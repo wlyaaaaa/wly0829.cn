@@ -52,7 +52,11 @@
     continueScene();
   });
   const update = snapshot => {
-    if (snapshot?.overall) window.HeroLive.setStatus(snapshot.overall);
+    if (snapshot?.overall) {
+      const full = snapshot.overall, lead = full.detail.split(/[，；。]/)[0];
+      window.HeroLive.setStatus({...full, detail: lead + '；详情见驾驶舱'});
+      container.querySelector('[data-hl="s2"]')?.setAttribute('title', full.detail);
+    }
   };
   document.addEventListener('site-status', event => update(event.detail));
   update(window.SiteStatus?.snapshot?.());

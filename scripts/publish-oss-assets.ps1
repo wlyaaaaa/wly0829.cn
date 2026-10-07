@@ -39,6 +39,8 @@ if ($prefix -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._/-]*$' -or @($prefix.Split('/') 
     throw 'Invalid immutable release prefix.'
 }
 if ($Upload) {
+    Checked $Python @((Join-Path $PSScriptRoot 'hybrid-release.py'), 'verify', '--output', $plan.source_root, '--oss-preparation', $preparationRoot,
+        '--content-report', (Join-Path $preparationRoot 'content-verification.json'), '--public-repos-from-github')
     if (-not $CliPath -or -not $CliProfile) { throw 'Upload requires the exact CLI path and OAuth profile from the OSS handoff.' }
     $cliExecutable = (Get-Command -Name $CliPath -ErrorAction Stop).Source
     # Group copies retain the original relative paths. One recursive upload per

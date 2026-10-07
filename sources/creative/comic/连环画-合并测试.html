@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>连环画合并测试</title>
+<link rel="icon" href="data:,">
+<style>
+  html, body { margin:0; background:#fff; color:#2a3b4d; font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif; }
+  /* 宽度照网站首页的 sizes：手机 100vw-20px，其余 100vw-48px，最宽 1600px */
+  .wrap { max-width:1648px; margin:0 auto; padding:0 24px; box-sizing:border-box; }
+  @media (max-width:599.98px) { .wrap { padding:0 10px; } }
+  .demo { margin:12px 0; border:1px solid #cfe9d8; border-radius:12px; background:#f1faf4; padding:10px 12px; font-size:13px; line-height:1.7; }
+  .gap { height:70vh; display:flex; align-items:flex-end; justify-content:center; color:#8aa596; font-size:13px; padding-bottom:20px; box-sizing:border-box; }
+  /* 照网站的结构：section.screen > picture > img，后面是热区层 .overlays */
+  .screen { position:relative; line-height:0; }
+  .screen img { display:block; width:100%; height:auto; }
+  .overlays { position:absolute; inset:0; }
+  .overlays a { position:absolute; display:block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo"><b>合并测试页</b>：同一份 <code>comic-live.js</code> + <code>comic-data.js</code>。竖屏（高 ≥ 宽）显示竖版图、用竖版数据，横屏显示横版图、用横版数据；转屏或拖窗口比例时跟着换。往下滚看效果。</div>
+  <div class="gap">往下滚 ↓</div>
+  <section class="screen" id="home-02">
+    <picture>
+      <source type="image/avif" media="(orientation:portrait)" srcset="img/home-02-v-1280-2468865eea25.avif 1280w">
+      <source type="image/avif" media="(orientation:landscape)" srcset="img/home-02-h-2880-9b996bf070d6.avif 2880w">
+      <img src="img/home-02-h-2880-9b996bf070d6.avif" alt="一句话，把一次旅行变成一部片子（上）">
+    </picture>
+    <div class="overlays"><a href="#home-03" style="left:2%;top:40%;width:30%;height:10%" aria-label="热区示例"></a></div>
+  </section>
+  <section class="screen" id="home-03">
+    <picture>
+      <source type="image/avif" media="(orientation:portrait)" srcset="img/home-03-v-1280-f29fd32e70ba.avif 1280w">
+      <source type="image/avif" media="(orientation:landscape)" srcset="img/home-03-h-2880-501ab33ed9e2.avif 2880w">
+      <img src="img/home-03-h-2880-501ab33ed9e2.avif" alt="一句话，把一次旅行变成一部片子（下）">
+    </picture>
+    <div class="overlays"></div>
+  </section>
+  <div class="gap" style="align-items:flex-start;padding-top:20px">（到底了）</div>
+</div>
+<script src="comic-data.js" defer></script>
+<script src="comic-live.js" defer></script>
+</body>
+</html>

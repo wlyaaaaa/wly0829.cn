@@ -1,0 +1,1239 @@
+[
+  {
+    "screen": "localocr-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "50%",
+        "text_ref": "本地文字识别"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "50%"
+      },
+      {
+        "type": "stat_card",
+        "variant": "paragraph_stats",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "expected_cards": 4,
+        "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026年9月28日20:26（北京时间）"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上毛笔艺术字大标题，下面一句粗体副标题和一段介绍。右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：1 一叠纸，2 两条岔路一快一慢，3 一排小方块（模型），4 一张打勾的清单。卡片下面右对齐一行灰色小字“截至 2026 年 9 月 28 日”。最下面一行两个白底细绿边圆角按钮。没有“现在”横条（这个项目没有自己的自动任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-01-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "本地文字识别"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "stat_card",
+        "variant": "paragraph_stats",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "expected_cards": 4,
+        "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026年9月28日20:26（北京时间）"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "columns_v": 1,
+        "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：大标题、副标题、介绍从上往下；插画放在介绍下面，占满宽；四张数字卡两行两列；截至日期；两个按钮上下各占一行。 那一排按钮里同样有〔复制 AI 续作说明〕。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-13",
+    "orientation": "h",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "什么材料走哪条路"
+      },
+      {
+        "type": "illustration",
+        "row": "routes",
+        "width": "22%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "row": "routes",
+        "width": "78%",
+        "text_ref": "普通页：截图、网页图、普通扫描件"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "row": "routes-bottom",
+        "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "row": "routes-bottom",
+        "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标",
+        "width": "50%"
+      },
+      {
+        "type": "notice",
+        "text_ref": "体检的完整门槛见亮点：先快后强；全部模型见用的哪些模型。"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上毛笔艺术字标题加绿色笔刷线。画面左边约 22% 宽一幅水彩插画：一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的“体检”小站。从左往右是一张选路图：一条绿色主路从纸堆出发，先到第一张大卡片“普通页”（图标：闪电），这条路画成实线最粗；从体检小站分出一条向下弯的绿色支路，标小字“体检不过关的那一页”，通向第二张大卡片“难页”（图标：望远镜）；纸堆上方另有一条细虚线支路，标小字“明说要结构”，通向第三张大卡片“要还原结构”（图标：表格网格）。三张卡片从上到下排在画面右侧约 75% 宽里，每张卡片左边是粗体卡片标题和括号说明，右边是一个浅绿底的圆角模型名条（写“→ 快读：……”那一行），下面一两行正文。三张卡片宽高一致、间距一致，不留空格子。最下面一条横跨整屏的细卡片放最后一句，两个〔〕画成白底细浅绿描边的圆角按钮。三个图标和第 6 屏“用的哪些模型”表格里的图标保持同一画法。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查追加（AI实施；本人本轮明确授权重排）：主图只旁置第一条普通页说明；难页/结构还原两条独立移下方双列，不让左图陪三条长纵链。 定稿和素材原件不改。"
+  },
+  {
+    "screen": "localocr-13",
+    "orientation": "v",
+    "source_image": "",
+    "source_images": [],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "什么材料走哪条路"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "row": "routes",
+        "width": "78%",
+        "text_ref": "普通页：截图、网页图、普通扫描件"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "row": "routes",
+        "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ],
+        "row": "routes",
+        "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标"
+      },
+      {
+        "type": "notice",
+        "text_ref": "体检的完整门槛见亮点：先快后强；全部模型见用的哪些模型。"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；插画缩成一行宽在上；三张卡片上下排、各占满宽，卡片之间用一段向下的绿色箭头连起来（第二段箭头旁写“体检不过关的那一页”，通向第三张的箭头画成虚线，旁写“明说要结构”）；每张卡片里先标题，再模型名条，再正文；最下面两个按钮上下各一行。字和横版完全一样。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我一般不直接开它，而是跟AI说要读什么，AI判断该不该用"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "1一字不差抄截图",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "2扫描讲义转文字",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "3整理照片时读屏幕上的字",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题，下面一行说明文字（含一个链接）。三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。最下面一条细横条放一句话。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：按 qa-07 第2条电脑三张用法卡改用已有 left_inside，保留三列和原节点；重复内卡根因仍交 main。；图审回读仍嵌套步骤内卡：改用已有source_text_card单steps卡头+完整para正文接口，显式图标只显示一次，无新组件/新字。"
+  },
+  {
+    "screen": "localocr-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-localocr-02-v\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-localocr-02-v\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "平时怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "我一般不直接开它，而是跟AI说要读什么，AI判断该不该用"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "1一字不差抄截图",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "2扫描讲义转文字",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+        ]
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "usage",
+        "width": "33.333%",
+        "text_ref": "3整理照片时读屏幕上的字",
+        "whole_block": true,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+        ]
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题、说明在上；三张卡片上下排，每张插画在左、字在右；最下面横条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；图审回读仍嵌套步骤内卡：改用已有source_text_card单steps卡头+完整para正文接口，显式图标只显示一次，无新组件/新字。"
+  },
+  {
+    "screen": "localocr-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "读出来是什么样"
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0,
+          1
+        ],
+        "columns": 2,
+        "columns_v": 1,
+        "ratio": "3:2",
+        "caption_mode": "source_order",
+        "connector": "arrow",
+        "text_ref": "原图：项目自带的合成采购单（900×600），有标题、六"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次识别写出三份结果："
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "TXT纯文字，按页分开"
+      },
+      {
+        "type": "notice",
+        "text_ref": "另附一份客观结论和一句人话摘要，例如这张图的摘要："
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。上半部分左右两个带细浅绿边框的空位（各约占宽度 40%，4:3 左右），中间一个绿色箭头从左指向右；左空位贴原图截图，右空位贴识别输出截图；每个空位下面一行小字说明。下半部分一排三张小卡片（TXT、MD、JSON 各一个小文件图标），右边一张稍宽的浅黄底便签卡，上面写“人话摘要”那一句。空位里什么都不画。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/page-agent-t05-shot-response：两槽与各自原图注由同一截图块按 source_order 承接，横两列、竖一列、箭头连接；只合并规格分块，不删图注、不把截图写进浅色留空框。"
+  },
+  {
+    "screen": "localocr-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "读出来是什么样"
+      },
+      {
+        "type": "screenshot",
+        "indices": [
+          0,
+          1
+        ],
+        "columns": 2,
+        "columns_v": 1,
+        "ratio": "3:2",
+        "caption_mode": "source_order",
+        "connector": "arrow",
+        "text_ref": "原图：项目自带的合成采购单（900×600），有标题、六"
+      },
+      {
+        "type": "prose",
+        "text_ref": "每次识别写出三份结果："
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+        ],
+        "text_ref": "TXT纯文字，按页分开"
+      },
+      {
+        "type": "notice",
+        "text_ref": "另附一份客观结论和一句人话摘要，例如这张图的摘要："
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；原图空位、向下箭头、输出空位上下排，各带说明；三张文件卡一行一张；摘要便签在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/page-agent-t05-shot-response：两槽与各自原图注由同一截图块按 source_order 承接，横两列、竖一列、箭头连接；只合并规格分块，不删图注、不把截图写进浅色留空框。"
+  },
+  {
+    "screen": "localocr-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它没有自动提醒；出了问题直接跟AI说，AI按下面的办法处"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "正忙同时只做一个识别。再交一份，会直接回“有任务在跑”和"
+      },
+      {
+        "type": "notice",
+        "text_ref": "把握分高也不等于每个字都对：关键的小字、淡字，回原图看一"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题，下面一行小字。七张横向小卡片排成两列（左四右三），每张左边一个小水彩图标（红灯的排队牌、沙漏、停止按钮、显卡递给另一只手、一半的纸、搬家纸箱、放大镜对着原图），右边粗体一句加小字。右列第四个位置放一张浅绿底提示卡，写最后一句话。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "出事怎么办"
+      },
+      {
+        "type": "prose",
+        "text_ref": "它没有自动提醒；出了问题直接跟AI说，AI按下面的办法处"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "正忙同时只做一个识别。再交一份，会直接回“有任务在跑”和"
+      },
+      {
+        "type": "notice",
+        "text_ref": "把握分高也不等于每个字都对：关键的小字、淡字，回原图看一"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题、小字；七张卡片一行一张；提示卡在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-localocr-05-h\\round-01\\candidate-1.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-localocr-05-h\\round-01\\candidate-1.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一次识别经过哪几步"
+      },
+      {
+        "type": "flow",
+        "columns": 6,
+        "direction": "horizontal",
+        "illustration": "above_card",
+        "icons": "auto",
+        "connector": "arrow",
+        "branch_after": 5,
+        "branch_return": 6,
+        "text_ref": "1先留底算原件的内容指纹（SHA-256），复制一份只读"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "识过不重识同一份材料、同样的请求再来，先核对原件、模型、"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一条从左到右的流程图，六个圆角节点（小水彩图标：带锁的文件副本、领号牌、一叠纸被切成一页页、闪电、听诊器、三份文件），绿色箭头依次相连，节点下面一两行小字；第 5 个节点和第 4 个之间多画一条向下弯的细支线，通向一个小一点的“强模型”节点再回到第 6 个。流程图下面两张横向小卡片并排。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-05-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一次识别经过哪几步"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "arrow",
+        "branch_after": 5,
+        "branch_return": 6,
+        "text_ref": "1先留底算原件的内容指纹（SHA-256），复制一份只读"
+      },
+      {
+        "type": "content_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "识过不重识同一份材料、同样的请求再来，先核对原件、模型、"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；六个节点从上往下排，箭头向下，强模型支线画在第 5 个节点右侧；两张小卡片上下排。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用的哪些模型"
+      },
+      {
+        "type": "table",
+        "columns": 4,
+        "portrait_layout": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用途模型做什么为什么这样选日常识字PP-OCRv6med"
+      },
+      {
+        "type": "notice",
+        "text_ref": "全部是百度飞桨的模型，从ModelScope魔搭下载（国"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一张五行四列的表格（圆角、细浅绿线、表头浅绿底），每行最左边一个小水彩图标（闪电、旋转箭头、望远镜、表格网格、被熨平的纸）。表格下面一条横跨整屏的细卡片放最后两句话，右端画魔搭的小标志（抽象魔方图形，不写英文商标字）。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "用的哪些模型"
+      },
+      {
+        "type": "table",
+        "columns": 4,
+        "portrait_layout": "row_cards",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用途模型做什么为什么这样选日常识字PP-OCRv6med"
+      },
+      {
+        "type": "notice",
+        "text_ref": "全部是百度飞桨的模型，从ModelScope魔搭下载（国"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；每行模型改成一张卡片（第一行粗体用途，下面三行：模型、做什么、为什么），五张上下排；底部细卡片。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "跑在哪、怎么不打架",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-localocr.png",
+        "target_height": 430,
+        "target_width": 523,
+        "align": "center",
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+          "_library/icons/公文包清单.png"
+        ],
+        "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+        ],
+        "text_ref": "一块显卡"
+      },
+      {
+        "type": "prose",
+        "text_ref": "代码：6,929行程序（Python、PowerShel"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：主图与前两条说明组成30/70上栏，其余三条整宽三列，五条原文和五幅图按原序保留。 仅更改单页排版规格，不改定稿字句和素材文件。\n插画实际复验：target_height与target_width按素材完整自然比例成对设置，不把单独max-height压成扁图；原图字节不变。"
+  },
+  {
+    "screen": "localocr-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "跑在哪、怎么不打架"
+      },
+      {
+        "type": "illustration",
+        "row": "runtime",
+        "width": "40%",
+        "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-localocr.png"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+          "_library/icons/公文包清单.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+        ],
+        "row": "runtime",
+        "width": "60%",
+        "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
+      },
+      {
+        "type": "prose",
+        "text_ref": "代码：6,929行程序（Python、PowerShel"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；示意图占满宽；五张卡片一行一张；灰色小字在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "illustration",
+        "row": "highlight",
+        "width": "35%",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "section_heading",
+        "row": "highlight",
+        "width": "65%",
+        "text_ref": "先快后强，只重读有问题的那一页",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "麻烦每页都用强模型最稳，但太慢：强模型首次加载加识别要5",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 2,
+        "row": "highlight",
+        "bare": true,
+        "text_ref": "一个字都没读出来整页平均把握分低于0.78把握分低于0.",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "例外：近乎纯色、本来就像空白的页读不出字，不算“没读出来",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+        "frame": "localocr-highlight"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题“亮点”，下面一张横跨整屏的大卡片。卡片左边约 35% 宽一幅水彩插画：一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面。卡片右边：粗体标题，下面“麻烦”“解法”“结果”“取舍”四段，每段开头两个字用绿色小标签；解法里的六条画成两列小清单，每条前面一个小听诊器图标。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-08-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "亮点"
+      },
+      {
+        "type": "illustration",
+        "row": "highlight",
+        "width": "35%",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "section_heading",
+        "row": "highlight",
+        "width": "65%",
+        "text_ref": "先快后强，只重读有问题的那一页",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "麻烦每页都用强模型最稳，但太慢：强模型首次加载加识别要5",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 2,
+        "row": "highlight",
+        "bare": true,
+        "text_ref": "一个字都没读出来整页平均把握分低于0.78把握分低于0.",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "例外：近乎纯色、本来就像空白的页读不出字，不算“没读出来",
+        "frame": "localocr-highlight"
+      },
+      {
+        "type": "prose",
+        "row": "highlight",
+        "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+        "frame": "localocr-highlight"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；插画在上占满宽；四段上下排，六条清单一行一条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "text_ref": "1.把握分很高，也可能读错表格"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和照片视频录音管理页的“亮点”一样：三张大卡片横排，每张上面一幅小水彩插画，卡片标题用大字，下面“麻烦”“解法”“证据”三段。插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+        ],
+        "text_ref": "1.把握分很高，也可能读错表格"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：三张卡片上下排，每张插画在上、字在下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  {
+    "screen": "localocr-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（28项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "没用过＝每次识别都会留任务记录，真实材料里一次也没有；说"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "读字"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1图片和截图识字png、jpg、webp、bmp图片和截"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "选模型"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "7先快后强自动选每页先用快模型读，体检不过的页才换强模型"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "表格和位置"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "11表格还原成行列PP-StructureV3把表格还原"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  {
+    "screen": "localocr-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-10-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部功能（28项）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "没用过＝每次识别都会留任务记录，真实材料里一次也没有；说"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "读字"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1图片和截图识字png、jpg、webp、bmp图片和截"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "选模型"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "7先快后强自动选每页先用快模型读，体检不过的页才换强模型"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "表格和位置"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "11表格还原成行列PP-StructureV3把表格还原"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  {
+    "screen": "localocr-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-11-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-11-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "结果靠得住"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "14有字、没字、说不准每份结果附一份客观结论，空结果不当"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "运行和显卡"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "19本机识别服务只在本机18665端口，同一时间只做一个"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "版本和换模型"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "25正式版和开发代码分开每天用的是验收过的快照，改代码不"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  {
+    "screen": "localocr-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-11-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-11-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "结果靠得住"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "14有字、没字、说不准每份结果附一份客观结论，空结果不当"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "运行和显卡"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "19本机识别服务只在本机18665端口，同一时间只做一个"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "版本和换模型"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "25正式版和开发代码分开每天用的是验收过的快照，改代码不"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  {
+    "screen": "localocr-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-12-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-12-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（2026年）",
+        "row": "balanced-heading",
+        "width": "70%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "small",
+        "align": "left",
+        "description": "丝带起点显卡",
+        "row": "balanced-heading",
+        "width": "15%"
+      },
+      {
+        "type": "illustration",
+        "index": 1,
+        "size": "small",
+        "align": "right",
+        "description": "丝带终点验收纸",
+        "row": "balanced-heading",
+        "width": "15%"
+      },
+      {
+        "type": "timeline",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "ribbon",
+        "illustration": "outside",
+        "icons": "none",
+        "paragraph_items": true,
+        "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（"
+      },
+      {
+        "type": "prose",
+        "text_ref": "41次提交，7月2日到9月27日；9月24日之后只改过文"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一条从左到右的水彩绿丝带时间轴，上面十个小旗，每个小旗：日期（粗体绿色）＋一行字，上下错开不挤；丝带起点画一块显卡，终点画一张打勾的验收单。时间轴下面一行灰色小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；本轮文字优先；仅此屏竖版由短命子代理查看338×600、42279字节的单张压缩JPEG确认：标题下左侧有显卡，底部说明框左侧有装订方格纸（未辨清勾，不能称验收单），所有日期旗在竖丝带右，日期上/正文下。横版只按scene十旗一条水平丝带，列数改10，不借竖图推断横版。无需每日期10个图标；只需两端图位，当前缺明确素材。上下错开旗帜仍需组件/审页确认。 页修复 07（北京时间 2026-10-03）：按 qa-07 第5条横时间轴十项改五列两行，两端图栏各14%、时间轴72%；竖版起点图保留独立左侧小栏，时间轴改整宽独立块，解除18%图栏占去正文左边的宽度。原十日期和页尾统计全部保留。"
+  },
+  {
+    "screen": "localocr-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-12-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-12-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（2026年）"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "small",
+        "align": "left",
+        "row": "axis-start",
+        "row_v": true,
+        "width": "18%",
+        "description": "标题下左侧显卡"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "outside",
+        "icons": "none",
+        "paragraph_items": true,
+        "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（"
+      },
+      {
+        "type": "illustration",
+        "index": 1,
+        "size": "small",
+        "align": "left",
+        "row": "footer",
+        "row_v": true,
+        "width": "22%",
+        "description": "底部说明框左侧装订方格纸"
+      },
+      {
+        "type": "prose",
+        "text_ref": "41次提交，7月2日到9月27日；9月24日之后只改过文",
+        "row": "footer",
+        "row_v": true,
+        "width": "78%"
+      }
+    ],
+    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；时间轴改成从上往下的竖丝带，小旗一行一个；灰色小字在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；本轮文字优先；仅此屏竖版由短命子代理查看338×600、42279字节的单张压缩JPEG确认：标题下左侧有显卡，底部说明框左侧有装订方格纸（未辨清勾，不能称验收单），所有日期旗在竖丝带右，日期上/正文下。横版只按scene十旗一条水平丝带，列数改10，不借竖图推断横版。无需每日期10个图标；只需两端图位，当前缺明确素材。上下错开旗帜仍需组件/审页确认。 页修复 07（北京时间 2026-10-03）：按 qa-07 第5条横时间轴十项改五列两行，两端图栏各14%、时间轴72%；竖版起点图保留独立左侧小栏，时间轴改整宽独立块，解除18%图栏占去正文左边的宽度。原十日期和页尾统计全部保留。"
+  }
+]

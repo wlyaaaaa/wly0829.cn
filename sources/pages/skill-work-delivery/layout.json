@@ -1,0 +1,691 @@
+[
+  {
+    "screen": "skill-work-delivery-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "工作支持与交付技能"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%",
+        "illustration": "outside"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "content",
+        "width": "50%",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "row": "content",
+        "text_ref": "不用点名",
+        "width": "50%"
+      },
+      {
+        "type": "dialogue",
+        "columns": 3,
+        "split_paras": true,
+        "flow": "row",
+        "illustration": "none",
+        "icons": "none",
+        "width": "100%",
+        "text_ref": "怎么跟 AI 说",
+        "row": "talk"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait，库存 source_layout；横版标题和技能名在左上、主插画右上卡外，下方左栏说明卡和浅绿提示、右栏一张对话大卡；10 个原话段各一气泡，横版两列按列读取，竖版按定稿单列。引号原样保留。竖版插画在说明和提示之后、问法之前。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:工作支持与交付技能].text_ref"
+        ],
+        "requirement": "标题“工作支持与交付技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:工作支持与交付技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "工作支持与交付技能"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "banner"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "flow": "column",
+        "rows": 10,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "怎么跟 AI 说"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait，库存 source_layout；横版标题和技能名在左上、主插画右上卡外，下方左栏说明卡和浅绿提示、右栏一张对话大卡；10 个原话段各一气泡，横版两列按列读取，竖版按定稿单列。引号原样保留。竖版插画在说明和提示之后、问法之前。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:工作支持与交付技能].text_ref"
+        ],
+        "requirement": "标题“工作支持与交付技能”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-01.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:工作支持与交付技能].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "head",
+        "width": "38%",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "row": "head",
+        "width": "62%",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "我：",
+        "width": "100%",
+        "row": "example"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "row": "example",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "connector_style": "thin_line",
+        "illustration": "left_inside",
+        "illustration_inside": false,
+        "icons": "auto",
+        "row": "example",
+        "text_ref": "三份资料"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "row": "example",
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "过几天，资料换了版",
+        "width": "100%",
+        "row": "followup"
+      },
+      {
+        "type": "prose",
+        "text_ref": "换版时哪些算失效",
+        "row": "followup"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与示例小标签相邻；横版左约2/3是我、AI做事、AI交回的竖对话，右约1/3是一张外卡内的我/AI两气泡；竖版主对话在前，后续外卡整宽放最后。四步骤用细竖线和节点连接，四图标在节点左侧卡外；不要横排成2×2。换版说明链接在后续卡下。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:示例：].tone"
+        ],
+        "requirement": "示例为灰色小标签；tag 当前不消费 tone，须样张确认并实现该灰色标签，不能据字段声称已变灰。",
+        "evidence": "定稿 skill-work-delivery-02.scene；components/comp-text/primitives.py:render_tag"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[timeline:三份资料].icons"
+        ],
+        "requirement": "icon 需要 4 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-work-delivery-02.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一个完整例子"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "我："
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "AI 做了什么"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "connector_style": "thin_line",
+        "illustration": "left_inside",
+        "illustration_inside": false,
+        "icons": "auto",
+        "text_ref": "三份资料"
+      },
+      {
+        "type": "dialogue",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "AI 交回"
+      },
+      {
+        "type": "dialogue",
+        "columns": 1,
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "过几天，资料换了版"
+      },
+      {
+        "type": "prose",
+        "text_ref": "换版时哪些算失效"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与示例小标签相邻；横版左约2/3是我、AI做事、AI交回的竖对话，右约1/3是一张外卡内的我/AI两气泡；竖版主对话在前，后续外卡整宽放最后。四步骤用细竖线和节点连接，四图标在节点左侧卡外；不要横排成2×2。换版说明链接在后续卡下。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:示例：].tone"
+        ],
+        "requirement": "示例为灰色小标签；tag 当前不消费 tone，须样张确认并实现该灰色标签，不能据字段声称已变灰。",
+        "evidence": "定稿 skill-work-delivery-02.scene；components/comp-text/primitives.py:render_tag"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[timeline:三份资料].icons"
+        ],
+        "requirement": "icon 需要 4 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-work-delivery-02.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].text_ref"
+        ],
+        "requirement": "标题“一个完整例子”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-02.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:一个完整例子].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "notice",
+        "inline_button": "去看全部功能",
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 2,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。整屏章节大标题居中；浅绿满宽横幅右端是原文“去看全部功能”按钮，竖版按钮单独一行；下方一张规矩大卡含卡头及 6 个左图右文内条目，横版两列、竖版一列。没有 scene 外的主插画。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 6 个，当前有效总 manifest 有 2 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-work-delivery-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-03-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能做的事"
+      },
+      {
+        "type": "notice",
+        "inline_button": "去看全部功能",
+        "text_ref": "这个技能能做的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "item_cards": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "用这个技能时"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。整屏章节大标题居中；浅绿满宽横幅右端是原文“去看全部功能”按钮，竖版按钮单独一行；下方一张规矩大卡含卡头及 6 个左图右文内条目，横版两列、竖版一列。没有 scene 外的主插画。",
+    "pending_requirements": [
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:用这个技能时].icons"
+        ],
+        "requirement": "icon 需要 6 个，当前有效总 manifest 有 2 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:skill-work-delivery-03.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:能做的事].text_ref"
+        ],
+        "requirement": "标题“能做的事”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-03.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:能做的事].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/公文包清单.png"
+        ],
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "heading_size": "medium",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "icon_position": "header_left",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。横版左约1/3为标题及管卡，右约2/3上表格下不做卡，无连线。竖版依次为管、4 张表格行卡、不做；行卡上方“这些事”、下方“找谁”和原链接。三块各自的小图标放块内左上，禁止跨块复用一个图标。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "表格/行卡的路牌图标及卡头大小必须按源构图，table 当前只渲染标题与表体，不读取这三个字段。",
+        "evidence": "定稿 skill-work-delivery-04.scene；components/table/table.py:render_table"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "三个块分别需要已核对的管、路牌、禁止图标映射；当前每屏只有 icon-01 且没有语义标注，不得多个块用 auto 重复同一物件。",
+        "evidence": "定稿 skill-work-delivery-04.scene；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-work-delivery-04.scene 明确每块一个、共三个图标；库存 assets 只估 1 个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "skill-work-delivery-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\img\\skill-work-delivery-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "边界"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/公文包清单.png"
+        ],
+        "text_ref": "管"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "heading_size": "medium",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "inner_columns": 1,
+        "icon_position": "header_left",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "不做"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。横版左约1/3为标题及管卡，右约2/3上表格下不做卡，无连线。竖版依次为管、4 张表格行卡、不做；行卡上方“这些事”、下方“找谁”和原链接。三块各自的小图标放块内左上，禁止跨块复用一个图标。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
+    "pending_requirements": [
+      {
+        "owner": "table",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[table:不管，交给谁].illustration",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[table:不管，交给谁].heading_size"
+        ],
+        "requirement": "表格/行卡的路牌图标及卡头大小必须按源构图，table 当前只渲染标题与表体，不读取这三个字段。",
+        "evidence": "定稿 skill-work-delivery-04.scene；components/table/table.py:render_table"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "asset_order_review",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "三个块分别需要已核对的管、路牌、禁止图标映射；当前每屏只有 icon-01 且没有语义标注，不得多个块用 auto 重复同一物件。",
+        "evidence": "定稿 skill-work-delivery-04.scene；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:管].icons",
+          "blocks[table:不管，交给谁].icons",
+          "blocks[points_card:不做].icons"
+        ],
+        "requirement": "icon 需要 3 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 skill-work-delivery-04.scene 明确每块一个、共三个图标；库存 assets 只估 1 个"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:边界].text_ref"
+        ],
+        "requirement": "标题“边界”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json:skill-work-delivery-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:边界].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  }
+]

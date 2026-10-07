@@ -31,7 +31,7 @@ test('historical success never becomes a current green status', () => {
 test('reader-supplied observation time renders in Beijing independently of browser timezone', () => {
   assert.equal(ui.view({ state: 'failed', text: '失败', readAt: '2026-10-04T01:26:00Z' }).timeLabel, '北京时间 09:26 读取');
   assert.equal(ui.view({ state: 'offline', text: '读不到电脑', cached: true, readAt: '2026-10-03T23:59:00Z' }).timeLabel, '北京时间 2026年10月4日 07:59 读到');
-  assert.equal(ui.view({ state: 'unknown', text: '读不到', readAt: '2026-10-04 09:26:00' }).timeLabel, '读取时间：读不到');
+  assert.equal(ui.view({ state: 'unknown', text: '读不到', readAt: '2026-10-04 09:26:00' }).timeLabel, '尚无成功读数');
   assert.equal(ui.view({ state: 'unknown', text: '读不到', readAt: 0 }).time, null);
 });
 

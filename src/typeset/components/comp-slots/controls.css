@@ -1,0 +1,302 @@
+.c-slot-controls {
+  min-width: 0;
+  color: var(--text);
+  font-family: "Sans", sans-serif;
+  font-size: var(--fs-body, inherit);
+  line-height: var(--lh, 1.45);
+}
+.c-slot-controls .c-slot-controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: var(--gap-card, 16px);
+}
+.c-slot-controls-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  width: var(--slot-button-width);
+  max-width: 100%;
+  min-height: var(--slot-button-min-height, 2.5em);
+  margin: 0.12em 0;
+  padding: 0.3em 0.65em;
+  border: 2px solid var(--link);
+  border-radius: var(--radius, 16px);
+  background: var(--slot-button-bg, white);
+  color: var(--link);
+  font: inherit;
+  font-family: "Sans", sans-serif;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: var(--lh, 1.45);
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.c-slot-controls-button.is-primary,
+.c-slot-controls-button.is-selected {
+  background: var(--accent);
+  color: var(--slot-button-on-accent, white);
+  border-color: var(--accent);
+}
+.c-slot-controls-button.is-danger {
+  color: var(--text);
+  border-color: var(--slot-danger-line, var(--text));
+}
+.c-slot-controls-button.is-disabled {
+  background: var(--soft);
+  color: var(--text);
+  border-color: var(--line);
+  cursor: default;
+}
+.c-slot-controls-button.is-busy {
+  cursor: progress;
+}
+.c-slot-input {
+  display: grid;
+  grid-template-columns: repeat(var(--slot-controls-columns, 1), minmax(0, 1fr));
+  align-items: start;
+  gap: var(--gap-card, 16px);
+}
+.c-slot-input .c-slot-controls-step {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  gap: var(--gap-card, 16px);
+}
+.c-slot-input .c-slot-controls-step > .slot-list {
+  width: 100%;
+  min-width: 0;
+}
+.c-slot-controls .c-slot-controls-input {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 2.5em;
+  padding: 0.3em 0.65em;
+  border: 2px solid var(--line);
+  border-radius: var(--radius, 16px);
+  background: var(--cardbg, var(--soft));
+  color: var(--text);
+  font: inherit;
+  line-height: var(--lh, 1.45);
+}
+.c-slot-controls .c-slot-controls-input.is-duration,
+.c-slot-controls .c-slot-controls-input.is-totp { width: 100%; }
+.c-slot-input[data-orient="v"] .c-slot-controls-input { width: 100%; }
+.c-slot-input .slot-step-number {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.85em;
+  min-width: 1.85em;
+  height: 1.85em;
+  margin-right: 0.25em;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--surface, white);
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* 构图档位只调整控件/外框，正文仍使用共享字高。 */
+.c-slot-buttons {
+  display: grid;
+  grid-template-columns: repeat(var(--slot-controls-columns, 1), minmax(0, 1fr));
+  gap: var(--gap-card, 16px);
+}
+.c-slot-controls .c-slot-controls-actionline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-card, 16px);
+  align-items: stretch;
+  min-width: 0;
+}
+.c-slot-controls .c-slot-controls-actionline.is-vertical {
+  flex-direction: column;
+}
+.c-slot-controls .c-slot-controls-actionline[data-keep-same-row="true"] {
+  display: grid;
+  grid-template-columns: repeat(var(--slot-controls-actions), minmax(0, 1fr));
+}
+.c-slot-controls .c-slot-controls-action {
+  display: flex;
+  min-width: 0;
+}
+.c-slot-controls .c-slot-controls-action > button,
+.c-slot-controls .c-slot-controls-action > a {
+  min-width: 0;
+  max-width: 100%;
+  flex-shrink: 1;
+  align-self: stretch;
+}
+.c-slot-controls .c-slot-controls-actionline[data-keep-same-row="true"] .c-slot-controls-action > button,
+.c-slot-controls .c-slot-controls-actionline[data-keep-same-row="true"] .c-slot-controls-action > a {
+  width: 100%;
+}
+.c-slot-controls .c-slot-controls-linkbutton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.3em 0.65em;
+  margin: 0.12em 0;
+  min-height: 2.5em;
+  border: 2px solid var(--link);
+  border-radius: var(--radius, 16px);
+  background: var(--surface);
+  color: var(--link);
+  font-size: var(--fs-body);
+  font-weight: 700;
+  line-height: var(--lh, 1.45);
+  overflow-wrap: anywhere;
+}
+.c-slot-controls[data-size="small"] .c-slot-controls-linkbutton { min-height: 2.25em; }
+.c-slot-controls[data-size="large"] .c-slot-controls-linkbutton { min-height: 3em; }
+.c-slot-input.is-structured {
+  display: grid;
+  grid-template-columns: repeat(var(--slot-controls-columns, 1), minmax(0, 1fr));
+  align-items: stretch;
+}
+.c-slot-input.is-structured .c-slot-controls-step {
+  position: relative;
+  min-width: 0;
+  align-items: stretch;
+}
+.c-slot-input.is-structured .c-slot-controls-step-head {
+  display: grid;
+  grid-template-columns: 1.85em minmax(0, 1fr);
+  gap: 0.4em;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+.c-slot-input.is-structured .c-slot-controls-step-head.has-icon {
+  grid-template-columns: 1.85em minmax(0, 1fr) 3em;
+}
+.c-slot-input.is-structured .slot-step-number { margin: 0; }
+.c-slot-input.is-structured .c-slot-controls-step-copy { min-width: 0; }
+.c-slot-input.is-structured .c-slot-controls-step-icon {
+  width: 3em;
+  height: 3em;
+  object-fit: contain;
+}
+.c-slot-input.is-structured .c-slot-controls-step.card {
+  padding: var(--gap-card, 16px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 16px);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+.c-slot-input.is-structured[data-size="small"] .c-slot-controls-step.card { padding: 0.5em; }
+.c-slot-input.is-structured[data-size="large"] .c-slot-controls-step.card { padding: 1em; }
+.c-slot-input.is-structured[data-connector="thin_green_vertical_line"] .c-slot-controls-step:not(:last-child)::after,
+.c-slot-input.is-structured[data-connector="arrow"] .c-slot-controls-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 0.925em;
+  top: 1.9em;
+  bottom: calc(-1 * var(--gap-card, 16px));
+  width: 2px;
+  background: var(--line);
+  pointer-events: none;
+}
+.c-slot-input.is-structured[data-connector="arrow"] .c-slot-controls-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: calc(0.925em - 4px);
+  bottom: calc(-0.5 * var(--gap-card, 16px));
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+.c-slot-controls .c-slot-controls-input.is-duration,
+.c-slot-controls .c-slot-controls-input.is-totp {
+  width: var(--slot-input-width, 100%);
+  height: var(--slot-input-height, auto);
+  min-height: var(--slot-input-height, 2.5em);
+}
+.c-slot-controls[data-size="small"] .c-slot-controls-input { min-height: var(--slot-input-height, 2.25em); }
+.c-slot-controls[data-size="large"] .c-slot-controls-input { min-height: var(--slot-input-height, 3em); }
+.c-slot-input.is-structured .c-slot-controls-fieldrow {
+  display: flex;
+  gap: 0.5em;
+  align-items: stretch;
+  margin-top: 0.35em;
+  max-width: 100%;
+  min-width: 0;
+}
+.c-slot-input.is-structured .c-slot-controls-fieldrow > input { flex-shrink: 1; }
+.c-slot-input.is-structured .c-slot-controls-fieldrow > button { flex-shrink: 1; min-width: 0; }
+.c-slot-input.is-structured .c-slot-controls-fieldrow.is-below_totp { flex-direction: column; }
+.c-slot-input.is-structured .c-slot-controls-fieldrow.is-below_totp > button { align-self: start; }
+.c-slot-input.is-structured .c-slot-controls-below-action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin-top: 0.15em;
+}
+.c-slot-input.is-structured .c-slot-controls-copy-tail {
+  white-space: nowrap;
+}
+.c-slot-input.is-structured .c-slot-controls-action-tail {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  vertical-align: middle;
+  max-width: 100%;
+  min-width: 0;
+}
+.c-slot-input.is-structured .c-slot-controls-action-tail > button,
+.c-slot-input.is-structured .c-slot-controls-action-tail > label {
+  min-width: 0;
+  flex-shrink: 1;
+}
+.c-slot-input.is-structured .c-slot-controls-action-tail > button {
+  width: auto;
+  min-height: 1lh;
+  height: auto;
+  margin: 0;
+  padding: 0 0.45em;
+  border-width: 1px;
+  border-radius: 999px;
+  line-height: var(--lh, 1.45);
+  white-space: normal;
+}
+.c-slot-input.is-structured .c-slot-controls-action-punctuation {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.c-slot-input.is-structured .c-slot-controls-submit-tail {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.15em;
+  max-width: 100%;
+  min-width: 0;
+  align-self: start;
+}
+.c-slot-input.is-structured .c-slot-controls-submit-tail > button {
+  min-width: 0;
+  flex-shrink: 1;
+}
+.c-slot-controls .c-slot-controls-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  vertical-align: middle;
+  max-width: 100%;
+}
+.c-slot-controls .c-slot-controls-checkbox > input {
+  width: 1em;
+  height: 1em;
+  flex: 0 0 1em;
+  accent-color: var(--accent);
+}

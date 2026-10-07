@@ -1,0 +1,3421 @@
+{
+  "schema": "site.nav-label-assets.v1",
+  "labels": [
+    {
+      "id": "nav-203c08e0d44a",
+      "text": "首页",
+      "file": "nav-203c08e0d44a-edd509e7e8.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        339,
+        100,
+        522,
+        219
+      ],
+      "size": [
+        183,
+        119
+      ],
+      "ink_box": [
+        21,
+        26,
+        160,
+        96
+      ],
+      "ink_left": 0.11475409836065574,
+      "ink_right": 0.8743169398907104,
+      "ink_top": 0.2184873949579832,
+      "ink_bottom": 0.8067226890756303,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-f8d7d5c654a4",
+      "text": "怎么协作",
+      "file": "nav-f8d7d5c654a4-5b3867abcd.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        1057,
+        105,
+        1362,
+        211
+      ],
+      "size": [
+        305,
+        106
+      ],
+      "ink_box": [
+        18,
+        20,
+        288,
+        89
+      ],
+      "ink_left": 0.05901639344262295,
+      "ink_right": 0.9442622950819672,
+      "ink_top": 0.18867924528301888,
+      "ink_bottom": 0.839622641509434,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-81c30b16b817",
+      "text": "驾驶舱",
+      "file": "nav-81c30b16b817-104543d2df.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        307,
+        319,
+        556,
+        431
+      ],
+      "size": [
+        249,
+        112
+      ],
+      "ink_box": [
+        20,
+        23,
+        230,
+        93
+      ],
+      "ink_left": 0.08032128514056225,
+      "ink_right": 0.9236947791164659,
+      "ink_top": 0.20535714285714285,
+      "ink_bottom": 0.8303571428571429,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-79f326be4409",
+      "text": "项目",
+      "file": "nav-79f326be4409-b5609146ae.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        1117,
+        321,
+        1297,
+        435
+      ],
+      "size": [
+        180,
+        114
+      ],
+      "ink_box": [
+        23,
+        26,
+        159,
+        92
+      ],
+      "ink_left": 0.12777777777777777,
+      "ink_right": 0.8833333333333333,
+      "ink_top": 0.22807017543859648,
+      "ink_bottom": 0.8070175438596491,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-99aea2f9131a",
+      "text": "技能",
+      "file": "nav-99aea2f9131a-e436a15de1.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        336,
+        532,
+        523,
+        651
+      ],
+      "size": [
+        187,
+        119
+      ],
+      "ink_box": [
+        22,
+        26,
+        166,
+        96
+      ],
+      "ink_left": 0.11764705882352941,
+      "ink_right": 0.8877005347593583,
+      "ink_top": 0.2184873949579832,
+      "ink_bottom": 0.8067226890756303,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-1123245d1bed",
+      "text": "规则",
+      "file": "nav-1123245d1bed-8fa5fdcd73.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        1116,
+        534,
+        1302,
+        652
+      ],
+      "size": [
+        186,
+        118
+      ],
+      "ink_box": [
+        24,
+        27,
+        165,
+        97
+      ],
+      "ink_left": 0.12903225806451613,
+      "ink_right": 0.8870967741935484,
+      "ink_top": 0.2288135593220339,
+      "ink_bottom": 0.8220338983050848,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-aa8446366b2c",
+      "text": "连接电脑",
+      "file": "nav-aa8446366b2c-f680559cef.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        273,
+        753,
+        591,
+        862
+      ],
+      "size": [
+        318,
+        109
+      ],
+      "ink_box": [
+        19,
+        21,
+        300,
+        91
+      ],
+      "ink_left": 0.059748427672955975,
+      "ink_right": 0.9433962264150944,
+      "ink_top": 0.1926605504587156,
+      "ink_bottom": 0.8348623853211009,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-0571025156a9",
+      "text": "授权与状态",
+      "file": "nav-0571025156a9-33f12540d3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-01.png",
+      "source_sha256": "a1ac0872caffce5e1206e4873a7c2e23ab14830dfcc128a4dd2baf64a4aea097",
+      "source_box": [
+        1020,
+        757,
+        1405,
+        861
+      ],
+      "size": [
+        385,
+        104
+      ],
+      "ink_box": [
+        18,
+        19,
+        370,
+        88
+      ],
+      "ink_left": 0.046753246753246755,
+      "ink_right": 0.961038961038961,
+      "ink_top": 0.18269230769230768,
+      "ink_bottom": 0.8461538461538461,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-e3040dfd6b30",
+      "text": "全部项目",
+      "file": "nav-e3040dfd6b30-06d6cd14db.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        282,
+        101,
+        551,
+        199
+      ],
+      "size": [
+        269,
+        98
+      ],
+      "ink_box": [
+        18,
+        22,
+        253,
+        80
+      ],
+      "ink_left": 0.06691449814126393,
+      "ink_right": 0.9405204460966543,
+      "ink_top": 0.22448979591836735,
+      "ink_bottom": 0.8163265306122449,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-e7b1605b4942",
+      "text": "全部技能",
+      "file": "nav-e7b1605b4942-07c8612354.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        1115,
+        104,
+        1387,
+        196
+      ],
+      "size": [
+        272,
+        92
+      ],
+      "ink_box": [
+        16,
+        19,
+        257,
+        77
+      ],
+      "ink_left": 0.058823529411764705,
+      "ink_right": 0.9448529411764706,
+      "ink_top": 0.20652173913043478,
+      "ink_bottom": 0.8369565217391305,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-bad6e882e38b",
+      "text": "全部规则",
+      "file": "nav-bad6e882e38b-e524180a15.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        283,
+        310,
+        555,
+        405
+      ],
+      "size": [
+        272,
+        95
+      ],
+      "ink_box": [
+        17,
+        21,
+        255,
+        79
+      ],
+      "ink_left": 0.0625,
+      "ink_right": 0.9375,
+      "ink_top": 0.22105263157894736,
+      "ink_bottom": 0.8315789473684211,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-53d77f56548d",
+      "text": "回到顶部",
+      "file": "nav-53d77f56548d-931a6f5a51.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        1118,
+        311,
+        1387,
+        407
+      ],
+      "size": [
+        269,
+        96
+      ],
+      "ink_box": [
+        17,
+        20,
+        254,
+        78
+      ],
+      "ink_left": 0.06319702602230483,
+      "ink_right": 0.9442379182156134,
+      "ink_top": 0.20833333333333334,
+      "ink_bottom": 0.8125,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-928b8f27a82f",
+      "text": "上一个项目",
+      "file": "nav-928b8f27a82f-e2bbbd5ea3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        257,
+        524,
+        580,
+        615
+      ],
+      "size": [
+        323,
+        91
+      ],
+      "ink_box": [
+        15,
+        18,
+        308,
+        76
+      ],
+      "ink_left": 0.04643962848297214,
+      "ink_right": 0.9535603715170279,
+      "ink_top": 0.1978021978021978,
+      "ink_bottom": 0.8351648351648352,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-15f64416b184",
+      "text": "下一个项目",
+      "file": "nav-15f64416b184-caddec342c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        1091,
+        524,
+        1415,
+        615
+      ],
+      "size": [
+        324,
+        91
+      ],
+      "ink_box": [
+        14,
+        18,
+        308,
+        76
+      ],
+      "ink_left": 0.043209876543209874,
+      "ink_right": 0.9506172839506173,
+      "ink_top": 0.1978021978021978,
+      "ink_bottom": 0.8351648351648352,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-0260b011a9d8",
+      "text": "上一个技能",
+      "file": "nav-0260b011a9d8-5cb896d183.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        257,
+        736,
+        584,
+        827
+      ],
+      "size": [
+        327,
+        91
+      ],
+      "ink_box": [
+        15,
+        19,
+        313,
+        76
+      ],
+      "ink_left": 0.045871559633027525,
+      "ink_right": 0.9571865443425076,
+      "ink_top": 0.2087912087912088,
+      "ink_bottom": 0.8351648351648352,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b948ca92cd17",
+      "text": "下一个技能",
+      "file": "nav-b948ca92cd17-8f6cb96b2d.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-02.png",
+      "source_sha256": "d502f3b5f2ec8411de8e2d9aa649eb4f54e0b9c012b484b66b9c724933982176",
+      "source_box": [
+        1090,
+        734,
+        1419,
+        828
+      ],
+      "size": [
+        329,
+        94
+      ],
+      "ink_box": [
+        15,
+        20,
+        314,
+        77
+      ],
+      "ink_left": 0.04559270516717325,
+      "ink_right": 0.9544072948328267,
+      "ink_top": 0.2127659574468085,
+      "ink_bottom": 0.8191489361702128,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-40007239354e",
+      "text": "上一个规则",
+      "file": "nav-40007239354e-e4258e4e6b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        252,
+        110,
+        630,
+        207
+      ],
+      "size": [
+        378,
+        97
+      ],
+      "ink_box": [
+        15,
+        17,
+        363,
+        82
+      ],
+      "ink_left": 0.03968253968253968,
+      "ink_right": 0.9603174603174603,
+      "ink_top": 0.17525773195876287,
+      "ink_bottom": 0.845360824742268,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-96c690fb8465",
+      "text": "下一个规则",
+      "file": "nav-96c690fb8465-3c333aa0d9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        1041,
+        111,
+        1403,
+        208
+      ],
+      "size": [
+        362,
+        97
+      ],
+      "ink_box": [
+        14,
+        17,
+        346,
+        81
+      ],
+      "ink_left": 0.03867403314917127,
+      "ink_right": 0.9558011049723757,
+      "ink_top": 0.17525773195876287,
+      "ink_bottom": 0.8350515463917526,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-f911e414cf6b",
+      "text": "GitHub",
+      "file": "nav-f911e414cf6b-1091b45af4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        307,
+        330,
+        578,
+        421
+      ],
+      "size": [
+        271,
+        91
+      ],
+      "ink_box": [
+        15,
+        17,
+        259,
+        75
+      ],
+      "ink_left": 0.055350553505535055,
+      "ink_right": 0.955719557195572,
+      "ink_top": 0.18681318681318682,
+      "ink_bottom": 0.8241758241758241,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-cfc3d445066f",
+      "text": "哔哩哔哩",
+      "file": "nav-cfc3d445066f-1472523cea.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        1067,
+        328,
+        1376,
+        426
+      ],
+      "size": [
+        309,
+        98
+      ],
+      "ink_box": [
+        19,
+        19,
+        293,
+        82
+      ],
+      "ink_left": 0.061488673139158574,
+      "ink_right": 0.948220064724919,
+      "ink_top": 0.19387755102040816,
+      "ink_bottom": 0.8367346938775511,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4b68ab3847fe",
+      "text": "X",
+      "file": "nav-4b68ab3847fe-bf43f49ac0.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        396,
+        547,
+        490,
+        646
+      ],
+      "size": [
+        94,
+        99
+      ],
+      "ink_box": [
+        23,
+        21,
+        73,
+        77
+      ],
+      "ink_left": 0.24468085106382978,
+      "ink_right": 0.776595744680851,
+      "ink_top": 0.21212121212121213,
+      "ink_bottom": 0.7777777777777778,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-73075237fd0f",
+      "text": "邮箱",
+      "file": "nav-73075237fd0f-23b8cc864c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        1133,
+        541,
+        1309,
+        651
+      ],
+      "size": [
+        176,
+        110
+      ],
+      "ink_box": [
+        23,
+        23,
+        155,
+        89
+      ],
+      "ink_left": 0.13068181818181818,
+      "ink_right": 0.8806818181818182,
+      "ink_top": 0.20909090909090908,
+      "ink_bottom": 0.8090909090909091,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-84a3b8153a01",
+      "text": "这个网页是怎么做的",
+      "file": "nav-84a3b8153a01-6bae7e875d.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        118,
+        751,
+        763,
+        851
+      ],
+      "size": [
+        645,
+        100
+      ],
+      "ink_box": [
+        17,
+        19,
+        629,
+        84
+      ],
+      "ink_left": 0.02635658914728682,
+      "ink_right": 0.9751937984496124,
+      "ink_top": 0.19,
+      "ink_bottom": 0.84,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7371cd297c8d",
+      "text": "开头",
+      "file": "nav-7371cd297c8d-586821e6d3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-03.png",
+      "source_sha256": "40ef470ac360555a3d4b990158d20f70fcb7b574d48333e23c0bdb7d12f92b91",
+      "source_box": [
+        1135,
+        744,
+        1312,
+        856
+      ],
+      "size": [
+        177,
+        112
+      ],
+      "ink_box": [
+        24,
+        26,
+        157,
+        91
+      ],
+      "ink_left": 0.13559322033898305,
+      "ink_right": 0.8870056497175142,
+      "ink_top": 0.23214285714285715,
+      "ink_bottom": 0.8125,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-9fe7ee970509",
+      "text": "怎么用",
+      "file": "nav-9fe7ee970509-785d27303b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        320,
+        108,
+        530,
+        205
+      ],
+      "size": [
+        210,
+        97
+      ],
+      "ink_box": [
+        17,
+        21,
+        192,
+        78
+      ],
+      "ink_left": 0.08095238095238096,
+      "ink_right": 0.9142857142857143,
+      "ink_top": 0.21649484536082475,
+      "ink_bottom": 0.8041237113402062,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4aa1a3c6743f",
+      "text": "技术",
+      "file": "nav-4aa1a3c6743f-a7c4322f14.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        1149,
+        103,
+        1306,
+        207
+      ],
+      "size": [
+        157,
+        104
+      ],
+      "ink_box": [
+        21,
+        26,
+        139,
+        84
+      ],
+      "ink_left": 0.1337579617834395,
+      "ink_right": 0.8853503184713376,
+      "ink_top": 0.25,
+      "ink_bottom": 0.8076923076923077,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ba0d3fdcc635",
+      "text": "亮点",
+      "file": "nav-ba0d3fdcc635-747020dfb6.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        346,
+        306,
+        505,
+        415
+      ],
+      "size": [
+        159,
+        109
+      ],
+      "ink_box": [
+        22,
+        30,
+        138,
+        88
+      ],
+      "ink_left": 0.13836477987421383,
+      "ink_right": 0.8679245283018868,
+      "ink_top": 0.27522935779816515,
+      "ink_bottom": 0.8073394495412844,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-6c8f61c25046",
+      "text": "全部功能",
+      "file": "nav-6c8f61c25046-bdc96b7285.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        1092,
+        311,
+        1366,
+        413
+      ],
+      "size": [
+        274,
+        102
+      ],
+      "ink_box": [
+        18,
+        25,
+        257,
+        82
+      ],
+      "ink_left": 0.06569343065693431,
+      "ink_right": 0.9379562043795621,
+      "ink_top": 0.24509803921568626,
+      "ink_bottom": 0.803921568627451,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-25f5ce57a190",
+      "text": "功能",
+      "file": "nav-25f5ce57a190-fa850698b0.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        346,
+        520,
+        503,
+        624
+      ],
+      "size": [
+        157,
+        104
+      ],
+      "ink_box": [
+        22,
+        27,
+        139,
+        84
+      ],
+      "ink_left": 0.14012738853503184,
+      "ink_right": 0.8853503184713376,
+      "ink_top": 0.25961538461538464,
+      "ink_bottom": 0.8076923076923077,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-f8367a4ec7c3",
+      "text": "演进",
+      "file": "nav-f8367a4ec7c3-48ff7d7f09.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        1148,
+        518,
+        1307,
+        626
+      ],
+      "size": [
+        159,
+        108
+      ],
+      "ink_box": [
+        22,
+        29,
+        140,
+        86
+      ],
+      "ink_left": 0.13836477987421383,
+      "ink_right": 0.8805031446540881,
+      "ink_top": 0.26851851851851855,
+      "ink_bottom": 0.7962962962962963,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-08aa6600cac6",
+      "text": "我的 AI 实践",
+      "file": "nav-08aa6600cac6-602f9373a3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        242,
+        736,
+        608,
+        830
+      ],
+      "size": [
+        366,
+        94
+      ],
+      "ink_box": [
+        16,
+        21,
+        352,
+        78
+      ],
+      "ink_left": 0.04371584699453552,
+      "ink_right": 0.9617486338797814,
+      "ink_top": 0.22340425531914893,
+      "ink_bottom": 0.8297872340425532,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-32df1de256e2",
+      "text": "AI 规则与技能基座",
+      "file": "nav-32df1de256e2-b3ec9bce6b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-04.png",
+      "source_sha256": "cba3ea1b8dc5c71fb480f3db9aa967d6c30908861b0597167ecfe2198be86c9f",
+      "source_box": [
+        967,
+        734,
+        1489,
+        829
+      ],
+      "size": [
+        522,
+        95
+      ],
+      "ink_box": [
+        16,
+        22,
+        509,
+        80
+      ],
+      "ink_left": 0.03065134099616858,
+      "ink_right": 0.975095785440613,
+      "ink_top": 0.23157894736842105,
+      "ink_bottom": 0.8421052631578947,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b84e0bc14839",
+      "text": "AI 工具配置管理",
+      "file": "nav-b84e0bc14839-2ffb0167ae.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        209,
+        117,
+        691,
+        202
+      ],
+      "size": [
+        482,
+        85
+      ],
+      "ink_box": [
+        12,
+        13,
+        471,
+        73
+      ],
+      "ink_left": 0.024896265560165973,
+      "ink_right": 0.9771784232365145,
+      "ink_top": 0.15294117647058825,
+      "ink_bottom": 0.8588235294117647,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-354b28c85333",
+      "text": "原文",
+      "file": "nav-354b28c85333-d2ba35345b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        1137,
+        107,
+        1297,
+        209
+      ],
+      "size": [
+        160,
+        102
+      ],
+      "ink_box": [
+        20,
+        23,
+        142,
+        83
+      ],
+      "ink_left": 0.125,
+      "ink_right": 0.8875,
+      "ink_top": 0.22549019607843138,
+      "ink_bottom": 0.8137254901960784,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-00267a7b08c7",
+      "text": "约法",
+      "file": "nav-00267a7b08c7-63cd6d40bd.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        371,
+        319,
+        530,
+        418
+      ],
+      "size": [
+        159,
+        99
+      ],
+      "ink_box": [
+        19,
+        21,
+        142,
+        80
+      ],
+      "ink_left": 0.11949685534591195,
+      "ink_right": 0.8930817610062893,
+      "ink_top": 0.21212121212121213,
+      "ink_bottom": 0.8080808080808081,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-398cd04705c2",
+      "text": "中文语音转写",
+      "file": "nav-398cd04705c2-8535e7bfc4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        1024,
+        324,
+        1413,
+        414
+      ],
+      "size": [
+        389,
+        90
+      ],
+      "ink_box": [
+        15,
+        15,
+        376,
+        75
+      ],
+      "ink_left": 0.038560411311053984,
+      "ink_right": 0.9665809768637532,
+      "ink_top": 0.16666666666666666,
+      "ink_bottom": 0.8333333333333334,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ad9615fb9649",
+      "text": "为什么不用了",
+      "file": "nav-ad9615fb9649-3be273ec8f.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        255,
+        534,
+        643,
+        627
+      ],
+      "size": [
+        388,
+        93
+      ],
+      "ink_box": [
+        16,
+        19,
+        376,
+        78
+      ],
+      "ink_left": 0.041237113402061855,
+      "ink_right": 0.9690721649484536,
+      "ink_top": 0.20430107526881722,
+      "ink_bottom": 0.8387096774193549,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-bcacfb9b86ef",
+      "text": "为什么不用",
+      "file": "nav-bcacfb9b86ef-479b4f09f4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        1056,
+        533,
+        1384,
+        627
+      ],
+      "size": [
+        328,
+        94
+      ],
+      "ink_box": [
+        16,
+        20,
+        312,
+        79
+      ],
+      "ink_left": 0.04878048780487805,
+      "ink_right": 0.9512195121951219,
+      "ink_top": 0.2127659574468085,
+      "ink_bottom": 0.8404255319148937,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-13c165c6204c",
+      "text": "AI 模型评测",
+      "file": "nav-13c165c6204c-5d9bd5641e.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        272,
+        742,
+        629,
+        835
+      ],
+      "size": [
+        357,
+        93
+      ],
+      "ink_box": [
+        14,
+        18,
+        342,
+        78
+      ],
+      "ink_left": 0.0392156862745098,
+      "ink_right": 0.957983193277311,
+      "ink_top": 0.1935483870967742,
+      "ink_bottom": 0.8387096774193549,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-6622024dbab4",
+      "text": "Codex 远程",
+      "file": "nav-6622024dbab4-49e89c1ddc.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-05.png",
+      "source_sha256": "cacdec34c44636effef42c8842bf452f9a6ce64a905545880dbf9dd9d81402a3",
+      "source_box": [
+        1033,
+        743,
+        1406,
+        835
+      ],
+      "size": [
+        373,
+        92
+      ],
+      "ink_box": [
+        17,
+        18,
+        359,
+        76
+      ],
+      "ink_left": 0.045576407506702415,
+      "ink_right": 0.9624664879356568,
+      "ink_top": 0.1956521739130435,
+      "ink_bottom": 0.8260869565217391,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b17c63a0c02b",
+      "text": "AI 备份",
+      "file": "nav-b17c63a0c02b-4647a99d7a.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        319,
+        96,
+        557,
+        190
+      ],
+      "size": [
+        238,
+        94
+      ],
+      "ink_box": [
+        15,
+        19,
+        223,
+        78
+      ],
+      "ink_left": 0.06302521008403361,
+      "ink_right": 0.9369747899159664,
+      "ink_top": 0.20212765957446807,
+      "ink_bottom": 0.8297872340425532,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-2c093b1f4da8",
+      "text": "个人理解库",
+      "file": "nav-2c093b1f4da8-b5e111f23b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        1057,
+        98,
+        1388,
+        188
+      ],
+      "size": [
+        331,
+        90
+      ],
+      "ink_box": [
+        15,
+        17,
+        318,
+        76
+      ],
+      "ink_left": 0.045317220543806644,
+      "ink_right": 0.9607250755287009,
+      "ink_top": 0.18888888888888888,
+      "ink_bottom": 0.8444444444444444,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ec96df61bbe2",
+      "text": "开发配置备份",
+      "file": "nav-ec96df61bbe2-ba243176fc.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        242,
+        312,
+        635,
+        401
+      ],
+      "size": [
+        393,
+        89
+      ],
+      "ink_box": [
+        16,
+        16,
+        381,
+        76
+      ],
+      "ink_left": 0.04071246819338423,
+      "ink_right": 0.9694656488549618,
+      "ink_top": 0.1797752808988764,
+      "ink_bottom": 0.8539325842696629,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7c69cd876f1c",
+      "text": "屏保与壁纸",
+      "file": "nav-7c69cd876f1c-c07cdb9949.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        1059,
+        311,
+        1390,
+        402
+      ],
+      "size": [
+        331,
+        91
+      ],
+      "ink_box": [
+        13,
+        17,
+        316,
+        77
+      ],
+      "ink_left": 0.03927492447129909,
+      "ink_right": 0.9546827794561934,
+      "ink_top": 0.18681318681318682,
+      "ink_bottom": 0.8461538461538461,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-1f90fc70c428",
+      "text": "GitHub 项目总索引",
+      "file": "nav-1f90fc70c428-af555e3e8c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        152,
+        531,
+        722,
+        616
+      ],
+      "size": [
+        570,
+        85
+      ],
+      "ink_box": [
+        13,
+        15,
+        557,
+        74
+      ],
+      "ink_left": 0.02280701754385965,
+      "ink_right": 0.9771929824561404,
+      "ink_top": 0.17647058823529413,
+      "ink_bottom": 0.8705882352941177,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d6543d3bdf2e",
+      "text": "学习方法",
+      "file": "nav-d6543d3bdf2e-4a3c7a3f79.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        1089,
+        528,
+        1357,
+        620
+      ],
+      "size": [
+        268,
+        92
+      ],
+      "ink_box": [
+        16,
+        18,
+        253,
+        77
+      ],
+      "ink_left": 0.05970149253731343,
+      "ink_right": 0.9440298507462687,
+      "ink_top": 0.1956521739130435,
+      "ink_bottom": 0.8369565217391305,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-6077f34d4f3f",
+      "text": "本地文字识别",
+      "file": "nav-6077f34d4f3f-3c17d040a7.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        244,
+        744,
+        632,
+        833
+      ],
+      "size": [
+        388,
+        89
+      ],
+      "ink_box": [
+        15,
+        16,
+        374,
+        76
+      ],
+      "ink_left": 0.03865979381443299,
+      "ink_right": 0.9639175257731959,
+      "ink_top": 0.1797752808988764,
+      "ink_bottom": 0.8539325842696629,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b0cc204ea4e3",
+      "text": "双机剪贴板",
+      "file": "nav-b0cc204ea4e3-dddf1326b7.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-06.png",
+      "source_sha256": "7f03578cc20498089f9faeb3c75ce4230f553677308670b7639789d1e5e3d273",
+      "source_box": [
+        1056,
+        744,
+        1387,
+        834
+      ],
+      "size": [
+        331,
+        90
+      ],
+      "ink_box": [
+        16,
+        16,
+        317,
+        76
+      ],
+      "ink_left": 0.04833836858006042,
+      "ink_right": 0.9577039274924471,
+      "ink_top": 0.17777777777777778,
+      "ink_bottom": 0.8444444444444444,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-84d31f2883b2",
+      "text": "OpenClaw 网关",
+      "file": "nav-84d31f2883b2-5c365f293b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        149,
+        103,
+        704,
+        215
+      ],
+      "size": [
+        555,
+        112
+      ],
+      "ink_box": [
+        20,
+        20,
+        538,
+        95
+      ],
+      "ink_left": 0.036036036036036036,
+      "ink_right": 0.9693693693693693,
+      "ink_top": 0.17857142857142858,
+      "ink_bottom": 0.8482142857142857,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-c542fe3321d5",
+      "text": "密码中心",
+      "file": "nav-c542fe3321d5-44dee37fb5.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        1077,
+        106,
+        1379,
+        205
+      ],
+      "size": [
+        302,
+        99
+      ],
+      "ink_box": [
+        16,
+        17,
+        290,
+        84
+      ],
+      "ink_left": 0.052980132450331126,
+      "ink_right": 0.9602649006622517,
+      "ink_top": 0.1717171717171717,
+      "ink_bottom": 0.8484848484848485,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-a7d6625f8c31",
+      "text": "双屏信息中心",
+      "file": "nav-a7d6625f8c31-dc0b566ec5.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        207,
+        319,
+        642,
+        423
+      ],
+      "size": [
+        435,
+        104
+      ],
+      "ink_box": [
+        18,
+        20,
+        423,
+        86
+      ],
+      "ink_left": 0.041379310344827586,
+      "ink_right": 0.9724137931034482,
+      "ink_top": 0.19230769230769232,
+      "ink_bottom": 0.8269230769230769,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-0fccb0359756",
+      "text": "电脑配置与恢复",
+      "file": "nav-0fccb0359756-39332dcc63.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        981,
+        323,
+        1479,
+        419
+      ],
+      "size": [
+        498,
+        96
+      ],
+      "ink_box": [
+        16,
+        16,
+        484,
+        82
+      ],
+      "ink_left": 0.0321285140562249,
+      "ink_right": 0.9718875502008032,
+      "ink_top": 0.16666666666666666,
+      "ink_bottom": 0.8541666666666666,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4e2a26bfa5b7",
+      "text": "个人表达",
+      "file": "nav-4e2a26bfa5b7-32bf10e5ea.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        274,
+        537,
+        577,
+        639
+      ],
+      "size": [
+        303,
+        102
+      ],
+      "ink_box": [
+        18,
+        19,
+        288,
+        85
+      ],
+      "ink_left": 0.0594059405940594,
+      "ink_right": 0.9504950495049505,
+      "ink_top": 0.18627450980392157,
+      "ink_bottom": 0.8333333333333334,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-bdeaa8d446e8",
+      "text": "个人正式文书",
+      "file": "nav-bdeaa8d446e8-fb5cc17d0c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        1013,
+        540,
+        1446,
+        637
+      ],
+      "size": [
+        433,
+        97
+      ],
+      "ink_box": [
+        15,
+        17,
+        419,
+        83
+      ],
+      "ink_left": 0.03464203233256351,
+      "ink_right": 0.9676674364896074,
+      "ink_top": 0.17525773195876287,
+      "ink_bottom": 0.8556701030927835,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ac4c8a0e1c9a",
+      "text": "个人健康",
+      "file": "nav-ac4c8a0e1c9a-e383dfe3fd.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        274,
+        751,
+        580,
+        857
+      ],
+      "size": [
+        306,
+        106
+      ],
+      "ink_box": [
+        18,
+        21,
+        288,
+        87
+      ],
+      "ink_left": 0.058823529411764705,
+      "ink_right": 0.9411764705882353,
+      "ink_top": 0.19811320754716982,
+      "ink_bottom": 0.8207547169811321,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-3aedbba755a3",
+      "text": "个人材料查找",
+      "file": "nav-3aedbba755a3-c5881e33d5.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-07.png",
+      "source_sha256": "efc4af6d87b5b1822f5603c13c03f841f5e8612a898d16a4189418ac2899f2f6",
+      "source_box": [
+        1014,
+        756,
+        1446,
+        853
+      ],
+      "size": [
+        432,
+        97
+      ],
+      "ink_box": [
+        14,
+        16,
+        419,
+        82
+      ],
+      "ink_left": 0.032407407407407406,
+      "ink_right": 0.9699074074074074,
+      "ink_top": 0.16494845360824742,
+      "ink_bottom": 0.845360824742268,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-aa35b263ba8d",
+      "text": "照片视频录音管理",
+      "file": "nav-aa35b263ba8d-14ba304cc2.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        198,
+        112,
+        675,
+        190
+      ],
+      "size": [
+        477,
+        78
+      ],
+      "ink_box": [
+        11,
+        12,
+        468,
+        67
+      ],
+      "ink_left": 0.023060796645702306,
+      "ink_right": 0.9811320754716981,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8589743589743589,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-81f708b1a4e1",
+      "text": "让 AI 守规矩、用对工具",
+      "file": "nav-81f708b1a4e1-fa1edcea86.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        905,
+        111,
+        1522,
+        192
+      ],
+      "size": [
+        617,
+        81
+      ],
+      "ink_box": [
+        13,
+        13,
+        607,
+        69
+      ],
+      "ink_left": 0.02106969205834684,
+      "ink_right": 0.9837925445705025,
+      "ink_top": 0.16049382716049382,
+      "ink_bottom": 0.8518518518518519,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4ca9db96020f",
+      "text": "让 AI 管好秘密",
+      "file": "nav-4ca9db96020f-e78a37705d.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        241,
+        329,
+        635,
+        411
+      ],
+      "size": [
+        394,
+        82
+      ],
+      "ink_box": [
+        13,
+        13,
+        384,
+        70
+      ],
+      "ink_left": 0.03299492385786802,
+      "ink_right": 0.9746192893401016,
+      "ink_top": 0.15853658536585366,
+      "ink_bottom": 0.8536585365853658,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-02dcc797a55f",
+      "text": "让 AI 管好备份和恢复",
+      "file": "nav-02dcc797a55f-dda7096c98.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        934,
+        331,
+        1496,
+        409
+      ],
+      "size": [
+        562,
+        78
+      ],
+      "ink_box": [
+        11,
+        12,
+        553,
+        68
+      ],
+      "ink_left": 0.019572953736654804,
+      "ink_right": 0.9839857651245552,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8717948717948718,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-cfd12e1e0ea5",
+      "text": "让电脑顺手、状态看得见",
+      "file": "nav-cfd12e1e0ea5-eced589cee.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        115,
+        546,
+        762,
+        629
+      ],
+      "size": [
+        647,
+        83
+      ],
+      "ink_box": [
+        13,
+        15,
+        637,
+        70
+      ],
+      "ink_left": 0.02009273570324575,
+      "ink_right": 0.9845440494590417,
+      "ink_top": 0.18072289156626506,
+      "ink_bottom": 0.8433734939759037,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-007d3d9e3dfd",
+      "text": "人不在电脑前也能办事",
+      "file": "nav-007d3d9e3dfd-7ff63ca4da.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        925,
+        549,
+        1513,
+        627
+      ],
+      "size": [
+        588,
+        78
+      ],
+      "ink_box": [
+        10,
+        12,
+        577,
+        68
+      ],
+      "ink_left": 0.017006802721088437,
+      "ink_right": 0.9812925170068028,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8717948717948718,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-0ceab1e2ae9c",
+      "text": "让 AI 懂我",
+      "file": "nav-0ceab1e2ae9c-d57d01901e.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        294,
+        763,
+        578,
+        847
+      ],
+      "size": [
+        284,
+        84
+      ],
+      "ink_box": [
+        14,
+        15,
+        273,
+        70
+      ],
+      "ink_left": 0.04929577464788732,
+      "ink_right": 0.9612676056338029,
+      "ink_top": 0.17857142857142858,
+      "ink_bottom": 0.8333333333333334,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-47c38255d539",
+      "text": "让 AI 读懂我的材料",
+      "file": "nav-47c38255d539-4847e9c81d.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-08.png",
+      "source_sha256": "96d69f1c4a51bb73541085dc952c21042f96cf179f9af9dc5d7de41d64b0d9a5",
+      "source_box": [
+        964,
+        766,
+        1468,
+        844
+      ],
+      "size": [
+        504,
+        78
+      ],
+      "ink_box": [
+        11,
+        12,
+        495,
+        68
+      ],
+      "ink_left": 0.021825396825396824,
+      "ink_right": 0.9821428571428571,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8717948717948718,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-f983720b3736",
+      "text": "让 AI 帮我写和做",
+      "file": "nav-f983720b3736-8a1bcf3cbb.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        195,
+        97,
+        666,
+        183
+      ],
+      "size": [
+        471,
+        86
+      ],
+      "ink_box": [
+        13,
+        16,
+        459,
+        73
+      ],
+      "ink_left": 0.027600849256900213,
+      "ink_right": 0.9745222929936306,
+      "ink_top": 0.18604651162790697,
+      "ink_bottom": 0.8488372093023255,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7a2999aa1db2",
+      "text": "冻结（AI 不再维护）",
+      "file": "nav-7a2999aa1db2-6d08770161.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        966,
+        96,
+        1506,
+        184
+      ],
+      "size": [
+        540,
+        88
+      ],
+      "ink_box": [
+        14,
+        16,
+        528,
+        74
+      ],
+      "ink_left": 0.025925925925925925,
+      "ink_right": 0.9777777777777777,
+      "ink_top": 0.18181818181818182,
+      "ink_bottom": 0.8409090909090909,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-46d81a290a11",
+      "text": "代理上网修复",
+      "file": "nav-46d81a290a11-a280e79f95.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        244,
+        311,
+        618,
+        397
+      ],
+      "size": [
+        374,
+        86
+      ],
+      "ink_box": [
+        15,
+        17,
+        363,
+        74
+      ],
+      "ink_left": 0.040106951871657755,
+      "ink_right": 0.9705882352941176,
+      "ink_top": 0.19767441860465115,
+      "ink_bottom": 0.8604651162790697,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-807d67167ecb",
+      "text": "内存盘守护",
+      "file": "nav-807d67167ecb-fb12d17bc9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        1084,
+        311,
+        1400,
+        398
+      ],
+      "size": [
+        316,
+        87
+      ],
+      "ink_box": [
+        15,
+        16,
+        302,
+        74
+      ],
+      "ink_left": 0.04746835443037975,
+      "ink_right": 0.9556962025316456,
+      "ink_top": 0.1839080459770115,
+      "ink_bottom": 0.8505747126436781,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4ffbcdc5180e",
+      "text": "电脑远程控制",
+      "file": "nav-4ffbcdc5180e-359330db06.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        247,
+        528,
+        620,
+        614
+      ],
+      "size": [
+        373,
+        86
+      ],
+      "ink_box": [
+        15,
+        17,
+        359,
+        74
+      ],
+      "ink_left": 0.040214477211796246,
+      "ink_right": 0.9624664879356568,
+      "ink_top": 0.19767441860465115,
+      "ink_bottom": 0.8604651162790697,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-c3b187c6f34b",
+      "text": "要点",
+      "file": "nav-c3b187c6f34b-4ddf745fe8.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        1165,
+        522,
+        1317,
+        621
+      ],
+      "size": [
+        152,
+        99
+      ],
+      "ink_box": [
+        20,
+        23,
+        133,
+        80
+      ],
+      "ink_left": 0.13157894736842105,
+      "ink_right": 0.875,
+      "ink_top": 0.23232323232323232,
+      "ink_bottom": 0.8080808080808081,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d23365471633",
+      "text": "用户授权",
+      "file": "nav-d23365471633-a5edfa0628.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        301,
+        742,
+        564,
+        833
+      ],
+      "size": [
+        263,
+        91
+      ],
+      "ink_box": [
+        16,
+        18,
+        249,
+        76
+      ],
+      "ink_left": 0.060836501901140684,
+      "ink_right": 0.9467680608365019,
+      "ink_top": 0.1978021978021978,
+      "ink_bottom": 0.8351648351648352,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-e61ad08fd3c7",
+      "text": "能力与运行方式",
+      "file": "nav-e61ad08fd3c7-83c88a9991.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-09.png",
+      "source_sha256": "bec047424ec5dfa2a83efba62cf17d573780d8e453e9771b9a7c73bf9dfa9cbc",
+      "source_box": [
+        1024,
+        744,
+        1457,
+        830
+      ],
+      "size": [
+        433,
+        86
+      ],
+      "ink_box": [
+        14,
+        16,
+        420,
+        73
+      ],
+      "ink_left": 0.03233256351039261,
+      "ink_right": 0.9699769053117783,
+      "ink_top": 0.18604651162790697,
+      "ink_bottom": 0.8488372093023255,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-eb8a91c04af8",
+      "text": "Claude 适配",
+      "file": "nav-eb8a91c04af8-3a642f6145.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        268,
+        111,
+        606,
+        191
+      ],
+      "size": [
+        338,
+        80
+      ],
+      "ink_box": [
+        14,
+        13,
+        326,
+        67
+      ],
+      "ink_left": 0.04142011834319527,
+      "ink_right": 0.9644970414201184,
+      "ink_top": 0.1625,
+      "ink_bottom": 0.8375,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-a4674b618f03",
+      "text": "Codex 适配",
+      "file": "nav-a4674b618f03-7321eeca34.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        1071,
+        111,
+        1398,
+        191
+      ],
+      "size": [
+        327,
+        80
+      ],
+      "ink_box": [
+        14,
+        13,
+        315,
+        67
+      ],
+      "ink_left": 0.04281345565749235,
+      "ink_right": 0.963302752293578,
+      "ink_top": 0.1625,
+      "ink_bottom": 0.8375,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-5c3f32ee791f",
+      "text": "事实来源与任务上下文",
+      "file": "nav-5c3f32ee791f-191fda0715.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        146,
+        323,
+        731,
+        403
+      ],
+      "size": [
+        585,
+        80
+      ],
+      "ink_box": [
+        12,
+        13,
+        573,
+        69
+      ],
+      "ink_left": 0.020512820512820513,
+      "ink_right": 0.9794871794871794,
+      "ink_top": 0.1625,
+      "ink_bottom": 0.8625,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ba55b824f91a",
+      "text": "工程与交付",
+      "file": "nav-ba55b824f91a-ef56bd978b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        1082,
+        322,
+        1390,
+        404
+      ],
+      "size": [
+        308,
+        82
+      ],
+      "ink_box": [
+        14,
+        14,
+        294,
+        70
+      ],
+      "ink_left": 0.045454545454545456,
+      "ink_right": 0.9545454545454546,
+      "ink_top": 0.17073170731707318,
+      "ink_bottom": 0.8536585365853658,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-5002849d4689",
+      "text": "分工与并行施工",
+      "file": "nav-5002849d4689-7cf0b4c2a9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        231,
+        539,
+        643,
+        617
+      ],
+      "size": [
+        412,
+        78
+      ],
+      "ink_box": [
+        11,
+        12,
+        402,
+        68
+      ],
+      "ink_left": 0.02669902912621359,
+      "ink_right": 0.9757281553398058,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8717948717948718,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-114b2984bb76",
+      "text": "个人资料与数据处理",
+      "file": "nav-114b2984bb76-d0e5aaa996.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        972,
+        539,
+        1498,
+        617
+      ],
+      "size": [
+        526,
+        78
+      ],
+      "ink_box": [
+        11,
+        12,
+        516,
+        68
+      ],
+      "ink_left": 0.02091254752851711,
+      "ink_right": 0.9809885931558935,
+      "ink_top": 0.15384615384615385,
+      "ink_bottom": 0.8717948717948718,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-fbcb5d6d6e0c",
+      "text": "重大动作与本人验证",
+      "file": "nav-fbcb5d6d6e0c-1cf3c67f5c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        175,
+        751,
+        700,
+        830
+      ],
+      "size": [
+        525,
+        79
+      ],
+      "ink_box": [
+        13,
+        14,
+        514,
+        69
+      ],
+      "ink_left": 0.024761904761904763,
+      "ink_right": 0.979047619047619,
+      "ink_top": 0.17721518987341772,
+      "ink_bottom": 0.8734177215189873,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-e64cb80820be",
+      "text": "规则发布与恢复",
+      "file": "nav-e64cb80820be-2d667a0786.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-10.png",
+      "source_sha256": "81d55e8056ef69827e4ae37168fbb4fc79af6f6c92051b420aae3e50c04379d8",
+      "source_box": [
+        1028,
+        750,
+        1443,
+        832
+      ],
+      "size": [
+        415,
+        82
+      ],
+      "ink_box": [
+        12,
+        14,
+        403,
+        70
+      ],
+      "ink_left": 0.02891566265060241,
+      "ink_right": 0.9710843373493976,
+      "ink_top": 0.17073170731707318,
+      "ink_bottom": 0.8536585365853658,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-9e44041a627e",
+      "text": "10 个专题",
+      "file": "nav-9e44041a627e-88e52517f8.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        266,
+        94,
+        590,
+        188
+      ],
+      "size": [
+        324,
+        94
+      ],
+      "ink_box": [
+        17,
+        17,
+        310,
+        81
+      ],
+      "ink_left": 0.05246913580246913,
+      "ink_right": 0.9567901234567902,
+      "ink_top": 0.18085106382978725,
+      "ink_bottom": 0.8617021276595744,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-283ba9f1bcbc",
+      "text": "例子",
+      "file": "nav-283ba9f1bcbc-034e82091b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        1147,
+        90,
+        1313,
+        195
+      ],
+      "size": [
+        166,
+        105
+      ],
+      "ink_box": [
+        18,
+        22,
+        147,
+        84
+      ],
+      "ink_left": 0.10843373493975904,
+      "ink_right": 0.8855421686746988,
+      "ink_top": 0.20952380952380953,
+      "ink_bottom": 0.8,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7dadc2c869cd",
+      "text": "能做的事",
+      "file": "nav-7dadc2c869cd-3d9e1e9682.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        281,
+        314,
+        574,
+        413
+      ],
+      "size": [
+        293,
+        99
+      ],
+      "ink_box": [
+        17,
+        18,
+        277,
+        82
+      ],
+      "ink_left": 0.05802047781569966,
+      "ink_right": 0.9453924914675768,
+      "ink_top": 0.18181818181818182,
+      "ink_bottom": 0.8282828282828283,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7a7e13ca9679",
+      "text": "边界",
+      "file": "nav-7a7e13ca9679-5772824213.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        1144,
+        308,
+        1312,
+        416
+      ],
+      "size": [
+        168,
+        108
+      ],
+      "ink_box": [
+        22,
+        25,
+        151,
+        89
+      ],
+      "ink_left": 0.13095238095238096,
+      "ink_right": 0.8988095238095238,
+      "ink_top": 0.23148148148148148,
+      "ink_bottom": 0.8240740740740741,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-a6a91aec3d6c",
+      "text": "加密文件",
+      "file": "nav-a6a91aec3d6c-c5a00dbc50.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        281,
+        536,
+        573,
+        631
+      ],
+      "size": [
+        292,
+        95
+      ],
+      "ink_box": [
+        16,
+        16,
+        278,
+        80
+      ],
+      "ink_left": 0.0547945205479452,
+      "ink_right": 0.952054794520548,
+      "ink_top": 0.16842105263157894,
+      "ink_bottom": 0.8421052631578947,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-1629dc4a2efd",
+      "text": "网页上的事接着办",
+      "file": "nav-1629dc4a2efd-7eef4fd7d4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        953,
+        539,
+        1506,
+        631
+      ],
+      "size": [
+        553,
+        92
+      ],
+      "ink_box": [
+        15,
+        14,
+        544,
+        78
+      ],
+      "ink_left": 0.027124773960216998,
+      "ink_right": 0.9837251356238698,
+      "ink_top": 0.15217391304347827,
+      "ink_bottom": 0.8478260869565217,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b317940f6801",
+      "text": "中文语音转写技能",
+      "file": "nav-b317940f6801-03d2ad5ab6.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        149,
+        757,
+        702,
+        852
+      ],
+      "size": [
+        553,
+        95
+      ],
+      "ink_box": [
+        16,
+        16,
+        540,
+        80
+      ],
+      "ink_left": 0.028933092224231464,
+      "ink_right": 0.976491862567812,
+      "ink_top": 0.16842105263157894,
+      "ink_bottom": 0.8421052631578947,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d0fad5fdc9ee",
+      "text": "技能与基座体检",
+      "file": "nav-d0fad5fdc9ee-473019e477.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-11.png",
+      "source_sha256": "9764fecd750188e88db9f5b27a96bb9a435fc3acb0ad77a4709895fe2c5d842a",
+      "source_box": [
+        986,
+        758,
+        1474,
+        851
+      ],
+      "size": [
+        488,
+        93
+      ],
+      "ink_box": [
+        14,
+        15,
+        476,
+        79
+      ],
+      "ink_left": 0.028688524590163935,
+      "ink_right": 0.9754098360655737,
+      "ink_top": 0.16129032258064516,
+      "ink_bottom": 0.8494623655913979,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-599652b09be1",
+      "text": "记得我是谁",
+      "file": "nav-599652b09be1-d444637d07.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        259,
+        104,
+        610,
+        197
+      ],
+      "size": [
+        351,
+        93
+      ],
+      "ink_box": [
+        15,
+        16,
+        338,
+        79
+      ],
+      "ink_left": 0.042735042735042736,
+      "ink_right": 0.9629629629629629,
+      "ink_top": 0.17204301075268819,
+      "ink_bottom": 0.8494623655913979,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-74d04bc95950",
+      "text": "讲给我听",
+      "file": "nav-74d04bc95950-e11d9568a8.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        1068,
+        102,
+        1357,
+        197
+      ],
+      "size": [
+        289,
+        95
+      ],
+      "ink_box": [
+        17,
+        18,
+        276,
+        81
+      ],
+      "ink_left": 0.058823529411764705,
+      "ink_right": 0.9550173010380623,
+      "ink_top": 0.18947368421052632,
+      "ink_bottom": 0.8526315789473684,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-226ea60bb2aa",
+      "text": "一堆文件一起看",
+      "file": "nav-226ea60bb2aa-0f1a45c5b9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        197,
+        312,
+        674,
+        408
+      ],
+      "size": [
+        477,
+        96
+      ],
+      "ink_box": [
+        15,
+        19,
+        465,
+        82
+      ],
+      "ink_left": 0.031446540880503145,
+      "ink_right": 0.9748427672955975,
+      "ink_top": 0.19791666666666666,
+      "ink_bottom": 0.8541666666666666,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-11d81cc6f497",
+      "text": "邮件、云盘和待办",
+      "file": "nav-11d81cc6f497-74b1aa2016.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        949,
+        313,
+        1482,
+        410
+      ],
+      "size": [
+        533,
+        97
+      ],
+      "ink_box": [
+        18,
+        18,
+        522,
+        82
+      ],
+      "ink_left": 0.03377110694183865,
+      "ink_right": 0.9793621013133208,
+      "ink_top": 0.18556701030927836,
+      "ink_bottom": 0.845360824742268,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-915c18abd56f",
+      "text": "学习方法技能",
+      "file": "nav-915c18abd56f-50316ea4cb.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        229,
+        539,
+        641,
+        629
+      ],
+      "size": [
+        412,
+        90
+      ],
+      "ink_box": [
+        14,
+        13,
+        402,
+        78
+      ],
+      "ink_left": 0.03398058252427184,
+      "ink_right": 0.9757281553398058,
+      "ink_top": 0.14444444444444443,
+      "ink_bottom": 0.8666666666666667,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d44b78dbb889",
+      "text": "密码和本人验证",
+      "file": "nav-d44b78dbb889-d8eab12220.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        981,
+        538,
+        1451,
+        631
+      ],
+      "size": [
+        470,
+        93
+      ],
+      "ink_box": [
+        13,
+        16,
+        458,
+        79
+      ],
+      "ink_left": 0.027659574468085105,
+      "ink_right": 0.9744680851063829,
+      "ink_top": 0.17204301075268819,
+      "ink_bottom": 0.8494623655913979,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7d54fc8abffe",
+      "text": "文稿转 PDF",
+      "file": "nav-7d54fc8abffe-f3a3ee3182.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        251,
+        754,
+        625,
+        848
+      ],
+      "size": [
+        374,
+        94
+      ],
+      "ink_box": [
+        14,
+        17,
+        359,
+        80
+      ],
+      "ink_left": 0.0374331550802139,
+      "ink_right": 0.9598930481283422,
+      "ink_top": 0.18085106382978725,
+      "ink_bottom": 0.851063829787234,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-cc709d5c8610",
+      "text": "照片录音里有没有我",
+      "file": "nav-cc709d5c8610-573e9388df.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-12.png",
+      "source_sha256": "0d1204ee2eb6de3fcedf2cd8e71602d32604df4863b7fa5fc1368db29225657d",
+      "source_box": [
+        917,
+        759,
+        1519,
+        848
+      ],
+      "size": [
+        602,
+        89
+      ],
+      "ink_box": [
+        13,
+        13,
+        590,
+        76
+      ],
+      "ink_left": 0.02159468438538206,
+      "ink_right": 0.9800664451827242,
+      "ink_top": 0.14606741573033707,
+      "ink_bottom": 0.8539325842696629,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-66149eed6485",
+      "text": "修乱码",
+      "file": "nav-66149eed6485-a9c3b96ca3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        307,
+        103,
+        530,
+        199
+      ],
+      "size": [
+        223,
+        96
+      ],
+      "ink_box": [
+        16,
+        18,
+        207,
+        79
+      ],
+      "ink_left": 0.07174887892376682,
+      "ink_right": 0.9282511210762332,
+      "ink_top": 0.1875,
+      "ink_bottom": 0.8229166666666666,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-be2402614ab7",
+      "text": "PDF 逐页检查",
+      "file": "nav-be2402614ab7-240f06263e.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        1016,
+        105,
+        1435,
+        195
+      ],
+      "size": [
+        419,
+        90
+      ],
+      "ink_box": [
+        17,
+        15,
+        406,
+        77
+      ],
+      "ink_left": 0.0405727923627685,
+      "ink_right": 0.9689737470167065,
+      "ink_top": 0.16666666666666666,
+      "ink_bottom": 0.8555555555555555,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4e505cc090bd",
+      "text": "个人正式文书技能",
+      "file": "nav-4e505cc090bd-395e204a7d.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        149,
+        312,
+        686,
+        401
+      ],
+      "size": [
+        537,
+        89
+      ],
+      "ink_box": [
+        14,
+        16,
+        526,
+        78
+      ],
+      "ink_left": 0.0260707635009311,
+      "ink_right": 0.9795158286778398,
+      "ink_top": 0.1797752808988764,
+      "ink_bottom": 0.8764044943820225,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-449e49ffe10c",
+      "text": "健康问题",
+      "file": "nav-449e49ffe10c-51547cb4e9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        1080,
+        310,
+        1371,
+        404
+      ],
+      "size": [
+        291,
+        94
+      ],
+      "ink_box": [
+        16,
+        18,
+        276,
+        80
+      ],
+      "ink_left": 0.054982817869415807,
+      "ink_right": 0.9484536082474226,
+      "ink_top": 0.19148936170212766,
+      "ink_bottom": 0.851063829787234,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b4cd545c8396",
+      "text": "找文件原件",
+      "file": "nav-b4cd545c8396-15c14c1d72.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        245,
+        532,
+        593,
+        626
+      ],
+      "size": [
+        348,
+        94
+      ],
+      "ink_box": [
+        16,
+        17,
+        335,
+        79
+      ],
+      "ink_left": 0.04597701149425287,
+      "ink_right": 0.9626436781609196,
+      "ink_top": 0.18085106382978725,
+      "ink_bottom": 0.8404255319148937,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4e6127dc90b9",
+      "text": "找照片和录音",
+      "file": "nav-4e6127dc90b9-892d5284da.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        1021,
+        537,
+        1429,
+        626
+      ],
+      "size": [
+        408,
+        89
+      ],
+      "ink_box": [
+        15,
+        13,
+        395,
+        76
+      ],
+      "ink_left": 0.03676470588235294,
+      "ink_right": 0.9681372549019608,
+      "ink_top": 0.14606741573033707,
+      "ink_bottom": 0.8539325842696629,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ac5fa6b95fb3",
+      "text": "改项目前先核对",
+      "file": "nav-ac5fa6b95fb3-af4e6e0345.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        186,
+        748,
+        653,
+        834
+      ],
+      "size": [
+        467,
+        86
+      ],
+      "ink_box": [
+        14,
+        14,
+        457,
+        76
+      ],
+      "ink_left": 0.029978586723768737,
+      "ink_right": 0.9785867237687366,
+      "ink_top": 0.16279069767441862,
+      "ink_bottom": 0.8837209302325582,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-a7004192c786",
+      "text": "替我拟消息",
+      "file": "nav-a7004192c786-ce8dbf8999.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-13.png",
+      "source_sha256": "be1b69caf2596bb387212e35b4da22428c809afcbb28ef726c498de52573f43b",
+      "source_box": [
+        1053,
+        745,
+        1402,
+        838
+      ],
+      "size": [
+        349,
+        93
+      ],
+      "ink_box": [
+        14,
+        17,
+        336,
+        79
+      ],
+      "ink_left": 0.04011461318051576,
+      "ink_right": 0.9627507163323782,
+      "ink_top": 0.1827956989247312,
+      "ink_bottom": 0.8494623655913979,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d320a7a8e10d",
+      "text": "汇报网页",
+      "file": "nav-d320a7a8e10d-8eaeb3f27c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        301,
+        105,
+        538,
+        184
+      ],
+      "size": [
+        237,
+        79
+      ],
+      "ink_box": [
+        15,
+        15,
+        225,
+        66
+      ],
+      "ink_left": 0.06329113924050633,
+      "ink_right": 0.9493670886075949,
+      "ink_top": 0.189873417721519,
+      "ink_bottom": 0.8354430379746836,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-ac7c4489258f",
+      "text": "远程只让自己连",
+      "file": "nav-ac7c4489258f-fff988fffe.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        1050,
+        104,
+        1436,
+        183
+      ],
+      "size": [
+        386,
+        79
+      ],
+      "ink_box": [
+        12,
+        16,
+        376,
+        66
+      ],
+      "ink_left": 0.031088082901554404,
+      "ink_right": 0.9740932642487047,
+      "ink_top": 0.20253164556962025,
+      "ink_bottom": 0.8354430379746836,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-93d38313e1c3",
+      "text": "查电脑卡顿",
+      "file": "nav-93d38313e1c3-9ea7432e96.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        275,
+        315,
+        566,
+        395
+      ],
+      "size": [
+        291,
+        80
+      ],
+      "ink_box": [
+        14,
+        16,
+        278,
+        67
+      ],
+      "ink_left": 0.048109965635738834,
+      "ink_right": 0.9553264604810997,
+      "ink_top": 0.2,
+      "ink_bottom": 0.8375,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7d45fb4cf6cb",
+      "text": "加密库操作",
+      "file": "nav-7d45fb4cf6cb-f049c7262a.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        1099,
+        315,
+        1390,
+        395
+      ],
+      "size": [
+        291,
+        80
+      ],
+      "ink_box": [
+        13,
+        16,
+        279,
+        67
+      ],
+      "ink_left": 0.044673539518900345,
+      "ink_right": 0.9587628865979382,
+      "ink_top": 0.2,
+      "ink_bottom": 0.8375,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-60a4cfb68952",
+      "text": "看微信聊天",
+      "file": "nav-60a4cfb68952-b42bae19a9.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        275,
+        529,
+        565,
+        608
+      ],
+      "size": [
+        290,
+        79
+      ],
+      "ink_box": [
+        14,
+        16,
+        277,
+        66
+      ],
+      "ink_left": 0.04827586206896552,
+      "ink_right": 0.9551724137931035,
+      "ink_top": 0.20253164556962025,
+      "ink_bottom": 0.8354430379746836,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-01e813c718dc",
+      "text": "工作支持与交付技能",
+      "file": "nav-01e813c718dc-cf7dd8453b.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        997,
+        530,
+        1492,
+        605
+      ],
+      "size": [
+        495,
+        75
+      ],
+      "ink_box": [
+        12,
+        14,
+        485,
+        65
+      ],
+      "ink_left": 0.024242424242424242,
+      "ink_right": 0.9797979797979798,
+      "ink_top": 0.18666666666666668,
+      "ink_bottom": 0.8666666666666667,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-6904d6772a2c",
+      "text": "找资料和读懂文件",
+      "file": "nav-6904d6772a2c-d59f788fa4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        199,
+        743,
+        643,
+        818
+      ],
+      "size": [
+        444,
+        75
+      ],
+      "ink_box": [
+        11,
+        13,
+        435,
+        64
+      ],
+      "ink_left": 0.024774774774774775,
+      "ink_right": 0.9797297297297297,
+      "ink_top": 0.17333333333333334,
+      "ink_bottom": 0.8533333333333334,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-d74ab6c312cc",
+      "text": "了解我，学习、工作和生活",
+      "file": "nav-d74ab6c312cc-1e468d7532.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-14.png",
+      "source_sha256": "132fa60285dfd79fea77d530947aff7e3e6fcee5f4195c381fee3257e3fbbab8",
+      "source_box": [
+        918,
+        742,
+        1571,
+        820
+      ],
+      "size": [
+        653,
+        78
+      ],
+      "ink_box": [
+        12,
+        14,
+        643,
+        66
+      ],
+      "ink_left": 0.018376722817764167,
+      "ink_right": 0.9846860643185299,
+      "ink_top": 0.1794871794871795,
+      "ink_bottom": 0.8461538461538461,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-dcf589ca0573",
+      "text": "密码、电脑和代码",
+      "file": "nav-dcf589ca0573-9b21d4da7c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        196,
+        106,
+        698,
+        192
+      ],
+      "size": [
+        502,
+        86
+      ],
+      "ink_box": [
+        12,
+        13,
+        492,
+        74
+      ],
+      "ink_left": 0.02390438247011952,
+      "ink_right": 0.9800796812749004,
+      "ink_top": 0.1511627906976744,
+      "ink_bottom": 0.8604651162790697,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-4a88ab94a2b0",
+      "text": "Steam 外观备份",
+      "file": "nav-4a88ab94a2b0-5e138a4d36.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        982,
+        106,
+        1459,
+        192
+      ],
+      "size": [
+        477,
+        86
+      ],
+      "ink_box": [
+        15,
+        13,
+        467,
+        74
+      ],
+      "ink_left": 0.031446540880503145,
+      "ink_right": 0.9790356394129979,
+      "ink_top": 0.1511627906976744,
+      "ink_bottom": 0.8604651162790697,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-3049ff19fb62",
+      "text": "远程电脑串流",
+      "file": "nav-3049ff19fb62-53df589182.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        247,
+        316,
+        650,
+        405
+      ],
+      "size": [
+        403,
+        89
+      ],
+      "ink_box": [
+        15,
+        16,
+        392,
+        78
+      ],
+      "ink_left": 0.03722084367245657,
+      "ink_right": 0.9727047146401985,
+      "ink_top": 0.1797752808988764,
+      "ink_bottom": 0.8764044943820225,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-e6d3981fff7c",
+      "text": "电脑使用与性能记录",
+      "file": "nav-e6d3981fff7c-ab79177a52.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        935,
+        317,
+        1513,
+        405
+      ],
+      "size": [
+        578,
+        88
+      ],
+      "ink_box": [
+        14,
+        15,
+        567,
+        77
+      ],
+      "ink_left": 0.02422145328719723,
+      "ink_right": 0.9809688581314879,
+      "ink_top": 0.17045454545454544,
+      "ink_bottom": 0.875,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-507ea0dd268b",
+      "text": "Typora 薄荷主题",
+      "file": "nav-507ea0dd268b-3935459246.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        206,
+        529,
+        701,
+        626
+      ],
+      "size": [
+        495,
+        97
+      ],
+      "ink_box": [
+        13,
+        17,
+        482,
+        85
+      ],
+      "ink_left": 0.026262626262626262,
+      "ink_right": 0.9737373737373738,
+      "ink_top": 0.17525773195876287,
+      "ink_bottom": 0.8762886597938144,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-6e677e46fe2c",
+      "text": "本地加密库",
+      "file": "nav-6e677e46fe2c-6b3fd479e3.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        1049,
+        531,
+        1395,
+        621
+      ],
+      "size": [
+        346,
+        90
+      ],
+      "ink_box": [
+        13,
+        16,
+        333,
+        78
+      ],
+      "ink_left": 0.03757225433526012,
+      "ink_right": 0.9624277456647399,
+      "ink_top": 0.17777777777777778,
+      "ink_bottom": 0.8666666666666667,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-53b3f1b94558",
+      "text": "本地视频制作",
+      "file": "nav-53b3f1b94558-8d2e872c1c.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        247,
+        745,
+        649,
+        834
+      ],
+      "size": [
+        402,
+        89
+      ],
+      "ink_box": [
+        12,
+        15,
+        391,
+        77
+      ],
+      "ink_left": 0.029850746268656716,
+      "ink_right": 0.972636815920398,
+      "ink_top": 0.16853932584269662,
+      "ink_bottom": 0.8651685393258427,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-7e142c3eeeda",
+      "text": "微信记录交给 AI",
+      "file": "nav-7e142c3eeeda-b2948cd648.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-15.png",
+      "source_sha256": "72148ec2799c1a13a6927f6f9a879202aabe33e45c1f70563cd25948b72f5164",
+      "source_box": [
+        982,
+        744,
+        1466,
+        836
+      ],
+      "size": [
+        484,
+        92
+      ],
+      "ink_box": [
+        13,
+        16,
+        470,
+        78
+      ],
+      "ink_left": 0.026859504132231406,
+      "ink_right": 0.9710743801652892,
+      "ink_top": 0.17391304347826086,
+      "ink_bottom": 0.8478260869565217,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-b56251f26d1e",
+      "text": "微信聊天读取",
+      "file": "nav-b56251f26d1e-3a39e28da4.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-16.png",
+      "source_sha256": "a1c2f6f76112f3b185d7ef82ba927aac8e5b0cca3ea7c138bbb08ef3ceaebabf",
+      "source_box": [
+        250,
+        84,
+        622,
+        170
+      ],
+      "size": [
+        372,
+        86
+      ],
+      "ink_box": [
+        15,
+        17,
+        359,
+        72
+      ],
+      "ink_left": 0.04032258064516129,
+      "ink_right": 0.9650537634408602,
+      "ink_top": 0.19767441860465115,
+      "ink_bottom": 0.8372093023255814,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    },
+    {
+      "id": "nav-68cc25dbbe6a",
+      "text": "工作支持与交付",
+      "file": "nav-68cc25dbbe6a-8a8adff464.png",
+      "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\shared\\nav-label-sheets\\nav-labels-16.png",
+      "source_sha256": "a1c2f6f76112f3b185d7ef82ba927aac8e5b0cca3ea7c138bbb08ef3ceaebabf",
+      "source_box": [
+        1042,
+        84,
+        1467,
+        170
+      ],
+      "size": [
+        425,
+        86
+      ],
+      "ink_box": [
+        14,
+        17,
+        413,
+        72
+      ],
+      "ink_left": 0.03294117647058824,
+      "ink_right": 0.971764705882353,
+      "ink_top": 0.19767441860465115,
+      "ink_bottom": 0.8372093023255814,
+      "method": "alpha>0.18; composite-white luminance<185; connected area>=2"
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+/* 总页入口与表头统计；颜色和字号角色只取全站变量。 */
+.c-hub-links, .c-hub-stats {
+  min-width: 0;
+  color: var(--text);
+  font-family: "Sans", sans-serif;
+  font-size: max(var(--fs-body), var(--hub-min-font));
+  line-height: var(--lh);
+}
+.c-hub-links {
+  display: grid;
+  grid-template-columns: repeat(var(--hub-link-columns), minmax(0, 1fr));
+  gap: var(--gap-card);
+}
+.c-hub-links .hub-link-cell {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-color: var(--line);
+  border-radius: var(--radius);
+  background: var(--cardbg);
+  box-shadow: var(--card-shadow);
+}
+.c-hub-links .hub-link-frozen { border-color: var(--notice-gray-line); }
+.c-hub-links .hub-link-label { min-width: 0; flex: 1 1 auto; font-weight: 700; color: var(--accent); }
+.c-hub-links .hub-link-count { min-width: 0; flex: 0 0 auto; max-width: 45%; text-align: right; color: var(--text); }
+.c-hub-links .hub-link-detail { min-width: 0; flex: 1 1 auto; }
+.c-hub-links .hub-link-extra { min-width: 0; grid-column: 1 / -1; }
+.c-hub-links .tb, .c-hub-stats .tb { overflow-wrap: anywhere; }
+.c-hub-links[data-orient="v"] .hub-link-cell { padding: 14px 22px; gap: 18px; }
+.c-hub-stats { display: flex; flex-direction: column; gap: var(--gap-card); }
+.c-hub-stats .hub-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--hub-stat-columns), minmax(0, 1fr));
+  column-gap: 0;
+  row-gap: 0;
+  min-width: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.c-hub-stats .hub-stat-shell {
+  min-width: 0;
+  border-color: var(--line);
+  border-radius: var(--radius);
+  background: var(--cardbg);
+  box-shadow: var(--card-shadow);
+  margin-right: var(--hub-stat-gap);
+}
+.c-hub-stats .hub-stat-emphasis { background: var(--soft); }
+.c-hub-stats .hub-stat-row-gap { height: var(--gap-card); }
+.c-hub-stats .hub-stat-label, .c-hub-stats .hub-stat-value {
+  min-width: 0;
+  position: relative;
+  margin: 0 calc(16px + var(--hub-stat-gap)) 0 16px;
+  z-index: 1;
+}
+.c-hub-stats .hub-stat-label { padding-top: 12px; color: var(--text); }
+.c-hub-stats .hub-stat-value {
+  padding: 4px 0 14px;
+  font-size: var(--fs-num, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.25;
+}
+.c-hub-stats .hub-stat-left {
+  grid-template-columns: repeat(var(--hub-stat-columns), minmax(0, 1fr));
+  column-gap: 0;
+  row-gap: 0;
+  align-items: stretch;
+}
+.c-hub-stats .hub-stat-left .hub-stat-shell { margin-right: var(--gap-card); }
+.c-hub-stats .hub-stat-left .hub-stat-side-label {
+  align-self: center;
+  justify-self: start;
+  width: calc(44% - 20px);
+  margin-left: 20px;
+  margin-right: 0;
+  padding: 12px 0;
+}
+.c-hub-stats .hub-stat-left .hub-stat-side-value {
+  align-self: center;
+  justify-self: end;
+  width: calc(56% - 28px - var(--hub-stat-gap));
+  margin-left: 8px;
+  margin-right: calc(20px + var(--gap-card));
+  padding: 14px 0;
+  font-size: var(--fs-num, 64px);
+  text-align: right;
+}
+.c-hub-stats .hub-stat-icon {
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+  margin: 12px calc(16px + var(--hub-stat-gap)) 0 16px;
+  align-self: start;
+}
+.c-hub-stats .hub-stat-icon img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: contain;
+  object-position: left center;
+}
+.c-hub-stats[data-orient="v"] .hub-stat-icon img { height: 210px; }
+.c-hub-stats .hub-stat-below .hub-stat-label { padding: 8px 0 16px; }
+.c-hub-stats .hub-stat-below .hub-stat-value { padding-top: 8px; padding-bottom: 0; }
+.c-hub-stats .hub-stat-fields { min-width: 0; }
+.c-hub-stats .hub-stat-field {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px 18px;
+  border-color: var(--line);
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+.c-hub-stats .hub-stat-field::after { content: none; }
+.c-hub-stats .hub-stat-shell::after, .c-hub-stats .hub-stat-item::after { content: none; }
+.c-hub-stats .hub-field-icon img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: 150px;
+  object-fit: contain;
+  object-position: left center;
+}
+.c-hub-stats .hub-field-number-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+}
+.c-hub-stats .hub-field-ordinal { flex: none; font-size: var(--fs-body); color: var(--text); }
+.c-hub-stats .hub-field-numbered { flex-direction: column; align-items: stretch; gap: calc(var(--gap-card) * .5); }
+.c-hub-stats .hub-field-numbered .hub-field-ordinal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-width: 1.5em;
+  min-height: 1.5em;
+  padding: .1em;
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--accent);
+  font-size: var(--fs-body);
+  line-height: 1.2;
+}
+.c-hub-stats .hub-field-value {
+  min-width: 0;
+  margin: 0;
+  font-size: var(--fs-num, 64px);
+  line-height: 1.25;
+  color: var(--accent);
+  font-weight: 800;
+}
+.c-hub-stats .hub-stat-value-group {
+  display: inline-block;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.c-hub-stats .hub-stat-detail-unit {
+  font-size: var(--fs-body);
+  font-weight: 400;
+  line-height: var(--lh);
+}
+.c-hub-stats .hub-field-body { font-size: max(var(--fs-body), var(--hub-min-font)); line-height: var(--lh); }
+.c-hub-stats .hub-stat-extra { grid-column: 1 / -1; min-width: 0; }
+.c-hub-stats .hub-stat-asof {
+  font-size: max(var(--fs-body), var(--hub-min-font));
+  line-height: var(--lh);
+  color: var(--muted);
+  margin-top: auto;
+}
+.c-hub-stats .hub-stat-detail-side {
+  display: grid;
+  grid-template-columns: minmax(0, var(--hub-stat-number-width)) minmax(0, var(--hub-stat-body-width));
+  gap: 12px 20px;
+  align-items: start;
+}
+.c-hub-stats .hub-stat-detail-side[data-icon-position="left_above_number"] .hub-field-icon { grid-row: 1; grid-column: 1; min-width: 0; }
+.c-hub-stats .hub-stat-field[data-icon-position="top_left"] .hub-field-icon img { object-position: left center; }
+.c-hub-stats .hub-stat-detail-side .hub-field-number-line { grid-row: 2; grid-column: 1; }
+.c-hub-stats .hub-stat-detail-side .hub-field-body { grid-row: 1 / span 2; grid-column: 2; }
+.c-hub-stats .hub-stat-detail-side .hub-stat-asof { grid-row: 3; grid-column: 1 / -1; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-field-number-line { grid-row: 1; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-field-body { grid-row: 1; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-stat-asof { grid-row: 2; }
+.c-hub-stats[data-orient="v"] .hub-field-icon img { height: 210px; }
+
+/* 数字角色和 core 的同方向字号一致；共享变量登记前用现役 core 数值。 */
+.c-hub-stats[data-orient="v"] .hub-field-value,
+.c-hub-stats[data-orient="v"] .hub-stat-value,
+.c-hub-stats[data-orient="v"] .hub-stat-left .hub-stat-side-value { font-size: var(--fs-num, 92px); }
+.c-hub-stats .hub-field-ordinal { font-size: var(--fs-body); }
+.c-hub-stats .hub-stat-label { font-size: var(--fs-body); line-height: var(--lh); }
+.c-hub-stats .hub-field-description { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.c-hub-stats .hub-stat-fields { align-items: stretch; }
+.c-hub-stats .hub-stat-item { min-width: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.c-hub-stats .hub-stat-item > .hub-stat-field { flex: 1; }
+.c-hub-stats .hub-stat-icon-empty { min-height: 150px; }
+.c-hub-stats[data-orient="v"] .hub-stat-icon-empty { min-height: 210px; }
+.c-hub-stats .hub-stat-field.hub-stat-mode-left_inside,
+.c-hub-stats .hub-stat-field.hub-stat-mode-right_inside {
+  display: grid;
+  grid-template-columns: minmax(0, 34fr) minmax(min-content, 66fr);
+  gap: 8px 16px;
+  align-content: start;
+}
+.c-hub-stats .hub-stat-mode-left_inside > .hub-field-icon { grid-column: 1; grid-row: 1 / span 2; min-width: 0; }
+.c-hub-stats .hub-stat-mode-left_inside > .hub-field-number-line { grid-column: 2; grid-row: 1; }
+.c-hub-stats .hub-stat-mode-left_inside > .hub-field-description { grid-column: 2; grid-row: 2; }
+.c-hub-stats .hub-stat-field.hub-stat-mode-right_inside { grid-template-columns: minmax(min-content, 66fr) minmax(0, 34fr); }
+.c-hub-stats .hub-stat-mode-right_inside > .hub-field-icon { grid-column: 2; grid-row: 1 / span 2; min-width: 0; }
+.c-hub-stats .hub-stat-mode-right_inside > .hub-field-number-line { grid-column: 1; grid-row: 1; }
+.c-hub-stats .hub-stat-mode-right_inside > .hub-field-description { grid-column: 1; grid-row: 2; }
+.c-hub-stats .hub-stat-field.hub-stat-no-icon { display: flex; flex-direction: column; }
+.c-hub-stats .hub-stat-field.hub-stat-detail-side { grid-template-columns: minmax(0, var(--hub-stat-number-width)) minmax(0, var(--hub-stat-body-width)); }
+.c-hub-stats .hub-stat-detail-side .hub-field-description { display: contents; }
+.c-hub-stats .hub-stat-detail-side .hub-field-number-line { grid-column: 1; grid-row: 2; }
+.c-hub-stats .hub-stat-detail-side .hub-field-body { grid-column: 2; grid-row: 1 / span 2; }
+.c-hub-stats .hub-stat-detail-side .hub-stat-asof { grid-column: 1 / -1; grid-row: 3; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon { display: grid; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-field-number-line { grid-row: 1; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-field-body { grid-row: 1; }
+.c-hub-stats .hub-stat-detail-side.hub-stat-no-icon .hub-stat-asof { grid-row: 2; }
+/* 表格仍按“全部表头、全部数据”保 DOM 顺序，用同格网格定位图片和文字。 */
+.c-hub-stats .hub-stat-grid.hub-stat-mode-left_inside:not(.hub-stat-no-icon) > .hub-stat-icon,
+.c-hub-stats .hub-stat-grid.hub-stat-mode-right_inside:not(.hub-stat-no-icon) > .hub-stat-icon {
+  width: calc(32% - 16px); margin-top: 12px; align-self: start;
+}
+.c-hub-stats .hub-stat-grid.hub-stat-mode-left_inside > .hub-stat-icon { justify-self: start; }
+.c-hub-stats .hub-stat-grid.hub-stat-mode-right_inside > .hub-stat-icon { justify-self: end; }
+.c-hub-stats .hub-stat-grid.hub-stat-mode-left_inside:not(.hub-stat-no-icon) > .hub-stat-label,
+.c-hub-stats .hub-stat-grid.hub-stat-mode-left_inside:not(.hub-stat-no-icon) > .hub-stat-value { margin-left: calc(34% + 16px); }
+.c-hub-stats .hub-stat-grid.hub-stat-mode-right_inside:not(.hub-stat-no-icon) > .hub-stat-label,
+.c-hub-stats .hub-stat-grid.hub-stat-mode-right_inside:not(.hub-stat-no-icon) > .hub-stat-value { margin-right: calc(34% + 16px + var(--hub-stat-gap)); }
+.c-hub-stats .hub-stat-align-center .hub-field-value,
+.c-hub-stats .hub-stat-align-center .hub-field-description { text-align: center; }
+.c-hub-stats .hub-stat-align-right .hub-field-value,
+.c-hub-stats .hub-stat-align-right .hub-field-description { text-align: right; }
+/* 灰仅作用于历史数字卡与小插画，标题图没有透明度或去色规则。 */
+.c-hub-stats.hub-stat-historical .hub-stat-field,
+.c-hub-stats .hub-stat-historical .hub-stat-shell { background: var(--muted-bg); border-color: var(--muted-line); }
+.c-hub-stats.hub-stat-historical .hub-field-value,
+.c-hub-stats .hub-stat-historical .hub-stat-value { color: var(--muted); }
+.c-hub-stats.hub-stat-historical .hub-field-icon img,
+.c-hub-stats .hub-stat-historical .hub-stat-icon img { filter: saturate(.45); }
+
+/* medium 是留白档位：只改内边距、卡内间距，num/body 的共享字号不变。 */
+.c-hub-stats[data-size="medium"] .hub-stat-field {
+  padding: calc(var(--gap-card) * .75) var(--gap-card) calc(var(--gap-card) * .875);
+  gap: calc(var(--gap-card) * .375);
+}
+.c-hub-stats[data-size="medium"] .hub-field-description { gap: calc(var(--gap-card) * .375); }
+.c-hub-stats[data-size="medium"] .hub-stat-label { padding-top: calc(var(--gap-card) * .625); }
+.c-hub-stats[data-size="medium"] .hub-stat-value { padding-bottom: calc(var(--gap-card) * .75); }
+.c-hub-stats[data-size="medium"] .hub-stat-below .hub-stat-label { padding: calc(var(--gap-card) * .375) 0 calc(var(--gap-card) * .75); }
+.c-hub-stats[data-size="medium"][data-orient="v"] .hub-stat-field { padding: calc(var(--gap-card) * .9) calc(var(--gap-card) * 1.125) var(--gap-card); }

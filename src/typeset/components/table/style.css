@@ -1,0 +1,73 @@
+/* 所有视觉值复用 base.css；不改变其它组件。 */
+.c-table {
+  width: 100%; min-width: 0; display: flex; flex-direction: column;
+  gap: var(--gap-card); color: var(--text); font-family: "Sans", sans-serif;
+  font-size: max(var(--fs-body), var(--table-min-font, var(--fs-body)));
+  font-weight: 400; line-height: var(--lh);
+}
+.c-table *, .c-table .mono {
+  min-width: 0; max-width: 100%; white-space: normal;
+  overflow-wrap: anywhere; word-break: normal;
+}
+.c-table .mono { font-family: inherit; font-size: inherit; }
+.c-table .table-frame {
+  border: 2px solid var(--line); border-radius: var(--radius);
+  background: var(--card-bg); box-shadow: var(--card-shadow);
+}
+.c-table .table-grid {
+  width: 100%; table-layout: fixed; border-collapse: separate;
+  border-spacing: 0; font: inherit; color: inherit;
+}
+.c-table .table-grid th, .c-table .table-grid td {
+  padding: 10px 16px; vertical-align: top;
+}
+.c-table .table-grid th {
+  background: color-mix(in srgb, var(--line) 45%, transparent);
+  color: var(--title); font-weight: 700;
+}
+.c-table .table-grid th:first-child { border-top-left-radius: calc(var(--radius) - 2px); }
+.c-table .table-grid th:last-child { border-top-right-radius: calc(var(--radius) - 2px); }
+.c-table .table-grid td { border-top: 1px solid var(--line); }
+.c-table .table-grid tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--line) 12%, transparent);
+}
+.c-table .table-grid tbody tr:last-child td:first-child { border-bottom-left-radius: calc(var(--radius) - 2px); }
+.c-table .table-grid tbody tr:last-child td:last-child { border-bottom-right-radius: calc(var(--radius) - 2px); }
+.c-table .table-grid:not(:has(thead)) tbody tr:first-child td { border-top: 0; }
+.c-table .table-left { text-align: left; }
+.c-table .table-center { text-align: center; }
+.c-table .table-right { text-align: right; }
+.c-table .table-header {
+  display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 12px 20px;
+  border: 2px solid var(--line); border-radius: var(--radius);
+  background: color-mix(in srgb, var(--line) 32%, transparent);
+  color: var(--title); font-weight: 700;
+}
+.c-table .table-card {
+  display: flex; flex-direction: column; gap: 10px; padding: 16px 20px 20px;
+  border: 2px solid var(--line); border-radius: var(--radius);
+  background: var(--card-bg); box-shadow: var(--card-shadow);
+}
+.c-table .table-head {
+  padding-bottom: 10px; border-bottom: 1px solid var(--line);
+  color: var(--accent); font-weight: 700;
+}
+.c-table .table-field {
+  display: grid; grid-template-columns: fit-content(38%) minmax(0, 1fr);
+  column-gap: 8px; align-items: start;
+}
+.c-table .table-field > .table-cell:only-child { grid-column: 1 / -1; }
+.c-table .table-label, .c-table .table-caption { color: var(--accent); font-weight: 700; }
+.c-table[data-orient="v"] .table-label, .c-table[data-orient="v"] .table-label * {
+  white-space: nowrap; overflow-wrap: normal; word-break: normal;
+}
+.c-table[data-orient="v"] .table-cell { text-align: left; }
+.c-table .lk {
+  color: var(--link); text-decoration: underline;
+  text-decoration-thickness: 2px; text-underline-offset: .16em;
+}
+.c-table b, .c-table strong { color: var(--accent); font-weight: 700; }
+.c-table .inline-btn {
+  min-width: 0; white-space: normal; padding: .1em .35em;
+  font-size: inherit; display: inline; border-width: 1px;
+}

@@ -1,0 +1,102 @@
+/* New quote fill, points header, term separators and speech tails require gallery approval. */
+.c-text { min-width: 0; font-family: "Sans", sans-serif; font-size: var(--fs-body); line-height: var(--lh); color: var(--text); }
+.c-text.ct-quote, .c-text.ct-source_text_card, .c-text.ct-glossary, .c-text.ct-points_card, .c-text.ct-dialogue { display: grid; gap: var(--gap-card); align-items: start; }
+.c-text.ct-cols-1 { grid-template-columns: minmax(0, 1fr); }
+.c-text.ct-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.c-text.ct-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.c-text.ct-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.c-text.ct-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.c-text.ct-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.c-text.ct-v { grid-template-columns: minmax(0, 1fr); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-1 { grid-template-columns: minmax(0, 1fr); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.c-text.ct-v.ct-explicit-v-cols.ct-cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.c-text.ct-size-small .ct-card-head { font-size: var(--fs-body); }
+.c-text.ct-size-medium .ct-card-head { font-size: var(--fs-name); }
+.c-text.ct-size-large .ct-card-head { font-size: calc(var(--fs-name) * 1.2); }
+.c-text.ct-last-inner-cols > .ct-card:last-child .ct-list { columns: var(--ct-last-inner-columns); column-gap: var(--gap-card); }
+.c-text.ct-last-inner-cols > .ct-card:last-child .ct-list > li { break-inside: avoid; }
+.c-text .ct-speaker-ai { --ct-speaker-edge: var(--line); }
+.c-text .ct-speaker-self { --ct-speaker-edge: var(--accent); }
+.c-text .ct-speaker-ai > .ct-bubble, .c-text .ct-speaker-self > .ct-bubble { border-color: var(--ct-speaker-edge); }
+.c-text.ct-h.ct-last-wide > .ct-card:last-child { grid-column: 1 / -1; }
+.c-text.ct-h.ct-last-inner-cols-2 > .ct-card:last-child .ct-list { columns: 2; column-gap: var(--gap-card); }
+.c-text.ct-h.ct-last-inner-cols-2 > .ct-card:last-child .ct-list > li { break-inside: avoid; }
+.c-text .ct-card { min-width: 0; margin: 0; border: 2px solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); }
+.c-text .ct-source-card, .c-text .ct-quote-card, .c-text .ct-bubble { padding: 0.6em 0.75em; }
+.c-text .ct-card-body { min-width: 0; padding: 0.5em 0.75em 0.65em; }
+.c-text .ct-card-head { padding: 0.35em 0.65em; font-size: var(--fs-name); font-weight: 700; color: var(--title); border-bottom: 1px solid var(--line); border-radius: var(--radius) var(--radius) 0 0; }
+.c-text .ct-points-card .ct-card-head, .c-text .ct-quote-card { background: var(--soft, var(--card-bg)); }
+.c-text .ct-heading { font-size: var(--fs-name); font-weight: 700; color: var(--title); }
+.c-text.ct-align-center .ct-heading, .c-text.ct-align-center .ct-card-head { text-align: center; }
+.c-text .ct-paragraph + .ct-paragraph, .c-text .ct-card-body > * + *, .c-text .ct-source-card > * + *, .c-text .ct-quote-card > * + *, .c-text .ct-bubble > * + * { margin-top: 0.3em; }
+.c-text .tb { min-width: 0; max-width: 100%; overflow-wrap: anywhere; word-break: normal; }
+.c-text .ct-lead { font-weight: 700; color: var(--accent); }
+.c-text .ct-list { padding-left: 1.1em; }
+.c-text .ct-list li + li { margin-top: 0.2em; }
+.c-text .ct-list li::marker { color: var(--accent); }
+.c-text .ct-steps { list-style: none; padding: 0; }
+.c-text .ct-step { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.4em; }
+.c-text .ct-step + .ct-step { margin-top: 0.3em; }
+.c-text .ct-step-number { color: var(--accent); font-weight: 700; }
+.c-text .ct-terms { margin: 0; }
+.c-text .ct-term { min-width: 0; padding: 0.35em 0; }
+.c-text .ct-term + .ct-term { border-top: 1px solid var(--line); }
+.c-text .ct-term dt { color: var(--accent); font-weight: 700; }
+.c-text .ct-term dd { margin: 0; }
+.c-text.ct-h .ct-term { display: grid; grid-template-columns: minmax(0, 30%) minmax(0, 1fr); gap: 0.5em; }
+.c-text.ct-h .ct-term > dd:first-child { grid-column: 1 / -1; }
+.c-text .ct-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: var(--fs-body); }
+.c-text .ct-table th, .c-text .ct-table td { text-align: left; vertical-align: top; padding: 0.3em; border: 1px solid var(--line); }
+.c-text .ct-table th { color: var(--title); font-weight: 700; }
+.c-text .ct-code { font-family: var(--font-mono); font-size: calc(var(--fs-body) * 1.3); line-height: var(--lh); white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; padding: 0.35em; border: 1px solid var(--line); border-radius: calc(var(--radius) / 2); }
+.c-text .ct-code .mono, .c-text .mono { white-space: pre-wrap; overflow-wrap: anywhere; }
+.c-text .ct-legend { display: flex; flex-wrap: wrap; gap: 0.35em 0.75em; }
+.c-text .ct-links { white-space: pre-wrap; }
+.c-text .ct-links .btn { white-space: normal; max-width: 100%; }
+.c-text .ct-bubble { position: relative; margin-bottom: 0.75em; }
+.c-text .ct-side-left { margin-right: 0.75em; }
+.c-text .ct-side-right { margin-left: 0.75em; }
+.c-text .ct-tail::after { content: ""; position: absolute; bottom: -0.4em; left: 1.1em; width: 0.65em; height: 0.65em; background: var(--soft, var(--card-bg)); border-right: 2px solid var(--line); border-bottom: 2px solid var(--line); transform: rotate(45deg); }
+.c-text .ct-tail { background: var(--soft, var(--card-bg)); }
+.c-text .ct-side-right.ct-tail::after { left: auto; right: 1.1em; }
+.c-text .ct-dialogue-items { display: grid; grid-template-columns: repeat(var(--ct-dialogue-columns, 1), minmax(0, 1fr)); gap: var(--gap-card); padding: 0.55em 0.75em; }
+.c-text .ct-dialogue-label, .c-text .ct-dialogue-rest { grid-column: 1 / -1; min-width: 0; }
+.c-text .ct-dialogue-label { background: var(--soft, var(--card-bg)); }
+.c-text .ct-dialogue-turn { min-width: 0; }
+.c-text .ct-dialogue-turn.ct-with-avatar, .c-text .ct-dialogue-turn.ct-with-right-image { display: grid; gap: 0.5em; align-items: start; }
+.c-text .ct-dialogue-turn.ct-image-left { grid-template-columns: minmax(0, 3.5em) minmax(0, 1fr); grid-template-areas: "avatar bubble"; }
+.c-text .ct-dialogue-turn.ct-image-right { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble avatar"; }
+.c-text .ct-dialogue-turn.ct-image-bottom { grid-template-columns: minmax(0, 1fr); grid-template-areas: "bubble" "avatar"; }
+.c-text .ct-dialogue-turn.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble right"; }
+.c-text .ct-dialogue-turn.ct-image-left.ct-with-right-image { grid-template-columns: minmax(0, 3.5em) minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "avatar bubble right"; }
+.c-text .ct-dialogue-turn.ct-image-right.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em) minmax(0, 3.5em); grid-template-areas: "bubble avatar right"; }
+.c-text .ct-dialogue-turn.ct-image-bottom.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble right" "avatar avatar"; }
+.c-text .ct-avatar, .c-text .ct-dialogue-right-image { display: block; width: 100%; max-width: 3.5em; height: auto; object-fit: contain; }
+.c-text .ct-avatar { grid-area: avatar; }
+.c-text .ct-dialogue-right-image { grid-area: right; }
+.c-text .ct-image-bottom .ct-avatar { max-width: 100%; max-height: 7em; justify-self: center; }
+.c-text .ct-dialogue-turn > .ct-bubble { min-width: 0; grid-area: bubble; }
+.c-text .ct-dialogue-turn.ct-dialogue-has-annotation { display: grid; gap: 0.5em; row-gap: 0.75em; align-items: start; grid-template-columns: minmax(0, 1fr); grid-template-areas: "bubble" "annotation"; break-inside: avoid; }
+.c-text .ct-dialogue-has-annotation.ct-image-left { grid-template-columns: minmax(0, 3.5em) minmax(0, 1fr); grid-template-areas: "avatar bubble" ". annotation"; }
+.c-text .ct-dialogue-has-annotation.ct-image-right { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble avatar" "annotation ."; }
+.c-text .ct-dialogue-has-annotation.ct-image-bottom { grid-template-columns: minmax(0, 1fr); grid-template-areas: "bubble" "annotation" "avatar"; }
+.c-text .ct-dialogue-has-annotation.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble right" "annotation ."; }
+.c-text .ct-dialogue-has-annotation.ct-image-left.ct-with-right-image { grid-template-columns: minmax(0, 3.5em) minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "avatar bubble right" ". annotation ."; }
+.c-text .ct-dialogue-has-annotation.ct-image-right.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em) minmax(0, 3.5em); grid-template-areas: "bubble avatar right" "annotation . ."; }
+.c-text .ct-dialogue-has-annotation.ct-image-bottom.ct-with-right-image { grid-template-columns: minmax(0, 1fr) minmax(0, 3.5em); grid-template-areas: "bubble right" "annotation ." "avatar avatar"; }
+.c-text .ct-dialogue-turn > .ct-dialogue-annotation { min-width: 0; margin: 0; grid-area: annotation; font-size: var(--fs-body); color: var(--muted); line-height: var(--lh); overflow-wrap: anywhere; }
+.c-text .ct-image-left .ct-tail::after { left: -0.4em; right: auto; bottom: auto; top: 1em; border-right: 0; border-left: 2px solid var(--line); border-bottom: 2px solid var(--line); }
+.c-text .ct-image-right .ct-tail::after { left: auto; right: -0.4em; bottom: auto; top: 1em; border-left: 0; border-right: 2px solid var(--line); border-bottom: 2px solid var(--line); transform: rotate(-45deg); }
+.c-text.ct-dialogue.ct-h.ct-last-wide > .ct-dialogue-turn:last-child { grid-column: 1 / -1; }
+.c-text.ct-dialogue.ct-h.ct-last-inner-cols-2 > .ct-dialogue-turn:last-child .ct-list { columns: 2; column-gap: var(--gap-card); }
+.c-text.ct-dialogue.ct-h.ct-last-inner-cols-2 > .ct-dialogue-turn:last-child .ct-list > li { break-inside: avoid; }
+.c-text .ct-quote-left-line { border: 0; border-left: 3px solid var(--link); border-radius: 0; background: none; box-shadow: none; }
+.c-text .ct-bubble-white, .c-text .ct-bubble-white.ct-tail::after { background: var(--surface, var(--cardbg)); }
+.c-text.ct-dialogue-split.ct-h .ct-dialogue-last-wide { grid-column: 1 / -1; }
+.c-text .ct-term-punctuation { color: var(--text); font-weight: 400; }
+.c-text .ct-dialogue-compact > .ct-bubble { width: fit-content; max-width: var(--ct-bubble-max-width, 85%); justify-self: start; }
+.c-text .ct-dialogue-compact > .ct-side-right { justify-self: end; }

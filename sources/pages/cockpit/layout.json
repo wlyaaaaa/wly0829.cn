@@ -1,0 +1,1734 @@
+[
+  {
+    "screen": "cockpit-01",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-01-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "inline_link",
+      "illustration",
+      "live_box",
+      "monospace",
+      "status_legend",
+      "section_heading",
+      "stretch_list",
+      "action_button"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "illustration",
+      "status_legend",
+      "action_button",
+      "chapter_title",
+      "inline_link",
+      "live_box",
+      "monospace",
+      "section_heading",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上毛笔艺术字大标题“驾驶舱”，下面两行介绍（〔约法 L27〕画成绿色链接）。右上约三分之一宽一幅水彩插画（开头短视频就从这里取景）：书桌上一台侧透机箱和一台显示器，机箱前面板一盏小白灯，桌上一块外接固态和一只手机，窗外一角远山，桌角一盆绿植；插画里不画字。中间一行是总灯：左边一个圆形空位（直径约屏高的 22%），只画一圈很淡的水彩圆形底座、不画灯色，网页程序在这里贴预先画好的四张水彩灯之一（绿、黄、红、灰，同一尺寸同一位置）；圆形右边一个横长空框（约屏宽 55%、高约屏高 9%），放总灯旁边那一句话；它下面一排五个等宽小空框（每个约屏宽 10.5%、高约屏高 9%，间距相同），放五项速览。圆形正下方一行灰色小字图例：四个小水彩色点（绿、黄、红、灰）各跟一段字。下半屏：小标题“要我处理的事”，下面一个满宽的列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。最下面一排六个同样大小的白底细绿边圆角按钮（页内跳转），居中排一行。四个空位和列表框之外不留大块空白。",
+      "portrait": "竖版：标题；两行介绍；插画缩到屏宽；圆形灯位居中；一句话空框满宽、高约两行字；五个速览空框一行一个、满宽、高约一行半字；图例四项排成两行两列；“要我处理的事”和满宽列表框（同样能拉长）；六个按钮两行三个。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上约三分之一宽一幅水彩插画",
+        "下方一行灰色小字图例：四个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上毛笔艺术字大标题“驾驶舱”，下面两行介绍（〔约法 L27〕画成绿色链接）。右上约三分之一宽一幅水彩插画（开头短视频就从这里取景）：书桌上一台侧透机箱和一台显示器，机箱前面板一盏小白灯，桌上一块外接固态和一只手机，窗外一角远山，桌角一盆绿植；插画里不画字。中间一行是总灯：左边一个圆形空位（直径约屏高的 22%），只画一圈很淡的水彩圆形底座、不画灯色，网页程序在这里贴预先画好的四张水彩灯之一（绿、黄、红、灰，同一尺寸同一位置）；圆形右边一个横长空框（约屏宽 55%、高约屏高 9%），放总灯旁边那一句话；它下面一排五个等宽小空框（每个约屏宽 10.5%、高约屏高 9%，间距相同），放五项速览。圆形正下方一行灰色小字图例：四个小水彩色点（绿、黄、红、灰）各跟一段字。下半屏：小标题“要我处理的事”，下面一个满宽的列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。最下面一排六个同样大小的白底细绿边圆角按钮（页内跳转），居中排一行。四个空位和列表框之外不留大块空白。",
+    "portrait": "竖版：标题；两行介绍；插画缩到屏宽；圆形灯位居中；一句话空框满宽、高约两行字；五个速览空框一行一个、满宽、高约一行半字；图例四项排成两行两列；“要我处理的事”和满宽列表框（同样能拉长）；六个按钮两行三个。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "67%",
+        "text_ref": "驾驶舱"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "这台电脑现在好不好、有没有要我处理的事，打开这一页就知道。数据每分钟从电脑读一次"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "intro",
+        "width": "33%",
+        "asset": "_library/illustrations/ill-53b8c5c622e8b9.png",
+        "panel_asset_sha256": "220e4babb91d16ee83700fc8f89b91373e9f08e81ffc6eb96dfdbc2f5ea08331",
+        "panels": [
+          [
+            0,
+            0,
+            887,
+            333
+          ]
+        ]
+      },
+      {
+        "type": "live_box",
+        "layout": "overall",
+        "key": "cockpit-overall"
+      },
+      {
+        "type": "status_legend",
+        "columns": 2,
+        "portrait_columns": 2,
+        "text_ref": "绿：都正常黄：要留意，例如备份超期、同一个任务连着失败、磁盘剩余不到10%红：要"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "要我处理的事"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-attention",
+        "min_height": 260
+      },
+      {
+        "type": "action_button",
+        "text_ref": "↓电脑↓自动任务↓备份和云端↓安全和授权↓项目↓今天的动态",
+        "columns": 6,
+        "columns_v": 2,
+        "align": "center"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n固定图例是一条‘绿：…黄：…红：…灰：…’ para，status_legend 只按圆点符号拆项，不能直接生成四项颜色点及竖版2×2；当前完整保留图例文字。\n底部六按钮横版一排/竖版两排三列为明确源要求，action_button 目前只自动折行，没有指定六项网格字段。\n总灯直径/一句话框55%/五速览10.5%等源比例由 live_box 的固定样式近似，规格不能分别控制。中间列表框先留有最小高度，运行时拉伸与灯图贴入由网页负责。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：六按钮使用横6列、手机2列等宽网格并居中；四项灯色图例横竖均为2×2，保留完整原字。",
+    "unsupported_requirements": [
+      "固定图例是一条‘绿：…黄：…红：…灰：…’ para，status_legend 只按圆点符号拆项，不能直接生成四项颜色点及竖版2×2；当前完整保留图例文字。",
+      "底部六按钮横版一排/竖版两排三列为明确源要求，action_button 目前只自动折行，没有指定六项网格字段。",
+      "总灯直径/一句话框55%/五速览10.5%等源比例由 live_box 的固定样式近似，规格不能分别控制。中间列表框先留有最小高度，运行时拉伸与灯图贴入由网页负责。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 2
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-01",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-01-v2.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "prose",
+      "inline_link",
+      "illustration",
+      "live_box",
+      "monospace",
+      "status_legend",
+      "section_heading",
+      "stretch_list",
+      "action_button"
+    ],
+    "portrait_component_order": [
+      "prose",
+      "illustration",
+      "status_legend",
+      "action_button",
+      "chapter_title",
+      "inline_link",
+      "live_box",
+      "monospace",
+      "section_heading",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上毛笔艺术字大标题“驾驶舱”，下面两行介绍（〔约法 L27〕画成绿色链接）。右上约三分之一宽一幅水彩插画（开头短视频就从这里取景）：书桌上一台侧透机箱和一台显示器，机箱前面板一盏小白灯，桌上一块外接固态和一只手机，窗外一角远山，桌角一盆绿植；插画里不画字。中间一行是总灯：左边一个圆形空位（直径约屏高的 22%），只画一圈很淡的水彩圆形底座、不画灯色，网页程序在这里贴预先画好的四张水彩灯之一（绿、黄、红、灰，同一尺寸同一位置）；圆形右边一个横长空框（约屏宽 55%、高约屏高 9%），放总灯旁边那一句话；它下面一排五个等宽小空框（每个约屏宽 10.5%、高约屏高 9%，间距相同），放五项速览。圆形正下方一行灰色小字图例：四个小水彩色点（绿、黄、红、灰）各跟一段字。下半屏：小标题“要我处理的事”，下面一个满宽的列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。最下面一排六个同样大小的白底细绿边圆角按钮（页内跳转），居中排一行。四个空位和列表框之外不留大块空白。",
+      "portrait": "竖版：标题；两行介绍；插画缩到屏宽；圆形灯位居中；一句话空框满宽、高约两行字；五个速览空框一行一个、满宽、高约一行半字；图例四项排成两行两列；“要我处理的事”和满宽列表框（同样能拉长）；六个按钮两行三个。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上约三分之一宽一幅水彩插画",
+        "下方一行灰色小字图例：四个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上毛笔艺术字大标题“驾驶舱”，下面两行介绍（〔约法 L27〕画成绿色链接）。右上约三分之一宽一幅水彩插画（开头短视频就从这里取景）：书桌上一台侧透机箱和一台显示器，机箱前面板一盏小白灯，桌上一块外接固态和一只手机，窗外一角远山，桌角一盆绿植；插画里不画字。中间一行是总灯：左边一个圆形空位（直径约屏高的 22%），只画一圈很淡的水彩圆形底座、不画灯色，网页程序在这里贴预先画好的四张水彩灯之一（绿、黄、红、灰，同一尺寸同一位置）；圆形右边一个横长空框（约屏宽 55%、高约屏高 9%），放总灯旁边那一句话；它下面一排五个等宽小空框（每个约屏宽 10.5%、高约屏高 9%，间距相同），放五项速览。圆形正下方一行灰色小字图例：四个小水彩色点（绿、黄、红、灰）各跟一段字。下半屏：小标题“要我处理的事”，下面一个满宽的列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。最下面一排六个同样大小的白底细绿边圆角按钮（页内跳转），居中排一行。四个空位和列表框之外不留大块空白。",
+    "portrait": "竖版：标题；两行介绍；插画缩到屏宽；圆形灯位居中；一句话空框满宽、高约两行字；五个速览空框一行一个、满宽、高约一行半字；图例四项排成两行两列；“要我处理的事”和满宽列表框（同样能拉长）；六个按钮两行三个。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "驾驶舱"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这台电脑现在好不好、有没有要我处理的事，打开这一页就知道。数据每分钟从电脑读一次"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "asset": "_library/illustrations/ill-53b8c5c622e8b9.png",
+        "panel_asset_sha256": "220e4babb91d16ee83700fc8f89b91373e9f08e81ffc6eb96dfdbc2f5ea08331",
+        "panels": [
+          [
+            0,
+            0,
+            887,
+            333
+          ]
+        ]
+      },
+      {
+        "type": "live_box",
+        "layout": "overall",
+        "key": "cockpit-overall"
+      },
+      {
+        "type": "status_legend",
+        "columns": 2,
+        "portrait_columns": 2,
+        "text_ref": "绿：都正常黄：要留意，例如备份超期、同一个任务连着失败、磁盘剩余不到10%红：要"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "要我处理的事"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-attention",
+        "min_height": 340
+      },
+      {
+        "type": "action_button",
+        "text_ref": "↓电脑↓自动任务↓备份和云端↓安全和授权↓项目↓今天的动态",
+        "columns": 6,
+        "columns_v": 2,
+        "align": "center"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n固定图例是一条‘绿：…黄：…红：…灰：…’ para，status_legend 只按圆点符号拆项，不能直接生成四项颜色点及竖版2×2；当前完整保留图例文字。\n底部六按钮横版一排/竖版两排三列为明确源要求，action_button 目前只自动折行，没有指定六项网格字段。\n总灯直径/一句话框55%/五速览10.5%等源比例由 live_box 的固定样式近似，规格不能分别控制。中间列表框先留有最小高度，运行时拉伸与灯图贴入由网页负责。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：六按钮使用横6列、手机2列等宽网格并居中；四项灯色图例横竖均为2×2，保留完整原字。",
+    "unsupported_requirements": [
+      "固定图例是一条‘绿：…黄：…红：…灰：…’ para，status_legend 只按圆点符号拆项，不能直接生成四项颜色点及竖版2×2；当前完整保留图例文字。",
+      "底部六按钮横版一排/竖版两排三列为明确源要求，action_button 目前只自动折行，没有指定六项网格字段。",
+      "总灯直径/一句话框55%/五速览10.5%等源比例由 live_box 的固定样式近似，规格不能分别控制。中间列表框先留有最小高度，运行时拉伸与灯图贴入由网页负责。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 2
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-02",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-02-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "illustration",
+      "inline_link",
+      "stretch_list",
+      "content_card"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "illustration",
+      "content_card",
+      "chapter_title",
+      "prose",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“电脑”，标题下一行问句（字号略大、绿色）。左边约四分之一宽一幅竖长水彩插画：侧透机箱里显卡和风扇、旁边一根温度计和一片落叶；插画下面两段灰色固定说明（第二段里〔电脑配置与恢复〕画成绿色链接）。右边约四分之三宽一个大列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排成小卡片：处理器、显卡、内存、各盘剩余、网络、开机多久、屏幕。",
+      "portrait": "竖版：小节标题和问句；插画缩成一行高的横条；两段说明；列表框满宽在最下面（网页程序把小卡片改成一行一张）。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约四分之一宽一幅竖长水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“电脑”，标题下一行问句（字号略大、绿色）。左边约四分之一宽一幅竖长水彩插画：侧透机箱里显卡和风扇、旁边一根温度计和一片落叶；插画下面两段灰色固定说明（第二段里〔电脑配置与恢复〕画成绿色链接）。右边约四分之三宽一个大列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排成小卡片：处理器、显卡、内存、各盘剩余、网络、开机多久、屏幕。",
+    "portrait": "竖版：小节标题和问句；插画缩成一行高的横条；两段说明；列表框满宽在最下面（网页程序把小卡片改成一行一张）。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "电脑"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "这台电脑现在累不累、还剩多少地方？"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "computer-intro",
+        "width": "25%",
+        "row_valign": "center"
+      },
+      {
+        "type": "prose",
+        "row": "computer-intro",
+        "text_ref": "处理器和显卡的温度、占用，内存，每块盘还剩多少，网络快不快、丢不丢包，开机多久，",
+        "width": "75%"
+      },
+      {
+        "type": "prose",
+        "row": "computer-intro",
+        "text_ref": "哪块盘剩余不到10%，会进最上面“要我处理的事”。每块盘放什么，见电脑配置与恢复"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-pc",
+        "width": "100%",
+        "placement": "none",
+        "min_height": 480
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源竖版插画要求一行高横条，illustration.banner 只有通用尺寸，不控制源裁切长宽。左侧灰固定说明、绿色问句当前 prose 仅支持大号/粗体，尚无按角色分色字段。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：外层 row 已分左右栏，取消 stretch_list 内部 side 二次分栏，使实时列表撑满自身 75%/67% 列。",
+    "unsupported_requirements": [
+      "源竖版插画要求一行高横条，illustration.banner 只有通用尺寸，不控制源裁切长宽。左侧灰固定说明、绿色问句当前 prose 仅支持大号/粗体，尚无按角色分色字段。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-02",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-02-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "illustration",
+      "inline_link",
+      "stretch_list",
+      "content_card"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "illustration",
+      "content_card",
+      "chapter_title",
+      "prose",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“电脑”，标题下一行问句（字号略大、绿色）。左边约四分之一宽一幅竖长水彩插画：侧透机箱里显卡和风扇、旁边一根温度计和一片落叶；插画下面两段灰色固定说明（第二段里〔电脑配置与恢复〕画成绿色链接）。右边约四分之三宽一个大列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排成小卡片：处理器、显卡、内存、各盘剩余、网络、开机多久、屏幕。",
+      "portrait": "竖版：小节标题和问句；插画缩成一行高的横条；两段说明；列表框满宽在最下面（网页程序把小卡片改成一行一张）。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约四分之一宽一幅竖长水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“电脑”，标题下一行问句（字号略大、绿色）。左边约四分之一宽一幅竖长水彩插画：侧透机箱里显卡和风扇、旁边一根温度计和一片落叶；插画下面两段灰色固定说明（第二段里〔电脑配置与恢复〕画成绿色链接）。右边约四分之三宽一个大列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排成小卡片：处理器、显卡、内存、各盘剩余、网络、开机多久、屏幕。",
+    "portrait": "竖版：小节标题和问句；插画缩成一行高的横条；两段说明；列表框满宽在最下面（网页程序把小卡片改成一行一张）。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "电脑"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "这台电脑现在累不累、还剩多少地方？"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "prose",
+        "text_ref": "处理器和显卡的温度、占用，内存，每块盘还剩多少，网络快不快、丢不丢包，开机多久，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "哪块盘剩余不到10%，会进最上面“要我处理的事”。每块盘放什么，见电脑配置与恢复"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-pc",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源竖版插画要求一行高横条，illustration.banner 只有通用尺寸，不控制源裁切长宽。左侧灰固定说明、绿色问句当前 prose 仅支持大号/粗体，尚无按角色分色字段。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+    "unsupported_requirements": [
+      "源竖版插画要求一行高横条，illustration.banner 只有通用尺寸，不控制源裁切长宽。左侧灰固定说明、绿色问句当前 prose 仅支持大号/粗体，尚无按角色分色字段。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-03",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-03-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "section_heading",
+      "icon",
+      "illustration",
+      "inline_link",
+      "stretch_list",
+      "bullet_list"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "illustration",
+      "icon",
+      "inline_link",
+      "stretch_list",
+      "bullet_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小标题“远程和网络”（比第 2 屏的“电脑”小一级），下面一行问句（绿色）。左边约三分之一宽：一幅小水彩插画——家里的机箱和窗外远处一台打开的笔记本、一只手机，三者之间一条细细的虚线绿色光点相连（表示私人网络）；插画下面六条固定说明，一条一行，每条前一个小水彩图标（插头、显示器、一张网、笔记本、地球、刷新箭头），最后一行说明里〔连接电脑〕画成绿色链接。右边约三分之二宽一个列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排六行，对着左边六条说明。",
+      "portrait": "竖版：小标题和问句；插画缩成一行高的横条；六条说明一行一条；“还没接上”那段；列表框满宽在最后。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之一宽：一幅小水彩插画",
+        "下面六条固定说明，一条一行，每条前一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小标题“远程和网络”（比第 2 屏的“电脑”小一级），下面一行问句（绿色）。左边约三分之一宽：一幅小水彩插画——家里的机箱和窗外远处一台打开的笔记本、一只手机，三者之间一条细细的虚线绿色光点相连（表示私人网络）；插画下面六条固定说明，一条一行，每条前一个小水彩图标（插头、显示器、一张网、笔记本、地球、刷新箭头），最后一行说明里〔连接电脑〕画成绿色链接。右边约三分之二宽一个列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排六行，对着左边六条说明。",
+    "portrait": "竖版：小标题和问句；插画缩成一行高的横条；六条说明一行一条；“还没接上”那段；列表框满宽在最后。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "远程和网络"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我人不在电脑前，能不能连上它？"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "remote",
+        "width": "33%"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "row": "remote",
+        "text_ref": "电脑MCP：手机或别处的AI经它用这台电脑串流：我自己远程看桌面、亲手点（电脑上"
+      },
+      {
+        "type": "prose",
+        "row": "remote",
+        "text_ref": "已接上的显示读数"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-remote",
+        "placement": "none",
+        "min_height": 440,
+        "row": "remote",
+        "width": "67%"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n左侧六条固定说明各前的插头/显示器/网/笔记本/地球/刷新图标，目前 bullet_list 无逐项图标接口；未拿任意图标替代。右侧对应六行是留给真实网页的数据，规格中不画假读数。\n绿色问句与灰说明角色色、竖版一行高插画裁切尚无字段支持。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：外层 row 已分左右栏，取消 stretch_list 内部 side 二次分栏，使实时列表撑满自身 75%/67% 列。",
+    "unsupported_requirements": [
+      "左侧六条固定说明各前的插头/显示器/网/笔记本/地球/刷新图标，目前 bullet_list 无逐项图标接口；未拿任意图标替代。右侧对应六行是留给真实网页的数据，规格中不画假读数。",
+      "绿色问句与灰说明角色色、竖版一行高插画裁切尚无字段支持。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-03",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-03-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "section_heading",
+      "icon",
+      "illustration",
+      "inline_link",
+      "stretch_list",
+      "bullet_list"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "illustration",
+      "icon",
+      "inline_link",
+      "stretch_list",
+      "bullet_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小标题“远程和网络”（比第 2 屏的“电脑”小一级），下面一行问句（绿色）。左边约三分之一宽：一幅小水彩插画——家里的机箱和窗外远处一台打开的笔记本、一只手机，三者之间一条细细的虚线绿色光点相连（表示私人网络）；插画下面六条固定说明，一条一行，每条前一个小水彩图标（插头、显示器、一张网、笔记本、地球、刷新箭头），最后一行说明里〔连接电脑〕画成绿色链接。右边约三分之二宽一个列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排六行，对着左边六条说明。",
+      "portrait": "竖版：小标题和问句；插画缩成一行高的横条；六条说明一行一条；“还没接上”那段；列表框满宽在最后。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边约三分之一宽：一幅小水彩插画",
+        "下面六条固定说明，一条一行，每条前一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小标题“远程和网络”（比第 2 屏的“电脑”小一级），下面一行问句（绿色）。左边约三分之一宽：一幅小水彩插画——家里的机箱和窗外远处一台打开的笔记本、一只手机，三者之间一条细细的虚线绿色光点相连（表示私人网络）；插画下面六条固定说明，一条一行，每条前一个小水彩图标（插头、显示器、一张网、笔记本、地球、刷新箭头），最后一行说明里〔连接电脑〕画成绿色链接。右边约三分之二宽一个列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排六行，对着左边六条说明。",
+    "portrait": "竖版：小标题和问句；插画缩成一行高的横条；六条说明一行一条；“还没接上”那段；列表框满宽在最后。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "远程和网络"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我人不在电脑前，能不能连上它？"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "text_ref": "电脑MCP：手机或别处的AI经它用这台电脑串流：我自己远程看桌面、亲手点（电脑上"
+      },
+      {
+        "type": "prose",
+        "text_ref": "已接上的显示读数"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-remote",
+        "placement": "side",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n左侧六条固定说明各前的插头/显示器/网/笔记本/地球/刷新图标，目前 bullet_list 无逐项图标接口；未拿任意图标替代。右侧对应六行是留给真实网页的数据，规格中不画假读数。\n绿色问句与灰说明角色色、竖版一行高插画裁切尚无字段支持。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "左侧六条固定说明各前的插头/显示器/网/笔记本/地球/刷新图标，目前 bullet_list 无逐项图标接口；未拿任意图标替代。右侧对应六行是留给真实网页的数据，规格中不画假读数。",
+      "绿色问句与灰说明角色色、竖版一行高插画裁切尚无字段支持。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-04",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-04-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "section_heading",
+      "prose",
+      "live_embed",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "live_embed",
+      "prose",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小标题“近 24 小时的曲线”，下面一行问句（绿色），再下面一行灰色固定说明。小标题右侧画 Grafana 的标志（小号）。下面一个大的 16:9 嵌入框，约占屏宽 86%、居中，画成水彩圆角细边相框（四角各压一小片水彩叶子），框内纯白、一个字都不画、不画假曲线，网页程序把 Grafana 只读公开面板嵌在这里；电脑不在线时网页程序在框中央写一行字。",
+      "portrait": "竖版：小标题、标志、问句、说明依次往下；嵌入框满宽，改成上下两段（上段处理器和显卡，下段内存和网络），每段约 4:3。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小标题“近 24 小时的曲线”，下面一行问句（绿色），再下面一行灰色固定说明。小标题右侧画 Grafana 的标志（小号）。下面一个大的 16:9 嵌入框，约占屏宽 86%、居中，画成水彩圆角细边相框（四角各压一小片水彩叶子），框内纯白、一个字都不画、不画假曲线，网页程序把 Grafana 只读公开面板嵌在这里；电脑不在线时网页程序在框中央写一行字。",
+    "portrait": "竖版：小标题、标志、问句、说明依次往下；嵌入框满宽，改成上下两段（上段处理器和显卡，下段内存和网络），每段约 4:3。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "近24小时的曲线"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "这一天电脑什么时候忙、有没有过热？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "处理器和显卡的温度、占用，内存和网络，近24小时的曲线。来自我的Grafana只"
+      },
+      {
+        "type": "live_embed",
+        "key": "cockpit-grafana",
+        "leaves": true
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n小标题右侧 Grafana 小标需单独且明确品牌图资产，section_heading 没有右侧标志字段；不擅加图形或品牌文字。绿色问句/灰说明的分色未由 prose 实现。\nlive_embed 已支持横86%居中16:9与竖上下两块4:3；实际在线/离线字与曲线由网页填，本规格只留空框。",
+    "unsupported_requirements": [
+      "小标题右侧 Grafana 小标需单独且明确品牌图资产，section_heading 没有右侧标志字段；不擅加图形或品牌文字。绿色问句/灰说明的分色未由 prose 实现。",
+      "live_embed 已支持横86%居中16:9与竖上下两块4:3；实际在线/离线字与曲线由网页填，本规格只留空框。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 1,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-04",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-04-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "section_heading",
+      "prose",
+      "live_embed",
+      "icon"
+    ],
+    "portrait_component_order": [
+      "section_heading",
+      "live_embed",
+      "prose",
+      "icon"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小标题“近 24 小时的曲线”，下面一行问句（绿色），再下面一行灰色固定说明。小标题右侧画 Grafana 的标志（小号）。下面一个大的 16:9 嵌入框，约占屏宽 86%、居中，画成水彩圆角细边相框（四角各压一小片水彩叶子），框内纯白、一个字都不画、不画假曲线，网页程序把 Grafana 只读公开面板嵌在这里；电脑不在线时网页程序在框中央写一行字。",
+      "portrait": "竖版：小标题、标志、问句、说明依次往下；嵌入框满宽，改成上下两段（上段处理器和显卡，下段内存和网络），每段约 4:3。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小标题“近 24 小时的曲线”，下面一行问句（绿色），再下面一行灰色固定说明。小标题右侧画 Grafana 的标志（小号）。下面一个大的 16:9 嵌入框，约占屏宽 86%、居中，画成水彩圆角细边相框（四角各压一小片水彩叶子），框内纯白、一个字都不画、不画假曲线，网页程序把 Grafana 只读公开面板嵌在这里；电脑不在线时网页程序在框中央写一行字。",
+    "portrait": "竖版：小标题、标志、问句、说明依次往下；嵌入框满宽，改成上下两段（上段处理器和显卡，下段内存和网络），每段约 4:3。",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "近24小时的曲线"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "这一天电脑什么时候忙、有没有过热？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "处理器和显卡的温度、占用，内存和网络，近24小时的曲线。来自我的Grafana只"
+      },
+      {
+        "type": "live_embed",
+        "key": "cockpit-grafana",
+        "leaves": true
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n小标题右侧 Grafana 小标需单独且明确品牌图资产，section_heading 没有右侧标志字段；不擅加图形或品牌文字。绿色问句/灰说明的分色未由 prose 实现。\nlive_embed 已支持横86%居中16:9与竖上下两块4:3；实际在线/离线字与曲线由网页填，本规格只留空框。",
+    "unsupported_requirements": [
+      "小标题右侧 Grafana 小标需单独且明确品牌图资产，section_heading 没有右侧标志字段；不擅加图形或品牌文字。绿色问句/灰说明的分色未由 prose 实现。",
+      "live_embed 已支持横86%居中16:9与竖上下两块4:3；实际在线/离线字与曲线由网页填，本规格只留空框。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 1,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-05",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-05-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "notice",
+      "tag",
+      "icon",
+      "illustration",
+      "inline_link",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "tag",
+      "illustration",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "notice",
+      "icon",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“自动任务”，下面一行问句（绿色）。问句下面一条浅绿底圆角横幅，横排五枚白底小标签（就是“点开写清五件事”那五个粗体词），每枚前一个小水彩图标（齿轮、时钟、警示三角、停止的手掌、一串断开的链条）。横幅下两段灰色固定说明（〔约法 L28〕画成绿色链接）。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。右上角一小幅水彩插画：一只小机械手在给一株绿植浇水，压在列表框上沿外侧，不挡框内。",
+      "portrait": "竖版：标题和问句；五枚小标签排成两行（三个加两个，居中）；两段说明；插画缩小放在说明旁；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“自动任务”，下面一行问句（绿色）。问句下面一条浅绿底圆角横幅，横排五枚白底小标签（就是“点开写清五件事”那五个粗体词），每枚前一个小水彩图标（齿轮、时钟、警示三角、停止的手掌、一串断开的链条）。横幅下两段灰色固定说明（〔约法 L28〕画成绿色链接）。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。右上角一小幅水彩插画：一只小机械手在给一株绿植浇水，压在列表框上沿外侧，不挡框内。",
+    "portrait": "竖版：标题和问句；五枚小标签排成两行（三个加两个，居中）；两段说明；插画缩小放在说明旁；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "自动任务",
+        "row": "task-intro",
+        "width": "80%"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "电脑自己在做的事，有没有按时做、做成没有？",
+        "row": "task-intro"
+      },
+      {
+        "type": "tag",
+        "text_ref": "每个任务点开写清五件事：在做什么上次和下次运行有没有出错怎么停停了影响什么",
+        "row": "task-intro"
+      },
+      {
+        "type": "prose",
+        "text_ref": "出问题的排在最上面，正常的按组折起来；停用的、别的软件自己装的任务也各自折起来，",
+        "row": "task-intro"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里只显示，不能在网页上停；要停跟AI说一声，它照“怎么停”那条办。自动运行的东",
+        "row": "task-intro"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "right",
+        "row": "task-intro",
+        "width": "20%"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-tasks",
+        "min_height": 360
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n‘五件事’是一条带粗体的 para，不是五个独立节点；tag 目前只会将整段包成一个标签，尚不能按原五个粗体词拆成五枚、各带图标，竖版3+2居中。\n机械手浇绿植应压在列表框右上沿外侧且不遮框内；现 illustration 是独立块，伸长框无外角插画定位接口；竖版应放说明旁而非单独一幅。绿色问句/灰说明的角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 3 项，文字盘点预算 5 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：浇水图改为靠右、图宽20%，全宽列表框接在下一块；精确压在框上沿的叠层仍需组件接口。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "unsupported_requirements": [
+      "‘五件事’是一条带粗体的 para，不是五个独立节点；tag 目前只会将整段包成一个标签，尚不能按原五个粗体词拆成五枚、各带图标，竖版3+2居中。",
+      "机械手浇绿植应压在列表框右上沿外侧且不遮框内；现 illustration 是独立块，伸长框无外角插画定位接口；竖版应放说明旁而非单独一幅。绿色问句/灰说明的角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 5 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 5,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-05",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-05-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "notice",
+      "tag",
+      "icon",
+      "illustration",
+      "inline_link",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "tag",
+      "illustration",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "notice",
+      "icon",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“自动任务”，下面一行问句（绿色）。问句下面一条浅绿底圆角横幅，横排五枚白底小标签（就是“点开写清五件事”那五个粗体词），每枚前一个小水彩图标（齿轮、时钟、警示三角、停止的手掌、一串断开的链条）。横幅下两段灰色固定说明（〔约法 L28〕画成绿色链接）。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。右上角一小幅水彩插画：一只小机械手在给一株绿植浇水，压在列表框上沿外侧，不挡框内。",
+      "portrait": "竖版：标题和问句；五枚小标签排成两行（三个加两个，居中）；两段说明；插画缩小放在说明旁；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“自动任务”，下面一行问句（绿色）。问句下面一条浅绿底圆角横幅，横排五枚白底小标签（就是“点开写清五件事”那五个粗体词），每枚前一个小水彩图标（齿轮、时钟、警示三角、停止的手掌、一串断开的链条）。横幅下两段灰色固定说明（〔约法 L28〕画成绿色链接）。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。右上角一小幅水彩插画：一只小机械手在给一株绿植浇水，压在列表框上沿外侧，不挡框内。",
+    "portrait": "竖版：标题和问句；五枚小标签排成两行（三个加两个，居中）；两段说明；插画缩小放在说明旁；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "自动任务"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "电脑自己在做的事，有没有按时做、做成没有？"
+      },
+      {
+        "type": "tag",
+        "text_ref": "每个任务点开写清五件事：在做什么上次和下次运行有没有出错怎么停停了影响什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "出问题的排在最上面，正常的按组折起来；停用的、别的软件自己装的任务也各自折起来，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里只显示，不能在网页上停；要停跟AI说一声，它照“怎么停”那条办。自动运行的东"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "right",
+        "target_width": "20%"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-tasks",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n‘五件事’是一条带粗体的 para，不是五个独立节点；tag 目前只会将整段包成一个标签，尚不能按原五个粗体词拆成五枚、各带图标，竖版3+2居中。\n机械手浇绿植应压在列表框右上沿外侧且不遮框内；现 illustration 是独立块，伸长框无外角插画定位接口；竖版应放说明旁而非单独一幅。绿色问句/灰说明的角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 3 项，文字盘点预算 5 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：浇水图改为靠右、图宽20%，全宽列表框接在下一块；精确压在框上沿的叠层仍需组件接口。",
+    "unsupported_requirements": [
+      "‘五件事’是一条带粗体的 para，不是五个独立节点；tag 目前只会将整段包成一个标签，尚不能按原五个粗体词拆成五枚、各带图标，竖版3+2居中。",
+      "机械手浇绿植应压在列表框右上沿外侧且不遮框内；现 illustration 是独立块，伸长框无外角插画定位接口；竖版应放说明旁而非单独一幅。绿色问句/灰说明的角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 3 项，文字盘点预算 5 个图标位；差 2 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 5,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-06",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-06-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "icon",
+      "inline_link",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "icon",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“备份和云端”，下面一行问句（绿色）。问句下一排五个水彩小图标，等距横排，每个下面一行小字：机箱里的固态硬盘（G 盘）、一块外接固态（H 盘）、Google 云盘标志、Google 相册标志、GitHub 标志，最右一个小灰叉（哪里都没备份的）。图标排下面三段灰色固定说明（〔约法 L21〕画成绿色链接）。再下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题和问句；六个小图标排成两行三个；三段说明；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“备份和云端”，下面一行问句（绿色）。问句下一排五个水彩小图标，等距横排，每个下面一行小字：机箱里的固态硬盘（G 盘）、一块外接固态（H 盘）、Google 云盘标志、Google 相册标志、GitHub 标志，最右一个小灰叉（哪里都没备份的）。图标排下面三段灰色固定说明（〔约法 L21〕画成绿色链接）。再下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题和问句；六个小图标排成两行三个；三段说明；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "备份和云端"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我的东西保住了没有？存在哪、是不是最新？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "G 盘　H 盘　Google 云盘　Google 相册　GitHub　副本未核实的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按去处列，每个去处写清：备份了什么、多少、最近一次成功、正在传什么、下一次什么时"
+      },
+      {
+        "type": "prose",
+        "text_ref": "怎么算正常：每天的备份36小时内、每周的备份9天内成功过一次。超过这个期限算黄，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里只写到类别和文件夹，不写具体文件名。我删掉的东西，备份也跟着删；照片视频这类"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-backups",
+        "min_height": 360
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n六个去处名称位于同一 para，须按全角空格拆成六格并配 G盘/H盘/云盘/相册/GitHub/灰叉，横6格/竖2×3；现 prose/图标接口不能在同节点内逐格分配，未复制标签或随意猜映射。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 4 项，文字盘点预算 5 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "六个去处名称位于同一 para，须按全角空格拆成六格并配 G盘/H盘/云盘/相册/GitHub/灰叉，横6格/竖2×3；现 prose/图标接口不能在同节点内逐格分配，未复制标签或随意猜映射。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 5 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 5,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-06",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-06-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "icon",
+      "inline_link",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "icon",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“备份和云端”，下面一行问句（绿色）。问句下一排五个水彩小图标，等距横排，每个下面一行小字：机箱里的固态硬盘（G 盘）、一块外接固态（H 盘）、Google 云盘标志、Google 相册标志、GitHub 标志，最右一个小灰叉（哪里都没备份的）。图标排下面三段灰色固定说明（〔约法 L21〕画成绿色链接）。再下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题和问句；六个小图标排成两行三个；三段说明；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“备份和云端”，下面一行问句（绿色）。问句下一排五个水彩小图标，等距横排，每个下面一行小字：机箱里的固态硬盘（G 盘）、一块外接固态（H 盘）、Google 云盘标志、Google 相册标志、GitHub 标志，最右一个小灰叉（哪里都没备份的）。图标排下面三段灰色固定说明（〔约法 L21〕画成绿色链接）。再下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题和问句；六个小图标排成两行三个；三段说明；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "备份和云端"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我的东西保住了没有？存在哪、是不是最新？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "G 盘　H 盘　Google 云盘　Google 相册　GitHub　副本未核实的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按去处列，每个去处写清：备份了什么、多少、最近一次成功、正在传什么、下一次什么时"
+      },
+      {
+        "type": "prose",
+        "text_ref": "怎么算正常：每天的备份36小时内、每周的备份9天内成功过一次。超过这个期限算黄，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里只写到类别和文件夹，不写具体文件名。我删掉的东西，备份也跟着删；照片视频这类"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-backups",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n六个去处名称位于同一 para，须按全角空格拆成六格并配 G盘/H盘/云盘/相册/GitHub/灰叉，横6格/竖2×3；现 prose/图标接口不能在同节点内逐格分配，未复制标签或随意猜映射。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 4 项，文字盘点预算 5 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "六个去处名称位于同一 para，须按全角空格拆成六格并配 G盘/H盘/云盘/相册/GitHub/灰叉，横6格/竖2×3；现 prose/图标接口不能在同节点内逐格分配，未复制标签或随意猜映射。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 4 项，文字盘点预算 5 个图标位；差 1 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 4,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 5,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-07",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-07-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "monospace",
+      "content_card",
+      "icon",
+      "inline_link",
+      "action_button",
+      "live_box"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "action_button",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "monospace",
+      "icon",
+      "inline_link",
+      "live_box"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“安全和授权”，下面一行问句（绿色）。下面三张等宽竖卡片一行排开，每张上半是一个小水彩图标和粗体名字（一把挂锁、一枚盖了章的通行证、一扇关着的窗），名字下面一两行灰色说明（〔约法 L18〕〔L16〕画成绿色链接）；每张卡片下半一个空框（约卡片高的 35%），框里不画字，网页程序填“锁着／开着到 HH:MM”这类状态。卡片下面一行字，末尾〔授权与状态〕画成一个白底细绿边圆角按钮。",
+      "portrait": "竖版：标题和问句；三张卡片上下排、满宽，每张左边图标和名字、右边说明，下面空框满宽；最后一行和按钮。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "个人资料",
+        "无限制授权",
+        "Windows"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "下面三张等宽竖卡片一行排开，每张上半是一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“安全和授权”，下面一行问句（绿色）。下面三张等宽竖卡片一行排开，每张上半是一个小水彩图标和粗体名字（一把挂锁、一枚盖了章的通行证、一扇关着的窗），名字下面一两行灰色说明（〔约法 L18〕〔L16〕画成绿色链接）；每张卡片下半一个空框（约卡片高的 35%），框里不画字，网页程序填“锁着／开着到 HH:MM”这类状态。卡片下面一行字，末尾〔授权与状态〕画成一个白底细绿边圆角按钮。",
+    "portrait": "竖版：标题和问句；三张卡片上下排、满宽，每张左边图标和名字、右边说明，下面空框满宽；最后一行和按钮。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "安全和授权"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我的资料和这台电脑现在锁着没有？"
+      },
+      {
+        "type": "live_box",
+        "layout": "cards",
+        "key": "cockpit-security",
+        "shared_key": true,
+        "text_ref": "个人资料"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "inline_button": "授权与状态",
+        "text_ref": "这里只显示；要锁资料、结束授权、锁Windows，去授权与状态。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\nlive_box.cards 已按个人资料/无限制授权/Windows 三组原文保留三状态空框；源横版每卡图标在上、竖版图标与说明左右排，当前 live_box 没有锁/通行证/窗三图语义映射和插画方向字段。空框35%高度也不能指定。\n最后‘授权与状态’原链接提升为按钮通过 notice.inline_button 表达；新样式需组件样张，不能标为已批准。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+    "unsupported_requirements": [
+      "live_box.cards 已按个人资料/无限制授权/Windows 三组原文保留三状态空框；源横版每卡图标在上、竖版图标与说明左右排，当前 live_box 没有锁/通行证/窗三图语义映射和插画方向字段。空框35%高度也不能指定。",
+      "最后‘授权与状态’原链接提升为按钮通过 notice.inline_button 表达；新样式需组件样张，不能标为已批准。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 3,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-07",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-07-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "monospace",
+      "content_card",
+      "icon",
+      "inline_link",
+      "action_button",
+      "live_box"
+    ],
+    "portrait_component_order": [
+      "content_card",
+      "action_button",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "monospace",
+      "icon",
+      "inline_link",
+      "live_box"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“安全和授权”，下面一行问句（绿色）。下面三张等宽竖卡片一行排开，每张上半是一个小水彩图标和粗体名字（一把挂锁、一枚盖了章的通行证、一扇关着的窗），名字下面一两行灰色说明（〔约法 L18〕〔L16〕画成绿色链接）；每张卡片下半一个空框（约卡片高的 35%），框里不画字，网页程序填“锁着／开着到 HH:MM”这类状态。卡片下面一行字，末尾〔授权与状态〕画成一个白底细绿边圆角按钮。",
+      "portrait": "竖版：标题和问句；三张卡片上下排、满宽，每张左边图标和名字、右边说明，下面空框满宽；最后一行和按钮。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "个人资料",
+        "无限制授权",
+        "Windows"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "下面三张等宽竖卡片一行排开，每张上半是一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“安全和授权”，下面一行问句（绿色）。下面三张等宽竖卡片一行排开，每张上半是一个小水彩图标和粗体名字（一把挂锁、一枚盖了章的通行证、一扇关着的窗），名字下面一两行灰色说明（〔约法 L18〕〔L16〕画成绿色链接）；每张卡片下半一个空框（约卡片高的 35%），框里不画字，网页程序填“锁着／开着到 HH:MM”这类状态。卡片下面一行字，末尾〔授权与状态〕画成一个白底细绿边圆角按钮。",
+    "portrait": "竖版：标题和问句；三张卡片上下排、满宽，每张左边图标和名字、右边说明，下面空框满宽；最后一行和按钮。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "安全和授权"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "我的资料和这台电脑现在锁着没有？"
+      },
+      {
+        "type": "live_box",
+        "layout": "cards",
+        "key": "cockpit-security",
+        "shared_key": true,
+        "text_ref": "个人资料"
+      },
+      {
+        "type": "notice",
+        "tone": "green",
+        "inline_button": "授权与状态",
+        "text_ref": "这里只显示；要锁资料、结束授权、锁Windows，去授权与状态。"
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\nlive_box.cards 已按个人资料/无限制授权/Windows 三组原文保留三状态空框；源横版每卡图标在上、竖版图标与说明左右排，当前 live_box 没有锁/通行证/窗三图语义映射和插画方向字段。空框35%高度也不能指定。\n最后‘授权与状态’原链接提升为按钮通过 notice.inline_button 表达；新样式需组件样张，不能标为已批准。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+    "unsupported_requirements": [
+      "live_box.cards 已按个人资料/无限制授权/Windows 三组原文保留三状态空框；源横版每卡图标在上、竖版图标与说明左右排，当前 live_box 没有锁/通行证/窗三图语义映射和插画方向字段。空框35%高度也不能指定。",
+      "最后‘授权与状态’原链接提升为按钮通过 notice.inline_button 表达；新样式需组件样张，不能标为已批准。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 3,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 3,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-08",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-08-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "illustration",
+      "content_card",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "content_card",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“项目”，下面一行问句（绿色），再下面两段灰色固定说明（“出错的”“等验收的”两个粗体词各配一个小色点：红、黄；〔全部项目〕画成绿色链接）。右上角一小幅水彩插画：一摞文件夹上停着一只小鸟，一枚夹子夹着一张打钩的小卡。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题、问句、两段说明；插画缩小放说明右侧；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“项目”，下面一行问句（绿色），再下面两段灰色固定说明（“出错的”“等验收的”两个粗体词各配一个小色点：红、黄；〔全部项目〕画成绿色链接）。右上角一小幅水彩插画：一摞文件夹上停着一只小鸟，一枚夹子夹着一张打钩的小卡。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题、问句、两段说明；插画缩小放说明右侧；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "项目"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "哪个项目出了错、哪个在等验收？"
+      },
+      {
+        "type": "prose",
+        "row": "project-intro",
+        "width": "76%",
+        "text_ref": "这里只列两种：出错的和等验收的。等验收分开数：待我验收、AI待验收、以后再做；等"
+      },
+      {
+        "type": "prose",
+        "row": "project-intro",
+        "text_ref": "每个项目怎么用，进全部项目挑。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "project-intro",
+        "width": "24%"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-projects",
+        "min_height": 340
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n两段说明中的‘出错的’红点/‘等验收的’黄点是原文局部强调，prose 无定点状态图形接口，不能把整段染红黄；本规格保留全部原字。候选文件夹/鸟/夹子图仅由清单读取，仍待图像语义核对。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+    "unsupported_requirements": [
+      "两段说明中的‘出错的’红点/‘等验收的’黄点是原文局部强调，prose 无定点状态图形接口，不能把整段染红黄；本规格保留全部原字。候选文件夹/鸟/夹子图仅由清单读取，仍待图像语义核对。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-08",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-08-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "illustration",
+      "content_card",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "illustration",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "inline_link",
+      "content_card",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“项目”，下面一行问句（绿色），再下面两段灰色固定说明（“出错的”“等验收的”两个粗体词各配一个小色点：红、黄；〔全部项目〕画成绿色链接）。右上角一小幅水彩插画：一摞文件夹上停着一只小鸟，一枚夹子夹着一张打钩的小卡。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题、问句、两段说明；插画缩小放说明右侧；列表框满宽。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右上角一小幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“项目”，下面一行问句（绿色），再下面两段灰色固定说明（“出错的”“等验收的”两个粗体词各配一个小色点：红、黄；〔全部项目〕画成绿色链接）。右上角一小幅水彩插画：一摞文件夹上停着一只小鸟，一枚夹子夹着一张打钩的小卡。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题、问句、两段说明；插画缩小放说明右侧；列表框满宽。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "项目"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "哪个项目出了错、哪个在等验收？"
+      },
+      {
+        "type": "prose",
+        "row": "project-intro",
+        "row_v": true,
+        "width": "76%",
+        "text_ref": "这里只列两种：出错的和等验收的。等验收分开数：待我验收、AI待验收、以后再做；等"
+      },
+      {
+        "type": "prose",
+        "row": "project-intro",
+        "row_v": true,
+        "text_ref": "每个项目怎么用，进全部项目挑。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "project-intro",
+        "row_v": true,
+        "width": "24%"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-projects",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n两段说明中的‘出错的’红点/‘等验收的’黄点是原文局部强调，prose 无定点状态图形接口，不能把整段染红黄；本规格保留全部原字。候选文件夹/鸟/夹子图仅由清单读取，仍待图像语义核对。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+    "unsupported_requirements": [
+      "两段说明中的‘出错的’红点/‘等验收的’黄点是原文局部强调，prose 无定点状态图形接口，不能把整段染红黄；本规格保留全部原字。候选文件夹/鸟/夹子图仅由清单读取，仍待图像语义核对。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "illustration": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 1,
+      "inventory_icon_slots": 0,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-09",
+    "orientation": "h",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-09-h.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "icon",
+      "timeline",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "icon",
+      "timeline",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“今天的动态”，下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩图标（一张光盘、一块打钩的硬盘、一个红色小叉、一叠打钩的卡片、一个电源键、一张拍立得照片），依次对着说明里的六类事。下面一个满宽列表框，左边画一条竖的水彩绿丝带当时间轴（丝带随框一起拉长），列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题、问句、说明；六个小图标排成一行（缩小）；列表框满宽，时间轴丝带在左。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“今天的动态”，下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩图标（一张光盘、一块打钩的硬盘、一个红色小叉、一叠打钩的卡片、一个电源键、一张拍立得照片），依次对着说明里的六类事。下面一个满宽列表框，左边画一条竖的水彩绿丝带当时间轴（丝带随框一起拉长），列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题、问句、说明；六个小图标排成一行（缩小）；列表框满宽，时间轴丝带在左。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "今天的动态"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "今天电脑上发生了什么？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按北京时间从早到晚排，只记有凭据的真事：系统镜像开始和完成、哪项备份完成、哪个任"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-today",
+        "min_height": 360
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n说明右侧六个光盘/勾盘/红叉/勾卡/电源/拍立得小图的独立图标行、竖版六图缩成一排缺语义映射与 icon 行组件。\n可拉伸列表框左侧竖水彩丝带需与框一起拉长，stretch_list 尚无时间轴/随框拉伸装饰字段；不能拿独立 timeline 加假日期。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "说明右侧六个光盘/勾盘/红叉/勾卡/电源/拍立得小图的独立图标行、竖版六图缩成一排缺语义映射与 icon 行组件。",
+      "可拉伸列表框左侧竖水彩丝带需与框一起拉长，stretch_list 尚无时间轴/随框拉伸装饰字段；不能拿独立 timeline 加假日期。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  },
+  {
+    "screen": "cockpit-09",
+    "orientation": "v",
+    "portrait_required": true,
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\img\\cockpit-09-v.png"
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\page.json",
+    "source_sha256": "fd94bb9abd2a80d033cd7519be5cd1701c6032d521e234eb6392e6f83fc40423",
+    "desktop_component_order": [
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "icon",
+      "timeline",
+      "stretch_list"
+    ],
+    "portrait_component_order": [
+      "icon",
+      "timeline",
+      "chapter_title",
+      "section_heading",
+      "prose",
+      "stretch_list"
+    ],
+    "source_layout": {
+      "desktop": "横版：左上小节标题“今天的动态”，下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩图标（一张光盘、一块打钩的硬盘、一个红色小叉、一叠打钩的卡片、一个电源键、一张拍立得照片），依次对着说明里的六类事。下面一个满宽列表框，左边画一条竖的水彩绿丝带当时间轴（丝带随框一起拉长），列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+      "portrait": "竖版：标题、问句、说明；六个小图标排成一行（缩小）；列表框满宽，时间轴丝带在左。"
+    },
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "scene": "横版：左上小节标题“今天的动态”，下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩图标（一张光盘、一块打钩的硬盘、一个红色小叉、一叠打钩的卡片、一个电源键、一张拍立得照片），依次对着说明里的六类事。下面一个满宽列表框，左边画一条竖的水彩绿丝带当时间轴（丝带随框一起拉长），列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+    "portrait": "竖版：标题、问句、说明；六个小图标排成一行（缩小）；列表框满宽，时间轴丝带在左。",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "今天的动态"
+      },
+      {
+        "type": "prose",
+        "size": "large",
+        "bold": true,
+        "text_ref": "今天电脑上发生了什么？"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按北京时间从早到晚排，只记有凭据的真事：系统镜像开始和完成、哪项备份完成、哪个任"
+      },
+      {
+        "type": "stretch_list",
+        "live_key": "cockpit-today",
+        "min_height": 540
+      }
+    ],
+    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n说明右侧六个光盘/勾盘/红叉/勾卡/电源/拍立得小图的独立图标行、竖版六图缩成一排缺语义映射与 icon 行组件。\n可拉伸列表框左侧竖水彩丝带需与框一起拉长，stretch_list 尚无时间轴/随框拉伸装饰字段；不能拿独立 timeline 加假日期。绿色问句/灰说明角色色尚缺。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。",
+    "unsupported_requirements": [
+      "说明右侧六个光盘/勾盘/红叉/勾卡/电源/拍立得小图的独立图标行、竖版六图缩成一排缺语义映射与 icon 行组件。",
+      "可拉伸列表框左侧竖水彩丝带需与框一起拉长，stretch_list 尚无时间轴/随框拉伸装饰字段；不能拿独立 timeline 加假日期。绿色问句/灰说明角色色尚缺。",
+      "core.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。",
+      "资产清单的 icon 仅 1 项，文字盘点预算 6 个图标位；差 5 个候选位（预算为盘点估计，不作已核实语义结论）。"
+    ],
+    "asset_evidence": {
+      "manifest_records": {
+        "icon": 1,
+        "title": 1
+      },
+      "inventory_illustration_slots": 0,
+      "inventory_icon_slots": 6,
+      "semantic_image_reviewed": false
+    }
+  }
+]

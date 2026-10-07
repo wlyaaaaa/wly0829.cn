@@ -146,8 +146,9 @@ class OssBudgetOverlayTests(unittest.TestCase):
             h.validate_content(self.source, self.root/'changed-split.json', preparation)
 
     def test_unsealed_split_is_rejected(self):
+        preparation=self.preparation(sealed=False)
         with self.assertRaisesRegex(ValueError, 'full GET evidence'):
-            h.validate_content(self.source, self.root/'unsealed.json', self.preparation(sealed=False))
+            h.validate_content(preparation/'github', self.root/'unsealed.json')
 
     def test_small_budget_does_not_waive_other_source_findings(self):
         self.put(self.source, 'raw.log', b'ordinary local test log')

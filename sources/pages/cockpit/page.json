@@ -1,0 +1,547 @@
+{
+ "schema": "site-b2.page.v1",
+ "page": "cockpit",
+ "kind": "cockpit",
+ "title": "驾驶舱",
+ "url": "/cockpit/",
+ "tagline": "这台电脑现在好不好、要我做什么，一页看完。",
+ "status": "",
+ "public": true,
+ "repo_url": null,
+ "capability": "",
+ "based_on": {
+  "commit": "91b73e4ba6fc3a7f195611eaed75e67b8a06fe9c",
+  "commit_time": "2026-10-01T17:39:13+08:00",
+  "file": "PCConfig 91b73e4（接口和 docs\\runtime\\dashboard-api-contract.md）；/computer-access/api/status 只读读数 2026-10-01 18:16 北京时间；b1\\pipe\\cockpit-data.md（10 月 1 日 17:50–18:02 核验）；owner-choices.md 驾驶舱各节"
+ },
+ "video_prompt": "以这张图为第一帧（只有第 1 屏右上那幅插画，没有字、按钮和实时框），镜头和构图完全不动。只让画里的东西轻轻动：侧透机箱里显卡的柔和白光和机箱前面板那盏小白灯一起缓慢呼吸，亮暗一次正好 6 秒；一串淡绿色小光点从机箱沿着桌面流进旁边的外接固态，光点到达时外接固态的指示灯闪一下；手机屏幕亮一下再暗回去；窗外远山上一缕云慢慢飘过一小段；桌角绿植的叶子随微风轻轻摇，一片小叶子从右上方缓缓飘落到桌面。显示器画面保持不变。画面里不出现任何文字，不添加新东西，四周的白色纸面保持干净。6 秒，最后一帧和第一帧一致，首尾接成无缝循环，水彩画风不变，没有声音。",
+ "screens": [
+  {
+   "id": "cockpit-01",
+   "section": "top",
+   "title": "总灯和要我处理的事",
+   "scene": "横版：左上毛笔艺术字大标题“驾驶舱”，下面两行介绍（〔约法 L27〕画成绿色链接）。右上约三分之一宽一幅水彩插画（开头短视频就从这里取景）：书桌上一台侧透机箱和一台显示器，机箱前面板一盏小白灯，桌上一块外接固态和一只手机，窗外一角远山，桌角一盆绿植；插画里不画字。中间一行是总灯：左边一个圆形空位（直径约屏高的 22%），只画一圈很淡的水彩圆形底座、不画灯色，网页程序在这里贴预先画好的四张水彩灯之一（绿、黄、红、灰，同一尺寸同一位置）；圆形右边一个横长空框（约屏宽 55%、高约屏高 9%），放总灯旁边那一句话；它下面一排五个等宽小空框（每个约屏宽 10.5%、高约屏高 9%，间距相同），放五项速览。圆形正下方一行灰色小字图例：四个小水彩色点（绿、黄、红、灰）各跟一段字。下半屏：小标题“要我处理的事”，下面一个满宽的列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。最下面一排六个同样大小的白底细绿边圆角按钮（页内跳转），居中排一行。四个空位和列表框之外不留大块空白。",
+   "portrait": "竖版：标题；两行介绍；插画缩到屏宽；圆形灯位居中；一句话空框满宽、高约两行字；五个速览空框一行一个、满宽、高约一行半字；图例四项排成两行两列；“要我处理的事”和满宽列表框（同样能拉长）；六个按钮两行三个。",
+   "text": "# 驾驶舱\n\n这台电脑现在好不好、有没有要我处理的事，打开这一页就知道。数据每分钟从电脑读一次，时间都是北京时间。这是我真实在用的看板，不是演示（〔约法 L27〕）。\n\n绿：都正常　黄：要留意，例如备份超期、同一个任务连着失败、磁盘剩余不到 10%　红：要马上处理，例如备份两个周期都没成功、磁盘剩余不到 5%　灰：电脑不在线\n\n## 要我处理的事\n\n〔↓ 电脑〕　〔↓ 自动任务〕　〔↓ 备份和云端〕　〔↓ 安全和授权〕　〔↓ 项目〕　〔↓ 今天的动态〕",
+   "links": [
+    {
+     "text": "约法 L27",
+     "href": "/rules/charter/#L27"
+    },
+    {
+     "text": "↓ 电脑",
+     "href": "/cockpit/#pc"
+    },
+    {
+     "text": "↓ 自动任务",
+     "href": "/cockpit/#tasks"
+    },
+    {
+     "text": "↓ 备份和云端",
+     "href": "/cockpit/#backups"
+    },
+    {
+     "text": "↓ 安全和授权",
+     "href": "/cockpit/#security"
+    },
+    {
+     "text": "↓ 项目",
+     "href": "/cockpit/#projects"
+    },
+    {
+     "text": "↓ 今天的动态",
+     "href": "/cockpit/#today"
+    }
+   ],
+   "anchors": [
+    {
+     "id": "attention",
+     "text": "要我处理的事"
+    }
+   ],
+   "live": [
+    "cockpit-overall",
+    "cockpit-attention"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-02",
+   "section": "pc",
+   "title": "电脑",
+   "scene": "横版：左上小节标题“电脑”，标题下一行问句（字号略大、绿色）。左边约四分之一宽一幅竖长水彩插画：侧透机箱里显卡和风扇、旁边一根温度计和一片落叶；插画下面两段灰色固定说明（第二段里〔电脑配置与恢复〕画成绿色链接）。右边约四分之三宽一个大列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排成小卡片：处理器、显卡、内存、各盘剩余、网络、开机多久、屏幕。",
+   "portrait": "竖版：小节标题和问句；插画缩成一行高的横条；两段说明；列表框满宽在最下面（网页程序把小卡片改成一行一张）。",
+   "text": "## 电脑\n\n这台电脑现在累不累、还剩多少地方？\n\n处理器和显卡的温度、占用，内存，每块盘还剩多少，网络快不快、丢不丢包，开机多久，屏幕。读不到的项写“读不到”，不当成 0。\n\n哪块盘剩余不到 10%，会进最上面“要我处理的事”。每块盘放什么，见〔电脑配置与恢复〕。",
+   "links": [
+    {
+     "text": "电脑配置与恢复",
+     "href": "/projects/pcconfig/#usage"
+    }
+   ],
+   "anchors": [],
+   "live": [
+    "cockpit-pc"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-03",
+   "section": "pc",
+   "title": "远程和网络",
+   "scene": "横版：左上小标题“远程和网络”（比第 2 屏的“电脑”小一级），下面一行问句（绿色）。左边约三分之一宽：一幅小水彩插画——家里的机箱和窗外远处一台打开的笔记本、一只手机，三者之间一条细细的虚线绿色光点相连（表示私人网络）；插画下面六条固定说明，一条一行，每条前一个小水彩图标（插头、显示器、一张网、笔记本、地球、刷新箭头），最后一行说明里〔连接电脑〕画成绿色链接。右边约三分之二宽一个列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。网页程序在框里排六行，对着左边六条说明。",
+   "portrait": "竖版：小标题和问句；插画缩成一行高的横条；六条说明一行一条；“还没接上”那段；列表框满宽在最后。",
+   "text": "### 远程和网络\n\n我人不在电脑前，能不能连上它？\n\n- **电脑 MCP**：手机或别处的 AI 经它用这台电脑\n- **串流**：我自己远程看桌面、亲手点（电脑上 Sunshine，另一头 Moonlight）\n- **Tailscale**：只有我的设备能进的私人网络\n- **副机**：第二台笔记本在不在线\n- **代理和联网**：代理开没开、上不上得了网\n- **Windows 更新**：是不是装好了在等重启\n\n已接上的显示读数，其余写“读不到”；每项保留采样时间。怎么连，见〔连接电脑〕。",
+   "links": [
+    {
+     "text": "连接电脑",
+     "href": "/mcp/"
+    }
+   ],
+   "anchors": [
+    {
+     "id": "remote",
+     "text": "远程和网络"
+    }
+   ],
+   "live": [
+    "cockpit-remote"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-04",
+   "section": "pc",
+   "title": "近 24 小时的曲线",
+   "scene": "横版：左上小标题“近 24 小时的曲线”，下面一行问句（绿色），再下面一行灰色固定说明。小标题右侧画 Grafana 的标志（小号）。下面一个大的 16:9 嵌入框，约占屏宽 86%、居中，画成水彩圆角细边相框（四角各压一小片水彩叶子），框内纯白、一个字都不画、不画假曲线，网页程序把 Grafana 只读公开面板嵌在这里；电脑不在线时网页程序在框中央写一行字。",
+   "portrait": "竖版：小标题、标志、问句、说明依次往下；嵌入框满宽，改成上下两段（上段处理器和显卡，下段内存和网络），每段约 4:3。",
+   "text": "### 近 24 小时的曲线\n\n这一天电脑什么时候忙、有没有过热？\n\n处理器和显卡的温度、占用，内存和网络，近 24 小时的曲线。来自我的 Grafana 只读公开面板，不用登录；只放硬件，不含我用了哪些软件。电脑在线才显示。",
+   "links": [],
+   "anchors": [
+    {
+     "id": "grafana",
+     "text": "近 24 小时的曲线"
+    }
+   ],
+   "live": [
+    "cockpit-grafana"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-05",
+   "section": "tasks",
+   "title": "自动任务",
+   "scene": "横版：左上小节标题“自动任务”，下面一行问句（绿色）。问句下面一条浅绿底圆角横幅，横排五枚白底小标签（就是“点开写清五件事”那五个粗体词），每枚前一个小水彩图标（齿轮、时钟、警示三角、停止的手掌、一串断开的链条）。横幅下两段灰色固定说明（〔约法 L28〕画成绿色链接）。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。右上角一小幅水彩插画：一只小机械手在给一株绿植浇水，压在列表框上沿外侧，不挡框内。",
+   "portrait": "竖版：标题和问句；五枚小标签排成两行（三个加两个，居中）；两段说明；插画缩小放在说明旁；列表框满宽。",
+   "text": "## 自动任务\n\n电脑自己在做的事，有没有按时做、做成没有？\n\n每个任务点开写清五件事：**在做什么**　**上次和下次运行**　**有没有出错**　**怎么停**　**停了影响什么**\n\n出问题的排在最上面，正常的按组折起来；停用的、别的软件自己装的任务也各自折起来，后者不算进总灯。从项目页的“现在正不正常”过来，这里只亮那个项目的任务。\n\n这里只显示，不能在网页上停；要停跟 AI 说一声，它照“怎么停”那条办。自动运行的东西都要在这里看得见（〔约法 L28〕）。",
+   "links": [
+    {
+     "text": "约法 L28",
+     "href": "/rules/charter/#L28"
+    }
+   ],
+   "anchors": [],
+   "live": [
+    "cockpit-tasks"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-06",
+   "section": "backups",
+   "title": "备份和云端",
+   "scene": "横版：左上小节标题“备份和云端”，下面一行问句（绿色）。问句下一排五个水彩小图标，等距横排，每个下面一行小字：机箱里的固态硬盘（G 盘）、一块外接固态（H 盘）、Google 云盘标志、Google 相册标志、GitHub 标志，最右一个小灰叉（哪里都没备份的）。图标排下面三段灰色固定说明（〔约法 L21〕画成绿色链接）。再下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+   "portrait": "竖版：标题和问句；六个小图标排成两行三个；三段说明；列表框满宽。",
+   "text": "## 备份和云端\n\n我的东西保住了没有？存在哪、是不是最新？\n\nG 盘　H 盘　Google 云盘　Google 相册　GitHub　副本未核实的\n\n按去处列，每个去处写清：备份了什么、多少、最近一次成功、正在传什么、下一次什么时候、有没有出错。另列副本未核实的类别，只看登记范围。\n\n怎么算正常：每天的备份 36 小时内、每周的备份 9 天内成功过一次。超过这个期限算黄，超过两个周期还没成功算红；最近一次失败、但期限内成功过的，只提醒，不变色。“正在传”只认上传程序自己报的进度，程序开着不算传完。\n\n这里只写到类别和文件夹，不写具体文件名。我删掉的东西，备份也跟着删；照片视频这类留 30 天后悔期（〔约法 L21〕）。",
+   "links": [
+    {
+     "text": "约法 L21",
+     "href": "/rules/charter/#L21"
+    }
+   ],
+   "anchors": [],
+   "live": [
+    "cockpit-backups"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-07",
+   "section": "security",
+   "title": "安全和授权",
+   "scene": "横版：左上小节标题“安全和授权”，下面一行问句（绿色）。下面三张等宽竖卡片一行排开，每张上半是一个小水彩图标和粗体名字（一把挂锁、一枚盖了章的通行证、一扇关着的窗），名字下面一两行灰色说明（〔约法 L18〕〔L16〕画成绿色链接）；每张卡片下半一个空框（约卡片高的 35%），框里不画字，网页程序填“锁着／开着到 HH:MM”这类状态。卡片下面一行字，末尾〔授权与状态〕画成一个白底细绿边圆角按钮。",
+   "portrait": "竖版：标题和问句；三张卡片上下排、满宽，每张左边图标和名字、右边说明，下面空框满宽；最后一行和按钮。",
+   "text": "## 安全和授权\n\n我的资料和这台电脑现在锁着没有？\n\n**个人资料**\n锁着时，AI 不用我的私人资料回答；我验证一次才开一段时间（〔约法 L18〕）。\n\n**无限制授权**\n开着时，在我定的范围和时间里，我的明确指令优先于 AI 自己的规则（〔L16〕）。\n\n**Windows**\n电脑现在锁屏没有。\n\n这里只显示；要锁资料、结束授权、锁 Windows，去〔授权与状态〕。",
+   "links": [
+    {
+     "text": "约法 L18",
+     "href": "/rules/charter/#L18"
+    },
+    {
+     "text": "L16",
+     "href": "/rules/charter/#L16"
+    },
+    {
+     "text": "授权与状态",
+     "href": "/computer-access/"
+    }
+   ],
+   "anchors": [],
+   "live": [
+    "cockpit-security"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-08",
+   "section": "projects",
+   "title": "项目",
+   "scene": "横版：左上小节标题“项目”，下面一行问句（绿色），再下面两段灰色固定说明（“出错的”“等验收的”两个粗体词各配一个小色点：红、黄；〔全部项目〕画成绿色链接）。右上角一小幅水彩插画：一摞文件夹上停着一只小鸟，一枚夹子夹着一张打钩的小卡。下面一个满宽列表框，列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+   "portrait": "竖版：标题、问句、两段说明；插画缩小放说明右侧；列表框满宽。",
+   "text": "## 项目\n\n哪个项目出了错、哪个在等验收？\n\n这里只列两种：**出错的**和**等验收的**。等验收分开数：待我验收、AI 待验收、以后再做；等多久都只是提醒，不变色。都没有就写“项目都正常，没有等验收的”。\n\n每个项目怎么用，进〔全部项目〕挑。",
+   "links": [
+    {
+     "text": "全部项目",
+     "href": "/projects/"
+    }
+   ],
+   "anchors": [
+    {
+     "id": "pending",
+     "text": "等验收的"
+    }
+   ],
+   "live": [
+    "cockpit-projects"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  },
+  {
+   "id": "cockpit-09",
+   "section": "today",
+   "title": "今天的动态",
+   "scene": "横版：左上小节标题“今天的动态”，下面一行问句（绿色），再下面一段灰色固定说明，说明右边一排六个小水彩图标（一张光盘、一块打钩的硬盘、一个红色小叉、一叠打钩的卡片、一个电源键、一张拍立得照片），依次对着说明里的六类事。下面一个满宽列表框，左边画一条竖的水彩绿丝带当时间轴（丝带随框一起拉长），列表框画成能往下拉长的水彩圆角细边框：上沿和下沿各画完整（上沿左角压一小枝水彩叶子），中间一段纯白、左右边线笔直，拼页程序按九宫格把中间往下拉长，列表多长框就多长；框里一个字都不画，网页程序往里填。",
+   "portrait": "竖版：标题、问句、说明；六个小图标排成一行（缩小）；列表框满宽，时间轴丝带在左。",
+   "text": "## 今天的动态\n\n今天电脑上发生了什么？\n\n按北京时间从早到晚排，只记有凭据的真事：系统镜像开始和完成、哪项备份完成、哪个任务出错、验收了几项、电脑重启、电脑卡住时自动留下现场。每几分钟一次的正常巡查不记，出错才记。",
+   "links": [],
+   "anchors": [],
+   "live": [
+    "cockpit-today"
+   ],
+   "screenshots": [],
+   "chain": "",
+   "reuse": ""
+  }
+ ],
+ "registry": {
+  "live": [
+   {
+    "slot": "cockpit-overall",
+    "meaning": "总灯、旁边一句话、五项速览。灯：网页程序贴预先画好的四张水彩灯图之一（绿、黄、红、灰）。一句话例子：“都正常”“1 项备份没保住，2 个任务出错”“暂时读不到电脑”“电脑不在线，最后一次读到是 HH:MM”。五项速览（WZ8 定的首屏内容）：①电脑在线、开了多久；②个人资料锁着／开着到 HH:MM；③无限制授权关着／开着到 HH:MM；④今天自动任务：跑了 N 个、出错 M 个、下一个是什么几点；⑤备份最近一次成功：哪项、几点。",
+    "rule": "在线时按红 > 黄 > 灰 > 绿：红＝启用的备份失败或过期，或 mine=true 的启用任务失败；黄＝备份或对应任务 warn、mine=false 的任务失败、采样陈旧，另加（AI 建议，接口合同里没有）任意盘剩余不到 10%；灰＝automation/backups/pending/today 任一块缺失或不可用，或启用备份的成功历史未知；绿＝以上都没有。普通任务单条 unknown/never、待验收不影响灯；“电脑上别的软件”不单独报红。有缺块又有已知失败时保留红黄。从没读成功过写“暂时读不到电脑”；曾读成功、现在失败写“电脑不在线，最后一次读到是 HH:MM”，灯灰。",
+    "source": "/computer-access/api/status：automation、backups、pending、today、host.uptime_seconds、personal_data、unrestricted；判灯规则见 PCConfig docs/runtime/dashboard-api-contract.md“总灯、过期和断线”"
+   },
+   {
+    "slot": "cockpit-attention",
+    "meaning": "要我处理的事，一行一件，每行末尾一个跳到详细那一行的箭头。五类，按这个顺序：①任务失败（mine=true、启用、state=failed，写任务人话名）；②备份过期或失败（backups 里 failed/stale 红，warn 黄）；③磁盘快满（hardware.volumes 剩余不到 10%，写盘符和剩余）；④等我验收（pending 里 who=me 且 pending，写 plain_title 和核验时机）；⑤读不到的块（哪一块读不到、从几点起）。没有就写“没有要我处理的”。电脑不在线时只写“电脑不在线，最后一次读到是 HH:MM”，不拿旧数据当现状。",
+    "source": "同一接口：automation.items、backups.items、hardware.volumes、pending.items、各块 state"
+   },
+   {
+    "slot": "cockpit-pc",
+    "meaning": "小卡片：处理器（型号、温度、占用、功耗）；显卡（温度、占用、显存已用/总量）；内存（已用/总量）；各盘剩余（每块盘一条细进度条：盘符、类型、剩余/总量，外接 H 盘没接上写“没接上”）；网络（连接方式和速率、上下行、延迟、丢包）；开机多久；屏幕（当前输出的分辨率和刷新率）。单项读不到写“读不到”，过期写“N 分钟前的数”。",
+    "source": "hardware.cpu、hardware.gpus、hardware.memory、hardware.volumes、hardware.network、hardware.display、host.uptime_seconds；逐字段 sources[field] 给采样时间和新旧"
+   },
+   {
+    "slot": "cockpit-remote",
+    "meaning": "六行，对着图上六条说明：电脑 MCP、串流、Tailscale、副机、代理和联网、Windows 更新。每行一盏小灯加一句话（例如“在线”“副机离线，最后在线 HH:MM”“有更新等重启”）。接口还没有这些字段，接上之前每行写“还没接上”，不写“正常”，也不写“读不到”。",
+    "source": "接口正在补（本人：槽位照留）。现在能用的旁证：automation 里“远程和网络”组的远程操作桌面、串流画面切换、远程串流体检、网络代理启动等任务行；它们只说明任务在不在跑，不等于连得上。"
+   },
+   {
+    "slot": "cockpit-grafana",
+    "meaning": "嵌入 Grafana 只读公开面板（近 24 小时硬件曲线，访客不用登录）。只有电脑在线、面板地址检查通过时才嵌入；电脑不在线时框中央写“电脑不在线，最后一次读到是 HH:MM”；电脑在线但面板打不开时写“曲线暂时打不开”。",
+    "source": "公开面板还没建（本人 10 月 1 日同意建，只放硬件曲线）。接口现有 grafana={state,checked_at,url} 检查的是登录页 /login，不是公开面板；需要加一个公开面板地址和它自己的可达检查。"
+   },
+   {
+    "slot": "cockpit-tasks",
+    "meaning": "最上面一行汇总：今天跑了 N 个、出错 M 个、下一个是什么几点。下面出问题的（failed、warn、overdue、unknown）排最前；正常的按 automation.groups 的组折叠，组标题写组名和条数；停用的、project=“电脑上别的软件”的各自折成一组放最后。每行：plain.name、状态灯、上次和下次运行（北京时间）、schedule_zh；点开显示 plain.what、plain.stop、plain.impact，有 status_note 也显示。没有 plain 的写原任务身份和“还没写说明”。",
+    "source": "automation.items（plain、schedule_zh、enabled、state、last_run_at、next_run_at、runs_today、project、group）；今天跑了几个＝启用且 runs_today=true 的条数，runs_today 是“今天跑过没有”，不是次数；“下一个”取可靠 next_run_at 最小值"
+   },
+   {
+    "slot": "cockpit-backups",
+    "meaning": "按去处一组一组列：G 盘（机箱里的第一份备份，含每天的加密系统镜像）、H 盘（外接第二份，跟 G 同步）、Google 云盘、Google 相册、GitHub（三个核心仓库和各项目代码）。每组写：备份了哪些类别和文件夹、多少（个数或大小）、最近一次成功、正在传什么（类别、批次、进度）、下一次什么时候、有没有出错。最后一组“哪里都没备份的”：先按电脑配置与恢复的登记写 D 盘（游戏，重装即可）、V 盘（开发盘，代码都在 GitHub）、Z 盘（内存盘，只放可丢的缓存）；E 盘上没登记进任何备份类别的文件夹，接口能算出来以后也列在这里。只到类别和文件夹，不出现具体文件名。",
+    "source": "现有：backups.items（last_success_at 取任务历史的 201/0 完成事件、last_attempt、state、cadence），automation 里各备份和上云任务的 plain。缺：接口没有按去处的归类、没有“多少”、没有 cloud/uploads 块（正在传什么）；“哪里都没备份的”没有实时来源。补法见 b1\\pipe\\cockpit-data.md 第 1 节“备份和云端”一行。"
+   },
+   {
+    "slot": "cockpit-security",
+    "meaning": "三张卡片的状态框：个人资料“锁着”或“开着到 HH:MM”；无限制授权“关着”或“开着到 HH:MM”；Windows“已锁屏”“没锁屏”“没人登录”。不放任何按钮。电脑不在线时三格都写“电脑不在线，最后一次读到是 HH:MM”，不拿旧的绿灯当现状。",
+    "source": "personal_data.state/expires_at_unix、unrestricted.state/expires_at_unix、host.screen_state（locked/unlocked/no_session/unknown，来自 public_access.py screen_status）"
+   },
+   {
+    "slot": "cockpit-projects",
+    "meaning": "只列 overview 为 run_failed、acceptance_failed、run_overdue、run_unknown 的项目，以及待我验收、AI 待验收、以后再做任一数量大于 0 的项目。每行：项目名（用网站页名，点了去项目页）、状态灯、health_reason 那句话；点开列这个项目的待验收条目（plain_title、谁来做、什么时候核）。都没有写“项目都正常，没有等验收的”。冻结项目不列。",
+    "source": "projects.items（overview、run_health、acceptance、waiting_user_count、waiting_ai_count、on_hold_count、failed_count、health_reason）、pending.items（plain_title、who、when、project）"
+   },
+   {
+    "slot": "cockpit-today",
+    "meaning": "时间轴，按 at 从早到晚，同 id 去重。显示字固定：系统镜像备份开始／系统镜像备份完成／〈任务人话名〉完成／〈任务人话名〉出错／核对了 N 项，都通过（或通过 M 项）／电脑重启完成／电脑卡住，已自动留下现场。今天还没有事写“今天还没有动态”。",
+    "source": "today.items（id、type、at、task_id、count、passed），task_id 对 automation.items 的 id 取人话名"
+   }
+  ],
+  "live_anchors": [
+   {
+    "id": "agents",
+    "site_title": "AI 规则与技能基座",
+    "api_project": "规则与技能库",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/agents/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：AI 规则与技能基座 · 看全部”，只显示接口 project=“规则与技能库”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "ai-cli-profile-manager",
+    "site_title": "AI 工具配置管理",
+    "api_project": "AI 命令行配置",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/ai-cli-profile-manager/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：AI 工具配置管理 · 看全部”，只显示接口 project=“AI 命令行配置”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "chinese-asr",
+    "site_title": "中文语音转写",
+    "api_project": "中文语音转写",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/chinese-asr/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：中文语音转写 · 看全部”，只显示接口 project=“中文语音转写”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "codex-memory",
+    "site_title": "AI 备份",
+    "api_project": "Codex 记录备份",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/codex-memory/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：AI 备份 · 看全部”，只显示接口 project=“Codex 记录备份”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "devconfig-backup",
+    "site_title": "开发配置备份",
+    "api_project": "开发配置备份",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/devconfig-backup/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：开发配置备份 · 看全部”，只显示接口 project=“开发配置备份”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "emerald-veil",
+    "site_title": "屏保与壁纸",
+    "api_project": "屏保",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/emerald-veil/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：屏保与壁纸 · 看全部”，只显示接口 project=“屏保”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "github-local-index",
+    "site_title": "GitHub 项目总索引",
+    "api_project": "GitHub 仓库总表",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/github-local-index/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：GitHub 项目总索引 · 看全部”，只显示接口 project=“GitHub 仓库总表”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "meshclip-kit",
+    "site_title": "双机剪贴板",
+    "api_project": "两台电脑剪贴板同步",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/meshclip-kit/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：双机剪贴板 · 看全部”，只显示接口 project=“两台电脑剪贴板同步”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "password-center",
+    "site_title": "密码中心",
+    "api_project": "密码中心",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/password-center/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：密码中心 · 看全部”，只显示接口 project=“密码中心”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "pc-panel-hub",
+    "site_title": "双屏信息中心",
+    "api_project": "机箱小屏",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/pc-panel-hub/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：双屏信息中心 · 看全部”，只显示接口 project=“机箱小屏”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "pcconfig",
+    "site_title": "电脑配置与恢复",
+    "api_project": "电脑配置与恢复",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/pcconfig/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：电脑配置与恢复 · 看全部”，只显示接口 project=“电脑配置与恢复”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "personal-materials",
+    "site_title": "个人材料查找",
+    "api_project": "个人材料查找",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/personal-materials/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：个人材料查找 · 看全部”，只显示接口 project=“个人材料查找”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "personal-media",
+    "site_title": "照片视频录音管理",
+    "api_project": "照片视频录音管理",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/personal-media/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：照片视频录音管理 · 看全部”，只显示接口 project=“照片视频录音管理”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "ramdisk-guardian",
+    "site_title": "内存盘守护",
+    "api_project": "缓存盘守护",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/ramdisk-guardian/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：内存盘守护 · 看全部”，只显示接口 project=“缓存盘守护”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "steam-millennium-config-backup",
+    "site_title": "Steam 外观备份",
+    "api_project": "Steam 皮肤备份",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/steam-millennium-config-backup/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：Steam 外观备份 · 看全部”，只显示接口 project=“Steam 皮肤备份”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "timeaudit",
+    "site_title": "电脑使用与性能记录",
+    "api_project": "电脑使用与性能记录",
+    "lands_on": "cockpit-tasks",
+    "from": "/projects/timeaudit/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“自动任务”，框顶出一枚可关的标签“只看：电脑使用与性能记录 · 看全部”，只显示接口 project=“电脑使用与性能记录”的任务（出问题的照样在前）；“备份和云端”“项目”两块里属于它的行同时描一圈绿边。这个项目没出错、不等验收时，“项目”一块里不出现它，这是对的。"
+   },
+   {
+    "id": "remote-control",
+    "site_title": "电脑远程控制",
+    "api_project": null,
+    "lands_on": "cockpit-remote",
+    "from": "/projects/remote-control/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“远程和网络”，亮“电脑 MCP”那一行；同时在自动任务里展开“远程和网络”组，亮远程操作桌面、远程维护（管理员）、远程维护（系统级）三行（这三项在接口里记在电脑配置与恢复名下，按任务名认）。"
+   },
+   {
+    "id": "sunshine-remote-streaming",
+    "site_title": "远程电脑串流",
+    "api_project": "远程桌面串流",
+    "lands_on": "cockpit-remote",
+    "from": "/projects/sunshine-remote-streaming/ 开头一屏的〔现在正不正常 → 驾驶舱〕",
+    "how": "跳到“远程和网络”，亮“串流”那一行；同时在自动任务里亮本项目的两个任务（串流画面切换、远程串流体检）。"
+   },
+   {
+    "id": "learning",
+    "site_title": "学习方法",
+    "api_project": "学习方法",
+    "lands_on": "cockpit-projects",
+    "from": "/projects/learning/ 的〔学到哪了 → 驾驶舱〕",
+    "how": "驾驶舱不放学习一块。跳到“项目”一块，框顶出一行“学习进度不放驾驶舱，在学习方法页看”，点它回 /projects/learning/。建议改第 1 批学习方法页的按钮（见 notes.unsure）。"
+   },
+   {
+    "id": "pending",
+    "site_title": "（锚点画在图上）",
+    "api_project": null,
+    "lands_on": "cockpit-projects",
+    "from": "/projects/pc-panel-hub/ 的〔待验收清单〕",
+    "how": "第 8 屏“等验收的”字上已有图上锚点；网页程序在这一块里把等验收的项目全部展开，列出每条的标题、谁来做、什么时候核。"
+   }
+  ],
+  "mentions": [
+   {
+    "target": "/rules/charter/#L27",
+    "screen": "cockpit-01",
+    "text": "约法 L27"
+   },
+   {
+    "target": "/projects/pcconfig/#usage",
+    "screen": "cockpit-02",
+    "text": "电脑配置与恢复"
+   },
+   {
+    "target": "/mcp/",
+    "screen": "cockpit-03",
+    "text": "连接电脑"
+   },
+   {
+    "target": "/rules/charter/#L28",
+    "screen": "cockpit-05",
+    "text": "约法 L28"
+   },
+   {
+    "target": "/rules/charter/#L21",
+    "screen": "cockpit-06",
+    "text": "约法 L21"
+   },
+   {
+    "target": "/rules/charter/#L18",
+    "screen": "cockpit-07",
+    "text": "约法 L18"
+   },
+   {
+    "target": "/rules/charter/#L16",
+    "screen": "cockpit-07",
+    "text": "L16"
+   },
+   {
+    "target": "/computer-access/",
+    "screen": "cockpit-07",
+    "text": "授权与状态"
+   },
+   {
+    "target": "/projects/",
+    "screen": "cockpit-08",
+    "text": "全部项目"
+   }
+  ]
+ },
+ "notes": {
+  "merged": [
+   "WZ8 定的首屏内容（电脑在线和开机多久、个人资料锁、无限制授权、今天的自动任务、备份最近一次成功）并进第 1 屏 cockpit-overall 的五项速览；详细的在各自一块，速览只一句，属于有意义的重复。",
+   "“屏幕状态”拆开：Windows 锁没锁屏放“安全和授权”（接口 host.screen_state 就是锁屏状态），“电脑”一块的“屏幕”只写当前输出的分辨率和刷新率，免得一样东西两处讲。",
+   "远程和网络、Grafana 曲线作为“电脑”一节的两屏，各带图上锚点 #remote、#grafana。"
+  ],
+  "dropped": [
+   "学习一块：本人 10 月 1 日答复“学习也不一定每天学吧”，定稿结构写明不放。",
+   "“AI 花了多少”：本人 9 月 28 日 K3 定暂不做。",
+   "接口里的 weekly（近 7 天提交数）、changes（近 7 天改动和修复估算）、ai_work（AI 正在做的事、未合回分支）：定稿结构七块里没有；ai_work 的运行计数现在全部读不到（cockpit-data.md 第 1 节），上了也是一排“读不到”。",
+   "Grafana 登录页链接：定稿改成嵌只读公开面板，不再单放登录页链接。"
+  ],
+  "unsure": [
+   "“要你处理的”还是“要我处理的”：派活说明给的空状态原文是“没有要你处理的”，但第 1 批全站约定页面里的“我”指本人。我统一写成“要我处理的事”“没有要我处理的”，免得同一页一会儿“我”一会儿“你”。要改回“你”只改第 1 屏小标题和两个槽位的空状态字。",
+   "列表多长不固定（自动任务现有 122 条），一张定高的图装不下。我把每个列表框写成“上沿、下沿画在图里，中间纯白按九宫格拉长”。这要拼页程序支持把一屏图切成上段、可拉长的框、下段；第 1 批的拼页程序只支持定高的“现在”横条空框，要 Claude 定拼法。",
+   "第 1 批学习方法页的〔学到哪了 → 驾驶舱〕（/cockpit/#learning）：驾驶舱已不放学习。我留了 #learning 锚点（落到“项目”一块并给一行字指回学习方法页），但更好的是把那页的按钮改掉或删掉。第 1 批的文件我没动。",
+   "第 1 批项目页的名字和接口里的项目显示名对不上 10 处（例如页面“屏保与壁纸”、接口“屏保”；“AI 备份”对“Codex 记录备份”；“双屏信息中心”对“机箱小屏”；“内存盘守护”对“缓存盘守护”）。驾驶舱里的名字要跟项目页一致，我在 registry.live_anchors 里列了对照，建议网页程序按对照显示网站页名；更彻底是改 GitHub 总索引 website-projects.json 的 display_name，那属于别的仓库。",
+   "电脑远程控制（remote-control）在接口里没有自己的项目行，它的三个任务记在“电脑配置与恢复”名下；我让 #remote-control 落到“远程和网络”并按任务名亮那三行。",
+   "磁盘“快满”的线我定为剩余不到 10%（AI 建议），并让它把总灯变黄；接口合同的判灯规则里没有磁盘。现在 C 盘剩 18.8%，其余盘都在 40% 以上（10 月 1 日 18:16 读数）。",
+   "远程和网络六项：本人更早说过“服务在不在线、公网通不通”这类不稳定信号不接（电脑远程控制页给第 2 批的素材里记的），这次定稿又要留这六个槽位并说接口在补。我按最新的写，接上前显示“还没接上”。",
+   "Grafana 公开面板还没建；面板里放哪几条曲线我写的是“处理器和显卡的温度、占用，内存和网络”，建面板时要对上；接口还要加公开面板地址和可达检查，现在的 grafana 字段只查登录页。另外 Grafana 默认不许嵌入别的网页，要开嵌入设置。",
+   "备份按去处列，接口现在给不出：按去处的归类、每个去处“多少”、正在传什么、“哪里都没备份的”都没有实时来源。GitHub 算不算一个去处是我加的（三个核心仓库和各项目代码都在私人 GitHub），本人说的是“G 盘镜像、H 盘、Google Drive、Google 相册等”。真正有用的“没备份的”是 E 盘上没登记进任何备份类别的文件夹，要电脑配置与恢复按备份登记去算。",
+   "派活说明写的接口合同路径 E:\\PCConfig\\tools\\remote-computer-mcp\\dashboard-api-contract.md 不存在，实际在 E:\\PCConfig\\docs\\runtime\\dashboard-api-contract.md，我读的是后者。",
+   "第 1 屏总灯图例和第 6 屏“怎么算正常”是我按接口合同的判灯规则改写的人话，没有本人原话；替本人口吻写的句子：第 1 屏介绍两句、第 7 屏三段说明、第 5 屏“要停跟 AI 说一声”。"
+  ]
+ },
+ "video_prompt_en": "Use this image as the first frame (it is only the watercolor illustration from the upper right of the first screen: no text, buttons or live boxes). Keep the camera and composition completely still. Gently animate only what is in the picture: the soft white glow of the graphics card inside the glass-sided PC case and the small white light on the case's front panel breathe slowly together, one bright-dim cycle over the 6 seconds; a thin line of pale green dots flows from the PC case across the desk into the external SSD beside it, and the SSD's indicator light blinks once as the dots arrive; the phone screen lights up once and dims again; a wisp of cloud over the distant mountains outside the window drifts a little; the leaves of the potted plant on the desk corner sway in a light breeze, and one small leaf drifts slowly down from the upper right onto the desk. The monitor image stays unchanged. No text anywhere, add nothing new, keep the white paper around the edges clean. 6 seconds, the last frame matches the first for a seamless loop, same watercolor style, no audio.",
+ "video_files": {
+  "first_frame": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\video\\cockpit-01-frame.png",
+  "deliver_to": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\cockpit\\video\\cockpit-01.mp4"
+ }
+}

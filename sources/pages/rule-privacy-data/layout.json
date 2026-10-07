@@ -1,0 +1,1850 @@
+[
+  {
+    "screen": "rule-privacy-data-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "个人资料与数据处理"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "本人的私人资料什么时候能用、放在哪里算可信、公开到哪一步、备份怎么跟着原件删。"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+          "_library/icons/身份盾牌.png",
+          "_library/icons/文稿堆.png"
+        ],
+        "text_ref": "先看是哪种情况"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "text_ref": "跳到：资料的锁和解锁可信位置和秘密公开分级表私人仓库和备份"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词"
+      },
+      {
+        "type": "document_mock",
+        "variant": "window",
+        "text_ref": "资料锁L1L2L3L4L5GH30天",
+        "base_asset": "_library/illustrations/ill-r3-313baf1d2fe281cb.png",
+        "label_positions": [
+          {
+            "x": 20.0,
+            "y": 4.51128,
+            "width": 23.33333,
+            "height": 6.51629,
+            "align": "center"
+          },
+          {
+            "x": 60.16667,
+            "y": 53.88471,
+            "width": 18.66667,
+            "height": 5.76441,
+            "align": "center"
+          },
+          {
+            "x": 66.66667,
+            "y": 42.85714,
+            "width": 16.5,
+            "height": 5.26316,
+            "align": "center"
+          },
+          {
+            "x": 73.16667,
+            "y": 32.33083,
+            "width": 15.66667,
+            "height": 4.7619,
+            "align": "center"
+          },
+          {
+            "x": 79.16667,
+            "y": 23.30827,
+            "width": 12.66667,
+            "height": 4.26065,
+            "align": "center"
+          },
+          {
+            "x": 84.16667,
+            "y": 13.03258,
+            "width": 10.5,
+            "height": 4.26065,
+            "align": "center"
+          },
+          {
+            "x": 12.83333,
+            "y": 73.43358,
+            "width": 7.83333,
+            "height": 10.27569,
+            "align": "center"
+          },
+          {
+            "x": 34.0,
+            "y": 73.18296,
+            "width": 8.83333,
+            "height": 10.77694,
+            "align": "center"
+          },
+          {
+            "x": 64.16667,
+            "y": 71.17794,
+            "width": 18.66667,
+            "height": 15.03759,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          },
+          {
+            "label_index": 5,
+            "position_index": 5
+          },
+          {
+            "label_index": 6,
+            "position_index": 6
+          },
+          {
+            "label_index": 7,
+            "position_index": 7
+          },
+          {
+            "label_index": 8,
+            "position_index": 8
+          }
+        ],
+        "layout": "illustration_labels"
+      },
+      {
+        "type": "notice",
+        "text_ref": "本人的资料现在锁着还是开着、开到几点：现在的资料状态→授权与状态"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "content_card",
+      "icon",
+      "illustration",
+      "inline_link",
+      "bullet_list",
+      "action_button",
+      "segmented_band",
+      "tag",
+      "glossary"
+    ],
+    "source_layout": "横版 16:9。左边约 55% 宽是文字区：左上“个人资料与数据处理”用毛笔艺术字大标题（和约法样张的“约法”两字同一种写法），下面一行粗体深绿副标题。副标题下面紧接一张浅绿细边圆角大卡片“先看是哪种情况”（卡头一条浅绿底色带，粗体深绿），是本屏最醒目的文字块：卡里三行，每行左边一个圆形小水彩图标、右边粗体情况名加说明：“只是普通技术工作”配一台屏幕上有绿色对勾的小笔记本电脑；“要用本人的私人资料”配一只挂着绿色挂锁的小木柜（和右边插画同一只）；“准备公开”配一级浅绿小石台阶上放着一个小喇叭。三行之间细虚线分隔，行里的〔〕画成链接样式。卡片下面是介绍段（字小一号，五个约法条目画成链接样式），再下面“跳到：”后面四个圆角小按钮（白底浅绿描边绿字）。右边约 45% 宽：上面约 62% 高是原来那幅水彩插画，照原图不变——上段私人资料小木柜挂绿色挂锁、锁上小牌“资料锁”、柜旁小沙漏、一只手递来验证卡；中段五级浅石台阶侧面刻“L1”到“L5”、L4 上一只关着的小保险箱；下段两块水彩硬盘贴“G”“H”、H 盘旁小木箱挂日历牌“30 天”。插画里只有这些小牌和标签上有字，text 里“资料锁　L1　L2　L3　L4　L5　G　H　30 天”这一行就是它们的字，不要另外画成一行文字。插画下面放一张浅绿细边小卡“先认几个词”，四个词条竖排，词条名粗体绿色，字小一号。整屏最下面一条横跨全宽的细长圆角横条（浅绿底），左边是“本人的资料现在锁着还是开着、开到几点：”，右边一个显眼的按钮〔现在的资料状态 → 授权与状态〕。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1,
+        2
+      ],
+      "card_groups": [
+        "本人的私人资料什么时候能用、放在哪里算可信、公开到哪一步、备份怎么跟着原件删。",
+        "先看是哪种情况",
+        "先认几个词"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个圆形小水彩",
+        "右边插画",
+        "右边约 45% 宽：上面约 62% 高是原来那幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。首屏左55%标题、副题、三行情况卡、介绍和四跳转；右45%主插画及四词词条卡；底部状态横条整宽。右图的资料锁/L1-L5/G/H/30天须以末段原文填入图内牌位；当前document_mock只是保文样稿，待comp-slots插画标签定位，不能额外画成一行字。三个情况图标的库存预算仅1个不足scene明确3个，须补真实三图；四跳转带“跳到：”的para尚未成为按钮网格，待comp-text保前缀并把原链接排成按钮。；素材登记插画0/1，必须补齐场景要求，不能删除插画位；素材登记图标0/1，按源位置的文件号显式请求，缺图不代表可以省略图标。；page-fixer-07：首屏标题与主体占全宽；四跳转按钮排2列；词条55%和唯一插画标签块45%并排；删除单独插画块，document_mock保留唯一插画。\nmain-closer：图内标签接final-label-geometry实测唯一bindings；当前完整底图SHA fb3f09fde58e2ce0f944bfc6c6f0f6bc528a886b74b21db8b9ff371d8af076d9；保原字与motion，最终安全框包容由DOM复核。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-privacy-data-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/ill-r3-313baf1d2fe281cb.png",
+        "size": "large",
+        "align": "center",
+        "target_width": "100%"
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "个人资料与数据处理"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "本人的私人资料什么时候能用、放在哪里算可信、公开到哪一步、备份怎么跟着原件删。"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "item_cards": true,
+        "inner_columns": 1,
+        "illustration": "left_inside",
+        "icons": [
+          "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+          "_library/icons/身份盾牌.png",
+          "_library/icons/文稿堆.png"
+        ],
+        "text_ref": "先看是哪种情况"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "text_ref": "跳到：资料的锁和解锁可信位置和秘密公开分级表私人仓库和备份"
+      },
+      {
+        "type": "prose",
+        "text_ref": "资料锁L1L2L3L4L5GH30天",
+        "textless": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "本人的资料现在锁着还是开着、开到几点：现在的资料状态→授权与状态"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "content_card",
+      "illustration",
+      "prose",
+      "glossary",
+      "action_button",
+      "icon",
+      "inline_link",
+      "bullet_list",
+      "segmented_band",
+      "tag"
+    ],
+    "source_layout": "竖版 9:16，自上而下：毛笔大标题；粗体副标题；“先看是哪种情况”卡片整宽（三行，图标在左）；水彩插画（同横版，缩成整宽一幅，小牌上的字不变）；介绍段；“先认几个词”卡片（四个词条一行一条）；“跳到：”四个按钮排两行、每行两个；最下面横条改成上面一行说明、下面一个整宽按钮。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1,
+        2
+      ],
+      "card_groups": [
+        "本人的私人资料什么时候能用、放在哪里算可信、公开到哪一步、备份怎么跟着原件删。",
+        "先看是哪种情况",
+        "先认几个词"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边一个圆形小水彩",
+        "右边插画",
+        "右边约 45% 宽：上面约 62% 高是原来那幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。标题→副题→三行情况卡→整宽插画→介绍→四词卡→跳转2×2→状态说明及整宽按钮。图内九处标签只映射到插画不另列；当前独立mock未实现空间叠合。副标题与词条不加外部大章题。；素材登记插画0/1，必须补齐场景要求，不能删除插画位；素材登记图标0/1，按源位置的文件号显式请求，缺图不代表可以省略图标。；page-fixer-07：删除单独插画块，document_mock保留唯一插画。\nmain-closer：图内标签接final-label-geometry实测唯一bindings；当前完整底图SHA fb3f09fde58e2ce0f944bfc6c6f0f6bc528a886b74b21db8b9ff371d8af076d9；保原字与motion，最终安全框包容由DOM复核。\nmain-closer 2026-10-03T20:36:28+08:00：实际文字Range超出真实安全牌框，竖版撤下坐标绑定，恢复原合法保字＋composition incomplete；不把单靠固定.tb框的旧机器pass当通过。safe DOM证据 main-closer/family-label-dom.json；横版实测安全绑定保留。\nmain-closer5 2026-10-04T07:00:58.635971+08:00：按Claude本轮裁定，手机首屏采用插画上、文字下；复用01-h既有无字插画，整幅100%宽等比缩放，不裁物件。原五/九标签改既有prose顺排于文字区，全部原字、motion及其它屏保全；不再请求插画牌面净区，也不更改任何素材ready。"
+  },
+  {
+    "screen": "rule-privacy-data-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 个人资料的锁和解锁"
+      },
+      {
+        "type": "topology",
+        "columns": 2,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "一张图：这次能不能用私人资料",
+        "layout": "graph",
+        "columns_v": 1,
+        "size": "medium",
+        "graph_nodes": [
+          {
+            "id": "heading",
+            "count": 1,
+            "row": 1,
+            "column": 1,
+            "row_v": 1,
+            "column_v": 1,
+            "shape": "context",
+            "column_span": 2
+          },
+          {
+            "id": "start",
+            "count": 1,
+            "row": 2,
+            "column": 1,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
+            "column_span": 2,
+            "segment_refs": [
+              "Codex"
+            ],
+            "prefix_end": "：",
+            "prefix_role": "title"
+          },
+          {
+            "id": "need",
+            "count": 1,
+            "row": 3,
+            "column": 1,
+            "row_v": 3,
+            "column_v": 1,
+            "column_span": 2
+          },
+          {
+            "id": "no-need",
+            "count": 1,
+            "row": 4,
+            "column": 1,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/icons/钥匙.png"
+          },
+          {
+            "id": "need-yes",
+            "count": 1,
+            "row": 4,
+            "column": 2,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "state",
+            "count": 1,
+            "row": 5,
+            "column": 2,
+            "row_v": 6,
+            "column_v": 1
+          },
+          {
+            "id": "open",
+            "count": 1,
+            "row": 6,
+            "column": 1,
+            "row_v": 7,
+            "column_v": 1,
+            "icon": "_library/icons/沙漏.png"
+          },
+          {
+            "id": "locked",
+            "count": 1,
+            "row": 6,
+            "column": 2,
+            "row_v": 8,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          },
+          {
+            "id": "result",
+            "count": 1,
+            "row": 7,
+            "column": 2,
+            "row_v": 9,
+            "column_v": 1
+          },
+          {
+            "id": "passed",
+            "count": 1,
+            "row": 8,
+            "column": 1,
+            "row_v": 10,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "cancelled",
+            "count": 1,
+            "row": 8,
+            "column": 2,
+            "row_v": 11,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "start",
+            "to": "need",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "need",
+            "to": "no-need",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "need",
+            "to": "need-yes",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "need-yes",
+            "to": "state",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "state",
+            "to": "open",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "state",
+            "to": "locked",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "locked",
+            "to": "result",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "result",
+            "to": "passed",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "result",
+            "to": "cancelled",
+            "from_side": "bottom",
+            "to_side": "top"
+          }
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-02-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "只有一份状态",
+        "header_icon_motion_dots": {
+          "asset_sha256": "dd5edf7b9984e271a1241436e0530a2907cc18e3ccd30607230bf29655f1ceb0",
+          "dots": [
+            [
+              0.7777777777777778,
+              0.6341463414634146,
+              0.02666666666666667,
+              0.04878048780487805
+            ]
+          ]
+        }
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-02-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "开多久"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "points_card",
+      "section_heading",
+      "flow",
+      "icon",
+      "inline_link",
+      "quote",
+      "notice",
+      "bullet_list",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9。风格照规则总页第一屏和规则原文样张（白底、纯绿主色、深绿毛笔标题、深蓝灰正文、水彩插画、细浅绿描边圆角卡）。左上一行深绿大字是本屏的“## …”标题（井号不画）。左边约 62% 宽是一张大圆角卡“一张图：这次能不能用私人资料”（卡头浅绿底色带、深绿粗体），卡里画成从上往下的流程图：最上面一个浅绿底圆角起点框，写“每条新消息先读一次资料状态”那一句，框左一个小图标（挂锁旁一块小表盘）；向下箭头接问题框“这次要用私人资料吗？”；从它向左伸出写着“不用”的绿色箭头，指向实心绿底白字的终点框“照常做：……”；向下写着“要用”的箭头接问题框“状态开着吗？”，箭头旁用小号灰字写“用私人资料不等于要先把隐私盘点一遍。”（“往下看状态”就是这支箭头，不另写）；“状态开着吗？”向左伸出写着“开着”的箭头，指向实心绿底白字终点框“直接用，到截止时间为止。”；向下写着“锁着、过期或说不清”的箭头，接一个浅琥珀底的步骤框“请本人验证一次：……”，框左一个小图标（一张验证卡和一把钥匙）；再向下接问题框“验证结果”，向左写着“通过、资料读得到”的箭头指向实心绿底终点框“接着处理原来的问题。”；向右写着“本人取消、拒绝或超时”的箭头指向浅灰底终点框“只结束这一次：……”，框左一个小图标（一张被轻轻划掉的小票），框里的〔锁着的时候〕画成链接样式。text 里每个“→”就是对应的那支箭头，“→”左边的字写在箭头上，右边的字写在框里；问题框是浅绿底圆角框、粗体深绿字。右边约 38% 宽上下两张白底细浅绿描边圆角卡：上“只有一份状态”（图标：挂锁旁边一块小表盘），下“开多久”（图标：一个小沙漏）；以“实例：”开头的那条画成各自卡片底部一个浅黄底的小便签（字照写），表示这是本机现在的真实例子、不是规则原文。卡片里每条要点前一个小绿圆点，正文深蓝灰；`…` 里的名字用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。不画编号，不加要点以外的字。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "这次要用私人资料吗？",
+        "状态开着吗？",
+        "验证结果"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": true
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左62%一个从上到下的判断大卡，起点→问题→左右分支→验证结果；右38%两规则卡上下。当前flow会把bullets各自线性成链，不支持问题/结果回接分支与箭头上的标签；需要comp-diagram分支流程布局，全文仍保留。实例便签用inset_prefixes已支持嵌框，黄底是未批准样式需样张。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-privacy-data-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-02-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 个人资料的锁和解锁"
+      },
+      {
+        "type": "topology",
+        "columns": 2,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "page_break_after": true,
+        "text_ref": "一张图：这次能不能用私人资料",
+        "layout": "graph",
+        "columns_v": 1,
+        "size": "medium",
+        "graph_nodes": [
+          {
+            "id": "heading",
+            "count": 1,
+            "row": 1,
+            "column": 1,
+            "row_v": 1,
+            "column_v": 1,
+            "shape": "context",
+            "column_span": 2
+          },
+          {
+            "id": "start",
+            "count": 1,
+            "row": 2,
+            "column": 1,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
+            "column_span": 2,
+            "segment_refs": [
+              "Codex"
+            ],
+            "prefix_end": "：",
+            "prefix_role": "title"
+          },
+          {
+            "id": "need",
+            "count": 1,
+            "row": 3,
+            "column": 1,
+            "row_v": 3,
+            "column_v": 1,
+            "column_span": 2
+          },
+          {
+            "id": "no-need",
+            "count": 1,
+            "row": 4,
+            "column": 1,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/icons/钥匙.png"
+          },
+          {
+            "id": "need-yes",
+            "count": 1,
+            "row": 4,
+            "column": 2,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "state",
+            "count": 1,
+            "row": 5,
+            "column": 2,
+            "row_v": 6,
+            "column_v": 1
+          },
+          {
+            "id": "open",
+            "count": 1,
+            "row": 6,
+            "column": 1,
+            "row_v": 7,
+            "column_v": 1,
+            "icon": "_library/icons/沙漏.png"
+          },
+          {
+            "id": "locked",
+            "count": 1,
+            "row": 6,
+            "column": 2,
+            "row_v": 8,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          },
+          {
+            "id": "result",
+            "count": 1,
+            "row": 7,
+            "column": 2,
+            "row_v": 9,
+            "column_v": 1
+          },
+          {
+            "id": "passed",
+            "count": 1,
+            "row": 8,
+            "column": 1,
+            "row_v": 10,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "cancelled",
+            "count": 1,
+            "row": 8,
+            "column": 2,
+            "row_v": 11,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "start",
+            "to": "need",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "need",
+            "to": "no-need",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "need",
+            "to": "need-yes",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "need-yes",
+            "to": "state",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "state",
+            "to": "open",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "state",
+            "to": "locked",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "locked",
+            "to": "result",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "result",
+            "to": "passed",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "result",
+            "to": "cancelled",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          }
+        ]
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-02-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "只有一份状态"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-02-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "开多久"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "flow",
+      "prose",
+      "notice",
+      "chapter_title",
+      "points_card",
+      "section_heading",
+      "icon",
+      "inline_link",
+      "quote",
+      "bullet_list",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：标题在上；流程卡整宽，流程从上往下，左右分支改成在问题框下面并排的两个小框（窄时一行一个），箭头上的字照写；然后“只有一份状态”“开多久”两张整宽卡，实例便签跟在各自卡片底部。字和横版完全一样。字多时在完整卡片之间拆屏：-v 放标题和流程卡，-v2 放后两张卡。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [
+        "这次要用私人资料吗？",
+        "状态开着吗？",
+        "验证结果"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": true
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。第一张标题和完整流程，第二张只有一份状态、开多久；分支窄时一行一个。page_break_after仅规格意图，flow/核心尚不消费该标记；需comp-diagram分支布局和main卡间分页，不能说已按v/v2分好。"
+  },
+  {
+    "screen": "rule-privacy-data-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-03-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "three-cards",
+        "width": "30%",
+        "text_ref": "锁着的时候"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-03-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "three-cards",
+        "width": "30%",
+        "text_ref": "各管各的权限"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data/rule-privacy-data-03-icon-03.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "three-cards",
+        "width": "40%",
+        "text_ref": "入口"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画，没有就不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画。卡片里每条要点前一个小绿圆点，正文深蓝灰；以“实例：”开头的那条画成卡片底部一个浅黄底的小便签（字照写），表示这是本机现在的真实例子、不是规则原文。`…` 里的名字和路径用等宽字体、浅绿底小框，反引号不画。〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。不画编号，不加要点以外的字。 卡片左上角各一个小水彩图标：“锁着的时候”配一把关着的挂锁挡在几条岔路前、“各管各的权限”配三把不同颜色的钥匙各挂一个钩、“入口”配一扇半开的小木门。三张卡排成三列、顶边对齐：左“锁着的时候”、中“各管各的权限”、右“入口”（最宽，约占 40%）。右卡里五个英文名字都用等宽小框，一个名字不折行。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角各一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。本屏无大标题；锁着的时候/各管各的权限/入口三卡横30%/30%/40%、竖同序整宽。每卡左上图标、浅绿卡头；英文标识不缩字，竖可独占一行。header_icon逐卡按原序显式文件，避免缺03时拿02冒充入口。；素材登记图标2/3，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-privacy-data-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-03-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-03-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "锁着的时候"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-03-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "各管各的权限"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data/rule-privacy-data-03-icon-03.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "入口"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "monospace",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：本屏没有大标题；三张卡片从上到下一张一条、整宽，顺序同横版。字和横版完全一样；等宽小框里的英文名字太长时可以单独占一行。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角各一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。本屏无大标题；锁着的时候/各管各的权限/入口三卡横30%/30%/40%、竖同序整宽。每卡左上图标、浅绿卡头；英文标识不缩字，竖可独占一行。header_icon逐卡按原序显式文件，避免缺03时拿02冒充入口。；素材登记图标2/3，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-privacy-data-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 可信位置和原样保存"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/privacy-trusted-position-icon.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "cards-0",
+        "width": "50%",
+        "text_ref": "可信位置"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "cards-0",
+        "width": "50%",
+        "text_ref": "原样保存"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a49a00a56102f5cd2d4b.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "cards-1",
+        "width": "50%",
+        "text_ref": "本机安全就这几样"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-c5b32376bb2aca42c7fc.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "cards-1",
+        "width": "50%",
+        "text_ref": "秘密放在哪里"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画，没有就不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画。卡片里每条要点前一个小绿圆点，正文深蓝灰；以“实例：”开头的那条画成卡片底部一个浅黄底的小便签（字照写），表示这是本机现在的真实例子、不是规则原文。`…` 里的名字和路径用等宽字体、浅绿底小框，反引号不画。〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。不画编号，不加要点以外的字。 卡片左上角各一个小水彩图标：“可信位置”配一台电脑、一块硬盘和一朵小云围成一圈、“原样保存”配一本摊开的账本上一张没被涂黑的纸条、“本机安全就这几样”配一面小盾牌上挂一把小钥匙、“秘密放在哪里”配一只关着的小保险箱。四张卡排成两行两列：上行左“可信位置”、右“原样保存”；下行左“本机安全就这几样”（最长，可以比右边高）、右“秘密放在哪里”。“本机安全就这几样”卡片里提到的 ToDesk、Sunshine/Moonlight、KDE Connect、小米妙享只写字，不画品牌标志。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角各一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。四卡横2×2、竖一列，可信位置→原样保存→本机安全→秘密；图标在卡头左，不画ToDesk等正文品牌标志。外层卡间无连接。；素材登记图标3/4，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-privacy-data-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-04-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 可信位置和原样保存"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/privacy-trusted-position-icon.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "可信位置"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "原样保存"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a49a00a56102f5cd2d4b.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "本机安全就这几样"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-c5b32376bb2aca42c7fc.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "秘密放在哪里"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：标题在上，四张卡片从上到下一张一条、整宽，顺序同横版。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        2
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角各一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。四卡横2×2、竖一列，可信位置→原样保存→本机安全→秘密；图标在卡头左，不画ToDesk等正文品牌标志。外层卡间无连接。；素材登记图标3/4，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-privacy-data-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 公开个人数据分级表"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a0bd87bc3fa1f18e5282.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "这张表怎么用"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-eee93d6e0a2d49990395.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "L3 以下不设限"
+      },
+      {
+        "type": "table",
+        "text_ref": "五个等级"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "table",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画，没有就不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画。卡片里每条要点前一个小绿圆点，正文深蓝灰；以“实例：”开头的那条画成卡片底部一个浅黄底的小便签（字照写），表示这是本机现在的真实例子、不是规则原文。`…` 里的名字和路径用等宽字体、浅绿底小框，反引号不画。〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。不画编号，不加要点以外的字。 布局：左边约 35% 宽上下两张卡：上“这张表怎么用”（图标：一把尺子量一张纸）、下“L3 以下不设限”（图标：一道敞开的小栅栏门，带实例便签）。右边约 65% 宽是“五个等级”大卡，里面画成五行表格，表头“等级 / 是什么 / 公开时”三列；每行最左边的等级格画成一级小石台阶（和开头插画的五级台阶同一套颜色，L1 最浅、L5 最深），“公开时”一列的底色也随等级从很浅的绿渐到浅橙灰。表格线用浅绿细线。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1,
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [
+        {
+          "start_line": 11,
+          "columns": 3,
+          "data_rows": 5
+        }
+      ],
+      "illustration_position_mentions": [
+        "左边的等级格画成一级小石台阶（和开头插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左35%表用法、L3以下上下两卡；右65%五级三列表格为一张大卡。五级等级格需小石台阶及层级底色；points_card内table目前普通保文表格，未调用table族逐行手机转换，需comp-text嵌套table并由table族支持等级阶梯。两左卡与右表全文节点有意按视觉列重排。；素材登记图标1/3，按源位置的文件号显式请求，缺图不代表可以省略图标。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。；独立复核：原文中的短键长值表改现役table组件按内容列宽，全部原字和顺序保持。"
+  },
+  {
+    "screen": "rule-privacy-data-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-05-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 公开个人数据分级表"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a0bd87bc3fa1f18e5282.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "这张表怎么用"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "五个等级"
+      },
+      {
+        "type": "table",
+        "text_ref": "等级是什么公开时L1非个人、虚构、匿名的内容，或本人已经主动公开、再公开也不加伤害的"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-eee93d6e0a2d49990395.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "L3 以下不设限"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "prose",
+      "chapter_title",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "table",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：标题在上；“这张表怎么用”卡片整宽；“五个等级”改成五张小卡、一级一张、一行一条，每张卡左上角是等级小台阶，卡里先写“是什么”、再写“公开时”（两行各带小标签“是什么”“公开时”，这两个标签就是表头的字）；最后“L3 以下不设限”卡片整宽。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1,
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [
+        {
+          "start_line": 11,
+          "columns": 3,
+          "data_rows": 5
+        }
+      ],
+      "illustration_position_mentions": [
+        "左边的等级格画成一级小石台阶（和开头插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。顺序为标题→表用法→五等级五张行卡→L3以下；table已能一行一卡并完整保表头一次，但等级石阶图、卡头装饰、深浅分级底色需table族样张。五等级外卡包裹也需嵌套，不能拿五个普通白卡称完全照原图。；素材登记图标1/3，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-privacy-data-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 私人仓库收口、备份跟着原件走"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-06-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "storage",
+        "width": "42%",
+        "text_ref": "私人仓库收口"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-06-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "storage",
+        "width": "58%",
+        "text_ref": "备份跟着原件走"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "notice",
+      "monospace",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画，没有就不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画。卡片里每条要点前一个小绿圆点，正文深蓝灰；以“实例：”开头的那条画成卡片底部一个浅黄底的小便签（字照写），表示这是本机现在的真实例子、不是规则原文。`…` 里的名字和路径用等宽字体、浅绿底小框，反引号不画。〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。不画编号，不加要点以外的字。 两张卡左右并排：左“私人仓库收口”约 42% 宽（图标：一个上了小锁的 GitHub 八爪猫标志旁边一只装满的纸箱）、右“备份跟着原件走”约 58% 宽（图标：三块硬盘 E、G、H 用细绿箭头依次连起来，H 盘旁一个挂“30 天”日历牌的小木箱，和开头插画同一只）。两张卡各自底部有实例便签。可以画 GitHub 标志。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。私人仓库42%、备份58%两卡横并排、竖上下，实例各自卡底嵌框；备份图标里的E/G/H/30天仅scene描述，定稿正文已有相应字，不能擅自复制到插画；若有字图需素材去字。"
+  },
+  {
+    "screen": "rule-privacy-data-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-06-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 私人仓库收口、备份跟着原件走"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-06-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "私人仓库收口"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-privacy-data\\rule-privacy-data-06-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "备份跟着原件走"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "notice",
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "quote",
+      "monospace",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽，先“私人仓库收口”后“备份跟着原件走”，实例便签跟在各自卡片底部。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。私人仓库42%、备份58%两卡横并排、竖上下，实例各自卡底嵌框；备份图标里的E/G/H/30天仅scene描述，定稿正文已有相应字，不能擅自复制到插画；若有字图需素材去字。"
+  },
+  {
+    "screen": "rule-privacy-data-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "个人资料与数据处理"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E216 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 个人资料与数据处理”到“怎么解锁”那条结束；右卡放“时长”“取消只结束这一次”“锁着的时候”“各管各的权限”四条。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。横版要求两大卡连续排原文；07在单一bullets中的“怎么解锁”之后换右卡，08在另一单一bullets的“可信位置”之后换右卡。当前text_ref不能在bullets内部拆分，whole_block只生成一外卡；columns=2是目标列数，待main增加原节点条目范围切片再交comp-text，不得用重复同节点造两卡。；page-fixer-07：原文单卡占满全宽。"
+  },
+  {
+    "screen": "rule-privacy-data-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-07-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "个人资料与数据处理"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。竖版整篇同一张整宽外卡，内表格应逐行小卡；source_text_card内table当前普通表格，09须comp-text转交table族，不能缩字号。"
+  },
+  {
+    "screen": "rule-privacy-data-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "入口。查状态、业务检查和锁定分别是密码中心的StatusPersonalEnviro"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“入口”那一条和“## 可信位置和原样保存”下的“可信位置”一条；右卡放“原样保存”“本机安全就这几样”“秘密放哪里”三条。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。横版要求两大卡连续排原文；07在单一bullets中的“怎么解锁”之后换右卡，08在另一单一bullets的“可信位置”之后换右卡。当前text_ref不能在bullets内部拆分，whole_block只生成一外卡；columns=2是目标列数，待main增加原节点条目范围切片再交comp-text，不得用重复同节点造两卡。；page-fixer-07：原文单卡占满全宽。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-privacy-data-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "入口。查状态、业务检查和锁定分别是密码中心的StatusPersonalEnviro"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。竖版整篇同一张整宽外卡，内表格应逐行小卡；source_text_card内table当前普通表格，09须comp-text转交table族，不能缩字号。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-privacy-data-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "公开个人数据分级表"
+      },
+      {
+        "type": "table",
+        "text_ref": "公开等级含义和典型内容公开时默认",
+        "source_prose": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "below_l3_publication_default：L1、L2以及没有L3以上"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "inline_link",
+      "monospace",
+      "table"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。这屏不分两卡：上面一张整宽卡片放“## 公开个人数据分级表”和它下面的那段话；中间是原文表格，画成三列表格（表头“等级 / 含义和典型内容 / 公开时默认”，“|---|”那一行是 Markdown 的表格分隔线，画成表头下的一条细线、不画成字），每行最左格等级字加粗；下面一张整宽卡片放“`below_l3_publication_default`”开头那一段。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [
+        {
+          "start_line": 7,
+          "columns": 3,
+          "data_rows": 5
+        }
+      ],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。横版上段整宽原文卡→三列表格五行→below_l3整宽原文卡。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-privacy-data-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "公开个人数据分级表"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "table",
+      "prose",
+      "section_heading",
+      "source_text_card",
+      "inline_link",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样；表格改成一行一张小卡：每张卡先写等级，再写“含义和典型内容”和“公开时默认”两段（这两个小标签就是表头的字）。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        3
+      ],
+      "portrait_columns_mentioned": [
+        1
+      ],
+      "card_groups": [],
+      "table_shapes": [
+        {
+          "start_line": 7,
+          "columns": 3,
+          "data_rows": 5
+        }
+      ],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。竖版整篇同一张整宽外卡，内表格应逐行小卡；source_text_card内table当前普通表格，09须comp-text转交table族，不能缩字号。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-privacy-data-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "row": "original",
+        "width": "50%",
+        "text_ref": "私人仓库收口"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "row": "original",
+        "width": "50%",
+        "text_ref": "备份跟着原件走"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## 私人仓库收口”和它下面两段；右卡放“## 备份跟着原件走”和它下面那一大段。字少，行距和卡片留白放宽，卡片下方画一条水彩叶子装饰带。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。横版仓库/备份两等宽卡，下方叶子装饰带须补资产并由包装层放置；inventory插画预算0不抹掉scene要求。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-privacy-data-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\img\\rule-privacy-data-10-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "私人仓库收口"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-privacy-data\\page.json",
+    "source_sha256": "434bb605f668cd0372a9565435d16e97f81bf3d74e32cd1682652efa3c0bfe48",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，普通深绿小节标题，不用毛笔大标题、图标或连线。竖版整篇同一张整宽外卡，内表格应逐行小卡；source_text_card内table当前普通表格，09须comp-text转交table族，不能缩字号。；续屏版本标签明确 E214，标签不属于规则正文。"
+  }
+]

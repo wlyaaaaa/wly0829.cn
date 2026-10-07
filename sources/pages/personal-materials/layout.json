@@ -1,0 +1,1516 @@
+[
+  {
+    "screen": "personal-materials-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人材料查找",
+        "align": "left",
+        "row": "hero",
+        "width": "55%",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-01-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-01-h.png",
+        "source_box": [
+          44,
+          56,
+          608,
+          201
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "记得有份文件，想不起放在哪：说个大概，AI找出那一份原件，再翻到要看的那一页。",
+        "size": "large",
+        "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
+        "row": "hero"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "row": "hero",
+        "whole_block": true
+      },
+      {
+        "type": "illustration",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
+        "variant": "number_header_table",
+        "columns": 4,
+        "columns_v": 2,
+        "label_position": "above",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/文件夹.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026年9月28日20:55（北京时间）",
+        "align": "right"
+      },
+      {
+        "type": "live_box",
+        "text_ref": "现在每天17:10同步",
+        "slots": 1
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作现在正不正常→驾驶舱复制AI续作说明"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第2项：按本屏 asset-map 原槽顺序显式绑定打勾清单、文件夹、文稿堆、绿色箭头，图在数字上方。当前表格统计的 img 已在 DOM 但仍被卡面遮住，见 requests/comp-hub/page-fixer-05-qa-common.md。原标题及原图取色坐标保持。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-01",
+      "component_order": [
+        "chapter_title",
+        "prose",
+        "content_card",
+        "inline_link",
+        "illustration",
+        "tag",
+        "monospace",
+        "stat_card",
+        "icon",
+        "action_button",
+        "live_strip",
+        "table"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人材料查找",
+        "align": "center",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-01-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-01-h.png",
+        "source_box": [
+          44,
+          56,
+          608,
+          201
+        ]
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "prose",
+        "text_ref": "记得有份文件，想不起放在哪：说个大概，AI找出那一份原件，再翻到要看的那一页。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "whole_block": true
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
+        "variant": "number_header_table",
+        "columns": 1,
+        "columns_v": 1,
+        "label_position": "above",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/文件夹.png",
+          "_library/icons/文稿堆.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至2026年9月28日20:55（北京时间）",
+        "align": "right"
+      },
+      {
+        "type": "live_box",
+        "text_ref": "现在每天17:10同步",
+        "slots": 1
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置→怎么协作现在正不正常→驾驶舱复制AI续作说明"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第2项：数字卡单列、数字占整宽，四个图标按本屏原槽显式绑定并置于数字上方。图标已在 DOM 但仍被卡面遮住，见 requests/comp-hub/page-fixer-05-qa-common.md。原标题及原图取色坐标保持。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-01",
+      "component_order": [
+        "illustration",
+        "content_card",
+        "stat_card",
+        "prose",
+        "live_strip",
+        "action_button",
+        "chapter_title",
+        "inline_link",
+        "tag",
+        "monospace",
+        "icon",
+        "table"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-01-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "什么时候轮到它",
+        "align": "center",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-02-v.png",
+        "source_box": [
+          12,
+          28,
+          907,
+          229
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "它只管一件事：不知道原件在哪的时候，把那一份找出来。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "table",
+        "text_ref": "你的情况谁来办知道文件在哪AI直接读，不经过它不知道在哪、要在几个地方找，或者原来的位置失效了个人材料查找找照片、视频、录音，也包括拍成照片",
+        "highlight_rows": [
+          2
+        ],
+        "variant": "routing",
+        "row": "routing",
+        "width": "75%"
+      },
+      {
+        "type": "illustration",
+        "row": "routing",
+        "width": "25%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、一个完整的例子：找文件原件"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-02",
+      "component_order": [
+        "chapter_title",
+        "prose",
+        "content_card",
+        "table",
+        "illustration",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "什么时候轮到它",
+        "align": "center",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-02-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-02-v.png",
+        "source_box": [
+          12,
+          28,
+          907,
+          229
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "它只管一件事：不知道原件在哪的时候，把那一份找出来。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "table",
+        "text_ref": "你的情况谁来办知道文件在哪AI直接读，不经过它不知道在哪、要在几个地方找，或者原来的位置失效了个人材料查找找照片、视频、录音，也包括拍成照片",
+        "highlight_rows": [
+          2
+        ],
+        "variant": "routing"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "prose",
+        "text_ref": "跟AI怎么说、一个完整的例子：找文件原件"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-02",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "prose",
+        "inline_link",
+        "chapter_title",
+        "table"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "凭印象找一份合同",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "cards-top",
+        "width": "50%",
+        "header_icon": [
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "微信里收过、下载过的文件",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "cards-top",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "翻到那一页",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "cards-bottom",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "清手机时不重复存",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "cards-bottom",
+        "width": "50%"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-03",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "illustration",
+        "section_heading",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "凭印象找一份合同",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "微信里收过、下载过的文件",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "翻到那一页",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "清手机时不重复存",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-03",
+      "component_order": [
+        "content_card",
+        "illustration",
+        "chapter_title",
+        "section_heading",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每天17:10，自动",
+        "align": "left",
+        "row": "routine",
+        "width": "33%",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑配置与恢复每天备份个人资料，复制到备份硬盘之前先跑这一步：",
+        "row": "routine"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "逐条看登记过的原件还在不在；我删掉的，去掉那一条，连同只属于它的文字（为什么这样定，见亮点）刷新微信收到的文件和下载文件夹的文件名清单做完，",
+        "row": "routine"
+      },
+      {
+        "type": "prose",
+        "text_ref": "除此之外没有后台程序，不扫整台电脑。",
+        "row": "routine"
+      },
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "left",
+        "row": "routine",
+        "width": "67%",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况它怎么做没找到列出实际查过哪些来源、哪些打不开、哪些没查，不说“没有这份”；你换个说法或说出大概在哪，它在同样的范围里接着找选中的文件变",
+        "row": "routine"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第3项：同排两个章节标题均声明 medium，删除重复头图的独立插画。标题图实际尺寸仍不受 size 控制，见 requests/main/page-fixer-05-qa-common.md。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-04",
+      "component_order": [
+        "chapter_title",
+        "comparison",
+        "bullet_list",
+        "prose",
+        "icon",
+        "inline_link",
+        "table"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每天17:10，自动",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "illustration"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑配置与恢复每天备份个人资料，复制到备份硬盘之前先跑这一步："
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "逐条看登记过的原件还在不在；我删掉的，去掉那一条，连同只属于它的文字（为什么这样定，见亮点）刷新微信收到的文件和下载文件夹的文件名清单做完，"
+      },
+      {
+        "type": "prose",
+        "text_ref": "除此之外没有后台程序，不扫整台电脑。"
+      },
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况它怎么做没找到列出实际查过哪些来源、哪些打不开、哪些没查，不说“没有这份”；你换个说法或说出大概在哪，它在同样的范围里接着找选中的文件变"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-04",
+      "component_order": [
+        "table",
+        "chapter_title",
+        "comparison",
+        "bullet_list",
+        "prose",
+        "icon",
+        "inline_link"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-05-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一次查找经过哪几步",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+        "columns": 3,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "tag",
+        "text_ref": "不够才走这步"
+      },
+      {
+        "type": "flow",
+        "text_ref": "4选中再核对只完整读选中的这一份，算SHA-256内容指纹，和登记时的大小、指纹比5翻到那一页读出这一份的文字，返回页码、段落或行号，附不超",
+        "columns": 3,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "打开时有一道小缝：Windows的默认软件只能按路径打开文件，最后一次核对和软件真正读取之间还有极短的空档，项目说明里照实写着，不说“绝对”"
+      },
+      {
+        "type": "prose",
+        "text_ref": "为什么一份文件要核几次指纹，见亮点。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-05",
+      "component_order": [
+        "chapter_title",
+        "flow",
+        "content_card",
+        "icon",
+        "section_heading",
+        "prose",
+        "tag",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一次查找经过哪几步",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "tag",
+        "text_ref": "不够才走这步"
+      },
+      {
+        "type": "flow",
+        "text_ref": "4选中再核对只完整读选中的这一份，算SHA-256内容指纹，和登记时的大小、指纹比5翻到那一页读出这一份的文字，返回页码、段落或行号，附不超",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "notice",
+        "text_ref": "打开时有一道小缝：Windows的默认软件只能按路径打开文件，最后一次核对和软件真正读取之间还有极短的空档，项目说明里照实写着，不说“绝对”"
+      },
+      {
+        "type": "prose",
+        "text_ref": "为什么一份文件要核几次指纹，见亮点。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-05",
+      "component_order": [
+        "flow",
+        "tag",
+        "chapter_title",
+        "content_card",
+        "icon",
+        "section_heading",
+        "prose",
+        "inline_link",
+        "numbered_steps"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么配对、存了什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "配对不用模型，结果能复查",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "principles-0",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两份一样不一样，只看内容指纹",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "principles-0",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "存位置、指纹和可搜文字",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "principles-1",
+        "width": "50%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "读文档用的库",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "principles-1",
+        "width": "50%"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+        "columns": 3,
+        "columns_v": 3,
+        "icons": "none"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：四条原理卡按两行两列；三项数字改为下方整宽一行，避免短数字竖栏下方大白。 仅更改单页排版规格，不改定稿字句和素材文件。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-06",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "stat_card",
+        "prose"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么配对、存了什么",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "配对不用模型，结果能复查",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "两份一样不一样，只看内容指纹",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "存位置、指纹和可搜文字",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "读文档用的库",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "none"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第6项：统计卡 columns 与 columns_v 均为1，4,192行和0字节不再挤进三列。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-06",
+      "component_order": [
+        "content_card",
+        "prose",
+        "stat_card",
+        "chapter_title",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-06-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "范围有多大",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "segmented_band",
+        "text_ref": "85,189个看过的文件（重叠的来源只算一次）10,250个是照片、视频、录音，跳过",
+        "variant": "funnel",
+        "columns": 2,
+        "direction": "horizontal",
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "53个来源是什么",
+        "row": "ranges",
+        "width": "50%",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "chart",
+        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+        "variant": "stacked",
+        "row": "ranges",
+        "chart_type": "stacked"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "164份登记原件，共1.2GB",
+        "row": "ranges",
+        "width": "50%",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "chart",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+        "variant": "stacked",
+        "row": "ranges",
+        "chart_type": "stacked"
+      },
+      {
+        "type": "prose",
+        "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：分段带按现有 funnel 分两列两排，扩大末格可用宽度；单独的其余用时现找是原定稿段落，完整保留。第5项的两图均已使用现有 stacked，图例数值和说明分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-07",
+      "component_order": [
+        "chapter_title",
+        "segmented_band",
+        "stat_card",
+        "prose",
+        "annotation",
+        "chart",
+        "status_legend",
+        "bullet_list"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "范围有多大",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "segmented_band",
+        "text_ref": "85,189个看过的文件（重叠的来源只算一次）10,250个是照片、视频、录音，跳过",
+        "variant": "stack",
+        "columns": 1,
+        "direction": "vertical",
+        "illustration": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "53个来源是什么",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "chart",
+        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+        "variant": "stacked",
+        "chart_type": "stacked"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "164份登记原件，共1.2GB",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "chart",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+        "variant": "stacked",
+        "chart_type": "stacked"
+      },
+      {
+        "type": "prose",
+        "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：采用现有 stack 纵排等宽四段，保留所有源字和原独立说明段。第5项的两图使用现有 stacked；图例分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-07",
+      "component_order": [
+        "segmented_band",
+        "chart",
+        "status_legend",
+        "chapter_title",
+        "stat_card",
+        "prose",
+        "annotation",
+        "bullet_list"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "只记一小份，其余现找",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "highlights",
+        "width": "33.333%",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "删了就是删了，没接上不算删",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "highlights",
+        "width": "33.333%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "打开的就是登记的那一份",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "row": "highlights",
+        "width": "33.333%"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-08",
+      "component_order": [
+        "chapter_title",
+        "monospace",
+        "content_card",
+        "illustration",
+        "tag",
+        "prose"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-08-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "只记一小份，其余现找",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "text_ref": "删了就是删了，没接上不算删",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "打开的就是登记的那一份",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-08",
+      "component_order": [
+        "content_card",
+        "prose",
+        "illustration",
+        "chapter_title",
+        "monospace",
+        "tag"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-09-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几个小巧思",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "说“签字版”，就不给草稿说法里有“签字”“草稿”“定稿”这类版本词，候选里必须有同样的词才会列出；免得我要签字版，它递来一份草稿。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "只看不记AI自己读的时候只核对，不写登记，也不在桌面上弹出窗口；你说要看，才打开。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "查找从不顺手改登记找、核对、盘点都只读；去掉失效的登记只在每天17:10那一步做，出了问题只查一处。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "大文件夹拖不垮盘点单个来源最多数5万个文件，超了就标“至少”，接着数别的来源，整轮最多20秒。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-09",
+      "component_order": [
+        "chapter_title",
+        "content_card",
+        "icon",
+        "section_heading"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-09-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几个小巧思",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "说“签字版”，就不给草稿说法里有“签字”“草稿”“定稿”这类版本词，候选里必须有同样的词才会列出；免得我要签字版，它递来一份草稿。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "只看不记AI自己读的时候只核对，不写登记，也不在桌面上弹出窗口；你说要看，才打开。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "查找从不顺手改登记找、核对、盘点都只读；去掉失效的登记只在每天17:10那一步做，出了问题只查一处。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "大文件夹拖不垮盘点单个来源最多数5万个文件，超了就标“至少”，接着数别的来源，整轮最多20秒。",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "whole_block": true,
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 独立短卡改已实现points_card保留名/说明，避免基础卡默认叶子压字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-09",
+      "component_order": [
+        "content_card",
+        "chapter_title",
+        "icon",
+        "section_heading"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-10-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（13项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说不准＝这项用的时候不留记录，9月15–28日的对话记录里（Claude的从9月24日才有）也没找到用过的痕迹。"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "找",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1凭印象找说记得的标题、用途或一句话，在登记过的原件里给出几个候选，写明是标题对上还是正文对上在用2按版本找说“签字版”“草稿”“定稿”，只",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "核对和阅读",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "5确认是那一份选中后重算大小和SHA-256，和登记时比；只核对，不写登记，不弹窗口在用6翻到那一页在选中的PDF、Word、TXT、Mar",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "收进来",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9精确登记别的项目交来一份文件的路径、大小和指纹，现场复算对上才登记；只记位置，不复制原件在用10按内容查重交来一批内容指纹（一次最多100",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "维护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "11删了就不再找每天17:10去掉我已删掉的原件那一条；文件夹打不开、内容变了都不删在用12看还有多少按需数一遍来源里有多少非媒体文件、多少",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "fill_last_row": true
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：四个功能组短末行使用已有fill_last_row，尾孤卡及两卡均分整行，保留原条序和图标。 仅更改单页排版规格，不改定稿字句和素材文件。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-10",
+      "component_order": [
+        "chapter_title",
+        "status_legend",
+        "section_heading",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-10-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（13项）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说不准＝这项用的时候不留记录，9月15–28日的对话记录里（Claude的从9月24日才有）也没找到用过的痕迹。"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "找",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1凭印象找说记得的标题、用途或一句话，在登记过的原件里给出几个候选，写明是标题对上还是正文对上在用2按版本找说“签字版”“草稿”“定稿”，只",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "核对和阅读",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "5确认是那一份选中后重算大小和SHA-256，和登记时比；只核对，不写登记，不弹窗口在用6翻到那一页在选中的PDF、Word、TXT、Mar",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "收进来",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9精确登记别的项目交来一份文件的路径、大小和指纹，现场复算对上才登记；只记位置，不复制原件在用10按内容查重交来一批内容指纹（一次最多100",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "维护",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "11删了就不再找每天17:10去掉我已删掉的原件那一条；文件夹打不开、内容变了都不删在用12看还有多少按需数一遍来源里有多少非媒体文件、多少",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-10",
+      "component_order": [
+        "status_legend",
+        "section_heading",
+        "chapter_title",
+        "feature_card",
+        "icon"
+      ]
+    },
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-10-v2.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-11-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-11-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-11-h.png",
+        "source_box": [
+          19,
+          0,
+          388,
+          213
+        ]
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月25日旧的个人知识库退役；同一天建成个人材料查找：只在登记范围里给少量候选，听得懂平常说法8月27日照片、视频、录音全部划给照片视频录音",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/文件夹.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月25日–9月27日，一共21次提交。"
+      }
+    ],
+    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第1项：九节点时间线 columns=1、direction=vertical，完整日期和说明纵排。原标题及原图取色坐标保持。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-11",
+      "component_order": [
+        "chapter_title",
+        "timeline",
+        "content_card",
+        "prose"
+      ]
+    },
+    "portrait_required": true
+  },
+  {
+    "screen": "personal-materials-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-11-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large",
+        "asset": "personal-materials\\personal-materials-11-title-01.png",
+        "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\img\\personal-materials-11-h.png",
+        "source_box": [
+          19,
+          0,
+          388,
+          213
+        ]
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8月25日旧的个人知识库退役；同一天建成个人材料查找：只在登记范围里给少量候选，听得懂平常说法8月27日照片、视频、录音全部划给照片视频录音",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/icons/波形照片.png",
+          "_library/icons/文件夹.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/文稿堆.png"
+        ]
+      },
+      {
+        "type": "prose",
+        "text_ref": "8月25日–9月27日，一共21次提交。"
+      }
+    ],
+    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",
+    "layout_reference": {
+      "inventory": "typeset-inventory/screens.jsonl",
+      "screen_id": "personal-materials-11",
+      "component_order": [
+        "timeline",
+        "content_card",
+        "chapter_title",
+        "prose"
+      ]
+    },
+    "portrait_required": true
+  }
+]

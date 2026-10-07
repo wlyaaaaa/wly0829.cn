@@ -1,0 +1,6 @@
+{
+  "schema": "wly.live-ui-recipe.v1",
+  "library": "sources/assets/_library",
+  "font": "C:/Windows/Fonts/NotoSansSC-VF.ttf",
+  "toc_unify_package": "sources/navigation"
+}

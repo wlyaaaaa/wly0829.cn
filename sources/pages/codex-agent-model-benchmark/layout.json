@@ -1,0 +1,567 @@
+[
+  {
+    "screen": "codex-agent-model-benchmark-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "row": "intro",
+        "width": "70%",
+        "text_ref": "AI模型评测"
+      },
+      {
+        "type": "tag",
+        "row": "intro",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "原名CACB（Codex智能体能力基准）。原来想用同一套真实的编程题，让不同的AI模型在Codex里各答"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "row": "intro",
+        "width": "30%"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "为什么不用了"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字，竖线后小字）："
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "text_ref": "108月31日时，能拿来选模型的完整比较2500万–800万token：一个模型答完10道题的输入量（8",
+        "variant": "paragraph_stats",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "expected_cards": 4,
+        "historical": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "冻结的项目，AI不主动看、不维护：约法L24"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "复制AI续作说明"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左侧约 55% 宽：左上大标题毛笔艺术字“AI 模型评测”，标题右边一枚灰绿色圆角小标签“已冻结”；标题下面是介绍段。介绍段下面三张并排的说明卡，卡顶各一个小水彩图标：第一张一个漏了一角、往外撒硬币的钱袋（额度）；第二张一个人坐在电脑前、屏幕上是聊天窗口，旁边摊着一本打开的杂志（厂商公布＋权威评测）；第三张一个上了锁、落了薄灰的木质档案柜。每张卡第一行粗体小标题（为什么不用了／现在靠什么判断模型／停到什么程度），下面几行正文。右侧约 45%：一幅水彩插画：一张考场课桌，桌上摊着一叠试卷（卷面只画横线，不写字），旁边一只秒表和一架天平，天平两端的托盘上各坐一个圆润的小机器人，两端几乎一样高；课桌上方挂着一块小黑板，黑板上画一个大大的绿色问号；整幅画偏灰淡，一角垂下一片落叶。画面下部一排四张数字卡片（上面小插画：空奖杯、一叠纸币变成的 token 小方块、一排 24 个小格子、一串提交小圆点；大号绿色数字，下面一行小字），数字卡整体偏灰淡，表示是历史数字。最下面一行小字和链接。仓库私有，不放 GitHub 按钮；不画“现在”横条（没有在跑的任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。 页修复 07（北京时间 2026-10-03）：按 qa-07 第1、2条把原四项改由数字卡承接，保留原编号、数字及完整说明；电脑介绍卡改一列左图右文，手机原一列不变。定稿“数字卡片……”引导句未删，另请 main/Claude 裁定。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-01-h.png"
+    ],
+    "portrait_required": true
+  },
+  {
+    "screen": "codex-agent-model-benchmark-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "AI模型评测"
+      },
+      {
+        "type": "tag",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0
+      },
+      {
+        "type": "prose",
+        "text_ref": "原名CACB（Codex智能体能力基准）。原来想用同一套真实的编程题，让不同的AI模型在Codex里各答"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "为什么不用了"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字，竖线后小字）："
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "text_ref": "108月31日时，能拿来选模型的完整比较2500万–800万token：一个模型答完10道题的输入量（8",
+        "variant": "paragraph_stats",
+        "illustration": "top_inside",
+        "icons": "auto",
+        "expected_cards": 4,
+        "historical": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "冻结的项目，AI不主动看、不维护：约法L24"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "复制AI续作说明"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版 9:16，从上往下：大标题和“已冻结”标签；右侧那幅考场插画放到标题下面，占满宽度；介绍段；三张说明卡改成上下三张，每张一整行；四张数字卡改成两行两张；最下面一行小字和链接。字完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。 页修复 07（北京时间 2026-10-03）：按 qa-07 第1、2条把原四项改由数字卡承接，保留原编号、数字及完整说明；电脑介绍卡改一列左图右文，手机原一列不变。定稿“数字卡片……”引导句未删，另请 main/Claude 裁定。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-01-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "四条原因"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人9月28日说明的原因，翻成人话是下面四条。每条下面的浅色小字，是这个项目自己的记录里看得到的事实（A"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "row": "reasons-0",
+        "width": "50%",
+        "text_ref": "1太费额度"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "row": "reasons-0",
+        "width": "50%",
+        "text_ref": "2外面已经有评测"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "row": "reasons-1",
+        "width": "50%",
+        "text_ref": "3自己出的题评不出能力"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "row": "reasons-1",
+        "width": "50%",
+        "text_ref": "4平时用着就看得出来"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "还有一件事，不是本人说的原因：8月15日它自查出方法和评分有问题，仓库改成私有，留下的分数不作结论；到8"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左上标题，标题下一行导语。中间 2 列 × 2 行四张圆角卡片，每张：左上一个小水彩图标，粗体标题一行，下面三四行正文用浅灰绿小字（表示是项目记录里的事实）。四个图标依次：1 一个沙漏旁边堆着一摞硬币；2 一本打开的杂志，封面画几根柱状图；3 一架天平，两端几乎一样高；4 一个人坐在电脑前，屏幕上是聊天气泡，旁边一个小对勾。卡片下面一块浅灰底的小字区（“还有一件事”那段），占满宽度。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-02-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "四条原因"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人9月28日说明的原因，翻成人话是下面四条。每条下面的浅色小字，是这个项目自己的记录里看得到的事实（A"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "text_ref": "1太费额度"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "text_ref": "2外面已经有评测"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "text_ref": "3自己出的题评不出能力"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "text_ref": "4平时用着就看得出来"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "还有一件事，不是本人说的原因：8月15日它自查出方法和评分有问题，仓库改成私有，留下的分数不作结论；到8"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版 9:16：标题、导语在上；四张卡片改成一列，每张一整行（图标在左、字在右）；最下面“还有一件事”一段。字完全一样。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-02-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "当初想解决什么、怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "想解决什么"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "row": "balanced-pair-1",
+        "width": "50%",
+        "text_ref": "1定题"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "row": "balanced-pair-1",
+        "width": "50%",
+        "text_ref": "2分开作答"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "row": "balanced-pair-2",
+        "width": "50%",
+        "text_ref": "3程序检查"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "row": "balanced-pair-2",
+        "width": "50%",
+        "text_ref": "4蒙眼评审"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "5出报告"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "row": "details",
+        "width": "40%",
+        "text_ref": "我要做什么"
+      },
+      {
+        "type": "document_mock",
+        "variant": "paper",
+        "row": "details",
+        "width": "60%",
+        "text_ref": "10道题"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左上标题，下面“想解决什么”一段。上半部一条从左到右的水彩流程图，五个节点用粗绿色箭头连起来：①一叠用夹子夹好、贴了封条的试卷 → ②三张并排的小课桌，各坐一个小机器人（桌上分别是 Codex 标志、一块显卡、一朵云）→ ③一台小机器吐出一张打了勾叉的成绩条 → ④一个蒙着眼罩的评审小人拿着放大镜看一份答卷 → ⑤两张并排的成绩单，中间画一个大大的“≠”号不相加。每个节点下面：粗体节点名一行，小字一两行。下半部左边一张“我要做什么”卡（三行带小勾选框的清单）；右边画成一本摊开的点名册：左页竖着列 10 道题（C1…C10 和题名，照下面的字写），右页底部一条横着的分数条，分成 50、25、15、10 四段，颜色由深绿到浅绿，每段下面写名字。整屏偏灰淡一点。 页修复 07（北京时间 2026-10-03）：按 qa-07 第4条把章节标题改 medium；现标题图对档位的实际支持交 main，待统一出图。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-03-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "当初想解决什么、怎么用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "想解决什么"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "1定题"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "2分开作答"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "3程序检查"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "4蒙眼评审"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "connector": "arrow",
+        "text_ref": "5出报告"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "text_ref": "我要做什么"
+      },
+      {
+        "type": "document_mock",
+        "variant": "paper",
+        "text_ref": "10道题"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版 9:16：标题和“想解决什么”；流程图改成从上到下五个节点，箭头朝下，节点名和小字在图标右边；“我要做什么”卡一整行；点名册改成一列 10 行，下面是分数条。字完全一样。 页修复 07（北京时间 2026-10-03）：按 qa-07 第4条把章节标题改 medium；现标题图对档位的实际支持交 main，待统一出图。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-03-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部旧功能（13项，全部已停用）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：✕已停用"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "出题和作答"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "检查和评审"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "花费和报告"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9，和其他项目页“全部功能”同一种画法，但整屏色调偏灰淡，表示都已停用。左上标题，标题右边图例（只有一种：灰色叉“已停用”）。三组功能从上往下排；每组的组名用毛笔字写在这一组卡片上方的一行（不单独占一整列）；卡片三列排：每张卡左边一个灰调小水彩图标，粗体功能名，下面一两行说明，右上角一个灰色叉。图标：题库画一叠贴了封条的试卷，分开作答画三张隔开的小课桌，三种接法画 Codex 标志、一块显卡和一朵云，带帮手作答画一个大机器人牵着几个小机器人，外部工具交接画一只手把一张纸条递进窗口，快速加新模型画一个带加号的文件夹，核实答题者画一张带照片的小工牌，程序硬检查画一台吐出勾叉纸条的小机器，蒙眼评审画一个蒙着眼罩拿放大镜的小人，失败归因和挑选画一个分成四格的收纳盒，额度探针画一支插进硬币堆的温度计，三份报告画三份叠放的文件，给选模型当参考画一架一边重一边轻的天平。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-04-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部旧功能（13项，全部已停用）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：✕已停用"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "出题和作答"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "检查和评审"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "last_row_fill": true,
+        "text_ref": "花费和报告"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版 9:16：标题和图例在上；每组组名一行，下面卡片改成一行一张（图标在左、字在右、叉在右上）；三组依次往下。字完全一样。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-04-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（8月8日—9月28日，65次提交）"
+      },
+      {
+        "type": "timeline",
+        "direction": "horizontal",
+        "columns": 5,
+        "connector": "ribbon",
+        "illustration": "outside",
+        "text_ref": "8月8日：第一版：让Codex原生子代理答题，并记下到底是谁在答8月11日：一天16次提交：撤掉自制的选",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/禁止文件.png",
+          "_library/icons/禁止文件.png"
+        ]
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "size": "banner"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左上标题。中间一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，9 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤；8 月 11 日到 15 日那一段小旗挨得最密。越往右丝带颜色越淡、越偏灰。最右端丝带的尽头画那张考场课桌：试卷收成一叠、用绳子捆好，天平收起来靠在桌边，桌面落了几片叶子。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-05-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-agent-model-benchmark-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "演进（8月8日—9月28日，65次提交）"
+      },
+      {
+        "type": "timeline",
+        "direction": "vertical",
+        "columns": 5,
+        "connector": "ribbon",
+        "illustration": "outside",
+        "text_ref": "8月8日：第一版：让Codex原生子代理答题，并记下到底是谁在答8月11日：一天16次提交：撤掉自制的选",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/禁止文件.png",
+          "_library/icons/禁止文件.png"
+        ]
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "index": 0,
+        "size": "banner"
+      }
+    ],
+    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版 9:16：标题；时间轴改成从上到下一条竖丝带，9 个小旗依次往下，日期在左、小字在右；最下面是收起来的课桌。字完全一样。",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-agent-model-benchmark\\img\\codex-agent-model-benchmark-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-codex-agent-model-benchmark-05-v2\\round-01\\candidate-1.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16"
+  }
+]

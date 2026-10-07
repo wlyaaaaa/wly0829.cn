@@ -95,7 +95,7 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
         additions['cockpit/assets/today-river-assets2/' + name] = (assets / name).read_bytes()
     html = once(html, old_ref, new_ref)
     html = once(html, '</head>', f'<link rel="stylesheet" href="{css_ref}"><script type="module" src="{js_ref}"></script></head>')
-    anchor = '<div class="screen-equivalent-text" id="cockpit-05-equivalent-text"'
+    anchor = '<div class="screen-equivalent-text" id="cockpit-01-equivalent-text"'
     html = once(html, anchor, MOUNT + anchor)
     additions[html_rel] = html.encode('utf8')
     site = output / 'site'

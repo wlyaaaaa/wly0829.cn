@@ -1,0 +1,1831 @@
+[
+  {
+    "screen": "daily-preferences-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人理解库",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "hero",
+        "width": "48%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 了解",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "row": "hero",
+        "width": "52%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "比如",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "76 张",
+        "align": "left",
+        "size": "medium",
+        "columns": 4,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看横原图：左上标题与一句话/介绍，右上卡片盒大插画；例子横卡贯通；4 张数字横卡内图在左、数字和说明在右。原图只有协作链接，定稿新加续作说明按钮须完整排入。统计四行实际解析为 para，当前 core.stat_card 只处理 stats，能保字但无法复原数字卡；需组件适配/样张。数字横卡的新变体未出现在批准样板，待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "个人理解库",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "让 AI 了解",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "比如",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "76 张",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "top_inside",
+        "connector": "none",
+        "columns_v": 2,
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "截至",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "在整套系统里的位置",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看 v/v2：v 为标题、包含一句话与介绍的整宽卡、大插画；v2 从例子左图右字横卡开始，再 2×2 数字卡、截至与协作按钮。原竖图实际例子在大插画之后，按图落位。定稿新增第二按钮，依批准样板竖版单列。统计 para 节点适配及首段有边卡均待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-01-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-daily-preferences-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "问到我，AI 自己来查",
+        "align": "left",
+        "columns": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/共享节点.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "跟 AI 怎么说",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/人物.png"
+        ]
+      }
+    ],
+    "notes": "实看：横为 2×2 四卡，竖为四张整宽卡；两个方向的插画都在卡内左侧，非 portrait 描述的顶部。末尾整宽浅绿技能链接条，左侧小书图。notice 当前不消费插画字段，末条左图需样张/组件适配。整屏章节标题按追加标准居中。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "平时怎么用",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "问到我，AI 自己来查",
+        "align": "left",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/共享节点.png"
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "跟 AI 怎么说",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/人物.png"
+        ]
+      }
+    ],
+    "notes": "实看：横为 2×2 四卡，竖为四张整宽卡；两个方向的插画都在卡内左侧，非 portrait 描述的顶部。末尾整宽浅绿技能链接条，左侧小书图。notice 当前不消费插画字段，末条左图需样张/组件适配。整屏章节标题按追加标准居中。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-02-v.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-03-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几个典型场景",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "外卖点了什么",
+        "align": "left",
+        "columns": 4,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/气泡.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
+        ]
+      }
+    ],
+    "notes": "实看横图：四张竖长卡均分整行，卡头小浅绿标签，下方插画，再下方正文；四卡顶齐。标签式卡头是批准样板外变体，待样张；不从 scene 补写未在定稿的日期。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-03-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几个典型场景",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "外卖点了什么",
+        "align": "left",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/打勾清单.png",
+          "_library/icons/打勾清单.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "“这句话我当时怎么说的？”",
+        "align": "left",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "columns_v": 1,
+        "icons": [
+          "_library/icons/气泡.png",
+          "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
+        ]
+      }
+    ],
+    "notes": "实看 v 为前两张卡：大卡头、插画、正文。替换 v2 为后两张整宽卡，仅大卡头与正文，没有插画；不补原横图的手机/地图插画。卡头浅绿标签与无插画续卡变体待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-daily-preferences-03-v2\\round-01\\candidate-1.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-daily-preferences-04-h\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几张认识卡",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head",
+        "width": "34%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "摘自",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head",
+        "width": "66%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "主要饮品",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ],
+        "row": "cards-0",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "零食：喜欢脆口，嫌贵",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ],
+        "row": "cards-0",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "手机高刷新率",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ],
+        "row": "cards-1",
+        "width": "50%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "看风景和场馆",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ],
+        "row": "cards-1",
+        "width": "50%"
+      }
+    ],
+    "notes": "实看替换横图：2×2 卡，每卡左图、右侧绿卡名条和证据徽章、摘要、底部灰依据。v 前两卡保留左图，v2 后两卡无插画；竖版卡名与证据徽章并排或自然折行，依据在底部浅绿条。四张卡名+证据均解析为 para，须同块收其摘要/依据，不能让三段各自变成卡。当前 core.content_card 对无 group 的 para 会形成一个匿名卡，保字但不生成卡头/证据徽章/依据条；这些变体是新样式，待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "几张认识卡",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "摘自",
+        "align": "center",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "主要饮品",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "零食：喜欢脆口，嫌贵",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "手机高刷新率",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "看风景和场馆",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/绿叶装饰.png"
+        ]
+      }
+    ],
+    "notes": "实看替换横图：2×2 卡，每卡左图、右侧绿卡名条和证据徽章、摘要、底部灰依据。v 前两卡保留左图，v2 后两卡无插画；竖版卡名与证据徽章并排或自然折行，依据在底部浅绿条。四张卡名+证据均解析为 para，须同块收其摘要/依据，不能让三段各自变成卡。当前 core.content_card 对无 group 的 para 会形成一个匿名卡，保字但不生成卡头/证据徽章/依据条；这些变体是新样式，待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-04-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-05-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "说“要更新了”之后",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1先看谁停了",
+        "align": "left",
+        "columns": 4,
+        "illustration": "top_inside",
+        "connector": "arrow",
+        "direction": "horizontal",
+        "icons": "auto",
+        "text_layout": "inline"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不限定来源时",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看：横为上4下3节点，第二排三节点各占1/3，箭头只在同排节点间；纵为向下7节点。v 的1–3有左侧插画，v2 的4–7没有插画；每项小标题浅绿底。7步是一个 steps 节点，text_ref 含编号只能定位第一项，不能用4.读拆块；现有 flow 仅整组插画模式，不能表达前三项有图/后四项无图。底部两段提示横图左右并列、竖图上下分条；两段各是 para，可由 notice 完整消费，灰提示新变体待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-05-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "说“要更新了”之后",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1先看谁停了",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "arrow",
+        "direction": "vertical",
+        "icons": "auto",
+        "text_layout": "inline"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不限定来源时",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看：横为上4下3节点，第二排三节点各占1/3，箭头只在同排节点间；纵为向下7节点。v 的1–3有左侧插画，v2 的4–7没有插画；每项小标题浅绿底。7步是一个 steps 节点，text_ref 含编号只能定位第一项，不能用4.读拆块；现有 flow 仅整组插画模式，不能表达前三项有图/后四项无图。底部两段提示横图左右并列、竖图上下分条；两段各是 para，可由 notice 完整消费，灰提示新变体待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-05-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-daily-preferences-06-h\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "target_height": 230,
+        "target_width": 465
+      }
+    ],
+    "notes": "实看替换横图：左约68%两列表7行，首列图标与情况，右列正文，右约32%数据库抽屉→备份硬盘插画。表格整个节点起点为情况。现有 table 未使用 icons/illustration，行图标需适配；表格外观未在批准样板，待样张。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "出事怎么办",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "table",
+        "text_ref": "情况",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看 v 为表前4行整宽卡，卡内左图右文字，情况与它怎么办分别浅绿卡头；第4行后放数据库备份插画。v2 为后3行纯文字卡，无插画。全表只有一个 table 节点，当前 blocks 不能在第4行之后插入独立 illustration；草稿插画块先放全表后，准确位置由本 notes 指明，尚不能表达原图。现有 table 也未实现前4行图标/后3行无图与每字段浅绿卡头，待组件样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-06-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-daily-preferences-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "topology",
+        "text_ref": "来源原件",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "layout": "graph",
+        "columns_v": 1,
+        "graph_nodes": [
+          {
+            "id": "source",
+            "count": 2,
+            "row": 1,
+            "column": 1,
+            "row_v": 1,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+          },
+          {
+            "id": "import",
+            "count": 2,
+            "row": 2,
+            "column": 1,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/icons/笔记本电脑.png"
+          },
+          {
+            "id": "database",
+            "count": 6,
+            "row": 1,
+            "column": 2,
+            "row_v": 3,
+            "column_v": 1,
+            "icon": "_library/icons/数据库.png",
+            "row_span": 2
+          },
+          {
+            "id": "views",
+            "count": 2,
+            "row": 1,
+            "column": 3,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png"
+          },
+          {
+            "id": "query",
+            "count": 2,
+            "row": 2,
+            "column": 3,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "source",
+            "to": "import",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "import",
+            "to": "database",
+            "from_side": "right",
+            "to_side": "left"
+          },
+          {
+            "from": "database",
+            "to": "views",
+            "from_side": "right",
+            "to_side": "left"
+          },
+          {
+            "from": "views",
+            "to": "query",
+            "from_side": "bottom",
+            "to_side": "top"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "写入口",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "row": "architecture-footer",
+        "width": "33.333%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每一次读都先过资料锁",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "row": "architecture-footer",
+        "width": "33.333%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "Python 标准库为主",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto",
+        "row": "architecture-footer",
+        "width": "33.333%"
+      }
+    ],
+    "notes": "实看替换横图：左70%标题和架构，右30%三张纵卡；左主图绿色虚线框，来源横排5图→内容指纹条→导入条→数据库四行；数据库右伸两张视图纸；下接7个查询胶囊，再接手机云端经电脑至Codex/Claude的虚线链。右卡依次写入口、资料锁、技术说明且上图下字。定稿架构14个节点按 layers 的2/2/5/2/3消费，保留原文↓/→，不再增程序箭头。当前 topology 的单列分层卡不能表达数据库圆柱、侧伸视图、7胶囊和虚线终端链，也未给合格无字专用底图；这是新架构样式，待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。",
+    "fix_notes": "按 qa-11 第1、2项将14个原文单元按2/2/6/2/2分成来源、导入、数据库、视图、查询5节点；横三列、竖单列、卡内小图。原箭头文字仍在所属节点，不生成纯箭头独立卡；侧卡改至下方。原文无改动，待独立视觉复查。"
+  },
+  {
+    "screen": "daily-preferences-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "它是怎么搭的",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "topology",
+        "text_ref": "来源原件",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "layout": "graph",
+        "columns_v": 1,
+        "graph_nodes": [
+          {
+            "id": "source",
+            "count": 2,
+            "row": 1,
+            "column": 1,
+            "row_v": 1,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+          },
+          {
+            "id": "import",
+            "count": 2,
+            "row": 1,
+            "column": 2,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/icons/笔记本电脑.png"
+          },
+          {
+            "id": "database",
+            "count": 6,
+            "row": 1,
+            "column": 3,
+            "row_v": 3,
+            "column_v": 1,
+            "icon": "_library/icons/数据库.png"
+          },
+          {
+            "id": "views",
+            "count": 2,
+            "row": 2,
+            "column": 1,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png"
+          },
+          {
+            "id": "query",
+            "count": 2,
+            "row": 2,
+            "column": 2,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "source",
+            "to": "import",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "import",
+            "to": "database",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "database",
+            "to": "views",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "views",
+            "to": "query",
+            "from_side": "bottom",
+            "to_side": "top"
+          }
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "写入口",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每一次读都先过资料锁",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "Python 标准库为主",
+        "align": "left",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "实看 v：顶端它是怎么搭的为卡内普通小标题，非毛笔大标题；来源卡、指纹卡、导入卡、数据库卡、写入后重建条、两份视图卡按向下链。v2 查询入口及调用说明一张卡，然后写入口、资料锁、技术说明三张纯文字卡。当前 chapter_title 用 small/medium 仅记录目标但仍会找毛笔图，不能复原卡内小标题；topology 分层未能正确合并数据库内容及浅绿卡头与视图图标，需样张，不报还原完成。 页代理复核：原竖图为卡内小标题，最终用section_heading的小档表达，避免chapter_title误用毛笔大标题。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-07-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。",
+    "fix_notes": "按 qa-11 第1、2项将14个原文单元按2/2/6/2/2分成来源、导入、数据库、视图、查询5节点；横三列、竖单列、卡内小图。原箭头文字仍在所属节点，不生成纯箭头独立卡；侧卡改至下方。原文无改动，待独立视觉复查。"
+  },
+  {
+    "screen": "daily-preferences-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-daily-preferences-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "材料从哪来（30 类）",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head",
+        "width": "56%"
+      },
+      {
+        "type": "illustration",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "row": "head",
+        "width": "44%"
+      },
+      {
+        "type": "table",
+        "text_ref": "怎么进来",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "条数是",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "明确不接",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看替换横图：左标题右浅溪汇流插画；三列表6行整宽，首列行图标，来源和数字在中列，节奏在右列，数字绿；底部两段小字。中列各来源之间保留定稿分隔的语义，不画排版用｜。table 当前未消费行图标/数字绿/原列宽，须组件样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-08-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "材料从哪来（30 类）",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "table",
+        "text_ref": "怎么进来",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      },
+      {
+        "type": "prose",
+        "text_ref": "条数是",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "明确不接",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      }
+    ],
+    "notes": "实看 v 首3行卡，左大插画，右栏依次怎么进来/来源和条数/应有节奏三条浅绿卡头，来源数字逐条竖排；v2 后3行纯文字整宽卡且无插画，末尾两说明框。没有横图溪流插画。单 table 节点无法用 text_ref 分成前三行有图/后三行无图；行内数字与各段卡头未由当前 table 复现，新样式待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-08-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-09-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "材料怎么变成认识",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "topology",
+        "text_ref": "三层分开放",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "layout": "layers",
+        "layers": [
+          {
+            "count": 2,
+            "columns": 1
+          }
+        ],
+        "icons": [
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "_library/icons/气泡.png"
+        ]
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "几条判断规矩",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "谁来写",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ]
+      }
+    ],
+    "notes": "实看横图左48%为标题和三层图，左下原始记录、气泡、上层认识卡；三层说明位于图右上；绿支持/灰语境/橙反例线连回来源。右52%上判断规则整卡、下谁来写整卡（左Claude/ChatGPT标志）。三层只有组名+一段para，不可凭 scene 补额外标签；现有 topology 均为卡层，无法实现插画中的三色关系线与说明相对位置；原图已有＝支持/＝语境/＝反例小图例，定稿没有独立重复图例，不得补字。新图形/图例样式待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-09-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "材料怎么变成认识",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "topology",
+        "text_ref": "三层分开放",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "layout": "layers",
+        "layers": [
+          {
+            "count": 2,
+            "columns": 1
+          }
+        ],
+        "icons": [
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+          "_library/icons/气泡.png"
+        ]
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "几条判断规矩",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "谁来写",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ]
+      }
+    ],
+    "notes": "实看竖图：标题居中；三层图上方区域中左侧约40%为三层说明、右侧及下方为层图；之后规则满宽卡、谁来写卡（两标志在左）。需专门层图排版，不把解释段拆成新三层文字；目前 topology 样式只能保内容，三色线/示意图未复现，新样式待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-09-v.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-10-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "39 份",
+        "align": "left",
+        "size": "medium",
+        "columns": 4,
+        "illustration": "none",
+        "connector": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "一处维护",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图：左78%为标题及2列3排六原则卡，非 scene 所述一列六卡；每卡图在左正文右，第6卡右上黄点；右22%有竖分隔线，4个大数字无图无边卡。原则为单 bullets 节点；数字为4个para，当前 core.stat_card无法将其变成数字卡。右侧无边数字/细分隔线/第6卡状态点均是批准样板外变体，待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-10-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么这样设计",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "一处维护",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "columns_v": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "39 份",
+        "align": "left",
+        "size": "medium",
+        "columns": 2,
+        "illustration": "none",
+        "connector": "none",
+        "columns_v": 2,
+        "icons": "none"
+      }
+    ],
+    "notes": "实看 v 前5原则单列横卡、图左文右；v2 第6原则卡为顶部大插画、下方大粗标题和较长正文，右上黄点，之后4数字2×2。六原则是一个bullets节点，当前整组统一 illustration 无法表达末项改top_inside；不能用第6项text_ref另切。数字para需组件适配。整张第6卡新样式待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-10-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-11-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "说错了一纠正",
+        "align": "left",
+        "columns": 2,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
+          "_library/icons/日历时钟.png"
+        ]
+      }
+    ],
+    "notes": "实看横图两张各半宽的大卡，上方插画在卡内且上沿局部探出，下面大粗标题，再麻烦/解法/例子（标签粗绿）。每个group+3para整体一张卡，原定稿顺序保留。麻烦/解法/例子未由core自动加绿粗，只能以定稿原文排入，样张需表现标签角色；插画探出卡上沿的新变体待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-11-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "亮点",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "说错了一纠正",
+        "align": "left",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "退了的单不算喜欢",
+        "align": "left",
+        "columns": 1,
+        "illustration": "top_inside",
+        "connector": "none",
+        "icons": [
+          "_library/icons/日历时钟.png"
+        ]
+      }
+    ],
+    "notes": "实看 v 第一亮点卡上图下标题正文，v2 第二亮点卡无插画、纯标题/麻烦/解法/例子。用第二个group真实起点拆，原文不重复。第二卡标签换行独占段首，标签粗绿属组件待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-11-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-11-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（45 项）",
+        "align": "left",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head",
+        "width": "42%"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head",
+        "width": "58%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "待验收＝",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "head"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "认识我",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1问我的情况",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "记下和纠正",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "7记下我的原话",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "检查写得对不对",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "11讲清认识变了什么",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；当前feature_card仅从定稿字段识别状态，不能显示这些准确状态点，需组件读registry或明确状态映射，禁止补字。毛笔组标题及状态点需样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部功能（45 项）",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "● 在用",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "待验收＝",
+        "align": "left",
+        "size": "small",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "认识我",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1问我的情况",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "记下和纠正",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "7记下我的原话",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "检查写得对不对",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "11讲清认识变了什么",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图：顶栏标题左42%/图例与说明右58%；认识我6项3列2排，记下和纠正4项一排4列，检查写得对不对4项一排4列。v 首6项左插画右文，v2 7–14无插画；每组小毛笔标题在上方，无重复大标题/图例。状态1–4绿、5黄、6–13绿、14灰。状态只在scene/registry中，steps文本没有状态列；当前feature_card仅从定稿字段识别状态，不能显示这些准确状态点，需组件读registry或明确状态映射，禁止补字。毛笔组标题及状态点需样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-12-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-13-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "查事实",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "15查记录和出处",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "帮我选",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "23日常推荐菜单",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "给别的项目和设备",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "25别的项目写回来",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto",
+        "last_row": "fill"
+      }
+    ],
+    "notes": "实看横图查事实15–20为3列2排，21/22两卡各半宽均分第三行；帮我选23/24半宽一排；给别的项目和设备25–28一排4列。查事实8项整体是一个steps节点，当前columns=3最后两卡只占2/3，无法表达同节点最后行扩展半宽，不能用21内部项另开text_ref；须组件行跨度适配。v 15–22保左插画，v2 23–28无插画。21灰＝没用过，24浅灰＝说不准，其余绿。状态点与组毛笔标题需组件适配/样张；没有整屏大标题或新图例。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-13-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "查事实",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "15查记录和出处",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "帮我选",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "23日常推荐菜单",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "给别的项目和设备",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "25别的项目写回来",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图查事实15–20为3列2排，21/22两卡各半宽均分第三行；帮我选23/24半宽一排；给别的项目和设备25–28一排4列。查事实8项整体是一个steps节点，当前columns=3最后两卡只占2/3，无法表达同节点最后行扩展半宽，不能用21内部项另开text_ref；须组件行跨度适配。v 15–22保左插画，v2 23–28无插画。21灰＝没用过，24浅灰＝说不准，其余绿。状态点与组毛笔标题需组件适配/样张；没有整屏大标题或新图例。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-13-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-13-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-14-h.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "接新材料",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "29导入新导出",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "保护和修复",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "41读之前先过资料锁",
+        "align": "left",
+        "size": "medium",
+        "columns": 3,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图接新材料12项3列4排，保护和修复先41–43三列一排、44/45各半宽均分末行；该5项是单steps节点，最后行半宽不能用44内部项text_ref切块，需组件行跨度适配。v 29–35，v2 36–45，所有卡保留左图右字、右上状态点；45灰，其余绿；40中文语音转写为定稿链接，完整保留。无新增大标题或图例。准确状态点及毛笔组标题待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-14-v.png",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "接新材料",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "29导入新导出",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "保护和修复",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "41读之前先过资料锁",
+        "align": "left",
+        "size": "medium",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "none",
+        "portrait_columns": 1,
+        "icons": "auto"
+      }
+    ],
+    "notes": "实看横图接新材料12项3列4排，保护和修复先41–43三列一排、44/45各半宽均分末行；该5项是单steps节点，最后行半宽不能用44内部项text_ref切块，需组件行跨度适配。v 29–35，v2 36–45，所有卡保留左图右字、右上状态点；45灰，其余绿；40中文语音转写为定稿链接，完整保留。无新增大标题或图例。准确状态点及毛笔组标题待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-14-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-14-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-15",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-15-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none",
+        "row": "history-head",
+        "width": "78%"
+      },
+      {
+        "type": "illustration",
+        "align": "right",
+        "size": "small",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "row": "history-head",
+        "width": "22%",
+        "target_height": 220
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 31 日",
+        "align": "left",
+        "columns": 2,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "direction": "vertical",
+        "icons": "auto",
+        "width": "100%",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "实看横图：左68%为两条并排竖时间线，各7节点，先左列8/31–9/14再右列9/15–9/28；每节点小图左、日期正文右，绿线与圆点在左边缘；右32%成长卡片盒大插画。日期清单实际为单stats节点，timeline可消费stats，但direction=vertical当前固定单列、忽略columns=2，无法把单节点分为左右各7项；不能用9/15内部条目text_ref拆块。左右按列顺序的新时间线变体待样张。",
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  },
+  {
+    "screen": "daily-preferences-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-15-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进",
+        "align": "center",
+        "size": "large",
+        "columns": 1,
+        "illustration": "none",
+        "connector": "none"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "size": "small",
+        "columns": 1,
+        "illustration": "outside",
+        "connector": "none",
+        "target_height": 360
+      },
+      {
+        "type": "timeline",
+        "text_ref": "8 月 31 日",
+        "align": "left",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "direction": "vertical",
+        "icons": "auto",
+        "text_layout": "inline"
+      }
+    ],
+    "notes": "实看 v 为顶部成长插画、演进标题、第一列7节点，v2续后7节点；竖版14节点连续单列，每项小图左日期正文右、左绿线圆点。日期stats节点完整分给timeline，不误用stat_card，不重复标题或插画。时间线外观不在3张批准样板，待样张。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\img\\daily-preferences-15-v2.png"
+    ],
+    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
+  }
+]

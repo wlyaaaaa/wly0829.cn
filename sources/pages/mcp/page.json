@@ -1,0 +1,358 @@
+{
+  "schema": "site-b2.page.v1",
+  "page": "mcp",
+  "kind": "mcp",
+  "title": "连接电脑",
+  "url": "/mcp/",
+  "tagline": "我自己看桌面，或让 AI 用电脑：入口、步骤、验证日期。",
+  "status": "",
+  "public": true,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "commit": "6f3cb90f79d8dd7632eb3adf0e1cd5028471bf92",
+    "commit_time": "2026-09-25T03:52:41+08:00",
+    "file": "旧站源码 V:\\Personal\\Projects\\wly0829.cn（app\\page.jsx McpAccessPage、app\\content-mcp-access.js）；PCConfig 91b73e4（tools\\remote-computer-mcp\\README.md、docs\\recovery\\副驾驶笔记本账本.md）；事实单 b1\\pipe\\p2\\facts-ops.md 第 2 节；10 月 1 日 18:29 本写稿人对副机 ComputerContext 的一次只读调用"
+  },
+  "video_prompt": "以这张图为第一帧，镜头和构图完全不动，只让插画里的东西轻轻动：手机和显示器之间那条绿色丝带像被微风吹着轻轻起伏，丝带上漂着的那一小块桌面画面慢慢滑向手机；另一条虚线上，一颗绿色光点从手机的对话气泡出发，沿虚线流进机箱，机箱侧面的绿色灯带随之亮一下；显示器屏幕上的浅绿画面缓慢流动；笔记本屏幕微微亮起再暗回去；桌角绿植的叶子轻轻摇，一片小叶子缓缓飘落。画面里不出现任何文字和数字，不添加新东西，按钮、文字和空框所在的白色纸面保持干净不动。约 6 秒，首尾衔接成无缝循环，水彩画风不变，没有声音。 ｜ Prompt: Use this image as the first frame. Keep the camera and composition completely still and gently animate only what is in the illustration: the green ribbon between the phone and the monitor ripples softly as if in a light breeze, and the small piece of desktop picture floating on it glides slowly toward the phone; along the other dotted line, a small green light dot leaves the chat bubble on the phone and flows into the PC case, and the green light strip on the side of the case brightens once; the pale green picture on the monitor drifts slowly; the laptop screen glows faintly and dims again; the leaves of the desk plant sway gently and one small leaf drifts down. No text or numbers anywhere, add nothing new, keep the white paper where the buttons, text and empty boxes sit clean and still. About 6 seconds, the last frame matches the first for a seamless loop, same watercolor style, no audio.",
+  "screens": [
+    {
+      "id": "mcp-01",
+      "section": "top",
+      "title": "开头：两条路",
+      "scene": "横版：左上毛笔艺术字大标题“连接电脑”，下面一行介绍。右上约 40% 宽一幅水彩插画（开头短视频从这里取景）：家里书桌上一台侧透机箱和一台显示器，桌边一台合上一半的笔记本（副机）；画面左下角一部手机。手机和显示器之间两条细线：一条是绿色丝带，丝带上漂着一小块桌面画面（表示串流）；另一条是虚线，线上一颗绿色光点，手机屏上一个对话气泡，气泡旁小小的 ChatGPT 和 Claude 标志。插画里不画字。插画左边、标题下方两张等宽竖卡片并排：左卡“我自己看桌面”（小图标：一只眼睛对着一块屏幕），右卡“让 AI 用电脑”（小图标：对话气泡连着一个小齿轮），卡片最后一行是绿色带箭头的页内链接。下面一条满宽“现在”横条：左边“现在”两个毛笔字，接着三个空框——主机（约屏宽 22%、高约屏高 8%）、副机（同样大小）、主机授权（约屏宽 34%、同高），框画成很淡的水彩圆角细边框，框里一个字都不画，网页程序往里填；每个框上方一行灰色小字标签（主机、副机、主机授权）。横条下面一行灰色小字和两个链接。",
+      "portrait": "竖版：标题和介绍；插画缩到屏宽；两张路线卡片上下排、满宽；“现在”横条改成竖排：“现在”二字，下面三个满宽空框依次往下（每个高约一行半字，上方带标签）；最后两行灰色小字和链接。",
+      "text": "# 连接电脑\n\n两条路连到我家里这台电脑。\n\n**我自己看桌面**\n用 Moonlight 串流，在手机或笔记本上看见桌面、亲手点。〔↓ 我自己看桌面〕\n\n**让 AI 用电脑**\nChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件、命令和桌面的接口）来干活。〔↓ 让 AI 用电脑〕\n\n**现在**\n主机　副机　主机授权\n\n要开、要关个人资料和无限制授权，去〔授权与状态〕；电脑本身累不累，看〔驾驶舱〕。\n只给我本人和我授权过的客户端用：复制地址拿不到任何操作权限。",
+      "links": [
+        {
+          "text": "↓ 我自己看桌面",
+          "href": "/mcp/#see-desktop"
+        },
+        {
+          "text": "↓ 让 AI 用电脑",
+          "href": "/mcp/#ai-use"
+        },
+        {
+          "text": "授权与状态",
+          "href": "/computer-access/"
+        },
+        {
+          "text": "驾驶舱",
+          "href": "/cockpit/#remote"
+        }
+      ],
+      "anchors": [],
+      "live": [
+        "mcp-main",
+        "mcp-secondary",
+        "mcp-grants"
+      ],
+      "buttons": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "mcp-02",
+      "section": "see-desktop",
+      "title": "我自己看桌面",
+      "scene": "横版：左上小节标题“我自己看桌面”，下面一行绿色副标题。左边约 55% 宽一张白底细浅绿边圆角卡片“怎么连”，三步编号，每步前一个小水彩图标（手机上点一台电脑、手指点屏幕、断开的插头和原位的窗口）。右边约 43% 宽上下三张小卡片：“画面怎么选”“停在登录界面时”“最近一次真实验证”；最后一张的“未核实”用浅灰圆点加字。最下面一行字，两个链接画成绿色。卡片之间间距一致。",
+      "portrait": "竖版：小节标题和副标题；“怎么连”卡片满宽；三张小卡片依次往下、满宽；最后一行字。",
+      "text": "## 我自己看桌面\n\n日常用 Moonlight 连主机（电脑上跑的是 Sunshine；Artemis 也能连）。副机也以 Moonlight 为主，网易 UU、ToDesk 备用。\n\n**怎么连**\n1. 打开手机或笔记本上的 Moonlight，点已经配对好的主机。人不在家时，这台设备要在 Tailscale（只连我自己设备的私人网络）里。\n2. 看得见桌面、点得动，才算连上。\n3. 断开后看一眼：主屏和窗口还在原位。\n\n**画面怎么选**　先用正在亮的主屏；只有一块健康的虚拟屏可以兜底。连上、断开都不会关掉或重排主屏、水冷屏和机箱小屏。\n\n**停在登录界面时**　Moonlight 要先登录才行，这时用 ToDesk：看门狗每 2 分钟把 ToDesk 服务修回开着。重启后、登录前从别的设备真连一次，还没验收。\n\n**最近一次真实验证**　未核实：找不到一次带日期的“连上、操作、断开”完整记录。\n\n没画面看〔救急先看：串流没画面〕；技术细节见〔远程电脑串流〕。",
+      "links": [
+        {
+          "text": "救急先看：串流没画面",
+          "href": "/rescue/#e-stream"
+        },
+        {
+          "text": "远程电脑串流",
+          "href": "/projects/sunshine-remote-streaming/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "see-moonlight",
+          "text": "怎么连"
+        }
+      ],
+      "live": [],
+      "buttons": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "mcp-03",
+      "section": "ai-use",
+      "title": "让 AI 用电脑：三个入口",
+      "scene": "横版：左上小节标题“让 AI 用电脑”，下面两行说明。中间三张等宽等高的竖卡片一行排开：主机（小水彩图标：侧透机箱）、副机（笔记本）、主机备用入口（笔记本和机箱之间一条转接的弯箭头）。每张卡片：粗体名字、一行灰字说明；一个浅灰底圆角地址条，地址用等宽字体完整画出、不截断（可折两行）；地址条下两个按钮并排——左边绿底白字“复制给 AI 的说明”，右边白底细绿边“只复制地址”；下面两三行字。卡片下面一行灰色小字。",
+      "portrait": "竖版：小节标题和说明；三张卡片上下排、满宽，地址条满宽，两个按钮并排；最后一行灰字。",
+      "text": "## 让 AI 用电脑\n\n电脑 MCP 本身不带模型：想事情的是发起的那个 AI（ChatGPT、Claude 或 Codex），电脑只负责照它的要求读文件、跑命令、操作桌面。\n\n**主机**　家里的台式机\nhttps://mcp.wly0829.cn/mcp\n［复制给 AI 的说明］［只复制地址］\n经 Cloudflare 隧道进来。文件、命令和桌面工具；普通、管理员、SYSTEM 维护都开着。\n\n**副机**　笔记本\nhttps://laptop-e48n0drj.tailbe620b.ts.net/computer/mcp\n［复制给 AI 的说明］［只复制地址］\n经 Tailscale 公网入口进来，单独登录、单独权限，用的是副机自己的文件和工具。\n\n**主机备用入口**　经副机转接\nhttps://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp\n［复制给 AI 的说明］［只复制地址］\n主机的公网入口坏了才临时加上，干活的仍是主机。要单独授权一次，主入口的登录不能拿来用；两台都要开机联网。不会自动切换，也不会把中断的任务重做一遍。\n\n平时 ChatGPT 里只留主机、副机两个连接。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "ai-main",
+          "text": "主机"
+        },
+        {
+          "id": "ai-secondary",
+          "text": "副机"
+        },
+        {
+          "id": "ai-fallback",
+          "text": "主机备用入口"
+        }
+      ],
+      "live": [],
+      "buttons": [
+        {
+          "text": "复制给 AI 的说明",
+          "where": "主机卡片",
+          "does": "把这台电脑的“配置说明”复制到剪贴板（服务地址、连接方式、先确认客户端支持远程 MCP、认证不要把密钥贴进聊天、连上后列工具并只读核对是哪台电脑；备用入口多一段“只在主入口故障时用、结果不明先核实”）：主机",
+          "api": "不调接口，只写剪贴板；文字取自现有 content-mcp-access.js 的 mcpSetupNote(主机)"
+        },
+        {
+          "text": "只复制地址",
+          "where": "主机卡片",
+          "does": "把主机地址复制到剪贴板",
+          "api": "不调接口，只写剪贴板"
+        },
+        {
+          "text": "复制给 AI 的说明",
+          "where": "副机卡片",
+          "does": "把这台电脑的“配置说明”复制到剪贴板（服务地址、连接方式、先确认客户端支持远程 MCP、认证不要把密钥贴进聊天、连上后列工具并只读核对是哪台电脑；备用入口多一段“只在主入口故障时用、结果不明先核实”）：副机",
+          "api": "不调接口，只写剪贴板；mcpSetupNote(副机)"
+        },
+        {
+          "text": "只复制地址",
+          "where": "副机卡片",
+          "does": "把副机地址复制到剪贴板",
+          "api": "不调接口，只写剪贴板"
+        },
+        {
+          "text": "复制给 AI 的说明",
+          "where": "主机备用入口卡片",
+          "does": "把这台电脑的“配置说明”复制到剪贴板（服务地址、连接方式、先确认客户端支持远程 MCP、认证不要把密钥贴进聊天、连上后列工具并只读核对是哪台电脑；备用入口多一段“只在主入口故障时用、结果不明先核实”）：主机备用入口",
+          "api": "不调接口，只写剪贴板；mcpSetupNote(mcpMainFallback)"
+        },
+        {
+          "text": "只复制地址",
+          "where": "主机备用入口卡片",
+          "does": "把备用地址复制到剪贴板",
+          "api": "不调接口，只写剪贴板"
+        }
+      ],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "mcp-04",
+      "section": "chatgpt",
+      "title": "ChatGPT 怎么接",
+      "scene": "横版：左上小节标题“ChatGPT 怎么接”，标题左边画 ChatGPT 标志。左边约 60% 宽：五步竖排的编号流程（绿色圆圈编号，步与步之间细绿竖线），第 3 步里“填什么”画成一张浅灰底的小表格（两列：项目、填什么）。右边约 38% 宽上下两张小卡片：“在手机上用”（小图标：手机）、“授权弹窗一直转圈”（小图标：转圈的弹窗），后者最后一行是链接。",
+      "portrait": "竖版：小节标题；五步流程满宽往下，第 3 步的小表格改成一行一项；两张小卡片依次往下、满宽。",
+      "text": "## ChatGPT 怎么接\n\n账号要能用自定义 MCP（开发者模式）。\n\n1. 在电脑上打开 ChatGPT 网页：设置 → Security and login（安全和登录）→ 打开 Developer mode（开发者模式）。\n2. 打开〔chatgpt.com/plugins〕，点加号新建一个 MCP 应用，放进项目“我的电脑”，名字叫“主机 MCP”或“副机 MCP”，地址填上一屏那条。\n3. 认证选 OAuth，照下表填：\n| 项目 | 填什么 |\n|---|---|\n| 客户端 ID | https://chatgpt.com/oauth/client.json |\n| 客户端密钥 | 留空 |\n| 令牌端点认证方式 | none |\n| 权限范围 | desktop:control |\n4. 点连接，弹出电脑自己的登录页：输入密码中心里登记的“电脑 MCP 入口密码”，不是 OpenAI 的密码。\n5. 连上后先让它调用 ComputerContext，看连的是不是那台电脑，再跑一条只读命令。显示“已安装”不算连通。\n\n**在手机上用**　手机 App 能不能直接新建连接还没核实；建不了就在电脑网页上给同一个账号加，手机上照样用。手机上用不用开 Tailscale：不用，ChatGPT 的服务器经公网连电脑，手机原来的代理照开。\n\n**授权弹窗一直转圈**　关掉整个弹窗，从“连接”重新来一次，见〔救急先看：ChatGPT 授权转圈〕。",
+      "links": [
+        {
+          "text": "chatgpt.com/plugins",
+          "href": "https://chatgpt.com/plugins"
+        },
+        {
+          "text": "救急先看：ChatGPT 授权转圈",
+          "href": "/rescue/#e-chatgpt-auth"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "chatgpt-steps",
+          "text": "ChatGPT 怎么接"
+        }
+      ],
+      "live": [],
+      "buttons": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "mcp-05",
+      "section": "claude",
+      "title": "Claude 和 Codex 怎么接",
+      "scene": "横版：左上小节标题“Claude 和 Codex 怎么接”，标题左边画 Claude 标志。上面约 62% 高一张大卡片“Claude”：三步编号，两条命令画在浅灰底等宽字的命令条里（完整画出，可折行不截断），卡片最后一行灰字。下面一张满宽的小卡片“Codex”，标题左边画一个小的 OpenAI 标志。",
+      "portrait": "竖版：小节标题；Claude 卡片满宽，命令条自动折行；Codex 卡片在下、满宽。",
+      "text": "## Claude 和 Codex 怎么接\n\n**Claude**\n现在登记的是主机上的 Claude Code 连副机，连接名 secondary_laptop：\n1. 在主机终端运行：\nclaude mcp add -s user --transport http --client-id claude-main-desktop --callback-port 33418 secondary_laptop https://laptop-e48n0drj.tailbe620b.ts.net/computer/mcp\n2. 在能交互的终端运行 claude mcp login secondary_laptop，在弹出的浏览器里登录；后台程序做不了这一步。\n3. 回调地址只能是 http://localhost:33418/callback，换成 127.0.0.1 或别的端口都会被拒。\nClaude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前没有登记过的接法。\n\n**Codex**\n主机的 Codex 用 secondary_laptop 连副机；副机的 Codex 用 main_desktop 经备用入口连主机。Codex 的回调是 http://127.0.0.1/callback，只允许端口变，和 Claude 的不能混用。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "claude-steps",
+          "text": "Claude"
+        },
+        {
+          "id": "codex-steps",
+          "text": "Codex"
+        }
+      ],
+      "live": [],
+      "buttons": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "mcp-06",
+      "section": "verified",
+      "title": "最近一次真实验证",
+      "scene": "横版：左上小节标题“最近一次真实验证”。左边约 62% 宽一张水彩风表格（圆角外框、细浅绿格线、表头浅绿底），三列：哪条路、哪天（北京时间）、验证了什么；“未核实”两格画浅灰小圆点加字，其余画绿色小圆点。表格下一行灰字。右边约 36% 宽一张卡片“用之前知道”，四条，每条前一个小水彩图标（鼠标、关机的电脑、两把不同的钥匙、救生圈），最后一条末尾链接画成绿色。",
+      "portrait": "竖版：小节标题；表格改成一行一张小卡片（粗体路名，下面日期和验证了什么）；表格下的灰字；“用之前知道”卡片满宽在最后。",
+      "text": "## 最近一次真实验证\n\n| 哪条路 | 哪天（北京时间） | 验证了什么 |\n|---|---|---|\n| ChatGPT → 主机 | 9 月 11 日 16:54、17:15–17:16 | 普通命令回读主机；管理员和 SYSTEM 维护都返回对的 Windows 身份；登录过期自动续上 |\n| ChatGPT → 副机 | 9 月 11 日 11:28 | 普通命令 8 次全成功；SYSTEM 维护成功 |\n| Claude Code（主机）→ 副机 | 10 月 1 日 18:29 | 只读调用 ComputerContext，返回副机的电脑名和规则 |\n| 副机的 Codex → 主机备用入口 | 9 月 11 日 17:38、17:45 | 登录完成；新开的任务普通命令和 SYSTEM 维护都成功 |\n| 主机备用入口 | 9 月 11 日 16:28–16:29 | 故意停掉主机的公网隧道，经副机转接，普通命令 3 次全成功 |\n| Moonlight 串流 | 未核实 | 没有带日期的完整连接记录 |\n| 登录前用 ToDesk | 未核实 | 只验过看门狗在跑，没从别的设备真连过 |\n\n这些是带日期的记录，不说明电脑此刻在线；此刻看页首“现在”。\n\n**用之前知道**\n- AI 用鼠标、键盘时，占的是我正在用的桌面。\n- 电脑要开着、联网；没人登录时，桌面类工具用不了。电脑 MCP 救不了没启动的 Windows。\n- 连上电脑，不等于开了个人资料或无限制授权；Windows 管理员、SYSTEM 也不是我的最高授权。\n- 连不上先看〔救急先看：远程连不上〕。",
+      "links": [
+        {
+          "text": "救急先看：远程连不上",
+          "href": "/rescue/#e-remote"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "before-use",
+          "text": "用之前知道"
+        }
+      ],
+      "live": [],
+      "buttons": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "live": [
+      {
+        "slot": "mcp-main",
+        "screen": "mcp-01",
+        "meaning": "主机现在在不在线。灯和字一起换（预先画好四张同尺寸的小灯：绿、黄、灰、空心灰圈）：绿“在线 · 已开机 N 小时”；黄“正在连接”；灰“连不上，最后一次读到 HH:MM”；空心灰圈“暂时读不到”。",
+        "source": "GET https://mcp.wly0829.cn/computer-access/api/status 成功与否（接口没有单独的 online 字段，在线＝这次读取成功且数据是新的）；已开机多久取 host.uptime_seconds。前台每 60 秒读一次，回到前台立即读，后台不读。",
+        "gap": "“能不能连”（MCP 入口本身通不通）现在没有公开的可读来源：status 读得到只说明状态服务通。AI 建议：后端在 status 里加一个主、副机 MCP 入口可达检查（例如未认证请求返回 401 就算入口通），接上前只显示在线与否。"
+      },
+      {
+        "slot": "mcp-secondary",
+        "screen": "mcp-01",
+        "meaning": "副机现在在不在线、MCP 入口通不通。接上来源前写“还没接上”（空心灰圈），不写“正常”也不写“读不到”。",
+        "source": "现在没有来源：主机的 status 接口不带副机；原 /mcp/ 页的摘要也只读主机。",
+        "gap": "要副机自己出一个公开的只读状态，或由主机代测副机入口；属于 PCConfig 远程服务的改动。"
+      },
+      {
+        "slot": "mcp-grants",
+        "screen": "mcp-01",
+        "meaning": "主机授权摘要，两行，每行一盏小灯加字：个人资料“锁着”（灰）／“开着，到 HH:MM”（绿）／“正在变”（黄）；无限制授权“关着”（灰）／“开着，到 HH:MM”（绿）。读不到时两行都写“当前状态未知”（空心灰圈），不留旧的绿灯。只看，不放按钮；办理去授权与状态页。",
+        "source": "同一个 status：personal_data.state/expires_at_unix、unrestricted.state/expires_at_unix。"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-chatgpt-main",
+        "text": "9 月 11 日 16:54、17:15–17:16",
+        "meaning": "ChatGPT → 主机最近一次带日期的调用验收",
+        "as_of": "2026-10-01",
+        "source": "content-mcp-access.js:11–14；PCConfig MCP README.md:48",
+        "screens": [
+          "mcp-06"
+        ]
+      },
+      {
+        "id": "n-chatgpt-secondary",
+        "text": "9 月 11 日 11:28",
+        "meaning": "ChatGPT → 副机",
+        "as_of": "2026-10-01",
+        "source": "content-mcp-access.js:23–26；README.md:50",
+        "screens": [
+          "mcp-06"
+        ]
+      },
+      {
+        "id": "n-claude-secondary",
+        "text": "10 月 1 日 18:29",
+        "meaning": "主机 Claude Code → 副机，一次只读 ComputerContext 调用（返回 computer=LAPTOP-E48N0DRJ）",
+        "as_of": "2026-10-01",
+        "source": "本写稿人在本会话的 mcp__secondary_laptop__ComputerContext 调用，observed_utc 2026-10-01T10:29:47Z",
+        "screens": [
+          "mcp-06"
+        ]
+      },
+      {
+        "id": "n-codex-fallback",
+        "text": "9 月 11 日 17:38、17:45",
+        "meaning": "副机 Codex → 主机备用入口",
+        "as_of": "2026-10-01",
+        "source": "PCConfig MCP README.md:21（UTC 09:38/09:45 换算）",
+        "screens": [
+          "mcp-06"
+        ]
+      },
+      {
+        "id": "n-fallback-drill",
+        "text": "9 月 11 日 16:28–16:29",
+        "meaning": "停主机隧道后经备用入口普通命令 3/3",
+        "as_of": "2026-10-01",
+        "source": "PCConfig MCP README.md:50、52；content-mcp-access.js:35–37",
+        "screens": [
+          "mcp-06"
+        ]
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/computer-access/",
+        "screen": "mcp-01",
+        "text": "授权与状态"
+      },
+      {
+        "target": "/cockpit/#remote",
+        "screen": "mcp-01",
+        "text": "驾驶舱"
+      },
+      {
+        "target": "/rescue/#e-stream",
+        "screen": "mcp-02",
+        "text": "救急先看：串流没画面"
+      },
+      {
+        "target": "/projects/sunshine-remote-streaming/",
+        "screen": "mcp-02",
+        "text": "远程电脑串流"
+      },
+      {
+        "target": "/rescue/#e-chatgpt-auth",
+        "screen": "mcp-04",
+        "text": "救急先看：ChatGPT 授权转圈"
+      },
+      {
+        "target": "/rescue/#e-remote",
+        "screen": "mcp-06",
+        "text": "救急先看：远程连不上"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [
+      "旧页三步“选电脑，复制说明 → 完成认证 → 确认连通，再使用”并进 ChatGPT、Claude 两屏的具体步骤，不再单列一屏。",
+      "旧页“接入方式与认证”“技术与最近验收”两个折叠区：认证并进第 4、5 屏，验收并进第 6 屏的表格；不再做折叠。",
+      "旧页页首“主机授权状态”摘要卡：保留成第 1 屏的 mcp-grants 实时框（只看）；旧卡上解锁、开启、延长、锁定、结束五个跳转按钮合成一个〔授权与状态〕链接，办理都在那页。",
+      "旧页摘要里的“Grafana 是否在线”：电脑性能和曲线都归驾驶舱（本人 10 月 1 日同意性能挪到驾驶舱），本页改成〔驾驶舱〕链接。"
+    ],
+    "dropped": [
+      "旧页“最近普通调用日期”写在每张设备卡上：改为第 6 屏一张表统一写，设备卡上不重复。",
+      "旧页的速度样本（20 次只读命令 0.70–0.77 秒）：只覆盖当时的通用客户端，不代表手机或 ChatGPT 的往返速度，不上。"
+    ],
+    "unsure": [
+      "Claude Code（主机）→ 副机 的验证日期 10 月 1 日 18:29：事实单 U03 写“没找到主机侧完整验收日期”。我在写稿时用本会话已接好的 secondary_laptop 连接做了一次只读 ComputerContext 调用，成功返回 computer=LAPTOP-E48N0DRJ、执行身份 SYSTEM（session 0）。这说明 OAuth 登录已完成、工具能调通；没测命令执行和桌面工具。表里写的是“只读调用 ComputerContext”。这次调用是事实单以外我自己做的检查，请 Claude 决定能不能上页。",
+      "“Claude 连主机、Claude 手机 App 和网页版：目前没有登记过的接法”：依据是事实单只查到主机 Claude Code → 副机这一条登记（PCConfig MCP README.md:15–23）。若本人其实在 Claude 手机或网页里加过连接器，这句要改。",
+      "实时“能不能连”：本人要求写在不在线、能不能连。现在主机只有“状态接口读得到”这一个来源，副机没有任何来源；两个 live 槽位的 gap 里写了要补什么（AI 建议）。接上前副机显示“还没接上”。",
+      "第 3 屏的“复制给 AI 的说明”“只复制地址”是会动的按钮（写剪贴板）。第 1 批格式没有按钮字段，我在每屏加了 buttons（图上字、在哪张卡、做什么、接什么），图上用［］标出按钮字；拼页程序要据此在图上放点击区。",
+      "ChatGPT 第 1 步菜单路径用的是官方文档英文名（Security and login、Developer mode），没核实本人账号界面上的中文名；第 2 步“放进项目‘我的电脑’”出自 PCConfig MCP README.md:164、172–182。",
+      "第 4 屏写了 OAuth 客户端 ID（https://chatgpt.com/oauth/client.json）和权限范围：这是 ChatGPT 公开的客户端标识，不是秘密；入口密码只写名字、不写值。",
+      "副机地址里有笔记本的 Tailscale 机器名（laptop-e48n0drj）：旧公开页已经登过，照登。",
+      "替本人口吻写的句子：第 1 屏“两条路连到我家里这台电脑”、第 6 屏“用之前知道”四条。"
+    ]
+  }
+}

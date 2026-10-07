@@ -1,0 +1,1063 @@
+[
+  {
+    "screen": "rule-context-sources-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "事实来源与任务上下文",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的决定和纠正记在哪。",
+        "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是Codex和Claude共用的规则，管四件事：一是查一件事实该找哪个仓库，按需要一步步读，不乱翻也不瞎猜；二是哪些项",
+        "row": "hero"
+      },
+      {
+        "type": "glossary",
+        "text_ref": "先认几个词",
+        "whole_block": true,
+        "columns": 1,
+        "row": "hero"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "跳到：",
+        "columns": 3,
+        "columns_v": 2,
+        "row": "hero"
+      },
+      {
+        "text_ref": "E:\\.agents",
+        "type": "document_mock",
+        "variant": "window",
+        "base_asset": "_library/illustrations/事实来源五牌.png",
+        "label_positions": [
+          {
+            "x": 12.508,
+            "y": 26.561,
+            "width": 14.342,
+            "height": 6.244,
+            "align": "center"
+          },
+          {
+            "x": 43.353,
+            "y": 24.281,
+            "width": 13.621,
+            "height": 5.253,
+            "align": "center"
+          },
+          {
+            "x": 73.674,
+            "y": 26.561,
+            "width": 14.014,
+            "height": 6.541,
+            "align": "center"
+          },
+          {
+            "x": 15.652,
+            "y": 70.466,
+            "width": 18.009,
+            "height": 7.532,
+            "align": "center"
+          },
+          {
+            "x": 71.84,
+            "y": 88.404,
+            "width": 18.664,
+            "height": 7.334,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          },
+          {
+            "label_index": 3,
+            "position_index": 3
+          },
+          {
+            "label_index": 4,
+            "position_index": 4
+          }
+        ],
+        "layout": "illustration_labels"
+      },
+      {
+        "type": "notice",
+        "text_ref": "三个基座之间谁把什么交给谁"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；QA04 修复：按审查第5条把跳转按钮改3列2行，保留原按钮全称和原字序。第4条路牌标签是定稿文字，不直接删去；图内定位缺口另提组件请求。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rule-context-sources-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "illustration",
+        "asset": "_library/illustrations/事实来源五牌.png",
+        "size": "large",
+        "align": "center",
+        "target_width": "100%"
+      },
+      {
+        "type": "chapter_title",
+        "text_ref": "事实来源与任务上下文",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "遇到一件事该去哪查；哪些项目冻结不碰、哪些只修报错；长任务停了怎么接着做；本人的决定和纠正记在哪。",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是Codex和Claude共用的规则，管四件事：一是查一件事实该找哪个仓库，按需要一步步读，不乱翻也不瞎猜；二是哪些项"
+      },
+      {
+        "type": "glossary",
+        "text_ref": "先认几个词",
+        "whole_block": true,
+        "columns": 1
+      },
+      {
+        "type": "action_button",
+        "text_ref": "跳到：",
+        "columns": 2,
+        "columns_v": 2
+      },
+      {
+        "type": "prose",
+        "text_ref": "E:\\.agents",
+        "textless": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "三个基座之间谁把什么交给谁"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65。此为AI排版补充，列new-looks待验收。\nmain-closer 2026-10-03T20:36:28+08:00：实际文字Range超出真实安全牌框，竖版撤下坐标绑定，恢复原合法保字＋composition incomplete；不把单靠固定.tb框的旧机器pass当通过。safe DOM证据 main-closer/family-label-dom.json；横版实测安全绑定保留。\nmain-closer5 2026-10-04T07:00:58.635971+08:00：按Claude本轮裁定，手机首屏采用插画上、文字下；复用01-h既有无字插画，整幅100%宽等比缩放，不裁物件。原五/九标签改既有prose顺排于文字区，全部原字、motion及其它屏保全；不再请求插画牌面净区，也不更改任何素材ready。"
+  },
+  {
+    "screen": "rule-context-sources-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·事实找谁",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "四个家，各管各的事实",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "按需要一步步读",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "基座的日常治理：修问题，不补跑备份",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-context-sources-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·事实找谁",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "四个家，各管各的事实",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "按需要一步步读",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "基座的日常治理：修问题，不补跑备份",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·冻结的项目",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结了，AI就不主动碰",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结名单",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结不等于删",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-context-sources-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·冻结的项目",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结了，AI就不主动碰",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结名单",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "冻结不等于删",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·三档维护",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "三档各怎么维护",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "row": "topcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "偶用名单（11项：10个仓库加1个功能）",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "row": "topcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "谁在读这张表",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rule-context-sources-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-04-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·三档维护",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "三档各怎么维护",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "偶用名单（11项：10个仓库加1个功能）",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "谁在读这张表",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·长任务接续",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先分清几类东西",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "row": "topcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "经验当场写进文件，不写进记忆区",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "row": "topcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "说明文档只给AI，给本人看的都在网站",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "row": "bottomcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "第三方AI命令行工具的长任务",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          3
+        ],
+        "row": "bottomcards",
+        "width": "50%",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rule-context-sources-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·长任务接续",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "先分清几类东西",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "经验当场写进文件，不写进记忆区",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "说明文档只给AI，给本人看的都在网站",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "第三方AI命令行工具的长任务",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          3
+        ],
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·一样东西只存一处",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "每样东西只有一个家",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "发现副本怎么收",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left",
+        "motion_icon_arrow": true
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；QA04 修复：按审查第7条将两张要点卡改为50:50等宽。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-context-sources-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-06-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·一样东西只存一处",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "每样东西只有一个家",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "发现副本怎么收",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "icon_position": "header_left",
+        "motion_icon_arrow": true
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·纠正和经验记在哪",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "当轮就记，记完说一句",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          0
+        ],
+        "row": "body",
+        "width": "44%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "决定原话只存一处",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          1
+        ],
+        "row": "body",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "什么写到哪",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          2
+        ],
+        "row": "body",
+        "width": "56%",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "每周一次查漏",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "header_icon": [
+          3
+        ],
+        "row": "body",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rule-context-sources-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-07-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "人话要点·纠正和经验记在哪",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "当轮就记，记完说一句",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none",
+        "header_icon": [
+          0
+        ],
+        "table_mobile": "row_cards",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "决定原话只存一处",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none",
+        "header_icon": [
+          1
+        ],
+        "table_mobile": "row_cards",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "什么写到哪",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none",
+        "header_icon": [
+          2
+        ],
+        "table_mobile": "row_cards",
+        "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "每周一次查漏",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none",
+        "header_icon": [
+          3
+        ],
+        "table_mobile": "row_cards",
+        "icon_position": "header_left"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"
+  },
+  {
+    "screen": "rule-context-sources-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "事实来源与任务上下文",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "冻结名单只维护在这里",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "body_columns": 1
+      },
+      {
+        "type": "prose",
+        "text_ref": "（表中另有4行是本人定了不在网站上出现的旧项目，没有放上来。）"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "冻结管的是AI维护范围",
+        "body_columns": 1
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；既有4行省略的人工说明独立在原文卡外显示，不标source_prose、不计入原文摘要。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-context-sources-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "事实来源与任务上下文",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "prose",
+        "text_ref": "（表中另有4行是本人定了不在网站上出现的旧项目，没有放上来。）"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "冻结管的是AI维护范围"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；既有4行省略的人工说明独立在原文卡外显示，不标source_prose、不计入原文摘要。"
+  },
+  {
+    "screen": "rule-context-sources-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-09-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-09-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "三档维护",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "body_columns": 1
+      },
+      {
+        "type": "table",
+        "text_ref": "档位"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "长任务接续",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "body_columns": 1
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；续屏版本标签明确 E214，标签不属于规则正文。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。；独立复核：原文中的短键长值表改现役table组件按内容列宽，全部原字和顺序保持。"
+  },
+  {
+    "screen": "rule-context-sources-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-09-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-09-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-09-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "三档维护",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-context-sources-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-10-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-10-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "一样东西只存一处",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "source",
+        "width": "50%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "内容写到哪里怎么跟本人说话经skills/explain-to-me按个人表达项目的流程维护；新增时先查同类并合并，保留",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "source",
+        "width": "50%"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；续屏版本标签明确 E214，标签不属于规则正文。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "rule-context-sources-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-10-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-context-sources\\img\\rule-context-sources-10-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "一样东西只存一处",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；续屏版本标签明确 E214，标签不属于规则正文。"
+  }
+]

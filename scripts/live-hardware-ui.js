@@ -143,7 +143,7 @@
       const header = el('div', 'live-hardware-header', null, 'hardware-header');
       const current = el('div', 'live-hardware-current', null, 'hardware-current');
       const dot = el('span', 'live-hardware-dot', null, 'hardware-dot'); dot.dataset.state = m.online ? 'ok' : 'unknown'; dot.setAttribute('aria-hidden', 'true');
-      current.append(dot, el('strong', '', m.online ? '电脑在线' : '电脑当前读不到', 'hardware-online'));
+      current.append(dot, el('strong', '', m.online ? '电脑在线' : c.cached ? '显示上一次读数' : '电脑当前读不到', 'hardware-online'));
       const screenText = { locked: 'Windows 已锁屏', unlocked: 'Windows 未锁屏', no_session: 'Windows 无交互桌面' }[m.screen.value] || 'Windows 锁屏状态读不到';
       current.append(reading('span', 'live-hardware-screen-state', m.screen, screenText, 'hardware-screen-state'));
       const stale = c.cached || c.old || m.hardware.state === 'stale';

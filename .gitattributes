@@ -3,4 +3,16 @@ public/media/localocr/sample-table-actual.md -text whitespace=-blank-at-eof
 public/media/localocr/sample-table-actual.json -text
 public/media/vault-tool/synthetic-roundtrip.json -text
 site-release/** -text
+
+# Preserve migrated producer and page-source byte identity.
+src/typeset/** -text
+src/typeset/render_page.py whitespace=cr-at-eol
+sources/** -text
+scripts/inventory.py -text
+# Migrated runtime sources and art inputs keep their source byte identities.
+src/runtime/living/** -text
+src/runtime/bird/** -text
+sources/living/** -text
+sources/bird/** -text
+config/build.json -text
 config/assembled-rules-pin.json -text

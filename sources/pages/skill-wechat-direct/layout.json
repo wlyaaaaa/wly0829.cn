@@ -1,0 +1,307 @@
+[
+ {
+  "screen": "skill-wechat-direct-01",
+  "orientation": "h",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "row": "intro",
+    "width": "64%",
+    "text_ref": "看微信聊天"
+   },
+   {
+    "type": "prose",
+    "row": "intro",
+    "text_ref": "技能名：wechat-direct"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "index": 0,
+    "row": "intro",
+    "width": "36%",
+    "align": "center",
+    "target_width": 313,
+    "target_height": 290
+   },
+   {
+    "type": "dialogue",
+    "columns": 4,
+    "split_items": true,
+    "sides": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "text_ref": "这样跟AI说就行"
+   },
+   {
+    "type": "prose",
+    "text_ref": "没说主号还是副号时，聊天默认两个号都找，找到不止一个就问我；朋友圈一定两个号分开查、分开报。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左上毛笔艺术字标题，标题下一行灰色小字写技能名。左边约一半宽是介绍段和“这样跟 AI 说就行”八句话，每句画成一个浅绿对话气泡（气泡靠右，像我发出去的消息），两列四行。右边一幅水彩插画：一个人坐在电脑前对着屏幕说话，屏幕里两个聊天窗口，一只放大镜照着其中一小段（和微信直读项目页开头的插画同一套画法，不画微信标志）。最下面一行灰色小字。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-01-h.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-01-h.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-01",
+  "orientation": "v",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "看微信聊天"
+   },
+   {
+    "type": "prose",
+    "text_ref": "技能名：wechat-direct"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "index": 0
+   },
+   {
+    "type": "dialogue",
+    "columns": 1,
+    "split_items": true,
+    "sides": [
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right",
+     "right"
+    ],
+    "text_ref": "这样跟AI说就行"
+   },
+   {
+    "type": "prose",
+    "text_ref": "没说主号还是副号时，聊天默认两个号都找，找到不止一个就问我；朋友圈一定两个号分开查、分开报。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题、技能名、介绍在上；插画缩小放在介绍下面；八个气泡一行一个往下排；灰色小字在最后。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-01-v.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-01-v.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-02",
+  "orientation": "h",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "一个完整例子"
+   },
+   {
+    "type": "dialogue",
+    "sides": [
+     "right"
+    ],
+    "text_ref": "我说：项目群上周五最后定的交付时间是哪天？那句“可以”回的是哪条？"
+   },
+   {
+    "type": "flow",
+    "columns": 3,
+    "direction": "horizontal",
+    "connector": "arrow",
+    "illustration": "left_inside",
+    "text_ref": "AI做的"
+   },
+   {
+    "type": "dialogue",
+    "sides": [
+     "left"
+    ],
+    "text_ref": "AI回我：周五16:40群里定的是10月9日交付；“可以”回的是“那就9号交？”这一条。后面那条语音说的"
+   },
+   {
+    "type": "prose",
+    "text_ref": "这是示范，不是真实聊天。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左上标题。从左到右三栏：左栏一个手机聊天样式的对话框，里面是“我说”那句（绿色气泡）；中栏一条竖向的三步处理线，每步一个小水彩图标（两个名牌只亮了一个、放大镜照着一小段气泡、一句回复连着原句旁边一个小喇叭）和编号；右栏一张白底卡片，是 AI 的回答（灰色气泡）。三栏之间绿色箭头。最下面一行灰色小字。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-02-h.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-02-h.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-02",
+  "orientation": "v",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "一个完整例子"
+   },
+   {
+    "type": "dialogue",
+    "sides": [
+     "right"
+    ],
+    "text_ref": "我说：项目群上周五最后定的交付时间是哪天？那句“可以”回的是哪条？"
+   },
+   {
+    "type": "flow",
+    "columns": 1,
+    "direction": "vertical",
+    "connector": "arrow",
+    "illustration": "left_inside",
+    "text_ref": "AI做的"
+   },
+   {
+    "type": "dialogue",
+    "sides": [
+     "left"
+    ],
+    "text_ref": "AI回我：周五16:40群里定的是10月9日交付；“可以”回的是“那就9号交？”这一条。后面那条语音说的"
+   },
+   {
+    "type": "prose",
+    "text_ref": "这是示范，不是真实聊天。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：我说的气泡、三步、AI 的回答从上到下排，中间向下的箭头；灰色小字在最后。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-02-v.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-02-v.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-03",
+  "orientation": "h",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "left",
+    "size": "medium",
+    "row": "banner",
+    "width": "30%",
+    "text_ref": "能做的事"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "index": 0,
+    "size": "banner",
+    "row": "banner",
+    "width": "15%"
+   },
+   {
+    "type": "prose",
+    "row": "banner",
+    "width": "55%",
+    "text_ref": "读一段聊天、找被回的原话、打开附件、建档补新、看和存朋友圈、完整存底、核对以前的导出……全部25项和每项"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：一条矮的横幅（高度约为普通一屏的三分之一）：左边标题，右边一句话，句末的链接画成绿色带小箭头；左侧一个小水彩图标（一张列着勾选项的清单）。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-wechat-direct-03-h.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-skill-wechat-direct-03-h.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-03",
+  "orientation": "v",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "medium",
+    "text_ref": "能做的事"
+   },
+   {
+    "type": "illustration",
+    "illustration": "outside",
+    "index": 0,
+    "size": "banner"
+   },
+   {
+    "type": "prose",
+    "text_ref": "读一段聊天、找被回的原话、打开附件、建档补新、看和存朋友圈、完整存底、核对以前的导出……全部25项和每项"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题、图标和那句话上下排，占小半屏。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-03-v.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-03-v.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-04",
+  "orientation": "h",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "边界"
+   },
+   {
+    "type": "points_card",
+    "columns": 2,
+    "text_ref": "它管的"
+   },
+   {
+    "type": "notice",
+    "text_ref": "要我明确说的：完整存底只在我明确要求时做；整批导出聊天记录属于约法里的重大的事。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左上标题。左右两栏卡片：左栏“它管的”（绿色细边框），右栏“它不做的”（灰色细边框），每条一行，前面一个小圆点。最下面一条横跨两栏的细卡片放“要我明确说的”那句。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-04-h.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-04-h.png"
+  ],
+  "portrait_required": true
+ },
+ {
+  "screen": "skill-wechat-direct-04",
+  "orientation": "v",
+  "blocks": [
+   {
+    "type": "chapter_title",
+    "align": "center",
+    "size": "large",
+    "text_ref": "边界"
+   },
+   {
+    "type": "points_card",
+    "columns": 2,
+    "text_ref": "它管的"
+   },
+   {
+    "type": "notice",
+    "text_ref": "要我明确说的：完整存底只在我明确要求时做；整批导出聊天记录属于约法里的重大的事。"
+   }
+  ],
+  "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；“它管的”一栏在上，“它不做的”一栏在下，每条一行；细卡片在最后。",
+  "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-04-v.png",
+  "source_images": [
+   "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\img\\skill-wechat-direct-04-v.png"
+  ],
+  "portrait_required": true
+ }
+]

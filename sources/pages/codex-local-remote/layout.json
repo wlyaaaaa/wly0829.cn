@@ -1,0 +1,712 @@
+[
+  {
+    "screen": "codex-local-remote-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Codex远程",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%"
+      },
+      {
+        "type": "tag",
+        "text_ref": "已冻结",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "原来想在手机浏览器里接着管电脑上Codex桌面版正在跑的任务：看进度、批命令、补一句要求、叫停或排好下一句。手机上看到的",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "为什么不用了",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "split_cards": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "165次提交，7月26日到8月7日26个正式版本，7月28日到8月3日，最后一个是v0.1.531,771项v0.1.5",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "variant": "stats",
+        "tone": "historical",
+        "portrait_columns": 2
+      },
+      {
+        "type": "action_button",
+        "text_ref": "GitHub"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。 用文字卡整组承接三张介绍卡，修复窄栏内长按钮不能换行；卡顶插画仍需组件支持。 数字内容保持为四张卡（手机两列）；真正的大数字和历史灰调变体仍未实现，已列入请求。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Codex远程",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "prose",
+        "text_ref": "原来想在手机浏览器里接着管电脑上Codex桌面版正在跑的任务：看进度、批命令、补一句要求、叫停或排好下一句。手机上看到的"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "为什么不用了",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "split_cards": false
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片（竖线前大字"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "165次提交，7月26日到8月7日26个正式版本，7月28日到8月3日，最后一个是v0.1.531,771项v0.1.5",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "variant": "stats",
+        "tone": "historical",
+        "portrait_columns": 2
+      },
+      {
+        "type": "action_button",
+        "text_ref": "GitHub"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。 用文字卡整组承接三张介绍卡，修复窄栏内长按钮不能换行；卡顶插画仍需组件支持。 数字内容保持为四张卡（手机两列）；真正的大数字和历史灰调变体仍未实现，已列入请求。"
+  },
+  {
+    "screen": "codex-local-remote-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么串流能代替它",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人只说了一句“被远程桌面替代”。下面的对照和经过，是AI按仓库里8月3日的停用复盘和现在的用法补的，不是本人的话。"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "两条路差在哪",
+        "row": "comparison",
+        "width": "50%"
+      },
+      {
+        "type": "table",
+        "text_ref": "Codex远程远程电脑串流手机上看到什么专门做的手机网页，只有Codex的任务电脑的整个桌面能管什么只管Codex桌面版",
+        "mobile": "comparison",
+        "row": "comparison"
+      },
+      {
+        "type": "prose",
+        "text_ref": "远程电脑串流 6 月 26 日",
+        "row": "comparison"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "现在这些事谁来做",
+        "row": "comparison"
+      },
+      {
+        "type": "table",
+        "text_ref": "当初让它做的",
+        "mobile": "row_cards",
+        "row": "comparison"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "它自己也没稳下来",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+        ],
+        "row": "comparison",
+        "width": "50%"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "为什么串流能代替它",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人只说了一句“被远程桌面替代”。下面的对照和经过，是AI按仓库里8月3日的停用复盘和现在的用法补的，不是本人的话。"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "两条路差在哪"
+      },
+      {
+        "type": "table",
+        "text_ref": "Codex远程远程电脑串流手机上看到什么专门做的手机网页，只有Codex的任务电脑的整个桌面能管什么只管Codex桌面版",
+        "mobile": "comparison"
+      },
+      {
+        "type": "prose",
+        "text_ref": "远程电脑串流 6 月 26 日"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "它自己也没稳下来",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "现在这些事谁来做"
+      },
+      {
+        "type": "table",
+        "text_ref": "当初让它做的",
+        "mobile": "row_cards"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。"
+  },
+  {
+    "screen": "codex-local-remote-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "当初想解决什么、怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "想解决的麻烦",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "怎么用"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1说“打开远程”",
+        "direction": "horizontal",
+        "columns": 5,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后怎么连"
+      },
+      {
+        "type": "topology",
+        "text_ref": "手机浏览器",
+        "layout": "chain",
+        "split_arrows": false,
+        "connector": "none",
+        "illustration": "none",
+        "direction": "horizontal"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "截图说明："
+      },
+      {
+        "type": "screenshot",
+        "columns": 4,
+        "caption_mode": "source_order",
+        "aspect_ratio": "9:19",
+        "text_ref": "真机任务列表"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。 窄栏链路按既有文字保全；组件若仍固定横链导致溢出，需其所有者修复，不能缩字或移出原左栏。 2026-10-04 第三轮：依wave2b与Claude引导d29ed330-e0cb-45ac-bd52-61ee8a0a076c，原文字节点通宽，五步按现有五列横向接口、完整链路按已支持的横向自然排法，四个9:19截图位整宽一排置底；原图/竖版/源字及四槽映射不改。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-03-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "当初想解决什么、怎么用",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "想解决的麻烦",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "怎么用"
+      },
+      {
+        "type": "flow",
+        "text_ref": "1说“打开远程”",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "背后怎么连",
+        "page_break_before": true
+      },
+      {
+        "type": "topology",
+        "text_ref": "手机浏览器",
+        "layout": "chain",
+        "split_arrows": false,
+        "connector": "none",
+        "illustration": "none",
+        "direction": "vertical",
+        "chain_columns": 1
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "截图说明："
+      },
+      {
+        "type": "screenshot",
+        "columns": 2,
+        "columns_v": 2,
+        "caption_mode": "full_width",
+        "frame_style": "plain_white",
+        "text_ref": "真机任务列表",
+        "indices": [
+          0,
+          1
+        ]
+      },
+      {
+        "type": "screenshot",
+        "columns": 2,
+        "columns_v": 2,
+        "caption_mode": "full_width",
+        "frame_style": "plain_white",
+        "text_ref": "审批抽屉",
+        "indices": [
+          2,
+          3
+        ],
+        "page_break_before": true
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。 原v仅标题/麻烦/五步；v2从背后怎么连起含两段完整链路说明、原截图说明、任务列表/工作记录各自图注；v3仅审批抽屉/文件页各自图注。两组按真实截图比例并排、图注整宽、不重复正文，分界在完整块间。"
+  },
+  {
+    "screen": "codex-local-remote-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部旧功能（21项，全部已停用）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "在手机上看同一个任务",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "接着同一个任务：手机和电脑用同一个任务编号；电脑上的Codex先接上这个任务，手机的第一句才放行，不会各跑一份✕任务列表",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "插话、审批和下一轮",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "给正在跑的回复补一句：趁这一轮还没结束，把要求补进去✕叫停：停掉当前这一轮✕下一轮排队：先写好下一句，能改、调顺序、删；",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "tone": "historical"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部旧功能（21项，全部已停用）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "在手机上看同一个任务",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "接着同一个任务：手机和电脑用同一个任务编号；电脑上的Codex先接上这个任务，手机的第一句才放行，不会各跑一份✕任务列表",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "插话、审批和下一轮",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "给正在跑的回复补一句：趁这一轮还没结束，把要求补进去✕叫停：停掉当前这一轮✕下一轮排队：先写好下一句，能改、调顺序、删；",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "tone": "historical"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。"
+  },
+  {
+    "screen": "codex-local-remote-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部旧功能（续）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "电脑文件",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "电脑文件页：浏览和搜索这台电脑检测到的全部磁盘，预览文本、Markdown、图片和PDF，上传、新建、编辑、改名、复制、",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从外面连回来",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "外网入口：经TailscaleFunnel的一个公网地址进来，手机只要浏览器；9月26日撤掉✕登录和请求保护：一个本机设",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "开关、安装和更新",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "打开和关闭远程：平时Codex原样启动；“打开”时才接管，必要时重开一次Codex；“关闭”只关公网入口、不重开Code",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical",
+        "last_full_width": true
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。；最终视觉补验电脑文件仅一张卡，改为单列通栏，保留全部源字。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "全部旧功能（续）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "电脑文件",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "电脑文件页：浏览和搜索这台电脑检测到的全部磁盘，预览文本、Markdown、图片和PDF，上传、新建、编辑、改名、复制、",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从外面连回来",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "外网入口：经TailscaleFunnel的一个公网地址进来，手机只要浏览器；9月26日撤掉✕登录和请求保护：一个本机设",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "开关、安装和更新",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "打开和关闭远程：平时Codex原样启动；“打开”时才接管，必要时重开一次Codex；“关闭”只关公网入口、不重开Code",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "tone": "historical"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。"
+  },
+  {
+    "screen": "codex-local-remote-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进（7月26日—8月7日，65次提交）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "7月26日：第一版提交7月28日：发布v0.1.0、v0.1.1；当天一次冷启动连接全通，启动过程仍有毛病。本人实际用过",
+        "direction": "horizontal",
+        "columns": 5,
+        "connector": "ribbon",
+        "illustration": "none",
+        "tone": "historical_after_aug03",
+        "end_illustration": "_library/fix-round-2/icon-clean-6afd7a4832cdf576ac2f.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "留下的教训",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "测试全绿不等于能用：证据分五层：对话里的说法→代码和测试通过→新版本装好了→真机跑通一次→反复恢复都行。说“稳定”要到第",
+        "columns": 4,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。；主布局接任：封存盒按assets已供的木匣锁精确PNG接链尾，原撤图不恢复。",
+    "aspect": "16:9"
+  },
+  {
+    "screen": "codex-local-remote-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\codex-local-remote\\img\\codex-local-remote-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "演进（7月26日—8月7日，65次提交）",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "7月26日：第一版提交7月28日：发布v0.1.0、v0.1.1；当天一次冷启动连接全通，启动过程仍有毛病。本人实际用过",
+        "direction": "vertical",
+        "columns": 5,
+        "connector": "ribbon",
+        "illustration": "none",
+        "tone": "historical_after_aug03",
+        "end_illustration": "_library/fix-round-2/icon-clean-6afd7a4832cdf576ac2f.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "留下的教训",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "测试全绿不等于能用：证据分五层：对话里的说法→代码和测试通过→新版本装好了→真机跑通一次→反复恢复都行。说“稳定”要到第",
+        "columns": 4,
+        "columns_v": 1,
+        "illustration": "top_inside",
+        "icons": "auto"
+      }
+    ],
+    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 停用项目仅排版指定定稿，不读取或维护项目仓库。03 按 main-closer2-brief.md Claude 第1条：仅原件路径/字节不改不删；网站另由程序按原 v/v2/v3 全文字范围排版分张。数字卡、历史灰调及时间线旗帜需组件承接。；主布局接任：封存盒按assets已供的木匣锁精确PNG接链尾，原撤图不恢复。"
+  }
+]

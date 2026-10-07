@@ -1,0 +1,1086 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory",
+  "kind": "project",
+  "title": "AI 备份",
+  "url": "/projects/codex-memory/",
+  "tagline": "五个 AI 工具各备了什么，为什么。",
+  "status": "常用",
+  "public": false,
+  "repo_url": null,
+  "capability": "保全 AI 的对话，说清各工具备没备",
+  "based_on": {
+    "commit": "f8d65472a5dcc93bdea777c1d82b4022fdb094f5",
+    "commit_time": "2026-09-28T11:05:09+08:00"
+  },
+  "video_prompt": "5–8 秒无缝循环，白底水彩风，从开头这屏的插画出发：五个 AI 工具的小标志排成一排轻轻上下浮动；Codex 标志后面，机箱上方半透明的相机快门“咔嚓”合上又张开一次，合上的瞬间画面微微定格、泛一层淡绿；一串对话气泡沿粗一些的淡绿线流进两块带锁的备份硬盘，硬盘指示灯随气泡到达闪一下；另外三条细线上几颗小齿轮慢慢滑进贴着“开发配置”标签的纸箱；灰色小龙虾标志静止不动；四周水彩叶子轻轻摆动。镜头不动，不出现任何文字，最后一帧回到第一帧。",
+  "screens": [
+    {
+      "id": "codex-memory-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版：左上毛笔艺术字大标题“AI 备份”，标题右侧同一行放一个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。标题下一段介绍文字。右上一幅水彩插画：一台侧透机箱前面站着五个小工具标志排成一排（OpenAI 的 Codex 标志、Claude 标志、Google Antigravity 标志、OpenCode 标志、一只小水彩龙虾代表 OpenClaw）。只有 Codex 标志身后连出一条粗一些的淡绿线，线上飘着一串对话气泡，连向两块并排的带锁备份硬盘（一块在机箱里、一块外接）；Codex、Claude、Antigravity、OpenCode 四个标志各有一条细线连向一个贴着“开发配置”小标签的纸箱；小龙虾标志保留明显的小暂停符号；原有龙虾色彩可以保留，不要求整个灰洗。机箱上方悬着一个半透明的相机快门图案。介绍段里“系统镜像”四个字是链接（绿色、细下划线）。中间一排四张数字卡片（上面一个小水彩图标、大号绿色数字、下面一两行小字）：1 一串对话气泡；2 两块带锁的硬盘；3 一个空文件夹里冒出一个绿色对勾；4 三个小盒子上各打一个灰色叉。卡片下沿右侧一行灰色小字“截至 9 月 28 日”。卡片下面一行浅灰小字写分工那一句，其中两个项目名是链接（绿色、带细下划线）。最下面一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：从上到下——大标题；标题下一行放〔在整套系统里的位置 → 怎么协作〕按钮；介绍段；插画缩到屏宽（五个标志一排在上，硬盘和纸箱在下）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；分工那一句；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "# AI 备份\n\n〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕\n\n我在用的五个 AI 工具，配置、记忆、对话各备没备、为什么，都在这一页。真正要单独备的只有一样：Codex 的完整对话。它放在 E 盘，E 盘不在每天的〔系统镜像〕里（电脑配置与恢复每天 13:30 给 Windows 和 C 盘做的整盘加密镜像，留 3 天），所以每天单独备一份，Codex 开着也照常备；要恢复时先还原到一个空文件夹核对，不直接覆盖正在用的 Codex。各个工具的配置都交给开发配置备份，原来另备配置和记忆的三套 9 月 28 日退役了（笔记本上 Codex 设置那一路照旧）。\n\n- **11.3 GB**　Codex 完整对话，2,461 个文件，每天 12:15 存一份\n- **2 块加密盘**　对话正文的备份只放在这两块盘上，不上网\n- **66.3 GB**　8 月 30 日试恢复：4,441 个文件还原到空文件夹，逐个核对一致\n- **3 套退役**　Codex 设置和记忆、Claude 记忆、Antigravity 设置和知识的备份，9 月 28 日停掉\n\n截至 9 月 28 日\n\n各个工具的配置文件夹归〔开发配置备份〕；两块备份盘本身、每天同步到外接盘、换电脑的整套流程归〔电脑配置与恢复〕。\n\n**现在**　〔现在正不正常 → 驾驶舱〕",
+      "links": [
+        {
+          "text": "在整套系统里的位置 → 怎么协作",
+          "href": "/how/#codex-memory"
+        },
+        {
+          "text": "系统镜像",
+          "href": "/projects/pcconfig/#f-system-image"
+        },
+        {
+          "text": "开发配置备份",
+          "href": "/projects/devconfig-backup/",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "b5b8de5536b026654fa5a10a1286a59a4228b1a48e70c9de8cc97b9bab7cc4f2",
+              "instances": [
+                {
+                  "context_text": "空文件夹核对，不直接覆盖正在用的Codex。各个工具的配置都交给开发配置备份，",
+                  "context_rect": [
+                    59,
+                    384,
+                    848,
+                    408
+                  ],
+                  "expected_rect": [
+                    712,
+                    386,
+                    841,
+                    408
+                  ]
+                },
+                {
+                  "context_text": "各个工具的配置文件夹归开发配置备份；两块备份盘本身、每天同步到外接盘、换电脑的整套流程归电脑配置与恢复。",
+                  "context_rect": [
+                    39,
+                    758,
+                    1157,
+                    782
+                  ],
+                  "expected_rect": [
+                    279,
+                    760,
+                    408,
+                    782
+                  ]
+                }
+              ]
+            },
+            "v": {
+              "input_sha256": "af865a0d32fdccb4c9604cf6f13044b1330f551d0e3d665a499068d75d43a7a8",
+              "instances": [
+                {
+                  "context_text": "各个工具的配置文件夹归开发配置备份→；两块备份盘本身、",
+                  "context_rect": [
+                    67,
+                    2843,
+                    848,
+                    2875
+                  ],
+                  "expected_rect": [
+                    396,
+                    2847,
+                    600,
+                    2875
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "b5b8de5536b026654fa5a10a1286a59a4228b1a48e70c9de8cc97b9bab7cc4f2",
+              "instances": [
+                {
+                  "context_text": "各个工具的配置文件夹归开发配置备份；两块备份盘本身、每天同步到外接盘、换电脑的整套流程归电脑配置与恢复。",
+                  "context_rect": [
+                    39,
+                    758,
+                    1157,
+                    782
+                  ],
+                  "expected_rect": [
+                    998,
+                    760,
+                    1148,
+                    782
+                  ]
+                }
+              ]
+            },
+            "v": {
+              "input_sha256": "af865a0d32fdccb4c9604cf6f13044b1330f551d0e3d665a499068d75d43a7a8",
+              "instances": [
+                {
+                  "context_text": "每天同步到外接盘、换电脑的整套流程归电脑配置与恢复→。",
+                  "context_rect": [
+                    67,
+                    2886,
+                    855,
+                    2919
+                  ],
+                  "expected_rect": [
+                    598,
+                    2890,
+                    833,
+                    2918
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "现在正不正常 → 驾驶舱",
+          "href": "/cockpit/#codex-memory"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [
+        "run",
+        "backup"
+      ],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-02",
+      "section": "usage",
+      "title": "每个 AI 工具备了什么",
+      "scene": "横版：左上标题，标题下一行图例（三个小色块加文字：深绿块＝专门备，浅绿块＝随开发配置备份带上，浅灰块＝不备）。主体是一张 5 行 × 3 列的大表：每行最左边是工具的标志和名字（Codex 画 OpenAI 标志，Claude 画 Claude 标志，Antigravity 画 Google Antigravity 标志，OpenCode 画 OpenCode 标志，OpenClaw 画一只灰色小水彩龙虾），这一列只占约 12% 宽；三列表头“配置”“记忆 / 它自己记下的知识”“对话”各配一个小图标（齿轮、便签、对话气泡）。每个格子左上角一个色块，按格子开头的字归类：“专门备”深绿，“随开发配置备份”浅绿，“不备”“不专门备”和“没有单独的记忆文件夹”浅灰；Codex 的“对话”格加粗描一圈深绿边，全表只有这一格是深绿。表格下面两行灰色小字：C 盘镜像那一句、G 和 H 的说明。表格里“开发配置备份”“OpenClaw 网关”是链接（绿色、细下划线）。字多的格子可以两三行，行高按最长的格子定，字号不缩小。",
+      "portrait": "竖版：标题；图例排一行；表格改成五张工具卡片上下排，每张卡片顶上是工具标志和名字，下面三行分别是“配置”“记忆”“对话”，每行左边色块、右边字；Codex 那张卡片的“对话”一行加深绿描边；最后是两行小字。",
+      "text": "# 每个 AI 工具备了什么\n\n■ 专门备　■ 随开发配置备份带上　■ 不备\n\n| 工具 | 配置 | 记忆 / 它自己记下的知识 | 对话 |\n|---|---|---|---|\n| **Codex** | 随〔开发配置备份〕每天带上 | 随开发配置备份带上：记忆开关关着，不会有新记忆，旧记忆照备（含 9 月 28 日补上的 extensions 子文件夹） | 专门备：每天 12:15 存 G 盘，14:30 进 H 盘。对话正文只有这一份备份；附件、听写记录、生成的图片、对话备份文件夹原先也随开发配置备份传到私人 Google 云盘（9 月 28 日连状态库约 1.17 GB），9 月 29 日定下 Codex 对话不上云盘，这几样不再带、只留状态库（10 月 3 日当前包已核对排除） |\n| **Claude** | 随开发配置备份带上（Claude 文件夹去掉对话和记忆，另加一个总配置文件） | 不备：记忆开关关着；Claude 记忆备份 9 月 28 日退役，已有的备份留档 | 不备 |\n| **Antigravity** | 随开发配置备份带上（9 月 28 日补上了桌面版的状态文件和项目、插件登记；命令行版的设置、MCP 连接和登录文件照带） | 不备：原来的“Gemini 备份”9 月 28 日退役；命令行版记下的知识和标注原先随开发配置备份带着，9 月 29 日起排除 | 不备：桌面版的不备；命令行版的 34 个对话文件原先随开发配置备份带着，9 月 29 日起排除（10 月 3 日当前包已核对排除） |\n| **OpenCode** | 随开发配置备份带上（9 月 28 日补上了插件和桌面版设置） | 没有单独的记忆文件夹 | 不备：对话库 opencode.db 没有备份 |\n| **OpenClaw** | 不备：已冻结，9 月 28 日也从开发配置备份里拿掉了 | 不备 | 不备：它自己的备份 9 月 26 日起停了。详见〔OpenClaw 网关〕 |\n\nCodex 的数据在 E 盘，不在每天的系统镜像里；其余四个工具的数据在 C 盘，每天 13:30 的系统镜像带着它们，只留 3 天。\nG 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（Windows 整盘加密）锁着。\n\n截至 9 月 28 日",
+      "links": [
+        {
+          "text": "开发配置备份",
+          "href": "/projects/devconfig-backup/",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "1ad2d0b51b5b26254d359e334b058849d211402c9d59578d8c74073a94c6bd62",
+              "instances": [
+                {
+                  "context_text": "随开发配置备份每天带上",
+                  "context_rect": [
+                    306,
+                    290,
+                    532,
+                    311
+                  ],
+                  "expected_rect": [
+                    328,
+                    292,
+                    449,
+                    311
+                  ]
+                },
+                {
+                  "context_text": "随开发配置备份带上",
+                  "context_rect": [
+                    307,
+                    457,
+                    490,
+                    479
+                  ],
+                  "expected_rect": [
+                    329,
+                    459,
+                    449,
+                    479
+                  ]
+                },
+                {
+                  "context_text": "随开发配置备份带上(9 月 28 日",
+                  "context_rect": [
+                    307,
+                    561,
+                    602,
+                    584
+                  ],
+                  "expected_rect": [
+                    330,
+                    564,
+                    450,
+                    584
+                  ]
+                },
+                {
+                  "context_text": "随开发配置备份带上(9 月 28 日",
+                  "context_rect": [
+                    307,
+                    696,
+                    602,
+                    719
+                  ],
+                  "expected_rect": [
+                    330,
+                    698,
+                    450,
+                    718
+                  ]
+                }
+              ]
+            },
+            "v": {
+              "input_sha256": "124dc3e61722b2d9819d47a43ea90db47057114f25a99ba31f892c19e76df302",
+              "instances": [
+                {
+                  "context_text": "配置：随开发配置备份每天带上",
+                  "context_rect": [
+                    158,
+                    442,
+                    643,
+                    476
+                  ],
+                  "expected_rect": [
+                    290,
+                    444,
+                    505,
+                    475
+                  ]
+                },
+                {
+                  "context_text": "配置：随开发配置备份带上（Claude文件夹去掉",
+                  "context_rect": [
+                    163,
+                    1301,
+                    858,
+                    1335
+                  ],
+                  "expected_rect": [
+                    302,
+                    1304,
+                    487,
+                    1334
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "OpenClaw 网关",
+          "href": "/projects/openclaw/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-03",
+      "section": "usage",
+      "title": "为什么其余都不另备",
+      "scene": "横版：左上标题。五张卡片，上排三张、下排两张（下排居中），每张左上角是工具标志（Codex、Claude、Antigravity、OpenCode、OpenClaw 小龙虾），卡片标题粗体，下面三四行说明；每张卡片右上角一个小符号：Codex、Claude、Antigravity 三张画一个灰色叉（有一套备份退役了），OpenCode 画一个浅绿对勾（还装着，只备配置），OpenClaw 画一个灰色暂停（冻结）。最下面一条浅绿细卡片放“对话为什么只专门备 Codex 的”那一句。卡片之间一致间距。",
+      "portrait": "竖版：标题；五张卡片一列排下来，每张满宽（左上标志、右边标题，下面说明）；最后是细卡片。",
+      "text": "# 为什么其余都不另备\n\n**Codex 的设置和记忆：交给开发配置备份**\n原来 Codex 自己有个任务，每天 11:05、13:05 把设置、记忆和技能存到本机、G 盘和私人 GitHub；开发配置备份每天 12:05 也在带同一个文件夹，两份重复，9 月 28 日 23:26 把前一个停了。开发配置备份原先按目录名排除 extensions（本意是挡编辑器扩展），把 Codex 记忆里同名的子文件夹（45 个文件）也挡掉了，停之前先补上了，9 月 29 日 12:05 那次起按新清单跑。笔记本上 Codex 设置那一路不受影响。\n\n**Claude：只备配置**\n记忆开关关着，Claude 不再往记忆里写；Claude 记忆备份最后只剩 20 个旧记忆文件和一个规则入口文件（共约 35 KB）可备，9 月 28 日 23:10 停掉，私人仓库和已有备份留档。它每天顺带记的“用了哪些技能”，改由 Codex 12:15 那次对话备份一起记。\n\n**Antigravity：本意只备配置**\n9 月 25 日还用过；Gemini 命令行 9 月 17 日以后已经卸了。原来那套“Gemini 备份”备的其实是 Antigravity 的设置、状态和它自己记下的笔记，9 月 28 日 23:26 停掉，只留配置，交给开发配置备份。命令行版的知识、标注和对话原先也随开发配置备份带着（只按名字排除了桌面版的文件夹）；9 月 29 日起一并排除，设置、MCP 连接和登录文件照带，10 月 3 日当前包已核对，这几类已排除。\n\n**OpenCode：只备配置**\n还装着，9 月 16 日以后没用过，暂不退役。配置随开发配置备份带上；对话库不备。\n\n**OpenClaw：什么都不留**\n已经冻结，它自己的 5 个计划任务 9 月 25–26 日起全停，包括它的备份；留最后一份也没有意义，所以 9 月 28 日也从开发配置备份里拿掉了，已有的旧包按原来的轮换自然过期。\n\n对话为什么只专门备 Codex 的：Codex 的数据在 E 盘，系统镜像不带，不另备就一份都没有；其余工具的对话在 C 盘，至少还有 3 天镜像。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-04",
+      "section": "usage",
+      "title": "Codex 对话备份备了什么",
+      "scene": "横版：左上标题，右上一幅小水彩插画：一个大保险箱，里面整齐码着一摞对话气泡、几张附件、一只小麦克风（听写记录）、一个小数据库圆柱。主体是两张并排的对照卡：左卡“备”（绿色小勾图标），右卡“不备”（灰色小叉图标）。下面一排四张小卡片（多大、几点、存到哪、留几份），每张上面小图标、中间粗体、下面一行字。右下角一行灰色小字“截至 9 月 28 日”。",
+      "portrait": "竖版：标题和插画上下排；“备”“不备”两张卡片上下排；四张小卡片两行两列；“截至”小字靠右。",
+      "text": "# Codex 对话备份备了什么\n\n**备**　进行中和已归档的对话、对话备份、附件、听写记录、状态数据库、生成的图片、自动任务的状态、从 Claude 导入的对话\n\n**不备**　登录凭据、缓存、插件、工作副本、诊断日志\n\n- **多大**　2,461 个文件，11.3 GB\n- **几点**　每天 12:15，Codex 开着也照常\n- **存到哪**　G 盘；14:30 随同步进 H 盘；这份备份从不上网\n- **留几份**　G 和 H 各留最新两份（每天存下的一份叫一个恢复点）\n\n截至 9 月 28 日",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-05",
+      "section": "usage",
+      "title": "要用的时候",
+      "scene": "横版：左上标题，下面一行小字。四张横向卡片排成两行两列，每张左上一个小水彩图标（1 一串断开的对话气泡，2 一块裂开的硬盘和旁边完好的外接盘，3 两台电脑之间一个箭头，4 一个放大镜照着一张回执），卡片里先是粗体小标题，再是一行浅绿底的“跟 AI 说”引语框（引号里的话用稍大的字），最后一两行说明。卡片之间一致间距。最下面一条浅绿细卡片放“配置坏了”那一句，其中“开发配置备份”是链接。",
+      "portrait": "竖版：标题；小字说明；四张卡片一列排下来，每张满宽（左图标、右边小标题、引语框、说明）；最后是细卡片。",
+      "text": "# 要用的时候\n\n平时什么都不用管，要用时跟 Codex 或 Claude 说一句。\n\n1. **Codex 对话丢了，或读不出旧对话**\n“先在别处试恢复 Codex 对话”\nAI 先核对 G 盘上最新的一份，再还原到一个新的空文件夹，边还原边核对。换不换进正在用的 Codex 另外决定，程序自己不会往那里写。文件还原已经测过；Codex 能不能读回任务列表、接着聊，还没测过。\n\n2. **G 盘坏了**\n“从外接盘恢复 Codex 对话”\nH 盘上有同样的两份，照上一条的做法从 H 还原。\n\n3. **换电脑**\n“我要换机恢复”\n跟着〔换机恢复的整套流程〕走，轮到 Codex 时用这里的对话备份。\n\n4. **想确认备份好不好**\n“检查 Codex 完整对话备份”\nAI 看回执、只读核对最新那份，只报数量和结果，不读对话内容。\n\n哪个工具的配置坏了，从〔开发配置备份〕找回。",
+      "links": [
+        {
+          "text": "换机恢复的整套流程",
+          "href": "/projects/pcconfig/#pcconfig-07"
+        },
+        {
+          "text": "开发配置备份",
+          "href": "/projects/devconfig-backup/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-06",
+      "section": "usage",
+      "title": "出事怎么办",
+      "scene": "横版：左上标题，右上一幅小水彩插画：一个小机器人举着一块写着“停”的小牌子，脚边一块没插好的硬盘。主体是四张两列两行的小卡片，每张左边一个小图标（1 一块带问号的硬盘，2 一根拔掉的 USB 线，3 两只同时伸过来的手，4 一个没关的相机快门），右边粗体小标题加一两行说明。最下面一条浅绿细卡片放“怎么知道出事”那一句，开头的“驾驶舱”是链接。",
+      "portrait": "竖版：标题和插画上下排；四张卡片改成一列，每张满宽（左图标、右字）；最下面的细卡片满宽。",
+      "text": "# 出事怎么办\n\n- **G 盘没接、锁着或不是那块盘**　先认盘：盘名、盘的身份编号、BitLocker 已加密且已解锁，有一样不对就不写对话备份，本地使用小记录照常采集。\n- **H 盘没接**　14:30 的同步只记一笔“H 不在”，G 上照常；下次接上再补。\n- **两次同时开跑**　后开的那次直接退出，不会两个程序同时写一块盘。\n- **上次给 E 盘拍的临时快照（卷影）没删干净**　下一次备份不开跑，等核对清楚再删，免得临时快照越积越多。\n\n怎么知道出事：〔驾驶舱〕上，最近一次没成功就亮黄灯，36 小时都没成功就亮红灯；电脑配置与恢复每天 14:15 还按 G 盘上的回执另查一遍 36 小时。",
+      "links": [
+        {
+          "text": "驾驶舱",
+          "href": "/cockpit/#codex-memory"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-07",
+      "section": "tech",
+      "title": "它是怎么搭的",
+      "scene": "横版：左上标题。一条从左到右的流程图（和电脑配置与恢复页“它是怎么搭的”同样的圆角节点卡片和绿色箭头），7 个节点排成两行（上排 4 个、下排 3 个，蛇形连接），小图标依次是：一本小账本、一块带锁硬盘和身份牌、相机快门、一排指纹、一个抽屉里整齐的小格子、一个封了蜡的信封、一个指针拨到“最新”。每个节点下面两行小字。最下面一条横跨整屏的浅绿细卡片，放“14:30 外接盘”那一段，左边画一块外接硬盘小图标。",
+      "portrait": "竖版：标题；流程改成从上到下的竖流程，每个节点左图标、右边字；最下面外接盘卡片满宽。",
+      "text": "# 它是怎么搭的\n\n**每天 12:15**（管理员权限）\n1. **记使用小记录**　先把前一天 Codex、Claude 调用过的技能、工具和命令名记下来（见全部功能第 11 项），所以 12:15 开跑、12:18 左右才拍卷影\n2. **认盘**　核对 G 的身份和加密状态\n3. **拍卷影**　用 Windows 的卷影复制（VSS）把 E 盘冻结在这一瞬间，从冻结的样子里读\n4. **算指纹**　每个文件算一遍 SHA-256（内容指纹）\n5. **只存新内容**　按指纹存进 G 的内容库，库里已有的不再存\n6. **写清单、封口**　清单记下每个文件对应哪个指纹；清单本身再算一个指纹封口，然后把引用到的内容逐个重算核对\n7. **换“最新”**　全部对上才把“最新”指向这一份；再删掉卷影和比这两份更早的点，写回执\n\n**14:30 外接盘**（电脑配置与恢复的同步任务）把 G 上的两份复制到 H，在 H 上整份重算 SHA-256，清单和封口都和 G 一样，才把 H 的“最新”换过去，再删 H 上 G 已经不要的旧点。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-08",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版：左上标题。四张两列两行的大卡片，每张上面一幅小水彩插画（1 一个大保险箱锁在家里，旁边一朵打叉的云；2 一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸；3 一个日历上只圈着最近两天；4 一个空文件夹和一个正在用的文件夹，中间一块“禁止写入”的小牌子），插画下面粗体标题加两三行说明。",
+      "portrait": "竖版：标题；四张卡片一列排下来，每张满宽（插画在上、字在下，插画高度缩小）。",
+      "text": "# 为什么这样设计\n\n**为什么对话正文不上网**\n十几 GB，全是私人内容，GitHub 放不下也不该放，只放本机的两块加密盘。附件、图片这些零碎的，原先也随开发配置备份进私人 Google 云盘；9 月 29 日定下 Codex 对话不上云盘，之后不再带（见“每个 AI 工具备了什么”）。\n\n**为什么按内容存**\n同一个文件没变，就不再存第二遍，两个恢复点共用。9 月 28 日那份 11.3 GB 里，2.9 GB 是直接复用的；每天变的文件不少，新写了 8.4 GB。\n\n**为什么只留两份**\n每天要新写几 GB，全留着盘会越来越满。留当前和前一天两份：一份坏了还有一份；删旧的之前，先把要留的两份都核对完整。\n\n**为什么先还原到空文件夹**\n直接盖到正在用的 Codex 上，万一备份有问题，连现在的也毁了。程序拒绝往正在用的 Codex 目录、备份目录和有东西的文件夹里还原。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-09",
+      "section": "highlights",
+      "title": "亮点",
+      "scene": "横版：左上标题。两张横向大卡片左右并排（每张占一半宽），每张上面一幅水彩插画、下面粗体标题和正文，正文里“麻烦”“解法”两个小标签用浅绿底。插画：1 一台开着的电脑屏幕上对话还在滚动，上方一个相机快门“咔嚓”定格了一帧，定格的那帧是淡绿色的；2 一个指针表盘，指针停在“上一份”，旁边一份没封口的信封被挡在门外。",
+      "portrait": "竖版：标题；两张卡片上下排、满宽（插画在上、字在下）。",
+      "text": "# 亮点\n\n**Codex 开着，照样拍下完整对话。**\n麻烦：Codex 开着时，对话和数据库一直在写，直接复制会拷到写了一半的文件；为了备份把 Codex 关掉，又会打断手头的工作。\n解法：先给 E 盘拍一个卷影，从这个冻结的瞬间读，读完马上删掉卷影。9 月 28 日 12:18–12:22，3 分 18 秒存好 2,461 个文件、11.3 GB。它相当于那一瞬间突然断电时的样子，正写到一半的那一步可能没存全，所以回执上标着“崩溃一致”，不说成完美。\n\n**没做完的备份，不会被当成“最新”。**\n麻烦：备份到一半断电、盘满或出错，留下半份；下次恢复要是拿到这半份，就找不回东西。\n解法：新的一份先放在暂存区，整份核对完才挪进正式位置，最后一步才把“最新”指过来。外接盘上还要整份再核一遍，才换外接盘的“最新”。哪一步失败，恢复时拿到的都是上一份完整的。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-10",
+      "section": "features",
+      "title": "全部功能（1）",
+      "scene": "横版：“全部功能”的第 1 张，顶上大标题和一行图例（图例画成六个圆点加文字）。和电脑配置与恢复页“全部功能”同样的画法：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名不单独占一列；横条下面是这一组的卡片，排成两列、从左到右再换行，每张卡片左边小水彩图标、粗体“编号. 功能名”、下面说明文字、右上角一个状态小圆点。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高，字号不缩小。",
+      "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和说明、右上角状态圆点）。",
+      "text": "# 全部功能（20 项）\n● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用\n\n**Codex 完整对话**\n1. **对话每日备份**　每天 12:15 在 Codex 开着时给 E 盘拍卷影，从卷影里读对话、附件、听写记录、状态数据库等，存进 G 盘；存完删掉卷影　〈在用〉\n2. **同样内容只存一份**　每个文件按 SHA-256 存，没变的直接复用，几个恢复点共用同一份内容　〈在用〉\n3. **只留最新两份**　G 上留当前和前一个恢复点；先把两份都核对完整，再删更旧的点和没有哪份还在用的内容，9 月 28 日删了 1 个点、6.5 GB　〈在用〉\n4. **外接盘一份**　每天 14:30 的外接盘同步把它复制到 H；H 上整份重算 SHA-256、和 G 一致，才换 H 的“最新”，H 跟着 G 删旧点；H 没接时只记一笔　〈在用〉\n5. **核对恢复点**　只读核对 G 或 H 上的某一份：逐个内容重算 SHA-256，不写任何东西，不用管理员权限　〈在用〉\n6. **试恢复到空文件夹**　把某一份还原到一个新的空文件夹，边还原边核对，不碰正在用的 Codex。8 月 30 日试过：66.3 GB、4,441 个文件，逐个核对一致　〈在用〉\n7. **看现状**　不读内容，只报 Codex 目录现在多少文件、多大，G 上最新一份是哪个，H 在不在；用了不留记录，查不到用过没有　〈说不准〉\n8. **进度文件**　备份和恢复时随时写出阶段、处理了多少、百分比、速度和预计还要多久，不含文件名　〈在用〉\n9. **计划任务自检**　核对 12:15 那个任务的时间、权限、启动方式有没有被改。现在它把电脑时区的变化误报成“要修”，任务其实照常在 12:15 跑；用了不留记录，查不到用过没有　〈说不准〉\n10. **卷影试拍**　只拍一次卷影、数一下读得到多少文件，马上删掉，确认这台电脑能拍；用了不留记录，查不到用过没有　〈说不准〉",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-conversations",
+          "text": "Codex 完整对话"
+        },
+        {
+          "id": "f-conv-daily",
+          "text": "对话每日备份"
+        },
+        {
+          "id": "f-conv-dedupe",
+          "text": "同样内容只存一份"
+        },
+        {
+          "id": "f-conv-keep-two",
+          "text": "只留最新两份"
+        },
+        {
+          "id": "f-conv-cold",
+          "text": "外接盘一份"
+        },
+        {
+          "id": "f-conv-validate",
+          "text": "核对恢复点"
+        },
+        {
+          "id": "f-conv-restore",
+          "text": "试恢复到空文件夹"
+        },
+        {
+          "id": "f-conv-inspect",
+          "text": "看现状"
+        },
+        {
+          "id": "f-conv-progress",
+          "text": "进度文件"
+        },
+        {
+          "id": "f-task-check",
+          "text": "计划任务自检"
+        },
+        {
+          "id": "f-vss-probe",
+          "text": "卷影试拍"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "features",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-11",
+      "section": "features",
+      "title": "全部功能（2）",
+      "scene": "横版：接“全部功能”第 1 张的画法（不再重复图例）：组名横条横跨整屏，下面卡片两列排，状态画成卡片右上角的圆点。“用了哪些技能”这组只有一张卡，横跨两列画成宽卡；“笔记本”这组四张卡，第 12 张横跨两列、其余三张一行排。“已停用的备份”这组的卡片整体用浅灰底、图标去色，右上角画灰色叉，字照样清楚；这组卡片可以排成三列、字号不缩小。第 20 张卡片里的“开发配置备份”是链接。",
+      "portrait": "竖版：同第 1 张：组名横条满宽，卡片一行一张；已停用那组卡片浅灰底。",
+      "text": "# 全部功能（续）\n\n**用了哪些技能**\n11. **AI 使用小记录**　往一份长期记录里追加 AI 调用过的技能、工具和命令名，Codex 和 Claude 两路都挂在每天 12:15 的对话备份开头（Claude 那一路 9 月 28 日前挂在 10:35 的 Claude 记忆备份上，新接法从 9 月 29 日 12:15 那次起）。每次只补运行当天的前一天：某天任务整天没启动或采集失败，它前一天的调用就可能漏记，之后也不会自动补；G 盘不在线，本地照常记，只跳过 G 上的副本。只记名字、时间和工作目录，不记内容，也不管调用成没成功；删了对话也查得到最近一次调用；哪些算真用、哪些是测试或维护，将来由网站的功能总账按工作目录另算（功能总账还没做）。记录在 E:\\Data\\PCConfig\\AiUsageLedger，北京时间 9 月 28 日 12:18 Codex 写完之后共 329,091 条（Codex 从 9 月 15 日补起，这次补了 195,872 条；Claude 从 9 月 24 日补起）；G 盘正常时把整份记录发布到 G，14:30 的外接盘同步再复制到 H。记录没写成，原来的备份照跑　〈在用〉\n\n**笔记本**\n12. **笔记本用同一套**　笔记本每天 09:00、21:00 用同一套程序备份自己的 Codex：设置先滤掉私人配置，再推到私人仓库里单独的分支（9 月 10–28 日 36 次）；对话存笔记本本机和加密 U 盘，各留两份。9 月 10 日在笔记本上试恢复后，Codex 在隔离环境里读出了其中一段对话。怎么装、怎么接线归电脑配置与恢复　〈在用〉\n\n13. **推到私人 GitHub**　笔记本的设置快照推到私人仓库单独的分支，推完再现问一次，和本机一致才算成功；两边对不上就拒绝上传。主机那一路 9 月 28 日停　〈在用〉\n14. **断网不耽误本地**　GitHub 连不上时笔记本本机那份照常存好，上传在 2 秒、5 秒后各重试一次。主机那一路 9 月 28 日停　〈在用〉\n15. **不收登录凭据**　登录凭据、设备编号、对话、数据库、缓存不进 GitHub，笔记本的设置文件还先过滤掉私人配置。主机那一路 9 月 28 日停　〈在用〉\n\n**已停用的备份**\n16. **Codex 设置和记忆备份**　主机每天 11:05、13:05 把设置、记忆、技能存本机和 G 盘各 30 份、推私人 GitHub；9 月 28 日 23:26 停，和开发配置备份重复　〈已停用〉\n17. **云端旧记忆不删**　主机那一路：原件删掉的记忆，仓库里还留着，和约法 L21 不一致；随上一项停，私人仓库留档　〈已停用〉\n18. **找回某一天的设置**　从主机 G 盘的 30 份快照里挑一天放回；随第 16 项停　〈已停用〉\n19. **Claude 记忆备份**　每天 10:35 备 Claude 的记忆和规则入口文件；记忆开关关着、没东西可备，9 月 28 日 23:10 停，私人仓库留档　〈已停用〉\n20. **Antigravity 设置和知识备份**　原名“Gemini 备份”，每天 11:10、13:10 备 Antigravity 的设置、状态和它记下的笔记；9 月 28 日 23:26 停，配置改由〔开发配置备份〕带上　〈已停用〉",
+      "links": [
+        {
+          "text": "开发配置备份",
+          "href": "/projects/devconfig-backup/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-ledger",
+          "text": "用了哪些技能"
+        },
+        {
+          "id": "f-usage-ledger",
+          "text": "AI 使用小记录"
+        },
+        {
+          "id": "g-laptop",
+          "text": "笔记本"
+        },
+        {
+          "id": "f-laptop",
+          "text": "笔记本用同一套"
+        },
+        {
+          "id": "f-settings-github",
+          "text": "推到私人 GitHub"
+        },
+        {
+          "id": "f-cloud-outage",
+          "text": "断网不耽误本地"
+        },
+        {
+          "id": "f-no-credentials",
+          "text": "不收登录凭据"
+        },
+        {
+          "id": "g-settings",
+          "text": "已停用的备份"
+        },
+        {
+          "id": "f-settings-backup",
+          "text": "Codex 设置和记忆备份"
+        },
+        {
+          "id": "f-memory-keep-old",
+          "text": "云端旧记忆不删"
+        },
+        {
+          "id": "f-settings-restore",
+          "text": "找回某一天的设置"
+        },
+        {
+          "id": "f-r-claude-memory",
+          "text": "Claude 记忆备份"
+        },
+        {
+          "id": "f-r-antigravity",
+          "text": "Antigravity 设置和知识备份"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "features",
+      "reuse": ""
+    },
+    {
+      "id": "codex-memory-12",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版：左上标题。拿电脑配置与恢复页“演进”同样的画法：一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点分成左右两列（左列 6 月 21 日–8 月 30 日，右列 9 月 1 日–9 月 29 日）。9 月 28 日 23:10–23:26 那条用浅灰小叉图标，字可以占两三行。右下角一幅小插画：五个工具标志，只有 Codex 标志后面连着两块带锁硬盘。",
+      "portrait": "竖版：标题；一条竖向时间线从上到下排全部节点；小插画放最下面。",
+      "text": "# 演进\n\n- **6 月 21 日**　Claude 记忆开始备份到私人 GitHub（当时挂在 OpenClaw 的任务上）\n- **7 月 1 日**　Codex 的设置和记忆、Gemini 的设置开始每天备份到私人 GitHub\n- **7 月 6 日**　Codex 设置和记忆定在每天 11:05、13:05 各跑一次\n- **7 月 23 日**　传完向 GitHub 现问一次，对上才算成功\n- **8 月 22 日**　G 盘快照和上一份一样就不另存\n- **8 月 30 日**　Codex 完整对话备份上线：卷影、按内容存、放 G 盘；当天试恢复 66.3 GB\n- **9 月 1 日**　Codex 目录搬到 E:\\Data\\AppData\\Codex，备份跟着改\n- **9 月 10 日**　笔记本用上同一套\n- **9 月 13–14 日**　对话只留最新两份，外接盘跟着 G 删旧点；外接盘没接也能照常存 G\n- **9 月 17 日**　Gemini 命令行卸掉，原来的 Gemini 备份只剩 Antigravity 的东西\n- **9 月 26 日**　Claude 记忆备份有了自己的程序；OpenClaw 自己的备份停了\n- **9 月 27 日**　对话备份顺手记下 AI 用过的技能和命令名\n- **9 月 28 日**　这份小记录第一次随备份跑完，补记 195,872 条\n- **9 月 28 日 23:10–23:26**　只留真正要单独备的：Claude 记忆开关关着，Claude 记忆备份停，它记用量的那一路挪到 12:15；Codex 设置和记忆备份和开发配置备份重复，停；Antigravity 只留配置，原 Gemini 备份停；开发配置备份补上漏掉的 Codex 记忆，拿掉冻结的 OpenClaw。这一页从“Codex 备份恢复”改成“AI 备份”\n- **9 月 29 日**　开发配置备份不再带 Antigravity 命令行版的对话、标注和知识；按我的决定，Codex 对话也不随配置包上云盘，只留在 G、H 两块盘",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-conversations",
+        "name": "Codex 完整对话"
+      },
+      {
+        "id": "g-ledger",
+        "name": "用了哪些技能"
+      },
+      {
+        "id": "g-laptop",
+        "name": "笔记本"
+      },
+      {
+        "id": "g-settings",
+        "name": "已停用的备份"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-conv-daily",
+        "group": "g-conversations",
+        "name": "对话每日备份",
+        "what": "每天 12:15 在 Codex 开着时给 E 盘拍卷影，从卷影里读对话、附件、听写记录、状态数据库等，存进 G 盘；存完删掉卷影",
+        "how": "自动：计划任务 \\CodexConversationBackup-Hot-Daily（管理员权限）；想查就说“检查 Codex 完整对话备份”",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 371–464、1124–1200 行；hot-last.json（9/28 12:22 complete）；inventory#2 运行中会话备份"
+      },
+      {
+        "id": "f-conv-dedupe",
+        "group": "g-conversations",
+        "name": "同样内容只存一份",
+        "what": "每个文件按 SHA-256 存，没变的直接复用，几个恢复点共用同一份内容",
+        "how": "自动：随对话每日备份",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 578–663、835–878 行；hot-last.json reused_object_bytes"
+      },
+      {
+        "id": "f-conv-keep-two",
+        "group": "g-conversations",
+        "name": "只留最新两份",
+        "what": "G 上留当前和前一个恢复点；先把两份都核对完整，再删更旧的点和没有哪份还在用的内容，9 月 28 日删了 1 个点、6.5 GB",
+        "how": "自动：随对话每日备份",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 957–973、1371–1513 行；hot-last.json hot_retention_*；提交 bc574f8"
+      },
+      {
+        "id": "f-conv-cold",
+        "group": "g-conversations",
+        "name": "外接盘一份",
+        "what": "每天 14:30 的外接盘同步把它复制到 H；H 上整份重算 SHA-256、和 G 一致，才换 H 的“最新”，H 跟着 G 删旧点；H 没接时只记一笔",
+        "how": "自动：PCConfig 的 \\AIRecoveryColdSync-Daily 调本仓库的 FinalizeCold",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 1877–1970 行；cold-last.json（9/28 14:52 complete）；PCConfig core_recovery.json；inventory#3 多盘会话副本"
+      },
+      {
+        "id": "f-conv-validate",
+        "group": "g-conversations",
+        "name": "核对恢复点",
+        "what": "只读核对 G 或 H 上的某一份：逐个内容重算 SHA-256，不写任何东西，不用管理员权限",
+        "how": "说“核对 Codex 对话备份”；外接盘同步每天也会调用",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 683–783 行；validate-progress.json（8/30）；CONVERSATION_BACKUP.md 第 73 行"
+      },
+      {
+        "id": "f-conv-restore",
+        "group": "g-conversations",
+        "name": "试恢复到空文件夹",
+        "what": "把某一份还原到一个新的空文件夹，边还原边核对，不碰正在用的 Codex。8 月 30 日试过：66.3 GB、4,441 个文件，逐个核对一致",
+        "how": "说“先在别处试恢复 Codex 对话”",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 1760–1875 行；E:\\Data\\AppData\\CodexConversationRestoreTest-20260830T0121Z.restore-receipt.json；已定口径：用真实数据做过的恢复演练算在用；inventory#4 隔离恢复"
+      },
+      {
+        "id": "f-conv-inspect",
+        "group": "g-conversations",
+        "name": "看现状",
+        "what": "不读内容，只报 Codex 目录现在多少文件、多大，G 上最新一份是哪个，H 在不在；用了不留记录，查不到用过没有",
+        "how": "说“看看 Codex 对话备份现在什么情况”",
+        "status": "说不准",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 1972–2000 行；唯一的运行是 9/28 写稿时只读跑的一次"
+      },
+      {
+        "id": "f-conv-progress",
+        "group": "g-conversations",
+        "name": "进度文件",
+        "what": "备份和恢复时随时写出阶段、处理了多少、百分比、速度和预计还要多久，不含文件名",
+        "how": "自动：本机 %LOCALAPPDATA%\\CodexConversationBackup\\progress.json 和 G 根目录各一份",
+        "status": "在用",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 466–540 行；progress.json（9/28 12:22）"
+      },
+      {
+        "id": "f-task-check",
+        "group": "g-conversations",
+        "name": "计划任务自检",
+        "what": "核对 12:15 那个任务的时间、权限、启动方式有没有被改。现在它把电脑时区的变化误报成“要修”，任务其实照常在 12:15 跑；用了不留记录，查不到用过没有",
+        "how": "说“检查 Codex 对话备份的计划任务”",
+        "status": "说不准",
+        "screen": "codex-memory-10",
+        "source": "Install-CodexConversationBackupTask.ps1 -Mode Inspect（9/28 写稿时只读跑的一次读回 needs_repair，daily_at 23:15 对 21:15）；PCConfig 只在重建计划 build_scheduled_task_rebuild_plan.mjs 第 311 行列了这条命令，不会自动调用；audit.md A2"
+      },
+      {
+        "id": "f-vss-probe",
+        "group": "g-conversations",
+        "name": "卷影试拍",
+        "what": "只拍一次卷影、数一下读得到多少文件，马上删掉，确认这台电脑能拍；用了不留记录，查不到用过没有",
+        "how": "说“试拍一次 Codex 所在盘的卷影”（要管理员权限）",
+        "status": "说不准",
+        "screen": "codex-memory-10",
+        "source": "Invoke-CodexConversationBackup.ps1 第 2002–2034 行；没找到运行记录"
+      },
+      {
+        "id": "f-usage-ledger",
+        "group": "g-ledger",
+        "name": "AI 使用小记录",
+        "what": "往一份长期记录里追加 AI 调用过的技能、工具和命令名，Codex 和 Claude 两路都挂在每天 12:15 的对话备份开头（Claude 那一路 9 月 28 日前挂在 10:35 的 Claude 记忆备份上，新接法从 9 月 29 日 12:15 那次起）。每次只补运行当天的前一天：某天任务整天没启动或采集失败，它前一天的调用就可能漏记，之后也不会自动补；G 盘不在线，本地照常记，只跳过 G 上的副本。只记名字、时间和工作目录，不记内容，也不管调用成没成功；删了对话也查得到最近一次调用；哪些算真用、哪些是测试或维护，将来由网站的功能总账按工作目录另算（功能总账还没做）。记录在 E:\\Data\\PCConfig\\AiUsageLedger，北京时间 9 月 28 日 12:18 Codex 写完之后共 329,091 条（Codex 从 9 月 15 日补起，这次补了 195,872 条；Claude 从 9 月 24 日补起）；G 盘正常时把整份记录发布到 G，14:30 的外接盘同步再复制到 H。记录没写成，原来的备份照跑",
+        "how": "自动：挂在 12:15 的对话备份开头；记录在 E:\\Data\\PCConfig\\AiUsageLedger，G、H 各一份",
+        "status": "在用",
+        "screen": "codex-memory-11",
+        "source": "AI_USAGE_LEDGER.md；Invoke-CodexConversationBackup.ps1 第 1141–1149 行；hot-last.json 的 usage_ledger；状态按已定口径（至少一次真实使用算在用）定为在用：北京 9/28 10:35 Claude 记忆备份、12:15 本项目对话备份两次自然运行都成功（state-claude.json、state-codex.json bootstrap_complete；hot-last.json usage_ledger status=complete），G:\\80_Backup\\AiUsageLedger 与 H:\\80_自动备份区\\AiUsageLedger 都有同字节副本；PCConfig 待验收清单 usage-ledger-first-backfill 没勾不影响；Claude 一路 9/28 挪到 12:15（codex-memory 提交 0fc08f3，回执字段 usage_ledger_claude、状态文件另存）；只看不写演练取到 Claude 9/27 共 31,043 条，和账本一致；9/29 12:15 第一次自然运行待验收；已知风险：任务整天没启动或采集失败时，它前一天的调用可能漏记、不自动补；G 不在线时本地照常采集，只跳过 G 上的副本；owner-decisions.md 第 860 行和“网站：AI 备份的去留和写法”一节"
+      },
+      {
+        "id": "f-laptop",
+        "group": "g-laptop",
+        "name": "笔记本用同一套",
+        "what": "笔记本每天 09:00、21:00 用同一套程序备份自己的 Codex：设置先滤掉私人配置，再推到私人仓库里单独的分支（9 月 10–28 日 36 次）；对话存笔记本本机和加密 U 盘，各留两份。9 月 10 日在笔记本上试恢复后，Codex 在隔离环境里读出了其中一段对话。怎么装、怎么接线归电脑配置与恢复",
+        "how": "自动：笔记本上的 CodexRecovery-SecondaryLaptop 任务；装和接线见电脑配置与恢复",
+        "status": "在用",
+        "screen": "codex-memory-11",
+        "source": "CONVERSATION_BACKUP.md 第 65–84 行；project-safe-codex-config.py；git log origin/backup/secondary-laptop 34 次；PCConfig Manage-CodexDataBackup.ps1；旧网站 content-codex-memory.js 记 9/10 试恢复回执（本轮未重读）"
+      },
+      {
+        "id": "f-settings-backup",
+        "group": "g-settings",
+        "name": "Codex 设置和记忆备份",
+        "what": "主机每天 11:05、13:05 把设置、记忆、技能存本机和 G 盘各 30 份、推私人 GitHub；9 月 28 日 23:26 停，和开发配置备份重复",
+        "how": "原计划任务 \\Codex Memory Backup（9/28 停）",
+        "status": "已停用",
+        "screen": "codex-memory-11",
+        "source": "tools/backup-codex-memory.ps1；日志 logs/backup-codex-memory.log（9 月 61 次启动、60 次写好 G）；9/28 本人决定退役（和开发配置备份重复）；计划任务北京 9/28 23:26 禁用（Get-ScheduledTask 读回 Disabled）；提交 7eb54f9；inventory#1 配置记忆备份"
+      },
+      {
+        "id": "f-settings-github",
+        "group": "g-laptop",
+        "name": "推到私人 GitHub",
+        "what": "笔记本的设置快照推到私人仓库单独的分支，推完再现问一次，和本机一致才算成功；两边对不上就拒绝上传。主机那一路 9 月 28 日停",
+        "how": "自动：随笔记本的设置备份（主机那一路 9/28 停）",
+        "status": "在用",
+        "screen": "codex-memory-11",
+        "source": "backup-codex-memory.ps1 第 330–397 行；笔记本分支 36 次快照（北京 9/10–9/28 21:00）；主机 main 139 次自动快照提交（北京 7/1–9/28）后停"
+      },
+      {
+        "id": "f-cloud-outage",
+        "group": "g-laptop",
+        "name": "断网不耽误本地",
+        "what": "GitHub 连不上时笔记本本机那份照常存好，上传在 2 秒、5 秒后各重试一次。主机那一路 9 月 28 日停",
+        "how": "自动：随笔记本的设置备份（主机那一路 9/28 停）",
+        "status": "在用",
+        "screen": "codex-memory-11",
+        "source": "backup-codex-memory.ps1 第 257–313 行（笔记本模式重试 2、5 秒，第 264–266 行）；笔记本分支最新 83c97c1（北京 9/28 21:00）；主机日志北京 9/14–9/18 十次停在 G 之后、9/18 13:09 补上"
+      },
+      {
+        "id": "f-no-credentials",
+        "group": "g-laptop",
+        "name": "不收登录凭据",
+        "what": "登录凭据、设备编号、对话、数据库、缓存不进 GitHub，笔记本的设置文件还先过滤掉私人配置。主机那一路 9 月 28 日停",
+        "how": "自动：随笔记本的设置备份（主机那一路 9/28 停）",
+        "status": "在用",
+        "screen": "codex-memory-11",
+        "source": "backup-codex-memory.ps1 第 181–215、399–417 行；project-safe-codex-config.py（笔记本）；提交 0cb00fd"
+      },
+      {
+        "id": "f-memory-keep-old",
+        "group": "g-settings",
+        "name": "云端旧记忆不删",
+        "what": "主机那一路：原件删掉的记忆，仓库里还留着，和约法 L21 不一致；随上一项停，私人仓库留档",
+        "how": "随 Codex 设置和记忆备份",
+        "status": "已停用",
+        "screen": "codex-memory-11",
+        "source": "backup-codex-memory.ps1 第 604–625、764–782 行；tools/AGENTS.md 第 5 行；MANIFEST.json 788 个文件对当次快照 151 个"
+      },
+      {
+        "id": "f-settings-restore",
+        "group": "g-settings",
+        "name": "找回某一天的设置",
+        "what": "从主机 G 盘的 30 份快照里挑一天放回；随第 16 项停",
+        "how": "随 Codex 设置和记忆备份",
+        "status": "已停用",
+        "screen": "codex-memory-11",
+        "source": "tools/AGENTS.md 第 7 行；手动复制不留记录，没找到使用痕迹"
+      },
+      {
+        "id": "f-r-claude-memory",
+        "group": "g-settings",
+        "name": "Claude 记忆备份",
+        "what": "每天 10:35 备 Claude 的记忆和规则入口文件；记忆开关关着、没东西可备，9 月 28 日 23:10 停，私人仓库留档",
+        "how": "原计划任务 \\Claude Memory Backup（北京每天 10:35；9/28 停）",
+        "status": "已停用",
+        "screen": "codex-memory-11",
+        "source": "b1/_retired/claude-memory/facts.md；owner-decisions.md“网站：AI 备份的去留和写法”；计划任务北京 9/28 23:10 禁用（读回 Disabled）"
+      },
+      {
+        "id": "f-r-antigravity",
+        "group": "g-settings",
+        "name": "Antigravity 设置和知识备份",
+        "what": "原名“Gemini 备份”，每天 11:10、13:10 备 Antigravity 的设置、状态和它记下的笔记；9 月 28 日 23:26 停，配置改由〔开发配置备份〕带上",
+        "how": "原计划任务 \\Gemini Memory Backup（北京每天 11:10、13:10；9/28 停）",
+        "status": "已停用",
+        "screen": "codex-memory-11",
+        "source": "E:\\Projects\\Backups\\gemini-memory README.md、tools/backup-gemini-memory.ps1；E:\\Data\\Backups\\GeminiMemory\\last-result.json（9/28 13:10 succeeded，59 个文件 12,281 字节）；本人 9/28 23:1x 原话；计划任务北京 9/28 23:26 禁用（读回 Disabled）"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-conv-size",
+        "text": "11.3 GB · 2,461 个文件",
+        "meaning": "最新一份 Codex 完整对话恢复点的大小和文件数（北京 9/28 12:15 那份）",
+        "as_of": "2026-09-28",
+        "source": "hot-last.json：total_size_bytes 11,275,377,846、file_count 2,461",
+        "screens": [
+          "codex-memory-01",
+          "codex-memory-04",
+          "codex-memory-08",
+          "codex-memory-09"
+        ]
+      },
+      {
+        "id": "n-restore-test",
+        "text": "2 分 18 秒 · 66.3 GB · 4,441 个文件",
+        "meaning": "8 月 30 日试恢复到空文件夹（北京 09:21–09:23）",
+        "as_of": "2026-08-30",
+        "source": "restore-progress.json、CodexConversationRestoreTest-20260830T0121Z.restore-receipt.json",
+        "screens": [
+          "codex-memory-01",
+          "codex-memory-10",
+          "codex-memory-12"
+        ]
+      },
+      {
+        "id": "n-retired",
+        "text": "3 套退役",
+        "meaning": "9 月 28 日停掉的 Codex 设置和记忆、Claude 记忆、Antigravity 设置和知识三套备份",
+        "as_of": "2026-09-28",
+        "source": "owner-decisions.md“网站：AI 备份的去留和写法”及本人 23:1x 原话（协调转达）",
+        "screens": [
+          "codex-memory-01",
+          "codex-memory-03",
+          "codex-memory-11",
+          "codex-memory-12"
+        ]
+      },
+      {
+        "id": "n-keep",
+        "text": "两份",
+        "meaning": "对话恢复点 G 和 H 各留 2 份",
+        "as_of": "2026-09-28",
+        "source": "DesktopHotRetentionKeep=2；G/H 目录计数",
+        "screens": [
+          "codex-memory-04",
+          "codex-memory-08",
+          "codex-memory-10"
+        ]
+      },
+      {
+        "id": "n-hot-duration",
+        "text": "3 分 18 秒",
+        "meaning": "9/28 对话备份从拍卷影到换“最新”的用时（北京 12:18:53–12:22:11）",
+        "as_of": "2026-09-28",
+        "source": "progress.json started_utc、hot-last.json completed_utc",
+        "screens": [
+          "codex-memory-09"
+        ]
+      },
+      {
+        "id": "n-reuse",
+        "text": "复用 2.9 GB · 新写 8.4 GB",
+        "meaning": "9/28 那份对话恢复点里复用和新写的字节",
+        "as_of": "2026-09-28",
+        "source": "hot-last.json reused_object_bytes 2,897,337,370、new_object_bytes 8,378,040,476",
+        "screens": [
+          "codex-memory-08"
+        ]
+      },
+      {
+        "id": "n-pruned",
+        "text": "1 个点、6.5 GB",
+        "meaning": "9/28 保留期清理删掉的旧恢复点和字节",
+        "as_of": "2026-09-28",
+        "source": "hot-last.json hot_retention_deleted_bytes 6,487,900,827",
+        "screens": [
+          "codex-memory-10"
+        ]
+      },
+      {
+        "id": "n-ledger",
+        "text": "195,872 条",
+        "meaning": "使用小记录第一次运行时补记的 Codex 调用条数（北京 9/15 00:00–9/28 12:15）",
+        "as_of": "2026-09-28",
+        "source": "hot-last.json usage_ledger.events",
+        "screens": [
+          "codex-memory-11",
+          "codex-memory-12"
+        ]
+      },
+      {
+        "id": "n-ledger-total",
+        "text": "329,091 条",
+        "meaning": "使用小记录两路合计条数，是北京 9/28 12:18 Codex 写完之后的数（Codex 从 9/15 补起、Claude 从 9/24 补起）",
+        "as_of": "2026-09-28",
+        "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl 行数（9/28 写稿时 wc -l）",
+        "screens": [
+          "codex-memory-11"
+        ]
+      },
+      {
+        "id": "n-laptop-commits",
+        "text": "36 次",
+        "meaning": "笔记本设置快照推到 backup/secondary-laptop 分支的次数（北京 9/10–9/28 21:00）",
+        "as_of": "2026-09-28",
+        "source": "git log origin/backup/secondary-laptop（本机引用，最后 fetch 以前）",
+        "screens": [
+          "codex-memory-11"
+        ]
+      },
+      {
+        "id": "n-devconfig-codex",
+        "text": "约 1.17 GB",
+        "meaning": "9/28 12:06 开发配置备份包里属于 Codex 对话备份范围的部分（对话备份文件夹、附件、听写、状态库、生成的图片等，不含对话正文）；9/29 提交 9d35282 按本人决定排除其中除状态库以外的几样，12:05 新包跑完才算落实",
+        "as_of": "2026-09-28",
+        "source": "devconfig-backup out\\devconfig-20260927-230644-4423084c.zip.manifest.json 按 relative_path 和 length 统计：1,567 个文件 1,170,759,696 字节（thread-backups 593,889,706、generated_images 365,888,749、visualizations 147,399,687、dictation-history 26,109,855、四个 sqlite 约 31 MB、sqlite 目录 5,476,744、attachments 966,689 等）",
+        "screens": [
+          "codex-memory-02"
+        ]
+      },
+      {
+        "id": "n-claude-memory",
+        "text": "20 个旧记忆文件、约 35 KB",
+        "meaning": "Claude 记忆备份退役前最后一次备的量（北京 9/28 10:35）",
+        "as_of": "2026-09-28",
+        "source": "b1/_retired/claude-memory/facts.md 第 2 节（G current.json 21 个文件 35,680 字节）",
+        "screens": [
+          "codex-memory-03"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-codex-app",
+        "with": "Codex 桌面（外部）",
+        "direction": "拿来",
+        "flow": "从 Codex 桌面的数据目录 E:\\Data\\AppData\\Codex 读完整对话；只读，不写回",
+        "source": "Invoke-CodexConversationBackup.ps1 第 38、371–464 行"
+      },
+      {
+        "id": "r-devconfig",
+        "with": "devconfig-backup",
+        "direction": "交给它",
+        "flow": "Codex、Claude、Antigravity、OpenCode 的配置（Codex 连旧记忆）都随开发配置备份每天 12:05 带上；本页只一句话链过去。9/28 提交 bd651fa（活动检出已快进）补上 Codex 记忆 extensions、Antigravity 桌面版状态文件和项目/插件登记、OpenCode 插件和桌面版设置，拿掉 .openclaw；9/29 12:05 第一次按新清单跑（待验收）。9/28 的包还带着 Codex 的对话备份文件夹、附件、听写、状态库、生成的图片（约 1.17 GB，不含对话正文）和 Antigravity 命令行版的知识、对话，打成不加密的 zip 传私人 Google 云盘；9/29 凌晨 73556a9 排除 Antigravity 命令行版的对话、标注、知识（设置、MCP、登录文件照带），9d35282 按本人决定排除 Codex 对话备份文件夹、附件、听写、生成的图片、可视化（状态库照带），都等 9/29 12:05 新包核对",
+        "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1；out\\latest.zip.manifest.json（9/28 12:06 包：home/.codex 3,262、home/.claude 1,884、home/.gemini 220、home/.config/opencode 23、home/.openclaw 911 个文件）；本人 9/28 23:1x 原话"
+      },
+      {
+        "id": "r-pcconfig-cold",
+        "with": "pcconfig",
+        "direction": "交出",
+        "flow": "对话恢复点写 G；14:30 PCConfig 的外接盘同步把它复制到 H，并回调本仓库的 FinalizeCold 在 H 上整份核对、换 H 指针、删旧点",
+        "source": "E:\\PCConfig\\registries\\core_recovery.json backup_sets codex_conversations；Invoke-CoreRecoveryMaintenance.ps1 第 21–23、2480 行"
+      },
+      {
+        "id": "r-pcconfig-registry",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "写 G 之前，读 PCConfig 登记的 G 盘卷标、文件系统和卷 ID 指纹来认盘",
+        "source": "Invoke-CodexConversationBackup.ps1 第 984–1013 行（PCConfigManifestPath）"
+      },
+      {
+        "id": "r-pcconfig-freshness",
+        "with": "pcconfig、网站驾驶舱（第 2 批）",
+        "direction": "提供",
+        "flow": "PCConfig 每天 14:15 按 G 上的指针和回执查 36 小时新鲜度；驾驶舱按任务计划器的成功记录显示",
+        "source": "core_recovery.json source_freshness；PCConfig docs/runtime/dashboard-api-contract.md backups 一节"
+      },
+      {
+        "id": "r-pcconfig-image",
+        "with": "pcconfig",
+        "direction": "兜底",
+        "flow": "Claude、Antigravity、OpenCode 的数据（含对话）在 C 盘，靠每天 13:30 的系统镜像兜底，只留 3 天；Codex 在 E 盘不在镜像里",
+        "source": "pcconfig 页 f-system-image；owner-decisions.md“网站：AI 备份的去留和写法”核实的事实"
+      },
+      {
+        "id": "r-pcconfig-laptop",
+        "with": "pcconfig",
+        "direction": "被装到笔记本",
+        "flow": "PCConfig 的 Manage-CodexDataBackup.ps1 把本仓库四个引擎文件装到笔记本、写笔记本的配置、建笔记本的计划任务",
+        "source": "PCConfig tools/secondary-laptop-recovery/scripts/Manage-CodexDataBackup.ps1 第 179、292、333 行"
+      },
+      {
+        "id": "r-github",
+        "with": "GitHub（私人仓库 wlyaaaaa/codex-memory、gemini-memory、claude-memory）",
+        "direction": "交出（大半已停）",
+        "flow": "笔记本设置仍推 codex-memory 的 backup/secondary-laptop 分支；主机 main 分支、gemini-memory、claude-memory 9/28 23:10–23:26 起不再自动更新，留档；本项目的对话备份从不上传",
+        "source": "backup-codex-memory.ps1 第 381–397 行；CONVERSATION_BACKUP.md 第 20–21、69 行；本人 9/28 决定"
+      },
+      {
+        "id": "r-claude-memory-ledger",
+        "with": "claude-memory（已退役）",
+        "direction": "接过来",
+        "flow": "AI 使用小记录的 Claude 那一路原来挂在 Claude 记忆备份上；9/28 起改由本项目 12:15 的对话备份一起记，写进同一份 E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl",
+        "source": "AI_USAGE_LEDGER.md 第 3–4、71 行；owner-decisions.md“网站：AI 备份的去留和写法”落实含义第 2 条；codex-memory 提交 0fc08f3（北京 9/28 23:10）"
+      },
+      {
+        "id": "r-ledger-consumer",
+        "with": "网站功能总账（第 2 批）",
+        "direction": "提供",
+        "flow": "使用小记录将来给每月功能总账提供最近一次调用（只有名字、时间、工作目录）；哪些算真用将来由功能总账按工作目录另算（功能总账还没做）",
+        "source": "owner-decisions.md 第 860 行；pending_acceptance.json usage-ledger-first-backfill 的 source"
+      },
+      {
+        "id": "r-openclaw",
+        "with": "openclaw（冻结）",
+        "direction": "说明",
+        "flow": "表里 OpenClaw 一行链到它的冻结页；它的备份（openclaw-backup）的来龙去脉在那一页",
+        "source": "b1/openclaw/facts.md F7、U11"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-vss-live",
+        "title": "Codex 开着，照样拍下完整对话。",
+        "screen": "codex-memory-09"
+      },
+      {
+        "id": "h-pointer-last",
+        "title": "没做完的备份，不会被当成“最新”。",
+        "screen": "codex-memory-09"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/how/#codex-memory",
+        "screen": "codex-memory-01",
+        "text": "在整套系统里的位置 → 怎么协作"
+      },
+      {
+        "target": "/projects/devconfig-backup/",
+        "screen": "codex-memory-01",
+        "text": "开发配置备份"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "codex-memory-01",
+        "text": "电脑配置与恢复"
+      },
+      {
+        "target": "/cockpit/#codex-memory",
+        "screen": "codex-memory-01",
+        "text": "现在正不正常 → 驾驶舱"
+      },
+      {
+        "target": "/projects/devconfig-backup/",
+        "screen": "codex-memory-02",
+        "text": "开发配置备份"
+      },
+      {
+        "target": "/projects/openclaw/",
+        "screen": "codex-memory-02",
+        "text": "OpenClaw 网关"
+      },
+      {
+        "target": "/projects/pcconfig/#usage",
+        "screen": "codex-memory-05",
+        "text": "换机恢复的整套流程"
+      },
+      {
+        "target": "/projects/devconfig-backup/",
+        "screen": "codex-memory-05",
+        "text": "开发配置备份"
+      },
+      {
+        "target": "/cockpit/#codex-memory",
+        "screen": "codex-memory-06",
+        "text": "驾驶舱"
+      },
+      {
+        "target": "/projects/devconfig-backup/",
+        "screen": "codex-memory-11",
+        "text": "开发配置备份"
+      }
+    ],
+    "live": [
+      {
+        "slot": "run",
+        "meaning": "本项目在用的自动任务（Codex 对话备份，每天 12:15）现在正不正常：一盏状态灯加一句话（运行正常／有任务没按时跑／上次运行失败／暂时读不到）",
+        "source": "看板接口 /computer-access/api/status 的 projects 行（本项目）里的 automation 数字；三个已停任务停掉后应显示为 disabled，不算失败"
+      },
+      {
+        "slot": "backup",
+        "meaning": "Codex 对话最近一次备好是什么时候：“G 今天 12:22 · H 今天 14:52”这样一句",
+        "source": "同一接口 backups 块里 Codex 对话备份那条的 last_success_at（任务计划器事件 201）；H 那半句取 cold-last.json 的 completed_utc，若接口没有这一项就只显示 G"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [
+      "inventory#1 配置记忆备份 → f-settings-backup（已停用；另把它的几个机制列成 f-settings-github、f-cloud-outage、f-no-credentials、f-memory-keep-old、f-settings-restore，一并已停用，锚点保留）",
+      "inventory#2 运行中会话备份 → f-conv-daily（去重、保留两份、进度另列 f-conv-dedupe、f-conv-keep-two、f-conv-progress）",
+      "inventory#3 多盘会话副本 → f-conv-cold（H 盘那份）；G 盘那份就是 f-conv-daily",
+      "inventory#4 隔离恢复 → f-conv-restore；主机上的还原程序只核对文件、不开 Codex 读，能读的证据只在笔记本那次（写进 f-laptop）",
+      "Invoke-AiUsageLedger 的 -DryRun 只统计模式、-SkipUsageLedger 停用开关 → 并入 f-usage-ledger，不单列",
+      "同一时间只跑一个（全局互斥锁）、上次卷影没清干净就不开跑 → 写在“出事怎么办”，不单列为功能",
+      "原 Claude 记忆备份页（b1/_retired/claude-memory）的功能整体并成 f-r-claude-memory 一张已停用卡；它的用量那一路并进 f-usage-ledger",
+      "原“Gemini 备份”（gemini-memory）的功能（按名单备、存本机和 G 各 30 份、推私人仓库并跟着删、last-result 回执、按清单恢复、只列不写）整体并成 f-r-antigravity 一张已停用卡，没有单独开组（协调 9/28 23:1x 改定）"
+    ],
+    "dropped": [
+      "旧网站的截图：旧网站 public/media 下没有本项目的目录，没有可放回的截图",
+      "Codex 目录里 skills 下三个文件夹的名字不上页（其中一个名字属于不上网站的主题）",
+      "原“出事怎么办”里“上传那一步没走完”（9/14–9/18 十次停在 GitHub 之前）：属于已停用的设置和记忆备份，不再上页；事实留在 facts.md 和 f-cloud-outage 的 source",
+      "原亮点“等网络的时候，原件被换掉了”：讲的是已停用的设置和记忆备份，亮点只收在用的做法，删",
+      "开发配置备份具体带哪些文件夹：家在开发配置备份页，本页只一句话链过去（协调要求）"
+    ],
+    "unsure": [
+      "Codex 的对话备份文件夹、附件、听写、生成的图片原先随开发配置备份传私人 Google 云盘（9/28 包连状态库约 1.17 GB）。本人 9 月 29 日 02:2x 定“codex 对话目前不需要上传到 drive”（决定记录“Codex 对话不随配置包上云盘”），开发配置备份 9d35282 已排除，状态库照带；页面第 2、8 屏按这条改了。这条不在修复对话发来的事实清单里，是写稿人按决定记录补的。",
+      "Antigravity 命令行版的知识和对话（9/28 22:42 的包里 conversations 34、implicit 100、annotations 25、brain 1、knowledge 1 个文件）原先随开发配置备份带着；修复对话 9/29 凌晨（73556a9）已排除，设置、MCP 连接和登录文件照带。页面第 2、3 屏已改成“9 月 29 日起排除”，12:05 新包跑完核对包清单后才算落实。",
+      "开发配置备份的新清单（bd651fa）和 12:15 记 Claude 用量的新接法（0fc08f3）都要到 9 月 29 日 12:05、12:15 第一次自然运行才见分晓，两条都在 PCConfig 待验收清单里；开发配置备份的范围改动（包括 9/29 凌晨的 Antigravity 命令行版排除、Codex 对话几样排除）页面都写成“12:05 那次跑完才算落实”；若 9/29 没跑通要回来改。",
+      "Codex 设置和记忆任务退役后，笔记本那一路仍用同一个 backup-codex-memory.ps1 推 backup/secondary-laptop 分支（最新北京 9/28 21:00）；本人的决定只说主机上重复的那个任务，笔记本停不停没说，页面按在用写。",
+      "原“Gemini 备份”实际是每天两次（北京 11:10、13:10，计划任务两个触发器 22:10、00:10 -05:00），页面按任务读回写两次。",
+      "OpenCode“没有单独的记忆文件夹”：只看了 ~/.config/opencode 和 ~/.local/share/opencode 下的文件夹名（log、repos、snapshot、storage、tool-output、opencode.db），没有叫记忆的；没读内容，不排除它把记忆存在对话库里。",
+      "替本人口吻写的句子：第 1 屏“我在用的五个 AI 工具”；第 5 屏几句“跟 AI 说”的话（“先在别处试恢复 Codex 对话”“从外接盘恢复 Codex 对话”“我要换机恢复”“检查 Codex 完整对话备份”），上线前请本人过目。",
+      "别的页该改的链接：原链到 /projects/claude-memory/ 的地方 → /projects/codex-memory/#f-r-claude-memory（讲退役）或 #f-usage-ledger（讲用量小记录）；写着“Codex 备份恢复”的地方改名“AI 备份”，讲对话备份的链 #f-conv-daily，讲各工具备没备的链 #usage（“每个 AI 工具备了什么”是 usage 节第一屏）；pcconfig 页 f-ai-usage-ledger 卡和 r-ai-memory 关系 → #f-usage-ledger；开发配置备份页讲 Codex 对话历史交给谁时 → #f-conv-daily、讲它接手 Codex/Antigravity 配置时 → #usage；OpenClaw 冻结页讲备份去向时 → #usage。本页第 1 屏新链到 /projects/pcconfig/#f-system-image，请确认 pcconfig 页有这个锚点。",
+      "“看现状”“计划任务自检”都标说不准：两项用了都不留记录，唯一的运行是写稿时我自己只读跑的。",
+      "笔记本 9 月 10 日“Codex 在隔离环境里读出了一段对话”只来自旧网站 9 月 24 日记下的回执摘要；本轮没有去笔记本重读回执。",
+      "第 1 屏“当时 66.3 GB”与现在 11.3 GB 的差别：我把原因理解为本人删对话的习惯，没有记录能算出具体删了多少；页面上只写“当时”。",
+      "第 8 屏“每天要新写几 GB，全留着盘会越来越满”是我根据 9 月 28 日新写 8.4 GB 推的理由；9 月 13 日改成只留两份的提交说明没写原因。",
+      "替本人口吻写的句子（9 月 29 日补，上线前请本人过目）：第 12 屏“按我的决定，Codex 对话也不随配置包上云盘”（依据同上一条决定记录）。"
+    ]
+  }
+}

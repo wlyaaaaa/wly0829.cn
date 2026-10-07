@@ -1,0 +1,914 @@
+/* 流程／时间线／台阶：只使用共用色彩与字号；所有图形都不裁文字。 */
+.c-diagram.c-sequence {
+  --sequence-space: var(--gap-card, 16px);
+  --sequence-icon-height: var(--icon-height, 140px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap, 18px);
+  min-width: 0;
+  width: 100%;
+  color: var(--text);
+  font-family: "Sans", sans-serif;
+  font-size: max(var(--fs-body, 24px), var(--sequence-min-font));
+  line-height: var(--lh, 1.45);
+  position: relative;
+}
+.c-diagram.c-sequence[data-orient="v"] { --sequence-icon-height: var(--icon-height-v, 150px); }
+.c-diagram.c-sequence[data-align="center"] .sequence-copy,
+.c-diagram.c-sequence[data-align="center"] .sequence-context { text-align: center; }
+.c-diagram.c-sequence[data-align="right"] .sequence-copy,
+.c-diagram.c-sequence[data-align="right"] .sequence-context { text-align: right; }
+.c-diagram.c-sequence .sequence-chain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sequence-space);
+  min-width: 0;
+}
+.c-diagram.c-sequence .sequence-chain.sequence-timeline-columns {
+  display: grid;
+  grid-template-columns: repeat(var(--sequence-columns), minmax(0, 1fr));
+  align-items: start;
+  min-width: 0;
+}
+.c-diagram.c-sequence .sequence-row {
+  display: grid;
+  grid-template-columns: repeat(var(--sequence-columns), minmax(0, 1fr));
+  gap: var(--sequence-space);
+  align-items: stretch;
+  min-width: 0;
+}
+.c-diagram.c-sequence .sequence-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  isolation: isolate;
+  direction: ltr;
+}
+.c-diagram.c-sequence .sequence-row[data-reversed="true"] {
+  direction: rtl;
+}
+.c-diagram.c-sequence[data-stagger="true"] .sequence-chain[data-axis="horizontal"] .sequence-item:nth-child(even) {
+  padding-top: 0.65em;
+}
+.c-diagram.c-sequence .sequence-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  min-width: 0;
+  padding: 0.5em 0.6em;
+  border: 2px solid var(--line);
+  border-radius: var(--radius, 16px);
+  background: var(--card-bg, var(--cardbg));
+  box-shadow: var(--card-shadow, none);
+}
+.c-diagram.c-sequence .sequence-copy,
+.c-diagram.c-sequence .sequence-context {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.c-diagram.c-sequence .sequence-item.sequence-external-icon {
+  display: grid;
+  grid-template-columns: minmax(0, 25%) minmax(0, 1fr);
+  gap: 0.5em;
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-item.sequence-number-left-outside {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.35em;
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-node-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+}
+.c-diagram.c-sequence .sequence-node-body.sequence-external-body {
+  display: grid;
+  grid-template-columns: minmax(0, 25%) minmax(0, 1fr);
+  gap: 0.5em;
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-number-outside {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55em;
+  min-height: 1.55em;
+  border-radius: 50%;
+  background: var(--badge, var(--accent));
+  color: var(--on-accent, var(--cardbg));
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  line-height: 1.1;
+  font-weight: 800;
+}
+.c-diagram.c-sequence .sequence-item.sequence-external-icon .sequence-card {
+  display: block;
+}
+.c-diagram.c-sequence[data-open-nodes="true"] .sequence-card,
+.c-diagram.c-sequence[data-enclosure="single_card"] .sequence-item > .sequence-card {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.c-diagram.c-sequence.sequence-group-enclosure {
+  padding: 0.5em;
+  background: var(--card-bg, var(--cardbg));
+}
+.c-diagram.c-sequence.sequence-group-enclosure[data-header-art="true"] {
+  padding-top: 3.7em;
+}
+.c-diagram.c-sequence .sequence-header-art {
+  position: absolute;
+  right: 0.4em;
+  top: -0.5em;
+  width: min(25%, 6em);
+  height: 4em;
+  object-fit: contain;
+  pointer-events: none;
+  border: 0;
+  background: none;
+}
+.c-diagram.c-sequence .sequence-main-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 10em;
+  object-fit: contain;
+}
+.c-diagram.c-sequence .sequence-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  gap: var(--sequence-space);
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-hero-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sequence-space);
+  min-width: 0;
+}
+.c-diagram.c-sequence .sequence-branch-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.3em;
+}
+.c-diagram.c-sequence .sequence-card[data-optional="true"] {
+  border-style: dashed;
+}
+.c-diagram.c-sequence .sequence-branches {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sequence-space);
+  margin-top: 0.4em;
+  min-width: 0;
+}
+.c-diagram.c-sequence[data-orient="v"] .sequence-branches {
+  grid-template-columns: minmax(0, 1fr);
+}
+.c-diagram.c-sequence .sequence-branch {
+  min-width: 0;
+  padding: 0.35em;
+  border-top: 3px solid var(--accent);
+}
+.c-diagram.c-sequence .sequence-copy > * + * { margin-top: 0.22em; }
+.c-diagram.c-sequence .sequence-copy .dg-body {
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  line-height: var(--lh, 1.45);
+}
+.c-diagram.c-sequence .sequence-copy .dg-name {
+  font-size: max(var(--fs-name), var(--sequence-min-font));
+  line-height: 1.25;
+  color: var(--title);
+  font-weight: 800;
+}
+.c-diagram.c-sequence .sequence-copy:has(> .dg-number) {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.2em 0.3em;
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-copy > .dg-number,
+.c-diagram.c-sequence .sequence-branch-head > .dg-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55em;
+  min-height: 1.55em;
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--badge, var(--accent));
+  color: var(--cardbg);
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  font-weight: 800;
+  line-height: 1.1;
+}
+.c-diagram.c-sequence .sequence-copy:has(> .dg-number) > .dg-name {
+  grid-column: 2;
+  grid-row: 1;
+}
+.c-diagram.c-sequence .sequence-copy:has(> .dg-number):has(> .dg-name) > .dg-body {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.c-diagram.c-sequence .sequence-copy:has(> .dg-number):not(:has(> .dg-name)) > .dg-body {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+.c-diagram.c-sequence .sequence-art {
+  height: var(--sequence-icon-height);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 0.2em;
+}
+.c-diagram.c-sequence .sequence-icon {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: var(--sequence-icon-height);
+  object-fit: contain;
+}
+.c-diagram.c-sequence .sequence-icon.sequence-icon-blank {
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+.c-diagram.c-sequence .sequence-flag {
+  min-width: 0;
+  padding: 0.3em 0.4em;
+  margin-bottom: 0.4em;
+  color: var(--cardbg);
+  background: linear-gradient(100deg, var(--badge, var(--accent)), var(--accent));
+  border-radius: 0.2em;
+  border-right: 0.16em solid var(--line);
+  text-align: center;
+  overflow-wrap: anywhere;
+  font-size: max(var(--fs-name), var(--sequence-min-font));
+  line-height: 1.25;
+  font-weight: 800;
+}
+.c-diagram.c-sequence.c-timeline .sequence-card.sequence-open {
+  display: block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0.2em 0.35em;
+}
+.c-diagram.c-sequence[data-illustration="left_inside"] .sequence-card {
+  display: grid;
+  grid-template-columns: minmax(0, 25%) minmax(0, 1fr);
+  align-items: center;
+  gap: 0.5em;
+}
+.c-diagram.c-sequence[data-illustration="left_inside"] .sequence-card:not(:has(> .sequence-icon)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.c-diagram.c-sequence[data-illustration="right_inside"] .sequence-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 25%);
+  align-items: center;
+  gap: 0.5em;
+}
+.c-diagram.c-sequence[data-illustration="right_inside"] .sequence-card:not(:has(> .sequence-icon)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.c-diagram.c-sequence[data-path="ascending"] .sequence-chain[data-axis="horizontal"] .sequence-item {
+  margin-top: calc((var(--sequence-count) - var(--sequence-index) - 1) * 0.25em);
+}
+.c-diagram.c-sequence[data-path="ascending"] .sequence-chain[data-axis="horizontal"] .sequence-item::after {
+  transform: rotate(-20deg);
+  transform-origin: right center;
+}
+.c-diagram.c-sequence[data-illustration="top_inside"] .sequence-icon { align-self: center; }
+.c-diagram.c-sequence .sequence-item::before,
+.c-diagram.c-sequence .sequence-item::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+.c-diagram.c-sequence[data-connector="ribbon"] .sequence-chain[data-axis="horizontal"] .sequence-item:not(:first-child)::after {
+  width: var(--sequence-space);
+  height: 0.32em;
+  left: auto;
+  right: 100%;
+  top: 2.6em;
+  border-radius: 0.2em;
+  background: linear-gradient(90deg, var(--line), var(--accent), var(--line));
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="horizontal"] .sequence-item:not(:first-child)::after {
+  left: auto;
+  right: 100%;
+  top: 2.6em;
+  width: var(--sequence-space);
+  height: 2px;
+  background: var(--accent);
+}
+.c-diagram.c-sequence[data-connector="line"] .sequence-chain[data-axis="horizontal"] .sequence-item:not(:first-child)::after {
+  left: auto;
+  right: 100%;
+  top: 2.6em;
+  width: var(--sequence-space);
+  height: 2px;
+  background: var(--line);
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="horizontal"] .sequence-item:not(:first-child)::before {
+  left: auto;
+  right: calc(100% + 0.08em);
+  top: calc(2.6em - 0.16em);
+  width: 0.32em;
+  height: 0.32em;
+  border-top: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+.c-diagram.c-sequence.c-flow[data-orient="h"] .sequence-card {
+  padding: 0.45em 0.35em;
+}
+.c-diagram.c-sequence[data-connector="ribbon"] .sequence-chain[data-axis="vertical"] .sequence-row:not(:last-child) .sequence-item::after {
+  content: var(--sequence-forward-connector-content, "");
+  left: 1.1em;
+  top: 100%;
+  width: 0.22em;
+  height: var(--sequence-space);
+  background: var(--line);
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="vertical"] .sequence-row:not(:last-child) .sequence-item::after {
+  content: var(--sequence-forward-connector-content, "");
+  left: 50%;
+  top: 100%;
+  width: 2px;
+  height: var(--sequence-space);
+  background: var(--accent);
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="vertical"] .sequence-row:not(:last-child) .sequence-item::before {
+  content: var(--sequence-forward-connector-content, "");
+  left: calc(50% - 0.15em);
+  top: calc(100% + var(--sequence-space) - 0.3em);
+  width: 0.32em;
+  height: 0.32em;
+  border-bottom: 2px solid var(--accent);
+  border-right: 2px solid var(--accent);
+  transform: rotate(45deg);
+}
+.c-diagram.c-sequence .sequence-chain[data-axis="vertical"] .sequence-item[data-page-break-after="true"],
+.c-diagram.c-sequence .sequence-chain[data-axis="vertical"] .sequence-row:has(+ .sequence-row .sequence-item[data-page-break-before="true"]) .sequence-item {
+  --sequence-forward-connector-content: none;
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="vertical"] .sequence-row:not(:last-child) .sequence-number-left-outside::after {
+  left: 0.775em;
+  top: 1.55em;
+  height: calc(100% + var(--sequence-space) - 1.55em);
+}
+.c-diagram.c-sequence[data-connector="arrow"] .sequence-chain[data-axis="vertical"] .sequence-row:not(:last-child) .sequence-number-left-outside::before {
+  left: calc(0.775em - 0.15em);
+}
+.c-diagram.c-sequence.c-timeline .sequence-card { box-shadow: none; }
+.c-diagram.c-sequence.c-timeline[data-connector="ribbon"] .sequence-chain[data-axis="vertical"] {
+  padding-left: 0.8em;
+  border-left: 3px solid var(--line);
+}
+.c-diagram.c-sequence.c-timeline[data-connector="line"] .sequence-chain[data-axis="vertical"] {
+  padding-left: 0.8em;
+  border-left: 2px solid var(--line);
+}
+.c-diagram.c-sequence.c-timeline[data-connector="line"] .sequence-chain[data-axis="vertical"] .sequence-item::before {
+  top: 0.9em;
+  left: -1.04em;
+  width: 0.35em;
+  height: 0.35em;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--cardbg);
+  z-index: 1;
+}
+.c-diagram.c-sequence.c-timeline[data-connector="ribbon"] .sequence-chain[data-axis="vertical"] .sequence-item::before {
+  top: 0.9em;
+  left: -1.04em;
+  width: 0.35em;
+  height: 0.35em;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--cardbg);
+  z-index: 1;
+  transform: none;
+}
+.c-diagram.c-sequence.c-timeline[data-connector="ribbon"] .sequence-chain[data-axis="vertical"] .sequence-item::after {
+  content: none;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="steps"] .sequence-item {
+  margin-left: min(calc(var(--sequence-index) * 0.65em), 16%);
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="steps"] .sequence-card {
+  background: linear-gradient(100deg, var(--soft), var(--cardbg));
+  border-radius: 0.45em;
+}
+.c-diagram.c-sequence.c-segmented_band .sequence-card[data-highlight="true"] {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+  outline-offset: 3px;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="funnel"] .sequence-item {
+  margin-inline: min(calc(var(--sequence-index) * 1.2%), 12%);
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="funnel"] .sequence-card {
+  border-radius: 0.35em 0.35em 0.65em 0.65em;
+  background: linear-gradient(180deg, var(--soft), var(--cardbg));
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"] .sequence-card {
+  border: 2px solid var(--accent);
+  border-radius: 0.15em;
+  padding: 0.2em;
+  background: var(--soft);
+  box-shadow: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"] .sequence-copy > .dg-body {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"][data-orient="v"] .sequence-card {
+  padding-inline: 0.2em;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"] .sequence-row { gap: 0.3em; }
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"] .sequence-copy {
+  padding: 0.25em;
+  text-align: center;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="film"] .sequence-film-rail {
+  width: 100%;
+  height: 0.35em;
+  flex: none;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 0.2em, var(--cardbg) 0.2em 0.55em, var(--accent) 0.55em 0.8em);
+  box-shadow: inset 0 0.06em var(--accent), inset 0 -0.06em var(--accent);
+  pointer-events: none;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="stack"] .sequence-card {
+  border-left: 0.25em solid var(--line);
+  background: var(--soft);
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="stack"] .sequence-item[data-index="0"] .sequence-card {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent, var(--cardbg));
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="stack"] .sequence-inline strong {
+  font-size: inherit;
+  color: inherit;
+  font-weight: 800;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="section"] .sequence-section-symbol {
+  width: 100%;
+  height: 3em;
+  border: 2px solid var(--accent);
+  background: linear-gradient(90deg, var(--soft), var(--line));
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="section"] .sequence-ruler {
+  width: 100%;
+  height: 0.5em;
+  border-top: 2px solid var(--line);
+  background: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 1em);
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="section"][data-section-content="outside"][data-direction="vertical"][data-annotation-side="right"] .sequence-item > .sequence-card {
+  display: grid;
+  grid-template-columns: minmax(0, 22%) minmax(0, 1fr);
+  gap: 0.6em;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+.c-diagram.c-sequence.c-segmented_band[data-variant="section"][data-section-content="outside"][data-direction="vertical"][data-annotation-side="right"] .sequence-section-symbol {
+  height: 100%;
+  min-height: 3em;
+}
+.c-diagram.c-sequence .sequence-section-description {
+  min-width: 0;
+  padding: 0.5em;
+  background: var(--card-bg, var(--cardbg));
+}
+.c-diagram.c-sequence .sequence-section-symbol.sequence-section-labeled {
+  height: auto;
+  min-height: 3em;
+  padding: 0.35em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25em;
+  overflow-wrap: anywhere;
+}
+.c-diagram.c-sequence .sequence-section-labeled .dg-name {
+  color: var(--title);
+  font-size: max(var(--fs-name), var(--sequence-min-font));
+  font-weight: 800;
+  line-height: 1.25;
+}
+.c-diagram.c-sequence .sequence-leaders {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.c-diagram.c-sequence .sequence-edges {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+.c-diagram.c-sequence .sequence-edges > path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.c-diagram.c-sequence[data-connector="ribbon"] .sequence-edges > path {
+  stroke-width: 0.28em;
+}
+.c-diagram.c-sequence .sequence-edges marker path {
+  fill: var(--accent);
+  stroke: none;
+}
+.c-diagram.c-sequence[data-path="serpentine"] .sequence-chain[data-axis="horizontal"] {
+  padding-inline: 0.6em;
+}
+.c-diagram.c-sequence[data-path="z_order"] .sequence-chain[data-axis="horizontal"] {
+  padding-inline: 0.6em;
+}
+.c-diagram.c-sequence[data-path="curved"][data-loop-at="0"] .sequence-chain {
+  padding-left: 0.6em;
+}
+.c-diagram.c-sequence[data-path="serpentine"] .sequence-chain[data-axis="horizontal"] .sequence-item::before,
+.c-diagram.c-sequence[data-path="serpentine"] .sequence-chain[data-axis="horizontal"] .sequence-item::after {
+  content: none;
+}
+.c-diagram.c-sequence[data-path="z_order"] .sequence-chain[data-axis="horizontal"] .sequence-item::before,
+.c-diagram.c-sequence[data-path="z_order"] .sequence-chain[data-axis="horizontal"] .sequence-item::after {
+  content: none;
+}
+.c-diagram.c-sequence:not([data-loop-at="0"]) .sequence-chain {
+  padding-right: 2.4em;
+  padding-left: 1em;
+  padding-bottom: 1em;
+}
+.c-diagram.c-sequence .sequence-item[data-muted="true"] .sequence-card,
+.c-diagram.c-sequence .sequence-item[data-muted="true"] .sequence-flag {
+  background: var(--muted-bg);
+  border-color: var(--muted-line);
+}
+.c-diagram.c-sequence .sequence-item[data-muted="true"] .sequence-flag {
+  background: var(--muted);
+}
+.c-diagram.c-sequence .sequence-item[data-marker="pending"] .sequence-card,
+.c-diagram.c-sequence .sequence-item[data-marker="pending"] .sequence-flag {
+  background: var(--notice-yellow-bg);
+  border-color: var(--notice-yellow-line);
+}
+.c-diagram.c-sequence .sequence-item[data-marker="pending"] .sequence-flag {
+  color: var(--title);
+}
+.c-diagram.c-sequence .sequence-symbol {
+  width: 1.6em;
+  height: 1.6em;
+  margin: 0 auto 0.25em;
+  flex: none;
+}
+.c-diagram.c-sequence .sequence-symbol svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2px;
+}
+.c-diagram.c-sequence .sequence-symbol .sequence-question-dot {
+  fill: var(--accent);
+  stroke: none;
+}
+.c-diagram.c-sequence .sequence-symbol .sequence-failure-mark {
+  stroke: var(--slot-danger-line);
+}
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="day-axis"] {
+  stroke-width: 0.28em;
+}
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="day-spoke"] {
+  stroke-width: 2px;
+}
+.c-diagram.c-sequence[data-variant="day_band"] .sequence-chain[data-axis="horizontal"] {
+  gap: 1.5em;
+}
+.c-diagram.c-sequence[data-variant="day_band"] .sequence-chain[data-axis="horizontal"] .sequence-item::before,
+.c-diagram.c-sequence[data-variant="day_band"] .sequence-chain[data-axis="horizontal"] .sequence-item::after {
+  content: none;
+}
+
+/* 审美复核候选：同一事件一行日期＋正文，原长正文正常换行，不缩字。 */
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] {
+  gap: 0.3em;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-chain {
+  gap: 0;
+  padding-left: 0;
+  border-left: 0;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-row {
+  border-bottom: 1px solid var(--line);
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-row:last-child {
+  border-bottom: 0;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-card {
+  display: block;
+  padding: 0.22em 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-copy {
+  display: grid;
+  grid-template-columns: 9.5em minmax(0, 1fr);
+  column-gap: 0.45em;
+  align-items: baseline;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-copy > .dg-name {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  font-weight: 800;
+}
+.c-diagram.c-sequence.c-timeline[data-layout="date_rows"] .sequence-copy > .dg-body {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+.c-diagram.c-sequence.c-segmented_band[data-layout="priority_steps"] {
+  padding: 0.45em 0.55em;
+  gap: 0.35em;
+  background: var(--card-bg, var(--cardbg));
+}
+.c-diagram.c-sequence.c-segmented_band[data-layout="priority_steps"] .sequence-chain {
+  gap: 0.25em;
+}
+.c-diagram.c-sequence.c-segmented_band[data-layout="priority_steps"] .sequence-card {
+  padding: 0.25em 0.35em;
+}
+.c-diagram.c-sequence.c-flow[data-scale="large"] .sequence-art,
+.c-diagram.c-sequence.c-flow[data-scale="large"] .sequence-icon {
+  height: calc(var(--sequence-icon-height) * 1.35);
+}
+.c-diagram.c-sequence.c-flow[data-scale="large"] .sequence-copy > .dg-number,
+.c-diagram.c-sequence.c-flow[data-scale="large"] .sequence-branch-head > .dg-number,
+.c-diagram.c-sequence.c-flow[data-scale="large"] .sequence-number-outside {
+  width: 2em;
+  min-height: 2em;
+}
+.c-diagram.c-sequence.c-flow[data-scale="large"][data-orient="h"] .sequence-card {
+  padding-inline: 0.2em;
+}
+
+/* 明确竖旗候选：左旗原日期、右框原正文；细杆随真实DOM中心定位。 */
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-item.sequence-vertical-flag {
+  display: grid;
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr);
+  gap: 0.75em;
+  align-items: start;
+}
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-flag {
+  margin-bottom: 0;
+}
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-flag-card {
+  padding: 0.45em 0.55em;
+  border: 2px solid var(--line);
+  background: var(--card-bg, var(--cardbg));
+}
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-chain[data-axis="vertical"] {
+  border-left: 0;
+  padding-left: 0.8em;
+}
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-item::before,
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-item::after {
+  content: none;
+}
+.c-diagram.c-sequence[data-layout="vertical_flags"] .sequence-edges > path {
+  stroke-width: 2px;
+}
+.c-diagram.c-sequence .sequence-edges > circle[data-edge-kind="flag-point"] {
+  fill: var(--accent);
+  stroke: var(--line);
+  stroke-width: 1px;
+}
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="branch-stub"] {
+  stroke: var(--link);
+  stroke-width: 3px;
+}
+.c-diagram.c-sequence[data-illustration="left_inside"][data-icon-width-explicit="true"] .sequence-card {
+  grid-template-columns: minmax(0, var(--sequence-icon-column)) minmax(0, 1fr);
+}
+.c-diagram.c-sequence[data-illustration="left_inside"][data-icon-width-explicit="true"] .sequence-card > .sequence-copy {
+  grid-column: 2;
+}
+.c-diagram.c-sequence[data-illustration="left_inside"][data-icon-separator="true"] .sequence-card > .sequence-copy {
+  border-left: 1px solid var(--line);
+  padding-left: 0.45em;
+}
+.c-diagram.c-sequence:not([data-branch-after="0"]) .sequence-chain[data-axis="horizontal"] {
+  padding-top: 1.3em;
+}
+.c-diagram.c-sequence:not([data-branch-after="0"]) .sequence-chain[data-axis="vertical"] {
+  padding-right: 0.8em;
+}
+.c-diagram.c-sequence .sequence-leaders path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5px;
+  stroke-dasharray: 4 5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 正式字段中的局部图位和节点变体，文字继续使用同角色变量。 */
+.c-diagram.c-sequence .sequence-item[data-illustration="left_inside"] > .sequence-card {
+  display: grid;
+  grid-template-columns: minmax(0, var(--sequence-icon-column, 25%)) minmax(0, 1fr);
+  gap: 0.5em;
+  align-items: center;
+}
+.c-diagram.c-sequence .sequence-item[data-illustration="right_inside"] > .sequence-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--sequence-icon-column, 25%));
+  gap: 0.5em;
+  align-items: center;
+}
+.c-diagram.c-sequence .sequence-item[data-illustration="top_inside"] > .sequence-card,
+.c-diagram.c-sequence .sequence-item[data-illustration="bottom_inside"] > .sequence-card,
+.c-diagram.c-sequence .sequence-item[data-illustration="below_card"] > .sequence-card,
+.c-diagram.c-sequence .sequence-item[data-illustration="none"] > .sequence-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+.c-diagram.c-sequence .sequence-item[data-icon-align="left"] .sequence-icon { align-self: start; }
+.c-diagram.c-sequence:not([data-icon-width-explicit="true"]) .sequence-item[data-illustration="left_inside"] > .sequence-card:not(:has(> .sequence-icon)),
+.c-diagram.c-sequence:not([data-icon-width-explicit="true"]) .sequence-item[data-illustration="right_inside"] > .sequence-card:not(:has(> .sequence-icon)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+.c-diagram.c-sequence .sequence-title-context:has(> .sequence-title-icon) { display: flex; gap: 0.3em; align-items: center; }
+.c-diagram.c-sequence .sequence-title-icon { width: 1.4em; height: 1.4em; object-fit: contain; }
+.c-diagram.c-sequence .sequence-number-top-left { display: flex; flex-direction: column; align-items: start; }
+.c-diagram.c-sequence .sequence-item[data-number-position="inline"] .dg-number {
+  width: auto;
+  min-height: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--accent);
+}
+.c-diagram.c-sequence .sequence-station-label {
+  padding: 0.25em 0.4em;
+  border: 2px solid var(--line);
+  border-radius: 0.2em;
+  background: var(--soft);
+  font-size: max(var(--fs-name), var(--sequence-min-font));
+  font-weight: 800;
+}
+.c-diagram.c-sequence[data-size="medium"] { --sequence-space: 0.7em; }
+.c-diagram.c-sequence[data-compact-rows="true"] .sequence-chain { gap: 0.25em; }
+.c-diagram.c-sequence .sequence-item[data-item-variant="date_left_flags"] {
+  display: grid;
+  grid-template-columns: minmax(0, 30%) minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75em;
+}
+.c-diagram.c-sequence .sequence-item[data-item-variant="date_left_flags"] .sequence-art { grid-column: 2; }
+.c-diagram.c-sequence .sequence-item[data-item-variant="date_left_flags"] .sequence-flag-card { grid-column: 2; }
+.c-diagram.c-sequence .sequence-item[data-item-variant="date_left_flags"] .sequence-flag { grid-row: 1 / span 2; }
+.c-diagram.c-sequence .sequence-item[data-item-connector="none"]::before,
+.c-diagram.c-sequence .sequence-item[data-item-connector="none"]::after,
+.c-diagram.c-sequence[data-path="curved"] .sequence-item::before,
+.c-diagram.c-sequence[data-path="curved"] .sequence-item::after { content: none; }
+.c-diagram.c-sequence.c-timeline:has(.sequence-item[data-item-connector="none"]) .sequence-chain[data-axis="vertical"],
+.c-diagram.c-sequence.c-timeline[data-path="curved"] .sequence-chain[data-axis="vertical"] {
+  border-left: 0;
+}
+.c-diagram.c-sequence .sequence-item[data-item-variant="flags_connected"]::before { content: none; }
+.c-diagram.c-sequence .sequence-item[data-item-variant="flags_connected"]::after {
+  content: "";
+  left: 1.1em;
+  top: 100%;
+  width: 0.22em;
+  height: var(--sequence-space);
+  background: var(--line);
+}
+.c-diagram.c-sequence .sequence-emphasis-badge {
+  display: inline-block;
+  padding: 0.15em 0.35em;
+  background: var(--accent);
+  color: var(--cardbg);
+  border-radius: 0.3em;
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  font-weight: 800;
+}
+.c-diagram.c-sequence .sequence-status {
+  position: absolute;
+  top: 0.3em;
+  right: 0.3em;
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background: var(--status-pending);
+}
+.c-diagram.c-sequence .sequence-card:has(> .sequence-status) { padding-right: 1em; }
+.c-diagram.c-sequence[data-dot-nodes="true"] .sequence-chain {
+  padding-left: 0.8em;
+  border-left: 2px solid var(--line);
+}
+.c-diagram.c-sequence[data-dot-nodes="true"] .sequence-item::before {
+  content: "";
+  left: -1em;
+  top: 0.8em;
+  width: 0.35em;
+  height: 0.35em;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.c-diagram.c-sequence[data-dot-nodes="true"] .sequence-item::after { content: none; }
+.c-diagram.c-sequence[data-branches] { padding: 0.65em 0.65em 1em; }
+.c-diagram.c-sequence[data-database-bracket="true"] { padding-right: 1em; }
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="counter-branch"] {
+  stroke: var(--diagram-counter);
+  stroke-width: 2px;
+}
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="database-bracket"] { stroke-width: 2px; }
+.c-diagram.c-sequence .sequence-main-and-branch {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8em;
+  min-width: 0;
+  flex: 1;
+}
+.c-diagram.c-sequence .sequence-main-and-branch[data-side="right"] {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+}
+.c-diagram.c-sequence .sequence-failure-branch {
+  min-width: 0;
+  padding: 0.35em 0.4em;
+  border: 2px dashed var(--line);
+  background: var(--card-bg, var(--cardbg));
+  border-radius: var(--radius);
+  box-shadow: none;
+}
+.c-diagram.c-sequence .sequence-failure-branch .dg-body {
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  line-height: var(--lh, 1.45);
+  overflow-wrap: anywhere;
+}
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="failure-branch"] { stroke-width: 2px; }
+.c-diagram.c-sequence[data-source-connectors="true"] { --sequence-space: max(var(--gap-card, 16px), 1.8em); }
+.c-diagram.c-sequence[data-source-connectors="true"] .sequence-item::before,
+.c-diagram.c-sequence[data-source-connectors="true"] .sequence-item::after { content: none; }
+.c-diagram.c-sequence .sequence-source-connector {
+  position: absolute;
+  display: inline-block;
+  left: 0;
+  top: 0;
+  width: auto;
+  height: auto;
+  color: var(--accent);
+  font-size: max(var(--fs-body), var(--sequence-min-font));
+  line-height: 1.1;
+  white-space: nowrap;
+  text-align: center;
+  transform-origin: center;
+  z-index: 3;
+}
+.c-diagram.c-sequence .sequence-source-connector[data-axis="vertical"]:not([data-native-vertical="true"]) { transform: rotate(90deg); }
+.c-diagram.c-sequence .sequence-edges > path[data-edge-kind="loop"] { stroke-width: 2px; }
+.c-diagram.c-sequence .sequence-manual-action {
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.2em;
+  vertical-align: middle;
+  object-fit: contain;
+}

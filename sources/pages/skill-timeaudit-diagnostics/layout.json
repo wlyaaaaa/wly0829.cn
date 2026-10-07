@@ -1,0 +1,423 @@
+[
+  {
+    "screen": "skill-timeaudit-diagnostics-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-01-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "查电脑卡顿",
+        "align": "center",
+        "size": "large",
+        "row": "hero",
+        "width": "50%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名",
+        "row": "hero"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么",
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑卡了",
+        "row": "hero"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "medium",
+        "row": "hero",
+        "align": "center",
+        "target_height": 220
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 2,
+        "split_paras": true,
+        "illustration": "none",
+        "row": "hero",
+        "width": "50%"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 qa-11 修复：插画移到左栏提示框下，用 medium/220px 上限；右栏由怎么跟 AI 说明确开启，补左下空白而保留原气泡分组。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-02-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "另一种问法",
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 qa-11 修复：例子主内容占全宽；另一种问法在其后独立全宽行，取消 66.7/33.3 高度悬殊的并栏。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-03-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "size": "large",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "这个技能是只读诊断入口"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1,
+        "item_cards": true,
+        "inner_columns": 2,
+        "icons": "auto",
+        "illustration": "left_inside"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 qa-11 修复：能做的事原词独立为章节标题；提示框从下一原段开始，去看全部功能保留为句尾行内链接，不重复标题、不改句尾。缺毛笔标题素材已另提请求。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-04-h.png"
+    ],
+    "portrait_required": true,
+    "aspect": "16:9",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          0
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/代码窗口.png"
+        ]
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。\n2026-10-04 空白专查追加（AI实施；本人本轮明确授权重排）：管的范围、不管事项表、不做事项按原序整宽纵排，避免短范围卡撑成左空长栏。 定稿和素材原件不改。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-01-v.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "查电脑卡顿",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "技能名"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "它做什么"
+      },
+      {
+        "type": "prose",
+        "text_ref": "电脑卡了"
+      },
+      {
+        "type": "notice",
+        "text_ref": "不用点名"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "banner"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "怎么跟 AI 说",
+        "columns": 1,
+        "split_paras": true,
+        "illustration": "none"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-02-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "sides": [
+          "right"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "timeline",
+        "text_ref": "AI 做了什么",
+        "direction": "vertical",
+        "columns": 1,
+        "connector": "ribbon",
+        "illustration": "left_inside",
+        "icons": "auto"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "AI 交回",
+        "sides": [
+          "left"
+        ],
+        "illustration": "none"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "另一种问法",
+        "split_paras": true,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "illustration": "none"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-03-v2.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事",
+        "size": "large",
+        "align": "center"
+      },
+      {
+        "type": "notice",
+        "text_ref": "这个技能是只读诊断入口"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "用这个技能时",
+        "columns": 1,
+        "item_cards": true,
+        "inner_columns": 1,
+        "icons": "auto",
+        "illustration": "left_inside"
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。 qa-11 修复：能做的事原词独立为章节标题；提示框从下一原段开始，去看全部功能保留为句尾行内链接，不重复标题、不改句尾。缺毛笔标题素材已另提请求。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  },
+  {
+    "screen": "skill-timeaudit-diagnostics-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\img\\skill-timeaudit-diagnostics-04-v.png"
+    ],
+    "portrait_required": true,
+    "aspect": "9:16",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "管",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          0
+        ]
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "不管，交给谁"
+      },
+      {
+        "type": "table",
+        "text_ref": "这些事"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "不做",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/代码窗口.png"
+        ]
+      }
+    ],
+    "notes": "依据 screens.jsonl 的 source_layout、desktop/portrait_component_order、layout_variants 与定稿 scene/portrait/text 核对；仅文字审查，未查看原图或成图。",
+    "layout_basis": {
+      "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "source_sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
+      "inventory": "typeset-inventory/screens.jsonl"
+    }
+  }
+]

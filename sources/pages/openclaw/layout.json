@@ -1,0 +1,1136 @@
+[
+  {
+    "screen": "openclaw-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "OpenClaw 网关"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "row": "hero",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "原来想在手机"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "content_card",
+        "columns": 3,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "为什么不用了",
+        "width": "100%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片"
+      },
+      {
+        "type": "stat_card",
+        "columns": 4,
+        "columns_v": 2,
+        "illustration": "none",
+        "icons": "none",
+        "historical": true,
+        "text_ref": "1 127,675"
+      },
+      {
+        "type": "action_button",
+        "promote_links": [
+          "GitHub",
+          "复制 AI 续作说明"
+        ],
+        "text_ref": "〔GitHub〕"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。横版左55%含标题/冻结标签、介绍及三说明卡；右45%卡外手机—断开的细绿虚线—电脑和带霜打盹小龙虾；四历史数字卡在底部整宽。竖版标题/标签、主插画、介绍、三卡、2×2数字卡、GitHub和续作按钮/说明链接依次排。不加现在横条，不启动冻结项目。\n页修复10：h简介三卡移到首屏插画下方全宽三列；两方向数字卡不放图。数字卡片说明原属定稿，删字待main裁定，暂保留。简介第一图标和标题污染交素材。",
+    "pending_requirements": [
+      {
+        "owner": "主工程师 / comp-hub",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[stat_card:1 127,675].type",
+          "blocks[stat_card:1 127,675].historical"
+        ],
+        "requirement": "四条数字原文是 steps.cols，须显示原编号一次并按竖线前大数字/后说明生成四张数字卡；stat_card 当前仅收 stats。横版四列、竖版两列；historical 当前未消费，只让历史卡/插画适度灰淡，不降低毛笔浓度。",
+        "evidence": "openclaw/page.json:openclaw-01.text；components/core/__init__.py:stat_card；components/comp-hub/link_stats.py:stat_card"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:已冻结].tone",
+          "blocks[action_button:〔GitHub〕].promote_links"
+        ],
+        "requirement": "已冻结为灰绿小标签；底行仅 GitHub 与复制AI续作说明为等大白底细边按钮，约法L24保持内联链接。tag 不读取 tone；action_button 对混合 para 不提升指定链接，promote_links 当前未读取。",
+        "evidence": "openclaw/page.json:openclaw-01.scene；components/comp-text/primitives.py:render_tag；components/comp-text/buttons.py:render_action_button"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:为什么不用了].icons",
+          "blocks[stat_card:1 127,675].icons",
+          "blocks[action_button:〔GitHub〕]"
+        ],
+        "requirement": "icon 需要 8 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:OpenClaw 网关].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "16:9"
+  },
+  {
+    "screen": "openclaw-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "OpenClaw 网关"
+      },
+      {
+        "type": "tag",
+        "tone": "gray",
+        "text_ref": "已冻结"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "size": "banner"
+      },
+      {
+        "type": "prose",
+        "text_ref": "原来想在手机"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "top_inside",
+        "icons": "auto",
+        "text_ref": "为什么不用了"
+      },
+      {
+        "type": "prose",
+        "text_ref": "数字卡片"
+      },
+      {
+        "type": "stat_card",
+        "columns": 2,
+        "columns_v": 2,
+        "illustration": "none",
+        "icons": "none",
+        "historical": true,
+        "text_ref": "1 127,675"
+      },
+      {
+        "type": "action_button",
+        "promote_links": [
+          "GitHub",
+          "复制 AI 续作说明"
+        ],
+        "text_ref": "〔GitHub〕"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。横版左55%含标题/冻结标签、介绍及三说明卡；右45%卡外手机—断开的细绿虚线—电脑和带霜打盹小龙虾；四历史数字卡在底部整宽。竖版标题/标签、主插画、介绍、三卡、2×2数字卡、GitHub和续作按钮/说明链接依次排。不加现在横条，不启动冻结项目。\n页修复10：h简介三卡移到首屏插画下方全宽三列；两方向数字卡不放图。数字卡片说明原属定稿，删字待main裁定，暂保留。简介第一图标和标题污染交素材。",
+    "pending_requirements": [
+      {
+        "owner": "主工程师 / comp-hub",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[stat_card:1 127,675].type",
+          "blocks[stat_card:1 127,675].historical"
+        ],
+        "requirement": "四条数字原文是 steps.cols，须显示原编号一次并按竖线前大数字/后说明生成四张数字卡；stat_card 当前仅收 stats。横版四列、竖版两列；historical 当前未消费，只让历史卡/插画适度灰淡，不降低毛笔浓度。",
+        "evidence": "openclaw/page.json:openclaw-01.text；components/core/__init__.py:stat_card；components/comp-hub/link_stats.py:stat_card"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[tag:已冻结].tone",
+          "blocks[action_button:〔GitHub〕].promote_links"
+        ],
+        "requirement": "已冻结为灰绿小标签；底行仅 GitHub 与复制AI续作说明为等大白底细边按钮，约法L24保持内联链接。tag 不读取 tone；action_button 对混合 para 不提升指定链接，promote_links 当前未读取。",
+        "evidence": "openclaw/page.json:openclaw-01.scene；components/comp-text/primitives.py:render_tag；components/comp-text/buttons.py:render_action_button"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[content_card:为什么不用了].icons",
+          "blocks[stat_card:1 127,675].icons",
+          "blocks[action_button:〔GitHub〕]"
+        ],
+        "requirement": "icon 需要 8 个，当前有效总 manifest 有 1 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-01.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:OpenClaw 网关].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "9:16"
+  },
+  {
+    "screen": "openclaw-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "哪里不好用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人的原话是"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "issues-0",
+        "width": "50%",
+        "text_ref": "1越聊越满"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "issues-0",
+        "width": "50%",
+        "text_ref": "2每轮都先背一大段说明"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "issues-1",
+        "width": "50%",
+        "text_ref": "3官方升级可能改坏设置"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "row": "issues-1",
+        "width": "50%",
+        "text_ref": "4自己时不时卡住"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不算在它头上的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说句公道话"
+      },
+      {
+        "type": "table",
+        "columns": 2,
+        "text_ref": "现在这些事谁来做"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。四条问题各为完整外卡；横版两列两排，竖版一列，卡内包含原编号/标题、正文、记录日期。拆成四个真实 text_ref 以保持正文和日期跟随对应卡。下方灰区、公道话、两列表格（竖版三行卡）按原序；各图标须按四条原义显式映射。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:1越聊越满].icon_position",
+          "blocks[points_card:2每轮都先背一大段说明].icon_position",
+          "blocks[points_card:3官方升级可能改坏设置].icon_position",
+          "blocks[points_card:4自己时不时卡住].icon_position"
+        ],
+        "requirement": "四完整问题卡按2×2/竖单列排，每张含编号标题、正文和记录日期；points_card 的 header_left 只识首个 card/group/heading，真实首节点为 steps，故图标当前不放。记录日期要浅灰小字；竖版图标在左、字在右。",
+        "evidence": "openclaw/page.json:openclaw-02.scene/text；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:不算在它头上的].tone"
+        ],
+        "requirement": "此段按原文为浅灰说明区；notice gray 当前沿批准的浅绿底，灰底须组件样张确认，不能据字段称已呈现浅灰。",
+        "evidence": "components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:1越聊越满].icons",
+          "blocks[points_card:2每轮都先背一大段说明].icons",
+          "blocks[points_card:3官方升级可能改坏设置].icons",
+          "blocks[points_card:4自己时不时卡住].icons"
+        ],
+        "requirement": "icon 需要 4 个，当前有效总 manifest 有 3 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-02.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:哪里不好用].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "16:9"
+  },
+  {
+    "screen": "openclaw-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-v2.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-02-v3.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "哪里不好用"
+      },
+      {
+        "type": "prose",
+        "text_ref": "本人的原话是"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "1越聊越满"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "2每轮都先背一大段说明"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "3官方升级可能改坏设置"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "icon_position": "header_left",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "text_ref": "4自己时不时卡住"
+      },
+      {
+        "type": "notice",
+        "tone": "gray",
+        "text_ref": "不算在它头上的"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说句公道话"
+      },
+      {
+        "type": "table",
+        "columns": 1,
+        "text_ref": "现在这些事谁来做"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。四条问题各为完整外卡；横版两列两排，竖版一列，卡内包含原编号/标题、正文、记录日期。拆成四个真实 text_ref 以保持正文和日期跟随对应卡。下方灰区、公道话、两列表格（竖版三行卡）按原序；各图标须按四条原义显式映射。",
+    "pending_requirements": [
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:1越聊越满].icon_position",
+          "blocks[points_card:2每轮都先背一大段说明].icon_position",
+          "blocks[points_card:3官方升级可能改坏设置].icon_position",
+          "blocks[points_card:4自己时不时卡住].icon_position"
+        ],
+        "requirement": "四完整问题卡按2×2/竖单列排，每张含编号标题、正文和记录日期；points_card 的 header_left 只识首个 card/group/heading，真实首节点为 steps，故图标当前不放。记录日期要浅灰小字；竖版图标在左、字在右。",
+        "evidence": "openclaw/page.json:openclaw-02.scene/text；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[notice:不算在它头上的].tone"
+        ],
+        "requirement": "此段按原文为浅灰说明区；notice gray 当前沿批准的浅绿底，灰底须组件样张确认，不能据字段称已呈现浅灰。",
+        "evidence": "components/comp-text/primitives.py:render_notice"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[points_card:1越聊越满].icons",
+          "blocks[points_card:2每轮都先背一大段说明].icons",
+          "blocks[points_card:3官方升级可能改坏设置].icons",
+          "blocks[points_card:4自己时不时卡住].icons"
+        ],
+        "requirement": "icon 需要 4 个，当前有效总 manifest 有 3 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-02.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:哪里不好用].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "9:16"
+  },
+  {
+    "screen": "openclaw-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "当初想怎么用"
+      },
+      {
+        "type": "flow",
+        "columns": 5,
+        "direction": "horizontal",
+        "connector": "arrow",
+        "illustration": "above_card",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
+          "_library/icons/笔记本电脑.png",
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/双气泡.png"
+        ],
+        "text_ref": "1手机"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "uses",
+        "width": "45%",
+        "text_ref": "在手机上派活"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "uses",
+        "text_ref": "想让它当"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "uses",
+        "width": "55%",
+        "text_ref": "运维交给 AI，我不开终端"
+      },
+      {
+        "type": "notice",
+        "text_ref": "一个绿灯只说明一层"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。五节点箭头流程在上；横版下半部左两卡上下叠、右运维大卡，竖版三卡按定稿一行一张。运维卡内问话气泡和四勾选项需保持。底部浅绿横条保留原文≠。",
+    "pending_requirements": [
+      {
+        "owner": "主工程师 / comp-diagram",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[flow:1手机].type",
+          "blocks[flow:1手机].columns",
+          "blocks[flow:1手机].connector"
+        ],
+        "requirement": "五个编号标题与后续正文必须合成五个节点再连接；当前 parse 生成五组单项 steps 和独立 para，flow._sections 将其拆成五条单项链，无法得到五节点连箭头。横版五节点一排、竖版从上到下，图标右边放节点名及说明。",
+        "evidence": "openclaw/page.json:openclaw-03.text；engine/parse.py:parse；components/comp-diagram/sequence.py:_sections"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:运维交给 AI，我不开终端].whole_block"
+        ],
+        "requirement": "运维卡须在单一外卡内把“我只说一句”原段画为气泡，其后四原文项目为小勾选框；whole_block 已支持外卡，但尚无混合气泡/勾选框字段，当前仍普通段落和圆点清单。",
+        "evidence": "openclaw/page.json:openclaw-03.scene；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[flow:1手机].icons"
+        ],
+        "requirement": "icon 需要 5 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 openclaw-03.scene 明确五个图标节点；库存 assets 错计为 0，需补素材登记"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:当初想怎么用].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "16:9"
+  },
+  {
+    "screen": "openclaw-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "当初想怎么用"
+      },
+      {
+        "type": "flow",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
+          "_library/icons/笔记本电脑.png",
+          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/双气泡.png"
+        ],
+        "text_ref": "1手机"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "在手机上派活"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "想让它当"
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "运维交给 AI，我不开终端"
+      },
+      {
+        "type": "notice",
+        "text_ref": "一个绿灯只说明一层"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。五节点箭头流程在上；横版下半部左两卡上下叠、右运维大卡，竖版三卡按定稿一行一张。运维卡内问话气泡和四勾选项需保持。底部浅绿横条保留原文≠。",
+    "pending_requirements": [
+      {
+        "owner": "主工程师 / comp-diagram",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[flow:1手机].type",
+          "blocks[flow:1手机].columns",
+          "blocks[flow:1手机].connector"
+        ],
+        "requirement": "五个编号标题与后续正文必须合成五个节点再连接；当前 parse 生成五组单项 steps 和独立 para，flow._sections 将其拆成五条单项链，无法得到五节点连箭头。横版五节点一排、竖版从上到下，图标右边放节点名及说明。",
+        "evidence": "openclaw/page.json:openclaw-03.text；engine/parse.py:parse；components/comp-diagram/sequence.py:_sections"
+      },
+      {
+        "owner": "comp-text",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[points_card:运维交给 AI，我不开终端].whole_block"
+        ],
+        "requirement": "运维卡须在单一外卡内把“我只说一句”原段画为气泡，其后四原文项目为小勾选框；whole_block 已支持外卡，但尚无混合气泡/勾选框字段，当前仍普通段落和圆点清单。",
+        "evidence": "openclaw/page.json:openclaw-03.scene；components/comp-text/cards.py:_points_headed"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[flow:1手机].icons"
+        ],
+        "requirement": "icon 需要 5 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 openclaw-03.scene 明确五个图标节点；库存 assets 错计为 0，需补素材登记"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:当初想怎么用].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "9:16"
+  },
+  {
+    "screen": "openclaw-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "head",
+        "width": "72%",
+        "text_ref": "全部旧功能（14 项，全部已停用）"
+      },
+      {
+        "type": "status_legend",
+        "row": "head",
+        "width": "28%",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "在聊天里派活"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "渠道交办",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "让它一直在线"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "网关常驻",
+        "fill_last_row": true
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "备份与恢复"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "官方备份和恢复演练",
+        "fill_last_row": true
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与单项已停用图例相邻；三组各有一行毛笔组名，组名不单独占列。组卡数量为5、5、4，横版各组三列，竖版单列。分别以真实组名/首条作 text_ref，不加新标题或状态。三组毛笔素材和主标题须逐字一致。\n页修复10：三组组名改为small section_heading，保留本屏大标题。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。",
+    "pending_requirements": [
+      {
+        "owner": "comp-hub",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[feature_card].muted"
+        ],
+        "requirement": "十四旧功能全部停用；卡内右上灰叉、图标灰调，毛笔标题仍保持批准浓度。feature_card 当前未消费 muted，淡灰装饰需样张确认，不能给整屏或标题加透明度。",
+        "evidence": "openclaw/page.json:openclaw-04.scene；components/comp-hub/feature_status.py:render_feature_card"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[feature_card].icons"
+        ],
+        "requirement": "icon 需要 14 个，当前有效总 manifest 有 4 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-04.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:全部旧功能（14 项，全部已停用）].text_ref"
+        ],
+        "requirement": "标题“全部旧功能（14 项，全部已停用）”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:全部旧功能（14 项，全部已停用）].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:在聊天里派活].text_ref"
+        ],
+        "requirement": "标题“在聊天里派活”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:在聊天里派活].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:让它一直在线].text_ref"
+        ],
+        "requirement": "标题“让它一直在线”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:让它一直在线].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:备份与恢复].text_ref"
+        ],
+        "requirement": "标题“备份与恢复”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:备份与恢复].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ]
+  },
+  {
+    "screen": "openclaw-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "全部旧功能（14 项，全部已停用）"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例："
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "在聊天里派活"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "渠道交办"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "让它一直在线"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "网关常驻"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "备份与恢复"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "muted": true,
+        "text_ref": "官方备份和恢复演练"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。标题与单项已停用图例相邻；三组各有一行毛笔组名，组名不单独占列。组卡数量为5、5、4，横版各组三列，竖版单列。分别以真实组名/首条作 text_ref，不加新标题或状态。三组毛笔素材和主标题须逐字一致。\n页修复10：三组组名改为small section_heading，保留本屏大标题。",
+    "pending_requirements": [
+      {
+        "owner": "comp-hub",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[feature_card].muted"
+        ],
+        "requirement": "十四旧功能全部停用；卡内右上灰叉、图标灰调，毛笔标题仍保持批准浓度。feature_card 当前未消费 muted，淡灰装饰需样张确认，不能给整屏或标题加透明度。",
+        "evidence": "openclaw/page.json:openclaw-04.scene；components/comp-hub/feature_status.py:render_feature_card"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[feature_card].icons"
+        ],
+        "requirement": "icon 需要 14 个，当前有效总 manifest 有 4 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "typeset-inventory/screens.jsonl:openclaw-04.source_layout；typeset-assets/manifest.jsonl"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:全部旧功能（14 项，全部已停用）].text_ref"
+        ],
+        "requirement": "标题“全部旧功能（14 项，全部已停用）”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:全部旧功能（14 项，全部已停用）].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:在聊天里派活].text_ref"
+        ],
+        "requirement": "标题“在聊天里派活”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:在聊天里派活].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:让它一直在线].text_ref"
+        ],
+        "requirement": "标题“让它一直在线”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:让它一直在线].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "title_fallback",
+        "fields": [
+          "blocks[chapter_title:备份与恢复].text_ref"
+        ],
+        "requirement": "标题“备份与恢复”当前总 manifest 无逐字一致的合格 title 素材，程序会用字体兜底；补合格标题图后核对原浓度。",
+        "evidence": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\page.json:openclaw-04.text; typeset-assets/manifest.jsonl；components/core/__init__.py:_title"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:备份与恢复].size"
+        ],
+        "requirement": "保留 medium 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "9:16"
+  },
+  {
+    "screen": "openclaw-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "演进（6 月 19 日—9 月 28 日，65 次提交）",
+        "row": "balanced-heading",
+        "width": "88%"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside",
+        "row": "balanced-heading",
+        "width": "12%"
+      },
+      {
+        "type": "timeline",
+        "columns": 4,
+        "direction": "horizontal",
+        "connector": "ribbon",
+        "illustration": "outside",
+        "icons": "none",
+        "item_rows": [
+          4,
+          4,
+          3
+        ],
+        "text_ref": "6 月 19 日"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。11个日期节点原序保留，横版用6+5两排旗头和蜿蜒丝带，末端睡着的小龙虾在右；竖版一条向下丝带，日期左说明右，最下方小龙虾。末端的灰淡仅用于丝带/装饰，不降低毛笔标题浓度。\n页修复10：h时间线每排四项，三排4/4/3，原字和日期顺序保留。",
+    "pending_requirements": [
+      {
+        "owner": "comp-diagram",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[timeline:6 月 19 日].item_rows",
+          "blocks[timeline:6 月 19 日].connector",
+          "blocks[timeline:6 月 19 日].illustration"
+        ],
+        "requirement": "横版11日期旗需要两排蜿蜒连续丝带，上下错开，第二排接回第一排，末端渐淡/偏灰；当前 item_rows 支持两排数量，但无蛇形跨排连线或渐淡，timeline 默认每排同向独立。竖版日期在左、说明在右的竖丝带亦需按源构图核对。",
+        "evidence": "openclaw/page.json:openclaw-05.scene/portrait；components/comp-diagram/sequence.py 与 sequence.css"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 openclaw-05.scene/portrait 明确末端打盹带霜小龙虾；库存 assets 漏计为 0"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:演进（6 月 19 日—9 月 28 日，65 次提交）].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "16:9"
+  },
+  {
+    "screen": "openclaw-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\openclaw\\img\\openclaw-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "medium",
+        "text_ref": "演进（6 月 19 日—9 月 28 日，65 次提交）"
+      },
+      {
+        "type": "timeline",
+        "columns": 1,
+        "direction": "vertical",
+        "connector": "ribbon",
+        "illustration": "outside",
+        "icons": "none",
+        "text_ref": "6 月 19 日"
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      }
+    ],
+    "notes": "构图来源：定稿 scene/portrait。11个日期节点原序保留，横版用6+5两排旗头和蜿蜒丝带，末端睡着的小龙虾在右；竖版一条向下丝带，日期左说明右，最下方小龙虾。末端的灰淡仅用于丝带/装饰，不降低毛笔标题浓度。",
+    "pending_requirements": [
+      {
+        "owner": "comp-diagram",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[timeline:6 月 19 日].item_rows",
+          "blocks[timeline:6 月 19 日].connector",
+          "blocks[timeline:6 月 19 日].illustration"
+        ],
+        "requirement": "横版11日期旗需要两排蜿蜒连续丝带，上下错开，第二排接回第一排，末端渐淡/偏灰；当前 item_rows 支持两排数量，但无蛇形跨排连线或渐淡，timeline 默认每排同向独立。竖版日期在左、说明在右的竖丝带亦需按源构图核对。",
+        "evidence": "openclaw/page.json:openclaw-05.scene/portrait；components/comp-diagram/sequence.py 与 sequence.css"
+      },
+      {
+        "owner": "素材负责人",
+        "type": "missing_asset",
+        "fields": [
+          "blocks[illustration].illustration"
+        ],
+        "requirement": "illustration 需要 1 个，当前有效总 manifest 有 0 个；按源文物件语义和原序补齐，不复用错误物件、不放空图。",
+        "evidence": "定稿 openclaw-05.scene/portrait 明确末端打盹带霜小龙虾；库存 assets 漏计为 0"
+      },
+      {
+        "owner": "主工程师",
+        "type": "unsupported_layout",
+        "fields": [
+          "blocks[chapter_title:演进（6 月 19 日—9 月 28 日，65 次提交）].size"
+        ],
+        "requirement": "保留 large 标题档位；core._title 当前不消费 size，须按原图标题角色核对实际大小。",
+        "evidence": "typeset-proto/components/core/__init__.py:_title"
+      }
+    ],
+    "aspect": "9:16"
+  }
+]

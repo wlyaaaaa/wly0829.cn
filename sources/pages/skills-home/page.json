@@ -1,0 +1,923 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skills-home",
+  "kind": "skills-home",
+  "title": "技能",
+  "url": "/skills/",
+  "tagline": "AI 碰到某类事时照着办的说明书，一共 26 个。",
+  "status": "",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "files": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-media\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-media-person-self\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-wechat-direct\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-chinese-asr\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-localocr\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-mojibake-doctor\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-md-to-pdf\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-pdf-render-safe\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-daily-preferences\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-explain-to-me\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-reply-as-me\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-learning\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-work-delivery\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-formal-documents\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-health\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-local-secret-broker\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-authorization-file-broker\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-vault-workflow\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-browser-control-continuity\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-google-workspace-direct\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-tailscale-safe-exposure\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-project-entry-gate\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-cloud-asset-channel\\page.json"
+    ],
+    "project_titles_from": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\chinese-asr\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\daily-preferences\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\github-local-index\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\learning\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\password-center\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-expression\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-formal-documents\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-health\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-materials\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\timeaudit\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\vault-tool\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechatdirect\\page.json",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\work-delivery-copilot\\page.json"
+    ],
+    "agents_commit": "9e269f2635aaca847c50c38d1d9338110524145f",
+    "agents_commit_time": "2026-10-02T03:05:57+08:00"
+  },
+  "video_prompt": "5–8 秒循环：从开头这屏的水彩书桌出发，一排小手册的书脊从左到右依次微微亮起浅绿光，小机器人把手里那本翻过一页，空白对话气泡轻轻浮动，几片水彩绿叶从上方缓缓飘落；画面里不出现任何字，镜头不动。",
+  "screens": [
+    {
+      "id": "skills-home-01",
+      "section": "top",
+      "title": "技能是什么、怎么用",
+      "scene": "横版 16:9。风格照规则总页和已通过的规则原文样张 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png（白底、纯绿、深蓝灰正文、细浅绿描边圆角卡），毛笔标题写法和规则总页开头一屏相同。左右分栏。左边约占 55%：左上毛笔艺术字大标题“技能”，下面一道绿色笔刷线；笔刷线下粗体深绿一句（技能是……说明书。），再下面一段深蓝灰常规字；然后一张浅绿底圆角小卡写“怎么用”那一句，“怎么用”粗体深绿；小卡下面一个醒目的大数字块：“26 个技能”里的“26”用很大的深绿数字，“个技能”粗体，后面灰绿色小字写截至日期和分组数；数字块下面一行小字说明“属于：项目名”标签，其中“属于：项目名”画成和后面卡片上一样的浅绿小标签样式（不是链接）。右边约占 45% 画一幅水彩插画：一张木书桌上立着一排 26 本薄薄的小手册（书脊从深绿到浅绿渐变，书脊不写字），一只小机器人助手正从中抽出一本翻开来看，机器人胸前一左一右两枚小圆徽章：Claude 的橙色星芒标志和 OpenAI 的黑色花结标志（代表 Codex）；书桌另一侧飘着一个空白的对话气泡（表示我说了一句话，气泡里不写字）；周围几片水彩绿叶。插画里不出现任何字。整屏最下面一条贯通全宽的细长浅绿圆角横条，里面是“技能怎么写……项目里讲。”那句，行末〔技能怎么装到各个 AI → 基座〕画成白底细绿描边的圆角按钮。",
+      "portrait": "竖版 9:16，字完全一样，从上往下：毛笔大标题“技能”和笔刷线；粗体一句；说明段；“怎么用”小卡；大数字块“26 个技能”和截至日期；“属于”标签说明；水彩插画（书桌、一排小手册、抽书的机器人和两枚徽章、空白气泡）缩成宽约 75% 居中；最下面横条，文字在上，〔技能怎么装到各个 AI → 基座〕按钮换到文字下面单独一行居中。",
+      "text": "# 技能\n\n**技能是 AI 碰到某类事时照着办的说明书。**\n\n里面写着这类事怎么做、用哪些工具、哪些不归它管。Codex 和 Claude 共用同一套。\n\n**怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。\n\n**26 个技能**　截至 10 月 2 日，按用途分 7 组。\n\n卡片右下角带“属于：项目名”的 18 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。\n\n技能怎么写、怎么装到 Codex 和 Claude，在“AI 规则与技能基座”项目里讲。〔技能怎么装到各个 AI → 基座〕",
+      "links": [
+        {
+          "text": "技能怎么装到各个 AI → 基座",
+          "href": "/projects/agents/#agents-08"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "skills-home-02",
+      "section": "find",
+      "title": "找资料和读懂文件",
+      "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“找照片、文件和聊天”4 张（一行排开）；“读懂录音、图片和文档”5 张（排成两行，上面 4 张、下面 1 张靠左）。全页统一：每排 4 张，卡片同宽同高；一组超过 4 张就换行，最后一排靠左、不拉宽；不满 4 张的组也靠左、和别组的卡同宽。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：找照片和录音：一叠照片旁边一小段录音波形；找文件原件：一个文件夹里抽出一页纸；照片录音里有没有我：一张照片上用绿圈圈出一个人的剪影（不画五官）；看微信聊天：微信的绿色双气泡标志；中文语音转写技能：一支麦克风和几道声波；本地文字识别：放大镜压在几行浅绿横线上（横线代表文字，不画可读的字）；修乱码：一团乱线被梳子理成整齐的横线；文稿转 PDF：一张散开的纸变成一本装订好的小册子；PDF 逐页检查：一排小页面缩略图，其中一页被放大镜放大。组与组之间用很淡的水彩绿色笔刷线分隔。",
+      "portrait": "竖版 9:16，字完全一样：各组从上往下排，每组先是组名，组说明换到组名下一行；下面卡片一行一张、占满宽度，图标在卡片左边，技能名和一句话在右边，“属于”小标签在一句话下面靠右。",
+      "text": "**找照片、文件和聊天**　从我自己的照片、录音、文档和微信里找东西。\n\n- 〔找照片和录音〕说个大概，找出照片视频原件或录音里那句话。　〔属于：照片视频录音管理〕\n- 〔找文件原件〕说个大概，找出文档原件，翻到要看的那一页。　〔属于：个人材料查找〕\n- 〔照片录音里有没有我〕看指定的照片或录音里有没有我，不认别人。\n- 〔看微信聊天〕问微信里的事，AI 只读点名的那一段。　〔属于：微信聊天读取〕\n\n**读懂录音、图片和文档**　把录音、图片和乱码变成能核对的文字，也把文稿做成查过的 PDF。\n\n- 〔中文语音转写技能〕跟 AI 说一句，录音就变成能核对的文字。　〔属于：中文语音转写〕\n- 〔本地文字识别〕要逐字准确、成批或只在本机时，交给本地识字。　〔属于：本地文字识别〕\n- 〔修乱码〕查清中文乱码怎么来的，能严格倒回才修。\n- 〔文稿转 PDF〕把 Markdown 转成能打印的 PDF，查过再交。\n- 〔PDF 逐页检查〕把 PDF 摊成一页页的图，让 AI 真的看一遍。",
+      "links": [
+        {
+          "text": "找照片和录音",
+          "href": "/skills/personal-media/"
+        },
+        {
+          "text": "属于：照片视频录音管理",
+          "href": "/projects/personal-media/"
+        },
+        {
+          "text": "找文件原件",
+          "href": "/skills/personal-materials/"
+        },
+        {
+          "text": "属于：个人材料查找",
+          "href": "/projects/personal-materials/"
+        },
+        {
+          "text": "照片录音里有没有我",
+          "href": "/skills/media-person-self/"
+        },
+        {
+          "text": "看微信聊天",
+          "href": "/skills/wechat-direct/"
+        },
+        {
+          "text": "属于：微信聊天读取",
+          "href": "/projects/wechatdirect/"
+        },
+        {
+          "text": "中文语音转写技能",
+          "href": "/skills/chinese-asr/"
+        },
+        {
+          "text": "属于：中文语音转写",
+          "href": "/projects/chinese-asr/"
+        },
+        {
+          "text": "本地文字识别",
+          "href": "/skills/localocr/"
+        },
+        {
+          "text": "属于：本地文字识别",
+          "href": "/projects/localocr/"
+        },
+        {
+          "text": "修乱码",
+          "href": "/skills/mojibake-doctor/"
+        },
+        {
+          "text": "文稿转 PDF",
+          "href": "/skills/md-to-pdf/"
+        },
+        {
+          "text": "PDF 逐页检查",
+          "href": "/skills/pdf-render-safe/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-find",
+          "text": "找照片、文件和聊天"
+        },
+        {
+          "id": "skill-personal-media",
+          "text": "找照片和录音"
+        },
+        {
+          "id": "skill-personal-materials",
+          "text": "找文件原件"
+        },
+        {
+          "id": "skill-media-person-self",
+          "text": "照片录音里有没有我"
+        },
+        {
+          "id": "skill-wechat-direct",
+          "text": "看微信聊天"
+        },
+        {
+          "id": "g-read",
+          "text": "读懂录音、图片和文档"
+        },
+        {
+          "id": "skill-chinese-asr",
+          "text": "中文语音转写技能"
+        },
+        {
+          "id": "skill-localocr",
+          "text": "本地文字识别"
+        },
+        {
+          "id": "skill-mojibake-doctor",
+          "text": "修乱码"
+        },
+        {
+          "id": "skill-md-to-pdf",
+          "text": "文稿转 PDF"
+        },
+        {
+          "id": "skill-pdf-render-safe",
+          "text": "PDF 逐页检查"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "cards",
+      "reuse": ""
+    },
+    {
+      "id": "skills-home-03",
+      "section": "about-me",
+      "title": "了解我，学习、工作和生活",
+      "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“了解我、跟我说清楚”4 张（一行排开）；“学习、工作和生活”4 张（一行排开）。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：记得我是谁：一本带绿丝带书签的小笔记本，封面一颗小心形；讲给我听：一块小黑板上画着三个方框连成的简单流程图（不写字）；汇报网页：一扇白底绿边的小网页窗，里面一个柱状图和两个勾选框；替我拟消息：一支钢笔和一个空白对话气泡；学习方法技能：一本摊开的书和一支铅笔；工作支持与交付技能：一只公文包和一张打了勾的清单；个人正式文书技能：一张纸、一支钢笔和一道签名横线（不写字）；健康问题：一颗绿色心形和一段心跳折线。组与组之间用很淡的水彩绿色笔刷线分隔。",
+      "portrait": "竖版 9:16，字完全一样：各组从上往下排，每组先是组名，组说明换到组名下一行；下面卡片一行一张、占满宽度，图标在卡片左边，技能名和一句话在右边，“属于”小标签在一句话下面靠右。",
+      "text": "**了解我、跟我说清楚**　AI 怎么记住我、怎么跟我讲、怎么替我写。\n\n- 〔记得我是谁〕带着对我的了解回答，说错了一纠正就改。　〔属于：个人理解库〕\n- 〔讲给我听〕AI 向我说明时照同一本手册讲，讲到我一遍就懂。　〔属于：个人表达〕\n- 〔汇报网页〕汇报、裁定和长回答做成网页，点选就能答复；别的回答合适时也能用。\n- 〔替我拟消息〕意思我定，AI 看发给谁、什么关系，写得自然。　〔属于：个人表达〕\n\n**学习、工作和生活**　学东西、办工作上的事、写正式文书、问健康，各按一套固定做法办。\n\n- 〔学习方法技能〕说一句“接着上次讲”，AI 老师就接着教。　〔属于：学习方法〕\n- 〔工作支持与交付技能〕工作上的事交给 AI，要长期维护的交付才建包　〔属于：工作支持与交付〕\n- 〔个人正式文书技能〕说一句要签什么，AI 做成能签能核对的文书。　〔属于：个人正式文书〕\n- 〔健康问题〕问健康问题、交新报告、更新设备数据，都找它。　〔属于：个人健康〕",
+      "links": [
+        {
+          "text": "记得我是谁",
+          "href": "/skills/daily-preferences/"
+        },
+        {
+          "text": "属于：个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "讲给我听",
+          "href": "/skills/explain-to-me/"
+        },
+        {
+          "text": "属于：个人表达",
+          "href": "/projects/personal-expression/"
+        },
+        {
+          "text": "汇报网页",
+          "href": "/skills/report-page/"
+        },
+        {
+          "text": "替我拟消息",
+          "href": "/skills/reply-as-me/"
+        },
+        {
+          "text": "学习方法技能",
+          "href": "/skills/learning/"
+        },
+        {
+          "text": "属于：学习方法",
+          "href": "/projects/learning/"
+        },
+        {
+          "text": "工作支持与交付技能",
+          "href": "/skills/work-delivery/"
+        },
+        {
+          "text": "属于：工作支持与交付",
+          "href": "/projects/work-delivery-copilot/"
+        },
+        {
+          "text": "个人正式文书技能",
+          "href": "/skills/personal-formal-documents/"
+        },
+        {
+          "text": "属于：个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "健康问题",
+          "href": "/skills/personal-health/"
+        },
+        {
+          "text": "属于：个人健康",
+          "href": "/projects/personal-health/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-me",
+          "text": "了解我、跟我说清楚"
+        },
+        {
+          "id": "skill-daily-preferences",
+          "text": "记得我是谁"
+        },
+        {
+          "id": "skill-explain-to-me",
+          "text": "讲给我听"
+        },
+        {
+          "id": "skill-report-page",
+          "text": "汇报网页"
+        },
+        {
+          "id": "skill-reply-as-me",
+          "text": "替我拟消息"
+        },
+        {
+          "id": "g-life",
+          "text": "学习、工作和生活"
+        },
+        {
+          "id": "skill-learning",
+          "text": "学习方法技能"
+        },
+        {
+          "id": "skill-work-delivery",
+          "text": "工作支持与交付技能"
+        },
+        {
+          "id": "skill-personal-formal-documents",
+          "text": "个人正式文书技能"
+        },
+        {
+          "id": "skill-personal-health",
+          "text": "健康问题"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "cards",
+      "reuse": ""
+    },
+    {
+      "id": "skills-home-04",
+      "section": "pc-and-code",
+      "title": "密码、电脑和代码",
+      "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“密码和加密”3 张（一行靠左排，不拉宽）；“电脑、网页和账号”5 张（排成两行，上面 4 张、下面 1 张靠左）；“维护代码”1 张（靠左放）。全页统一：每排 4 张，卡片同宽同高；一组超过 4 张就换行，最后一排靠左、不拉宽；不满 4 张的组也靠左、和别组的卡同宽。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：密码和本人验证：一把钥匙和一只小保险箱；加密文件：一个文件夹上挂一把小锁；加密库操作：一扇圆形的厚重保险库门；网页上的事接着办：Chrome 的标志加一个向前的绿色箭头；邮件、云盘和待办：Gmail 的信封标志和 Google 云盘的三角标志并排；远程只让自己连：两台小设备之间一条连线，连线中间一面小盾牌；查电脑卡顿：一只秒表压在一条起伏的折线上；省流量的云端素材：一朵绿色水彩云托着一张小图片，云下一根细线连到一台小笔记本电脑；改项目前先核对：GitHub 的黑色章鱼猫标志旁边一个放大镜。组与组之间用很淡的水彩绿色笔刷线分隔。",
+      "portrait": "竖版 9:16，字完全一样：各组从上往下排，每组先是组名，组说明换到组名下一行；下面卡片一行一张、占满宽度，图标在卡片左边，技能名和一句话在右边，“属于”小标签在一句话下面靠右。",
+      "text": "**密码和加密**　AI 碰密码和加密文件，一律经过本机的密码中心或本地加密库。\n\n- 〔密码和本人验证〕让 AI 按规矩用密码中心：查、用、验证、授权　〔属于：密码中心〕\n- 〔加密文件〕点名的文件，交给密码中心加密保管　〔属于：密码中心〕\n- 〔加密库操作〕让 AI 管本地加密库，密码只在本机窗口里输　〔属于：本地加密库〕\n\n**电脑、网页和账号**　网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、把大文件放云上省流量。\n\n- 〔网页上的事接着办〕网页卡住、要登录时，接着把事办完。\n- 〔邮件、云盘和待办〕查邮件、找云盘文件、记待办，也能等验证码。　〔属于：电脑配置与恢复〕\n- 〔远程只让自己连〕开个服务给自己的设备用，外人连不上。\n- 〔查电脑卡顿〕说一句“刚才卡了”，AI 按时间对齐证据去查。　〔属于：电脑使用与性能记录〕\n- 〔省流量的云端素材〕AI 要反复读的大文件，云上放一份，AI 在云里读。\n\n**维护代码**　改代码之前，先把仓库的事实核对清楚再动手。\n\n- 〔改项目前先核对〕动代码之前，先认准仓库、查清同步。　〔属于：GitHub 项目总索引〕",
+      "links": [
+        {
+          "text": "密码和本人验证",
+          "href": "/skills/local-secret-broker/"
+        },
+        {
+          "text": "属于：密码中心",
+          "href": "/projects/password-center/"
+        },
+        {
+          "text": "加密文件",
+          "href": "/skills/authorization-file-broker/"
+        },
+        {
+          "text": "加密库操作",
+          "href": "/skills/vault-workflow/"
+        },
+        {
+          "text": "属于：本地加密库",
+          "href": "/projects/vault-tool/"
+        },
+        {
+          "text": "网页上的事接着办",
+          "href": "/skills/browser-control-continuity/"
+        },
+        {
+          "text": "邮件、云盘和待办",
+          "href": "/skills/google-workspace-direct/"
+        },
+        {
+          "text": "属于：电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "远程只让自己连",
+          "href": "/skills/tailscale-safe-exposure/"
+        },
+        {
+          "text": "查电脑卡顿",
+          "href": "/skills/timeaudit-diagnostics/"
+        },
+        {
+          "text": "属于：电脑使用与性能记录",
+          "href": "/projects/timeaudit/"
+        },
+        {
+          "text": "省流量的云端素材",
+          "href": "/skills/cloud-asset-channel/"
+        },
+        {
+          "text": "改项目前先核对",
+          "href": "/skills/project-entry-gate/"
+        },
+        {
+          "text": "属于：GitHub 项目总索引",
+          "href": "/projects/github-local-index/"
+        }
+      ],
+      "anchors": [
+        {
+          "id": "g-secret",
+          "text": "密码和加密"
+        },
+        {
+          "id": "skill-local-secret-broker",
+          "text": "密码和本人验证"
+        },
+        {
+          "id": "skill-authorization-file-broker",
+          "text": "加密文件"
+        },
+        {
+          "id": "skill-vault-workflow",
+          "text": "加密库操作"
+        },
+        {
+          "id": "g-pc",
+          "text": "电脑、网页和账号"
+        },
+        {
+          "id": "skill-browser-control-continuity",
+          "text": "网页上的事接着办"
+        },
+        {
+          "id": "skill-google-workspace-direct",
+          "text": "邮件、云盘和待办"
+        },
+        {
+          "id": "skill-tailscale-safe-exposure",
+          "text": "远程只让自己连"
+        },
+        {
+          "id": "skill-timeaudit-diagnostics",
+          "text": "查电脑卡顿"
+        },
+        {
+          "id": "skill-cloud-asset-channel",
+          "text": "省流量的云端素材"
+        },
+        {
+          "id": "g-code",
+          "text": "维护代码"
+        },
+        {
+          "id": "skill-project-entry-gate",
+          "text": "改项目前先核对"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "cards",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-find",
+        "name": "找照片、文件和聊天",
+        "line": "从我自己的照片、录音、文档和微信里找东西。",
+        "screen": "skills-home-02",
+        "members": [
+          "/skills/personal-media/",
+          "/skills/personal-materials/",
+          "/skills/media-person-self/",
+          "/skills/wechat-direct/"
+        ]
+      },
+      {
+        "id": "g-read",
+        "name": "读懂录音、图片和文档",
+        "line": "把录音、图片和乱码变成能核对的文字，也把文稿做成查过的 PDF。",
+        "screen": "skills-home-02",
+        "members": [
+          "/skills/chinese-asr/",
+          "/skills/localocr/",
+          "/skills/mojibake-doctor/",
+          "/skills/md-to-pdf/",
+          "/skills/pdf-render-safe/"
+        ]
+      },
+      {
+        "id": "g-me",
+        "name": "了解我、跟我说清楚",
+        "line": "AI 怎么记住我、怎么跟我讲、怎么替我写。",
+        "screen": "skills-home-03",
+        "members": [
+          "/skills/daily-preferences/",
+          "/skills/explain-to-me/",
+          "/skills/report-page/",
+          "/skills/reply-as-me/"
+        ]
+      },
+      {
+        "id": "g-life",
+        "name": "学习、工作和生活",
+        "line": "学东西、办工作上的事、写正式文书、问健康，各按一套固定做法办。",
+        "screen": "skills-home-03",
+        "members": [
+          "/skills/learning/",
+          "/skills/work-delivery/",
+          "/skills/personal-formal-documents/",
+          "/skills/personal-health/"
+        ]
+      },
+      {
+        "id": "g-secret",
+        "name": "密码和加密",
+        "line": "AI 碰密码和加密文件，一律经过本机的密码中心或本地加密库。",
+        "screen": "skills-home-04",
+        "members": [
+          "/skills/local-secret-broker/",
+          "/skills/authorization-file-broker/",
+          "/skills/vault-workflow/"
+        ]
+      },
+      {
+        "id": "g-pc",
+        "name": "电脑、网页和账号",
+        "line": "网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、把大文件放云上省流量。",
+        "screen": "skills-home-04",
+        "members": [
+          "/skills/browser-control-continuity/",
+          "/skills/google-workspace-direct/",
+          "/skills/tailscale-safe-exposure/",
+          "/skills/timeaudit-diagnostics/",
+          "/skills/cloud-asset-channel/"
+        ]
+      },
+      {
+        "id": "g-code",
+        "name": "维护代码",
+        "line": "改代码之前，先把仓库的事实核对清楚再动手。",
+        "screen": "skills-home-04",
+        "members": [
+          "/skills/project-entry-gate/"
+        ]
+      }
+    ],
+    "features": [],
+    "numbers": [
+      {
+        "id": "n-skills",
+        "text": "26 个技能",
+        "meaning": "网站上有技能页的技能数",
+        "as_of": "2026-10-02",
+        "source": "E208 安装清单 config/personal-skill-supply.json 28 项全部 install=true，减去本人定不上网站的 2 项（工作副本 2a0fda9 现数）；即 b1 下在用技能页 25 个加新增的 skill-cloud-asset-channel",
+        "screens": [
+          "skills-home-01"
+        ]
+      },
+      {
+        "id": "n-groups",
+        "text": "分 7 组",
+        "meaning": "技能总页按用途分的组数",
+        "as_of": "2026-10-02",
+        "source": "本页脚本 GROUPS",
+        "screens": [
+          "skills-home-01"
+        ]
+      },
+      {
+        "id": "n-entry",
+        "text": "18 个",
+        "meaning": "是某个项目入口的技能数（卡上带“属于”标签）",
+        "as_of": "2026-10-02",
+        "source": "本页脚本 ENTRY；判据和逐个出处见 facts.md 第 3 节",
+        "screens": [
+          "skills-home-01"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-personal-media-entry",
+        "with": "personal-media",
+        "direction": "入口",
+        "flow": "技能“找照片和录音”是项目“照片视频录音管理”的入口",
+        "source": "b1\\skill-personal-media\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-personal-materials-entry",
+        "with": "personal-materials",
+        "direction": "入口",
+        "flow": "技能“找文件原件”是项目“个人材料查找”的入口",
+        "source": "b1\\skill-personal-materials\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-wechat-direct-entry",
+        "with": "wechatdirect",
+        "direction": "入口",
+        "flow": "技能“看微信聊天”是项目“微信聊天读取”的入口",
+        "source": "b1\\skill-wechat-direct\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-chinese-asr-entry",
+        "with": "chinese-asr",
+        "direction": "入口",
+        "flow": "技能“中文语音转写技能”是项目“中文语音转写”的入口",
+        "source": "b1\\skill-chinese-asr\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-localocr-entry",
+        "with": "localocr",
+        "direction": "入口",
+        "flow": "技能“本地文字识别”是项目“本地文字识别”的入口",
+        "source": "b1\\skill-localocr\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-daily-preferences-entry",
+        "with": "daily-preferences",
+        "direction": "入口",
+        "flow": "技能“记得我是谁”是项目“个人理解库”的入口",
+        "source": "b1\\skill-daily-preferences\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-explain-to-me-entry",
+        "with": "personal-expression",
+        "direction": "入口",
+        "flow": "技能“讲给我听”是项目“个人表达”的入口",
+        "source": "b1\\skill-explain-to-me\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-reply-as-me-entry",
+        "with": "personal-expression",
+        "direction": "入口",
+        "flow": "技能“替我拟消息”是项目“个人表达”的入口",
+        "source": "b1\\skill-reply-as-me\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-learning-entry",
+        "with": "learning",
+        "direction": "入口",
+        "flow": "技能“学习方法技能”是项目“学习方法”的入口",
+        "source": "b1\\skill-learning\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-work-delivery-entry",
+        "with": "work-delivery-copilot",
+        "direction": "入口",
+        "flow": "技能“工作支持与交付技能”是项目“工作支持与交付”的入口",
+        "source": "b1\\skill-work-delivery\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-personal-formal-documents-entry",
+        "with": "personal-formal-documents",
+        "direction": "入口",
+        "flow": "技能“个人正式文书技能”是项目“个人正式文书”的入口",
+        "source": "b1\\skill-personal-formal-documents\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-personal-health-entry",
+        "with": "personal-health",
+        "direction": "入口",
+        "flow": "技能“健康问题”是项目“个人健康”的入口",
+        "source": "b1\\skill-personal-health\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-local-secret-broker-entry",
+        "with": "password-center",
+        "direction": "入口",
+        "flow": "技能“密码和本人验证”是项目“密码中心”的入口",
+        "source": "b1\\skill-local-secret-broker\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-authorization-file-broker-entry",
+        "with": "password-center",
+        "direction": "入口",
+        "flow": "技能“加密文件”是项目“密码中心”的入口",
+        "source": "b1\\skill-authorization-file-broker\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-vault-workflow-entry",
+        "with": "vault-tool",
+        "direction": "入口",
+        "flow": "技能“加密库操作”是项目“本地加密库”的入口",
+        "source": "b1\\skill-vault-workflow\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-google-workspace-direct-entry",
+        "with": "pcconfig",
+        "direction": "入口",
+        "flow": "技能“邮件、云盘和待办”是项目“电脑配置与恢复”的入口",
+        "source": "b1\\skill-google-workspace-direct\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-timeaudit-diagnostics-entry",
+        "with": "timeaudit",
+        "direction": "入口",
+        "flow": "技能“查电脑卡顿”是项目“电脑使用与性能记录”的入口",
+        "source": "b1\\skill-timeaudit-diagnostics\\page.json 的 abilities 屏链接"
+      },
+      {
+        "id": "r-project-entry-gate-entry",
+        "with": "github-local-index",
+        "direction": "入口",
+        "flow": "技能“改项目前先核对”是项目“GitHub 项目总索引”的入口",
+        "source": "b1\\skill-project-entry-gate\\page.json 的 abilities 屏链接"
+      }
+    ],
+    "highlights": [],
+    "mentions": [
+      {
+        "target": "/projects/agents/#tech",
+        "screen": "skills-home-01",
+        "text": "技能怎么装到各个 AI → 基座"
+      },
+      {
+        "target": "/skills/personal-media/",
+        "screen": "skills-home-02",
+        "text": "找照片和录音"
+      },
+      {
+        "target": "/projects/personal-media/",
+        "screen": "skills-home-02",
+        "text": "属于：照片视频录音管理"
+      },
+      {
+        "target": "/skills/personal-materials/",
+        "screen": "skills-home-02",
+        "text": "找文件原件"
+      },
+      {
+        "target": "/projects/personal-materials/",
+        "screen": "skills-home-02",
+        "text": "属于：个人材料查找"
+      },
+      {
+        "target": "/skills/media-person-self/",
+        "screen": "skills-home-02",
+        "text": "照片录音里有没有我"
+      },
+      {
+        "target": "/skills/wechat-direct/",
+        "screen": "skills-home-02",
+        "text": "看微信聊天"
+      },
+      {
+        "target": "/projects/wechatdirect/",
+        "screen": "skills-home-02",
+        "text": "属于：微信聊天读取"
+      },
+      {
+        "target": "/skills/chinese-asr/",
+        "screen": "skills-home-02",
+        "text": "中文语音转写技能"
+      },
+      {
+        "target": "/projects/chinese-asr/",
+        "screen": "skills-home-02",
+        "text": "属于：中文语音转写"
+      },
+      {
+        "target": "/skills/localocr/",
+        "screen": "skills-home-02",
+        "text": "本地文字识别"
+      },
+      {
+        "target": "/projects/localocr/",
+        "screen": "skills-home-02",
+        "text": "属于：本地文字识别"
+      },
+      {
+        "target": "/skills/mojibake-doctor/",
+        "screen": "skills-home-02",
+        "text": "修乱码"
+      },
+      {
+        "target": "/skills/md-to-pdf/",
+        "screen": "skills-home-02",
+        "text": "文稿转 PDF"
+      },
+      {
+        "target": "/skills/pdf-render-safe/",
+        "screen": "skills-home-02",
+        "text": "PDF 逐页检查"
+      },
+      {
+        "target": "/skills/daily-preferences/",
+        "screen": "skills-home-03",
+        "text": "记得我是谁"
+      },
+      {
+        "target": "/projects/daily-preferences/",
+        "screen": "skills-home-03",
+        "text": "属于：个人理解库"
+      },
+      {
+        "target": "/skills/explain-to-me/",
+        "screen": "skills-home-03",
+        "text": "讲给我听"
+      },
+      {
+        "target": "/projects/personal-expression/",
+        "screen": "skills-home-03",
+        "text": "属于：个人表达"
+      },
+      {
+        "target": "/skills/report-page/",
+        "screen": "skills-home-03",
+        "text": "汇报网页"
+      },
+      {
+        "target": "/skills/reply-as-me/",
+        "screen": "skills-home-03",
+        "text": "替我拟消息"
+      },
+      {
+        "target": "/skills/learning/",
+        "screen": "skills-home-03",
+        "text": "学习方法技能"
+      },
+      {
+        "target": "/projects/learning/",
+        "screen": "skills-home-03",
+        "text": "属于：学习方法"
+      },
+      {
+        "target": "/skills/work-delivery/",
+        "screen": "skills-home-03",
+        "text": "工作支持与交付技能"
+      },
+      {
+        "target": "/projects/work-delivery-copilot/",
+        "screen": "skills-home-03",
+        "text": "属于：工作支持与交付"
+      },
+      {
+        "target": "/skills/personal-formal-documents/",
+        "screen": "skills-home-03",
+        "text": "个人正式文书技能"
+      },
+      {
+        "target": "/projects/personal-formal-documents/",
+        "screen": "skills-home-03",
+        "text": "属于：个人正式文书"
+      },
+      {
+        "target": "/skills/personal-health/",
+        "screen": "skills-home-03",
+        "text": "健康问题"
+      },
+      {
+        "target": "/projects/personal-health/",
+        "screen": "skills-home-03",
+        "text": "属于：个人健康"
+      },
+      {
+        "target": "/skills/local-secret-broker/",
+        "screen": "skills-home-04",
+        "text": "密码和本人验证"
+      },
+      {
+        "target": "/projects/password-center/",
+        "screen": "skills-home-04",
+        "text": "属于：密码中心"
+      },
+      {
+        "target": "/skills/authorization-file-broker/",
+        "screen": "skills-home-04",
+        "text": "加密文件"
+      },
+      {
+        "target": "/skills/vault-workflow/",
+        "screen": "skills-home-04",
+        "text": "加密库操作"
+      },
+      {
+        "target": "/projects/vault-tool/",
+        "screen": "skills-home-04",
+        "text": "属于：本地加密库"
+      },
+      {
+        "target": "/skills/browser-control-continuity/",
+        "screen": "skills-home-04",
+        "text": "网页上的事接着办"
+      },
+      {
+        "target": "/skills/google-workspace-direct/",
+        "screen": "skills-home-04",
+        "text": "邮件、云盘和待办"
+      },
+      {
+        "target": "/projects/pcconfig/",
+        "screen": "skills-home-04",
+        "text": "属于：电脑配置与恢复"
+      },
+      {
+        "target": "/skills/tailscale-safe-exposure/",
+        "screen": "skills-home-04",
+        "text": "远程只让自己连"
+      },
+      {
+        "target": "/skills/timeaudit-diagnostics/",
+        "screen": "skills-home-04",
+        "text": "查电脑卡顿"
+      },
+      {
+        "target": "/projects/timeaudit/",
+        "screen": "skills-home-04",
+        "text": "属于：电脑使用与性能记录"
+      },
+      {
+        "target": "/skills/project-entry-gate/",
+        "screen": "skills-home-04",
+        "text": "改项目前先核对"
+      },
+      {
+        "target": "/projects/github-local-index/",
+        "screen": "skills-home-04",
+        "text": "属于：GitHub 项目总索引"
+      }
+    ],
+    "live": []
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "卡上不写使用次数、功能数、机制：这些的家在各技能页和项目页（不重复介绍）。",
+      "开头不讲技能怎么装、怎么接到两个 AI，只一句话加〔技能怎么装到各个 AI → 基座〕：家在 AI 规则与技能基座项目页（技术一节“技能：一份源码，两边共用”）。"
+    ],
+    "unsure": [
+      "卡片入口：和规则总页一样，技能名本身就是链接，不另放 25 个一样的〔进去看〕（同一屏十来个同样的字，拼页程序按图上文字找链接时分不清）；协调者已认可规则总页这样做。",
+      "同一屏里有两处同样的链接字：第 3 屏〔属于：个人表达〕两次（讲给我听、替我拟消息），第 4 屏〔属于：密码中心〕两次（密码和本人验证、加密文件）。两处去的是同一个项目页，links 里各只记一次；拼页程序要让两处都能点。",
+      "“属于”怎么判：技能页“能做的事”只链到某个项目页的全部功能或其中一组、不在技能页自己写全的，算那个项目的入口（18 个；技能与基座体检 10 月 2 日退役后从 19 减为 18）。拿不太准的一个：邮件、云盘和待办——技能页把能做的事链到电脑配置与恢复的“Google 直连”一组（#g-google），账号授权也由电脑配置与恢复保管，所以标了〔属于：电脑配置与恢复〕；如果本人觉得它是独立技能，删掉 ENTRY 里这一行重跑即可。manifest 把文稿转 PDF、PDF 逐页检查挂在 Typora 薄荷主题下、照片录音里有没有我挂在照片视频录音管理下，但这三个技能页都自己写全了能做的事、各自的写稿人在 notes 里说明不是入口，所以没标“属于”；远程只让自己连同理（它管四个项目的远程连接）。",
+      "技能名照各技能页的 title 原样，叫法不统一：中文语音转写技能、学习方法技能、个人正式文书技能、工作支持与交付技能四个带“技能”后缀，其余不带；本地文字识别的技能名和项目名一模一样。在技能总页上“技能”二字多余；要统一应改这四个技能页的 title，改完重跑本脚本即可。四个一句话（加密文件、密码和本人验证、加密库操作、工作支持与交付技能）结尾没有句号，也照原样。",
+      "分组（7 组）、组名和组说明是我定的，按“用来办什么事”分；照片录音里有没有我放在“找照片、文件和聊天”，因为它总是在找到照片或录音之后用。",
+      "替本人口吻写的句子（第 1 屏）：“技能是 AI 碰到某类事时照着办的说明书。”“直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。”依据写稿说明和基座项目页第 8 屏“AI 按我要做的事挑，我不用记技能名”。",
+      "总数 25 只数有技能页、仍在用的技能，页面上不提别的技能（10 月 2 日 control-plane-doctor、file-intake-router 退役，27→25）。",
+      "链接字互相包含：第 2 屏〔本地文字识别〕是〔属于：本地文字识别〕的一部分，〔属于：中文语音转写〕是〔中文语音转写技能〕的一部分。拼页程序按图上文字找链接位置时要按整段文字匹配、不能只找包含关系，否则会点错；也可以改这两个技能页的 title 从根上避开。",
+      "E208（10 月 2 日）：新增〔省流量的云端素材〕放“电脑、网页和账号”组；全页卡片排法统一成每排 4 张、同宽同高、最后一排靠左。第 1 屏 27→26、9 月 28 日→10 月 2 日、19→18 已直接写进 text，冻结改稿 fix/page-edits.json 里对应几条要跳过。gen_skills_home.py 没同步，不要重跑。"
+    ],
+    "bar_labels": [
+      "技能是什么",
+      "找资料",
+      "读懂文件",
+      "了解我",
+      "学习工作",
+      "密码加密",
+      "电脑网页",
+      "代码"
+    ]
+  }
+}

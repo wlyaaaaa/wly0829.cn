@@ -1,0 +1,1618 @@
+[
+  {
+    "screen": "rule-protected-actions-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-01-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-01-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "55%",
+        "text_ref": "重大动作与本人验证"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "row": "hero",
+        "text_ref": "哪些事算重大，动手前怎么把关，什么时候、用什么方式请本人验证。"
+      },
+      {
+        "type": "prose",
+        "row": "hero",
+        "text_ref": "这是Codex和Claude共用的规则，管四件事：哪些动作算“重大的事”；这类事动手"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "hero",
+        "width": "45%"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词"
+      },
+      {
+        "type": "action_button",
+        "columns": 3,
+        "text_ref": "跳到：哪些算重大什么时候请本人验证动手前的把关GitHub重大动作本人验证的四种方式"
+      },
+      {
+        "type": "prose",
+        "text_ref": "删库把关四选一通行密钥手机验证码恢复码",
+        "align": "left",
+        "textless": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在开没开无限制授权、个人资料解没解锁：现在的授权状态→授权与状态"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "content_card",
+      "glossary",
+      "action_button",
+      "inline_link",
+      "illustration",
+      "bullet_list"
+    ],
+    "source_layout": "横版 16:9。左边约 55% 宽是文字区：左上“重大动作与本人验证”用毛笔艺术字大标题（和约法样张的“约法”两字同一种写法），下面一行粗体深绿副标题，再下面介绍段。介绍段下面一张浅绿细边圆角卡片“先认几个词”，七个词条竖排，词条名粗体绿色。卡片下面一行“跳到：”后面六个圆角小按钮（白底浅绿描边绿字），就是那六个〔〕链接。右边约 45% 宽一幅水彩插画：一条林间小路上横着一道漆成白绿两色的木栏杆，栏杆旁一个小木岗亭，岗亭檐下挂小木牌“把关”，亭里坐一个戴眼镜的小 AI 助手，胸前是 Claude 的橙色星芒标志，正低头看一张单子。路上另一个小 AI 助手推着一辆小推车走到栏杆前停下，车上一只纸箱，箱侧贴着纸条“删库”。栏杆这一侧放一张小木桌，桌上一只浅绿托盘，托盘沿上刻着“四选一”，盘里并排四样东西：一把系着小牌“通行密钥”的黄铜钥匙、一部屏幕朝上的手机（屏幕上只画代表验证码的圆点，不画数字；这些圆点仅作插画示意，不规定验证码位数）旁边小牌“手机验证码”、一张折起的纸条上写“恢复码”、一张小卡片上并排画 Google 的彩色 G 标志和微软的四色方块标志。栏杆另一侧小路尽头一间小木屋，屋顶上画 GitHub 的黑色章鱼猫标志。插画里只有这六处小牌子和纸条有字，text 里“删库　把关　四选一　通行密钥　手机验证码　恢复码”这一行就是它们的字，不要另外画成一行文字。整屏最下面一条横跨全宽的细长圆角横条（浅绿底），左边是“现在开没开无限制授权、个人资料解没解锁：”，右边一个显眼的按钮〔现在的授权状态 → 授权与状态〕。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1,
+        2
+      ],
+      "card_groups": [
+        "哪些事算重大，动手前怎么把关，什么时候、用什么方式请本人验证。",
+        "先认几个词"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边约 45% 宽一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。首屏左55%题、副题、介绍、七词卡、六跳转；右45%岗亭推车/四选一托盘插画，底部整宽状态条。末段六词只在图内小牌显示一次，当前window样稿不能定位标签；交comp-slots做图文融合。带跳到前缀的para须comp-text按钮布局支持；章副题保持深绿粗体。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。；页修复08第二轮视觉补验：进一步收齐首屏留白，补充通用明确图标映射，保留全量源字。；第二轮发现columns作用于外卡，单个词表组误占半栏；第三轮明确单列通栏。"
+  },
+  {
+    "screen": "rule-protected-actions-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-01-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-01-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "重大动作与本人验证"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "哪些事算重大，动手前怎么把关，什么时候、用什么方式请本人验证。"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是Codex和Claude共用的规则，管四件事：哪些动作算“重大的事”；这类事动手"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "text_ref": "先认几个词"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "text_ref": "跳到：哪些算重大什么时候请本人验证动手前的把关GitHub重大动作本人验证的四种方式"
+      },
+      {
+        "type": "prose",
+        "text_ref": "删库把关四选一通行密钥手机验证码恢复码",
+        "align": "left",
+        "textless": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "现在开没开无限制授权、个人资料解没解锁：现在的授权状态→授权与状态"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "illustration",
+      "prose",
+      "glossary",
+      "content_card",
+      "action_button",
+      "inline_link",
+      "bullet_list"
+    ],
+    "source_layout": "竖版 9:16，自上而下：毛笔大标题；粗体副标题；水彩插画（同横版，缩成整宽一幅：上半是岗亭、栏杆和推车，下半是小木桌上的四选一托盘，远处小木屋和 GitHub 标志放在右上角；六处小牌子的字不变）；介绍段；“先认几个词”卡片（七个词条一行一条）；“跳到：”六个按钮排三行、每行两个；最下面“授权与状态”横条改成上面一行说明、下面一个整宽按钮。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        1,
+        2
+      ],
+      "card_groups": [
+        "哪些事算重大，动手前怎么把关，什么时候、用什么方式请本人验证。",
+        "先认几个词"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "右边约 45% 宽一幅水彩插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。标题→副题→完整岗亭托盘插画→介绍→七词卡→六按钮2×3→底部说明按钮。六图内标签不另作末行字，独立mock仅保文待空间定位，资料与授权不生成假状态。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "rule-protected-actions-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一张图：这件事要不要请本人验证"
+      },
+      {
+        "type": "topology",
+        "columns": 3,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "先看实际后果：是不是这七类？",
+        "layout": "graph",
+        "columns_v": 1,
+        "graph_nodes": [
+          {
+            "id": "major",
+            "count": 2,
+            "row": 1,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 1,
+            "column_v": 1
+          },
+          {
+            "id": "ordinary",
+            "count": 1,
+            "row": 2,
+            "column": 1,
+            "column_span": 1,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/icons/打勾清单.png"
+          },
+          {
+            "id": "executor",
+            "count": 1,
+            "row": 3,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 3,
+            "column_v": 1
+          },
+          {
+            "id": "desktop",
+            "count": 1,
+            "row": 4,
+            "column": 1,
+            "column_span": 2,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+          },
+          {
+            "id": "other-ai",
+            "count": 1,
+            "row": 4,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          },
+          {
+            "id": "github",
+            "count": 1,
+            "row": 5,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 6,
+            "column_v": 1
+          },
+          {
+            "id": "github-yes",
+            "count": 1,
+            "row": 6,
+            "column": 1,
+            "column_span": 2,
+            "row_v": 7,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "github-no",
+            "count": 1,
+            "row": 6,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 8,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+          },
+          {
+            "id": "authorization",
+            "count": 1,
+            "row": 7,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 9,
+            "column_v": 1
+          },
+          {
+            "id": "waiver",
+            "count": 1,
+            "row": 8,
+            "column": 1,
+            "column_span": 1,
+            "row_v": 10,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          },
+          {
+            "id": "unlocked",
+            "count": 1,
+            "row": 8,
+            "column": 2,
+            "column_span": 1,
+            "row_v": 11,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "locked",
+            "count": 1,
+            "row": 8,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 12,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "major",
+            "to": "ordinary",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "major",
+            "to": "executor",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "executor",
+            "to": "desktop",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "executor",
+            "to": "other-ai",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "desktop",
+            "to": "github",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "github",
+            "to": "github-yes",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "github",
+            "to": "github-no",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "github-no",
+            "to": "authorization",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "authorization",
+            "to": "waiver",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "authorization",
+            "to": "unlocked",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "authorization",
+            "to": "locked",
+            "from_side": "bottom",
+            "to_side": "top"
+          }
+        ]
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "怎么验证：通行密钥、手机验证码、恢复码、Google或微软账号四选一，任一种成功就算",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "tone": "yellow",
+        "text_ref": "验证过不等于可以做：动手前还要由够格的模型把一遍关；对外发布、第一次公开发布、真正删"
+      },
+      {
+        "type": "action_button",
+        "columns": 4,
+        "text_ref": "七类的细节→哪些算重大把关→动手前的把关GitHub细则→GitHub重大动作四种方"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "illustration",
+      "icon",
+      "flow",
+      "tag",
+      "bullet_list",
+      "action_button",
+      "inline_link",
+      "content_card"
+    ],
+    "source_layout": "横版 16:9。风格照规则总页第一屏和规则原文样张（白底、纯绿主色、深绿毛笔标题、深蓝灰正文、水彩插画、细浅绿描边圆角卡）。左上一行深绿大字是本屏的“## …”标题（井号不画），标题左边画开头插画里那座小木岗亭的小图标。左边约 64% 宽是一张从上往下的判断流程图，四个判断依次往下：每个判断是一个浅绿底圆角问题框（粗体深绿问题），问题框之间用向下的细灰绿箭头连起来，箭头旁不写字。第一个问题框下面挂一张浅灰绿底的小清单卡，写那七类动作，排两三行。每个判断右边伸出绿色细箭头，text 里“→”左边的字（“不是”“是”“开着”“没开，个人资料在解锁期内”等）就写在箭头上，“→”画成箭头本身；箭头指向圆角结果小胶囊：结果是“普通干活，不打断”“不弹验证”“不再打断”的胶囊实心绿底白字；结果是“先请本人验证”“验证一次”“先请本人验证一次”的胶囊浅琥珀底深棕字，胶囊左端一把小黄铜钥匙；“往下看”的分支不画胶囊，箭头直接接回下一个问题框。胶囊后面的补充短句（如“带‘密码’‘删除’‘私人’的字眼不算数。”“个人资料解没解锁都一样。”“对话里一句‘别验证了’代替不了。”）用小号深蓝灰字写在胶囊右边或下面。“谁在做？”问题框旁画两个很小的桌面窗口图标（左窗角 OpenAI 黑色花结、右窗角 Claude 橙色星芒）；GitHub 那个问题框旁画 GitHub 黑色章鱼猫小标志。右边约 36% 宽上下两张白底细浅绿描边圆角卡：上卡“怎么验证”，卡左上角是开头插画里那只四选一浅绿托盘的小图标（托盘和东西都不写字）；下卡“验证过不等于可以做”，卡左上角一枚小绿盾牌加一个对勾，卡底色浅黄。整屏最下面一行四个白底细绿描边的圆角按钮并排居中，就是那四个〔〕链接，按钮末尾小 ↗。不画编号，插画和图标里不出现别的字。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [
+        "先看实际后果：是不是这七类？",
+        "谁在做？",
+        "是 GitHub 删库、转移仓库、非公开改公开，或新建公开仓库吗？",
+        "开着无限制授权吗？"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边画开头插画",
+        "上下两张白底细浅绿描边圆角卡：上卡“怎么验证”，卡左上角是开头插画"
+      ],
+      "portrait_split_or_protection": true
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。四个问题纵向判断占左64%，右36%验证卡和浅黄说明；七类清单接首问题，问题右侧标签箭头通结果胶囊，继续分支回下一问题。flow当前只具线性链，无法问题/结果分支、实心结果胶囊、图标跨问题定位；需comp-diagram分支专用布局与样张。标题左岗亭、第二问题桌面窗及GitHub小标仍需资产方补，不能按inventory两个图标预算隐藏。底四按钮并排居中，↗不在定稿中不新增。；素材登记插画0/1，必须补齐场景要求，不能删除插画位；素材登记图标0/2，按源位置的文件号显式请求，缺图不代表可以省略图标。新构图，待样张：库存没有09原图，source_images仅借同页02作为风格参考；09的四判断与分支布局仍完全按本屏scene/portrait，不把参考卡片结构当09原图。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "rule-protected-actions-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "一张图：这件事要不要请本人验证"
+      },
+      {
+        "type": "topology",
+        "columns": 3,
+        "connector": "arrow",
+        "illustration": "left_inside",
+        "text_ref": "先看实际后果：是不是这七类？",
+        "layout": "graph",
+        "columns_v": 1,
+        "graph_nodes": [
+          {
+            "id": "major",
+            "count": 2,
+            "row": 1,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 1,
+            "column_v": 1
+          },
+          {
+            "id": "ordinary",
+            "count": 1,
+            "row": 2,
+            "column": 1,
+            "column_span": 1,
+            "row_v": 2,
+            "column_v": 1,
+            "icon": "_library/icons/打勾清单.png"
+          },
+          {
+            "id": "executor",
+            "count": 1,
+            "row": 3,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 3,
+            "column_v": 1
+          },
+          {
+            "id": "desktop",
+            "count": 1,
+            "row": 4,
+            "column": 1,
+            "column_span": 2,
+            "row_v": 4,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+          },
+          {
+            "id": "other-ai",
+            "count": 1,
+            "row": 4,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 5,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          },
+          {
+            "id": "github",
+            "count": 1,
+            "row": 5,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 6,
+            "column_v": 1
+          },
+          {
+            "id": "github-yes",
+            "count": 1,
+            "row": 6,
+            "column": 1,
+            "column_span": 2,
+            "row_v": 7,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "github-no",
+            "count": 1,
+            "row": 6,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 8,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+          },
+          {
+            "id": "authorization",
+            "count": 1,
+            "row": 7,
+            "column": 1,
+            "column_span": 3,
+            "row_v": 9,
+            "column_v": 1
+          },
+          {
+            "id": "waiver",
+            "count": 1,
+            "row": 8,
+            "column": 1,
+            "column_span": 1,
+            "row_v": 10,
+            "column_v": 1,
+            "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          },
+          {
+            "id": "unlocked",
+            "count": 1,
+            "row": 8,
+            "column": 2,
+            "column_span": 1,
+            "row_v": 11,
+            "column_v": 1,
+            "icon": "_library/icons/文稿堆.png"
+          },
+          {
+            "id": "locked",
+            "count": 1,
+            "row": 8,
+            "column": 3,
+            "column_span": 1,
+            "row_v": 12,
+            "column_v": 1,
+            "icon": "_library/icons/身份盾牌.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "major",
+            "to": "ordinary",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "major",
+            "to": "executor",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "executor",
+            "to": "desktop",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "executor",
+            "to": "other-ai",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "desktop",
+            "to": "github",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 42
+          },
+          {
+            "from": "github",
+            "to": "github-yes",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "github",
+            "to": "github-no",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "github-no",
+            "to": "authorization",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "authorization",
+            "to": "waiver",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "authorization",
+            "to": "unlocked",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 20
+          },
+          {
+            "from": "authorization",
+            "to": "locked",
+            "from_side": "left",
+            "to_side": "left",
+            "return": true,
+            "offset": 42
+          }
+        ]
+      },
+      {
+        "type": "points_card",
+        "whole_block": true,
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "怎么验证：通行密钥、手机验证码、恢复码、Google或微软账号四选一，任一种成功就算",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "tone": "yellow",
+        "text_ref": "验证过不等于可以做：动手前还要由够格的模型把一遍关；对外发布、第一次公开发布、真正删"
+      },
+      {
+        "type": "action_button",
+        "columns": 2,
+        "text_ref": "七类的细节→哪些算重大把关→动手前的把关GitHub细则→GitHub重大动作四种方"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "tag",
+      "prose",
+      "action_button",
+      "chapter_title",
+      "illustration",
+      "icon",
+      "flow",
+      "bullet_list",
+      "inline_link",
+      "content_card"
+    ],
+    "source_layout": "竖版 9:16，字完全一样：标题在上；四个判断从上往下，每个问题框整宽，分支箭头改成在问题框下面向下伸出，结果胶囊一行一个；七类清单卡跟在第一个问题框下面；然后“怎么验证”“验证过不等于可以做”两张整宽卡；最后四个按钮排两行、每行两个。字多时在完整的判断之间拆屏：-v 放标题到“是 GitHub……吗？”，-v2 放“开着无限制授权吗？”到最后。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [
+        2
+      ],
+      "card_groups": [
+        "先看实际后果：是不是这七类？",
+        "谁在做？",
+        "是 GitHub 删库、转移仓库、非公开改公开，或新建公开仓库吗？",
+        "开着无限制授权吗？"
+      ],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左边画开头插画",
+        "上下两张白底细浅绿描边圆角卡：上卡“怎么验证”，卡左上角是开头插画"
+      ],
+      "portrait_split_or_protection": true
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。第一张到GitHub判断，第二张从无限制授权判断到末尾；原四判断必须完整，在判断组之间拆，分支结果一行一个、末按钮2×2。同一flow块尚无分组页界，需main/comp-diagram在完整group之间分张，不以自动等高切图冒充v/v2。各结果箭头原字完整保留。；素材登记插画0/1，必须补齐场景要求，不能删除插画位；素材登记图标0/2，按源位置的文件号显式请求，缺图不代表可以省略图标。新构图，待样张：库存没有09原图，source_images仅借同页02作为风格参考；09的四判断与分支布局仍完全按本屏scene/portrait，不把参考卡片结构当09原图。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
+  },
+  {
+    "screen": "rule-protected-actions-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 重大的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-0400995e5d5fc6cc69e3.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "major-cards",
+        "width": "40%",
+        "text_ref": "哪些算重大的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-13257ae877bb3fbc6e7f.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "major-cards",
+        "width": "60%",
+        "text_ref": "什么时候请本人验证"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-02-icon-03.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "major-cards",
+        "text_ref": "这份清单怎么来的"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片里每条要点前一个小绿圆点，正文深蓝灰。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。卡片左上角一个小水彩图标：“哪些算重大的事”配一只贴着红封条的小纸箱、“什么时候请本人验证”配一个小沙漏旁边立着一把黄铜钥匙、“这份清单怎么来的”配一页被划掉一半的旧草稿纸。排法：左边一张高卡“哪些算重大的事”占约 40% 宽，七类动作一行一条，下面那段“算不算重大看实际后果……”接在同一张卡里、和七类之间隔一条浅绿细线；右边上面一张卡“什么时候请本人验证”；右下一张窄一点的浅绿底小卡“这份清单怎么来的”。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。左40%七类大高卡与后果说明同卡、两者间细线；右60%验证卡与较窄清单来历卡上下。后果说明节点保留于左卡；底来历不误拆为外部正文。小绿圆点来自原清单，来历卡浅绿新样式需样张。；素材登记图标2/3，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-02-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 重大的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-0400995e5d5fc6cc69e3.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "哪些算重大的事"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-13257ae877bb3fbc6e7f.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "什么时候请本人验证"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-02-icon-03.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "这份清单怎么来的"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：标题在上，三张卡片从上到下一张一条、整宽，顺序同横版（哪些算重大 → 什么时候验证 → 清单怎么来的）。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [
+        1
+      ],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。三卡同序整宽：七类、什么时候验证、清单来历；没有横版左右列，前卡后果说明仍在同卡。；素材登记图标2/3，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-03-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-03-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 动手前的把关"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions\\rule-protected-actions-03-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "judgement",
+        "width": "60%",
+        "text_ref": "谁来把关、把什么"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-ef36f925fb2dac51e0c0.png"
+        ],
+        "inset_prefixes": [
+          "打个比方："
+        ],
+        "row": "judgement",
+        "width": "40%",
+        "text_ref": "把关不是独立复核"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片里每条要点前一个小绿圆点，正文深蓝灰。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。卡片左上角一个小水彩图标：“谁来把关、把什么”配开头插画里那座小木岗亭（同一座）、“把关不是独立复核”配一只放大镜照着一页纸。排法：左边约 60% 宽一张大卡“谁来把关、把什么”；右边约 40% 宽一张卡“把关不是独立复核”，卡里最后一条“打个比方……”放在一个浅绿底小框里。两张卡下面留一条窄窄的水彩装饰带：左边岗亭的小栏杆抬起一半，右边一条小路通向远处，路边几片叶子。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩图标：“谁来把关、把什么”配开头插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横60%/40%两卡、竖上下；末条打比方浅绿内框由inset_prefixes实现。底部岗亭半抬栏杆及通远处小路装饰带是scene明确要求，inventory插画计0；规格保留banner插画位，素材需补。"
+  },
+  {
+    "screen": "rule-protected-actions-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-03-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-03-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-03-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 动手前的把关"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions\\rule-protected-actions-03-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "谁来把关、把什么"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-ef36f925fb2dac51e0c0.png"
+        ],
+        "inset_prefixes": [
+          "打个比方："
+        ],
+        "text_ref": "把关不是独立复核"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "size": "banner"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon"
+    ],
+    "source_layout": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“谁来把关”，后“把关不是独立复核”），“打个比方”小框留在第二张卡里；最下面水彩装饰带。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩图标：“谁来把关、把什么”配开头插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横60%/40%两卡、竖上下；末条打比方浅绿内框由inset_prefixes实现。底部岗亭半抬栏杆及通远处小路装饰带是scene明确要求，inventory插画计0；规格保留banner插画位，素材需补。"
+  },
+  {
+    "screen": "rule-protected-actions-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-04-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-04-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · GitHub 重大动作"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions\\rule-protected-actions-04-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "github",
+        "width": "40%",
+        "text_ref": "要本人验证的四种动作"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-04-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "由来："
+        ],
+        "row": "github",
+        "width": "60%",
+        "text_ref": "普通收尾，不验证"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "icon",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "tag"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画），标题左边画 GitHub 的黑色章鱼猫小标志。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片里每条要点前一个小绿圆点，正文深蓝灰。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。卡片左上角一个小水彩图标：“要本人验证的四种动作”配一把黄铜钥匙插在小锁上、“普通收尾，不验证”配一个装好的小纸箱贴着绿色对勾。排法：左边约 40% 宽一张卡“要本人验证的四种动作”，卡头下第一条的四种动作画成四个并排的小标签（删除仓库、转移仓库、非公开改公开、新建公开仓库），标签下面接着画其余要点；右边约 60% 宽一张卡“普通收尾，不验证”，最后一条“由来：……”放在卡片底部一个浅绿底小框里。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左40%四种动作卡，右60%普通收尾，竖上下。左第一bullet一行含四个动作，需在原标点位置拆四个标签，横4个、竖2×2；现points_card不做清单内标签拆分，交comp-text。标题左GitHub小标是额外图像需求，chapter_title未支持标题内图标，需core/素材方接入；不增文字。右由来浅绿内框已用inset_prefixes。；素材登记图标1/2，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-04-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-04-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · GitHub 重大动作"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions\\rule-protected-actions-04-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "要本人验证的四种动作"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-04-icon-02.png"
+        ],
+        "inset_prefixes": [
+          "由来："
+        ],
+        "text_ref": "普通收尾，不验证"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "tag",
+      "chapter_title",
+      "prose",
+      "icon",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link"
+    ],
+    "source_layout": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“要本人验证的四种动作”，四个小标签排成两行两个；后“普通收尾，不验证”，由来小框在卡底）。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左40%四种动作卡，右60%普通收尾，竖上下。左第一bullet一行含四个动作，需在原标点位置拆四个标签，横4个、竖2×2；现points_card不做清单内标签拆分，交comp-text。标题左GitHub小标是额外图像需求，chapter_title未支持标题内图标，需core/素材方接入；不增文字。右由来浅绿内框已用inset_prefixes。；素材登记图标1/2，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-05-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-05-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 删库和转移"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-05-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "现在的执行入口具体这样做："
+        ],
+        "row": "delete",
+        "width": "50%",
+        "text_ref": "删库和转移前先备好"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/沙漏.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "row": "delete",
+        "width": "50%",
+        "text_ref": "谁来执行、回执怎么写"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片里每条要点前一个小绿圆点，正文深蓝灰。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。卡片左上角一个小水彩图标：“删库和转移前先备好”配一摞装订好的文件夹和一只打开的小木箱、“谁来执行、回执怎么写”配一张盖了绿色圆章的小收据。排法：两张卡左右并排、等宽。左卡“删库和转移前先备好”里，第三条“现在的执行入口具体这样做……”放在一个浅绿底小框里，框里右上角画一张小清单纸，纸上只画几条横线、不写字。右卡“谁来执行、回执怎么写”里，“回执分开写两件事”那一条旁边画一张小收据，收据上两行小勾选框，框旁不写字。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。两卡横等宽、竖上下；左第三条浅绿内框，右回执两项旁小收据。卡头图标按01/02显式映射；左内框右上清单小纸与右条目小收据也是scene要求，points_card尚无指定某bullet附图接口，需comp-text与素材方补位。；素材登记图标0/2，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-05-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-05-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 删库和转移"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-protected-actions/rule-protected-actions-05-icon-01.png"
+        ],
+        "inset_prefixes": [
+          "现在的执行入口具体这样做："
+        ],
+        "text_ref": "删库和转移前先备好"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/沙漏.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "谁来执行、回执怎么写"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“删库和转移前先备好”，后“谁来执行、回执怎么写”）。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。两卡横等宽、竖上下；左第三条浅绿内框，右回执两项旁小收据。卡头图标按01/02显式映射；左内框右上清单小纸与右条目小收据也是scene要求，points_card尚无指定某bullet附图接口，需comp-text与素材方补位。；素材登记图标0/2，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-06-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-06-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 本人验证方式"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-b939a47c15f4e73feeb0.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "本人验证的四种方式"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "各产品各管各的"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "target_height": 230,
+        "target_width": 356
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片里每条要点前一个小绿圆点，正文深蓝灰。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。卡片左上角一个小水彩图标：“本人验证的四种方式”配开头插画里那只四选一托盘（同一只，四样东西不变，但这里托盘和小牌子都不写字）、“各产品各管各的”配三个并排的小木柜，柜门上分别画一把钥匙、一个对勾盾牌、一块硬盘。排法：左边约 62% 宽一张大卡“本人验证的四种方式”；右边约 38% 宽一张卡“各产品各管各的”，卡片下面留一块水彩小插画：三个小木柜前各站一个小 AI 助手，各看各的柜子。local-secret-broker 用等宽字体。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩图标：“本人验证的四种方式”配开头插画",
+        "下面留一块水彩小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。横左62%验证大卡，右38%产品卡及卡下三柜小AI插画；小插画在卡外下方。inventory主插画预算0不能抹掉scene明确三柜图，需要补资产。四选一图不带旧标签字。；素材登记图标1/2，按源位置的文件号显式请求，缺图不代表可以省略图标。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。"
+  },
+  {
+    "screen": "rule-protected-actions-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-06-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-06-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 本人验证方式"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-b939a47c15f4e73feeb0.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "本人验证的四种方式"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+        ],
+        "inset_prefixes": [
+          "实例："
+        ],
+        "text_ref": "各产品各管各的"
+      },
+      {
+        "type": "illustration",
+        "index": 0
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "chapter_title",
+      "prose",
+      "section_heading",
+      "points_card",
+      "bullet_list",
+      "inline_link",
+      "icon",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：标题在上，两张卡片从上到下一张一条、整宽（先“本人验证的四种方式”，后“各产品各管各的”），三个小木柜的插画放在最下面。字和横版完全一样。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [
+        "左上角一个小水彩图标：“本人验证的四种方式”配开头插画",
+        "下面留一块水彩小插画"
+      ],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。标题→四种方式整宽卡→各产品整宽卡→三柜小AI整宽插画。卡头图标与底主插画分开，不把四选一托盘拿来冒充三柜。；素材登记图标1/2，按源位置的文件号显式请求，缺图不代表可以省略图标。"
+  },
+  {
+    "screen": "rule-protected-actions-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-07-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-07-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "重大动作与本人验证",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "重大动作前的把关",
+        "body_columns": 1
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "inline_link",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E216 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 重大动作与本人验证”到“什么时候请本人验证：”下面五条结束；右卡放“## 重大动作前的把关”和它下面两段。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，不换成活动E210；上方版本小字；横等宽两大卡，07左到验证五条、右把关两段，08左GitHub三段、右验证方式和各产品同卡；竖整篇一张外卡。whole_block现已实现内h1/h2小题不拆卡、不画毛笔章题。无插画、图标或连线。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。"
+  },
+  {
+    "screen": "rule-protected-actions-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-07-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-07-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版，一字不改"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "重大动作与本人验证"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "inline_link",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：左上小字在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样；字多，行距紧一点但不挤。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，不换成活动E210；上方版本小字；横等宽两大卡，07左到验证五条、右把关两段，08左GitHub三段、右验证方式和各产品同卡；竖整篇一张外卡。whole_block现已实现内h1/h2小题不拆卡、不画毛笔章题。无插画、图标或连线。"
+  },
+  {
+    "screen": "rule-protected-actions-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-08-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-08-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "row": "original",
+        "width": "50%",
+        "text_ref": "GitHub 重大动作"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "row": "original",
+        "width": "50%",
+        "text_ref": "本人验证方式"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## GitHub 重大动作”和它下面三段；右卡放“## 本人验证方式”“## 各产品各管各的”两节。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，不换成活动E210；上方版本小字；横等宽两大卡，07左到验证五条、右把关两段，08左GitHub三段、右验证方式和各产品同卡；竖整篇一张外卡。whole_block现已实现内h1/h2小题不拆卡、不画毛笔章题。无插画、图标或连线。；续屏版本标签明确 E214，标签不属于规则正文。"
+  },
+  {
+    "screen": "rule-protected-actions-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-08-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-08-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\img\\rule-protected-actions-08-v2.png"
+    ],
+    "blocks": [
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "small",
+        "text_ref": "原文·E216版·续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "columns": 1,
+        "text_ref": "GitHub 重大动作"
+      }
+    ],
+    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
+    "source_sha256": "8bc1977d436a73cebb618fb2762303a3ccf5345022fe1673ca71ee2cfe52a81e",
+    "source_component_order": [
+      "section_heading",
+      "source_text_card",
+      "prose",
+      "monospace"
+    ],
+    "source_layout": "竖版 9:16：“原文 · 续”在最上面，下面一张整宽大卡片从头排到尾，顺序和横版完全一样；字多，行距紧一点但不挤。",
+    "layout_variants": {
+      "desktop_columns_mentioned": [],
+      "portrait_columns_mentioned": [],
+      "card_groups": [],
+      "table_shapes": [],
+      "illustration_position_mentions": [],
+      "portrait_split_or_protection": false
+    },
+    "notes": "依据定稿scene/portrait与库存文字描述制定，未查看图片、未渲染。E214原文，不换成活动E210；上方版本小字；横等宽两大卡，07左到验证五条、右把关两段，08左GitHub三段、右验证方式和各产品同卡；竖整篇一张外卡。whole_block现已实现内h1/h2小题不拆卡、不画毛笔章题。无插画、图标或连线。；续屏版本标签明确 E214，标签不属于规则正文。"
+  }
+]

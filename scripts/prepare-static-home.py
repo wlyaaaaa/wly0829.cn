@@ -180,7 +180,10 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
     old_ref = refs[0]
     old_app_rel = urlsplit(urljoin('/index.html', old_ref)).path.lstrip('/')
     old_app = (baseline / old_app_rel).read_bytes()
-    static_app = remove_living_runtime(old_app.decode('utf8')).encode('utf8')
+    static_source = manifest.get('home_static_preparation', {}).get('home_bundle') if data.get('home_living') else None
+    static_bytes = (baseline / static_source['path']).read_bytes() if static_source else old_app
+    if static_source and proof(static_bytes) != {key: static_source[key] for key in ('sha256', 'bytes')}: raise ValueError('Bound original static runtime changed')
+    static_app = remove_living_runtime(static_bytes.decode('utf8')).encode('utf8')
     app_rel = '_shared/static-home-app-' + proof(static_app)['sha256'][:20] + '.js'
     data.pop('home_living', None)
     data['home_static'] = True

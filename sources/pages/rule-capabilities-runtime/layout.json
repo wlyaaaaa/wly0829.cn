@@ -1,0 +1,1242 @@
+[
+  {
+    "screen": "rule-capabilities-runtime-01",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-01-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "52%",
+        "text_ref": "能力与运行方式"
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "AI 拿什么来做事"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "先认几个词",
+        "width": "100%"
+      },
+      {
+        "type": "action_button",
+        "columns": 6,
+        "text_ref": "跳到："
+      },
+      {
+        "text_ref": "工具清单",
+        "type": "document_mock",
+        "variant": "window",
+        "base_asset": "_library/illustrations/助手工具板三牌位.png",
+        "label_positions": [
+          {
+            "x": 38.833,
+            "y": 5.114,
+            "width": 31.5,
+            "height": 10.227,
+            "align": "center"
+          },
+          {
+            "x": 19.5,
+            "y": 79.545,
+            "width": 8.833,
+            "height": 6.25,
+            "align": "center"
+          },
+          {
+            "x": 78.667,
+            "y": 47.159,
+            "width": 12.5,
+            "height": 5.114,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          }
+        ],
+        "layout": "illustration_labels"
+      },
+      {
+        "type": "notice",
+        "text_ref": "自动运行的东西现在跑得怎么样"
+      }
+    ],
+    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 5af082e77c0d9b5c1a4b69d95baec439c520a44db7d968a80d23cd1eab836314。此为AI排版补充，列new-looks待验收。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-01",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-01-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能力与运行方式"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "AI 拿什么来做事"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这是 Codex、Claude 和它们派出的子代理共用的规则专题"
+      },
+      {
+        "type": "glossary",
+        "text_ref": "先认几个词",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "跳到：",
+        "columns": 2,
+        "columns_v": 2
+      },
+      {
+        "text_ref": "工具清单",
+        "type": "document_mock",
+        "variant": "window",
+        "base_asset": "_library/round3/portrait-label-supply/png/ill-r3-portrait-0e061e2c5434a041.png",
+        "layout": "illustration_labels",
+        "label_positions": [
+          {
+            "x": 34.778325,
+            "y": 11.026878,
+            "width": 48.472906,
+            "height": 7.443143,
+            "align": "center"
+          },
+          {
+            "x": 12.216749,
+            "y": 82.563749,
+            "width": 27.29064,
+            "height": 7.098553,
+            "align": "center"
+          },
+          {
+            "x": 56.748768,
+            "y": 62.026189,
+            "width": 30.541872,
+            "height": 5.789111,
+            "align": "center"
+          }
+        ],
+        "label_bindings": [
+          {
+            "label_index": 0,
+            "position_index": 0
+          },
+          {
+            "label_index": 1,
+            "position_index": 1
+          },
+          {
+            "label_index": 2,
+            "position_index": 2
+          }
+        ]
+      },
+      {
+        "type": "notice",
+        "text_ref": "自动运行的东西现在跑得怎么样"
+      }
+    ],
+    "notes": "横图标题/副标题/介绍/词卡在左，卡外工具板插画在右；跳转按钮整宽一排、底部驾驶舱横条。竖图实际副标题在插画之前、介绍在插画之后（intro 块须可按节点放在图两侧）；v2 末尾原图误多出三按钮，定稿“工具清单 E: 看板”只作为插画标签，由程序覆盖，不另画成按钮；G1 顺序与标签空间顺序需主工程师接线。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 5af082e77c0d9b5c1a4b69d95baec439c520a44db7d968a80d23cd1eab836314。此为AI排版补充，列new-looks待验收。\nmain-closer 2026-10-03T20:36:28+08:00：实际文字Range超出真实安全牌框，竖版撤下坐标绑定，恢复原合法保字＋composition incomplete；不把单靠固定.tb框的旧机器pass当通过。safe DOM证据 main-closer/family-label-dom.json；横版实测安全绑定保留。\nmain-closer3：仅竖版接正式ready同scene新PNG与其SHA实测牌面合同；完整等比、不裁切拉伸，保全部原签与36px正文；真实Range和整页程序检查另核，横版保持既有图。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-01-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-01-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-02",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-rule-capabilities-runtime-02-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 选能力"
+      },
+      {
+        "type": "points_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "怎么挑|另一台电脑上的 AI|软件界面上的点选，默认交本人",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7983110846f54e6a0488.png",
+          "_library/fix-round-2/icon-clean-e8b273e5b4b0bb382863.png",
+          "_library/fix-round-2/capability-select-icon.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside",
+        "last_full_width": true
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排3张，竖版整宽一张一行。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-02",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-02-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 选能力"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "怎么挑|另一台电脑上的 AI|软件界面上的点选，默认交本人",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-7983110846f54e6a0488.png",
+          "_library/fix-round-2/icon-clean-e8b273e5b4b0bb382863.png",
+          "_library/fix-round-2/capability-select-icon.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排3张，竖版整宽一张一行。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-02-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-capabilities-runtime-02-v2\\round-01\\candidate-2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-03",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-03-h.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "能力不够时|怎么说|验证码这类限时的事要盯住",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/capability-missing-puzzle-icon.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排3张，竖版整宽一张一行。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-03",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-03-v.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "能力不够时|怎么说|验证码这类限时的事要盯住",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/capability-missing-puzzle-icon.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排3张，竖版整宽一张一行。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-04",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-04-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 常用入口"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "本机小工具",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-1d279ddcf369d19a9c58.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "清单现在写的"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "生成图片和设计画面",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-71e040b035621f213a7d.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横版两等宽卡，左卡底部内嵌清单小框，右卡标题旁调色盘；竖版小工具卡、独立清单框、图片设计卡顺排。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-04",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-04-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 常用入口"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "本机小工具",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-1d279ddcf369d19a9c58.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "icons": [
+          "_library/icons/打勾清单.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "清单现在写的"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "none",
+        "text_ref": "生成图片和设计画面"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横版两等宽卡，左卡底部内嵌清单小框，右卡标题旁调色盘；竖版小工具卡、独立清单框、图片设计卡顺排。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-04-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-04-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-05",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-05-h.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "私人领域直接走各自的入口|Gmail、Google 云盘和待办",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。原横图每卡图标在标题左侧，原竖图第一卡多门插画在卡头上方，第二卡无额外插画。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-05",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-05-v.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "私人领域直接走各自的入口|Gmail、Google 云盘和待办",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。原横图每卡图标在标题左侧，原竖图第一卡多门插画在卡头上方，第二卡无额外插画。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-05-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-05-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-05b",
+    "orientation": "h",
+    "source_image": "",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 云端素材通道"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "为什么要|怎么做|留多久、什么不上云|标尺：每个文件理想是上传一次、下载一次",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-5fbd5c4a89d6e83599d1.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "新构图，待样张。该方向无有效原图。整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。按04/08同页两列要点卡组织四卡2×2；为什么要下方卡外小插画、竖版移到该卡右下角。",
+    "reference_screen": "rule-capabilities-runtime-08",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-05b",
+    "orientation": "v",
+    "source_image": "",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 云端素材通道"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "为什么要|怎么做|留多久、什么不上云|标尺：每个文件理想是上传一次、下载一次",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+          "_library/fix-round-2/icon-clean-5fbd5c4a89d6e83599d1.png",
+          "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "新构图，待样张。该方向无有效原图。整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。按04/08同页两列要点卡组织四卡2×2；为什么要下方卡外小插画、竖版移到该卡右下角。",
+    "reference_screen": "rule-capabilities-runtime-08",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-06",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-06-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 浏览器"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "33%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "默认用本人的 Chrome",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-3162cbde5f4caa3c205d.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "34%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "登录本人的账号",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/人物.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "row": "points",
+        "icons": [
+          "_library/icons/手机电脑连接.png"
+        ],
+        "illustration": "left_inside",
+        "text_ref": "取码工具现在的样子"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "33%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "预览本地网页",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/打勾清单.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图三等宽卡、中卡下面附取码说明；竖图取码框在v2最上，然后预览卡。定稿text含字面反斜杠n，本轮主程序已统一解析与G1基准；定稿未修改，四个text_ref均已恢复匹配。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-06",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-06-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 浏览器"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "默认用本人的 Chrome",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-3162cbde5f4caa3c205d.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "登录本人的账号",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/人物.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "text_ref": "取码工具现在的样子"
+      },
+      {
+        "type": "points_card",
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "预览本地网页"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图三等宽卡、中卡下面附取码说明；竖图取码框在v2最上，然后预览卡。定稿text含字面反斜杠n，本轮主程序已统一解析与G1基准；定稿未修改，四个text_ref均已恢复匹配。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-06-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-06-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-07",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 汇报、网站和自动运行的东西"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "33%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "汇报网页",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-5d6ddc33dee56786bad9.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "row": "points",
+        "illustration": "left_inside",
+        "text_ref": "现在的做法",
+        "icons": [
+          "_library/icons/回收站文件.png"
+        ]
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "33%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "网站怎么更新",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-07-icon-02.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "illustration",
+        "row": "points",
+        "illustration": "outside"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "34%",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "自动运行的东西要看得见",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-6a38e42190b5f0212a91.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      },
+      {
+        "type": "notice",
+        "row": "points",
+        "illustration": "left_inside",
+        "text_ref": "现在的登记",
+        "icons": [
+          "_library/icons/日历时钟.png"
+        ]
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-07",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-v.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 汇报、网站和自动运行的东西"
+      },
+      {
+        "type": "points_card",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "汇报网页"
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "text_ref": "现在的做法"
+      },
+      {
+        "type": "points_card",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "网站怎么更新"
+      },
+      {
+        "type": "points_card",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "自动运行的东西要看得见"
+      },
+      {
+        "type": "notice",
+        "illustration": "none",
+        "text_ref": "现在的登记"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-08",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-08-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 软件更新和兼容"
+      },
+      {
+        "type": "points_card",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "什么时候可以更新|锁版本|改在用的软件时保什么|更新不该打扰本人",
+        "illustration_asset": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。原横图四卡2×2且小插画在正文左侧，原竖图前两卡左图卡头、后两卡纯标题；色彩遵统一标准，不继承旧黄紫蓝卡色。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-08",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-capabilities-runtime-08-v\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 软件更新和兼容"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": "auto",
+        "connector": "none",
+        "text_ref": "什么时候可以更新|锁版本|改在用的软件时保什么|更新不该打扰本人",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。 横版每排2张，竖版整宽一张一行。原横图四卡2×2且小插画在正文左侧，原竖图前两卡左图卡头、后两卡纯标题；色彩遵统一标准，不继承旧黄紫蓝卡色。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-capabilities-runtime-08-v\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-08-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-09",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-09-h.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 安装位置、配置和本机约定"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "45%",
+        "icons": "auto",
+        "illustration": "top_inside",
+        "text_ref": "缺什么装什么",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-c39257cf985b27028f54.png"
+        ],
+        "illustration_description": "原规格插画位置：top_inside"
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "width": "55%",
+        "icons": "auto",
+        "illustration": "none",
+        "text_ref": "东西放 E 盘",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/icons/文件夹.png"
+        ],
+        "illustration_description": "原规格插画位置：top_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图卡头后各有一幅居中卡内大插画（纸箱/E盘绿箱），左45%右55%；竖图纸箱在卡头左，E盘卡头无额外图。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-09",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-capabilities-runtime-09-v\\round-01\\candidate-1.png",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "人话要点 · 安装位置、配置和本机约定"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "缺什么装什么|东西放 E 盘",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-c39257cf985b27028f54.png",
+          "_library/icons/文件夹.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图卡头后各有一幅居中卡内大插画（纸箱/E盘绿箱），左45%右55%；竖图纸箱在卡头左，E盘卡头无额外图。\n2026-10-03 13:46:49 page-fixer-01 第二轮：现有字段修复数字卡窄列/环图真实数字解析/明确文件夹图标绑定。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1b\\state\\b1-rule-capabilities-runtime-09-v\\round-01\\candidate-1.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-09-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-10",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-10-h.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "icons": "auto",
+        "illustration": "top_inside",
+        "text_ref": "配置和密钥",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-10-icon-01.png"
+        ],
+        "illustration_description": "原规格插画位置：top_inside"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "icons": "auto",
+        "illustration": "top_inside",
+        "text_ref": "技能和插件|Windows",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-10-icon-02.png",
+          "_library/fix-round-2/icon-clean-167263af5fd76ed4dbd8.png"
+        ],
+        "illustration_description": "原规格插画位置：top_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。无大标题；原横图左大卡右上下两卡，左55%右45%；顶部底部叶带仅装饰、不加文字。竖图配置卡跨v/v2后接技能、Windows，不重复新增标题。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-10",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-10-v.png",
+    "blocks": [
+      {
+        "type": "points_card",
+        "columns": 1,
+        "columns_v": 1,
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "配置和密钥|技能和插件|Windows",
+        "icon_position": "header_left",
+        "header_icon": [
+          "rule-capabilities-runtime/rule-capabilities-runtime-10-icon-01.png",
+          "rule-capabilities-runtime/rule-capabilities-runtime-10-icon-02.png",
+          "_library/fix-round-2/icon-clean-167263af5fd76ed4dbd8.png"
+        ],
+        "illustration_description": "原规格插画位置：left_inside"
+      }
+    ],
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。无大标题；原横图左大卡右上下两卡，左55%右45%；顶部底部叶带仅装饰、不加文字。竖图配置卡跨v/v2后接技能、Windows，不重复新增标题。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-10-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-10-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-11",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-11-h.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版"
+      },
+      {
+        "type": "chapter_title",
+        "align": "left",
+        "size": "large",
+        "row": "intro",
+        "width": "50%",
+        "text_ref": "能力与运行方式",
+        "source_prose": true
+      },
+      {
+        "type": "prose",
+        "row": "intro",
+        "text_ref": "owner:",
+        "source_prose": true
+      },
+      {
+        "type": "illustration",
+        "row": "intro",
+        "width": "50%",
+        "illustration": "outside"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 2,
+        "columns_v": 1,
+        "split_after": "界面上的点选默认交本人",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "选能力"
+      }
+    ],
+    "notes": "原图上部页名/owner/介绍在左、工具电脑插画在右；下面原文两栏卡，左前三条、右后三条；竖版介绍后卡外插画、再一整宽原文卡。和 scene 的全部正文入两卡冲突，按实际原图。split_after 为待接入原文节点内分栏需求，当前解析器不可拆同一 bullets 节点。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-11",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-11-v.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版"
+      },
+      {
+        "type": "chapter_title",
+        "align": "center",
+        "size": "large",
+        "text_ref": "能力与运行方式",
+        "source_prose": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "owner:",
+        "source_prose": true
+      },
+      {
+        "type": "illustration",
+        "illustration": "outside"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "选能力",
+        "whole_block": true
+      }
+    ],
+    "notes": "原图上部页名/owner/介绍在左、工具电脑插画在右；下面原文两栏卡，左前三条、右后三条；竖版介绍后卡外插画、再一整宽原文卡。和 scene 的全部正文入两卡冲突，按实际原图。split_after 为待接入原文节点内分栏需求，当前解析器不可拆同一 bullets 节点。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-12",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-12-h.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "常用入口",
+        "row": "entries",
+        "width": "50%",
+        "row_equal_height": true
+      },
+      {
+        "type": "source_text_card",
+        "whole_block": true,
+        "split_cards": false,
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "谁画、谁复核",
+        "row": "entries",
+        "width": "50%",
+        "row_equal_height": true
+      }
+    ],
+    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版左卡本机/生图，右卡私人领域/Google；需在连续bullets里第2条后切栏。；E215生图细则扩为六项，横版改在“怎么做”后接右栏，保持原文顺序并缩小两栏长度差。；最终沿该完整条目边界使用两张齐底原文卡，左常用入口至“怎么做”、右“谁画、谁复核”至Google；没有改写或重排原文。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-12",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-12-v.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "split_after": null,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "常用入口",
+        "whole_block": true
+      }
+    ],
+    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版左卡本机/生图，右卡私人领域/Google；需在连续bullets里第2条后切栏。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-13",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-13-h.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "illustration": "none",
+        "text_ref": "浏览器",
+        "body_columns": 1
+      },
+      {
+        "type": "source_text_card",
+        "illustration": "bottom_inside",
+        "text_ref": "需要真实浏览器预览本地HTML时",
+        "illustrations": "auto",
+        "illustration_asset": [
+          "_library/illustrations/generic-report-page-dashboard.png"
+        ],
+        "body_columns": 1
+      }
+    ],
+    "notes": "横版左卡浏览器节与前两段，右卡本地预览第三段，右卡下半内部Chrome窗口插画；竖版一整宽原文卡，插画在同卡最底部。小号原文续标记按原图左对齐，不当大章标题。；blank-audit：长短栏改顺序整宽、撤固定最小画布，定稿字与顺序保持。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-13",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-13-v.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "bottom_inside",
+        "text_ref": "浏览器",
+        "illustrations": "auto",
+        "whole_block": true,
+        "illustration_asset": [
+          "_library/illustrations/generic-report-page-dashboard.png"
+        ]
+      }
+    ],
+    "notes": "横版左卡浏览器节与前两段，右卡本地预览第三段，右卡下半内部Chrome窗口插画；竖版一整宽原文卡，插画在同卡最底部。小号原文续标记按原图左对齐，不当大章标题。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-14",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-14-h.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "row": "source",
+        "width": "50%",
+        "illustration": "none",
+        "text_ref": "汇报、网站和自动运行的东西"
+      },
+      {
+        "type": "source_text_card",
+        "row": "source",
+        "width": "50%",
+        "illustration": "none",
+        "text_ref": "软件更新和兼容"
+      }
+    ],
+    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-14",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-14-v.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "split_after": null,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "汇报、网站和自动运行的东西",
+        "whole_block": true
+      }
+    ],
+    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-15",
+    "orientation": "h",
+    "source_image": "",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 2,
+        "columns_v": 1,
+        "split_after": "东西放 E 盘",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "安装位置、配置和本机约定"
+      },
+      {
+        "type": "prose",
+        "text_ref": "个别只涉及我私事的字句没有放上来"
+      }
+    ],
+    "notes": "新构图，待样张。该方向无有效原图。原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版 -h.png 为零字节，另有 -h-new.png 未列入批准替换，不擅自认定通过；参考14横版写两栏，新构图待样张。竖版原图第一张后两条即停，v2接配置/技能/Windows；原图把底注重复画了两次，定稿只显示一次；按定稿放最后。",
+    "reference_screen": "rule-capabilities-runtime-14",
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  },
+  {
+    "screen": "rule-capabilities-runtime-15",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-15-v.png",
+    "blocks": [
+      {
+        "type": "prose",
+        "text_ref": "原文 · E216 版 · 续"
+      },
+      {
+        "type": "source_text_card",
+        "columns": 1,
+        "columns_v": 1,
+        "split_after": null,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "安装位置、配置和本机约定",
+        "whole_block": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "个别只涉及我私事的字句没有放上来"
+      }
+    ],
+    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版 -h.png 为零字节，另有 -h-new.png 未列入批准替换，不擅自认定通过；参考14横版写两栏，新构图待样张。竖版原图第一张后两条即停，v2接配置/技能/Windows；原图把底注重复画了两次，定稿只显示一次；按定稿放最后。",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-15-v.png",
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-15-v2.png"
+    ],
+    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
+  }
+]

@@ -123,9 +123,9 @@ main {
 
 .back-to-top {
   position: fixed;
-  right: max(22px, env(safe-area-inset-right));
-  bottom: max(22px, env(safe-area-inset-bottom));
-  z-index: 28;
+  right: max(14px, env(safe-area-inset-right));
+  top: 8px;
+  z-index: 90;
   display: inline-flex;
   width: 46px;
   height: 46px;
@@ -301,6 +301,8 @@ main {
   margin: 0 auto;
   padding: 0 28px;
 }
+
+@media (min-width: 681px) { .site-header .header-inner { padding-right: 76px; } }
 
 .menu-backdrop {
   display: none;
@@ -6402,7 +6404,7 @@ html[data-enhanced="true"] .system-workflow-panel:not(.is-current) { display: no
 }
 
 @media (max-width: 680px) {
-  .back-to-top { right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); width: 42px; height: 42px; }
+  .back-to-top { right: max(14px, env(safe-area-inset-right)); top: 62px; width: 42px; height: 42px; }
   .back-to-top-stamp { min-height: 24px; margin-left: 8px; padding: 3px 7px; font-size: 11px; }
   .capability-link-bar { grid-template-columns: minmax(0,1fr); }
   .capability-link-bar > strong { border-right: 0; border-bottom: 1px solid var(--line); }

@@ -1,0 +1,901 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-expression",
+  "kind": "project",
+  "title": "个人表达",
+  "url": "/projects/personal-expression/",
+  "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
+  "status": "常用",
+  "public": false,
+  "repo_url": null,
+  "capability": "把话讲明白、把消息写自然",
+  "based_on": {
+    "commit": "fb082dc8abfb01cdc572570d875b25a5b1e13554",
+    "commit_time": "2026-09-28T17:34:03+08:00"
+  },
+  "video_prompt": "5–8 秒循环。画面从开头这屏的水彩插画出发：左边对话气泡里的一团乱线慢慢从左往右理顺，变成一条平直的绿线，理顺时轻轻亮一下；中间的小册子翻过一页，一枚绿色书签滑进去停住；右边的钢笔在便签上写出几道浅灰短线（不是字），便签上方三个空白小标签牌轻轻晃动，其中一个慢慢变成亮绿。白底、纯绿主色、水彩质感，镜头不动，不出现任何文字和品牌标志。",
+  "screens": [
+    {
+      "id": "personal-expression-01",
+      "section": "top",
+      "title": "开头",
+      "scene": "横版：左上毛笔艺术字大标题，下面介绍段（四五行，两个粗体小标题嵌在段里）。右上一幅水彩插画：左边一个对话气泡，里面一团乱线从左往右慢慢理成一条平直的绿线；中间一本翻开的小册子，夹着几枚绿色书签；右边一支钢笔搁在一张便签上，便签上方悬着三个空白的小标签牌，其中一个是亮绿色。插画里不画任何字。介绍下面一张浅绿底的横向引语卡片放“真实的一次”那段（左边一个小对话气泡图标，我的原话用引号、字稍大）。再下面一排四张数字卡（和标杆页第一屏一样：上面小插画，大号绿色数字，下面一两行小字；插画依次是：翻开的小册子、一叠对话气泡、两枚并排的小徽章、一个打着钩的小程序窗口）。最下面左边一个按钮〔在整套系统里的位置 → 怎么协作〕。私有仓库，不放 GitHub 按钮；这个项目没有自动任务，不画“现在”横条。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：标题和介绍在上；插画缩小放在介绍下面；“真实的一次”引语卡片占一整行；四张数字卡一行一张（第三张字多，卡片高一些）；按钮单独一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "# 个人表达\n\nAI 跟我说话、替我给别人写消息，都照这里的手册和样本来。**讲给我听**：AI 向我汇报、解释、请我拍板时照手册讲；我说没听懂，就从我原来的问题重讲。**替我拟消息**：我定好要说什么，AI 先看这条发给谁、我们什么关系，参考我平时对这类人怎么说，写成一条自然的消息，发不发我定。我指出哪句难懂、哪句别扭，当场改好，教训写回这里，下次换哪个 AI 都用得上。\n\n**真实的一次**（9 月 27 日）：AI 报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核验项。我问：“这是什么应用？你现在什么都不和用户讨论，用户已经不知道这是什么了？”原来是手机 App Usage 日报的标题和落款被当成两个 App 记了下来。当天手册里多了一条：报“修好了”之前，先用一句日常话说清是哪样东西、出了什么问题、对我有什么影响。\n\n- **11 条原则 · 6 条读懂我的话**｜讲给我听的手册，背后是 50 条带日期的真实案例（9 月 8–28 日）\n- **45 条**｜我在微信里真实发过的话，每条标着发给谁、什么关系；另有 5 份我评过的 AI 稿\n- **33 次 · 22 次**｜AI 调用“讲给我听”“替我拟消息”（9 月 15–27 日的使用记录；Claude 9 月 24 日起才有记录；含维护这个项目时的调用）\n- **327 行 Python**｜只读资料：不调模型、不在后台跑；24 个自动测试\n\n〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕",
+      "links": [
+        {
+          "text": "在整套系统里的位置 → 怎么协作",
+          "href": "/how/#personal-expression"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-expression/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-02",
+      "section": "usage",
+      "title": "两种用法，分开存",
+      "scene": "横版：左上标题。中间一张大表格：左边一列是行名（粗体），右边两列是两个用法；两列表头上方各一幅小水彩插画（讲给我听：一个小机器人对着一只耳朵说话，耳朵旁一个小灯泡亮起；替我拟消息：一支钢笔在便签上写字，旁边一个信封）。两列之间一道细细的绿色竖线。表格下面两张横向细卡片并排：“为什么分开”（图标：两个分开放的文件夹）、“在哪用”（图标：一个对话窗口），第二张里的两个技能名画成链接样式。",
+      "portrait": "竖版：表格改成两张卡片上下排：“讲给我听”一张、“替我拟消息”一张，每张卡片里一行一条（行名粗体在前）；两张细卡片跟在后面，一行一张。",
+      "text": "## 两种用法，分开存\n\n| | **讲给我听** | **替我拟消息** |\n|---|---|---|\n| 谁对谁说 | AI 对我说 | 我对别人说，AI 代写 |\n| 什么时候 | AI 向我汇报、解释、请我拍板；我说“没听懂”“我问的是……” | 这条消息要说什么已经定了，只差写成话 |\n| 读什么 | 讲解手册 | 拟消息指南、按关系挑出的样本、我评过的 AI 稿 |\n| 不做 | 不学我聊天的口吻 | 不替我定说什么，不替我发，不写正式文书的正文 |\n| 怎么叫出来 | 不用点名，AI 向我说明时需要就读，同一件事里读过就接着用 | 说“帮我按平时的口吻回这条” |\n\n**为什么分开**：我平时怎么跟朋友说话，推不出我怎么才听得懂；讲给我听的规矩只从我对讲解的反馈里来。反过来，我让 AI“说人话”，也不是我给别人发消息的习惯。\n\n**在哪用**：就在原来的对话里用，带着真实的聊天前文和我的原话，不另开对话，也不另跑一个模型改写。跟 AI 怎么说、例子和边界，见〔讲给我听技能〕和〔替我拟消息技能〕。",
+      "links": [
+        {
+          "text": "讲给我听技能",
+          "href": "/skills/explain-to-me/"
+        },
+        {
+          "text": "替我拟消息技能",
+          "href": "/skills/reply-as-me/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-03",
+      "section": "usage",
+      "title": "讲给我听：所有 AI 共用的一本手册",
+      "scene": "横版：左上标题，下面一段引言（三个链接画成绿色带小箭头）。左边约一半宽一张大卡片“11 条照着做的原则”：十一枚浅绿色圆角小胶囊，三四枚一行自然排开，胶囊里是原则短句。右边一张卡片“6 条读懂我的话”，一行一条，每条前一个小水彩图标（一个小人指着自己、一个被划掉又改正的字、一个回声气泡、一个问号旁边一个空白小框、一张用胶带贴进来的纸条、一本小字典）。底部左右两条细卡片：“50 条真实案例”（旁边画一叠带空白日期小标签的卡片）、“我状态很差时”（旁边画一杯冒热气的茶）。",
+      "portrait": "竖版：标题和引言在上；11 枚胶囊两枚一行；6 条一行一条；两条细卡片一行一张放最后。",
+      "text": "## 讲给我听：所有 AI 共用的一本手册\n\n我反复跟 AI 说“说人话，别当谜语人”。〔约法 L2〕和〔L5〕是总纲；这本手册存的是每一次让我卡住的真实原因和改法。规则总纲写明：向我说明时，完整的表达教训在这里，需要时读；〔汇报网页〕的写法也从这里来。\n\n**11 条照着做的原则**\n从我原来的问题重讲 · 先说有什么用 · 问之前先查记过的 · 请我拍板前讲清情况、后果和建议 · 用我认得的名字 · 能做就做完 · 主动报进度、耗时和额度 · 给有分量的判断 · 依据说清、转述不走样 · 说真心话时按我的利益帮 · 看板先总览、异常在前\n\n**6 条读懂我的话**\n1. 我说“用户”，多半就是我自己。\n2. 同音字、错字能还原就直接还原：常见“在/再”“他/它”“等级/登记”“一搬/一般”“调验/调研”，还有 DCP/DPC、openclow 这类拼写。\n3. “是不是……？”“所以说……吧？”多半是我在复述自己的理解：先答对不对，再补正。\n4. 我问 AI 的事，不等于我做过或打算做。\n5. 长消息里常夹着我粘贴进来的 AI 原文，那不是我的话。\n6. 几个固定说法：“画面卡”是显示刷新卡，不是鼠标键盘延迟；单说“验证码”就是邮箱验证码；“屏保”指〔泡泡屏保〕那个项目。\n\n这 6 条出自 9 月 15–26 日我约 480 条手打消息：中位数约 40 字，约三分之一用“；”串起几件事，13% 带两个以上问号；漏答的那件，往往就是我下一句“我问的是……”。\n\n**50 条真实案例**：每条写着日期、出自哪次对话、我当时怎么说、以后怎么做（9 月 8–28 日）。每条原则都追得到这些案例和我的原话。\n\n**我状态很差时**：按我事先确认过的一套默认做法说话。",
+      "links": [
+        {
+          "text": "约法 L2",
+          "href": "/rules/charter/#L2"
+        },
+        {
+          "text": "L5",
+          "href": "/rules/charter/#L5",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "b9c085bd46e4e71a481bc5e654fe36cd7c7b37fe19182e4d546c335a91d0be28",
+              "instances": [
+                {
+                  "context_text": "我反复跟AI说“说人话，别当谜语人”。约法L2和L5是总纲；这本手册存的是",
+                  "context_rect": [
+                    47,
+                    150,
+                    828,
+                    170
+                  ],
+                  "expected_rect": [
+                    555,
+                    153,
+                    576,
+                    170
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "text": "汇报网页",
+          "href": "/skills/report-page/"
+        },
+        {
+          "text": "泡泡屏保",
+          "href": "/projects/emerald-veil/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-04",
+      "section": "usage",
+      "title": "替我拟消息：从意思到一条消息",
+      "scene": "横版：左上标题。上半部一条从左到右的五步流程，五个圆角节点用绿色箭头连起来，每个节点上方一幅小水彩图标（一张写好要点的便签；一个小人和三个小标签牌；一叠对话气泡，一只手从里面挑出两张；一张被红笔划掉一段的稿纸；一支钢笔和一个信封）。节点下写粗体小标题和两三行字；第 2 步里引号中的对象和关系名画成浅绿色小标签的样子。下半部四张并排小卡片放最后四段（图标：一个空盒子；一张小照片和一个笑脸表情；一个问号气泡；一张被红笔划掉又重写的便签），最后一张里的技能名画成链接样式。",
+      "portrait": "竖版：五步竖排，一步一张卡片，箭头向下；四张小卡片一行一张放最后。",
+      "text": "## 替我拟消息：从意思到一条消息\n\n1. **意思先定好**\n当前对话或别的项目先定说什么、为了什么，这里只管写成话。要带上真实的聊天前文和我的原话，不能只给一句概括。\n\n2. **先看发给谁、什么关系**\n对象写关系身份、不写人名，比如“二姨”“银行客服”；关系写有多熟，比如“老朋友”“服务关系”（售后、客服、线上交易都算服务关系）。看不出的标“看不出”，不猜。\n\n3. **按关系挑我的说法**\n关系对上的排前面；标“看不出”的，只在同一种场合时附在后面；关系明显不同的，一句也不借。场合（朋友、家人、办事、群聊等）只决定排序；样本讲的是什么事，不是挑它的理由。这一步 9 月 26 日上线，还没在真实拟稿里验过。\n\n4. **先看我否定过的 AI 稿**\n5 份 AI 稿有我的评价：认可 1、勉强接受 1、否定 3，否定的写着原因。动笔前先看原因。\n\n5. **写成，交给我**\n意思、事实和分寸不变；不擅自加承诺、道歉、邀约，语气也不比原意更热络；我以前说过的人名、日期、地点不搬进来。可以比我以前说得好，不追求像。发不发我定。\n\n**没有对得上的样本**：照样写，但说明参考有限，不假装有我的说法撑着。\n**聊天里有图片、表情、动图**：带上看过的描述、谁发的、前后几条、是动图还是静图（这一条还没在真实聊天里验过）。\n**拿不准又会改变意思的**：问我一个具体问题；措辞小事 AI 自己定。\n**真实的一稿**：我否过一版代写，原因是“人机味道太冲；微信消息也没有分条”；那一稿、改稿和我的评价见〔替我拟消息技能〕的例子。",
+      "links": [
+        {
+          "text": "替我拟消息技能",
+          "href": "/skills/reply-as-me/#examples"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-05",
+      "section": "usage",
+      "title": "我指出问题之后，出事怎么办",
+      "scene": "横版：左右两栏。左栏标题“我指出问题之后”，四步竖排，一条细绿线串起四个小节点（图标：一支正在改稿的红笔；两个分开的文件夹；两张卡片合成一张；一个打钩的小箱子），四步下面一行小字。右栏标题“出事怎么办”，一张两列表格五行，每行左边一个小水彩图标（一把锁；一支没墨的笔；两只手同时伸向同一张纸；一个往回绕的小箭头；一个分成两条岔路的路牌）。",
+      "portrait": "竖版：左栏的四步和那行小字在上；表格改成五张小卡片一行一张（粗体写情况，下面写怎么办）。",
+      "text": "## 我指出问题之后\n\n1. **先改眼前的**：按我说的重讲或改稿，不先给一套分析。\n2. **写回对的地方**：讲解的教训进讲解手册，拟消息的进拟消息指南；我真正说过或改过的话才进样本；AI 稿经我评过才进对照，不冒充我的原话。\n3. **同类合并，只补不减**：先找有没有同类，有就并进去；只能补范围、例外和来源，不删我的原话，不放宽也不收窄。\n4. **校验、回读、存快照**：确认下次正常调用读得到，再存进私有 GitHub 仓库。没真的写进去、没回读，不能说“记下了”。\n\n不用我说“保存”，也不用我回到这个项目复述；表达库完不完善由 AI 负责。\n\n## 出事怎么办\n\n| 情况 | 怎么办 |\n|---|---|\n| 个人资料锁着 | 程序一行都不读，请我验证；AI 也不换个来源绕过去 |\n| 资料暂时写不进去 | 明说“这次知道了，但没存上” |\n| 别的对话同时在改 | 校验会提示差异，见亮点 3 |\n| 资料改乱了 | 指定一版快照，先读出来核对，再还原 |\n| 一条教训有两种理解 | 问我一个具体问题；我没回答，不算我认可 |",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-06",
+      "section": "tech",
+      "title": "它是怎么搭的",
+      "scene": "横版：左上标题。上面一条横向流程图，六个节点用绿色箭头连起来，每个节点一幅小水彩图标加下面的字（几个叠在一起的对话窗口；两枚技能小徽章；一个小程序窗口，里面几行浅灰短线；一把锁和一个对勾；一个文件夹；一支钢笔回到对话窗口）。下面左边一张四行两列表格“四份资料”，右边一张卡片“四个命令”，命令名用等宽字体。最下面两张细卡片并排：“备份”（画 GitHub 的猫形标志和一个小箱子）、“没有”（五个被轻轻划掉的小图标：一盏常亮的小灯、一个芯片、一只耳朵、一个数据库圆柱、一排排队的小人）。",
+      "portrait": "竖版：流程图改成竖排，箭头向下；表格改成四张小卡片一行一张（文件名粗体在上）；命令卡片；两张细卡片一行一张。",
+      "text": "## 它是怎么搭的\n\n**一次调用怎么走**\n任何对话里的 AI（Codex、Claude 和它们派的子代理）→ 技能入口 explain-to-me 或 reply-as-me → expression.py → 先查〔个人资料锁〕，放行才读 → E:\\PersonalData\\个人表达 → 读出来的交回当前 AI，由它在这个对话里写\n\n**四份资料**\n| 文件 | 放什么 |\n|---|---|\n| explain-to-me.md | 讲解手册：11 条原则、6 条读懂我的话、50 条案例 |\n| reply-guide.md | 拟消息指南：样本怎么用、图片表情怎么带、怎么补说法、AI 稿对照里学到的 |\n| reply-samples.jsonl | 45 条样本：每条记着谁写的、出自哪个微信号和聊天、每句的时间和原消息编号、发给谁、什么关系、当时的前文 |\n| reply-contrasts.jsonl | 5 份 AI 稿对照：我的评价和原因 |\n\n**expression.py 的四个命令**（327 行，只用 Python 标准库）\n- explain：读讲解手册\n- scenes：列出现有的对象、关系、场合各有几条\n- reply：按关系（--relationship、--audience）和场合（--scene）取样本和 AI 稿\n- validate：查每条的格式和出处，对照私有快照\n\n**备份**：四份资料在私有仓库 wlyaaaaa/personal-expression 的 data-backup 里留 Git 快照，正常收尾时更新；加 --data-root 能直接读仓库里这份快照，更早的版本从 Git 历史里取出来再读。\n\n**没有**：常驻程序、模型服务、后台监听、数据库、队列。",
+      "links": [
+        {
+          "text": "个人资料锁",
+          "href": "/rules/privacy-data/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-07",
+      "section": "tech",
+      "title": "为什么这样设计",
+      "scene": "横版：左上标题。七张横向小卡片两列排（最后一张占一整行），每张左边一幅小水彩图标，右边粗体一句加一两行小字（图标：一只手把一张纸递回对话框；一支铅笔和一个对勾；三支颜色不同的笔；一根细线连到一枚小图钉；一把被轻轻划掉的尺子；一支只照亮一小块地面的手电；一个聊天气泡上放着一只放大镜）。底部一条浅绿色横条放测试那段，左端一张打钩的测试单图标。",
+      "portrait": "竖版：七张卡片一行一张；横条放最后。",
+      "text": "## 为什么这样设计\n\n- **程序只读，写稿交给当前 AI。** 拟稿要读懂整段前文和上游定好的意思，这些都在当前对话里；另开一个模型重写，上下文要再搬一遍，还容易丢。\n- **改资料就是改文件。** 一条教训就是几句话，用普通编辑改、跑校验、回读就够；Git 历史就是版本记录。\n- **谁写的分成三种。** 我自己发的、我改过的、AI 起草的。可用样本只收前两种；AI 稿就算我发出去了也不算，不然 AI 会把自己的话学成“我的口吻”。\n- **每句都追得到出处。** 样本必须写微信号、聊天、每句的时间（带时区）和原消息编号，句数要对上；平时藏起编号，要核对时才显示。\n- **不追求像。** 验收看自然、合适、不违和、意思没变，不用相似度打分：像，不等于我认可。\n- **一次反馈只管它的场合。** 比如（示意）我嫌一条催进度的工作消息太生硬，教训是先问对方要不要帮忙，而不是每条都加“不急”；也不等于别的场合都不能说“不急”。\n- **只在真实问题和真实聊天里验。** 9 月 8 日起不再编场景试写，由处理真实事情的 AI 顺手记教训。\n\n24 个自动测试守着这些：缺出处或编号重复的样本进不来；关系对不上的不返回；资料锁着时连校验都不读；AI 稿对照不混进我的样本。",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-08",
+      "section": "highlights",
+      "title": "亮点",
+      "scene": "横版：左上标题。三张大卡片，上面两张并排、下面一张占一整行，每张左上一个编号圆章和一幅小水彩插画（1：一本小册子被几个颜色不同的小机器人围着看，册子翻开的那页上画一块小看板，顶上一个红点一个黄点；2：一只放大镜照着一串对话气泡，其中几个被夹上绿色小夹子；3：两只手各拿一支笔，在同一张纸的不同地方写）。卡片里“麻烦”两个字是灰色小标签，“解法”两个字是绿色小标签，链接画成绿色带小箭头。",
+      "portrait": "竖版：三张卡片一行一张。",
+      "text": "## 亮点\n\n**1. 教会一个 AI，所有 AI 都会**\n麻烦：“说人话”“我问的是……”，我在 Codex 里说过，在 Claude 里又说，换个子代理还得再说：9 月 15–26 日的反馈里两边都有。\n解法：两边的自动记忆都关了（〔约法 L30〕），这类教训只存在这一处；规则总纲指明所有 AI 向我说明时需要就读它，〔事实来源与任务上下文〕这个专题也规定这类经验写回这里。比如 9 月 26 日我在一个 Claude 对话里说“看板不够直观，你可以先粗略在详细”“异常的和黄色的优先展示”，当晚写成手册第 11 条；之后哪个 AI 做看板，读手册都会读到它。\n\n**2. “调用了技能”不等于“记下了”**\n麻烦：9 月 26 日第一次回头查我的原话，发现 9 月 15–25 日约 35 起表达反馈，只有 2 起写进了资料：AI 当场改了，却没写回。\n解法：没真改进资料、没回读，就不能说记下了；每次更新我的个人资料时，AI 只读回扫最近几天我说过的话，按“听不懂”“说人话”“我问的是”“不是不是”“？？？”这些信号找出漏的，合并后回读。9 月 28 日又从 ChatGPT 导出里补了 3 条。\n\n**3. 几个项目同时改，小改后对照快照**\n麻烦：哪个项目的 AI 都能改表达库；两个对话同时改，后写的整份覆盖，就会吞掉前一个刚加的教训。\n解法：只按原句做小替换（合并的规矩见“我指出问题之后”第 3 步）；校验拿现在的资料和私有仓库里最近的快照比，列出还没存的文件，以及快照里有、现在没了的带引号原话和样本编号。9 月 28 日补 ChatGPT 导出的反馈时，校验先报出讲解手册还没进快照，同步后才显示一致。这是事后检查，不会阻止同时写入；没进快照的改动被盖掉，也可能查不出来。",
+      "links": [
+        {
+          "text": "约法 L30",
+          "href": "/rules/charter/#L30"
+        },
+        {
+          "text": "事实来源与任务上下文",
+          "href": "/rules/context-sources/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-09",
+      "section": "features",
+      "title": "全部功能（一）",
+      "scene": "横版：和上一屏（或下一屏）是同一个网格，两张上下拼成一整段。每组一个粗体组名，写在这组卡片上方一行（不单独占一整列）；组下面功能卡片两列排，每张卡：左边一个小水彩图标，粗体功能名，右上角一个状态小圆点（在用＝绿色实心、待验收＝黄色实心、没用过＝灰色实心、说不准＝浅灰实心），下面一两行字。这一张顶上是标题，标题下面一行是图例（四个圆点和名字），图例下一行小字是四种状态的意思；然后是“讲给我听”“替我拟消息”两组。",
+      "portrait": "竖版：标题、图例和那行小字在上；每组组名一行，卡片一行一张。",
+      "text": "## 全部功能（20 项）\n● 在用　● 待验收　● 没用过　● 说不准\n在用＝技能或程序里有，记录里用过；待验收＝做好了，还没在真实使用里验过；没用过＝每用一次都会留下提交，现在一条也找不到；说不准＝用了不一定留痕，记录里又没找到。\n\n**讲给我听**\n- **照手册讲** ● 在用｜AI 向我汇报、解释、请我拍板时，先照手册组织：先说有什么用，再讲结论和依据\n- **没听懂就重讲** ● 在用｜我说“没听懂”“我问的是……”，回到我原来的问题，把人、事、判断和背景讲清，换眼前的例子\n- **读懂我的话** ● 在用｜“用户”多半是我、同音字直接还原、问 AI 的事不等于做过、粘贴进来的 AI 原文不是我的话、几个固定说法，共 6 条\n- **只问具体的** ● 在用｜要问我之前先查记过的；只问具体事实或真实取舍，不让我挑抽象的讲法\n- **状态差时换讲法** ● 说不准｜我状态很差时，按我事先确认过的默认做法说话\n\n**替我拟消息**\n- **拟消息** ● 在用｜意思定好后写成自然的消息：意思、事实、分寸不变，不加承诺，不发送；对不上样本就说明参考有限\n- **看关系选说法** ● 说不准｜先按发给谁、什么关系挑我的样本，场合只排序；关系不同的不借口吻\n- **参考我评过的 AI 稿** ● 说不准｜我评过的 AI 稿分认可、勉强接受、否定三档，否定的写原因；动笔前先看原因\n- **带上图片和表情** ● 待验收｜聊天里有图片、表情、动图时，带上看过的描述、谁发的、前后几条、是动图还是静图\n- **核对样本出处** ● 说不准｜要核对某条样本时，显示原消息编号和校验码（哈希）；平时藏起来",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-explain",
+          "text": "讲给我听"
+        },
+        {
+          "id": "g-reply",
+          "text": "替我拟消息"
+        },
+        {
+          "id": "f-explain",
+          "text": "照手册讲"
+        },
+        {
+          "id": "f-reexplain",
+          "text": "没听懂就重讲"
+        },
+        {
+          "id": "f-read-my-words",
+          "text": "读懂我的话"
+        },
+        {
+          "id": "f-ask-concrete",
+          "text": "只问具体的"
+        },
+        {
+          "id": "f-low-mood",
+          "text": "状态差时换讲法"
+        },
+        {
+          "id": "f-draft",
+          "text": "拟消息"
+        },
+        {
+          "id": "f-by-relation",
+          "text": "看关系选说法"
+        },
+        {
+          "id": "f-contrasts",
+          "text": "参考我评过的 AI 稿"
+        },
+        {
+          "id": "f-media",
+          "text": "带上图片和表情"
+        },
+        {
+          "id": "f-locators",
+          "text": "核对样本出处"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "pe-features",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-10",
+      "section": "features",
+      "title": "全部功能（二）",
+      "scene": "横版：和上一屏（或下一屏）是同一个网格，两张上下拼成一整段。每组一个粗体组名，写在这组卡片上方一行（不单独占一整列）；组下面功能卡片两列排，每张卡：左边一个小水彩图标，粗体功能名，右上角一个状态小圆点（在用＝绿色实心、待验收＝黄色实心、没用过＝灰色实心、说不准＝浅灰实心），下面一两行字。这一张没有标题和图例，直接接着排“记住纠正”“保管和找回”两组。",
+      "portrait": "竖版：每组组名一行，卡片一行一张。",
+      "text": "**记住纠正**\n- **记住纠正** ● 在用｜当场改好，写回对应的资料，校验、回读、存快照；不用我说“保存”\n- **加的时候就合并** ● 在用｜新教训先找同类，并进同一条，保留我的原话和适用范围\n- **回扫漏收的反馈** ● 在用｜更新我的个人资料时，只读回扫最近几天我说过的话，按信号找出没记下的反馈，合并后回读\n- **复核各项目的改动** ● 没用过｜更新我的个人资料时，看上次以来所有对话对表达库的改动：有没有把原意压窄或放宽、放错方向、重复，或把对人的评价写进来；小问题直接补\n- **大合并交给独立核对** ● 没用过｜要重排多条时先写方案，派没参与的 AI 逐条核对我的原话一处不丢，再写回；不请我逐条对照\n- **从微信补我的说法** ● 在用｜按眼前的用途，从最近或历史微信里挑值得留的我的话，带出处加进样本\n\n**保管和找回**\n- **锁着就不读** ● 在用｜每条读取命令（连校验在内）先查个人资料锁，没放行就一行不读\n- **校验资料** ● 在用｜查每条样本的出处、编号、对象和关系齐不齐，再对照私有快照（见亮点 3）\n- **私有仓库快照** ● 在用｜资料变了，收尾时把四份资料存进私有 GitHub 仓库，留下每一版\n- **找回旧版** ● 说不准｜从 Git 历史里取出要的那一版快照，先读出来核对，再还原到资料目录",
+      "links": [],
+      "anchors": [
+        {
+          "id": "g-learn",
+          "text": "记住纠正",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "ecb39629a9066a1df0b34cc8aba7e38d623a0e13a972df80356a98228315c0a9",
+              "instances": [
+                {
+                  "context_text": "记住纠正",
+                  "context_rect": [
+                    19,
+                    12,
+                    330,
+                    112
+                  ],
+                  "expected_rect": [
+                    19,
+                    12,
+                    330,
+                    112
+                  ]
+                }
+              ]
+            },
+            "v": {
+              "input_sha256": "d189bf10b474b946d07e03b537993350f392f7b5344207043b0ac29ca8e30d77",
+              "instances": [
+                {
+                  "context_text": "记住纠正",
+                  "context_rect": [
+                    19,
+                    0,
+                    438,
+                    130
+                  ],
+                  "expected_rect": [
+                    19,
+                    0,
+                    438,
+                    130
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "id": "g-keep",
+          "text": "保管和找回"
+        },
+        {
+          "id": "f-feedback",
+          "text": "记住纠正",
+          "locator_text": {
+            "h": "当场改好，写回对应的",
+            "v": "当场改好，写回对应的资料，"
+          }
+        },
+        {
+          "id": "f-merge",
+          "text": "加的时候就合并"
+        },
+        {
+          "id": "f-rescan",
+          "text": "回扫漏收的反馈"
+        },
+        {
+          "id": "f-review-edits",
+          "text": "复核各项目的改动"
+        },
+        {
+          "id": "f-big-merge",
+          "text": "大合并交给独立核对"
+        },
+        {
+          "id": "f-corpus",
+          "text": "从微信补我的说法"
+        },
+        {
+          "id": "f-lock",
+          "text": "锁着就不读"
+        },
+        {
+          "id": "f-validate",
+          "text": "校验资料"
+        },
+        {
+          "id": "f-backup",
+          "text": "私有仓库快照"
+        },
+        {
+          "id": "f-restore",
+          "text": "找回旧版"
+        }
+      ],
+      "live": [],
+      "screenshots": [],
+      "chain": "pe-features",
+      "reuse": ""
+    },
+    {
+      "id": "personal-expression-11",
+      "section": "history",
+      "title": "演进",
+      "scene": "横版：左上标题。一条从左到右的水彩绿色丝带时间线，七个节点上下错开，每个节点：粗体日期、一幅小水彩图标（一本新笔记本；一叠写满的便签；一把锁；一个日历上的小对勾；一把锁连着一根线到一台电脑；三个小标签牌；两只手在同一张纸上写），下面两三行字。右下角一枚圆形小徽章放最后那行。",
+      "portrait": "竖版：时间线改成竖排，节点一个接一个往下；徽章放最后。",
+      "text": "## 演进\n\n- **9 月 8 日**　建项目：两个用法、一份带出处的精选资料，当天存进私有仓库；定下只用真实问题和真实聊天验收。\n- **9 月 12–13 日**　讲解手册连着补教训：AI 为自己辩护的话和查实的事实分开写；有理由的估计和实测的分数分开写；保留日期和具体的事。\n- **9 月 14 日**　读样本之前，先查个人资料现在能不能用。\n- **9 月 19 日**　更新我的个人资料时，顺带收表达教训。\n- **9 月 24 日**　接上全电脑共用的个人资料锁；反馈怎么记、样本出处怎么写，挪进必读的维护文档。\n- **9 月 26 日**　重排讲解手册；加 AI 稿对照和样本前文；改成先按对象和关系挑样本；第一次回扫补收漏记的反馈；看板的讲法定为先总览、红黄在前。\n- **9 月 28 日**　按我认可的对照合并一次同类教训；定下几个项目都能改、校验对照快照；完不完善交给 AI；补上 ChatGPT 导出里的 3 条反馈和“问 AI 的事不等于做过”。\n\n截至 9 月 28 日：62 次修改",
+      "links": [],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "groups": [
+      {
+        "id": "g-explain",
+        "name": "讲给我听"
+      },
+      {
+        "id": "g-reply",
+        "name": "替我拟消息"
+      },
+      {
+        "id": "g-learn",
+        "name": "记住纠正"
+      },
+      {
+        "id": "g-keep",
+        "name": "保管和找回"
+      }
+    ],
+    "features": [
+      {
+        "id": "f-explain",
+        "group": "g-explain",
+        "name": "照手册讲",
+        "what": "AI 向我汇报、解释、请我拍板时，先照手册组织：先说有什么用，再讲结论和依据",
+        "how": "不用点名，AI 向我说明时需要就读；也可以说“按讲给我听的规矩重新整理”",
+        "status": "在用",
+        "screen": "personal-expression-09",
+        "source": "explain-to-me SKILL.md:8,18；E187 AGENTS.md:79；使用记录 explain-to-me 33 次、expression.py explain 11 次（ledger/usage-events.jsonl，9 月 15–27 日）"
+      },
+      {
+        "id": "f-reexplain",
+        "group": "g-explain",
+        "name": "没听懂就重讲",
+        "what": "我说“没听懂”“我问的是……”，回到我原来的问题，把人、事、判断和背景讲清，换眼前的例子",
+        "how": "直接说“没听懂，从我原来的问题重讲”",
+        "status": "在用",
+        "screen": "personal-expression-09",
+        "source": "explain-to-me SKILL.md:20；讲解手册第 1 条原则；README.md:7"
+      },
+      {
+        "id": "f-read-my-words",
+        "group": "g-explain",
+        "name": "读懂我的话",
+        "what": "“用户”多半是我、同音字直接还原、问 AI 的事不等于做过、粘贴进来的 AI 原文不是我的话、几个固定说法，共 6 条",
+        "how": "不用说，AI 读手册时一并读到",
+        "status": "在用",
+        "screen": "personal-expression-09",
+        "source": "data-backup/explain-to-me.md 第 53-63 行“二、读懂本人的话”；提交 152c8bc、fb082dc"
+      },
+      {
+        "id": "f-ask-concrete",
+        "group": "g-explain",
+        "name": "只问具体的",
+        "what": "要问我之前先查记过的；只问具体事实或真实取舍，不让我挑抽象的讲法",
+        "how": "不用说",
+        "status": "在用",
+        "screen": "personal-expression-09",
+        "source": "explain-to-me SKILL.md:20；讲解手册第 3 条原则；提交 67aaf04"
+      },
+      {
+        "id": "f-low-mood",
+        "group": "g-explain",
+        "name": "状态差时换讲法",
+        "what": "我状态很差时，按我事先确认过的默认做法说话",
+        "how": "不用说，AI 看出来就照做",
+        "status": "说不准",
+        "screen": "personal-expression-09",
+        "source": "explain-to-me SKILL.md:18；讲解手册小节“默认：本人状态很差时”；提交 ee53b63、b796d69、31988a2。用了不一定留痕，记录里查不到，所以说不准"
+      },
+      {
+        "id": "f-draft",
+        "group": "g-reply",
+        "name": "拟消息",
+        "what": "意思定好后写成自然的消息：意思、事实、分寸不变，不加承诺，不发送；对不上样本就说明参考有限",
+        "how": "说“帮我按平时的口吻回这条，意思是……”",
+        "status": "在用",
+        "screen": "personal-expression-09",
+        "source": "README.md:8；reply-as-me SKILL.md:8,25,32；expression.py:201；使用记录 reply-as-me 22 次（9 月 15–27 日）"
+      },
+      {
+        "id": "f-by-relation",
+        "group": "g-reply",
+        "name": "看关系选说法",
+        "what": "先按发给谁、什么关系挑我的样本，场合只排序；关系不同的不借口吻",
+        "how": "告诉 AI 发给谁、有多熟；AI 用 scenes 看现有标签，再用 reply --relationship 取",
+        "status": "说不准",
+        "screen": "personal-expression-09",
+        "source": "9 月 28 日资料解锁后复查：翻遍 Codex、Claude 全部对话记录，上线后 reply --relationship 真正返回结果的只有 3 次，都在开发和验收这个功能的对话里（9 月 26 日 18:09–18:24 两个 Codex 子任务、9 月 28 日 01:08 个人项目对话），没找到真实拟稿里的运行；AI 也可能复用读过的样本不留痕，所以说不准。按关系挑样本的程序只在 expression.py reply 里跑；使用记录里唯一一次 reply 在 9 月 26 日 00:29，早于这条上线（4ec6140，03:47），之后没有 reply 记录；AI 也可能直接读样本文件，不留痕，所以说不准。README.md:24；expression.py:155-173；reply-as-me SKILL.md:18；决定 FY18（9 月 26 日）；提交 4ec6140；使用记录 expression.py reply 1 次、scenes 1 次"
+      },
+      {
+        "id": "f-contrasts",
+        "group": "g-reply",
+        "name": "参考我评过的 AI 稿",
+        "what": "我评过的 AI 稿分认可、勉强接受、否定三档，否定的写原因；动笔前先看原因",
+        "how": "不用说，取样本时一起带出；我评一份 AI 稿，它就记进对照",
+        "status": "说不准",
+        "screen": "personal-expression-09",
+        "source": "9 月 28 日资料解锁后复查对话记录，AI 稿对照随 reply 返回的几次都在开发和验收对话里，没找到真实拟稿中的使用。上线（ea1a395 9 月 26 日 01:28、fcb938e 04:37）后使用记录里没有 reply 调用，也可能直接读文件不留痕，所以说不准。expression.py:46-78,194-198；reply-as-me SKILL.md:30；reply-contrasts.jsonl 5 份（快照 fb082dc）；提交 ea1a395、fcb938e"
+      },
+      {
+        "id": "f-media",
+        "group": "g-reply",
+        "name": "带上图片和表情",
+        "what": "聊天里有图片、表情、动图时，带上看过的描述、谁发的、前后几条、是动图还是静图",
+        "how": "从微信聊天里拟回复时，AI 顺带把图片表情交过来",
+        "status": "待验收",
+        "screen": "personal-expression-09",
+        "source": "README.md:34“尚未完成真实微信动画用于拟回复的验收”；AGENTS.md:19；reply-guide.md 小节“调用方带来的图片、表情和动画”"
+      },
+      {
+        "id": "f-locators",
+        "group": "g-reply",
+        "name": "核对样本出处",
+        "what": "要核对某条样本时，显示原消息编号和校验码（哈希）；平时藏起来",
+        "how": "说“这条样本出自哪，给我核对一下”；AI 加 --with-locators",
+        "status": "说不准",
+        "screen": "personal-expression-09",
+        "source": "README.md:32；expression.py:139-145,192-193；测试 test_locators_are_opt_in_without_mutating_source。命令名记录里分不出带没带这个参数"
+      },
+      {
+        "id": "f-feedback",
+        "group": "g-learn",
+        "name": "记住纠正",
+        "what": "当场改好，写回对应的资料，校验、回读、存快照；不用我说“保存”",
+        "how": "直接指出哪句难懂、哪句别扭",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "docs/feedback-workflow.md:9-16；README.md:40；62 次提交里多数是写回教训；使用记录 expression.py validate 15 次"
+      },
+      {
+        "id": "f-merge",
+        "group": "g-learn",
+        "name": "加的时候就合并",
+        "what": "新教训先找同类，并进同一条，保留我的原话和适用范围",
+        "how": "不用说",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "explain-to-me SKILL.md:26；reply-as-me SKILL.md:36；决定 ZS20；提交 45fd1ca（9 月 28 日 01:03，按我认可的对照合并一次）"
+      },
+      {
+        "id": "f-rescan",
+        "group": "g-learn",
+        "name": "回扫漏收的反馈",
+        "what": "更新我的个人资料时，只读回扫最近几天我说过的话，按信号找出没记下的反馈，合并后回读",
+        "how": "说“做一次个人增量”，AI 顺带回扫",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "docs/feedback-workflow.md:17；AGENTS.md:14；9 月 26 日首次回扫（提交 152c8bc）；9 月 28 日补 ChatGPT 导出 3 条（提交 fb082dc）"
+      },
+      {
+        "id": "f-review-edits",
+        "group": "g-learn",
+        "name": "复核各项目的改动",
+        "what": "更新我的个人资料时，看上次以来所有对话对表达库的改动：有没有把原意压窄或放宽、放错方向、重复，或把对人的评价写进来；小问题直接补",
+        "how": "说“做一次个人增量”，AI 顺带复核",
+        "status": "没用过",
+        "screen": "personal-expression-10",
+        "source": "docs/feedback-workflow.md:25；AGENTS.md:13；决定“表达库多个项目都能改”（9 月 28 日 01:12 起）。9 月 28 日解锁后复查：这之后唯一一次个人增量（当天 17:33 补 ChatGPT 导出反馈，个人项目对话 e427ea43）只跑了校验和提交，没有查看 data-backup 的提交历史"
+      },
+      {
+        "id": "f-big-merge",
+        "group": "g-learn",
+        "name": "大合并交给独立核对",
+        "what": "要重排多条时先写方案，派没参与的 AI 逐条核对我的原话一处不丢，再写回；不请我逐条对照",
+        "how": "不用说，个人增量时由 AI 自己判断要不要做",
+        "status": "没用过",
+        "screen": "personal-expression-10",
+        "source": "docs/feedback-workflow.md:26；决定 FZ12（9 月 28 日）。每做一次都会留下提交和审查记录；FZ12 之后的 3 次提交都是小改，没找到"
+      },
+      {
+        "id": "f-corpus",
+        "group": "g-learn",
+        "name": "从微信补我的说法",
+        "what": "按眼前的用途，从最近或历史微信里挑值得留的我的话，带出处加进样本",
+        "how": "说“给这个场合找找我以前怎么说的”",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "9 月 8 日建库时从微信精选本人原话（提交 decdb21）；9 月 26 日处理真实任务时又从微信补进 4 条带出处的样本（提交 cc0fb25）。README 里写的“别的 AI 在后续任务中主动做完整条链”仍待验证，写进审计。README.md:48-54（已做：能力和流程；待验证：别的 AI 在真实任务里主动做完整条链）；docs/feedback-workflow.md:28-34；底稿状态待验收"
+      },
+      {
+        "id": "f-lock",
+        "group": "g-keep",
+        "name": "锁着就不读",
+        "what": "每条读取命令（连校验在内）先查个人资料锁，没放行就一行不读",
+        "how": "不用说；锁着时 AI 会请我验证",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "expression.py:275-311；测试 test_all_private_commands_stop_before_reading_including_validate；E:\\PCConfig\\docs\\runtime\\personal-data-access.md 调用点表"
+      },
+      {
+        "id": "f-validate",
+        "group": "g-keep",
+        "name": "校验资料",
+        "what": "查每条样本的出处、编号、对象和关系齐不齐，再对照私有快照（见亮点 3）",
+        "how": "改完资料 AI 自己跑",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "expression.py:204-211,243-272,320-321；使用记录 validate 15 次（9 月 25–27 日）；对照快照这一半 480faa8（9 月 28 日 01:12）上线后，9 月 28 日 17:33 在个人项目对话 e427ea43 补 ChatGPT 导出反馈时真实跑过：先报 backup_pending，同步后 in_sync，随后提交 fb082dc"
+      },
+      {
+        "id": "f-backup",
+        "group": "g-keep",
+        "name": "私有仓库快照",
+        "what": "资料变了，收尾时把四份资料存进私有 GitHub 仓库，留下每一版",
+        "how": "不用说，正常收尾时一起做",
+        "status": "在用",
+        "screen": "personal-expression-10",
+        "source": "README.md:56-58；AGENTS.md:21；改过 data-backup 的提交 49 次"
+      },
+      {
+        "id": "f-restore",
+        "group": "g-keep",
+        "name": "找回旧版",
+        "what": "从 Git 历史里取出要的那一版快照，先读出来核对，再还原到资料目录",
+        "how": "说要找回哪一版",
+        "status": "说不准",
+        "screen": "personal-expression-10",
+        "source": "README.md:60-65（--data-root data-backup）；AGENTS.md:21；找回不一定留痕，记录里没找到"
+      }
+    ],
+    "numbers": [
+      {
+        "id": "n-principles",
+        "text": "11 条原则 · 6 条读懂我的话",
+        "meaning": "讲解手册“一、照着做的原则”的编号条数和“二、读懂本人的话”的条数",
+        "as_of": "2026-09-28",
+        "source": "data-backup/explain-to-me.md（提交 fb082dc）逐条数；facts.md F8-F10",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-03",
+          "personal-expression-06"
+        ]
+      },
+      {
+        "id": "n-cases",
+        "text": "50 条",
+        "meaning": "讲解手册“三、来源与案例”里带日期的顶层条目，日期 9 月 8–28 日",
+        "as_of": "2026-09-28",
+        "source": "awk 'NR>=64 && NR<130' explain-to-me.md | grep -c '^- '；facts.md F12",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-03",
+          "personal-expression-06"
+        ]
+      },
+      {
+        "id": "n-samples",
+        "text": "45 条",
+        "meaning": "reply-samples.jsonl 的样本条数，全部是本人在微信发过的原话（author=self_message，status=reference）",
+        "as_of": "2026-09-28",
+        "source": "Python 逐行数 data-backup/reply-samples.jsonl（fb082dc）；现役文件大小与快照相同；facts.md F20",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-06",
+          "personal-expression-08"
+        ]
+      },
+      {
+        "id": "n-contrasts",
+        "text": "5 份 AI 稿（认可 1、勉强接受 1、否定 3）",
+        "meaning": "reply-contrasts.jsonl 条数和 verdict 分布",
+        "as_of": "2026-09-28",
+        "source": "Python 数 data-backup/reply-contrasts.jsonl；facts.md F22",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-04",
+          "personal-expression-06",
+          "personal-expression-08"
+        ]
+      },
+      {
+        "id": "n-skill-calls",
+        "text": "33 次 · 22 次",
+        "meaning": "explain-to-me、reply-as-me 技能被调用次数（17 个、9 个对话），含在个人项目目录里维护本项目时的调用",
+        "as_of": "2026-09-27",
+        "source": "ledger/usage-events.jsonl 按 kind=skill 和 name 数；Codex 9 月 15 日起、Claude 9 月 24 日起记，最后一条 9 月 27 日 20:39；facts.md F51",
+        "screens": [
+          "personal-expression-01"
+        ]
+      },
+      {
+        "id": "n-code",
+        "text": "327 行 Python",
+        "meaning": "expression.py 行数（wc -l），只用标准库",
+        "as_of": "2026-09-28",
+        "source": "wc -l expression.py（fb082dc）",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-06"
+        ]
+      },
+      {
+        "id": "n-tests",
+        "text": "24 个自动测试",
+        "meaning": "tests/test_expression.py 的测试数，9 月 28 日运行全部通过",
+        "as_of": "2026-09-28",
+        "source": "py -3 -m unittest discover -s tests：Ran 24 tests OK；facts.md F48",
+        "screens": [
+          "personal-expression-01",
+          "personal-expression-07"
+        ]
+      },
+      {
+        "id": "n-rescan",
+        "text": "约 35 起只有 2 起",
+        "meaning": "9 月 26 日首次回扫：9 月 15–25 日的表达反馈约 35 起，当时只收进 2 起",
+        "as_of": "2026-09-26",
+        "source": "docs/feedback-workflow.md:17",
+        "screens": [
+          "personal-expression-08"
+        ]
+      },
+      {
+        "id": "n-chatgpt",
+        "text": "3 条",
+        "meaning": "9 月 28 日从 ChatGPT 导出补进讲解手册的反馈条数",
+        "as_of": "2026-09-28",
+        "source": "提交 fb082dc 标题“补 ChatGPT 导出里的三条反馈”",
+        "screens": [
+          "personal-expression-08",
+          "personal-expression-11"
+        ]
+      },
+      {
+        "id": "n-commits",
+        "text": "62 次修改",
+        "meaning": "仓库提交数，北京时间 9 月 8 日 10:28 到 9 月 28 日 17:34",
+        "as_of": "2026-09-28",
+        "source": "git log --oneline | wc -l",
+        "screens": [
+          "personal-expression-11"
+        ]
+      },
+      {
+        "id": "n-features",
+        "text": "20 项",
+        "meaning": "全部功能条数",
+        "as_of": "2026-09-28",
+        "source": "registry.features 条数",
+        "screens": [
+          "personal-expression-09"
+        ]
+      }
+    ],
+    "relations": [
+      {
+        "id": "r-wechat-samples",
+        "with": "wechatdirect",
+        "direction": "拿来",
+        "flow": "样本全部出自微信聊天读取：补样本时由它有界读取最近或历史的聊天，本项目只存挑中的本人原话和出处（微信号、聊天、时间、原消息编号）；拟回复时的图片表情也由它取",
+        "source": "reply-samples.jsonl source.provider 全为 wechat-direct；README.md:28,34；docs/feedback-workflow.md:30-32"
+      },
+      {
+        "id": "r-understanding",
+        "with": "daily-preferences",
+        "direction": "平级",
+        "flow": "个人理解库管我的背景、经历和偏好，本项目只管怎么说；本项目不写理解库的数据库；理解库更新个人资料（个人增量）时，把整理中遇到的真实表达反馈交过来，本项目回扫并合并",
+        "source": "AGENTS.md:5,13-15；daily-preferences references/source-refresh.md:29；提交 fb082dc（ChatGPT 导出）"
+      },
+      {
+        "id": "r-agents-root",
+        "with": "agents",
+        "direction": "被引用",
+        "flow": "AI 规则与技能基座装两个技能入口到各个 AI；规则总纲第 5 条让 AI 向我说明时读讲解手册；专题“事实来源与任务上下文”规定怎么跟我说话的经验写回这里",
+        "source": "E:\\.agents\\config\\personal-skill-supply.json:37-38；E187 AGENTS.md:79；agents.context-sources.md:74"
+      },
+      {
+        "id": "r-report-page",
+        "with": "report-page（技能）",
+        "direction": "交出去",
+        "flow": "汇报网页技能的“汇报和裁定的写法”来自讲解手册，完整版按 explain-to-me 读",
+        "source": "E:\\.agents\\skills\\report-page\\SKILL.md:86"
+      },
+      {
+        "id": "r-health",
+        "with": "personal-health",
+        "direction": "交出去",
+        "flow": "个人健康向我解释时照讲解手册；我状态很差时的默认讲法和健康项目的措辞对齐",
+        "source": "E:\\.agents\\skills\\personal-health\\SKILL.md:8；提交 ee53b63"
+      },
+      {
+        "id": "r-lock",
+        "with": "pcconfig",
+        "direction": "拿来",
+        "flow": "每次读取前调用电脑配置与恢复装好的个人资料锁入口（C:\\ProgramData\\PCConfig\\AuthorityHost\\tools\\personal_data_access.py），放行才读",
+        "source": "expression.py:275-289；E:\\PCConfig\\docs\\runtime\\personal-data-access.md 调用点表"
+      },
+      {
+        "id": "r-domains",
+        "with": "learning",
+        "direction": "被调用",
+        "flow": "学习等领域项目先定好说什么、怎么应对（策略和专业内容归它们），再在原对话里用替我拟消息写成话，或用讲给我听把事讲明白",
+        "source": "README.md:10,12；AGENTS.md:5,18"
+      },
+      {
+        "id": "r-formal-docs",
+        "with": "personal-formal-documents",
+        "direction": "分工",
+        "flow": "正式文书的正文按事实、证据和文书规范写，不用替我拟消息；向我解释文书时用讲给我听",
+        "source": "AGENTS.md:9；reply-as-me SKILL.md:34"
+      },
+      {
+        "id": "r-github-backup",
+        "with": "GitHub 私有仓库 wlyaaaaa/personal-expression",
+        "direction": "交出去",
+        "flow": "四份资料的 Git 快照放在 data-backup，正常收尾时更新；validate 拿它和现役资料比",
+        "source": "README.md:56-67；expression.py:215-272"
+      }
+    ],
+    "highlights": [
+      {
+        "id": "h-one-handbook",
+        "title": "教会一个 AI，所有 AI 都会",
+        "screen": "personal-expression-08"
+      },
+      {
+        "id": "h-called-not-saved",
+        "title": "“调用了技能”不等于“记下了”",
+        "screen": "personal-expression-08"
+      },
+      {
+        "id": "h-concurrent-edits",
+        "title": "几个项目同时改，小改后对照快照",
+        "screen": "personal-expression-08"
+      }
+    ],
+    "mentions": [
+      {
+        "target": "/how/#personal-expression",
+        "screen": "personal-expression-01",
+        "text": "在整套系统里的位置 → 怎么协作"
+      },
+      {
+        "target": "/skills/explain-to-me/",
+        "screen": "personal-expression-02",
+        "text": "讲给我听技能"
+      },
+      {
+        "target": "/skills/reply-as-me/",
+        "screen": "personal-expression-02",
+        "text": "替我拟消息技能"
+      },
+      {
+        "target": "/skills/reply-as-me/#examples",
+        "screen": "personal-expression-04",
+        "text": "替我拟消息技能"
+      },
+      {
+        "target": "/rules/charter/#L2",
+        "screen": "personal-expression-03",
+        "text": "约法 L2"
+      },
+      {
+        "target": "/rules/charter/#L5",
+        "screen": "personal-expression-03",
+        "text": "L5"
+      },
+      {
+        "target": "/skills/report-page/",
+        "screen": "personal-expression-03",
+        "text": "汇报网页"
+      },
+      {
+        "target": "/projects/emerald-veil/",
+        "screen": "personal-expression-03",
+        "text": "泡泡屏保"
+      },
+      {
+        "target": "/rules/privacy-data/",
+        "screen": "personal-expression-06",
+        "text": "个人资料锁"
+      },
+      {
+        "target": "/rules/charter/#L30",
+        "screen": "personal-expression-08",
+        "text": "约法 L30"
+      },
+      {
+        "target": "/rules/context-sources/",
+        "screen": "personal-expression-08",
+        "text": "事实来源与任务上下文"
+      }
+    ],
+    "live": []
+  },
+  "notes": {
+    "merged": [
+      "底稿“讲给我听”→ f-explain，另把技能里写明的重讲、读懂我的话、只问具体的、状态差时的默认拆成单独功能（f-reexplain、f-read-my-words、f-ask-concrete、f-low-mood），方便看出哪条没用。",
+      "底稿“拟消息”→ f-draft；“没有匹配样本照样写、标参考有限”（reference_limited）是它的一部分行为，并进 f-draft，不单列。",
+      "底稿“关系选样”→ f-by-relation；scenes 命令（列出现有对象、关系、场合）是它的准备步骤，并进去。",
+      "底稿“反馈留存”→ f-feedback；另把现行流程里的“加的时候合并”“回扫”“大合并交独立核对”拆成 f-merge、f-rescan、f-big-merge。",
+      "底稿“补充语料”→ f-corpus；“私有恢复”→ 拆成 f-backup（存快照）和 f-restore（找回），另加 f-validate、f-lock、f-locators 三条代码里真实存在的功能。"
+    ],
+    "dropped": [
+      "样本的 stage、outcome 两个字段（关系当时的阶段、后来怎样）不上页：只是样本附带的背景字段，写出来会引人追问样本内容；facts.md F20 记了条数。",
+      "样本按场合的分布、按微信号的分布（主号 19、副号 26）不上页：场合里有两个不上网站的，分布会留痕迹；页面只写总数。",
+      "技能里给 AI 的命令细节（--data-root 路径、screen/factor 分类）只在技术屏写到命令名，不上参数细节。"
+    ],
+    "unsure": [
+      "替本人口吻写的句子：第 1 屏介绍全段；第 2 屏“为什么分开”一段（“我平时怎么跟朋友说话，推不出我怎么才听得懂”是按 docs/feedback-workflow.md:33 翻的）；第 3 屏“我反复跟 AI 说‘说人话，别当谜语人’”；第 5 屏“不用我说‘保存’……表达库完不完善由 AI 负责”；第 8 屏亮点 1 的“麻烦”（依据讲解手册 9 月 15–26 日回扫案例：Codex 01a0d813 与 Claude 6b1e27e0 等都有“人话”类反馈）。",
+      "第 1 屏“33 次 · 22 次”含维护这个项目时的调用，没法只数替我办事的次数；reply-as-me 22 次里程序取样本（expression.py reply）只有 1 次，且早于按关系挑样本和 AI 稿对照上线，所以这两项按审稿意见改标“说不准”（协调人说至少一次真实使用才标在用，这里找不到那一次）；效果和原因写进 audit.md 第 1 条。要不要换成别的数字，请 Claude 定。",
+      "第 3 屏“我状态很差时”一条：资料解锁后读了这一节，内容涉及心情很差时的处理，还牵涉一个不上网站的话题，页面只写存在、不写内容。",
+      "按本人“亮点只收已经在用的做法”（owner-decisions.md:1169），原亮点 4“先看关系，再借口吻”撤掉：按关系挑样本上线后，找到的 reply 运行都在个人表达项目目录或 E:\\.agents 里（开发和验收），没有真实拟稿的证据；原亮点 3 后半句“大合并交独立核对”也撤掉（f-big-merge 没用过）。这两件在第 4 屏和全部功能里照实写着。",
+      "f-big-merge 标“没用过”：FZ12（9 月 28 日）之后没有找到按“方案＋独立审查”做的大合并；9 月 28 日 01:03 那次合并是本人看过对照后同意的，按旧做法。若 Claude 认为新流程刚定、应标“待验收”，改状态即可。",
+      "第 8 屏亮点 1 说“规则总纲让所有 AI 向我说明时读它”：依据是活动规则 E187 AGENTS.md 导航部分第 5 条（不是约法 L1–L30），所以没加约法锚点链接。"
+    ]
+  }
+}
