@@ -30,10 +30,6 @@
 .b2-connection-notice{margin:12px 24px;padding:12px 16px;border:1px solid #d4ddd7;border-radius:10px;background:white;color:#68766f;line-height:1.5;font:15px/1.5 "Sans",sans-serif}.b2-connection-notice[hidden]{display:none}.b2-connection-notice a{color:#168449}
 @media(max-width:767px){.b2-overview-group .b2-live-group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.b2-mcp-group .b2-live-group-grid,.b2-authority-group .b2-live-group-grid{grid-template-columns:1fr}.b2-overview-main{gap:12px}.b2-slot.b2-overview-lamp{width:44px!important;height:44px!important;min-width:44px;box-shadow:0 0 0 5px #f0f7f3}.b2-overview-main .live-status-card{font-size:15px}.b2-connection-notice{margin:10px 12px}}
 @media(max-width:767px){.b2-overview-main{flex-direction:column;align-items:stretch}.b2-overview-main>.b2-overview-lamp{align-self:center}}
-@media(max-width:767px){.b2-overview-main>.b2-overview-lamp{margin-top:20px}}
-.b2-card-enter{animation:sample-card-in var(--motion-card-duration,800ms) ease var(--b2-enter-delay,0ms) both}
-@media(prefers-reduced-motion:reduce){.b2-card-enter{animation:none}}
-.motion-off .b2-card-enter,.motion-stalled .b2-card-enter{animation:none}
 @media(max-width:767px){.b2-hardware-summary{margin:12px 12px 20px}}
 @media(max-width:767px){.b2-grafana-frame{height:360px!important}.b2-card-list>details{padding:8px 10px}.b2-slot.b2-ui-slot{font-size:15px}}
 .b2-slot[data-cached=true]:not(.typeset-lamp){align-items:stretch;justify-content:flex-start;text-align:left}

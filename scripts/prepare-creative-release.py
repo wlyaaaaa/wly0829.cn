@@ -2,14 +2,11 @@
 import argparse
 import importlib.util
 import json
-import subprocess, time
+import subprocess
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parent
-def input_path(value): return (ROOT / value).resolve()
-def packet_path(packet, value): return ROOT / value if value.startswith('sources/') else packet.parent.parent / value
 STEPS = ('comic', 'living', 'album', 'river', 'demo', 'retry')
 FULL_2F_SCOPE='full-pages-creative-2f'
 FULL_2F_STEPS=('river','living','comic','album','demo','retry')
@@ -44,26 +41,23 @@ def recipe(path):
     if data.get('home_bio'): required.add('home_bio_script')
     if data.get('bird_first_packet'): required |= {'bird_first_packet','native_home_support','native_home_script'}
     if data.get('living_pages_packet'): required.add('living_pages_packet')
-    paths = {key: input_path(data[key]) for key in required - {'geometry', 'asset_base_url'}}
-    paths['geometry'] = [input_path(p) for p in data.get('geometry',[])]
+    paths = {key: Path(data[key]).resolve() for key in required - {'geometry', 'asset_base_url'}}
+    paths['geometry'] = [Path(p).resolve() for p in data.get('geometry',[])]
     inputs = {str(path): stamp(path)}
     # Bind the actual approved packages and implementation used by this fixed replay.
     for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference','home_bio_script','native_home_script')]:
         if not root.is_dir():
             raise ValueError('Missing preparation package: ' + str(root))
-        files = [root/'river2.template.html'] if root == paths.get('river_handoff') else root.rglob('*')
-        inputs.update({str(p.resolve()): stamp(p) for p in files if p.is_file()})
+        inputs.update({str(p.resolve()): stamp(p) for p in root.rglob('*') if p.is_file()})
     for p in paths['geometry']:
         inputs[str(p)] = stamp(p)
     if data.get('home_bio'): inputs[str(paths['home_bio_script'])] = stamp(paths['home_bio_script'])
     if data.get('bird_first_packet'):
         inputs[str(paths['native_home_script'])] = stamp(paths['native_home_script'])
-        scene = paths['native_home_script'].parents[3] / 'living/step1-source/home-scene.js'
-        inputs[str(scene)] = stamp(scene)
         inputs[str(paths['native_home_script'].parent/'build_bird_guide.py')] = stamp(paths['native_home_script'].parent/'build_bird_guide.py')
     if data.get('living_pages_packet'):
-        packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); inputs.update({str(packet_path(packet,rel)):stamp(packet_path(packet,rel)) for rel in refs['object_sources'].values()})
-        inputs[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py')]=stamp(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py')
+        packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); inputs.update({str(packet.parent.parent/rel):stamp(packet.parent.parent/rel) for rel in refs['object_sources'].values()})
+        inputs[str(packet.parent.parent/'scripts/apply_bird_fixed_upgrade.py')]=stamp(packet.parent.parent/'scripts/apply_bird_fixed_upgrade.py')
     if static_2f:
         reference=paths['static_home_reference']
         inputs[str(reference)]=stamp(reference)
@@ -81,7 +75,7 @@ def recipe(path):
             inputs[str(HERE/name)]=stamp(HERE/name)
         inputs.update({str(p.resolve()):stamp(p)for p in (HERE/'today-river-assets2').rglob('*')if p.is_file()})
     if data.get('title_cache'):
-        paths['title_cache'] = input_path(data['title_cache'])
+        paths['title_cache'] = Path(data['title_cache']).resolve()
         inputs[str(paths['title_cache'])] = stamp(paths['title_cache'])
     return data, paths, inputs
 
@@ -113,7 +107,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         inputs[str(staged_build_report)]=stamp(staged_build_report)
         if static_2f:
             matches=[(Path(p).resolve(),expected) for p,expected in staged.get('inputs',{}).items()
-                     if p in staged.get('pages',{}).get('how',{}).get('inputs',staged.get('inputs',{})) and p.replace('\\','/').endswith(('/input-snapshot/sources/how.json','/sources/pages/how/page.json'))]
+                     if p.replace('\\','/').endswith('/input-snapshot/sources/how.json')]
             if len(matches)!=1 or stamp(matches[0][0])!=matches[0][1]:
                 raise ValueError('Static 2f replay requires the exact staged frozen how Source JSON')
             panorama_source=matches[0][0]
@@ -129,7 +123,6 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     if data.get('bird_first_packet'): selected_steps.append('native-living')
     if data.get('living_pages_packet'): selected_steps.append('bird-first')
     for name in selected_steps:
-        step_started = time.perf_counter()
         dest = evidence_root / (name + '-site')
         proof = evidence_root / (name + '.json')
         if name == 'static-home':
@@ -142,9 +135,8 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             import shutil
             packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest)
             for rel,src in refs['object_sources'].items():
-                if rel.endswith('/config.json'): continue
-                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(packet_path(packet,src),target)
-            args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
+                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); shutil.copyfile(packet.parent.parent/src,target)
+            args=[str(packet.parent.parent/'scripts/apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
         elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
@@ -175,12 +167,14 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
-        if name=='river' and 'data-today-river' in (current/'cockpit/index.html').read_text('utf8'):
-            import shutil
-            shutil.copytree(current,dest/'site')
-        else:
-            subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
+        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'bird-first':
+            engine=(dest/refs['engine_url'].lstrip('/')).read_text('utf8'); needle='M=A.getBoundingClientRect(),k=Math.round(M.width)'
+            assert engine.count(needle)==1
+            engine=engine.replace(needle,'M=(()=>{const f=window.TypesetLiveFlow?.sourceBox(e,x);return f?{left:f.left-x[0]*f.image_width,top:f.top-x[1]*f.image_height,width:f.image_width,height:f.image_height}:A.getBoundingClientRect()})(),k=Math.round(M.width)').replace('ge.className="living-layer",','ge.className="living-layer",ge.style.zIndex="1",')
+            rel='_living/_engine/living.'+hybrid.hashlib.sha256(engine.encode()).hexdigest()[:10]+'.js'; (dest/rel).write_text(engine,encoding='utf8')
+            for row in refs['mounted']:
+                p=dest/row['route']; p.write_text(p.read_text('utf8').replace(refs['engine_url'],'/'+rel),encoding='utf8')
             updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
         if name == 'native-living':
             import shutil
@@ -200,34 +194,11 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         step={'name': name, 'before_release_id': before, 'after_release_id': after}
         if static_2f:step['manifest']={'path':str(dest/hybrid.MANIFEST),**stamp(dest/hybrid.MANIFEST)}
         steps.append(step)
-        step['seconds'] = round(time.perf_counter() - step_started, 3)
         current = dest
     prepared = hybrid.read(current / hybrid.MANIFEST)
     files = hybrid.inventory(current)
     if files != prepared['files']:
         raise ValueError('Prepared inventory changed during replay')
-    if static_2f:
-        import html, re
-        app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')]
-        inputs.update({str(path): stamp(path) for path in app_inputs})
-        status = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
-            "import {skills} from './app/content-skills.js'; console.log(JSON.stringify(skills.find(s=>s.slug==='native-economy-routing').readerStatus))"], cwd=ROOT).decode('utf8'))
-        status_page = current / 'skills/native-economy-routing/index.html'
-        body = status_page.read_bytes().decode('utf8')
-        matches = re.findall(r'<span class="status-pill status-mixed">([^<]*按任务需要决定是否分工[^<]*)</span>', body)
-        if len(matches) != 1: raise ValueError('Legacy routing status is missing or ambiguous')
-        status_page.write_bytes(body.replace(matches[0], html.escape(status)).encode('utf8'))
-        source_css = (ROOT / 'app/style.css').read_text('utf8')
-        rules = re.findall(r'\.back-to-top \{[^}]+\}', source_css)
-        header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)
-        if len(rules) != 2 or not header: raise ValueError('Legacy header styles are missing or ambiguous')
-        css = (rules[0] + '\n.back-to-top{bottom:auto}\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}').encode('utf8')
-        css_url = '/_typeset/runtime/legacy-header-' + hybrid.hashlib.sha256(css).hexdigest()[:20] + '.css'
-        (current / css_url.lstrip('/')).write_bytes(css)
-        for page in current.rglob('*.html'):
-            original = page.read_bytes().decode('utf8')
-            if 'id="page-data"' not in original and 'back-to-top' in original:
-                page.write_bytes(original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1).encode('utf8'))
     accepted = raw['accepted_pages']
     accepted_files = {hybrid.route_file(url) for url in accepted}
     # These published legacy links lost their old anchors in the reviewed 27-page
@@ -244,11 +215,6 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     # Final assembly performs this same restoration. Bind its actual byte changes
     # before the reviewed file ledger, so the second assembly is idempotent.
     pending_link_restorations=hybrid.nav_repair.restore_pending_links(current,navigation_pages)
-    requested=json.loads(os.environ.get('WLY_RENDER_PAGES','null'))
-    if requested is not None:
-        for rel in old['files']:
-            if rel.endswith('.html') and rel not in accepted_files and not (rel=='index.html' and 'home' in requested):
-                (current/rel).write_bytes((baseline/rel).read_bytes())
     files=hybrid.inventory(current)
     changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(current / rel),
                      'before': old['files'].get(rel), 'after': proof}

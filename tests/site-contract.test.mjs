@@ -473,7 +473,7 @@ test("the shared enhancement and search indices stay within their measured revie
   const javascriptSources = await Promise.all(javascript.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const gzipBytes = javascriptSources.reduce((total, source) => total + gzipSync(source).length, 0);
   assert.ok(gzipBytes <= registry.refresh_policy.shared_interaction_gzip_budget_kib * 1024, `shared enhancement JavaScript gzip ${gzipBytes} exceeds registry budget`);
-  const stylesheets = (await readdir(assetsRoot)).filter((item) => item.endsWith(".css") && !item.startsWith("computer-access-"));
+  const stylesheets = (await readdir(assetsRoot)).filter((item) => item.endsWith(".css"));
   assert.ok(stylesheets.length >= 1, "production build has no shared stylesheet");
   const stylesheetSources = await Promise.all(stylesheets.map((item) => readFile(path.join(assetsRoot, item), "utf8")));
   const stylesheetGzipBytes = stylesheetSources.reduce((total, source) => total + gzipSync(source).length, 0);
@@ -597,7 +597,6 @@ test("TimeAudit reuses the existing website runtime without services, databases 
 
 test("the maintenance registry drives all completed candidate packages", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
-  registry.projects = registry.projects.filter((item) => item.enabled);
   assert.equal(registry.schema, "wly.personal-panel-project-registry.v2");
   assert.equal(registry.refresh_policy.mode, "ai_managed_on_demand");
   assert.equal(registry.refresh_policy.semantic_writer, "website_ai_task_only");
@@ -2440,7 +2439,7 @@ test("daily-preferences shares correctable personal understanding while domain d
     /免费.*0\.5/s,
     /AppID.*多账号|多账号.*AppID/s,
     /历史取得方式.*(?:Unknown|未知)|(?:Unknown|未知).*历史取得方式/s,
-    /不恢复退役.*现行依赖.*旧资料.*一次性线索/s,
+    /PersonalOS.*一次性.*(?:不恢复|不依赖)/s,
     /1,287.*192.*32/s,
     /12.*acquired_verified.*95.*snapshot_only/s,
     /conversation.on.demand|对话内按需|新对话.*同步刷新/s,
@@ -4030,7 +4029,7 @@ test("publication cannot upload before snapshot binding, production build, publi
   assert.match(verifier, /GitHub fine-grained token/);
   assert.match(verifier, /const secretPatterns/);
   assert.doesNotMatch(verifier, /forbiddenTerms|forbidden_public_term/);
-  assert.match(verifier, /production_remote_content_evidence_reused_count/);
+  assert.doesNotMatch(verifier, /textExtensions/);
   assert.match(verifier, /core\.quotepath=false/);
   assert.match(verifier, /"-z"/);
   assert.match(verifier, /split\("\\0"\)/);

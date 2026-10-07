@@ -9,8 +9,6 @@ import { generateTypesetSearchOverlay } from "./typeset-search-overlay.mjs";
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDirectory, "..");
 const distRoot = path.join(projectRoot, "dist");
-const bodyArgument = process.argv.indexOf("--render-bodies");
-const bodyConfig = bodyArgument < 0 ? null : JSON.parse(await readFile(process.argv[bodyArgument + 1], "utf8"));
 const overlayArgument = process.argv.indexOf("--search-overlay");
 const overlayConfig = overlayArgument < 0 ? null : process.argv[overlayArgument + 1];
 if (overlayArgument >= 0 && !overlayConfig) throw new Error("--search-overlay requires a JSON configuration path");
@@ -18,7 +16,7 @@ if (overlayConfig) {
   const report = await generateTypesetSearchOverlay(searchAssets, path.resolve(overlayConfig));
   console.log(JSON.stringify(report, null, 2));
 } else {
-  const rootHtml = bodyConfig ? "" : await readFile(path.join(distRoot, "index.html"), "utf8");
+  const rootHtml = await readFile(path.join(distRoot, "index.html"), "utf8");
   const [{ default: react }, { createServer }] = await Promise.all([
     import("@vitejs/plugin-react"), import("vite")
   ]);
@@ -29,26 +27,15 @@ if (overlayConfig) {
     appType: "custom",
     logLevel: "error",
     plugins: [react()],
-    // One-shot SSR must not crawl/watch the generated publication directories.
-    optimizeDeps: { noDiscovery: true, include: [] },
     server: {
       middlewareMode: true,
-      hmr: false,
-      watch: null
+      hmr: false
     }
   });
 
   let compactSearchRecordCount = 0;
   try {
     const renderer = await vite.ssrLoadModule("/server/render-route.jsx");
-    if (bodyConfig) {
-      for (const route of bodyConfig.routes) {
-        if (!routePaths.includes(route)) throw new Error(`Unknown static route: ${route}`);
-        const target = path.resolve(bodyConfig.output, route.slice(1), "index.html");
-        await mkdir(path.dirname(target), { recursive: true });
-        await writeFile(target, renderer.renderRoute(route), "utf8");
-      }
-    } else {
     compactSearchRecordCount = renderer.compactSearchRecordCount;
     await writeFile(path.join(distRoot, "search-index.js"), renderer.compactSearchAsset, "utf8");
     await writeFile(path.join(distRoot, "search-projects.js"), renderer.compactProjectSearchAsset, "utf8");
@@ -60,11 +47,9 @@ if (overlayConfig) {
       await mkdir(targetDirectory, { recursive: true });
       await writeFile(path.join(targetDirectory, "index.html"), renderer.renderDocument(rootHtml, route), "utf8");
     }
-    }
   } finally {
     await vite.close();
   }
-  if (bodyConfig) { console.log(`Generated ${bodyConfig.routes.length} route bodies.`); process.exit(0); }
 
   const sitemapEntries = routePaths
     .filter((route) => route !== "/system")

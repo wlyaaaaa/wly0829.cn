@@ -189,7 +189,6 @@ def verify_projection(root, *, seal=False):
         proof.update(status='pass',completed_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat())
         write(proof_path,proof)
     return proof
-def projection_digest(proof): return contract.sha_bytes(json.dumps({k: proof[k] for k in ('contract', 'pin_sha256', 'records')}, sort_keys=True).encode())
 
 
 def main():
@@ -307,11 +306,10 @@ def main():
     write(args.output / 'rule-public-projection.json', proof)
     if args.prepare_only:
         print(json.dumps({'status': 'prepared', 'html_directions': len(records), 'output': str(args.output)}, ensure_ascii=False)); return
-    os.environ['TYPESET_ASSET_ROOT'] = str(HERE.parent/'sources/assets')
     sys.path.insert(0, str(args.engine_root))
     from engine import render as renderer
     from playwright.sync_api import sync_playwright
-    chrome = Path(os.environ.get('WLY_RENDER_CHROME', renderer.CHROME))
+    chrome = Path(renderer.CHROME)
     if not chrome.is_file(): raise ValueError('Installed owner Chrome is unavailable')
     runtime = args.output / 'runtime-temp'; runtime.mkdir()
     for key in ('TEMP', 'TMP', 'TMPDIR'): os.environ[key] = str(runtime)
@@ -325,7 +323,7 @@ def main():
     summaries = []
     with sync_playwright() as playwright:
         context = playwright.chromium.launch_persistent_context(str(args.output / 'chrome-profile'), executable_path=str(chrome),
-                    headless=True, device_scale_factor=1, viewport={'width':941, 'height':200}, args=['--disable-gpu', '--disable-lcd-text'])
+                    headless=True, device_scale_factor=1, viewport={'width':941, 'height':200})
         try:
             for name in names:
                 entry=next(item for item in exported if item['page']==name)

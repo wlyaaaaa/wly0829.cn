@@ -228,7 +228,7 @@ function apply(t) {
   box.style.opacity = String(rp <= 0 ? 0 : .35 + .65 * easeOut(rp));
   box.style.transform = `translateY(${(1 - easeOut(rp)) * 10}px)`;
   const ty = span(t, TT.type, T.typeDur);
-  box.querySelector('.m').textContent = s.result;
+  box.querySelector('.m').textContent = s.result.slice(0, Math.round(s.result.length * ty));
   box.querySelector('.caret').style.opacity = (ty > 0 && ty < 1) ? '1' : '0';
   rin.style.borderColor = ty >= 1 ? '#2f9e5a' : '#c3ead0';
   [...box.querySelectorAll('.chip')].forEach((c, j) => {

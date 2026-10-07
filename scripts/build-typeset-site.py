@@ -591,9 +591,6 @@ def build_page(name, records, args, candidate):
     video_asset_manifest=args.typeset_root.parent/'typeset-assets'/name/'manifest.jsonl'
     if old_video and video_asset_manifest.exists():inputs[str(video_asset_manifest.resolve())]=stamp(video_asset_manifest)
     expected = [s for s in source['screens'] if not s.get('hidden')]
-    order = source.get('reading_order', [])
-    expected.sort(key=lambda s: order.index(s['id']) if s['id'] in order else len(order))
-    manifest['screens'].sort(key=lambda s: order.index(s['screen']) if s['screen'] in order else len(order))
     if [s['id'] for s in expected] != [s['screen'] for s in manifest['screens']]:
         issues.append('清单屏顺序/完整性与当前定稿不一致')
     qpath = args.typeset_root/name/'report.json'
@@ -659,7 +656,7 @@ def build_page(name, records, args, candidate):
                     inputs[str(projection_path)]=args.rule_projection_proof
                     inputs.update(args.rule_projection_inputs)
                     meta['raw_rendered_input_sha256']=projection['raw_html_sha256']
-                    meta['public_projection_sha256']=args.rule_projection_id
+                    meta['public_projection_sha256']=args.rule_projection_proof['sha256']
                     identity=src.get('source_excerpt_id');excerpt=rule_contract.excerpt_entry(pin,identity)
                     expected_source=pin['documents'].get(meta['relative_file'])
                     meta.update(excerpt_contract=based_on.get('excerpt_contract'),excerpt_id=identity)
@@ -701,7 +698,6 @@ def build_page(name, records, args, candidate):
                 else:
                     meta['src']=asset(original_path,candidate,'rule-sources')
             except (KeyError,OSError,ValueError) as error:
-                meta.pop('original_html', None)
                 issues.append(sid+':缺少真实原文来源证据：'+str(error))
         whole=next((l for l in old.get('layouts',{}).get('h',{}).get('links',[])if l.get('whole')),None)
         if whole:model['primary_href']=whole['href']
@@ -942,9 +938,8 @@ def main():
     global ASSET_CACHE,REUSE_ASSET_CACHE
     started=time.perf_counter()
     ap=argparse.ArgumentParser(description=__doc__)
-    for arg in ['typeset-root','baseline','legacy-site','output','report']:
+    for arg in ['typeset-root','inventory','baseline','legacy-site','output','report']:
         ap.add_argument('--'+arg,type=Path,required=True)
-    ap.add_argument('--inventory',type=Path,default=HERE.parent/'.publish/inventory/screens.jsonl')
     ap.add_argument('--pages',nargs='+')
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
@@ -976,7 +971,6 @@ def main():
         projection_module=importlib.util.module_from_spec(projection_spec);projection_spec.loader.exec_module(projection_module)
         projection=projection_module.verify_projection(args.rule_projection_path.parent)
         args.rule_projection_proof=stamp(args.rule_projection_path)
-        args.rule_projection_id=projection_module.projection_digest(projection)
         args.rule_projection_records={(row['page'],row['screen'],row['orientation']):row for row in projection['records']}
         for entry in projection['projected_pages']:
             for path_key,sha_key in [('source_file','source_sha256'),('raw_source_file','raw_source_sha256'),('spec_file','spec_sha256'),('raw_spec_file','raw_spec_sha256')]:
@@ -994,8 +988,6 @@ def main():
     if args.output.exists():raise ValueError('Choose a fresh output directory')
     inventory_text,args.inventory_proof=text_bound(args.inventory)
     rows=[json.loads(x)for x in inventory_text.splitlines()if x.strip()]
-    if args.inventory == (HERE.parent/'sources/screens.jsonl').resolve():
-        for row in rows: row['source_path'] = str(HERE.parent/'sources/pages'/row['page']/'page.json')
     grouped=defaultdict(list)
     for row in rows:grouped[row['page']].append(row)
     names=args.pages or list(grouped)
@@ -1065,18 +1057,6 @@ def main():
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
                              baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
-    if manifest['files'].get('index.html')==baseline_manifest['files'].get('index.html'):
-        manifest.update({key:baseline_manifest[key] for key in ('home_static_preparation','home_comic_preparation') if key in baseline_manifest});hybrid.write(raw_output/hybrid.MANIFEST,manifest)
-    static_home=baseline_manifest.get('home_static_preparation',{})
-    original_app=static_home.get('home_bundle',{})
-    if original_app and manifest['files'].get(original_app['path'])=={key:original_app[key] for key in ('sha256','bytes')}:
-        manifest['home_static_preparation']=static_home
-        hybrid.write(raw_output/hybrid.MANIFEST,manifest)
-    comic_home=baseline_manifest.get('home_comic_preparation',{})
-    comic_files=[rel for rel in baseline_manifest['files'] if rel.startswith('_shared/home-comic/'+comic_home.get('package_id','')[:20]+'/')]
-    if comic_home and comic_files and all(manifest['files'].get(rel)==baseline_manifest['files'][rel] for rel in comic_files):
-        manifest['home_comic_preparation']=comic_home
-        hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     creative=None;creative_inputs={}
     if args.creative_preparation:
         creative_spec=importlib.util.spec_from_file_location('typeset_creative',HERE/'prepare-creative-release.py')
@@ -1086,8 +1066,6 @@ def main():
             staged_report=args.output.parent/(args.output.name+'-staged-build-report.json')
             for state in states.values():
                 if state.get('url'):state['html_sha256']=hybrid.digest(raw_output/hybrid.route_file(state['url']))
-            how_source=next((Path(row['source_path']) for row in rows if row['page']=='how'),None)
-            if how_source: args.external_inputs[str(how_source)]=stamp(how_source)
             write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
                 'pages':states,'files':manifest['files'],'baseline_root':str(args.baseline),
                 'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},

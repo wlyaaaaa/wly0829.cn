@@ -35,27 +35,17 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v6
         with:
-          fetch-depth: 1
+          fetch-depth: 0
+
       - name: Restore exact static release
         if: inputs.site == 'rollback'
         env:
           RESTORE_REF: ${{ inputs.restore_ref }}
         run: |
           test -n "$RESTORE_REF" || { echo 'restore_ref is required'; exit 1; }
-          git fetch --depth=1 origin "$RESTORE_REF"
           python3 scripts/hybrid-release.py restore --ref "$RESTORE_REF" --output restored-release
           if [ -d site-release ]; then mv site-release before-restore-release; fi
           mv restored-release site-release
-
-      - name: Fetch only the baseline needed by content validation
-        run: |
-          python3 - <<'PY'
-          import json, subprocess
-          from pathlib import Path
-          path = Path('site-release/release-manifest.json')
-          baseline = json.loads(path.read_text('utf8')).get('baseline_production_commit') if path.is_file() else None
-          if baseline: subprocess.run(['git','fetch','--depth=1','origin',baseline],check=True)
-          PY
 
       - name: Set up Node.js
         uses: actions/setup-node@v7

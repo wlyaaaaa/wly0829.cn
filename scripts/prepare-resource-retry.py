@@ -11,7 +11,7 @@ HERE=Path(__file__).resolve().parent
 MARKER='data-resource-retry="next-2e"'
 INITIAL_ATTRIBUTE=b' data-resource-retry-initial="1"'
 STYLESHEET_ATTRIBUTE=b' data-resource-retry-stylesheet="1"'
-INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&(e.target instanceof HTMLImageElement||(e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial"))||(e.target instanceof HTMLLinkElement&&e.target.rel.toLowerCase().split(/\\s+/).includes("stylesheet")&&e.target.hasAttribute("data-resource-retry-stylesheet")));document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
+INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&((e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial"))||(e.target instanceof HTMLLinkElement&&e.target.rel.toLowerCase().split(/\\s+/).includes("stylesheet")&&e.target.hasAttribute("data-resource-retry-stylesheet")));document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
 
 def mark_initial_stylesheets(raw,rel,policy):
     allowed={urljoin('https://wly0829.cn/',value) for value in policy['stylesheets']};marked=[]
@@ -138,7 +138,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
     from build_bird_guide import minify
     runtime=minify(raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))),'js','es2019')
     runtime_rel='_shared/resource-retry-'+hashlib.sha256(runtime).hexdigest()[:20]+'.js'
-    addition='\n<script defer '+MARKER+' src="/'+runtime_rel+'"></script>\n'
+    addition='\n<script '+MARKER+' src="/'+runtime_rel+'"></script>\n'
     selected=set(pages or observed['html_resources']);changes={};initial_scripts={};initial_stylesheets={}
     if not selected<=set(observed['html_resources']):raise ValueError('Selected page missing from complete source')
     for rel in selected:
