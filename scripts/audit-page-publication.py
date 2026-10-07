@@ -15,7 +15,7 @@ from urllib.parse import urljoin, urlsplit
 
 HERE=Path(__file__).resolve().parent
 if str(HERE) not in sys.path: sys.path.insert(0,str(HERE))
-from public_page_contract import public_page_data, public_search_records, local_values, omit_local_literals, LOCAL_LITERAL, INTERNAL_LITERAL
+from public_page_contract import public_page_data, public_search_records, local_values, omit_local_literals
 
 PAGE_DATA=re.compile(r'(<script\b[^>]*\bid=["\']page-data["\'][^>]*>)(.*?)(</script>)',re.S|re.I)
 SCREEN=re.compile(r'(<section\b[^>]*\bdata-screen=["\']([^"\']+)["\'][^>]*>)(.*?)(</section>)',re.S|re.I)

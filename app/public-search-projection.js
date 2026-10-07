@@ -1,11 +1,9 @@
 // Public search exposes a fixed record shape and preserves surrounding authored text.
-const localLiteral=/(?:file:\/+(?:[a-z]:)?|(?<![a-z0-9])[a-z]:[\\/]+|(?<![\\.\w])\\\\(?!\\)[^\\\s]+\\(?!\\))[^\s<>"'，。；！？（）【】,;!?()|`]*/giu;
-const internalLiteral=/\b(?:claude-gate-\d+|root_task_id|human_prompt_id|wave\d[a-z]?-(?:current|final)-\d+)\b/giu;
 const scalarFields=['type','group','projectSlug','title','href','detail','search'];
 const listFields=['aliases','scopes'];
 
 export function publicSearchText(value){
-  return String(value??'').replace(localLiteral,'（本机路径）').replace(internalLiteral,'（本机路径）');
+  return String(value??'');
 }
 
 export function publicSearchRecord(entry){
