@@ -223,7 +223,7 @@ test("project hero stays product-first and technical prose wraps on mobile", asy
   assert.match(styleSource, /\.plain-list li,[\s\S]*?overflow-wrap:\s*anywhere;/);
   assert.match(styleSource, /\.failure-list dt,[\s\S]*?overflow-wrap:\s*anywhere;/);
   assert.match(pageSource, /project-hero\$\{module \? " project-hero-module" : ""\}/, "direct module routes must expose a compact mobile hero hook");
-  assert.match(pageSource, /<p className="project-lead">\{displayCopy\(module\?\.value \|\| currentProject\.summary/ , "mobile module routes must show their own purpose before details");
+  assert.match(pageSource, /<ProjectLead value=\{module\?\.value \|\| currentProject\.summary\}/, "module routes must show their own purpose before details");
   assert.doesNotMatch(styleSource, /\.project-hero-module \.project-lead\s*\{\s*display:\s*none;/, "mobile module routes must keep their own useful description visible");
   assert.match(styleSource, /\.project-hero-module \.project-entry-card\s*\{[\s\S]*?display:\s*flex;/, "the compact module entry card must retain visible repository status");
 });

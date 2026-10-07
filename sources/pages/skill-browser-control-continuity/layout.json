@@ -258,6 +258,7 @@
         "flow_direction": "vertical",
         "illustration": "none",
         "text_ref": "9 月 18 日 13:54：",
+        "group_nodes_as_steps": true,
         "direction": "vertical",
         "text_layout": "inline"
       },
@@ -304,7 +305,7 @@
         "columns": 1,
         "columns_v": 1,
         "connector": "none",
-        "illustration": "left_inside",
+        "illustration": "top_inside",
         "items_layout": {
           "count": 2,
           "original_split_between_nodes": true
@@ -322,8 +323,9 @@
         "columns": 1,
         "columns_v": 1,
         "connector": "none",
-        "illustration": "left_inside",
-        "text_ref": "9月28日记进技能的一次排查：插件的3个运行文件一",
+        "illustration": "top_inside",
+        "text_ref": "9月28日记进技能的一次排查",
+        "group_nodes_as_steps": true,
         "direction": "vertical",
         "text_layout": "inline"
       },

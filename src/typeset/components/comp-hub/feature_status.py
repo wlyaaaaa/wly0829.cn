@@ -90,6 +90,8 @@ def _field(value, ctx, role="feature-text", tag="div", corner=False, data_role=N
     """将状态符号移到角上时，DOM 仍保持它在原文中的位置。"""
     value = str(value) if value is not None else ""
     value = value.replace("｜", "")
+    if role == "feature-text" and "\n\n" in value:
+        return ctx.render({"type": "prose", "spec": {}, "nodes": parse(value)})
     attrs = f' data-role="{data_role}"' if data_role else ''
     if not corner or not _MARK.search(value):
         return f'<{tag} class="{role} tb"{attrs}>{ctx.inline(value)}</{tag}>'
@@ -215,7 +217,7 @@ def _parenthetical_field(value, ctx, role, data_role=None):
 
 def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=1,
           status_display=None, keep_separator=True, state=None, status_position="top_right", muted=False, states=None,
-          numeric_emphasis=False, status_style=None, trailing_parentheses=False, preserve_status_text=False):
+          numeric_emphasis=False, status_style=None, trailing_parentheses=False, preserve_status_text=False, body_nodes=()):
     states = states or _STATUS
     fields = list(fields)
     parentheses_mode = trailing_parentheses or preserve_status_text
@@ -254,8 +256,9 @@ def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=
     if state and not has_symbol and not semantic_dot and not pill and not parentheses_mode:
         # 装饰没有文字；状态词仍在原文的位置完整显示。
         parts.append(f'<span class="feature-status-dot" data-state="{state}" aria-hidden="true"></span>')
-    if icon:
-        parts.append(f'<img class="feature-icon" src="{html.escape(_asset_url(icon, ctx), quote=True)}" alt="">')
+    icon_html = f'<img class="feature-icon" src="{html.escape(_asset_url(icon, ctx), quote=True)}" alt="">' if icon else ""
+    if icon_html and illustration != "header_left":
+        parts.append(icon_html)
     parts.append('<div class="feature-copy">')
     symbol_field = next((i for i in range(len(fields) - 1, -1, -1) if _MARK.search(str(fields[i][1] or ""))), None)
     if (len(fields) > 1 and fields[0][0] == "feature-name" and fields[1][0] == "feature-text"
@@ -282,6 +285,8 @@ def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=
             continue
         if index == 0:
             parts.append('<div class="feature-head">')
+            if icon_html and illustration == "header_left":
+                parts.append(icon_html)
             if number is not None:
                 parts.append(_field(number, ctx, "feature-number", "span"))
             numeric = numeric_emphasis and bool(re.match(r"^[0-9０-９]", _semantic_text(value, ctx).lstrip()))
@@ -299,6 +304,8 @@ def _card(fields, ctx, number=None, icon=None, illustration="left_inside", span=
             parts.append(_field(value, ctx, role, corner=not parentheses_mode and index == symbol_field))
     if not fields and number is not None:
         parts.append(_field(number, ctx, "feature-number"))
+    if body_nodes:
+        parts.append(ctx.render({"type": "prose", "spec": {}, "nodes": body_nodes}))
     parts.append('</div></article>')
     return ''.join(parts)
 
@@ -964,7 +971,13 @@ def render_feature_card(block: dict, ctx) -> str:
             ctx.incomplete(f"feature_card size={size} 没有可执行的留白档位，按 medium 留白显示。", "composition")
             size = "medium"
         attrs += f' data-size="{size}"'
-    nodes = block.get("nodes", [])
+    nodes = list(block.get("nodes", []))
+    # 原文缩进的清单属于前一个编号卡；保留独立节点，复用正文组件。
+    for index in range(len(nodes) - 1, 0, -1):
+        before, node = nodes[index - 1:index + 1]
+        if node.get("type") == "bullets" and node.get("src") and all(line[:1].isspace() for line in node["src"]) and before.get("type") == "steps":
+            items = before["items"]
+            nodes[index - 1:index + 1] = [dict(before, items=[*items[:-1], dict(items[-1], body_nodes=[node])])]
     states = _status_map(ctx)
     icons = _take_icons(nodes, spec, ctx, states)
     trailing_parentheses = spec.get("status_from_trailing_parentheses") is True
@@ -1136,13 +1149,13 @@ def render_feature_card(block: dict, ctx) -> str:
         marked = re.match(r"^\*\*(.+?)\*\*", str(value))
         group_name = _semantic_text(marked[1] if marked else value, ctx)
 
-    def add_card(fields, number=None, keep_separator=True):
+    def add_card(fields, number=None, keep_separator=True, body_nodes=()):
         nonlocal card_index
         icon = icons[card_index] if card_index < len(icons) else None
         illustration = spec.get("illustration", "left_inside")
         if illustration == "none":
             icon = None
-        if illustration not in ("top_inside", "left_inside", "none"):
+        if illustration not in ("top_inside", "left_inside", "header_left", "none"):
             illustration = "left_inside"
         spans = spec.get("item_spans", {})
         key = str(number if number is not None else card_index + 1)
@@ -1166,7 +1179,7 @@ def render_feature_card(block: dict, ctx) -> str:
         off = spec.get("off_background") == "gray" and (source_state or state) == "off"
         cards.append(_card(fields, ctx, number, icon, illustration, span, status_display, keep_separator,
                            state, position, bool(spec.get("muted") or off), card_states, numeric_emphasis, status_style,
-                           trailing_parentheses, preserve_status_text))
+                           trailing_parentheses, preserve_status_text, body_nodes))
         card_spans.append(span)
         card_index += 1
         if inline_after is not None and str(number) == str(inline_after):
@@ -1205,7 +1218,7 @@ def render_feature_card(block: dict, ctx) -> str:
             add_card([("feature-name", node.get("name", "")), ("feature-text", node.get("text", ""))])
         elif kind == "steps":
             for index, item in enumerate(node.get("items", [])):
-                add_card(_step_fields(item), item.get("n"), _keep_status_separator(node, index))
+                add_card(_step_fields(item), item.get("n"), _keep_status_separator(node, index), item.get("body_nodes", ()))
         elif kind == "bullets":
             for item in node.get("items", []):
                 fields = []

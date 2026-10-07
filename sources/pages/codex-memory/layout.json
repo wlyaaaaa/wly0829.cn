@@ -1051,7 +1051,7 @@
         "columns_v": 1,
         "icons": "auto",
         "illustration": "left_inside",
-        "text_ref": "11AI使用小记录往一份长期记录里追加AI调用过的技能、工具和命令名，Codex和Claude两",
+        "text_ref": "11AI使用小记录",
         "fill_last_row": true
       },
       {
@@ -1123,8 +1123,8 @@
         "columns": 1,
         "columns_v": 1,
         "icons": "auto",
-        "illustration": "left_inside",
-        "text_ref": "11AI使用小记录往一份长期记录里追加AI调用过的技能、工具和命令名，Codex和Claude两"
+        "illustration": "header_left",
+        "text_ref": "11AI使用小记录"
       },
       {
         "type": "section_heading",

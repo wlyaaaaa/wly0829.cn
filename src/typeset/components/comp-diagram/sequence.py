@@ -739,7 +739,7 @@ def _prepared_nodes(nodes, spec, ctx, component=None):
             prepared.append({"type": "item", "lead": node.get("name", ""), "text": "", "following_nodes": [], "group_event": True})
         elif kind in ("steps", "bullets", "stats") and bind_steps:
             prepared.extend(units([node]))
-        elif kind == "para" and prepared and prepared[-1].get("type") == "item" and (bind_steps or (bind_groups and prepared[-1].get("group_event"))):
+        elif kind in ("para", "bullets") and prepared and prepared[-1].get("type") == "item" and (bind_steps or (bind_groups and prepared[-1].get("group_event"))):
             last = dict(prepared[-1])
             last["following_nodes"] = list(last.get("following_nodes", [])) + [node]
             prepared[-1] = last

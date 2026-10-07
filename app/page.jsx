@@ -566,6 +566,16 @@ function HomePage() {
 
 function projectKicker() { return "项目与实际用途"; }
 
+function ProjectLead({ value, kind }) {
+  const copy = (text) => text.split(/(\*\*.*?\*\*)/).map((part, index) => part.startsWith("**") ? <strong key={index}>{displayCopy(part.slice(2, -2), kind)}</strong> : displayCopy(part, kind));
+  return value.split(/\r?\n\s*\r?\n/).filter((paragraph) => paragraph.trim()).map((paragraph, index) => {
+    const lines = paragraph.split(/\r?\n/);
+    return lines.every((line) => line.trim().startsWith("- "))
+      ? <ul className="project-lead plain-list" key={index}>{lines.map((line, row) => <li key={row}>{copy(line.trim().slice(2))}</li>)}</ul>
+      : <p className="project-lead" key={index}>{copy(paragraph)}</p>;
+  });
+}
+
 function ProjectHero({ entry, module }) {
   const { project: currentProject } = entry;
   const repositoryUrl = publicRepositoryUrl(entry);
@@ -580,7 +590,7 @@ function ProjectHero({ entry, module }) {
           <div className="project-hero-copy">
             <p className="section-kicker">{module ? `${currentProject.title} · 功能说明` : currentProject.kicker || projectKicker(entry.kind)}</p>
             <h1><span className="title-accent" aria-hidden="true" /><span className="project-hero-title-text">{displayCopy(module?.title || currentProject.title, entry.kind)}</span></h1>
-            <p className="project-lead">{displayCopy(module?.value || currentProject.summary, entry.kind)}</p>
+            <ProjectLead value={module?.value || currentProject.summary} kind={entry.kind} />
             {module?.readerStatus ? <p className="module-reader-state"><strong>当前情况：</strong>{displayCopy(module.readerStatus, entry.kind)}</p> : null}
             {module ? <p className="reader-observation">项目快照核对于 <ObservedTime value={projectCardPresentation(entry).observedAt} />；具体测试保留各自日期，页面不实时探测运行状态。</p> : null}
             {!module ? <ProjectQuickState entry={entry} /> : null}
