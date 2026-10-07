@@ -1,5 +1,0 @@
-[data-home-daytimes]{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px 0 24px}
-[data-home-daytimes] button{border:1px solid #bed9c8;border-radius:999px;background:#fff;color:#245d3d;padding:7px 14px;font:inherit;cursor:pointer}
-[data-home-daytimes] button:hover,[data-home-daytimes] button[aria-pressed=true]{background:#e6f4eb;border-color:#378454}
-[data-home-daytimes] button:focus-visible{outline:2px solid #378454;outline-offset:3px}
-[data-home-daytimes] img{display:block;height:24px;width:auto}

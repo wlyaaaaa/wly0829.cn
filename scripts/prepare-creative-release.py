@@ -113,7 +113,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         inputs[str(staged_build_report)]=stamp(staged_build_report)
         if static_2f:
             matches=[(Path(p).resolve(),expected) for p,expected in staged.get('inputs',{}).items()
-                     if p in staged.get('pages',{}).get('how',{}).get('inputs',staged.get('inputs',{})) and p.replace('\\','/').endswith(('/input-snapshot/sources/how.json','/sources/pages/how/page.json'))]
+                     if p in staged.get('pages',{}).get('how',{}).get('inputs',staged.get('inputs',{})) and p.replace('\\','/').endswith(('/sources/how.json','/sources/pages/how/page.json'))]
             if len(matches)!=1 or stamp(matches[0][0])!=matches[0][1]:
                 raise ValueError('Static 2f replay requires the exact staged frozen how Source JSON')
             panorama_source=matches[0][0]
