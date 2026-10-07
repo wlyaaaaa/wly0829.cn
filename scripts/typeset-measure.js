@@ -96,10 +96,10 @@ function typesetContentRects(win,doc){
    if(!cards.length)cards=[...doc.querySelectorAll('main#page>.row> .col > :not(.ill):not(.title-wrap),main#page>.c-prose,main#page>.c-text')].map(rect).filter(valid);
    cards=cards.filter(r=>!liveRects.some(l=>Math.max(0,Math.min(r[0]+r[2],l[0]+l[2])-Math.max(r[0],l[0]))*Math.max(0,Math.min(r[1]+r[3],l[1]+l[3])-Math.max(r[1],l[1]))>r[2]*r[3]*.5));
    const normalize=text=>text.replace(/[\s,，]/g,'');const oldNumbers=item.motion_numbers||[];
-   const numbers=oldNumbers.length?[...doc.querySelectorAll('.num,[data-role=num],.dg-number,.feature-number,[data-motion-text=number],.dd-chart-number,.hub-number-value,.ct-step-number,.slot-step-number,.ghost,.brushfont,.dg-heading,.hub-heading,.sechead')].map(el=>{
+   const numbers=[...doc.querySelectorAll('.num,[data-role=num],.dg-number,.feature-number,[data-motion-text=number],.dd-chart-number,.hub-number-value,.ct-step-number,.slot-step-number,.ghost,.brushfont,.dg-heading,.hub-heading,.sechead')].map(el=>{
     const text=el.textContent.trim(),m=typesetNumberToken(text),legacy=oldNumbers.some(n=>normalize(n.text)===normalize(text)||m?.notation==='circled'&&Number(n.value??n.numeric)===m.value&&normalize(text)===m.numeric),stat=el.matches('.num,[data-role=num],.dd-chart-number,.hub-number-value');
     const r=rect(el.matches('.ghost')?el.closest('.title-wrap'):el);return m&&(legacy||stat)?{text,...m,rect:r,basis:legacy?'legacy number semantic value in current producer DOM':'current statistic field in producer DOM'}:null;
-   }).filter(x=>x&&valid(x.rect)):[];
+   }).filter(x=>x&&valid(x.rect));
    const dotIssues=[],dotObservations=[],dots=[];
    for(const el of doc.querySelectorAll(TYPESET_DOT_SELECTOR)){
     if(el.matches('.hub-status,.ct-point-status')&&el.querySelector(TYPESET_DOT_SELECTOR))continue;

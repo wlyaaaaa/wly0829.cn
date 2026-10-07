@@ -721,7 +721,7 @@
         "type": "stat_card",
         "text_ref": "8 月 7 日",
         "columns": 3,
-        "columns_v": 1,
+        "columns_v": 2,
         "icons": [
           "_library/icons/日历时钟.png",
           "_library/icons/版本循环文件.png",

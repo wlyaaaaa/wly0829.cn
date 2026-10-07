@@ -781,7 +781,9 @@
         "illustration": "outside",
         "align": "center",
         "size": "medium",
-        "target_height": 370
+        "target_height": 370,
+        "row": "video-fallback",
+        "width": "38%"
       },
       {
         "type": "content_card",
@@ -791,7 +793,9 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/小放映机.png"
-        ]
+        ],
+        "row": "video-fallback",
+        "width": "60%"
       }
     ],
     "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
@@ -981,8 +985,9 @@
         ],
         "panel_asset_sha256": "5170487289e90cefcdedb2387d320da6613f00412a5bab89d2a249083982e94d",
         "connector": "arrow",
-        "row": "balanced-heading",
-        "width": "12%"
+        "row": "incident-lead",
+        "width": "30%",
+        "target_height": 350
       },
       {
         "type": "content_card",
@@ -992,7 +997,19 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/云图片.png",
-          "_library/illustrations/账本.png",
+          "_library/illustrations/账本.png"
+        ],
+        "equal_height": false,
+        "row": "incident-lead",
+        "width": "68%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "新版上线检查没过",
+        "columns": 2,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
           "_library/icons/版本循环文件.png",
           "_library/icons/齿轮.png",
           "_library/icons/文件齿轮.png",

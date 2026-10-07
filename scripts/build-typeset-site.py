@@ -561,6 +561,8 @@ def build_page(name, records, args, candidate):
         if templated and not new_project:data['family']='skills'
     if new_project:
         data['project']=name
+        data['video_prompt']=bool(source.get('video_prompt'))
+        text=re.sub(r'<script\b[^>]*\bid="album-page"[^>]*>.*?</script>','',text,flags=re.S)
         data['repo_url']=source.get('repo_url')
         data['repository_visibility']='PUBLIC' if source.get('public') else 'PRIVATE'
         data['status_binding']={'project':name,'repo':(source.get('repo_url') or '').removeprefix('https://github.com/'),
@@ -641,6 +643,8 @@ def build_page(name, records, args, candidate):
         model = {'id':sid,'title':src.get('title',''),'section':section,'shape':shape,
                  'render_mode':'typeset','parts':[],'layouts':{'h':{},'v':{}},
                  'screen_anchors':list(dict.fromkeys([x['id'] for x in src.get('anchors',[])]+extra_anchors[sid]))}
+        if shape=='card' and src.get('card',{}).get('href'):
+            model['primary_href']=src['card']['href']
         if shape=='source_text' and Path(rel).parts[0]=='rules':
             based_on=source.get('based_on') or {}
             model['source_version']=src.get('text','').split('\n',1)[0]

@@ -63,12 +63,17 @@ def toc_unify_package(package):
 
 
 def prepare_toc_recipe(site, recipe):
-    """Refresh the complete site after creative replay using the approved helper."""
+    """Refresh the declared directories using the approved complete package."""
     recipe, site = Path(recipe).resolve(), Path(site).resolve()
     config = json.loads(recipe.read_text('utf8'))
     if config.get('schema') != 'wly.live-ui-recipe.v1' or not config.get('toc_unify_package'):
         raise ValueError('A live UI recipe with the approved TOC package is required')
     package, label_map, pages, images, consumed = toc_unify_package(config['toc_unify_package'])
+    selection = config.get('toc_pages')
+    if selection is not None:
+        if not selection or len(selection) != len(set(selection)) or not set(selection) <= set(pages):
+            raise ValueError('TOC selection must be a nonempty unique subset of the registered scope')
+        pages = selection
     inputs = {str(path): proof(path.read_bytes()) for path in [recipe, HERE / 'prepare-live-ui.py', *consumed]}
     # Fail before copying or changing anything if the complete declared scope is absent.
     for relative in pages:
