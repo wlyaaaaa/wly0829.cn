@@ -275,7 +275,6 @@ async def native_body(session, identity, item, bodies):
     body = base64.b64decode(value['body']) if value.get('base64Encoded') else value['body'].encode('utf8')
     return {'url':item['url'], 'http':item['http'], 'bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest()}, body
 
-
 async def candidate_document(session, event, root, url_documents):
     request = event['request']; rel = url_documents.get(request['url'])
     if event.get('resourceType') == 'Document' and request['method'] == 'GET' and rel:

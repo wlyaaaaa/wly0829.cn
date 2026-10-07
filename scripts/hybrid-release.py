@@ -546,7 +546,6 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
         objects = manifest['oss']['objects']; rows = {}
         if local_assets:
             cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
-            cache.mkdir(parents=True, exist_ok=True)
             for rel in list(manifest['files'])+[MANIFEST]+list(objects):
                 source = Path(local_assets)/rel if rel in objects else output/rel
                 if rel in objects and (source.stat().st_size != objects[rel]['bytes'] or digest(source) != objects[rel]['sha256']):

@@ -714,8 +714,6 @@ def estimate_download(objects, confirmed=False):
     size = sum(obj['bytes'] for obj in objects.values())
     print(f'本次预计下载约 {size/1e9:.3f} GB', flush=True)
     if size > 5e9 and not confirmed: raise ValueError('预计下载超过 5GB，须主持确认 --confirm-download-over-5gb')
-    return size
-
 
 def verify_metadata(obj, receipt, origin, timeout=60):
     request = Request(obj['url'], method='HEAD', headers={'Origin':origin, 'Referer':origin+'/', 'Accept-Encoding':'identity'})
@@ -729,7 +727,6 @@ def verify_metadata(obj, receipt, origin, timeout=60):
             and headers.get('content-type', '').split(';')[0] in {obj['content_type'], 'text/javascript' if obj['content_type']=='application/javascript' else obj['content_type']}
             and headers.get('access-control-allow-origin') in ('*', origin))
         return {**receipt, 'metadata_verified':True, 'downloaded_bytes':0, 'head_headers':headers} if valid else None
-
 
 def verify_object(output, rel, obj, origin, timeout, download_to=None):
     request = Request(obj['url'], headers={'Origin': origin, 'Referer': origin + '/', 'Accept-Encoding': 'identity'})

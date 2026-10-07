@@ -74,8 +74,7 @@ if (distFiles.includes(manifestPath)) {
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
       const entries = Object.entries(manifest.oss.objects);
-      const sealedGate = manifest.oss.content_verification;
-      const reuseSealedScan = sealedGate?.status === "pass" && sealedGate.release_id === manifest.release_id;
+      const reuseSealedScan = manifest.oss.content_verification?.status === "pass" && manifest.oss.content_verification.release_id === manifest.release_id;
       let cursor = 0;
       await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
         while (cursor < entries.length) {
