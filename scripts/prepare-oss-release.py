@@ -614,8 +614,18 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
-    try: previous = verify_manifest(read(previous_manifest)) if previous_manifest else None
-    except (OSError, ValueError, KeyError, TypeError): previous = None
+    previous = None
+    if previous_manifest:
+        try:
+            previous = verify_manifest(read(previous_manifest))
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
+    elif not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
+        spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
+        retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
+        predecessor = retention.predecessor()
+        if predecessor and predecessor.get('oss'):
+            previous = verify_manifest(predecessor)
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     while rewriter.retained:
@@ -668,6 +678,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                         'rewritten_files': len(rewriter.changes)},
             'remote_verified': False}
     plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel] for rel in rewriter.retained}
+    added = {rel: row for rel, row in objects.items() if rel not in rewriter.retained}
+    plan['summary'].update(new_objects=len(added), new_bytes=sum(row['bytes'] for row in added.values()))
     if previous: plan['retained_receipt'] = {key:previous['oss']['verification'].get(key)
         for key in ('method','release_id','verified_at_beijing','sampled_gets')}
     if previous:

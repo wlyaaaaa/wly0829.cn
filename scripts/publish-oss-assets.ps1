@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory)][string]$Preparation,
     [string]$CliPath,
     [Alias('Profile')][string]$CliProfile,
@@ -7,7 +7,8 @@ param(
     [switch]$Upload,
     [switch]$VerifyRemote,
     [switch]$ConfirmDownloadOver5GB,
-    [switch]$RetryFailedVerification
+    [switch]$RetryFailedVerification,
+    [string]$LockHolder
 )
 $ErrorActionPreference = 'Stop'
 $preparationRoot = [IO.Path]::GetFullPath($Preparation)
@@ -40,11 +41,26 @@ $prefix = [string]$plan.prefix
 if ($prefix -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._/-]*$' -or @($prefix.Split('/') | Where-Object { $_ -in @('', '.', '..') }).Count) {
     throw 'Invalid immutable release prefix.'
 }
+$retentionScript = Join-Path $PSScriptRoot 'oss-retention.py'
+$uploadLockOwned = $false
+$uploadLockTool = 'E:\.agents\tools\Invoke-ShortLock.ps1'
+if (-not $LockHolder) { $LockHolder = "OSS-upload/$PID" }
+try {
 if ($Upload) {
     Checked $Python @((Join-Path $PSScriptRoot 'hybrid-release.py'), 'verify', '--output', $plan.source_root, '--oss-preparation', $preparationRoot,
         '--content-report', (Join-Path $preparationRoot 'content-verification.json'), '--public-repos-from-github')
     if (-not $CliPath -or -not $CliProfile) { throw 'Upload requires the exact CLI path and OAuth profile from the OSS handoff.' }
     $cliExecutable = (Get-Command -Name $CliPath -ErrorAction Stop).Source
+    $lockView = (& pwsh -NoProfile -File $uploadLockTool -Mode Inspect -Name wly0829-publication -Json) | ConvertFrom-Json
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect wly0829-publication.' }
+    $active = @($lockView.locks | Where-Object { $_.active })
+    if (@($active | Where-Object { $_.holder -cne $LockHolder }).Count) { throw 'Website publication or another upload owns the lock.' }
+    if (-not $active.Count) {
+        $claim = (& pwsh -NoProfile -File $uploadLockTool -Mode Acquire -Name wly0829-publication -Holder $LockHolder -Minutes 30 -Reason 'Register and upload exact website OSS objects' -Json) | ConvertFrom-Json
+        if ($LASTEXITCODE -ne 0 -or $claim.status -notin @('acquired','renewed')) { throw 'Cannot acquire wly0829-publication.' }
+        $uploadLockOwned = $true
+    }
+    Checked $Python @($retentionScript, 'pin', '--preparation', $preparationRoot, '--lock-holder', $LockHolder)
     # Group copies retain the original relative paths. One recursive upload per
     # MIME type avoids one CLI process per object and sets correct module/font
     # headers regardless of the uploader host OS MIME registry.
@@ -118,9 +134,13 @@ if (-not $receipt.complete -or -not $receipt.html_ready -or $receipt.release_id 
     throw 'Remote body verification is incomplete; HTML is not ready.'
 }
 Checked $Python @($prepareScript, 'seal-remote', '--output', $preparationRoot)
+if ($Upload) { Checked $Python @($retentionScript, 'pin', '--preparation', $preparationRoot, '--lock-holder', $LockHolder) }
 [pscustomobject]@{
     status = 'assets_verified'; release_id = $plan.release_id
     github_root = Join-Path $preparationRoot 'github'; html_ready = $true
     remote_receipt = Join-Path $preparationRoot 'remote-verification.json'
     message = 'Every prepared object passed full GET SHA256. Integrate and publish the referenced HTML through the existing Pages owner.'
 } | ConvertTo-Json -Depth 8
+} finally {
+    if ($uploadLockOwned) { & pwsh -NoProfile -File $uploadLockTool -Mode Release -Name wly0829-publication -Holder $LockHolder -Json | Out-Null }
+}

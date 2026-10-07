@@ -20,6 +20,14 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_explicit_missing_or_invalid_predecessor_does_not_become_full_upload(self):
+        invalid = self.root/'invalid-predecessor.json'; invalid.write_text('{"invalid":true}')
+        for previous in (self.root/'missing.json', invalid):
+            with self.subTest(previous=previous), self.assertRaisesRegex(ValueError, 'Explicit previous-manifest'):
+                oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture',
+                            self.root/'must-not-exist', previous_manifest=previous)
+            self.assertFalse((self.root/'must-not-exist').exists())
+
     def test_bird_atlas_literal_stays_relative_to_its_migrated_sprites_directory(self):
         owner='_living/_engine/bird.fixture/bird.js'
         text=b'const atlas={image:"bird-atlas.webp"}; img.src=base+atlas.image;'
