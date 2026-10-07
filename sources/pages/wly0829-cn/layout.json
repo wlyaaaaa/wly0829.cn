@@ -391,7 +391,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "今天在接入",
+        "text_ref": "正在接入或待验",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -443,7 +443,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "今天在接入",
+        "text_ref": "正在接入或待验",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",

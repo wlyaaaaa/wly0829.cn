@@ -1198,12 +1198,22 @@
       {
         "type": "content_card",
         "text_ref": "按需，不定时改",
-        "columns": 2,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文件写作.png",
-          "_library/icons/秒表.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/秒表.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "检查挡在发布前",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png",
           "_library/illustrations/电脑后台闹钟.png"
@@ -1216,17 +1226,22 @@
         "size": "medium"
       },
       {
-        "type": "content_card",
+        "type": "link_grid",
         "text_ref": "80 多页、700 多屏",
+        "columns": 4,
+        "columns_v": 1,
+        "icons": "none"
+      },
+      {
+        "type": "link_grid",
+        "text_ref": "305 个网址 × 2 种宽度",
         "columns": 3,
         "columns_v": 1,
-        "illustration": "none",
-        "icons": "none",
-        "equal_height": true
+        "icons": "none"
       },
       {
         "type": "prose",
-        "text_ref": "以后改了内容",
+        "text_ref": "以后我说“更新网站”",
         "align": "left"
       }
     ],
@@ -1265,12 +1280,22 @@
       {
         "type": "content_card",
         "text_ref": "按需，不定时改",
-        "columns": 2,
+        "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文件写作.png",
-          "_library/icons/秒表.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/秒表.png"
+        ]
+      },
+      {
+        "type": "content_card",
+        "text_ref": "检查挡在发布前",
+        "columns": 3,
+        "columns_v": 1,
+        "illustration": "left_inside",
+        "icons": [
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png",
           "_library/illustrations/电脑后台闹钟.png"
@@ -1283,17 +1308,22 @@
         "size": "medium"
       },
       {
-        "type": "content_card",
+        "type": "link_grid",
         "text_ref": "80 多页、700 多屏",
+        "columns": 4,
+        "columns_v": 1,
+        "icons": "none"
+      },
+      {
+        "type": "link_grid",
+        "text_ref": "305 个网址 × 2 种宽度",
         "columns": 3,
         "columns_v": 1,
-        "illustration": "none",
-        "icons": "none",
-        "equal_height": true
+        "icons": "none"
       },
       {
         "type": "prose",
-        "text_ref": "以后改了内容",
+        "text_ref": "以后我说“更新网站”",
         "align": "left"
       }
     ],
