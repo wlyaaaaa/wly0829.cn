@@ -839,7 +839,7 @@ def prepare(args):
                 static_module.verify_static_home(release,static)
                 panorama=creative['panorama_source_input'];bound_file(panorama['path'],panorama,checked_inputs)
                 if (staged.get('inputs',{}).get(panorama['path'])!={'sha256':panorama['sha256'],'bytes':panorama['bytes']}
-                        or not panorama['path'].replace('\\','/').endswith('/input-snapshot/sources/how.json')):
+                        or not panorama['path'].replace('\\','/').endswith('/sources/how.json')):
                     raise ValueError('Panorama Source is not the exact native staged frozen input')
             elif not manifest.get('home_living_preparation',{}).get('package_bytes_unchanged'):
                 raise ValueError('Creative homepage lacks the exact approved living package')

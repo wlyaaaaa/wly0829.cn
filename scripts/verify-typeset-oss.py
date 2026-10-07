@@ -247,7 +247,7 @@ def verify(args):
         require(reading.get('static_transfers') and all(transfer['status']=='pass' and 1<=len(transfer['attempts'])<=2 for transfer in reading['static_transfers']),'Final split execution lacks bounded actual static transfers')
     else:
         require(cold['status']=='pass' and all(row['status']=='pass' and row['under_two_seconds'] and not row['failed_requests'] and not row['network_failures'] for row in cold['checks']),'Cold browser coverage or resource checks failed')
-    if manifest.get('home_living_preparation'):
+    if manifest.get('home_living_preparation') or any(step.get('name')=='native-living' for step in manifest.get('creative_preparation',{}).get('steps',[])):
         living=cold.get('home_living',{})
         require(build.get('creative_preparation') and living.get('schema')=='wly.oss-home-living.v1' and living.get('release_id')==manifest['release_id'] and living.get('html_sha256')==manifest['files']['index.html']['sha256'] and living.get('status')=='pass','Living homepage lacks bound actual OSS runtime evidence')
         require(len(living.get('checks',[]))==3 and {row['case'] for row in living['checks']}=={'desktop','phone','reduced'},'Living homepage runtime cases are incomplete')

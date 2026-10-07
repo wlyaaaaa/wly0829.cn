@@ -84,6 +84,7 @@ def prepare_toc_recipe(site, recipe):
         nav = re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>', text, re.S)
         if not nav or not re.search(r'<a\b[^>]*data-section=', nav[0]):
             raise ValueError('Complete TOC page lacks its original directory: ' + relative)
+        if relative=='rules/charter/index.html' and 'class="toc-inner toc-text"' in nav[0]: continue
         names = {html.unescape(name) for name in re.findall(r'data-label-[hv]="([^"]+)"', nav[0])}
         if names - label_map.keys():
             raise ValueError('TOC labels are missing on ' + relative + ': ' + ', '.join(sorted(names - label_map.keys())))

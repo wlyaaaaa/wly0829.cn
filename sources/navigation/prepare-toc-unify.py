@@ -20,6 +20,14 @@ def prepare_toc(site_root, label_map=None, pages=None):
         before=path.read_bytes();text=before.decode('utf8')
         nav=re.search(r'<nav\b[^>]*class="toc"[^>]*>.*?</nav>',text,re.S)
         if not nav:continue
+        if rel=='rules/charter/index.html' and 'class="toc-inner toc-text"' in nav[0]:
+            ids=set(re.findall(r'\bid="([^"]+)"',text));labels=[]
+            for tag in re.findall(r'<a\b[^>]*>',nav[0]):
+                attrs={k:html.unescape(v)for k,_,v in re.findall(r'([\w-]+)\s*=\s*(["\x27])(.*?)\2',tag)}
+                if attrs.get('href')!='#'+attrs.get('data-section','') or attrs.get('data-section')not in ids:raise ValueError(rel+': live-text 目录链接或目标无效')
+                labels.append({'section':attrs['data-section'],'label_h':attrs.get('data-label-h'),'label_v':attrs.get('data-label-v')})
+            if not labels:raise ValueError(rel+': live-text 目录为空')
+            plans.append({'path':path,'page':rel,'before':before,'text':text,'labels':labels,'names':[],'rendering':'live-text'});continue
         names=[html.unescape(x)for x in re.findall(r'data-label-[hv]="([^"]+)"',nav[0])]
         absent=sorted(set(names)-set(label_map))
         if absent:missing.append({'page':rel,'labels':absent});continue
@@ -53,6 +61,8 @@ def prepare_toc(site_root, label_map=None, pages=None):
         rel='_typeset/runtime/'+filename;dst=root/rel;dst.parent.mkdir(parents=True,exist_ok=True);dst.write_bytes(payload);assets[Path(name).suffix]='/'+rel
     changes=[]
     for plan in plans:
+        if plan.get('rendering')=='live-text':
+            after=plan['path'].read_bytes();changes.append({'page':plan['page'],'labels':plan['labels'],'rendering':'live-text','before_sha256':hashlib.sha256(plan['before']).hexdigest(),'after_sha256':hashlib.sha256(after).hexdigest(),'changed':after!=plan['before']});continue
         data={name:label_map[name]for name in dict.fromkeys(plan['names'])}
         tags='<script type="application/json" id="toc-label-data">'+json.dumps(data,ensure_ascii=False).replace('<','\\u003c')+'</script><link rel="stylesheet" href="'+assets['.css']+'"><script defer src="'+assets['.js']+'"></script>'
         text=plan['text'].replace('</head>',tags+'</head>',1)
