@@ -375,7 +375,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-projects'){
 
-  if(target?.id==='learning')return {rows:[{text:'学习进度不放驾驶舱，在学习方法页看',href:'/projects/learning/'}],state:'ok'};
+  if(target?.id==='learning'){const row=cpLearning();return {...row,rows:[{...row,href:'/projects/learning/'}]};}
 
   if(!list('projects'))return {text:'项目状态暂时读不到',state:'unknown'};
 
@@ -479,6 +479,16 @@ function cpTitle(screen,text){
 }
 function cpSection(id,title,screen){const node=cpNode('section','cp-section');node.id=id;node.setAttribute('aria-label',title);node.append(cpTitle(screen,title));const body=cpNode('div','cp-rows');node.append(body);return {node,body};}
 function cpLine(text,state='unknown'){const row=cpNode('p','cp-line',text);row.dataset.state=state==='attention'?'warn':state;return row;}
+function cpLearning(){
+ const row=rawList('projects')?.find(item=>item.mode==='learning'),m=row?.metrics,at=timestamp(row?.updated_at),n=value=>Number.isInteger(value)&&value>=0?String(value):'未统计';
+ if(!m)return {text:'学习方法：学习记录尚未读到',state:'unknown'};
+ const lessons=m.lessons||{},sessions=m.sessions_7d||{},practice=m.practice||{};
+ const recent=online()&&Number.isInteger(sessions.count)&&sessions.count>=0?'近7日已记录 '+sessions.count+' 次':'近7日次数未统计',duration=online()&&Number.isInteger(sessions.minutes)&&sessions.minutes>=0?sessions.minutes+' 分钟':'未统计';
+ const reported=duration!=='未统计'&&Number.isInteger(sessions.unreported_count)&&sessions.unreported_count>0?'已报 '+duration+'，另 '+sessions.unreported_count+' 次未报':'本人所报时长 '+duration;
+ const exercises=[['algorithm','算法','done','total'],['java_review','Java 复习','done','total'],['quiz','随堂问答','correct','asked'],['experiments','实验','done','planned']].filter(([key])=>practice[key]).map(([key,label,a,b])=>label+' '+n(practice[key][a])+'/'+n(practice[key][b])+(key==='algorithm'?'（通过 '+n(practice[key].passed)+'）':''));
+ const stale=row.state==='stale'||!online(),latest=stale?'；最近一次学习记录：'+(Number.isFinite(at)&&at>0?time(at).split(' ')[0]:'时间未登记'):'';
+ return {text:'学习方法：课程累计 '+n(lessons.done)+'/'+n(lessons.total)+' 课；'+recent+'，'+reported+'（缺日未计）；练习：'+(exercises.join('，')||'未统计')+latest,state:stale?'stale':row.state==='ok'?'ok':'unknown'};
+}
 function cpSafeHref(value){if(typeof value!=='string')return null;try{const url=new URL(value,location.href);return ['https:','http:'].includes(url.protocol)?url.href:null;}catch{return null;}}
 function cpOpenDetails(anchor){if(!cockpitUI)return;cockpitUI.details.open=true;render();const node=document.getElementById(anchor);node?.scrollIntoView({behavior:'smooth',block:'start'});}
 function cpPanel(open){
@@ -498,7 +508,7 @@ function mountCockpit(){
  const need=cpNode('div','cp-need'),know=cpNode('div','cp-know'),following=cpNode('details','cp-following'),followingLabel=cpNode('summary',null,'AI 在跟：读取中');following.append(followingLabel);conclusion.body.append(need,know,following);
  const grants=cpNode('div','cp-authority-items'),manage=cpButton('办理');manage.onclick=()=>cpPanel(true);authority.body.append(grants,manage);
  const computer=cpSection('cp-computer','电脑','cockpit-02'),remote=cpSection('cp-remote','远程和网络','cockpit-03'),cloud=cpSection('cp-cloud','备份和云端','cockpit-06'),today=cpSection('cp-today','今天的动态','cockpit-09');today.node.classList.add('cp-today');
- const events=cpNode('div','cp-events'),basis=cpNode('p','cp-line cp-basis'),changes=cpNode('div','cp-changes');today.body.append(events,basis,changes);if(todayRiverHost)today.body.prepend(todayRiverHost);
+ const events=cpNode('div','cp-events'),basis=cpNode('p','cp-line cp-basis'),learning=cpNode('p','cp-line cp-learning'),changes=cpNode('div','cp-changes');today.body.append(events,learning,basis,changes);if(todayRiverHost)today.body.prepend(todayRiverHost);
  grid.append(conclusion.node,authority.node,computer.node,remote.node,cloud.node,today.node);root.append(grid);
  const jump=cpNode('nav','cp-jump');jump.setAttribute('aria-label','驾驶舱区块');for(const [id,text]of [['cp-computer','电脑'],['cp-remote','远程'],['cp-cloud','备份云端'],['cp-today','今天'],['cp-details','明细']]){const link=cpNode('a','cp-button',text);link.href='#'+id;if(id==='cp-details')link.onclick=()=>{details.open=true;};jump.append(link);}root.append(jump);
  const details=cpNode('details','cp-details');details.id='cp-details';details.append(cpNode('summary',null,'明细 · 自动任务、硬件、副本、24 小时曲线、这块怎么看'));
@@ -516,7 +526,7 @@ function mountCockpit(){
  form.append(cpNode('p','cp-form-note','个人资料与全局授权分别计时。已有授权加时，刷新保持原期限；验证码只提交给电脑。'));
  const reductions=cpNode('div','cp-reductions');for(const [text,key]of [['锁定资料','lock-personal-data'],['结束授权','lock-unrestricted'],['Windows 锁屏','lock-windows'],['操作结果','results']])reductions.append(cpButton(text,key));form.append(reductions);panel.append(form);document.body.append(shade,panel);
  panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();cpPanel(false);}if(event.key==='Tab'){const controls=[...panel.querySelectorAll('button,input,a')].filter(node=>!node.disabled&&!node.hidden),first=controls[0],last=controls.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}});
- cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,know,followingLabel,grants,manage,computer,remote,cloud,today,events,basis,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
+ cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,know,followingLabel,grants,manage,computer,remote,cloud,today,events,basis,learning,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
  document.body.classList.add('cockpit-rearranged');
  const riverHelp=()=>{const legend=todayRiverHost?.querySelector('#legend');if(legend&&!legend.closest('details')){const help=cpNode('details','cp-river-help');help.append(cpNode('summary',null,'这块怎么看'));legend.before(help);help.append(legend);}};riverHelp();document.addEventListener('today-river-ready',riverHelp);
  for(const [id,section]of [['pc',computer],['remote',remote],['backups',cloud],['security',authority],['today',today]]){const old=document.getElementById(id);if(old&&archive.contains(old))old.id='cp-original-'+id;const anchor=cpNode('span','cp-anchor');anchor.id=id;section.node.prepend(anchor);}
@@ -548,6 +558,7 @@ function renderCockpit(){
   const nodes=[];for(let i=0;i<ids.length;i++){if(missing.has(ids[i]))continue;const row=cpDisplay(byId.get(ids[i]),fallbacks[i]);if(row)nodes.push(row);}for(const gap of gaps)if((gap.card_ids||[]).some(id=>ids.includes(id))&&!know.some(item=>item.source_id===gap.source_id))nodes.push(cpLine((gap.title||'来源')+'从 '+time(timestamp(gap.since))+' 起读不到，AI 在跟','unknown'));syncChildren(section.body,nodes);
  }
  const todayEvents=ready?cockpit.today_events:undefined;syncChildren(ui.events,Array.isArray(todayEvents)?todayEvents.length?todayEvents.map(item=>cpLine(item.title||'事件内容尚未读到','ok')):[cpLine('今天还没有新事件','ok')]:[cpLine('今天的事件正在读取')]);
+ const learning=cpLearning();ui.learning.textContent=learning.text;ui.learning.dataset.state=learning.state;
  const corrections=ready?cockpit.owner_corrections:null;ui.basis.textContent='基座 · '+(corrections?.text||'今天纠正：未统计；近7天：未统计');ui.basis.dataset.state=corrections?.status==='pass'?'ok':'unknown';
  const changeNodes=[cpNode('h3',null,'今天代码变化')],change=cpDisplay(byId.get('today_changes'),'今天代码变化尚未读到');if(change)changeNodes.push(change);
  changeNodes.push(cpNode('h3',null,'今天上线'),cpLine('尚未读到发布记录'));syncChildren(ui.changes,changeNodes);

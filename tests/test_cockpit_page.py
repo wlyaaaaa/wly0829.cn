@@ -1,16 +1,10 @@
 """Real installed Chrome checks of the compact cockpit; all status/actions are fictional."""
-import importlib.util
-import json
-import os
+import hashlib, importlib.util, json, mimetypes, os, re, time, unittest
 from pathlib import Path
-import re, hashlib, mimetypes
-import time
-import unittest
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(os.environ.get('COCKPIT_PAGE_QA_ROOT', 'E:/Cache/Codex/Temp/cockpit-page-20261007'))
-
 
 def load_module(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
@@ -93,6 +87,7 @@ class CockpitPageTests(unittest.TestCase):
                 self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth'))
                 self.assertIn('尚未读到发布记录', page.locator('.cp-changes').inner_text())
                 self.assertIn('今天 3 项备份完成', page.locator('.cp-events').inner_text())
+                self.assertIn('学习方法：学习记录尚未读到', page.locator('.cp-learning').inner_text())
                 self.assertIn('今天纠正：未统计；近7天：未统计', page.locator('.cp-basis').inner_text())
                 state['value']['cockpit']['owner_corrections'] = {'status': 'pass', 'total': 0, 'history': [], 'text': '今天纠正：0；近7天：未统计'}; page.evaluate('SiteB2.refresh()'); page.locator('.cp-basis').filter(has_text='今天纠正：0；').wait_for()
                 page.wait_for_function('window.todayRiver?.gl||document.querySelector("#today-river #stage")?.classList.contains("nogl")', timeout=60000)
@@ -107,11 +102,6 @@ class CockpitPageTests(unittest.TestCase):
                     self.assertEqual(page.locator('.cp-action-card').count(), 5); self.assertEqual(page.locator('.cp-headline').inner_text(), '有 5 件事要你做')
                     if mode == 'stale': self.assertIn('这是 ', row.inner_text()); self.assertIn(' 的数', row.inner_text())
                 traffic['display'] = original_traffic
-                for position in ['middle', 'bottom']:
-                    page.evaluate('(p)=>scrollTo({top:p==="middle"?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:"instant"})', position)
-                    rect = page.locator('.cp-refresh').bounding_box(); self.assertTrue(0 <= rect['y'] < 900); self.assertEqual(round(rect['width']), 44); self.assertEqual(round(rect['height']), 44)
-                    self.assertTrue(page.locator('.cp-refresh').evaluate('e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e}'))
-                    reads = state['reads']; page.locator('.cp-refresh').click(); page.wait_for_function('document.querySelector(".cp-refresh").getAttribute("aria-busy")==="false"'); self.assertGreater(state['reads'], reads)
                 page.get_by_role('button', name='办理', exact=True).scroll_into_view_if_needed(); before = page.evaluate('scrollY')
                 page.get_by_role('button', name='办理', exact=True).click()
                 panel = page.locator('.cp-panel'); page.locator('#cp-hours').fill('2.5'); page.locator('#cp-code').fill('0' * 6)
@@ -132,6 +122,16 @@ class CockpitPageTests(unittest.TestCase):
                 page.locator('.cp-original [data-b2-slot=cockpit-tasks]').first.filter(has_text='测试任务').wait_for(timeout=30000)
                 self.assertIn('测试停止入口', page.locator('.cp-original').text_content())
                 page.locator('.cp-details iframe').first.wait_for(state='attached')
+                page.locator('.cp-details').evaluate('async e=>{for(const d of e.querySelectorAll("details"))d.open=true;await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))}')
+                for position in ['middle', 'bottom']:
+                    page.evaluate('(p)=>scrollTo({top:p==="middle"?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:"instant"})', position)
+                    rect = page.locator('.cp-refresh').bounding_box(); self.assertTrue(0 <= rect['y'] < 900); self.assertEqual(round(rect['width']), 44); self.assertEqual(round(rect['height']), 44)
+                    self.assertEqual(page.locator('.cp-refresh,.b2-toolbar-refresh').count(), 1)
+                    if position == 'bottom': page.wait_for_load_state('networkidle', timeout=15000); page.evaluate('scrollTo(0,document.documentElement.scrollHeight)'); self.assertLessEqual(abs(page.evaluate('document.documentElement.scrollHeight-innerHeight-scrollY')), 2)
+                    self.assertTrue(page.locator('.cp-refresh').evaluate('e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e}'))
+                    reads = state['reads']; page.locator('.cp-refresh').click(); page.wait_for_function('document.querySelector(".cp-refresh").getAttribute("aria-busy")==="false"'); self.assertGreater(state['reads'], reads)
+                    self.assertEqual(page.locator('.cp-bar').evaluate('e=>getComputedStyle(e).position'), 'fixed')
+                    if position == 'bottom': page.evaluate('scrollTo(0,document.documentElement.scrollHeight)'); page.screenshot(path=str(OUT / f'expanded-bottom-671ceb86-{width}.png'))
                 old = state['value']; state['value'] = {key: value for key, value in old.items() if key != 'cockpit'}
                 page.evaluate('SiteB2.refresh()'); page.locator('.cp-headline').filter(has_text='结论正在读取').wait_for()
                 self.assertEqual(page.locator('.cp-lamp').get_attribute('data-state'), 'unknown')
