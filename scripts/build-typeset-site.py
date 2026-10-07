@@ -130,13 +130,19 @@ def quality(path, report, proof):
             'incomplete_screens':[x.get('screen','')+'-'+x.get('orientation','') for x in pending],
             'legacy_evidence':legacy, 'note':'旧质量记录未按新闸门验证' if legacy else ''}
 
+def native_actions_for(old, orientation):
+    actions=old.get('layouts',{}).get(orientation,{}).get('native_actions',[])
+    if actions:return actions
+    prefix=old.get('id','')+'-'+orientation+'-'
+    return [a for part in old.get('parts',[])for a in part.get('native_actions',[])if a.get('hot_id','').startswith(prefix)]
+
 def action_for(hot, metadata, source, old):
     # Producer fitting can split a visible button label across lines. The
     # declared action name uses ordinary word spacing, never layout newlines.
     key = ' '.join((hot.get('text') or hot['href'].split('::')[-1]).split())
-    matches = [x for x in old.get('layouts',{}).get('h',{}).get('native_actions',[]) if x.get('text') == key]
+    matches = [x for x in native_actions_for(old,'h') if x.get('text') == key]
     if not matches:
-        matches = [x for x in old.get('layouts',{}).get('v',{}).get('native_actions',[]) if x.get('text') == key]
+        matches = [x for x in native_actions_for(old,'v') if x.get('text') == key]
     if len(matches) > 1:
         definitions = source.get('buttons',[])
         where = metadata.get('data-button-where') or hot['href'].split('::')[0]
