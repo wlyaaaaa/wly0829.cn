@@ -10,7 +10,8 @@ const I = { reveal: 3.6, gate: .8, clock: [2, 12], future: 3.2, fleet: 4.2, lamp
 const host = document.querySelector('[data-today-river]'); if (!host) return;
 host.id = 'today-river'; host.innerHTML = "<div class=\"wrap\">\n  <h3>今天的河</h3>\n  <p id=\"headline\" role=\"status\">暂时读不到电脑，还没读到今天的自动任务。</p>\n  <p class=\"when\" id=\"when\"></p>\n  <div id=\"alerts\"></div>\n  <div id=\"scroller\" hidden>\n    <div id=\"stage\" aria-label=\"今天的河：电脑上自动任务今天的情况\">\n      <div id=\"paper\"></div><canvas id=\"water\"></canvas><div id=\"layer\"></div><div id=\"tip\"></div>\n    </div>\n  </div>\n  <p class=\"hint\" hidden>左右滑动，可以看整条河。</p>\n  <div class=\"legend\" id=\"legend\" hidden></div>\n  <div class=\"card\" id=\"pick\" hidden></div>\n  <div class=\"card\" id=\"log\" hidden></div>\n</div>";
 const GEOM = {"aspect": 1.722, "top": [17.15, 17.04, 16.82, 16.82, 14.46, 14.8, 15.02, 15.47, 17.83, 19.39, 20.96, 20.4, 17.6, 16.59, 16.03, 16.82, 19.73, 20.4, 20.52, 20.18, 20.52, 22.42, 20.74, 22.42, 22.65, 23.09, 23.32, 20.85, 20.74, 21.41, 23.32, 22.09, 22.09, 22.53, 22.53, 22.2, 22.87, 22.42, 21.3, 20.4, 20.29, 20.18, 20.4, 21.52, 21.64, 21.52, 21.75, 21.86, 21.52, 21.64, 22.31, 23.65, 24.55, 24.66, 24.66, 24.33, 23.54, 21.97, 21.75, 22.09, 21.08, 20.85, 23.77, 23.88, 24.1, 23.99, 23.09, 20.07, 18.27, 16.59, 16.93, 18.16, 18.05, 18.27, 18.5, 15.25, 15.47, 15.13, 13.34, 17.6, 17.83, 16.48, 14.13, 13.45, 17.15, 17.83, 18.72, 18.5, 17.83, 18.16, 18.27, 18.27, 18.05, 16.59, 18.05, 18.05, 17.49], "bot": [62.11, 61.66, 61.1, 61.1, 61.77, 66.14, 65.81, 67.49, 67.26, 66.14, 66.14, 66.48, 66.48, 66.82, 67.15, 67.49, 67.83, 68.05, 72.2, 69.17, 70.07, 70.74, 70.74, 69.73, 69.17, 69.39, 69.51, 69.84, 69.51, 69.06, 72.09, 72.98, 74.66, 75.22, 70.07, 74.66, 74.1, 74.44, 73.32, 73.88, 74.33, 74.78, 75.34, 75.22, 74.22, 73.54, 73.21, 72.2, 71.41, 72.2, 74.78, 76.35, 77.02, 78.14, 77.69, 77.91, 79.04, 75.67, 74.44, 72.98, 72.09, 71.97, 72.2, 72.09, 72.87, 73.54, 73.32, 72.65, 74.78, 73.54, 72.76, 70.07, 69.51, 69.73, 69.28, 69.28, 69.51, 69.73, 71.41, 71.08, 71.52, 71.97, 72.53, 69.06, 68.95, 68.83, 69.84, 70.07, 69.73, 69.51, 68.83, 68.5, 68.05, 67.38, 67.38, 67.38, 68.05], "boats": [{"w": 360, "h": 118}, {"w": 360, "h": 134}, {"w": 360, "h": 113}, {"w": 360, "h": 116}]}, $ = s => host.querySelector(s), root = host;
-const asset = name => new URL('./today-river-assets2/' + name, import.meta.url).href;
+const riverAssets = JSON.parse(document.querySelector('#page-data')?.textContent || '{}').today_river_assets;
+const asset = name => riverAssets?.[name] || new URL('./today-river-assets2/' + name, import.meta.url).href;
 const BIRD = {"idle": {"w": 122, "h": 97, "fx": 83.8, "fy": 93.6}, "look": {"w": 117, "h": 97, "fx": 85.5, "fy": 93.4}, "tilt": {"w": 125, "h": 93, "fx": 84.3, "fy": 89.1}, "sing": {"w": 123, "h": 108, "fx": 85.9, "fy": 104.7}, "sleep": {"w": 116, "h": 78, "fx": 80.6, "fy": 75.2}};
 for (const [pose, meta] of Object.entries(BIRD)) meta.src = asset('bird-' + pose + '.webp');
 const stage = $('#stage'), layer = $('#layer'), tip = $('#tip'), canvas = $('#water');
@@ -99,7 +100,7 @@ function six(M, t) {
 
 // ---------- 画面 ----------
 let M = null, acts = [], wakes = [], els = new Map();
-const put = (e, x, y) => { e.style.left = x + '%'; e.style.top = y + '%'; };
+const put = (e, x, y) => { if (e.classList.contains('boat')) { e.style.left = e.style.top = '0'; e.style.transform = `translate(${x}em,${y / GEOM.aspect}em) translate(-50%,-50%)`; } else { e.style.left = x + '%'; e.style.top = y + '%'; } };
 const remember = (t, e) => { if (!els.has(t.i)) els.set(t.i, []); els.get(t.i).push(e); };
 function boat(o) {
   const S = GEOM.boats[o.sprite], b = mk('button', 'boat ' + (o.cls || ''), layer); b.type = 'button';
@@ -330,8 +331,9 @@ void main(){
   gl_FragColor = vec4(mix(vec3(1.), col, show), 1.);
 }`;
 const GL = { gl: null, u: {}, ok: false };
+const loadImage = src => new Promise((res, rej) => { const im = new Image(); let retried = false; im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => { if (!retried) { retried = true; im.src = src; } else rej(new Error('图没读出来')); }; im.src = src; });
+for (let i = 0; i < 4; i++) loadImage(asset('boat' + i + '.webp')).catch(() => {});
 async function initGL() {
-  const load = src => new Promise((res, rej) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => rej(new Error('图没读出来')); im.src = src; });
   try {
     const gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'high-performance' }); if (!gl) throw new Error('这台设备开不了 WebGL');
     const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
@@ -340,20 +342,20 @@ async function initGL() {
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer()); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
     const a = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
     const url = getComputedStyle(stage).getPropertyValue('--river').trim().replace(/^url\(["']?|["']?\)$/g, '');
-    const [river, mask] = await Promise.all([load(url), load(asset('mask.png'))]);
+    const [river, mask] = await Promise.all([loadImage(url), loadImage(asset('mask.png'))]);
     [river, mask].forEach((im, k) => { gl.activeTexture(gl.TEXTURE0 + k); gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); });
     ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uGray', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
-    gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true;
+    gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true; stage.classList.remove('nogl');
     canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); GL.ok = false; stage.classList.add('nogl'); });
   } catch (err) { console.info('[今天的河] 水面动效没开起来，改用静止的画：', err.message || err); stage.classList.add('nogl'); }
 }
 const boatBuf = new Float32Array(56);
 function draw(tb) {
   if (!GL.ok) return; const gl = GL.gl, u = GL.u;
-  const w = Math.round(stage.clientWidth * Math.min(1.5, devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
+  const w = Math.round(stageWidth * Math.min(1.5, devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
   if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
   boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
@@ -364,7 +366,8 @@ function draw(tb) {
 
 // ---------- 时间和循环 ----------
 const clock = { t0: null, skip: false, manual: null, done: false };
-const fit = () => { if (stage.clientWidth) stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
+let stageWidth = 0;
+const fit = () => { stageWidth = stage.clientWidth; if (stageWidth) stage.style.fontSize = stageWidth / 100 + 'px'; };
 let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
 const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
 function step(tb) { if (!clock.done || clock.manual != null) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
@@ -400,7 +403,7 @@ async function start(snap, intro = true) {
   $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
   $('#pick').hidden = true; tip.style.opacity = 0;
   fit(); build(snap);
-  if (!GL.gl && !stage.classList.contains('nogl')) { glLoading ||= initGL(); await glLoading; }
+  if (!glLoading) { stage.classList.add('nogl'); glLoading = initGL().then(redraw); }
   if (turn !== generation) return;
   const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
   stage.classList.toggle('still', still || M.stale || reduce);

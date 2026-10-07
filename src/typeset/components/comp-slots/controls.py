@@ -307,6 +307,7 @@ class _FormContext:
         self.ctx, self.spec, self.layout = ctx, spec, layout
         self.fields, self.placed, self.item_number = fields, placed, item_number
         self.field_row = None
+        self.duration_row = None
 
     def __getattr__(self, key):
         return getattr(self.ctx, key)
@@ -317,7 +318,13 @@ class _FormContext:
 
         def flush_actions():
             if actions:
-                out.append('<span class="c-slot-controls-below-action">' + ''.join(actions) + '</span>')
+                kind = ' is-duration-row' if any('is-duration' in value for value in actions) else ''
+                row = '<span class="c-slot-controls-below-action' + kind + '">' + ''.join(actions) + '</span>'
+                if kind:
+                    self.duration_row = row
+                    out.append('<span data-slot-paired-duration></span>')
+                else:
+                    out.append(row)
                 actions.clear()
 
         for match in _BUTTON.finditer(text):
@@ -328,6 +335,9 @@ class _FormContext:
             elif between:
                 (actions if actions else out).append(self.ctx.inline(between))
             label = match.group(1) or match.group(2)
+            if label in self.layout.get("step3_buttons", []) and "duration" in self.fields and "duration" not in self.placed:
+                actions.append(_input("duration", self.ctx, self.layout.get("duration", {})))
+                self.placed.add("duration")
             suffix = _FORM_PUNCT.match(text, match.end())
             punctuation = _form_punctuation(self.ctx, suffix.group() if suffix else '')
             below_action = False
@@ -353,6 +363,7 @@ class _FormContext:
                     rendered = _button(label, self.ctx, button_spec)
                     self.ctx.incomplete("input_field：save_default 的文字不在本屏真实按钮定义中", "composition")
                 rendered = _form_action_tail(rendered, punctuation)
+                below_action = self.layout.get("buttons") == "below_copy"
             else:
                 if isinstance(submit, dict) and label == submit.get("text"):
                     button_spec.update({key: submit[key] for key in ("role", "state") if key in submit})
@@ -487,6 +498,9 @@ def _input_layout(block, ctx):
                 paired = (f'<span class="c-slot-controls-fieldrow is-{position}">'
                           + input_html + '<span class="c-slot-controls-submit-tail tb">'
                           + submit_html + suffix + '</span></span>')
+            if form_ctx.duration_row:
+                copy, _, suffix = copy.partition('<span data-slot-paired-duration></span>')
+                paired = '<div class="c-slot-controls-duration-body">' + form_ctx.duration_row + '<div class="tb c-slot-controls-step-copy">' + suffix + '</div></div>'
             icon = (f'<img class="c-slot-controls-step-icon" src="{_attr(icons[index])}" '
                     'alt="" aria-hidden="true">') if icons else ''
             contents = (f'<div class="c-slot-controls-step-head {"has-icon" if icon else ""}">'

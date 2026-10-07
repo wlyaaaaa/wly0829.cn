@@ -16,6 +16,7 @@ const grantKey='site-b2-access-request-v1',actionsKey='site-b2-access-actions-v1
 const elements=new Map();
 const todayRiverHost=document.querySelector('[data-today-river]');
 const lastGrafanaGroups=new Map();
+let navigatingForm=0;
 
 const liveAnchors=data.b2_live_anchors||[];
 
@@ -93,8 +94,8 @@ function backupAlertHeadline(rows){
  return problem?name(problem)+'：'+(state==='unknown'&&problem.state==='success'?'最近成功时间读不到':stateText(problem.state))+(problem.status_note||problem.plain?.status_note||problem.reason?'；'+(problem.status_note||problem.plain?.status_note||problem.reason):''):undefined;
 }
 function projectAlertHeadline(){
- const state=projectHealth(),problem=state!=='ok'&&(list('projects')||[]).find(x=>projectRowHealth(x)===state);
- return problem?name(problem)+'：'+(problem.health_reason||({error:'有失败记录待核对',unknown:'运行状态暂时读不到',warn:'有事项待处理'})[state]):undefined;
+ const state=projectHealth();
+ return state==='ok'?'项目都正常':state==='error'?'有项目出了问题，下面逐项说明':state==='unknown'?'有些项目还没读到结果，下面说明你是否需要操作':'有项目需要确认，下面逐项说明';
 }
 
 const online=()=>phase==='ready'&&freshStatus(status,clock());
@@ -268,7 +269,12 @@ function pendingRows(){
 
  for(const x of list('projects')||[])if(x.frozen!==true){if(x.failed_count>0||['run_failed','acceptance_failed'].includes(x.overview))out.push({text:name(x)+'：有失败记录待核对',href:'#projects'});else if(!projectReadMissing(x)&&(['run_unknown','unknown'].includes(x.overview)||x.run_health==='unknown'))out.push({text:name(x)+'：运行结果还未确认，请查看未接入的任务记录',href:'#projects'});}
  for(const x of status?.remote_network?.items||[])if(x.id==='windows_update_restart'&&x.state==='pending')out.push({text:'Windows 更新：等待重启',href:'#remote'});
- for(const gap of readGaps())out.push({key:'read-gap:'+gap.key,text:gap.label+'暂时读不到；从 '+time(gap.since)+' 起'+(gap.overGrace?'，已经超过 10 分钟':'，10 分钟内先保持灯况'),href:gap.key.startsWith('hardware')?'#pc':gap.key.startsWith('backup')?'#backups':gap.key.startsWith('automation')?'#tasks':gap.key.startsWith('remote')?'#remote':['personal_data','unrestricted','windows'].includes(gap.key)?'#security':gap.key==='today'?'#today':'#projects'});
+ const gapGroups=new Map(),gapTitles={hardware:'电脑读数',automation:'自动任务',backups:'备份运行记录',projects:'项目状态',remote_network:'远程和网络',backup_inventory:'备份副本证据'};
+ for(const gap of readGaps()){const key=gap.key.split(':')[0];if(!gapGroups.has(key))gapGroups.set(key,[]);gapGroups.get(key).push(gap);}
+ for(const [key,gaps] of gapGroups){const since=Math.min(...gaps.map(g=>g.since)),suffix='；从 '+time(since)+' 起'+(gaps.some(g=>g.overGrace)?'，已经超过 10 分钟':'，10 分钟内先保持灯况');
+  const row={key:'read-gap:'+key,text:key==='hardware'?'电脑读数从 '+time(since)+' 起读不到（共 '+gaps.length+' 项），已 '+Math.max(0,Math.floor((clock()-since)/60))+' 分钟':(gaps.length===1?gaps[0].label:gapTitles[key]||gaps[0].label)+'暂时读不到'+(gaps.length>1?'（共 '+gaps.length+' 项）':'')+suffix,href:key==='hardware'?'#pc':key.startsWith('backup')?'#backups':key==='automation'?'#tasks':key==='remote_network'?'#remote':['personal_data','unrestricted','windows'].includes(key)?'#security':key==='today'?'#today':'#projects'};
+  if(gaps.length>1)row.children=gaps.map(g=>({key:'read-gap:'+g.key,text:g.label,detail:'暂时读不到；从 '+time(g.since)+' 起'}));out.push(row);
+ }
 
  return out.length?out:[{text:'没有要我处理的',empty:true}];
 
@@ -373,7 +379,7 @@ function liveValue(slot){
 
   if(!list('projects'))return {text:'项目状态暂时读不到',state:'unknown'};
 
-  const rows=(list('projects')||[]).filter(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.failed_count>0||['run_failed','acceptance_failed','run_overdue','run_unknown'].includes(x.overview))).map(x=>({key:x.project||x.title,highlight:!!target?.api_project&&x.project===target.api_project,open:target?.id==='pending',detail:(list('pending')||[]).filter(p=>p.project===x.project).map(p=>(p.plain_title||'条目标题读不到')+' · '+({me:'我',ai:'AI'})[p.who]+' · '+(p.when||'核验时机读不到')).join('；'),text:(x.project||x.title)+'：'+(x.health_reason||'有事项待处理'),href:x.website_url&&/^https:\/\/wly0829.cn\//.test(x.website_url)?x.website_url:null}));
+  const rows=(list('projects')||[]).filter(x=>x.frozen!==true).map(x=>({key:x.project||x.title,highlight:!!target?.api_project&&x.project===target.api_project,open:target?.id==='pending',detail:(list('pending')||[]).filter(p=>p.project===x.project).map(p=>(p.plain_title||'这件事的说明暂时读不到')+' · '+({me:'需要你确认',ai:'由 AI 检查，你暂时不用操作'})[p.who]+' · '+(p.when||'还没写什么时候检查')).join('；'),text:(x.project||x.title)+'：'+(x.waiting_user_count>0?'要你做 · ':x.waiting_ai_count>0?'AI 在跟 · ':projectRowHealth(x)!=='ok'?'知道就行 · ':'')+(x.health_reason||(projectRowHealth(x)==='ok'?'正常':'这次没读到完整说明')),href:x.website_url&&/^https:\/\/wly0829.cn\//.test(x.website_url)?x.website_url:null}));
 
   return {text:projectAlertHeadline(),rows:rowText(rows,'项目都正常，没有等验收的'),state:projectHealth()};
 
@@ -494,7 +500,7 @@ function mount(){
 
   }
 
-  for(const entry of layout.native_actions||[]){const button=document.createElement('button');button.className='b2-native b2-image-action';button.type='button';button.dataset.b2Action=entry.action;button.dataset.baseLabel=entry.text;button.textContent=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';button.setAttribute('aria-label',entry.text);button.title=entry.text;rectStyle(button,entry.rect);button.onclick=()=>{if(entry.copy_text){navigator.clipboard.writeText(entry.copy_text).then(()=>message('已复制。','ok')).catch(()=>message('未能写入剪贴板，请检查浏览器剪贴板权限。','error'));}else action(entry.action);};section.querySelector('.overlays').append(button);}
+  for(const entry of layout.native_actions||[]){const button=document.createElement('button');button.className='b2-native b2-image-action';button.type='button';button.dataset.b2Action=entry.action;if(entry.action==='save-default')button.setAttribute('role','checkbox');button.dataset.baseLabel=entry.text;button.textContent=entry.text;button.dataset.hotId=entry.hot_id||'';button.dataset.typesetKind='button';button.setAttribute('aria-label',entry.text);button.title=entry.text;rectStyle(button,entry.rect);button.onclick=()=>{if(entry.copy_text){navigator.clipboard.writeText(entry.copy_text).then(()=>message('已复制。','ok')).catch(()=>message('未能写入剪贴板，请检查浏览器剪贴板权限。','error'));}else action(entry.action);};section.querySelector('.overlays').append(button);}
   let flowCells=liveCells.filter(cell=>cell.node.tagName!=='INPUT'&&cell.slot!=='ca-connection');
   if(screenId==='cockpit-01'){
    const overview=flowCells.filter(cell=>cell.slot==='cockpit-overall'||cell.slot.startsWith('cockpit-quick-'));
@@ -587,7 +593,7 @@ function render(){
 
   if(a.startsWith('lock-')){const kind=a.slice(5),field=kind==='windows'?'lock_windows':kind==='personal-data'?'lock_data':'end_unrestricted';disabled||=status?.public_actions?.[field]!==true||(kind==='personal-data'&&!canEndGrant(status?.personal_data,clock()))||(kind==='unrestricted'&&!canEndGrant(status?.unrestricted,clock()))||(kind==='windows'&&status?.host?.screen_state!=='unlocked')||actions.some(x=>x.action===kind&&unresolvedAction(x));}
 
-  b.disabled=disabled;b.dataset.labelChanging=String(!!b.textContent&&b.textContent!==b.dataset.baseLabel);if(['combined','save-default'].includes(a))b.setAttribute('aria-pressed',String(a==='combined'?combined:saveDefault));if(a.startsWith('purpose-'))b.setAttribute('aria-pressed',String(a==='purpose-'+purpose));b.dataset.selected=a==='combined'?String(combined):a==='save-default'?String(saveDefault):a==='purpose-'+purpose?'true':'false';
+  b.disabled=disabled;b.dataset.labelChanging=String(!!b.textContent&&b.textContent!==b.dataset.baseLabel);if(a==='combined')b.setAttribute('aria-pressed',String(combined));if(a==='save-default')b.setAttribute('aria-checked',String(saveDefault));if(a.startsWith('purpose-'))b.setAttribute('aria-pressed',String(a==='purpose-'+purpose));b.dataset.selected=a==='combined'?String(combined):a==='save-default'?String(saveDefault):a==='purpose-'+purpose?'true':'false';
 
  }
 
@@ -597,8 +603,9 @@ function render(){
   const text=lastRead&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到的数据。':offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
  }else if(connectionNotice&&!connectionNotice.hidden)connectionNotice.hidden=true;
  if(document.body.dataset.b2StatusPhase!==phase)document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
+ updateCockpitToolbar();
  if(todayRiverHost)try{const key='site-river-height-v1:'+innerWidth;todayRiverHost.style.minHeight=phase==='loading'?(Number(localStorage.getItem(key))||Math.min(1200,innerHeight*1.2))+'px':'';if(phase==='ready')localStorage.setItem(key,String(todayRiverHost.offsetHeight));}catch{}
- restoreReading?.();
+ if(performance.now()>navigatingForm)restoreReading?.();
 
 }
 
@@ -668,7 +675,7 @@ function action(key){
 
  if(!formal||!online()||busy)return;
 
- if(key.startsWith('choose-')){purpose=key.slice(7);combined=false;document.querySelector('[data-screen="computer-access-02"]')?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('[data-b2-slot="ca-form-hours"]')?.focus({preventScroll:true});}
+ if(key.startsWith('choose-')){purpose=key.slice(7);combined=false;window.TypesetLiveFlow?.cancelReader?.();navigatingForm=performance.now()+1200;render();requestAnimationFrame(()=>requestAnimationFrame(()=>{document.querySelector('[data-screen="computer-access-02"]')?.scrollIntoView({behavior:'smooth',block:'start'});document.querySelector('[data-b2-slot="ca-form-hours"]')?.focus({preventScroll:true});}));return;}
 
  else if(key.startsWith('purpose-'))purpose=key.slice(8);
 
@@ -687,6 +694,15 @@ function action(key){
 }
 
 const reader=createStatusReader((signal,{refresh})=>data.kind==='cockpit'?window.SiteLiveRuntime.readStatus(signal,refresh):window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
+
+let cockpitToolbar;
+function updateCockpitToolbar(){
+ if(!cockpitToolbar)return;const row=summary(),label=cockpitToolbar.querySelector('.b2-toolbar-message');cockpitToolbar.dataset.state=row.state;label.textContent=row.text;label.title=row.text;label.onclick=()=>message(row.text,row.state);cockpitToolbar.querySelector('small').textContent=lastRead?time(lastRead).replace('今天 ','')+' 读到':'还没读到';
+}
+if(data.kind==='cockpit'){
+ cockpitToolbar=document.createElement('aside');cockpitToolbar.className='b2-cockpit-toolbar';cockpitToolbar.setAttribute('aria-label','驾驶舱当前状态');cockpitToolbar.innerHTML='<i aria-hidden="true"></i><button type="button" class="b2-toolbar-message">正在读取…</button><small>还没读到</small><button type="button" class="b2-toolbar-refresh">刷新</button>';document.body.append(cockpitToolbar);
+ const refresh=cockpitToolbar.querySelector('.b2-toolbar-refresh');refresh.setAttribute('aria-label','重新读取驾驶舱数据');refresh.onclick=async()=>{refresh.disabled=true;refresh.textContent='正在读';try{await readStatus({replace:true,refresh:true});refresh.textContent=phase==='ready'?'刷新':'重试';updateCockpitToolbar();}finally{refresh.disabled=false;}};
+}
 
 function readStatus(options){if(!formal&&!(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname))){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 

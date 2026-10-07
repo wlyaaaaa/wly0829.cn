@@ -1751,14 +1751,14 @@
       {
         "type": "directory_tile",
         "text_ref": "电脑远程控制",
-        "columns": 3,
+        "columns": 2,
         "portrait_columns": 1,
         "illustration": "top_inside",
         "icons": [
           "_library/icons/手机电脑连接.png",
           "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-          "_library/icons/地球.png"
+          "_library/illustrations/main-proxyclean.png"
         ],
         "connector": "none",
         "copy_labels": [
@@ -1827,7 +1827,7 @@
           "_library/icons/手机电脑连接.png",
           "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-          "_library/icons/地球.png"
+          "_library/illustrations/main-proxyclean.png"
         ],
         "connector": "none",
         "copy_labels": [

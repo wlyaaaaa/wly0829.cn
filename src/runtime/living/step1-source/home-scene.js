@@ -1063,7 +1063,7 @@ function frame(now) {
   const raw = last ? now - last : 0, dt = Math.min(0.05, raw / 1000); last = now;
   frames++; maxFrame = Math.max(maxFrame, raw);
   if (checkFrameGuard(now)) return;
-  if (S.fast) S.hour = (S.hour + dt * 24 / 60) % 24;
+  if (S.fast) shared.daytimeHour = S.hour = (S.hour + raw / 1000 * 24 / 60) % 24;
   else if (S.follow) S.hour = hzHour();
   try { if (!V.manual) step(dt * SPEED); render(); }
   catch (e) { stop('render-error', e); return; }
@@ -1146,6 +1146,12 @@ function setStatus(s) {
   if (!canAnimate()) paintStatic();
 }
 function setHour(h) { S.follow = false; S.fast = false; S.hour = ((Number(h) % 24) + 24) % 24; paintStatus(); lastScr = ''; if (!canAnimate()) paintStatic(); }
+function setDaytime(mode) {
+  const hour = {morning: sun.sr + .35, day: 12, evening: sun.ss + .25, night: 23.5}[mode];
+  if (mode === 'cycle') { S.follow = false; S.fast = true; S.hour = shared.daytimeHour ?? S.hour; }
+  else if (Number.isFinite(hour)) setHour(hour); else throw new TypeError('未知的时间选择');
+  paintStatus(); lastScr = ''; if (!canAnimate()) paintStatic();
+}
 // cors=true：这张图要当 WebGL 贴图。素材在别的域名（例如 OSS）时，必须按跨域方式读取，
 // 否则浏览器不许上传到显卡。只显示用的底图不加，这样能和首页原图共用同一份缓存。
 function loadImage(src, cors = false) {
@@ -1232,9 +1238,9 @@ function destroy() {
   ink.style.filter=originalPlateFilter;root.remove(); stage.style.cursor = '';
 }
 return { ready, destroy, pauseChanged, preferenceChanged, layout, setStatus,
-  SPEED, S, V, bird, setMode, setHour, sing, startHop, seek, skipIntro, replay,
+  SPEED, S, V, bird, setMode, setHour, setDaytime, sing, startHop, seek, skipIntro, replay,
   play: () => { V.manual = false; resetGuard(2000); }, freeze: t => { S.frozen = t; resetGuard(2000); }, act: a => { bird.act = a; }, leaf: () => { leafCd = -1; },
-  hasBird, diagnostics: () => ({phase, reason, paused: shared.paused, frames, maxFrame, fps, canvas:[glc.width, glc.height], dpr,
+  hasBird, diagnostics: () => ({phase, reason, paused: shared.paused, frames, maxFrame, fps, canvas:[glc.width, glc.height], dpr, daytime:{mode:shared.daytime || 'real',hour:S.hour,follow:S.follow,fast:S.fast},
     resolution: { css: [stage.clientWidth, stage.clientHeight], actualDpr: [glc.width / Math.max(1, stage.clientWidth), glc.height / Math.max(1, stage.clientHeight)],
       texture: textureSize.slice(), base: [base.naturalWidth, base.naturalHeight], baseSrc: base.currentSrc || base.src,
       staticProtection: preserveInfo, staticRegionSource: ink.currentSrc || ink.src, staticRegionNativeSize: [ink.naturalWidth, ink.naturalHeight], ambientGamma: lastGamma, limit: canvasLimit },
@@ -1267,7 +1273,7 @@ function mount(container, options = {}) {
     const next = choose(); if (next === orientation && scene) { scene.layout(); return; }
     orientation = next; const current = ++token;
     if (scene) scene.destroy();
-    try { scene = createScene(container, resolveAssets(config[next], assetBase), config, shared); await scene.ready; }
+    try { scene = createScene(container, resolveAssets(config[next], assetBase), config, shared); await scene.ready; if (shared.daytime) scene.setDaytime(shared.daytime); }
     catch (e) { shared.errors.push(String(e.message || e)); }
     if (current !== token || destroyed) return;
   }
@@ -1297,7 +1303,8 @@ function mount(container, options = {}) {
     document.removeEventListener('visibilitychange',pauseChanged); global.removeEventListener('scroll',scrollChanged,true); media.removeEventListener('change',preferenceChanged);
     container.style.position = originalPosition; if (container.__heroLive === api) delete container.__heroLive; mounts.delete(api);
   }, diagnostics() { return {...(scene ? scene.diagnostics() : {phase:destroyed?'destroyed':'static',reason:'config-error',errors:shared.errors.slice()}),orientation}; },
-  _status(next) {shared.status = next; if(scene) scene.setStatus(next);}
+  _status(next) {shared.status = next; if(scene) scene.setStatus(next);},
+  setDaytime(mode) { if (scene) { scene.setDaytime(mode); shared.daytimeHour = scene.S.hour; } shared.daytime = mode; }
   };
   if (options.preview) {
     for (const key of ['S','V','bird','SPEED','hasBird']) Object.defineProperty(api,key,{get:()=>scene && scene[key]});

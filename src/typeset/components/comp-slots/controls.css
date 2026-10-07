@@ -15,6 +15,7 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
   vertical-align: middle;
   flex-shrink: 0;
   width: var(--slot-button-width);
@@ -142,6 +143,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   box-sizing: border-box;
   padding: 0.3em 0.65em;
   margin: 0.12em 0;
@@ -300,3 +302,9 @@
   flex: 0 0 1em;
   accent-color: var(--accent);
 }
+
+.c-slot-input.is-structured .is-duration-row{flex-wrap:nowrap;align-items:stretch;gap:.25em}
+.c-slot-input.is-structured .is-duration-row>.c-slot-controls-input{width:3.2em;min-width:3.2em;flex:none;height:auto}
+.c-slot-input.is-structured .is-duration-row>.c-slot-controls-action-tail{flex:1;align-items:stretch}
+.c-slot-input.is-structured .is-duration-row button{width:100%;height:100%;min-height:2.5em;border-radius:8px;white-space:nowrap}
+.c-slot-input.is-structured[data-orient="h"] .c-slot-controls-duration-body{margin-left:2.25em}

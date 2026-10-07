@@ -175,11 +175,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
-        if name=='river' and 'data-today-river' in (current/'cockpit/index.html').read_text('utf8'):
-            import shutil
-            shutil.copytree(current,dest/'site',copy_function=hybrid.builder.copy_release_asset)
-        else:
-            subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
+        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'bird-first':
             updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
         if name == 'native-living':

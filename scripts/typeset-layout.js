@@ -403,7 +403,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function liveCell(host,node){
   const state=states.get(host);return state?.cells.find(cell=>!isLamp(cell)&&(cell.node===node||cell.node.contains(node)))||null;
  }
- window.TypesetLiveFlow={apply,request,reset,plan,sourceBox,liveCell,preserveReader};
+ window.TypesetLiveFlow={apply,request,reset,plan,sourceBox,liveCell,preserveReader,cancelReader:()=>readerInput++};
  document.addEventListener('live-status-layout',()=>request());window.addEventListener('resize',()=>request(),{passive:true});document.fonts?.ready.then(()=>request());
 })();
 /* end-typeset-live-flow-v1 */

@@ -1429,13 +1429,13 @@
         "type": "prose",
         "size": "large",
         "bold": true,
-        "text_ref": "哪个项目出了错、哪个在等验收？"
+        "text_ref": "哪个项目出了错、哪件事需要我确认？"
       },
       {
         "type": "prose",
         "row": "project-intro",
         "width": "76%",
-        "text_ref": "这里只列两种：出错的和等验收的。等验收分开数：待我验收、AI待验收、以后再做；等"
+        "text_ref": "每个项目一行，先看要不要我做什么。需要我确认的写明有几件"
       },
       {
         "type": "prose",
@@ -1524,14 +1524,14 @@
         "type": "prose",
         "size": "large",
         "bold": true,
-        "text_ref": "哪个项目出了错、哪个在等验收？"
+        "text_ref": "哪个项目出了错、哪件事需要我确认？"
       },
       {
         "type": "prose",
         "row": "project-intro",
         "row_v": true,
         "width": "76%",
-        "text_ref": "这里只列两种：出错的和等验收的。等验收分开数：待我验收、AI待验收、以后再做；等"
+        "text_ref": "每个项目一行，先看要不要我做什么。需要我确认的写明有几件"
       },
       {
         "type": "prose",

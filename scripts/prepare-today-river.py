@@ -75,8 +75,7 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
     html_rel = 'cockpit/index.html'
     original_html = (release / html_rel).read_bytes()
     html = original_html.decode('utf8')
-    if 'data-today-river' in html:
-        raise ValueError('Use the release before this preparation to rebuild the river')
+    installed = 'data-today-river' in html
     refs = re.findall(r'<script\b[^>]*\bsrc="([^"]*b2-typeset-[a-f0-9]+\.js)"[^>]*>', html)
     if len(refs) != 1:
         raise ValueError('Expected one actual cockpit B2 asset')
@@ -98,9 +97,21 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
     for name in ['river.webp', 'mask.png', *[f'boat{i}.webp' for i in range(4)], *[f'bird-{pose}.webp' for pose in ['idle','look','tilt','sing','sleep']]]:
         additions['cockpit/assets/today-river-assets2/' + name] = (assets / name).read_bytes()
     html = once(html, old_ref, new_ref)
+    if installed:
+        for pattern in [r'<script\b[^>]*(?:data-)?src="[^"]*today-river-[a-f0-9]+\.js"[^>]*>\s*</script>', r'<link\b[^>]*href="[^"]*today-river-[a-f0-9]+\.css"[^>]*>']:
+            html, count = re.subn(pattern, '', html)
+            if not count:
+                raise ValueError('Installed river is missing its script or stylesheet')
     html = once(html, '</head>', f'<link rel="stylesheet" href="{css_ref}"><script type="module" src="{js_ref}"></script></head>')
-    anchor = '<div class="screen-equivalent-text" id="cockpit-01-equivalent-text"'
-    html = once(html, anchor, MOUNT + anchor)
+    if not installed:
+        anchor = '<div class="screen-equivalent-text" id="cockpit-01-equivalent-text"'
+        html = once(html, anchor, MOUNT + anchor)
+    page_data = re.search(r'(<script\b[^>]*id="page-data"[^>]*>)(.*?)(</script>)', html, re.S)
+    if not page_data:
+        raise ValueError('River asset URLs require the actual page-data block')
+    data = json.loads(page_data[2])
+    data['today_river_assets'] = {Path(rel).name: '/' + rel for rel in additions if '/today-river-assets2/' in rel}
+    html = html[:page_data.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + html[page_data.end(2):]
     additions[html_rel] = html.encode('utf8')
     site = output / 'site'
     output.mkdir(parents=True, exist_ok=True)

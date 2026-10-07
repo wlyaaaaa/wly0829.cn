@@ -30,6 +30,7 @@ HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活�
 #home-01 .hotspot, #home-01 button { z-index:1; }
 #home-01 .hero-live-layer [data-hl="screen"] .more { max-width:620px; font-size:48px; white-space:normal; overflow-wrap:anywhere; line-height:1.2; }
 '''
+HOME_CSS += (HERE.parent / 'sources/living/home-support/timecontrols.css').read_text('utf8')
 
 
 def proof(body: bytes) -> dict:
@@ -152,6 +153,8 @@ window.HomeLivingStatusModel = (() => {
 
 
 def patch_runtime(text: str, model: str, bridge: str) -> str:
+    controls = (HERE.parent / 'sources/living/home-support/timecontrols.js').read_text('utf8')
+    bridge = bridge.rstrip().removesuffix('})();') + '\n' + controls + '\n})();'
     # Rebinding the model after the live reader is refreshed must be repeatable.
     if MODEL_START in text:
         if text.count(MODEL_START) != 1 or text.count(MODEL_END) != 1:

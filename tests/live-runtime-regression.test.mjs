@@ -77,12 +77,18 @@ test('LC-05: past, future and next-year timestamps retain Beijing calendar dates
 });
 test('LC-04: a missing hardware metric remains unknown and is named in pending during grace',()=>{
  for(const patch of [data=>data.hardware.cpu.sources.temperature_celsius.status='unavailable',data=>data.hardware.memory.used_bytes=null,data=>data.hardware.volumes[0].sources.free_bytes.status='unknown',data=>data.hardware.gpus=[{state:'ok',model:'显卡',usage_percent:null,temperature_celsius:40,vram_used_bytes:0,vram_total_bytes:1024}]]){
-  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>/硬件.*读不到/.test(x.text)));
+  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>x.key?.startsWith('read-gap:hardware')&&x.text.includes('读不到')));
  }
 });
 test('LC-07: upgrade observation failure is a failed result',()=>{
  const data=fixture();data.automation.items[0]={...data.automation.items[0],project:'AI 工具入口',plain:{name:'AI 工具升级观察'},state:'failed',last_run_at:iso(now-60000)};
  const result=live.parse(data,'watch','AI 工具入口',now);assert.equal(result.state,'failed');assert.match(result.text,/失败/);
+});
+test('unreadable metrics from one hardware source fold into one row with complete details',()=>{
+ const data=fixture();data.hardware.cpu.usage_percent=null;data.hardware.cpu.temperature_celsius=null;data.hardware.memory.used_bytes=null;
+ const app=cockpit();app.set(data);const rows=app.value('cockpit-attention').rows.filter(x=>x.key?.startsWith('read-gap:hardware'));
+ assert.equal(rows.length,1);assert.match(rows[0].text,/电脑读数从 今天 02:00 起读不到（共 3 项）/);assert.equal(rows[0].children.length,3);
+ assert.ok(rows[0].children.some(x=>x.text.includes('处理器的温度')));assert.ok(rows[0].children.every(x=>x.detail.includes('今天 02:00')));
 });
 test('LC-08: expired blocks preserve their actual prior value with time and a non-green state',()=>{
  const data=fixture();for(const key of ['automation','backups','projects','pending','today'])data[key].observed_at=iso(now-3600000);

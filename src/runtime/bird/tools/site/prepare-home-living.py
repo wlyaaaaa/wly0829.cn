@@ -178,6 +178,7 @@ def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, outpu
     data['home_living'] = True
     data['home_static'] = False
     data['shared']['script_bundle'] = '/' + app_rel
+    labels = json.loads((support / 'timecontrols-labels.json').read_text('utf8')); data['shared'].setdefault('nav_labels', {}).update(labels)
     html = original[:match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + original[match.end(2):]
     old_tag = app_match[0]
     new_tag = old_tag.replace(app_match[1], '/' + app_rel).replace('<script ', '<script type="module" ')
@@ -185,6 +186,7 @@ def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, outpu
     html = replace_once(html, old_tag, engine_tag + new_tag)
     html = replace_once(html, '</head>', '<link rel="stylesheet" href="/' + css_rel + '"></head>')
     files = {app_rel: app_bytes, css_rel: css, engine_rel: engine_bytes}
+    files.update({item['src'].lstrip('/'): (support / 'assets' / Path(item['src']).name).read_bytes() for item in labels.values()})
     config_rel = home['config_url'].lstrip('/')
     config_bytes = (support / Path(config_rel).name).read_bytes()
     config = json.loads(config_bytes)
