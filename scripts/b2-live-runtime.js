@@ -558,7 +558,13 @@ function render(){
 
   if(target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project){const filter=document.createElement('button');filter.type='button';filter.className='b2-filter';filter.textContent='只看：'+target.site_title+' · 看全部';filter.onclick=()=>{target=null;history.replaceState(null,'',location.pathname+location.search+'#tasks');render();};content.append(filter);}
 
-  if(slot==='cockpit-pc'&&window.LiveHardwareUI){const displayed=displayRow.hardwareCached?{...status,hardware:displayRow.hardwareDisplay?.hardware,hardware_observed_at_unix:displayRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:displayRow.hardwareDisplay;content.append(window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:displayRow.hardwareCached===true,at:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)}));}
+  if(slot==='cockpit-pc'&&window.LiveHardwareUI){
+   const displayed=displayRow.hardwareCached?{...status,hardware:displayRow.hardwareDisplay?.hardware,hardware_observed_at_unix:displayRow.hardwareDisplay?.hardware_observed_at_unix}:online()?status:displayRow.hardwareDisplay,at=displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot);
+   const hardware=window.LiveHardwareUI.render(document,displayed,{mode:'full',cached:!online(),hardwareCached:displayRow.hardwareCached===true,at});
+   if(displayRow.hardwareCached||!status?.hardware||['unknown','unavailable','failed','error','stale'].includes(status.hardware.state)||status.display_cache?.collectors?.hardware?.state==='error'){
+    const detail=document.createElement('details'),title=document.createElement('summary');detail.className='b2-hardware-read-detail';detail.dataset.rowKey='hardware-read-detail';title.textContent=Number.isFinite(at)&&(displayRow.hardwareCached||!online()||status.hardware?.state==='stale')?'这是 '+time(at)+' 的电脑读数，之后没读到':'电脑读数暂时读不到，点开看明细';detail.append(title,hardware);content.append(detail);
+   }else content.append(hardware);
+  }
 
   else if(displayRow.iframe){const note=document.createElement('p');note.className='b2-chart-loading-note';note.textContent='公开曲线会在下方加载，首次打开可能稍慢。';const frame=document.createElement('iframe');frame.src=displayRow.iframe;frame.title=grouped?displayRow.title:'近24小时硬件曲线';frame.loading='lazy';frame.className='b2-grafana-frame';content.append(note,frame);}
 
