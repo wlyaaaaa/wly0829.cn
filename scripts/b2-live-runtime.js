@@ -81,7 +81,21 @@ function hardwareReadGaps(){
  return gaps;
 }
 function hardwareHealth(){const gaps=hardwareReadGaps();return gaps.some(x=>x.health==='stale')?'stale':gaps.length?'unknown':'ok';}
-function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
+function projectRowHealth(x){
+ if(x.frozen===true)return 'ok';
+ if(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')return 'error';
+ if(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')return 'unknown';
+ return x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue'?'warn':'ok';
+}
+function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';const states=rows.map(projectRowHealth);return ['error','unknown','warn'].find(state=>states.includes(state))||'ok';}
+function backupAlertHeadline(rows){
+ const state=rowState(rows),problem=state!=='ok'&&rows.find(x=>x.enabled!==false&&rowState([x])===state);
+ return problem?name(problem)+'：'+(state==='unknown'&&problem.state==='success'?'最近成功时间读不到':stateText(problem.state))+(problem.status_note||problem.plain?.status_note||problem.reason?'；'+(problem.status_note||problem.plain?.status_note||problem.reason):''):undefined;
+}
+function projectAlertHeadline(){
+ const state=projectHealth(),problem=state!=='ok'&&(list('projects')||[]).find(x=>projectRowHealth(x)===state);
+ return problem?name(problem)+'：'+(problem.health_reason||({error:'有失败记录待核对',unknown:'运行状态暂时读不到',warn:'有事项待处理'})[state]):undefined;
+}
 
 const online=()=>phase==='ready'&&freshStatus(status,clock());
 const authorizationTime=g=>g?.observed_at_unix??status?.display_cache?.collectors?.authorization?.observed_at_unix??status?.observed_at_unix;
@@ -351,7 +365,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-backups'&&!list('backups'))return {text:'备份暂时读不到',state:'unknown'};
 
- if(slot==='cockpit-backups')return {rows:[...rowText(backups.map(x=>({key:(x.project||'')+':'+name(x),highlight:!!target?.api_project&&x.project===target.api_project,text:name(x)+' · '+stateText(x.state)+' · 最近成功 '+time(Date.parse(x.last_success_at)/1000),state:rowState([x]),detail:[x.plain?.what,x.destination,x.scope_note,cadenceText(x.cadence)].filter(Boolean).join('；')})),'当前没有登记的备份'),{key:'inventory',text:'副本和保存位置',children:inventoryRows().flatMap(group=>group.children?.length?group.children.map(row=>({...row,text:group.text+' · '+row.text})):[group])},{key:'cloud',text:'云端维护',children:cloudRows()}],state:rowState(backups)};
+ if(slot==='cockpit-backups')return {text:backupAlertHeadline(backups),rows:[...rowText(backups.map(x=>({key:(x.project||'')+':'+name(x),highlight:!!target?.api_project&&x.project===target.api_project,text:name(x)+' · '+stateText(x.state)+' · 最近成功 '+time(Date.parse(x.last_success_at)/1000),state:rowState([x]),detail:[x.plain?.what,x.destination,x.scope_note,cadenceText(x.cadence)].filter(Boolean).join('；')})),'当前没有登记的备份'),{key:'inventory',text:'副本和保存位置',children:inventoryRows().flatMap(group=>group.children?.length?group.children.map(row=>({...row,text:group.text+' · '+row.text})):[group])},{key:'cloud',text:'云端维护',children:cloudRows()}],state:rowState(backups)};
 
  if(slot==='cockpit-projects'){
 
@@ -361,7 +375,7 @@ function liveValue(slot){
 
   const rows=(list('projects')||[]).filter(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.failed_count>0||['run_failed','acceptance_failed','run_overdue','run_unknown'].includes(x.overview))).map(x=>({key:x.project||x.title,highlight:!!target?.api_project&&x.project===target.api_project,open:target?.id==='pending',detail:(list('pending')||[]).filter(p=>p.project===x.project).map(p=>(p.plain_title||'条目标题读不到')+' · '+({me:'我',ai:'AI'})[p.who]+' · '+(p.when||'核验时机读不到')).join('；'),text:(x.project||x.title)+'：'+(x.health_reason||'有事项待处理'),href:x.website_url&&/^https:\/\/wly0829.cn\//.test(x.website_url)?x.website_url:null}));
 
-  return {rows:rowText(rows,'项目都正常，没有等验收的'),state:projectHealth()};
+  return {text:projectAlertHeadline(),rows:rowText(rows,'项目都正常，没有等验收的'),state:projectHealth()};
 
  }
 

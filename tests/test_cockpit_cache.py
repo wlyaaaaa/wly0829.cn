@@ -45,7 +45,7 @@ def latest_release(output):
     output.mkdir(parents=True, exist_ok=True)
     html = (RELEASE/'cockpit/index.html').read_bytes()
     old_ref = __import__('re').search(rb'<script[^>]*src="([^"]*b2-typeset-[a-f0-9]+\.js)"', html).group(1)
-    old_rel = 'cockpit/' + old_ref.decode()
+    old_rel = old_ref.decode().lstrip('/') if old_ref.startswith(b'/') else 'cockpit/' + old_ref.decode()
     compiled = live_update.patch_b2_runtime((RELEASE/old_rel).read_text('utf8')).encode('utf8')
     new_rel = 'cockpit/assets/b2-typeset-'+hashlib.sha256(compiled).hexdigest()[:16]+'.js'
     new_ref = 'assets/' + Path(new_rel).name
@@ -111,7 +111,7 @@ class CockpitDOMTests(unittest.TestCase):
             def log_message(self, *_): pass
             def do_GET(self):
                 path = unquote(urlsplit(self.path).path)
-                if path == '/computer-access/api/status':
+                if path in ('/__status', '/computer-access/api/status'):
                     with cls.lock:
                         cls.status_count += 1
                         code, body, delay = cls.status_queue.pop(0) if cls.status_queue else cls.status_default
@@ -125,7 +125,7 @@ class CockpitDOMTests(unittest.TestCase):
                     if not file.is_file(): file = RELEASE/rel
                     if not file.is_file(): self.send_error(404); return
                     payload = file.read_bytes()
-                    if rel.endswith('b2-access-model-4ec8751fbae9.js'):
+                    if file.name.startswith('b2-access-model-'):
                         # Only the test HTTP response recognizes the explicit fixture origin.
                         payload = payload.replace(b'https://mcp.wly0829.cn', cls.origin.encode()).replace(b'https://wly0829.cn', cls.origin.encode())
                     self.send_response(200)
@@ -180,6 +180,7 @@ class CockpitDOMTests(unittest.TestCase):
         self.page.evaluate('window.fixtureNow += '+str(advance))
         if code==200:
             now=self.page.evaluate('Date.now()')
+            body['observed_at_unix'] = now/1000
             observed=__import__('datetime').datetime.fromtimestamp(now/1000,__import__('datetime').timezone.utc).isoformat()
             for key in ['automation','backups','projects','pending','today']:
                 if key in body: body[key]['observed_at']=observed
@@ -254,6 +255,29 @@ class CockpitDOMTests(unittest.TestCase):
         self.assertIn('上次读到 今天 00:03', partial_old['cockpit-pc']['text'])
         self.assertIn('上次读到 今天 00:02', partial_old['cockpit-tasks']['text'])
         self.assertEqual(self.page.evaluate('SiteB2.getSnapshot().lastRead'), (NOW+86400000+120000)/1000)
+
+    def test_alert_headlines_name_the_problem_instead_of_the_first_normal_row(self):
+        self.load()
+        body = fixture()
+        body['backups']['items'] = [
+            {'name': '正常备份', 'state': 'success', 'last_success_at': '2026-10-03T16:01:00+00:00'},
+            {'name': '问题备份', 'state': 'warn', 'status_note': '备份目标没接上'}]
+        body['projects']['items'] = [
+            {'project': '正常项目', 'overview': 'ok'},
+            {'project': '待验收项目', 'waiting_ai_count': 1, 'health_reason': 'AI 待验收'},
+            {'project': '问题项目', 'run_health': 'failed', 'overview': 'run_failed', 'health_reason': '上次运行失败'}]
+        for width in (1440, 390):
+            self.page.set_viewport_size({'width': width, 'height': 1000})
+            self.refresh(200, body)
+            for slot, expected, state in [('cockpit-backups', '问题备份：需要留意；备份目标没接上', 'warn'),
+                                          ('cockpit-projects', '问题项目：上次运行失败', 'error')]:
+                card = self.page.locator('[data-b2-slot="'+slot+'"] .live-status-card').first
+                self.page.wait_for_function('(x)=>document.querySelector(\'[data-b2-slot="\'+x.slot+\'"] .live-status-state\')?.textContent===x.expected', arg={'slot': slot, 'expected': expected}, timeout=5000)
+                self.assertEqual(card.locator('.live-status-state').text_content(), expected)
+                self.assertEqual(card.get_attribute('data-state'), state)
+            self.assertIn('正常备份', self.page.locator('[data-b2-slot="cockpit-backups"]').first.text_content())
+            self.assertIn('待验收项目', self.page.locator('[data-b2-slot="cockpit-projects"]').first.text_content())
+            self.snapshot('alert-headlines-'+str(width))
 
     def test_storage_unavailable_uses_memory_only(self):
         self.context.add_init_script("Object.defineProperty(window,'localStorage',{get(){throw Error('fictional storage unavailable')}})")
