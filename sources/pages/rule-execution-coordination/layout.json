@@ -205,7 +205,9 @@
         "text_ref": "怎么交代、怎么交付",
         "header_icon": [
           "_library/fix-round-2/icon-clean-2d7996732dca21311fe1.png"
-        ]
+        ],
+        "row": "cards",
+        "width": "33.33%"
       },
       {
         "type": "points_card",
@@ -217,7 +219,8 @@
         "text_ref": "全局规则只引用，资料锁着时不凑",
         "header_icon": [
           "_library/fix-round-2/icon-clean-335cc1ba09973e3c57cd.png"
-        ]
+        ],
+        "row": "cards"
       },
       {
         "type": "points_card",
@@ -229,7 +232,9 @@
         "text_ref": "本人的限制优先",
         "header_icon": [
           "_library/fix-round-2/icon-clean-f007fef9844a5e7dde84.png"
-        ]
+        ],
+        "row": "cards",
+        "width": "33.33%"
       },
       {
         "type": "points_card",
@@ -241,14 +246,31 @@
         "text_ref": "可派模型清单",
         "header_icon": [
           "_library/fix-round-2/icon-clean-b9fb21fad9f1e0ed18a6.png"
-        ]
+        ],
+        "row": "cards"
       },
       {
         "type": "notice",
-        "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派"
+        "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派",
+        "row": "cards"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "改动与花费成比例",
+        "header_icon": [
+          "_library/icons/秒表.png"
+        ],
+        "row": "cards",
+        "width": "33.33%",
+        "row_equal_height": true
       }
     ],
-    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“怎么交代、怎么交付”配一张写满字的任务卡和一支笔、“全局规则只引用，资料锁着时不凑”配一本合着的规则书上夹一张指路小纸条、“本人的限制优先”配一道小栅栏门、“可派模型清单”配一块挂着几个名牌的小木板。卡片里每条要点前一个小绿圆点，正文深蓝灰。左列上下两张卡“怎么交代、怎么交付”“全局规则只引用，资料锁着时不凑”，占约一半宽；右列上下两张卡“本人的限制优先”“可派模型清单”。“型号与派法”链接和“本网站专用分工”这两段放在右下卡片下面一个浅绿底的小框里，框左边画三个品牌标志：Claude 的橙色星芒、OpenAI 的黑色花结、Codex 的终端小图标。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。；本轮四张独立卡分别按ctx.icons接口的原图顺序显式绑定第1–4图，避免每卡auto都从第1图重取；未新增图内品牌。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。本屏没有“## …”大标题，直接从卡片开始。圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“怎么交代、怎么交付”配一张写满字的任务卡和一支笔、“全局规则只引用，资料锁着时不凑”配一本合着的规则书上夹一张指路小纸条、“本人的限制优先”配一道小栅栏门、“可派模型清单”配一块挂着几个名牌的小木板、“改动与花费成比例”配已有秒表图标。卡片里每条要点前一个小绿圆点，正文深蓝灰，“够用就停”四个字照原样粗体。五张卡排成三列：左列上下两张“怎么交代、怎么交付”“全局规则只引用，资料锁着时不凑”；中列上下两张“本人的限制优先”“可派模型清单”；右列一张高卡“改动与花费成比例”。“型号与派法”链接和“本网站专用分工”这两段放在中列卡片下面一个浅绿底的小框里，框左边画三个品牌标志：Claude 的橙色星芒、OpenAI 的黑色花结、Codex 的终端小图标。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。；五卡显式绑定真实资产，前四张沿用原图标，第五张使用已有秒表；同名row按width开启三栏，仅各栏首卡为33.33%，后续无width块在本栏纵排，中栏说明框紧接模型清单；右栏独立卡使用现有等高行。"
   },
   {
     "screen": "rule-execution-coordination-03",
@@ -267,8 +289,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
-        "width": "50%",
         "text_ref": "怎么交代、怎么交付",
         "header_icon": [
           "_library/fix-round-2/icon-clean-2d7996732dca21311fe1.png"
@@ -281,7 +301,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
         "text_ref": "全局规则只引用，资料锁着时不凑",
         "header_icon": [
           "_library/fix-round-2/icon-clean-335cc1ba09973e3c57cd.png"
@@ -294,8 +313,6 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
-        "width": "50%",
         "text_ref": "本人的限制优先",
         "header_icon": [
           "_library/fix-round-2/icon-clean-f007fef9844a5e7dde84.png"
@@ -308,19 +325,29 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "row": "cards",
         "text_ref": "可派模型清单",
         "header_icon": [
           "_library/fix-round-2/icon-clean-b9fb21fad9f1e0ed18a6.png"
         ]
       },
       {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "改动与花费成比例",
+        "header_icon": [
+          "_library/icons/秒表.png"
+        ]
+      },
+      {
         "type": "notice",
-        "row": "cards",
         "text_ref": "完整型号、按场景的档位与三种宿主派法，统一见本页型号与派"
       }
     ],
-    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：本屏没有大标题；四张卡片从上到下一张一条、整宽，“型号与派法”链接和“本网站专用分工”小框放最后，三个品牌标志排在小框上沿。字和横版完全一样。；本轮四张独立卡分别按ctx.icons接口的原图顺序显式绑定第1–4图，避免每卡auto都从第1图重取；未新增图内品牌。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
+    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：竖版 9:16：本屏没有大标题；五张卡片从上到下一张一条、整宽，顺序：怎么交代、怎么交付；全局规则只引用，资料锁着时不凑；本人的限制优先；可派模型清单；改动与花费成比例。“型号与派法”链接和“本网站专用分工”小框放最后，三个品牌标志排在小框上沿。字和横版完全一样；字多时在完整卡片之间拆屏：-v 放前三张卡，-v2 放后两张卡和小框。；五卡显式绑定真实资产，前四张沿用原图标，第五张使用已有秒表；去掉旧row/50%压列，逐卡整宽，沿用split_cards=false和现有完整卡边界自然分页，不新增分页功能。"
   },
   {
     "screen": "rule-execution-coordination-04",
