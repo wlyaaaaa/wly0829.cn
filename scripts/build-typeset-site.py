@@ -1045,6 +1045,9 @@ def main():
                 states[n]=build_page(n,grouped[n],args,candidate)
         except Exception as e:states[n]={'status':'missing' if isinstance(e,FileNotFoundError)else'blocked','issues':[str(e)]}
         print(n+':'+states[n]['status'],flush=True)
+    blocked_states={name:state for name,state in states.items()if state.get('status')!='built'}
+    write(args.output.with_name(args.output.name+'-page-blockers.json'),
+          {'schema':'wly.typeset-page-blockers.v1','stage':'before-workbench','pages':blocked_states})
     # Blocked pages remain available as labelled local previews; publication uses the independent evidence gate.
     accepted={s['url']:{'page':n,'preview':True,'build_status':s['status']}for n,s in states.items()if s.get('url')}
     support=[]
