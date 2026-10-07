@@ -1,6 +1,6 @@
 {
   "schema": "agents.model-roster.v1",
-  "updated_beijing_date": "2026-10-05",
+  "updated_beijing_date": "2026-10-08",
   "purpose": "可派模型清单：列出各宿主现在能派哪些型号、各适合什么活。只作参考，不当门禁；实际能不能派以宿主当时真实支持的为准。",
   "update_rule": "本人告知有新型号或新档位、或要求重估分工时，按《分工与并行施工》“新型号怎么调研”查公开数据，重新评估后直接更新选择，不为型号路线和档位再问本人，不自动沿用旧型号设置。AA 尚未出分时可用厂商公布的评测；数据足够可直接定稿，需等 AA 的对应条目标“暂定（厂商数据，日期）”。本人告知 AA 出分后，对这次新型号相关的选择做一次短复核：有变化就改，暂定的核实后去掉“暂定”。授权、预算仍按约法 L23 由本人确认。Sol ultra、Luna max 和生图 low 例外的现约定限当前代际，换代按新数据重评直接更新。",
   "hosts": {
@@ -76,7 +76,7 @@
           "subagent_type": "sonnet-low",
           "model": "claude-sonnet-5-5",
           "effort": "low",
-          "fit": "机械、明确、结果能马上核对的小事：批量读取、格式转换、在给定材料里查找和摘录；不凭记忆答事实；最便宜的一档"
+          "fit": "机械、明确、结果能马上核对的小事：批量读取、格式转换、在给定材料里查找和摘录，以及必须在 Claude 会话里跑的验收清单和新会话验收（Hook、MCP 等是否生效，做法见《Claude 适配》“要在新会话里验收的”）；不凭记忆答事实。简单复核要判断对错，仍交 opus-low（AA 2026-10-08：综合 42.31 对 35.87、Omniscience 38.87 对 19.37，耗时相当）。Claude 这边接这类活的选择：Haiku 5.5 每题更省，但同题库更慢、更弱（见 not_dispatched）。"
         },
         {
           "subagent_type": "opus-low",
@@ -152,13 +152,18 @@
         {
           "model": "claude-sonnet-5-5",
           "efforts": "medium、high、xhigh、max",
-          "reason": "Opus 5.5 相邻档位质量相当或更好，耗时和额度差不多：medium 对 opus-low（综合 41 对 42，每题 0.59 对 0.55 美元，约 1.8 对 1.4 分钟），high 对 opus-medium（47 对 51，1.08 对 1.34 美元，3.3 对 3.5 分钟），凭记忆答事实也差一截（约 20 对 40）；xhigh、max 比同等质量的 Opus 档更贵更慢。日常写代码 Sonnet high 比 Opus high 快一倍，但 opus-low 更快，GPT 用不了时选 opus-low。依据见决定文档“派活按能胜任的最低一档”。 这里的数是 2026-09-29／30 的历史公开查询，不能当成本轮新结果；本人对 Sonnet 的派发限制不变。"
+          "reason": "定位：范围清楚的编码和职业任务很强，max 的 AA 编码代理 68.36 高于 Opus max 65.99（Claude 代理有回退，配置不同）。但 Claude 子代理现在做的复核、分析、抽查上，Opus 相邻档质量更好、花费和耗时相当（AA 2026-10-08）：Sonnet medium 对 opus-low 综合 40.84 对 42.31、每题 0.59 对 0.55 美元、约 137 对 85 秒；high 对 opus-medium 46.75 对 51.24、1.12 对 1.34 美元、235 对 209 秒；凭记忆答事实（Omniscience）约 20 对 39—40。编码施工按场景表交 Sol，所以不派这几档。本人对 Sonnet 的派发限制（GPT 能用时不派）不变。完整数据见决定文档“Haiku 5.5 定位与 Claude 三型号选型”。"
+        },
+        {
+          "model": "claude-haiku-5-5",
+          "efforts": "low、medium、high、xhigh、max（都不派）",
+          "reason": "定位（厂商）：高量、窄范围、看重成本的子任务。按“先能胜任，再更快，再省额度”，现有选择在每个能放的位置都更合适（AA 2026-10-08）。①Claude 会话验收清单和机械兜底：sonnet-low 的编码代理 42.06、每题 6.35 分钟、0.48 美元，Haiku low 只有 28.18、11.56 分钟、0.14 美元，更弱也更慢；Haiku 编码最好的 xhigh 41.44 也要 25.88 分钟、0.61 美元。②便宜复核：opus-low 综合 42.31、Omniscience 38.87、AA-LCR 80.67，Haiku low 只有 29.45、3.25、72.00，xhigh 的 Omniscience 也只有 6.05，凭记忆易出错，不适合找错。③机械批量活按场景表交 Luna max。本人猜的“强于 Luna、弱于 Sol”只部分成立：xhigh／max 综合 41.25／43.40 在 Luna 38.12 和 Sol 51.04 之间，但 Automation 全档低于 Luna、LCR 全档低于 Luna、max 的 Briefcase 和 GDPval 反超 Sol。2026-10-08 另派 Sol 专找反例，结论“没找到推翻的反例”：短回答 Haiku 确实更快（OpenRouter 中位延迟 1.24 对 Sonnet 2.31 秒），Claude 订阅里也比 Sonnet 少占额度（官方只给定性说法），但官方 Haiku 提示指南写明 low、medium 有时没检查就报告完成，不适合验收清单；看图表、操作界面、长材料 max 档等单项优势对应的活已有 GPT 或 Opus 接。以后要用时档位只考虑 xhigh（Haiku 自身编码最高点；max 编码回落到 36.47、花费翻 4 倍）。完整数据见决定文档“Haiku 5.5 定位与 Claude 三型号选型”。"
         }
       ],
       "builtin_only": [
         {
           "family": "haiku",
-          "use": "只用于内置的 claude-code-guide 这类本职小任务"
+          "use": "只用于内置的 claude-code-guide 这类本职小任务；宿主的 haiku 别名现指 Haiku 5.5，不另派。"
         }
       ],
       "inherits_root": {
