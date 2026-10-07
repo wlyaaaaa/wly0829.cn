@@ -107,7 +107,7 @@ const G = Object.assign({
   fan: [2480, 880]                                               // 发光风扇的中心
 }, A.geom || {});
 const portrait = PH > PW;
-let preserveMask = null, preserveInfo = null;
+let preserveMask = null, preserveInfo = null, preserveCSS = '', originalProtection = null;
 const svgNS = 'http://www.w3.org/2000/svg', toneId = 'hero-static-tone-' + (++staticToneId);
 const toneSvg = document.createElementNS(svgNS, 'svg');
 toneSvg.setAttribute('width','0'); toneSvg.setAttribute('height','0'); toneSvg.setAttribute('aria-hidden','true');
@@ -155,11 +155,21 @@ function buildPreserveMask(image) {
   const guard=feather(dilate(guardCore,2),8);
   for(let p=0;p<pd.data.length;p+=4){const a=pd.data[p+3];if(a>254)protectedPixels++;pd.data[p]=pd.data[p+1]=pd.data[p+2]=255;pd.data[p+3]=255-a;}
   lg.putImageData(pd,0,0);
-  if(externalPlate) {root.style.maskImage='url('+live.toDataURL()+')';root.style.maskSize='100% 100%';root.style.maskRepeat='no-repeat';root.style.maskMode='alpha';}
+  if(externalPlate) {preserveCSS='url('+live.toDataURL()+')';root.style.maskImage=preserveCSS;root.style.maskSize='100% 100%';root.style.maskRepeat='no-repeat';root.style.maskMode='alpha';}
   else {ink.style.maskImage='url('+protect.toDataURL()+')';ink.style.maskSize='100% 100%';ink.style.maskRepeat='no-repeat';ink.src=base.src;}
   const gg=guard.getContext('2d',{willReadFrequently:true}),gd=gg.getImageData(0,0,w,h);
   for(let p=0;p<gd.data.length;p+=4){gd.data[p]=gd.data[p+1]=gd.data[p+2]=gd.data[p+3];gd.data[p+3]=255;}gg.putImageData(gd,0,0);
   preserveMask=guard;preserveInfo={kind:'native-avatar-ellipse-and-ink-contours',nativeSize:[w,h],opaqueFraction:protectedPixels/(w*h),featherPx:4,guardFeatherPx:8,avatar:av,textSeedRects:textRects,buttons};
+}
+// 开场由同一张原画的着色器演出；完成后才露出原生清晰头像和字，避免原字抢先穿透。
+function syncOriginalProtection(opening, it = 99) {
+  if (originalProtection !== !opening) {
+    if (externalPlate) root.style.maskImage = opening ? 'none' : preserveCSS;
+    else style(ink, 'visibility', opening ? 'hidden' : '');
+    originalProtection = !opening;
+  }
+  const ui = opening ? eOut(ramp(it, 4.4, 0.35)).toFixed(4) : '1';
+  if (stage.style.getPropertyValue('--hero-intro-ui') !== ui) stage.style.setProperty('--hero-intro-ui', ui);
 }
 const fitAxis = (old, axis) => {
   const xs = old.map(q => q[axis]), ys = G.scr.map(q => q[axis]);
@@ -235,7 +245,7 @@ void pop(vec2 P0, inout vec2 P, inout float ivis, vec2 c, vec2 hf, float t0){
     vec2 Q = q/s;
     vec2 k = abs(Q)-(hf-vec2(hf.y)); float sd = length(max(k,0.0))-hf.y;
     if (sd < 4.0) { P = c+Q; ivis *= min(1.0, u*5.0); }        // 缩放后的按钮里：画按钮
-    else { P = vec2(P0.x, c.y-hf.y-22.0); }                  // 还没弹出来的地方：照着按钮正上方那条空白纸的颜色画，不留白色的按钮形状
+    else { P = vec2(c.x-hf.x, c.y-hf.y-22.0); }              // 取按钮左上方的空白纸，避开右侧风景，免得把树影拉成条纹。
   }
 }
 void main(){
@@ -250,8 +260,10 @@ void main(){
       float nr = ad + 60.0*(fbm(P*0.006+1.3)-0.5);
       vis *= mix(1.0, smoothstep(r, r-50.0, nr), smoothstep(350.0, 328.0, ad));
     }
-    if (P.x>120.0 && P.x<370.0 && P.y>385.0 && P.y<660.0) {          // 头像旁边那枝叶子：跟着淡入
-      ivis *= smoothstep(0.0, 1.0, pg(1.25, 0.5) * 1.6 - (P.y-385.0)/275.0*0.6);
+    if (ad>330.0 && P.x>120.0 && P.x<370.0 && P.y>385.0 && P.y<660.0) { // 叶子跟着淡入，不把重叠的头像切成矩形。
+      vec3 leafColor=texture2D(u_tex,v_uv).rgb;
+      float leafMask=smoothstep(0.025,0.12,leafColor.g-max(leafColor.r,leafColor.b));
+      ivis *= mix(1.0,smoothstep(0.0,1.0,pg(1.25,0.5)*1.6-(P.y-385.0)/275.0*0.6),leafMask);
     }
     if (P.x>215.0 && P.x<815.0 && P.y>712.0 && P.y<902.0) {          // “吴乐阳”：一笔一笔写出来
       float x0 = 225.0, x1 = 418.0, k = 0.0;
@@ -471,20 +483,6 @@ void main(){
       float dk = max(0.0, min(bg.r, min(bg.g, bg.b)) - min(raw.r, min(raw.g, raw.b)));   // 这一点比周围的纸暗多少：暗一点点也算字
       col = mix(col, bg, max(ink, smoothstep(0.015, 0.050, dk))*(1.0-ivis));
     }
-    col = mix(vec3(1.0), col, vis);
-  }
-  if (u_it < 4.0) {
-    vec2 q = (v_uv - vec2(0.58,0.30))*vec2(ASPECT,1.0);
-    float R = 1.5*(1.0-pow(1.0-clamp(u_it/2.2, 0.0, 1.0), 2.2));
-    float dd = length(q) + 0.22*(fbm(v_uv*vec2(4.0,2.25)+3.0)-0.5) + 0.06*(fbm(v_uv*vec2(16.0,9.0)+9.0)-0.5)
-             + 0.018*(noise(v_uv*vec2(110.0,62.0))-0.5);            // 再加一层细碎的毛边，像水彩干掉的边
-    float bl = smoothstep(R, R-0.010, dd);                          // 边要干脆
-    float ring = smoothstep(R-0.002, R-0.016, dd)*(1.0-smoothstep(R-0.02, R-0.09, dd));
-    float wet = smoothstep(R-0.03, R-0.28, dd);                     // 刚晕到的地方颜色浅，慢慢“干”成原色
-    float pig = smoothstep(0.02, 0.20, 1.0 - min(col.r, min(col.g, col.b)));
-    col = mix(mix(col, vec3(1.0), 0.45), col, wet);
-    col *= 1.0 - 0.34*ring*pig;                                     // 水彩边上颜料积起来的那圈深色
-    col = mix(vec3(1.0), col, bl);
   }
   float nightReach = 0.0;
   if (u_night > 0.0) {
@@ -510,8 +508,23 @@ void main(){
     nightReach = smoothstep(-300.0,-160.0,inner)*u_night;
     col = mix(col, mix(night, col, glow), nightReach);
   }
+  // 先合成夜色，再从白纸晕开，未出场的纸面不会被夜景重新染满。
+  if (u_it < 7.0) col = mix(vec3(1.0), col, vis);
+  if (u_it < 4.0) {
+    vec2 q = (v_uv - vec2(0.58,0.30))*vec2(ASPECT,1.0);
+    float R = 1.5*(1.0-pow(1.0-clamp(u_it/2.2, 0.0, 1.0), 2.2));
+    float dd = length(q) + 0.22*(fbm(v_uv*vec2(4.0,2.25)+3.0)-0.5) + 0.06*(fbm(v_uv*vec2(16.0,9.0)+9.0)-0.5)
+             + 0.018*(noise(v_uv*vec2(110.0,62.0))-0.5);            // 再加一层细碎的毛边，像水彩干掉的边
+    float bl = smoothstep(R, R-0.010, dd);                          // 边要干脆
+    float ring = smoothstep(R-0.002, R-0.016, dd)*(1.0-smoothstep(R-0.02, R-0.09, dd));
+    float wet = smoothstep(R-0.03, R-0.28, dd);                     // 刚晕到的地方颜色浅，慢慢“干”成原色
+    float pig = smoothstep(0.02, 0.20, 1.0 - min(col.r, min(col.g, col.b)));
+    col = mix(mix(col, vec3(1.0), 0.45), col, wet);
+    col *= 1.0 - 0.34*ring*pig;                                     // 水彩边上颜料积起来的那圈深色
+    col = mix(vec3(1.0), col, bl);
+  }
   vec3 originalColor=pow(texture2D(u_tex,v_uv).rgb,u_ambientGamma);
-  float preserve=texture2D(u_preserve,v_uv).r;
+  float preserve=texture2D(u_preserve,v_uv).r*step(7.0,u_it);
   col=mix(col,originalColor,preserve*(1.0-nightReach));
 gl_FragColor = vec4(clamp(col,0.0,1.0), 1.0);
 }`;
@@ -533,8 +546,10 @@ if (portrait) {
       float nr = ad + ${n(av.radius_x*.24)}*(fbm(P*0.006+1.3)-0.5);
       vis *= mix(1.0,smoothstep(r,r-50.0,nr),smoothstep(${n(av.radius_x*1.4)},${n(av.radius_x*1.31)},ad));
     }
-    if (P.x>${n(branch[0]-12)} && P.x<${n(branch[2]+12)} && P.y>${n(branch[1]-12)} && P.y<${n(branch[3]+12)}) {
-      ivis *= smoothstep(0.0,1.0,pg(1.25,0.5)*1.6-(P.y-${n(branch[1])})/${n(branch[3]-branch[1])}*0.6);
+    if (ad>${n(av.radius_x)} && P.x>${n(branch[0]-12)} && P.x<${n(branch[2]+12)} && P.y>${n(branch[1]-12)} && P.y<${n(branch[3]+12)}) {
+      vec3 leafColor=texture2D(u_tex,v_uv).rgb;
+      float leafMask=smoothstep(0.025,0.12,leafColor.g-max(leafColor.r,leafColor.b));
+      ivis *= mix(1.0,smoothstep(0.0,1.0,pg(1.25,0.5)*1.6-(P.y-${n(branch[1])})/${n(branch[3]-branch[1])}*0.6),leafMask);
     }
     if (P.x>${n(name[0]-10)} && P.x<${n(name[2]+10)} && P.y>${n(name[1]-6)} && P.y<${n(name[3]+6)}) {
       float x0=${n(chars[0][0])},x1=${n(chars[0][2])},k=0.0;
@@ -555,7 +570,7 @@ if (portrait) {
   FS = FS.slice(0,FS.indexOf('    vec2 ac ='))+intro+FS.slice(FS.indexOf('    uv = P/PX;'));
   // 竖版两按钮上下相邻：第二个按钮正上方会碰到第一个绿色按钮，
   // 两者都用第一按钮上方的实测白纸作背景，避免弹出途中带出绿色矩形。
-  FS = FS.replace('P = vec2(P0.x, c.y-hf.y-22.0);', `P = vec2(P0.x, ${n(G.buttons[0].bbox_xyxy[1]-22)});`);
+  FS = FS.replace('P = vec2(c.x-hf.x, c.y-hf.y-22.0);', `P = vec2(P0.x, ${n(G.buttons[0].bbox_xyxy[1]-22)});`);
   FS = FS.replace('const float ASPECT = 1.77668;',`const float ASPECT = ${n(PW/PH)};`)
     .replace('const vec2 PX = vec2(2880.0, 1621.0);',`const vec2 PX = ${v2([PW,PH])};`);
   const start = FS.indexOf('  // ---- 窗外'), end = FS.indexOf('  // ---- 开场：左边还没');
@@ -980,6 +995,7 @@ function step(dt) {                 // 往前走一小步：鸟、粒子、视�
 function render() {
   const T = reduce ? 0 : (S.frozen != null ? S.frozen : V.t);
   const it = reduce ? 99 : V.t - V.i0;
+  syncOriginalProtection(introEnabled && it < 7, it);
   const P = todParams(S.hour); S.night = P.n;
   S.sleep = hasBird && (S.hour >= 23 || S.hour < sun.sr - 0.6);
 
@@ -1014,42 +1030,38 @@ function canAnimate() { return !destroyed && active && !failed && !reduce && tex
 function shouldRun() { return canAnimate() && !shared.paused; }
 // ---------- 防卡死的保险（宁可不触发，不能误触发） ----------
 // 只看页面可见、画在屏幕内、动画在播时真正画出来的帧，记下相邻两帧的间隔。
-// 退回静态的条件，满足其一：
-//   a) 最近约 6 秒、至少 5 个帧间隔，间隔的中位数超过 100 毫秒（实际帧率中位数低于 10）；
-//   b) 连续 3 帧以上、每帧都超过 1 秒，而且这几帧加起来超过 5 秒（一帧接一帧的长帧就是卡死）。
+// 仅当最近约 5 秒的实际帧率中位数低于 10，才退静态；极慢帧也只按这同一个条件判断。
 // 不算的：刚开始播的头 2 秒、滚动中和最后一次滚动后 1.5 秒、页面隐藏或画滚出屏幕（浏览器自己暂停）、
-// 手动取帧；单次长帧只占窗口里的一个间隔，拉不动中位数，也凑不成“连续 3 帧”。
-const GUARD = { graceMs: 2000, windowMs: 6000, minIntervals: 5, slowMedianMs: 100, longMs: 1000, longRun: 3, longRunMs: 5000 };
+// 手动取帧；单次长帧只占窗口里的一个间隔，不另设长帧触发条件。
+const GUARD = { graceMs: 2000, windowMs: 5000, slowMedianFPS: 10 };
 const guardGaps = [];
-let guardSpan = 0, guardLast = 0, guardMedian = 0, guardLong = 0, guardLongMs = 0, guardMedianAt = 0;
+let guardSpan = 0, guardLast = 0, guardMedian = 0, guardFPS = 0, guardMedianAt = 0, guardScroll = shared.scrollingUntil;
 function resetGuard(grace = 0) {
-  guardGaps.length = 0; guardSpan = 0; guardLast = 0; guardMedian = 0; guardLong = 0; guardLongMs = 0; guardMedianAt = 0;
+  guardGaps.length = 0; guardSpan = 0; guardLast = 0; guardMedian = 0; guardFPS = 0; guardMedianAt = 0;
   guardEligibleAt = performance.now() + grace;
 }
 function resetBudget() { last = 0; resetGuard(GUARD.graceMs); }
 function checkFrameGuard(now) {
   if (!shouldRun() || V.manual || S.frozen != null) { resetGuard(GUARD.graceMs); return false; }
-  if (now < shared.scrollingUntil) { resetGuard(); guardEligibleAt = shared.scrollingUntil; return false; }
+  // 即使长帧跨过整段滚动及尾期，也丢弃这个间隔，不能把浏览器滚动节流算成卡死。
+  if (now < shared.scrollingUntil || guardScroll !== shared.scrollingUntil) {
+    guardScroll = shared.scrollingUntil; resetGuard(Math.max(0, guardEligibleAt - now, shared.scrollingUntil - now)); return false;
+  }
   if (now < guardEligibleAt) { guardLast = 0; return false; }
   if (!guardLast) { guardLast = now; return false; }
   const gap = now - guardLast; guardLast = now;
-  if (gap > GUARD.longMs) { guardLong++; guardLongMs += gap; } else { guardLong = 0; guardLongMs = 0; }
   guardGaps.push(gap); guardSpan += gap;
-  while (guardGaps.length > GUARD.minIntervals && guardSpan - guardGaps[0] >= GUARD.windowMs) guardSpan -= guardGaps.shift();
-  const full = guardSpan >= GUARD.windowMs && guardGaps.length >= GUARD.minIntervals;
-  if (full && (now >= guardMedianAt || gap > GUARD.slowMedianMs)) {          // 中位数最多每 250 毫秒算一次
+  while (guardGaps.length > 1 && guardSpan - guardGaps[0] >= GUARD.windowMs) guardSpan -= guardGaps.shift();
+  const full = guardSpan >= GUARD.windowMs;
+  if (full && (now >= guardMedianAt || 1000 / gap < GUARD.slowMedianFPS)) {
     const s = guardGaps.slice().sort((a, b) => a - b), m = s.length >> 1;
     guardMedian = s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; guardMedianAt = now + 250;
+    guardFPS = s.length % 2 ? 1000 / s[m] : (1000 / s[m - 1] + 1000 / s[m]) / 2;
   }
-  let why = null;
-  if (guardLong >= GUARD.longRun && guardLongMs >= GUARD.longRunMs) why = 'long-frames';
-  else if (full && guardMedian > GUARD.slowMedianMs) why = 'slow-median';
-  if (!why) return false;
-  guardTrigger = { rule: why, intervals: guardGaps.length, windowMs: Math.round(guardSpan), medianIntervalMs: +guardMedian.toFixed(1),
-    medianFPS: guardMedian ? +(1000 / guardMedian).toFixed(2) : 0, consecutiveLong: guardLong, consecutiveLongMs: Math.round(guardLongMs) };
-  console.info(why === 'long-frames'
-    ? `[HeroLive] 动效退回静态：可见播放时连续 ${guardLong} 帧每帧都超过 1 秒（共 ${(guardLongMs / 1000).toFixed(1)} 秒）；仅本页本次生效。`
-    : `[HeroLive] 动效退回静态：可见播放时最近 ${(guardSpan / 1000).toFixed(1)} 秒实际帧率中位数 ${(1000 / guardMedian).toFixed(1)} FPS（帧间隔中位数 ${guardMedian.toFixed(0)} 毫秒）；仅本页本次生效。`);
+  if (!full || guardFPS >= GUARD.slowMedianFPS) return false;
+  guardTrigger = { rule: 'slow-median', intervals: guardGaps.length, windowMs: Math.round(guardSpan), medianIntervalMs: +guardMedian.toFixed(1),
+    medianFPS: +guardFPS.toFixed(2) };
+  console.info(`[HeroLive] 动效退回静态：可见播放时最近 ${(guardSpan / 1000).toFixed(1)} 秒实际帧率中位数 ${guardFPS.toFixed(1)} FPS（帧间隔中位数 ${guardMedian.toFixed(0)} 毫秒）；仅本页本次生效。`);
   stop('slow-frames'); return true;
 }
 function schedule() {
@@ -1060,7 +1072,8 @@ function schedule() {
 function frame(now) {
   raf = 0;
   if (!shouldRun()) return;
-  const raw = last ? now - last : 0, dt = Math.min(0.05, raw / 1000); last = now;
+  const raw = last ? now - last : 0;
+  const dt = introEnabled && V.t - V.i0 < 7 ? raw / 1000 : Math.min(0.05, raw / 1000); last = now;
   frames++; maxFrame = Math.max(maxFrame, raw);
   if (checkFrameGuard(now)) return;
   if (S.fast) shared.daytimeHour = S.hour = (S.hour + raw / 1000 * 24 / 60) % 24;
@@ -1074,6 +1087,7 @@ function paintStatic() {
   if (destroyed) return;
   if (S.follow) S.hour = hzHour();
   V.i0 = V.t - 99; V.par[0] = V.par[1] = 0;
+  syncOriginalProtection(false);
   setClass(root, 'is-static', true);
   style(cam, 'transform', ''); style(base, 'visibility', '');
   style(root, 'visibility', reduce && externalPlate ? 'hidden' : '');
@@ -1115,10 +1129,11 @@ function resetBird(intro) {
 }
 function replay() { if (reduce || failed) return; V.i0 = introEnabled ? V.t : V.t - 99; parts.length = 0; resetBird(true); lastScr = ''; }
 function skipIntro() {
-  if (V.t - V.i0 >= INTRO) return;
+  if (V.t - V.i0 >= 7) return;
   V.i0 = V.t - 20;
   if (!bird.introDone || (bird.act && bird.act.shake)) resetBird(false);
   lastScr = '';
+  if (canAnimate()) render();
 }
 // 把时间定在开场后的第 s 秒（逐格截图用）。往后走就接着算，往回就从头算一遍，结果每次一样。
 function seek(s) {
@@ -1177,7 +1192,7 @@ async function load() {
   try {
     // 原图先完成绘制，下一帧才请求鸟和去鸟底图。
     await new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
-    originalPresented = true;
+    originalPresented = !shared.opening?.pending;
     if (destroyed || failed || reduce) return;
     const spriteEntries = hasBird ? Object.entries(A.sprites) : [];
     const loaded = await Promise.all([loadImage(hasBird ? A.plateNoBird : A.plate, true), ...spriteEntries.map(([, sp]) => loadImage(sp.src))]);
@@ -1191,11 +1206,15 @@ async function load() {
     for (const k in imgs) fx.drawImage(imgs[k], 0, 0, 2, 2);
     fx.clearRect(0, 0, 4, 4);
     active = true; phase = 'live'; reason = null;
-    introEnabled = shared.intro === true || (shared.intro !== false && !originalPresented);
-    introReason = shared.intro === true ? 'explicit-on' : shared.intro === false ? 'explicit-off' : originalPresented ? 'image-already-visible' : 'early-mount';
+    introEnabled = !shared.introPlayed && (!shared.opening || shared.opening.pending) && (shared.intro === true || (shared.intro !== false && !originalPresented));
+    introReason = shared.introPlayed ? 'already-played' : shared.opening && !shared.opening.pending ? 'image-already-visible' : shared.intro === true ? 'explicit-on' : shared.intro === false ? 'explicit-off' : originalPresented ? 'image-already-visible' : 'early-mount';
+    if (introEnabled) shared.introPlayed = true;
     if (!V.manual) { V.i0 = introEnabled ? V.t : V.t - 99; resetBird(true); }
     root.classList.remove('is-static'); style(glc,'visibility',''); style(fxc,'visibility','');
-    resetBudget(); render(); root.classList.add('is-ready'); schedule();
+    render(); resetBudget();
+    // 接续第三版冷启动首两帧约 0.11 秒的推进，段落时长和统一 SPEED 保持原值。
+    if (introEnabled && !V.manual) step(SPEED * 0.112);
+    root.classList.add('is-ready'); schedule();
   } catch (e) { stop('asset-or-webgl-error', e); }
   finally {
     loading = false;
@@ -1235,7 +1254,7 @@ function destroy() {
     if (prog) gl.deleteProgram(prog); if (glTexture) gl.deleteTexture(glTexture); if(glPreserve)gl.deleteTexture(glPreserve); if (glBuffer) gl.deleteBuffer(glBuffer);
     const lose = gl.getExtension('WEBGL_lose_context'); if (lose) lose.loseContext();
   }
-  ink.style.filter=originalPlateFilter;root.remove(); stage.style.cursor = '';
+  ink.style.filter=originalPlateFilter;root.remove(); stage.style.cursor = ''; stage.style.removeProperty('--hero-intro-ui');
 }
 return { ready, destroy, pauseChanged, preferenceChanged, layout, setStatus,
   SPEED, S, V, bird, setMode, setHour, setDaytime, sing, startHop, seek, skipIntro, replay,
@@ -1244,9 +1263,9 @@ return { ready, destroy, pauseChanged, preferenceChanged, layout, setStatus,
     resolution: { css: [stage.clientWidth, stage.clientHeight], actualDpr: [glc.width / Math.max(1, stage.clientWidth), glc.height / Math.max(1, stage.clientHeight)],
       texture: textureSize.slice(), base: [base.naturalWidth, base.naturalHeight], baseSrc: base.currentSrc || base.src,
       staticProtection: preserveInfo, staticRegionSource: ink.currentSrc || ink.src, staticRegionNativeSize: [ink.naturalWidth, ink.naturalHeight], ambientGamma: lastGamma, limit: canvasLimit },
-    intro:{enabled:introEnabled,reason:introReason},
-    frameGuard:{intervals:guardGaps.length,windowMs:Math.round(guardSpan),medianIntervalMs:+guardMedian.toFixed(1),medianFPS:guardMedian?+(1000/guardMedian).toFixed(2):0,
-      consecutiveLong:guardLong,rules:GUARD,scrollExcluded:performance.now()<shared.scrollingUntil,trigger:guardTrigger},errors:shared.errors.slice()})
+    intro:{enabled:introEnabled,reason:introReason,time:V.t-V.i0,opening:introEnabled&&V.t-V.i0<7,wholeCanvasReveal:true,startup:shared.opening?.reason},
+    frameGuard:{intervals:guardGaps.length,windowMs:Math.round(guardSpan),medianIntervalMs:+guardMedian.toFixed(1),medianFPS:+guardFPS.toFixed(2),
+      rules:GUARD,scrollExcluded:performance.now()<shared.scrollingUntil,trigger:guardTrigger},errors:shared.errors.slice()})
   ,birdPoint: () => {const p=toImage([bird.x,bird.y-80]);return {x:p[0]*stage.clientWidth/PW,y:p[1]*stage.clientHeight/PH,world:[bird.x,bird.y],image:toImage([bird.x,bird.y])};}
 };
 }
@@ -1255,7 +1274,7 @@ function mount(container, options = {}) {
   if (!container || container.nodeType !== 1) throw new TypeError('mount 需要一个容器元素');
   if (container.__heroLive) container.__heroLive.destroy();
   const plateImage = typeof options.plateImage === 'string' ? container.querySelector(options.plateImage) : options.plateImage || null;
-  const shared = {status:options.status ? validateStatus(options.status) : {...status}, reduced:matchMedia('(prefers-reduced-motion: reduce)').matches, paused:document.hidden, scrollingUntil:0, errors:[], plateImage, intro:options.intro};
+  const shared = {status:options.status ? validateStatus(options.status) : {...status}, reduced:matchMedia('(prefers-reduced-motion: reduce)').matches, paused:document.hidden, scrollingUntil:0, errors:[], plateImage, intro:options.intro, opening:options.opening};
   const media = matchMedia('(prefers-reduced-motion: reduce)');
   let scene = null, config = null, orientation = null, destroyed = false, token = 0;
   let intersection = true;
@@ -1304,6 +1323,7 @@ function mount(container, options = {}) {
     container.style.position = originalPosition; if (container.__heroLive === api) delete container.__heroLive; mounts.delete(api);
   }, diagnostics() { return {...(scene ? scene.diagnostics() : {phase:destroyed?'destroyed':'static',reason:'config-error',errors:shared.errors.slice()}),orientation}; },
   _status(next) {shared.status = next; if(scene) scene.setStatus(next);},
+  skipIntro() { if (scene) scene.skipIntro(); },
   setDaytime(mode) { if (scene) { scene.setDaytime(mode); shared.daytimeHour = scene.S.hour; } shared.daytime = mode; }
   };
   if (options.preview) {
