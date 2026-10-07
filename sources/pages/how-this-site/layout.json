@@ -51,11 +51,8 @@
         "type": "action_button",
         "text_ref": "看分工 ↓",
         "align": "left",
-        "link_style": "button",
-        "promote_links": [
-          "看分工 ↓",
-          "看数字口径 ↓"
-        ]
+        "columns": 2,
+        "columns_v": 2
       }
     ],
     "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
@@ -115,11 +112,6 @@
         "type": "action_button",
         "text_ref": "看分工 ↓",
         "align": "left",
-        "link_style": "button",
-        "promote_links": [
-          "看分工 ↓",
-          "看数字口径 ↓"
-        ],
         "columns": 2,
         "columns_v": 2
       }
@@ -181,7 +173,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "834b0bcbe8d948f5557dfaf4680789a22db40ce8e84dd678e44ee39ed7264cc2",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -235,7 +227,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "834b0bcbe8d948f5557dfaf4680789a22db40ce8e84dd678e44ee39ed7264cc2",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -276,7 +268,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -317,7 +309,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -371,7 +363,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -425,7 +417,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -471,7 +463,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -517,7 +509,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -563,7 +555,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -609,7 +601,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -674,7 +666,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -735,7 +727,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -759,7 +751,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/画笔调色板.png"
+        ]
       },
       {
         "type": "content_card",
@@ -767,7 +761,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ]
       },
       {
         "type": "content_card",
@@ -775,7 +771,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/illustrations/电脑后台闹钟.png"
+        ]
       },
       {
         "type": "illustration",
@@ -791,7 +789,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/小放映机.png"
+        ]
       }
     ],
     "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
@@ -821,7 +821,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/画笔调色板.png"
+        ]
       },
       {
         "type": "content_card",
@@ -829,7 +831,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/代码窗口.png"
+        ]
       },
       {
         "type": "content_card",
@@ -837,7 +841,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/illustrations/电脑后台闹钟.png"
+        ]
       },
       {
         "type": "illustration",
@@ -853,7 +859,9 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/小放映机.png"
+        ]
       }
     ],
     "notes": "按本屏最新定稿的 scene、portrait 和正文更新组件引用，保留现有已审核素材。",
@@ -887,6 +895,7 @@
           "_library/icons/云.png",
           "_library/icons/代码窗口.png",
           "_library/round3/clean-assets/png/09-时钟-clean.png",
+          "_library/icons/late-r3-pdf-clarity-slider.png",
           "_library/icons/盾牌对勾.png"
         ],
         "equal_height": true
@@ -923,6 +932,7 @@
           "_library/icons/云.png",
           "_library/icons/代码窗口.png",
           "_library/round3/clean-assets/png/09-时钟-clean.png",
+          "_library/icons/late-r3-pdf-clarity-slider.png",
           "_library/icons/盾牌对勾.png"
         ],
         "equal_height": true
@@ -980,11 +990,13 @@
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
-        "row_counts": [
-          2,
-          2,
-          2
+        "icons": [
+          "_library/icons/云图片.png",
+          "_library/illustrations/账本.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/齿轮.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/数据库.png"
         ],
         "equal_height": false
       },
@@ -1021,11 +1033,13 @@
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
-        "row_counts": [
-          2,
-          2,
-          2
+        "icons": [
+          "_library/icons/云图片.png",
+          "_library/illustrations/账本.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/齿轮.png",
+          "_library/icons/文件齿轮.png",
+          "_library/icons/数据库.png"
         ],
         "equal_height": false
       },
@@ -1100,7 +1114,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -1135,7 +1149,7 @@
     "notes": "新12屏定稿。AI补充：依现有组件排本文的原卡、原流程和表格；插画复用既有文件，未恢复旧人物/工位合同。",
     "provenance": {
       "text": "E:\\Cache\\Claude\\Temp\\4bd59299\\b2\\how-this-site\\page.json",
-      "source_sha256": "见 page.json 当前版本（Claude 10 月 4 日文字定稿后）",
+      "source_sha256": "2393cde951b1635090bf6ba049162257d14ef2175babae5e8208797ce1608109",
       "requirements": "page.json notes.requirements；根会话2026-10-04 03:53交回的最终12屏。",
       "composition": "最终scene与portrait；按旧批准样板的现成组件选择列数和现有插画，属于AI补充。",
       "style": "typeset-proto/STANDARDS.md 与 COMPONENTS-API.md；批准样板 approved-style-v2。"
@@ -1170,7 +1184,13 @@
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/秒表.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png",
+          "_library/illustrations/电脑后台闹钟.png"
+        ]
       },
       {
         "type": "section_heading",
@@ -1231,7 +1251,13 @@
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/文件写作.png",
+          "_library/icons/秒表.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/版本循环文件.png",
+          "_library/illustrations/电脑后台闹钟.png"
+        ]
       },
       {
         "type": "section_heading",
