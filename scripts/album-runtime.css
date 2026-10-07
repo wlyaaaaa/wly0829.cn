@@ -1,6 +1,6 @@
-/* Frozen album rhythm: 655 ms movement, inside the 785 ms navigation budget.
+/* Frozen album rhythm: 720 ms movement, after up to 1500 ms preparation.
    This clock deliberately does not divide by the site's --motion-speed. */
-:root { --album-duration: 655ms; }
+:root { --album-duration: 720ms; }
 /* Match the existing typeset runtime's 768px choice before it starts. This
    prevents a delayed enhancement from showing/capturing both baked versions. */
 @media (max-width: 767px) { .typeset-part[data-orientation="h"][data-both="false"] { display: none; } }

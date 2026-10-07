@@ -476,7 +476,8 @@ async def prepare(args, ownership):
     manifest['files'] = files; manifest['release_id'] = release_id
     manifest['page_flip_preparation'] = {'schema': 'wly.album-preparation.v1', 'status': 'prepared_pending_parent_acceptance',
         'baseline_release_id': read(source/'release-manifest.json')['release_id'], 'source_root': str(source),
-        'motion_ms': 655, 'total_budget_ms': 785, 'runtime': [js_rel,css_rel,index_rel], 'geometry': geometry_proofs, 'build_reports': report_proofs,
+        'motion_ms': 720, 'preparation_budget_ms': 1500, 'total_budget_ms': 2220,
+        'runtime': [js_rel,css_rel,index_rel], 'geometry': geometry_proofs, 'build_reports': report_proofs,
         'modified_legacy_scripts': legacy_changes, 'removed_startup_document_hints': removed_hints,
         'unchanged_source_media_count': len(immutable), 'native_routes': len(models), 'no_corresponding_subject_routes': [k for k,v in models.items() if not any(n['arts'] for n in v['nodes'] if n['screen'] == v['entry'])]}
     write(out/'release-manifest.json', manifest)

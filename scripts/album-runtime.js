@@ -6,7 +6,7 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const key = 'site-album-navigation-v1', positionsKey = key + '-positions';
   const meta = JSON.parse(document.querySelector('#album-page')?.textContent || '{}');
-  const budget = 785, nominal = 655;
+  const preparationBudget = 1500, nominal = 720;
   let index = {}, generation = 0, clicked = null, revealSeen = false, transition = null;
   let runtimeLoaded = false, runtimeLoading = false, runtimeRequested = false, runtimeStartCount = 0, currentClean = null;
   const heldImages = new Map(), decodedImages = new Set(), warmedRoutes = new Set(), events = [], pausedForAlbum = new Set();
@@ -293,10 +293,10 @@
     vt.ready.catch(() => {}); vt.updateCallbackDone?.catch(() => {});
     const from = window.navigation?.activation?.from?.url || pending?.from || document.referrer;
     const valid = pending?.allowed && path(pending.to) === path(location.href) && local(from);
-    const remaining = pending ? budget - (Date.now() - pending.at) : 0;
+    const remaining = pending ? preparationBudget - (Date.now() - pending.at) : 0;
     const finish = () => { loadRuntime(); event('finished'); };
     vt.finished.then(finish, finish);
-    if (!valid || staticMotion() || remaining < 80) { currentClean?.(); event('skip', {reason: staticMotion() ? 'static' : remaining < 80 ? 'navigation-budget' : 'native-route', remaining}); vt.skipTransition(); return; }
+    if (!valid || staticMotion() || remaining <= 0) { currentClean?.(); event('skip', {reason: staticMotion() ? 'static' : remaining <= 0 ? 'navigation-budget' : 'native-route', remaining}); vt.skipTransition(); return; }
     const saved = (read(positionsKey) || {})[path(location.href)];
     if (pending.restore && saved && !location.hash) {
       if (saved.width === innerWidth) scrollTo({left:saved.x, top:saved.y, behavior:'instant'});
@@ -318,11 +318,13 @@
     const clean = decorate(pending.back ? 'back' : 'forward', pending.artKey, pending.restore ? saved?.screen : meta.entry, true);
     // Capturing real DOM bounds can itself consume the allowance. Recompute
     // after that work, rather than replaying time spent on layout/decoding.
-    const animationRemaining = budget - (Date.now() - pending.at);
-    if (animationRemaining < 80) { clean(); event('skip',{reason:'preparation-budget',remaining:animationRemaining}); vt.skipTransition(); return; }
-    root.style.setProperty('--album-duration', Math.min(nominal, animationRemaining - 80) + 'ms');
+    const preparationRemaining = preparationBudget - (Date.now() - pending.at);
+    if (preparationRemaining <= 0) { clean(); event('skip',{reason:'preparation-budget',remaining:preparationRemaining}); vt.skipTransition(); return; }
+    root.style.setProperty('--album-duration', nominal + 'ms');
     compositeGroups(vt, generation);
-    const timer = setTimeout(() => vt.skipTransition(), animationRemaining - 20);
+    let timer = setTimeout(() => { event('skip', {reason:'preparation-budget',remaining:0}); vt.skipTransition(); }, preparationRemaining);
+    // Preparation can take the whole allowance; movement keeps its own clock.
+    vt.ready.then(() => { clearTimeout(timer); timer = setTimeout(() => vt.skipTransition(), nominal + 80); }).catch(() => {});
     vt.finished.then(() => { clearTimeout(timer); clean(); }, () => { clearTimeout(timer); clean(); });
     clicked = null;
   });
@@ -330,8 +332,8 @@
     const pending = recall();
     if (runtimeRequested || !transition && (revealSeen || !('onpagereveal' in window) || !pending || path(pending.to) !== path(location.href))) loadRuntime();
     // If a browser suppresses pagereveal despite exposing its event property,
-    // the existing runtime still starts within the original total allowance.
-    if (!runtimeLoaded && !transition) setTimeout(loadRuntime, Math.max(0, budget - (Date.now() - (pending?.at || 0))));
+    // the existing runtime still starts within the preparation allowance.
+    if (!runtimeLoaded && !transition) setTimeout(loadRuntime, Math.max(0, preparationBudget - (Date.now() - (pending?.at || 0))));
     const value = (read(positionsKey) || {})[path(pending?.from)];
     if (value && Date.now() - value.at < 3600000) warmImages(value.images);
   }, {once:true});

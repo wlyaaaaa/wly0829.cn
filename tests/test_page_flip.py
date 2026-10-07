@@ -71,7 +71,7 @@ async def main(args):
         def do_GET(self):
             path = unquote(urlsplit(self.path).path)
             if state['slow'] == path:
-                time.sleep(1.1)
+                time.sleep(1.8)
             target = (root / path.lstrip('/')).resolve()
             if asset_root and target.is_relative_to(root) and not target.exists():
                 candidate=(asset_root/path.lstrip('/')).resolve()
@@ -282,7 +282,7 @@ async def main(args):
                 assert any(e['type']=='skip' and e['reason']=='navigation-budget' for e in slow['album']['events']),slow['album']['events']
                 state['slow']=None
                 # Capability fallback simulation in this Chrome only, explicitly labelled.
-                await context.route('**/_album/*.css',lambda route: route.fulfill(status=200,body=':root{--album-duration:655ms}',content_type='text/css'))
+                await context.route('**/_album/*.css',lambda route: route.fulfill(status=200,body=':root{--album-duration:720ms}',content_type='text/css'))
                 await load('/skills/')
                 fallback=await navigate(page.locator('a[href="/skills/localocr/"]'),'/skills/localocr/','no-view-transition-rule-simulation')
                 assert not any(e['type']=='ready' for e in fallback['album']['events'])

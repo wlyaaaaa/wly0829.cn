@@ -95,7 +95,8 @@ class MotionTests(unittest.TestCase):
 
     def test_existing_legacy_and_typeset_app_shapes_are_supported(self):
         legacy = (RELEASE_ROOT/'_shared/app-a86fd4dfcf0c.js').read_text('utf8')
-        installed = next((RELEASE_ROOT/'_typeset/runtime').glob('app-*.js')).read_text('utf8')
+        installed = next(p.read_text('utf8') for p in (RELEASE_ROOT/'_typeset/runtime').glob('app-*.js')
+                         if '/* motion-appearance-v1 */' not in p.read_text('utf8'))
         for source in (legacy, installed):
             patched = motion.patch_runtime(source)
             subprocess.run(['node', '--check', '-'], input=patched, text=True, encoding='utf8', check=True, capture_output=True)
@@ -105,6 +106,17 @@ class MotionTests(unittest.TestCase):
         current = builder.patch_app(legacy)
         self.assertEqual(current.count('function motionNumberToken('), 1)
         subprocess.run(['node', '--check', '-'], input=current, text=True, encoding='utf8', check=True, capture_output=True)
+
+    def test_page_appearance_clock_preserves_home_aliases_and_independent_config(self):
+        helpers=(ROOT/'scripts/typeset-layout.js').read_text('utf8').split('/* Manifest geometry',1)[0]
+        for identity, expected in [('home',2.5),('how',1.75),('cockpit',1.75),('skills',1.75)]:
+            script=('const document={getElementById:()=>({textContent:'+json.dumps(json.dumps({'page':identity}))+'})};'
+                    'const SiteMotionAppearance='+json.dumps(motion.appearance())+';'+helpers+
+                    "process.stdout.write(JSON.stringify({label:SiteMotionAppearance.speed_multiplier,effective:motionAppearanceSpeed(SiteMotionAppearance),cards:motionDuration('cards'),numbers:motionDuration('numbers'),bird:motionDelay(2300)}));")
+            actual=json.loads(subprocess.check_output(['node','-e',script],text=True,encoding='utf8'))
+            self.assertEqual(actual['label'],2.5);self.assertEqual(actual['effective'],expected)
+            self.assertAlmostEqual(actual['cards'],900/expected);self.assertAlmostEqual(actual['numbers'],1200/expected)
+            self.assertEqual(actual['bird'],920)
 
     def test_preparation_changes_only_urls_and_never_old_hash_assets_or_oss_media(self):
         with tempfile.TemporaryDirectory() as folder:

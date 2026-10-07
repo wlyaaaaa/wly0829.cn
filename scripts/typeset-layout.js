@@ -15,7 +15,10 @@ function motionDotEnabled(marker){
  if(marker.policy==='current-active-status-v1')return marker.state==='active';
  return !['cross','pill'].includes(marker.shape)&&!String(marker.basis||'').includes('annotation pin');
 }
-function motionDuration(name){return SiteMotionAppearance.duration_ms[name]/SiteMotionAppearance.speed_multiplier;}
+// Canonical page identity also covers homepage aliases without guessing URLs.
+const motionAppearancePage=typeof document==='undefined'?null:JSON.parse(document.getElementById('page-data')?.textContent||'{}').page;
+function motionAppearanceSpeed(config){return motionAppearancePage&&motionAppearancePage!=='home'?1.75:config.speed_multiplier;}
+function motionDuration(name){return SiteMotionAppearance.duration_ms[name]/motionAppearanceSpeed(SiteMotionAppearance);}
 function motionDelay(milliseconds){return milliseconds/SiteMotionAppearance.speed_multiplier;}
 function motionLeafPosition(width,gap,index,count){
  const size=width<600?28:40+index%3*7,drift=(index%2?35:-30)*SiteMotionAppearance.amplitude;
@@ -29,8 +32,10 @@ function installMotionExperience(config){
  let frame=0,last=null,eligibleAt=0,animationCheckAt=0;const samples=[];
  function speedCSS(){
   for(const animation of document.getAnimations()){
-   if(!(animation instanceof CSSAnimation||animation instanceof CSSTransition)||accelerated.has(animation)||animation.effect?.target?.closest?.('video.hero-video'))continue;
-   animation.updatePlaybackRate(config.speed_multiplier);accelerated.add(animation);
+   const target=animation.effect?.target;
+   if(!(animation instanceof CSSAnimation||animation instanceof CSSTransition)||accelerated.has(animation)||target?.closest?.('video.hero-video,#today-river'))continue;
+   const speed=target?.closest?.('.lb-stage,.lb-page,#one-sentence')?config.speed_multiplier:motionAppearanceSpeed(config);
+   animation.updatePlaybackRate(speed);accelerated.add(animation);
   }
  }
  document.addEventListener('animationstart',speedCSS,true);document.addEventListener('transitionrun',speedCSS,true);

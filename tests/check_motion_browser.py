@@ -186,7 +186,7 @@ async def run(args, address):
                 values['pass'] = bool(values['appearance'] == cfg and values['depth'] and all(abs(item['variable']) <= limit+.001 for item in values['depth']) and any(abs(abs(item['variable'])-limit)<.01 for item in values['depth']) and all(item['translate'] != 'none' for item in values['depth']))
                 result['checks'].append({'kind': 'actual-parallax', 'width': width, **values})
                 calls = await page.evaluate("""() => window.__motionCalls.filter(x=>x.className.includes('sample-card')).map(x=>({frames:x.frames,options:x.options,current_time:x.animation.currentTime}))""")
-                result['checks'].append({'kind':'actual-card-animation','width':width,'samples':calls,'pass':bool(calls) and all(x['frames'][0]['transform']=='translateY(80px)' and x['options']['duration']==cfg['duration_ms']['cards']/cfg['speed_multiplier'] for x in calls)})
+                result['checks'].append({'kind':'actual-card-animation','width':width,'samples':calls,'expected_speed':1.75,'pass':bool(calls) and all(x['frames'][0]['transform']=='translateY(80px)' and x['options']['duration']==cfg['duration_ms']['cards']/1.75 for x in calls)})
             # Real old homepage runtime must expose and use the same config.
             await page.goto(address+'/', wait_until='load')
             result['checks'].append({'kind':'homepage-runtime','pass':await page.evaluate('window.SiteMotionAppearance?.amplitude===2.5&&!!window.SiteSamples?.refresh')})
