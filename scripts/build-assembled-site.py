@@ -213,7 +213,7 @@ class Refs(HTMLParser):
         if d.get('id'): self.ids.add(d['id'])
         for key, value in attrs:
             if not value: continue
-            if key in {'href', 'src', 'data-src', 'data-lazy-src', 'poster', 'data-poster', 'action'}:
+            if key in {'href', 'src', 'data-src', 'data-lazy-src', 'poster', 'data-poster', 'action', 'data-living-config'}:
                 self.refs.append((value, tag == 'a' and key == 'href'))
             elif key.endswith('srcset'):
                 self.refs.extend((v.strip().split()[0], False) for v in value.split(',') if v.strip())

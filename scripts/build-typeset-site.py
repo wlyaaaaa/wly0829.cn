@@ -929,6 +929,12 @@ def build_page(name, records, args, candidate):
         if favicon:shutil.copyfile(favicon,candidate/'favicon.svg')
     if url not in {'/404.html','/404/'}:
         text,_=publication.apply_metadata(text,url,candidate,data,source)
+    if new_project and name=='wly0829-cn':
+        bird_spec=importlib.util.spec_from_file_location('typeset_new_bird',HERE/'prepare-new-project-bird.py')
+        bird=importlib.util.module_from_spec(bird_spec);bird_spec.loader.exec_module(bird)
+        text=bird.attach(text,data,candidate,geometries)
+        for path in (HERE/'prepare-new-project-bird.py',bird.HERO,Path(bird.living.__file__)):
+            inputs[str(path.resolve())]=stamp(path)
     dest=candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(text,encoding='utf8')
     for p,proof in inputs.items():
         if stamp(p)!=proof: issues.append('构建期间输入变化：'+p)
