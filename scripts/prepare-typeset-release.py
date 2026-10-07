@@ -1151,7 +1151,8 @@ def production_check(args):
     manifest = read(args.baseline_manifest)
     baseline, _ = hybrid.verify_baseline(args.baseline.resolve(), manifest)
     commit = subprocess.check_output(["git", "rev-parse", "--verify", args.production_ref + "^{commit}"], cwd=ROOT, text=True).strip()
-    remote_manifest = json.loads(subprocess.check_output(["git", "show", commit + ":site-release/release-manifest.json"], cwd=ROOT))
+    remote_manifest_bytes = subprocess.check_output(["git", "show", commit + ":site-release/release-manifest.json"], cwd=ROOT)
+    remote_manifest = json.loads(remote_manifest_bytes)
     if remote_manifest.get("schema") != "wly.hybrid-release.v1":
         raise ValueError("Fetched production commit has no verified hybrid release")
     if remote_manifest.get('oss'):
@@ -1179,6 +1180,12 @@ def production_check(args):
     online = None
     for attempt in range(3):
         try:
+            if os.environ.get('WLY_RELEASE_FULL') != '1':
+                try:
+                    identity = json.loads(fetch_bytes('release-identity.json', 4096))
+                    if identity == {'release_id':remote_manifest['release_id'],'manifest_sha256':hashlib.sha256(remote_manifest_bytes).hexdigest()}:
+                        online = remote_manifest; break
+                except (OSError, ValueError): pass
             online = json.loads(fetch_bytes("release-manifest.json"))
             if online.get("release_id") == remote_manifest.get("release_id") and online.get("files") == remote_manifest.get("files"):
                 break
