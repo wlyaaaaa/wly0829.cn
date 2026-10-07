@@ -141,7 +141,7 @@ const report = {
 };
 process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 if (findings.length) process.exitCode = 1;
-if (process.env.GITHUB_ACTIONS === "true" && !findings.length) {
+if (process.env.GITHUB_ACTIONS === "true" && process.env.GITHUB_WORKSPACE && path.resolve(process.env.GITHUB_WORKSPACE) === projectRoot && distRoot === path.join(projectRoot, "dist") && !findings.length) {
   const event = process.env.GITHUB_EVENT_PATH ? JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, "utf8")) : {};
   let files = [], before = event.before;
   if (/^[\da-f]{40}$/.test(before || "") && !/^0+$/.test(before)) { execFileSync("git", ["fetch", "--depth=1", "origin", before], {cwd: projectRoot}); files = execFileSync("git", ["diff", "--name-only", before, "HEAD", "--", "site-release"], {cwd: projectRoot}).toString("utf8").trim().split("\n").filter(Boolean); }

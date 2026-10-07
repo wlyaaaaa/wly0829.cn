@@ -20,7 +20,7 @@ width:160px;height:48px;padding:8px;border:1px solid black;font:16px/20px Arial}
 .cards article {height:70px;background:#ddd}
 </style>'''
 ICON = '<svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7"/></svg>'
-IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAFklEQVR4nGNgaGAgDY1qGNXAMGw1AAAOjIABvgVSCAAAAABJRU5ErkJggg=='
 
 
 class SiteUiTests(unittest.TestCase):
@@ -64,11 +64,11 @@ class SiteUiTests(unittest.TestCase):
         result = self.scan('<div class="row"><button class="btn">Open</button>'
             '<button class="btn">'+ICON+'<span>Open</span></button><a class="btn" href="/">Open</a></div>'
             '<a href="/" style="display:block;height:160px;border:1px solid;padding:20px">'
-            '<h2>A long card title</h2><p>This is a descriptive card, not a compact button.</p></a>'
+            '<h2>A long card title</h2><p>This is a descriptive card, not a compact button.</p></a><section data-today-river><button class="alert" style="width:700px;text-align:left"><b>Task</b> failure description</button></section>'
             '<div hidden><button class="btn" style="text-align:left">Hidden</button>'
             '<img src="broken:" width="40" height="40"><svg width="40" height="40"></svg></div>')
         self.assertEqual(result['issues'], [])
-        self.assertEqual(result['counts']['buttons'], 3)
+        self.assertEqual(result['counts']['buttons'], 4)
         self.assertEqual(result['counts']['images'], 1)
 
     def test_button_center_wrapping_and_overflow_are_detected(self):
@@ -97,7 +97,7 @@ class SiteUiTests(unittest.TestCase):
 
     def test_missing_broken_empty_and_placeholder_assets_are_detected(self):
         fixtures = [
-            ('image-source-missing', '<img width="40" height="40">'),
+            ('image-source-missing', '<img width="40" height="40">'), ('image-empty-review', '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" width="40" height="40">'),
             ('image-load-failed', '<img src="data:image/png;base64,broken" width="40" height="40">'),
             ('svg-empty', '<svg width="40" height="40"><defs><rect width="30" height="30"/></defs></svg>'),
             ('svg-empty', '<svg width="40" height="40"><g opacity="0"><rect width="30" height="30"/></g></svg>'),
@@ -130,7 +130,7 @@ const block=fs.readFileSync(0,'utf8');
 async function check(changes,fail=false) { const calls=[]; let error=null;
   const exec=(cmd,args)=>{calls.push([cmd,args]);if(cmd==='git'&&args[0]==='diff')return Buffer.from(changes.join('\n'));if(args[0].endsWith('check-site-ui.py')&&fail)throw Error('gate failed');return Buffer.alloc(0);};
   const run=new AsyncFunction('execFileSync','readFile','path','process','findings','projectRoot','scriptDirectory','distRoot',block);
-  try {await run(exec,async()=>JSON.stringify({before:'a'.repeat(40)}),{join:(...p)=>p.join('/')},{env:{GITHUB_ACTIONS:'true',GITHUB_EVENT_PATH:'event.json'}},[],'/project','/project/scripts','/dist');}
+  try {await run(exec,async()=>JSON.stringify({before:'a'.repeat(40)}),{join:(...p)=>p.join('/'),resolve:p=>p},{env:{GITHUB_ACTIONS:'true',GITHUB_EVENT_PATH:'event.json',GITHUB_WORKSPACE:'/project'}},[],'/project','/project/scripts','/project/dist');}
   catch(e){error=e.message;}
   return {args:calls.find(c=>c[1][0].endsWith('check-site-ui.py'))?.[1],error}; }
 const html='site-release/computer-access/index.html';

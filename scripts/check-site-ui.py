@@ -1,8 +1,6 @@
 """Chrome DOM/interaction publication gate. --pages selects page-data ids; --full audits every route."""
-import argparse, asyncio, json, os, re, tempfile, threading, time
+import argparse, asyncio, json, os, re, subprocess, tempfile, time
 from datetime import datetime, timedelta, timezone
-from functools import partial
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 from playwright.async_api import async_playwright
@@ -18,158 +16,129 @@ PROBE = """(() => {
 })();"""
 MOTION = """selector => [...document.querySelectorAll(selector)].map(e => {
  const r=e.getBoundingClientRect(),visible=r.width>0&&r.height>0&&e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true});
- return {id:e.id||e.getAttribute('data-hl')||e.className,visible,width:r.width,height:r.height,draws:__uiDraws.get(e)||0,transform:getComputedStyle(e).transform};
+ return {id:e.closest('.boat')?'boat:'+e.closest('.boat').dataset.i:e.id||e.getAttribute('data-hl')||e.className,visible,x:r.x,y:r.y,width:r.width,height:r.height,draws:__uiDraws.get(e)||0,transform:getComputedStyle(e).transform};
 })"""
 VIDEOS = """() => [...new Set([...__uiVideos,...document.querySelectorAll('video')])].map(v=>({src:v.currentSrc||v.src,time:v.currentTime,duration:v.duration,paused:v.paused,ended:v.ended,loop:v.loop,autoplay:v.autoplay,ready:v.readyState,error:v.error?.code}))"""
 COLOR = """selector=>new Promise(done=>requestAnimationFrame(()=>done([...document.querySelectorAll(selector)].map(e=>{try{const c=document.createElement('canvas');c.width=c.height=24;const x=c.getContext('2d');x.drawImage(e,0,0,24,24);const p=x.getImageData(0,0,24,24).data;return [0,1,2].map(k=>p.reduce((s,v,i)=>s+(i%4===k?v:0),0)/576)}catch{return null}}))))"""
-
 def inventory(root, pages=None):
     routes, ids = {}, {}
     for file in sorted(root.rglob('index.html')) + ([root/'404.html'] if (root/'404.html').is_file() else []):
-        rel = file.relative_to(root).as_posix()
-        route = '/' if rel == 'index.html' else '/' + rel.removesuffix('index.html')
-        routes[route] = rel
+        route = '/' + file.relative_to(root).as_posix().removesuffix('index.html'); routes[route] = file
         match = re.search(r'<script[^>]*id=[\"\x27]page-data[\"\x27][^>]*>(.*?)</script>', file.read_text('utf8'), re.S)
-        if match:
-            ids.setdefault(json.loads(match[1]).get('page'), []).append(route)
-    if not routes:
-        raise ValueError('No static routes; refusing an empty PASS')
-    if not pages:
-        return sorted(routes)
+        if match: ids.setdefault(json.loads(match[1]).get('page'), []).append(route)
+    if not routes: raise ValueError('No static routes; refusing an empty PASS')
+    if not pages: return sorted(routes)
     chosen = set()
     for name in pages:
-        if name in ('home', 'homepage', 'index'):
-            chosen.add('/')
-        elif name in ids:
-            chosen.update(ids[name])
-        elif ('/'+name.strip('/')+'/') in routes:
-            chosen.add('/'+name.strip('/')+'/')
-        elif name in routes:
-            chosen.add(name)
-        else:
-            raise ValueError('Unknown affected page: '+name)
+        route = '/' if name in ('home','homepage','index') else name if name in routes else '/'+name.strip('/')+'/'
+        matches = ids.get(name) or ([route] if route in routes else [])
+        if not matches: raise ValueError('Unknown affected page: '+name)
+        chosen.update(matches)
     return sorted(chosen)
 async def review(page, base, route, width, dom):
-    issues, checks = [], {}
-    def fail(kind, element, evidence):
-        issues.append(dict(kind=kind, element=element, evidence=evidence))
+    issues, checks = [], {'reloads': [], 'phases': []}
+    fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
-    if not response or response.status >= 400:
-        fail('route-http', route, {'status': response.status if response else None})
-    await page.evaluate('document.fonts.ready')
-    await page.wait_for_timeout(800)
+    if not response or response.status >= 400: fail('route-http', route, {'status': response.status if response else None})
+    await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
     await page.evaluate("async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));}await new Promise(r=>setTimeout(r,500));scrollTo({top:0,behavior:'instant'})}")
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
-    measured = await page.evaluate(dom)
-    issues.extend(measured['issues']); checks.update(measured['counts'])
+    measured = await page.evaluate(dom); issues.extend(measured['issues']); checks.update(measured['counts'], measurements=measured.get('measurements',[]))
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
     for link in {x['href']: x for x in links}.values():
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
-        if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']):
-            fail('anchor-target-missing',link['href'],{}); continue
+        if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']): fail('anchor-target-missing',link['href'],{}); continue
         try: await target.click(timeout=5000)
         except Exception as error: fail('anchor-click-failed', link['href'], str(error)); continue
-        positions = []
-        for _ in range(12):
-            await page.wait_for_timeout(250); positions.append(await page.evaluate('scrollY'))
-        if max(positions[4:])-min(positions[4:]) > 4:
-            fail('anchor-rebound', link['href'], {'positions_250ms': positions})
+        positions = await page.evaluate("async()=>{const p=[];for(let i=0;i<12;i++){await new Promise(r=>setTimeout(r,250));p.push(scrollY)}return p}")
+        if max(positions[4:])-min(positions[4:]) > 4: fail('anchor-rebound', link['href'], {'positions_250ms': positions})
     checks['anchors'] = len(links)
     await page.evaluate('scrollTo(0,0)')
     if route in ('/', '/cockpit/'):
-        selector = '.hero-live-layer canvas' if route == '/' else '[data-today-river] canvas'
-        checks['reloads'] = []
+        selector = '.hero-live-layer canvas' if route == '/' else '[data-today-river] canvas, [data-today-river] .boat:not(.ashore) .bob'
         for run in range(5):
             await page.reload(wait_until='domcontentloaded'); await page.wait_for_timeout(1800)
             await page.locator('#home-01' if route == '/' else '[data-today-river]').scroll_into_view_if_needed()
-            before = await page.evaluate(MOTION, selector); await page.wait_for_timeout(1000)
-            after = await page.evaluate(MOTION, selector)
+            before = await page.evaluate(MOTION, selector); await page.wait_for_timeout(1000); after = await page.evaluate(MOTION, selector)
             record = {'run': run+1, 'before': before, 'after': after}; checks['reloads'].append(record)
-            if not before or not any(x['visible'] for x in before):
-                fail('living-missing', selector, record)
-            elif not any(b['draws']>a['draws'] for a,b in zip(before,after)):
-                fail('living-stopped', selector, record)
+            if route == '/cockpit/' and await page.evaluate('Boolean(window.todayRiver?.model && window.todayRiver.model.past.length+window.todayRiver.model.future.length)') and not any(a['id'].startswith('boat:') and a['visible'] and a['transform']!=b['transform'] for a,b in zip(before,after)): fail('boat-missing-or-stopped',selector,record)
+            if not before or not any(x['visible'] for x in before): fail('living-missing', selector, record)
+            elif not any(b['draws']>a['draws'] for a,b in zip(before,after)): fail('living-stopped', selector, record)
         if route == '/':
-            checks['phases'] = []
             for label in ['清晨','白天','傍晚','晚上','一分钟循环一天']:
                 control = page.get_by_role('button', name=label, exact=True)
-                if not await control.count():
-                    fail('phase-control-missing', label, {'buttons': await page.locator('button').all_text_contents()}); continue
+                if not await control.count(): fail('phase-control-missing', label, {'count':0}); continue
                 state = lambda: control.evaluate("e=>JSON.stringify([e.getAttribute('aria-pressed'),e.getAttribute('aria-selected'),e.className,document.body.dataset])")
                 selected = await state(); color = await page.evaluate(COLOR, selector); before = await page.evaluate(MOTION, selector); await control.click(); await page.wait_for_timeout(800)
                 after = await page.evaluate(MOTION, selector); checks['phases'].append({'label': label, 'before': before, 'after': after})
                 after_color = await page.evaluate(COLOR,selector); changed = any(a and b and max(abs(x-y) for x,y in zip(a,b))>2 for a,b in zip(color,after_color))
                 if selected == await state() or not changed: fail('phase-control-inert', label, {'colors': [color,after_color], 'selection_changed': selected != await state()})
-    samples = [await page.evaluate(VIDEOS)]
-    if samples[0]:
+    samples = [await page.evaluate(VIDEOS)]; animation = [await page.evaluate(MOTION, selector)] if route in ('/','/cockpit/') else []
+    if samples[0] or animation:
         for _ in range(30):
             await page.wait_for_timeout(1000); samples.append(await page.evaluate(VIDEOS))
+            if animation: animation.append(await page.evaluate(MOTION,selector))
+        if animation and any(sum(x['draws'] for x in a)>=sum(x['draws'] for x in b) for a,b in zip(animation,animation[1:])): fail('living-30s-stopped',selector,{'samples_1s':animation})
         for index, video in enumerate(samples[0]):
             trace = [s[index] for s in samples if len(s)>index]
             if not any(a['time']>b['time'] for a,b in zip(trace,trace[1:])) and video['duration'] and video['duration']>0:
                 await page.evaluate("i=>[...new Set([...__uiVideos,...document.querySelectorAll('video')])][i].currentTime=Math.max(0,[...new Set([...__uiVideos,...document.querySelectorAll('video')])][i].duration-.3)",index)
                 await page.wait_for_timeout(1200); boundary = (await page.evaluate(VIDEOS))[index]
                 if boundary['time']>=video['duration']-.3 or boundary['ended']: fail('video-loop-failed',video['src'],boundary)
-            if not video['autoplay'] or not video['loop'] or any(s['paused'] or s['ended'] or s['error'] for s in trace) or any(a['time']==b['time'] for a,b in zip(trace,trace[1:])):
-                fail('video-playback', video['src'], {'samples_1s': trace})
-    checks['videos'] = samples
+            if not video['autoplay'] or not video['loop'] or any(s['paused'] or s['ended'] or s['error'] for s in trace) or any(a['time']==b['time'] for a,b in zip(trace,trace[1:])): fail('video-playback', video['src'], {'samples_1s': trace})
+    checks['videos'] = samples; checks['animation_30s'] = animation
     if route == '/cockpit/':
         text = await page.locator('body').inner_text()
         for word in INTERNAL:
             if word in text: fail('internal-wording', word, {'matches': text.count(word)})
         rows = await page.locator('[data-row-key^="read-gap:"]').evaluate_all("es=>es.filter(e=>e.checkVisibility()).map(e=>({source:e.dataset.rowKey.split(':')[1],text:e.innerText}))")
-        groups = {s:[r['text'] for r in rows if r['source']==s] for s in {r['source'] for r in rows}}
-        checks['unavailable'] = groups
-        for source, rows in groups.items():
+        checks['unavailable'] = {s:[r['text'] for r in rows if r['source']==s] for s in {r['source'] for r in rows}}
+        for source, rows in checks['unavailable'].items():
             if len(rows)>1: fail('unavailable-repeat' if source!='unknown' else 'unavailable-source-unknown', source, {'rows': rows})
     if route.startswith('/rules'):
-        original = page.locator('main pre')
-        visible = [await e.inner_text() for e in await original.all() if await e.evaluate("e=>e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
+        visible = [await e.inner_text() for e in await page.locator('main pre').all() if await e.evaluate("e=>e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
         checks['rule_visible_characters'] = sum(map(len, visible))
-        if checks['rule_visible_characters'] < 200:
-            fail('rule-original-image-only', '.rule-original-panel pre', {'visible_characters': checks['rule_visible_characters']})
+        if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', '.rule-original-panel pre', {'visible_characters': checks['rule_visible_characters']})
     return dict(route=route, width=width, final_url=page.url, issues=issues, checks=checks)
 async def run(args):
     started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full else args.pages)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    temp = Path(tempfile.mkdtemp(prefix='site-ui-', dir=args.output.parent))
+    args.output.parent.mkdir(parents=True, exist_ok=True); temp = Path(tempfile.mkdtemp(prefix='site-ui-', dir=args.output.parent)).resolve()
     os.environ['TEMP'] = os.environ['TMP'] = os.environ['TMPDIR'] = str(temp)
-    server = None
-    if not args.base_url:
-        class Handler(SimpleHTTPRequestHandler):
-            def log_message(self, *_): pass
-        server = ThreadingHTTPServer(('127.0.0.1',0), partial(Handler,directory=str(args.root.resolve())))
-        threading.Thread(target=server.serve_forever,daemon=True).start()
-    base = args.base_url.rstrip('/') if args.base_url else 'https://wly0829.cn'
-    records = []; dom = (HERE/'site-ui-dom.js').read_text('utf8')
-    try:
-        async with async_playwright() as pw:
-            context = await pw.chromium.launch_persistent_context(str(temp/'profile'), executable_path=str(args.chrome), headless=True, reduced_motion='no-preference')
-            await context.add_init_script(PROBE)
-            if server:
-                async def candidate(handler):
-                    response = await context.request.get(f'http://127.0.0.1:{server.server_port}'+urlsplit(handler.request.url).path)
-                    await handler.fulfill(response=response)
-                await context.route('https://wly0829.cn/**',candidate)
-            semaphore = asyncio.Semaphore(4)
-            async def check(route, width):
-                async with semaphore:
-                    page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
-                    try: record = await review(page,base,route,width,dom)
-                    except Exception as error: record = dict(route=route,width=width,issues=[dict(kind='check-error',element=route,evidence=str(error))])
-                    finally: await page.close()
-                    records.append(record); print(f'{len(records)}/{len(routes)*2} {width} {route} issues={len(record["issues"])}', flush=True)
-            await asyncio.gather(*(check(route,width) for route in routes for width in (390,1440)))
-            version = context.browser.version; await context.close()
-    finally:
-        if server: server.shutdown(); server.server_close()
-    receipt = dict(schema='website.ui-gate.v1',observed_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat(),base_url=base,candidate_root=str(args.root.resolve()) if server else None,chrome=str(args.chrome),chrome_version=version,temp=str(temp),seconds=round(time.monotonic()-started,2),records=sorted(records,key=lambda r:(r['route'],r['width'])))
-    receipt['issue_count'] = sum(len(r['issues']) for r in records); receipt['status'] = 'fail' if receipt['issue_count'] else 'pass'
+    base = args.base_url.rstrip('/') if args.base_url else 'https://wly0829.cn'; records = []; dom = (HERE/'site-ui-dom.js').read_text('utf8')
+    async with async_playwright() as pw:
+        context = await pw.chromium.launch_persistent_context(str(temp/'profile'), executable_path=str(args.chrome), headless=True, reduced_motion='no-preference')
+        await context.add_init_script(PROBE)
+        if args.geometry:
+            glyphs = [{'src':r['parts'][0]['image'],'sha256':r['parts'][0]['sha256'],'boxes':r.get('content_occupancy',{}).get('blocks',[])} for r in json.loads(args.geometry.read_text('utf8'))['records'] if len(r.get('parts',[]))==1]
+            await context.add_init_script('window.__uiGlyphs='+json.dumps(glyphs))
+        if not args.base_url:
+            async def candidate(handler):
+                file = (args.root.resolve()/urlsplit(handler.request.url).path.lstrip('/')).resolve()
+                if file.is_dir(): file = file/'index.html'
+                if not file.is_relative_to(args.root.resolve()) or not file.is_file(): return await handler.fulfill(status=404,body='candidate route missing')
+                await handler.fulfill(path=str(file))
+            await context.route('https://wly0829.cn/**',candidate)
+        semaphore = asyncio.Semaphore(4)
+        async def check(route, width):
+            async with semaphore:
+                page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
+                try: record = await review(page,base,route,width,dom)
+                except Exception as error: record = dict(route=route,width=width,issues=[dict(kind='check-error',element=route,evidence=str(error))])
+                finally: await page.close()
+                records.append(record); print(f'{len(records)}/{len(routes)*2} {width} {route} issues={len(record["issues"])}', flush=True)
+        await asyncio.gather(*(check(route,width) for route in routes for width in (390,1440)))
+        version = context.browser.version; await context.close()
+    receipt = dict(schema='website.ui-gate.v1',observed_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat(),base_url=base,candidate_root=str(args.root.resolve()) if not args.base_url else None,chrome=str(args.chrome),chrome_version=version,temp=str(temp),seconds=round(time.monotonic()-started,2),records=sorted(records,key=lambda r:(r['route'],r['width'])))
+    findings = [i for r in records for i in r['issues']]; warnings = [i for i in findings if 'review' in i['kind'] or 'unmeasurable' in i['kind'] or i['kind']=='check-error']
+    receipt.update(issue_count=len(findings),warning_count=len(warnings),blocker_count=len(findings)-len(warnings),status='fail' if len(findings)>len(warnings) else 'partial' if warnings else 'pass')
+    if os.name == 'nt':
+        cleanup = subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(temp),'-AllowedRoot',str(args.output.parent.resolve()),'-Json'],capture_output=True,text=True,encoding='utf8',creationflags=subprocess.CREATE_NO_WINDOW)
+        receipt['temp_cleanup'] = json.loads(cleanup.stdout.lstrip('\ufeff')) if cleanup.returncode==0 else {'status':'failed','error':cleanup.stderr}
     args.output.write_text(json.dumps(receipt,ensure_ascii=False,indent=2),'utf8'); print(json.dumps({k:receipt[k] for k in ('status','issue_count','seconds')},ensure_ascii=False))
-    return bool(receipt['issue_count'])
+    return bool(receipt['blocker_count'])
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
-    parser.add_argument('--base-url'); parser.add_argument('--pages',nargs='+'); parser.add_argument('--full',action='store_true')
+    parser.add_argument('--base-url'); parser.add_argument('--pages',nargs='+'); parser.add_argument('--full',action='store_true'); parser.add_argument('--geometry',type=Path)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     raise SystemExit(asyncio.run(run(parser.parse_args())))

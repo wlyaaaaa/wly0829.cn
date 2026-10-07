@@ -421,7 +421,7 @@ try {
     Checked 'python' $contentArguments
     Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rebuilt)
     $uiRoot = if ($OssPreparation) { Join-Path $OssPreparation 'github' } else { $rebuilt }
-    $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'))
+    $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'),'--geometry',$Geometry)
     if ($UiFull -or -not $Pages) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
     Checked 'python' $uiArguments
     if ($OssPreparation) {
