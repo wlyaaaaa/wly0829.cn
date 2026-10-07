@@ -44,7 +44,10 @@
         "type": "action_button",
         "text_ref": "查看驾驶舱",
         "columns": 4,
-        "columns_v": 2
+        "columns_v": 2,
+        "brand_icons": {
+          "GitHub": "wly0829-cn/github-mark-official.svg"
+        }
       }
     ],
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
@@ -97,7 +100,10 @@
         "type": "action_button",
         "text_ref": "查看驾驶舱",
         "columns": 2,
-        "columns_v": 2
+        "columns_v": 2,
+        "brand_icons": {
+          "GitHub": "wly0829-cn/github-mark-official.svg"
+        }
       }
     ],
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",

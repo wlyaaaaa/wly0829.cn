@@ -1,4 +1,5 @@
 /* 白色来自共享 --surface；实心主按钮与大号粗体介绍须先出样张。 */
+.c-text .ct-action-brand { width: 1em; height: 1em; flex: none; margin-right: .3em; }
 .c-text.c-text-actions .ct-action.ct-action-entry-arrow { gap: .3em; }
 .c-text.c-text-actions .ct-action-entry-arrow-shape {
   display: block;

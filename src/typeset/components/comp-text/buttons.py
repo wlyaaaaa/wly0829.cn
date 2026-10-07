@@ -24,6 +24,7 @@ PROSE_FIELDS = BUTTON_FIELDS | PROSE_IMAGE_FIELDS | {
     'status_dots'}
 # 只登记 action_button 的显式入口箭头；不改变 prose 的字段与渲染。
 BUTTON_FIELDS = BUTTON_FIELDS | {'entry_arrow_refs'}
+BUTTON_FIELDS = BUTTON_FIELDS | {'brand_icons'}
 _PROSE_TONES = ('normal', 'muted', 'accent', 'gray')
 # 只兼容已提交的这一个旧字段值；新规格应直接写 inline_button。
 _LEGACY_LAYOUT_BUTTONS = {'末尾怎么协作作细绿边按钮': '怎么协作'}
@@ -102,7 +103,11 @@ def _button_row(node, ctx, spec):
     source = " ".join(node.get("src") or [])
     if not source:
         source = " ".join("〔" + text + "〕" for text in node.get("links", []))
-    return _row(_as_buttons(ctx.inline(source)), spec, ctx)
+    rendered = _as_buttons(ctx.inline(source))
+    for label, asset in (spec.get('brand_icons') or {}).items():
+        icon = f'<img class="ct-action-brand" src="{escape(ctx.asset_url(ctx.resolve(asset)), quote=True)}" alt="">'
+        rendered = re.sub(r'(<a\b[^>]*>)' + re.escape(label) + r'(</a>)', lambda match: match[1] + icon + escape(label) + match[2], rendered)
+    return _row(rendered, spec, ctx)
 
 
 def _paired_button_paragraph(rendered, ctx, spec, labels, tone):
