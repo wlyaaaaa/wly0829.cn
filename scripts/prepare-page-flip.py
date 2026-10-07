@@ -25,6 +25,7 @@ spec.loader.exec_module(builder)
 
 HERE = Path(__file__).resolve().parent
 DATA = re.compile(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>', re.S)
+ALBUM = re.compile(r'<script\b[^>]*\bid=(["\x27])album-page\1[^>]*>(?P<data>.*?)</script>', re.S)
 SCRIPT = re.compile(r'<script\b(?P<attrs>[^>]*)>(?P<body>.*?)</script>', re.S | re.I)
 ATTR = re.compile(r'([\w-]+)\s*=\s*(["\'])(.*?)\2', re.S)
 
@@ -269,6 +270,7 @@ def inject_runtime(text, js, css, index, model):
         # data-src participates in the site's existing OSS URL mapper.
         return '<script' + opening + ' data-album-runtime data-src="' + html.escape(src, quote=True) + '"></script>'
     text = SCRIPT.sub(delay, text)
+    text = ALBUM.sub('', text)
     serialized = json.dumps(model, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
     head = '<script id="album-page" type="application/json">' + serialized + '</script>'
     head += '<link rel="preload" as="fetch" href="' + index + '" crossorigin="anonymous" id="album-route-index">'
@@ -317,12 +319,13 @@ async def prepare(args, ownership):
     if any(k not in original for k in oss_objects):
         raise ValueError('HTML-only OSS package: restore all manifest OSS objects into a complete inventory-bound local source before replay')
     pages = {k: (source/k).read_bytes().decode('utf8') for k in original if k.endswith('.html')}
-    records, geometry_proofs = {}, []
+    records, geometry_proofs, declared_geometry = {}, [], set()
     report_geometries, report_proofs = bound_geometries(args.build_report)
     geometry_paths = list(dict.fromkeys(args.geometry + report_geometries))
     for p in geometry_paths:
         d = read(p); fit = fit_script(d['fit_input']); geometry_proofs.append({'path': str(p.resolve()), 'sha256': digest(p)})
         for r in d.get('records', []):
+            declared_geometry.add((r['screen'], r['orientation']))
             if r.get('issues') or r.get('broken_images') or not r.get('parts'):
                 continue
             hp = Path(r['html'])
@@ -332,6 +335,10 @@ async def prepare(args, ownership):
     pixel_cache = {}
     for rel, text in pages.items():
         match = DATA.search(text); data = json.loads(match[1]) if match else {}
+        previous = list(ALBUM.finditer(text))
+        if len(previous)>1 and any(json.loads(m['data']).get('nodes')!=[] or json.loads(m['data']).get('route')!=route(rel) for m in previous): raise ValueError('Existing album model is not unique: '+rel)
+        prior_model = json.loads(previous[0]['data']) if previous else {}
+        if previous and prior_model.get('route') != route(rel): raise ValueError('Existing album page differs: '+rel)
         picture_parts=PictureParts(text).parts
         nodes, image_rows = [], []
         screens = data.get('screens', []); entry = next((s['id'] for s in screens if s.get('shape') != 'card'), None)
@@ -345,6 +352,16 @@ async def prepare(args, ownership):
                 if sid == entry or first_cards:
                     image_rows.append({'src': urljoin('/' + rel, part['src']), 'orientation': orient, 'both': part.get('both', False), 'widthBased': bool(data.get('typeset'))})
                 if not asset:
+                    continue
+                if (sid, orient) not in declared_geometry:
+                    retained = [n for n in prior_model.get('nodes', [])
+                                if n.get('screen')==sid and n.get('orientation')==orient and n.get('src')==urljoin('/'+rel,part['src']) and n.get('size')==part['size']]
+                    actual = [p for p in picture_parts if p['orientation']==orient and local_asset(source,p['src'],rel)==asset]
+                    key = asset.relative_to(source).as_posix()
+                    if retained and (len(retained)!=1 or len(actual)!=1 or key not in original or
+                            retained[0].get('selector')!='[data-part="'+actual[0]['id']+'"]' or original[key]!=manifest.get('baseline_files',{}).get(key)):
+                        raise ValueError('Inherited album part or bytes changed: '+rel+' '+part['src'])
+                    if retained: nodes.append(dict(retained[0]))
                     continue
                 for r in records.get((sid, orient), []):
                     source_part = next((p for p in r['parts'] if p['image'] == part['image'] and p['size'] == part['size']), None)
@@ -412,6 +429,7 @@ async def prepare(args, ownership):
     observed.update(await titles(pending, args.chrome, args.profile, evidence, ownership))
     for model in models.values():
         for node in model['nodes']:
+            if '_record' not in node: continue
             rs = observed.get(node.pop('_record'), [])
             yoff, padding = node.pop('_offset'), node.pop('_padding'); width, height = node['size']
             title_row = next((r for r in rs if r['rect'][1] >= yoff and r['rect'][1]+r['rect'][3] <= yoff+height-padding+1), None)
