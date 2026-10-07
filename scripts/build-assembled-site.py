@@ -437,8 +437,8 @@ def tar_estimated_bytes(root, entries):
                        + (((p.stat().st_size if p.is_file() else 0)+511)//512)*512 for p in entries)
 
 
-def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None, budget_root=None, verified_files=None):
-    files = sorted(p for p in output.rglob('*') if p.is_file() and p.relative_to(output).as_posix() not in (verified_files or {}))
+def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None, budget_root=None):
+    files = sorted(p for p in output.rglob('*') if p.is_file())
     registry_path=ROOT/'config/panel-projects.json'
     registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
     registered_repos={entry['source']['repo'].lower() for entry in registry.get('projects',[])
@@ -536,8 +536,7 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
             except ValueError as e: findings.append({'file': rel, 'type': str(e)}); continue
             if target is None: continue
             refs_count += 1
-            if not target.is_file() and target.relative_to(output).as_posix() not in (verified_files or {}):
-                missing.append({'file': rel, 'reference': ref, 'navigation': navigation})
+            if not target.is_file(): missing.append({'file': rel, 'reference': ref, 'navigation': navigation})
             elif navigation and urlsplit(ref).fragment and target.suffix=='.html':
                 fragment=unquote(urlsplit(ref).fragment)
                 if fragment not in html_anchors.get(target.resolve(),set()):

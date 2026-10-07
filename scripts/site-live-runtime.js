@@ -1,29 +1,6 @@
 (function(){'use strict';
 const unknown={text:'暂时读不到',state:'unknown'};
 const readTimeoutMs=8000;
-async function readStatus(signal,refresh=false,local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname)){
- return retryStatus(async()=>{
-  let failure;
-  for(const url of local?['/__status']:['https://live.wly0829.cn/computer-access/state','https://mcp.wly0829.cn/computer-access/api/status']){
-   if(signal?.aborted)throw signal.reason;
-   const controller=new AbortController(),abort=()=>controller.abort(),timer=setTimeout(abort,readTimeoutMs);
-   signal?.addEventListener('abort',abort,{once:true});
-   try{
-    const response=await fetch(url+(refresh?'?refresh=1':''),{credentials:'include',cache:'no-store',signal:controller.signal});
-    if(!response.ok){const error=Error('HTTP_'+response.status);error.httpStatus=response.status;throw error;}
-    const next=await response.json();if(!freshStatus(next))throw Error('expired_snapshot');return next;
-   }catch(error){failure=error;if(signal?.aborted)throw error;}
-   finally{clearTimeout(timer);signal?.removeEventListener('abort',abort);}
-  }
-  throw failure;
- },signal);
-}
-async function retryStatus(read,signal){
- for(let attempt=0;;attempt++)try{return await read();}catch(error){
-  if(attempt===2||signal?.aborted||error.httpStatus>=400&&error.httpStatus<500||/^HTTP_4/.test(error.message||''))throw error;
-  await new Promise((resolve,reject)=>{const abort=()=>{clearTimeout(timer);reject(error);};const timer=setTimeout(()=>{signal?.removeEventListener('abort',abort);resolve();},500*(attempt+1));signal?.addEventListener('abort',abort,{once:true});});
- }
-}
 function freshStatus(data,now=Date.now()){
  const maxAge=(Number(data?.max_age_seconds)||120)*1000,fresh=t=>Number.isFinite(t)&&t>0&&t*1000<=now+60000&&now-t*1000<=maxAge;
  if(!fresh(data?.served_at_unix??data?.observed_at_unix))return false;
@@ -34,9 +11,9 @@ function freshStatus(data,now=Date.now()){
 }
 function connectionText(at,loading=false){const date=Number.isFinite(at)&&at>0?new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(at*1000)):null;return (loading?'正在连接电脑。':'读不到电脑：可能电脑不在线，也可能是你这边的网络连不上它。')+(date?'最后读到是 '+date+'（北京时间）。':'还没读到过。');}
 function formatTime(value,now){const t=typeof value==='string'?Date.parse(value):NaN;if(!Number.isFinite(t)||t>now)return null;const parts=d=>Object.fromEntries(new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t),n=parts(now);return (d.year===n.year&&d.month===n.month&&d.day===n.day?'今天':(d.year===n.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;}
-function taskResult(task,now){if(!task)return unknown;if(task.enabled===false||task.state==='disabled')return {text:'已停用',state:'disabled'};const labels={success:'正常',warn:'需要留意',failed:'失败',running:'正在运行'};const t=formatTime(task.last_run_at,now);return t&&Object.hasOwn(labels,task.state)?{text:labels[task.state]+' · '+t,state:task.state==='success'?'ok':task.state}:unknown;}
-function parse(data,slot,project,now=Date.now(),historical=false){
- function items(name,states){const b=data?.[name];if(!b||!states.includes(b.state)&&!(historical&&b.state==='stale')||!Array.isArray(b.items))return null;const t=Date.parse(b.observed_at);return Number.isFinite(t)&&t<=now+60000&&(historical||now-t<=(Number(b.max_age_seconds)||120)*1000)?b.items:null;}
+function taskResult(task,now){if(!task)return unknown;const labels={success:'正常',warn:'需要留意',failed:'失败',running:'正在运行',disabled:'已停用'};const t=formatTime(task.last_run_at,now);return t&&Object.hasOwn(labels,task.state)?{text:labels[task.state]+' · '+t,state:task.state==='success'?'ok':task.state}:unknown;}
+function parse(data,slot,project,now=Date.now()){
+ function items(name,states){const b=data?.[name];if(!b||!states.includes(b.state)||!Array.isArray(b.items))return null;const t=Date.parse(b.observed_at);return Number.isFinite(t)&&t<=now+60000&&now-t<=(Number(b.max_age_seconds)||120)*1000?b.items:null;}
  if(slot==='run'){const row=items('projects',['ok','empty','partial'])?.find(x=>x.project===project);const labels={ok:'运行正常',failed:'上次运行失败',overdue:'有任务没按时跑',not_applicable:'暂无启用中的任务'};return row&&Object.hasOwn(labels,row.run_health)?{text:labels[row.run_health],state:row.run_health}:unknown;}
  if(slot==='cloud'){
   if(project==='照片视频录音管理'){const task=items('automation',['ok','partial','empty'])?.find(x=>x.project===project&&x.plain?.name==='照片视频录音云端维护');return taskResult(task,now);}
@@ -57,14 +34,14 @@ function parse(data,slot,project,now=Date.now(),historical=false){
  }
  if(slot==='acceptance'){const row=items('projects',['ok','partial','empty'])?.find(x=>x.project===project);const n=row?.waiting_user_count;return Number.isInteger(n)&&n>=0?{text:n?`${n} 项待验收`:'没有待验收',state:n?'waiting':'ok'}:unknown;}
  if(slot==='watch'){const task=items('automation',['ok','partial','empty'])?.find(x=>x.project===project&&x.plain?.name==='AI 工具升级观察');if(!task)return unknown;if(task.enabled===false||task.state==='disabled')return {text:'平时停着',state:'disabled'};return task.enabled===true?taskResult(task,now):unknown;}
- if(slot==='local'||slot==='panel')return unknown;
+ if(slot==='local'||slot==='panel')return unknown; // 当前接口没有本机模型状态、机箱屏画面实际更新时间，不能拿其他时间代替。
  if(slot==='config'||slot==='wechat'){const name=slot==='config'?'开发配置备份':'微信聊天备份';const task=items('automation',['ok','partial','empty'])?.find(x=>x.project===project&&x.plain?.name===name);const item=task&&items('backups',['ok','partial','empty'])?.find(x=>x.id===task.id&&x.project===project);const t=item&&formatTime(item.last_success_at,now);return t?{text:'上次成功 '+t,state:item.state==='stale'?'overdue':'ok'}:unknown;}
  if(slot==='health'){const task=items('automation',['ok','partial','empty'])?.find(x=>x.project===project&&x.plain?.name==='内存盘维护');return taskResult(task,now);}
  if(slot==='capture'){const task=items('automation',['ok','partial','empty'])?.find(x=>x.project===project&&x.plain?.name==='串流画面切换');const state=task?.related_status?.capture;const labels={success:'正常',failed:'异常',warn:'需要留意'};return Object.hasOwn(labels,state)?{text:labels[state],state:state==='success'?'ok':state}:unknown;}
- if(slot==='sync'){const rows=items('projects',['ok','partial','empty'])?.filter(x=>x.mode==='repository');if(!rows?.length)return unknown;let yes=0,no=0,unread=0;for(const row of rows){const g=row.github_sync,t=Date.parse(g?.observed_at);if(!g||!Number.isFinite(t)||t>now+60000||now-t>600000){unread++;continue;}if(g.state==='in_sync')yes++;else if(['ahead','behind','diverged','local_ahead','remote_ahead','out_of_sync'].includes(g.state))no++;else unread++;}return {text:`已同步 ${yes} 个 · 未同步 ${no} 个`+(unread?` · ${unread} 个缺少当前读数`:''),state:unread?'warn':no?'overdue':'ok'};}
+ if(slot==='sync'){const rows=items('projects',['ok','empty'])?.filter(x=>x.mode==='repository');if(!rows?.length)return unknown;let yes=0,no=0;for(const row of rows){const g=row.github_sync,t=Date.parse(g?.observed_at);if(!g||!Number.isFinite(t)||t>now+60000||now-t>600000)return unknown;if(g.state==='in_sync')yes++;else if(['ahead','behind','diverged','local_ahead','remote_ahead','out_of_sync'].includes(g.state))no++;else return unknown;}return {text:`已同步 ${yes} 个 · 未同步 ${no} 个`,state:no?'overdue':'ok'};}
  if(slot==='grafana'){const g=data?.grafana,t=Date.parse(g?.checked_at);if(g?.state==='reachable'&&Number.isFinite(t)&&t<=now+60000&&now-t<=300000&&typeof g.url==='string'&&/^https:\/\//.test(g.url))return {text:'在线',state:'ok',href:g.url};return unknown;}
  if(['lessons','week','practice'].includes(slot)){
-  const row=items('projects',['ok','empty','partial'])?.find(x=>x.project==='学习方法');const metrics=row?.metrics;if(!metrics||!historical&&['stale','unavailable'].includes(row.state))return unknown;
+  const row=items('projects',['ok','empty','partial'])?.find(x=>x.project==='学习方法');const metrics=row?.metrics;if(!metrics||row.state==='stale'||row.state==='unavailable')return unknown;
   const integer=v=>Number.isInteger(v)&&v>=0;
   if(slot==='lessons'){const m=metrics.lessons;return m&&integer(m.done)&&integer(m.total)&&m.done<=m.total?{text:`已学 ${m.done}/${m.total} 课`,state:'learning'}:unknown;}
   if(slot==='week'){const m=metrics.sessions_7d;return m&&integer(m.count)&&integer(m.minutes)?{text:`近 7 天 ${m.count}次 · ${m.minutes}分钟`,state:'learning'}:unknown;}
@@ -90,13 +67,11 @@ function cacheKey(page,slot){return `site-live:v1:${page}:${slot}`;}
 function readLast(storage,page,slot,project,now=Date.now()){try{const c=JSON.parse(storage.getItem(cacheKey(page,slot)));return c&&c.project===project&&typeof c.result?.text==='string'&&c.result.state!=='unknown'&&Number.isFinite(c.at)&&c.at<=now+60000?c:null;}catch{return null;}}
 function readCache(storage,page,slot,project,now=Date.now()){const c=readLast(storage,page,slot,project,now);return c&&now-c.at<86400000?c:null;}
 function offlineResult(c,now=Date.now()){return c?{text:'读不到电脑 · 当时：'+c.result.text+' · 上次读到 '+formatTime(new Date(c.at).toISOString(),now)+(now-c.at>=86400000?'（已超过24小时）':'')+' · 当前状态未知',state:'offline',cached:true,readAt:c.at/1000}: {text:'读不到电脑 · 还没读到过',state:'offline',cached:false};}
-const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs,retryStatus,readStatus};
+const helpers={parse,fitCloud,unifyBannerFonts,readCache,readLast,offlineResult,cacheKey,formatTime,connectionText,freshStatus,readTimeoutMs};
 if(typeof module!=='undefined'&&module.exports){module.exports=helpers;return;}
 window.SiteLiveRuntime=helpers;
-window.dispatchEvent?.(new Event('site-live-ready'));
 const page=JSON.parse(document.querySelector('#page-data').textContent),loading={text:'读取中',state:'loading'};
 let last=null,busy=false,controller=null,phase='loading',offline=false,cancelledForVisibility=false;const history=[];let started=0;
-const lastValues=new Map();
 function resetOfflineLayout(){
  for(const section of document.querySelectorAll('.offline-expanded')){section.classList.remove('offline-expanded');section.style.height='';section.style.aspectRatio=section._layout.size.join('/');section.querySelector('picture').style.clipPath='';for(const [el,style]of section._offlineStyles||[])if(el.isConnected)el.style.cssText=style;section._offlineStyles=null;section.querySelectorAll('.offline-tail,.offline-notice').forEach(e=>e.remove());}
 }
@@ -108,32 +83,20 @@ function offlineNotice(section,texts){if(section.classList.contains('typeset-scr
 }
 function currentResult(slot){
  const connected=last&&freshStatus(last)&&(phase==='ready'||phase==='loading');
- const optional=['learning','ai-cli-profile-manager','pc-panel-hub'].includes(page.page);
- let result=connected?(slot==='run'&&page.page==='remote-control'?{text:'电脑连接服务在线',state:'ok',readAt:last.served_at_unix??last.observed_at_unix}:parse(last,slot,page.project)):unknown;
+ const result=connected?parse(last,slot,page.project):unknown;
  const block=slot==='grafana'?'grafana':['config','wechat','backup'].includes(slot)?'backups':['image'].includes(slot)?'today':['watch','cloud','health','capture'].includes(slot)?'automation':'projects';
- const source=last?.[block],readAt=result.readAt||Number(source?.observed_at_unix)||Date.parse(source?.observed_at||source?.checked_at)/1000;
- const row=source?.items?.find(x=>x.project===page.project);
- const outdated=connected&&(source?.state==='stale'||['stale','unavailable'].includes(row?.state)||Number.isFinite(readAt)&&Date.now()/1000-readAt>(Number(source?.max_age_seconds)||120));
- if(outdated)result=unknown;
+ const source=last?.[block],readAt=Number(source?.observed_at_unix)||Date.parse(source?.observed_at||source?.checked_at)/1000;
  if(result.state!=='unknown')return {...result,readAt:Number.isFinite(readAt)?readAt:undefined};
- let cached=lastValues.get(slot);try{cached ||= readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project);}catch{}
- if(optional){
-  const previous=connected?parse(last,slot,page.project,Date.now(),true):unknown;
-  const old=previous.state!=='unknown'?{result:previous,at:Date.parse(row?.updated_at||row?.observed_at||source?.observed_at)}:cached;
-  if(old&&Number.isFinite(old.at)){const parts=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'numeric',day:'numeric'}).formatToParts(new Date(old.at)),date=parts.find(p=>p.type==='month').value+'月'+parts.find(p=>p.type==='day').value+'日';return {...old.result,text:old.result.text+' · 最后更新 '+date+'（已过期）',state:'stale',cached:true,retained:true,readAt:old.at/1000};}
-  return {empty:true,state:'unknown'};
- }
- if(last&&phase!=='ready'&&cached)return {...cached.result,text:cached.result.text+' · '+Math.max(0,Math.floor((Date.now()-cached.at)/60000))+' 分钟前读到',state:'unknown',cached:true,retained:true,readAt:cached.at/1000};
+ let cached;try{cached=readCache(localStorage,page.page,slot,page.project)||readLast(localStorage,page.page,slot,page.project);}catch{}
  if(connected&&source?.collection_state==='reading')return cached?{...offlineResult(cached),text:'此项正在读取 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:{text:'正在读取这一项 · 还没读到过',state:'loading',readAt:undefined};
- if(connected)return cached?{...offlineResult(cached),text:'此项当前读不到 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:{text:result.text!==unknown.text?result.text:source?.state==='stale'?'这一项的读数已过期':'这一项暂时读不到',state:'unknown'};
- if(phase==='loading'&&!last)return cached?{...offlineResult(cached),text:'正在重新读取 · '+cached.result.text,retained:true}:loading;
+ if(connected)return cached?{...offlineResult(cached),text:'此项当前读不到 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:unknown;
  return offlineResult(cached);
 }
 function display(){
  resetOfflineLayout();
  for(const strip of document.querySelectorAll('.live-strip')){
   const cells=[...strip.querySelectorAll('[data-slot]')],results=cells.map(cell=>currentResult(cell.dataset.slot));
-  const readable=results.length>0&&results.every(result=>result.state!=='unknown'||result.retained);strip.hidden=!readable;
+  const readable=results.length>0&&results.every(result=>result.state!=='unknown');strip.hidden=!readable;
   cells.forEach((cell,i)=>{const result=results[i],prefix=page.status_binding?.prefixes?.[cell.dataset.slot],text=readable?(prefix?prefix+'：':'')+result.text:'';cell.querySelector('span').textContent=text;cell.title=text;cell.dataset.state=readable?result.state:'unknown';cell.dataset.cached=String(!!result.cached);
    if(readable&&result.href){cell.href=result.href;cell.setAttribute('role','link');cell.target='_blank';cell.rel='noopener';}else{cell.removeAttribute('href');cell.setAttribute('role','status');}
   });
@@ -145,7 +108,7 @@ function display(){
   if(!notice){notice=document.createElement('aside');notice.dataset.computerReadNotice='true';notice.setAttribute('role','status');notice.style.cssText='margin:12px 24px;padding:12px 16px;border:1px solid #d4ddd7;border-radius:8px;background:white;color:#68766f;line-height:1.5';document.querySelector('main')?.prepend(notice);}
   const times=[...document.querySelectorAll('[data-slot]')].map(cell=>currentResult(cell.dataset.slot).readAt).filter(Number.isFinite);let saved=0;try{saved=Number(localStorage.getItem('computer-last-read-v1'))||0;}catch{}
   const at=Number(last?.observed_at_unix)|| (times.length?Math.max(...times):saved);
-  notice.textContent=(last&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((Date.now()/1000-at)/60))+' 分钟前读到的数据。':connectionText(at,waiting))+(at>0?'旧数只表示当时的状态。':'');
+  notice.textContent=connectionText(at,waiting)+'旧数只表示当时的状态。';
   const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口';notice.append(' ',link);notice.hidden=false;
  }else if(notice)notice.hidden=true;
  document.body.dataset.statusPhase=phase;
@@ -153,13 +116,15 @@ function display(){
 }
 async function refresh(){
  if(busy||document.hidden||!document.querySelector('[data-slot]'))return;
- busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();
+ busy=true;phase='loading';offline=false;cancelledForVisibility=false;started=performance.now();display();controller=new AbortController();const timer=setTimeout(()=>controller.abort(),readTimeoutMs);
  try{
-  last=await readStatus(controller.signal);phase='ready';document.body.dataset.statusError='';
+  const local=['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname);
+  const response=await fetch(local?'/__status':'https://mcp.wly0829.cn/computer-access/api/status',{credentials:'include',cache:'no-store',signal:controller.signal});if(!response.ok)throw Error('HTTP_'+response.status);
+  last=await response.json();phase=freshStatus(last)?'ready':'error';document.body.dataset.statusError=phase==='ready'?'':'expired_snapshot';
   if(phase==='ready')try{localStorage.setItem('computer-last-read-v1',String(Date.now()/1000));}catch{}
-  if(phase==='ready')for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=currentResult(slot);if(!['unknown','loading'].includes(result.state)){const saved={project:page.project,result,at:Number.isFinite(result.readAt)?result.readAt*1000:Date.now()};lastValues.set(slot,saved);try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify(saved));}catch{}}}
- }catch(e){phase=cancelledForVisibility?'loading':'error';offline=!cancelledForVisibility&&(e.name==='AbortError'||e.name==='TypeError'||/^HTTP_5/.test(e.message||''));document.body.dataset.statusError=e.name==='AbortError'?'timeout':e.message;}
- finally{busy=false;display();}
+  if(phase==='ready')for(const cell of document.querySelectorAll('[data-slot]')){const slot=cell.dataset.slot,result=currentResult(slot);if(!['unknown','loading'].includes(result.state))try{localStorage.setItem(cacheKey(page.page,slot),JSON.stringify({project:page.project,result,at:Number.isFinite(result.readAt)?result.readAt*1000:Date.now()}));}catch{}}
+ }catch(e){last=null;phase=cancelledForVisibility?'loading':'error';offline=!cancelledForVisibility&&(e.name==='AbortError'||e.name==='TypeError'||/^HTTP_5/.test(e.message||''));document.body.dataset.statusError=e.name==='AbortError'?'timeout':e.message;}
+ finally{clearTimeout(timer);busy=false;display();}
 }
 document.addEventListener('site-layout',()=>{display();if(phase==='loading'&&!started&&!last&&!busy)refresh();});addEventListener('resize',display);
 document.fonts?.ready.then(display);

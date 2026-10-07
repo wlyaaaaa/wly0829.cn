@@ -134,9 +134,6 @@ def main():
                 return self.send(payload,mimetypes.guess_type(rp.name)[0]or'application/octet-stream',cache='max-age=3600, immutable')
             if path=='/__typeset/build-report':
                 d=json.loads(report.read_text('utf8'));d['build_report_sha256']=hashlib.sha256(report.read_bytes()).hexdigest()
-                quality_path=HERE.parent/'.publish/quality-baseline.json'
-                if not quality_path.is_file():quality_path=HERE.parent/'config/quality-baseline.json'
-                if quality_path.is_file():d['quality_baseline']=json.loads(quality_path.read_text('utf8'))
                 return self.send(json.dumps(d,ensure_ascii=False))
             if path=='/__typeset/result':
                 return self.send(result.read_bytes() if result.exists() else '{"status":"running"}')
@@ -171,7 +168,6 @@ def main():
                 d['summary']={'passed':sum(p.get('status')=='pass'for p in d['pages'].values()),'failed':sum(p.get('status')=='fail'for p in d['pages'].values()),'checked':len(d['pages']),'unverified':[p for p in build['pages']if p not in d['pages']]}
                 result.parent.mkdir(parents=True,exist_ok=True);result.write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
             return self.send('{"saved":true}')
-    ThreadingHTTPServer.request_queue_size=128
     server=ThreadingHTTPServer(('127.0.0.1',args.port),Handler)
     print('Preview http://127.0.0.1:'+str(server.server_port)+' ; DOM acceptance /__typeset/qa',flush=True)
     server.serve_forever()

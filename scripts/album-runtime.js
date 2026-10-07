@@ -40,22 +40,18 @@
     // Engines and their mounts retain the source order, including module
     // entries. Mark before starting so BFCache cannot load a second copy.
     event('runtime-start', {scripts: scripts.map(el => el.dataset.src)});
-    const loadEntry = placeholder => {
+    (async () => {
+      for (const placeholder of scripts) {
         const replacement = document.createElement('script');
         for (const attr of placeholder.attributes) if (!attr.name.startsWith('data-album-') && attr.name !== 'data-src') replacement.setAttribute(attr.name, attr.value);
         replacement.src = placeholder.dataset.src;
         replacement.async = false;
-        return new Promise(resolve => {
+        await new Promise(resolve => {
           replacement.addEventListener('load', resolve, {once:true});
           replacement.addEventListener('error', () => { event('runtime-resource-error', {src: replacement.src}); resolve(); }, {once:true});
           placeholder.replaceWith(replacement);
         });
-    };
-    (async () => {
-      const primary = scripts.find(el => /b2-(?:typeset|live)-/.test(el.dataset.src));
-      const firstRead = primary ? loadEntry(primary) : Promise.resolve();
-      await Promise.all(scripts.filter(placeholder => placeholder !== primary).map(loadEntry));
-      await firstRead;
+      }
       runtimeLoaded = true; runtimeLoading = false;
       event('runtime-ready');
     })();
@@ -335,7 +331,6 @@
     const value = (read(positionsKey) || {})[path(pending?.from)];
     if (value && Date.now() - value.at < 3600000) warmImages(value.images);
   }, {once:true});
-  if (performance.getEntriesByType('navigation')[0]?.domContentLoadedEventStart) loadRuntime();
   addEventListener('pageshow', e => { if (e.persisted && !root.hasAttribute('data-album-running')) { loadRuntime(); resumeVideo(); } });
   reduce.addEventListener('change', () => { if (reduce.matches) { transition?.skipTransition(); currentClean?.(); loadRuntime(); } });
   window.SiteAlbum = {get snapshot() { return {generation, runtimeLoaded, runtimeLoading, runtimeStartCount, running: root.hasAttribute('data-album-running'), events: [...events], warmedRoutes: [...warmedRoutes], imageCount: heldImages.size, images:[...heldImages].map(([src,im])=>({src,currentSrc:im.currentSrc,crossOrigin:im.crossOrigin,decoded:decodedImages.has(src)}))}; }};

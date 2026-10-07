@@ -225,16 +225,9 @@ async def titles(records, chrome, profiles, evidence, ownership):
                 await page.evaluate('document.fonts.ready')
                 await page.evaluate('Promise.all([...document.images].map(i=>i.decode().catch(()=>{})))')
                 await page.evaluate('(' + record['_fit'] + ')()')
-                await page.evaluate("""async()=>{
-                    await window.__typesetReady;
-                    const size=()=>JSON.stringify([document.documentElement.scrollHeight,...[...document.querySelectorAll('[data-comp=chapter_title] img,.title-wrap.title-img img')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y,r.width,r.height];})]);
-                    let previous=size(),stable=0;
-                    for(let n=0;n<120&&stable<2;n++){await new Promise(requestAnimationFrame);const current=size();stable=current===previous?stable+1:0;previous=current;}
-                    if(stable<2)throw Error('Album title layout did not settle');
-                }""")
                 measured = await page.evaluate("""()=>({width:document.documentElement.clientWidth,height:document.documentElement.scrollHeight,
                     titles:[...document.querySelectorAll('[data-comp=chapter_title] img,.title-wrap.title-img img')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return {rect:[r.x,r.y+scrollY,r.width,r.height],src:e.getAttribute('src')};}),
-                    illustrations:[...document.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art,svg.illustration-panel')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y+scrollY,r.width,r.height];}),
+                    illustrations:[...document.querySelectorAll('[data-comp=illustration] img,.ill img,img.mock-base-art')].map(e=>{const r=e.getBoundingClientRect();return [r.x,r.y+scrollY,r.width,r.height];}),
                     broken:[...document.images].filter(i=>!i.complete||!i.naturalWidth).map(i=>i.src)})""")
                 valid = measured['width'] == width and abs(measured['height'] - record['measured_height']) <= 2 and not measured['broken']
                 expected = [a['rect'] for a in record.get('illustrations', [])]
@@ -268,7 +261,7 @@ def inject_runtime(text, js, css, index, model):
     serialized = json.dumps(model, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
     head = '<script id="album-page" type="application/json">' + serialized + '</script>'
     head += '<link rel="preload" as="fetch" href="' + index + '" crossorigin="anonymous" id="album-route-index">'
-    head += '<link rel="stylesheet" href="' + css + '"><script data-album-inline>' + (HERE/'album-runtime.js').read_text('utf8').replace('</script', '<\\/script') + '</script>'
+    head += '<link rel="stylesheet" href="' + css + '"><script src="' + js + '"></script>'
     # Before deferred enhancement entries, and before first reveal registration.
     charset = re.search(r'<meta\b[^>]*charset=[^>]*>', text, re.I)
     if charset:
@@ -283,18 +276,10 @@ def inject_runtime(text, js, css, index, model):
             part = text[start:end].replace('loading="lazy"', 'loading="eager"')
             def eager(tag):
                 attrs = dict((k.lower(),v) for k,_,v in ATTR.findall(tag[0]))
-                descriptor = next((d for d in model.get('images', []) if d.get('src') == attrs.get('data-src') and d.get('orientation') and not d.get('both')), None)
-                if tag[0].startswith('<img') and descriptor:
-                    portrait = descriptor['orientation'] == 'v'
-                    media = ('(max-width:767.98px)' if portrait else '(min-width:768px)') if descriptor.get('widthBased') else ('(orientation:portrait)' if portrait else '(orientation:landscape)')
-                    image = re.sub(r'\s+src="[^"]*"', '', tag[0])
-                    return '<source media="'+media+'" srcset="'+html.escape(attrs['data-src'],quote=True)+'">'+image
                 addition = ''.join(' ' + name + '="' + html.escape(attrs['data-'+name],quote=True) + '"' for name in ['src','srcset'] if attrs.get('data-'+name) and not attrs.get(name))
                 return tag[0][:-2] + addition + ' />' if tag[0].endswith('/>') and addition else tag[0][:-1] + addition + '>'
             part = re.sub(r'<(?:img|source)\b[^>]*>', eager, part)
             text = text[:start] + part + text[end:]
-    loading=(HERE/'image-loading-runtime.js').read_text('utf8')
-    text=re.sub(r'(<main\b[^>]*>)',lambda m:m[1]+'<script data-image-loading>'+loading+'</script>',text,count=1)
     return text, delayed, removed_hints
 
 
@@ -476,7 +461,7 @@ def main():
     ap.add_argument('--geometry', type=Path, action='append', default=[])
     ap.add_argument('--build-report', type=Path, action='append', default=[], help='Read hash-bound geometry from actual page inputs, including named baseline build reports')
     ap.add_argument('--asset-baseurl', default='', help='Configured new asset base; omitted for the later OSS mapping stage')
-    ap.add_argument('--chrome', type=Path, default=Path(__import__('os').environ.get('WLY_RENDER_CHROME', 'C:/Program Files/Google/Chrome/Application/chrome.exe')))
+    ap.add_argument('--chrome', type=Path, default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     ap.add_argument('--profile', type=Path, required=True)
     ap.add_argument('--evidence', type=Path, required=True)
     ap.add_argument('--title-cache', type=Path, help='Reuse same-generation, hash-bound producer DOM observations')

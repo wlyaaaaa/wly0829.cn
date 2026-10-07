@@ -1103,7 +1103,10 @@ export const systemDependencyNodes = [
     "title": "AI 辅助学习",
     "subtitle": "把需求文档、课程材料与当前一手资料连成能理解、能运用的学习",
     "href": "/projects/learning",
-    "detail": "把需求文档的业务场景、课程的原理方法和互联网当前事实连起来。AI先规划可修改的大纲；技术单元逐篇准备讲义，项目问题充分备课后可以直接交流。真实反馈改变后续讲法，人决定继续或暂停。"
+    "detail": "把需求文档的业务场景、课程的原理方法和互联网当前事实连起来。AI先规划可修改的大纲；技术单元逐篇准备讲义，项目问题充分备课后可以直接交流。真实反馈改变后续讲法，人决定继续或暂停。",
+    "legacyIds": [
+      "system-node-career-development"
+    ]
   },
   {
     "id": "materials",

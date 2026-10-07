@@ -491,7 +491,7 @@ async def run_initial_script_fixture(args):
                     initial_rows=[r for r in rows if r['case']==case and r['port']==main.server_port and r['path']=='/initial.js']
                     runtime_load=next(e['at'] for e in sample['events'] if e['kind']=='load' and 'resource-retry-' in (e.get('src')or''))
                     element_error=next(e['at'] for e in sample['events'] if e['kind']=='error' and e.get('id')=='critical' and e['trusted'])
-                    assert element_error<runtime_load,sample
+                    assert (element_error<runtime_load)==(case in ('blocking','album-late')),sample
                     assert sample['business']==1 and len(errors)==1 and 'expected-initial-execution-error' in errors[0],(errors,sample)
                     assert counts[(foreign.server_port,case,'/outside.js')]==1
                     if args.expect_initial=='absent':assert sample['initial']==0 and len(initial_rows)==1,sample

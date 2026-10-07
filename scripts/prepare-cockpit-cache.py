@@ -23,9 +23,9 @@ const cockpitCacheKey=slot=>`site-live:v1:${data.page}:${slot}`;
 function cockpitReadLast(slot,now=Date.now()){
  const validRows=rows=>Array.isArray(rows)&&rows.every(row=>row&&typeof row.text==='string'&&(!row.children||validRows(row.children)));
  const knownResult=result=>['ok','warn','error','closed'].includes(result?.state)||(result?.state==='unknown'&&result.cacheable===true&&validRows(result.rows));
- const valid=c=>c&&c.project===data.project&&typeof c.result?.text==='string'&&knownResult(c.result)&&(!c.result.rows||validRows(c.result.rows))&&Number.isFinite(c.at)&&c.at<=now+60000;
+ const valid=c=>c&&c.project===data.project&&typeof c.result?.text==='string'&&knownResult(c.result)&&!c.result.iframe&&(!c.result.rows||validRows(c.result.rows))&&Number.isFinite(c.at)&&c.at<=now+60000;
  let c=cockpitLastValues.get(slot);if(!valid(c))c=null;
- try{const stored=JSON.parse(localStorage.getItem(cockpitCacheKey(slot)));if(valid(stored)&&!stored.result.iframe&&(!c||stored.at>c.at))c=stored;}catch{}
+ try{const stored=JSON.parse(localStorage.getItem(cockpitCacheKey(slot)));if(valid(stored)&&(!c||stored.at>c.at))c=stored;}catch{}
  return c;
 }
 function cockpitReadCache(slot,now=Date.now()){
@@ -44,8 +44,6 @@ function rememberCockpitValues(at){
   for(const slot of slots){
    if(['ca-form','ca-toast','ca-results','ca-form-hours','ca-form-code'].includes(slot))continue;
    const value=currentValue(slot);
-   if(value.rows){const rowAt=slotTime(slot);cockpitLastValues.set(slot,{project:data.project,result:{...value,text:value.text??cockpitPlainRows(value.rows),cacheable:true},at:Number.isFinite(rowAt)&&rowAt>0?rowAt*1000:at});}
-   if(value.iframe){cockpitLastValues.set(slot,{project:data.project,result:{...value,text:value.text||'近24小时曲线'},at});continue;}
    if(value.iframe||(!['ok','warn','error','closed'].includes(value.state)&&!(value.state==='unknown'&&value.cacheable===true&&Array.isArray(value.rows))))continue;
    const result={...value,text:value.text??(value.rows?cockpitPlainRows(value.rows):'')};
    if(!result.text)continue;
@@ -61,9 +59,6 @@ function value(slot){
  const connected=online(),current=connected?currentValue(slot):null;
  if(connected&&(current.state!=='unknown'||current.rows||current.iframe))return current;
  const c=cockpitReadLast(slot),at=c?.at/1000||status?.observed_at_unix||lastRead;
- const retainedNotice=c?Math.max(0,Math.floor((Date.now()-c.at)/60000))+' 分钟前读到 · 上次读到 '+time(c.at/1000)+' · 当前状态未知':'';
- if(phase==='error'&&cockpitLastValues.has(slot)&&c)return {...c.result,rows:c.result.rows?[{text:retainedNotice},...cockpitHistoricalRows(c.result.rows)]:undefined,state:'unknown',cached:true,retained:true,cachedAt:c.at,hardwareCached:!!c.result.hardwareDisplay,notice:c.result.rows?undefined:retainedNotice};
- if(c?.result.iframe)return current||{text:'曲线暂时打不开',state:'unknown',cached:false};
  if(connected){if(!c)return current;return {...c.result,text:'此项正在重新读取 · 当时：'+c.result.text,rows:c.result.rows?[{text:'上次读到 '+time(c.at/1000)+'（北京时间）；此项当前还不能确认'},...cockpitHistoricalRows(c.result.rows)]:undefined,state:'unknown',cached:true,cachedAt:c.at,hardwareCached:!!c.result.hardwareDisplay};}
  if(['cockpit-overall','ca-connection','mcp-main'].includes(slot))return {text:offline(at),state:'unknown',cached:!!c,cachedAt:c?.at};
  if(slot==='cockpit-attention')return {rows:[{text:offline(at)},{text:'若只是主入口故障，可查看连接电脑页的副机备用入口（两台电脑都需开机联网）',href:'/mcp/'},...(c?.result.rows?[{text:'以下是上次读到的待办，当前情况还不能确认'},...cockpitHistoricalRows(c.result.rows)]:[])],state:'unknown',cached:!!c,cachedAt:c?.at};
@@ -87,9 +82,8 @@ def patch_cockpit_cache(text: str) -> str:
     if MARKER in text:
         return text
     text = replace_once(text, 'function value(slot){', CACHE_RUNTIME + '\nfunction currentValue(slot){')
-    anchor = 'el._rendered=signature;' if 'el._rendered=signature;' in text else "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';"
-    cache_row = 'displayRow' if 'displayRow=grouped' in text else 'valueRow'
-    text = replace_once(text, anchor, anchor + f"el.dataset.cached=String({cache_row}.cached===true);if({cache_row}.cachedAt)el.dataset.lastReadAt=String({cache_row}.cachedAt);else delete el.dataset.lastReadAt;")
+    text = replace_once(text, "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';",
+        "const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';el.dataset.cached=String(valueRow.cached===true);if(valueRow.cachedAt)el.dataset.lastReadAt=String(valueRow.cachedAt);else delete el.dataset.lastReadAt;")
     text = replace_once(text, "if(target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project)",
         "if(!valueRow.cached&&target?.lands_on==='cockpit-tasks'&&slot==='cockpit-tasks'&&target.api_project)")
     text = replace_once(text, "phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';",

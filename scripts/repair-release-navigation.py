@@ -34,7 +34,7 @@ PUBLIC_SEARCH_FIELDS = ('type', 'group', 'scopes', 'projectSlug', 'title', 'deta
 SITE_NAVIGATION = {'首页':'/', '怎么协作':'/how/', '驾驶舱':'/cockpit/',
                    '项目':'/projects/', '技能':'/skills/', '规则':'/rules/',
                    '连接电脑':'/mcp/', '授权与状态':'/computer-access/',
-                   '这个网页是怎么做的':'/how-this-site/', '救急先看':'/rescue/'}
+                   '这个网页是怎么做的':'/how-this-site/'}
 _public_spec = importlib.util.spec_from_file_location('public_page_contract', Path(__file__).with_name('public_page_contract.py'))
 public_contract = importlib.util.module_from_spec(_public_spec)
 _public_spec.loader.exec_module(public_contract)
@@ -247,27 +247,6 @@ def rule_neighbors(route, pages):
     return result
 
 
-def compact_home_highlights(text, data):
-    """手机复用原图：保留竖版数字区，六张短卡各用横版原图全宽显示。"""
-    if 'data-home-compact' in text: return text
-    screen = next((s for s in data.get('screens', []) if s.get('id') == 'home-04'), None)
-    if not screen or len(screen['layouts']['h'].get('cards', [])) != 7: return text
-    h, v = screen['layouts']['h'], screen['layouts']['v']
-    def image(layout):
-        w, height = layout['size']; src = html.escape(layout['viewer'].get('avif') or layout['viewer']['src'], quote=True)
-        return f'<image href="{src}" width="{w}" height="{height}"/>'
-    header_height = round(v['cards'][1][1] * v['size'][1])
-    cards = [f'<svg viewBox="0 0 {v["size"][0]} {header_height}" aria-hidden="true">{image(v)}</svg>']
-    for rect, link in zip(h['cards'][1:], h['links']):
-        x, y, w, height = [round(n * h['size'][i % 2], 2) for i, n in enumerate(rect)]
-        label, href = html.escape(link['text'], quote=True), html.escape(link['href'], quote=True)
-        cards.append(f'<a href="{href}" aria-label="{label}"><svg viewBox="{x} {y} {w} {height}" aria-hidden="true">{image(h)}</svg></a>')
-    markup = '<div class="home-compact" data-home-compact="1">' + ''.join(cards) + '</div>'
-    text = re.sub(r'(<section\b[^>]*id="home-04"[^>]*>)', lambda m: m[0] + markup, text, count=1)
-    css = '.home-compact{display:none}@media(orientation:portrait){#home-04{aspect-ratio:auto!important;height:auto!important}#home-04>picture,#home-04>.overlays{display:none}.home-compact{display:grid;gap:12px;padding:0 10px 12px}.home-compact svg{display:block;width:100%;height:auto}.home-compact a{display:block;border-radius:14px;overflow:hidden}.home-compact a:focus-visible{outline:2px solid #0a7232;outline-offset:3px}}'
-    return text.replace('</head>', '<style data-home-compact>' + css + '</style></head>')
-
-
 def repair_owned_navigation(text, pages, owner_route=None):
     """Bind existing navigation roles; keep artwork, copy and unrelated links exact."""
     changes = []
@@ -275,24 +254,7 @@ def repair_owned_navigation(text, pages, owner_route=None):
     if match:
         data = json.loads(match[2]); route = owner_route or data.get('url')
         if data.get('page') == 'home':
-            if len(data.get('screens',[]))>1 and re.search(r'<section\b[^>]*id="home-04"',text):
-                if data['screens'][1]['id'] != 'home-02': changes.append({'role':'home-reading-order'})
-                data['screens'].sort(key=lambda s: ['home-01', 'home-02', 'home-03', 'home-04', 'home-05'].index(s['id']))
-                outcomes = re.search(r'(?:<div\b[^>]*class="section-anchor"[^>]*></div>)?<section\b[^>]*id="home-04"[^>]*>[\s\S]*?</section>', text)[0]
-                text = text.replace(outcomes, '', 1)
-                text = re.sub(r'(<section\b[^>]*id="home-03"[^>]*>[\s\S]*?</section>)', lambda m: m[0] + outcomes, text, count=1)
-                text = compact_home_highlights(text, data)
-                seen = set()
-                for screen in data['screens']:
-                    section = screen.get('section')
-                    if not section or section in seen: continue
-                    seen.add(section)
-                    marker = re.search(r'<div\b[^>]*class="section-anchor"[^>]*id="' + re.escape(section) + r'"[^>]*></div>', text)
-                    if marker:
-                        text = text.replace(marker[0], '', 1)
-                        text = re.sub(r'(?=<section\b[^>]*id="' + re.escape(screen['id']) + r'")', lambda m: marker[0], text, count=1)
             targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/', 'home-03-link-5-0':'/how/', 'home-05-link-3-0':'/how/', 'home-02-link-0-0':'/projects/remote-control/'}
-            targets.update({'home-05-link-4-0':'/cockpit/', 'home-05-link-5-0':'/how-this-site/', 'home-05-link-6-0':'/rescue/'})
             for node in visit(data):
                 target = targets.get(node.get('main_id') or node.get('id'))
                 if target and 'href' in node and target_exists(target, pages):

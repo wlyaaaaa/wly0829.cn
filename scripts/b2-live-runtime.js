@@ -14,8 +14,6 @@ let status=null,phase='loading',lastRead=0,problem='',purpose='personal_data',co
 const grantKey='site-b2-access-request-v1',actionsKey='site-b2-access-actions-v1';
 
 const elements=new Map();
-const todayRiverHost=document.querySelector('[data-today-river]');
-const lastGrafanaGroups=new Map();
 
 const liveAnchors=data.b2_live_anchors||[];
 
@@ -23,8 +21,7 @@ let target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1))
 
 const clock=()=>Date.now()/1000;
 
-const timeFormatter=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
-const time=t=>{if(!Number.isFinite(t)||t<=0)return '时间未知';const parts=d=>Object.fromEntries(timeFormatter.formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t*1000),now=parts(Date.now());return (d.year===now.year&&d.month===now.month&&d.day===now.day?'今天':(d.year===now.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;};
+const time=t=>{if(!Number.isFinite(t)||t<=0)return '时间未知';const parts=d=>Object.fromEntries(new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(d)).map(p=>[p.type,p.value]));const d=parts(t*1000),now=parts(Date.now());return (d.year===now.year&&d.month===now.month&&d.day===now.day?'今天':(d.year===now.year?'':d.year+'年')+d.month+'月'+d.day+'日')+' '+d.hour+':'+d.minute;};
 
 const known=v=>v===null||v===undefined?'读不到':String(v);
 
@@ -51,11 +48,14 @@ function grafanaGroupRow(part){
 function grafanaGroupValue(part){
  const selected=grafanaGroupRow(part),primary=part==='cpu-gpu'?selected:grafanaGroupRow('cpu-gpu'),secondary=part==='memory-network'?selected:grafanaGroupRow('memory-network');
  if(!primary.iframe&&!secondary.iframe){
-  return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
+  if(part==='memory-network')return {...selected,empty:true,emptyReason:'grafana-groups-unreadable'};
+  const groups=(status?.grafana||status?.services?.grafana)?.groups;
+  if(online()&&['cpu-gpu','memory-network'].every(key=>groups?.[key]?.state==='unavailable'&&groups[key].url===null&&groups[key].checked_at===null))return {...selected,title:'近24小时曲线',text:'手机版图表稍后上线。',readAt:null,planned:true};
+  return {...selected,title:'近24小时曲线',text:'两组曲线暂时打不开\n处理器和显卡观察：'+time(primary.readAt)+'\n内存和网络观察：'+time(secondary.readAt)};
  }
- return selected.iframe?selected:{...selected,empty:true,emptyReason:'grafana-group-unreadable'};
+ return selected;
 }
-const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter','connection_type']);
+const staticHardwareFields=new Set(['model','cores','threads','total_bytes','vram_total_bytes','letter']);
 function blockHealth(key){const b=status?.[key];if(!b||['unavailable','unknown'].includes(b.state))return 'unknown';if(['failed','error'].includes(b.state))return 'error';const at=blockTime(b);if(b.state==='stale'||!Number.isFinite(at)||at>clock()+60||clock()-at>(Number(b.max_age_seconds)||120))return 'stale';return ['ok','partial','empty'].includes(b.state)?'ok':'unknown';}
 const rawList=key=>['ok','partial','empty','stale'].includes(status?.[key]?.state)&&Array.isArray(status[key].items)?status[key].items:null;
 let historical=false;
@@ -64,23 +64,19 @@ const name=x=>x?.plain?.name||x?.name||x?.plain_title||x?.project||'名称暂未
 const stateText=s=>({success:'正常',failed:'失败',error:'出错',warn:'需要留意',stale:'已过期',overdue:'没按时完成',running:'正在运行',disabled:'已停用',unknown:'状态未知',never:'还没运行',unavailable:'暂时读不到'})[s]||'状态未知';
 const cadenceText=s=>({daily:'每天',weekly:'每周',monthly:'每月',hourly:'每小时',manual:'手动运行',on_change:'变更时',on_login:'登录时',on_startup:'开机时'})[s]||'周期说明暂未提供';
 const rowState=rows=>rows?.some(x=>x.enabled!==false&&['failed','error'].includes(x.state))?'error':rows?.some(x=>x.enabled!==false&&['warn','stale','overdue'].includes(x.state))?'warn':!rows||rows.some(x=>x.enabled!==false&&(!['success','running','disabled','never'].includes(x.state)||x.state==='success'&&!Number.isFinite(Date.parse(x.last_success_at||x.last_run_at))))?'unknown':'ok';
-function hardwareReadGaps(){
- const hw=status?.hardware;if(!hw||['unknown','unavailable','error','failed'].includes(hw.state))return [{key:'hardware',label:'硬件状态',source:hw,health:'unknown'}];
+function hardwareHealth(){
+ const hw=status?.hardware;if(!hw||['unknown','unavailable'].includes(hw.state))return 'unknown';
  const unwrapped=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
- const groups=[['cpu','处理器',hw.cpu,['model','usage_percent','temperature_celsius','power_watts']],['memory','内存',hw.memory,['used_bytes','total_bytes']],['network','网络',hw.network,[Object.hasOwn(hw.network||{},'connected')?'connected':'connection_type','download_bytes_per_second','upload_bytes_per_second',...['latency_ms','jitter_ms','packet_loss_percent'].filter(f=>Object.hasOwn(hw.network||{},f))]],['display','屏幕',hw.display,['width_px','height_px','refresh_hz']],...(hw.gpus||[]).map((row,i)=>['gpu'+i,'显卡'+(i+1),row,['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']]),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>['disk'+unwrapped(row.letter),unwrapped(row.letter)+'磁盘',row,['letter','free_bytes','total_bytes']])];
- const labels={model:'型号',usage_percent:'占用率',temperature_celsius:'温度',power_watts:'功耗',used_bytes:'已用容量',total_bytes:'总容量',connected:'连接状态',connection_type:'连接类型',download_bytes_per_second:'下载速度',upload_bytes_per_second:'上传速度',latency_ms:'延迟',jitter_ms:'抖动',packet_loss_percent:'丢包率',width_px:'宽度',height_px:'高度',refresh_hz:'刷新率',vram_used_bytes:'已用显存',vram_total_bytes:'总显存',letter:'盘符',free_bytes:'剩余空间'},gaps=[];
- const collector=status?.display_cache?.collectors?.hardware,hardwareAt=hardwareSnapshot(status)?.observed_at_unix;
- for(const [id,label,row,fields] of groups)for(const field of fields){
-  const metric=row?.[field],source=row?.sources?.[field],actual=unwrapped(metric),sampled=metric?.observed_at_unix??source?.observed_at_unix??blockTime(row),maxAge=Number(row?.max_age_seconds||hw.max_age_seconds)||120;
-  const missing=!row||actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||[row.state,metric?.state,source?.status].some(s=>['unknown','unavailable','error','failed'].includes(s));
-  const old=Number.isFinite(hardwareAt)&&(hardwareAt>clock()+60||clock()-hardwareAt>maxAge)||!staticHardwareFields.has(field)&&Number.isFinite(sampled)&&(sampled>clock()+60||clock()-sampled>maxAge);
-  const stale=old||collector?.state==='error'||[metric?.state,source?.status].includes('stale')||!metric?.state&&!source?.status&&row?.state==='stale';
-  const expiredAt=Math.min(...[hardwareAt,staticHardwareFields.has(field)?NaN:sampled].filter(t=>Number.isFinite(t)&&clock()-t>maxAge).map(t=>t+maxAge));
-  if(missing||stale)gaps.push({key:'hardware:'+id+':'+field,label:'硬件：'+label+'的'+labels[field]+'当前读数',source:source||metric,expiredAt,health:stale?'stale':'unknown'});
+ const groups=[{row:hw.cpu,fields:['model','usage_percent','temperature_celsius','power_watts']},{row:hw.memory,fields:['used_bytes','total_bytes']},{row:hw.network,fields:['connected','download_bytes_per_second','upload_bytes_per_second']},{row:hw.display,fields:['width_px','height_px','refresh_hz']},...(hw.gpus||[]).map(row=>({row,fields:['model','usage_percent','temperature_celsius','vram_used_bytes','vram_total_bytes']})),...(hw.volumes||[]).filter(v=>unwrapped(v.connected)!==false).map(row=>({row,fields:['letter','free_bytes','total_bytes']}))];
+ let unknown=false,stale=hw.state==='stale';
+ for(const {row,fields} of groups){
+  if(!row||['unknown','unavailable','error','failed'].includes(row.state)){unknown=true;continue;}
+  if(row.state==='stale')stale=true;
+  for(const field of fields){const metric=row[field],source=row.sources?.[field],actual=unwrapped(metric);if(actual===null||actual===undefined||actual===''||typeof actual==='number'&&!Number.isFinite(actual)||['unknown','unavailable','error','failed'].includes(metric?.state)||['unknown','unavailable','error','failed'].includes(source?.status))unknown=true;if(metric?.state==='stale'||source?.status==='stale')stale=true;const sampled=metric?.observed_at_unix??source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sampled)&&(sampled>clock()+60||clock()-sampled>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;}
+  const at=blockTime(row);if(Number.isFinite(at)&&(at>clock()+60||clock()-at>(Number(row.max_age_seconds||hw.max_age_seconds)||120)))stale=true;
  }
- return gaps;
+ return stale?'stale':unknown?'unknown':'ok';
 }
-function hardwareHealth(){const gaps=hardwareReadGaps();return gaps.some(x=>x.health==='stale')?'stale':gaps.length?'unknown':'ok';}
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')))return 'error';if(rows.some(x=>x.frozen!==true&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')))return 'unknown';if(rows.some(x=>x.frozen!==true&&(x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue')))return 'warn';return 'ok';}
 
 const online=()=>phase==='ready'&&freshStatus(status,clock());
@@ -159,7 +155,18 @@ function readGaps(){
    for(const group of rows)for(const x of (group.items||[]).filter(x=>taskInLamp(x)&&x.role!=='original'))if(['unknown','unavailable'].includes(x.protection)||x.destination_state==='unregistered'||['unknown','unavailable'].includes(x.freshness))add(key+':'+x.id,'“'+group.name+'”里的备份“'+name(x)+'”的副本证据',x);
   }
  }
- for(const gap of hardwareReadGaps())add(gap.key,gap.label,gap.source,gap.expiredAt);
+ if(hardwareHealth()!=='ok'){
+  const hw=status?.hardware,rows=[hw?.cpu,hw?.memory,hw?.network,hw?.display,...(hw?.gpus||[]),...(hw?.volumes||[])];
+  const expired=[];
+  for(const row of rows.filter(Boolean)){
+   const maxAge=Number(row.max_age_seconds||hw?.max_age_seconds)||120,at=blockTime(row);
+   if(Number.isFinite(at)&&clock()-at>maxAge)expired.push(at+maxAge);
+   for(const [field,source]of Object.entries(row.sources||{})){const sample=source?.observed_at_unix;if(!staticHardwareFields.has(field)&&Number.isFinite(sample)&&clock()-sample>maxAge)expired.push(sample+maxAge);}
+  }
+  const collector=status?.display_cache?.collectors?.hardware,hardwareAt=status?.hardware_observed_at_unix??collector?.observed_at_unix;
+  if(Number.isFinite(hardwareAt)&&clock()-hardwareAt>(Number(hw?.max_age_seconds)||120))expired.push(hardwareAt+(Number(hw?.max_age_seconds)||120));
+  add('hardware','硬件状态',collector||hw,expired.length?Math.min(...expired):undefined);
+ }
  const authoritySource=status?.display_cache?.collectors?.authorization;
  for(const [key,label] of [['personal_data','个人资料开关状态'],['unrestricted','无限制授权状态']]){const g=status?.[key],at=authorizationTime(g),expired=Number.isFinite(at)&&clock()-at>120?at+120:undefined;if(!authorizationFresh(g)||!g?.state||['unknown','unavailable'].includes(g.state))add(key,label,Number.isFinite(g?.observed_at_unix)?g:authoritySource||g,expired);}
  const screenAt=windowsTime();if(!windowsFresh()||!['locked','unlocked','no_session'].includes(status?.host?.screen_state))add('windows','锁屏状态',status?.host?.sources?.screen_state||status?.host,Number.isFinite(screenAt)&&clock()-screenAt>120?screenAt+120:undefined);
@@ -300,7 +307,7 @@ function liveValue(slot){
 
  if(slot==='mcp-secondary'){const peer=list('remote_network')?.find(x=>x.id==='secondary_laptop');return {text:peer?.state==='online'?'副机在线':peer?.state==='offline'?'副机不在线':'副机状态读不到',state:peer?.state==='online'?'ok':peer?.state==='offline'?'closed':'unknown'};}
 
- const taskBrief=`今天跑了 ${todayTasks.length} 个（含常驻和高频任务），出错 ${failed.length} 个`+(next?'；下一个 '+name(next)+' '+time(Date.parse(next.next_run_at)/1000):'；下次运行暂时未知');
+ const taskBrief=`今天跑了 ${todayTasks.length} 个，出错 ${failed.length} 个`+(next?'；下一个 '+name(next)+' '+time(Date.parse(next.next_run_at)/1000):'；下次运行暂时未知');
 
  if(slot==='cockpit-overall')return summary();
 
@@ -312,7 +319,7 @@ function liveValue(slot){
 
  if(slot==='cockpit-quick-4')return {text:list('automation')?taskBrief:'自动任务暂时读不到',state:rowState(list('automation'))};
 
- if(slot==='cockpit-quick-5')return {text:(lastBackup?name(lastBackup)+' 最近成功 '+time(Date.parse(lastBackup.last_success_at)/1000):'最近成功的备份暂时未知')+backups.filter(x=>x.enabled!==false&&['warn','stale','overdue','failed','error'].includes(x.state)).map(x=>'；'+name(x)+'：'+(x.status_note||x.plain?.status_note||x.reason||stateText(x.state))).join(''),state:rowState(list('backups'))};
+ if(slot==='cockpit-quick-5')return {text:lastBackup?name(lastBackup)+' 最近成功 '+time(Date.parse(lastBackup.last_success_at)/1000):'最近成功的备份暂时未知',state:rowState(list('backups'))};
 
  if(slot==='ca-windows'||slot==='cockpit-security-windows'){if(!windowsFresh())return {text:'锁屏状态读不到',state:'unknown'};return {text:(({locked:'已锁屏',unlocked:'未锁屏',no_session:'没人登录'})[host.screen_state]||'读不到'),state:host.screen_state==='unlocked'?'ok':['locked','no_session'].includes(host.screen_state)?'closed':'unknown'};}
 
@@ -324,7 +331,7 @@ function liveValue(slot){
   const rows=list('remote_network');if(!rows)return {text:status?.remote_network?.collection_state==='reading'?'正在读取远程和网络':'远程和网络读不到',state:'unknown'};
   const labels={tailscale:'远程网络',secondary_laptop:'副机',sunshine:'串流服务',system_proxy:'系统代理',internet:'互联网连接',windows_update_restart:'Windows重启'};
   const states={online:'在线',offline:'不在线',running:'在运行',stopped:'已停止',enabled:'已开启',disabled:'已关闭',ok:'连接正常',not_pending:'没有待重启',pending:'需要重启',unknown:'读不到',unavailable:'读不到',stale:'读数已过期'};
-  return {text:'电脑连接服务：在线',rows:rows.map(x=>({key:x.id,text:(labels[x.id]||name(x))+'：'+(states[x.state]||'状态读不到'),state:['unknown','unavailable','stale'].includes(x.state)?'unknown':['offline','stopped','pending'].includes(x.state)?'warn':'ok',detail:'北京时间 '+time(timestamp(x.observed_at))+' 读的',highlight:target?.id==='sunshine-remote-streaming'&&x.id==='sunshine'})),state:rows.some(x=>['unknown','unavailable','stale'].includes(x.state))?'unknown':rows.some(x=>['offline','stopped','pending'].includes(x.state))?'warn':'ok'};
+  return {rows:[{text:'电脑连接服务：在线',state:'ok'},...rows.map(x=>({key:x.id,text:(labels[x.id]||name(x))+'：'+(states[x.state]||'状态读不到'),state:['unknown','unavailable','stale'].includes(x.state)?'unknown':['offline','stopped','pending'].includes(x.state)?'warn':'ok',detail:'北京时间 '+time(timestamp(x.observed_at))+' 读的',highlight:target?.id==='sunshine-remote-streaming'&&x.id==='sunshine'}))],state:rows.some(x=>['unknown','unavailable','stale'].includes(x.state))?'unknown':rows.some(x=>['offline','stopped','pending'].includes(x.state))?'warn':'ok'};
  }
 
  if(slot==='cockpit-grafana'){
@@ -337,7 +344,9 @@ function liveValue(slot){
 
   if((g?.public_dashboard_state==='reachable'||currentPublicRoute)&&/^https:\/\//.test(publicUrl||'')&&!/\/login(?:[/?#]|$)/.test(publicUrl))return {iframe:publicUrl,state:'ok'};
 
-  return {text:'曲线暂时打不开',state:'unknown',empty:true};
+  if(g?.state==='reachable'&&g.url==='https://grafana.wly0829.cn/')return {text:'监控网页已响应 · 打开图表网页',href:g.url,state:'ok'};
+
+  return {text:'曲线暂时打不开',state:'unknown'};
 
  }
 
@@ -369,16 +378,9 @@ function liveValue(slot){
 
   if(!list('today'))return {text:'今天动态暂时读不到',state:'unknown'};
 
-  const seen=new Set(),labels={system_backup_started:'系统镜像备份开始',system_backup_completed:'系统镜像备份完成',computer_reboot_completed:'电脑重启完成',computer_restarted:'电脑重启完成',stutter_captured:'电脑卡住，已自动留下现场',freeze_captured:'电脑卡住，已自动留下现场'};
+  const seen=new Set(),labels={system_backup_started:'系统镜像备份开始',system_backup_completed:'系统镜像备份完成',computer_reboot_completed:'电脑重启完成',stutter_captured:'电脑卡住，已自动留下现场'};
 
-  let background=0;const actions={task_completed:'完成',backup_completed:'备份完成',task_failed:'出错',automation_failed:'出错'},named=[...(list('automation')||[]),...backups];
-  const rows=(list('today')||[]).filter(x=>x.id&&!seen.has(x.id)&&seen.add(x.id)).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)).flatMap(x=>{
-   const task=named.find(t=>t.id===x.task_id),taskName=task?.plain?.name||task?.name||x.plain_title?.trim();
-   const reviewed=['acceptance_checked','acceptance_reviewed'].includes(x.type)&&Number.isInteger(x.count)&&x.count>=0&&Number.isInteger(x.passed)&&x.passed>=0&&x.passed<=x.count;
-   const title=labels[x.type]||(reviewed?'核对了 '+x.count+' 项，'+(x.passed===x.count?'都通过':'通过 '+x.passed+' 项'):actions[x.type]&&taskName?taskName+' · '+actions[x.type]:x.plain_title?.trim());
-   if(!title){background++;return [];}return [{text:time(Date.parse(x.at)/1000)+' · '+title}];
-  });
-  if(background)rows.push({text:'另有 '+background+' 条后台事件'});
+  const rows=(list('today')||[]).filter(x=>x.id&&!seen.has(x.id)&&seen.add(x.id)).sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)).map(x=>({text:time(Date.parse(x.at)/1000)+' · '+(labels[x.type]||(x.type==='task_completed'?(tasks.find(t=>t.id===x.task_id)?.plain?.name||'任务')+'完成':x.type==='task_failed'?(tasks.find(t=>t.id===x.task_id)?.plain?.name||'任务')+'出错':x.type==='acceptance_checked'?'核对了 '+known(x.count)+' 项，'+(x.passed===x.count?'都通过':'通过 '+known(x.passed)+' 项'):x.plain_title||'事件详情暂未提供'))}));
 
   return {rows:rowText(rows,'今天还没有动态'),state:'ok'};
 
@@ -408,8 +410,8 @@ function value(slot){
  const health=slotHealth(slot);
  // Grafana has a 300-second check interval; the general dashboard blocks use
  // 120 seconds. Do not turn a still-current live iframe into historical data.
- if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false,empty:true};
- if((health==='stale'&&slot!=='cockpit-pc'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
+ if(slot==='cockpit-grafana')return health==='ok'?result:{text:'曲线暂时打不开',state:'unknown',cached:false};
+ if((health==='stale'||(slotKeys[slot]||[]).some(key=>key!=='hardware'&&blockHealth(key)==='stale'))&&slot!=='cockpit-overall'&&slot!=='cockpit-attention'){
   historical=true;let old;try{old=liveValue(slot);}finally{historical=false;}
   if(old.rows||old.iframe||old.state!=='unknown')return {...expiredValue(old,slotTime(slot)),cacheable:slot==='cockpit-pc'&&!!old.rows};
  }
@@ -448,7 +450,6 @@ function liveGroup(section,cells,className,padding=.012){
 }
 
 function mount(){
- if(todayRiverHost)document.querySelector('[data-screen="cockpit-01"]')?.after(todayRiverHost);
 
  for(const section of document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')){
 
@@ -489,8 +490,6 @@ function mount(){
   else if(screenId==='mcp-01'&&flowCells.length){if(layout.compact_live===true){for(const cell of flowCells)cell.compactFrame=true;}else flowCells=[liveGroup(section,flowCells,'b2-mcp-group',.035)];}
   else if(screenId==='computer-access-01'){
    const grants=flowCells.filter(cell=>['ca-personal-data','ca-unrestricted','ca-windows'].includes(cell.slot));
-   const entrance=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('b2-card-enter');entrance.unobserve(entry.target);}});
-   grants.forEach((cell,index)=>{cell.node.style.setProperty('--b2-enter-delay',index*80+'ms');entrance.observe(cell.node);});
    if(grants.length>1&&Math.max(...grants.map(cell=>cell.rect[1]))-Math.min(...grants.map(cell=>cell.rect[1]))<.02){flowCells=flowCells.filter(cell=>!grants.includes(cell));const group=liveGroup(section,grants,'b2-authority-group');group.flowRow=true;flowCells.push(group);}
    else for(const cell of grants){cell.forceOverlay=true;cell.flowRow=true;}
   }
@@ -502,36 +501,27 @@ function mount(){
 
  render();
 
- if(todayRiverHost){document.querySelector('.b2-overview-main')?.after(todayRiverHost);todayRiverHost.style.pointerEvents='auto';}
-
 }
 
 function render(){
- const restoreReading=window.TypesetLiveFlow?.preserveReader?.();
- if(online())for(const key of Object.keys(grafanaGroupTitles)){const row=grafanaGroupRow(key);if(row.iframe)lastGrafanaGroups.set(key,row);}
 
- if(typeof globalToast!=='undefined'&&globalToast._rendered!==JSON.stringify([toast,toastState])){globalToast._rendered=JSON.stringify([toast,toastState]);globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
- const widths=new Map([...document.querySelectorAll('[data-b2-slot]')].map(el=>el.closest('.typeset-part')||el.closest('.screen')).filter(Boolean).map(section=>[section,section.clientWidth]));
+ if(typeof globalToast!=='undefined'){globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
 
  for(const el of document.querySelectorAll('[data-b2-slot]')){
 
-  const slot=el.dataset.b2Slot,valueRow=value(slot);
-  const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),cachedGroup=lastGrafanaGroups.get(el.dataset.livePart),displayRow=grouped?(phase==='error'&&cachedGroup?{...cachedGroup,state:'unknown',cached:true,retained:true,notice:Math.max(0,Math.floor((clock()-cachedGroup.readAt)/60))+' 分钟前读到 · 当前状态未知',cachedAt:cachedGroup.readAt*1000}:grafanaGroupValue(el.dataset.livePart)):valueRow;
-  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,widths.get(section)/layout.size[0]*30));
-  const signature=JSON.stringify([displayRow,slotTime(slot),font,target?.id,online(),phase,lastContact()]);
-  if(el.tagName!=='INPUT'&&el._rendered===signature)continue;
-  el._rendered=signature;
+  const slot=el.dataset.b2Slot,valueRow=value(slot);el.dataset.state=valueRow.state||'unknown';
+  const grouped=slot==='cockpit-grafana'&&Object.hasOwn(grafanaGroupTitles,el.dataset.livePart),displayRow=grouped?grafanaGroupValue(el.dataset.livePart):valueRow;
   el.dataset.state=displayRow.state||'unknown';
-  if(grouped&&!displayRow.retained){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
+  if(grouped){el.dataset.cached='false';delete el.dataset.lastReadAt;el.dataset.grafanaEmptyReason=displayRow.emptyReason||'';}
 
-  el.style.fontSize=font+'px';
+  const section=(el.closest('.typeset-part')||el.closest('.screen')),layout=section._layout,font=el.classList.contains('b2-ui-slot')?16:Math.max(11,Math.min(18,section.clientWidth/layout.size[0]*30));el.style.fontSize=font+'px';
   el.hidden=displayRow.empty===true;el.dataset.optionalEmpty=String(el.hidden);
   if(el.hidden){el.replaceChildren();window.TypesetLiveFlow?.request(section);continue;}
 
   if(el.tagName==='INPUT'){el.disabled=busy||!formal||!online()||!status?.state_version||status?.factor?.available!==true||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);if(document.activeElement!==el)el.value=slot==='ca-form-hours'?hours:code;continue;}
 
   if(slot==='ca-connection'){
-   const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':lastRead?'连接暂时中断':'读不到电脑';stamp.textContent=lastRead&&phase==='error'?Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到':lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;
+   const dot=document.createElement('i'),label=document.createElement('strong'),stamp=document.createElement('small');dot.className='live-status-dot';dot.style.position='static';label.style.gridColumn='2';label.textContent=online()?'电脑在线':phase==='loading'?'正在连接':'读不到电脑';stamp.textContent=lastContact()?'上次 '+time(lastContact()):'还没读到过';syncChildren(el,[dot,label,stamp]);continue;
   }
 
   const content=document.createElement('div');
@@ -551,15 +541,13 @@ function render(){
    const headline=displayRow.text||displayRow.rows?.[0]?.text||(displayRow.iframe?'可查看近24小时硬件曲线':'此项读不到');
    const card=window.LiveStatusUI.render(document,{...displayRow,text:headline,readAt:grouped?displayRow.readAt:displayRow.cachedAt?displayRow.cachedAt/1000:slotTime(slot)},{title:grouped?displayRow.title:liveTitles[slot]||'当前状态',slot,icons:data.shared?.live_status_icons});
    if(displayRow.operation||displayRow.planned){card.querySelector('.live-status-meta')?.remove();card.title=(grouped?displayRow.title:liveTitles[slot]||'办理结果')+'：'+headline;}
-   if(displayRow.rows||displayRow.iframe){if(displayRow.rows){card.querySelector('.live-status-value')?.remove();slot==='cockpit-today'&&headline==='今天还没有动态'&&content.firstChild?.textContent===headline&&content.firstChild.remove();}const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
+   if(displayRow.rows||displayRow.iframe){if(displayRow.rows)card.querySelector('.live-status-value')?.remove();const list=document.createElement('div');list.className='b2-card-list';list.dataset.rowKey='rows:'+slot;list.append(...content.childNodes);card.insertBefore(list,card.querySelector('.live-status-meta'));}
    else content.replaceChildren();
    content.replaceChildren(card);
   }
   syncChildren(el,[...content.childNodes]);el.dataset.cached=String(!!displayRow.cached);
   window.TypesetLiveFlow?.request(section);
  }
- const chartScreen=document.querySelector('[data-screen="cockpit-04"]');
- if(chartScreen)chartScreen.hidden=[...chartScreen.querySelectorAll('.typeset-part:not([hidden]) [data-b2-slot="cockpit-grafana"]')].every(node=>node.hidden);
 
  for(const b of document.querySelectorAll('[data-b2-action]')){
 
@@ -580,11 +568,9 @@ function render(){
  const hardwareSummary=document.querySelector('[data-b2-hardware-summary]');if(hardwareSummary&&window.LiveHardwareUI){const old=value('cockpit-pc'),displayed=old.hardwareCached?{...status,hardware:old.hardwareDisplay?.hardware,hardware_observed_at_unix:old.hardwareDisplay?.hardware_observed_at_unix}:online()?status:old.hardwareDisplay;syncChildren(hardwareSummary,[window.LiveHardwareUI.render(document,displayed,{mode:'compact',cached:!online(),hardwareCached:old.hardwareCached===true,at:old.cachedAt?old.cachedAt/1000:slotTime('cockpit-pc')})]);}
  let connectionNotice=document.querySelector('[data-b2-connection-notice]');if(!online()){
   if(!connectionNotice){connectionNotice=document.createElement('aside');connectionNotice.dataset.b2ConnectionNotice='true';connectionNotice.className='b2-connection-notice';connectionNotice.setAttribute('role','status');document.querySelector('main')?.prepend(connectionNotice);}
-  const text=lastRead&&phase==='error'?'连接暂时中断，下面保留 '+Math.max(0,Math.floor((clock()-lastRead)/60))+' 分钟前读到的数据。':offline(lastContact());if(connectionNotice._rendered!==text){connectionNotice._rendered=text;connectionNotice.textContent=text;const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);}if(connectionNotice.hidden)connectionNotice.hidden=false;
- }else if(connectionNotice&&!connectionNotice.hidden)connectionNotice.hidden=true;
- if(document.body.dataset.b2StatusPhase!==phase)document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
- if(todayRiverHost)try{const key='site-river-height-v1:'+innerWidth;todayRiverHost.style.minHeight=phase==='loading'?(Number(localStorage.getItem(key))||Math.min(1200,innerHeight*1.2))+'px':'';if(phase==='ready')localStorage.setItem(key,String(todayRiverHost.offsetHeight));}catch{}
- restoreReading?.();
+  connectionNotice.textContent=offline(lastContact());const link=document.createElement('a');link.href='/mcp/';link.textContent='查看连接电脑页的副机备用入口（两台电脑都需开机联网）';connectionNotice.append(' ',link);connectionNotice.hidden=false;
+ }else if(connectionNotice)connectionNotice.hidden=true;
+ document.body.dataset.b2StatusPhase=phase;if(dialog.open)results();
 
 }
 
@@ -672,9 +658,9 @@ function action(key){
 
 }
 
-const reader=createStatusReader((signal,{refresh})=>data.kind==='cockpit'?window.SiteLiveRuntime.readStatus(signal,refresh):window.SiteLiveRuntime.retryStatus(()=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime.readTimeoutMs}),signal),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
+const reader=createStatusReader((signal,{refresh})=>apiRequest(base,refresh?'/status?refresh=1':'/status',{signal,timeout:window.SiteLiveRuntime?.readTimeoutMs||8000}),value=>{status=adaptStatus(value);if(!value.hardware)delete status.hardware;phase='ready';lastRead=Number.isFinite(value.observed_at_unix)?value.observed_at_unix:clock();problem='';if(!hoursTouched&&Number.isFinite(value.default_minutes))hours=String(value.default_minutes/60);render();},error=>{phase='error';problem=error.httpStatus>=500?'server':'connection';render();});
 
-function readStatus(options){if(!formal&&!(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname))){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
+function readStatus(options){if(!formal){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
 
 let pollTimer;
 
@@ -682,9 +668,7 @@ function schedule(){clearTimeout(pollTimer);if(formal&&!document.hidden)pollTime
 
 document.addEventListener('visibilitychange',()=>{clearTimeout(pollTimer);if(document.hidden)reader.invalidate();else{if(!busy)readStatus({replace:true});schedule();}});
 
-addEventListener('site-live-ready',()=>{if(!document.hidden&&phase!=='ready')readStatus({replace:true});},{once:true});
-setTimeout(()=>{if(!document.hidden&&phase==='loading')readStatus();},8000);
-document.addEventListener('site-layout',mount);mount();if(!document.hidden&&window.SiteLiveRuntime)readStatus();if(formal&&validRequest(linkedRequest))query();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
+document.addEventListener('site-layout',mount);mount();if(!document.hidden)readStatus();if(formal&&validRequest(linkedRequest))query();schedule();setInterval(()=>{if(!document.hidden)render();},15000);
 
 addEventListener('hashchange',()=>{target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1)))||null;render();});
 

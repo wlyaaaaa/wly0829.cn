@@ -208,20 +208,3 @@ pwsh -NoProfile -File scripts/rollback-hybrid.ps1 -RestoreRef '实际回退提�
 ```
 
 生产恢复后仍须等 Pages 成功并回读上线字节。保留本轮恢复包及对应 Git 引用，直到本代上线被确认且不再需要恢复；清理本轮临时材料遵照活动规则放进回收站，不永久删除来历不明的文件。
-
-## 仓库内页面源（迁移 A1）
-
-生产入口为 `src/typeset/render_page.py`；引擎、注册组件、样式、排版前端脚本及闭包内资产位于 `src/typeset/`。每页唯一源为 `sources/pages/<id>/page.json` 与相邻 `layout.json`，原稿格式保持。
-生成屏清单用 `python scripts/inventory.py`，默认输出 `.publish/inventory/`；可通过 `TYPESET_INVENTORY_OUT` 指定任务输出目录。
-`sources/screens.jsonl` 保留原始 740 行清单，因当前源重生为 736 行且路径、图片库存与后续定稿已变，无法原字节重生。它作为原始迁移证据保留；生成入口从仓库页面目录解析源文件，读取该清单时重绑定到相邻 page.json。
-从仓库根运行 `python src/typeset/render_page.py <id> --no-compare --out .publish/typeset-out`；全页选项沿用 `--all`。
-D05 资产尚由下一组迁移：引擎默认读取 `sources/assets/`，本阶段验证通过 `TYPESET_ASSET_ROOT` 显式指定已存在的生产资产库；缓存写入本工作树 `.publish/`。
-先运行库存生成工具，再运行现有 `build-typeset-site.py`、`check-typeset-site.py`、`snapshot-typeset-inputs.py`；三者默认读取仓库内 `.publish/inventory/screens.jsonl`，保留显式参数以消费独立冻结快照或原始迁移清单。
-2f 最终撤图修复由同版 `engine/render.py`、`components/comp-slots/shots.py` 及 AI CLI 页构图、定稿共同承接。
-系统字体仍按 base.css 原 file URL 引用，不复制字体；版本和字节身份观察于北京时间 2026-10-06。
-| 系统字体 | 版本 | 字节 | SHA-256 |
-|---|---|---:|---|
-| `C:\Windows\Fonts\NotoSansSC-VF.ttf` | Version 2.04;241114210130;non-release | 17773244 | `763146584cf0710223441356b4395e279021b0806c196614377a7a0174ae074a` |
-| `C:\Windows\Fonts\STXINGKA.TTF` | Version 1.02 | 4016288 | `7f901dfb0526d542740264fb5ba8dfe483293ad060270d273593e2f04a69d080` |
-| `C:\Windows\Fonts\FZSTK.TTF` | Version 1.00 | 7574196 | `0b5a903376fe4d97306c943b690b04a5080889b4f87f8d704962939d3ceef1c4` |
-未迁原型、demo、缓存、样片驱动和历史审查文件不在生产闭包；A1 交接目录的 `not-moved.json` 列出逐文件路径、字节与原因，后续退役前由主持核对。

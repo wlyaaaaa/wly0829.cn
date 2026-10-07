@@ -78,7 +78,9 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 远端核验对**每个**计划对象执行匿名完整 GET，带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
 
-上传前，发布器对完整本地源包执行内容门，将结果、检查器版本和完整文件覆盖写入 `content-verification.json`；密封时连同最终清单和上传后的 SHA、大小、ETag 收入 `release-manifest.json` 的 `oss.content_verification` / `oss.verification`。CI 和恢复部署逐对象 HEAD 对比大小、ETag 和响应策略；变化、请求失败、内容证据缺失或检查器变化时读取完整正文，HTML、脚本、Markdown 等文本仍使用真实文件检查。ETag 只判断变化；同一任务已取得且 SHA/大小相同的正文可复用。
+全通过后上传入口自动调用 `seal-remote`：回执须绑定当前准备计划，再写入发布清单的 `oss.verification`。GitHub 清单的发布身份同时绑定源版本、选定 origin、版本前缀、GitHub 文件及完整 OSS 对象指纹；历史 `baseline_files` 只作来源证据。未密封的清单、回环地址、不完整或错版本的 GET 回执不能通过生产校验。`hybrid-release.py` 校验当前 GitHub 文件、全部路由及已绑定的 OSS 证明，原未迁移发布仍走既有分支。
+
+公开内容检查继续扫描所有源码和 HTML；OSS 分支还实际下载并核对全部远端对象，对各扩展名执行原凭据检查。上线回读同时检查 GitHub 文件与 OSS 对象，MP4 重新核对 Range 正文指纹。没有用假本地 JS 占位绕过产物要求。
 
 远端全通过之后，发布负责人还须完成真实浏览器验收：首页及旧下层导航、搜索、模块跨源加载、LocalOCR 冷缓存整页 1–2 秒目标、视频开播与拖动、HTTP 状态、热区/动效及实时转屏。完整 GET 能证明文件与传输契约，不能单独证明浏览器性能或体验达标。最后才发布 `github/`，不能把本地准备成功当作可上线。既有发布/回读脚本中依赖全资源留在 GitHub 的检查需由负责人兼容 OSS 清单后调用。
 
