@@ -697,11 +697,11 @@ const reader=createStatusReader((signal,{refresh})=>data.kind==='cockpit'?window
 
 let cockpitToolbar;
 function updateCockpitToolbar(){
- if(!cockpitToolbar)return;const row=summary(),label=cockpitToolbar.querySelector('.b2-toolbar-message');cockpitToolbar.dataset.state=row.state;label.textContent=row.text;label.title=row.text;label.onclick=()=>message(row.text,row.state);cockpitToolbar.querySelector('small').textContent=lastRead?time(lastRead).replace('今天 ','')+' 读到':'还没读到';
+ if(!cockpitToolbar)return;const row=summary(),label=cockpitToolbar.querySelector('.b2-toolbar-message'),refresh=cockpitToolbar.querySelector('.b2-toolbar-refresh');if(!refresh.dataset.reading)refresh.disabled=busy;cockpitToolbar.dataset.state=row.state;label.textContent=row.text;label.title=row.text;label.onclick=()=>message(row.text,row.state);cockpitToolbar.querySelector('small').textContent=lastRead?time(lastRead).replace('今天 ','')+' 读到':'还没读到';
 }
 if(data.kind==='cockpit'){
  cockpitToolbar=document.createElement('aside');cockpitToolbar.className='b2-cockpit-toolbar';cockpitToolbar.setAttribute('aria-label','驾驶舱当前状态');cockpitToolbar.innerHTML='<i aria-hidden="true"></i><button type="button" class="b2-toolbar-message">正在读取…</button><small>还没读到</small><button type="button" class="b2-toolbar-refresh">刷新</button>';document.body.append(cockpitToolbar);
- const refresh=cockpitToolbar.querySelector('.b2-toolbar-refresh');refresh.setAttribute('aria-label','重新读取驾驶舱数据');refresh.onclick=async()=>{refresh.disabled=true;refresh.textContent='正在读';try{await readStatus({replace:true,refresh:true});refresh.textContent=phase==='ready'?'刷新':'重试';updateCockpitToolbar();}finally{refresh.disabled=false;}};
+ const refresh=cockpitToolbar.querySelector('.b2-toolbar-refresh');refresh.setAttribute('aria-label','重新读取驾驶舱数据');refresh.onclick=async()=>{if(busy)return;refresh.dataset.reading='true';refresh.disabled=true;refresh.textContent='正在读';try{await readStatus({replace:true,refresh:true});refresh.textContent=phase==='ready'?'刷新':'重试';updateCockpitToolbar();}finally{delete refresh.dataset.reading;refresh.disabled=busy;}};
 }
 
 function readStatus(options){if(!formal&&!(data.kind==='cockpit'&&['localhost','127.0.0.1','::1','[::1]'].includes(location.hostname))){phase='error';problem='connection';render();return Promise.resolve();}return reader.read(options);}
