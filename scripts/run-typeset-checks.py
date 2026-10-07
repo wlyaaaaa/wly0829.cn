@@ -75,8 +75,8 @@ def static_transfer_handler(manifest, origin, transfers):
 
     async def handler(route):
         request=route.request;parsed=urlsplit(request.url)
-        # Preserve every query component except the product's exact retry marker.
-        query='&'.join(part for part in parsed.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+        # Only the exact retry and living CORS markers share the sealed object.
+        query='&'.join(part for part in parsed.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry' and part!='living-cors=1')
         canonical=urlunsplit((parsed.scheme,parsed.netloc,parsed.path,query,parsed.fragment))
         obj=remote.get(canonical)
         if not obj or request.method!='GET' or any(key.lower()=='range' for key in request.headers):

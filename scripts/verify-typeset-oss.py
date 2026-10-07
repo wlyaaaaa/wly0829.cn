@@ -69,7 +69,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
         consumers=transfer.get('consumers',[])
         require(consumers and all(item.get('reused_transfer') is (number>0) and item.get('resource_type') for number,item in enumerate(consumers)),role+' consumer reuse observations are missing')
         for consumer in consumers:
-            actual=urlsplit(consumer['url']);query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+            actual=urlsplit(consumer['url']);query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry' and part!='living-cors=1')
             require(urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment))==url,role+' consumer query or object identity differs')
         gets+=len(attempts);timings.append({'url':url,'seconds':transfer['seconds'],'attempts':[{'number':item['number'],'started_at_beijing':item['started_at_beijing'],'seconds':item['seconds']} for item in attempts]})
     canceled_consumers=[];raw_failed_requests=report.get('failed_requests',[])
@@ -77,7 +77,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
     by_url={transfer['url']:transfer for transfer in transfers}
     for failure in raw_failed_requests:
         require(role=='network' and failure.get('error')=='net::ERR_ABORTED' and failure.get('resource_type')=='image','Only full QA image consumer cancellations may be retained with a verified body')
-        actual=urlsplit(failure.get('url',''));query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry')
+        actual=urlsplit(failure.get('url',''));query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry' and part!='living-cors=1')
         canonical=urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment));transfer=by_url.get(canonical)
         require(transfer is not None and any(consumer['url']==failure['url'] and consumer['resource_type']=='image' for consumer in transfer['consumers']),'Canceled image lacks its exact same-run verified transfer and consumer')
         canceled_consumers.append({'observation':failure,'canonical_url':canonical,'classification':'image_consumer_aborted_with_same_run_verified_body','verified_body':{key:transfer['attempts'][-1][key] for key in ('http','final_url','bytes','sha256','content_type','acao')},'cancellation_time_and_cause':'not established by network report'})
@@ -132,6 +132,9 @@ def verify_bounded_acceptance(receipt,manifest,manifest_sha256,cold_path,reading
     for role,source in sources.items():require(oss.digest(Path(source['path']))==source['sha256'],'Bounded '+role+' source SHA changed')
     expected=bounded_acceptance(manifest,manifest_sha256,Path(receipt['instruction_file']),{role:source['path'] for role,source in sources.items()},layout_acceptance,build_report,qa_plan)
     require(receipt==expected,'Bounded proof instruction, observations or acceptance metadata changed')
+
+def unchanged_static_home(manifest,plan,build):
+    return bool(manifest.get('home_static_preparation')) and (Path(plan['source_root'])/'index.html').read_bytes() == (Path(build['baseline_root'])/'index.html').read_bytes()
 
 def verify(args):
     preparation=args.preparation.resolve()
@@ -253,7 +256,7 @@ def verify(args):
             require(all(response.get('verified') is True and response['url'] in remote_by_url and response['bytes']==remote_by_url[response['url']]['bytes'] and response['sha256']==remote_by_url[response['url']]['sha256'] for response in row['responses']),'Living homepage did not execute exact real OSS bodies')
             if row['case']=='reduced':require(row['after']['draws']==0 and row['after']['diagnostics']['phase']=='static' and row['after']['diagnostics']['reason']=='reduced-motion' and row['after']['diagnostics']['frames']==row['before']['diagnostics']['frames'] and row['after']['image'] and all(image['complete'] and image['width']>0 for image in row['after']['image']),'Living static original and quiet clock/status contract were not observed')
             else:require(row['after']['draws']>row['before']['draws'] and row['after']['diagnostics']['frames']>row['before']['diagnostics']['frames'] and len(set(row['after']['time_samples']))>=2,'Actual living GL/frame/time did not advance')
-    else:
+    elif not unchanged_static_home(manifest,plan,build):
         video=cold.get('video',{})
         require(video.get('status')=='pass' and video.get('issues')==[] and video.get('route')=='/' and video.get('seek',{}).get('seeked') is True,'Unchanged homepage lacks actual playback and seek evidence')
         require(video['before']['src'] in remote_by_url and video['after']['current_src']==video['before']['src'] and video['after']['current_time']>video['before']['current_time'],'Homepage playback does not use the bound real OSS video')

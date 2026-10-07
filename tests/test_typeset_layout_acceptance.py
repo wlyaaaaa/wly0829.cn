@@ -358,6 +358,14 @@ class LayoutAcceptanceTests(unittest.TestCase):
             args.layout_acceptance = None
             with self.assertRaisesRegex(ValueError, 'Split DOM verification did not pass'): o.verify(args)
 
+    def test_static_home_exception_requires_exact_original_bytes(self):
+        source, baseline = self.root / 'source', self.root / 'baseline'
+        source.mkdir(); baseline.mkdir()
+        (source / 'index.html').write_bytes(b'updated home')
+        (baseline / 'index.html').write_bytes(b'original home')
+        self.assertFalse(o.unchanged_static_home({'home_static_preparation': {}},
+            {'source_root': str(source)}, {'baseline_root': str(baseline)}))
+
     def test_stage_requires_same_explicit_acceptance_and_unchanged_raw_qa(self):
         reviewed, staged = self.root / 'reviewed', self.root / 'staged'
         reviewed.mkdir(); staged.mkdir()
