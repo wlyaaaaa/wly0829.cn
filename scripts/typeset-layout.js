@@ -262,7 +262,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
   for(const tile of state.tiles){
    if(tile.image.getAttribute('src')!==sourceURL)tile.image.src=sourceURL;
    tile.node.style.height=(tile.end-tile.start)*height+'px';Object.assign(tile.image.style,{width:width+'px',height:height+'px',left:-tile.columns[0]*width+'px',top:-tile.start*height+'px'});mask(tile,width,height);
-   tile.node.hidden=emptyStrip&&tile.start>=firstLive-.00001&&tile.end<=lastLive+.00001;
+   tile.node.hidden=tile.optional||emptyStrip&&tile.start>=firstLive-.00001&&tile.end<=lastLive+.00001;
    if(emptyStrip&&tile.start===0){const end=Math.max(0,firstLive-120/host._layout.size[1]);tile.node.style.height=end*height+'px';tile.image.style.clipPath='inset(0 0 '+(1-end)*100+'% 0)';}
   }
   for(const band of state.bands)if(band.optional)band.node.hidden=band.cells.every(cell=>cell.node.hidden);
@@ -366,7 +366,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     state.bands.push({node:row,cards,start:r[1],end:bottom,cells:[cell],replace:true,row:true});cursor=band.end;continue;
    }
    const region=document.createElement('div');region.className='typeset-live-flow-region';if(band.replace)region.classList.add('typeset-live-flow-replacement');
-   const optional=band.cells.every(cell=>cell.collapseWhenEmpty),raster=makeTile(state,band.start,band.end,band.cells);raster.node.hidden=optional;region.append(raster.node);
+   const optional=band.cells.every(cell=>cell.collapseWhenEmpty),raster=makeTile(state,band.start,band.end,band.cells);raster.optional=optional;raster.node.hidden=optional;region.append(raster.node);
    const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',optional?1:Math.min(3,band.cells.length));region.append(cards);container.append(region);
    for(const cell of band.cells)move(cards,cell.node);
    state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:band.replace,optional});cursor=band.end;

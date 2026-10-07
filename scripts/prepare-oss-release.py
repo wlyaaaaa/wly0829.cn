@@ -847,10 +847,10 @@ def seal_remote(output):
         manifest['oss']['content_verification'] = {key:content[key] for key in ('status','checker_sha256','checked_at_beijing','output_files')}
         manifest['oss']['content_verification']['sealed_release_id'] = plan['release_id']
     verify_manifest(manifest)
-    write(path, manifest)
     spec = importlib.util.spec_from_file_location('oss_local_gate', Path(__file__).with_name('hybrid-release.py'))
     hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
     hybrid.builder.load_public_repos()
+    write(path, manifest)
     previous_path = output/'previous-content-verification.json'
     write(previous_path, plan.get('previous_content', {}))
     gate = hybrid.validate_content(output/'github', output/'local-content-verification.json', local_assets=output/'oss', previous_report=previous_path)

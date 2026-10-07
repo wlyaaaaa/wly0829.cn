@@ -206,10 +206,12 @@ async def run(args, base, build):
             if response_tasks:await asyncio.gather(*response_tasks)
             result['responses']=responses
             if context:await context.close()
-            cleanup=subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1',
+            try:cleanup=subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1',
                        '-LiteralPath',str(profile),'-AllowedRoot',str(args.cache.resolve()),'-Json'],
-                       capture_output=True,text=True,creationflags=subprocess.CREATE_NO_WINDOW)
-            result['profile_cleanup']={'exit_code':cleanup.returncode,'receipt':cleanup.stdout.strip(),'error':cleanup.stderr.strip()}
+                       capture_output=True,text=True,encoding='utf-8',errors='replace',creationflags=subprocess.CREATE_NO_WINDOW)
+            except Exception as error:cleanup=None; cleanup_error=f'{type(error).__name__}: {error}'
+            missing=cleanup is None or cleanup.stdout is None or cleanup.stderr is None
+            result['profile_cleanup']={'exit_code':cleanup.returncode if cleanup else None,'receipt':cleanup.stdout if cleanup else None,'error':cleanup.stderr if cleanup else cleanup_error,'capture_missing':missing}
     result['verified_at_beijing']=datetime.now(timezone(timedelta(hours=8))).isoformat()
     result['summary']={'pages':len(result['pages']),'expected_pages':len(names),'resizes':len(result['cases']),
         'failed_resizes':sum(not c['pass'] for c in result['cases']),

@@ -94,10 +94,23 @@
    const tracks=style.gridTemplateColumns.split(/\s+/).map(Number.parseFloat),gap=Number.parseFloat(style.columnGap)||0,index=siblings.indexOf(el),column=index%tracks.length,padding=Number.parseFloat(style.paddingLeft)||0,left=parentBox.left+padding+tracks.slice(0,column).reduce((sum,value)=>sum+value,0)+gap*column;
    if(!tracks.length||tracks.some(value=>!Number.isFinite(value)||value<=0)||Math.abs(box.left-left)>1.5||Math.abs(box.width-tracks[column])>1.5)return false;
   }
-  if(frozen.live_part!=='lamp'&&box.height<Math.min(94,frozen.rect[3]*sourceWidth*part.size[1]/part.size[0])-1)return false;
+  const summary=slot==='cockpit-pc'&&cell.flowRow===true?el.querySelector('details.b2-hardware-read-detail:not([open]) > summary'):null,minimum=summary&&contentVisible(win,summary)&&summary.getBoundingClientRect().height>0?summary.getBoundingClientRect().height:94;
+  if(frozen.live_part!=='lamp'&&box.height<Math.min(minimum,frozen.rect[3]*sourceWidth*part.size[1]/part.size[0])-1)return false;
   const registeredSiblings=siblings.map(node=>cell.members?.find(member=>member.node===node)||win.TypesetLiveFlow?.liveCell?.(host,node)).filter(Boolean);
   for(let i=1;i<registeredSiblings.length;i++){const before=registeredSiblings[i-1].rect,after=registeredSiblings[i].rect;if(after[1]<before[1]-.00001||Math.abs(after[1]-before[1])<=.00001&&after[0]<before[0]-.00001)return false;}
   return true;
+ }
+ function hiddenGrafanaGroups(win,section,screen){
+  if(screen.id!=='cockpit-04'||section.dataset.screen!==screen.id||!section.hidden||win.getComputedStyle(section).display!=='none'||section.querySelector('iframe'))return null;
+  const active=[...section.querySelectorAll('.typeset-part')].filter(host=>!host.hidden),expected=screen.parts.filter(part=>part.both||part.orientation===(win.innerWidth<768?'v':'h'));if(!active.length||active.length!==expected.length)return null;
+  const slots=[];for(let index=0;index<active.length;index++){
+   const host=active[index],part=expected[index],layout=host._layout,images=[...host.querySelectorAll(':scope > picture > img,.typeset-live-flow-image')],url=new URL(part.src,win.location.href).href;if(!layout||host.dataset.orientation!==part.orientation||layout.image!==part.image||layout.orientation!==part.orientation||JSON.stringify(layout.size)!==JSON.stringify(part.size)||new URL(layout.src,win.location.href).href!==url||!images.length||images.some(im=>!im.complete||im.naturalWidth!==part.size[0]||im.naturalHeight!==part.size[1]||(im.currentSrc||im.src)!==url))return null;
+   const entries=part.native_live||[],mounted=[...host.querySelectorAll('[data-hot-id]')];if(entries.length!==2||part.hotspots.length!==2||mounted.length!==2||entries.map(entry=>entry.live_part).sort().join(',')!=='cpu-gpu,memory-network')return null;
+   for(const entry of entries){const matches=mounted.filter(el=>el.dataset.hotId===entry.hot_id),el=matches[0],hot=part.hotspots.find(hot=>hot.id===entry.hot_id),cell=el&&win.TypesetLiveFlow?.liveCell?.(host,el);
+    if(matches.length!==1||entry.slot!=='cockpit-grafana'||hot?.kind!=='live'||hot.slot!==entry.slot||hot.live_part!==entry.live_part||el.dataset.b2Slot!==entry.slot||el.dataset.livePart!==entry.live_part||cell?.node!==el||cell.compactFrame!==true||cell.slot!==entry.slot||cell.livePart!==entry.live_part||!frozenRect(hot.rect,entry.rect)||!frozenRect(cell.rect,entry.rect)||!frozenRect(cell.maskRect||cell.rect,entry.mask_rect||entry.rect)||!el.hidden||el.dataset.optionalEmpty!=='true'||el.dataset.grafanaEmptyReason!=='grafana-groups-unreadable'||win.getComputedStyle(el).display!=='none'||el.getClientRects().length||el.querySelector('iframe'))return null;
+    slots.push({screen:screen.id,part:part.image,hot_id:hot.id,slot:entry.slot,live_part:entry.live_part,kind:'unavailable_chart_group',semantic_status:'grafana_groups_unreadable',status:'pass',visible_rect:null,visible_text_rects:[],probes:[]});
+   }
+  }return slots;
  }
  /* typeset-content-acceptance-v1 */
  function contentBox(r){return {left:r.left,top:r.top,right:r.right??r.left+r.width,bottom:r.bottom??r.top+r.height,width:r.width,height:r.height};}
@@ -204,6 +217,7 @@
    for(const section of doc.querySelectorAll('.typeset-screen')){
     const s=data.screens.find(item=>item.id===section.dataset.screen);
     if(!s)continue;
+    const unavailable=hiddenGrafanaGroups(win,section,s);if(unavailable){liveSlots.push(...unavailable);screens.push({screen:s.id,semantic_status:'grafana_groups_unreadable',slots:unavailable,status:'pass'});continue;}
     for(const host of section.querySelectorAll('.typeset-part:not([hidden])')){
      const part=s.parts.find(item=>item.image===(host._layout?.image||host.dataset.part))||host._layout,staticBlocks=contentStaticRects(win,host,part),blocks=staticBlocks||[];if(!staticBlocks)issues.push(part.image+':content occupancy evidence missing');
      for(const hot of part.hotspots.filter(item=>['screenshot','live'].includes(item.kind))){const el=[...host.querySelectorAll('[data-hot-id]')].find(node=>node.dataset.hotId===hot.id);if(!el)continue;
@@ -250,7 +264,7 @@
  }
  /* end-typeset-content-acceptance-v1 */
  async function check(url,width,entry){
-  const{win,doc}=await load(url,width),issues=[],geometryDiagnostics=[];
+  const{win,doc}=await load(url,width),issues=[],geometryDiagnostics=[],geometrySemantics=[];
   const d=JSON.parse(doc.querySelector('#page-data').textContent);
   for(const screen of d.screens||[])for(const part of screen.parts||[])part.content_occupancy=entry?.content_occupancy?.parts?.[part.image];
   if(win.innerWidth!==width)issues.push('viewport width '+win.innerWidth);
@@ -264,6 +278,7 @@
   for(const section of doc.querySelectorAll('.typeset-screen')){
    const s=model.get(section.dataset.screen),active=[...section.querySelectorAll('.typeset-part')].filter(p=>!p.hidden),expected=s.parts.filter(p=>p.both||p.orientation===(width<768?'v':'h'));
    if(active.length!==expected.length)issues.push(s.id+':orientation part count');
+   const unavailable=hiddenGrafanaGroups(win,section,s);if(unavailable){geometrySemantics.push({screen:s.id,semantic_status:'grafana_groups_unreadable',slots:unavailable});live+=unavailable.length;parts+=active.length;continue;}
    for(let n=0;n<active.length;n++){
     const host=active[n],p=expected[n],r=host.getBoundingClientRect(),im=host.querySelector(':scope > picture > img'),image=sourceBox(win,host,[0,0,1,1]);parts++;
     if(im.naturalWidth!==p.size[0]||im.naturalHeight!==p.size[1])issues.push(p.image+':PNG dimensions differ');
@@ -331,7 +346,7 @@
    const grids=[...doc.querySelectorAll('.typeset-card-grid')].map(g=>{const css=win.getComputedStyle(g),columns=css.gridTemplateColumns.split(' '),gap=parseFloat(css.columnGap)||0,track=(g.clientWidth-(columns.length-1)*gap)/columns.length;return {cards:g.children.length,columns:columns.length,fills_track:[...g.children].every(c=>Math.abs(c.getBoundingClientRect().width-track)<1)};});
    if(d.page==='projects-home'&&(!grids.length||grids.some(g=>g.columns!==(width<768?1:2))))issues.push('project card grid columns');
    if(grids.some(g=>!g.fills_track))issues.push('project card does not fill grid track');
-  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,content_acceptance:content,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,geometry_diagnostics:geometryDiagnostics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
+  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,content_acceptance:content,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,geometry_diagnostics:geometryDiagnostics,geometry_semantics:geometrySemantics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
  }
  const effectNames=new Set(['cards','numbers','dots','arrows','screen_enter','seam','depth','update','ambient','back_top','footer_signature','navigation','viewer','brief','live','screenshots','compare','card_feedback']);
  const geometryKeys=['cards','numbers','dots','arrows'];

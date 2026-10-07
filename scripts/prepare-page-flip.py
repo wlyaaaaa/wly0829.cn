@@ -255,6 +255,8 @@ async def titles(records, chrome, profiles, evidence, ownership):
 
 def inject_runtime(text, js, css, index, model):
     text, removed_hints = remove_document_hints(text)
+    text = re.sub(r'<script\b[^>]*\bdata-(?:album-inline|image-loading)\b[^>]*>.*?</script>', '', text, flags=re.S | re.I)
+    text = re.sub(r'<link\b[^>]*(?:\bid=["\x27]album-route-index["\x27]|\bhref=["\x27]/?_album/[^"\x27]+\.css["\x27])[^>]*>', '', text, flags=re.I)
     delayed = []
     def delay(match):
         attrs = dict((k.lower(), html.unescape(v)) for k, _, v in ATTR.findall(match['attrs']))
@@ -294,7 +296,8 @@ def inject_runtime(text, js, css, index, model):
                     portrait = descriptor['orientation'] == 'v'
                     media = ('(max-width:767.98px)' if portrait else '(min-width:768px)') if descriptor.get('widthBased') else ('(orientation:portrait)' if portrait else '(orientation:landscape)')
                     image = re.sub(r'\s+src="[^"]*"', '', tag[0])
-                    return '<source media="'+media+'" srcset="'+html.escape(attrs['data-src'],quote=True)+'">'+image
+                    source = '<source media="'+media+'" srcset="'+html.escape(attrs['data-src'],quote=True)+'">'
+                    return ('' if source in part else source)+image
                 addition = ''.join(' ' + name + '="' + html.escape(attrs['data-'+name],quote=True) + '"' for name in ['src','srcset'] if attrs.get('data-'+name) and not attrs.get(name))
                 return tag[0][:-2] + addition + ' />' if tag[0].endswith('/>') and addition else tag[0][:-1] + addition + '>'
             part = re.sub(r'<(?:img|source)\b[^>]*>', eager, part)
