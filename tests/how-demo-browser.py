@@ -16,7 +16,16 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import unquote, urlsplit
 
 ROOT=Path(__file__).resolve().parents[1]
-SNAP="""()=>{const s=document.getElementById('one-sentence');return {url:location.href,phase:s?.dataset.howDemoPhase,ready:s?.dataset.howDemoReady,story:s?.dataset.howDemoStory,time:Number(s?.dataset.howDemoTime),speed:Number(s?.dataset.howDemoSpeed),sourceSpeed:window.SiteMotionAppearance?.speed_multiplier,visible:s?.dataset.howDemoVisible,overflow:document.documentElement.scrollWidth>innerWidth+1,stageDebug:typeof window.stage,result:s?.querySelector('.m')?.textContent,go:s?.querySelector('.go')?.getAttribute('href'),intro:s?.querySelector('.note')?.textContent,caseAnchors:['case-trip','case-restore','case-away'].map(id=>({id,exists:!!document.getElementById(id)})),clipped:[...s.querySelectorAll('.node .in,.result .in')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>({text:e.textContent,width:e.clientWidth,scroll:e.scrollWidth})),buttonCount:s?.querySelectorAll('.say').length,initialization:s?.dataset.howDemoInitialized,album:window.SiteAlbum?.snapshot,oldScreenCount:document.querySelectorAll('main [data-screen]').length};}"""
+SNAP="""()=>{const s=document.getElementById('one-sentence');return {url:location.href,phase:s?.dataset.howDemoPhase,ready:s?.dataset.howDemoReady,story:s?.dataset.howDemoStory,time:Number(s?.dataset.howDemoTime),speed:Number(s?.dataset.howDemoSpeed),sourceSpeed:window.SiteMotionAppearance?.speed_multiplier,visible:s?.dataset.howDemoVisible,overflow:document.documentElement.scrollWidth>innerWidth+1,stageDebug:typeof window.stage,result:s?.querySelector('.m')?.textContent,go:s?.querySelector('.go')?.getAttribute('href'),intro:s?.querySelector('.note')?.textContent,caseAnchors:['case-trip','case-restore','case-away'].map(id=>({id,exists:!!document.getElementById(id)})),clipped:[...s.querySelectorAll('.node .in,.result .in')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>({text:e.textContent,width:e.clientWidth,scroll:e.scrollWidth})),buttonCount:s?.querySelectorAll('.say').length,initialization:s?.dataset.howDemoInitialized,album:window.SiteAlbum?.snapshot,oldScreenCount:document.querySelectorAll('main [data-screen]').length,
+sourceScreenCount:JSON.parse(document.getElementById('page-data').textContent).screens.length,
+detailScreenCount:s.querySelectorAll('[data-how-story-detail] [data-screen]').length,
+detailMounts:[...s.querySelectorAll('[data-how-story-detail]')].map(e=>({story:e.dataset.howStoryDetail,hidden:e.hidden,mounted:[...e.querySelectorAll('.typeset-part')].filter(p=>p._typesetInstalled).length})),
+visibleCase:[...s.querySelectorAll('[data-how-story-detail]')].filter(e=>e.getClientRects().length).map(e=>e.dataset.howStoryDetail).join(','),
+wiresHidden:!s.querySelector('#how-demo-wires').getClientRects().length,
+buttons:[...s.querySelectorAll('.say')].map(b=>{
+ const r=document.createRange();r.selectNodeContents(b);const t=r.getBoundingClientRect(),q=b.getBoundingClientRect();
+ return {lines:r.getClientRects().length,dx:t.x+t.width/2-q.x-q.width/2,dy:t.y+t.height/2-q.y-q.height/2,height:q.height};
+})};}"""
 
 
 async def main(args):
@@ -66,7 +75,8 @@ async def main(args):
                 async def load():
                     await page.goto(base+'/how/',wait_until='domcontentloaded');await page.wait_for_function('document.getElementById("one-sentence")?.dataset.howDemoReady==="true"',timeout=30000)
                 await load();await page.wait_for_timeout(250);idle=await snap();assert idle['phase']=='idle' and idle['time']==0 and idle['stageDebug']=='undefined',idle
-                assert idle['oldScreenCount']==15 and idle['buttonCount']==3 and all(a['exists'] for a in idle['caseAnchors'])
+                assert idle['sourceScreenCount']==15 and idle['detailScreenCount']==7 and idle['visibleCase']=='0' and idle['buttonCount']==3 and all(a['exists'] for a in idle['caseAnchors'])
+                assert idle['wiresHidden'] and all(b['lines']==1 and abs(b['dx'])<=2 and abs(b['dy'])<=2 and b['height']>=44 for b in idle['buttons']),idle
                 assert idle['speed']==idle['sourceSpeed']==manifest['how_demo_preparation']['speed'],idle
                 results.append({'device':device,'case':'offscreen-idle','snapshot':idle,'chrome':context.browser.version})
                 await page.locator('#how-demo-stage').scroll_into_view_if_needed()
@@ -82,7 +92,7 @@ async def main(args):
                         await page.wait_for_timeout(100)
                     else:raise RuntimeError('Story did not finish in real time: '+str(await snap()))
                     data=await page.evaluate('JSON.parse(document.querySelector("[data-how-demo-data]").textContent)')
-                    assert sample['result']==data['stories'][i]['result'] and sample['go']==data['stories'][i]['link'] and not sample['clipped'] and not overflow,sample
+                    assert sample['result']==data['stories'][i]['result'] and sample['go']==data['stories'][i]['link'] and sample['visibleCase']==str(i) and not sample['wiresHidden'] and not sample['clipped'] and not overflow,sample
                     results.append({'device':device,'case':'story-'+str(i+1),'elapsed_seconds':round(time.monotonic()-started,3),'snapshot':sample,'samples':frames})
                 await page.locator('#how-demo-result .go').click();await page.wait_for_timeout(180)
                 assert urlsplit(page.url).fragment=='case-away';results.append({'device':device,'case':'real-case-anchor','url':page.url})
@@ -91,6 +101,21 @@ async def main(args):
                 for i in range(3):
                     await page.locator('#how-demo-pick button').nth(i).click();await page.wait_for_timeout(30);sample=await snap();assert sample['phase']=='complete' and not sample['overflow'] and not sample['clipped'],sample
                     results.append({'device':device,'case':'reduce-'+str(i+1),'snapshot':sample})
+                for fragment,expected in [('case-restore','1'),('how-15','2')]:
+                    await page.goto(base+'/how/#'+fragment,wait_until='domcontentloaded');await page.wait_for_function('document.getElementById("one-sentence")?.dataset.howDemoReady==="true"')
+                    assert (await snap())['visibleCase']==expected
+                    await page.reload(wait_until='domcontentloaded');await page.wait_for_function('document.getElementById("one-sentence")?.dataset.howDemoReady==="true"');assert (await snap())['visibleCase']==expected
+                    results.append({'device':device,'case':'detail-direct-refresh-'+fragment,'snapshot':await snap()})
+                await page.locator('#how-demo-pick button').nth(0).click();await page.locator('#how-demo-pick button').nth(1).click()
+                await page.go_back();await page.wait_for_function('document.getElementById("one-sentence").dataset.howDemoStory==="0"');assert (await snap())['visibleCase']=='0'
+                await page.go_forward();await page.wait_for_function('document.getElementById("one-sentence").dataset.howDemoStory==="1"');assert (await snap())['visibleCase']=='1'
+                plain=await context.browser.new_context(java_script_enabled=False,**options);await plain.route('**/*',route)
+                reading=await plain.new_page();await reading.goto(base+'/how/',wait_until='domcontentloaded')
+                assert await reading.locator('[data-how-story-detail] [data-screen]').count()==7
+                assert await reading.locator('[data-how-story-detail] img[src]').count()>=7
+                assert all([await reading.locator('[data-how-story-detail="'+str(i)+'"]').is_visible() for i in range(3)])
+                results.append({'device':device,'case':'no-js-full-cases','screens':7,'boundary':'page-data retains 15 screens; current native runtime may also mount inactive detail screens'})
+                await plain.close()
                 await context.close()
             complete=True
     finally:

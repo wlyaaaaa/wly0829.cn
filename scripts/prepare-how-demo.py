@@ -145,15 +145,43 @@ def panorama_data(args,page):
     return projection,proof
 
 
-def render(data,speed):
+def move_story_details(text,data):
+    panels=[]
+    for i,story in enumerate(data['stories']):
+        chunks=[]
+        for screen in story['detail_screens']:
+            matches=list(re.finditer(r'<section\b[^>]*\bid="'+re.escape(screen['id'])+r'"[^>]*>[\s\S]*?</section>',text))
+            if len(matches)!=1 or matches[0][0].count('<section')!=1:
+                raise ValueError('Expected one complete flat case section: '+screen['id'])
+            match=matches[0];chunk=match[0];text=text[:match.start()]+text[match.end():]
+            def image_source(image):
+                tag=image[0]
+                return tag if re.search(r'(?<![-\w])src=',tag) else re.sub(r'\bdata-src="([^"]+)"',r'data-src="\1" src="\1"',tag,count=1)
+            chunks.append(re.sub(r'<img\b[^>]*>',image_source,chunk))
+        anchor=story['link'].lstrip('#')
+        marker=re.search(r'<(?:div|span)\b[^>]*\bid="'+re.escape(anchor)+r'"[^>]*></(?:div|span)>',text)
+        if marker:
+            chunks.insert(0,marker[0]);text=text[:marker.start()]+text[marker.end():]
+        if not any('id="'+anchor+'"' in chunk for chunk in chunks):
+            raise ValueError('Case reading anchor is missing: '+anchor)
+        panels.append('<div data-how-story-detail="'+str(i)+'">'+''.join(chunks)+'</div>')
+    return text,''.join(panels)
+
+
+def render(data,speed,details=''):
     ui=data['ui'];esc=lambda value:html.escape(value,quote=True)
     encoded=json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('</','<\\/')
     return MARKER_START+f'''<section class="how-demo-screen" id="{SCREEN}" aria-labelledby="how-demo-title" data-how-demo-site-speed="{speed}">
 <h2 class="how-demo-title" id="how-demo-title">{esc(ui['title'])}</h2><p class="how-demo-sub">{esc(ui['intro'])}</p>
-<div class="app" id="how-demo-app"><svg id="how-demo-wires" aria-hidden="true"></svg><div id="how-demo-fly" aria-hidden="true"></div><img class="leaf" src="{esc(data['assets']['leaf-r']['src'])}" alt="">
+<div class="app" id="how-demo-app"><svg id="how-demo-wires" aria-hidden="true" hidden></svg><div id="how-demo-fly" aria-hidden="true"></div><img class="leaf" src="{esc(data['assets']['leaf-r']['src'])}" alt="">
 <aside class="side"><h2>{esc(ui['asideTitle'])}</h2><div class="pick" id="how-demo-pick"></div><div class="ill" id="how-demo-ill"></div><p class="note">{esc(ui['note'])}</p><div class="legend" id="how-demo-legend"></div></aside>
 <section class="stage" id="how-demo-stage" aria-live="polite"><div class="slotrow"><span class="who" id="how-demo-who"></span><div class="slot" id="how-demo-slot" data-tip="{esc(ui['slotTip'])}" tabindex="0"><span class="txt" id="how-demo-slottxt">&#160;</span></div></div><div class="grid" id="how-demo-grid"></div><div class="result" id="how-demo-result"></div></section></div>
 <div id="how-demo-tip" role="tooltip"></div><div class="how-demo-transcript" data-screen-transcript="how-demo-v3">{esc(transcript(data))}</div>
+{details}<noscript><style>
+#how-demo-app{{display:none}}
+[data-how-story-detail] [data-orientation="v"]{{display:none}}
+@media(max-width:767px){{[data-how-story-detail] [data-orientation="h"]{{display:none}}[data-how-story-detail] [data-orientation="v"]{{display:block}}}}
+</style></noscript>
 <script type="application/json" data-how-demo-data>{encoded}</script></section>'''+MARKER_END
 
 
@@ -188,10 +216,11 @@ def prepare(args):
     def bundle(name,payload,suffix):
         rel='_how-demo/'+name+'-'+hashlib.sha256(payload).hexdigest()[:20]+suffix;updates[rel]=payload;return '/'+rel
     css=bundle('how-demo',(HERE/'how-demo-runtime.css').read_bytes(),'.css');js=bundle('how-demo',(HERE/'how-demo-runtime.js').read_bytes(),'.js')
-    text=re.sub(re.escape(MARKER_START)+r'[\s\S]*?'+re.escape(MARKER_END),'',before)
+    text,details=move_story_details(before,data)
+    text=re.sub(re.escape(MARKER_START)+r'[\s\S]*?'+re.escape(MARKER_END),'',text)
     text=re.sub(r'<link\b[^>]*data-how-demo-bundle[^>]*>|<script\b[^>]*data-how-demo-bundle[^>]*>[\s\S]*?</script>','',text)
     insertion=text.index('</section>',text.index('id="how-01"'))+len('</section>')
-    text=text[:insertion]+render(data,speed)+text[insertion:]
+    text=text[:insertion]+render(data,speed,details)+text[insertion:]
     text=re.sub(r'<p class="how-demo-jump">[\s\S]*?</p>', '', text)
     text=re.sub(r'(<section\b[^>]*\bid="how-01"[^>]*>)', r'\1<p class="how-demo-jump"><a href="#one-sentence">点一句话，看它怎么被办成 →</a></p>', text, count=1)
     album='data-album-runtime' in text
@@ -211,7 +240,7 @@ def prepare(args):
     search_original=source_path(source, 'search-index.js').read_bytes().decode('utf8');prefix='window.__WLY_SEARCH_INDEX__='
     if not search_original.startswith(prefix): raise ValueError('Unknown existing search-index contract')
     arr,end=json.JSONDecoder().raw_decode(search_original[len(prefix):]);arr=[e for e in arr if e.get('origin')!='how-demo-v3']
-    projected=[{'type':'协作示例','group':'系统','projectSlug':None,'title':data['ui']['title']+' · '+s['say'],'href':'/how/#one-sentence','detail':s['result'],'search':shared_text(data)+'\n'+story_text(data,s),'aliases':data['chipNames'],'scopes':['system'],'origin':'how-demo-v3'} for s in data['stories']]
+    projected=[{'type':'协作示例','group':'系统','projectSlug':None,'title':data['ui']['title']+' · '+s['say'],'href':'/how/'+s['link'],'detail':s['result'],'search':shared_text(data)+'\n'+story_text(data,s),'aliases':data['chipNames'],'scopes':['system'],'origin':'how-demo-v3'} for s in data['stories']]
     combined=prefix+json.dumps(arr+projected,ensure_ascii=False,separators=(',',':'))+search_original[len(prefix)+end:]
     search=bundle('how-demo-search',combined.encode('utf8'),'.js');updated=[]
     for rel in original:

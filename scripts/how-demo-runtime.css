@@ -1,13 +1,14 @@
 #one-sentence{position:relative;container-type:inline-size;container-name:howdemo;max-width:1360px;margin:0 auto 24px;padding:16px 16px 32px;background:#fff;color:var(--text,#2e4675);font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",sans-serif;line-height:1.7;line-break:strict;scroll-margin-top:140px}#one-sentence,#one-sentence *{box-sizing:border-box}#one-sentence .how-demo-icon{display:block;width:100%;height:100%}#one-sentence .how-demo-title{font-size:24px;margin:2px 0 4px;color:var(--title,#0a7232);letter-spacing:.02em}#one-sentence .how-demo-sub{font-size:14.5px;margin:0 0 14px;line-height:1.7;max-width:900px}#one-sentence .how-demo-transcript{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:pre-wrap}#one-sentence .ill img{visibility:visible}#one-sentence [data-tip]:focus-visible{outline:2px solid var(--accent,#0a7a33);outline-offset:2px}
 #how-01 .how-demo-jump{position:relative;z-index:5;margin:12px 24px}#how-01 .how-demo-jump a{display:inline-flex;align-items:center;min-height:44px;padding:10px 18px;border:2px solid #c3ead0;border-radius:14px;background:#f2fbf5;color:#0a7232;font-size:16px;line-height:1.5;text-decoration:none}#how-01 .how-demo-jump a:hover{background:#e5f6eb}#how-01 .how-demo-jump a:focus-visible{outline:2px solid #0a7232;outline-offset:3px}
 #one-sentence h1{ font-size:24px; margin:2px 0 4px; color:var(--title,#0a7232); letter-spacing:.02em; }
+#how-demo-wires[hidden]{display:none}
 #one-sentence .sub{ color:var(--text,#2e4675); font-size:14.5px; margin:0 0 14px; line-height:1.7; max-width:900px; }
 #one-sentence .app{ position:relative; display:grid; grid-template-columns:286px 1fr; gap:18px; padding:16px; background:#fff; overflow-x:clip; }
 #one-sentence .side,#one-sentence .stage{ position:relative; z-index:2; }
 #one-sentence .leaf{ position:absolute; right:2px; top:-30px; width:56px; height:auto; z-index:4; pointer-events:none; }
 #one-sentence .side h2{ font-size:15px; color:var(--title,#0a7232); margin:4px 0 10px; }
 #one-sentence .pick{ display:flex; flex-direction:column; gap:10px; }
-#one-sentence .say{ font:inherit; font-size:14.5px; line-height:1.55; text-align:left; padding:11px 14px 11px 38px; border-radius:16px 16px 16px 6px; cursor:pointer;
+#one-sentence .say{ font:inherit; font-size:14.5px; line-height:1.55; display:flex; align-items:center; justify-content:center; text-align:center; white-space:nowrap; min-height:44px; padding:11px 14px; border-radius:16px 16px 16px 6px; cursor:pointer;
          border:2px solid #c3ead0; background:#fff; color:var(--text,#2e4675); position:relative; transition:background .12s, border-color .12s; }
 #one-sentence .say::before{ content:"“"; position:absolute; left:12px; top:4px; font-size:30px; line-height:1; color:#8fcfa8; font-family:Georgia,serif; }
 #one-sentence .say:hover{ background:#f6fcf8; border-color:#9fd8b3; }

@@ -18,17 +18,29 @@
       "id": "how-this-site-01",
       "section": "top",
       "title": "这个网页是怎么做的",
-      "scene": "横版：首屏沿用现有书桌与机器人水彩插画；左侧介绍，下方四张数字卡和两个链接按钮。标题用已有毛笔图。",
+      "scene": "横版：首屏沿用现有书桌与机器人水彩插画；左侧介绍，下方是更新、发布检查、加载、修错与这次分工的真实章节入口。标题用已有毛笔图。",
       "portrait": "竖版：按同一份文字顺序排列，卡片和表格按手机宽度自然分页；不缩小正文。",
-      "text": "# 这个网页是怎么做的\n\n我只做三件事：提要求、做决定、验收。其余的活，由几种 AI 分头做：查事实、写稿、画图、排版、挑错、配置托管，再把网页放上网。\n\n这个网站自己就是例子。一开始每屏连字带画全交给 AI 画；卡在维护和流量上以后，改成程序排字、AI 画插画，多路 AI 同时施工、互相挑错。它现在也是我唯一的总看板，它对我有什么用、怎么用，见〔个人网站（总看板）〕。\n\n- **80 多页**　这一轮要做的页面，首页另算\n- **700 多屏**　每屏都排电脑和手机两种版式\n- **约 30 路**　同一时间施工的 AI 任务\n- **约 2 小时 40 分**　一批更新从定稿到上线核对完\n\n截至 10 月 4 日，数字都已取整。\n\n〔看分工 ↓〕　〔看数字口径 ↓〕",
+      "text": "# 这个网页是怎么做的\n\n改一处要多久、发布前查什么：先看更新流程与数字口径，再看怎样才算做完。网页怎么快起来、出了岔子怎么修，也有这次制作中实际走过的办法。\n\n我只做三件事：提要求、做决定、验收。其余的活，由几种 AI 分头做：查事实、写稿、画图、排版、挑错、配置托管，再把网页放上网。\n\n这个网站自己就是例子。一开始每屏连字带画全交给 AI 画；卡在维护和流量上以后，改成程序排字、AI 画插画，多路 AI 同时施工、互相挑错。它现在也是我唯一的总看板，它对我有什么用、怎么用，见〔个人网站（总看板）〕。\n\n〔以后怎么更新与数字口径 ↓〕　〔发布前怎样才算做完 ↓〕　〔加载与托管 ↓〕　〔出了岔子怎么修 ↓〕　〔这次谁做什么 ↓〕",
       "links": [
         {
-          "text": "看分工 ↓",
-          "href": "/how-this-site/#who"
+          "text": "以后怎么更新与数字口径 ↓",
+          "href": "/how-this-site/#numbers"
         },
         {
-          "text": "看数字口径 ↓",
-          "href": "/how-this-site/#numbers"
+          "text": "发布前怎样才算做完 ↓",
+          "href": "/how-this-site/#quality"
+        },
+        {
+          "text": "加载与托管 ↓",
+          "href": "/how-this-site/#speed"
+        },
+        {
+          "text": "出了岔子怎么修 ↓",
+          "href": "/how-this-site/#repairs"
+        },
+        {
+          "text": "这次谁做什么 ↓",
+          "href": "/how-this-site/#who"
         },
         {
           "text": "个人网站（总看板）",
@@ -47,11 +59,11 @@
       "title": "谁做什么",
       "scene": "横版：分工流程与准确型号角色表，配已有文稿、画笔、放大镜、代码等图标。不要以灯泡冒充具体AI头像。",
       "portrait": "竖版：按同一份文字顺序排列，卡片和表格按手机宽度自然分页；不缩小正文。",
-      "text": "## 谁做什么\n\n我的要求 → Claude 想和把关 → 多路 AI 施工 → 程序检查 → Claude 人眼验收 → 发布后核对\n\n| 谁 | 这次做什么 |\n|---|---|\n| 我 | 提要求、选方案、看成品，指出要改的地方 |\n| Claude Opus 5.5 | 想和把关、拆活派活、写关键文案和提示词；排版框架是前期做过的 |\n| GPT-6.1 Sol | 查事实、做组件、接线、独立审查；早期用过 GPT-6 Sol |\n| GPT-6 Astra | 风格样图、拼页程序、难活和前端审美复核 |\n| GPT-6 Luna | 调用 Codex 内置的生图工具，画整屏、插画和毛笔标题这类量大的素材 |\n| Claude Fable 5.1 | 在另一个对话里专管创意：定动效方向、写分镜、审效果 |\n| Google Flow | 用 Omni 1.1 Flash 把插画做成短视频；现在改用代码动效，视频留作退路 |\n\n谁来做，看成品要什么：能用就行的交能胜任里最划算的；要惊艳的，样板和关键部分交做得最好的，其余照样板做。能力只看厂商公布与 AA 等权威评测；样板定稿前、交付前各一轮头脑风暴。Astra 可把子活再派给 Sol 或 Luna。所有 AI 守同一套规则，比如哪些内容能公开。\n\n〔怎么协作〕",
+      "text": "## 谁做什么\n\n我的要求 → Claude 想和把关 → 多路 AI 施工 → 程序检查 → Claude 人眼验收 → 发布后核对\n\n| 谁 | 这次做什么 |\n|---|---|\n| 我 | 提要求、选方案、看成品，指出要改的地方 |\n| Claude Opus 5.5 | 想和把关、拆活派活、写关键文案和提示词；排版框架是前期做过的 |\n| GPT-6.1 Sol | 查事实、做组件、接线、独立审查；早期用过 GPT-6 Sol |\n| GPT-6 Astra | 风格样图、拼页程序、难活和前端审美复核 |\n| GPT-6 Luna | 调用 Codex 内置的生图工具，画整屏、插画和毛笔标题这类量大的素材 |\n| Claude Fable 5.1 | 在另一个对话里专管创意：定动效方向、写分镜、审效果 |\n| Google Flow | 用 Omni 1.1 Flash 把插画做成短视频；现在改用代码动效，视频留作退路 |\n\n〔现行型号、档位和分工 → 怎么协作〕",
       "links": [
         {
-          "text": "怎么协作",
-          "href": "/how/"
+          "text": "现行型号、档位和分工 → 怎么协作",
+          "href": "/how/#ai-roles"
         }
       ],
       "anchors": [],
@@ -215,7 +227,6 @@
         "as_of": "2026-10-04",
         "source": "typeset-inventory/stats.json；按pages_manifest现读核对",
         "screens": [
-          "how-this-site-01",
           "how-this-site-12"
         ]
       },
@@ -226,7 +237,6 @@
         "as_of": "2026-10-04",
         "source": "HANDOFF:94-95",
         "screens": [
-          "how-this-site-01",
           "how-this-site-06",
           "how-this-site-12"
         ]
@@ -311,7 +321,6 @@
         "as_of": "2026-10-04",
         "source": "integration/finish-wave2a-report.py:18,29,37；publication-state.json:51",
         "screens": [
-          "how-this-site-01",
           "how-this-site-12"
         ]
       },
@@ -339,24 +348,39 @@
     ],
     "mentions": [
       {
-        "target": "/how-this-site/#who",
-        "screen": "how-this-site-01",
-        "text": "看分工 ↓"
+        "target": "/projects/localocr/",
+        "screen": "how-this-site-07",
+        "text": "本地文字识别"
       },
       {
         "target": "/how-this-site/#numbers",
         "screen": "how-this-site-01",
-        "text": "看数字口径 ↓"
+        "text": "以后怎么更新与数字口径 ↓"
       },
       {
-        "target": "/how/",
+        "target": "/how-this-site/#quality",
+        "screen": "how-this-site-01",
+        "text": "发布前怎样才算做完 ↓"
+      },
+      {
+        "target": "/how-this-site/#speed",
+        "screen": "how-this-site-01",
+        "text": "加载与托管 ↓"
+      },
+      {
+        "target": "/how-this-site/#repairs",
+        "screen": "how-this-site-01",
+        "text": "出了岔子怎么修 ↓"
+      },
+      {
+        "target": "/how-this-site/#who",
+        "screen": "how-this-site-01",
+        "text": "这次谁做什么 ↓"
+      },
+      {
+        "target": "/how/#ai-roles",
         "screen": "how-this-site-02",
-        "text": "怎么协作"
-      },
-      {
-        "target": "/projects/localocr/",
-        "screen": "how-this-site-07",
-        "text": "本地文字识别"
+        "text": "现行型号、档位和分工 → 怎么协作"
       },
       {
         "target": "/projects/wly0829-cn/",

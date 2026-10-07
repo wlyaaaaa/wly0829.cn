@@ -76,6 +76,9 @@ def recipe(path):
         for rel,expected in static_module.reference_data(reference)[2].items():
             inputs[str((reference.parent/rel).resolve())]=expected
         inputs[str(HERE/'prepare-static-home.py')]=stamp(HERE/'prepare-static-home.py')
+        highlights_spec=importlib.util.spec_from_file_location('creative_home_highlights',HERE/'prepare-home-highlights.py')
+        highlights=importlib.util.module_from_spec(highlights_spec);highlights_spec.loader.exec_module(highlights)
+        inputs.update({str(p):stamp(p) for p in highlights.input_paths()})
     for pattern in ('prepare-home-*.*', 'home-living-*.*', 'prepare-page-flip.py', 'album-runtime.*',
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
                     'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py', 'release_delta.py'):

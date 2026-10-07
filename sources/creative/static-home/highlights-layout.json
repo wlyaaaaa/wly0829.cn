@@ -1,0 +1,62 @@
+[
+  {
+    "screen": "home-highlights-01",
+    "orientation": "h",
+    "shape": "screen",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这套东西办过的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "照片视频录音管理",
+        "columns": 3,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "top_inside",
+        "icons": [
+          "_library/icons/波形照片.png",
+          "_library/icons/硬盘循环.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/麦克风.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/文件夹.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "home-highlights-01",
+    "orientation": "v",
+    "shape": "screen",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这套东西办过的事",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "照片视频录音管理",
+        "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/波形照片.png",
+          "_library/icons/硬盘循环.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/麦克风.png",
+          "_library/icons/趋势图.png",
+          "_library/icons/文件夹.png"
+        ]
+      }
+    ]
+  }
+]

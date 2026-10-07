@@ -16,6 +16,7 @@ from . import assets
 from .layout import build_html, load_spec, textless_visible_source, WIDTH, MIN_FONT
 from .parse import canon, expected_text, node_text, parse, original_markdown
 from .registry import load as load_registry
+from .content import bound_json
 
 PROTO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PIPE = os.path.dirname(os.path.dirname(PROTO))
@@ -442,7 +443,7 @@ def render_page(page_name, screens=None, orients=("h", "v"), do_compare=True, ou
     src = os.path.abspath(source_file) if source_file else page_sources().get(page_name)
     if not src:
         raise SystemExit(f"清单里没有页 {page_name}")
-    page = json.load(open(src, encoding="utf-8"))
+    page = bound_json(src)
     for screen in page["screens"]: screen["screenshots"] = [] if screen["id"] in page.get("withdrawn_screenshot_screens", []) else screen.get("screenshots", [])
     outdir = os.path.join(out_root, page_name)
     os.makedirs(os.path.join(outdir, "html"), exist_ok=True)

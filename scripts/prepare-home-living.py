@@ -104,46 +104,34 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
         offline = between(text, 'const offline=', 'const lastContact=')
         lamp = between(text, 'const lampReadKey=', 'function summary(){')
         pending = between(text, 'function pendingRows(){', 'function liveValue(')
-        extra = freshness + policy + connection + offline + lamp + pending
+        displayed = between(text, 'const slotKeys=', 'function slotTime(') + between(text, 'function value(slot){', 'function syncChildren(')
+        retained = between(text, 'const cockpitLastValues=', 'function rememberCockpitValues(') if 'const cockpitLastValues=' in text else ''
+        extra = freshness + policy + connection + offline + lamp + pending + displayed + retained
     else:
         extra = (between(text, 'const online=', 'const offline=')
                  + between(text, 'const offline=', 'const stateLabel='))
+    data_match = re.search(r'<script[^>]*id="page-data"[^>]*>(.*?)</script>', html, re.S)
+    source_data = json.loads(data_match[1])
+    data_identity = json.dumps({key:source_data.get(key) for key in ('kind','page','project')}, ensure_ascii=False)
     rules = numeric + adaptation + clock + dependencies + extra + summary
     body = MODEL_START + "\nimport {hardwareSnapshot} from '/" + numeric_rel + "';\n" + r'''
 /* 首页总览规则来自本次完整输入中实际使用的驾驶舱 B2，原函数保持原样。 */
 window.HomeLivingStatusModel = (() => {
+ const data=''' + data_identity + r''';function liveValue(){return summary();}
  let status=null,phase='loading',lastRead=0;
 ''' + rules + r'''
  return (raw, readPhase) => {
  status=raw?adaptStatus(raw):null;phase=readPhase;
  if(raw&&!raw.hardware)delete status.hardware;
  if(raw&&phase==='ready')lastRead=Number.isFinite(raw.observed_at_unix)?raw.observed_at_unix:clock();
- const value=summary();
- if (!online()) return Object.freeze({state:'off',title:'暂时读不到电脑',detail:value.text});
-''' + (r'''
- const unread=readGaps().map(gap=>gap.label+'暂时读不到；从 '+time(gap.since)+' 起'+(gap.overGrace?'，已经超过 10 分钟':'，10 分钟内先保持灯况'));
-''' if current else r'''
- const labels={automation:'自动任务',backups:'备份',projects:'项目',pending:'待验收事项',today:'今天的记录'};
- const unread=[];
- for(const [key,label] of Object.entries(labels)) {
-  const health=blockHealth(key);
-  if(health==='stale')unread.push(label+'的记录没有及时更新');
-  else if(health==='unknown')unread.push(label+'暂时读不到');
- }
- const hardware=hardwareHealth();
- if(hardware==='stale')unread.push('电脑硬件的记录没有及时更新');
- else if(hardware==='unknown')unread.push('电脑硬件有状态暂时读不到');
-''') + r'''
- const detail=[value.text,...unread].filter((text,index,all)=>all.indexOf(text)===index).join('；');
- return Object.freeze(value.state==='ok'?{state:'ok',title:value.text,detail}:
-  ['warn','error'].includes(value.state)?{state:'warn',title:'有事要处理',detail}:
-  {state:'off',title:'暂时读不到电脑',detail:'电脑在线；'+detail});
+ const displayed=typeof value==='function'?value('cockpit-overall'):summary();
+ return Object.freeze({state:!online()?'off':['warn','error'].includes(displayed.state)?'warn':displayed.state==='ok'?'ok':'off',title:displayed.text,detail:'',pendingCount:online()&&typeof pendingRows==='function'?pendingRows().filter(row=>!row.empty).length:null});
  };
 })();
 ''' + MODEL_END
     evidence = {'runtime': {'path': rel, **proof(original)}, 'numeric': {'path': numeric_rel, **proof(numeric_bytes)},
                 'rules_sha256': proof(rules.encode())['sha256'],
-                'extraction': 'actual-input-cockpit-b2-verbatim-summary-and-dependencies',
+                'extraction': 'actual-input-cockpit-b2-verbatim-overall-display-and-dependencies',
                 'model_contract': 'read-gap-policy' if current else 'legacy-summary',
                 'persistent_lamp_closure': current}
     return body, evidence

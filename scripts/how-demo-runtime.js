@@ -29,10 +29,17 @@ function nameHTML(s) {
   const parts = String(s).split(' · ');
   return parts.map((p, i) => `<span class="seg">${words(p)}${i < parts.length - 1 ? ' ·' : ''}</span>`).join(' ');
 }
+function modelHTML(row) {
+  const label = nameHTML(row.model);
+  return ['@model:luna', '@model:sol', '@model:opus'].includes(row.tip)
+    ? `<a href="/how/#ai-roles">${label}</a>` : label;
+}
 const pick = $('#how-demo-pick'), grid = $('#how-demo-grid'), resBox = $('#how-demo-result'), app = $('#how-demo-app'), wires = $('#how-demo-wires'), fly = $('#how-demo-fly'), slot = $('#how-demo-slot'), slottxt = $('#how-demo-slottxt'), who = $('#how-demo-who'), ill = $('#how-demo-ill');
+const details = [...scope.querySelectorAll('[data-how-story-detail]')];
 STORIES.forEach((s, i) => {
-  const b = document.createElement('button'); b.className = 'say'; b.type = 'button'; b.textContent = s.say; b.dataset.i = i;
+  const b = document.createElement('button'); b.className = 'say'; b.type = 'button'; b.textContent = s.choice || s.say; b.dataset.i = i;
   b.addEventListener('click', () => {
+    if (location.hash !== s.link) history.pushState(null, '', s.link);
     autoStarted = true; select(i, true);
     // 手机上舞台在句子下面：点完把舞台滚到眼前，免得演出发生在屏幕外
     if (narrow()) slot.scrollIntoView({ block:'start', behavior: reduce ? 'auto' : 'smooth' });
@@ -52,7 +59,7 @@ function build(i) {
       `<div class="node card"><div class="in"><span class="num">${esc(DATA.ui.taskPrefix)} ${k + 1} ${esc(DATA.ui.taskSuffix)}</span><span class="t1 nice">${words(r.task)}</span></div></div>` +
       `<div class="node rule" data-tip="${esc(tipText(r.ruleTip))}"><div class="ring"></div><div class="in">${icons(['盾牌对勾'])}<span class="t1 reveal nice">${words(r.rule)}</span></div><span class="stamp${r.wait ? ' wait' : ''}">${esc(r.stamp)}</span></div>` +
       `<div class="node take" data-tip="${esc(tipText(r.take.tip))}"><div class="ring"></div><div class="in">${icons(r.take.ic)}<span class="t1 nice name">${nameHTML(r.take.name)}</span><span class="t2 nice name">${nameHTML(r.take.sub)}</span></div></div>` +
-      `<div class="node ai" data-tip="${esc(tipText(r.tip))}"><div class="ring"></div><div class="in">${icons(r.ic)}<span class="t1 nice name">${nameHTML(r.model)}</span><span class="t2 reveal nice">${words(r.why)}</span>` +
+      `<div class="node ai" data-tip="${esc(tipText(r.tip))}"><div class="ring"></div><div class="in">${icons(r.ic)}<span class="t1 nice name">${modelHTML(r)}</span><span class="t2 reveal nice">${words(r.why)}</span>` +
         (r.act ? `<span class="act nice">${words(r.act.t)}</span>`.replace('act nice', `act ${r.act.kind} nice`) : '') + `</div></div>`;
     grid.appendChild(row);
   });
@@ -240,6 +247,7 @@ function apply(t) {
   const gl = span(t, TT.glow, .7);
   box.querySelector('.ring').style.opacity = String(gl > 0 && gl < 1 ? (1 - gl) : 0);
   box.querySelector('.ring').style.transform = `scale(${1 + gl * .04})`;
+  wires.toggleAttribute('hidden', !R.some(r => r.segs.some(s => Number(s.p.style.opacity) > 0 && Number(s.p.style.strokeDashoffset) < s.len)));
 }
 function seg(s, p, show) {
   s.p.style.strokeDashoffset = s.halo.style.strokeDashoffset = s.len * (1 - p);
@@ -255,7 +263,13 @@ const V={t:0,playing:false,last:0};
 function mark(){scope.dataset.howDemoStory=String(cur);scope.dataset.howDemoPhase=V.playing?(visible&&!document.hidden?'playing':'paused'):(TT&&V.t>=TT.end?'complete':'idle');scope.dataset.howDemoSpeed=String(SPEED);}
 function stop(){if(frame)cancelAnimationFrame(frame);frame=0;}
 function schedule(){if(V.playing&&visible&&!document.hidden&&!reduce&&!frame){V.last=performance.now();frame=requestAnimationFrame(tick);}mark();}
-function select(i,play){stop();SPEED=siteSpeed();if(i!==cur){cur=i;build(i);} [...pick.children].forEach((b,k)=>{b.classList.toggle('on',k===i);b.setAttribute('aria-pressed',String(k===i));});layout();V.t=reduce?TT.end:0;V.playing=!reduce&&play;apply(V.t);schedule();}
+function select(i,play){
+  stop();SPEED=siteSpeed();if(i!==cur){cur=i;build(i);}
+  details.forEach((detail,k)=>{detail.hidden=k!==i;});
+  [...pick.children].forEach((b,k)=>{b.classList.toggle('on',k===i);b.setAttribute('aria-pressed',String(k===i));});
+  dispatchEvent(new Event('resize'));
+  layout();V.t=reduce?TT.end:0;V.playing=!reduce&&play;apply(V.t);schedule();
+}
 function tick(now){frame=0;if(!V.playing||!visible||document.hidden||reduce){mark();return;}if(window.SiteMotionInsurance?.snapshot?.stalled||document.body.classList.contains('motion-stalled')){V.t=TT.end;V.playing=false;apply(V.t);mark();return;}SPEED=siteSpeed();const dt=Math.max(0,(now-V.last)/1000);V.last=now;V.t=Math.min(TT.end,V.t+dt*SPEED);if(V.t>=TT.end)V.playing=false;apply(V.t);mark();if(V.playing)frame=requestAnimationFrame(tick);}
 let resizing=0;
 const refresh=()=>{cancelAnimationFrame(resizing);resizing=requestAnimationFrame(()=>{layout();apply(V.t);});};
@@ -268,10 +282,21 @@ function showTip(el){const txt=el.getAttribute('data-tip');if(!txt)return;tipFor
 scope.addEventListener('mouseover',e=>{const el=e.target.closest('[data-tip]');if(el){if(el!==tipFor)showTip(el);}else hideTip();});
 scope.addEventListener('click',e=>{const el=e.target.closest('[data-tip]');if(el&&matchMedia('(hover: none)').matches)el===tipFor?hideTip():showTip(el);else if(!el)hideTip();});
 scope.addEventListener('focusin',e=>{const el=e.target.closest('[data-tip]');if(el)showTip(el);});scope.addEventListener('focusout',hideTip);addEventListener('scroll',hideTip,{passive:true});
-select(0,false);
+function followHash(){
+  const hash=decodeURIComponent(location.hash.slice(1)),target=hash?document.getElementById(hash):null;
+  const i=target?details.indexOf(target.closest('[data-how-story-detail]')):(hash?-1:0);
+  if(i<0)return false;
+  autoStarted=autoStarted||!!target;
+  if(i!==cur)select(i,!!target);
+  if(target)requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));
+  return true;
+}
+addEventListener('hashchange',followHash);
+addEventListener('popstate',followHash);
+if(!followHash())select(0,false);
 const ALL_IC=[...new Set(STORIES.flatMap(s=>s.rows.flatMap(r=>[...r.ic,...r.take.ic])).concat(DATA.ui.legend.map(l=>l.icon),'盾牌对勾'))];
 const KEEP=[];const decodes=ALL_IC.map(n=>{const im=new Image();im.crossOrigin='anonymous';im.src=IC(n);KEEP.push(im);return im.decode().catch(()=>{});});
-const fonts=document.fonts?.ready||Promise.resolve();const ownImages=[...scope.querySelectorAll('img')].map(im=>im.decode().catch(()=>{}));
+const fonts=document.fonts?.ready||Promise.resolve();const ownImages=[...app.querySelectorAll('img')].map(im=>im.decode().catch(()=>{}));
 Promise.all([fonts,...decodes,...ownImages]).then(()=>{ready=true;scope.dataset.howDemoReady='true';refresh();if(reduce){V.t=TT.end;apply(V.t);}else if(visible&&!autoStarted){autoStarted=true;select(0,true);}mark();});
 const watcher=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;scope.dataset.howDemoVisible=String(visible);if(!visible)stop();else if(ready&&!autoStarted){autoStarted=true;select(0,true);}else schedule();mark();},{threshold:0});watcher.observe($('#how-demo-stage'));
 })();
