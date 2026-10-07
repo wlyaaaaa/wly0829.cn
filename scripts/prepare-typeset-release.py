@@ -8,6 +8,7 @@ import json
 import math
 import os
 import re
+import shutil
 import struct
 import subprocess
 import sys
@@ -681,10 +682,11 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
         creative = build['creative_preparation']; creative['staged_build_report']['path'] = '<staged-report>'
         for step in creative['steps']:
             step['manifest'] = {'path': '<' + step['name'] + '-manifest>'}
+            step.pop('seconds', None)
     for field in ('inputs', 'creative_preparation'):
         if copies[0][field] != copies[1][field]:
             raise ValueError('Rebuild changed reviewed external inputs or creative ledger')
-    if rebuilt['creative_preparation'] != final_manifest.get('creative_preparation'):
+    if hybrid.stable_evidence(rebuilt['creative_preparation'], ROOT) != final_manifest.get('creative_preparation'):
         raise ValueError('Rebuilt creative report differs from the actual final manifest')
     return copies
 
@@ -724,6 +726,54 @@ def static_home_stages(release, static, creative, ui, checked):
         if len(rows) != 1 or rows[0]['before_sha256'] != digest(last / 'index.html') or rows[0]['after_sha256'] != digest(release / 'index.html'):
             raise ValueError('Final homepage postprocessing lacks its exact TOC before/after binding')
     return {'static_stage_verified': True, 'final_stage': stages[-1][0], 'final_picture_and_runtime_bound': True}
+def acceptance_plan(build, manifest, release):
+    urls = {'/', '/cockpit/', '/rules/charter/', '/projects/agents/', '/rescue/', '/rules/'}
+    urls.update(entry['url'] for entry in build['pages'].values())
+    urls.update(hybrid.file_route(rel) for rel, proof in manifest['files'].items()
+                if (rel.endswith('index.html') or rel == '404.html') and proof != manifest['baseline_files'].get(rel))
+    if any(not rel.endswith('.html') and manifest['files'].get(rel) != proof
+           for rel, proof in manifest['baseline_files'].items()):
+        urls.update(manifest['routes'])
+    pages = {}
+    for url in sorted(urls, key=lambda url: (url not in {entry['url'] for entry in build['pages'].values()}, url)):
+        match = hybrid.builder.PAGE_DATA.search((release/hybrid.route_file(url)).read_text('utf8'))
+        data = json.loads(match[2]) if match else {}
+        if data.get('typeset'):
+            key = data['page'] if data['page'] not in pages else data['page']+'@'+url
+            pages[key] = {'url': url}
+    return {'release_id': manifest['release_id'], 'manifest_sha256': digest(release/hybrid.MANIFEST),
+            'ui_pages': sorted(urls), 'pages': pages}
+
+
+def browser_acceptance(plan_path, reading_path, build_path, release, manifest):
+    plan = read(plan_path); expected = acceptance_plan(read(build_path), manifest, release)
+    if any(plan.get(key) != value for key, value in expected.items()) or plan['source_build_report_sha256'] != digest(build_path):
+        raise ValueError('Browser acceptance plan differs from the complete affected routes and fixed samples')
+    ui = read(plan['ui_verification']['path']); reading = read(reading_path)
+    if ui.get('candidate_manifest_sha256') != expected['manifest_sha256']:
+        raise ValueError('UI evidence lacks the current candidate manifest binding; rerun check-typeset-site.py')
+    if digest(plan['ui_verification']['path']) != plan['ui_verification']['sha256'] or Path(ui['candidate_root']).resolve() != release:
+        raise ValueError('UI evidence belongs to a different candidate')
+    if ui['schema'] != 'website.ui-gate.v1' or ui['blocker_count'] or {(r['route'], r['width']) for r in ui['records']} != {(url, width) for url in expected['ui_pages'] for width in (390, 1440)}:
+        raise ValueError('UI evidence omits required desktop/mobile routes or has blockers')
+    if (reading.get('schema') != 'wly.typeset-reading-check.v1' or reading.get('evidence_mode') != 'artifact'
+            or reading.get('status') != 'pass' or reading.get('artifact_unchanged') is not True
+            or reading['build_report_sha256'] != digest(plan_path) or reading['release_id'] != expected['release_id']
+            or reading['manifest_sha256'] != expected['manifest_sha256'] or Path(reading['root']).resolve() != release
+            or set(reading['pages']) != set(expected['pages']) or reading.get('response_failures')
+            or not reading['summary']['navigation_checks'] or any(reading['summary'][key] for key in ('failed_resizes', 'screen_mismatches', 'failed_navigation', 'page_errors'))):
+        raise ValueError('Reading evidence is not the complete unchanged candidate')
+    for page, entry in expected['pages'].items():
+        relative = hybrid.route_file(entry['url']); observed = reading['pages'][page]
+        ids = observed['screen_ids']; cases = [c for c in reading['cases'] if c['page'] == page]
+        if observed['url'] != entry['url'] or observed['html_sha256'] != manifest['files'][relative]['sha256']:
+            raise ValueError('Reading HTML binding differs: '+page)
+        required = {(screen, fraction, start, end) for screen in {ids[0], ids[len(ids)//2], ids[-1]}
+                    for fraction in (.15, .5, .85) for start, end in ((390, 844), (844, 390), (740, 1024), (1024, 740))}
+        actual = {(c['requested_screen'], c['requested_fraction'], c['from'][0], c['to'][0]) for c in cases if 'requested_screen' in c and c['pass']}
+        if actual != required or not any(c.get('kind') == 'rapid-resizes' and c['pass'] for c in cases) or not all(c['pass'] for c in cases):
+            raise ValueError('Full reading matrix is missing or failed: '+page)
+    return {'plan_sha256': digest(plan_path), 'reading_sha256': digest(reading_path), 'ui': plan['ui_verification'], 'ui_status': ui['status']}
 
 
 def prepare(args):
@@ -758,7 +808,7 @@ def prepare(args):
     rebuilt = read(args.rebuilt_report) if args.rebuilt_report else None
     reviewed_comparable = build
     comparable = rebuilt
-    if rebuilt and build.get('creative_preparation') and build['creative_preparation'] != manifest.get('creative_preparation'):
+    if rebuilt and build.get('creative_preparation') and hybrid.stable_evidence(build['creative_preparation'], ROOT) != manifest.get('creative_preparation'):
         try:
             reviewed_comparable, comparable = rebuilt_generation(build, rebuilt, manifest)
         except (ValueError, KeyError, OSError, TypeError) as error:
@@ -784,7 +834,7 @@ def prepare(args):
         block("baseline", "Release is not bound to the supplied production baseline")
     if build.get('live_ui_preparation'):
         ui=build['live_ui_preparation'];toc=ui.get('toc',{})
-        if ui.get('schema')!='wly.live-ui-preparation.v1' or ui!=manifest.get('live_ui_preparation'):
+        if ui.get('schema')!='wly.live-ui-preparation.v1' or hybrid.stable_evidence(ui, ROOT)!=manifest.get('live_ui_preparation'):
             block('live_ui_preparation','Live UI preparation differs from the exact final manifest')
         missing={entry['page']for entry in toc.get('missing_labels',[])}
         recorded={hybrid.route_file(entry['url'])for entry in build.get('pages',{}).values()
@@ -820,7 +870,7 @@ def prepare(args):
     elif build.get('creative_preparation'):
         try:
             creative=(rebuilt or build)['creative_preparation']
-            if creative.get('schema')!='wly.creative-replay-result.v1' or creative!=manifest.get('creative_preparation'):
+            if creative.get('schema')!='wly.creative-replay-result.v1' or hybrid.stable_evidence(creative, ROOT)!=manifest.get('creative_preparation'):
                 raise ValueError('Creative preparation differs from the reviewed final source')
             bound_file(creative['config']['path'],creative['config'],checked_inputs)
             config=read(creative['config']['path'])
@@ -916,7 +966,7 @@ def prepare(args):
                 plan=read(plan_path)
                 expected_runtime={page:entry['url'] for page,entry in runtime.items()}
                 expected_runtime.update({page:entry['url'] for page,entry in build['pages'].items()})
-                if set(proof['pages'])!=set(expected_runtime) or set(plan['pages'])!=set(expected_runtime):
+                if not set(expected_runtime) <= set(proof['pages']) or set(proof['pages']) != set(plan['pages']):
                     raise ValueError('Reading-position verification must cover every updated runtime page')
                 reviewed_root=Path(build['output_root']).resolve()
                 if Path(proof['root']).resolve()!=reviewed_root or proof['manifest_sha256']!=digest(reviewed_root/hybrid.MANIFEST):
@@ -945,6 +995,11 @@ def prepare(args):
             block('release_overlay',error)
     elif overlay_info:
         block('release_overlay','Build overlay is absent from the release manifest')
+    if getattr(args, 'reading_plan', None) or getattr(args, 'runtime_verification', None):
+        try:
+            result['browser_acceptance'] = browser_acceptance(args.reading_plan, args.runtime_verification, args.build_report, release, manifest)
+        except (ValueError, KeyError, OSError, TypeError) as error:
+            block('browser_acceptance', error)
     if build.get("files") != manifest["files"]:
         block("build", "Release files differ from the reviewed build report; rebuild requires new verification")
     if build.get("release_id", release_id) != release_id:
@@ -1135,6 +1190,10 @@ def prepare(args):
         except OSError as error:block('inputs',error)
     result['input_verification']={'unique_files_hashed':len(checked_inputs),'scope':'This prepare invocation only; full expected SHA/bytes and unchanged file stat'}
     result["status"] = "ready" if not result["blockers"] else "blocked"
+    if result['status'] == 'ready' and getattr(args, 'copy_to', None):
+        target = args.copy_to.resolve()
+        if target.is_relative_to(release) or release.is_relative_to(target): raise ValueError('Candidate copy must be disjoint')
+        shutil.copytree(release, target, copy_function=getattr(hybrid.builder, 'copy_release_asset', shutil.copy2))
     write(args.output, result)
     return result
 
@@ -1375,6 +1434,7 @@ def readback(args):
     result = {"schema": "wly.typeset-online-readback.v1", "status": status, "release_id": manifest["release_id"],
               'manifest_sha256': manifest_sha256, 'file_fingerprints': files,
               'files_sha256': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(), 'retained_report_sha256': retained_report_sha256,
+              'previous_report_fallback_reason': ('Explicit full recheck' if full else 'No complete valid previous readback') if not retained_report_sha256 else None,
               "checked_at_beijing": now(), "checked_files": len(checks), "checks": checks, "issues": failed,
               "retried_files": len(current_checks), "retry_report_sha256": digest(retry_report) if retry_report else None,
               "excluded_deployment_metadata": ["CNAME"], "automatic_rollback": False}
@@ -1396,6 +1456,7 @@ def main(argv=None):
     gate.add_argument("--rebuilt-report", type=Path, help="Bind a publish-time rebuild's inputs and program contract to the reviewed report")
     gate.add_argument('--runtime-verification',type=Path,help='Actual artifact rotation checks for the preserved pages whose app references change')
     gate.add_argument('--reading-plan',type=Path,help='Exact URL plan checked by runtime verification')
+    gate.add_argument('--copy-to',type=Path,help='Copy this unchanged, fully checked candidate to a fresh publication directory')
     gate.add_argument("--pages", nargs="+")
     production = commands.add_parser("production-check", help="Explicit online check used only by -Publish")
     for name in ("baseline", "baseline-manifest", "output"):

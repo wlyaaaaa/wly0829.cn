@@ -99,6 +99,22 @@ class PublicationSpeedTests(unittest.TestCase):
         data = h.read(old); data['files_sha256'] = '0'*64; h.write(old, data)
         current, calls, unused = self.online(old)
         self.assertEqual(current['retried_files'], current['checked_files'])
+        self.assertTrue(current['previous_report_fallback_reason'])
+
+    def test_automatic_readback_baseline_requires_current_passing_identity(self):
+        import subprocess
+        source = (ROOT/'scripts/publish-typeset.ps1').read_text('utf-8-sig')
+        helper = source[source.index('function ResolveReadbackBaseline'):source.index('function ConfirmReadback')]
+        script = self.root/'readback-baseline.ps1'
+        script.write_text('param([string]$CachePath,[string]$Identity)\n$ErrorActionPreference="Stop"; $online=$Identity|ConvertFrom-Json\nfunction ReadJson([string]$Path){Get-Content -Raw -LiteralPath $Path|ConvertFrom-Json}\nfunction Invoke-RestMethod{return $online}\n'+helper+'\nResolveReadbackBaseline $CachePath|ConvertTo-Json -Compress\n', encoding='utf8')
+        first, unused, cache = self.online()
+        identity = json.dumps({'release_id':first['release_id'], 'manifest_sha256':first['manifest_sha256']})
+        for cache_path, fingerprint, mode in ((cache, first['manifest_sha256'], 'candidate_previous'), (cache, '0'*64, 'full'), (self.root/'absent.json', None, 'full')):
+            first['manifest_sha256'] = fingerprint
+            h.write(cache, first)
+            result = json.loads(subprocess.check_output(['pwsh', '-NoProfile', '-File', str(script), str(cache_path), identity], text=True))
+            self.assertEqual(result['mode'], mode)
+            if mode == 'full': self.assertTrue(result['reason'])
 
     def test_same_release_id_changed_manifest_rejects_old_retry(self):
         first, unused, old = self.online()
@@ -116,3 +132,50 @@ class PublicationSpeedTests(unittest.TestCase):
         with patch.dict(os.environ, {'WLY_RELEASE_FULL':'1'}), patch.object(fixture.oss, 'verify_object_with_retries', return_value={'status':'pass'}) as get:
             self.assertTrue(fixture.oss.verify_remote(output, retry_failed=True)['complete'])
         self.assertEqual(get.call_count, len(plan['objects']))
+
+    def test_candidate_gate_rejects_navigation_only_and_wrong_generation(self):
+        routes = ['/', '/cockpit/', '/rules/charter/', '/projects/agents/', '/rescue/', '/rules/', '/projects/demo/']
+        for index, url in enumerate(routes):
+            data = {'page':'page-'+str(index), 'typeset':url != '/', 'screens':[{'id':'screen-one'}]}
+            self.put(h.route_file(url), '<script id="page-data" type="application/json">'+json.dumps(data)+'</script>')
+        self.put('untouched/index.html', '<script id="page-data" type="application/json">'+json.dumps(data)+'</script>')
+        self.refresh()
+        baseline = dict(self.manifest['files'])
+        self.put('assets/main.js', 'void 2;')
+        self.refresh()
+        self.manifest['baseline_files'] = baseline
+        h.write(self.source/h.MANIFEST, self.manifest)
+        build_path = self.root/'build.json'
+        p.write(build_path, {'pages':{'page-6':{'url':'/projects/demo/'}}})
+        plan = p.acceptance_plan(p.read(build_path), self.manifest, self.source)
+        self.assertIn('/untouched/', plan['ui_pages'])
+        self.assertEqual(plan['pages']['page-6']['url'], '/projects/demo/')
+        ui_path = self.root/'ui.json'; plan_path = self.root/'plan.json'; reading_path = self.root/'reading.json'
+        p.write(ui_path, {'schema':'website.ui-gate.v1', 'status':'pass', 'blocker_count':0, 'candidate_root':str(self.source),
+            'candidate_manifest_sha256':plan['manifest_sha256'],
+            'records':[{'route':url, 'width':width} for url in plan['ui_pages'] for width in (390, 1440)]})
+        plan.update(source_build_report_sha256=p.digest(build_path), ui_verification={'path':str(ui_path), 'sha256':p.digest(ui_path)})
+        p.write(plan_path, plan)
+        cases = [{'page':page, 'requested_screen':'screen-one', 'requested_fraction':fraction, 'from':[start, 900],
+                  'to':[end, 900], 'pass':True} for page in plan['pages'] for fraction in (.15, .5, .85)
+                 for start, end in ((390, 844), (844, 390), (740, 1024), (1024, 740))]
+        cases += [{'page':page, 'kind':'rapid-resizes', 'pass':True} for page in plan['pages']]
+        reading = {'schema':'wly.typeset-reading-check.v1', 'status':'pass', 'evidence_mode':'artifact', 'artifact_unchanged':True,
+            'root':str(self.source), 'release_id':plan['release_id'], 'manifest_sha256':plan['manifest_sha256'],
+            'build_report_sha256':p.digest(plan_path), 'cases':cases, 'response_failures':[],
+            'summary':dict(navigation_checks=1, failed_resizes=0, screen_mismatches=0, failed_navigation=0, page_errors=0),
+            'pages':{page:{'url':entry['url'], 'html_sha256':self.manifest['files'][h.route_file(entry['url'])]['sha256'],
+                           'screen_ids':['screen-one']} for page, entry in plan['pages'].items()}}
+        p.write(reading_path, reading); p.browser_acceptance(plan_path, reading_path, build_path, self.source, self.manifest)
+        reading['cases'] = [case for case in cases if case.get('kind') == 'rapid-resizes']
+        p.write(reading_path, reading)
+        with self.assertRaisesRegex(ValueError, 'Full reading matrix'):
+            p.browser_acceptance(plan_path, reading_path, build_path, self.source, self.manifest)
+        reading['cases'] = cases; reading['release_id'] = 'wrong-generation'; p.write(reading_path, reading)
+        with self.assertRaisesRegex(ValueError, 'complete unchanged candidate'):
+            p.browser_acceptance(plan_path, reading_path, build_path, self.source, self.manifest)
+        self.put('index.html', (self.source/'index.html').read_text('utf8')+'<p>Candidate B homepage</p>'); self.refresh()
+        plan.update(p.acceptance_plan(p.read(build_path), self.manifest, self.source)); p.write(plan_path, plan)
+        reading.update(release_id=plan['release_id'], manifest_sha256=plan['manifest_sha256'], build_report_sha256=p.digest(plan_path)); p.write(reading_path, reading)
+        with self.assertRaisesRegex(ValueError, 'current candidate manifest binding'):
+            p.browser_acceptance(plan_path, reading_path, build_path, self.source, self.manifest)

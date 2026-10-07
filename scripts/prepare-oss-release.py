@@ -598,7 +598,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None, full_upload=False):
     spec = importlib.util.spec_from_file_location('oss_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
     builder = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(builder)
@@ -615,17 +615,20 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
     previous = None
-    if previous_manifest:
-        try:
-            previous = verify_manifest(read(previous_manifest))
-        except (OSError, ValueError, KeyError, TypeError) as error:
-            raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
-    elif not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
-        spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
-        retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
-        predecessor = retention.predecessor()
-        if predecessor and predecessor.get('oss'):
-            previous = verify_manifest(predecessor)
+    if not full_upload:
+        if previous_manifest:
+            try:
+                previous = verify_manifest(read(previous_manifest))
+            except (OSError, ValueError, KeyError, TypeError) as error:
+                raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
+        elif not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
+            spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
+            retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
+            predecessor = retention.predecessor()
+            if predecessor and predecessor.get('oss'):
+                previous = verify_manifest(predecessor)
+        if previous is None:
+            raise ValueError('Previous OSS manifest is required; select --full-upload explicitly for a full upload')
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     while rewriter.retained:
@@ -669,6 +672,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     plan = {'schema': 'wly.oss-release-plan.v1', 'prepared_at_beijing': stamp(), 'release_id': release_id,
             'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,'rewriter_version':rewriter_version,
             'asset_base_url': base, 'prefix': prefix, 'html_origin': origin.rstrip('/'), 'test_only': allow_test,
+            'upload_mode': 'full' if full_upload else 'incremental',
             'github_files': github, 'objects': objects, 'url_changes': rewriter.changes,
             'closure': {k: sorted(v) for k, v in sorted(rewriter.references.items())},
             'host_control_exceptions': sorted(set(actual) & HOST_CONTROLS),
@@ -895,6 +899,7 @@ def main():
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
     p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6),default=6)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
+    p.add_argument('--full-upload',action='store_true',help='Explicitly upload all objects to the new prefix without retaining a previous release')
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)
@@ -905,12 +910,19 @@ def main():
             p.add_argument('--retry-failed',action='store_true',help='Recheck unresolved same-plan objects; preserve prior full-body proofs')
     args = parser.parse_args()
     if args.command == 'prepare':
-        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)
+        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest,args.full_upload)
         print(json.dumps({'status': 'prepared', 'summary': plan['summary'], 'release_id': plan['release_id']}, ensure_ascii=False))
     elif args.command == 'verify-local':
         plan = verify_local(args.output)
         estimate_download({rel:obj for rel,obj in plan['objects'].items() if rel not in plan.get('retained_objects',{})},args.confirm_download_over_5gb)
-        print(json.dumps({'status': 'pass', 'summary': plan['summary']}, ensure_ascii=False))
+        pending = {rel:obj for rel,obj in plan['objects'].items() if rel not in plan.get('retained_objects',{})}
+        receipt_path = Path(args.output)/'remote-verification.json'
+        if receipt_path.is_file():
+            receipt = read(receipt_path)
+            if receipt.get('plan_sha256') == digest(Path(args.output)/PLAN):
+                pending = {rel:obj for rel,obj in pending.items() if receipt.get('objects',{}).get(rel,{}).get('status') != 'pass'}
+        print(json.dumps({'status': 'pass', 'summary': plan['summary'],
+            'upload': {'objects': len(pending), 'bytes': sum(obj['bytes'] for obj in pending.values())}}, ensure_ascii=False), flush=True)
     elif args.command == 'verify-remote':
         report = verify_remote(args.output, args.workers, args.timeout, args.retry_failed,args.confirm_download_over_5gb)
         print(json.dumps({'status': 'pass', 'html_ready': report['html_ready'], 'objects': len(report['objects'])}))

@@ -89,7 +89,7 @@ function ReadJson([string]$Path) { return Get-Content -Raw -LiteralPath $Path | 
 function SaveJson([string]$Path, $Value) {
     [IO.File]::WriteAllText($Path, ($Value | ConvertTo-Json -Depth 100) + "`n", [Text.UTF8Encoding]::new($false))
 }
-function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
+function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport, [string]$CopyTo) {
     $arguments = @('scripts/prepare-typeset-release.py','prepare','--typeset-root',$TypesetRoot,'--inventory',$Inventory,
         '--geometry',$Geometry,
         '--baseline',$Baseline,'--baseline-manifest',$BaselineManifest,'--release',$Candidate,
@@ -97,6 +97,7 @@ function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
     if ($Directive) { $arguments += @('--directive',$Directive) }
     if ($LayoutAcceptance) { $arguments += @('--layout-acceptance',$LayoutAcceptance) }
     if ($RebuildReport) { $arguments += @('--rebuilt-report',$RebuildReport) }
+    if ($CopyTo) { $arguments += @('--copy-to',$CopyTo) }
     if ($RuntimeVerification) { $arguments += @('--runtime-verification',$RuntimeVerification) }
     if ($ReadingPlan) { $arguments += @('--reading-plan',$ReadingPlan) }
     if ($Pages) { $arguments += @('--pages') + $Pages }
@@ -130,6 +131,9 @@ function OssBrowserNetwork([string]$Mode, [string]$Staged) {
     }
 }
 $prepared = Join-Path $RunRoot 'preparation.json'
+if ($Publish -and (-not $RuntimeVerification -or -not $ReadingPlan -or -not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'check-site-ui.py') -PathType Leaf))) {
+    throw 'Publication requires the installed UI checker and bound complete reading/UI evidence.'
+}
 Write-Output "Local release evidence: $prepared"
 if ($OssPreparation) { VerifyOss (Join-Path $RunRoot 'oss-preparation.json') }
 Prepare $Release $prepared
@@ -139,7 +143,6 @@ if (-not $Publish) {
     Write-Output 'Prepared locally. No fetch, merge, staging, commit, push or online readback was requested.'
     return
 }
-if (-not $LegacySite) { throw '-Publish requires -LegacySite for the exact reviewed build command.' }
 if (-not $LockHolder -or $LockHolder -notmatch '^(Claude|Codex)/.+$') { throw '-Publish requires -LockHolder containing the actual harness and real task id, for example Claude/<real-task-id>.' }
 if (-not (Test-Path -LiteralPath $ShortLockTool -PathType Leaf)) { throw 'The registered wly0829-publication short-lock entrypoint is unavailable.' }
 $remote = (& git remote get-url origin).Trim()
@@ -157,12 +160,17 @@ $state = [ordered]@{ schema='wly.typeset-publication.v1'; status='preparing'; re
     started_at_beijing=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o');
     selected_pages=$receipt.selected_pages; batch=$receipt.batch; pushed_commit=$null; rollback_ref=$null;
     directive_sha256=$receipt.directive_sha256; geometry_sha256=$receipt.geometry_sha256;
-    automatic_rollback=$false; lock_holder=$LockHolder; timings=[ordered]@{} }
+    automatic_rollback=$false; lock_holder=$LockHolder; timings=[ordered]@{}; stages=[ordered]@{} }
 function SaveState { SaveJson $statePath $state }
 function TimedChecked([string]$Program, [string[]]$Arguments, [string]$Field) {
     $watch = [Diagnostics.Stopwatch]::StartNew()
+    $started = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
     try { Checked $Program $Arguments }
-    finally { $state.timings[$Field] = $watch.Elapsed.TotalSeconds; SaveState }
+    finally {
+        $state.timings[$Field] = $watch.Elapsed.TotalSeconds
+        $state.stages[$Field] = [ordered]@{started_at_beijing=$started; ended_at_beijing=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o'); seconds=$watch.Elapsed.TotalSeconds}
+        SaveState
+    }
 }
 $script:publicationLockAcquired = $false
 $script:confirmedPublicationFailure = $null
@@ -275,6 +283,16 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
     }
     return [pscustomobject]@{ status=$(if ($stableFailures -eq 3) { 'confirmed_failure' } else { 'unknown' }); report=$lastReport }
 }
+function ResolveReadbackBaseline([string]$CachePath) {
+    try {
+        $cached = ReadJson $CachePath
+        $online = Invoke-RestMethod -Uri ('https://wly0829.cn/release-identity.json?readback_baseline='+[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) -Headers @{'Cache-Control'='no-cache'} -TimeoutSec 30
+        if ($cached.schema -eq 'wly.typeset-online-readback.v1' -and $cached.status -eq 'pass' -and $cached.release_id -and $cached.release_id -ceq $online.release_id -and $cached.manifest_sha256 -ceq $online.manifest_sha256) {
+            return [ordered]@{mode='candidate_previous'; report=$CachePath; reason=$null}
+        }
+        return [ordered]@{mode='full'; report=$null; reason='Cached passing readback does not match the current public identity.'}
+    } catch { return [ordered]@{mode='full'; report=$null; reason=$_.Exception.Message} }
+}
 function ConfirmReadback([string]$Candidate, [string]$Prefix) {
     $previous = $null
     $lastSignature = $null
@@ -291,7 +309,10 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
             return [pscustomobject]@{ status='unknown'; report=$report; reason='Readback command did not produce valid evidence.' }
         }
         $proof = ReadJson $report
-        if ($proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$report; reason=$null } }
+        if ($proof.status -eq 'pass') {
+            SaveJson $readbackCache $proof
+            return [pscustomobject]@{ status='pass'; report=$report; reason=$null }
+        }
         if ($proof.status -eq 'mismatch' -and $proof.issues.Count) {
             $signature = @($proof.issues | Sort-Object path | ForEach-Object {
                 [ordered]@{ path=$_.path; actual=$_.actual; actual_release_id=$_.actual_release_id; actual_files_sha256=$_.actual_files_sha256 }
@@ -404,34 +425,13 @@ try {
     if ($RuntimeBaseline) { $productionArguments+='--runtime-baseline' }
     Checked 'python' $productionArguments
     $state.production_commit = (ReadJson $productionCheck).production_commit
+    $readbackCache = Join-Path ([IO.Path]::GetFullPath((& git rev-parse --git-common-dir).Trim(), $repoRoot)) 'latest-typeset-readback.json'
+    $state.readback_baseline = if ($PreviousReadback) { [ordered]@{mode='explicit'; report=$PreviousReadback; reason=$null} } else { ResolveReadbackBaseline $readbackCache }
+    $PreviousReadback = $state.readback_baseline.report
     SaveState
     $rebuilt = Join-Path $RunRoot 'rebuilt-dist'
-    $rebuiltReport = Join-Path $RunRoot 'rebuilt-build-report.json'
-    $buildArguments = @('scripts/build-typeset-site.py','--typeset-root',$TypesetRoot,'--inventory',$Inventory,
-        '--geometry',$Geometry,
-        '--baseline',$Baseline,'--legacy-site',$LegacySite,'--output',$rebuilt,'--report',$rebuiltReport)
-    if ($Pages) { $buildArguments += @('--pages') + $Pages }
-    if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
-    if ($ReuseAssetCache) { $buildArguments += '--reuse-asset-cache' }
-    if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
-    if ($CreativePreparation) { $buildArguments += @('--creative-preparation',$CreativePreparation) }
-    if ($LiveUiPreparation) { $buildArguments += @('--live-ui-preparation',$LiveUiPreparation) }
-    if ($RulePublicProjection) { $buildArguments += @('--rule-public-projection',$RulePublicProjection) }
-    if ($RuntimeBaseline) { $buildArguments+=@('--runtime-baseline','--baseline-ref',$state.production_commit) }
-    TimedChecked 'python' $buildArguments 'build_seconds'
-    $rebuiltProof = ReadJson $rebuiltReport
-    if ($rebuiltProof.geometry_path -ne $Geometry -or $rebuiltProof.geometry_sha256 -cne $receipt.geometry_sha256) {
-        $state.status = 'requires_new_verification'
-        throw 'Rebuild changed its geometry input. Repeat program verification, Claude review, and the explicit publication instruction for the new build.'
-    }
+    Prepare $Release (Join-Path $RunRoot 'rebuilt-preparation.json') '' $rebuilt
     $rebuiltIdentity = ReadJson (Join-Path $rebuilt 'release-manifest.json')
-    if ($rebuiltIdentity.release_id -ne $receipt.release_id) {
-        $state.status = 'requires_new_verification'
-        throw 'Rebuild changed release_id. Repeat the full program verification, Claude review, and explicit publication instruction for the new build.'
-    }
-    # built_at may change. The Claude-reviewed report remains immutable; its input and
-    # output hashes must still match every byte of the rebuilt release.
-    Prepare $rebuilt (Join-Path $RunRoot 'rebuilt-preparation.json') $rebuiltReport
     HoldPublicationLock
     $contentArguments=@('scripts/hybrid-release.py','verify','--output',$rebuilt,
         '--content-report',(Join-Path $RunRoot 'content-report.json'),'--public-repos-from-github')
@@ -495,6 +495,7 @@ try {
     CommitRelease 'Publish Claude-reviewed typeset static release'
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $state.status = 'push_requested'
+    $state.requested_commit = (& git rev-parse HEAD).Trim()
     SaveState
     HoldPublicationLock
     TimedChecked 'git' @('push','origin','HEAD:main') 'push_seconds'

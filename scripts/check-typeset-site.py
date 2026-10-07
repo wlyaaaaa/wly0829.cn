@@ -28,6 +28,7 @@ from engine import render as renderer, assets
 
 def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def load_state(path): return json.loads(path.read_text('utf8')) if path.is_file() else {}
+def beijing_now(): return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
 def fingerprints(lock):
     assets._manifest = None
@@ -158,6 +159,15 @@ def file_proofs(paths):
     return {str(p): digest(p) for root in paths for p in (root.rglob('*') if root.is_dir() else [root]) if p.is_file()}
 
 
+def resume_readback_only(published, expected, invalid, online_release, remote_main):
+    attempted = bool(published.get('pushed_commit')) or published.get('status') in ('push_requested', 'push_result_unknown')
+    bound = not invalid and published.get('release_id') and published['release_id'] == expected.get('release_id')
+    if attempted and (not bound or published.get('automatic_rollback') or published.get('status', '').startswith('rollback')
+                      or online_release != published['release_id'] and remote_main not in {published.get('requested_commit') or published.get('pushed_commit'), published.get('production_commit')}):
+        raise ValueError('Previous publication needs recovery or main advanced; do not rebuild or publish')
+    return bool(bound and (attempted or published['release_id'] == online_release))
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name, default in zip(('typeset-root', 'baseline', 'legacy-site', 'run-root', 'asset-cache'),
@@ -170,7 +180,10 @@ def main():
     mode.add_argument('--pages', nargs='+', help='Only replace and verify the selected page routes')
     for flag in ('changed', 'all'): mode.add_argument('--'+flag, action='store_true')
     for flag in ('resume', 'publish'): parser.add_argument('--'+flag, action='store_true')
+    parser.add_argument('--full-upload', action='store_true', help='Explicitly prepare all OSS objects without a previous sealed manifest')
     args = parser.parse_args()
+    if not (HERE/'check-site-ui.py').is_file():
+        raise ValueError('The required UI checker is unavailable: '+str(HERE/'check-site-ui.py'))
     sys.path.insert(0, str(ROOT/'.publish/python-tools'))
     lock = json.loads((ROOT/'config/render.lock.json').read_text('utf8'))
     renderer.verify_lock(lock)
@@ -187,6 +200,8 @@ def main():
     import importlib.util
     spec = importlib.util.spec_from_file_location('assembly_inputs', HERE/'prepare-creative-release.py')
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    spec = importlib.util.spec_from_file_location('acceptance_gate', HERE/'prepare-typeset-release.py')
+    gate = importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
     assembly_files = [Path(p) for p in module.recipe(ROOT/'config/build.json')[2]]
     assembly_files += [HERE/name for name in ('build-typeset-site.py', 'build-assembled-site.py', 'hybrid-release.py',
         'repair-release-navigation.py', 'prepare-live-ui.py', 'prepare-motion-release.py', 'public_page_contract.py', 'rule_original_contract.py',
@@ -213,7 +228,7 @@ def main():
     for name in set(current)-set(selected)-{'home'}:
         if not reuse_page(name, current[name], args.typeset_root, durable): selected.append(name)
     if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
-    invalid = state.get('fingerprints') != page_keys
+    invalid = state.get('fingerprints') != page_keys or state.get('selected_pages') != selected
     state.update(schema='wly.typeset-publication.v1', selected_pages=selected, status='running', fingerprints=page_keys)
     state.setdefault('stages', {name: {'status': 'pending'} for name in ('inputs', 'generation', 'checks', 'publication', 'readback')})
     def save():
@@ -222,25 +237,30 @@ def main():
     def phase(name, outputs):
         nonlocal invalid
         record = state['stages'][name]
-        active = invalid or record['status'] != 'pass' or record.get('outputs') != file_proofs(outputs)
+        active = name == 'checks' or invalid or record['status'] != 'pass' or record.get('outputs') != file_proofs(outputs)
         if not active: yield False; return
-        invalid = True; begin = time.monotonic(); record.update(status='running', failure=None); save()
+        invalid = True; begin = time.monotonic(); record.update(status='running', failure=None, started_at_beijing=beijing_now()); save()
         try:
             yield True
             record.update(status='pass', outputs=file_proofs(outputs))
         except Exception as error:
             record.update(status='failed', failure=str(error)); raise
         finally:
-            record['seconds'] = round(time.monotonic()-begin, 3); save()
+            record.update(seconds=round(time.monotonic()-begin, 3), ended_at_beijing=beijing_now()); save()
     if args.resume:
         with urlopen('https://wly0829.cn/release-manifest.json', timeout=30) as response:
             state['remote_read_before_resume'] = re.search(r'"release_id"\s*:\s*"([a-f0-9]{64})"', response.read(2048).decode('utf8', 'replace'))[1]
         published = load_state(run/'publisher/publication-state.json')
-        expected = load_state(run/'generation/dist/release-manifest.json')
-        if not invalid and published.get('release_id') == expected.get('release_id') and published.get('release_id') and (published.get('pushed_commit') or published.get('status') == 'push_requested' or published['release_id'] == state['remote_read_before_resume']):
+        expected = load_state(ROOT/'site-release/release-manifest.json')
+        remote_main = subprocess.check_output(['git', 'ls-remote', '--heads', 'origin', 'main'], text=True,
+            env={**os.environ, 'GIT_TERMINAL_PROMPT': '0', 'GCM_INTERACTIVE': 'Never'}, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)).split()[0]
+        if resume_readback_only(published, expected, invalid, state['remote_read_before_resume'], remote_main):
             subprocess.run([sys.executable, str(HERE/'prepare-typeset-release.py'), 'readback', '--release',
-                            str(ROOT/'site-release'), '--output', str(run/'resume-readback.json')], check=True)
+                            str(ROOT/'site-release'), '--output', str(run/'resume-readback.json'), '--previous-report', str((ROOT/common).resolve()/'latest-typeset-readback.json')], check=True)
             if json.loads((run/'resume-readback.json').read_text('utf8'))['release_id'] != published['release_id']: raise ValueError('Interrupted publication was restored; prepare a new approved generation')
+            subprocess.run([sys.executable, str(HERE/'check-site-ui.py'), '--root', str(run/'generation/dist'),
+                '--output', str(run/'resume-ui.json'), '--pages', 'cockpit', '--chrome', lock['chrome']['path']], check=True, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            state['stages']['checks']['resume_ui'] = {'path': str(run/'resume-ui.json'), 'sha256': digest(run/'resume-ui.json')}
             state['status'] = 'pass'; state['stages']['readback'].update(status='pass', outputs=file_proofs([run/'resume-readback.json'])); state['stages']['publication'].update(status='pass'); save()
             print('Existing publication read back; no repeat publication.'); return 0
     work = run/'generation'
@@ -249,6 +269,7 @@ def main():
     environment = {**os.environ, 'TEMP': str(cache), 'TMP': str(cache), 'TMPDIR': str(cache), 'WLY_RENDER_CHROME': lock['chrome']['path'], 'TYPESET_INVENTORY_OUT': str(args.inventory.parent), 'WLY_RENDER_PAGES': json.dumps(selected),
                    'PYTHONPATH': os.pathsep.join([lock['python_tools'], os.environ.get('PYTHONPATH', '')])}
     stages = []
+    state['operations'] = stages
     started = time.monotonic()
     native = [p for p in selected if p != 'home'] or ['how']; selection = ['--pages', *native]
     snapshot = work / 'input-snapshot'
@@ -256,6 +277,9 @@ def main():
     inventory = work/'projection/projected-inventory.jsonl' if project else snapshot/'typeset-inventory/screens.jsonl'
     report = work / 'build-report.json'
     verification = work / 'verification.json'
+    plan_path = run/'reading-plan.json'
+    reading_path = run/'reading.json'
+    ui_path = run/'ui-verification.json'
     geometry = work / 'motion-geometry.json'
     baseline = Path(state['baseline']) if state.get('baseline') else args.baseline.resolve() if args.all or not (run/'current-site').is_dir() else run/'current-site'
 
@@ -264,6 +288,7 @@ def main():
         if script == 'run-typeset-checks.py':
             phase += '-' + parameters[parameters.index('--mode') + 1]
         begin = time.monotonic()
+        began_at = beijing_now()
         command = [sys.executable, '-u', str(HERE / script), *map(str, parameters)]
         if script == 'run-typeset-checks.py': command += ['--chrome', lock['chrome']['path']]
         print('Stage: ' + phase, flush=True)
@@ -281,7 +306,8 @@ def main():
                 if process.poll() is None:
                     process.terminate()
                     process.wait(timeout=15)
-        stages.append({'stage': phase, 'exit_code': code, 'seconds': round(time.monotonic() - begin, 3)})
+        stages.append({'stage': phase, 'exit_code': code, 'seconds': round(time.monotonic() - begin, 3),
+                       'started_at_beijing': began_at, 'ended_at_beijing': beijing_now()}); save()
         if code and not allow_failure:
             raise RuntimeError(phase + ' failed; see the retained log')
         return code
@@ -374,14 +400,31 @@ def main():
                         shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid)]) for name, key in current.items()):
                     raise ValueError('Assembly inputs changed during generation')
                 for name in rendered_pages: store_page(name, current[name], args.typeset_root, durable)
-        with phase('checks', [verification, run/'content-report.json']) as active:
+        with phase('checks', [verification, run/'content-report.json', plan_path, reading_path, ui_path]) as active:
             if active:
                 with preview(work/'dist', 'qa') as address:
                     execute('run-typeset-checks.py', ['--mode', 'qa', '--url', address, '--task-cache', cache,
                         '--timeout', '1800', '--jobs', str(args.jobs), *selection])
                 proof = json.loads(verification.read_text('utf8'))
                 if proof['summary']['failed'] or proof['summary']['unverified']: raise ValueError('Browser verification failed')
-                budget=work/'oss-budget';execute('prepare-oss-release.py', ['prepare', '--source', work/'dist', '--asset-base-url', json.loads((ROOT/'config/build.json').read_text('utf8'))['asset_base_url'], '--prefix', 'releases/'+proof['release_id'], '--output', budget])
+                manifest = load_state(work/'dist/release-manifest.json')
+                plan = gate.acceptance_plan(load_state(report), manifest, work/'dist')
+                if digest(work/'dist/release-manifest.json') != plan['manifest_sha256']: raise ValueError('Candidate manifest changed before UI checking')
+                execute('check-site-ui.py', ['--root', work/'dist', '--output', ui_path, '--geometry', geometry,
+                    '--chrome', lock['chrome']['path'], '--pages', *plan['ui_pages']])
+                if digest(work/'dist/release-manifest.json') != plan['manifest_sha256']: raise ValueError('Candidate manifest changed during UI checking')
+                ui = load_state(ui_path)
+                ui['candidate_manifest_sha256'] = plan['manifest_sha256']
+                ui_path.write_text(json.dumps(ui, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
+                plan.update(source_build_report_sha256=digest(report), ui_verification={'path': str(ui_path), 'sha256': digest(ui_path)})
+                plan_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
+                execute('check-typeset-reading.py', ['--root', work/'dist', '--build-report', plan_path,
+                    '--cache', cache, '--out', reading_path, '--chrome', lock['chrome']['path']])
+                gate.browser_acceptance(plan_path, reading_path, report, work/'dist', manifest)
+                budget=work/'oss-budget'
+                if budget.exists(): recycle_owned(budget)
+                oss_options = ['--full-upload'] if args.full_upload else ['--previous-manifest', ROOT/'site-release/release-manifest.json']
+                execute('prepare-oss-release.py', ['prepare', '--source', work/'dist', '--asset-base-url', json.loads((ROOT/'config/build.json').read_text('utf8'))['asset_base_url'], '--prefix', 'releases/'+proof['release_id'], '--output', budget, *oss_options])
                 execute('hybrid-release.py', ['verify', '--output', work/'dist', '--content-report', run/'content-report.json', '--oss-preparation', budget])
         with phase('publication', [run/'publisher/publication-state.json'] if args.publish else []) as active:
             if active and args.publish:
@@ -392,6 +435,7 @@ def main():
                     geometry, baseline, work/'dist', report, verification, args.legacy_site, ROOT/'config/build.json', ROOT/'config/live-ui.json', work/'typeset-out/rule-public-projection.json'))))
                 if not project: paths.pop('RulePublicProjection')
                 paths.update(options.pop('paths', {}))
+                paths.update(RuntimeVerification=str(reading_path), ReadingPlan=str(plan_path))
                 (run/'pages.txt').write_text('\n'.join(native), encoding='utf8')
                 (run/'batch.json').write_text(json.dumps({'schema':'wly.typeset-batch.v1', 'page_list':'pages.txt', 'paths':paths}), encoding='utf8')
                 command = ['pwsh', '-NoProfile', '-File', str(HERE/'Publish-Pages.ps1'), '-Batch', str(run/'batch.json'), '-RunRoot', str(run/'publisher'), '-Publish']
@@ -399,7 +443,8 @@ def main():
                 subprocess.run(command, check=True, env=environment); result['publication_executed'] = True
         with phase('readback', [run/'online-readback.json'] if args.publish else []) as active:
             if active and args.publish:
-                execute('prepare-typeset-release.py', ['readback', '--release', ROOT/'site-release', '--output', run/'online-readback.json'])
+                previous_report = load_state(run/'publisher/publication-state.json')['readback']['report']
+                execute('prepare-typeset-release.py', ['readback', '--release', ROOT/'site-release', '--output', run/'online-readback.json', '--previous-report', previous_report])
         if not args.publish:
             for name in ('publication','readback'): state['stages'][name].update(status='skipped', reason='Publication not requested')
         if (run/'current-site').exists(): shutil.move(run/'current-site', run/('retained-site-'+str(time.time_ns())))

@@ -164,8 +164,32 @@ class OssReleaseTests(unittest.TestCase):
 
     def prepare(self, origin='https://fixture-bucket.oss-cn-beijing.aliyuncs.com', test=False):
         output = self.root/'output'
-        plan = oss.prepare(self.source, origin, 'releases/fixture-001', output, allow_test=test)
+        plan = oss.prepare(self.source, origin, 'releases/fixture-001', output, allow_test=test, full_upload=True)
         return output, plan
+
+    def test_previous_manifest_failures_require_explicit_full_upload(self):
+        invalid = self.root/'invalid.json'; invalid.write_text('{}', encoding='utf8')
+        output = self.root/'output'; base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com'
+        for previous in (None, self.root/'missing.json', invalid):
+            with self.subTest(previous=previous), patch.dict(os.environ, {'WLY_RELEASE_FULL':'1'}):
+                with self.assertRaisesRegex(ValueError, 'Previous OSS manifest'):
+                    oss.prepare(self.source, base, 'releases/fixture-001', output, previous_manifest=previous)
+                self.assertFalse(output.exists())
+        command = ['prepare', '--source', str(self.source), '--asset-base-url', base,
+                   '--prefix', 'releases/fixture-001', '--output', str(output), '--full-upload']
+        with patch('sys.argv', ['prepare-oss-release.py', *command]), patch('builtins.print'):
+            oss.main()
+        plan = oss.read(output/oss.PLAN)
+        self.assertEqual(plan['upload_mode'], 'full')
+        with patch('sys.argv', ['prepare-oss-release.py', 'verify-local', '--output', str(output)]), patch('builtins.print') as printed:
+            oss.main()
+        upload = json.loads(printed.call_args.args[0])['upload']
+        self.assertEqual(upload, {'objects':len(plan['objects']), 'bytes':sum(obj['bytes'] for obj in plan['objects'].values())})
+        oss.write(output/'remote-verification.json', {'plan_sha256':oss.digest(output/oss.PLAN),
+            'objects':{rel:{'status':'pass'} for rel in plan['objects']}})
+        with patch('sys.argv', ['prepare-oss-release.py', 'verify-local', '--output', str(output)]), patch('builtins.print') as printed:
+            oss.main()
+        self.assertEqual(json.loads(printed.call_args.args[0])['upload'], {'objects':0, 'bytes':0})
 
     def test_full_route_and_resource_closure_preserves_binaries(self):
         output, plan = self.prepare()
@@ -421,7 +445,7 @@ class OssReleaseTests(unittest.TestCase):
             source_manifest['release_id'] = oss.hashlib.sha256(json.dumps(source_manifest['files'], sort_keys=True).encode()).hexdigest()
             oss.write(self.source/oss.MANIFEST, source_manifest)
             output = self.root/case
-            plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output)
+            plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output, full_upload=True)
             addresses = {obj['url']:rel for rel,obj in plan['objects'].items()}
             class Response:
                 def __init__(self, request):
@@ -483,7 +507,7 @@ class OssReleaseTests(unittest.TestCase):
             manifest['files']={k:v for k,v in oss.inventory(self.source).items() if k!=oss.MANIFEST}
             oss.write(self.source/oss.MANIFEST,manifest)
             output=self.root/case
-            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=3)
+            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=3,full_upload=True)
             proof=plan['home_entry_overlay']
             self.assertEqual(len(proof['changes']),6)
             self.assertEqual(proof['changes'][0]['target_href'],target)
@@ -519,7 +543,7 @@ class OssReleaseTests(unittest.TestCase):
                     self.assertEqual(len(proof['native_navigation_changes']),5)
                     self.assertIn(b'href="/how-this-site/"',prepared)
                 output=self.root/('version-'+str(version))
-                plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=version)
+                plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=version,full_upload=True)
                 self.assertEqual(plan['home_entry_overlay'],proof)
                 self.assertEqual(oss.verify_local(output)['rewriter_version'],version)
         self.assertEqual((self.source/'index.html').read_bytes(),home)

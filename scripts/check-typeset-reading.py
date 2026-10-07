@@ -151,6 +151,7 @@ async def run(args, base, build):
                     if media_ready['failed_images']:raise ValueError('Candidate media decode incomplete: '+str(media_ready['failed_images']))
                 await browser_page.wait_for_timeout(100)
                 ids=await browser_page.locator('.screen').evaluate_all('(nodes)=>nodes.map(s=>s.dataset.screen)')
+                result['pages'][name]['screen_ids'] = ids
                 chosen=list(dict.fromkeys([ids[0],ids[len(ids)//2],ids[-1]]))
                 transitions=[] if args.navigation_only else [((390,844),(844,390)),((844,390),(390,844)),
                                   ((740,args.desktop_height),(1024,args.desktop_height)),((1024,args.desktop_height),(740,args.desktop_height))]
