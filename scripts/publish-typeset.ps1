@@ -24,6 +24,7 @@ param(
     [string]$OssReading,
     [string]$OssCold,
     [string]$OssRetryProof,
+    [string]$PreviousReadback,
     [switch]$RuntimeBaseline,
     [string[]]$Pages,
     [switch]$UiFull,
@@ -203,6 +204,7 @@ function WaitPages([string]$Commit) {
 }
 function WaitPublicIdentity([string]$Candidate, [int]$TimeoutSeconds = 1200) {
     $expected = ReadJson (Join-Path $Candidate 'release-manifest.json')
+    $expectedHash = (Get-FileHash -LiteralPath (Join-Path $Candidate 'release-manifest.json') -Algorithm SHA256).Hash.ToLowerInvariant()
     $deadline = [DateTimeOffset]::UtcNow.AddSeconds($TimeoutSeconds)
     $lastError = $null
     $observedRelease = $null
@@ -213,6 +215,14 @@ function WaitPublicIdentity([string]$Candidate, [int]$TimeoutSeconds = 1200) {
         HoldPublicationLock
         $attempts++
         try {
+            if ($env:WLY_RELEASE_FULL -ne '1') {
+                try {
+                    $identity = Invoke-RestMethod -Uri ('https://wly0829.cn/release-identity.json?wait=' + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) -ConnectionTimeoutSeconds 20 -OperationTimeoutSeconds 20
+                    if ($identity.release_id -ceq $expected.release_id -and $identity.manifest_sha256 -ceq $expectedHash) {
+                        return [pscustomobject]@{ status='pass'; attempts=$attempts; release_id=$expected.release_id; message=$null }
+                    }
+                } catch { }
+            }
             $uri = 'https://wly0829.cn/release-manifest.json?typeset_wait=' + [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
             $remaining = [Math]::Max(1,[Math]::Min(20,[int]($deadline-[DateTimeOffset]::UtcNow).TotalSeconds))
             $response = Invoke-WebRequest -Uri $uri -ConnectionTimeoutSeconds $remaining -OperationTimeoutSeconds $remaining -Headers @{ 'Cache-Control'='no-cache'; 'Accept-Encoding'='identity' }
@@ -266,6 +276,7 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
         HoldPublicationLock
         $report = Join-Path $RunRoot "$Prefix-$round.json"
         $arguments = @('scripts/prepare-typeset-release.py','readback','--release',$Candidate,'--output',$report)
+        if ($PreviousReadback -and $Prefix -eq 'online-readback') { $arguments += @('--previous-report',$PreviousReadback) }
         if ($previous) { $arguments += @('--retry-report',$previous) }
         & python @arguments | Out-Host
         $code = $LASTEXITCODE

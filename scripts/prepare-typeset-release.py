@@ -1118,7 +1118,7 @@ def online_oss_file(relative, expected, attempts=3):
     for attempt in range(attempts):
         try:
             headers = {'Origin': SITE, 'Referer': SITE+'/', 'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'}
-            h, count = hashlib.sha256(), 0
+            h, count, prefix = hashlib.sha256(), 0, b''
             with urlopen(Request(expected['url'], headers=headers), timeout=60) as response:
                 cors = response.headers.get('Access-Control-Allow-Origin')
                 mime = response.headers.get_content_type()
@@ -1127,6 +1127,7 @@ def online_oss_file(relative, expected, attempts=3):
                 if response.status != 200 or cors not in ('*', SITE) or mime not in accepted:
                     raise ValueError('OSS HTTP, CORS or MIME differs')
                 while chunk := response.read(1024*1024):
+                    if not prefix: prefix = chunk[:32]
                     h.update(chunk); count += len(chunk)
             actual = {'sha256': h.hexdigest(), 'bytes': count}
             if actual != {key: expected[key] for key in ('sha256', 'bytes')}:
@@ -1137,7 +1138,7 @@ def online_oss_file(relative, expected, attempts=3):
                     with urlopen(Request(expected['url'], headers=headers), timeout=60) as response:
                         part = response.read(length+1)
                         if (response.status != 206 or response.headers.get('Content-Range') != f'bytes 0-{length-1}/{count}'
-                                or len(part) != length or hashlib.sha256(part).hexdigest() != expected['range_sha256']):
+                                or len(part) != length or hashlib.sha256(part).hexdigest() != (expected.get('range_sha256') or hashlib.sha256(prefix).hexdigest())):
                             raise ValueError('OSS video range differs from verified bytes')
                 return {'path': relative, 'status': 'pass', 'attempts': attempt+1, 'bytes': count, 'sha256': h.hexdigest()}
         except (OSError, ValueError) as error:
@@ -1247,24 +1248,42 @@ def stage_check(args):
 
 def readback(args):
     manifest = hybrid.verify_release(args.release.resolve())
+    manifest_sha256 = digest(args.release / hybrid.MANIFEST)
+    full = os.environ.get('WLY_RELEASE_FULL') == '1'
     files = {key: value for key, value in manifest["files"].items() if key != "CNAME"}
     for relative, obj in manifest.get('oss', {}).get('objects', {}).items():
         entry = dict(obj)
         if relative.endswith('.mp4'):
-            entry['range_sha256'] = manifest['oss']['verification']['objects'][relative]['range']['sha256']
+            entry['range_sha256'] = manifest['oss']['verification']['objects'][relative].get('range', {}).get('sha256')
         files['OSS/'+relative] = entry
     retained = {}
+    previous_report = getattr(args, 'previous_report', None)
+    retained_report_sha256 = None
+    if previous_report and not full:
+        try:
+            previous = read(previous_report)
+            fingerprints = previous.get('file_fingerprints', {})
+            checks = {item['path']: item for item in previous.get('checks', [])}
+            if (previous.get('schema') == 'wly.typeset-online-readback.v1' and previous.get('status') == 'pass'
+                    and isinstance(fingerprints, dict) and set(checks) == set(fingerprints)
+                    and len(checks) == len(previous['checks'])
+                    and all(row.get('status') == 'pass' for row in checks.values())
+                    and previous.get('files_sha256') == hashlib.sha256(json.dumps(fingerprints, sort_keys=True).encode()).hexdigest()):
+                retained = {key: row for key, row in checks.items() if row.get('status') == 'pass' and fingerprints[key] == files.get(key)}
+                retained_report_sha256 = digest(previous_report)
+        except (OSError, ValueError, KeyError, TypeError, AttributeError): pass
     retry_report = getattr(args, "retry_report", None)
-    if retry_report:
+    if retry_report and not full:
         previous = read(retry_report)
-        if previous.get("schema") != "wly.typeset-online-readback.v1" or previous.get("release_id") != manifest["release_id"]:
+        if (previous.get("schema") != "wly.typeset-online-readback.v1" or previous.get("release_id") != manifest["release_id"]
+                or previous.get('manifest_sha256') != manifest_sha256 or previous.get('file_fingerprints') != files):
             raise ValueError("Retry report belongs to a different release")
         retained = {item["path"]: item for item in previous.get("checks", [])}
         if set(retained) != set(files):
             raise ValueError("Retry report does not cover the complete release")
         pending = {key: value for key, value in files.items() if retained[key].get("status") != "pass"}
     else:
-        pending = files
+        pending = {key: value for key, value in files.items() if key not in retained}
     with ThreadPoolExecutor(max_workers=6) as pool:
         current_checks = list(pool.map(lambda item: online_oss_file(*item) if item[0].startswith('OSS/') else online_file(*item), sorted(pending.items())))
     retained.update({item["path"]: item for item in current_checks})
@@ -1273,8 +1292,17 @@ def readback(args):
     identity_issue = None
     for attempt in range(3):
         try:
-            identity = json.loads(fetch_bytes("release-manifest.json"))
-            if identity.get("release_id") == manifest["release_id"] and identity.get("files") == manifest["files"] and identity.get('oss') == manifest.get('oss'):
+            if not full:
+                try:
+                    identity = json.loads(fetch_bytes('release-identity.json', 4096))
+                    if identity == {'release_id': manifest['release_id'], 'manifest_sha256': manifest_sha256}:
+                        identity_issue = None
+                        break
+                except (OSError, ValueError): pass
+            identity_bytes = fetch_bytes("release-manifest.json")
+            identity = json.loads(identity_bytes)
+            if (hashlib.sha256(identity_bytes).hexdigest() == manifest_sha256 and identity.get("release_id") == manifest["release_id"]
+                    and identity.get("files") == manifest["files"] and identity.get('oss') == manifest.get('oss')):
                 identity_issue = None
                 break
             identity_issue = {"path": "release-manifest.json", "status": "mismatch", "message": "Online release identity differs",
@@ -1289,6 +1317,8 @@ def readback(args):
         failed.append(identity_issue)
     status = "unknown" if any(item["status"] == "unknown" for item in failed) else "mismatch" if failed else "pass"
     result = {"schema": "wly.typeset-online-readback.v1", "status": status, "release_id": manifest["release_id"],
+              'manifest_sha256': manifest_sha256, 'file_fingerprints': files,
+              'files_sha256': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(), 'retained_report_sha256': retained_report_sha256,
               "checked_at_beijing": now(), "checked_files": len(checks), "checks": checks, "issues": failed,
               "retried_files": len(current_checks), "retry_report_sha256": digest(retry_report) if retry_report else None,
               "excluded_deployment_metadata": ["CNAME"], "automatic_rollback": False}
@@ -1321,6 +1351,7 @@ def main(argv=None):
     online.add_argument("--release", type=Path, required=True)
     online.add_argument("--output", type=Path, required=True)
     online.add_argument("--retry-report", type=Path, help="Recheck unresolved files while retaining the prior full-coverage results")
+    online.add_argument('--previous-report', type=Path, help='Reuse unchanged descriptors from a complete passing readback')
     wrap = commands.add_parser("wrap-baseline", help="Local exact rollback package using hybrid.assemble")
     for name in ("baseline", "baseline-manifest", "output"):
         wrap.add_argument("--" + name, type=Path, required=True)

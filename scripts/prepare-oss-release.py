@@ -15,6 +15,7 @@ import html
 import importlib.util
 import json
 import mimetypes
+import os
 import posixpath
 import re
 import shutil
@@ -162,7 +163,7 @@ def inventory(root):
     for p in sorted(Path(root).rglob('*')):
         if p.is_symlink():
             raise ValueError('Release symlink: ' + str(p))
-        if p.is_file():
+        if p.is_file() and p.relative_to(root).as_posix() != 'release-identity.json':
             values[p.relative_to(root).as_posix()] = {'bytes': p.stat().st_size, 'sha256': digest(p)}
     return values
 
@@ -610,7 +611,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
-    previous = verify_manifest(read(previous_manifest)) if previous_manifest else None
+    try: previous = verify_manifest(read(previous_manifest)) if previous_manifest else None
+    except (OSError, ValueError, KeyError, TypeError): previous = None
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     while rewriter.retained:
@@ -665,6 +667,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel] for rel in rewriter.retained}
     if previous: plan['retained_receipt'] = {key:previous['oss']['verification'].get(key)
         for key in ('method','release_id','verified_at_beijing','sampled_gets')}
+    if previous:
+        plan.update(previous_content=previous['oss'].get('content_verification', {}),previous_host_files=previous['files'])
     if home_proof:plan['home_entry_overlay']=home_proof
     write(output / PLAN, plan)
     verify_local(output)
@@ -776,9 +780,9 @@ def verify_object_with_retries(output, rel, obj, origin, timeout, download_to=No
 def verify_remote(output, workers=4, timeout=60, retry_failed=False, confirmed=False):
     output = Path(output).resolve()
     plan = verify_local(output)
-    results = dict(plan.get('retained_objects', {})); previous = None; previous_hash = None
+    results = {} if os.environ.get('WLY_RELEASE_FULL') == '1' else dict(plan.get('retained_objects', {})); previous = None; previous_hash = None
     pending = {rel:obj for rel,obj in plan['objects'].items() if rel not in results}
-    if retry_failed:
+    if retry_failed and os.environ.get('WLY_RELEASE_FULL') != '1':
         previous_path=output/'remote-verification.json'
         previous=read(previous_path);previous_hash=digest(previous_path)
         if (previous.get('schema')!='wly.oss-remote-verification.v1' or previous.get('release_id')!=plan['release_id']
@@ -844,10 +848,18 @@ def seal_remote(output):
     spec = importlib.util.spec_from_file_location('oss_local_gate', Path(__file__).with_name('hybrid-release.py'))
     hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
     hybrid.builder.load_public_repos()
-    gate = hybrid.validate_content(output/'github', output/'local-content-verification.json', local_assets=output/'oss')
+    previous_path = output/'previous-content-verification.json'
+    write(previous_path, plan.get('previous_content', {}))
+    gate = hybrid.validate_content(output/'github', output/'local-content-verification.json', local_assets=output/'oss', previous_report=previous_path)
     manifest['oss'].setdefault('content_verification', {}).update({'status':gate['status'], 'release_id':manifest['release_id'],
         'verified_at_beijing':stamp(), 'checker_sha256':hybrid.checker_version(), 'public_repositories':sorted(hybrid.builder.PUBLIC_REPOS),
         'output_files':plan['source_files'], 'sealed_release_id':plan['release_id']})
+    content = manifest['oss']['content_verification']
+    content.update({key:gate[key] for key in ('content_policy','selected_files','exempt_files','files_checked','files_retained') if key in gate})
+    content.update(output_files_sha256=hybrid.fingerprint(plan['source_files']),checked_files=gate.get('output_files', {}),checked_files_sha256=hybrid.fingerprint(gate.get('output_files', {})),
+                   retained_objects={rel:hybrid.fingerprint(plan['objects'][rel]) for rel in plan.get('retained_objects', {})})
+    content['affected_routes'] = [route for route in manifest['routes'] if route in ('/','/cockpit/')
+        or not gate.get('files_retained') or plan.get('previous_host_files', {}).get(hybrid.route_file(route)) != manifest['files'][hybrid.route_file(route)]]
     write(path, manifest)
     plan['github_files'][MANIFEST] = {'bytes': path.stat().st_size, 'sha256': digest(path)}
     plan['remote_verified'] = True
