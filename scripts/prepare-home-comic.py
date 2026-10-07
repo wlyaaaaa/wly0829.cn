@@ -13,7 +13,10 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
-import shutil
+try:
+    from release_delta import inventory, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, source_path, write_changes
 from urllib.parse import urlsplit
 spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
 builder = importlib.util.module_from_spec(spec)
@@ -31,11 +34,6 @@ BINDINGS = {
 def stamp(path):
     data = Path(path).read_bytes()
     return {'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
-
-
-def inventory(root):
-    return {p.relative_to(root).as_posix(): stamp(p) for p in sorted(root.rglob('*'))
-            if p.is_file() and p.relative_to(root).as_posix() != 'release-manifest.json'}
 
 
 def identity(files, manifest):
@@ -97,7 +95,7 @@ def validate_home(baseline, package, html):
         viewer = screens[sid]['layouts'][kind]['viewer']
         if Path(urlsplit(viewer['avif']).path).name != name or [viewer['width'], viewer['height']] != [width, height]:
             raise ValueError('Comic original binding changed; regenerate from the new illustration: ' + sid + '/' + kind)
-        local = baseline / urlsplit(viewer['avif']).path.lstrip('/')
+        local = source_path(baseline, urlsplit(viewer['avif']).path.lstrip('/'))
         original = package / 'img' / name
         if not local.is_file():
             raise ValueError('Prepare against the complete source release with local media bytes: ' + name)
@@ -122,7 +120,7 @@ def validate_home(baseline, package, html):
                 if not fields:
                     continue
                 rel = urlsplit(fields[0]).path.lstrip('/')
-                target = baseline / rel
+                target = source_path(baseline, rel)
                 if not target.is_file():
                     raise ValueError('Responsive media bytes missing: ' + rel)
                 kind = 'v' if '-v-' in Path(rel).name else 'h'
@@ -146,7 +144,7 @@ def prepare(baseline, package, output, report):
     baseline_id = identity(before, manifest)
     if baseline_id != manifest['release_id']:
         raise ValueError('Baseline release identity differs from its actual files')
-    raw = (baseline / 'index.html').read_bytes(); html = raw.decode('utf8')
+    raw = source_path(baseline, 'index.html').read_bytes(); html = raw.decode('utf8')
     originals, responsive = validate_home(baseline, package, html)
     assets = {p.relative_to(package).as_posix(): p.read_bytes() for p in sorted((package / 'assets').glob('*.png'))}
     if len(assets) != 82 or len(list((package / 'assets').iterdir())) != 82:
@@ -162,35 +160,34 @@ def prepare(baseline, package, output, report):
     existing = manifest.get('home_comic_preparation')
     mounts = re.findall(r'<script\b[^>]*\bsrc=[\"\x27]([^\"\x27]*comic-(?:data|live)\.js)[\"\x27][^>]*>\s*</script>', html, re.I)
     already_integrated = bool(existing or mounts)
+    previous_mounts=[]
     if already_integrated:
         expected_mounts = ['/' + prefix + '/comic-data.js', '/' + prefix + '/comic-live.js']
-        if mounts != expected_mounts or not existing or existing.get('package_id') != package_id:
+        if not existing or existing.get('package_id') != package_id:
             raise ValueError('Existing comic mount differs from this package; retain the current source and review the two script references instead of duplicating them')
         for rel, value in package_files.items():
             if before.get(prefix + '/' + rel) != value:
                 raise ValueError('Existing comic package bytes differ: ' + rel)
         updated = raw
+        if mounts != expected_mounts:
+            removed=0
+            pattern=r'<script\b[^>]*(?:data-)?src=["\x27][^"\x27]*comic-(?:data|live)\.js["\x27][^>]*>\s*</script>'
+            for match in re.finditer(pattern,html,re.I):
+                previous_mounts.append({'offset':match.start()-removed,'text':match[0]});removed+=len(match[0])
+            updated=re.sub(pattern,'',html,flags=re.I).replace('</body>',refs+'</body>',1).encode('utf8')
     else:
         if raw.count(b'</body>') != 1:
             raise ValueError('Expected one homepage body closing tag')
         updated = raw.replace(b'</body>', refs.encode() + b'</body>', 1)
-    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
-    for rel, body in assets.items():
-        target = output / prefix / rel; target.parent.mkdir(parents=True, exist_ok=True)
-        if target.suffix.lower() in builder.RELEASE_BINARY_EXT:
-            builder.copy_release_asset(package/rel, target)
-        else:
-            target.write_bytes(body)
-    (output / 'index.html').write_bytes(updated)
-    after = inventory(output)
+    after = write_changes(baseline, output, {**{prefix+'/'+rel: body for rel, body in assets.items()}, 'index.html': updated}, copy_asset=builder.copy_release_asset)
     changed = [rel for rel, value in before.items() if after.get(rel) != value]
-    if changed != ([] if already_integrated else ['index.html']) or (not already_integrated and updated.replace(refs.encode(), b'', 1) != raw):
+    if changed != ([] if updated==raw else ['index.html']) or (not already_integrated and updated.replace(refs.encode(), b'', 1) != raw):
         raise AssertionError('Comic preparation changed an existing file beyond the two homepage references')
     release_id = identity(after, manifest)
     manifest.update({'files': after, 'release_id': release_id})
-    if not already_integrated:
+    if updated!=raw:
         manifest['home_comic_preparation'] = {'status': 'prepared_pending_acceptance', 'baseline_release_id': baseline_id, 'package_id': package_id,
-                     'old_page_evidence_is_not_new_acceptance': True}
+                     'old_page_evidence_is_not_new_acceptance': True, 'previous_mounts':previous_mounts}
     (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     result = {'schema': 'wly.home-comic-preparation.v1', 'status': 'prepared', 'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
               'baseline': str(baseline), 'baseline_release_id': baseline_id, 'output': str(output), 'release_id': release_id, 'files': len(after), 'html_count': sum(rel.endswith('.html') for rel in after),
@@ -198,7 +195,7 @@ def prepare(baseline, package, output, report):
               'package_source': str(package), 'package_id': package_id, 'package_prefix': prefix, 'package_files': package_files, 'original_package_files': original_files,
               'bound_originals': originals, 'responsive_delivery': responsive, 'page_data_preserved': True, 'runtime_overlay_preserved': manifest.get('runtime_overlay'),
               'integration_change': 'Honor existing SiteMotionInsurance page latch and reduced-motion before canvas creation; clear in-flight overlays on site-motion static transition. No FPS sampler added.',
-              'rollback': {'remove_exact_utf8': '' if already_integrated else refs, 'baseline_index': stamp(baseline / 'index.html'),
+              'rollback': {'remove_exact_utf8': '' if already_integrated else refs, 'baseline_index': stamp(source_path(baseline, 'index.html')),
                            'existing_package_retained': already_integrated}, 'published': False}
     report = Path(report); report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
@@ -221,9 +218,10 @@ def rollback(candidate, output, report):
     raw = (candidate / 'index.html').read_bytes()
     if raw.count(refs) != 1:
         raise ValueError('Homepage comic references differ; review the newer homepage first')
-    shutil.copytree(candidate, output, copy_function=builder.copy_release_asset)
-    (output / 'index.html').write_bytes(raw.replace(refs, b'', 1))
-    after = inventory(output); new_id = identity(after, manifest)
+    restored=raw.replace(refs,b'',1).decode('utf8')
+    for item in reversed(info.get('previous_mounts',[])):
+        restored=restored[:item['offset']]+item['text']+restored[item['offset']:]
+    after = write_changes(candidate, output, {'index.html': restored.encode('utf8')}); new_id = identity(after, manifest, copy_asset=builder.copy_release_asset)
     manifest.pop('home_comic_preparation')
     manifest.update({'files': after, 'release_id': new_id, 'home_comic_rollback': {'status': 'prepared_pending_acceptance', 'candidate_release_id': identity(files, manifest),
                      'original_baseline_release_id': info['baseline_release_id'], 'unreferenced_package_files_retained': True}})

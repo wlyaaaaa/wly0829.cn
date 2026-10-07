@@ -11,7 +11,9 @@ import hashlib
 import json
 from pathlib import Path
 import re
-import shutil
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'scripts'))
+from release_delta import inventory, source_path, write_changes
 from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parent
@@ -22,10 +24,6 @@ BJT = timezone(timedelta(hours=8))
 
 def proof(body):
     return {'sha256': hashlib.sha256(body).hexdigest(), 'bytes': len(body)}
-
-def inventory(root):
-    return {p.relative_to(root).as_posix(): proof(p.read_bytes()) for p in sorted(root.rglob('*'))
-            if p.is_file() and p.relative_to(root).as_posix() != 'release-manifest.json'}
 
 def identity(files, manifest):
     options = {'separators': (',', ':')} if manifest.get('runtime_overlay') else {}
@@ -76,7 +74,7 @@ def prepare(baseline, output, report, assets_manifest=ASSETS):
         if proof(payload) != {'sha256': item['sha256'], 'bytes': item['bytes']}:
             raise ValueError('Signature asset bytes have changed: ' + item['new_name'])
         payloads[item['old_name']] = (item, payload)
-    html = patch_text((baseline / 'index.html').read_text('utf8'))
+    html = patch_text(source_path(baseline, 'index.html').read_text('utf8'))
     new_files, replacements = {}, {}
     # Retain every path directory. New config stays beside the existing sprites.
     for old_name, (item, body) in payloads.items():
@@ -103,7 +101,7 @@ def prepare(baseline, output, report, assets_manifest=ASSETS):
     config_changes = []
     configs = [rel for rel in old_files if re.search(r'hero-live\.config\.[a-f0-9]+\.json$', rel)]
     for rel in configs:
-        old_config = (baseline / rel).read_bytes()
+        old_config = source_path(baseline, rel).read_bytes()
         config = json.loads(old_config)
         changed = old_config.decode('utf8')
         for old, new in replacements.items():
@@ -126,7 +124,7 @@ def prepare(baseline, output, report, assets_manifest=ASSETS):
         config_changes.append({'before':rel,'after':new_rel,'geometry_unchanged':True})
     engines = [rel for rel in old_files if re.search(r'hero-live\.[a-f0-9]+\.js$',rel)]
     for rel in engines:
-        original = (baseline / rel).read_text('utf8')
+        original = source_path(baseline, rel).read_text('utf8')
         updated = original
         for old, new in replacements.items():
             updated = updated.replace(old, new)
@@ -157,19 +155,14 @@ def prepare(baseline, output, report, assets_manifest=ASSETS):
     for rel, body in new_files.items():
         if rel != 'index.html' and rel in old_files and old_files[rel] != proof(body):
             raise ValueError('Refusing to overwrite an original resource: ' + rel)
-    shutil.copytree(baseline, output)
-    for rel, body in new_files.items():
-        target = output / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(body)
-    files = inventory(output)
+    files = write_changes(baseline, output, new_files)
     if 'index.html' not in {x.lstrip('/') + ('index.html' if x.endswith('/') else '') for x in manifest.get('accepted_pages', {})}:
         existing = manifest.setdefault('release_overlay', {}).get('index.html', {})
         manifest['release_overlay']['index.html'] = {
             'kind':existing.get('kind', 'integrated_preparation' if manifest.get('creative_preparation') else 'home_bio'), 'before':manifest['baseline_files']['index.html'],
             'after':files['index.html'], 'previous_overlay_kind':existing.get('kind'),
             'reason':'Owner-selected exact signature; metadata, equivalent text and raster references only'}
-    manifest.update(files=files, release_id=identity(files,manifest), prepared_at_beijing=datetime.now(BJT).isoformat())
+    manifest.update(files=files, release_id=identity(files,manifest))
     manifest['home_bio_preparation'] = {'schema':'wly.home-bio-preparation.v1', 'status':'prepared_pending_acceptance',
         'new_text':NEW, 'text_locations':5, 'baseline_release_id':identity(old_files,manifest),
         'assets_manifest':proof(assets_manifest.read_bytes()), 'published':False}

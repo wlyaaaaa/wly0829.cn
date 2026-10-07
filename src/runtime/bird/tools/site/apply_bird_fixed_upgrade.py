@@ -6,8 +6,9 @@ import apply_bird_visible_upgrade as old
 import prepare_living_batch as b
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'living/tools'))
 from pack import to_screen
+sys.path.insert(0, str(Path(__file__).resolve().parents[5] / 'scripts'))
 
-def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None,pages=None):
+def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None,pages=None,return_changes=False):
  refs=b.read(packet/'references.json')
  engine_url=engine_url or refs['engine_url'];bird_url=bird_url or refs['bird_sprites_url']
  if Path(urlsplit(engine_url).path).name!=refs['current_engine']['engine']:raise ValueError('engine URL与批准内容版本不同')
@@ -16,10 +17,11 @@ def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None
  if not set(config_urls)<=allowed:raise ValueError('配置映射包含范围之外的页')
  selected=allowed if pages is None else set(pages)
  if not selected<=allowed:raise ValueError('选定页包含范围之外的页：'+', '.join(sorted(selected-allowed)))
- rows=[]
+ from release_delta import source_path
+ rows=[];updates={}
  for row in refs['mounted']:
   if row['page'] not in selected:continue
-  p=site/b.relative(row['route']);before=p.read_bytes();cfg=config_urls.get(row['page'],row['config'])
+  rel=b.relative(row['route']);p=site/rel;before=source_path(site,rel).read_bytes();cfg=config_urls.get(row['page'],row['config'])
   if refs.get('illustration_bindings'):
    data=json.loads(b.DATA.search(before.decode('utf-8'))[1]);parts=data['screens'][0]['parts']
    if data.get('page')!=row['page']:raise ValueError('实际首屏页名不符：'+row['page'])
@@ -49,6 +51,7 @@ def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None
    config['schema']='living-art/1'
    payload=json.dumps(config,ensure_ascii=False,separators=(',',':')).encode('utf-8')
    cfg='/_living/'+row['page']+'/bird-source.'+b.sha(payload)[:12]+'/config.json'
+   updates[cfg.lstrip('/')]=payload
    if write:
     target=site/cfg.lstrip('/');target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(payload)
    runtime={**refs['runtime'],'engine':engine_url}
@@ -58,9 +61,11 @@ def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None
   else:
    after=old.patch_html(before,row,refs['previous_engine']['engine'],engine_url,cfg,
     previous_adapter=refs.get('previous_adapter'),current_adapter_url=refs.get('runtime',{}).get('adapter'),bird_sprites_url=None if refs.get('illustration_bindings') else bird_url)
-  if write and after!=before:p.write_bytes(after)
+  if after!=before:updates[rel]=after
+  if write and after!=before:p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(after)
   rows.append({'page':row['page'],'route':row['route'],'changed':before!=after,'before_sha256':b.sha(before),'after_sha256':b.sha(after),'body_hotspots_preserved':True})
- return {'schema':'wly.bird-fixed-selective-update.v1','status':'pass','applied':write,'pages':rows,'mounted':len(rows),'deferred_pages':sorted(allowed-selected),'stage_unmounted':len(refs['staged']),'external_actions':[]}
+ result={'schema':'wly.bird-fixed-selective-update.v1','status':'pass','applied':write,'pages':rows,'mounted':len(rows),'deferred_pages':sorted(allowed-selected),'stage_unmounted':len(refs['staged']),'external_actions':[]}
+ return (result, updates) if return_changes else result
 
 if __name__=='__main__':
  p=argparse.ArgumentParser(description=__doc__)

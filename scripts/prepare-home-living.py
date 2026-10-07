@@ -12,7 +12,10 @@ import hashlib
 import json
 from pathlib import Path
 import re
-import shutil
+try:
+    from release_delta import inventory, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, source_path, write_changes
 from urllib.parse import urljoin, urlsplit
 spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
 builder = importlib.util.module_from_spec(spec)
@@ -34,11 +37,6 @@ HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活�
 
 def proof(body: bytes) -> dict:
     return {'sha256': hashlib.sha256(body).hexdigest(), 'bytes': len(body)}
-
-
-def inventory(root: Path) -> dict:
-    return {p.relative_to(root).as_posix(): proof(p.read_bytes()) for p in sorted(root.rglob('*'))
-            if p.is_file() and p.relative_to(root).as_posix() != 'release-manifest.json'}
 
 
 def identity(files: dict, manifest: dict) -> str:
@@ -78,12 +76,12 @@ def home_preloads(text: str, horizontal: str, vertical: str) -> str:
 
 def cockpit_model(root: Path) -> tuple[str, dict]:
     """Extract the current input's actual B2 rules, never a fixed old fixture."""
-    html = (root / 'cockpit/index.html').read_text('utf8')
+    html = source_path(root, 'cockpit/index.html').read_text('utf8')
     refs = re.findall(r'<script\b[^>]*src="([^"]*b2-typeset-[a-f0-9]+\.js)"', html)
     if len(refs) != 1:
         raise ValueError('Expected the actual cockpit B2 runtime')
     rel = urlsplit(urljoin('/cockpit/index.html', refs[0])).path.lstrip('/')
-    original = (root / rel).read_bytes()
+    original = source_path(root, rel).read_bytes()
     text = original.decode('utf8').replace('\r\n', '\n').replace('\r', '\n')
     dependencies = between(text, 'const blockTime=', 'const online=')
     summary = between(text, 'function summary(){', 'function rowText(')
@@ -91,7 +89,7 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
     if not import_ref:
         raise ValueError('Actual B2 numeric dependency is missing')
     numeric_rel = urlsplit(urljoin('/' + rel, import_ref[1])).path.lstrip('/')
-    numeric_bytes = (root / numeric_rel).read_bytes()
+    numeric_bytes = source_path(root, numeric_rel).read_bytes()
     access_text = numeric_bytes.decode('utf8').replace('\r\n', '\n').replace('\r', '\n')
     numeric = between(access_text, 'export function reading(', 'export function rate(').replace('export function', 'function')
     adaptation = between(access_text, 'export function adaptStatus(', 'export const errorMessages').replace('export function', 'function')
@@ -233,7 +231,7 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
                 'pixel_sha256_rgba': hashlib.sha256(rgba.tobytes()).hexdigest(), **proof(body),
                 'original_encoding_lossless': b'VP8L' in body[:64], 'transcoded': False,
                 'transfer_bytes_and_decoded_pixels_unchanged': True}
-    original_html = (baseline / 'index.html').read_bytes()
+    original_html = source_path(baseline, 'index.html').read_bytes()
     html = original_html.decode('utf8')
     data_match = re.search(r'(<script\b[^>]*id="page-data"[^>]*>)(.*?)(</script>)', html, re.S)
     if not data_match:
@@ -246,7 +244,7 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
         raise ValueError('Expected one homepage app runtime')
     old_app_ref = app_refs[0]
     old_app_rel = urlsplit(urljoin('/index.html', old_app_ref)).path.lstrip('/')
-    app_bytes = (baseline / old_app_rel).read_bytes()
+    app_bytes = source_path(baseline, old_app_rel).read_bytes()
     model, model_proof = cockpit_model(baseline)
     bridge = (HERE / 'home-living-bind.js').read_bytes()
     new_app = patch_runtime(app_bytes.decode('utf8'), model, bridge.decode('utf8')).encode('utf8')
@@ -298,16 +296,8 @@ def prepare(baseline: Path, package: Path, output: Path, report: Path) -> dict:
     for rel, body in new_files.items():
         if rel != 'index.html' and rel in old_files and old_files[rel] != proof(body):
             raise ValueError('Refusing to replace any old asset: ' + rel)
-    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
-    for rel, body in new_files.items():
-        target = output / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
-        if target.suffix.lower() in builder.RELEASE_BINARY_EXT:
-            builder.copy_release_asset(package/rel.removeprefix('_shared/home-living/'), target)
-        else:
-            target.write_bytes(body)
-    files = inventory(output)
-    manifest.update({'files': files, 'release_id': identity(files, manifest), 'prepared_at_beijing': datetime.now(BJT).isoformat()})
+    files = write_changes(baseline, output, new_files, copy_asset=builder.copy_release_asset)
+    manifest.update({'files': files, 'release_id': identity(files, manifest)})
     manifest['home_living_preparation'] = {'schema': 'wly.home-living.v1', 'status': 'prepared_pending_browser_acceptance',
         'baseline_release_id': identity(old_files, manifest), 'package_engine': package_manifest['engine'],
         'package_bytes_unchanged': True, 'only_changed_html': 'index.html', 'actual_b2_rules_sha256': model_proof['rules_sha256'], 'published': False}
@@ -339,7 +329,7 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     old_files = inventory(baseline)
     if old_files != manifest.get('files') or identity(old_files, manifest) != manifest.get('release_id'):
         raise ValueError('Complete baseline bytes do not match the inventory and RID')
-    html = (baseline / 'index.html').read_text('utf8')
+    html = source_path(baseline, 'index.html').read_text('utf8')
     data_match = re.search(r'(<script\b[^>]*id="page-data"[^>]*>)(.*?)(</script>)', html, re.S)
     if not data_match:
         raise ValueError('Homepage page-data is missing')
@@ -353,7 +343,7 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     old_rel = urlsplit(urljoin('/index.html', old_ref)).path.lstrip('/')
     bridge = (HERE / 'home-living-bind.js').read_text('utf8')
     model, model_proof = cockpit_model((cockpit or baseline).resolve())
-    body = patch_runtime((baseline / old_rel).read_text('utf8'), model, bridge).encode('utf8')
+    body = patch_runtime(source_path(baseline, old_rel).read_text('utf8'), model, bridge).encode('utf8')
     app_rel = '_shared/home-app-' + proof(body)['sha256'][:20] + '.js'
     data['shared']['script_bundle'] = '/' + app_rel
     html = html[:data_match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + html[data_match.end(2):]
@@ -361,11 +351,8 @@ def rebind(baseline: Path, output: Path, report: Path, cockpit: Path | None = No
     html = re.sub(r'<script\b(?![^>]*\btype=)(?=[^>]*(?:src|data-src)="/' + app_rel + '")', '<script type="module"', html)
     layouts = data['screens'][0]['layouts']
     html = home_preloads(html, layouts['h']['viewer']['src'], layouts['v']['viewer']['src'])
-    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
-    (output / app_rel).write_bytes(body)
-    (output / 'index.html').write_text(html, encoding='utf8', newline='\n')
-    files = inventory(output)
-    manifest.update(files=files, release_id=identity(files, manifest), prepared_at_beijing=datetime.now(BJT).isoformat())
+    files = write_changes(baseline, output, {app_rel: body, 'index.html': html.encode('utf8')}, copy_asset=builder.copy_release_asset)
+    manifest.update(files=files, release_id=identity(files, manifest))
     manifest['home_living_preparation'].update(actual_b2_rules_sha256=model_proof['rules_sha256'], published=False)
     (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     result = {'schema': 'wly.home-living-rebind.v1', 'status': 'prepared', 'published': False,

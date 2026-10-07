@@ -17,6 +17,10 @@ import shutil
 spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
+try:
+    from release_delta import inventory, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, source_path, write_changes
 
 ROOT = Path(__file__).resolve().parents[1]
 BJT = timezone(timedelta(hours=8))
@@ -65,15 +69,15 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
         raise ValueError('Use a new empty preparation directory')
     manifest_path = release / 'release-manifest.json'
     manifest = json.loads(manifest_path.read_text('utf8'))
-    original_files = {p.relative_to(release).as_posix(): proof(p.read_bytes()) for p in release.rglob('*') if p.is_file()}
+    original_files = inventory(release)
     for rel, expected in manifest['files'].items():
         if original_files.get(rel) != expected:
             raise ValueError('Incomplete or changed source release: ' + rel)
     # The actual complete runtime must include every asset in its manifest.
-    if not (release / '_typeset/runtime').is_dir() or not (release / '_shared').is_dir():
+    if not all(any(rel.startswith(prefix) for rel in original_files) for prefix in ('_typeset/runtime/', '_shared/')):
         raise ValueError('HTML-only publication is not a complete runtime source')
     html_rel = 'cockpit/index.html'
-    original_html = (release / html_rel).read_bytes()
+    original_html = source_path(release, html_rel).read_bytes()
     html = original_html.decode('utf8')
     installed = 'data-today-river' in html
     refs = re.findall(r'<script\b[^>]*\bsrc="([^"]*b2-typeset-[a-f0-9]+\.js)"[^>]*>', html)
@@ -81,7 +85,7 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
         raise ValueError('Expected one actual cockpit B2 asset')
     old_ref = refs[0]
     old_rel = old_ref.lstrip('/') if old_ref.startswith('/') else (Path('cockpit') / old_ref).as_posix()
-    runtime = patch_runtime((release / old_rel).read_text('utf8')).encode('utf8')
+    runtime = patch_runtime(source_path(release, old_rel).read_text('utf8')).encode('utf8')
     new_rel = 'cockpit/assets/b2-typeset-' + proof(runtime)['sha256'][:20] + '.js'
     new_ref = '/' + new_rel if old_ref.startswith('/') else 'assets/' + Path(new_rel).name
     additions = {new_rel: runtime}
@@ -114,23 +118,16 @@ def prepare(release: Path, output: Path, handoff: Path) -> dict:
     additions[html_rel] = html.encode('utf8')
     site = output / 'site'
     output.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(release, site, copy_function=builder.copy_release_asset)
-    changes = {}
     for rel, payload in additions.items():
-        path = site / rel
+        path = source_path(release, rel)
         if path.is_file() and rel != html_rel and path.read_bytes() != payload:
             raise ValueError('Content-addressed asset collision: ' + rel)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(payload)
-        changes[rel] = {'before': original_files.get(rel), 'after': proof(payload)}
-        manifest['files'][rel] = proof(payload)
-    manifest['prepared_at_beijing'] = datetime.now(BJT).isoformat()
+    manifest['files'] = write_changes(release, site, additions, copy_asset=builder.copy_release_asset)
+    changes = {rel: {'before': original_files.get(rel), 'after': proof(payload)} for rel, payload in additions.items() if proof(payload) != original_files.get(rel)}
     manifest['release_id'] = hashlib.sha256(json.dumps(manifest['files'],sort_keys=True).encode()).hexdigest()
-    manifest['today_river_preparation'] = {'baseline_release_id': json.loads(manifest_path.read_text('utf8'))['release_id'], 'publication_performed':False, 'original_task_list_retained':True}
+    if changes or not manifest.get('today_river_preparation'):
+        manifest['today_river_preparation'] = {'baseline_release_id': json.loads(manifest_path.read_text('utf8'))['release_id'], 'publication_performed':False, 'original_task_list_retained':True}
     (site / 'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n','utf8')
-    mismatches = [rel for rel, digest in original_files.items() if rel not in [html_rel,'release-manifest.json'] and proof((site / rel).read_bytes()) != digest]
-    if mismatches:
-        raise ValueError('Unrelated original bytes changed: ' + ', '.join(mismatches))
     receipt = {'schema':'wly.today-river-preparation.v1','status':'prepared','observed_at_beijing':datetime.now(BJT).isoformat(),'input_release':str(release),'input_release_id':manifest['today_river_preparation']['baseline_release_id'],'baseline_manifest':proof(manifest_path.read_bytes()),'input_file_count':len(original_files),'input_html_count':sum(x.endswith('.html') for x in original_files),'preserved_original_files':len(original_files)-2,'changes':changes,'candidate':str(site),'release_id':manifest['release_id'],'handoff_template':proof((handoff/'river2.template.html').read_bytes()),'external_write':False,'rollback':'Discard this candidate or restore cockpit/index.html and release-manifest.json from input; all original addressed assets are retained.'}
     (output / 'preparation.json').write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n','utf8')
     return receipt

@@ -13,7 +13,10 @@ import html
 import json
 from pathlib import Path
 import re
-import shutil
+try:
+    from release_delta import inventory, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, source_path, write_changes
 from urllib.parse import unquote, urljoin, urlsplit
 spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
 builder = importlib.util.module_from_spec(spec)
@@ -33,19 +36,15 @@ def digest(path):
     with Path(path).open('rb') as f: return hashlib.file_digest(f,'sha256').hexdigest()
 
 
-def inventory(root):
-    return {p.relative_to(root).as_posix():{'sha256':digest(p),'bytes':p.stat().st_size}
-            for p in sorted(root.rglob('*')) if p.is_file() and p.name!='release-manifest.json'}
-
-
 def local_file(root,url,owner):
     parts=urlsplit(url)
     path=unquote(parts.path)
     if not parts.netloc:
         candidate=(root/urljoin('/'+owner,path).lstrip('/')).resolve()
-        return candidate if candidate.is_relative_to(root) and candidate.is_file() else None
+        candidate = source_path(root, candidate.relative_to(root).as_posix()) if candidate.is_relative_to(root) else candidate
+        return candidate if candidate.is_file() else None
     chunks=path.lstrip('/').split('/')
-    return next((root.joinpath(*chunks[i:]) for i in range(len(chunks)) if root.joinpath(*chunks[i:]).is_file()),None)
+    return next((source_path(root, '/'.join(chunks[i:])) for i in range(len(chunks)) if source_path(root, '/'.join(chunks[i:])).is_file()),None)
 
 
 def canonical_data():
@@ -165,7 +164,7 @@ def prepare(args):
     manifest=read(source/'release-manifest.json');original=inventory(source)
     if original!=manifest['files']: raise ValueError('Complete source bytes do not match release inventory')
     if any(k not in original for k in manifest.get('oss',{}).get('objects',{})): raise ValueError('HTML-only OSS source cannot replay how-demo')
-    before=(source/'how/index.html').read_bytes().decode('utf8')
+    before=source_path(source, 'how/index.html').read_bytes().decode('utf8')
     if not all('id="'+a+'"' in before for a in ['how-04','case-trip','case-restore','case-away']): raise ValueError('The real how division and three case anchors are required')
     source_data_match=re.search(r'<script[^>]*id="page-data"[^>]*>(.*?)</script>',before,re.S)
     source_page_data=source_data_match[0] if source_data_match else None
@@ -175,20 +174,19 @@ def prepare(args):
     by_hash={}
     for rel,meta in original.items():
         if Path(rel).suffix.lower()=='.png': by_hash.setdefault(meta['sha256'],rel)
-    shutil.copytree(source,out,copy_function=builder.copy_release_asset)
-    (out/'_how-demo/assets').mkdir(parents=True,exist_ok=True)
+    updates={}
     for name,spec in specs.items():
         rel=by_hash.get(spec['sha256'])
         if not rel:
             src=args.assets_dir/spec['file'] if args.assets_dir else None
             if not src or not src.is_file() or digest(src)!=spec['sha256'] or src.stat().st_size!=spec['bytes']:
                 raise ValueError('Missing unchanged approved source asset: '+spec['file']+'; pass --assets-dir assets/src')
-            rel='_how-demo/assets/'+spec['sha256'][:20]+'-'+spec['file'];builder.copy_release_asset(src,out/rel)
+            rel='_how-demo/assets/'+spec['sha256'][:20]+'-'+spec['file'];updates[rel]=src.read_bytes()
         assets[name]={'src':'/'+rel,'size':spec['size'],**({'crop':spec['crop']} if spec.get('crop') else {})}
         proofs.append({'asset':name,'file':rel,'sha256':spec['sha256'],'bytes':spec['bytes'],'unchanged_original_byte':True})
     data['assets']=assets
     def bundle(name,payload,suffix):
-        rel='_how-demo/'+name+'-'+hashlib.sha256(payload).hexdigest()[:20]+suffix;(out/rel).write_bytes(payload);return '/'+rel
+        rel='_how-demo/'+name+'-'+hashlib.sha256(payload).hexdigest()[:20]+suffix;updates[rel]=payload;return '/'+rel
     css=bundle('how-demo',(HERE/'how-demo-runtime.css').read_bytes(),'.css');js=bundle('how-demo',(HERE/'how-demo-runtime.js').read_bytes(),'.js')
     text=re.sub(re.escape(MARKER_START)+r'[\s\S]*?'+re.escape(MARKER_END),'',before)
     text=re.sub(r'<link\b[^>]*data-how-demo-bundle[^>]*>|<script\b[^>]*data-how-demo-bundle[^>]*>[\s\S]*?</script>','',text)
@@ -209,8 +207,8 @@ def prepare(args):
                            f'<script src="{panorama_js}" defer data-how-demo-bundle></script>')+'</head>')
         text=text.replace('</body>',f'<script type="application/json" data-how-panorama-data>{encoded}</script></body>')
     if source_page_data and source_page_data not in text: raise AssertionError('Existing 15-screen page-data changed')
-    (out/'how/index.html').write_bytes(text.encode('utf8'))
-    search_original=(source/'search-index.js').read_bytes().decode('utf8');prefix='window.__WLY_SEARCH_INDEX__='
+    updates['how/index.html']=text.encode('utf8')
+    search_original=source_path(source, 'search-index.js').read_bytes().decode('utf8');prefix='window.__WLY_SEARCH_INDEX__='
     if not search_original.startswith(prefix): raise ValueError('Unknown existing search-index contract')
     arr,end=json.JSONDecoder().raw_decode(search_original[len(prefix):]);arr=[e for e in arr if e.get('origin')!='how-demo-v3']
     projected=[{'type':'协作示例','group':'系统','projectSlug':None,'title':data['ui']['title']+' · '+s['say'],'href':'/how/#one-sentence','detail':s['result'],'search':shared_text(data)+'\n'+story_text(data,s),'aliases':data['chipNames'],'scopes':['system'],'origin':'how-demo-v3'} for s in data['stories']]
@@ -218,10 +216,10 @@ def prepare(args):
     search=bundle('how-demo-search',combined.encode('utf8'),'.js');updated=[]
     for rel in original:
         if not rel.endswith('.html'): continue
-        target=out/rel;h=target.read_bytes().decode('utf8')
+        h=updates.get(rel, source_path(source, rel).read_bytes()).decode('utf8')
         newer=re.sub(r'(<script\b[^>]*\bsrc=["\'])([^"\']*(?:/search-index\.js|/_how-demo/how-demo-search-[a-f0-9]+\.js))(["\'])',lambda m:m[1]+search+m[3],h)
-        if newer!=h: target.write_bytes(newer.encode('utf8'));updated.append(rel)
-    files=inventory(out)
+        if newer!=h: updates[rel]=newer.encode('utf8');updated.append(rel)
+    files=write_changes(source, out, updates, copy_asset=builder.copy_release_asset)
     if any(files.get(k)!=v for k,v in original.items() if not k.endswith('.html')): raise AssertionError('Original assets changed')
     rid=hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()
     manifest['release_id']=rid;manifest['files']=files;manifest['how_demo_preparation']={'schema':'wly.how-demo-preparation.v1','status':'prepared_pending_root_acceptance','baseline_release_id':read(source/'release-manifest.json')['release_id'],'screen':SCREEN,'source_data_sha256':digest(HERE/'how-demo-data.json'),'speed':speed,'speed_source':speed_proof,'bundle':[js,css,search],'source_assets':proofs,'original_page_data_preserved':True,'anchors':['case-trip','case-restore','case-away']}

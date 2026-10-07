@@ -15,7 +15,10 @@ from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
-import shutil
+try:
+    from release_delta import inventory, proof, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, proof, source_path, write_changes
 import subprocess
 from datetime import datetime, timedelta, timezone
 from urllib.parse import unquote, urljoin, urlsplit
@@ -41,11 +44,6 @@ def read(path):
 
 def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', 'utf8')
-
-
-def inventory(root):
-    return {p.relative_to(root).as_posix(): {'sha256': digest(p), 'bytes': p.stat().st_size}
-            for p in sorted(root.rglob('*')) if p.is_file() and p.name != 'release-manifest.json'}
 
 
 def route(rel):
@@ -113,7 +111,7 @@ def remove_document_hints(text):
     return text,len(spans)
 
 
-def patch_legacy_pointer_intent(out, original):
+def patch_legacy_pointer_intent(source, original, updates):
     """Keep existing module URLs and RR allowlists; only change its focus hook."""
     before = b'document.addEventListener(`focusin`,e=>n(e.target.closest?.(`a[href]`)))'
     after = b'document.addEventListener(`pointerdown`,e=>n(e.target.closest?.(`a[href]`)))'
@@ -121,13 +119,13 @@ def patch_legacy_pointer_intent(out, original):
     for rel in original:
         if not rel.endswith('.js'):
             continue
-        path = out/rel; payload = path.read_bytes()
+        payload = source_path(source, rel).read_bytes()
         if b"link[rel='prefetch'][as='document']" not in payload or before not in payload:
             continue
         if payload.count(before) != 1:
             raise ValueError('Ambiguous legacy document-prefetch hook: '+rel)
-        path.write_bytes(payload.replace(before,after,1))
-        changes.append({'path':rel,'before':original[rel], 'after':{'bytes':path.stat().st_size,'sha256':digest(path)},
+        updates[rel] = payload.replace(before,after,1)
+        changes.append({'path':rel,'before':original[rel], 'after':proof(updates[rel]),
                         'change':'Original document prefetch focusin -> pointerdown; original pointerover remains'})
     return changes
 
@@ -137,13 +135,14 @@ def local_asset(source, src, owner):
     if u.netloc:
         # Content-addressed OSS URLs may be mapped to a supplied complete source,
         # but no image is downloaded and no old fixed prefix is assumed.
-        candidates = [source / unquote(u.path.lstrip('/'))]
+        candidates = [source_path(source, unquote(u.path.lstrip('/')))]
         suffix = unquote(u.path).split('/')
-        candidates += [source.joinpath(*suffix[i:]) for i in range(1, len(suffix))]
+        candidates += [source_path(source, '/'.join(suffix[i:])) for i in range(1, len(suffix))]
         return next((p for p in candidates if p.is_file()), None)
     relative = urljoin('/' + owner, src)
     target = (source / unquote(relative.lstrip('/'))).resolve()
-    return target if target.is_relative_to(source) and target.is_file() else None
+    target = source_path(source, target.relative_to(source).as_posix()) if target.is_relative_to(source) else target
+    return target if target.is_file() else None
 
 
 def pixels(path):
@@ -321,7 +320,7 @@ async def prepare(args, ownership):
     oss_objects=manifest.get('oss',{}).get('objects',{})
     if any(k not in original for k in oss_objects):
         raise ValueError('HTML-only OSS package: restore all manifest OSS objects into a complete inventory-bound local source before replay')
-    pages = {k: (source/k).read_bytes().decode('utf8') for k in original if k.endswith('.html')}
+    pages = {k: source_path(source,k).read_bytes().decode('utf8') for k in original if k.endswith('.html')}
     records, geometry_proofs, declared_geometry = {}, [], set()
     report_geometries, report_proofs = bound_geometries(args.build_report)
     geometry_paths = list(dict.fromkeys(args.geometry + report_geometries))
@@ -459,18 +458,15 @@ async def prepare(args, ownership):
     js_bytes, css_bytes = (HERE/'album-runtime.js').read_bytes(), (HERE/'album-runtime.css').read_bytes()
     js_rel = '_album/album-' + hashlib.sha256(js_bytes).hexdigest()[:20] + '.js'
     css_rel = '_album/album-' + hashlib.sha256(css_bytes).hexdigest()[:20] + '.css'
-    shutil.copytree(source, out, copy_function=builder.copy_release_asset)
-    legacy_changes = patch_legacy_pointer_intent(out, original)
-    (out/'_album').mkdir(exist_ok=True)
-    for rel, payload in [(index_rel,index_bytes),(js_rel,js_bytes),(css_rel,css_bytes)]:
-        (out/rel).write_bytes(payload)
+    updates = {index_rel:index_bytes, js_rel:js_bytes, css_rel:css_bytes}
+    legacy_changes = patch_legacy_pointer_intent(source, original, updates)
     changed, delayed, removed_hints = [], {}, {}
     for rel, text in pages.items():
         model = models[route(rel)]
         text, scripts, hint_count = inject_runtime(text, resource(js_rel), resource(css_rel), resource(index_rel), model)
-        (out/rel).write_bytes(text.encode('utf8')); changed.append(rel); delayed[route(rel)] = scripts
+        updates[rel] = text.encode('utf8'); changed.append(rel); delayed[route(rel)] = scripts
         if hint_count: removed_hints[route(rel)] = hint_count
-    files = inventory(out)
+    files = write_changes(source, out, updates, copy_asset=builder.copy_release_asset)
     image_suffix = {'.png','.webp','.avif','.jpg','.jpeg','.gif','.svg','.ico','.bmp','.tiff','.tif','.mp4','.webm'}
     immutable = [k for k in original if Path(k).suffix.lower() in image_suffix]
     modified_scripts = {row['path'] for row in legacy_changes}

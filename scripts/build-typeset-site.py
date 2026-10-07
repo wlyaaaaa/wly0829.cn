@@ -926,6 +926,7 @@ def build_page(name, records, args, candidate):
     dot_capabilities=[p.get('dot_capability')for s in data['screens']for p in s['parts']]
     dot_status='present'if data['motion_counts']['dots']else'no_corresponding_element'if dot_capabilities and all(dot_capabilities)else'measurement_missing'
     data['motion_capabilities']={**capabilities,'dots':{'policy':motion_prep.DOT_POLICY,'status':dot_status,'label':'新版面无对应元素'if dot_status=='no_corresponding_element'else'当前有效状态标记'}}
+    text=re.sub(r'<link\b[^>]*href="[^\"]*typeset-layout-[a-f0-9]+\.css"[^>]*>','',text)
     text=text.replace('</head>',f'<link rel="stylesheet" href="{css}"></head>')
     label_names=set(re.findall(r'data-label-(?:text|h|v)="([^"]+)"',text))
     data['shared']['nav_labels']={k:v for k,v in data['shared'].get('nav_labels',{}).items()if k in {html.unescape(x)for x in label_names}}
@@ -1115,7 +1116,8 @@ def main():
     creative_scope=read(args.creative_preparation).get('scope')if args.creative_preparation else None
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
                              baseline_production_commit=args.baseline_ref,
-                             baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None)
+                             baseline_input_kind='complete_runtime_staging' if args.runtime_baseline else None,
+                             defer=bool(args.creative_preparation))
     inherited_retry=baseline_manifest.get('resource_retry_preparation',{})
     if not args.creative_preparation and inherited_retry.get('runtime') in manifest['files'] and manifest['files'][inherited_retry['runtime']]==baseline_manifest['files'].get(inherited_retry['runtime']):
         manifest['resource_retry_preparation']=inherited_retry
@@ -1141,7 +1143,7 @@ def main():
         if creative_scope in ('full-pages-creative-2f','full-pages-creative-2f-static-home'):
             staged_report=args.output.parent/(args.output.name+'-staged-build-report.json')
             for state in states.values():
-                if state.get('url'):state['html_sha256']=hybrid.digest(raw_output/hybrid.route_file(state['url']))
+                if state.get('url'):state['html_sha256']=hybrid.digest(hybrid.source_path(raw_output,hybrid.route_file(state['url'])))
             how_source=next((Path(row['source_path']) for row in rows if row['page']=='how'),None)
             if how_source: args.external_inputs[str(how_source)]=stamp(how_source)
             write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
@@ -1178,12 +1180,12 @@ def main():
         if creative:
             creative['files']=ledger
             creative['assembled_release_id']=manifest['release_id']
-            manifest['creative_preparation']=creative
+            manifest['creative_preparation'].update(files=ledger,assembled_release_id=manifest['release_id'])
     if live_ui:
-        manifest['live_ui_preparation']=live_ui
+        manifest['live_ui_preparation']=hybrid.stable_evidence(live_ui,HERE.parent)
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
     if workbench:
-        manifest['rule_original_workbench']=workbench
+        manifest['rule_original_workbench']=hybrid.stable_evidence(workbench,HERE.parent)
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
     if native:
         if native_readability.source_inputs(stamp)!=native_inputs:raise ValueError('Native source inputs changed after SSR')

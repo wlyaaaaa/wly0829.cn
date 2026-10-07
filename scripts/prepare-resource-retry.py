@@ -10,6 +10,10 @@ from urllib.parse import urljoin,urlsplit
 spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
+try:
+    from release_delta import inventory, source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory, source_path, write_changes
 
 HERE=Path(__file__).resolve().parent
 MARKER='data-resource-retry="next-2e"'
@@ -42,8 +46,6 @@ def mark_initial_scripts(raw,rel,policy):
     return re.sub(br'<script\b[^>]*>',mark,raw,flags=re.I),marked
 def stamp(path):
     body=Path(path).read_bytes();return {'sha256':hashlib.sha256(body).hexdigest(),'bytes':len(body)}
-def inventory(root):
-    return {p.relative_to(root).as_posix():stamp(p)for p in sorted(root.rglob('*'))if p.is_file()and p.relative_to(root).as_posix()!='release-manifest.json'}
 def identity(files,manifest):
     if manifest.get('schema')!='wly.hybrid-release.v1':raise ValueError('Unsupported release schema')
     overlay=manifest.get('runtime_overlay')
@@ -73,7 +75,7 @@ def policy_and_observation(baseline,files,asset_base_url=None):
     explicit_origin=asset_origin(asset_base_url)
     origins={explicit_origin} if explicit_origin else set();pages={};dynamic=[]
     for rel in files:
-        path=baseline/rel
+        path=source_path(baseline, rel)
         if rel.endswith('.html'):
             parser=Resources();parser.feed(path.read_text('utf8'));pages[rel]=parser.rows
             for row in parser.rows:
@@ -108,6 +110,9 @@ def remove_previous_recovery(raw,info):
             album=addition.replace(b'<script defer ',b'<script  ',1).replace(b' src="',b'  data-album-runtime data-src="',1)
             serializations.update((album,album.replace(b'\n',b'\r\n')))
         matches=[value for value in serializations if raw.count(value)==1]
+        if not matches and key=='addition':
+            pattern=rb'\r?\n?<script\b(?=[^>]*data-resource-retry="next-2e")(?=[^>]*(?:data-)?src="/'+re.escape(info['runtime'].encode())+rb'")[^>]*>\s*</script>\r?\n?'
+            matches=[match[0] for match in re.finditer(pattern,raw)]
         if len(matches)!=1:raise ValueError('Existing recovery does not match the bound predecessor: '+key)
         matched=matches[0];start=raw.index(matched);spans.append((start,start+len(matched)))
     for key in ('initial_script_attribute','initial_stylesheet_attribute'):
@@ -152,7 +157,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
     selected=set(pages or observed['html_resources']);changes={};initial_scripts={};initial_stylesheets={}
     if not selected<=set(observed['html_resources']):raise ValueError('Selected page missing from complete source')
     for rel in selected:
-        raw=(baseline/rel).read_bytes()
+        raw=source_path(baseline, rel).read_bytes()
         if MARKER.encode()in raw:
             if not previous:raise ValueError('Page already has resource recovery')
             raw,previous_restore[rel]=remove_previous_recovery(raw,previous)
@@ -164,19 +169,16 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
         # The early inline observer only marks genuine element load errors.
         # Original script order and existing handlers remain in place.
         changes[rel]=marked.replace(b'</head>',addition.encode()+b'</head>',1)
-    shutil.copytree(baseline,output,copy_function=builder.copy_release_asset)
-    (output/runtime_rel).parent.mkdir(parents=True,exist_ok=True);(output/runtime_rel).write_bytes(runtime)
-    for rel,raw in changes.items():(output/rel).write_bytes(raw)
-    after=inventory(output)
+    after=write_changes(baseline, output, {**changes, runtime_rel: runtime}, copy_asset=builder.copy_release_asset)
     assert all(after[rel]==entry for rel,entry in before.items()if rel not in changes)
-    assert all(restore_previous_recovery((output/rel).read_bytes().replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'').replace(STYLESHEET_ATTRIBUTE,b''),previous_restore.get(rel,[]))==(baseline/rel).read_bytes()for rel in changes)
+    assert all(restore_previous_recovery(raw.replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'').replace(STYLESHEET_ATTRIBUTE,b''),previous_restore.get(rel,[]))==source_path(baseline,rel).read_bytes()for rel,raw in changes.items())
     rid=identity(after,manifest);old_rid=manifest['release_id']
     manifest.update({'files':after,'release_id':rid,'resource_retry_preparation':{'status':'next_2e_prepared_pending_acceptance','baseline_release_id':old_rid,'runtime':runtime_rel,'addition':addition,'initial_capture_addition':INITIAL_CAPTURE,'initial_script_attribute':INITIAL_ATTRIBUTE.decode(),'initial_stylesheet_attribute':STYLESHEET_ATTRIBUTE.decode(),'initial_scripts':initial_scripts,'initial_stylesheets':initial_stylesheets,'changed_html':sorted(changes),'old_page_evidence_is_not_new_acceptance':True}})
     if previous_proof:
         manifest['resource_retry_preparation'].update(previous_manifest=previous_proof,previous_html_restore=previous_restore)
         if stamp(previous_manifest)!={key:previous_proof[key]for key in ('sha256','bytes')}:raise ValueError('Previous manifest changed during replay')
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
-    result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(output/runtime_rel),'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
+    result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(source_path(output,runtime_rel)),'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
     report=Path(report);report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
 def rollback(baseline,output,report):
     baseline,output=Path(baseline).resolve(),Path(output).resolve()
@@ -186,7 +188,7 @@ def rollback(baseline,output,report):
     info=manifest.pop('resource_retry_preparation');addition=info['addition'].encode()
     bodies={}
     for rel in info['changed_html']:
-        body=(baseline/rel).read_bytes()
+        body=source_path(baseline, rel).read_bytes()
         if body.count(addition)!=1:raise ValueError('Review newer HTML before rollback')
         restored=body.replace(addition,b'',1)
         if info.get('initial_capture_addition'):
@@ -195,9 +197,7 @@ def rollback(baseline,output,report):
             restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
             if info.get('initial_stylesheet_attribute'):restored=restored.replace(info['initial_stylesheet_attribute'].encode(),b'')
         bodies[rel]=restore_previous_recovery(restored,info.get('previous_html_restore',{}).get(rel,[]))
-    shutil.copytree(baseline,output,copy_function=builder.copy_release_asset)
-    for rel,body in bodies.items():(output/rel).write_bytes(body)
-    after=inventory(output);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
+    after=write_changes(baseline, output, bodies);rid=identity(after,manifest);manifest.update(files=after,release_id=rid, copy_asset=builder.copy_release_asset)
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     result={'status':'prepared_static_rollback','release_id':rid,'output':str(output),'unused_runtime_retained':True,'published':False};Path(report).write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
 def main():

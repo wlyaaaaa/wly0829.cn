@@ -16,6 +16,10 @@ from html.parser import HTMLParser
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
+try:
+    from release_delta import inventory as delta_inventory, sources, source_path, stable_evidence, LEDGER
+except ModuleNotFoundError:
+    from scripts.release_delta import inventory as delta_inventory, sources, source_path, stable_evidence, LEDGER
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = 'release-manifest.json'
@@ -37,13 +41,15 @@ def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
 
 def inventory(root):
+    if sources(Path(root).resolve()):
+        return delta_inventory(root)
     result = {}
     for p in sorted(root.rglob('*')):
         if p.is_symlink():
             raise ValueError('Symlink is not a release asset: '+str(p))
-        if p.is_file() and p.relative_to(root).as_posix() not in (MANIFEST, 'release-identity.json'):
+        if p.is_file() and p.relative_to(root).as_posix() not in (MANIFEST, 'release-identity.json', LEDGER):
             result[p.relative_to(root).as_posix()] = {'sha256': digest(p), 'bytes': p.stat().st_size}
-    return result
+    return dict(sorted(result.items()))
 
 def route_file(url):
     path = unquote(urlsplit(url).path)
@@ -299,28 +305,33 @@ def unchanged_search_finding(output, finding, overlay):
 
 
 def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None,
-             baseline_production_commit=None, baseline_input_kind=None):
+             baseline_production_commit=None, baseline_input_kind=None, defer=False):
     baseline = baseline.resolve(); candidate = candidate.resolve(); output = output.resolve()
     if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
         raise ValueError('Choose a fresh, disjoint output directory')
     old, routes = verify_baseline(baseline, baseline_manifest)
-    overlays = overlay.get('files', {}) if overlay else {}
+    overlays = dict(sorted(overlay.get('files', {}).items())) if overlay else {}
     if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
     accepted_files = {route_file(x) for x in accepted}
     available = {x for x in old if x.endswith('.html')} | accepted_files
-    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
+    if defer:
+        output.mkdir(parents=True)
+    else:
+        shutil.copytree(baseline, output, copy_function=getattr(builder, 'copy_release_asset', shutil.copy2))
     # HTTP snapshots do not expose Pages' domain configuration file.
     # Adding that deployment metadata preserves every captured HTTP byte.
-    if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
+    if not (baseline/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
     # Old release-manifest is replaced by this generation; old content remains exact.
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
-    navigation_pages = nav_repair.page_inventory(output)
-    for rel in accepted_files:
-        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'),candidate)
+    paths = {'CNAME':str(output/'CNAME')} if defer and not (baseline/'CNAME').exists() else {}
+    navigation_pages = nav_repair.page_inventory(baseline)
+    for rel in sorted(accepted_files):
+        navigation_pages[rel] = nav_repair.PageFacts(source_path(candidate,rel).read_text('utf-8-sig'),candidate)
     while pending:
         rel = pending.pop()
         if rel in copied: continue
-        path = candidate/rel
+        logical = candidate/rel
+        path = source_path(candidate, rel)
         if not path.is_file(): raise ValueError('Candidate dependency missing: '+rel)
         if candidate_files is not None:
             proof = candidate_files.get(rel)
@@ -332,35 +343,42 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         target = output/rel
         text = None
         if rel in accepted_files:
-            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files, navigation_pages)
+            text = rewrite_links(path.read_text('utf-8-sig'), candidate, logical, available, mappings, baseline if defer else output, accepted_files, navigation_pages)
         elif rel in old and rel not in overlays:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)
-        if text is None: builder.copy_release_asset(path, target)
+        if text is None and defer: target = path
+        elif text is None: getattr(builder, 'copy_release_asset', shutil.copy2)(path, target)
         else: target.write_text(text, encoding='utf8')
+        paths[rel] = str(target)
         copied.add(rel)
-        for ref, navigation in references(path, text):
-            dependency = local_reference(candidate, path, ref)
+        content = text if text is not None else path.read_text('utf-8-sig') if path.suffix in {'.html','.css','.js','.json'} else None
+        for ref, navigation in references(logical, content):
+            dependency = local_reference(candidate, logical, ref)
             if dependency is None: continue
             dep = dependency.relative_to(candidate).as_posix()
             if navigation and dependency.suffix == '.html':
                 if dep not in available and not (output/dep).is_file(): raise ValueError('Unresolved navigation: '+ref)
                 continue
-            if dep in old and not dependency.is_file(): continue
+            if dep in old and not source_path(candidate, dep).is_file(): continue
             pending.append(dep)
     # Bind every inherited and rebuilt navigation role after the complete
     # package exists, rather than retaining an earlier partial-release fallback.
-    navigation_pages = nav_repair.page_inventory(output)
-    for rel in nav_repair.restore_pending_links(output, navigation_pages):
+    navigation_pages = nav_repair.page_inventory(output) if not defer else navigation_pages
+    for rel in nav_repair.restore_pending_links(output, navigation_pages) if not defer else []:
         if rel not in accepted_files:
             overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),
                              'after':{'sha256':digest(output/rel),'bytes':(output/rel).stat().st_size}}
     for rel, entry in old.items():
-        if rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
+        if not defer and rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
             raise ValueError('Old file changed: '+rel)
     for route in routes:
-        if not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
-    files = inventory(output)
+        if not defer and not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
+    files = {**old, **{rel:{'sha256':digest(Path(path)),'bytes':Path(path).stat().st_size} for rel,path in paths.items()}} if defer else inventory(output)
+    if defer:
+        write(output/LEDGER, {'baseline':str(baseline),'sources':paths})
+        sources.cache_clear()
+        files = dict(sorted(files.items()))
     release_id = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
     manifest = {'schema':'wly.hybrid-release.v1', 'release_id':release_id,
                 'baseline_prepared_at_beijing':baseline_manifest.get('prepared_at_beijing') or baseline_manifest.get('baseline_prepared_at_beijing'),

@@ -5,6 +5,10 @@ import json
 import subprocess, time
 import sys
 from pathlib import Path
+try:
+    from release_delta import source_path, write_changes, stable_evidence
+except ModuleNotFoundError:
+    from scripts.release_delta import source_path, write_changes, stable_evidence
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -74,7 +78,7 @@ def recipe(path):
         inputs[str(HERE/'prepare-static-home.py')]=stamp(HERE/'prepare-static-home.py')
     for pattern in ('prepare-home-*.*', 'home-living-*.*', 'prepare-page-flip.py', 'album-runtime.*',
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
-                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py'):
+                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py', 'release_delta.py'):
         inputs.update({str(p.resolve()): stamp(p) for p in HERE.glob(pattern) if p.is_file()})
     if full_2f:
         for name in ('today-river.js','today-river.css'):
@@ -83,6 +87,8 @@ def recipe(path):
     if data.get('title_cache'):
         paths['title_cache'] = input_path(data['title_cache'])
         inputs[str(paths['title_cache'])] = stamp(paths['title_cache'])
+    minifier=ROOT/'src/runtime/bird/tools/site/build_bird_guide.py'
+    inputs[str(minifier)]=stamp(minifier)
     return data, paths, inputs
 
 
@@ -123,7 +129,11 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     steps = []
     import os
     environment=os.environ.copy()
-    if data.get('native_home_script'): environment['PYTHONPATH']=str(paths['native_home_script'].parent)+os.pathsep+environment.get('PYTHONPATH','')
+    environment['WLY_RELEASE_DELTA']='1'
+    environment['PYTHONPATH']=str(HERE)+os.pathsep+str(ROOT/'src/runtime/bird/tools/site')+os.pathsep+environment.get('PYTHONPATH','')
+    if data.get('native_home_script'):
+        sys.path.insert(0,str(paths['native_home_script'].parent))
+        environment['PYTHONPATH']=str(paths['native_home_script'].parent)+os.pathsep+environment['PYTHONPATH']
     selected_steps=list(('demo','retry') if data.get('scope')=='page-demo-and-retry' else STATIC_2F_STEPS if static_2f else FULL_2F_STEPS if full_2f else STEPS)
     if data.get('home_bio'): selected_steps.append('bio')
     if data.get('bird_first_packet'): selected_steps.append('native-living')
@@ -139,19 +149,19 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         elif name == 'bio':
             args=[str(paths['home_bio_script']),'--baseline',current,'--output',dest,'--report',proof]
         elif name == 'bird-first':
-            import shutil
-            packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json'); shutil.copytree(current,dest,copy_function=hybrid.builder.copy_release_asset)
-            for rel,src in refs['object_sources'].items():
-                if rel.endswith('/config.json'): continue
-                target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); hybrid.builder.copy_release_asset(packet_path(packet,src),target)
-            args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
+            from apply_bird_fixed_upgrade import apply
+            packet=paths['living_pages_packet']; refs=hybrid.read(packet/'references.json')
             requested=json.loads(environment.get('WLY_RENDER_PAGES','null'))
-            if requested is not None:args+=['--pages',*sorted({row['page'] for row in refs['mounted']} & set(requested))]
+            bird,updates=apply(current,packet,return_changes=True,pages=None if requested is None else sorted({row['page'] for row in refs['mounted']} & set(requested)))
+            updates.update({rel:packet_path(packet,src).read_bytes() for rel,src in refs['object_sources'].items() if not rel.endswith('/config.json')})
+            updated=hybrid.read(current/hybrid.MANIFEST);updated['files']=write_changes(current,dest,updates,delta=True)
+            updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest()
+            hybrid.write(dest/hybrid.MANIFEST,updated);hybrid.write(proof,bird);args=None
         elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
             args = ['prepare-home-living.py', '--baseline', current, '--package', paths['living_package'], '--output', dest, '--report', proof]
-            home_data=hybrid.builder.PAGE_DATA.search((current/'index.html').read_text('utf8'))if full_2f else None
+            home_data=hybrid.builder.PAGE_DATA.search(source_path(current,'index.html').read_text('utf8'))if full_2f else None
             if full_2f and home_data and json.loads(home_data[2]).get('home_living'):
                 args=['prepare-home-living.py','--baseline',current,'--output',dest,'--report',proof,'--rebind-only']
         elif name == 'album':
@@ -181,16 +191,13 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
                 args += ['--previous-manifest', previous_manifest]
         before = hybrid.read(current / hybrid.MANIFEST)['release_id']
-        subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
-        if name == 'bird-first':
-            updated=hybrid.read(dest/hybrid.MANIFEST); updated['files']=hybrid.inventory(dest); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(dest/hybrid.MANIFEST,updated)
+        if args:
+            subprocess.run([sys.executable, str(HERE / args[0]), *map(str, args[1:])], check=True, env=environment)
         if name == 'native-living':
-            import shutil
-            site=dest/'site'; shutil.copytree(current,site,copy_function=hybrid.builder.copy_release_asset)
-            for group in ('assets','pages'):
-                for p in (dest/group).rglob('*'):
-                    if p.is_file(): target=site/p.relative_to(dest/group); target.parent.mkdir(parents=True,exist_ok=True); hybrid.builder.copy_release_asset(p,target)
-            dest=site; updated=hybrid.read(site/hybrid.MANIFEST); updated['files']=hybrid.inventory(site); updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest(); hybrid.write(site/hybrid.MANIFEST,updated)
+            updates={p.relative_to(dest/group).as_posix():p.read_bytes() for group in ('assets','pages') for p in (dest/group).rglob('*') if p.is_file()}
+            site=dest/'site';updated=hybrid.read(current/hybrid.MANIFEST);updated['files']=write_changes(current,site,updates,delta=True)
+            updated['release_id']=hybrid.hashlib.sha256(json.dumps(updated['files'],sort_keys=True).encode()).hexdigest()
+            hybrid.write(site/hybrid.MANIFEST,updated);dest=site
         if name == 'river':
             dest = dest / 'site'
         if name=='album' and full_2f:
@@ -208,51 +215,61 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     files = hybrid.inventory(current)
     if files != prepared['files']:
         raise ValueError('Prepared inventory changed during replay')
+    tail_updates={}
     if static_2f:
         import html, re
         app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')]
         inputs.update({str(path): stamp(path) for path in app_inputs})
         status = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
             "import {skills} from './app/content-skills.js'; console.log(JSON.stringify(skills.find(s=>s.slug==='native-economy-routing').readerStatus))"], cwd=ROOT).decode('utf8'))
-        status_page = current / 'skills/native-economy-routing/index.html'
+        status_rel = 'skills/native-economy-routing/index.html'
+        status_page = source_path(current,status_rel)
         body = status_page.read_bytes().decode('utf8')
         matches = re.findall(r'<span class="status-pill status-mixed">([^<]*按任务需要决定是否分工[^<]*)</span>', body)
         if len(matches) != 1: raise ValueError('Legacy routing status is missing or ambiguous')
-        status_page.write_bytes(body.replace(matches[0], html.escape(status)).encode('utf8'))
+        tail_updates[status_rel]=body.replace(matches[0], html.escape(status)).encode('utf8')
         source_css = (ROOT / 'app/style.css').read_text('utf8')
         rules = re.findall(r'\.back-to-top \{[^}]+\}', source_css)
         header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)
         if len(rules) != 2 or not header: raise ValueError('Legacy header styles are missing or ambiguous')
         css = (rules[0] + '\n.back-to-top{bottom:auto}\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}').encode('utf8')
         css_url = '/_typeset/runtime/legacy-header-' + hybrid.hashlib.sha256(css).hexdigest()[:20] + '.css'
-        (current / css_url.lstrip('/')).write_bytes(css)
-        for page in current.rglob('*.html'):
-            original = page.read_bytes().decode('utf8')
+        tail_updates[css_url.lstrip('/')]=css
+        for rel in files:
+            if not rel.endswith('.html'):continue
+            original = tail_updates.get(rel,source_path(current,rel).read_bytes()).decode('utf8')
             if 'id="page-data"' not in original and 'back-to-top' in original:
-                page.write_bytes(original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1).encode('utf8'))
+                original=re.sub(r'<link\b[^>]*href="[^\"]*legacy-header-[a-f0-9]+\.css"[^>]*>','',original)
+                tail_updates[rel]=original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1).encode('utf8')
     accepted = raw['accepted_pages']
     accepted_files = {hybrid.route_file(url) for url in accepted}
     # These published legacy links lost their old anchors in the reviewed 27-page
     # update. Reuse the existing navigation contract and retain each original href.
-    navigation_pages=hybrid.nav_repair.page_inventory(current)
+    navigation_pages={rel:hybrid.nav_repair.PageFacts(tail_updates.get(rel,source_path(current,rel).read_bytes()).decode('utf8'),current) for rel in files if rel.endswith('.html')}
     navigation_repairs=[]
     for rel in ('skills/documents/index.html','skills/pdf/index.html','system/index.html'):
         path=current/rel
-        if not path.is_file():continue
-        original=path.read_bytes()
+        if rel not in files:continue
+        original=tail_updates.get(rel,source_path(current,rel).read_bytes())
         revised=hybrid.rewrite_links(original.decode('utf8'),current,path,set(navigation_pages),navigation_repairs,
                                      current,accepted_files,navigation_pages).encode('utf8')
-        if revised!=original:path.write_bytes(revised)
+        if revised!=original:tail_updates[rel]=revised
     # Final assembly performs this same restoration. Bind its actual byte changes
     # before the reviewed file ledger, so the second assembly is idempotent.
-    pending_link_restorations=hybrid.nav_repair.restore_pending_links(current,navigation_pages)
+    pending_link_restorations=[]
+    for rel in navigation_pages:
+        text,restored=hybrid.nav_repair.restore_pending_html(tail_updates.get(rel,source_path(current,rel).read_bytes()).decode('utf8'),navigation_pages)
+        text,owned=hybrid.nav_repair.repair_owned_navigation(text,navigation_pages,hybrid.file_route(rel))
+        if restored or owned:tail_updates[rel]=text.encode('utf8');pending_link_restorations.append(rel)
     requested=json.loads(os.environ.get('WLY_RENDER_PAGES','null'))
     if requested is not None:
         for rel in old['files']:
             if rel.endswith('.html') and rel not in accepted_files and not (rel=='index.html' and 'home' in requested):
-                (current/rel).write_bytes((baseline/rel).read_bytes())
+                tail_updates[rel]=(baseline/rel).read_bytes()
+    tail=current.parent/'final-delta';files=write_changes(current,tail,tail_updates,delta=True)
+    hybrid.write(tail/hybrid.MANIFEST,{**prepared,'files':files,'release_id':hybrid.hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()});current=tail
     files=hybrid.inventory(current)
-    changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(current / rel),
+    changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(source_path(current,rel)),
                      'before': old['files'].get(rel), 'after': proof}
                for rel, proof in files.items()
                if rel not in accepted_files and proof != old['files'].get(rel)}
@@ -263,13 +280,13 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     normalization=[]
     for rel in files.keys()|manifest['files'].keys():
         if files.get(rel)==manifest['files'].get(rel):continue
-        if rel not in accepted_files or (current/rel).read_bytes().replace(b'\r\n',b'\n')!=(output/rel).read_bytes().replace(b'\r\n',b'\n'):
+        if rel not in accepted_files or source_path(current,rel).read_bytes().replace(b'\r\n',b'\n')!=(output/rel).read_bytes().replace(b'\r\n',b'\n'):
             raise ValueError('Hybrid assembly changed approved prepared content: '+rel)
         normalization.append(rel)
     for key in ('home_living_preparation', 'home_static_preparation', 'home_comic_preparation', 'page_flip_preparation',
                 'today_river_preparation', 'how_demo_preparation', 'resource_retry_preparation', 'home_bio_preparation'):
         if key in prepared:
-            manifest[key] = prepared[key]
+            manifest[key] = stable_evidence(prepared[key],ROOT)
     public_changes = {rel: {k: v for k, v in entry.items() if k != 'source_path'}
                       for rel, entry in changes.items()}
     result = {'schema': 'wly.creative-replay-result.v1', 'config': {'path': str(config), **stamp(config)},
@@ -279,7 +296,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     if data.get('scope'):result['scope']=data['scope']
     if staged_proof:result['staged_build_report']=staged_proof
     if panorama_source:result['panorama_source_input']={'path':str(panorama_source),**stamp(panorama_source)}
-    manifest['creative_preparation'] = result
+    manifest['creative_preparation'] = stable_evidence(result,ROOT)
     hybrid.write(output / hybrid.MANIFEST, manifest)
     for p, expected in inputs.items():
         if stamp(Path(p)) != expected:

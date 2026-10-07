@@ -10,10 +10,12 @@ import argparse
 from datetime import datetime
 import importlib.util
 import json
-import os
 from pathlib import Path
 import re
-import shutil
+try:
+    from release_delta import source_path, write_changes
+except ModuleNotFoundError:
+    from scripts.release_delta import source_path, write_changes
 from urllib.parse import urljoin, urlsplit
 
 HERE = Path(__file__).resolve().parent
@@ -111,7 +113,7 @@ def reference_data(path: Path) -> tuple[str, dict, dict]:
 def verify_static_home(release: Path, preparation: dict) -> dict:
     """Check the final real artifact after the remaining creative preparations."""
     release = Path(release).resolve()
-    html = (release / 'index.html').read_text('utf8')
+    html = source_path(release, 'index.html').read_text('utf8')
     data = json.loads(PAGE_DATA.search(html)[2])
     current_picture = PICTURE.search(html)[3]
     reference = Path(preparation['reference']['path']).resolve()
@@ -128,7 +130,7 @@ def verify_static_home(release: Path, preparation: dict) -> dict:
             if data['screens'][0]['layouts'][orientation][key] != layouts[orientation][key]:
                 raise ValueError('Final home original geometry changed')
     for rel, expected in assets.items():
-        if proof((release / rel).read_bytes()) != expected:
+        if proof(source_path(release, rel).read_bytes()) != expected:
             raise ValueError('Final original static plate bytes changed: ' + rel)
     active = re.findall(r'<(?:link|script)\b[^>]*(?:href|src)="([^"]+)"', html)
     if any('/home-living/' in ref or 'home-living-bind-' in ref for ref in active):
@@ -137,7 +139,7 @@ def verify_static_home(release: Path, preparation: dict) -> dict:
     if album_match and json.loads(album_match[1]).get('images') != album_images(picture):
         raise ValueError('Final homepage album warms a different first-screen image')
     app = data['shared']['script_bundle'].lstrip('/')
-    body = (release / app).read_bytes()
+    body = source_path(release, app).read_bytes()
     if {'path': app, **proof(body)} != preparation['home_bundle']:
         raise ValueError('Final homepage runtime differs from the static preparation')
     if any(token in body for token in (b'HomeLiving', b'HeroLive', b'livingSnapshot', b'page.home_living')):
@@ -162,11 +164,12 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
     for rel, expected in assets.items():
         if old_files.get(rel) != expected:
             raise ValueError('Current baseline no longer contains the bound original static asset: ' + rel)
-    original = (baseline / 'index.html').read_bytes()
+    original = source_path(baseline, 'index.html').read_bytes()
     html = original.decode('utf8')
     nav_spec = importlib.util.spec_from_file_location('static_home_navigation', HERE / 'repair-release-navigation.py')
     nav = importlib.util.module_from_spec(nav_spec); nav_spec.loader.exec_module(nav)
-    html, navigation_changes = nav.repair_owned_navigation(html, nav.page_inventory(baseline), '/')
+    pages = {rel: nav.PageFacts(source_path(baseline, rel).read_text('utf8'), baseline) for rel in old_files if rel.endswith('.html')}
+    html, navigation_changes = nav.repair_owned_navigation(html, pages, '/')
     match, old_picture = PAGE_DATA.search(html), PICTURE.search(html)
     if not match or not old_picture:
         raise ValueError('Current homepage first picture or page-data is missing')
@@ -179,9 +182,9 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
         raise ValueError('Expected exactly one current homepage app runtime')
     old_ref = refs[0]
     old_app_rel = urlsplit(urljoin('/index.html', old_ref)).path.lstrip('/')
-    old_app = (baseline / old_app_rel).read_bytes()
+    old_app = source_path(baseline, old_app_rel).read_bytes()
     static_source = manifest.get('home_static_preparation', {}).get('home_bundle') if data.get('home_living') else None
-    static_bytes = (baseline / static_source['path']).read_bytes() if static_source else old_app
+    static_bytes = source_path(baseline, static_source['path']).read_bytes() if static_source else old_app
     if static_source and proof(static_bytes) != {key: static_source[key] for key in ('sha256', 'bytes')}: raise ValueError('Bound original static runtime changed')
     static_app = remove_living_runtime(static_bytes.decode('utf8')).encode('utf8')
     app_rel = '_shared/static-home-app-' + proof(static_app)['sha256'][:20] + '.js'
@@ -232,12 +235,7 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
     if any(token in html.split('</head>')[0] for token in ('home-living/', 'home-living-bind-')):
         raise ValueError('Living resource remains active in the homepage head')
     new_files = {'index.html': html.encode('utf8'), app_rel: static_app}
-    shutil.copytree(baseline, output, copy_function=living.builder.copy_release_asset)
-    for rel, body in new_files.items():
-        target = output / rel
-        target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes(body)
-    files = inventory(output)
+    files = write_changes(baseline, output, new_files, copy_asset=living.builder.copy_release_asset)
     manifest.pop('home_living_preparation', None)
     result = {'schema': 'wly.static-home-preparation.v1', 'status': 'prepared_pending_browser_acceptance',
         'observed_at_beijing': datetime.now(living.BJT).isoformat(), 'published': False,
@@ -254,8 +252,9 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
         'changed_existing': {rel: {'before': old_files[rel], 'after': value} for rel, value in files.items()
                              if rel in old_files and value != old_files[rel]},
         'new_files': {rel: value for rel, value in files.items() if rel not in old_files}}
-    manifest.update(files=files, release_id=result['release_id'], prepared_at_beijing=result['observed_at_beijing'])
-    manifest['home_static_preparation'] = result
+    manifest.update(files=files, release_id=result['release_id'])
+    manifest['home_static_preparation'] = {key:value for key,value in result.items() if key!='observed_at_beijing'}
+    manifest['home_static_preparation']['baseline_prepared_at_beijing'] = manifest.get('baseline_prepared_at_beijing',manifest.get('prepared_at_beijing'))
     (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
