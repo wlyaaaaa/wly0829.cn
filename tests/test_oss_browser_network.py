@@ -126,6 +126,8 @@ class OssBrowserNetworkTests(unittest.TestCase):
         self.assertEqual(result['expected_navigation_cancellations'],1)
         self.assertFalse(network.status_get_succeeded({'method':'GET','url':network.STATUS_URL,'response_url':network.STATUS_URL,'response_http':403}))
         self.assertTrue(network.status_get_succeeded({'method':'GET','url':network.STATUS_URL,'response_url':network.STATUS_URL,'response_http':200}))
+        self.assertTrue(network.status_get_succeeded({'method':'GET','url':'https://live.wly0829.cn/computer-access/state','response_url':'https://live.wly0829.cn/computer-access/state','response_http':200}))
+        self.assertFalse(network.status_get_succeeded({'method':'GET','url':'https://live.wly0829.cn/computer-access/state','response_url':network.STATUS_URL,'response_http':200}))
 
     def test_validator_recomputes_scope_and_rejects_forged_classification_counts_and_body_errors(self):
         base='https://fixture.invalid'

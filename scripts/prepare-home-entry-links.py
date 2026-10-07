@@ -68,6 +68,14 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
         spec=importlib.util.spec_from_file_location('home_entry_navigation',Path(__file__).with_name('repair-release-navigation.py'))
         nav=importlib.util.module_from_spec(spec);spec.loader.exec_module(nav)
         text,native_changes=nav.repair_owned_navigation(text,nav.page_inventory(root),'/')
+    if not legacy and model.get('screens'):
+        data=re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>',text,re.S)
+        model=json.loads(data[1])
+        boxes={'h':[1633/2880,756/1621,690/2880,382/1621],'v':[477.79/1280,512.52/2227,455.67/1280,244.13/2227]}
+        for orientation,rect in boxes.items():
+            links=model['screens'][0]['layouts'][orientation]['links']
+            links[:]=[link for link in links if link['id']!='home-01-screen-cockpit']+[{'id':'home-01-screen-cockpit','text':'点击电脑屏幕进入驾驶舱','href':'/cockpit/','rect':rect,'text_only':True}]
+        text=text[:data.start(1)]+json.dumps(model,ensure_ascii=False,separators=(',',':'))+text[data.end(1):]
     corrected=text.encode('utf8')
     if source.read_bytes()!=original:raise ValueError('Home changed during preparation')
     evidence={'schema':'wly.home-entry-links.v1','status':'pass','source':str(source),'before_sha256':sha(original),'after_sha256':sha(corrected),

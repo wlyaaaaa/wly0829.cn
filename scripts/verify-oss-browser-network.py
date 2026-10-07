@@ -56,8 +56,8 @@ def declared_oss_static(payload, owner, manifest):
 
 
 def status_get_succeeded(item):
-    return (item.get('method')=='GET' and canonical_object(item.get('url',''))==STATUS_URL
-            and item.get('response_http')==200 and canonical_object(item.get('response_url',''))==STATUS_URL)
+    return (item.get('method')=='GET' and canonical_object(item.get('url','')) in (STATUS_URL,'https://live.wly0829.cn/computer-access/state')
+            and item.get('response_http')==200 and canonical_object(item.get('response_url',''))==canonical_object(item.get('url','')))
 
 
 def artifact(preparation, release=None):
