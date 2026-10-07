@@ -334,7 +334,7 @@ const loadImage = src => new Promise((res, rej) => { const im = new Image(); let
 for (let i = 0; i < 4; i++) loadImage(asset('boat' + i + '.webp')).catch(() => {});
 async function initGL() {
   try {
-    const gl = canvas.getContext('webgl', { alpha: false, antialias: false, powerPreference: 'high-performance' }); if (!gl) throw new Error('这台设备开不了 WebGL');
+    const gl = canvas.getContext('webgl', { alpha: false, antialias: true, powerPreference: 'high-performance' }); if (!gl) throw new Error('这台设备开不了 WebGL');
     const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
     const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr);
     if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(pr)); gl.useProgram(pr);
@@ -347,4 +347,86 @@ async function initGL() {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); });
     ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
+<<<<<<< C-and-ours
     gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true; stage.classList.remove('nogl');
+=======
+    gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true;
+    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); GL.ok = false; stage.classList.add('nogl'); });
+  } catch (err) { console.info('[今天的河] 水面动效没开起来，改用静止的画：', err.message || err); stage.classList.add('nogl'); }
+}
+const boatBuf = new Float32Array(56);
+function draw(tb) {
+  if (!GL.ok) return; const gl = GL.gl, u = GL.u;
+  const w = Math.round(stage.clientWidth * (devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
+  if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+  boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
+  gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uT, Math.min(tb, 1e6) % 4000); gl.uniform1f(u.uA, GEOM.aspect); gl.uniform1f(u.uReveal, clamp(tb / I.reveal));
+  if (M.stale) boatBuf.fill(0), gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uNight, M.night.n); gl.uniform1f(u.uWarm, M.night.w);
+  metrics.draws++; gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+
+// ---------- 时间和循环 ----------
+const clock = { t0: null, skip: false, manual: null, done: false };
+const fit = () => { if (stage.clientWidth) stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
+let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
+const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
+function step(tb) { if (!M.stale && (!clock.done || clock.manual != null)) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
+function frame(ts) {
+  raf = 0; if (!M || still || reduce || document.hidden || !seen) return;
+  metrics.frames++;
+  if (clock.t0 == null) clock.t0 = ts - (clock.skip ? I.end / SPEED * 1000 : 0);          // 第一次真的画出来才开始算时间，后台打开的页面不会把开场白白放掉
+  step(clock.manual != null ? clock.manual : (ts - clock.t0) / 1000 * SPEED);
+  // 防卡死的保险：页面看得见、动画在播、连着大约 5 秒帧率的中位数低于 10 帧，才退回静止；只管这一次这一页
+  if (last) { const gap = ts - last; since += gap; if (since > 2000) { gaps.push(gap); let sum = 0; for (const g of gaps) sum += g; while (sum > 5000 && gaps.length > 1) sum -= gaps.shift();
+    if (sum >= 4800 && gaps.length >= 5) { const s = [...gaps].sort((a, b) => a - b), fps = 1000 / s[s.length >> 1]; metrics.medianFPS = fps; if (fps < 10) { freeze(`连着 5 秒帧率中位数只有 ${fps.toFixed(1)} 帧，低于 10 帧`); return; } } } }
+  last = ts; raf = requestAnimationFrame(frame);
+}
+function freeze(why) { still = true; metrics.freezeReason = why; clearTimeout(birdTimer); stage.classList.add('still'); if (!M.stale) acts.forEach(f => f(1e9)); draw(1e9); $('.hint').textContent = '动画已暂停，数据照常更新'; $('.hint').style.display = 'block'; console.info('[今天的河] 这一次改成静止画面：' + why); }
+const wake = () => { last = 0; since = 0; gaps = []; metrics.medianFPS = null; if (M && seen && !document.hidden && !raf && !still && !reduce) raf = requestAnimationFrame(frame); };
+document.addEventListener('visibilitychange', wake);
+setInterval(()=>{const label=$('.now b');if(label&&!document.hidden)label.textContent=hm(M?.stale ? M.now : Date.now());},1000);
+new IntersectionObserver(es => { seen = es[0].isIntersecting; stage.classList.toggle('out-of-view', !seen); if (seen) wake(); }).observe(stage);
+addEventListener('scroll', () => { last = 0; since = 0; gaps = []; }, true);
+const redraw = () => {
+  if (!M || !stage.clientWidth) return;
+  fit();
+  draw(reduce || still ? 1e9 : clock.manual ?? (clock.t0 == null ? 0 : (performance.now() - clock.t0) / 1000 * SPEED));
+};
+addEventListener('resize', redraw);
+new ResizeObserver(redraw).observe(stage);
+
+async function start(snap, intro = true) {
+  const turn = ++generation;
+  if (M && (snap.reason || ['unknown', 'unavailable', 'stale'].includes(snap.automation?.state))) {
+    M.stale = true; M.snap = {...M.snap, reason:snap.reason || (snap.automation?.state === 'stale' ? 'stale' : 'unreadable')};
+    stage.classList.add('stale'); $('.now').firstChild.textContent = '最后读到 '; $('.now b').textContent = hm(M.now);
+    host.querySelectorAll('.boat .tag i').forEach(e => e.remove());
+    host.querySelectorAll('.boat[data-tip]').forEach(e => e.dataset.tip = e.dataset.tip.replace(/ · (还有.*|到点了.*)$/, ''));
+    texts(M.past.filter(p => p.t.ran).length, M.idle.length + M.off.length); wake(); return;
+  }
+  cancelAnimationFrame(raf); raf = 0; clearTimeout(birdTimer);
+  if (!snap?.automation || !Number.isFinite(parse(snap.automation.observed_at) || parse(snap.captured_at))) return;
+  const firstDisplay = $('#scroller').hidden;
+  $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
+  $('#pick').hidden = true; tip.style.opacity = 0;
+  fit(); build(snap);
+  if (!GL.gl && !stage.classList.contains('nogl')) { glLoading ||= initGL(); await glLoading; }
+  if (turn !== generation) return;
+  const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
+  stage.classList.toggle('still', still || reduce);
+  if (reduce || still || M.stale) { acts.forEach(f => f(1e9)); draw(1e9); if (reduce || still) return; }
+  clock.done = M.stale; clock.manual = null; clock.t0 = null; clock.skip = !intro || M.stale; wake();
+}
+// 接入用：setSnapshot 换一份新读到的数据；验收用：seek(秒) 定格到开场的某一刻，resume() 接着走
+window.todayRiver = { SPEED, ready: true, setSnapshot: (s, intro = false) => {
+    if (['unknown','unavailable'].includes(s?.automation?.state) && !M) return Promise.resolve();
+    if ((!s?.automation || !Array.isArray(s.automation.items) || ['unknown','unavailable'].includes(s.automation.state)) && M) s = {...M.snap, reason:s?.reason || 'unreadable'};
+    if (!s?.automation || !Array.isArray(s.automation.items) || !Number.isFinite(parse(s.automation.observed_at) || parse(s.captured_at))) return Promise.resolve();
+    return start(s, intro);
+  }, replay: () => M ? start(M.snap, true) : Promise.resolve(),
+  seek: s => { clock.manual = s * SPEED; clock.done = false; step(clock.manual); }, resume: () => { clock.t0 = performance.now() - (clock.manual || 0) / SPEED * 1000; clock.manual = null; wake(); },
+  get model() { return M; }, get still() { return still; }, get static() { return reduce || still; }, get gl() { return GL.ok; }, get metrics() { return {...metrics}; } };
+document.dispatchEvent(new Event('today-river-ready'));
+})();
+>>>>>>> ours-aa

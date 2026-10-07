@@ -319,7 +319,7 @@ async def main(args):
                 for width,height in [(390,844),(1440,900),(390,844),(844,390),(390,844)]:
                     await page.set_viewport_size({'width':width,'height':height})
                     await page.wait_for_timeout(250)
-                    assert await page.evaluate('water.width===Math.round(stage.clientWidth*Math.min(1.5,devicePixelRatio)) && water.height>0')
+                    assert await page.evaluate('water.width===Math.round(stage.clientWidth*devicePixelRatio) && water.height>0')
                 await page.set_viewport_size(options['viewport'])
                 await page.wait_for_timeout(250)
                 valid_size=await page.evaluate('[water.width,water.height]')
