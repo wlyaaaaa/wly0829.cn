@@ -10,8 +10,6 @@ def load_module(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     return module
-
-
 def fixture():
     now = time.time(); stamp = __import__('datetime').datetime.fromtimestamp(now, __import__('datetime').timezone.utc).isoformat()
     block = lambda items: {'state': 'ok', 'items': items, 'observed_at': stamp, 'max_age_seconds': 120}
@@ -20,14 +18,16 @@ def fixture():
     ids = ['computer_health', 'disk_space', 'traffic', 'remote', 'backups', 'drive_upload', 'aliyun_billing', 'today_changes']
     texts = ['电脑正常：不热不忙', '最紧的 C 盘还剩 15.5%', '套餐已用 20 / 100 GB，剩余 80 GB，10月31日重置，预计20天', '人不在也连得上', '备份都在期限内', '没在传，上次传完照片视频', '余额尚未读到', '今天 2 个项目有代码变化']
     cards = [{'id': key, 'display': {'text': text, 'state': 'ok', 'observed_at': stamp}} for key, text in zip(ids, texts)]
-    need = [{'id': str(i), 'title': f'测试要求 {i}', 'action': {'where': None, 'href': None, 'due_at': None, 'due_text': '下次用时' if i == 0 else None, 'consequence': None, 'estimated_minutes': None}} for i in range(5)]
+    need = [{'id': str(i), 'title': f'测试要求 {i}', 'action': {'where': None, 'href': None, 'due_at': None, 'due_text': '本次验收时' if i == 0 else None, 'consequence': None, 'estimated_minutes': None}} for i in range(5)]
+    for item in need: item.update(source_id='pending', current=True, resolved=False, action_owner='user', owner_action_required=True, state='pending', what_happened='虚构验收请求已登记', user_action=item['action']['due_text'] or '查看测试要求', at_beijing=stamp, severity='red')
+    groups = {'need_you': need, 'ai_following': [], 'deferred': [], 'history': []}
     return {'status': 'ok', 'observed_at_unix': now, 'served_at_unix': now, 'max_age_seconds': 120, 'state_version': 'fixture', 'default_minutes': 480,
         'host': {'screen_state': 'unlocked', 'observed_at_unix': now}, 'personal_data': {'state': 'unlocked', 'expires_at_unix': now + 3600}, 'unrestricted': {'state': 'inactive'},
         'factor': {'available': True}, 'public_actions': {'lock_data': False, 'end_unrestricted': False, 'lock_windows': False},
         'grafana': {'state': 'online', 'public_dashboard_state': 'reachable', 'public_dashboard_url': 'https://grafana.wly0829.cn/public-dashboards/' + 'a' * 32, 'public_dashboard_checked_at': stamp,
             'groups': {key: {'state': 'reachable', 'checked_at': stamp, 'url': 'https://grafana.wly0829.cn/public-dashboards/' + 'a' * 32} for key in ['cpu-gpu', 'memory-network']}},
         'automation': block(tasks), 'backups': block([]), 'pending': block([]), 'projects': block([]), 'today': block([]), 'remote_network': block([]),
-        'cockpit': {'schema': 'pcconfig.cockpit.v1', 'observed_at': stamp, 'overall': {'state': 'warn', 'summary': '有 5 件事要你做（旧字段）'}, 'summary': {'text': '有 5 件事要你做'}, 'cards': cards, 'need_you': need,
+        'cockpit': {'schema': 'pcconfig.cockpit.v1', 'observed_at': stamp, 'overall': {'state': 'warn', 'summary': '有 5 件事要你做（旧字段）'}, 'summary': {'text': '有 5 件事要你做', 'state': 'attention'}, 'detail_summary': '有 5 件事要你做', 'detail_groups': groups, 'detail_counts': {key: len(value) for key, value in groups.items()}, 'cards': cards, 'need_you': need,
             'know': [{'id': 'gap', 'kind': 'source_gap', 'source_id': 'test-source', 'title': '测试来源超过十分钟读不到'}], 'ai_following': {'count': 2}, 'source_gaps': [],
             'today_events': [{'id': 'backup', 'title': '今天 3 项备份完成'}], 'today_changes': {'deployment_verified': False, 'evidence': 'git_commits', 'commits': 2}}}
 
@@ -68,7 +68,7 @@ class CockpitPageTests(unittest.TestCase):
                     if url.path == '/__test-cp.css': return r.fulfill(body=(ROOT / 'scripts/b2-live.css').read_bytes(), content_type='text/css')
                     if url.path.startswith('/__test-title/'): return r.fulfill(body=titles[Path(url.path).stem]['path'].read_bytes(), content_type='image/png')
                     if url.hostname == 'grafana.wly0829.cn': return r.fulfill(body='<html lang="zh-CN"><body>虚构曲线</body></html>', content_type='text/html')
-                    cached = OUT / 'preview-cache' / (hashlib.sha256(request.url.encode()).hexdigest() + Path(url.path).suffix)
+                    cached = Path(os.environ.get('COCKPIT_PAGE_ASSET_CACHE', str(OUT / 'preview-cache'))) / (hashlib.sha256(request.url.encode()).hexdigest() + Path(url.path).suffix)
                     if cached.is_file():
                         body = cached.read_bytes()
                         if Path(url.path).name.startswith('app-'): body = update.patch_shared_runtime(body.decode('utf8')).encode('utf8')
@@ -82,14 +82,14 @@ class CockpitPageTests(unittest.TestCase):
                 self.assertEqual(page.locator('.cp-section .cp-title-crop img').count(), 6); self.assertEqual(page.locator('.cp-title-pending').count(), 0)
                 self.assertEqual(page.locator('.cp-action-card').count(), 5)
                 self.assertEqual(page.locator('.cp-headline').inner_text(), '有 5 件事要你做')
-                self.assertIn('下次用时', page.locator('.cp-action-card').first.inner_text()); self.assertNotIn('期限未登记', page.locator('.cp-action-card').first.inner_text())
+                self.assertIn('本次验收时', page.locator('.cp-action-card').first.inner_text()); self.assertNotIn('期限未登记', page.locator('.cp-action-card').first.inner_text())
                 self.assertEqual(page.locator('.cp-details iframe').count(), 0)
                 self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth'))
-                self.assertIn('尚未读到发布记录', page.locator('.cp-changes').inner_text())
+                self.assertIn('不能从代码提交推断哪些已上线', page.locator('.cp-changes').inner_text())
                 self.assertIn('今天 3 项备份完成', page.locator('.cp-events').inner_text())
                 self.assertIn('学习方法：学习记录尚未读到', page.locator('.cp-learning').inner_text())
-                self.assertIn('今天纠正：未统计；近7天：未统计', page.locator('.cp-basis').inner_text())
-                state['value']['cockpit']['owner_corrections'] = {'status': 'pass', 'total': 0, 'history': [], 'text': '今天纠正：0；近7天：未统计'}; page.evaluate('SiteB2.refresh()'); page.locator('.cp-basis').filter(has_text='今天纠正：0；').wait_for()
+                self.assertIn('你纠正 AI 的次数：这次没读到', page.locator('.cp-basis').inner_text())
+                state['value']['cockpit']['owner_corrections'] = {'status': 'pass', 'total': 0, 'history': [], 'text': '今天纠正：0；近7天：未统计'}; page.evaluate('SiteB2.refresh()'); page.locator('.cp-basis').filter(has_text='今天 0 次').wait_for()
                 page.wait_for_function('window.todayRiver?.gl||document.querySelector("#today-river #stage")?.classList.contains("nogl")', timeout=60000)
                 page.evaluate('todayRiver.seek(12)')
                 page.screenshot(path=str(OUT / f'cockpit-{width}.png'), full_page=True)
@@ -100,7 +100,7 @@ class CockpitPageTests(unittest.TestCase):
                     traffic['display'] = {'text': text, 'state': mode, 'observed_at': observed}; state['value']['cockpit']['observed_at'] = observed; page.evaluate('SiteB2.refresh()')
                     row = page.locator('#cp-computer .cp-line').filter(has_text=text); row.wait_for(); self.assertEqual(row.get_attribute('data-state'), mode); self.assertNotIn('已用 3 GB', row.inner_text())
                     self.assertEqual(page.locator('.cp-action-card').count(), 5); self.assertEqual(page.locator('.cp-headline').inner_text(), '有 5 件事要你做')
-                    if mode == 'stale': self.assertIn('这是 ', row.inner_text()); self.assertIn(' 的数', row.inner_text())
+                    if mode == 'stale': self.assertIn('当时：', row.inner_text()); self.assertIn('当前情况未知', row.inner_text())
                 traffic['display'] = original_traffic
                 page.get_by_role('button', name='办理', exact=True).scroll_into_view_if_needed(); before = page.evaluate('scrollY')
                 page.get_by_role('button', name='办理', exact=True).click()
@@ -119,7 +119,7 @@ class CockpitPageTests(unittest.TestCase):
                 page.get_by_role('button', name='关闭办理面板', exact=True).click()
                 self.assertEqual(page.evaluate('scrollY'), before)
                 page.locator('.cp-details>summary').click()
-                page.locator('.cp-original [data-b2-slot=cockpit-tasks]').first.filter(has_text='测试任务').wait_for(timeout=30000)
+                page.locator('.cp-original [data-b2-slot=cockpit-tasks]').first.filter(has_text='测试工作').wait_for(timeout=30000)
                 self.assertIn('测试停止入口', page.locator('.cp-original').text_content())
                 page.locator('.cp-details iframe').first.wait_for(state='attached')
                 page.locator('.cp-details').evaluate('async e=>{for(const d of e.querySelectorAll("details"))d.open=true;await document.fonts.ready;await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)))}')
@@ -133,7 +133,7 @@ class CockpitPageTests(unittest.TestCase):
                     self.assertEqual(page.locator('.cp-bar').evaluate('e=>getComputedStyle(e).position'), 'fixed')
                     if position == 'bottom': page.evaluate('scrollTo(0,document.documentElement.scrollHeight)'); page.screenshot(path=str(OUT / f'expanded-bottom-671ceb86-{width}.png'))
                 old = state['value']; state['value'] = {key: value for key, value in old.items() if key != 'cockpit'}
-                page.evaluate('SiteB2.refresh()'); page.locator('.cp-headline').filter(has_text='结论正在读取').wait_for()
+                page.evaluate('SiteB2.refresh()'); page.locator('.cp-headline').filter(has_text='事项明细这次没读到').wait_for()
                 self.assertEqual(page.locator('.cp-lamp').get_attribute('data-state'), 'unknown')
                 state['value'] = old
                 for _ in range(5):

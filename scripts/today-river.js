@@ -347,17 +347,14 @@ async function initGL() {
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); });
     ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
-<<<<<<< C-and-ours
     gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true; stage.classList.remove('nogl');
-=======
-    gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true;
     canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); GL.ok = false; stage.classList.add('nogl'); });
   } catch (err) { console.info('[今天的河] 水面动效没开起来，改用静止的画：', err.message || err); stage.classList.add('nogl'); }
 }
 const boatBuf = new Float32Array(56);
 function draw(tb) {
   if (!GL.ok) return; const gl = GL.gl, u = GL.u;
-  const w = Math.round(stage.clientWidth * (devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
+  const w = Math.round(stageWidth * (devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
   if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
   if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
   boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
@@ -368,7 +365,8 @@ function draw(tb) {
 
 // ---------- 时间和循环 ----------
 const clock = { t0: null, skip: false, manual: null, done: false };
-const fit = () => { if (stage.clientWidth) stage.style.fontSize = stage.clientWidth / 100 + 'px'; };
+let stageWidth = 0;
+const fit = () => { stageWidth = stage.clientWidth; if (stageWidth) stage.style.fontSize = stageWidth / 100 + 'px'; };
 let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
 const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
 function step(tb) { if (!M.stale && (!clock.done || clock.manual != null)) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
@@ -412,7 +410,7 @@ async function start(snap, intro = true) {
   $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
   $('#pick').hidden = true; tip.style.opacity = 0;
   fit(); build(snap);
-  if (!GL.gl && !stage.classList.contains('nogl')) { glLoading ||= initGL(); await glLoading; }
+  if (!glLoading) { stage.classList.add('nogl'); glLoading = initGL().then(redraw); }
   if (turn !== generation) return;
   const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
   stage.classList.toggle('still', still || reduce);
@@ -430,4 +428,3 @@ window.todayRiver = { SPEED, ready: true, setSnapshot: (s, intro = false) => {
   get model() { return M; }, get still() { return still; }, get static() { return reduce || still; }, get gl() { return GL.ok; }, get metrics() { return {...metrics}; } };
 document.dispatchEvent(new Event('today-river-ready'));
 })();
->>>>>>> ours-aa
