@@ -760,7 +760,7 @@ def build_page(name, records, args, candidate):
             if image.get('hotspots',len(hot)) != len(hot): issues.append(ip.name+':热区数量不符')
             part = {'image':ip.name,'src':asset(ip,candidate,name),'size':size,'orientation':orient,
                     'both':not has_v,'hotspots':[],'live':[],'native_live':[],'native_actions':[],
-                    'links':[],'anchors':[],'screenshots':[],'cards':[],'numbers':[]}
+                    'links':[],'anchors':[],'screenshots':[],'cards':[],'numbers':[],'dots':[],'arrows':[]}
             # Only the producer's plain strip separates its heading and footer
             # from the replaceable slots. Legacy framed strips keep their source.
             if compact_live.get(orient):
