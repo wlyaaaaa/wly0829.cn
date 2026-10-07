@@ -15,6 +15,10 @@ on:
         description: "Exact commit containing the previous site-release (required for rollback)"
         type: string
         required: false
+      FULL_RELEASE:
+        description: "Recheck the complete release without retained evidence"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -28,6 +32,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      WLY_RELEASE_FULL: ${{ inputs.FULL_RELEASE && '1' || '0' }}
     timeout-minutes: 60
     outputs:
       pages_artifact_id: ${{ steps.pages_artifact.outputs.artifact_id }}
@@ -119,6 +125,11 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v6
+
+      - name: Bind final deployment manifest
+        if: steps.source.outputs.site == 'hybrid'
+        run: |
+          python3 -c "import hashlib,json; from pathlib import Path; p=Path('dist/release-manifest.json'); Path('dist/release-identity.json').write_text(json.dumps({'release_id':json.loads(p.read_text('utf8'))['release_id'],'manifest_sha256':hashlib.sha256(p.read_bytes()).hexdigest()})+'\n',encoding='utf8')"
 
       - name: Upload Pages artifact
         id: pages_artifact

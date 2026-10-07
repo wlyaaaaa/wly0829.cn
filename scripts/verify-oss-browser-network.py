@@ -24,6 +24,9 @@ HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location('browser_network_oss', HERE/'prepare-oss-release.py')
 oss = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(oss)
+spec = importlib.util.spec_from_file_location('browser_network_hybrid', HERE/'hybrid-release.py')
+hybrid = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(hybrid)
 ORIGIN = 'https://wly0829.cn'
 SCHEMA = 'wly.oss-browser-network.v1'
 METHOD = 'Installed headless Chrome; native HTTPS OSS and service GET; CDP Network events and actual response body SHA256; no OSS interception'
@@ -81,6 +84,11 @@ def artifact(preparation, release=None):
         raise ValueError('Manifest routes do not cover every actual HTML document')
     if not {'/computer-access/', '/cockpit/'} <= set(routes):
         raise ValueError('Mandatory status pages are absent from the release')
+    evidence = manifest['oss'].get('content_verification', {})
+    affected = evidence.get('affected_routes')
+    if (os.environ.get('WLY_RELEASE_FULL') != '1' and evidence.get('checker_sha256') == hybrid.checker_version()
+            and isinstance(affected, list) and all(isinstance(route, str) and route in documents for route in affected)):
+        documents = {route: rel for route, rel in documents.items() if route in set(affected) | {'/', '/cockpit/'}}
     return plan, manifest, root, documents
 
 
@@ -174,9 +182,9 @@ def compat_contract(root, manifest, documents, route):
     parts = urlsplit(target)
     if parts.scheme != 'https' or parts.netloc != urlsplit(ORIGIN).netloc or parts.path == route:
         return None
-    if parts.path not in documents or documents[parts.path] not in manifest['files']:
+    if parts.path not in manifest.get('routes', documents) or route_file(parts.path) not in manifest['files']:
         return None
-    target_text = (root/documents[parts.path]).read_text('utf8')
+    target_text = (root/route_file(parts.path)).read_text('utf8')
     if any(tag == 'meta' and attrs.get('http-equiv','').lower() == 'refresh'
            for tag,attrs,raw,offset in oss.HtmlTags(target_text).tags):
         return None  # Multi-hop or cyclic declarations receive no exception.
@@ -189,7 +197,7 @@ def compat_contract(root, manifest, documents, route):
     return {'initial_url':ORIGIN+route,'target_url':target,
             'target_http_url':urlunsplit((parts.scheme,parts.netloc,parts.path,parts.query,'')),
             'initial_sha256':manifest['files'][documents[route]]['sha256'],
-            'target_sha256':manifest['files'][documents[parts.path]]['sha256'],
+            'target_sha256':manifest['files'][route_file(parts.path)]['sha256'],
             'target_title':title,'declared_content':refresh[0]}
 
 

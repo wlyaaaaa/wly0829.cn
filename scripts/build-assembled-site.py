@@ -438,7 +438,8 @@ def tar_estimated_bytes(root, entries):
 
 
 def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None, budget_root=None, verified_files=None):
-    files = sorted(p for p in output.rglob('*') if p.is_file() and p.relative_to(output).as_posix() not in (verified_files or {}))
+    all_files = sorted(p for p in output.rglob('*') if p.is_file() and p.relative_to(output).as_posix() != 'release-identity.json')
+    files = [p for p in all_files if p.relative_to(output).as_posix() not in (verified_files or {})]
     registry_path=ROOT/'config/panel-projects.json'
     registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
     registered_repos={entry['source']['repo'].lower() for entry in registry.get('projects',[])
@@ -450,7 +451,7 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     findings = rule_pin_findings(output,files); missing = []; refs_count = 0
     pin=rule_contract.load_pin(ROOT)
     current_contract=pin.get('schema')=='wly.assembled-rules-pin.v2'
-    total = sum(p.stat().st_size for p in files)
+    total = sum(p.stat().st_size for p in all_files)
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
     # Conservative bound includes directories and long-path/PAX name records.
     entries = [p for p in output.rglob('*') if p.is_file() or p.is_dir()]
@@ -463,7 +464,10 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
         deployment_bytes = sum(p.stat().st_size for p in budget_entries if p.is_file())
         deployment_tar_bytes = tar_estimated_bytes(budget_root, budget_entries)
     groups = {}; html_anchors = {}
-    for page in files:
+    for p in all_files:
+        g = groups.setdefault(p.suffix or '(none)', {'files':0,'bytes':0})
+        g['files'] += 1; g['bytes'] += p.stat().st_size
+    for page in all_files:
         if page.suffix != '.html': continue
         content=page.read_text('utf-8-sig'); parser=Refs();parser.feed(content)
         ids=set(parser.ids)
@@ -476,8 +480,6 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
                     ids.update(a['id'] for a in layout.get('anchors',[]) if isinstance(a,dict) and isinstance(a.get('id'),str))
         html_anchors[page.resolve()]=ids
     for p in files:
-        key = p.suffix or '(none)'; g = groups.setdefault(key, {'files': 0, 'bytes': 0})
-        g['files'] += 1; g['bytes'] += p.stat().st_size
         rel = p.relative_to(output).as_posix()
         if p.is_symlink(): findings.append({'file': rel, 'type': 'symlink'})
         if p.stat().st_size > 100_000_000: findings.append({'file': rel, 'type': 'git_object_limit'})
@@ -544,7 +546,7 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
                     missing.append({'file':rel,'reference':ref,'navigation':True,'type':'missing_anchor'})
     domain = (output/'CNAME').read_text('utf8').strip() if (output/'CNAME').exists() else None
     if domain != 'wly0829.cn': findings.append({'file': 'CNAME', 'type': 'domain_mismatch'})
-    if not any(p.suffix == '.js' for p in files): findings.append({'file': '', 'type': 'javascript_missing'})
+    if not any(p.suffix == '.js' for p in all_files): findings.append({'file': '', 'type': 'javascript_missing'})
     if deployment_bytes > BUDGET or deployment_tar_bytes > BUDGET: findings.append({'file': '', 'type': '15_percent_headroom', 'budget': BUDGET})
     required = [x for x in ('index.html','404.html') if not (output/x).is_file()]
     # B1 diagnostics can be inspected, but never accepted as publishable.
@@ -552,10 +554,10 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     assets_missing = [x for x in missing if not x['navigation']]
     result = dict(schema='wly.assembled-build.v1',ready_to_publish=ready,status='pass' if ready else 'incomplete' if not findings and not assets_missing else 'block',
                   bytes=total,MB=round(total/1e6,3),MiB=round(total/2**20,3),tar_estimated_bytes=tar_bytes,
-                  limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-deployment_tar_bytes,files=len(files),
+                  limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-deployment_tar_bytes,files=len(all_files),
                   groups=groups,local_references_checked=refs_count,missing_reference_count=len(missing),missing_references=missing,
                   required_missing=required,findings=findings,input=input_stats,
-                  output_files={p.relative_to(output).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in files})
+                  output_files={**(verified_files or {}),**{p.relative_to(output).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in files}})
     if budget_root is not None:
         result.update(full_artifact_bytes=total, full_artifact_tar_estimated_bytes=tar_bytes,
                       github_deployment_bytes=deployment_bytes, github_deployment_tar_estimated_bytes=deployment_tar_bytes,
