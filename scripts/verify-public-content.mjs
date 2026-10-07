@@ -71,15 +71,41 @@ if (distFiles.includes(manifestPath)) {
   if (manifest.oss) {
     try {
       execFileSync(process.platform === "win32" ? "python" : "python3", [
-        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot, "--check-sealed-content"
+        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
       const entries = Object.entries(manifest.oss.objects);
+      let checks = {};
+      try {
+        checks = JSON.parse(await readFile(path.join(projectRoot, ".publish", "oss-gate", manifest.release_id, "object-checks.json"), "utf8"));
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
       let cursor = 0;
       await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
         while (cursor < entries.length) {
           const [relative, object] = entries[cursor++];
+          if (checks.release_id === manifest.release_id && checks.checker_sha256 === manifest.oss.content_verification?.checker_sha256 && checks.objects?.[relative]?.method === "HEAD") {
+            remoteEvidenceCount++;
+            continue;
+          }
           try {
+            let bytes;
+            let response;
+            try {
+              // The preceding original artifact gate has just downloaded and
+              // verified every object here. Reuse those exact bytes for the
+              // all-extension credential scan; no local placeholder exists.
+              bytes = await readFile(path.join(projectRoot, ".publish", "oss-gate", manifest.release_id, "dist", relative));
+              remoteCachedCount++;
+            } catch (error) {
+              if (error.code !== "ENOENT") throw error;
+              response = await fetch(object.url, { headers: { Origin: "https://wly0829.cn", Referer: "https://wly0829.cn/", "Accept-Encoding": "identity" }, signal: AbortSignal.timeout(60000) });
+              bytes = Buffer.from(await response.arrayBuffer());
+            }
+            const hash = createHash("sha256").update(bytes).digest("hex");
+            if (response && response.status !== 200 || bytes.length !== object.bytes || hash !== object.sha256) throw new Error("Remote body differs from sealed release");
+            inspectBytes(bytes, `OSS/${relative}`);
             remoteArtifactCount++;
             if (textExtensions.has(path.extname(relative))) remoteTextCount++;
             if ([".js", ".mjs"].includes(path.extname(relative))) remoteJavaScriptCount++;

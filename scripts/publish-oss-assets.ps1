@@ -6,7 +6,6 @@ param(
     [ValidateRange(1,16)][int]$VerifyWorkers = 4,
     [switch]$Upload,
     [switch]$VerifyRemote,
-    [switch]$ConfirmDownloadOver5GB,
     [switch]$RetryFailedVerification
 )
 $ErrorActionPreference = 'Stop'
@@ -15,12 +14,11 @@ $planPath = Join-Path $preparationRoot 'oss-plan.json'
 $plan = Get-Content -LiteralPath $planPath -Raw -Encoding utf8 | ConvertFrom-Json -DateKind String
 if ($plan.schema -cne 'wly.oss-release-plan.v1') { throw 'Unsupported OSS release plan.' }
 $prepareScript = Join-Path $PSScriptRoot 'prepare-oss-release.py'
-[string[]]$downloadConfirmation = if ($ConfirmDownloadOver5GB) { '--confirm-download-over-5gb' } else { @() }
 function Checked([string]$Executable, [string[]]$Arguments) {
     & $Executable @Arguments
     if ($LASTEXITCODE -ne 0) { throw "Command failed with exit code $LASTEXITCODE : $Executable" }
 }
-Checked $Python (@($prepareScript, 'verify-local', '--output', $preparationRoot) + $downloadConfirmation)
+Checked $Python @($prepareScript, 'verify-local', '--output', $preparationRoot)
 if (-not ($Upload -or $VerifyRemote)) {
     [pscustomobject]@{
         status = 'local_prepared'; release_id = $plan.release_id; summary = $plan.summary
@@ -50,7 +48,7 @@ if ($Upload) {
     # headers regardless of the uploader host OS MIME registry.
     $groupRoot = Join-Path $preparationRoot ('upload-groups-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory -Path $groupRoot | Out-Null
-    $objects = @($plan.objects.PSObject.Properties | Where-Object { $_.Name -cnotin @($plan.retained_objects.PSObject.Properties.Name) })
+    $objects = @($plan.objects.PSObject.Properties)
     $previousReceiptPath = Join-Path $preparationRoot 'remote-verification.json'
     if (Test-Path -LiteralPath $previousReceiptPath) {
         $previousReceipt = Get-Content -LiteralPath $previousReceiptPath -Raw -Encoding utf8 | ConvertFrom-Json -DateKind String
@@ -103,14 +101,13 @@ if ($Upload) {
         $uploadFailure = $_
         # Preserve real body evidence for partial transfer recovery. The next
         # run skips only proven bytes and refuses overwrites of different ones.
-        & $Python $prepareScript 'verify-remote' '--output' $preparationRoot '--workers' ([string]$VerifyWorkers) @downloadConfirmation
+        & $Python $prepareScript 'verify-remote' '--output' $preparationRoot '--workers' ([string]$VerifyWorkers)
         throw $uploadFailure
     }
     # A zero CLI exit is transport evidence only. The full anonymous GET proof
     # below is always required after upload, including video byte ranges.
 }
 $verificationArguments = @($prepareScript, 'verify-remote', '--output', $preparationRoot, '--workers', [string]$VerifyWorkers)
-$verificationArguments += $downloadConfirmation
 if ($RetryFailedVerification) { $verificationArguments += '--retry-failed' }
 Checked $Python $verificationArguments
 $receipt = Get-Content -LiteralPath (Join-Path $preparationRoot 'remote-verification.json') -Raw -Encoding utf8 | ConvertFrom-Json -DateKind String

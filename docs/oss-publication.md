@@ -76,9 +76,9 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 同日07:10的明确指令另外授权两桶 `ResponseVary=true`；这项配置已经单独回读并用同URL普通图片→CORS图片→GL上传测试。北京上述Referer未改。以后是否改配置仍依据真实指令，上传入口不隐式改桶。
 
-远端核验对首次上传或变化的对象执行匿名完整 GET 封口，未变对象沿用已有回执；请求带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个新 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
+远端核验对**每个**计划对象执行匿名完整 GET，带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
 
-封口在本机对完整发布包运行内容门，保留原 source coverage 并用 release_id 与当前 checker_sha256 绑定最终 HTML/对象指纹。CI 逐对象 HEAD 核大小、CRC64（旧回执无 CRC 时用 ETag）、MIME/CORS/编码；不符或请求失败才完整 GET。完整正文内容检查复用同一检查器、同一完整包的本机结果，源码及 HTML 的凭据扫描仍由第二公开门执行。首次完整 GET、已接受的全库存 HEAD CRC64/MD5＋样本 GET 及混合复用证据保持各自身份，不把 HEAD 标作完整 GET。
+上传前，发布器对完整本地源包执行内容门，将结果、检查器版本和完整文件覆盖写入 `content-verification.json`；密封时连同最终清单和上传后的 SHA、大小、ETag 收入 `release-manifest.json` 的 `oss.content_verification` / `oss.verification`。CI 和恢复部署逐对象 HEAD 对比大小、ETag 和响应策略；变化、请求失败、内容证据缺失或检查器变化时读取完整正文，HTML、脚本、Markdown 等文本仍使用真实文件检查。ETag 只判断变化；同一任务已取得且 SHA/大小相同的正文可复用。
 
 远端全通过之后，发布负责人还须完成真实浏览器验收：首页及旧下层导航、搜索、模块跨源加载、LocalOCR 冷缓存整页 1–2 秒目标、视频开播与拖动、HTTP 状态、热区/动效及实时转屏。完整 GET 能证明文件与传输契约，不能单独证明浏览器性能或体验达标。最后才发布 `github/`，不能把本地准备成功当作可上线。既有发布/回读脚本中依赖全资源留在 GitHub 的检查需由负责人兼容 OSS 清单后调用。
 
@@ -97,5 +97,3 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 2026-10-04 14:52 引导 `8c5b469a-9178-475c-92aa-b59dd6fa5292` 将 08:52 的有界重试裁定明确扩至 2e、2f 和以后各版：本机冷启动空响应和长耗时，每个资源最多重试一次后完整取到且字节一致即通过，不再等稳定 2 秒。`OssRetryProof` 保留首次原生失败、长耗时、实际一次补取及完整 body/大小/SHA/MIME/CORS；网站图片、CSS、动态脚本各一次的真实恢复仍单独验收。受控 HTTPS 取回和证据复用不冒充原生 2 秒通过，不改代理/网络设置。既有 2b/2c 回执继续按原 08:52 指令及其副机直连证据核对。
 
 `verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。回滚使用发布时实际生产Git提交，旧OSS前缀保留；并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。
-
-省流量入口：prepare --previous-manifest 保留未变对象地址与旧回执；只传、只完整 GET 新对象，所有仍被清单引用的旧对象保留，本轮不增加清理。C10 默认共享隐藏 Chrome 缓存并复用已核 SHA，--retry-failed 只补失败路由，--cold-cache 单独运行；开始估算超过5GB需 --confirm-download-over-5gb 或 PS -ConfirmDownloadOver5GB。旧回滚清单的同版本本机内容结果登记在 config/oss-content-seals.json，恢复时补入该结果，HTML、媒体及实际原生产 GitRef 不变。
