@@ -87,7 +87,7 @@ jobs:
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/build-assembled-site.py --verify-only --public-repos-from-github
 
-      - name: Validate byte-preserving hybrid release
+      - name: Validate sealed bodies with HEAD; GET only mismatches
         if: steps.source.outputs.site == 'hybrid'
         env:
           GITHUB_TOKEN: ${{ github.token }}

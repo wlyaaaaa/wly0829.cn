@@ -1,5 +1,5 @@
 """Native network evidence: declared navigation discards never hide real errors."""
-import copy,hashlib,importlib.util,json,os,subprocess,tempfile,unittest
+import argparse,asyncio,copy,hashlib,http.server,importlib.util,json,os,subprocess,tempfile,threading,unittest
 from pathlib import Path
 from unittest import mock
 
@@ -160,5 +160,67 @@ class OssBrowserNetworkTests(unittest.TestCase):
                 with self.subTest(label=label):
                     corrupted=copy.deepcopy(report);change(corrupted);network.oss.write(path,corrupted)
                     with self.assertRaises(ValueError):network.validate_receipt(self.folder,path,'candidate',self.folder)
+
+    def test_candidate_native_shared_cache_body_once_and_retry_only_failed_route(self):
+        payload=b'window.nativeCacheProbe=true;'; hits=[]; navigations=[]
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_GET(handler):
+                hits.append(handler.path); handler.send_response(200)
+                handler.send_header('Content-Type','application/javascript')
+                handler.send_header('Cache-Control','public,max-age=31536000,immutable')
+                handler.send_header('Content-Length',str(len(payload))); handler.end_headers(); handler.wfile.write(payload)
+            def log_message(handler,*args): pass
+        server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler)
+        thread=threading.Thread(target=server.serve_forever,daemon=True); thread.start()
+        origin='http://127.0.0.1:'+str(server.server_port); url=origin+'/controls/asset.js'
+        docs={'/one.html':'one.html','/two.html':'two.html'}
+        for rel in docs.values():
+            (self.folder/rel).write_text('<head><title>Probe</title></head><script src="'+url+'"></script>',encoding='utf8')
+        manifest={'release_id':'cache-release','files':{rel:{'sha256':network.oss.digest(self.folder/rel)} for rel in docs.values()},
+                  'oss':{'asset_base_url':origin,'prefix':'controls','objects':{'asset.js':
+                         {'url':url,'bytes':len(payload),'sha256':hashlib.sha256(payload).hexdigest()}}}}
+        plan={'asset_base_url':origin,'source_release_id':'cache-source'}
+        network.oss.write(self.folder/network.oss.PLAN,plan); network.oss.write(self.folder/network.oss.MANIFEST,manifest)
+        args=argparse.Namespace(preparation=self.folder,release=self.folder,mode='candidate',output=self.folder/'cache-first.json',
+            task_cache=self.folder/'cache',chrome=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'),route_timeout=10,
+            retry_failed=None,cold_cache=False,confirm_download_over_5gb=False)
+        original=network.candidate_document
+        async def document_handler(session,event,root,mapping):
+            navigations.append(event['request']['url']); await original(session,event,root,mapping)
+        try:
+            with mock.patch.object(network,'ORIGIN',origin), mock.patch.object(network,'artifact',return_value=(plan,manifest,self.folder,docs)), \
+                 mock.patch.object(network,'candidate_document',side_effect=document_handler), \
+                 mock.patch.object(network.oss,'urlopen',side_effect=AssertionError('No second native GET')):
+                self.assertEqual(asyncio.run(network.run(args)),0)
+                first=network.oss.read(args.output)
+                self.assertEqual(hits.count('/controls/asset.js'),1)
+                self.assertEqual(sum(body.get('reused',False) for row in first['pages'] for body in row['static_bodies']),1)
+                self.assertGreater(first['oss_download_bytes'],0)
+                first['status']='fail'; first['pages'][1]['status']='fail'; first['pages'][1]['issues'].append('Fixture route failure')
+                first['pages'][1].update(network.blocking_events(first['pages'][1],None,manifest))
+                first['summary']=network.summarize(first['pages'],origin); network.oss.write(args.output,first)
+                args.retry_failed=args.output; args.output=self.folder/'cache-retry.json'; navigations.clear()
+                self.assertEqual(asyncio.run(network.run(args)),0)
+                retry=network.oss.read(args.output)
+                self.assertEqual(navigations,[origin+'/two.html'])
+                self.assertEqual([row['route'] for row in retry['pages']],list(docs))
+                self.assertEqual(retry['pages'][0],first['pages'][0])
+                self.assertEqual(retry['retry_receipt']['sha256'],network.oss.digest(args.retry_failed))
+                broken=copy.deepcopy(first); broken['manifest_sha256']='wrong'; network.oss.write(args.retry_failed,broken)
+                with self.assertRaises(ValueError):network.validate_receipt(self.folder,args.retry_failed,'candidate',self.folder,allow_failed=True)
+        finally: server.shutdown(); server.server_close(); thread.join(timeout=5)
+
+    def test_fresh_partial_and_unverified_cache_responses_still_read_browser_body(self):
+        async def verify():
+            session=mock.Mock(); session.send=mock.AsyncMock(return_value={'body':'native'})
+            item={'url':'https://fixture.invalid/a.js','http':200,'disk_cache':False}
+            result,body=await network.native_body(session,'first',item,{})
+            result['verified']=True; prior={item['url']:result}
+            await network.native_body(session,'cached',{**item,'disk_cache':True},prior)
+            for changed in (item,{**item,'http':206,'disk_cache':True},{**item,'disk_cache':True,'url':item['url']+'?other'}):
+                await network.native_body(session,'fresh',changed,prior)
+            result['verified']=False; await network.native_body(session,'unverified',{**item,'disk_cache':True},prior)
+            self.assertEqual(session.send.await_count,5); self.assertEqual(body,b'native')
+        asyncio.run(verify())
 
 if __name__=='__main__':unittest.main()

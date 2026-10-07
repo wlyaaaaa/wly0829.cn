@@ -28,8 +28,11 @@ python scripts/prepare-oss-release.py prepare `
   --source <完整已核实发布包> `
   --asset-base-url <已选定的上海桶默认HTTPS origin> `
   --prefix releases/<本次唯一版本> `
+  --previous-manifest <上一版封口的release-manifest.json> `
   --output <全新准备目录>
 ```
+
+首次迁移省略 `--previous-manifest`；后续发布显式提供上一版封口清单。准备器从原文件大小与 SHA-256 开始筛选复用对象，再传播脚本、样式和数据中的依赖地址变化，逐字节核对最终输出。未变对象继续引用原对象键和完整 GET 回执；只有变化对象进入本次新前缀、上传和完整 GET。文件名、图片清晰度、尺寸、质量及二进制正文均不为省流量改变。
 
 桶名、profile（配置身份）、CLI 位置来自 OSS 迁移交接及本人选定目标，不能从旧桶或测速例子推定。准备器支持北京与上海的默认 HTTPS origin；本次正式发布使用上海，不带路径、查询参数或图片处理参数。版本前缀不能重复使用给不同内容。
 
@@ -38,7 +41,7 @@ python scripts/prepare-oss-release.py prepare `
 - `github/`：全部原 HTML 路由和必要站点控制文件；HTML 只改资源引用。普通导航链接、内联正文、实时状态 API、热区和转屏逻辑保留。
 - `oss/`：全部非 HTML 内容资源，保持原相对路径。引用和历史资源均保留，不暗删旧资源。图片、MP4、遮罩、封面等二进制逐字节原样复制。
 - `oss-plan.json`：输入及输出大小/指纹、版本对象键、真实引用闭包、逐字符 URL 改写位置、改前改后内容、控制文件例外及汇总。`remote_verified: false` 表示本地准备从不冒充远端通过。
-- `remote-verification.json`：运行远端核验后生成，绑定 `oss-plan.json` 的真实文件指纹。只有完整 GET 正文核验成功才有 `html_ready: true`。
+- `remote-verification.json`：运行远端核验后生成，绑定 `oss-plan.json` 的真实文件指纹。新对象有本次完整 GET，未变对象沿用同一地址与指纹的旧完整 GET，完整覆盖后才有 `html_ready: true`。
 
 “只留 HTML”的必要技术例外为 `CNAME`、`.nojekyll`（存在时）、`robots.txt`、`sitemap.xml` 和 `release-manifest.json`。它们服务 GitHub 的域名、抓取与既有生产恢复入口，保留原控制行为；页面内容资源全部去 OSS。清单 `files` 对应 GitHub 文件，`oss.objects` 对应 OSS 文件。原 `baseline_files`、接受批次和回退引用仍是原发布历史证据，不伪造为本次云核验。
 
@@ -76,17 +79,23 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 同日07:10的明确指令另外授权两桶 `ResponseVary=true`；这项配置已经单独回读并用同URL普通图片→CORS图片→GL上传测试。北京上述Referer未改。以后是否改配置仍依据真实指令，上传入口不隐式改桶。
 
-远端核验对**每个**计划对象执行匿名完整 GET，带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
+正文证明在对象首次上传后的封口阶段完成：每个新对象执行匿名完整 GET，带实际本站 Origin/Referer，检查 HTTP 200、真实正文大小、SHA-256、MIME 和 CORS；新 MP4 另执行 Range GET，核对 206、`Content-Range` 及完整正文中的相同分段。未变对象沿用旧地址和已验证正文回执，不再上传、完整 GET。上传退出码及自填 `x-oss-meta-sha256` 仍不能证明正文。
 
-全通过后上传入口自动调用 `seal-remote`：回执须绑定当前准备计划，再写入发布清单的 `oss.verification`。GitHub 清单的发布身份同时绑定源版本、选定 origin、版本前缀、GitHub 文件及完整 OSS 对象指纹；历史 `baseline_files` 只作来源证据。未密封的清单、回环地址、不完整或错版本的 GET 回执不能通过生产校验。`hybrid-release.py` 校验当前 GitHub 文件、全部路由及已绑定的 OSS 证明，原未迁移发布仍走既有分支。
+CI 逐对象 HEAD，核对实际大小、封口 GET 响应里的 `x-oss-hash-crc64ecma`，旧回执无 CRC64 时比对其 ETag，同时保留 MIME、CORS、identity 编码检查。CRC64 存在时不能靠相同 ETag 放过 CRC64 差异。任一项不符或 HEAD 不可用，才完整 GET，并重新核正文 SHA-256；MP4 仍核 Range。HEAD 与 ETag 的职责是确认已证明正文的对象没有改变，正文证明仍来自上传封口，因此正常 CI 不需要再次下载整包。[OSS 的 HeadObject 定义](https://www.alibabacloud.com/help/zh/oss/developer-reference/headobject)支持不返回正文地读取大小与 CRC64。
 
-公开内容检查继续扫描所有源码和 HTML；OSS 分支还实际下载并核对全部远端对象，对各扩展名执行原凭据检查。上线回读同时检查 GitHub 文件与 OSS 对象，MP4 重新核对 Range 正文指纹。没有用假本地 JS 占位绕过产物要求。
+全通过后上传入口自动调用 `seal-remote`：回执须绑定当前准备计划，再写入发布清单的 `oss.verification`。封口还在本机对完整包运行原公开内容门，包含全部 JS、每种扩展的凭据检查、仓库引用和资源闭包；结果与公开仓库清单绑定到发布身份，写入 `oss.content_verification`，失败不产生通过结果。GitHub 清单的发布身份同时绑定源版本、选定 origin、版本前缀、GitHub 文件及完整 OSS 对象指纹；历史 `baseline_files` 只作来源证据。旧清单没有本机内容门回执时，必须先用完整本地包补做扫描，不能把 HEAD 当成内容扫描。`hybrid-release.py` 校验当前 GitHub 文件、全部路由及已绑定的 OSS 证明，原未迁移发布仍走既有分支。
+
+CI 继续扫描所有源码和 HTML；OSS 正文内容检查复用上述同版完整本机扫描结果，不下载正文或制造 JS 占位。新增本机扫描后，第二道 `verify-public-content.mjs` 也复用同一结果，避免第一道已通过后又整包重下；源码与 GitHub 文件的原检查保留。
+
+`verify-oss-browser-network.py` 默认让所有路由共用同一个独立 Chrome 缓存；Chrome 已明确命中缓存且同一对象此前取得正文 SHA 时复用该证据，真实新响应和媒体 Range 仍核对正文。候选 HTML 使用 CDP 只拦导航文档，避免 Playwright 路由拦截关闭资源缓存；OSS 和状态服务仍走真实网络。脚本不在 CDP 已取得正文后另做原生完整 GET。`--retry-failed <原回执>` 校验原回执与本版清单绑定，只访问失败或缺失路由，保留通过路由的完整证据并输出完整路由清单；`--cold-cache` 单独保留逐页冷缓存全量检查，不在常规发布使用。下载量记录在浏览器回执 `oss_download_bytes`，仅计本次新跑路由的 OSS 网络响应。
+
+本地发布校验、远端封口核验和浏览器检查开始前打印“本次预计下载约 X GB”；超过 5GB 时先停止，由主持确认后才通过 `--confirm-download-over-5gb` 明确继续。HEAD 门的预估按全部对象需要异常完整 GET 的保守上界计算；冷缓存逐页检查也使用保守上界，不将零正文 HEAD 冒充整包新证明。
 
 远端全通过之后，发布负责人还须完成真实浏览器验收：首页及旧下层导航、搜索、模块跨源加载、LocalOCR 冷缓存整页 1–2 秒目标、视频开播与拖动、HTTP 状态、热区/动效及实时转屏。完整 GET 能证明文件与传输契约，不能单独证明浏览器性能或体验达标。最后才发布 `github/`，不能把本地准备成功当作可上线。既有发布/回读脚本中依赖全资源留在 GitHub 的检查需由负责人兼容 OSS 清单后调用。
 
 ## 回滚与本地演练
 
-回滚恢复前一版 HTML 和控制文件。前一版引用的 OSS 前缀不删除，避免回滚 HTML 指向已消失资源。首次迁移的旧 HTML 原引用 GitHub 资源，首次切换也须保留该旧完整包/提交作为恢复材料。
+回滚恢复前一版 HTML 和控制文件。所有仍被任意清单引用的对象都保留，跨版本复用对象也遵守这一条；将来清理只能删除没有任何保留清单引用的对象，本次不增加清理功能。首次迁移的旧 HTML 原引用 GitHub 资源，首次切换也须保留该旧完整包/提交作为恢复材料。
 
 本地演练可传 `--test-loopback --asset-base-url http://127.0.0.1:<端口>`，无需生产桶/profile。此计划明确标为 `test_only`，发布入口拒绝上传，也拒绝把其核验当成生产证据。针对性测试通过真实本地 HTTP 服务验证正文指纹、CORS、MIME 和视频 Range；伪造的正确元数据搭配错误正文必须失败。
 

@@ -216,8 +216,10 @@ def verify_manifest(manifest, require_remote=True):
             raise ValueError('Invalid OSS object path: ' + rel)
         if rel in files or rel.endswith('.html') or rel in HOST_CONTROLS:
             raise ValueError('OSS object overlaps HTML-host inventory: ' + rel)
-        url = base + '/' + prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
-        if obj.get('key') != prefix + '/' + rel or obj.get('url') != url or obj.get('content_type') != content_type(rel):
+        key = obj.get('key', '')
+        validate_target(base, key[:-len(rel)-1])
+        url = base + '/' + quote(key, safe='/~!$&()*+,;=:@-._')
+        if not key.endswith('/'+rel) or obj.get('url') != url or obj.get('content_type') != content_type(rel):
             raise ValueError('OSS object address or MIME mismatch: ' + rel)
         if type(obj.get('bytes')) is not int or obj['bytes'] < 0 or not re.fullmatch(r'[a-f0-9]{64}', obj.get('sha256', '')):
             raise ValueError('Invalid OSS object fingerprint: ' + rel)
@@ -402,6 +404,7 @@ class Rewriter:
         return edits
 
     def target(self, rel):
+        if rel in getattr(self, 'retained', {}): return self.retained[rel]['url']
         return self.base + '/' + self.prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
 
     def resolve(self, raw, owner, context):
@@ -592,7 +595,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=5):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=5, previous_manifest=None):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -605,6 +608,15 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
+    previous = verify_manifest(read(previous_manifest)) if previous_manifest else None
+    rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
+        if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
+    while rewriter.retained:
+        changed = [rel for rel, obj in rewriter.retained.items() if Path(rel).suffix in TEXT_ASSETS
+            and hashlib.sha256(rewriter.rewrite((source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
+        if not changed: break
+        for rel in changed: del rewriter.retained[rel]
+    rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear()
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source,version=rewriter_version)
     objects, github = {}, {}
@@ -626,6 +638,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             objects[rel] = {**value, 'key': prefix + '/' + rel, 'url': rewriter.target(rel),
                             'content_type': content_type(rel), 'source': actual[rel],
                             'byte_preserved': value == actual[rel]}
+            if rel in rewriter.retained: objects[rel] = rewriter.retained[rel]
     if rewriter.missing:
         write(output / 'unresolved-resources.json', rewriter.missing)
         raise ValueError('Missing local resources; inspect unresolved-resources.json')
@@ -647,6 +660,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                         'mp4_files': sum(x.endswith('.mp4') for x in objects),
                         'rewritten_files': len(rewriter.changes)},
             'remote_verified': False}
+    plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel] for rel in rewriter.retained}
     if home_proof:plan['home_entry_overlay']=home_proof
     write(output / PLAN, plan)
     verify_local(output)
@@ -675,6 +689,7 @@ def verify_local(output):
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
     rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
+    rewriter.retained = {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})}
     home_bytes,home_proof=current_home_links(source,version=plan.get('rewriter_version',1))
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
@@ -695,9 +710,30 @@ def verify_local(output):
     return plan
 
 
+def estimate_download(objects, confirmed=False):
+    size = sum(obj['bytes'] for obj in objects.values())
+    print(f'本次预计下载约 {size/1e9:.3f} GB', flush=True)
+    if size > 5e9 and not confirmed: raise ValueError('预计下载超过 5GB，须主持确认 --confirm-download-over-5gb')
+    return size
+
+
+def verify_metadata(obj, receipt, origin, timeout=60):
+    request = Request(obj['url'], method='HEAD', headers={'Origin':origin, 'Referer':origin+'/', 'Accept-Encoding':'identity'})
+    with urlopen(request, timeout=timeout) as response:
+        headers = {key.lower():value for key,value in response.headers.items()}
+        old = {key.lower():value for key,value in receipt.get('headers', {}).items()}
+        fingerprint = 'x-oss-hash-crc64ecma' if old.get('x-oss-hash-crc64ecma') else 'etag'
+        valid = (response.status == 200 and int(headers.get('content-length', -1)) == obj['bytes']
+            and bool(old.get(fingerprint)) and headers.get(fingerprint) == old[fingerprint]
+            and headers.get('content-encoding', 'identity') == 'identity'
+            and headers.get('content-type', '').split(';')[0] in {obj['content_type'], 'text/javascript' if obj['content_type']=='application/javascript' else obj['content_type']}
+            and headers.get('access-control-allow-origin') in ('*', origin))
+        return {**receipt, 'metadata_verified':True, 'downloaded_bytes':0, 'head_headers':headers} if valid else None
+
+
 def verify_object(output, rel, obj, origin, timeout, download_to=None):
     request = Request(obj['url'], headers={'Origin': origin, 'Referer': origin + '/', 'Accept-Encoding': 'identity'})
-    h, count = hashlib.sha256(), 0
+    h, count, first_bytes = hashlib.sha256(), 0, b''
     with urlopen(request, timeout=timeout) as response:
         if response.status != 200:
             raise ValueError('Expected full GET 200: ' + rel)
@@ -716,6 +752,7 @@ def verify_object(output, rel, obj, origin, timeout, download_to=None):
             while chunk := response.read(1024 * 1024):
                 h.update(chunk)
                 count += len(chunk)
+                first_bytes += chunk[:32-len(first_bytes)]
                 if downloaded: downloaded.write(chunk)
         finally:
             if downloaded: downloaded.close()
@@ -731,10 +768,7 @@ def verify_object(output, rel, obj, origin, timeout, download_to=None):
             body = response.read(end + 2)
             if response.status != 206 or response.headers.get('Content-Range') != f'bytes 0-{end}/{count}':
                 raise ValueError('Video byte range unsupported: ' + rel)
-            local = destination if destination else Path(output)/'oss'/rel
-            with local.open('rb') as f:
-                if body != f.read(end + 1):
-                    raise ValueError('Video range bytes differ: ' + rel)
+            if body != first_bytes: raise ValueError('Video range bytes differ: ' + rel)
             result['range'] = {'http': 206, 'bytes': len(body), 'content_range': response.headers['Content-Range'],
                                'sha256': hashlib.sha256(body).hexdigest()}
     return result
@@ -751,25 +785,26 @@ def verify_object_with_retries(output, rel, obj, origin, timeout, download_to=No
             time.sleep(.3*(attempt+1))
 
 
-def verify_remote(output, workers=4, timeout=60, retry_failed=False):
+def verify_remote(output, workers=4, timeout=60, retry_failed=False, confirmed=False):
     output = Path(output).resolve()
     plan = verify_local(output)
-    results = {}; previous = None; previous_hash = None
-    pending = dict(plan['objects'])
+    results = dict(plan.get('retained_objects', {})); previous = None; previous_hash = None
+    pending = {rel:obj for rel,obj in plan['objects'].items() if rel not in results}
     if retry_failed:
         previous_path=output/'remote-verification.json'
         previous=read(previous_path);previous_hash=digest(previous_path)
         if (previous.get('schema')!='wly.oss-remote-verification.v1' or previous.get('release_id')!=plan['release_id']
-                or previous.get('plan_sha256')!=digest(output/PLAN) or set(previous.get('objects',{}))!=set(pending)):
+                or previous.get('plan_sha256')!=digest(output/PLAN) or set(previous.get('objects',{}))!=set(plan['objects'])):
             raise ValueError('Retry receipt differs from the complete current preparation plan')
         write(output/('remote-verification-'+previous_hash[:12]+'.json'),previous)
         for rel,row in previous['objects'].items():
-            obj=pending[rel]
+            obj=plan['objects'][rel]
             if row.get('status')=='pass' and row.get('http')==200 and row.get('bytes')==obj['bytes'] and row.get('sha256')==obj['sha256']:
                 results[rel]=row
         pending={rel:obj for rel,obj in pending.items() if rel not in results}
     def get_object(rel,obj):
         return verify_object_with_retries(output,rel,obj,plan['html_origin'],timeout)
+    estimate_download(pending, confirmed)
     with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
         futures = {pool.submit(get_object,rel,obj): rel for rel,obj in pending.items()}
         for future in concurrent.futures.as_completed(futures):
@@ -808,6 +843,13 @@ def seal_remote(output):
     manifest['oss']['verification'] = proof
     verify_manifest(manifest)
     write(path, manifest)
+    spec = importlib.util.spec_from_file_location('oss_local_gate', Path(__file__).with_name('hybrid-release.py'))
+    hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
+    hybrid.builder.load_public_repos()
+    gate = hybrid.validate_content(output/'github', output/'local-content-verification.json', local_assets=output/'oss')
+    manifest['oss']['content_verification'] = {'status':gate['status'], 'release_id':manifest['release_id'],
+        'verified_at_beijing':stamp(), 'public_repositories':sorted(hybrid.builder.PUBLIC_REPOS)}
+    write(path, manifest)
     plan['github_files'][MANIFEST] = {'bytes': path.stat().st_size, 'sha256': digest(path)}
     plan['remote_verified'] = True
     write(output/PLAN, plan)
@@ -826,22 +868,25 @@ def main():
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
     p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5),default=5)
+    p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and full-body receipts from this sealed release')
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)
+        p.add_argument('--confirm-download-over-5gb',action='store_true')
         if command == 'verify-remote':
             p.add_argument('--workers', type=int, default=4)
             p.add_argument('--timeout', type=int, default=60)
             p.add_argument('--retry-failed',action='store_true',help='Recheck unresolved same-plan objects; preserve prior full-body proofs')
     args = parser.parse_args()
     if args.command == 'prepare':
-        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version)
+        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)
         print(json.dumps({'status': 'prepared', 'summary': plan['summary'], 'release_id': plan['release_id']}, ensure_ascii=False))
     elif args.command == 'verify-local':
         plan = verify_local(args.output)
+        estimate_download({rel:obj for rel,obj in plan['objects'].items() if rel not in plan.get('retained_objects',{})},args.confirm_download_over_5gb)
         print(json.dumps({'status': 'pass', 'summary': plan['summary']}, ensure_ascii=False))
     elif args.command == 'verify-remote':
-        report = verify_remote(args.output, args.workers, args.timeout, args.retry_failed)
+        report = verify_remote(args.output, args.workers, args.timeout, args.retry_failed,args.confirm_download_over_5gb)
         print(json.dumps({'status': 'pass', 'html_ready': report['html_ready'], 'objects': len(report['objects'])}))
     else:
         manifest = seal_remote(args.output)

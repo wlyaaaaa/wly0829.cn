@@ -520,7 +520,7 @@ def oss_module():
     return module
 
 
-def validate_content(output, report, oss_preparation=None):
+def validate_content(output, report, oss_preparation=None, local_assets=None, confirmed=False):
     output=output.resolve()
     manifest = verify_release(output)
     asset_prefix = None
@@ -542,25 +542,43 @@ def validate_content(output, report, oss_preparation=None):
                 raise ValueError('OSS budget preparation belongs to another source or inventory')
             budget_root = preparation/'github'
     if manifest.get('oss'):
-        # The existing artifact gate needs actual files, including remote JS
-        # repository references. Materialize verified bodies in the ignored
-        # task/CI cache and run that same gate over the complete release.
         oss = oss_module()
-        cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
-        cache.mkdir(parents=True, exist_ok=True)
-        for rel in list(manifest['files'])+[MANIFEST]:
-            target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True)
-            shutil.copyfile(output/rel,target)
-        def materialize(item):
-            rel,obj=item
-            return rel,oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60,download_to=cache/rel)
-        with ThreadPoolExecutor(max_workers=4) as pool:
-            rows=dict(pool.map(materialize,manifest['oss']['objects'].items()))
-        write(cache.parent/'actual-get.json',{'release_id':manifest['release_id'],'objects':rows,
-                                             'checked_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat()})
-        output=cache
+        objects = manifest['oss']['objects']; rows = {}
+        if local_assets:
+            cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
+            cache.mkdir(parents=True, exist_ok=True)
+            for rel in list(manifest['files'])+[MANIFEST]+list(objects):
+                source = Path(local_assets)/rel if rel in objects else output/rel
+                if rel in objects and (source.stat().st_size != objects[rel]['bytes'] or digest(source) != objects[rel]['sha256']):
+                    raise ValueError('Local content body differs from sealed object: '+rel)
+                target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+            output=cache
+        else:
+            gate = manifest['oss'].get('content_verification', {})
+            if gate.get('status') != 'pass' or gate.get('release_id') != manifest['release_id']:
+                raise ValueError('Missing release-bound local full-package content gate')
+            if builder.PUBLIC_REPOS and not set(gate.get('public_repositories', [])) <= builder.PUBLIC_REPOS:
+                raise ValueError('Sealed repository inventory changed; rerun the local content gate')
+            oss.estimate_download(objects, confirmed)
+            def check(item):
+                rel,obj=item; receipt=manifest['oss']['verification']['objects'][rel]
+                try: row=oss.verify_metadata(obj,receipt,'https://wly0829.cn')
+                except (OSError, ValueError): row=None
+                if row is None:
+                    row=oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60)
+                    row['downloaded_bytes']=obj['bytes']+row.get('range',{}).get('bytes',0)
+                return rel,row
+            with ThreadPoolExecutor(max_workers=4) as pool: rows=dict(pool.map(check,objects.items()))
         asset_prefix=manifest['oss']['asset_base_url']+'/'+manifest['oss']['prefix']+'/'
-    original = builder.rule_pin_findings
+    original = builder.rule_pin_findings; original_resolve = builder.resolve_ref
+    if manifest.get('oss'):
+        addresses = {obj['url']:rel for rel,obj in objects.items()}
+        def resolve(root, owner, ref, prefix=None):
+            url=ref.split('#')[0].split('?')[0]
+            if url in addresses: return root/addresses[url] if local_assets else None
+            if url.startswith(manifest['oss']['asset_base_url']+'/'): raise ValueError('Unsealed OSS reference: '+ref)
+            return original_resolve(root,owner,ref,prefix)
+        builder.resolve_ref=resolve
     # The owner keeps old rule pages. Only newly accepted rule pages use current pin.
     def selected_pin(root, files):
         selected = {route_file(x) for x in manifest['accepted_pages']}
@@ -615,11 +633,12 @@ def validate_content(output, report, oss_preparation=None):
         result['content_gate_scope']='Current accepted pages and their assets; direct navigation resolves against all preserved production routes. Exact baseline bytes remain verified separately.'
         result['ready_to_publish'] = not kept and not result['missing_references'] and not result['required_missing']
         result['status'] = 'pass' if result['ready_to_publish'] else 'block'
+        if manifest.get('oss'): result['oss_download_bytes']=sum(row.get('downloaded_bytes',0) for row in rows.values())
         write(report, result)
         print(json.dumps({'status':result['status'],'findings':len(kept),'preserved_baseline_topic_findings':len(retained_topics),'missing_references':len(result['missing_references'])}))
         if not result['ready_to_publish']: raise ValueError('Hybrid content gate failed; inspect '+str(report))
         return result
-    finally: builder.rule_pin_findings = original
+    finally: builder.rule_pin_findings = original; builder.resolve_ref = original_resolve
 
 def restore_git(ref, output):
     if output.exists(): raise ValueError('Restore output must be fresh')
@@ -647,13 +666,14 @@ def main():
     verify.add_argument('--content-report',type=Path)
     verify.add_argument('--oss-preparation',type=Path,help='Bind the GitHub deployment budget to this sealed split while checking the complete source')
     verify.add_argument('--public-repos-from-github',action='store_true')
+    verify.add_argument('--confirm-download-over-5gb',action='store_true')
     restore = commands.add_parser('restore'); restore.add_argument('--ref', required=True); restore.add_argument('--output',type=Path,required=True)
     args = parser.parse_args()
     if args.command == 'restore': print(restore_git(args.ref,args.output)); return
     if args.command == 'verify':
         manifest = verify_release(args.output)
         if args.public_repos_from_github: builder.load_public_repos()
-        if args.content_report: validate_content(args.output,args.content_report,args.oss_preparation)
+        if args.content_report: validate_content(args.output,args.content_report,args.oss_preparation,confirmed=args.confirm_download_over_5gb)
         print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
     approvals = read(args.approvals); states = read(args.status)['pages']; report = read(args.candidate_report); proof = report.get('input',{})
     candidate_files = report.get('output_files')

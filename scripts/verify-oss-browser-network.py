@@ -42,7 +42,7 @@ def route_file(route):
 
 def canonical_object(url):
     parts = urlsplit(url)
-    query = '&'.join(part for part in parts.query.split('&') if unquote(part.partition('=')[0]) != '__wly_resource_retry')
+    query = '&'.join(part for part in parts.query.split('&') if unquote(part.partition('=')[0]) != '__wly_resource_retry' and part != 'living-cors=1')
     return urlunsplit((parts.scheme, parts.netloc, parts.path, query, ''))
 
 
@@ -84,7 +84,7 @@ def artifact(preparation, release=None):
     return plan, manifest, root, documents
 
 
-def validate_receipt(preparation, receipt_path, mode='candidate', release=None):
+def validate_receipt(preparation, receipt_path, mode='candidate', release=None, allow_failed=False):
     plan, manifest, root, documents = artifact(preparation, release)
     report = oss.read(receipt_path)
     expected = {'schema': SCHEMA, 'mode': mode, 'method': METHOD, 'origin': ORIGIN,
@@ -94,12 +94,14 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None):
                 'manifest_sha256': oss.digest(root/oss.MANIFEST), 'routes': list(documents)}
     for key, value in expected.items():
         if report.get(key) != value: raise ValueError('Browser network receipt differs: ' + key)
-    if report.get('status') != 'pass' or not report.get('profile_cleanup', {}).get('verified'):
+    if report.get('status') not in (('pass','fail') if allow_failed else ('pass',)) or not report.get('profile_cleanup', {}).get('verified'):
         raise ValueError('Native browser network gate or profile cleanup did not pass')
     rows = report.get('pages', [])
     if len(rows) != len(documents) or [row.get('route') for row in rows] != list(documents):
-        raise ValueError('Browser network receipt omits manifest routes or aliases')
+        if not allow_failed or len({row.get('route') for row in rows}) != len(rows) or any(row.get('route') not in documents for row in rows):
+            raise ValueError('Browser network receipt omits manifest routes or aliases')
     for row in rows:
+        if allow_failed and row.get('status') == 'fail': continue
         verify_oss_403(row,plan['asset_base_url'])
         derived = blocking_events(row, compat_contract(root,manifest,documents,row['route']), manifest)
         if any(row.get(key) != value for key,value in derived.items()):
@@ -265,6 +267,24 @@ def recycle_profile(profile, allowed_root):
             'receipt': receipt, 'exit': result.returncode}
 
 
+async def native_body(session, identity, item, bodies):
+    prior = bodies.get(canonical_object(item['url']))
+    if item['http'] == 200 and item['disk_cache'] and prior and prior.get('verified') is True:
+        return {**prior, 'url':item['url'], 'reused':True}, None
+    value = await asyncio.wait_for(session.send('Network.getResponseBody', {'requestId':identity}),timeout=10)
+    body = base64.b64decode(value['body']) if value.get('base64Encoded') else value['body'].encode('utf8')
+    return {'url':item['url'], 'http':item['http'], 'bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest()}, body
+
+
+async def candidate_document(session, event, root, url_documents):
+    request = event['request']; rel = url_documents.get(request['url'])
+    if event.get('resourceType') == 'Document' and request['method'] == 'GET' and rel:
+        await session.send('Fetch.fulfillRequest', {'requestId':event['requestId'], 'responseCode':200,
+            'responseHeaders':[{'name':'Content-Type','value':'text/html; charset=utf-8'}],
+            'body':base64.b64encode((root/rel).read_bytes()).decode('ascii')})
+    else: await session.send('Fetch.continueRequest', {'requestId':event['requestId']})
+
+
 async def run(args):
     from playwright.async_api import async_playwright
     started = time.monotonic()
@@ -282,7 +302,16 @@ async def run(args):
               'release_id': manifest['release_id'], 'source_release_id': plan['source_release_id'],
               'plan_sha256': oss.digest(args.preparation/oss.PLAN), 'manifest_sha256': oss.digest(root/oss.MANIFEST),
               'routes': list(documents), 'pages': [], 'started_at_beijing': oss.stamp()}
+    retained = {}
+    if args.retry_failed:
+        validate_receipt(args.preparation,args.retry_failed,args.mode,args.release,allow_failed=True)
+        retained = {row['route']:row for row in oss.read(args.retry_failed)['pages'] if row['status'] == 'pass'}
+        report['retry_receipt'] = {'path':str(args.retry_failed.resolve()),'sha256':oss.digest(args.retry_failed)}
     objects = {obj['url']: (rel, obj) for rel, obj in manifest['oss']['objects'].items()}
+    multiplier = len(documents)-len(retained) if args.cold_cache else bool(len(documents)-len(retained))
+    oss.estimate_download({url:{**obj,'bytes':obj['bytes']*multiplier} for url,(rel,obj) in objects.items()},
+                          args.confirm_download_over_5gb)
+    verified_bodies = {}
     url_documents = {ORIGIN+route: rel for route, rel in documents.items()}
     contracts = {route:compat_contract(root,manifest,documents,route) for route in documents}
     for contract in contracts.values():
@@ -293,29 +322,27 @@ async def run(args):
             context = await runtime.chromium.launch_persistent_context(str(profile), executable_path=str(args.chrome),
                 headless=True, viewport={'width':1440, 'height':1000}, service_workers='block')
             report['browser_version'] = context.browser.version if context.browser else 'persistent installed Chrome'
-            if args.mode == 'candidate':
-                async def document_handler(route):
-                    request = route.request
-                    rel = url_documents.get(request.url)
-                    if request.resource_type == 'document' and request.method == 'GET' and rel:
-                        await route.fulfill(status=200, content_type='text/html; charset=utf-8', body=(root/rel).read_bytes())
-                    else: await route.continue_()
-                # This pattern never matches the OSS or service origin.
-                await context.route(ORIGIN+'/**', document_handler)
             for initial in list(context.pages): await initial.close()
             for route, rel in documents.items():
+                if route in retained:
+                    report['pages'].append(retained[route]); continue
                 page = await context.new_page()
                 session = await context.new_cdp_session(page)
                 await session.send('Page.enable')
                 await session.send('Page.setLifecycleEventsEnabled',{'enabled':True})
                 await session.send('Network.enable', {'maxTotalBufferSize':512*1024*1024, 'maxResourceBufferSize':64*1024*1024, 'enableDurableMessages':True})
-                await session.send('Network.setCacheDisabled', {'cacheDisabled':True})
+                if args.cold_cache: await session.send('Network.clearBrowserCache')
+                await session.send('Network.setCacheDisabled', {'cacheDisabled':args.cold_cache})
+                if args.mode == 'candidate':
+                    async def document_handler(event): await candidate_document(session,event,root,url_documents)
+                    session.on('Fetch.requestPaused', document_handler)
+                    await session.send('Fetch.enable', {'patterns':[{'urlPattern':ORIGIN+'/*','resourceType':'Document'}]})
                 row = {'route':route, 'url':ORIGIN+route, 'status':'fail', 'requests':[], 'responses':[], 'http_response_extra':[],
                        'documents':[], 'static_bodies':[], 'loading_failed':[], 'http_failures':[], 'page_errors':[], 'issues':[],
                        'frame_navigations':[], 'navigation_requests':[], 'lifecycle_events':[]}
                 row['declared_oss_static']=declared_oss_static((root/rel).read_bytes(),rel,manifest)
                 report['pages'].append(row)
-                requests = {}; responses = {}; pending = set(); body_tasks = set(); request_referrers = {}; last_event = time.monotonic()
+                requests = {}; responses = {}; pending = set(); body_tasks = set(); request_referrers = {}; cache_hits = set(); last_event = time.monotonic()
                 def frame_navigated(event):
                     frame = event['frame']
                     row['frame_navigations'].append({'frame_id':frame['id'],'loader_id':frame.get('loaderId'),
@@ -346,7 +373,7 @@ async def run(args):
                     item = {'request_id':identity, 'url':response['url'], 'http':response['status'], 'type':event.get('type'),
                             'headers':{key.lower():value for key,value in response.get('headers',{}).items()
                                        if key.lower() in ('content-type','content-range','content-length','access-control-allow-origin')},
-                            'disk_cache':response.get('fromDiskCache',False), 'service_worker':response.get('fromServiceWorker',False)}
+                            'disk_cache':response.get('fromDiskCache',False) or identity in cache_hits, 'service_worker':response.get('fromServiceWorker',False)}
                     responses[identity] = item; row['responses'].append(item)
                     if response['status'] >= 400: row['http_failures'].append({key:item[key] for key in ('url','http','type')})
                 def response_headers(event):
@@ -369,9 +396,9 @@ async def run(args):
                             row['issues'].append('Static browser resource did not use sealed OSS: '+url)
                         return  # Never read or retain service response payloads.
                     try:
-                        value = await asyncio.wait_for(session.send('Network.getResponseBody', {'requestId':identity}),timeout=10)
-                        body = base64.b64decode(value['body']) if value.get('base64Encoded') else value['body'].encode('utf8')
-                        result = {'url':url, 'http':item['http'], 'bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest()}
+                        result,body = await native_body(session,identity,item,verified_bodies if bound and not args.cold_cache else {})
+                        if result.get('reused'):
+                            row['static_bodies'].append(result); return
                         if is_document:
                             target = url_documents.get(url)
                             result['verified'] = bool(target and item['http'] == 200 and result['sha256'] == manifest['files'][target]['sha256'])
@@ -388,12 +415,14 @@ async def run(args):
                                 result['verified'] = size == obj['bytes'] and body == expected and len(body) == high-low+1
                             else: result['verified'] = item['http'] == 200 and result['bytes'] == obj['bytes'] and result['sha256'] == obj['sha256']
                             row['static_bodies'].append(result)
+                            if result['verified'] and item['http'] == 200: verified_bodies[canonical] = result
                         if not result['verified']: row['issues'].append('Native response body differs from manifest: '+url)
                     except Exception as error: row['issues'].append('Actual browser body unavailable: '+url+' '+str(error))
                 def finished(event):
                     nonlocal last_event
                     last_event = time.monotonic(); pending.discard(event['requestId'])
                     if event['requestId'] in requests: requests[event['requestId']]['finished_timestamp'] = event.get('timestamp')
+                    if event['requestId'] in responses: responses[event['requestId']]['transferred_bytes'] = event.get('encodedDataLength',0)
                     task = asyncio.create_task(record_body(event['requestId'])); body_tasks.add(task); task.add_done_callback(body_tasks.discard)
                 session.on('Page.lifecycleEvent',lifecycle_event)
                 session.on('Page.frameNavigated',frame_navigated)
@@ -402,6 +431,7 @@ async def run(args):
                 session.on('Network.requestWillBeSentExtraInfo', request_headers)
                 session.on('Network.responseReceived', received)
                 session.on('Network.responseReceivedExtraInfo', response_headers)
+                session.on('Network.requestServedFromCache', lambda event: cache_hits.add(event['requestId']))
                 session.on('Network.loadingFailed', failed)
                 session.on('Network.loadingFinished', finished)
                 page.on('pageerror', lambda error: row['page_errors'].append(str(error)))
@@ -453,6 +483,8 @@ async def run(args):
             for name,value in prior_temp.items():
                 if value is None: os.environ.pop(name,None)
                 else: os.environ[name] = value
+    report['oss_download_bytes'] = sum(item.get('transferred_bytes',0) for row in report['pages'] if row['route'] not in retained
+                                      for item in row.get('responses',[]) if item['url'].startswith(plan['asset_base_url']+'/'))
     report['summary'] = summarize(report['pages'],plan['asset_base_url'])
     report['status'] = 'pass' if len(report['pages']) == len(documents) and report['summary']['passed'] == len(documents) and not report.get('error') and report['profile_cleanup']['verified'] else 'fail'
     report['completed_at_beijing'] = oss.stamp(); report['seconds'] = round(time.monotonic()-started,3)
@@ -471,6 +503,9 @@ def main():
     parser.add_argument('--task-cache',type=Path,required=True)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     parser.add_argument('--route-timeout',type=int,default=120)
+    parser.add_argument('--cold-cache',action='store_true',help='Independently download and verify every route without shared cache')
+    parser.add_argument('--retry-failed',type=Path,help='Retain verified passing routes from this manifest-bound receipt')
+    parser.add_argument('--confirm-download-over-5gb',action='store_true',help='Host explicitly confirmed an estimated download over 5 GB')
     args = parser.parse_args(); args.preparation = args.preparation.resolve()
     if args.route_timeout < 10: parser.error('Route timeout must allow real network settling')
     return asyncio.run(run(args))

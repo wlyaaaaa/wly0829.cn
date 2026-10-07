@@ -74,11 +74,14 @@ if (distFiles.includes(manifestPath)) {
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
       const entries = Object.entries(manifest.oss.objects);
+      const sealedGate = manifest.oss.content_verification;
+      const reuseSealedScan = sealedGate?.status === "pass" && sealedGate.release_id === manifest.release_id;
       let cursor = 0;
       await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
         while (cursor < entries.length) {
           const [relative, object] = entries[cursor++];
           try {
+            if (!reuseSealedScan) {
             let bytes;
             let response;
             try {
@@ -95,6 +98,7 @@ if (distFiles.includes(manifestPath)) {
             const hash = createHash("sha256").update(bytes).digest("hex");
             if (response && response.status !== 200 || bytes.length !== object.bytes || hash !== object.sha256) throw new Error("Remote body differs from sealed release");
             inspectBytes(bytes, `OSS/${relative}`);
+            }
             remoteArtifactCount++;
             if (textExtensions.has(path.extname(relative))) remoteTextCount++;
             if ([".js", ".mjs"].includes(path.extname(relative))) remoteJavaScriptCount++;

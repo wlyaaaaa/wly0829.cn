@@ -6,8 +6,11 @@ import os
 from pathlib import Path
 import threading
 import shutil
+import subprocess
 import unittest
 import uuid
+from email.message import Message
+from unittest.mock import patch
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -105,7 +108,22 @@ class OssReleaseTests(unittest.TestCase):
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_bytes(body)
         oss.write(self.source/oss.MANIFEST, {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture',
-                                          'files': oss.inventory(self.source), 'routes': ['/', '/projects/demo/']})
+                                          'files': oss.inventory(self.source), 'routes': ['/', '/projects/demo/'],
+                                          'accepted_pages':['/', '/projects/demo/'], 'baseline_files':{}, 'release_overlay':{}})
+
+    def hybrid(self):
+        spec = importlib.util.spec_from_file_location('test_hybrid_oss', ROOT/'scripts/hybrid-release.py')
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        module.ROOT = self.root/'mock-repo'
+        (module.ROOT/'scripts').mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT/'scripts/prepare-oss-release.py', module.ROOT/'scripts/prepare-oss-release.py')
+        return module
+
+    def seal(self, output, hybrid):
+        with patch.object(oss, 'importlib') as loader, patch.object(hybrid.builder, 'load_public_repos'), \
+                patch.object(hybrid, 'validate_content', return_value={'status':'pass'}):
+            loader.util.module_from_spec.return_value = hybrid
+            return oss.seal_remote(output)
 
     def prepare(self, origin='https://fixture-bucket.oss-cn-beijing.aliyuncs.com', test=False):
         output = self.root/'output'
@@ -258,18 +276,26 @@ class OssReleaseTests(unittest.TestCase):
                 oss.verify_manifest(altered)
 
     def test_seal_binds_actual_report_and_current_html_inventory(self):
-        from unittest.mock import patch
+        (self.source/'404.html').write_bytes(b'<!doctype html><title>missing</title>')
+        source_manifest = oss.read(self.source/oss.MANIFEST)
+        source_manifest['files'] = {k:v for k,v in oss.inventory(self.source).items() if k != oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST, source_manifest)
         output, plan = self.prepare()
+        hybrid = self.hybrid()
         # Use actual prepared bytes through urllib's response contract. This
         # validates sealing/replay without claiming a cloud transfer occurred.
         class Response:
-            def __init__(self, rel, ranged):
-                from email.message import Message
+            def __init__(self, rel, request):
+                ranged = request.has_header('Range')
                 obj = plan['objects'][rel]
                 self.headers = Message()
                 self.headers['Content-Type'] = obj['content_type']
                 self.headers['Access-Control-Allow-Origin'] = 'https://wly0829.cn'
+                self.headers['Content-Length'] = str(obj['bytes'])
+                self.headers['x-oss-hash-crc64ecma'] = '12345'
+                self.headers['ETag'] = 'fixture-etag'
                 self.body = (output/'oss'/rel).read_bytes()
+                self.head = request.get_method() == 'HEAD'
                 self.status = 206 if ranged else 200
                 if ranged:
                     length = min(len(self.body),32)
@@ -277,34 +303,57 @@ class OssReleaseTests(unittest.TestCase):
                     self.body = self.body[:length]
                 self.offset = 0
             def read(self, n):
+                if self.head: raise AssertionError('HEAD must never read response body')
                 result = self.body[self.offset:self.offset+n]; self.offset += len(result); return result
             def __enter__(self): return self
             def __exit__(self, *_): pass
         addresses = {obj['url']:rel for rel,obj in plan['objects'].items()}
-        with patch.object(oss, 'urlopen', side_effect=lambda req, timeout:Response(addresses[req.full_url], req.has_header('Range'))):
+        serve = lambda req, timeout:Response(addresses[req.full_url], req)
+        with patch.object(oss, 'urlopen', side_effect=serve):
             oss.verify_remote(output, workers=2)
-        manifest = oss.seal_remote(output)
+        manifest = self.seal(output, hybrid)
         oss.verify_manifest(manifest)
         oss.verify_local(output)
-        spec = importlib.util.spec_from_file_location('test_hybrid_oss', ROOT/'scripts/hybrid-release.py')
-        hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
         hybrid.verify_release(output/'github')
+        report = self.root/'head-gate.json'
+        with patch.object(hybrid, 'oss_module', return_value=oss), patch.object(oss, 'urlopen', side_effect=serve) as network:
+            self.assertEqual(hybrid.validate_content(output/'github', report)['oss_download_bytes'], 0)
+        self.assertEqual([call.args[0].get_method() for call in network.call_args_list], ['HEAD']*len(plan['objects']))
+        def tamper(request, timeout):
+            response = serve(request, timeout)
+            if addresses[request.full_url] == 'assets/main.js':
+                response.headers.replace_header('x-oss-hash-crc64ecma', '99999')
+                response.body = b'tampered JavaScript'
+            return response
+        with patch.object(hybrid, 'oss_module', return_value=oss), patch.object(oss, 'urlopen', side_effect=tamper):
+            with self.assertRaisesRegex(ValueError, 'Remote body differs'):
+                hybrid.validate_content(output/'github', report)
+        incremental = self.root/'incremental'
+        next_plan = oss.prepare(self.source, plan['asset_base_url'], 'releases/fixture-002', incremental,
+                                previous_manifest=output/'github'/oss.MANIFEST)
+        self.assertEqual(set(next_plan['retained_objects']), set(plan['objects']))
+        self.assertEqual(next_plan['objects'], plan['objects'])
+        with patch.object(oss, 'verify_object_with_retries') as download:
+            self.assertTrue(oss.verify_remote(incremental)['complete'])
+        download.assert_not_called()
+        if pwsh := shutil.which('pwsh'):
+            no_upload, no_python = self.root/'no-upload.ps1', self.root/'no-python.ps1'
+            no_upload.write_text('throw "Unchanged object uploaded"', encoding='utf8')
+            no_python.write_text('$global:LASTEXITCODE = 0', encoding='utf8')
+            process = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'),
+                '-Preparation', str(incremental), '-Upload', '-CliPath', str(no_upload), '-CliProfile', 'fixture',
+                '-Python', str(no_python)], capture_output=True, text=True,
+                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            self.assertEqual(process.returncode, 0, process.stderr)
         (output/'github/index.html').write_bytes(b'changed after sealing')
         with self.assertRaisesRegex(ValueError, 'Release bytes differ'):
             hybrid.verify_release(output/'github')
 
-    def test_original_repository_and_resource_gates_still_check_remote_bodies(self):
-        from email.message import Message
-        from unittest.mock import patch
+    def test_original_repository_and_resource_gates_still_check_local_bodies(self):
         (self.source/'404.html').write_bytes(b'<!doctype html><title>missing</title>')
         source_manifest = oss.read(self.source/oss.MANIFEST)
         source_manifest.update({'accepted_pages':['/', '/projects/demo/'], 'baseline_files':{}, 'release_overlay':{}})
-        spec = importlib.util.spec_from_file_location('test_remote_content', ROOT/'scripts/hybrid-release.py')
-        hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
-        # Keep downloaded test bodies in this test's own temporary directory.
-        hybrid.ROOT = self.root/'mock-repo'
-        (hybrid.ROOT/'scripts').mkdir(parents=True)
-        shutil.copyfile(ROOT/'scripts/prepare-oss-release.py', hybrid.ROOT/'scripts/prepare-oss-release.py')
+        hybrid = self.hybrid()
         for case in ('repository', 'missing_import', 'valid_import'):
             base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com/releases/fixture-001/'
             body = (b'const r="https://github.com/wlyaaaaa/oss-test-unregistered";' if case=='repository' else
@@ -331,16 +380,16 @@ class OssReleaseTests(unittest.TestCase):
                 def __exit__(self,*_):pass
             serve=lambda request,timeout:Response(request)
             report=self.root/(case+'-gate.json')
-            with self.subTest(case=case), patch.object(oss,'urlopen',side_effect=serve), patch('urllib.request.urlopen',side_effect=serve), patch.object(hybrid.builder,'PUBLIC_REPOS',{'wlyaaaaa/known-public'}):
-                oss.verify_remote(output,workers=2);oss.seal_remote(output)
+            with self.subTest(case=case), patch.object(oss,'urlopen',side_effect=serve), patch.object(hybrid.builder,'PUBLIC_REPOS',{'wlyaaaaa/known-public'}):
+                oss.verify_remote(output,workers=2);self.seal(output, hybrid)
                 if case=='valid_import':
-                    self.assertEqual(hybrid.validate_content(output/'github',report)['status'],'pass')
+                    self.assertEqual(hybrid.validate_content(output/'github',report,local_assets=output/'oss')['status'],'pass')
                 else:
                     with self.assertRaisesRegex(ValueError,'Hybrid content gate failed'):
-                        hybrid.validate_content(output/'github',report)
+                        hybrid.validate_content(output/'github',report,local_assets=output/'oss')
                     result=oss.read(report)
                     if case=='repository':self.assertTrue(any(row['type']=='repository_not_public' for row in result['findings']))
-                    else:self.assertTrue(any('assets/missing.js' in row['reference'] for row in result['missing_references']))
+                    else:self.assertTrue(any('assets/missing.js' in row['type'] for row in result['findings']))
 
     def test_historical_asset_preparation_restores_only_named_home_entries(self):
         records=[{'id':identity,'href':'/'} for _ in range(2)

@@ -46,7 +46,7 @@ if ($Upload) {
     # headers regardless of the uploader host OS MIME registry.
     $groupRoot = Join-Path $preparationRoot ('upload-groups-' + [guid]::NewGuid().ToString('N').Substring(0,8))
     New-Item -ItemType Directory -Path $groupRoot | Out-Null
-    $objects = @($plan.objects.PSObject.Properties)
+    $objects = @($plan.objects.PSObject.Properties | Where-Object { $_.Name -cnotin @($plan.retained_objects.PSObject.Properties.Name) })
     $previousReceiptPath = Join-Path $preparationRoot 'remote-verification.json'
     if (Test-Path -LiteralPath $previousReceiptPath) {
         $previousReceipt = Get-Content -LiteralPath $previousReceiptPath -Raw -Encoding utf8 | ConvertFrom-Json -DateKind String
