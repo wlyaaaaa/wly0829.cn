@@ -1212,6 +1212,7 @@ async function load() {
     if (!V.manual) { V.i0 = introEnabled ? V.t : V.t - 99; resetBird(true); }
     root.classList.remove('is-static'); style(glc,'visibility',''); style(fxc,'visibility','');
     render(); resetBudget();
+    last = performance.now(); // 首次已绘制，下一帧计入这段真实间隔；暂停恢复仍沿用 resetBudget。
     // 接续第三版冷启动首两帧约 0.11 秒的推进，段落时长和统一 SPEED 保持原值。
     if (introEnabled && !V.manual) step(SPEED * 0.112);
     root.classList.add('is-ready'); schedule();
