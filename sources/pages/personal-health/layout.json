@@ -112,7 +112,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "平时什么都不会自动发生"
+        "text_ref": "平时只有一件事会自动发生"
       },
       {
         "type": "content_card",
@@ -121,7 +121,8 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": "auto",
-        "text_ref": "① 问健康问题"
+        "text_ref": "① 问健康问题",
+        "item_count": 4
       },
       {
         "type": "notice",
@@ -152,7 +153,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "平时什么都不会自动发生"
+        "text_ref": "平时只有一件事会自动发生"
       },
       {
         "type": "content_card",
@@ -161,7 +162,8 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": "auto",
-        "text_ref": "① 问健康问题"
+        "text_ref": "① 问健康问题",
+        "item_count": 2
       },
       {
         "type": "content_card",
@@ -170,7 +172,8 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": "auto",
-        "text_ref": "③ 有新报告"
+        "text_ref": "③ 有新报告",
+        "item_count": 2
       },
       {
         "type": "notice",
@@ -549,7 +552,7 @@
         "size": "large",
         "row": "标题与图例",
         "width": "43%",
-        "text_ref": "全部功能（14 项）"
+        "text_ref": "全部功能（15 项）"
       },
       {
         "type": "status_legend",
@@ -563,7 +566,12 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/心形.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/round3/clean-assets/png/05-灯泡-clean.png"
+        ],
         "size": "medium",
         "text_ref": "问健康问题",
         "fill_last_row": true
@@ -573,7 +581,10 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png"
+        ],
         "size": "medium",
         "text_ref": "报告和现状",
         "fill_last_row": true
@@ -583,7 +594,12 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/打勾清单.png"
+        ],
         "size": "medium",
         "text_ref": "更新设备数据",
         "fill_last_row": true
@@ -593,7 +609,13 @@
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/09-时钟-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
         "size": "medium",
         "text_ref": "查设备记录",
         "fill_last_row": true
@@ -614,7 +636,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（14 项）"
+        "text_ref": "全部功能（15 项）"
       },
       {
         "type": "status_legend",
@@ -625,7 +647,12 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/心形.png",
+          "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+          "_library/icons/盾牌对勾.png",
+          "_library/round3/clean-assets/png/05-灯泡-clean.png"
+        ],
         "size": "medium",
         "text_ref": "问健康问题"
       },
@@ -634,7 +661,10 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png"
+        ],
         "size": "medium",
         "text_ref": "报告和现状"
       },
@@ -643,7 +673,12 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/钥匙.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/日历时钟.png",
+          "_library/icons/打勾清单.png"
+        ],
         "size": "medium",
         "text_ref": "更新设备数据"
       },
@@ -652,7 +687,13 @@
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/09-时钟-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
         "size": "medium",
         "text_ref": "查设备记录"
       }
@@ -696,7 +737,8 @@
         "illustration": "left_inside",
         "connector": "ribbon",
         "icons": [
-          8
+          8,
+          "_library/icons/日历时钟.png"
         ],
         "width": "100%",
         "text_ref": "9 月 27 日",
@@ -704,7 +746,7 @@
         "connector_style": "thin_line"
       }
     ],
-    "notes": "原标题与9节点时间线共在左约47%，右约52%独立大插画自下向上贯通。时间线节点卡内左图标、右日期及正文；左外一条绿色竖线与9圆点相连。整屏标题按新标准居中；左右构图依原图。插画藤蔓由左下纸张向右上设备及电脑生长；不另加文字。；QA04：按审查时间线整宽双列竖排，固定5+4分界，取消同行手表独立插画。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。",
+    "notes": "原标题与10节点时间线共在左约47%，右约52%独立大插画自下向上贯通。时间线节点卡内左图标、右日期及正文；左外一条绿色竖线与10圆点相连。整屏标题按新标准居中；左右构图依原图。插画藤蔓由左下纸张向右上设备及电脑生长；不另加文字。；QA04：按审查时间线整宽双列竖排，固定5+4分界，取消同行手表独立插画。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。\n本轮十节点配套：前段8个，末段9月27日与10月7日2个；保留既有分栏与末段单列样式。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-health\\img\\personal-health-08-h.png"
     ],
@@ -727,7 +769,18 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "connector": "ribbon",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/盾牌对勾.png",
+          "_library/icons/断线.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/版本循环文件.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/09-时钟-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/日历时钟.png"
+        ],
         "text_ref": "8 月 25 日",
         "direction": "vertical",
         "connector_style": "thin_line"
@@ -740,7 +793,7 @@
         "size": "medium"
       }
     ],
-    "notes": "9节点单列；每节点左内图标右日期及正文，节点左外竖线圆点贯通。卡外插画置底，保持纸张→册子→设备→电脑顺序。整屏标题按新标准居中。",
+    "notes": "10节点单列；每节点左内图标右日期及正文，节点左外竖线圆点贯通。卡外插画置底，保持纸张→册子→设备→电脑顺序。整屏标题按新标准居中。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-health\\img\\personal-health-08-v.png"
     ],

@@ -723,10 +723,15 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文稿堆.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/日历时钟.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/开关.png",
           "_library/icons/文稿堆.png"
-        ]
+        ],
+        "item_count": 8
       },
       {
         "type": "prose",
@@ -758,10 +763,15 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文稿堆.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/日历时钟.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/开关.png",
           "_library/icons/文稿堆.png"
-        ]
+        ],
+        "item_count": 8
       },
       {
         "type": "prose",
@@ -937,7 +947,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（36项）",
+        "text_ref": "全部功能（42项）",
         "align": "center",
         "size": "large"
       },
@@ -982,7 +992,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（36项）",
+        "text_ref": "全部功能（42项）",
         "align": "center",
         "size": "large"
       },
@@ -1031,7 +1041,15 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/打勾清单.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/GitHub标志.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       },
@@ -1042,7 +1060,18 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/日历时钟.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/共享节点.png",
+          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/round3/clean-assets/png/43-文件柜-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       }
@@ -1066,7 +1095,15 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/打勾清单.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/GitHub标志.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       },
@@ -1077,7 +1114,18 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/书签册.png",
+          "_library/icons/文稿堆.png",
+          "_library/icons/双气泡.png",
+          "_library/icons/日历时钟.png",
+          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/icons/共享节点.png",
+          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/round3/clean-assets/png/43-文件柜-clean.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       }
@@ -1100,9 +1148,19 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/打勾清单.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/icons/日历时钟.png"
+        ],
         "status_position": "top_right",
-        "status_text": "dot_only"
+        "status_text": "dot_only",
+        "item_spans": {
+          "32": 3
+        }
       },
       {
         "type": "feature_card",
@@ -1111,9 +1169,17 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/GitHub标志.png"
+        ],
         "status_position": "top_right",
-        "status_text": "dot_only"
+        "status_text": "dot_only",
+        "item_spans": {
+          "38": 3
+        }
       },
       {
         "type": "feature_card",
@@ -1122,7 +1188,9 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/身份盾牌.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       }
@@ -1146,7 +1214,14 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/代码窗口.png",
+          "_library/icons/放大镜.png",
+          "_library/icons/打勾清单.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+          "_library/icons/日历时钟.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       },
@@ -1157,7 +1232,12 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+          "_library/icons/打勾清单.png",
+          "_library/icons/代码窗口.png",
+          "_library/icons/GitHub标志.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       },
@@ -1168,7 +1248,9 @@
         "portrait_columns": 1,
         "last_row": "fill",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/icons/身份盾牌.png"
+        ],
         "status_position": "top_right",
         "status_text": "dot_only"
       }
@@ -1232,7 +1314,21 @@
         "direction": "vertical",
         "connector": "ribbon",
         "illustration": "left_inside",
-        "icons": "auto",
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/GitHub标志.png",
+          "_library/icons/版本循环文件.png",
+          "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/文件齿轮.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/云.png",
+          "_library/icons/版本循环文件.png"
+        ],
         "width": "100%",
         "row": "history",
         "columns": 2,
@@ -1263,7 +1359,21 @@
         "direction": "vertical",
         "connector": "ribbon",
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/icons/GitHub标志.png",
+          "_library/icons/版本循环文件.png",
+          "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+          "_library/icons/版本循环文件.png",
+          "_library/icons/文件齿轮.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/icons/云.png",
+          "_library/icons/版本循环文件.png"
+        ]
       },
       {
         "type": "illustration",

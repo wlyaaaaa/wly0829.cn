@@ -61,7 +61,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "不用点名：要汇报、要我裁定，或者回答超过大约一千字，AI自己就做成网页；别的回答，网页看着更直观",
+        "text_ref": "不用点名：要展开说明的汇报",
         "row": "intro"
       }
     ],
@@ -127,7 +127,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "不用点名：要汇报、要我裁定，或者回答超过大约一千字，AI自己就做成网页；别的回答，网页看着更直观"
+        "text_ref": "不用点名：要展开说明的汇报"
       }
     ],
     "composition_basis": {
@@ -932,7 +932,7 @@
       "screen_id": "skill-report-page-08",
       "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\page.json"
     },
-    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。原八事件是 para 节点，须按真实日期串成时间线；不新增“我说/它改成”等定稿外字。最后正常事件绿点，停用叉只在原横幅。"
+    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。九个事件是 para 节点，须按真实日期串成时间线；不新增“我说/它改成”等定稿外字。最后正常事件绿点，停用叉只在原横幅。"
   },
   {
     "screen": "skill-report-page-08",
@@ -985,7 +985,7 @@
       "screen_id": "skill-report-page-08",
       "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-report-page\\page.json"
     },
-    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。原八事件是 para 节点，须按真实日期串成时间线；不新增“我说/它改成”等定稿外字。最后正常事件绿点，停用叉只在原横幅。"
+    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。九个事件是 para 节点，须按真实日期串成时间线；不新增“我说/它改成”等定稿外字。最后正常事件绿点，停用叉只在原横幅。"
   },
   {
     "screen": "skill-report-page-09",
