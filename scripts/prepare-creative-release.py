@@ -173,7 +173,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             if data.get('scope')=='page-demo-and-retry' or full_2f:
                 previous_manifest=baseline/hybrid.MANIFEST if old.get('resource_retry_preparation') else retry_predecessor_manifest
             else:previous_manifest=None
-            if previous_manifest and not hybrid.read(Path(previous_manifest)).get('resource_retry_preparation'):previous_manifest=None
+            if previous_manifest and (not Path(previous_manifest).is_file() or not hybrid.read(Path(previous_manifest)).get('resource_retry_preparation')):previous_manifest=None
             if previous_manifest:
                 previous_manifest=Path(previous_manifest).resolve()
                 inputs[str(previous_manifest)]=stamp(previous_manifest)
