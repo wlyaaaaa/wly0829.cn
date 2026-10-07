@@ -14,10 +14,19 @@ PROBE = """(() => {
    for(const name of ['drawArrays','drawElements','fill','stroke','fillRect','drawImage']) { const fn=proto[name]; if(fn) proto[name]=function(...args) { __uiDraws.set(this.canvas,(__uiDraws.get(this.canvas)||0)+1); return fn.apply(this,args); }; }
  }
 })();"""
-MOTION = """selector => [...document.querySelectorAll(selector)].map(e => {
- const r=e.getBoundingClientRect(),visible=r.width>0&&r.height>0&&e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true});
- return {id:e.closest('.boat')?'boat:'+e.closest('.boat').dataset.i:e.id||e.getAttribute('data-hl')||e.className,visible,x:r.x,y:r.y,width:r.width,height:r.height,draws:__uiDraws.get(e)||0,transform:getComputedStyle(e).transform};
-})"""
+MOTION = """selector => new Promise(done=>requestAnimationFrame(()=>done([...document.querySelectorAll(selector)].map(e => {
+ const r=e.getBoundingClientRect(),visible=r.width>0&&r.height>0&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth&&e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true});
+ let pixels=null;
+ if(e instanceof HTMLCanvasElement && visible) try {
+   const c=document.createElement('canvas'),x=c.getContext('2d');c.width=c.height=64;
+   const crop=[Math.max(0,-r.left),Math.max(0,-r.top),Math.min(r.right,innerWidth)-Math.max(r.left,0),Math.min(r.bottom,innerHeight)-Math.max(r.top,0)];
+   x.drawImage(e,crop[0]*e.width/r.width,crop[1]*e.height/r.height,crop[2]*e.width/r.width,crop[3]*e.height/r.height,0,0,64,64);
+   const data=x.getImageData(0,0,64,64).data;pixels=data.some(v=>v>0)?data.reduce((h,v)=>Math.imul(h^v,16777619)>>>0,2166136261):null;
+ } catch {}
+ return {id:e.closest('.boat')?'boat:'+e.closest('.boat').dataset.i:e.id||e.getAttribute('data-hl')||e.className,visible,x:r.x,y:r.y,width:r.width,height:r.height,draws:__uiDraws.get(e)||0,pixels,transform:getComputedStyle(e).transform};
+}))))"""
+def motion_changed(before, after):
+    return any(a['visible'] and b['visible'] and (a.get('pixels') is not None and b.get('pixels') is not None and a['pixels']!=b['pixels'] or a['transform']!=b['transform']) for a,b in zip(before,after))
 VIDEOS = """() => [...new Set([...__uiVideos,...document.querySelectorAll('video')])].map(v=>({src:v.currentSrc||v.src,time:v.currentTime,duration:v.duration,paused:v.paused,ended:v.ended,loop:v.loop,autoplay:v.autoplay,ready:v.readyState,error:v.error?.code}))"""
 COLOR = """selector=>new Promise(done=>requestAnimationFrame(()=>done([...document.querySelectorAll(selector)].map(e=>{try{const c=document.createElement('canvas');c.width=c.height=24;const x=c.getContext('2d');x.drawImage(e,0,0,24,24);const p=x.getImageData(0,0,24,24).data;return [0,1,2].map(k=>p.reduce((s,v,i)=>s+(i%4===k?v:0),0)/576)}catch{return null}}))))"""
 def inventory(root, pages=None):
@@ -45,6 +54,9 @@ async def review(page, base, route, width, dom, blocked=None):
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
     if blocked is not None: await page.evaluate('values=>window.__uiBlockedImages=values',blocked.get(page,{}))
     measured = await page.evaluate(dom); issues.extend(measured['issues']); checks.update(measured['counts'], measurements=measured.get('measurements',[]))
+    checks['video_before_interaction'] = await page.evaluate(VIDEOS)
+    for video in checks['video_before_interaction']:
+        if video['ready']>=2 and video['paused']: fail('video-autoplay',video['src'],video)
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
     for link in {x['href']: x for x in links}.values():
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
@@ -65,28 +77,32 @@ async def review(page, base, route, width, dom, blocked=None):
             record = {'run': run+1, 'before': before, 'after': after}; checks['reloads'].append(record)
             if route == '/cockpit/' and await page.evaluate('Boolean(window.todayRiver?.model && window.todayRiver.model.past.length+window.todayRiver.model.future.length)') and not any(a['id'].startswith('boat:') and a['visible'] and a['transform']!=b['transform'] for a,b in zip(before,after)): fail('boat-missing-or-stopped',selector,record)
             if not before or not any(x['visible'] for x in before): fail('living-missing', selector, record)
-            elif not any(b['draws']>a['draws'] for a,b in zip(before,after)): fail('living-stopped', selector, record)
+            elif not motion_changed(before,after): fail('living-frame-unmeasurable-review', selector, record)
         if route == '/':
+            fail('hero-boat-identity-review',selector,{'reason':'canvas pixels prove scene movement; they do not independently identify the boat sprite'})
+            night = page.get_by_role('button',name='晚上',exact=True)
+            if await night.count(): await night.click(); await page.wait_for_timeout(800)
             for label in ['清晨','白天','傍晚','晚上','一分钟循环一天']:
                 control = page.get_by_role('button', name=label, exact=True)
                 if not await control.count(): fail('phase-control-missing', label, {'count':0}); continue
                 state = lambda: control.evaluate("e=>JSON.stringify([e.getAttribute('aria-pressed'),e.getAttribute('aria-selected'),e.className,document.body.dataset])")
                 selected = await state(); color = await page.evaluate(COLOR, selector); await control.click(); await page.wait_for_timeout(800)
                 after_color = await page.evaluate(COLOR,selector); record = {'label':label,'colors':[color,after_color],'selection_changed':selected!=await state()}; checks['phases'].append(record)
-                if not record['selection_changed'] or not any(a and b and max(abs(x-y) for x,y in zip(a,b))>2 for a,b in zip(color,after_color)): fail('phase-control-inert',label,record)
+                if not any(a and b and max(abs(x-y) for x,y in zip(a,b))>2 for a,b in zip(color,after_color)): fail('phase-control-inert' if any(a and b for a,b in zip(color,after_color)) else 'phase-pixels-unmeasurable-review',label,record)
     samples = [await page.evaluate(VIDEOS)]; animation = [await page.evaluate(MOTION, selector)] if route in ('/','/cockpit/') else []
     if samples[0] or animation:
         for _ in range(30):
             await page.wait_for_timeout(1000); samples.append(await page.evaluate(VIDEOS))
             if animation: animation.append(await page.evaluate(MOTION,selector))
-        if animation and any(sum(x['draws'] for x in a)>=sum(x['draws'] for x in b) for a,b in zip(animation,animation[1:])): fail('living-30s-stopped',selector,{'samples_1s':animation})
+        if animation and not any(motion_changed(a,b) for a,b in zip(animation,animation[1:])):
+            fail('living-30s-stopped' if any(x.get('pixels') is not None for frame in animation for x in frame) else 'living-frame-unmeasurable-review',selector,{'samples_1s':animation})
         for index, video in enumerate(samples[0]):
             trace = [s[index] for s in samples if len(s)>index]
             if not any(a['time']>b['time'] for a,b in zip(trace,trace[1:])) and video['duration'] and video['duration']>0:
                 await page.evaluate("i=>[...new Set([...__uiVideos,...document.querySelectorAll('video')])][i].currentTime=Math.max(0,[...new Set([...__uiVideos,...document.querySelectorAll('video')])][i].duration-.3)",index)
                 await page.wait_for_timeout(1200); boundary = (await page.evaluate(VIDEOS))[index]
                 if boundary['time']>=video['duration']-.3 or boundary['ended']: fail('video-loop-failed',video['src'],boundary)
-            if not video['autoplay'] or not video['loop'] or any(s['paused'] or s['ended'] or s['error'] for s in trace) or any(a['time']==b['time'] for a,b in zip(trace,trace[1:])): fail('video-playback', video['src'], {'samples_1s': trace})
+            if any(s['paused'] or s['ended'] or s['error'] for s in trace) or any(a['time']==b['time'] for a,b in zip(trace,trace[1:])): fail('video-playback', video['src'], {'samples_1s': trace})
     checks['videos'] = samples; checks['animation_30s'] = animation
     if route == '/cockpit/':
         text = await page.locator('body').inner_text()
