@@ -1,6 +1,12 @@
 {
   "schema": "wly.render-lock.v1",
   "reason": "Same input pixels must be reproducible; update after comparing a full generation.",
+  "python_tools": "E:/Tools/wly-typeset-python314",
+  "python_packages": {
+    "python": "3.14.7",
+    "fonttools": "4.63.0",
+    "brotli": "1.2.0"
+  },
   "chrome": {
     "version": "154.0.8037.92",
     "path": "E:/Tools/ChromeForTesting/154.0.8037.92/chrome-win64/chrome.exe",

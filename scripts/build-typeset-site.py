@@ -524,7 +524,7 @@ def local_deps(candidate, legacy, baseline):
                     raise ValueError('Referenced asset unavailable: '+str(target.relative_to(candidate)))
                 target.parent.mkdir(parents=True, exist_ok=True)
                 hybrid.builder.copy_release_asset(original,target)
-            if target.suffix in {'.js','.css','.html','.mjs'}:
+            if target.suffix in {'.js','.css','.html','.mjs','.json'}:
                 pending.append(target)
 
 def build_page(name, records, args, candidate):
@@ -998,6 +998,10 @@ def main():
     ap.add_argument('--live-ui-preparation',type=Path,help='Replay the delivered live UI, font and directory assets before assembly')
     args=ap.parse_args()
     native_inputs=native_readability.source_inputs(stamp) if args.native_routes else None
+    sys.path.insert(0, str(HERE.parent/'.publish/python-tools'))
+    sys.path.insert(0, str(HERE.parent/'src/typeset'))
+    from engine.render import verify_lock
+    verify_lock(read(HERE.parent/'config/render.lock.json'))
     REUSE_ASSET_CACHE=args.reuse_asset_cache
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
     baseline_manifest=read(args.baseline/'release-manifest.json')

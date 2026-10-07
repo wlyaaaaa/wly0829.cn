@@ -16,6 +16,7 @@ import subprocess
 import sys
 import time
 from urllib.request import urlopen
+from urllib.parse import unquote, urlsplit
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -29,32 +30,129 @@ def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def load_state(path): return json.loads(path.read_text('utf8')) if path.is_file() else {}
 
 def fingerprints(lock):
-    shared = [p for folder in ('src', 'scripts', 'config', 'sources/creative', 'sources/bird',
-              'sources/living', 'sources/navigation', 'sources/rules', 'sources/signature', 'sources/assets/_library/icons')
-              for p in (ROOT / folder).rglob('*') if p.is_file() and '__pycache__' not in p.parts and p.name != 'quality-baseline.json']
-    shared += list((ROOT/'sources/assets').glob('*.json'))
     assets._manifest = None
-    for row in [lock['chrome'], *lock['fonts']]:
-        if digest(row['path']) != row['sha256']:
-            raise ValueError('Locked rendering dependency changed: ' + row['path'])
-    shared_hash = hashlib.sha256(''.join(str(p)+digest(p) for p in sorted(shared)).encode()).hexdigest()
-    library = assets.manifest(); hashed = {}; result = {'home': shared_hash}
+    library = assets.manifest(); result = {}; hashed = {}
+    registry = renderer.load_registry()
+    environment = {key: lock[key] for key in ('args', 'python_packages')}
+    environment['binaries'] = [row['sha256'] for row in [lock['chrome'], *lock['fonts']]]
     for name, source in renderer.page_sources().items():
         page = json.loads(Path(source).read_text('utf8'))
+        for screen in page['screens']: screen['screenshots'] = [] if screen['id'] in page.get('withdrawn_screenshot_screens', []) else screen.get('screenshots', [])
         if not page.get('url') and name != '404': continue
         layout = ROOT / 'sources/pages' / name / 'layout.json'
-        files = {Path(source), layout}; rows = [r for s in page['screens'] for r in library.get(s['id'], [])]
-        for literal in re.findall(r'"(?:\\.|[^"\\])*"', json.dumps([page, json.loads(layout.read_text('utf8')), rows], ensure_ascii=False)):
+        spec = json.loads(layout.read_text('utf8'))
+        spec = [{k: v for k, v in row.items() if k not in ('source_image', 'source_images')} for row in spec]
+        rows = [r for s in page['screens'] for r in library.get(s['id'], [])]
+        content = json.loads(json.dumps([page, spec, rows]))
+        files = renderer.render_dependencies(name, page, {(r['screen'], r.get('orientation', 'h')): r for r in spec}, registry)
+        resources = [spec, rows, [s.get('screenshots', []) for s in page['screens']]]
+        for literal in re.findall(r'"(?:\\.|[^"\\])*"', json.dumps(resources, ensure_ascii=False)):
             value = json.loads(literal)
             if not re.search(r'[/\\]|^proto:|\.[a-zA-Z0-9]{1,6}$', value): continue
             p = ROOT/'src/typeset/assets'/(value[6:] if value[6:].endswith('.png') else value[6:]+'.png') if value.startswith('proto:') else Path(assets.local_path(value))
             if not p.is_absolute(): p = Path(assets.ASSET_ROOT) / p
-            if p.resolve().is_relative_to(ROOT) and p.is_file(): files.add(p.resolve())
-        for p in sorted(files):
-            if p not in hashed: hashed[p] = digest(p)
-        result[name] = hashlib.sha256((shared_hash + json.dumps(rows, sort_keys=True, ensure_ascii=False)
-                       + ''.join(str(p)+hashed[p] for p in sorted(files))).encode()).hexdigest()
+            if p.is_file(): files.add(p.resolve())
+        for p in files:
+            if p.is_file() and p not in hashed: hashed[p] = digest(p)
+        proofs = {relative_id(p): hashed[p] for p in files if p.is_file()}
+        regions = load_state(Path(assets.TITLE_REGIONS)).get('regions', {})
+        result[name] = content_key([content, environment, proofs,
+                                   {sha: regions[sha] for sha in proofs.values() if sha in regions}])
+    result['home'] = content_key('home')
     return result
+
+
+def relative_id(path):
+    path = Path(path).resolve()
+    for label, root in (('repo', ROOT), ('assets', Path(assets.ASSET_ROOT))):
+        if path.is_relative_to(root.resolve()): return label + '/' + path.relative_to(root.resolve()).as_posix()
+    return 'external/' + path.name + '/' + digest(path)
+
+
+def content_key(value):
+    text = json.dumps(value, sort_keys=True, ensure_ascii=False)
+    for root, label in ((ROOT, '@repo'), (Path(assets.ASSET_ROOT), '@assets')):
+        for spelling in (str(root), root.as_posix()): text = text.replace(json.dumps(spelling)[1:-1], label)
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def page_proofs(root):
+    return {p.relative_to(root).as_posix(): digest(p) for p in root.rglob('*') if p.is_file() and p.name != '.render.lock'}
+
+
+def recycle_owned(path):
+    subprocess.run(['pwsh', '-NoProfile', '-File', 'E:/.agents/tools/Move-TaskItemToRecycleBin.ps1',
+        '-LiteralPath', str(path), '-AllowedRoot', str(path.parent), '-Json'], check=True, capture_output=True)
+
+
+def reuse_page(name, key, root, state_root):
+    cached = state_root/'pages'/key/name
+    proof = load_state(cached.parent/'proof.json')
+    if not proof or proof.get('files') != page_proofs(cached): return False
+    if any(not (Path(assets.CACHE)/rel).is_file() or digest(Path(assets.CACHE)/rel) != sha
+           for rel, sha in proof.get('derived', {}).items()): return False
+    if proof['repo'] == str(ROOT) and proof['assets'] == str(assets.ASSET_ROOT) and page_proofs(root/name) == proof['files']: return True
+    if (root/name).exists(): recycle_owned(root/name)
+    shutil.copytree(cached, root/name, dirs_exist_ok=True)
+    if page_proofs(root/name) != proof['files']: return False
+    for path in (root/name).rglob('*'):
+        if path.suffix not in ('.html', '.json'): continue
+        original = text = path.read_bytes().decode('utf8')
+        for old, new in ((proof['repo'], ROOT), (proof['assets'], Path(assets.ASSET_ROOT))):
+            for before, after in ((str(Path(old)), str(new)), (Path(old).as_posix(), new.as_posix())):
+                text = text.replace(before, after).replace(json.dumps(before)[1:-1], json.dumps(after)[1:-1])
+        if text != original: path.write_bytes(text.encode('utf8'))
+    return True
+
+
+def store_page(name, key, root, state_root):
+    dest = state_root/'pages'/key/name
+    if dest.parent.exists(): recycle_owned(dest.parent)
+    shutil.copytree(root/name, dest, dirs_exist_ok=True)
+    derived = {}
+    for page in dest.rglob('*.html'):
+        for ref in re.findall(r'(?:src|href)="(file://[^\"]+)"', page.read_text('utf8')):
+            path = Path(unquote(urlsplit(ref).path.lstrip('/')))
+            if path.is_relative_to(Path(assets.CACHE)):
+                derived[path.relative_to(assets.CACHE).as_posix()] = digest(path)
+    (dest.parent/'proof.json').write_text(json.dumps({'files': page_proofs(dest), 'repo': str(ROOT),
+        'assets': str(assets.ASSET_ROOT), 'derived': derived}, sort_keys=True), encoding='utf8')
+
+
+def shell_key(name, legacy, baseline, hybrid):
+    source = json.loads(Path(renderer.page_sources()[name]).read_text('utf8')) if name != 'home' else {'url': '/'}
+    rel = hybrid.route_file(source.get('url') or ('/404.html' if name == '404' else '/'+name+'/'))
+    root = legacy if (legacy/rel).is_file() else baseline
+    page = root/rel; files = {page}; text = page.read_text('utf8')
+    parser = hybrid.builder.Refs(); parser.feed(re.sub(r'<main\b.*?</main>', '', text, flags=re.S))
+    pending = [hybrid.local_reference(root, page, ref) for ref, nav in parser.refs if not nav]
+    while pending:
+        path = pending.pop()
+        if path is None or path in files: continue
+        if not path.is_file(): raise ValueError('Assembly dependency unavailable: '+str(path))
+        files.add(path)
+        if path.suffix in ('.js', '.css', '.mjs'):
+            pending += [hybrid.local_reference(root, path, ref) for ref, nav in hybrid.references(path) if not nav]
+    return content_key({p.relative_to(root).as_posix(): digest(p) for p in files})
+
+
+def assembly_key(name, files, recipe):
+    owners = {key: 'home' for key in ('static_home_reference', 'comic_package', 'home_bio_script',
+        'bird_first_packet', 'native_home_support', 'native_home_script')}
+    owners.update(river_handoff='cockpit', demo_assets='how')
+    def selected(path):
+        for key, owner in owners.items():
+            if key in recipe:
+                root = (ROOT/recipe[key]).resolve()
+                if path == root or root in path.parents: return name == owner
+        if path.parent == HERE or path == HERE/'today-river-assets2' or HERE/'today-river-assets2' in path.parents:
+            if re.match(r'(?:prepare-home-|home-|prepare-static-home|prepare-today-river|today-river)', path.name):
+                return name == ('cockpit' if 'river' in path.name else 'home')
+            if path.suffix in ('.js', '.css') and path.name.startswith('how-demo-'): return name == 'how'
+        return True
+    config = {key: value for key, value in recipe.items() if key not in owners or owners[key] == name}
+    inputs = {relative_id(p): digest(p) for p in files if p != ROOT/'config/build.json' and selected(p)}
+    return content_key([config, inputs])
 
 def file_proofs(paths):
     return {str(p): digest(p) for root in paths for p in (root.rglob('*') if root.is_dir() else [root]) if p.is_file()}
@@ -66,19 +164,43 @@ def main():
                             ('typeset-out', 'baseline', 'legacy', 'update', 'asset-cache')):
         parser.add_argument('--' + name, type=Path, default=ROOT / '.publish' / default)
     parser.add_argument('--inventory', type=Path, default=HERE.parent/'.publish/inventory/screens.jsonl')
+    parser.add_argument('--state-root', type=Path, help='Persistent ledger and complete page artifacts; defaults to the shared Git directory')
     parser.add_argument('--jobs', type=int, default=3)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--pages', nargs='+', help='Only replace and verify the selected page routes')
     for flag in ('changed', 'all'): mode.add_argument('--'+flag, action='store_true')
     for flag in ('resume', 'publish'): parser.add_argument('--'+flag, action='store_true')
     args = parser.parse_args()
+    sys.path.insert(0, str(ROOT/'.publish/python-tools'))
+    lock = json.loads((ROOT/'config/render.lock.json').read_text('utf8'))
+    renderer.verify_lock(lock)
     run = args.run_root.resolve()
     run.mkdir(parents=True, exist_ok=True)
-    lock = json.loads((ROOT/'config/render.lock.json').read_text('utf8'))
-    current = fingerprints(lock); state_path = run/'publication-state.json'; ledger_path = run/'page-fingerprints.json'
+    common = subprocess.check_output(['git', '-C', str(ROOT), 'rev-parse', '--git-common-dir'], text=True).strip()
+    durable = args.state_root.resolve() if args.state_root else (ROOT/common).resolve()/'typeset-state'
+    durable.mkdir(parents=True, exist_ok=True)
+    assets.CACHE = str(durable/'derived-assets')
+    current = fingerprints(lock); state_path = run/'publication-state.json'
+    ledger_path = durable/('published-page-fingerprints.json' if args.publish else 'page-fingerprints.json')
     previous = load_state(ledger_path)
+    # Existing preparation recipes own the static inputs consumed by assembly.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location('assembly_inputs', HERE/'prepare-creative-release.py')
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assembly_files = [Path(p) for p in module.recipe(ROOT/'config/build.json')[2]]
+    assembly_files += [HERE/name for name in ('build-typeset-site.py', 'build-assembled-site.py', 'hybrid-release.py',
+        'repair-release-navigation.py', 'prepare-live-ui.py', 'prepare-motion-release.py', 'public_page_contract.py', 'rule_original_contract.py',
+        'audit-page-publication.py', 'update-live-release.py', 'prepare-rule-workbench-originals.py')]
+    assembly_files += [p for folder in ('sources/navigation', 'sources/rules') for p in (ROOT/folder).rglob('*') if p.is_file()]
+    assembly_files += [ROOT/'config/live-ui.json', ROOT/'config/panel-projects.json', ROOT/'config/assembled-rules-pin.json']
+    assembly_files += [p for pattern in ('typeset-layout.*', 'b2-live*', 'typeset-measure.js', 'site-live-runtime.js',
+        'typeset-live-display.js', 'live-*-ui.*', 'prepare-toc-consistency.py', 'toc-consistency.*', 'release_delta.py') for p in HERE.glob(pattern)]
+    assembly_files += [ROOT/'app/computer-access-model.js']
+    recipe = json.loads((ROOT/'config/build.json').read_text('utf8'))
+    page_keys = {name: content_key([key, assembly_key(name, assembly_files, recipe), shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid)])
+                 for name, key in current.items()}
     state = load_state(state_path) if args.resume else {}
-    selected = args.pages or (sorted(current) if args.all or set(previous)-current.keys() else [p for p in current if previous.get(p) != current[p]])
+    selected = args.pages or (sorted(current) if args.all or set(previous)-current.keys() else [p for p in current if previous.get(p) != page_keys[p]])
     rule_pages = {r['page'] for r in json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))['excerpt_contract']['excerpts'].values()} | {'rules-home'}
     if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
     if state: selected = sorted(set(state['selected_pages']) | set(selected))
@@ -88,8 +210,11 @@ def main():
         outputs = [run/'generation'/name for name in ('dist','build-report.json','motion-geometry.json','typeset-out')] + [args.typeset_root, Path(last['baseline']), args.legacy_site]
         if last['stages']['generation'].get('outputs') != file_proofs(outputs): selected = sorted(current)
     if not selected: print('No page inputs changed; no generation or publication.', flush=True); return 0
-    invalid = state.get('fingerprints') != current
-    state.update(schema='wly.typeset-publication.v1', selected_pages=selected, status='running', fingerprints=current)
+    for name in set(current)-set(selected)-{'home'}:
+        if not reuse_page(name, current[name], args.typeset_root, durable): selected.append(name)
+    if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
+    invalid = state.get('fingerprints') != page_keys
+    state.update(schema='wly.typeset-publication.v1', selected_pages=selected, status='running', fingerprints=page_keys)
     state.setdefault('stages', {name: {'status': 'pending'} for name in ('inputs', 'generation', 'checks', 'publication', 'readback')})
     def save():
         temp = state_path.with_suffix('.tmp'); temp.write_text(json.dumps(state, ensure_ascii=False, indent=2)+'\n', encoding='utf8'); temp.replace(state_path)
@@ -122,7 +247,7 @@ def main():
     cache = run / 'browser-cache'
     cache.mkdir(exist_ok=True)
     environment = {**os.environ, 'TEMP': str(cache), 'TMP': str(cache), 'TMPDIR': str(cache), 'WLY_RENDER_CHROME': lock['chrome']['path'], 'TYPESET_INVENTORY_OUT': str(args.inventory.parent), 'WLY_RENDER_PAGES': json.dumps(selected),
-                   'PYTHONPATH': os.pathsep.join([str(ROOT/'.publish/python-tools'), os.environ.get('PYTHONPATH', '')])}
+                   'PYTHONPATH': os.pathsep.join([lock['python_tools'], os.environ.get('PYTHONPATH', '')])}
     stages = []
     started = time.monotonic()
     native = [p for p in selected if p != 'home'] or ['how']; selection = ['--pages', *native]
@@ -213,9 +338,14 @@ def main():
                 from playwright.sync_api import sync_playwright
                 with sync_playwright() as runtime:
                     browser = runtime.chromium.launch(executable_path=lock['chrome']['path'], headless=True, args=lock['args'])
+                    rendered_pages = []
                     for name in native:
+                        if not args.all and reuse_page(name, current[name], args.typeset_root, durable):
+                            print('Reused complete page: '+name, flush=True); continue
+                        if (args.typeset_root/name).exists(): recycle_owned(args.typeset_root/name)
                         rendered = renderer.render_page(name, do_compare=False, out_root=str(args.typeset_root), browser=browser); print('Rendered: '+name, flush=True)
                         if rendered['failed'] or rendered['incomplete']: raise ValueError('Renderer failed: ' + name)
+                        rendered_pages.append(name)
                     browser.close()
                 execute('inventory.py', [])
                 execute('snapshot-typeset-inputs.py', ['--typeset-root', args.typeset_root.resolve(), '--producer-root', ROOT/'src/typeset',
@@ -239,6 +369,11 @@ def main():
                     '--reuse-asset-cache', '--output', work/'dist', '--report', report, '--creative-preparation', ROOT/'config/build.json',
                     '--live-ui-preparation', ROOT/'config/live-ui.json', *selection] + (['--rule-public-projection', work/'typeset-out/rule-public-projection.json'] if project else []))
                 if fingerprints(lock) != current: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
+                current_recipe = json.loads((ROOT/'config/build.json').read_text('utf8'))
+                if any(page_keys[name] != content_key([key, assembly_key(name, assembly_files, current_recipe),
+                        shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid)]) for name, key in current.items()):
+                    raise ValueError('Assembly inputs changed during generation')
+                for name in rendered_pages: store_page(name, current[name], args.typeset_root, durable)
         with phase('checks', [verification, run/'content-report.json']) as active:
             if active:
                 with preview(work/'dist', 'qa') as address:
@@ -269,8 +404,9 @@ def main():
             for name in ('publication','readback'): state['stages'][name].update(status='skipped', reason='Publication not requested')
         if (run/'current-site').exists(): shutil.move(run/'current-site', run/('retained-site-'+str(time.time_ns())))
         shutil.copytree(work/'dist', run/'current-site', copy_function=builder.copy_release_asset); shutil.copyfile(geometry, run/'current-geometry.json')
-        previous.update({p: current[p] for p in selected})
+        previous.update({p: page_keys[p] for p in selected})
         temp = ledger_path.with_suffix('.tmp'); temp.write_text(json.dumps(previous, sort_keys=True), encoding='utf8'); temp.replace(ledger_path)
+        if args.publish: (durable/'page-fingerprints.json').write_bytes(ledger_path.read_bytes())
         state['status'] = result['status'] = 'pass'; save()
     except Exception as error:
         state['status'] = result['status'] = 'error'; save()

@@ -10,6 +10,7 @@ import json
 import os
 import re
 import time
+from pathlib import Path
 
 from . import assets
 from .layout import build_html, load_spec, textless_visible_source, WIDTH, MIN_FONT
@@ -74,6 +75,62 @@ def page_sources():
     for src in glob.glob(os.path.join(PIPE, "sources", "pages", "*", "page.json")):
         out[os.path.basename(os.path.dirname(src))] = src
     return out
+
+
+def verify_lock(lock):
+    """Fail before rendering when the locked font encoder cannot run."""
+    import platform
+    import importlib
+    import sys
+    sys.path.insert(0, lock['python_tools'])
+    versions = {"python": platform.python_version()}
+    for name, module in (("fonttools", "fontTools"), ("brotli", "brotli")):
+        try:
+            versions[name] = importlib.import_module(module).__version__
+        except ImportError as error:
+            raise ValueError("Missing locked rendering dependency: " + name) from error
+    if versions != lock["python_packages"]:
+        raise ValueError("Locked Python/FontTools/Brotli versions differ: " + repr(versions))
+    from fontTools.ttLib import woff2
+    if not woff2.haveBrotli:
+        raise ValueError("Locked FontTools WOFF2 encoder has no Brotli")
+    for row in [lock["chrome"], *lock["fonts"]]:
+        if assets._sha(row["path"]) != row["sha256"]:
+            raise ValueError("Locked rendering dependency changed: " + row["path"])
+
+
+def render_dependencies(page_name, page, spec, registry=None):
+    """The loaded styles and component families actually used by this page."""
+    reg, owner, css, _ = registry or load_registry()
+    files = set(Path(PROTO, "engine").glob("*.py")) | {Path(PROTO, "engine/checks.js"), Path(PROTO, "style/base.css")}
+    files.update(map(Path, css))  # The renderer links every registered stylesheet.
+    files.update(Path(PROTO, 'components').rglob('*.css'))
+    files.update(Path(PROTO, 'style').glob('*'))
+    files.update(Path(PROTO, 'assets', 'leaf-'+side+'.png') for side in ('l', 'r'))
+    files.update(Path(PROTO, name) for name in ("typeset_check.js", "typeset_labels.js", "typeset_apply.js"))
+    used = set()
+    def track(name, fn):
+        def call(block, ctx):
+            used.add(owner[name]); return fn(block, ctx)
+        return call
+    tracked = {name: track(name, fn) for name, fn in reg.items()}
+    import sys
+    def observe(frame, event, arg):
+        if event == 'call' and frame.f_code.co_filename.startswith(PROTO): files.add(Path(frame.f_code.co_filename))
+    for screen in page["screens"]:
+        if screen.get("hidden"): continue
+        for orient in ("h", "v"):
+            if not wanted(screen, orient, spec): continue
+            item = spec.get((screen["id"], orient), {})
+            previous = sys.getprofile(); sys.setprofile(observe)
+            try: build_html(page, screen, orient, tracked, [str(p) for p in css], item)
+            finally: sys.setprofile(previous)
+            for family in used:
+                files.update(p for p in Path(PROTO, "components", family).rglob('*')
+                             if p.suffix in ('.py', '.js', '.png', '.json') and '__pycache__' not in p.parts)
+            if screen['id'] == 'rule-engineering-delivery-10':
+                files.add(Path(PROTO, 'components/comp-diagram/step-ports.js'))
+    return files
 
 
 def g1(screen, text, textless_exclusions=()):

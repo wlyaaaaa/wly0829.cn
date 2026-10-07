@@ -363,7 +363,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     files = inventory(output)
     release_id = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
     manifest = {'schema':'wly.hybrid-release.v1', 'release_id':release_id,
-                'prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),
+                'baseline_prepared_at_beijing':baseline_manifest.get('prepared_at_beijing') or baseline_manifest.get('baseline_prepared_at_beijing'),
                 'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_production_commit or baseline_manifest.get('production_commit'),
                 'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
                 'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
