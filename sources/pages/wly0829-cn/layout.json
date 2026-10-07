@@ -42,7 +42,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "现在正不正常 → 驾驶舱",
+        "text_ref": "查看驾驶舱",
         "columns": 4,
         "columns_v": 2
       }
@@ -50,7 +50,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -95,7 +95,7 @@
       },
       {
         "type": "action_button",
-        "text_ref": "现在正不正常 → 驾驶舱",
+        "text_ref": "查看驾驶舱",
         "columns": 2,
         "columns_v": 2
       }
@@ -103,7 +103,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -145,7 +145,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -187,7 +187,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -231,7 +231,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -275,7 +275,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -315,7 +315,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -355,7 +355,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -407,7 +407,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -459,7 +459,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -501,7 +501,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -543,7 +543,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -584,7 +584,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -625,7 +625,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -681,7 +681,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -737,7 +737,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -774,7 +774,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -811,7 +811,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -845,7 +845,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -879,7 +879,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -934,7 +934,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -989,7 +989,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1066,7 +1066,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1143,7 +1143,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1193,7 +1193,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1243,7 +1243,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1284,7 +1284,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
@@ -1325,7 +1325,7 @@
     "notes": "按每屏横竖版说明组合现有章节标题、卡片、表格、流程和时间线组件。",
     "provenance": {
       "text": "sources/pages/wly0829-cn/page.json",
-      "source_sha256": "99db148f644ae8b3a7489b0f13dbe5be82612d9d8fcd732a726feb6abb7fd76c",
+      "source_sha256": "3578e80e89ae7fd9cf994b8f03e35c0450e3da09fc397660e9489837283f7c2c",
       "requirements": "派单原稿：Opus 定稿，共 14 屏、39 项。",
       "composition": "按各屏 scene 与 portrait 排列已有组件类型，没有增加渲染机制。",
       "style": "沿用现有 sources/pages/*/layout.json 结构与已登记组件。"
