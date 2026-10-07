@@ -28,10 +28,7 @@
            mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent); mask-composite:intersect; }
 #today-river #stage.nogl #paper { display:block; }
 #today-river #stage.nogl #water { display:none; }
-#today-river #stage.stale #paper { filter:grayscale(.9) brightness(1.04); }
-#today-river #stage.stale #layer { filter:grayscale(.85); }
-#today-river #stage.stale .lamp .lit { background:#b9c2bd !important; box-shadow:none !important; animation:none !important; }
-#today-river #stage.stale .lamp .glow { opacity:0 !important; }
+#today-river #stage.stale .boat, #today-river #stage.stale .boat * { animation-play-state:paused !important; transition:none !important; }
 #today-river #layer { position:absolute; inset:0; }
 #today-river #layer button { font-family:inherit; }
 #today-river .hint { display:none; font-size:12.5px; color:var(--tr-muted); margin:6px 0 0; }

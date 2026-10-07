@@ -49,13 +49,30 @@ check('first-two-seconds','run(1,1900,150)',false);
 check('single-long-frame','run(1,6000,1000/60);frame(7500);run(7517,11000,1000/60)',false);
 check('brief-slow-frames','run(1,6000,1000/60);run(6150,6600,150);run(6617,12000,1000/60)',false);
 check('hidden-excluded','run(1,6000,1000/60);document.hidden=true;run(6150,17000,150);document.hidden=false;wake();run(17017,24000,1000/60)',false);
-check('stale-excluded','M.stale=true;run(1,12000,150)',false);
+check('stale-water-insured','M.stale=true;run(1,12000,150)',true);
 check('reduced-motion-excluded','reduce=true;run(1,12000,150)',false);
 check('continuous-low-fps','run(1,14000,150)',true);
 process.stdout.write(JSON.stringify({schema:'wly.today-river-insurance-policy.v1',synthetic_timestamps:true,busy_wait:false,cases}));
 """.replace('FRAME',json.dumps(frame)).replace('WAKE',json.dumps(wake))
     result=subprocess.run(['node','-'],input=script,text=True,capture_output=True,check=True)
     (output/'insurance-policy.json').write_text(result.stdout+'\n','utf8')
+    reader=r"""
+const vm=require('node:vm'),assert=require('node:assert/strict'),fs=require('node:fs');
+const requests=[];let timeout=true,expired=false;
+const sandbox={module:{exports:{}},AbortController,clearTimeout,setTimeout:(f,ms)=>setTimeout(f,ms===8000?5:ms),fetch:async(url,{signal})=>{
+ requests.push(url);if(timeout&&url.includes('live.wly'))return new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(Error('timeout')),{once:true}));
+ return {ok:true,json:async()=>({observed_at_unix:Date.now()/1000-(expired&&url.includes('mcp.wly')?121:0),automation:{state:'unavailable'}})};
+}};
+vm.runInNewContext(fs.readFileSync('scripts/site-live-runtime.js','utf8'),sandbox);
+(async()=>{const read=sandbox.module.exports.readStatus;
+ await read(undefined,false,false);timeout=false;await read(undefined,false,false);expired=true;
+ assert.equal((await read(undefined,false,false)).automation.state,'unavailable');await read(undefined,false,true);await read(undefined,false,false);
+ assert.deepEqual(requests.map(x=>x.includes('live.wly')?'live':x.includes('mcp.wly')?'mcp':x),['live','mcp','mcp','mcp','live','/__status','live']);
+ const signal=AbortSignal.abort();await assert.rejects(read(signal,false,false));assert.equal(requests.length,7);process.stdout.write(JSON.stringify({mock:true,timeout_path:true,requests}));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+    readback=subprocess.run(['node','-'],input=reader,text=True,capture_output=True,check=True,cwd=ROOT)
+    (output/'reader-policy.json').write_text(readback.stdout+'\n','utf8')
     return json.loads(result.stdout)
 
 
@@ -262,9 +279,16 @@ async def main(args):
                 results.append({'device':device,'case':'errors-overdue-fallback-name','snapshot':bad})
                 for mode,word in [('failure','现在读不到电脑。'),('unknown','自动任务暂时读不到。'),('unavailable','自动任务暂时读不到。'),('stale','自动任务的记录没有及时更新。')]:
                     await refresh('normal')
+                    last=await page.evaluate('({at:todayRiver.model.now,boats:[...document.querySelectorAll("#today-river .boat")].map(e=>[e.style.left,e.style.top])})')
                     old=await refresh(mode)
-                    assert old['headline'].startswith(word) and '之后的情况不知道' in old['headline'],old
-                    assert old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
+                    assert word in old['headline'] and '旧数据，之后的情况不知道' in old['headline'],old
+                    assert not old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
+                    await page.evaluate('()=>{window.riverTestNow=Date.now;Date.now=()=>riverTestNow()+120000;}')
+                    await page.wait_for_timeout(1100)
+                    held=await page.evaluate('({at:todayRiver.model.now,sign:document.querySelector("#today-river .now").textContent,boats:[...document.querySelectorAll("#today-river .boat")].map(e=>[e.style.left,e.style.top]),filter:getComputedStyle(document.querySelector("#today-river #layer")).filter,frames:todayRiver.metrics.frames})')
+                    await page.evaluate('()=>{Date.now=riverTestNow;delete window.riverTestNow;}')
+                    assert held['at']==last['at'] and held['boats']==last['boats'] and held['filter']=='none' and held['frames']>old['metrics']['frames'],(last,held)
+                    assert held['sign']=='最后读到 '+dt.datetime.fromtimestamp(last['at']/1000,BJT).strftime('%H:%M'),held
                     if mode=='stale':
                         await page.set_viewport_size({'width':390,'height':844})
                         await page.wait_for_timeout(250)
@@ -275,13 +299,14 @@ async def main(args):
                         await page.wait_for_timeout(250)
                     assert '最后一次读到' in old['headline'] and '最后读到时刻' in old['legend'] and any('当时已跑完' in x for x in old['groups']),old
                     results.append({'device':device,'case':mode+'-old-value-boundary','snapshot':old})
-                await refresh('normal')
+                recovered=await refresh('normal')
+                assert not recovered['static'] and '旧数据' not in recovered['headline'] and recovered['signs'][0].startswith('现在 '),recovered
                 state['mode']='offline-browser'
                 await context.set_offline(True)
                 await page.evaluate('window.SiteB2.refresh()')
                 await page.wait_for_function("document.body.dataset.b2StatusPhase === 'error'",timeout=12000)
                 disconnected=await page.evaluate(SNAP)
-                assert disconnected['headline'].startswith('现在读不到电脑。') and disconnected['static']
+                assert '现在读不到电脑。' in disconnected['headline'] and not disconnected['static']
                 assert '之后的情况不知道' in disconnected['headline']
                 assert '还有' not in (disconnected['lead'] or '') and not any('到点了' in x for x in disconnected['tips'])
                 results.append({'device':device,'case':'browser-network-offline-old-value','snapshot':disconnected,'browser_offline':True,'synthetic_http_failure':False})

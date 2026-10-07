@@ -187,8 +187,8 @@ function build(snap) {
   });
 
   // 木牌和钟
-  const nowSign = sign(GATE, 11.5, `现在 <b>${hm(Date.now())}</b>`, null, 'now'), nowB = nowSign.querySelector('b');
-  acts.push(() => { nowB.textContent = hm(Date.now()); });
+  const nowSign = sign(GATE, 11.5, `${M.stale ? '最后读到' : '现在'} <b>${hm(M.stale ? M.now : Date.now())}</b>`, null, 'now'), nowB = nowSign.querySelector('b');
+  acts.push(() => { nowB.textContent = hm(M.stale ? M.now : Date.now()); });
   perch(nowSign);
   const ranToday = M.past.filter(p => p.t.ran).length;
   const signs = [nowSign, sign(13, 10.5, `${M.stale ? '当时' : '今天'}已跑完 <b>${ranToday}</b> 个`, 'past'), sign(74, 9.5, `常驻和高频 <b>${nG}</b> 个`, 'guard'),
@@ -214,13 +214,13 @@ function chirp(pitch, count) {
 }
 function perch(signEl) {
   const P = BIRD; if (!P) return; clearTimeout(birdTimer);
-  const b = mk('button', 'bird', signEl), img = mk('img', '', b), k = 2.9 / P.idle.h, asleep = M.night.n > .6 && !M.stale;      // 站着的时候大约 2.9 个字高
+  const b = mk('button', 'bird', signEl), img = mk('img', '', b), k = 2.9 / P.idle.h, asleep = M.night.n > .6;      // 站着的时候大约 2.9 个字高
   b.type = 'button'; b.setAttribute('aria-label', '小鸟，点一下会叫'); img.alt = ''; img.draggable = false;
   const pose = name => { const p = P[name]; img.src = p.src; img.style.width = p.w * k + 'em'; img.style.left = -p.fx * k + 'em'; img.style.top = -p.fy * k + 'em'; };
   const rest = () => { pose(asleep ? 'sleep' : 'idle'); b.classList.toggle('asleep', asleep); };
-  const idle = () => { birdTimer = setTimeout(() => { if (!asleep && !reduce && !still && !M.stale && !document.hidden && seen) { pose(rnd() < .5 ? 'look' : 'tilt'); setTimeout(rest, 1100 / SPEED * 2); } if (!still && !M.stale) idle(); }, (5 + rnd() * 6) * 1000 / SPEED * 2); };
-  rest(); if (!M.stale && !reduce && !still) idle();
-  b.onclick = e => { e.stopPropagation(); chirp(asleep ? .86 : 1, asleep ? 1 : 3); if (reduce || still || M.stale) return; b.classList.remove('asleep', 'hop'); void b.offsetWidth; pose(asleep ? 'idle' : 'sing'); b.classList.add('hop'); setTimeout(rest, asleep ? 1500 : 900); };
+  const idle = () => { birdTimer = setTimeout(() => { if (!asleep && !reduce && !still && !document.hidden && seen) { pose(rnd() < .5 ? 'look' : 'tilt'); setTimeout(rest, 1100 / SPEED * 2); } if (!still) idle(); }, (5 + rnd() * 6) * 1000 / SPEED * 2); };
+  rest(); if (!reduce && !still) idle();
+  b.onclick = e => { e.stopPropagation(); chirp(asleep ? .86 : 1, asleep ? 1 : 3); if (reduce || still) return; b.classList.remove('asleep', 'hop'); void b.offsetWidth; pose(asleep ? 'idle' : 'sing'); b.classList.add('hop'); setTimeout(rest, asleep ? 1500 : 900); };
   acts.push(tb => b.classList.toggle('in', tb >= I.clock[1] + 2));   // 钟走完、船停稳前后，小鸟最后落下
 }
 
@@ -230,7 +230,7 @@ function texts(ranToday, nShore) {
   const nGuardAlert = M.guards.filter(t => t.alert).length;
   const lead = nBad || nWarn ? [nBad ? `<span class="bad">有 ${nBad} 个任务出错</span>` : '', nWarn ? `<span class="warn">${nBad ? '' : '有 '}${nWarn} 个${nBad ? '' : '任务'}要留意</span>` : ''].filter(Boolean).join('、') + '，详情见下面。' : M.fog.length ? `读到结果的任务都没有出错，也没有要留意的；${M.fog.length} 个这次没读到结果。` : '没有出错的，也没有要留意的。';
   const unavailable = ({offline:'现在读不到电脑。', unreadable:'自动任务暂时读不到。', stale:'自动任务的记录没有及时更新。'})[M.snap.reason || (M.A.state === 'stale' ? 'stale' : 'unreadable')];
-  $('#headline').innerHTML = M.stale ? `<span class="warn">${unavailable}</span>下面是 ${obs} 最后一次读到的样子，之后的情况不知道。` : M.A.state === 'empty' ? '电脑上现在没有登记的自动任务。' : lead +
+  $('#headline').innerHTML = M.stale ? `<span class="warn">旧数据，之后的情况不知道。${unavailable}</span>下面是 ${obs} 最后一次读到的样子。` : M.A.state === 'empty' ? '电脑上现在没有登记的自动任务。' : lead +
     `今天定时任务已经跑完 <b>${ranToday}</b> 个，还有 <b>${M.future.length}</b> 个要跑；常驻和高频任务 <b>${M.guards.length}</b> 个，${nGuardAlert ? `其中 ${nGuardAlert} 个有问题` : '都正常'}。另有 ${nShore} 个今天没有安排或已停用${(nBad || nWarn) && M.fog.length ? `，${M.fog.length} 个这次没读到结果` : ''}。`;
   $('#when').textContent = `读到电脑的时间：${obs}（北京时间）· 一共 ${M.tasks.length} 个自动任务`;
   const al = $('#alerts'); al.textContent = '';
@@ -280,7 +280,7 @@ function nightOf(ms) {
 // ---------- 水：让画里的河真的流起来 ----------
 const VS = 'attribute vec2 a; varying vec2 vUv; void main(){ vUv = vec2(a.x*.5+.5, .5-a.y*.5); gl_Position = vec4(a,0.,1.); }';
 const FS = `precision highp float;
-varying vec2 vUv; uniform sampler2D uTex, uMask; uniform float uT, uA, uReveal, uGray, uNight, uWarm; uniform vec4 uBoat[14];
+varying vec2 vUv; uniform sampler2D uTex, uMask; uniform float uT, uA, uReveal, uNight, uWarm; uniform vec4 uBoat[14];
 float hash(vec2 p){ p = fract(p*vec2(123.34,456.21)); p += dot(p,p+45.32); return fract(p.x*p.y); }
 float noise(vec2 p){ vec2 i=floor(p), f=fract(p); f=f*f*(3.-2.*f); return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x), mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x), f.y); }
 float fbm(vec2 p){ float s=0., a=.5; for(int i=0;i<3;i++){ s+=a*noise(p); p=p*2.03+vec2(17.3,9.1); a*=.5; } return s; }
@@ -320,9 +320,8 @@ void main(){
   col = mix(col, vec3(.96, 1., .97), clamp(foam, 0., 1.) * .78 * m);
   // 天色：夜里偏蓝偏暗，日出日落偏暖；纸的留白不跟着变
   float ink = smoothstep(.985, .8, min(col.r, min(col.g, col.b)));
-  col = mix(col, col*vec3(.5,.69,.86)*.92 + vec3(0.,.012,.035), uNight*.62*ink*(1. - uGray));
+  col = mix(col, col*vec3(.5,.69,.86)*.92 + vec3(0.,.012,.035), uNight*.62*ink);
   col = mix(col, col*vec3(1.08,.95,.78), uWarm*.55*ink);
-  float gr = dot(col, vec3(.3,.59,.11)); col = mix(col, vec3(gr)*1.03 + .02, uGray*.88);
   // 四边化进白纸里；开场从浮标那里晕开
   float nz = fbm(p*4.5); vec2 ed = min(uv, 1.-uv);
   float show = smoothstep(0., .05, ed.x + (nz-.5)*.03) * smoothstep(0., .075, ed.y + (nz-.5)*.045);
@@ -347,77 +346,5 @@ async function initGL() {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); });
-    ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uGray', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
+    ['uTex', 'uMask', 'uT', 'uA', 'uReveal', 'uNight', 'uWarm', 'uBoat'].forEach(n => GL.u[n] = gl.getUniformLocation(pr, n));
     gl.uniform1i(GL.u.uTex, 0); gl.uniform1i(GL.u.uMask, 1); GL.gl = gl; GL.ok = true; stage.classList.remove('nogl');
-    canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); GL.ok = false; stage.classList.add('nogl'); });
-  } catch (err) { console.info('[今天的河] 水面动效没开起来，改用静止的画：', err.message || err); stage.classList.add('nogl'); }
-}
-const boatBuf = new Float32Array(56);
-function draw(tb) {
-  if (!GL.ok) return; const gl = GL.gl, u = GL.u;
-  const w = Math.round(stageWidth * Math.min(1.5, devicePixelRatio || 1)), h = Math.round(w / GEOM.aspect);
-  if (!w || !h) return; // 重挂载时保留上一帧，等容器恢复尺寸再画。
-  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
-  boatBuf.fill(0); wakes.filter(o => o.s > .02).sort((a, b) => b.s - a.s).slice(0, 14).forEach((o, k) => boatBuf.set([o.x / 100, o.y / 100, o.w / 100 * GEOM.aspect, o.s], k * 4));
-  gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uT, Math.min(tb, 1e6) % 4000); gl.uniform1f(u.uA, GEOM.aspect); gl.uniform1f(u.uReveal, clamp(tb / I.reveal));
-  gl.uniform1f(u.uGray, M.stale ? 1 : 0); if (M.stale) boatBuf.fill(0), gl.uniform4fv(u.uBoat, boatBuf); gl.uniform1f(u.uNight, M.night.n); gl.uniform1f(u.uWarm, M.night.w);
-  metrics.draws++; gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-}
-
-// ---------- 时间和循环 ----------
-const clock = { t0: null, skip: false, manual: null, done: false };
-let stageWidth = 0;
-const fit = () => { stageWidth = stage.clientWidth; if (stageWidth) stage.style.fontSize = stageWidth / 100 + 'px'; };
-let raf = 0, seen = true, still = false, last = 0, gaps = [], since = 0, generation = 0, glLoading = null;
-const metrics = { frames: 0, draws: 0, freezeReason: null, medianFPS: null };
-function step(tb) { if (!clock.done || clock.manual != null) acts.forEach(f => f(tb)); if (tb >= I.end && clock.manual == null) clock.done = true; draw(tb); }
-function frame(ts) {
-  raf = 0; if (!M || still || M.stale || reduce || document.hidden || !seen) return;
-  metrics.frames++;
-  if (clock.t0 == null) clock.t0 = ts - (clock.skip ? I.end / SPEED * 1000 : 0);          // 第一次真的画出来才开始算时间，后台打开的页面不会把开场白白放掉
-  step(clock.manual != null ? clock.manual : (ts - clock.t0) / 1000 * SPEED);
-  // 防卡死的保险：页面看得见、动画在播、连着大约 5 秒帧率的中位数低于 10 帧，才退回静止；只管这一次这一页
-  if (last) { const gap = ts - last; since += gap; if (since > 2000) { gaps.push(gap); let sum = 0; for (const g of gaps) sum += g; while (sum > 5000 && gaps.length > 1) sum -= gaps.shift();
-    if (sum >= 4800 && gaps.length >= 5) { const s = [...gaps].sort((a, b) => a - b), fps = 1000 / s[s.length >> 1]; metrics.medianFPS = fps; if (fps < 10) { freeze(`连着 5 秒帧率中位数只有 ${fps.toFixed(1)} 帧，低于 10 帧`); return; } } } }
-  last = ts; raf = requestAnimationFrame(frame);
-}
-function freeze(why) { still = true; metrics.freezeReason = why; clearTimeout(birdTimer); stage.classList.add('still'); acts.forEach(f => f(1e9)); draw(1e9); console.info('[今天的河] 这一次改成静止画面：' + why); }
-const wake = () => { last = 0; since = 0; gaps = []; metrics.medianFPS = null; if (M && seen && !document.hidden && !raf && !still && !reduce && !M.stale) raf = requestAnimationFrame(frame); };
-document.addEventListener('visibilitychange', wake);
-setInterval(()=>{const label=$('.now b');if(label&&!document.hidden)label.textContent=hm(Date.now());},1000);
-new IntersectionObserver(es => { seen = es[0].isIntersecting; stage.classList.toggle('out-of-view', !seen); if (seen) wake(); }).observe(stage);
-addEventListener('scroll', () => { last = 0; since = 0; gaps = []; }, true);
-const redraw = () => {
-  if (!M || !stage.clientWidth) return;
-  fit();
-  draw(reduce || still || M.stale ? 1e9 : clock.manual ?? (clock.t0 == null ? 0 : (performance.now() - clock.t0) / 1000 * SPEED));
-};
-addEventListener('resize', redraw);
-new ResizeObserver(redraw).observe(stage);
-
-async function start(snap, intro = true) {
-  const turn = ++generation;
-  cancelAnimationFrame(raf); raf = 0; clearTimeout(birdTimer);
-  if (!snap?.automation || !Number.isFinite(parse(snap.automation.observed_at) || parse(snap.captured_at))) return;
-  const firstDisplay = $('#scroller').hidden;
-  $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
-  $('#pick').hidden = true; tip.style.opacity = 0;
-  fit(); build(snap);
-  if (!glLoading) { stage.classList.add('nogl'); glLoading = initGL().then(redraw); }
-  if (turn !== generation) return;
-  const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
-  stage.classList.toggle('still', still || M.stale || reduce);
-  if (reduce || still || M.stale) { acts.forEach(f => f(1e9)); draw(1e9); return; }      // 读不到电脑时河停住，不放开场
-  clock.done = false; clock.manual = null; clock.t0 = null; clock.skip = !intro; wake();
-}
-// 接入用：setSnapshot 换一份新读到的数据；验收用：seek(秒) 定格到开场的某一刻，resume() 接着走
-window.todayRiver = { SPEED, ready: true, setSnapshot: (s, intro = false) => {
-    if (['unknown','unavailable'].includes(s?.automation?.state) && !M) return Promise.resolve();
-    if ((!s?.automation || !Array.isArray(s.automation.items) || ['unknown','unavailable'].includes(s.automation.state)) && M) s = {...M.snap, reason:s?.reason || 'unreadable'};
-    if (!s?.automation || !Array.isArray(s.automation.items) || !Number.isFinite(parse(s.automation.observed_at) || parse(s.captured_at))) return Promise.resolve();
-    return start(s, intro);
-  }, replay: () => M ? start(M.snap, true) : Promise.resolve(),
-  seek: s => { clock.manual = s * SPEED; clock.done = false; step(clock.manual); }, resume: () => { clock.t0 = performance.now() - (clock.manual || 0) / SPEED * 1000; clock.manual = null; wake(); },
-  get model() { return M; }, get still() { return still; }, get static() { return reduce || still || !!M?.stale; }, get gl() { return GL.ok; }, get metrics() { return {...metrics}; } };
-document.dispatchEvent(new Event('today-river-ready'));
-})();
