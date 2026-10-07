@@ -7,15 +7,18 @@ import prepare_living_batch as b
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'living/tools'))
 from pack import to_screen
 
-def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None):
+def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None,pages=None):
  refs=b.read(packet/'references.json')
  engine_url=engine_url or refs['engine_url'];bird_url=bird_url or refs['bird_sprites_url']
  if Path(urlsplit(engine_url).path).name!=refs['current_engine']['engine']:raise ValueError('engine URL与批准内容版本不同')
  if not urlsplit(bird_url).path.endswith('/'+refs['current_engine']['bird']):raise ValueError('bird目录与批准内容版本不同')
  config_urls=config_urls or {};allowed={r['page'] for r in refs['mounted']}
  if not set(config_urls)<=allowed:raise ValueError('配置映射包含范围之外的页')
+ selected=allowed if pages is None else set(pages)
+ if not selected<=allowed:raise ValueError('选定页包含范围之外的页：'+', '.join(sorted(selected-allowed)))
  rows=[]
  for row in refs['mounted']:
+  if row['page'] not in selected:continue
   p=site/b.relative(row['route']);before=p.read_bytes();cfg=config_urls.get(row['page'],row['config'])
   if refs.get('illustration_bindings'):
    data=json.loads(b.DATA.search(before.decode('utf-8'))[1]);parts=data['screens'][0]['parts']
@@ -57,11 +60,12 @@ def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None
     previous_adapter=refs.get('previous_adapter'),current_adapter_url=refs.get('runtime',{}).get('adapter'),bird_sprites_url=None if refs.get('illustration_bindings') else bird_url)
   if write and after!=before:p.write_bytes(after)
   rows.append({'page':row['page'],'route':row['route'],'changed':before!=after,'before_sha256':b.sha(before),'after_sha256':b.sha(after),'body_hotspots_preserved':True})
- return {'schema':'wly.bird-fixed-selective-update.v1','status':'pass','applied':write,'pages':rows,'mounted':len(rows),'stage_unmounted':len(refs['staged']),'external_actions':[]}
+ return {'schema':'wly.bird-fixed-selective-update.v1','status':'pass','applied':write,'pages':rows,'mounted':len(rows),'deferred_pages':sorted(allowed-selected),'stage_unmounted':len(refs['staged']),'external_actions':[]}
 
 if __name__=='__main__':
  p=argparse.ArgumentParser(description=__doc__)
  for n in ('site','packet','output'):p.add_argument('--'+n,type=Path,required=True)
+ p.add_argument('--pages',nargs='*')
  p.add_argument('--engine-url');p.add_argument('--bird-url');p.add_argument('--config-url-map',type=Path);p.add_argument('--apply',action='store_true')
- a=p.parse_args();r=apply(a.site,a.packet,a.apply,a.engine_url,a.bird_url,b.read(a.config_url_map) if a.config_url_map else None);b.write(a.output,r)
+ a=p.parse_args();r=apply(a.site,a.packet,a.apply,a.engine_url,a.bird_url,b.read(a.config_url_map) if a.config_url_map else None,pages=a.pages);b.write(a.output,r)
  print(json.dumps({'status':r['status'],'changed':sum(x['changed'] for x in r['pages']),'applied':r['applied']}))

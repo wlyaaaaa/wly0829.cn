@@ -145,6 +145,8 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 if rel.endswith('/config.json'): continue
                 target=dest/rel; target.parent.mkdir(parents=True,exist_ok=True); hybrid.builder.copy_release_asset(packet_path(packet,src),target)
             args=[str(paths['native_home_script'].parent/'apply_bird_fixed_upgrade.py'),'--site',dest,'--packet',packet,'--output',proof,'--apply']
+            requested=json.loads(environment.get('WLY_RENDER_PAGES','null'))
+            if requested is not None:args+=['--pages',*sorted({row['page'] for row in refs['mounted']} & set(requested))]
         elif name == 'comic':
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
