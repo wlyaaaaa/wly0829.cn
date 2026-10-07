@@ -77,7 +77,10 @@ class OssBudgetOverlayTests(unittest.TestCase):
                 'html_ready': True, 'failed': [], 'objects': rows,
                 'method': 'anonymous full GET body SHA256 plus MP4 byte range',
                 'verified_at_beijing': '2026-10-04T11:30:00+08:00'})
-            oss.seal_remote(preparation)
+            with patch.object(oss, 'importlib') as loader, patch.object(h.builder, 'load_public_repos'), \
+                    patch.object(h, 'validate_content', return_value={'status':'pass'}):
+                loader.util.module_from_spec.return_value = h
+                oss.seal_remote(preparation)
         return preparation
 
     def materialized_check(self, preparation, report):
@@ -85,18 +88,8 @@ class OssBudgetOverlayTests(unittest.TestCase):
         (isolated/'scripts').mkdir(parents=True)
         shutil.copyfile(ROOT/'scripts/prepare-oss-release.py', isolated/'scripts/prepare-oss-release.py')
 
-        def local_body(_, relative, obj, origin, timeout, download_to):
-            body = (preparation/'oss'/relative).read_bytes()
-            self.assertEqual(hashlib.sha256(body).hexdigest(), obj['sha256'])
-            self.assertEqual(len(body), obj['bytes'])
-            download_to.parent.mkdir(parents=True, exist_ok=True)
-            download_to.write_bytes(body)
-            return {'status': 'pass', 'bytes': len(body), 'sha256': obj['sha256']}
-
-        # Only transport is stubbed. The real materialization and full scanner run.
-        with patch.object(h, 'ROOT', isolated), patch.object(h, 'oss_module', return_value=oss), \
-                patch.object(oss, 'verify_object_with_retries', side_effect=local_body):
-            return h.validate_content(preparation/'github', report)
+        with patch.object(h, 'ROOT', isolated):
+            return h.validate_content(preparation/'github', report, local_assets=preparation/'oss')
 
     def test_large_source_uses_small_verified_github_budget(self):
         preparation = self.preparation()
