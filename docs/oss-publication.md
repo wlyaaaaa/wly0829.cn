@@ -85,6 +85,8 @@ CI 逐对象 HEAD，核对实际大小、封口 GET 响应里的 `x-oss-hash-crc
 
 全通过后上传入口自动调用 `seal-remote`：回执须绑定当前准备计划，再写入发布清单的 `oss.verification`。封口还在本机对完整包运行原公开内容门，包含全部 JS、每种扩展的凭据检查、仓库引用和资源闭包；结果与公开仓库清单绑定到发布身份，写入 `oss.content_verification`，失败不产生通过结果。GitHub 清单的发布身份同时绑定源版本、选定 origin、版本前缀、GitHub 文件及完整 OSS 对象指纹；历史 `baseline_files` 只作来源证据。旧清单没有本机内容门回执时，必须先用完整本地包补做扫描，不能把 HEAD 当成内容扫描。`hybrid-release.py` 校验当前 GitHub 文件、全部路由及已绑定的 OSS 证明，原未迁移发布仍走既有分支。
 
+接入新管线前，当前版本和需要保留的 OSS 回滚版本都先补齐本机内容门。按旧计划的 `source_root`、origin、prefix 和 `rewriter_version`，用全新输出目录调用 `prepare(..., previous_manifest=旧清单)`；版本 2–5 可用上面的 prepare 命令，历史版本 1 用同一个 Python 函数重放。确认新旧 `release_id` 相同、全部对象均在 `retained_objects` 后，才运行 `verify-remote` 和 `seal-remote`。这时没有新对象、无需上传或完整 GET，只在本机扫描完整包并补入内容结果；新的 `github/` 可与管线一起提交。若身份或复用集合不符，先停下核对旧版本和输入。这个补齐步骤不改变旧 HTML、媒体或对象地址，已用合成旧版本验证。
+
 CI 继续扫描所有源码和 HTML；OSS 正文内容检查复用上述同版完整本机扫描结果，不下载正文或制造 JS 占位。新增本机扫描后，第二道 `verify-public-content.mjs` 也复用同一结果，避免第一道已通过后又整包重下；源码与 GitHub 文件的原检查保留。
 
 `verify-oss-browser-network.py` 默认让所有路由共用同一个独立 Chrome 缓存；Chrome 已明确命中缓存且同一对象此前取得正文 SHA 时复用该证据，真实新响应和媒体 Range 仍核对正文。候选 HTML 使用 CDP 只拦导航文档，避免 Playwright 路由拦截关闭资源缓存；OSS 和状态服务仍走真实网络。脚本不在 CDP 已取得正文后另做原生完整 GET。`--retry-failed <原回执>` 校验原回执与本版清单绑定，只访问失败或缺失路由，保留通过路由的完整证据并输出完整路由清单；`--cold-cache` 单独保留逐页冷缓存全量检查，不在常规发布使用。下载量记录在浏览器回执 `oss_download_bytes`，仅计本次新跑路由的 OSS 网络响应。
