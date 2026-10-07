@@ -483,7 +483,7 @@ function cpSafeHref(value){if(typeof value!=='string')return null;try{const url=
 function cpOpenDetails(anchor){if(!cockpitUI)return;cockpitUI.details.open=true;render();const node=document.getElementById(anchor);node?.scrollIntoView({behavior:'smooth',block:'start'});}
 function cpPanel(open){
  if(!cockpitUI)return;const {panel,shade,root,details,manage}=cockpitUI;
- panel.hidden=shade.hidden=!open;root.inert=details.inert=open;
+ panel.hidden=shade.hidden=!open;root.inert=details.inert=cockpitUI.bar.inert=open;
  if(open){cockpitUI.previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';panel.querySelector('[data-cp-purpose]')?.focus({preventScroll:true});}
  else{document.body.style.overflow=cockpitUI.previousOverflow||'';manage.focus({preventScroll:true});}
 }
@@ -492,13 +492,13 @@ function mountCockpit(){
  const paper=document.querySelector('main .paper')||document.querySelector('main');if(!paper)return;
  const original=[...paper.children],root=cpNode('div','cp-cockpit'),bar=cpNode('header','cp-bar');
  const lamp=cpNode('span','cp-lamp'),headline=cpNode('strong','cp-headline','正在读取'),stamp=cpNode('time','cp-stamp');
- lamp.setAttribute('role','img');const refresh=cpButton('↻','refresh');refresh.classList.add('cp-refresh');refresh.setAttribute('aria-label','刷新驾驶舱');bar.append(lamp,headline,stamp,refresh);root.append(bar);
+ lamp.setAttribute('role','img');const refresh=cpButton('↻','refresh');refresh.classList.add('cp-refresh');refresh.setAttribute('aria-label','刷新驾驶舱');bar.append(lamp,headline,stamp,refresh);root.append(cpNode('div','cp-bar-space'));document.body.append(bar);document.documentElement.style.setProperty('--cp-toc-offset',(document.querySelector('.toc')?.getBoundingClientRect().height||0)+'px');
  const grid=cpNode('div','cp-grid'),conclusion=cpSection('cp-conclusion','驾驶舱','cockpit-01'),authority=cpSection('cp-security','安全和授权','cockpit-07');
  conclusion.node.classList.add('cp-conclusion');authority.node.classList.add('cp-security');
  const need=cpNode('div','cp-need'),know=cpNode('div','cp-know'),following=cpNode('details','cp-following'),followingLabel=cpNode('summary',null,'AI 在跟：读取中');following.append(followingLabel);conclusion.body.append(need,know,following);
  const grants=cpNode('div','cp-authority-items'),manage=cpButton('办理');manage.onclick=()=>cpPanel(true);authority.body.append(grants,manage);
  const computer=cpSection('cp-computer','电脑','cockpit-02'),remote=cpSection('cp-remote','远程和网络','cockpit-03'),cloud=cpSection('cp-cloud','备份和云端','cockpit-06'),today=cpSection('cp-today','今天的动态','cockpit-09');today.node.classList.add('cp-today');
- const events=cpNode('div','cp-events'),changes=cpNode('div','cp-changes');today.body.append(events,changes);if(todayRiverHost)today.body.prepend(todayRiverHost);
+ const events=cpNode('div','cp-events'),basis=cpNode('p','cp-line cp-basis'),changes=cpNode('div','cp-changes');today.body.append(events,basis,changes);if(todayRiverHost)today.body.prepend(todayRiverHost);
  grid.append(conclusion.node,authority.node,computer.node,remote.node,cloud.node,today.node);root.append(grid);
  const jump=cpNode('nav','cp-jump');jump.setAttribute('aria-label','驾驶舱区块');for(const [id,text]of [['cp-computer','电脑'],['cp-remote','远程'],['cp-cloud','备份云端'],['cp-today','今天'],['cp-details','明细']]){const link=cpNode('a','cp-button',text);link.href='#'+id;if(id==='cp-details')link.onclick=()=>{details.open=true;};jump.append(link);}root.append(jump);
  const details=cpNode('details','cp-details');details.id='cp-details';details.append(cpNode('summary',null,'明细 · 自动任务、硬件、副本、24 小时曲线、这块怎么看'));
@@ -516,7 +516,7 @@ function mountCockpit(){
  form.append(cpNode('p','cp-form-note','个人资料与全局授权分别计时。已有授权加时，刷新保持原期限；验证码只提交给电脑。'));
  const reductions=cpNode('div','cp-reductions');for(const [text,key]of [['锁定资料','lock-personal-data'],['结束授权','lock-unrestricted'],['Windows 锁屏','lock-windows'],['操作结果','results']])reductions.append(cpButton(text,key));form.append(reductions);panel.append(form);document.body.append(shade,panel);
  panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();cpPanel(false);}if(event.key==='Tab'){const controls=[...panel.querySelectorAll('button,input,a')].filter(node=>!node.disabled&&!node.hidden),first=controls[0],last=controls.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}});
- cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,know,followingLabel,grants,manage,computer,remote,cloud,today,events,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
+ cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,know,followingLabel,grants,manage,computer,remote,cloud,today,events,basis,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
  document.body.classList.add('cockpit-rearranged');
  const riverHelp=()=>{const legend=todayRiverHost?.querySelector('#legend');if(legend&&!legend.closest('details')){const help=cpNode('details','cp-river-help');help.append(cpNode('summary',null,'这块怎么看'));legend.before(help);help.append(legend);}};riverHelp();document.addEventListener('today-river-ready',riverHelp);
  for(const [id,section]of [['pc',computer],['remote',remote],['backups',cloud],['security',authority],['today',today]]){const old=document.getElementById(id);if(old&&archive.contains(old))old.id='cp-original-'+id;const anchor=cpNode('span','cp-anchor');anchor.id=id;section.node.prepend(anchor);}
@@ -524,13 +524,13 @@ function mountCockpit(){
 }
 function cpDisplay(card,fallback){
  const display=card?.display;if(display?.state==='hidden')return null;
- const text=display?.text||fallback||'状态正在读取',at=timestamp(display?.observed_at);const stale=display?.state==='stale'||!!display?.text&&(!online()&&lastRead>0||Number.isFinite(at)&&clock()-at>120);
- return cpLine(text+(stale?' · 这是 '+time(timestamp(display?.observed_at)||lastRead)+' 的数':''),stale?'stale':online()?display?.state||'unknown':'unknown');
+ const text=display?.text||fallback||'状态正在读取',at=timestamp(display?.observed_at),stale=display?.state==='stale'||!!display?.text&&!online();
+ return cpLine(text+(stale?' · '+(Number.isFinite(at)&&at>0?'这是 '+time(at)+' 的数':'这是缓存，数据时间未登记'):''),stale?'stale':online()?display?.state||'unknown':'unknown');
 }
 function renderCockpit(){
- if(!cockpitUI)return;const ui=cockpitUI,cockpit=status?.cockpit,at=timestamp(cockpit?.observed_at),ready=online()&&cockpit?.schema==='pcconfig.cockpit.v1'&&Number.isFinite(at)&&at<=clock()+60&&clock()-at<=120;
- const overall=ready?cockpit.overall:{state:'unknown',summary:phase==='loading'?'正在读取电脑状态':online()?'结论正在读取':'暂时读不到电脑'};
- ui.lamp.dataset.state=overall.state==='attention'?'warn':overall.state||'unknown';ui.lamp.setAttribute('aria-label',overall.summary||'结论未知');ui.headline.textContent=overall.summary||'结论尚未读到';ui.headline.title=ui.headline.textContent;
+ if(!cockpitUI)return;const ui=cockpitUI,cockpit=status?.cockpit,ready=online()&&cockpit?.schema==='pcconfig.cockpit.v1';
+ const overall=ready?cockpit.overall:{state:'unknown',summary:phase==='loading'?'正在读取电脑状态':online()?'结论正在读取':'暂时读不到电脑'},summary=ready?cockpit.summary?.text||overall.summary:overall.summary;
+ ui.lamp.dataset.state=overall.state==='attention'?'warn':overall.state||'unknown';ui.lamp.setAttribute('aria-label',summary||'结论未知');ui.headline.textContent=summary||'结论尚未读到';ui.headline.title=ui.headline.textContent;
  ui.stamp.textContent=statusReading?'读取中':lastRead?'读于 '+time(lastRead).replace('今天 ',''):'读取中';ui.stamp.dateTime=lastRead?new Date(lastRead*1000).toISOString():'';ui.stamp.title=lastRead?beijingTime(lastRead):'尚未读到';ui.refresh.disabled=busy||statusReading||phase==='loading';ui.refresh.setAttribute('aria-busy',String(statusReading));
  const need=ready?cockpit.need_you||[]:[],know=ready?cockpit.know||[]:[];const needNodes=need.length?[cpNode('h3',null,'要你做（'+need.length+'）')]:[];
  const cards=cpNode('div','cp-action-grid');cards.dataset.count=String(need.length);
@@ -544,10 +544,11 @@ function renderCockpit(){
  const labels=[['个人资料',compactGrant('personal_data'),grantState(status?.personal_data),'personal_data'],['全局授权',compactGrant('unrestricted'),grantState(status?.unrestricted),'unrestricted'],['Windows',windowsFresh()?({'locked':'已锁屏','unlocked':'未锁屏','no_session':'没人登录'})[status?.host?.screen_state]||'未知':'读不到',windowsFresh()?'ok':'unknown'],['电脑',online()?'在线':'读不到',online()?'ok':'unknown']];
  syncChildren(ui.grants,labels.map(([label,text,state,key])=>{const item=cpNode('div','cp-authority');item.dataset.state=state;item.append(cpNode('span',null,label),cpNode('strong',null,text));if(key&&authorizationFresh(status?.[key])&&remainingMinutes(status?.[key],clock())>0)item.append(cpNode('small',null,'到 '+time(status[key].expires_at_unix).replace('今天 ','')));return item;}));
  const byId=new Map((cockpit?.schema==='pcconfig.cockpit.v1'?cockpit.cards||[]:[]).map(card=>[card.id,card]));const gaps=(ready?cockpit.source_gaps||[]:[]).filter(gap=>clock()-timestamp(gap.since)>600),missing=new Set(gaps.flatMap(gap=>gap.card_ids||[]));
- for(const [section,ids,fallbacks]of [[ui.computer,['computer_health','disk_space','traffic'],['电脑读数正在读取','磁盘剩余正在读取','今天按程序的流量正在读取']],[ui.remote,['remote'],['远程状态正在读取']],[ui.cloud,['backups','drive_upload','aliyun_billing'],['备份状态正在读取','Drive 上传状态正在读取','阿里云余额尚未读到']]]){
+ for(const [section,ids,fallbacks]of [[ui.computer,['computer_health','disk_space','traffic'],['电脑读数正在读取','磁盘剩余正在读取','套餐流量尚未读到']],[ui.remote,['remote'],['远程状态正在读取']],[ui.cloud,['backups','drive_upload','aliyun_billing'],['备份状态正在读取','Drive 上传状态正在读取','阿里云余额尚未读到']]]){
   const nodes=[];for(let i=0;i<ids.length;i++){if(missing.has(ids[i]))continue;const row=cpDisplay(byId.get(ids[i]),fallbacks[i]);if(row)nodes.push(row);}for(const gap of gaps)if((gap.card_ids||[]).some(id=>ids.includes(id))&&!know.some(item=>item.source_id===gap.source_id))nodes.push(cpLine((gap.title||'来源')+'从 '+time(timestamp(gap.since))+' 起读不到，AI 在跟','unknown'));syncChildren(section.body,nodes);
  }
  const todayEvents=ready?cockpit.today_events:undefined;syncChildren(ui.events,Array.isArray(todayEvents)?todayEvents.length?todayEvents.map(item=>cpLine(item.title||'事件内容尚未读到','ok')):[cpLine('今天还没有新事件','ok')]:[cpLine('今天的事件正在读取')]);
+ const corrections=ready?cockpit.owner_corrections:null;ui.basis.textContent='基座 · '+(corrections?.text||'今天纠正：未统计；近7天：未统计');ui.basis.dataset.state=corrections?.status==='pass'?'ok':'unknown';
  const changeNodes=[cpNode('h3',null,'今天代码变化')],change=cpDisplay(byId.get('today_changes'),'今天代码变化尚未读到');if(change)changeNodes.push(change);
  changeNodes.push(cpNode('h3',null,'今天上线'),cpLine('尚未读到发布记录'));syncChildren(ui.changes,changeNodes);
  if(document.activeElement!==ui.duration)ui.duration.value=hours;if(document.activeElement!==ui.factor)ui.factor.value=code;ui.defaultInput.checked=saveDefault;ui.selection.disabled=busy||!!grant&&grantResultNeedsQuery(grant);ui.duration.disabled=ui.selection.disabled;ui.defaultInput.disabled=ui.selection.disabled;

@@ -3,7 +3,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
-import re
+import re, hashlib, mimetypes
 import time
 import unittest
 from urllib.parse import urlsplit
@@ -24,7 +24,7 @@ def fixture():
     tasks = [{'id': 'test-task', 'project': '测试项目', 'enabled': True, 'state': 'success', 'mine': True, 'runs_today': True,
         'last_run_at': stamp, 'next_run_at': stamp, 'plain': {'name': '测试任务', 'what': '测试工作', 'stop': '测试停止入口', 'impact': '测试停止影响'}}]
     ids = ['computer_health', 'disk_space', 'traffic', 'remote', 'backups', 'drive_upload', 'aliyun_billing', 'today_changes']
-    texts = ['电脑正常：不热不忙', '最紧的 C 盘还剩 15.5%', '今天流量 8 GB，最多：测试程序', '人不在也连得上', '备份都在期限内', '没在传，上次传完照片视频', '余额尚未读到', '今天 2 个项目有代码变化']
+    texts = ['电脑正常：不热不忙', '最紧的 C 盘还剩 15.5%', '套餐已用 20 / 100 GB，剩余 80 GB，10月31日重置，预计20天', '人不在也连得上', '备份都在期限内', '没在传，上次传完照片视频', '余额尚未读到', '今天 2 个项目有代码变化']
     cards = [{'id': key, 'display': {'text': text, 'state': 'ok', 'observed_at': stamp}} for key, text in zip(ids, texts)]
     need = [{'id': str(i), 'title': f'测试要求 {i}', 'action': {'where': None, 'href': None, 'due_at': None, 'due_text': '下次用时' if i == 0 else None, 'consequence': None, 'estimated_minutes': None}} for i in range(5)]
     return {'status': 'ok', 'observed_at_unix': now, 'served_at_unix': now, 'max_age_seconds': 120, 'state_version': 'fixture', 'default_minutes': 480,
@@ -33,10 +33,9 @@ def fixture():
         'grafana': {'state': 'online', 'public_dashboard_state': 'reachable', 'public_dashboard_url': 'https://grafana.wly0829.cn/public-dashboards/' + 'a' * 32, 'public_dashboard_checked_at': stamp,
             'groups': {key: {'state': 'reachable', 'checked_at': stamp, 'url': 'https://grafana.wly0829.cn/public-dashboards/' + 'a' * 32} for key in ['cpu-gpu', 'memory-network']}},
         'automation': block(tasks), 'backups': block([]), 'pending': block([]), 'projects': block([]), 'today': block([]), 'remote_network': block([]),
-        'cockpit': {'schema': 'pcconfig.cockpit.v1', 'observed_at': stamp, 'overall': {'state': 'warn', 'summary': '有 5 件事要你做'}, 'cards': cards, 'need_you': need,
+        'cockpit': {'schema': 'pcconfig.cockpit.v1', 'observed_at': stamp, 'overall': {'state': 'warn', 'summary': '有 5 件事要你做（旧字段）'}, 'summary': {'text': '有 5 件事要你做'}, 'cards': cards, 'need_you': need,
             'know': [{'id': 'gap', 'kind': 'source_gap', 'source_id': 'test-source', 'title': '测试来源超过十分钟读不到'}], 'ai_following': {'count': 2}, 'source_gaps': [],
             'today_events': [{'id': 'backup', 'title': '今天 3 项备份完成'}], 'today_changes': {'deployment_verified': False, 'evidence': 'git_commits', 'commits': 2}}}
-
 
 class CockpitPageTests(unittest.TestCase):
     def test_phone_and_desktop(self):
@@ -57,6 +56,7 @@ class CockpitPageTests(unittest.TestCase):
         state = {'value': fixture(), 'reads': 0}
         with sync_playwright() as pw:
             for width in [390, 1440]:
+                state['value'] = fixture()
                 context = pw.chromium.launch_persistent_context(str(OUT / f'profile-{width}'), executable_path=r'C:\Program Files\Google\Chrome\Application\chrome.exe', headless=True,
                     viewport={'width': width, 'height': 915 if width == 390 else 1000}, timezone_id='Asia/Shanghai')
                 def route(r):
@@ -74,6 +74,11 @@ class CockpitPageTests(unittest.TestCase):
                     if url.path == '/__test-cp.css': return r.fulfill(body=(ROOT / 'scripts/b2-live.css').read_bytes(), content_type='text/css')
                     if url.path.startswith('/__test-title/'): return r.fulfill(body=titles[Path(url.path).stem]['path'].read_bytes(), content_type='image/png')
                     if url.hostname == 'grafana.wly0829.cn': return r.fulfill(body='<html lang="zh-CN"><body>虚构曲线</body></html>', content_type='text/html')
+                    cached = OUT / 'preview-cache' / (hashlib.sha256(request.url.encode()).hexdigest() + Path(url.path).suffix)
+                    if cached.is_file():
+                        body = cached.read_bytes()
+                        if Path(url.path).name.startswith('app-'): body = update.patch_shared_runtime(body.decode('utf8')).encode('utf8')
+                        return r.fulfill(body=body, content_type=mimetypes.guess_type(url.path)[0] or 'application/octet-stream')
                     return r.continue_()
                 context.route('**/*', route)
                 page = context.pages[0]; page.on('pageerror', lambda error: errors.append(str(error)))
@@ -82,14 +87,31 @@ class CockpitPageTests(unittest.TestCase):
                 page.wait_for_function("[...document.querySelectorAll('.cp-title-crop img')].every(e=>e.complete&&e.naturalWidth>0)", timeout=90000)
                 self.assertEqual(page.locator('.cp-section .cp-title-crop img').count(), 6); self.assertEqual(page.locator('.cp-title-pending').count(), 0)
                 self.assertEqual(page.locator('.cp-action-card').count(), 5)
+                self.assertEqual(page.locator('.cp-headline').inner_text(), '有 5 件事要你做')
                 self.assertIn('下次用时', page.locator('.cp-action-card').first.inner_text()); self.assertNotIn('期限未登记', page.locator('.cp-action-card').first.inner_text())
                 self.assertEqual(page.locator('.cp-details iframe').count(), 0)
                 self.assertFalse(page.evaluate('document.documentElement.scrollWidth>innerWidth'))
                 self.assertIn('尚未读到发布记录', page.locator('.cp-changes').inner_text())
                 self.assertIn('今天 3 项备份完成', page.locator('.cp-events').inner_text())
+                self.assertIn('今天纠正：未统计；近7天：未统计', page.locator('.cp-basis').inner_text())
+                state['value']['cockpit']['owner_corrections'] = {'status': 'pass', 'total': 0, 'history': [], 'text': '今天纠正：0；近7天：未统计'}; page.evaluate('SiteB2.refresh()'); page.locator('.cp-basis').filter(has_text='今天纠正：0；').wait_for()
                 page.wait_for_function('window.todayRiver?.gl||document.querySelector("#today-river #stage")?.classList.contains("nogl")', timeout=60000)
                 page.evaluate('todayRiver.seek(12)')
                 page.screenshot(path=str(OUT / f'cockpit-{width}.png'), full_page=True)
+                traffic = next(card for card in state['value']['cockpit']['cards'] if card['id'] == 'traffic'); original_traffic = traffic['display'].copy()
+                for text, mode, age in [('套餐已用 20 / 100 GB，剩余 80 GB，10月31日重置，预计20天', 'ok', 10800), ('套餐读不到：没有提供套餐读数', 'unknown', 0), ('套餐缓存已用 20 / 100 GB，剩余 80 GB', 'stale', 90000)]:
+                    observed = __import__('datetime').datetime.fromtimestamp(time.time() - age, __import__('datetime').timezone.utc).isoformat()
+                    state['value']['automation']['items'][0]['traffic'] = {'package': {'status': 'unknown' if mode == 'unknown' else 'ok', 'used_gb': None if mode == 'unknown' else 20, 'total_gb': 100, 'remaining_gb': 80, 'updated_at_beijing': observed, 'stale': mode == 'stale'}, 'primary_metric': 'package.used_gb', 'today_gb': 3, 'srum': {'status': '已读取', 'updated_at_beijing': observed, 'today': {'upload_gb': 1, 'download_gb': 2, 'top': []}}}
+                    traffic['display'] = {'text': text, 'state': mode, 'observed_at': observed}; state['value']['cockpit']['observed_at'] = observed; page.evaluate('SiteB2.refresh()')
+                    row = page.locator('#cp-computer .cp-line').filter(has_text=text); row.wait_for(); self.assertEqual(row.get_attribute('data-state'), mode); self.assertNotIn('已用 3 GB', row.inner_text())
+                    self.assertEqual(page.locator('.cp-action-card').count(), 5); self.assertEqual(page.locator('.cp-headline').inner_text(), '有 5 件事要你做')
+                    if mode == 'stale': self.assertIn('这是 ', row.inner_text()); self.assertIn(' 的数', row.inner_text())
+                traffic['display'] = original_traffic
+                for position in ['middle', 'bottom']:
+                    page.evaluate('(p)=>scrollTo({top:p==="middle"?document.documentElement.scrollHeight*.5:document.documentElement.scrollHeight,behavior:"instant"})', position)
+                    rect = page.locator('.cp-refresh').bounding_box(); self.assertTrue(0 <= rect['y'] < 900); self.assertEqual(round(rect['width']), 44); self.assertEqual(round(rect['height']), 44)
+                    self.assertTrue(page.locator('.cp-refresh').evaluate('e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e}'))
+                    reads = state['reads']; page.locator('.cp-refresh').click(); page.wait_for_function('document.querySelector(".cp-refresh").getAttribute("aria-busy")==="false"'); self.assertGreater(state['reads'], reads)
                 page.get_by_role('button', name='办理', exact=True).scroll_into_view_if_needed(); before = page.evaluate('scrollY')
                 page.get_by_role('button', name='办理', exact=True).click()
                 panel = page.locator('.cp-panel'); page.locator('#cp-hours').fill('2.5'); page.locator('#cp-code').fill('0' * 6)
