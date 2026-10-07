@@ -796,7 +796,7 @@ export const chineseAsrModules = [
     teaser: "把每个模型的身份、版本、能力与分工集中登记；日常快慢路线保持稳定，新装更强模型也不会暗中改掉默认结果。",
     status: "Registry 登记 6 个 Profile，直接转写闭集 5 个；quick/strict 固定，Whisper Large V3 仅 fallback/comparison、当前不可直接执行",
     statusTone: "mixed",
-    value: "我按用途选路线：对电脑说话打字用 Qwen3-ASR-1.7B；先快速看录音内容用 SenseVoiceSmall；要核对重要文字用 Qwen 与 SenseVoice 两路。明确要求更强的本地对照时可选 FireRedASR2-LLM 加 Qwen，Fun-ASR 是可明确选择的另一中文路线；多人录音的分段可用 Paraformer，确认文案配时间用 Qwen3-ForcedAligner。普通录音不会因安装新模型而自动改路线或上传云端。",
+    value: "按用途选，不按哪个模型新：要快速知道录音讲了什么就先出初稿，要正式引用的地方用两路识别互相核对，已经有确认过的文稿就只把文字对上时间。普通录音不会因为装了新模型就自动换路线，也不会自动上传云端。\n\n- **对电脑说话打字**：Qwen3-ASR-1.7B\n- **快速看录音内容（初稿）**：SenseVoiceSmall\n- **核对重要文字**：Qwen 与 SenseVoice 两路\n- **明确要求更强的本地对照**：FireRedASR2-LLM 加 Qwen\n- **另一条可明确选择的中文路线**：Fun-ASR\n- **多人录音分段**：Paraformer\n- **已有文案配时间**：Qwen3-ForcedAligner",
     why: "不同用途需要不同速度和复核强度；装了新模型不等于它该接管日常任务。固定当前默认和实际执行身份，才能知道这次结果是怎样来的。",
     example: "“先快速知道这段语音讲什么；需要正式引用的部分再严谨核对。”第一轮用 SenseVoiceSmall 出初稿；复核时用 Qwen3-ASR-1.7B 主识别、SenseVoice 对照，把分歧连到原音。若我只要给确认过的旁白标词语秒数，则改用对齐入口，不重新识别文案。",
     result: "每次交回实际使用的模型、初稿或双路文字、需要回听的差异与时间位置；对齐任务另给逐词秒数。Whisper Large V3 目前只有登记，不能直接执行，也不是失败后的自动备选；云端专业识别须另行明确选择并满足本次上传条件。",
@@ -899,7 +899,7 @@ export const chineseAsrModules = [
     statusTone: "mixed",
     value: "升级或换机前，我能分清缺的是 Python 依赖、固定权重还是 FireRed 的 WSL。想换默认模型时，先用相同参考语料比较错误与复核代价，再明确切换并留回退点；不会因为下载完成、目录存在或公开分数更高，就偷偷换掉日常路线。",
     why: "源码、运行依赖与模型文件是三种东西；只保留其中一份，换机或断网时可能到最后才发现根本跑不起来。先查缺的层，再恢复。",
-    example: "比如我问“新电脑暂时没网，怎样把 ChineseASR 恢复到能跑严格转写？”系统会先核对预存的依赖锁、离线轮包与校验清单，重建 Windows 虚拟环境；再单独确认 Qwen 模型缓存与回执。若还需要 FireRed，就继续检查 WSL 中的源码、运行时、模型回执和存储容量。最后必须跑默认 strict 冒烟；重要证据路线还要另跑 FireRed + Qwen 冒烟并人工核听。",
+    example: "比如我问：“新电脑暂时没网，怎样把中文转写恢复到能严格转写？”系统先分清缺的是哪一层：运行环境、固定的识别模型，还是重要材料才用的 FireRed 那一套，再用事先存好的材料一层层补回。最后不看“装好了”的提示，而是真的转写一小段音频，确认模型真能跑；重要材料还要分别确认两路识别都能运行，并由人核听结果。事先没存好的离线材料，会直接报出缺什么，不会说成已经能断网恢复。",
     result: "交回这台机器哪些识别路线真的能运行、缺哪些依赖或模型文件、恢复后是否通过小段真实声音检查。想换默认模型时还会交回同材料比较与可回退的配置决定；只下载完成不能算可用。",
     readerStates: {
       "pass": "运行依赖、对应模型文件和一次实际试跑都通过后，才把这条路线标为可用；重要录音的质量仍需单独回听。",
@@ -940,7 +940,7 @@ export const chineseAsrModules = [
       "运行 build-wheelhouse.ps1 下载全部 wheel，生成 checksum 与 JSON manifest；verify-wheelhouse.ps1 立即做一次独立校验。",
       "把 wheelhouse、manifests、项目源码和模型/FireRed 工件作为不同恢复对象保存；Git 仓库只保存源码、脚本和小型 manifest，不保存大文件。",
       "断网时先验证 checksum，再由 install-offline.ps1 创建新的 venv、无索引安装、安装本地源码并运行 pip check/Doctor；正常验收不使用 SkipVerify。",
-      "恢复 Qwen 时核对固定 revision、13 项必要文件和回执；恢复 FireRed 时再核对 14 项权重、固定源码 commit、干净工作树、WSL Python/CUDA 与内存门槛。",
+      "恢复 Qwen 时核对固定 revision、13 项必要文件和回执；恢复 FireRed 时再核对 14 项权重、固定源码 commit、干净工作树、WSL Python/CUDA 与内存门槛，并核对 WSL 的存储容量。",
       "同一 adapter 替换模型时先更新 Registry 与身份合同，再下载工件；新增不同 runtime 时新增 adapter，不在旧 profile 下伪装。",
       "最后运行默认 strict 与 smoke-asr-smart；FireRed + Qwen 还运行 smoke-evidence-asr 并核对每段 verified、非空 raw、dtype、无 engine_failure，关键语句人工回听。"
     ],
