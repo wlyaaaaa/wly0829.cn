@@ -1418,7 +1418,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -1459,7 +1459,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -1490,7 +1490,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1530,7 +1530,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1564,7 +1564,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1600,7 +1600,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1632,7 +1632,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1670,7 +1670,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1704,11 +1704,11 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
-        "text_ref": "改了MCP之后的验收：改了MCP服务的源码后，正在运行的Claude桌面会话仍用会话开始时启动的旧MCP进程。要验收“新会话里的MCP”，用",
+        "text_ref": "要在新会话里验收的",
         "whole_block": true,
         "columns": 1
       }
@@ -1733,11 +1733,11 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
-        "text_ref": "改了MCP之后的验收：改了MCP服务的源码后，正在运行的Claude桌面会话仍用会话开始时启动的旧MCP进程。要验收“新会话里的MCP”，用",
+        "text_ref": "要在新会话里验收的",
         "whole_block": true,
         "columns": 1
       }
@@ -1762,7 +1762,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1801,7 +1801,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1834,7 +1834,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1874,7 +1874,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",

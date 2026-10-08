@@ -583,7 +583,7 @@
     "dropped": [
       "旧网站的运行证据细节不上：两个健康页的具体 HTTP 状态和时刻、GitHub Actions 编号、证据分层表、各脚本退出码、超时毫秒数、Schema 的 18 个属性等——项目已冻结，读者用不上。",
       "接口的具体路径（/api/v1/...）、ChatLab Pull、sync 游标字段名不上：行话，冻结页用不上；只在 facts.md 留底。",
-      "README 和 project_manifest.json 里列的下游私人项目名（按本人决定不上网站的 PersonalOS 等）不写；7 月 28 日那条演进只写“已导出的微信文件怎么交接”。",
+      "sha256:be024c6a0ccb97a5dc666950b46b3b25571f17a0a25158a4f62cc12116972ee8",
       "WeFlow 数据接口要本地凭据（token）这件事没写：读者用不上；页面和底稿都没有写任何凭据的值。"
     ],
     "unsure": [

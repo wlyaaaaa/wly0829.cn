@@ -331,7 +331,8 @@
      if(er.left<r.left-1||er.top<r.top-1||er.right>r.right+1||er.bottom>r.bottom+1)issues.push(p.image+':hotspot outside image '+h.id);
      if(h.invalid)issues.push(p.image+':unbound target '+(h.href||h.target));
      if(h.kind==='link'||h.kind==='button'){
-      if(h.action){if(el.dataset.b2Action!==h.action)issues.push(p.image+':native button target');}
+      if(h.reference_only){if(h.href!==null||typeof h.original_href!=='string'||el.tagName!=='SPAN'||el.hasAttribute('href')||el.tabIndex!==0||!el.title.includes(h.original_href)||el.getAttribute('aria-label')!==el.title)issues.push(p.image+':reference-only support document');}
+      else if(h.action){if(el.dataset.b2Action!==h.action)issues.push(p.image+':native button target');}
       else if(!h.invalid){if(el.getAttribute('href')!==h.href)issues.push(p.image+':link target');targets.push(h.href);}
       hotspots++;
      }else if(h.kind==='live'){

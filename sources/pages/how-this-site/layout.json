@@ -491,7 +491,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "高峰时同时开了",
+        "text_ref": "那次建设高峰同时开了",
         "align": "left"
       },
       {
@@ -537,7 +537,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "高峰时同时开了",
+        "text_ref": "那次建设高峰同时开了",
         "align": "left"
       },
       {
@@ -951,7 +951,8 @@
         "connector": "arrow",
         "row": "incident-lead",
         "width": "30%",
-        "target_height": 350
+        "target_height": 350,
+        "panel_renderer": "image"
       },
       {
         "type": "content_card",

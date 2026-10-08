@@ -334,10 +334,18 @@ def _illustration_panels(sp, ctx):
             or any(type(v) is not int for v in r) or not (0 <= r[0] < r[2] <= width and 0 <= r[1] < r[3] <= height) for r in rects):
         ctx.incomplete("illustration.panels 需要至少一个完整有效实测矩形", "composition")
         return ""
+    mode = sp.get("panel_renderer", "svg")
+    if mode not in ("svg", "image") or mode == "image" and any(r[0] != 0 or r[2] != width for r in rects):
+        ctx.incomplete("illustration.panel_renderer:image 需要原图整宽矩形；未知模式未执行。", "composition")
+        return ""
     out = []
     for i, (x0, y0, x1, y1) in enumerate(rects):
         if i and sp.get("connector") == "arrow":
             out.append('<span class="panel-down-arrow" data-comp="arrow" aria-hidden="true"></span>')
+        if mode == "image":
+            position = 100 * y0 / (height - y1 + y0) if height != y1 - y0 else 0
+            out.append(f'<img class="illustration-panel" src="{html.escape(ctx.asset_url(path), quote=True)}" alt="" aria-hidden="true" style="width:100%;aspect-ratio:{x1-x0}/{y1-y0};object-fit:cover;object-position:50% {position}%">')
+            continue
         out.append(f'<svg class="illustration-panel" aria-hidden="true" viewBox="{x0} {y0} {x1-x0} {y1-y0}" '
                    f'style="width:100%;aspect-ratio:{x1-x0}/{y1-y0}" xmlns="http://www.w3.org/2000/svg">'
                    f'<image href="{ctx.asset_url(path)}" width="{width}" height="{height}"/></svg>')
@@ -874,7 +882,7 @@ SPEC_FIELDS = {
                        "page_break_after_item", "part_after_steps", "item_illustration_v", "human_action_items", "size", "item_layout",
                        "annotation_target", "annotation_connector", "annotation_anchors", "annotation_geometry"],
     "live_strip": ["keys", "labels", "slots", "slot_width", "frame_widths", "label_layout", "size", "columns", "empty_slots", "button_position", "frame_mode"],
-    "illustration": ["illustration", "asset", "index", "size", "align", "bleed", "target_width", "target_height", "motion_regions", "motion_asset_sha256", "panels", "panel_asset_sha256", "connector", "gallery_assets", "caption_count", "columns", "columns_v"],
+    "illustration": ["illustration", "asset", "index", "size", "align", "bleed", "target_width", "target_height", "motion_regions", "motion_asset_sha256", "panels", "panel_asset_sha256", "panel_renderer", "connector", "gallery_assets", "caption_count", "columns", "columns_v"],
     "stat_card": ["columns", "columns_v", "icons"],
 }
 

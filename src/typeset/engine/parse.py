@@ -26,15 +26,15 @@ def _strip_prefix(line):
     return CARD_PREFIX_RE.sub(card, line)
 
 
-def normalize(text, strip_prefix=True):
+def normalize(text, strip_prefix=True, preserve_codes=False):
     """定稿归一（解析和 G1 共用）：
     1. 整屏没有真换行、却写了字面 \\n 的（如 rule-capabilities-runtime-06），把字面 \\n 当换行；
-    2. 转义造成的双反斜杠按单反斜杠（13:50 裁定第 5 条）；
+    2. 设计稿双反斜杠按单反斜杠；规则原文的行内代码保持原字；
     3. 行首的设计说明前缀（大标题：/标题：/一句话：/介绍：/导语：/说明：/截图说明：/大数字卡：/数字卡片（…）：）去掉。"""
     text = text or ""
     if "\n" not in text and "\\n" in text:
         text = text.replace("\\n", "\n")
-    text = text.replace("\\\\", "\\")
+    text = re.sub(r"`[^`]+`|\\\\", lambda m: m[0] if preserve_codes and m[0].startswith("`") else m[0].replace("\\\\", "\\"), text)
     if not strip_prefix:
         return text
     return "\n".join(_strip_prefix(l) for l in text.split("\n"))
@@ -85,8 +85,8 @@ def original_markdown(screen):
 
 
 def parse(text, markdown_links=False):
-    raw_lines = normalize(text, strip_prefix=False).split("\n")  # 去前缀前的原行（text_ref 按原文写的也能定位）
-    text = normalize(text)
+    raw_lines = normalize(text, strip_prefix=False, preserve_codes=markdown_links).split("\n")  # 去前缀前的原行（text_ref 按原文写的也能定位）
+    text = normalize(text, preserve_codes=markdown_links)
     lines = text.split("\n")
     nodes, i = [], 0
     while i < len(lines):
@@ -205,7 +205,7 @@ def canon(s):
 def expected_text(text, markdown_links=False):
     out = []
     in_code = False
-    for line in normalize(text).split("\n"):
+    for line in normalize(text, preserve_codes=markdown_links).split("\n"):
         s = line.strip()
         is_sep = sep_row(s)
         if s.startswith("```"):

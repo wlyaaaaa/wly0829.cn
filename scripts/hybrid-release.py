@@ -324,7 +324,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     # Old release-manifest is replaced by this generation; old content remains exact.
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
     paths = {'CNAME':str(output/'CNAME')} if defer and not (baseline/'CNAME').exists() else {}
-    navigation_pages = nav_repair.page_inventory(baseline)
+    navigation_pages = nav_repair.page_inventory(baseline,exclude=accepted_files)
     for rel in sorted(accepted_files):
         navigation_pages[rel] = nav_repair.PageFacts(source_path(candidate,rel).read_text('utf-8-sig'),candidate)
     while pending:
@@ -540,8 +540,11 @@ def oss_module():
 
 
 def checker_version():
-    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py',
-             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json']
+    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py', 'scripts/prepare-rules-pin.py',
+             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json',
+             'scripts/private_rule_policy.py']
+    policy = '.publish/private/rule-public-policy.json'
+    if (builder.ROOT/policy).is_file(): paths.append(policy)
     return hashlib.sha256(json.dumps({p: (builder.ROOT/p).read_text('utf-8-sig') for p in paths}, sort_keys=True).encode()).hexdigest()
 
 

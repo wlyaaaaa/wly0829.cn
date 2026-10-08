@@ -17,7 +17,7 @@ def mapping(schema, key_kind='name'):
     return ('map', schema, key_kind)
 
 RECT = array(S)
-LINK = fields('id text href original_href rect text_rect whole button card_title card_title_rect arrow_status text_only kind slot action copy_text hot_id live_part occurrence part x y w h rect_px target invalid')
+LINK = fields('id text href original_href rect text_rect whole button card_title card_title_rect arrow_status text_only kind slot action copy_text hot_id live_part occurrence part x y w h rect_px target invalid reference_only')
 for key in ('rect','text_rect','card_title_rect','rect_px'):
     LINK[key]=RECT
 SHOT = fields('src full caption role size crop')

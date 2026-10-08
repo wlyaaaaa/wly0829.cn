@@ -19,6 +19,18 @@ HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name
 <img id="terminal" src="/fixture/terminal.svg" width="120" height="80"><div style="height:18000px"></div><img id="lazy" src="/fixture/lazy.svg" width="120" height="80" loading="lazy"></body></html>'''.encode()
 
 class SourceTests(unittest.TestCase):
+    def test_album_replay_replaces_previous_metadata_without_rewriting_data(self):
+        inject = __import__('runpy').run_path(str(ROOT/'scripts/prepare-page-flip.py'))['inject_runtime']
+        original = '<head><meta charset="utf-8"><script id="album-page">{"old":true}</script><link id="album-route-index" href="/old.json"></head><script id="page-data">{"example":"album-page"}</script>'
+        once = inject(original, '', '/album.css', '/new.json', {'route':'/current/'})[0]
+        twice = inject(once, '', '/album.css', '/newest.json', {'route':'/latest/'})[0]
+        for text in (once, twice):
+            self.assertEqual(text.count('id="album-page"'), 1)
+            self.assertEqual(text.count('id="album-route-index"'), 1)
+            self.assertIn('<script id="page-data">{"example":"album-page"}</script>', text)
+        self.assertIn('"route":"/latest/"', twice)
+        self.assertIn('href="/newest.json"', twice)
+
     def test_stylesheet_marker_preserves_handlers_and_rollback_exact_original_bytes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
@@ -39,6 +51,7 @@ class SourceTests(unittest.TestCase):
             self.assertTrue(all((restored/rel).read_bytes()==(root/rel).read_bytes() for rel in files))
 
     def test_initial_capture_is_exactly_bounded_and_preparation_rollback_preserves_source_bytes(self):
+        self.assertIn('data-resource-retry="next-2e" src="/retry.js"', __import__('runpy').run_path(str(ROOT/'scripts/prepare-page-flip.py'))['inject_runtime']('<head><script defer data-resource-retry="next-2e" src="/retry.js"></script></head>', '', '', '', {})[0])
         with tempfile.TemporaryDirectory() as temporary:
             root=Path(temporary)/'raw';fixture_source(root)
             raw=(root/'index.html').read_bytes().replace(b'<script src="/fixture/static.js" defer>',b'<script onerror="window.originalError=true" src="/fixture/static.js" defer>')

@@ -3,13 +3,16 @@ import contextlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
 
 spec=importlib.util.spec_from_file_location('publish_builder',Path(__file__).resolve().parents[1]/'scripts/build-assembled-site.py')
 builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
+POLICY_UNAVAILABLE = bool(os.environ.get('CI')) and not (Path(__file__).resolve().parents[1] / '.publish/private/rule-public-policy.json').is_file()
 
+def private_fixture(identity): return builder.load_policy()['fixture_values'][identity]
 class PublicationGate(unittest.TestCase):
     def setUp(self):
         self.root=Path(tempfile.mkdtemp(prefix='publication-test-'))
@@ -45,20 +48,23 @@ class PublicationGate(unittest.TestCase):
         (self.site/'app.js').write_text('import "./missing-runtime.js";',encoding='utf8')
         result=self.run_gate(True)
         self.assertEqual({x['reference'] for x in result['missing_references']},{'missing.avif','/404.html#absent','./missing-runtime.js'})
-    def test_technical_path_allowed_and_topic_blocked(self):
+    def test_technical_path_allowed(self):
         (self.site/'404.html').write_text('<html><code>E:\\Tools\\helper.ps1</code></html>',encoding='utf8');self.run_gate()
-        (self.site/'404.html').write_text('<html>personal-'+'romance</html>',encoding='utf8')
+    @unittest.skipIf(POLICY_UNAVAILABLE, 'private publication policy is unavailable in CI')
+    def test_excluded_topic_is_blocked(self):
+        (self.site/'404.html').write_text('<html>personal-'+private_fixture('sha256:7d169dba7fa090ebca96e3fac8a97954da07be1b11fe9c9842434c281e886189'),encoding='utf8')
         result=self.run_gate(True);self.assertEqual(result['findings'][0]['type'],'excluded_topic')
         self.assertIn('column',result['findings'][0])
     def test_relative_private_filename(self):
         (self.site/'聊天记录-示例.txt').write_text('Synthetic fixture',encoding='utf8')
         result=self.run_gate(True);self.assertTrue(any(x['type']=='private_filename' for x in result['findings']))
-    def test_model_writing_role_does_not_adopt_case_content(self):
-        (self.site/'404.html').write_text('<p>写给我看的文字：网站文案、汇报、方案、法律文书。</p>',encoding='utf8')
+    @unittest.skipIf(POLICY_UNAVAILABLE, 'private publication policy is unavailable in CI')
+    def test_writing_role_keeps_topic_boundary(self):
+        (self.site/'404.html').write_text(private_fixture('sha256:bcf7fe8e8182d78f19b210eaa8251422bfe3668862f6c2a979bf439c02858fc7'),encoding='utf8')
         self.run_gate()
-        (self.site/'404.html').write_text('<p>写给我看的文字：网站文案、汇报、方案、法律文书。</p><p>起诉具体案件。</p>',encoding='utf8')
+        (self.site/'404.html').write_text(private_fixture('sha256:a09f75ce4296d20cc67149eb376c5f0a569cb7643dee21044fde2c2e1be1d330'),encoding='utf8')
         result=self.run_gate(True)
-        self.assertTrue(any(x['type']=='excluded_topic' and x['matched']=='案件' for x in result['findings']))
+        self.assertTrue(any(x['type']=='excluded_topic' and x['matched']==private_fixture('sha256:4dc1478b13feba0dc68b323ca22be6b65fef09cd6354cad3f706710b724e7c51') for x in result['findings']))
     def test_binary_credentials_and_domain(self):
         (self.site/'image.png').write_bytes(b'\x00sk-'+b'X'*24+b'\x00')
         (self.site/'CNAME').write_text('wrong.example\n',encoding='utf8')
@@ -70,10 +76,12 @@ class PublicationGate(unittest.TestCase):
         (self.site/'CNAME').write_text('different.example\n',encoding='utf8')
         with self.assertRaises(ValueError): builder.build(self.site,self.root/'output',self.report,False)
         self.assertFalse((self.root/'output').exists())
-    def test_exact_legal_phrase_and_repo_boundaries(self):
-        (self.site/'404.html').write_text('<html>正式法律文书仍交 Claude</html>',encoding='utf8');self.run_gate()
-        (self.site/'404.html').write_text('<html>正式法律文书仍交 Claude；法律</html>',encoding='utf8')
+    @unittest.skipIf(POLICY_UNAVAILABLE, 'private publication policy is unavailable in CI')
+    def test_exact_exception_phrase(self):
+        (self.site/'404.html').write_text(private_fixture('sha256:6eb6a5db01e74d1efcb005ff29593acd2a9333a6f4eb93365f26610e81bad5b2'),encoding='utf8');self.run_gate()
+        (self.site/'404.html').write_text(private_fixture('sha256:6e3575bc7b0fdd7e34e3abd1f88a999179c7d6dca1c0971d6e7bba98a3050b9e'),encoding='utf8')
         result=self.run_gate(True);self.assertEqual(len(result['findings']),1)
+    def test_repository_boundaries(self):
         builder.PRIVATE_REPOS.add('owner/demo')
         try:
             self.assertEqual(builder.clean_repo_bindings('owner/demo-public'),'owner/demo-public')

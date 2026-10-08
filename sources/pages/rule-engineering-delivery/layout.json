@@ -819,7 +819,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版，一字不改",
+        "text_ref": "原文 · E228 版，一字不改",
         "align": "left",
         "size": "small"
       },
@@ -865,7 +865,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版，一字不改",
+        "text_ref": "原文 · E228 版，一字不改",
         "align": "left",
         "size": "small"
       },
@@ -925,7 +925,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },
@@ -934,16 +934,21 @@
         "text_ref": "验证",
         "columns": 1,
         "whole_block": true,
-        "illustration": "none",
-        "column_split_after_item": 4,
-        "body_columns": 2
+        "illustration": "none"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "仓库和过程材料",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none"
       }
     ],
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-engineering-delivery\\img\\rule-engineering-delivery-07-h.png"
     ],
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-engineering-delivery\\img\\rule-engineering-delivery-07-h.png",
-    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；续屏版本标签明确 E214，标签不属于规则正文。",
+    "notes": "横版按“验证”和“仓库和过程材料”自然章节使用两张全宽原文卡，依原顺序连续阅读；保留全部正文、链接和代码，避免旧两列长度悬殊造成大块留白。",
     "aspect": "16:9",
     "layout_requirements": {
       "source_layout": {
@@ -965,9 +970,7 @@
         "monospace"
       ]
     },
-    "pending_requirements": [
-      "原文横版必须两张长卡，切口在连续bullets内部（按原文第3/4/3/4条）；text_ref只定位节点，source_text_card未消费 body_columns/column_split_after_item。保留一整卡文字，切口构图未完成。"
-    ]
+    "pending_requirements": []
   },
   {
     "screen": "rule-engineering-delivery-07",
@@ -975,7 +978,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },
@@ -1024,7 +1027,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },
@@ -1071,7 +1074,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },
@@ -1117,7 +1120,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },
@@ -1167,7 +1170,7 @@
     "blocks": [
       {
         "type": "section_heading",
-        "text_ref": "原文·E216版·续",
+        "text_ref": "原文 · E228 版 · 续",
         "align": "left",
         "size": "small"
       },

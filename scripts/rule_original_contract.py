@@ -10,16 +10,15 @@ from html.parser import HTMLParser
 from urllib.parse import unquote
 
 from public_page_contract import omit_local_literals, local_values
+from private_rule_policy import OmissionMap, PolicyUnavailable, load_policy, private_source_root, resolve_omission
 
-CONTRACT = 'e216-original-ranges-v1'
+CONTRACT = 'e221-original-ranges-v1'
 
 
 def excerpt_contract_id(version):
-    """Use the release's actual contract while retaining exact E215 replay."""
-    if version == 'E215':
-        return 'e215-original-ranges-v1'
-    if version == 'E216':
-        return CONTRACT
+    """Use the inspected release's explicit excerpt contract."""
+    if isinstance(version, str) and re.fullmatch(r'E[1-9]\d*', version):
+        return version.lower() + '-original-ranges-v1'
     raise ValueError('Unsupported fixed source excerpt release: ' + str(version))
 HTML_VOID_TAGS = frozenset({'area', 'base', 'br', 'col', 'embed', 'hr', 'img',
                             'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'})
@@ -54,15 +53,7 @@ def source_root_opening(tag, attrs, opening):
                                          if v is not None else '') for k, v in attrs) + '>'
 
 
-OMISSIONS = {
-    'docs/contracts/agents.capabilities-runtime.md': ['、本人诉讼', '、`personal-litigation`'],
-    'docs/contracts/agents.context-sources.md': [
-        '| PersonalOS（含退役留档） | `PersonalOS-Retired` |',
-        '| 个人知识库 | `PersonalKnowledgeBase` |',
-        '| 游戏求解 | `md-triple-tactics-talent-solver` |',
-        '| 对齐数据集 | `human-alignment-dataset-001` |'],
-    'docs/contracts/agents.privacy-data.md': ['`wlyaaaaa/Key` 仓库和 '],
-}
+OMISSIONS = OmissionMap()
 
 # These boundaries come from the pre-refresh approved page ranges. A new
 # independent source chapter does not enter a range merely to satisfy a digest.
@@ -71,7 +62,7 @@ RANGES = {
                            (6, '## 子代理和项目规则不扩大授权', '## 受信任的 AI'),
                            (7, '## 受信任的 AI', None)],
     'rule-capabilities-runtime': [(11, None, '## 常用入口'),
-                                  (12, '## 常用入口', '## 云端素材通道'),
+                                  (12, '## 常用入口', '## 浏览器'),
                                   (13, '## 浏览器', '## 汇报、网站和自动运行的东西'),
                                   (14, '## 汇报、网站和自动运行的东西', '## 安装位置、配置和本机约定'),
                                   (15, '## 安装位置、配置和本机约定', None)],
@@ -126,9 +117,11 @@ def source_link_target(value):
 
 def public_markdown(raw, relative, *, apply_omissions=True):
     """Keep every source paragraph; omit only approved values and local literals."""
+    load_policy()
     text = raw.replace('\r\n', '\n').replace('\r', '\n')
     if apply_omissions:
-        for phrase in OMISSIONS.get(relative, []):
+        for item in OMISSIONS.get(relative, []):
+            phrase = resolve_omission(item)
             if text.count(phrase) != 1:
                 raise ValueError('Approved omission no longer occurs once: ' + relative)
             if phrase.startswith('|'):
@@ -137,13 +130,16 @@ def public_markdown(raw, relative, *, apply_omissions=True):
                 text = text.replace(phrase, '', 1)
     text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)',
                   lambda m: '[' + m[1] + '](' + source_link_target(m[2]) + ')', text)
-    return omit_local_literals(text, replacement='（本机路径）')
+    return text
 
 
 def marker_offset(raw, marker):
     if marker is None:
         return None
-    hits = list(re.finditer(r'^' + re.escape(marker), raw, re.M))
+    markers = [marker]
+    if marker == '- **改了 MCP 之后的验收**':
+        markers.append('- **要在新会话里验收的**')
+    hits = [hit for boundary in markers for hit in re.finditer(r'^' + re.escape(boundary), raw, re.M)]
     if len(hits) != 1:
         raise ValueError('Source excerpt boundary is not unique: ' + marker)
     return hits[0].start()
@@ -172,9 +168,18 @@ def excerpts(raw, page):
                     end = cursor + len(line)
                 cursor += len(line) + 1
             articles[int(match[2])] = raw[match.start(1):end]
-        return [(f'charter/charter-{screen:02}', '\n\n'.join(articles[i] for i in range(first, last + 1)),
-                 {'articles': [first, last], 'approved_omissions': []})
-                for screen, first, last in [(2, 1, 10), (3, 11, 17), (4, 18, 23), (5, 24, 30)]]
+        result = []
+        for screen, first, last in [(2, 1, 10), (3, 11, 17), (4, 18, 23), (5, 24, 30)]:
+            selected = '\n\n'.join(articles[i] for i in range(first, last + 1))
+            applied = [item for item in OMISSIONS.get('AGENTS.md', []) if resolve_omission(item) in selected]
+            for item in applied:
+                phrase = resolve_omission(item)
+                if selected.count(phrase) != 1:
+                    raise ValueError('Excerpt omission is ambiguous: ' + page)
+                selected = selected.replace(phrase, '', 1)
+            result.append((f'charter/charter-{screen:02}', selected,
+                           {'articles': [first, last], 'approved_omissions': applied}))
+        return result
     result = []
     relative = document_for_page(page)
     ranges = RANGES[page]
@@ -198,14 +203,15 @@ def excerpts(raw, page):
         selected = raw[a:b].strip()
         # An omission outside this selected range cannot be applied twice.
         applied = []
-        for phrase in OMISSIONS.get(relative, []):
+        for item in OMISSIONS.get(relative, []):
+            phrase = resolve_omission(item)
             if phrase not in selected:
                 continue
             if selected.count(phrase) != 1:
                 raise ValueError('Excerpt omission is ambiguous: ' + page)
             selected = (re.sub('^' + re.escape(phrase) + r'\n?', '', selected, count=1, flags=re.M)
                         if phrase.startswith('|') else selected.replace(phrase, '', 1))
-            applied.append(phrase)
+            applied.append(item)
         result.append((f'{page}/{page}-{screen:02}', selected,
                        {'from': start, 'to': end, 'approved_omissions': applied}))
     return result
@@ -230,6 +236,9 @@ def project_original_html(text, *, keep_render_dependencies=False):
             opening = self.get_starttag_text()
             opening = re.sub(r'((?:data-)?href=["\'])([^"\']*)(["\'])',
                 lambda m: m[1] + html.escape(source_link_target(html.unescape(m[2])), quote=True) + m[3], opening)
+            opening = re.sub(r'\b(?:data-)?href=(["\'])([^"\']*)\1',
+                lambda m: ('data-source-reference="' + html.escape(html.unescape(m[2]),quote=True)
+                           + '" title="此辅助文档未随规则快照发布"') if support_reference(html.unescape(m[2])) else m[0], opening)
             if not keep_render_dependencies:
                 dropped={key for key,value in attrs if key in {'src','srcset','data-src','data-lazy-src','style'} and value and local_values(value)}
                 if dropped:
@@ -240,12 +249,15 @@ def project_original_html(text, *, keep_render_dependencies=False):
         def handle_data(self, value):
             # Decode entities in this node only: <task-id> remains visible code,
             # never a synthetic HTML element or an extension of the path value.
-            self.parts.append(html.escape(omit_local_literals(value, replacement='（本机路径）'), quote=False))
+            self.parts.append(html.escape(value, quote=False))
         def handle_comment(self, value): self.parts.append('<!--' + value + '-->')
     parser = Projection(); parser.feed(text); text = ''.join(parser.parts)
-    if not keep_render_dependencies and local_values(text):
-        raise ValueError('Local literal survived rule public projection')
     return text
+
+
+def support_reference(href):
+    return (not re.match(r'^(?:/|#|[a-z][a-z0-9+.-]*:)',href,re.I)
+            and Path(href.partition('#')[0]).suffix in {'.md','.json','.ps1'})
 
 
 def source_heading_aliases(raw):
@@ -265,6 +277,14 @@ def charter_heading_aliases(raw, first, last):
         next_article=re.search(r'^- \*\*L(\d+)\b',charter[heading.end():],re.M)
         if next_article and first<=int(next_article[1])<=last:selected.append(heading[0])
     return source_heading_aliases('\n'.join(selected))
+
+
+def assert_rule_page_version(page, pin, release):
+    version = release['release_id']
+    labels = [value for item in page.get('registry', {}).get('numbers', []) if item.get('id') == 'n-release'
+              for value in re.findall(r'(?<![A-Za-z0-9])E[1-9]\d*(?!\d)', item.get('text', ''))]
+    if pin.get('version') != version or page.get('based_on', {}).get('release') != version or labels != [version]:
+        raise ValueError('Rule page label, original source and inspected release versions differ')
 
 
 def load_pin(root):

@@ -13,6 +13,7 @@ import rule_original_contract as contract
 
 
 def generate(release_root, record_sha256, verified_release_id):
+    contract.load_policy()
     release_root = Path(release_root).resolve()
     record_path = release_root / 'release.json'
     if contract.sha_bytes(record_path.read_bytes()) != record_sha256:

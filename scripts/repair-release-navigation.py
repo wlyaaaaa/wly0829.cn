@@ -68,7 +68,7 @@ def normalize_path(path):
 
 
 class PageFacts(HTMLParser):
-    def __init__(self, text, site_root=None):
+    def __init__(self, text, site_root=None, rule_pin=None):
         super().__init__(convert_charrefs=True)
         self.ids = set()
         self.title = ''
@@ -78,7 +78,7 @@ class PageFacts(HTMLParser):
         self.transcripts = {}
         self.headings = []
         self.stack = []
-        self.rule_workbench_metadata=rule_contract.parse_workbench_metadata(text,site_root=site_root)
+        self.rule_workbench_metadata=rule_contract.parse_workbench_metadata(text,pin=rule_pin,site_root=site_root)
         self.feed(text)
         self.title = re.sub(r'[\t\n\f\r ]+', ' ', self.title).strip(' \t\n\f\r')
         match = PAGE_DATA.search(text)
@@ -114,8 +114,8 @@ class PageFacts(HTMLParser):
                 break
 
 
-def page_inventory(root):
-    return {p.relative_to(root).as_posix(): PageFacts(p.read_text('utf-8-sig'),root) for p in root.rglob('*.html')}
+def page_inventory(root, rule_pin=None, exclude=()):
+    return {p.relative_to(root).as_posix(): PageFacts(p.read_text('utf-8-sig'),root,rule_pin) for p in root.rglob('*.html') if p.relative_to(root).as_posix() not in exclude}
 
 
 def local_url(ref):

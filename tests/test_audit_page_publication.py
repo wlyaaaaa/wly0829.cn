@@ -26,6 +26,13 @@ class PublicProjection(unittest.TestCase):
     def test_authored_path_request_survives_projection(self):
         title=r'比如我问“E:\GitHub总索引这个目录最后会推到哪里？”'
         self.assertEqual(public_page_data({'title':title}),{'title':title})
+    def test_public_field_retains_authored_path(self):
+        data={'title':r'E:\Cache\build'}
+        self.assertEqual(public_page_data(data),data)
+    def test_rule_prose_and_ordinary_fields_retain_authored_paths(self):
+        original=r'<p>入口是 E:\.agents\tools\Invoke-EAgentRulesRelease.ps1。</p>'
+        data={'screens':[{'source_meta':{'original_html':original}}],'title':r'E:\Cache\build'}
+        self.assertEqual(public_page_data(data),data)
     def test_coordinates_labels_actions_and_resources_survive(self):
         data={'title':'项目','screens':[{'id':'a','parts':[{'src':'/a.webp','size':[1440,915],
               'links':[{'href':'/rules/','text':'规则','rect':[.1,.2,.3,.4]}],

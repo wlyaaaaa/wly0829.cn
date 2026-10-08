@@ -1,9 +1,9 @@
 {
   "schema": "wly.nav-unify-assets.v1",
   "standard": "2026-09-30 built-in imagegen heavy bold green sans-serif original header labels",
-  "expected_labels": 75,
-  "available_labels": 75,
-  "new": 44,
+  "expected_labels": 79,
+  "available_labels": 79,
+  "new": 48,
   "reused": 31,
   "missing": [],
   "items": [
@@ -4217,15 +4217,167 @@
         188,
         7605
       ]
+    },
+    {
+      "index": 76,
+      "text": "怎样对我说话、怎样理解我的需求（L1–L10）",
+      "kind": "new",
+      "png": "images/nav-unify-label-76-67510b576b.png",
+      "webp": "images/nav-unify-label-76-67510b576b.webp",
+      "size": [
+        2172,
+        724
+      ],
+      "ink_box_alpha16": [
+        30,
+        298,
+        2137,
+        419
+      ],
+      "png_sha256": "9b9c703deac8cd15e2a021dd2ac5d6fe72b4cdd3d451eba1f0bb0c8c1302ed0d",
+      "webp_sha256": "a20672cb65903fd8dc593f415f6f10c4650593aafe23da5d014b5194b08be87b",
+      "rgba_sha256": "56da1ee5c36de93b46f7c7bae361a8b66fb26ff981aea3d5b0f1b3b046570f8f",
+      "origin": {
+        "method": "built-in-imagegen",
+        "source": "E:\\Data\\AppData\\Codex\\generated_images\\01a11518-c21b-7fb0-b539-7971e183968b\\exec-ff12a6e6-41f4-456f-803e-9c79e361a184.png",
+        "source_sha256": "9b9c703deac8cd15e2a021dd2ac5d6fe72b4cdd3d451eba1f0bb0c8c1302ed0d",
+        "prompt": "Use case: productivity-visual. Asset type: one Chinese navigation text bitmap for an existing website. Render ONLY this exact text verbatim: 「怎样对我说话、怎样理解我的需求（L1–L10）」. Match the established style: very heavy bold green Chinese sans-serif letters, like a clean thick black-weight Noto Sans Chinese / Helvetica wordmark; the Latin L and digits are the same heavy sans-serif weight. Solid very dark forest-green ink close to #005d35. Crisp smooth anti-aliased edges. Flat typography only, no shadow, glow, bevel, border, illustration, icons, watermark, decoration, or gradients. Genuinely transparent RGBA background, no checkerboard drawn into it. Keep the entire sentence on ONE horizontal line, fully visible with generous transparent margins and no letters cut off. Long wide composition. Preserve every Chinese character, Chinese punctuation 、，full-width parentheses （）, uppercase L, digits and en dash – exactly. The output will be cropped only by its transparent outer margins; make the letterforms readable at small navigation size. Do not invent or omit any words."
+      },
+      "atlas_ink_box": [
+        38,
+        7919,
+        2145,
+        8040
+      ],
+      "atlas_tile_box": [
+        8,
+        7621,
+        2180,
+        8345
+      ]
+    },
+    {
+      "index": 77,
+      "text": "怎样做事、授权与安全（L11–L17）",
+      "kind": "new",
+      "png": "images/nav-unify-label-77-47117cdb2b.png",
+      "webp": "images/nav-unify-label-77-47117cdb2b.webp",
+      "size": [
+        2193,
+        717
+      ],
+      "ink_box_alpha16": [
+        48,
+        273,
+        2142,
+        436
+      ],
+      "png_sha256": "a547eca666ff56f569277a6f38028a0b06813336f1c4cc2509a8207253a77f4a",
+      "webp_sha256": "ce840136badb8d328a9b71229e974842e228b26483db703ac4483b92024b838b",
+      "rgba_sha256": "5745d21bcec447190393cf3df54754f9371df2686e11e643a00f135fdb5dfd28",
+      "origin": {
+        "method": "built-in-imagegen",
+        "source": "E:\\Data\\AppData\\Codex\\generated_images\\01a11518-c21b-7fb0-b539-7971e183968b\\exec-6b4405df-ff2e-4d1f-a957-eda36502667f.png",
+        "source_sha256": "a547eca666ff56f569277a6f38028a0b06813336f1c4cc2509a8207253a77f4a",
+        "prompt": "Use case: productivity-visual. Asset type: one Chinese navigation text bitmap for an existing website. Render ONLY this exact text verbatim: 「怎样做事、授权与安全（L11–L17）」. Match the established style: very heavy bold green Chinese sans-serif letters, like a clean thick black-weight Noto Sans Chinese / Helvetica wordmark; the Latin L and digits are the same heavy sans-serif weight. Solid very dark forest-green ink close to #005d35. Crisp smooth anti-aliased edges. Flat typography only, no shadow, glow, bevel, border, illustration, icons, watermark, decoration, or gradients. Genuinely transparent RGBA background, no checkerboard drawn into it. Keep the entire sentence on ONE horizontal line, fully visible with generous transparent margins and no letters cut off. Long wide composition. Preserve every Chinese character, Chinese punctuation 、，full-width parentheses （）, uppercase L, digits and en dash – exactly. The output will be cropped only by its transparent outer margins; make the letterforms readable at small navigation size. Do not invent or omit any words."
+      },
+      "atlas_ink_box": [
+        56,
+        8634,
+        2150,
+        8797
+      ],
+      "atlas_tile_box": [
+        8,
+        8361,
+        2201,
+        9078
+      ]
+    },
+    {
+      "index": 78,
+      "text": "个人资料、数据与备份、分工和花钱（L18–L23）",
+      "kind": "new",
+      "png": "images/nav-unify-label-78-e890031495.png",
+      "webp": "images/nav-unify-label-78-e890031495.webp",
+      "size": [
+        2172,
+        724
+      ],
+      "ink_box_alpha16": [
+        49,
+        305,
+        2131,
+        408
+      ],
+      "png_sha256": "e82d1d5cfe6afeb6a162e5f464e948a73d7cb74607020331579cd68155af46d0",
+      "webp_sha256": "1b11439b28b728cb0771cd89804c2db9fd231c91943b18fa85b4edf5e92e7865",
+      "rgba_sha256": "82d3528eaa59031a8074375901ce51215afde80c7ec024eab26fcfc4510c00e3",
+      "origin": {
+        "method": "built-in-imagegen",
+        "source": "E:\\Data\\AppData\\Codex\\generated_images\\01a11518-c21b-7fb0-b539-7971e183968b\\exec-d3a97d3d-fea2-4bb3-8991-2315d0b57e7d.png",
+        "source_sha256": "e82d1d5cfe6afeb6a162e5f464e948a73d7cb74607020331579cd68155af46d0",
+        "prompt": "Use case: productivity-visual. Asset type: one Chinese navigation text bitmap for an existing website. Render ONLY this exact text verbatim: 「个人资料、数据与备份、分工和花钱（L18–L23）」. Match the established style: very heavy bold green Chinese sans-serif letters, like a clean thick black-weight Noto Sans Chinese / Helvetica wordmark; the Latin L and digits are the same heavy sans-serif weight. Solid very dark forest-green ink close to #005d35. Crisp smooth anti-aliased edges. Flat typography only, no shadow, glow, bevel, border, illustration, icons, watermark, decoration, or gradients. Genuinely transparent RGBA background, no checkerboard drawn into it. Keep the entire sentence on ONE horizontal line, fully visible with generous transparent margins and no letters cut off. Long wide composition. Preserve every Chinese character, Chinese punctuation 、，full-width parentheses （）, uppercase L, digits and en dash – exactly. The output will be cropped only by its transparent outer margins; make the letterforms readable at small navigation size. Do not invent or omit any words."
+      },
+      "atlas_ink_box": [
+        57,
+        9399,
+        2139,
+        9502
+      ],
+      "atlas_tile_box": [
+        8,
+        9094,
+        2180,
+        9818
+      ]
+    },
+    {
+      "index": 79,
+      "text": "项目、汇报网站和电脑、规则本身（L24–L30）",
+      "kind": "new",
+      "png": "images/nav-unify-label-79-34ea742c76.png",
+      "webp": "images/nav-unify-label-79-34ea742c76.webp",
+      "size": [
+        2172,
+        724
+      ],
+      "ink_box_alpha16": [
+        27,
+        289,
+        2142,
+        415
+      ],
+      "png_sha256": "d953cf51f6a487732f02263c8d4bbea88e39c59ade7298413647ca0582b174dd",
+      "webp_sha256": "f4edcb44b5937d4705ccc9131877799ebf00960577662bbc7a0d7dc734d51938",
+      "rgba_sha256": "7d44f2d9e0fd4b575d43c73c57a61b59073b8d19cd6dfd5f443a2b8b0519b02d",
+      "origin": {
+        "method": "built-in-imagegen",
+        "source": "E:\\Data\\AppData\\Codex\\generated_images\\01a11518-c21b-7fb0-b539-7971e183968b\\exec-19d2ba54-ddbd-46a0-919e-3468b7c8cab7.png",
+        "source_sha256": "d953cf51f6a487732f02263c8d4bbea88e39c59ade7298413647ca0582b174dd",
+        "prompt": "Use case: productivity-visual. Asset type: one Chinese navigation text bitmap for an existing website. Render ONLY this exact text verbatim: 「项目、汇报网站和电脑、规则本身（L24–L30）」. Match the established style: very heavy bold green Chinese sans-serif letters, like a clean thick black-weight Noto Sans Chinese / Helvetica wordmark; the Latin L and digits are the same heavy sans-serif weight. Solid very dark forest-green ink close to #005d35. Crisp smooth anti-aliased edges. Flat typography only, no shadow, glow, bevel, border, illustration, icons, watermark, decoration, or gradients. Genuinely transparent RGBA background, no checkerboard drawn into it. Keep the entire sentence on ONE horizontal line, fully visible with generous transparent margins and no letters cut off. Long wide composition. Preserve every Chinese character, Chinese punctuation 、，full-width parentheses （）, uppercase L, digits and en dash – exactly. The output will be cropped only by its transparent outer margins; make the letterforms readable at small navigation size. Do not invent or omit any words."
+      },
+      "atlas_ink_box": [
+        35,
+        10123,
+        2150,
+        10249
+      ],
+      "atlas_tile_box": [
+        8,
+        9834,
+        2180,
+        10558
+      ]
     }
   ],
   "atlas": {
     "size": [
-      932,
-      7621
+      2209,
+      10574
     ],
-    "png_sha256": "317512416f57eac7eb4f39e4e377bb6c893dddaaf6e7c4ec9f49316c7f1e868d",
-    "webp_sha256": "1f41b86d80364ac5ff464c611046d141788a6eb0621d5cdf35043970209b1ef9",
-    "webp_bytes": 2840448
+    "png_sha256": "1fbec57ed69a034546689485a06164b09844c42e051e9f8bdb8bcce88285cecc",
+    "webp_sha256": "9f422478109cf451a893b48879c3512faf1e9b9b5d011c0d1a6f469e3f1cd8b6",
+    "webp_bytes": 3604696
   }
 }

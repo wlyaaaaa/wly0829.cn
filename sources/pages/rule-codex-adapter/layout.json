@@ -428,26 +428,22 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文 · E216 版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
         "columns": 1,
         "whole_block": true,
-        "row": "original",
-        "width": "48%",
         "text_ref": "Codex 适配"
       },
       {
         "type": "source_text_card",
         "columns": 1,
         "whole_block": true,
-        "row": "original",
-        "width": "48%",
         "text_ref": "无限制授权"
       }
     ],
-    "notes": "亲看h：外部小版本提示左上，下方两等宽长卡；左卡含普通Codex题、owner、入口全部，右授权整张卡。无毛笔题、笔刷线、图标或连线。内部命令浅绿等宽框按原定稿，不用活动E208替换E187正文。whole_block当前已由组件实现并待样张。 本轮只依据文字核对，未重新看图。",
+    "notes": "横版按“Codex 适配及入口”和“无限制授权”使用两张全宽原文卡，保持全部原文顺序和代码链接；避免旧左右卡长度悬殊造成大块留白。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-codex-adapter\\img\\rule-codex-adapter-05-h.png"
     ],
@@ -463,7 +459,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文 · E216 版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -488,7 +484,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -521,7 +517,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",

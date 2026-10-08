@@ -142,6 +142,15 @@ def project_html(document):
     return result.replace('一字不改','公开副本')
 
 
+def unbound_visible_literals(document, typeset, publication):
+    approved = [row['value'] for row in local_values(publication.rendered_text('<body>'+typeset.original_rule_html(document)+'</body>'))]
+    extra = []
+    for row in local_values(publication.rendered_text(document)):
+        if row['value'] in approved: approved.remove(row['value'])
+        else: extra.append(row)
+    return extra
+
+
 def verify_projection(root, *, seal=False):
     root=Path(root).resolve();proof_path=root/'rule-public-projection.json';proof=read(proof_path)
     pin_path=HERE.parent/'config/assembled-rules-pin.json';pin=read(pin_path)
@@ -172,7 +181,7 @@ def verify_projection(root, *, seal=False):
         semantic=contract.project_original_html(typeset.original_rule_html(document))
         if builder.typeset_prose_digest(semantic)!=expected[row['excerpt_id']]['rendered_text_sha256']:
             raise ValueError('Actual public HTML changed the fixed source excerpt')
-        if local_values(publication.rendered_text(document)):raise ValueError('Actual public image HTML contains a visible local path')
+        if unbound_visible_literals(document,typeset,publication):raise ValueError('Actual public image HTML contains an unbound visible local path')
         quality=next((item for item in read(page/'report.json')['screens'] if item.get('screen')==row['screen'] and item.get('orientation')==row['orientation']),None)
         if not quality or quality.get('status')!='pass' or quality.get('issues') or quality.get('incomplete'):
             raise ValueError('Actual public image does not pass the existing quality gates')
@@ -247,7 +256,7 @@ def main():
                 source_html = contract.project_original_html(typeset.original_rule_html(projected))
                 if builder.typeset_prose_digest(source_html) != expected['rendered_text_sha256']:
                     raise ValueError('Projected HTML differs from independent source excerpt: ' + screen['id'] + '/' + orientation)
-                if local_values(publication.rendered_text(projected), 'visible-public-rule-text'):
+                if unbound_visible_literals(projected,typeset,publication):
                     raise ValueError('A visible local literal remains outside the canonical source projection')
                 target = args.output / name / 'html' / raw_html.name
                 target.write_text(projected, encoding='utf8')
@@ -342,7 +351,7 @@ def main():
         semantic=contract.project_original_html(typeset.original_rule_html(rendered.read_text('utf8')))
         if builder.typeset_prose_digest(semantic)!=row['excerpt_rendered_text_sha256']:
             raise ValueError('Rendered public image HTML no longer matches the independent excerpt')
-        if local_values(publication.rendered_text(rendered.read_text('utf8'))):
+        if unbound_visible_literals(rendered.read_text('utf8'),typeset,publication):
             raise ValueError('Rendered public image still contains a visible local path')
         row['public_html_sha256'] = digest(rendered)
         row['outputs'] = [{**image, 'sha256':digest(root/image['image']), 'links_sha256':digest(root/image['links'])}

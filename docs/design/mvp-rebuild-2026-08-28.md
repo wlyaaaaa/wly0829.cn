@@ -28,13 +28,13 @@ infrastructure after its content is removed.
   protected foreground refresh, raw preservation, deterministic offline
   verification, evidence states and Health Owner boundaries.
 - Top-level information areas are Project, Rules and Skills.
-- No Ideas area, website-self project, future placeholders, career marketing or
+- No Ideas area, website-self project, future placeholders, marketing or
   salary-oriented copy.
 - Public content may include detailed architecture, paths, hashes, versions,
   failures and verification evidence.
 - Passwords, keys, tokens, recovery secrets and other credential values never
   enter generated data, source, bundles or HTML.
-- Litigation and other unrelated sensitive personal projects are out of scope.
+- Unselected personal projects are out of scope.
 - One subagent has one durable goal. Follow-ups may refine or expand only that
   same goal; an unrelated objective always needs a fresh subagent.
 - All product and maintenance documents are tracked except

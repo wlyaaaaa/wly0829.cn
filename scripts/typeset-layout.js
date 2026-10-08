@@ -121,7 +121,7 @@ function rememberReadingPosition(){
   const first=readingScreenGeometry(el),r=readingScreenGeometry(preferred);
   if(r.top===first.top&&r.height&&r.top<=point&&r.top+r.height>point)el=preferred;
  }
- if(el){const r=readingScreenGeometry(el),maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);readingPosition={id:el.dataset.screen,fraction:(scrollY+offset-r.top)/r.height,atTop:scrollY<2,atBottom:maxScroll>0&&Math.abs(scrollY-maxScroll)<=1};}else readingPosition=null;
+ if(el){const r=readingScreenGeometry(el),maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);readingPosition={id:el.dataset.screen,fraction:(scrollY+offset-r.top)/r.height,gap:Math.min(0,scrollY+offset-r.top),atTop:scrollY<2,atBottom:maxScroll>0&&Math.abs(scrollY-maxScroll)<=1};}else readingPosition=null;
 }
 function cancelReadingResize(){
  const revision=++typesetReadingState.revision;
@@ -144,15 +144,19 @@ function resizeLayout(){
   const el=saved&&[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===saved.id);
   // Manifest aspect ratios reserve dimensions before downloads. Decode the
   // destination screen, then let shared header/TOC layout settle before placing.
-  const images=el?[...el.querySelectorAll('.typeset-part:not([hidden]) picture img')]:[];
-  Promise.all([document.fonts.ready,readingLayoutReady(),...images.map(load)]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  const images=el?[...el.querySelectorAll('.typeset-part:not([hidden]) picture img')]:[],navigationImages=[...document.querySelectorAll('#site-header img,.toc img')];
+  Promise.all([document.fonts.ready,readingLayoutReady(),...images.map(load),...navigationImages.map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
    if(revision!==typesetReadingState.revision)return;
    if(saved?.atTop)scrollTo({top:0,behavior:'instant'});
    else if(saved?.atBottom)scrollTo({top:Math.max(0,document.documentElement.scrollHeight-innerHeight),behavior:'instant'});
    else if(el&&saved){
-    const r=readingScreenGeometry(el),top=Math.max(0,r.top+r.height*saved.fraction-updateAnchorOffset());
+    const r=readingScreenGeometry(el);
+    // A screen's preceding whitespace is a pixel gap, not part of its image.
+    const previousEnd=Math.max(0,...[...document.querySelectorAll('.screen')].map(readingScreenGeometry).filter(box=>box.height&&box.top<r.top).map(box=>box.top+box.height));
+    const within=saved.fraction<0?Math.max(saved.gap,previousEnd-r.top):r.height*saved.fraction,naturalMax=Math.max(0,document.documentElement.scrollHeight-innerHeight-(parseFloat(document.body.style.paddingBottom)||0));
+    const top=Math.max(0,Math.min(r.top+within-updateAnchorOffset(),saved.fraction<0?naturalMax:Infinity));
     const needed=Math.max(0,top+innerHeight-document.documentElement.scrollHeight);
-    if(needed)document.body.style.paddingBottom=(parseFloat(getComputedStyle(document.body).paddingBottom)||0)+Math.ceil(needed)+'px';
+    if(needed&&saved.fraction>=0)document.body.style.paddingBottom=(parseFloat(getComputedStyle(document.body).paddingBottom)||0)+Math.ceil(needed)+'px';
     scrollTo({top,behavior:'instant'});
    }
    resizing=false;typesetReadingState.saved=null;
@@ -172,14 +176,14 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
 /* typeset-live-flow-v1 */
 (function(){
  const states=new WeakMap(),hosts=new Set(),pending=new Set();let frame=0,readerInput=0;
- for(const type of ['wheel','touchmove','keydown','resize','click','pointerdown'])window.addEventListener(type,()=>readerInput++,{passive:true,capture:true});
+ for(const type of ['wheel','touchmove','keydown','resize','click','pointerdown','hashchange'])window.addEventListener(type,()=>readerInput++,{passive:true,capture:true});
  function preserveReader(){
-  if(resizing)return ()=>{};
+  if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return ()=>{};
   const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
   const node=hit?.closest('.typeset-part,#today-river')||[...document.querySelectorAll('.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
   if(!node)return ()=>{};
-  const top=node.getBoundingClientRect().top,input=readerInput,at=performance.now();
-  const place=()=>{if(input===readerInput&&node.isConnected){const delta=node.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
+  const top=node.getBoundingClientRect().top,input=readerInput,at=performance.now(),revision=typesetReadingState.revision,width=innerWidth,height=innerHeight;
+  const place=()=>{if(!resizing&&revision===typesetReadingState.revision&&width===innerWidth&&height===innerHeight&&input===readerInput&&node.isConnected){const delta=node.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
   return ()=>{requestAnimationFrame(()=>requestAnimationFrame(place));setTimeout(()=>{place();requestAnimationFrame(()=>requestAnimationFrame(place));},Math.max(0,800-(performance.now()-at)));};
  }
  const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
@@ -458,7 +462,8 @@ function installTypeset(section,screen){
    if(hot.action||part.native_live.some(x=>x.hot_id===hot.id))continue;
    let el;
    if(hot.kind==='link'||hot.kind==='button'){
-    if(hot.invalid){el=document.createElement('span');el.className='typeset-unbound';el.textContent='动作待接入';}
+    if(hot.reference_only){el=document.createElement('span');el.className='hotspot';el.tabIndex=0;el.style.cursor='help';el.title='此辅助文档未随规则快照发布：'+hot.original_href;el.setAttribute('aria-label',el.title);}
+    else if(hot.invalid){el=document.createElement('span');el.className='typeset-unbound';el.textContent='动作待接入';}
     else{el=makeLink(hot);el.dataset.typesetKind=hot.kind;if(screen.primary_href&&hot.href!==screen.primary_href)el.dataset.cardSecondary='true';}
    }else if(hot.kind==='live'){
     el=document.createElement('a');el.className='slot typeset-live';el.dataset.slot=hot.slot;el.dataset.livePart=hot.live_part||'';el.setAttribute('role','status');

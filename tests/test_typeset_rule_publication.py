@@ -43,6 +43,19 @@ class TypesetRulePublication(unittest.TestCase):
         self.assertIn(('/_typeset/rule-sources/original.md',False),list(builder.nested_refs({'screens':[self.row]})))
         self.assertEqual(typeset.original_rule_html('<p>原文 · E207 版</p>'+self.rendered),self.rendered)
 
+    def test_page_label_source_and_inspected_release_must_match(self):
+        version = 'E207'; pin = {'version': version}; release = {'release_id': version}
+        page = {'based_on': {'release': version}, 'registry': {'numbers': [{'id': 'n-release', 'text': version + '（已核验）'}]}}
+        builder.rule_contract.assert_rule_page_version(page, pin, release)
+        for field in ('label', 'source', 'inspect'):
+            with self.subTest(field=field):
+                changed = json.loads(json.dumps(page)); inspected = dict(release)
+                if field == 'label': changed['registry']['numbers'][0]['text'] = 'E208（旧标注）'
+                elif field == 'source': changed['based_on']['release'] = 'E208'
+                else: inspected['release_id'] = 'E208'
+                with self.assertRaisesRegex(ValueError, 'versions differ'):
+                    builder.rule_contract.assert_rule_page_version(changed, pin, inspected)
+
     def test_e187_and_e190_are_still_stale(self):
         for version in ('E187','E190'):
             with self.subTest(version=version):
