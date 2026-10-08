@@ -2744,5 +2744,7 @@
       "prior_spec_reused": true
     },
     "prior_visual_verified": true
-  }
+  },
+  {"screen": "timeaudit-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]},
+  {"screen": "timeaudit-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]}
 ]

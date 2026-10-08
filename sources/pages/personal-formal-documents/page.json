@@ -267,7 +267,8 @@
    "screenshots": [],
    "chain": "",
    "reuse": ""
-  }
+  },
+    {"id": "personal-formal-documents-gallery", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n完全虚构，仅作生成与排版演示：2.0.1 通过 Microsoft Word 生成同源 DOCX/PDF，并由 Poppler 渲染后完成 1/1 页彩色与灰度检查。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/media/document-materials/fictional-after-sales-page.webp", "caption": "完全虚构，仅作生成与排版演示：2.0.1 通过 Microsoft Word 生成同源 DOCX/PDF，并由 Poppler 渲染后完成 1/1 页彩色与灰度检查。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
  ],
  "registry": {
   "groups": [

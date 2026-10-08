@@ -43,6 +43,19 @@ class ReleaseAssetCacheTests(unittest.TestCase):
             self.assertEqual(source.read_bytes(), b'independent')
         self.assertFalse(self.cache.exists())
 
+    def test_gallery_original_png_bypasses_encoding_and_keeps_exact_bytes(self):
+        spec = importlib.util.spec_from_file_location('gallery_asset_builder', Path(__file__).resolve().parents[1]/'scripts/build-typeset-site.py')
+        gallery = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(gallery)
+        source = self.root/'original.png'
+        original = Path(__file__).resolve().parents[1]/'public/media/ai-cli-profile-manager/01-desktop-qwen38-codex-harness.png'
+        source.write_bytes(original.read_bytes())
+        candidate = self.root/'candidate'
+        with patch.object(gallery, 'encode_png', side_effect=AssertionError('Original gallery images must not be encoded')):
+            url = gallery.asset(source, candidate, 'screenshots', preserve_original=True)
+        self.assertTrue(url.endswith('.png'))
+        self.assertEqual((candidate/url.lstrip('/')).read_bytes(), original.read_bytes())
+
     def test_concurrent_cache_creation_is_complete_and_corruption_is_rejected(self):
         source = self.root/'source.png'
         source.write_bytes(b'complete binary'*1000)

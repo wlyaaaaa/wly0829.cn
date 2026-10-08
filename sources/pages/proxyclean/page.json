@@ -311,7 +311,8 @@
       "screenshots": [],
       "chain": "",
       "reuse": ""
-    }
+    },
+    {"id": "proxyclean-gallery", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。\n\n首页显示当前Windows代理和检查结论；能正常上网就不用操作。需要时选择检查修复，或明确关闭代理。\n\n本次没找到可自动修复的代理问题，测试网页也未确认连通。程序给出下一步，并明确没有重启网卡或修改无线设置。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/media/proxyclean/checking.png", "caption": "打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/proxyclean/home.png", "caption": "首页显示当前Windows代理和检查结论；能正常上网就不用操作。需要时选择检查修复，或明确关闭代理。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/proxyclean/no-fix-found.png", "caption": "本次没找到可自动修复的代理问题，测试网页也未确认连通。程序给出下一步，并明确没有重启网卡或修改无线设置。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
   ],
   "registry": {
     "groups": [

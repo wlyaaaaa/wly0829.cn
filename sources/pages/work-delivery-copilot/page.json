@@ -284,7 +284,8 @@
       "screenshots": [],
       "chain": "",
       "reuse": ""
-    }
+    },
+    {"id": "work-delivery-copilot-gallery", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。\n\n完全虚构的项目评审页：10 条事实、确认状态和同一事实修订版集中呈现。\n\n完全虚构的执行跟踪表：执行事项、负责人、日期、状态、关联事实和验收备注来自同一 build。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/media/work-delivery/fictional-prd-page.webp", "caption": "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/work-delivery/fictional-review-slide.webp", "caption": "完全虚构的项目评审页：10 条事实、确认状态和同一事实修订版集中呈现。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/work-delivery/fictional-execution-tracker.webp", "caption": "完全虚构的执行跟踪表：执行事项、负责人、日期、状态、关联事实和验收备注来自同一 build。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
   ],
   "registry": {
     "groups": [

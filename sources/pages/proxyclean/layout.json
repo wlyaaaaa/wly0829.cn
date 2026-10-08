@@ -954,5 +954,7 @@
       ],
       "ribbon_position": "left"
     }
-  }
+  },
+  {"screen": "proxyclean-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
+  {"screen": "proxyclean-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
 ]

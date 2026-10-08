@@ -1,5 +1,4 @@
 {
-  "withdrawn_screenshot_screens": ["ai-cli-profile-manager-04", "ai-cli-profile-manager-05", "ai-cli-profile-manager-06"],
   "schema": "site-b1.page.v1",
   "page": "ai-cli-profile-manager",
   "kind": "project",
@@ -89,16 +88,12 @@
       "title": "在 Codex 桌面版里",
       "scene": "横版画面：左上标题。左边约 55% 宽，四条带小水彩图标的说明（一个下拉菜单、一个放大镜照着 OpenAI 标志、两张任务卡中间一道分隔线、一个说话的气泡），每条第一句粗体。右边约 45% 宽，留一个带细绿边框的竖长空位放截图（宽高比约 1:2，占右栏大部分高度），空位下面一行小字是图说。",
       "portrait": "竖版：标题在上，四条说明一条一行排下来；截图空位放在说明下面，占整行宽，图说在截图下。",
-      "text": "在 Codex 桌面版里\n\n**菜单里多了 8 个。** 本机的 Qwen3.8 27B、Qwen3.6 35B 和它们各自的去限制版（社区去掉拒答限制的改版）；云端的 Qwen3.8 Max、GLM-5.3、GLM-5.3 Flash、DeepSeek Flash。\n\n**官方新型号自己出现。** OpenAI 的型号每次都向官方引擎现查，再和上面 8 个合成一份菜单；OpenAI 出了新型号，不用改代码。\n\n**换服务要新建任务。** Codex 在建任务时就定了请求发往哪家。官方、本机、云端之间要换，就新建一个任务；本机 4 个之间可以在同一个任务里切。\n\n**别家模型也说中文进度。** 开始前说准备解决什么，中途讲清重要发现，GLM 的思考过程照样显示成思考摘要。\n\n9 月 15 日：桌面版里选本机 Qwen3.8 27B，按规则查我的饮品偏好，用时 7 分 30 秒，思考摘要也是中文。\n\n这张截图含个人内容，已撤下",
+      "text": "在 Codex 桌面版里\n\n**菜单里多了 8 个。** 本机的 Qwen3.8 27B、Qwen3.6 35B 和它们各自的去限制版（社区去掉拒答限制的改版）；云端的 Qwen3.8 Max、GLM-5.3、GLM-5.3 Flash、DeepSeek Flash。\n\n**官方新型号自己出现。** OpenAI 的型号每次都向官方引擎现查，再和上面 8 个合成一份菜单；OpenAI 出了新型号，不用改代码。\n\n**换服务要新建任务。** Codex 在建任务时就定了请求发往哪家。官方、本机、云端之间要换，就新建一个任务；本机 4 个之间可以在同一个任务里切。\n\n**别家模型也说中文进度。** 开始前说准备解决什么，中途讲清重要发现，GLM 的思考过程照样显示成思考摘要。\n\n桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。\n\n9 月 15 日：桌面版里选本机 Qwen3.8 27B，按规则查我的饮品偏好，用时 7 分 30 秒，思考摘要也是中文。",
       "links": [],
       "anchors": [],
       "live": [],
       "screenshots": [
-        {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\ai-cli-profile-manager\\01-desktop-qwen38-codex-harness.png",
-          "where": "右栏带细绿边框的竖长空位（宽高比约 1:2）",
-          "caption": "9 月 15 日：桌面版里选本机 Qwen3.8 27B，按规则查我的饮品偏好，用时 7 分 30 秒，思考摘要也是中文。"
-        }
+        {"file": "public/media/ai-cli-profile-manager/01-desktop-qwen38-codex-harness.png", "where": "完整原图，点击放大", "caption": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。", "preserve_original": true}
       ],
       "chain": "",
       "reuse": ""
@@ -109,16 +104,12 @@
       "title": "在终端里",
       "scene": "横版画面：左上标题。左边约 45% 宽，四个编号步骤竖排，每步一个小水彩图标（一个终端提示符、一张清单打勾、一个 Codex 窗口、一扇门）；步骤下面一行灰色小字。右边约 55% 宽，留一个带细绿边框的空位放截图（宽高比约 5:6），空位下面一行小字是图说。",
       "portrait": "竖版分2张，每张使用原生9:16画布，按默认v、v2顺序展示。第1张（ai-cli-profile-manager-05-v.png）：仅原标题“在终端里”、4个步骤及Qwen Code和OpenCode灰色说明。每步整宽上下排，图标缩成标题旁小标；正文参考36源像素、行高44源像素，在941宽显示到370时约14.16px。这张没有截图、截图图注或任何空框，不在步骤里面画假截图框。第2张（新增ai-cli-profile-manager-05-v2.png）：仅唯一真实截图空位和原9月15日图注，不新增标题，不重复步骤或灰色说明。截图空框占正文整行宽，内部完全空白，宽高比1436:1737；参考宽880、高1064源像素，原图注紧跟其下。真实截图由现役编译器完整保比例贴入，不能压扁或缩窄截图塞正文。不增删改写原字、不添装饰或空卡填满画布，连续外白交现役crop_box裁边。横版scene、原text和正确h保持。",
-      "text": "在终端里\n\n1. 在项目目录敲 aicli，列出这次能开的路线，最近用过的排第一。\n2. 选一个编号。打开前它先写清：连的是本机哪个服务、模型全名、思考档位，以及“上下文快满时先把目标和改动记进项目、压缩后重读规则和改动”这条约定。\n3. 进入原版 Codex：界面、命令、聊天历史都是原版的。\n4. 想换模型就退出重选；同一个会话中途不换服务。\n\nQwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。\n\n9 月 15 日的列表：选 1 号本机 Qwen3.8 27B，打开前先写清连哪、用谁。列表里 DeepSeek V4 的几条后来已退役。\n\n这张截图含个人内容，已撤下",
+      "text": "在终端里\n\n1. 在项目目录敲 aicli，列出这次能开的路线，最近用过的排第一。\n2. 选一个编号。打开前它先写清：连的是本机哪个服务、模型全名、思考档位，以及“上下文快满时先把目标和改动记进项目、压缩后重读规则和改动”这条约定。\n3. 进入原版 Codex：界面、命令、聊天历史都是原版的。\n4. 想换模型就退出重选；同一个会话中途不换服务。\n\nQwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。\n\n在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。\n\n9 月 15 日的列表：选 1 号本机 Qwen3.8 27B，打开前先写清连哪、用谁。列表里 DeepSeek V4 的几条后来已退役。",
       "links": [],
       "anchors": [],
       "live": [],
       "screenshots": [
-        {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\ai-cli-profile-manager\\02-cli-profile-selection.png",
-          "where": "右栏带细绿边框的空位（宽高比约 5:6）",
-          "caption": "9 月 15 日的列表：选 1 号本机 Qwen3.8 27B，打开前先写清连哪、用谁。列表里 DeepSeek V4 的几条后来已退役。"
-        }
+        {"file": "public/media/ai-cli-profile-manager/02-cli-profile-selection.png", "where": "完整原图，点击放大", "caption": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。", "preserve_original": true}
       ],
       "chain": "",
       "reuse": ""
@@ -129,46 +120,14 @@
       "title": "本机模型走完一件真事",
       "scene": "横版画面：左上标题，下面一段说明。说明下面三个并排的带细绿边框的截图空位（每个宽高比约 5:6，等宽等高，间距一致），每个空位上方一个绿色圆圈编号①②③，下面一行小字图说。三个空位之间画两个细绿箭头从左指向右。",
       "portrait": "竖版：标题和说明在上；三个截图空位改成上下三个，每个占整行宽，编号在左上角，图说在各自下面，空位之间一个向下的小箭头。",
-      "text": "本机模型走完一件真事\n\n还是 9 月 15 日那个终端会话：本机 Qwen3.8 27B 在原版 Codex 里按规则一步步来，每一步的命令和结果都留在原版的工作记录里。\n\n① 这张截图含个人内容，已撤下\n② 这张截图含个人内容，已撤下\n③ 这张截图含个人内容，已撤下",
+      "text": "本机模型走完一件真事\n\n还是 9 月 15 日那个终端会话：本机 Qwen3.8 27B 在原版 Codex 里按规则一步步来，每一步的命令和结果都留在原版的工作记录里。\n\n① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。\n② 同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。\n③ CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。",
       "links": [],
       "anchors": [],
       "live": [],
       "screenshots": [
-        {
-          "file": "V:\\Personal\\Projects\\wly0829.cn\\public\\media\\ai-cli-profile-manager\\03-cli-rule-loading.png",
-          "where": "左边第一个空位（①）",
-          "caption": "① 先核对当前生效的规则版本，再读要用的技能说明。",
-          "frame_bindings": {
-            "h": {
-              "8034FA114E5C36DC731F0F8B9BD758F5C29DF57DED660C9DF54742DA6CBED5B5": [
-                67,
-                299,
-                504,
-                793
-              ]
-            },
-            "v": {
-              "E43A5ECBA979DEDAAB06612FE17C77156B1ADE8EBE6196E3E76B379DF2B8FB0A": [
-                43,
-                390,
-                899,
-                1426
-              ]
-            }
-          },
-          "crop_h": [
-            0,
-            75,
-            821,
-            1006
-          ],
-          "crop_v": [
-            0,
-            69,
-            800,
-            1040
-          ]
-        }
+        {"file": "public/media/ai-cli-profile-manager/03-cli-rule-loading.png", "where": "完整原图，点击放大", "caption": "CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。", "preserve_original": true, "frame_bindings": {"h": {"8034FA114E5C36DC731F0F8B9BD758F5C29DF57DED660C9DF54742DA6CBED5B5": [67, 299, 504, 793]}, "v": {"E43A5ECBA979DEDAAB06612FE17C77156B1ADE8EBE6196E3E76B379DF2B8FB0A": [43, 390, 899, 1426]}}, "crop_h": [0, 75, 821, 1006], "crop_v": [0, 69, 800, 1040]},
+        {"file": "public/media/ai-cli-profile-manager/04-cli-personal-access-check.png", "where": "完整原图，点击放大", "caption": "同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。", "preserve_original": true},
+        {"file": "public/media/ai-cli-profile-manager/05-cli-preference-result.png", "where": "完整原图，点击放大", "caption": "CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。", "preserve_original": true}
       ],
       "chain": "",
       "reuse": ""

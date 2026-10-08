@@ -322,7 +322,8 @@
       "screenshots": [],
       "chain": "",
       "reuse": ""
-    }
+    },
+    {"id": "typora-theme-pack-gallery", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。\n\n个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。\n\n公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/assets/typora-theme-pack/original-pdf.webp", "caption": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/assets/typora-theme-pack/personal-pdf.webp", "caption": "个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/assets/typora-theme-pack/company-pdf.webp", "caption": "公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
   ],
   "registry": {
     "groups": [

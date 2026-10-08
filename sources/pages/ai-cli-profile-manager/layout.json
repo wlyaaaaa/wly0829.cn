@@ -274,7 +274,7 @@
       },
       {
         "type": "screenshot",
-        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
@@ -316,7 +316,7 @@
       },
       {
         "type": "screenshot",
-        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
@@ -365,11 +365,7 @@
       },
       {
         "type": "screenshot",
-        "withdrawn_indices": [
-          0
-        ],
-        "withdrawal_note": "这张截图含个人内容，已撤下",
-        "text_ref": "这张截图含个人内容，已撤下",
+        "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
         "caption_mode": "source_order",
         "slot_groups": [
           {
@@ -425,7 +421,7 @@
       },
       {
         "type": "screenshot",
-        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
@@ -461,7 +457,7 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "①这张截图含个人内容，已撤下",
+        "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
         "indices": [
           0,
           1,
@@ -492,12 +488,7 @@
               2
             ]
           }
-        ],
-        "withdrawn_indices": [0,
-          1,
-          2
-        ],
-        "withdrawal_note": "这张截图含个人内容，已撤下"
+        ]
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题，下面一段说明。说明下面三个并排的带细绿边框的截图空位（每个宽高比约 5:6，等宽等高，间距一致），每个空位上方一个绿色圆圈编号①②③，下面一行小字图说。三个空位之间画两个细绿箭头从左指向右。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；已用新截图接口同块三槽、slot_groups=[0,1,2]分别消费三条原图注，原①②③移到槽上，连接箭头不加字。"
@@ -524,7 +515,7 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "①这张截图含个人内容，已撤下",
+        "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
         "indices": [
           0,
           1,
@@ -555,12 +546,7 @@
               2
             ]
           }
-        ],
-        "withdrawn_indices": [0,
-          1,
-          2
-        ],
-        "withdrawal_note": "这张截图含个人内容，已撤下"
+        ]
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题和说明在上；三个截图空位改成上下三个，每个占整行宽，编号在左上角，图说在各自下面，空位之间一个向下的小箭头。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；已用新截图接口同块三槽、slot_groups=[0,1,2]分别消费三条原图注，原①②③移到槽上，连接箭头不加字。"

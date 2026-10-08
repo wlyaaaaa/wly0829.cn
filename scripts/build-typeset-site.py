@@ -43,6 +43,17 @@ BJT = timezone(timedelta(hours=8))
 ASSET_CACHE = None
 REUSE_ASSET_CACHE = False
 ASSET_CACHE_REUSE = {}
+GALLERY_JS = """document.addEventListener('click', event => {
+ const button=event.target.closest?.('button.typeset-screenshot');
+ if(!button||button.dataset.compare==='true'||!window.SiteImageViewer)return;
+ const data=JSON.parse(document.querySelector('#page-data').textContent);
+ const shots=data.screens.flatMap(s=>s.parts.flatMap(p=>p.hotspots.filter(h=>h.kind==='screenshot').flatMap(h=>h.shots||[])));
+ const selected=shots.find(s=>s.src===button.querySelector('img')?.getAttribute('src'));
+ const items=[...new Map(shots.map(s=>[s.full||s.src,s])).values()];
+ if(!selected||items.length<2)return;
+ event.preventDefault();event.stopImmediatePropagation();
+ window.SiteImageViewer.openGallery(items.map(s=>({src:new URL(s.full||s.src,location.href).href,title:s.caption})),items.findIndex(s=>(s.full||s.src)===(selected.full||selected.src)),button);
+},true);"""
 
 def read(path):
     return json.loads(Path(path).read_text('utf-8-sig'))
@@ -397,9 +408,9 @@ def encode_png(path, effort=80):
                    'decoded_rgba_sha256':pixel_hash,'pixel_equal':True,'compression_effort':effort})
     return encoded
 
-def asset(path, candidate, category='images', baseline=None, baseline_files=None):
+def asset(path, candidate, category='images', baseline=None, baseline_files=None, preserve_original=False):
     path = Path(path)
-    actual=encode_png(path) if path.suffix.lower()=='.png' else path
+    actual=encode_png(path) if path.suffix.lower()=='.png' and not preserve_original else path
     if actual.stat().st_size>=path.stat().st_size:actual=path
     if baseline is not None:
         proof=stamp(actual)
@@ -877,9 +888,9 @@ def build_page(name, records, args, candidate):
                         # The owner's screenshot requirement is complete, readable
                         # originals. Earlier source crop hints are not display bounds.
                         crop=None
-                        bound={'src':asset(sp,candidate,'screenshots'),'caption':sh.get('caption',''),'role':sh.get('role',''),'size':shot_size,'crop':crop}
+                        bound={'src':asset(sp,candidate,'screenshots',preserve_original=sh.get('preserve_original',False)),'caption':sh.get('caption',''),'role':sh.get('role',''),'size':shot_size,'crop':crop}
                         if sh.get('full'):
-                            fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots',args.baseline,args.baseline_files)
+                            fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots',args.baseline,args.baseline_files,preserve_original=sh.get('preserve_original',False))
                         h['shots'].append(bound)
                 if h['kind'] in {'live','screenshot'} or h.get('action') or h.get('invalid'):
                     h['target']=h.pop('href')
@@ -962,6 +973,9 @@ def build_page(name, records, args, candidate):
         text=bird.attach(text,data,candidate,geometries)
         for path in (HERE/'prepare-new-project-bird.py',bird.HERO,Path(bird.living.__file__)):
             inputs[str(path.resolve())]=stamp(path)
+    if any(sh.get('preserve_original') for screen in source['screens'] for sh in screen.get('screenshots',[])):
+        gallery=bundle(GALLERY_JS,candidate,'gallery','.js')
+        text=text.replace('</body>',f'<script src="{gallery}" defer></script></body>')
     dest=candidate/rel;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(text,encoding='utf8')
     for p,proof in inputs.items():
         if stamp(p)!=proof: issues.append('构建期间输入变化：'+p)
