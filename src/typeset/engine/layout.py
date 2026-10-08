@@ -11,6 +11,7 @@ E = lambda x: html.escape(x or "", quote=True)
 from .inline import make_inline
 from .parse import canon, node_text, parse, normalize, original_markdown
 from . import registry as _registry
+from .content import bound_json
 
 PROTO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC_DIR = os.path.join(os.path.dirname(os.path.dirname(PROTO)), "sources", "pages")
@@ -189,7 +190,7 @@ def load_spec(page_name, spec_file=None):
     p = spec_file or os.path.join(SPEC_DIR, page_name, "layout.json")
     if not os.path.exists(p):
         return {}
-    data = json.load(open(p, encoding="utf-8"))
+    data = bound_json(p)
     out = {}
     for item in data:
         out[(item["screen"], item.get("orientation", "h"))] = item

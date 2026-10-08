@@ -44,6 +44,14 @@ class NavigationRepair(unittest.TestCase):
         self.put('rules/privacy-data/index.html', '<h2 id="p-classification">已发布原专题</h2>')
         self.assertEqual(nav.resolve_navigation(original, nav.page_inventory(self.root)), original)
 
+    def test_home_comic_opens_its_complete_case_directly(self):
+        self.put('index.html', '<h1>首页</h1>')
+        self.put('how/index.html', '<h2 id="case-trip">完整旅行过程</h2>')
+        data={'page':'home','screens':[], 'link':{'id':'home-03-link-5-0','href':'/how/'}}
+        text='<script id="page-data">'+json.dumps(data)+'</script>'
+        result, _=nav.repair_owned_navigation(text, nav.page_inventory(self.root), '/')
+        self.assertEqual(json.loads(nav.PAGE_DATA.search(result)[2])['link']['href'], '/how/#case-trip')
+
     def test_unpublished_page_and_anchor_use_nearest_actual_page_without_inventing_hash(self):
         self.put('index.html', '<h1>首页</h1>')
         self.put('projects/index.html', '<h1>项目</h1>')

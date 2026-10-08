@@ -121,10 +121,13 @@ const shouldRun=()=>active;let stops=[],logs=[];const stop=why=>stops.push(why),
 '''
     code = '''const run=new Function('gaps','excluded', ''' + json.dumps(harness + guard + '''
 if(excluded==='hidden')active=false;if(excluded==='scroll')shared.scrollingUntil=20000;if(excluded==='startup')guardEligibleAt=20000;
-checkFrameGuard(time);for(const gap of gaps){time+=gap;if(checkFrameGuard(time))break;}
+checkFrameGuard(time);if(excluded==='crossed-scroll')shared.scrollingUntil=time+1500;
+for(const gap of gaps){time+=gap;if(checkFrameGuard(time))break;}
 return {trigger:guardTrigger,stops,logs};''') + ''');
-const cases=[['single-long',[2500,...Array(400).fill(16)],null,false],['two-long',[2500,2500,...Array(400).fill(16)],null,false],['short-slow',Array(22).fill(180),null,false],['sustained-slow',Array(50).fill(180),null,true],['exact-100ms',Array(80).fill(100),null,false],['over-100ms',Array(80).fill(101),null,true],['long-total-4500',[1500,1500,1500],null,false],['long-total-exact-5000',[1500,1500,2000],null,true],['scroll-excluded',Array(70).fill(180),'scroll',false],['hidden-excluded',Array(70).fill(180),'hidden',false],['startup-excluded',Array(70).fill(180),'startup',false]];
-const results=cases.map(([name,gaps,excluded,expected])=>{const value=run(gaps,excluded);if(Boolean(value.trigger)!==expected)throw Error(name);return {name,expected_trigger:expected,...value};});process.stdout.write(JSON.stringify(results));'''
+const cases=[['single-long',[2500,...Array(400).fill(16)],null,false],['two-long',[2500,2500,...Array(400).fill(16)],null,true],['short-slow',Array(22).fill(180),null,false],['sustained-slow',Array(50).fill(180),null,true],['exact-100ms',Array(80).fill(100),null,false],['over-100ms',Array(80).fill(101),null,true],['long-total-4500',[1500,1500,1500],null,false],['long-total-exact-5000',[1500,1500,2000],null,true],['past-fast-then-stall',[...Array(400).fill(16),6000],null,true],['scroll-tail-crossed',[3000,2500],'crossed-scroll',false],['scroll-excluded',Array(70).fill(180),'scroll',false],['hidden-excluded',Array(70).fill(180),'hidden',false],['startup-excluded',Array(70).fill(180),'startup',false]];
+const results=cases.map(([name,gaps,excluded,expected])=>{const value=run(gaps,excluded);if(Boolean(value.trigger)!==expected)throw Error(name);
+ if(value.trigger&&(value.trigger.rule!=='slow-median'||value.trigger.windowMs<5000||value.trigger.medianFPS>=10))throw Error(name+' violates the visible five-second median rule');
+ return {name,expected_trigger:expected,...value};});process.stdout.write(JSON.stringify(results));'''
     result = subprocess.run(['node', '-e', code], text=True, capture_output=True, encoding='utf8', check=True)
     return json.loads(result.stdout)
 

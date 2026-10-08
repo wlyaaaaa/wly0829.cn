@@ -234,7 +234,11 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
                   lambda m: m[1] + f'aspect-ratio:{h[0]}/{h[1]};--grid-index:0', html, count=1)
     if any(token in html.split('</head>')[0] for token in ('home-living/', 'home-living-bind-')):
         raise ValueError('Living resource remains active in the homepage head')
-    new_files = {'index.html': html.encode('utf8'), app_rel: static_app}
+    from runpy import run_path
+    html, highlights_files, highlights = run_path(str(HERE/'prepare-home-highlights.py'))['prepare_fragment'](html, data, report.parent/'home-highlights')
+    match = PAGE_DATA.search(html)
+    html = html[:match.start(2)] + json.dumps(data, ensure_ascii=False, separators=(',', ':')) + html[match.end(2):]
+    new_files = {'index.html': html.encode('utf8'), app_rel: static_app, **highlights_files}
     files = write_changes(baseline, output, new_files, copy_asset=living.builder.copy_release_asset)
     manifest.pop('home_living_preparation', None)
     result = {'schema': 'wly.static-home-preparation.v1', 'status': 'prepared_pending_browser_acceptance',
@@ -244,7 +248,7 @@ def prepare(baseline: Path, reference: Path, output: Path, report: Path) -> dict
         'release_id': identity(files, manifest), 'inherited_living_removed': inherited_living,
         'first_picture_sha256': proof(picture.encode('utf8'))['sha256'], 'static_assets': assets,
         'original_static_bytes_unchanged': True, 'current_home_links_and_other_screens_preserved': not navigation_changes,
-        'navigation_changes': navigation_changes,
+        'navigation_changes': navigation_changes, 'home_highlights': highlights,
         'navigation_source': {'path':str(HERE / 'repair-release-navigation.py'), **proof((HERE / 'repair-release-navigation.py').read_bytes())},
         'removed_active_living_tags': removed_tags,
         'old_home_bundle': {'path': old_app_rel, **proof(old_app)},

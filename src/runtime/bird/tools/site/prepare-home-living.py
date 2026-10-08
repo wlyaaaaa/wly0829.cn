@@ -32,6 +32,35 @@ HOME_CSS = '''/* 原图和活画用同一比例，热区和 Tab 焦点位于活�
 #home-01 > .overlays { z-index:1; }
 #home-01 .hotspot, #home-01 button { z-index:1; }
 '''
+HOME_OPENING = r'''<style>
+html[data-home-opening="pending"] #home-01 > * { visibility:hidden !important; }
+</style><script>
+(() => {
+  const root = document.documentElement, reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const path = value => new URL(value, location.href).pathname.replace(/index\.html$/, '');
+  let restore = false;
+  try {
+    const previous = JSON.parse(sessionStorage.getItem('site-album-navigation-v1'));
+    restore = previous?.restore && Date.now() - previous.at < 10000 && path(previous.to) === path(location.href);
+  } catch {}
+  if (restore || reduce.matches || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') return;
+  // 在原图第一次绘制之前保留白纸；未执行脚本时，原图照常显示。
+  const opening = window.HomeOpening = {pending:true, reason:'preparing'};
+  root.dataset.homeOpening = 'pending';
+  opening.release = reason => {
+    if (!opening.pending) return;
+    opening.pending = false; opening.reason = reason;
+    delete root.dataset.homeOpening; clearTimeout(timer);
+  };
+  const timer = setTimeout(() => opening.release('startup-timeout'), 6000);
+  addEventListener('error', event => {
+    if (/\/(?:hero-live\.|home-app-)/.test(event.target?.src || '')) opening.release('script-error');
+  }, true);
+  addEventListener('pagereveal', event => { if (opening.pending) event.viewTransition?.skipTransition(); });
+  addEventListener('pagehide', () => opening.release('pagehide'));
+  reduce.addEventListener('change', event => { if (event.matches) opening.release('reduced-motion'); });
+})();
+</script>'''
 
 
 def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, output: Path) -> dict:
@@ -90,6 +119,7 @@ def prepare_native_home(baseline: Path, fixed_packet: Path, support: Path, outpu
     new_tag = old_tag.replace(app_match[1], '/' + app_rel).replace('<script ', '<script type="module" ')
     engine_tag = '<script data-album-runtime data-src="' + home['engine_url'] + '"></script>'
     html = replace_once(html, old_tag, engine_tag + new_tag)
+    html = replace_once(html, '<meta charset="utf-8">', '<meta charset="utf-8">' + HOME_OPENING)
     html = replace_once(html, '</head>', '<link rel="stylesheet" href="/' + css_rel + '"></head>')
     files = {app_rel: app_bytes, css_rel: css, engine_rel: engine_bytes}
     config_rel = home['config_url'].lstrip('/')

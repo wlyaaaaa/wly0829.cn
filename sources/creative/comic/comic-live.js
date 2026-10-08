@@ -949,9 +949,9 @@ function init() {
     let cv = el.querySelector('canvas.comic-live');
     if (!cv) {
       cv = document.createElement('canvas'); cv.className = 'comic-live'; cv.setAttribute('aria-hidden', 'true');
-      Object.assign(cv.style, { position: 'absolute', pointerEvents: 'none' });
+      Object.assign(cv.style, { position: 'absolute', pointerEvents: 'none', zIndex: '6' });
       const pic = img.closest('picture') || img;
-      pic.after(cv);                            // 在图后面、热区层前面：链接照常能点
+      pic.after(cv);                            // 盖过整卡静图（悬停最高为 5）；透明区保留卡片反馈，链接照常能点
       if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
     }
     SCR[id] = { el, img, cv, ctx: cv.getContext('2d'), src: null };

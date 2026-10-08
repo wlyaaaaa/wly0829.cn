@@ -15,6 +15,8 @@ import struct
 import sys
 import time
 from urllib.parse import unquote, urlsplit
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]/'src/typeset'))
+from engine.content import bound_json
 
 BJT = timezone(timedelta(hours=8))
 TEXT_SUFFIXES = {'.html', '.css', '.json', '.jsonl', '.py'}
@@ -348,6 +350,7 @@ class Snapshot:
             'original_bytes': proof['bytes'], 'snapshot_path': str(self.output / rel),
             'snapshot_relative_path': rel.as_posix(), 'snapshot_sha256': frozen['sha256'],
             'snapshot_bytes': frozen['bytes'], 'transformed': True}
+        return self.output / rel
 
     def producer_resource(self, value):
         if not isinstance(value, str) or not value:
@@ -399,7 +402,7 @@ class Snapshot:
             else: self.producer_resource(value)
         for page in self.pages:
             path = Path(__file__).resolve().parents[1]/'sources/pages'/page/'layout.json' if root == Path(__file__).resolve().parents[1]/'src/typeset' else root/'specs'/(page+'.json')
-            self.copy(path, Path('typeset-proto/specs') / (page + '.json'), transform=False)
+            self.derived(path, Path('typeset-proto/specs') / (page + '.json'), json.dumps(bound_json(path, self.content_read), ensure_ascii=False).encode('utf8')) if '{{' in decode(self.load(path)[0]) else self.copy(path, Path('typeset-proto/specs') / (page + '.json'), transform=False)
             payload, _ = self.load(path)
             for row in json.loads(decode(payload)): resources(row.get('blocks', []))
         # assets.manifest() prefers a verified shared-library map. Keep that
@@ -436,6 +439,10 @@ class Snapshot:
             ready['asset_map_sha256'] = digest(payload)
             self.derived(marker, 'typeset-assets/_library/REQUESTS-READY.json',
                          (json.dumps(ready, ensure_ascii=False, indent=2) + '\n').encode('utf8'))
+
+    def content_read(self, path):
+        self.copy(path, Path('content-inputs')/path.relative_to(Path(__file__).resolve().parents[1]), transform=False)
+        return decode(self.load(path)[0])
 
     def plan(self):
         self.active = set()
@@ -483,7 +490,7 @@ class Snapshot:
             if len(originals) != 1:
                 raise ValueError('Page has multiple source files: ' + page)
             original = originals.pop()
-            frozen_source = self.copy(original, Path('sources') / (page + '.json'), transform=False)
+            frozen_source = self.derived(original, Path('sources') / (page + '.json'), json.dumps(bound_json(original, self.content_read), ensure_ascii=False).encode('utf8')) if '{{' in decode(self.load(original)[0]) else self.copy(original, Path('sources') / (page + '.json'), transform=False)
             source_payload, source_proof = self.load(original)
             source = json.loads(decode(source_payload))
             screen_ids.update(screen['id'] for screen in source['screens'])
@@ -506,7 +513,7 @@ class Snapshot:
                             frozen_resource = self.copy(Path(prior_map.get(original_resource, original_resource)), transform=False)
                             self.resource_aliases[original_resource] = str(frozen_resource)
             for row in grouped[page]:
-                frozen_rows.append({**row, 'source_path': str(frozen_source)})
+                frozen_rows.append({**row, 'source_path': str(frozen_source), 'source_sha256': stamp_file(frozen_source)['sha256']})
             self.copy(base / 'report.json', transform=False)
             self.copy(self.asset_root / page / 'manifest.jsonl', transform=False)
             for screen in manifest['screens']:

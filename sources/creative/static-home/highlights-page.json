@@ -1,0 +1,49 @@
+{
+  "schema": "site-b2.page.v1",
+  "page": "home-highlights",
+  "kind": "home-fragment",
+  "title": "这套东西办过的事",
+  "url": null,
+  "based_on": {
+    "source": "Each selected project registry.numbers; H1/H2 2026-10-07",
+    "scope": "Only homepage home-04; no new route"
+  },
+  "screens": [
+    {
+      "id": "home-highlights-01",
+      "section": "highlights",
+      "title": "这套东西办过的事",
+      "text": "## 这套东西办过的事\n\n- **〔照片视频录音管理〕**　按日期和地点找素材，整理时保留能回到原件的目录。 **{{personal-media.registry.numbers.n-images-sorted.text}}**。观察截至 {{personal-media.registry.numbers.n-images-sorted.as_of}}。\n- **〔电脑配置与恢复〕**　接上外接备份盘，在另一台电脑上取回密码、解开系统镜像；整机还原还没实测。 **{{pcconfig.registry.numbers.n-offline-test.text}}**。观察截至 {{pcconfig.registry.numbers.n-offline-test.as_of}}。\n- **〔本地文字识别〕**　把图片和扫描件读成字；难的页才换强模型，结果回到原材料。 **{{localocr.registry.numbers.n-jobs.text}}**。观察截至 {{localocr.registry.numbers.n-jobs.as_of}}。\n- **〔中文语音转写〕**　录音变成逐句文字和时间；平时按 Win+H，也能直接说中文。 **{{chinese-asr.registry.numbers.n-transcribed.text}}**。观察截至 {{chinese-asr.registry.numbers.n-transcribed.as_of}}。\n- **〔电脑使用与性能记录〕**　电脑卡过、热过、掉过帧，能按时间倒回去查当时的记录。 **{{timeaudit.registry.numbers.n-hw-samples.text}}**。观察截至 {{timeaudit.registry.numbers.n-hw-samples.as_of}}。\n- **〔个人材料查找〕**　说个大概，找到原件，再翻到要看的那页；每份原件核对过内容指纹。 **{{personal-materials.registry.numbers.n-registered.text}}**。观察截至 {{personal-materials.registry.numbers.n-registered.as_of}}。\n",
+      "links": [
+        {
+          "text": "照片视频录音管理",
+          "href": "/projects/personal-media/"
+        },
+        {
+          "text": "电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "本地文字识别",
+          "href": "/projects/localocr/"
+        },
+        {
+          "text": "中文语音转写",
+          "href": "/projects/chinese-asr/"
+        },
+        {
+          "text": "电脑使用与性能记录",
+          "href": "/projects/timeaudit/"
+        },
+        {
+          "text": "个人材料查找",
+          "href": "/projects/personal-materials/"
+        }
+      ],
+      "scene": "标题沿用绿色毛笔笔画和浅绿笔刷；六个亮点用白底细绿描边圆角卡，横版3列2行，竖版一列。所有数字和日期引用所属项目登记。",
+      "portrait": "同一份六卡文字，按手机宽度自然延伸，不缩字。",
+      "screenshots": [],
+      "live": []
+    }
+  ]
+}

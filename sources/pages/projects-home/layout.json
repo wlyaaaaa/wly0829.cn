@@ -24,7 +24,7 @@
         "align": "left",
         "size": "large",
         "weight": "bold",
-        "text_ref": "31 个在用的项目",
+        "text_ref": "{{scale.in_use}} 个在用的项目",
         "row": "hero",
         "bold": true
       },
@@ -129,7 +129,7 @@
         "align": "left",
         "size": "large",
         "weight": "bold",
-        "text_ref": "31 个在用的项目",
+        "text_ref": "{{scale.in_use}} 个在用的项目",
         "bold": true
       },
       {
@@ -291,28 +291,15 @@
         "type": "project_tile",
         "text_ref": "AI 规则与技能基座",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -321,15 +308,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排5格，各排铺满卡宽；不照通用示例重排。批准替换图五格一排；标题和数字内容以当前定稿为准，统计日期作为图中文字放在数字格正下方。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[2, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-03",
@@ -347,30 +331,21 @@
         "type": "project_tile",
         "text_ref": "AI 规则与技能基座",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-04",
@@ -388,28 +363,15 @@
         "type": "project_tile",
         "text_ref": "AI 工具配置管理",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 6,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -418,15 +380,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图两排各3格，各排铺满卡宽；不照通用示例重排。双排数字区占下半部更多高度，统计行在两排格之后。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[3, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-04",
@@ -444,30 +403,21 @@
         "type": "project_tile",
         "text_ref": "AI 工具配置管理",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 6,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-05",
@@ -485,27 +435,15 @@
         "type": "project_tile",
         "text_ref": "GitHub 项目总索引",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -514,15 +452,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-05",
@@ -540,30 +475,21 @@
         "type": "project_tile",
         "text_ref": "GitHub 项目总索引",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-06",
@@ -647,28 +573,15 @@
         "type": "project_tile",
         "text_ref": "密码中心",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          2
-        ],
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -677,15 +590,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。0.5–72 小时是一个完整数字项，不拆成两格。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。；视觉回读：0.5–72小时末字仍换行，07四格改两行各2格，保留全数字原字号。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-07",
@@ -703,30 +613,21 @@
         "type": "project_tile",
         "text_ref": "密码中心",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-08",
@@ -744,27 +645,15 @@
         "type": "project_tile",
         "text_ref": "本地加密库",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -773,22 +662,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "number_column_widths": [
-          [
-            461,
-            536,
-            490
-          ]
-        ]
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图三数字格宽度约461:536:490，中格略宽以承载长说明；不强制等宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-08",
@@ -806,30 +685,21 @@
         "type": "project_tile",
         "text_ref": "本地加密库",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-09",
@@ -913,27 +783,15 @@
         "type": "project_tile",
         "text_ref": "电脑配置与恢复",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2
-        ],
-        "stat_columns": 2,
-        "stat_count": 2,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -942,15 +800,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排2格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-10",
@@ -968,30 +823,21 @@
         "type": "project_tile",
         "text_ref": "电脑配置与恢复",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 2,
-        "stat_count": 2,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-11",
@@ -1009,28 +855,15 @@
         "type": "project_tile",
         "text_ref": "开发配置备份",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1039,15 +872,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排5格，各排铺满卡宽；不照通用示例重排。五格一排，42.5 GiB和4个之间不留占位格。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[2, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-11",
@@ -1065,30 +895,21 @@
         "type": "project_tile",
         "text_ref": "开发配置备份",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-12",
@@ -1106,27 +927,15 @@
         "type": "project_tile",
         "text_ref": "AI 备份",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1135,15 +944,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。2 分 18 秒是一个数字项，三格等宽。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-12",
@@ -1161,30 +967,21 @@
         "type": "project_tile",
         "text_ref": "AI 备份",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-13",
@@ -1202,27 +999,15 @@
         "type": "project_tile",
         "text_ref": "Steam 外观备份",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1231,15 +1016,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 独立视觉复核：Steam外观备份四格的数字与说明均居中。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-13",
@@ -1257,30 +1039,21 @@
         "type": "project_tile",
         "text_ref": "Steam 外观备份",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-14",
@@ -1364,28 +1137,15 @@
         "type": "project_tile",
         "text_ref": "内存盘守护",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1394,15 +1154,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排5格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[2, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-15",
@@ -1420,30 +1177,21 @@
         "type": "project_tile",
         "text_ref": "内存盘守护",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-16",
@@ -1461,27 +1209,15 @@
         "type": "project_tile",
         "text_ref": "代理上网修复",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1490,16 +1226,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下、直达上有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-16",
@@ -1517,31 +1249,21 @@
         "type": "project_tile",
         "text_ref": "代理上网修复",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-17",
@@ -1559,28 +1281,15 @@
         "type": "project_tile",
         "text_ref": "电脑使用与性能记录",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          2
-        ],
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1589,16 +1298,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下、直达上有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。；实际字框回读仍有长数字折行，统计格改最多2列保留数字字号与原文。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-17",
@@ -1616,31 +1321,21 @@
         "type": "project_tile",
         "text_ref": "电脑使用与性能记录",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-18",
@@ -1658,27 +1353,15 @@
         "type": "project_tile",
         "text_ref": "双屏信息中心",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1687,16 +1370,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下、直达上有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-18",
@@ -1714,31 +1393,21 @@
         "type": "project_tile",
         "text_ref": "双屏信息中心",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-19",
@@ -1756,27 +1425,15 @@
         "type": "project_tile",
         "text_ref": "屏保与壁纸",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -1785,16 +1442,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下、直达上有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-19",
@@ -1812,31 +1465,21 @@
         "type": "project_tile",
         "text_ref": "屏保与壁纸",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-20",
@@ -1849,27 +1492,15 @@
         "type": "project_tile",
         "text_ref": "个人网站（总看板）",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
@@ -1878,16 +1509,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。",
-    "aspect": "1672:1045"
+    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。 目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-20",
@@ -1900,34 +1527,21 @@
         "type": "project_tile",
         "text_ref": "个人网站（总看板）",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2,
-        "number_rows": [
-          4
-        ]
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。"
+    "notes": "本人10月7日要求新增网站正式项目；复用现有项目卡组件与网站无字水彩插画，完整横竖版，不缩小正文。 目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-21",
@@ -2011,27 +1625,15 @@
         "type": "project_tile",
         "text_ref": "电脑远程控制",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2040,16 +1642,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-22",
@@ -2067,31 +1665,21 @@
         "type": "project_tile",
         "text_ref": "电脑远程控制",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-23",
@@ -2109,27 +1697,15 @@
         "type": "project_tile",
         "text_ref": "远程电脑串流",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2138,16 +1714,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-23",
@@ -2165,31 +1737,21 @@
         "type": "project_tile",
         "text_ref": "远程电脑串流",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-24",
@@ -2207,27 +1769,15 @@
         "type": "project_tile",
         "text_ref": "双机剪贴板",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "soft_filled_borderless",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2236,18 +1786,14 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
         },
         "link_fill_width": false,
-        "status_style": "plain",
-        "separator_after_date": false
+        "status_style": "plain"
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。批准替换图的数字区是浅色一排三格，卡间无明显细框；底部三胶囊一排，直达：仍须按定稿显示。示意两台电脑的箭头是插画内部的物件，不在卡片之间另画流程线。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 批准替换卡的数字三格为极淡绿填充、无明显边框；底部三条入口各占一栏铺满同一行，文字仍按当前定稿保留直达标签。 批准替换图的偶尔用标签为淡绿实底胶囊，日期与底部入口间不加分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：直达取消满宽填充，恢复行内链接；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-24",
@@ -2265,33 +1811,23 @@
         "type": "project_tile",
         "text_ref": "双机剪贴板",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "soft_filled_borderless",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
         "frozen": false,
         "link_fill_width": false,
-        "status_style": "plain",
-        "separator_after_date": false,
-        "portrait_columns": 2
+        "status_style": "plain"
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-25",
@@ -2375,27 +1911,15 @@
         "type": "project_tile",
         "text_ref": "个人理解库",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2404,16 +1928,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-26",
@@ -2431,31 +1951,21 @@
         "type": "project_tile",
         "text_ref": "个人理解库",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-27",
@@ -2473,27 +1983,15 @@
         "type": "project_tile",
         "text_ref": "个人健康",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2502,16 +2000,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-27",
@@ -2529,31 +2023,21 @@
         "type": "project_tile",
         "text_ref": "个人健康",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-28",
@@ -2571,27 +2055,15 @@
         "type": "project_tile",
         "text_ref": "学习方法",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2600,16 +2072,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-28",
@@ -2627,31 +2095,21 @@
         "type": "project_tile",
         "text_ref": "学习方法",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-29",
@@ -2735,28 +2193,15 @@
         "type": "project_tile",
         "text_ref": "中文语音转写",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2765,16 +2210,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排5格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 独立视觉复核：本卡数字及说明靠左，不能沿用前组的居中数字格。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[2, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-30",
@@ -2792,31 +2233,21 @@
         "type": "project_tile",
         "text_ref": "中文语音转写",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-31",
@@ -2834,28 +2265,15 @@
         "type": "project_tile",
         "text_ref": "本地文字识别",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3,
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 6,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2864,16 +2282,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排6格，各排铺满卡宽；不照通用示例重排。六格确实是一排，不跟04同为六项而重排成两排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 独立视觉复核：本卡数字及说明靠左，不能沿用前组的居中数字格。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大3列，number_rows=[3, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-31",
@@ -2891,31 +2305,21 @@
         "type": "project_tile",
         "text_ref": "本地文字识别",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 6,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-32",
@@ -2933,28 +2337,15 @@
         "type": "project_tile",
         "text_ref": "微信聊天读取",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          3
-        ],
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -2963,16 +2354,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排5格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 独立视觉复核：本卡数字及说明靠左，不能沿用前组的居中数字格。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：数字区最大4列，number_rows=[2, 3]；统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-32",
@@ -2990,31 +2377,21 @@
         "type": "project_tile",
         "text_ref": "微信聊天读取",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 5,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-33",
@@ -3032,28 +2409,15 @@
         "type": "project_tile",
         "text_ref": "照片视频录音管理",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          2
-        ],
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3062,16 +2426,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。四格一排；第一项19,851 → 3,357 张完整保留，末项标签自然换行，不缩字号。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。；实际字框回读仍有长数字折行，统计格改最多2列保留数字字号与原文。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-33",
@@ -3089,31 +2449,21 @@
         "type": "project_tile",
         "text_ref": "照片视频录音管理",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-34",
@@ -3131,27 +2481,15 @@
         "type": "project_tile",
         "text_ref": "个人材料查找",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3160,16 +2498,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-34",
@@ -3187,31 +2521,21 @@
         "type": "project_tile",
         "text_ref": "个人材料查找",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-35",
@@ -3295,27 +2619,15 @@
         "type": "project_tile",
         "text_ref": "个人表达",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          4
-        ],
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3324,16 +2636,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-36",
@@ -3351,31 +2659,21 @@
         "type": "project_tile",
         "text_ref": "个人表达",
         "align": "left",
-        "columns": 4,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 4,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-37",
@@ -3393,27 +2691,15 @@
         "type": "project_tile",
         "text_ref": "个人正式文书",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3422,16 +2708,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-37",
@@ -3449,31 +2731,21 @@
         "type": "project_tile",
         "text_ref": "个人正式文书",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-38",
@@ -3491,27 +2763,15 @@
         "type": "project_tile",
         "text_ref": "工作支持与交付",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3520,16 +2780,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-38",
@@ -3547,31 +2803,21 @@
         "type": "project_tile",
         "text_ref": "工作支持与交付",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-39",
@@ -3589,27 +2835,15 @@
         "type": "project_tile",
         "text_ref": "Typora 薄荷主题",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3618,16 +2852,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-39",
@@ -3645,31 +2875,21 @@
         "type": "project_tile",
         "text_ref": "Typora 薄荷主题",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-40",
@@ -3687,28 +2907,15 @@
         "type": "project_tile",
         "text_ref": "本地视频制作",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          2,
-          2
-        ],
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": true,
@@ -3717,16 +2924,12 @@
           "title": "upper_left",
           "tagline": "middle_left",
           "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
           "retirement": null
-        },
-        "separator_after_date": true
+        }
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排4格，各排铺满卡宽；不照通用示例重排。3840×2160 和60 帧属同一个数字项。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。；实际字框回读仍有长数字折行，统计格改最多2列保留数字字号与原文。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。"
   },
   {
     "screen": "projects-home-40",
@@ -3744,31 +2947,21 @@
         "type": "project_tile",
         "text_ref": "本地视频制作",
         "align": "left",
-        "columns": 2,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 2,
-        "stat_count": 4,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": true,
-        "frozen": false,
-        "separator_after_date": true,
-        "portrait_columns": 2
+        "frozen": false
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。"
   },
   {
     "screen": "projects-home-41",
@@ -3852,27 +3045,15 @@
         "type": "project_tile",
         "text_ref": "OpenClaw 网关",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": false,
@@ -3880,19 +3061,14 @@
         "source_regions": {
           "title": "upper_left",
           "tagline": "middle_left",
-          "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
-          "retirement": "between_date_and_footer"
+          "illustration": "upper_right"
         },
-        "separator_after_date": true,
         "separator_before_footer": true,
         "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。冻结卡保留浅灰状态标签，不画公开/私有徽章；日期下方依次排停下原因、现在，最后一行直达。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。 冻结卡次序：数字→日期→细线→停下原因→现在→细线→直达；现在行中的链接保持行内绿字下划线，不改成胶囊。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-42",
@@ -3910,33 +3086,23 @@
         "type": "project_tile",
         "text_ref": "OpenClaw 网关",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": false,
         "frozen": true,
-        "separator_after_date": true,
         "separator_before_footer": true,
-        "retirement_inline_link_style": "underlined_inline",
-        "portrait_columns": 2
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-43",
@@ -3954,27 +3120,15 @@
         "type": "project_tile",
         "text_ref": "Codex 远程",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": false,
@@ -3982,19 +3136,14 @@
         "source_regions": {
           "title": "upper_left",
           "tagline": "middle_left",
-          "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
-          "retirement": "between_date_and_footer"
+          "illustration": "upper_right"
         },
-        "separator_after_date": true,
         "separator_before_footer": true,
         "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。冻结卡保留浅灰状态标签，不画公开/私有徽章；日期下方依次排停下原因、现在，最后一行直达。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。 冻结卡次序：数字→日期→细线→停下原因→现在→细线→直达；现在行中的链接保持行内绿字下划线，不改成胶囊。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-43",
@@ -4012,33 +3161,23 @@
         "type": "project_tile",
         "text_ref": "Codex 远程",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": false,
         "frozen": true,
-        "separator_after_date": true,
         "separator_before_footer": true,
-        "retirement_inline_link_style": "underlined_inline",
-        "portrait_columns": 2
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-44",
@@ -4056,27 +3195,15 @@
         "type": "project_tile",
         "text_ref": "AI 模型评测",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": false,
@@ -4084,19 +3211,14 @@
         "source_regions": {
           "title": "upper_left",
           "tagline": "middle_left",
-          "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
-          "retirement": "between_date_and_footer"
+          "illustration": "upper_right"
         },
-        "separator_after_date": true,
         "separator_before_footer": true,
         "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。冻结卡保留浅灰状态标签，不画公开/私有徽章；日期下方依次排停下原因、现在，最后一行直达。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。 冻结卡次序：数字→日期→细线→停下原因→现在→细线→直达；现在行中的链接保持行内绿字下划线，不改成胶囊。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-44",
@@ -4114,33 +3236,23 @@
         "type": "project_tile",
         "text_ref": "AI 模型评测",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": false,
         "frozen": true,
-        "separator_after_date": true,
         "separator_before_footer": true,
-        "retirement_inline_link_style": "underlined_inline",
-        "portrait_columns": 2
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-45",
@@ -4158,27 +3270,15 @@
         "type": "project_tile",
         "text_ref": "微信记录交给 AI",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "number_rows": [
-          3
-        ],
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
         "badge_position": "top_right",
-        "illustration_position": "right_inside_above_stats",
         "tagline_position": "left_inside_below_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "one_row",
         "show_badge": false,
@@ -4186,19 +3286,14 @@
         "source_regions": {
           "title": "upper_left",
           "tagline": "middle_left",
-          "illustration": "upper_right",
-          "stats": "below_illustration",
-          "date": "below_stats",
-          "retirement": "between_date_and_footer"
+          "illustration": "upper_right"
         },
-        "separator_after_date": true,
         "separator_before_footer": true,
         "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "沿用上一批原图文字记录（本轮主/子代理均未看图）：已看原图。画布就是一张卡，窄白边、细绿圆角外框；标题链接在左上，状态贴标题右侧，公开GitHub/私有锁徽章在右上；一句话左侧，水彩插画在同一外卡的右半上部、在数字子卡外，数字子卡内没有插画；日期和直达行依次在数字区下面。无卡间连线，无额外图标牌。数字格按原图一排3格，各排铺满卡宽；不照通用示例重排。冻结卡保留浅灰状态标签，不画公开/私有徽章；日期下方依次排停下原因、现在，最后一行直达。定稿portrait明确“不画竖版”，只提交横版项，网页按组重排。原图字与当前定稿冲突时完整使用定稿，不把旧文案抄回。 接续核对：按COMPONENTS-API当前组件实现，columns表示数字区最大列数；使用right_inside把插画放在外卡右半上部，数字区满宽。 原图日期下有浅绿全宽细分隔线。 冻结卡次序：数字→日期→细线→停下原因→现在→细线→直达；现在行中的链接保持行内绿字下划线，不改成胶囊。；本轮把未生效canvas比例转为aspect最小高度，项目数字和直达留在同一个project_tile，删除未被消费parts。实际固定卡高、卡片间高度一致性仍待数字量测。；page-fixer-07：统计数字统一居中。 本轮明确要求已取代旧不画竖版约定：同屏显式补941宽v，横版原构图保持。",
-    "aspect": "1672:1045"
+    "notes": "目录卡横版：沿用原标题、状态、可见性标记、一句能力和水彩插画，保留真实直达入口；卡高由这些内容自然决定，正文和入口不缩字。保留原停下原因、现在的替代办法及其链接。"
   },
   {
     "screen": "projects-home-45",
@@ -4216,32 +3311,22 @@
         "type": "project_tile",
         "text_ref": "微信记录交给 AI",
         "align": "left",
-        "columns": 3,
         "illustration": "right_inside",
         "connector": "none",
         "icons": "none",
         "size": "medium",
-        "stat_columns": 3,
-        "stat_count": 3,
         "title_style": "sans_bold",
         "title_position": "top_left",
         "status_position": "after_title",
-        "stats_position": "full_width_below_hero",
-        "stat_alignment": "center",
-        "stat_style": "rounded_thin_border",
-        "number_label_position": "below",
-        "date_position": "below_stats",
         "footer_position": "bottom_left",
         "link_layout": "auto",
         "show_badge": false,
         "frozen": true,
-        "separator_after_date": true,
         "separator_before_footer": true,
-        "retirement_inline_link_style": "underlined_inline",
-        "portrait_columns": 2
+        "retirement_inline_link_style": "underlined_inline"
       }
     ],
     "portrait_required": true,
-    "notes": "北京时间 2026-10-04 本轮明确要求：每张项目卡补941宽手机竖版，组内一列。AI实现选择：复用横版同一组件/内容/插画/徽章/状态/链接，标题与徽章分行，介绍和插画上下排；数字最多两列，直达入口自然换行，正文不缩字，卡高随内容。原横版source_image只用于来源对照，不作为竖版构图。"
+    "notes": "目录卡竖版：沿用同一份标题、状态、可见性、能力句、插画和入口；按现有组件自然排列，入口自然换行，正文不缩字，卡高随内容。保留原停下原因、现在的替代办法及其链接。"
   }
 ]

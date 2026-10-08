@@ -17,7 +17,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "我、Claude、GPT、三个底座",
+        "text_ref": "想看一件事怎么办成",
         "row": "top"
       },
       {
@@ -68,7 +68,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "我、Claude、GPT、三个底座"
+        "text_ref": "想看一件事怎么办成"
       },
       {
         "type": "illustration",
@@ -228,34 +228,22 @@
       },
       {
         "type": "content_card",
-        "text_ref": "GPT-6 Luna",
-        "columns": 3,
+        "text_ref": "写代码、改脚本、修 bug",
+        "columns": 2,
         "columns_v": 1,
         "align": "left",
         "connector": "none",
-        "illustration": "left_inside",
-        "icons": "auto"
+        "illustration": "none",
+        "icons": "none"
       },
       {
         "type": "notice",
-        "text_ref": "Claude Fable",
+        "text_ref": "{{roster.update_rule}}",
         "tone": "gray"
       },
       {
-        "type": "content_card",
-        "text_ref": "这个网站就是这样分的",
-        "columns": 1,
-        "columns_v": 1,
-        "align": "left",
-        "connector": "none",
-        "illustration": "left_inside",
-        "icons": [
-          "_library/icons/文稿堆.png"
-        ]
-      },
-      {
         "type": "action_button",
-        "text_ref": "每类活用哪一档",
+        "text_ref": "看协作过程",
         "columns": 2,
         "align": "center"
       }
@@ -288,34 +276,22 @@
       },
       {
         "type": "content_card",
-        "text_ref": "GPT-6 Luna",
+        "text_ref": "写代码、改脚本、修 bug",
         "columns": 1,
         "columns_v": 1,
         "align": "left",
         "connector": "none",
-        "illustration": "left_inside",
-        "icons": "auto"
+        "illustration": "none",
+        "icons": "none"
       },
       {
         "type": "notice",
-        "text_ref": "Claude Fable",
+        "text_ref": "{{roster.update_rule}}",
         "tone": "gray"
       },
       {
-        "type": "content_card",
-        "text_ref": "这个网站就是这样分的",
-        "columns": 1,
-        "columns_v": 1,
-        "align": "left",
-        "connector": "none",
-        "illustration": "top_inside",
-        "icons": [
-          "_library/icons/文稿堆.png"
-        ]
-      },
-      {
         "type": "action_button",
-        "text_ref": "每类活用哪一档",
+        "text_ref": "看协作过程",
         "columns": 1,
         "align": "center"
       }

@@ -1,6 +1,8 @@
 """离线清点指定两批直接子页；只向本文件所在目录写清点产物。"""
 from __future__ import annotations
-import collections, datetime, hashlib, json, os, pathlib, re
+import collections, datetime, hashlib, json, os, pathlib, re, sys
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]/'src/typeset'))
+from engine.content import bound_json
 
 ROOT = pathlib.Path(__file__).resolve().parents[1] / 'sources/pages'
 OUT = pathlib.Path(os.environ.get('TYPESET_INVENTORY_OUT', ROOT.parents[1] / '.publish/inventory'))
@@ -387,7 +389,7 @@ def main():
     paths=sorted(ROOT.glob('*/page.json'))
     before={str(p):sha(p.read_bytes()) for p in paths};image_before={};rows=[];pages=[]
     for p in paths:
-        raw=p.read_bytes();d=json.loads(raw.decode('utf-8-sig'))
+        raw=p.read_bytes();d=bound_json(p, lambda source: source.read_text('utf-8-sig'))
         imgs=sorted(q for q in (p.parent/'img').glob('*') if q.is_file() and q.suffix.lower() in ['.png','.jpg','.jpeg','.webp','.avif'])
         for q in imgs:image_before[str(q)]=(q.stat().st_size,q.stat().st_mtime_ns)
         pages.append({'batch':p.parent.parent.name,'page':p.parent.name,'screens':len(d['screens']),'source_path':str(p),'sha256':sha(raw)})
@@ -423,7 +425,7 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True)
     (OUT/'screens.jsonl').write_text(''.join(json.dumps(r,ensure_ascii=False,separators=(',',':'))+'\n' for r in rows),encoding='utf-8')
     jwrite(OUT/'stats.json',stats)
-    md=['# 全站排版组件总表',f'\n清点时间：{NOW}（北京时间）。活动规则 E208 核验通过；离线只读分析。',
+    md=['# 全站排版组件总表',f'\n清点时间：{NOW}（北京时间）；离线只读分析。活动规则核验由调用方记录。',
       f'\n## 范围与数字\n\n指定范围共 **{len(paths)} 页、{len(rows)} 屏、{len(counts)} 类组件**。来源 `sources/pages/`。三张总页已包含。只读直接子页，不含管线历史／预览和退役目录。',
       f'\n规划无字水彩资产位 **{illustrations} 幅插画＋{icons} 个小图标＝{illustrations+icons} 个**。这是按描述拆分的预算，{stats["asset_estimated_screens"]} 屏涉及数量推断；不是去重后的最终采购量。横竖不翻倍，共享叶子／状态点／箭头／线框不计。',
       f'\n实时框涉及 **{stats["live_screens"]} 屏**（live 注册 {stats["live_registry_slots"]} 项）；截图／照片槽涉及 **{stats["screenshot_screens"]} 屏、{stats["screenshot_slots"]} 槽**，使用 {stats["screenshot_source_files"]} 条源图记录。before／after 两图按同一槽计。',

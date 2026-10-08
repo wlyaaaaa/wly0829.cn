@@ -230,31 +230,13 @@
         "text_ref": "派谁：什么活"
       },
       {
-        "type": "prose",
-        "text_ref": "先能胜任"
-      },
-      {
-        "type": "content_card",
-        "columns": 2,
-        "columns_v": 1,
-        "illustration": "none",
-        "connector": "none",
-        "text_ref": "GPT-6 Luna",
-        "icons": "none"
-      },
-      {
-        "type": "notice",
-        "columns": 1,
-        "illustration": "none",
-        "text_ref": "Claude Fable",
-        "icons": "none"
-      },
-      {
-        "type": "prose",
-        "text_ref": "截至北京时间"
+        "type": "action_button",
+        "text_ref": "现行型号、档位和分工 → 怎么协作",
+        "align": "left"
       }
     ],
-    "notes": "批准横图实际六卡2列3行，按行Luna/Sol、Opus/最难、Sonnet/生图；横卡没有图标，标题整宽居中，不照旧scene的3列2行。末尾Fable细条、日期链接。；qa-10第3条：横竖六卡及Fable提示统一无图标，保留全部定稿，取消手机三张Claude卡重复橙标。"
+    "notes": "沿用原标题；现行型号、档位和分工由“怎么协作”承接，本页只保留入口。",
+    "shape": "strip"
   },
   {
     "screen": "rules-home-03",
@@ -271,31 +253,13 @@
         "text_ref": "派谁：什么活"
       },
       {
-        "type": "prose",
-        "text_ref": "先能胜任"
-      },
-      {
-        "type": "content_card",
-        "columns": 1,
-        "columns_v": 1,
-        "illustration": "none",
-        "connector": "none",
-        "text_ref": "GPT-6 Luna",
-        "icons": "none"
-      },
-      {
-        "type": "notice",
-        "columns": 1,
-        "illustration": "none",
-        "text_ref": "Claude Fable",
-        "icons": "none"
-      },
-      {
-        "type": "prose",
-        "text_ref": "截至北京时间"
+        "type": "action_button",
+        "text_ref": "现行型号、档位和分工 → 怎么协作",
+        "align": "left"
       }
     ],
-    "notes": "仅存批准-v2续图，前三卡和标题所在-v缺失：新构图，待样张（竖版前半）。续图后三卡一行一张，图标在卡内左、标题和说明在右；Fable也是左图右文的细卡，末尾日期链接一张细卡。前半据同页竖版和portrait补标题、前三卡，整宽标题居中。；qa-10第3条：横竖六卡及Fable提示统一无图标，保留全部定稿，取消手机三张Claude卡重复橙标。"
+    "notes": "沿用原标题；现行型号、档位和分工由“怎么协作”承接，本页只保留入口。",
+    "shape": "strip"
   },
   {
     "screen": "rules-home-04",
