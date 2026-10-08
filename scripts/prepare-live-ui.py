@@ -129,6 +129,16 @@ def patch_layout(text):
     flow=source[start:end]
     install='function installTypeset(section,screen){'; next_function='function displayTypesetStatus('
     if install not in text:return text
+    # SiteAudit owns rendered slots; inactive copies may intentionally have no span.
+    audit="slots:[...document.querySelectorAll('.slot')].map"
+    active="slots:[...document.querySelectorAll('.slot')].filter(c=>{const r=c.getBoundingClientRect();return c.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&r.width>0&&r.height>0;}).map"
+    if text.count(audit)==1:text=text.replace(audit,active,1)
+    elif text.count(active)!=1:raise ValueError('Unsupported legacy SiteAudit slot enumeration')
+    reading='const typesetReadingState='
+    if text.count(reading)!=1:raise ValueError('Unsupported legacy reading state')
+    begin=text.index(reading); finish=text.index(start_marker,begin)
+    source_begin=source.index(reading)
+    text=text[:begin]+source[source_begin:source.index(start_marker,source_begin)]+text[finish:]
     if start_marker in text:
         start=text.index(start_marker); end=text.index(end_marker,start)+len(end_marker)
         text=text[:start]+flow+text[end:]

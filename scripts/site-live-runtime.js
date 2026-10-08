@@ -121,8 +121,8 @@ function currentResult(slot){
   const previous=connected?parse(last,slot,page.project,Date.now(),true):unknown;
   const old=previous.state!=='unknown'?{result:previous,at:Date.parse(row?.updated_at||row?.observed_at||source?.observed_at)}:cached;
   if(old&&Number.isFinite(old.at)){const parts=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'numeric',day:'numeric'}).formatToParts(new Date(old.at)),date=parts.find(p=>p.type==='month').value+'月'+parts.find(p=>p.type==='day').value+'日';return {...old.result,text:old.result.text+' · 最后更新 '+date+'（已过期）',state:'stale',cached:true,retained:true,readAt:old.at/1000};}
-  return {empty:true,state:'unknown'};
  }
+ if(slot==='local'||slot==='panel')return {text:slot==='local'?'此网页尚未读到本地模型实时状态':'此网页尚未读到面板实时状态',state:'unknown'};
  if(last&&phase!=='ready'&&cached)return {...cached.result,text:cached.result.text+' · '+Math.max(0,Math.floor((Date.now()-cached.at)/60000))+' 分钟前读到',state:'unknown',cached:true,retained:true,readAt:cached.at/1000};
  if(connected&&source?.collection_state==='reading')return cached?{...offlineResult(cached),text:'此项正在读取 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:{text:'正在读取这一项 · 还没读到过',state:'loading',readAt:undefined};
  if(connected)return cached?{...offlineResult(cached),text:'此项当前读不到 · 当时：'+cached.result.text+' · 上次读到 '+formatTime(new Date(cached.at).toISOString(),Date.now()),state:'unknown'}:{text:result.text!==unknown.text?result.text:source?.state==='stale'?'这一项的读数已过期':'这一项暂时读不到',state:'unknown'};

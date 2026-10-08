@@ -3,6 +3,7 @@ function displayTypesetStatus(payload,phase,parse,data){
   const result=parse(payload,el.dataset.slot,data.project);
   const slot=el.dataset.slot,part=el.closest('.typeset-part');
   el.hidden=result.empty===true;
+  el.dataset.optionalEmpty=String(result.empty===true);
   if(el.hidden){el.replaceChildren();continue;}
   const title=data.status_binding?.prefixes?.[slot]||data.status_binding?.labels?.[slot];
   if(window.LiveStatusUI){

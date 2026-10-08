@@ -27,7 +27,7 @@ POSITION = """() => {
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
  const screens=[...document.querySelectorAll('.screen')];
  function top(el){let y=0;for(let node=el;node;node=node.offsetParent)y+=node.offsetTop;return y;}
- const point=scrollY+offset;
+ const point=scrollY+offset,maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);
  const first=screens.find(s=>s.offsetHeight&&top(s)+s.offsetHeight>point);
  // The runtime selects a member of an ambiguous grid row. Measure that
  // member from DOM coordinates, accepting it only within the actual row.
@@ -36,14 +36,15 @@ POSITION = """() => {
                               s.offsetHeight&&top(s)<=point&&top(s)+s.offsetHeight>point):[];
  const el=row.find(s=>s.dataset.screen===readingPosition?.id)||first;
  return {id:el?.dataset.screen,fraction:el?(scrollY+offset-top(el))/el.offsetHeight:null,
-         height:el?.offsetHeight,y:scrollY,offset,width:innerWidth,viewportHeight:innerHeight,
+         height:el?.offsetHeight,y:scrollY,maxScroll,atBottom:maxScroll>0&&Math.abs(scrollY-maxScroll)<=1,offset,width:innerWidth,viewportHeight:innerHeight,
          row_candidates:row.map(s=>s.dataset.screen)};
 }"""
 PLACE = """({id,fraction})=>{
  const el=[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===id);
  let y=0;for(let node=el;node;node=node.offsetParent)y+=node.offsetTop;
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
- scrollTo({top:y+el.offsetHeight*fraction-offset,behavior:'instant'});
+ const requested=y+el.offsetHeight*fraction-offset,maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight),target=Math.max(0,Math.min(maxScroll,requested));
+ scrollTo({top:target,behavior:'instant'});return {requested,target,maxScroll,clamped:target!==requested};
 }"""
 
 
@@ -51,6 +52,12 @@ def reading_error_within_two_pixels(value):
     # Retain the measured delta. Only arithmetic roundoff at the inclusive edge
     # is equivalent to 2px; any meaningful extra displacement remains a failure.
     return value is not None and (value <= 2 or math.isclose(value, 2, rel_tol=0, abs_tol=1e-9))
+
+
+def reading_delta(before, after):
+    if before.get('atBottom') and before.get('maxScroll', 0) > 0:
+        return abs(after['y'] - after['maxScroll'])
+    return abs(after['fraction'] - before['fraction']) * after['height'] if after['id'] == before['id'] else None
 
 
 async def reading_position(browser_page):
@@ -141,7 +148,7 @@ async def run(args, base, build):
                             await browser_page.wait_for_timeout(80)
                             await reading_position(browser_page)
                             after=await reading_position(browser_page)
-                            delta=abs(after['fraction']-before['fraction'])*after['height'] if after['id']==before['id'] else None
+                            delta=reading_delta(before, after)
                             result['cases'].append({'page':name,'requested_screen':screen,'requested_fraction':fraction,
                                 'from':start,'to':end,'before':before,'after':after,'error_px':delta,
                                 'pass':reading_error_within_two_pixels(delta)})
@@ -162,7 +169,7 @@ async def run(args, base, build):
                 await browser_page.wait_for_timeout(80)
                 await reading_position(browser_page)
                 after=await reading_position(browser_page)
-                delta=abs(after['fraction']-before['fraction'])*after['height'] if after['id']==before['id'] else None
+                delta=reading_delta(before, after)
                 result['cases'].append({'page':name,'kind':'rapid-resizes','sequence':sequence,
                     'before':before,'after':after,'error_px':delta,'pass':reading_error_within_two_pixels(delta)})
                 # Real click / hash / history paths, including a click during a pending resize.
