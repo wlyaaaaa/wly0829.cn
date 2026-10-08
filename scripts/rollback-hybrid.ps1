@@ -9,6 +9,44 @@ function Checked([string]$Program,[string[]]$Arguments) {
     }
     if ($LASTEXITCODE -ne 0) { throw "$Program failed: exit $LASTEXITCODE" }
 }
+function Assert-RollbackOss([string]$Restored,[string]$Current,[string]$Report) {
+    $restore=Get-Content -Raw -LiteralPath $Restored | ConvertFrom-Json -AsHashtable -DateKind String
+    if (-not $restore.oss) { return }
+    $currentManifest=Get-Content -Raw -LiteralPath $Current | ConvertFrom-Json -AsHashtable -DateKind String
+    $known=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+    foreach ($object in $currentManifest.oss.objects.Values) {
+        [void]$known.Add("$($currentManifest.oss.asset_base_url)`n$($object.key)")
+    }
+    $checks=@()
+    foreach ($object in $restore.oss.objects.Values) {
+        if (-not $known.Add("$($restore.oss.asset_base_url)`n$($object.key)")) { continue }
+        $detail=$null
+        try {
+            $status=[int](Invoke-WebRequest -Method Head -Uri $object.url -TimeoutSec 30 -SkipHttpErrorCheck).StatusCode
+        } catch {
+            $status=0
+            $detail=$_.Exception.Message
+        }
+        $state=if ($status -ge 200 -and $status -lt 300) {
+            'present'
+        } elseif ($status -in 404,410) {
+            'missing'
+        } else {
+            'unknown'
+        }
+        $checks+=@{key=$object.key;url=$object.url;status=$status;state=$state;error=$detail}
+    }
+    New-Item -ItemType Directory -Path (Split-Path -Parent $Report) -Force | Out-Null
+    @{restore_ref=$RestoreRef;asset_base_url=$restore.oss.asset_base_url;checks=$checks} |
+        ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $Report -Encoding utf8
+    $missing=@($checks | Where-Object state -eq 'missing')
+    $unknown=@($checks | Where-Object state -eq 'unknown')
+    if ($missing.Count -or $unknown.Count) {
+        foreach ($object in $missing) { Write-Warning "OSS object missing; re-upload required: $($object.key) $($object.url)" }
+        foreach ($object in $unknown) { Write-Warning "OSS existence unknown (HTTP $($object.status)): $($object.key) $($object.url)" }
+        throw "Rollback stopped before publication; OSS checks: $Report"
+    }
+}
 if (-not $RestoreRef) {
     $manifest=Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'site-release/release-manifest.json') | ConvertFrom-Json -DateKind String
     $RestoreRef=$manifest.rollback_ref
@@ -33,6 +71,7 @@ try {
     Checked 'git' @('fetch','origin','main')
     $local=(& git rev-parse HEAD).Trim(); $remoteHead=(& git rev-parse origin/main).Trim()
     if ($local -ne $remoteHead) { throw 'Rollback needs local HEAD equal to origin/main; integrate unrelated commits explicitly.' }
+    Assert-RollbackOss (Join-Path $Output 'release-manifest.json') (Join-Path $repoRoot 'site-release/release-manifest.json') (Join-Path $runRoot 'oss-existence.json')
     $target=Join-Path $repoRoot 'site-release'
     $retention=Join-Path $runRoot 'failed-release'
     $resolvedRepo=[IO.Path]::GetFullPath($repoRoot).TrimEnd('\','/')+[IO.Path]::DirectorySeparatorChar
