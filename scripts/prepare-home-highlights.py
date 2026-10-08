@@ -27,7 +27,16 @@ def input_paths():
     return {p.resolve() for p in paths if p.is_file()}
 
 
+def practice_entry(text):
+    text = re.sub(r'<div\b[^>]*data-home-practice-link[^>]*>[\s\S]*?</div>', '', text)
+    text, count = re.subn(r'(?=<div\b[^>]*\bid="story"[^>]*>)', '<div class="screen-control-row" data-home-practice-link><a href="/how/#practice">我的AI实践</a></div>', text, count=1)
+    if count != 1:
+        raise ValueError('Homepage practice entry needs the actual story anchor')
+    return text
+
+
 def prepare_fragment(text, data, scratch):
+    text = practice_entry(text)
     if not any(s['id']=='home-04' for s in data.get('screens', [])):
         return text, {}, None
     from playwright.sync_api import sync_playwright
