@@ -1876,5 +1876,118 @@
     ],
     "notes": "新构图，待样张；本方向没有原图，参照 how-07。目录按组标题再项目卡的顺序。how-07 原竖版看和听两卡单列为文字卡带角叶、不放大插画；做成品/备份项目卡为卡名、卡内大插画、拿/给正文。现有 how-07 缺个人正式文书/工作支持/Typora/AI备份对应分张，按可见相邻卡补齐，待样张。 本方向为参照同页目录卡的新构图。 qa04 修正：真实card目录路由已恢复；按原项目顺序逐项显式绑定现有库图标，避免本屏只有1个旧槽造成其余空图。AI补充的绑定只取名称对应通用物件；竖版看和听原构图明确无图的组仍保留无图。",
     "reference_screen": "how-07"
+  },
+  {
+    "screen": "how-16",
+    "orientation": "h",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-h.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-h.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的AI实践",
+        "align": "center",
+        "size": "large",
+        "width": "100%",
+        "row": "practice-0"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3,118.5 亿 Token",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "lead_value",
+        "icons": "none",
+        "width": "42%",
+        "row": "practice-main"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "用过的工具",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "item_images": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/手机电脑连接.png"
+        ],
+        "row": "practice-main"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图：",
+        "columns": 3,
+        "columns_v": 2,
+        "caption": "after",
+        "width": "58%",
+        "row": "practice-main",
+        "ratios": [
+          "1007:1489",
+          "1440:878",
+          "1440:881",
+          "1440:806",
+          "1440:896",
+          "1445:1060"
+        ],
+        "equal_row_height": true
+      }
+    ],
+    "aspect": "16:9",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。"
+  },
+  {
+    "screen": "how-16",
+    "orientation": "v",
+    "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-v.png",
+    "source_images": [
+      "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\img\\agents-16-v.png"
+    ],
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "我的AI实践",
+        "align": "center",
+        "size": "large"
+      },
+      {
+        "type": "stat_card",
+        "text_ref": "3,118.5 亿 Token",
+        "columns": 1,
+        "columns_v": 1,
+        "variant": "lead_value",
+        "icons": "none"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "用过的工具",
+        "illustration": "left_inside",
+        "icons": "auto",
+        "item_images": [
+          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
+          "_library/icons/手机电脑连接.png"
+        ]
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "截图：",
+        "columns": 3,
+        "columns_v": 2,
+        "caption": "after",
+        "ratios": [
+          "1007:1489",
+          "1440:878",
+          "1440:881",
+          "1440:806",
+          "1440:896",
+          "1445:1060"
+        ],
+        "equal_row_height": true
+      }
+    ],
+    "aspect": "9:16",
+    "notes": "依据清单 source_layout 与定稿 scene/portrait 文字补齐，未查看图片；沿原横竖构图，不加定稿外字。列优先/状态仅圆点/lead_value 数字/截图列数若组件未消费，列为未完成并提请求。agents-08 保留原文箭头链，通过 topology.split_arrows 分段；五站节点图形仍待构图验收。"
   }
 ]
