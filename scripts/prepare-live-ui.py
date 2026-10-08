@@ -19,6 +19,25 @@ def proof(payload):
     return {'sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload)}
 
 
+def cockpit_title_inputs(library):
+    """Reuse the six accepted title bitmaps at their original pixel resolution."""
+    library = Path(library).resolve(); manifest = library / 'asset-map.jsonl'; reuse = library.parent / 'cockpit/compact-titles.json'
+    expected = {'cockpit-01', 'cockpit-02', 'cockpit-03', 'cockpit-06', 'cockpit-07', 'cockpit-09'}
+    chosen = {}
+    rows = [json.loads(line) for line in manifest.read_text('utf8').splitlines()]
+    rows += json.loads(reuse.read_text('utf8'))['titles']
+    for row in rows:
+        if row.get('screen_id') not in expected or row.get('role') != 'title' or row.get('slot_ordinal') != 1:
+            continue
+        path = library.parent / row['asset']
+        if row.get('status') != 'ready' or row.get('text_verified') is not True or proof(path.read_bytes())['sha256'] != row.get('sha256'):
+            raise ValueError('Accepted cockpit title differs: ' + row['screen_id'])
+        with Image.open(path) as image: size = list(image.size)
+        chosen[row['screen_id']] = {'path': path, 'size': size}
+    if set(chosen) != expected: raise ValueError('The cockpit requires all six accepted bitmap titles')
+    return chosen, [manifest, reuse, *[row['path'] for row in chosen.values()]]
+
+
 def toc_unify_package(package):
     """Read the approved 85-page/75-label package without implicit fallbacks."""
     package = Path(package).resolve()
@@ -215,6 +234,10 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
     update = module('live_update', 'update-live-release.py')
     layout_css = addressed('typeset-layout', '.css', (HERE/'typeset-layout.css').read_bytes())
     b2_css = addressed('b2-live', '.css', (HERE/'b2-live.css').read_bytes())
+    cockpit_titles = {}
+    if page_scope is None or 'cockpit/index.html' in page_scope:
+        title_rows, _ = cockpit_title_inputs(library)
+        cockpit_titles = {screen: {'src': addressed(screen+'-title', '.png', row['path'].read_bytes()), 'size': row['size'], 'title': [0, 0, 1, 1]} for screen, row in title_rows.items()}
     changed_refs = {}
     def resolve(page, url):
         if url.startswith(('http:','https:','data:')): return None
@@ -266,10 +289,11 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
             if re.search(r'/typeset-layout-[0-9a-f]+\.css$',old):text=text.replace(old,layout_css)
             if re.search(r'b2-live-[0-9a-f]+\.css$',old):text=text.replace(old,b2_css)
         data.setdefault('shared',{})['live_status_icons']=icons
+        if data.get('kind') == 'cockpit': data['shared']['cockpit_titles'] = cockpit_titles
         # Dynamic renderers use string maps and constructed URLs. Declare their
         # exact dependencies in the existing native src graph before assembly.
         data['shared']['live_status_asset_dependencies']=[{'src':url}for url in sorted(
-            set(icons.values())|{item['public_path']for item in hardware_icons})]
+            set(icons.values())|{item['public_path']for item in hardware_icons}|{row['src'] for row in cockpit_titles.values() if data.get('kind') == 'cockpit'})]
         text=re.sub(r'(<script\b[^>]*\bid="page-data"[^>]*>).*?(</script>)',lambda m:m[1]+json.dumps(data,ensure_ascii=False,separators=(',',':')).replace('<','\\u003c')+m[2],text,count=1,flags=re.S)
         text=re.sub(r'<link[^>]*data-live-ui[^>]*>|<script[^>]*data-live-ui[^>]*>.*?</script>','',text,flags=re.S)
         # Older releases merged layout CSS into motion-* rather than linking a
@@ -314,6 +338,8 @@ def prepare_recipe(site, recipe, pages=None):
     if not unify:
         consumed += [HERE / name for name in ('prepare-toc-consistency.py', 'toc-consistency.css', 'toc-consistency.js')]
     consumed += [HERE.parent / 'app/computer-access-model.js']
+    if pages is None or 'cockpit/index.html' in pages:
+        _, title_inputs = cockpit_title_inputs(paths['library']); consumed += title_inputs
     consumed += [paths['library'] / relative for relative in set(hardware.SOURCES.values())]
     consumed += [paths['library'] / 'icons' / name for name in
         ('笔记本电脑.png', '硬盘循环.png', '云对勾.png', '打勾清单.png', '日历时钟.png', '工具箱.png')]

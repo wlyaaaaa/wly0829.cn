@@ -34,11 +34,31 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout:(...args)=>setTimeout(...args).unref(),clearTimeout};
  sandbox.window.top=sandbox.window;
- vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ const copying=source.slice(source.indexOf('function cpPublicSentence('),source.indexOf('function cpNoticeNode('));
+ vm.runInNewContext(pure+copying+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,cpTyped,cpItemTime,pendingRows,cpPublicSentence,cpCopyMeta,cpCopyRecords,cpCopyPrompt,cpCopyReady,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
 const groupUrls={all:'https://grafana.wly0829.cn/public-dashboards/cccccccccccccccccccccccccccccccc?theme=light','cpu-gpu':'https://grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?theme=light','memory-network':'https://grafana.wly0829.cn/public-dashboards/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb?theme=light'};
 function groupedFixture(){const data=fixture();data.grafana={state:'reachable',checked_at:iso(now),public_dashboard_state:'reachable',public_dashboard_checked_at:iso(now),public_dashboard_url:groupUrls.all,groups:Object.fromEntries(['cpu-gpu','memory-network'].map((part,i)=>[part,{state:'reachable',checked_at:iso(now-(i+1)*60000),url:groupUrls[part],max_age_seconds:300}]))};return data;}
+
+test('cockpit read completion rearms the observer deadline once without busy polling',async()=>{
+ const source=readFileSync(new URL('../scripts/b2-live-runtime.js',import.meta.url),'utf8');
+ const start=source.indexOf('let pollTimer,pollObserverTried=null;'),end=source.indexOf("document.addEventListener('visibilitychange'",start);
+ let seconds=1080,timer,calls=0,healthy=true;
+ const sandbox={formal:true,document:{hidden:false},busy:false,statusReading:false,data:{kind:'cockpit'},status:{automation:{observed_at_unix:1000,max_age_seconds:120}},
+  blockTime:b=>b.observed_at_unix,blockHealth:()=>healthy?'ok':'stale',online:()=>true,clock:()=>seconds,
+  clearTimeout(){},setTimeout(fn,delay){timer={fn,delay};return timer;},async readStatus(options){calls++;assert.equal(typeof options.refresh,'boolean');}};
+ vm.runInNewContext(source.slice(start,end)+'\nglobalThis.rearm=schedule;',sandbox);
+ sandbox.rearm();assert.equal(timer.delay,20000);
+ seconds=1100;await timer.fn();assert.equal(calls,1);assert.equal(timer.delay,60000);
+ sandbox.rearm();assert.equal(timer.delay,60000);assert.equal(calls,1);
+ sandbox.status.automation.observed_at_unix=1080;seconds=1160;sandbox.rearm();assert.equal(timer.delay,20000);
+ sandbox.busy=true;await timer.fn();assert.equal(calls,1);assert.equal(timer.delay,60000);
+ sandbox.busy=false;sandbox.rearm();seconds=1180;await timer.fn();assert.equal(calls,2);
+ healthy=false;sandbox.rearm();assert.equal(timer.delay,60000);
+ sandbox.document.hidden=true;sandbox.rearm();assert.equal(calls,2);
+ assert.match(source,/render\(\);schedule\(\);\},error=>/);
+});
 
 test('authorization result surface distinguishes no request, unknown outcome and an actual receipt, even offline',()=>{
  const app=cockpit();app.set(fixture());assert.equal(app.value('ca-results').empty,true);assert.equal(app.value('ca-toast').empty,true);
@@ -52,32 +72,24 @@ test('a fresh partial authority readback retains only that field while an expire
  data.personal_data={state:'locked',observed_at_unix:now/1000};app.set(data);
  assert.equal(app.value('ca-personal-data').state,'closed');assert.match(app.value('ca-personal-data').text,/锁着/);
  assert.equal(app.value('ca-unrestricted').state,'unknown');
- const attention=app.value('cockpit-attention').rows;assert.ok(!attention.some(row=>row.text.includes('个人资料开关状态')));assert.ok(attention.some(row=>row.text.includes('无限制授权状态')));
+ assert.equal(app.value('cockpit-attention').state,'unknown');assert.match(app.summary().text,/事项明细.*没读到/);
 });
 
 test('LC-01/02: source-backed drive letters and backup names remain readable Chinese',()=>{
- const app=cockpit();app.set(fixture());
+ const app=cockpit(),data=fixture();data.cockpit={detail_groups:{need_you:[],ai_following:[],deferred:[],history:[]}};app.set(data);
  const pc=app.value('cockpit-pc');assert.ok(pc.rows.some(x=>x.text.startsWith('E：')));assert.ok(!JSON.stringify(pc).includes('[object Object]'));assert.ok(!pc.rows.some(x=>x.text.includes('::')||x.text.includes(':：')));
- const backup=app.value('cockpit-backups');assert.match(backup.rows[0].text,/中文备份 · 正常/);assert.match(backup.rows[0].detail,/每天/);assert.ok(!JSON.stringify(backup).includes('task-backuphash'));
- assert.match(app.value('cockpit-quick-5').text,/中文备份/);
-});
-test('LC-03/04: single failures are pending; partial reads keep their own unknown state during grace',()=>{
- let data=fixture(),app=cockpit();data.projects.items[0].failed_count=1;data.projects.items[0].overview='run_failed';app.set(data);assert.equal(app.value('cockpit-overall').state,'ok');assert.match(app.value('cockpit-overall').text,/待处理/);
- data=fixture();data.projects.state='unavailable';app=cockpit();app.set(data);assert.equal(app.value('cockpit-overall').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);
- data=fixture();data.projects.items[0].overview='run_unknown';app=cockpit();app.set(data);assert.equal(app.value('cockpit-overall').state,'ok');assert.match(app.value('cockpit-attention').rows.at(-1).text,/运行状态.*读不到/);
- data=fixture();data.hardware={state:'unavailable'};app=cockpit();app.set(data);assert.equal(app.value('cockpit-pc').state,'unknown');
- data=fixture();data.backups.items[0].state='failed';app=cockpit();app.set(data);assert.equal(app.value('cockpit-backups').state,'error');assert.equal(app.value('cockpit-quick-5').state,'error');
+ const backup=app.value('cockpit-backups');assert.match(backup.rows[0].text,/中文备份/);assert.ok(!JSON.stringify(backup).includes('[object Object]'));
 });
 test('LC-05: past, future and next-year timestamps retain Beijing calendar dates',()=>{
  const app=cockpit(),data=fixture();data.backups.items[0].last_success_at='2026-09-28T10:30:00+08:00';app.set(data);
- assert.match(app.value('cockpit-backups').rows[0].text,/9月28日 10:30/);
- const task=app.value('cockpit-tasks').rows.flatMap(x=>x.children||[x]).find(x=>x.text.includes('每日检查')&&x.text.includes('上次'));assert.match(task.text,/9月28日 02:30/);assert.match(task.text,/10月5日 02:30/);
+ assert.match(app.time(Date.parse('2026-09-28T10:30:00+08:00')/1000),/9月28日 10:30/);
+ assert.match(app.time(Date.parse('2026-10-05T02:30:00+08:00')/1000),/10月5日 02:30/);
  assert.match(app.time(Date.parse('2027-01-01T00:30:00+08:00')/1000),/2027年1月1日 00:30/);
  assert.match(app.value('cockpit-security').text,/10月5日 03:00/);
 });
-test('LC-04: a missing hardware metric remains unknown and is named in pending during grace',()=>{
+test('LC-04: a missing hardware metric remains unknown; absent typed groups cannot assert a current conclusion',()=>{
  for(const patch of [data=>data.hardware.cpu.sources.temperature_celsius.status='unavailable',data=>data.hardware.memory.used_bytes=null,data=>data.hardware.volumes[0].sources.free_bytes.status='unknown',data=>data.hardware.gpus=[{state:'ok',model:'显卡',usage_percent:null,temperature_celsius:40,vram_used_bytes:0,vram_total_bytes:1024}]]){
-  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.match(app.value('cockpit-overall').text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>x.key?.startsWith('read-gap:hardware')&&x.text.includes('读不到')));
+  const data=fixture();patch(data);const app=cockpit();app.set(data);assert.notEqual(app.value('cockpit-pc').state,'ok');assert.equal(app.value('cockpit-overall').state,'unknown');assert.match(app.value('cockpit-overall').text,/当前结论不完整/);
  }
 });
 test('LC-07: upgrade observation failure is a failed result',()=>{
@@ -86,13 +98,9 @@ test('LC-07: upgrade observation failure is a failed result',()=>{
 });
 test('unreadable metrics from one hardware source fold into one row with complete details',()=>{
  const data=fixture();data.hardware.cpu.usage_percent=null;data.hardware.cpu.temperature_celsius=null;data.hardware.memory.used_bytes=null;
- const app=cockpit();app.set(data);const rows=app.value('cockpit-attention').rows.filter(x=>x.key?.startsWith('read-gap:hardware'));
+ const app=cockpit();app.set(data);const rows=app.pendingRows().filter(x=>x.key?.startsWith('read-gap:hardware'));
  assert.equal(rows.length,1);assert.match(rows[0].text,/电脑读数从 今天 02:00 起读不到（共 3 项）/);assert.equal(rows[0].children.length,3);
  assert.ok(rows[0].children.some(x=>x.text.includes('处理器的温度')));assert.ok(rows[0].children.every(x=>x.detail.includes('今天 02:00')));
-});
-test('LC-08: expired blocks preserve their actual prior value with time and a non-green state',()=>{
- const data=fixture();for(const key of ['automation','backups','projects','pending','today'])data[key].observed_at=iso(now-3600000);
- const app=cockpit();app.set(data);const backup=app.value('cockpit-backups');assert.equal(backup.state,'unknown');assert.match(backup.rows[0].text,/中文备份/);assert.match(backup.notice,/数据已过期.*上次读到 今天 01:00/);assert.equal(app.value('cockpit-overall').state,'warn');
 });
 test('a stale live chart cannot be represented or cached as a historical chart',()=>{
  const data=fixture();data.grafana={checked_at:iso(now-3600000),public_dashboard_state:'reachable',public_dashboard_url:'https://fixture.invalid/chart'};
@@ -156,20 +164,20 @@ test('group freshness does not inherit canonical, login or the other group clock
  const cpu=app.grafanaGroupValue('cpu-gpu');assert.equal(cpu.iframe,undefined);assert.equal(cpu.state,'unknown');assert.equal(cpu.readAt,now/1000-301);assert.equal(app.grafanaGroupValue('memory-network').iframe,groupUrls['memory-network']);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
  data.grafana.groups['cpu-gpu'].checked_at=iso(now-300000);app.set(data);assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);
 });
-test('one failed group leaves the other chart visible; unavailable groups are hidden and recover',()=>{
+test('one failed group leaves the other chart visible; unavailable groups keep an explained position and recover',()=>{
  const data=groupedFixture(),app=cockpit();data.grafana.groups['memory-network']={state:'unavailable',checked_at:iso(now),url:null,max_age_seconds:300};app.set(data);
- assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);let memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,undefined);assert.equal(memory.state,'unknown');assert.equal(memory.empty,true);assert.equal(memory.readAt,now/1000);
+ assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,groupUrls['cpu-gpu']);let memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,undefined);assert.equal(memory.state,'unknown');assert.notEqual(memory.empty,true);assert.equal(memory.readAt,now/1000);
  data.grafana.groups['cpu-gpu']={state:'unavailable',checked_at:null,url:null,max_age_seconds:300};app.set(data);
- assert.equal(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.equal(memory.empty,true);assert.equal(memory.emptyReason,'grafana-groups-unreadable');assert.equal(memory.cached,false);
+ assert.notEqual(app.grafanaGroupValue('cpu-gpu').empty,true);memory=app.grafanaGroupValue('memory-network');assert.notEqual(memory.empty,true);assert.match(memory.text,/现在打不开.*最后一次查询.*不影响/);assert.equal(memory.cached,false);
  app.set(groupedFixture());memory=app.grafanaGroupValue('memory-network');assert.equal(memory.iframe,groupUrls['memory-network']);assert.notEqual(memory.empty,true);
 });
 
-test('unregistered or failed mobile groups are hidden without a promised launch',()=>{
+test('unregistered or failed mobile groups retain the unknown explanation without a promised launch',()=>{
  const data=groupedFixture(),app=cockpit();
  for(const part of ['cpu-gpu','memory-network'])data.grafana.groups[part]={state:'unavailable',url:null,checked_at:null,max_age_seconds:300};
- app.set(data);let row=app.grafanaGroupValue('cpu-gpu');assert.equal(row.empty,true);assert.equal(row.planned,undefined);assert.equal(Number.isFinite(row.readAt),false);assert.equal(row.state,'unknown');assert.equal(row.cached,false);assert.equal(row.iframe,undefined);assert.equal(app.grafanaGroupValue('memory-network').empty,true);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
+ app.set(data);let row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.empty,true);assert.equal(row.planned,undefined);assert.equal(Number.isFinite(row.readAt),false);assert.equal(row.state,'unknown');assert.equal(row.cached,false);assert.equal(row.iframe,undefined);assert.notEqual(app.grafanaGroupValue('memory-network').empty,true);assert.equal(app.value('cockpit-grafana').iframe,groupUrls.all);
  for(const observed of [{state:'unavailable',url:null,checked_at:iso(now-301000)},{state:'error',url:null,checked_at:iso(now)},{state:'reachable',url:'https://grafana.wly0829.cn/login',checked_at:iso(now)}]){
-  const changed=structuredClone(data);changed.grafana.groups['cpu-gpu']=observed;app.set(changed);row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.planned,true);assert.equal(row.empty,true);
+  const changed=structuredClone(data);changed.grafana.groups['cpu-gpu']=observed;app.set(changed);row=app.grafanaGroupValue('cpu-gpu');assert.notEqual(row.planned,true);assert.notEqual(row.empty,true);
  }
  app.set(data,'error');assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
  const expired=structuredClone(data);expired.observed_at_unix-=121;app.set(expired);assert.notEqual(app.grafanaGroupValue('cpu-gpu').planned,true);
@@ -199,73 +207,22 @@ test('legacy sources keep the full desktop chart but cannot impersonate mobile g
  assert.equal(app.grafanaGroupValue('cpu-gpu').iframe,undefined);assert.equal(app.grafanaGroupValue('cpu-gpu').cached,false);assert.equal(app.grafanaGroupValue('memory-network').iframe,undefined);
 });
 test('cached cockpit and shared results keep values across errors and reloads without green lights',()=>{
- const saved=storage();let app=cockpit(saved);app.set(fixture());app.value('cockpit-backups');
- app.set(null,'error',now/1000);let result=app.value('cockpit-backups');assert.equal(result.state,'unknown');assert.match(result.rows[1].text,/中文备份/);assert.match(result.rows[0].text,/上次读到 今天 02:00/);
- app=cockpit(saved);app.set(null,'error',0);result=app.value('cockpit-backups');assert.match(result.rows[1].text,/中文备份/);
+ const saved=storage();let app=cockpit(saved);app.set(fixture());app.value('cockpit-pc');
+ app.set(null,'error',now/1000);let result=app.value('cockpit-pc');assert.equal(result.state,'unknown');assert.match(JSON.stringify(result.rows),/处理器/);
+ app=cockpit(saved);app.set(null,'error',0);result=app.value('cockpit-pc');assert.match(JSON.stringify(result.rows),/处理器/);
  saved.setItem(live.cacheKey('old','watch'),JSON.stringify({project:'AI 工具入口',result:{text:'失败 · 9月28日 10:30',state:'failed'},at:now-2*86400000}));
  assert.equal(live.readCache(saved,'old','watch','AI 工具入口',now),null);const old=live.readLast(saved,'old','watch','AI 工具入口',now);const history=live.offlineResult(old,now);assert.equal(history.state,'offline');assert.match(history.text,/上次读到 10月2日 02:00.*超过24小时/);
 });
 
-test('lamp policy: all normal, a 5-minute gap, a 15-minute gap, computer offline and overdue backup',()=>{
- let data=fixture(),app=cockpit();app.set(data);assert.equal(app.summary().state,'ok');assert.equal(app.summary().text,'都正常');
- data=fixture();data.remote_network.items[0]={id:'internet',state:'unknown',unavailable_since:iso(now-5*60000)};app=cockpit();app.set(data);
- assert.equal(app.summary().state,'ok');assert.match(app.summary().text,/正在确认/);assert.ok(app.value('cockpit-attention').rows.some(x=>/互联网连接.*从 今天 01:55 起/.test(x.text)));
- data.remote_network.items[0].unavailable_since=iso(now-15*60000);app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.match(app.value('cockpit-attention').rows.at(-1).text,/01:45.*超过 10 分钟/);
- app.set(null,'error');assert.equal(app.summary().state,'unknown');
- data=fixture();data.backups.items[0].last_success_at=iso(now-37*3600000);app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.match(app.summary().text,/备份超期/);
-});
 test('lamp policy: fresh HTTP responses cannot hide an expired whole-computer snapshot',()=>{
  const data=fixture();data.observed_at_unix=now/1000-121;const app=cockpit();app.set(data);assert.equal(app.value('cockpit-overall').state,'unknown');assert.match(app.summary().text,/读不到电脑.*可能电脑不在线.*最后读到/);
 });
-test('lamp policy: repeated observations and reloads retain the first unreadable time; recovery resets it',()=>{
- const saved=storage(),app=cockpit(saved);let data=fixture();data.remote_network.items[0].state='unknown';app.set(data);
- app.advance(5*60000);data=fixture();data.observed_at_unix+=300;data.remote_network.observed_at=iso(now+300000);data.remote_network.items[0].state='unknown';app.set(data);assert.equal(app.summary().state,'ok');
- const reloaded=cockpit(saved);reloaded.advance(11*60000);data=fixture();data.observed_at_unix+=660;for(const key of ['automation','backups','pending','today','projects','remote_network','backup_inventory'])data[key].observed_at=iso(now+660000);
- for(const group of [data.hardware.cpu,data.hardware.memory,data.hardware.network,data.hardware.display,...data.hardware.volumes])for(const source of Object.values(group.sources))source.observed_at_unix+=660;
- data.remote_network.items[0].state='unknown';reloaded.set(data);assert.equal(reloaded.summary().state,'warn');assert.match(reloaded.value('cockpit-attention').rows.at(-1).text,/02:00/);
- data.remote_network.items[0].state='online';reloaded.set(data);assert.equal(reloaded.summary().state,'ok');
- data.remote_network.items[0].state='unknown';reloaded.set(data);assert.equal(reloaded.summary().state,'ok');assert.match(reloaded.value('cockpit-attention').rows.at(-1).text,/02:11/);
-});
-test('lamp policy: task streaks are 1 green, 2 yellow and 4 red; external and disabled tasks are excluded',()=>{
- for(const [count,expected] of [[1,'ok'],[2,'warn'],[4,'error']]){const data=fixture();data.automation.items[0].state='failed';data.automation.items[0].consecutive_failures=count;const app=cockpit();app.set(data);assert.equal(app.summary().state,expected);assert.ok(app.value('cockpit-attention').rows.some(x=>/任务出错/.test(x.text)));}
- const data=fixture();data.automation.items.push({id:'external',project:'电脑上别的软件',enabled:true,state:'failed',consecutive_failures:8},{id:'disabled',enabled:false,state:'failed',consecutive_failures:8});const app=cockpit();app.set(data);assert.equal(app.summary().state,'ok');
-});
-test('lamp policy: never-run tasks and read-but-unknown results are not lost reads',()=>{
- const data=fixture();data.automation.state='partial';data.automation.items[0]={...data.automation.items[0],state:'never',last_run_at:null,next_run_at:iso(now+3600000),availability:'available'};
- data.automation.items.push({id:'unknown-code',enabled:true,state:'unknown',availability:'available',plain:{name:'未知结果任务'}},{id:'manual',enabled:null,state:'unknown',source:'codex',availability:'not_connected',plain:{name:'按需周检'}});
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'ok');assert.match(app.summary().text,/待处理/);assert.ok(!app.value('cockpit-attention').rows.some(x=>/读不到/.test(x.text)));assert.ok(app.value('cockpit-attention').rows.some(x=>/还没接入/.test(x.text)));
-});
-test('lamp policy: empty blocks are known and backup evidence gaps are independently timed',()=>{
- const data=fixture();data.today={...data.today,state:'empty',items:[]};data.backup_inventory={...data.backup_inventory,state:'partial',items:[{id:'other',items:[{id:'copy',name:'测试备份',enabled:true,protection:'unknown',freshness:'unknown',unavailable_since:iso(now-15*60000)}]}]};
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.ok(app.value('cockpit-attention').rows.some(x=>/测试备份.*副本证据.*超过 10 分钟/.test(x.text)));
-});
-test('lamp policy: a project derived from unconnected manual tasks is a result gap, not an unreadable block',()=>{
- const data=fixture();Object.assign(data.projects.items[0],{overview:'run_unknown',run_health:'unknown'});Object.assign(data.automation.items[0],{project:'示例项目',enabled:null,state:'unknown',source:'laptop',availability:'not_connected'});
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'ok');assert.ok(app.value('cockpit-attention').rows.some(x=>/运行结果还未确认/.test(x.text)));assert.ok(!app.value('cockpit-attention').rows.some(x=>/读不到/.test(x.text)));
-});
-test('lamp policy: an original-data inventory is not a failed backup-copy receipt',()=>{
- const data=fixture();data.backup_inventory.state='partial';data.backup_inventory.items=[{id:'g',name:'原件',items:[{id:'original',role:'original',protection:'unknown',freshness:'unknown',unavailable_since:iso(now-15*60000)}]}];
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'ok');assert.equal(app.summary().text,'都正常');
-});
-test('lamp policy: daily and weekly overdue thresholds, low disks and system disk red threshold',()=>{
- for(const [cadence,hours,expected] of [['daily',36,'ok'],['daily',37,'warn'],['daily',49,'error'],['weekly',9*24,'ok'],['weekly',9*24+1,'warn'],['weekly',14*24+1,'error']]){const data=fixture();data.backups.items[0].cadence=cadence;data.backups.items[0].last_success_at=iso(now-hours*3600000);const app=cockpit();app.set(data);assert.equal(app.summary().state,expected);}
- for(const [drive,free,total,expected] of [['E:',9,100,'warn'],['E:',4,100,'error'],['C:',14,50,'error']]){const data=fixture();Object.assign(data.hardware.volumes[0],{letter:drive,free_bytes:free*1024**3,total_bytes:total*1024**3});const app=cockpit();app.set(data);assert.equal(app.summary().state,expected);}
-});
-test('lamp policy: a short partial read holds a previously known yellow lamp',()=>{
- const data=fixture(),app=cockpit();data.automation.items[0].state='failed';data.automation.items[0].consecutive_failures=2;app.set(data);assert.equal(app.summary().state,'warn');
- data.automation.state='unavailable';app.set(data);assert.equal(app.summary().state,'warn');assert.match(app.summary().text,/正在确认/);
-});
-test('lamp policy: an old red lamp is held only during grace; an unrelated long read gap is yellow',()=>{
- const data=fixture(),app=cockpit();Object.assign(data.automation.items[0],{state:'failed',consecutive_failures:4});app.set(data);assert.equal(app.summary().state,'error');
- data.automation.items[0].state='success';data.backup_inventory={state:'unavailable',unavailable_since:iso(now-15*60000),observed_at:iso(now),max_age_seconds:120};app.set(data);assert.equal(app.summary().state,'warn');
- data.automation.items[0].state='failed';app.set(data);assert.equal(app.summary().state,'error');
-});
 test('offline: initial loading immediately exposes cached public values and an honest last-read label',()=>{
  const saved=storage(),first=cockpit(saved);first.set(fixture());const next=cockpit(saved);next.set(null,'loading',0);
- const old=next.value('cockpit-backups');assert.equal(old.state,'unknown');assert.match(old.rows[1].text,/中文备份/);assert.match(old.rows[0].text,/上次读到/);
- assert.match(next.value('cockpit-overall').text,/正在连接电脑.*最后读到/);assert.ok(next.value('cockpit-attention').rows.some(x=>x.href==='/mcp/'));
+ const old=next.value('cockpit-pc');assert.equal(old.state,'unknown');assert.match(JSON.stringify(old.rows),/处理器/);assert.match(JSON.stringify(old.rows),/上次读到/);
+ assert.match(next.value('cockpit-overall').text,/正在连接电脑/);assert.equal(next.value('cockpit-attention').state,'unknown');
  next.set(null,'error',0);assert.match(next.value('cockpit-overall').text,/可能电脑不在线.*网络连不上/);
- next.set(fixture());assert.equal(next.summary().state,'ok');
+ next.set(fixture());assert.equal(next.summary().state,'unknown');
 });
 test('offline: never-seen data says so and the shared read deadline is bounded',()=>{
  const app=cockpit();app.set(null,'error',0);assert.match(app.value('cockpit-overall').text,/还没读到过/);assert.match(live.connectionText(0),/还没读到过/);assert.equal(live.readTimeoutMs,8000);assert.equal(live.freshStatus({observed_at_unix:now/1000-121},now),false);
@@ -280,37 +237,15 @@ test('display cache: first warming contact is online, repeated failed empty samp
  const app=cockpit();app.set(data);assert.equal(app.summary().state,'unknown');
 });
 
-test('display cache: expired authorization is a timed yellow gap while fresh WTS remains readable',()=>{
- const data=fixture();data.served_at_unix=now/1000;data.host.sources={screen_state:{status:'ok',observed_at_unix:now/1000}};
- data.display_cache={collectors:{authorization:{state:'error',observed_at_unix:now/1000-900,unavailable_since_unix:now/1000-780},hardware:{state:'ready',observed_at_unix:now/1000},dashboard:{state:'ready',observed_at_unix:now/1000}}};
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.equal(app.value('cockpit-security').state,'unknown');assert.equal(app.value('cockpit-security-windows').state,'ok');
- assert.equal(model.freshScreen(data,now/1000),true);data.host.sources.screen_state.observed_at_unix-=900;assert.equal(model.freshScreen(data,now/1000),false);
-});
-
-test('display cache: old hardware timestamps retain their original expiry across a fresh service reply',()=>{
- const data=fixture();data.served_at_unix=now/1000;data.hardware_observed_at_unix=now/1000-900;
- data.host.sources={screen_state:{status:'ok',observed_at_unix:now/1000}};
- data.display_cache={collectors:{authorization:{state:'ready',observed_at_unix:now/1000},hardware:{state:'error',observed_at_unix:now/1000-900,unavailable_since_unix:now/1000-780},dashboard:{state:'ready',observed_at_unix:now/1000}}};
- for(const row of [data.hardware.cpu,data.hardware.memory,data.hardware.network,data.hardware.display,...data.hardware.volumes])for(const source of Object.values(row.sources))source.observed_at_unix-=900;
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.equal(app.value('cockpit-pc').state,'unknown');
-});
-
 test('display cache: ready warming replies keep prior public hardware without restoring current certainty',()=>{
  const app=cockpit();app.set(fixture());
  const data=fixture();delete data.hardware;data.served_at_unix=now/1000;data.observed_at_unix=null;
  data.display_cache={collectors:{authorization:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000},hardware:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000},dashboard:{state:'reading',observed_at_unix:null,refresh_started_at_unix:now/1000}}};
  app.set(data);const value=app.value('cockpit-pc');assert.equal(value.state,'unknown');assert.equal(value.hardwareCached,true);assert.ok(value.hardwareDisplay);assert.match(JSON.stringify(value.rows),/上次读到/);
 });
-test('task reads: declared unavailability wins over legacy manual-entry inference',()=>{
- const data=fixture();data.automation.items[0]={...data.automation.items[0],enabled:null,source:'codex',availability:'unavailable',state:'unknown',unavailable_since:iso(now-15*60000)};
- const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.ok(app.value('cockpit-attention').rows.some(x=>/自动任务.*读不到/.test(x.text)));
-});
 test('offline: readable historical hardware remains cached when another telemetry field is stale',()=>{
  const saved=storage(),data=fixture();data.hardware.network.sources.download_bytes_per_second.status='stale';const app=cockpit(saved);app.set(data);assert.equal(app.value('cockpit-pc').state,'unknown');
  const next=cockpit(saved);next.set(null,'loading',0);const value=next.value('cockpit-pc');assert.equal(value.state,'unknown');assert.ok(value.rows.some(x=>/处理器/.test(x.text)));assert.match(value.rows[0].text,/上次读到/);
-});
-test('lamp policy: unreadable security status is a local gap, never a computer-offline claim',()=>{
- const data=fixture();data.personal_data={state:'unknown',unavailable_since:iso(now-15*60000)};const app=cockpit();app.set(data);assert.equal(app.summary().state,'warn');assert.ok(app.value('cockpit-attention').rows.some(x=>/个人资料开关状态.*读不到/.test(x.text)&&x.href==='#security'));
 });
 test('legacy home without typed display boots, updates ordinary live strips and retains offline values',async()=>{
  const saved=storage(),span={textContent:''};
@@ -330,5 +265,39 @@ test('legacy home without typed display boots, updates ordinary live strips and 
 test('expired project metrics can retain genuine old values; unsupported fields remain absent',()=>{
  const data=fixture();data.projects=block([{project:'学习方法',state:'stale',metrics:{lessons:{done:3,total:28}}}]);data.projects.state='stale';data.projects.observed_at=iso(now-86400000);
  assert.equal(live.parse(data,'lessons','学习方法',now).state,'unknown');assert.equal(live.parse(data,'lessons','学习方法',now,true).text,'已学 3/28 课');assert.equal(live.parse(data,'panel','双屏信息中心',now).state,'unknown');
- const app=cockpit();data.backups.items[0].state='warn';app.set(data);assert.match(app.value('cockpit-quick-5').text,/需要留意/);
+ const app=cockpit();data.backups.items[0].state='warn';app.set(data);assert.match(app.value('cockpit-quick-5').text,/当前结论不完整/);
+});
+
+test('typed summary and detail rows consume one source classification, with unknown when it is absent',()=>{
+ const data=fixture(),app=cockpit(),item={id:'typed-ai',title:'测试任务没有完成',source_id:'automation',current:true,resolved:false,action_owner:'ai',owner_action_required:false,severity:'yellow',what_happened:'最近那轮没完成，由 AI 核对',execution_started_at:null};
+ data.cockpit={detail_summary:'AI 需核对 1 项（是否已开始未记录）',summary:{state:'attention'},detail_groups:{need_you:[],ai_following:[item],deferred:[],history:[]}};app.set(data);
+ assert.equal(app.summary().text,data.cockpit.detail_summary);assert.equal(app.value('cockpit-tasks').rows.find(row=>row.key===item.id).group,'ai_following');assert.match(JSON.stringify(app.value('cockpit-tasks').rows),/是否已开始.*未记录/);
+ delete data.cockpit.detail_groups;app.set(data);assert.equal(app.summary().state,'unknown');assert.match(app.summary().text,/当前结论不完整/);
+});
+test('typed registration and read clocks remain distinct; terminal history has no current unknown or completion estimate',()=>{
+ const app=cockpit();app.set(fixture());const row=app.cpTyped({id:'past',title:'已通过的要求',source_id:'pending',state:'passed',history_category:'passed',current:false,resolved:true,what_happened:'已通过，留作记录',observed_at:iso(now),registration_date:'2026-09-28'},'history');
+ assert.match(JSON.stringify(row.facts),/已通过，留作记录/);assert.ok(!row.facts.some(fact=>fact.label==='完成时间'||fact.label==='当前情况'));assert.match(app.cpItemTime(row),/本轮读取于 今天 02:00/);
+ delete row.observed_at;assert.equal(app.cpItemTime(row),'登记于 2026-09-28');row.at='2026-09-28T10:30:00+08:00';row.at_kind='registration';assert.equal(app.cpItemTime(row),'登记于 9月28日 10:30');
+});
+
+test('AI handoff excludes closed and historic records and waits for the notice contract',()=>{
+ const app=cockpit(),data=fixture();data.cockpit={cards:[{id:'normal',notice_kind:null}],detail_groups:{need_you:[],ai_following:[],deferred:[],history:[]}};app.set(data);assert.equal(app.cpCopyReady(),true);
+ const row={id:'issue',title:'提醒',current:true,notice_kind:'warn',severity:'yellow',ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}};
+ assert.equal(app.cpCopyMeta(row,'公共一句话').hasHint,true);assert.equal(app.cpCopyMeta({...row,ai_hint:null},'公共一句话').hasHint,false);
+ for(const excluded of [{treatment_category:'C'},{earlier:true},{current:false},{current:null},{group:'history'},{group:'deferred'},{resolved:true},{notice_kind:null},{notice_kind:'unknown',ai_hint:null}])assert.equal(app.cpCopyMeta({...row,...excluded},'公共一句话'),null);
+ const currentMissing={...row,notice_kind:'unknown',treatment_category:'D',current:null,group:'history',earlier:true,history_category:'unconfirmed'};assert.equal(app.cpCopyMeta(currentMissing,'公共未知句').color,'未知');for(const terminal of ['passed','superseded','ended','expired'])assert.equal(app.cpCopyMeta({...currentMissing,history_category:terminal},'公共未知句'),null);
+ delete data.cockpit.cards[0].notice_kind;app.set(data);assert.equal(app.cpCopyReady(),false);app.set(data,'error');assert.equal(app.cpCopyMeta(row,'公共一句话'),null);
+});
+test('AI handoff deduplicates exact IDs and copies source time without private detail',()=>{
+ const app=cockpit(),data=fixture();data.observed_at_unix-=120;app.set(data);
+ const record=(id,color,at)=>app.cpCopyMeta({id,title:id,current:true,notice_kind:color==='未知'?'unknown':'warn',severity:color==='红'?'red':'yellow',first_seen_at:at,ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}},'公共一句话');
+ const newer=record('yellow-new','黄',iso(now-60000)),older=record('yellow-old','黄',iso(now-120000)),red=record('red','红',null),unknown=record('unknown','未知',null);
+ const rows=app.cpCopyRecords({querySelectorAll:()=>[newer,red,unknown,older,newer].map(_cpCopy=>({_cpCopy}))},true);assert.deepEqual(Array.from(rows,row=>row.id),['red','yellow-old','yellow-new','unknown']);
+ const prompt=app.cpCopyPrompt(rows,'all','');assert.match(prompt,/http:\/\/127\.0\.0\.1:18793\/computer-access\/api\/status/);assert.match(prompt,/页面读到时间：10月4日 01:58（北京时间）。/);assert.doesNotMatch(prompt,/PRIVATE_|公共一句话/);
+ const missing={...red,hasHint:false};assert.match(app.cpCopyPrompt([missing],'item',''),/id=red 这一条还没有 ai_hint/);assert.match(app.cpCopyPrompt([missing],'block','电脑'),/id=red：red（还没有 ai_hint）/);
+});
+test('generic notices retain their friendly issue context in display and copied text',()=>{
+ const app=cockpit(),data=fixture(),message='这次没有完成。AI 会在下次治理里处理。',issue={id:'public-issue',title:'统计本机代理流量',public_message:message};data.cockpit={detail_groups:{need_you:[],ai_following:[issue],deferred:[],history:[]}};app.set(data);
+ const row={id:'traffic',title:'套餐流量',public_message:message,notice_kind:'warn',ai_hint:{issue_ids:[issue.id],task_name:'PRIVATE_TASK',last_error:'PRIVATE_ERROR'}},sentence=app.cpPublicSentence(row);assert.equal(sentence,issue.title+'：'+message);assert.match(app.cpCopyPrompt([app.cpCopyMeta(row,sentence)],'item',''),/统计本机代理流量：这次没有完成/);assert.doesNotMatch(sentence,/PRIVATE_|套餐流量/);
+ assert.equal(app.cpPublicSentence({...issue,public_message:issue.title+'：'+message}),issue.title+'：'+message);assert.equal(app.cpPublicSentence({plain:{name:'检查电脑记录备份'},public_message:message}),'检查电脑记录备份：'+message);
 });

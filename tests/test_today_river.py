@@ -49,13 +49,30 @@ check('first-two-seconds','run(1,1900,150)',false);
 check('single-long-frame','run(1,6000,1000/60);frame(7500);run(7517,11000,1000/60)',false);
 check('brief-slow-frames','run(1,6000,1000/60);run(6150,6600,150);run(6617,12000,1000/60)',false);
 check('hidden-excluded','run(1,6000,1000/60);document.hidden=true;run(6150,17000,150);document.hidden=false;wake();run(17017,24000,1000/60)',false);
-check('stale-excluded','M.stale=true;run(1,12000,150)',false);
+check('stale-water-insured','M.stale=true;run(1,12000,150)',true);
 check('reduced-motion-excluded','reduce=true;run(1,12000,150)',false);
 check('continuous-low-fps','run(1,14000,150)',true);
 process.stdout.write(JSON.stringify({schema:'wly.today-river-insurance-policy.v1',synthetic_timestamps:true,busy_wait:false,cases}));
 """.replace('FRAME',json.dumps(frame)).replace('WAKE',json.dumps(wake))
     result=subprocess.run(['node','-'],input=script,text=True,capture_output=True,check=True)
     (output/'insurance-policy.json').write_text(result.stdout+'\n','utf8')
+    reader=r"""
+const vm=require('node:vm'),assert=require('node:assert/strict'),fs=require('node:fs');
+const requests=[];let timeout=true,expired=false;
+const sandbox={module:{exports:{}},AbortController,clearTimeout,setTimeout:(f,ms)=>setTimeout(f,ms===8000?5:ms),fetch:async(url,{signal})=>{
+ requests.push(url);if(timeout&&url.includes('live.wly'))return new Promise((_,reject)=>signal.addEventListener('abort',()=>reject(Error('timeout')),{once:true}));
+ return {ok:true,json:async()=>({observed_at_unix:Date.now()/1000-(expired&&url.includes('mcp.wly')?121:0),automation:{state:'unavailable'}})};
+}};
+vm.runInNewContext(fs.readFileSync('scripts/site-live-runtime.js','utf8'),sandbox);
+(async()=>{const read=sandbox.module.exports.readStatus;
+ await read(undefined,false,false);timeout=false;await read(undefined,false,false);expired=true;
+ assert.equal((await read(undefined,false,false)).automation.state,'unavailable');await read(undefined,false,true);await read(undefined,false,false);
+ assert.deepEqual(requests.map(x=>x.includes('live.wly')?'live':x.includes('mcp.wly')?'mcp':x),['live','mcp','mcp','mcp','live','/__status','live']);
+ const signal=AbortSignal.abort();await assert.rejects(read(signal,false,false));assert.equal(requests.length,7);process.stdout.write(JSON.stringify({mock:true,timeout_path:true,requests}));
+})().catch(error=>{console.error(error);process.exitCode=1;});
+"""
+    readback=subprocess.run(['node','-'],input=reader,text=True,capture_output=True,check=True,cwd=ROOT)
+    (output/'reader-policy.json').write_text(readback.stdout+'\n','utf8')
     return json.loads(result.stdout)
 
 
@@ -79,6 +96,8 @@ def fixture(mode):
                      row('过期','overdue',status_note='合成过期原因'),
                      row('灯出错','failed',schedule_zh='每 5 分钟一次',last_run_at=iso(now-60))])
         rows.append(row('内部编号','never',plain={}))
+    if mode in ['panel-heartbeat','panel-exit']:
+        rows=[row('副屏','failed',schedule_zh='常驻',last_run_at=iso(now-36000),heartbeat_at=iso(now-300),related_status={'panel':'stale'},public_message='出错了' if mode=='panel-exit' else '不知道，这次没读到副屏心跳',notice_kind='error' if mode=='panel-exit' else 'unknown',outcomes={'kind':'panel_heartbeat','state':'failed' if mode=='panel-exit' else 'stale','execution_failed':mode=='panel-exit','heartbeat_at':iso(now-300)})]
     a = {'state':'partial' if mode=='partial' else 'ok','items':rows,'groups':[{'id':'backup','name':'合成备份组'},{'id':'upkeep','name':'合成维护组'}],
          'observed_at':iso(now),'max_age_seconds':120}
     if mode=='empty':
@@ -237,6 +256,14 @@ async def main(args):
                 await page.locator('#today-river .boat').first.click(force=True)
                 labels=await page.locator('#today-river #pick .six b').all_text_contents()
                 assert labels==['在做什么','上次什么时候跑的','下次什么时候跑','有没有出错','怎么停','停了影响什么'],labels
+                selected=await page.locator('#today-river #pick').get_attribute('data-task-id')
+                for day_shift in [0,86400]:
+                    sample=fixture('normal');sample['automation']['items'].reverse();sample['automation']['observed_at']=dt.datetime.fromtimestamp(time.time()+day_shift,BJT).isoformat()
+                    next(t for t in sample['automation']['items'] if t['id']==selected)['plain']['what']='同一任务的新说明'
+                    await page.evaluate('s=>todayRiver.setSnapshot(s,false)',sample)
+                    assert await page.locator('#today-river #pick').is_visible() and await page.locator('#today-river #pick').get_attribute('data-task-id')==selected
+                    assert '同一任务的新说明' in await page.locator('#today-river #pick').text_content()
+                await refresh('normal')
                 # Count native WebAudio oscillators to verify the accepted click chirp.
                 await page.locator('#today-river #stage').evaluate('(e)=>window.scrollBy(0,e.getBoundingClientRect().top-160)')
                 await page.wait_for_timeout(100)
@@ -260,12 +287,31 @@ async def main(args):
                 await page.locator('#today-river #g-alert .row').first.locator('summary').click()
                 await page.locator('#today-river #g-alert .row').first.locator('.six').wait_for(state='attached')
                 results.append({'device':device,'case':'errors-overdue-fallback-name','snapshot':bad})
+                for mode,flag in [('panel-heartbeat','gray'),('panel-exit','bad')]:
+                    await refresh(mode);await page.locator('#today-river #layer [data-i]').first.click(force=True)
+                    projected=await page.evaluate('({flag:todayRiver.model.tasks[0].flag,last:todayRiver.model.tasks[0].last})')
+                    assert projected['flag']==flag and projected['last'] is None,projected
+                    card=await page.locator('#today-river #pick').text_content()
+                    assert ('出错了' in card)==(flag=='bad') and '上次什么时候跑的' not in card and '最后读到副屏心跳' not in card,card
                 for mode,word in [('failure','现在读不到电脑。'),('unknown','自动任务暂时读不到。'),('unavailable','自动任务暂时读不到。'),('stale','自动任务的记录没有及时更新。')]:
                     await refresh('normal')
+                    last=await page.evaluate('({at:todayRiver.model.now,boats:[...document.querySelectorAll("#today-river .boat")].map(e=>[e.style.left,e.style.top])})')
                     old=await refresh(mode)
-                    assert old['headline'].startswith(word) and '之后的情况不知道' in old['headline'],old
-                    assert old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
+                    assert word in old['headline'] and '旧数据，之后的情况不知道' in old['headline'],old
+                    assert not old['static'] and '还有' not in (old['lead'] or '') and '到点了' not in ''.join(old['tips']),old
+                    await page.evaluate('()=>{window.riverTestNow=Date.now;Date.now=()=>riverTestNow()+120000;}')
+                    await page.wait_for_timeout(1100)
+                    held=await page.evaluate('({at:todayRiver.model.now,sign:document.querySelector("#today-river .now").textContent,boats:[...document.querySelectorAll("#today-river .boat")].map(e=>[e.style.left,e.style.top]),filter:getComputedStyle(document.querySelector("#today-river #layer")).filter,frames:todayRiver.metrics.frames})')
+                    await page.evaluate('()=>{Date.now=riverTestNow;delete window.riverTestNow;}')
+                    assert held['at']==last['at'] and held['boats']==last['boats'] and held['filter']=='none' and held['frames']>old['metrics']['frames'],(last,held)
+                    assert held['sign']=='最后读到 '+dt.datetime.fromtimestamp(last['at']/1000,BJT).strftime('%H:%M'),held
                     if mode=='stale':
+                        await page.locator('#today-river').evaluate("e=>e.style.marginTop='2000px'")
+                        await page.wait_for_timeout(250)
+                        await refresh('normal'); await refresh('stale')
+                        await page.locator('#today-river #stage').scroll_into_view_if_needed()
+                        assert await page.locator('#today-river .now').evaluate("e=>e.classList.contains('in')")
+                        await page.locator('#today-river').evaluate("e=>e.style.marginTop=''")
                         await page.set_viewport_size({'width':390,'height':844})
                         await page.wait_for_timeout(250)
                         await page.set_viewport_size({'width':1440,'height':900})
@@ -275,13 +321,14 @@ async def main(args):
                         await page.wait_for_timeout(250)
                     assert '最后一次读到' in old['headline'] and '最后读到时刻' in old['legend'] and any('当时已跑完' in x for x in old['groups']),old
                     results.append({'device':device,'case':mode+'-old-value-boundary','snapshot':old})
-                await refresh('normal')
+                recovered=await refresh('normal')
+                assert not recovered['static'] and '旧数据' not in recovered['headline'] and recovered['signs'][0].startswith('现在 '),recovered
                 state['mode']='offline-browser'
                 await context.set_offline(True)
                 await page.evaluate('window.SiteB2.refresh()')
                 await page.wait_for_function("document.body.dataset.b2StatusPhase === 'error'",timeout=12000)
                 disconnected=await page.evaluate(SNAP)
-                assert disconnected['headline'].startswith('现在读不到电脑。') and disconnected['static']
+                assert '现在读不到电脑。' in disconnected['headline'] and not disconnected['static']
                 assert '之后的情况不知道' in disconnected['headline']
                 assert '还有' not in (disconnected['lead'] or '') and not any('到点了' in x for x in disconnected['tips'])
                 results.append({'device':device,'case':'browser-network-offline-old-value','snapshot':disconnected,'browser_offline':True,'synthetic_http_failure':False})
@@ -294,7 +341,7 @@ async def main(args):
                 for width,height in [(390,844),(1440,900),(390,844),(844,390),(390,844)]:
                     await page.set_viewport_size({'width':width,'height':height})
                     await page.wait_for_timeout(250)
-                    assert await page.evaluate('water.width===Math.round(stage.clientWidth*Math.min(1.5,devicePixelRatio)) && water.height>0')
+                    assert await page.evaluate('water.width===Math.round(stage.clientWidth*devicePixelRatio) && water.height>0')
                 await page.set_viewport_size(options['viewport'])
                 await page.wait_for_timeout(250)
                 valid_size=await page.evaluate('[water.width,water.height]')
