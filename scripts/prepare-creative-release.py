@@ -78,7 +78,7 @@ def recipe(path):
         inputs[str(HERE/'prepare-static-home.py')]=stamp(HERE/'prepare-static-home.py')
     for pattern in ('prepare-home-*.*', 'home-living-*.*', 'prepare-page-flip.py', 'album-runtime.*',
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
-                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'prepare-creative-release.py', 'release_delta.py'):
+                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'image-loading-runtime.js', 'prepare-stutter-page.py', 'stutter-page.*', 'prepare-creative-release.py', 'release_delta.py'):
         inputs.update({str(p.resolve()): stamp(p) for p in HERE.glob(pattern) if p.is_file()})
     if full_2f:
         for name in ('today-river.js','today-river.css'):
@@ -138,6 +138,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     if data.get('home_bio'): selected_steps.append('bio')
     if data.get('bird_first_packet'): selected_steps.append('native-living')
     if data.get('living_pages_packet'): selected_steps.append('bird-first')
+    if data.get('stutter_page'): selected_steps.insert(selected_steps.index('retry'), 'stutter')
     for name in selected_steps:
         step_started = time.perf_counter()
         dest = evidence_root / (name + '-site')
@@ -179,6 +180,8 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 frozen=inputs[str(panorama_source)]
                 args+=['--panorama-source',panorama_source,'--panorama-source-sha256',frozen['sha256'],
                        '--panorama-source-bytes',frozen['bytes']]
+        elif name == 'stutter':
+            args = ['prepare-stutter-page.py', '--release', current, '--output', dest, '--delta']
         else:
             args = ['prepare-resource-retry.py', '--baseline', current, '--output', dest, '--report', proof,
                     '--asset-base-url', data['asset_base_url']]
@@ -242,6 +245,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 original=re.sub(r'<link\b[^>]*href="[^\"]*legacy-header-[a-f0-9]+\.css"[^>]*>','',original)
                 tail_updates[rel]=original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1).encode('utf8')
     accepted = raw['accepted_pages']
+    if data.get('stutter_page'): accepted = {**accepted, '/cockpit/stutter/': {'build_status': 'built'}}
     accepted_files = {hybrid.route_file(url) for url in accepted}
     # These published legacy links lost their old anchors in the reviewed 27-page
     # update. Reuse the existing navigation contract and retain each original href.

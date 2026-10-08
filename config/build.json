@@ -7,6 +7,7 @@
   "demo_assets": "sources/creative/demo/assets/src",
   "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
   "home_bio": true,
+  "stutter_page": true,
   "home_bio_script": "sources/signature/prepare-home-bio.py",
   "bird_first_packet": "sources/bird/prepared/home-packet-2g",
   "native_home_support": "sources/living/home-support",
