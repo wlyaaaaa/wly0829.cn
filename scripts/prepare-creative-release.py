@@ -236,6 +236,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)
         if len(rules) != 2 or not header: raise ValueError('Legacy header styles are missing or ambiguous')
         back_to_top = '\n'.join(re.findall(r'^(?:@media[^{]+\{)?\.back-to-top\{[^}]+\}\}?$', (HERE / 'toc-consistency.css').read_text('utf8'), re.M))
+        if back_to_top.count('.back-to-top') != 2: raise ValueError('Canonical back-to-top styles are missing or ambiguous')
         css = (rules[0] + '\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}\n' + back_to_top).encode('utf8')
         css_url = '/_typeset/runtime/legacy-header-' + hybrid.hashlib.sha256(css).hexdigest()[:20] + '.css'
         tail_updates[css_url.lstrip('/')]=css
