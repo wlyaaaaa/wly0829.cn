@@ -96,6 +96,8 @@ def fixture(mode):
                      row('过期','overdue',status_note='合成过期原因'),
                      row('灯出错','failed',schedule_zh='每 5 分钟一次',last_run_at=iso(now-60))])
         rows.append(row('内部编号','never',plain={}))
+    if mode in ['panel-heartbeat','panel-exit']:
+        rows=[row('副屏','failed',schedule_zh='常驻',last_run_at=iso(now-36000),heartbeat_at=iso(now-300),related_status={'panel':'stale'},public_message='出错了' if mode=='panel-exit' else '不知道，这次没读到副屏心跳',notice_kind='B' if mode=='panel-exit' else 'D',outcomes={'kind':'panel_heartbeat','state':'failed' if mode=='panel-exit' else 'stale','execution_failed':mode=='panel-exit','heartbeat_at':iso(now-300)})]
     a = {'state':'partial' if mode=='partial' else 'ok','items':rows,'groups':[{'id':'backup','name':'合成备份组'},{'id':'upkeep','name':'合成维护组'}],
          'observed_at':iso(now),'max_age_seconds':120}
     if mode=='empty':
@@ -254,6 +256,14 @@ async def main(args):
                 await page.locator('#today-river .boat').first.click(force=True)
                 labels=await page.locator('#today-river #pick .six b').all_text_contents()
                 assert labels==['在做什么','上次什么时候跑的','下次什么时候跑','有没有出错','怎么停','停了影响什么'],labels
+                selected=await page.locator('#today-river #pick').get_attribute('data-task-id')
+                for day_shift in [0,86400]:
+                    sample=fixture('normal');sample['automation']['items'].reverse();sample['automation']['observed_at']=dt.datetime.fromtimestamp(time.time()+day_shift,BJT).isoformat()
+                    next(t for t in sample['automation']['items'] if t['id']==selected)['plain']['what']='同一任务的新说明'
+                    await page.evaluate('s=>todayRiver.setSnapshot(s,false)',sample)
+                    assert await page.locator('#today-river #pick').is_visible() and await page.locator('#today-river #pick').get_attribute('data-task-id')==selected
+                    assert '同一任务的新说明' in await page.locator('#today-river #pick').text_content()
+                await refresh('normal')
                 # Count native WebAudio oscillators to verify the accepted click chirp.
                 await page.locator('#today-river #stage').evaluate('(e)=>window.scrollBy(0,e.getBoundingClientRect().top-160)')
                 await page.wait_for_timeout(100)
@@ -277,6 +287,12 @@ async def main(args):
                 await page.locator('#today-river #g-alert .row').first.locator('summary').click()
                 await page.locator('#today-river #g-alert .row').first.locator('.six').wait_for(state='attached')
                 results.append({'device':device,'case':'errors-overdue-fallback-name','snapshot':bad})
+                for mode,flag in [('panel-heartbeat','gray'),('panel-exit','bad')]:
+                    await refresh(mode);await page.locator('#today-river #layer [data-i]').first.click(force=True)
+                    projected=await page.evaluate('({flag:todayRiver.model.tasks[0].flag,last:todayRiver.model.tasks[0].last})')
+                    assert projected['flag']==flag and projected['last'] is None,projected
+                    card=await page.locator('#today-river #pick').text_content()
+                    assert ('出错了' in card)==(flag=='bad') and '上次什么时候跑的' not in card and '最后读到副屏心跳' not in card,card
                 for mode,word in [('failure','现在读不到电脑。'),('unknown','自动任务暂时读不到。'),('unavailable','自动任务暂时读不到。'),('stale','自动任务的记录没有及时更新。')]:
                     await refresh('normal')
                     last=await page.evaluate('({at:todayRiver.model.now,boats:[...document.querySelectorAll("#today-river .boat")].map(e=>[e.style.left,e.style.top])})')

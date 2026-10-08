@@ -49,8 +49,12 @@ function sort(snap) {
   const groups = Object.fromEntries((A.groups || []).map(g => [g.id, g.name]));
   const every = t => { const s = t.schedule_zh || ''; let m; if (/每分钟一次/.test(s)) return 1; if ((m = /每\s*(\d+)\s*分钟一次/.exec(s))) return +m[1]; if ((m = /每\s*(\d+)\s*秒/.exec(s))) return +m[1] / 60; return Infinity; };
   const tasks = (A.items || []).map((raw, i) => {
+    const panel = Object.hasOwn(raw.related_status || {}, 'panel') || raw.outcomes?.kind === 'panel_heartbeat', executionFailed = raw.outcomes?.execution_failed === true;
+    const panelUnknown = panel && !executionFailed && (['unknown', 'stale'].includes(raw.related_status?.panel) || ['unknown', 'stale', 'failed'].includes(raw.state) || ['unknown', 'stale'].includes(raw.outcomes?.state));
+    if (panel) raw = {...raw, last_run_at:null, state:executionFailed ? 'failed' : panelUnknown ? 'unknown' : raw.state};
     const t = { raw, i, name: raw.plain?.name || '没写名字的任务', group: groups[raw.group] || '', last: parse(raw.last_run_at), next: parse(raw.next_run_at), every: every(raw) };
-    t.note = raw.status_note || raw.plain?.status_note || raw.reason || '';
+    const pulse = parse(raw.outcomes?.heartbeat_at || raw.heartbeat_at); t.panel = panel; t.panelUnknown = panelUnknown; t.pulse = pulse <= now ? pulse : NaN;
+    t.note = panelUnknown ? '' : raw.status_note || raw.plain?.status_note || raw.reason || '';
     t.off = raw.enabled === false || raw.state === 'disabled';
     t.flag = raw.state === 'failed' ? 'bad' : ['warn', 'overdue', 'stale'].includes(raw.state) ? 'warn' : ['success', 'running'].includes(raw.state) ? 'ok' : 'gray';
     t.alert = !t.off && (t.flag === 'bad' || t.flag === 'warn');
@@ -77,6 +81,7 @@ const frequency = (t, once = false) => {
 };
 function stateOf(t) {
   if (t.off) return ['gray', '已停用'];
+  if (t.panelUnknown) return ['gray', '没读到副屏心跳'];
   if (t.raw.state === 'overdue') return ['warn', '过期'];
   if (t.flag === 'bad' || t.flag === 'warn') return [t.flag, STATE[t.flag]];
   if (t.raw.state === 'running') return ['ok', '正在运行'];
@@ -89,17 +94,17 @@ function stateOf(t) {
 const v = x => x ? esc(x) : '<span class="none">还没写</span>';
 function six(M, t) {
   const [cls, word] = stateOf(t), r = t.raw;
-  const err = t.off ? '已停用，不算出错' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') :
+  const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') :
     r.state === 'unknown' ? '不知道，这次没读到它的运行结果' : r.state === 'never' ? '还没跑过，谈不上出错' : r.state === 'running' ? '没有，正在运行' : '没有，上次运行正常';
   const next = t.off ? '已停用，不会自动跑' : t.next > M.now ? whenText(M, t.next) + (r.schedule_zh ? `（${r.schedule_zh}）` : '') : r.schedule_zh || '';
   return `<h4>${esc(t.name)}<span class="state ${cls}">${word}</span><small>${esc(t.group)}</small></h4><div class="six">
-    <div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>上次什么时候跑的</b>${t.last > 0 ? esc(whenText(M, t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : '没读到') + '</span>'}</div>
+    <div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : '没读到') + '</span>'}</div>
     <div><b>下次什么时候跑</b>${next ? esc(next) : '<span class="none">没读到</span>'}</div><div><b>有没有出错</b>${esc(err)}</div>
     <div><b>怎么停</b>${v(r.plain?.stop)}</div><div><b>停了影响什么</b>${v(r.plain?.impact)}</div></div>`;
 }
 
 // ---------- 画面 ----------
-let M = null, acts = [], wakes = [], els = new Map();
+let M = null, acts = [], wakes = [], els = new Map(), picked = null;
 const put = (e, x, y) => { if (e.classList.contains('boat')) { e.style.left = e.style.top = '0'; e.style.transform = `translate(${x}em,${y / GEOM.aspect}em) translate(-50%,-50%)`; } else { e.style.left = x + '%'; e.style.top = y + '%'; } };
 const remember = (t, e) => { if (!els.has(t.i)) els.set(t.i, []); els.get(t.i).push(e); };
 function boat(o) {
@@ -255,10 +260,20 @@ function texts(ranToday, nShore) {
   group('off', '停用的、从没跑过的', '拉到岸上的船', M.off, false, t => t.off ? '停用' : '没跑过', () => C.gray, C.gray);
   group('fog', '没读到结果的', '雾里的船：这次没读到运行结果，好坏还不知道', M.fog, false, () => '', () => '#c9d3de', '#c9d3de');
 }
-function mark(t) { host.querySelectorAll('#layer .on').forEach(e => e.classList.remove('on')); if (t) (els.get(t.i) || []).forEach(e => e.classList.add('on')); }
-function pick(t, scroll) { mark(t); const p = $('#pick'); p.hidden = false; p.innerHTML = six(M, t); if (scroll) p.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
+function mark(t, occurrence = null) { host.querySelectorAll('#layer .on').forEach(e => e.classList.remove('on')); if (t) (els.get(t.i) || []).forEach((e, i) => { if (occurrence == null || i === occurrence) e.classList.add('on'); }); }
+function pick(t, scroll, occurrence = 0) {
+  picked = { id: t.raw.id, occurrence }; mark(t, occurrence); const p = $('#pick'); p.hidden = false; p.dataset.taskId = t.raw.id; p.dataset.occurrence = occurrence;
+  if (['bad', 'warn'].includes(t.flag) || t.raw.state === 'unknown') {
+    p.textContent = t.raw.public_message || STATE[t.flag];
+    document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
+  } else p.innerHTML = six(M, t);
+  p.insertAdjacentHTML('beforeend', '<button type="button" data-close-pick>收起说明</button>');
+  p.querySelector('[data-close-pick]').onclick = () => { picked = null; p.hidden = true; mark(null); };
+  if (scroll) p.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' });
+}
+function restorePick() { const t = picked && M.tasks.find(t => t.raw.id === picked.id); if (t) pick(t, false, Math.min(picked.occurrence, Math.max(0, (els.get(t.i) || []).length - 1))); else { picked = null; $('#pick').hidden = true; } }
 function openGroup(key) { const d = $('#g-' + key) || $('#g-off'); if (!d) return; d.open = true; d.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' }); }
-layer.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) pick(M.tasks[+b.dataset.i]); });
+layer.addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) { const t = M.tasks[+b.dataset.i]; pick(t, false, (els.get(t.i) || []).indexOf(b)); } });
 const showTip = e => { const b = e.target.closest?.('[data-i]'); if (!b) { tip.style.opacity = 0; return; } const t = M.tasks[+b.dataset.i], r = stage.getBoundingClientRect(), q = b.getBoundingClientRect();
   tip.innerHTML = `<b>${esc(t.name)}</b>${esc(b.dataset.tip || stateOf(t)[1])}`; tip.style.left = clamp(q.left - r.left + q.width / 2 - 70, 6, r.width - 290) + 'px';
   tip.style.top = (q.top - r.top > 90 ? q.top - r.top - 62 : q.bottom - r.top + 10) + 'px'; tip.style.opacity = 1; };
@@ -408,8 +423,8 @@ async function start(snap, intro = true) {
   if (!snap?.automation || !Number.isFinite(parse(snap.automation.observed_at) || parse(snap.captured_at))) return;
   const firstDisplay = $('#scroller').hidden;
   $('#scroller').hidden = false; $('#legend').hidden = false; $('#log').hidden = false; $('.hint').hidden = false;
-  $('#pick').hidden = true; tip.style.opacity = 0;
-  fit(); build(snap);
+  tip.style.opacity = 0;
+  fit(); build(snap); restorePick();
   if (!glLoading) { stage.classList.add('nogl'); glLoading = initGL().then(redraw); }
   if (turn !== generation) return;
   const sc = $('#scroller'); if (firstDisplay || intro) sc.scrollLeft = Math.max(0, stage.clientWidth * GATE / 100 - sc.clientWidth / 2 + 18);
