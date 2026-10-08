@@ -490,6 +490,11 @@ function cpTitle(screen,text){
 function cpSection(id,title,screen){const node=cpNode('section','cp-section');node.id=id;node.setAttribute('aria-label',title);node.append(cpTitle(screen,title));const copyActions=cpNode('div','cp-section-copy'),body=cpNode('div','cp-rows');node.append(copyActions,body);return {node,body,copyActions,title};}
 function cpLine(text,state='unknown'){const row=cpNode('p','cp-line',text);row.dataset.state=state==='attention'?'warn':state;return row;}
 
+function cpPublicSentence(row){
+ const sentence=row.public_message||row.display?.public_message||row.display?.text||row.what_happened||row.text||'这次没读到这条的说明。';
+ const related=Object.values(cpGroups()||{}).flat().find(item=>row.ai_hint?.issue_ids?.includes(item.id)&&item.public_message===sentence),label=related?.title||row.plain_title||row.plain?.what||row.plain?.name||row.title||row.text?.split('：')[0];
+ return label&&!sentence.includes(label)&&/^(这次|本次|上次|最近那轮|最近一轮)/.test(sentence)?label+'：'+sentence:sentence;
+}
 function cpCurrentMissingNotice(row){return row?.notice_kind==='unknown'&&row.treatment_category==='D'&&!!row.ai_hint&&row.current===null&&!row.resolved&&row.history_category==='unconfirmed';}
 function cpCopyMeta(row,sentence){
  if(!online()||!row?.id||row.current===false||row.resolved||row.group==='deferred'||row.treatment_category==='C'||['passed','superseded','ended','expired'].includes(row.history_category))return null;
@@ -527,7 +532,7 @@ function cpCopyButton(rows,scope,label){
  return button;
 }
 function cpNoticeNode(row,state='warn'){
- const sentence=row.public_message||row.display?.public_message||row.display?.text||row.what_happened||row.text||'这次没读到这条的说明。',node=cpNode('div','cp-notice');node.dataset.rowKey=row.key||row.id||row.text;node.append(cpLine(sentence,state));
+ const sentence=cpPublicSentence(row),node=cpNode('div','cp-notice');node.dataset.rowKey=row.key||row.id||row.text;node.append(cpLine(sentence,state));
  const copy=cpCopyMeta(row,sentence);if(copy){node._cpCopy=copy;node.append(cpCopyButton([copy],'item',''));}return node;
 }
 
@@ -590,8 +595,8 @@ function cpInsightRows(){
    ...changeRows.map(([key,label])=>'24小时变化（'+label+'）：'+(num(changes[key])===null?'暂无可用对比':(changes[key]>0?'+':'')+amount(changes[key],key==='handle_count'?'个':'GB',key==='handle_count'?1:1e9))),
    '这里只判断资源压力和记录趋势，卡顿根因及驱动突发仍未确认。']});
  const e=(hw.volumes||[]).find(v=>v.letter==='E:'),hardwareAt=status?.hardware_observed_at_unix;
- rows.computer.push({text:'E盘：'+(fresh(hardwareAt,180)?'':'这是当时的数；')+(e?.connected===false?'没接上':amount(e?.free_bytes,'TB',1e12)+' 可用')+'；本轮结束后目标至少1.6 TB，收尾尚未核对',
-  state:fresh(hardwareAt,180)&&num(e?.free_bytes)!==null&&e?.connected!==false?'ok':'unknown',details:[when(hardwareAt),'当前容量与收尾目标采用十进制字节换算；施工中没有宣告达标。']});
+ rows.computer.push({text:'E盘：'+(fresh(hardwareAt,180)?'':'这是当时的数；')+(e?.connected===false?'没接上':amount(e?.free_bytes,'TB',1e12)+' 可用'),
+  state:fresh(hardwareAt,180)&&num(e?.free_bytes)!==null&&e?.connected!==false?'ok':'unknown',details:[when(hardwareAt),'当前容量采用十进制字节换算。']});
  const cleanup=tasks.find(t=>t.cleanup)?.cleanup,disk=cleanup?.disks?.find(v=>v.letter==='E:'),delta=disk?.free_delta_bytes;
  rows.computer.push({record_id:tasks.find(t=>t.cleanup)?.id,text:cleanup?'回收站清理：'+(cleanup.state==='success'?'最近一轮已完成':cleanup.state==='failed'?'最近一轮失败':'最近一轮结果未确认')+'；E盘可用空间变化 '+(num(delta)===null?'未读到':(delta>0?'+':'')+amount(delta,'GB',1e9)):'回收站清理：执行回执尚未读到',
   state:!live?'unknown':cleanup?.state==='failed'?'warn':cleanup?.state==='success'?'ok':'unknown',
