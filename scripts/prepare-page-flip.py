@@ -359,7 +359,7 @@ async def prepare(args, ownership):
                     retained = [n for n in prior_model.get('nodes', [])
                                 if n.get('screen')==sid and n.get('orientation')==orient and n.get('src')==urljoin('/'+rel,part['src']) and n.get('size')==part['size']]
                     actual = [p for p in picture_parts if p['orientation']==orient and local_asset(source,p['src'],rel)==asset]
-                    key = asset.relative_to(source).as_posix()
+                    key = next(key for key in original if unquote(urlsplit(urljoin('/'+rel, part['src'])).path).endswith('/'+key) and source_path(source, key) == asset)
                     if retained and (len(retained)!=1 or len(actual)!=1 or key not in original or
                             retained[0].get('selector')!='[data-part="'+actual[0]['id']+'"]' or original[key]!=manifest.get('baseline_files',{}).get(key)):
                         raise ValueError('Inherited album part or bytes changed: '+rel+' '+part['src'])
