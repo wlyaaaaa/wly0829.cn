@@ -1,0 +1,27 @@
+{
+  "schema": "wly.cockpit-title-reuse.v1",
+  "titles": [
+    {
+      "page": "cockpit",
+      "screen_id": "cockpit-03",
+      "role": "title",
+      "slot_ordinal": 1,
+      "title_ordinal": 1,
+      "title_text": "远程和网络",
+      "asset": "cockpit/cockpit-03-title-01.png",
+      "status": "ready",
+      "text_verified": true,
+      "sha256": "592e7599c4d03fbb73929e0e28d891113cf0cb147f2290ddd8b8b6b4197f7086",
+      "source": "sources/pages/cockpit/page.json",
+      "source_sha256": "2199d33d4c328ece3aeaa16f6143f3462e0b677ca08bbf48feb62bc08b3949d3",
+      "reuse_basis": "唯一源现有 section_heading 按现役 renderer 的真实 DOM 文字范围截图；保留原字形，3倍像素采样，未重画。",
+      "source_rect": {
+        "x": 32,
+        "y": 19,
+        "width": 158,
+        "height": 52
+      },
+      "captured_at_beijing": "2026-10-07T23:00:17.169730+08:00"
+    }
+  ]
+}

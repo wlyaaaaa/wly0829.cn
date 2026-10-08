@@ -37,7 +37,7 @@ function relayTodayRiver(){
  const at=blockTime(automation),captured_at=Number.isFinite(at)?new Date(at*1000).toISOString():null;
  const snapshot={captured_at,sample_kind:'live',automation,reason};
  const signature=JSON.stringify(snapshot);if(signature===todayRiverSignature)return;
- todayRiverSignature=signature;window.todayRiver.setSnapshot(snapshot,!window.todayRiver.model&&!reason);
+ todayRiverSignature=signature;window.todayRiver.setSnapshot(snapshot,!window.todayRiver.model&&!reason&&performance.getEntriesByType('navigation')[0]?.type!=='reload');
 }
 document.addEventListener('today-river-ready',()=>{todayRiverSignature='';relayTodayRiver();});
 """
