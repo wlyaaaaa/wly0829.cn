@@ -221,7 +221,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     tail_updates={}
     if static_2f:
         import html, re
-        app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')]
+        app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')] + [HERE / 'toc-consistency.css']
         inputs.update({str(path): stamp(path) for path in app_inputs})
         status = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
             "import {skills} from './app/content-skills.js'; console.log(JSON.stringify(skills.find(s=>s.slug==='native-economy-routing').readerStatus))"], cwd=ROOT).decode('utf8'))
@@ -235,13 +235,14 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         rules = re.findall(r'\.back-to-top \{[^}]+\}', source_css)
         header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)
         if len(rules) != 2 or not header: raise ValueError('Legacy header styles are missing or ambiguous')
-        css = (rules[0] + '\n.back-to-top{bottom:auto}\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}').encode('utf8')
+        back_to_top = '\n'.join(re.findall(r'^(?:@media[^{]+\{)?\.back-to-top\{[^}]+\}\}?$', (HERE / 'toc-consistency.css').read_text('utf8'), re.M))
+        css = (rules[0] + '\n' + header[0] + '\n@media(max-width:680px){' + rules[1] + '}\n' + back_to_top).encode('utf8')
         css_url = '/_typeset/runtime/legacy-header-' + hybrid.hashlib.sha256(css).hexdigest()[:20] + '.css'
         tail_updates[css_url.lstrip('/')]=css
         for rel in files:
             if not rel.endswith('.html'):continue
             original = tail_updates.get(rel,source_path(current,rel).read_bytes()).decode('utf8')
-            if 'id="page-data"' not in original and 'back-to-top' in original:
+            if 'back-to-top' in original:
                 original=re.sub(r'<link\b[^>]*href="[^\"]*legacy-header-[a-f0-9]+\.css"[^>]*>','',original)
                 tail_updates[rel]=original.replace('</head>', '<link rel="stylesheet" href="' + css_url + '"></head>', 1).encode('utf8')
     accepted = raw['accepted_pages']

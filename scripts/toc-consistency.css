@@ -1,6 +1,6 @@
-.back-to-top{top:8px;right:14px;bottom:auto;width:44px;height:44px;z-index:90}
+.back-to-top{top:auto!important;right:max(14px,env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));width:44px;height:44px;z-index:90}
 #site-header .desktop-masthead{padding-right:76px}
-@media(max-width:767.98px){.back-to-top{top:6px;right:62px;width:42px;height:42px}}
+@media(max-width:767.98px){.back-to-top{width:42px;height:42px}}
 #home-01 .hotspot:is([data-link-id="home-01-link-0-0"],[data-link-id="home-01-link-1-0"]){backdrop-filter:brightness(.95) contrast(1.12)}
 /* A single measured ink box gives every drawn label the same height and baseline. */
 .toc[data-toc-consistency]{display:block}
