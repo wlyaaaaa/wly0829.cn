@@ -1,5 +1,5 @@
 // 浏览器里的自检取数：G1 文字、G2 实测字高、G3 版面、G5 热区、G4 标题图位置、G6 同角色字号。
-() => {
+(sourceMarks = {}) => {
   const page = document.querySelector('#page');
   const res = {text: '', issues: [], minGlyph: 999, minGlyphAt: '', hot: [], titles: [], roles: {}};
   // 字体内容区比例：100px 的“国”字 Range 高度 / 100
@@ -67,7 +67,12 @@
   res.text = parts.map(part => typeof part === 'string' ? part : [...part.cards]
     .sort((a, b) => a[0] - b[0]).map(([, text]) => text).join('')).join('');
   // G1 补查：排版记号不该画出来（canon 会把它们从两边都去掉，所以逐字比较看不出）
-  const marks = (res.text.match(/[〔〕【】［］｜]|\*\*/g) || []);
+  const marks = (res.text.match(/[〔〕【】［］｜]|\*\*/g) || []).filter(mark => {
+    if (!(sourceMarks[mark] > 0)) return true;
+    sourceMarks[mark] -= 1;
+    return false;
+  });
+  if (Object.values(sourceMarks).some(count => count > 0)) res.issues.push('G1 原文代码字符缺失');
   if (marks.length) res.issues.push('G1 画出了排版记号 ' + [...new Set(marks)].join(' ') + ' 共 ' + marks.length + ' 处');
 
   // G3：溢出（卡片根元素的叶子装饰故意探出，卡内文字另查）
