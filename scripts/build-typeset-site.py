@@ -424,6 +424,19 @@ def bundle(text, candidate, label, suffix):
     dest.write_bytes(text.encode('utf8'))
     return '/_typeset/runtime/'+name
 
+def patch_inherited_app(text):
+    marker = '// Shared appearance helpers also run on the existing homepage runtime.'
+    if text.count(marker) != 1 or text.count('function layout(){') != 1: raise ValueError('Unsupported inherited layout runtime')
+    start, end = text.index(marker), text.index('function layout(){')
+    if end <= start: raise ValueError('Inherited layout runtime boundaries are reversed')
+    text = text[:start] + (HERE/'typeset-layout.js').read_text('utf8').rstrip() + '\n' + text[end:]
+    old = 'const initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision)scrollToCurrentHash();};'
+    new = 'let initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision){scrollToCurrentHash();initialReadingRevision=typesetReadingState.revision;}};'
+    if text.count(old) == 1: text = text.replace(old, new, 1)
+    elif text.count(new) != 1: raise ValueError('Unsupported inherited initial hash restore')
+    return text
+
+
 def patch_app(text):
     # text_bound preserves raw CRLF; read_text used by overlays normalizes it.
     # Match the same legacy code and produce the same runtime in both paths.
@@ -455,7 +468,7 @@ def patch_app(text):
     initial_hash="Promise.all([document.fonts.ready,...[...document.querySelectorAll('#site-header img,.toc img')].map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(scrollToCurrentHash));addEventListener('hashchange',scrollToCurrentHash);\naddEventListener('load',scrollToCurrentHash,{once:true});"
     if text.count(initial_hash)!=1:raise ValueError('Unsupported legacy initial hash restore')
     text=text.replace(initial_hash,
-        "const initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision)scrollToCurrentHash();};\n"
+        "let initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision){scrollToCurrentHash();initialReadingRevision=typesetReadingState.revision;}};\n"
         "Promise.all([document.fonts.ready,...[...document.querySelectorAll('#site-header img,.toc img')].map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(restoreInitialHash));addEventListener('hashchange',scrollToCurrentHash);\n"
         "addEventListener('load',restoreInitialHash,{once:true});",1)
     sample_start=text.index('/* 已选七项通用动效')
@@ -703,7 +716,7 @@ def build_page(name, records, args, candidate):
                     if declared!=excerpt['selection']['approved_omissions']:
                         raise ValueError('本屏批准省略声明与固定来源范围不一致')
                     if not expected_source or expected_source['source_sha256']!=original_proof['sha256']:
-                        raise ValueError('本屏来源不在固定 E214 全文清单')
+                        raise ValueError('本屏来源不在固定 ' + pin['version'] + ' 全文清单')
                     meta['original_html']=rule_contract.project_original_html(meta['original_html'])
                     if hybrid.builder.typeset_prose_digest(meta['original_html'])!=excerpt['rendered_text_sha256']:
                         raise ValueError('本屏原文与独立固定 '+pin['version']+' 摘录全文摘要不符')
@@ -722,7 +735,8 @@ def build_page(name, records, args, candidate):
                     release_root=original_path.parents[len(Path(meta['relative_file']).parts)-1]
                     record=release_root/'release.json';inputs[str(record.resolve())]=stamp(record)
                     if inputs[str(record.resolve())]['sha256']!=pin['release_record_sha256']:
-                        raise ValueError('原文来源发布记录不在固定 E214 合同')
+                        raise ValueError('原文来源发布记录不在固定 ' + pin['version'] + ' 合同')
+                    rule_contract.assert_rule_page_version(source, pin, json.loads(record.read_text('utf8')))
                     for resource,proof in pin.get('public_source_resources',{}).items():
                         if not resource.startswith('/rule-sources/'):continue
                         resource_source=release_root/proof['relative_file'];resource_proof=stamp(resource_source)
@@ -858,6 +872,8 @@ def build_page(name, records, args, candidate):
                     if shape=='source_text':known.update(fixed_source_link_targets)
                     if h['href'] not in known:
                         issues.append(sid+':链接目标不属于定稿：'+h['href'])
+                    if shape=='source_text' and rule_contract.support_reference(h['href']):
+                        h.update(href=None,reference_only=True)
                     part['links'].append(h)
                 elif h['kind']=='screenshot':
                     shots = screenshot(h,src)
@@ -907,6 +923,10 @@ def build_page(name, records, args, candidate):
             ap=args.legacy_site/sr.lstrip('/');app_text,app_proof=text_bound(ap);inputs[str(ap.resolve())]=app_proof
             patched=patch_app(app_text);new=bundle(patched,candidate,'app','.js')
             text=text.replace(sr,new);data['shared']['script_bundle']=new
+        elif sr.startswith('/_typeset/runtime/app-'):
+            ap=args.legacy_site/sr.lstrip('/');app_text,app_proof=text_bound(ap);inputs[str(ap.resolve())]=app_proof
+            patched=patch_inherited_app(app_text);new=bundle(patched,candidate,'app','.js')
+            text=text.replace(sr,new);data['shared']['script_bundle']=new
         elif 'b2-live-' in sr and sr.endswith('.js'):
             bp=(base_html.parent/sr).resolve();b2_text,b2_proof=text_bound(bp);inputs[str(bp)]=b2_proof
             # Place it beside the original imports; imports remain relative to this route's assets.
@@ -944,7 +964,7 @@ def build_page(name, records, args, candidate):
     data=public_page_data(data)
     text=DATA.sub(lambda m:m[1]+json.dumps(data,ensure_ascii=False).replace('</',r'<\/')+m[3],text,count=1)
     # The exact HTML used for the raster also owns its spoken/text equivalent.
-    text,_=publication.install_transcripts(text,transcripts,url,omit_local_paths=True)
+    text,_=publication.install_transcripts(text,transcripts,url,omit_local_paths=not url.startswith('/rules/'))
     if not (candidate/'favicon.svg').exists():
         favicon=next((root/'favicon.svg' for root in (args.legacy_site,args.baseline) if (root/'favicon.svg').is_file()),None)
         if favicon:shutil.copyfile(favicon,candidate/'favicon.svg')
@@ -1108,7 +1128,8 @@ def main():
             state=matches[0];state['status']='blocked'
             state.setdefault('issues',[]).append('实时界面目录缺字图：'+', '.join(missing['labels']))
             accepted[state['url']]['build_status']='blocked'
-    if args.creative_preparation and (args.release_overlay or args.preview_support):
+    native_rule_overlay=overlay and set(overlay['files']) <= {'rule-sources/templates/claude-home/CLAUDE.md','rule-sources/templates/codex-home/AGENTS.md'} and all(entry['kind']=='integrated_preparation' for entry in overlay['files'].values())
+    if args.creative_preparation and ((args.release_overlay and not native_rule_overlay) or args.preview_support):
         raise ValueError('Creative replay uses the complete native five-page source without preview support or another overlay')
     native=native_readability.prepare(args,candidate,accepted,native_inputs,stamp,hybrid.route_file) if args.native_routes else None
     if native:args.external_inputs.update(native['inputs'])
@@ -1152,6 +1173,7 @@ def main():
                 **({'native_readability':native} if native else {}),
                 'pages':states,'files':manifest['files'],'baseline_root':str(args.baseline),
                 'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},
+                'live_ui_preparation':live_ui,'rule_original_workbench':workbench,
                 'geometry_path':str(args.geometry),'geometry_sha256':hybrid.digest(args.geometry)})
         manifest,creative,creative_inputs=creative_module.prepare(raw_output,args.baseline,args.creative_preparation,args.output,
             args.output.parent/(args.output.name+'-creative-evidence'),staged_build_report=staged_report,

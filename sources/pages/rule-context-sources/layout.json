@@ -871,7 +871,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -890,10 +890,6 @@
         "illustration": "none",
         "icons": "none",
         "body_columns": 1
-      },
-      {
-        "type": "prose",
-        "text_ref": "（表中另有4行是本人定了不在网站上出现的旧项目，没有放上来。）"
       },
       {
         "type": "source_text_card",
@@ -916,7 +912,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -925,10 +921,6 @@
         "columns": 1,
         "illustration": "none",
         "icons": "none"
-      },
-      {
-        "type": "prose",
-        "text_ref": "（表中另有4行是本人定了不在网站上出现的旧项目，没有放上来。）"
       },
       {
         "type": "source_text_card",
@@ -949,7 +941,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -987,7 +979,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1010,7 +1002,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1047,7 +1039,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",

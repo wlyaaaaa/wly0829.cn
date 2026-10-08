@@ -943,7 +943,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版"
+        "text_ref": "原文 · E228 版"
       },
       {
         "type": "chapter_title",
@@ -968,15 +968,15 @@
       },
       {
         "type": "source_text_card",
-        "columns": 2,
+        "columns": 1,
         "columns_v": 1,
-        "split_after": "界面上的点选默认交本人",
         "illustration": "none",
         "icons": "none",
-        "text_ref": "选能力"
+        "text_ref": "选能力",
+        "whole_block": true
       }
     ],
-    "notes": "原图上部页名/owner/介绍在左、工具电脑插画在右；下面原文两栏卡，左前三条、右后三条；竖版介绍后卡外插画、再一整宽原文卡。和 scene 的全部正文入两卡冲突，按实际原图。split_after 为待接入原文节点内分栏需求，当前解析器不可拆同一 bullets 节点。",
+    "notes": "横版保留上方介绍和原插画，下方“选能力”使用一张全宽原文卡，原条目顺序和内容完整；避免旧两列长度悬殊造成大块留白。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   {
@@ -986,7 +986,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版"
+        "text_ref": "原文 · E228 版"
       },
       {
         "type": "chapter_title",
@@ -1024,7 +1024,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1033,10 +1033,7 @@
         "columns": 1,
         "illustration": "none",
         "icons": "none",
-        "text_ref": "常用入口",
-        "row": "entries",
-        "width": "50%",
-        "row_equal_height": true
+        "text_ref": "常用入口"
       },
       {
         "type": "source_text_card",
@@ -1045,13 +1042,10 @@
         "columns": 1,
         "illustration": "none",
         "icons": "none",
-        "text_ref": "谁画、谁复核",
-        "row": "entries",
-        "width": "50%",
-        "row_equal_height": true
+        "text_ref": "云端素材通道"
       }
     ],
-    "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版左卡本机/生图，右卡私人领域/Google；需在连续bullets里第2条后切栏。；E215生图细则扩为六项，横版改在“怎么做”后接右栏，保持原文顺序并缩小两栏长度差。；最终沿该完整条目边界使用两张齐底原文卡，左常用入口至“怎么做”、右“谁画、谁复核”至Google；没有改写或重排原文。",
+    "notes": "横版按“常用入口”和“云端素材通道”自然章节使用两张全宽原文卡，保持全部原文顺序及代码链接；避免旧左右卡长度悬殊造成大块留白。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   {
@@ -1061,7 +1055,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1084,7 +1078,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1113,7 +1107,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1138,7 +1132,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1165,7 +1159,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1188,7 +1182,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1198,10 +1192,6 @@
         "illustration": "none",
         "icons": "none",
         "text_ref": "安装位置、配置和本机约定"
-      },
-      {
-        "type": "prose",
-        "text_ref": "个别只涉及我私事的字句没有放上来"
       }
     ],
     "notes": "新构图，待样张。该方向无有效原图。原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版 -h.png 为零字节，另有 -h-new.png 未列入批准替换，不擅自认定通过；参考14横版写两栏，新构图待样张。竖版原图第一张后两条即停，v2接配置/技能/Windows；原图把底注重复画了两次，定稿只显示一次；按定稿放最后。",
@@ -1215,7 +1205,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E216 版 · 续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1226,10 +1216,6 @@
         "icons": "none",
         "text_ref": "安装位置、配置和本机约定",
         "whole_block": true
-      },
-      {
-        "type": "prose",
-        "text_ref": "个别只涉及我私事的字句没有放上来"
       }
     ],
     "notes": "原文续标记小号左对齐；正文横版左右两大卡接续，竖版整宽单卡，井号不画、不是毛笔章节大标题。横版 -h.png 为零字节，另有 -h-new.png 未列入批准替换，不擅自认定通过；参考14横版写两栏，新构图待样张。竖版原图第一张后两条即停，v2接配置/技能/Windows；原图把底注重复画了两次，定稿只显示一次；按定稿放最后。",

@@ -23,9 +23,13 @@ class PublicProjection(unittest.TestCase):
         self.assertEqual(result['shared']['group_leaf'],{'src':'/leaf.webp','crop':[0,0,3,4]})
         self.assertNotIn('unexpected',result)
         self.assertIn('page-data.unexpected',omitted)
-    def test_public_field_with_local_value_fails_instead_of_lying(self):
-        with self.assertRaisesRegex(ValueError,'public runtime field'):
-            public_page_data({'title':r'E:\Cache\build'})
+    def test_public_field_retains_authored_path(self):
+        data={'title':r'E:\Cache\build'}
+        self.assertEqual(public_page_data(data),data)
+    def test_rule_prose_and_ordinary_fields_retain_authored_paths(self):
+        original=r'<p>入口是 E:\.agents\tools\Invoke-EAgentRulesRelease.ps1。</p>'
+        data={'screens':[{'source_meta':{'original_html':original}}],'title':r'E:\Cache\build'}
+        self.assertEqual(public_page_data(data),data)
     def test_coordinates_labels_actions_and_resources_survive(self):
         data={'title':'项目','screens':[{'id':'a','parts':[{'src':'/a.webp','size':[1440,915],
               'links':[{'href':'/rules/','text':'规则','rect':[.1,.2,.3,.4]}],
@@ -46,8 +50,9 @@ class PublicProjection(unittest.TestCase):
         data=[{'title':'查找材料','href':'/projects/personal-materials/','scopes':['projects'],'source_notes':{'origin':r'E:\Cache\work'}}]
         result=public_search_records(data)
         self.assertEqual(result,[{'title':'查找材料','href':'/projects/personal-materials/','scopes':['projects']}])
-    def test_decoded_unc_path_is_removed_but_json_escaped_relative_is_not_unc(self):
-        self.assertEqual(omit_local_literals(r'\\server\share\item.txt'), '')
+    def test_authored_unc_path_and_json_relative_remain_preserved(self):
+        original=r'\\server\share\item.txt'
+        self.assertEqual(omit_local_literals(original),original)
         relative=json.dumps(r'.\scripts\helper.ps1')
         self.assertEqual(local_values(relative),[])
 
@@ -68,9 +73,9 @@ class TranscriptMetadata(unittest.TestCase):
         self.assertNotIn('file:',text)
         self.assertNotIn('ignored',text)
         self.assertNotIn('页面包装',text)
-    def test_approved_placeholder_preserves_surrounding_prose(self):
+    def test_authored_path_preserves_surrounding_prose(self):
         prose=r'原件放在 E:\PersonalData\来源原件\健康，不进 Git；每天备份。'
-        self.assertEqual(omit_local_literals(prose,replacement='（本机路径）'),'原件放在 （本机路径），不进 Git；每天备份。')
+        self.assertEqual(omit_local_literals(prose,replacement='（本机路径）'),prose)
     def test_hidden_body_attached_without_changing_visible_image_or_link(self):
         result,count=audit.install_transcripts(self.fixture(),{'one':{'h':'完整定稿原文。','v':'竖版完整定稿原文。'}},'/example/')
         self.assertEqual(count,1)
@@ -104,7 +109,7 @@ class TranscriptMetadata(unittest.TestCase):
         source='<script type="application/json" data-continuation-context="">'+json.dumps(value,ensure_ascii=False)+'</script>'
         result=audit.scrub_html_literals(source,[],'/example/')
         data=json.loads(result.split('>',1)[1].rsplit('</script>',1)[0])
-        self.assertEqual(data['text'],'配置在 \n下一段完整保留。')
+        self.assertEqual(data['text'],value['text'])
         self.assertEqual(local_values(data),[])
     def test_final_projection_is_idempotent_and_preserves_metadata(self):
         data={'title':'材料','url':'/','shared':{'group_leaf':{'src':'/leaf.webp','source':r'E:\Cache\input'}}}

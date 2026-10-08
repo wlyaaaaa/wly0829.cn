@@ -109,6 +109,11 @@ def remove_previous_recovery(raw,info):
         if key=='addition':
             album=addition.replace(b'<script defer ',b'<script  ',1).replace(b' src="',b'  data-album-runtime data-src="',1)
             serializations.update((album,album.replace(b'\n',b'\r\n')))
+        script=re.search(rb' src="([^"]+)"',addition)
+        if key=='addition' and script:
+            delayed=addition.replace(script[0][1:],b'',1).replace(b'defer',b'',1)
+            delayed=delayed.replace(b'></script>',b' data-album-runtime data-src="'+script[1]+b'"></script>',1)
+            serializations.update({delayed,delayed.replace(b'\n',b'\r\n')})
         matches=[value for value in serializations if raw.count(value)==1]
         if not matches and key=='addition':
             pattern=rb'\r?\n?<script\b(?=[^>]*data-resource-retry="next-2e")(?=[^>]*(?:data-)?src="/'+re.escape(info['runtime'].encode())+rb'")[^>]*>\s*</script>\r?\n?'

@@ -23,6 +23,21 @@ comic = importlib.util.module_from_spec(spec); spec.loader.exec_module(comic)
 
 
 class SourceTests(unittest.TestCase):
+    def test_album_replay_without_metadata_and_duplicate_rejection(self):
+        baseline, package, output = [os.environ.get('WLY_COMIC_' + name) for name in ('BASELINE', 'PACKAGE', 'OUTPUT')]
+        if not all((baseline, package, output)): self.skipTest('Set WLY_COMIC_BASELINE, PACKAGE and OUTPUT for actual Album replay')
+        self.assertIsNone(json.loads((Path(baseline)/'release-manifest.json').read_text('utf8')).get('home_comic_preparation'))
+        output = Path(output)
+        result = comic.prepare(baseline, package, output, output.parent/'test-comic.json')
+        self.assertEqual(result['changed_existing_files'], [])
+        self.assertEqual((Path(baseline)/'index.html').read_bytes(), (output/'index.html').read_bytes())
+        manifest = json.loads((output/'release-manifest.json').read_text('utf8'))
+        index = output/'index.html'
+        index.write_bytes(index.read_bytes().replace(b'</body>', comic.references(result['package_prefix']).encode()+b'</body>'))
+        manifest['files'] = comic.inventory(output); manifest['release_id'] = comic.identity(manifest['files'], manifest)
+        (output/'release-manifest.json').write_text(json.dumps(manifest), encoding='utf8')
+        with self.assertRaisesRegex(ValueError, 'Existing comic mount differs'): comic.prepare(output, package, output.parent/'duplicate', output.parent/'duplicate.json')
+
     def test_known_release_identity_schemes(self):
         files = {'index.html': {'sha256': 'a'*64, 'bytes': 3}}
         normal = {'schema': 'wly.hybrid-release.v1'}

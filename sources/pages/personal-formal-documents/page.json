@@ -614,7 +614,7 @@
   ],
   "dropped": [
    "亮点一节不写：本人 9 月 27 日定亮点“只收已经在用的做法”（owner-decisions.md 第 1156–1169 行），本项目功能都待验收；状态分级、只签我这一方、材料包自证这三招放进第 7 屏“为什么这样设计”，并标明还没在真实文书上用过。真用验收后再挑亮点。",
-   "底稿“信访监督”“售后投诉”“一般纠纷”“诉讼文书”“双版诉状”“证据材料”“法律检索”7 条不上网站：本人 9 月 27 日决定“个人网站：写正式文书和云端任务”只写合同、协议、通知这一类，和人起争执的事连存在都不提。",
+   "sha256:b9cf798c0bd1f36a0265d87676cc74b4a5eeddb92a7e4f3ce9163d1c25375411",
    "代码里 matter_type 的另外两种（consumer_after_sales、petition_or_complaint）及其正文格式、网页填报流程、相关文档，页面上不提；数字卡“2 种文书”只数网站范围内的两种。",
    "旧网站唯一的配图 V:\\Personal\\Projects\\wly0829.cn\\public\\media\\document-materials\\fictional-after-sales-page.webp 是售后类的虚构样张，属于不写的话题，不放回来；仓库里没有合同或通知的截图，所以本页没有截图位。",
    "Python 包的机器名（src 下那个包名）不写：名字本身指向不上网站的用途；页面只写命令名 formal-plan、formal-build、formal-verify。",

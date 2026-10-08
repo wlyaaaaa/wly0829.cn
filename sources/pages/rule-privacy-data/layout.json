@@ -1491,7 +1491,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -1508,7 +1508,7 @@
       "prose",
       "monospace"
     ],
-    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E216 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 个人资料与数据处理”到“怎么解锁”那条结束；右卡放“时长”“取消只结束这一次”“锁着的时候”“各管各的权限”四条。",
+    "source_layout": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E221 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 个人资料与数据处理”到“怎么解锁”那条结束；右卡放“时长”“取消只结束这一次”“锁着的时候”“各管各的权限”四条。",
     "layout_variants": {
       "desktop_columns_mentioned": [],
       "portrait_columns_mentioned": [],
@@ -1532,7 +1532,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -1572,7 +1572,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1613,7 +1613,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1653,7 +1653,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1717,7 +1717,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1769,7 +1769,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1819,7 +1819,7 @@
         "type": "section_heading",
         "align": "left",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",

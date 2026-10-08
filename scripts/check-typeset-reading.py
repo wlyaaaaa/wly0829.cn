@@ -55,6 +55,13 @@ CANDIDATE_MEDIA_READY = """async () => {
  return {fonts:document.fonts.status,images:images.length,
    failed_images:images.filter(i=>!i.complete||!i.naturalWidth).map(i=>i.currentSrc||i.src)};
 }"""
+GAP = """id => {
+ const screens=[...document.querySelectorAll('.screen')],el=screens.find(s=>s.dataset.screen===id),previous=screens[screens.indexOf(el)-1];
+ if(!el||!previous)return null;
+ function top(node){let y=0;for(;node;node=node.offsetParent)y+=node.offsetTop;return y;}
+ const screenTop=top(el),previousBottom=top(previous)+previous.offsetHeight,point=scrollY+(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0),padding=parseFloat(document.body.style.paddingBottom)||0,maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);
+ return {previous_id:previous.dataset.screen,screen_top:screenTop,previous_bottom:previousBottom,point,gap_px:screenTop-previousBottom,distance_px:screenTop-point,max_scroll:maxScroll,padding_px:padding,natural_max_scroll:Math.max(0,maxScroll-padding)};
+}"""
 
 
 def reading_error_within_two_pixels(value):
@@ -164,14 +171,26 @@ async def run(args, base, build):
                             await browser_page.evaluate(PLACE,{'id':screen,'fraction':fraction})
                             await browser_page.wait_for_timeout(50)
                             before=await reading_position(browser_page)
+                            gap_scope=(name=='cockpit' and screen=='cockpit-09' and start==(1024,900) and end==(740,900) and fraction in [.15,.5,.85] and before['fraction']<0)
+                            before_gap=await browser_page.evaluate(GAP,screen) if gap_scope else None
+                            gap_scope=bool(gap_scope and before_gap and before['id']==screen and before_gap['previous_id']=='cockpit-08' and before_gap['previous_bottom']<=before_gap['point']<before_gap['screen_top'])
                             await browser_page.set_viewport_size({'width':end[0],'height':end[1]})
                             await browser_page.wait_for_timeout(80)
                             await reading_position(browser_page)
                             after=await reading_position(browser_page)
                             delta=reading_delta(before, after)
+                            basis=None
+                            if gap_scope:
+                                after_gap=await browser_page.evaluate(GAP,screen)
+                                valid=(before['id']==screen and before_gap and after_gap and before_gap['previous_id']==after_gap['previous_id']=='cockpit-08' and before_gap['previous_bottom']<=before_gap['point']<before_gap['screen_top'] and after_gap['previous_bottom']<=after_gap['screen_top'])
+                                expected=after_gap['screen_top']-min(before_gap['distance_px'],after_gap['gap_px']) if valid else None
+                                expected=after['offset']+min(max(0,expected-after['offset']),after_gap['natural_max_scroll']) if valid else None
+                                basis={'kind':'measured-baseline-tail-gap','decision_id':'2db6fa76-c905-46c8-8971-87290763cc51','before':before_gap,'after':after_gap,'expected_point':expected,'expected_scroll':expected-after['offset'] if valid else None,'same_screen':before['id']==after['id']==screen,'fraction_error_px':delta}
+                                delta=abs(after_gap['point']-expected) if valid else None
                             result['cases'].append({'page':name,'requested_screen':screen,'requested_fraction':fraction,
                                 'from':start,'to':end,'before':before,'after':after,'error_px':delta,
-                                'pass':reading_error_within_two_pixels(delta)})
+                                'pass':reading_error_within_two_pixels(delta) and (basis is None or basis['same_screen'])})
+                            if basis:result['cases'][-1]['position_basis']=basis
                             if not reading_error_within_two_pixels(delta):
                                 result['cases'][-1]['runtime_observation']=await browser_page.evaluate("()=>({tracked:readingPosition,saved:typesetReadingState.saved,revision:typesetReadingState.revision,resizing,padding:getComputedStyle(document.body).paddingBottom,images:[...document.querySelectorAll('.typeset-part:not([hidden]) img')].filter(im=>!im.complete||!im.naturalWidth).map(im=>({src:im.currentSrc||im.src,complete:im.complete,width:im.naturalWidth}))})")
                             await browser_page.set_viewport_size({'width':start[0],'height':start[1]})

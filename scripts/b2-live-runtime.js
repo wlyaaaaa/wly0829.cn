@@ -85,7 +85,7 @@ function hardwareHealth(){const gaps=hardwareReadGaps();return gaps.some(x=>x.he
 function projectRowHealth(x){
  if(x.frozen===true)return 'ok';
  if(x.failed_count>0||['failed','run_failed','acceptance_failed'].includes(x.overview)||x.run_health==='failed')return 'error';
- if(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown')return 'unknown';
+ if(x.run_health!=='not_applicable'&&(['run_unknown','unknown'].includes(x.overview)||['unknown','unavailable','stale'].includes(x.state)||x.run_health==='unknown'))return 'unknown';
  return x.waiting_user_count>0||x.waiting_ai_count>0||x.on_hold_count>0||x.overview==='run_overdue'||x.run_health==='overdue'?'warn':'ok';
 }
 function projectHealth(){const rows=list('projects');if(!rows)return 'unknown';const states=rows.map(projectRowHealth);return ['error','unknown','warn'].find(state=>states.includes(state))||'ok';}
@@ -141,6 +141,7 @@ const taskInLamp=x=>x.enabled!==false&&x.external!==true&&x.project!=='电脑上
 const taskNotConnected=x=>x.availability!=null?x.availability==='not_connected':x.enabled==null&&x.source&&x.source!=='windows';
 const failureCount=x=>Number.isInteger(x.consecutive_failures)&&x.consecutive_failures>=0?x.consecutive_failures:null;
 function projectReadMissing(x){
+ if(x.run_health==='not_applicable')return false;
  if(['unknown','unavailable','stale'].includes(x.state))return true;
  if(!(['run_unknown','unknown'].includes(x.overview)||x.run_health==='unknown'))return false;
  const tasks=list('automation')?.filter(task=>task.project===x.project&&taskInLamp(task));

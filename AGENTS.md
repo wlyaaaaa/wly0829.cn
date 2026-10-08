@@ -389,7 +389,7 @@ personal AI collaboration workspace; public presentation is secondary.
   describe its enduring product idea and what was actually built, without
   publishing internal lifecycle labels or implying untrue current operation.
 - If a learning product is ever selected, describe only its learning method,
-  product design and implementation. Do not expose career or offer strategy.
+  product design and implementation. Do not expose individual outcomes or private planning.
 - A private personal domain is not automatically excluded from future project
   selection. When the owner selects one, a `curated_packaging` +
   `manual_owner_only` page may publish its reusable product thinking, evidence

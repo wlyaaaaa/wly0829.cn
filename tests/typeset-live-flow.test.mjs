@@ -9,6 +9,29 @@ const sandbox={window:{addEventListener(){}},document:{addEventListener(){}},req
 vm.runInNewContext(helper,sandbox);
 const {plan}=sandbox.window.TypesetLiveFlow;
 
+test('initial hash placement can settle again until reader navigation replaces it',()=>{
+ const line=readFileSync(new URL('../scripts/build-typeset-site.py',import.meta.url),'utf8').split('\n').find(line=>line.includes('"let initialReadingRevision='));
+ const env={resizing:false,typesetReadingState:{revision:0}};let placements=0;
+ env.scrollToCurrentHash=()=>{placements++;env.typesetReadingState.revision++;};
+ vm.runInNewContext(JSON.parse(line.trim())+'this.restore=restoreInitialHash;',env);
+ env.restore();env.restore();assert.equal(placements,2);
+ env.typesetReadingState.revision++;env.restore();assert.equal(placements,2);
+});
+
+test('late live-content placement yields to resize and reader navigation',()=>{
+ for(const [index,invalidate] of [()=>{},env=>env.typesetReadingState.revision++,env=>env.innerWidth++,env=>env.resizing=true,env=>env.events.click(),env=>env.events.hashchange()].entries()){
+  const queue=[],events={};let top=10,moved=0;
+  const node={isConnected:true,getBoundingClientRect:()=>({top:top-moved}),closest:()=>node};
+  const env={innerWidth:390,innerHeight:844,resizing:false,typesetReadingState:{width:390,height:844,revision:0},events,
+   window:{addEventListener:(type,callback)=>{events[type]=callback;},scrollBy:({top:delta})=>{moved+=delta;}},
+   document:{addEventListener(){},elementFromPoint:()=>node},performance:{now:()=>0},
+   requestAnimationFrame:callback=>{queue.push(callback);},setTimeout:callback=>{queue.push(callback);}};
+  vm.runInNewContext(helper,env);const restore=env.window.TypesetLiveFlow.preserveReader();top=20;restore();invalidate(env);
+  while(queue.length)queue.shift()();
+  assert.equal(moved,index===0?10:0);
+ }
+});
+
 test('nearby live rows form one natural-flow band in source order',()=>{
  const rows=plan([{rect:[.6,.5,.3,.025]},{rect:[.1,.5,.3,.025]},{rect:[.1,.54,.8,.025]}],1000);
  assert.equal(rows.length,1);

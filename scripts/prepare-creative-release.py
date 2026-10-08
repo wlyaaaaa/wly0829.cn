@@ -48,11 +48,12 @@ def recipe(path):
     if data.get('home_bio'): required.add('home_bio_script')
     if data.get('bird_first_packet'): required |= {'bird_first_packet','native_home_support','native_home_script'}
     if data.get('living_pages_packet'): required.add('living_pages_packet')
+    if data.get('title_cache'): required.add('title_cache')
     paths = {key: input_path(data[key]) for key in required - {'geometry', 'asset_base_url'}}
     paths['geometry'] = [input_path(p) for p in data.get('geometry',[])]
     inputs = {str(path): stamp(path)}
     # Bind the actual approved packages and implementation used by this fixed replay.
-    for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference','home_bio_script','native_home_script')]:
+    for root in [value for key,value in paths.items() if key not in ('geometry','static_home_reference','home_bio_script','native_home_script','title_cache')]:
         if not root.is_dir():
             raise ValueError('Missing preparation package: ' + str(root))
         files = [root/'river2.template.html'] if root == paths.get('river_handoff') else root.rglob('*')
@@ -60,6 +61,7 @@ def recipe(path):
     for p in paths['geometry']:
         inputs[str(p)] = stamp(p)
     if data.get('home_bio'): inputs[str(paths['home_bio_script'])] = stamp(paths['home_bio_script'])
+    if data.get('title_cache'): inputs[str(paths['title_cache'])] = stamp(paths['title_cache'])
     if data.get('bird_first_packet'):
         inputs[str(paths['native_home_script'])] = stamp(paths['native_home_script'])
         scene = paths['native_home_script'].parents[3] / 'living/step1-source/home-scene.js'

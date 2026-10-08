@@ -101,7 +101,7 @@ def remove_document_hints(text):
     class Hints(HTMLParser):
         def handle_starttag(self, tag, attrs):
             values = dict(attrs); rel = (values.get('rel') or '').lower().split()
-            if tag != 'link' or not ('prerender' in rel or 'prefetch' in rel and values.get('as','document').lower() == 'document'):
+            if tag != 'link' or not (values.get('id') == 'album-route-index' or 'prerender' in rel or 'prefetch' in rel and values.get('as','document').lower() == 'document'):
                 return
             line, column = self.getpos(); start = offsets[line-1]+column
             spans.append((start,start+len(self.get_starttag_text())))
@@ -253,6 +253,7 @@ async def titles(records, chrome, profiles, evidence, ownership):
 
 
 def inject_runtime(text, js, css, index, model):
+    text = SCRIPT.sub(lambda m: '' if dict((k.lower(), html.unescape(v)) for k, _, v in ATTR.findall(m['attrs'])).get('id') == 'album-page' else m[0], text)
     text, removed_hints = remove_document_hints(text)
     text = re.sub(r'<script\b[^>]*\bdata-(?:album-inline|image-loading)\b[^>]*>.*?</script>', '', text, flags=re.S | re.I)
     text = re.sub(r'<link\b[^>]*(?:\bid=["\x27]album-route-index["\x27]|\bhref=["\x27]/?_album/[^"\x27]+\.css["\x27])[^>]*>', '', text, flags=re.I)
@@ -260,7 +261,7 @@ def inject_runtime(text, js, css, index, model):
     def delay(match):
         attrs = dict((k.lower(), html.unescape(v)) for k, _, v in ATTR.findall(match['attrs']))
         src = attrs.get('src')
-        if not src or 'data-album-runtime' in match['attrs']:
+        if not src or 'data-album-runtime' in match['attrs'] or attrs.get('data-resource-retry') == 'next-2e':
             return match[0]
         # Delay the existing enhancement entries, not data or configuration JS.
         if 'defer' not in match['attrs'] and attrs.get('type') != 'module':
@@ -333,7 +334,7 @@ async def prepare(args, ownership):
             hp = Path(r['html'])
             if hp.is_file() and digest(hp) == r.get('html_sha256'):
                 r = dict(r); r['_fit'] = fit; records.setdefault((r['screen'], r['orientation']), []).append(r)
-    models, checks, needed = {}, [], {}
+    models, checks, needed, retentions = {}, [], {}, []
     pixel_cache = {}
     for rel, text in pages.items():
         match = DATA.search(text); data = json.loads(match[1]) if match else {}
@@ -342,6 +343,8 @@ async def prepare(args, ownership):
         prior_model = json.loads(previous[0]['data']) if previous else {}
         if previous and prior_model.get('route') != route(rel): raise ValueError('Existing album page differs: '+rel)
         picture_parts=PictureParts(text).parts
+        source_album = re.search(r'<script\b[^>]*\bid="album-page"[^>]*>(.*?)</script>', text, re.S)
+        source_nodes = json.loads(source_album[1]).get('nodes', []) if source_album else []
         nodes, image_rows = [], []
         screens = data.get('screens', []); entry = next((s['id'] for s in screens if s.get('shape') != 'card'), None)
         for screen in screens:
@@ -359,7 +362,7 @@ async def prepare(args, ownership):
                     retained = [n for n in prior_model.get('nodes', [])
                                 if n.get('screen')==sid and n.get('orientation')==orient and n.get('src')==urljoin('/'+rel,part['src']) and n.get('size')==part['size']]
                     actual = [p for p in picture_parts if p['orientation']==orient and local_asset(source,p['src'],rel)==asset]
-                    key = asset.relative_to(source).as_posix()
+                    key = next((k for k in original if source_path(source,k)==asset),None)
                     if retained and (len(retained)!=1 or len(actual)!=1 or key not in original or
                             retained[0].get('selector')!='[data-part="'+actual[0]['id']+'"]' or original[key]!=manifest.get('baseline_files',{}).get(key)):
                         raise ValueError('Inherited album part or bytes changed: '+rel+' '+part['src'])
@@ -397,6 +400,17 @@ async def prepare(args, ownership):
                                    'producer_html_sha256': r['html_sha256'], 'producer_png_sha256': source_part['sha256'],
                                    'transport_sha256': digest(asset), 'decoded_pixel_equal': True, 'art_count': len(arts)})
                     break
+                else:
+                    actual = next((p for p in picture_parts if p['orientation'] == orient and urljoin('/'+rel, p['src']) == urljoin('/'+rel, part['src'])), None)
+                    expected = {'screen': sid, 'orientation': orient, 'size': part['size'], 'src': urljoin('/'+rel, part['src']),
+                                'selector': '[data-part="' + actual['id'] + '"]' if actual else None}
+                    retained = [n for n in source_nodes if actual and all(n.get(k) == v for k,v in expected.items())]
+                    if len(retained) > 1: raise ValueError('Conflicting source album nodes: '+rel+' '+part['src'])
+                    if retained:
+                        if pixels(asset)[0] != tuple(part['size']): raise ValueError('Source album image size changed: '+rel+' '+part['src'])
+                        nodes.append(dict(retained[0]))
+                        retentions.append({'route': route(rel), 'source_html_sha256': original[rel]['sha256'], 'node': retained[0],
+                                           'image_sha256': digest(asset), 'basis': 'Exact source album-page node and current picture part; no new geometry measurement'})
         # Legacy raster first screen has exact responsive resource metadata, but
         # no reliable crop coordinates. Warm it without inventing a subject.
         if entry and not image_rows:
@@ -483,6 +497,7 @@ async def prepare(args, ownership):
     summary = {'status': 'prepared', 'release_id': release_id, 'source_release_id': manifest['page_flip_preparation']['baseline_release_id'],
                'source': str(source), 'candidate': str(out), 'files': len(files), 'html': len(pages), 'changed_html': changed,
                'delayed_scripts': delayed, 'pixel_bindings': checks, 'title_dom_measurements': evidence, 'geometry_build_reports': report_proofs,
+               'retained_source_nodes': retentions,
                'modified_legacy_scripts':legacy_changes,'removed_startup_document_hints':removed_hints,
                'route_effects': {k: {'entry':v['entry'], 'art_count':sum(len(n['arts']) for n in v['nodes']), 'title_count':sum('title' in n for n in v['nodes'])} for k,v in models.items()},
                'original_media_bytes_preserved': True, 'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat()}

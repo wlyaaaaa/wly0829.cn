@@ -248,8 +248,8 @@ function texts(ranToday, nShore) {
   };
   const day = ms => !(ms > 0) ? '' : dkey(ms) === M.today ? hm(ms) : dkey(ms) === M.today - 1 ? '昨天' : `${bj(ms).getUTCMonth() + 1}月${bj(ms).getUTCDate()}日`;
   group('alert', '出错的、要留意的', '先看这里', M.alerts, true, t => day(t.last), t => C[t.flag], C.bad);
-  group('past', M.stale ? '当时已跑完的' : '今天跑完的', '浮标左边升了旗的船', M.past.filter(p => p.t.ran).sort((a, b) => b.at - a.at), true, p => hm(p.at), p => C[p.t.flag], C.ok);
-  group('future', M.stale ? '当时还没到点的' : '今天还要跑的', '浮标右边还没升旗的船，按出发时间排', M.future, true, p => hm(p.at), () => '#9fd8b3', '#9fd8b3');
+  group('past', M.stale ? '当时已跑完的' : '今天跑完的', '浮标左边升了旗的船', M.past.filter(p => p.t.ran).sort((a, b) => b.at - a.at), false, p => hm(p.at), p => C[p.t.flag], C.ok);
+  group('future', M.stale ? '当时还没到点的' : '今天还要跑的', '浮标右边还没升旗的船，按出发时间排', M.future, false, p => hm(p.at), () => '#9fd8b3', '#9fd8b3');
   group('guard', '常驻和高频任务', '岸边的灯：一直开着，或每半小时内就跑一次', M.guards, false, t => t.every <= 30 ? frequency(t) : t.raw.state === 'running' ? '在运行' : '常驻', t => t.alert ? C[t.flag] : '#ffcb52', '#ffcb52');
   group('idle', '今天没有安排的', '岸上的船，今天不跑', M.idle, false, t => day(t.last), () => '#7cc79b', '#7cc79b');
   group('off', '停用的、从没跑过的', '拉到岸上的船', M.off, false, t => t.off ? '停用' : '没跑过', () => C.gray, C.gray);

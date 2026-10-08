@@ -188,14 +188,14 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def current_home_links(source, version=4):
+def current_home_links(source, version=4, rule_pin=None):
     if version not in (1,2,3,4,5,6):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
     spec=importlib.util.spec_from_file_location('home_entry_links',Path(__file__).with_name('prepare-home-entry-links.py'))
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.prepare_links(source,return_bytes=True,legacy=version<4)
+    return module.prepare_links(source,return_bytes=True,legacy=version<4,rule_pin=rule_pin)
 
 
 def verify_manifest(manifest, require_remote=True):

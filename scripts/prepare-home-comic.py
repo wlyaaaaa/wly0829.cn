@@ -158,12 +158,16 @@ def prepare(baseline, package, output, report):
     prefix = '_shared/home-comic/' + package_id[:20]
     refs = references(prefix)
     existing = manifest.get('home_comic_preparation')
-    mounts = re.findall(r'<script\b[^>]*\bsrc=[\"\x27]([^\"\x27]*comic-(?:data|live)\.js)[\"\x27][^>]*>\s*</script>', html, re.I)
+    mount_pattern = r'\s(?:data-)?src=[\"\x27]([^\"\x27]*comic-(?:data|live)\.js)[\"\x27]'
+    mounts = [value for tag in re.findall(r'<script\b[^>]*>(?:\s*</script>)?', html, re.I)
+              for value in re.findall(mount_pattern, tag, re.I)]
+    complete_mounts = [value for tag in re.findall(r'<script\b[^>]*>\s*</script>', html, re.I)
+                       for value in re.findall(mount_pattern, tag, re.I)]
     already_integrated = bool(existing or mounts)
     previous_mounts=[]
     if already_integrated:
         expected_mounts = ['/' + prefix + '/comic-data.js', '/' + prefix + '/comic-live.js']
-        if not existing or existing.get('package_id') != package_id:
+        if mounts != complete_mounts or (existing is None and mounts != expected_mounts) or (existing is not None and (not isinstance(existing, dict) or existing.get('package_id') != package_id)):
             raise ValueError('Existing comic mount differs from this package; retain the current source and review the two script references instead of duplicating them')
         for rel, value in package_files.items():
             if before.get(prefix + '/' + rel) != value:
@@ -185,7 +189,7 @@ def prepare(baseline, package, output, report):
         raise AssertionError('Comic preparation changed an existing file beyond the two homepage references')
     release_id = identity(after, manifest)
     manifest.update({'files': after, 'release_id': release_id})
-    if updated!=raw:
+    if updated!=raw or existing is None:
         manifest['home_comic_preparation'] = {'status': 'prepared_pending_acceptance', 'baseline_release_id': baseline_id, 'package_id': package_id,
                      'old_page_evidence_is_not_new_acceptance': True, 'previous_mounts':previous_mounts}
     (output / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')

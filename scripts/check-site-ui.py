@@ -113,9 +113,10 @@ async def review(page, base, route, width, dom, blocked=None):
         for source, rows in checks['unavailable'].items():
             if len(rows)>1: fail('unavailable-repeat' if source!='unknown' else 'unavailable-source-unknown', source, {'rows': rows})
     if route.startswith('/rules'):
-        visible = [await e.inner_text() for e in await page.locator('main pre').all() if await e.evaluate("e=>e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
+        rule_body = 'main article.rule-original-prose, main pre:not(article.rule-original-prose pre)'
+        visible = [await e.inner_text() for e in await page.locator(rule_body).all() if await e.evaluate("e=>!e.closest('[hidden]')&&e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
         checks['rule_visible_characters'] = sum(map(len, visible))
-        if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', '.rule-original-panel pre', {'visible_characters': checks['rule_visible_characters']})
+        if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', rule_body, {'visible_characters': checks['rule_visible_characters']})
     return dict(route=route, width=width, final_url=page.url, issues=issues, checks=checks)
 async def run(args):
     if args.base_url and (args.full or not args.pages) and not args.online_full: raise ValueError('Online all-route checks require --online-full; use local --root --full by default')

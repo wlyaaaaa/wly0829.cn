@@ -20,7 +20,7 @@ def proof(payload):
 
 
 def toc_unify_package(package):
-    """Read the approved 85-page/75-label package without implicit fallbacks."""
+    """Read the approved page scope and manifest-bound labels without fallbacks."""
     package = Path(package).resolve()
     consumed = [package / name for name in (
         'prepare-toc-unify.py', 'label-map-webp-visible-ink.json',
@@ -29,11 +29,12 @@ def toc_unify_package(package):
     label_map = json.loads(consumed[1].read_text('utf8'))
     pages = json.loads(consumed[2].read_text('utf8'))
     manifest = json.loads(consumed[3].read_text('utf8'))
+    expected_count = manifest.get('expected_labels')
     if (len(pages) != 85 or len(set(pages)) != 85 or 'index.html' not in pages
-            or '404.html' not in pages or len(label_map) != 75
-            or manifest.get('expected_labels') != 75 or manifest.get('available_labels') != 75
-            or manifest.get('missing') or len(manifest.get('items', [])) != 75):
-        raise ValueError('TOC unification requires the approved 85 pages and 75 labels')
+            or '404.html' not in pages or type(expected_count) is not int or expected_count < 1 or len(label_map) != expected_count
+            or manifest.get('available_labels') != expected_count
+            or manifest.get('missing') or len(manifest.get('items', [])) != expected_count):
+        raise ValueError('TOC unification requires the approved 85 pages and complete declared labels')
     if any(Path(page).as_posix() != page or page.startswith('/') or '..' in Path(page).parts
            or not page.endswith('.html') for page in pages):
         raise ValueError('TOC page scope contains an invalid relative HTML path')
@@ -57,7 +58,7 @@ def toc_unify_package(package):
         if any(abs(value - expected) > 1e-6 for value, expected in zip(ink, item['ink_box_alpha16'])):
             raise ValueError('TOC visible ink differs: ' + name)
         images.append(image)
-    if len({image.name for image in images}) != 75:
+    if len({image.name for image in images}) != expected_count:
         raise ValueError('TOC bitmap names are not unique')
     return package, label_map, pages, images, consumed + images
 

@@ -601,7 +601,7 @@ def _render_page(page, page_name, src, screens, orients, do_compare, outdir, bro
                 n = newm.pop(e["screen"], None)
                 if n:
                     os_ = {x["orientation"] for x in n["images"]}
-                    n["images"] = [x for x in e["images"] if x.get("orientation") not in os_] + n["images"]
+                    n["images"] = sorted([x for x in e["images"] if x.get("orientation") not in os_] + n["images"], key=lambda x: x.get("orientation") != "h")
                     merged.append(n)
                 else:
                     merged.append(e)

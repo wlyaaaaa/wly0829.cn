@@ -17,22 +17,32 @@
     return ratios[k];
   };
 
-  // G1：按 DOM 顺序取看得见的字（含 data-text），跳过 data-echo
+  // G1：按原文顺序取看得见的字（含 data-text），跳过 data-echo
   const parts = [];
+  // 功能卡的视觉顺序按状态；G1 按生成器保存的原序逐字核对每张卡。
+  const addText = (text, element) => {
+    const card = element.closest('[data-feature-source-index]');
+    const group = card?.closest('.feature-group-grid');
+    if (!group) { parts.push(text); return; }
+    let chunk = parts.at(-1);
+    if (chunk?.group !== group) { chunk = {group, cards: new Map()}; parts.push(chunk); }
+    const index = Number(card.dataset.featureSourceIndex);
+    chunk.cards.set(index, (chunk.cards.get(index) || '') + text);
+  };
   const textRects = [];  // 看得见的字的行框：[rect, 文字开头]
   const tw = document.createTreeWalker(page, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
   let n;
   while ((n = tw.nextNode())) {
     if (n.nodeType === 1) {
       if (n.closest('[data-echo]')) continue;
-      if (n.dataset && n.dataset.text) parts.push(n.dataset.text);
+      if (n.dataset && n.dataset.text) addText(n.dataset.text, n);
       continue;
     }
     const el = n.parentElement;
     if (!n.textContent.trim() || el.closest('[data-echo]')) continue;
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden') continue;
-    parts.push(n.textContent);
+    addText(n.textContent, el);
     // G2：实测字形高（跳过标题图下的透明对照字）
     if (el.closest('.ghost')) continue;
     // 旋转过的字（如竖版把“→”转成向下）：外框高不等于字高，按字号算（13:50 裁定第 9 条的框架缺陷）
@@ -54,7 +64,8 @@
       if (g < res.minGlyph) { res.minGlyph = g; res.minGlyphAt = n.textContent.trim().slice(0, 12); }
     }
   }
-  res.text = parts.join('');
+  res.text = parts.map(part => typeof part === 'string' ? part : [...part.cards]
+    .sort((a, b) => a[0] - b[0]).map(([, text]) => text).join('')).join('');
   // G1 补查：排版记号不该画出来（canon 会把它们从两边都去掉，所以逐字比较看不出）
   const marks = (res.text.match(/[〔〕【】［］｜]|\*\*/g) || []);
   if (marks.length) res.issues.push('G1 画出了排版记号 ' + [...new Set(marks)].join(' ') + ' 共 ' + marks.length + ' 处');

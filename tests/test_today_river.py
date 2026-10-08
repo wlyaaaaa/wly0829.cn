@@ -14,6 +14,7 @@ import threading
 import time
 import traceback
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 
 from playwright.async_api import async_playwright
@@ -110,6 +111,23 @@ SNAP = r"""()=>{
 }"""
 
 
+def verify_single_river(site):
+    refs = {'script': [], 'link': [], 'mount': []}
+    class RiverTags(HTMLParser):
+        def handle_starttag(self, tag, attrs):
+            data = dict(attrs)
+            if 'data-today-river' in data:
+                refs['mount'].append(tag)
+            for kind, value in [('script', data.get('src')), ('script', data.get('data-src')), ('link', data.get('href'))]:
+                filename = Path(urlsplit(value).path).name if value else ''
+                if tag == kind and filename.startswith('today-river-') and filename.endswith('.js' if kind == 'script' else '.css'):
+                    refs[kind].append(value)
+    parser = RiverTags()
+    parser.feed((site / 'cockpit/index.html').read_text('utf8'))
+    assert {kind: len(values) for kind, values in refs.items()} == {'script': 1, 'link': 1, 'mount': 1}, refs
+    return refs
+
+
 async def main(args):
     args.output.mkdir(parents=True,exist_ok=True)
     policy=verify_insurance(args.output)
@@ -117,6 +135,7 @@ async def main(args):
     os.environ['TEMP']=os.environ['TMP']=str(args.temp.resolve())
     state={'mode':'failure','status_requests':0,'external_blocked':[],'non_get_blocked':[],'missing':[]}
     site=args.site.resolve()
+    verify_single_river(site)
     class Handler(BaseHTTPRequestHandler):
         def log_message(self,*_): pass
         def do_GET(self):

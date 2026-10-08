@@ -11,6 +11,8 @@ spec=importlib.util.spec_from_file_location('overlay_hybrid',Path(__file__).reso
 h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
 spec=importlib.util.spec_from_file_location('overlay_preparation',Path(__file__).resolve().parents[1]/'scripts/prepare-typeset-release.py')
 p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
+def private_fixture(identity): return h.builder.load_policy()['fixture_values'][identity]
+POLICY_UNAVAILABLE = bool(h.os.environ.get('CI')) and not (Path(__file__).resolve().parents[1] / '.publish/private/rule-public-policy.json').is_file()
 class OverlayTests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)
@@ -41,16 +43,17 @@ class OverlayTests(unittest.TestCase):
         body=b'void 1;\n';rel='_typeset/runtime/app-'+hashlib.sha256(body).hexdigest()[:20]+'.js'
         self.put(self.base,rel,b'old')
         with self.assertRaisesRegex(ValueError,'content hash'):self.load({rel:self.entry(rel,body,'runtime_bundle')})
+    @unittest.skipIf(POLICY_UNAVAILABLE, 'private publication policy is unavailable in CI')
     def test_unchanged_search_record_does_not_waive_a_new_record(self):
-        old='window.__WLY_SEARCH_INDEX__='+json.dumps([{'text':'PersonalOS 旧记录'}],ensure_ascii=False)+';'
-        new='window.__WLY_SEARCH_INDEX__='+json.dumps([{'text':'PersonalOS 旧记录'},{'text':'PersonalOS 新记录'}],ensure_ascii=False)+';'
+        old='window.__WLY_SEARCH_INDEX__='+json.dumps([{'text':private_fixture('sha256:9cc3d3376bb1dcb75034cd6893754bfff7a8dd49dfdde99804701bf1c32570cd')}],ensure_ascii=False)+';'
+        new='window.__WLY_SEARCH_INDEX__='+json.dumps([{'text':private_fixture('sha256:9cc3d3376bb1dcb75034cd6893754bfff7a8dd49dfdde99804701bf1c32570cd')},{'text':private_fixture('sha256:3f1e20bd7e1e745da34743040f76a97c1904c87c3d830bfe56f5ff8bb7d04e95')}],ensure_ascii=False)+';'
         baseline=self.put(self.base,'search-index.js',old.encode());source=self.put(self.assets,'search-index.js',new.encode())
         kept=sorted(set(h.search_record_hashes(old))&set(h.search_record_hashes(new)))
         entry=self.entry('search-index.js',new.encode(),'search_index',preserved_record_sha256s=kept)
         self.load({'search-index.js':entry})
-        self.assertTrue(h.unchanged_search_finding(source,{'type':'excluded_topic','offset':new.index('PersonalOS')},entry))
-        self.assertFalse(h.unchanged_search_finding(source,{'type':'excluded_topic','offset':new.rindex('PersonalOS')},entry))
-        self.assertFalse(h.unchanged_search_finding(source,{'type':'credential','offset':new.index('PersonalOS')},entry))
+        self.assertTrue(h.unchanged_search_finding(source,{'type':'excluded_topic','offset':new.index(private_fixture('sha256:29de2b3769424e81047f6cb4ca162aeab9427445c943e10b534eecc608b708ff'))},entry))
+        self.assertFalse(h.unchanged_search_finding(source,{'type':'excluded_topic','offset':new.rindex(private_fixture('sha256:29de2b3769424e81047f6cb4ca162aeab9427445c943e10b534eecc608b708ff'))},entry))
+        self.assertFalse(h.unchanged_search_finding(source,{'type':'credential','offset':new.index(private_fixture('sha256:29de2b3769424e81047f6cb4ca162aeab9427445c943e10b534eecc608b708ff'))},entry))
     def test_private_path_pattern_stops_at_a_prose_sentence(self):
         self.assertIsNone(h.builder.PRIVATE.search('E:\\Documents\\xwechat_files。确认账号和聊天记录完整。'))
         self.assertIsNotNone(h.builder.PRIVATE.search('E:\\Documents\\聊天记录\\私密.json'))

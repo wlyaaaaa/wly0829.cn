@@ -30,8 +30,6 @@
       },
       {
         "type": "table",
-        "columns": 2,
-        "portrait_layout": "row_cards",
         "text_ref": "型号与派法（北京时间2026-10-03）"
       },
       {
@@ -98,8 +96,6 @@
       },
       {
         "type": "table",
-        "columns": 2,
-        "portrait_layout": "row_cards",
         "text_ref": "型号与派法（北京时间2026-10-03）"
       },
       {
@@ -427,7 +423,7 @@
       {
         "type": "section_heading",
         "size": "small",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -464,7 +460,7 @@
       {
         "type": "section_heading",
         "size": "small",
-        "text_ref": "原文·E216版，一字不改"
+        "text_ref": "原文 · E228 版，一字不改"
       },
       {
         "type": "source_text_card",
@@ -503,7 +499,7 @@
       {
         "type": "section_heading",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -584,7 +580,7 @@
       {
         "type": "section_heading",
         "size": "small",
-        "text_ref": "原文·E216版·续"
+        "text_ref": "原文 · E228 版 · 续"
       },
       {
         "type": "source_text_card",

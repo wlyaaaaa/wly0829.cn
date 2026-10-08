@@ -126,6 +126,13 @@ class OssBrowserNetworkTests(unittest.TestCase):
         self.assertEqual(result['expected_navigation_cancellations'],1)
         self.assertFalse(network.status_get_succeeded({'method':'GET','url':network.STATUS_URL,'response_url':network.STATUS_URL,'response_http':403}))
         self.assertTrue(network.status_get_succeeded({'method':'GET','url':network.STATUS_URL,'response_url':network.STATUS_URL,'response_http':200}))
+        primary={'method':'GET','url':network.PRIMARY_STATUS_URL,'response_url':network.PRIMARY_STATUS_URL,'response_http':200}
+        self.assertTrue(network.status_get_succeeded(primary,'/cockpit/'))
+        self.assertFalse(network.status_get_succeeded(primary,'/computer-access/'))
+        self.assertFalse(network.status_get_succeeded({**primary,'response_url':network.STATUS_URL},'/cockpit/'))
+        self.assertFalse(network.status_get_succeeded({**primary,'response_http':403},'/cockpit/'))
+        self.assertFalse(network.status_get_succeeded({**primary,'method':'POST'},'/cockpit/'))
+        self.assertFalse(network.status_get_succeeded({**primary,'url':network.PRIMARY_STATUS_URL+'?fake=1'},'/cockpit/'))
         self.assertTrue(network.status_get_succeeded({'method':'GET','url':'https://live.wly0829.cn/computer-access/state','response_url':'https://live.wly0829.cn/computer-access/state','response_http':200}))
         self.assertFalse(network.status_get_succeeded({'method':'GET','url':'https://live.wly0829.cn/computer-access/state','response_url':network.STATUS_URL,'response_http':200}))
 
@@ -165,9 +172,15 @@ class OssBrowserNetworkTests(unittest.TestCase):
 
     def test_candidate_native_shared_cache_body_once_and_retry_only_failed_route(self):
         payload=b'window.nativeCacheProbe=true;'; hits=[]
+        failures={'mode':None,'remaining':0}
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_GET(handler):
-                hits.append(handler.path); handler.send_response(200)
+                hits.append(handler.path)
+                if failures['mode']=='all' or failures['mode']=='once' and failures['remaining']>0:
+                    failures['remaining']-=1
+                    handler.close_connection=True
+                    return
+                handler.send_response(500 if failures['mode']=='http500' else 200)
                 handler.send_header('Content-Type','application/javascript')
                 handler.send_header('Cache-Control','public,max-age=31536000,immutable')
                 handler.send_header('Content-Length',str(len(payload))); handler.end_headers(); handler.wfile.write(payload)
@@ -206,6 +219,25 @@ class OssBrowserNetworkTests(unittest.TestCase):
                 self.assertEqual(retry['retry_receipt']['sha256'],network.oss.digest(args.retry_failed))
                 broken=copy.deepcopy(first); broken['manifest_sha256']='wrong'; network.oss.write(args.retry_failed,broken)
                 with self.assertRaises(ValueError):network.validate_receipt(self.folder,args.retry_failed,'candidate',self.folder,allow_failed=True)
+                for mode,expected in [('once',0),('all',2),('http500',2)]:
+                    with self.subTest(native_connection=mode):
+                        failures.update(mode=mode,remaining=3)
+                        args.retry_failed=None
+                        args.cold_cache=True
+                        args.output=self.folder/('native-'+mode+'.json')
+                        self.assertEqual(asyncio.run(network.run(args)),expected)
+                        result=network.oss.read(args.output)
+                        self.assertEqual(result['summary']['route_reruns']==0,mode=='http500')
+                        if mode=='all':self.assertEqual(result['summary']['route_reruns'],4)
+                        if mode!='http500':self.assertGreater(result['summary']['connection_failures'],0)
+                        if mode=='once':network.validate_receipt(self.folder,args.output,'candidate',self.folder)
+                        network.oss.write(self.allowed/('c10-native-'+mode+'.json'),result)
+                        if mode=='http500':self.assertEqual(result['summary']['connection_failures'],0)
+                        if mode=='once':
+                            forged=copy.deepcopy(result)
+                            forged['pages'][0]['previous_attempts'][0]['loading_failed'][0]['requestId']='forged'
+                            network.oss.write(self.folder/'forged.json',forged)
+                            with self.assertRaises(ValueError):network.validate_receipt(self.folder,self.folder/'forged.json','candidate',self.folder)
         finally: server.shutdown(); server.server_close(); thread.join(timeout=5)
 
 if __name__=='__main__':unittest.main()

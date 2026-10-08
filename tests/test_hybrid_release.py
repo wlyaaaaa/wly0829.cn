@@ -1,6 +1,7 @@
 """Independent fixtures for preservation, admission, links and exact Git restore."""
 import importlib.util
 import json
+import os
 import subprocess
 import tempfile
 import unittest
@@ -8,7 +9,9 @@ from pathlib import Path
 
 spec=importlib.util.spec_from_file_location('hybrid',Path(__file__).resolve().parents[1]/'scripts/hybrid-release.py')
 h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
+POLICY_UNAVAILABLE = bool(os.environ.get('CI')) and not (Path(__file__).resolve().parents[1] / '.publish/private/rule-public-policy.json').is_file()
 
+def private_fixture(identity): return h.builder.load_policy()['fixture_values'][identity]
 class HybridRelease(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix='hybrid-test-');self.root=Path(self.temp.name)
@@ -78,14 +81,15 @@ class HybridRelease(unittest.TestCase):
     def test_modified_baseline_and_missing_route_are_rejected(self):
         self.put(self.old,'kept/index.html','modified')
         with self.assertRaisesRegex(ValueError,'Baseline bytes'):self.assemble()
+    @unittest.skipIf(POLICY_UNAVAILABLE, 'private publication policy is unavailable in CI')
     def test_old_topic_scope_preserved_but_new_topic_blocks(self):
-        self.put(self.old,'kept/index.html','<h1>PersonalOS</h1>')
+        self.put(self.old,'kept/index.html',private_fixture('sha256:a680f0fabfedd39e983024b8f90226d27279f40bf1c6f424cd36573849af3a38'))
         self.baseline['files']=h.inventory(self.old)
         out,manifest=self.assemble(name='topic-old')
         result=h.validate_content(out,self.root/'old-topic-report.json')
         self.assertEqual(result['status'],'pass')
         self.assertTrue(result['preserved_baseline_topic_findings'])
-        self.put(self.new,'index.html','<h1>PersonalOS</h1><script src="/assets/new.js"></script>')
+        self.put(self.new,'index.html',private_fixture('sha256:cc824c1df660fe2a0c6ed0a7a196ab5e8a5a6ad9216539ceac8466cc125a8aaa'))
         out,manifest=self.assemble(name='topic-new')
         with self.assertRaisesRegex(ValueError,'content gate failed'):h.validate_content(out,self.root/'new-topic-report.json')
     def test_credentials_in_retained_baseline_still_block(self):

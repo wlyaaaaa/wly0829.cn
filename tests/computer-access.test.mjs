@@ -373,7 +373,7 @@ test("HTTP service failure retains status for friendly connection diagnosis with
   finally { globalThis.fetch = original; }
 });
 
-test("home and MCP summaries only offer links to the common authority page", async () => {
+test("home and MCP summaries only provide links to the common authority page", async () => {
   for (const route of ["index.html", "mcp/index.html"]) {
     const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
     assert.ok(html.includes("data-access-summary")); assert.ok(html.includes("进入授权与状态")); assert.ok(html.includes('id="grafana-status"'));

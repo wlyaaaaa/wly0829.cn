@@ -31,6 +31,8 @@ ORIGIN = 'https://wly0829.cn'
 SCHEMA = 'wly.oss-browser-network.v1'
 METHOD = 'Installed headless Chrome; native HTTPS OSS and service GET; CDP Network events and actual response body SHA256; no OSS interception'
 STATUS_URL = 'https://mcp.wly0829.cn/computer-access/api/status'
+PRIMARY_STATUS_URL = 'https://live.wly0829.cn/computer-access/state'
+CONNECTION_ERRORS = {'net::ERR_'+name for name in ('EMPTY_RESPONSE','CONNECTION_CLOSED','CONNECTION_RESET','TIMED_OUT','ABORTED')}
 
 
 def route_file(route):
@@ -55,9 +57,11 @@ def declared_oss_static(payload, owner, manifest):
                for value,context in rewriter.resource_values(tag,attrs))
 
 
-def status_get_succeeded(item):
-    return (item.get('method')=='GET' and canonical_object(item.get('url','')) in (STATUS_URL,'https://live.wly0829.cn/computer-access/state')
-            and item.get('response_http')==200 and canonical_object(item.get('response_url',''))==canonical_object(item.get('url','')))
+def status_get_succeeded(item, route=None):
+    url = canonical_object(item.get('url',''))
+    endpoints = (PRIMARY_STATUS_URL, STATUS_URL) if route in (None, '/cockpit/') else (STATUS_URL,)
+    return (item.get('method')=='GET' and url in endpoints
+            and item.get('response_http')==200 and canonical_object(item.get('response_url',''))==url)
 
 
 def artifact(preparation, release=None):
@@ -110,6 +114,15 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None, 
             raise ValueError('Browser network receipt omits manifest routes or aliases')
     for row in rows:
         if allow_failed and row.get('status') == 'fail': continue
+        previous = row.get('previous_attempts', [])
+        if len(previous) > 2 or not row.get('profile_cleanup',report['profile_cleanup']).get('verified'):
+            raise ValueError('Native route rerun limit or cleanup differs')
+        for attempt in previous:
+            derived_attempt = blocking_events(attempt, compat_contract(root,manifest,documents,row['route']), manifest)
+            if ((attempt.get('route'),attempt.get('url')) != (row['route'],ORIGIN+row['route']) or not attempt.get('profile_cleanup',{}).get('verified')
+                    or any(attempt.get(key) != value for key,value in derived_attempt.items())
+                    or not connection_only({**attempt, **derived_attempt})):
+                raise ValueError('Native rerun lacks retained connection-only evidence')
         verify_oss_403(row,plan['asset_base_url'])
         derived = blocking_events(row, compat_contract(root,manifest,documents,row['route']), manifest)
         if any(row.get(key) != value for key,value in derived.items()):
@@ -120,12 +133,12 @@ def validate_receipt(preparation, receipt_path, mode='candidate', release=None, 
         address = ORIGIN + row['route']
         if not any(item.get('url') == address and item.get('http') == 200 and item.get('sha256') == manifest['files'][documents[row['route']]]['sha256'] for item in observed):
             raise ValueError('Browser lacks actual route document bytes: ' + row['route'])
-        if row['route'] in ('/computer-access/', '/cockpit/') and not any(status_get_succeeded(item) for item in row.get('requests', [])):
+        if row['route'] in ('/computer-access/', '/cockpit/') and not any(status_get_succeeded(item, row['route']) for item in row.get('requests', [])):
             raise ValueError('Actual service status GET was not sent: ' + row['route'])
         expected_static=declared_oss_static((root/documents[row['route']]).read_bytes(),documents[row['route']],manifest)
         if row.get('declared_oss_static') is not expected_static:raise ValueError('Declared static dependency evidence differs from the actual document')
         if expected_static and not row.get('static_bodies'): raise ValueError('No native sealed OSS response bodies for the actual declared dependencies: '+row['route'])
-        for body in row['static_bodies']:
+        for body in (body for attempt in previous+[row] for body in attempt.get('static_bodies',[])):
             obj = next((obj for obj in manifest['oss']['objects'].values() if obj['url'] == body.get('canonical_url')), None)
             if not obj or body.get('verified') is not True or not body.get('sha256'):
                 raise ValueError('Browser body is not a sealed OSS object')
@@ -152,6 +165,7 @@ def verify_oss_403(row, asset_base):
 
 
 def summarize(rows, asset_base):
+    attempts = [attempt for row in rows for attempt in row.get('previous_attempts',[])+[row]]
     return {'routes': len(rows), 'passed': sum(row.get('status') == 'pass' for row in rows),
             'csp_blocked': sum(is_csp_failure(event) for row in rows for event in row.get('loading_failed', [])),
             'loading_failed': sum(len(row.get('loading_failed', [])) for row in rows),  # Raw, never rewritten to zero.
@@ -159,7 +173,25 @@ def summarize(rows, asset_base):
             'expected_navigation_cancellations': sum(len(row.get('expected_navigation_cancellations',[])) for row in rows),
             'http_failures': sum(len(row.get('http_failures', [])) for row in rows),
             'oss_http_403': sum(oss_403_count(row,asset_base) for row in rows),
-            'page_errors': sum(len(row.get('page_errors', [])) for row in rows)}
+            'page_errors': sum(len(row.get('page_errors', [])) for row in rows),
+            'connection_failures': sum(event.get('errorText') in CONNECTION_ERRORS and not event.get('checker_cancelled')
+                and not any(item.get('request_id') == event.get('requestId') and item.get('http',0) >= 400
+                            for item in row.get('responses',[])+row.get('http_response_extra',[])) for row in attempts for event in row.get('loading_failed',[])),
+            'route_reruns': sum(len(row.get('previous_attempts',[])) for row in rows)}
+
+
+def connection_only(row):
+    failures = row.get('blocking_loading_failed', row.get('loading_failed',[]))
+    requests = {item.get('request_id'):item for item in row.get('requests',[])}
+    consequences = {'Initial route document body was not verified','No native OSS response bodies for the actual declared dependencies','Actual service status GET was not sent and answered','Native network did not settle before deadline; pending: []'}
+    if row.get('navigation_issue') and any(event.get('url') == row.get('url') for event in failures):
+        consequences.add(row['navigation_issue'])
+    return (bool(failures) and all(event.get('errorText') in CONNECTION_ERRORS and not event.get('checker_cancelled')
+            and not event.get('blockedReason') and not event.get('corsErrorStatus') and event.get('at_beijing')
+            and event.get('url') and event['url'] == requests.get(event.get('requestId'),{}).get('url') for event in failures)
+            and not row.get('http_failures') and not row.get('pending_requests') and not row.get('teardown_error')
+            and not any(item.get('http',0) >= 400 for item in row.get('responses',[])+row.get('http_response_extra',[]))
+            and all(issue in consequences for issue in row.get('blocking_issues',row.get('issues',[]))))
 
 
 def failure_classification(report, manifest=None):
@@ -306,7 +338,7 @@ async def run(args):
               'release_id': manifest['release_id'], 'source_release_id': plan['source_release_id'],
               'plan_sha256': oss.digest(args.preparation/oss.PLAN), 'manifest_sha256': oss.digest(root/oss.MANIFEST),
               'routes': list(documents), 'pages': [], 'started_at_beijing': oss.stamp()}
-    retained = {}
+    retained = getattr(args,'_retained',{})
     if args.retry_failed:
         validate_receipt(args.preparation,args.retry_failed,args.mode,args.release,allow_failed=True)
         retained = {row['route']:row for row in oss.read(args.retry_failed)['pages'] if row['status'] == 'pass'}
@@ -349,7 +381,7 @@ async def run(args):
                     await session.send('Fetch.enable', {'patterns':[{'urlPattern':ORIGIN+'/*','resourceType':'Document'}]})
                 row = {'route':route, 'url':ORIGIN+route, 'status':'fail', 'requests':[], 'responses':[], 'http_response_extra':[],
                        'documents':[], 'static_bodies':[], 'loading_failed':[], 'http_failures':[], 'page_errors':[], 'issues':[],
-                       'frame_navigations':[], 'navigation_requests':[], 'lifecycle_events':[]}
+                       'frame_navigations':[], 'navigation_requests':[], 'lifecycle_events':[], 'started_at_beijing':oss.stamp()}
                 row['declared_oss_static']=declared_oss_static((root/rel).read_bytes(),rel,manifest)
                 report['pages'].append(row)
                 requests = {}; responses = {}; pending = set(); body_tasks = set(); request_referrers = {}; cache_hits = set(); last_event = time.monotonic()
@@ -395,7 +427,7 @@ async def run(args):
                 def failed(event):
                     nonlocal last_event
                     last_event = time.monotonic(); pending.discard(event['requestId'])
-                    row['loading_failed'].append({**event, 'url':requests.get(event['requestId'],{}).get('url')})
+                    row['loading_failed'].append({**event, 'url':requests.get(event['requestId'],{}).get('url'), 'at_beijing':oss.stamp(), 'checker_cancelled':row.get('tearing_down',False)})
                 async def record_body(identity):
                     item = responses.get(identity)
                     if not item: return
@@ -450,12 +482,14 @@ async def run(args):
                 session.on('Network.loadingFinished', finished)
                 page.on('pageerror', lambda error: row['page_errors'].append(str(error)))
                 deadline = time.monotonic()+args.route_timeout
+                navigating = True
                 try:
                     await page.goto(ORIGIN+route, wait_until='domcontentloaded', timeout=args.route_timeout*1000)
                     if contracts[route]:
                         await page.wait_for_url(contracts[route]['target_url'],wait_until='domcontentloaded',
                             timeout=max(1,int((deadline-time.monotonic())*1000)))
                     # Native scrolling activates the page's actual lazy resources.
+                    navigating = False
                     height = await page.evaluate('document.documentElement.scrollHeight')
                     for position in range(0, height, 850):
                         if time.monotonic() >= deadline: raise TimeoutError('Route scroll/load deadline')
@@ -463,17 +497,19 @@ async def run(args):
                         await asyncio.sleep(.12)
                     await page.evaluate('scrollTo(0,0)')
                     while time.monotonic() < deadline:
-                        status_sent = route not in ('/computer-access/','/cockpit/') or any(status_get_succeeded(item) for item in row['requests'])
+                        status_sent = route not in ('/computer-access/','/cockpit/') or any(status_get_succeeded(item, route) for item in row['requests'])
                         if not pending and not body_tasks and status_sent and time.monotonic()-last_event >= 1: break
                         await asyncio.sleep(.1)
                     else: row['issues'].append('Native network did not settle before deadline; pending: '+str([requests[x]['url'] for x in pending if x in requests]))
                     row['final_document'] = await page.evaluate('({url:location.href,title:document.title})')
-                    if route in ('/computer-access/','/cockpit/') and not any(status_get_succeeded(item) for item in row['requests']):
+                    if route in ('/computer-access/','/cockpit/') and not any(status_get_succeeded(item, route) for item in row['requests']):
                         row['issues'].append('Actual service status GET was not sent and answered')
                     if not any(item['url'] == ORIGIN+route and item['verified'] for item in row['documents']):
                         row['issues'].append('Initial route document body was not verified')
                     if row['declared_oss_static'] and not row['static_bodies']: row['issues'].append('No native OSS response bodies for the actual declared dependencies')
-                except Exception as error: row['issues'].append(type(error).__name__+': '+str(error))
+                except Exception as error:
+                    row['issues'].append(type(error).__name__+': '+str(error))
+                    if navigating: row['navigation_issue'] = row['issues'][-1]
                 finally:
                     if body_tasks:
                         active=list(body_tasks)
@@ -483,12 +519,14 @@ async def run(args):
                             for task in unresolved:task.cancel()
                             await asyncio.gather(*unresolved,return_exceptions=True)
                     # Capture cancellation events from owned page teardown as well.
+                    row.update(pending_requests=[requests[x]['url'] for x in pending if x in requests], tearing_down=True)
                     try:await asyncio.wait_for(page.close(),timeout=10)
-                    except Exception as error:row['issues'].append('Owned page teardown failed: '+str(error))
+                    except Exception as error:row['teardown_error']=str(error); row['issues'].append('Owned page teardown failed: '+str(error))
                     await asyncio.sleep(.05)
                     row.update(blocking_events(row,contracts[route],manifest))
                     row['status'] = 'pass' if not any(row[key] for key in ('blocking_issues','blocking_loading_failed','http_failures','page_errors')) else 'fail'
                     row['oss_http_403'] = oss_403_count(row,plan['asset_base_url'])
+                    row['completed_at_beijing'] = oss.stamp()
                 print(route+' '+row['status']+' CSP='+str(sum(is_csp_failure(event) for event in row['loading_failed']))+' OSS403='+str(row['oss_http_403']), flush=True)
         except Exception as error: report['error'] = type(error).__name__+': '+str(error)
         finally:
@@ -499,6 +537,32 @@ async def run(args):
                 else: os.environ[name] = value
     report['oss_download_bytes'] = sum(item.get('transferred_bytes',0) for row in report['pages'] if row['route'] not in retained
                                       for item in row.get('responses',[]) if item['url'].startswith(plan['asset_base_url']+'/'))
+    if not getattr(args,'_single_attempt',False):
+        for index,row in enumerate(report['pages']):
+            previous = []
+            for number in range(2):
+                if not connection_only(row): break
+                previous.append({**row, 'profile_cleanup':row.get('profile_cleanup',report['profile_cleanup'])})
+                child = argparse.Namespace(**vars(args))
+                child.output = cache/('network-attempt-'+uuid.uuid4().hex+'.json')
+                child.retry_failed = None
+                child.cold_cache = True
+                child._single_attempt = True
+                child._retained = {item['route']:item for item in report['pages'] if item['route'] != row['route']}
+                await asyncio.sleep(3)
+                await run(child)
+                replay = oss.read(child.output)
+                report['oss_download_bytes'] += replay['oss_download_bytes']
+                if replay.get('error'):
+                    report['error'] = 'Native rerun failed: '+replay['error']; break
+                replacement = next((item for item in replay['pages'] if item['route'] == row['route']),None)
+                if replacement is None:
+                    report['error'] = 'Native rerun omitted route: '+str(replay.get('error'))
+                    break
+                row = {**replacement, 'profile_cleanup':replay['profile_cleanup']}
+            if previous:
+                row['previous_attempts'] = previous
+                report['pages'][index] = row
     report['summary'] = summarize(report['pages'],plan['asset_base_url'])
     report['status'] = 'pass' if len(report['pages']) == len(documents) and report['summary']['passed'] == len(documents) and not report.get('error') and report['profile_cleanup']['verified'] else 'fail'
     report['completed_at_beijing'] = oss.stamp(); report['seconds'] = round(time.monotonic()-started,3)

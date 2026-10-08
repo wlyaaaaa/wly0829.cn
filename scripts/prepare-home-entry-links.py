@@ -8,7 +8,7 @@ from pathlib import Path
 import re
 
 def sha(payload):return hashlib.sha256(payload).hexdigest()
-def prepare_links(source_site, output_home=None, evidence_path=None, inspect=False, return_bytes=False, legacy=False):
+def prepare_links(source_site, output_home=None, evidence_path=None, inspect=False, return_bytes=False, legacy=False, rule_pin=None):
     root=Path(source_site).resolve();source=root/'index.html'
     original=source.read_bytes();text=original.decode('utf8')
     manifest=json.loads((root/'release-manifest.json').read_text('utf-8-sig'))
@@ -67,7 +67,7 @@ def prepare_links(source_site, output_home=None, evidence_path=None, inspect=Fal
     if not legacy:
         spec=importlib.util.spec_from_file_location('home_entry_navigation',Path(__file__).with_name('repair-release-navigation.py'))
         nav=importlib.util.module_from_spec(spec);spec.loader.exec_module(nav)
-        text,native_changes=nav.repair_owned_navigation(text,nav.page_inventory(root),'/')
+        text,native_changes=nav.repair_owned_navigation(text,nav.page_inventory(root,rule_pin),'/')
     if not legacy and model.get('screens'):
         data=re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>',text,re.S)
         model=json.loads(data[1])

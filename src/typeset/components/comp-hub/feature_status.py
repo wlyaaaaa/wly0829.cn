@@ -1,4 +1,4 @@
-"""功能状态卡与独立图例；所有定稿节点按输入顺序可见输出。"""
+"""功能状态卡按审定状态稳定排序；独立图例与原文逐字核对。"""
 
 import html
 import re
@@ -944,6 +944,21 @@ def _masonry_grid(cards, columns, flow):
             + '<script data-echo="true">' + _MASONRY_INIT + '</script>')
 
 
+def _sort_feature_cards(cards, spans):
+    # 2694f952：待验收、在用、待实施、说不准、没用过、已停用；同状态保留原序。
+    ranks = {state: rank for rank, state in enumerate(("pending", "on", "ring", "uncertain", "unused", "off"))}
+    entries = []
+    for index, (card, span) in enumerate(zip(cards, spans)):
+        state = re.search(r'<article\b[^>]*\bdata-state="([^"]+)"', card)
+        rank = ranks.get(state[1] if state else None)
+        card = card.replace('<article ', f'<article data-feature-source-index="{index}" ', 1)
+        entries.append((rank, card, span))
+    ordered = iter(sorted((entry for entry in entries if entry[0] is not None), key=lambda entry: entry[0]))
+    # 无明确状态的卡不猜状态、也不改变其所在位置。
+    result = [next(ordered) if rank is not None else (rank, card, span) for rank, card, span in entries]
+    return [card for _, card, _ in result], [span for _, _, span in result]
+
+
 def render_feature_card(block: dict, ctx) -> str:
     """组标题跨整排；card/steps/bullets/stats 每个条目各一张卡。"""
     spec = block.get("spec", {})
@@ -1020,6 +1035,7 @@ def render_feature_card(block: dict, ctx) -> str:
     def flush_cards():
         if not cards:
             return
+        cards[:], card_spans[:] = _sort_feature_cards(cards, card_spans)
         columns = _columns(ctx, spec, group_index)
         flow = spec.get("flow") or "row"
         if flow not in ("row", "column", "masonry", "independent_columns"):

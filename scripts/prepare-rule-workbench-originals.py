@@ -71,6 +71,21 @@ def prepare(site_root, projection_manifest):
                      'update-live-release.py', 'prepare-motion-release.py'):
         bind(HERE / filename)
 
+    frames = {}
+    for orientation, slices, scale, expected in (
+        ('h', [263, 301, 263, 301], 0.2330232558139535, '8b0248a63912e07b020fe4c188b2fada75de7c4f7665f314018737262c2af176'),
+        ('v', [284, 245, 284, 245], 0.12277551020408164, '1766bfa9cab0da51b2e364cf0e22d5ab3133838b9f6acd5a108cc5ada79a8e52')):
+        payload = bind(HERE.parent / 'sources/assets/rule-paper' / ('source-frame-' + orientation + '.webp'), expected)
+        target = '/_typeset/rule-paper/' + expected[:20] + '-' + 'source-frame-' + orientation + '.webp'
+        publish(target, payload); frames[orientation] = {'src': target, 'slices': slices, 'scale': scale, 'sha256': expected}
+    illustration_sha = 'eb04e377b7542b657abc83412366159cb3b355864469be75c1e8a7177bd5c1a3'
+    illustration = bind(HERE.parent / 'sources/assets/_library/illustrations/main-agents.png', illustration_sha)
+    illustration_src = '/_typeset/rule-paper/' + illustration_sha[:20] + '-main-agents.png'; publish(illustration_src, illustration)
+    def frame_style(orientation):
+        frame = frames[orientation]
+        return ('--rule-paper:url("' + frame['src'] + '");--frame-slices:' + ' '.join(map(str, frame['slices'])) +
+                ';--frame-widths:' + ' '.join(f'{n * frame["scale"]:.8f}px' for n in frame['slices']) + ';')
+
     home = root / 'rules/index.html'; original = home.read_text('utf8')
     original = re.sub(re.escape(BEGIN) + r'.*?' + re.escape(END), '', original, flags=re.S)
     match = DATA.search(original)
@@ -85,7 +100,7 @@ def prepare(site_root, projection_manifest):
                for k, v in mappings['entries'].items()}
     records = {(r['excerpt_id'], r['orientation']): r for r in proof['records']}
     page_sources = {e['page']: json.loads(Path(e['source_file']).read_text('utf8')) for e in proof['projected_pages']}
-    topics = []; rows = []; markup = []
+    topics = []; rows = []; markup = []; readers = {}
     used_ids = set(re.findall(r'\bid=["\']([^"\']+)', original))
     for page, entries in grouped.items():
         source = page_sources[page]; based = source['based_on']; relative = contract.document_for_page(page)
@@ -128,7 +143,8 @@ def prepare(site_root, projection_manifest):
                         x, y, w, h = box
                         if x < 0 or y < 0 or w <= 0 or h <= 0 or x + w > width + 1 or y + h > height + 1:
                             raise ValueError('Original source hotspot is outside its image: ' + sid)
-                        links.append('<a class="overlay-link" href="' + html.escape(href, quote=True) + '" aria-label="' + html.escape(hot.get('text', ''), quote=True) + '" style="position:absolute;left:' + str(100*x/width) + '%;top:' + str(100*y/height) + '%;width:' + str(100*w/width) + '%;height:' + str(100*h/height) + '%"></a>')
+                        destination = ('data-source-reference="' + html.escape(href,quote=True) + '" tabindex="0" title="此辅助文档未随规则快照发布"') if contract.support_reference(href) else 'href="' + html.escape(href,quote=True) + '"'
+                        links.append('<a class="overlay-link" ' + destination + ' aria-label="' + html.escape(hot.get('text', ''), quote=True) + '" style="position:absolute;left:' + str(100*x/width) + '%;top:' + str(100*y/height) + '%;width:' + str(100*w/width) + '%;height:' + str(100*h/height) + '%"></a>')
                     fragments.append('<div class="rule-original-image" data-original-orientation="' + orientation + '" style="position:relative"><img src="' + target + '" width="' + str(width) + '" height="' + str(height) + '" loading="lazy" decoding="async" alt="' + html.escape(source['title'], quote=True) + '原文" style="display:block;width:100%;height:auto"><div class="overlays">' + ''.join(links) + '</div></div>')
             body = contract.project_original_html(typeset.original_rule_html(variants['h']))
             transcript = publication.rendered_text('<body>' + body + '</body>')
@@ -144,7 +160,10 @@ def prepare(site_root, projection_manifest):
             aliases = []
             for alias in excerpt.get('heading_aliases', []):
                 if alias not in used_ids: aliases.append('<span id="' + html.escape(alias, quote=True) + '"></span>'); used_ids.add(alias)
-            markup.append('<section class="rule-original-screen" id="' + sid + '" data-screen="' + sid + '" data-rule-excerpt="' + identity + '">' + ''.join(aliases) + ''.join(fragments) + '<pre class="screen-equivalent-text" data-rule-original-text="' + identity + '">' + html.escape(transcript) + '</pre></section>')
+            reader = '<article class="rule-original-prose">' + body + '</article>'
+            evidence_start = '<details class="rule-original-evidence"><summary>原文排版图与技术证据</summary>'
+            readers.setdefault(page, {})[sid] = (reader, evidence_start)
+            markup.append('<section class="rule-original-screen" id="' + sid + '" data-screen="' + sid + '" data-rule-excerpt="' + identity + '">' + ''.join(aliases) + reader + evidence_start + ''.join(fragments) + '</details><pre class="screen-equivalent-text" data-rule-original-text="' + identity + '">' + html.escape(transcript) + '</pre></section>')
         markup.append('</section>')
 
     # Source-relative topic links use the same fixed original screen when a detail
@@ -169,12 +188,23 @@ def prepare(site_root, projection_manifest):
             'pin_sha256': inputs[str(pin_path.resolve())]['sha256'], 'projection_sha256': projection.projection_digest(proof)}
     selector = ''.join('<a id="rule-tab-' + t['logical_id'] + '" href="/rules/?rule=' + t['logical_id'] + '#rule-panel-' + t['logical_id'] + '">' + html.escape(t['title']) + '</a>' for t in topics)
     style = '<style>.rule-original-workbench{margin:3rem 0}.rule-original-selector{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}.rule-original-selector a{border:1px solid #adc8b0;border-radius:.5rem;padding:.5rem .8rem;color:#28563a;background:#fff}.rule-original-panel{scroll-margin-top:7rem}.rule-original-panel[hidden]{display:none}.rule-original-image[data-original-orientation="v"]{display:none}.rule-original-screen{scroll-margin-top:7rem;margin:1rem 0}.rule-original-image .overlay-link{pointer-events:auto}@media(max-width:767.98px){.rule-original-image[data-original-orientation="h"]{display:none}.rule-original-image[data-original-orientation="v"]{display:block}}</style>'
+    style += '<style>.rule-original-prose{' + frame_style('h') + 'padding:clamp(1.2rem,3vw,2.5rem);border:solid transparent;border-width:var(--frame-widths);border-image-source:var(--rule-paper);border-image-slice:var(--frame-slices) fill;border-image-width:var(--frame-widths);border-image-repeat:stretch;font-size:clamp(1.05rem,1.2vw,1.2rem);line-height:1.85;color:#334d63;overflow-wrap:anywhere}.rule-original-prose h2,.rule-original-prose h3{color:#285d3c;line-height:1.5}.rule-original-prose a{color:#276942;text-decoration:underline}.rule-original-prose pre{white-space:pre-wrap;overflow-wrap:anywhere}.rule-original-illustration{float:right;width:min(11rem,25%);height:auto;margin:0 0 1rem 1rem}.rule-original-evidence{margin:.8rem 0 2rem;color:#486153}.rule-original-evidence summary{cursor:pointer}@media(max-width:767.98px){.rule-original-prose{' + frame_style('v') + '}}</style>'
     script = '''<script>(function(){const root=document.getElementById('rule-original-workbench');const panels=[...root.querySelectorAll('[data-rule-topic]')];function select(){let target=null;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(e){}const owner=target&&target.closest('[data-rule-topic]');const query=new URLSearchParams(location.search).get('rule');const current=owner||panels.find(p=>p.dataset.ruleTopic===query)||panels[0];panels.forEach(p=>p.hidden=p!==current);root.querySelectorAll('.rule-original-selector a').forEach(a=>a.setAttribute('aria-current',a.id==='rule-tab-'+current.dataset.ruleTopic?'true':'false'));if(target&&root.contains(target))requestAnimationFrame(()=>target.scrollIntoView({block:'start'}));}root.addEventListener('click',e=>{const a=e.target.closest('a');if(!a)return;const u=new URL(a.href,location.href);if(u.pathname!==location.pathname||!u.searchParams.has('rule'))return;e.preventDefault();history.pushState(null,'',u.href);select()});addEventListener('hashchange',select);addEventListener('popstate',select);select()})();</script>'''
-    block = BEGIN + style + '<section class="rule-original-workbench" id="rule-original-workbench"><h2>规则原文</h2><p>选择约法或专题，阅读 ' + html.escape(pin['version']) + ' 版的原文字图；每个专题也保留完整文本原文。</p><nav class="rule-original-selector" aria-label="规则原文专题">' + selector + '</nav>' + content + '</section><script id="rule-workbench-data" type="application/json">' + json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + '</script>' + script + END
+    block = BEGIN + style + '<section class="rule-original-workbench" id="rule-original-workbench"><img class="rule-original-illustration" src="' + illustration_src + '" width="1197" height="992" alt="" loading="lazy" decoding="async"><h2>规则原文</h2><p>选择约法或专题，阅读 ' + html.escape(pin['version']) + ' 版网页原文，可以选中和复制；展开排版图可查看本代排版与技术依据，每个专题也保留完整 Markdown 原文。</p><nav class="rule-original-selector" aria-label="规则原文专题">' + selector + '</nav>' + content + '</section><script id="rule-workbench-data" type="application/json">' + json.dumps(data, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + '</script>' + script + END
     if '</main>' not in original: raise ValueError('Rules home has no native content container')
     assembled = original.replace('</main>', block + '</main>', 1)
     contract.parse_workbench_metadata(assembled, pin)
     publish('rules/index.html', assembled.encode('utf8'))
+    for page, owned in readers.items():
+        detail = root / typeset.hybrid.route_file(page_sources[page]['url'])
+        if not detail.is_file(): continue
+        text = detail.read_text('utf8').replace(style, '')
+        for sid, (reader, evidence_start) in owned.items():
+            if reader in text: continue
+            pattern = r'(<section\b[^>]*\bid="' + re.escape(sid) + r'"[^>]*>)(.*?)(</section>)'
+            text, count = re.subn(pattern, lambda m: m[1] + reader + evidence_start.replace('<details ', '<details open ') + m[2] + '</details>' + m[3], text, count=1, flags=re.S)
+            if count != 1: raise ValueError('Original detail section is missing: ' + sid)
+        publish(detail.relative_to(root).as_posix(), text.replace('</head>', style + '</head>', 1).encode('utf8'))
     validation = contract.validate_rule_workbench(root, pin)
     if validation['findings']: raise ValueError(json.dumps(validation['findings'], ensure_ascii=False))
     parsed = contract.parse_workbench_metadata(assembled, pin)
@@ -182,7 +212,7 @@ def prepare(site_root, projection_manifest):
     targets = {href: contract.rule_original_fallback(href, mapping, {'rules/index.html': facts}) for href, mapping in mappings['entries'].items()}
     if any(not value for value in targets.values()): raise ValueError('Old source anchor lacks an exact original fallback')
     return {'schema': 'wly.rule-original-workbench-preparation.v1', 'status': 'pass', 'changed_files': sorted(set(changed)),
-            'inputs': inputs, 'topics': topics, 'topics11': len(topics), 'excerpt_count': len(rows),
+            'inputs': inputs, 'topics': topics, 'paper_frames': frames, 'topics11': len(topics), 'excerpt_count': len(rows),
             'legacy_targets': targets, 'legacy_reference_count': len(mappings['references']),
             'home_screens_preserved': home_screens, 'home_input_sha256': home_input_sha,
             'home_page_data_sha256': home_data_sha, 'proof': validation}
