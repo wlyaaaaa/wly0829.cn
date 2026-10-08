@@ -490,8 +490,10 @@ function cpTitle(screen,text){
 function cpSection(id,title,screen){const node=cpNode('section','cp-section');node.id=id;node.setAttribute('aria-label',title);node.append(cpTitle(screen,title));const copyActions=cpNode('div','cp-section-copy'),body=cpNode('div','cp-rows');node.append(copyActions,body);return {node,body,copyActions,title};}
 function cpLine(text,state='unknown'){const row=cpNode('p','cp-line',text);row.dataset.state=state==='attention'?'warn':state;return row;}
 
+function cpCurrentMissingNotice(row){return row?.notice_kind==='unknown'&&row.treatment_category==='D'&&!!row.ai_hint&&row.current===null&&!row.resolved&&row.history_category==='unconfirmed';}
 function cpCopyMeta(row,sentence){
- if(!online()||!row?.id||row.earlier||row.current===false||row.current===null||row.resolved||['history','deferred'].includes(row.group)||row.treatment_category==='C')return null;
+ if(!online()||!row?.id||row.current===false||row.resolved||row.group==='deferred'||row.treatment_category==='C'||['passed','superseded','ended','expired'].includes(row.history_category))return null;
+ if((row.earlier||row.current===null||row.group==='history')&&!cpCurrentMissingNotice(row))return null;
  if(!['error','warn','unknown'].includes(row.notice_kind)||row.notice_kind==='unknown'&&!row.ai_hint)return null;
  return {id:row.id,name:row.title||row.text||'这条提醒',sentence,hasHint:!!row.ai_hint,firstSeen:timestamp(row.first_seen_at),color:row.notice_kind==='unknown'?'未知':row.severity==='red'?'红':'黄'};
 }
@@ -541,7 +543,7 @@ function cpFactNode(facts){const list=cpNode('dl','cp-facts');for(const fact of 
 
 
 function cpItemNode(row){
- if(!row.earlier&&(['error','warn','unknown'].includes(row.notice_kind)||['error','warn'].includes(cpItemState(row))))return cpNoticeNode(row,cpItemState(row));
+ if(cpCurrentMissingNotice(row)||!row.earlier&&(['error','warn','unknown'].includes(row.notice_kind)||['error','warn'].includes(cpItemState(row))))return cpNoticeNode(row,cpItemState(row));
  const item=cpNode('article','cp-detail-item');item.dataset.rowKey=row.key||row.text;item.dataset.state=cpItemState(row);const head=cpNode('div','cp-item-head'),title=cpNode('h4',null,row.text||'事项说明未登记');
  if(row.href){const href=cpSafeHref(row.href);if(href){const link=cpNode('a',null,title.textContent);link.href=href;title.replaceChildren(link);}}
  head.append(title);if(row.owner&&row.owner!=='负责人未登记')head.append(cpNode('small',null,row.owner));head.append(cpNode('time',null,cpItemTime(row)));item.append(head,cpFactNode(row.facts));
@@ -718,9 +720,9 @@ function renderCockpit(){
  for(const [index,item]of need.entries()){const card=cpItemNode(item);card.classList.add('cp-action-card');const a=item.action||{};
   if(!['error','warn','unknown'].includes(item.notice_kind)){const href=cpSafeHref(a.href||item.href);if(href){const link=cpNode('a','cp-button',a.label||'去办理');link.href=href;card.append(link);}else{const button=cpButton('查看已登记要求');button.onclick=()=>cpOpenDetails('projects');card.append(button);}}(index<5?cards:rest).append(card);}
  if(need.length){needNodes.push(cards);if(need.length>5)needNodes.push(extra);}else needNodes.push(cpLine(typed?'现在没有要你做的事。':phase==='error'?summary:phase==='loading'?'当前结论正在读取':'当前情况未知',typed?'ok':'unknown'));syncChildren(ui.need,needNodes);
- const following=typed?.filter(row=>!row.earlier&&row.group==='ai_following'),conditional=ready?cockpit.conditional_user_actions||[]:[];ui.conditions.hidden=!conditional.length;
+ const following=typed?.filter(row=>!row.earlier&&row.group==='ai_following'||cpCurrentMissingNotice(row)),conditional=ready?cockpit.conditional_user_actions||[]:[];ui.conditions.hidden=!conditional.length;
  const list=cpNode('ul');for(const item of conditional){const li=cpNode('li');li.dataset.rowKey=item.id;const entry=item.action?.where;li.textContent=entry&&entry.includes('入口：')?entry:(item.when||'按登记条件出现时')+'：'+item.title+'。入口：'+(entry||'告诉 AI 开始验收')+'。';list.append(li);}syncChildren(ui.conditions,[cpNode('h3',null,'待你验收 '+conditional.length+' 项（按条件出现时做）'),list]);
- const started=following?.filter(row=>Number.isFinite(timestamp(row.execution_started_at))&&timestamp(row.execution_started_at)>0).length||0;syncChildren(ui.know,[]);ui.followingLabel.textContent=following?started?'AI 正在处理 '+started+' 项 · 需核对 '+(following.length-started)+' 项':'AI 需核对 '+following.length+' 项（是否已开始未记录）':phase==='loading'?'AI 需核对：正在读取':'AI 需核对：这次没读到';ui.followingLabel.parentElement.hidden=!!following&&!following.length;syncChildren(ui.followingBody,following?[cpRowsNode(following,false)]:[]);
+ const started=following?.filter(row=>Number.isFinite(timestamp(row.execution_started_at))&&timestamp(row.execution_started_at)>0).length||0;syncChildren(ui.know,[]);ui.followingLabel.textContent=following?started?'AI 正在处理 '+started+' 项 · 需核对 '+(following.length-started)+' 项':'AI 需核对 '+following.length+' 项（是否已开始未记录）':phase==='loading'?'AI 需核对：正在读取':'AI 需核对：这次没读到';ui.followingLabel.parentElement.hidden=!!following&&!following.length;syncChildren(ui.followingBody,following?[...(following.some(row=>!cpCurrentMissingNotice(row))?[cpRowsNode(following.filter(row=>!cpCurrentMissingNotice(row)),false)]:[]),...following.filter(cpCurrentMissingNotice).map(cpItemNode)]:[]);
  const compactGrant=(key)=>!authorizationFresh(status?.[key])?'读不到':remainingMinutes(status?.[key],clock())>0?(key==='personal_data'?'已解锁':'已开启'):stateLabel(status?.[key]);
  const closed=key=>authorizationFresh(status?.[key])&&['locked','inactive','revoked','expired'].includes(status?.[key]?.state);const labels=[['个人资料',closed('personal_data')?'正常锁着':compactGrant('personal_data'),grantState(status?.personal_data),'personal_data'],['无限制授权',closed('unrestricted')?'正常关着':compactGrant('unrestricted'),grantState(status?.unrestricted),'unrestricted'],['Windows',windowsFresh()?({'locked':'已锁屏','unlocked':'未锁屏','no_session':'没人登录'})[status?.host?.screen_state]||'未知':'读不到',windowsFresh()?'ok':'unknown'],['电脑',online()?'在线':'读不到',online()?'ok':'unknown']];
  syncChildren(ui.grants,labels.map(([label,text,state,key])=>{const item=cpNode('div','cp-authority');item.dataset.state=state;item.append(cpNode('span',null,label),cpNode('strong',null,text));if(label==='电脑')item.append(cpNode('small',null,(online()?'':'当时：')+cpUptime()));if(key&&authorizationFresh(status?.[key])&&remainingMinutes(status[key],clock())>0)item.append(cpNode('small',null,'到 '+time(status[key].expires_at_unix).replace('今天 ','')));return item;}));

@@ -34,7 +34,7 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout:(...args)=>setTimeout(...args).unref(),clearTimeout};
  sandbox.window.top=sandbox.window;
- const copying=source.slice(source.indexOf('function cpCopyMeta('),source.indexOf('function cpNoticeNode('));
+ const copying=source.slice(source.indexOf('function cpCurrentMissingNotice('),source.indexOf('function cpNoticeNode('));
  vm.runInNewContext(pure+copying+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,cpTyped,cpItemTime,pendingRows,cpCopyMeta,cpCopyRecords,cpCopyPrompt,cpCopyReady,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
@@ -285,6 +285,7 @@ test('AI handoff excludes closed and historic records and waits for the notice c
  const row={id:'issue',title:'提醒',current:true,notice_kind:'warn',severity:'yellow',ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}};
  assert.equal(app.cpCopyMeta(row,'公共一句话').hasHint,true);assert.equal(app.cpCopyMeta({...row,ai_hint:null},'公共一句话').hasHint,false);
  for(const excluded of [{treatment_category:'C'},{earlier:true},{current:false},{current:null},{group:'history'},{group:'deferred'},{resolved:true},{notice_kind:null},{notice_kind:'unknown',ai_hint:null}])assert.equal(app.cpCopyMeta({...row,...excluded},'公共一句话'),null);
+ const currentMissing={...row,notice_kind:'unknown',treatment_category:'D',current:null,group:'history',earlier:true,history_category:'unconfirmed'};assert.equal(app.cpCopyMeta(currentMissing,'公共未知句').color,'未知');for(const terminal of ['passed','superseded','ended','expired'])assert.equal(app.cpCopyMeta({...currentMissing,history_category:terminal},'公共未知句'),null);
  delete data.cockpit.cards[0].notice_kind;app.set(data);assert.equal(app.cpCopyReady(),false);app.set(data,'error');assert.equal(app.cpCopyMeta(row,'公共一句话'),null);
 });
 test('AI handoff deduplicates exact IDs and copies source time without private detail',()=>{
