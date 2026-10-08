@@ -550,7 +550,7 @@ function cpItemNode(row){
  if(row.technical?.length){const technical=cpNode('details','cp-technical');technical.dataset.rowKey='technical';technical.append(cpNode('summary',null,'技术细节'),cpFactNode(row.technical));item.append(technical);}if(row.detail&&!row.facts?.length)item.append(cpFactNode(cpFacts([['操作说明',row.detail]])));return item;
 }
 function cpInsightNode(row){
- if(row.href){const text=['error','warn'].includes(row.notice_kind)&&row.public_message?'电脑卡不卡：'+row.public_message.replace(/^电脑资源[：:]\s*/,'')+' › 详情':row.text,root=cpNoticeNode({...row,public_message:text},row.state),link=cpNode('a','cp-stutter-entry',text);link.href=row.href;root.firstChild.replaceWith(link);return root;}
+ if(row.href){const text=['error','warn'].includes(row.notice_kind)&&row.public_message?'电脑卡不卡：'+row.public_message.replace(/^电脑资源[：:]\s*/,'')+' › 详情':row.text,root=cpNoticeNode({...row,public_message:text},row.state),link=cpNode('a','cp-line cp-stutter-entry',text);link.href=row.href;link.dataset.state=row.state;root.firstChild.replaceWith(link);return root;}
  if(['error','warn','unknown'].includes(row.notice_kind))return cpNoticeNode(row,row.state);const root=cpNode('div','cp-insight');root.append(cpLine(row.text,row.state));if(row.details?.length){const detail=cpNode('details','cp-hint-details');detail.dataset.rowKey=row.text.split('：')[0];detail.append(cpNode('summary',null,'查看数据来源与说明'));const list=cpNode('ul');for(const text of row.details)list.append(cpNode('li',null,text));detail.append(list);root.append(detail);}return root;
 }
 function cpUpdateCopyButtons(){
