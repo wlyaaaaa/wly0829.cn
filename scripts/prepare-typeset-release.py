@@ -705,13 +705,13 @@ def static_home_stages(release, static, creative, ui, checked):
     stages = [(step['name'], Path(step['manifest']['path']).resolve().parent) for step in creative['steps']]
     for name, root in stages:
         stage = read(root / hybrid.MANIFEST)
-        bound_file(root / 'index.html', stage['files']['index.html'], checked)
+        bound_file(hybrid.source_path(root, 'index.html'), stage['files']['index.html'], checked)
     spec = importlib.util.spec_from_file_location('typeset_static_home', ROOT / 'scripts/prepare-static-home.py')
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
     module.verify_static_home(stages[0][1], static)
     for relative, expected in static['static_assets'].items():
         bound_file(release / relative, expected, checked)
-    last = stages[-1][1]; prior = (last / 'index.html').read_text('utf8'); final = (release / 'index.html').read_text('utf8')
+    last = stages[-1][1]; prior = (hybrid.source_path(last, 'index.html')).read_text('utf8'); final = (release / 'index.html').read_text('utf8')
     if module.PICTURE.search(prior)[3] != module.PICTURE.search(final)[3]:
         raise ValueError('Final homepage picture differs from the bound last creative stage')
     before = json.loads(module.PAGE_DATA.search(prior)[2]); after = json.loads(module.PAGE_DATA.search(final)[2])
@@ -721,9 +721,9 @@ def static_home_stages(release, static, creative, ui, checked):
         raise ValueError('Final homepage state, geometry or runtime differs from the bound creative stage')
     stage_files = read(last / hybrid.MANIFEST)['files']; bundle = after['shared']['script_bundle'].lstrip('/')
     bound_file(release / bundle, stage_files[bundle], checked)
-    if digest(last / 'index.html') != digest(release / 'index.html'):
+    if digest(hybrid.source_path(last, 'index.html')) != digest(release / 'index.html'):
         rows = [row for row in ui.get('toc', {}).get('pages', []) if row['page'] == 'index.html']
-        if len(rows) != 1 or rows[0]['before_sha256'] != digest(last / 'index.html') or rows[0]['after_sha256'] != digest(release / 'index.html'):
+        if len(rows) != 1 or rows[0]['before_sha256'] != digest(hybrid.source_path(last, 'index.html')) or rows[0]['after_sha256'] != digest(release / 'index.html'):
             raise ValueError('Final homepage postprocessing lacks its exact TOC before/after binding')
     return {'static_stage_verified': True, 'final_stage': stages[-1][0], 'final_picture_and_runtime_bound': True}
 def acceptance_plan(build, manifest, release):
