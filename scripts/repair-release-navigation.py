@@ -268,7 +268,7 @@ def compact_home_highlights(text, data):
     return text.replace('</head>', '<style data-home-compact>' + css + '</style></head>')
 
 
-def repair_owned_navigation(text, pages, owner_route=None):
+def repair_owned_navigation(text, pages, owner_route=None, home_trip_anchor=True):
     """Bind existing navigation roles; keep artwork, copy and unrelated links exact."""
     changes = []
     match = PAGE_DATA.search(text)
@@ -291,7 +291,7 @@ def repair_owned_navigation(text, pages, owner_route=None):
                     if marker:
                         text = text.replace(marker[0], '', 1)
                         text = re.sub(r'(?=<section\b[^>]*id="' + re.escape(screen['id']) + r'")', lambda m: marker[0], text, count=1)
-            targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/', 'home-03-link-5-0':'/how/#case-trip', 'home-05-link-3-0':'/how/', 'home-02-link-0-0':'/projects/remote-control/'}
+            targets = {'home-01-link-1-0':'/how/', 'home-01-link-2-0':'/cockpit/', 'home-03-link-5-0':'/how/#case-trip' if home_trip_anchor else '/how/', 'home-05-link-3-0':'/how/', 'home-02-link-0-0':'/projects/remote-control/'}
             targets.update({'home-05-link-4-0':'/cockpit/', 'home-05-link-5-0':'/how-this-site/', 'home-05-link-6-0':'/rescue/'})
             for node in visit(data):
                 target = targets.get(node.get('main_id') or node.get('id'))

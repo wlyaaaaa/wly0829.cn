@@ -188,14 +188,14 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def current_home_links(source, version=4, rule_pin=None):
-    if version not in (1,2,3,4,5,6):raise ValueError('Unsupported homepage navigation replay version')
+def current_home_links(source, version=7, rule_pin=None):
+    if version not in (1,2,3,4,5,6,7):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
     spec=importlib.util.spec_from_file_location('home_entry_links',Path(__file__).with_name('prepare-home-entry-links.py'))
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.prepare_links(source,return_bytes=True,legacy=version<4,rule_pin=rule_pin)
+    return module.prepare_links(source,return_bytes=True,legacy=version<4,rule_pin=rule_pin,home_trip_anchor=version>=7)
 
 
 def verify_manifest(manifest, require_remote=True):
@@ -265,7 +265,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5,6):
+        if version not in (1,2,3,4,5,6,7):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -598,7 +598,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None, full_upload=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=7, previous_manifest=None, full_upload=False):
     spec = importlib.util.spec_from_file_location('oss_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
     builder = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(builder)
@@ -897,7 +897,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6),default=6)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7),default=7)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
     p.add_argument('--full-upload',action='store_true',help='Explicitly upload all objects to the new prefix without retaining a previous release')
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
