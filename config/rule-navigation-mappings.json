@@ -1,9 +1,9 @@
 {
   "schema": "wly.rule-navigation-mappings.v1",
-  "version": "E228",
+  "version": "E229",
   "source_report_sha256": "cf85f07a2458d179a9c492e96295fae67985c2f2820cee28e15ebc62e9e8532d",
   "source_reference_inventory_sha256": "f5c02570966b6d87a8a4b81f387dc2b572c0a6fddba6e3e0614f85a619bfa3af",
-  "pin_sha256": "bb58f3fdd39b9b35f8551ac2f11c992e2c33f43ce58c303818138f5d6f8c3c41",
+  "pin_sha256": "114b0746afda994f6c389df68835803f2912196a152b764da1e71063e04ea9a1",
   "reference_count": 94,
   "unique_target_count": 5,
   "entries": {
