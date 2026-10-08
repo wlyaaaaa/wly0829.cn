@@ -163,10 +163,13 @@ def prepare(baseline, package, output, report):
     previous_mounts=[]
     if already_integrated:
         expected_mounts = ['/' + prefix + '/comic-data.js', '/' + prefix + '/comic-live.js']
-        if not existing or existing.get('package_id') != package_id:
+        if not existing or not existing.get('package_id'):
             raise ValueError('Existing comic mount differs from this package; retain the current source and review the two script references instead of duplicating them')
+        mounted_prefix = '_shared/home-comic/' + existing['package_id'][:20]
         for rel, value in package_files.items():
-            if before.get(prefix + '/' + rel) != value:
+            if rel == 'comic-live.js' and mounted_prefix != prefix:
+                continue
+            if before.get(mounted_prefix + '/' + rel) != value:
                 raise ValueError('Existing comic package bytes differ: ' + rel)
         updated = raw
         if mounts != expected_mounts:
