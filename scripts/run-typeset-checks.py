@@ -95,6 +95,36 @@ def static_transfer_handler(manifest, origin, transfers):
     return handler
 
 
+async def install_candidate_document_origin(context, preview_origin, browser_origin, manifest, *, plan=None):
+    """Use the sealed site's real document origin with exact loopback documents."""
+    if browser_origin is None:
+        return preview_origin
+    production_origin=(plan or {}).get('html_origin') or manifest.get('html_origin')
+    verification=manifest.get('oss',{}).get('verification',{})
+    local=urlsplit(preview_origin)
+    if (browser_origin!='https://wly0829.cn' or browser_origin!=production_origin
+        or not verification.get('complete') or not verification.get('html_ready')
+        or verification.get('release_id')!=manifest.get('release_id')
+        or local.scheme!='http' or local.hostname not in {'127.0.0.1','localhost'}):
+        raise ValueError('Candidate browser origin requires the sealed production origin and actual loopback preview')
+    if plan and (plan.get('release_id')!=manifest['release_id'] or plan.get('remote_verified') is not True):
+        raise ValueError('Candidate document origin does not match the remotely verified split plan')
+    files=manifest.get('files',{})
+    async def forward(route):
+        request=route.request;parsed=urlsplit(request.url);path=unquote(parsed.path)
+        key=path.lstrip('/')+('index.html' if path.endswith('/') else '')
+        document=request.method=='GET' and key.endswith('.html') and key in files
+        control=path.startswith('/__typeset/') or path=='/__status'
+        if not document and not control:
+            return await route.continue_()
+        response=await route.fetch(url=preview_origin.rstrip('/')+parsed.path+('?' + parsed.query if parsed.query else ''),max_retries=0)
+        if document and (response.status!=200 or hashlib.sha256(await response.body()).hexdigest()!=files[key]['sha256']):
+            raise ValueError('Candidate document bytes differ from the sealed HTML: '+key)
+        await route.fulfill(response=response)
+    await context.route(browser_origin+'/**',forward)
+    return browser_origin
+
+
 async def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--mode',choices=['geometry','qa','baseline'],required=True)
@@ -109,6 +139,7 @@ async def main():
     parser.add_argument('--network-output',type=Path,help='Actual failed/static-response transport observations, without response bodies')
     parser.add_argument('--static-retry-once',action='store_true',help='Use actual sealed HTTPS static bodies with at most one retry; retain first failures and timing')
     parser.add_argument('--static-manifest',type=Path,help='Exact OSS split release-manifest.json; required with --static-retry-once')
+    parser.add_argument('--browser-origin',help='Sealed production document origin for the actual loopback candidate')
     args=parser.parse_args()
     if args.mode=='baseline':
         proof=json.loads(args.verification.read_text('utf8'))
@@ -119,6 +150,9 @@ async def main():
         args.baseline_output.write_text(json.dumps({'schema':'wly.typeset-quality-baseline.v1','release_id':proof['release_id'],'production_commit':args.production_commit,'verification_sha256':hashlib.sha256(args.verification.read_bytes()).hexdigest(),'pages':pages},ensure_ascii=False,indent=2)+'\n',encoding='utf8')
         return
     if args.static_retry_once and not args.static_manifest:parser.error('--static-retry-once requires --static-manifest')
+    if args.browser_origin and not args.static_retry_once:parser.error('--browser-origin requires sealed --static-retry-once mode')
+    browser_url=args.browser_origin or args.url
+    origin_plan=json.loads((args.static_manifest.resolve().parent.parent/'oss-plan.json').read_text('utf8')) if args.browser_origin else None
     profile=args.task_cache.resolve()/('chrome-profile-'+uuid.uuid4().hex)
     profile.mkdir(parents=True)
     print('Temporary profile: '+str(profile),flush=True)
@@ -128,7 +162,7 @@ async def main():
              'transport_scope':STATIC_TRANSFER_SCOPE if args.static_retry_once else 'Observed browser requests only'}
     if args.static_retry_once:
         manifest_bytes=args.static_manifest.read_bytes();manifest=json.loads(manifest_bytes)
-        parsed_origin=urlsplit(args.url)
+        parsed_origin=urlsplit(browser_url)
         network.update(release_id=manifest['release_id'],manifest_sha256=hashlib.sha256(manifest_bytes).hexdigest(),cors_origin=parsed_origin.scheme+'://'+parsed_origin.netloc)
         network['qa_wait_budget_ms']=90000
     async with async_playwright() as runtime:
@@ -138,7 +172,9 @@ async def main():
             context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
             context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
         if args.static_retry_once:
-            static_handler=static_transfer_handler(manifest,args.url,network['static_transfers'])
+            await install_candidate_document_origin(context,args.url,args.browser_origin,manifest,plan=origin_plan)
+            if args.browser_origin:network.update(preview_origin=args.url,browser_origin=browser_url)
+            static_handler=static_transfer_handler(manifest,browser_url,network['static_transfers'])
             await context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_handler)
         try:
             page=context.pages[0] if context.pages else await context.new_page()
@@ -168,10 +204,12 @@ async def main():
                     if args.network_output:
                         worker_context.on('response',lambda response:network['responses'].append({'url':response.url,'status':response.status,'resource_type':response.request.resource_type}))
                         worker_context.on('requestfailed',lambda request:network['failed_requests'].append({'url':request.url,'error':request.failure,'resource_type':request.resource_type}))
-                    if args.static_retry_once:await worker_context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_handler)
+                    if args.static_retry_once:
+                        await install_candidate_document_origin(worker_context,args.url,args.browser_origin,manifest,plan=origin_plan)
+                        await worker_context.route(manifest['oss']['asset_base_url'].rstrip('/')+'/**',static_handler)
                     try:
                         suffix=('&static_wait_ms=90000' if args.static_retry_once else '')+('&baseline=1' if args.collect_baseline else '')
-                        await worker.goto(args.url+'/__typeset/qa?native=1&pages='+','.join(group)+suffix,wait_until='domcontentloaded')
+                        await worker.goto(browser_url+'/__typeset/qa?native=1&pages='+','.join(group)+suffix,wait_until='domcontentloaded')
                         while time.monotonic()-started<args.timeout:
                             state=await worker.evaluate("({text:document.querySelector('#state')?.textContent, request:window.TypesetQA?.request,phase:window.TypesetQA?.phase,error:window.TypesetQA?.error})")
                             if state.get('text')!=last:

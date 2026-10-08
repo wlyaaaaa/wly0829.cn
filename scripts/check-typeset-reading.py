@@ -46,6 +46,15 @@ PLACE = """({id,fraction})=>{
  const requested=y+el.offsetHeight*fraction-offset,maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight),target=Math.max(0,Math.min(maxScroll,requested));
  scrollTo({top:target,behavior:'instant'});return {requested,target,maxScroll,clamped:target!==requested};
 }"""
+CANDIDATE_MEDIA_READY = """async () => {
+ loadFooter();await Promise.all(mediaImages.map(load));
+ await Promise.all([...document.images].filter(i=>i.getAttribute('src')).map(i=>{
+   i.loading='eager';return i.decode().catch(()=>{});
+ }));await document.fonts.ready;motion();
+ const images=[...document.images].filter(i=>i.getAttribute('src'));
+ return {fonts:document.fonts.status,images:images.length,
+   failed_images:images.filter(i=>!i.complete||!i.naturalWidth).map(i=>i.currentSrc||i.src)};
+}"""
 
 
 def reading_error_within_two_pixels(value):
@@ -102,9 +111,14 @@ async def run(args, base, build):
             context=await pw.chromium.launch_persistent_context(str(profile),headless=True,
                         executable_path=str(args.chrome),viewport={'width':390,'height':844},
                         device_scale_factor=1,args=['--hide-scrollbars'])
+            browser_base=base
+            if args.browser_origin:
+                origin_plan=json.loads((args.root.resolve().parent/'oss-plan.json').read_text('utf8'))
+                browser_base=await static_controller.install_candidate_document_origin(context,base,args.browser_origin,manifest_data,plan=origin_plan)
+                result.update(preview_origin=base,browser_origin=browser_base)
             if args.static_retry_once:
                 await context.route(manifest_data['oss']['asset_base_url'].rstrip('/')+'/**',
-                    static_controller.static_transfer_handler(manifest_data,base,result['static_transfers']))
+                    static_controller.static_transfer_handler(manifest_data,browser_base,result['static_transfers']))
                 result.update(transport_method=static_controller.STATIC_TRANSFER_METHOD,
                     transport_scope=static_controller.STATIC_TRANSFER_SCOPE,native_uninterrupted_cold=False)
             browser_page=context.pages[0]
@@ -122,14 +136,19 @@ async def run(args, base, build):
                     remote=remote_objects.get(urljoin(url,src))
                     scripts.append({'src':src,'url':path,'sha256':hashlib.sha256(artifact.read_bytes()).hexdigest()
                                     if not parsed.netloc and artifact.is_file() else remote.get('sha256') if remote else None,
-                                    'response_url':urljoin(base+url,src)})
+                                    'response_url':urljoin(browser_base+url,src)})
                 result['pages'][name]={'url':url,'html_sha256':hashlib.sha256(html_body).hexdigest(),'scripts':scripts}
                 await browser_page.set_viewport_size({'width':390,'height':844})
-                response=await browser_page.goto(base+url,wait_until='domcontentloaded',timeout=90000)
+                response=await browser_page.goto(browser_base+url,wait_until='domcontentloaded',timeout=90000)
                 if response.status!=200 or await response.body()!=html_body:
                     raise ValueError('Reading server did not return the exact selected artifact: '+url)
                 await browser_page.emulate_media(reduced_motion='reduce')
                 await browser_page.evaluate('document.fonts.ready')
+                if args.browser_origin:
+                    await browser_page.wait_for_function("()=>typeof window.SiteAudit?.ready==='function'",timeout=10000)
+                    media_ready=await browser_page.evaluate(CANDIDATE_MEDIA_READY)
+                    result['pages'][name]['media_readiness']=media_ready
+                    if media_ready['failed_images']:raise ValueError('Candidate media decode incomplete: '+str(media_ready['failed_images']))
                 await browser_page.wait_for_timeout(100)
                 ids=await browser_page.locator('.screen').evaluate_all('(nodes)=>nodes.map(s=>s.dataset.screen)')
                 chosen=list(dict.fromkeys([ids[0],ids[len(ids)//2],ids[-1]]))
@@ -207,13 +226,17 @@ async def run(args, base, build):
             try:result['failure_observation']=await browser_page.evaluate("()=>({url:location.href,tracked:typeof readingPosition==='undefined'?null:readingPosition,saved:typeof typesetReadingState==='undefined'?null:typesetReadingState.saved,revision:typeof typesetReadingState==='undefined'?null:typesetReadingState.revision,resizing:typeof resizing==='undefined'?null:resizing,runtime_globals:{readingPosition:typeof readingPosition,typesetReadingState:typeof typesetReadingState,resizing:typeof resizing},audit_ready:typeof window.SiteAudit?.ready==='function',album:window.SiteAlbum?.snapshot||null,images:[...document.querySelectorAll('.typeset-part:not([hidden]) img')].filter(im=>!im.complete||!im.naturalWidth).map(im=>({src:im.currentSrc||im.src,complete:im.complete,width:im.naturalWidth}))})")
             except Exception as observation_error:result['failure_observation_error']=str(observation_error)
         finally:
-            if context and args.static_retry_once:await context.unroute_all(behavior='wait')
+            if context and args.static_retry_once:
+                try:await context.unroute_all(behavior='wait')
+                except Exception as error:result['errors'].append('Route teardown: '+str(error))
             if args.static_retry_once:
                 result['static_transfer_status']='pass' if result['static_transfers'] and all(row['status']=='pass' for row in result['static_transfers']) else 'fail'
                 if result['static_transfer_status']!='pass':result['errors'].append('One or more bounded static transfers failed')
             if response_tasks:await asyncio.gather(*response_tasks)
             result['responses']=responses
-            if context:await context.close()
+            if context:
+                try:await context.close()
+                except Exception as error:result['errors'].append('Context cleanup: '+str(error))
             try:cleanup=subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1',
                        '-LiteralPath',str(profile),'-AllowedRoot',str(args.cache.resolve()),'-Json'],
                        capture_output=True,text=True,encoding='utf-8',errors='replace',creationflags=subprocess.CREATE_NO_WINDOW)
@@ -243,8 +266,10 @@ def main():
     ap.add_argument('--patched-runtime',action='store_true')
     ap.add_argument('--port',type=int,default=0,help='Fixed registered loopback origin for OSS CORS verification')
     ap.add_argument('--static-retry-once',action='store_true',help='08:52 acceptance: actual static HTTPS body retrieval with at most one retry, preserving response hashes and first failures')
+    ap.add_argument('--browser-origin',help='Sealed production document origin for the actual loopback candidate')
     ap.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     args=ap.parse_args()
+    if args.browser_origin and not args.static_retry_once:ap.error('--browser-origin requires sealed --static-retry-once mode')
     args.cache.mkdir(parents=True,exist_ok=True)
     for key in ['TEMP','TMP','TMPDIR']:os.environ[key]=str(args.cache.resolve())
     build=json.loads(args.build_report.read_text('utf8'));overrides={}
@@ -289,7 +314,7 @@ def main():
         for entry in result['pages'].values():
             html=args.root/(entry['url'].lstrip('/')+'index.html' if entry['url'].endswith('/') else entry['url'].lstrip('/'))
             unchanged=unchanged and hashlib.sha256(html.read_bytes()).hexdigest()==entry['html_sha256']
-            actual_html=actual_by_url.get('http://127.0.0.1:'+str(server.server_port)+entry['url'],[])
+            actual_html=actual_by_url.get((args.browser_origin or 'http://127.0.0.1:'+str(server.server_port))+entry['url'],[])
             if not actual_html or any(row['status']!=200 or row.get('sha256')!=entry['html_sha256'] for row in actual_html):
                 response_failures.append({'url':entry['url'],'kind':'html','responses':actual_html})
             for script in entry['scripts']:
