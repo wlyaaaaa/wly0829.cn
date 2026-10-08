@@ -556,7 +556,8 @@ function cpUpdateCopyButtons(){
  for(const section of [ui.conclusion,ui.computer,ui.remote,ui.cloud,ui.today]){const list=cpCopyRecords(section.node);section.copyActions.hidden=list.length<2;syncChildren(section.copyActions,list.length>1?[cpCopyButton(list,'block',section.title)]:[]);}
 }
 function cpRiverNotice(taskId,target,task=target?._cpRiverTask){
- const item=Object.entries(cpGroups()||{}).flatMap(([group,rows])=>rows.map(row=>({...row,group}))).find(row=>row.id===taskId);
+ let item=Object.entries(cpGroups()||{}).flatMap(([group,rows])=>rows.map(row=>({...row,group}))).find(row=>row.id===taskId);
+ if(!item?.public_message&&task?.id===taskId&&task.public_message&&['error','warn','unknown'].includes(task.notice_kind))item={...task,current:true,title:task.title||task.plain?.name||'这条提醒'};
  if(!target||!item?.public_message||!['error','warn','unknown'].includes(item.notice_kind))return;
  if(task)target._cpRiverTask=task;const panel=Object.hasOwn(task?.related_status||{},'panel')||task?.outcomes?.kind==='panel_heartbeat';
  if(panel&&(task.state==='unknown'&&item.state==='failed'||task.outcomes?.execution_failed===true&&item.state!=='failed'))return;
