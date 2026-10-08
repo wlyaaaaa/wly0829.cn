@@ -44,11 +44,16 @@ def inventory(root, pages=None):
         if not matches: raise ValueError('Unknown affected page: '+name)
         chosen.update(matches)
     return sorted(chosen)
-async def review(page, base, route, width, dom, blocked=None):
+async def review(page, base, route, width, dom, blocked=None, native_routes=()):
     issues, checks = [], {'reloads': [], 'phases': []}
     fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
     if not response or response.status >= 400: fail('route-http', route, {'status': response.status if response else None})
+    if route in native_routes:
+        await page.wait_for_timeout(2000)
+        texts = await page.evaluate("html=>[new DOMParser().parseFromString(html,'text/html'),document].map(d=>(d.querySelector('main')?.textContent||'').replace(/\\s+/g,' ').trim())", await response.text() if response else '')
+        checks['native_readability'] = {'consistent': bool(texts[0]) and texts[0]==texts[1], **{name:{'sha256':hashlib.sha256(value.encode('utf8')).hexdigest(),'characters':len(value)} for name,value in zip(('ssr','browser'),texts)}}
+        if not checks['native_readability']['consistent']: fail('native-main-rewritten', 'main', checks['native_readability'])
     await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
     await page.evaluate("async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));}await new Promise(r=>setTimeout(r,500));scrollTo({top:0,behavior:'instant'})}")
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
@@ -122,6 +127,7 @@ async def review(page, base, route, width, dom, blocked=None):
 async def run(args):
     if args.base_url and (args.full or not args.pages) and not args.online_full: raise ValueError('Online all-route checks require --online-full; use local --root --full by default')
     started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full or args.online_full else args.pages)
+    native_routes = json.loads((args.root/'release-manifest.json').read_text('utf8')).get('native_readability',{}).get('routes',{}) if (args.root/'release-manifest.json').is_file() else {}
     preparation = args.oss_preparation or (args.root.parent if (args.root.parent/'oss-plan.json').is_file() else None)
     objects = json.loads((preparation/'oss-plan.json').read_text('utf8'))['objects'] if preparation else {}
     assets = {urlsplit(obj['url'])._replace(query='',fragment='').geturl():(preparation/'oss'/rel,obj) for rel,obj in objects.items()}
@@ -167,7 +173,7 @@ async def run(args):
             async with semaphore:
                 page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
                 try:
-                    record = await review(page,base,route,width,dom,blocked)
+                    record = await review(page,base,route,width,dom,blocked,native_routes)
                     if not args.base_url:
                         gaps = [key for key in blocked.get(page,{}) if re.search(r'\.(js|css|woff2?|mp4|webm)$',urlsplit(key).path,re.I)]
                         if gaps: record['issues'].append(dict(kind='local-assets-unavailable-review',element=route,evidence={'assets':gaps})); record['dependency_unavailable']=True

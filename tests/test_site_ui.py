@@ -33,6 +33,11 @@ class SiteUiTests(unittest.TestCase):
         result = subprocess.run([sys.executable, str(ROOT/'scripts/check-site-ui.py'), '--root', str(root.parent), '--pages', 'probe', '--output', str(output)], capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
         self.assertEqual([(r['checks']['anchors'], r['issues']) for r in json.loads(output.read_text('utf8'))['records']], [(3, []), (3, [])])
+        (root/'index.html').write_text('<main>Fresh SSR body</main><script>setTimeout(()=>document.querySelector("main").textContent="Old baseline body",1200)</script>', encoding='utf8')
+        (root.parent/'release-manifest.json').write_text(json.dumps({'native_readability':{'routes':{'/probe/':{}}}}), encoding='utf8')
+        result = subprocess.run([sys.executable, str(ROOT/'scripts/check-site-ui.py'), '--root', str(root.parent), '--pages', 'probe', '--output', str(output)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 1, result.stdout+result.stderr)
+        self.assertEqual([(r['checks']['native_readability']['consistent'], [i['kind'] for i in r['issues']]) for r in json.loads(output.read_text('utf8'))['records']], [(False, ['native-main-rewritten']), (False, ['native-main-rewritten'])])
 
     @classmethod
     def setUpClass(cls):
