@@ -18,6 +18,7 @@ function retryImage(image,state,manual=false){
  clearTimeout(state.timer);state.timer=null;
  if(!image.isConnected||canonical(selected(image))!==state.url){hideButton(state);return;}
  const fresh=retryURL(state.url,manual?'manual-'+(++state.manual):'auto');
+ image.dataset.resourceRetryState='loading';
  state.waiting=false;state.reloading=true;hideButton(state);record('image',manual?'manual':'retry',state.url,manual?state.manual:1);
  const replaceSet=value=>value.split(',').map(part=>{const fields=part.trim().split(/\s+/);if(canonical(fields[0])===state.url)fields[0]=fresh;return fields.join(' ');}).join(', ');
  for(const source of image.closest('picture')?.querySelectorAll('source[srcset]')||[])source.srcset=replaceSet(source.srcset);
@@ -27,6 +28,7 @@ function retryImage(image,state,manual=false){
  if(canonical(image.src)===state.url||!image.closest('picture'))image.src=fresh;
 }
 function placeButton(button){
+ if(button.closest('.image-loading-wrap')){Object.assign(button.style,{position:'relative',left:'',top:''});button.hidden=false;return;}
  const image=button._image,r=image.getBoundingClientRect();
  if(r.bottom<=0||r.top>=innerHeight||r.right<=0||r.left>=innerWidth){button.hidden=true;return;}
  button.hidden=false;const w=button.offsetWidth||92,h=button.offsetHeight||32;
@@ -43,9 +45,9 @@ function placeButton(button){
 }
 function showButton(image,state){
  if(!image.isConnected||state.button)return;
- const button=document.createElement('button');button.type='button';button.className='resource-retry-button';button.textContent='重新加载';button.setAttribute('aria-label','重新加载图片'+(image.alt?'：'+image.alt:''));
+ const button=document.createElement('button');button.type='button';button.className='resource-retry-button';button.textContent='点一下重试';button.setAttribute('aria-label','点一下重试'+(image.alt?'：'+image.alt:''));
  Object.assign(button.style,{zIndex:'2147483000',boxSizing:'border-box',margin:'0',padding:'5px 10px',fontFamily:'inherit',fontSize:'14px',lineHeight:'20px',color:'#065c34',background:'#fff',border:'1px solid #8bc6aa',borderRadius:'6px',cursor:'pointer',pointerEvents:'auto',width:'auto',height:'auto'});
- button._image=image;state.button=button;buttons.add(button);document.body.append(button);placeButton(button);
+ button.style.minHeight='44px';button._image=image;state.button=button;buttons.add(button);(image._loadingWrap&&!image._loadingWrap.classList.contains('image-loading-compact')?image._loadingWrap.firstChild:document.body).append(button);placeButton(button);
  button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();retryImage(image,state,true);});
 }
 function imageError(image){
@@ -53,11 +55,11 @@ function imageError(image){
  const url=canonical(selected(image));let state=imageState.get(image);
  if(!state||state.url!==url){clearTimeout(state?.timer);hideButton(state||{});state={url,auto:0,manual:0,waiting:false,timer:null,button:null};imageState.set(image,state);}
  if(!state.auto){state.auto=1;state.waiting=true;record('image','waiting',url,0);state.timer=setTimeout(()=>{state.timer=null;if(state.waiting)retryImage(image,state);},delay);}
- else{state.reloading=false;record('image','failed',url,1);showButton(image,state);}
+ else{state.reloading=false;image.dataset.resourceRetryState=state.manual?'again':'failed';record('image','failed',url,1);showButton(image,state);}
 }
 document.addEventListener('error',event=>imageError(event.target),true);
 for(const image of document.querySelectorAll('img[data-resource-retry-failed="1"]'))imageError(image);
-document.addEventListener('load',event=>{const image=event.target;if(image instanceof HTMLImageElement){const state=imageState.get(image);if(state){clearTimeout(state.timer);state.timer=null;hideButton(state);state.waiting=false;state.reloading=false;if(canonical(selected(image))===state.url)record('image','loaded',state.url,state.auto);}}},true);
+document.addEventListener('load',event=>{const image=event.target;if(image instanceof HTMLImageElement){delete image.dataset.resourceRetryState;const state=imageState.get(image);if(state){clearTimeout(state.timer);state.timer=null;hideButton(state);state.waiting=false;state.reloading=false;if(canonical(selected(image))===state.url)record('image','loaded',state.url,state.auto);}}},true);
 for(const event of ['scroll','resize'])addEventListener(event,()=>{for(const button of buttons)placeButton(button);},{passive:true});
 
 function stylesheetAllowed(link){return link instanceof HTMLLinkElement&&link.rel.toLowerCase().split(/\s+/).includes('stylesheet')&&link.href&&stylesheetURLs.has(canonical(link.href))&&!forbidden(new URL(link.href,base));}

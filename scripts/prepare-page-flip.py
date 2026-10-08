@@ -301,8 +301,6 @@ def inject_runtime(text, js, css, index, model):
                 return tag[0][:-2] + addition + ' />' if tag[0].endswith('/>') and addition else tag[0][:-1] + addition + '>'
             part = re.sub(r'<(?:img|source)\b[^>]*>', eager, part)
             text = text[:start] + part + text[end:]
-    loading=(HERE/'image-loading-runtime.js').read_text('utf8')
-    text=re.sub(r'(<main\b[^>]*>)',lambda m:m[1]+'<script data-image-loading>'+loading+'</script>',text,count=1)
     return text, delayed, removed_hints
 
 

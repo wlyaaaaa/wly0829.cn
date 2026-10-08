@@ -20,6 +20,7 @@ MARKER='data-resource-retry="next-2e"'
 INITIAL_ATTRIBUTE=b' data-resource-retry-initial="1"'
 STYLESHEET_ATTRIBUTE=b' data-resource-retry-stylesheet="1"'
 INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&(e.target instanceof HTMLImageElement||(e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial"))||(e.target instanceof HTMLLinkElement&&e.target.rel.toLowerCase().split(/\\s+/).includes("stylesheet")&&e.target.hasAttribute("data-resource-retry-stylesheet")));document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
+INITIAL_CAPTURE=INITIAL_CAPTURE.replace('</script>',(HERE/'image-loading-runtime.js').read_text('utf8').replace('</script','<\\/script')+'</script>')
 
 def mark_initial_stylesheets(raw,rel,policy):
     allowed={urljoin('https://wly0829.cn/',value) for value in policy['stylesheets']};marked=[]
@@ -178,7 +179,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
         manifest['resource_retry_preparation'].update(previous_manifest=previous_proof,previous_html_restore=previous_restore)
         if stamp(previous_manifest)!={key:previous_proof[key]for key in ('sha256','bytes')}:raise ValueError('Previous manifest changed during replay')
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
-    result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(source_path(output,runtime_rel)),'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
+    result={'schema':'wly.resource-retry-preparation.v1','status':'prepared_next_2e_only','prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),'baseline':str(baseline),'output':str(output),'baseline_release_id':old_rid,'release_id':rid,'files':len(after),'html_count':sum(r.endswith('.html')for r in after),'changed_html':sorted(changes),'runtime':runtime_rel,'runtime_stamp':stamp(source_path(output,runtime_rel)),'inputs':{str(HERE/name):stamp(HERE/name) for name in ('image-loading-runtime.js','resource-retry-runtime.js','prepare-resource-retry.py')},'original_files_preserved':True,'rollback_byte_exact':True,'observation':observed,'policy':policy,'published':False}
     report=Path(report);report.parent.mkdir(parents=True,exist_ok=True);report.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
 def rollback(baseline,output,report):
     baseline,output=Path(baseline).resolve(),Path(output).resolve()

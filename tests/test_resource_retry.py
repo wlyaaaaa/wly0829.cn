@@ -161,7 +161,7 @@ async def run(args):
             assert image['picture']['rect']==initial['picture']['rect']and image['original']==initial['original']and image['picture']['crossOrigin']==initial['picture']['crossOrigin']
             rows=[r for r in state['requests']if r['path']=='/fixture/picture.svg'];gap=rows[1]['at']-rows[0]['at'];assert .9<=gap<3,rows
             assert state['counts'].get('GET /fixture/lazy.svg',0)==0
-            assert any(b['text']=='重新加载'and b['image']=='terminal'for b in image['buttons'])
+            assert any(b['text']=='点一下重试'and b['image']=='terminal'for b in image['buttons'])
             original_hit=await page.locator('#original-button').evaluate('e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===e;}');assert original_hit
             checks.append({'case':'picture-503-one-second-retry-success-and-terminal-button','pass':True,'gap_seconds':gap,'initial':initial,'after':image,'original_button_hit':original_hit,'lazy_requests_before_scroll':0})
             state['terminal_fail']=False
