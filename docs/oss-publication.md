@@ -70,7 +70,11 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 上传按 MIME 类型分组，每组保留原路径，指定正确 `Content-Type` 和版本资源的长期缓存头。使用已交接的现代 `aliyun ossutil cp` OAuth profile，region 从默认域名解析；不使用长期 Key 参数、配置查看或调试输出。公共读、允许本站的 Referer、GET CORS（跨域读取）由桶交接提供，上传工具不自行修改。模块脚本和视频读取必须在实际本站来源下通过 CORS。
 
-上传使用 `--ignore-existing --force`：前者跳过已有对象，后者免除交互提示；已实测同一计划第二次上传为零对象。发生部分传输失败时，保留真实 CLI 记录并生成实际 GET 核验结果。`retry-failed` 只重查同一计划指纹和完整对象集合中失败的项目，旧失败回执另存，保留的通过项仍来自真实完整 GET。已存在的错误正文不覆盖，另起新版本前缀解决。所有旧版本前缀保留。
+上传使用 `--ignore-existing --force`：前者跳过已有对象，后者免除交互提示；已实测同一计划第二次上传为零对象。发生部分传输失败时，保留真实 CLI 记录并生成实际 GET 核验结果。`retry-failed` 只重查同一计划指纹和完整对象集合中失败的项目，旧失败回执另存，保留的通过项仍来自真实完整 GET。已存在的错误正文不覆盖，另起新版本前缀解决。
+
+未指定上一清单时，准备器核对真实成功 Pages 部署，不能因本地发布账存在而跳过权威版本；显式指定但无效的清单直接报错，计划明确显示新增对象数和字节。上海上传与回收共用 `wly0829-publication`，已持锁的调用者传入同一真实 `-LockHolder`。上传前把计划 SHA、不可变对象及源身份和完整键集登记到 Git 共享目录 `wly-oss/pins`，失败仍保留；正常封口只允许验证状态和清单自身指纹变化，对象及源输入不可变；按实际封口清单绑定回执补入 `managed.json`，单独 VerifyRemote 重试成功也补登记，不按时间过期。候选明确废弃后，原负责人在同锁内以 `oss-retention.py retire --pin-id <登记文件名中的64位ID> --plan-sha256 <登记原SHA> --lock-holder <持有人>` 清退确切登记，原目录移走或计划被替代也可执行。
+
+正式上线全部回读成功后，只回收上传器管理的生成对象中不被当前网页及在途登记引用的确切 null 版本，不长期保留上一版本。未完成发布前原线上仍须保护。未知登记或计划漂移时整轮不删；个别对象的版本或实际回执不明确时保留并单列，已证对象继续回收，不能冒全清；每批最多 1,000 个显式键，回收后重新列举确认，独立 `oss-cleanup.json` 记录数量和字节。清理失败保持已成功的发布状态并报告清理未完成，不触发发布回滚。桶内其它来源、未经授权的旧孤立对象和新的桶不套用此回收范围。
 
 外置 CSS 的背景资源使用 CSS 自己的 OSS 地址作为 Referer。桶名单除了本站，还须允许自身默认 HTTPS 域名；否则浏览器背景图会被拒绝。首版先实际回读确认两桶 Referer/CORS 相同，随后仅为上海补上 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/*`，保留禁止空 Referer、其他来源和 CORS 原值；北京不改。此配置修复由负责人持短锁单独执行及回读，不由上传器隐式改桶。
 
@@ -84,11 +88,11 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 ## 回滚与本地演练
 
-回滚恢复前一版 HTML 和控制文件。前一版引用的 OSS 前缀不删除，避免回滚 HTML 指向已消失资源。首次迁移的旧 HTML 原引用 GitHub 资源，首次切换也须保留该旧完整包/提交作为恢复材料。
+回滚恢复前一版 HTML 和控制文件。稳定上线后云端不额外保留上一版本资源；真正需要回退时，先从已有源码和本地素材补上传该版缺失对象，再恢复 HTML，不能宣称清理后仍可无上传即时回退。发布未完成时仍保留原线上对象。首次迁移的旧 HTML 原引用 GitHub 资源，首次切换保留旧完整包/提交作为本地恢复材料，不主动重复生图。
 
 本地演练可传 `--test-loopback --asset-base-url http://127.0.0.1:<端口>`，无需生产桶/profile。此计划明确标为 `test_only`，发布入口拒绝上传，也拒绝把其核验当成生产证据。针对性测试通过真实本地 HTTP 服务验证正文指纹、CORS、MIME 和视频 Range；伪造的正确元数据搭配错误正文必须失败。
 
-上传分组副本、演练和失败回执属于当前任务的接续材料。负责人完成发布/恢复验收后，按现有回收站工具回收本次生成目录，不永久删除旧 OSS 前缀。
+上传分组副本、演练和失败回执属于当前任务的接续材料。负责人完成发布/恢复验收后，按现有回收站工具回收本次生成目录，旧云对象按上文精确键回收规则处理。
 
 ## 后续排版批次的OSS发布
 
@@ -96,6 +100,6 @@ pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
 
 2026-10-04 14:52 引导 `8c5b469a-9178-475c-92aa-b59dd6fa5292` 将 08:52 的有界重试裁定明确扩至 2e、2f 和以后各版：本机冷启动空响应和长耗时，每个资源最多重试一次后完整取到且字节一致即通过，不再等稳定 2 秒。`OssRetryProof` 保留首次原生失败、长耗时、实际一次补取及完整 body/大小/SHA/MIME/CORS；网站图片、CSS、动态脚本各一次的真实恢复仍单独验收。受控 HTTPS 取回和证据复用不冒充原生 2 秒通过，不改代理/网络设置。既有 2b/2c 回执继续按原 08:52 指令及其副机直连证据核对。
 
-`verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。回滚使用发布时实际生产Git提交，旧OSS前缀保留；并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。
+`verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。未完成发布的自动恢复使用原真实生产Git提交及仍保留的原线上对象；稳定后需要旧版时按上文补上传资源。并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。
 
-省流量入口：prepare --previous-manifest 保留未变对象地址与旧回执；只传、只完整 GET 新对象，所有仍被清单引用的旧对象保留，本轮不增加清理。C10 默认共享隐藏 Chrome 缓存并复用已核 SHA，--retry-failed 只补失败路由，--cold-cache 单独运行；开始估算超过5GB需 --confirm-download-over-5gb 或 PS -ConfirmDownloadOver5GB。旧回滚清单的同版本本机内容结果登记在 config/oss-content-seals.json，恢复时补入该结果，HTML、媒体及实际原生产 GitRef 不变。
+省流量入口：prepare --previous-manifest 保留未变对象地址与旧回执；只传、只完整 GET 新对象，稳定上线后按当前引用和实际在途登记回收旧生成对象。C10 默认共享隐藏 Chrome 缓存并复用已核 SHA，--retry-failed 只补失败路由，--cold-cache 单独运行；开始估算超过5GB需 --confirm-download-over-5gb 或 PS -ConfirmDownloadOver5GB。旧回滚清单的同版本本机内容结果登记在 config/oss-content-seals.json，恢复时补入该结果，HTML、媒体及实际原生产 GitRef 不变。

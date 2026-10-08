@@ -554,6 +554,14 @@ try {
     SaveState
     Write-Output "Published commit $commit; Pages run $($deploymentResult.run); all public HTML and asset hashes passed."
     Write-Output "Exact rollback reference: $rollbackRef"
+    if ($OssPreparation) {
+        $cleanupReport = Join-Path $RunRoot 'oss-cleanup.json'
+        & python 'scripts/oss-retention.py' collect --preparation $OssPreparation --commit $commit --rollback $rollbackRef --lock-holder $LockHolder `
+            --cli 'E:\Tools\aliyun-cli\aliyun.exe' --profile website-images --report $cleanupReport
+        $state.oss_cleanup = [ordered]@{ report=$cleanupReport; exit=$LASTEXITCODE; status=$(if($LASTEXITCODE -eq 0){'complete'}else{'incomplete'}) }
+        SaveState
+        if ($state.oss_cleanup.exit -ne 0) { Write-Warning "Publication succeeded; OSS collection is incomplete: $cleanupReport" }
+    }
 } catch {
     $state.error = $_.Exception.Message
     if ($state.status -eq 'preparing') { $state.status = 'stopped_before_push' }
