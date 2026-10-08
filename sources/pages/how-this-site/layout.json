@@ -584,7 +584,7 @@
       {
         "type": "content_card",
         "text_ref": "先让程序拦住确定的错",
-        "columns": 3,
+        "columns": 2,
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [

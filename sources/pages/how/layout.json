@@ -346,10 +346,16 @@
         "row": "body",
         "width": "50%",
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/人物.png",
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ]
       }
     ],
-    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/手机上四卡单列左图右文。竖版关系图在标题后、四卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/盯进度、收结果/手机上五卡单列左图右文。竖版关系图在标题后、五卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
   },
   {
     "screen": "how-04",
@@ -396,10 +402,16 @@
         "align": "left",
         "connector": "none",
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/人物.png",
+          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
+        ]
       }
     ],
-    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/手机上四卡单列左图右文。竖版关系图在标题后、四卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+    "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/盯进度、收结果/手机上五卡单列左图右文。竖版关系图在标题后、五卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
   },
   {
     "screen": "how-09",

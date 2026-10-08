@@ -183,7 +183,7 @@
       "id": "ai-cli-profile-manager-10",
       "section": "tech",
       "title": "用了哪些工具和模型",
-      "scene": "横版画面：左上标题。一张三列的水彩风格表格（哪一部分｜用的什么｜在哪跑），每行最左画对应的品牌小标志（原版工具行画 OpenAI、Claude 两个标志；OpenAI 官方行画 OpenAI 标志；智谱行画智谱 GLM 标志；DeepSeek 行画小鲸鱼标志；阿里云行画通义千问标志；本机模型行画一块显卡；模型服务行画 Ollama 小羊驼；桌面桥、后台运行行画一座小桥和一台小引擎）。“在哪跑”一列用绿色小胶囊标“本机”或“云端”。表格下面一行放最后一句。",
+      "scene": "横版画面：左上标题。一张三列的水彩风格表格（哪一部分｜用的什么｜在哪跑）。表格下面一行放最后一句。",
       "portrait": "竖版分张原字范围保持现有v/v2/v3。仅第3张ai-cli-profile-manager-10-v3：后台运行一条（哪一部分/用的什么/在哪跑）和两段路线说明完整原字；不搬第1/2张的其它工具条目或标题。收紧说明卡高度、正文正常大字，保留本张字段关系；表格或上下卡片以正常370px清楚可读为准，不以旧AI卡片形式本身退回。只有本张正确原字，外部连续白边交现役crop_box，不添空框或新句。",
       "text": "用了哪些工具和模型\n\n| 哪一部分 | 用的什么 | 在哪跑 |\n|---|---|---|\n| 原版工具 | Codex 命令行和桌面版、Claude Code、Qwen Code、OpenCode、Open Interpreter 官方 Rust 版 | 本机 |\n| OpenAI 官方 | 桌面版里的 GPT-6 系列由官方引擎现场列出；终端官方路线的默认型号还写着 GPT-5.6 Sol，启动时可以指定；另有 GPT-5.3 Codex Spark（只收文字的快速编程档；7 月 29 日真实写代码任务超出步数上限被停、得分 2/9，能力验收没通过，只证明了文字链路）。用 ChatGPT 账号登录 | 云端 |\n| 智谱 GLM | GLM-5.3、GLM-5.3 Flash，编码套餐，上下文约 105 万 token，Flash 还能看图 | 云端 |\n| DeepSeek | DeepSeek Flash（官方自动升到最新的 Flash，能看图）、DeepSeek V4 Pro 0813（只在终端），上下文约 100 万 token | 云端 |\n| 阿里云百炼 | Qwen3.8 Max 0902、Qwen3.7 Max 06-08，北京按量计费，上下文约 98 万 token | 云端 |\n| 本机模型 | Qwen3.8 27B、Qwen3.6 35B 和各自的去限制版，4 位量化，上下文 262,144 token | 本机显卡 |\n| 模型服务 | Ollama 0.34.4，同一时间只跑一个请求，空闲 3 分钟卸载；经电脑配置的显卡排队服务（本机 32100 端口） | 本机 |\n| 桌面桥 | .NET 10 的 C# 程序 | 本机 |\n| 后台运行 | Codex app-server（Codex 自带的后台服务接口）和它原生的“恢复同一会话” | 本机 |\n\n云端每条路线都钉死精确型号（为什么见下一屏）；只有 DeepSeek Flash 特意跟着官方升级。\n\n21 条里有 2 条这台电脑眼下用不上：Claude Code 和 Open Interpreter 各有一条连的是本机没装的 qwen3:8b、qwen3-coder:30b（Open Interpreter 只有这一条）。Claude Code 经 ChatGPT 的两条转接从没配过，9 月 29 日已退役。云端厂商路线全在 Codex 上；Claude Code 能用的是官方、本机 Qwen 和自定义端点。",
       "links": [],
