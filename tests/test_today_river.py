@@ -97,7 +97,7 @@ def fixture(mode):
                      row('灯出错','failed',schedule_zh='每 5 分钟一次',last_run_at=iso(now-60))])
         rows.append(row('内部编号','never',plain={}))
     if mode in ['panel-heartbeat','panel-exit']:
-        rows=[row('副屏','failed',schedule_zh='常驻',last_run_at=iso(now-36000),heartbeat_at=iso(now-300),related_status={'panel':'stale'},public_message='出错了' if mode=='panel-exit' else '不知道，这次没读到副屏心跳',notice_kind='B' if mode=='panel-exit' else 'D',outcomes={'kind':'panel_heartbeat','state':'failed' if mode=='panel-exit' else 'stale','execution_failed':mode=='panel-exit','heartbeat_at':iso(now-300)})]
+        rows=[row('副屏','failed',schedule_zh='常驻',last_run_at=iso(now-36000),heartbeat_at=iso(now-300),related_status={'panel':'stale'},public_message='出错了' if mode=='panel-exit' else '不知道，这次没读到副屏心跳',notice_kind='error' if mode=='panel-exit' else 'unknown',outcomes={'kind':'panel_heartbeat','state':'failed' if mode=='panel-exit' else 'stale','execution_failed':mode=='panel-exit','heartbeat_at':iso(now-300)})]
     a = {'state':'partial' if mode=='partial' else 'ok','items':rows,'groups':[{'id':'backup','name':'合成备份组'},{'id':'upkeep','name':'合成维护组'}],
          'observed_at':iso(now),'max_age_seconds':120}
     if mode=='empty':
