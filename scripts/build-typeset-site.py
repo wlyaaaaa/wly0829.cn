@@ -396,10 +396,18 @@ def encode_png(path, effort=80):
                    'decoded_rgba_sha256':pixel_hash,'pixel_equal':True,'compression_effort':effort})
     return encoded
 
-def asset(path, candidate, category='images'):
+def asset(path, candidate, category='images', baseline=None, baseline_files=None):
     path = Path(path)
     actual=encode_png(path) if path.suffix.lower()=='.png' else path
     if actual.stat().st_size>=path.stat().st_size:actual=path
+    if baseline is not None:
+        proof=stamp(actual)
+        matches=[rel for rel,entry in baseline_files.items() if entry==proof and Path(rel).suffix.lower()==actual.suffix.lower()]
+        if len(matches)==1:
+            original=baseline/matches[0]
+            if not original.is_file() or stamp(original)!=proof:
+                raise ValueError('Screenshot baseline asset differs from its manifest: '+matches[0])
+            return '/'+matches[0]
     name = hybrid.digest(actual)[:20]+'-'+path.stem+actual.suffix
     rel = Path('_typeset')/category/name
     dest = candidate/rel
@@ -864,7 +872,7 @@ def build_page(name, records, args, candidate):
                         crop=None
                         bound={'src':asset(sp,candidate,'screenshots'),'caption':sh.get('caption',''),'role':sh.get('role',''),'size':shot_size,'crop':crop}
                         if sh.get('full'):
-                            fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots')
+                            fp=Path(args.resource_map.get(os.path.normcase(str(Path(sh['full']).resolve())),sh['full']));inputs[str(fp.resolve())]=stamp(fp);bound['full']=asset(fp,candidate,'screenshots',args.baseline,args.baseline_files)
                         h['shots'].append(bound)
                 if h['kind'] in {'live','screenshot'} or h.get('action') or h.get('invalid'):
                     h['target']=h.pop('href')
@@ -997,6 +1005,7 @@ def main():
         baseline_manifest=baseline_module.verify_input_baseline(args.baseline,args.baseline_ref,True)
     elif args.baseline_ref:
         raise ValueError('--baseline-ref requires --runtime-baseline')
+    args.baseline_files=baseline_manifest['files']
     if args.geometry:args.geometry=args.geometry.resolve()
     args.snapshot_path=args.typeset_root.parent/'snapshot.json';args.snapshot_proof=None;args.resource_map={};args.external_inputs={}
     args.rule_projection_records={};args.rule_projection_inputs={}

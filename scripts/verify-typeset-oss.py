@@ -37,7 +37,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
         origin=next(iter(origins))
     parsed_origin=urlsplit(origin or '')
     require(parsed_origin.scheme in {'http','https'} and parsed_origin.netloc and origin==parsed_origin.scheme+'://'+parsed_origin.netloc,role+' actual CORS origin is missing')
-    require(report.get('static_transfer_status')=='pass' and (role=='network' or not report.get('failed_requests')) and not report.get('errors') and not report.get('response_failures'),role+' has unresolved resource failures')
+    require(report.get('static_transfer_status')=='pass' and (role in {'network','reading'} or not report.get('failed_requests')) and not report.get('errors') and not report.get('response_failures'),role+' has unresolved resource failures')
     if role=='reading':require(report.get('status')=='pass', 'Reading capability failed')
     remote={obj['url']:obj for obj in manifest['oss']['objects'].values()}
     transfers=report.get('static_transfers',[]);seen=set();first_failures=[];timings=[];gets=0
@@ -72,10 +72,28 @@ def bounded_report(report,manifest,manifest_sha256,role):
             actual=urlsplit(consumer['url']);query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry' and part!='living-cors=1')
             require(urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment))==url,role+' consumer query or object identity differs')
         gets+=len(attempts);timings.append({'url':url,'seconds':transfer['seconds'],'attempts':[{'number':item['number'],'started_at_beijing':item['started_at_beijing'],'seconds':item['seconds']} for item in attempts]})
-    canceled_consumers=[];raw_failed_requests=report.get('failed_requests',[])
+    canceled_consumers=[];external_runtime_observations=[];raw_failed_requests=report.get('failed_requests',[])
     require(isinstance(raw_failed_requests,list),role+' failed request observations are malformed')
     by_url={transfer['url']:transfer for transfer in transfers}
+    required_reading_urls={urljoin(origin,page['url']) for page in report.get('pages',{}).values()}
+    required_reading_urls.update(script['response_url'] for page in report.get('pages',{}).values() for script in page.get('scripts',[]) if script.get('response_url'))
     for failure in raw_failed_requests:
+        if role in {'reading','network'} and failure.get('resource_type')=='fetch' and failure.get('url') in {'https://live.wly0829.cn/computer-access/state','https://mcp.wly0829.cn/computer-access/api/status'}:
+            require(failure['url'] not in remote and failure['url'] not in required_reading_urls
+                and isinstance(failure.get('error'),str) and failure['error'],role+' external API observation overlaps selected artifacts or lacks its actual error')
+            external_runtime_observations.append({'observation':failure,'classification':'external_runtime_failure_outside_selected_static_get_scope',
+                'status':'cancelled' if failure['error']=='net::ERR_ABORTED' else 'failed','static_object':False,'selected_html_or_script':False,
+                'external_runtime_acceptance':'not established','operations_executed':False})
+            continue
+        if role=='reading' or role=='network' and failure.get('resource_type') in {'document','fetch'}:
+            target=urlsplit(failure.get('url',''));resource=failure.get('resource_type')
+            external=resource=='document' and target.hostname=='grafana.wly0829.cn' and target.path.startswith('/public-dashboards/')
+            require(failure.get('error')=='net::ERR_ABORTED' and target.scheme=='https' and external
+                and failure['url'] not in remote and failure['url'] not in required_reading_urls,role+' cancellation is not outside the selected artifact and static transport scope')
+            canceled_consumers.append({'observation':failure,'classification':'external_runtime_consumer_aborted_outside_selected_artifact',
+                'static_object':False,'selected_html_or_script':False,'external_runtime_acceptance':'not established',
+                'cancellation_time_and_cause':'not established by network report'})
+            continue
         require(role=='network' and failure.get('error')=='net::ERR_ABORTED' and failure.get('resource_type')=='image','Only full QA image consumer cancellations may be retained with a verified body')
         actual=urlsplit(failure.get('url',''));query='&'.join(part for part in actual.query.split('&') if unquote(part.partition('=')[0])!='__wly_resource_retry' and part!='living-cors=1')
         canonical=urlunsplit((actual.scheme,actual.netloc,actual.path,query,actual.fragment));transfer=by_url.get(canonical)
@@ -96,7 +114,7 @@ def bounded_report(report,manifest,manifest_sha256,role):
             require(row.get('static_transfer_urls') and set(row['static_transfer_urls'])<=seen,'Controlled cold case lacks its actual transfer references')
             require(all(elapsed(row.get(key)) for key in ('seconds','completion_seconds','elapsed_seconds')) and row.get('under_two_seconds') is (row['seconds']<=2),'Controlled cold elapsed observations changed')
             cold_timings.append({key:row[key] for key in ('route','phone','round','seconds','completion_seconds','elapsed_seconds','under_two_seconds')})
-    return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin,'checked_at_beijing':report.get('checked_at_beijing'),'verified_at_beijing':report.get('verified_at_beijing'),'raw_failed_requests':raw_failed_requests,'raw_failed_requests_sha256':hashlib.sha256(json.dumps(raw_failed_requests,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf8')).hexdigest(),'canceled_consumers':canceled_consumers}
+    return {'objects':len(transfers),'body_gets':gets,'first_failures':first_failures,'transfer_timings':timings,'cold_timings':cold_timings,'run_seconds':report.get('seconds'),'transport_method':method,'transport_scope':scope,'cors_origin':origin,'checked_at_beijing':report.get('checked_at_beijing'),'verified_at_beijing':report.get('verified_at_beijing'),'raw_failed_requests':raw_failed_requests,'raw_failed_requests_sha256':hashlib.sha256(json.dumps(raw_failed_requests,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf8')).hexdigest(),'canceled_consumers':canceled_consumers,'external_runtime_observations':external_runtime_observations}
 
 def bounded_acceptance(manifest,manifest_sha256,instruction,sources,layout_acceptance=None,build_report=None,qa_plan=None):
     instruction=instruction.resolve();text=instruction.read_text('utf8')

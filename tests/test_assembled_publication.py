@@ -34,6 +34,12 @@ class PublicationGate(unittest.TestCase):
             else: self.assertTrue(builder.validate(self.site,self.report)['ready_to_publish'])
         return json.loads(self.report.read_text('utf8'))
     def test_complete_site(self): self.run_gate()
+    def test_gallery_full_image_is_a_required_resource(self):
+        page=self.site/'index.html'
+        page.write_text('<script id="page-data">{"screens":[{"shots":[{"src":"/thumbnail.webp","full":"/absent-original.webp"}]}]}</script>',encoding='utf8')
+        (self.site/'thumbnail.webp').write_bytes(b'fixture thumbnail')
+        result=self.run_gate(True)
+        self.assertIn('/absent-original.webp',{row['reference'] for row in result['missing_references']})
     def test_missing_lazy_import_and_anchor(self):
         (self.site/'index.html').write_text('<html><script src="/app.js"></script><img data-lazy-src="missing.avif"><a href="/404.html#absent">404</a></html>',encoding='utf8')
         (self.site/'app.js').write_text('import "./missing-runtime.js";',encoding='utf8')

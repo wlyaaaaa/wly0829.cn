@@ -22,12 +22,14 @@
  let requestId=0;
  async function load(url,width,options={}){
   frame.width=String(width);frame.height=String(options.initialHeight||options.height||1000);
-  const target=new URL(url,location.origin);target.searchParams.delete('audit');if(options.audit!==false)target.searchParams.set('audit','1');
+  const target=new URL(url,location.origin);target.searchParams.delete('audit');
   await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('route load timeout')),routeWait);frame.onload=()=>{clearTimeout(timer);resolve();};frame.src=target.href;});
   const win=frame.contentWindow,doc=win.document;
   for(let n=0;n<120&&!win.SiteAudit;n++)await sleep(50);
   if(!win.SiteAudit)throw Error('页面运行件未初始化');
-  await Promise.race([win.SiteAudit.ready(),sleep(decodeWait).then(()=>{throw Error('image decode timeout');})]);
+  const mediaReady=win.eval("(async()=>{loadFooter();await Promise.all(mediaImages.map(load));await Promise.all([...document.images].filter(i=>i.getAttribute('src')).map(i=>{i.loading='eager';return i.decode().catch(()=>{});}));await document.fonts.ready;await window.pageLiving?.ready;motion();const images=[...document.images].filter(i=>i.getAttribute('src'));await Promise.all(images.map(i=>{i.loading='eager';return i.decode().catch(()=>{});}));return {fonts:document.fonts.status,images:images.length,failed_images:images.filter(i=>!i.complete||!i.naturalWidth).map(i=>i.currentSrc||i.src)};})()");
+  const ready=await Promise.race([mediaReady,sleep(decodeWait).then(()=>{throw Error('image decode timeout');})]);
+  if(ready.failed_images.length)throw Error('image decode incomplete: '+ready.failed_images.join(', '));
   const phaseKey=['cockpit','computer-access','mcp'].includes(JSON.parse(doc.querySelector('#page-data').textContent).kind)?'b2StatusPhase':doc.querySelector('.typeset-live')?'statusPhase':null;
   if(phaseKey){
    const deadline=performance.now()+routeWait;while(!['ready','error'].includes(doc.body.dataset[phaseKey])){if(performance.now()>deadline)throw Error('status initial read did not settle');await sleep(50);}
@@ -178,7 +180,7 @@
   for(const [fx,fy] of points){let failure=null;
    for(let attempt=0;attempt<=2;attempt++){
     const dx=area.left+area.width*fx,dy=area.top+area.height*fy;win.scrollTo({top:dy-win.innerHeight*.45,behavior:'instant'});await new Promise(resolve=>win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)));
-    const connected=bound.isConnected,staleText=textMeta&&(!textNode?.isConnected||textNode.parentElement!==bound),now=connected?rect(bound):null,next=connected?currentArea():null,changed=!connected||staleText||bound.tagName!==tag||key(bound)!==classes||hotId&&bound.closest('[data-hot-id]')?.dataset.hotId!==hotId||rectError(now,previous)>.00001||phase()!==state||next&&rectError(next,area)>.00001;
+    const connected=bound.isConnected,staleText=textMeta&&(!textNode?.isConnected||textNode.parentElement!==bound),now=connected?rect(bound):null,next=connected?currentArea():null,changed=!connected||staleText||bound.tagName!==tag||key(bound)!==classes||hotId&&bound.closest('[data-hot-id]')?.dataset.hotId!==hotId||Math.max(Math.abs(now.width-previous.width),Math.abs(now.height-previous.height))>.00001||phase()!==state||next&&Math.max(Math.abs(next.width-area.width),Math.abs(next.height-area.height))>.00001;
     if(changed){if(rebound>=2){failure={reason:'target_rebind_limit'};break;}rebound++;const current=resolve();if(!current){failure={reason:'target_rebind_missing_or_nonunique'};break;}bound=current;const fresh=currentArea();if(!fresh){failure={reason:'current_content_range_missing'};break;}area=fresh;previous=rect(bound);state=phase();continue;}
     if(!next){failure={reason:'current_content_range_missing'};break;}area=next;break;
    }
@@ -297,6 +299,7 @@
  async function check(url,width,entry){
   const{win,doc}=await load(url,width),issues=[],geometryDiagnostics=[],geometrySemantics=[];
   const d=JSON.parse(doc.querySelector('#page-data').textContent);
+  if(!win.matchMedia('(prefers-reduced-motion:reduce)').matches)issues.push('static layout did not observe native reduced motion');
   for(const screen of d.screens||[])for(const part of screen.parts||[])part.content_occupancy=entry?.content_occupancy?.parts?.[part.image];
   if(win.innerWidth!==width)issues.push('viewport width '+win.innerWidth);
   if(!d.typeset)issues.push('route did not select typeset page');
@@ -377,7 +380,7 @@
    const grids=[...doc.querySelectorAll('.typeset-card-grid')].map(g=>{const css=win.getComputedStyle(g),columns=css.gridTemplateColumns.split(' '),gap=parseFloat(css.columnGap)||0,track=(g.clientWidth-(columns.length-1)*gap)/columns.length;return {cards:g.children.length,columns:columns.length,fills_track:[...g.children].every(c=>Math.abs(c.getBoundingClientRect().width-track)<1)};});
    if(d.page==='projects-home'&&(!grids.length||grids.some(g=>g.columns!==(width<768?1:2))))issues.push('project card grid columns');
    if(grids.some(g=>!g.fills_track))issues.push('project card does not fill grid track');
-  return {width,height:1000,route:url,images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,content_acceptance:content,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,geometry_diagnostics:geometryDiagnostics,geometry_semantics:geometrySemantics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
+  return {width,height:1000,route:url,browser_condition:win.matchMedia('(prefers-reduced-motion:reduce)').matches?'reduce':'no-preference',images:images.length,active_parts:parts,hotspots,live_slots:live,screenshot_slots:shots,content_acceptance:content,hit_checks:hitChecks,hit_diagnostics:hitDiagnostics,geometry_diagnostics:geometryDiagnostics,geometry_semantics:geometrySemantics,scroll_width:doc.documentElement.scrollWidth,ids,internal_targets:targets,grids,issues:[...new Set(issues)],status:issues.length?'fail':'pass'};
  }
  const effectNames=new Set(['cards','numbers','dots','arrows','screen_enter','seam','depth','update','ambient','back_top','footer_signature','navigation','viewer','brief','live','screenshots','compare','card_feedback']);
  const geometryKeys=['cards','numbers','dots','arrows'];
@@ -398,7 +401,7 @@
   // image decoding runs. Expand the real viewport after attaching observers.
   const {win,doc}=await load(url,width,{audit:false,initialHeight:1}),data=JSON.parse(doc.querySelector('#page-data').textContent),issues=[];
   const observed=new Set(),samples=[],sampleIds=new Set(),observedDots=new Set(),rules=await cssRules(doc);
-  const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null;
+  const counts=Object.fromEntries(geometryKeys.map(key=>[key,0]));let running=0,binding=true,nativeBound=true,backTopCheck=null,normalMedia=null;
   const stateObserved={normal_branch:new URL(win.location.href).searchParams.get('audit')!=='1'&&doc.body.dataset.audit!=='true',reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,hidden:doc.hidden};
   const capabilityCounts={cards:0,numbers:0,arrows:0,screenshots:0,card_feedback:0},partCapabilities=[];
   if(!data.typeset)issues.push('normal route did not select the current typeset page');
@@ -437,6 +440,9 @@
    frame.height='1000';win.scrollTo({top:0,behavior:'instant'});await sleep(180);
    const layoutDeadline=performance.now()+decodeWait;
    while(!win.eval("typeof resizing!=='undefined'&&!resizing&&typeof typesetReadingState!=='undefined'&&typesetReadingState.width===innerWidth&&typesetReadingState.height===innerHeight")){if(performance.now()>layoutDeadline)throw Error('normal effects viewport layout did not settle');await sleep(50);}
+   const normalImages=[...doc.images].filter(i=>i.getAttribute('src'));
+   await Promise.race([Promise.all(normalImages.map(i=>i.decode().catch(()=>{}))),sleep(decodeWait).then(()=>{throw Error('normal image decode timeout');})]);
+   normalMedia={images:normalImages.length,failed_images:normalImages.filter(i=>!i.complete||!i.naturalWidth).map(i=>i.currentSrc||i.src),bird_atlas:normalImages.filter(i=>(i.currentSrc||i.src).includes('/bird-atlas.')).map(i=>({src:i.currentSrc||i.src,loaded:i.complete&&i.naturalWidth>0,natural_width:i.naturalWidth,natural_height:i.naturalHeight}))};if(normalMedia.failed_images.length)issues.push('normal image decode incomplete: '+normalMedia.failed_images.join(', '));
    capture();
    const model=new Map(data.screens.map(screen=>[screen.id,screen]));
    for(const section of doc.querySelectorAll('.typeset-screen')){
@@ -491,7 +497,7 @@
    const top=doc.querySelector('.back-to-top');
    if(top&&typeof top.onclick==='function'){const max=Math.max(0,doc.documentElement.scrollHeight-win.innerHeight),dest=Math.min(max,win.innerHeight*.8);win.scrollTo({top:dest,behavior:'instant'});await sleep(80);const before=win.scrollY;backTopCheck={requested_scroll_y:dest,scroll_y_before:before,button_hidden:top.hidden,samples:[before]};top.click();for(let n=0;n<90&&win.scrollY>2;n++){await sleep(40);backTopCheck.samples.push(win.scrollY);}backTopCheck.scroll_y_after=win.scrollY;if(before>2&&win.scrollY<=2)observed.add('back_top');}
    capture();win.scrollTo({top:0,behavior:'instant'});
-   return {width:win.innerWidth,height:win.innerHeight,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,capability_counts:capabilityCounts,part_capabilities:partCapabilities,effects_capabilities:data.motion_capabilities,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
+   return {width:win.innerWidth,height:win.innerHeight,browser_condition:stateObserved.reduced_motion?'reduce':'no-preference',normal_media:normalMedia,normal_branch:stateObserved.normal_branch,reduced_motion:stateObserved.reduced_motion,hidden:stateObserved.hidden,new_geometry_bound:binding,geometry_counts:counts,capability_counts:capabilityCounts,part_capabilities:partCapabilities,effects_capabilities:data.motion_capabilities,running_animation_count:running,hotspot_css_feedback:cssFeedback,hotspot_count:hotspots.length,native_buttons_bound:nativeBound,hero_video_attached:!!doc.querySelector('video.hero-video'),video_spec:data.video||null,motion_appearance:win.SiteMotionAppearance||null,preserved:[...observed],back_top_check:backTopCheck,samples,issues:unique(issues)};
   }finally{win.clearInterval(sampling);observer.disconnect();}
  }
  async function checkEffects(entry){
@@ -573,7 +579,7 @@
    beforeScroll={...videoPosition(win,doc,section),playing:started,phase:win.SiteHero?.phase||null,current_time:v?.currentTime||0,video_paused:v?.paused??null,video_hidden:v?.hidden??null};
   }
   const placement=caseName==='offscreen'?await positionVideo(win,doc,section,true):visiblePosition;
-  const gate={case:caseName,width:win.innerWidth,height:win.innerHeight,expected_mounted:expectedPlaying,expected_playing:expectedPlaying,mounted:false,playing:false,attached:false,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:false,phase:win.SiteHero?.phase||null,time_advanced:false,status:'fail',issues:[]};
+  const gate={case:caseName,width:win.innerWidth,height:win.innerHeight,browser_condition:win.matchMedia('(prefers-reduced-motion:reduce)').matches?'reduce':'no-preference',expected_mounted:expectedPlaying,expected_playing:expectedPlaying,mounted:false,playing:false,attached:false,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:false,phase:win.SiteHero?.phase||null,time_advanced:false,status:'fail',issues:[]};
   const spec=entry.video_expected;
   gate.scroll_placement=placement;gate.before_scroll=beforeScroll;
   if(!placement.stable)gate.issues.push('native video viewport/scroll geometry did not settle');
@@ -611,7 +617,7 @@
   const observed=new Promise((resolve,reject)=>{
    listener=()=>{if(!doc.hidden)return;
     const rect=section?.getBoundingClientRect(),style=video?win.getComputedStyle(video):null;
-    const gate={case:'document_hidden',width:win.innerWidth,height:win.innerHeight,expected_mounted:false,expected_playing:false,mounted:!!video&&!video.hidden&&style?.display!=='none'&&!doc.hidden,playing:!!video&&!video.hidden&&!video.paused&&!video.ended&&video.readyState>=2,attached:!!video,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:!!rect&&!!section.getClientRects().length&&rect.bottom>0&&rect.top<win.innerHeight,phase:runtime?.phase||null,time_advanced:false,current_time_before:video?.currentTime||0,current_time_after:null,video_paused:video?video.paused:null,video_hidden:video?video.hidden:null,method:'navigation_visibilitychange',visibility_event_observed:true,visibility_state:doc.visibilityState,source_url:source,endpoint:'about:blank',parent_hidden:document.hidden,before_navigation:before,status:'fail',issues:[]};
+    const gate={case:'document_hidden',width:win.innerWidth,height:win.innerHeight,browser_condition:win.matchMedia('(prefers-reduced-motion:reduce)').matches?'reduce':'no-preference',expected_mounted:false,expected_playing:false,mounted:!!video&&!video.hidden&&style?.display!=='none'&&!doc.hidden,playing:!!video&&!video.hidden&&!video.paused&&!video.ended&&video.readyState>=2,attached:!!video,hidden:doc.hidden,reduced_motion:win.matchMedia('(prefers-reduced-motion:reduce)').matches,portrait:win.matchMedia('(orientation:portrait)').matches,section_visible:!!rect&&!!section.getClientRects().length&&rect.bottom>0&&rect.top<win.innerHeight,phase:runtime?.phase||null,time_advanced:false,current_time_before:video?.currentTime||0,current_time_after:null,video_paused:video?video.paused:null,video_hidden:video?video.hidden:null,method:'navigation_visibilitychange',visibility_event_observed:true,visibility_state:doc.visibilityState,source_url:source,endpoint:'about:blank',parent_hidden:document.hidden,before_navigation:before,status:'fail',issues:[]};
     clearTimeout(timer);doc.removeEventListener('visibilitychange',listener);resolve(gate);
    };
    doc.addEventListener('visibilitychange',listener);
@@ -644,7 +650,9 @@
   const name=names[i],p=build.pages[name],checks=[];
   control.page=name;
   state.textContent=`正在验收 ${i+1}/${names.length}：${name}`;
+  if(!await environment('reduced_motion',true))throw Error('native static layout condition unavailable');
   if(p.url)for(const width of [1440,390])try{checks.push(await check(p.url,width,p));}catch(e){checks.push({width,status:'fail',issues:[String(e)]});}
+  if(!await environment('reduced_motion',false))throw Error('native normal condition was not restored');
   const issues=[...(p.issues||[])];
   const effects=p.url?await checkEffects(p):{status:'fail',expected:p.effects_expected||[],preserved:[],issues:['built route is missing'],evidence:{normal_branch:false,new_geometry_bound:false,geometry_sha256:null,geometry_counts:{cards:0,numbers:0,dots:0,arrows:0},running_animation_count:0,hotspot_css_feedback:false,native_buttons_bound:false}};
   let videoChecks={status:'fail',issues:[],files:[],gates:[],mounted:false};

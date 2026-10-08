@@ -451,7 +451,7 @@ def rule_pin_findings(output,files):
 def nested_refs(value, navigation_enabled=True):
     if isinstance(value, dict):
         for k, v in value.items():
-            if isinstance(v, str) and k in {'src', 'avif', 'href', 'poster', 'mask', 'script_bundle', 'style_bundle', 'repo_url'}:
+            if isinstance(v, str) and k in {'src', 'full', 'avif', 'href', 'poster', 'mask', 'script_bundle', 'style_bundle', 'repo_url'}:
                 if k == 'href' and not navigation_enabled: continue
                 # Screenshot metadata stores basenames; the runtime prepends assets/.
                 yield ('assets/'+v if k == 'src' and v.startswith('screenshot-') else v), k == 'href'
