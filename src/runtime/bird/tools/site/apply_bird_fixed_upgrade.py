@@ -21,7 +21,7 @@ def apply(site,packet,write=False,engine_url=None,bird_url=None,config_urls=None
  rows=[];updates={}
  for row in refs['mounted']:
   if row['page'] not in selected:continue
-  rel=b.relative(row['route']);p=site/rel;before=source_path(site,rel).read_bytes();cfg=config_urls.get(row['page'],row['config'])
+  rel=b.relative(row['route']).as_posix();p=site/rel;before=source_path(site,rel).read_bytes();cfg=config_urls.get(row['page'],row['config'])
   if refs.get('illustration_bindings'):
    data=json.loads(b.DATA.search(before.decode('utf-8'))[1]);parts=data['screens'][0]['parts']
    if data.get('page')!=row['page']:raise ValueError('实际首屏页名不符：'+row['page'])
