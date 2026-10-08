@@ -45,7 +45,7 @@ if ($prefix -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._/-]*$' -or @($prefix.Split('/') 
 $retentionScript = Join-Path $PSScriptRoot 'oss-retention.py'
 $uploadLockOwned = $false
 $uploadLockTool = $ShortLockTool
-if (-not $LockHolder) { $LockHolder = "OSS-upload/$PID" }
+if (-not $LockHolder) { throw 'Upload or remote verification requires -LockHolder containing the actual harness and real task id.' }
 try {
 if ($Upload -or $VerifyRemote) {
     $lockView = (& pwsh -NoProfile -File $uploadLockTool -Mode Inspect -Name wly0829-publication -Json) | ConvertFrom-Json

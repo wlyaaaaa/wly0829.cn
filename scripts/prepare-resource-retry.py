@@ -197,7 +197,7 @@ def rollback(baseline,output,report):
             restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
             if info.get('initial_stylesheet_attribute'):restored=restored.replace(info['initial_stylesheet_attribute'].encode(),b'')
         bodies[rel]=restore_previous_recovery(restored,info.get('previous_html_restore',{}).get(rel,[]))
-    after=write_changes(baseline, output, bodies);rid=identity(after,manifest);manifest.update(files=after,release_id=rid, copy_asset=builder.copy_release_asset)
+    after=write_changes(baseline, output, bodies, copy_asset=builder.copy_release_asset);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     result={'status':'prepared_static_rollback','release_id':rid,'output':str(output),'unused_runtime_retained':True,'published':False};Path(report).write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
 def main():

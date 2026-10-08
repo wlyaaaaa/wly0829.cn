@@ -115,16 +115,26 @@ function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
 }
 function OssBrowserNetwork([string]$Mode, [string]$Staged) {
     $output=Join-Path $RunRoot "oss-browser-$Mode.json"
+    $fresh = -not (Test-Path -LiteralPath $output)
     $arguments=@('scripts/verify-oss-browser-network.py','--preparation',$OssPreparation,'--release',$Staged,
         '--mode',$Mode,'--output',$output,'--task-cache',(Join-Path $RunRoot 'browser-network-temp'))
     & python @arguments
     $code=$LASTEXITCODE
+    if ($fresh -and $code -eq 2 -and $Mode -eq 'live' -and (Test-Path -LiteralPath $output) -and (ReadJson $output).failure_class.retryable) {
+        $firstOutput = $output
+        $output = Join-Path $RunRoot 'oss-browser-live-retry.json'
+        $fresh = -not (Test-Path -LiteralPath $output)
+        $arguments[[array]::IndexOf($arguments, '--output') + 1] = $output
+        & python @arguments '--retry-failed' $firstOutput
+        $code = $LASTEXITCODE
+    }
     $state["oss_browser_$Mode"]=[ordered]@{ exit=$code; report=$output; status=$(if($code -eq 0){'pass'}else{'fail'}) }
     SaveState
     if($code -ne 0){
         if($Mode -eq 'live') {
-            $state.status='online_native_network_failed'
-            $script:confirmedPublicationFailure='Mandatory final-origin public Chrome network gate failed; restore this publication through the exact existing rollback path.'
+            $failure = if ($fresh -and $code -eq 2 -and (Test-Path -LiteralPath $output)) { (ReadJson $output).failure_class.kind } else { 'unknown' }
+            $state.status = if ($failure -eq 'confirmed') { 'online_native_network_failed' } else { 'online_native_network_unconfirmed' }
+            if ($failure -eq 'confirmed') { $script:confirmedPublicationFailure='Mandatory final-origin public Chrome network gate failed; restore this publication through the exact existing rollback path.' }
             SaveState
         }
         throw "Mandatory OSS $Mode browser network gate failed. Actual events: $output"

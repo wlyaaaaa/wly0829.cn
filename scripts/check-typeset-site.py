@@ -18,6 +18,8 @@ import time
 from urllib.request import urlopen
 from urllib.parse import unquote, urlsplit
 
+import prepare_native_readability as native_readability
+
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 spec = importlib.util.spec_from_file_location('release_asset_builder', HERE/'build-assembled-site.py')
@@ -25,6 +27,7 @@ builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
 sys.path.insert(0, str(ROOT / 'src/typeset'))
 from engine import render as renderer, assets
+from engine.content import bound_json
 
 def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def load_state(path): return json.loads(path.read_text('utf8')) if path.is_file() else {}
@@ -37,11 +40,11 @@ def fingerprints(lock):
     environment = {key: lock[key] for key in ('args', 'python_packages')}
     environment['binaries'] = [row['sha256'] for row in [lock['chrome'], *lock['fonts']]]
     for name, source in renderer.page_sources().items():
-        page = json.loads(Path(source).read_text('utf8'))
+        page = bound_json(source)
         for screen in page['screens']: screen['screenshots'] = [] if screen['id'] in page.get('withdrawn_screenshot_screens', []) else screen.get('screenshots', [])
         if not page.get('url') and name != '404': continue
         layout = ROOT / 'sources/pages' / name / 'layout.json'
-        spec = json.loads(layout.read_text('utf8'))
+        spec = bound_json(layout)
         spec = [{k: v for k, v in row.items() if k not in ('source_image', 'source_images')} for row in spec]
         rows = [r for s in page['screens'] for r in library.get(s['id'], [])]
         content = json.loads(json.dumps([page, spec, rows]))
@@ -159,6 +162,65 @@ def file_proofs(paths):
     return {str(p): digest(p) for root in paths for p in (root.rglob('*') if root.is_dir() else [root]) if p.is_file()}
 
 
+def fp_algorithm_identity():
+    import inspect
+    return {'check_script_sha256': digest(Path(__file__)),
+            'render_dependencies_sha256': hashlib.sha256(inspect.getsource(renderer.render_dependencies).encode()).hexdigest()}
+
+
+def baseline_seed(path, baseline=None):
+    import runpy
+    seed = path if isinstance(path, dict) else load_state(path)
+    if seed.get('schema') not in ('wly.typeset-baseline-seed.v1', 'wly.typeset-published-baseline.v1') or seed.get('status') != 'pass':
+        raise ValueError('Formal baseline seed requires completed verified publication evidence')
+    def evidence(row, parse=True):
+        target = Path(row['path'])
+        if digest(target) != row['sha256']: raise ValueError('Baseline evidence SHA changed: '+str(target))
+        return load_state(target) if parse else None
+    publication, online = evidence(seed['publication_state']), evidence(seed['online_readback'])
+    if (publication.get('status') != 'published' or publication.get('pushed_commit') != seed['published_commit'] or publication.get('automatic_rollback')
+            or Path(publication['readback']['report']).resolve() != Path(seed['online_readback']['path']).resolve()):
+        raise ValueError('Baseline publication is not the exact completed pushed/readback generation')
+    git_bytes = subprocess.check_output(['git', 'show', seed['published_commit']+':site-release/release-manifest.json'], cwd=ROOT)
+    published = json.loads(git_bytes)
+    if (online.get('schema') != 'wly.typeset-online-readback.v1' or online.get('status') != 'pass' or online.get('release_id') != published['release_id']
+            or online.get('manifest_sha256') != hashlib.sha256(git_bytes).hexdigest() or publication.get('release_id') != published['release_id']):
+        raise ValueError('Baseline online PASS does not bind the exact Git publication')
+    raw_root = Path(baseline or seed['raw_root']).resolve()
+    if digest(raw_root/'release-manifest.json') != seed['raw_manifest_sha256']: raise ValueError('Formal raw baseline manifest changed')
+    raw = runpy.run_path(str(HERE/'prepare-audit-release.py'))['verify_input_baseline'](raw_root, seed['published_commit'], True)
+    if raw['release_id'] != seed['raw_release_id'] or seed['evaluator'] != fp_algorithm_identity(): raise ValueError('Raw release or fingerprint evaluator identity differs')
+    if not all(re.fullmatch(r'[0-9a-f]{40,64}', seed[name]) for name in ('source_commit', 'evaluator_commit')): raise ValueError('Formal source/evaluator commit evidence is missing')
+    required_refs = ('source_build_report', 'source_snapshot', 'source_binding', 'environment', 'evaluator_migration') if seed['schema'] == 'wly.typeset-baseline-seed.v1' else ('source_build_report', 'source_snapshot')
+    for name in required_refs: evidence(seed['producer_refs'][name], False)
+    if seed['schema'] == 'wly.typeset-baseline-seed.v1':
+        if not seed['legacy_shell_files']: raise ValueError('Frozen baseline legacy evidence is missing')
+        for relative, proof in seed['legacy_shell_files'].items():
+            target = Path(seed['legacy_shell_root'])/relative
+            if digest(target) != proof['sha256'] or target.stat().st_size != proof['bytes']: raise ValueError('Frozen baseline legacy changed: '+relative)
+    if not seed['page_keys'] or any(set(values) != {'render', 'assembly', 'shell'} or not all(isinstance(value, str) and re.fullmatch(r'[0-9a-f]{64}', value) for value in values.values()) for values in seed['page_keys'].values()):
+        raise ValueError('Formal baseline page fingerprint components are incomplete')
+    return seed, raw_root
+
+
+def page_scope(parts, previous, pages=None, all_pages=False, rules=(), resumed=()):
+    reasons = {}
+    if set(previous)-set(parts): raise ValueError('Source pages retired; baseline inheritance requires review: '+str(sorted(set(previous)-set(parts))))
+    for name, values in parts.items():
+        old = previous.get(name)
+        if old is None: why = ['new_page']
+        elif isinstance(old, dict): why = [key+'_changed' for key in values if values[key] != old.get(key)]
+        else: why = ['inputs_changed'] if content_key(list(values.values())) != old else []
+        if why: reasons[name] = why
+    selected = sorted(parts if all_pages else reasons) if pages is None else list(pages)
+    required = set(reasons) | (set(rules) if set(selected) & set(rules) else set()) | set(resumed)
+    outside = required-set(selected)
+    if pages is not None and outside or resumed and set(resumed) != set(selected):
+        raise ValueError('required_outside_scope: '+str({name: reasons.get(name, ['rule_group_or_resume']) for name in sorted(outside or set(selected)-set(resumed))}))
+    if pages is None: selected = sorted(set(selected) | required)
+    return selected, {name: reasons.get(name, ['requested_or_rule_group']) for name in selected}
+
+
 def resume_readback_only(published, expected, invalid, online_release, remote_main):
     attempted = bool(published.get('pushed_commit')) or published.get('status') in ('push_requested', 'push_result_unknown')
     bound = not invalid and published.get('release_id') and published['release_id'] == expected.get('release_id')
@@ -175,6 +237,8 @@ def main():
         parser.add_argument('--' + name, type=Path, default=ROOT / '.publish' / default)
     parser.add_argument('--inventory', type=Path, default=HERE.parent/'.publish/inventory/screens.jsonl')
     parser.add_argument('--state-root', type=Path, help='Persistent ledger and complete page artifacts; defaults to the shared Git directory')
+    parser.add_argument('--baseline-seed', type=Path, help='Verified formal raw/source fingerprint handoff; overrides unpublished local ledgers')
+    parser.add_argument('--native-routes', nargs='+', help='Existing native project route bodies to refresh within this batch')
     parser.add_argument('--jobs', type=int, default=3)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--pages', nargs='+', help='Only replace and verify the selected page routes')
@@ -193,9 +257,24 @@ def main():
     durable = args.state_root.resolve() if args.state_root else (ROOT/common).resolve()/'typeset-state'
     durable.mkdir(parents=True, exist_ok=True)
     assets.CACHE = str(durable/'derived-assets')
-    current = fingerprints(lock); state_path = run/'publication-state.json'
-    ledger_path = durable/('published-page-fingerprints.json' if args.publish else 'page-fingerprints.json')
-    previous = load_state(ledger_path)
+    state_path = run/'publication-state.json'
+    saved = load_state(state_path)
+    published = load_state(run/'publisher/publication-state.json')
+    attempted = bool(published.get('pushed_commit') or published.get('requested_commit')) or published.get('status') in (
+        'published', 'push_requested', 'push_result_unknown')
+    if attempted and (not args.resume or not saved.get('baseline_seed') or not saved.get('source_commit') or not saved.get('evaluator')):
+        raise ValueError('Published/push-attempted batch requires its original --resume inputs; use a fresh --run-root for new work')
+    state = saved if args.resume else {}
+    input_paths = {name: str(value.resolve()) if value else None for name, value in vars(args).items()
+                   if isinstance(value, Path) or name == 'baseline_seed'}
+    current = fingerprints(lock)
+    formal = load_state(durable/'published-page-fingerprints.json')
+    seed_path = state.get('baseline_seed') or args.baseline_seed or (durable/'published-page-fingerprints.json' if formal.get('schema') == 'wly.typeset-published-baseline.v1' else None)
+    seed, seeded_raw = baseline_seed(seed_path, state.get('baseline') if args.resume else args.baseline if args.baseline_seed else None) if seed_path else (None, None)
+    if not seed: raise ValueError('A verified formal baseline seed or published ledger is required; candidate/plain ledgers cannot authorize inheritance')
+    if not args.resume and seed and args.baseline_seed and formal.get('schema') == 'wly.typeset-published-baseline.v1' and (formal['published_commit'], formal['raw_manifest_sha256']) != (seed['published_commit'], seed['raw_manifest_sha256']):
+        raise ValueError('Seed was superseded by a formal publication; use its raw/updated handoff: '+formal['raw_root'])
+    previous = dict(seed['page_keys']); args.baseline = seeded_raw
     # Existing preparation recipes own the static inputs consumed by assembly.
     import importlib.util
     spec = importlib.util.spec_from_file_location('assembly_inputs', HERE/'prepare-creative-release.py')
@@ -212,24 +291,31 @@ def main():
         'typeset-live-display.js', 'live-*-ui.*', 'prepare-toc-consistency.py', 'toc-consistency.*', 'release_delta.py') for p in HERE.glob(pattern)]
     assembly_files += [ROOT/'app/computer-access-model.js']
     recipe = json.loads((ROOT/'config/build.json').read_text('utf8'))
-    page_keys = {name: content_key([key, assembly_key(name, assembly_files, recipe), shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid)])
+    parts = {name: dict(render=key, assembly=assembly_key(name, assembly_files, recipe), shell=shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid))
                  for name, key in current.items()}
-    state = load_state(state_path) if args.resume else {}
-    selected = args.pages or (sorted(current) if args.all or set(previous)-current.keys() else [p for p in current if previous.get(p) != page_keys[p]])
+    page_keys = {name: content_key(list(values.values())) for name, values in parts.items()}
+    if args.resume and args.native_routes is None: args.native_routes = state.get('native_routes')
+    native_inputs = native_readability.source_inputs(lambda p: {'sha256': digest(p), 'bytes': p.stat().st_size}) if args.native_routes else {}
+    native_key = content_key([args.native_routes or [], native_inputs])
     rule_pages = {r['page'] for r in json.loads((ROOT/'config/assembled-rules-pin.json').read_text('utf8'))['excerpt_contract']['excerpts'].values()} | {'rules-home'}
-    if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
-    if state: selected = sorted(set(state['selected_pages']) | set(selected))
+    requested = state.get('selected_pages') if args.resume and args.pages is None and not args.all else args.pages
+    selected, selection_reasons = page_scope(parts, previous, requested, args.all, rule_pages, state.get('selected_pages', ()))
     if set(selected) - current.keys(): parser.error('Unknown site pages: ' + ', '.join(set(selected)-current.keys()))
     if not selected and state_path.is_file():
         last = json.loads(state_path.read_text('utf8'))
         outputs = [run/'generation'/name for name in ('dist','build-report.json','motion-geometry.json','typeset-out')] + [args.typeset_root, Path(last['baseline']), args.legacy_site]
-        if last['stages']['generation'].get('outputs') != file_proofs(outputs): selected = sorted(current)
+        if last['stages']['generation'].get('outputs') != file_proofs(outputs):
+            selected = last['selected_pages']; selection_reasons = {name: ['outputs_invalidated'] for name in selected}
+    if args.native_routes and not selected: raise ValueError('Native body updates require an explicit typeset page batch')
     if not selected: print('No page inputs changed; no generation or publication.', flush=True); return 0
-    for name in set(current)-set(selected)-{'home'}:
-        if not reuse_page(name, current[name], args.typeset_root, durable): selected.append(name)
-    if set(selected) & rule_pages: selected = sorted(set(selected) | rule_pages)
-    invalid = state.get('fingerprints') != page_keys or state.get('selected_pages') != selected
-    state.update(schema='wly.typeset-publication.v1', selected_pages=selected, status='running', fingerprints=page_keys)
+    invalid = state.get('fingerprints') != page_keys or state.get('selected_pages') != selected or state.get('native_key') != native_key
+    if attempted and (invalid or state.get('input_paths') != input_paths or state['evaluator'] != fp_algorithm_identity()):
+        raise ValueError('Published/push-attempted batch inputs or scope changed; use a fresh --run-root')
+    source_commit = state.get('source_commit') if not invalid else None
+    source_commit = source_commit or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    evaluator = fp_algorithm_identity()
+    state.update(schema='wly.typeset-publication.v1', selected_pages=selected, selection_reasons=selection_reasons, status='running', fingerprints=page_keys,
+                 baseline_seed=seed, baseline=str(seeded_raw), source_commit=source_commit, evaluator=evaluator, input_paths=input_paths, native_routes=args.native_routes, native_key=native_key)
     state.setdefault('stages', {name: {'status': 'pending'} for name in ('inputs', 'generation', 'checks', 'publication', 'readback')})
     def save():
         temp = state_path.with_suffix('.tmp'); temp.write_text(json.dumps(state, ensure_ascii=False, indent=2)+'\n', encoding='utf8'); temp.replace(state_path)
@@ -247,6 +333,23 @@ def main():
             record.update(status='failed', failure=str(error)); raise
         finally:
             record.update(seconds=round(time.monotonic()-begin, 3), ended_at_beijing=beijing_now()); save()
+    def finalize_publication():
+        publication_path = run/'publisher/publication-state.json'; publication = load_state(publication_path)
+        if publication.get('status') != 'published': raise ValueError('Formal ledger requires the publisher to have actually published')
+        online_path = Path(publication['readback']['report']); raw_root = run/'generation/dist'; raw_manifest = load_state(raw_root/'release-manifest.json')
+        if formal.get('schema') == 'wly.typeset-published-baseline.v1' and (formal['published_commit'], formal['raw_manifest_sha256']) == (publication['pushed_commit'], digest(raw_root/'release-manifest.json')):
+            baseline_seed(formal)
+            return
+        completed = dict(schema='wly.typeset-published-baseline.v1', status='pass', page_keys=parts, source_commit=source_commit, evaluator_commit=source_commit, evaluator=evaluator,
+            published_commit=publication['pushed_commit'], raw_root=str(raw_root), raw_release_id=raw_manifest['release_id'], raw_manifest_sha256=digest(raw_root/'release-manifest.json'),
+            publication_state={'path':str(publication_path), 'sha256':digest(publication_path)}, online_readback={'path':str(online_path), 'sha256':digest(online_path)},
+            producer_refs={
+                'source_build_report':{'path':str(run/'generation/build-report.json'), 'sha256':digest(run/'generation/build-report.json')},
+                'source_snapshot':{'path':str(run/'generation/input-snapshot/snapshot.json'), 'sha256':digest(run/'generation/input-snapshot/snapshot.json')}})
+        baseline_seed(completed)
+        target = durable/'published-page-fingerprints.json'
+        temp = target.with_suffix('.tmp'); temp.write_text(json.dumps(completed, sort_keys=True), encoding='utf8'); temp.replace(target)
+    save()
     if args.resume:
         with urlopen('https://wly0829.cn/release-manifest.json', timeout=30) as response:
             state['remote_read_before_resume'] = re.search(r'"release_id"\s*:\s*"([a-f0-9]{64})"', response.read(2048).decode('utf8', 'replace'))[1]
@@ -261,8 +364,12 @@ def main():
             subprocess.run([sys.executable, str(HERE/'check-site-ui.py'), '--root', str(run/'generation/dist'),
                 '--output', str(run/'resume-ui.json'), '--pages', 'cockpit', '--chrome', lock['chrome']['path']], check=True, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             state['stages']['checks']['resume_ui'] = {'path': str(run/'resume-ui.json'), 'sha256': digest(run/'resume-ui.json')}
-            state['status'] = 'pass'; state['stages']['readback'].update(status='pass', outputs=file_proofs([run/'resume-readback.json'])); state['stages']['publication'].update(status='pass'); save()
+            if published.get('status') == 'published':
+                shutil.copyfile(run/'generation/motion-geometry.json', run/'current-geometry.json')
+                finalize_publication()
+            state['status'] = 'pass'; state['stages']['readback'].update(status='pass', outputs=file_proofs([run/'resume-readback.json'])); save()
             print('Existing publication read back; no repeat publication.'); return 0
+        if attempted: raise ValueError('Push-attempted batch is readback-only; recovery did not confirm this publication')
     work = run/'generation'
     cache = run / 'browser-cache'
     cache.mkdir(exist_ok=True)
@@ -271,7 +378,8 @@ def main():
     stages = []
     state['operations'] = stages
     started = time.monotonic()
-    native = [p for p in selected if p != 'home'] or ['how']; selection = ['--pages', *native]
+    native = [p for p in selected if p != 'home']; selection = ['--pages', *native]
+    if not native: raise ValueError('Home-only native generation is unavailable; refusing to add how outside scope')
     snapshot = work / 'input-snapshot'
     project = bool(set(native) & rule_pages)
     inventory = work/'projection/projected-inventory.jsonl' if project else snapshot/'typeset-inventory/screens.jsonl'
@@ -281,7 +389,8 @@ def main():
     reading_path = run/'reading.json'
     ui_path = run/'ui-verification.json'
     geometry = work / 'motion-geometry.json'
-    baseline = Path(state['baseline']) if state.get('baseline') else args.baseline.resolve() if args.all or not (run/'current-site').is_dir() else run/'current-site'
+    baseline = seeded_raw
+    if seed and state.get('baseline') and Path(state['baseline']).resolve() != baseline: raise ValueError('Resume raw baseline differs from the formal handoff')
 
     def execute(script, parameters, allow_failure=False):
         phase = Path(script).stem
@@ -355,10 +464,10 @@ def main():
     try:
         with phase('inputs', [run/'input-plan.json']) as active:
             if active:
-                if baseline == run/'current-site': baseline = Path(shutil.move(baseline, run/('retained-site-'+str(time.time_ns()))))
                 state['baseline'] = str(baseline); (run/'input-plan.json').write_text(json.dumps(current, sort_keys=True), encoding='utf8')
         with phase('generation', [work/'dist', report, geometry, work/'typeset-out', args.typeset_root, baseline, args.legacy_site]) as active:
             if active:
+                if native_inputs and native_readability.source_inputs(lambda p: {'sha256': digest(p), 'bytes': p.stat().st_size}) != native_inputs: raise ValueError('Native source inputs changed before generation')
                 if work.exists(): shutil.move(work, run/('retained-'+str(time.time_ns())))
                 work.mkdir()
                 from playwright.sync_api import sync_playwright
@@ -375,7 +484,8 @@ def main():
                     browser.close()
                 execute('inventory.py', [])
                 execute('snapshot-typeset-inputs.py', ['--typeset-root', args.typeset_root.resolve(), '--producer-root', ROOT/'src/typeset',
-                    '--inventory', args.inventory.resolve(), '--output', snapshot, '--pages', *sorted(set(current)-{'home'})])
+                    '--inventory', args.inventory.resolve(), '--output', snapshot, '--pages', *native,
+                    '--source-only', ROOT/'sources/pages/how/page.json'])
                 if project:
                     execute('prepare-rule-public-projection.py', ['--typeset-root', snapshot/'typeset-out', '--page-root', snapshot/'sources',
                         '--engine-root', snapshot/'typeset-proto', '--inventory', snapshot/'typeset-inventory/screens.jsonl', '--output', work/'projection'])
@@ -393,8 +503,9 @@ def main():
                 execute('build-typeset-site.py', ['--typeset-root', work/'typeset-out', '--inventory', inventory,
                     '--geometry', geometry, '--baseline', baseline, '--legacy-site', args.legacy_site.resolve(), '--asset-cache', args.asset_cache.resolve(),
                     '--reuse-asset-cache', '--output', work/'dist', '--report', report, '--creative-preparation', ROOT/'config/build.json',
-                    '--live-ui-preparation', ROOT/'config/live-ui.json', *selection] + (['--rule-public-projection', work/'typeset-out/rule-public-projection.json'] if project else []))
+                    '--live-ui-preparation', ROOT/'config/live-ui.json', *selection] + (['--rule-public-projection', work/'typeset-out/rule-public-projection.json'] if project else []) + (['--native-routes', *args.native_routes] if args.native_routes else []))
                 if fingerprints(lock) != current: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
+                if native_inputs and native_readability.source_inputs(lambda p: {'sha256': digest(p), 'bytes': p.stat().st_size}) != native_inputs: raise ValueError('Native source inputs changed during generation')
                 current_recipe = json.loads((ROOT/'config/build.json').read_text('utf8'))
                 if any(page_keys[name] != content_key([key, assembly_key(name, assembly_files, current_recipe),
                         shell_key(name, args.legacy_site.resolve(), args.baseline.resolve(), module.hybrid)]) for name, key in current.items()):
@@ -447,11 +558,9 @@ def main():
                 execute('prepare-typeset-release.py', ['readback', '--release', ROOT/'site-release', '--output', run/'online-readback.json', '--previous-report', previous_report])
         if not args.publish:
             for name in ('publication','readback'): state['stages'][name].update(status='skipped', reason='Publication not requested')
-        if (run/'current-site').exists(): shutil.move(run/'current-site', run/('retained-site-'+str(time.time_ns())))
-        shutil.copytree(work/'dist', run/'current-site', copy_function=builder.copy_release_asset); shutil.copyfile(geometry, run/'current-geometry.json')
-        previous.update({p: page_keys[p] for p in selected})
-        temp = ledger_path.with_suffix('.tmp'); temp.write_text(json.dumps(previous, sort_keys=True), encoding='utf8'); temp.replace(ledger_path)
-        if args.publish: (durable/'page-fingerprints.json').write_bytes(ledger_path.read_bytes())
+        shutil.copyfile(geometry, run/'current-geometry.json')
+        if args.publish:
+            finalize_publication()
         state['status'] = result['status'] = 'pass'; save()
     except Exception as error:
         state['status'] = result['status'] = 'error'; save()

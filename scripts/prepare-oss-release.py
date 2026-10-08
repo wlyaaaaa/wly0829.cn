@@ -615,20 +615,20 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
     rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
     previous = None
-    if not full_upload:
-        if previous_manifest:
-            try:
-                previous = verify_manifest(read(previous_manifest))
-            except (OSError, ValueError, KeyError, TypeError) as error:
-                raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
-        elif not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
-            spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
-            retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
-            predecessor = retention.predecessor()
-            if predecessor and predecessor.get('oss'):
-                previous = verify_manifest(predecessor)
-        if previous is None:
-            raise ValueError('Previous OSS manifest is required; select --full-upload explicitly for a full upload')
+    if previous_manifest:
+        try:
+            previous = verify_manifest(read(previous_manifest))
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            raise ValueError('Previous OSS manifest cannot be verified: '+str(previous_manifest)+': '+str(error)) from error
+    elif not full_upload and not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
+        spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
+        retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
+        predecessor = retention.predecessor()
+        if predecessor and predecessor.get('oss'):
+            previous = verify_manifest(predecessor)
+    if not full_upload and previous is None:
+        raise ValueError('Previous OSS manifest is required; select --full-upload explicitly for a full upload')
+    if full_upload: previous = None
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     while rewriter.retained:

@@ -759,6 +759,7 @@ def main():
     prepare.add_argument('--rollback-ref')
     verify = commands.add_parser('verify'); verify.add_argument('--output',type=Path,required=True)
     verify.add_argument('--content-report',type=Path)
+    verify.add_argument('--local-assets',type=Path)
     verify.add_argument('--oss-preparation',type=Path,help='Bind the GitHub deployment budget to this sealed split while checking the complete source')
     verify.add_argument('--public-repos-from-github',action='store_true')
     verify.add_argument('--confirm-download-over-5gb',action='store_true')
@@ -769,8 +770,9 @@ def main():
     if args.command == 'restore': print(restore_git(args.ref,args.output)); return
     if args.command == 'verify':
         manifest = verify_release(args.output)
-        if args.public_repos_from_github: builder.load_public_repos()
-        if args.content_report or args.check_sealed_content: validate_content(args.output,args.content_report,args.oss_preparation,confirmed=args.confirm_download_over_5gb,seal_only=args.check_sealed_content,previous_report=args.previous_content_report)
+        if args.public_repos_from_github or args.local_assets: builder.load_public_repos()
+        report = args.content_report or (args.output.parent/'local-content-gate.json' if args.local_assets else None)
+        if report or args.check_sealed_content: validate_content(args.output,report,args.oss_preparation,local_assets=args.local_assets,confirmed=args.confirm_download_over_5gb,seal_only=args.check_sealed_content,previous_report=args.previous_content_report)
         print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
     approvals = read(args.approvals); states = read(args.status)['pages']; report = read(args.candidate_report); proof = report.get('input',{})
     candidate_files = report.get('output_files')

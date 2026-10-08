@@ -162,6 +162,20 @@ def summarize(rows, asset_base):
             'page_errors': sum(len(row.get('page_errors', [])) for row in rows)}
 
 
+def failure_classification(report, manifest=None):
+    rows = report.get('pages', [])
+    if (report.get('schema') != SCHEMA or not rows or report.get('error') or not report.get('profile_cleanup', {}).get('verified')
+            or len(rows) != len(report.get('routes', [])) or {row.get('route') for row in rows} != set(report.get('routes', [])) or any(row.get('page_errors') for row in rows)):
+        return {'kind': 'unknown', 'retryable': False}
+    if report.get('status') == 'pass': return {'kind': 'pass', 'retryable': False}
+    transport = any(re.fullmatch(r'net::ERR_(?:EMPTY_RESPONSE|ABORTED|TIMED_OUT|(?:CONNECTION|NAME|NETWORK|INTERNET|PROXY|SSL|CERT|TUNNEL|SOCKET|HTTP2|QUIC|DNS|ADDRESS)_[A-Z_]+)', event.get('errorText', ''))
+                    for row in rows if row.get('status') == 'fail' for event in row.get('blocking_loading_failed', []))
+    owned = {ORIGIN + route for route in report['routes']} | {obj['url'] for obj in (manifest or {}).get('oss', {}).get('objects', {}).values()}
+    confirmed = any(canonical_object(event.get('url', '')) in owned and (event.get('http', 0) >= 400 or is_csp_failure(event)) for row in rows if row.get('status') == 'fail' for event in row.get('http_failures', []) + row.get('blocking_loading_failed', []))
+    confirmed |= any(body.get('http') == 200 and body.get('expected_sha256') and body.get('sha256') and body['sha256'] != body['expected_sha256'] for row in rows if row.get('status') == 'fail' for body in row.get('documents', []) + row.get('static_bodies', []))
+    return {'kind': 'unknown' if transport or not confirmed else 'confirmed', 'retryable': True}
+
+
 def is_csp_failure(event):
     # Some blocked subframe Documents omit blockedReason in Chrome's CDP event.
     return event.get('blockedReason') == 'csp' or event.get('errorText') == 'net::ERR_BLOCKED_BY_CSP'
@@ -398,6 +412,7 @@ async def run(args):
                         value = await asyncio.wait_for(session.send('Network.getResponseBody', {'requestId':identity}),timeout=10)
                         body = base64.b64decode(value['body']) if value.get('base64Encoded') else value['body'].encode('utf8')
                         result = {'url':url, 'http':item['http'], 'bytes':len(body), 'sha256':hashlib.sha256(body).hexdigest()}
+                        result['expected_sha256'] = manifest['files'][url_documents[url]]['sha256'] if url in url_documents else bound[1]['sha256'] if bound else None
                         if is_document:
                             target = url_documents.get(url)
                             result['verified'] = bool(target and item['http'] == 200 and result['sha256'] == manifest['files'][target]['sha256'])
@@ -487,6 +502,7 @@ async def run(args):
     report['summary'] = summarize(report['pages'],plan['asset_base_url'])
     report['status'] = 'pass' if len(report['pages']) == len(documents) and report['summary']['passed'] == len(documents) and not report.get('error') and report['profile_cleanup']['verified'] else 'fail'
     report['completed_at_beijing'] = oss.stamp(); report['seconds'] = round(time.monotonic()-started,3)
+    report['failure_class'] = failure_classification(report, manifest)
     args.output.parent.mkdir(parents=True,exist_ok=True); oss.write(args.output, report)
     if report['status'] == 'pass': validate_receipt(args.preparation, args.output, args.mode, args.release)
     print(json.dumps({'status':report['status'], 'summary':report['summary'], 'output':str(args.output)}, ensure_ascii=False))

@@ -221,7 +221,7 @@ def rollback(candidate, output, report):
     restored=raw.replace(refs,b'',1).decode('utf8')
     for item in reversed(info.get('previous_mounts',[])):
         restored=restored[:item['offset']]+item['text']+restored[item['offset']:]
-    after = write_changes(candidate, output, {'index.html': restored.encode('utf8')}); new_id = identity(after, manifest, copy_asset=builder.copy_release_asset)
+    after = write_changes(candidate, output, {'index.html': restored.encode('utf8')}, copy_asset=builder.copy_release_asset); new_id = identity(after, manifest)
     manifest.pop('home_comic_preparation')
     manifest.update({'files': after, 'release_id': new_id, 'home_comic_rollback': {'status': 'prepared_pending_acceptance', 'candidate_release_id': identity(files, manifest),
                      'original_baseline_release_id': info['baseline_release_id'], 'unreferenced_package_files_retained': True}})

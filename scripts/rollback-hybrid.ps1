@@ -1,4 +1,4 @@
-param([string]$RestoreRef, [string]$Output, [switch]$Publish, [switch]$DeferDeploymentCheck)
+param([string]$RestoreRef, [string]$Output, [switch]$Publish, [switch]$DeferDeploymentCheck, [string]$LocalAssets)
 $ErrorActionPreference='Stop'
 $repoRoot=Split-Path -Parent $PSScriptRoot
 Set-Location -LiteralPath $repoRoot
@@ -18,7 +18,9 @@ $runId=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('yyy
 $runRoot=Join-Path $repoRoot ".publish/rollback-$runId"
 if (-not $Output) { $Output=Join-Path $runRoot 'dist' }
 Checked 'python' @('scripts/hybrid-release.py','restore','--ref',$RestoreRef,'--output',$Output)
-Checked 'node' @('scripts/verify-public-content.mjs','--dist',$Output)
+$gateArguments=@('scripts/verify-public-content.mjs','--dist',$Output)
+if ($LocalAssets) { $gateArguments+=@('--local-assets',$LocalAssets) }
+Checked 'node' $gateArguments
 if (-not $Publish) { Write-Output "Exact rollback prepared and checked: $Output"; return }
 Checked 'git' @('diff','--quiet'); Checked 'git' @('diff','--cached','--quiet')
 $untracked=& git ls-files --others --exclude-standard

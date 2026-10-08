@@ -73,7 +73,8 @@ if (distFiles.includes(manifestPath)) {
     hasOssManifest = true;
     try {
       execFileSync(process.platform === "win32" ? "python" : "python3", [
-        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot, "--check-sealed-content"
+        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot, "--check-sealed-content",
+        ...(process.argv.includes("--local-assets") ? process.argv.slice(process.argv.indexOf("--local-assets"), process.argv.indexOf("--local-assets") + 2) : [])
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
       const entries = Object.entries(manifest.oss.objects);

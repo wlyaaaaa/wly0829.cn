@@ -1145,6 +1145,8 @@ def main():
             for state in states.values():
                 if state.get('url'):state['html_sha256']=hybrid.digest(hybrid.source_path(raw_output,hybrid.route_file(state['url'])))
             how_source=next((Path(row['source_path']) for row in rows if row['page']=='how'),None)
+            if how_source is None:
+                how_source=Path(args.resource_map[os.path.normcase(str((HERE.parent/'sources/pages/how/page.json').resolve()))])
             if how_source: args.external_inputs[str(how_source)]=stamp(how_source)
             write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
                 **({'native_readability':native} if native else {}),

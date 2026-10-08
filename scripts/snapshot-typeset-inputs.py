@@ -172,12 +172,13 @@ def rewrite_css(text, owner, rewrite):
 
 
 class Snapshot:
-    def __init__(self, typeset_root, inventory, output, pages=None, page_inputs=None, producer_root=None):
+    def __init__(self, typeset_root, inventory, output, pages=None, page_inputs=None, producer_root=None, source_only=None):
         self.typeset_root = typeset_root
         self.pipeline = typeset_root.parent
         self.inventory = inventory
         self.output = output
         self.requested_pages = pages
+        self.source_only = source_only or []
         self.sources = {}
         self.emissions = {}
         self.active = set()
@@ -441,6 +442,8 @@ class Snapshot:
         self.fonts = set()
         self.font_uris = defaultdict(set)
         self.orientation_exceptions = []
+        for source in self.source_only:
+            self.copy(source.resolve(), Path('sources')/(safe_part(source.parent.name, 'source-only page')+'.json'), transform=False)
         inventory_payload, _ = self.load(self.inventory)
         rows = [json.loads(line) for line in decode(inventory_payload).splitlines() if line.strip()]
         repository = Path(__file__).resolve().parents[1]
@@ -635,13 +638,14 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--inventory', type=Path, default=Path(__file__).resolve().parents[1]/'.publish/inventory/screens.jsonl')
     parser.add_argument('--pages', nargs='+', help='Optional pilot subset; default is the complete inventory.')
+    parser.add_argument('--source-only', type=Path, nargs='+', help='Freeze source JSON only, without adding native pages or inventory rows.')
     parser.add_argument('--page-inputs', type=Path, help='Exact per-page frozen input roots; preserve previously reviewed page bytes.')
     parser.add_argument('--producer-root', type=Path,
                         help='Opt in to freeze the complete current producer runtime, selected specs and referenced assets; must share the typeset root parent.')
     args = parser.parse_args()
     page_inputs = json.loads(args.page_inputs.read_text('utf-8-sig')) if args.page_inputs else None
     snapshot = Snapshot(args.typeset_root.resolve(), args.inventory.resolve(), args.output.resolve(), args.pages, page_inputs,
-                        args.producer_root.resolve() if args.producer_root else None)
+                        args.producer_root.resolve() if args.producer_root else None, source_only=args.source_only)
     return snapshot.run()
 
 

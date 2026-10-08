@@ -63,7 +63,7 @@ class OssBudgetOverlayTests(unittest.TestCase):
         source = source or self.source
         preparation = self.root/('split-'+uuid.uuid4().hex)
         plan = oss.prepare(source, 'https://fixture-bucket.oss-cn-shanghai.aliyuncs.com',
-                           'releases/budget-fixture', preparation)
+                           'releases/budget-fixture', preparation, full_upload=True)
         if sealed:
             # Local protocol records isolate seal binding; no real GET is claimed.
             rows = {rel: {'status': 'pass', 'http': 200, 'bytes': obj['bytes'],
@@ -162,6 +162,15 @@ class OssBudgetOverlayTests(unittest.TestCase):
         self.assertGreater(report['full_artifact_bytes'], h.builder.BUDGET)
         self.assertLess(report['github_deployment_tar_estimated_bytes'], h.builder.BUDGET)
         self.assertIn('assets/payload.bin', report['output_files'])
+        manifest = preparation/'github'/h.MANIFEST
+        before = manifest.read_bytes()
+        arguments = ['hybrid-release.py','verify','--output',str(preparation/'github'),'--local-assets',str(preparation/'oss'),'--check-sealed-content','--content-report',str(self.root/'cli-content.json')]
+        with patch('sys.argv', arguments), patch.object(h.builder, 'load_public_repos'):
+            h.main()
+            self.assertEqual(manifest.read_bytes(), before)
+            self.put(preparation/'oss', 'assets/app.js', b'bad object bytes')
+            with self.assertRaisesRegex(ValueError, 'Local content body differs'):
+                h.main()
 
     def test_materialization_still_scans_oss_content_findings(self):
         self.put(self.source, 'raw.log', b'ordinary local test log')
