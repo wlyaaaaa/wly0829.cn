@@ -3,6 +3,7 @@
 from html import escape
 from pathlib import Path
 import re
+from engine.parse import MD_LINK_RE
 from math import lcm
 from urllib.parse import unquote, urlsplit
 
@@ -1328,7 +1329,7 @@ def _points_headed(group, ctx, spec, group_index):
                     head = f'<div class="ct-card-head ct-point-head-right"><div class="tb" data-role="name">{title}</div>{picture}</div>'
         if spec.get("header_navigation") == "inline_right" and remaining:
             nav = remaining[0]
-            if nav.get("type") == "linkrow" or nav.get("type") == "para" and re.search(r"〔[^〔〕]+〕", str(nav.get("text") or "")):
+            if nav.get("type") == "linkrow" or nav.get("type") == "para" and (re.search(r"〔[^〔〕]+〕", str(nav.get("text") or "")) or MD_LINK_RE.search(str(nav.get("text") or ""))):
                 if first.get("type") == "card" and first.get("text"):
                     _unfinished(ctx, "comp-text 要点卡：原首 card 的说明在导航之前，头右导航会改原序，保留正文导航。")
                 else:
