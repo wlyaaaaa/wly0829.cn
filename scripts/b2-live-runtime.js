@@ -430,6 +430,7 @@ function syncChildren(parent,desired){
    for(const attr of [...node.attributes])if(attr.name!=='open'&&!wanted.hasAttribute(attr.name))node.removeAttribute(attr.name);
    for(const attr of [...wanted.attributes])if(attr.name!=='open'&&node.getAttribute(attr.name)!==attr.value)node.setAttribute(attr.name,attr.value);
    if(wanted.onclick)node.onclick=wanted.onclick;
+   if(wanted._cpCopy)node._cpCopy=wanted._cpCopy;else delete node._cpCopy;
    syncChildren(node,[...wanted.childNodes]);
   }
   used.add(node);if(parent.childNodes[i]!==node)parent.insertBefore(node,parent.childNodes[i]||null);
@@ -486,8 +487,47 @@ function cpTitle(screen,text){
  if(source){const [x,y,w,h]=source.title,frame=cpNode('span','cp-title-crop'),image=cpNode('img'),ratio=w*source.size[0]/(h*source.size[1]);frame.style.aspectRatio=String(ratio);frame.style.width=`min(100%, calc(var(--cp-title-height,54px) * ${ratio}))`;if(screen==='cockpit-01')heading.classList.add('cp-title-main');image.src=source.src;image.alt='';image.decoding='async';image.style.cssText=`width:${100/w}%;height:${100/h}%;left:${-100*x/w}%;top:${-100*y/h}%`;frame.append(image);heading.append(frame);}
  else heading.append(cpNode('span','cp-title-pending',text));return heading;
 }
-function cpSection(id,title,screen){const node=cpNode('section','cp-section');node.id=id;node.setAttribute('aria-label',title);node.append(cpTitle(screen,title));const body=cpNode('div','cp-rows');node.append(body);return {node,body};}
+function cpSection(id,title,screen){const node=cpNode('section','cp-section');node.id=id;node.setAttribute('aria-label',title);node.append(cpTitle(screen,title));const copyActions=cpNode('div','cp-section-copy'),body=cpNode('div','cp-rows');node.append(copyActions,body);return {node,body,copyActions,title};}
 function cpLine(text,state='unknown'){const row=cpNode('p','cp-line',text);row.dataset.state=state==='attention'?'warn':state;return row;}
+
+function cpCopyMeta(row,sentence){
+ if(!online()||!row?.id||row.earlier||row.current===false||row.current===null||row.resolved||['history','deferred'].includes(row.group)||row.treatment_category==='C')return null;
+ if(!['error','warn','unknown'].includes(row.notice_kind)||row.notice_kind==='unknown'&&!row.ai_hint)return null;
+ return {id:row.id,name:row.title||row.text||'这条提醒',sentence,hasHint:!!row.ai_hint,firstSeen:timestamp(row.first_seen_at),color:row.notice_kind==='unknown'?'未知':row.severity==='red'?'红':'黄'};
+}
+function cpCopyRecords(host,sort=false){
+ const seen=new Set(),rows=[];
+ for(const node of host.querySelectorAll('.cp-notice')){const row=node._cpCopy;if(row&&!seen.has(row.id)){seen.add(row.id);rows.push(row);}}
+ return sort?['红','黄','未知'].flatMap(color=>{const group=rows.filter(row=>row.color===color);return group.every(row=>Number.isFinite(row.firstSeen))?group.sort((a,b)=>a.firstSeen-b.firstSeen):group;}):rows;
+}
+function cpCopyObserved(){
+ const at=timestamp(status?.observed_at_unix??status?.observed_at);if(!Number.isFinite(at)||at<=0)return '还不知道';
+ const parts=Object.fromEntries(timeFormatter.formatToParts(new Date(at*1000)).map(part=>[part.type,part.value]));return parts.month+'月'+parts.day+'日 '+parts.hour+':'+parts.minute;
+}
+function cpCopyReady(){const rows=Object.values(cpGroups()||{}).flat(),cards=status?.cockpit?.cards||[];return online()&&!statusReading&&(rows.length?rows.every(row=>Object.hasOwn(row,'notice_kind')):cards.some(card=>Object.hasOwn(card,'notice_kind')));}
+function cpCopyPrompt(rows,scope,label){
+ const endpoint='http://127.0.0.1:18793/computer-access/api/status',stamp='页面读到时间：'+cpCopyObserved()+'（北京时间）。';
+ if(scope==='item'){
+  const row=rows[0],detail=row.hasHint?`细节在本机状态接口 ${endpoint} 里 id=${row.id} 的 ai_hint。`:`本机状态接口 ${endpoint} 里 id=${row.id} 这一条还没有 ai_hint，请先从这条的来源查起。`;
+  const finish=row.hasHint?'请查清原因、修好、验证；修完让驾驶舱这条变绿，再用一两句话告诉我原因和结果。':'请查清原因、修好、验证，并给这一条补上 ai_hint；修完让驾驶舱这条变绿，再用一两句话告诉我原因和结果。';
+  return `请处理驾驶舱这条：${row.name}（${row.sentence}）。\n${detail}\n${finish}\n${stamp}`;
+ }
+ const list=rows.map((row,index)=>`${index+1}. ${scope==='all'?'['+row.color+'] ':''}id=${row.id}：${row.name}${row.hasHint?'':'（还没有 ai_hint）'}`).join('\n');
+ const start=scope==='all'?`请处理驾驶舱现在所有要处理的 ${rows.length} 条，按下面的顺序（先红、再黄、最后结果未知）：`:`请处理驾驶舱“${label}”里要处理的 ${rows.length} 条：`;
+ const finish=scope==='all'?'请逐条查清原因、修好、验证；修完让驾驶舱整页变绿，最后按条告诉我原因和结果，没修好的写明卡在哪。':'请逐条查清原因、修好、验证；修完让这几条都变绿，最后按条告诉我原因和结果，没修好的写明卡在哪。';
+ return `${start}\n${list}\n每条的细节在本机状态接口 ${endpoint} 里对应 id 的 ai_hint。\n${finish}\n${stamp}`;
+}
+function cpCopyButton(rows,scope,label){
+ const count=rows.length,ready=cpCopyReady(),text=scope==='item'?'复制给 AI':scope==='block'?'本区 '+count+' 条复制给 AI':!ready?'读到状态后才能复制':count?'全部 '+count+' 条复制给 AI':'现在没有要交给 AI 的事';
+ const button=cpButton(text);button.classList.add('cp-copy');button.disabled=!ready||!count;
+ button.setAttribute('aria-label',scope==='item'?'把这一条的处理提示复制给 AI':scope==='block'?'把本区要处理的 '+count+' 条复制给 AI':count?'把驾驶舱现在要处理的 '+count+' 条全部复制给 AI':text);
+ button.onclick=async()=>{const prompt=cpCopyPrompt(rows,scope,label);try{await navigator.clipboard.writeText(prompt);message(scope==='item'?'已复制，粘贴给 Codex 或 Claude 就行':'已复制 '+count+' 条，粘贴给 Codex 或 Claude 就行','ok');}catch{message('没能自动复制，请长按或选中下面的文字手动复制。');const field=cpNode('textarea','cp-copy-manual');field.value=prompt;field.readOnly=true;field.setAttribute('aria-label','可手动复制的处理提示');cockpitUI.copyFallback.replaceChildren(field);field.focus({preventScroll:true});field.select();}};
+ return button;
+}
+function cpNoticeNode(row,state='warn'){
+ const sentence=row.public_message||row.display?.public_message||row.display?.text||row.what_happened||row.text||'这次没读到这条的说明。',node=cpNode('div','cp-notice');node.dataset.rowKey=row.key||row.id||row.text;node.append(cpLine(sentence,state));
+ const copy=cpCopyMeta(row,sentence);if(copy){node._cpCopy=copy;node.append(cpCopyButton([copy],'item',''));}return node;
+}
 
 
 
@@ -501,12 +541,27 @@ function cpFactNode(facts){const list=cpNode('dl','cp-facts');for(const fact of 
 
 
 function cpItemNode(row){
+ if(!row.earlier&&(['error','warn','unknown'].includes(row.notice_kind)||['error','warn'].includes(cpItemState(row))))return cpNoticeNode(row,cpItemState(row));
  const item=cpNode('article','cp-detail-item');item.dataset.rowKey=row.key||row.text;item.dataset.state=cpItemState(row);const head=cpNode('div','cp-item-head'),title=cpNode('h4',null,row.text||'事项说明未登记');
  if(row.href){const href=cpSafeHref(row.href);if(href){const link=cpNode('a',null,title.textContent);link.href=href;title.replaceChildren(link);}}
  head.append(title);if(row.owner&&row.owner!=='负责人未登记')head.append(cpNode('small',null,row.owner));head.append(cpNode('time',null,cpItemTime(row)));item.append(head,cpFactNode(row.facts));
  if(row.technical?.length){const technical=cpNode('details','cp-technical');technical.dataset.rowKey='technical';technical.append(cpNode('summary',null,'技术细节'),cpFactNode(row.technical));item.append(technical);}if(row.detail&&!row.facts?.length)item.append(cpFactNode(cpFacts([['操作说明',row.detail]])));return item;
 }
-function cpInsightNode(row){const root=cpNode('div','cp-insight');root.append(cpLine(row.text,row.state));if(row.details?.length){const detail=cpNode('details','cp-hint-details');detail.dataset.rowKey=row.text.split('：')[0];detail.append(cpNode('summary',null,'查看数据来源与说明'));const list=cpNode('ul');for(const text of row.details)list.append(cpNode('li',null,text));detail.append(list);root.append(detail);}return root;}
+function cpInsightNode(row){
+ if(row.href){const text=['error','warn'].includes(row.notice_kind)&&row.public_message?'电脑卡不卡：'+row.public_message.replace(/^电脑资源[：:]\s*/,'')+' › 详情':row.text,root=cpNoticeNode({...row,public_message:text},row.state),link=cpNode('a','cp-stutter-entry',text);link.href=row.href;root.firstChild.replaceWith(link);return root;}
+ if(['error','warn','unknown'].includes(row.notice_kind))return cpNoticeNode(row,row.state);const root=cpNode('div','cp-insight');root.append(cpLine(row.text,row.state));if(row.details?.length){const detail=cpNode('details','cp-hint-details');detail.dataset.rowKey=row.text.split('：')[0];detail.append(cpNode('summary',null,'查看数据来源与说明'));const list=cpNode('ul');for(const text of row.details)list.append(cpNode('li',null,text));detail.append(list);root.append(detail);}return root;
+}
+function cpUpdateCopyButtons(){
+ const ui=cockpitUI;if(!ui)return;const all=cpCopyRecords(ui.root,true);syncChildren(ui.copyAll,[cpCopyButton(all,'all','')]);
+ for(const section of [ui.conclusion,ui.computer,ui.remote,ui.cloud,ui.today]){const list=cpCopyRecords(section.node);section.copyActions.hidden=list.length<2;syncChildren(section.copyActions,list.length>1?[cpCopyButton(list,'block',section.title)]:[]);}
+}
+function cpRiverNotice(taskId,target,task=target?._cpRiverTask){
+ const item=Object.entries(cpGroups()||{}).flatMap(([group,rows])=>rows.map(row=>({...row,group}))).find(row=>row.id===taskId);
+ if(!target||!item?.public_message||!['error','warn','unknown'].includes(item.notice_kind))return;
+ if(task)target._cpRiverTask=task;const panel=Object.hasOwn(task?.related_status||{},'panel')||task?.outcomes?.kind==='panel_heartbeat';
+ if(panel&&(task.state==='unknown'&&item.state==='failed'||task.outcomes?.execution_failed===true&&item.state!=='failed'))return;
+ const close=target.querySelector('[data-close-pick]');target.replaceChildren(cpNoticeNode(item,cpItemState(item)));if(close)target.append(close);cpUpdateCopyButtons();
+}
 function cpRowsNode(rows,titles=true,uncertain=false){
  const root=cpNode('div','cp-detail-groups'),flat=rows.flatMap(row=>row.children?row.children.map(child=>({...child,project:child.project||row.text})):row).map(row=>uncertain?{...row,uncertain:true}:row),stamp=row=>typeof row.at==='string'&&/[T ]\d{2}:\d{2}.*(?:Z|[+-]\d{2}:\d{2})$/.test(row.at)?timestamp(row.at):NaN;
  const append=(host,items,key)=>{items.sort((a,b)=>cpDateKey(b).localeCompare(cpDateKey(a))||(Number.isFinite(stamp(a))&&Number.isFinite(stamp(b))?stamp(b)-stamp(a):0));host.append(...items.slice(0,5).map(cpItemNode));if(items.length>5){const more=cpNode('details','cp-more');more.dataset.rowKey='more:'+key;more.append(cpNode('summary',null,'再看 '+(items.length-5)+' 件'),...items.slice(5).map(cpItemNode));host.append(more);}};
@@ -526,7 +581,7 @@ function cpInsightRows(){
   warming:'首次趋势观察中',ok:'已记录的资源指标未触发预警',trend_gap:'趋势记录有断档',history_unavailable:'历史记录未读到',write_failed:'记录写入失败',data_unavailable:'资源数据未读全'};
  const trends={warming:'趋势仍在观察期（同次启动至少25小时）',unknown:'趋势证据不足',warn:'已记录到资源增长趋势',ok:'这段记录未触发增长预警'},changes=health.changes_24h||{};
  const changeRows=[['nonpaged_pool_bytes','非分页池'],['paged_pool_bytes','分页池'],['committed_bytes','内存提交量'],['available_bytes','可用内存'],['handle_count','句柄数量']];
- rows.computer.push({text:'卡顿资源：'+(healthFresh?'':'这是当时的记录；')+(reasons[health.reason_code]||'当前原因未读到')+'；有效记录 '+(num(health.coverage_hours)===null?'未统计':health.coverage_hours.toFixed(1)+' 小时')+'；'+(trends[health.trend_state]||'趋势尚未读到'),
+ rows.computer.push({id:'computer_health',href:'/cockpit/stutter/',text:'电脑卡不卡：'+(!healthFresh||health.state==='unknown'?'这次没读到，现在卡不卡还不知道':health.state==='ok'?cpUptime()+'，读数正常'+(health.trend_state==='warming'?'，还在观察期':''):cpUptime()+'，'+(reasons[health.reason_code]||'资源读数需要核对'))+' › 详情',
   state:healthFresh?['error','warn'].includes(health.state)?'warn':health.state==='ok'&&health.trend_state==='ok'?'ok':'unknown':'unknown',
   details:[when(health.observed_at_unix),
    ...changeRows.map(([key,label])=>'24小时变化（'+label+'）：'+(num(changes[key])===null?'暂无可用对比':(changes[key]>0?'+':'')+amount(changes[key],key==='handle_count'?'个':'GB',key==='handle_count'?1:1e9))),
@@ -535,7 +590,7 @@ function cpInsightRows(){
  rows.computer.push({text:'E盘：'+(fresh(hardwareAt,180)?'':'这是当时的数；')+(e?.connected===false?'没接上':amount(e?.free_bytes,'TB',1e12)+' 可用')+'；本轮结束后目标至少1.6 TB，收尾尚未核对',
   state:fresh(hardwareAt,180)&&num(e?.free_bytes)!==null&&e?.connected!==false?'ok':'unknown',details:[when(hardwareAt),'当前容量与收尾目标采用十进制字节换算；施工中没有宣告达标。']});
  const cleanup=tasks.find(t=>t.cleanup)?.cleanup,disk=cleanup?.disks?.find(v=>v.letter==='E:'),delta=disk?.free_delta_bytes;
- rows.computer.push({text:cleanup?'回收站清理：'+(cleanup.state==='success'?'最近一轮已完成':cleanup.state==='failed'?'最近一轮失败':'最近一轮结果未确认')+'；E盘可用空间变化 '+(num(delta)===null?'未读到':(delta>0?'+':'')+amount(delta,'GB',1e9)):'回收站清理：执行回执尚未读到',
+ rows.computer.push({record_id:tasks.find(t=>t.cleanup)?.id,text:cleanup?'回收站清理：'+(cleanup.state==='success'?'最近一轮已完成':cleanup.state==='failed'?'最近一轮失败':'最近一轮结果未确认')+'；E盘可用空间变化 '+(num(delta)===null?'未读到':(delta>0?'+':'')+amount(delta,'GB',1e9)):'回收站清理：执行回执尚未读到',
   state:!live?'unknown':cleanup?.state==='failed'?'warn':cleanup?.state==='success'?'ok':'unknown',
   details:[when(cleanup?.finished_at),'E盘清理前 '+amount(disk?.free_before_bytes,'GB',1e9)+'，清理后 '+amount(disk?.free_after_bytes,'GB',1e9)+'；这是期间可用空间变化。',
    '逻辑删除量 '+amount(cleanup?.removed_bytes,'GB',1e9)+'，不作为实测释放量；运行后待释放总量未统计。','下次运行：'+when(tasks.find(t=>t.cleanup)?.next_run_at)]});
@@ -548,7 +603,7 @@ function cpInsightRows(){
  const bill=status?.aliyun_billing||{},locked=bill.state==='waiting_for_unlock',billFresh=fresh(bill.observed_at,bill.max_age_seconds||3900)&&bill.state==='ok';
  const spendLabel=bill.billing_cycle===month?'本月已花':bill.billing_cycle?bill.billing_cycle+' 已花':'费用月份未登记，已花';
  const errors={api_timeout:'本次取数超时',permission_denied:'本次取数未获许可',api_failed:'本次取数失败',billing_incomplete:'本次账单未取完整'};
- rows.cloud.push({text:locked?'阿里云费用：个人资料锁着时不读，这次没读。'+(Number.isFinite(stamp(bill.last_success_at))?'最近一次读到是 '+time(stamp(bill.last_success_at))+'。':'最近一次成功时间还没读到。')+'这是正常状态，你不用处理。':'阿里云费用：'+(billFresh?'':'当时：')+'余额 '+amount(bill.balance_yuan,'元')+'；'+spendLabel+' '+amount(bill.month_spend_yuan,'元')+(errors[bill.error]?'；'+errors[bill.error]:''),
+ rows.cloud.push({id:'aliyun_billing',text:locked?'阿里云费用：个人资料锁着时不读，这次没读。'+(Number.isFinite(stamp(bill.last_success_at))?'最近一次读到是 '+time(stamp(bill.last_success_at))+'。':'最近一次成功时间还没读到。')+'这是正常状态，你不用处理。':'阿里云费用：'+(billFresh?'':'当时：')+'余额 '+amount(bill.balance_yuan,'元')+'；'+spendLabel+' '+amount(bill.month_spend_yuan,'元')+(errors[bill.error]?'；'+errors[bill.error]:''),
   state:locked?'unknown':billFresh&&num(bill.balance_yuan)!==null&&num(bill.month_spend_yuan)!==null?bill.low_balance===true?'warn':'ok':'unknown',
   details:locked?['最近成功：'+when(bill.last_success_at),'最近一次取数被资料锁阻止：'+when(bill.attempted_at)]:[when(bill.observed_at),'账单月份：'+(bill.billing_cycle||'未登记')+'；取数失败本身不证明余额不足。']});
  for(const group of status?.backup_inventory?.items||[]){
@@ -556,12 +611,12 @@ function cpInsightRows(){
   const text=group.id==='g'?'G 盘副本：'+verified.length+' 类已核实；'+missing.length+' 类这次没拿到回执'+(missing.length?'（'+names(missing)+'），这几类是否最新不确定。这不代表 G 盘读不到。由 AI 核对（是否已开始未记录），你不用管。':'。'):
    group.id==='drive'?'Google 云盘副本：'+(verified.length?names(verified)+' 已核实；':'')+(missing.length?names(missing)+'这次来源打不开，现有多少、是否最新都不知道。这不代表云盘整体出问题。':'已登记类别均已核实。'):
    ['photos','google_photos'].includes(group.id)?'Google 相册副本：'+(missing.length?'这次没读到回执，不能确认是否最新。看板没有因此判断照片丢失。':'已登记媒体副本已核实。'):null;
-  if(text)rows.cloud.push({text:(live?'':'当时：')+text,state:!live?'unknown':group.id==='g'&&missing.length?'warn':missing.length?'unknown':'ok',details:copies.map(item=>{const upload=(status?.cloud?.items||[]).find(row=>row.id===item.cloud_id),states={running:'正在上传或验证',uploading:'正在上传',completed:'该轮已完成',idle:'该上传器当时空闲',failed:'该轮没完成',partial:'该轮没完整完成'};return (item.name||'类别名未记录')+'：'+(item.protection==='verified_copy'?'副本已核实':'这次没拿到回执')+'；最近成功 '+when(item.last_success_at)+(group.id==='drive'?'；此项只覆盖这类上传程序，未读取 Google 云盘桌面端当前状态。最近运行：'+(states[upload?.state]||'没读到')+'（'+when(upload?.observed_at)+'）':'');})});
+  if(text)rows.cloud.push({source_id:'backup_inventory.'+group.id,text:(live?'':'当时：')+text,state:!live?'unknown':group.id==='g'&&missing.length?'warn':missing.length?'unknown':'ok',details:copies.map(item=>{const upload=(status?.cloud?.items||[]).find(row=>row.id===item.cloud_id),states={running:'正在上传或验证',uploading:'正在上传',completed:'该轮已完成',idle:'该上传器当时空闲',failed:'该轮没完成',partial:'该轮没完整完成'};return (item.name||'类别名未记录')+'：'+(item.protection==='verified_copy'?'副本已核实':'这次没拿到回执')+'；最近成功 '+when(item.last_success_at)+(group.id==='drive'?'；此项只覆盖这类上传程序，未读取 Google 云盘桌面端当前状态。最近运行：'+(states[upload?.state]||'没读到')+'（'+when(upload?.observed_at)+'）':'');})});
  }
  const unavailableCloud=(status?.cloud?.items||[]).filter(item=>['unknown','unavailable'].includes(item.state));if(unavailableCloud.length)rows.cloud.push({text:'云端维护：这次没拿到运行记录，结果未知。这不代表照片丢了或任务失败。'+(unavailableCloud.some(item=>item.reason==='personal_data_locked')?'个人资料锁着时不读这份记录。':''),state:'unknown'});
  const monitor=tasks.find(t=>t.monitor)?.monitor,monitorFresh=monitor&&!monitor.stale&&fresh(monitor.observed_at,1200),notice=monitor?.notification||{};
  const noticeStates={none:'本轮没有待发送事件',not_started:'尚未发送',sending:'发送中，结果未确认',sent:'已发送',unknown:'发送结果未确认'};
- rows.today.push({text:monitor?'看板最近自检：'+(monitor.state==='success'?'通过':monitor.state==='failed'?'发现异常':'结果未确认')+(monitorFresh?'':'（当时记录）')+'；异常邮件提醒已配置':'看板自检：回执尚未读到',
+ rows.today.push({record_id:tasks.find(t=>t.monitor)?.id,text:monitor?'看板最近自检：'+(monitor.state==='success'?'通过':monitor.state==='failed'?'发现异常':'结果未确认')+(monitorFresh?'':'（当时记录）')+'；异常邮件提醒已配置':'看板自检：回执尚未读到',
   state:monitorFresh?monitor.state==='failed'?'warn':monitor.state==='success'?'ok':'unknown':'unknown',
   details:[when(monitor?.observed_at),
    ...(monitor?.checks?.map(check=>'实际检查（'+({page:'页面',api:'主接口',control:'对照文件'})[check.name]+'）：HTTP '+(check.http??'未知')+'，'+(check.valid===true?'内容有效':check.valid===false?'内容异常':'结果未确认'))||['实际检查项尚未读到']),
@@ -573,6 +628,8 @@ function cpInsightRows(){
   state:!live||['stale','unknown','unavailable'].includes(project.state)?'unknown':['failed','overdue'].includes(project.run_health)||project.acceptance==='failed'?'warn':project.run_health==='ok'&&['all_passed','waiting','not_applicable'].includes(project.acceptance)?'ok':'unknown',
   details:[when(project.observed_at),'验收：'+(acceptances[project.acceptance]||'未确认'),'此处阶段表示维护档位，不代表开发进度。']});
  if(!rows.projects.length)rows.projects.push({text:status?.projects?.state==='empty'?'当前项目索引没有登记条目':'项目阶段和运行索引尚未读到',state:'unknown'});
+ const notices=Object.values(cpGroups()||{}).flat(),cards=status?.cockpit?.cards||[];
+ for(const list of Object.values(rows))for(const row of list){const source=row.record_id?notices.find(item=>item.id===row.record_id):row.source_id?notices.find(item=>item.source_id===row.source_id):row.id?cards.find(card=>card.id===row.id):null;if(source){Object.assign(row,{id:source.id,title:source.title,public_message:source.public_message||source.display?.public_message,notice_kind:source.notice_kind,ai_hint:source.ai_hint,severity:source.severity,current:source.current,treatment_category:source.treatment_category,first_seen_at:source.first_seen_at});}}
  return rows;
 }
 function cpLearning(){
@@ -587,9 +644,12 @@ function cpLearning(){
 }
 function cpSafeHref(value){if(typeof value!=='string')return null;try{const url=new URL(value,location.href);return ['https:','http:'].includes(url.protocol)?url.href:null;}catch{return null;}}
 function cpCorrectionText(value){
- const valid=n=>Number.isInteger(n)&&n>=0;if(!value||value.status!=='pass')return '你纠正 AI 的次数：这次没读到，暂不能统计（不是 0 次）。';const days=Array.isArray(value.history)?value.history:[],known=days.filter(day=>valid(day.total)),missing=7-known.length;
- return '你纠正 AI：今天 '+(valid(value.total)?value.total+' 次':'未统计')+'，近 7 天 '+(known.length?known.reduce((sum,day)=>sum+day.total,0)+' 次'+(missing>0?'，其中 '+missing+' 天没统计到':''):'未统计（不是 0 次）')+'。';
+ const valid=n=>Number.isInteger(n)&&n>=0,days=Array.isArray(value?.history)?value.history:[],known=days.filter(day=>valid(day.total)),missing=Math.max(0,7-known.length);
+ if(!valid(value?.total)&&!known.length)return '你纠正 AI 的次数：这次没读到，暂不能统计（不是 0 次）。';
+ const latest=known.map(day=>day.date).filter(date=>/^\d{4}-\d{2}-\d{2}$/.test(date||'')).sort().at(-1);
+ return '你纠正 AI：今天 '+(valid(value?.total)?value.total+' 次':'未统计')+'，近 7 天 '+(known.length?known.reduce((sum,day)=>sum+day.total,0)+' 次'+(missing?'，其中 '+missing+' 天没统计到':''):'未统计（不是 0 次）')+(latest?'；最近统计完整的是 '+Number(latest.slice(5,7))+'月'+Number(latest.slice(8))+'日':'')+'。';
 }
+function cpUptime(){const seconds=numeric(status?.host?.uptime_seconds);if(seconds===null||seconds<0)return '开机时长未读到';const minutes=Math.floor(seconds/60),hours=Math.floor(minutes/60),days=Math.floor(hours/24);return '开机 '+(days?days+' 天'+(hours%24?' '+hours%24+' 小时':''):hours?hours+' 小时':minutes+' 分钟');}
 function cpHardwareNode(displayed,options){
  const node=window.LiveHardwareUI.render(document,displayed,options);for(const stamp of node.querySelectorAll('.live-hardware-card-time,.live-hardware-read-time'))stamp.textContent=stamp.textContent.replace(/^读取于 /,'本轮读取于 ');
  if(data.kind==='cockpit'&&options.mode==='full'){const hw=displayed?.hardware||{},groups=[hw.cpu,hw.memory,...(hw.gpus||[])],modelTimes=groups.map(row=>row?.sources?.model?.observed_at_unix).filter(Number.isFinite),sensorUnknown=groups.some(row=>['temperature_celsius','power_watts'].some(key=>row?.sources?.[key]?.sample_time_known===false)),detail=cpNode('details','cp-hint-details');detail.dataset.rowKey='hardware-time-boundary';detail.append(cpNode('summary',null,'读取时间的含义'),cpNode('p',null,(modelTimes.length?'型号清单更新于 '+time(Math.min(...modelTimes))+'。':'型号清单更新时间没记录。')+(sensorUnknown?'其中从传感器程序读回的温度和功耗没记录采样时刻；对应的时间是本轮读回时间，各字段来源保留在上方。':'')));node.append(detail);}return node;
@@ -609,10 +669,11 @@ function mountCockpit(){
  lamp.setAttribute('role','img');const refresh=cpButton('↻','refresh');refresh.classList.add('cp-refresh');refresh.setAttribute('aria-label','刷新驾驶舱');bar.append(lamp,headline,stamp,refresh);root.append(cpNode('div','cp-bar-space'));document.body.append(bar);document.documentElement.style.setProperty('--cp-toc-offset',(document.querySelector('.toc')?.getBoundingClientRect().height||0)+'px');
  const grid=cpNode('div','cp-grid'),conclusion=cpSection('cp-conclusion','驾驶舱','cockpit-01'),authority=cpSection('cp-security','安全和授权','cockpit-07');
  conclusion.node.classList.add('cp-conclusion');authority.node.classList.add('cp-security');
- const need=cpNode('div','cp-need'),know=cpNode('div','cp-know'),conditions=cpNode('section','cp-conditions'),following=cpNode('details','cp-following'),followingLabel=cpNode('summary',null,'AI 需核对：正在读取'),followingBody=cpNode('div');following.append(followingLabel,followingBody);conclusion.body.append(need,know,following);
+ const need=cpNode('div','cp-need'),copyAll=cpNode('div','cp-copy-all'),copyFallback=cpNode('div','cp-copy-fallback'),know=cpNode('div','cp-know'),conditions=cpNode('section','cp-conditions'),following=cpNode('details','cp-following'),followingLabel=cpNode('summary',null,'AI 需核对：正在读取'),followingBody=cpNode('div');following.append(followingLabel,followingBody);conclusion.body.append(need,copyAll,copyFallback,know,following);
  const grants=cpNode('div','cp-authority-items'),manage=cpButton('办理');manage.onclick=()=>cpPanel(true);authority.body.append(grants,manage);
  const computer=cpSection('cp-computer','电脑','cockpit-02'),remote=cpSection('cp-remote','远程和网络','cockpit-03'),cloud=cpSection('cp-cloud','备份和云端','cockpit-06'),today=cpSection('cp-today','今天的动态','cockpit-09');today.node.classList.add('cp-today');
  const events=cpNode('div','cp-events'),basis=cpNode('p','cp-line cp-basis'),learning=cpNode('p','cp-line cp-learning'),changes=cpNode('div','cp-changes');today.body.append(events,learning,basis,changes);if(todayRiverHost)today.body.prepend(todayRiverHost);
+ root.append(cpNode('p','cp-color-help','绿：都正常　黄：要留意，例如备份超期、同一个任务连着失败、磁盘剩余不到 10%　红：要马上处理，例如备份两个周期都没成功、磁盘剩余不到 5%　灰：没有当前结论、只是旧记录，或正常关着（例如个人资料锁着），具体看旁边文字。'));
  grid.append(conclusion.node,authority.node,computer.node,remote.node,conditions,cloud.node,today.node);root.append(grid);
  const jump=cpNode('nav','cp-jump');jump.setAttribute('aria-label','驾驶舱区块');for(const [id,text]of [['cp-computer','电脑'],['cp-remote','远程'],['cp-cloud','备份云端'],['cp-today','今天'],['cp-details','明细']]){const link=cpNode('a','cp-button',text);link.href='#'+id;if(id==='cp-details')link.onclick=()=>{details.open=true;};jump.append(link);}root.append(jump);
  const details=cpNode('details','cp-details');details.id='cp-details';details.append(cpNode('summary',null,'明细：自动任务、硬件、副本、24 小时曲线、这块怎么看'));
@@ -630,14 +691,16 @@ function mountCockpit(){
  form.append(cpNode('p','cp-form-note','个人资料和无限制授权分开计时，只在你确认的范围和期限内生效。已开着的可以加时，刷新不改原期限；验证码只交给电脑。'));
  const reductions=cpNode('div','cp-reductions');for(const [text,key]of [['锁定资料','lock-personal-data'],['结束授权','lock-unrestricted'],['Windows 锁屏','lock-windows'],['操作结果','results']])reductions.append(cpButton(text,key));form.append(reductions);panel.append(form);document.body.append(shade,panel);
  panel.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();cpPanel(false);}if(event.key==='Tab'){const controls=[...panel.querySelectorAll('button,input,a')].filter(node=>!node.disabled&&!node.hidden),first=controls[0],last=controls.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}});
- cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,know,conditions,followingLabel,followingBody,grants,manage,computer,remote,cloud,today,events,basis,learning,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
+ cockpitUI={root,details,archive,bar,lamp,headline,stamp,refresh,need,copyAll,copyFallback,conclusion,know,conditions,followingLabel,followingBody,grants,manage,computer,remote,cloud,today,events,basis,learning,changes,panel,shade,selection,duration,factor,defaultInput,feedback};
  document.body.classList.add('cockpit-rearranged');
  const riverHelp=()=>{const legend=todayRiverHost?.querySelector('#legend');if(legend&&!legend.closest('details')){const help=cpNode('details','cp-river-help');help.append(cpNode('summary',null,'这块怎么看'));legend.before(help);help.append(legend);}};riverHelp();document.addEventListener('today-river-ready',riverHelp);
+ document.addEventListener('today-river-selected-notice',event=>cpRiverNotice(event.detail?.taskId,event.detail?.target,event.detail?.task));
  for(const [id,section]of [['pc',computer],['remote',remote],['backups',cloud],['security',authority],['today',today]]){const old=document.getElementById(id);if(old&&archive.contains(old))old.id='cp-original-'+id;const anchor=cpNode('span','cp-anchor');anchor.id=id;section.node.prepend(anchor);}
  const navigate=()=>{const id=decodeURIComponent(location.hash.slice(1));if(archive.querySelector('[id="'+CSS.escape(id)+'"]'))details.open=true;};addEventListener('hashchange',navigate);navigate();
 }
 function cpDisplay(card,fallback){
  const display=card?.display;if(display?.state==='hidden')return null;
+ if(['error','warn','unknown'].includes(card?.notice_kind))return cpNoticeNode({...card,public_message:display?.public_message},!online()?'unknown':display?.state==='attention'?'warn':display?.state);
  const text=display?.text||fallback||'状态正在读取',at=timestamp(display?.observed_at),stale=display?.state==='stale'||!!display?.text&&!online();
  const statedUnknown=/现在.*还不知道|当前情况未知|这次.*没读到/.test(text),shown=stale&&!statedUnknown?'当时：'+text+'（'+(Number.isFinite(at)&&at>0?time(at)+' 读到':'读取时间未记录')+'，当前情况未知）。':text;
  const node=cpNode('div','cp-insight');node.dataset.rowKey=card?.id||fallback;node.append(cpLine(shown,stale?'stale':online()?display?.state||'unknown':'unknown'));
@@ -652,24 +715,25 @@ function renderCockpit(){
  const needNodes=need.length?[cpNode('h3',null,'现在要你处理 '+need.length+' 项')]:[];
  const cards=cpNode('div','cp-action-grid'),extra=cpNode('details','cp-more'),rest=cpNode('div','cp-action-grid');cards.dataset.count=String(Math.min(need.length,5));rest.dataset.count=String(Math.max(need.length-5,1));extra.dataset.rowKey='need-more';extra.append(cpNode('summary',null,'再看 '+Math.max(need.length-5,0)+' 件'),rest);
  for(const [index,item]of need.entries()){const card=cpItemNode(item);card.classList.add('cp-action-card');const a=item.action||{};
-  const href=cpSafeHref(a.href||item.href);if(href){const link=cpNode('a','cp-button',a.label||'去办理');link.href=href;card.append(link);}else{const button=cpButton('查看已登记要求');button.onclick=()=>cpOpenDetails('projects');card.append(button);}(index<5?cards:rest).append(card);}
+  if(!['error','warn','unknown'].includes(item.notice_kind)){const href=cpSafeHref(a.href||item.href);if(href){const link=cpNode('a','cp-button',a.label||'去办理');link.href=href;card.append(link);}else{const button=cpButton('查看已登记要求');button.onclick=()=>cpOpenDetails('projects');card.append(button);}}(index<5?cards:rest).append(card);}
  if(need.length){needNodes.push(cards);if(need.length>5)needNodes.push(extra);}else needNodes.push(cpLine(typed?'现在没有要你做的事。':phase==='error'?summary:phase==='loading'?'当前结论正在读取':'当前情况未知',typed?'ok':'unknown'));syncChildren(ui.need,needNodes);
  const following=typed?.filter(row=>!row.earlier&&row.group==='ai_following'),conditional=ready?cockpit.conditional_user_actions||[]:[];ui.conditions.hidden=!conditional.length;
  const list=cpNode('ul');for(const item of conditional){const li=cpNode('li');li.dataset.rowKey=item.id;const entry=item.action?.where;li.textContent=entry&&entry.includes('入口：')?entry:(item.when||'按登记条件出现时')+'：'+item.title+'。入口：'+(entry||'告诉 AI 开始验收')+'。';list.append(li);}syncChildren(ui.conditions,[cpNode('h3',null,'待你验收 '+conditional.length+' 项（按条件出现时做）'),list]);
  const started=following?.filter(row=>Number.isFinite(timestamp(row.execution_started_at))&&timestamp(row.execution_started_at)>0).length||0;syncChildren(ui.know,[]);ui.followingLabel.textContent=following?started?'AI 正在处理 '+started+' 项 · 需核对 '+(following.length-started)+' 项':'AI 需核对 '+following.length+' 项（是否已开始未记录）':phase==='loading'?'AI 需核对：正在读取':'AI 需核对：这次没读到';ui.followingLabel.parentElement.hidden=!!following&&!following.length;syncChildren(ui.followingBody,following?[cpRowsNode(following,false)]:[]);
  const compactGrant=(key)=>!authorizationFresh(status?.[key])?'读不到':remainingMinutes(status?.[key],clock())>0?(key==='personal_data'?'已解锁':'已开启'):stateLabel(status?.[key]);
  const closed=key=>authorizationFresh(status?.[key])&&['locked','inactive','revoked','expired'].includes(status?.[key]?.state);const labels=[['个人资料',closed('personal_data')?'正常锁着':compactGrant('personal_data'),grantState(status?.personal_data),'personal_data'],['无限制授权',closed('unrestricted')?'正常关着':compactGrant('unrestricted'),grantState(status?.unrestricted),'unrestricted'],['Windows',windowsFresh()?({'locked':'已锁屏','unlocked':'未锁屏','no_session':'没人登录'})[status?.host?.screen_state]||'未知':'读不到',windowsFresh()?'ok':'unknown'],['电脑',online()?'在线':'读不到',online()?'ok':'unknown']];
- syncChildren(ui.grants,labels.map(([label,text,state,key])=>{const item=cpNode('div','cp-authority');item.dataset.state=state;item.append(cpNode('span',null,label),cpNode('strong',null,text));if(key&&authorizationFresh(status?.[key])&&remainingMinutes(status?.[key],clock())>0)item.append(cpNode('small',null,'到 '+time(status[key].expires_at_unix).replace('今天 ','')));return item;}));
+ syncChildren(ui.grants,labels.map(([label,text,state,key])=>{const item=cpNode('div','cp-authority');item.dataset.state=state;item.append(cpNode('span',null,label),cpNode('strong',null,text));if(label==='电脑')item.append(cpNode('small',null,(online()?'':'当时：')+cpUptime()));if(key&&authorizationFresh(status?.[key])&&remainingMinutes(status[key],clock())>0)item.append(cpNode('small',null,'到 '+time(status[key].expires_at_unix).replace('今天 ','')));return item;}));
  const byId=new Map((cockpit?.schema==='pcconfig.cockpit.v1'?cockpit.cards||[]:[]).map(card=>[card.id,card])),insight=cpInsightRows();const gaps=(ready?cockpit.source_gaps||[]:[]).filter(gap=>clock()-timestamp(gap.since)>600);
  for(const [section,ids,fallbacks]of [[ui.computer,['computer_health','disk_space','traffic'],['电脑读数当前未知','磁盘剩余当前未知','套餐流量尚未读到']],[ui.remote,['remote'],['远程状态当前未知']],[ui.cloud,['backups','drive_upload'],['备份当前情况未知','Google 云盘：现在有没有在上传还不知道。']]]){
-  const nodes=section===ui.computer?[cpInsightNode(insight.computer[0])]:[];for(let i=0;i<ids.length;i++){const row=cpDisplay(byId.get(ids[i]),fallbacks[i]);if(row)nodes.push(row);}if(section===ui.computer)nodes.push(...insight.computer.slice(1).map(cpInsightNode));if(section===ui.cloud)nodes.push(...insight.cloud.map(cpInsightNode));
-  for(const gap of gaps)if((gap.card_ids||[]).some(id=>ids.includes(id))&&!gap.source_id?.startsWith('backup_inventory.'))nodes.push(cpLine(gap.title||'来源状态这次没读到，由 AI 核对（是否已开始未记录）。','warn'));syncChildren(section.body,nodes);
+  const nodes=section===ui.computer?[cpInsightNode(insight.computer[0])]:[];for(let i=0;i<ids.length;i++){if(section===ui.computer&&ids[i]==='computer_health')continue;const row=cpDisplay(byId.get(ids[i]),fallbacks[i]);if(row)nodes.push(row);}if(section===ui.computer)nodes.push(...insight.computer.slice(1).map(cpInsightNode));if(section===ui.cloud)nodes.push(...insight.cloud.map(cpInsightNode));
+  for(const gap of gaps)if((gap.card_ids||[]).some(id=>ids.includes(id))&&!gap.source_id?.startsWith('backup_inventory.')){const item=typed?.find(row=>row.source_id===gap.source_id&&row.kind==='source_gap');if(item)nodes.push(cpItemNode(item));}syncChildren(section.body,nodes);
  }
  const todayEvents=ready?cockpit.today_events:undefined;syncChildren(ui.events,[...(Array.isArray(todayEvents)?todayEvents.length?todayEvents.map(item=>cpLine(item.title||'事件内容尚未读到','ok')):[cpLine('今天还没有新事件','ok')]:[cpLine(phase==='loading'?'今天的事件正在读取':'今天事件当前情况未知')]),...insight.today.map(cpInsightNode)]);
  const learning=cpLearning();ui.learning.textContent=learning.text;ui.learning.dataset.state=learning.state;
  const corrections=ready?cockpit.owner_corrections:null;ui.basis.textContent=cpCorrectionText(corrections);ui.basis.dataset.state=corrections?.status==='pass'?'ok':'unknown';
  const changeNodes=[cpNode('h3',null,'今天代码变化')],change=cpDisplay(byId.get('today_changes'),'今天代码变化尚未读到');if(change)changeNodes.push(change);
  changeNodes.push(cpNode('h3',null,'今天上线'),cpLine('发布记录还没接到看板，不能从代码提交推断哪些已上线。'));syncChildren(ui.changes,changeNodes);
+ const pick=todayRiverHost?.querySelector('#pick');if(pick&&!pick.hidden)cpRiverNotice(pick.dataset.taskId,pick);cpUpdateCopyButtons();
  if(document.activeElement!==ui.duration)ui.duration.value=hours;if(document.activeElement!==ui.factor)ui.factor.value=code;ui.defaultInput.checked=saveDefault;ui.selection.disabled=busy||!!grant&&grantResultNeedsQuery(grant);ui.duration.disabled=ui.selection.disabled;ui.defaultInput.disabled=ui.selection.disabled;
  ui.factor.disabled=busy||!formal||!online()||!status?.state_version||status?.factor?.available!==true||status?.factor?.cooldown_until_unix>clock()||!!grant&&grantResultNeedsQuery(grant);
  for(const button of ui.panel.querySelectorAll('[data-cp-purpose]'))button.setAttribute('aria-pressed',String(button.dataset.cpPurpose===(combined?'both':purpose)));

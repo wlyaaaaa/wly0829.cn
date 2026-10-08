@@ -34,7 +34,8 @@ function cockpit(saved=storage()) {
  const slots=['cockpit-overall','cockpit-quick-1','cockpit-quick-2','cockpit-quick-3','cockpit-quick-4','cockpit-quick-5','cockpit-pc','cockpit-tasks','cockpit-backups','cockpit-projects','cockpit-today','cockpit-attention','cockpit-remote','cockpit-grafana','cockpit-security','cockpit-security-unrestricted','cockpit-security-windows'];
  const sandbox={...model,Date:ClockDate,Intl,URLSearchParams,localStorage:saved,sessionStorage:storage(),window:{SiteLiveRuntime:live,top:null},location:{origin:'https://wly0829.cn',hash:'',search:''},document:{querySelector:()=>({textContent:JSON.stringify({kind:'cockpit',page:'cockpit',project:null,screens:[{parts:[{native_live:slots.map(slot=>({slot}))}]}]})}),querySelectorAll:()=>[]},setTimeout:(...args)=>setTimeout(...args).unref(),clearTimeout};
  sandbox.window.top=sandbox.window;
- vm.runInNewContext(pure+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,cpTyped,cpItemTime,pendingRows,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
+ const copying=source.slice(source.indexOf('function cpCopyMeta('),source.indexOf('function cpNoticeNode('));
+ vm.runInNewContext(pure+copying+"\nglobalThis.subject={value,time,slotTime,grafanaGroupValue,summary,cpTyped,cpItemTime,pendingRows,cpCopyMeta,cpCopyRecords,cpCopyPrompt,cpCopyReady,operationRecords(request,items=[]){grant=request;actions=items;},set(data,p='ready',at=data?.observed_at_unix){status=data?adaptStatus(data):null;phase=p;lastRead=p==='ready'?clock():at||0;if(p==='ready')rememberCockpitValues(lastRead*1000);}};",sandbox);
  return {...sandbox.subject,advance(ms){current+=ms;}};
 }
 const groupUrls={all:'https://grafana.wly0829.cn/public-dashboards/cccccccccccccccccccccccccccccccc?theme=light','cpu-gpu':'https://grafana.wly0829.cn/public-dashboards/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?theme=light','memory-network':'https://grafana.wly0829.cn/public-dashboards/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb?theme=light'};
@@ -277,4 +278,20 @@ test('typed registration and read clocks remain distinct; terminal history has n
  const app=cockpit();app.set(fixture());const row=app.cpTyped({id:'past',title:'已通过的要求',source_id:'pending',state:'passed',history_category:'passed',current:false,resolved:true,what_happened:'已通过，留作记录',observed_at:iso(now),registration_date:'2026-09-28'},'history');
  assert.match(JSON.stringify(row.facts),/已通过，留作记录/);assert.ok(!row.facts.some(fact=>fact.label==='完成时间'||fact.label==='当前情况'));assert.match(app.cpItemTime(row),/本轮读取于 今天 02:00/);
  delete row.observed_at;assert.equal(app.cpItemTime(row),'登记于 2026-09-28');row.at='2026-09-28T10:30:00+08:00';row.at_kind='registration';assert.equal(app.cpItemTime(row),'登记于 9月28日 10:30');
+});
+
+test('AI handoff excludes closed and historic records and waits for the notice contract',()=>{
+ const app=cockpit(),data=fixture();data.cockpit={cards:[{id:'normal',notice_kind:null}],detail_groups:{need_you:[],ai_following:[],deferred:[],history:[]}};app.set(data);assert.equal(app.cpCopyReady(),true);
+ const row={id:'issue',title:'提醒',current:true,notice_kind:'warn',severity:'yellow',ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}};
+ assert.equal(app.cpCopyMeta(row,'公共一句话').hasHint,true);assert.equal(app.cpCopyMeta({...row,ai_hint:null},'公共一句话').hasHint,false);
+ for(const excluded of [{treatment_category:'C'},{earlier:true},{current:false},{current:null},{group:'history'},{group:'deferred'},{resolved:true},{notice_kind:null},{notice_kind:'unknown',ai_hint:null}])assert.equal(app.cpCopyMeta({...row,...excluded},'公共一句话'),null);
+ delete data.cockpit.cards[0].notice_kind;app.set(data);assert.equal(app.cpCopyReady(),false);app.set(data,'error');assert.equal(app.cpCopyMeta(row,'公共一句话'),null);
+});
+test('AI handoff deduplicates exact IDs and copies source time without private detail',()=>{
+ const app=cockpit(),data=fixture();data.observed_at_unix-=120;app.set(data);
+ const record=(id,color,at)=>app.cpCopyMeta({id,title:id,current:true,notice_kind:color==='未知'?'unknown':'warn',severity:color==='红'?'red':'yellow',first_seen_at:at,ai_hint:{last_error:'PRIVATE_ERROR',log_ref:'PRIVATE_PATH'}},'公共一句话');
+ const newer=record('yellow-new','黄',iso(now-60000)),older=record('yellow-old','黄',iso(now-120000)),red=record('red','红',null),unknown=record('unknown','未知',null);
+ const rows=app.cpCopyRecords({querySelectorAll:()=>[newer,red,unknown,older,newer].map(_cpCopy=>({_cpCopy}))},true);assert.deepEqual(Array.from(rows,row=>row.id),['red','yellow-old','yellow-new','unknown']);
+ const prompt=app.cpCopyPrompt(rows,'all','');assert.match(prompt,/http:\/\/127\.0\.0\.1:18793\/computer-access\/api\/status/);assert.match(prompt,/页面读到时间：10月4日 01:58（北京时间）。/);assert.doesNotMatch(prompt,/PRIVATE_|公共一句话/);
+ const missing={...red,hasHint:false};assert.match(app.cpCopyPrompt([missing],'item',''),/id=red 这一条还没有 ai_hint/);assert.match(app.cpCopyPrompt([missing],'block','电脑'),/id=red：red（还没有 ai_hint）/);
 });
