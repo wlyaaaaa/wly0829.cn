@@ -211,7 +211,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1对照本人要求本人的原话和选项照办，没定到的AI放手",
+        "text_ref": "1对照本人要求本人的话先分类：禁令照办，觉得不对先拿事实问本人",
         "columns": 5,
         "direction": "horizontal",
         "connector": "arrow",
@@ -293,7 +293,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1对照本人要求本人的原话和选项照办，没定到的AI放手",
+        "text_ref": "1对照本人要求本人的话先分类：禁令照办，觉得不对先拿事实问本人",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
