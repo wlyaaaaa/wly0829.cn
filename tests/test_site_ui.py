@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from playwright.sync_api import sync_playwright
@@ -24,6 +25,15 @@ IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAF
 
 
 class SiteUiTests(unittest.TestCase):
+    def test_anchor_clicks_do_not_inherit_the_previous_reading_tab(self):
+        root = self.folder/'anchor-isolation'/'probe'; root.mkdir(parents=True)
+        (root/'index.html').write_text('<a href="#product">Product</a><a href="#technical">Technical</a><section id="product"><a href="#project-gallery">Gallery</a><section id="project-gallery">Gallery result</section></section>'
+            '<section id="technical" hidden>Reference</section><script>addEventListener("hashchange",()=>{document.getElementById("product").hidden=location.hash==="#technical";document.getElementById("technical").hidden=location.hash!=="#technical"})</script>', encoding='utf8')
+        output = self.folder/'anchor-review.json'
+        result = subprocess.run([sys.executable, str(ROOT/'scripts/check-site-ui.py'), '--root', str(root.parent), '--pages', 'probe', '--output', str(output)], capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout+result.stderr)
+        self.assertEqual([(r['checks']['anchors'], r['issues']) for r in json.loads(output.read_text('utf8'))['records']], [(3, []), (3, [])])
+
     @classmethod
     def setUpClass(cls):
         cls.allowed = Path('E:/Cache/Codex/Temp')

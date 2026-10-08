@@ -59,6 +59,8 @@ async def review(page, base, route, width, dom, blocked=None):
         if video['ready']>=2 and video['paused']: fail('video-autoplay',video['src'],video)
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
     for link in {x['href']: x for x in links}.values():
+        await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
+        await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
         if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']): fail('anchor-target-missing',link['href'],{}); continue
         if link.get('action') and await target.count() and not await target.is_enabled(): fail('anchor-unavailable-review',link['href'],{'reason':'control-disabled'}); continue
