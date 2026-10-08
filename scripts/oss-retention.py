@@ -47,7 +47,8 @@ def predecessor():
         statuses = json.loads(command('gh', 'api', 'repos/wlyaaaaa/wly0829.cn/deployments/' + str(deployment['id']) + '/statuses?per_page=1'))
         if statuses and statuses[0]['state'] == 'success':
             return manifest(deployment['sha'])
-    if deployments:
+    local_manifest = ROOT / 'site-release' / 'release-manifest.json'
+    if deployments or (shared() / 'published.json').exists() or (local_manifest.exists() and read(local_manifest).get('oss')):
         raise ValueError('No confirmed successful publication; supply its exact previous-manifest')
     return None
 

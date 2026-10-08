@@ -88,6 +88,8 @@ class RetentionTests(unittest.TestCase):
 
     def test_stale_local_publication_record_does_not_replace_authoritative_success(self):
         retention.write(self.shared/'published.json', {'commit': 'old'})
+        with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'command', return_value='[]'):
+            with self.assertRaises(ValueError): retention.predecessor()
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'command', side_effect=[json.dumps([{'id': 7, 'sha': 'new'}]), json.dumps([{'state': 'success'}])]), \
              patch.object(retention, 'manifest', return_value={'release_id': 'new'}) as manifests:
             self.assertEqual(retention.predecessor(), {'release_id': 'new'})
