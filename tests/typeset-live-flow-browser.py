@@ -137,7 +137,9 @@ def fixture(pages):
 
 SNAPSHOT = '''()=>({
   overflow:document.documentElement.scrollWidth>innerWidth+1,
-  cards:[...document.querySelectorAll('.typeset-live')].filter(e=>e.getClientRects().length).map(e=>({slot:e.dataset.slot,state:e.dataset.state,text:e.textContent,height:e.clientHeight,width:e.clientWidth,font:getComputedStyle(e).fontSize,overflow:e.scrollWidth>e.clientWidth+1,inFlow:!!e.closest('.typeset-live-flow-cards'),box:(()=>{const r=e.getBoundingClientRect();return [r.left,r.top,r.width,r.height]})()})),
+  cards:[...document.querySelectorAll('.typeset-live')].filter(e=>e.getClientRects().length).map(e=>({slot:e.dataset.slot,state:e.dataset.state,text:e.textContent,height:e.clientHeight,width:e.clientWidth,font:getComputedStyle(e).fontSize,overflow:e.scrollWidth>e.clientWidth+1||e.scrollHeight>e.clientHeight+1,inFlow:!!e.closest('.typeset-live-flow-cards'),box:(()=>{const r=e.getBoundingClientRect();return [r.left,r.top,r.width,r.height]})(),
+    compact:!!e.closest('.typeset-live-flow-compact-frame')&&e.classList.contains('live-status-compact'),
+    geometry:(()=>{const b=e.getBoundingClientRect(),rect=r=>[r.left,r.top,r.right,r.bottom],contentRects=[...e.querySelectorAll('*')].filter(n=>n.getClientRects().length).map(n=>rect(n.getBoundingClientRect())),textRects=[],walker=document.createTreeWalker(e,NodeFilter.SHOW_TEXT);for(let n;n=walker.nextNode();)if(n.textContent.trim()){const range=document.createRange();range.selectNodeContents(n);textRects.push(...[...range.getClientRects()].map(rect));}return {contentRects,textRects,contained:[...contentRects,...textRects].every(r=>r[0]>=b.left-1&&r[1]>=b.top-1&&r[2]<=b.right+1&&r[3]<=b.bottom+1)};})()})),
   parts:[...document.querySelectorAll('.typeset-live-flow-ready')].filter(e=>!e.hidden).map(e=>({screen:e.closest('.screen').dataset.screen,height:e.clientHeight,tiles:[...e.querySelectorAll('.typeset-live-flow-tile')].map(t=>[Number(t.dataset.sourceStart),Number(t.dataset.sourceEnd)]),imagesSame:[...e.querySelectorAll('.typeset-live-flow-image')].every(i=>i.src===(e.querySelector(':scope>picture img').currentSrc||e.querySelector(':scope>picture img').src)),imagesLoaded:[...e.querySelectorAll('.typeset-live-flow-image')].every(i=>i.complete&&i.naturalWidth>0),hotspots:[...e.querySelectorAll('[data-typeset-kind="link"],[data-typeset-kind="button"]')].map(h=>({id:h.dataset.hotId,href:h.getAttribute('href'),inTile:!!h.closest('.typeset-live-flow-layer')}))}))
 })'''
 
@@ -190,7 +192,8 @@ async def run(args):
                 await page.wait_for_timeout(80)
                 snapshot = await page.evaluate(SNAPSHOT)
                 assert not snapshot['overflow'], (device, entry, snapshot)
-                assert snapshot['cards'] and all(c['inFlow'] and not c['overflow'] and c['height'] >= 94 and float(c['font'].removesuffix('px')) >= 14 for c in snapshot['cards']), (device, entry, snapshot)
+                assert snapshot['cards'] and all(c['inFlow'] and not c['overflow'] and float(c['font'].removesuffix('px')) >= 14 for c in snapshot['cards']), (device, entry, snapshot)
+                assert all(c['geometry']['textRects'] and c['geometry']['contained'] and float(c['font'].removesuffix('px')) >= 16 if c['compact'] else c['height'] >= 94 for c in snapshot['cards']), (device, entry, snapshot)
                 for part in snapshot['parts']:
                     assert part['imagesSame'] and part['imagesLoaded'], part
                     intervals = sorted(part['tiles'])

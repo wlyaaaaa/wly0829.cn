@@ -142,8 +142,10 @@
  function contentText(win,root){
   const doc=win.document,walker=doc.createTreeWalker(root,win.NodeFilter.SHOW_TEXT),entries=[];
   while(walker.nextNode()){const node=walker.currentNode,el=node.parentElement;if(!node.textContent.trim()||!contentVisible(win,el))continue;const clip=contentClip(win,el);if(!clip)continue;
+   const key=e=>[...e.classList].sort().join(' '),hot=el.closest('[data-hot-id]'),host=el.closest('.typeset-part'),peers=hot?[hot,...hot.querySelectorAll(el.tagName)].filter(e=>e.tagName===el.tagName&&key(e)===key(el)):[el],r=contentBox(el.getBoundingClientRect());
+   const probe={hot,host,hotId:hot?.dataset.hotId,tag:el.tagName,classes:key(el),ordinal:peers.indexOf(el),count:peers.length,rect:{...r,top:r.top+win.scrollY,bottom:r.bottom+win.scrollY},phase:[doc.body.dataset.b2StatusPhase,doc.body.dataset.statusPhase,hot?.dataset.state].join('|'),node,nodeOrdinal:[...el.childNodes].filter(n=>n.nodeType===3).indexOf(node),nodeCount:[...el.childNodes].filter(n=>n.nodeType===3).length};
    const range=doc.createRange();range.selectNodeContents(node);
-   for(const r of range.getClientRects()){const box=contentIntersection(contentBox(r),clip);if(box)entries.push({el,text:node.textContent.trim(),box});}
+   for(const [lineOrdinal,r] of [...range.getClientRects()].entries()){const box=contentIntersection(contentBox(r),clip);if(box)entries.push({el,text:node.textContent.trim(),box,probe:{...probe,lineOrdinal}});}
   }
   return entries;
  }
@@ -161,11 +163,28 @@
   for(const above of stack.slice(0,index)){if(above.contains(target)||target.contains(above))continue;if(contentPaints(win,above,x,y))return {reason:'painted_cover',tag:above.tagName,id:above.id,class_name:above.className};}
   return null;
  }
- async function contentProbe(win,target,box,points=[[.2,.2],[.5,.2],[.8,.2],[.2,.5],[.5,.5],[.8,.5],[.2,.8],[.5,.8],[.8,.8]]){
-  const records=[];
-  for(const [fx,fy] of points){
-   const dx=box.left+box.width*fx,dy=box.top+box.height*fy;win.scrollTo({top:dy-win.innerHeight*.45,behavior:'instant'});await new Promise(resolve=>win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)));
-   const y=dy-win.scrollY,blocker=dx<0||dx>=win.innerWidth||y<0||y>=win.innerHeight?{reason:'outside_viewport'}:contentBlocker(win,target,dx,y);records.push({point:[dx,y],scroll_y:win.scrollY,blocker});
+ async function contentProbe(win,target,box,points=[[.2,.2],[.5,.2],[.8,.2],[.2,.5],[.5,.5],[.8,.5],[.2,.8],[.5,.8],[.8,.8]],textMeta=null){
+  const records=[],key=e=>[...e.classList].sort().join(' '),rect=e=>{const r=contentBox(e.getBoundingClientRect());return {...r,top:r.top+win.scrollY,bottom:r.bottom+win.scrollY};};
+  const hot=textMeta?.hot||target.closest('[data-hot-id]'),host=textMeta?.host||target.closest('.typeset-part'),tag=textMeta?.tag||target.tagName,classes=textMeta?.classes??key(target),hotId=textMeta?.hotId||hot?.dataset.hotId;
+  const peers=h=>[h,...h.querySelectorAll(tag)].filter(e=>e.tagName===tag&&key(e)===classes),initial=hot?peers(hot):[target],ordinal=textMeta?.ordinal??initial.indexOf(target),count=textMeta?.count??initial.length,original=textMeta?.rect||rect(target);
+  let bound=target,previous=original,area=contentBox(box),textNode=textMeta?.node,rebound=0;
+  const phase=()=>[win.document.body.dataset.b2StatusPhase,win.document.body.dataset.statusPhase,bound.closest('[data-hot-id]')?.dataset.state].join('|');let state=textMeta?.phase??phase();
+  const resolve=()=>{if(!hotId)return bound.isConnected&&bound.tagName===tag&&key(bound)===classes?bound:null;const anchors=[...(host?.isConnected?host:win.document).querySelectorAll('[data-hot-id]')].filter(e=>e.dataset.hotId===hotId);if(anchors.length!==1)return null;const list=peers(anchors[0]);return list.length===count&&ordinal>=0?list[ordinal]||null:null;};
+  const currentArea=()=>{const clip=contentClip(win,bound);if(!clip)return null;const current=rect(bound);let region;
+   if(textMeta){const nodes=[...bound.childNodes].filter(n=>n.nodeType===3),node=nodes[textMeta.nodeOrdinal];if(!node?.textContent.trim())return null;if(nodes.length!==textMeta.nodeCount)return null;const range=win.document.createRange();range.selectNodeContents(node);const line=range.getClientRects()[textMeta.lineOrdinal];if(!line)return null;textNode=node;region=contentBox(line);region={...region,top:region.top+win.scrollY,bottom:region.bottom+win.scrollY};}
+   else{if(original.width<=0||original.height<=0)return null;region=contentBox({left:current.left+(box.left-original.left)*current.width/original.width,top:current.top+(box.top-original.top)*current.height/original.height,width:box.width*current.width/original.width,height:box.height*current.height/original.height});}
+   return contentIntersection(region,{...clip,top:clip.top+win.scrollY,bottom:clip.bottom+win.scrollY});
+  };
+  for(const [fx,fy] of points){let failure=null;
+   for(let attempt=0;attempt<=2;attempt++){
+    const dx=area.left+area.width*fx,dy=area.top+area.height*fy;win.scrollTo({top:dy-win.innerHeight*.45,behavior:'instant'});await new Promise(resolve=>win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)));
+    const connected=bound.isConnected,staleText=textMeta&&(!textNode?.isConnected||textNode.parentElement!==bound),now=connected?rect(bound):null,next=connected?currentArea():null,changed=!connected||staleText||bound.tagName!==tag||key(bound)!==classes||hotId&&bound.closest('[data-hot-id]')?.dataset.hotId!==hotId||rectError(now,previous)>.00001||phase()!==state||next&&rectError(next,area)>.00001;
+    if(changed){if(rebound>=2){failure={reason:'target_rebind_limit'};break;}rebound++;const current=resolve();if(!current){failure={reason:'target_rebind_missing_or_nonunique'};break;}bound=current;const fresh=currentArea();if(!fresh){failure={reason:'current_content_range_missing'};break;}area=fresh;previous=rect(bound);state=phase();continue;}
+    if(!next){failure={reason:'current_content_range_missing'};break;}area=next;break;
+   }
+   const dx=area.left+area.width*fx,dy=area.top+area.height*fy,y=dy-win.scrollY,blocker=failure||(dx<0||dx>=win.innerWidth||y<0||y>=win.innerHeight?{reason:'outside_viewport'}:contentBlocker(win,bound,dx,y));
+   const clip=bound.isConnected?contentClip(win,bound):null,sampleClip=clip?{...clip,top:clip.top+win.scrollY,bottom:clip.bottom+win.scrollY}:null;
+   records.push({point:[dx,y],scroll_y:win.scrollY,blocker,connected:bound.isConnected,current_rect:bound.isConnected?contentBox(bound.getBoundingClientRect()):null,hit_stack:win.document.elementsFromPoint(dx,y).map(e=>({tag:e.tagName,id:e.id,class_name:e.getAttribute('class')||''})),rebound_count:rebound,sample_box:failure?null:area,sample_text:textMeta&&textNode?.isConnected&&textNode.parentElement===bound?textNode.textContent.trim():null,sample_target_box:bound.isConnected?rect(bound):null,sample_clip:sampleClip});
   }
   return records;
  }
@@ -239,7 +258,7 @@
         let regions=visible?[visible]:[];for(const control of el.querySelectorAll('input[type=range],.typeset-compare-open')){const clip=contentClip(win,control);if(clip)regions=regions.flatMap(region=>contentSubtract(region,clip));}visible=regions.sort((a,b)=>b.width*b.height-a.width*a.height)[0]||null;
         const record={screen:s.id,part:part.image,hot_id:hot.id,source_index:index,role:hot.shots[index].role||null,natural_size:img?[img.naturalWidth,img.naturalHeight]:[0,0],visible_rect:visible,probes:[]};
         if(!img?.complete||!img.naturalWidth||!img.naturalHeight||!visible||visible.width<=0||visible.height<=0){record.status='fail';issues.push(part.image+':screenshot not visibly rendered '+hot.id+'/'+index);}
-        else{const y=win.scrollY,box={...visible,top:visible.top+y,bottom:visible.bottom+y},points=[[.2,.2],[.5,.2],[.8,.2],[.2,.5],[.5,.5],[.8,.5],[.2,.8],[.5,.8],[.8,.8],...contentCoverPoints(win,img,box)];record.probes=await contentProbe(win,img,box,points);record.status=record.probes.some(probe=>probe.blocker)?'fail':'pass';if(record.status==='fail')issues.push(part.image+':screenshot covered '+hot.id+'/'+index);else for(const region of regions)blocks.push({left:region.left,top:region.top+y,width:region.width,height:region.height});}
+        else{const y=win.scrollY,imageBox=contentBox(img.getBoundingClientRect()),box={...visible,top:visible.top+y,bottom:visible.bottom+y},points=[[.2,.2],[.5,.2],[.8,.2],[.2,.5],[.5,.5],[.8,.5],[.2,.8],[.5,.8],[.8,.8],...contentCoverPoints(win,img,box)];record.probes=await contentProbe(win,img,box,points);record.status=record.probes.some(probe=>probe.blocker)?'fail':'pass';if(record.status==='fail')issues.push(part.image+':screenshot covered '+hot.id+'/'+index);else{const last=record.probes.at(-1),current=last?.sample_target_box;record.sample_regions=regions.map(region=>current&&last.sample_clip?contentIntersection(contentBox({left:current.left+(region.left-imageBox.left)*current.width/imageBox.width,top:current.top+(region.top-imageBox.top)*current.height/imageBox.height,width:region.width*current.width/imageBox.width,height:region.height*current.height/imageBox.height}),last.sample_clip):null).filter(Boolean);for(const region of record.sample_regions)blocks.push({left:region.left,top:region.top,width:region.width,height:region.height});}}
         screenshots.push(record);
        }
       }else{
@@ -256,15 +275,17 @@
        const inputText=input?(el.value||el.getAttribute('placeholder')||''):null;
        const record={screen:s.id,part:part.image,hot_id:hot.id,slot:hot.slot,kind:lamp?'status_lamp':input?'form_input':'visible_text',state,text:input?inputText:meaning,...(input?{input_label:el.getAttribute('aria-label'),input_empty:!inputText,semantic_status:inputText?'input_value_present':'awaiting_user_input'}:{}),visible_text_rects:text.map(entry=>entry.box),visible_rect:clip,probes:[]};
        if(!meaning||!clip||clip.width<=0||clip.height<=0||lamp&&(!state||!contentPaints(win,el,clip.left+clip.width/2,clip.top+clip.height/2))){record.status='fail';issues.push(part.image+':empty or invisible live content '+hot.slot);}
-       else{const y=win.scrollY,targets=(lamp||input?[{el,box:clip}]:contentText(win,el)).map(target=>({...target,box:{...target.box,top:target.box.top+y}}));for(const target of targets){const b=target.box,probes=await contentProbe(win,target.el,b,[[.5,.5]]);record.probes.push(...probes);if(probes.every(probe=>!probe.blocker)&&!input)blocks.push({left:b.left,top:b.top,width:b.width,height:b.height});}record.status=record.probes.some(probe=>probe.blocker)?'fail':'pass';if(record.status==='fail')issues.push(part.image+':live content covered '+hot.slot);
+       else{const y=win.scrollY,targets=(lamp||input?[{el,box:clip}]:contentText(win,el)).map(target=>({...target,box:{...target.box,top:target.box.top+y}}));for(const target of targets){const b=target.box,probes=await contentProbe(win,target.el,b,[[.5,.5]],target.probe);record.probes.push(...probes);if(probes.every(probe=>!probe.blocker)&&!input)for(const {sample_box:q} of probes)if(q)blocks.push({left:q.left,top:q.top,width:q.width,height:q.height});}record.status=record.probes.some(probe=>probe.blocker)?'fail':'pass';if(record.status==='fail')issues.push(part.image+':live content covered '+hot.slot);
         // The two schema-owned form fields are user input, not status values.
         // An empty labelled input is never counted as a filled content block.
         if(input&&inputText&&record.status==='pass'){const cs=win.getComputedStyle(el),ctx=doc.createElement('canvas').getContext('2d');ctx.font=cs.font;const w=Math.min(ctx.measureText(inputText).width,clip.width),h=Math.min(parseFloat(cs.fontSize)||0,clip.height);if(w>0&&h>0)blocks.push({left:clip.left+parseFloat(cs.paddingLeft||0),top:clip.top+y+(clip.height-h)/2,width:w,height:h});}
        }
+       record.sample_texts=record.probes.map(p=>p.sample_text).filter(t=>t!==null&&t!==undefined);record.sample_boxes=record.probes.map(p=>p.sample_box).filter(Boolean);
        liveSlots.push(record);
       }
      }
-     for(const node of host.querySelectorAll('[data-today-river] h3,[data-today-river] p'))for(const text of contentText(win,node)){const y=win.scrollY,b={...text.box,top:text.box.top+y},probes=await contentProbe(win,text.el,b,[[.5,.5]]);if(probes.some(probe=>probe.blocker))issues.push(part.image+':river explanation covered');else blocks.push({left:b.left,top:b.top,width:b.width,height:b.height});}
+     for(const node of host.querySelectorAll('[data-today-river] h3,[data-today-river] p'))for(const text of contentText(win,node)){const y=win.scrollY,b={...text.box,top:text.box.top+y},probes=await contentProbe(win,text.el,b,[[.5,.5]],text.probe);if(probes.some(probe=>probe.blocker))issues.push(part.image+':river explanation covered');else for(const {sample_box:q} of probes)if(q)blocks.push({left:q.left,top:q.top,width:q.width,height:q.height});}
+     for(const hot of part.hotspots.filter(item=>item.kind==='button'&&item.action)){const node=[...host.querySelectorAll('[data-hot-id]')].find(el=>el.dataset.hotId===hot.id);if(!node)continue;for(const text of contentText(win,node)){const y=win.scrollY,b={...text.box,top:text.box.top+y},probes=await contentProbe(win,text.el,b,[[.5,.5]],text.probe);if(probes.some(probe=>probe.blocker))issues.push(part.image+':native button text covered '+hot.id);else for(const {sample_box:q} of probes)if(q)blocks.push({left:q.left,top:q.top,width:q.width,height:q.height});}}
      const empty=staticBlocks?contentBlankRegions(blocks,{width:win.innerWidth,height:win.innerHeight}):{components:[],issues:[]},proof=part.content_occupancy;const sourceBinding=proof?Object.fromEntries(['policy','method','source_html_sha256','source_png_sha256','fit_sha256','measurement_sha256'].map(key=>[key,proof[key]])):null;const before=prior(win.innerWidth)?.blank?.[part.image]||0,fraction=empty.largest_empty_rectangle?.viewport_fraction||0,regression=baseline?{before,after:fraction,tolerance:.02,worse:fraction>Math.max(.15,before+.02)}:null;
      screens.push({screen:s.id,part:part.image,source_binding:sourceBinding,content_blocks:blocks.length,...empty,regression});issues.push(...empty.issues.map(issue=>part.image+':'+issue));if(regression?regression.worse:empty.definite_fail)issues.push(part.image+':continuous blank rectangle exceeds 15% of viewport');
     }

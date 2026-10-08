@@ -398,7 +398,9 @@
         "address_style": "monospace",
         "button_columns": 2,
         "text_ref": "主机",
-        "whole_block": true
+        "whole_block": true,
+        "row": "primary-entrances",
+        "width": "50%"
       },
       {
         "type": "points_card",
@@ -411,7 +413,9 @@
         "address_style": "monospace",
         "button_columns": 2,
         "text_ref": "副机",
-        "whole_block": true
+        "whole_block": true,
+        "row": "primary-entrances",
+        "width": "50%"
       },
       {
         "type": "points_card",
@@ -424,7 +428,10 @@
         "address_style": "monospace",
         "button_columns": 2,
         "text_ref": "主机备用入口",
-        "whole_block": true
+        "whole_block": true,
+        "row": "backup-entrance",
+        "width": "80%",
+        "row_align": "center"
       },
       {
         "type": "notice",

@@ -353,29 +353,39 @@
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "arrow",
-        "row": "cli",
-        "width": "58%",
-        "text_ref": "1在项目目录敲aicli，列出这次能开的路线，最近用过的"
+        "text_ref": "1在项目目录敲aicli，列出这次能开的路线，最近用过的",
+        "row": "cli-steps",
+        "width": "75%",
+        "row_align": "center"
       },
       {
         "type": "prose",
-        "row": "cli",
         "page_break_after": false,
         "text_ref": "QwenCode和OpenCode的3条路线只给程序调用"
       },
       {
         "type": "screenshot",
-        "withdrawn_indices": [0], "withdrawal_note": "这张截图含个人内容，已撤下", "text_ref": "这张截图含个人内容，已撤下", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "withdrawn_indices": [
+          0
+        ],
+        "withdrawal_note": "这张截图含个人内容，已撤下",
+        "text_ref": "这张截图含个人内容，已撤下",
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          }
+        ],
         "indices": [
           0
         ],
-        "row": "cli",
-        "width": "42%",
         "ratio": "1436:1737"
       },
       {
         "type": "prose",
-        "row": "cli",
         "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
       }
     ],

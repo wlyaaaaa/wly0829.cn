@@ -39,6 +39,9 @@ function typesetContentRects(win,doc){
   const before=groups.get(owner)||[];before.push(...rs.map(rect));groups.set(owner,before);
  }
  for(const rs of groups.values()){const left=Math.min(...rs.map(r=>r[0])),top=Math.min(...rs.map(r=>r[1])),right=Math.max(...rs.map(r=>r[0]+r[2])),bottom=Math.max(...rs.map(r=>r[1]+r[3]));blocks.push({kind:'text',rect:[left,top,right-left,bottom-top]});}
+ for(const el of page.querySelectorAll('[data-comp=chart].dd-chart-bar .dd-track,[data-comp=chart].dd-chart-bar .dd-bar,.feature-status-dot')){
+  const box=el.getBoundingClientRect(),style=win.getComputedStyle(el);if(visible(el)&&box.width>0&&box.height>0&&style.backgroundColor!=='transparent'&&style.backgroundColor!=='rgba(0, 0, 0, 0)')blocks.push({kind:'drawing',rect:rect(box)});
+ }
  // Read only the existing raster's numerical ink bounds. No page capture,
  // bitmap export or card/background-container rectangle enters occupancy.
  for(const im of page.querySelectorAll('img')){

@@ -55,6 +55,10 @@ a.live-status-card[href]:hover { border-color: #76ba90; }
 a.live-status-card[href]:focus-visible { outline: 3px solid #6bac86; outline-offset: 3px; }
 .live-status-card.live-status-compact { gap: 4px; padding: 9px 11px; border-radius: 10px; }
 .live-status-card.live-status-compact .live-status-icon { flex-basis: 25px; width: 25px; height: 25px; }
+.typeset-live-flow-compact-frame .live-status-card.live-status-compact { grid-template-columns: minmax(0, auto) minmax(0, 1fr); align-items: center; }
+.typeset-live-flow-compact-frame .live-status-compact .live-status-heading { grid-column: 1; }
+.typeset-live-flow-compact-frame .live-status-compact .live-status-summary { grid-column: 2; }
+.typeset-live-flow-compact-frame .live-status-compact .live-status-value, .typeset-live-flow-compact-frame .live-status-compact .live-status-meta { grid-column: 1 / -1; }
 .typeset-live.live-status-card { height: auto !important; justify-content: stretch; align-items: stretch; min-height: 0; }
 .typeset-live.live-status-card > * { min-width: 0; }
 @media (max-width: 600px) {

@@ -21,13 +21,6 @@
         "row": "top"
       },
       {
-        "type": "line_legend",
-        "text_ref": "线上传的东西分四种",
-        "row": "top",
-        "layout": "rows",
-        "columns": 1
-      },
-      {
         "type": "illustration",
         "row": "top",
         "width": "47%",
@@ -35,6 +28,12 @@
         "index": 0,
         "size": "large",
         "target_width": "100%"
+      },
+      {
+        "type": "line_legend",
+        "text_ref": "线上传的东西分四种",
+        "layout": "rows",
+        "columns": 2
       },
       {
         "type": "action_button",
@@ -1089,6 +1088,16 @@
         "type": "content_card",
         "text_ref": "⑤ 共享端口",
         "columns": 1,
+        "columns_v": 1,
+        "align": "left",
+        "connector": "none",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "⑦ 复制粘贴",
+        "columns": 3,
         "columns_v": 1,
         "align": "left",
         "connector": "none",

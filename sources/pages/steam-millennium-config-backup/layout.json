@@ -1156,7 +1156,7 @@
         "type": "status_legend",
         "align": "left",
         "size": "medium",
-        "columns": 1,
+        "columns": 2,
         "illustration": "none",
         "connector": "none",
         "text_ref": "图例：",

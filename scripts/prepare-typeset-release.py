@@ -15,7 +15,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import quote, urljoin, urlsplit
+from urllib.parse import quote, unquote, urljoin, urlsplit
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -228,7 +228,7 @@ def effects_evidence(entry, dom, snapshot_hash):
     if not baseline_path.is_file():baseline_path=ROOT/'config/quality-baseline.json'
     baseline=read(baseline_path) if baseline_path.is_file() else None;before=next((p for name,p in (baseline or {}).get('pages',{}).items() if name==dom.get('quality_page')),None)
     required=set(expected) if before is None else set().union(*(set(p['preserved']) for p in before.values()))
-    if set(actual_expected) != set(expected) or not required.issubset(preserved):
+    if set(actual_expected) != set(expected) or not set(expected).issubset(preserved):
         raise ValueError("Effects evidence omits or changes an original-site capability")
     evidence = proof.get("evidence")
     if not isinstance(evidence, dict):
@@ -269,6 +269,16 @@ def effects_evidence(entry, dom, snapshot_hash):
         observed.update(capabilities)
     if counts != totals or evidence["running_animation_count"] != max(running) or set(preserved) != observed:
         raise ValueError("Effects summary differs from its actual desktop and phone observations")
+    def current_absent(name):
+        cap = entry.get('effects_capabilities', {}).get(name, {})
+        return (name in {'cards', 'numbers', 'arrows', 'screenshots', 'card_feedback'} and name not in expected
+                and cap.get('policy') == 'current-bound-layout-v1' and cap.get('status') == 'no_corresponding_element'
+                and all(type(cap.get(key)) is int and cap[key] == 0 for key in ('count_h', 'count_v'))
+                and all(check.get('effects_capabilities', {}).get(name) == cap
+                        and type(check.get('capability_counts', {}).get(name)) is int
+                        and check['capability_counts'][name] == 0 for check in checks))
+    if any(not current_absent(name) for name in required - set(preserved)):
+        raise ValueError("Effects evidence omits an original-site capability without current bound absence")
     capability = entry.get('effects_capabilities', {}).get('dots')
     if capability:
         if capability.get('policy') != motion.DOT_POLICY or capability.get('status') not in {'present', 'no_corresponding_element'}:
@@ -679,6 +689,43 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
     return copies
 
 
+def unused_live_ui_asset(release, relative, asset, manifest, build, checked):
+    if relative in manifest['files'] or not re.fullmatch(r'_typeset/runtime/live-ui-[a-f0-9]{20}\.css', relative):
+        return False
+    if any(Path(relative).name in unquote((release / name).read_text('utf-8-sig'))
+           for name in manifest['files'] if Path(name).suffix in {'.html', '.css', '.js', '.json'}):
+        return False
+    bound_file(Path(build['output_root'] + '-candidate') / relative, asset, checked)
+    return True
+
+
+def static_home_stages(release, static, creative, ui, checked):
+    stages = [(step['name'], Path(step['manifest']['path']).resolve().parent) for step in creative['steps']]
+    for name, root in stages:
+        stage = read(root / hybrid.MANIFEST)
+        bound_file(root / 'index.html', stage['files']['index.html'], checked)
+    spec = importlib.util.spec_from_file_location('typeset_static_home', ROOT / 'scripts/prepare-static-home.py')
+    module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    module.verify_static_home(stages[0][1], static)
+    for relative, expected in static['static_assets'].items():
+        bound_file(release / relative, expected, checked)
+    last = stages[-1][1]; prior = (last / 'index.html').read_text('utf8'); final = (release / 'index.html').read_text('utf8')
+    if module.PICTURE.search(prior)[3] != module.PICTURE.search(final)[3]:
+        raise ValueError('Final homepage picture differs from the bound last creative stage')
+    before = json.loads(module.PAGE_DATA.search(prior)[2]); after = json.loads(module.PAGE_DATA.search(final)[2])
+    if (any(before.get(key) != after.get(key) for key in ('home_static', 'home_living', 'video'))
+            or before['screens'][0]['layouts'] != after['screens'][0]['layouts']
+            or before['shared']['script_bundle'] != after['shared']['script_bundle']):
+        raise ValueError('Final homepage state, geometry or runtime differs from the bound creative stage')
+    stage_files = read(last / hybrid.MANIFEST)['files']; bundle = after['shared']['script_bundle'].lstrip('/')
+    bound_file(release / bundle, stage_files[bundle], checked)
+    if digest(last / 'index.html') != digest(release / 'index.html'):
+        rows = [row for row in ui.get('toc', {}).get('pages', []) if row['page'] == 'index.html']
+        if len(rows) != 1 or rows[0]['before_sha256'] != digest(last / 'index.html') or rows[0]['after_sha256'] != digest(release / 'index.html'):
+            raise ValueError('Final homepage postprocessing lacks its exact TOC before/after binding')
+    return {'static_stage_verified': True, 'final_stage': stages[-1][0], 'final_picture_and_runtime_bound': True}
+
+
 def prepare(args):
     checked_inputs={}
     release = args.release.resolve()
@@ -693,7 +740,7 @@ def prepare(args):
             issue["page"] = page
         result["blockers"].append(issue)
 
-    # The explicit Claude instruction is supplied by the caller; never manufacture it.
+    # The supervisor's explicit instruction is supplied by the caller; never manufacture it.
     build = read(args.build_report)
     verification = read(args.verification)
     directive_present = args.directive is not None and args.directive.is_file()
@@ -704,8 +751,8 @@ def prepare(args):
     geometry_hash = hashlib.sha256(geometry_payload).hexdigest()
     for data, schema, name in ((build, "wly.typeset-build.v1", "build"),
                                (verification, "wly.typeset-verification.v1", "DOM verification"),
-                               (directive, "wly.typeset-publish-directive.v1", "Claude publication instruction")):
-        if data.get("schema") != schema and (name != "Claude publication instruction" or directive_present):
+                               (directive, "wly.typeset-publish-directive.v1", "Publication instruction")):
+        if data.get("schema") != schema and (name != "Publication instruction" or directive_present):
             block("evidence", name + " schema mismatch")
     manifest = hybrid.verify_release(release)
     rebuilt = read(args.rebuilt_report) if args.rebuilt_report else None
@@ -749,6 +796,9 @@ def prepare(args):
         for asset in ui.get('assets',[])+ui.get('hardware_icons',[]):
             relative=asset.get('path') or asset['public_path'].lstrip('/')
             if manifest['files'].get(relative)!={key:asset[key]for key in ('sha256','bytes')}:
+                if unused_live_ui_asset(release, relative, asset, manifest, build, checked_inputs):
+                    result.setdefault('unreferenced_live_ui_stage_assets', []).append({'path': relative, **{key: asset[key] for key in ('sha256', 'bytes')}})
+                    continue
                 block('live_ui_preparation','Live UI asset is absent or changed in the exact final manifest: '+relative)
     overlay_info = build.get('release_overlay')
     automatic_navigation=manifest.get('release_overlay',{})
@@ -834,9 +884,7 @@ def prepare(args):
                         or static.get('release_id')!=creative['steps'][0]['after_release_id']
                         or manifest.get('home_living_preparation')):
                     raise ValueError('Static homepage preparation differs from the actual first replay step')
-                static_spec=importlib.util.spec_from_file_location('typeset_static_home',ROOT/'scripts/prepare-static-home.py')
-                static_module=importlib.util.module_from_spec(static_spec);static_spec.loader.exec_module(static_module)
-                static_module.verify_static_home(release,static)
+                result['home_stage_verification'] = static_home_stages(release, static, creative, build.get('live_ui_preparation') or {}, checked_inputs)
                 panorama=creative['panorama_source_input'];bound_file(panorama['path'],panorama,checked_inputs)
                 if (staged.get('inputs',{}).get(panorama['path'])!={'sha256':panorama['sha256'],'bytes':panorama['bytes']}
                         or not panorama['path'].replace('\\','/').endswith('/sources/how.json')):
@@ -898,7 +946,7 @@ def prepare(args):
     elif overlay_info:
         block('release_overlay','Build overlay is absent from the release manifest')
     if build.get("files") != manifest["files"]:
-        block("build", "Release files differ from the Claude-reviewed build report; rebuild requires new verification")
+        block("build", "Release files differ from the reviewed build report; rebuild requires new verification")
     if build.get("release_id", release_id) != release_id:
         block("build", "Build release_id differs; repeat program verification, Claude review, and the publication instruction")
     if build.get("baseline_index_sha256") != old["index.html"]["sha256"]:
@@ -915,7 +963,7 @@ def prepare(args):
             block("homepage", "Homepage must never occur in accepted_pages")
     bound_evidence = [(verification, "DOM verification")]
     if directive_present:
-        bound_evidence.append((directive, "Claude publication instruction"))
+        bound_evidence.append((directive, "Publication instruction"))
     for data, name in bound_evidence:
         if data.get("build_report_sha256") != build_hash or data.get("release_id") != release_id:
             block("evidence", name + " belongs to a different build or release")
@@ -928,8 +976,8 @@ def prepare(args):
         block("evidence", error)
     instruction_source = directive.get("source")
     source_present = isinstance(instruction_source, str) and bool(instruction_source.strip()) or isinstance(instruction_source, dict) and any(isinstance(value, str) and value.strip() for value in instruction_source.values())
-    if directive.get("recorded_by") != "Claude" or directive.get("instruction") != "发布" or directive.get("reviewed") is not True or not source_present:
-        block("publication_instruction", "Claude must review the full program evidence and issue an explicit publication instruction with its real source")
+    if directive.get("recorded_by") not in {"Claude", "Codex"} or directive.get("instruction") != "发布" or directive.get("reviewed") is not True or not source_present:
+        block("publication_instruction", "The supervisor must review the full program evidence and issue an explicit publication instruction with its real source")
 
     rows = [json.loads(line) for line in args.inventory.read_text("utf-8-sig").splitlines() if line.strip()]
     inventory_pages = {}
@@ -1343,7 +1391,7 @@ def main(argv=None):
     gate = commands.add_parser("prepare", help="Local evidence check; no build, Git mutation, or network")
     for name in ("typeset-root", "inventory", "geometry", "baseline", "baseline-manifest", "release", "build-report", "verification", "output"):
         gate.add_argument("--" + name, type=Path, required=True)
-    gate.add_argument("--directive", type=Path, help="Actual Claude publication instruction; omission produces a local publication_instruction blocker")
+    gate.add_argument("--directive", type=Path, help="Actual supervisor publication instruction; omission produces a local publication_instruction blocker")
     gate.add_argument('--layout-acceptance', type=Path, help='Exact 03:01 deferred layout findings bound to this generation and unchanged raw QA; never publication authority')
     gate.add_argument("--rebuilt-report", type=Path, help="Bind a publish-time rebuild's inputs and program contract to the reviewed report")
     gate.add_argument('--runtime-verification',type=Path,help='Actual artifact rotation checks for the preserved pages whose app references change')

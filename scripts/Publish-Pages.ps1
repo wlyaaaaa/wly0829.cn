@@ -24,7 +24,7 @@ foreach($key in @('TypesetRoot','Inventory','Geometry','Baseline','Release','Bui
 if($settings.runtime_baseline -eq $true){$parameters.RuntimeBaseline=$true}
 if($settings.reuse_asset_cache -eq $true){$parameters.ReuseAssetCache=$true}
 if($Directive){$parameters.Directive=[IO.Path]::GetFullPath($Directive)}
-if($Publish -and -not $Directive){throw 'Publication requires the real Claude instruction bound to the exact reviewed batch.'}
+if($Publish -and -not $Directive){throw 'Publication requires the real supervisor instruction bound to the exact reviewed batch.'}
 if($Publish -and -not $LockHolder){throw 'Publication requires the actual harness and task id in -LockHolder.'}
 if($LockHolder){$parameters.LockHolder=$LockHolder}
 if(-not $RunRoot){

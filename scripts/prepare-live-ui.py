@@ -139,6 +139,14 @@ def patch_layout(text):
     begin=text.index(reading); finish=text.index(start_marker,begin)
     source_begin=source.index(reading)
     text=text[:begin]+source[source_begin:source.index(start_marker,source_begin)]+text[finish:]
+    hash_guard='if(readingRevision!==typesetReadingState.revision||location.hash!==hash||!target.isConnected)return;'
+    hash_cancel=hash_guard+'window.TypesetLiveFlow?.cancelReader?.();'
+    if text.count(hash_guard)!=1:raise ValueError('Unsupported legacy hash placement')
+    if hash_cancel not in text:text=text.replace(hash_guard,hash_cancel,1)
+    hash_finish=';place();requestAnimationFrame(place);'
+    hash_settle=hash_finish+'readingLayoutReady().then(place);'
+    if hash_finish not in text:raise ValueError('Unsupported legacy hash settling')
+    if hash_settle not in text:text=text.replace(hash_finish,hash_settle,1)
     if start_marker in text:
         start=text.index(start_marker); end=text.index(end_marker,start)+len(end_marker)
         text=text[:start]+flow+text[end:]
@@ -218,7 +226,18 @@ def prepare(site, library, font=None, sprite=None, label_map=None, pages=None):
         data_match = re.search(r'<script\b[^>]*\bid="page-data"[^>]*>(.*?)</script>', text, re.S)
         if not data_match: continue
         data = json.loads(data_match[1]); has_live = any(part.get('native_live') or part.get('live') for s in data.get('screens',[]) for part in [*s.get('parts',[]), *s.get('layouts',{}).values()])
-        if not has_live: continue
+        if not has_live:
+            for old in sorted(set(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', text))):
+                path = resolve(page, old)
+                if not path or not re.fullmatch(r'app-[0-9a-f]+\.js', path.name): continue
+                if path not in changed_refs:
+                    patched = update.patch_shared_runtime(patch_layout(path.read_text('utf8').replace('\r\n','\n')))
+                    changed_refs[path] = addressed('app', '.js', patched.encode('utf8'))
+                text = text.replace(old, changed_refs[path])
+            after = text.encode('utf8')
+            if after != before:
+                page.write_bytes(after); changes.append({'path':page.relative_to(site).as_posix(),'before':proof(before),'after':proof(after)})
+            continue
         if font:
             points = sorted((set(map(ord, text)) | runtime_points) & supported)
             face = TTFont(io.BytesIO(source_bytes), recalcTimestamp=False)

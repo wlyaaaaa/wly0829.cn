@@ -303,7 +303,9 @@
           "left"
         ],
         "icons": "none",
-        "text_ref": "AI 交回"
+        "text_ref": "AI 交回",
+        "row": "results",
+        "width": "50%"
       },
       {
         "type": "dialogue",
@@ -315,7 +317,9 @@
         ],
         "illustration": "none",
         "icons": "none",
-        "text_ref": "另一种问法"
+        "text_ref": "另一种问法",
+        "row": "results",
+        "width": "50%"
       }
     ],
     "notes": "标题左侧、示例灰条同高右侧。主对话约2/3宽，用户气泡右对齐；四步绿细竖线及圆节点连接，图标在卡外左；AI交回白气泡置其下。另一种问法整张竖卡在右1/3，内部我/AI两气泡，底端主插画在卡内。不得将四步排成横向或2×2。 文字审查校正：另一种问法以已支持的 split_paras 组成一张外卡内两泡；AI交回不领取四步骤图标，避免把步骤物件误当头像。",

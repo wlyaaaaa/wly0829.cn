@@ -74,6 +74,13 @@ else {
 if (Test-Path -LiteralPath $RunRoot) { throw 'RunRoot must be a fresh directory.' }
 New-Item -ItemType Directory -Path $RunRoot | Out-Null
 Set-Location -LiteralPath $repoRoot
+$publisherTempRoots = @('TEMP','TMP','TMPDIR') | ForEach-Object { [Environment]::GetEnvironmentVariable($_, 'Process') } | Where-Object { -not [string]::IsNullOrEmpty($_) } | Sort-Object -Unique
+foreach ($publisherTempRoot in $publisherTempRoots) {
+    [void][IO.Directory]::CreateDirectory($publisherTempRoot)
+    $publisherTempProbe = [IO.Path]::Combine($publisherTempRoot, 'wly-temp-probe-' + [guid]::NewGuid().ToString('N') + '.tmp')
+    $publisherTempStream = [IO.FileStream]::new($publisherTempProbe, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None, 4096, [IO.FileOptions]::DeleteOnClose)
+    try { $publisherTempStream.WriteByte(1); $publisherTempStream.Flush($true) } finally { $publisherTempStream.Dispose() }
+}
 function Checked([string]$Program, [string[]]$Arguments) {
     & $Program @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Program failed: exit $LASTEXITCODE. Inspect this run's reports for the exact publication or recovery state." }

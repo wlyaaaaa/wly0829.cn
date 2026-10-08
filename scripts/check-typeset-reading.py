@@ -188,6 +188,7 @@ async def run(args, base, build):
                     result['navigation'].append({'page':name,'kind':'toc-during-resize','hash':target,'error_px':error,'pass':error<=2})
                     await browser_page.reload(wait_until='domcontentloaded',timeout=90000)
                     await browser_page.evaluate('document.fonts.ready')
+                    await browser_page.evaluate('readingLayoutReady()')
                     await browser_page.wait_for_function("hash => {const el=document.getElementById(decodeURIComponent(hash.slice(1)));return el && Math.abs(el.getBoundingClientRect().top-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0))<=2;}",arg=target,polling='raf',timeout=60000)
                     await browser_page.wait_for_timeout(250)
                     error=await browser_page.evaluate("hash => {const el=document.getElementById(decodeURIComponent(hash.slice(1)));return Math.abs(el.getBoundingClientRect().top-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0));}",target)

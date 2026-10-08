@@ -126,6 +126,10 @@ function cancelReadingResize(){
  typesetReadingState.width=innerWidth;typesetReadingState.height=innerHeight;
  return revision;
 }
+function readingLayoutReady(){
+ const kind=JSON.parse(document.querySelector('#page-data').textContent).kind,key=['cockpit','computer-access','mcp'].includes(kind)?'b2StatusPhase':document.querySelector('.typeset-live')?'statusPhase':null;
+ return document.fonts.ready.then(()=>new Promise(resolve=>{const settle=()=>{if(key&&!['ready','error'].includes(document.body.dataset[key]))requestAnimationFrame(settle);else requestAnimationFrame(()=>requestAnimationFrame(resolve));};settle();}));
+}
 function resizeLayout(){
  if(!resizing){rememberReadingPosition();typesetReadingState.saved=readingPosition;resizing=true;}
  const revision=++typesetReadingState.revision,saved=typesetReadingState.saved;
@@ -136,7 +140,7 @@ function resizeLayout(){
   // Manifest aspect ratios reserve dimensions before downloads. Decode the
   // destination screen, then let shared header/TOC layout settle before placing.
   const images=el?[...el.querySelectorAll('.typeset-part:not([hidden]) picture img')]:[];
-  Promise.all([document.fonts.ready,...images.map(load)]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  Promise.all([document.fonts.ready,readingLayoutReady(),...images.map(load)]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
    if(revision!==typesetReadingState.revision)return;
    if(saved?.atTop)scrollTo({top:0,behavior:'instant'});
    else if(saved?.atBottom)scrollTo({top:Math.max(0,document.documentElement.scrollHeight-innerHeight),behavior:'instant'});
@@ -157,12 +161,13 @@ document.addEventListener('click',event=>{
  const link=node?.closest('a[href]');
  if(node?.closest('.back-to-top')||(link&&link.hash&&link.hash!=='#menu'&&link.origin===location.origin&&link.pathname===location.pathname))cancelReadingResize();
 },true);
+addEventListener('pointerdown',event=>{if(event.isTrusted&&event.clientX>=document.documentElement.clientWidth)cancelReadingResize();},{capture:true,passive:true});
 for(const event of ['wheel','touchstart'])addEventListener(event,cancelReadingResize,{passive:true});
 addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' '].includes(event.key))cancelReadingResize();});
 /* typeset-live-flow-v1 */
 (function(){
  const states=new WeakMap(),hosts=new Set(),pending=new Set();let frame=0,readerInput=0;
- for(const type of ['wheel','touchmove','keydown','resize','click'])window.addEventListener(type,()=>readerInput++,{passive:true,capture:true});
+ for(const type of ['wheel','touchmove','keydown','resize','click','pointerdown'])window.addEventListener(type,()=>readerInput++,{passive:true,capture:true});
  function preserveReader(){
   if(resizing)return ()=>{};
   const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
@@ -333,7 +338,7 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
     if(band.start>cursor+.00001)container.append(makeTile(state,cursor,band.start).node);
     const region=document.createElement('div');region.className='typeset-live-flow-region typeset-live-flow-compact-frame';
     const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',Math.min(3,band.cells.length));region.append(cards);container.append(region);
-    for(const cell of band.cells)move(cards,cell.node);
+    for(const cell of band.cells){move(cards,cell.node);cell.node.style.setProperty('--typeset-live-min-height','0px');}
     state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:false,compact:true,optional:true});cursor=band.end;
    }
    if(cursor<1-.00001)container.append(makeTile(state,cursor,1).node);
@@ -373,7 +378,8 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
    raster.collapseWhenEmpty=optional;
    raster.node.hidden=raster.optional||optional&&band.cells.every(cell=>cell.node.hidden);
    region.append(raster.node);
-   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',optional?1:Math.min(3,band.cells.length));region.append(cards);container.append(region);
+   const sameRow=band.cells.every(cell=>Math.abs(cell.rect[1]-band.cells[0].rect[1])<.00001);
+   const cards=document.createElement('div');cards.className='typeset-live-flow-cards';cards.style.setProperty('--typeset-live-columns',optional&&!sameRow?1:Math.min(3,band.cells.length));region.append(cards);container.append(region);
    for(const cell of band.cells)move(cards,cell.node);
    state.bands.push({node:region,cards,start:band.start,end:band.end,cells:band.cells,replace:band.replace,optional});cursor=band.end;
    }
