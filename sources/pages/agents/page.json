@@ -532,9 +532,9 @@
       "id": "agents-16",
       "section": "practice",
       "title": "我的 AI 实践",
-      "scene": "横版画面：左上标题。左边约 40% 宽：一个很醒目的大数字“约 3000 亿 token”（粗体绿色、全屏最大字号），下面一行小字说明；再往下三条短说明，每条前面一个小水彩图标（一只打开的工具箱、一个插头连着几片绿叶、一部手机连着一台电脑），每条第一句粗体。右边约 60% 宽：五个带细浅绿边框的空截图位，排成上 3 下 2、下排居中，每个宽高比约 1.1:1（接近正方形），空位里什么都不画，拼页时贴真实截图；五个空位下面一行灰绿小字写截图说明。",
-      "portrait": "竖版：标题在上，大数字和小字说明紧跟着，三条说明一条一行；五个截图空位放在下面，每行两个、最后一行一个居中，每个接近正方形；截图说明在最下面。",
-      "text": "# 我的 AI 实践\n\n**约 3000 亿 token**　截至 9 月 30 日，我预计已经用了这么多。\n\n- **用过的工具**　Codex、Claude Code、Grok Build、Google Antigravity、OpenCode、Cline、Qoder；OpenClaw 刚火的时候就试过。\n- **接进来的模型**　Codex 里接了 GLM、DeepSeek、Qwen，让国产模型也做实际的 Agent 任务。\n- **手机上也能干长活**　手机上的 ChatGPT 经〔电脑远程控制〕连回家里的电脑，开几个对话一直操作电脑；走的是 ChatGPT 聊天本身，不占 Codex 的额度。\n\n截图：9 月 24 日的 Codex 用量快照，五份独立记录。",
+      "scene": "横版画面：保留“我的AI实践”标题。左边约42%宽：醒目的大数字“3,118.5 亿 Token”（粗体绿色、全屏最大字号），下面说明截止日期与累计显示值依据，列出Codex、Claude分项；再往下保留三条工具、国产模型与手机长活的说明、原图标和链接，以及统计范围短注。右边约58%宽：六个带细浅绿边框的真实截图位，排成3列×2行，同排按各原图比例等高，完整缩放，不裁切、不拉伸；六图下面写截图说明。",
+      "portrait": "竖版：标题在上，大数字、截止日期、累计显示值依据和Codex、Claude分项紧跟着，保留三条使用说明、图标、原链接及统计范围短注；六个真实截图位放在下面，排成2列×3行，同排按各原图比例等高，完整缩放，不裁切、不拉伸；截图说明在最下面。",
+      "text": "# 我的 AI 实践\n\n**3,118.5 亿 Token**　截至2026年10月7日，按Codex与Claude用量页的累计显示值汇总。\n\nCodex：2,272.5亿（5个账号）\n\nClaude：846亿（84.6B）\n\n- **用过的工具**　Codex、Claude Code、Grok Build、Google Antigravity、OpenCode、Cline、Qoder；OpenClaw 刚火的时候就试过。\n- **接进来的模型**　Codex 里接了 GLM、DeepSeek、Qwen，让国产模型也做实际的 Agent 任务。\n- **手机上也能干长活**　手机上的 ChatGPT 经〔电脑远程控制〕连回家里的电脑，开几个对话一直操作电脑；走的是 ChatGPT 聊天本身，不占 Codex 的额度。\n\n统计范围为Codex与Claude用量页，未另加其他工具或模型的估算。\n\n截图：5份Codex记录与1份Claude记录，按页面显示精度相加。",
       "links": [
         {
           "text": "电脑远程控制",
@@ -545,29 +545,34 @@
       "live": [],
       "screenshots": [
         {
-          "file": "sources/assets/_references/76c35cb89296e7eead0c041bfe6e12ea54c7e69c2ddb731e1907666a93f96b01.png",
-          "where": "右侧第 1 个截图空位（接近正方形，约 1.1:1）",
-          "caption": "9 月 24 日 Codex 用量快照"
+          "file": "sources/assets/_references/50192eda1d1dc273fc1993aaef6639a8a7042cf886e83f8523fdbb2cfcbc106d.png",
+          "where": "第1个截图位（原图比例1007:1489，完整缩放）",
+          "caption": "Codex 614.2亿累计用量记录"
         },
         {
-          "file": "sources/assets/_references/c568532ded41f2026ff1197442eeb7bf3dbb7480fb1cab49e54cfe1303c3314a.png",
-          "where": "右侧第 2 个截图空位（接近正方形，约 1.1:1）",
-          "caption": "9 月 24 日 Codex 用量快照"
+          "file": "sources/assets/_references/98bdf4875b2158711c94e8cb1bf44bd239f8cbc513a761fb697ad485f7dfcdee.jpg",
+          "where": "第2个截图位（原图比例1440:878，完整缩放）",
+          "caption": "Codex 405.5亿累计用量记录"
         },
         {
-          "file": "sources/assets/_references/a780f7e87b284f46461b7357ced2012920c12f3157fdecdf430489a77fa47e57.png",
-          "where": "右侧第 3 个截图空位（接近正方形，约 1.1:1）",
-          "caption": "9 月 24 日 Codex 用量快照"
+          "file": "sources/assets/_references/f3a938c987a565ad553b91c9371c031e2844ad934960f80e7b5600976bb4b8b9.jpg",
+          "where": "第3个截图位（原图比例1440:881，完整缩放）",
+          "caption": "Codex 520.1亿累计用量记录"
         },
         {
-          "file": "sources/assets/_references/22d147c813263953a0b94fe79654fdaa97269ba49195f5c33d0085457a9379bd.png",
-          "where": "右侧第 4 个截图空位（接近正方形，约 1.1:1）",
-          "caption": "9 月 24 日 Codex 用量快照"
+          "file": "sources/assets/_references/4b707df22230fef81ef0a45267e99404b16ddf89e46e3be3895b662427e1ce59.jpg",
+          "where": "第4个截图位（原图比例1440:806，完整缩放）",
+          "caption": "Codex 408亿累计用量记录"
         },
         {
-          "file": "sources/assets/_references/970d88e186e562d4389eec8667575f9e7e353cf503e87638065f305368a47be2.png",
-          "where": "右侧第 5 个截图空位（接近正方形，约 1.1:1）",
-          "caption": "9 月 24 日 Codex 用量快照"
+          "file": "sources/assets/_references/037d3a3b9ab57f8e7aad0ccc3405f3dedf7e91cb3fc3aea1dc0f097df7e9bfc3.jpg",
+          "where": "第5个截图位（原图比例1440:896，完整缩放）",
+          "caption": "Codex 324.7亿累计用量记录"
+        },
+        {
+          "file": "sources/assets/_references/7caa4ae5a00558aa825416a7fdd8fcfb2f8b6673587484a9799f012dd13f775e.png",
+          "where": "第6个截图位（原图比例1445:1060，完整缩放）",
+          "caption": "Claude 84.6B累计用量记录"
         }
       ],
       "chain": "",

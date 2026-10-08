@@ -1428,13 +1428,13 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "约 3000 亿 token",
+        "text_ref": "3,118.5 亿 Token",
         "columns": 1,
         "columns_v": 1,
         "variant": "lead_value",
         "icons": "none",
-        "width": "100%",
-        "row": "practice-1"
+        "width": "42%",
+        "row": "practice-main"
       },
       {
         "type": "bullet_list",
@@ -1446,18 +1446,25 @@
           "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
           "_library/icons/手机电脑连接.png"
         ],
-        "width": "100%",
-        "row": "practice-2"
+        "row": "practice-main"
       },
       {
         "type": "screenshot",
         "text_ref": "截图：",
         "columns": 3,
         "columns_v": 2,
-        "ratio": 1.1,
         "caption": "after",
-        "width": "100%",
-        "row": "practice-3"
+        "width": "58%",
+        "row": "practice-main",
+        "ratios": [
+          "1007:1489",
+          "1440:878",
+          "1440:881",
+          "1440:806",
+          "1440:896",
+          "1445:1060"
+        ],
+        "equal_row_height": true
       }
     ],
     "aspect": "16:9",
@@ -1479,7 +1486,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "约 3000 亿 token",
+        "text_ref": "3,118.5 亿 Token",
         "columns": 1,
         "columns_v": 1,
         "variant": "lead_value",
@@ -1501,8 +1508,16 @@
         "text_ref": "截图：",
         "columns": 3,
         "columns_v": 2,
-        "ratio": 1.1,
-        "caption": "after"
+        "caption": "after",
+        "ratios": [
+          "1007:1489",
+          "1440:878",
+          "1440:881",
+          "1440:806",
+          "1440:896",
+          "1445:1060"
+        ],
+        "equal_row_height": true
       }
     ],
     "aspect": "9:16",
