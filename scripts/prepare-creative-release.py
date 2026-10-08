@@ -78,7 +78,7 @@ def recipe(path):
         inputs[str(HERE/'prepare-static-home.py')]=stamp(HERE/'prepare-static-home.py')
     for pattern in ('prepare-home-*.*', 'home-living-*.*', 'prepare-page-flip.py', 'album-runtime.*',
                     'prepare-today-river.py', 'today-river-runtime.*', 'prepare-how-demo.py',
-                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'image-loading-runtime.js', 'prepare-stutter-page.py', 'stutter-page.*', 'prepare-creative-release.py', 'release_delta.py'):
+                    'how-demo-*.*', 'prepare-resource-retry.py', 'resource-retry-runtime.js', 'image-loading-runtime.js', 'prepare-stutter-page.py', 'stutter-page.*', 'stutter-page-copy.json', 'prepare-creative-release.py', 'release_delta.py'):
         inputs.update({str(p.resolve()): stamp(p) for p in HERE.glob(pattern) if p.is_file()})
     if full_2f:
         for name in ('today-river.js','today-river.css'):
