@@ -48,7 +48,9 @@ GALLERY_JS = """document.addEventListener('click', event => {
  if(!button||button.dataset.compare==='true'||!window.SiteImageViewer)return;
  const data=JSON.parse(document.querySelector('#page-data').textContent);
  const shots=data.screens.flatMap(s=>s.parts.flatMap(p=>p.hotspots.filter(h=>h.kind==='screenshot').flatMap(h=>h.shots||[])));
- const selected=shots.find(s=>s.src===button.querySelector('img')?.getAttribute('src'));
+ const chosen=new URL(button.querySelector('img')?.getAttribute('src'),location.href);
+ chosen.searchParams.delete('__wly_resource_retry');
+ const selected=shots.find(s=>new URL(s.src,location.href).href===chosen.href);
  const items=[...new Map(shots.map(s=>[s.full||s.src,s])).values()];
  if(!selected||items.length<2)return;
  event.preventDefault();event.stopImmediatePropagation();
