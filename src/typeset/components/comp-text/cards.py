@@ -363,7 +363,7 @@ def _source_head(group, index, spec, ctx, paginated):
     if navigation and remaining:
         first_body = remaining[0]
         if first_body.get("type") == "linkrow" or (first_body.get("type") == "para" and
-                re.search(r"[〔【［]", first_body.get("text") or "")):
+                (re.search(r"[〔【［]", first_body.get("text") or "") or MD_LINK_RE.search(first_body.get("text") or ""))):
             nav = '<div class="ct-source-navigation">' + _node(remaining.pop(0), ctx) + '</div>'
     picture = ""
     if icon_position in ("header_left", "header_top"):
