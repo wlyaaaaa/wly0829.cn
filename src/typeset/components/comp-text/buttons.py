@@ -104,6 +104,8 @@ def _button_row(node, ctx, spec):
     if not source:
         source = " ".join("〔" + text + "〕" for text in node.get("links", []))
     rendered = _as_buttons(ctx.inline(source))
+    if ctx.screen['id'] == 'remote-control-01':
+        rendered = re.sub(r'(<a\b(?=[^>]*\bdata-href="https://github\.com/wlyaaaaa/wly0829\.cn")[^>]*>)GitHub（网页部分）(</a>)', r'\1<span style="position:relative;left:8px">GitHub（网页部分）</span>\2', rendered)
     for label, asset in (spec.get('brand_icons') or {}).items():
         icon = f'<img class="ct-action-brand" src="{escape(ctx.asset_url(ctx.resolve(asset)), quote=True)}" alt="">'
         rendered = re.sub(r'(<a\b[^>]*>)' + re.escape(label) + r'(</a>)', lambda match: match[1] + icon + escape(label) + match[2], rendered)
