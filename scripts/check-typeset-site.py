@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import re
+import runpy
 import shutil
 import subprocess
 import sys
@@ -22,6 +23,7 @@ import prepare_native_readability as native_readability
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
+build_selection = runpy.run_path(str(HERE/'build-typeset-site.py'))
 spec = importlib.util.spec_from_file_location('release_asset_builder', HERE/'build-assembled-site.py')
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
@@ -33,13 +35,16 @@ def digest(path): return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def load_state(path): return json.loads(path.read_text('utf8')) if path.is_file() else {}
 def beijing_now(): return datetime.now(timezone(timedelta(hours=8))).isoformat()
 
-def fingerprints(lock):
+def fingerprints(lock, inventory=None):
+    rows = [json.loads(row) for row in Path(inventory or ROOT/'.publish/inventory/screens.jsonl').read_text('utf8').splitlines() if row.strip()]
+    names = build_selection['selected_page_names'](dict.fromkeys(row['page'] for row in rows))
     assets._manifest = None
     library = assets.manifest(); result = {}; hashed = {}
     registry = renderer.load_registry()
     environment = {key: lock[key] for key in ('args', 'python_packages')}
     environment['binaries'] = [row['sha256'] for row in [lock['chrome'], *lock['fonts']]]
-    for name, source in renderer.page_sources().items():
+    for name in names:
+        source = renderer.page_sources()[name]
         page = bound_json(source)
         for screen in page['screens']: screen['screenshots'] = [] if screen['id'] in page.get('withdrawn_screenshot_screens', []) else screen.get('screenshots', [])
         if not page.get('url') and name != '404': continue
@@ -125,7 +130,7 @@ def store_page(name, key, root, state_root):
 
 def shell_key(name, legacy, baseline, hybrid):
     source = json.loads(Path(renderer.page_sources()[name]).read_text('utf8')) if name != 'home' else {'url': '/'}
-    rel = hybrid.route_file(source.get('url') or ('/404.html' if name == '404' else '/'+name+'/'))
+    rel = hybrid.route_file(build_selection['selected_page_route'](source.get('url') or ('/404.html' if name == '404' else '/'+name+'/'), baseline))
     root = legacy if (legacy/rel).is_file() else baseline
     page = root/rel; files = {page}; text = page.read_text('utf8')
     parser = hybrid.builder.Refs(); parser.feed(re.sub(r'<main\b.*?</main>', '', text, flags=re.S))
@@ -267,7 +272,7 @@ def main():
     state = saved if args.resume else {}
     input_paths = {name: str(value.resolve()) if value else None for name, value in vars(args).items()
                    if isinstance(value, Path) or name == 'baseline_seed'}
-    current = fingerprints(lock)
+    current = fingerprints(lock, args.inventory)
     formal = load_state(durable/'published-page-fingerprints.json')
     seed_path = state.get('baseline_seed') or args.baseline_seed or (durable/'published-page-fingerprints.json' if formal.get('schema') == 'wly.typeset-published-baseline.v1' else None)
     seed, seeded_raw = baseline_seed(seed_path, state.get('baseline') if args.resume else args.baseline if args.baseline_seed else None) if seed_path else (None, None)
@@ -504,7 +509,7 @@ def main():
                     '--geometry', geometry, '--baseline', baseline, '--legacy-site', args.legacy_site.resolve(), '--asset-cache', args.asset_cache.resolve(),
                     '--reuse-asset-cache', '--output', work/'dist', '--report', report, '--creative-preparation', ROOT/'config/build.json',
                     '--live-ui-preparation', ROOT/'config/live-ui.json', *selection] + (['--rule-public-projection', work/'typeset-out/rule-public-projection.json'] if project else []) + (['--native-routes', *args.native_routes] if args.native_routes else []))
-                if fingerprints(lock) != current: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
+                if fingerprints(lock, args.inventory) != current: raise ValueError('Inputs changed during generation; rerun to invalidate dependent stages')
                 if native_inputs and native_readability.source_inputs(lambda p: {'sha256': digest(p), 'bytes': p.stat().st_size}) != native_inputs: raise ValueError('Native source inputs changed during generation')
                 current_recipe = json.loads((ROOT/'config/build.json').read_text('utf8'))
                 if any(page_keys[name] != content_key([key, assembly_key(name, assembly_files, current_recipe),

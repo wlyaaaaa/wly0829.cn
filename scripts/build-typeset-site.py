@@ -527,6 +527,13 @@ def local_deps(candidate, legacy, baseline):
             if target.suffix in {'.js','.css','.html','.mjs','.json'}:
                 pending.append(target)
 
+def selected_page_names(grouped, pages=None):
+    return pages or list(grouped)
+
+def selected_page_route(url, baseline):
+    alias = hybrid.nav_repair.ALIASES.get(url)
+    return alias if alias and (baseline/hybrid.route_file(alias)).is_file() else url
+
 def build_page(name, records, args, candidate):
     source_path = Path(records[0]['source_path'])
     source,source_proof = json_bound(source_path)
@@ -537,8 +544,7 @@ def build_page(name, records, args, candidate):
     authored_url=url
     authored_rel=hybrid.route_file(authored_url)
     alias=hybrid.nav_repair.ALIASES.get(url)
-    if alias and (args.baseline/hybrid.route_file(alias)).is_file():
-        url=alias
+    url=selected_page_route(url, args.baseline)
     rel = hybrid.route_file(url)
     base_html = args.legacy_site/authored_rel
     if not base_html.exists() and alias:
@@ -1045,7 +1051,7 @@ def main():
         for row in rows: row['source_path'] = str(HERE.parent/'sources/pages'/row['page']/'page.json')
     grouped=defaultdict(list)
     for row in rows:grouped[row['page']].append(row)
-    names=args.pages or list(grouped)
+    names=selected_page_names(grouped, args.pages)
     ASSET_CACHE=args.asset_cache.resolve()if args.asset_cache else args.typeset_root.parent/'integration'/'asset-cache'
     ASSET_CACHE.mkdir(parents=True,exist_ok=True)
     to_encode=[]
