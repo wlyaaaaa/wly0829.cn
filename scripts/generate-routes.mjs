@@ -2,7 +2,7 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { canonicalUrl, routePaths } from "../app/site-content.js";
+import { canonicalUrl, routeMeta, routePaths } from "../app/site-content.js";
 import * as searchAssets from "../app/search-assets.js";
 import { generateTypesetSearchOverlay } from "./typeset-search-overlay.mjs";
 
@@ -48,6 +48,7 @@ if (overlayConfig) {
         await mkdir(path.dirname(target), { recursive: true });
         await writeFile(target, renderer.renderRoute(route), "utf8");
       }
+      await writeFile(path.resolve(bodyConfig.output, "route-meta.json"), JSON.stringify(Object.fromEntries(bodyConfig.routes.map((route) => [route, routeMeta(route)])), null, 2), "utf8");
     } else {
     compactSearchRecordCount = renderer.compactSearchRecordCount;
     await writeFile(path.join(distRoot, "search-index.js"), renderer.compactSearchAsset, "utf8");

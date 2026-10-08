@@ -24,6 +24,7 @@ from urllib.parse import urlsplit, unquote
 HERE = Path(__file__).resolve().parent
 if str(HERE) not in sys.path: sys.path.insert(0,str(HERE))
 from public_page_contract import public_page_data
+import prepare_native_readability as native_readability
 import rule_original_contract as rule_contract
 publication_spec=importlib.util.spec_from_file_location('typeset_publication', HERE/'audit-page-publication.py')
 publication=importlib.util.module_from_spec(publication_spec)
@@ -984,6 +985,7 @@ def main():
         ap.add_argument('--'+arg,type=Path,required=True)
     ap.add_argument('--inventory',type=Path,default=HERE.parent/'.publish/inventory/screens.jsonl')
     ap.add_argument('--pages',nargs='+')
+    ap.add_argument('--native-routes',nargs='+',help='Existing native project routes whose fresh SSR main replaces the baseline body')
     ap.add_argument('--preview-support',action='store_true',help='Add unselected legacy shells for a local pilot; never use for publication')
     ap.add_argument('--geometry',type=Path)
     ap.add_argument('--asset-cache',type=Path)
@@ -995,6 +997,7 @@ def main():
     ap.add_argument('--rule-public-projection',type=Path,help='Sealed public rule image generation; defaults to typeset-root/rule-public-projection.json')
     ap.add_argument('--live-ui-preparation',type=Path,help='Replay the delivered live UI, font and directory assets before assembly')
     args=ap.parse_args()
+    native_inputs=native_readability.source_inputs(stamp) if args.native_routes else None
     REUSE_ASSET_CACHE=args.reuse_asset_cache
     for k in ['typeset_root','inventory','baseline','legacy_site','output','report']:setattr(args,k,getattr(args,k).resolve())
     baseline_manifest=read(args.baseline/'release-manifest.json')
@@ -1102,6 +1105,8 @@ def main():
             accepted[state['url']]['build_status']='blocked'
     if args.creative_preparation and (args.release_overlay or args.preview_support):
         raise ValueError('Creative replay uses the complete native five-page source without preview support or another overlay')
+    native=native_readability.prepare(args,candidate,accepted,native_inputs,stamp,hybrid.route_file) if args.native_routes else None
+    if native:args.external_inputs.update(native['inputs'])
     raw_output=args.output.parent/(args.output.name+'-raw') if args.creative_preparation else args.output
     creative_scope=read(args.creative_preparation).get('scope')if args.creative_preparation else None
     manifest=hybrid.assemble(args.baseline,candidate,raw_output,baseline_manifest,accepted,overlay=overlay,
@@ -1111,6 +1116,7 @@ def main():
     if not args.creative_preparation and inherited_retry.get('runtime') in manifest['files'] and manifest['files'][inherited_retry['runtime']]==baseline_manifest['files'].get(inherited_retry['runtime']):
         manifest['resource_retry_preparation']=inherited_retry
         hybrid.write(raw_output/hybrid.MANIFEST,manifest)
+    if native:manifest['native_readability']=native;hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     if manifest['files'].get('index.html')==baseline_manifest['files'].get('index.html'):
         manifest.update({key:baseline_manifest[key] for key in ('home_static_preparation','home_comic_preparation') if key in baseline_manifest});hybrid.write(raw_output/hybrid.MANIFEST,manifest)
     static_home=baseline_manifest.get('home_static_preparation',{})
@@ -1135,6 +1141,7 @@ def main():
             how_source=next((Path(row['source_path']) for row in rows if row['page']=='how'),None)
             if how_source: args.external_inputs[str(how_source)]=stamp(how_source)
             write(staged_report,{'schema':'wly.typeset-build.v1','stage':'native-before-creative','release_id':manifest['release_id'],
+                **({'native_readability':native} if native else {}),
                 'pages':states,'files':manifest['files'],'baseline_root':str(args.baseline),
                 'inputs':{str(args.inventory):args.inventory_proof,**args.external_inputs,**live_ui_inputs,**workbench_inputs},
                 'geometry_path':str(args.geometry),'geometry_sha256':hybrid.digest(args.geometry)})
@@ -1174,6 +1181,10 @@ def main():
     if workbench:
         manifest['rule_original_workbench']=workbench
         hybrid.write(args.output/hybrid.MANIFEST,manifest)
+    if native:
+        if native_readability.source_inputs(stamp)!=native_inputs:raise ValueError('Native source inputs changed after SSR')
+        manifest['native_readability']=native
+        hybrid.write(args.output/hybrid.MANIFEST,manifest)
     for s in states.values():
         if s.get('url'):s['html_sha256']=hybrid.digest(args.output/hybrid.route_file(s['url']))
     report={'schema':'wly.typeset-build.v1','built_at_beijing':datetime.now(BJT).isoformat(),
@@ -1202,6 +1213,7 @@ def main():
     if workbench:
         report['rule_original_workbench']=workbench
         report['inputs'].update(workbench_inputs)
+    if native:report['native_readability']=native
     if args.reuse_asset_cache:
         report['asset_cache_reuse']={'mode':'verified-existing-or-original-png','sources':ASSET_CACHE_REUSE,'new_encodings':0}
     write(args.report,report)
