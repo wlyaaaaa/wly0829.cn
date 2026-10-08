@@ -497,9 +497,9 @@ def _render_page(page, page_name, src, screens, orients, do_compare, outdir, bro
                             unresolved:r.extra_labels.unresolved}};
                 }""")
                 literal_marks = {}
-                if original_markdown(scr):
-                    literals = "".join(re.findall(r"`[^`]+`", scr["text"]))
-                    literal_marks = {mark: literals.count(mark) for mark in "〔〕"}
+                if original_markdown(scr) and scr.get("source_excerpt_id"):
+                    literals = scr["text"]
+                    literal_marks = {mark: literals.count(mark) for mark in "〔〕｜"}
                 chk = pg.evaluate(CHECK_JS, literal_marks)
                 png = os.path.join(outdir, f"{scr['id']}-{o}.png")
                 pg.screenshot(path=png, full_page=True)

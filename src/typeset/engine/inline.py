@@ -55,7 +55,8 @@ def make_inline(links, motion_text=None, markdown_links=False):
         def bt(m):
             t = html.unescape(m.group(1))
             return f'<a class="btn inline-btn" data-href="{html.escape(links.get(t, ""))}" data-hot="button">{html.escape(t, quote=False)}</a>'
-        s = LINK_RE.sub(lk, s)
+        if not markdown_links:
+            s = LINK_RE.sub(lk, s)
         s = BTN_RE.sub(bt, s)
         def put_markdown_link(match):
             label, target = stored_markdown_links[int(match[1])]
@@ -78,7 +79,8 @@ def make_inline(links, motion_text=None, markdown_links=False):
             return '<a class="lk" data-href="' + html.escape(target, quote=True) + '" data-hot="link">' + visible + '</a>'
         s = re.sub(r"\x03(\d+)\x03", put_markdown_link, s)
         # ｜ 是定稿的分格记号（G1 基准也去掉它），从不画出来：换成一格空白
-        s = s.replace("｜", '<span class="sep">　</span>')
+        if not markdown_links:
+            s = s.replace("｜", '<span class="sep">　</span>')
         for ch, cls in DOT_CLASS.items():
             s = s.replace(ch, f'<span class="dot {cls}">{ch}</span>')
 
