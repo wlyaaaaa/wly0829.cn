@@ -52,6 +52,7 @@ function sort(snap) {
     const panel = Object.hasOwn(raw.related_status || {}, 'panel') || raw.outcomes?.kind === 'panel_heartbeat', executionFailed = raw.outcomes?.execution_failed === true;
     const panelUnknown = panel && !executionFailed && (['unknown', 'stale'].includes(raw.related_status?.panel) || ['unknown', 'stale', 'failed'].includes(raw.state) || ['unknown', 'stale'].includes(raw.outcomes?.state));
     if (panel) raw = {...raw, last_run_at:null, state:executionFailed ? 'failed' : panelUnknown ? 'unknown' : raw.state};
+    if (panelUnknown) raw = {...raw, notice_kind:'D', public_message:raw.notice_kind === 'D' ? raw.public_message : undefined};
     const t = { raw, i, name: raw.plain?.name || '没写名字的任务', group: groups[raw.group] || '', last: parse(raw.last_run_at), next: parse(raw.next_run_at), every: every(raw) };
     const pulse = parse(raw.outcomes?.heartbeat_at || raw.heartbeat_at); t.panel = panel; t.panelUnknown = panelUnknown; t.pulse = pulse <= now ? pulse : NaN;
     t.note = panelUnknown ? '' : raw.status_note || raw.plain?.status_note || raw.reason || '';
