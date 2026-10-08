@@ -315,6 +315,10 @@ class OssReleaseTests(unittest.TestCase):
     def test_seal_binds_actual_report_and_current_html_inventory(self):
         output, plan = self.prepare()
         hybrid = self.hybrid()
+        retention_spec = importlib.util.spec_from_file_location('lifecycle_retention', ROOT/'scripts/oss-retention.py')
+        retention = importlib.util.module_from_spec(retention_spec); retention_spec.loader.exec_module(retention)
+        with patch.object(retention, 'shared', return_value=self.root/'shared'), patch.object(retention, 'BASE', plan['asset_base_url']), patch.object(retention, 'BUCKET', 'fixture-bucket'):
+            pin_path = retention.pin(output); before_pin = retention.read(pin_path)
         # Use actual prepared bytes through urllib's response contract. This
         # validates sealing/replay without claiming a cloud transfer occurred.
         class Response:
@@ -345,6 +349,16 @@ class OssReleaseTests(unittest.TestCase):
         with patch.object(oss, 'urlopen', side_effect=serve):
             oss.verify_remote(output, workers=2)
         manifest = self.seal(output, hybrid)
+        with patch.object(retention, 'shared', return_value=self.root/'shared'), patch.object(retention, 'BASE', plan['asset_base_url']), patch.object(retention, 'BUCKET', 'fixture-bucket'):
+            retention.pin(output)
+            after_pin = retention.read(pin_path); managed = retention.read(self.root/'shared/managed.json')
+            self.assertEqual(before_pin['identity_sha256'], after_pin['identity_sha256'])
+            self.assertNotEqual(before_pin['plan_sha256'], after_pin['plan_sha256'])
+            self.assertTrue(all(row['etag'] == 'fixture-etag' for row in managed['objects'].values()))
+            sealed_plan = oss.read(output/oss.PLAN); changed_plan = copy.deepcopy(sealed_plan)
+            changed_plan['source_files']['index.html']['sha256'] = '0'*64; oss.write(output/oss.PLAN, changed_plan)
+            with self.assertRaisesRegex(ValueError, 'in-flight plan changed'): retention.pin(output)
+            oss.write(output/oss.PLAN, sealed_plan)
         oss.verify_manifest(manifest)
         oss.verify_local(output)
         hybrid.verify_release(output/'github')
@@ -371,13 +385,22 @@ class OssReleaseTests(unittest.TestCase):
         download.assert_not_called()
         if pwsh := shutil.which('pwsh'):
             no_upload, no_python = self.root/'no-upload.ps1', self.root/'no-python.ps1'
+            no_lock = self.root/'no-lock.ps1'
+            no_lock.write_text('param($Mode,$Name,$Holder,$Minutes,$Reason,[switch]$Json)\nif($Mode -eq "Acquire"){\'{"status":"acquired"}\'}else{\'{"status":"ok","locks":[]}\'}', encoding='utf8')
             no_upload.write_text('throw "Unchanged object uploaded"', encoding='utf8')
             no_python.write_text('$global:LASTEXITCODE = 0', encoding='utf8')
             process = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'),
                 '-Preparation', str(incremental), '-Upload', '-CliPath', str(no_upload), '-CliProfile', 'fixture',
-                '-Python', str(no_python)], capture_output=True, text=True,
+                '-Python', str(no_python), '-ShortLockTool', str(no_lock)], capture_output=True, text=True,
                 creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             self.assertEqual(process.returncode, 0, process.stderr)
+            pin_calls = self.root/'pin-calls.jsonl'
+            no_python.write_text("$args|ConvertTo-Json -Compress|Add-Content -LiteralPath '" + str(pin_calls).replace("'", "''") + "'; $global:LASTEXITCODE=0", encoding='utf8')
+            retry = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'), '-Preparation', str(incremental),
+                '-VerifyRemote', '-Python', str(no_python), '-ShortLockTool', str(no_lock)], capture_output=True, text=True,
+                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            self.assertEqual(retry.returncode, 0, retry.stderr)
+            self.assertTrue(any('oss-retention.py' in row[0] and row[1]=='pin' for row in (json.loads(line) for line in pin_calls.read_text().splitlines())))
         (output/'github/index.html').write_bytes(b'changed after sealing')
         with self.assertRaisesRegex(ValueError, 'Release bytes differ'):
             hybrid.verify_release(output/'github')

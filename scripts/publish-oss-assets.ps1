@@ -8,7 +8,8 @@
     [switch]$VerifyRemote,
     [switch]$ConfirmDownloadOver5GB,
     [switch]$RetryFailedVerification,
-    [string]$LockHolder
+    [string]$LockHolder,
+    [string]$ShortLockTool = 'E:\.agents\tools\Invoke-ShortLock.ps1'
 )
 $ErrorActionPreference = 'Stop'
 $preparationRoot = [IO.Path]::GetFullPath($Preparation)
@@ -43,14 +44,10 @@ if ($prefix -cnotmatch '^[A-Za-z0-9][A-Za-z0-9._/-]*$' -or @($prefix.Split('/') 
 }
 $retentionScript = Join-Path $PSScriptRoot 'oss-retention.py'
 $uploadLockOwned = $false
-$uploadLockTool = 'E:\.agents\tools\Invoke-ShortLock.ps1'
+$uploadLockTool = $ShortLockTool
 if (-not $LockHolder) { $LockHolder = "OSS-upload/$PID" }
 try {
-if ($Upload) {
-    Checked $Python @((Join-Path $PSScriptRoot 'hybrid-release.py'), 'verify', '--output', $plan.source_root, '--oss-preparation', $preparationRoot,
-        '--content-report', (Join-Path $preparationRoot 'content-verification.json'), '--public-repos-from-github')
-    if (-not $CliPath -or -not $CliProfile) { throw 'Upload requires the exact CLI path and OAuth profile from the OSS handoff.' }
-    $cliExecutable = (Get-Command -Name $CliPath -ErrorAction Stop).Source
+if ($Upload -or $VerifyRemote) {
     $lockView = (& pwsh -NoProfile -File $uploadLockTool -Mode Inspect -Name wly0829-publication -Json) | ConvertFrom-Json
     if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect wly0829-publication.' }
     $active = @($lockView.locks | Where-Object { $_.active })
@@ -60,6 +57,12 @@ if ($Upload) {
         if ($LASTEXITCODE -ne 0 -or $claim.status -notin @('acquired','renewed')) { throw 'Cannot acquire wly0829-publication.' }
         $uploadLockOwned = $true
     }
+}
+if ($Upload) {
+    Checked $Python @((Join-Path $PSScriptRoot 'hybrid-release.py'), 'verify', '--output', $plan.source_root, '--oss-preparation', $preparationRoot,
+        '--content-report', (Join-Path $preparationRoot 'content-verification.json'), '--public-repos-from-github')
+    if (-not $CliPath -or -not $CliProfile) { throw 'Upload requires the exact CLI path and OAuth profile from the OSS handoff.' }
+    $cliExecutable = (Get-Command -Name $CliPath -ErrorAction Stop).Source
     Checked $Python @($retentionScript, 'pin', '--preparation', $preparationRoot, '--lock-holder', $LockHolder)
     # Group copies retain the original relative paths. One recursive upload per
     # MIME type avoids one CLI process per object and sets correct module/font
@@ -134,7 +137,7 @@ if (-not $receipt.complete -or -not $receipt.html_ready -or $receipt.release_id 
     throw 'Remote body verification is incomplete; HTML is not ready.'
 }
 Checked $Python @($prepareScript, 'seal-remote', '--output', $preparationRoot)
-if ($Upload) { Checked $Python @($retentionScript, 'pin', '--preparation', $preparationRoot, '--lock-holder', $LockHolder) }
+if ($Upload -or $VerifyRemote) { Checked $Python @($retentionScript, 'pin', '--preparation', $preparationRoot, '--lock-holder', $LockHolder) }
 [pscustomobject]@{
     status = 'assets_verified'; release_id = $plan.release_id
     github_root = Join-Path $preparationRoot 'github'; html_ready = $true
