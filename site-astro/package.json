@@ -1,0 +1,21 @@
+{
+  "name": "wly0829-site-astro",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "convert": "python tools/convert_page.py",
+    "dev": "astro dev",
+    "build": "astro build --force",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.2",
+    "astro": "^7.3.8",
+    "hastscript": "^9.0.1",
+    "image-size": "^2.0.4",
+    "rehype-raw": "^7.0.0",
+    "remark-directive": "^4.0.0",
+    "unist-util-visit": "^5.1.0"
+  }
+}

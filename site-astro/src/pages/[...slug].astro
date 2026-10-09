@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import Site from '../layouts/Site.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((entry) => ({
+    params: { slug: entry.data.url.replace(/^\/|\/$/g, '') || undefined },
+    props: { entry },
+  }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={entry.data.motion}>
+  <Content />
+</Site>

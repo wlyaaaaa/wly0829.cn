@@ -465,6 +465,8 @@ function createScene(part, orient, cfg, shared, opts) {
   function sig(e, t) {         // 招牌动作的时间以开场结束为起点
     return t - Vt.i0 - INTRO;
   }
+  // 位移类效果（晃动、水波）接手后 0.8 秒内幅度由 0 平滑加满：画布第一帧和静态图一致，不跳。
+  function ramp(t) { return eInOut(clamp((t - Vt.i0 - INTRO) / 0.8, 0, 1)); }
   function update(t) {
     E.fill(0); Q.fill(0); QC.fill(0);
     const night = S.night; let nq = 0;
@@ -477,13 +479,13 @@ function createScene(part, orient, cfg, shared, opts) {
           const per = e.period || 5.5, g = e.gust || {}, ge = g.every || 14, gd = g.dur || 3.2;
           const k = Math.floor((t + 7) / ge), gt = (t + 7) - k * ge - (hash1(k + e._slot) * 2.0);
           const gp = gt > 0 && gt < gd ? gt / gd : -1;
-          E.set([t * 2 * Math.PI / per, gp < 0 ? -9 : -0.35 + (A + 0.7) * eInOut(gp), gp < 0 ? 0 : (g.amp ?? 1.3) * Math.sin(Math.PI * gp), e.amp || 0.004], o);
+          E.set([t * 2 * Math.PI / per, gp < 0 ? -9 : -0.35 + (A + 0.7) * eInOut(gp), gp < 0 ? 0 : (g.amp ?? 1.3) * Math.sin(Math.PI * gp), (e.amp || 0.004) * ramp(t)], o);
           break;
         }
         case 'flow': {
           const per = e.period || 8;
-          if (e.mode === 'wave') E.set([t * 2 * Math.PI / per, 0, 0, e.amp || 0.004], o);
-          else E.set([t / per * 0.9, t / per * 0.6, 0, e.amp || 0.003], o);
+          if (e.mode === 'wave') E.set([t * 2 * Math.PI / per, 0, 0, (e.amp || 0.004) * ramp(t)], o);
+          else E.set([t / per * 0.9, t / per * 0.6, 0, (e.amp || 0.003) * ramp(t)], o);
           break;
         }
         case 'part': {
@@ -700,6 +702,12 @@ function createScene(part, orient, cfg, shared, opts) {
       if (!ok) { stop('webgl-unavailable'); return; }
       layout();
       active = true; phase = 'live'; reason = null;
+      // 开始画之前再看一眼原图：此刻已经显示在页面上（加载完、有尺寸、没隐藏、不透明度大于 0）就算“已显示”，
+      // 不播入场晕开，免得盖住已经看见的图再从纸色晕出来（“图先在、突然没了、再出来”）。
+      if (!originalPresented && img.complete && img.naturalWidth && img.getClientRects().length) {
+        const cs = getComputedStyle(img);
+        if (cs.visibility !== 'hidden' && cs.display !== 'none' && Number(cs.opacity) > 0) originalPresented = true;
+      }
       introEnabled = opts.intro === true || (opts.intro !== false && !originalPresented);
       introReason = opts.intro === true ? 'explicit-on' : opts.intro === false ? 'explicit-off' : originalPresented ? 'image-already-visible' : 'early-mount';
       if (!Vt.manual) { Vt.i0 = introEnabled ? Vt.t : Vt.t - INTRO - 0.01; }

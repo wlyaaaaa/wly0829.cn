@@ -1,0 +1,66 @@
+---
+// 全站外壳：页头、目录条、页尾照现在网站（src/chrome 里的原样 HTML 和原样式），正文区块样式在 blocks.css。
+// 动效：翻页过渡、站点运行脚本（水彩、落叶、回顶、小鸟彩蛋）、环境动画引擎，都是现有页面实际加载的原文件，
+// 只把翻页数据里“插画、标题在哪”改指新页的元素（见 albumMeta）。
+import header from '../chrome/header.html?raw';
+import footer from '../chrome/footer.html?raw';
+import chrome from '../chrome/chrome.json';
+import livingEngine from '../chrome/living-engine.json';
+import '../styles/blocks.css';
+const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+interface Props { title: string; kind: string; url: string; page: string; motion?: any; toc: { id: string; label: string; img?: string }[] }
+const { title, kind, url, toc, page, motion } = Astro.props;
+const rt = runtimes[`../chrome/runtime/${page}.json`];
+
+function albumMeta() {
+  const old = rt.album;
+  const first = (old.nodes || []).find((n: any) => n.orientation === 'h') || {};
+  const nodes: any[] = [];
+  if (motion?.art) nodes.push({ screen: motion.screen, selector: `[data-art-key="${motion.art.key}"]`, src: motion.art.src, size: motion.art.size, orientation: 'h',
+    arts: [{ key: motion.art.key, rect: [0, 0, 1, 1] }], primary: null, links: first.links || [], title: null });
+  if (motion?.brush) nodes.push({ screen: motion.screen, selector: `[data-title-key="${motion.brush.key}"]`, src: motion.brush.src, size: motion.brush.size, orientation: 'h',
+    arts: [], primary: null, links: [], title: [0, 0, 1, 1], titleKey: first.titleKey });
+  const images = [motion?.art, motion?.brush].filter(Boolean).map((x: any) => ({ src: x.src, both: true }));
+  return { ...old, entry: motion?.screen || old.entry, nodes, images };
+}
+const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\u003c');
+const head = rt ? rt.head.map((h: string) => h.startsWith('<script id="album-page"')
+  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>` : h).join('\n') : '';
+// 站点运行脚本按 page-data 里的旧“整屏图”逐屏排版；新页没有整屏图，把屏清单置空，其余（落叶、水彩、页头、目录用的共用数据）原样
+const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
+  const d = JSON.parse(body); d.screens = []; return a + safe(d) + c;
+}) : '';
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} · 吴乐阳</title>
+  <link rel="canonical" href={new URL(url, 'https://wly0829.cn').href} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
+  <Fragment set:html={head} />
+</head>
+<body data-page-kind={kind} class="astro-page">
+  <a class="skip" href="#content">跳到正文</a>
+  <Fragment set:html={header} />
+  {rt?.toc_html ? <Fragment set:html={rt.toc_html} /> : toc.length > 0 && (
+    <nav data-toc-consistency="uniform-v1" class="toc" aria-label="本页目录"><div class="bar-inner"><div class="toc-inner toc-text">
+      {toc.map((t) => (
+        <a class="nav-link" href={'#' + t.id} data-section={t.id} data-label-h={t.label} data-label-v={t.label}>
+          {t.img
+            ? <span class="nav-label"><img class="toc-img" src={t.img} alt={t.label} /></span>
+            : <span class="nav-label">{t.label}</span>}
+        </a>
+      ))}
+    </div></div></nav>
+  )}
+  <main id="content" class="sx-page paper">
+    <slot />
+  </main>
+  <Fragment set:html={footer} />
+  <Fragment set:html={tail} />
+  <script is:inline defer src="/_living/living-mount.js"></script>
+</body>
+</html>

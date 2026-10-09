@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+# 生成物：tools/extract_chrome.py、adapt_motion.py、pack_living.py、convert_page.py 重建（见 README）
+public/assets/
+public/_shared/
+public/_living/
+public/_album/
+public/_typeset/
+public/_chrome/
+src/content/pages/_stress/
