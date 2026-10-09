@@ -314,37 +314,107 @@
       },
       {
         "type": "topology",
-        "text_ref": "图里：",
-        "row": "body",
-        "width": "50%",
-        "layout": "branches",
-        "connector": "arrow",
-        "illustration": "outside",
-        "topology_layout": "我在上；Claude 左/Codex 右；两者任务文件右向与报告左向；手机在下连主机",
-        "icons": [
-          "_library/icons/人物.png",
+        "text_ref": "我",
+        "layout": "graph",
+        "columns": 3,
+        "connector": "none",
+        "illustration": "above_card",
+        "graph_nodes": [
           {
-            "asset": "_library/icons/显示器.png",
-            "badge": "_library/icons/Claude标志.png"
+            "id": "me",
+            "count": 1,
+            "row": 1,
+            "column": 2,
+            "icon": "_library/icons/人物.png"
           },
           {
-            "asset": "_library/icons/显示器.png",
-            "badge": "_library/icons/OpenAI标志.png"
+            "id": "claude",
+            "count": 1,
+            "row": 2,
+            "column": 1,
+            "icon": "_library/icons/显示器.png",
+            "icon_badge": "_library/icons/Claude标志.png"
           },
-          "_library/icons/白纸.png",
-          "_library/icons/白纸.png",
-          "_library/icons/手机.png"
+          {
+            "id": "codex",
+            "count": 1,
+            "row": 2,
+            "column": 3,
+            "icon": "_library/icons/显示器.png",
+            "icon_badge": "_library/icons/OpenAI标志.png"
+          },
+          {
+            "id": "task",
+            "count": 1,
+            "shape": "papers",
+            "row": 2,
+            "column": 2,
+            "icon": "_library/icons/白纸.png"
+          },
+          {
+            "id": "report",
+            "count": 1,
+            "shape": "papers",
+            "row": 3,
+            "column": 2,
+            "icon": "_library/icons/白纸.png"
+          },
+          {
+            "id": "phone",
+            "count": 1,
+            "row": 4,
+            "column": 2,
+            "icon": "_library/icons/手机.png"
+          }
+        ],
+        "edges": [
+          {
+            "from": "me",
+            "to": "claude",
+            "style": "dashed",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "me",
+            "to": "codex",
+            "style": "dashed",
+            "from_side": "bottom",
+            "to_side": "top"
+          },
+          {
+            "from": "claude",
+            "to": "task",
+            "from_side": "right",
+            "to_side": "left"
+          },
+          {
+            "from": "task",
+            "to": "codex",
+            "from_side": "right",
+            "to_side": "left"
+          },
+          {
+            "from": "codex",
+            "to": "report",
+            "from_side": "bottom",
+            "to_side": "right"
+          },
+          {
+            "from": "report",
+            "to": "claude",
+            "from_side": "left",
+            "to_side": "bottom"
+          }
         ]
       },
       {
         "type": "content_card",
         "text_ref": "我　提要求、拍板",
-        "columns": 1,
+        "columns": 2,
         "columns_v": 1,
         "align": "left",
         "connector": "none",
-        "row": "body",
-        "width": "50%",
         "illustration": "left_inside",
         "icons": [
           "_library/icons/人物.png",
@@ -352,7 +422,8 @@
           "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
-        ]
+        ],
+        "last_full_width": true
       }
     ],
     "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/盯进度、收结果/手机上五卡单列左图右文。竖版关系图在标题后、五卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
@@ -373,26 +444,12 @@
         "size": "large"
       },
       {
-        "type": "topology",
-        "text_ref": "图里：",
-        "layout": "branches",
-        "connector": "arrow",
-        "illustration": "outside",
-        "topology_layout": "同横版关系图置顶，一次呈现定稿全部图内标签",
-        "icons": [
-          "_library/icons/人物.png",
-          {
-            "asset": "_library/icons/显示器.png",
-            "badge": "_library/icons/Claude标志.png"
-          },
-          {
-            "asset": "_library/icons/显示器.png",
-            "badge": "_library/icons/OpenAI标志.png"
-          },
-          "_library/icons/白纸.png",
-          "_library/icons/白纸.png",
-          "_library/icons/手机.png"
-        ]
+        "type": "tag",
+        "text_ref": "我",
+        "columns": 2,
+        "columns_v": 2,
+        "size": "small",
+        "align": "left"
       },
       {
         "type": "content_card",
