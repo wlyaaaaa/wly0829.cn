@@ -1235,7 +1235,7 @@
         "type": "topology",
         "text_ref": "定稿改好",
         "layout": "chain",
-        "split_arrows": true,
+        "split_arrows": false,
         "columns": 7,
         "columns_v": 1,
         "connector": "none",

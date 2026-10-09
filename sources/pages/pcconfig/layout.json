@@ -2624,7 +2624,7 @@
         "illustration": "left_inside",
         "icons": "auto",
         "group_heading": "brush",
-        "item_spans": {"11": 3, "16": 3, "67": 2, "66": 3, "71": 3},
+        "item_spans": {"11": 3, "16": 3, "67": 3, "66": 2, "71": 3},
         "status_text": "dot_only"
       }
     ],

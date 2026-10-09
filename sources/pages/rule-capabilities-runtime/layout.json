@@ -662,6 +662,15 @@
         "illustration": "outside"
       },
       {
+        "type": "notice",
+        "row": "points",
+        "illustration": "left_inside",
+        "text_ref": "现在的登记",
+        "icons": [
+          "_library/icons/日历时钟.png"
+        ]
+      },
+      {
         "type": "points_card",
         "row": "points",
         "width": "34%",
@@ -673,15 +682,6 @@
           "_library/fix-round-2/icon-clean-6a38e42190b5f0212a91.png"
         ],
         "illustration_description": "原规格插画位置：left_inside"
-      },
-      {
-        "type": "notice",
-        "row": "points",
-        "illustration": "left_inside",
-        "text_ref": "现在的登记",
-        "icons": [
-          "_library/icons/日历时钟.png"
-        ]
       },
       {
         "type": "points_card",

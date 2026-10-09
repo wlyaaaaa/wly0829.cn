@@ -374,12 +374,36 @@
       },
       {
         "type": "points_card",
-        "columns": 3,
+        "columns": 1,
         "split_cards": false,
         "illustration": "left_inside",
         "icon_position": "header_left",
         "icons": "auto",
-        "text_ref": "Claude 和 GPT 一起干时"
+        "text_ref": "Claude 和 GPT 一起干时",
+        "row": "details",
+        "width": "42%"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "快速模式、故障和额度",
+        "row": "details",
+        "width": "30%"
+      },
+      {
+        "type": "points_card",
+        "columns": 1,
+        "split_cards": false,
+        "illustration": "left_inside",
+        "icon_position": "header_left",
+        "icons": "auto",
+        "text_ref": "什么时候新开对话",
+        "row": "details",
+        "width": "28%"
       }
     ],
     "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9。左上一行深绿大字是本屏的“## …”标题（井号不画）。下面是圆角卡片（白底、浅绿细边），每个“### …”小标题一张卡，小标题画在卡片顶上一条浅绿底色带里、深绿粗体，井号不画；卡片左上角一个小水彩图标：“主对话的责任”配一个拿着清单打勾的小人、“Claude 和 GPT 一起干时”配 Claude 橙色星芒和 OpenAI 黑色花结两个标志并排握手、“快速模式、故障和额度”配一个电量回满的小电池、“什么时候新开对话”配一个新打开的对话气泡。卡片里每条要点前一个小绿圆点，正文深蓝灰。四张卡排成两行两列：上行左“主对话的责任”、右“Claude 和 GPT 一起干时”（这张最长，可以比左边高）；下行左“快速模式、故障和额度”、右“什么时候新开对话”。〔〕里的字画成绿色下划线加小箭头的链接样式。不画编号，不加要点以外的字。（g4 补充）“主对话的责任”卡现在多了接力成品、盯到交付、叫停后确认三处，比“Claude 和 GPT 一起干时”还长；两行两列的排法不变，上行两张卡高度按较长的一张，下行“什么时候新开对话”也多了一条满槽的说明，卡高按内容，不留大块空白。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。"
