@@ -30,8 +30,6 @@
       },
       {
         "type": "table",
-        "columns": 2,
-        "portrait_layout": "row_cards",
         "text_ref": "型号与派法（北京时间2026-10-08）"
       },
       {
@@ -103,8 +101,6 @@
       },
       {
         "type": "table",
-        "columns": 2,
-        "portrait_layout": "row_cards",
         "text_ref": "型号与派法（北京时间2026-10-08）"
       },
       {
