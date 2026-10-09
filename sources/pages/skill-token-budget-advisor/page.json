@@ -1,0 +1,56 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "skill-token-budget-advisor",
+  "kind": "skill-redirect",
+  "title": "额度估算",
+  "url": "/skills/token-budget-advisor/",
+  "destination": "/skills/",
+  "tagline": "已退役",
+  "status": "已退役",
+  "public": false,
+  "repo_url": null,
+  "capability": "",
+  "based_on": {
+    "file": "退役提交 .agents 2ed452e（9 月 25 日）：本人 9 月 26 日（北京时间）定 token-budget-advisor 不用，连同测试退役"
+  },
+  "video_prompt": "",
+  "screens": [
+    {
+      "id": "skill-token-budget-advisor-01",
+      "section": "top",
+      "title": "去向",
+      "scene": "",
+      "portrait": "",
+      "text": "额度估算\n\n已退役：这个技能 9 月 25 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。",
+      "links": [
+        {
+          "text": "技能首页",
+          "href": "/skills/"
+        }
+      ],
+      "anchors": [],
+      "live": [],
+      "screenshots": [],
+      "chain": "",
+      "reuse": ""
+    }
+  ],
+  "registry": {
+    "numbers": [],
+    "relations": [],
+    "mentions": [
+      {
+        "target": "/skills/",
+        "screen": "skill-token-budget-advisor-01",
+        "text": "技能首页"
+      }
+    ]
+  },
+  "notes": {
+    "merged": [],
+    "dropped": [
+      "原技能页的说法、例子和能做的事整页撤下：技能已退役，旧网址只留一句去向。"
+    ],
+    "unsure": []
+  }
+}
