@@ -9,3 +9,6 @@ public/_album/
 public/_typeset/
 public/_chrome/
 src/content/pages/_stress/
+src/chrome/retained/
+public/cockpit/
+public/_home-cockpit/home-firstpaint-*.js

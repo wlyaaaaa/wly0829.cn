@@ -1,6 +1,8 @@
 # site-astro：内容页自动排版样板
 
-每页一个 Markdown 内容文件（`src/content/pages/<页>.md`），区块自动适应宽度；页头、页尾、目录条、配色字体和动效照现在网站。首页和驾驶舱不在这里。
+内容页每页一个 Markdown 文件（`src/content/pages/<页>.md`），区块自动适应宽度；首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
+
+首页与驾驶舱生成：`python tools/retain_home_cockpit.py <候选站构建目录>`，然后 `npm run build`。生成脚本只读候选站，复制两页实际依赖和自有动效包，逐文件核对 SHA-256；清单在 `src/chrome/retained/manifest.json`。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
 
 ## 一次完整生成
 
