@@ -35,9 +35,12 @@ POSITION = """() => {
  const row=first?screens.filter(s=>s.parentElement===first.parentElement&&top(s)===top(first)&&
                               s.offsetHeight&&top(s)<=point&&top(s)+s.offsetHeight>point):[];
  const el=row.find(s=>s.dataset.screen===readingPosition?.id)||first;
+ const node=readingPosition?.node,owner=readingPosition?.nodeOwner,refs=window.__readingObserverRefs??=[];
+ const ref=el=>{if(!refs.includes(el))refs.push(el);return refs.indexOf(el);};
+ const semantic=node?.isConnected&&owner?.isConnected&&node.getClientRects().length?{node:ref(node),owner:ref(owner),ownerId:owner?.id,tag:node.tagName,identity:readingPosition.nodeIdentity,top:node.getBoundingClientRect().top}:null;
  return {id:el?.dataset.screen,fraction:el?(scrollY+offset-top(el))/el.offsetHeight:null,
          height:el?.offsetHeight,y:scrollY,maxScroll,atBottom:maxScroll>0&&Math.abs(scrollY-maxScroll)<=1,offset,width:innerWidth,viewportHeight:innerHeight,
-         row_candidates:row.map(s=>s.dataset.screen)};
+         row_candidates:row.map(s=>s.dataset.screen),semantic,semantic_gap:semantic?null:'raster-no-semantic-mapping'};
 }"""
 PLACE = """({id,fraction})=>{
  const el=[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===id);
@@ -64,6 +67,10 @@ def reading_error_within_two_pixels(value):
 
 
 def reading_delta(before, after):
+    if before.get('semantic'):
+        a,b=before['semantic'],after.get('semantic')
+        same=b and (a['owner']==b['owner'] or a['ownerId'] and a['ownerId']==b['ownerId']) and (a['node']==b['node'] or a['tag']==b['tag'] and a['identity'] and a['identity']==b['identity'])
+        return abs(b['top']-a['top']) if same else None
     if before.get('atBottom') and before.get('maxScroll', 0) > 0:
         return abs(after['y'] - after['maxScroll'])
     return abs(after['fraction'] - before['fraction']) * after['height'] if after['id'] == before['id'] else None
@@ -78,7 +85,7 @@ async def reading_position(browser_page):
       if(window.SiteAlbum&&!window.SiteAlbum.snapshot.runtimeLoaded)return false;
       if(innerWidth!==expected.width||innerHeight!==expected.height||resizing||typesetReadingState.width!==expected.width||typesetReadingState.height!==expected.height)return false;
       const current=(POSITION_VALUE)(),tracked=readingPosition;
-      return current.id===tracked?.id && (!current.id||Math.abs(current.fraction-tracked.fraction)<1e-8);
+      return current.semantic || current.id===tracked?.id && (!current.id||Math.abs(current.fraction-tracked.fraction)<1e-8);
     }""".replace('POSITION_VALUE',POSITION)
     await browser_page.wait_for_function(predicate,arg=expected,polling='raf',timeout=10000)
     return await browser_page.evaluate(POSITION)
