@@ -1,6 +1,6 @@
 """把指定候选站的首页、驾驶舱及实际依赖原样带进 Astro；不修改候选站。
 用法：python tools/retain_home_cockpit.py <候选站构建目录>
-生成物不入库，图片逐字节复制并核对 SHA-256，不转码、不改尺寸。
+生成物不入库；先逐字节复制原依赖，再从审定 master 生成首页换色图片。
 """
 import hashlib
 import html
@@ -9,6 +9,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from runpy import run_path
 from urllib.parse import unquote, urlsplit
 from home_firstpaint import adjust_home
 
@@ -77,7 +78,8 @@ while pending:
     references(path.read_text(encoding='utf-8'), [path.parent, SOURCE, SOURCE / 'cockpit'])
 
 home = output / 'home.html'
-home.write_text(adjust_home(home.read_text(encoding='utf-8'), SOURCE, PUBLIC), encoding='utf-8', newline='')
+white_gear = run_path(str(ROOT.parent / 'sources/home-white-gear/build.py'))['build'](PUBLIC, home)
+home.write_text(adjust_home(home.read_text(encoding='utf-8'), PUBLIC, PUBLIC), encoding='utf-8', newline='')
 
 # 驾驶舱保留原挂载和完整屏幕数据，仅沿用样板已验证的通用引擎首帧修正。
 import subprocess
@@ -89,5 +91,6 @@ cockpit.write_text(cockpit.read_text(encoding='utf-8').replace(engine['deployed'
 
 manifest = {'pages': pages, 'files': copied, 'count': len(copied),
             'bytes': sum(item['bytes'] for item in copied.values())}
+manifest['home_white_gear'] = white_gear
 (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
 print(json.dumps({key: manifest[key] for key in ['pages', 'count', 'bytes']}, ensure_ascii=False))
