@@ -601,9 +601,49 @@ def layout_acceptance(path, build, build_path, verification, verification_path, 
             "raw_pages": raw_pages, "accepted_issues": actual}
 
 
+def native_generation(build):
+    """Canonicalize only SHA-bound native generator locations in a comparison copy."""
+    native = build.get('native_readability')
+    if not native:
+        return build
+    inputs = dict(native['inputs'])
+    configs = [Path(p) for p in inputs if Path(p).name == 'render.json'
+               and str(Path(p).parent/'bodies/route-meta.json') in inputs]
+    if native.get('schema') != 'wly.native-readability.v1' or len(configs) != 1:
+        raise ValueError('Native generation lacks its unique bound render config')
+    for path, proof in inputs.items():
+        bound_file(path, proof)
+    config_path = configs[0]; config = read(config_path); root = config_path.parent
+    body_root = Path(config['output'])
+    if body_root != root/'bodies' or config['routes'] != [url.removesuffix('/') for url in native['routes']]:
+        raise ValueError('Native render config changed its routes or generated body role')
+    metadata_path = body_root/'route-meta.json'
+    if read(metadata_path) != {url.removesuffix('/'): row['metadata'] for url, row in native['routes'].items()}:
+        raise ValueError('Native generated route metadata differs from its bound records')
+    payload = config_path.read_bytes(); locator = json.dumps(config['output']).encode('utf8')
+    if payload.count(locator) != 1:
+        raise ValueError('Native render output locator is not unique')
+    canonical = payload.replace(locator, json.dumps('<native-body>/bodies').encode('utf8'), 1)
+    generated = {str(config_path): {'sha256': hashlib.sha256(canonical).hexdigest(), 'bytes': len(canonical)},
+                 str(metadata_path): inputs[str(metadata_path)]}
+    for url, row in native['routes'].items():
+        path = str(body_root/hybrid.route_file(url))
+        if inputs.get(path) != row['body']:
+            raise ValueError('Native generated body differs from its recorded input: '+url)
+        generated[path] = inputs[path]
+    for ledger in (native['inputs'], build.get('inputs', {})):
+        for path, canonical_proof in generated.items():
+            if path in ledger:
+                if ledger[path] != inputs[path]:
+                    raise ValueError('Native generated input proof differs between ledgers')
+                ledger['<native-body>/'+Path(path).relative_to(root).as_posix()] = canonical_proof
+                del ledger[path]
+    return build
+
+
 def rebuilt_generation(reviewed, rebuilt, final_manifest):
     """Compare real replay entities, allowing only their generated locations/times."""
-    copies = json.loads(json.dumps([reviewed, rebuilt]))
+    copies = [native_generation(build) for build in json.loads(json.dumps([reviewed, rebuilt]))]
     entities = []
     for build in copies:
         creative = build['creative_preparation']
@@ -637,41 +677,57 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
                 raise ValueError('Rebuild changed a real stage or its release chain')
             previous = current['release_id']; manifests.append(current)
         entities.append((staged, raw_root, roots, manifests))
-    if json.dumps(read(entities[0][0]['path']), sort_keys=True) != json.dumps(read(entities[1][0]['path']), sort_keys=True):
+    if native_generation(read(entities[0][0]['path'])) != native_generation(read(entities[1][0]['path'])):
         raise ValueError('Rebuild changed the complete staged report')
     normalized = []
     for build, (staged, raw_root, roots, manifests) in zip(copies, entities):
-        static_time = manifests[1]['home_static_preparation']['observed_at_beijing']
+        static_time = manifests[1]['home_static_preparation'].get('observed_at_beijing')
         final_root = Path(staged['path']).with_name(Path(staged['path']).name.replace('-staged-build-report.json', ''))
-        final = read(final_root / hybrid.MANIFEST) if build is copies[0] else json.loads(json.dumps(final_manifest))
+        final = read(final_root / hybrid.MANIFEST)
         if final['files'] != build['files'] or final['release_id'] != build['release_id']:
             raise ValueError('Final manifest differs from the reviewed build files')
-        for manifest in manifests + [final]:
+        projected = ('home_static_preparation', 'page_flip_preparation', 'how_demo_preparation')
+        for key in projected:
+            if final.get(key) != hybrid.stable_evidence(manifests[-1].get(key), ROOT):
+                raise ValueError('Final preparation differs from its actual last stage: '+key)
+        for manifest in manifests:
+            native_generation(manifest)
             if 'prepared_at_beijing' in manifest:
                 beijing_timestamp(manifest['prepared_at_beijing'], 'prepared_at_beijing')
                 manifest['prepared_at_beijing'] = '<generated-time>'
             static = manifest.get('home_static_preparation') if manifest is not manifests[0] else None
             if static:
-                beijing_timestamp(static['observed_at_beijing'], 'home_static_preparation.observed_at_beijing')
-                if (static['observed_at_beijing'] != static_time or static['baseline'] != str(raw_root)
+                if 'observed_at_beijing' in static:
+                    beijing_timestamp(static['observed_at_beijing'], 'home_static_preparation.observed_at_beijing')
+                if (static.get('observed_at_beijing') != static_time or static['baseline'] != str(raw_root)
                         or static['output'] != str(roots[0])):
                     raise ValueError('Static preparation does not identify its actual first stage')
                 bound_file(raw_root / hybrid.MANIFEST, static['baseline_manifest'])
-                static.update(baseline='<raw>', output='<static>', observed_at_beijing='<generated-time>',
+                static.update(baseline='<raw>', output='<static>',
                               baseline_manifest='<verified-raw-manifest>')
+                if 'observed_at_beijing' in static:
+                    static['observed_at_beijing'] = '<generated-time>'
             album = manifest.get('page_flip_preparation')
             if album:
                 if album['source_root'] != str(roots[2]):
                     raise ValueError('Album source is not the actual comic stage')
                 album['source_root'] = '<comic>'
                 for report in album['build_reports']:
-                    if report['path'] != staged['path'] or report['sha256'] != staged['sha256'] or report['bytes'] != staged['bytes']:
+                    if (report['path'] != staged['path'] or report['sha256'] != staged['sha256']
+                            or ('bytes' in report and report['bytes'] != staged['bytes'])):
                         raise ValueError('Album changed the staged report binding')
-                    report.update(path='<staged-report>', sha256='<verified-staged-report>', bytes='<verified-staged-report>')
+                    bound_file(report['path'], staged)
+                    report.update(path='<staged-report>', sha256='<verified-staged-report>')
+                    if 'bytes' in report:
+                        report['bytes'] = '<verified-staged-report>'
             demo = manifest.get('how_demo_preparation')
             if demo:
                 speed = demo['speed_source']; path = Path(speed['path'])
-                relative = path.relative_to(roots[3]).as_posix()
+                locations = [rel for rel, proof in manifests[4]['files'].items()
+                             if proof['sha256'] == speed['sha256'] and hybrid.source_path(roots[3], rel) == path]
+                if len(locations) != 1:
+                    raise ValueError('Demo speed source lacks its unique actual album locator')
+                relative = locations[0]
                 proof = manifests[4]['files'].get(relative)
                 if not proof or speed['sha256'] != proof['sha256']:
                     raise ValueError('Demo speed source is not the actual album runtime')
@@ -679,6 +735,16 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
             if manifest.get('creative_preparation'):
                 manifest['creative_preparation'] = '<verified-creative>'
             normalized.append(manifest)
+        native_generation(final)
+        for key in projected:
+            if key in final:
+                final[key] = hybrid.stable_evidence(manifests[-1][key], ROOT)
+        if 'prepared_at_beijing' in final:
+            beijing_timestamp(final['prepared_at_beijing'], 'prepared_at_beijing')
+            final['prepared_at_beijing'] = '<generated-time>'
+        if final.get('creative_preparation'):
+            final['creative_preparation'] = '<verified-creative>'
+        normalized.append(final)
     split = len(entities[0][3]) + 1
     if normalized[:split] != normalized[split:]:
         raise ValueError('Rebuild changed complete stage manifests beyond generated roles')
@@ -692,7 +758,7 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
     for field in ('inputs', 'creative_preparation'):
         if copies[0][field] != copies[1][field]:
             raise ValueError('Rebuild changed reviewed external inputs or creative ledger')
-    if hybrid.stable_evidence(rebuilt['creative_preparation'], ROOT) != final_manifest.get('creative_preparation'):
+    if hybrid.stable_evidence(reviewed['creative_preparation'], ROOT) != final_manifest.get('creative_preparation'):
         raise ValueError('Rebuilt creative report differs from the actual final manifest')
     return copies
 
@@ -814,7 +880,7 @@ def prepare(args):
     rebuilt = read(args.rebuilt_report) if args.rebuilt_report else None
     reviewed_comparable = build
     comparable = rebuilt
-    if rebuilt and build.get('creative_preparation') and hybrid.stable_evidence(build['creative_preparation'], ROOT) != manifest.get('creative_preparation'):
+    if rebuilt and build.get('creative_preparation'):
         try:
             reviewed_comparable, comparable = rebuilt_generation(build, rebuilt, manifest)
         except (ValueError, KeyError, OSError, TypeError) as error:
@@ -875,7 +941,7 @@ def prepare(args):
             block('release_overlay',error)
     elif build.get('creative_preparation'):
         try:
-            creative=(rebuilt or build)['creative_preparation']
+            creative=build['creative_preparation']
             if creative.get('schema')!='wly.creative-replay-result.v1' or hybrid.stable_evidence(creative, ROOT)!=manifest.get('creative_preparation'):
                 raise ValueError('Creative preparation differs from the reviewed final source')
             bound_file(creative['config']['path'],creative['config'],checked_inputs)
@@ -1190,7 +1256,18 @@ def prepare(args):
             block("page_evidence", error, page)
         if len(result["blockers"]) == start:
             result["pages"][page]["status"] = "ready"
-    if len(bound_urls) != len(set(bound_urls)) or set(manifest.get("accepted_pages", {})) != set(bound_urls):
+    expected_urls = set(bound_urls)
+    native = build.get('native_readability') or {}
+    try:
+        if (manifest.get('native_readability') or {}) != native:
+            raise ValueError('Native route evidence differs from the reviewed manifest')
+        native_generation(json.loads(json.dumps({'native_readability': native})))
+        expected_urls.update(native.get('routes', {}))
+    except (ValueError, KeyError, OSError, TypeError) as error:
+        block('scope', error)
+    if any(step['name'] == 'stutter' for step in result.get('creative_preparation', {}).get('steps', [])):
+        expected_urls.add('/cockpit/stutter/')
+    if len(bound_urls) != len(set(bound_urls)) or set(manifest.get("accepted_pages", {})) != expected_urls:
         block("scope", "accepted_pages must exactly match the selected website URLs")
     for path,(_,observed) in checked_inputs.items():
         try:
