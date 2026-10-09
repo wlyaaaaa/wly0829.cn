@@ -23,6 +23,8 @@ except ModuleNotFoundError:
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = 'release-manifest.json'
+RETIRED_ARTIFACT = '_typeset/rule-sources/0057134e1ae9250111cbdde2ba3d64e44d54bffed4cfee5a341bd3e8d077bffb.md'
+RETIRED_PROOF = {'sha256':'0057134e1ae9250111cbdde2ba3d64e44d54bffed4cfee5a341bd3e8d077bffb', 'bytes':19537}
 spec = importlib.util.spec_from_file_location('assembled_builder', ROOT/'scripts/build-assembled-site.py')
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
@@ -310,6 +312,9 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
         raise ValueError('Choose a fresh, disjoint output directory')
     old, routes = verify_baseline(baseline, baseline_manifest)
+    retired = {RETIRED_ARTIFACT:{'kind':'retired_artifact', 'before':RETIRED_PROOF}} if RETIRED_ARTIFACT in old else {}
+    if retired and old[RETIRED_ARTIFACT] != RETIRED_PROOF:
+        raise ValueError('Approved retired artifact baseline identity differs')
     overlays = dict(sorted(overlay.get('files', {}).items())) if overlay else {}
     if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
     accepted_files = {route_file(x) for x in accepted}
@@ -317,7 +322,8 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     if defer:
         output.mkdir(parents=True)
     else:
-        shutil.copytree(baseline, output, copy_function=getattr(builder, 'copy_release_asset', shutil.copy2))
+        shutil.copytree(baseline, output, copy_function=getattr(builder, 'copy_release_asset', shutil.copy2),
+                        ignore=lambda directory,names:[name for name in names if (Path(directory)/name).relative_to(baseline).as_posix() in retired])
     # HTTP snapshots do not expose Pages' domain configuration file.
     # Adding that deployment metadata preserves every captured HTTP byte.
     if not (baseline/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
@@ -329,6 +335,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         navigation_pages[rel] = nav_repair.PageFacts(source_path(candidate,rel).read_text('utf-8-sig'),candidate)
     while pending:
         rel = pending.pop()
+        if rel in retired:raise ValueError('Approved retired artifact is still a dependency: '+rel)
         if rel in copied: continue
         logical = candidate/rel
         path = source_path(candidate, rel)
@@ -370,11 +377,11 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
             overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),
                              'after':{'sha256':digest(output/rel),'bytes':(output/rel).stat().st_size}}
     for rel, entry in old.items():
-        if not defer and rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
+        if not defer and rel not in retired and rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
             raise ValueError('Old file changed: '+rel)
     for route in routes:
         if not defer and not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
-    files = {**old, **{rel:{'sha256':digest(Path(path)),'bytes':Path(path).stat().st_size} for rel,path in paths.items()}} if defer else inventory(output)
+    files = {**{rel:entry for rel,entry in old.items() if rel not in retired}, **{rel:{'sha256':digest(Path(path)),'bytes':Path(path).stat().st_size} for rel,path in paths.items()}} if defer else inventory(output)
     if defer:
         write(output/LEDGER, {'baseline':str(baseline),'sources':paths})
         sources.cache_clear()
@@ -386,6 +393,7 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
                 'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
                 'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
     if overlays: manifest['release_overlay'] = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlays.items()}
+    if retired:manifest['retired_artifacts'] = retired
     if baseline_input_kind:
         manifest['baseline_input_kind'] = baseline_input_kind
         manifest['baseline_source_release_id'] = baseline_manifest.get('release_id')
@@ -397,6 +405,9 @@ def verify_release(output, require_remote=True):
     manifest = read(output/MANIFEST)
     if manifest.get('schema') != 'wly.hybrid-release.v1' or inventory(output) != manifest['files']:
         raise ValueError('Release bytes differ from manifest')
+    retired = manifest.get('retired_artifacts', {})
+    if retired and (retired != {RETIRED_ARTIFACT:{'kind':'retired_artifact', 'before':RETIRED_PROOF}} or manifest['baseline_files'].get(RETIRED_ARTIFACT) != RETIRED_PROOF or RETIRED_ARTIFACT in manifest['files']):
+        raise ValueError('Retired artifact identity or omission differs')
     if 'oss' in manifest:
         oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
         oss = importlib.util.module_from_spec(oss_spec)
@@ -420,7 +431,7 @@ def verify_release(output, require_remote=True):
             if hashlib.sha256(recovered).hexdigest() != entry['before']['sha256']:
                 raise ValueError('Runtime overlay did not preserve original content: '+rel)
     for rel, entry in manifest['baseline_files'].items():
-        if rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
+        if rel not in retired and rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
     for route in manifest['routes']:
         if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
     return manifest
