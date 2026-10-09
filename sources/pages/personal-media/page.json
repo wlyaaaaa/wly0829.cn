@@ -167,43 +167,50 @@
       "screenshots": [
         {
           "file": "sources/assets/_references/b50119e7b6dba66895d1f86ff3f0238c2c913fa7a6e257d358ab1d8828025fdf.webp",
-          "full": "sources/assets/_references/b1afb6274d46bb8b234e860c506fe05acd4a0dc0ecdff51eb20f26c2430d6e74.webp",
+          "full": "public/media/personal-media/01-singapore-tree-well.jpg",
+          "preserve_original": true,
           "where": "第一行左一的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "1. 沿着石墙，抬头看树。"
         },
         {
           "file": "sources/assets/_references/3ef12e8dcfc152b9652c13e4d1eb3f5eae4922717b4d3fdf8eb17f47791edfc1.webp",
-          "full": "sources/assets/_references/7ca42e44d2d5ecfc444a65fd81100a98d9e77d0d41e244ce1deb2cf80c548839.webp",
+          "full": "public/media/personal-media/02-hong-kong-harbor-lights.jpg",
+          "preserve_original": true,
           "where": "第一行左二的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "2. 维港的灯，落在水里。"
         },
         {
-          "file": "sources/assets/_references/b55841fe1f83d4d4248af37fda1339225d37480aa8be832d0027d05a22575cb2.webp",
-          "full": "sources/assets/_references/f440dba9ce5da2876adffcf2822c3b56fa33ada3b066fb5c0d7307abda366321.webp",
+          "file": "public/media/personal-media/03-beijing-lantern-corridor.jpg",
+          "full": "public/media/personal-media/03-beijing-lantern-corridor.jpg",
+          "preserve_original": true,
           "where": "第一行左三的照片空位（竖向 3:4）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "3. 走进一整条红灯笼。"
         },
         {
-          "file": "sources/assets/_references/84e7f50ae18f3dc3799f8fa57ef086c41bba9c0bbb0e1b917f9ca42e8d66507f.webp",
-          "full": "sources/assets/_references/73263a1787e27b397e8b1b403b0aca343cb0d3aba5b4fb1fae33cdc40f88f34a.webp",
+          "file": "public/media/personal-media/04-shanghai-sunset-skyline.jpg",
+          "full": "public/media/personal-media/04-shanghai-sunset-skyline.jpg",
+          "preserve_original": true,
           "where": "第一行左四的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "4. 傍晚，从高处看陆家嘴。整理时 AI 拿同一傍晚的两张问我留哪张，我留了这张。"
         },
         {
           "file": "sources/assets/_references/7f16b5ec33fe901393f4b5206ed8c276d4f4327d763adf8a5d892e6b1bbcf6a0.webp",
-          "full": "sources/assets/_references/7b903aca9b24f73e764078772a80a69bdf1cef2d7ce0feb320e63745661a0c51.webp",
+          "full": "public/media/personal-media/05-singapore-palm-street.jpg",
+          "preserve_original": true,
           "where": "第一行左五的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "5. 店屋、棕榈和远处的金顶。"
         },
         {
           "file": "sources/assets/_references/1e622ffa0d1a85b87f1c9d952eda12d4c4f092d82613a202324445131554fe78.webp",
-          "full": "sources/assets/_references/f5f42567205ad64156708b6c2ebaa9d31bdeec3b4a32fba17baaacb5fedc8ee9.webp",
+          "full": "public/media/personal-media/06-singapore-sea-and-sky.jpg",
+          "preserve_original": true,
           "where": "第二行左一的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "6. 海面把天空接了下来。"
         },
         {
-          "file": "sources/assets/_references/606c915743adc289f293fc895afe957a22f3496eb9cd58e3bf9159dc52e2ba68.webp",
-          "full": "sources/assets/_references/03aee1a844a081a6d050aa6c07d23a046bfd934e2c4ce6bb0dd9445754be02ed.webp",
+          "file": "public/media/personal-media/07-hong-kong-golden-atrium.jpg",
+          "full": "public/media/personal-media/07-hong-kong-golden-atrium.jpg",
+          "preserve_original": true,
           "where": "第二行左二的照片空位（竖向 3:4）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "7. 中庭里的金色星球。",
           "frame_bindings": {
@@ -218,8 +225,9 @@
           }
         },
         {
-          "file": "sources/assets/_references/2a5adec030950854729275d98ff700d14abebb7420b64c985c8537c493496cc8.webp",
-          "full": "sources/assets/_references/5338a131a6307ed8c9f9c4ccfabd87162d21a1d75599421fc171f28bf6dbac0f.webp",
+          "file": "public/media/personal-media/08-chongqing-cable-car.jpg",
+          "full": "public/media/personal-media/08-chongqing-cable-car.jpg",
+          "preserve_original": true,
           "where": "第二行左三的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "8. 缆车穿过桥与层层屋顶。",
           "frame_bindings": {
@@ -235,13 +243,15 @@
         },
         {
           "file": "sources/assets/_references/76a0beac922e0990ff2946fee9e42ec1915d93a0f3fef9e82966234b87bc4de3.webp",
-          "full": "sources/assets/_references/8868e2b7bae9daa9cb89e00fb4572f6c6be8fd2c66deb8f0f7ebe995164c553c.webp",
+          "full": "public/media/personal-media/02-wuxi-blue-hour-water-town.jpg",
+          "preserve_original": true,
           "where": "第二行左四的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "9. 天还没黑，河边已经亮灯。"
         },
         {
           "file": "sources/assets/_references/65a8ec13f43421b92b3e17b8c06cb3a3a4ac8859aeef61b244d7bb3b20ef80ce.webp",
-          "full": "sources/assets/_references/89e19cd5a41e955a14bdd91b526b08f344e6481630d7d6ab05bd3695a5774fd6.webp",
+          "full": "public/media/personal-media/10-kunming-lakeside-gulls.jpg",
+          "preserve_original": true,
           "where": "第二行左五的照片空位（横向 4:3）；格子里贴 file 这张缩略图，按原比例完整放进；点开显示 full 那张原图",
           "caption": "10. 湖岸边，海鸥从眼前飞过。"
         }
@@ -557,7 +567,7 @@
       "chain": "",
       "reuse": ""
     },
-    {"id": "personal-media-gallery-history", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。\n\n沿着石墙，抬头看树。\n\n维港的灯，落在水里。\n\n暮色把桥、船、粉墙和灯影收进同一种安静的蓝。\n\n走进一整条红灯笼。\n\n临窗的一顿饭：广州塔与江景、餐桌上的海鲜和玩偶留在同一张照片里。\n\n傍晚，从高处看陆家嘴。\n\n道路曲线从画面底部穿进高楼，把城市纵深完整带出来。\n\n店屋、棕榈和远处的金顶。\n\n树冠撑满画面，阳光从枝叶间落进花与热带绿意。\n\n冷暖船灯散在深色海面上，像旅程结束前的一张星图。\n\n海面把天空接了下来。\n\n中庭里的金色星球。\n\n高饱和的橙红前景把灰蓝城市切出鲜明节奏。\n\n垂直水幕贯穿多层花园，绿色和紫色把空间感推到最高。\n\n缆车穿过桥与层层屋顶。\n\n彩虹色曲线和规整建筑形成一张轻快、干净的城市画面。\n\n湖岸边，海鸥从眼前飞过。\n\n溪流形成天然引导线，把苔石、落叶和层层绿意串在一起。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/media/personal-media/01-singapore-night-garden.jpg", "caption": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/01-singapore-tree-well.jpg", "caption": "沿着石墙，抬头看树。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/02-hong-kong-harbor-lights.jpg", "caption": "维港的灯，落在水里。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/02-wuxi-blue-hour-water-town.jpg", "caption": "暮色把桥、船、粉墙和灯影收进同一种安静的蓝。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/03-beijing-lantern-corridor.jpg", "caption": "走进一整条红灯笼。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/03-guangzhou-city-dinner.jpg", "caption": "临窗的一顿饭：广州塔与江景、餐桌上的海鲜和玩偶留在同一张照片里。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/04-shanghai-sunset-skyline.jpg", "caption": "傍晚，从高处看陆家嘴。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/04-singapore-city-night-roads.jpg", "caption": "道路曲线从画面底部穿进高楼，把城市纵深完整带出来。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/05-singapore-palm-street.jpg", "caption": "店屋、棕榈和远处的金顶。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/05-singapore-tropical-canopy.jpg", "caption": "树冠撑满画面，阳光从枝叶间落进花与热带绿意。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/06-singapore-harbor-from-air.jpg", "caption": "冷暖船灯散在深色海面上，像旅程结束前的一张星图。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/06-singapore-sea-and-sky.jpg", "caption": "海面把天空接了下来。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/07-hong-kong-golden-atrium.jpg", "caption": "中庭里的金色星球。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/07-singapore-sculpture-skyline.jpg", "caption": "高饱和的橙红前景把灰蓝城市切出鲜明节奏。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/08-changi-jewel-rain-vortex.jpg", "caption": "垂直水幕贯穿多层花园，绿色和紫色把空间感推到最高。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/08-chongqing-cable-car.jpg", "caption": "缆车穿过桥与层层屋顶。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/09-shanghai-rainbow-sculpture.jpg", "caption": "彩虹色曲线和规整建筑形成一张轻快、干净的城市画面。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/10-kunming-lakeside-gulls.jpg", "caption": "湖岸边，海鸥从眼前飞过。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/10-singapore-rainforest-stream.jpg", "caption": "溪流形成天然引导线，把苔石、落叶和层层绿意串在一起。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
+    {"id": "personal-media-gallery-history", "section": "gallery", "title": "画廊", "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。", "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。", "text": "画廊\n\n点击图片，可以查看完整原图。\n\n蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。\n\n临窗的一顿饭：广州塔与江景、餐桌上的海鲜和玩偶留在同一张照片里。\n\n道路曲线从画面底部穿进高楼，把城市纵深完整带出来。\n\n树冠撑满画面，阳光从枝叶间落进花与热带绿意。\n\n冷暖船灯散在深色海面上，像旅程结束前的一张星图。\n\n高饱和的橙红前景把灰蓝城市切出鲜明节奏。\n\n垂直水幕贯穿多层花园，绿色和紫色把空间感推到最高。\n\n彩虹色曲线和规整建筑形成一张轻快、干净的城市画面。\n\n溪流形成天然引导线，把苔石、落叶和层层绿意串在一起。", "links": [], "anchors": [], "live": [], "screenshots": [{"file": "public/media/personal-media/01-singapore-night-garden.jpg", "caption": "蓝色灯光、温室轮廓与水面倒影把城市夜色拉开成完整层次。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/03-guangzhou-city-dinner.jpg", "caption": "临窗的一顿饭：广州塔与江景、餐桌上的海鲜和玩偶留在同一张照片里。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/04-singapore-city-night-roads.jpg", "caption": "道路曲线从画面底部穿进高楼，把城市纵深完整带出来。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/05-singapore-tropical-canopy.jpg", "caption": "树冠撑满画面，阳光从枝叶间落进花与热带绿意。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/06-singapore-harbor-from-air.jpg", "caption": "冷暖船灯散在深色海面上，像旅程结束前的一张星图。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/07-singapore-sculpture-skyline.jpg", "caption": "高饱和的橙红前景把灰蓝城市切出鲜明节奏。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/08-changi-jewel-rain-vortex.jpg", "caption": "垂直水幕贯穿多层花园，绿色和紫色把空间感推到最高。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/09-shanghai-rainbow-sculpture.jpg", "caption": "彩虹色曲线和规整建筑形成一张轻快、干净的城市画面。", "where": "画廊：完整原图，点击放大", "preserve_original": true}, {"file": "public/media/personal-media/10-singapore-rainforest-stream.jpg", "caption": "溪流形成天然引导线，把苔石、落叶和层层绿意串在一起。", "where": "画廊：完整原图，点击放大", "preserve_original": true}], "chain": "", "reuse": ""}
   ],
   "registry": {
     "groups": [
