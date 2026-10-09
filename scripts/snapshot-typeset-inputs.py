@@ -462,6 +462,8 @@ class Snapshot:
         for row in rows:
             grouped[safe_part(row['page'], 'page')].append(row)
         self.pages = self.requested_pages or list(grouped)
+        policy_path = repository / '.publish/private/rule-public-policy.json'
+        if policy_path.is_file(): self.copy(policy_path, Path('input-evidence/rule-public-policy.json'), transform=False)
         missing = set(self.pages) - set(grouped)
         if missing:
             raise ValueError('Pages absent from inventory: ' + ', '.join(sorted(missing)))

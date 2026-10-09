@@ -715,6 +715,7 @@ def build_page(name, records, args, candidate):
                 meta['source_sha256']=original_proof['sha256']
                 if based_on.get('sha256')!=original_proof['sha256']:
                     issues.append(sid+':原文声明SHA与实际来源不符')
+                policy_path=(HERE.parent/'.publish/private/rule-public-policy.json').resolve();inputs[str(policy_path)]=stamp(policy_path)
                 pin=rule_contract.load_pin(HERE.parent)
                 if pin.get('schema')=='wly.assembled-rules-pin.v2':
                     projection=getattr(args,'rule_projection_records',{}).get((name,sid,'h'))
