@@ -8,7 +8,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGES = {"skill-report-page": "/skills/report-page/", "localocr": "/projects/localocr/", "rule-engineering-delivery": "/rules/engineering-delivery/"}
 ap = argparse.ArgumentParser()
 ap.add_argument("out"); ap.add_argument("dist")
-ap.add_argument("--widths", default="1440,390"); ap.add_argument("--pages", default=",".join(PAGES)); ap.add_argument("--base", default="http://127.0.0.1:4392")
+ap.add_argument("--suffix", default="-r2"); ap.add_argument("--widths", default="1440,390"); ap.add_argument("--pages", default=",".join(PAGES)); ap.add_argument("--base", default="http://127.0.0.1:4392")
 a = ap.parse_args()
 os.makedirs(a.out, exist_ok=True)
 font = ImageFont.truetype("C:/Windows/Fonts/msyh.ttc", 22)
@@ -16,8 +16,9 @@ index = []
 with sync_playwright() as p:
     b = p.chromium.launch()
     for page in a.pages.split(","):
-        rt = json.load(open(os.path.join(ROOT, "src", "chrome", "runtime", page + ".json"), encoding="utf-8"))
         import re as _re
+        if page not in PAGES:  # 别的页：地址从 page.json 读
+            PAGES[page] = json.load(open(os.path.join(os.path.dirname(ROOT), "sources", "pages", page, "page.json"), encoding="utf-8"))["url"]
         rel = PAGES[page].strip("/")
         html = open(os.path.join(a.dist, *rel.split("/"), "index.html"), encoding="utf-8").read()
         old = {}
@@ -33,7 +34,7 @@ with sync_playwright() as p:
             o = "h" if w >= 768 else "v"
             for k, g in enumerate(groups, 1):
                 nf = os.path.join(a.out, f"{page}-{w}-{k:02d}-new.png")
-                pg.locator("#" + g["id"]).screenshot(path=nf)
+                pg.locator("section.sx-screen").nth(k - 1).screenshot(path=nf)  # 有的面板没有 id（无屏号的续块）
                 new = Image.open(nf).convert("RGB")
                 olds = [Image.open(os.path.join(a.dist, src.lstrip("/"))).convert("RGB") for sid in g["screens"] for src in old.get((sid, o), [])[:1]
                         if os.path.exists(os.path.join(a.dist, src.lstrip("/")))]
@@ -50,7 +51,7 @@ with sync_playwright() as p:
                 d.text((8, 8), f"现在 {g['id']}（{w}px）", fill=(10, 114, 50), font=font)
                 d.text((oc.width + 28, 8), f"新版 第二轮（{w}px）", fill=(10, 114, 50), font=font)
                 c.paste(oc, (0, 40)); c.paste(new, (oc.width + 20, 40))
-                f = os.path.join(a.out, f"{page}-{w}-{k:02d}-{g['id']}-r2.png"); c.save(f); os.remove(nf)
+                f = os.path.join(a.out, f"{page}-{w}-{k:02d}-{g['id'] or 'noid'}{a.suffix}.png"); c.save(f); os.remove(nf)
                 index.append({"page": page, "width": w, "section": g["id"], "screens": g["screens"], "file": f, "old_h": oc.height, "new_h": new.height})
             pg.close()
     b.close()

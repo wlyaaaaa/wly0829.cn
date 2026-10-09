@@ -92,6 +92,11 @@ function cards(node) {
   const out = [];
   let cur = null;
   for (const c of node.children) {
+    if (has(c, 'brk-card') && data(c, 'head')) {  // 一组卡的小标题：占满一行，不画成卡
+      cur = el('div', { className: ['cards-head'] }, []);
+      out.push(cur);
+      continue;
+    }
     if (has(c, 'brk-card')) {
       const icon = data(c, 'icon');
       cur = el('article', { className: ['card'] }, []);
@@ -105,7 +110,9 @@ function cards(node) {
     if (!cur) { cur = el('article', { className: ['card'] }, []); out.push(cur); }
     cur.children.push(c);
   }
+  const heads = out.filter((a) => has(a, 'cards-head'));
   for (const a of out) {
+    if (heads.includes(a)) continue;
     // 结构照现在的功能卡：图在左（或上），文字一栏，状态是右上角一个彩色点
     const icon = a.children[0] && has(a.children[0], 'card-icon') ? a.children[0] : null;
     const rest = a.children.filter((c) => c !== icon);
@@ -129,11 +136,11 @@ function cards(node) {
   }
   // 某张卡的字数远多于其他卡（超过中位数 2.2 倍）时让它独占一行，免得同排的短卡被拉出大块空白
   if (out.length >= 3) {
-    const lens = out.map((a) => text(a).length);
+    const lens = out.map((a) => (heads.includes(a) ? 0 : text(a).length));
     const med = [...lens].sort((x, y) => x - y)[Math.floor(lens.length / 2)];
     out.forEach((a, i) => { if (lens[i] > med * 2.2 && lens[i] > 160) a.properties.className.push('is-wide'); });
   }
-  node.properties.dataN = String(out.length);
+  node.properties.dataN = String(out.length - heads.length);
   node.children = out;
   return node;
 }
@@ -283,6 +290,8 @@ function transform(node) {
     if (has(c, 'blk-steps')) return steps(c);
     if (has(c, 'blk-gallery')) return gallery(c);
     if (has(c, 'blk-dialogue')) return dialogue(c);
+    if (has(c, 'blk-row')) return row(c);
+    if (has(c, 'blk-annotate')) return annotate(c);
     if (isTag(c, 'table')) return table(c);
     if (isTag(c, 'img') && !c.properties.width) {
       const d = dims(c.properties.src);
@@ -292,6 +301,69 @@ function transform(node) {
     return c;
   });
   return node;
+}
+
+// —— 旧构图的 row + width：同一行的块分栏左右排（栏宽照构图百分比；窄屏叠成一栏，见样式表）——
+function row(node) {
+  const ws = String(data(node, 'cols') || '').split(',').map(Number).filter((x) => x > 0);
+  node.properties.style = `--row-cols:${ws.map((w) => `minmax(0,${w}fr)`).join(' ')}`;
+  // 分栏里的步骤照现在竖排（样式表里 .blk-steps.in-col）
+  const mark = (n) => { for (const k of n.children || []) { if (has(k, 'blk-steps')) k.properties.className.push('in-col'); mark(k); } };
+  mark(node);
+  return node;
+}
+
+// —— 编号标注截图：截图上按坐标放编号点；旁注按点的高度排在右边，引线连过去（窄屏旁注排到下面）——
+function annotate(node) {
+  const shot = data(node, 'shot');
+  const w = Number(data(node, 'w')) || 60;
+  const anchors = String(data(node, 'anchors') || '').split(';').filter(Boolean).map((a) => a.split(',').map(Number));
+  const list = node.children.find((c) => isTag(c, 'ul') || isTag(c, 'ol'));
+  const items = list ? list.children.filter((c) => isTag(c, 'li')) : [];
+  // 旁注的高度：照点的高度，挨得太近就往下让（至少隔 9%）
+  let last = -1;
+  const ys = items.map((_, k) => { const a = anchors.find((x) => x[2] === k) || anchors[k]; let y = a ? a[1] : (k + .5) / Math.max(1, items.length); y = Math.max(y, last + .09); last = y; return y; });
+  const figKids = [img(shot, data(node, 'alt') || '', { loading: 'lazy' })];
+  const leads = [];
+  items.forEach((li, k) => {
+    const a = anchors.find((x) => x[2] === k) || anchors[k];
+    const no = (text(li).trim().match(/^[0-9０-９]+/) || [String(k + 1)])[0];
+    if (a) {
+      figKids.push(el('span', { className: ['ann-dot'], style: `--x:${a[0]};--y:${a[1]}`, ariaHidden: 'true' }, [{ type: 'text', value: no }]));
+      leads.push(el('span', { className: ['ann-lead'], style: `--x:${a[0]};--y:${a[1]};--ny:${ys[k]}`, ariaHidden: 'true' }, []));
+    }
+    li.properties = { ...(li.properties || {}), style: `--ny:${ys[k]}` };
+  });
+  const ol = el('ol', { className: ['ann-notes'] }, items);
+  node.properties.style = `--mw:${w}%`;
+  node.children = [el('div', { className: ['ann-stage'] }, [el('figure', { className: ['ann-shot'] }, figKids), ...leads, ol])];
+  return node;
+}
+
+// 插画位：把同一屏章节头里的插画（带动画层的 figure）原样挪到构图写的那一栏
+function artslots(root) {
+  let lastChapter = null;
+  const walk = (n) => {
+    if (!n.children) return;
+    for (let i = 0; i < n.children.length; i++) {
+      const c = n.children[i];
+      if (c.type !== 'element') continue;
+      if (has(c, 'brk-screen')) lastChapter = null;
+      if (has(c, 'chapter')) lastChapter = c;
+      if (has(c, 'brk-artslot')) {
+        const fig = lastChapter && lastChapter.children.find((k) => isTag(k, 'figure') && has(k, 'chapter-art'));
+        if (fig) {
+          lastChapter.children = lastChapter.children.filter((k) => k !== fig);
+          lastChapter.properties.className = cls(lastChapter).filter((x) => x !== 'has-art').concat(['no-art', 'art-moved']);
+          fig.properties.className = [...cls(fig), 'row-art'];
+          n.children[i] = fig;
+        } else n.children.splice(i--, 1);
+        continue;
+      }
+      walk(c);
+    }
+  };
+  walk(root);
 }
 
 // —— 分屏：每个章节头开一个白底面板，同一节的续屏并进上一块面板 ——
@@ -328,6 +400,7 @@ function screens(root) {
 export default function rehypeBlocks() {
   return (tree) => {
     transform(tree);
+    artslots(tree);
     screens(tree);
   };
 }

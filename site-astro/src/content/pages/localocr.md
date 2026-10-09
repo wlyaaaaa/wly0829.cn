@@ -58,18 +58,32 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "9a6f7a8f0cf89f0b12bd30f6f7b6de81d4f13e3a371983b5bebcf3583975fbb0",
-  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
+  "converted_at_beijing": "2026-10-10T00:15:05+08:00"
  }
 }
 ---
 
 ::screen{#localocr-01 section="top"}
 
+::::::row{cols="50.0,50.0"}
+
+:::::col
+
 :::chapter{title="本地文字识别" brush="/assets/localocr/localocr-01-title-01.png" brushbox="13,0,0,7" size="large" art="/assets/_library/illustrations/main-localocr.png" artw="50%" align="left" level="1" living="/_living/localocr/astro/config.json"}
 #### 在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全，并说清哪里没把握。
 
 AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参数表或几十张截图，就把文件交给它。比如“把这张参数表读成文字，没把握的地方标出来”，会得到文字和逐页判断：有字、没字，还是说不准；要还原表格行列，明确说明。识字在本机离线完成，图片不传到识别网站；读不好的页再用更强的模型重读。
 :::
+
+:::::
+
+:::::col
+
+::artslot
+
+:::::
+
+::::::
 
 :::stats{cols="4" colsv="2" icons="/assets/_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png,/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png,/assets/_library/fix-round-2/icon-clean-f12e6ff1182222417108.png,/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
 - <strong>684 次</strong>　识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）
@@ -90,7 +104,17 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 :::
 
-:::cards{art="left" kind="content_card" cols="2" colsv="1"}
+::::::row{cols="22.0,78.0"}
+
+:::::col
+
+::artslot
+
+:::::
+
+:::::col
+
+:::cards{art="left" kind="content_card" cols="1" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"}
 
 #### 普通页：截图、网页图、普通扫描件
@@ -98,7 +122,13 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 → 快读：PP-OCRv6\_medium（检测、识别各一个模型）
 
 默认先走这条。模型热着一页约 2 秒，每行字给一个 0–1 的把握分。
+:::
 
+:::::
+
+::::::
+
+:::cards{art="left" kind="content_card" cols="2" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
 
 <strong>难页：快读后体检不过关</strong>（一个字没读出来、把握分偏低、读出 ∑ ∫ 这类公式符号、带横竖线的表格）
@@ -295,7 +325,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
 
 :::
 
-:::cards{art="left" kind="content_card" cols="3" colsv="1"}
+:::cards{art="left" kind="content_card" cols="1" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
 
 #### 为什么在 Linux 里跑
@@ -307,7 +337,9 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
 #### 一个本机服务
 
 FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型，模型在一个随时能结束的工作进程里：同一模型连着用就热着复用，换模型先关旧的再开新的，不让几套模型叠在内存里。
+:::
 
+:::cards{art="left" kind="content_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
 #### 一块显卡：两家可同时，大模型单用
@@ -335,6 +367,16 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 
 :::
 
+::::::row{cols="35.0,65.0"}
+
+:::::col
+
+::artslot
+
+:::::
+
+:::::col
+
 <h3 class="sechead">先快后强，只重读有问题的那一页</h3>
 
 <strong>麻烦</strong>　每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。
@@ -354,6 +396,10 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 <strong>结果</strong>　7 月 8 日–9 月 28 日，自动选模型的 300 次识别里，277 次（92%）快模型就够，23 次换了强模型。9 月 26 日一份 16 页的扫描 PDF，只有第 15 页被重读，其余 15 页保留快读结果。
 
 <strong>取舍</strong>　这是经验规则，不是真的看懂了版面，会漏判；已知是多栏论文、公式很多的文档，直接说用强模型。
+
+:::::
+
+::::::
 
 ::screen{#localocr-09 section="highlights" continue="1"}
 

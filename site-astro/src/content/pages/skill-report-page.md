@@ -48,12 +48,16 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "555a0223983561e2d2ebdc51910e3a77bf6278828d77df4bd88bd14435678670",
-  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
+  "converted_at_beijing": "2026-10-10T00:15:05+08:00"
  }
 }
 ---
 
 ::screen{#skill-report-page-01 section="top"}
+
+::::::row{cols="52.0,48.0"}
+
+:::::col
 
 :::chapter{title="汇报网页" brush="/assets/_library/titles/title-d320a7a8e10d363dd8a8.png" brushbox="4,4,4,8" size="large" art="/assets/_library/illustrations/generic-report-page-dashboard.png" artw="48%" align="left" level="1" living="/_living/skill-report-page/astro/config.json"}
 技能名 report-page · [约法 L26](/rules/charter/#L26)说的那种白底绿色汇报网页
@@ -70,20 +74,16 @@ AI 只写内容文件（文字和数字），版式、配色、图表和检查�
 :::
 
 :::stats{cols="3" colsv="1"}
-- <strong>65 份</strong>　9 月 26–28 日生成、现存的汇报页（58 个不同标题）
-- <strong>387 张</strong>　
-- <strong>129 次</strong>　
-
-截至 9 月 28 日
-
-58 个标题各取最新一版，其中 50 份带决策卡，共 387 张
-
-截至 9 月 28 日
-
-Claude 87 次、Codex 42 次运行生成命令
-
-9 月 26 日 03:31–28 日 10:00（使用小记录只记到这里）
+- <strong>65 份</strong>　9 月 26–28 日生成、现存的汇报页（58 个不同标题）<br>截至 9 月 28 日
+- <strong>387 张</strong>　58 个标题各取最新一版，其中 50 份带决策卡，共 387 张<br>截至 9 月 28 日
+- <strong>129 次</strong>　Claude 87 次、Codex 42 次运行生成命令<br>9 月 26 日 03:31–28 日 10:00（使用小记录只记到这里）
 :::
+
+:::::
+
+:::::col
+
+::artslot
 
 :::dialogue
 #### 怎么跟 AI 说
@@ -109,6 +109,10 @@ Claude 87 次、Codex 42 次运行生成命令
 不用点名：要展开说明的汇报、要我裁定，或者回答超过大约一千字，AI 自己就做成网页；别的回答，网页看着更直观、更好看时也可以用。简单的完成回执和短状态直接在对话里说，不专门做网页，也不为了做网页把一句话扩成汇报；我明确要网页时照做。
 :::
 
+:::::
+
+::::::
+
 ::screen{#skill-report-page-02 section="examples"}
 
 :::chapter{title="一个完整例子：这个网站的设计稿怎么定下来" brush="/assets/_library/titles/title-cad79fffe8ffc762fedc.png" brushbox="6,7,4,5" size="large" align="left"}
@@ -118,6 +122,10 @@ Claude 87 次、Codex 42 次运行生成命令
 :::tag
 真事 · 北京时间 9 月 28 日 18–19 点
 :::
+
+::::::row{cols="60.0,40.0"}
+
+:::::col
 
 :::steps{kind="flow" colsv="1" icons="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png,/assets/_library/icons/%E6%8C%87%E5%90%91%E6%89%8B.png,/assets/_library/icons/%E9%BD%BF%E8%BD%AE.png,/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png"}
 1. <strong>AI 把设计稿做成网页</strong>　Claude 把网站设计稿第 4 版写成一份内容文件：页首一句“这页对你有什么用”和先说结论，正文按要定的事分节，每件事一张卡片，编号 V1 到 V21。一条命令生成、自检，在 Chrome 打开。
@@ -129,6 +137,10 @@ Claude 87 次、Codex 42 次运行生成命令
 :::note
 <strong>上一轮</strong>　第 3 版 25 张卡，我在 8 张上选了“要改”并写了说明；AI 照改出第 4 版，复核一轮。
 :::
+
+:::::
+
+:::::col
 
 :::cards{art="icon" kind="source_text_card" colsv="1"}
 ::card{icon="/assets/_library/icons/%E5%8F%8C%E6%B0%94%E6%B3%A1.png"}
@@ -152,35 +164,31 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 答复格式是固定的：第一行标题，每题一行，最后整体补充。
 
+:::::
+
+::::::
+
 ::screen{#skill-report-page-03 section="examples"}
 
 :::chapter{title="页面长什么样" brush="/assets/_library/titles/title-02d56f0b3157e18ad998.png" brushbox="4,5,4,4" size="large" align="center"}
 
 :::
 
-:::gallery
-![演示页截图（页首）：用技能自带的演示内容在 1280 像素宽生成，9 月 28 日](/assets/_references/c6f816fe118db865d676f152851de608e3c8c3550b0ced08e99315d7c34d50e1.png "nocap")
-
-![演示页截图（卡片）：用技能自带的示例展示选项、我的说明和答复区](/assets/_references/b3c38dd68e427c123208f5415194a5ead7ff24a06553f16da4e89104848daa47.png "nocap")
+:::annotate{shot="/assets/_references/c6f816fe118db865d676f152851de608e3c8c3550b0ced08e99315d7c34d50e1.png" w="66" anchors="0.500,0.053,0;0.500,0.240,1;0.180,0.351,2;0.188,0.725,3" alt="演示页截图（页首）：用技能自带的演示内容在 1280 像素宽生成，9 月 28 日"}
+- <span class="ann-no">1</span>页眉：标签（请你裁定、AI 汇报、AI 回答）、北京时间、“本地文件，不对外发布”，右上角“字号 − / +”
+- <span class="ann-no">2</span>标题下一句：看完能解决什么
+- <span class="ann-no">3</span>“先说结论”：先给判断，再说要我做什么
+- <span class="ann-no">4</span>本页导航：三节以上自动出现，点节名就跳过去
 :::
-
-1 页眉：标签（请你裁定、AI 汇报、AI 回答）、北京时间、“本地文件，不对外发布”，右上角“字号 − / +”
-
-2 标题下一句：看完能解决什么
-
-3 “先说结论”：先给判断，再说要我做什么
-
-4 本页导航：三节以上自动出现，点节名就跳过去
 
 演示页截图（页首）：用技能自带的演示内容在 1280 像素宽生成，9 月 28 日
 
-5 卡片：编号和问题，下面是这件事的来龙去脉
-
-6 选项：每个都是确定的做法，写清选了会怎样；“AI 建议”单独一行
-
-7 每张卡下面一个“我的说明”框
-
-8 页尾“把选择发回给 AI”：整体补充和“生成我的答复”按钮
+:::annotate{shot="/assets/_references/b3c38dd68e427c123208f5415194a5ead7ff24a06553f16da4e89104848daa47.png" w="66" anchors="0.500,0.029,0;0.277,0.175,1;0.500,0.348,2;0.229,0.877,3" alt="演示页截图（卡片）：用技能自带的示例展示选项、我的说明和答复区"}
+- <span class="ann-no">5</span>卡片：编号和问题，下面是这件事的来龙去脉
+- <span class="ann-no">6</span>选项：每个都是确定的做法，写清选了会怎样；“AI 建议”单独一行
+- <span class="ann-no">7</span>每张卡下面一个“我的说明”框
+- <span class="ann-no">8</span>页尾“把选择发回给 AI”：整体补充和“生成我的答复”按钮
+:::
 
 演示页截图（卡片）：用技能自带的示例展示选项、我的说明和答复区
 
@@ -189,6 +197,10 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 :::chapter{title="能做的事：该用哪种图" brush="/assets/_library/titles/title-87028220e41029f4bc43.png" brushbox="4,6,4,7" size="large" align="center"}
 <strong>原则：怎么便于我理解就怎么画。</strong>先想清这一段要让我明白什么，再挑最好懂的一种；帮不上理解的图不加。每张图前一句话说它说明了什么，数字写来源，粗估写明粗估。
 :::
+
+::::::row{cols="60.0,40.0"}
+
+:::::col
 
 | 要说的内容 | 用哪种 |
 |---|---|
@@ -232,11 +244,19 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 状态：绿圆点＝在用（记录或现存页面里用过）　灰圆点＝没用过（会留下痕迹的，一次也没找到）　浅灰圆点＝说不准（用了不留痕，这次也没数到）　叉＝已停用
 
+:::::
+
+:::::col
+
 :::gallery
 ![演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据](/assets/_references/d40e5cb08bcead69457cabaf7c00f348bc927eaa465ef8b587b57c71eee18418.png "nocap")
 :::
 
 演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据
+
+:::::
+
+::::::
 
 ::screen{#skill-report-page-05 section="abilities"}
 
@@ -283,7 +303,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 :::
 
-:::steps{kind="flow" cols="5" colsv="1" icons="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%86%99%E4%BD%9C.png,/assets/_library/icons/%E7%94%BB%E7%AC%94%E8%B0%83%E8%89%B2%E6%9D%BF.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png,/assets/_library/icons/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%A0%87%E7%AD%BE%E9%A1%B5.png,/assets/_library/icons/%E5%9B%9E%E6%94%B6%E7%AB%99%E6%96%87%E4%BB%B6.png"}
+:::steps{kind="flow" cols="5" colsv="1" icons="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%86%99%E4%BD%9C.png,/assets/_library/icons/%E7%94%BB%E7%AC%94%E8%B0%83%E8%89%B2%E6%9D%BF.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png,/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%A4%B9%E9%93%BE%E6%8E%A5.png,/assets/_library/icons/%E5%9B%9E%E6%94%B6%E7%AB%99%E6%96%87%E4%BB%B6.png"}
 1. <strong>写内容文件</strong>
 2. <strong>生成</strong>
 3. <strong>自检</strong>
@@ -381,13 +401,25 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 - 卡片编号跨轮不重复；提上一轮时写“第一轮 A3（总索引改私有）”这样带人话的说法
 :::
 
+::::::row{cols="50.0,50.0"}
+
+:::::col
+
 :::note
 <strong>收到答复怎么办</strong>（在用）　有说明的以说明为准，说明里的追问逐条答；看不懂、矛盾或明显误选的，做下一轮页面讲清，不替我改选择。
 :::
 
+:::::
+
+:::::col
+
 :::note
 <strong>子代理不做页面</strong>（在用）　派出去的子代理默认写成文字交回给派它的会话；要不要给我做页面由主对话定。页面做完，回复里仍用几句话说结论、附上页面链接，关掉页面也能从对话里找回。
 :::
+
+:::::
+
+::::::
 
 ::screen{#skill-report-page-08 section="abilities"}
 

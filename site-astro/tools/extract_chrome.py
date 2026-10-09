@@ -1,5 +1,5 @@
 """从现在的候选站点抄页头、页尾和它们用到的共用素材（原文件逐字节复制，不转码）。
-用法：python tools/extract_chrome.py <候选站点根目录>
+用法：python tools/extract_chrome.py <候选站点根目录> [页名 ... | all]
 产出：src/chrome/header.html、src/chrome/footer.html、src/chrome/toc-labels.json、public/_shared/...、public/_chrome/*.css"""
 import json, os, re, shutil, sys
 
@@ -33,9 +33,17 @@ for href in css:
 
 # 目录条标签图：三页各自的分节名和标签图
 labels = {}
-for page, rel in [("skill-report-page", "skills/report-page"), ("localocr", "projects/localocr"),
-                  ("rule-engineering-delivery", "rules/engineering-delivery")]:
-    h = open(os.path.join(DIST, rel, "index.html"), encoding="utf-8").read()
+# 哪些页：命令行第 2 个参数起写页名（all = sources/pages 下全部有 page.json 的页）；不写就是样板 3 页
+_names = sys.argv[2:] or ["skill-report-page", "localocr", "rule-engineering-delivery"]
+if _names == ["all"]:
+    _names = sorted(d for d in os.listdir(os.path.join(os.path.dirname(ROOT), "sources", "pages")) if os.path.exists(os.path.join(os.path.dirname(ROOT), "sources", "pages", d, "page.json")))
+PAIRS = []
+for _n in _names:
+    _url = json.load(open(os.path.join(os.path.dirname(ROOT), "sources", "pages", _n, "page.json"), encoding="utf-8"))["url"]
+    if os.path.exists(os.path.join(DIST, *_url.strip("/").split("/"), "index.html")):
+        PAIRS.append((_n, _url.strip("/")))
+for page, rel in PAIRS:
+    h = open(os.path.join(DIST, *rel.split("/"), "index.html"), encoding="utf-8").read()
     toc = re.search(r'<nav data-toc-consistency[^>]*>(.*?)</nav>', h, re.S)
     items = []
     if toc:
@@ -80,9 +88,8 @@ HEAD_PATTERNS = [
     r'<link data-living-runtime rel="stylesheet"[^>]*>',
 ]
 copy_refs = set()
-for page, rel in [("skill-report-page", "skills/report-page"), ("localocr", "projects/localocr"),
-                  ("rule-engineering-delivery", "rules/engineering-delivery")]:
-    h = open(os.path.join(DIST, rel, "index.html"), encoding="utf-8").read()
+for page, rel in PAIRS:
+    h = open(os.path.join(DIST, *rel.split("/"), "index.html"), encoding="utf-8").read()
     head = h[:h.index("</head>")]
     parts = []
     for pat in HEAD_PATTERNS:

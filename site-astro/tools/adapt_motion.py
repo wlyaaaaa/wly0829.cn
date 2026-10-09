@@ -3,7 +3,7 @@
 旧配置的坐标是“整屏 PNG 里插画那一块（box）”的比例；新页直接显示插画原图，
 所以把坐标按引擎自己的换算规则（living.js 里的 ht 函数，逐条照抄）预先换到插画坐标，
 box 和遮罩范围改成整张图 [0,0,1,1]、image.size 改成插画原图尺寸。效果参数、遮罩图、纹理、小鸟一律不改。
-用法：python tools/adapt_motion.py   （读 src/chrome/runtime/<页>.json，写 public/_living/<页>/astro/config.json）"""
+用法：python tools/adapt_motion.py [页名 ...]  （读 src/chrome/runtime/<页>.json，写 public/_living/<页>/astro/config.json）"""
 import json
 import os
 import shutil
@@ -66,5 +66,8 @@ def adapt(page):
 
 
 if __name__ == "__main__":
-    for p in ("skill-report-page", "localocr", "rule-engineering-delivery"):
+    import sys
+    # 页名写在命令行；不写就是 src/chrome/runtime 里已抄出的全部页（不按页名写死）
+    names = sys.argv[1:] or sorted(f[:-5] for f in os.listdir(os.path.join(ROOT, "src", "chrome", "runtime")) if f.endswith(".json"))
+    for p in names:
         adapt(p)

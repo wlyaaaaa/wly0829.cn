@@ -1,8 +1,8 @@
 """样板机器检查（只用 Playwright，不另做检查系统）。
-每页 × 375/390/960/1280/1920 五种宽度：
+每页 × 375/390/960/1280/1920 五种宽度（另查空卡：数字卡、卡片只有标题没有说明）：
   1. 横向溢出：页面宽于窗口；
   2. 元素重叠：正文里不同元素的文字行、图片互相压住（按文字的实际行框比，绕开浮动插画的行不算）；
-  3. 窄栏：一段需要换行的文字，所在栏宽放不下 15 个字；
+  3. 窄栏：一段需要换行的文字，所在栏宽放不下 9 个字（不比现在网站最密处更窄：现在 6 步一排每格约 9.4 字）；表格还按行列显示时换行的格子不到 240px；
   4. 图片：所有图片加载成功（滚到底触发懒加载后，complete 且有像素；另记 4xx/5xx 请求）；
 另外每页一次：page.json 文字逐段在新页面上找得到（去空白和排版记号后比，毛笔标题图按其替代文字算），列出缺的。
 用法：python tools/check.py <输出json> [--base http://127.0.0.1:4391] [--pages a,b]"""
@@ -33,6 +33,7 @@ JS = r"""
     const host = n.parentElement;
     if (host.closest('.living-layer')) continue;
     if (host.closest('.sr')) continue;  // 只给读屏的字（剪成 1 像素，看不见），不算重叠
+    if (host.closest('.ann-dot')) continue;  // 编号点本来就标在截图上
     const th = host.closest('thead'); if (th && getComputedStyle(th).clipPath !== 'none') continue;  // 卡片模式下表头只留给读屏
     const r = document.createRange(); r.selectNodeContents(n);
     for (const q of r.getClientRects()) if (q.width > 1 && q.height > 1) boxes.push({ el: host, x: q.left, y: q.top + scrollY, w: q.width, h: q.height, kind: 'text', t: n.nodeValue.trim().slice(0, 16) });
@@ -53,14 +54,14 @@ JS = r"""
       if (out.overlaps.length > 40) break;
     }
   }
-  // 窄栏：需要换行的文字块，内容宽度放不下 15 个字
+  // 窄栏：需要换行的文字块，内容宽度放不下 9 个字（定稿：不比现在网站最密处更窄；现在最密的是 6 步一排，1600 画布上每格约 9.4 个字）
   for (const el of main.querySelectorAll('p, li, td, th, h3, h4, figcaption, .step-title, .step-text, .stat-text, .bubble')) {
     const txt = el.innerText.trim(); if (txt.length < 16) continue;
     const cs = getComputedStyle(el); const fs = parseFloat(cs.fontSize);
     const w = el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
     const r = document.createRange(); r.selectNodeContents(el);
     const lines = new Set([...r.getClientRects()].map(q => Math.round(q.top))).size;
-    if (w > 0 && w < 15 * fs - 1 && lines > 1) out.narrow.push({ tag: el.tagName, cls: el.className, width: Math.round(w), need: Math.round(15 * fs), text: txt.slice(0, 20) });
+    if (w > 0 && w < 9 * fs - 1 && lines > 1) out.narrow.push({ tag: el.tagName, cls: el.className, width: Math.round(w), need: Math.round(9 * fs), text: txt.slice(0, 20) });
   }
   // 表格窄栏（铺开检查的口径）：表格还按行列显示时，换行的单元格列宽不到 240px
   for (const td of main.querySelectorAll('table td, table th')) {
@@ -71,6 +72,10 @@ JS = r"""
     const w = td.getBoundingClientRect().width;
     if (w < 240 && lines > 1) out.narrow.push({ tag: td.tagName, cls: 'table-col<240', width: Math.round(w), need: 240, text: td.innerText.trim().slice(0, 20) });
   }
+  // 空卡：数字卡、卡片除了标题（数字/卡名）以外没有说明 —— 说明掉到卡外的那种错（源里本就没有说明的另由 Python 端对照源文排除）
+  out.empty_cards = [];
+  for (const st of main.querySelectorAll('.stat')) { const t = st.querySelector('.stat-text'); if (!t || !t.textContent.trim()) out.empty_cards.push({ kind: 'stat', title: (st.querySelector('.stat-num') || st).textContent.trim().slice(0, 20), screen: st.closest('section')?.id || '' }); }
+  for (const cd of main.querySelectorAll('.card')) { const cp = cd.querySelector('.card-copy'); if (!cp) continue; const rest = [...cp.children].filter((x) => x.tagName !== 'H4' && x.textContent.trim()); if (!rest.length) out.empty_cards.push({ kind: 'card', title: (cp.querySelector('h4') || cp).textContent.trim().slice(0, 20), screen: cd.closest('section')?.id || '' }); }
   for (const im of document.images) if (im.getAttribute('src') && !(im.complete && im.naturalWidth > 0)) out.images.push(im.currentSrc || im.getAttribute('src'));
   return out;
 }
@@ -136,10 +141,10 @@ with sync_playwright() as p:
                 total = sum(len(t) for _, t in segs); missing = sum(len(t) for _, t in miss)
                 row["text"] = {"segments": len(segs), "missing_segments": len(miss), "chars": total, "missing_chars": missing,
                                "coverage": round(1 - missing / max(1, total), 4), "missing": [{"screen": s, "text": t[:60]} for s, t in miss]}
-            row["widths"][w] = {"overflow": r["overflow"], "overlaps": r["overlaps"], "narrow": r["narrow"], "broken_images": r["images"], "http_errors": r["http_errors"]}
+            row["widths"][w] = {"overflow": r["overflow"], "overlaps": r["overlaps"], "narrow": r["narrow"], "broken_images": r["images"], "http_errors": r["http_errors"], "empty_cards": r["empty_cards"]}
             ctx.close()
         result["pages"].append(row)
-        ok = all(not v["overflow"] and not v["overlaps"] and not v["narrow"] and not v["broken_images"] for v in row["widths"].values())
+        ok = all(not v["overflow"] and not v["overlaps"] and not v["narrow"] and not v["broken_images"] and not v["empty_cards"] for v in row["widths"].values())
         print(page, "通过" if ok else "有问题", {w: {k: (len(v[k]) if isinstance(v[k], list) else bool(v[k])) for k in v} for w, v in row["widths"].items()}, "文字覆盖", row.get("text", {}).get("coverage"))
     b.close()
 result["seconds"] = round(time.time() - t0, 1)

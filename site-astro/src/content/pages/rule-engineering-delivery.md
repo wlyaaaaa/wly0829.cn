@@ -40,12 +40,16 @@
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
   "sha256": "9814cf0fbfb045ba32f05e92bb5d8383b99c4e7a5a39e0c44ffa4d911cc3ec40",
-  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
+  "converted_at_beijing": "2026-10-10T00:15:05+08:00"
  }
 }
 ---
 
 ::screen{#rule-engineering-delivery-01 section="top"}
+
+::::::row{cols="55.0,45.0"}
+
+:::::col
 
 :::chapter{title="工程与交付" brush="/assets/rule-engineering-delivery/rule-engineering-delivery-01-title-01.png" brushbox="8,0,0,7" size="large" art="/assets/_library/illustrations/%E5%B7%A5%E7%A8%8B%E4%BA%A4%E4%BB%98%E8%B7%AF%E5%BE%84.png" artw="45%" align="center" level="1" living="/_living/rule-engineering-delivery/astro/config.json"}
 #### 改东西要做到什么程度、怎样才算验证过、做完怎么收尾。
@@ -57,7 +61,17 @@
 
 这是 Codex 和 Claude 共用的工程规则。实现方式由 AI 自己选；这份规则定的是工程要做到什么程度、什么才算做完：先对准本人要的结果，不被现有做法绑住；本人自己的依赖坏了要真修好；验证说实话，只报真验过的部分；退役的东西直接删，这次任务的下载和临时文件用完放进回收站；改过的仓库提交、推送，进了默认分支才算做完；最后是一组日常技术默认。它是约法[L6 说的和做的一致](/rules/charter/#L6)[L10 不凭空加需求，也不偷懒](/rules/charter/#L10)[L13 做完收好尾](/rules/charter/#L13)[L22 想和做分开，质量优先](/rules/charter/#L22)落到工程上的细则。
 
+:::::
+
+:::::col
+
+::artslot
+
 对准目标　真实验证　回收站　main
+
+:::::
+
+::::::
 
 #### 先认几个词
 

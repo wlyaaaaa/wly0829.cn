@@ -75,7 +75,7 @@
 }
 @media (max-width: 767.98px) { .sx-screen { margin-bottom: 14px; } }
 .sx-screen > * + * { margin-top: var(--gap); }
-.sx-screen > .blk:not(.blk-cards):not(.blk-dialogue), .sx-screen > .tbl, .sx-screen > .sechead { display: flow-root; }
+.sx-screen > .blk:not(.blk-cards):not(.blk-dialogue):not(.blk-row), .sx-screen > .tbl, .sx-screen > .sechead { display: flow-root; }
 .sx-screen > :where(ul, ol), .card :where(ul, ol), .blk-note :where(ul, ol) { padding-left: 1.3em; }
 .sx-page li + li { margin-top: .2em; }
 .sx-page li::marker { color: #2f9e5a; }
@@ -96,6 +96,8 @@
 @media (max-width: 767.98px) { .chapter { --cap: 148; } .chapter .brush-title[data-size="medium"] { --cap: 110; } .chapter .brush-title[data-size="small"] { --cap: 78; } }
 /* 标题图照现在：裁掉白纸边后，显示高度不超过档位（大 160 / 中 118 / 小 84 画布像素），只缩不放大 */
 .sx-page .chapter .brush { display: block; height: calc(min(var(--ih, 160), var(--cap, 160)) * var(--u)); width: auto; max-width: 100%; mix-blend-mode: multiply; }
+/* 标题图还没下载完时也先占好自己的高度（站点运行脚本会按“宽×比例”给没加载完的图定高，标题图宽度是自动的，会被算成 0、加载完再撑开，整页往下一跳） */
+.sx-page .chapter .brush.image-loading-pending { height: calc(min(var(--ih, 160), var(--cap, 160)) * var(--u)) !important; width: calc(min(var(--ih, 160), var(--cap, 160)) * var(--u) * var(--iw, 600) / var(--ih, 160)) !important; }
 .chapter[data-align="center"] .brush-title { text-align: center; }
 .chapter[data-align="center"] .brush { margin: 0 auto; }
 .chapter[data-align="left"] .brush { margin-left: calc(-12 * var(--u)); }
@@ -127,19 +129,54 @@
   .chapter[data-align] .brush { margin: 0 auto; }
 }
 
-/* —— 2 卡片组：列数照现在的构图（cols / 手机 colsv），一行放不下 15 个字才少一列；最后一行照现在靠左放，不拉宽 —— */
+/* —— 旧构图的 row + width：同一行左右分栏，栏宽照构图百分比；窄屏（手机）叠成一栏 —— */
+.blk-row { display: grid; grid-template-columns: var(--row-cols, 1fr 1fr); column-gap: calc(var(--gap) * 1.5); align-items: start; }
+.blk-col { min-width: 0; display: flex; flex-direction: column; gap: var(--gap); }
+.blk-col > * { margin: 0; }
+.blk-col > .blk:not(.blk-cards):not(.blk-dialogue) { display: flow-root; }
+.sx-page .blk-col > .chapter-art.row-art { align-self: center; }
+.sx-page .blk-col > .chapter-art.row-art img { width: calc(var(--iw, 600) * var(--u)); max-width: 100%; height: auto; margin: 0 auto; }
+.chapter.art-moved .brush-title { text-align: left; }
+.chapter.art-moved .brush { margin: 0; }
+@media (max-width: 767.98px) {
+  .blk-row { display: block; }
+  .blk-col + .blk-col { margin-top: var(--gap); }
+  .chapter.art-moved .brush-title { text-align: center; } .chapter.art-moved .brush { margin: 0 auto; }
+}
+
+/* —— 编号标注截图（旧构图 annotation）：左边截图带编号点，右边旁注按点的高度排，绿色细引线相连；窄了就旁注排到截图下面 —— */
+.blk-annotate { container-type: inline-size; }
+.ann-stage { position: relative; display: grid; grid-template-columns: var(--mw, 60%) minmax(0, 1fr); column-gap: calc(var(--gap) * 2.4); }
+.ann-shot { position: relative; margin: 0; border: max(2px, calc(2 * var(--u))) solid var(--line); border-radius: calc(10 * var(--u)); background: #fff; }
+.sx-page .ann-shot img { display: block; width: 100%; height: auto; border-radius: inherit; }
+.ann-dot { position: absolute; left: calc(var(--x) * 100%); top: calc(var(--y) * 100%); transform: translate(-50%, -50%); z-index: 2;
+  width: calc(var(--fs-body) * 1.35); height: calc(var(--fs-body) * 1.35); border-radius: 50%; background: var(--badge); color: #fff; font-weight: 800;
+  font-size: calc(var(--fs-body) * .8); display: grid; place-items: center; box-shadow: 0 0 0 calc(3 * var(--u)) rgba(255, 255, 255, .9); }
+.ann-lead { position: absolute; z-index: 1; left: calc(var(--x) * var(--mw, 60%)); top: calc(var(--y) * 100%); height: max(2px, calc(2 * var(--u)));
+  width: calc((1 - var(--x)) * var(--mw, 60%) + var(--gap) * 2.2); background: #4cb873; transform: translateY(-50%); }
+.ann-notes { position: relative; list-style: none; margin: 0; padding: 0; }
+.ann-notes > li { position: absolute; left: 0; right: 0; top: calc(var(--ny) * 100%); transform: translateY(-.8em); line-height: 1.45; }
+.ann-no { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; margin-right: .4em; border-radius: 50%; background: var(--badge); color: #fff; font-weight: 800; font-size: .85em; vertical-align: .05em; }
+@container (max-width: 700px) {
+  .ann-stage { display: block; }
+  .ann-lead { display: none; }
+  .ann-notes { margin-top: var(--gap); display: flex; flex-direction: column; gap: calc(8 * var(--u)); }
+  .ann-notes > li { position: static; transform: none; }
+}
+
+/* —— 2 卡片组：列数照现在的构图（cols / 手机 colsv），一行放不下 10 个字（现在网站最密处的密度）才少一列；最后一行照现在靠左放，不拉宽 —— */
 .blk-cards {
   --cols: 1;
   display: grid; gap: var(--gap-card);
-  grid-template-columns: repeat(auto-fill, minmax(max(var(--col-min, calc(var(--fs-body) * 15 + 4 * var(--gap-card))), calc((100% - (var(--cols) - 1) * var(--gap-card)) / var(--cols) - 0.5px)), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(max(var(--col-min, calc(var(--fs-body) * 10 + 4 * var(--gap-card))), calc((100% - (var(--cols) - 1) * var(--gap-card)) / var(--cols) - 0.5px)), 1fr));
 }
 .blk-cards[data-cols="2"] { --cols: 2; } .blk-cards[data-cols="3"] { --cols: 3; } .blk-cards[data-cols="4"] { --cols: 4; } .blk-cards[data-cols="5"] { --cols: 5; }
 @media (max-width: 767.98px) {
   .blk-cards { --cols: 1 !important; }
   .blk-cards[data-colsv="2"] { --cols: 2 !important; }
 }
-.blk-cards[data-art="icon"] { --col-min: calc(var(--fs-body) * 18 + 4 * var(--gap-card)); }
-.blk-cards[data-art="left"] { --col-min: calc(var(--fs-body) * 15 + 240 * var(--u) + 5 * var(--gap-card)); }
+.blk-cards[data-art="icon"] { --col-min: calc(var(--fs-body) * 13 + 4 * var(--gap-card)); }
+.blk-cards[data-art="left"] { --col-min: calc(var(--fs-body) * 10 + 240 * var(--u) + 5 * var(--gap-card)); }
 /* 现在三列侧图卡（如“TXT / Markdown / JSON”）：图缩到 150 像素画布宽，三张仍一排 */
 .blk-cards[data-art="left"][data-cols="3"], .blk-cards[data-art="left"][data-cols="4"] { --col-min: calc(var(--fs-body) * 11 + 150 * var(--u) + 5 * var(--gap-card)); }
 .sx-page .blk-cards[data-art="left"]:is([data-cols="3"], [data-cols="4"]) .card-icon { width: calc(150 * var(--u)); }
@@ -163,6 +200,9 @@
   .sx-page .blk-cards[data-art="left"] .card-icon { width: calc(220 * var(--u)); }
   .blk-cards[data-art="left"] .card { align-items: flex-start; }
 }
+/* 一组卡的小标题（源里只有名字、下面跟着几张卡）：占满一行的深绿粗体字 */
+.blk-cards > .cards-head { grid-column: 1 / -1; }
+.cards-head > h4 { color: var(--title); font-weight: 800; font-size: var(--fs-name); line-height: 1.3; margin-top: calc(var(--gap-card) * .4); }
 /* 状态：右上角一个彩色点（字留给读屏） */
 .status-dot { position: absolute; top: calc(var(--gap-card) / 2); right: calc(var(--gap-card) / 2); width: calc(var(--fs-body) * .55); height: calc(var(--fs-body) * .55); border-radius: 50%; background: var(--status-on); }
 .status-dot[data-state="pending"] { background: var(--status-pending); }
@@ -188,15 +228,15 @@
 .blk-buttons p { display: flex; flex-wrap: wrap; gap: calc(14 * var(--u)); }
 .sx-page a.btn, .blk-buttons a { flex: 1 1 calc(300 * var(--u)); display: inline-flex; justify-content: center; align-items: center; border: max(2px, calc(2 * var(--u))) solid #2f9e5a; border-radius: calc(12 * var(--u)); background: #fff; color: var(--link); font-weight: 700; text-decoration: none; padding: calc(6 * var(--u)) calc(20 * var(--u)); }
 
-/* —— 3 数字卡：电脑一行 cols 个；手机 colsv 个（照现在 2 列），每格放不下 15 个字才退一列 —— */
-.stat-row { --cols: 4; display: grid; gap: var(--gap-card); grid-template-columns: repeat(auto-fill, minmax(max(calc(var(--fs-body) * .86 * 15 + 40 * var(--u)), calc((100% - (var(--cols) - 1) * var(--gap-card)) / var(--cols) - .5px)), 1fr)); }
+/* —— 3 数字卡：电脑一行 cols 个；手机 colsv 个（照现在 2 列），每格放不下 10 个字才退一列 —— */
+.stat-row { --cols: 4; display: grid; gap: var(--gap-card); grid-template-columns: repeat(auto-fill, minmax(max(calc(var(--fs-body) * .86 * 10 + 40 * var(--u)), calc((100% - (var(--cols) - 1) * var(--gap-card)) / var(--cols) - .5px)), 1fr)); }
 .blk-stats[data-cols="2"] .stat-row { --cols: 2; } .blk-stats[data-cols="3"] .stat-row { --cols: 3; }
-/* 手机照现在两列（本人要求）：正文缩一档字；构图写明一列的才一列 */
+/* 手机照现在两列（本人要求），字号照现在不缩；构图写明一列的才一列 */
 @media (max-width: 767.98px) { .stat-row { grid-template-columns: repeat(2, minmax(0, 1fr)); } .blk-stats[data-colsv="1"] .stat-row { grid-template-columns: minmax(0, 1fr); }
-  .blk-stats .stat-text { font-size: calc(var(--fs-body) * .78); } }
+}  /* 定稿：手机两列时字号也不比现在小（现在手机数字卡说明用正文字号） */
 .stat { min-width: 0; padding: calc(10 * var(--u)) calc(18 * var(--u)) calc(14 * var(--u)); border: max(2px, calc(2 * var(--u))) solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); display: flex; flex-direction: column; }
 .sx-page .stat-icon { height: calc(140 * var(--u)); width: auto; max-width: 100%; object-fit: contain; align-self: flex-start; }
-.stat-num { color: var(--accent); font-size: var(--fs-num); font-weight: 800; line-height: 1.3; margin: 0; }
+.stat-num { color: var(--accent); font-size: var(--fs-num); font-weight: 800; line-height: 1.42; margin: 0; }  /* 行框不小于字体本身的高度，免得和图标、说明的行框相交 */
 .stat-unit { font-size: var(--fs-body); font-weight: 700; }
 .stat-text { line-height: 1.4; }
 .blk-stats > p { margin-top: calc(var(--gap) * .6); }
@@ -207,13 +247,13 @@
 }
 
 /* —— 4 步骤：电脑上横排、每步图在卡片上方、后面一条绿丝带（照现在“一次识别经过哪几步”）；
-      每格放不下 15 个字时先缩一档字、再分两排，超过 8 步才竖排；手机竖排，每步左边保留小插图 —— */
+      照现在的密度：8 步以内横排（7–8 步分两排），字号不缩；块本身窄（手机或窄栏）时竖排；手机竖排，每步左边保留小插图 —— */
 .blk-steps { container-type: inline-size; }
 .step-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--gap-card); grid-template-columns: repeat(var(--per-row, 1), minmax(0, 1fr)); position: relative; }
 .step { position: relative; min-width: 0; display: flex; flex-direction: column; gap: calc(6 * var(--u)); }
 .step-pic { height: calc(160 * var(--u)); display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; }
 .sx-page .step-icon { max-height: 100%; max-width: 100%; width: auto; height: auto; object-fit: contain; }
-.step-body { flex: 1; border: max(2px, calc(2 * var(--u))) solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); padding: calc(10 * var(--u)) calc(14 * var(--u)) calc(14 * var(--u)); }
+.step-body { flex: 1; border: max(2px, calc(2 * var(--u))) solid var(--line); border-radius: var(--radius); background: var(--card-bg); box-shadow: var(--card-shadow); padding: calc(10 * var(--u)) calc(10 * var(--u)) calc(14 * var(--u)); }
 .step-head { display: flex; align-items: center; gap: calc(10 * var(--u)); margin-bottom: calc(4 * var(--u)); }
 .step-no { flex: none; width: calc(44 * var(--u)); height: calc(44 * var(--u)); min-width: 1.3em; min-height: 1.3em; border-radius: 50%; background: var(--badge); color: #fff; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; font-size: calc(27 * var(--u)); line-height: 1; }
 .step-title { color: var(--title); font-weight: 700; font-size: var(--fs-name); line-height: 1.25; min-width: 0; }
@@ -222,14 +262,15 @@
 /* 丝带：图片中线处一条绿带，从第一步到最后一步 */
 .blk-steps.has-pics .step-list::before { content: ""; position: absolute; left: 4%; right: 4%; top: calc(80 * var(--u)); height: calc(14 * var(--u)); border-radius: calc(7 * var(--u)); background: linear-gradient(90deg, #8fd8a4, #4cb873 50%, #8fd8a4); opacity: .85; z-index: 0; }
 .blk-steps:not(.has-pics) .step:not(:last-child)::after { content: "→"; position: absolute; right: calc(-1 * var(--gap-card)); top: 50%; width: var(--gap-card); text-align: center; transform: translateY(-50%); color: #2f9e5a; font-weight: 800; font-size: var(--fs-body); }
-/* 每排几步：横版画布 1600 宽，按 15 字算：4 步正常字号一排；5 步缩一档字一排；6 步分两排各 3；7–8 步两排各 4；更多竖排 */
+/* 每排几步：1–6 步一排；7–8 步两排各 4；更多竖排 */
 .blk-steps[data-n="1"] { --per-row: 1; } .blk-steps[data-n="2"] { --per-row: 2; } .blk-steps[data-n="3"] { --per-row: 3; } .blk-steps[data-n="4"] { --per-row: 4; }
-.blk-steps[data-n="5"] { --per-row: 5; } .blk-steps[data-n="5"] .step-body { font-size: calc(var(--fs-body) * .75); } .blk-steps[data-n="5"] .step-title { font-size: calc(var(--fs-name) * .8); }
-.blk-steps[data-n="6"] { --per-row: 3; } .blk-steps[data-n="7"], .blk-steps[data-n="8"] { --per-row: 4; }
-.blk-steps[data-n="6"].has-pics .step-list::before, .blk-steps[data-n="7"].has-pics .step-list::before, .blk-steps[data-n="8"].has-pics .step-list::before { display: none; }
+/* 定稿（主持 23:52）：照现在的密度，5、6 步也一排，字号不缩（现在的流程图用正文字号）；7–8 步两排各 4 */
+.blk-steps[data-n="5"] { --per-row: 5; } .blk-steps[data-n="6"] { --per-row: 6; } .blk-steps[data-n="7"], .blk-steps[data-n="8"] { --per-row: 4; }
+.blk-steps[data-n="7"].has-pics .step-list::before, .blk-steps[data-n="8"].has-pics .step-list::before { display: none; }
 /* 竖排（超过 8 步，或手机）：一张卡里的竖线列表；有图时图在左 */
 .blk-steps.is-long:not([data-kind="timeline"]) .step-list, .blk-steps .step-list.vert { --per-row: 1; }
-@media (max-width: 767.98px) {
+/* 竖排的条件按步骤块自己的宽度（容器查询）：手机上，或放在构图的窄栏里（如“一个完整例子”左栏）都竖排 */
+@container (max-width: 820px) {
   .blk-steps .step-list { --per-row: 1 !important; gap: calc(var(--gap-card) * .8); }
   .blk-steps.has-pics .step-list::before { top: 2%; bottom: 2%; left: calc(110 * var(--u)); right: auto; width: calc(14 * var(--u)); height: auto; background: linear-gradient(180deg, #8fd8a4, #4cb873 50%, #8fd8a4); display: block !important; }
   .blk-steps.has-pics .step { display: grid; grid-template-columns: calc(220 * var(--u)) minmax(0, 1fr); column-gap: calc(16 * var(--u)); align-items: start; }
@@ -239,15 +280,26 @@
   .step-no { width: calc(58 * var(--u)); height: calc(58 * var(--u)); font-size: calc(36 * var(--u)); }
   .blk-steps:not(.has-pics) .step:not(:last-child)::after { content: none; }
 }
+/* 放在构图分栏里的步骤（如“一个完整例子”左栏）：照现在竖排，图在左 */
+.blk-steps.in-col .step-list { --per-row: 1 !important; gap: calc(var(--gap-card) * .8); }
+  .blk-steps.in-col.has-pics .step-list::before { top: 2%; bottom: 2%; left: calc(110 * var(--u)); right: auto; width: calc(14 * var(--u)); height: auto; background: linear-gradient(180deg, #8fd8a4, #4cb873 50%, #8fd8a4); display: block !important; }
+  .blk-steps.in-col.has-pics .step { display: grid; grid-template-columns: calc(220 * var(--u)) minmax(0, 1fr); column-gap: calc(16 * var(--u)); align-items: start; }
+  .blk-steps.in-col.has-pics .step-pic { height: auto; }
+  .blk-steps.in-col .step-body, .blk-steps.in-col[data-n="5"] .step-body { font-size: var(--fs-body); }
+  .blk-steps.in-col .step-title, .blk-steps.in-col[data-n="5"] .step-title { font-size: var(--fs-name); }
+  .step-no { width: calc(58 * var(--u)); height: calc(58 * var(--u)); font-size: calc(36 * var(--u)); }
+  .blk-steps.in-col:not(.has-pics) .step:not(:last-child)::after { content: none; }
+/* 窄一些的电脑（步骤块不到 1100px）：6 步分两排各 3，免得每格比现在还窄 */
+@container (max-width: 1100px) { .blk-steps[data-n="6"] .step-list { --per-row: 3; } }
 
 /* —— 时间线：电脑上横排卡片、日期在绿色条里（照现在“演进”），一排 cols 个（默认 5），字缩一档；手机竖排 —— */
 .blk-steps[data-kind="timeline"] { --per-row: 5; }
 .blk-steps[data-kind="timeline"][data-cols="4"] { --per-row: 4; } .blk-steps[data-kind="timeline"][data-cols="6"] { --per-row: 6; } .blk-steps[data-kind="timeline"][data-cols="3"] { --per-row: 3; }
 .blk-steps[data-kind="timeline"] .step-list { row-gap: calc(var(--gap-card) * 1.4); }
-.blk-steps[data-kind="timeline"] .step-body { padding: 0; overflow: hidden; font-size: calc(var(--fs-body) * .78); }
+.blk-steps[data-kind="timeline"] .step-body { padding: 0; overflow: hidden; }
 .blk-steps[data-kind="timeline"] .step-no { display: none; }
 .blk-steps[data-kind="timeline"] .step-head { margin: 0; background: var(--badge); justify-content: center; padding: calc(6 * var(--u)) calc(10 * var(--u)); }
-.blk-steps[data-kind="timeline"] .step-title { color: #fff; font-size: calc(var(--fs-name) * .9); text-align: center; }
+.blk-steps[data-kind="timeline"] .step-title { color: #fff; font-size: var(--fs-name); text-align: center; }
 .blk-steps[data-kind="timeline"] .step-text { padding: calc(8 * var(--u)) calc(14 * var(--u)) calc(12 * var(--u)); text-align: left; }
 .blk-steps[data-kind="timeline"] .step:not(:last-child)::after { content: none; }
 @media (max-width: 767.98px) {
@@ -259,8 +311,9 @@
 /* —— 6 对话/引文：现在的绿边气泡 —— */
 .blk-dialogue { display: flex; flex-direction: column; gap: calc(14 * var(--u)); }
 .bubble { position: relative; border: max(2px, calc(3 * var(--u))) solid #39a862; border-radius: calc(30 * var(--u)); background: #f4fcf6; padding: calc(14 * var(--u)) calc(22 * var(--u)); }
-.blk-dialogue.is-short { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(calc(var(--fs-body) * 15 + 50 * var(--u)), calc(50% - var(--gap-card))), 1fr)); gap: calc(14 * var(--u)) var(--gap-card); }
+.blk-dialogue.is-short { display: grid; grid-template-columns: repeat(auto-fill, minmax(max(calc(var(--fs-body) * 10 + 50 * var(--u)), calc(50% - var(--gap-card))), 1fr)); gap: calc(14 * var(--u)) var(--gap-card); }
 .blk-dialogue.is-short > :not(.bubble) { grid-column: 1 / -1; }
+@media (max-width: 767.98px) { .blk-dialogue.is-short { display: flex; } }  /* 手机照现在一句一行 */
 .blk-dialogue h4 { color: var(--title); font-size: var(--fs-name); font-weight: 800; }
 
 /* —— 7 画廊/截图：每行等高，按原图比例分宽 —— */
@@ -277,3 +330,16 @@
 
 /* —— 目录条：样式和标签图由原站样式与运行脚本负责 —— */
 .toc .toc-img { height: 30px; width: auto; margin: -6px -6px 0; display: block; }
+
+/* —— 慢网时大插画出来前：不用灰色“图片加载中”框，改成浅色水彩底（同一位置、同样大小、不透明；不用低清预览图）—— */
+.sx-page figure.chapter-art .image-loading-wrap {
+  background:
+    radial-gradient(ellipse 46% 40% at 42% 48%, rgba(170, 222, 184, .42), rgba(170, 222, 184, 0) 70%),
+    radial-gradient(ellipse 38% 34% at 64% 58%, rgba(196, 234, 206, .5), rgba(196, 234, 206, 0) 72%),
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(232, 246, 236, .9), rgba(255, 255, 255, 0) 80%),
+    #fff !important;  /* 底是不透明的白：没下载完的半张图不透出来，下载完一次换成整张图（不是由淡到浓） */
+}
+.sx-page figure.chapter-art .image-loading-note { opacity: 0; }
+/* 毛笔标题图没下载完时：位置先空着（白底、不显示“图片加载中”字样），下载完一次显示 */
+.sx-page .brush-title .image-loading-wrap { background: #fff !important; }
+.sx-page .brush-title .image-loading-note { opacity: 0; }

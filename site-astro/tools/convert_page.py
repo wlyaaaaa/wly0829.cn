@@ -61,7 +61,13 @@ def public_rule_text(screen):
     GATE_LOG.append({"screen": screen["id"], "file": rel, "policy_omissions_for_file": len(values), "leaked": 0,
                      "declared_omit": len(screen["source"].get("omit", [])), "changed_by_projection": out != text})
     return out
-OUT_MD = os.path.join(SITE, "src", "content", "pages")
+OUT_MD = os.environ.get("CONVERT_OUT_MD") or os.path.join(SITE, "src", "content", "pages")
+DRY = bool(os.environ.get("CONVERT_DRY"))  # 全站统计用：不复制素材
+RULE_HITS = {}  # 规则名 → {页: set(屏)}，用来统计每条共用规则在全站多少页、多少段生效
+
+
+def hit(rule, page, screen):
+    RULE_HITS.setdefault(rule, {}).setdefault(page, set()).add(screen)
 OUT_PUB = os.path.join(SITE, "public")
 TOC_LABELS = os.path.join(SITE, "src", "chrome", "toc-labels.json")
 SECTION_LABEL = {"top": "开头", "usage": "怎么用", "tech": "技术", "highlights": "亮点", "features": "全部功能",
@@ -105,9 +111,10 @@ def publish(rel):
     rel = rel.replace("\\", "/")
     src = os.path.join(ASSETS, *rel.split("/"))
     dst = os.path.join(OUT_PUB, "assets", *rel.split("/"))
-    os.makedirs(os.path.dirname(dst), exist_ok=True)
-    if not os.path.exists(dst) or os.path.getsize(dst) != os.path.getsize(src):
-        shutil.copyfile(src, dst)
+    if not DRY:
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        if not os.path.exists(dst) or os.path.getsize(dst) != os.path.getsize(src):
+            shutil.copyfile(src, dst)
     return "/assets/" + urllib.parse.quote(rel, safe="/")
 
 
@@ -253,13 +260,13 @@ KEYWORD_ICONS = [  # (关键词正则, 素材库里的图) 先匹配标题，再
     (r"安全|保护|保险|防", "_library/icons/盾牌对勾.png"),
     (r"换电脑|环境|重建|安装|部署", "_library/icons/工具箱.png"),
     (r"备份|硬盘|存档", "_library/icons/硬盘循环.png"),
-    (r"上传|推送|同步|GitHub|仓库", "_library/icons/文件夹链接.png"),
+    (r"上传|推送|同步|GitHub|仓库|打开", "_library/icons/文件夹链接.png"),
     (r"删除|回收站|清理|腾", "_library/icons/回收站文件.png"),
     (r"截图|照片|图片|相机|拍", "_library/icons/相机.png"),
     (r"交结果|交付|完成|打包|发布|结果", "_library/icons/纸箱.png"),
     (r"清单|步骤|规矩|写法|要点|待办", "_library/icons/打勾清单.png"),
     (r"想法|原则|建议|思路|亮点|巧思", "_library/icons/气泡灯泡.png"),
-    (r"网页|网站|浏览器|在线|Chrome|打开", "_library/icons/浏览器标签页.png"),
+    (r"网页|网站|浏览器|在线|Chrome", "_library/icons/浏览器标签页.png"),
     (r"语音|录音|麦克风", "_library/icons/麦克风.png"),
     (r"模型|识别|AI", "_library/icons/双模型窗口.png"),
     (r"文件|材料|文档|讲义|扫描|PDF|纸|页", "_library/icons/文稿堆.png"),
@@ -280,8 +287,9 @@ def keyword_icon(title, text, used):
 
 def cols_attr(spec, default=None, default_v=1):
     """旧构图写的列数（横版 columns / 竖版 columns_v）照搬：电脑上按它排，排不下才少列。"""
-    c = spec.get("columns") or default
-    v = spec.get("columns_v") or spec.get("portrait_columns") or default_v
+    num = lambda x: int(x) if isinstance(x, (int, float)) or (isinstance(x, str) and x.isdigit()) else None  # 构图里偶有写成列表的（按栏宽），不当列数
+    c = num(spec.get("columns")) or default
+    v = num(spec.get("columns_v")) or num(spec.get("portrait_columns")) or default_v
     out = []
     if c:
         out.append(f'cols="{int(c)}"')
@@ -316,6 +324,12 @@ class Screen:
         self.out = []
         self.motion = None
         self.spec_chapter = None
+        self.chapter_art = None
+        self.shots_used = set()  # 已经放进“编号标注截图”的截图，画廊不再重复放
+        self.marks = []  # (self.out 下标, row 名, width)：照旧构图把同一 row 的块左右并排
+
+    def hit(self, rule):
+        hit(rule, self.page["page"], self.s["id"])
 
     def take_icons(self, n, texts=None):
         """按槽位顺序取图；槽位是“拿叶子凑数”的（fallback），改按这一项的字挑意思对得上的图。"""
@@ -327,10 +341,12 @@ class Screen:
             asset = row["asset"] if row and not row.get("fallback") else None
             if asset in used:  # 同一组里槽位图重复（同一张灯泡连放三次）也按字另挑
                 asset = None
+                self.hit("图标：同组重复的槽位图改按字另挑")
             if not asset:
                 asset = keyword_icon(texts[k][0], texts[k][1], used)
                 if asset:
                     self.notes.append(f"图标：槽位 {self.icon_i} 原是凑数的装饰叶子，按字改用 {asset.split('/')[-1]}")
+                    self.hit("图标：凑数叶子改按字挑图")
             if asset:
                 used.add(asset)
             got.append(publish(asset) if asset else "")
@@ -339,6 +355,8 @@ class Screen:
     def art(self):
         blocks = (self.spec or {}).get("blocks", [])
         if blocks and not any(b["type"] == "illustration" for b in blocks):
+            if self.arts:
+                self.hit("插画：构图里没有插画的屏不额外加")
             return None  # 现在这一屏没有插画（构图里没有 illustration），不额外加
         if any(b["type"] == "illustration" and b.get("size") == "small" for b in blocks) and \
                 not any(b["type"] == "illustration" and b.get("size") != "small" for b in blocks):
@@ -356,6 +374,54 @@ class Screen:
                 return publish(r["asset"])
         return None
 
+    def wrap_rows(self):
+        """旧构图的 row + width（全站 layout.json 通用字段）：同一 row 的相邻块左右并排。
+        规则同旧排版引擎：带 width 的块开新的一栏，不带 width 的并进前一栏；没写宽度的栏平分剩下的宽度。
+        只有一栏（或整行就是一个块）的不包。窄屏由样式表叠成一栏。"""
+        marks = [m for m in self.marks if m[0] < len(self.out)]
+        if not marks:
+            return
+        # 每个记号覆盖到下一个记号前（同一下标的空块合并）
+        spans = []
+        for k, (st, row, w) in enumerate(marks):
+            en = marks[k + 1][0] if k + 1 < len(marks) else len(self.out)
+            if en > st:
+                spans.append([st, en, row, w])
+        groups, cur = [], None
+        for sp in spans:
+            if sp[2] and cur and cur[0][2] == sp[2] and cur[-1][1] == sp[0]:
+                cur.append(sp)
+            else:
+                cur = [sp]; groups.append(cur)
+        new, pos = [], 0
+        for g in groups:
+            if not g[0][2] or len(g) < 2:
+                continue
+            cols = []
+            for sp in g:
+                if sp[3] or not cols:
+                    cols.append([sp[3], [sp]])
+                else:
+                    cols[-1][1].append(sp)
+            if len(cols) < 2:
+                continue
+            given = [float(str(w).rstrip("%")) for w, _ in cols if w and str(w).endswith("%")]
+            free = max(0.0, 100.0 - sum(given)); nfree = sum(1 for w, _ in cols if not (w and str(w).endswith("%")))
+            ws = [float(str(w).rstrip("%")) if w and str(w).endswith("%") else (free / nfree if nfree else 0) for w, _ in cols]
+            new += self.out[pos:g[0][0]]
+            new.append('::::::row{cols="' + ",".join(f"{x:.1f}" for x in ws) + '"}')
+            for _, sps in cols:
+                new.append(":::::col")
+                for sp in sps:
+                    new += self.out[sp[0]:sp[1]]
+                new.append(":::::")
+            new.append("::::::")
+            pos = g[-1][1]
+            self.hit(f"row 并排：同一行 {len(cols)} 栏左右排")
+        if pos:
+            new += self.out[pos:]
+            self.out = new
+
     def emit(self, s):
         if s.strip():
             self.out.append(s.strip())
@@ -367,11 +433,13 @@ class Screen:
         brush = publish(self.titles[0]["asset"]) if self.titles else None
         box = ink_box(self.titles[0]["asset"]) if self.titles else None
         art = self.art()
+        self.chapter_art = art
         attrs = [f'title="{title.replace(chr(34), "＂")}"']
         if brush:
             attrs.append(f'brush="{brush}"')
             if box:
                 attrs.append(f'brushbox="{",".join(map(str, box))}"')
+                self.hit("标题：裁白纸边、按档位封顶")
             size = (self.spec_chapter or {}).get("size")
             if size in ("small", "medium", "large"):
                 attrs.append(f'size="{size}"')
@@ -431,16 +499,24 @@ class Screen:
                 cur[1].append(n)
         if not cards:
             return
+        # 只有名字、后面紧跟别的卡的那一项，是一组卡的小标题（如“能装回的：2 个文件”），不当成一张空卡
+        heads = {k for k, (t, body) in enumerate(cards) if t and not body and k + 1 < len(cards)}
+        if heads:
+            self.hit("卡片：只有名字的组标题不再画成空卡")
         want_icons = not any((b["spec"].get("icons") == "none") for b in blocks)
-        texts = [(t, " ".join(P.node_text(n) for n in body if n.get("src")) or " ".join(n.get("text", "") for n in body)) for t, body in cards]
-        icons = self.take_icons(len(cards), texts) if want_icons else [""] * len(cards)
+        real = [k for k in range(len(cards)) if k not in heads]
+        texts = [(t, " ".join(P.node_text(n) for n in body if n.get("src")) or " ".join(n.get("text", "") for n in body)) for k, (t, body) in enumerate(cards) if k not in heads]
+        got = self.take_icons(len(real), texts) if want_icons else [""] * len(real)
+        icons = [""] * len(cards)
+        for k, ic in zip(real, got):
+            icons[k] = ic
         # 图怎么放照旧构图：content_card 的 left_inside/top_inside 是大插图，其它（功能卡、要点卡）是标题旁小图标
         spec0 = blocks[0]["spec"]
         ill = spec0.get("illustration")
         art_mode = "left" if (blocks[0]["type"] == "content_card" and ill == "left_inside") else "top" if (blocks[0]["type"] in ("content_card",) and ill == "top_inside") else "icon"
         parts = []
-        for (title, body), icon in zip(cards, icons):
-            head = "::card" + (f'{{icon="{icon}"}}' if icon else "")
+        for k, ((title, body), icon) in enumerate(zip(cards, icons)):
+            head = '::card{head="1"}' if k in heads else "::card" + (f'{{icon="{icon}"}}' if icon else "")
             seg = [head]
             if title:
                 seg.append("#### " + inline(title, self.links, self.md))
@@ -451,32 +527,39 @@ class Screen:
         # 列数照旧构图：同一 row 里并排的卡片块数、各块 columns 里取最大（旧版把同 row 的块左右排）
         from collections import Counter
         rows = Counter(b["spec"].get("row") for b in blocks if b["spec"].get("row"))
-        want = max([rows.most_common(1)[0][1] if rows else 1] + [int(b["spec"].get("columns") or 1) for b in blocks])
+        want = max([rows.most_common(1)[0][1] if rows else 1] + [int(b["spec"]["columns"]) if isinstance(b["spec"].get("columns"), (int, float, str)) and str(b["spec"]["columns"]).isdigit() else 1 for b in blocks])
         spec_c = dict(spec0)
-        if want > int(spec0.get("columns") or default_cols or 1):
+        c0 = spec0.get("columns")
+        if want > (int(c0) if isinstance(c0, int) or (isinstance(c0, str) and c0.isdigit()) else int(default_cols or 1)):
             spec_c["columns"] = min(want, len(cards))
+            self.hit("卡片：列数照构图同一行的块数")
         attrs = f'art="{art_mode}" kind="{blocks[0]["type"]}" ' + cols_attr(spec_c, default_cols)
         self.emit(":::cards{" + attrs.strip() + "}\n" + "\n\n".join(parts) + "\n:::")
 
     def stats(self, b):
         items = []
         extra = []
+        old_extra = False  # 只用于统计：第二轮的旧规则此时是否已把说明丢到卡外
+        open_ = False  # 当前这张数字卡还在收说明：粗体数字/卡名后面紧跟的几行都是它的（照现在：说明 + “截至…”都在卡里）
         for n in b["nodes"]:
             if n["type"] == "stats":
-                items += [(it["num"], [it["text"]]) for it in n["items"]]
+                items += [(it["num"], [it["text"]] if it.get("text") else []) for it in n["items"]]
+                open_ = True
             elif n["type"] == "group":
-                items.append((n["name"], []))
+                items.append((n["name"], [])); open_ = True
             elif n["type"] == "card":
-                items.append((n["name"], [n["text"]]))
-            elif n["type"] == "para" and re.match(r"^[0-9０-９][^　｜]{0,14}[　｜]", n["text"]) and not extra:
+                items.append((n["name"], [n["text"]])); open_ = True
+            elif n["type"] == "para" and (re.match(r"^[0-9０-９][^　｜]{0,14}[　｜]", n["text"]) or re.match(r"^(?!截至)[^　｜]{0,8}[0-9０-９][^　｜]{0,8}[　｜]", n["text"])) and (open_ or not extra):
+                # “数字　说明”或“每周一 10:30　说明”这种短头加全角空格的一行，是新的一张数字卡
                 num, rest = re.split(r"[　｜]", n["text"], maxsplit=1)
-                items.append((num, [rest.strip("　 ")]))
-            elif n["type"] == "para" and items and not extra and items[-1][1] == []:
-                items[-1][1].append(n["text"])
-            elif n["type"] == "para" and items and not extra and not re.match(r"^截至|^数据|^注", n["text"]) and len(items[-1][1]) < 2:
+                items.append((num, [rest.strip("　 ")])); open_ = True
+            elif n["type"] == "para" and items and open_ and len(items[-1][1]) < 3:
+                old_ok = not old_extra and (not items[-1][1] or (not re.match(r"^截至|^数据|^注", n["text"]) and len(items[-1][1]) < 2))
+                if not old_ok:  # 第二轮旧规则会把这一行丢到卡外（汇报网页“387 张”“129 次”那种）
+                    self.hit("数字卡：说明和“截至…”落回自己的卡"); old_extra = True
                 items[-1][1].append(n["text"])
             else:
-                extra.append(n)
+                extra.append(n); open_ = False; old_extra = True
         if not items:
             self.emit(nodes_md(b["nodes"], self.links, self.md)); return
         if len(items) > 4 and False:
@@ -534,7 +617,9 @@ class Screen:
         page_text = P.canon(self.s.get("text", ""))
         if shots and not done:
             imgs = []
-            for sh in shots:
+            for k_sh, sh in enumerate(shots):
+                if k_sh in self.shots_used:
+                    continue
                 f = sh.get("file", "")
                 if not f or not os.path.isfile(os.path.join(REPO, f)):
                     self.notes.append(f"截图缺文件 {f}"); continue
@@ -549,6 +634,25 @@ class Screen:
             self.notes.append(f"{b['type']} 没有可用的整块图片，按文字原样放")
         self.prose(b)
         return done
+
+    def annotation(self, b):
+        """旧构图的 annotation（全站 layout.json 字段：screenshot 序号、media_width、anchors x/y/unit）：
+        截图上按坐标放编号圆点，旁边逐条注释，宽屏用引线连起来；窄屏注释排在截图下面。"""
+        sp = b["spec"]; shots = self.s.get("screenshots") or []
+        idx = sp.get("screenshot")
+        if not isinstance(idx, int) or idx >= len(shots) or not os.path.isfile(os.path.join(REPO, shots[idx].get("file", ""))):
+            self.prose(b); return
+        url = publish_ref(shots[idx]["file"]); self.shots_used.add(idx)
+        lines = []
+        for n in b["nodes"]:
+            t = n.get("text", "")
+            m = re.match(r"^([0-9０-９]+)\s*(.*)$", t, re.S)
+            num, rest = (m[1], m[2]) if m else ("", t)
+            lines.append(f'- <span class="ann-no">{num}</span>' + inline(rest, self.links, self.md))
+        an = ";".join(f'{float(a.get("x", .5)):.3f},{float(a.get("y", 0)):.3f},{int(a.get("unit", k))}' for k, a in enumerate(sp.get("anchors") or []))
+        alt = (shots[idx].get("caption") or "").replace('"', "＂")
+        self.emit(f':::annotate{{shot="{url}" w="{sp.get("media_width") or 60}" anchors="{an}" alt="{alt}"}}\n' + "\n".join(lines) + "\n:::")
+        self.hit("编号标注截图：截图上编号点 + 引线 + 旁注")
 
     def prose(self, b):
         nodes = b["nodes"]
@@ -578,13 +682,29 @@ class Screen:
         i = 0
         gallery_done = False
         pending_cards = []
+        def rowof(x):
+            return (x.get("spec") or {}).get("row") or None
+
+        def mark(x, row="__self__"):
+            self.marks.append((len(self.out), rowof(x) if row == "__self__" else row, (x.get("spec") or {}).get("width")))
+
         def flush():
             if pending_cards:
+                mark(pending_cards[0])
                 self.cards(list(pending_cards)); pending_cards.clear()
+        # 每个 row 里有几块不是插画的（插画单独一行就不算并排）
+        row_members = {}
+        for x in blocks:
+            if rowof(x):
+                row_members.setdefault(rowof(x), []).append(x["type"])
         while i < len(blocks):
             b = blocks[i]
             t = b["type"]
             if t in CARD_TYPES or (t == "source_text_card"):
+                if pending_cards and (rowof(pending_cards[0]) != rowof(b) or
+                                      (pending_cards[-1]["spec"].get("columns") != b["spec"].get("columns") and b["type"] == pending_cards[-1]["type"])):
+                    flush()  # 旧构图里换了一行（row 名不同），或同类卡的列数变了（如先 1 列宽卡、再 3 列小卡），卡片组也分开
+                    self.hit("卡片：列数变了就分成两组（先宽卡后小卡）")
                 pending_cards.append(b); i += 1; continue
             flush()
             if t in ("chapter_title", "title_strip"):
@@ -601,36 +721,56 @@ class Screen:
                         lead = pn; blocks[j] = dict(blocks[j], nodes=[])
                     elif pn[0]["type"] == "para" and len(pn[0]["text"]) <= 160:
                         lead = pn[:1]; blocks[j] = dict(blocks[j], nodes=pn[1:])
+                # 章节头的导语在某个 row 里（首屏“左文右图”）：章节头也算那一行的第一栏
+                lead_row = rowof(blocks[j]) if j < len(blocks) and blocks[j]["type"] == "prose" else None
+                mark(b, lead_row)
                 self.chapter(b["nodes"], lead)
+            elif t == "illustration" and rowof(b) and len(row_members.get(rowof(b), [])) > 1 and self.chapter_art:
+                # 旧构图里插画和别的块同一行：把章节插画（带动画）挪到这一栏，宽度照构图
+                mark(b)
+                self.emit("::artslot")
+                self.hit("row 并排：章节插画放进构图写的那一栏")
+                self.prose(b)
             elif t == "illustration":
-                if has_chapter and not any(x["type"] == "chapter_title" for x in blocks[:i]) and False:
-                    pass
+                mark(b)
                 a = self.art() if self.arts else None
                 if a and not has_chapter:
                     self.emit(f":::figure\n![]({a})\n:::")
                 elif a and i > 0:
                     self.emit(f":::figure\n![]({a})\n:::")
                 self.prose(b)
+            elif t == "annotation" and isinstance(b["spec"].get("screenshot"), int):
+                mark(b)
+                self.annotation(b)
             elif t == "stat_card":
+                mark(b)
                 self.stats(b)
             elif t in STEP_TYPES:
+                mark(b)
                 self.steps(b)
             elif t == "dialogue":
+                mark(b)
                 body = nodes_md(b["nodes"], self.links, self.md)
                 self.emit(":::dialogue\n" + body + "\n:::")
             elif t == "status_legend":
+                mark(b)
                 body = nodes_md(b["nodes"], self.links, self.md)
                 body = re.sub(r"([●○✕])\s*([^　●○✕<\n]+)", lambda m: f'<span class="legend-item" data-state="{state_of(m[2]) or "on"}"><span class="legend-dot" aria-hidden="true">{m[1]}</span>{m[2].strip()}</span>', body)
                 self.emit(":::legend" + chr(10) + body + chr(10) + ":::")
             elif t in NOTE_TYPES:
+                mark(b)
                 self.emit(":::note\n" + nodes_md(b["nodes"], self.links, self.md) + "\n:::")
             elif t == "tag":
+                mark(b)
                 self.emit(":::tag\n" + nodes_md(b["nodes"], self.links, self.md) + "\n:::")
             elif t == "action_button":
+                mark(b)
                 self.emit(":::buttons\n" + nodes_md(b["nodes"], self.links, self.md) + "\n:::")
             elif t in GALLERY_TYPES:
+                mark(b)
                 gallery_done = self.gallery(b, gallery_done)
             elif t == "section_heading" and b["nodes"]:
+                mark(b)
                 first = b["nodes"][0]
                 img = None  # 小节名照现在：深绿粗体字，不用毛笔图
                 if img:
@@ -640,9 +780,11 @@ class Screen:
                     self.emit('<h3 class="sechead">' + inline(text_of(first), self.links, self.md) + '</h3>')
                 self.emit(nodes_md(b["nodes"][1:], self.links, self.md))
             else:
+                mark(b)
                 self.prose(b)
             i += 1
         flush()
+        self.wrap_rows()
         if (s.get("screenshots") or []) and not gallery_done:
             gallery_done = self.gallery({"type": "screenshot", "nodes": [], "spec": {}}, False)
         return "\n\n".join(self.out)
@@ -670,6 +812,9 @@ def file_meta(url):
         return None
     from PIL import Image
     p = os.path.join(OUT_PUB, *urllib.parse.unquote(url).lstrip("/").split("/"))
+    if DRY and url.startswith("/assets/") and not os.path.exists(p):  # 只统计不复制时，直接读素材库原图
+        q = urllib.parse.unquote(url)[len("/assets/"):]
+        p = os.path.join(ASSETS, *q.split("/")) if not q.startswith("_repo/") else os.path.join(REPO, *q[len("_repo/"):].split("/"))
     with Image.open(p) as im:
         size = list(im.size)
     return {"src": url, "size": size, "key": hashlib.sha256(open(p, "rb").read()).hexdigest()}
@@ -749,3 +894,6 @@ if __name__ == "__main__":
     for g in GATE_LOG:
         print("  规则原文公开过滤：", json.dumps(g, ensure_ascii=False))
     print(f"转换用时 {(_t.time() - t0):.1f} 秒，共 {len(names)} 页，失败 {len(failed)} 页")
+    if os.environ.get("CONVERT_RULE_STATS"):
+        json.dump({r: {"pages": len(v), "screens": sum(len(x) for x in v.values()), "by_page": {k: sorted(x) for k, x in v.items()}}
+                   for r, v in sorted(RULE_HITS.items())}, open(os.environ["CONVERT_RULE_STATS"], "w", encoding="utf-8"), ensure_ascii=False, indent=1)
