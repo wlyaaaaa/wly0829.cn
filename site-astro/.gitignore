@@ -9,3 +9,6 @@ public/_album/
 public/_typeset/
 public/_chrome/
 src/content/pages/_stress/
+# 区块排版的中间文件和结果：tools/render_blocks.py 每次生成时重建（npm run build 会先跑它）
+.cache/
+src/content/rendered/

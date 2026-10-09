@@ -11,7 +11,7 @@ const pages = defineCollection({
     url: z.string(),
     tagline: z.string().optional(),
     toc: z.array(z.object({ id: z.string(), label: z.string(), img: z.string().optional() })).default([]),
-    motion: z.any().optional(),
+    page: z.any().optional(),
     source: z.object({ page: z.string(), sha256: z.string(), converted_at_beijing: z.string() }).optional(),
   }),
 });

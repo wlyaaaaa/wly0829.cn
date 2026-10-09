@@ -41,22 +41,28 @@ def adapt(page):
         return None
     cfg = json.load(open(os.path.join(ROOT, "public", src_url.lstrip("/")), encoding="utf-8"))
     out = {k: v for k, v in cfg.items() if k not in ("h", "v")}
-    o = cfg["h"]
-    box = o["box"]
-    tex = o.get("texture", {}).get("size")
-    shown = [box[2] * o["image"]["size"][0], box[3] * o["image"]["size"][1]]
-    n = {k: v for k, v in o.items()}
-    n["effects"] = [ht(e, box) for e in o.get("effects", [])]
-    if o.get("intro"):
-        n["intro"] = ht(o["intro"], box)
-    if o.get("bird"):
-        n["bird"] = ht(o["bird"], box)
-    n["masks"] = [{**m, "rect": [0, 0, 1, 1]} for m in o.get("masks", [])]
-    n["box"] = [0, 0, 1, 1]
-    n["image"] = {**o["image"], "size": tex or [round(shown[0]), round(shown[1])]}
-    out["h"] = n
-    if "guide" in cfg and isinstance(cfg["guide"], dict) and "h" in cfg["guide"]:
-        out["guide"] = {"h": cfg["guide"]["h"]}
+    shown_h = None
+    for side in ("h", "v"):  # 电脑、手机两份：新页里插画在电脑画布和手机画布上各有一张
+        if side not in cfg:
+            continue
+        o = cfg[side]
+        box = o["box"]
+        tex = o.get("texture", {}).get("size")
+        shown = [box[2] * o["image"]["size"][0], box[3] * o["image"]["size"][1]]
+        n = {k: v for k, v in o.items()}
+        n["effects"] = [ht(e, box) for e in o.get("effects", [])]
+        if o.get("intro"):
+            n["intro"] = ht(o["intro"], box)
+        if o.get("bird"):
+            n["bird"] = ht(o["bird"], box)
+        n["masks"] = [{**m, "rect": [0, 0, 1, 1]} for m in o.get("masks", [])]
+        n["box"] = [0, 0, 1, 1]
+        n["image"] = {**o["image"], "size": tex or [round(shown[0]), round(shown[1])]}
+        out[side] = n
+        shown_h = shown_h or (shown, tex, box)
+    if "guide" in cfg and isinstance(cfg["guide"], dict):
+        out["guide"] = {k: v for k, v in cfg["guide"].items() if k in ("h", "v")}
+    shown, tex, box = shown_h
     dst = os.path.join(ROOT, "public", "_living", page, "astro", "config.json")
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     json.dump(out, open(dst, "w", encoding="utf-8"), ensure_ascii=False)

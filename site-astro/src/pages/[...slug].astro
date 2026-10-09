@@ -1,17 +1,46 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Site from '../layouts/Site.astro';
 
+// 每页的区块由 tools/render_blocks.py 照内容文件排好（电脑画布 1672、手机画布 941 各一份），这里只拼进页面外壳。
+const rendered = import.meta.glob('../content/rendered/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+
 export async function getStaticPaths() {
-  const pages = await getCollection('pages');
+  const done = import.meta.glob('../content/rendered/*.json');  // getStaticPaths 单独运行，只能用这里自己导入的
+  const pages = (await getCollection('pages')).filter((entry) => {
+    if (done[`../content/rendered/${entry.id}.json`]) return true;
+    console.warn(`${entry.id}：没有排版结果（tools/render_blocks.py 这一页出错或没跑），这一页不生成`);
+    return false;
+  });
   return pages.map((entry) => ({
-    params: { slug: entry.data.url.replace(/^\/|\/$/g, '') || undefined },
+    // 没有网址的页（404、GitHub 个人主页稿）放在 /<页名>/，不和首页撞
+    params: { slug: entry.data.url.replace(/^\/|\/$/g, '') || entry.id },
     props: { entry },
   }));
 }
 const { entry } = Astro.props;
-const { Content } = await render(entry);
+const r = rendered[`../content/rendered/${entry.id}.json`];
+if (!r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
+const esc = (v: string) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const screen = (s: any) => `<section class="ts-screen" id="${esc(s.id)}" data-screen="${esc(s.id)}" data-section="${esc(s.section || '')}">`
+  + (s.anchor ? `<div class="section-anchor" id="${esc(s.anchor)}"></div>` : '')
+  + (s.article ? `<article class="rule-original-prose">${s.article}</article><details open class="rule-original-evidence"><summary tabindex="-1">原文排版图与技术证据</summary>` : '')
+  + (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
+  + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : '')
+  + (s.article ? `</details>` : '')
+  + `</section>`;
+const canvas = (o: string, x: any) =>
+  `<div class="ts-canvas o-${o} ts-shape-${x.shape || ''}" style="min-height:${x.height}px;${x.style || ''}">${x.html}</div>${x.overlay || ''}`;
+// 和现在网站一样：连续的独立卡（shape=card）放进两列卡片网格（手机一列）；别的屏（例如分类标题条）把网格断开、占满整行
+const parts: string[] = [];
+let grid: string[] = [];
+for (const s of r.screens) {
+  if ((s.h || s.v)?.shape === 'card') { grid.push(screen(s)); continue; }
+  if (grid.length) { parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`); grid = []; }
+  parts.push(screen(s));
+}
+if (grid.length) parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`);
 ---
-<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={entry.data.motion}>
-  <Content />
+<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r}>
+  <Fragment set:html={parts.join('')} />
 </Site>

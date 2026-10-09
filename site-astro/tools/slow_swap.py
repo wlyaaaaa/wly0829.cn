@@ -26,7 +26,7 @@ INIT = r"""
   new MutationObserver((recs) => { for (const r of recs) { const t = r.target; if (t.classList && t.classList.contains('living-layer') && t.classList.contains('is-live') && !window.__live) { window.__live = performance.now(); window.__ev.push({ t: window.__live, kind: 'canvas-live' }); } } })
     .observe(document, { subtree: true, attributes: true, attributeFilter: ['class'] });
   const poll = () => {
-    const img = document.querySelector('figure[data-living-config] img');
+    const img = [...document.querySelectorAll('figure[data-living-config] img')].find(i => i.getClientRects().length);
     if (img && !window.__imgshown && img.complete && img.naturalWidth) { const cs = getComputedStyle(img); if (cs.visibility !== 'hidden' && +cs.opacity > 0) { window.__imgshown = performance.now(); window.__ev.push({ t: window.__imgshown, kind: 'static-visible' }); } }
     if (img && window.__imgshown) { const cs = getComputedStyle(img); if (cs.visibility === 'hidden' || +cs.opacity < 1 || cs.display === 'none') window.__ev.push({ t: performance.now(), kind: 'static-hidden-again', opacity: cs.opacity, visibility: cs.visibility }); }
     requestAnimationFrame(poll);
@@ -34,7 +34,7 @@ INIT = r"""
   requestAnimationFrame(poll);
 })();
 """
-BOX = "(()=>{const f=document.querySelector('figure[data-living-config]');if(!f)return null;const r=f.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()"
+BOX = "(()=>{const f=[...document.querySelectorAll('figure[data-living-config]')].find(x=>x.getClientRects().length);if(!f)return null;const r=f.getBoundingClientRect();return [r.x,r.y,r.width,r.height]})()"
 
 
 def run(b, path, w, h, cond):

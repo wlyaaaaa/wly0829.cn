@@ -6,7 +6,7 @@
   "scripts": {
     "convert": "python tools/convert_page.py",
     "dev": "astro dev",
-    "build": "astro build --force",
+    "build": "python tools/render_blocks.py --all && astro build --force",
     "preview": "astro preview"
   },
   "dependencies": {

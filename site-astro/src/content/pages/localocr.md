@@ -36,274 +36,2346 @@
    "img": "/_shared/nav-unify-standard/nav-unify-label-55-f8367a4ec7.webp"
   }
  ],
- "motion": {
-  "screen": "localocr-01",
-  "art": {
-   "src": "/assets/_library/illustrations/main-localocr.png",
-   "size": [
-    1189,
-    977
-   ],
-   "key": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6"
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "localocr",
+  "kind": "project",
+  "title": "本地文字识别",
+  "url": "/projects/localocr/",
+  "tagline": "在本机显卡上把图片和扫描件里的字读准、读全。",
+  "status": "常用",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/LocalOCR",
+  "capability": "看懂图片和扫描件里的字",
+  "based_on": {
+   "commit": "d47d48822760918ee4895750ba8cfa851be7af32",
+   "commit_time": "2026-09-27T16:22:31+08:00"
   },
-  "brush": {
-   "src": "/assets/localocr/localocr-01-title-01.png",
-   "size": [
-    681,
-    173
+  "video_prompt": "6 秒无缝循环，白底水彩风格，从开头这屏的插画出发：机箱里的显卡绿光缓慢呼吸；三张纸（手机截图、扫描讲义、带表格的单据）从显卡上方轻轻飘起，纸上的一行行字依次化成绿色小方框，排队飞进放大镜；其中表格那张纸飞到一半停住，一道细绿光扫过表格的横竖线，它转向另一条更粗的绿色光带（强模型）再飞进放大镜；放大镜下方“有字”“没字”“说不准”三个小标签轮流轻轻亮一下。镜头不动，没有文字，结尾回到起始画面。",
+  "registry": {
+   "groups": [
+    {
+     "id": "g-read",
+     "name": "读字"
+    },
+    {
+     "id": "g-route",
+     "name": "选模型"
+    },
+    {
+     "id": "g-structure",
+     "name": "表格和位置"
+    },
+    {
+     "id": "g-trust",
+     "name": "结果靠得住"
+    },
+    {
+     "id": "g-run",
+     "name": "运行和显卡"
+    },
+    {
+     "id": "g-version",
+     "name": "版本和换模型"
+    }
    ],
-   "key": "84b6833b60f41aa68e46393d7023d3a48e8487a764c7da9e071ad183b89d3bed"
+   "features": [
+    {
+     "id": "f-image",
+     "group": "g-read",
+     "name": "图片和截图识字",
+     "what": "png、jpg、webp、bmp 图片和截图，读出全部文字",
+     "how": "跟 AI 说读哪张图，或拖到 start.bat",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "router.py 第 5 行；任务登记 646 张图片"
+    },
+    {
+     "id": "f-scan",
+     "group": "g-read",
+     "name": "扫描件逐页识字",
+     "what": "扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数",
+     "how": "跟 AI 说这份扫描件转成文字",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "pdf_utils.py 第 104 行；ARCHITECTURE.md；任务登记 12 份 PDF 共 34 页"
+    },
+    {
+     "id": "f-folder",
+     "group": "g-read",
+     "name": "一个文件夹一起读",
+     "what": "每个文件分别选路线，不支持的文件列为跳过",
+     "how": "把文件夹交给 AI",
+     "status": "说不准",
+     "screen": "localocr-10",
+     "source": "router.py 第 29–49 行；任务记录按单个文件记，看不出是否整夹提交"
+    },
+    {
+     "id": "f-drag",
+     "group": "g-read",
+     "name": "拖到 start.bat 就识别",
+     "what": "不经过 AI，自己拖文件，结果在 outputs 文件夹",
+     "how": "把文件拖到 start.bat 上",
+     "status": "说不准",
+     "screen": "localocr-10",
+     "source": "README.md；9 月 8 日修过拖放路径（376a777），但拖放不单独留记录"
+    },
+    {
+     "id": "f-outputs",
+     "group": "g-read",
+     "name": "三种结果文件",
+     "what": "纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON",
+     "how": "识别后自动写出",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "QUICKSTART_FOR_AI.md“输出”"
+    },
+    {
+     "id": "f-rotate",
+     "group": "g-read",
+     "name": "歪的倒的先转正",
+     "what": "两个方向小模型判断整页和每行字的朝向，先转正再读",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "model_profiles.json 第 17–19 行；任务登记 628 条带 page_angle"
+    },
+    {
+     "id": "f-auto",
+     "group": "g-route",
+     "name": "先快后强自动选",
+     "what": "每页先用快模型读，体检不过的页才换强模型",
+     "how": "默认就是自动",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "difficulty.py；任务登记 auto 300 次、升级 23 次（截至 9 月 28 日 20:26）"
+    },
+    {
+     "id": "f-page-escalate",
+     "group": "g-route",
+     "name": "只重读有问题的页",
+     "what": "多页文件里只把没读好的那几页交给强模型，其余页保留快读结果",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "任务登记 9 月 26 日 17:09 一份 16 页 PDF 只重读第 15 页"
+    },
+    {
+     "id": "f-explicit",
+     "group": "g-route",
+     "name": "指定模型",
+     "what": "可以直接说用快模型、强模型或结构还原，自动选路不改写",
+     "how": "跟 AI 说“用强模型读”",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "smart_router.py 第 48–66 行；任务登记 reason=explicit_ocr 288 次、explicit_model 69 次"
+    },
+    {
+     "id": "f-triage",
+     "group": "g-route",
+     "name": "只看走哪条路",
+     "what": "先预览这份材料会走哪条路线，不真的识别",
+     "how": "让 AI 先预检",
+     "status": "说不准",
+     "screen": "localocr-10",
+     "source": "ocr_smart.ps1 -TriageOnly 第 390 行；预检不留任务记录"
+    },
+    {
+     "id": "f-table",
+     "group": "g-structure",
+     "name": "表格还原成行列",
+     "what": "PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标",
+     "how": "明确说“要表格结构”",
+     "status": "没用过",
+     "screen": "localocr-10",
+     "source": "model_profiles.json；任务登记里真实材料 0 次（只有 9 月 3 日测试样例 1 次）"
+    },
+    {
+     "id": "f-formula-seal",
+     "group": "g-structure",
+     "name": "公式和印章",
+     "what": "同一条结构还原路线认出公式、检测印章文字",
+     "how": "明确说要公式或印章",
+     "status": "没用过",
+     "screen": "localocr-10",
+     "source": "model_profiles.json 第 105–108 行；同上 0 次"
+    },
+    {
+     "id": "f-coords",
+     "group": "g-structure",
+     "name": "每行字的位置和把握分",
+     "what": "JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分",
+     "how": "要位置时说一声",
+     "status": "在用",
+     "screen": "localocr-10",
+     "source": "ARCHITECTURE.md“模型和结果合同”"
+    },
+    {
+     "id": "f-objective",
+     "group": "g-trust",
+     "name": "有字、没字、说不准",
+     "what": "每份结果附一份客观结论，空结果不当“没字”",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "objective_result.py；8 月 18 日起 274 份真实结果带结论"
+    },
+    {
+     "id": "f-summary",
+     "group": "g-trust",
+     "name": "一句人话摘要",
+     "what": "把覆盖、质量、文字块数和是否升级写成一句话",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "acc6d15；任务登记 127 份结果带摘要"
+    },
+    {
+     "id": "f-snapshot",
+     "group": "g-trust",
+     "name": "原件留底再识别",
+     "what": "先算指纹做只读快照，识别完原件变了就不发结果",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "ARCHITECTURE.md“输入、状态与输出”"
+    },
+    {
+     "id": "f-cache",
+     "group": "g-trust",
+     "name": "识过不重识",
+     "what": "同样的材料和请求再来，核对指纹后直接交上次结果",
+     "how": "自动；也可以让 AI 先查",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "756d0cf；outputs.py 第 45 行"
+    },
+    {
+     "id": "f-partial",
+     "group": "g-trust",
+     "name": "中断时保住读完的页",
+     "what": "超时或崩溃时已读完的页留作部分结果，不冒充整份",
+     "how": "自动",
+     "status": "说不准",
+     "screen": "localocr-11",
+     "source": "ARCHITECTURE.md；只有中断时才出现，登记里没有单独字段"
+    },
+    {
+     "id": "f-server",
+     "group": "g-run",
+     "name": "本机识别服务",
+     "what": "只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队",
+     "how": "AI 自动启动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "server.py；ARCHITECTURE.md"
+    },
+    {
+     "id": "f-status",
+     "group": "g-run",
+     "name": "查进度、取消",
+     "what": "按任务编号查到哪一步，或只取消这一项",
+     "how": "跟 AI 说“看看做到哪了”或“取消”",
+     "status": "说不准",
+     "screen": "localocr-11",
+     "source": "server.py 第 137、143 行；查询和取消不留记录"
+    },
+    {
+     "id": "f-gpu",
+     "group": "g-run",
+     "name": "领显卡、和语音转写同时跑",
+     "what": "向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "gpu_broker.py；PCConfig broker.py 第 474–499 行"
+    },
+    {
+     "id": "f-release",
+     "group": "g-run",
+     "name": "用完腾显卡",
+     "what": "关掉工作进程、还回显卡；本地大模型要用时调度员也会先清",
+     "how": "说“识别完把显卡腾出来”",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "release_resources.ps1；台账有 release_resources.ps1 命令记录"
+    },
+    {
+     "id": "f-limits",
+     "group": "g-run",
+     "name": "超时和内存上限",
+     "what": "一次默认 300 秒、最多 2 小时；内存超 30 GB 只停自己",
+     "how": "自动；长任务 AI 会放宽期限",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "ARCHITECTURE.md“任务与资源生命周期”"
+    },
+    {
+     "id": "f-observer",
+     "group": "g-run",
+     "name": "给看板的任务视图",
+     "what": "只读、不含文件内容的任务列表接口",
+     "how": "看板读取",
+     "status": "说不准",
+     "screen": "localocr-11",
+     "source": "server.py 第 163 行；本轮没找到调用方"
+    },
+    {
+     "id": "f-release-snapshot",
+     "group": "g-version",
+     "name": "正式版和开发代码分开",
+     "what": "每天用的是验收过的快照，改代码不影响它",
+     "how": "自动",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "UPGRADING.md；current → 9 月 24 日版"
+    },
+    {
+     "id": "f-rollback",
+     "group": "g-version",
+     "name": "退回上一版",
+     "what": "保留上一版，出问题可以切回，切回也要它自己的验收",
+     "how": "跟 AI 说退回上一版",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "UPGRADING.md；旧网站记载 9 月 17 日实测切换和回滚"
+    },
+    {
+     "id": "f-acceptance",
+     "group": "g-version",
+     "name": "换版前三道验收",
+     "what": "依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换",
+     "how": "换版时 AI 跑",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "验收回执 acceptance.json"
+    },
+    {
+     "id": "f-model-swap",
+     "group": "g-version",
+     "name": "换模型只改配置",
+     "what": "模型写在配置档里，新模型先对照验收，不自动当默认",
+     "how": "跟 AI 说想试某个新模型",
+     "status": "在用",
+     "screen": "localocr-11",
+     "source": "MODELS.md“可替换版本合同”；e93fdc6"
+    }
+   ],
+   "numbers": [
+    {
+     "id": "n-jobs",
+     "text": "684 次识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）",
+     "meaning": "任务登记里完成的识别，去掉项目自带样例、冒烟测试和 8 月 18 日开发时的空白测试图；材料按原件指纹去重；页数累加；命中缓存不新增记录",
+     "as_of": "2026-09-28",
+     "source": "E:\\Projects\\Tools\\LocalOCR\\_server\\jobs\\*.json 只读字段现算（facts.md 第三节）",
+     "screens": [
+      "localocr-01"
+     ]
+    },
+    {
+     "id": "n-auto",
+     "text": "92%；自动选模型的 300 次里 277 次快模型就够，23 次换了强模型；其余 384 次直接指定快模型",
+     "meaning": "route.requested_engine=auto 的完成记录里最终模型的分布（截至 9 月 28 日 20:26）",
+     "as_of": "2026-09-28",
+     "source": "同上，按 route.requested_engine 和 result.model_id",
+     "screens": [
+      "localocr-01",
+      "localocr-08"
+     ]
+    },
+    {
+     "id": "n-page-escalate",
+     "text": "16 页的扫描 PDF 只重读了第 15 页（9 月 26 日）",
+     "meaning": "route.escalated_page_indices=[14]",
+     "as_of": "2026-09-28",
+     "source": "同上，只读页数和页号字段",
+     "screens": [
+      "localocr-08",
+      "localocr-09"
+     ]
+    },
+    {
+     "id": "n-models",
+     "text": "18 个本地模型，共 3.9 GB",
+     "meaning": "WSL /root/.paddlex/official_models 目录数和 du 总大小",
+     "as_of": "2026-09-28",
+     "source": "wsl du -sh",
+     "screens": [
+      "localocr-01",
+      "localocr-06"
+     ]
+    },
+    {
+     "id": "n-tests",
+     "text": "181 项测试无失败（16 项按条件跳过）；9 个合成样例；9 月 24 日验收",
+     "meaning": "现役版本验收回执：181 项单元测试，165 项通过、16 项按条件跳过、0 项失败，9 个合成样例覆盖三条路线全过",
+     "as_of": "2026-09-28",
+     "source": "/root/localocr-runtimes/current/acceptance/acceptance.json、quality.json、unit.log",
+     "screens": [
+      "localocr-01",
+      "localocr-07",
+      "localocr-11",
+      "localocr-12"
+     ]
+    },
+    {
+     "id": "n-speed",
+     "text": "一张截图约 2 秒；强模型首次约 50 秒",
+     "meaning": "验收 quality.json：快模型热着 1.85–2.08 秒/样例（首次含加载 17.4 秒）；VL 首次含加载 50.4 秒",
+     "as_of": "2026-09-24",
+     "source": "quality.json 各样例 elapsed_sec",
+     "screens": [
+      "localocr-02",
+      "localocr-06",
+      "localocr-08"
+     ]
+    },
+    {
+     "id": "n-memory",
+     "text": "工作进程内存约 16 GB（强模型）",
+     "meaning": "验收中加载 VL 后工作进程内存峰值 16.25–16.31 GiB（不是显存）",
+     "as_of": "2026-09-24",
+     "source": "quality.json process_peak_rss_bytes",
+     "screens": [
+      "localocr-06",
+      "localocr-08"
+     ]
+    },
+    {
+     "id": "n-table-score",
+     "text": "平均把握分 0.99995",
+     "meaning": "验收样例 auto_table 快读 9 行的平均把握分 0.999949",
+     "as_of": "2026-09-24",
+     "source": "quality.json auto_table route.difficulty.metrics",
+     "screens": [
+      "localocr-09"
+     ]
+    },
+    {
+     "id": "n-objective",
+     "text": "274 份真实结果都是“有字”",
+     "meaning": "8 月 18 日起带 objective_outcome 的真实识别结果（唯一一份“没字”是 8 月 18 日开发时的空白测试图，已排除）",
+     "as_of": "2026-09-28",
+     "source": "任务登记 result.objective_outcome 计数",
+     "screens": [
+      "localocr-09"
+     ]
+    },
+    {
+     "id": "n-code",
+     "text": "6,929 行程序、4,801 行测试、41 次提交",
+     "meaning": "git ls-files 统计：localocr/*.py 5188 + ps1/bat 1466 + scripts 275；tests/*.py 4801；git log 41 次",
+     "as_of": "2026-09-28",
+     "source": "git ls-files | xargs wc -l；git log --oneline",
+     "screens": [
+      "localocr-07",
+      "localocr-12"
+     ]
+    },
+    {
+     "id": "n-features",
+     "text": "全部功能（28 项）",
+     "meaning": "本页 registry.features 条数",
+     "as_of": "2026-09-28",
+     "source": "本页",
+     "screens": [
+      "localocr-10"
+     ]
+    }
+   ],
+   "relations": [
+    {
+     "id": "r-file-intake",
+     "with": "当时的 AI（按文件类型选读法）",
+     "direction": "拿来",
+     "flow": "一堆文件混在一起时，当时的 AI 把扫描件、无文字层 PDF 和要逐字的图片交给它，电子版 PDF 和 Office 文件走各自的读取工具",
+     "source": "E:\\.agents\\skills\\localocr\\SKILL.md 第 8–17 行（提交 99e1da5）；file-intake-router 10 月 2 日退役"
+    },
+    {
+     "id": "r-materials",
+     "with": "personal-materials",
+     "direction": "拿来",
+     "flow": "找到的原件没有文字层、要翻到哪一页时，只对这一份调用，复用已有结果，位置绑定到原 PDF 的页码",
+     "source": "E:\\.agents\\skills\\personal-materials\\SKILL.md 第 23 行"
+    },
+    {
+     "id": "r-media",
+     "with": "personal-media",
+     "direction": "拿来",
+     "flow": "整理照片时画面由 AI 自己看，截图上的屏幕文字交给它逐字读；搜索索引 4,363 条里 376 条这样审过",
+     "source": "V:\\Personal\\Projects\\personal-media\\personal_media.py 第 165 行；keeper-search-index.ndjson 字段计数"
+    },
+    {
+     "id": "r-asr",
+     "with": "chinese-asr",
+     "direction": "并行",
+     "flow": "共用一块显卡，两者可以同时持有租约",
+     "source": "E:\\PCConfig\\tools\\local_gpu_broker\\broker.py 第 70–71、474–499 行"
+    },
+    {
+     "id": "r-pcconfig-broker",
+     "with": "pcconfig",
+     "direction": "依赖",
+     "flow": "显卡调度员发租约；本地大模型要用显卡前先清掉文字识别的工作进程",
+     "source": "broker.py 第 389–396 行；task_purpose_catalog.json 第 322、341 行"
+    },
+    {
+     "id": "r-pcconfig-restore",
+     "with": "pcconfig",
+     "direction": "被登记",
+     "flow": "项目路径、端口 18665、恢复锚点、换机时按来源重下模型",
+     "source": "PCConfig registries/projects.json、project_restore_anchors.json、core_recovery.json、wsl_user_data_backup.json"
+    },
+    {
+     "id": "r-ollama",
+     "with": "本地大模型（Ollama）",
+     "direction": "互斥",
+     "flow": "和本地大模型不能同时占显卡",
+     "source": "broker.py；本人决定“9/27 中文转写维护与显卡分工”"
+    },
+    {
+     "id": "r-modelscope",
+     "with": "ModelScope 魔搭（外部）",
+     "direction": "拿来",
+     "flow": "安装时下载模型，之后离线",
+     "source": "docs/MODELS.md“下载来源优先级”"
+    },
+    {
+     "id": "r-github-ci",
+     "with": "GitHub Actions（外部）",
+     "direction": "给出",
+     "flow": "每次推送跑模型无关的测试",
+     "source": ".github/workflows/tests.yml"
+    }
+   ],
+   "highlights": [
+    {
+     "id": "h-fast-then-strong",
+     "title": "先快后强，只重读有问题的那一页",
+     "screen": "localocr-08"
+    },
+    {
+     "id": "h-table-lines",
+     "title": "把握分很高，也可能读错表格",
+     "screen": "localocr-09"
+    },
+    {
+     "id": "h-no-text",
+     "title": "读不出字，不等于没有字",
+     "screen": "localocr-09"
+    },
+    {
+     "id": "h-no-unwarp",
+     "title": "截图不需要“摊平”",
+     "screen": "localocr-09"
+    }
+   ],
+   "mentions": [
+    {
+     "target": "/how/#localocr",
+     "screen": "localocr-01",
+     "text": "在整套系统里的位置 → 怎么协作"
+    },
+    {
+     "target": "/skills/localocr/",
+     "screen": "localocr-02",
+     "text": "跟 AI 怎么说 → 技能页"
+    },
+    {
+     "target": "/projects/personal-media/",
+     "screen": "localocr-02",
+     "text": "照片视频录音管理"
+    },
+    {
+     "target": "/projects/chinese-asr/",
+     "screen": "localocr-07",
+     "text": "中文语音转写"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "localocr-07",
+     "text": "电脑配置与恢复"
+    }
+   ],
+   "live": []
+  },
+  "notes": {
+   "merged": [
+    "底稿“图片文字识别”→ f-image；“扫描PDF识别”→ f-scan（并入多页 TIFF）；“按材料选识别”→ f-auto，另拆出 f-page-escalate、f-explicit、f-triage；“表格版面识别”拆成 f-table、f-formula-seal（结构还原）和 f-coords（普通识别也有的位置和把握分）；“识别结果复核”→ f-objective（另拆出 f-summary）；“作业查询取消”→ f-status；“结果复用”→ f-cache；“资源释放”→ f-release。",
+    "“忙时直说不排队”并入 f-server，因为它是服务的固定行为，不是能单独用的功能。"
+   ],
+   "dropped": [
+    "AI 自己看图和本地识字怎么分工、两边冲突怎么办：家在技能页 /skills/localocr/，本页只写一句并链过去。",
+    "安装、预热模型、重型多模型测试要明确同意（--allow-heavy）等维护细节：读者不关心，不上。"
+   ],
+   "unsure": [
+    "开头没有“现在”横条和〔现在正不正常 → 驾驶舱〕：这个项目自己没有计划任务（显卡调度员的两个任务归电脑配置与恢复）。如果驾驶舱想显示“识别服务在不在跑、现在忙不忙”（/health 的 active_jobs），可以加一个 run 槽位，请 Claude 定。",
+    "“表格还原成行列”“公式和印章”标“没用过”：任务登记里真实材料上结构还原 0 次（旧功能总账写的是“在用”）。真实材料上的表格目前是靠自动换强模型保住行列。请本人确认这两项要不要保留。",
+    "“退回上一版”标“在用”依据的是旧网站记载的 9 月 17 日端到端回执（切换、回滚、再恢复），本轮没重新读那份回执原件。",
+    "第 2 屏“我一般不直接开它，而是跟 AI 说要读什么”是替本人口吻写的句子，上线前请本人过目。",
+    "数字和旧稿不同：旧稿 9 月 28 日 04:45 算的是 645 次、517 份、667 页、“97% 以上只用快模型”；按审稿意见截至 9 月 28 日 20:26 重算为 684、555、706（还在每天增长，上线前可再算一次）。另外“97%”把直接指定快模型的 357 次也算进去了，会夸大自动选路的效果，本页改用“自动选模型 300 次里 92% 快模型就够”。",
+    "画廊的输出截图是 9 月 3 日结构还原路线的旧结果，现役版本没用同一张图重跑；截图里自带的文字（“实际识别输出”等）由拼页原样贴上，不在本页 text 里。"
+   ]
   }
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "9a6f7a8f0cf89f0b12bd30f6f7b6de81d4f13e3a371983b5bebcf3583975fbb0",
-  "converted_at_beijing": "2026-10-10T00:15:05+08:00"
+  "converted_at_beijing": "2026-10-10T02:27:55+08:00"
  }
 }
 ---
 
 ::screen{#localocr-01 section="top"}
 
-::::::row{cols="50.0,50.0"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-01",
+  "section": "top",
+  "title": "开头",
+  "scene": "横版：左上毛笔艺术字大标题，下面一句粗体副标题和一段介绍。右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：1 一叠纸，2 两条岔路一快一慢，3 一排小方块（模型），4 一张打勾的清单。卡片下面右对齐一行灰色小字“截至 2026 年 9 月 28 日”。最下面一行两个白底细绿边圆角按钮。没有“现在”横条（这个项目没有自己的自动任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "portrait": "竖版：大标题、副标题、介绍从上往下；插画放在介绍下面，占满宽；四张数字卡两行两列；截至日期；两个按钮上下各占一行。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+  "links": [
+   {
+    "text": "在整套系统里的位置 → 怎么协作",
+    "href": "/how/#localocr"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/LocalOCR"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/localocr/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "left",
+     "size": "large",
+     "row": "hero",
+     "width": "50%",
+     "text_ref": "本地文字识别"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
+    },
+    {
+     "type": "stat_card",
+     "variant": "paragraph_stats",
+     "columns": 4,
+     "columns_v": 2,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "expected_cards": 4,
+     "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至2026年9月28日20:26（北京时间）"
+    },
+    {
+     "type": "action_button",
+     "columns": 3,
+     "columns_v": 1,
+     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上毛笔艺术字大标题，下面一句粗体副标题和一段介绍。右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：1 一叠纸，2 两条岔路一快一慢，3 一排小方块（模型），4 一张打勾的清单。卡片下面右对齐一行灰色小字“截至 2026 年 9 月 28 日”。最下面一行两个白底细绿边圆角按钮。没有“现在”横条（这个项目没有自己的自动任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "本地文字识别"
+    },
+    {
+     "type": "prose",
+     "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全"
+    },
+    {
+     "type": "illustration"
+    },
+    {
+     "type": "stat_card",
+     "variant": "paragraph_stats",
+     "columns": 4,
+     "columns_v": 2,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "expected_cards": 4,
+     "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至2026年9月28日20:26（北京时间）"
+    },
+    {
+     "type": "action_button",
+     "columns": 3,
+     "columns_v": 1,
+     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：大标题、副标题、介绍从上往下；插画放在介绍下面，占满宽；四张数字卡两行两列；截至日期；两个按钮上下各占一行。 那一排按钮里同样有〔复制 AI 续作说明〕。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "684 次｜识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "92%｜自动选模型的 300 次里，277 次快模型就够，23 次换了强模型（其余 384 次是直接指定快模型）",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云下载",
+   "source_phrase": "18 个｜本地模型，共 3.9 GB，下载后离线运行",
+   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "红色警示",
+   "source_phrase": "181 项｜测试无失败（16 项按条件跳过），现役版本 9 月 24 日验收",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-localocr.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "main-localocr",
+   "source_phrase": "右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。",
+   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "localocr/localocr-01-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-01-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-6077f34d4f3fa1ff31ba",
+   "title_text": "本地文字识别",
+   "sha256": "84b6833b60f41aa68e46393d7023d3a48e8487a764c7da9e071ad183b89d3bed",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::::col
-
-:::chapter{title="本地文字识别" brush="/assets/localocr/localocr-01-title-01.png" brushbox="13,0,0,7" size="large" art="/assets/_library/illustrations/main-localocr.png" artw="50%" align="left" level="1" living="/_living/localocr/astro/config.json"}
-#### 在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全，并说清哪里没把握。
+# 本地文字识别
+**在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全，并说清哪里没把握。**
 
 AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参数表或几十张截图，就把文件交给它。比如“把这张参数表读成文字，没把握的地方标出来”，会得到文字和逐页判断：有字、没字，还是说不准；要还原表格行列，明确说明。识字在本机离线完成，图片不传到识别网站；读不好的页再用更强的模型重读。
-:::
 
-:::::
-
-:::::col
-
-::artslot
-
-:::::
-
-::::::
-
-:::stats{cols="4" colsv="2" icons="/assets/_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png,/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png,/assets/_library/fix-round-2/icon-clean-f12e6ff1182222417108.png,/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
-- <strong>684 次</strong>　识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）
-- <strong>92%</strong>　自动选模型的 300 次里，277 次快模型就够，23 次换了强模型（其余 384 次是直接指定快模型）
-- <strong>18 个</strong>　本地模型，共 3.9 GB，下载后离线运行
-- <strong>181 项</strong>　测试无失败（16 项按条件跳过），现役版本 9 月 24 日验收
-:::
+684 次｜识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）
+92%｜自动选模型的 300 次里，277 次快模型就够，23 次换了强模型（其余 384 次是直接指定快模型）
+18 个｜本地模型，共 3.9 GB，下载后离线运行
+181 项｜测试无失败（16 项按条件跳过），现役版本 9 月 24 日验收
 
 截至 2026 年 9 月 28 日 20:26（北京时间）
 
-:::buttons
-[在整套系统里的位置 → 怎么协作](/how/#localocr) [GitHub](https://github.com/wlyaaaaa/LocalOCR) [复制 AI 续作说明](/projects/localocr/#ai-brief)
-:::
+〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 
 ::screen{#localocr-13 section="usage"}
 
-:::chapter{title="什么材料走哪条路" brush="/assets/_library/round3/titles/title-836e7102d7fd69c05c88.png" brushbox="6,4,4,4" size="large" art="/assets/_library/illustrations/%E8%AF%86%E5%88%AB%E7%BA%B8%E5%BC%A0%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png" artw="22%" artside="left" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-13",
+  "section": "usage",
+  "title": "什么材料走哪条路",
+  "scene": "横版：左上毛笔艺术字标题加绿色笔刷线。画面左边约 22% 宽一幅水彩插画：一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的“体检”小站。从左往右是一张选路图：一条绿色主路从纸堆出发，先到第一张大卡片“普通页”（图标：闪电），这条路画成实线最粗；从体检小站分出一条向下弯的绿色支路，标小字“体检不过关的那一页”，通向第二张大卡片“难页”（图标：望远镜）；纸堆上方另有一条细虚线支路，标小字“明说要结构”，通向第三张大卡片“要还原结构”（图标：表格网格）。三张卡片从上到下排在画面右侧约 75% 宽里，每张卡片左边是粗体卡片标题和括号说明，右边是一个浅绿底的圆角模型名条（写“→ 快读：……”那一行），下面一两行正文。三张卡片宽高一致、间距一致，不留空格子。最下面一条横跨整屏的细卡片放最后一句，两个〔〕画成白底细浅绿描边的圆角按钮。三个图标和第 6 屏“用的哪些模型”表格里的图标保持同一画法。",
+  "portrait": "竖版：标题；插画缩成一行宽在上；三张卡片上下排、各占满宽，卡片之间用一段向下的绿色箭头连起来（第二段箭头旁写“体检不过关的那一页”，通向第三张的箭头画成虚线，旁写“明说要结构”）；每张卡片里先标题，再模型名条，再正文；最下面两个按钮上下各一行。字和横版完全一样。",
+  "links": [
+   {
+    "text": "亮点：先快后强",
+    "href": "/projects/localocr/#fast-then-strong"
+   },
+   {
+    "text": "用的哪些模型",
+    "href": "/projects/localocr/#models"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "routes",
+    "text": "什么材料走哪条路"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "什么材料走哪条路"
+    },
+    {
+     "type": "illustration",
+     "row": "routes",
+     "width": "22%"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+     ],
+     "row": "routes",
+     "width": "78%",
+     "text_ref": "普通页：截图、网页图、普通扫描件"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ],
+     "row": "routes-bottom",
+     "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出",
+     "width": "50%"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ],
+     "row": "routes-bottom",
+     "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标",
+     "width": "50%"
+    },
+    {
+     "type": "notice",
+     "text_ref": "体检的完整门槛见亮点：先快后强；全部模型见用的哪些模型。"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上毛笔艺术字标题加绿色笔刷线。画面左边约 22% 宽一幅水彩插画：一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的“体检”小站。从左往右是一张选路图：一条绿色主路从纸堆出发，先到第一张大卡片“普通页”（图标：闪电），这条路画成实线最粗；从体检小站分出一条向下弯的绿色支路，标小字“体检不过关的那一页”，通向第二张大卡片“难页”（图标：望远镜）；纸堆上方另有一条细虚线支路，标小字“明说要结构”，通向第三张大卡片“要还原结构”（图标：表格网格）。三张卡片从上到下排在画面右侧约 75% 宽里，每张卡片左边是粗体卡片标题和括号说明，右边是一个浅绿底的圆角模型名条（写“→ 快读：……”那一行），下面一两行正文。三张卡片宽高一致、间距一致，不留空格子。最下面一条横跨整屏的细卡片放最后一句，两个〔〕画成白底细浅绿描边的圆角按钮。三个图标和第 6 屏“用的哪些模型”表格里的图标保持同一画法。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查追加（AI实施；本人本轮明确授权重排）：主图只旁置第一条普通页说明；难页/结构还原两条独立移下方双列，不让左图陪三条长纵链。 定稿和素材原件不改。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "什么材料走哪条路"
+    },
+    {
+     "type": "illustration"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+     ],
+     "row": "routes",
+     "width": "78%",
+     "text_ref": "普通页：截图、网页图、普通扫描件"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ],
+     "row": "routes",
+     "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ],
+     "row": "routes",
+     "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标"
+    },
+    {
+     "type": "notice",
+     "text_ref": "体检的完整门槛见亮点：先快后强；全部模型见用的哪些模型。"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；插画缩成一行宽在上；三张卡片上下排、各占满宽，卡片之间用一段向下的绿色箭头连起来（第二段箭头旁写“体检不过关的那一页”，通向第三张的箭头画成虚线，旁写“明说要结构”）；每张卡片里先标题，再模型名条，再正文；最下面两个按钮上下各一行。字和横版完全一样。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+   "fallback": false,
+   "key": "照片堆",
+   "source_phrase": "普通页：截图、网页图、普通扫描件 \n→快读：PP-OCRv6_medium（检测、识别各一个模型）\n默认先走这条。模型热着一页约2秒，每行字给一个0–1的把握分。",
+   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n难页：快读后体检不过关（一个字没读出来、把握分偏低、读出∑∫这类公式符号、带横竖线的表格）\n→只把这一页交给强模型：PaddleOCR-VL-1.6＋PP-DocLayoutV3版面检测\n用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约50秒、内存约16GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标 \n→结构还原：PP-StructureV3（内部识字用PP-OCRv5，另有表格、公式PP-FormulaNet_plus-L、印章模型）\n只在明确说要结构时走，不参与自动选择；真实材料上还没用过，只在项目自带的样例上跑过。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+   "fallback": false,
+   "key": "照片堆",
+   "source_phrase": "普通页：截图、网页图、普通扫描件 \n→快读：PP-OCRv6_medium（检测、识别各一个模型）\n默认先走这条。模型热着一页约2秒，每行字给一个0–1的把握分。",
+   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n难页：快读后体检不过关（一个字没读出来、把握分偏低、读出∑∫这类公式符号、带横竖线的表格）\n→只把这一页交给强模型：PaddleOCR-VL-1.6＋PP-DocLayoutV3版面检测\n用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约50秒、内存约16GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标 \n→结构还原：PP-StructureV3（内部识字用PP-OCRv5，另有表格、公式PP-FormulaNet_plus-L、印章模型）\n只在明确说要结构时走，不参与自动选择；真实材料上还没用过，只在项目自带的样例上跑过。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/识别纸张通用构图.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "识别纸张通用构图",
+   "source_phrase": "画面左边约 22% 宽一幅水彩插画：一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的“体检”小站。",
+   "sha256": "f9df63d5f9169507df5d49cc657a281a8cf6f4a6c22bd301d70545b1e78f3991",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-836e7102d7fd69c05c88.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-836e7102d7fd69c05c88",
+   "title_text": "什么材料走哪条路",
+   "sha256": "77ee80bd350f23df230cb7092b7623d3f6838357e083fd6974942b9529d0a335",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 什么材料走哪条路
 
-::::::row{cols="22.0,78.0"}
-
-:::::col
-
-::artslot
-
-:::::
-
-:::::col
-
-:::cards{art="left" kind="content_card" cols="1" colsv="1"}
-::card{icon="/assets/_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"}
-
-#### 普通页：截图、网页图、普通扫描件
-
-→ 快读：PP-OCRv6\_medium（检测、识别各一个模型）
-
+**普通页：截图、网页图、普通扫描件**
+→ 快读：PP-OCRv6_medium（检测、识别各一个模型）
 默认先走这条。模型热着一页约 2 秒，每行字给一个 0–1 的把握分。
-:::
 
-:::::
-
-::::::
-
-:::cards{art="left" kind="content_card" cols="2" colsv="1"}
-::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
-
-<strong>难页：快读后体检不过关</strong>（一个字没读出来、把握分偏低、读出 ∑ ∫ 这类公式符号、带横竖线的表格）
-
+**难页：快读后体检不过关**（一个字没读出来、把握分偏低、读出 ∑ ∫ 这类公式符号、带横竖线的表格）
 → 只把这一页交给强模型：PaddleOCR-VL-1.6 ＋ PP-DocLayoutV3 版面检测
-
 用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约 50 秒、内存约 16 GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。
 
-::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
-
-#### 要还原结构：表格变成行列，认公式和印章，给每块区域坐标
-
-→ 结构还原：PP-StructureV3（内部识字用 PP-OCRv5，另有表格、公式 PP-FormulaNet\_plus-L、印章模型）
-
+**要还原结构：表格变成行列，认公式和印章，给每块区域坐标**
+→ 结构还原：PP-StructureV3（内部识字用 PP-OCRv5，另有表格、公式 PP-FormulaNet_plus-L、印章模型）
 只在明确说要结构时走，不参与自动选择；真实材料上还没用过，只在项目自带的样例上跑过。
-:::
 
-:::note
-体检的完整门槛见[亮点：先快后强](/projects/localocr/#fast-then-strong)；全部模型见[用的哪些模型](/projects/localocr/#models)。
-:::
+体检的完整门槛见〔亮点：先快后强〕；全部模型见〔用的哪些模型〕。
 
 ::screen{#localocr-02 section="usage"}
 
-:::chapter{title="平时怎么用" brush="/assets/personal-health/personal-health-02-title-01.png" brushbox="9,0,0,5" size="large" align="center"}
-我一般不直接开它，而是跟 AI 说要读什么，AI 判断该不该用它、再调它；也可以把文件拖到 start.bat 上，结果在 outputs 文件夹。怎么跟 AI 说、什么时候 AI 自己看就够：[跟 AI 怎么说 → 技能页](/skills/localocr/)
-:::
+```typeset
+{
+ "screen": {
+  "id": "localocr-02",
+  "section": "usage",
+  "title": "平时怎么用",
+  "scene": "横版：左上标题，下面一行说明文字（含一个链接）。三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。最下面一条细横条放一句话。",
+  "portrait": "竖版：标题、说明在上；三张卡片上下排，每张插画在左、字在右；最下面横条。",
+  "links": [
+   {
+    "text": "跟 AI 怎么说 → 技能页",
+    "href": "/skills/localocr/"
+   },
+   {
+    "text": "照片视频录音管理",
+    "href": "/projects/personal-media/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "平时怎么用"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我一般不直接开它，而是跟AI说要读什么，AI判断该不该用"
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "1一字不差抄截图",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+     ]
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "2扫描讲义转文字",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+     ]
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "3整理照片时读屏幕上的字",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ]
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题，下面一行说明文字（含一个链接）。三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。最下面一条细横条放一句话。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：按 qa-07 第2条电脑三张用法卡改用已有 left_inside，保留三列和原节点；重复内卡根因仍交 main。；图审回读仍嵌套步骤内卡：改用已有source_text_card单steps卡头+完整para正文接口，显式图标只显示一次，无新组件/新字。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "平时怎么用"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我一般不直接开它，而是跟AI说要读什么，AI判断该不该用"
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "1一字不差抄截图",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+     ]
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "2扫描讲义转文字",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"
+     ]
+    },
+    {
+     "type": "source_text_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "usage",
+     "width": "33.333%",
+     "text_ref": "3整理照片时读屏幕上的字",
+     "whole_block": true,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+     ]
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题、说明在上；三张卡片上下排，每张插画在左、字在右；最下面横条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；图审回读仍嵌套步骤内卡：改用已有source_text_card单steps卡头+完整para正文接口，显式图标只显示一次，无新组件/新字。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+   "fallback": false,
+   "key": "双机器人",
+   "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
+   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-personal-media.png",
+   "fallback": false,
+   "semantic_status": "common_subject_reused_per_b2bc0efe",
+   "key": "手机照片现图小槽4比3",
+   "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
+   "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/ill-c8b9869aab61ad.png",
+   "fallback": false,
+   "semantic_status": "matched_existing_objects",
+   "key": "ill-c8b9869aab61ad",
+   "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
+   "sha256": "28708e9a68b4fa19329c1899898d6dd4e3e973d0c20a0fdce8dab5d0332bf6ff",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-personal-media.png",
+   "fallback": false,
+   "semantic_status": "common_subject_reused_per_b2bc0efe",
+   "key": "手机照片现图小槽4比3",
+   "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
+   "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "personal-health/personal-health-02-title-01.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-8477921ac5c65e15db4b",
+   "title_text": "平时怎么用",
+   "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::cards{art="icon" kind="source_text_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"}
+## 平时怎么用
+我一般不直接开它，而是跟 AI 说要读什么，AI 判断该不该用它、再调它；也可以把文件拖到 start.bat 上，结果在 outputs 文件夹。怎么跟 AI 说、什么时候 AI 自己看就够：〔跟 AI 怎么说 → 技能页〕
 
-1. <strong>一字不差抄截图</strong>
-
+1. **一字不差抄截图**
 一批截图要一字不差时，AI 交给它读。模型热着时一张截图约 2 秒；结果带每行字的位置和把握分；有字块把握分低于 0.50 时，结果会标“置信度较低”，AI 据此回原图核对。
 
-::card{icon="/assets/_library/icons/%E7%A7%92%E8%A1%A8.png"}
-
-2. <strong>扫描讲义转文字</strong>
-
+2. **扫描讲义转文字**
 整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI 会说清哪几页换过模型、哪几页把握不高。
 
-::card{icon="/assets/_library/icons/%E7%9B%B8%E6%9C%BA.png"}
-
-3. <strong>整理照片时读屏幕上的字</strong>
-
-[照片视频录音管理](/projects/personal-media/)整理截图时，画面由 AI 自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。
-:::
+3. **整理照片时读屏幕上的字**
+〔照片视频录音管理〕整理截图时，画面由 AI 自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。
 
 ::screen{#localocr-03 section="usage"}
 
-:::chapter{title="读出来是什么样" brush="/assets/_library/titles/title-84a305beb3019ba74f7a.png" brushbox="4,7,4,7" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-03",
+  "section": "usage",
+  "title": "读出来是什么样",
+  "scene": "横版：左上标题。上半部分左右两个带细浅绿边框的空位（各约占宽度 40%，4:3 左右），中间一个绿色箭头从左指向右；左空位贴原图截图，右空位贴识别输出截图；每个空位下面一行小字说明。下半部分一排三张小卡片（TXT、MD、JSON 各一个小文件图标），右边一张稍宽的浅黄底便签卡，上面写“人话摘要”那一句。空位里什么都不画。",
+  "portrait": "竖版：标题；原图空位、向下箭头、输出空位上下排，各带说明；三张文件卡一行一张；摘要便签在最下面。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [
+   {
+    "file": "sources/assets/_references/4fbf3d65137840ceecba3c516856412760303c96230389ae5bcc63f5c6caf4fe.webp",
+    "where": "上半部分左边的空位",
+    "caption": "原图：项目自带的合成采购单（900×600），有标题、六列表格、五条商品和合计。",
+    "frame_bindings": {
+     "h": {
+      "27E99DFB1CF5BF828BA68AF4DD19C6F94966C1203BF9693DE2DDE832B6812887": [
+       48,
+       113,
+       766,
+       448
+      ]
+     },
+     "v": {
+      "1FBE9402EFBFB1F6358C71982EF5DB7697174E090905B0485D4AF5831E1F68AB": [
+       49,
+       141,
+       850,
+       682
+      ]
+     }
+    },
+    "crop_h": [
+     0,
+     27,
+     900,
+     442
+    ]
+   },
+   {
+    "file": "sources/assets/_references/c0efe539bcea67b32b891321fdb3f0c531600a3d728c30d6e2072277338719c5.webp",
+    "where": "上半部分右边的空位",
+    "caption": "9 月 3 日本机实际输出（结构还原路线）：六列、五行和合计都对；原图标题没进正文，原始文字行把标题里的编号 PO-2026-0712 读成了 P0-2026-0712。如实保留，不修饰成全对。",
+    "frame_bindings": {
+     "h": {
+      "27E99DFB1CF5BF828BA68AF4DD19C6F94966C1203BF9693DE2DDE832B6812887": [
+       900,
+       105,
+       1626,
+       448
+      ]
+     },
+     "v": {
+      "1FBE9402EFBFB1F6358C71982EF5DB7697174E090905B0485D4AF5831E1F68AB": [
+       49,
+       887,
+       850,
+       1442
+      ]
+     }
+    },
+    "crop_h": [
+     25,
+     160,
+     1054,
+     640
+    ]
+   }
+  ],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "读出来是什么样"
+    },
+    {
+     "type": "screenshot",
+     "indices": [
+      0,
+      1
+     ],
+     "columns": 2,
+     "columns_v": 1,
+     "ratio": "3:2",
+     "caption_mode": "source_order",
+     "connector": "arrow",
+     "text_ref": "原图：项目自带的合成采购单（900×600），有标题、六"
+    },
+    {
+     "type": "prose",
+     "text_ref": "每次识别写出三份结果："
+    },
+    {
+     "type": "content_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+     ],
+     "text_ref": "TXT纯文字，按页分开"
+    },
+    {
+     "type": "notice",
+     "text_ref": "另附一份客观结论和一句人话摘要，例如这张图的摘要："
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。上半部分左右两个带细浅绿边框的空位（各约占宽度 40%，4:3 左右），中间一个绿色箭头从左指向右；左空位贴原图截图，右空位贴识别输出截图；每个空位下面一行小字说明。下半部分一排三张小卡片（TXT、MD、JSON 各一个小文件图标），右边一张稍宽的浅黄底便签卡，上面写“人话摘要”那一句。空位里什么都不画。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/page-agent-t05-shot-response：两槽与各自原图注由同一截图块按 source_order 承接，横两列、竖一列、箭头连接；只合并规格分块，不删图注、不把截图写进浅色留空框。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "读出来是什么样"
+    },
+    {
+     "type": "screenshot",
+     "indices": [
+      0,
+      1
+     ],
+     "columns": 2,
+     "columns_v": 1,
+     "ratio": "3:2",
+     "caption_mode": "source_order",
+     "connector": "arrow",
+     "text_ref": "原图：项目自带的合成采购单（900×600），有标题、六"
+    },
+    {
+     "type": "prose",
+     "text_ref": "每次识别写出三份结果："
+    },
+    {
+     "type": "content_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
+     ],
+     "text_ref": "TXT纯文字，按页分开"
+    },
+    {
+     "type": "notice",
+     "text_ref": "另附一份客观结论和一句人话摘要，例如这张图的摘要："
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；原图空位、向下箭头、输出空位上下排，各带说明；三张文件卡一行一张；摘要便签在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。 页修复 07（北京时间 2026-10-03）：接入既有 comp-slots/page-agent-t05-shot-response：两槽与各自原图注由同一截图块按 source_order 承接，横两列、竖一列、箭头连接；只合并规格分块，不删图注、不把截图写进浅色留空框。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "key": "文稿堆",
+   "source_phrase": "TXT 纯文字，按页分开\n",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "Markdown 保留标题层级，表格、公式留结构\n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "JSON 每块字的位置框、把握分、阅读顺序和类型\n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "key": "文稿堆",
+   "source_phrase": "TXT 纯文字，按页分开\n",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "Markdown 保留标题层级，表格、公式留结构\n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "JSON 每块字的位置框、把握分、阅读顺序和类型\n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-84a305beb3019ba74f7a.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-03-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-84a305beb3019ba74f7a",
+   "title_text": "读出来是什么样",
+   "sha256": "e39e6eb2e4d24712abd49e6b6b74b61f6bf504bda3b6618302ee406a96ea5cc6",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
-
-:::gallery
-![原图：项目自带的合成采购单（900×600），有标题、六列表格、五条商品和合计。](/assets/_references/4fbf3d65137840ceecba3c516856412760303c96230389ae5bcc63f5c6caf4fe.webp "nocap")
-
-![9 月 3 日本机实际输出（结构还原路线）：六列、五行和合计都对；原图标题没进正文，原始文字行把标题里的编号 PO-2026-0712 读成了 P0-2026-0712。如实保留，不修饰成全对。](/assets/_references/c0efe539bcea67b32b891321fdb3f0c531600a3d728c30d6e2072277338719c5.webp "nocap")
-:::
+## 读出来是什么样
 
 原图：项目自带的合成采购单（900×600），有标题、六列表格、五条商品和合计。
-
 9 月 3 日本机实际输出（结构还原路线）：六列、五行和合计都对；原图标题没进正文，原始文字行把标题里的编号 PO-2026-0712 读成了 P0-2026-0712。如实保留，不修饰成全对。
 
 每次识别写出三份结果：
+**TXT**｜纯文字，按页分开
+**Markdown**｜保留标题层级，表格、公式留结构
+**JSON**｜每块字的位置框、把握分、阅读顺序和类型
 
-:::cards{art="left" kind="content_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### TXT
-
-纯文字，按页分开
-
-::card{icon="/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png"}
-
-#### Markdown
-
-保留标题层级，表格、公式留结构
-
-::card
-
-#### JSON
-
-每块字的位置框、把握分、阅读顺序和类型
-:::
-
-:::note
 另附一份客观结论和一句人话摘要，例如这张图的摘要：
-
 “识别完成：检测到 2 个文字块；覆盖完整；质量未知；未触发自动升级。”
-
 结构还原把整张表算作一块、合计算一块，所以是 2 个文字块；这条路线不给把握分，质量只能写“未知”，不是出错。
-:::
 
 ::screen{#localocr-04 section="usage"}
 
-:::chapter{title="出事怎么办" brush="/assets/_library/round3/titles/title-r3-45a143d5be04db99e96c.png" brushbox="5,4,4,7" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-04",
+  "section": "usage",
+  "title": "出事怎么办",
+  "scene": "横版：左上标题，下面一行小字。七张横向小卡片排成两列（左四右三），每张左边一个小水彩图标（红灯的排队牌、沙漏、停止按钮、显卡递给另一只手、一半的纸、搬家纸箱、放大镜对着原图），右边粗体一句加小字。右列第四个位置放一张浅绿底提示卡，写最后一句话。",
+  "portrait": "竖版：标题、小字；七张卡片一行一张；提示卡在最下面。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "出事怎么办"
+    },
+    {
+     "type": "prose",
+     "text_ref": "它没有自动提醒；出了问题直接跟AI说，AI按下面的办法处"
+    },
+    {
+     "type": "content_card",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "正忙同时只做一个识别。再交一份，会直接回“有任务在跑”和"
+    },
+    {
+     "type": "notice",
+     "text_ref": "把握分高也不等于每个字都对：关键的小字、淡字，回原图看一"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题，下面一行小字。七张横向小卡片排成两列（左四右三），每张左边一个小水彩图标（红灯的排队牌、沙漏、停止按钮、显卡递给另一只手、一半的纸、搬家纸箱、放大镜对着原图），右边粗体一句加小字。右列第四个位置放一张浅绿底提示卡，写最后一句话。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "出事怎么办"
+    },
+    {
+     "type": "prose",
+     "text_ref": "它没有自动提醒；出了问题直接跟AI说，AI按下面的办法处"
+    },
+    {
+     "type": "content_card",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "正忙同时只做一个识别。再交一份，会直接回“有任务在跑”和"
+    },
+    {
+     "type": "notice",
+     "text_ref": "把握分高也不等于每个字都对：关键的小字、淡字，回原图看一"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题、小字；七张卡片一行一张；提示卡在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "红灯的排队牌",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/沙漏.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "沙漏",
+   "source_phrase": "沙漏",
+   "sha256": "832f14c995b046898ae2ca304e804dc44efa3a83e3a7d8c056bc73a910ad0678",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "停止按钮",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "显卡",
+   "source_phrase": "显卡递给另一只手",
+   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "文稿堆",
+   "source_phrase": "一半的纸",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "文稿堆",
+   "source_phrase": "搬家纸箱",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "放大镜",
+   "source_phrase": "放大镜对着原图",
+   "sha256": "84904c9325e20f1cc5a64be3b7621158834c1e37275ad7b03a515f4bd515ab4a",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-45a143d5be04db99e96c.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-45a143d5be04db99e96c",
+   "title_text": "出事怎么办",
+   "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出事怎么办
 它没有自动提醒；出了问题直接跟 AI 说，AI 按下面的办法处理。
-:::
 
-:::cards{art="left" kind="content_card" cols="2" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
+**正忙**｜同时只做一个识别。再交一份，会直接回“有任务在跑”和任务编号，不偷偷排队；AI 先查进度，不重复提交。
+**太久**｜一次默认最多 300 秒，长任务可放宽到 2 小时；超时连同子进程一起结束，显卡还回去。AI 那边等不及先断开，不等于识别失败，先按任务编号回查。
+**想停**｜按任务编号只取消这一项，不影响别的服务；取消后不自动重试。
+**显卡要给别人**｜说“识别完把显卡腾出来”。另外，电脑上有个显卡调度员（电脑配置与恢复里的本机小服务：谁要用显卡，先向它领一张限时许可，也就是“租约”；它决定谁能同时用、谁要等）。本地大模型要用显卡时，它会先把文字识别清走。
+**强模型重读失败**｜快读的结果单独存成“部分结果”，照样报失败，不当完成。
+**换电脑**｜模型和运行环境不进备份，按登记从魔搭重下、重建环境，再跑一遍验收。
 
-#### 正忙
-
-同时只做一个识别。再交一份，会直接回“有任务在跑”和任务编号，不偷偷排队；AI 先查进度，不重复提交。
-
-::card{icon="/assets/_library/icons/%E6%B2%99%E6%BC%8F.png"}
-
-#### 太久
-
-一次默认最多 300 秒，长任务可放宽到 2 小时；超时连同子进程一起结束，显卡还回去。AI 那边等不及先断开，不等于识别失败，先按任务编号回查。
-
-::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
-
-#### 想停
-
-按任务编号只取消这一项，不影响别的服务；取消后不自动重试。
-
-::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
-
-#### 显卡要给别人
-
-说“识别完把显卡腾出来”。另外，电脑上有个显卡调度员（电脑配置与恢复里的本机小服务：谁要用显卡，先向它领一张限时许可，也就是“租约”；它决定谁能同时用、谁要等）。本地大模型要用显卡时，它会先把文字识别清走。
-
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 强模型重读失败
-
-快读的结果单独存成“部分结果”，照样报失败，不当完成。
-
-::card{icon="/assets/_library/icons/%E5%B7%A5%E5%85%B7%E7%AE%B1.png"}
-
-#### 换电脑
-
-模型和运行环境不进备份，按登记从魔搭重下、重建环境，再跑一遍验收。
-:::
-
-:::note
 把握分高也不等于每个字都对：关键的小字、淡字，回原图看一眼。
-:::
 
 ::screen{#localocr-05 section="tech"}
 
-:::chapter{title="一次识别经过哪几步" brush="/assets/_library/titles/title-3df730e1229eed07fb1c.png" brushbox="4,6,4,6" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-05",
+  "section": "tech",
+  "title": "一次识别经过哪几步",
+  "scene": "横版：左上标题。一条从左到右的流程图，六个圆角节点（小水彩图标：带锁的文件副本、领号牌、一叠纸被切成一页页、闪电、听诊器、三份文件），绿色箭头依次相连，节点下面一两行小字；第 5 个节点和第 4 个之间多画一条向下弯的细支线，通向一个小一点的“强模型”节点再回到第 6 个。流程图下面两张横向小卡片并排。",
+  "portrait": "竖版：标题；六个节点从上往下排，箭头向下，强模型支线画在第 5 个节点右侧；两张小卡片上下排。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "一次识别经过哪几步"
+    },
+    {
+     "type": "flow",
+     "columns": 6,
+     "direction": "horizontal",
+     "illustration": "above_card",
+     "icons": "auto",
+     "connector": "arrow",
+     "branch_after": 5,
+     "branch_return": 6,
+     "text_ref": "1先留底算原件的内容指纹（SHA-256），复制一份只读"
+    },
+    {
+     "type": "content_card",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "识过不重识同一份材料、同样的请求再来，先核对原件、模型、"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一条从左到右的流程图，六个圆角节点（小水彩图标：带锁的文件副本、领号牌、一叠纸被切成一页页、闪电、听诊器、三份文件），绿色箭头依次相连，节点下面一两行小字；第 5 个节点和第 4 个之间多画一条向下弯的细支线，通向一个小一点的“强模型”节点再回到第 6 个。流程图下面两张横向小卡片并排。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "一次识别经过哪几步"
+    },
+    {
+     "type": "flow",
+     "columns": 1,
+     "direction": "vertical",
+     "illustration": "left_inside",
+     "icons": "auto",
+     "connector": "arrow",
+     "branch_after": 5,
+     "branch_return": 6,
+     "text_ref": "1先留底算原件的内容指纹（SHA-256），复制一份只读"
+    },
+    {
+     "type": "content_card",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "识过不重识同一份材料、同样的请求再来，先核对原件、模型、"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；六个节点从上往下排，箭头向下，强模型支线画在第 5 个节点右侧；两张小卡片上下排。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "一条向下弯的细支线，通向一个小一点的“强模型”节点再回到第 6 个",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-3df730e1229eed07fb1c.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-3df730e1229eed07fb1c",
+   "title_text": "一次识别经过哪几步",
+   "sha256": "17e8c530089ace8ae5c2d0631f6509873a0c9e4e86bab6534df94796aea8120d",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 一次识别经过哪几步
 
-:::steps{kind="flow" cols="6" colsv="1" icons="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png,/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png,/assets/_library/icons/%E8%A3%81%E7%BA%B8%E5%88%80.png,/assets/_library/icons/%E7%A7%92%E8%A1%A8.png,/assets/_library/round3/clean-assets/png/42-%E5%90%AC%E8%AF%8A%E5%99%A8%E6%A3%80%E6%9F%A5-clean.png,/assets/_library/icons/%E7%BA%B8%E7%AE%B1.png"}
-1. <strong>先留底</strong>　算原件的内容指纹（SHA-256），复制一份只读快照来识别；识别完再核一次，原件中途被改就不发结果。
-2. <strong>领显卡</strong>　向显卡调度员领租约，领到才加载模型。
-3. <strong>拆页</strong>　PDF 按 216 DPI 逐页渲染成图（单页最多 2400 万像素），多页 TIFF 逐帧拆开；图片直接读。
-4. <strong>快读</strong>　每页先用 PP-OCRv6 读，每行字附一个 0–1 的把握分。
-5. <strong>逐页体检</strong>　不过关的页交给 PaddleOCR-VL-1.6 重读，快读结果照样留着对照（规则见亮点）。
-6. <strong>交结果</strong>　写出三份结果、客观结论和人话摘要；最后写完任务记录才算完成。
-:::
+1. **先留底**｜算原件的内容指纹（SHA-256），复制一份只读快照来识别；识别完再核一次，原件中途被改就不发结果。
+2. **领显卡**｜向显卡调度员领租约，领到才加载模型。
+3. **拆页**｜PDF 按 216 DPI 逐页渲染成图（单页最多 2400 万像素），多页 TIFF 逐帧拆开；图片直接读。
+4. **快读**｜每页先用 PP-OCRv6 读，每行字附一个 0–1 的把握分。
+5. **逐页体检**｜不过关的页交给 PaddleOCR-VL-1.6 重读，快读结果照样留着对照（规则见亮点）。
+6. **交结果**｜写出三份结果、客观结论和人话摘要；最后写完任务记录才算完成。
 
-:::cards{art="left" kind="content_card" cols="2" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
-
-#### 识过不重识
-
-同一份材料、同样的请求再来，先核对原件、模型、配置和输出文件的指纹，都对得上才直接交上次的结果；换了模型不会误用旧结果。
-
-::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
-
-#### 要表格结构时
-
-明确说要表格、公式、印章或区域坐标，走 PP-StructureV3 这条路；它不参与自动选择。
-:::
+**识过不重识**｜同一份材料、同样的请求再来，先核对原件、模型、配置和输出文件的指纹，都对得上才直接交上次的结果；换了模型不会误用旧结果。
+**要表格结构时**｜明确说要表格、公式、印章或区域坐标，走 PP-StructureV3 这条路；它不参与自动选择。
 
 ::screen{#localocr-06 section="tech"}
 
-:::chapter{title="用的哪些模型" brush="/assets/_library/titles/title-bb35286273c0e9b2518a.png" brushbox="4,6,4,7" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-06",
+  "section": "tech",
+  "title": "用的哪些模型",
+  "scene": "横版：左上标题。一张五行四列的表格（圆角、细浅绿线、表头浅绿底），每行最左边一个小水彩图标（闪电、旋转箭头、望远镜、表格网格、被熨平的纸）。表格下面一条横跨整屏的细卡片放最后两句话，右端画魔搭的小标志（抽象魔方图形，不写英文商标字）。",
+  "portrait": "竖版：标题；每行模型改成一张卡片（第一行粗体用途，下面三行：模型、做什么、为什么），五张上下排；底部细卡片。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "models",
+    "text": "用的哪些模型"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "用的哪些模型"
+    },
+    {
+     "type": "table",
+     "columns": 4,
+     "portrait_layout": "row_cards",
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "用途模型做什么为什么这样选日常识字PP-OCRv6med"
+    },
+    {
+     "type": "notice",
+     "text_ref": "全部是百度飞桨的模型，从ModelScope魔搭下载（国"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一张五行四列的表格（圆角、细浅绿线、表头浅绿底），每行最左边一个小水彩图标（闪电、旋转箭头、望远镜、表格网格、被熨平的纸）。表格下面一条横跨整屏的细卡片放最后两句话，右端画魔搭的小标志（抽象魔方图形，不写英文商标字）。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "用的哪些模型"
+    },
+    {
+     "type": "table",
+     "columns": 4,
+     "portrait_layout": "row_cards",
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "用途模型做什么为什么这样选日常识字PP-OCRv6med"
+    },
+    {
+     "type": "notice",
+     "text_ref": "全部是百度飞桨的模型，从ModelScope魔搭下载（国"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；每行模型改成一张卡片（第一行粗体用途，下面三行：模型、做什么、为什么），五张上下排；底部细卡片。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "闪电",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "绿色箭头",
+   "source_phrase": "旋转箭头",
+   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "望远镜",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "表格网格",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "文稿堆",
+   "source_phrase": "被熨平的纸",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-bb35286273c0e9b2518a.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-bb35286273c0e9b2518a",
+   "title_text": "用的哪些模型",
+   "sha256": "a6cbd322cc64ff90d6b6c5e85e8e8aba76d3418ade99dc9770c0c7bb191ee081",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 用的哪些模型
 
 | 用途 | 模型 | 做什么 | 为什么这样选 |
 |---|---|---|---|
@@ -313,76 +2385,529 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 | 结构还原 | PP-StructureV3：版面 2 个、识字 PP-OCRv5 2 个、表格 5 个、公式 PP-FormulaNet 1 个、印章 1 个 | 表格还原成行列，认公式和印章，给每块区域坐标 | 只在明确要结构时用；它不支持 v6，所以内部用 v5 |
 | 纸张摊平 | UVDoc | 把拍弯的纸“摊平” | 只给强模型和结构还原用；日常识字关掉（见亮点） |
 
-:::note
 全部是百度飞桨的模型，从 ModelScope 魔搭下载（国内直连约 25 MB/s），共 18 个、3.9 GB，下载后离线运行。用哪个模型写在一个配置文件里，换模型不改代码。
 
-AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描讲义、参数表或几十张截图，它会漏字、猜字，还说不清哪里没看清。这个项目用百度飞桨的文字识别模型在本机离线识字：每页先用快模型（PP-OCRv6\_medium）读，只把读得不好、或看得出是表格公式的那几页交给强模型（PaddleOCR-VL-1.6）重读；要把表格还原成行列，明说就走结构还原（PP-StructureV3）；每份结果写明“有字”“没字”还是“说不准”。识字这一步不联网，图片不传到任何识别网站。
-:::
+AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描讲义、参数表或几十张截图，它会漏字、猜字，还说不清哪里没看清。这个项目用百度飞桨的文字识别模型在本机离线识字：每页先用快模型（PP-OCRv6_medium）读，只把读得不好、或看得出是表格公式的那几页交给强模型（PaddleOCR-VL-1.6）重读；要把表格还原成行列，明说就走结构还原（PP-StructureV3）；每份结果写明“有字”“没字”还是“说不准”。识字这一步不联网，图片不传到任何识别网站。
 
 ::screen{#localocr-07 section="tech"}
 
-:::chapter{title="跑在哪、怎么不打架" brush="/assets/_library/round3/titles/title-r3-f255783c85c0e7082f7e.png" brushbox="2,0,0,0" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-07",
+  "section": "tech",
+  "title": "跑在哪、怎么不打架",
+  "scene": "横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。",
+  "portrait": "竖版：标题；示意图占满宽；五张卡片一行一张；灰色小字在最下面。",
+  "links": [
+   {
+    "text": "中文语音转写",
+    "href": "/projects/chinese-asr/"
+   },
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "跑在哪、怎么不打架",
+     "row": "balanced-heading",
+     "width": "88%"
+    },
+    {
+     "type": "illustration",
+     "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-localocr.png",
+     "target_height": 430,
+     "target_width": 523,
+     "align": "center",
+     "row": "balanced-heading",
+     "width": "12%"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+      "_library/icons/公文包清单.png"
+     ],
+     "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
+    },
+    {
+     "type": "content_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+      "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+     ],
+     "text_ref": "一块显卡"
+    },
+    {
+     "type": "prose",
+     "text_ref": "代码：6,929行程序（Python、PowerShel"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：主图与前两条说明组成30/70上栏，其余三条整宽三列，五条原文和五幅图按原序保留。 仅更改单页排版规格，不改定稿字句和素材文件。\n插画实际复验：target_height与target_width按素材完整自然比例成对设置，不把单独max-height压成扁图；原图字节不变。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "跑在哪、怎么不打架"
+    },
+    {
+     "type": "illustration",
+     "row": "runtime",
+     "width": "40%",
+     "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-localocr.png"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png",
+      "_library/icons/公文包清单.png",
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
+      "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+     ],
+     "row": "runtime",
+     "width": "60%",
+     "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
+    },
+    {
+     "type": "prose",
+     "text_ref": "代码：6,929行程序（Python、PowerShel"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；示意图占满宽；五张卡片一行一张；灰色小字在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "fallback": false,
+   "key": "显卡",
+   "source_phrase": "为什么在 Linux 里跑 这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。\n",
+   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/13-公文包清单-clean.png",
+   "fallback": false,
+   "key": "公文包清单",
+   "source_phrase": "一个本机服务 FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型，模型在一个随时能结束的工作进程里：同一模型连着用就热着复用，换模型先关旧的再开新的，不让几套模型叠在内存里。\n",
+   "sha256": "6c838cf1f00338d2d467304875ffcc24263ed89010212c4d382029d3e92434fa",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "key": "文稿堆",
+   "source_phrase": "一块显卡：两家可同时，大模型单用 文字识别和〔中文语音转写〕可以同时用显卡；本地大模型要用时，前两家都得让开。由〔电脑配置与恢复〕里的显卡调度员按租约分配。\n",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "key": "时钟",
+   "source_phrase": "有上限 一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。\n",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "key": "红色警示",
+   "source_phrase": "每天用的是验收过的一版 正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。\n",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "fallback": false,
+   "key": "显卡",
+   "source_phrase": "为什么在 Linux 里跑 这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。\n",
+   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/13-公文包清单-clean.png",
+   "fallback": false,
+   "key": "公文包清单",
+   "source_phrase": "一个本机服务 FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型，模型在一个随时能结束的工作进程里：同一模型连着用就热着复用，换模型先关旧的再开新的，不让几套模型叠在内存里。\n",
+   "sha256": "6c838cf1f00338d2d467304875ffcc24263ed89010212c4d382029d3e92434fa",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "key": "文稿堆",
+   "source_phrase": "一块显卡：两家可同时，大模型单用 文字识别和〔中文语音转写〕可以同时用显卡；本地大模型要用时，前两家都得让开。由〔电脑配置与恢复〕里的显卡调度员按租约分配。\n",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "key": "时钟",
+   "source_phrase": "有上限 一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。\n",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "key": "红色警示",
+   "source_phrase": "每天用的是验收过的一版 正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。\n",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-localocr.png",
+   "fallback": false,
+   "semantic_status": "final_gap_same_project_main_reuse",
+   "key": "WSL服务与显卡结构图",
+   "source_phrase": "横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。",
+   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-f255783c85c0e7082f7e.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-07-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-f255783c85c0e7082f7e",
+   "title_text": "跑在哪、怎么不打架",
+   "sha256": "6b6eb440fb19d9d568f81ae7125ee9c161903063691425bf8e088769595e7e60",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 跑在哪、怎么不打架
 
-:::cards{art="left" kind="content_card" cols="1" colsv="1"}
-::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
-
-#### 为什么在 Linux 里跑
-
-这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。
-
-::card{icon="/assets/_library/round3/clean-assets/png/13-%E5%85%AC%E6%96%87%E5%8C%85%E6%B8%85%E5%8D%95-clean.png"}
-
-#### 一个本机服务
-
-FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型，模型在一个随时能结束的工作进程里：同一模型连着用就热着复用，换模型先关旧的再开新的，不让几套模型叠在内存里。
-:::
-
-:::cards{art="left" kind="content_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 一块显卡：两家可同时，大模型单用
-
-文字识别和[中文语音转写](/projects/chinese-asr/)可以同时用显卡；本地大模型要用时，前两家都得让开。由[电脑配置与恢复](/projects/pcconfig/)里的显卡调度员按租约分配。
-
-::card{icon="/assets/_library/round3/clean-assets/png/09-%E6%97%B6%E9%92%9F-clean.png"}
-
-#### 有上限
-
-一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
-
-#### 每天用的是验收过的一版
-
-正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。
-:::
+**为什么在 Linux 里跑**｜这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。
+**一个本机服务**｜FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型，模型在一个随时能结束的工作进程里：同一模型连着用就热着复用，换模型先关旧的再开新的，不让几套模型叠在内存里。
+**一块显卡：两家可同时，大模型单用**｜文字识别和〔中文语音转写〕可以同时用显卡；本地大模型要用时，前两家都得让开。由〔电脑配置与恢复〕里的显卡调度员按租约分配。
+**有上限**｜一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。
+**每天用的是验收过的一版**｜正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。
 
 代码：6,929 行程序（Python、PowerShell），4,801 行测试；公开仓库每次推送，GitHub 自动跑一遍不需要显卡的测试。
 
 ::screen{#localocr-08 section="highlights"}
 
-:::chapter{title="亮点" brush="/assets/_library/round3/titles/title-r3-ba0d3fdcc635f736cc8b.png" brushbox="4,4,4,4" size="large" art="/assets/_library/illustrations/%E6%96%87%E7%A8%BF%E6%A0%B8%E9%AA%8C%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png" artw="35%" artside="left" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-08",
+  "section": "highlights",
+  "title": "亮点：先快后强，只重读那一页",
+  "scene": "横版：左上标题“亮点”，下面一张横跨整屏的大卡片。卡片左边约 35% 宽一幅水彩插画：一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面。卡片右边：粗体标题，下面“麻烦”“解法”“结果”“取舍”四段，每段开头两个字用绿色小标签；解法里的六条画成两列小清单，每条前面一个小听诊器图标。",
+  "portrait": "竖版：标题；插画在上占满宽；四段上下排，六条清单一行一条。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "fast-then-strong",
+    "text": "先快后强，只重读有问题的那一页"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "亮点"
+    },
+    {
+     "type": "illustration",
+     "row": "highlight",
+     "width": "35%",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "section_heading",
+     "row": "highlight",
+     "width": "65%",
+     "text_ref": "先快后强，只重读有问题的那一页",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "麻烦每页都用强模型最稳，但太慢：强模型首次加载加识别要5",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "bullet_list",
+     "columns": 2,
+     "row": "highlight",
+     "bare": true,
+     "text_ref": "一个字都没读出来整页平均把握分低于0.78把握分低于0.",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "例外：近乎纯色、本来就像空白的页读不出字，不算“没读出来",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+     "frame": "localocr-highlight"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题“亮点”，下面一张横跨整屏的大卡片。卡片左边约 35% 宽一幅水彩插画：一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面。卡片右边：粗体标题，下面“麻烦”“解法”“结果”“取舍”四段，每段开头两个字用绿色小标签；解法里的六条画成两列小清单，每条前面一个小听诊器图标。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "亮点"
+    },
+    {
+     "type": "illustration",
+     "row": "highlight",
+     "width": "35%",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "section_heading",
+     "row": "highlight",
+     "width": "65%",
+     "text_ref": "先快后强，只重读有问题的那一页",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "麻烦每页都用强模型最稳，但太慢：强模型首次加载加识别要5",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "bullet_list",
+     "columns": 2,
+     "row": "highlight",
+     "bare": true,
+     "text_ref": "一个字都没读出来整页平均把握分低于0.78把握分低于0.",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "例外：近乎纯色、本来就像空白的页读不出字，不算“没读出来",
+     "frame": "localocr-highlight"
+    },
+    {
+     "type": "prose",
+     "row": "highlight",
+     "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+     "frame": "localocr-highlight"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；插画在上占满宽；四段上下排，六条清单一行一条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "麻烦｜每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "听诊器检查",
+   "source_phrase": "解法｜每页先快读，再逐页体检，下面任一条成立，只把这一页交给强模型：",
+   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "一个字都没读出来",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "整页平均把握分低于 0.78",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/文稿核验通用构图.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "文稿核验通用构图",
+   "source_phrase": "卡片左边约 35% 宽一幅水彩插画：一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面。",
+   "sha256": "073503cefc7591f3fbafa430ecb30700d758e348da21f24a58d6fa1850ae7cc6",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-ba0d3fdcc635f736cc8b.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\localocr\\img\\localocr-08-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-ba0d3fdcc635f736cc8b",
+   "title_text": "亮点",
+   "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 亮点
 
-::::::row{cols="35.0,65.0"}
+### 先快后强，只重读有问题的那一页
 
-:::::col
+**麻烦**｜每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。
 
-::artslot
-
-:::::
-
-:::::col
-
-<h3 class="sechead">先快后强，只重读有问题的那一页</h3>
-
-<strong>麻烦</strong>　每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。
-
-<strong>解法</strong>　每页先快读，再逐页体检，下面任一条成立，只把这一页交给强模型：
-
+**解法**｜每页先快读，再逐页体检，下面任一条成立，只把这一页交给强模型：
 - 一个字都没读出来
 - 整页平均把握分低于 0.78
 - 把握分低于 0.80 的行占四分之一以上
@@ -393,327 +2918,1366 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 
 例外：近乎纯色、本来就像空白的页读不出字，不算“没读出来”，不升级。
 
-<strong>结果</strong>　7 月 8 日–9 月 28 日，自动选模型的 300 次识别里，277 次（92%）快模型就够，23 次换了强模型。9 月 26 日一份 16 页的扫描 PDF，只有第 15 页被重读，其余 15 页保留快读结果。
+**结果**｜7 月 8 日–9 月 28 日，自动选模型的 300 次识别里，277 次（92%）快模型就够，23 次换了强模型。9 月 26 日一份 16 页的扫描 PDF，只有第 15 页被重读，其余 15 页保留快读结果。
 
-<strong>取舍</strong>　这是经验规则，不是真的看懂了版面，会漏判；已知是多栏论文、公式很多的文档，直接说用强模型。
+**取舍**｜这是经验规则，不是真的看懂了版面，会漏判；已知是多栏论文、公式很多的文档，直接说用强模型。
 
-:::::
+::screen{#localocr-09 section="highlights"}
 
-::::::
+```typeset
+{
+ "screen": {
+  "id": "localocr-09",
+  "section": "highlights",
+  "title": "亮点：三个小巧思",
+  "scene": "横版：和照片视频录音管理页的“亮点”一样：三张大卡片横排，每张上面一幅小水彩插画，卡片标题用大字，下面“麻烦”“解法”“证据”三段。插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
+  "portrait": "竖版：三张卡片上下排，每张插画在上、字在下。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "content_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": [
+      "_library/icons/打勾清单.png",
+      "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+     ],
+     "text_ref": "1.把握分很高，也可能读错表格"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和照片视频录音管理页的“亮点”一样：三张大卡片横排，每张上面一幅小水彩插画，卡片标题用大字，下面“麻烦”“解法”“证据”三段。插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "content_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": [
+      "_library/icons/打勾清单.png",
+      "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
+     ],
+     "text_ref": "1.把握分很高，也可能读错表格"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：三张卡片上下排，每张插画在上、字在下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "key": "打勾清单",
+   "source_phrase": "1. 把握分很高，也可能读错表格 \n麻烦快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。\n解法体检时另外用图像找横线和竖线的交叉点，够6个就判为表格页，交给强模型。\n证据验收样例“自动路线·表格”：快读9行，平均把握分0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9月26日那份16页扫描件的第15页，平均把握分0.997，就是因为表格线才被重读的。",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "key": "问号气泡",
+   "source_phrase": "2. 读不出字，不等于没有字 \n麻烦结果为空时，AI很容易说“这图没字”，其实可能是字太小、太淡或模型出错。\n解法结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。\n证据8月18日起带结论的274份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+   "fallback": false,
+   "key": "照片堆",
+   "source_phrase": "3. 截图不需要“摊平” \n麻烦UVDoc本是给拍弯的纸用的，对平整的软件截图反而裁掉边缘、读错字，还连带触发不必要的强模型重读。\n解法日常识字默认关掉摊平，只保留转正方向；强模型和结构还原处理纸质文档时仍开着。\n证据8月28日起这样设；关掉后截图的主体文字和位置恢复正常。",
+   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "key": "打勾清单",
+   "source_phrase": "1. 把握分很高，也可能读错表格 \n麻烦快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。\n解法体检时另外用图像找横线和竖线的交叉点，够6个就判为表格页，交给强模型。\n证据验收样例“自动路线·表格”：快读9行，平均把握分0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9月26日那份16页扫描件的第15页，平均把握分0.997，就是因为表格线才被重读的。",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "key": "问号气泡",
+   "source_phrase": "2. 读不出字，不等于没有字 \n麻烦结果为空时，AI很容易说“这图没字”，其实可能是字太小、太淡或模型出错。\n解法结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。\n证据8月18日起带结论的274份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+   "fallback": false,
+   "key": "照片堆",
+   "source_phrase": "3. 截图不需要“摊平” \n麻烦UVDoc本是给拍弯的纸用的，对平整的软件截图反而裁掉边缘、读错字，还连带触发不必要的强模型重读。\n解法日常识字默认关掉摊平，只保留转正方向；强模型和结构还原处理纸质文档时仍开着。\n证据8月28日起这样设；关掉后截图的主体文字和位置恢复正常。",
+   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-localocr.png",
+   "fallback": false,
+   "semantic_status": "common_subject_reused_per_b2bc0efe",
+   "key": "识别纸张现图小槽4比3",
+   "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
+   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-localocr.png",
+   "fallback": false,
+   "semantic_status": "common_subject_reused_per_b2bc0efe",
+   "key": "识别纸张现图小槽4比3",
+   "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
+   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-localocr.png",
+   "fallback": false,
+   "semantic_status": "common_subject_reused_per_b2bc0efe",
+   "key": "识别纸张现图小槽4比3",
+   "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
+   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-::screen{#localocr-09 section="highlights" continue="1"}
+**1. 把握分很高，也可能读错表格**
+麻烦｜快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。
+解法｜体检时另外用图像找横线和竖线的交叉点，够 6 个就判为表格页，交给强模型。
+证据｜验收样例“自动路线·表格”：快读 9 行，平均把握分 0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9 月 26 日那份 16 页扫描件的第 15 页，平均把握分 0.997，就是因为表格线才被重读的。
 
-:::cards{art="top" kind="content_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%89%93%E5%8B%BE%E6%B8%85%E5%8D%95.png"}
+**2. 读不出字，不等于没有字**
+麻烦｜结果为空时，AI 很容易说“这图没字”，其实可能是字太小、太淡或模型出错。
+解法｜结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。
+证据｜8 月 18 日起带结论的 274 份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。
 
-#### 1\. 把握分很高，也可能读错表格
-
-麻烦　快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。
-
-解法　体检时另外用图像找横线和竖线的交叉点，够 6 个就判为表格页，交给强模型。
-
-证据　验收样例“自动路线·表格”：快读 9 行，平均把握分 0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9 月 26 日那份 16 页扫描件的第 15 页，平均把握分 0.997，就是因为表格线才被重读的。
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
-
-#### 2\. 读不出字，不等于没有字
-
-麻烦　结果为空时，AI 很容易说“这图没字”，其实可能是字太小、太淡或模型出错。
-
-解法　结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。
-
-证据　8 月 18 日起带结论的 274 份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"}
-
-#### 3\. 截图不需要“摊平”
-
-麻烦　UVDoc 本是给拍弯的纸用的，对平整的软件截图反而裁掉边缘、读错字，还连带触发不必要的强模型重读。
-
-解法　日常识字默认关掉摊平，只保留转正方向；强模型和结构还原处理纸质文档时仍开着。
-
-证据　8 月 28 日起这样设；关掉后截图的主体文字和位置恢复正常。
-:::
+**3. 截图不需要“摊平”**
+麻烦｜UVDoc 本是给拍弯的纸用的，对平整的软件截图反而裁掉边缘、读错字，还连带触发不必要的强模型重读。
+解法｜日常识字默认关掉摊平，只保留转正方向；强模型和结构还原处理纸质文档时仍开着。
+证据｜8 月 28 日起这样设；关掉后截图的主体文字和位置恢复正常。
 
 ::screen{#localocr-10 section="features"}
 
-:::chapter{title="全部功能（28 项）" brush="/assets/_library/titles/title-832fae0fa1193bf6035b.png" brushbox="6,5,5,7" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-10",
+  "section": "features",
+  "title": "全部功能（一）",
+  "scene": "横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。",
+  "portrait": "竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "g-read",
+    "text": "读字"
+   },
+   {
+    "id": "f-image",
+    "text": "图片和截图识字"
+   },
+   {
+    "id": "f-scan",
+    "text": "扫描件逐页识字"
+   },
+   {
+    "id": "f-folder",
+    "text": "一个文件夹一起读"
+   },
+   {
+    "id": "f-drag",
+    "text": "拖到 start.bat 就识别"
+   },
+   {
+    "id": "f-outputs",
+    "text": "三种结果文件"
+   },
+   {
+    "id": "f-rotate",
+    "text": "歪的倒的先转正"
+   },
+   {
+    "id": "g-route",
+    "text": "选模型"
+   },
+   {
+    "id": "f-auto",
+    "text": "先快后强自动选"
+   },
+   {
+    "id": "f-page-escalate",
+    "text": "只重读有问题的页"
+   },
+   {
+    "id": "f-explicit",
+    "text": "指定模型"
+   },
+   {
+    "id": "f-triage",
+    "text": "只看走哪条路"
+   },
+   {
+    "id": "g-structure",
+    "text": "表格和位置"
+   },
+   {
+    "id": "f-table",
+    "text": "表格还原成行列"
+   },
+   {
+    "id": "f-formula-seal",
+    "text": "公式和印章"
+   },
+   {
+    "id": "f-coords",
+    "text": "每行字的位置和把握分"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "localocr-features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "全部功能（28项）"
+    },
+    {
+     "type": "status_legend",
+     "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+    },
+    {
+     "type": "prose",
+     "text_ref": "没用过＝每次识别都会留任务记录，真实材料里一次也没有；说"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "读字"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "1图片和截图识字png、jpg、webp、bmp图片和截"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "选模型"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "7先快后强自动选每页先用快模型读，体检不过的页才换强模型"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "表格和位置"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "11表格还原成行列PP-StructureV3把表格还原"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "全部功能（28项）"
+    },
+    {
+     "type": "status_legend",
+     "text_ref": "图例：●在用●待验收○待实施●没用过●说不准✕已停用"
+    },
+    {
+     "type": "prose",
+     "text_ref": "没用过＝每次识别都会留任务记录，真实材料里一次也没有；说"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "读字"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "1图片和截图识字png、jpg、webp、bmp图片和截"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "选模型"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "7先快后强自动选每页先用快模型读，体检不过的页才换强模型"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "表格和位置"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "11表格还原成行列PP-StructureV3把表格还原"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "图片和截图识字｜png、jpg、webp、bmp 图片和截图，读出全部文字｜在用",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "扫描件逐页识字｜扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数｜在用",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件夹链接.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件夹链接",
+   "source_phrase": "一个文件夹一起读｜每个文件分别选路线，不支持的文件列为跳过｜说不准",
+   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "拖到 start.bat 就识别｜不经过 AI，自己拖文件，结果在 outputs 文件夹｜说不准",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "三种结果文件｜纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON｜在用",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "歪的倒的先转正｜两个方向小模型判断整页和每行字的朝向，先转正再读｜在用",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "听诊器检查",
+   "source_phrase": "先快后强自动选｜每页先用快模型读，体检不过的页才换强模型｜在用",
+   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "只重读有问题的页｜多页文件里只把没读好的那几页交给强模型，其余页保留快读结果｜在用",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/禁止文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "禁止文件",
+   "source_phrase": "指定模型｜可以直接说用快模型、强模型或结构还原，自动选路不改写｜在用",
+   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "只看走哪条路｜先预览这份材料会走哪条路线，不真的识别｜说不准",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "表格还原成行列｜PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标｜没用过",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "公式和印章｜同一条结构还原路线认出公式、检测印章文字｜没用过",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "每行字的位置和把握分｜JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分｜在用",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-832fae0fa1193bf6035b.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-832fae0fa1193bf6035b",
+   "title_text": "全部功能（28 项）",
+   "sha256": "6d3d12f37d920a1a5fd9c8cb7a2cb87a8329866c1afc0d67237213e6b3f95774",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-bf9114190f82e713bc95.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-bf9114190f82e713bc95",
+   "title_text": "表格和位置",
+   "sha256": "cec3a8c2e951d5c9bfe14e51146ee5c9d2f48ac2e4389ecbfde7ebb9f714b6f7",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-28809440ab88664c39f1.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-28809440ab88664c39f1",
+   "title_text": "读字",
+   "sha256": "e76d2bab87c1ae465e70070a256eefed7885e64b911ade927410515f36a5f35f",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-23c4841cbe265cd064ad.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-23c4841cbe265cd064ad",
+   "title_text": "选模型",
+   "sha256": "3b5c186f9e4373e1d358c0e66b638088a7a0cf3605a820d550808a1291f3e4e2",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
-
-:::legend
-图例：<span class="legend-item" data-state="on"><span class="legend-dot" aria-hidden="true">●</span>在用</span>　<span class="legend-item" data-state="pending"><span class="legend-dot" aria-hidden="true">●</span>待验收</span>　<span class="legend-item" data-state="todo"><span class="legend-dot" aria-hidden="true">○</span>待实施</span>　<span class="legend-item" data-state="unused"><span class="legend-dot" aria-hidden="true">●</span>没用过</span>　<span class="legend-item" data-state="uncertain"><span class="legend-dot" aria-hidden="true">●</span>说不准</span>　<span class="legend-item" data-state="off"><span class="legend-dot" aria-hidden="true">✕</span>已停用</span>
-:::
-
+## 全部功能（28 项）
+图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
 没用过＝每次识别都会留任务记录，真实材料里一次也没有；说不准＝用了也不一定留记录。
 
-<h3 class="sechead">读字</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 1 图片和截图识字
-
-png、jpg、webp、bmp 图片和截图，读出全部文字
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
-
-#### 2 扫描件逐页识字
-
-扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%A4%B9%E9%93%BE%E6%8E%A5.png"}
-
-#### 3 一个文件夹一起读
-
-每个文件分别选路线，不支持的文件列为跳过
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
-
-#### 4 拖到 start.bat 就识别
-
-不经过 AI，自己拖文件，结果在 outputs 文件夹
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-
-::card{icon="/assets/_library/icons/%E7%BA%B8%E7%AE%B1.png"}
-
-#### 5 三种结果文件
-
-纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png"}
-
-#### 6 歪的倒的先转正
-
-两个方向小模型判断整页和每行字的朝向，先转正再读
-
-<span class="status-tag" data-state="on">在用</span>
-:::
-
-<h3 class="sechead">选模型</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/round3/clean-assets/png/42-%E5%90%AC%E8%AF%8A%E5%99%A8%E6%A3%80%E6%9F%A5-clean.png"}
-
-#### 7 先快后强自动选
-
-每页先用快模型读，体检不过的页才换强模型
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 8 只重读有问题的页
-
-多页文件里只把没读好的那几页交给强模型，其余页保留快读结果
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
-
-#### 9 指定模型
-
-可以直接说用快模型、强模型或结构还原，自动选路不改写
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
-
-#### 10 只看走哪条路
-
-先预览这份材料会走哪条路线，不真的识别
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-:::
-
-<h3 class="sechead">表格和位置</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card
-
-#### 11 表格还原成行列
-
-PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标
-
-<span class="status-tag" data-state="unused">没用过</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 12 公式和印章
-
-同一条结构还原路线认出公式、检测印章文字
-
-<span class="status-tag" data-state="unused">没用过</span>
-
-::card
-
-#### 13 每行字的位置和把握分
-
-JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
-
-<span class="status-tag" data-state="on">在用</span>
-:::
-
-::screen{#localocr-11 section="features" continue="1"}
-
-<h3 class="sechead">结果靠得住</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
-
-#### 14 有字、没字、说不准
-
-每份结果附一份客观结论，空结果不当“没字”
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 15 一句人话摘要
-
-把覆盖、质量、文字块数和是否升级写成一句话
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
-
-#### 16 原件留底再识别
-
-先算指纹做只读快照，识别完原件变了就不发结果
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
-
-#### 17 识过不重识
-
-同样的材料和请求再来，核对指纹后直接交上次结果
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
-
-#### 18 中断时保住读完的页
-
-超时或崩溃时已读完的页留作部分结果，不冒充整份
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-:::
-
-<h3 class="sechead">运行和显卡</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/round3/clean-assets/png/09-%E6%97%B6%E9%92%9F-clean.png"}
-
-#### 19 本机识别服务
-
-只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
-
-#### 20 查进度、取消
-
-按任务编号查到哪一步，或只取消这一项
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-
-::card{icon="/assets/_library/icons/%E9%BA%A6%E5%85%8B%E9%A3%8E.png"}
-
-#### 21 领显卡、和语音转写同时跑
-
-向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
-
-#### 22 用完腾显卡
-
-关掉工作进程、还回显卡；本地大模型要用时调度员也会先清
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%B2%99%E6%BC%8F.png"}
-
-#### 23 超时和内存上限
-
-一次默认 300 秒、最多 2 小时；内存超 30 GB 只停自己
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
-
-#### 24 给看板的任务视图
-
-只读、不含文件内容的任务列表接口
-
-<span class="status-tag" data-state="uncertain">说不准</span>
-:::
-
-<h3 class="sechead">版本和换模型</h3>
-
-:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
-::card{icon="/assets/_library/icons/%E6%89%93%E5%8B%BE%E6%B8%85%E5%8D%95.png"}
-
-#### 25 正式版和开发代码分开
-
-每天用的是验收过的快照，改代码不影响它
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
-
-#### 26 退回上一版
-
-保留上一版，出问题可以切回，切回也要它自己的验收
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
-
-#### 27 换版前三道验收
-
-依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换
-
-<span class="status-tag" data-state="on">在用</span>
-
-::card{icon="/assets/_library/icons/%E6%96%87%E4%BB%B6%E9%BD%BF%E8%BD%AE.png"}
-
-#### 28 换模型只改配置
-
-模型写在配置档里，新模型先对照验收，不自动当默认
-
-<span class="status-tag" data-state="on">在用</span>
-:::
+**读字**
+1. 图片和截图识字｜png、jpg、webp、bmp 图片和截图，读出全部文字｜在用
+2. 扫描件逐页识字｜扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数｜在用
+3. 一个文件夹一起读｜每个文件分别选路线，不支持的文件列为跳过｜说不准
+4. 拖到 start.bat 就识别｜不经过 AI，自己拖文件，结果在 outputs 文件夹｜说不准
+5. 三种结果文件｜纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON｜在用
+6. 歪的倒的先转正｜两个方向小模型判断整页和每行字的朝向，先转正再读｜在用
+
+**选模型**
+7. 先快后强自动选｜每页先用快模型读，体检不过的页才换强模型｜在用
+8. 只重读有问题的页｜多页文件里只把没读好的那几页交给强模型，其余页保留快读结果｜在用
+9. 指定模型｜可以直接说用快模型、强模型或结构还原，自动选路不改写｜在用
+10. 只看走哪条路｜先预览这份材料会走哪条路线，不真的识别｜说不准
+
+**表格和位置**
+11. 表格还原成行列｜PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标｜没用过
+12. 公式和印章｜同一条结构还原路线认出公式、检测印章文字｜没用过
+13. 每行字的位置和把握分｜JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分｜在用
+
+::screen{#localocr-11 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "localocr-11",
+  "section": "features",
+  "title": "全部功能（二）",
+  "scene": "横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。",
+  "portrait": "竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "g-trust",
+    "text": "结果靠得住"
+   },
+   {
+    "id": "f-objective",
+    "text": "有字、没字、说不准"
+   },
+   {
+    "id": "f-summary",
+    "text": "一句人话摘要"
+   },
+   {
+    "id": "f-snapshot",
+    "text": "原件留底再识别"
+   },
+   {
+    "id": "f-cache",
+    "text": "识过不重识"
+   },
+   {
+    "id": "f-partial",
+    "text": "中断时保住读完的页"
+   },
+   {
+    "id": "g-run",
+    "text": "运行和显卡"
+   },
+   {
+    "id": "f-server",
+    "text": "本机识别服务"
+   },
+   {
+    "id": "f-status",
+    "text": "查进度、取消"
+   },
+   {
+    "id": "f-gpu",
+    "text": "领显卡、和语音转写同时跑"
+   },
+   {
+    "id": "f-release",
+    "text": "用完腾显卡"
+   },
+   {
+    "id": "f-limits",
+    "text": "超时和内存上限"
+   },
+   {
+    "id": "f-observer",
+    "text": "给看板的任务视图"
+   },
+   {
+    "id": "g-version",
+    "text": "版本和换模型"
+   },
+   {
+    "id": "f-release-snapshot",
+    "text": "正式版和开发代码分开"
+   },
+   {
+    "id": "f-rollback",
+    "text": "退回上一版"
+   },
+   {
+    "id": "f-acceptance",
+    "text": "换版前三道验收"
+   },
+   {
+    "id": "f-model-swap",
+    "text": "换模型只改配置"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "localocr-features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "结果靠得住"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "14有字、没字、说不准每份结果附一份客观结论，空结果不当"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "运行和显卡"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "19本机识别服务只在本机18665端口，同一时间只做一个"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "版本和换模型"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "25正式版和开发代码分开每天用的是验收过的快照，改代码不"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：和电脑配置与恢复页的“全部功能”一样的画法，但组名不单独占一整列：每组的组名（毛笔字）写在这组卡片上方一行，下面卡片排成三列；每张卡片左边小水彩图标，粗体“编号. 功能名”，下面一句话，右上角一个小圆点表示状态（竖线不画）。两张图上下拼成一整段：同一个网格，第一张顶上有标题、图例和图例下一行小字，第二张没有标题和图例，接着往下排；上下边都不画边框。圆点颜色：在用＝绿，待验收＝黄，待实施＝空心绿圈，没用过＝灰，说不准＝浅灰，已停用＝灰色叉。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "结果靠得住"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "14有字、没字、说不准每份结果附一份客观结论，空结果不当"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "运行和显卡"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "19本机识别服务只在本机18665端口，同一时间只做一个"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "版本和换模型"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "25正式版和开发代码分开每天用的是验收过的快照，改代码不"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：组名在上，卡片一行一张（编号功能名、一句话、状态圆点在右上）；第一张顶上标题、图例和说明。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。 页修复 07（北京时间 2026-10-03）：按 qa-07 第3条将本屏3个功能分组改为已有 section_heading small，原组名逐字保留；章节标题仍用毛笔图。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "有字、没字、说不准｜每份结果附一份客观结论，空结果不当“没字”｜在用",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "一句人话摘要｜把覆盖、质量、文字块数和是否升级写成一句话｜在用",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "原件留底再识别｜先算指纹做只读快照，识别完原件变了就不发结果｜在用",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "识过不重识｜同样的材料和请求再来，核对指纹后直接交上次结果｜在用",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "中断时保住读完的页｜超时或崩溃时已读完的页留作部分结果，不冒充整份｜说不准",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "本机识别服务｜只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队｜在用",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "查进度、取消｜按任务编号查到哪一步，或只取消这一项｜说不准",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/麦克风.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "麦克风",
+   "source_phrase": "领显卡、和语音转写同时跑｜向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥｜在用",
+   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "显卡",
+   "source_phrase": "用完腾显卡｜关掉工作进程、还回显卡；本地大模型要用时调度员也会先清｜在用",
+   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/沙漏.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "沙漏",
+   "source_phrase": "超时和内存上限｜一次默认 300 秒、最多 2 小时；内存超 30 GB 只停自己｜在用",
+   "sha256": "832f14c995b046898ae2ca304e804dc44efa3a83e3a7d8c056bc73a910ad0678",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "给看板的任务视图｜只读、不含文件内容的任务列表接口｜说不准",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "正式版和开发代码分开｜每天用的是验收过的快照，改代码不影响它｜在用",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "退回上一版｜保留上一版，出问题可以切回，切回也要它自己的验收｜在用",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "红色警示",
+   "source_phrase": "换版前三道验收｜依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换｜在用",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "换模型只改配置｜模型写在配置档里，新模型先对照验收，不自动当默认｜在用",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-42a7349ed63d01fcfbd4.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-42a7349ed63d01fcfbd4",
+   "title_text": "版本和换模型",
+   "sha256": "e4a8f50a957fd8d781689a4fe2d106e3c34cfee64af7296da6664a57e67deed2",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-cb974c2fd1313936b428.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-cb974c2fd1313936b428",
+   "title_text": "结果靠得住",
+   "sha256": "45d4ac611bd60428c1e5fe8cb6d34fd63cf2d293fb6b80bfa264995412cae1f1",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-34c6277de864cb7d079c.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-34c6277de864cb7d079c",
+   "title_text": "运行和显卡",
+   "sha256": "05b5848b04bdf9c4ce0bcc184b5d2f7653e2df2a16c9e27dd1792f72bb6a1506",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**结果靠得住**
+14. 有字、没字、说不准｜每份结果附一份客观结论，空结果不当“没字”｜在用
+15. 一句人话摘要｜把覆盖、质量、文字块数和是否升级写成一句话｜在用
+16. 原件留底再识别｜先算指纹做只读快照，识别完原件变了就不发结果｜在用
+17. 识过不重识｜同样的材料和请求再来，核对指纹后直接交上次结果｜在用
+18. 中断时保住读完的页｜超时或崩溃时已读完的页留作部分结果，不冒充整份｜说不准
+
+**运行和显卡**
+19. 本机识别服务｜只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队｜在用
+20. 查进度、取消｜按任务编号查到哪一步，或只取消这一项｜说不准
+21. 领显卡、和语音转写同时跑｜向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥｜在用
+22. 用完腾显卡｜关掉工作进程、还回显卡；本地大模型要用时调度员也会先清｜在用
+23. 超时和内存上限｜一次默认 300 秒、最多 2 小时；内存超 30 GB 只停自己｜在用
+24. 给看板的任务视图｜只读、不含文件内容的任务列表接口｜说不准
+
+**版本和换模型**
+25. 正式版和开发代码分开｜每天用的是验收过的快照，改代码不影响它｜在用
+26. 退回上一版｜保留上一版，出问题可以切回，切回也要它自己的验收｜在用
+27. 换版前三道验收｜依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换｜在用
+28. 换模型只改配置｜模型写在配置档里，新模型先对照验收，不自动当默认｜在用
 
 ::screen{#localocr-12 section="history"}
 
-:::chapter{title="演进（2026 年）" brush="/assets/_library/titles/title-60559ec08d1172637358.png" brushbox="4,6,4,7" size="large" align="center"}
+```typeset
+{
+ "screen": {
+  "id": "localocr-12",
+  "section": "history",
+  "title": "演进",
+  "scene": "横版：左上标题。一条从左到右的水彩绿丝带时间轴，上面十个小旗，每个小旗：日期（粗体绿色）＋一行字，上下错开不挤；丝带起点画一块显卡，终点画一张打勾的验收单。时间轴下面一行灰色小字。",
+  "portrait": "竖版：标题；时间轴改成从上往下的竖丝带，小旗一行一个；灰色小字在最下面。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "演进（2026年）",
+     "row": "balanced-heading",
+     "width": "70%"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "small",
+     "align": "left",
+     "description": "丝带起点显卡",
+     "row": "balanced-heading",
+     "width": "15%"
+    },
+    {
+     "type": "illustration",
+     "index": 1,
+     "size": "small",
+     "align": "right",
+     "description": "丝带终点验收纸",
+     "row": "balanced-heading",
+     "width": "15%"
+    },
+    {
+     "type": "timeline",
+     "columns": 5,
+     "direction": "horizontal",
+     "connector": "ribbon",
+     "illustration": "outside",
+     "icons": "none",
+     "paragraph_items": true,
+     "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（"
+    },
+    {
+     "type": "prose",
+     "text_ref": "41次提交，7月2日到9月27日；9月24日之后只改过文"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。一条从左到右的水彩绿丝带时间轴，上面十个小旗，每个小旗：日期（粗体绿色）＋一行字，上下错开不挤；丝带起点画一块显卡，终点画一张打勾的验收单。时间轴下面一行灰色小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；本轮文字优先；仅此屏竖版由短命子代理查看338×600、42279字节的单张压缩JPEG确认：标题下左侧有显卡，底部说明框左侧有装订方格纸（未辨清勾，不能称验收单），所有日期旗在竖丝带右，日期上/正文下。横版只按scene十旗一条水平丝带，列数改10，不借竖图推断横版。无需每日期10个图标；只需两端图位，当前缺明确素材。上下错开旗帜仍需组件/审页确认。 页修复 07（北京时间 2026-10-03）：按 qa-07 第5条横时间轴十项改五列两行，两端图栏各14%、时间轴72%；竖版起点图保留独立左侧小栏，时间轴改整宽独立块，解除18%图栏占去正文左边的宽度。原十日期和页尾统计全部保留。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "演进（2026年）"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "small",
+     "align": "left",
+     "row": "axis-start",
+     "row_v": true,
+     "width": "18%",
+     "description": "标题下左侧显卡"
+    },
+    {
+     "type": "timeline",
+     "columns": 1,
+     "direction": "vertical",
+     "connector": "ribbon",
+     "illustration": "outside",
+     "icons": "none",
+     "paragraph_items": true,
+     "text_ref": "7月2日在RTX5080上跑通PaddleOCR3.7（"
+    },
+    {
+     "type": "illustration",
+     "index": 1,
+     "size": "small",
+     "align": "left",
+     "row": "footer",
+     "row_v": true,
+     "width": "22%",
+     "description": "底部说明框左侧装订方格纸"
+    },
+    {
+     "type": "prose",
+     "text_ref": "41次提交，7月2日到9月27日；9月24日之后只改过文",
+     "row": "footer",
+     "row_v": true,
+     "width": "78%"
+    }
+   ],
+   "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；时间轴改成从上往下的竖丝带，小旗一行一个；灰色小字在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；本轮文字优先；仅此屏竖版由短命子代理查看338×600、42279字节的单张压缩JPEG确认：标题下左侧有显卡，底部说明框左侧有装订方格纸（未辨清勾，不能称验收单），所有日期旗在竖丝带右，日期上/正文下。横版只按scene十旗一条水平丝带，列数改10，不借竖图推断横版。无需每日期10个图标；只需两端图位，当前缺明确素材。上下错开旗帜仍需组件/审页确认。 页修复 07（北京时间 2026-10-03）：按 qa-07 第5条横时间轴十项改五列两行，两端图栏各14%、时间轴72%；竖版起点图保留独立左侧小栏，时间轴改整宽独立块，解除18%图栏占去正文左边的宽度。原十日期和页尾统计全部保留。"
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "fallback": false,
+   "semantic_status": "AI补充：按本轮许可复用同主体；不承诺组合/动作/方格细节一致",
+   "key": "显卡",
+   "source_phrase": "丝带起点显卡／标题下左侧显卡",
+   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png",
+   "fallback": false,
+   "semantic_status": "AI补充：按本轮许可复用同主体；不承诺组合/动作/方格细节一致",
+   "key": "白纸",
+   "source_phrase": "丝带终点纸张／底说明框左侧装订方格纸",
+   "sha256": "e010ca7001948622ae4e18db3eea512568d933314d2ef2a8d4249bdb31d7d41e",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-60559ec08d1172637358.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-60559ec08d1172637358",
+   "title_text": "演进（2026 年）",
+   "sha256": "db23165afb23b1b352da4a906595585ada3cfcf674b7dc824e7908e425f6a9b2",
+   "status": "ready"
+  }
+ ]
+}
+```
 
-:::
+## 演进（2026 年）
 
-:::steps{kind="timeline" cols="5" colsv="1"}
-1. <strong>7 月 2 日</strong>　在 RTX 5080 上跑通 PaddleOCR 3.7（放进 WSL2；随后换成同一代架构的 5090 D）
-2. <strong>7 月 5 日</strong>　本机识别服务；用完可以腾显卡
-3. <strong>7 月 7 日</strong>　模型写进配置档；加上结构还原；识过不重识；自动选路
-4. <strong>7 月 12 日</strong>　所有显卡工作都先向全机调度员领号
-5. <strong>7 月 30 日</strong>　难页自动交本地强模型重读
-6. <strong>8 月 18 日</strong>　分清“读不出”和“没有字”，每份结果附客观结论
-7. <strong>8 月 28 日</strong>　截图关掉纸张摊平；运行和入口全面加固
-8. <strong>9 月 2 日</strong>　每份结果加一句人话摘要
-9. <strong>9 月 17 日</strong>　正式版和开发代码分开，可以退回上一版
-10. <strong>9 月 24 日</strong>　现役版本验收：181 项测试无失败（16 项按条件跳过），9 个合成样例全过
-:::
+7 月 2 日｜在 RTX 5080 上跑通 PaddleOCR 3.7（放进 WSL2；随后换成同一代架构的 5090 D）
+7 月 5 日｜本机识别服务；用完可以腾显卡
+7 月 7 日｜模型写进配置档；加上结构还原；识过不重识；自动选路
+7 月 12 日｜所有显卡工作都先向全机调度员领号
+7 月 30 日｜难页自动交本地强模型重读
+8 月 18 日｜分清“读不出”和“没有字”，每份结果附客观结论
+8 月 28 日｜截图关掉纸张摊平；运行和入口全面加固
+9 月 2 日｜每份结果加一句人话摘要
+9 月 17 日｜正式版和开发代码分开，可以退回上一版
+9 月 24 日｜现役版本验收：181 项测试无失败（16 项按条件跳过），9 个合成样例全过
 
 41 次提交，7 月 2 日到 9 月 27 日；9 月 24 日之后只改过文档。

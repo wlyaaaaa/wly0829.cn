@@ -1,15 +1,17 @@
 ---
-// 全站外壳：页头、目录条、页尾照现在网站（src/chrome 里的原样 HTML 和原样式），正文区块样式在 blocks.css。
+// 全站外壳：页头、目录条、页尾照现在网站（src/chrome 里的原样 HTML 和原样式）。
+// 正文区块：tools/render_blocks.py 用现在网站的区块库排好，样式是同一份（public/assets/_typeset/typeset.css），
+// 字体是同一个字体文件按本页用字抽的子集；画布按栏宽等比缩放（电脑画布 1672、手机画布 941）。
 // 动效：翻页过渡、站点运行脚本（水彩、落叶、回顶、小鸟彩蛋）、环境动画引擎，都是现有页面实际加载的原文件，
 // 只把翻页数据里“插画、标题在哪”改指新页的元素（见 albumMeta）。
 import header from '../chrome/header.html?raw';
 import footer from '../chrome/footer.html?raw';
 import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
-import '../styles/blocks.css';
+import '../styles/typeset-page.css';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
-interface Props { title: string; kind: string; url: string; page: string; motion?: any; toc: { id: string; label: string; img?: string }[] }
-const { title, kind, url, toc, page, motion } = Astro.props;
+interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; toc: { id: string; label: string; img?: string }[] }
+const { title, kind, url, toc, page, motion, blocks } = Astro.props;
 const rt = runtimes[`../chrome/runtime/${page}.json`];
 
 function albumMeta() {
@@ -41,6 +43,9 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
   <Fragment set:html={head} />
+  {blocks && <link rel="preload" as="font" type="font/woff2" href={blocks.font} crossorigin="anonymous" />}
+  {blocks && <link rel="stylesheet" href={blocks.css} />}
+  {blocks && <Fragment set:html={`<style>@font-face{font-family:"Sans";src:url("${blocks.font}") format("woff2");font-weight:100 900;font-display:block}</style>`} />}
 </head>
 <body data-page-kind={kind} class="astro-page">
   <a class="skip" href="#content">跳到正文</a>
@@ -56,7 +61,11 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
       ))}
     </div></div></nav>
   )}
-  <main id="content" class="sx-page paper">
+  <main id="content" class="paper ts-page">
+    <script is:inline>(()=>{const m=document.currentScript.parentElement;const z=()=>{const w=m.clientWidth;if(!w)return;m.style.setProperty('--tz-h',String(w/1672));m.style.setProperty('--tz-v',String(w/941));m.style.setProperty('--tz-card',String((innerWidth<768?w:(w-16)/2)/1672));};z();new ResizeObserver(z).observe(m);
+const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});})();</script>
     <slot />
   </main>
   <Fragment set:html={footer} />

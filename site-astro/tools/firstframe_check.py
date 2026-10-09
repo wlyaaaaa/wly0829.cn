@@ -48,11 +48,11 @@ FADES = r"""
   for (const a of document.getAnimations()) {
     const eff = a.effect; if (!eff || !eff.getKeyframes) continue;
     const k = eff.getKeyframes(); const t = eff.target; if (!t) continue;
-    const inArt = t.closest && (t.closest('.chapter-art') || t.closest('.living-layer') || t.closest('.easter-bird') || (t.className && String(t.className).includes('bird')));
+    const inArt = t.closest && (t.closest('.chapter-art') || t.closest('figure[data-living-config]') || t.closest('.living-layer') || t.closest('.easter-bird') || (t.className && String(t.className).includes('bird')));
     if (!inArt) continue;
     if (k.length && k[0].opacity !== undefined && Number(k[0].opacity) === 0) rows.push({ target: t.className || t.tagName, name: a.animationName || a.id || '' });
   }
-  for (const el of document.querySelectorAll('.chapter-art img, .living-layer, .living-layer canvas')) {
+  for (const el of document.querySelectorAll('.chapter-art img, figure[data-living-config] img, .living-layer, .living-layer canvas')) {
     const cs = getComputedStyle(el); if (cs.transitionProperty.includes('opacity') && cs.transitionDuration !== '0s') rows.push({ target: el.className || el.tagName, transition: cs.transitionDuration });
   }
   return rows;
