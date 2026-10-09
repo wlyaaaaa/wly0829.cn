@@ -351,15 +351,24 @@ def render_screenshot(block, ctx):
     deco_class, decoration = _shot_decoration(spec, ctx)
     ratios = [ratio_for(shot, spec, pos, ctx) for pos, (_, shot) in enumerate(selected)]
     slots, full_captions, rows, row_items = [], [], [], []
+    from engine.layout import WIDTH
+    row_start, row_width = 0, WIDTH[orient] - (40 if screen_value(ctx, "shape") in ("card", "strip") else 72 if orient == "h" else 56)
+    limits = [spec.get("max_width_v" if orient == "v" else "max_width"), spec.get("width") if orient == "h" else None] if equal_height else []
+    row_width = min([row_width] + [float(v[:-1]) * row_width / 100 if isinstance(v, str) else float(v) for v in limits if type(v) in (int, float) and v > 0 or isinstance(v, str) and re.fullmatch(r'\d+(?:\.\d+)?%', v) and 0 < float(v[:-1]) <= 100])
+    minimum, gap = 14 * (24 if orient == "h" else 36), 16 if orient == "h" else 18
     for pos, (index, shot) in enumerate(selected):
         ratio = ratios[pos]
+        trial = ratios[row_start:pos + 2]
+        row_end = (pos + 1) % cols == 0 or pos + 1 == len(selected)
+        if equal_height:
+            row_end = pos + 1 == len(selected) or pos + 1 - row_start >= cols or (row_width - gap * (len(trial) - 1)) * min(trial) / sum(trial) < minimum
         last_row = len(selected) % cols
         offset = cols - last_row + 1 if last_row and pos == len(selected) - last_row else None
         start = f'grid-column-start:{offset};' if offset is not None and not equal_height else ''
         number, caption = _caption_parts(captions[pos], spec, ctx)
         to_next = connector == "arrow" and pos + 1 < len(selected)
-        right = _connector("right") if to_next and (pos + 1) % cols else ''
-        down = _connector("down") if to_next and not (pos + 1) % cols else ''
+        right = _connector("right") if to_next and not row_end else ''
+        down = _connector("down") if to_next and row_end else ''
         arrow_class = ' slot-shot-item-arrow-right' if right else ''
         caption_html = f'<div class="slot-shot-caption" data-shot-caption-index="{index}">{caption}</div>' if caption and not full_width else ''
         if shot.get("withdrawn"):
@@ -387,16 +396,18 @@ def render_screenshot(block, ctx):
         (row_items if equal_height else slots).append(item)
         if full_width and caption:
             full_captions.append(f'<div class="slot-shot-caption" data-shot-caption-index="{index}">{caption}</div>')
-        if full_width and ((pos + 1) % cols == 0 or pos + 1 == len(selected)):
+        if full_width and row_end:
             (row_items if equal_height else slots).append(f'<div class="slot-shot-full-captions">{"".join(full_captions)}{down}</div>')
             full_captions = []
-        if equal_height and ((pos + 1) % cols == 0 or pos + 1 == len(selected)):
-            row_ratios = ratios[(pos // cols) * cols:pos + 1]
+        if equal_height and row_end:
+            row_ratios = ratios[row_start:pos + 1]
             # 以真实比例分配宽度：宽/比例一致，所以同排框等高；不拉伸或裁原图。
-            weights = ' '.join(f'minmax(0,{r:.12g}fr)' for r in row_ratios)
-            rows.append(f'<div class="slot-shot-row" data-shot-row="{pos // cols}" '
-                        f'style="grid-template-columns:{weights}">{"".join(row_items)}</div>')
+            weights = ' '.join(f'minmax(0,{r / min(row_ratios):.12g}fr)' for r in row_ratios)
+            cap = 'max-width:min(100%,14em);margin-inline:auto;' if len(row_ratios) == 1 and ratio < 1 else ''
+            rows.append(f'<div class="slot-shot-row" data-shot-row="{len(rows)}" '
+                        f'style="grid-template-columns:{weights};{cap}">{"".join(row_items)}</div>')
             row_items = []
+            row_start = pos + 1
     text = render_nodes(after, ctx)
     width = _grid_width(spec, orient, ctx)
     grid_class = "slot-shot-grid slot-shot-grid-equal-height" if equal_height else "slot-shot-grid"
