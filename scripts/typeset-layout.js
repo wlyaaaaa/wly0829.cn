@@ -111,6 +111,8 @@ function rememberReadingPosition(){
  // reading point until the new manifest layout has finished replacing it.
  if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return;
  const offset=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anchor-offset'))||0;
+ const line=Math.max(offset,Math.min(240,innerHeight/4)),x=innerWidth/2,hit=document.elementFromPoint(x,line);
+ const semantic=readingPosition?.nodeRevision===typesetReadingState.revision&&readingPosition.node?.isConnected?readingPosition.node:hit?.closest('p,h1,h2,h3,h4,tr,[data-row-key],[data-source-node],[data-panorama-node]')||[...document.querySelectorAll('.how-panorama-visual')].find(el=>{const r=el.getBoundingClientRect();return r.width&&r.height&&r.left<=x&&r.right>=x&&r.top<=line&&r.bottom>=line;});
  const point=scrollY+offset,screens=[...document.querySelectorAll('.screen')];
  let el=screens.find(s=>{const r=readingScreenGeometry(s);return r.height&&r.top+r.height>point;});
  // A grid row can contain distinct screens at the same reading line. Keep
@@ -122,12 +124,14 @@ function rememberReadingPosition(){
   if(r.top===first.top&&r.height&&r.top<=point&&r.top+r.height>point)el=preferred;
  }
  if(el){const r=readingScreenGeometry(el),maxScroll=Math.max(0,document.documentElement.scrollHeight-innerHeight);readingPosition={id:el.dataset.screen,fraction:(scrollY+offset-r.top)/r.height,gap:Math.min(0,scrollY+offset-r.top),atTop:scrollY<2,atBottom:maxScroll>0&&Math.abs(scrollY-maxScroll)<=1};}else readingPosition=null;
+ if(semantic){const identity=['data-panorama-node','data-source-node','data-row-key','id'].find(name=>semantic.getAttribute(name));
+ readingPosition={...(readingPosition||{}),node:semantic,nodeTop:semantic.getBoundingClientRect().top,nodeOwner:semantic.closest('[data-screen],section'),nodeIdentity:identity?[identity,semantic.getAttribute(identity)]:null};}
 }
 function cancelReadingResize(){
  const revision=++typesetReadingState.revision;
  if(resizeFrame)cancelAnimationFrame(resizeFrame);resizeFrame=0;
  if(resizing)layout();
- resizing=false;typesetReadingState.saved=null;
+ resizing=false;typesetReadingState.saved=null;document.body.style.paddingBottom='';
  typesetReadingState.width=innerWidth;typesetReadingState.height=innerHeight;
  return revision;
 }
@@ -140,15 +144,18 @@ function resizeLayout(){
  const revision=++typesetReadingState.revision,saved=typesetReadingState.saved;
  if(resizeFrame)cancelAnimationFrame(resizeFrame);
  resizeFrame=requestAnimationFrame(()=>{
-  resizeFrame=0;layout();
+  resizeFrame=0;document.body.style.paddingBottom='';layout();
   const el=saved&&[...document.querySelectorAll('.screen')].find(s=>s.dataset.screen===saved.id);
   // Manifest aspect ratios reserve dimensions before downloads. Decode the
   // destination screen, then let shared header/TOC layout settle before placing.
   const images=el?[...el.querySelectorAll('.typeset-part:not([hidden]) picture img')]:[],navigationImages=[...document.querySelectorAll('#site-header img,.toc img')];
   Promise.all([document.fonts.ready,readingLayoutReady(),...images.map(load),...navigationImages.map(im=>im.decode().catch(()=>{}))]).then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{
    if(revision!==typesetReadingState.revision)return;
+   const owner=saved?.nodeOwner?.isConnected?saved.nodeOwner:saved?.nodeOwner?.id&&document.getElementById(saved.nodeOwner.id),identity=saved?.nodeIdentity;
+   const anchor=saved?.node?.isConnected&&saved.node.getClientRects().length?saved.node:identity&&owner&&[...owner.querySelectorAll(saved.node.tagName+'['+identity[0]+'="'+CSS.escape(identity[1])+'"]')].find(node=>node.getClientRects().length);
    if(saved?.atTop)scrollTo({top:0,behavior:'instant'});
    else if(saved?.atBottom)scrollTo({top:Math.max(0,document.documentElement.scrollHeight-innerHeight),behavior:'instant'});
+   else if(anchor)scrollBy({top:anchor.getBoundingClientRect().top-saved.nodeTop,behavior:'instant'});
    else if(el&&saved){
     const r=readingScreenGeometry(el);
     // A screen's preceding whitespace is a pixel gap, not part of its image.
@@ -159,9 +166,10 @@ function resizeLayout(){
     if(needed&&saved.fraction>=0)document.body.style.paddingBottom=(parseFloat(getComputedStyle(document.body).paddingBottom)||0)+Math.ceil(needed)+'px';
     scrollTo({top,behavior:'instant'});
    }
-   resizing=false;typesetReadingState.saved=null;
+   if(saved?.node)setTimeout(()=>{if(revision!==typesetReadingState.revision)return;const current=identity&&owner&&[...owner.querySelectorAll(saved.node.tagName+'['+identity[0]+'="'+CSS.escape(identity[1])+'"]')].find(node=>node.getClientRects().length)||anchor;if(current?.isConnected){scrollBy({top:current.getBoundingClientRect().top-saved.nodeTop,behavior:'instant'});readingPosition={...saved,node:current,nodeTop:saved.nodeTop,nodeOwner:owner,nodeIdentity:identity,nodeRevision:revision};}resizing=false;typesetReadingState.saved=null;},800);
+   if(!saved?.node){resizing=false;typesetReadingState.saved=null;}
    typesetReadingState.width=innerWidth;typesetReadingState.height=innerHeight;
-   rememberReadingPosition();window.SiteToc?.update();
+   rememberReadingPosition();if(anchor)readingPosition={...(readingPosition||{}),node:anchor,nodeTop:anchor.getBoundingClientRect().top,nodeOwner:owner,nodeIdentity:identity,nodeRevision:typesetReadingState.revision};window.SiteToc?.update();
   })));
  });
 }
