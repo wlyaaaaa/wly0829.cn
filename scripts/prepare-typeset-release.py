@@ -707,6 +707,12 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
                               baseline_manifest='<verified-raw-manifest>')
                 if 'observed_at_beijing' in static:
                     static['observed_at_beijing'] = '<generated-time>'
+                highlights = static.get('home_highlights', {}).get('typeset', {})
+                if 'seconds' in highlights:
+                    elapsed = highlights['seconds']
+                    if type(elapsed) not in (int, float) or not math.isfinite(elapsed) or elapsed < 0:
+                        raise ValueError('Home highlight generation duration is invalid')
+                    highlights['seconds'] = '<generated-duration>'
             album = manifest.get('page_flip_preparation')
             if album:
                 if album['source_root'] != str(roots[2]):
