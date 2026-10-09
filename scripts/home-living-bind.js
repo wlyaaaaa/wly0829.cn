@@ -58,6 +58,10 @@
   const scenes = new MutationObserver(continueScene);
   scenes.observe(container, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
   continueScene();
+  container.addEventListener('click', event => {
+    const screen = visibleLayer?.querySelector('[data-hl="screen"]')?.getBoundingClientRect();
+    if (screen && event.clientX >= screen.left && event.clientX <= screen.right && event.clientY >= screen.top && event.clientY <= screen.bottom) location.assign('/cockpit/');
+  });
   addEventListener('pagehide', () => {
     hero.skipIntro();
     scenes.disconnect();

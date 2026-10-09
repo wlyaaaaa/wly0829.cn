@@ -164,7 +164,9 @@ def move_story_details(text,data):
             chunks.insert(0,marker[0]);text=text[:marker.start()]+text[marker.end():]
         if not any('id="'+anchor+'"' in chunk for chunk in chunks):
             raise ValueError('Case reading anchor is missing: '+anchor)
-        panels.append('<div data-how-story-detail="'+str(i)+'">'+''.join(chunks)+'</div>')
+        links = (link for screen in story['detail_screens'] for link in screen.get('links', []))
+        links = ''.join(f'<a href="{html.escape(x["href"], quote=True)}">{html.escape(x["text"])}</a> ' for x in links)
+        panels.append('<div data-how-story-detail="'+str(i)+'">'+''.join(chunks)+'<noscript>'+links+'</noscript></div>')
     return text,''.join(panels)
 
 
