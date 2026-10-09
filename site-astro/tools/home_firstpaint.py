@@ -87,8 +87,13 @@ def adjust_home(html, source, public):
     # 原加载链已经读到native AVIF；独立纹理保留它完整的构图与原画小鸟。
     patch('$.drawImage(l,0,0,m,_);', '_homeNative=l;$.drawImage(l,0,0,m,_);')
     patch('uniform sampler2D u_tex, u_preserve;', 'uniform sampler2D u_tex, u_preserve, u_native;')
-    # 头像/墨迹先与原静态保护同色，再按原纸色reveal；完成时CSS保护不再换色。
-    patch('if (u_it < 7.0) col = mix(vec3(1.0), col, vis);', 'col=mix(col,texture2D(u_native,v_uv).rgb,texture2D(u_preserve,v_uv).r);\\n  if (u_it < 7.0) col = mix(vec3(1.0), col, vis);')
+    # 保色继续服从原藏字与rise/pop取样；完成后仍与静态保护同色。
+    patch('  // ---- 开场：左边还没出场的字先藏起来，再让水彩从白纸上晕开 ----\\n',
+          '  // ---- 开场：左边还没出场的字先藏起来，再让水彩从白纸上晕开 ----\\n  float _homeInkHide=0.0; vec3 _homeInkBg=vec3(1.0);\\n')
+    patch('col = mix(col, bg, max(ink, smoothstep(0.015, 0.050, dk))*(1.0-ivis));',
+          '_homeInkBg=bg; _homeInkHide=max(ink, smoothstep(0.015, 0.050, dk))*(1.0-ivis); col=mix(col,bg,_homeInkHide);')
+    patch('if (u_it < 7.0) col = mix(vec3(1.0), col, vis);',
+          'vec2 _homeNativeUv=u_it<7.0?uv:v_uv;\\n  col=mix(col,mix(texture2D(u_native,_homeNativeUv).rgb,_homeInkBg,_homeInkHide),texture2D(u_preserve,_homeNativeUv).r);\\n  if (u_it < 7.0) col = mix(vec3(1.0), col, vis);')
     patch('  vec3 originalColor=pow(texture2D(u_tex,v_uv).rgb,u_ambientGamma);\\n  float preserve=texture2D(u_preserve,v_uv).r*step(7.0,u_it);\\n  col=mix(col,originalColor,preserve*(1.0-nightReach));\\n', '')
     patch('r.uniform1i(L.u_tex,0),r.uniform1i(L.u_preserve,1)',
           '_homeNative=(()=>{Ht();const im=d.plateImage&&d.plateImage.complete&&d.plateImage.naturalWidth?d.plateImage:_homeNative||e;'

@@ -4,6 +4,12 @@
 #home-01 .home-hero-cta a:first-child { background: #00994c; border-color: #00994c; color: #fff; }
 #home-01 .home-hero-cta a:focus-visible { outline: 3px solid #005d37; outline-offset: 3px; }
 #home-01 .hotspot:is([data-link-id="home-01-link-1-0"], [data-link-id="home-01-link-2-0"]) { display: none !important; }
+/* 中宽横版以1280屏宽、1232px主图为基准，按钮各尺寸随主图等比缩放。 */
+@media (min-width: 768px) and (max-width: 1279.98px) and (orientation: landscape) {
+  #home-01 { container-type: inline-size; }
+  #home-01 .home-hero-cta { --cta-unit: calc(100cqw / 1232); min-height: 0; gap: calc(10.24 * var(--cta-unit)); }
+  #home-01 .home-hero-cta a { padding: calc(5 * var(--cta-unit)) calc(10 * var(--cta-unit)); border-width: calc(1.5 * var(--cta-unit)); font-size: calc(14.72 * var(--cta-unit)); white-space: nowrap; }
+}
 @media (orientation: portrait) {
   #home-01[data-home-cta] { margin-bottom: 140px; }
   #home-01 .home-hero-cta { left: 4.1%; top: 87.8%; width: 91.8%; height: 146px; grid-template-columns: 1fr; grid-template-rows: repeat(3, 44px); gap: 7px; }
