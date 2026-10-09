@@ -4,6 +4,8 @@
 
 首页与驾驶舱生成：`python tools/retain_home_cockpit.py <候选站构建目录>`，然后 `npm run build`。生成脚本只读候选站，复制两页实际依赖和自有动效包，逐文件核对 SHA-256；清单在 `src/chrome/retained/manifest.json`。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
 
+首页按浏览器会话首次从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。回访、后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
+
 ## 一次完整生成
 
 ```powershell

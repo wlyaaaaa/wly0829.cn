@@ -1,4 +1,4 @@
-"""首页只在首屏绘制前争取一次开场；原图和其余脚本不变。"""
+"""会话首次从纸色开场；图片到达后超时和连续慢帧才跳完成图。"""
 import hashlib
 import re
 from pathlib import Path
@@ -11,15 +11,20 @@ OPENING = r"""(() => {
   const back=performance.getEntriesByType('navigation')[0]?.type==='back_forward';
   const opening=window.HomeOpening={pending:first&&!back&&!reduced.matches,
     reason:reduced.matches?'reduced-motion':back?'back-forward':first?'preparing':'session-return',
-    deadline:performance.now()+500,started:false};
+    imageAt:null,started:false};
   let timer=0;
   opening.release=reason=>{if(!opening.pending)return;opening.pending=false;
     opening.reason=reason;delete root.dataset.homeOpening;clearTimeout(timer);};
-  opening.start=()=>{if(!opening.pending||performance.now()>opening.deadline){
+  opening.dataReady=image=>{if(!opening.pending||opening.started||opening.imageAt!==null)return;
+    opening.imageAt=performance.getEntriesByName(image.currentSrc||image.src).at(-1)?.responseEnd||performance.now();
+    timer=setTimeout(()=>opening.release('startup-timeout'),Math.max(0,3000-(performance.now()-opening.imageAt)));};
+  opening.start=()=>{if(!opening.pending||opening.imageAt!==null&&performance.now()-opening.imageAt>=3000){
     opening.release('startup-timeout');return false;}
     opening.started=true;clearTimeout(timer);return true;};
-  if(opening.pending){root.dataset.homeOpening='pending';
-    timer=setTimeout(()=>opening.release('startup-timeout'),500);}
+  if(opening.pending)root.dataset.homeOpening='pending';
+  document.addEventListener('load',event=>{if(event.target.matches?.('#home-01 picture img'))opening.dataReady(event.target);},true);
+  document.addEventListener('DOMContentLoaded',()=>{const image=document.querySelector('#home-01 picture img');
+    if(image?.complete&&image.naturalWidth)opening.dataReady(image);},{once:true});
   addEventListener('error',event=>{if(/hero-live|home-app|home-firstpaint/.test(event.target?.src||''))
     opening.release('script-error');},true);
   addEventListener('pagehide',()=>opening.release('pagehide'));
@@ -49,17 +54,25 @@ def adjust_home(html, source, public):
     # 记录接手时刻；首次完整绘制前不预推进开场，迟接手的小鸟留在原落点。
     patch('let Ct=!1,le=!1,r0="loading",c0=0;',
           'let Ct=!1,le=!1,r0="loading",c0=0,_homeLiveAt=Infinity,_homeSettled=false,'
-          '_homeNative=null,_homeNativeTex=null,_homeBlend=0;')
+          '_homeNative=null,_homeNativeTex=null,_homeBlend=0,_homeSlowFrames=0;')
     patch('p.i0=le?p.t:p.t-99,at(!0)', 'p.i0=le?p.t:p.t-99,at(le)')
     patch('le&&!p.manual&&jt(Ee*.112)', '0')
     patch('Ze(),Tt(),rt=performance.now(),0,T.classList.add("is-ready")',
           'Ze(),le&&d.opening&&!d.opening.start()&&(le=!1,p.i0=p.t-99,at(!1),Ze()),'
           '_homeLiveAt=performance.now(),Tt(),rt=performance.now(),T.classList.add("is-ready")')
+    # 只在原开场播放期间计连续慢帧；跳过仍交给原引擎，完成图用既有native缓存。
+    patch('const o=rt?e-rt:0,s=le&&p.t-p.i0<7?o/1e3:Math.min(.05,o/1e3);',
+          'const o=rt?e-rt:0;'
+          'if(le&&p.t-p.i0<7){_homeSlowFrames=o>100?_homeSlowFrames+1:0;'
+          'if(_homeSlowFrames>=5){r0="slow-intro-frames";_homeSettled=true;_homeLiveAt=Infinity;'
+          'at(!1);N0();_homeLiveAt=performance.now();rt=e;Ne();return;}}'
+          'const s=le&&p.t-p.i0<7?o/1e3:Math.min(.05,o/1e3);')
     # 最后半个动画秒收回位移，开场落在静态几何；随后0.8真实秒恢复环境运动。
     patch('function Ze(){const e=',
-          'function Ze(){const _homeIt=p.t-p.i0;'
-          'if(le&&_homeIt>=7&&!_homeSettled){_homeSettled=true;_homeLiveAt=performance.now();}'
-          'const _homeMotion=le&&_homeIt<7?Te(ve((7-_homeIt)/.5,0,1)):'
+          'function Ze(){const _homeIt=p.t-p.i0;let _homeFresh=false;'
+          'if(le&&_homeIt>=7&&!_homeSettled){_homeSettled=true;at(!1);'
+          '_homeLiveAt=performance.now();_homeFresh=true;}'
+          'const _homeMotion=_homeFresh?0:le&&_homeIt<7?Te(ve((7-_homeIt)/.5,0,1)):'
           'Te(ve((performance.now()-_homeLiveAt)/800,0,1));_homeBlend=_homeMotion;const e=')
     patch('r.uniform1f(L.u_motion,g?0:1)', 'r.uniform1f(L.u_motion,g?0:_homeMotion)')
     patch('r.uniform2f(L.u_par,g?0:p.par[0]/(Q?2880:m),g?0:p.par[1]/(Q?1621:_))',

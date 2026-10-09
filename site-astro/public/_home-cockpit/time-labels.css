@@ -1,4 +1,5 @@
-/* 第 2 版：画面下沿的水彩标签，五个时段仍使用原按钮和原点击逻辑。 */
+/* 首次布局：此段同步嵌入首页 head；原按钮和点击逻辑照旧。 */
+html[data-home-opening="pending"] #home-01 { background: #fff; }
 #home-01 .home-time-controls {
   top: auto !important;
   bottom: 2.4% !important;
@@ -7,26 +8,9 @@
   gap: clamp(6px, 1vw, 14px) !important;
   align-items: center;
 }
-#home-01 .home-time-controls button {
-  --label-ink: #0c6932;
-  color: var(--label-ink);
-  background: radial-gradient(ellipse at 30% 45%, #dbecc4, #eaf0cf 65%, #e5edc6) !important;
-  border: 0 !important;
-  border-radius: 2px !important;
-  padding: 9px 10px !important;
-  min-height: 44px !important;
-  clip-path: polygon(5% 8%, 20% 3%, 40% 6%, 61% 1%, 82% 5%, 96% 12%, 98% 38%, 95% 58%, 99% 78%, 92% 94%, 69% 98%, 47% 93%, 24% 99%, 6% 92%, 1% 72%, 4% 51%, 0 28%);
-  transition: background-color .2s, filter .2s;
-  filter: drop-shadow(0 1px 2px #38602c18);
-}
-#home-01 .home-time-controls button:nth-child(2n) { transform: rotate(-2deg); }
-#home-01 .home-time-controls button:nth-child(2n+1) { transform: rotate(1.5deg); }
-#home-01 .home-time-controls button[aria-pressed="true"] {
-  background: radial-gradient(ellipse at 38% 42%, #007a44, #168a52 70%, #32935a) !important;
-}
-#home-01 .home-time-controls button[aria-pressed="true"] img { filter: brightness(0) invert(1); }
-#home-01 .home-time-controls button:hover { filter: brightness(.95); }
-#home-01 .home-time-controls button:focus-visible { outline: 3px solid #005d37; outline-offset: -5px; }
+#home-01 .home-time-controls button { padding: 9px 10px !important; min-height: 44px !important; border-width: 0 !important; }
+#home-01 .home-time-controls button img { width: 38px; height: 24px; }
+#home-01 .home-time-controls button:nth-child(5) img { width: 123px; }
 @media (min-width: 768px) and (max-width: 1100px) and (orientation: landscape) {
   #home-01 .home-time-controls { right: 3% !important; }
 }
@@ -41,8 +25,29 @@
     gap: 4px !important;
   }
   #home-01 .home-time-controls button { min-width: 44px !important; padding: 7px 6px !important; }
-  #home-01 .home-time-controls button img { max-width: 100%; width: auto; height: 22px; }
+  #home-01 .home-time-controls button img { max-width: 100%; width: 34.833333px; height: 22px; }
+  #home-01 .home-time-controls button:nth-child(5) img { width: 112.75px; }
 }
+@media (max-width: 352px) and (orientation: portrait) { #home-01 { margin-bottom: 108px; } #home-01 .home-time-controls { bottom: -100px !important; } }
+/* 标签绘色 */
+#home-01 .home-time-controls button {
+  --label-ink: #0c6932;
+  color: var(--label-ink);
+  background: radial-gradient(ellipse at 30% 45%, #dbecc4, #eaf0cf 65%, #e5edc6) !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+  clip-path: polygon(5% 8%, 20% 3%, 40% 6%, 61% 1%, 82% 5%, 96% 12%, 98% 38%, 95% 58%, 99% 78%, 92% 94%, 69% 98%, 47% 93%, 24% 99%, 6% 92%, 1% 72%, 4% 51%, 0 28%);
+  transition: background-color .2s, filter .2s;
+  filter: drop-shadow(0 1px 2px #38602c18);
+}
+#home-01 .home-time-controls button:nth-child(2n) { transform: rotate(-2deg); }
+#home-01 .home-time-controls button:nth-child(2n+1) { transform: rotate(1.5deg); }
+#home-01 .home-time-controls button[aria-pressed="true"] {
+  background: radial-gradient(ellipse at 38% 42%, #007a44, #168a52 70%, #32935a) !important;
+}
+#home-01 .home-time-controls button[aria-pressed="true"] img { filter: brightness(0) invert(1); }
+#home-01 .home-time-controls button:hover { filter: brightness(.95); }
+#home-01 .home-time-controls button:focus-visible { outline: 3px solid #005d37; outline-offset: -5px; }
 @media (prefers-reduced-motion: reduce) {
   #home-01 .home-time-controls button { transition: none; }
 }
