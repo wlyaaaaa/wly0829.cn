@@ -1146,6 +1146,7 @@ def _render(block, ctx, kind):
              f'data-size="{spec.get("size","default")}" data-dot-nodes="{str(bool(spec.get("_dot_nodes"))).lower()}" '
              f'data-section-content="{section_mode}" '
              f'data-compact-rows="{str(bool(spec.get("_compact_rows"))).lower()}" '
+             + ('data-align-items="start" ' if spec.get("align_items") == "start" else '') +
              f'style="--sequence-min-font:{font}px;--sequence-icon-column:{icon_percent if icon_percent is not None else 25:g}%">']
     nodes = _prepared_nodes(block.get("nodes") or [], spec, ctx, kind)
     has_source_connectors = any(n.get('_source_connector_before') for n in nodes)
@@ -1530,7 +1531,7 @@ _COMMON_FIELDS = [
     "main_illustration_position", "highlight_steps", "role_icons", "ribbon", "database_bracket", "tone", "end_illustration",
 ]
 SPEC_FIELDS = {
-    "flow": _COMMON_FIELDS + ["hero_after_item", "layout", "scale"],
+    "flow": _COMMON_FIELDS + ["hero_after_item", "layout", "scale", "align_items"],
     "timeline": _COMMON_FIELDS + ["split_at", "split_after", "items_per_column", "column_flow", "segments", "variant", "band_placement", "layout"],
     "segmented_band": _COMMON_FIELDS + ["variant", "layout", "segment_proportions", "annotation_side", "section_content"],
 }

@@ -912,3 +912,5 @@
   vertical-align: middle;
   object-fit: contain;
 }
+/* align_items:start：并排等高卡的内容顶对齐，小标题同一高度（放在全部图位规则之后才盖得住）。 */
+.c-diagram.c-sequence[data-align-items="start"] .sequence-item > .sequence-card { align-items: start; }

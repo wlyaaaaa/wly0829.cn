@@ -35,7 +35,7 @@ globalThis.TypesetApplyResidual = (options={}) => {
     for(const term of terms){const label=term.querySelector(':scope > dt');if(!label)continue;
       const width=contentWidth(term),fs=number(getComputedStyle(term).fontSize),gap=number(getComputedStyle(term).columnGap)||fs*.5;
       if(widest>width+1){receipt.unresolved.push({kind:'dt',text:label.textContent,reason:'术语完整宽度超过整排',need:widest,available:width});continue;}
-      nowrap(label);const below=widest+gap+fs*6>width;
+      nowrap(label);const below=document.body.classList.contains('o-v')||widest+gap+fs*6>width; // 竖版（手机）词在上、解释在下
       term.style.display='grid';term.style.gridTemplateColumns=below?'minmax(0,1fr)':widest+'px minmax(0,1fr)';
       if(below)for(const value of term.querySelectorAll(':scope > dd'))value.style.gridColumn='1 / -1';
       receipt.terms.push({text:label.textContent,width:widest,available:width,value_below:below});

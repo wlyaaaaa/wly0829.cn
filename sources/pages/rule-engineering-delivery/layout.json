@@ -214,6 +214,7 @@
         "text_ref": "1对照本人要求本人的话先分类：禁令照办，觉得不对先拿事实问本人",
         "columns": 5,
         "direction": "horizontal",
+        "align_items": "start",
         "connector": "arrow",
         "illustration": "left_inside"
       },
