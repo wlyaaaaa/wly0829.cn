@@ -19,9 +19,9 @@
       "id": "devconfig-backup-01",
       "section": "top",
       "title": "开头",
-      "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
-      "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
-      "text": "# 开发配置备份\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕\n\n重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。\n\n- **66 个来源**　开发配置清单（9 月 29 日凌晨起）；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备\n- **146,300 个文件**　微信原始文件 42.5 GiB，每天拍快照复制一份到 G\n- **10,498 个文件**　9 月 28 日的开发配置包，压缩后 1.11 GiB（按改之前的清单）\n- **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云\n\n截至 9 月 28 日\n\n**现在**　〔现在正不正常 → 驾驶舱〕",
+      "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 10 月 10 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+      "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 10 月 10 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+      "text": "# 开发配置备份\n\n〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕\n\n重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。\n\n- **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备\n- **148,470 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G\n- **6,266 个文件**　最新一个开发配置包，压缩后 286 MiB\n- **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云\n\n截至 10 月 10 日\n\n**现在**　〔现在正不正常 → 驾驶舱〕",
       "links": [
         {
           "text": "在整套系统里的位置 → 怎么协作",
@@ -78,7 +78,7 @@
       "title": "备份里有什么，没有什么",
       "scene": "横版：左右两栏。左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；五张标签卡下面一块浅绿细框“AI 工具这一块只有它在备”：三行工具小条（Codex、Antigravity、OpenCode，各配一个小图标），下面一条更浅的细框“迁移与核对依据”，四条编号小字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
       "portrait": "竖版：标题；先“开发配置包”：纸箱插画缩小放在上面，五条内容一行一条往下排，接着“AI 工具这一块只有它在备”三行和“迁移与核对依据”四条，再接“不进包的”、黄色提醒条；再往下是“微信”：文件夹插画和那段字。",
-      "text": "# 备份里有什么，没有什么\n\n## 开发配置包（9 月 29 日凌晨起的清单：66 个来源）\n\n- **用户目录**　19 个文件夹：Claude、Codex、Antigravity、Cursor、Cline、Copilot、OpenCode 等 AI 和编程工具的设置，GPG、Docker 上下文；17 个单文件：Git、npm、conda、WSL、WakaTime、Claude 的设置等\n- **AppData 里 29 项**　VS Code、Cursor、JetBrains、Typora、Apifox、OBS、PowerToys、Windows Terminal、代理程序、SignalRGB、GitHub CLI、Docker Desktop、OpenCode 桌面版、PixPin、FinalShell，还有自己装的字体\n- **Scoop**　用 Scoop 装的软件各自的设置\n- **系统**　用户和系统环境变量、系统 PATH、hosts、Wi-Fi 配置、Xshell 会话、按名字挑出的 16 个计划任务的定义（其中 8 个停用）\n- **换机清单**　已装软件表、winget 和 Scoop 清单、VS Code 和 Cursor 扩展、JetBrains 插件，以及选的是哪个云盘账号\n\n**AI 工具这一块只有它在备**\n\n- **Codex**　带配置和记忆；记忆开关虽关着，旧的 84 个记忆文件照备。\n- **Antigravity**　带设置；命令行版照带设置、MCP 连接和登录文件。不带对话、标注和知识（9 月 29 日起）。\n- **OpenCode**　带设置。\n\n**迁移与核对依据**\n1. 9 月 28 日晚起，这三样统一由这里备；原来 Codex、Gemini 各自的记忆备份已停。\n2. 统一时顺带补回了被通用排除规则误挡的文件：Codex 记忆里 45 个扩展笔记、Antigravity 的状态文件和项目、插件登记、OpenCode 的 1 个自定义插件。\n3. 已冻结的 OpenClaw 不再带，旧包到期自然删掉。\n4. 10 月 3 日修复后的当前包已核对清单：该带的配置和记忆都在，该排除的对话与附件均未混入。\n\n清单里本机没装的（例如 conda 设置、Docker MCP 的 3 个文件）记为“没装”，不算失败；但 Codex、Claude、Antigravity、OpenCode 这几个必需的配置目录缺了，整次报出缺的是哪个，不当成“没装”。9 月 28 日 12:05 那份还是旧清单：10,498 个文件、压缩前 1.92 GiB，其中 911 个是 OpenClaw 的。\n\n**不进包的**　缓存、插件本体、node_modules、日志、浏览器 Cookie 和历史；.env、auth.json、client_secret.json 这几种登录凭据文件（由〔密码中心〕单独恢复；Claude、Antigravity 自己的登录文件照原样带着）；各 AI 工具的对话历史（Codex 对话另有专门的快照备份，9 月 29 日起它的附件、听写记录、生成的图片和对话备份文件夹也不再进包，Codex 对话不上云盘；Claude 只备配置，对话和记忆都不备）。\n\n**包里仍可能有密码和密钥**（Wi-Fi 配置、GPG 钥匙、Xshell 会话、AI 工具的登录文件），所以包只放本机、G、H 和私人云盘；公开仓库里只有脚本。\n\n## 微信\n\nE:\\Documents\\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 伴随文件（少了它们，最近的消息可能对不上）、图片、视频和文件；只去掉 7 类缓存和临时目录（缓存、临时文件、小程序运行环境、性能记录、崩溃记录、临时传输文件、推荐封面）。只复制，不打开数据库、不解密、不看内容。",
+      "text": "# 备份里有什么，没有什么\n\n## 开发配置包（现行清单：70 个来源）\n\n- **用户目录**　19 个文件夹：Claude、Codex、Antigravity、Cursor、Cline、Copilot、OpenCode 等 AI 和编程工具的设置，GPG、Docker 上下文；17 个单文件：Git、npm、conda、WSL、WakaTime、Claude 的设置等\n- **AppData 里 33 项**　VS Code、Cursor、JetBrains、Typora、Apifox、OBS、PowerToys、Windows Terminal、代理程序、SignalRGB、GitHub CLI、Docker Desktop、OpenCode 桌面版、PixPin、FinalShell，还有自己装的字体\n- **Scoop**　用 Scoop 装的软件各自的设置\n- **系统**　用户和系统环境变量、系统 PATH、hosts、Wi-Fi 配置、Xshell 会话、按名字挑出的 16 个计划任务的定义（其中 8 个停用）\n- **换机清单**　已装软件表、winget 和 Scoop 清单、VS Code 和 Cursor 扩展、JetBrains 插件，以及选的是哪个云盘账号\n\n**AI 工具这一块只有它在备**\n\n- **Codex**　带配置和记忆；记忆开关虽关着，旧的 84 个记忆文件照备。\n- **Antigravity**　带设置；命令行版照带设置、MCP 连接和登录文件。不带对话、标注和知识（9 月 29 日起）。\n- **OpenCode**　带设置。\n\n**迁移与核对依据**\n1. 9 月 28 日晚起，这三样统一由这里备；原来 Codex、Gemini 各自的记忆备份已停。\n2. 统一时顺带补回了被通用排除规则误挡的文件：Codex 记忆里 45 个扩展笔记、Antigravity 的状态文件和项目、插件登记、OpenCode 的 1 个自定义插件。\n3. 已冻结的 OpenClaw 不再带，旧包到期自然删掉。\n4. 10 月 3 日修复后的当前包已核对清单：该带的配置和记忆都在，该排除的对话与附件均未混入。\n\n清单里本机没装的（例如 conda 设置、Docker MCP 的 3 个文件）记为“没装”，不算失败；但 Codex、Claude、Antigravity、OpenCode 这几个必需的配置目录缺了，整次报出缺的是哪个，不当成“没装”。9 月 28 日 12:05 那份还是旧清单：10,498 个文件、压缩前 1.92 GiB，其中 911 个是 OpenClaw 的。\n\n**不进包的**　缓存、插件本体、node_modules、日志、浏览器 Cookie 和历史；.env、auth.json、client_secret.json 这几种登录凭据文件（由〔密码中心〕单独恢复；Claude、Antigravity 自己的登录文件照原样带着）；各 AI 工具的对话历史（Codex 对话另有专门的快照备份，9 月 29 日起它的附件、听写记录、生成的图片和对话备份文件夹也不再进包，Codex 对话不上云盘；Claude 只备配置，对话和记忆都不备）。\n\n**包里仍可能有密码和密钥**（Wi-Fi 配置、GPG 钥匙、Xshell 会话、AI 工具的登录文件），所以包只放本机、G、H 和私人云盘；公开仓库里只有脚本。\n\n## 微信\n\nE:\\Documents\\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 伴随文件（少了它们，最近的消息可能对不上）、图片、视频和文件；只去掉 7 类缓存和临时目录（缓存、临时文件、小程序运行环境、性能记录、崩溃记录、临时传输文件、推荐封面）。只复制，不打开数据库、不解密、不看内容。",
       "links": [
         {
           "text": "密码中心",
@@ -116,7 +116,7 @@
       "title": "它是怎么搭的",
       "scene": "横版：上下两条横向流水线，每条是一串圆角节点、节点之间细绿箭头，节点左边小水彩图标、右边字。上面一条标“开发配置”（节点：来源→逐个复制→再扫一遍→打包→三道核对→本机→G→云盘）；下面一条标“微信”（节点：卷影快照→复制新一份→整份核对→换上→每周一：查回执→上云）。两条线下面一排三张小卡：“用到的工具”（画 PowerShell、7-Zip、rclone、Google 云盘的小标志）、“回执”（画一张带对勾的小票）、“规模”（画一叠代码纸）。",
       "portrait": "竖版：标题；“开发配置”流水线改成从上到下的竖流程，接着“微信”竖流程；最下面三张小卡上下排、满宽。",
-      "text": "# 它是怎么搭的\n\n## 开发配置\n1. **按清单找来源**　66 个来源写在一个清单文件里，改备份范围只改它\n2. **逐个复制**　普通文件复制到临时区并核对 SHA-256；选定的活动 SQLite 数据库先做一致副本，再核对完整性\n3. **再扫一遍**　复制完再看一遍来源：文件名单变了，重新收集整份，最多 3 轮；持续变化才失败；已复制的文件后来又改了，只记个数（9 月 28 日是 0）。所以它是逐个文件核对过的，不是同一瞬间的快照\n4. **打包、三道核对**　7-Zip 打成 zip；7-Zip 自检；包里每个文件和清单逐项对上；算整包 SHA-256\n5. **发布**　本机→G→云盘，每处复制完都比对哈希，最后才把“当前是哪个包”指过去\n\n## 微信\n1. **拍快照**　用 Windows 卷影快照（VSS）定格 E 盘那一刻，微信照常写也不影响\n2. **复制新一份**　在 G 上旁边建新目录；和上一份一样的文件用硬链接，不重复占空间，所以 42.5 GiB 只用 12 分钟\n3. **整份核对、换上**　每个文件的 SHA-256 都对上才换上，上一份留着\n4. **每周一上云**　先查回执，再用 rclone 传，传完两遍比对\n\n**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（要管理员权限，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口。\n\n**回执**　每次运行写一份：每一步成没成、跳过了哪些文件、出错的是哪个（只写路径，不写内容）。\n\n**规模**　45 个受 Git 管的文件、约 4,400 行，其中 19 个是自检脚本；68 次提交。",
+      "text": "# 它是怎么搭的\n\n## 开发配置\n1. **按清单找来源**　70 个来源写在一个清单文件里，改备份范围只改它\n2. **逐个复制**　普通文件复制到临时区并核对 SHA-256；选定的活动 SQLite 数据库先做一致副本，再核对完整性\n3. **再扫一遍**　复制完再看一遍来源：文件名单变了，重新收集整份，最多 3 轮；持续变化才失败；已复制的文件后来又改了，只记个数（9 月 28 日是 0）。所以它是逐个文件核对过的，不是同一瞬间的快照\n4. **打包、三道核对**　7-Zip 打成 zip；7-Zip 自检；包里每个文件和清单逐项对上；算整包 SHA-256\n5. **发布**　本机→G→云盘，每处复制完都比对哈希，最后才把“当前是哪个包”指过去\n\n## 微信\n1. **拍快照**　用 Windows 卷影快照（VSS）定格 E 盘那一刻，微信照常写也不影响\n2. **复制新一份**　在 G 上旁边建新目录；和上一份一样的文件用硬链接，不重复占空间，所以 9 月 28 日那次 42.5 GiB 只用了 12 分钟\n3. **整份核对、换上**　每个文件的 SHA-256 都对上才换上，上一份留着\n4. **每周一上云**　先查回执，再用 rclone 传，传完两遍比对\n\n**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（要管理员权限，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口。\n\n**回执**　每次运行写一份：每一步成没成、跳过了哪些文件、出错的是哪个（只写路径，不写内容）。\n\n**规模**　45 个受 Git 管的文件、约 4,400 行，其中 19 个是自检脚本；68 次提交。",
       "links": [],
       "anchors": [],
       "live": [],
@@ -329,11 +329,11 @@
         "id": "f-config-sources",
         "group": "g-config",
         "name": "按清单收集配置",
-        "what": "66 个来源：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”；必需的 AI 配置目录缺了明确报缺口",
+        "what": "70 个来源：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”；必需的 AI 配置目录缺了明确报缺口",
         "how": "自动：DevConfigBackup-Local；改范围改 sources.psd1",
         "status": "在用",
         "screen": "devconfig-backup-08",
-        "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1（bd651fa 后 65 个）；DevConfig.Sources.ps1:2-52；9/28 包清单为改前 59 个来源"
+        "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1（10 月 7 日 2cc7be0 加入代理程序 FlyingBird 的 4 项后为 70 个）；DevConfig.Sources.ps1"
       },
       {
         "id": "f-system-export",
@@ -559,32 +559,50 @@
     "numbers": [
       {
         "id": "n-config-files",
+        "text": "6,266 个文件",
+        "meaning": "北京 10 月 9 日 12:07 完成的开发配置包里的文件数",
+        "as_of": "2026-10-09",
+        "source": "out\\latest.zip.receipt.json file_count（devconfig-20261008-230721-2f23e2bc.zip）",
+        "screens": [
+          "devconfig-backup-01"
+        ]
+      },
+      {
+        "id": "n-config-files-0928",
         "text": "10,498 个文件",
-        "meaning": "9 月 28 日 12:05 那个开发配置包里的文件数",
+        "meaning": "9 月 28 日 12:05 那个开发配置包里的文件数（历史快照：这些屏按当时日期写明，未随首屏刷新）",
         "as_of": "2026-09-28",
         "source": "out\\latest.zip.receipt.json file_count",
         "screens": [
-          "devconfig-backup-01",
           "devconfig-backup-03"
         ]
       },
       {
         "id": "n-config-size",
+        "text": "压缩后 286 MiB · 压缩前 0.88 GiB",
+        "meaning": "同一个包：299,545,722 字节；清单 bytes 941,389,373",
+        "as_of": "2026-10-09",
+        "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
+        "screens": [
+          "devconfig-backup-01"
+        ]
+      },
+      {
+        "id": "n-config-size-0928",
         "text": "压缩后 1.11 GiB · 压缩前 1.92 GiB",
-        "meaning": "同一个包：1,195,940,714 字节；清单 bytes 2,061,071,802",
+        "meaning": "同一个包：1,195,940,714 字节；清单 bytes 2,061,071,802（历史快照：这些屏按当时日期写明，未随首屏刷新）",
         "as_of": "2026-09-28",
         "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
         "screens": [
-          "devconfig-backup-01",
           "devconfig-backup-03"
         ]
       },
       {
         "id": "n-sources",
-        "text": "66 个来源",
-        "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出）：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 1 项；9 月 29 日凌晨 73556a9 把 .config\\opencode 加成精确目录（为了把它登记成必需来源）后是 66 个；bd651fa 后是 65 个，再之前 59 个",
-        "as_of": "2026-09-29",
-        "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 9d35282：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppData 29＋ExtraDirs 1）",
+        "text": "70 个来源",
+        "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出和对话历史段）：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 1 项；9 月 29 日为 66 个，10 月 7 日 2cc7be0 加 FlyingBird 4 项",
+        "as_of": "2026-10-10",
+        "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 2cc7be0：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppDataRoamingFiles 16＋AppDataRoamingDirs 11＋AppDataLocalDirs 5＋AppDataLocalFiles 1＋ExtraDirs 1）；同法数 9d35282 得 66，与旧稿一致",
         "screens": [
           "devconfig-backup-01",
           "devconfig-backup-03",
@@ -594,12 +612,21 @@
       },
       {
         "id": "n-wechat-files",
+        "text": "148,470 个文件 · 42.8 GiB",
+        "meaning": "北京 10 月 9 日 10:11 完成的那份微信备份（45,947,989,585 字节）",
+        "as_of": "2026-10-09",
+        "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json file_count、bytes",
+        "screens": [
+          "devconfig-backup-01"
+        ]
+      },
+      {
+        "id": "n-wechat-files-0928",
         "text": "146,300 个文件 · 42.5 GiB",
-        "meaning": "9 月 28 日 09:30 那份微信备份（45,603,489,818 字节），同日上云的也是这一份",
+        "meaning": "9 月 28 日 09:30 那份微信备份（45,603,489,818 字节），同日上云的也是这一份（历史快照：这些屏按当时日期写明，未随首屏刷新）",
         "as_of": "2026-09-28",
         "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json；state\\wechat-drive-success.json",
         "screens": [
-          "devconfig-backup-01",
           "devconfig-backup-05",
           "devconfig-backup-07",
           "devconfig-backup-10"
@@ -609,8 +636,8 @@
         "id": "n-tasks",
         "text": "4 个自动任务",
         "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-        "as_of": "2026-09-28",
-        "source": "Get-ScheduledTask",
+        "as_of": "2026-10-10",
+        "source": "Get-ScheduledTask（10 月 10 日只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
         "screens": [
           "devconfig-backup-01"
         ]
