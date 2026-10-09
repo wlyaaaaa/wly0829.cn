@@ -263,7 +263,7 @@
  "source": {
   "page": "sources/pages/rules-home/page.json",
   "sha256": "2326303ad9d1835784cb5f210791f1bbc837a31f5ed9f151a03d4ab6c6b40d1f",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -465,7 +465,11 @@
    "key": "ill-4bce9731581bc2",
    "source_phrase": "左边色块下方留出的位置画一幅水彩插画：一个两层的小木书架，上层只放一本厚厚的精装书，封面深绿，垂一条绿色丝带书签，书旁一枚绿色印章（印面朝下，看不到印文）；下层整齐竖着 10 本薄册子，书脊从深绿到浅绿渐变；书架旁几片水彩绿叶。",
    "sha256": "421c6aa8d646e894c5b62de75e129b60646020d72acece8b84a5ebe155efb705",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个两层的小木书架，上层只放一本厚厚的精装书，封面深绿，垂一条绿色丝带书签，书旁一枚绿色印章（印面朝下，看不到印文）；下层整齐竖着 10 本薄册子，书脊从深绿到浅绿渐变；书架旁几片水彩绿叶"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -482,7 +486,14 @@
    "key": "title-1123245d1bed08b2722d",
    "title_text": "规则",
    "sha256": "ba17c50d535d6b4856c59eee91105a04e280d2e1c43feb765e57a1177a9d9011",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    8,
+    307,
+    171
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -499,7 +510,14 @@
    "key": "title-00267a7b08c70dd214ad",
    "title_text": "约法",
    "sha256": "faa1270e33a9a453dafe203de8fbc9f71e6351b3906b35878af76d0a6526148b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    865,
+    81,
+    1053,
+    179
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -728,7 +746,14 @@
    "key": "title-aa17a270b4aa01ce7c57",
    "title_text": "派谁：什么活交哪个 AI",
    "sha256": "34ed6b13888a6deb51e5fd240baca2a03b45fa96697bfc31278b5e40ef98de54",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    404,
+    6,
+    1280,
+    154
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -988,7 +1013,8 @@
    "key": "title-28c5d7872f811b188340",
    "title_text": "碰到一件事，AI 怎么判断",
    "sha256": "db3dbf6af13e9c0c1b35094422ba089d04d40dfa48403b68cc58bee61606c209",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1371,7 +1397,8 @@
    "key": "title-affcb0a1678abce5ccb8",
    "title_text": "10 个专题",
    "sha256": "38a0e937f9bc2af7475951b58300ffba01f60353837232745b1d4f9f81977185",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -133,7 +133,7 @@
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
   "sha256": "9fa6f1e56994626552cecbdc03a2e6b54b7051c11e04410fe8ab4fd820ff8159",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -270,7 +270,11 @@
    "key": "仓库入口分支",
    "source_phrase": "右上角一幅小插画：一扇半开的小门，门口立着一块写着仓库名的木牌，门边一只放大镜照着一根分出两个杈的树枝（像 Git 分支）。",
    "sha256": "fb8713f1caaf2aa08ba6baf5aebe1db8c945d387bfdf3d92ed485a8ab116ca5d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一扇半开的小门，门口立着一块写着仓库名的木牌，门边一只放大镜照着一根分出两个杈的树枝（像 Git 分支"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -287,7 +291,8 @@
    "key": "title-ac5fa6b95fb3139da85a",
    "title_text": "改项目前先核对",
    "sha256": "52cee192fcc1c315989578a8aee1ba04f37b6f94642e25eb5061e3635ad94eb2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -514,7 +519,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -751,7 +757,8 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -947,7 +954,8 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

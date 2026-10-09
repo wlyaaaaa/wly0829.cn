@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "674e8b199941c4ab4be9df79f953ba6491404cb85058d8bc5b45f6a35fbfbced",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -983,7 +983,14 @@
    "key": "title-r3-0d293ec5d94972ae8bb5",
    "title_text": "Steam 外观备份",
    "sha256": "837f8f4ac44e46767d355bef3fbba3f598df82f4024009af054ea0dee70c27f4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    172,
+    49,
+    921,
+    223
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1250,7 +1257,11 @@
    "key": "ill-080add9cd0030c",
    "source_phrase": "三张竖向大卡片横排：左卡（绿色细边，标签“能装回的：2 个文件”）顶部一幅小水彩插画：一个浅色的 Steam 窗口草图，右上角一个绿色按钮，右侧一条极细的滚动条被一枚放大镜照着；下面两段（粗体小标题＋正文）。",
    "sha256": "a9f8b16c6185ffdf792475613ab2868f8164ee2f2ceef9eedc843e171aee4a55",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个浅色的 Steam 窗口草图，右上角一个绿色按钮，右侧一条极细的滚动条被一枚放大镜照着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1267,7 +1278,14 @@
    "key": "title-0edf304366fc91280fb9",
    "title_text": "存了什么、没存什么",
    "sha256": "a43b33e108825d9b5270daf9a63ee0fc9b205b524490cbb904fa63ea35fe5e97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    168,
+    51,
+    893,
+    196
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1598,7 +1616,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "120ccf74245896faf26f89084cffa6406560b108b3388c1c2296cb6611897e8b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    28,
+    86,
+    697,
+    310
+   ],
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1615,7 +1640,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    878,
+    11,
+    1338,
+    192
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1914,7 +1946,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-cfc4e91cd52655c5f83d",
    "title_text": "换电脑怎么装回",
    "sha256": "582ef28d675d1b9f8201a4753d9d3151ea53730955d5a1dc360ed37ced2f0992",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    53,
+    35,
+    703,
+    187
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2184,7 +2223,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-a9ef7c14972894e60892",
    "title_text": "一次备份经过哪几步",
    "sha256": "25f70f4eda66d32fcadd83ebf60c585ed9a4f087f19c420aa225105b048e4994",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2487,7 +2527,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    24,
+    10,
+    738,
+    227
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2682,7 +2729,11 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅水彩插画（1 一个敞开的公开书架，书架上的文件夹里有一张被小剪刀剪掉一角的纸，剪下的一角上画着一串打了马赛克的数字；2 一只手正要把一张纸放进碎纸机，另一只手挡住了它，旁边一个半开、里面有空格的文件夹；3 两张一模一样的纸并排，第二张右上角贴着一枚写着“3.5.0”的小邮票），插画下面粗体标题，再下面“麻烦”“解法”两段，“麻烦”“解法”四个字用绿色小标签。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个敞开的公开书架，书架上的文件夹里有一张被小剪刀剪掉一角的纸，剪下的一角上画着一串抽象的小方块"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2697,7 +2748,11 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "ill-e16ee295d00f1b",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅水彩插画（1 一个敞开的公开书架，书架上的文件夹里有一张被小剪刀剪掉一角的纸，剪下的一角上画着一串打了马赛克的数字；2 一只手正要把一张纸放进碎纸机，另一只手挡住了它，旁边一个半开、里面有空格的文件夹；3 两张一模一样的纸并排，第二张右上角贴着一枚写着“3.5.0”的小邮票），插画下面粗体标题，再下面“麻烦”“解法”两段，“麻烦”“解法”四个字用绿色小标签。",
    "sha256": "5781931ba047d6d25589f5b153128d3c05fa831873b0980e62fe199fdbec1bb1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手正要把一张纸放进碎纸机，另一只手挡住了它，旁边一个半开、里面有空格的文件夹"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2712,7 +2767,11 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "纸张复本",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅水彩插画（1 一个敞开的公开书架，书架上的文件夹里有一张被小剪刀剪掉一角的纸，剪下的一角上画着一串打了马赛克的数字；2 一只手正要把一张纸放进碎纸机，另一只手挡住了它，旁边一个半开、里面有空格的文件夹；3 两张一模一样的纸并排，第二张右上角贴着一枚写着“3.5.0”的小邮票），插画下面粗体标题，再下面“麻烦”“解法”两段，“麻烦”“解法”四个字用绿色小标签。",
    "sha256": "6b9c4edb8919ba0d45d5fae517282bf21192273f7d7baa00e470beb72deb3c7c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两张一模一样的纸并排，第二张右上角贴着一枚画抽象短线的的小邮票"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2729,7 +2788,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    27,
+    10,
+    295,
+    216
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3239,7 +3305,14 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-6c8f61c25046fd4ea548",
    "title_text": "全部功能",
    "sha256": "27ad83b63427e81b39c96b361d36d65c691830f0816342473621fb722be9ef3c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    60,
+    3,
+    427,
+    129
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3678,7 +3751,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-8344610235166dbb1b95",
    "title_text": "全部功能（续）",
    "sha256": "a477fe5c5f4e2dd6de8bb2ec910a2ee46bd3cd38fafaf792ecf3815cdea111fd",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4028,7 +4102,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "key": "title-r3-7d359dfee0bedd68127f",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

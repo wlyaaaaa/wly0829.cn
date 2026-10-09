@@ -12,15 +12,21 @@ export async function getStaticPaths() {
     console.warn(`${entry.id}：没有排版结果（tools/render_blocks.py 这一页出错或没跑），这一页不生成`);
     return false;
   });
-  return pages.map((entry) => ({
+  // 改过地址的页（page.json 的 old_urls）：旧地址出一句话的去向页，指到现在的页面
+  // （现在网站上旧地址只剩素材目录，打开是目录列表）
+  const moved = pages.flatMap((entry) => (entry.data.old_urls || []).map((from: string) => ({
+    params: { slug: from.replace(/^\/|\/$/g, '') },
+    props: { moved: { to: entry.data.url, title: entry.data.title } },
+  })));
+  return [...pages.map((entry) => ({
     // 没有网址的页（404、GitHub 个人主页稿）放在 /<页名>/，不和首页撞
     params: { slug: entry.data.url.replace(/^\/|\/$/g, '') || entry.id },
     props: { entry },
-  }));
+  })), ...moved];
 }
-const { entry } = Astro.props;
-const r = rendered[`../content/rendered/${entry.id}.json`];
-if (!r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
+const { entry, moved } = Astro.props as { entry?: any; moved?: { to: string; title: string } };
+const r = entry ? rendered[`../content/rendered/${entry.id}.json`] : null;
+if (entry && !r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
 // 只给比对用：SX_RULE_CANVAS=1 构建时规则原文屏出排好的原文卡（不出网页字），用来和现在的原文排版图逐屏比；正式构建不设
 const ruleCanvas = process.env.SX_RULE_CANVAS === '1';
 const esc = (v: string) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -39,13 +45,19 @@ const canvas = (o: string, x: any) =>
 // 和现在网站一样：连续的独立卡（shape=card）放进两列卡片网格（手机一列）；别的屏（例如分类标题条）把网格断开、占满整行
 const parts: string[] = [];
 let grid: string[] = [];
-for (const s of r.screens) {
+for (const s of r?.screens || []) {
   if ((s.h || s.v)?.shape === 'card') { grid.push(screen(s)); continue; }
   if (grid.length) { parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`); grid = []; }
   parts.push(screen(s));
 }
 if (grid.length) parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`);
 ---
-<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page}>
-  <Fragment set:html={parts.join('')} />
-</Site>
+{moved ? (
+  <Site title={moved.title} kind="moved" toc={[]} url={moved.to} page="moved" moved={moved.to}>
+    <p class="moved-notice">“{moved.title}”换了地址，现在的页面在 <a href={moved.to}>{moved.to}</a>，两秒后自动跳过去。</p>
+  </Site>
+) : (
+  <Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page}>
+    <Fragment set:html={parts.join('')} />
+  </Site>
+)}

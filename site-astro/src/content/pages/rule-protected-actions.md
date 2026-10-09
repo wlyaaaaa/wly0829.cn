@@ -256,7 +256,7 @@
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
   "sha256": "6bc149284f9473ffb3a861e7d9716b818f5b30dc6d8eca49b871a52cd46434fd",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -483,7 +483,11 @@
    "key": "验证关卡托盘",
    "source_phrase": "右边约 45% 宽一幅水彩插画：一条林间小路上横着一道漆成白绿两色的木栏杆，栏杆旁一个小木岗亭，岗亭檐下挂小木牌“把关”，亭里坐一个戴眼镜的小 AI 助手，胸前是 Claude 的橙色星芒标志，正低头看一张单子。路上另一个小 AI 助手推着一辆小推车走到栏杆前停下，车上一只纸箱，箱侧贴着纸条“删库”。栏杆这一侧放一张小木桌，桌上一只浅绿托盘，托盘沿上刻着“四选一”，盘里并排四样东西：一把系着小牌“通行密钥”的黄铜钥匙、一部屏幕朝上的手机（屏幕上只画代表验证码的圆点，不画数字；这些圆点仅作插画示意，不规定验证码位数）旁边小牌“手机验证码”、一张折起的纸条上写“恢复码”、一张小卡片上并排画 Google 的彩色 G 标志和微软的四色方块标志。",
    "sha256": "397cade96ab3c8ab3861ef3a0e56f799eba6e2aba903efadd06e873df3bc2fb9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一条林间小路上横着一道漆成白绿两色的木栏杆，栏杆旁一个小木岗亭，岗亭檐下挂小木牌抽象图形，亭里坐一个戴眼镜的小 AI 助手，胸前是 Claude 的橙色星芒标志，正低头看一张单子；栏杆这一侧放一张小木桌，桌上一只浅绿托盘，托盘沿上画抽象短线的，盘里并排四样东西：一把系着小牌抽象图形的黄铜钥匙、一部屏幕朝上的手机（屏幕上只画代表验证码的圆点，不画数字；这些圆点仅作插画示意，不规定验证码位数）旁边小牌抽象图形、一张折起的纸条上画抽象短线的、一张小卡片上并排画 Google 的彩色 G 标志和微软的四色方块标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -500,7 +504,14 @@
    "key": "title-fbcb5d6d6e0c008057dc",
    "title_text": "重大动作与本人验证",
    "sha256": "7b9d977d99e7b4ba2f503940b16558b1655f3a436f62c771341bf1a8c12a6ac5",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    27,
+    10,
+    829,
+    163
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1228,7 +1239,9 @@
    "key": "ill-d6d27a8e43661b",
    "source_phrase": "左上一行深绿大字是本屏的“## …”标题（井号不画），标题左边画开头插画里那座小木岗亭的小图标。",
    "sha256": "397cade96ab3c8ab3861ef3a0e56f799eba6e2aba903efadd06e873df3bc2fb9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1245,7 +1258,8 @@
    "key": "title-58dac56a0f27f959ebdc",
    "title_text": "一张图：这件事要不要请本人验证",
    "sha256": "dadff3d733e75bb612012587d0cb1ad3507097a39bb875bfab9064e20d0d826a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1622,7 +1636,14 @@
    "key": "title-r3-620256d530d5a056c3ae",
    "title_text": "人话要点 · 重大的事",
    "sha256": "4aac686c7c7c3f916762a94f9df2ee6625cdf74425481933748936a7f15432f9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    0,
+    89,
+    939,
+    359
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1888,7 +1909,14 @@
    "key": "title-r3-a5ba03a8cb9c5498b080",
    "title_text": "人话要点 · 动手前的把关",
    "sha256": "96fee7228dc8812ed14f844bd76710b1433b45de0365428b98e2085cb7897196",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    32,
+    947,
+    189
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2115,7 +2143,14 @@
    "key": "title-r3-52625320a1f020dd1434",
    "title_text": "人话要点 · GitHub 重大动作",
    "sha256": "cc11e0901835d2a1d57145d7c30045fccb57cdf35cee804502d1aa381e896b13",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    82,
+    926,
+    284
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2341,7 +2376,14 @@
    "key": "title-r3-7cd24cf36b4ef5b6ba56",
    "title_text": "人话要点 · 删库和转移",
    "sha256": "4001ccfd7739f7065bad3d7669e7820e40be7204b9151b2849f3048d1c0efb06",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    162,
+    37,
+    1075,
+    231
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2594,7 +2636,14 @@
    "key": "title-r3-2869461b916c6926d9ff",
    "title_text": "人话要点 · 本人验证方式",
    "sha256": "b97045ed628b52818a0244010aa192b466853b5ecb6ee0a2c23817a2e66a9d54",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    34,
+    40,
+    961,
+    223
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2756,7 +2805,8 @@
    "key": "title-fbcb5d6d6e0c008057dc",
    "title_text": "重大动作与本人验证",
    "sha256": "7b9d977d99e7b4ba2f503940b16558b1655f3a436f62c771341bf1a8c12a6ac5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2773,7 +2823,14 @@
    "key": "title-a49e660271673a587392",
    "title_text": "重大的事",
    "sha256": "47a297aa774e48595b7b876ece224d2dbaee53edca585bc51f93471573d1266c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    45,
+    324,
+    221,
+    385
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2790,7 +2847,14 @@
    "key": "title-da8469347307d5e61bd2",
    "title_text": "重大动作前的把关",
    "sha256": "cfcdb62992a0656d623fa09eaa20fda68fcf683e3496c201326d4b960bef5ab8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    896,
+    328,
+    1222,
+    390
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2954,7 +3018,14 @@ owner: `E:\.agents`
    "key": "title-51022da84156910de666",
    "title_text": "GitHub 重大动作",
    "sha256": "28879893def69a0560438515a128b797df05b1b260fd651a46bab33fb0888842",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    44,
+    84,
+    522,
+    168
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2971,7 +3042,14 @@ owner: `E:\.agents`
    "key": "title-4f37d5aa8678360fc289",
    "title_text": "本人验证方式",
    "sha256": "f02bd064e735f9f840ee1339adac273039b8849f9e7161e56ac447138b12801d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    853,
+    86,
+    1211,
+    168
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2988,7 +3066,14 @@ owner: `E:\.agents`
    "key": "title-21fa38b90b2251dc944d",
    "title_text": "各产品各管各的",
    "sha256": "2aa33f39d1e29569b9960ff6edc0b35305151c1d98ef9681dc08d224f2791ab3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    855,
+    682,
+    1263,
+    766
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

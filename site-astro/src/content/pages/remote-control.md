@@ -841,7 +841,7 @@
  "source": {
   "page": "sources/pages/remote-control/page.json",
   "sha256": "2ffedb887616a32e8d60fa8a36b8803d570ac248954b3470714b6886094cc40c",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -1105,7 +1105,11 @@
    "key": "手机远程",
    "source_phrase": "右上一幅水彩插画：中间一台台式机（机箱侧透、显示器亮着），右边一台笔记本，两台之间一条绿色虚线；左边一部手机，屏幕上是对话气泡，右上角画 ChatGPT 标志；笔记本屏幕角上画 Codex 标志，台式机显示器角上画 Claude 标志；台式机上方一朵云，云上画 Cloudflare 标志，云和台式机之间一条绿色丝带（隧道）；笔记本下方一个小网状图形，画 Tailscale 标志。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "中间一台台式机（机箱侧透、显示器亮着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1122,7 +1126,8 @@
    "key": "title-r3-4ffbcdc5180e90a996a7",
    "title_text": "电脑远程控制",
    "sha256": "436a053b59bc992374eddc1ae93cf509be31c5b2a536cd3c0a448300475a7cf2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1342,7 +1347,11 @@
    "key": "手机远程",
    "source_phrase": "上半部分三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一只手拿着手机，远处一座房子里的台式机亮着；2 台式机和笔记本面对面，中间一把小扳手来回传；3 一把绿色小锁，手机屏幕上六个数字格子。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手拿着手机，远处一座房子里的台式机亮着"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1357,7 +1366,11 @@
    "key": "电脑远程",
    "source_phrase": "上半部分三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一只手拿着手机，远处一座房子里的台式机亮着；2 台式机和笔记本面对面，中间一把小扳手来回传；3 一把绿色小锁，手机屏幕上六个数字格子。",
    "sha256": "3562cf4060ee36240ac08e8255aab66764cf19b17484987d2137b4d3a1dc64c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "台式机和笔记本面对面，中间一把小扳手来回传"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1372,7 +1385,11 @@
    "key": "手机验证现图小槽4比3",
    "source_phrase": "上半部分三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一只手拿着手机，远处一座房子里的台式机亮着；2 台式机和笔记本面对面，中间一把小扳手来回传；3 一把绿色小锁，手机屏幕上六个数字格子。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一把绿色小锁，手机屏幕上六个数字格子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1389,7 +1406,8 @@
    "key": "title-r3-9fe7ee9705091075f9a6",
    "title_text": "怎么用",
    "sha256": "c038ec3c038c442742b47f8ba4768302d518cc4ff2e1c7bab1e1aa7b318f70f6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1624,7 +1642,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1860,7 +1879,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2156,7 +2176,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2286,7 +2307,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-0f9aae02a3f315c1a7f5",
    "title_text": "两台电脑对照",
    "sha256": "5964f11e9efc69e21f06d3cff7543f1908e6e02a8a3f16c72441b01ad3f96376",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2438,7 +2460,11 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "沙漏便签",
    "source_phrase": "下面左边约三分之一宽一幅水彩插画：一个沙漏，旁边一张写着“重启”的小便签，便签边上画右 Ctrl 和 Scroll Lock 两个键帽。",
    "sha256": "0f6cdf6f9a505591f7463d9595fac8ab8ea5f4be6eb191919930eb231f85fdf2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个沙漏，旁边一张画抽象短线的的小便签，便签边上画右 Ctrl 和 Scroll Lock 两个键帽"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2455,7 +2481,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-5f7ec2ac822a1c2292a0",
    "title_text": "超时和卡死怎么处理",
    "sha256": "a3914ca470d884156615b45600f91d5a5ebf116a88639ef94ff38b219631d3ff",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2564,7 +2591,11 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "电脑远程",
    "source_phrase": "插画：1 一条断开的云朵丝带，旁边笔记本伸出一条绿色小路绕到台式机，台式机上一把扳手；2 手机和笔记本各举着一张同样的卷轴（规则），卷轴上印着同一个小印章。",
    "sha256": "3562cf4060ee36240ac08e8255aab66764cf19b17484987d2137b4d3a1dc64c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一条断开的云朵丝带，旁边笔记本伸出一条绿色小路绕到台式机，台式机上一把扳手"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2579,7 +2610,11 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "ill-60021c4b952086",
    "source_phrase": "插画：1 一条断开的云朵丝带，旁边笔记本伸出一条绿色小路绕到台式机，台式机上一把扳手；2 手机和笔记本各举着一张同样的卷轴（规则），卷轴上印着同一个小印章。",
    "sha256": "2c64edbf15f5db02940844a6405ee4b9915ad75d5461ef758fb520330e4db662",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机和笔记本各举着一张同样的卷轴（规则），卷轴上印着同一个小印章"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3083,7 +3118,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-63eff3c9b1acd9a76839",
    "title_text": "全部功能（44 项）",
    "sha256": "848a2eb1e100299943297590900b6d1e29844987b55b9d7651011b96480b35ce",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4216,7 +4252,11 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "手机远程",
    "source_phrase": "右侧一幅大一点的水彩插画：一台台式机先亮起，接着旁边长出一台笔记本，再往上长出一朵云和一条丝带，最后一把小锁挂在丝带上，像一路长出来的样子。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台台式机先亮起，接着旁边长出一台笔记本，再往上长出一朵云和一条丝带，最后一把小锁挂在丝带上，像一路长出来的样子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4233,7 +4273,8 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "key": "title-r3-7d359dfee0bedd68127f",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

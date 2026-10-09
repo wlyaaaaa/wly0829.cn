@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "8e7a0df8d34f255641de77227d2b8b8123e3a5f8e3ac374ccd4010bb595f886c",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -915,7 +915,11 @@
    "key": "main-codex-memory",
    "source_phrase": "右上一幅水彩插画：一台侧透机箱前面站着五个小工具标志排成一排（OpenAI 的 Codex 标志、Claude 标志、Google Antigravity 标志、OpenCode 标志、一只小水彩龙虾代表 OpenClaw）。",
    "sha256": "877d44d9a2accd5b88c7ce272a54ca12f28d4d68eaa6140b4c744a93faedd791",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台侧透机箱前面站着五个小工具标志排成一排（OpenAI 的 Codex 标志、Claude 标志、Google Antigravity 标志、OpenCode 标志、一只小水彩龙虾代表 OpenClaw"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -932,7 +936,14 @@
    "key": "title-6f90adb58444fb907be5",
    "title_text": "AI 备份",
    "sha256": "696360bdce420878ef019b0cd8ff5781aa9fb2f85e342b4745db1faa329a054d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    55,
+    429,
+    228
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1279,7 +1290,14 @@
    "key": "title-b62096060777380cae1d",
    "title_text": "每个 AI 工具备了什么",
    "sha256": "494378291c35c9862d05312f876033f778d33ce8c6f956fb37919da68b11ea71",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    7,
+    805,
+    149
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1566,7 +1584,14 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "key": "title-r3-dc0e402a2b913136da4c",
    "title_text": "为什么其余都不另备",
    "sha256": "7228f7e23828436d0f033f7b30097d3555c01023288cf6d67d4b768d129d0e7d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    27,
+    19,
+    795,
+    172
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1794,7 +1819,11 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "key": "main-codex-memory",
    "source_phrase": "横版：左上标题，右上一幅小水彩插画：一个大保险箱，里面整齐码着一摞对话气泡、几张附件、一只小麦克风（听写记录）、一个小数据库圆柱。",
    "sha256": "877d44d9a2accd5b88c7ce272a54ca12f28d4d68eaa6140b4c744a93faedd791",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个大保险箱，里面整齐码着一摞对话气泡、几张附件、一只小麦克风（听写记录）、一个小数据库圆柱"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1812,7 +1841,14 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "key": "title-r3-b9154942586a651c5726",
    "title_text": "Codex 对话备份备了什么",
    "sha256": "768c745a8c76ae5b077f3ae1d3da0307985d0c7856d9eb9f73c40a52de390a2d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    64,
+    144,
+    937,
+    240
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2037,7 +2073,14 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "key": "title-r3-89e03216750ff4124a4f",
    "title_text": "要用的时候",
    "sha256": "f836c4c1359f045667da6baaadeaf4c8cd3c0f7e1114370b43e8c49d9fb4497c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    39,
+    76,
+    695,
+    274
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2231,7 +2274,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "机器人助手通用构图",
    "source_phrase": "横版：左上标题，右上一幅小水彩插画：一个小机器人举着一块写着“停”的小牌子，脚边一块没插好的硬盘。",
    "sha256": "e69d2febfcaf7eb75330eec8be0f5166de6d56595d3cac37bbc4a6a1d7511fe1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个小机器人举着一块画抽象短线的的小牌子，脚边一块没插好的硬盘"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2248,7 +2295,14 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    43,
+    762,
+    275
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2527,7 +2581,8 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2687,7 +2742,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "ill-de252b42772516",
    "source_phrase": "四张两列两行的大卡片，每张上面一幅小水彩插画（1 一个大保险箱锁在家里，旁边一朵打叉的云；2 一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸；3 一个日历上只圈着最近两天；4 一个空文件夹和一个正在用的文件夹，中间一块“禁止写入”的小牌子），插画下面粗体标题加两三行说明。",
    "sha256": "500a1e71343f942ec6260493836ff572fc2dc97a6bd21ea6995289b964e15e59",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个大保险箱锁在家里，旁边一朵打叉的云"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2702,7 +2761,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "对话气泡",
    "source_phrase": "四张两列两行的大卡片，每张上面一幅小水彩插画（1 一个大保险箱锁在家里，旁边一朵打叉的云；2 一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸；3 一个日历上只圈着最近两天；4 一个空文件夹和一个正在用的文件夹，中间一块“禁止写入”的小牌子），插画下面粗体标题加两三行说明。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2717,7 +2780,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "ill-12682716eb7b18",
    "source_phrase": "四张两列两行的大卡片，每张上面一幅小水彩插画（1 一个大保险箱锁在家里，旁边一朵打叉的云；2 一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸；3 一个日历上只圈着最近两天；4 一个空文件夹和一个正在用的文件夹，中间一块“禁止写入”的小牌子），插画下面粗体标题加两三行说明。",
    "sha256": "f2bb549f0d3d498ab16f4cb19931375a02c28e596e518f3ba7363e45c2063e60",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个日历上只圈着最近两天"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2732,7 +2799,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "四张两列两行的大卡片，每张上面一幅小水彩插画（1 一个大保险箱锁在家里，旁边一朵打叉的云；2 一叠对话气泡里大部分是灰色、只有少数几张是绿色新纸；3 一个日历上只圈着最近两天；4 一个空文件夹和一个正在用的文件夹，中间一块“禁止写入”的小牌子），插画下面粗体标题加两三行说明。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个空文件夹和一个正在用的文件夹，中间一块抽象图形的小牌子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2749,7 +2820,14 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    0,
+    654,
+    187
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2876,7 +2954,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "ill-0ef03daf83d0ac",
    "source_phrase": "插画：1 一台开着的电脑屏幕上对话还在滚动，上方一个相机快门“咔嚓”定格了一帧，定格的那帧是淡绿色的；2 一个指针表盘，指针停在“上一份”，旁边一份没封口的信封被挡在门外。",
    "sha256": "6adaba7c2e2fe31ac94e621de8298d1105e64f44d61b904b44642db58fd61d1e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台开着的电脑屏幕上对话还在滚动，上方一个相机快门抽象图形定格了一帧，定格的那帧是淡绿色的"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2891,7 +2973,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "表盘计时现图小槽4比3",
    "source_phrase": "插画：1 一台开着的电脑屏幕上对话还在滚动，上方一个相机快门“咔嚓”定格了一帧，定格的那帧是淡绿色的；2 一个指针表盘，指针停在“上一份”，旁边一份没封口的信封被挡在门外。",
    "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个指针表盘，指针停在抽象图形，旁边一份没封口的信封被挡在门外"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2908,7 +2994,14 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    45,
+    345,
+    292
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3213,7 +3306,14 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-1efcedb7161dbae98920",
    "title_text": "全部功能（20 项）",
    "sha256": "95c1b6fe82eaa95aa092974960a9bfbb96cfc48071f84325f48f0047d86f48f7",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    116,
+    46,
+    806,
+    162
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3593,7 +3693,8 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-8344610235166dbb1b95",
    "title_text": "全部功能（续）",
    "sha256": "a477fe5c5f4e2dd6de8bb2ec910a2ee46bd3cd38fafaf792ecf3815cdea111fd",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3966,7 +4067,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "main-codex-memory",
    "source_phrase": "右下角一幅小插画：五个工具标志，只有 Codex 标志后面连着两块带锁硬盘。",
    "sha256": "877d44d9a2accd5b88c7ce272a54ca12f28d4d68eaa6140b4c744a93faedd791",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "五个工具标志，只有 Codex 标志后面连着两块带锁硬盘"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3983,7 +4088,14 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    7,
+    210,
+    159
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

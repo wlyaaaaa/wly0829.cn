@@ -526,7 +526,7 @@
  "source": {
   "page": "sources/pages/personal-materials/page.json",
   "sha256": "64dcb7d87b5c8817f0fc9d85305c3a6366c01c58681db6c62e822189d591d422",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -826,7 +826,11 @@
    "key": "main-personal-materials",
    "source_phrase": "右上一幅水彩插画：一个半开的木制文件柜抽屉，几页纸从里面微微探出；一只放大镜照在其中一页上，放大镜里那一行被绿色荧光笔划亮；这页纸右边一条绿色细虚线连到一个挂在纸角的小标签，标签上只画一个绿色对勾。",
    "sha256": "2d93d1dbb7e27d2bfe7edfb1fddc0ce968d1aa0b0d2abf80d5e29944ef796814",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个半开的木制文件柜抽屉，几页纸从里面微微探出；一只放大镜照在其中一页上，放大镜里那一行被绿色荧光笔划亮；这页纸右边一条绿色细虚线连到一个挂在纸角的小标签，标签上只画一个绿色对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -843,7 +847,14 @@
    "key": "title-3aedbba755a3ecadad30",
    "title_text": "个人材料查找",
    "sha256": "16baef8817de0758ff25860ad8af3013dac676286f76619404361559f51bf1f7",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    44,
+    56,
+    608,
+    201
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1023,7 +1034,11 @@
    "key": "分岔指路",
    "source_phrase": "表格右边一幅小水彩插画：一个路口的木制指路牌，分出若干块空白箭头牌（牌上不写字，数量不表示表格行数或事实），其中一块涂成绿色。",
    "sha256": "1dfe279ec5b683d3ceacacf8af37000c33a04422ad35709f45cfde7f9e6e85c6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个路口的木制指路牌，分出若干块空白箭头牌（牌上不写字，数量不表示表格行数或事实），其中一块涂成绿色"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1040,7 +1055,14 @@
    "key": "title-66df8abb0937a3fde01d",
    "title_text": "什么时候轮到它",
    "sha256": "bf63ff840ff9cf60279ce3e6beb1149fb9c9e238a6c7906965dc6e14217090ab",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    12,
+    28,
+    907,
+    229
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1245,7 +1267,11 @@
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "插画依次：①一只手翻开一叠文件，上面压着一个写着“草稿”的红章和一个写着“签字版”的绿章（这两个章上的字就是这两个词）；②一台电脑屏幕，左边一个绿色聊天气泡图标、右边一个下载箭头图标，下面是一列只有灰线的文件名；③一页 PDF 上一行绿色高亮，旁边一个小书签写着“第 4 页”；④一部手机把一页文档递向电脑，中间一个绿色的“=”号。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手翻开一叠文件，上面压着一个画抽象短线的的红章和一个画抽象短线的的绿章（这两个章上的字就是这两个词"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1260,7 +1286,11 @@
    "key": "截图聊天现图小槽3比2",
    "source_phrase": "插画依次：①一只手翻开一叠文件，上面压着一个写着“草稿”的红章和一个写着“签字版”的绿章（这两个章上的字就是这两个词）；②一台电脑屏幕，左边一个绿色聊天气泡图标、右边一个下载箭头图标，下面是一列只有灰线的文件名；③一页 PDF 上一行绿色高亮，旁边一个小书签写着“第 4 页”；④一部手机把一页文档递向电脑，中间一个绿色的“=”号。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑屏幕，左边一个绿色聊天气泡图标、右边一个下载箭头图标，下面是一列只有灰线的文件名"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1275,7 +1305,11 @@
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "插画依次：①一只手翻开一叠文件，上面压着一个写着“草稿”的红章和一个写着“签字版”的绿章（这两个章上的字就是这两个词）；②一台电脑屏幕，左边一个绿色聊天气泡图标、右边一个下载箭头图标，下面是一列只有灰线的文件名；③一页 PDF 上一行绿色高亮，旁边一个小书签写着“第 4 页”；④一部手机把一页文档递向电脑，中间一个绿色的“=”号。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一页 PDF 上一行绿色高亮，旁边一个小书签画抽象短线的"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1290,7 +1324,11 @@
    "key": "手机传文档",
    "source_phrase": "插画依次：①一只手翻开一叠文件，上面压着一个写着“草稿”的红章和一个写着“签字版”的绿章（这两个章上的字就是这两个词）；②一台电脑屏幕，左边一个绿色聊天气泡图标、右边一个下载箭头图标，下面是一列只有灰线的文件名；③一页 PDF 上一行绿色高亮，旁边一个小书签写着“第 4 页”；④一部手机把一页文档递向电脑，中间一个绿色的“=”号。",
    "sha256": "43e7083be7de7470eb4c6c1313009afd427495f4342b608b78b17ebb3596f5c8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机把一页文档递向电脑，中间一个绿色的抽象图形号"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1306,7 +1344,8 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1574,7 +1613,14 @@
    "key": "title-30b2f95f0ed4fc8623cf",
    "title_text": "每天 17:10，自动",
    "sha256": "52789664b863dea58877b54da6865bf69812144f91bdf8d8e35f5d057ccbc690",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    55,
+    594,
+    254
+   ],
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1590,7 +1636,8 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1860,7 +1907,8 @@
    "key": "title-e6ba3dabb7a211ac4166",
    "title_text": "一次查找经过哪几步",
    "sha256": "e50c3741648d08258cc767c950579bf08cbc66decf899b14db7285a18cebc2e4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2118,7 +2166,14 @@
    "key": "title-d7a2e33250663d085fc9",
    "title_text": "怎么配对、存了什么",
    "sha256": "2c99959d556daf5fa5229769caaa6f57101e8f67649c6a759c0ac8c722f1cc5e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    55,
+    916,
+    293
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2310,7 +2365,14 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
    "key": "title-9c1019fbea36b0468cca",
    "title_text": "范围有多大",
    "sha256": "ff88748ed2c877307686246dbe8d57a8228e0cc72f21478111b7c9c485e1f33e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    0,
+    554,
+    210
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2499,7 +2561,11 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "纸山与索引盒",
    "source_phrase": "插画依次：①左边一座堆到天花板的纸山，右边一个小巧的卡片盒，中间一个绿色箭头；②一只手把一页纸丢进回收站，旁边一块拔掉线的硬盘上挂着一个问号；③一页纸前后各一个指纹，中间一个绿色对勾。",
    "sha256": "28870a47db5c33b2899a8d5fa7c8ee51d4aa365096baf4d990a7599a2fca3a00",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一座堆到天花板的纸山，右边一个小巧的卡片盒，中间一个绿色箭头"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2514,7 +2580,11 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "回收纸张",
    "source_phrase": "插画依次：①左边一座堆到天花板的纸山，右边一个小巧的卡片盒，中间一个绿色箭头；②一只手把一页纸丢进回收站，旁边一块拔掉线的硬盘上挂着一个问号；③一页纸前后各一个指纹，中间一个绿色对勾。",
    "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手把一页纸丢进回收站，旁边一块拔掉线的硬盘上挂着一个问号"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2529,7 +2599,11 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "ill-ceb7770be79939",
    "source_phrase": "插画依次：①左边一座堆到天花板的纸山，右边一个小巧的卡片盒，中间一个绿色箭头；②一只手把一页纸丢进回收站，旁边一块拔掉线的硬盘上挂着一个问号；③一页纸前后各一个指纹，中间一个绿色对勾。",
    "sha256": "cf94dec1a4cbbcb4fd06b860e2b844d3536bc284c2f8a330ed111b089f0ca908",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一页纸前后各一个指纹，中间一个绿色对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2545,7 +2619,8 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2785,7 +2860,14 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "title-r3-dcd81d9754d1fc331c17",
    "title_text": "几个小巧思",
    "sha256": "9b110977309ed1f7a87273e6bdb78ceca7df41d535c378c040c9d1f00f4c8da2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    17,
+    0,
+    757,
+    262
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3280,7 +3362,8 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "title-89d5d38b73ccb7f50ee7",
    "title_text": "全部功能（13 项）",
    "sha256": "e46626e7dbf7420e96d4bd40ad16e465db6e17c84ab27c6232b07bd820934234",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3588,7 +3671,14 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "title-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "9295104b2b762c99b491be8f3d3014cc5199cfc958a820556f1856b59a70d168",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    0,
+    388,
+    213
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

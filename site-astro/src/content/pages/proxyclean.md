@@ -466,7 +466,7 @@
  "source": {
   "page": "sources/pages/proxyclean/page.json",
   "sha256": "bcb365de6a5cacdef89f064d0de06eaa95b9192b1429d620d4455d3b5593189a",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -682,7 +682,11 @@
    "key": "main-proxyclean",
    "source_phrase": "右上一幅水彩插画：一台笔记本电脑，屏幕上是白底绿字的小窗口（只画色块，不画字）；电脑背后伸出四五根细线，接到一块插线板上：两根线是鲜绿色、插在亮着小绿灯的插孔里（还在工作的代理），另外两根是灰色虚线、插在已经熄灭的空插孔里（代理已经退出、设置还指着它）；一只绿色的小剪刀只剪那两根灰色虚线，绿色的线不碰。",
    "sha256": "019f54c30ab70337943a5737509908b1294f194b4d7bb04e4b0aac93021dedf1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台笔记本电脑，屏幕上是白底绿字的小窗口（只画色块，不画字）；电脑背后伸出四五根细线，接到一块插线板上：两根线是鲜绿色、插在亮着小绿灯的插孔里（还在工作的代理），另外两根是灰色虚线、插在已经熄灭的空插孔里（代理已经退出、设置还指着它）；一只绿色的小剪刀只剪那两根灰色虚线，绿色的线不碰"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -699,7 +703,14 @@
    "key": "title-46d81a290a1174cb7ad6",
    "title_text": "代理上网修复",
    "sha256": "2542736434a7d0b4b0c5942162562ba528c72a54f319f706ef20d370fded5d7d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    25,
+    732,
+    199
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -894,7 +905,14 @@
    "key": "title-9c89b638cb4fccecaf20",
    "title_text": "什么时候打开它",
    "sha256": "f31c207fe1b0e79594a28c92b57340d223e8d5b59508fb0e30952f30b4d4b97d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    14,
+    87,
+    577,
+    226
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1060,7 +1078,8 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-58500a6ad9eea0669b2f",
    "title_text": "点下去之后会发生什么",
    "sha256": "95476cc3a9702333cf1bcca0d35907b525f0e17feadfae0637c4a2f6cd772028",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1355,7 +1374,14 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-r3-5ff9913ca695a98ad690",
    "title_text": "它查什么、怎么算“失效”",
    "sha256": "b19eda92ad19de5b3d43444d5708546b8e21117f61e12e0faffb43e23b705ada",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    85,
+    26,
+    853,
+    178
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1586,7 +1612,8 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-9a4dc2c50ca35317e642",
    "title_text": "怎么搭的、为什么这样设计",
    "sha256": "7283eca70e5761921969ea5bb7ff693b30e3a8d8cfadd479ad7649a8ec1c0aec",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1743,7 +1770,11 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "树枝索引",
    "source_phrase": "左卡插画：一棵小树，树根处是一个带窗口的小方块，树干上是一颗齿轮（内核），树枝上挂一个小扳手（辅助服务），树旁边有一个长得很像但没连在树上的小方块。",
    "sha256": "afe98924e00cbe34c88815a7c2e8b9195ae2737f0b90d323144026d20d396946",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一棵小树，树根处是一个带窗口的小方块，树干上是一颗齿轮（内核），树枝上挂一个小扳手（辅助服务），树旁边有一个长得很像但没连在树上的小方块"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1758,7 +1789,11 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "窗口菜单现图小槽4比3",
    "source_phrase": "右卡插画：一只放大镜罩在一个白底绿边的小窗口上，窗口旁一把扳手静静放在盒子里、盒盖合着。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只放大镜罩在一个白底绿边的小窗口上，窗口旁一把扳手静静放在盒子里、盒盖合着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1774,7 +1809,8 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2099,7 +2135,8 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-b97dc51af18801a6558a",
    "title_text": "全部功能（17 项）",
    "sha256": "5a37cda99b5e726c7700d3c6cce4043cfc18590b5e8c45cc17258a27621c1b17",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2624,7 +2661,8 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-r3-7d359dfee0bedd68127f",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2800,7 +2838,14 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

@@ -517,7 +517,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "555a0223983561e2d2ebdc51910e3a77bf6278828d77df4bd88bd14435678670",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -675,7 +675,11 @@
    "key": "generic-report-page-dashboard",
    "source_phrase": "右上角一幅小插画：一台笔记本电脑屏幕上是白底绿边的网页，网页里画一根绿色柱状图和两张小卡片，卡片上各有一个打钩的圆点；电脑旁边一只手指点着其中一张卡片。",
    "sha256": "e6990e5657edbed68189b47d52f3088f639df95e4c2ed45db6698094d967b734",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台笔记本电脑屏幕上是白底绿边的网页，网页里画一根绿色柱状图和两张小卡片，卡片上各有一个打钩的圆点；电脑旁边一只手指点着其中一张卡片"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -692,7 +696,8 @@
    "key": "title-d320a7a8e10d363dd8a8",
    "title_text": "汇报网页",
    "sha256": "99b3b71384343347a96e28d52c4c483776addf5117f4b69203b18e6bcf5613ea",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -922,7 +927,8 @@ Claude 87 次、Codex 42 次运行生成命令
    "key": "title-cad79fffe8ffc762fedc",
    "title_text": "一个完整例子：这个网站的设计稿怎么定下来",
    "sha256": "1ef57ebf272630497cd729a09fb89e3d0dbbc6bc3500cf41250e0e17c8458eff",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1193,7 +1199,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "key": "title-02d56f0b3157e18ad998",
    "title_text": "页面长什么样",
    "sha256": "b663447f27304ccc211094e351de220ed2ce285c2846f7059a37ecc2e54e4a9b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1652,7 +1659,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "key": "title-87028220e41029f4bc43",
    "title_text": "能做的事：该用哪种图",
    "sha256": "f8a0a108a93bfcced568185766bcf6a0af17b62a09ee1e30080f7a1d0caedaf6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1893,7 +1901,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "key": "title-e174bbe0abebc651e69a",
    "title_text": "能做的事：卡片、媒体、好读",
    "sha256": "0a4a01deaa01c6601c1b5cafa7884b5e9a4cee589ac0746d3e26b043e67bfa79",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2178,7 +2187,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "key": "title-5e7019c4b23cc0561f13",
    "title_text": "能做的事：一条命令做完",
    "sha256": "5744726c8054597da8111c1b58cc62015f21969439c6ae94ec789817801abe52",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2456,7 +2466,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "key": "title-c76d507f3230cbeb035f",
    "title_text": "AI 写这种页的规矩",
    "sha256": "b1ec2ed0e9e5e61a7c59a861a6ef5e19fb0faea656103c870d6f0dd2bc085934",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2613,7 +2624,11 @@ AI 写这种页的规矩
    "key": "generic-report-page-dashboard",
    "source_phrase": "时间线右下角一枚小印章样的圆形插画：一张网页上叠着一个对话气泡。",
    "sha256": "e6990e5657edbed68189b47d52f3088f639df95e4c2ed45db6698094d967b734",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张网页上叠着一个对话气泡"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2630,7 +2645,8 @@ AI 写这种页的规矩
    "key": "title-ff818ac07f31565ae40c",
    "title_text": "能做的事：它是怎么长成现在这样的",
    "sha256": "700fb4e189ba529e000eeaa74ed2d66b4263228afc8cd18e0b4c0cfa8170f351",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2810,7 +2826,8 @@ AI 写这种页的规矩
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -421,7 +421,7 @@
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
   "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -784,7 +784,11 @@
    "key": "main-wechat-history-ai-bridge",
    "source_phrase": "右侧约 45%：一幅水彩插画：左边一台笔记本电脑，屏幕上是微信的绿色标志；右边一个小圆台上并排画 Claude 和 Codex（OpenAI）的标志；两者之间是一座落了薄霜、颜色偏灰的小木桥，桥中间立着一台小小的旧服务器图标（代表 WeFlow），桥头一只打盹的小狗（看门狗）趴着；木桥上方另有一条笔直、发亮的绿色细线从微信标志直接连到 AI 标志。",
    "sha256": "d8fd30018536ab47bc4df2c6e23158e31470b94f7053b32768b758789ee71793",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一台笔记本电脑，屏幕上是微信的绿色标志；右边一个小圆台上并排画 Claude 和 Codex（OpenAI）的标志；两者之间是一座落了薄霜、颜色偏灰的小木桥，桥中间立着一台小小的旧服务器图标（代表 WeFlow），桥头一只打盹的小狗（看门狗）趴着；木桥上方另有一条笔直、发亮的绿色细线从微信标志直接连到 AI 标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -801,7 +805,14 @@
    "key": "title-5ee1e7ad6f7b7b8cd8c2",
    "title_text": "微信记录交给 AI",
    "sha256": "55997de4c3f58f84e9354e73ac8b9be0bac03da7d52ca5a65d8b6388338b4b7e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    18,
+    29,
+    675,
+    140
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1044,7 +1055,14 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "key": "title-9aa465b9d24921fade17",
    "title_text": "两条路差在哪",
    "sha256": "f101f3f481eb670ac028f414220ba511f5a96bcbe6b1dcb81873135ccf9285e5",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    24,
+    0,
+    576,
+    133
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1447,7 +1465,8 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "key": "title-dee7d8d741cbf8bc4f55",
    "title_text": "当初想解决什么、怎么用",
    "sha256": "42d7bf08ebd1843e296bb8267c2305622af91724ca588ef557b4fda2d2815e59",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1865,7 +1884,8 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "key": "title-746a4ff7a2c4f592dc6f",
    "title_text": "全部旧功能（11 项，全部已停用）",
    "sha256": "adb656101d8347a60b11c57635447161d37afadfcddd50b028e025952062fb66",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1882,7 +1902,8 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "key": "title-425a4a69604f12b4a165",
    "title_text": "检查和交接",
    "sha256": "4bec32bfa413d2b7157c06fa78cbc32d683c57ec5d96a13d7f8504489d1e4740",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1899,7 +1920,8 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "key": "title-de515c7d522bb39efb1e",
    "title_text": "给 AI 取微信",
    "sha256": "83ff8a22121f79d68496d924e58908956e44d8bf03fd43b76a919c8e539b8c98",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1916,7 +1938,8 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "key": "title-9175bd83f94f3bc6ea9a",
    "title_text": "让 WeFlow 一直在线",
    "sha256": "a332c5cdee2e71bba9006d8e01053b1227c9a2c2ff4f16e35453e22d9ef1d99e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2135,7 +2158,8 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "key": "title-0c690f026d942d20dcf7",
    "title_text": "演进（6 月 20 日—9 月 26 日）",
    "sha256": "6b5b7088a814987ade9b2e47844af4f7dbe6400a8966939b98cd65a1f75374b8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

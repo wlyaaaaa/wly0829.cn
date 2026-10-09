@@ -1851,7 +1851,7 @@
  "source": {
   "page": "sources/pages/how/page.json",
   "sha256": "f3936fe0bfceda5ad5f633bb899028bbb320b871b715a734169aca0c79d743c0",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -2121,7 +2121,11 @@
    "key": "系统群岛",
    "source_phrase": "右边约 45% 宽是一幅水彩插画（开头短视频从这里取景，插画里不画任何字）：一张摊开的水彩地图，中间一片浅蓝绿的湖，湖里有几座小岛，岛上是小小的房子、书架、机箱和手机的简笔造型，岛和岛之间有细细的木桥和小路，路上几颗淡绿小光点；地图左下角压着一支毛笔，右上角一枝绿叶伸进画面。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "开头短视频从这里取景，插画里不画任何字）：一张摊开的水彩地图，中间一片浅蓝绿的湖，湖里有几座小岛，岛上是小小的房子、书架、机箱和手机的简笔造型，岛和岛之间有细细的木桥和小路，路上几颗淡绿小光点；地图左下角压着一支毛笔，右上角一枝绿叶伸进画面"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2138,7 +2142,14 @@
    "key": "title-f8d7d5c654a48f01f102",
    "title_text": "怎么协作",
    "sha256": "332174cc91d04e67ac7436ec35d8b2d25240aa08aa021265b7957f72c423bd23",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    0,
+    670,
+    220
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3034,7 +3045,14 @@
    "key": "title-a10bdbb66360b2552318",
    "title_text": "全景图",
    "sha256": "74cc6261bb4f8d54a19afa84e70ece8759c9e18679c9e14f7417af0f54fa703d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    18,
+    0,
+    270,
+    120
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3309,7 +3327,8 @@
    "key": "rules-e216-how-05-title",
    "title_text": "派谁：每个型号干什么（现行分工）",
    "sha256": "80a0c0498a9592b6f1d5c76d79d6d7e4230d4ee94bf7ef8fb2050c0fc2eb55f2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3326,7 +3345,8 @@
    "key": "title-6b7b7d19f18c14eedead",
    "title_text": "派谁：每个型号干什么（截至 10 月 1 日）",
    "sha256": "908322e129fbde2e5060fc420b9e49a59cec2873c9faf8452b7bd14d53bfd71e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3606,7 +3626,8 @@
    "key": "title-5e3e1f08e2fbcb4837bb",
    "title_text": "我、Claude 和 GPT 怎么分工",
    "sha256": "ddcd9862edca2d83a4092be03699eecfc5545e224704e44def29a75e73049f31",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3852,7 +3873,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "横版：左边约 32% 宽是一张缩小的全景图（只画这一例用到的牌子，名字就是“这一例用到”那一行；其余区域只留淡淡的岛形，不写字）。右边是标题、开头一段和三张步骤卡（开头第一句“这是一个设想，还没从头到尾实际跑过。”粗体深绿、单独一行，紧挨标题，一眼看得到），步骤卡从上到下排，每张左边一个大号绿色序号圆圈①②③，卡里三行：谁做、传什么、注意（“注意”一行用浅灰小字）。开头一段旁边一幅小水彩：高铁车窗外远处是黄山的山影，一只手拿着手机。往下滚时，网页把正在读的那张步骤卡描一圈绿边，左边小地图里这一步用到的牌子亮起，网页程序在它们之间画线、走光点，其余变淡（用到哪些写在 registry.case_steps）；小地图里同样不画连线。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "按本屏这一例用到的项目选择同全景图的岛形和小物件；未点名项目只留淡岛形，不画连线或文字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3867,7 +3892,11 @@ Codex
    "key": "手机远程",
    "source_phrase": "开头一段旁边一幅小水彩：高铁车窗外远处是黄山的山影，一只手拿着手机。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "高铁车窗外远处黄山山影，一只手拿手机"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3884,7 +3913,14 @@ Codex
    "key": "title-3ec6c76a0ca937191ad8",
    "title_text": "例一：一句话，把一次旅行变成一部片子",
    "sha256": "2255caef292c842c37cf27e236600855005d07b5fe9d8b0529390903f9788106",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    536,
+    18,
+    1332,
+    135
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -4108,7 +4144,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "横版：和上一屏同一版式接着画：左边同一张缩小的全景图，右边接着三张步骤卡④⑤⑥；第⑥张卡旁边一幅小水彩：清晨的书桌，显示器上是一部片子的第一帧（黄山云海），旁边一只手机。最下面一行“这一例用到”。滚动时的点亮同上一屏。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "与上一屏同一张小全景图，岛形和项目物件按原文上一屏限定，不画连线或文字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -4123,7 +4163,11 @@ Codex
    "key": "手机远程",
    "source_phrase": "横版：和上一屏同一版式接着画：左边同一张缩小的全景图，右边接着三张步骤卡④⑤⑥；第⑥张卡旁边一幅小水彩：清晨的书桌，显示器上是一部片子的第一帧（黄山云海），旁边一只手机。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "清晨书桌，显示器里黄山云海影像，旁边手机"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4361,7 +4405,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "横版：左边约 32% 宽是缩小的全景图（只画这一例用到的牌子，其余淡化），图下一幅小水彩：一块外接固态插在一台笔记本上。右边：标题、开头一段、一条小横幅（两个圆角小标签：“真做过”绿色实心、“还没做过”灰色空心，作图例），然后四张步骤卡①②③④，每张卡右上角贴一个小标签：①②③贴“真做过 9 月 22 日”，④贴“真做过 9 月 20 日”。滚动时点亮规则同例一。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "按本屏这一例用到的项目选择全景图的岛形和物件；其余岛形淡化，名字和连线由网页程序放"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -4376,7 +4424,11 @@ Codex
    "key": "外接恢复现图小槽4比3",
    "source_phrase": "横版：左边约 32% 宽是缩小的全景图（只画这一例用到的牌子，其余淡化），图下一幅小水彩：一块外接固态插在一台笔记本上。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "外接固态插在笔记本上"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4393,7 +4445,14 @@ Codex
    "key": "title-9ab02032ceb0c8cebcbc",
    "title_text": "例二：电脑坏了，换一台，一句话开始恢复",
    "sha256": "1832ec121d4a2fb3537ba9ee94e441461884046af314236a369795386c418db6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    79,
+    929,
+    346
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4627,7 +4686,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "横版：和上一屏同一版式：左边同一张小地图；右边接着三张步骤卡⑤⑥⑦（⑤贴“还没做过”灰色空心标签，⑥贴“真做过 8 月 30 日”绿色实心标签，⑦贴“还没做过”灰色空心标签）；下面左右两张等宽卡：“能恢复的”（绿色小勾）和“不保证的”（灰色小叉），每张里是一串短条目；最下面一行链接。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "与上一屏同一张小地图，沿用该例项目物件和岛形；名字和连线由网页程序另放"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4838,7 +4901,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "左边贴一条竖的缩小全景图，只画这一屏用到的牌子：手机、远程电脑串流、电脑远程控制、副机（第二台笔记本）、Claude、GPT；滚动到哪张卡，对应牌子亮起。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "竖向小地图只放手机、远程串流小屏幕、伸向电脑的机械手、第二台笔记本、Claude与GPT的场景小物件；源文明确Claude和GPT但是否在本图画品牌标志待页面核对；不画名字或连线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4855,7 +4922,8 @@ Codex
    "key": "title-46f4330cc20a172c2193",
    "title_text": "例三：人不在电脑前，也能办事",
    "sha256": "9871a24f815d17b8c1206f30f235a2f381205645afd6006ce7df222ff9353d21",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5029,7 +5097,11 @@ Codex
    "key": "手机远程",
    "source_phrase": "横版：标题下面一幅横向小水彩：左边一台台式机、右边一台笔记本，中间一张淡绿色的网把两台和上方一只手机连在一起（代表 Tailscale 私网），网上几颗光点来回流动；图里不写字。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左台式机、右笔记本电脑，上方手机，中间淡绿网相连，网上来回光点"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -5044,7 +5116,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "左边竖条小地图只画：副机（第二台笔记本）、双机剪贴板、电脑远程控制、代理上网修复、手机。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "竖条小地图只放第二台笔记本、两张叠着的便签、伸向电脑的机械手、地球加小扳手、手机；不画文字或连线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5061,7 +5137,8 @@ Codex
    "key": "title-f7877f60b5f2d90829e1",
    "title_text": "副机和主机：共享端口和数据",
    "sha256": "452880ff4b8475d43262576bb782ba2ed6a54abc33c38cb41c9db09657908e03",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5360,7 +5437,11 @@ Codex
    "key": "系统群岛",
    "source_phrase": "左边竖条小地图只画：网站：驾驶舱、授权与状态、手机、密码中心、电脑配置与恢复、GPT。",
    "sha256": "59b0cc1de1d9fc0845a241678ec529fd86b092e4372a1f8b7c482b9204b2f61b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "竖条小地图只放网页框、手机、保险柜、电脑配置恢复相关物件和GPT场景物件；名字和关系线由网页程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5377,7 +5458,8 @@ Codex
    "key": "title-7fb7f26c7d199236a14e",
    "title_text": "看进度、让电脑自己盯着",
    "sha256": "66ef61031ad0322bf85e1a6a7f10bfa1cb9b2cec6473fb06df842579c04aa326",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5596,7 +5678,14 @@ Codex
    "key": "title-4153dd5e12e634b4affb",
    "title_text": "三个底座怎么配合",
    "sha256": "61cf504f26a4aca414fa556f791e0c0a8d65e99b202920324aca7b01b9482df1",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    7,
+    83,
+    939,
+    299
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -5894,7 +5983,8 @@ Codex
    "key": "title-dfb92a2f678c6afee07f",
    "title_text": "每个项目从谁拿、给谁（一）",
    "sha256": "f3fe80098e939895d5adf9a0b204438977e3b0df834dda85c7c1ce958eae8dc2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5911,7 +6001,8 @@ Codex
    "key": "title-afb63a620bdcff15d8cd",
    "title_text": "安全",
    "sha256": "132d5a3e147d329d242aebbf0ac7736f67ad2e1369e8ac8f72ec18e68bf8cfd8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5928,7 +6019,8 @@ Codex
    "key": "title-db51d7e018da7f7580f1",
    "title_text": "了解我",
    "sha256": "add163cc4478ba0b4d8665f4c6b980319bcfcaa4441746b8186691e922ce1e10",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5945,7 +6037,8 @@ Codex
    "key": "title-c3f46556ef6b7d3b6d5a",
    "title_text": "我的资料",
    "sha256": "a3e74173285f98555707d296a4e57eba58c3796907156fdf4076df084301b711",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6240,7 +6333,8 @@ Codex
    "key": "title-60062d6b8d061c7ce2be",
    "title_text": "每个项目从谁拿、给谁（二）",
    "sha256": "c93f14029799e9f92344ad5eac86567ffd71f76b3546bdd69d1c1773d41c55c2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6257,7 +6351,8 @@ Codex
    "key": "title-cde16273e61cf5631eb4",
    "title_text": "看和听",
    "sha256": "98c147763abd0714f0172c51e4e99361eecf395621a73930e10f6c80258f7d6f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6274,7 +6369,8 @@ Codex
    "key": "title-fbd8c3a22d9e0f71ed4a",
    "title_text": "做成品",
    "sha256": "241634c7833f42b8a2d1b49dc00c2c60d371fd0daf6cf0b2e2840c1efde2c4b7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6291,7 +6387,8 @@ Codex
    "key": "title-70e372abbae5f619b7e4",
    "title_text": "备份",
    "sha256": "111ef0de1af959568b49e14876c64621e275ef649c40effcadead0faf7619359",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6553,7 +6650,8 @@ Codex
    "key": "title-a78d867cc0f93579f392",
    "title_text": "每个项目从谁拿、给谁（三）",
    "sha256": "0c85407b1cd2e6770367a06db25cb1ce9088cd67022defdf31d8c82c910504d6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6570,7 +6668,8 @@ Codex
    "key": "title-7ba00927dde9122f9686",
    "title_text": "远程",
    "sha256": "e97758359fe387aef71ac398e9010846b97932a96664fd32b520f237def38474",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6587,7 +6686,8 @@ Codex
    "key": "title-b907be5d419dd5ed6cbe",
    "title_text": "电脑日常",
    "sha256": "1b2439f8c5682eec28499fe6b896b11ecdf6c004f5f3b559b7c250b73d602559",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6792,7 +6892,14 @@ Codex
    "key": "title-01d8e64301ad85e00ed4",
    "title_text": "我的 AI 实践",
    "sha256": "2ed9e3a1493e5cf1ec0c711b0db09d5555fdf60492580e933f05cac3281a1aa0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    91,
+    588,
+    217
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

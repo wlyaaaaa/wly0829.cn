@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "fb86209f69478e209bb38f9b54b60f31c27c04b349180a3f7bf6e9695dbf7562",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -940,7 +940,11 @@
    "key": "main-timeaudit",
    "source_phrase": "右上一幅水彩插画：一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录）。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -957,7 +961,8 @@
    "key": "title-e6d3981fff7ce4844fde",
    "title_text": "电脑使用与性能记录",
    "sha256": "966cd716e01fb5a839602e35bff0a201706e9c96b893de9390a1bf032e602d50",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1144,7 +1149,11 @@
    "key": "显示器等待",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
    "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1159,7 +1168,11 @@
    "key": "热力格子",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
    "sha256": "4efb691c4acee75f1102bffb14d87f50e8975eea509921c9e67327e7266ea597",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1174,7 +1187,11 @@
    "key": "性能证据现图小槽4比3",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1191,7 +1208,8 @@
    "key": "title-693d1b1487ac54839d16",
    "title_text": "想查什么，从哪进",
    "sha256": "0c063d46ed5d59b8f08892c60855ffd3b4436bce55957364a8dab246647b1686",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1482,7 +1500,8 @@
    "key": "title-e4282fe1da346c845a99",
    "title_text": "六张看板",
    "sha256": "aca3dbf797712c7515fba18f8690b05665a84c2b90f03d15dd82bf561bdb6f18",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1703,7 +1722,11 @@
    "key": "电表",
    "source_phrase": "左上角标题旁画一只小电表插画。",
    "sha256": "994d98ed1be64be3b5cca46723ad45aeeebb385c62d93d3276ccdd44a9cdd27e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左上角标题旁画一只小电表插画"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1720,7 +1743,8 @@
    "key": "title-97563dd8028280141660",
    "title_text": "看板长这样",
    "sha256": "26d021704e81ced022b0247e3385be9d99596cc05a22f864b35b5d2ae9d4911a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2020,7 +2044,11 @@
    "key": "性能证据通用构图",
    "source_phrase": "左边约 40% 宽一幅水彩插画：一个对话气泡（里面只画三个小点）连到一张桌子，桌上摊着五张半透明的小卡片叠在同一条时间线上（一张画曲线、一张画内存条、一张画 Windows 小窗、一张画心跳线、一张画秒表），一把放大镜压在它们重叠的地方；桌子右下角一个“只看”的小眼睛图标。",
    "sha256": "2e7d2b561c1c035b6d6af2ae285947564c16c067fb16ac18cd0fb7d5e3e0f0b1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话气泡（里面只画三个小点）连到一张桌子，桌上摊着五张半透明的小卡片叠在同一条时间线上（一张画曲线、一张画内存条、一张画 Windows 小窗、一张画心跳线、一张画秒表），一把放大镜压在它们重叠的地方；桌子右下角一个抽象图形的小眼睛图标"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2037,7 +2065,8 @@
    "key": "title-f26a006fb9e334ec321d",
    "title_text": "卡了，问 AI",
    "sha256": "a0bf5bb2765e90c50299483f3c5b4bf8026be84321d1f2c5530d3a426b86bc78",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2310,7 +2339,11 @@
    "key": "性能证据通用构图",
    "source_phrase": "左边约 45% 宽一幅水彩插画：一个剪贴板上夹着几张便签，便签上只画浅灰短线；一只手从一叠便签里抽出一张；旁边一枚回形针、一只放大镜；剪贴板夹子上挂着一个小标签（标签上画一把小锁，不画字）。",
    "sha256": "2e7d2b561c1c035b6d6af2ae285947564c16c067fb16ac18cd0fb7d5e3e0f0b1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个剪贴板上夹着几张便签，便签上只画浅灰短线；一只手从一叠便签里抽出一张；旁边一枚回形针、一只放大镜；剪贴板夹子上挂着一个小标签（标签上画一把小锁，不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2327,7 +2360,8 @@
    "key": "title-4dc1add24e1dfa4a3a95",
    "title_text": "找回复制过的东西",
    "sha256": "1c3297434a874fd99116915e89162416bb9a1d2fb47dc23e650116e2449e8bb5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2521,7 +2555,11 @@
    "key": "热力格子",
    "source_phrase": "左边约一半宽一幅水彩插画：一张一周的热力格子（七列、二十四行的小方格，深浅不一的绿色，格子里不画字），格子上方一个小沙漏，旁边一个人离开椅子的剪影和一只放在桌上的耳机（表示放声音不算离开）。",
    "sha256": "4efb691c4acee75f1102bffb14d87f50e8975eea509921c9e67327e7266ea597",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张一周的热力格子（七列、二十四行的小方格，深浅不一的绿色，格子里不画字），格子上方一个小沙漏，旁边一个人离开椅子的剪影和一只放在桌上的耳机（表示放声音不算离开"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2538,7 +2576,8 @@
    "key": "title-dd00907c6539fea8f3b2",
    "title_text": "时间花在哪",
    "sha256": "df3efdfd926ae0884f090701b90c52b37ad08302d4f90f107781077ce0ce711e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2817,7 +2856,8 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3116,7 +3156,8 @@
    "key": "title-0b60834985c2a3a3693c",
    "title_text": "每天在后台发生什么",
    "sha256": "c9337d89b03b00345e1efdede6ef3c924a0db1c177a22c72807381910921f549",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3465,7 +3506,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3843,7 +3885,11 @@
    "key": "锁抽屉柜",
    "source_phrase": "右边约 40% 宽一幅插画：一排按周分隔的抽屉，最左边几格已经抽空，只剩一张写满短线的小卡片（汇总），抽屉下方一块硬盘，旁边标着 G（只画字母 G）；插画下面一张浅绿边框卡片“备份”，三条短句。",
    "sha256": "3bc7ab81fe67babd0f71db9d6da0e720473458604b0ffe325e38006d94879cd9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一排按周分隔的抽屉，最左边几格已经抽空，只剩一张写满短线的小卡片（汇总），抽屉下方一块硬盘，旁边标着 G（只画字母 G"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3860,7 +3906,8 @@
    "key": "title-329ff84c0c5023ba9bf8",
    "title_text": "存多久、占多大",
    "sha256": "3bba79e726df92714526d62649d621b09659c3d27b8cba5708baadffd6765713",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4094,7 +4141,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4312,7 +4360,11 @@
    "key": "ill-4084221892ddb5",
    "source_phrase": "插画：1 一只守门的小狗趴在一台机箱旁，机箱上方飘着一条跳动的心跳线，其中一小段变成平线，小狗正抬头看着那段平线；2 右边这张卡片的插画位换成一个带细绿边框的截图空位（宽高比约 2:1），截图位下面一行灰色小字（截图说明）。",
    "sha256": "adf0466595d685a8e7e81d0713e37579844b78c5489f69228933b3139bbc679a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "守门小狗趴在机箱旁，机箱上方心跳线中一段变平，小狗抬头看平线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4328,7 +4380,8 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4473,7 +4526,9 @@
    "key": "ill-c1d850f44e8d3e",
    "source_phrase": "插画：1 两段半透明的绿色时间条互相重叠，重叠处颜色更深，上方一只手把它们压成一条（旁边一只合上的笔记本电脑和一轮小月亮表示睡眠）；2 一排按周分隔的小抽屉，最左边几格空了，每个空抽屉前放着一张薄薄的汇总卡片，卡片上画一根小柱状图。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -5068,7 +5123,8 @@
    "key": "title-532b0a5a67ef64bb6401",
    "title_text": "全部功能（35 项）",
    "sha256": "1fa57c2d0712191d862d1797bcaa2d858bb69d0595e25d547f53f42ff4578c71",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5943,7 +5999,11 @@
    "key": "main-timeaudit",
    "source_phrase": "三张图上下拼成一整段：同一个网格、同样的卡片宽高和间距，上下边都不画边框；这是第三张：没有标题、没有图例，接着排；卡片排完后下方留出的空白里画一幅浅浅的水彩小插画（一卷心电图纸带绕着一只小狗和一枚回形针，不画字），不要画边框。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一卷心电图纸带绕着一只小狗和一枚回形针，不画字），不要画边框"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6310,7 +6370,11 @@
    "key": "main-timeaudit",
    "source_phrase": "横版画面：左边约 65% 宽一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边一幅大一点的水彩插画：一卷心电图纸带从上往下展开，纸带旁依次长出一块仪表盘、一只守门的小狗、一枚回形针、一个放大镜、一朵云和一排抽屉，像一路长出来的样子（插画里不画字）。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一卷心电图纸带从上往下展开，纸带旁依次长出一块仪表盘、一只守门的小狗、一枚回形针、一个放大镜、一朵云和一排抽屉，像一路长出来的样子（插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -6326,7 +6390,8 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6586,7 +6651,14 @@
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

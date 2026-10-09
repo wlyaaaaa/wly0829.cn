@@ -1067,7 +1067,7 @@
  "source": {
   "page": "sources/pages/password-center/page.json",
   "sha256": "1572f91317677a0ab79b4abf2bfeb2e895cd9328cd3996618d967ea0e6389548",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1276,7 +1276,11 @@
    "key": "main-password-center",
    "source_phrase": "右上一幅水彩插画：一只绿色保险柜，柜门半开，露出一叠卡片（钥匙、银行卡、硬盘、便签四种小图标）；柜门上挂一个钥匙环，环上四把样子不同的小钥匙（指纹、一部屏幕上亮着一排小圆点的手机、一张画满细线的小纸条、Google 和微软两个小标志）；保险柜左边一台电脑、右边一部手机，各用一条细绿线连到柜子。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只绿色保险柜，柜门半开，露出一叠卡片（钥匙、银行卡、硬盘、便签四种小图标）；柜门上挂一个钥匙环，环上四把样子不同的小钥匙（指纹、一部屏幕上亮着一排小圆点的手机、一张画满细线的小纸条、Google 和微软两个小标志）；保险柜左边一台电脑、右边一部手机，各用一条细绿线连到柜子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1293,7 +1297,8 @@
    "key": "title-c542fe3321d5cecadc64",
    "title_text": "密码中心",
    "sha256": "7cbaf4202c59834a5cb0158ce9d68c8c302f14ba9860a0bd53f9f8809f8e863b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1575,7 +1580,11 @@
    "key": "手机验证现图小槽4比3",
    "source_phrase": "屏幕右侧约三分之一宽，上面留一个带细浅绿边框的空位（约 3:2，放“解锁个人资料”窗口截图），空位下面一行小字说明；空位上方画一小幅水彩插画：一个人坐在电脑前，旁边手机屏幕亮着一排小圆点。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个人坐在电脑前，旁边手机屏幕亮着一排小圆点"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1591,7 +1600,8 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1735,7 +1745,8 @@
    "key": "title-1138f9144e7d2dc5f8e6",
    "title_text": "桌面窗口",
    "sha256": "b6bd3d4666daf680001d08b9218db0c4b93371013f1c4e63eaa6461715dc742f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2019,7 +2030,11 @@
    "key": "指纹",
    "source_phrase": "上半部分四张并排的竖长卡片，每张顶上一幅小水彩插画（1 一枚指纹叠在 Chrome 标志上；2 一部手机屏幕上一排小圆点和一个转圈的小时钟；3 一张画满细线的小纸条压在台灯下；4 Google 和微软两个标志并排），下面粗体标题和两行正文。",
    "sha256": "0508044582941f32db7b44c33fbe1171e0996f4f1c68f9521b8e2ba1ba97876f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一枚指纹叠在 Chrome 标志上"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2034,7 +2049,11 @@
    "key": "手机验证现图小槽4比3",
    "source_phrase": "上半部分四张并排的竖长卡片，每张顶上一幅小水彩插画（1 一枚指纹叠在 Chrome 标志上；2 一部手机屏幕上一排小圆点和一个转圈的小时钟；3 一张画满细线的小纸条压在台灯下；4 Google 和微软两个标志并排），下面粗体标题和两行正文。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机屏幕上一排小圆点和一个转圈的小时钟"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2049,7 +2068,11 @@
    "key": "验证码纸",
    "source_phrase": "上半部分四张并排的竖长卡片，每张顶上一幅小水彩插画（1 一枚指纹叠在 Chrome 标志上；2 一部手机屏幕上一排小圆点和一个转圈的小时钟；3 一张画满细线的小纸条压在台灯下；4 Google 和微软两个标志并排），下面粗体标题和两行正文。",
    "sha256": "bd4eda69465f07bad83182ac2761b2456d746bb31d62a1a112f1c6aef5ad85e3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张画满细线的小纸条压在台灯下"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2066,7 +2089,8 @@
    "key": "title-8b0c9dfb726d01da38a2",
    "title_text": "确认是我本人：四种方式任选一种",
    "sha256": "26c2c777152d4a46eb0384e761d20ced20dd0463a8def1014326e862b93d774e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2311,7 +2335,11 @@
    "key": "手机验证通用构图",
    "source_phrase": "左边约三分之一宽画一部竖着的小米手机水彩插画，屏幕上是 App 列表：顶部一排小圆角标签、下面几行条目，全部用灰色小横线代替，不画任何字。",
    "sha256": "eefe0eb4077dfee27460fc768dc3990e85a2db8026d7168aa92ed89fff8654da",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边约三分之一宽画一部竖着的小米手机水彩插画，屏幕上是 App 列表：顶部一排小圆角标签、下面几行条目，全部用灰色小横线代替，不画任何字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2328,7 +2356,8 @@
    "key": "title-4bf60a8abe37f3192614",
    "title_text": "手机上也能用",
    "sha256": "3e2c7e3e68d5c3af335f5a817e727003ec17d0ae4ec73ec4214617ee5ffced7f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2557,7 +2586,11 @@
    "key": "外接恢复现图小槽4比3",
    "source_phrase": "右边约三分之一宽一张竖长卡片“实测过”，上面画一台笔记本接着一块外接固态，屏幕上是密码中心窗口。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "笔记本接外接固态，屏幕是密码中心窗口；窗口只画绿色形状和浅灰短线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2574,7 +2607,8 @@
    "key": "title-e72be5c70de544e152ba",
    "title_text": "电脑坏了、换电脑",
    "sha256": "7a02fcd88edd7eaaf55b2683cb8528904319127dea9a30a15cb5d6a5e9068d42",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2706,7 +2740,11 @@
    "key": "锁文件夹",
    "source_phrase": "表格上方左右各一小幅水彩插画：左边一个文件夹被绿丝带捆着、丝带上挂四把小钥匙；右边一个密封的信封贴着一张密码纸条。",
    "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "文件夹被绿色丝带捆着，丝带挂四把小钥匙"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2721,7 +2759,11 @@
    "key": "信封文件",
    "source_phrase": "表格上方左右各一小幅水彩插画：左边一个文件夹被绿丝带捆着、丝带上挂四把小钥匙；右边一个密封的信封贴着一张密码纸条。",
    "sha256": "4c84d57aec93f5fa654626301c1df6fb7f3fa5364a34647567e2b7a89e1d4717",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "密封信封旁贴纸条，只画纸条的浅灰短线，不画密码"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2738,7 +2780,8 @@
    "key": "title-51facc39d5321e15d968",
    "title_text": "加密文件用哪一套",
    "sha256": "d0efbcd33ee82054254eb683abdba4223213c44417959e89fe4989b6b6b1caa7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3408,7 +3451,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3813,7 +3857,8 @@
    "key": "title-9a27c27cd770156f2f09",
    "title_text": "钥匙一层套一层",
    "sha256": "ebcdffaf83be86b144de792ff36eb0ee7a260cd21fb3d434c1b65fb72963af40",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4118,7 +4163,8 @@
    "key": "title-b8399041990297fbf73e",
    "title_text": "恢复副本和同步",
    "sha256": "faa901f3982e956f9e670c5aaa1612c44c4d92792e7e09196c7064e55dab6de0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4452,7 +4498,8 @@
    "key": "title-9893e6d0fc6dfc342d0f",
    "title_text": "AI 用 key，却看不见 key",
    "sha256": "3c05c5553aa603d8ef98c81031ca2ca1f7befc30bdbee346ea70461bbf2a9c14",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4688,7 +4735,11 @@ AI 用 key，却看不见 key
    "key": "ill-cb31464c772622",
    "source_phrase": "插画：1 一个钥匙环上四把钥匙，其中三把淡成虚线，剩下一把照样插进锁孔；2 一个程序窗口从一只手里接过钥匙，旁边一个对话气泡里是转写结果的短线和一个对勾；3 三部画成虚线的旧手机被划掉，一把新钥匙递给一部实线的新手机。",
    "sha256": "74ecdc848999a961fb98b4350f51806007342d222281697e569bdb65df78f685",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个钥匙环上四把钥匙，其中三把淡成虚线，剩下一把照样插进锁孔"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -4703,7 +4754,11 @@ AI 用 key，却看不见 key
    "key": "ill-085bf9d2ce6c0b",
    "source_phrase": "插画：1 一个钥匙环上四把钥匙，其中三把淡成虚线，剩下一把照样插进锁孔；2 一个程序窗口从一只手里接过钥匙，旁边一个对话气泡里是转写结果的短线和一个对勾；3 三部画成虚线的旧手机被划掉，一把新钥匙递给一部实线的新手机。",
    "sha256": "b94ecc4093ee2189196d281e4cad1901ecb2735dc5b381679292928b6597692a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个程序窗口从一只手里接过钥匙，旁边一个对话气泡里是转写结果的短线和一个对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -4718,7 +4773,11 @@ AI 用 key，却看不见 key
    "key": "手机验证现图小槽4比3",
    "source_phrase": "插画：1 一个钥匙环上四把钥匙，其中三把淡成虚线，剩下一把照样插进锁孔；2 一个程序窗口从一只手里接过钥匙，旁边一个对话气泡里是转写结果的短线和一个对勾；3 三部画成虚线的旧手机被划掉，一把新钥匙递给一部实线的新手机。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "三部画成虚线的旧手机被划掉，一把新钥匙递给一部实线的新手机"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4734,7 +4793,8 @@ AI 用 key，却看不见 key
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5228,7 +5288,8 @@ AI 用 key，却看不见 key
    "key": "title-54596e57810a000930ac",
    "title_text": "全部功能（57 项）",
    "sha256": "98b8dfb367f8b1c8fad62e8f09bb1e2fedee9da37931420da166836e51021260",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6805,7 +6866,11 @@ AI 用 key，却看不见 key
    "key": "main-password-center",
    "source_phrase": "右侧留一幅大一点的水彩插画：一只小保险柜从电脑机箱里被搬出来，放到自己的小桌子上，旁边一部手机和两块硬盘。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只小保险柜从电脑机箱里被搬出来，放到自己的小桌子上，旁边一部手机和两块硬盘"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -6821,7 +6886,8 @@ AI 用 key，却看不见 key
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -207,7 +207,7 @@
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
   "sha256": "93fe1dadfc7f24367a23895110daba8fad204eb0d1c98987144749b52f3f1ceb",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -430,7 +430,13 @@
    "key": "motion-rule-execution-coordination-01-legacy-video",
    "source_phrase": "旧HTML同屏首屏原video.rect及原mask对应主体，原文字与截图位由新DOM独立保留",
    "sha256": "2b4e5675eaddd4e52542adafa9b24b6290fdf90b556e64d79a1498fd054bd19d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    1032,
+    3,
+    1672,
+    360
+   ]
   },
   {
    "role": "title",
@@ -447,7 +453,8 @@
    "key": "title-5002849d46891c01a050",
    "title_text": "分工与并行施工",
    "sha256": "23b61c8358a5a092232dbf3bef0bae942902a222680a49f50cca19c3658baff4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -624,7 +631,14 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    "key": "title-r3-3d5456ab77b501b1bfa1",
    "title_text": "人话要点 · 派子代理的原则",
    "sha256": "4e37331bf0d9de9695c7a6dcb112cbe15d6711e1289e0c47802f1013c1734535",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    22,
+    1002,
+    182
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1383,7 +1397,14 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    "key": "title-961dbc324ba66f0f1c7e",
    "title_text": "人话要点 · 多个任务同时改东西",
    "sha256": "8c522658f3342e3f56ccd2dbc667fe2366a71eaf0a91e06f8232614d6755a1b8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    36,
+    100,
+    902,
+    222
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1532,7 +1553,8 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    "key": "title-5002849d46891c01a050",
    "title_text": "分工与并行施工",
    "sha256": "23b61c8358a5a092232dbf3bef0bae942902a222680a49f50cca19c3658baff4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1549,7 +1571,14 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    "key": "title-7d9f97dd5ba6c2f97759",
    "title_text": "派子代理的原则",
    "sha256": "6804cb8fc7d135e71cf5829627f289f976ca0e9ffc144877b5087319a20e3c28",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    209,
+    344,
+    448,
+    387
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1809,7 +1838,14 @@ owner: `E:\.agents`
    "key": "title-d95027df2f4dd9c1d6e5",
    "title_text": "多个任务同时改东西",
    "sha256": "4cf207e2ecba7e0e57083b46d9d8d2a276d50f2b3d11fd0dafbabdf57131b9df",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    858,
+    76,
+    1251,
+    141
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

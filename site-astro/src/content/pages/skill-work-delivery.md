@@ -133,7 +133,7 @@
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
   "sha256": "174c1e9bc2238866e1ee17e1cc995cf6437276572a60c737a23681d37f2e0a62",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -351,7 +351,11 @@
    "key": "main-work-delivery-copilot",
    "source_phrase": "右上角一幅小插画：一只公文包半开着，露出三张纸，纸上连出一根细绿丝线（纸上不画字）。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只公文包半开着，露出三张纸，纸上连出一根细绿丝线（纸上不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -368,7 +372,8 @@
    "key": "title-01e813c718dc919b1fac",
    "title_text": "工作支持与交付技能",
    "sha256": "a65206836c9cb47097d33fc73ddb227d4f5fb1327138889ddd63f6791c1fdb91",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -717,7 +722,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -987,7 +993,8 @@ AI：“有 2 条指标定义对不上新版，标了过期，其余照旧不用
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1252,7 +1259,8 @@ AI：“有 2 条指标定义对不上新版，标了过期，其余照旧不用
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

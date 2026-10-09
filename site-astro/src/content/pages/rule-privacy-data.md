@@ -293,7 +293,7 @@
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
   "sha256": "3e64e1ffd1304366f44afe95353b0eb16b897e7001f30acc89d50da7d946e502",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -719,7 +719,11 @@
    "key": "ill-r3-313baf1d2fe281cb",
    "source_phrase": "右边约 45% 宽：上面约 62% 高是原来那幅水彩插画，照原图不变——上段私人资料小木柜挂绿色挂锁、锁上小牌“资料锁”、柜旁小沙漏、一只手递来验证卡；中段五级浅石台阶侧面刻“L1”到“L5”、L4 上一只关着的小保险箱；下段两块水彩硬盘贴“G”“H”、H 盘旁小木箱挂日历牌“30 天”。",
    "sha256": "fb3f09fde58e2ce0f944bfc6c6f0f6bc528a886b74b21db8b9ff371d8af076d9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "右边约 45% 宽：上面约 62% 高是原来那幅水彩插画，照原图不变——上段私人资料小木柜挂绿色挂锁、锁上小牌抽象图形、柜旁小沙漏、一只手递来验证卡；中段五级浅石台阶侧面刻抽象图形到抽象图形、L4 上一只关着的小保险箱；下段两块水彩硬盘贴抽象图形抽象图形、H 盘旁小木箱挂日历牌抽象图形"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -736,7 +740,14 @@
    "key": "title-114b2984bb76abfd8650",
    "title_text": "个人资料与数据处理",
    "sha256": "2e412fcb966f9f6b24fddcc638fb5737acd88777530bd3b856b0f2c94c0a1aad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    37,
+    793,
+    174
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1424,7 +1435,14 @@
    "key": "title-r3-2562c2b6911b2e5437d5",
    "title_text": "人话要点 · 个人资料的锁和解锁",
    "sha256": "a0dd205ba0e931d06d774bbd1864f60b48a36c3cf0f87c22ec7dc9420fa08731",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    34,
+    94,
+    934,
+    245
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2088,7 +2106,14 @@
    "key": "title-r3-777546ef0acd4d4c12d6",
    "title_text": "人话要点 · 可信位置和原样保存",
    "sha256": "82046e28d4686b50dfa300018295ac9bee0b1b6e7af99bb908ee9d4852888c82",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    28,
+    56,
+    886,
+    223
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2391,7 +2416,14 @@
    "key": "title-r3-9ea70b9708a82b4a2556",
    "title_text": "人话要点 · 公开个人数据分级表",
    "sha256": "225ad32cf71d95686b364eccc09505941d37a5f8df9ba39697549e3b097b63f2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    27,
+    53,
+    909,
+    205
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2636,7 +2668,14 @@
    "key": "title-r3-264e15c95b9cbdb79092",
    "title_text": "人话要点 · 私人仓库收口、备份跟着原件走",
    "sha256": "101a420a04ecd7be52b963f3ca0a9ded1b076f1e8e58f25a16232285191f3a96",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    11,
+    1307,
+    159
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2793,7 +2832,14 @@
    "key": "title-114b2984bb76abfd8650",
    "title_text": "个人资料与数据处理",
    "sha256": "c7d72b54a10917d976de904e7d05d27972b024b4599a991ef97c59254b0f84ca",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    50,
+    803,
+    184
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2810,7 +2856,14 @@
    "key": "title-86814cb01f9c94f989bc",
    "title_text": "个人资料的锁和解锁",
    "sha256": "966c035d590733ce9f813c23c5a3fbe419f536e35e42d23b33bcfc13b1032e97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    53,
+    390,
+    424,
+    451
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2950,7 +3003,14 @@ owner: `E:\.agents`
    "key": "title-eedd8f221b5ce38d13c7",
    "title_text": "可信位置和原样保存",
    "sha256": "502d90226c8c9af5625cdfd1324d88174c8109f04a30d1a1694326c3841e00c5",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    55,
+    510,
+    424,
+    582
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3121,7 +3181,14 @@ owner: `E:\.agents`
    "key": "title-a316a5ebdecd321a3fbf",
    "title_text": "公开个人数据分级表",
    "sha256": "797b84ed506e1c68681eced60c4352858c47f567af60c88d275077fb086e81f0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    61,
+    415,
+    113
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3267,7 +3334,14 @@ owner: `E:\.agents`
    "key": "title-0fbbdff035ced24e62d6",
    "title_text": "私人仓库收口",
    "sha256": "2739efc4fc2d12999ffecb4cdfe3efd33b7d771cb7f6d326e429af2ffeae5638",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    71,
+    114,
+    508,
+    262
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3284,7 +3358,14 @@ owner: `E:\.agents`
    "key": "title-a6cd4d09c37c002e5c0a",
    "title_text": "备份跟着原件走",
    "sha256": "8625eebae9f1f1a0a6088c7bb4efa572b12891c3515cd887b639e5ae81d16012",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    776,
+    115,
+    1249,
+    258
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

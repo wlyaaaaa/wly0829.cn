@@ -447,7 +447,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
   "sha256": "9c8ad625cba4baa12035927ca8d9bab013fc9178817c9571367eef6c0f726197",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -701,7 +701,14 @@
    "key": "title-67ace702377bbefa1281",
    "title_text": "Typora 薄荷主题",
    "sha256": "1bbb29d83c0844dbd7fa2dfadd2b834cfa7d7695f660a1a00158a2c518b91a15",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    39,
+    95,
+    904,
+    290
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -829,7 +836,11 @@
    "key": "main-typora-theme-pack",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。",
    "sha256": "15c405fd0bc2978642ed84464064871759d9f3cc9d0e57d22cf04c76eefb32cc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -844,7 +855,11 @@
    "key": "菜单导出",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。",
    "sha256": "2b8e3375f5859d4e452d7882e2c22940914e21980bd333b200c4b0f2872327aa",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个展开的抽象图形下拉菜单，最下面三项抽象图形抽象图形抽象图形，字由排版程序另放，菜单右边飘出一张 PDF"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -859,7 +874,11 @@
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话气泡，里面一张小小的 PDF 和一枚放大镜"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -875,7 +894,8 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1096,7 +1116,14 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-0e07274886025ebed242",
    "title_text": "三种 PDF 长什么样",
    "sha256": "3cd290443e7e62acdcedfe6e64688d1ed26b63ea035bb471c514192c843876d8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    16,
+    701,
+    141
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1309,7 +1336,14 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "1800120604445f4527924e491f0e362ca46475a77e31ca6f81cecc3f429b31b0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    25,
+    549,
+    178
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1562,7 +1596,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-646d3c025d8d190f698b",
    "title_text": "一次导出经过哪几步",
    "sha256": "d0bc8683f00ad86fc9b186f87590f75d1de1786034d95971c253f5d979468abe",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1785,7 +1820,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1934,7 +1970,11 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "文稿核验通用构图",
    "source_phrase": "卡片左边约 35% 宽一幅水彩插画：桌上一份装订好的旧 PDF 安安稳稳放着，旁边一张新打印的纸正被一枚放大镜检查，纸边上夹着一张小标签“暂存”；远处一只空的回收筐。",
    "sha256": "073503cefc7591f3fbafa430ecb30700d758e348da21f24a58d6fa1850ae7cc6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "桌上一份装订好的旧 PDF 安安稳稳放着，旁边一张新打印的纸正被一枚放大镜检查，纸边上夹着一张小标签抽象图形；远处一只空的回收筐"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1952,7 +1992,14 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-r3-bfb12675129eb6f4b635",
    "title_text": "导坏了，旧 PDF 也还在",
    "sha256": "6c7006f918be3ca9b8ae2affd62aaaee31db60605fda28672099e7cb1b82e290",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    44,
+    46,
+    896,
+    216
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2141,7 +2188,11 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "主题菜单薄荷文件夹",
    "source_phrase": "卡片 1 插画：一个下拉菜单“主题”，里面只有一行“Verdant Mint”带薄荷叶图标，菜单后面一个小文件夹“verdant”半掩着。",
    "sha256": "1dd888935ed6da2dddf751fadedaf2627394fdd164907f6c9e44a13c024adc91",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "插画：一个下拉菜单抽象图形，里面只有一行抽象图形带薄荷叶图标，菜单后面一个小文件夹抽象图形半掩着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2158,7 +2209,14 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    19,
+    312,
+    266
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2609,7 +2667,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-45135f1666c9b132c5b6",
    "title_text": "全部功能（16 项）",
    "sha256": "7bf885a31684b83b413b63948a8635c12d172ef806ec329043e2428a59f6f896",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2626,7 +2685,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-6a70a665aa10d0971b37",
    "title_text": "导出 PDF",
    "sha256": "18e6f5af46da2d0d5965eb325df11b868e9d77bf405d52ba331018c10df1b2b0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2643,7 +2703,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-09dc38e31ec2e8088038",
    "title_text": "导出保护",
    "sha256": "63b4c62a609a7b5a9eef1893254201c29663087add3343c283e20ad9c6ca6740",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2660,7 +2721,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-74f45217e60ab2f7f622",
    "title_text": "编辑主题",
    "sha256": "f9b3562e08cd04ea3f1427bf3ca53d268ec7f2eb531227ca010eca1a1fdaf13c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2677,7 +2739,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-fa27f5f24f0be57f46b0",
    "title_text": "配置和维护",
    "sha256": "3a39b2dfc428ca3b84b5a51bc2ededd97a9f86f1aca7cbb6a38dab6c36e8c48d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2813,7 +2876,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-60559ec08d1172637358",
    "title_text": "演进（2026 年）",
    "sha256": "db23165afb23b1b352da4a906595585ada3cfcf674b7dc824e7908e425f6a9b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2981,7 +3045,14 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

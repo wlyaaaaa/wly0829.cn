@@ -663,7 +663,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "62c648459315fdde40c66277ba6c10d9038e17109c8c551b00b9228d537c8c97",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -883,7 +883,11 @@
    "key": "main-wechatdirect",
    "source_phrase": "右上一幅水彩插画：一台电脑屏幕上并排两个聊天窗口，窗口顶上的小名牌分别写“主号”“副号”；一只放大镜照着其中一小段聊天气泡，一条细绿线从一句回复连到它引用的原句；屏幕旁一个数据库圆柱，上面贴一把小锁（表示只读）；再旁边一个文件夹，封面写“档案”。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑屏幕上并排两个聊天窗口，窗口顶上的小名牌分别画抽象短线的抽象图形；一只放大镜照着其中一小段聊天气泡，一条细绿线从一句回复连到它引用的原句；屏幕旁一个数据库圆柱，上面贴一把小锁（表示只读）；再旁边一个文件夹，封面画抽象短线的"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -900,7 +904,14 @@
    "key": "title-b56251f26d1e6a830f55",
    "title_text": "微信聊天读取",
    "sha256": "01943c96d2dba6a8cb3a89d7ba1375f3afdec50051fda70bb3bcbf8e8fa29b83",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    26,
+    717,
+    197
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1169,7 +1180,11 @@
    "key": "对话气泡",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个带问号的对话气泡"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1184,7 +1199,11 @@
    "key": "对话气泡",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两句气泡被一条细绿线连起来"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1199,7 +1218,11 @@
    "key": "手机照片现图小槽4比3",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个小喇叭和一张小照片"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1214,7 +1237,11 @@
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个文件夹里一叠纸，最上面一张贴着小绿标签"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1229,7 +1256,11 @@
    "key": "手机照片现图小槽4比3",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张相框样式的小动态卡片"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1244,7 +1275,11 @@
    "key": "ill-c20cd39482f91d",
    "source_phrase": "插画依次是：一个带问号的对话气泡；两句气泡被一条细绿线连起来；一个小喇叭和一张小照片；一个文件夹里一叠纸，最上面一张贴着小绿标签；一张相框样式的小动态卡片；一个封好的牛皮纸袋，袋口一个对勾。",
    "sha256": "2553ce6d1fd05ee59fc0d9aee6ca7dc6576eee2b28a45bffa9dec516ba95adf3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个封好的牛皮纸袋，袋口一个对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1261,7 +1296,14 @@
    "key": "title-9fe7ee9705091075f9a6",
    "title_text": "怎么用",
    "sha256": "a2404fd06bb0d2c9aaf2d5c456cc8d831d5d9fb9f267b8520f707ac8048a9f98",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    38,
+    4,
+    411,
+    175
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1505,7 +1547,8 @@
    "key": "title-c3e815393f8b66e5a4e8",
    "title_text": "读不到或出事的时候",
    "sha256": "119da2d5627db369de50af9a2283330bbb7eec77f6c969a7b51a3f5e17d3627c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1781,7 +1824,8 @@
    "key": "title-d6e04a733b9017f8080e",
    "title_text": "它是怎么读的",
    "sha256": "2ec5813025b80178b13aae2f2333041edb3e9134c2b97f8b14fafbca5f61f8df",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2127,7 +2171,11 @@
    "key": "文件收纳通用构图",
    "source_phrase": "左边约五分之二宽，一个打开的牛皮纸文件夹水彩插画，里面的文件像清单一样一行行画出来：每行左边一个小文件图标，粗体文件名，后面一句说明（就是“文件夹里有”那七行，字照抄）。",
    "sha256": "764e9012bb1bbe7cfc27ff7639b21204558266fe15f49c6340212ad71fb8560d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边约五分之二宽，一个打开的牛皮纸文件夹水彩插画，里面的文件像清单一样一行行画出来：每行左边一个小文件图标，粗体文件名，后面一句说明（就是抽象图形那七行，字照抄"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2145,7 +2193,14 @@
    "key": "title-r3-a03f622b1e83c22d0ceb",
    "title_text": "档案怎么存、怎么更新",
    "sha256": "957c3bcb655937c37d77d84917875f94d34533101e0bc84d7809a382b29ac8f9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    41,
+    86,
+    901,
+    292
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2440,7 +2495,14 @@
    "key": "title-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "ad71f994850283a95cdec0c1364c324a66e4c26337ee9370b5a022ad5efbc258",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    90,
+    910,
+    340
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2580,7 +2642,11 @@
    "key": "截图聊天现图小槽4比3",
    "source_phrase": "插画：1 两个聊天窗口顶上的名牌被一只手对调，旁边一枚绿色指纹印章；2 左边一张写满乱码方块的纸条，一个箭头，右边变成整齐的横线文字（不画真实的字）；3 一个很多人头像的群聊窗口，只有一个头像的气泡被绿色放大镜挑出来排成一列。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两个聊天窗口顶上的名牌被一只手对调，旁边一枚绿色指纹印章"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2595,7 +2661,11 @@
    "key": "乱码修复宽构图",
    "source_phrase": "插画：1 两个聊天窗口顶上的名牌被一只手对调，旁边一枚绿色指纹印章；2 左边一张写满乱码方块的纸条，一个箭头，右边变成整齐的横线文字（不画真实的字）；3 一个很多人头像的群聊窗口，只有一个头像的气泡被绿色放大镜挑出来排成一列。",
    "sha256": "3c1e0eb893840e38f29a4e6bb56773cee8674ad86aedf8477d06a43811ccfdd9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一张写满乱码方块的纸条，一个箭头，右边变成整齐的横线文字（不画真实的字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2610,7 +2680,11 @@
    "key": "截图聊天现图小槽4比3",
    "source_phrase": "插画：1 两个聊天窗口顶上的名牌被一只手对调，旁边一枚绿色指纹印章；2 左边一张写满乱码方块的纸条，一个箭头，右边变成整齐的横线文字（不画真实的字）；3 一个很多人头像的群聊窗口，只有一个头像的气泡被绿色放大镜挑出来排成一列。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个很多人头像的群聊窗口，只有一个头像的气泡被绿色放大镜挑出来排成一列"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2627,7 +2701,14 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    87,
+    297,
+    304
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3083,7 +3164,8 @@
    "key": "title-63735e387888cdd72a9b",
    "title_text": "全部功能（25 项）",
    "sha256": "60d0b674270883c94e01563dd88d7915919dac0f6e295d69d6b8ac8bfcba8b5d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3848,7 +3930,11 @@
    "key": "main-wechatdirect",
    "source_phrase": "右边一幅大一点的水彩插画：一只小工具箱慢慢长成一个整齐的小档案柜，旁边一台电脑上两个聊天窗口，档案柜抽屉上贴着绿色小标签（不写字）。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只小工具箱慢慢长成一个整齐的小档案柜，旁边一台电脑上两个聊天窗口，档案柜抽屉上贴着绿色小标签（不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3865,7 +3951,14 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    0,
+    239,
+    171
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -223,7 +223,7 @@
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
   "sha256": "59fc194524b0e4fa18da59e5edb31715ebb894e6e3f6b88791a52ebf0f6667dc",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -498,7 +498,14 @@
    "key": "title-d24e7f63be7a65c8632c",
    "title_text": "Codex 适配",
    "sha256": "38d4374f57f5d6f76c80bc8763cddfc808a13d45dbcdc8dbbfc030a7d4d130fd",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    5,
+    631,
+    173
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -684,7 +691,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-r3-d1f790b4199487b68a87",
    "title_text": "人话要点 · 入口和无限制授权",
    "sha256": "bbb5944b3eb5e593cdfe0f7f9710f66ce17d009248f80f82829ccfe43321dac2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    17,
+    19,
+    928,
+    178
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -970,7 +984,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-5b2d9db12c2c119eb149",
    "title_text": "人话要点 · 派子代理：Codex 的不同处",
    "sha256": "311a05806e0627b7f3bd966bbd9959de7d6b00acbfa4f202bc8e880d0c16ea56",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    24,
+    1079,
+    159
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1160,7 +1181,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-e06583b464c3ac6a92f2",
    "title_text": "人话要点 · 状态和升级",
    "sha256": "65136208aa03449867dc41a132be52ecc0072803e6f7d3f58e61bdd1c25add87",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    29,
+    865,
+    184
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1286,7 +1314,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-d24e7f63be7a65c8632c",
    "title_text": "Codex 适配",
    "sha256": "f512b7a3f68a3c0149e74ecfe179f78a21be6c0f0b3adff0d11abb946a7bd9be",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    55,
+    128,
+    289,
+    177
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1303,7 +1338,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-8350155947f7b71f7e57",
    "title_text": "入口和新消息",
    "sha256": "4c7a8e99ae60a10acf71f285cf513b5db7db157c164a84d591308dc647ea0114",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    58,
+    426,
+    293,
+    473
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1320,7 +1362,14 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
    "key": "title-7aaf9f13bf9d1731bada",
    "title_text": "无限制授权",
    "sha256": "9d8c04889eaec5fa60cdb5bdd1e79bc01fa89df04479b6dcf4a959603656985b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    877,
+    128,
+    1086,
+    178
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1480,7 +1529,14 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
    "key": "title-fcd24f348b09c36fbafe",
    "title_text": "派子代理：Codex 的不同处",
    "sha256": "658e4ddf3f37d5acfa092a0a22815fa38117a89c2c87bdaf4b972aa3fb036993",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    52,
+    109,
+    576,
+    174
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1497,7 +1553,14 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
    "key": "title-3f2f4a6c0064aa6ebdbe",
    "title_text": "新消息里的状态",
    "sha256": "29a550e54f98d0f583f4c203f267ca7645f728da75fca2a34f8c55bb8e96bc3f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    876,
+    108,
+    1179,
+    174
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1514,7 +1577,14 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
    "key": "title-fe23a6356f7f7f4a3b82",
    "title_text": "官方升级",
    "sha256": "9f117e9da591e4806629790c0a51fbc4cc42e93b6426672d7e4601adc1838423",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    875,
+    453,
+    1066,
+    524
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

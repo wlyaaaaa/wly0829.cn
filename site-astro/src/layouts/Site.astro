@@ -10,8 +10,8 @@ import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
 import '../styles/typeset-page.css';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
-interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; toc: { id: string; label: string; img?: string }[] }
-const { title, kind, url, toc, page, motion, blocks, pageMeta } = Astro.props;
+interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; toc: { id: string; label: string; img?: string }[] }
+const { title, kind, url, toc, page, motion, blocks, pageMeta, moved } = Astro.props;
 const rt = runtimes[`../chrome/runtime/${page}.json`];
 
 function albumMeta() {
@@ -62,6 +62,8 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title} · 吴乐阳</title>
   <link rel="canonical" href={new URL(url, 'https://wly0829.cn').href} />
+  {moved && <meta http-equiv="refresh" content={`2; url=${moved}`} />}
+  {moved && <meta name="robots" content="noindex" />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
   <Fragment set:html={head} />
@@ -86,8 +88,8 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   <main id="content" class="paper ts-page">
     <script is:inline>(()=>{const m=document.currentScript.parentElement;const z=()=>{const w=m.clientWidth;if(!w)return;m.style.setProperty('--tz-h',String(w/1672));m.style.setProperty('--tz-v',String(w/941));m.style.setProperty('--tz-card',String((innerWidth<768?w:(w-16)/2)/1672));};z();new ResizeObserver(z).observe(m);
 const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);
-document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});
-document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});})();</script>
+document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});
+document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});})();</script>
     <slot />
     {briefText && (
       <section id="ai-brief" class="ai-brief-static" aria-label="复制 AI 续作说明">
@@ -111,5 +113,6 @@ document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.targ
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
   <script is:inline defer src="/_living/living-mount.js"></script>
+  {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
 </body>
 </html>

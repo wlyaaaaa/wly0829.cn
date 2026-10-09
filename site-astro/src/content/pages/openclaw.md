@@ -490,7 +490,7 @@
  "source": {
   "page": "sources/pages/openclaw/page.json",
   "sha256": "419f26996ab20dd536f658523d86b7627d5d60f4bdf3078c45c11ddc7e7a154e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -885,7 +885,11 @@
    "key": "main-openclaw",
    "source_phrase": "右侧约 45%：一幅水彩插画：一部手机，屏幕上是 Telegram 和飞书的标志和一个聊天气泡；一条细绿虚线从手机连向一台家用台式电脑，虚线在半路断开；电脑前趴着一只红色小龙虾在睡觉，身上落了一层薄霜。",
    "sha256": "90e1c348891691d034a7f6e0abdb840afe44e108eef43f6df06258e8cfba69d2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机，屏幕上是 Telegram 和飞书的标志和一个聊天气泡；一条细绿虚线从手机连向一台家用台式电脑，虚线在半路断开；电脑前趴着一只红色小龙虾在睡觉，身上落了一层薄霜"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -903,7 +907,14 @@
    "key": "title-r3-df14cb8685ae6ff155e4",
    "title_text": "OpenClaw 网关",
    "sha256": "1798f3face926a104c83458eda98df0acb3e44c2695cd0427cd7a49ed73b9578",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    25,
+    131,
+    701,
+    334
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1268,7 +1279,14 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-57c743bc4133270e9e71",
    "title_text": "哪里不好用",
    "sha256": "80092ace3d14d77abd7ac4461bdb4f673b448bf3738dda1f1cfea1f47faf2c0d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    53,
+    10,
+    442,
+    97
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1608,7 +1626,14 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-r3-64724d085eb3bb863200",
    "title_text": "当初想怎么用",
    "sha256": "8ae35ca9eee11696cb57a01d805e9056a3f740fc6877e96c0c0c3869d28d2def",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    0,
+    447,
+    125
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2268,7 +2293,8 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-757c11cc01bc4ee03ef9",
    "title_text": "全部旧功能（14 项，全部已停用）",
    "sha256": "7c9b4b1ce7507cffd43f6b421082d49c39d0d0fce3989cbdf08d3780318caaf9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2285,7 +2311,8 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-74f851d7d1c80ce167e7",
    "title_text": "在聊天里派活",
    "sha256": "1b79f365abc5a6ccba3e64c2dff16209947b682163c1692f4d87c203b330daaf",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2302,7 +2329,8 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-6beda481d19d4185977f",
    "title_text": "备份与恢复",
    "sha256": "f89aea79b6343a29854a73f07dabdc3e3962971b055d4a6ef7538d0e6844a432",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2319,7 +2347,8 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-7d88bbbe1a5c2b775bf8",
    "title_text": "让它一直在线",
    "sha256": "35c3d1b3082c2ee1d934b707b00ed60d6e8b6f048589c3f0e262418c2233cad9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2525,7 +2554,14 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "key": "title-946e1c8e0a4412765a56",
    "title_text": "演进（6 月 19 日—9 月 28 日，65 次提交）",
    "sha256": "82c3ce8ea4b67ec3860dd958f489eba0333f2272fb1c84a54295856d180dffe9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    89,
+    902,
+    203
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

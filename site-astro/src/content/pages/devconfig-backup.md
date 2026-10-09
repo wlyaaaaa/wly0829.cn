@@ -584,7 +584,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "b966684fa221237aa441b216e75ac249c09b9cb564bb937e1061ac3049f4b047",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -914,7 +914,11 @@
    "key": "main-devconfig-backup",
    "source_phrase": "右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。",
    "sha256": "02c93e4d5401230db278ed1e08517748a918e05e838da9d22eac7d1af121ec36",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口抽象图形、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -931,7 +935,14 @@
    "key": "title-ec96df61bbe2956d4ebe",
    "title_text": "开发配置备份",
    "sha256": "8565fe8b060182353e0d8bdc500ae0740f956619eee0473740ae2204e391022d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    76,
+    569,
+    223
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1252,7 +1263,8 @@
    "key": "title-44eb4812bcd4bfabe49f",
    "title_text": "每天发生什么（北京时间）",
    "sha256": "250e914eb04313a26d5bbe6fdbd18189cb783f3c49ad9a425fbf07fae7a4babd",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1270,7 +1282,14 @@
    "key": "title-r3-e21982fa91062915ceb7",
    "title_text": "它和两个项目怎么分工",
    "sha256": "6f19116531070eb81e4b568326d6d43bb290429042c42ce5acf1b5a7aba98c4a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    593,
+    590,
+    702
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1592,7 +1611,11 @@
    "key": "开发配置包纸箱五文件",
    "source_phrase": "左栏约 60% 是“开发配置包”：画一个打开的水彩纸箱，箱里分层插着五张标签卡（用户目录、AppData、Scoop、系统、换机清单），每张卡旁边是对应那一条字；纸箱下方一个灰色小垃圾桶，旁边是“不进包的”那段字；最下面一条浅黄色提醒条放“包里仍可能有密码和密钥”那段。",
    "sha256": "ced1bd3dccfbe5ec4d7c3b064a258e0d3ab3ea0c13492e8311696dcc67eda12c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "打开的水彩纸箱，箱里分层插着五张卡片，纸箱下方灰色小垃圾桶"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1607,7 +1630,11 @@
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "右栏约 40% 是“微信”：画一个文件夹图标，里面露出数据库圆柱、图片、视频、文件四个小图标，旁边一个被划掉的“缓存”小篮子，下面是微信那段字。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "文件夹里露出数据库圆柱、图片、视频、文件四类小图形，旁边被划掉的缓存小篮子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1624,7 +1651,8 @@
    "key": "title-c9ab9cfaf82902ec1e40",
    "title_text": "备份里有什么，没有什么",
    "sha256": "03b81e5571986e7aa2ff3a7c0ecc7652f67dba4cca97fffa7e2daa9fa2744acf",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1641,7 +1669,8 @@
    "key": "title-fc3d57642e8ceb3b7d1a",
    "title_text": "开发配置包（9 月 29 日凌晨起的清单：66 个来源）",
    "sha256": "5f394634e34f0299b9e73df83afb2fb0c7f80ab905ea88b3ca7030d14d7161ba",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1658,7 +1687,14 @@
    "key": "title-r3-81b430b69643518018b5",
    "title_text": "微信",
    "sha256": "2a549ad47445ad52c8f52ff5061ed74d50ff0f4bbab240d3431a10d60e72bc02",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    70,
+    1129,
+    268,
+    1258
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1997,7 +2033,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2014,7 +2051,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-63c7e5ee5827e9cd126c",
    "title_text": "电脑坏了或重装",
    "sha256": "c10cb5d24c7dfb763edc1cee1a77b39c6bb2719d1f2d24b47335204a9f87ca4f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    50,
+    130,
+    384,
+    218
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2031,7 +2075,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-493ad3760ba7535666d5",
    "title_text": "备份失败了",
    "sha256": "be24944b9e8a14c38b67bbfd93be7919ad1bcac59f00249690fe1e377b1b0c7e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    1035,
+    127,
+    1278,
+    222
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2048,7 +2099,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-38c57e193305946b5145",
    "title_text": "还没真做过的",
    "sha256": "e6c5ea3985a8ea293977e0c57a870d3ccd102528679d477a6b90c04c10d7289a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    1036,
+    570,
+    1337,
+    663
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2552,7 +2610,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2570,7 +2629,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-46900c8b69a622112117",
    "title_text": "开发配置",
    "sha256": "751a25ec5a47c65f59247bf1b1919e81ba7f457deffcafb7a3c8e3e4c78c8db2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    362,
+    182,
+    579,
+    270
+   ],
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2586,7 +2652,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-r3-81b430b69643518018b5",
    "title_text": "微信",
    "sha256": "2a549ad47445ad52c8f52ff5061ed74d50ff0f4bbab240d3431a10d60e72bc02",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2875,7 +2942,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3114,7 +3182,11 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "截图聊天现图小槽4比3",
    "source_phrase": "卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3129,7 +3201,11 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "ill-6e251cbd0a1d06",
    "source_phrase": "卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。",
    "sha256": "15747f7df5e2ee49c7bd32234d4c2a8de5a9d5340ad09dab50d8e9aaed156bee",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3144,7 +3220,11 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "备份纸箱现图小槽4比3",
    "source_phrase": "卡片 1：一只微信气泡被相机快门定格，旁边一朵云上一个绿色对勾；卡片 2：一个很小的 0 字节文件被一把挂锁锁住，旁边一个纸箱卡在传送带上；卡片 3：一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头。",
    "sha256": "02c93e4d5401230db278ed1e08517748a918e05e838da9d22eac7d1af121ec36",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个大纸箱变成一个小一圈的纸箱，中间一个向下的绿箭头"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3161,7 +3241,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    28,
+    0,
+    297,
+    218
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3582,7 +3669,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-8ce8796469dd3341e2bd",
    "title_text": "全部功能（23 项）",
    "sha256": "89fc362f96d4c1d70b0e830cea81dbabb001b4c22adeef174b779bedc145ab87",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3598,7 +3686,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-ec96df61bbe2956d4ebe",
    "title_text": "开发配置备份",
    "sha256": "8565fe8b060182353e0d8bdc500ae0740f956619eee0473740ae2204e391022d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4108,7 +4197,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-a10276ae63bc16c96ec6",
    "title_text": "微信备份",
    "sha256": "87ea880694d127fdffc822bf38b9c960982fa38ab42f49596c6c958724f6c1af",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4125,7 +4215,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-e0534b8a4e46a0cb5601",
    "title_text": "恢复",
    "sha256": "e8e761101316bab206a3b4951c52688636904578c3bd11244d37577b016819c9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4142,7 +4233,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-0a1984ddf011b1453e0e",
    "title_text": "看状态和维护",
    "sha256": "cdb4eedcc42f1c5bc31fa2f0712e1828cb23191ba0562d78357dba6e63123360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4354,7 +4446,14 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "title-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "0b21217f2f4e7033e8c35aca01c83d5433f77e0d95429c80d9be39704ce3fbdc",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    14,
+    2,
+    251,
+    146
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

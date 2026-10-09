@@ -714,7 +714,7 @@
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
   "sha256": "07c949c827231a63e869218541546899aa33822183b32b0cd8494e36b615fd5f",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -896,7 +896,8 @@
    "key": "wly0829-cn-01-title-1",
    "title_text": "个人网站（总看板）",
    "sha256": "914da6ad04ab4adba9ed7c4d95046019680808df69021022bc68648a3ea8479d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1029,7 +1030,8 @@
    "key": "wly0829-cn-02-title-1",
    "title_text": "它替我看三件事",
    "sha256": "dd5f266daba3d6b0ade3a35df277853a80b73961a463a9b4b65085145dfb661c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1197,7 +1199,8 @@
    "key": "wly0829-cn-03-title-1",
    "title_text": "每一页管什么",
    "sha256": "04b5a22c6a3869a882f97e6b8c691b546b7afaeaf3267956b3fc6f660bbe3707",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1340,7 +1343,8 @@
    "key": "wly0829-cn-04-title-1",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1485,7 +1489,8 @@
    "key": "wly0829-cn-05-title-1",
    "title_text": "现在做到哪了",
    "sha256": "86596697b5aeba09f9831a5e96cc608135302c738c0549c6eb00412496e80d28",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1626,7 +1631,8 @@
    "key": "wly0829-cn-06-title-1",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1761,7 +1767,8 @@
    "key": "wly0829-cn-07-title-1",
    "title_text": "AI 怎么维护它",
    "sha256": "9514728635c15c8a58694a7cca1fe7b77005e086c5137f8172c10ef7f301c663",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1920,7 +1927,8 @@
    "key": "wly0829-cn-08-title-1",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2044,7 +2052,8 @@
    "key": "wly0829-cn-09-title-1",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2159,7 +2168,8 @@
    "key": "wly0829-cn-10-title-1",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2373,7 +2383,8 @@
    "key": "wly0829-cn-11-title-1",
    "title_text": "全部功能（39 项）",
    "sha256": "761604f10f7d1cfa2f1611f5cf3899e9d2781eb78682a48fa9c6bc385274e7f7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2388,7 +2399,8 @@
    "key": "wly0829-cn-11-title-2",
    "title_text": "首页和驾驶舱",
    "sha256": "d931cb10fe19919c06a2d85bba2e2513859df156ecd705ac8265164c4f5ec6fe",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2682,7 +2694,8 @@
    "key": "wly0829-cn-12-title-1",
    "title_text": "资料锁和授权",
    "sha256": "af0f85a732bbf37751753eff26b642926656ce1fe404933275f4be552a78e51b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2697,7 +2710,8 @@
    "key": "wly0829-cn-12-title-2",
    "title_text": "读懂整套东西",
    "sha256": "a1ff10e48e9488606cd493f0323dc1362358fbf1297e6dcb14ff1b72487f9ca8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2712,7 +2726,8 @@
    "key": "wly0829-cn-12-title-3",
    "title_text": "AI 怎么维护",
    "sha256": "0f968c434403571f8be469ee30fb3a789b6ab23b2d234ffc92e9026891fb4ff1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2902,7 +2917,8 @@
    "key": "wly0829-cn-13-title-1",
    "title_text": "画和动效",
    "sha256": "3dc20ae4fe9241b720d254dfbd47175f47ed1a4cdd9c4960a311e11876b65b63",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2919,7 +2935,8 @@
    "key": "wly0829-cn-13-title-2",
    "title_text": "已停用",
    "sha256": "109419764a0213c3c797117892861b41eba1c925b8ea33a3c2d91df372cd05da",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3045,7 +3062,8 @@
    "key": "wly0829-cn-14-title-1",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

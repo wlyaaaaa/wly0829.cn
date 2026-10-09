@@ -134,7 +134,7 @@
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
   "sha256": "41fc28ca1b8852703d4b4975268be8991276e5786c0798dd322d568da2cedd58",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -299,7 +299,11 @@
    "key": "工作区连接电脑",
    "source_phrase": "右边一幅水彩插画：一台台式电脑，屏幕旁绕着三枚品牌标志——Gmail、Google 云盘（Google Drive）、Google 待办（Google Tasks）——用细细的绿线连到电脑；电脑侧面挂着一把小锁（表示个人资料锁）；稍远处一枚 Google 日历（Google Calendar）标志画成淡灰色，上面落着一片小雪花（表示冻结）。",
    "sha256": "e50b102a50b231e3a78d3bdfeca8b65c9bba457a6bfa4ef510bda45dae5c874a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台台式电脑，屏幕旁绕着三枚品牌标志——Gmail、Google 云盘（Google Drive）、Google 待办（Google Tasks）——用细细的绿线连到电脑；电脑侧面挂着一把小锁（表示个人资料锁）；稍远处一枚 Google 日历（Google Calendar）标志画成淡灰色，上面落着一片小雪花（表示冻结"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -316,7 +320,8 @@
    "key": "title-r3-d223d6a75d27bc742247",
    "title_text": "邮件、云盘和待办",
    "sha256": "a5421fc213e048e3607c88073ed1669389fac032f3d58ee2d3dae382856854fb",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -680,7 +685,11 @@
    "key": "ill-r3-3b851ccc59f5297a",
    "source_phrase": "右边约三分之一宽，一幅插画：一部手机大小的邮件列表，旁边一个圆形计时表盘，画面上的字见“表盘上的字”；下面一张小卡片“要注意”。",
    "sha256": "b9a99be3ab748a9f9f547d9bf8b2c231c59b37e461d860a805755326075a63d2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机大小的邮件列表、圆形计时表盘；邮件名和时间文字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -694,7 +703,8 @@
    "key": "ill-r3-portrait-5c85a0a4b186e1ca",
    "source_phrase": "右边约三分之一宽，一幅插画：一部手机大小的邮件列表，旁边一个圆形计时表盘，画面上的字见“表盘上的字”；下面一张小卡片“要注意”。",
    "sha256": "903841124f7874c9b94ec7390a5bb81ec85e93ace0aec187a0ff52f83348ebfa",
-   "status": "ready"
+   "status": "ready",
+   "hidden": false
   },
   {
    "role": "title",
@@ -711,7 +721,8 @@
    "key": "title-r3-6f985d2c355c464874c8",
    "title_text": "一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办",
    "sha256": "a5fe819bfcb1ede19737ae199e5ca89888296c7fe432643acd3f542675a45b3e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -971,7 +982,11 @@
    "key": "邮件线程",
    "source_phrase": "右边约三分之一宽，一幅插画：一个邮件线程，三封信用绿线串成一串，最下面一封带回形针；插画下一张小卡片写最后那句真事。",
    "sha256": "de3c2bbe03fdfc9746870d8da3b574c9581bcf7f5c1feb199b55661bd93c125f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个邮件线程，三封信用绿线串成一串，最下面一封带回形针"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -988,7 +1003,8 @@
    "key": "title-r3-ad68a8207ba2025c09d1",
    "title_text": "再一个例子：“按这个意思回复原邮件，附上桌面那份 PDF”",
    "sha256": "7049071d5be4f07c4298b258c1284a9b33ee61e6f2998ffdbdb94c721226ba99",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1290,7 +1306,8 @@
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1454,7 +1471,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

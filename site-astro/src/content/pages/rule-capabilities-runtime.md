@@ -398,7 +398,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "1847e3d4b039f7abbeb4216602d67c7752935bbc87af3b176d2f11d9c29d6d54",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -705,7 +705,11 @@
    "key": "助手工具板三牌位",
    "source_phrase": "右边约 45% 宽一幅水彩插画：中间一个小小的 AI 助手站在一面木洞洞板前，洞洞板上挂着几样工具——扳手、放大镜、画笔、一个 Chrome 彩色圆形标志、一个 Gmail 标志、一个 Google 云盘三色三角标志，板子顶上钉一块小木牌“工具清单”；助手脚边一个绿色小储物箱，箱侧贴着小标签“E:”，箱口探出几片绿叶；插画右下一台笔记本电脑，屏幕上是白底绿色的网页看板（只画色块、卡片和几个小圆点状态灯，状态灯绿、绿、黄），屏幕上方一块小牌“看板”。",
    "sha256": "5af082e77c0d9b5c1a4b69d95baec439c520a44db7d968a80d23cd1eab836314",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "中间一个小小的 AI 助手站在一面木洞洞板前，洞洞板上挂着几样工具——扳手、放大镜、画笔、一个 Chrome 彩色圆形标志、一个 Gmail 标志、一个 Google 云盘三色三角标志，板子顶上钉一块小木牌抽象图形；助手脚边一个绿色小储物箱，箱侧贴着小标签抽象图形，箱口探出几片绿叶；插画右下一台笔记本电脑，屏幕上是白底绿色的网页看板（只画色块、卡片和几个小圆点状态灯，状态灯绿、绿、黄），屏幕上方一块小牌抽象图形"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -719,7 +723,8 @@
    "key": "ill-r3-portrait-0e061e2c5434a041",
    "source_phrase": "右边约 45% 宽一幅水彩插画：中间一个小小的 AI 助手站在一面木洞洞板前，洞洞板上挂着几样工具——扳手、放大镜、画笔、一个 Chrome 彩色圆形标志、一个 Gmail 标志、一个 Google 云盘三色三角标志，板子顶上钉一块小木牌“工具清单”；助手脚边一个绿色小储物箱，箱侧贴着小标签“E:”，箱口探出几片绿叶；插画右下一台笔记本电脑，屏幕上是白底绿色的网页看板（只画色块、卡片和几个小圆点状态灯，状态灯绿、绿、黄），屏幕上方一块小牌“看板”。",
    "sha256": "5f8f1273b3b768f4638ca067a370e0eeedeb4cc7ab271573037a31ff85d1fa69",
-   "status": "ready"
+   "status": "ready",
+   "hidden": false
   },
   {
    "role": "title",
@@ -736,7 +741,14 @@
    "key": "title-e61ad08fd3c7a24a0aa8",
    "title_text": "能力与运行方式",
    "sha256": "a7cbb8c9ad6b2c71161f34e0ada1adfabee275b4cbe78ab58fb730e55afe2524",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    41,
+    925,
+    246
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -915,7 +927,14 @@
    "key": "title-r3-70eb6f4a8c9787cb2151",
    "title_text": "人话要点 · 选能力",
    "sha256": "ee43f2dc2b3ba4837acf95d019f9d328a483be3f3068918dbb5f491eeb0be97f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    14,
+    726,
+    148
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1276,7 +1295,14 @@
    "key": "title-r3-d78f33a557787858b04a",
    "title_text": "人话要点 · 常用入口",
    "sha256": "641a9638908a38a12634f0b2b2c0c23e2c17a5d7174709a7170ad0c9b522bc67",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    36,
+    27,
+    837,
+    169
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1635,7 +1661,11 @@
    "key": "云端审稿",
    "source_phrase": "“为什么要”卡下方空处画一幅小水彩：左边一台笔记本电脑，一根细细的绿线只往上连一次到一朵云，云里两个胸前黑色花结徽章（OpenAI 标志）的小机器人拿放大镜看一张画稿，插画里不画字。",
    "sha256": "7a411f99317c55a7b24e019d9188e14b2881d7509ca2bc22eaa2571e6b3039c3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一台笔记本电脑，一根细细的绿线只往上连一次到一朵云，云里两个胸前黑色花结徽章（OpenAI 标志）的小机器人拿放大镜看一张画稿，插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1652,7 +1682,8 @@
    "key": "title-f124bce130a386c97d1a",
    "title_text": "人话要点 · 云端素材通道",
    "sha256": "2bb15b855b9f210793e495d1c215fb5085d5180a06f38483f20fc769a3147e8c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1907,7 +1938,11 @@
    "key": "手机远程",
    "source_phrase": "三张卡排成三列：左“默认用本人的 Chrome”；中“登录本人的账号”，它下面接一个浅绿底圆角小框放“取码工具现在的样子（9 月 27 日）”这段，小框左上角一幅很小的水彩：一部手机和一台笔记本电脑之间一道细细的弧线，弧线中间一个小信封（信封上不画字）；右“预览本地网页”。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机、笔记本电脑，中间细弧线和小信封"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1925,13 +1960,40 @@
    "key": "title-r3-4a3370ff6f834cd75e40",
    "title_text": "人话要点 · 浏览器",
    "sha256": "dba9cc7db6baa461f0d7c214e448b91497f09353e3c1682a748870b0e3ba228f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    414,
+    29,
+    1196,
+    217
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
 ```
 
-## 人话要点 · 浏览器\n\n### 默认用本人的 Chrome\n- 默认用本人正在用的那个 Chrome（〔约法 L29〕）；它没开时，可以用现有的受管办法把它打开。\n- 本人明确选别的浏览器时，听本人的。\n- 不把某个工具自己的默认浏览器或应用内浏览器当成本人的默认，也不悄悄换成别家的浏览器。Claude 用本人 Chrome 登录状态时默认派 GPT，无需登录可用内置浏览器；Codex 仍用本人 Chrome，本人指定优先。\n- 控制浏览器的连接断了、运行环境要恢复时，按〔browser-control-continuity〕技能处理，保留本人已经打开的页面；这不改变网站上的动作、账号和内容要不要授权。\n\n### 登录本人的账号\n- 已授权登录本人的账号、需要手机号时，可以直接填本人的常用号码并发验证码。号码记在个人理解库的“本人基本信息”卡，问“我的手机号”就能取到，登录一般用第一个。\n- 验证码能从现有允许的来源取到，就及时完成登录；短信验证码用电脑配置里的按需取码工具。取不到就交本人填。\n- 需要账号密码时由本人自己登录；已经退役的浏览器代填密码不恢复。\n- 各家 AI 按自己真实的能力和限制做，不把 Claude 的限制写成所有 AI 都不能做。\n- 短信来源没接通时如实说，不把调查报告当成已经能自动取码，也不为等验证码新建全局后台服务。\n\n**取码工具现在的样子（9 月 27 日）**：读的是小米妙享从手机转到这台电脑上的通知；只在 AI 调用时短暂运行，默认往前回看 60 秒、再等 30 秒，不常驻，码只交给调用它的 AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。\n\n### 预览本地网页\n- 要用真浏览器看本地 HTML，第一次就走受支持的本地 HTTP 服务，不先试直接打开文件（file://）。\n- 优先用已有的开发或预览服务；确实要临时起一个服务，就绪检查、进程和会话、事后清理都归 browser-control-continuity。\n- 只是生成文件时，不机械地启动服务；本人要的独立 HTML 文件，不换成对话里的可视小组件。
+## 人话要点 · 浏览器
+
+### 默认用本人的 Chrome
+- 默认用本人正在用的那个 Chrome（〔约法 L29〕）；它没开时，可以用现有的受管办法把它打开。
+- 本人明确选别的浏览器时，听本人的。
+- 不把某个工具自己的默认浏览器或应用内浏览器当成本人的默认，也不悄悄换成别家的浏览器。Claude 用本人 Chrome 登录状态时默认派 GPT，无需登录可用内置浏览器；Codex 仍用本人 Chrome，本人指定优先。
+- 控制浏览器的连接断了、运行环境要恢复时，按〔browser-control-continuity〕技能处理，保留本人已经打开的页面；这不改变网站上的动作、账号和内容要不要授权。
+
+### 登录本人的账号
+- 已授权登录本人的账号、需要手机号时，可以直接填本人的常用号码并发验证码。号码记在个人理解库的“本人基本信息”卡，问“我的手机号”就能取到，登录一般用第一个。
+- 验证码能从现有允许的来源取到，就及时完成登录；短信验证码用电脑配置里的按需取码工具。取不到就交本人填。
+- 需要账号密码时由本人自己登录；已经退役的浏览器代填密码不恢复。
+- 各家 AI 按自己真实的能力和限制做，不把 Claude 的限制写成所有 AI 都不能做。
+- 短信来源没接通时如实说，不把调查报告当成已经能自动取码，也不为等验证码新建全局后台服务。
+
+**取码工具现在的样子（9 月 27 日）**：读的是小米妙享从手机转到这台电脑上的通知；只在 AI 调用时短暂运行，默认往前回看 60 秒、再等 30 秒，不常驻，码只交给调用它的 AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。
+
+### 预览本地网页
+- 要用真浏览器看本地 HTML，第一次就走受支持的本地 HTTP 服务，不先试直接打开文件（file://）。
+- 优先用已有的开发或预览服务；确实要临时起一个服务，就绪检查、进程和会话、事后清理都归 browser-control-continuity。
+- 只是生成文件时，不机械地启动服务；本人要的独立 HTML 文件，不换成对话里的可视小组件。
 
 ::screen{#rule-capabilities-runtime-07 section="points"}
 
@@ -2242,7 +2304,14 @@
    "key": "title-r3-a404e195d17326d92ef2",
    "title_text": "人话要点 · 汇报、网站和自动运行的东西",
    "sha256": "2bf849f2dfbb3ffb9c44f99e55209d9b4561c79e60d16d326c1360abc368e155",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    24,
+    1563,
+    202
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2450,7 +2519,14 @@
    "key": "title-b138d6816176ad8f6f60",
    "title_text": "人话要点 · 软件更新和兼容",
    "sha256": "e6a9ee9a9d88258551a60d2f69d5e284ef95b8cadf99bf0d046887d1aeef4506",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    84,
+    901,
+    243
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2628,7 +2704,14 @@
    "key": "title-r3-449b2fdb4421c4699b23",
    "title_text": "人话要点 · 安装位置、配置和本机约定",
    "sha256": "45a02fc28e4671e66e7ee4669273173ef95a95e6480eb7da78e94c431d5530f6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    56,
+    63,
+    892,
+    344
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2957,7 +3040,8 @@
    "key": "title-e61ad08fd3c7a24a0aa8",
    "title_text": "能力与运行方式",
    "sha256": "a7cbb8c9ad6b2c71161f34e0ada1adfabee275b4cbe78ab58fb730e55afe2524",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2974,7 +3058,14 @@
    "key": "title-86b03d00fd61395c6696",
    "title_text": "选能力",
    "sha256": "25bb92f5ac26cf93aec554cb697a960a07b2bfc54dafd7b15e9a812e81a0d268",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    400,
+    187,
+    465
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3095,7 +3186,14 @@ owner: `E:\.agents`
    "key": "title-a1ff7a4db4d4606d7694",
    "title_text": "常用入口",
    "sha256": "be195e42745168040107ed2e39e075135b5a02d84cd63ebfb34d498174db5223",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    152,
+    264,
+    233
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3261,7 +3359,14 @@ owner: `E:\.agents`
    "key": "title-e19c3b9e266c69c952f9",
    "title_text": "浏览器",
    "sha256": "9b42dd5a4f1916f124e3c64bf517a91ff6f9b657956371129b2001d5372b895d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    189,
+    214,
+    266
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3369,7 +3474,14 @@ owner: `E:\.agents`
    "key": "title-df734fe45c2c9e3fbe97",
    "title_text": "汇报、网站和自动运行的东西",
    "sha256": "80508bde9b773e8ee53aeebb4e3f9840d072ff3396fcafbf9178adbe01b08756",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    61,
+    174,
+    598,
+    240
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3386,7 +3498,14 @@ owner: `E:\.agents`
    "key": "title-cd777becf1c9a458e894",
    "title_text": "软件更新和兼容",
    "sha256": "dbe530091641dd97640998b854543cf38c3f76ac1538038c4bd22ef8bc723e3c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    855,
+    175,
+    1161,
+    240
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3500,7 +3619,14 @@ owner: `E:\.agents`
    "key": "title-f38ed295f09e29b4e526",
    "title_text": "安装位置、配置和本机约定",
    "sha256": "1aad819db1c4e5e22ea44e60afba50589e5dc3340e20fd702eac225d24c7559c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    227,
+    659,
+    318
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

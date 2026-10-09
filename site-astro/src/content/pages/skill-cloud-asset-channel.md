@@ -270,7 +270,7 @@
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
   "sha256": "afc3176c0b8d5d9c47a10ed8c9945445ab7520c0f23ead1dc2cc78a7c553e8dc",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -429,7 +429,11 @@
    "key": "云端审稿",
    "source_phrase": "右边一幅水彩插画：一张浅木色书桌上一台笔记本电脑，屏幕上方只伸出一根细细的绿线，往上连到一朵绿色水彩云；云里一个胸前黑色花结徽章（OpenAI 标志）的奶白小机器人拿放大镜看一张画稿；云下一个小信封正飘回桌上；桌边一盆绿植。",
    "sha256": "7a411f99317c55a7b24e019d9188e14b2881d7509ca2bc22eaa2571e6b3039c3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张浅木色书桌上一台笔记本电脑，屏幕上方只伸出一根细细的绿线，往上连到一朵绿色水彩云；云里一个胸前黑色花结徽章（OpenAI 标志）的奶白小机器人拿放大镜看一张画稿；云下一个小信封正飘回桌上；桌边一盆绿植"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -446,7 +450,8 @@
    "key": "title-72b5dfcd59fff7329346",
    "title_text": "省流量的云端素材",
    "sha256": "3400a0a3317e74c4dad43d46e58ee68a555995fbc4e188a7a80eb0143628b905",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -718,7 +723,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -949,7 +955,8 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1213,7 +1220,8 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

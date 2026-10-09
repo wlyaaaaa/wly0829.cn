@@ -155,7 +155,7 @@
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
   "sha256": "8e44b1645806f9b923099352d4548164b9a5e60815f88674085a3bfa87e5075b",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -405,7 +405,11 @@
    "key": "main-daily-preferences",
    "source_phrase": "横版：左边大标题毛笔艺术字“记得我是谁”，下面一行说明（“个人理解库”画成绿色带小箭头的链接样式）；右边一幅水彩插画：一个对话框旁边，一只木质卡片盒打开着，一张索引卡被轻轻抽出一半（卡面只画浅灰短线）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话框旁边，一只木质卡片盒打开着，一张索引卡被轻轻抽出一半（卡面只画浅灰短线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -423,7 +427,14 @@
    "key": "title-r3-599652b09be1c9fe8b11",
    "title_text": "记得我是谁",
    "sha256": "39f090364eb6961d0ffe9ea28c75332683428e6fd0d9d2cbbffd31ca67efb091",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    15,
+    68,
+    752,
+    293
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -616,7 +627,11 @@
    "key": "卡片索引",
    "source_phrase": "下面左右两栏：左栏是一段对话（左边“我”的气泡，右边“AI”的回答卡片）；右栏是一条竖向的五步小流程，每步一个圆圈编号和一句话，说明 AI 背后做了什么，步与步之间绿色箭头；流程旁一幅小插画：一张索引卡上贴着一张黄色小便签，便签上画一个小日历角（不画字）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张索引卡上贴着一张黄色小便签，便签上画一个小日历角（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -633,7 +648,14 @@
    "key": "title-r3-ffa2cdd15edd0e90e6e8",
    "title_text": "一个完整的例子",
    "sha256": "124b2b24498ea3f5a4ab869e35efad8b281dcd8cd6557b63e9b7e3753660f0cb",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    15,
+    772,
+    173
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -748,7 +770,11 @@
    "key": "卡片索引",
    "source_phrase": "左上标题“能做的事”，下面一句带链接的话单独一行、字稍大，“项目页的全部功能”画成绿色带小箭头的按钮样式；右边一幅小插画：一个漏斗，上面几个对话气泡落进去，下面出来一张索引卡、一张小票和一个定位针（不画字）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个漏斗，上面几个对话气泡落进去，下面出来一张索引卡、一张小票和一个定位针（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -765,7 +791,14 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    41,
+    242,
+    756,
+    535
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1077,7 +1110,11 @@
    "key": "卡片索引",
    "source_phrase": "右下角一小幅水彩插画：一个书架上一排贴着不同颜色标签的盒子，中间那只卡片盒亮着（不画字）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个书架上一排贴着不同颜色标签的盒子，中间那只卡片盒亮着（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1094,7 +1131,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

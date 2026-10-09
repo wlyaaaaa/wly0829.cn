@@ -127,7 +127,7 @@
  "source": {
   "page": "sources/pages/skill-file-intake-router/page.json",
   "sha256": "6607119272a6f4cf405b8a3eb6d49d872f7c11e6d0e70d6950b69991f19d8cca",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -387,7 +387,11 @@
    "key": "文件收纳通用构图",
    "source_phrase": "右边一幅水彩插画：一个敞开的文件夹里倒出一堆各式各样的文件（Word 蓝色文档、Excel 绿色表格、一张手机拍的收据照片、一份泛黄的扫描件、一个压缩包、一个小喇叭形状的录音），一只绿色的小手正把它们分别放进几个小筐。",
    "sha256": "764e9012bb1bbe7cfc27ff7639b21204558266fe15f49c6340212ad71fb8560d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个敞开的文件夹里倒出一堆各式各样的文件（Word 蓝色文档、Excel 绿色表格、一张手机拍的收据照片、一份泛黄的扫描件、一个压缩包、一个小喇叭形状的录音），一只绿色的小手正把它们分别放进几个小筐"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -404,7 +408,8 @@
    "key": "title-r3-226ea60bb2aab8a3c92b",
    "title_text": "一堆文件一起看",
    "sha256": "3826fc250cc31a3038b1259986b5531fa53693aa66d9042be6ef9a1f795ab8f4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -842,7 +847,8 @@
    "key": "title-r3-8d08639fd32dbc701685",
    "title_text": "一个完整例子：照这套做法，一个杂乱的资料文件夹会这样读",
    "sha256": "92af344c46ec2a033f239acfab6c3fa80479420c640f048340f46ed7d040173d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1205,7 +1211,8 @@
    "key": "title-r3-7eba73556ace94c31498",
    "title_text": "能做的事：什么文件交给谁",
    "sha256": "c49d0964a70a9e1ab260a954d2a49662dc1df4bfb5b70eb06cf8e1d1560ad672",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1419,7 +1426,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

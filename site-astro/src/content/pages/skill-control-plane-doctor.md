@@ -137,7 +137,7 @@
  "source": {
   "page": "sources/pages/skill-control-plane-doctor/page.json",
   "sha256": "e1270125bb29a8ea33c088b4e738d60d3cb1d36a30bc9946ad384b0b4c48ad37",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -348,7 +348,11 @@
    "key": "听诊核验",
    "source_phrase": "右上角一幅小插画：一只听诊器搭在三块叠起来的积木上（三块积木分别画一本规则书、一台电脑、一只 GitHub 章鱼猫标志），旁边一张体检单上画三行打钩和两个问号。",
    "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只听诊器搭在三块叠起来的积木上（三块积木分别画一本规则书、一台电脑、一只 GitHub 章鱼猫标志），旁边一张体检单上画三行打钩和两个问号"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -365,7 +369,8 @@
    "key": "title-d0fad5fdc9eeb2b960b9",
    "title_text": "技能与基座体检",
    "sha256": "13434d4563d931f311d681eca7266f3fb6327a3f189e72909e351ab269733304",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -656,7 +661,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1191,7 +1197,8 @@ AI：“连这台电脑的运行条件一起查了：配置在，也对得上；
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

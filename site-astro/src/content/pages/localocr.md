@@ -621,7 +621,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "9a6f7a8f0cf89f0b12bd30f6f7b6de81d4f13e3a371983b5bebcf3583975fbb0",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -813,7 +813,11 @@
    "key": "main-localocr",
    "source_phrase": "右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签抽象图形抽象图形抽象图形"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -830,7 +834,14 @@
    "key": "title-6077f34d4f3fa1ff31ba",
    "title_text": "本地文字识别",
    "sha256": "84b6833b60f41aa68e46393d7023d3a48e8487a764c7da9e071ad183b89d3bed",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    41,
+    47,
+    722,
+    220
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1083,7 +1094,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "识别纸张通用构图",
    "source_phrase": "画面左边约 22% 宽一幅水彩插画：一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的“体检”小站。",
    "sha256": "f9df63d5f9169507df5d49cc657a281a8cf6f4a6c22bd301d70545b1e78f3991",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠纸（一张手机截图、一张扫描讲义、一张带表格的单据）走进一个听诊器形状的抽象图形小站"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1100,7 +1115,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-836e7102d7fd69c05c88",
    "title_text": "什么材料走哪条路",
    "sha256": "77ee80bd350f23df230cb7092b7623d3f6838357e083fd6974942b9529d0a335",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1434,7 +1450,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "手机照片现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机截图叠成一摞"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1449,7 +1469,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "ill-c8b9869aab61ad",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
    "sha256": "28708e9a68b4fa19329c1899898d6dd4e3e973d0c20a0fdce8dab5d0332bf6ff",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1464,7 +1488,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "手机照片现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 手机截图叠成一摞，2 一本 16 页的扫描讲义，只有其中一页被绿色荧光笔圈起来，3 相册网格里几张截图，屏幕上的字被放大镜照着），插画下面卡片标题粗体，下面正文。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "相册网格里几张截图，屏幕上的字被放大镜照着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1480,7 +1508,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1759,7 +1788,14 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-84a305beb3019ba74f7a",
    "title_text": "读出来是什么样",
    "sha256": "e39e6eb2e4d24712abd49e6b6b74b61f6bf504bda3b6618302ee406a96ea5cc6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    40,
+    12,
+    586,
+    150
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1972,7 +2008,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2190,7 +2227,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-3df730e1229eed07fb1c",
    "title_text": "一次识别经过哪几步",
    "sha256": "17e8c530089ace8ae5c2d0631f6509873a0c9e4e86bab6534df94796aea8120d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2369,7 +2407,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "key": "title-bb35286273c0e9b2518a",
    "title_text": "用的哪些模型",
    "sha256": "a6cbd322cc64ff90d6b6c5e85e8e8aba76d3418ade99dc9770c0c7bb191ee081",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2647,7 +2686,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "WSL服务与显卡结构图",
    "source_phrase": "横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的抽象图形小人，手里三张号牌：抽象图形抽象图形（两张并排都亮）、抽象图形（单独、灰着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2664,7 +2707,14 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-r3-f255783c85c0e7082f7e",
    "title_text": "跑在哪、怎么不打架",
    "sha256": "6b6eb440fb19d9d568f81ae7125ee9c161903063691425bf8e088769595e7e60",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    14,
+    680,
+    157
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2878,7 +2928,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "文稿核验通用构图",
    "source_phrase": "卡片左边约 35% 宽一幅水彩插画：一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面。",
    "sha256": "073503cefc7591f3fbafa430ecb30700d758e348da21f24a58d6fa1850ae7cc6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠 16 页纸摊开成扇形，其中 15 页淡淡地打着绿勾，第 15 页被抽出来放在一台望远镜下面"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2895,7 +2949,14 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    25,
+    0,
+    273,
+    212
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3067,7 +3128,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "识别纸张现图小槽4比3",
    "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3082,7 +3147,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "识别纸张现图小槽4比3",
    "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张空白纸旁边三个小牌子抽象图形抽象图形抽象图形，抽象图形那块亮着"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3097,7 +3166,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "识别纸张现图小槽4比3",
    "source_phrase": "插画：1 一张表格被拆成散落的小字块，旁边一个 99.99 分的满分徽章，一把尺子在找横竖线；2 一张空白纸旁边三个小牌子“有字”“没字”“说不准”，“说不准”那块亮着；3 一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台熨斗悬在一张平整的手机截图上方，截图边缘被烫卷了一角"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3535,7 +3608,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-832fae0fa1193bf6035b",
    "title_text": "全部功能（28 项）",
    "sha256": "6d3d12f37d920a1a5fd9c8cb7a2cb87a8329866c1afc0d67237213e6b3f95774",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3552,7 +3626,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-bf9114190f82e713bc95",
    "title_text": "表格和位置",
    "sha256": "cec3a8c2e951d5c9bfe14e51146ee5c9d2f48ac2e4389ecbfde7ebb9f714b6f7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3569,7 +3644,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-28809440ab88664c39f1",
    "title_text": "读字",
    "sha256": "e76d2bab87c1ae465e70070a256eefed7885e64b911ade927410515f36a5f35f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3586,7 +3662,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-23c4841cbe265cd064ad",
    "title_text": "选模型",
    "sha256": "3b5c186f9e4373e1d358c0e66b638088a7a0cf3605a820d550808a1291f3e4e2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4042,7 +4119,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-42a7349ed63d01fcfbd4",
    "title_text": "版本和换模型",
    "sha256": "e4a8f50a957fd8d781689a4fe2d106e3c34cfee64af7296da6664a57e67deed2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4059,7 +4137,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-cb974c2fd1313936b428",
    "title_text": "结果靠得住",
    "sha256": "45d4ac611bd60428c1e5fe8cb6d34fd63cf2d293fb6b80bfa264995412cae1f1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4076,7 +4155,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-34c6277de864cb7d079c",
    "title_text": "运行和显卡",
    "sha256": "05b5848b04bdf9c4ce0bcc184b5d2f7653e2df2a16c9e27dd1792f72bb6a1506",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4261,7 +4341,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "key": "title-60559ec08d1172637358",
    "title_text": "演进（2026 年）",
    "sha256": "db23165afb23b1b352da4a906595585ada3cfcf674b7dc824e7908e425f6a9b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

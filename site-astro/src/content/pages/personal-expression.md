@@ -558,7 +558,7 @@
  "source": {
   "page": "sources/pages/personal-expression/page.json",
   "sha256": "7ee6b7daabc203fdfa7ee4a36ccdf81d1bbdd662a7ff16812c08482056317165",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -740,7 +740,11 @@
    "key": "main-personal-expression",
    "source_phrase": "右上一幅水彩插画：左边一个对话气泡，里面一团乱线从左往右慢慢理成一条平直的绿线；中间一本翻开的小册子，夹着几枚绿色书签；右边一支钢笔搁在一张便签上，便签上方悬着三个空白的小标签牌，其中一个是亮绿色。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一个对话气泡，里面一团乱线从左往右慢慢理成一条平直的绿线；中间一本翻开的小册子，夹着几枚绿色书签；右边一支钢笔搁在一张便签上，便签上方悬着三个空白的小标签牌，其中一个是亮绿色"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -757,7 +761,14 @@
    "key": "title-4e2a26bfa5b77eecf5d5",
    "title_text": "个人表达",
    "sha256": "396504e8f7918c65451a245e16808fa97faf2d6a0b2550cc88f60677552e1414",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    27,
+    7,
+    557,
+    190
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -872,7 +883,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "ill-b3a00c97d2a7ac",
    "source_phrase": "中间一张大表格：左边一列是行名（粗体），右边两列是两个用法；两列表头上方各一幅小水彩插画（讲给我听：一个小机器人对着一只耳朵说话，耳朵旁一个小灯泡亮起；替我拟消息：一支钢笔在便签上写字，旁边一个信封）。",
    "sha256": "c2544f24b2b6266b1286c5a2b3b8c62db37d0fbd7f51b50891b59a1347907052",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "小机器人对着一只耳朵说话，旁边小灯泡亮起"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -887,7 +902,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "main-personal-expression",
    "source_phrase": "中间一张大表格：左边一列是行名（粗体），右边两列是两个用法；两列表头上方各一幅小水彩插画（讲给我听：一个小机器人对着一只耳朵说话，耳朵旁一个小灯泡亮起；替我拟消息：一支钢笔在便签上写字，旁边一个信封）。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "钢笔、便签、信封；便签只画短线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -905,7 +924,14 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-bc1489838ea48353dcfa",
    "title_text": "两种用法，分开存",
    "sha256": "5ee9919a677f2d14903fb4b6b6fe7d9386a5fac69d5836cbebf4c2a989505b8b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    73,
+    690,
+    261
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1098,7 +1124,14 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-f8915d2b17eb17010484",
    "title_text": "讲给我听：所有 AI 共用的一本手册",
    "sha256": "60d8fd69001540589c1794e36393ff9d998731d21bf22d6c8e2b1dc76b0396a8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    21,
+    870,
+    144
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1422,7 +1455,9 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "ill-95f73e7f9f8e20",
    "source_phrase": "横版：左上标题。上半部一条从左到右的五步流程，五个圆角节点用绿色箭头连起来，每个节点上方一幅小水彩图标（一张写好要点的便签；一个小人和三个小标签牌；一叠对话气泡，一只手从里面挑出两张；一张被红笔划掉一段的稿纸；一支钢笔和一个信封）。节点下写粗体小标题和两三行字；第 2 步里引号中的对象和关系名画成浅绿色小标签的样子。下半部四张并排小卡片放最后四段（图标：一个空盒子；一张小照片和一个笑脸表情；一个问号气泡；一张被红笔划掉又重写的便签），最后一张里的技能名画成链接样式。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1439,7 +1474,8 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-eb315928d7ae05ff2405",
    "title_text": "替我拟消息：从意思到一条消息",
    "sha256": "157ab74fc4491931b8d4c2c024c1e724b6026d8cc66c87fd5061951f9c102247",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1718,7 +1754,8 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-2ddd4e83829dc0c6f819",
    "title_text": "我指出问题之后",
    "sha256": "6793a6d4347bd82b6c2473a4c455acb5155cf357a8cc2878d91a64523897de4a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1734,7 +1771,8 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1986,7 +2024,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "备份纸箱通用构图",
    "source_phrase": "最下面两张细卡片并排：“备份”（画 GitHub 的猫形标志和一个小箱子）、“没有”（五个被轻轻划掉的小图标：一盏常亮的小灯、一个芯片、一只耳朵、一个数据库圆柱、一排排队的小人）。",
    "sha256": "d6e0a0dc340a4095bb08a817b77ac65c0388211dc4f7709acd7aa385f2ab68df",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "GitHub 猫形标志和一个小箱子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2003,7 +2045,14 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "7dd89f5e09fca216349210da29cf34dca860291559935758c62587647c4b7c1d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    22,
+    0,
+    571,
+    137
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2220,7 +2269,14 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    14,
+    45,
+    890,
+    297
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2373,7 +2429,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "ill-73e21d6be60949",
    "source_phrase": "三张大卡片，上面两张并排、下面一张占一整行，每张左上一个编号圆章和一幅小水彩插画（1：一本小册子被几个颜色不同的小机器人围着看，册子翻开的那页上画一块小看板，顶上一个红点一个黄点；2：一只放大镜照着一串对话气泡，其中几个被夹上绿色小夹子；3：两只手各拿一支笔，在同一张纸的不同地方写）。",
    "sha256": "069fbab2106ac793b6161b16197b7cfeb5e423af1214ec4b6657d960559874c0",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本小册子被几个颜色不同的小机器人围着看，册子翻开的那页上画一块小看板，顶上一个红点一个黄点"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2388,7 +2448,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "对话气泡",
    "source_phrase": "三张大卡片，上面两张并排、下面一张占一整行，每张左上一个编号圆章和一幅小水彩插画（1：一本小册子被几个颜色不同的小机器人围着看，册子翻开的那页上画一块小看板，顶上一个红点一个黄点；2：一只放大镜照着一串对话气泡，其中几个被夹上绿色小夹子；3：两只手各拿一支笔，在同一张纸的不同地方写）。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只放大镜照着一串对话气泡，其中几个被夹上绿色小夹子"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2403,7 +2467,11 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "双人传稿",
    "source_phrase": "三张大卡片，上面两张并排、下面一张占一整行，每张左上一个编号圆章和一幅小水彩插画（1：一本小册子被几个颜色不同的小机器人围着看，册子翻开的那页上画一块小看板，顶上一个红点一个黄点；2：一只放大镜照着一串对话气泡，其中几个被夹上绿色小夹子；3：两只手各拿一支笔，在同一张纸的不同地方写）。",
    "sha256": "e192b3b436c78fcf3c7021f1cb5595405515cfec389bf319a4bce97c3ab25488",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两只手各拿一支笔，在同一张纸的不同地方写"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2420,7 +2488,14 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    16,
+    28,
+    317,
+    266
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2727,7 +2802,8 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-1efcedb7161dbae98920",
    "title_text": "全部功能（20 项）",
    "sha256": "95c1b6fe82eaa95aa092974960a9bfbb96cfc48071f84325f48f0047d86f48f7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3248,7 +3324,9 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "main-personal-expression",
    "source_phrase": "横版：左上标题。一条从左到右的水彩绿色丝带时间线，七个节点上下错开，每个节点：粗体日期、一幅小水彩图标（一本新笔记本；一叠写满的便签；一把锁；一个日历上的小对勾；一把锁连着一根线到一台电脑；三个小标签牌；两只手在同一张纸上写），下面两三行字。右下角一枚圆形小徽章放最后那行。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3264,7 +3342,8 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

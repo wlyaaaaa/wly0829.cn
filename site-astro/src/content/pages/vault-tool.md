@@ -593,7 +593,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "67666fafb031b6e89042e223d9377c159b8cf1b74907bad30bd2e6f71067a2a1",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -793,7 +793,11 @@
    "key": "密封文件钥匙",
    "source_phrase": "右上一幅水彩插画：一只绿色的密封信封（信封正面印着小字“vault.enc”），信封口被一把挂锁锁住，挂锁旁边一张写着一排小圆点的纸条（表示自己记住的密码）和一把小钥匙形状的卡片（表示可选的密钥文件）；信封后面露出两张半透明的卡片叠在一起（表示可以放两套内容）；信封右边一条细绿线连到一朵小云，云上画 GitHub 小猫标志和一把小锁（私人 Key 仓库）。",
    "sha256": "403ce13ac20240234cb5c83107cbfe12f712515dc8e047df1cbe2246f6868cf2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只绿色的密封信封（信封正面印着小字抽象图形），信封口被一把挂锁锁住，挂锁旁边一张写着一排小圆点的纸条（表示自己记住的密码）和一把小钥匙形状的卡片（表示可选的密钥文件）；信封后面露出两张半透明的卡片叠在一起（表示可以放两套内容）；信封右边一条细绿线连到一朵小云，云上画 GitHub 小猫标志和一把小锁（私人 Key 仓库"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -810,7 +814,8 @@
    "key": "title-6e677e46fe2cb211db69",
    "title_text": "本地加密库",
    "sha256": "d48e9f8921dcb6aaa6fccbfacecdfa4c90eb473f12831a8c302902e4171b964b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1021,7 +1026,11 @@
    "key": "终端光标通用构图",
    "source_phrase": "屏幕右侧约三分之一宽画一个终端窗口的水彩插画（深色底、绿色字），窗口里画真实的菜单文字（text 里从“常用”到“[0] 退出”那 4 行，照原样分行），窗口下面一行小字说明（text 里“在终端里运行……看到的菜单”那句）。",
    "sha256": "a846c2e4d1273a3e407416311b7438633e24641fb2603805fcd7b59afe05146b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "深色底终端小窗口，窗口只画绿光光标与浅灰短线，菜单真实字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1037,7 +1046,8 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1269,7 +1279,8 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1480,7 +1491,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1806,7 +1818,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-c3fd324ab88edff77317",
    "title_text": "钥匙和容器",
    "sha256": "26cade75aeaaf30480a4892daf81eecfcd5779de1df2804897f137040ad8bdf5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2022,7 +2035,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2251,7 +2265,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-a625b4fe783092515a60",
    "title_text": "还没在真实使用里验过的几道保护",
    "sha256": "57610bce57e64fe8bbba75162fc4a0898356542efceb7db4c14a5927696d2213",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2344,7 +2359,11 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "本地输入回执",
    "source_phrase": "一张宽大的亮点卡片，上面一幅水彩插画：一个 AI 小机器人站在一扇半开的窗户外面，窗户里一个小窗口弹出密码框，一双手在键盘上输入；窗外机器人只接到一张写着对勾的小纸条；远处一朵画着 GitHub 小猫标志和小锁的云，云里一页纸被换成一张写着“安全说明”的新纸（纸上不画可读的正文）。",
    "sha256": "d7c54c97d65c30bbc0d4029beb5515e5a6052a76b71eeff1b9d9f0042c3ec548",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个 AI 小机器人站在一扇半开的窗户外面，窗户里一个小窗口弹出密码框，一双手在键盘上输入；窗外机器人只接到一张写着对勾的小纸条；远处一朵画着 GitHub 小猫标志和小锁的云，云里一页纸被换成一张画抽象短线的的新纸（纸上不画只画抽象短线；正文由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2361,7 +2380,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-bad9a8cf38e71ad4c472",
    "title_text": "亮点：AI 帮我改了私人仓库，却没见到密码",
    "sha256": "1f2c43143a9231a89c1b491181bd6f1cd4641fb571701f59044c688dfd8c8c7c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2838,7 +2858,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-9927af4bc24dd2e35e4d",
    "title_text": "全部功能（26 项）",
    "sha256": "2130e322c30a46cde1e0e6a40f881265342953e414470cadc6102485d8f68aee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2855,7 +2876,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-e03bbf568653cad2e0a1",
    "title_text": "密码和钥匙",
    "sha256": "45af0b6d1aca61de10cec2316a5f0c3c3c0e21147990524ae2eecfafb3ac8d08",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2872,7 +2894,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-23ad502c91364e7e8a95",
    "title_text": "放进去和取出来",
    "sha256": "811e2cb046d4e3923d0486fc1d26d6abb0e65b29d7b11fc5566af03534a32078",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2889,7 +2912,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-5e70230a9631d5c877b6",
    "title_text": "进阶",
    "sha256": "f5af0c915ce015125b78fc1c50fd80ad8861ef2d3f51efce1b0f4d484ea94e17",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3240,7 +3264,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-c68f20b8b04ed36f07ad",
    "title_text": "备份到私人仓库",
    "sha256": "ed3265b2189fb0f66d220e78d53a41f410130d32e55eff21ba41bb5d56b1f876",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3257,7 +3282,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-a3c4b76cad78bf07f59b",
    "title_text": "检查和维护",
    "sha256": "8f7e15030716bf626b5d5d7aebf16ce10d451b304248b89969f341b6dfc8c24e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3523,7 +3549,11 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "密封文件钥匙",
    "source_phrase": "右侧一幅大一点的水彩插画：一个信封从单薄的一层慢慢变成里面叠着两张卡片、贴着挂锁，旁边一朵带锁的云，像一路长出来的样子。",
    "sha256": "403ce13ac20240234cb5c83107cbfe12f712515dc8e047df1cbe2246f6868cf2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个信封从单薄的一层慢慢变成里面叠着两张卡片、贴着挂锁，旁边一朵带锁的云，像一路长出来的样子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3539,7 +3569,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

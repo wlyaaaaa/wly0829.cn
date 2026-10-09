@@ -83,7 +83,7 @@
  "source": {
   "page": "sources/pages/skill-learning/page.json",
   "sha256": "5fba45eaa9fe28a669ff4682331a72bbaa8374673629b955c2ef1ccde88b61d2",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -253,7 +253,11 @@
    "key": "main-learning",
    "source_phrase": "右上角一幅小插画：一本摊开的绿色讲义旁边一个对话气泡，气泡里一个小问号（讲义上只画浅灰短线）。",
    "sha256": "6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本摊开的绿色讲义旁边一个对话气泡，气泡里一个小问号（讲义上只画浅灰短线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -270,7 +274,8 @@
    "key": "title-915c18abd56f47e782dc",
    "title_text": "学习方法技能",
    "sha256": "d387a24ce60c31a59f8bfde25945ffadd42f0a6c2232a95ddcaa2879141e4ee2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -580,7 +585,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -823,7 +829,8 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1048,7 +1055,8 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -1057,7 +1057,7 @@
  "source": {
   "page": "sources/pages/projects-home/page.json",
   "sha256": "78d2beb84dbeb662c5e3615ae9f7b9938c1121ddf53257198f351c0af5178ab4",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -1340,7 +1340,11 @@
    "key": "项目桌面盆栽",
    "source_phrase": "右边约占 42% 是一幅水彩插画，只做装饰：一张浅木色长桌，桌上一台显示器、一台笔记本、一部手机，周围错落摆着一排大小不一的绿色小盆栽，有的正抽出新叶；最右边几盆罩着浅灰色玻璃罩、叶子颜色发灰；桌面上散落几片水彩绿叶。",
    "sha256": "2fc77fcda38261964d17e393fc7d5004eac84742c7a3cc63c7ee93e48c560213",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "浅木色长桌，桌上显示器、笔记本、手机；周围一排大小不一绿色盆栽，有的抽新叶，最右几盆灰叶植株罩浅灰玻璃罩，桌面几片绿叶；屏幕只画柔和浅绿光，不画连线、箭头或字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1357,7 +1361,14 @@
    "key": "title-79f326be4409d51fe60f",
    "title_text": "项目",
    "sha256": "ba25fd4dc28f6a7579891faaf00064eb8b0e01e244f57bce45bde0f7d0a6d2ce",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    9,
+    293,
+    175
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1486,7 +1497,14 @@
    "key": "title-27844d9a569d4f88f6b1",
    "title_text": "让 AI 守规矩、用对工具",
    "sha256": "e47c88d27428e6784be26dedbba5cdbe9d20ff0cb8d36d6545150a441353533a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    203,
+    50,
+    1017,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1639,7 +1657,11 @@
    "key": "main-agents",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "eb04e377b7542b657abc83412366159cb3b355864469be75c1e8a7177bd5c1a3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "规则册、挂锁、印章"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -1796,7 +1818,11 @@
    "key": "main-ai-cli-profile-manager",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "显示器展开模型菜单、小保险箱、钥匙、显卡"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -1949,7 +1975,11 @@
    "key": "main-github-local-index",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "摊开的账本、文件夹、放大镜"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -2060,7 +2090,14 @@
    "key": "title-bd0d0bcf138260bd385f",
    "title_text": "让 AI 管好秘密",
    "sha256": "3c4d5b7bfff5885e4f2420f3f51ec7e6958afecc785bae1761360e68a98a3fc3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    203,
+    48,
+    739,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2213,7 +2250,11 @@
    "key": "main-password-center",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "绿色保险柜、指纹手机、钥匙、盾牌"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -2370,7 +2411,11 @@
    "key": "密封文件钥匙",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "403ce13ac20240234cb5c83107cbfe12f712515dc8e047df1cbe2246f6868cf2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "密封信封、挂锁、纸条、小钥匙形卡片"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -2481,7 +2526,14 @@
    "key": "title-f4a63a8adfa9b6b87b6c",
    "title_text": "让 AI 管好备份和恢复",
    "sha256": "9eac005567ff919eb2b2fd2414f1b82080e05998f8d9e589f6e43e4e16c15cad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    204,
+    51,
+    972,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2634,7 +2686,11 @@
    "key": "main-pcconfig",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "笔记本电脑、外接固态硬盘、翻开的恢复手册"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -2783,7 +2839,11 @@
    "key": "main-devconfig-backup",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "02c93e4d5401230db278ed1e08517748a918e05e838da9d22eac7d1af121ec36",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "打开的纸箱、一叠文件夹卡片、相机、聊天气泡"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -2936,7 +2996,11 @@
    "key": "main-codex-memory",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "877d44d9a2accd5b88c7ce272a54ca12f28d4d68eaa6140b4c744a93faedd791",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "保险箱、对话气泡、附件、数据库圆柱"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3093,7 +3157,11 @@
    "key": "main-steam-millennium-config-backup",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "09e81e5d964d5be93cc847398fffa8780bb6580ac64059e1ec0c9e4d01fada24",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "电脑窗口、存放外观配置的文件夹、皮肤卡片"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3204,7 +3272,14 @@
    "key": "title-cfd12e1e0ea51ceedd37",
    "title_text": "让电脑顺手、状态看得见",
    "sha256": "22a4ebcbb59af6686ac439e56b18a362dc2a1338f709a237b7371e751aec3d85",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    205,
+    51,
+    1069,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3361,7 +3436,11 @@
    "key": "main-ramdisk-guardian",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "绿色内存条、园丁、水壶、小闹钟"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3518,7 +3597,11 @@
    "key": "main-proxyclean",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "019f54c30ab70337943a5737509908b1294f194b4d7bb04e4b0aac93021dedf1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "笔记本电脑、插线板、剪刀"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3675,7 +3758,11 @@
    "key": "main-timeaudit",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "侧透机箱、心电图纸带、放大镜、夹着短线的便签"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3832,7 +3919,11 @@
    "key": "main-pc-panel-hub",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "3692e58386f2440b20e173e2a6aaef1ac68d2bc97a1d1483ad20e4c2741a7fe8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "侧透机箱、竖长小屏、曲面屏、手机"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3989,7 +4080,11 @@
    "key": "main-emerald-veil",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "显示器、雨林黑猫壁纸、玻璃泡泡、沙漏"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4137,7 +4232,11 @@
    "key": "main-how-this-site",
    "source_phrase": "④数字格和⑤直达那两块合起来画一个水彩浏览器窗口插画（窗口里是几块浅绿色色块和一片叶子，不带字）。",
    "sha256": "9f595df809f1dea3a44f9f3d93bed5c2cd0df26968844017d6e15a8be48a7658",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "机器人、书桌、画架、画稿"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4248,7 +4347,14 @@
    "key": "title-007d3d9e3dfda72577e7",
    "title_text": "人不在电脑前也能办事",
    "sha256": "d38d8d6b95652df4d5e235fdc813814210298ab154f1eaef4bd517d003132899",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    204,
+    50,
+    1025,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -4405,7 +4511,11 @@
    "key": "手机远程",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机、笔记本电脑、台式机"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4558,7 +4668,11 @@
    "key": "远程主备显示屏",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "bec98fa97416223b424093ad5aafd104c2d9007778b72c2768639fea7882f0c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "笔记本电脑、手机、暗色主显示器、半透明备用屏"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4719,7 +4833,11 @@
    "key": "双机互传",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "台式机、笔记本电脑、互传的文件夹"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4830,7 +4948,14 @@
    "key": "title-666df99b5837386d0b29",
    "title_text": "让 AI 懂我",
    "sha256": "a08c535eb105afaa42e290148c30007fa349855defe10b982e72ad9ffb09f4dd",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    199,
+    41,
+    586,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -4983,7 +5108,11 @@
    "key": "main-daily-preferences",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "打开的木卡片盒、索引卡、铅笔"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -5136,7 +5265,11 @@
    "key": "main-personal-health",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "健康册子、穿戴设备、报告纸、放大镜"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -5289,7 +5422,11 @@
    "key": "main-learning",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "绿色讲义、对话气泡"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -5400,7 +5537,14 @@
    "key": "title-501f981f585a819042f7",
    "title_text": "让 AI 读懂我的材料",
    "sha256": "539d1606eb31e08e6763eebb98d41b90dcb1ba2e661b5e22e10a6f4b013c86b1",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    204,
+    51,
+    893,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -5557,7 +5701,11 @@
    "key": "main-chinese-asr",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "夹麦、声波、纸、显卡"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -5714,7 +5862,11 @@
    "key": "main-localocr",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "扫描纸、放大镜、显卡"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -5871,7 +6023,11 @@
    "key": "main-wechatdirect",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "电脑聊天窗口、放大镜、只读数据库圆柱"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6024,7 +6180,11 @@
    "key": "main-personal-media",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机、照片缩略图、电脑"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6169,7 +6329,11 @@
    "key": "main-personal-materials",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "2d93d1dbb7e27d2bfe7edfb1fddc0ce968d1aa0b0d2abf80d5e29944ef796814",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "半开的木文件柜、放大镜、高亮纸、对勾标签"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6280,7 +6444,14 @@
    "key": "title-d33bf38765c909416b8b",
    "title_text": "让 AI 帮我写和做",
    "sha256": "06c649a3a200c26d68ea4847e4bbffd6ca980697df0f69635b9124bb4a251897",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    204,
+    51,
+    818,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -6433,7 +6604,11 @@
    "key": "main-personal-expression",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "钢笔、便签、信封"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6586,7 +6761,11 @@
    "key": "main-personal-formal-documents",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两页协议、笔记本电脑、封好的牛皮纸文件夹"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6739,7 +6918,11 @@
    "key": "main-work-delivery-copilot",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "半开的公文包、三张纸、细绿色丝线"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -6896,7 +7079,11 @@
    "key": "main-typora-theme-pack",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "15c405fd0bc2978642ed84464064871759d9f3cc9d0e57d22cf04c76eefb32cc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "薄荷绿边写字窗口、茶杯"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -7053,7 +7240,11 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "main-video-scaffold",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "显示器、麦克风、显卡、胶片"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -7164,7 +7355,8 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "title-d2af935af85fe894fc34",
    "title_text": "冻结（AI 不再维护）",
    "sha256": "a058bdf8ed0589a1c7fbbcf95d273e8ad90d63ca5df56e6ae4289af65fdfb249",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -7310,7 +7502,11 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "main-openclaw",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "90e1c348891691d034a7f6e0abdb840afe44e108eef43f6df06258e8cfba69d2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机、台式电脑、打盹的红色小龙虾"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -7458,7 +7654,11 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "main-codex-local-remote",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "207ca8c4f5cb3177b61374ce0da3e5131b939e2034be7fb401fa42636cd5a6c8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机、台式电脑、断开的细绿虚线"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -7602,7 +7802,11 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "main-codex-agent-model-benchmark",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "ad355788cbe119f122499a31ce8b00bdd2e7aa120623a0c00aa5d06a5aa4a61d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "试卷、秒表、天平、两只小机器人"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -7750,7 +7954,11 @@ Typora 用的薄荷主题，外加三种 PDF 样式。
    "key": "main-wechat-history-ai-bridge",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
    "sha256": "d8fd30018536ab47bc4df2c6e23158e31470b94f7053b32768b758789ee71793",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "笔记本电脑、落霜小木桥、旧服务器、打盹小狗"
+   ],
+   "hidden": false
   }
  ]
 }

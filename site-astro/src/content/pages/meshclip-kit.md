@@ -514,7 +514,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
   "sha256": "3e0a1ccbea448c09d4fdc47c5ad8504b9ddd089aa4ce4a93c56b0d8eb5d74fde",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -817,7 +817,11 @@
    "key": "双机互传",
    "source_phrase": "右上一幅水彩插画：左边一台台式机（显示器亮着），右边一台笔记本，两台隔着一段距离，中间画一张浅绿色的网（网上画 Tailscale 标志）把它们连起来；台式机屏幕上一张小便签正沿着网飞向笔记本，笔记本屏幕上出现同样一张便签；网的下面一个小文件夹也在往对面飞；两台电脑任务栏右下角各画一个小小的 KDE Connect 图标；台式机旁边蹲着一只拿着怀表的小绿狗（看门狗），笔记本旁边没有；周围水彩绿叶。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一台台式机（显示器亮着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -834,7 +838,8 @@
    "key": "title-r3-b0cc204ea4e3cde95f30",
    "title_text": "双机剪贴板",
    "sha256": "f19bedbcf242d19d9a1131077151df0bacd33882119c721966bce1ed816ed987",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1055,7 +1060,11 @@
    "key": "双机互传",
    "source_phrase": "左边约五分之三宽，上下三张横向卡片，每张左边一幅小水彩插画：1 两台电脑之间一张便签飞过去，笔记本键盘上按着 Ctrl 和 V 两个键帽；2 一个文件夹从一台电脑飞进另一台的“下载”文件夹，旁边一张照片也被装进文件夹里一起飞；3 一台合上盖子睡着的笔记本（头顶画 Zz）和一张没飞出去的便签。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两台电脑之间一张便签飞过去，笔记本键盘上按着 Ctrl 和 V 两个键帽"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1070,7 +1079,11 @@
    "key": "双机互传",
    "source_phrase": "左边约五分之三宽，上下三张横向卡片，每张左边一幅小水彩插画：1 两台电脑之间一张便签飞过去，笔记本键盘上按着 Ctrl 和 V 两个键帽；2 一个文件夹从一台电脑飞进另一台的“下载”文件夹，旁边一张照片也被装进文件夹里一起飞；3 一台合上盖子睡着的笔记本（头顶画 Zz）和一张没飞出去的便签。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个文件夹从一台电脑飞进另一台的抽象图形文件夹，旁边一张照片也被装进文件夹里一起飞"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1085,7 +1098,11 @@
    "key": "双机互传",
    "source_phrase": "左边约五分之三宽，上下三张横向卡片，每张左边一幅小水彩插画：1 两台电脑之间一张便签飞过去，笔记本键盘上按着 Ctrl 和 V 两个键帽；2 一个文件夹从一台电脑飞进另一台的“下载”文件夹，旁边一张照片也被装进文件夹里一起飞；3 一台合上盖子睡着的笔记本（头顶画 Zz）和一张没飞出去的便签。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台合上盖子睡着的笔记本（头顶画 Zz）和一张没飞出去的便签"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1103,7 +1120,14 @@
    "key": "title-r3-9fe7ee9705091075f9a6",
    "title_text": "怎么用",
    "sha256": "c038ec3c038c442742b47f8ba4768302d518cc4ff2e1c7bab1e1aa7b318f70f6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    0,
+    388,
+    206
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1410,7 +1434,14 @@
    "key": "title-r3-040a79d0da21f03a3d5c",
    "title_text": "出事怎么办，现在能不能用",
    "sha256": "dbcf59e7fdec31c4f8e352ead22e01c7e0445d41efc49579e50add72b94239b9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    24,
+    64,
+    919,
+    212
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1734,7 +1765,11 @@
    "key": "网络篱笆",
    "source_phrase": "上半屏一幅示意图：左边一台台式机、右边一台笔记本，中间一张浅绿色的网（画 Tailscale 标志），写着“主机 ⇄ Tailscale 私有网络 ⇄ 副机”那一行。",
    "sha256": "f5c152bbda27a0828f447a8ff362e0070a75d9c53bbbf45e804a2c4a272a9e0e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "台式机与笔记本电脑之间浅绿网，网中Tailscale标志；台式机下方四块积木分别画Tailscale、KDE Connect标志、小绿狗、小日历，外圈篱笆和小门；笔记本下方仅两块积木画Tailscale和KDE Connect标志，不画看门狗或计划任务"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1751,7 +1786,14 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    0,
+    522,
+    126
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2075,7 +2117,14 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    63,
+    93,
+    888,
+    299
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2290,7 +2339,11 @@
    "key": "ill-cc4a1402ccae14",
    "source_phrase": "插画：卡 1 一台刚亮起的台式机，屏幕角上一个转圈的重启箭头，旁边一只小绿狗把一个托盘图标叼回任务栏；卡 2 一圈篱笆上原来两扇大敞的门被打了叉、关上，旁边新开一扇只容一台笔记本通过的小门；卡 3 一只放大镜照着一行设备清单，清单是空的，却有一个小小的“1”被红笔划掉、改成问号。",
    "sha256": "e26d430dae2e9fb28c1e0e75e695ed58b80fed0538b6456e7c1f6ac4f4722973",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台刚亮起的台式机，屏幕角上一个转圈的重启箭头，旁边一只小绿狗把一个托盘图标叼回任务栏"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2305,7 +2358,11 @@
    "key": "网络篱笆",
    "source_phrase": "插画：卡 1 一台刚亮起的台式机，屏幕角上一个转圈的重启箭头，旁边一只小绿狗把一个托盘图标叼回任务栏；卡 2 一圈篱笆上原来两扇大敞的门被打了叉、关上，旁边新开一扇只容一台笔记本通过的小门；卡 3 一只放大镜照着一行设备清单，清单是空的，却有一个小小的“1”被红笔划掉、改成问号。",
    "sha256": "f5c152bbda27a0828f447a8ff362e0070a75d9c53bbbf45e804a2c4a272a9e0e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一圈篱笆上原来两扇大敞的门被打了叉、关上，旁边新开一扇只容一台笔记本通过的小门"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2320,7 +2377,11 @@
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "插画：卡 1 一台刚亮起的台式机，屏幕角上一个转圈的重启箭头，旁边一只小绿狗把一个托盘图标叼回任务栏；卡 2 一圈篱笆上原来两扇大敞的门被打了叉、关上，旁边新开一扇只容一台笔记本通过的小门；卡 3 一只放大镜照着一行设备清单，清单是空的，却有一个小小的“1”被红笔划掉、改成问号。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只放大镜照着一行设备清单，清单是空的，却有一个小小的抽象图形被红笔划掉、改成问号"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2337,7 +2398,14 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    36,
+    247,
+    206
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2686,7 +2754,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-r3-bdd68a3fea1a9e251e72",
    "title_text": "全部功能（18 项）",
    "sha256": "4bf33bfa5cee1cc0ec24549a9e0c1fd26aa00b98bfc77a331695191e36e8521f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2703,7 +2772,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-312573512f3a4e29cb0d",
    "title_text": "同步和传输",
    "sha256": "da0ecdd34476ff6ed44de0365d9894dc8dc9c53ddd59b20336739f33c035d25b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2720,7 +2790,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-d4670a4c4f0fa3ab9929",
    "title_text": "自动恢复",
    "sha256": "7713d4b103dcee0af42a5961b4ffc529505d29b56730a2c6c72ef42af584b12d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2737,7 +2808,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-509d3f0fdfa38b9e15da",
    "title_text": "连接和放行",
    "sha256": "6e368f37fc5151ea9d0b83e805059f98bb7c4cea432ee9618abca3aaa7a1434e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3087,7 +3159,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-36324886ebb698ec7f55",
    "title_text": "安装和收尾",
    "sha256": "c871d8cced2a018c685d2a73dedf67639f06108bd9bb1a9a37f3fd8400217c29",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3104,7 +3177,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-bc84aa14b9f37f92326c",
    "title_text": "看和管",
    "sha256": "e81686ec6cd15587a3cc66311d75755dc31ec63862c48f187e51347c24b0254c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3360,7 +3434,11 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "双机互传",
    "source_phrase": "右侧约三分之一宽一幅大一点的水彩插画：一台笔记本先亮起，旁边长出一台台式机，两台之间长出一张网，台式机旁最后出现一只小绿狗，像一路长出来的样子；插画里不写字。",
    "sha256": "3f61967dde6017572aaecfa5de1dffeda67f7735d0849312a76ae9567aef86ba",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台笔记本先亮起，旁边长出一台台式机，两台之间长出一张网，台式机旁最后出现一只小绿狗，像一路长出来的样子；插画里不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3377,7 +3455,8 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "key": "title-r3-7d359dfee0bedd68127f",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -304,7 +304,7 @@
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
   "sha256": "97d183bd2efcb6d69888e2084ff70a0a0fcbbb26d18b98c989828693605a8233",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -462,7 +462,11 @@
    "key": "页面扇形网格核验",
    "source_phrase": "右边一幅水彩插画：一份 PDF 像扇子一样摊开成一页页的图片，铺在一张桌上排成网格；一枚放大镜停在其中一页的表格上；桌角一个小相框里放着同一份 PDF 的“复印件”，表示先复制一份再看。",
    "sha256": "5b248feb481e7689d5abe285a3346104fe6ce031e46a31d0f178d232f7e0228a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一份 PDF 像扇子一样摊开成一页页的图片，铺在一张桌上排成网格；一枚放大镜停在其中一页的表格上；桌角一个小相框里放着同一份 PDF 的抽象图形，表示先复制一份再看"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -479,7 +483,14 @@
    "key": "title-7ea136b096b457e43aca",
    "title_text": "PDF 逐页检查",
    "sha256": "94aa9fba2e2b97aed1a7611cc39c5f279380014ecd31c2fe23043e83a657673b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    68,
+    684,
+    248
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -761,7 +772,14 @@ PDF 是 Markdown 转出来的，先用〔文稿转 PDF〕，再用它看。
    "key": "title-r3-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "2304e84af71ae809ed22525bb17a83cdc977e8073e268216601e3a099b2b6fc4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    20,
+    39,
+    581,
+    220
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1054,7 +1072,14 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
    "key": "title-2d9f9be76cdd463c3a93",
    "title_text": "平时它在干什么",
    "sha256": "5724770d3f09e43799722e592ca24a6c012d5b98bddbeb6e07d6c8a29939aa32",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    39,
+    77,
+    663,
+    243
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1506,7 +1531,8 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
    "key": "title-f635b114eb061de827b6",
    "title_text": "能做的事（12 项）",
    "sha256": "efb7bdaf9b1b0f610238d66a16ef20c78793d74015e2cd869f6bdc2931838be1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1804,7 +1830,14 @@ PDF 能打开、页数对，也可能有字被裁掉、表格挤出页边、某�
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    32,
+    254,
+    214
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

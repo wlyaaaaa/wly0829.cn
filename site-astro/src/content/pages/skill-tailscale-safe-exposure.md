@@ -110,7 +110,7 @@
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
   "sha256": "eb2f38f373d1393fde7b8320f579fb3ca0320bf9abb39d89bbfa0060a154abab",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -289,7 +289,11 @@
    "key": "网络篱笆",
    "source_phrase": "右边一幅水彩插画：一台台式机，外面围着一圈淡绿色的篱笆，篱笆上只开了一扇小门，门口站着一部手机和一台笔记本（各画 Tailscale 标志的小徽章），篱笆外一个模糊的人影被挡在外面。",
    "sha256": "f5c152bbda27a0828f447a8ff362e0070a75d9c53bbbf45e804a2c4a272a9e0e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台台式机，外面围着一圈淡绿色的篱笆，篱笆上只开了一扇小门，门口站着一部手机和一台笔记本（各画 Tailscale 标志的小徽章），篱笆外一个模糊的人影被挡在外面"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -306,7 +310,8 @@
    "key": "title-r3-ac7c4489258f839cafa8",
    "title_text": "远程只让自己连",
    "sha256": "4c49e051cd473a75ffd743d49d6fac792b4b9ca9bafe68c23747383a01d52e99",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -571,7 +576,11 @@
    "key": "账本",
    "source_phrase": "右边约三分之一宽，一张米色小账本插画，上面画真实的几行字（见“账本上的字”），账本下面一张小卡片“要注意”。",
    "sha256": "df5149a9dd4aa27c3fc3c6f0300186d80b7ed032d354c7f1041850e9753487da",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "米色小账本，只画纸面短线；真实账本字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -588,7 +597,8 @@
    "key": "title-r3-997ecda1c47e024c1a03",
    "title_text": "一个完整例子：照这套做法，“远程桌面只让笔记本和手机连”会这样办",
    "sha256": "cb8a2f2c580415b4d49f973fa9914dbce3f98b7adf237045946acc00dd658281",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -996,7 +1006,8 @@
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1192,7 +1203,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

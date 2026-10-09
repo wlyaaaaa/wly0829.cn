@@ -551,7 +551,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "b685a00566d08f2acc3adba8dbcfe1f500953f6140fa216c46c641853bc70966",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -761,7 +761,11 @@
    "key": "main-personal-health",
    "source_phrase": "右上一幅水彩插画：一只手腕戴着纤细的黑色穿戴设备，设备屏幕微微发绿光；手腕旁边一部手机，一条绿色细虚线从设备连到手机、再连到一本翻开的小册子；小册子封面写“健康现状”四个字；小册子旁边一只放大镜照着一张报告纸，报告纸上只画灰色横线，不画任何数字、表格或图表。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手腕戴着纤细的黑色穿戴设备，设备屏幕微微发绿光；手腕旁边一部手机，一条绿色细虚线从设备连到手机、再连到一本翻开的小册子；小册子封面画抽象短线的四个字；小册子旁边一只放大镜照着一张报告纸，报告纸上只画灰色横线，不画任何数字、表格或图表"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -778,7 +782,14 @@
    "key": "title-ac4c8a0e1c9a6474e7e1",
    "title_text": "个人健康",
    "sha256": "30bc1415feacf84c41d8e4cf82a4e40701793e5bef66409672b025f10480a1fe",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    77,
+    520,
+    257
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -975,7 +986,14 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    3,
+    520,
+    151
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1215,7 +1233,11 @@
    "key": "健康设备",
    "source_phrase": "右栏第三张下面空出的地方画一小幅水彩插画：手腕上的设备和手机之间一条虚线断开，旁边一个问号（不写字）。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手腕上的设备和手机之间一条虚线断开，旁边一个问号（不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1232,7 +1254,14 @@
    "key": "title-b7fc6f903d936aa151d4",
    "title_text": "断了、慢了、对不上怎么办",
    "sha256": "22543f42f797c3cf5f9a7ae9bfbdef2302b7df673d21d9878998d6bb03f491f4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    10,
+    910,
+    169
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1522,7 +1551,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1802,7 +1832,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1983,7 +2014,11 @@
    "key": "胶片媒体现图小槽4比3",
    "source_phrase": "插画：1 两卷胶片，一卷大部分是淡淡的虚线（表示直接引用旧的），末尾一小段是实的绿色（新补的），旁边一个小秒表；2 一台电脑和手腕上的设备之间一条虚线，中间一个放大镜照着一本日历，日历上连着八格灰色；3 一个漏斗，上面落进许多杂乱的小点，下面只出来四根整齐的绿色小柱子。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两卷胶片，一卷大部分是淡淡的虚线（表示直接引用旧的），末尾一小段是实的绿色（新补的），旁边一个小秒表"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1998,7 +2033,11 @@
    "key": "健康设备",
    "source_phrase": "插画：1 两卷胶片，一卷大部分是淡淡的虚线（表示直接引用旧的），末尾一小段是实的绿色（新补的），旁边一个小秒表；2 一台电脑和手腕上的设备之间一条虚线，中间一个放大镜照着一本日历，日历上连着八格灰色；3 一个漏斗，上面落进许多杂乱的小点，下面只出来四根整齐的绿色小柱子。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑和手腕上的设备之间一条虚线，中间一个放大镜照着一本日历，日历上连着八格灰色"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2013,7 +2052,11 @@
    "key": "ill-5517e0b7749246",
    "source_phrase": "插画：1 两卷胶片，一卷大部分是淡淡的虚线（表示直接引用旧的），末尾一小段是实的绿色（新补的），旁边一个小秒表；2 一台电脑和手腕上的设备之间一条虚线，中间一个放大镜照着一本日历，日历上连着八格灰色；3 一个漏斗，上面落进许多杂乱的小点，下面只出来四根整齐的绿色小柱子。",
    "sha256": "9e495e81fd1258397ef9d83b58e8fe2e3c8ac481d35c44712805cbe448d83596",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个漏斗，上面落进许多杂乱的小点，下面只出来四根整齐的绿色小柱子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2030,7 +2073,14 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    0,
+    246,
+    205
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2566,7 +2616,8 @@
    "key": "title-d6a05c1a9e5e8bbcf9a7",
    "title_text": "全部功能（14 项）",
    "sha256": "f217912415d125d84cd5997b99e0bcc94cdb939334451565819bed7e7505c526",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2850,7 +2901,11 @@
    "key": "main-personal-health",
    "source_phrase": "右侧一幅大一点的水彩插画：从左下到右上依次是一张报告纸（只画灰线）、一本小册子、手腕上的设备、一台电脑，像一路长出来的样子，中间用绿色细藤蔓连起来。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "从左下到右上依次是一张报告纸（只画灰线）、一本小册子、手腕上的设备、一台电脑，像一路长出来的样子，中间用绿色细藤蔓连起来"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2866,7 +2921,8 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

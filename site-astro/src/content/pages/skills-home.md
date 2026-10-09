@@ -579,7 +579,7 @@
  "source": {
   "page": "sources/pages/skills-home/page.json",
   "sha256": "1152ac1729bb56f9cd2d616d443d05746165a10bc2a49360ebf67cc0a16b74c9",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -834,7 +834,11 @@
    "key": "册子阅读通用构图",
    "source_phrase": "右边约占 45% 画一幅水彩插画：一张木书桌上立着一排 26 本薄薄的小手册（书脊从深绿到浅绿渐变，书脊不写字），一只小机器人助手正从中抽出一本翻开来看，机器人胸前一左一右两枚小圆徽章：Claude 的橙色星芒标志和 OpenAI 的黑色花结标志（代表 Codex）；书桌另一侧飘着一个空白的对话气泡（表示我说了一句话，气泡里不写字）；周围几片水彩绿叶。",
    "sha256": "23c8d9516b28c4cedffa788a834559174be8a940a2f9ca098ec5792db026aa3a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张木书桌上立着一排 26 本薄薄的小手册（书脊从深绿到浅绿渐变，书脊不写字），一只小机器人助手正从中抽出一本翻开来看，机器人胸前一左一右两枚小圆徽章：Claude 的橙色星芒标志和 OpenAI 的黑色花结标志（代表 Codex）；书桌另一侧飘着一个空白的对话气泡（表示我说了一句话，气泡里不写字）；周围几片水彩绿叶"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -851,7 +855,14 @@
    "key": "title-99aea2f9131ad6dad0e5",
    "title_text": "技能",
    "sha256": "747c372a2902118d4bf09c59daa20e2158a3917264b2203207500c0f37aad046",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    41,
+    366,
+    257
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1296,7 +1307,8 @@
    "key": "title-6b09a5a3be7c85b08b7b",
    "title_text": "找照片、文件和聊天",
    "sha256": "1de8ccd24908f26c94b0d6f011da55757d377f91e6c0cd8c856c779acac4ba1d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1312,7 +1324,8 @@
    "key": "title-ec6b9d361d730578628d",
    "title_text": "读懂录音、图片和文档",
    "sha256": "7f7c07d734d6ffa9ab23e1301ea9d341f86ad1fd5c0f0acd2a9b44c307ee34a1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1715,7 +1728,8 @@
    "key": "title-8b0817d0208d21affb55",
    "title_text": "了解我、跟我说清楚",
    "sha256": "2ab58de96bb0981e303c74a2795b8b063a0277409359fa5301710e4ef63e2f5d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1732,7 +1746,8 @@
    "key": "title-98430f305bb42f1f597d",
    "title_text": "学习、工作和生活",
    "sha256": "170889dcdf1796011c60e4691b83c999286cc1be3bfa8aafaafbae657b816afd",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2223,7 +2238,8 @@
    "key": "title-dee24793f1ece7651fb9",
    "title_text": "密码和加密",
    "sha256": "f58f892cd3922414984b54cf599254d029cf9ea830a0656286ac42414fcd33a1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2240,7 +2256,8 @@
    "key": "title-fec73bf4ae61e3fb1a7a",
    "title_text": "电脑、网页和账号",
    "sha256": "c59cfb8018131f6fbeff4f4d988465bc676e0ba29f60d211c7d2dc7d8c745687",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2257,7 +2274,8 @@
    "key": "title-3ce57af012e29b7d8dd6",
    "title_text": "维护代码",
    "sha256": "db02ad8f02ee91d900afeeb34767e6c154f128624361bb15e51e159a36c291f3",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

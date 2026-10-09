@@ -31,15 +31,16 @@ from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
 
-# 三个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、不碰站点）：BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR
+# 四个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、试排一个新页，不碰站点）：
+# BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR、BLOCK_WORK_DIR（排版缓存；和站点同时跑时要分开，免得互相盖掉）
 MD_DIR = os.environ.get("BLOCK_MD_DIR") or os.path.join(SITE, "src", "content", "pages")
 OUT_DIR = os.environ.get("BLOCK_OUT_DIR") or os.path.join(SITE, "src", "content", "rendered")
 PUB = os.environ.get("BLOCK_PUB_DIR") or os.path.join(SITE, "public")
-WORK = os.path.join(SITE, ".cache", "blocks")
+WORK = os.environ.get("BLOCK_WORK_DIR") or os.path.join(SITE, ".cache", "blocks")
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
-RENDER_VERSION = "r4-8"  # 排版做法改了就换，旧结果全部重排
+RENDER_VERSION = "r4-9"  # 排版做法改了就换，旧结果全部重排
 
 
 def file_url_to_path(u):
@@ -353,10 +354,62 @@ def hydrate(jobs, binds):
                 print(f"  {j['screen']}-{j['o']} 排版出错：{repr(e)[:160]}", flush=True)
                 r = None
             pg.close()
+            if r and "brushfont" in r.get("html", ""):
+                try:
+                    r["html"] = brush_titles(b, j, js, binds, r["html"])
+                except Exception as e:
+                    print(f"  {j['screen']}-{j['o']} 毛笔字标题转图出错：{repr(e)[:160]}", flush=True)
             if r:
                 out.append({**j, **r})
         b.close()
     return out
+
+
+# 毛笔字标题图放在区块库标题图的同一个缓存目录，发布时同样进 /assets/_titles/
+BRUSH_DIR = os.path.join(REPO, ".publish", "typeset-out", "_cache")
+BRUSH_PAD = 12  # 笔画可能伸出字框，四周多截一点透明边，用负边距放回原位
+
+
+def brush_titles(b, j, js, binds, html_in):
+    """字体兜底的标题（素材库里没有逐字一致的标题图，例如“全部功能（15 项）”）：区块库用毛笔字体（华文行楷、方正舒体，
+    Windows 自带，样式里按 file:/// 引用）写字。现在网站是在出图这一步把它画进整屏图的；网页上不能分发这两个系统字体，
+    所以同样在出图这一步把这几个字截成透明底的图（2 倍清晰度），页面上放图，字留作看不见的文字（可搜索、可复制）。
+    版面不变：图的显示大小就是原来字框的大小。"""
+    pg = b.new_page(viewport={"width": WIDTH[j["o"]], "height": 200}, device_scale_factor=2)
+    caps = []
+    try:
+        pg.goto("file:///" + j["html"].replace("\\", "/"))
+        pg.evaluate(js, binds.get((j["screen"], j["o"])))
+        pg.evaluate("document.fonts.ready.then(() => true)")
+        boxes = pg.evaluate("""() => [...document.querySelectorAll('.title-font .brushfont')].map(e => {
+            const r = e.getBoundingClientRect(); return [r.left + scrollX, r.top + scrollY, r.width, r.height]; })""")
+        pg.add_style_tag(content="*{visibility:hidden !important;background:transparent !important;box-shadow:none !important}"
+                                 ".title-font .brushfont,.title-font .brushfont *{visibility:visible !important}")
+        for x, y, w, h in boxes:
+            clip = {"x": max(0, x - BRUSH_PAD), "y": max(0, y - BRUSH_PAD), "width": w + 2 * BRUSH_PAD, "height": h + 2 * BRUSH_PAD}
+            png = pg.screenshot(clip=clip, omit_background=True, full_page=True)
+            name = "brushfont-" + hashlib.sha256(png).hexdigest()[:16] + ".png"
+            dst = os.path.join(BRUSH_DIR, name)
+            if not os.path.exists(dst):
+                os.makedirs(BRUSH_DIR, exist_ok=True)
+                open(dst, "wb").write(png)
+            caps.append((dst, w, h, x - clip["x"], y - clip["y"]))
+    finally:
+        pg.close()
+    it = iter(caps)
+
+    def one(m):
+        cap = next(it, None)
+        if cap is None:
+            return m.group(0)
+        dst, w, h, dx, dy = cap
+        url = "file:///" + dst.replace("\\", "/")
+        return (f'<div class="brushfont brushfont-img"{m.group(1)}><img src="{url}" alt="" '
+                f'style="display:block;width:{w + 2 * BRUSH_PAD:.2f}px;height:{h + 2 * BRUSH_PAD:.2f}px;'
+                f'margin:-{dy:.2f}px -{2 * BRUSH_PAD - dx:.2f}px -{2 * BRUSH_PAD - dy:.2f}px -{dx:.2f}px">'
+                f'<span style="position:absolute;left:0;top:0;width:100%;overflow:hidden;white-space:nowrap;color:transparent;'
+                f'-webkit-text-stroke:0;pointer-events:none">{m.group(2)}</span></div>')
+    return re.sub(r'<div class="brushfont"([^>]*)>(.*?)</div>', one, html_in, flags=re.S)
 
 
 def font_subset(name, texts):
@@ -464,6 +517,25 @@ def fill_shot_frames(body):
     return re.sub(r'<div class="slot-shot-frame[^"]*"[^>]*data-shot-source="([^"]+)"[^>]*>', one, body)
 
 
+_ALIASES = None
+
+
+def alias_links(text):
+    """改过地址的页（内容文件开头 old_urls）：HTML 里站内链接（href、data-href）指向旧地址的，改指现在的地址，锚点照留。"""
+    global _ALIASES
+    if _ALIASES is None:
+        _ALIASES = {}
+        for f in os.listdir(MD_DIR):
+            if f.endswith(".md"):
+                fm = parse_md(os.path.join(MD_DIR, f))[0]
+                for old in fm.get("old_urls") or []:
+                    _ALIASES[old] = fm["url"]
+    for old, new in _ALIASES.items():
+        text = re.sub(r'((?:href|data-href)=")' + re.escape(old.rstrip("/")) + r'(?:/|(?=["#?]))',
+                      lambda m: m.group(1) + new, text)
+    return text
+
+
 def rename_site_classes(body):
     """画布里和站点全局样式撞名的类改名：站点给 .source-prose 定了段距、表格、粗体等整套样式（规则原文页用），
     区块库只拿这个类当“原文正文”的标记、没有给它写样式。不改名的话站点那套会进画布，段落多出 1.1em 段距、
@@ -484,7 +556,7 @@ def finish_page(name, fm, results, cssv):
         sid = r["screen"]
         if sid not in screens:
             screens[sid] = {"id": sid}; order.append(sid)
-        body = rename_site_classes(fill_shot_frames(r["html"]))
+        body = alias_links(rename_site_classes(fill_shot_frames(r["html"])))
         for a, b in (r.get("replace") or {}).items():  # 内容文件写明的“显示时替换”（规则原文首行标签）
             body = body.replace(a, b)
         art_src = r.get("art")
@@ -538,7 +610,7 @@ def finish_page(name, fm, results, cssv):
         md_text = {m["screen"]["id"]: t for m, t in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
         for r in results:
             if r["o"] == "h" and r.get("shape") == "source_text" and r["screen"] in screens:
-                art = rule_original_html(r["html"])
+                art = alias_links(rule_original_html(r["html"]))
                 if art:
                     screens[r["screen"]]["article"] = art
                     first = next((x.strip() for x in md_text.get(r["screen"], "").split("\n") if x.strip()), "")
@@ -595,6 +667,8 @@ def run(names, workers=6):
     mount = os.path.join(SITE, "src", "scripts", "living-mount.js")
     os.makedirs(os.path.join(PUB, "_living"), exist_ok=True)
     shutil.copyfile(mount, os.path.join(PUB, "_living", "living-mount.js"))
+    # 内容页“现在”实时位：取数、读不到时只说一次并保留上次的值（Site.astro 引用）
+    shutil.copyfile(os.path.join(SITE, "src", "scripts", "live-dom.js"), os.path.join(PUB, "_living", "live-dom.js"))
     for f in RULE_FRAMES:
         publish_path(os.path.join(REPO, "sources", "assets", *f.split("/")))
     reg, owner, css, warn = load_registry()

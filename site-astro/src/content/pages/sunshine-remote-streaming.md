@@ -576,7 +576,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
   "sha256": "8bba71fa969575cbee679222bdde72d94c77e272213f63a480c8db41b3a2f5c2",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -909,7 +909,11 @@
    "key": "远程主备显示屏",
    "source_phrase": "右上一幅水彩插画：左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着。",
    "sha256": "bec98fa97416223b424093ad5aafd104c2d9007778b72c2768639fea7882f0c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一张办公桌上放着一台笔记本，屏幕里是家里主机的桌面，屏幕角上画 Moonlight 标志；笔记本旁边一部手机，屏幕里是同一个桌面的缩小版；一条绿色丝带从笔记本和手机飘向右边，丝带中间画 Tailscale 标志；丝带落进右边一座小房子里的台式机，机箱上画 Sunshine 标志；台式机前的大显示器是暗的（关着），旁边浮着一块半透明、虚线描边的屏幕（备用屏），桌面窗口在这块虚线屏上亮着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -926,7 +930,8 @@
    "key": "title-r3-3049ff19fb625c7b1507",
    "title_text": "远程电脑串流",
    "sha256": "50704cf4bfae06352fdea3c0417fb9b18d423e008a84ac07707b9fd839ecd45a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1202,7 +1207,11 @@
    "key": "电脑远程",
    "source_phrase": "三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。",
    "sha256": "3562cf4060ee36240ac08e8255aab66764cf19b17484987d2137b4d3a1dc64c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1217,7 +1226,11 @@
    "key": "手机远程",
    "source_phrase": "三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。",
    "sha256": "3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1232,7 +1245,11 @@
    "key": "显示屏切换",
    "source_phrase": "三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一间办公室，桌上笔记本屏幕里是家里主机的桌面，窗外远处一座小房子；2 一只手拿着手机，手机屏幕里是电脑桌面，桌面上一个 Codex 窗口，背景是街道；3 一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏。",
    "sha256": "b12747b31d895ccc6db936c6abd81a7571f0db1cdedfbe2b0b37b141e0d06468",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台关着的暗色大显示器，旁边一块虚线描边、半透明的备用屏亮着，几个小窗口正沿着弧线从暗屏飘到备用屏"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1327,7 +1344,8 @@
    "key": "title-r3-9fe7ee9705091075f9a6",
    "title_text": "怎么用",
    "sha256": "c038ec3c038c442742b47f8ba4768302d518cc4ff2e1c7bab1e1aa7b318f70f6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1638,7 +1656,8 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2004,7 +2023,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2314,7 +2334,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2537,7 +2558,11 @@
    "key": "显示屏切换",
    "source_phrase": "插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
    "sha256": "b12747b31d895ccc6db936c6abd81a7571f0db1cdedfbe2b0b37b141e0d06468",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2552,7 +2577,11 @@
    "key": "三层网络墙",
    "source_phrase": "插画：1 一块暗掉的显示器和一块虚线备用屏，几个小窗口沿弧线飘过去，旁边门把手上挂着一块画着手机的小牌子（表示有人连着就不动）；2 三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条）。",
    "sha256": "ea00de849fd65ee377bbd06e6a3af4056c076d73e0d8f0fe1c7415f1d429a3f0",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "三道叠在一起的小墙（三层地址转换），一条绿色丝带从墙顶上越过，一头连手机、一头连小房子，丝带中间画一个小问号（还没查过手机走不走这条"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2621,7 +2650,8 @@
    "key": "title-r3-1251a0366d197dc70ab3",
    "title_text": "还在等核对的两招",
    "sha256": "8846ad26f75e4aeb104d53299b7a25637fc0222a6accc57543018d50b3b2be0a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2803,7 +2833,11 @@
    "key": "文稿核验通用构图",
    "source_phrase": "一张横跨整屏的大卡片：左边约三分之一一幅水彩插画——一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门；右边约三分之二是卡片标题（大字）和正文。",
    "sha256": "073503cefc7591f3fbafa430ecb30700d758e348da21f24a58d6fa1850ae7cc6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一沓一模一样的纸（同一份报告被一次次重交），上面盖着红色印章，旁边一把钥匙正在打开一个闸门"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2846,7 +2880,8 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3315,7 +3350,8 @@
    "key": "title-410efe73a6bd515b74d2",
    "title_text": "主屏不在时",
    "sha256": "49a33b9237c16d769b1ac822e9d538789fd4cf6e90f917b69f63b46442175b72",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3332,7 +3368,8 @@
    "key": "title-r3-8dee835cbf8f2e59c8ed",
    "title_text": "全部功能（23 项）",
    "sha256": "c8d9777168b4d357cd37a882f4977a943f63200cdbda6a8ae47b03eb6a1b7935",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3349,7 +3386,8 @@
    "key": "title-30cbcef1875f1224a51f",
    "title_text": "连接和画面",
    "sha256": "df50eb62ad739c7b23883d3beead72e02419323cb0de4a0a7a4c5e31e6cdd1af",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3854,7 +3892,8 @@
    "key": "title-eb724d0c04bb230bc0d5",
    "title_text": "体检和修复",
    "sha256": "1ed2f2c793974f67f3a5718c817d409abd0bae5681857f14842d51c766528f01",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3871,7 +3910,8 @@
    "key": "title-84c0dc75bffc77e73c4a",
    "title_text": "安全规矩",
    "sha256": "3547513fdbe29338db9bb147013c1a554ab327fbb133e4503e677592f8dd82a4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3888,7 +3928,8 @@
    "key": "title-a8c3698b5b8c485d8bd4",
    "title_text": "已停用",
    "sha256": "109419764a0213c3c797117892861b41eba1c925b8ea33a3c2d91df372cd05da",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4251,7 +4292,11 @@
    "key": "远程主备显示屏",
    "source_phrase": "右侧一幅大一点的水彩插画：先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子。",
    "sha256": "bec98fa97416223b424093ad5aafd104c2d9007778b72c2768639fea7882f0c5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "先是一部手机和一座小房子之间一条细线，接着细线变成绿色丝带，房子里长出一块虚线的备用屏，最后丝带边上多了一个小听诊器和一个闸门，像一路长出来的样子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4268,7 +4313,8 @@
    "key": "title-r3-7d359dfee0bedd68127f",
    "title_text": "演进（北京时间）",
    "sha256": "f822fd4b764807be915e72b98b9486fe72a42f3abebbb53422a5e6db514f9ee4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

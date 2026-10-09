@@ -89,7 +89,7 @@
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
   "sha256": "75a55fc01816129b6388ad83eab1a6af6eaba8d405a3e116b917a59510a954e0",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -276,7 +276,11 @@
    "key": "手机照片通用构图",
    "source_phrase": "横版：左边大标题毛笔艺术字“照片录音里有没有我”，下面两行说明；右边一幅水彩插画：一张合影照片上一张脸被绿色细框框住，旁边一条录音波形，其中一段标成绿色。",
    "sha256": "753312b6e6ed1ff47c67a989c96803d31f85ce2566a2b45440dfb21a9af85169",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张合影照片上一张脸被绿色细框框住，旁边一条录音波形，其中一段标成绿色"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -293,7 +297,14 @@
    "key": "title-cc709d5c86101ecee93a",
    "title_text": "照片录音里有没有我",
    "sha256": "d483a5dcad75da069e848da42e9cabfdfcb82b3bb0e9f7b77a14977cc405db48",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    50,
+    16,
+    865,
+    179
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -582,7 +593,14 @@
    "key": "title-r3-bdc2a6c905c0aca904ca",
    "title_text": "怎么判断",
    "sha256": "5c6579dd04b812d51696a0f1189df47ecc0ab80587b5db32e91621bd2998675f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    10,
+    0,
+    473,
+    204
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -785,7 +803,14 @@
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    50,
+    588,
+    338
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1328,7 +1353,11 @@
    "key": "人脸卡挂锁",
    "source_phrase": "右下角一小幅水彩插画：一把小锁挂在一张人脸轮廓卡片上。",
    "sha256": "427737a88fea1ea2d691255a3bde21982799b31cbb4c87ff4b24e0000d0759b4",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一把小锁挂在一张人脸轮廓卡片上"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1345,7 +1374,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

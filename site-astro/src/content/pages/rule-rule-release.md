@@ -154,7 +154,7 @@
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
   "sha256": "a20d1cc589ae2ee5ebf2a0e63993969cd94b1d7470f147ba4ddd143aa2c1116a",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -442,7 +442,11 @@
    "key": "ill-r3-ec90efce29ff1bef",
    "source_phrase": "右边约 45% 宽一幅水彩插画：一个木书架，架上并排立着两本绿色封皮的精装书，书脊上分别写“E186”“E187”；书架前一根小木桩路标，伸出两块箭头木牌，上面那块写“当前”指向 E187，下面那块写“上一版”指向 E186。",
    "sha256": "d9860df278f0ab3dd0631005d8e3c86536fdacd1adeafab43eb8a867f387ecfa",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个木书架，架上并排立着两本绿色封皮的精装书，书脊上分别画抽象短线的抽象图形；书架前一根小木桩路标，伸出两块箭头木牌，上面那块画抽象短线的指向 E187，下面那块画抽象短线的指向 E186"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -459,7 +463,14 @@
    "key": "title-e64cb80820be1fddd48f",
    "title_text": "规则发布与恢复",
    "sha256": "e3c08a5035d1fdc51ee627e214af0edd3f1c9b4a022fa4ca0abc46ac0a486e44",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    3,
+    860,
+    175
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -696,7 +707,8 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-369682a53c2fcf66bb3e",
    "title_text": "人话要点 · 哪一版算数、怎么读",
    "sha256": "a49fd6b0dc4b7e242adc7f563d2c3f860bbe29dd4b9dade49cc956a0407ed357",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -910,7 +922,8 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-c749bac959be45238a1e",
    "title_text": "人话要点 · 发布和回退",
    "sha256": "f4f1ecba3ee688b33d7c13ebccb2e319d6bf16767afbe3963f5870eca31674ab",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1225,7 +1238,14 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-c6b1d1451bace51148bc",
    "title_text": "人话要点 · 验证",
    "sha256": "91fb1d8bbab53ba1d60cf3d18e9a0bf2247bf5304ab81df6467beba8ef7156d4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    151,
+    1248,
+    790,
+    1408
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1358,7 +1378,14 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-e64cb80820be1fddd48f",
    "title_text": "规则发布与恢复",
    "sha256": "b0f70e1a4148a88a72b1f8979e33f1f582ecf5750c59cc7791f46a66d81affb6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    61,
+    161,
+    496,
+    265
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1375,7 +1402,14 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-0bb559512fc577708440",
    "title_text": "什么算活动规则",
    "sha256": "db98351c1b0f768dfd619911a53d4c950fb022ea54ec58af54da7759ca5a0fbb",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    65,
+    455,
+    312,
+    502
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1392,7 +1426,14 @@ E186　E187　当前　上一版　SYSTEM
    "key": "title-6faf6ffbd68dd23745d2",
    "title_text": "读规则",
    "sha256": "790082acdbdc4f013d8914310e85f712de4bae3a20d7109020a441c792bceca3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    861,
+    158,
+    1068,
+    252
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1508,7 +1549,14 @@ owner: `E:\.agents`
    "key": "title-3d838a8f9c63308625b6",
    "title_text": "发布和回退",
    "sha256": "05bf81e8b8050f097f783127b544859d384e53f0624618a41977c6f20a9a9e22",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    50,
+    221,
+    277,
+    287
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1525,7 +1573,14 @@ owner: `E:\.agents`
    "key": "title-154723a1aa0a09a4c3f2",
    "title_text": "验证",
    "sha256": "c66ada4a4f0c06614511597689738cfa010e58602ba0f7ebeba1fb37a96d908b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    851,
+    567,
+    968,
+    635
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

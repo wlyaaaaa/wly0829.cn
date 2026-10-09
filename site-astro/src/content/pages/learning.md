@@ -545,7 +545,7 @@
  "source": {
   "page": "sources/pages/learning/page.json",
   "sha256": "92e0270a080bc548ff9845afe1c2a1aa83692a012b3ff3fa2e8c87bc2f126936",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -762,7 +762,11 @@
    "key": "main-learning",
    "source_phrase": "右上一幅水彩插画：一张书桌，摊开一本绿色封面的讲义（页面上只画浅灰短线，不画字），旁边一台笔记本电脑，屏幕上两个对话气泡（只画短线）；书桌后面的窗外是一座缓缓向上的绿色小山，一条由 28 块小石板铺成的小路蜿蜒上山，路边插着六面小三角旗，旗面分别写 A、B、C、D、M、P；第一块石板旁放着一双小鞋，表示还没出发。",
    "sha256": "6783142750756868f710b07ddd24707f33da4acbd83331629c187aab2a444720",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张书桌，摊开一本绿色封面的讲义（页面上只画浅灰短线，不画字），旁边一台笔记本电脑，屏幕上两个对话气泡（只画短线）；书桌后面的窗外是一座缓缓向上的绿色小山，一条由 28 块小石板铺成的小路蜿蜒上山，路边插着六面小三角旗，旗面分别写 A、B、C、D、M、P；第一块石板旁放着一双小鞋，表示还没出发"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -779,7 +783,8 @@
    "key": "title-d6543d3bdf2eedd910d9",
    "title_text": "学习方法",
    "sha256": "1c0a097651a329c826f1555e6e4a6e99843e94dba8380a17e383338b75f4f3d8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1003,7 +1008,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-02aef9a5669ae1d53950",
    "title_text": "一天怎么学",
    "sha256": "4bae9e3cace1c0daa3fefc8bbd36ca094de46ab93e4365a15206a5addf2c6d11",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1151,7 +1157,11 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "显卡计算",
    "source_phrase": "卡片上方画一块显卡侧面亮着绿光的小插画，旁边一个小标签“本机”。表格下面左边一块浅绿边框的小卡片“学完要能讲清”，四条带小圆点的短句；右边一段小字（调接口那段）配一幅小插画：一个代码窗口和一个 JSON 花括号用箭头来回连着。",
    "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "卡片上方画一块显卡侧面亮着绿光的小插画，旁边一个小标签抽象图形；一个代码窗口和一个 JSON 花括号用箭头来回连着"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1168,7 +1178,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-4e550dcf435c879d785c",
    "title_text": "一课长什么样：第一课",
    "sha256": "b5ee5f66e3eba87d4b1210150e4413e136e60982ce53c8a22175481b5879a338",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1487,7 +1498,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-ee21af1c754822e2c068",
    "title_text": "觉得不对、断了、落后了",
    "sha256": "2d851c093617c51d213b564d665d2ef681b8ec09e62133af9d7eb2a3a9e937c8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1760,7 +1772,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2130,7 +2143,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-67afc6595bc3bf1754f2",
    "title_text": "用了哪些模型、为什么这样设计",
    "sha256": "b4b9e8c236e16fcc53859aa7530a1a80a73585da6cae53f483ec8626117aa0aa",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2335,7 +2349,11 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "ill-c6715738c46fdf",
    "source_phrase": "上方一幅小插画：一个书架上摆着几个贴着绿色标签的小盒子，一只手只是指着，没有拿下来。",
    "sha256": "a486317351836d4e61b337a8bffd1e5980cfc7bae8ffaddb480b95b7f2ca6f00",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个书架上摆着几个贴着绿色标签的小盒子，一只手只是指着，没有拿下来"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2352,7 +2370,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-0f12b77042241fc24a2a",
    "title_text": "拿我自己的项目当例子（第一课已用上）",
    "sha256": "e15683337679edf7a5cd49bcde9159742d794286e07ac4cf461941038deb6df8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2539,7 +2558,11 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "问号天平",
    "source_phrase": "下面四张两行两列排的大卡片，每张顶上一幅小水彩插画（第一张：一个问号气泡对着一架天平；第二张：两位不同颜色的小人各拿一支红笔在同一叠讲义上圈画，旁边一排小试管都打着绿勾；第三张：一叠旧课本上放着放大镜，几处被贴上绿色小便签；第四张：一个代码窗口 → 一个小门牌写着 127.0.0.1:18765 → 一朵云（阿里云百炼），小门牌上方一把钥匙从一个带锁的保险箱（密码中心）里伸出来，只插进小门牌，代码窗口上方画一把被划掉的钥匙）。",
    "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个问号气泡对着一架天平"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2554,7 +2577,11 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "双人传稿",
    "source_phrase": "下面四张两行两列排的大卡片，每张顶上一幅小水彩插画（第一张：一个问号气泡对着一架天平；第二张：两位不同颜色的小人各拿一支红笔在同一叠讲义上圈画，旁边一排小试管都打着绿勾；第三张：一叠旧课本上放着放大镜，几处被贴上绿色小便签；第四张：一个代码窗口 → 一个小门牌写着 127.0.0.1:18765 → 一朵云（阿里云百炼），小门牌上方一把钥匙从一个带锁的保险箱（密码中心）里伸出来，只插进小门牌，代码窗口上方画一把被划掉的钥匙）。",
    "sha256": "e192b3b436c78fcf3c7021f1cb5595405515cfec389bf319a4bce97c3ab25488",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两位不同颜色的小人各拿一支红笔在同一叠讲义上圈画，旁边一排小试管都打着绿勾"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2569,7 +2596,11 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "下面四张两行两列排的大卡片，每张顶上一幅小水彩插画（第一张：一个问号气泡对着一架天平；第二张：两位不同颜色的小人各拿一支红笔在同一叠讲义上圈画，旁边一排小试管都打着绿勾；第三张：一叠旧课本上放着放大镜，几处被贴上绿色小便签；第四张：一个代码窗口 → 一个小门牌写着 127.0.0.1:18765 → 一朵云（阿里云百炼），小门牌上方一把钥匙从一个带锁的保险箱（密码中心）里伸出来，只插进小门牌，代码窗口上方画一把被划掉的钥匙）。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠旧课本上放着放大镜，几处被贴上绿色小便签"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2586,7 +2617,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-dbffe2440b69e0eaa806",
    "title_text": "亮点（一）",
    "sha256": "9783776acde678908a219befdc39168a28e3b89134ccd4892141e163f423ab5e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2972,7 +3004,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-1fa9782509dcd89fa521",
    "title_text": "全部功能（一）",
    "sha256": "1e5c4bf3fc00872afca728b814f1668ab6b1e2967adb3559b022ca0afd645e7f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3275,7 +3308,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-6077b0983fba8f66cbc2",
    "title_text": "全部功能（二）",
    "sha256": "f724d6f0a4ff0694c872b78338e32cb65ae469244152a161c7209e327a864e5c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3493,7 +3527,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

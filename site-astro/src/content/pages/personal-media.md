@@ -880,7 +880,7 @@
  "source": {
   "page": "sources/pages/personal-media/page.json",
   "sha256": "b82ca0788ddd3672a69ffc561098d9a8694cd883c21c86fd0b691ca43bd007f5",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1138,7 +1138,9 @@
    "key": "main-personal-media",
    "source_phrase": "”），左边不画竖线，〔〕里的字画成绿色链接字；为放下这一行，插画可以再略缩。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1155,7 +1157,14 @@
    "key": "title-aa35b263ba8daf9ad204",
    "title_text": "照片视频录音管理",
    "sha256": "c436e9125e11e1617635f54152eb41faa8064d216e82663aedad1055f89f08cc",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    55,
+    1,
+    749,
+    154
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1271,7 +1280,11 @@
    "key": "手机照片现图小槽4比3",
    "source_phrase": "三张并排大卡片，各有一幅插画：①手机连电脑，②电脑上整理（卡片下部一个审批页小样：缩略图和“保留”“不留”两个按钮），③精选放回手机。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机连电脑"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1286,7 +1299,11 @@
    "key": "截图聊天现图小槽4比3",
    "source_phrase": "三张并排大卡片，各有一幅插画：①手机连电脑，②电脑上整理（卡片下部一个审批页小样：缩略图和“保留”“不留”两个按钮），③精选放回手机。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "电脑上整理照片缩略图，保留原图的图库物件；按钮的文字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1301,7 +1318,11 @@
    "key": "手机照片现图小槽4比3",
    "source_phrase": "三张并排大卡片，各有一幅插画：①手机连电脑，②电脑上整理（卡片下部一个审批页小样：缩略图和“保留”“不留”两个按钮），③精选放回手机。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "精选照片缩略图回到手机"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1318,7 +1339,14 @@
    "key": "title-dbecf80ccde245e7bfdc",
    "title_text": "插上手机之后",
    "sha256": "4ce731beac1cee469beca51d5228c7f66f586a92f3b69d86c1430b209a220c74",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    37,
+    451,
+    164
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1466,7 +1494,11 @@
    "key": "回收纸张",
    "source_phrase": "两列五行对照表，结果格按浅绿、浅黄、浅灰、浅红、浅灰上色；右边一幅绿色回收桶插画。",
    "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两列五行对照表，结果格按浅绿、浅黄、浅灰、浅红、浅灰上色；右边一幅绿色回收桶插画"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1483,7 +1515,8 @@
    "key": "title-ef4e7a0a1da5e9ed7b3a",
    "title_text": "不同的“不要”，结果不一样",
    "sha256": "33783f855f1a48fd31f3254b112055ef15f8f5857e47aacf58464508eaf593b6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1675,7 +1708,8 @@
    "key": "title-b5231c5de766f974b225",
    "title_text": "它怎么决定留不留",
    "sha256": "630c6ae590a51ffbeb906750a885926c818df64a71f0dbca19eb0aa6fa2bdae5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1895,7 +1929,11 @@
    "key": "main-personal-media",
    "source_phrase": "以已通过的横版第 5 屏原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-04-desktop.png 为底：上半部标题和电脑、三块硬盘、手机、两朵云的插画、三个硬盘标签一律不动。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "电脑、三块硬盘、手机、两朵云；硬盘标签的文字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1913,7 +1951,14 @@
    "key": "title-r3-d1a53630592d6b047029",
    "title_text": "东西最后在哪",
    "sha256": "f0fa9e9f4b8c475c095977c4c54ebe3372070d1ce3231142ff4a201e0961aa52",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    41,
+    73,
+    605,
+    291
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2133,7 +2178,11 @@
    "key": "截图聊天现图小槽4比3",
    "source_phrase": "画面：左上一个戴眼镜的人拿手机说话，对话气泡；右上机器人拿放大镜，雪中公园石碑；中间四张雪景结果图；下面三张说明卡；最底一条“怎么跟 AI 说”和右边的按钮。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "戴眼镜的人拿手机说话，旁边对话气泡"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2148,7 +2197,11 @@
    "key": "机器人助手现图小槽4比3",
    "source_phrase": "画面：左上一个戴眼镜的人拿手机说话，对话气泡；右上机器人拿放大镜，雪中公园石碑；中间四张雪景结果图；下面三张说明卡；最底一条“怎么跟 AI 说”和右边的按钮。",
    "sha256": "965947350dbfb6819954dab14115c1bcda2186c989cc828b0cdf475bc3897ad7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "机器人拿放大镜，旁边雪中公园石碑；石碑只画石头轮廓"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2225,7 +2278,14 @@
    "key": "title-a11eed2bfd99e1259bf3",
    "title_text": "找东西",
    "sha256": "973843d95938051149d921bfde272cf21fe8e9750477b26868a28cea45206709",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    378,
+    1,
+    589,
+    126
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2464,7 +2524,14 @@
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2717,7 +2784,8 @@
    "key": "title-0960fa6e07411be916a2",
    "title_text": "它是怎么跑的",
    "sha256": "a023838529071c1a0c3174abc8a44b06cbb56530d94eac245446a4d19df0c688",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3041,7 +3109,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3155,7 +3224,9 @@
    "key": "媒体筛选留存",
    "source_phrase": "三张横向大卡片，左边插画，右边大字标题加三行说明。",
    "sha256": "da3ac0cfe943c98653f7f3406dd25d3b867ab96807b0aacbe0e6463c80eb1961",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3170,7 +3241,9 @@
    "key": "反馈写进程序",
    "source_phrase": "三张横向大卡片，左边插画，右边大字标题加三行说明。",
    "sha256": "44b31c673e934e2e73f706d3de1786eb7d25f9819a03f4cd4be818f7529f1a49",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3185,7 +3258,9 @@
    "key": "后台上传核对",
    "source_phrase": "三张横向大卡片，左边插画，右边大字标题加三行说明。",
    "sha256": "018acdfc4c5eba80a8b0ce45a079b95652422a1885baed773f9b602f3f9b2216",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3202,7 +3277,14 @@
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    0,
+    320,
+    211
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3612,7 +3694,14 @@
    "key": "title-532b0a5a67ef64bb6401",
    "title_text": "全部功能（35 项）",
    "sha256": "1fa57c2d0712191d862d1797bcaa2d858bb69d0595e25d547f53f42ff4578c71",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    0,
+    577,
+    105
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3629,7 +3718,8 @@
    "key": "title-d3bc2130b033878dd2cf",
    "title_text": "我来拍板",
    "sha256": "39c68022540502ec017f7cde2308f37e4d6638f6fd319eef9576675968cfb516",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3646,7 +3736,8 @@
    "key": "title-752a5ecab6515d915f35",
    "title_text": "手机第一次连上",
    "sha256": "6c28a8903c017b060331fb51ccaa70dd11f3eec0896bff41f57112ce439bda53",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3662,7 +3753,8 @@
    "key": "title-a11eed2bfd99e1259bf3",
    "title_text": "找东西",
    "sha256": "973843d95938051149d921bfde272cf21fe8e9750477b26868a28cea45206709",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3679,7 +3771,8 @@
    "key": "title-5d26951aee7dfc8bb4c0",
    "title_text": "拔线后在电脑上",
    "sha256": "f1c10bbb314e205227f6a2d5a1d3b91b8cb57499934ad371f948ecaf33d5f650",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4065,7 +4158,8 @@
    "key": "title-45a38d424be78a562cd1",
    "title_text": "云端",
    "sha256": "f5049175abbaebf5aa036e1e2dc23db8f30887beb4c1b1249a51730facabcc1d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4082,7 +4176,8 @@
    "key": "title-909d815d1fe21836cde4",
    "title_text": "收进来、改信息",
    "sha256": "b69cfffd1126830e1f61a4088d85c5b621ebee9e5c309c0e783c0ae51492bfb4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4099,7 +4194,8 @@
    "key": "title-0f7b8711d136fc5ee824",
    "title_text": "放回手机的精选",
    "sha256": "0f444f8f1d7f9459d5db220a668b15715074acf3563c21c4a221a867ed1480dc",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4390,7 +4486,8 @@
    "key": "title-1dc57da6e8fb57d828cb",
    "title_text": "每天自动和日常维护",
    "sha256": "51a61d72f79ce9d4ba24409a35262b99613ed786d1a3d7b2649fc92948927378",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4407,7 +4504,8 @@
    "key": "title-412677b5b74ffd7678de",
    "title_text": "私密",
    "sha256": "2a4664194ef6d35002fea49ce2c092be5716a9bbee2c495e9825b8dac3bb7ad6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4641,7 +4739,11 @@
    "key": "main-personal-media",
    "source_phrase": "右下角一小幅水彩插画：一台电脑、三块叠放的黑色硬盘和一朵云。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑、三块叠放的黑色硬盘和一朵云"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4657,7 +4759,8 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4955,7 +5058,14 @@
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

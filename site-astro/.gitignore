@@ -13,3 +13,7 @@ src/content/pages/_stress/
 # 区块排版的中间文件和结果：tools/render_blocks.py 每次生成时重建（npm run build 会先跑它）
 .cache/
 src/content/rendered/
+# 首页、驾驶舱：tools/retain_home_cockpit.py 从候选站抄来
+src/chrome/retained/
+public/cockpit/
+public/_home-cockpit/home-firstpaint-*.js

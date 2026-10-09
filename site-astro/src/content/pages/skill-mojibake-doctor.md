@@ -229,7 +229,7 @@
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
   "sha256": "dce4d7fdd83036cd08e9d13e85b02ef46314bbcb583ec54b723b5231a966f5fa",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -366,7 +366,11 @@
    "key": "乱码修复通用构图",
    "source_phrase": "右上角一幅小插画：一张纸上半截是一串歪歪扭扭的怪字，中间一只镊子夹起一小块，下半截变回整齐的中文；纸边上一个小小的回形针夹着一张备份小卡。",
    "sha256": "654836fb065c59c5959d1f6583beb44040fcc5e597fd50943aebfa97e831037f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张纸上半截是一串歪歪扭扭的怪字，中间一只镊子夹起一小块，下半截变回整齐的中文；纸边上一个小小的回形针夹着一张备份小卡"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -383,7 +387,8 @@
    "key": "title-66149eed64850fe3895f",
    "title_text": "修乱码",
    "sha256": "fbf3fbec7d298beb4e75a8fb2edb8e1b12ef28e0bdb35c51bf18f476c54310f7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -615,7 +620,9 @@
    "key": "ill-32c810f698d5c2",
    "source_phrase": "横版画面：左上标题，旁边一枚灰色小标签（例子来历那一行）。左边约三分之二宽画成一段竖向的对话：最上面“我”的气泡（右对齐，浅绿底），下面“AI 做了什么”几步画成一条细竖线串起的小节点（每个节点一个小水彩图标：一只放大镜照着一串怪字、一把往回拧的扳手、一个问号小气泡、一个上了锁的备份盒、一个往回转的箭头），再下面“AI 交回”画成左对齐的白底气泡。右边约三分之一宽一张竖卡片“另一种问法”，里面一问一答两个气泡。 插画中的纸上只用抽象错乱笔迹和整齐线条作示意，不写具体故意乱码字串或替换字符，也不把示意当成实测文件数据。",
    "sha256": "654836fb065c59c5959d1f6583beb44040fcc5e597fd50943aebfa97e831037f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -631,7 +638,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -787,7 +795,8 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "key": "title-379e63da6e51a7e561b3",
    "title_text": "能做的事：怎么判断是乱码",
    "sha256": "0e3eb8ccb4cf55700f6ef989ab5f0886f5949b011fe9b59fa89ba15818970ce4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1085,7 +1094,8 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "key": "title-0331b958f7f8c35b2760",
    "title_text": "能做的事：全部功能",
    "sha256": "080376b45bddcbd43ad87c18d4cb9ea49125a354c8736725cbe0f6d31c7dcd3c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1248,7 +1258,8 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

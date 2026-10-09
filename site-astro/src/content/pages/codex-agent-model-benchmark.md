@@ -420,7 +420,7 @@
  "source": {
   "page": "sources/pages/codex-agent-model-benchmark/page.json",
   "sha256": "2a3b80644222c99d885082dbd27646194c1ca5e4005967ea62cc9b9b9ec9d77e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -702,7 +702,11 @@
    "key": "main-codex-agent-model-benchmark",
    "source_phrase": "右侧约 45%：一幅水彩插画：一张考场课桌，桌上摊着一叠试卷（卷面只画横线，不写字），旁边一只秒表和一架天平，天平两端的托盘上各坐一个圆润的小机器人，两端几乎一样高；课桌上方挂着一块小黑板，黑板上画一个大大的绿色问号；整幅画偏灰淡，一角垂下一片落叶。",
    "sha256": "ad355788cbe119f122499a31ce8b00bdd2e7aa120623a0c00aa5d06a5aa4a61d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张考场课桌，桌上摊着一叠试卷（卷面只画横线，不写字），旁边一只秒表和一架天平，天平两端的托盘上各坐一个圆润的小机器人，两端几乎一样高；课桌上方挂着一块小黑板，黑板上画一个大大的绿色问号；整幅画偏灰淡，一角垂下一片落叶"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -719,7 +723,14 @@
    "key": "title-2c900536ca10747e3499",
    "title_text": "AI 模型评测",
    "sha256": "28b9d25dabbc7d938a7f457e091f6a1974035daea6b25ef9a6ca52d42a50c05b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    74,
+    584,
+    232
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -937,7 +948,14 @@
    "key": "title-ff6ec75b77a814d4e278",
    "title_text": "四条原因",
    "sha256": "be9bab04df759cb63c45eb233e62b94aabfb8b774d9a2d1cf00b2adb9d5d07b8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    51,
+    427,
+    160
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1122,7 +1140,8 @@
    "key": "title-dee7d8d741cbf8bc4f55",
    "title_text": "当初想解决什么、怎么用",
    "sha256": "42d7bf08ebd1843e296bb8267c2305622af91724ca588ef557b4fda2d2815e59",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1543,7 +1562,14 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "key": "title-r3-5c09777313d2010e01d4",
    "title_text": "全部旧功能（13 项，全部已停用）",
    "sha256": "b320e7cb81f27df9282466b1670fbb371c6aad5b54e24e6f877fe0f1f08ddb17",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    106,
+    18,
+    1008,
+    178
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1833,7 +1859,8 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "key": "title-57b17d1faa87e497d25a",
    "title_text": "演进（8 月 8 日—9 月 28 日，65 次提交）",
    "sha256": "885cf758740fe6c766aaa22bb1bb4219ea3d85f59bad3f3fcc6dc5d2458b0450",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

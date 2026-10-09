@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -902,7 +902,11 @@
    "key": "main-emerald-veil",
    "source_phrase": "右上一幅水彩插画：一张书桌，正中一台大显示器，屏幕里是青绿色的雨林和苔石、右上角一只探头的黑猫，雨丝斜落；屏幕上飘着十来个大小不一的彩色半透明玻璃泡泡（像 Windows 自带泡泡屏保，泡泡边缘有彩虹光泽）；桌上一副键盘和鼠标静静放着，旁边一只小沙漏；显示器右侧一台侧透机箱，机箱里的小屏是暗的、没有泡泡。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张书桌，正中一台大显示器，屏幕里是青绿色的雨林和苔石、右上角一只探头的黑猫，雨丝斜落；屏幕上飘着十来个大小不一的彩色半透明玻璃泡泡（像 Windows 自带泡泡屏保，泡泡边缘有彩虹光泽）；桌上一副键盘和鼠标静静放着，旁边一只小沙漏；显示器右侧一台侧透机箱，机箱里的小屏是暗的、没有泡泡"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -919,7 +923,8 @@
    "key": "title-7c69cd876f1cbd902d78",
    "title_text": "屏保与壁纸",
    "sha256": "7f76fd79e5eadd15e38b1df6f1fae56b9bfdf10fd97590d2a2ec5220ba412cb0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1093,7 +1098,11 @@
    "key": "main-emerald-veil",
    "source_phrase": "左半边一幅水彩插画：一台显示器，屏幕里是雨林和探头黑猫，上面飘着彩色玻璃泡泡；显示器下方把 Windows 任务栏右下角放大画出来：一个绿色圆形小托盘图标，图标上方一个浅色提示小条，写着“Emerald Veil | 实体主屏空闲 6 分钟”；提示条旁边展开一个白底右键菜单，从上到下四行，就是下面“托盘菜单”那四项的原文（菜单里不加别的字）。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台显示器，屏幕里是雨林和探头黑猫，上面飘着彩色玻璃泡泡；显示器下方把 Windows 任务栏右下角放大画出来：一个绿色圆形小托盘图标，图标上方一个浅色提示小条，画抽象短线的；提示条旁边展开一个白底右键菜单，从上到下四行，就是下面抽象图形那四项的原文（菜单里不加别的字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1109,7 +1118,8 @@
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1323,7 +1333,11 @@
    "key": "桌面屏幕范围",
    "source_phrase": "左边约 55% 宽一幅水彩插画，正面看一张书桌：正中大显示器（屏里雨林和泡泡），右下角一个绿色圆形对勾；左边一个用虚线勾出轮廓、半透明的“幽灵”显示器，里面空白，右下角一个灰色叉；右边一台侧透机箱，机箱侧面一条竖长的小屏、机箱顶部水冷头上一块弯弯的小曲面屏，两块小屏都是暗的，各带一个灰色叉；最右一台小显示器，屏上一个大问号，灰色叉。插画下方再画一个小场景：同一台大显示器被一块黑色幕布整个盖住，幕布前一个暂停符号。",
    "sha256": "d6b8f575759609f5964c01dc11eec8c58938eaa647bc4666bf1feb9c06a19428",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边约 55% 宽一幅水彩插画，正面看一张书桌：正中大显示器（屏里雨林和泡泡），右下角一个绿色圆形对勾；左边一个用虚线勾出轮廓、半透明的抽象图形显示器，里面空白，右下角一个灰色叉；右边一台侧透机箱，机箱侧面一条竖长的小屏、机箱顶部水冷头上一块弯弯的小曲面屏，两块小屏都是暗的，各带一个灰色叉；最右一台小显示器，屏上一个大问号，灰色叉；插画下方再画一个小场景：同一台大显示器被一块黑色幕布整个盖住，幕布前一个暂停符号"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1340,7 +1354,8 @@
    "key": "title-583fc02131689535f623",
    "title_text": "泡泡放在哪块屏",
    "sha256": "ad4e0d31d9c3a7e9d533d2761a1b2de86fe384b33668b9a96bb398b89bb71e56",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1655,7 +1670,8 @@
    "key": "title-a04797da830215d44792",
    "title_text": "桌面和锁屏：雨林黑猫",
    "sha256": "81074758f38291b7b13f0c6ea71b11a72966d026bd9cc7c3295b270b3b8ecb1f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1931,7 +1947,8 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2197,7 +2214,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2459,7 +2477,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2606,7 +2625,11 @@
    "key": "玻璃泡泡",
    "source_phrase": "插画：1 一只鼠标旁边一个若有若无的虚线小箭头，一个泡泡正在破掉；2 一块玻璃泡泡特写，边缘一圈彩虹光泽，旁边一支放下的画笔。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只鼠标旁边一个若有若无的虚线小箭头，一个泡泡正在破掉"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2621,7 +2644,11 @@
    "key": "玻璃泡泡",
    "source_phrase": "插画：1 一只鼠标旁边一个若有若无的虚线小箭头，一个泡泡正在破掉；2 一块玻璃泡泡特写，边缘一圈彩虹光泽，旁边一支放下的画笔。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一块玻璃泡泡特写，边缘一圈彩虹光泽，旁边一支放下的画笔"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3099,7 +3126,8 @@
    "key": "title-8ce8796469dd3341e2bd",
    "title_text": "全部功能（23 项）",
    "sha256": "89fc362f96d4c1d70b0e830cea81dbabb001b4c22adeef174b779bedc145ab87",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3731,7 +3759,11 @@
    "key": "main-emerald-veil",
    "source_phrase": "右边留一幅大一点的水彩插画：从上到下依次是一层淡绿色的透明薄纱、一串彩色玻璃泡泡、一幅雨林黑猫的画、一台显示器盖着半块黑幕、一个小小的托盘图标，像一路长出来的样子（插画里不画字）。",
    "sha256": "006edcbb9a53b279754fe4816a2ebe44ae212996e7884f7332304605bf528f7d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "从上到下依次是一层淡绿色的透明薄纱、一串彩色玻璃泡泡、一幅雨林黑猫的画、一台显示器盖着半块黑幕、一个小小的托盘图标，像一路长出来的样子（插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3747,7 +3779,8 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

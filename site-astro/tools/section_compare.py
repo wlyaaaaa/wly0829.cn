@@ -12,7 +12,7 @@ sys.path.insert(0, HERE)
 from likeness import likeness  # noqa: E402
 
 ROOT = os.path.dirname(HERE)
-ROUND = {"-r2": "第二轮", "-r3": "第三轮", "-r4": "第四轮", "-r5": "第五轮"}
+ROUND = {"-r2": "第二轮", "-r3": "第三轮", "-r4": "第四轮", "-r5": "第五轮", "-r6": "第六轮"}
 ap = argparse.ArgumentParser()
 ap.add_argument("out"); ap.add_argument("dist")
 ap.add_argument("--suffix", default="-r4"); ap.add_argument("--widths", default="1440,390")

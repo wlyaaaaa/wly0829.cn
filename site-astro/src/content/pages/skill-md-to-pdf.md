@@ -380,7 +380,7 @@
  "source": {
   "page": "sources/pages/skill-md-to-pdf/page.json",
   "sha256": "c55f95af4fb758c54ddff4f9f119d0e01e85cdcba3f6eff1839f021de8762dbd",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -629,7 +629,11 @@
    "key": "打印文稿",
    "source_phrase": "右边一幅水彩插画：一张写着 # 号的 Markdown 纸从左边滑进一台打印机（打印机侧面贴着 Edge 浏览器的蓝绿色波浪标志），右边出来一张 A4 纸，纸旁边一个盾牌加对勾；打印机下面压着一张旧的 A4 纸，完好无损。",
    "sha256": "3863c82d79b0bb3cdf7b7c8ec0218c0572326751b6f4e3c1c17b2cb352c2c32f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张写着 # 号的 Markdown 纸从左边滑进一台打印机（打印机侧面贴着 Edge 浏览器的蓝绿色波浪标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -646,7 +650,14 @@
    "key": "title-9886250624875171ec19",
    "title_text": "文稿转 PDF",
    "sha256": "b8732ecdf6a42c3c7e1e825034ae1314be90c281859d39dde6dc47996108d920",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    15,
+    646,
+    190
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -883,7 +894,14 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    17,
+    756,
+    182
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1158,7 +1176,11 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "验证码纸",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一张干净的白纸，只有黑色标题和细灰线；2 一张纸的标题是深绿色、引用条是浅绿；3 一叠彩色玻璃纸（灰、薄荷绿、墨蓝）正被放到一张白纸上），插画下面卡片标题粗体，下面正文（第 3 张里“Typora 薄荷主题”画成绿色链接样式）。",
    "sha256": "bd4eda69465f07bad83182ac2761b2456d746bb31d62a1a112f1c6aef5ad85e3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张干净的白纸，只有黑色短线和细灰线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1173,7 +1195,11 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "验证码纸",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一张干净的白纸，只有黑色标题和细灰线；2 一张纸的标题是深绿色、引用条是浅绿；3 一叠彩色玻璃纸（灰、薄荷绿、墨蓝）正被放到一张白纸上），插画下面卡片标题粗体，下面正文（第 3 张里“Typora 薄荷主题”画成绿色链接样式）。",
    "sha256": "bd4eda69465f07bad83182ac2761b2456d746bb31d62a1a112f1c6aef5ad85e3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张纸的标题位置为深绿色短线、引用条是浅绿"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1188,7 +1214,11 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "ill-0d6222e9ef3715",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一张干净的白纸，只有黑色标题和细灰线；2 一张纸的标题是深绿色、引用条是浅绿；3 一叠彩色玻璃纸（灰、薄荷绿、墨蓝）正被放到一张白纸上），插画下面卡片标题粗体，下面正文（第 3 张里“Typora 薄荷主题”画成绿色链接样式）。",
    "sha256": "6e35b91c62b34d888aed4b5830bedfe403d428159ce9c55587808380eb53f7ae",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠彩色玻璃纸（灰、薄荷绿、墨蓝）正被放到一张白纸上"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1205,7 +1235,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-8beef6f183ec7cff9871",
    "title_text": "样式从哪来",
    "sha256": "393a6feb6220af1337b53b18deac70b8d0757caf9058df75e55dc0ddb28c18cb",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1886,7 +1917,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-81b14f40fa6a8daf3002",
    "title_text": "能做的事（18 项）",
    "sha256": "8ebb09125d4730adfebad94a3ad2d43ed2263dbc79e8989408537fa992afbf84",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1903,7 +1935,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-f58c8c2af813da1177f2",
    "title_text": "不出乱子",
    "sha256": "f6a146d52ea850dc957c69cbb3b48f35a0abcb3be5044a60982fd1ec186c845a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1920,7 +1953,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-a55102a037b32b34a342",
    "title_text": "交之前查",
    "sha256": "e9775241a7af0507771d2e51f42cc5ee677c79188d9030e31fc4d2dcabd4e427",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1937,7 +1971,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-c8ffbdf15754d1d22420",
    "title_text": "样式",
    "sha256": "3a9a0b2307e5e6e344da5cbd53ec2c99e02f1339552b0bc0f437375a510c64f0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1954,7 +1989,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "key": "title-0b0d6cb3b2edb2dfbbac",
    "title_text": "转换",
    "sha256": "552cc0ed5f208037fe1c9a8010a9bb826a44283e23d3a17d7a43c83634d1d060",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2458,7 +2494,8 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

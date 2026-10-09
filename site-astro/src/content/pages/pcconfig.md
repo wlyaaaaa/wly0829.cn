@@ -1562,7 +1562,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "0c5e918a6a75b5683263272a98f4428fe237332978c29a4f6076be1609beae7e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1849,7 +1849,9 @@
    "key": "main-pcconfig",
    "source_phrase": "横版：和已通过的第 1 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-01-desktop.png）同一版式、同一幅插画，拿它做底只改四处。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1866,7 +1868,8 @@
    "key": "title-0fccb035975673fc63f8",
    "title_text": "电脑配置与恢复",
    "sha256": "1fcd800b41d916bfcdfad5102ff82ba45159f043be7d1c2b27cbf0c54b2f49f4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2181,7 +2184,14 @@
    "key": "title-r3-c6fb3995f9a727621f6c",
    "title_text": "电脑坏了怎么办",
    "sha256": "cc64b0c96c85f96aa3888a279c039b3dba7f02a009593fa3d980ff2c2fdfcf49",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    150,
+    1,
+    791,
+    118
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2549,7 +2559,8 @@
    "key": "title-e1b5c254742b22d0842c",
    "title_text": "每天自动发生什么（北京时间）",
    "sha256": "815fea34ce6e1a859226afb5c1466f5738984e3f62a552855531a500e838956b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2752,7 +2763,11 @@
    "key": "硬盘备份",
    "source_phrase": "其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字。",
    "sha256": "03905e7132eec0e7e9dc7a0b4d38523e9d6c47be69ee8b66ba47a0f3512d251b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2769,7 +2784,14 @@
    "key": "title-b00d7f59634d783b64da",
    "title_text": "三块盘：一份原件，两份备份",
    "sha256": "8c2d3f696c45541c9a3e9315985eaaaaaf90a5cf9e27130455afd74ff6001204",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    45,
+    905,
+    213
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3013,7 +3035,9 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "key": "ill-9724920e1e6c9b",
    "source_phrase": "横版：已通过，原样复用。六张两列三行的卡片，最下面一条实测数字。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3031,7 +3055,14 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "key": "title-r3-520520f493b37c7e1cce",
    "title_text": "备份怎么保证靠得住",
    "sha256": "fcf45aa438b86e43adb3203bf2eefbe7a7505c3721d1d16b7bfbbd86dd8890a2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    25,
+    24,
+    673,
+    143
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3177,7 +3208,8 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "key": "title-b000122009331d61164e",
    "title_text": "每块盘干什么（一）：机箱里的盘",
    "sha256": "dc3e6b952d4cf8aece9db73cd16603e358938110b4e63610cb151e23d277a375",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3406,7 +3438,8 @@ C、E 同在一块盘上：这块盘坏了，靠 G、H 上的镜像和备份一�
    "key": "title-4310b5b5c1d812ae9f45",
    "title_text": "每块盘干什么（二）：外接盘、U 盘、虚拟盘和云端",
    "sha256": "746259d934808d4ffa3833f02d6c00dc82913cb059f2c848dcb801c9383f4cb5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3602,7 +3635,11 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "外接恢复通用构图",
    "source_phrase": "左半边急救卡和按键的手，右半边“自动留现场”“救急 U 盘”两张卡。",
    "sha256": "7b741c8138bf750e27b87179703b3b6de0f580198f685f080dd72e51d836aaca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "急救卡纸片、手按键盘；键名和急救卡正文由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3620,7 +3657,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-dd11f99fbf00f941fa1a",
    "title_text": "电脑卡死了",
    "sha256": "c887048064b7538a3897a061b830a089a5e66d37cb4e69168baaf2ca4de0b450",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    31,
+    630,
+    244
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3896,7 +3940,11 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "家庭设备网络",
    "source_phrase": "中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字）。",
    "sha256": "fe3b44c69ff4b7bcde96e4d4c2cbcc12dc7a7e7c4bf9ff24067cd348ed0b8c25",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3914,7 +3962,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-4304486579c882df1250",
    "title_text": "远程连这台电脑",
    "sha256": "62fcec3dcc01249bbd0f0dcbb206b28c5cf96b41835a0cca498c68b9ef74b20c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    8,
+    643,
+    180
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4105,7 +4160,9 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "ill-5ba0605f5144b1",
    "source_phrase": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底，只改右栏两条的字：第一条括号里写全 11 个软件（字多了就把这张卡片加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条的“300 GB”“12 GB”改成“300 GiB”“12 GiB”。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -4120,7 +4177,9 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "ill-1e753f61b75cac",
    "source_phrase": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底，只改右栏两条的字：第一条括号里写全 11 个软件（字多了就把这张卡片加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条的“300 GB”“12 GB”改成“300 GiB”“12 GiB”。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4137,7 +4196,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-3b276e880e873ffb0d13",
    "title_text": "日常的小守护",
    "sha256": "91204ff9087e54e58f7f69855c19d44be5148163c8ff5b0755e309eb89de7fe0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4378,7 +4438,11 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "账本",
    "source_phrase": "改动一：左边那本翻开的账本，两页纸上要画出真实内容——text 里“名字｜做什么｜怎么停｜停了会怎样”是左页顶上的表头（竖线画成细分隔线），紧跟的前三条记录（第二备份盘同步、照片视频资料备份、回收站每周清理）写在左页，后三条（三块屏幕恢复、卡死自动留现场、小米妙享守护）写在右页；“125 个”写在圆环正中，下面三组数字和名称标在圆环三块旁边；每条记录两三行手写感的深绿小字，行间有浅绿横线，账本仍是水彩画法，字必须清楚可读（字号不小于正文小号）。",
    "sha256": "df5149a9dd4aa27c3fc3c6f0300186d80b7ed032d354c7f1041850e9753487da",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "翻开的两页账本，每页三行记录，只画浅灰短线和浅绿行线；账本旁闹钟和笔筒；真实记录字和圆环数据由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4396,7 +4460,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-6d220e572819d98e4c69",
    "title_text": "自动任务的总账",
    "sha256": "3d4d1c23b25082c2a970ce39748f4e41bc3bdb1639b55a1716260e3e7b3fa2e7",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    0,
+    592,
+    182
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4655,7 +4726,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    560,
+    0,
+    1121,
+    201
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4941,7 +5019,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5200,7 +5279,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-fb563e8aab6d0213c803",
    "title_text": "同步到外接盘，一次走七步",
    "sha256": "83edce443f2830eac2a0794e32ba0817d2faf8960511e6236e2258e3f30ac757",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    40,
+    29,
+    873,
+    201
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5462,7 +5548,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-70a61068914efbdfe5b3",
    "title_text": "系统镜像怎么做",
    "sha256": "03d7095e821eb3bf39a9e6e747cfa74ec919ef2c21fc0000751111b131fa33ad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    45,
+    5,
+    643,
+    136
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -5685,7 +5778,9 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "ill-196da31da8a90a",
    "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -5700,7 +5795,9 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "ill-ad192a99dcffa1",
    "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -5715,7 +5812,9 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "ill-5fd8eb171f4f0f",
    "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5732,7 +5831,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    0,
+    255,
+    184
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6080,7 +6186,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-4d1074a1cc01153ce3e6",
    "title_text": "全部功能（84 项）",
    "sha256": "12518b31aca18454f9af3629347f5b1b7c7304c8b1fbc5bbf279b7b67d3c2479",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    29,
+    695,
+    144
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6407,7 +6520,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-1ef7844ae1e4078fc386",
    "title_text": "坏了怎么办",
    "sha256": "07c3e6619cbc9033efda4484378c81330143717c3939f04f8f01b56f12336978",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -6945,7 +7059,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-2a00d050cecd3903db53",
    "title_text": "卡死和排障",
    "sha256": "f1996ffc79bf970a8800e5ffb76cda575614c9ea2c0241a405e8af897f11e8c0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -6962,7 +7077,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-e1d4152eeb43a0830741",
    "title_text": "远程和网络",
    "sha256": "778939ecdb55922e0f93a929cde31761b2bf6a713c4e3af897d76f7ea32d817b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -7537,7 +7653,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-e5dfba635c85da18dc74",
    "title_text": "Google 直连",
    "sha256": "5811e56222eadd11f205df52a5ed3e24c2e6c547cd2b167f3669d9ebeb463033",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -7554,7 +7671,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-f3cce2f38e5b727e806d",
    "title_text": "开机和桌面",
    "sha256": "a245f0eb4db7c97bcb58facba3314796a5e0d8c1bfc1b142097999bd5cdc4d14",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -7571,7 +7689,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-39599d46e0ff65ab6454",
    "title_text": "给 AI 用的小工具",
    "sha256": "f16fca3de08f6e74d1615895a21b2dab7d3b2b854d9e68bbd55e3ae20dc63aa0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -8031,7 +8150,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-18117d3ca0e2842e4845",
    "title_text": "笔记本和手机",
    "sha256": "6f9e99e16e7f2f6dcabd146b9f6321809cac4d6538179e308e6aa77b4596d185",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -8048,7 +8168,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-62168348bd3392884a9d",
    "title_text": "软件和环境",
    "sha256": "4964cded59dae5f0a40e0d3f1079a3c33f2abba1e261ba7675368bcfb6408b43",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -8505,7 +8626,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-a8c3698b5b8c485d8bd4",
    "title_text": "已停用",
    "sha256": "109419764a0213c3c797117892861b41eba1c925b8ea33a3c2d91df372cd05da",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -8522,7 +8644,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-f4e24edf435f5d0a4fc4",
    "title_text": "驾驶舱数据",
    "sha256": "c43980f9c6f18f752c7787ca8d98b53ba96ed7d9744b33fce86a043320b90dec",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -9025,7 +9148,11 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "main-pcconfig",
    "source_phrase": "横版：拿已通过的第 17 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-17-desktop.png）的画法：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点比原来多，分成左右两列时间线（左列 7 月 9 日–9 月 15 日，右列 9 月 19 日–9 月 29 日），右下角留原来那幅机箱、两块固态、外接盘、笔记本依次排开的小插画（缩小）。",
    "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "缩小"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -9042,7 +9169,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "aa00164d5ddf1c298b0abf6e6d2eb5ee2632f16f1af41bdaf2498e4496292023",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    364,
+    0,
+    577,
+    121
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -9354,7 +9488,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

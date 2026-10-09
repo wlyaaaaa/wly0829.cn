@@ -112,7 +112,7 @@
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
   "sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -385,7 +385,11 @@
    "key": "main-personal-materials",
    "source_phrase": "横版：左边大标题，下面两行说明；右边一幅水彩插画：一个半开的木制文件柜抽屉，一只放大镜照着一页纸上一行绿色高亮，纸角挂着一个画着绿色对勾的小标签（纸上文字只画灰色横线）。",
    "sha256": "2d93d1dbb7e27d2bfe7edfb1fddc0ce968d1aa0b0d2abf80d5e29944ef796814",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个半开的木制文件柜抽屉，一只放大镜照着一页纸上一行绿色高亮，纸角挂着一个画着绿色对勾的小标签（纸上文字只画灰色横线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -402,7 +406,14 @@
    "key": "title-b4cd545c8396c40e2a46",
    "title_text": "找文件原件",
    "sha256": "f4bc91323b790d83fd1ff844f746954f780ea2fb715e741831af5c016a742dff",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    75,
+    703,
+    275
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -589,7 +600,14 @@
    "key": "title-r3-ffa2cdd15edd0e90e6e8",
    "title_text": "一个完整的例子",
    "sha256": "124b2b24498ea3f5a4ab869e35efad8b281dcd8cd6557b63e9b7e3753660f0cb",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    15,
+    772,
+    173
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -736,7 +754,11 @@
    "key": "ill-a0d08c68ea9b87",
    "source_phrase": "画面右半一幅较大的水彩插画：一个漏斗，上面几张只画灰线的纸落进去，下面只出来一页带绿色对勾的纸。",
    "sha256": "1b559154f36e5a8633c70c46909405a4cd52c3de2a29723895093358caa32708",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个漏斗，上面几张只画灰线的纸落进去，下面只出来一页带绿色对勾的纸"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -753,7 +775,14 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "7220f624c3919cd1f629edfd976a6b5e536a5cb308a89e1951464d6d62cdffa4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    15,
+    151,
+    702,
+    417
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1123,7 +1152,11 @@
    "key": "late-r3-scanner-card-box",
    "source_phrase": "右下角一小幅水彩插画：一个整齐的小卡片盒，旁边一台没插电的大扫描仪上画一个灰色叉。",
    "sha256": "8af36b0505d74bfee38c9a1d014146303f3893b1e7e148214b9470c6795cdd7c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个整齐的小卡片盒，旁边一台没插电的大扫描仪上画一个灰色叉"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1140,7 +1173,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

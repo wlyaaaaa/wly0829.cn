@@ -102,7 +102,7 @@
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
   "sha256": "083826d713037844843d9e378a874360e2683836c0a129ed6391e8020c2fd93e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -343,7 +343,11 @@
    "key": "ill-5bc42b952ffaae",
    "source_phrase": "右上角一幅小插画：一团乱线穿过一只小漏斗，出来变成一条平直的绿线，旁边一只耳朵。",
    "sha256": "45119e65957d2caee38c7f30a533e33b44f58def734b45218225885dce1fd109",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一团乱线穿过一只小漏斗，出来变成一条平直的绿线，旁边一只耳朵"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -360,7 +364,8 @@
    "key": "title-74d04bc959504c855887",
    "title_text": "讲给我听",
    "sha256": "8a2a8ca433736a6cdbc411b8e34f6e63e10884f32cf1b1c6434129d0cf67d67a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -669,7 +674,8 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -895,7 +901,8 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1087,7 +1094,14 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    66,
+    282,
+    266
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

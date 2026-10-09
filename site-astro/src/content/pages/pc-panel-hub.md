@@ -797,7 +797,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1017,7 +1017,11 @@
    "key": "main-pc-panel-hub",
    "source_phrase": "右上一幅水彩插画：一台侧透机箱，机箱内侧竖着一条细长的小屏（上面只画浅绿色的小卡片和一条小折线，不画字），机箱顶部水冷头上一块弯弯的曲面屏（上面只画一个大号时钟形状和两三张半透明小卡片的轮廓，不画字）；机箱旁一部手机，手机和曲面屏之间一条虚线小箭头。",
    "sha256": "3692e58386f2440b20e173e2a6aaef1ac68d2bc97a1d1483ad20e4c2741a7fe8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台侧透机箱，机箱内侧竖着一条细长的小屏（上面只画浅绿色的小卡片和一条小折线，不画字），机箱顶部水冷头上一块弯弯的曲面屏（上面只画一个大号时钟形状和两三张半透明小卡片的轮廓，不画字）；机箱旁一部手机，手机和曲面屏之间一条虚线小箭头"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1034,7 +1038,8 @@
    "key": "title-a7d6625f8c31e6debfc1",
    "title_text": "双屏信息中心",
    "sha256": "244ec5498f58e72f62a35754b5203dc411b94861cfd9e71242f0d2f0ae936772",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1225,7 +1230,8 @@
    "key": "title-9f722e0a558a3d6add5e",
    "title_text": "每天发生什么",
    "sha256": "deab014424e0e51fe9cb2c9adbf77c040af5aa8f4ca12e5ed1a1ec925bbeebe0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1560,7 +1566,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-f44750d7804bfea9d241",
    "title_text": "机箱屏：一整条电脑状态",
    "sha256": "33c1de6fbb707363529751dde0c045c525afde4f2944503b371f98e9deb66795",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1740,7 +1747,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "机箱小屏",
    "source_phrase": "上半部分右侧一幅水彩插画：同一块弯弯的曲面屏满载时的样子——左上角大号时钟“21:30”，时钟右边一个电池图标和“86%”，左侧大区三张半透明水晶卡片（第一张“正在播放”，第二张“游戏进行中”，第三张“验证码”，码的位置画六个大圆点，不画任何数字），右侧弯折后的窄区两张卡片（“手机通知”两张，各一行标题），卡片里的字只画下面写出的这些；插画正下方一行小字图注“示意：满载时的样子，歌名、游戏、通知都是编的”。",
    "sha256": "c0c554b5039e4b92959cd1ba274b6319ecc0b7e1868636508e953e1cbbdadbbc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "弯弯的曲面屏；左上无数字时钟形状、旁边电池图标；左侧三张半透明水晶卡，验证码位置六个大圆点；右侧窄区两张通知卡，所有标题与示例数字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1757,7 +1768,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-bebe80747d0a2a02051b",
    "title_text": "曲面屏：只在有事时出现",
    "sha256": "eba60d1c2c601dc4d6ef39d8017377eaf549334dd5d44649d316e1e122da9d47",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1960,7 +1972,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "机箱小屏",
    "source_phrase": "左边约 40% 宽一幅水彩插画：一部手机，三张小通知卡片从手机里飘出来，经过一个小漏斗（漏斗上画两个重叠的相同卡片合成一张），落到一块弯弯的屏幕上，最新的一张在最下面，最上面一张淡出；漏斗旁一个小小的放大镜照着一串数字。",
    "sha256": "c0c554b5039e4b92959cd1ba274b6319ecc0b7e1868636508e953e1cbbdadbbc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "手机里三张通知卡飘出，经过小漏斗，落到弯弯屏幕；漏斗上两个重叠卡合成一张的图案；最上卡淡出，旁边小放大镜照抽象小圆点，不画数字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1977,7 +1993,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-01a2f644af778e3e0585",
    "title_text": "手机提醒怎么排",
    "sha256": "abca1bf65fffe5e12fbd57741d83a01fc176da251e1a88b4ffb47c569725f15b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2215,7 +2232,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2538,7 +2556,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2722,7 +2741,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-2b0716b7e0a0d87f384b",
    "title_text": "机箱屏怎么做到每秒一刷又不冻住",
    "sha256": "df7630bdff95f99ce63dc1a50571e4017d1b11618ecb72e760c36de188dbb833",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2965,7 +2985,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3105,7 +3126,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "ill-315f81ae4bf196",
    "source_phrase": "插画：1 一个心电图一样的绿色心跳线，线下一串小胶片格子；2 一根 USB 线上一个小扳手，旁边一个写着 759 的小计数牌；3 一只手停在两个一模一样的小盒子前（一个标问号）。",
    "sha256": "2f319e19345b69cd6ef0de998f3e66f82a921c50b40c3255d775e1ae8fd5398f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个心电图一样的绿色心跳线，线下一串小胶片格子"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3120,7 +3145,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "线缆维护",
    "source_phrase": "插画：1 一个心电图一样的绿色心跳线，线下一串小胶片格子；2 一根 USB 线上一个小扳手，旁边一个写着 759 的小计数牌；3 一只手停在两个一模一样的小盒子前（一个标问号）。",
    "sha256": "52f3ffa5b6e07c8b49bad87fee5c6ce6903b5deea4171b3a90eaa98cdebcc150",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根 USB 线上一个小扳手，旁边一个写着 759 的小计数牌"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3135,7 +3164,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "小盒子",
    "source_phrase": "插画：1 一个心电图一样的绿色心跳线，线下一串小胶片格子；2 一根 USB 线上一个小扳手，旁边一个写着 759 的小计数牌；3 一只手停在两个一模一样的小盒子前（一个标问号）。",
    "sha256": "e0e353b81e0923885518d9e4df78e71247588bb764e465a427a9d0bb1e6fbef5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手停在两个一模一样的小盒子前（一个标问号"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3570,7 +3603,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-faf70d284825f1ec8401",
    "title_text": "全部功能（42 项）",
    "sha256": "41be7b874b3b9bd0868d57ac927588f20fc131129f4778114313fcc35c86cfe0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4590,7 +4624,11 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "双屏演进修剪",
    "source_phrase": "横版画面：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边留一幅大一点的水彩插画：从上到下依次长出一个厂商软件的小窗口（画一个叉）、一条竖长的机箱屏、一块弯弯的曲面屏、一部手机、一把小剪刀剪下几张卡片（音量、U 盘、温度计、进度条的小图标），像一路长出来又修剪过的样子（插画里不画字）。",
    "sha256": "31f39addcb5b95b699f9dd57d1a835e6baa1a0abe604d869e3fab45f0ba7943f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "从上到下依次长出一个厂商软件的小窗口（画一个叉）、一条竖长的机箱屏、一块弯弯的曲面屏、一部手机、一把小剪刀剪下几张卡片（音量、U 盘、温度计、进度条的小图标），像一路长出来又修剪过的样子（插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4606,7 +4644,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4797,7 +4836,14 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -4942,7 +4988,14 @@ HS2 高优先级硬件告警演示；96°C 与持续 30 秒都是测试 fixture�
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

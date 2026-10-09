@@ -87,7 +87,7 @@
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
   "sha256": "33e69bf8c27d7b84564727de1b24efba4d211aec6758b1a371b1589b4619a14d",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -367,7 +367,11 @@
    "key": "main-chinese-asr",
    "source_phrase": "右上角一幅小插画：一只麦克风和一个对话气泡连着一张写满浅灰短线的纸（纸上不画字）。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只麦克风和一个对话气泡连着一张写满浅灰短线的纸（纸上不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -384,7 +388,8 @@
    "key": "title-b317940f680151b18f5f",
    "title_text": "中文语音转写技能",
    "sha256": "9bd58b9ff4330586f0fdc421e70ad2560620bd42fafe36a2a8674f4d26772d03",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -713,7 +718,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1063,7 +1069,8 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1356,7 +1363,8 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

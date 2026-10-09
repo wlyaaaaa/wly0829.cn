@@ -247,7 +247,7 @@
  "source": {
   "page": "sources/pages/rescue/page.json",
   "sha256": "c8a45984a632adf3160a973fd4a84484e48667e8e25f21c6da5484b61328ca25",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -444,7 +444,11 @@
    "key": "ill-9a8ad6f966959d",
    "source_phrase": "右上约四分之一宽一幅很小的水彩插画：一部手机斜靠在一本翻开的绿色小手册上，手册页上只画几道浅绿横线（不画字），旁边一片叶子。",
    "sha256": "139c6945a70dc781cc012b5fbf93ebfe657e122702b5997fa59514e41a5ae548",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机斜靠在一本翻开的绿色小手册上，手册页上只画几道浅绿横线（不画字），旁边一片叶子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -462,7 +466,14 @@
    "key": "title-0fea0cd83293605d3fd9",
    "title_text": "救急先看",
    "sha256": "e07958c78fcbafffca061365ddb85ab43ce069d1e66f36172ef8662e6d45cf8e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    6,
+    573,
+    198
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -681,7 +692,14 @@
    "key": "title-4e410331b51b69a8c2b2",
    "title_text": "卡死和远程连不上",
    "sha256": "b2124443af11220f8b35c4fc40e87048f20b9eee094c48528fa496162d289836",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    43,
+    63,
+    473,
+    151
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -897,7 +915,14 @@
    "key": "title-4f6c8645496a45c5927f",
    "title_text": "代理和上网",
    "sha256": "dc013becdd1a606ccba07f78515c7d0cd52e336e0bbb8a368f3d81a1299ffc09",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    42,
+    434,
+    173
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1114,7 +1139,14 @@
    "key": "title-a44d14888ce8f079340c",
    "title_text": "听写",
    "sha256": "ebd61129f519a90c19ea982dda00587d73ae3af259c25109c0d2f1899205cfd0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    36,
+    23,
+    203,
+    180
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1333,7 +1365,8 @@ Start-ScheduledTask -TaskPath '\' -TaskName 'ChineseASR Dictation'
    "key": "title-c0df0de3fe87c5bf8574",
    "title_text": "串流和主屏",
    "sha256": "ae78e486d40b21f37cbcfd1408f07e864bc9d973a8f36350546bcd812341dc79",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1556,7 +1589,14 @@ Get-SunshineHealth.ps1 -Json
    "key": "title-4a92087e35145267b8fa",
    "title_text": "机箱小屏和水冷屏",
    "sha256": "242606c717f55f161efd6600225fced24ff28da08fb6ea130732d816c86f9105",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    61,
+    18,
+    873,
+    205
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1791,7 +1831,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "key": "title-fbeef3acf7e4b1ac5046",
    "title_text": "整台电脑坏了，要换一台",
    "sha256": "1113eda77df3d59ce624a5013f11a4575f9449977e666f402ed6727b28c47290",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2029,7 +2070,14 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "key": "title-r3-fcf02ea13efaf53221b6",
    "title_text": "密码中心打不开",
    "sha256": "a39921dc2b8a00e9c9c3f02bf69d1e581791835d9917ab0686468fecf2d2f926",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    22,
+    9,
+    883,
+    262
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2239,7 +2287,8 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "key": "title-9f52b3d944189ad8d9ac",
    "title_text": "Codex 对话要恢复",
    "sha256": "87a01b9b90fd9b4f59eb037f16ab96ebd0c5a2f8b51e0ede3da907314df2b359",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2454,7 +2503,14 @@ Invoke-CodexConversationBackup.ps1 -Mode Validate -PayloadStore Hot -ReadOnly -J
    "key": "title-r3-d2909f1647e7c891a828",
    "title_text": "其他",
    "sha256": "3aaf3b932b1c34f3b4c3a8150e0474a22d10569f644dc3e0b8854c20512aec03",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    17,
+    20,
+    390,
+    240
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

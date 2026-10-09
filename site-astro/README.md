@@ -1,6 +1,6 @@
 # site-astro：内容页（区块照现在的网站，排版在浏览器里自动做）
 
-每页一个内容文件 `src/content/pages/<页>.md`。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站；首页和驾驶舱不在这里。
+内容页每页一个内容文件 `src/content/pages/<页>.md`，一律由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成，不手改。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
 
 ## 为什么这样做（第四轮）
 
@@ -9,10 +9,18 @@
 
 - 区块（卡片、数字卡、步骤和箭头、时间线和蛇形连线、对话气泡和小尾巴、例外虚线、右侧栏、术语表、按钮、编号标注截图……）的字号、间距、边框、配色、装饰和现在完全一样，因为是同一份代码；
 - 不写坐标：构图只写“用哪些区块、哪几块同一行、各占多宽”，浏览器按构图排；没写构图的屏由区块库自动分块；
-- 每个位置用哪张图（图标、插画、毛笔标题）在内容文件里逐条写明，以后改内容只改这个文件；
+- 每个位置用哪张图（图标、插画、毛笔标题）在内容文件里逐条写明；内容文件由转换器生成，改内容改 `page.json`、改构图改 `layout.json`，再重新转换；
 - 文字是真文字（能选、能搜、读屏能读），字体是出图时用的同一个字体文件按本页用字抽的子集。
 
 画布排好以后按栏宽整体等比缩放显示（宽于 768 用电脑那份，窄于 768 用手机那份），所以 960、1280 宽时和现在一样是缩小显示。
+
+## 首页和驾驶舱
+
+首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
+
+首页与驾驶舱生成：`python tools/retain_home_cockpit.py <候选站构建目录>`，然后 `npm run build`。生成脚本只读候选站，复制两页实际依赖和自有动效包，逐文件核对 SHA-256；清单在 `src/chrome/retained/manifest.json`。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
+
+首页按浏览器会话首次从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。回访、后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
 ## 一次完整生成
 
@@ -21,7 +29,7 @@ cd site-astro
 npm install                                                # 只第一次
 python tools/extract_chrome.py <现在网站的构建目录> all     # 抄页头页尾、目录条、动效运行件（原文件逐字节复制）
 python tools/copy_runtime_refs.py <现在网站的构建目录> all  # 补齐运行件实际会加载、脚本 import 到的文件（例如 how 页演示脚本、b2-access-model）
-python tools/convert_page.py --all                         # page.json + layout.json → 内容文件（只在从旧站搬内容时用）
+python tools/convert_page.py --all                         # page.json + layout.json → 内容文件（源改了就重新转换；同一份源转换两遍逐字节相同）
 python tools/adapt_motion.py                               # 环境动画配置改绑到插画（电脑、手机两份）
 python tools/pack_living.py                                # 环境动画引擎“已显示的图不再晕开、位移从 0 渐入”修正版
 npm run build                                              # = render_blocks.py --all（区块排版，没改的屏不重排）+ astro build
@@ -47,9 +55,13 @@ npm run build                                              # = render_blocks.py 
 这一屏的文字（Markdown）
 ````
 
-- 改字：直接改屏下面的文字。
-- 改图：改 `images` 里那个位置的 `asset`（相对 `sources/assets`）。
-- 改构图：`layout.h.blocks` 里每块的 `type`（区块名，见 `src/typeset/components`）、`row`（同一行的块写同一个名字）、`width`（这一栏占多宽）。手机构图不写时自动竖排。
+内容文件不手改，下面说的都是改源再重新转换（`python tools/convert_page.py <页>`）：
+
+- 改字、数字、链接：改 `sources/pages/<页>/page.json` 里那一屏的 `text`、`links`。
+- 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。
+- 改构图：改 `sources/pages/<页>/layout.json`：`h.blocks` 里每块的 `type`（区块名，见 `src/typeset/components`）、`row`（同一行的块写同一个名字）、`width`（这一栏占多宽）。手机构图不写时自动竖排。
+- 全新的页（只有 `page.json`、没有 `layout.json`）：转换器照样出内容文件，区块库按文字自动分块，电脑、手机两份都会排出来（毛笔标题、正文、编号步骤卡、列表、表格）；但没有插画、分组图标和左右分栏，要和现有页一样图文并排，得补素材表里的图、写 `layout.json`。
+- 改了地址的页：`page.json` 的 `url` 写现在的地址，旧地址列在 `old_urls`。旧地址出一句话的去向页（两秒后跳到现在的地址、不收录），站内链到旧地址的链接在排版时改指现在的地址。
 - 分组标题图标按原 scene 短语认图、品牌图标按“<品牌>标志”认图，所以 `images` 里这两种还写明 `source_phrase` 和 `sha256`；品牌图标行带 `"via": "brand"`，不占这一屏的图位。
 - 页里引用的数字和链接（`{{scale.total}}`、`{{group_counts.…}}`、`{{stories.…links}}` 等）在转换时用区块库的 `bound_json` 算好写进内容文件，和现在出图时冻结的时机一样；数据变了重新转换这一页。
 - 连续的独立卡（`shape: card`）放进两列网格（手机一列），中间别的屏（如分类标题条）把网格断开、占满整行。
@@ -76,4 +88,12 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 按活动版本重出原文：`python tools/convert_page.py --rules-release E:\.agents\releases\E251 <规则页…>`，用同一套摘录边界（`rule_original_contract.excerpts`）从这个版本的规则文件重新取每屏原文，首行版本号换成这个版本，再照常走公开过滤和投影。约法屏把落在这一屏的小节标题插回条文前面（构图按小节分卡）；构图里认首行版本标签的 `text_ref` 跟着换成新版本号；原文链到的公开入口模板一起重出。
 
-只想试排、不碰站点时，用环境变量把目录换到别处：`CONVERT_OUT_MD=<目录>`（转换结果，公开入口模板写在它下面的 `public/`），`BLOCK_MD_DIR`、`BLOCK_OUT_DIR`、`BLOCK_PUB_DIR`（区块排版读的内容、写的结果和发布文件）。
+只想试排、不碰站点时，用环境变量把目录换到别处：`CONVERT_OUT_MD=<目录>`（转换结果，公开入口模板写在它下面的 `public/`），`BLOCK_MD_DIR`、`BLOCK_OUT_DIR`、`BLOCK_PUB_DIR`、`BLOCK_WORK_DIR`（区块排版读的内容、写的结果、发布文件和排版缓存；和站点排版同时跑时缓存要分开）。
+
+## 毛笔标题
+
+素材库里没有同字标题图的大标题（`chapter_title` 退到 `title-font`），区块库用本机的行楷字体（`src/typeset/style/base.css` 的 `Brush`）排字。网页不能带这个字体，所以排版时把这几个字在 2 倍分辨率下单独截成透明 PNG（`.publish/typeset-out/_cache/brushfont-<内容摘要>.png`，发布到 `/assets/_titles/`），换掉页面里的字；原字留作透明文字，能选、能搜、读屏能读。
+
+## “现在”实时位
+
+区块库排好的实时位（`[data-hot="live"][data-href=<键>]`）由 `src/scripts/live-dom.js` 填（排版时复制到 `/_living/live-dom.js`）：借现在网站运行件对外的 `SiteLiveRuntime.readStatus / parse` 取数（授权与状态、连接电脑两页借 `SiteB2`），一分钟一次，切回页面时立刻读。读不到时照驾驶舱的做法：页面上只说一次“暂时读不到电脑，保留最后一次读到的状态（北京时间）”，实时位显示上次读到的值、整体变淡；从没读到过就安静占位，不出“读不到”；读到后自动恢复。上次读到的值只在真正读到时存（浏览器本地 `site-live-dom:v1:<页>`）。实时位放在哪一屏都一样填，挪到首屏标题下的状态行也不用改脚本。

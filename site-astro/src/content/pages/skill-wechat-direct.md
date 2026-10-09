@@ -95,7 +95,7 @@
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
   "sha256": "3ed9a9e2e5e0589adaa13462129142a2b291cdffe00aed4bbcf71b2998626bc9",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -227,7 +227,11 @@
    "key": "main-wechatdirect",
    "source_phrase": "右边一幅水彩插画：一个人坐在电脑前对着屏幕说话，屏幕里两个聊天窗口，一只放大镜照着其中一小段（和微信直读项目页开头的插画同一套画法，不画微信标志）。",
    "sha256": "eafe03939f7aa3775c7a9b3f0451c9054de8c3e7f251437c1f71745b8a1ac6e1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个人坐在电脑前对着屏幕说话，屏幕里两个聊天窗口，一只放大镜照着其中一小段（和微信直读项目页开头的插画同一套画法，不画微信标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -244,7 +248,14 @@
    "key": "title-60a4cfb689527d7e7be4",
    "title_text": "看微信聊天",
    "sha256": "e30b21621c749b6b915ab3324e26a1ee96fea2d9ae46c9133d8603f779eaeef3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    39,
+    40,
+    637,
+    213
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -424,7 +435,14 @@
    "key": "title-r3-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "2304e84af71ae809ed22525bb17a83cdc977e8073e268216601e3a099b2b6fc4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    166,
+    0,
+    761,
+    226
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -567,7 +585,14 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "f4e266eee8804722b43ccd0650518780fdf84c9b64fed969a8d4189636862cbe",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    502,
+    265,
+    885,
+    452
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -667,7 +692,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

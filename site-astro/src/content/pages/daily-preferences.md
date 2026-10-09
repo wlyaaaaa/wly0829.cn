@@ -921,7 +921,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "755bee5d578bfc65f05e510f4cd30e819b4fdb24b96c0b3dfcd50b05a3f74597",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1233,7 +1233,11 @@
    "key": "main-daily-preferences",
    "source_phrase": "右上一幅水彩插画：书桌上一只打开的木质卡片盒，里面竖着一排索引卡，每张卡顶上一个小绿色标签，卡面只画浅灰短线、不画字；几条细细的绿色虚线从卡片盒外飘进来，线头分别是一个聊天气泡、一只购物袋、一张小票、一个定位针、一部手机、一个游戏手柄、一个音符的小水彩图标；一支铅笔斜靠在最前面那张卡上，卡上一道短线被划掉、旁边写上了一道新的短线（表示更正，仍然只画线不画字）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "书桌上一只打开的木质卡片盒，里面竖着一排索引卡，每张卡顶上一个小绿色标签，卡面只画浅灰短线、不画字；几条细细的绿色虚线从卡片盒外飘进来，线头分别是一个聊天气泡、一只购物袋、一张小票、一个定位针、一部手机、一个游戏手柄、一个音符的小水彩图标；一支铅笔斜靠在最前面那张卡上，卡上一道短线被划掉、旁边写上了一道新的短线（表示更正，仍然只画线不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1250,7 +1254,8 @@
    "key": "title-2c093b1f4da8de523a6a",
    "title_text": "个人理解库",
    "sha256": "c15654139d5f7327273eac58db94631baaec16e4d6931b1ae5c07c6fa1b83972",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1488,7 +1493,11 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "key": "卡片索引",
    "source_phrase": "插画：1 一个对话框旁边，一只手从卡片盒里抽出一张卡（卡面只画短线）；2 一个说话的气泡，气泡旁一张卡被轻轻翻到背面、盖上一个灰色小圆章（不画字）；3 一本台历翻到新的一页，旁边一个带循环箭头的小篮子装着聊天气泡、小票、定位针；4 三个小房子图标（代表别的项目）各伸出一条双向箭头连到中间的卡片盒。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话框旁边，一只手从卡片盒里抽出一张卡（卡面只画短线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1503,7 +1512,11 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "key": "对话气泡",
    "source_phrase": "插画：1 一个对话框旁边，一只手从卡片盒里抽出一张卡（卡面只画短线）；2 一个说话的气泡，气泡旁一张卡被轻轻翻到背面、盖上一个灰色小圆章（不画字）；3 一本台历翻到新的一页，旁边一个带循环箭头的小篮子装着聊天气泡、小票、定位针；4 三个小房子图标（代表别的项目）各伸出一条双向箭头连到中间的卡片盒。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个说话的气泡，气泡旁一张卡被轻轻翻到背面、盖上一个灰色小圆章（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1518,7 +1531,11 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "key": "日历记录",
    "source_phrase": "插画：1 一个对话框旁边，一只手从卡片盒里抽出一张卡（卡面只画短线）；2 一个说话的气泡，气泡旁一张卡被轻轻翻到背面、盖上一个灰色小圆章（不画字）；3 一本台历翻到新的一页，旁边一个带循环箭头的小篮子装着聊天气泡、小票、定位针；4 三个小房子图标（代表别的项目）各伸出一条双向箭头连到中间的卡片盒。",
    "sha256": "f2bb549f0d3d498ab16f4cb19931375a02c28e596e518f3ba7363e45c2063e60",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本台历翻到新的一页，旁边一个带循环箭头的小篮子装着聊天气泡、小票、定位针"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1533,7 +1550,11 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "key": "卡片索引",
    "source_phrase": "插画：1 一个对话框旁边，一只手从卡片盒里抽出一张卡（卡面只画短线）；2 一个说话的气泡，气泡旁一张卡被轻轻翻到背面、盖上一个灰色小圆章（不画字）；3 一本台历翻到新的一页，旁边一个带循环箭头的小篮子装着聊天气泡、小票、定位针；4 三个小房子图标（代表别的项目）各伸出一条双向箭头连到中间的卡片盒。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "三个小房子图标（代表别的项目）各伸出一条双向箭头连到中间的卡片盒"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1549,7 +1570,8 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1732,7 +1754,11 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "餐食",
    "source_phrase": "插画：1 一张外卖小票旁边一只小鸡汤碗和一杯拿铁，一个绿色小算盘（票上只画短线和一个“−”号）；2 一张三栏的菜单卡，三栏顶上分别是绿色、浅绿、黄绿的小圆点，栏里只画浅灰短线；旁边一只酒杯上画一个灰色小叉；3 一部手机屏幕上一个“60Hz”小标签，旁边一张截图卡片和一个放大镜；4 一张小地图上一大段虚线空白，两端各一个定位针，中间一个问号气泡变成一个绿色小勾。",
    "sha256": "373eaad494ca5d385bb6023a6158f59917739095371ca1e9e8a76d3ca1e87b64",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张外卖小票旁边一只小鸡汤碗和一杯拿铁，一个绿色小算盘（票上只画短线和一个抽象图形号"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1747,7 +1773,11 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "菜单卡",
    "source_phrase": "插画：1 一张外卖小票旁边一只小鸡汤碗和一杯拿铁，一个绿色小算盘（票上只画短线和一个“−”号）；2 一张三栏的菜单卡，三栏顶上分别是绿色、浅绿、黄绿的小圆点，栏里只画浅灰短线；旁边一只酒杯上画一个灰色小叉；3 一部手机屏幕上一个“60Hz”小标签，旁边一张截图卡片和一个放大镜；4 一张小地图上一大段虚线空白，两端各一个定位针，中间一个问号气泡变成一个绿色小勾。",
    "sha256": "892d9ee2be26b5b195b945e291b5e1b46a0640c044c360dd8540fcf867aeca52",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张三栏的菜单卡，三栏顶上分别是绿色、浅绿、黄绿的小圆点，栏里只画浅灰短线；旁边一只酒杯上画一个灰色小叉"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1762,7 +1792,11 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "手机照片现图小槽4比3",
    "source_phrase": "插画：1 一张外卖小票旁边一只小鸡汤碗和一杯拿铁，一个绿色小算盘（票上只画短线和一个“−”号）；2 一张三栏的菜单卡，三栏顶上分别是绿色、浅绿、黄绿的小圆点，栏里只画浅灰短线；旁边一只酒杯上画一个灰色小叉；3 一部手机屏幕上一个“60Hz”小标签，旁边一张截图卡片和一个放大镜；4 一张小地图上一大段虚线空白，两端各一个定位针，中间一个问号气泡变成一个绿色小勾。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机屏幕上一个抽象图形小标签，旁边一张截图卡片和一个放大镜"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1777,7 +1811,11 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "地图定位",
    "source_phrase": "插画：1 一张外卖小票旁边一只小鸡汤碗和一杯拿铁，一个绿色小算盘（票上只画短线和一个“−”号）；2 一张三栏的菜单卡，三栏顶上分别是绿色、浅绿、黄绿的小圆点，栏里只画浅灰短线；旁边一只酒杯上画一个灰色小叉；3 一部手机屏幕上一个“60Hz”小标签，旁边一张截图卡片和一个放大镜；4 一张小地图上一大段虚线空白，两端各一个定位针，中间一个问号气泡变成一个绿色小勾。",
    "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张小地图上一大段虚线空白，两端各一个定位针，中间一个问号气泡变成一个绿色小勾"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1794,7 +1832,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "title-7885d427a96e92ad6e4a",
    "title_text": "几个典型场景",
    "sha256": "5c41b4cb70ec6a8fa844099076eca4dc966be4caca1c6eae0c2ab4a3ceb67eeb",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2057,7 +2096,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "title-243f39ea53b149605fb2",
    "title_text": "几张认识卡",
    "sha256": "c913e6647f893660b7673fae9f855a4b6e41d9819eb175fb00cfe252ff81605a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2292,7 +2332,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "title-df0c10ae3a402242dda6",
    "title_text": "说“要更新了”之后",
    "sha256": "a1458622500da15cdf0d116267bb710ba7d5eba0e36ebc02288ee14e87b3bc88",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2526,7 +2567,11 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "锁抽屉柜",
    "source_phrase": "右边三分之一一幅水彩插画：一个带锁的抽屉柜（代表数据库），旁边一条绿色箭头指向另一块硬盘，硬盘上贴一张小日历标着一个圈；插画里不写字。",
    "sha256": "3bc7ab81fe67babd0f71db9d6da0e720473458604b0ffe325e38006d94879cd9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个带锁的抽屉柜（代表数据库），旁边一条绿色箭头指向另一块硬盘，硬盘上贴一张小日历标着一个圈；插画里不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2542,7 +2587,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3073,7 +3119,8 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3328,7 +3375,11 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "水流汇合",
    "source_phrase": "右上角一小幅插画：几条溪流从不同方向汇入一个小水池（不画字）。",
    "sha256": "101a6e8234c72d6ea3180ef0a1c34e92a9e0710fed25c6f164d6b71d5e786926",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "几条溪流从不同方向汇入一个小水池（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3345,7 +3396,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-06df90208ea84033456a",
    "title_text": "材料从哪来（30 类）",
    "sha256": "2b4325fef6bc3907ec642c315639e6b96b3ef742bac2aa21796bf958a42a0d3b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3555,7 +3607,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-e3659099e1a17587c74d",
    "title_text": "材料怎么变成认识",
    "sha256": "d8eb2c720d691a2f90b5e4ef34b148750f656bd7c0eff44b861fa8adb993713e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3770,7 +3823,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3916,7 +3970,11 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "卡片索引",
    "source_phrase": "插画：1 一张卡片被一只手从卡片盒里抽出，同时后面几张相连的卡也被一根细线带着微微翘起（不画字）；2 一个购物袋旁边一张退款单，购物袋上一个小天平两边持平。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张卡片被一只手从卡片盒里抽出，同时后面几张相连的卡也被一根细线带着微微翘起（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3931,7 +3989,11 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "购物退款",
    "source_phrase": "插画：1 一张卡片被一只手从卡片盒里抽出，同时后面几张相连的卡也被一根细线带着微微翘起（不画字）；2 一个购物袋旁边一张退款单，购物袋上一个小天平两边持平。",
    "sha256": "4de62e8a3415e96a8b8a6d8fd62e8b554c31777decc10068955b2f6f3665771c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个购物袋旁边一张退款单，购物袋上一个小天平两边持平"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3947,7 +4009,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4470,7 +4533,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-0fbf7978fe7727d2a856",
    "title_text": "全部功能（45 项）",
    "sha256": "0b693a08b3f738b30b19d6ceea442d63ef6991b6fb85f79cfdca9fee578ac355",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5750,7 +5814,11 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "main-daily-preferences",
    "source_phrase": "横版画面：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边一幅大一点的水彩插画：一只卡片盒从一张购物小票旁边长出来，越往上卡片越多，周围依次长出聊天气泡、手机、定位针、日历和一把小锁，像一路长出来的样子（插画里不画字）。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只卡片盒从一张购物小票旁边长出来，越往上卡片越多，周围依次长出聊天气泡、手机、定位针、日历和一把小锁，像一路长出来的样子（插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5766,7 +5834,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

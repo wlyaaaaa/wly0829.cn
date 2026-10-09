@@ -85,7 +85,7 @@
  "source": {
   "page": "sources/pages/skill-vault-workflow/page.json",
   "sha256": "23eb1bd17815443e20ca9758db36a9c2f0e5194b28e8ba195107e9e718397d69",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -325,7 +325,11 @@
    "key": "密封文件钥匙",
    "source_phrase": "右上一幅水彩插画：一个 AI 小机器人站在一扇半开的窗户外，窗户里是一个绿色顶栏写着“VAULT”的小窗口和一只正在键盘上输入的手；窗外机器人手里只拿着一张写着对勾和一串短哈希样式小方块的纸条（不画可读的字）；旁边一个贴着挂锁的绿色信封。",
    "sha256": "403ce13ac20240234cb5c83107cbfe12f712515dc8e047df1cbe2246f6868cf2",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个 AI 小机器人站在一扇半开的窗户外，窗户里是一个绿色顶栏画抽象短线的的小窗口和一只正在键盘上输入的手；窗外机器人手里只拿着一张写着对勾和一串短哈希样式小方块的纸条（不画可读的字）；旁边一个贴着挂锁的绿色信封"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -342,7 +346,8 @@
    "key": "title-7d45fb4cf6cb3980f6f9",
    "title_text": "加密库操作",
    "sha256": "76e997a812bcc533c2d3935d6f11cde52541ecb1c9d171c1cb3a3947f253832c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -595,7 +600,8 @@
    "key": "title-eae954b1cdc66034c3c4",
    "title_text": "一个完整的例子：“把 vault.enc 里的清单改一句，改完备份到 Key”",
    "sha256": "eea1fd784ed4e04d87171270f246225c54ef4ed9a8345ed1c5b273dff2f3e675",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -712,7 +718,11 @@
    "key": "ill-0a6aa6f2e7f4f4",
    "source_phrase": "一张宽卡片，左边一个贴着挂锁的绿色信封小插画，右边一段话和一个链接按钮。",
    "sha256": "b2879220942f9a130ef3584fff6614dd154318addf1035d207b04b1383e8b392",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "贴着挂锁的绿色信封"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -728,7 +738,8 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -890,7 +901,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

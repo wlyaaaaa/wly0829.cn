@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "efe1732a43f5fa4e2f1d517afa80e6c28e63a6b0a31bc82858840c907c0bce2a",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1166,7 +1166,11 @@
    "key": "main-agents",
    "source_phrase": "右上一幅水彩插画：中间一本翻开的绿色封面规则册，书脊上一把小小的金色挂锁，书页右下角盖着一枚淡绿色圆形印章（印章里不写字）；规则册两侧各飘出一条绿色丝带，左边丝带连到一个圆角小窗口（窗口左上角画 Claude 的橙色星形标志），右边丝带连到另一个圆角小窗口（窗口左上角画 OpenAI 的黑色花结标志，代表 Codex）；两条丝带上各串着三四张很小的空白卡片（代表技能），窗口下方各有两三个更小的分身小窗口（代表子代理）。",
    "sha256": "eb04e377b7542b657abc83412366159cb3b355864469be75c1e8a7177bd5c1a3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "中间一本翻开的绿色封面规则册，书脊上一把小小的金色挂锁，书页右下角盖着一枚淡绿色圆形印章（印章里不写字）；规则册两侧各飘出一条绿色丝带，左边丝带连到一个圆角小窗口（窗口左上角画 Claude 的橙色星形标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1183,7 +1187,14 @@
    "key": "title-6712edb69b20e3051b4e",
    "title_text": "AI 规则与技能基座",
    "sha256": "5dfa5c88d34b32f0f7c529b45e3d5e1eb3982be04e94072239478d5041684458",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    32,
+    762,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1410,7 +1421,11 @@
    "key": "窗口菜单现图小槽4比3",
    "source_phrase": "丝带下面左右两张横向小卡片：左“子代理也一样”（小插画：一个大窗口牵着两个小窗口），右“每周一 13:00”（小插画：一本日历，旁边一个听诊器）。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个大窗口牵着两个小窗口"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1425,7 +1440,11 @@
    "key": "听诊核验",
    "source_phrase": "丝带下面左右两张横向小卡片：左“子代理也一样”（小插画：一个大窗口牵着两个小窗口），右“每周一 13:00”（小插画：一本日历，旁边一个听诊器）。",
    "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本日历，旁边一个听诊器"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1442,7 +1461,14 @@
    "key": "title-de31eae8c21a30252259",
    "title_text": "每天：一个 AI 接到活时发生什么",
    "sha256": "62a49ff94bcb84d9f3ccc34672544c2a2f28a2e68d0316d6bab743e69d1dce6c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    327,
+    13,
+    1319,
+    193
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1703,7 +1729,8 @@
    "key": "title-r3-agents03-large",
    "title_text": "改规矩：从一句话到所有 AI 换新版",
    "sha256": "2261afa477fec30df6f6752665e577103ef334925929e3c7c719c5b44d922e94",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1918,7 +1945,14 @@
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    95,
+    82,
+    861,
+    371
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2165,7 +2199,14 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    508,
+    1,
+    1147,
+    201
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2407,7 +2448,11 @@
    "key": "ill-d93ab52de4e826",
    "source_phrase": "右边约三分之一宽一张竖长卡片“为什么要这么多道”，上面一幅小插画：一个印章盖下去，后面跟着一排小窗口都亮起。",
    "sha256": "f40406d9ebdbfdfab58e2cb3fcf432d7060299321baf61176757ddd82943b852",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个印章盖下去，后面跟着一排小窗口都亮起"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2424,7 +2469,8 @@
    "key": "title-c4cc51deae3911540e71",
    "title_text": "发布器：不出半截、不互相覆盖",
    "sha256": "724240e98bd776669a33e6eb5063b9f0c2ff9fc47f578166c115d82ed79bd10d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2628,7 +2674,11 @@
    "key": "对话气泡",
    "source_phrase": "左右两栏各一张大卡片：左栏“Claude”（卡片左上角画 Claude 橙色星形标志），右栏“Codex”（卡片左上角画 OpenAI 花结标志）；两栏下面横跨整屏一张卡片“两边一样的”，卡片左边一幅小插画：一个对话气泡上挂三个小标签（芯片、钥匙、沙漏图案，不写字）。",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话气泡上挂三个小标签（芯片、钥匙、沙漏图案，不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2645,7 +2695,14 @@
    "key": "title-10c24e23ceab92ed0245",
    "title_text": "钩子：每条新消息带进来什么",
    "sha256": "610a349e5c6cbf79c4ea06c3b228f67af143e79e1717b70f8ecbeddc4dcae3d1",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    44,
+    1050,
+    222
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2934,7 +2991,14 @@
    "key": "title-0a92c0a97e54cfe84ec2",
    "title_text": "技能：一份源码，两边共用",
    "sha256": "d99c050178bf8ae2fdb8c634a5a7073e0169447809dc94e8ae06445ac504c430",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    19,
+    869,
+    151
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3126,7 +3190,11 @@
    "key": "ill-a77945a0de9de7",
    "source_phrase": "四张横向圆角卡片两列两行，每张左边一幅小水彩插画（1 一本厚厚的簿子，书脊不写字；2 放大镜照着两张相同的纸；3 一个关着的开关；4 一台秤上放着一个文件夹）。",
    "sha256": "fc8e9b315f058e323c6702bc9031f9831f17aa4e236be75ee3d566c7235ede00",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本厚厚的簿子，书脊不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3141,7 +3209,11 @@
    "key": "文稿核验现图小槽4比3",
    "source_phrase": "四张横向圆角卡片两列两行，每张左边一幅小水彩插画（1 一本厚厚的簿子，书脊不写字；2 放大镜照着两张相同的纸；3 一个关着的开关；4 一台秤上放着一个文件夹）。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "放大镜照着两张相同的纸"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3156,7 +3228,11 @@
    "key": "开关",
    "source_phrase": "四张横向圆角卡片两列两行，每张左边一幅小水彩插画（1 一本厚厚的簿子，书脊不写字；2 放大镜照着两张相同的纸；3 一个关着的开关；4 一台秤上放着一个文件夹）。",
    "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个关着的开关"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3171,7 +3247,11 @@
    "key": "ill-807563010dab8e",
    "source_phrase": "四张横向圆角卡片两列两行，每张左边一幅小水彩插画（1 一本厚厚的簿子，书脊不写字；2 放大镜照着两张相同的纸；3 一个关着的开关；4 一台秤上放着一个文件夹）。",
    "sha256": "de348b40defdb148c1b8a6a3ace12ecc058b8c87016dd94c4f15ecbeadbe17a0",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台秤上放着一个文件夹"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3189,7 +3269,14 @@
    "key": "title-7ad451cc50b551caae1c",
    "title_text": "我的决定和 AI 的经验记在哪",
    "sha256": "4abfe275248dd8ee21e6f630881f0b253c6c9ec356d4de55f60645c36161be12",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    74,
+    913,
+    238
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3443,7 +3530,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3631,7 +3719,11 @@
    "key": "锁文件夹",
    "source_phrase": "插画：1 一个文件夹上挂着一把大锁，旁边一只手拿着笔却写不进去，远处一个放大镜照出一处红色的不一致；2 两本书并排，一本是草稿（页边有涂改），一本盖了章，一个小箭头绕过草稿指向盖章的那本；3 一个大窗口和一个小窗口，大窗口上贴着一枚深色的标签，小窗口上是一枚空白标签（标签上都不写字），中间一只手把深色标签挡了回去。",
    "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个文件夹上挂着一把大锁，旁边一只手拿着笔却写不进去，远处一个放大镜照出一处红色的不一致"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3646,7 +3738,11 @@
    "key": "册子阅读现图小槽4比3",
    "source_phrase": "插画：1 一个文件夹上挂着一把大锁，旁边一只手拿着笔却写不进去，远处一个放大镜照出一处红色的不一致；2 两本书并排，一本是草稿（页边有涂改），一本盖了章，一个小箭头绕过草稿指向盖章的那本；3 一个大窗口和一个小窗口，大窗口上贴着一枚深色的标签，小窗口上是一枚空白标签（标签上都不写字），中间一只手把深色标签挡了回去。",
    "sha256": "421c6aa8d646e894c5b62de75e129b60646020d72acece8b84a5ebe155efb705",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两本书并排，一本是草稿（页边有涂改），一本盖了章，一个小箭头绕过草稿指向盖章的那本"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3661,7 +3757,11 @@
    "key": "ill-3d3a78f736250f",
    "source_phrase": "插画：1 一个文件夹上挂着一把大锁，旁边一只手拿着笔却写不进去，远处一个放大镜照出一处红色的不一致；2 两本书并排，一本是草稿（页边有涂改），一本盖了章，一个小箭头绕过草稿指向盖章的那本；3 一个大窗口和一个小窗口，大窗口上贴着一枚深色的标签，小窗口上是一枚空白标签（标签上都不写字），中间一只手把深色标签挡了回去。",
    "sha256": "07eda4e366c5c9dac17fb2e0a5596a2b01362bc621ff3224ae9efbf4a54b677b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个大窗口和一个小窗口，大窗口上贴着一枚深色的标签，小窗口上是一枚空白标签（标签上都不写字），中间一只手把深色标签挡了回去"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4062,7 +4162,8 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "key": "title-65814a6e2c5221e2b5d9",
    "title_text": "全部功能（36 项）",
    "sha256": "f3e831b10906dfc40261fcbb960d18090e8c7f3ebf271091384760db1e2939ff",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5216,7 +5317,11 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "key": "main-agents",
    "source_phrase": "右边约三分之一宽上半部分一幅水彩插画：一本规则册从一张薄纸慢慢长成厚书，旁边从一扇门长出两扇门（Claude 橙色星形标志、OpenAI 花结标志）；下半部分一张小柱状图（最后一行的四个月份和数字，就是柱子下方和顶上的字，柱子用深浅不同的绿）。",
    "sha256": "eb04e377b7542b657abc83412366159cb3b355864469be75c1e8a7177bd5c1a3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本规则册从一张薄纸慢慢长成厚书，旁边从一扇门长出两扇门（Claude 橙色星形标志、OpenAI 花结标志）"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5233,7 +5338,14 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    26,
+    1,
+    207,
+    152
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

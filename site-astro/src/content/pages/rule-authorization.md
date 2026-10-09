@@ -239,7 +239,7 @@
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
   "sha256": "8a2f7e1ca5775a6982bad266c836343600daca70592958fd753966dc632c2f0f",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -492,7 +492,11 @@
    "key": "授权通行路径",
    "source_phrase": "右边约 45% 宽一幅水彩插画，照原图不变：一条从左往右的小路，路起点一个小小的 AI 助手（胸前是 Claude 的橙色星芒标志）抱着一叠文件轻快往前走，路边一块绿色小木牌“直接做”；小路中段一道白色小栅栏门，门前排着一个信封、一枚硬币、一只写着向上箭头的小木箱，门柱上挂小牌“要本人点头”，门边站着一个人影（只画背影）抬手示意；栅栏门旁边的木桩上挂一张绿色长条通行证，写“长期授权”；小路尽头一张小桌上立着一个沙漏，沙漏旁一把金色钥匙，沙漏底座刻“0.5–72 小时”；画面右上角两扇并排的小窗户，左窗角 OpenAI 黑色花结标志、右窗角 Claude 橙色星芒标志，中间一枚绿色盾牌徽章写“受信任”。",
    "sha256": "d2c1840b26e431381d3ef74f34506abe810a27ce9a49d4cef5b946f1e0ef4cc5",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "右边约 45% 宽一幅水彩插画，照原图不变：一条从左往右的小路，路起点一个小小的 AI 助手（胸前是 Claude 的橙色星芒标志）抱着一叠文件轻快往前走，路边一块绿色小木牌抽象图形；小路中段一道白色小栅栏门，门前排着一个信封、一枚硬币、一只写着向上箭头的小木箱，门柱上挂小牌抽象图形，门边站着一个人影（只画背影）抬手示意；栅栏门旁边的木桩上挂一张绿色长条通行证，画抽象短线的；小路尽头一张小桌上立着一个沙漏，沙漏旁一把金色钥匙，沙漏底座刻抽象图形；画面右上角两扇并排的小窗户，左窗角 OpenAI 黑色花结标志、右窗角 Claude 橙色星芒标志，中间一枚绿色盾牌徽章画抽象短线的"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -509,7 +513,14 @@
    "key": "title-d23365471633404d9c55",
    "title_text": "用户授权",
    "sha256": "220adfe5e21b50085bb014d597fe03d2b046110cde3eb749782f2d89304e209c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    21,
+    6,
+    643,
+    187
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -755,7 +766,8 @@
    "key": "title-6319591a9a1ce9966831",
    "title_text": "人话要点 · 直接做，还是先问本人",
    "sha256": "fd28077b2e2421cd1fa5e5d79490bda21828f9a50f66571140cc881cde3bba35",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -969,7 +981,11 @@
    "key": "ill-ad17cb8bec4c97",
    "source_phrase": "左边约 36% 宽一张卡“长期授权怎么算”，左上角小水彩图标：一张绿色长条通行证（和开头插画木桩上那张同一张），卡片下半留一小幅水彩插画：通行证挂在木桩上随风轻摆，旁边一串挂着五把小钥匙的钥匙圈，插画里不写字。",
    "sha256": "74f7debe37628d89d9f12931a735f4e8a418a9b973c980e1fd4f4970da0b02b7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "通行证挂在木桩上随风轻摆，旁边一串挂着五把小钥匙的钥匙圈，插画里不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -986,7 +1002,8 @@
    "key": "title-2511a82a5300fc24b226",
    "title_text": "人话要点 · 长期授权：说过一次就一直算数",
    "sha256": "1f42f9533f259df7c7f2f97631575dd4955937ea0b457795071a0362ccb35203",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1265,7 +1282,8 @@
    "key": "title-ee350c3348bac7f49534",
    "title_text": "人话要点 · 无限制授权、子代理和项目规则",
    "sha256": "234ade6e34a1c02aa6e85e9e0ce7f94e64b1e8aa4fe86d819b59bfea6aa4bc50",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1494,7 +1512,14 @@
    "key": "title-r3-18835954778f1d64c1d2",
    "title_text": "人话要点 · 受信任的 AI",
    "sha256": "d29fafe104705800abd3b22b4858345dd1553898bf6678320a76c5463730b2f3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    20,
+    50,
+    814,
+    231
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1636,7 +1661,8 @@
    "key": "title-d23365471633404d9c55",
    "title_text": "用户授权",
    "sha256": "220adfe5e21b50085bb014d597fe03d2b046110cde3eb749782f2d89304e209c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1653,7 +1679,14 @@
    "key": "title-3db26530303f56b1807c",
    "title_text": "直接做的和要本人同意的",
    "sha256": "040381fded4a16ae5c62b84a947192e1b25ed815674a1e5c3be0a27ce193e628",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    53,
+    404,
+    489,
+    463
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1670,7 +1703,14 @@
    "key": "title-44b383de48f031d5a8b0",
    "title_text": "长期授权",
    "sha256": "757b08dd8cdf5170917351e30367e2044a266fecfe2d3aff7c2b1a553d4a9635",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    839,
+    207,
+    1011,
+    262
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1834,7 +1874,14 @@ owner: `E:\.agents`
    "key": "title-84def4434741128f36ac",
    "title_text": "子代理和项目规则不扩大授权",
    "sha256": "e12dd95b22b3ff706411e92d3a9add59ab4ba1d06b210ee3946bc5aff64b5785",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    59,
+    150,
+    603,
+    207
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1851,7 +1898,14 @@ owner: `E:\.agents`
    "key": "title-7aaf9f13bf9d1731bada",
    "title_text": "无限制授权",
    "sha256": "cff949bd2e624f39d050a3067cafdf36d57c6e7fa4416b7996fd0444fb59231b",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    850,
+    149,
+    1080,
+    208
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1992,7 +2046,14 @@ owner: `E:\.agents`
    "key": "title-67d07967d77ac5e58773",
    "title_text": "受信任的 AI",
    "sha256": "2139113cc5d0e36b8b1cb67e9e53e3050ff4febe480fb4e03050e47dcf301e84",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    52,
+    510,
+    219
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

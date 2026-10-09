@@ -14,6 +14,7 @@ import datetime
 import hashlib
 import json
 import os
+import re
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -80,7 +81,10 @@ def library():
 
 IMAGE_KEYS = ("role", "slot_ordinal", "orientations", "asset", "source_image", "fallback", "fallback_reason",
               "semantic_status", "title_exact_match", "text_verified", "key", "text", "title_text",
-              "source_phrase", "sha256", "status")
+              "source_phrase", "sha256", "status",
+              # 区块库按这些认图、定位：功能组尾排插画按原物件短句（original_elements）和组名认图，标题图按原图位置定对齐和取色
+              "original_elements", "group_name", "group", "source_box", "hidden", "g4_target_reference_available",
+              "verified_no_text")
 # 分组标题的品牌图标（构图写 "brand": "Claude" 等）：区块库按“<品牌>标志”在整个素材库里认图，这里把认到的那张也写进这一屏
 BRAND_OK = ("scene_explicit_primary_object", "automatically_accepted_per_b2bc0efe")
 
@@ -238,6 +242,11 @@ def convert(page):
         if s.get("hidden"):
             continue
         s = json.loads(json.dumps(s))
+        t = s.get("text")
+        if isinstance(t, str) and "\n" not in t and "\\n" in t:
+            # 源里整屏的换行被写成了字面的 \n（一整段连成一行，区块库认不出标题和要点，例如能力运行第 6 屏）：还原成换行
+            print(f"  {s['id']}: 源文字里的换行写成了字面的 \\n，已还原（源文件也该改）")
+            s["text"] = t.replace("\\n", "\n")
         swap = rule_release_text(page, s)
         rule_gate(s)
         bad = [x for x in (s.get("links") or []) if not isinstance(x, dict)]
@@ -267,19 +276,32 @@ def convert(page):
     now = (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)).strftime("%Y-%m-%dT%H:%M:%S+08:00")
     fm = {
         "title": data["title"], "kind": data["kind"], "url": data["url"], "tagline": data.get("tagline", ""),
+        # 改过地址的页：旧地址出一句话的去向页、站内链到旧地址的都改指现在的地址（page.json 的 old_urls）
+        **({"old_urls": data["old_urls"]} if data.get("old_urls") else {}),
         "toc": toc,
         "page": {k: v for k, v in data.items() if k != "screens"},
         "source": {"page": f"sources/pages/{page}/page.json", "sha256": hashlib.sha256(raw).hexdigest(), "converted_at_beijing": now},
     }
     out = "---\n" + json.dumps(fm, ensure_ascii=False, indent=1) + "\n---\n\n" + "\n".join(parts)
     os.makedirs(OUT_MD, exist_ok=True)
-    open(os.path.join(OUT_MD, page + ".md"), "w", encoding="utf-8", newline="\n").write(out)
+    dst = os.path.join(OUT_MD, page + ".md")
+    # 只差转换时间就不改写：同一份 page.json 重新转换一遍，得到的 .md 逐字节相同
+    stamp = re.compile(r'"converted_at_beijing": "[^"]*"')
+    if os.path.exists(dst):
+        prev = open(dst, encoding="utf-8").read()
+        if stamp.sub("", prev) == stamp.sub("", out):
+            return len(parts)
+    open(dst, "w", encoding="utf-8", newline="\n").write(out)
     return len(parts)
+
+
+# 驾驶舱保留候选站原 HTML（src/pages/cockpit/index.astro，见 README“首页和驾驶舱”），不出内容页，--all 时跳过
+RETAINED = {"cockpit"}
 
 
 def all_pages():
     root = os.path.join(REPO, "sources", "pages")
-    return sorted(d for d in os.listdir(root) if os.path.exists(os.path.join(root, d, "page.json")))
+    return sorted(d for d in os.listdir(root) if d not in RETAINED and os.path.exists(os.path.join(root, d, "page.json")))
 
 
 if __name__ == "__main__":

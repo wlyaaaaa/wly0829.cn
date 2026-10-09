@@ -2,28 +2,36 @@
 {
  "title": "Codex 远程",
  "kind": "frozen",
- "url": "/projects/codex-local-remote/",
+ "url": "/projects/codex-remote/",
  "tagline": "用手机浏览器接着管电脑上正在跑的 Codex 任务",
+ "old_urls": [
+  "/projects/codex-local-remote/"
+ ],
  "toc": [
   {
    "id": "top",
-   "label": "开头"
+   "label": "开头",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp"
   },
   {
    "id": "why-frozen",
-   "label": "为什么串流能代替它"
+   "label": "为什么不用了",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-11-ad9615fb96.webp"
   },
   {
    "id": "usage",
-   "label": "怎么用"
+   "label": "怎么用",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-43-9fe7ee9705.webp"
   },
   {
    "id": "features",
-   "label": "全部功能"
+   "label": "全部功能",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-25-6c8f61c250.webp"
   },
   {
    "id": "history",
-   "label": "演进"
+   "label": "演进",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-55-f8367a4ec7.webp"
   },
   {
    "id": "gallery",
@@ -35,7 +43,10 @@
   "page": "codex-local-remote",
   "kind": "frozen",
   "title": "Codex 远程",
-  "url": "/projects/codex-local-remote/",
+  "url": "/projects/codex-remote/",
+  "old_urls": [
+   "/projects/codex-local-remote/"
+  ],
   "tagline": "用手机浏览器接着管电脑上正在跑的 Codex 任务",
   "status": "冻结",
   "public": true,
@@ -486,8 +497,8 @@
  },
  "source": {
   "page": "sources/pages/codex-local-remote/page.json",
-  "sha256": "8397fbfa46240b077b0c888691899239797a9f63dd5926c9cff263aae92eead6",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "sha256": "e12d7fb4b1f27714b6ae0772df7277d08e75cf3e48cce616dcb544097687b367",
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -777,7 +788,11 @@
    "key": "main-codex-local-remote",
    "source_phrase": "右侧约 45%：一幅水彩插画：一部手机，屏幕上是绿白配色的任务列表网页（三行任务卡、顶上一个小绿点，不写字）；一条细绿虚线从手机连向一台家用台式电脑，电脑屏幕上是 Codex（OpenAI）的标志；虚线在半路断开、变淡；画面另一侧，同一台电脑的整个桌面被一束柔和的绿光投到另一部横握的手机上（串流）。",
    "sha256": "207ca8c4f5cb3177b61374ce0da3e5131b939e2034be7fb401fa42636cd5a6c8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机，屏幕上是绿白配色的任务列表网页（三行任务卡、顶上一个小绿点，不写字）；一条细绿虚线从手机连向一台家用台式电脑，电脑屏幕上是 Codex（OpenAI）的标志；虚线在半路断开、变淡；画面另一侧，同一台电脑的整个桌面被一束柔和的绿光投到另一部横握的手机上（串流"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -795,7 +810,14 @@
    "key": "title-r3-0a045d2837048fef4345",
    "title_text": "Codex 远程",
    "sha256": "80cd7627424b25f999fe587d71f84b2d1f359206fe273ec8a21e9433005e886f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    8,
+    605,
+    168
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -981,7 +1003,11 @@ AI 补充：在外面要管电脑，把整个桌面串流到手机上操作就�
    "key": "电脑故障",
    "source_phrase": "右半边：一张较大的圆角卡“它自己也没稳下来”，卡顶一幅小水彩插画：一台电脑的窗口正在关上，一只拿着扳手的小手和窗口一起被拉进关门的缝里（表示负责重开的程序跟着一起被关掉），旁边一个插头拔不出来的插座（端口被占）；插画下面是正文段和三条带小圆点的列表；卡片最下面一条浅灰底横条写“8 月 3 日决定……”那句。",
    "sha256": "a829484c629a21dc7d82cef241b226eb8fc89c70cbfd5705df85aa0d8002837a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑的窗口正在关上，一只拿着扳手的小手和窗口一起被拉进关门的缝里（表示负责重开的程序跟着一起被关掉），旁边一个插头拔不出来的插座（端口被占"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -998,7 +1024,14 @@ AI 补充：在外面要管电脑，把整个桌面串流到手机上操作就�
    "key": "title-7f03983f51892b37e722",
    "title_text": "为什么串流能代替它",
    "sha256": "e0119ac6f570378c0f52b808f03629565b4b58fee96afc0bc38a478aded697d8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    36,
+    10,
+    803,
+    159
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1407,7 +1440,8 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
    "key": "title-dee7d8d741cbf8bc4f55",
    "title_text": "当初想解决什么、怎么用",
    "sha256": "42d7bf08ebd1843e296bb8267c2305622af91724ca588ef557b4fda2d2815e59",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1803,7 +1837,8 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "key": "title-e57b396ce69bd05e4ec8",
    "title_text": "全部旧功能（21 项，全部已停用）",
    "sha256": "a61db35d4566a567b08bb85b465bb960ec533125db9bf64e4cf1b87afd050564",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2185,7 +2220,8 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "key": "title-b38ce3e9281d806bbc0e",
    "title_text": "全部旧功能（续）",
    "sha256": "80c25efe770f33cd59284278bb01d9823aaa54de0a0d3222b20e9a6e6812ca6d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2391,7 +2427,8 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "key": "title-7774c1074fb06286a47a",
    "title_text": "演进（7 月 26 日—8 月 7 日，65 次提交）",
    "sha256": "c489236087335c94952c986d79e4d73f2a2fb4aa346c866d9c1f3521f328a864",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2850,7 +2887,14 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

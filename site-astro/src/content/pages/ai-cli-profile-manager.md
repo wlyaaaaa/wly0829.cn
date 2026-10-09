@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "2b5909ed9ad001342c0b1f8623982891006d69c754446459900fe86abe093bef",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1000,7 +1000,11 @@
    "key": "main-ai-cli-profile-manager",
    "source_phrase": "右上一幅水彩插画：一台显示器上开着一个终端窗口和一个 Codex 桌面版窗口，桌面版窗口里展开一个模型下拉菜单，菜单每一行是一个品牌小标志加一条浅灰短线（依次画 OpenAI、智谱 GLM、DeepSeek 小鲸鱼、通义千问、Ollama 小羊驼的标志，短线处不写字）；显示器旁边一个小保险箱，伸出一把绿色小钥匙，只连向其中一个窗口；机箱侧面的显卡亮着绿光。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台显示器上开着一个终端窗口和一个 Codex 桌面版窗口，桌面版窗口里展开一个模型下拉菜单，菜单每一行是一个品牌小标志加一条浅灰短线（依次画 OpenAI、智谱 GLM、DeepSeek 小鲸鱼、通义千问、Ollama 小羊驼的标志，短线处不写字）；显示器旁边一个小保险箱，伸出一把绿色小钥匙，只连向其中一个窗口；机箱侧面的显卡亮着绿光"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1017,7 +1021,8 @@
    "key": "title-428f7e1995a31baba14e",
    "title_text": "AI 工具配置管理",
    "sha256": "2a86c37ca3a105624a255c05dc3ec1da4d5c6d357037b2a369818d3f0c91eca9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1232,7 +1237,8 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "key": "title-4b7555bca0b9f90df86e",
    "title_text": "为什么要它",
    "sha256": "1a24eeb4a3619ba48ac826ff49db4c26fade70ff185562a21b1f62ae3f4a6fe7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1431,7 +1437,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "key": "窗口菜单现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一个桌面窗口展开模型菜单；2 一个终端窗口，光标后面画一行 aicli；3 一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟），卡片标题粗体，下面两三行正文，再下面一个浅绿底的对话气泡写“跟 AI 说”。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个桌面窗口展开模型菜单"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1446,7 +1456,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "key": "终端光标现图小槽4比3",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一个桌面窗口展开模型菜单；2 一个终端窗口，光标后面画一行 aicli；3 一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟），卡片标题粗体，下面两三行正文，再下面一个浅绿底的对话气泡写“跟 AI 说”。",
    "sha256": "3878c53488627bf03ba69d44a9101fa92cf281721a460dce2ff09a86e4cee5cf",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个终端窗口，终端只画无字光标和短线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1461,7 +1475,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "key": "ill-14a7ac5383807e",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一个桌面窗口展开模型菜单；2 一个终端窗口，光标后面画一行 aicli；3 一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟），卡片标题粗体，下面两三行正文，再下面一个浅绿底的对话气泡写“跟 AI 说”。",
    "sha256": "eab6393429edc847f4ff85229f8a8ca40cf5632548b91647a347dd9e91ed263f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只大手把一张任务卡递给一个小机器人，机器人头上一个小时钟"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1478,7 +1496,8 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "key": "title-5ea9487c8144e4fcd6f7",
    "title_text": "三种用法",
    "sha256": "ba5fb1eded50f0180cc8fe7d6df8dcf91758be0a0472b62ffd091c378345e149",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1692,7 +1711,8 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
    "key": "title-0bc3d754030468ea8e00",
    "title_text": "在 Codex 桌面版里",
    "sha256": "421285f9642c021661eaffdaf09f93b7f37ab1dc3a98871388e14c4a82f853a8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1915,7 +1935,8 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
    "key": "title-7761784c301159f2718b",
    "title_text": "在终端里",
    "sha256": "06fd253b9d867ac756a30302033600a972b3d2ccba901b54864bdde877e3cc65",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2118,7 +2139,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-3eeca05e54f20e2bfce8",
    "title_text": "本机模型走完一件真事",
    "sha256": "8bca7c2b8d4905729ba0ae324f1cbe29ca5cd6e6ca57b0a6152ad20ba979fb33",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2336,7 +2358,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-737a5d0fc6b048bc441e",
    "title_text": "交给上层 AI 在后台跑",
    "sha256": "ad41d5d1e1b1cead44f27076a226412a04fb1b638f4403c0f09572d665981ad7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2535,7 +2558,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2719,7 +2743,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2819,7 +2844,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-9a49f4289213049df8d2",
    "title_text": "用了哪些工具和模型",
    "sha256": "08946b2ac6287caa9ec209b41a6546a3f6beabfd14885195cd8a3cb91fd4e4bb",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3028,7 +3054,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3223,7 +3250,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "绳结",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一根绳子断开处被同一个结重新系上，结上挂一张小身份卡；2 一块显卡前排着一只麦克风、一只放大镜和一个小模型方块，模型方块旁一个小沙漏；3 两个小人来回传纸条），卡片标题粗体，下面一段正文，卡片最底一行浅黄底小字写“现在：……”。",
    "sha256": "e8ba773f72832311f81a904a4de28a916eb9cee3f282faf68a07efac7c553766",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根绳子断开处被同一个结重新系上，结上挂一张小身份卡"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3238,7 +3269,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "显卡计算",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一根绳子断开处被同一个结重新系上，结上挂一张小身份卡；2 一块显卡前排着一只麦克风、一只放大镜和一个小模型方块，模型方块旁一个小沙漏；3 两个小人来回传纸条），卡片标题粗体，下面一段正文，卡片最底一行浅黄底小字写“现在：……”。",
    "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一块显卡前排着一只麦克风、一只放大镜和一个小模型方块，模型方块旁一个小沙漏"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3253,7 +3288,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "双人传稿",
    "source_phrase": "三张竖向卡片横排，每张上面一幅小水彩插画（1 一根绳子断开处被同一个结重新系上，结上挂一张小身份卡；2 一块显卡前排着一只麦克风、一只放大镜和一个小模型方块，模型方块旁一个小沙漏；3 两个小人来回传纸条），卡片标题粗体，下面一段正文，卡片最底一行浅黄底小字写“现在：……”。",
    "sha256": "e192b3b436c78fcf3c7021f1cb5595405515cfec389bf319a4bce97c3ab25488",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两个小人来回传纸条"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3270,7 +3309,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-dd372c88900a20e740c3",
    "title_text": "做好了、还在等真实使用的三个设计",
    "sha256": "65e9a483aafac1c0b21e85e82717b51a03b1173377119b9ff927f07ea5ecb0b8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3477,7 +3517,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "ill-b95e26f5da1f2b",
    "source_phrase": "插画：1 一个下拉菜单整张从一本厚目录里抽出来，旁边 OpenAI 标志上一颗小星星；2 两块显卡并排，左边那块旁边一只兔子、右边那块旁边一只慢悠悠的乌龟和一个“不动”的小手势。",
    "sha256": "f5013f962911bf0572280eb69b1e57c6d090db9d787b22788f000bfd19d7cb62",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个下拉菜单整张从一本厚目录里抽出来，旁边 OpenAI 标志上一颗小星星"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3492,7 +3536,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "显卡快慢对比",
    "source_phrase": "插画：1 一个下拉菜单整张从一本厚目录里抽出来，旁边 OpenAI 标志上一颗小星星；2 两块显卡并排，左边那块旁边一只兔子、右边那块旁边一只慢悠悠的乌龟和一个“不动”的小手势。",
    "sha256": "a8e765d6ad80fc1e1c030fe593178b13d915a2c0810bfd820589837f445a238a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两块显卡并排，左边那块旁边一只兔子、右边那块旁边一只慢悠悠的乌龟和一个抽象图形的小手势"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3508,7 +3556,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4038,7 +4087,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-4cab5975c545bdd8c575",
    "title_text": "Codex 桌面版",
    "sha256": "75dbba41fc658d292ef67d8aeb33712f350841aa99a9b00ba4effce6148a4509",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4055,7 +4105,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-e54f83bf05eee7b1d004",
    "title_text": "全部功能（38 项）",
    "sha256": "31cc6d03afcf48aa6186f83fb5e9a916d8f0f5f9a820b5af5dd1fab7775a2c08",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4072,7 +4123,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-60f7692b17ad3e00b8c7",
    "title_text": "启动和路线",
    "sha256": "c838db7e9f30f7ea79d1643a0d70d2508b5b5405b570b95d36a7866c85ce6be0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4089,7 +4141,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-e1361ad46d7b00c3f8f9",
    "title_text": "请 GPT 帮手",
    "sha256": "cab902ee535030d6a7ae5f82db8dd4876bc6ccbf4d41688bc8646914b71333cf",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4501,7 +4554,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-517484e7f24726ef3ee0",
    "title_text": "后台运行",
    "sha256": "8e389d43ad7b441c20d11e67d7c2066d3c714b14a2a1bc3a3146128217dcd650",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -4518,7 +4572,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-b2d3e0c1f2230bfed1ef",
    "title_text": "检查和验收",
    "sha256": "1527d65c08d5ed5ba2920f5df1cce8a781e78dfd356501b6f22ca4e6e2797cee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5010,7 +5065,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-8447ea1cbc480c4cc00e",
    "title_text": "安装和维护",
    "sha256": "3fa799cb5517de5979b24c53ffe903617db6aaebb7fbfb81b460f2264e07025c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5027,7 +5083,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-56fb0e72277beae34fe8",
    "title_text": "本机模型",
    "sha256": "64faf6cb50becabf649e03ec326c82fe71ec3726d741707a8e36c6df6e6e609f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5044,7 +5101,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-8c04ac3daa0d02258ae5",
    "title_text": "钥匙和转接",
    "sha256": "e02f904aca40cfc3169343931180e3e1314a08677911556492e5a503c11bf926",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -5061,7 +5119,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-590c52f46bbea05c5924",
    "title_text": "长对话",
    "sha256": "30140d696c78a56197d4dd9ace45642f5d71fe3bb1e1f2a497eb0a44a78ac873",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -5327,7 +5386,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "main-ai-cli-profile-manager",
    "source_phrase": "右侧留一幅大一点的水彩插画：从下往上长出来的一棵小树，树枝上依次挂着一个终端窗口、一个计时沙漏、一根接好的绳结、一个桌面菜单、两个小人传纸条、一把钥匙，像一路长出来的样子。",
    "sha256": "005ecff58d5a9fe61cfb8ef593a20e6374a4e41c601c4c1fe98e8841d0f94dea",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "从下往上长出来的一棵小树，树枝上依次挂着一个终端窗口、一个计时沙漏、一根接好的绳结、一个桌面菜单、两个小人传纸条、一把钥匙，像一路长出来的样子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -5343,7 +5406,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -87,7 +87,7 @@
  "source": {
   "page": "sources/pages/skill-authorization-file-broker/page.json",
   "sha256": "10bfd7b458cc2627256eac4e6ed0b83e107ed8e321f830c69657a5a9ee0cf5d8",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -314,7 +314,11 @@
    "key": "main-password-center",
    "source_phrase": "右上一幅水彩插画：一个文件夹被一条绿丝带捆好，丝带结上挂四把小钥匙，旁边一个打开的小盒子里整齐放着几块小方块（表示分块加密）。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个文件夹被一条绿丝带捆好，丝带结上挂四把小钥匙，旁边一个打开的小盒子里整齐放着几块小方块（表示分块加密"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -331,7 +335,8 @@
    "key": "title-a6a91aec3d6c7fa74c29",
    "title_text": "加密文件",
    "sha256": "41555999cb9980b4a0f614386e8d183a291537845643e525a010aa09ed4f5bd7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -520,7 +525,8 @@
    "key": "title-r3-1abec9b3222b498a6eb9",
    "title_text": "一个完整的例子：“帮我加密 E:\\扫描件\\合同 这个文件夹”",
    "sha256": "827a9a54db4ae8722207a0bb6dedcb14ca674cef470996afd8c8db30b5a87a9b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -620,7 +626,11 @@
    "key": "锁文件夹",
    "source_phrase": "一张宽卡片，左边丝带捆着的文件夹小插画，右边一段话和一个链接按钮。",
    "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "丝带捆着的文件夹"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -636,7 +646,8 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -758,7 +769,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

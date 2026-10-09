@@ -236,7 +236,7 @@
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
   "sha256": "dcd5f18d203607ff77afc0867aa5d3b2b5fa26f4d65ba9eebc46f8417035364e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -567,7 +567,11 @@
    "key": "Claude窗口、五级台阶与桥的结构图",
    "source_phrase": "横版 16:9。最上面一行是左上“Claude 适配”毛笔艺术字大标题（和约法样张的“约法”两字同一种写法），下面一行粗体深绿副标题。副标题下面一条横跨全宽的“最常用的两件事”：左端“最常用的两件事”粗体深绿，右边两张等宽等高、浅绿底、细绿边的圆角卡片并排，是全屏最显眼的一块。左卡左上画 Chrome 的彩色圆形标志，旁边一个胸前是 OpenAI 黑色花结的小机器人；右卡左上画一个小沙漏旁边一把钥匙。卡名（“要用本人已登录的 Chrome”“给当前 Claude 开无限制授权”）粗体深绿，冒号后的答案深蓝灰，末尾的〔详见：……〕画成白底细绿描边的小圆角按钮、带小箭头。这条下面再分左右两栏：左边约 55% 宽是文字区，先是介绍段（〔〕里的字画成绿色下划线加小箭头的链接样式）。介绍段下面一张浅绿细边圆角卡片“先认几个词”，六个词条竖排，词条名粗体绿色，字号比介绍段小一号、行距紧凑。卡片下面一行“跳到：”后面六个圆角小按钮（白底浅绿描边绿字），就是那六个〔〕链接。右边约 45% 宽一幅水彩插画（比原来略矮，给上面的两张卡让位）：上方一扇画着 Claude 橙色星芒标志的小窗口（代表 Claude 桌面版），窗口下沿垂下一根绿色细绳，串着三个小木块，一路垂到底部一枚小铜牌，铜牌上刻“claude-root”；细绳右边一段五级木台阶，每级台阶侧面一块小牌子，从低到高依次是“low”“medium”“high”“xhigh”“max”；台阶顶上架着一座小木桥，通向画面右缘一个胸前是 OpenAI 黑色花结标志的小机器人；画面左下角一只小木钩挂着一张空白便签（便签上不写字）。插画里只有铜牌和五块台阶牌子上有字，text 里“claude-root　low　medium　high　xhigh　max”这一行就是这六处的字，不要另外画成一行文字。整屏最下面一条横跨全宽的细长圆角横条（浅绿底），左边是“Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：”，右边一个显眼的按钮〔在整套系统里的分工 → 怎么协作〕。",
    "sha256": "63ce419fbe9c9d7dbe2c97e282aa0b8568f7bd77aa573d735748305bad6cba03",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "比原来略矮，给上面的两张卡让位）：上方一扇画着 Claude 橙色星芒标志的小窗口（代表 Claude 桌面版），窗口下沿垂下一根绿色细绳，串着三个小木块，一路垂到底部一枚小铜牌，铜牌上刻抽象图形；细绳右边一段五级木台阶，每级台阶侧面一块小牌子，从低到高依次是抽象图形抽象图形抽象图形抽象图形抽象图形；台阶顶上架着一座小木桥，通向画面右缘一个胸前是 OpenAI 黑色花结标志的小机器人；画面左下角一只小木钩挂着一张空白便签（便签上不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -584,7 +588,14 @@
    "key": "title-db1bc4ddc30dee2303c6",
    "title_text": "Claude 适配",
    "sha256": "cd385dbda2b017e28fc9869b9161f94bb7672c67a6638d4e0074ed3f763a345a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    28,
+    0,
+    786,
+    169
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -795,7 +806,8 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
    "key": "title-8a82a02edd771f698ac6",
    "title_text": "人话要点 · 最常用的两件事",
    "sha256": "bb3b7a49e9065879df866964364359c0b559f6b4d97f5c0e22423ad8c579f3ba",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1077,7 +1089,14 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
    "key": "title-3ceaf60d469227fb5513",
    "title_text": "人话要点 · Claude 派自己的子代理",
    "sha256": "71a00c22366b6816782d10eb8adba73693f15c5acf51939be55eb26a8e8d3eb6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    22,
+    91,
+    916,
+    226
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1293,7 +1312,14 @@ Claude 和 GPT 在这套规则下实际怎么分工、干过哪些活：〔在�
    "key": "title-r3-6833841bd9569218d70c",
    "title_text": "人话要点 · Claude 派 GPT 子代理",
    "sha256": "c7dde93e7b4705557120512f9d8d7be75a55fe9d41cf1610beb0937652ddbcfc",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    35,
+    98,
+    930,
+    204
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1910,7 +1936,8 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "key": "title-f931c3c1d4386023eae7",
    "title_text": "人话要点 · 怎么认出 Claude、档位怎么分",
    "sha256": "0a36eed98817cf16f46d07339689418773b795ec30045f87a2a688086ce792c2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2255,7 +2282,8 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "key": "title-1c22412ca19b41284b16",
    "title_text": "人话要点 · 宿主接线：这些东西怎么接在 Claude 上",
    "sha256": "2eb32204dd12a96e5ec7867da291391c6d596545fee58761c80fa87780b364d9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2748,7 +2776,8 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "key": "title-257875ef3ab006a2be38",
    "title_text": "人话要点 · 两个 Hook、无限制授权的接线",
    "sha256": "9aaca6ea90a901e87f1a1a8363ca638a3034bda2f208c22bbd1d11decac8699b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2955,7 +2984,14 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "key": "title-r3-7100f0861eb7ba51b4be",
    "title_text": "人话要点 · 受信任 AI 还能做什么、官方升级以后",
    "sha256": "0c86817afbadde8026d62b410d94fae2cc2ae230f2bc811f203c0feee5cdb4a3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    50,
+    1369,
+    167
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3103,7 +3139,14 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "key": "title-db1bc4ddc30dee2303c6",
    "title_text": "Claude 适配",
    "sha256": "cb33b3df79fa7c7c402a5a2dc20a747abd4d7d8abfb6cb3aa71c4b198ee9364d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    50,
+    722,
+    227
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3120,7 +3163,14 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "key": "title-2a9c9e9976421a9d9726",
    "title_text": "身份",
    "sha256": "a6a546a0510901f6e3f04302f04d732e061291ebf0d1d3c477a5dcc2467a5d51",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    45,
+    493,
+    149,
+    558
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3137,7 +3187,14 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "key": "title-50301cdf60dfb599a2f2",
    "title_text": "思考档位",
    "sha256": "b35a3eae339f8271e50af04c9ec8f77d4c4a9b5657aaa5a5a8aabe9364e9f5b4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    856,
+    291,
+    1044,
+    358
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3289,7 +3346,14 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "key": "title-9583cedf9141c56ec395",
    "title_text": "派子代理：Claude 的不同处",
    "sha256": "8abf5050d4467a77dfe5f04afe1593bca42657cb9b0cd9c17206e91f95d931b6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    132,
+    281,
+    614,
+    349
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3567,7 +3631,14 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
    "key": "title-e7bbcf30556086ec443a",
    "title_text": "宿主接线",
    "sha256": "f90965ca91c6268c3f9caceda355a5b9bf05923f8077d4a507aa4fecf2ff7e0f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    851,
+    14,
+    1216,
+    159
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3798,7 +3869,14 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "key": "title-59f58d53cda7d226edfa",
    "title_text": "Hook 和个人资料状态",
    "sha256": "9e5c04eb3eb7f5e84979c8063f5464e337a467c872dcd2e599864017cd50ddf1",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    175,
+    482,
+    244
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3815,7 +3893,14 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "key": "title-7aaf9f13bf9d1731bada",
    "title_text": "无限制授权",
    "sha256": "4afd794a277c318ff0145a30758bad3941725becb6af224a0b1605b80d39871a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    860,
+    175,
+    1094,
+    244
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3956,7 +4041,14 @@ Claude 会话和本机、图形界面、电脑 MCP 用同一份个人资料状�
    "key": "title-1666410c5efb391dd986",
    "title_text": "受信任 AI 的其他能力",
    "sha256": "9d1a95e371efeec0575355ad2993d45e92bc80bedc7998af4f85dc5dc3bc1901",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    108,
+    153,
+    556,
+    211
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -3973,7 +4065,14 @@ Claude 会话和本机、图形界面、电脑 MCP 用同一份个人资料状�
    "key": "title-fe23a6356f7f7f4a3b82",
    "title_text": "官方升级",
    "sha256": "a9081e78fc4f5b9e3dba5153d3db0909e1eed41fff9f52eaef9c7d157f248481",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    957,
+    151,
+    1162,
+    211
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

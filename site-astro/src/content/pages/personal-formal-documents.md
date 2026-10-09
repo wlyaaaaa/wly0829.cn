@@ -410,7 +410,7 @@
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
   "sha256": "b6ae86d61524bafd009cd3f5fecac14ee9bca133a6b48258834ce820a316a208",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -627,7 +627,11 @@
    "key": "main-personal-formal-documents",
    "source_phrase": "右上一幅水彩插画：书桌上一份摊开的两页协议（纸上只画浅灰短线，不画字），右页下方左右两个签字栏：左栏里一笔绿色签名，右栏是空的横线；旁边一台笔记本屏幕上并排两个文件图标（一个蓝色 W 形文档、一个红色 PDF 形文档，图标上不写字）；再旁边一个牛皮纸文件夹，封口贴着绿色封条和一把小锁。",
    "sha256": "dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "书桌上一份摊开的两页协议（纸上只画浅灰短线，不画字），右页下方左右两个签字栏：左栏里一笔绿色签名，右栏是空的横线；旁边一台笔记本屏幕上并排两个文件图标（一个蓝色 W 形文档、一个红色 PDF 形文档，图标上不写字）；再旁边一个牛皮纸文件夹，封口贴着绿色封条和一把小锁"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -644,7 +648,8 @@
    "key": "title-bdeaa8d446e882b1d13b",
    "title_text": "个人正式文书",
    "sha256": "139d368758ebd17739f7e672c9846e5cc88c290d2d2f8d73b18a03cacbca1836",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -852,7 +857,8 @@
    "key": "title-4433487b3c739aaae677",
    "title_text": "一份协议，从说出来到签好",
    "sha256": "43dd141249fb6d0ba2d0f43bc74e597884f1ab743bd1e577fe8547f2caed16d3",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1043,7 +1049,11 @@
    "key": "打印文稿",
    "source_phrase": "下半屏一张三列表格“电子版和打印版”，表头浅绿底；表格右边一幅小插画：一台打印机吐出一张纸，纸右下角有一笔签名，旁边一只手的大拇指悬在纸上方。",
    "sha256": "3863c82d79b0bb3cdf7b7c8ec0218c0572326751b6f4e3c1c17b2cb352c2c32f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台打印机吐出一张纸，纸右下角有一笔签名，旁边一只手的大拇指悬在纸上方"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1060,7 +1070,8 @@
    "key": "title-b7904de39adaf07983cb",
    "title_text": "通知、声明和打印版",
    "sha256": "1e9bd46a8582ccf44f05fb116635909c705c7a40a926a59e2608a3f012ffb6a5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1222,7 +1233,11 @@
    "key": "信封文件",
    "source_phrase": "表格右边一张竖卡片“对方签回，另记一笔”，卡片顶上一个小插画：一个信封里露出一张签好名的纸。",
    "sha256": "4c84d57aec93f5fa654626301c1df6fb7f3fa5364a34647567e2b7a89e1d4717",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个信封里露出一张签好名的纸"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1239,7 +1254,8 @@
    "key": "title-2acd8ac623a7ebf6731f",
    "title_text": "做好了，不等于交出去了",
    "sha256": "9d7834a2c4b4272a45f8ed6c6f823baf9063b7481f01df5fd19b595d9fcc904a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1492,7 +1508,11 @@
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "右下角一幅小插画：一只手把一张灰色草稿纸放回抽屉，抽屉里整齐排着几个带编号标签的文件夹（标签上不写字）。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只手把一张灰色草稿纸放回抽屉，抽屉里整齐排着几个带编号标签的文件夹（标签上不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1509,7 +1529,8 @@
    "key": "title-1dce7406fe48315ae005",
    "title_text": "出了岔子怎么办",
    "sha256": "70ea9ea3299bf5c01939855f14de395b0ed0be3888e1a95223f12e79c648fa10",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1749,7 +1770,8 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2098,7 +2120,8 @@ Python 写成：主程序 1,839 行，另用共用的检查模块 1,422 行；39
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2413,7 +2436,8 @@ Python 写成：主程序 1,839 行，另用共用的检查模块 1,422 行；39
    "key": "title-64159624b0111b83110c",
    "title_text": "全部功能（15 项）",
    "sha256": "a06d606c6c4cddbf07d9b054102b5f6bd90af4b965ea05e0735685b15c72f94b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2430,7 +2454,8 @@ Python 写成：主程序 1,839 行，另用共用的检查模块 1,422 行；39
    "key": "title-12dbeba3bcb9a68041cc",
    "title_text": "写文书",
    "sha256": "1d4674a83bcae6b6bc17502df26de8c157de3b02df16c115b83bb6fd20a1a9f0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2447,7 +2472,8 @@ Python 写成：主程序 1,839 行，另用共用的检查模块 1,422 行；39
    "key": "title-a8e7f791a6dbc64e4d56",
    "title_text": "出文件",
    "sha256": "1cabc5d7b7c930d5ea8d87f4aea70ba10da72e9f22b3c7851cd1565013f1cb03",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2464,7 +2490,8 @@ Python 写成：主程序 1,839 行，另用共用的检查模块 1,422 行；39
    "key": "title-71d8ae12c3fa89eb64cf",
    "title_text": "定下这件事",
    "sha256": "c856187de2f5ae7eb7739698cf2e2eb3fb6f3785963a0e206a8c353a1565414a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2725,7 +2752,11 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "main-personal-formal-documents",
    "source_phrase": "网格下面空出来的地方画一幅横向小插画：一张桌上从左到右排着一份草稿、一份签好名的协议、一个带封条的文件夹、一个信封、一个回执小票，每两样之间一个绿色小箭头（插画上不写字）。",
    "sha256": "dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张桌上从左到右排着一份草稿、一份签好名的协议、一个带封条的文件夹、一个信封、一个回执小票，每两样之间一个绿色小箭头（插画上不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2742,7 +2773,8 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "title-4838a86fa5e80b84f791",
    "title_text": "交出去以后",
    "sha256": "2f81582431334c08025982be58e6e229c5789f9131bc8fe77b45eeb23182ee1a",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2759,7 +2791,8 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "title-d454208294c410aa104a",
    "title_text": "检查和签名",
    "sha256": "462ca91dd870725ae37a3547df0faabb5022cdfc429438235b0f7552cadc159c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2866,7 +2899,11 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "main-personal-formal-documents",
    "source_phrase": "时间线下方一幅细长插画：一叠纸逐渐变成一个带封条的文件夹。",
    "sha256": "dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠纸逐渐变成一个带封条的文件夹"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2882,7 +2919,8 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3002,7 +3040,14 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

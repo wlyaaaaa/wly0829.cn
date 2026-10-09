@@ -412,7 +412,7 @@
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
   "sha256": "d268bb33bae46c1660884aa067c33b89bb7e3dd1d9628442a0a2d2d427414971",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -660,7 +660,11 @@
    "key": "事实来源五牌",
    "source_phrase": "右边约 45% 宽一幅水彩插画：一条林间小路通向三座并排的小木屋，屋檐下各挂一块木牌，分别写“E:\\.agents”“E:\\GitHub总索引”“E:\\PCConfig”；路口立着一块三叉指路牌（牌上不写字，只画箭头）。",
    "sha256": "04f59cba42618413fec0975b0425b266e64ec9443ad24d3c458cfbd0d28aaf65",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一条林间小路通向三座并排的小木屋，屋檐下各挂一块木牌，分别画抽象短线的抽象图形抽象图形；路口立着一块三叉指路牌（牌上不写字，只画箭头"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -677,7 +681,14 @@
    "key": "title-5c3f32ee791fa12cb29c",
    "title_text": "事实来源与任务上下文",
    "sha256": "67cc6133908c0f0885ab0b0a2ebe414dd0dd9766d5c4e1c1c5d76799a9872caa",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    14,
+    88,
+    941,
+    272
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -912,7 +923,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-80377ea1c28c68982dc0",
    "title_text": "人话要点 · 事实找谁",
    "sha256": "8a1d4beaaad7c0312c86cd0311d4d8af41c750d3071816ab065afc0bf7b5de64",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    94,
+    50,
+    846,
+    189
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1303,7 +1321,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-3261cfac23cf368bbc75",
    "title_text": "人话要点 · 冻结的项目",
    "sha256": "67bd8c0d4dc03ed61b366693cffa85cae4b3fb5c51086d8ce092e65a079ecc97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    60,
+    120,
+    877,
+    316
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1567,7 +1592,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-3e2890b7063e976f7a0b",
    "title_text": "人话要点 · 三档维护",
    "sha256": "2b5f8303c70731f5a0c0ca0eede5a3436c17867172f4f1fbae92c6aec4105673",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    34,
+    93,
+    810,
+    269
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1843,7 +1875,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-91ae045e625790f75d4a",
    "title_text": "人话要点 · 长任务接续",
    "sha256": "2c488f67efa006f70abdfe35b38f1dbd564059eaeea708579ee560d15e2c2114",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    18,
+    886,
+    181
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2031,7 +2070,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-93dd018dfe3eae286f84",
    "title_text": "人话要点 · 一样东西只存一处",
    "sha256": "f5afcbb50d709002e0ddfe6c433f85bef1ada78a6dad4daec1a44a85cbb601f8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    42,
+    997,
+    206
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2314,7 +2360,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-r3-70a88267df4ed076c946",
    "title_text": "人话要点 · 纠正和经验记在哪",
    "sha256": "45e9fdfaca0d62486006d83d8546519f7adfb5235b7a5a599df71ddbdcce3598",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    30,
+    18,
+    836,
+    150
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2458,7 +2511,8 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-5c3f32ee791fa12cb29c",
    "title_text": "事实来源与任务上下文",
    "sha256": "67cc6133908c0f0885ab0b0a2ebe414dd0dd9766d5c4e1c1c5d76799a9872caa",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2475,7 +2529,8 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-ebc6931a168640665ce1",
    "title_text": "事实找谁",
    "sha256": "996061fc25d6eb90af67c2c0588b1c5073181f98810aba36f606c60219fbe0fb",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2492,7 +2547,8 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "key": "title-adb88e3a2ebbe5d2924e",
    "title_text": "冻结的项目",
    "sha256": "1123035185746c639fbed1a163c433473d62745b5e47d01e350ddd1b2b2f4f6e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2629,7 +2685,14 @@ owner: `E:\.agents`
    "key": "title-6695ff3efba21312206f",
    "title_text": "三档维护",
    "sha256": "4b8c48b815471ee427852a5ba41a0e40f0639fe29351576aed2f6a49ba70ee56",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    56,
+    115,
+    239,
+    170
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2646,7 +2709,14 @@ owner: `E:\.agents`
    "key": "title-bf56ba49ad98cdbc0892",
    "title_text": "长任务接续",
    "sha256": "1fd8264f0ca5bb4fcfefc90490f42c27f4c4120525986cf2e1c48d987521e9b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    874,
+    117,
+    1098,
+    170
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "a2d14d6a37f1bc5300a0a84a4c56a7ce158e7466aaa7c9aaf370b6cca2fd78b8",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1005,7 +1005,11 @@
    "key": "main-chinese-asr",
    "source_phrase": "右上一幅水彩插画：一只夹在衣领上的小麦克风，声波一圈圈荡开，化成一行行浅灰短线落到一张纸上，纸上有两处淡黄色的小标记（纸上只画短线和黄标记，不画任何字）；纸旁一块显卡侧面亮着绿光；右下角浮着一个白底绿色的小胶囊（听写小窗：一个绿色麦克风图标、一个小下拉箭头、一个小叉，麦克风右上角一颗绿色小圆点）。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只夹在衣领上的小麦克风，声波一圈圈荡开，化成一行行浅灰短线落到一张纸上，纸上有两处淡黄色的小标记（纸上只画短线和黄标记，不画任何字）；纸旁一块显卡侧面亮着绿光；右下角浮着一个白底绿色的小胶囊（听写小窗：一个绿色麦克风图标、一个小下拉箭头、一个小叉，麦克风右上角一颗绿色小圆点"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1022,7 +1026,8 @@
    "key": "title-398cd04705c27daf5f2a",
    "title_text": "中文语音转写",
    "sha256": "9ad5d18ce6077e2d501be681fb038a73dd24c9224c966f3dc04d7595e46099f1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1293,7 +1298,11 @@
    "key": "分岔指路",
    "source_phrase": "表格右上角画一支小小的分岔路路牌。",
    "sha256": "1dfe279ec5b683d3ceacacf8af37000c33a04422ad35709f45cfde7f9e6e85c6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一支小小的分岔路路牌，只画路牌实体轮廓和分岔形状，不加牌面文字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1310,7 +1319,8 @@
    "key": "title-5b76399c244795471cf1",
    "title_text": "选哪条路",
    "sha256": "2061c15fe66c65704e896c392c7ed6d8dec88f1c379bd78383d1185f63dac47d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1464,7 +1474,11 @@
    "key": "听写窗口",
    "source_phrase": "左卡上方一幅小水彩插画：一张书桌，显示器上一个聊天输入框，右下角浮着白绿小胶囊听写窗，一只手在键盘上按着 Win 键（输入框里只画浅灰短线，不画字）；右卡上方一幅小水彩插画：左边一部手机显示一个语音气泡、一个录音文件图标，一支绿色箭头指向一张纸，纸上两处淡黄标记（只画短线）。",
    "sha256": "9805d7a1bc9651fec9702abfae2a8e4556a15ec366a939fe66c29e8e9dcbb0ff",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张书桌，显示器上一个聊天输入框，右下角浮着白绿小胶囊听写窗，一只手在键盘上按着 Win 键（输入框里只画浅灰短线，不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1479,7 +1493,11 @@
    "key": "语音转写现图小槽4比3",
    "source_phrase": "左卡上方一幅小水彩插画：一张书桌，显示器上一个聊天输入框，右下角浮着白绿小胶囊听写窗，一只手在键盘上按着 Win 键（输入框里只画浅灰短线，不画字）；右卡上方一幅小水彩插画：左边一部手机显示一个语音气泡、一个录音文件图标，一支绿色箭头指向一张纸，纸上两处淡黄标记（只画短线）。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边一部手机显示一个语音气泡、一个录音文件图标，一支绿色箭头指向一张纸，纸上两处淡黄标记（只画短线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1496,7 +1514,14 @@
    "key": "title-r3-21a1ae82f9192f6779d4",
    "title_text": "两种用法",
    "sha256": "873190dee313516494a9269126bd18f89205b89116a3cb68004cb3a424472657",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    64,
+    506,
+    219
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1724,7 +1749,8 @@
    "key": "title-29fcfd38909a51e5457c",
    "title_text": "一段录音交给 AI 之后",
    "sha256": "7d889c868b977a0cfa155e8f2aaea68b730838805172254a8fc33a465e0a27b9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2153,7 +2179,8 @@ P2　12:03　这句两个模型差得多，建议回听
    "key": "title-885cfbfa5b84b744b1dc",
    "title_text": "疑难的，再请云端听一遍",
    "sha256": "f408e074a578e255aa2e4a486a76175518a82da1483d0873965dd202d9639da1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2438,7 +2465,11 @@ P2　12:03　这句两个模型差得多，建议回听
    "key": "听写胶囊四部位",
    "source_phrase": "左半边一幅放大的水彩插画：白底绿边的小胶囊听写窗（真实尺寸 200×75 像素，这里放大画）：左边一个绿色麦克风按钮，麦克风右上角一颗小圆点，旁边一个小下拉箭头，最右一个小叉。",
    "sha256": "229bcb8f2ae1b1689f1d723853716b51ff59ce709753ec2e36c09d169b8db564",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "白底绿边的小胶囊听写窗（真实尺寸 200×75 像素，这里放大画）：左边一个绿色麦克风按钮，麦克风右上角一颗小圆点，旁边一个小下拉箭头，最右一个小叉"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2456,7 +2487,14 @@ P2　12:03　这句两个模型差得多，建议回听
    "key": "title-bd07fe0f9041361d495a",
    "title_text": "听写小窗",
    "sha256": "718177222b59295d480e811393cdbcc9dd3aa76aa37f5651de855bff7beb5a3f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    260,
+    12,
+    675,
+    137
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2696,7 +2734,8 @@ P2　12:03　这句两个模型差得多，建议回听
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2907,7 +2946,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3020,7 +3060,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-ba3bec5c420cdf3b1725",
    "title_text": "用了哪些模型",
    "sha256": "7041904026eedb0965187e13d645e5cf838d43d216ebe623231a3c0442fd2488",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3281,7 +3322,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3426,7 +3468,11 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "语音转写现图小槽4比3",
    "source_phrase": "插画：1 两只耳朵各听一条波形，波形下两张纸，中间一个放大镜照着一处“三百/三千”的差别（放大镜里只画两个小色块，不画字）；2 一段平直的波形旁边四个小格子，其中一个亮起；3 白绿小胶囊听写窗，麦克风是绿的，旁边一个小内存条托着一团声波，远处一张显卡。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两只耳朵各听一条波形，波形下两张纸，中间一个放大镜照着一处抽象图形的差别（放大镜里只画两个小色块，不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3441,7 +3487,11 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "波形",
    "source_phrase": "插画：1 两只耳朵各听一条波形，波形下两张纸，中间一个放大镜照着一处“三百/三千”的差别（放大镜里只画两个小色块，不画字）；2 一段平直的波形旁边四个小格子，其中一个亮起；3 白绿小胶囊听写窗，麦克风是绿的，旁边一个小内存条托着一团声波，远处一张显卡。",
    "sha256": "31f0f14bae9218df618102a98136ddafd52cb593a5474a0425248c78e85a9f14",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一段平直的波形旁边四个小格子，其中一个亮起"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3456,7 +3506,11 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "听写窗口",
    "source_phrase": "插画：1 两只耳朵各听一条波形，波形下两张纸，中间一个放大镜照着一处“三百/三千”的差别（放大镜里只画两个小色块，不画字）；2 一段平直的波形旁边四个小格子，其中一个亮起；3 白绿小胶囊听写窗，麦克风是绿的，旁边一个小内存条托着一团声波，远处一张显卡。",
    "sha256": "9805d7a1bc9651fec9702abfae2a8e4556a15ec366a939fe66c29e8e9dcbb0ff",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "白绿小胶囊听写窗，麦克风是绿的，旁边一个小内存条托着一团声波，远处一张显卡"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3472,7 +3526,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3931,7 +3986,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-e54f83bf05eee7b1d004",
    "title_text": "全部功能（38 项）",
    "sha256": "31cc6d03afcf48aa6186f83fb5e9a916d8f0f5f9a820b5af5dd1fab7775a2c08",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -4568,7 +4624,11 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "main-chinese-asr",
    "source_phrase": "三张图上下拼成一整段：画风、字号层级、组名和状态点统一；两列、三列、四列行按张数调整卡宽，每排等高等距、铺满画布，上下边都不画边框；这是第三张：没有标题、没有图例，接着排；所有卡片排满后，在段尾另画一幅浅浅的水彩小插画（一只麦克风和一张写满浅灰短线的纸，不画字），不要画边框。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只麦克风和一张写满浅灰短线的纸，不画字），不要画边框"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -4844,7 +4904,11 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "main-chinese-asr",
    "source_phrase": "横版画面：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边留一幅大一点的水彩插画：从上到下依次长出一张写满短线的纸、两只耳朵、一张显卡、一个白绿小胶囊听写窗、一朵云和一把钥匙，像一路长出来的样子（插画里不画字）。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "从上到下依次长出一张写满短线的纸、两只耳朵、一张显卡、一个白绿小胶囊听写窗、一朵云和一把钥匙，像一路长出来的样子（插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -4860,7 +4924,8 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

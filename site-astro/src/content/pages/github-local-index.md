@@ -2,32 +2,41 @@
 {
  "title": "GitHub 项目总索引",
  "kind": "project",
- "url": "/projects/github-local-index/",
+ "url": "/projects/github-index/",
  "tagline": "找全代码仓库，查清副本和同步情况。",
+ "old_urls": [
+  "/projects/github-local-index/"
+ ],
  "toc": [
   {
    "id": "top",
-   "label": "开头"
+   "label": "开头",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp"
   },
   {
    "id": "usage",
-   "label": "怎么用"
+   "label": "怎么用",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-43-9fe7ee9705.webp"
   },
   {
    "id": "tech",
-   "label": "技术"
+   "label": "技术",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-49-4aa1a3c674.webp"
   },
   {
    "id": "highlights",
-   "label": "亮点"
+   "label": "亮点",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-13-ba0d3fdcc6.webp"
   },
   {
    "id": "features",
-   "label": "全部功能"
+   "label": "全部功能",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-25-6c8f61c250.webp"
   },
   {
    "id": "history",
-   "label": "演进"
+   "label": "演进",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-55-f8367a4ec7.webp"
   }
  ],
  "page": {
@@ -35,7 +44,10 @@
   "page": "github-local-index",
   "kind": "project",
   "title": "GitHub 项目总索引",
-  "url": "/projects/github-local-index/",
+  "url": "/projects/github-index/",
+  "old_urls": [
+   "/projects/github-local-index/"
+  ],
   "tagline": "找全代码仓库，查清副本和同步情况。",
   "status": "常用",
   "public": false,
@@ -763,8 +775,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "11d8254b882c33a365a342108280b8ab5b862f86a735de3d6fe89474f5f898fd",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "sha256": "862beec5c9c0e046b6f8837f132ca71fda48c799de54ba1c6e2ad0c00baaa904",
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -1038,7 +1050,11 @@
    "key": "main-github-local-index",
    "source_phrase": "右上一幅水彩插画：一本摊开的大账本，左页是一行行小卡片（每行一个仓库，卡片左边一个小锁或小地球表示私有或公开，只画图形不画字）；右页几根细细的绿线从小文件夹里长出来（代表 Git 分支），汇到一根粗主干上；账本旁一只放大镜；右上角一个 GitHub 小猫标志（品牌标志照原样画）。",
    "sha256": "e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本摊开的大账本，左页是一行行小卡片（每行一个仓库，卡片左边一个小锁或小地球表示私有或公开，只画图形不画字）；右页几根细细的绿线从小文件夹里长出来（代表 Git 分支），汇到一根粗主干上；账本旁一只放大镜；右上角一个 GitHub 小猫标志（品牌标志照原样画"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1055,7 +1071,8 @@
    "key": "title-52fbc3b0e8f01b155bee",
    "title_text": "GitHub 项目总索引",
    "sha256": "1255afdf7fe08e2494a48482e6ebef6cd8b63d7d4398a2e27751bf5b70be0fed",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1287,7 +1304,8 @@ GitHub 项目总索引
    "key": "title-8477921ac5c65e15db4b",
    "title_text": "平时怎么用",
    "sha256": "60c9e97a88acfcedd74e9fb83b6da164baa88d0d5f92d3774c43ec4726bce7e9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1494,7 +1512,11 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "网页看板通用构图",
    "source_phrase": "左侧约四分之三宽是一块水彩风格的显示器屏幕插画（浅色底），屏幕里画一张真实的表格：表头和五行完全照下面的字画，“公开”一列里“公开”“私有”用绿色和灰色小标签；PCConfig 那一行和 wly0829.cn 那一行底色淡黄。",
    "sha256": "5f5204488bba4692225c17e68b358ac36a94954e10513eddf4ebf9cf13c6071e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "浅色显示器，屏幕里五行表格、绿色和灰色小状态标签，其中两行浅黄底；表格字和标签文字由排版程序放，不画进插画"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1511,7 +1533,8 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "title-9ea6f4e43ba2940923dd",
    "title_text": "总表长这样",
    "sha256": "8c15ddd6dbe5d816e3524aab510ddfd35893d9ff86834fe2474be96ab442901d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1731,7 +1754,8 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2059,7 +2083,8 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2300,7 +2325,11 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "索引指路",
    "source_phrase": "最下面第六张卡片横跨整屏、略宽一点，左边插画：一面厚砖墙被搬走，原地立着一块薄薄的指路牌，旁边一把钥匙正放进一只小保险箱；右边粗体一句加一段小字。",
    "sha256": "848acf70ba6927533720ca5f6a5b26f4561ae933e22fcfe8618363313709ed69",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一面厚砖墙被搬走，原地立着一块薄薄的指路牌，旁边一把钥匙正放进一只小保险箱"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2316,7 +2345,8 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2485,7 +2515,11 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "树枝索引",
    "source_phrase": "插画：1 一根粗树干（主线）旁伸出九根细枝，其中一根枝头挂着九颗小果子、没接回主干，一只放大镜照着它；2 两块小木牌，一块画问号、一块画叉，中间一道竖线隔开。",
    "sha256": "afe98924e00cbe34c88815a7c2e8b9195ae2737f0b90d323144026d20d396946",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根粗树干（主线）旁伸出九根细枝，其中一根枝头挂着九颗小果子、没接回主干，一只放大镜照着它"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2501,7 +2535,8 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2848,7 +2883,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-70b783bfeb9724c803e3",
    "title_text": "全部功能（32 项）",
    "sha256": "192638e5b17b28fa33cbb67212a1b8895ea9f0331efde081d14ae8580488b06e",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2865,7 +2901,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-728aaa9c90d9ede80150",
    "title_text": "找到和认准仓库",
    "sha256": "366dbbf751240236411275a87a62b0013b2d49a5b9aafd0343f1725956638c9c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -2882,7 +2919,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-2e603ba0d248e367b648",
    "title_text": "查同步",
    "sha256": "a48c87c00864b6dd65825e858bed7146eac249cbfa7c56c237b1db0b1ee215d1",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3198,7 +3236,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-4f614f6662501b88f1c5",
    "title_text": "公开和分享之前",
    "sha256": "94b199b5fe1636708ed7d90e3dd7cf36129a0b70812bc29a1316dffd5ae62be6",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3215,7 +3254,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-bc67d336db85bbdbe8c5",
    "title_text": "总表的维护",
    "sha256": "67e7682bb187808a65ad4fb51239291e08df9fb0b1e6c7518e3895666cd942b5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3232,7 +3272,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-40da45dafbd39c50e3b7",
    "title_text": "给网站和驾驶舱",
    "sha256": "2970ec4359cab19dcb1fa4ad743adf2aed0cb847c671348d4cb995cbbb31e4b2",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3625,7 +3666,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-2ebb0ad61f86cc85523b",
    "title_text": "仓库大动作",
    "sha256": "457a813999488dd77dc06fb597990b616c1a741476657b635b8d7a1d5430b443",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3642,7 +3684,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-a8c3698b5b8c485d8bd4",
    "title_text": "已停用",
    "sha256": "109419764a0213c3c797117892861b41eba1c925b8ea33a3c2d91df372cd05da",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3961,7 +4004,11 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "main-github-local-index",
    "source_phrase": "右侧一幅大一点的水彩插画：一棵小树苗从一本摊开的账本里长出来，越往上枝叶越多，枝上挂着一张张小仓库卡片，树干上挂着一把小锁（代表改成私有），树下几片落叶上画着小叉（代表删掉的功能）。",
    "sha256": "e365b0208f0e75f40c63f79598210e3b0bc529f83a26a6bcdfb133606b8e5f80",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一棵小树苗从一本摊开的账本里长出来，越往上枝叶越多，枝上挂着一张张小仓库卡片，树干上挂着一把小锁（代表改成私有），树下几片落叶上画着小叉（代表删掉的功能"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3977,7 +4024,8 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

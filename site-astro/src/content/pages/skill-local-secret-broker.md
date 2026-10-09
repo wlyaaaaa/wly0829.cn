@@ -107,7 +107,7 @@
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
   "sha256": "172a125fc1fdc1fbde86eae5b27e9cf5aebf311f5e2cc174cd4c005c3f67b7ef",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -354,7 +354,11 @@
    "key": "main-password-center",
    "source_phrase": "左边约一半宽画一个对话框插画：我说一句话，AI 回一个小窗口图标（窗口里画一把钥匙和一个“已显示”对勾），旁边是绿色保险柜的小图。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "我说一句话，AI 回一个小窗口图标（窗口里画一把钥匙和一个抽象图形对勾），旁边是绿色保险柜的小图"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -371,7 +375,8 @@
    "key": "title-d44b78dbb889af5d5029",
    "title_text": "密码和本人验证",
    "sha256": "0eb84c0992be72aafd17250b6508097e0c593c7b7ce67f4c02bd6bfef9d5b765",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -625,7 +630,8 @@
    "key": "title-eb75bf8c610a022e586a",
    "title_text": "一个完整的例子：“哔哩哔哩账号给我看一下”",
    "sha256": "ca4b5e629150bf4dcdbd595747c3ac70983236c2c3f176f3e94b228ec370fd89",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -768,7 +774,11 @@
    "key": "ill-194349e8e266e4",
    "source_phrase": "一张宽卡片，左边一个绿色保险柜小插画，右边一段话和一排六个链接按钮（圆角、白底细绿边，两行三个）。",
    "sha256": "75c5e52a73e7fa2d49f0c4cae82edb9649a9aa6d75e30164c71b1b99e0567fe8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "绿色保险柜"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -784,7 +794,8 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1015,7 +1026,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -168,7 +168,7 @@
  "source": {
   "page": "sources/pages/charter/page.json",
   "sha256": "d79be8ba11080d63fa4997afd24eefea0426b4f48d7d8c6fa9ac44138b626e42",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -413,7 +413,11 @@
    "key": "ill-1be50deeda642c",
    "source_phrase": "右边约占 45% 画一幅水彩插画：书桌上一本摊开的精装厚书（书页只画浅绿色细横线表示文字，不画任何可读的字），一条绿色丝带书签垂下来，旁边一支毛笔和一枚绿色印章（印面朝下，看不到印文），书的上方两个小圆形徽章：左边 Claude 的橙色星芒标志，右边 OpenAI 的黑色花结标志（代表 Codex），像在低头读这本书；周围几片水彩绿叶。",
    "sha256": "65f0b267b50893ed0a44a9c0b74446fce129253462185ad530027a6c48488985",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "书桌上一本摊开的精装厚书（书页只画浅绿色细横线表示文字，不画任何可读的字），一条绿色丝带书签垂下来，旁边一支毛笔和一枚绿色印章（印面朝下，看不到印文），书的上方两个小圆形徽章：左边 Claude 的橙色星芒标志，右边 OpenAI 的黑色花结标志（代表 Codex），像在低头读这本书；周围几片水彩绿叶"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -430,7 +434,14 @@
    "key": "title-00267a7b08c70dd214ad",
    "title_text": "约法",
    "sha256": "21aa1f3716e07b44c88bdcc7edd3e7e937fb85c26015f74a660871eafb9a30f9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    288,
+    7,
+    657,
+    222
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -938,7 +949,11 @@
    "key": "ill-daaac9793b0696",
    "source_phrase": "四角很小的淡水彩叶子；左卡正文下方如有空白，画一小幅水彩：一个装着揉皱纸团的回收站小桶旁边放着一只打了勾的绿色文件夹，不画任何字。",
    "sha256": "27e1259d44374e8a72df36186c54ea5a604182b60a585720db9629ee6d4bbc2f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个装着揉皱纸团的回收站小桶旁边放着一只打了勾的绿色文件夹，不画任何字"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -1183,7 +1198,11 @@
    "key": "硬盘备份",
    "source_phrase": "中间一卡字最少，卡片高度和另外两张对齐，正文下方的空白画一小幅水彩：两块固态硬盘之间一条绿色箭头，旁边一本小台历（台历上不画任何字），表示备份跟着原件走、删了留一段后悔期。",
    "sha256": "03905e7132eec0e7e9dc7a0b4d38523e9d6c47be69ee8b66ba47a0f3512d251b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两块固态硬盘之间一条绿色箭头，旁边一本小台历（台历上不画任何字），表示备份跟着原件走、删了留一段后悔期"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1474,7 +1493,11 @@
    "key": "网页看板现图小槽4比3",
    "source_phrase": "左右两栏：左栏（约占 58% 宽）上下两张卡，上面“八、项目与维护”（L24–L25），下面“九、汇报、网站和我的电脑”（L26–L29）；右栏（约占 42% 宽）上面一张卡“十、关于规则本身”（L30），卡下面的空白画一幅水彩：一台笔记本电脑屏幕上是白底绿色的网页看板（只画色块、卡片和小圆点状态灯，不画任何字），旁边一个 Chrome 浏览器的彩色圆形标志，几片绿叶。",
    "sha256": "e6990e5657edbed68189b47d52f3088f639df95e4c2ed45db6698094d967b734",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台笔记本电脑屏幕上是白底绿色的网页看板（只画色块、卡片和小圆点状态灯，不画任何字），旁边一个 Chrome 浏览器的彩色圆形标志，几片绿叶"
+   ],
+   "hidden": false
   }
  ]
 }

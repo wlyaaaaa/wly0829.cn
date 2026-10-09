@@ -117,7 +117,7 @@
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
   "sha256": "fc0f4ff3e6d98669a4e8fe61cce902245105d71c7a91dce4fd92390b5af21aad",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -406,7 +406,11 @@
    "key": "main-personal-media",
    "source_phrase": "横版：左边大标题毛笔艺术字“找照片和录音”，下面一行说明；右边一幅水彩插画：一台电脑屏幕上一排照片缩略图和一条录音波形，一只放大镜照着其中一张，旁边一个小对话气泡。",
    "sha256": "2f2e7ce709a4936fd3ce41f5e643c012ed98b5dda9eea2b2a990721902d62783",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台电脑屏幕上一排照片缩略图和一条录音波形，一只放大镜照着其中一张，旁边一个小对话气泡"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -423,7 +427,14 @@
    "key": "title-4e6127dc90b95b817e10",
    "title_text": "找照片和录音",
    "sha256": "8f204868b4bdb0924c673ebe380142fd531ec71ed5baa6eea4820be35ae66293",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    17,
+    812,
+    241
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -724,7 +735,14 @@
    "key": "title-r3-ffa2cdd15edd0e90e6e8",
    "title_text": "一个完整的例子",
    "sha256": "124b2b24498ea3f5a4ab869e35efad8b281dcd8cd6557b63e9b7e3753660f0cb",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    15,
+    772,
+    173
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -891,7 +909,11 @@
    "key": "ill-82e7c8289b7209",
    "source_phrase": "再下面是一张小对照表“你说的 → 它查的”，四行，左列是人话，右列是它换成的查询条件；表格右边一幅小插画：一个漏斗，上面几句话落进去，下面出来几张照片和一条录音波形。",
    "sha256": "92f5a00e81d0ccb9ad639057731b3c87048d60d68e919cadf4209a2718515d3b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个漏斗，上面几句话落进去，下面出来几张照片和一条录音波形"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -908,7 +930,14 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "0eca472ffd5c3869cf38ff7bf4c6df1873d836d768164ec9c8e2a5e2c829a4e8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    40,
+    65,
+    636,
+    254
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1522,7 +1551,11 @@
    "key": "卡片索引",
    "source_phrase": "右下角一小幅水彩插画：一个书架上贴着“照片”“录音”标签的盒子。",
    "sha256": "61d407568e0f51a69ee50eb21b68d0d0d2b7b9c130c66133ed524db22ba3efe7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个书架上画抽象短线的抽象图形标签的盒子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1539,7 +1572,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

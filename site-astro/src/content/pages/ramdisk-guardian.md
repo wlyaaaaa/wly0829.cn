@@ -548,7 +548,7 @@
  "source": {
   "page": "sources/pages/ramdisk-guardian/page.json",
   "sha256": "939399ea57535e0d491d77d7fb1c387f1e911f2be365d451acecdf0816e6f6d8",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -772,7 +772,11 @@
    "key": "main-ramdisk-guardian",
    "source_phrase": "右上一幅水彩插画：一根绿色内存条被画成一块小硬盘的样子，盘面写着“Z”，盘里飘着几片半透明的浏览器小图标（像落叶一样轻）；旁边一位小小的园丁拿着水壶和一把小扫帚照看它，园丁脚边一个小闹钟指着一刻钟；内存条下方一条细细的绿色光带流回主板，表示腾回来的内存。",
    "sha256": "b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根绿色内存条被画成一块小硬盘的样子，盘面画抽象短线的，盘里飘着几片半透明的浏览器小图标（像落叶一样轻）；旁边一位小小的园丁拿着水壶和一把小扫帚照看它，园丁脚边一个小闹钟指着一刻钟；内存条下方一条细细的绿色光带流回主板，表示腾回来的内存"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -789,7 +793,8 @@
    "key": "title-807d67167ecbc80a882d",
    "title_text": "内存盘守护",
    "sha256": "2467407487e90461108c436f7f7a17f6460895007b579eb3856718a9b6a6a554",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -938,7 +943,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "电脑后台闹钟",
    "source_phrase": "三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一台安静的电脑，屏幕角落一个很小的绿色闹钟在转，旁边没有弹窗；2 一个聊天气泡里写着“内存盘现在健康吗？",
    "sha256": "c155d8a2bf784ad7b0218af0170e04d661735982253bcc04341949a31c9f9a4e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台安静的电脑，屏幕角落一个很小的绿色闹钟在转，旁边没有弹窗"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -953,7 +962,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "对话气泡",
    "source_phrase": "三张竖向大卡片横排，每张顶部一幅小水彩插画：1 一台安静的电脑，屏幕角落一个很小的绿色闹钟在转，旁边没有弹窗；2 一个聊天气泡里写着“内存盘现在健康吗？",
    "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个聊天气泡里写着“内存盘现在健康吗？"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -968,7 +981,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "内存盘第三槽待定位",
    "source_phrase": "3 一个沙漏旁边立着一块“先别打扫”的小木牌。",
    "sha256": "b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "三张卡片占满整屏高度，插画可以画大一些，不留大块空白"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -986,7 +1003,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-9fe7ee9705091075f9a6",
    "title_text": "怎么用",
    "sha256": "c038ec3c038c442742b47f8ba4768302d518cc4ff2e1c7bab1e1aa7b318f70f6",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    10,
+    377,
+    223
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1168,7 +1192,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-45a143d5be04db99e96c",
    "title_text": "出事怎么办",
    "sha256": "f928d0c79dd2f414dc50379971745603f5f60766b4721b9cd809ea3427771c92",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    98,
+    634,
+    325
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1351,7 +1382,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    24,
+    2,
+    571,
+    199
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1560,7 +1598,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-5fde2369cff7293123bf",
    "title_text": "自动重建：动手前过四道关",
    "sha256": "a0494170e71a02031e1a9c58050d4d4a10dc82ab1696d8f2befbe295b5732a79",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    28,
+    21,
+    660,
+    114
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1744,7 +1789,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    99,
+    905,
+    317
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1889,7 +1941,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "插画：1 一个空文件夹被一条绿色箭头照搬到另一个文件夹，第二个文件夹里的纸一张张飞走，旁边一块写着“只放落叶”的小木牌（盘里只剩几片落叶）；2 一根内存条上压着一块大石头，一把扫帚把石头扫走，底下冒出一串绿色光点流回主板；3 一只鼓鼓的大行李箱旁边站着一只小巧的背包，背包上挂着一个绿色对勾。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个空文件夹被一条绿色箭头照搬到另一个文件夹，第二个文件夹里的纸一张张飞走，旁边一块画抽象短线的的小木牌（盘里只剩几片落叶"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1904,7 +1960,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "内存条",
    "source_phrase": "插画：1 一个空文件夹被一条绿色箭头照搬到另一个文件夹，第二个文件夹里的纸一张张飞走，旁边一块写着“只放落叶”的小木牌（盘里只剩几片落叶）；2 一根内存条上压着一块大石头，一把扫帚把石头扫走，底下冒出一串绿色光点流回主板；3 一只鼓鼓的大行李箱旁边站着一只小巧的背包，背包上挂着一个绿色对勾。",
    "sha256": "b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根内存条上压着一块大石头，一把扫帚把石头扫走，底下冒出一串绿色光点流回主板"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -1919,7 +1979,11 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "ill-ac9023a08928a4",
    "source_phrase": "插画：1 一个空文件夹被一条绿色箭头照搬到另一个文件夹，第二个文件夹里的纸一张张飞走，旁边一块写着“只放落叶”的小木牌（盘里只剩几片落叶）；2 一根内存条上压着一块大石头，一把扫帚把石头扫走，底下冒出一串绿色光点流回主板；3 一只鼓鼓的大行李箱旁边站着一只小巧的背包，背包上挂着一个绿色对勾。",
    "sha256": "c1d83b11554053e533bdcdea4db6d0205bae0f752f9e08efa28dc56a422c99b8",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一只鼓鼓的大行李箱旁边站着一只小巧的背包，背包上挂着一个绿色对勾"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1936,7 +2000,14 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "key": "title-r3-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    0,
+    312,
+    199
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2294,7 +2365,8 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "key": "title-e67ab5d2470d34ef96db",
    "title_text": "全部功能（22 项）",
    "sha256": "1720c2382378d1781e249db2405b7cccc63a1115b6460a78c726709cec7ce2a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2935,7 +3007,11 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "key": "main-ramdisk-guardian",
    "source_phrase": "右边约 36% 宽：上面一个带 1px 浅灰细边框、圆角 8px 的空白截图位，宽约屏宽 34%、高宽比 4:3（拼页时原样贴真实截图，框里什么都不画），截图位下面一行灰色小字图注；截图位下面一幅小插画：一根内存条从一块大硬盘的样子慢慢缩成一块小巧的盘，旁边一个园丁在扫落叶。",
    "sha256": "b6bb5606ff04437a7a32a1afce04189883bab97d88301f4d299e9cc188f1f7d1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一根内存条从一块大硬盘的样子慢慢缩成一块小巧的盘，旁边一个园丁在扫落叶"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2952,7 +3028,14 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    179,
+    37,
+    306,
+    131
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

@@ -60,5 +60,64 @@
    "label": "开头",
    "img": "/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp"
   }
+ ],
+ "codex-local-remote": [
+  {
+   "id": "top",
+   "label": "开头",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp"
+  },
+  {
+   "id": "why-frozen",
+   "label": "为什么不用了",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-11-ad9615fb96.webp"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-43-9fe7ee9705.webp"
+  },
+  {
+   "id": "features",
+   "label": "全部功能",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-25-6c8f61c250.webp"
+  },
+  {
+   "id": "history",
+   "label": "演进",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-55-f8367a4ec7.webp"
+  }
+ ],
+ "github-local-index": [
+  {
+   "id": "top",
+   "label": "开头",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-43-9fe7ee9705.webp"
+  },
+  {
+   "id": "tech",
+   "label": "技术",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-49-4aa1a3c674.webp"
+  },
+  {
+   "id": "highlights",
+   "label": "亮点",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-13-ba0d3fdcc6.webp"
+  },
+  {
+   "id": "features",
+   "label": "全部功能",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-25-6c8f61c250.webp"
+  },
+  {
+   "id": "history",
+   "label": "演进",
+   "img": "/_shared/nav-unify-standard/nav-unify-label-55-f8367a4ec7.webp"
+  }
  ]
 }

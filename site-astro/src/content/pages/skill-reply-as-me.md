@@ -92,7 +92,7 @@
  "source": {
   "page": "sources/pages/skill-reply-as-me/page.json",
   "sha256": "989d3980eed6ab1e854890263e7c0c43b0b1013d973a5afe09855efd0b14bb83",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -336,7 +336,11 @@
    "key": "main-personal-expression",
    "source_phrase": "右上角一幅小插画：一支钢笔在便签上写字，便签上方三个空白小标签牌，其中一个亮绿，旁边一个信封口朝下、没封上。",
    "sha256": "bd2a55824d3c0d660ba3ec66f21d697f621eaa21cb14c7fc62a0c8f0eec1ca44",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一支钢笔在便签上写字，便签上方三个空白小标签牌，其中一个亮绿，旁边一个信封口朝下、没封上"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -353,7 +357,14 @@
    "key": "title-a7004192c7864b550388",
    "title_text": "替我拟消息",
    "sha256": "ba8ddde12932654b4728e6553b2810883a67d3cfed1e3148bb054d60a6a9b0e0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    21,
+    739,
+    254
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -605,7 +616,14 @@
    "key": "title-r3-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "2304e84af71ae809ed22525bb17a83cdc977e8073e268216601e3a099b2b6fc4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    38,
+    9,
+    540,
+    112
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -870,7 +888,8 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1148,7 +1167,14 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    58,
+    269,
+    259
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }

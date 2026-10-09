@@ -151,7 +151,7 @@
  "source": {
   "page": "sources/pages/computer-access/page.json",
   "sha256": "3c63959f7f639ae841d9b53e01ffe325bba4617a92be23420665aff2d4b08227",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -710,7 +710,11 @@
    "key": "资料通行",
    "source_phrase": "右上角一小幅水彩插画（开头短视频从这里取景）：一把绿色小挂锁挂在一只钥匙环上，旁边一张盖了绿色印章的通行证，后面一扇半拉着窗帘的小窗（代表 Windows），前面一部手机，屏幕上只画一枚小盾牌（不画数字）；插画里不画字。",
    "sha256": "1766f0993c19002b64a929ec87e163cbbefb504d69d82dbb9a5b277d9873b152",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "开头短视频从这里取景）：一把绿色小挂锁挂在一只钥匙环上，旁边一张盖了绿色印章的通行证，后面一扇半拉着窗帘的小窗（代表 Windows），前面一部手机，屏幕上只画一枚小盾牌（不画数字）；插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -727,7 +731,14 @@
    "key": "title-0571025156a92e626b49",
    "title_text": "授权与状态",
    "sha256": "d485690bf70348c4e8c25020abe4928e78e28f96e8e7814366d3b0a88505d2f8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    7,
+    22,
+    627,
+    220
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1207,7 +1218,8 @@
    "key": "title-cb3515b349211594c07a",
    "title_text": "办理：验证一次，开一段时间",
    "sha256": "81198cafc241d53e0df0898146591218bbd46baa8324f691949bee46b918118b",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1534,7 +1546,14 @@
    "key": "title-6fc0d849cac748b48525",
    "title_text": "办完怎么看结果",
    "sha256": "1108d288156ea661f861cc31ec1700e7c123135fe621007f89ab5ecc9d739155",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    4,
+    762,
+    177
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1780,7 +1799,14 @@
    "key": "title-301c0bb1b591957f9f9b",
    "title_text": "连不上电脑时",
    "sha256": "1df69b21993402636c064cdacf4bca95da96e84a6b31ed1eb44e6ab5c99d2d41",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    17,
+    155,
+    551,
+    371
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1797,7 +1823,14 @@
    "key": "title-c40ceeadedbab4b44e0c",
    "title_text": "这一页怎么工作",
    "sha256": "78322a3b02e6a2c64436834dbbafef444d4efb1bab30bdd13a9ec10e9b90d558",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    838,
+    172,
+    1318,
+    373
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

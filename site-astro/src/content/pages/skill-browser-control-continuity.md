@@ -157,7 +157,7 @@
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
   "sha256": "d39ab250141513c17c2b5411c88472573942faac2bd8e2634cdb78d9bd3eb59e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -277,7 +277,11 @@
    "key": "电脑故障",
    "source_phrase": "右边一幅水彩插画：一个 Chrome 浏览器窗口（画 Chrome 标志），里面一张填了一半的表单；窗口和一只代表 AI 的绿色小机械手之间的连线断成两截，一个小扳手正把两截接回去；窗口上方一排标签页都还开着，其中一个标签页上贴着一枚小小的绿色别针（表示保住不动）。",
    "sha256": "a829484c629a21dc7d82cef241b226eb8fc89c70cbfd5705df85aa0d8002837a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个 Chrome 浏览器窗口（画 Chrome 标志），里面一张填了一半的表单；窗口和一只代表 AI 的绿色小机械手之间的连线断成两截，一个小扳手正把两截接回去；窗口上方一排标签页都还开着，其中一个标签页上贴着一枚小小的绿色别针（表示保住不动"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -294,7 +298,8 @@
    "key": "title-r3-1629dc4a2efd8cae9228",
    "title_text": "网页上的事接着办",
    "sha256": "e4d3349d70ddd1d4ea746ce5d831250eeeed17141499d55a1a702d32da5f6021",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -585,7 +590,11 @@
    "key": "验证码纸",
    "source_phrase": "右边约三分之一宽，一张米色小回执插画，上面画真实的几行字（见“回执上的字”），回执下面一张小卡片“要注意”。",
    "sha256": "bd4eda69465f07bad83182ac2761b2456d746bb31d62a1a112f1c6aef5ad85e3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "米色小回执，只画纸面短线；真实回执字由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -602,7 +611,8 @@
    "key": "title-r3-54762c0f3a354c5c85e0",
    "title_text": "一个完整例子：照这套做法，在网站上交一份带两个附件的申请会这样办",
    "sha256": "e020fb61fe7e9d0c565b7b709653f7b887287fee44ad60ba4b92f407daaa1164",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -814,7 +824,11 @@
    "key": "浏览器断线账本",
    "source_phrase": "左边一张“麻烦”卡片，配一幅小插画：Codex 标志和 Chrome 标志之间的一根线断开，地上散落三张写着文件名的小纸片。中间一条竖着的时间线，两个节点各一张卡片（9 月 18 日、9 月 28 日），每张卡片里几行字。右边一张米色小账本插画，上面画真实的几行字（见“账本上的字”）。",
    "sha256": "667a74760490e4b687a46dba4a5d68c88bda6137f2d0bf58ec3287b5e7ec017a",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "Codex 标志和 Chrome 标志之间的一根线断开，地上散落三张只画短线的小纸片；右边一张米色小账本插画，上面画只画抽象短线；正文由排版程序另放"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -831,7 +845,8 @@
    "key": "title-r3-c04a1f1df1fa55129a61",
    "title_text": "两次真事：Codex 更新后，AI 控制不了 Chrome",
    "sha256": "1fef3737ed892029aa3024dfbf5ccbf45135597bb5ff5c24e91cf9d37dd72904",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1220,7 +1235,8 @@
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1428,7 +1444,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

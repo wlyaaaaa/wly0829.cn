@@ -181,7 +181,7 @@
  "source": {
   "page": "sources/pages/mcp/page.json",
   "sha256": "374660f1e3de6277d77811c83eecc0c6fd9a68652c33e68bc063ad5854c06000",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -430,7 +430,11 @@
    "key": "桌面设备",
    "source_phrase": "右上约 40% 宽一幅水彩插画（开头短视频从这里取景）：家里书桌上一台侧透机箱和一台显示器，桌边一台合上一半的笔记本（副机）；画面左下角一部手机。",
    "sha256": "c3692d722e9e153a291563e37fa145fd627aa167c6c69814da7411b53a0fb9ff",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "家里书桌上侧透机箱和显示器，桌边半合笔记本，画面左下手机；不加品牌标志或文字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -447,7 +451,14 @@
    "key": "title-aa8446366b2cdde368b5",
    "title_text": "连接电脑",
    "sha256": "9c55a62c0a433d3b47c62d5246baedb4ff00f7547933c97a88f8f47aee82a5b0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    18,
+    706,
+    227
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -799,7 +810,14 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
    "key": "title-5c9195e6eba128e02e2c",
    "title_text": "我自己看桌面",
    "sha256": "58444074024c9a27be9721cc9460f5012d1f3dc99910554964c4ce8ea2c61879",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    18,
+    3,
+    736,
+    203
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1140,7 +1158,14 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
    "key": "title-a4497ad744394bfd2e97",
    "title_text": "让 AI 用电脑",
    "sha256": "cb1032d882ed932afffe6e10786db93f7b39c328f134697c68a977c98ac8d677",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    31,
+    723,
+    208
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1435,7 +1460,14 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "key": "title-r3-8a056844625e971c475d",
    "title_text": "ChatGPT 怎么接",
    "sha256": "9170ef753e1f89395c54e487985bd94e653115c0b1940627b4aee349c25f726f",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    185,
+    3,
+    987,
+    182
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1783,7 +1815,14 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "key": "title-r3-4800f2ba15e1093254d7",
    "title_text": "Claude 和 Codex 怎么接",
    "sha256": "d32867ec0b8efe2e541572565497280da4a73aca21e8b5ccfafeaee39eb61a7e",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    125,
+    11,
+    993,
+    152
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2211,7 +2250,8 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "key": "title-6f22f0e7ff679b1c33d0",
    "title_text": "最近一次真实验证",
    "sha256": "724e04348dd23cc86f975a23a0ee1b1da513597e5dc78ab137e41d855e83a349",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

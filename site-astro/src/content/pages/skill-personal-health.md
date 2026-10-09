@@ -100,7 +100,7 @@
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
   "sha256": "90a11cd9e32248251168482cad040eeebecbc1c75a9533ab4f132dabb9839671",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -337,7 +337,11 @@
    "key": "main-personal-health",
    "source_phrase": "横版：左边大标题，下面两行说明；右边一幅水彩插画：一本翻开的小册子（封面写“健康现状”），旁边一只手腕戴着纤细的穿戴设备，一只放大镜照着一张报告纸（纸上只画灰色横线，不画数字）。",
    "sha256": "fbd1f2129330dd87e3d7ab7700a2905db4b046aa75907bb91bcff8cb93fdf2ca",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一本翻开的小册子（封面画抽象短线的），旁边一只手腕戴着纤细的穿戴设备，一只放大镜照着一张报告纸（纸上只画灰色横线，不画数字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -354,7 +358,14 @@
    "key": "title-449e49ffe10c1179bb97",
    "title_text": "健康问题",
    "sha256": "8cf8f4f946a891f21afb4c3f72f7558e8e99da3c41a27149360e3c525259d7f3",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    29,
+    78,
+    596,
+    287
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -598,7 +609,11 @@
    "key": "漏斗筛选",
    "source_phrase": "右下角一小幅水彩插画：一个漏斗，上面落进七个小方块，其中两个是灰色空格，下面只出来五根整齐的绿色小柱子。",
    "sha256": "ede7778f6db273cb31678380c9d65def129e76b30ab5223b81fec106dde796fa",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个漏斗，上面落进七个小方块，其中两个是灰色空格，下面只出来五根整齐的绿色小柱子"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -615,7 +630,14 @@
    "key": "title-r3-ffa2cdd15edd0e90e6e8",
    "title_text": "一个完整的例子",
    "sha256": "124b2b24498ea3f5a4ab869e35efad8b281dcd8cd6557b63e9b7e3753660f0cb",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    15,
+    772,
+    173
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -766,7 +788,11 @@
    "key": "资料阶梯",
    "source_phrase": "再下面一张小对照表“什么时候 → 读什么”，六行，左列是情况，右列是它读什么；表格右边一幅小插画：一架三级的小梯子，最低一级放着一本小册子，往上一级是一叠来源卡片，最高一级是一张报告纸（纸上只画灰线）。",
    "sha256": "c5d0d8b0f83837db329e945d9b5d168ee17c985e486c425d29eeecf1cd1a476d",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一架三级的小梯子，最低一级放着一本小册子，往上一级是一叠来源卡片，最高一级是一张报告纸（纸上只画灰线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -783,7 +809,14 @@
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "94b505896e546576cdddc191eff3b98b6f6eede094bd5bdcf5f6310133ee8a51",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    78,
+    555,
+    259
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1149,7 +1182,11 @@
    "key": "听诊核验",
    "source_phrase": "右下角一小幅水彩插画：一个听诊器放在一张空白处方笺旁边，处方笺上画一个灰色小叉（表示不开药）。",
    "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个听诊器放在一张空白处方笺旁边，处方笺上画一个灰色小叉（表示不开药"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1166,7 +1203,8 @@
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

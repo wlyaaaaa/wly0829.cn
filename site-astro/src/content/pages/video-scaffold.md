@@ -585,7 +585,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "c37454aeb2a64f63669c06160bf04c354a104b3595cf14b7d14c0bf2ea803ae9",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -826,7 +826,11 @@
    "key": "main-video-scaffold",
    "source_phrase": "右上一幅水彩插画：一台宽屏显示器，屏幕里是浅绿色流动的毛玻璃背景，上面一行深绿大字“核心结论”正在逐字打出（最后一个字半透明）；（text 里单独一行的“核心结论”就是屏幕上这四个字，不另画别处。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台宽屏显示器，屏幕里是浅绿色流动的毛玻璃背景，上面一行深绿大字抽象图形正在逐字打出（最后一个字半透明）；（text 里单独一行的抽象图形就是屏幕上这四个字，不另画别处"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -843,7 +847,8 @@
    "key": "title-53b3f1b94558a15a78ab",
    "title_text": "本地视频制作",
    "sha256": "ef06d75d9fbc36aea8db2e718e3d3f2d65d62f3e5cae4f8625eda062c8cb16f8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1192,7 +1197,8 @@
    "key": "title-d8d18231794edfce8674",
    "title_text": "做一期视频，怎么走一遍",
    "sha256": "fa54edbff0db627ff454e812d8e313f53c934b0b4442c3dbed9b347dd748093c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1605,7 +1611,14 @@
    "key": "title-r3-f8960d493c3be57935f6",
    "title_text": "交出来什么，出了事怎么办",
    "sha256": "eb46035423c7b0dd557486a0031983e79e4f750c85cb056a4cebcd33914879d9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    39,
+    899,
+    190
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1879,7 +1892,14 @@
    "key": "title-r3-a636849de3b67d76b669",
    "title_text": "画面是怎么做出来的",
    "sha256": "9b7c8f25d7c548822e927c3ff2ba2ec9e1b6c452b2771a01cf361684e3f4415a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    11,
+    799,
+    194
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2130,7 +2150,8 @@
    "key": "title-302d236597fc22e0ed9f",
    "title_text": "用了什么模型和工具",
    "sha256": "1f53a8f55c0181f9014c6e06ed10bbad98f68ce5ec02edd74a856c09dcd9fe4f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2460,7 +2481,8 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2653,7 +2675,11 @@
    "key": "ill-r3-c02936fda748b204",
    "source_phrase": "插画：卡 1 一句旁白字条“先说结论 核心结论”，从“核心结论”四个字拉出一条绿色细线连到屏幕上正在弹出的同样四个字；卡 2 两段声波之间留出一小段平的空白，空白处画一个小小的逗号，下面一条胶片在同一位置多停了一格。",
    "sha256": "1617f2b072f9cbdcf4c846c7fd4f972950d2c9d34399d07771e92499b794c1dc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一句旁白字条抽象图形，从抽象图形四个字拉出一条绿色细线连到屏幕上正在弹出的同样四个字"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2668,7 +2694,11 @@
    "key": "波形",
    "source_phrase": "插画：卡 1 一句旁白字条“先说结论 核心结论”，从“核心结论”四个字拉出一条绿色细线连到屏幕上正在弹出的同样四个字；卡 2 两段声波之间留出一小段平的空白，空白处画一个小小的逗号，下面一条胶片在同一位置多停了一格。",
    "sha256": "31f0f14bae9218df618102a98136ddafd52cb593a5474a0425248c78e85a9f14",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两段声波之间留出一小段平的空白，空白处画一个小小的逗号，下面一条胶片在同一位置多停了一格"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2685,7 +2715,14 @@
    "key": "title-ba0d3fdcc635f736cc8b",
    "title_text": "亮点",
    "sha256": "0af11a4a03924b13941a5fd8c19a86d98304bafb57edd6eafefd462da4ee2b9d",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    39,
+    62,
+    351,
+    301
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3162,7 +3199,11 @@
    "key": "文件收纳现图小槽4比3",
    "source_phrase": "三组各 4 张：每组第一行三张、第二行一张靠左，右边空出的两格位置画一小幅水彩插画（开工组：一只打开的空文件夹和一张体检单；配音和时间组：麦克风和一条带刻度的声波；画面组：一块画板上画着一条绿色曲线），不写字。",
    "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "打开的空文件夹和体检单，纸上只画短线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3177,7 +3218,11 @@
    "key": "语音转写现图小槽4比3",
    "source_phrase": "三组各 4 张：每组第一行三张、第二行一张靠左，右边空出的两格位置画一小幅水彩插画（开工组：一只打开的空文件夹和一张体检单；配音和时间组：麦克风和一条带刻度的声波；画面组：一块画板上画着一条绿色曲线），不写字。",
    "sha256": "fd0136b15d80cd1eadf7d3d7a94f9306e1c2d9776454b28c009fc4c21fbff27f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "麦克风和一条带刻度的声波"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3192,7 +3237,11 @@
    "key": "画板曲线",
    "source_phrase": "三组各 4 张：每组第一行三张、第二行一张靠左，右边空出的两格位置画一小幅水彩插画（开工组：一只打开的空文件夹和一张体检单；配音和时间组：麦克风和一条带刻度的声波；画面组：一块画板上画着一条绿色曲线），不写字。",
    "sha256": "538371356f06d66e5610e143861ecdd0305ca030a9bc21439c9b6f109810215f",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "画板上画一条绿色曲线"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3209,7 +3258,8 @@
    "key": "title-63735e387888cdd72a9b",
    "title_text": "全部功能（25 项）",
    "sha256": "60d0b674270883c94e01563dd88d7915919dac0f6e295d69d6b8ac8bfcba8b5d",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3685,7 +3735,11 @@
    "key": "胶片媒体现图小槽4比3",
    "source_phrase": "按组排：组名一行（毛笔字，左边一小段绿色笔刷线），下面功能卡三列：出片 5 张（第一行三张、第二行两张，右边空出的一格画一小卷胶片插画）、验收和收尾 4 张（第二行一张靠左，右边两格画一张打勾的清单插画）、已停用 4 张（卡片整体淡一些，状态画灰色叉；第二行一张靠左，右边两格画一只装着旧胶片的收纳箱插画）。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一小卷胶片"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3700,7 +3754,11 @@
    "key": "勾选清单",
    "source_phrase": "按组排：组名一行（毛笔字，左边一小段绿色笔刷线），下面功能卡三列：出片 5 张（第一行三张、第二行两张，右边空出的一格画一小卷胶片插画）、验收和收尾 4 张（第二行一张靠左，右边两格画一张打勾的清单插画）、已停用 4 张（卡片整体淡一些，状态画灰色叉；第二行一张靠左，右边两格画一只装着旧胶片的收纳箱插画）。",
    "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张打勾的清单，纸上只画短线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3715,7 +3773,11 @@
    "key": "胶片媒体现图小槽4比3",
    "source_phrase": "按组排：组名一行（毛笔字，左边一小段绿色笔刷线），下面功能卡三列：出片 5 张（第一行三张、第二行两张，右边空出的一格画一小卷胶片插画）、验收和收尾 4 张（第二行一张靠左，右边两格画一张打勾的清单插画）、已停用 4 张（卡片整体淡一些，状态画灰色叉；第二行一张靠左，右边两格画一只装着旧胶片的收纳箱插画）。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "装着旧胶片的收纳箱"
+   ],
+   "hidden": false
   }
  ]
 }
@@ -3953,7 +4015,11 @@
    "key": "main-video-scaffold",
    "source_phrase": "右侧约三分之一宽一幅大一点的水彩插画：一台显示器、一支麦克风、一张显卡、一卷胶片由小到大依次排开，像一路长出来的样子；插画里不写字。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一台显示器、一支麦克风、一张显卡、一卷胶片由小到大依次排开，像一路长出来的样子；插画里不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3969,7 +4035,8 @@
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

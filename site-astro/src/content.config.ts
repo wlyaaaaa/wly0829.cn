@@ -9,6 +9,7 @@ const pages = defineCollection({
     title: z.string(),
     kind: z.string(),
     url: z.string(),
+    old_urls: z.array(z.string()).optional(),  // 改过地址的页：旧地址出一句话的去向页
     tagline: z.string().optional(),
     toc: z.array(z.object({ id: z.string(), label: z.string(), img: z.string().optional() })).default([]),
     page: z.any().optional(),

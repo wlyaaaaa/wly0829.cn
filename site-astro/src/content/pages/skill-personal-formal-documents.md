@@ -94,7 +94,7 @@
  "source": {
   "page": "sources/pages/skill-personal-formal-documents/page.json",
   "sha256": "345ac4c9b59dafd7803c74b13305d0d117ce5e4a155da9b48eff73f920773366",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -287,7 +287,11 @@
    "key": "main-personal-formal-documents",
    "source_phrase": "右上角一幅小插画：一个对话气泡连着一份协议，协议下方一栏绿色签名、一栏空横线（纸上不画字）。",
    "sha256": "dd0d6900de4c91a553f10202fc97b1011007055899ad6135ab2e0c9bbfa6b210",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话气泡连着一份协议，协议下方一栏绿色签名、一栏空横线（纸上不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -304,7 +308,8 @@
    "key": "title-4e505cc090bd810df22a",
    "title_text": "个人正式文书技能",
    "sha256": "9ea1a8d6ecf356089ce24eff24f9dbc38cfbf3a4df41393b05fef9943817dd70",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -611,7 +616,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -889,7 +895,8 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "key": "title-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "3e1b1e7f7b0486348d5ac2f82ea417096517df35396e802621d852f77d194360",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1154,7 +1161,8 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

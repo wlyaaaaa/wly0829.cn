@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "d54cb03c814b50b6fcea5f1ff6131a2060092abfb997692b7e37ee64dfd50f5f",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
  }
 }
 ---
@@ -546,7 +546,11 @@
    "key": "main-how-this-site",
    "source_phrase": "上半屏右边约 45% 宽一幅大水彩插画（开头短视频就从这里取景）：一张浅木色书桌，窗外远山；桌上四个奶白色圆头小机器人在干活——胸前橙色星芒徽章（Claude 标志）的一个坐在桌前在纸上写字；三个胸前黑色花结徽章（OpenAI 标志）的，一个在小画架上画水彩，一个拿放大镜看一张画稿，一个把几张画稿上下接成一长条网页；书桌右下角伸进来一只手（浅绿毛衣袖口），正按下一枚绿色印章；桌边一盆绿植。",
    "sha256": "965947350dbfb6819954dab14115c1bcda2186c989cc828b0cdf475bc3897ad7",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "开头短视频就从这里取景）：一张浅木色书桌，窗外远山；桌上四个奶白色圆头小机器人在干活——胸前橙色星芒徽章（Claude 标志）的一个坐在桌前在纸上写字；三个胸前黑色花结徽章（OpenAI 标志）的，一个在小画架上画水彩，一个拿放大镜看一张画稿，一个把几张画稿上下接成一长条网页；书桌右下角伸进来一只手（浅绿毛衣袖口），正按下一枚绿色印章；桌边一盆绿植"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -563,7 +567,14 @@
    "key": "title-84a3b8153a01204bf819",
    "title_text": "这个网页是怎么做的",
    "sha256": "26e38469cdcf7564b4503215a2d8c20ba89d0ebe3848055014125e68d4c76708",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    13,
+    870,
+    168
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -830,7 +841,14 @@
    "key": "title-r3-c081eedc98f603f50bbf",
    "title_text": "谁做什么",
    "sha256": "db86e7e98c4be5cd807be59c9e68277b47874de90fc041801012bc432d785d00",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    14,
+    2,
+    489,
+    218
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -989,7 +1007,8 @@
    "key": "title-bc263a854c3223dce31d",
    "title_text": "第一代：全靠画",
    "sha256": "89bbc70f2651ab739611d11397ebd4096ed10c1f3771ab4be836f4b927bf7eb0",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1217,7 +1236,8 @@
    "key": "title-22c16959eac7968044e3",
    "title_text": "卡在了维护",
    "sha256": "d7d2f151b8088885930ea23bf02149042b79d94c541f348e39907ce032517f51",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1414,7 +1434,11 @@
    "key": "机器人助手通用构图",
    "source_phrase": "右边约 38% 宽一幅水彩插画：胸前橙色星芒徽章的奶白小机器人坐在书桌前写字；它左手边一摞资料（一页画着花括号的代码纸、一张打满小对勾的回执、一个文件夹）；它面前摊着一张分成三格的稿纸，三格的小标题依次是“画面”“图上的字”“编号”（就是第二段里的这三个词），格子里只画几道浅灰横线代表字；桌角一个胸前黑色花结徽章的小机器人递过来一张纸（代表 GPT 整理的事实单）。",
    "sha256": "e69d2febfcaf7eb75330eec8be0f5166de6d56595d3cac37bbc4a6a1d7511fe1",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "胸前橙色星芒徽章的奶白小机器人坐在书桌前写字；它左手边一摞资料（一页画着花括号的代码纸、一张打满小对勾的回执、一个文件夹）；它面前摊着一张分成三格的稿纸，三格的小标题依次是抽象图形抽象图形抽象图形（就是第二段里的这三个词），格子里只画几道浅灰横线代表字；桌角一个胸前黑色花结徽章的小机器人递过来一张纸（代表 GPT 整理的事实单"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1431,7 +1455,8 @@
    "key": "title-8c80c2c725cf244f039e",
    "title_text": "转折：程序排版出图",
    "sha256": "ce4a50378e21108cb3bcd861d750b79d908e5d007aec3d18fd336a4829f0f4c5",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1625,7 +1650,11 @@
    "key": "双人画稿核查",
    "source_phrase": "右边约 42% 宽一幅水彩插画：左边胸前黑色花结徽章的小机器人（Luna）站在画架前，画架上并排一张横的、一张竖的画布；右边另一个同样徽章的小机器人（Sol）拿放大镜，把一张画稿和一张清单并排对照；画稿上一处被淡红色小圈圈出，一根弯箭头从这张画稿指回 Luna；旁边另一张画稿右下角盖着绿色对勾印章。",
    "sha256": "956b276ac8dde4065cf539bee95c8531e814f9e2fadd0d7f0a88fa6d6abcdc31",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "左边胸前黑色花结徽章的小机器人（Luna）站在画架前，画架上并排一张横的、一张竖的画布；右边另一个同样徽章的小机器人（Sol）拿放大镜，把一张画稿和一张清单并排对照；画稿上一处被淡红色小圈圈出，一根弯箭头从这张画稿指回 Luna；旁边另一张画稿右下角盖着绿色对勾印章"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1642,7 +1671,8 @@
    "key": "title-5002849d46891c01a050",
    "title_text": "分工与并行施工",
    "sha256": "23b61c8358a5a092232dbf3bef0bae942902a222680a49f50cca19c3658baff4",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1882,7 +1912,11 @@
    "key": "胶片媒体现图小槽4比3",
    "source_phrase": "右边约 40% 宽一幅水彩插画：桌上一个画框（里面是一小幅绿叶水彩），一根绿色箭头从画框指向一条胶片，胶片的几格里是同一幅画、叶子位置略有不同；旁边一台电脑显示器里那幅画在动（画几道轻轻的动作弧线），一部手机里显示同一幅画但是静止的。",
    "sha256": "a6ac71e4d63fca105264cc1b56666a0a2d6808b3f143c646868b97d83b6c9b8c",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "桌上一个画框（里面是一小幅绿叶水彩），一根绿色箭头从画框指向一条胶片，胶片的几格里是同一幅画、叶子位置略有不同；旁边一台电脑显示器里那幅画在动（画几道轻轻的动作弧线），一部手机里显示同一幅画但是静止的"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1899,7 +1933,8 @@
    "key": "title-d69efa27c4d56fa57b76",
    "title_text": "怎样才算做完",
    "sha256": "dd550f05628b5a5be349bba8907ea06206cbc20c6d365953857c3884fd077886",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2152,7 +2187,8 @@
    "key": "title-122dab1056a19ab39462",
    "title_text": "一本会动的水彩画册",
    "sha256": "5e050f4385f0408bd94e1b8badc491e7d7fed11bb825885ba8bd7989c3b39eb7",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2314,7 +2350,8 @@
    "key": "title-a1adbe1fdc3cb35499f9",
    "title_text": "让网页快起来",
    "sha256": "e80463fd3e7cdd320976386439cf848c469627cf8f04810568577ae673289a16",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2565,7 +2602,11 @@
    "key": "网页看板通用构图",
    "source_phrase": "右边约 42% 宽一幅水彩插画：书桌上一台大显示器、一台笔记本、一部手机并排，屏幕里都是同一长条绿色网页的缩小画面；胸前橙色星芒徽章的小机器人拿一把尺子比着手机屏幕的边；画面右下一只手（浅绿毛衣袖口）旁边飘着一个对话气泡，气泡里写“两批做完就发布”。",
    "sha256": "5f5204488bba4692225c17e68b358ac36a94954e10513eddf4ebf9cf13c6071e",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "书桌上一台大显示器、一台笔记本、一部手机并排，屏幕里都是同一长条绿色网页的缩小画面；胸前橙色星芒徽章的小机器人拿一把尺子比着手机屏幕的边；画面右下一只手（浅绿毛衣袖口）旁边飘着一个对话气泡，气泡里画抽象短线的"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2582,7 +2623,8 @@
    "key": "title-edd417147c4a51ad8620",
    "title_text": "出了岔子怎么修",
    "sha256": "358869427c15e4aef5177af9c29a054ec72c7452d4b939903f26a01032f62e14",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2761,7 +2803,8 @@
    "key": "title-d3bc2130b033878dd2cf",
    "title_text": "我来拍板",
    "sha256": "39c68022540502ec017f7cde2308f37e4d6638f6fd319eef9576675968cfb516",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2973,7 +3016,11 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
    "key": "ill-d9857c7ca4156e",
    "source_phrase": "左边约 46% 宽：上面一张卡片放“例 2”的标题和两段字；卡片下面一幅水彩小插画：一部手机竖着立在桌上，屏幕底部画两块上下排的浅绿色小方块（代表页脚分成上下两块），旁边一把小尺子和两片绿叶，插画里不画字。",
    "sha256": "143e3d8cb7d723e998509448c8d62d9696a3bae8823cc3e45f0ffe2d5198e293",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一部手机竖着立在桌上，屏幕底部画两块上下排的浅绿色小方块（代表页脚分成上下两块），旁边一把小尺子和两片绿叶，插画里不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2990,7 +3037,8 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
    "key": "title-2b4b8df0dbafdffe48a9",
    "title_text": "以后怎么更新",
    "sha256": "516e4f563905418a4f61e8c041372a22bd7fd472862b3b432f0f5ff2a7681a0f",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

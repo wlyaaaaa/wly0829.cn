@@ -90,7 +90,7 @@
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
   "sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -236,7 +236,11 @@
    "key": "main-timeaudit",
    "source_phrase": "右上角一幅小插画：一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字）。",
    "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -253,7 +257,8 @@
    "key": "title-93d38313e1c3ffddd596",
    "title_text": "查电脑卡顿",
    "sha256": "7fd063170e65f3ff1a5aacc52ba75d9a2347af2c6f3976dd4e8e92d832f2d3c9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -486,7 +491,8 @@
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -732,7 +738,8 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -926,7 +933,8 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

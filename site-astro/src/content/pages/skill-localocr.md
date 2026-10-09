@@ -110,7 +110,7 @@
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
   "sha256": "ba4bb1ac3d804b95c784668243faa203d45144a336d5fbeeb289754e5446d3c6",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -479,7 +479,11 @@
    "key": "main-localocr",
    "source_phrase": "右边一幅水彩插画：AI 的对话气泡旁边分出两条小路，一条通向一只眼睛（AI 自己看），一条通向本机显卡上的放大镜（本地文字识别），路口立一块小路牌。",
    "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "AI 的对话气泡旁边分出两条小路，一条通向一只眼睛（AI 自己看），一条通向本机显卡上的放大镜（本地文字识别），路口立一块小路牌"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -495,7 +499,8 @@
    "key": "title-6077f34d4f3fa1ff31ba",
    "title_text": "本地文字识别",
    "sha256": "84b6833b60f41aa68e46393d7023d3a48e8487a764c7da9e071ad183b89d3bed",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -746,7 +751,11 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "key": "识别纸张通用构图",
    "source_phrase": "左边约 55% 宽画一段对话（我在右、AI 在左的气泡，浅绿和白两色），AI 的回复分成几行；右边约 45% 宽一幅水彩插画：一叠 16 页的扫描讲义摊成扇形，第 15 页被抽出来放在望远镜下，旁边三个小文件图标（TXT、MD、JSON）。",
    "sha256": "f9df63d5f9169507df5d49cc657a281a8cf6f4a6c22bd301d70545b1e78f3991",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一叠 16 页的扫描讲义摊成扇形，第 15 页被抽出来放在望远镜下，旁边三个小文件图标（TXT、MD、JSON"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -762,7 +771,8 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "key": "title-1bd7ab40a6647c38f32a",
    "title_text": "一个完整例子",
    "sha256": "ebeedcd896facfd1af9e0b5b28e5faf151361e1fe40c83443eab292fd4e32f07",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -997,7 +1007,11 @@ AI：“16 页都读完了。第 1–14 页和第 16 页用快模型读，把握
    "key": "文稿核验宽构图",
    "source_phrase": "中间一幅水彩插画：一张街景照片，店门上方一块招牌；照片左边伸出一只眼睛的图标，右边伸出放大镜的图标。",
    "sha256": "f81b524f5a7b0c318f72027080dcae982dfd16482b93718d8dad52de517849e9",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张街景照片，店门上方一块招牌；照片左边伸出一只眼睛的图标，右边伸出放大镜的图标"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1015,7 +1029,14 @@ AI：“16 页都读完了。第 1–14 页和第 16 页用快模型读，把握
    "key": "title-e07205a96e4bb967e9d6",
    "title_text": "又看画面又抄字",
    "sha256": "e59bfa5efc552466c8fc31903a08f1d404298f0ce2e6796260f2ac23ca21adfe",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    8,
+    761,
+    234
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1147,7 +1168,11 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "key": "ill-185afc142d9ee9",
    "source_phrase": "横版：左上标题，下面一张横向大卡片：左边一幅小水彩插画（一张功能清单，28 个小圆点），右边一句话和一个按钮样式的链接。",
    "sha256": "eaec202faa47cebc15e0b952d347c345cba97b75360f811ec07fa326350842bc",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张功能清单，28 个小圆点"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1164,7 +1189,14 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "key": "title-r3-7dadc2c869cdb800f4de",
    "title_text": "能做的事",
    "sha256": "ea2afebfd1846c75e18aab7cec4ed1200b479bfa134dde5540602e3a65bc59a9",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    37,
+    60,
+    692,
+    350
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1401,7 +1433,8 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "key": "title-r3-7a7e13ca96796233d6be",
    "title_text": "边界",
    "sha256": "b65d0a46c467818fe1a33aae6516226038c04b5e42477682f1438a11a0bb38ad",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }

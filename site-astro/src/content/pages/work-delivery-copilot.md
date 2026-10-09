@@ -357,7 +357,7 @@
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
   "sha256": "6cf8e5a770edae351bbdd3234f139a31d281a485c6bd4be34ec6afa4e5dd916e",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -605,7 +605,11 @@
    "key": "main-work-delivery-copilot",
    "source_phrase": "右上一幅水彩插画：一张木桌上摊着三张纸——一张写满横线的说明文档、一张会议纪要（纸角别着回形针）、一张画着格子的表格；每张纸上各有一小段被绿色荧光笔划出的线，从划线处各拉出一根细细的绿色丝线，汇到桌子右边立着的三份成品：一本装订好的文档、一块小小的演示屏、一张跟踪表；其中表格那张资料的一角翻起，露出下面一张新版本，新版本上有一根丝线变成浅黄色。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张木桌上摊着三张纸——一张写满横线的说明文档、一张会议纪要（纸角别着回形针）、一张画着格子的表格；每张纸上各有一小段被绿色荧光笔划出的线，从划线处各拉出一根细细的绿色丝线，汇到桌子右边立着的三份成品：一本装订好的文档、一块小小的演示屏、一张跟踪表；其中表格那张资料的一角翻起，露出下面一张新版本，新版本上有一根丝线变成浅黄色"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -622,7 +626,8 @@
    "key": "title-68cc25dbbe6a77a81b7f",
    "title_text": "工作支持与交付",
    "sha256": "fb1f2854891cd2af82da6a6cabbcf0da40b8db75de39574e051da90ed6d84a01",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -769,7 +774,11 @@
    "key": "分岔指路",
    "source_phrase": "下面左右两张大卡片并排，中间一个小小的分岔路口水彩插画把两边连起来：左卡“日常：直接说”，卡片顶部小插画是一个对话气泡旁边一张打了勾的单页纸；右卡“要长期维护的交付：建交付包”，顶部小插画是一个透明的文件盒，里面立着三张纸，盒子外伸出三根绿色丝线；右卡里的两条编号条件前各一个小圆形编号。",
    "sha256": "1dfe279ec5b683d3ceacacf8af37000c33a04422ad35709f45cfde7f9e6e85c6",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "小小的分岔路口"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -784,7 +793,11 @@
    "key": "勾选清单",
    "source_phrase": "下面左右两张大卡片并排，中间一个小小的分岔路口水彩插画把两边连起来：左卡“日常：直接说”，卡片顶部小插画是一个对话气泡旁边一张打了勾的单页纸；右卡“要长期维护的交付：建交付包”，顶部小插画是一个透明的文件盒，里面立着三张纸，盒子外伸出三根绿色丝线；右卡里的两条编号条件前各一个小圆形编号。",
    "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "对话气泡旁边打勾的单页纸"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -799,7 +812,11 @@
    "key": "透明文件盒",
    "source_phrase": "下面左右两张大卡片并排，中间一个小小的分岔路口水彩插画把两边连起来：左卡“日常：直接说”，卡片顶部小插画是一个对话气泡旁边一张打了勾的单页纸；右卡“要长期维护的交付：建交付包”，顶部小插画是一个透明的文件盒，里面立着三张纸，盒子外伸出三根绿色丝线；右卡里的两条编号条件前各一个小圆形编号。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "透明文件盒内立三张纸，盒外伸三根绿色丝线"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -814,7 +831,11 @@
    "key": "册子阅读现图小槽4比3",
    "source_phrase": "两张卡下面一条横跨整屏的浅绿细卡片“我本人的背景从哪来”，左边一个小插画：一本翻开的小册子，一支笔在往里写。",
    "sha256": "421c6aa8d646e894c5b62de75e129b60646020d72acece8b84a5ebe155efb705",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "翻开的小册子和一支笔"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -831,7 +852,14 @@
    "key": "title-r3-21a1ae82f9192f6779d4",
    "title_text": "两种用法",
    "sha256": "873190dee313516494a9269126bd18f89205b89116a3cb68004cb3a424472657",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    64,
+    506,
+    219
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1264,7 +1292,14 @@
    "key": "title-r3-eb472c8b335051a2eaf2",
    "title_text": "建一个交付包，走一遍",
    "sha256": "ea880cbda9eb013fb489ae1cde89276786792bc655d8325341c91d2fa55aae22",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    44,
+    62,
+    724,
+    150
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1456,7 +1491,11 @@
    "key": "表格变更",
    "source_phrase": "右边约五分之二宽：上面一幅水彩插画——两张表格纸一前一后叠着，前面那张是新版，其中两行被浅黄色荧光笔标出，两根原本连着的绿色丝线在这两行处断开，其余几根丝线连着另外两张没动的纸，仍是绿色（纸上只画格子和浅灰短线，不写字）；插画下面两张小卡片上下排：“什么算‘还有效’”和“现在做不到的”，每张左上一个小图标（一枚图钉、一把量尺）。",
    "sha256": "13f2643671e5b77ec7da57f8496bed6887ac57df738e4e98a5849eaae66a14f3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两张表格纸一前一后叠着，前面那张是新版，其中两行被浅黄色荧光笔标出，两根原本连着的绿色丝线在这两行处断开，其余几根丝线连着另外两张没动的纸，仍是绿色（纸上只画格子和浅灰短线，不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -1473,7 +1512,14 @@
    "key": "title-d61696b3461c66a41c0b",
    "title_text": "资料换了版",
    "sha256": "aa629acf7e064fe6a1187fb56ede4ed9a65706ba7dd89756a6635f551693ef3a",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    33,
+    47,
+    521,
+    200
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -1724,7 +1770,14 @@
    "key": "title-r3-a3ee9e1ca208027ef241",
    "title_text": "出了事怎么办",
    "sha256": "e92799aaa76461543b0736697a83d543a00a9e4154075b42aa2cd83668f98b76",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    23,
+    87,
+    798,
+    344
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2109,7 +2162,14 @@
    "key": "title-r3-b5b4dae881cd56890248",
    "title_text": "它是怎么搭的",
    "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    32,
+    20,
+    525,
+    119
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2340,7 +2400,14 @@
    "key": "title-r3-9ce99a7f5a6a4d1b80fa",
    "title_text": "为什么这样设计",
    "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    19,
+    122,
+    894,
+    364
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -2605,7 +2672,11 @@
    "key": "表格变更",
    "source_phrase": "插画：卡 1 两张小表格上下摆着，每张两行，行首分别是“ERP”“CRM”，上面那张 ERP 行写“2026-09-22”、CRM 行写“2026-09-23”，下面那张两个日期对调；一根绿色丝线想从上面 ERP 的日期连到下面 CRM 的日期，被一枚绿色图钉（按在 ERP 行首）拦住，线在半路打了个结。",
    "sha256": "13f2643671e5b77ec7da57f8496bed6887ac57df738e4e98a5849eaae66a14f3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "卡 1 两张小表格上下摆着，每张两行，行首分别是抽象图形抽象图形，上面那张 ERP 行画抽象短线的、CRM 行画抽象短线的，下面那张两个日期对调；一根绿色丝线想从上面 ERP 的日期连到下面 CRM 的日期，被一枚绿色图钉（按在 ERP 行首）拦住，线在半路打了个结"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -2635,7 +2706,11 @@
    "key": "ill-a1de3051f28610",
    "source_phrase": "卡 3 一个小机器人站在分岔路口，没有路牌，它自己走向一扇写着对勾的门，手里只捏着三张纸。",
    "sha256": "a8b6c1a190c14c3dab7f5e99bce836634acca21a19917c58ec425293210d6935",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一个小机器人站在分岔路口，没有路牌，它自己走向一扇写着对勾的门，手里只捏着三张纸"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -2652,7 +2727,14 @@
    "key": "title-7d7181da56ef8f5b11f2",
    "title_text": "几处设计",
    "sha256": "6402b1debefa801c93b727fdec4dbbcea4233043d0130480cf788d329c2768e0",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    46,
+    446,
+    170
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -3046,7 +3128,11 @@ ready
    "key": "勾选清单",
    "source_phrase": "“日常”组只有 1 张卡，靠左，右边空出的两格画一小幅水彩插画：一个对话气泡旁边一张打勾的纸；“出文件”和“资料换版”两组各 2 张，右边空出的一格各画一小幅插画（六张扇形排开的小文件；两张叠着的表格纸，前面那张一角翻起）。",
    "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "对话气泡旁打勾的纸"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3061,7 +3147,11 @@ ready
    "key": "透明文件盒",
    "source_phrase": "“日常”组只有 1 张卡，靠左，右边空出的两格画一小幅水彩插画：一个对话气泡旁边一张打勾的纸；“出文件”和“资料换版”两组各 2 张，右边空出的一格各画一小幅插画（六张扇形排开的小文件；两张叠着的表格纸，前面那张一角翻起）。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "六张扇形排开的小文件"
+   ],
+   "hidden": false
   },
   {
    "role": "illustration",
@@ -3076,7 +3166,11 @@ ready
    "key": "表格变更",
    "source_phrase": "“日常”组只有 1 张卡，靠左，右边空出的两格画一小幅水彩插画：一个对话气泡旁边一张打勾的纸；“出文件”和“资料换版”两组各 2 张，右边空出的一格各画一小幅插画（六张扇形排开的小文件；两张叠着的表格纸，前面那张一角翻起）。",
    "sha256": "13f2643671e5b77ec7da57f8496bed6887ac57df738e4e98a5849eaae66a14f3",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "两张叠着的表格纸，前面那张一角翻起"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3093,7 +3187,8 @@ ready
    "key": "title-d1a28fe9f14a79b2601a",
    "title_text": "全部功能（8 项）",
    "sha256": "3ed4f944b2ab84c0e980f33410cd3999e0117ba1c692d664c2ebf75d20aa97db",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3110,7 +3205,8 @@ ready
    "key": "title-a8e7f791a6dbc64e4d56",
    "title_text": "出文件",
    "sha256": "1cabc5d7b7c930d5ea8d87f4aea70ba10da72e9f22b3c7851cd1565013f1cb03",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3127,7 +3223,8 @@ ready
    "key": "title-5eebdb43f02265619bea",
    "title_text": "建包和核事实",
    "sha256": "0a4dd26673b4b4b6165828f9aa07d415a11cf25059a562f4b4c0bda4d3dce6fe",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3144,7 +3241,8 @@ ready
    "key": "title-f648d6712cf804d1769f",
    "title_text": "日常",
    "sha256": "58a883359d8d90c68eaeb340441294d079cbd8700264d7a262c978f097ab5094",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -3161,7 +3259,8 @@ ready
    "key": "title-9cb64b3936931b384802",
    "title_text": "资料换版",
    "sha256": "5bd05782c33eaee47337fa6b59e85f05ede811b7cb929bc68b68db8b8db857d3",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3384,7 +3483,11 @@ ready
    "key": "main-work-delivery-copilot",
    "source_phrase": "右侧约三分之一宽一幅大一点的水彩插画：一张书桌上三份资料由细绿丝线连到三份成品，桌角放着一只合上的公文包，像是在等人来用；插画里不写字。",
    "sha256": "b34c7153df2282317848eeb4bac7dea94c6fa493d676ad9494d84955680f0c76",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "一张书桌上三份资料由细绿丝线连到三份成品，桌角放着一只合上的公文包，像是在等人来用；插画里不写字"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -3401,7 +3504,14 @@ ready
    "key": "title-r3-f8367a4ec7c3aa408a9e",
    "title_text": "演进",
    "sha256": "5e38f5402d26af886eb6b1852d3363f3a618c01be6c60c423b490489a9a5c1ee",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    21,
+    0,
+    209,
+    156
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -3567,7 +3677,14 @@ ready
    "key": "title-6f966a995ad3884757df",
    "title_text": "画廊",
    "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    47,
+    0,
+    352,
+    185
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }

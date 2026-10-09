@@ -261,7 +261,7 @@
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
   "sha256": "9814cf0fbfb045ba32f05e92bb5d8383b99c4e7a5a39e0c44ffa4d911cc3ec40",
-  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
  }
 }
 ---
@@ -529,7 +529,11 @@
    "key": "工程交付路径",
    "source_phrase": "右边约 45% 宽一幅水彩插画，从左上到右下画一条弯弯的小路，路边依次立着四块小木牌：第一块旁边是一个箭插在靶心上的草靶；第二块旁边是一张小木桌，桌上一只放大镜照着一张打了绿勾的纸；第三块旁边是一只浅绿色的小回收桶，几张揉皱的纸和几片落叶正落进去；第四块在小路尽头，旁边几根细枝条汇成一根粗树干，树干顶上停着一朵小云，云上画 GitHub 的黑色章鱼猫标志。",
    "sha256": "369ddfa2d61a1c2e26f20d41744e6c70c470e884e0feaf056f3acd8681154dc0",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [
+    "右边约 45% 宽一幅水彩插画，从左上到右下画一条弯弯的小路，路边依次立着四块小木牌：第一块旁边是一个箭插在靶心上的草靶；第二块旁边是一张小木桌，桌上一只放大镜照着一张打了绿勾的纸；第三块旁边是一只浅绿色的小回收桶，几张揉皱的纸和几片落叶正落进去；第四块在小路尽头，旁边几根细枝条汇成一根粗树干，树干顶上停着一朵小云，云上画 GitHub 的黑色章鱼猫标志"
+   ],
+   "hidden": false
   },
   {
    "role": "title",
@@ -546,7 +550,14 @@
    "key": "title-ba55b824f91a8ef32033",
    "title_text": "工程与交付",
    "sha256": "1490cf263749e28b0f0c1ce522b4ad260f463d998fde0fcdfcddeb4f093e2434",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    31,
+    0,
+    643,
+    168
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -856,7 +867,9 @@
    "key": "ill-d8e759c964a2bb",
    "source_phrase": "横版 16:9。左上一行深绿毛笔艺术字大标题“怎样才算做完”（和开头一屏“工程与交付”同一种写法，井号不画），下面一道绿色笔刷线；笔刷线下一行粗体深绿字“五步都走完才叫做完；只跑过测试，不等于本人能用。”。中间是一条从左到右的五步流程：五张等宽等高的圆角卡片（白底、细浅绿描边、大圆角）排成一行，卡片之间用粗一点的绿色箭头连起来。每张卡顶上一个绿色实心小圆，里面是白色数字 1–5；数字右边是步骤名（粗体深绿），下面是这一步的说明（深蓝灰常规字），〔〕里的字画成卡片底部的绿色下划线加小箭头链接样式，〔〕不画。每张卡左上角一个小水彩图标，和开头一屏插画是同一套：第 1 步一张对话气泡旁边一张打了绿勾的清单；第 2 步一只放大镜照着一张打了绿勾的纸，旁边一部小手机；第 3 步几根细枝条汇进一根粗树干，树干顶上一小朵云，云上画 GitHub 黑色章鱼猫标志；第 4 步一只眼睛望着那朵小云，中间一道往回的绿色弧形箭头；第 5 步一只浅绿色小回收桶，几张揉皱的纸和落叶正落进去。流程下面是“例外”：左端“例外”两个字粗体深绿，四条例外各画成一张浅灰绿底、细边的小圆角标签，用一根绿色细虚线分别挂在对应步骤卡的正下方（“第 2 步｜……”挂在第 2 张卡下，两条“第 3 步｜……”并排挂在第 3 张卡下，“第 5 步｜……”挂在第 5 张卡下），标签开头的“第 N 步｜”和后面冒号前的情形用粗体，其余深蓝灰。四张标签底边对齐，不画空标签，第 1、4 步下面不挂东西，那两处用一小丛水彩叶子补上，不留大块空白。不画页面背景和别的页面元素，插画里不出现任何别的字。（g4 补充）第 1 步下面也挂一张例外标签“第 1 步｜原话或选项确实做不到：……”，画法和其他例外标签一样；原先第 1 步下的那丛叶子去掉，只在第 4 步下面补叶子。第 1 步卡里的字比原来多两句，五张步骤卡仍等宽等高，按最长的一张定高度。",
    "sha256": "369ddfa2d61a1c2e26f20d41744e6c70c470e884e0feaf056f3acd8681154dc0",
-   "status": "ready"
+   "status": "ready",
+   "original_elements": [],
+   "hidden": false
   },
   {
    "role": "title",
@@ -873,7 +886,8 @@
    "key": "title-d69efa27c4d56fa57b76",
    "title_text": "怎样才算做完",
    "sha256": "dd550f05628b5a5be349bba8907ea06206cbc20c6d365953857c3884fd077886",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1074,7 +1088,8 @@
    "key": "title-r3-7d8b5bfc11e263f042cf",
    "title_text": "人话要点",
    "sha256": "67e3b37a6d76231c9583f82d7c7861b028456f5fcfb9fe574f7198794ea0bc6c",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1757,7 +1772,14 @@
    "key": "title-r3-7d8b5bfc11e263f042cf",
    "title_text": "人话要点",
    "sha256": "67e3b37a6d76231c9583f82d7c7861b028456f5fcfb9fe574f7198794ea0bc6c",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    133,
+    17,
+    792,
+    285
+   ],
+   "g4_target_reference_available": false
   }
  ]
 }
@@ -1943,7 +1965,8 @@
    "key": "title-ba55b824f91a8ef32033",
    "title_text": "工程与交付",
    "sha256": "1490cf263749e28b0f0c1ce522b4ad260f463d998fde0fcdfcddeb4f093e2434",
-   "status": "ready"
+   "status": "ready",
+   "g4_target_reference_available": false
   },
   {
    "role": "title",
@@ -1960,7 +1983,14 @@
    "key": "title-84e2aa51908549a41c6e",
    "title_text": "目标优先于实现",
    "sha256": "c5585e38f902d96f10c2eea5ef642ef5b06e516c145704971390da6fc65e1704",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    49,
+    364,
+    336,
+    434
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -1977,7 +2007,14 @@
    "key": "title-1cf35b8bab713a9a7310",
    "title_text": "依赖出问题要修好",
    "sha256": "2c01c56752d4d11afd52eac5f40cd2ad7d30aaeae12d848c60e9f64afb685e32",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    863,
+    566,
+    1174,
+    613
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2195,7 +2232,14 @@ owner: `E:\.agents`
    "key": "title-154723a1aa0a09a4c3f2",
    "title_text": "验证",
    "sha256": "c2bde3bf836da60b1b3a1254395c3d33850fd88e346f5c29b13945cf284c2c49",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    42,
+    97,
+    196,
+    184
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2212,7 +2256,14 @@ owner: `E:\.agents`
    "key": "title-3daaa38f5320708f63bf",
    "title_text": "仓库和过程材料",
    "sha256": "cd5f723aecb161f95006339a8527429f48b8272625d9628804738c32d1f3e4f4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    864,
+    566,
+    1259,
+    628
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2386,7 +2437,14 @@ owner: `E:\.agents`
    "key": "title-9d1a9e0be651afb32bea",
    "title_text": "下载、临时文件和清理",
    "sha256": "ba073445fac1a9c094620f99b750447b0552380ca1b0bcfa6d50dac924a285a4",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    46,
+    103,
+    747,
+    220
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
@@ -2549,7 +2607,14 @@ owner: `E:\.agents`
    "key": "title-626abb2fc2c06242710a",
    "title_text": "Git 收尾",
    "sha256": "45a83b50a8a27fc17fb2278f2acc2569a24824245ef0884262cdd53e9bb87e35",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    54,
+    101,
+    235,
+    171
+   ],
+   "g4_target_reference_available": true
   },
   {
    "role": "title",
@@ -2566,7 +2631,14 @@ owner: `E:\.agents`
    "key": "title-982d7e68e11426f69549",
    "title_text": "日常技术默认",
    "sha256": "211774acf6fb512b9a74b4d89b4662f7a75bbc9c6aa914bb55e5ac1ed8fe74da",
-   "status": "ready"
+   "status": "ready",
+   "source_box": [
+    864,
+    485,
+    1121,
+    549
+   ],
+   "g4_target_reference_available": true
   }
  ]
 }
