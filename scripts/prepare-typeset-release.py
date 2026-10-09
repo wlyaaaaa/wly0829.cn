@@ -608,7 +608,8 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
     for build in copies:
         creative = build['creative_preparation']
         bound_file(creative['config']['path'], creative['config'])
-        if read(creative['config']['path']).get('scope') != 'full-pages-creative-2f-static-home':
+        config = read(creative['config']['path'])
+        if config.get('scope') != 'full-pages-creative-2f-static-home':
             raise ValueError('Cross-root rebuild requires the exact static-home recipe')
         staged = creative['staged_build_report']; bound_file(staged['path'], staged)
         raw_root = Path(staged['path']).with_name(Path(staged['path']).name.replace('-staged-build-report.json', '-raw'))
@@ -618,8 +619,12 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
                 or body.get('release_id') != raw['release_id'] or raw['release_id'] != creative['raw_release_id']):
             raise ValueError('Rebuild staged body does not bind its actual raw files')
         steps = creative['steps']; roots = [Path(s['manifest']['path']).parent for s in steps]
-        if [s['name'] for s in steps] != ['static-home', 'river', 'comic', 'album', 'demo', 'retry']:
-            raise ValueError('Rebuild changed the six-step order')
+        expected_steps = ['static-home', 'river', 'comic', 'album', 'demo', 'retry']
+        if config.get('stutter_page'):
+            expected_steps.insert(expected_steps.index('retry'), 'stutter')
+        expected_steps += [step for key, step in [('home_bio', 'bio'), ('bird_first_packet', 'native-living'), ('living_pages_packet', 'bird-first')] if config.get(key)]
+        if [s['name'] for s in steps] != expected_steps:
+            raise ValueError('Rebuild changed the configured step order')
         manifests = [raw]
         previous = raw['release_id']
         for step, root in zip(steps, roots):
@@ -632,7 +637,7 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
                 raise ValueError('Rebuild changed a real stage or its release chain')
             previous = current['release_id']; manifests.append(current)
         entities.append((staged, raw_root, roots, manifests))
-    if Path(entities[0][0]['path']).read_bytes() != Path(entities[1][0]['path']).read_bytes():
+    if json.dumps(read(entities[0][0]['path']), sort_keys=True) != json.dumps(read(entities[1][0]['path']), sort_keys=True):
         raise ValueError('Rebuild changed the complete staged report')
     normalized = []
     for build, (staged, raw_root, roots, manifests) in zip(copies, entities):
@@ -645,7 +650,7 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
             if 'prepared_at_beijing' in manifest:
                 beijing_timestamp(manifest['prepared_at_beijing'], 'prepared_at_beijing')
                 manifest['prepared_at_beijing'] = '<generated-time>'
-            static = manifest.get('home_static_preparation')
+            static = manifest.get('home_static_preparation') if manifest is not manifests[0] else None
             if static:
                 beijing_timestamp(static['observed_at_beijing'], 'home_static_preparation.observed_at_beijing')
                 if (static['observed_at_beijing'] != static_time or static['baseline'] != str(raw_root)
@@ -660,9 +665,9 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
                     raise ValueError('Album source is not the actual comic stage')
                 album['source_root'] = '<comic>'
                 for report in album['build_reports']:
-                    if report['path'] != staged['path'] or report['sha256'] != staged['sha256']:
+                    if report['path'] != staged['path'] or report['sha256'] != staged['sha256'] or report['bytes'] != staged['bytes']:
                         raise ValueError('Album changed the staged report binding')
-                    report['path'] = '<staged-report>'
+                    report.update(path='<staged-report>', sha256='<verified-staged-report>', bytes='<verified-staged-report>')
             demo = manifest.get('how_demo_preparation')
             if demo:
                 speed = demo['speed_source']; path = Path(speed['path'])
@@ -674,12 +679,13 @@ def rebuilt_generation(reviewed, rebuilt, final_manifest):
             if manifest.get('creative_preparation'):
                 manifest['creative_preparation'] = '<verified-creative>'
             normalized.append(manifest)
-    if normalized[:8] != normalized[8:]:
+    split = len(entities[0][3]) + 1
+    if normalized[:split] != normalized[split:]:
         raise ValueError('Rebuild changed complete stage manifests beyond generated roles')
     for build, (staged, _, _, _) in zip(copies, entities):
         if build['inputs'].pop(staged['path']) != {k: staged[k] for k in ('sha256', 'bytes')}:
             raise ValueError('Rebuild changed the generated staged input proof')
-        creative = build['creative_preparation']; creative['staged_build_report']['path'] = '<staged-report>'
+        creative = build['creative_preparation']; creative['staged_build_report'].update(path='<staged-report>', sha256='<verified-staged-report>', bytes='<verified-staged-report>')
         for step in creative['steps']:
             step['manifest'] = {'path': '<' + step['name'] + '-manifest>'}
             step.pop('seconds', None)
