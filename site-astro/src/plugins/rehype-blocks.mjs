@@ -41,7 +41,8 @@ const data = (n, k) => { const p = n.properties || {}; return p['data-' + k] ?? 
 function img(src, alt, extra = {}) {
   const d = dims(src);
   const p = { src, alt: alt || '', loading: 'lazy', decoding: 'async', ...extra };
-  if (d) { p.width = d.w; p.height = d.h; }
+  // 原图像素尺寸写成变量：样式按“旧画布 1 像素 = --u”缩放，图和现在显示得一样大
+  if (d) { p.width = d.w; p.height = d.h; p.style = `--iw:${d.w};--ih:${d.h}`; }
   return el('img', p);
 }
 
@@ -51,20 +52,39 @@ function chapter(node) {
   const brush = data(node, 'brush');
   const art = data(node, 'art');
   const level = data(node, 'level') === '1' ? 'h1' : 'h2';
+  let brushImg = null;
+  if (brush) {
+    brushImg = img(brush, title, { loading: 'eager', className: ['brush'] });
+    const box = (data(node, 'brushbox') || '').split(',').map(Number);
+    const d = dims(brush);
+    if (d && box.length === 4 && box.every((v) => Number.isFinite(v))) {
+      // 只显示有笔画的部分（显示时裁，原图不动），尺寸按裁后的像素算
+      const cw = d.w - box[1] - box[3], ch = d.h - box[0] - box[2];
+      brushImg.properties.style = `--iw:${cw};--ih:${ch};object-view-box:inset(${box[0]}px ${box[1]}px ${box[2]}px ${box[3]}px)`;
+    }
+  }
+  const size = data(node, 'size') || 'large';
   const heading = brush
-    ? el(level, { className: ['brush-title'], dataTitleKey: fileKey(brush) }, [img(brush, title, { loading: 'eager', className: ['brush'] })])
+    ? el(level, { className: ['brush-title'], dataTitleKey: fileKey(brush), dataSize: size }, [brushImg])
     : el(level, { className: ['text-title'] }, [{ type: 'text', value: title }]);
   const body = node.children.filter((c) => !blank(c));
-  const textCol = el('div', { className: ['chapter-text'] }, [heading, ...body]);
-  const kids = [];
+  // 现在的版式：标题下面那句短的“一句话”是绿色粗体导语；长的说明段落是正文，不加粗
+  if (body[0] && body[0].tagName === 'p' && text(body[0]).length <= 48) body[0].properties = { ...(body[0].properties || {}), className: ['lead'] };
+  const align = data(node, 'align') || (art ? 'left' : 'center');
+  let fig = null;
   if (art) {
     const living = data(node, 'living');
-    const fig = el('figure', { className: ['chapter-art'], dataArtKey: fileKey(art) }, [img(art, '', { loading: 'eager' })]);
+    fig = el('figure', { className: ['chapter-art'], dataArtKey: fileKey(art) }, [img(art, '', { loading: 'eager' })]);
     if (living) fig.properties.dataLivingConfig = living;
-    kids.push(fig);
+    const aw = data(node, 'artw');
+    if (aw && /^[0-9.]+%$/.test(aw)) fig.properties.style = `--artw:${aw}`;
+    if (data(node, 'artside') === 'left') fig.properties.dataSide = 'left';
   }
-  kids.push(textCol);  // 插画在前：窄屏排在上面，宽屏浮到右上角
-  return el('div', { className: ['chapter', art ? 'has-art' : 'no-art'], id: node.properties.id }, kids);
+  // 靠左（首屏）：插画在前，浮到右上角，标题和一句话在左；居中：标题占满一行居中，插画在标题下面浮到右边
+  const kids = align === 'center'
+    ? [heading, ...(fig ? [fig] : []), el('div', { className: ['chapter-text'] }, body)]
+    : [...(fig ? [fig] : []), el('div', { className: ['chapter-text'] }, [heading, ...body])];
+  return el('div', { className: ['chapter', art ? 'has-art' : 'no-art'], dataAlign: align, id: node.properties.id }, kids);
 }
 
 // —— 卡片组：::card 分隔，每张卡可带图标 ——
@@ -86,12 +106,26 @@ function cards(node) {
     cur.children.push(c);
   }
   for (const a of out) {
-    // 图标和卡片标题并排成一行
+    // 结构照现在的功能卡：图在左（或上），文字一栏，状态是右上角一个彩色点
     const icon = a.children[0] && has(a.children[0], 'card-icon') ? a.children[0] : null;
-    const h = a.children.find((c) => isTag(c, 'h4'));
-    if (icon && h && a.children.indexOf(h) === 1) {
-      a.children.splice(0, 2, el('div', { className: ['card-head'] }, [icon, h]));
-    }
+    const rest = a.children.filter((c) => c !== icon);
+    let dot = null;
+    const pull = (nodes) => nodes.forEach((n) => {
+      if (!n.children) return;
+      n.children = n.children.filter((c) => {
+        if (has(c, 'status-tag')) {
+          const st = c.properties.dataState || 'on';
+          dot = el('span', { className: ['status-dot'], dataState: st, title: text(c) }, [el('span', { className: ['sr'] }, c.children)]);
+          return false;
+        }
+        return true;
+      });
+      pull(n.children);
+    });
+    pull(rest);
+    const copy = el('div', { className: ['card-copy'] }, rest.filter((c) => !(isTag(c, 'p') && !text(c).trim() && !c.children.some((x) => x.type === 'element'))));
+    a.children = [...(icon ? [icon] : []), copy, ...(dot ? [dot] : [])];
+    if (dot) a.properties.dataStatus = dot.properties.dataState;
   }
   // 某张卡的字数远多于其他卡（超过中位数 2.2 倍）时让它独占一行，免得同排的短卡被拉出大块空白
   if (out.length >= 3) {
@@ -117,7 +151,16 @@ function stats(node) {
     const rest = flat.filter((_, k) => k !== strongAt);
     const box = el('div', { className: ['stat'] }, []);
     if (icons[i]) box.children.push(img(icons[i], '', { className: ['stat-icon'] }));
-    if (num) box.children.push(el('div', { className: ['stat-num'] }, num.children));
+    if (num) {
+      // 数字大、单位小（照现在）：“684 次”→ 684 + 小字“次”
+      const t = text(num);
+      const m = t.match(/^([0-9０-９.,，%+~～–\-:：]+)\s*(.*)$/);
+      box.children.push(el('div', { className: ['stat-num'] }, m && m[2]
+        ? [{ type: 'text', value: m[1] }, el('span', { className: ['stat-unit'] }, [{ type: 'text', value: ' ' + m[2] }])]
+        : num.children));
+    }
+    while (rest.length && rest[0].type === 'text' && !rest[0].value.replace(/[\s\u3000]/g, '')) rest.shift();
+    if (rest.length && rest[0].type === 'text') rest[0] = { ...rest[0], value: rest[0].value.replace(/^[\s\u3000]+/, '') };
     box.children.push(el('div', { className: ['stat-text'] }, rest));
     return box;
   });
@@ -143,26 +186,28 @@ function steps(node) {
       body.push(...flat.slice(first + 1));
     } else body.push(...flat);
     const box = el('li', { className: ['step'] }, []);
+    if (icons[i]) box.children.push(el('div', { className: ['step-pic'] }, [img(icons[i], '', { className: ['step-icon'] })]));
     const top = el('div', { className: ['step-head'] }, [el('span', { className: ['step-no'] }, [{ type: 'text', value: String(i + 1) }])]);
-    if (icons[i]) top.children.unshift(img(icons[i], '', { className: ['step-icon'] }));
     if (head) top.children.push(head);
-    box.children.push(top);
+    const bodyBox = el('div', { className: ['step-body'] }, [top]);
+    box.children.push(bodyBox);
     // 去掉正文开头的空白
     while (body.length && body[0].type === 'text' && !body[0].value.trim()) body.shift();
     if (body.length && body[0].type === 'text') body[0] = { ...body[0], value: body[0].value.replace(/^[\s　]+/, '') };
-    if (body.length) box.children.push(el('div', { className: ['step-text'] }, body));
+    if (body.length) bodyBox.children.push(el('div', { className: ['step-text'] }, body));
     return box;
   });
   const extra = node.children.filter((c) => c !== list && !blank(c));
   const n = out.length;
   node.properties.dataN = String(n);
-  if (n > 5) node.properties.className.push('is-long');
+  if (icons.some(Boolean)) node.properties.className.push('has-pics');
+  if (n > 6) node.properties.className.push('is-long');
   node.children = [el('ol', { className: ['step-list'] }, out), ...extra];
   return node;
 }
 
 // —— 表格：给每格写上列名；按各列最长的字数算出“整表至少要多宽”，比这窄就每行变一张卡 ——
-const TBL_FS = 18;                     // 按最大正文字号估算（宽屏 18px），窄屏字号更小时只会更宽裕
+const TBL_FS = 20;                     // 按最大正文字号估算（宽屏 18px），窄屏字号更小时只会更宽裕
 const TBL_STEP = 120;                  // 档位：blocks.css 里按 120px 一档写好了对应的容器查询
 function table(t) {
   const head = t.children.find((c) => isTag(c, 'thead'));
@@ -177,6 +222,12 @@ function table(t) {
     if (names[i]) td.properties.dataLabel = names[i];
     longest[i] = Math.max(longest[i], text(td).length);
   });
+  // 第一列是短名称（都不超过 10 字，如“日常识字”“两三个关键数字”）：整列不换行，免得被别的长列挤成一字一行
+  if (longest[0] <= 10) {
+    const mark = (c) => { c.properties = { ...(c.properties || {}), className: [...((c.properties || {}).className || []), 'nw'] }; };
+    if (headRow) { const th = headRow.children.filter((c) => isTag(c, 'th'))[0]; if (th) mark(th); }
+    for (const tr of rows) { const td = tr.children.filter((c) => isTag(c, 'td'))[0]; if (td) mark(td); }
+  }
   // 会换行的列（超过 15 字）至少留 15 字宽；短列按自己的字数
   const need = longest.reduce((s, L) => s + Math.min(L, 15) * TBL_FS + 28, 0);
   for (const tr of [headRow, ...rows].filter(Boolean)) tr.children.filter((c) => isTag(c, 'td') || isTag(c, 'th')).forEach((cell, i) => {

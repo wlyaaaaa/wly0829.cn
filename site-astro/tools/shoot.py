@@ -14,6 +14,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument("out"); ap.add_argument("old_index")
 ap.add_argument("--tag", default="sample"); ap.add_argument("--base", default="http://127.0.0.1:4391")
 ap.add_argument("--pages", default=",".join(PAGES)); ap.add_argument("--no-compare", action="store_true")
+ap.add_argument("--suffix", default="", help="文件名后缀，如 -r2（第二轮，同名加后缀，不覆盖上一轮）")
 a = ap.parse_args()
 out = os.path.join(a.out, a.tag); os.makedirs(out, exist_ok=True)
 old = json.load(open(a.old_index, encoding="utf-8"))
@@ -34,7 +35,7 @@ def capture(pg, url, w, stem):
     y = 0; k = 1
     while y < H:
         h = min(SEG, H - y)
-        f = os.path.join(out, f"{stem}-new-part{k:02d}.png")
+        f = os.path.join(out, f"{stem}-new-part{k:02d}{a.suffix}.png")
         pg.screenshot(path=f, full_page=True, clip={"x": 0, "y": y, "width": w, "height": h})
         parts.append(f); y += h; k += 1
     return H, parts
@@ -68,7 +69,7 @@ def side_by_side(old_files, new_files, stem, w):
             c.paste(o.crop((0, y, o.width, min(o.height, y + h))), (0, head))
         if y < n.height:
             c.paste(n.crop((0, y, n.width, min(n.height, y + h))), (o.width + gap, head))
-        f = os.path.join(out, f"{stem}-side-by-side-part{k:02d}.png"); c.save(f); files.append(f)
+        f = os.path.join(out, f"{stem}-side-by-side-part{k:02d}{a.suffix}.png"); c.save(f); files.append(f)
     return files, o.height / scale, n.height / scale
 
 
@@ -87,4 +88,4 @@ with sync_playwright() as p:
                     row.update({"old_parts": [s["path"] for s in v["segments"]], "old_height": oh, "side_by_side": sbs})
             record.append(row); print(json.dumps({k: v for k, v in row.items() if k in ("page", "width", "height", "old_height")}, ensure_ascii=False))
     b.close()
-json.dump(record, open(os.path.join(out, "shots.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+json.dump(record, open(os.path.join(out, f"shots{a.suffix}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)

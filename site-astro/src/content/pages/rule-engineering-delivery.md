@@ -40,14 +40,14 @@
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
   "sha256": "9814cf0fbfb045ba32f05e92bb5d8383b99c4e7a5a39e0c44ffa4d911cc3ec40",
-  "converted_at_beijing": "2026-10-09T16:59:04+08:00"
+  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
  }
 }
 ---
 
 ::screen{#rule-engineering-delivery-01 section="top"}
 
-:::chapter{title="工程与交付" brush="/assets/rule-engineering-delivery/rule-engineering-delivery-01-title-01.png" art="/assets/_library/illustrations/%E5%B7%A5%E7%A8%8B%E4%BA%A4%E4%BB%98%E8%B7%AF%E5%BE%84.png" level="1" living="/_living/rule-engineering-delivery/astro/config.json"}
+:::chapter{title="工程与交付" brush="/assets/rule-engineering-delivery/rule-engineering-delivery-01-title-01.png" brushbox="8,0,0,7" size="large" art="/assets/_library/illustrations/%E5%B7%A5%E7%A8%8B%E4%BA%A4%E4%BB%98%E8%B7%AF%E5%BE%84.png" artw="45%" align="center" level="1" living="/_living/rule-engineering-delivery/astro/config.json"}
 #### 改东西要做到什么程度、怎样才算验证过、做完怎么收尾。
 :::
 
@@ -75,11 +75,11 @@
 
 ::screen{#rule-engineering-delivery-10 section="points"}
 
-:::chapter{title="怎样才算做完" brush="/assets/_library/titles/title-d69efa27c4d56fa57b76.png"}
+:::chapter{title="怎样才算做完" brush="/assets/_library/titles/title-d69efa27c4d56fa57b76.png" brushbox="4,6,4,7" size="large" align="center"}
 #### 五步都走完才叫做完；只跑过测试，不等于本人能用。
 :::
 
-:::steps{kind="flow" icons="/assets/_library/icons/%E4%BA%BA%E7%89%A9.png,/assets/_library/icons/%E5%8F%8C%E6%B0%94%E6%B3%A1.png,/assets/_library/fix-round-2/icon-clean-f2b865944254996a0705.png,/assets/_library/icons/%E4%BA%91.png,/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
+:::steps{kind="flow" cols="5" colsv="1" icons="/assets/_library/icons/%E4%BA%BA%E7%89%A9.png,/assets/_library/icons/%E5%8F%8C%E6%B0%94%E6%B3%A1.png,/assets/_library/fix-round-2/icon-clean-f2b865944254996a0705.png,/assets/_library/icons/%E4%BA%91.png,/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
 1. <strong>对照本人要求</strong>　本人的话先分类：禁令照办，觉得不对先拿事实问本人；要求、建议和本人选的选项，AI 判断有更好做法（事实或直觉都行）可以不照做，当场说清没照做什么、为什么；好奇和提问不当规矩。没定到的 AI 放手做，AI 写的稿子点过‘同意’也能改，改了单列。逐条核对可派人做，主持的看整体、拍板；没做到的如实列出，AI 补的标“AI 补充”。
 2. <strong>按实际用法验证</strong>　本人会碰到的改动，部署前按本人的用法验：新开对话试一次、真点按钮、真用手机；网页和图放进真正用的地方看整体。AI 自己能验的自己验，必须本人在场才请本人；惊艳类样板定稿前、交付前各一轮头脑风暴，找最值得的提升。[验证](/rules/engineering-delivery/#p-verify)
 3. <strong>在约定范围交付、同步</strong>　只暂存这次的改动，提交、正常推送，合进实际的默认分支；这是长期授权，不再问本人。[Git 收尾](/rules/engineering-delivery/#p-git)
@@ -87,8 +87,8 @@
 5. <strong>清理</strong>　这次的下载和临时文件放进回收站，核对回执；用过的分支和工作副本合并后删掉，或写明用途和什么时候删再留。[下载、临时文件和清理](/rules/engineering-delivery/#p-cleanup)
 :::
 
-:::cards
-::card
+:::cards{art="icon" kind="points_card" cols="1" colsv="1"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 #### 例外
 
@@ -101,11 +101,11 @@
 
 ::screen{#rule-engineering-delivery-03 section="points"}
 
-:::chapter{title="人话要点" brush="/assets/_library/round3/titles/title-r3-7d8b5bfc11e263f042cf.png"}
+:::chapter{title="人话要点" brush="/assets/_library/round3/titles/title-r3-7d8b5bfc11e263f042cf.png" brushbox="6,6,4,5" size="large" align="center"}
 
 :::
 
-:::cards
+:::cards{art="icon" kind="points_card" cols="1" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/03-%E6%94%BE%E5%A4%A7%E9%95%9C-clean.png"}
 
 #### 验证
@@ -133,7 +133,7 @@
 
 ::screen{#rule-engineering-delivery-04 section="points" continue="1"}
 
-:::cards
+:::cards{art="icon" kind="points_card" cols="1" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-f12e6ff1182222417108.png"}
 
 #### 仓库和过程材料
@@ -145,7 +145,7 @@
 - 拿不准还有没有人用，就问本人；不自己把“退役”改成“归档”。
 - 工作副本里要删的东西，也按下一组放进回收站。
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E5%9B%9E%E6%94%B6%E7%AB%99%E6%96%87%E4%BB%B6.png"}
 
 #### 下载、临时文件和清理
 
@@ -167,7 +167,7 @@
 
 ::screen{#rule-engineering-delivery-05 section="points" continue="1"}
 
-:::cards
+:::cards{art="icon" kind="points_card" cols="2" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/09-%E6%97%B6%E9%92%9F-clean.png"}
 
 #### Git 收尾
@@ -185,7 +185,7 @@
 - 维护或准备公开一个仓库时，用[GitHub 项目总索引](/projects/github-local-index/)现有的私人配套查询找到真实的对应关系；新克隆的仓库本机没有链接，不代表没有配套材料。
 - 内容怎么迁，按[个人资料与数据处理](/rules/privacy-data/)里的“私人仓库收口”办；挪走当前文件，不等于清理了 Git 历史。
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
 
 #### 日常技术默认
 
@@ -202,11 +202,11 @@
 
 ::screen{#rule-engineering-delivery-02 section="points"}
 
-:::chapter{title="人话要点" brush="/assets/_library/round3/titles/title-r3-7d8b5bfc11e263f042cf.png"}
+:::chapter{title="人话要点" brush="/assets/_library/round3/titles/title-r3-7d8b5bfc11e263f042cf.png" brushbox="6,6,4,5" size="large" align="center"}
 
 :::
 
-:::cards
+:::cards{art="icon" kind="points_card" cols="2" colsv="1"}
 ::card{icon="/assets/_library/icons/%E9%BD%BF%E8%BD%AE.png"}
 
 #### 目标优先于实现
@@ -227,7 +227,7 @@
 - 字数、token 和文件数只是成本参考，不是产品门槛：必要的条件和例外不为省字删掉，已经够了也不继续堆说明。
 - 用好懂的话和恰当的分层来写，不拿缩写、分号和超长的一行假装简洁。
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E7%A7%92%E8%A1%A8.png"}
 
 #### 依赖出问题要修好
 

@@ -48,19 +48,19 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "555a0223983561e2d2ebdc51910e3a77bf6278828d77df4bd88bd14435678670",
-  "converted_at_beijing": "2026-10-09T16:59:04+08:00"
+  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
  }
 }
 ---
 
 ::screen{#skill-report-page-01 section="top"}
 
-:::chapter{title="汇报网页" brush="/assets/_library/titles/title-d320a7a8e10d363dd8a8.png" art="/assets/_library/illustrations/generic-report-page-dashboard.png" level="1" living="/_living/skill-report-page/astro/config.json"}
+:::chapter{title="汇报网页" brush="/assets/_library/titles/title-d320a7a8e10d363dd8a8.png" brushbox="4,4,4,8" size="large" art="/assets/_library/illustrations/generic-report-page-dashboard.png" artw="48%" align="left" level="1" living="/_living/skill-report-page/astro/config.json"}
 技能名 report-page · [约法 L26](/rules/charter/#L26)说的那种白底绿色汇报网页
 :::
 
-:::cards
-::card
+:::cards{art="icon" kind="points_card" colsv="1"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 #### 它做什么
 
@@ -69,7 +69,7 @@
 AI 只写内容文件（文字和数字），版式、配色、图表和检查都交给一条命令；页面只存在我电脑上，不发到网上。
 :::
 
-:::stats
+:::stats{cols="3" colsv="1"}
 - <strong>65 份</strong>　9 月 26–28 日生成、现存的汇报页（58 个不同标题）
 - <strong>387 张</strong>　
 - <strong>129 次</strong>　
@@ -111,7 +111,7 @@ Claude 87 次、Codex 42 次运行生成命令
 
 ::screen{#skill-report-page-02 section="examples"}
 
-:::chapter{title="一个完整例子：这个网站的设计稿怎么定下来" brush="/assets/_library/titles/title-cad79fffe8ffc762fedc.png"}
+:::chapter{title="一个完整例子：这个网站的设计稿怎么定下来" brush="/assets/_library/titles/title-cad79fffe8ffc762fedc.png" brushbox="6,7,4,5" size="large" align="left"}
 
 :::
 
@@ -119,7 +119,7 @@ Claude 87 次、Codex 42 次运行生成命令
 真事 · 北京时间 9 月 28 日 18–19 点
 :::
 
-:::steps{kind="flow" icons="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png,/assets/_library/icons/%E6%8C%87%E5%90%91%E6%89%8B.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::steps{kind="flow" colsv="1" icons="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png,/assets/_library/icons/%E6%8C%87%E5%90%91%E6%89%8B.png,/assets/_library/icons/%E9%BD%BF%E8%BD%AE.png,/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png"}
 1. <strong>AI 把设计稿做成网页</strong>　Claude 把网站设计稿第 4 版写成一份内容文件：页首一句“这页对你有什么用”和先说结论，正文按要定的事分节，每件事一张卡片，编号 V1 到 V21。一条命令生成、自检，在 Chrome 打开。
 2. <strong>我逐张点选</strong>　每张卡写着现在是什么样、为什么要定、选了会怎样，AI 自己的倾向单独标“AI 建议”。我点“同意”或“要改”，想法不在选项里的，写进卡片下面的“我的说明”框。
 3. <strong>一键生成答复</strong>　点“生成我的答复”，整页选择变成几行字复制好，我粘回对话；这一轮分两次贴回。选到一半关掉页面也不丢，浏览器记着。
@@ -130,8 +130,8 @@ Claude 87 次、Codex 42 次运行生成命令
 <strong>上一轮</strong>　第 3 版 25 张卡，我在 8 张上选了“要改”并写了说明；AI 照改出第 4 版，复核一轮。
 :::
 
-:::cards
-::card
+:::cards{art="icon" kind="source_text_card" colsv="1"}
+::card{icon="/assets/_library/icons/%E5%8F%8C%E6%B0%94%E6%B3%A1.png"}
 
 #### 我贴回去的答复（节选）
 
@@ -154,7 +154,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 ::screen{#skill-report-page-03 section="examples"}
 
-:::chapter{title="页面长什么样" brush="/assets/_library/titles/title-02d56f0b3157e18ad998.png"}
+:::chapter{title="页面长什么样" brush="/assets/_library/titles/title-02d56f0b3157e18ad998.png" brushbox="4,5,4,4" size="large" align="center"}
 
 :::
 
@@ -186,7 +186,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 ::screen{#skill-report-page-04 section="abilities"}
 
-:::chapter{title="能做的事：该用哪种图" brush="/assets/_library/titles/title-87028220e41029f4bc43.png"}
+:::chapter{title="能做的事：该用哪种图" brush="/assets/_library/titles/title-87028220e41029f4bc43.png" brushbox="4,6,4,7" size="large" align="center"}
 <strong>原则：怎么便于我理解就怎么画。</strong>先想清这一段要让我明白什么，再挑最好懂的一种；帮不上理解的图不加。每张图前一句话说它说明了什么，数字写来源，粗估写明粗估。
 :::
 
@@ -210,7 +210,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 | 一个结论 | 一句大字 |
 | 图片、视频、录音、文档、文件夹 | 直接放进页面 |
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="1" colsv="1"}
 ::card
 
 #### 该用哪种图
@@ -240,11 +240,11 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 ::screen{#skill-report-page-05 section="abilities"}
 
-:::chapter{title="能做的事：卡片、媒体、好读" brush="/assets/_library/titles/title-e174bbe0abebc651e69a.png"}
+:::chapter{title="能做的事：卡片、媒体、好读" brush="/assets/_library/titles/title-e174bbe0abebc651e69a.png" brushbox="5,7,4,6" size="large" align="center"}
 
 :::
 
-:::cards
+:::cards{art="icon" kind="points_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"}
 
 #### 请我定的卡片
@@ -279,11 +279,11 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 ::screen{#skill-report-page-06 section="abilities"}
 
-:::chapter{title="能做的事：一条命令做完" brush="/assets/_library/titles/title-5e7019c4b23cc0561f13.png"}
+:::chapter{title="能做的事：一条命令做完" brush="/assets/_library/titles/title-5e7019c4b23cc0561f13.png" brushbox="5,5,4,4" size="large" align="center"}
 
 :::
 
-:::steps{kind="flow" icons="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%86%99%E4%BD%9C.png,/assets/_library/icons/%E7%94%BB%E7%AC%94%E8%B0%83%E8%89%B2%E6%9D%BF.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png"}
+:::steps{kind="flow" cols="5" colsv="1" icons="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%86%99%E4%BD%9C.png,/assets/_library/icons/%E7%94%BB%E7%AC%94%E8%B0%83%E8%89%B2%E6%9D%BF.png,/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png,/assets/_library/icons/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%A0%87%E7%AD%BE%E9%A1%B5.png,/assets/_library/icons/%E5%9B%9E%E6%94%B6%E7%AB%99%E6%96%87%E4%BB%B6.png"}
 1. <strong>写内容文件</strong>
 2. <strong>生成</strong>
 3. <strong>自检</strong>
@@ -291,7 +291,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 5. <strong>清理</strong>
 :::
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="2" colsv="1"}
 ::card
 
 #### 写内容文件一条命令生成
@@ -350,14 +350,14 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 
 ::screen{#skill-report-page-07 section="abilities"}
 
-:::chapter{title="AI 写这种页的规矩" brush="/assets/_library/titles/title-c76d507f3230cbeb035f.png"}
+:::chapter{title="AI 写这种页的规矩" brush="/assets/_library/titles/title-c76d507f3230cbeb035f.png" brushbox="4,5,4,5" size="large" align="center"}
 
 :::
 
-### <strong>写法规矩</strong>（在用）
+<h3 class="sechead"><strong>写法规矩</strong>（在用）</h3>
 
-:::cards
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::cards{art="icon" kind="points_card" cols="2" colsv="1"}
+::card{icon="/assets/_library/icons/%E6%97%A5%E5%8E%86%E6%97%B6%E9%92%9F.png"}
 
 怎么写：
 
@@ -370,7 +370,7 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 - 分清“已做”“接着做”“要我决定或亲手做”
 - 时间一律北京时间；长任务写清到哪一步、还差什么、还要多久
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 请我拍板时：
 
@@ -391,11 +391,11 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 
 ::screen{#skill-report-page-08 section="abilities"}
 
-:::chapter{title="能做的事：它是怎么长成现在这样的" brush="/assets/_library/titles/title-ff818ac07f31565ae40c.png"}
+:::chapter{title="能做的事：它是怎么长成现在这样的" brush="/assets/_library/titles/title-ff818ac07f31565ae40c.png" brushbox="5,7,4,7" size="large" align="center"}
 #### 几乎每样功能，都来自我在汇报页上的一句答复。
 :::
 
-:::steps{kind="timeline"}
+:::steps{kind="timeline" cols="4" colsv="1"}
 1. <strong>9 月 26 日 03:33</strong>　第一轮产品审查用过一张能点选的网页，AI 把它做成技能：白底绿色、带决策卡、一键生成答复
 2. <strong>9 月 26 日 04:25</strong>　每张卡下面自动加“我的说明”框：想法不在选项里也能写
 3. <strong>9 月 26 日 11:03</strong>　基本满意，想放大 50%–75%，多些图，文字也要排好读　→　大屏自动放大到 1.75 倍，长文字重新排版，加柱状图、折线图、进度条、树状图
@@ -415,19 +415,19 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 
 ::screen{#skill-report-page-09 section="limits"}
 
-:::chapter{title="边界" brush="/assets/_library/round3/titles/title-r3-7a7e13ca96796233d6be.png"}
+:::chapter{title="边界" brush="/assets/_library/round3/titles/title-r3-7a7e13ca96796233d6be.png" brushbox="4,4,5,7" size="large" align="center"}
 
 :::
 
-:::cards
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::cards{art="left" kind="content_card" cols="1" colsv="1"}
+::card{icon="/assets/_library/round3/clean-assets/png/42-%E5%90%AC%E8%AF%8A%E5%99%A8%E6%A3%80%E6%9F%A5-clean.png"}
 
 #### 管
 
 把 AI 要展开说明的汇报、审查和进度、请我裁定的事和长回答做成本地网页，别的回答网页更直观时也能用：排版、各种图、图片视频录音文档的显示、决策卡和答复、自检、打开和到期清理。简单的完成回执和短状态不归它，直接在对话里说；我明确要网页时照做。
 :::
 
-### 不管，交给谁
+<h3 class="sechead">不管，交给谁</h3>
 
 | 这些事 | 找谁 |
 |---|---|
@@ -436,8 +436,8 @@ AI 只写文字和数字，转义、版式、配色、画图都由命令做（�
 | 我的决定长期记在哪 | 决定原话记在规则与技能基座的决定记录里，不靠页面保存 |
 | 什么时候必须用网页 | [约法 L26](/rules/charter/#L26)和[能力与运行方式](/rules/capabilities-runtime/) |
 
-:::cards
-::card
+:::cards{art="icon" kind="points_card" colsv="1"}
+::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
 
 #### 不做
 

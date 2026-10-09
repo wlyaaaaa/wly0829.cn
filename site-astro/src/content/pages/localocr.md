@@ -58,20 +58,20 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "9a6f7a8f0cf89f0b12bd30f6f7b6de81d4f13e3a371983b5bebcf3583975fbb0",
-  "converted_at_beijing": "2026-10-09T16:59:04+08:00"
+  "converted_at_beijing": "2026-10-09T22:34:46+08:00"
  }
 }
 ---
 
 ::screen{#localocr-01 section="top"}
 
-:::chapter{title="本地文字识别" brush="/assets/localocr/localocr-01-title-01.png" art="/assets/_library/illustrations/main-localocr.png" level="1" living="/_living/localocr/astro/config.json"}
+:::chapter{title="本地文字识别" brush="/assets/localocr/localocr-01-title-01.png" brushbox="13,0,0,7" size="large" art="/assets/_library/illustrations/main-localocr.png" artw="50%" align="left" level="1" living="/_living/localocr/astro/config.json"}
 #### 在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全，并说清哪里没把握。
 
 AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参数表或几十张截图，就把文件交给它。比如“把这张参数表读成文字，没把握的地方标出来”，会得到文字和逐页判断：有字、没字，还是说不准；要还原表格行列，明确说明。识字在本机离线完成，图片不传到识别网站；读不好的页再用更强的模型重读。
 :::
 
-:::stats{icons="/assets/_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/fix-round-2/icon-clean-f12e6ff1182222417108.png,/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
+:::stats{cols="4" colsv="2" icons="/assets/_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png,/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png,/assets/_library/fix-round-2/icon-clean-f12e6ff1182222417108.png,/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
 - <strong>684 次</strong>　识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）
 - <strong>92%</strong>　自动选模型的 300 次里，277 次快模型就够，23 次换了强模型（其余 384 次是直接指定快模型）
 - <strong>18 个</strong>　本地模型，共 3.9 GB，下载后离线运行
@@ -86,11 +86,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-13 section="usage"}
 
-:::chapter{title="什么材料走哪条路" brush="/assets/_library/round3/titles/title-836e7102d7fd69c05c88.png" art="/assets/_library/illustrations/%E8%AF%86%E5%88%AB%E7%BA%B8%E5%BC%A0%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png"}
+:::chapter{title="什么材料走哪条路" brush="/assets/_library/round3/titles/title-836e7102d7fd69c05c88.png" brushbox="6,4,4,4" size="large" art="/assets/_library/illustrations/%E8%AF%86%E5%88%AB%E7%BA%B8%E5%BC%A0%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png" artw="22%" artside="left" align="center"}
 
 :::
 
-:::cards
+:::cards{art="left" kind="content_card" cols="2" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"}
 
 #### 普通页：截图、网页图、普通扫描件
@@ -107,7 +107,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约 50 秒、内存约 16 GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。
 
-::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
+::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
 
 #### 要还原结构：表格变成行列，认公式和印章，给每块区域坐标
 
@@ -122,24 +122,24 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-02 section="usage"}
 
-:::chapter{title="平时怎么用" brush="/assets/personal-health/personal-health-02-title-01.png" art="/assets/_library/illustrations/main-personal-media.png"}
+:::chapter{title="平时怎么用" brush="/assets/personal-health/personal-health-02-title-01.png" brushbox="9,0,0,5" size="large" align="center"}
 我一般不直接开它，而是跟 AI 说要读什么，AI 判断该不该用它、再调它；也可以把文件拖到 start.bat 上，结果在 outputs 文件夹。怎么跟 AI 说、什么时候 AI 自己看就够：[跟 AI 怎么说 → 技能页](/skills/localocr/)
 :::
 
-:::cards
+:::cards{art="icon" kind="source_text_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"}
 
 1. <strong>一字不差抄截图</strong>
 
 一批截图要一字不差时，AI 交给它读。模型热着时一张截图约 2 秒；结果带每行字的位置和把握分；有字块把握分低于 0.50 时，结果会标“置信度较低”，AI 据此回原图核对。
 
-::card{icon="/assets/_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"}
+::card{icon="/assets/_library/icons/%E7%A7%92%E8%A1%A8.png"}
 
 2. <strong>扫描讲义转文字</strong>
 
 整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI 会说清哪几页换过模型、哪几页把握不高。
 
-::card{icon="/assets/_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png"}
+::card{icon="/assets/_library/icons/%E7%9B%B8%E6%9C%BA.png"}
 
 3. <strong>整理照片时读屏幕上的字</strong>
 
@@ -148,7 +148,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-03 section="usage"}
 
-:::chapter{title="读出来是什么样" brush="/assets/_library/titles/title-84a305beb3019ba74f7a.png"}
+:::chapter{title="读出来是什么样" brush="/assets/_library/titles/title-84a305beb3019ba74f7a.png" brushbox="4,7,4,7" size="large" align="center"}
 
 :::
 
@@ -164,7 +164,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 每次识别写出三份结果：
 
-:::cards
+:::cards{art="left" kind="content_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
 #### TXT
@@ -177,7 +177,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 保留标题层级，表格、公式留结构
 
-::card{icon="/assets/_library/round3/clean-assets/png/05-%E7%81%AF%E6%B3%A1-clean.png"}
+::card
 
 #### JSON
 
@@ -194,12 +194,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-04 section="usage"}
 
-:::chapter{title="出事怎么办" brush="/assets/_library/round3/titles/title-r3-45a143d5be04db99e96c.png"}
+:::chapter{title="出事怎么办" brush="/assets/_library/round3/titles/title-r3-45a143d5be04db99e96c.png" brushbox="5,4,4,7" size="large" align="center"}
 它没有自动提醒；出了问题直接跟 AI 说，AI 按下面的办法处理。
 :::
 
-:::cards
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::cards{art="left" kind="content_card" cols="2" colsv="1"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 #### 正忙
 
@@ -211,7 +211,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 一次默认最多 300 秒，长任务可放宽到 2 小时；超时连同子进程一起结束，显卡还回去。AI 那边等不及先断开，不等于识别失败，先按任务编号回查。
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
 
 #### 想停
 
@@ -229,7 +229,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 快读的结果单独存成“部分结果”，照样报失败，不当完成。
 
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
+::card{icon="/assets/_library/icons/%E5%B7%A5%E5%85%B7%E7%AE%B1.png"}
 
 #### 换电脑
 
@@ -242,11 +242,11 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-05 section="tech"}
 
-:::chapter{title="一次识别经过哪几步" brush="/assets/_library/titles/title-3df730e1229eed07fb1c.png"}
+:::chapter{title="一次识别经过哪几步" brush="/assets/_library/titles/title-3df730e1229eed07fb1c.png" brushbox="4,6,4,6" size="large" align="center"}
 
 :::
 
-:::steps{kind="flow" icons="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png,/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::steps{kind="flow" cols="6" colsv="1" icons="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png,/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png,/assets/_library/icons/%E8%A3%81%E7%BA%B8%E5%88%80.png,/assets/_library/icons/%E7%A7%92%E8%A1%A8.png,/assets/_library/round3/clean-assets/png/42-%E5%90%AC%E8%AF%8A%E5%99%A8%E6%A3%80%E6%9F%A5-clean.png,/assets/_library/icons/%E7%BA%B8%E7%AE%B1.png"}
 1. <strong>先留底</strong>　算原件的内容指纹（SHA-256），复制一份只读快照来识别；识别完再核一次，原件中途被改就不发结果。
 2. <strong>领显卡</strong>　向显卡调度员领租约，领到才加载模型。
 3. <strong>拆页</strong>　PDF 按 216 DPI 逐页渲染成图（单页最多 2400 万像素），多页 TIFF 逐帧拆开；图片直接读。
@@ -255,14 +255,14 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 6. <strong>交结果</strong>　写出三份结果、客观结论和人话摘要；最后写完任务记录才算完成。
 :::
 
-:::cards
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::cards{art="left" kind="content_card" cols="2" colsv="1"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 #### 识过不重识
 
 同一份材料、同样的请求再来，先核对原件、模型、配置和输出文件的指纹，都对得上才直接交上次的结果；换了模型不会误用旧结果。
 
-::card
+::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
 
 #### 要表格结构时
 
@@ -271,7 +271,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
 
 ::screen{#localocr-06 section="tech"}
 
-:::chapter{title="用的哪些模型" brush="/assets/_library/titles/title-bb35286273c0e9b2518a.png"}
+:::chapter{title="用的哪些模型" brush="/assets/_library/titles/title-bb35286273c0e9b2518a.png" brushbox="4,6,4,7" size="large" align="center"}
 
 :::
 
@@ -291,11 +291,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
 
 ::screen{#localocr-07 section="tech"}
 
-:::chapter{title="跑在哪、怎么不打架" brush="/assets/_library/round3/titles/title-r3-f255783c85c0e7082f7e.png"}
+:::chapter{title="跑在哪、怎么不打架" brush="/assets/_library/round3/titles/title-r3-f255783c85c0e7082f7e.png" brushbox="2,0,0,0" size="large" align="center"}
 
 :::
 
-:::cards
+:::cards{art="left" kind="content_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
 
 #### 为什么在 Linux 里跑
@@ -331,11 +331,11 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 
 ::screen{#localocr-08 section="highlights"}
 
-:::chapter{title="亮点" brush="/assets/_library/round3/titles/title-r3-ba0d3fdcc635f736cc8b.png" art="/assets/_library/illustrations/%E6%96%87%E7%A8%BF%E6%A0%B8%E9%AA%8C%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png"}
+:::chapter{title="亮点" brush="/assets/_library/round3/titles/title-r3-ba0d3fdcc635f736cc8b.png" brushbox="4,4,4,4" size="large" art="/assets/_library/illustrations/%E6%96%87%E7%A8%BF%E6%A0%B8%E9%AA%8C%E9%80%9A%E7%94%A8%E6%9E%84%E5%9B%BE.png" artw="35%" artside="left" align="center"}
 
 :::
 
-### 先快后强，只重读有问题的那一页
+<h3 class="sechead">先快后强，只重读有问题的那一页</h3>
 
 <strong>麻烦</strong>　每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。
 
@@ -357,7 +357,7 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 
 ::screen{#localocr-09 section="highlights" continue="1"}
 
-:::cards
+:::cards{art="top" kind="content_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/icons/%E6%89%93%E5%8B%BE%E6%B8%85%E5%8D%95.png"}
 
 #### 1\. 把握分很高，也可能读错表格
@@ -391,26 +391,26 @@ FastAPI 写的接口，只在本机 18665 端口。接口本身不加载模型�
 
 ::screen{#localocr-10 section="features"}
 
-:::chapter{title="全部功能（28 项）" brush="/assets/_library/titles/title-832fae0fa1193bf6035b.png"}
+:::chapter{title="全部功能（28 项）" brush="/assets/_library/titles/title-832fae0fa1193bf6035b.png" brushbox="6,5,5,7" size="large" align="center"}
 
 :::
 
-:::note
-图例：● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
+:::legend
+图例：<span class="legend-item" data-state="on"><span class="legend-dot" aria-hidden="true">●</span>在用</span>　<span class="legend-item" data-state="pending"><span class="legend-dot" aria-hidden="true">●</span>待验收</span>　<span class="legend-item" data-state="todo"><span class="legend-dot" aria-hidden="true">○</span>待实施</span>　<span class="legend-item" data-state="unused"><span class="legend-dot" aria-hidden="true">●</span>没用过</span>　<span class="legend-item" data-state="uncertain"><span class="legend-dot" aria-hidden="true">●</span>说不准</span>　<span class="legend-item" data-state="off"><span class="legend-dot" aria-hidden="true">✕</span>已停用</span>
 :::
 
 没用过＝每次识别都会留任务记录，真实材料里一次也没有；说不准＝用了也不一定留记录。
 
-<h3 class="sub-brush"><img src="/assets/_library/titles/title-28809440ab88664c39f1.png" alt="读字"></h3>
+<h3 class="sechead">读字</h3>
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
 #### 1 图片和截图识字
 
 png、jpg、webp、bmp 图片和截图，读出全部文字
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
 
@@ -418,7 +418,7 @@ png、jpg、webp、bmp 图片和截图，读出全部文字
 
 扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/icons/%E6%96%87%E4%BB%B6%E5%A4%B9%E9%93%BE%E6%8E%A5.png"}
 
@@ -426,7 +426,7 @@ png、jpg、webp、bmp 图片和截图，读出全部文字
 
 每个文件分别选路线，不支持的文件列为跳过
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 
 ::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
 
@@ -434,43 +434,43 @@ png、jpg、webp、bmp 图片和截图，读出全部文字
 
 不经过 AI，自己拖文件，结果在 outputs 文件夹
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
+::card{icon="/assets/_library/icons/%E7%BA%B8%E7%AE%B1.png"}
 
 #### 5 三种结果文件
 
 纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E5%8F%8C%E6%A8%A1%E5%9E%8B%E7%AA%97%E5%8F%A3.png"}
 
 #### 6 歪的倒的先转正
 
 两个方向小模型判断整页和每行字的朝向，先转正再读
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 :::
 
-<h3 class="sub-brush"><img src="/assets/_library/titles/title-23c4841cbe265cd064ad.png" alt="选模型"></h3>
+<h3 class="sechead">选模型</h3>
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/42-%E5%90%AC%E8%AF%8A%E5%99%A8%E6%A3%80%E6%9F%A5-clean.png"}
 
 #### 7 先快后强自动选
 
 每页先用快模型读，体检不过的页才换强模型
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
 #### 8 只重读有问题的页
 
 多页文件里只把没读好的那几页交给强模型，其余页保留快读结果
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
 
@@ -478,7 +478,7 @@ png、jpg、webp、bmp 图片和截图，读出全部文字
 
 可以直接说用快模型、强模型或结构还原，自动选路不改写
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
 
@@ -486,19 +486,19 @@ png、jpg、webp、bmp 图片和截图，读出全部文字
 
 先预览这份材料会走哪条路线，不真的识别
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 :::
 
-<h3 class="sub-brush"><img src="/assets/_library/titles/title-bf9114190f82e713bc95.png" alt="表格和位置"></h3>
+<h3 class="sechead">表格和位置</h3>
 
-:::cards
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
+::card
 
 #### 11 表格还原成行列
 
 PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标
 
-<span class="status-tag">没用过</span>
+<span class="status-tag" data-state="unused">没用过</span>
 
 ::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
@@ -506,29 +506,29 @@ PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标
 
 同一条结构还原路线认出公式、检测印章文字
 
-<span class="status-tag">没用过</span>
+<span class="status-tag" data-state="unused">没用过</span>
 
-::card{icon="/assets/_library/round3/clean-assets/png/01-%E7%BB%BF%E5%8F%B6%E8%A3%85%E9%A5%B0-clean.png"}
+::card
 
 #### 13 每行字的位置和把握分
 
 JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 :::
 
 ::screen{#localocr-11 section="features" continue="1"}
 
-<h3 class="sub-brush"><img src="/assets/_library/titles/title-cb974c2fd1313936b428.png" alt="结果靠得住"></h3>
+<h3 class="sechead">结果靠得住</h3>
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
 
 #### 14 有字、没字、说不准
 
 每份结果附一份客观结论，空结果不当“没字”
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
@@ -536,15 +536,15 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 把覆盖、质量、文字块数和是否升级写成一句话
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
+::card{icon="/assets/_library/icons/%E5%8D%B0%E7%AB%A0.png"}
 
 #### 16 原件留底再识别
 
 先算指纹做只读快照，识别完原件变了就不发结果
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/round3/clean-assets/png/12-%E6%96%87%E4%BB%B6%E6%A0%B8%E9%AA%8C-clean.png"}
 
@@ -552,27 +552,27 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 同样的材料和请求再来，核对指纹后直接交上次结果
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
+::card{icon="/assets/_library/icons/%E7%A6%81%E6%AD%A2%E6%96%87%E4%BB%B6.png"}
 
 #### 18 中断时保住读完的页
 
 超时或崩溃时已读完的页留作部分结果，不冒充整份
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 :::
 
-<h3 class="sub-brush"><img src="/assets/_library/titles/title-34c6277de864cb7d079c.png" alt="运行和显卡"></h3>
+<h3 class="sechead">运行和显卡</h3>
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/round3/clean-assets/png/09-%E6%97%B6%E9%92%9F-clean.png"}
 
 #### 19 本机识别服务
 
 只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
 
@@ -580,7 +580,7 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 按任务编号查到哪一步，或只取消这一项
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 
 ::card{icon="/assets/_library/icons/%E9%BA%A6%E5%85%8B%E9%A3%8E.png"}
 
@@ -588,7 +588,7 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
 
@@ -596,7 +596,7 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 关掉工作进程、还回显卡；本地大模型要用时调度员也会先清
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/icons/%E6%B2%99%E6%BC%8F.png"}
 
@@ -604,35 +604,35 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 一次默认 300 秒、最多 2 小时；内存超 30 GB 只停自己
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"}
+::card{icon="/assets/_library/icons/%E6%96%87%E7%A8%BF%E5%A0%86.png"}
 
 #### 24 给看板的任务视图
 
 只读、不含文件内容的任务列表接口
 
-<span class="status-tag">说不准</span>
+<span class="status-tag" data-state="uncertain">说不准</span>
 :::
 
-### 版本和换模型
+<h3 class="sechead">版本和换模型</h3>
 
-:::cards
+:::cards{art="icon" kind="feature_card" cols="3" colsv="1"}
 ::card{icon="/assets/_library/icons/%E6%89%93%E5%8B%BE%E6%B8%85%E5%8D%95.png"}
 
 #### 25 正式版和开发代码分开
 
 每天用的是验收过的快照，改代码不影响它
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
-::card{icon="/assets/_library/icons/%E6%89%93%E5%8B%BE%E6%B8%85%E5%8D%95.png"}
+::card{icon="/assets/_library/icons/%E6%94%BE%E5%A4%A7%E9%95%9C.png"}
 
 #### 26 退回上一版
 
 保留上一版，出问题可以切回，切回也要它自己的验收
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"}
 
@@ -640,7 +640,7 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 
 ::card{icon="/assets/_library/icons/%E6%96%87%E4%BB%B6%E9%BD%BF%E8%BD%AE.png"}
 
@@ -648,37 +648,26 @@ JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分
 
 模型写在配置档里，新模型先对照验收，不自动当默认
 
-<span class="status-tag">在用</span>
+<span class="status-tag" data-state="on">在用</span>
 :::
 
 ::screen{#localocr-12 section="history"}
 
-:::chapter{title="演进（2026 年）" brush="/assets/_library/titles/title-60559ec08d1172637358.png" art="/assets/_library/round3/clean-assets/png/11-%E6%98%BE%E5%8D%A1-clean.png"}
+:::chapter{title="演进（2026 年）" brush="/assets/_library/titles/title-60559ec08d1172637358.png" brushbox="4,6,4,7" size="large" align="center"}
 
 :::
 
-:::figure
-![](/assets/_library/fix-round-2/icon-clean-45940475938ca8fdb78a.png)
+:::steps{kind="timeline" cols="5" colsv="1"}
+1. <strong>7 月 2 日</strong>　在 RTX 5080 上跑通 PaddleOCR 3.7（放进 WSL2；随后换成同一代架构的 5090 D）
+2. <strong>7 月 5 日</strong>　本机识别服务；用完可以腾显卡
+3. <strong>7 月 7 日</strong>　模型写进配置档；加上结构还原；识过不重识；自动选路
+4. <strong>7 月 12 日</strong>　所有显卡工作都先向全机调度员领号
+5. <strong>7 月 30 日</strong>　难页自动交本地强模型重读
+6. <strong>8 月 18 日</strong>　分清“读不出”和“没有字”，每份结果附客观结论
+7. <strong>8 月 28 日</strong>　截图关掉纸张摊平；运行和入口全面加固
+8. <strong>9 月 2 日</strong>　每份结果加一句人话摘要
+9. <strong>9 月 17 日</strong>　正式版和开发代码分开，可以退回上一版
+10. <strong>9 月 24 日</strong>　现役版本验收：181 项测试无失败（16 项按条件跳过），9 个合成样例全过
 :::
-
-7 月 2 日　在 RTX 5080 上跑通 PaddleOCR 3.7（放进 WSL2；随后换成同一代架构的 5090 D）
-
-7 月 5 日　本机识别服务；用完可以腾显卡
-
-7 月 7 日　模型写进配置档；加上结构还原；识过不重识；自动选路
-
-7 月 12 日　所有显卡工作都先向全机调度员领号
-
-7 月 30 日　难页自动交本地强模型重读
-
-8 月 18 日　分清“读不出”和“没有字”，每份结果附客观结论
-
-8 月 28 日　截图关掉纸张摊平；运行和入口全面加固
-
-9 月 2 日　每份结果加一句人话摘要
-
-9 月 17 日　正式版和开发代码分开，可以退回上一版
-
-9 月 24 日　现役版本验收：181 项测试无失败（16 项按条件跳过），9 个合成样例全过
 
 41 次提交，7 月 2 日到 9 月 27 日；9 月 24 日之后只改过文档。

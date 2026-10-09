@@ -1,5 +1,5 @@
 """样板机器检查（只用 Playwright，不另做检查系统）。
-每页 × 375/768/1440 三种宽度：
+每页 × 375/390/960/1280/1920 五种宽度：
   1. 横向溢出：页面宽于窗口；
   2. 元素重叠：正文里不同元素的文字行、图片互相压住（按文字的实际行框比，绕开浮动插画的行不算）；
   3. 窄栏：一段需要换行的文字，所在栏宽放不下 15 个字；
@@ -16,7 +16,7 @@ from engine import parse as P  # noqa: E402
 
 PAGES = {"skill-report-page": "/skills/report-page/", "localocr": "/projects/localocr/",
          "rule-engineering-delivery": "/rules/engineering-delivery/"}
-WIDTHS = (375, 768, 1440)
+WIDTHS = (375, 390, 960, 1280, 1920)  # 375 是铺开检查用的最窄手机； 第二轮：手机 390、窄电脑 960、常见 1280、大屏 1920
 
 JS = r"""
 () => {
@@ -32,6 +32,7 @@ JS = r"""
     if (!n.nodeValue.trim()) continue;
     const host = n.parentElement;
     if (host.closest('.living-layer')) continue;
+    if (host.closest('.sr')) continue;  // 只给读屏的字（剪成 1 像素，看不见），不算重叠
     const th = host.closest('thead'); if (th && getComputedStyle(th).clipPath !== 'none') continue;  // 卡片模式下表头只留给读屏
     const r = document.createRange(); r.selectNodeContents(n);
     for (const q of r.getClientRects()) if (q.width > 1 && q.height > 1) boxes.push({ el: host, x: q.left, y: q.top + scrollY, w: q.width, h: q.height, kind: 'text', t: n.nodeValue.trim().slice(0, 16) });
@@ -60,6 +61,15 @@ JS = r"""
     const r = document.createRange(); r.selectNodeContents(el);
     const lines = new Set([...r.getClientRects()].map(q => Math.round(q.top))).size;
     if (w > 0 && w < 15 * fs - 1 && lines > 1) out.narrow.push({ tag: el.tagName, cls: el.className, width: Math.round(w), need: Math.round(15 * fs), text: txt.slice(0, 20) });
+  }
+  // 表格窄栏（铺开检查的口径）：表格还按行列显示时，换行的单元格列宽不到 240px
+  for (const td of main.querySelectorAll('table td, table th')) {
+    if (td.closest('thead') && getComputedStyle(td.closest('thead')).clipPath !== 'none') continue;
+    if (getComputedStyle(td).display !== 'table-cell') continue;
+    const r = document.createRange(); r.selectNodeContents(td);
+    const lines = new Set([...r.getClientRects()].map(q => Math.round(q.top))).size;
+    const w = td.getBoundingClientRect().width;
+    if (w < 240 && lines > 1) out.narrow.push({ tag: td.tagName, cls: 'table-col<240', width: Math.round(w), need: 240, text: td.innerText.trim().slice(0, 20) });
   }
   for (const im of document.images) if (im.getAttribute('src') && !(im.complete && im.naturalWidth > 0)) out.images.push(im.currentSrc || im.getAttribute('src'));
   return out;
@@ -119,7 +129,7 @@ with sync_playwright() as p:
                 pass
             r = pg.evaluate(JS)
             r["http_errors"] = bad
-            if w == 1440:
+            if w == 1280:
                 seen = canon_page(pg.evaluate("(()=>{const c=document.querySelector('main').cloneNode(true);c.querySelectorAll('.step-no').forEach(e=>e.remove());return c.textContent+[...document.querySelectorAll('main h1 img, main h2 img, main h3 img, main .shot img')].map(i=>i.alt).join('')})()"))
                 segs = expected_segments(page)
                 miss = [(sid, t) for sid, t in segs if canon_page(t, True) not in seen]

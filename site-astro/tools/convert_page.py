@@ -186,7 +186,7 @@ def node_md(n, links, md=False, heading="####"):
     if t == "para":
         return inline(n["text"], links, md)
     if t == "status":
-        return f'<span class="status-tag">{inline(n["text"], links, md)}</span>'
+        return f'<span class="status-tag" data-state="{state_of(n["text"]) or "on"}">{inline(n["text"], links, md)}</span>'
     if t == "group":
         return f"{heading} {inline(n['name'], links, md)}"
     if t == "card":
@@ -215,7 +215,7 @@ def node_md(n, links, md=False, heading="####"):
             lines.append(row(r + [""] * (width - len(r))))
         return "\n".join(lines)
     if t == "legend":
-        return "　".join(f"{i['dot']} {inline(i['text'], links, md)}" for i in n["items"])
+        return "　".join(f'<span class="legend-item" data-state="{state_of(i["text"]) or "on"}"><span class="legend-dot" aria-hidden="true">{i["dot"]}</span>{inline(i["text"], links, md)}</span>' for i in n["items"])
     if t == "now":
         return inline("现在　" + "　".join(n["slots"]), links, md) + ("　" + " ".join(f':btn[{esc(l)}]{{href="{links.get(l, "#")}"}}' for l in n["links"]) if n["links"] else "")
     if t == "linkrow":
@@ -237,6 +237,69 @@ def text_of(n):
     return P.node_text(n)
 
 
+# —— 图标：素材库里标了“语义没对上、拿装饰叶子凑数”（fallback）的槽位不用，
+#    改按卡片/步骤的字从图标库里挑意思对得上的；挑不到就不放图，不再用叶子凑。——
+KEYWORD_ICONS = [  # (关键词正则, 素材库里的图) 先匹配标题，再匹配正文；同一组里尽量不重复
+    (r"显卡|GPU|领卡|腾卡", "_library/round3/clean-assets/png/11-显卡-clean.png"),
+    (r"体检|诊断|自检|健康", "_library/round3/clean-assets/png/42-听诊器检查-clean.png"),
+    (r"查|核对|核验|验收|检查|比对|看结构", "_library/icons/放大镜.png"),
+    (r"超时|太久|等|小时|分钟|秒|快读|速度", "_library/icons/秒表.png"),
+    (r"时间|定时|每天|每周|日期|日历", "_library/icons/日历时钟.png"),
+    (r"指纹|留底|快照|SHA|印章|盖章", "_library/icons/印章.png"),
+    (r"拆|切|分页|拆页", "_library/icons/裁纸刀.png"),
+    (r"停|取消|中断|禁止|不做|不许", "_library/icons/禁止文件.png"),
+    (r"失败|出错|报错|出事|警", "_library/icons/报警灯.png"),
+    (r"锁|密码|私人|私有|权限|授权", "_library/icons/钥匙.png"),
+    (r"安全|保护|保险|防", "_library/icons/盾牌对勾.png"),
+    (r"换电脑|环境|重建|安装|部署", "_library/icons/工具箱.png"),
+    (r"备份|硬盘|存档", "_library/icons/硬盘循环.png"),
+    (r"上传|推送|同步|GitHub|仓库", "_library/icons/文件夹链接.png"),
+    (r"删除|回收站|清理|腾", "_library/icons/回收站文件.png"),
+    (r"截图|照片|图片|相机|拍", "_library/icons/相机.png"),
+    (r"交结果|交付|完成|打包|发布|结果", "_library/icons/纸箱.png"),
+    (r"清单|步骤|规矩|写法|要点|待办", "_library/icons/打勾清单.png"),
+    (r"想法|原则|建议|思路|亮点|巧思", "_library/icons/气泡灯泡.png"),
+    (r"网页|网站|浏览器|在线|Chrome|打开", "_library/icons/浏览器标签页.png"),
+    (r"语音|录音|麦克风", "_library/icons/麦克风.png"),
+    (r"模型|识别|AI", "_library/icons/双模型窗口.png"),
+    (r"文件|材料|文档|讲义|扫描|PDF|纸|页", "_library/icons/文稿堆.png"),
+    (r"数据|数据库|记录|日志", "_library/icons/数据库.png"),
+    (r"设置|配置|改|工具|生成", "_library/icons/齿轮.png"),
+    (r"对话|说|答复|回答|聊天", "_library/icons/双气泡.png"),
+]
+
+
+def keyword_icon(title, text, used):
+    for source in (title or "", text or ""):
+        hits = [icon for pat, icon in KEYWORD_ICONS if re.search(pat, source) and os.path.isfile(os.path.join(ASSETS, icon))]
+        fresh = [h for h in hits if h not in used]
+        if fresh:
+            return fresh[0]  # 同一组里不重复用同一张图；没有新的就不放（不拿重复的凑）
+    return None
+
+
+def cols_attr(spec, default=None, default_v=1):
+    """旧构图写的列数（横版 columns / 竖版 columns_v）照搬：电脑上按它排，排不下才少列。"""
+    c = spec.get("columns") or default
+    v = spec.get("columns_v") or spec.get("portrait_columns") or default_v
+    out = []
+    if c:
+        out.append(f'cols="{int(c)}"')
+    if v:
+        out.append(f'colsv="{int(v)}"')
+    return " ".join(out)
+
+
+STATE_WORDS = [("待验收", "pending"), ("待实施", "todo"), ("没用过", "unused"), ("说不准", "uncertain"), ("已停用", "off"), ("停用", "off"), ("在用", "on")]
+
+
+def state_of(text):
+    for w, st in STATE_WORDS:
+        if w in (text or ""):
+            return st
+    return None
+
+
 # —— 区块 ——
 PAGE_ARTS = set()  # 同一页里已经放过的插画不再重复放
 class Screen:
@@ -252,17 +315,34 @@ class Screen:
         self.notes = []
         self.out = []
         self.motion = None
+        self.spec_chapter = None
 
-    def take_icons(self, n):
-        got = []
-        for _ in range(n):
-            if self.icon_i < len(self.icons):
-                got.append(publish(self.icons[self.icon_i]["asset"])); self.icon_i += 1
-            else:
-                got.append("")
+    def take_icons(self, n, texts=None):
+        """按槽位顺序取图；槽位是“拿叶子凑数”的（fallback），改按这一项的字挑意思对得上的图。"""
+        got, used = [], set()
+        texts = texts or [("", "")] * n
+        for k in range(n):
+            row = self.icons[self.icon_i] if self.icon_i < len(self.icons) else None
+            self.icon_i += 1
+            asset = row["asset"] if row and not row.get("fallback") else None
+            if asset in used:  # 同一组里槽位图重复（同一张灯泡连放三次）也按字另挑
+                asset = None
+            if not asset:
+                asset = keyword_icon(texts[k][0], texts[k][1], used)
+                if asset:
+                    self.notes.append(f"图标：槽位 {self.icon_i} 原是凑数的装饰叶子，按字改用 {asset.split('/')[-1]}")
+            if asset:
+                used.add(asset)
+            got.append(publish(asset) if asset else "")
         return got
 
     def art(self):
+        blocks = (self.spec or {}).get("blocks", [])
+        if blocks and not any(b["type"] == "illustration" for b in blocks):
+            return None  # 现在这一屏没有插画（构图里没有 illustration），不额外加
+        if any(b["type"] == "illustration" and b.get("size") == "small" for b in blocks) and \
+                not any(b["type"] == "illustration" and b.get("size") != "small" for b in blocks):
+            return None  # 现在只是标题两边的小装饰图，不当章节插画
         for r in self.arts:
             if r["asset"] not in self.used_art and r["asset"] not in PAGE_ARTS:
                 self.used_art.add(r["asset"]); PAGE_ARTS.add(r["asset"]); return publish(r["asset"])
@@ -285,12 +365,29 @@ class Screen:
         title_node = nodes[0] if nodes else None
         title = text_of(title_node) if title_node else self.s.get("title", "")
         brush = publish(self.titles[0]["asset"]) if self.titles else None
+        box = ink_box(self.titles[0]["asset"]) if self.titles else None
         art = self.art()
         attrs = [f'title="{title.replace(chr(34), "＂")}"']
         if brush:
             attrs.append(f'brush="{brush}"')
+            if box:
+                attrs.append(f'brushbox="{",".join(map(str, box))}"')
+            size = (self.spec_chapter or {}).get("size")
+            if size in ("small", "medium", "large"):
+                attrs.append(f'size="{size}"')
         if art:
             attrs.append(f'art="{art}"')
+            # 插画占多宽、在左还是右照旧构图：同一 row 里插画排在别的块前面就靠左
+            bl = (self.spec or {}).get("blocks", [])
+            ill = next((b for b in bl if b["type"] == "illustration" and b.get("size") != "small"), None)
+            if ill and str(ill.get("width") or "").endswith("%"):
+                attrs.append(f'artw="{ill["width"]}"')
+            if ill and ill.get("row"):
+                same = [b for b in bl if b.get("row") == ill["row"]]
+                if same and same[0] is ill and len(same) > 1:
+                    attrs.append('artside="left"')
+        align = (self.spec_chapter or {}).get("align") or ("left" if art else "center")
+        attrs.append(f'align="{align}"')
         if self.first:
             attrs.append('level="1"')
             living = os.path.join(OUT_PUB, "_living", self.page["page"], "astro", "config.json")
@@ -335,7 +432,12 @@ class Screen:
         if not cards:
             return
         want_icons = not any((b["spec"].get("icons") == "none") for b in blocks)
-        icons = self.take_icons(len(cards)) if want_icons else [""] * len(cards)
+        texts = [(t, " ".join(P.node_text(n) for n in body if n.get("src")) or " ".join(n.get("text", "") for n in body)) for t, body in cards]
+        icons = self.take_icons(len(cards), texts) if want_icons else [""] * len(cards)
+        # 图怎么放照旧构图：content_card 的 left_inside/top_inside 是大插图，其它（功能卡、要点卡）是标题旁小图标
+        spec0 = blocks[0]["spec"]
+        ill = spec0.get("illustration")
+        art_mode = "left" if (blocks[0]["type"] == "content_card" and ill == "left_inside") else "top" if (blocks[0]["type"] in ("content_card",) and ill == "top_inside") else "icon"
         parts = []
         for (title, body), icon in zip(cards, icons):
             head = "::card" + (f'{{icon="{icon}"}}' if icon else "")
@@ -345,7 +447,16 @@ class Screen:
             if body:
                 seg.append(nodes_md(body, self.links, self.md, heading="#####"))
             parts.append("\n\n".join(seg))
-        self.emit(":::cards\n" + "\n\n".join(parts) + "\n:::")
+        default_cols = 3 if blocks[0]["type"] == "feature_card" else None
+        # 列数照旧构图：同一 row 里并排的卡片块数、各块 columns 里取最大（旧版把同 row 的块左右排）
+        from collections import Counter
+        rows = Counter(b["spec"].get("row") for b in blocks if b["spec"].get("row"))
+        want = max([rows.most_common(1)[0][1] if rows else 1] + [int(b["spec"].get("columns") or 1) for b in blocks])
+        spec_c = dict(spec0)
+        if want > int(spec0.get("columns") or default_cols or 1):
+            spec_c["columns"] = min(want, len(cards))
+        attrs = f'art="{art_mode}" kind="{blocks[0]["type"]}" ' + cols_attr(spec_c, default_cols)
+        self.emit(":::cards{" + attrs.strip() + "}\n" + "\n\n".join(parts) + "\n:::")
 
     def stats(self, b):
         items = []
@@ -370,8 +481,8 @@ class Screen:
             self.emit(nodes_md(b["nodes"], self.links, self.md)); return
         if len(items) > 4 and False:
             pass
-        icons = [] if b["spec"].get("icons") == "none" else self.take_icons(len(items))
-        attr = f'{{icons="{",".join(icons)}"}}' if any(icons) else ""
+        icons = [] if b["spec"].get("icons") == "none" else self.take_icons(len(items), [(num, " ".join(t)) for num, t in items])
+        attr = "{" + cols_attr(b["spec"], min(4, len(items)), 2) + (f' icons="{",".join(icons)}"' if any(icons) else "") + "}"
         lines = []
         for num, texts in items:
             body = "<br>".join(inline(t, self.links, self.md) for t in texts)
@@ -396,8 +507,8 @@ class Screen:
             elif n["type"] == "para" and "→" in n["text"] and not items and len(n["text"]) < 60 and kind == "flow":
                 for part in re.split(r"\s*→\s*", n["text"]):
                     items.append((part, "", ""))
-            elif n["type"] == "para" and kind == "timeline" and re.match(r"^\d+\s*月\s*\d+\s*日[^　]*　", n["text"]) and not extra:
-                head, rest = n["text"].split("　", 1)
+            elif n["type"] == "para" and kind == "timeline" and re.match(r"^\d+\s*月\s*\d+\s*日[^　｜]*[　｜]", n["text"]) and not extra:
+                head, rest = re.split(r"[　｜]", n["text"], maxsplit=1)
                 items.append((head, rest.strip("　 "), ""))
             elif n["type"] == "para" and items and not items[-1][1] and not extra and kind == "flow":
                 items[-1] = (items[-1][0], n["text"], "")
@@ -407,8 +518,8 @@ class Screen:
                 extra.append(n)
         if not items:
             self.emit(nodes_md(nodes, self.links, self.md)); return
-        icons = [] if b["spec"].get("icons") == "none" or kind == "timeline" else self.take_icons(len(items))
-        attrs = [f'kind="{kind}"']
+        icons = [] if b["spec"].get("icons") == "none" or kind == "timeline" else self.take_icons(len(items), [(t, x) for t, x, _ in items])
+        attrs = [f'kind="{kind}"', cols_attr(b["spec"])]
         if any(icons):
             attrs.append(f'icons="{",".join(icons)}"')
         lines = []
@@ -477,6 +588,7 @@ class Screen:
                 pending_cards.append(b); i += 1; continue
             flush()
             if t in ("chapter_title", "title_strip"):
+                self.spec_chapter = b["spec"]
                 lead = []
                 j = i + 1
                 # 章节头里放“一句话”：紧跟的正文（不长于 400 字）整块并入，否则只取第一段
@@ -506,6 +618,10 @@ class Screen:
             elif t == "dialogue":
                 body = nodes_md(b["nodes"], self.links, self.md)
                 self.emit(":::dialogue\n" + body + "\n:::")
+            elif t == "status_legend":
+                body = nodes_md(b["nodes"], self.links, self.md)
+                body = re.sub(r"([●○✕])\s*([^　●○✕<\n]+)", lambda m: f'<span class="legend-item" data-state="{state_of(m[2]) or "on"}"><span class="legend-dot" aria-hidden="true">{m[1]}</span>{m[2].strip()}</span>', body)
+                self.emit(":::legend" + chr(10) + body + chr(10) + ":::")
             elif t in NOTE_TYPES:
                 self.emit(":::note\n" + nodes_md(b["nodes"], self.links, self.md) + "\n:::")
             elif t == "tag":
@@ -516,12 +632,12 @@ class Screen:
                 gallery_done = self.gallery(b, gallery_done)
             elif t == "section_heading" and b["nodes"]:
                 first = b["nodes"][0]
-                img = self.sub_title(text_of(first))
+                img = None  # 小节名照现在：深绿粗体字，不用毛笔图
                 if img:
                     alt = text_of(first).replace('"', "＂")
                     self.emit(f'<h3 class="sub-brush"><img src="{img}" alt="{alt}"></h3>')
                 else:
-                    self.emit("### " + inline(text_of(first), self.links, self.md))
+                    self.emit('<h3 class="sechead">' + inline(text_of(first), self.links, self.md) + '</h3>')
                 self.emit(nodes_md(b["nodes"][1:], self.links, self.md))
             else:
                 self.prose(b)
@@ -530,6 +646,23 @@ class Screen:
         if (s.get("screenshots") or []) and not gallery_done:
             gallery_done = self.gallery({"type": "screenshot", "nodes": [], "spec": {}}, False)
         return "\n\n".join(self.out)
+
+
+def ink_box(rel):
+    """毛笔标题图四周的白纸边（像现在网站一样只显示有笔画的部分，四周留 8 像素）：返回 上,右,下,左 要裁掉的像素。
+    只用于显示时裁（CSS object-view-box），图片文件本身不改。"""
+    from PIL import Image
+    import numpy as np
+    with Image.open(os.path.join(ASSETS, *rel.split("/"))) as im:
+        if im.mode in ("RGBA", "LA", "P"):
+            im = im.convert("RGBA"); bg = Image.new("RGB", im.size, "white"); bg.paste(im, mask=im.split()[3]); im = bg
+        a = np.asarray(im.convert("RGB")).min(axis=2)
+    ys, xs = np.where((a < 243).any(1))[0], np.where((a < 243).any(0))[0]
+    if not len(ys):
+        return None
+    h, w = a.shape; m = 8
+    t, b, l, r = max(0, ys[0] - m), max(0, h - 1 - ys[-1] - m), max(0, xs[0] - m), max(0, w - 1 - xs[-1] - m)
+    return [int(t), int(r), int(b), int(l)]
 
 
 def file_meta(url):
