@@ -279,6 +279,14 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
                 tail_updates[rel]=(baseline/rel).read_bytes()
     tail=current.parent/'final-delta';files=write_changes(current,tail,tail_updates,delta=True)
     hybrid.write(tail/hybrid.MANIFEST,{**prepared,'files':files,'release_id':hybrid.hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()});current=tail
+    search_source = [ROOT/'app'/name for name in ('search.js', 'search-assets.js', 'content-daily-preferences.js')] + [HERE/'repair-release-navigation.py']
+    inputs.update({str(path):stamp(path) for path in search_source})
+    native = json.loads(subprocess.check_output(['node', '--input-type=module', '-e', "import {globalSearchEntries} from './app/search.js'; import {compactSearchProjection} from './app/search-assets.js'; console.log(JSON.stringify(globalSearchEntries.map(compactSearchProjection).filter(e=>e.href==='/projects/daily-preferences/source-coverage/')))"], cwd=ROOT).decode('utf8'))
+    rel = 'projects/daily-preferences/index.html'
+    screen = [row for row in hybrid.nav_repair.published_records(current, {rel:hybrid.nav_repair.PageFacts(source_path(current,rel).read_text('utf8'),current)}) if row['href']=='/projects/daily-preferences/#daily-preferences-12']
+    if len(native)!=1 or len(screen)!=1:raise ValueError('Approved search Source destinations are missing or ambiguous')
+    search_tail=current.parent/'search-delta';files=write_changes(current,search_tail,hybrid.nav_repair.repair_search(current,{}, {row['href']:row for row in native+screen}),delta=True)
+    hybrid.write(search_tail/hybrid.MANIFEST,{**prepared,'files':files,'release_id':hybrid.hashlib.sha256(json.dumps(files,sort_keys=True).encode()).hexdigest()});current=search_tail
     files=hybrid.inventory(current)
     changes = {rel: {'kind': 'integrated_preparation', 'source_path': str(source_path(current,rel)),
                      'before': old['files'].get(rel), 'after': proof}

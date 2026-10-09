@@ -10,6 +10,7 @@ import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit, unquote, urlencode
+from release_delta import source_path
 
 PAGE_DATA = re.compile(r'(<script\b[^>]*\bid="page-data"[^>]*>)(.*?)(</script>)', re.S)
 ALIASES = {
@@ -481,7 +482,7 @@ def published_records(root, pages):
     result = []
     for rel, facts in sorted(pages.items()):
         if rel == '404.html' or file_route(rel) == '/system/': continue
-        text = (root / rel).read_text('utf-8-sig')
+        text = source_path(root, rel).read_text('utf-8-sig')
         match = PAGE_DATA.search(text)
         if not match: continue
         data = json.loads(match[2])
@@ -507,7 +508,17 @@ def published_records(root, pages):
     return result
 
 
-def repair_search(root, pages):
+def repair_search(root, pages, replacements=None):
+    if replacements is not None:
+        if set(replacements) != {'/projects/daily-preferences/source-coverage/', '/projects/daily-preferences/#daily-preferences-12'}:
+            raise ValueError('Only the two approved daily-preferences search destinations may be refreshed')
+        updates = {}
+        for name in ('search-projects.js', 'search-project-daily-preferences.js'):
+            rows = search_records(source_path(root, name).read_text('utf8'))
+            if any(sum(e.get('href') == href for e in rows) != 1 for href in replacements):
+                raise ValueError('Selected search destination is missing or ambiguous: ' + name)
+            updates[name] = serialize_search([replacements.get(e.get('href'), e) for e in rows], True).encode('utf8')
+        return updates
     files = sorted(root.glob('search-*.js'))
     source = {p.name: search_records(p.read_text('utf8')) for p in files}
     before_invalid = [{'asset': name, 'title': e.get('title'), 'href': e.get('href')}
