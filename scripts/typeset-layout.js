@@ -180,10 +180,10 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function preserveReader(){
   if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return ()=>{};
   const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
-  const node=hit?.closest('.typeset-part,#today-river')||[...document.querySelectorAll('.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
+  const node=hit?.closest('article,[data-row-key]:not(details),.cp-section,.typeset-part,#today-river')||[...document.querySelectorAll('.cp-section,.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
   if(!node)return ()=>{};
-  const top=node.getBoundingClientRect().top,input=readerInput,at=performance.now(),revision=typesetReadingState.revision,width=innerWidth,height=innerHeight;
-  const place=()=>{if(!resizing&&revision===typesetReadingState.revision&&width===innerWidth&&height===innerHeight&&input===readerInput&&node.isConnected){const delta=node.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
+  const top=node.getBoundingClientRect().top,host=node.closest('.cp-section,.typeset-part,#today-river'),key=node.dataset.rowKey,input=readerInput,at=performance.now(),revision=typesetReadingState.revision,width=innerWidth,height=innerHeight;
+  const place=()=>{const current=node.isConnected?node:key&&host?.querySelector('[data-row-key="'+CSS.escape(key)+'"]');if(!resizing&&revision===typesetReadingState.revision&&width===innerWidth&&height===innerHeight&&input===readerInput&&current?.isConnected){const delta=current.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
   return ()=>{requestAnimationFrame(()=>requestAnimationFrame(place));setTimeout(()=>{place();requestAnimationFrame(()=>requestAnimationFrame(place));},Math.max(0,800-(performance.now()-at)));};
  }
  const validRect=rect=>Array.isArray(rect)&&rect.length===4&&rect.every(Number.isFinite)&&rect[0]>=0&&rect[1]>=0&&rect[2]>0&&rect[3]>0&&rect[0]+rect[2]<=1.001&&rect[1]+rect[3]<=1.001;
