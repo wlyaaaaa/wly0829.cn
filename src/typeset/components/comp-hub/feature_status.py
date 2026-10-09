@@ -952,18 +952,10 @@ def _masonry_grid(cards, columns, flow):
 
 
 def _sort_feature_cards(cards, spans):
-    # 2694f952：待验收、在用、待实施、说不准、没用过、已停用；同状态保留原序。
-    ranks = {state: rank for rank, state in enumerate(("pending", "on", "ring", "uncertain", "unused", "off"))}
-    entries = []
-    for index, (card, span) in enumerate(zip(cards, spans)):
-        state = re.search(r'<article\b[^>]*\bdata-state="([^"]+)"', card)
-        rank = ranks.get(state[1] if state else None)
-        card = card.replace('<article ', f'<article data-feature-source-index="{index}" ', 1)
-        entries.append((rank, card, span))
-    ordered = iter(sorted((entry for entry in entries if entry[0] is not None), key=lambda entry: entry[0]))
-    # 无明确状态的卡不猜状态、也不改变其所在位置。
-    result = [next(ordered) if rank is not None else (rank, card, span) for rank, card, span in entries]
-    return [card for _, card, _ in result], [span for _, _, span in result]
+    # 照现在线上网站：卡片按源里的顺序（也就是编号从小到大）逐行排，编号等于显示顺序。
+    # 原来按状态重排（2694f952：待验收、在用、待实施……）的规则已撤（主持 10 月 10 日定），这里只标出源序号。
+    marked = [card.replace('<article ', f'<article data-feature-source-index="{index}" ', 1) for index, card in enumerate(cards)]
+    return marked, list(spans)
 
 
 def render_feature_card(block: dict, ctx) -> str:

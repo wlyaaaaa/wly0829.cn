@@ -1,0 +1,9383 @@
+---
+{
+ "title": "电脑配置与恢复",
+ "kind": "project",
+ "url": "/projects/pcconfig/",
+ "tagline": "每天把电脑备份两份，坏了照着就能恢复。",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  },
+  {
+   "id": "highlights",
+   "label": "亮点"
+  },
+  {
+   "id": "features",
+   "label": "全部功能"
+  },
+  {
+   "id": "history",
+   "label": "演进"
+  },
+  {
+   "id": "gallery",
+   "label": "画廊"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig",
+  "kind": "project",
+  "title": "电脑配置与恢复",
+  "url": "/projects/pcconfig/",
+  "tagline": "每天把电脑备份两份，坏了照着就能恢复。",
+  "status": "常用",
+  "public": false,
+  "repo_url": null,
+  "capability": "管好这台电脑：备份、恢复和自动任务",
+  "based_on": {
+   "commit": "6ba9bfc0be0974ede3995e5d9f297906b5728991",
+   "commit_time": "2026-09-28T15:56:44+08:00"
+  },
+  "video_prompt": "5–8 秒无缝循环，白底水彩风，从开头这屏的插画出发：侧透机箱里的显卡绿光轻轻呼吸；一串淡绿色的小光点从机箱沿线流进旁边的外接固态，再流回来，表示每天同步；外接固态指示灯随光点到达闪一下；右上角的云里一个绿色循环箭头慢慢转一圈；翻开的恢复指南书页被风吹起一页又落回；四周水彩叶子轻轻摆动。镜头不动，不出现任何文字，最后一帧回到第一帧。",
+  "registry": {
+   "groups": [
+    {
+     "id": "g-backup",
+     "name": "每天的备份"
+    },
+    {
+     "id": "g-recovery",
+     "name": "坏了怎么办"
+    },
+    {
+     "id": "g-freeze",
+     "name": "卡死和排障"
+    },
+    {
+     "id": "g-remote",
+     "name": "远程和网络"
+    },
+    {
+     "id": "g-secrets",
+     "name": "密码和资料"
+    },
+    {
+     "id": "g-desktop",
+     "name": "开机和桌面"
+    },
+    {
+     "id": "g-google",
+     "name": "Google 直连"
+    },
+    {
+     "id": "g-ai-tools",
+     "name": "给 AI 用的小工具"
+    },
+    {
+     "id": "g-software",
+     "name": "软件和环境"
+    },
+    {
+     "id": "g-laptop",
+     "name": "笔记本和手机"
+    },
+    {
+     "id": "g-cockpit",
+     "name": "驾驶舱数据"
+    },
+    {
+     "id": "g-retired",
+     "name": "已停用"
+    }
+   ],
+   "features": [
+    {
+     "id": "f-system-image",
+     "group": "g-backup",
+     "name": "加密系统镜像",
+     "what": "每天 13:30 用 Veeam 把 Windows、C 盘和三个核心仓库做成加密镜像放到 G，留最近 3 天；满一个月自动做一次全量（下一次约 10 月 20 日）",
+     "how": "自动：计划任务 PCConfig-SystemImage-Daily；Veeam 自己核对链完整",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.1 #1；E:\\Cache\\PCConfig\\SystemImage\\last-run.json（9/28 13:55 complete）"
+    },
+    {
+     "id": "f-personal-backup",
+     "group": "g-backup",
+     "name": "照片视频和个人资料备份",
+     "what": "每天 17:10 把五个资料目录复制到 G；E 上删掉的，在 G 待删区留 30 天",
+     "how": "自动：PersonalDataReplica-Hot-Daily",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "G:\\80_Backup\\ControlPlane\\personal-replica-hot-last.json（9/28 17:10 complete）"
+    },
+    {
+     "id": "f-media-cloud-start",
+     "group": "g-backup",
+     "name": "照片视频云端维护开关",
+     "what": "17:10 的备份做完后，开关开着就启动照片视频录音管理的云端维护：电脑删了云端跟删、新内容上云；云端做没做完看它自己的回执",
+     "how": "自动：挂在 17:10 备份的收尾；开关在 E:\\Data\\PCConfig\\PersonalMediaCloud\\config.json",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "PCConfig 提交 9b0853a8（9/28 14:13）；personal-replica-hot-last.json 的 cloud_maintenance=start_requested、exit_code=0"
+    },
+    {
+     "id": "f-docs-downloads",
+     "group": "g-backup",
+     "name": "文档、下载备份",
+     "what": "每天 12:35 复制到 G，删掉的留 30 天；顺带存上 WSL 里选定的 Linux 文件",
+     "how": "自动：DocumentsHotBackup-Daily、DownloadsHotBackup-Daily",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.1 #3–4"
+    },
+    {
+     "id": "f-software-list",
+     "group": "g-backup",
+     "name": "已装软件清单",
+     "what": "每天 10:45 导出已装软件、winget 清单和环境变量（秘密值打码），换机照着装",
+     "how": "自动：AutoDigitalBackupToG",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.1 #5"
+    },
+    {
+     "id": "f-guide-publish",
+     "group": "g-backup",
+     "name": "发布恢复指南",
+     "what": "每天 14:15 把最新的换机恢复指南和校验工具发布到 G（H 随 14:30 的同步拿到），并查登记过的 11 类备份最近有没有成功（Steam 外观 9 天，其余 36 小时）",
+     "how": "自动：AIRecoveryContext-Hot-Daily",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.1 #6"
+    },
+    {
+     "id": "f-cold-sync",
+     "group": "g-backup",
+     "name": "同步到外接盘",
+     "what": "每天 14:30 和每次登录时，把 G 上 19 类备份同步到 H，逐个核对；照片视频这几类删掉的在 H 也留 30 天",
+     "how": "自动：AIRecoveryColdSync-Daily",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "H:\\90_人工保留区\\RecoveryKit\\CORE_RECOVERY\\cold-last.json（9/28 16:36 完成，19 类 complete）"
+    },
+    {
+     "id": "f-other-backups",
+     "group": "g-backup",
+     "name": "别的项目的备份",
+     "what": "微信、开发配置（9 月 29 日 12:05 起按新清单带上 Codex 配置和记忆、Antigravity 设置，不再带 OpenClaw，那次跑完才算落实）、Codex 对话、电脑使用记录、Steam 外观、密码中心各自写进 G，这里统一同步到 H；14:15 的检查除微信、开发配置、Codex 对话和 Steam 外观，也查电脑使用记录和 AI 使用小记录（只提醒、不拦同步）；密码中心恢复集不在这 11 类里，同步回执单列它在 G、H 上各自的最新日期",
+     "how": "自动：各项目自己的任务写 G；本项目 14:30 同步；14:15 只查登记了新鲜度的几类",
+     "status": "在用",
+     "screen": "pcconfig-17",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.1 #8–12、#14–16；新鲜度检查范围见 registries/core_recovery.json source_freshness.entries（28f393b2 之后 9 条：devconfig、wechat、software_environment、documents_and_local_saves、downloads_personal_data、codex_conversations、personal_data、personal_media、steam_millennium）；Claude/Codex/Gemini 记忆备份任务 9/28 23:10–23:26 禁用（3bb90e98、28f393b2）"
+    },
+    {
+     "id": "f-recovery-guide",
+     "group": "g-recovery",
+     "name": "换机恢复指南",
+     "what": "7 步：接盘、取密码、做启动盘、还原、首次开机隔离、接着恢复；G、H 上各一份",
+     "how": "电脑坏了时本人接盘，跟 Codex 说“我要换机恢复”",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "docs/recovery/START_RECOVERY.md；E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.2 #18"
+    },
+    {
+     "id": "f-offline-password",
+     "group": "g-recovery",
+     "name": "离线取镜像密码",
+     "what": "G、H 根目录都有独立的密码中心，不用先登记电脑；离线打开需有效匹配的恢复码",
+     "how": "本人亲手在盘根打开密码中心，验证后搜“镜像”",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.2 #19；docs/recovery/副驾驶笔记本账本.md"
+    },
+    {
+     "id": "f-veeam-media",
+     "group": "g-recovery",
+     "name": "Veeam 恢复盘",
+     "what": "做启动 U 盘用的镜像文件，G、H 各一份；从 U 盘真的启动还没测",
+     "how": "需要时写进一个能清空的 U 盘",
+     "status": "待验收",
+     "screen": "pcconfig-18",
+     "source": "pending_acceptance.json：startup-check-15min（on_hold）"
+    },
+    {
+     "id": "f-rescue-usb",
+     "group": "g-recovery",
+     "name": "救急 U 盘",
+     "what": "32 GB，装着 PE 工具、主板 BIOS 回刷包、风扇配置和《救急先看》",
+     "how": "开不了机时插上用；手动维护",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.2 #21"
+    },
+    {
+     "id": "f-recovery-kit",
+     "group": "g-recovery",
+     "name": "恢复材料清单",
+     "what": "18 样，各带校验值：Veeam 恢复盘镜像、Veeam 整包校验工具、救急 U 盘里隐藏的 PE 启动分区、主板 BIOS F4b 回刷文件、BIOS 风扇配置备份、电脑恢复中文说明、救急 U 盘中文速查、Windows 11 25H2 中文安装镜像、Windows ADK 安装器、ADK 离线清单、ADK 补丁 KB5079391、WinPE 插件安装器、WinPE 离线清单、本机驱动全量导出、技嘉官方 BIOS 和驱动包、BIOS 设置记录、恢复材料校验清单、U 盘可见分区校验清单",
+     "how": "node tools/validate_recovery_kit.mjs 校验登记",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "registries/recovery_kit.json"
+    },
+    {
+     "id": "f-unpushed-code",
+     "group": "g-recovery",
+     "name": "找回没推送的代码",
+     "what": "镜像里带着三个核心仓库没推送的提交和没提交的修改，恢复时提到新目录",
+     "how": "恢复时用 Veeam 文件级恢复复制到新目录，不覆盖",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "docs/recovery/three_base_local_unique.md（8,381 个文件导出核对）"
+    },
+    {
+     "id": "f-task-rebuild",
+     "group": "g-recovery",
+     "name": "自动任务重建表",
+     "what": "换机时 33 个必须重建、5 个可选、49 个软件自己装回、38 个等我定",
+     "how": "换机时 AI 照表做",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "registries/scheduled_task_rebuild_plan.json；task_purpose_catalog.json rebuild_class 现算"
+    },
+    {
+     "id": "f-restore-order",
+     "group": "g-recovery",
+     "name": "恢复顺序",
+     "what": "先网络和 Codex，再常用软件，最后本地 AI；模型不备份，按来源重下并核对哈希",
+     "how": "换机时照 docs/recovery/runtime_restore_order.md",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.2 #25"
+    },
+    {
+     "id": "f-windows-baseline",
+     "group": "g-recovery",
+     "name": "Windows 稳定设置记录",
+     "what": "记下验证过的系统设置和原因，例如 TCP 用 CUBIC，因为 BBR2 曾让本机卡住",
+     "how": "换机后按需对照，不一键套用",
+     "status": "在用",
+     "screen": "pcconfig-18",
+     "source": "START_RECOVERY.md「主驾驶 Windows 稳定基线」"
+    },
+    {
+     "id": "f-bare-metal",
+     "group": "g-recovery",
+     "name": "整机空盘还原",
+     "what": "在新硬盘上从镜像把整台电脑还原；我决定不演练",
+     "how": "真坏了时照指南第 4–7 步",
+     "status": "没用过",
+     "screen": "pcconfig-18",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.2 #18（本人 C2 决定不演练）"
+    },
+    {
+     "id": "f-freeze-card",
+     "group": "g-freeze",
+     "name": "卡死急救卡",
+     "what": "两个 AI 一起卡住时照着做：留现场按右 Ctrl 加两下 Scroll Lock，不留就重启；还没真按过",
+     "how": "本人现场照做",
+     "status": "没用过",
+     "screen": "pcconfig-19",
+     "source": "docs/recovery/desktop-freeze-rescue.md；pending_acceptance.json keyboard-crash-dump-after-reboot（passed，设置已生效）"
+    },
+    {
+     "id": "f-freeze-capture",
+     "group": "g-freeze",
+     "name": "卡死自动留现场",
+     "what": "每 10 秒看一次进程，一起卡住超过约 60 秒就自动记下谁在等谁",
+     "how": "自动：远程服务里的循环",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "E:\\Data\\RemoteComputerMCP\\state\\freeze-capture.json（9/28 11:41 留过一次）"
+    },
+    {
+     "id": "f-stutter-check",
+     "group": "g-freeze",
+     "name": "回查卡顿原因",
+     "what": "刚卡过时，按时间把硬件、程序和系统记录对齐，查有证据的原因；只看不修",
+     "how": "跟 AI 说“刚才卡了一下”，timeaudit-diagnostics 技能调用它",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "tools/Get-ComputerStutterDiagnostic.ps1；E:\\.agents\\skills\\timeaudit-diagnostics\\SKILL.md:25"
+    },
+    {
+     "id": "f-known-issues",
+     "group": "g-freeze",
+     "name": "已知问题手册",
+     "what": "查明过的问题和以后的做法：显卡只跑 PCIe 5.0 x4（应至少 x8）；卡死、强制重启的排查顺序；内存被吃光的诊断结论；9 月 26 日、27 日两次新程序打不开的记录；画面卡和输入卡分开判断；Edge 更新被 360 关掉；natpierce 退役后留下两个代理入口；9 月 26 日顺带做的调整（卸向日葵、停 VMware 服务）",
+     "how": "问起时 AI 照做",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "docs/recovery/known_issues.md"
+    },
+    {
+     "id": "f-memory-log",
+     "group": "g-freeze",
+     "name": "内存用量记录",
+     "what": "开机后一直记内存用量；异常重启后 AI 从中查内存是不是被吃光",
+     "how": "自动：PCConfig Memory Diagnostics；查的时候用 tools/Get-MemoryFreezeEvidence.ps1",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #46；inventory #23"
+    },
+    {
+     "id": "f-laptop-takeover",
+     "group": "g-freeze",
+     "name": "笔记本接管预案",
+     "what": "主机固态装进硬盘盒接到笔记本时怎么处理",
+     "how": "现场确认是这种情况时才读",
+     "status": "没用过",
+     "screen": "pcconfig-19",
+     "source": "docs/recovery/nvme_enclosure_takeover.md"
+    },
+    {
+     "id": "f-remote-service",
+     "group": "g-remote",
+     "name": "远程服务的机器接线",
+     "what": "远程服务装在这台电脑上：开机自启的服务和登录任务、端口和隧道登记，换机按表重建；能做什么见电脑远程控制页",
+     "how": "自动：Windows 服务 PCConfigRemoteComputerMCP 开机启动",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "registries/remote_computer_mcp.json、remote_computer_cloudflare_tunnel.json、remote_computer_mcp_relay.json；服务 Running"
+    },
+    {
+     "id": "f-todesk-prelogin",
+     "group": "g-remote",
+     "name": "没登录也能连 ToDesk",
+     "what": "看门狗每 2 分钟把 ToDesk 服务修回“自动＋运行”；登录前真连一次还没测",
+     "how": "自动：ToDesk PreLogin Watchdog（SYSTEM）",
+     "status": "待验收",
+     "screen": "pcconfig-19",
+     "source": "docs/recovery/todesk_prelogin_watchdog.md"
+    },
+    {
+     "id": "f-rdp-tailscale",
+     "group": "g-remote",
+     "name": "远程桌面只放行两台",
+     "what": "Windows 远程桌面只对 Tailscale 里的笔记本和手机开放",
+     "how": "一次性防火墙设置",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "registries/rdp_tailscale_exposure.json"
+    },
+    {
+     "id": "f-proxy-share",
+     "group": "g-remote",
+     "name": "借电脑上网",
+     "what": "手机、笔记本经 Tailscale 用这台电脑的两个代理入口，不开公网",
+     "how": "手机或笔记本在 Tailscale 里填代理地址",
+     "status": "待验收",
+     "screen": "pcconfig-19",
+     "source": "pending_acceptance.json：tailscale-proxy-peer-acceptance（pending）"
+    },
+    {
+     "id": "f-proxy-autostart",
+     "group": "g-remote",
+     "name": "代理开机自启",
+     "what": "登录后以管理员身份打开 代理程序，恢复上次设置",
+     "how": "自动：代理程序 (Admin) 登录任务",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.3 #37"
+    },
+    {
+     "id": "f-network-rescue",
+     "group": "g-remote",
+     "name": "断网急救",
+     "what": "突然断网时先查哪一项，只做一项能撤回的恢复",
+     "how": "断网时 AI 照 docs/recovery/network-recovery.md 做",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "docs/recovery/network-recovery.md"
+    },
+    {
+     "id": "f-grafana-public",
+     "group": "g-remote",
+     "name": "图表公网入口",
+     "what": "电脑使用记录的 Grafana 图表经 Cloudflare 隧道（远程服务的外网入口也走它）公开在 grafana.wly0829.cn，要登录",
+     "how": "cloudflared 服务；登记在本项目",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "registries/remote_computer_cloudflare_tunnel.json"
+    },
+    {
+     "id": "f-pc-install",
+     "group": "g-secrets",
+     "name": "密码中心安装和绑定",
+     "what": "密码中心 9 月 28 日独立成项目，这里只管把它装到这台电脑并绑定",
+     "how": "安装器和机器绑定登记",
+     "status": "待验收",
+     "screen": "pcconfig-19",
+     "source": "registries/password_center_machine.json；pending_acceptance.json password-center-sync-after-fix（pending）"
+    },
+    {
+     "id": "f-data-lock-guide",
+     "group": "g-secrets",
+     "name": "资料锁接入说明",
+     "what": "各项目读私人资料前怎么查锁（9 个项目的调用点表）",
+     "how": "各项目开发时照着接",
+     "status": "在用",
+     "screen": "pcconfig-19",
+     "source": "docs/runtime/personal-data-access.md"
+    },
+    {
+     "id": "f-extra-encrypted-copy",
+     "group": "g-secrets",
+     "name": "清手机前的加密副本",
+     "what": "给照片视频录音管理清手机前多做一份加密副本",
+     "how": "代码和离线测试有，生产配置没部署",
+     "status": "待实施",
+     "screen": "pcconfig-19",
+     "source": "docs/contracts/pcconfig.personal-vault-protect.md"
+    },
+    {
+     "id": "f-encrypt-data-dirs",
+     "group": "g-secrets",
+     "name": "资料目录整体加密",
+     "what": "五个资料目录改成加密盘，解锁时才打开",
+     "how": "设计稿阶段",
+     "status": "待实施",
+     "screen": "pcconfig-19",
+     "source": "docs/design/sensitive-data-access.pending.md；owner-decisions P7A–C"
+    },
+    {
+     "id": "f-display-recovery",
+     "group": "g-desktop",
+     "name": "三块屏幕恢复",
+     "what": "三块屏偶尔只亮一块，每 5 分钟检查，自动恢复",
+     "how": "自动：PCConfig Display Topology Recovery",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #40"
+    },
+    {
+     "id": "f-xiaomi-share",
+     "group": "g-desktop",
+     "name": "小米妙享守护",
+     "what": "没开就补开，开机后弹一次主界面",
+     "how": "自动：PCConfig Xiaomi Share Watchdog",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #41"
+    },
+    {
+     "id": "f-desktop-icons",
+     "group": "g-desktop",
+     "name": "桌面图标自动隐藏",
+     "what": "双击桌面空白处显示，30 秒后自动再藏；主屏重新接上时顺手修好任务栏",
+     "how": "开机自启的小程序（注册表 Run 项）",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #42"
+    },
+    {
+     "id": "f-oled-blackout",
+     "group": "g-desktop",
+     "name": "主屏黑幕",
+     "what": "Ctrl+Win+R 给 OLED 主屏盖黑幕，串流照样看得到桌面",
+     "how": "按快捷键或开始菜单“主屏息屏切换”",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "docs/recovery/primary_oled_blackout.md"
+    },
+    {
+     "id": "f-audio-speaker",
+     "group": "g-desktop",
+     "name": "声音固定走音箱",
+     "what": "登录后把默认输出固定到音箱，不被别的设备抢走",
+     "how": "自动：PinDefaultAudio-Speaker",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #44"
+    },
+    {
+     "id": "f-wechat-dual",
+     "group": "g-desktop",
+     "name": "微信双开",
+     "what": "登录后自动开两个微信",
+     "how": "自动：WeChat AutoStart",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.4 #45"
+    },
+    {
+     "id": "f-claude-background",
+     "group": "g-desktop",
+     "name": "Claude 不自启、退出清理",
+     "what": "开机不自动开 Claude 桌面，关掉后清掉它留在后台的程序",
+     "how": "自动：两个管理员任务",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "docs/recovery/claude_desktop_background_policy.md"
+    },
+    {
+     "id": "f-recycle-weekly",
+     "group": "g-desktop",
+     "name": "回收站定时清理",
+     "what": "每小时看一次各盘；北京时间 0、6、12、18 点常规清：AI 缓存目录删进去的满 6 小时、其他满 7 天才永久删；某块盘空闲低于警戒线（容量的 5%，最少 20 GB、最多 100 GB）时，每小时都清这块盘，AI 缓存只留 1 小时；9 月 28 日第一次自动跑（那时是每周一 06:30 一次），清掉 21 项",
+     "how": "自动：PCConfig Recycle Bin Cleanup",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "pending_acceptance.json：recycle-bin-cleanup-first-auto-run（passed）；docs/runtime/recycle-bin-cleanup.md"
+    },
+    {
+     "id": "f-ai-cache-sweep",
+     "group": "g-desktop",
+     "name": "AI 缓存清扫",
+     "what": "每小时第 50 分钟把确认能重建、已验收、24 小时没再用到的子任务产物和闲置 7 天的旧临时目录放进回收站；在用的都留着，按单计期",
+     "how": "自动：PCConfig AI Cache Sweep；跟 AI 说停掉 AI 缓存清扫",
+     "status": "待验收",
+     "screen": "pcconfig-20",
+     "source": "docs/runtime/ai-cache-sweep.md；E:\\Data\\PCConfig\\AiCacheSweep\\status.json（10/8 凌晨几轮 reference_scan_complete=false、0 候选）"
+    },
+    {
+     "id": "f-desktop-scripts",
+     "group": "g-desktop",
+     "name": "桌面急救小脚本",
+     "what": "“释放卡住按键”“修复音响声音”，双击就用",
+     "how": "本人双击",
+     "status": "说不准",
+     "screen": "pcconfig-20",
+     "source": "tools/Release-StuckModifierKeys.ps1 等；没有使用记录"
+    },
+    {
+     "id": "f-startup-snapshot",
+     "group": "g-desktop",
+     "name": "启动项快照",
+     "what": "记下 23 个开机自启项，换机时参考",
+     "how": "tools/Get-StartupInventory.ps1",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "registries/startup_snapshot.json（9/18）"
+    },
+    {
+     "id": "f-gmail",
+     "group": "g-google",
+     "name": "邮件",
+     "what": "按条件找邮件和附件、读正文；把确认过的回复、草稿和整理交给 AI 办",
+     "how": "跟 AI 说要找的邮件；google-workspace-direct 技能调用",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "tools/GoogleWorkspaceDirectProvider.psm1:1655–1836"
+    },
+    {
+     "id": "f-gdrive",
+     "group": "g-google",
+     "name": "云盘",
+     "what": "找文件、下载原件；按指定对象上传、移动、分享",
+     "how": "同上",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "tools/GoogleWorkspaceDirectProvider.psm1:2401–2751"
+    },
+    {
+     "id": "f-gtasks",
+     "group": "g-google",
+     "name": "待办",
+     "what": "记待办、查询、修改、标记完成",
+     "how": "同上",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "tools/GoogleWorkspaceDirectProvider.psm1:2269–2364"
+    },
+    {
+     "id": "f-gphotos",
+     "group": "g-google",
+     "name": "相册",
+     "what": "单独一份授权：查已连接的相册，把选定照片上传并加入或移出相册",
+     "how": "按需调用；最近一次使用没核",
+     "status": "说不准",
+     "screen": "pcconfig-20",
+     "source": "tools/GooglePhotosDirectProvider.psm1；本人 D9 决定保留"
+    },
+    {
+     "id": "f-sms-code",
+     "group": "g-ai-tools",
+     "name": "取短信验证码",
+     "what": "手机验证码经小米妙享转到电脑，AI 读最近 60 秒的通知取码，不留日志；还没真用过",
+     "how": "AI 在网页点“发送验证码”后调用",
+     "status": "待验收",
+     "screen": "pcconfig-20",
+     "source": "docs/runtime/sms-code.md；pending_acceptance.json sms-code-first-real-login（pending）"
+    },
+    {
+     "id": "f-browser-runtime",
+     "group": "g-ai-tools",
+     "name": "浏览器连接检查",
+     "what": "AI 连不上我的 Chrome 时，查清缺哪个已装组件；只看不改",
+     "how": "browser-control-continuity 技能调用",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "tools/Get-BrowserControlRuntime.ps1；E:\\.agents\\skills\\browser-control-continuity\\SKILL.md:41"
+    },
+    {
+     "id": "f-task-wakeup",
+     "group": "g-ai-tools",
+     "name": "任务监测提醒",
+     "what": "让电脑盯一件事，条件满足就提醒原来的 Codex 任务",
+     "how": "AI 按需登记",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "docs/runtime/codex-task-wakeup.md"
+    },
+    {
+     "id": "f-codex-repair",
+     "group": "g-ai-tools",
+     "name": "Codex 卡住自动修",
+     "what": "Codex 桌面卡在加载时，开始菜单一键让命令行 Codex 诊断修复",
+     "how": "开始菜单 Codex AI Auto Repair",
+     "status": "说不准",
+     "screen": "pcconfig-20",
+     "source": "docs/recovery/codex_desktop_ai_recovery_prompt.md"
+    },
+    {
+     "id": "f-pending-list",
+     "group": "g-ai-tools",
+     "name": "待验收清单",
+     "what": "所有要等时机才能核的事登记在一处（9 月 28 日 43 项），驾驶舱读它",
+     "how": "AI 登记和核对",
+     "status": "在用",
+     "screen": "pcconfig-20",
+     "source": "registries/pending_acceptance.json"
+    },
+    {
+     "id": "f-managed-software",
+     "group": "g-software",
+     "name": "受管软件",
+     "what": "11 个开发软件统一查状态、更新：Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go",
+     "how": "tools/Invoke-ManagedSoftware.ps1",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "registries/managed_software_catalog.json"
+    },
+    {
+     "id": "f-weekly-software",
+     "group": "g-software",
+     "name": "软件每周检查",
+     "what": "每周日 23:30 查版本，空闲时给 Python 打补丁；精简后的新版 10 月 4 日第一次跑",
+     "how": "自动：PCConfig Governance Check",
+     "status": "待验收",
+     "screen": "pcconfig-21",
+     "source": "git 348632a2；governance 回执 9/27 仍是旧版"
+    },
+    {
+     "id": "f-gpu-queue",
+     "group": "g-software",
+     "name": "显卡排队",
+     "what": "本地大模型、中文听写和文字识别轮流用显卡，排队服务停了每 5 分钟补开",
+     "how": "自动：OllamaStable32100SelfHeal",
+     "status": "待验收",
+     "screen": "pcconfig-21",
+     "source": "pending_acceptance.json：dictation-aicli-gpu-handoff（on_hold）"
+    },
+    {
+     "id": "f-ollama-start",
+     "group": "g-software",
+     "name": "本地模型启动",
+     "what": "登录后打开 Ollama",
+     "how": "自动：OllamaStable32100",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §2.5 #53"
+    },
+    {
+     "id": "f-dictation-start",
+     "group": "g-software",
+     "name": "听写开机启动",
+     "what": "登录时启动中文听写，按 Win+H 说话出字",
+     "how": "自动：ChineseASR Dictation",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "pending_acceptance.json：dictation-on-demand-hotkey（passed）"
+    },
+    {
+     "id": "f-env-registry",
+     "group": "g-software",
+     "name": "环境变量登记",
+     "what": "94 个环境变量、62 条 PATH、各运行环境版本；软件打不开时先查缺哪个环境",
+     "how": "tools/Get-RuntimeInventory.ps1",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "registries/env_var_index.json、runtimes.json"
+    },
+    {
+     "id": "f-drive-roles",
+     "group": "g-software",
+     "name": "盘的分工",
+     "what": "稳定的放 E，新项目和缓存放 V，能丢的放 Z",
+     "how": "AI 放东西时照做",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "docs/governance/dev_storage_policy.md"
+    },
+    {
+     "id": "f-port-check",
+     "group": "g-software",
+     "name": "端口检查",
+     "what": "新开固定端口前先查会不会和别的程序冲突",
+     "how": "tools/Test-LocalServicePort.ps1",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "docs/governance/local_service_port_policy.md"
+    },
+    {
+     "id": "f-impact-query",
+     "group": "g-software",
+     "name": "改动影响查询",
+     "what": "给一个路径，查出配置在哪、会影响哪些项目（164 个配置项、21 个恢复锚点）",
+     "how": "node tools/query_project_impact.mjs --path …",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "registries/project_config_keys.json、project_restore_anchors.json"
+    },
+    {
+     "id": "f-move-dry-run",
+     "group": "g-software",
+     "name": "搬目录前预演",
+     "what": "把软件或项目搬到别的盘之前，先列出影响和怎么恢复；只预演不动手",
+     "how": "node tools/move_gate_dry_run.mjs",
+     "status": "说不准",
+     "screen": "pcconfig-21",
+     "source": "tools/move_gate_dry_run.mjs（最后改动 8/22）；没找到使用记录"
+    },
+    {
+     "id": "f-docker-wsl-space",
+     "group": "g-software",
+     "name": "Docker、WSL 空间压缩",
+     "what": "压缩虚拟盘腾空间，默认只预演",
+     "how": "按需手动",
+     "status": "说不准",
+     "screen": "pcconfig-21",
+     "source": "docs/recovery/docker_wsl_space_maintenance.md"
+    },
+    {
+     "id": "f-pagefile",
+     "group": "g-software",
+     "name": "分页文件和转储设置",
+     "what": "分页文件固定在 C（约 97.7 GiB），E 上取消；键盘触发转储已生效；分页文件重启后待核",
+     "how": "系统设置",
+     "status": "待验收",
+     "screen": "pcconfig-21",
+     "source": "pending_acceptance.json：pagefile-fixed-96gb-after-reboot（pending）"
+    },
+    {
+     "id": "f-laptop-role",
+     "group": "g-laptop",
+     "name": "笔记本的分工",
+     "what": "平时 Moonlight 远控主机；主机坏了时，笔记本能自己上网、让 Codex 干活、接 H 盘取密码",
+     "how": "按账本分工",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "docs/recovery/副驾驶笔记本账本.md"
+    },
+    {
+     "id": "f-laptop-veeam",
+     "group": "g-laptop",
+     "name": "笔记本读主机镜像",
+     "what": "笔记本装了 Veeam，只用来读备份、验证密码、提取文件",
+     "how": "接 H 后打开 Veeam",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "同上（9/22 实测）"
+    },
+    {
+     "id": "f-laptop-check",
+     "group": "g-laptop",
+     "name": "笔记本巡检",
+     "what": "检查笔记本上的恢复说明、备份和 U 盘副本，同步约法；平时暂停，需要时手动开",
+     "how": "本人需要时手动启动",
+     "status": "待验收",
+     "screen": "pcconfig-21",
+     "source": "pending_acceptance.json：laptop-law-sync（pending）"
+    },
+    {
+     "id": "f-phone",
+     "group": "g-laptop",
+     "name": "手机",
+     "what": "手机上的密码中心、经 Tailscale 借电脑上网、小米妙享互通",
+     "how": "日常使用",
+     "status": "在用",
+     "screen": "pcconfig-21",
+     "source": "owner-decisions B1；rdp_tailscale_exposure.json"
+    },
+    {
+     "id": "f-task-catalog",
+     "group": "g-cockpit",
+     "name": "自动任务人话目录",
+     "what": "143 条说明：本机 125 个，加上云端、Codex、笔记本、GitHub、远程服务里的，和登录后常驻的桌面图标自动隐藏、屏保、主屏黑幕监听，随备份启动的材料同步、照片视频云端维护，共 18 个",
+     "how": "驾驶舱读它",
+     "status": "在用",
+     "screen": "pcconfig-22",
+     "source": "registries/task_purpose_catalog.json（9/28 现算：windows 125、cloud 5、codex 4、github 2、laptop 2、服务内 1）"
+    },
+    {
+     "id": "f-task-table",
+     "group": "g-cockpit",
+     "name": "自动任务总表",
+     "what": "完整扫描一次，发布 125 个任务的现状（88 个开着、37 个停着）",
+     "how": "tools/scan_tasks.ps1",
+     "status": "在用",
+     "screen": "pcconfig-22",
+     "source": "registries/tasks.json"
+    },
+    {
+     "id": "f-dashboard-api",
+     "group": "g-cockpit",
+     "name": "看板接口",
+     "what": "10 月 4 日起，电脑上原有的状态服务每 30 秒更新一次显示缓存，网站来取时直接给最近一份：自动任务、备份、待验收、今天的动态、项目现状",
+     "how": "网站来取时直接读缓存",
+     "status": "在用",
+     "screen": "pcconfig-22",
+     "source": "docs/runtime/dashboard-api-contract.md；本机接口 200；dashboard-api-contract.md 2026-10-04 显示缓存合同"
+    },
+    {
+     "id": "f-cockpit-monitor",
+     "group": "g-cockpit",
+     "name": "驾驶舱巡检",
+     "what": "每 15 分钟请求驾驶舱页面、主接口和对照文件；连续 10 分钟打不开发 Gmail，恢复再发",
+     "how": "自动：Wly Cockpit Monitor；跟 AI 说停掉驾驶舱巡检",
+     "status": "待验收",
+     "screen": "pcconfig-22",
+     "source": "docs/runtime/cockpit-monitor.md；E:\\Data\\PCConfig\\CockpitMonitor\\latest.json；真实故障/恢复两封信未出现"
+    },
+    {
+     "id": "f-traffic-package",
+     "group": "g-cockpit",
+     "name": "流量记录和套餐提醒",
+     "what": "每分钟记程序代理/直连流量，超量提醒；按登记订阅来源读套餐，预计撑不到重置日每天记一条提醒",
+     "how": "自动：PCConfig Mihomo Traffic；跟 AI 说停掉流量记录",
+     "status": "在用",
+     "screen": "pcconfig-22",
+     "source": "registries/task_purpose_catalog.json；registries/dashboard_sources.json subscription_sources；tools/record_mihomo_traffic.py（ac5336a8）"
+    },
+    {
+     "id": "f-r-claude-memory",
+     "group": "g-retired",
+     "name": "Claude 记忆备份",
+     "what": "原每天 10:35；9 月 28 日停用：Claude 记忆开关关着，配置照旧由开发配置备份带上，用量改由 12:15 的 Codex 对话备份记",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "PCConfig 3bb90e98；tasks.json 中 Claude Memory Backup enabled=false；owner-decisions“AI 备份的去留和写法”"
+    },
+    {
+     "id": "f-r-codex-memory",
+     "group": "g-retired",
+     "name": "Codex 配置和记忆备份",
+     "what": "原每天 11:05、13:05；9 月 28 日停用：和开发配置备份重复，Codex 配置和记忆改由开发配置备份每天带上；Codex 对话备份照常",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "PCConfig 28f393b2；tasks.json 中 Codex Memory Backup enabled=false；owner-decisions“AI 备份只留该留的”"
+    },
+    {
+     "id": "f-r-gemini-memory",
+     "group": "g-retired",
+     "name": "Gemini 备份",
+     "what": "原每天 11:10、13:10，实际备 Antigravity 的设置、状态和它记下的知识；9 月 28 日停用，Antigravity 设置改由开发配置备份带上",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "PCConfig 28f393b2；tasks.json 中 Gemini Memory Backup enabled=false；owner-decisions“AI 备份只留该留的”"
+    },
+    {
+     "id": "f-r-natpierce",
+     "group": "g-retired",
+     "name": "natpierce 内网穿透",
+     "what": "9 月 26 日退役，远程改走 Cloudflare 隧道和 Tailscale",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "docs/recovery/known_issues.md；pending natpierce-after-reboot（superseded）"
+    },
+    {
+     "id": "f-r-sunlogin",
+     "group": "g-retired",
+     "name": "向日葵",
+     "what": "卸掉了，没登录时改用 ToDesk；留下的三个驱动下次重启后删",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "owner-decisions F5；pending sunlogin-driver-removal-after-reboot"
+    },
+    {
+     "id": "f-r-governance",
+     "group": "g-retired",
+     "name": "综合自查",
+     "what": "配置漂移、恢复准备、开发盘健康等每周体检；9 月 28 日退役，只留软件每周检查",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "git 348632a2（北京时间 9/28 03:59）"
+    },
+    {
+     "id": "f-r-cursor",
+     "group": "g-retired",
+     "name": "鼠标样式守护",
+     "what": "主题或登录把鼠标样式重置后改回来；9 月 28 日退役",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "git 9561183b（北京时间 9/28 01:24）"
+    },
+    {
+     "id": "f-r-model-backup",
+     "group": "g-retired",
+     "name": "本地模型备份",
+     "what": "9 月 26 日起模型不再备份，缺了按来源重下并核对哈希",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "owner-decisions DU2；tools/Sync-OllamaModelBackup.ps1 仍在（见审计）"
+    },
+    {
+     "id": "f-r-protected-platform",
+     "group": "g-retired",
+     "name": "旧受保护数据平台",
+     "what": "自动锁盘、“设备不可信”状态、十分钟保护邀请和整张银行卡盲填；密码中心恢复集继续保留",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "registries/protected_policy_retirement.json:5、:34"
+    },
+    {
+     "id": "f-r-coregoal",
+     "group": "g-retired",
+     "name": "CoreGoal 单因子引导",
+     "what": "旧受保护数据平台的安装和恢复引导，只要一种本人验证方式就能启动；8 月 19–22 日上线，9 月 25 日随旧平台退役，这件事现在归密码中心",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "git 77525fa2“Implement one-factor CoreGoal bootstrap”（本机 8/19）；ac9cdab6“Retire the P0 safe switch, CoreGoal consumers…”（本机 9/25，说明里写 P0–P7 的负责方改为密码中心）"
+    },
+    {
+     "id": "f-r-macrium",
+     "group": "g-retired",
+     "name": "Macrium 系统镜像",
+     "what": "9 月 19–20 日换成 Veeam",
+     "how": "—",
+     "status": "已停用",
+     "screen": "pcconfig-22",
+     "source": "E:\\Cache\\Claude\\Temp\\4bd59299\\build\\pcconfig-facts.md §6"
+    }
+   ],
+   "numbers": [
+    {
+     "id": "n-tasks",
+     "text": "125 个",
+     "meaning": "本机计划任务，不含 \\Microsoft\\Windows\\ 下的系统任务",
+     "as_of": "2026-09-28",
+     "source": "registries/tasks.json（北京时间 9/28 04:13 管理员扫描）",
+     "screens": [
+      "pcconfig-01",
+      "pcconfig-11",
+      "pcconfig-22"
+     ]
+    },
+    {
+     "id": "n-tasks-split",
+     "text": "28 个 · 26 个 · 71 个",
+     "meaning": "125 个按负责项目分：本项目、别的项目、第三方软件（第三方＝dashboard_sources.json 的 third_party_task_owners，即驾驶舱单列的“电脑上别的软件”）",
+     "as_of": "2026-09-29",
+     "source": "task_purpose_catalog.json（PCConfig 12171683 后，北京 9/29）source=windows 的 owner_project 现算：E:\\PCConfig 28（远程服务两个按需维护任务改归本项目，密码中心自查改归 PasswordCenter）；第三方 71；其余 26。旧稿 27/43/55 只把“Windows / 已安装软件”算第三方",
+     "screens": [
+      "pcconfig-11"
+     ]
+    },
+    {
+     "id": "n-tasks-enabled",
+     "text": "88 个开着、37 个停着",
+     "meaning": "125 个里启用和停用（9/28 23:1x 三个 AI 记忆备份禁用后）",
+     "as_of": "2026-09-28",
+     "source": "registries/tasks.json（提权重扫，提交 28f393b2）enabled 计数",
+     "screens": [
+      "pcconfig-11",
+      "pcconfig-22"
+     ]
+    },
+    {
+     "id": "n-rebuild",
+     "text": "33 个必须重建，5 个可选，49 个装回软件后自己会装，38 个等我决定",
+     "meaning": "换机重建分类",
+     "as_of": "2026-09-28",
+     "source": "task_purpose_catalog.json rebuild_class 现算；scheduled_task_rebuild_plan.json",
+     "screens": [
+      "pcconfig-07",
+      "pcconfig-11",
+      "pcconfig-18"
+     ]
+    },
+    {
+     "id": "n-catalog",
+     "text": "143 条说明",
+     "meaning": "人话目录条目：本机 125 + 非本机 18（laptop 2、local 5、codex 3、cloud 5、github 2、电脑 MCP 服务内 1；local 是 9/29 新登记的桌面图标自动隐藏、屏保、主屏黑幕监听、材料同步，和从 codex 挪过来的照片视频云端维护）",
+     "as_of": "2026-09-29",
+     "source": "docs/governance/scheduled_task_purpose_catalog.md“当前计数”（PCConfig 12171683，北京 9/29 01:35）",
+     "screens": [
+      "pcconfig-22"
+     ]
+    },
+    {
+     "id": "n-pending",
+     "text": "43 项",
+     "meaning": "待验收清单全部条目（pending 23、passed 13、on_hold 5、superseded 2）",
+     "as_of": "2026-09-28",
+     "source": "registries/pending_acceptance.json（提交 28f393b2 之后）",
+     "screens": [
+      "pcconfig-11",
+      "pcconfig-20"
+     ]
+    },
+    {
+     "id": "n-image-chain",
+     "text": "403 GiB",
+     "meaning": "G 上系统镜像链合计：全量 280.9 + 增量 37.5/38.1/46.6 GiB",
+     "as_of": "2026-09-28",
+     "source": "E:\\Cache\\PCConfig\\SystemImage\\last-run.json（13:55 complete）、G 目录",
+     "screens": [
+      "pcconfig-01",
+      "pcconfig-15"
+     ]
+    },
+    {
+     "id": "n-cold-minutes",
+     "text": "约 2 小时",
+     "meaning": "每天同步到外接盘的耗时：9/27 约 1 小时 46 分，9/28 14:30→16:36",
+     "as_of": "2026-09-28",
+     "source": "任务 LastRunTime＋H 回执 completed_utc",
+     "screens": [
+      "pcconfig-02",
+      "pcconfig-14"
+     ]
+    },
+    {
+     "id": "n-image-minutes",
+     "text": "约 25 分钟",
+     "meaning": "9/28 每日增量耗时 13:30→13:55",
+     "as_of": "2026-09-28",
+     "source": "last-run.json；任务 LastRunTime",
+     "screens": [
+      "pcconfig-02",
+      "pcconfig-15"
+     ]
+    },
+    {
+     "id": "n-cold-0927",
+     "text": "个人资料 280333 · 照片视频 19267 · 微信 146091 · 文档 93348",
+     "meaning": "9/27 16:16 完成的冷备逐项核对文件数",
+     "as_of": "2026-09-27",
+     "source": "当时 H 回执（见 pcconfig-facts.md §3）",
+     "screens": [
+      "pcconfig-06"
+     ]
+    },
+    {
+     "id": "n-cold-0928",
+     "text": "19 类全部完成 · 微信 146,300 · 个人资料 280,789 · 照片视频 19,272 · 文档 93,552 · 项目 55,686 · 软件 88,879",
+     "meaning": "9/28 14:30–16:36 冷备各类 verified_file_count",
+     "as_of": "2026-09-28",
+     "source": "H:\\90_人工保留区\\RecoveryKit\\CORE_RECOVERY\\cold-last.json cold_result.results[].retention.verified_file_count",
+     "screens": [
+      "pcconfig-14"
+     ]
+    },
+    {
+     "id": "n-disks",
+     "text": "C 599/488 · E 3214/1491 · D 3726 · G 1908/916 · H 1908/1418 · V 300 · Z 12（GiB）",
+     "meaning": "各卷容量/已用（按 2^30 算的 GiB）；H 北京 9/29 03:3x Get-Volume 复核仍是已用 1418.9、剩 489.0，修复对话查明 9/28 14:0x 以来多出的约 330 GiB 主要是新一条系统镜像链",
+     "as_of": "2026-09-28",
+     "source": "Get-Volume，北京时间 9/28 19:5x",
+     "screens": [
+      "pcconfig-04",
+      "pcconfig-05",
+      "pcconfig-10"
+     ]
+    },
+    {
+     "id": "n-disk-models",
+     "text": "4 TB 固态（C、E）、2 TB 固态（G）、2 TB 外接固态（H）、4 TB 机械盘（D）、32 GB U 盘（F）",
+     "meaning": "硬盘的标称容量（厂家标的 TB/GB，和卷大小 GiB 是两回事）",
+     "as_of": "2026-09-28",
+     "source": "pcconfig-facts.md §4 物理盘一列",
+     "screens": [
+      "pcconfig-03",
+      "pcconfig-04",
+      "pcconfig-05",
+      "pcconfig-12"
+     ]
+    },
+    {
+     "id": "n-g-usage",
+     "text": "系统镜像 403.2 · 微信 147.4 · 照片视频 140.5 … 只在 G 上的软件 37.7 · 只在 G 上的项目 9.2（GiB）",
+     "meaning": "G 上各目录按文件大小合计（硬链接会重复计）",
+     "as_of": "2026-09-28",
+     "source": "pcconfig-facts.md §3 G 盘一行（9/28 14:0x 目录统计）；G:\\20_Projects、G:\\70_Software 于 19:5x 用 Measure-Object 现算",
+     "screens": [
+      "pcconfig-04"
+     ]
+    },
+    {
+     "id": "n-offline-test",
+     "text": "9 月 22 日",
+     "meaning": "笔记本接 H 取密码、解密镜像实测",
+     "as_of": "2026-09-22",
+     "source": "docs/recovery/副驾驶笔记本账本.md",
+     "screens": [
+      "pcconfig-01",
+      "pcconfig-07",
+      "pcconfig-16"
+     ]
+    },
+    {
+     "id": "n-exported",
+     "text": "8381 个文件",
+     "meaning": "三个核心仓库本地独有内容从镜像导出核对",
+     "as_of": "2026-09-22",
+     "source": "docs/recovery/three_base_local_unique.md",
+     "screens": [
+      "pcconfig-07"
+     ]
+    },
+    {
+     "id": "n-hardlink",
+     "text": "271 GiB 复用、63 GiB 复制",
+     "meaning": "9/21 冷备镜像换代",
+     "as_of": "2026-09-21",
+     "source": "pcconfig-facts.md §5 亮点 2",
+     "screens": [
+      "pcconfig-16"
+     ]
+    },
+    {
+     "id": "n-freeze-capture",
+     "text": "9 月 28 日 11:41",
+     "meaning": "卡死自动留现场最近一次",
+     "as_of": "2026-09-28",
+     "source": "E:\\Data\\RemoteComputerMCP\\state\\freeze-capture.json",
+     "screens": [
+      "pcconfig-08",
+      "pcconfig-16"
+     ]
+    },
+    {
+     "id": "n-registries",
+     "text": "45 个登记文件",
+     "meaning": "registries/*.json",
+     "as_of": "2026-09-28",
+     "source": "pcconfig-facts.md §3 文档一行",
+     "screens": [
+      "pcconfig-12"
+     ]
+    },
+    {
+     "id": "n-tests",
+     "text": "178 个自动测试，15 组",
+     "meaning": "测试登记",
+     "as_of": "2026-09-28",
+     "source": "tests/test-registry.json",
+     "screens": [
+      "pcconfig-12",
+      "pcconfig-13"
+     ]
+    },
+    {
+     "id": "n-code",
+     "text": "110620 行",
+     "meaning": "git 跟踪的代码文件行数",
+     "as_of": "2026-09-28",
+     "source": "pcconfig-facts.md §3 代码量（9/28 14:xx 统计）",
+     "screens": [
+      "pcconfig-13"
+     ]
+    },
+    {
+     "id": "n-commits",
+     "text": "1437 次",
+     "meaning": "提交数，自 7/9 起（9/28 14:20 时；19:5x 现算为 1439）",
+     "as_of": "2026-09-28",
+     "source": "git rev-list --count HEAD",
+     "screens": [
+      "pcconfig-13"
+     ]
+    },
+    {
+     "id": "n-managed",
+     "text": "11 个开发软件（Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go）",
+     "meaning": "受管软件登记",
+     "as_of": "2026-09-28",
+     "source": "registries/managed_software_catalog.json",
+     "screens": [
+      "pcconfig-10",
+      "pcconfig-21"
+     ]
+    },
+    {
+     "id": "n-env",
+     "text": "94 个环境变量、62 条 PATH",
+     "meaning": "环境变量登记",
+     "as_of": "2026-09-28",
+     "source": "registries/env_var_index.json",
+     "screens": [
+      "pcconfig-10",
+      "pcconfig-21"
+     ]
+    },
+    {
+     "id": "n-config-keys",
+     "text": "164 个配置项、21 个恢复锚点",
+     "meaning": "项目配置位置登记",
+     "as_of": "2026-09-28",
+     "source": "registries/project_config_keys.json、project_restore_anchors.json",
+     "screens": [
+      "pcconfig-21"
+     ]
+    },
+    {
+     "id": "n-recovery-kit",
+     "text": "18 样恢复材料",
+     "meaning": "恢复材料登记",
+     "as_of": "2026-09-28",
+     "source": "registries/recovery_kit.json assets 18 条（逐条列在功能卡里）",
+     "screens": [
+      "pcconfig-18"
+     ]
+    },
+    {
+     "id": "n-startup",
+     "text": "23 个开机自启项",
+     "meaning": "启动项快照",
+     "as_of": "2026-09-18",
+     "source": "registries/startup_snapshot.json",
+     "screens": [
+      "pcconfig-20"
+     ]
+    },
+    {
+     "id": "n-features",
+     "text": "87 项",
+     "meaning": "全部功能条数（含已停用）",
+     "as_of": "2026-10-08",
+     "source": "本页 registry.features 计数",
+     "screens": [
+      "pcconfig-17"
+     ]
+    },
+    {
+     "id": "n-full-space",
+     "text": "约 202 GB",
+     "meaning": "10/20 主动全量需要的 G 空位",
+     "as_of": "2026-09-28",
+     "source": "last-run.json plan 段（pcconfig-facts.md 审计 A8）",
+     "screens": [
+      "pcconfig-15"
+     ]
+    }
+   ],
+   "relations": [
+    {
+     "id": "r-remote-control",
+     "with": "remote-control",
+     "direction": "住在这里",
+     "flow": "远程服务（电脑 MCP）的源码、登记、Windows 服务和登录任务都在本仓库；本项目负责安装、守护、换机重建；能力本身和怎么连的家在电脑远程控制页",
+     "source": "registries/remote_computer_mcp*.json；remote-control/page.json r-pcconfig-host"
+    },
+    {
+     "id": "r-streaming",
+     "with": "sunshine-remote-streaming",
+     "direction": "登记",
+     "flow": "串流体检（每天 14:30）和画面切换任务归远程电脑串流；本项目只登记机器路径和恢复顺序",
+     "source": "task_purpose_catalog.json；pcconfig-facts.md §7"
+    },
+    {
+     "id": "r-password-center",
+     "with": "password-center",
+     "direction": "安装和备份",
+     "flow": "本项目把密码中心装到本机并绑定；密码中心把加密恢复集写进 G，本项目每天同步外接盘时复制到 H（9/29 接上，待自然运行追平）；镜像密码、BitLocker 恢复密钥都存在密码中心",
+     "source": "registries/password_center_machine.json；docs/recovery/password-center-m2-operations.md"
+    },
+    {
+     "id": "r-devconfig",
+     "with": "devconfig-backup",
+     "direction": "拿来",
+     "flow": "开发配置包（12:05，9/29 起也带 Codex 配置和记忆、Antigravity 设置，不再带 OpenClaw）、微信热备（09:30）写 G、上 Google 云盘；本项目 14:15 查新鲜度、14:30 同步到 H",
+     "source": "pcconfig-facts.md §2.1 #8–10"
+    },
+    {
+     "id": "r-ai-memory",
+     "with": "codex-memory（AI 备份）",
+     "direction": "拿来",
+     "flow": "Codex 对话备份（12:15，也记 Claude 和 Codex 的用量）写 G，本项目同步到 H，逐对象 SHA-256 后才发布 H 指针；Claude、Codex、Gemini 记忆备份 9/28 停用，G 上旧快照照常同步留档",
+     "source": "pcconfig-facts.md §2.1 #11–12"
+    },
+    {
+     "id": "r-timeaudit",
+     "with": "timeaudit",
+     "direction": "拿来和公开",
+     "flow": "电脑使用记录和剪贴板记录的备份写 G，本项目同步到 H；Grafana 图表经本项目登记的隧道公开",
+     "source": "pcconfig-facts.md §2.1 #14、§2.3 #39"
+    },
+    {
+     "id": "r-steam",
+     "with": "steam-millennium-config-backup",
+     "direction": "拿来",
+     "flow": "Steam 外观快照写 G，本项目同步到 H",
+     "source": "pcconfig-facts.md §2.1 #15"
+    },
+    {
+     "id": "r-personal-media",
+     "with": "personal-media",
+     "direction": "交出和触发",
+     "flow": "照片视频录音的原件在 E，17:10 复制到 G；备份做完后按开关启动它的云端维护",
+     "source": "tools/Sync-PersonalReplicasToG.ps1；提交 9b0853a8"
+    },
+    {
+     "id": "r-personal-materials",
+     "with": "personal-materials",
+     "direction": "交出",
+     "flow": "个人资料原件在 E，17:10 热备复制到 G 并调用它的维护脚本",
+     "source": "pcconfig-facts.md §7"
+    },
+    {
+     "id": "r-chinese-asr",
+     "with": "chinese-asr",
+     "direction": "共用",
+     "flow": "听写登录任务和恢复登记在本项目；听写和本地大模型、文字识别共用本项目的显卡排队服务",
+     "source": "docs/recovery/chinese_dictation_on_demand.md；tools/local_gpu_broker/"
+    },
+    {
+     "id": "r-localocr",
+     "with": "localocr",
+     "direction": "共用",
+     "flow": "文字识别也经显卡排队服务用显卡",
+     "source": "inventory #24（local_gpu_broker）；owner-decisions 1432 行"
+    },
+    {
+     "id": "r-aicli",
+     "with": "ai-cli-profile-manager",
+     "direction": "引用",
+     "flow": "本地模型来源和哈希记在 AI 工具配置管理里，换机重下时引用",
+     "source": "pcconfig-facts.md §7"
+    },
+    {
+     "id": "r-ramdisk",
+     "with": "ramdisk-guardian",
+     "direction": "登记",
+     "flow": "Z 盘由内存盘守护每 15 分钟照看；本项目登记盘的用途",
+     "source": "pcconfig-facts.md §4 Z 行"
+    },
+    {
+     "id": "r-agents",
+     "with": "agents、github-local-index",
+     "direction": "一起备份",
+     "flow": "三个核心仓库都在每日加密镜像里，换机最先拉回",
+     "source": "pcconfig-facts.md §7"
+    },
+    {
+     "id": "r-cockpit",
+     "with": "网站驾驶舱（第 2 批）",
+     "direction": "提供",
+     "flow": "看板接口 /computer-access/api/status 给驾驶舱自动任务、备份、待验收、今天的动态、项目现状；网站只负责显示",
+     "source": "docs/runtime/dashboard-api-contract.md"
+    },
+    {
+     "id": "r-google",
+     "with": "google-workspace-direct 技能、Google",
+     "direction": "提供",
+     "flow": "固定账号的 Gmail、云盘、待办、相册授权由本项目持有，技能经本项目的调用层读写",
+     "source": "docs/contracts/pcconfig.google-workspace-provider.md"
+    },
+    {
+     "id": "r-laptop",
+     "with": "笔记本 LAPTOP-E48N0DRJ",
+     "direction": "互为备份",
+     "flow": "笔记本平时远控主机，主机坏了时接 H 取密码、读镜像；巡检平时暂停",
+     "source": "docs/recovery/副驾驶笔记本账本.md"
+    }
+   ],
+   "highlights": [
+    {
+     "id": "h-offline-recovery",
+     "title": "一块外接盘，取回密码、解开镜像。",
+     "screen": "pcconfig-16"
+    },
+    {
+     "id": "h-hardlink-generations",
+     "title": "271 GiB 没复制，只复制了 63 GiB。",
+     "screen": "pcconfig-16"
+    },
+    {
+     "id": "h-freeze-evidence",
+     "title": "卡住的时候，它自己留证据。",
+     "screen": "pcconfig-16"
+    }
+   ],
+   "mentions": [
+    {
+     "target": "/how/#pcconfig",
+     "screen": "pcconfig-01",
+     "text": "在整套系统里的位置 → 怎么协作"
+    },
+    {
+     "target": "/cockpit/#pcconfig",
+     "screen": "pcconfig-01",
+     "text": "现在正不正常 → 驾驶舱"
+    },
+    {
+     "target": "/cockpit/#pcconfig",
+     "screen": "pcconfig-02",
+     "text": "去驾驶舱看"
+    },
+    {
+     "target": "/projects/ramdisk-guardian/",
+     "screen": "pcconfig-05",
+     "text": "内存盘守护"
+    },
+    {
+     "target": "/projects/password-center/",
+     "screen": "pcconfig-05",
+     "text": "BitLocker 恢复密钥都登记在〔密码中心〕里"
+    },
+    {
+     "target": "/rules/charter/#L21",
+     "screen": "pcconfig-05",
+     "text": "规矩出自〔约法 L21〕"
+    },
+    {
+     "target": "/projects/password-center/",
+     "screen": "pcconfig-07",
+     "text": "在盘里的〔密码中心〕自己取出镜像密码——"
+    },
+    {
+     "target": "/projects/remote-control/",
+     "screen": "pcconfig-09",
+     "text": "怎么连、能做什么见〔电脑远程控制〕"
+    },
+    {
+     "target": "/projects/sunshine-remote-streaming/",
+     "screen": "pcconfig-09",
+     "text": "见〔远程电脑串流〕"
+    },
+    {
+     "target": "/projects/chinese-asr/",
+     "screen": "pcconfig-10",
+     "text": "见〔中文语音转写〕"
+    },
+    {
+     "target": "/cockpit/#pcconfig",
+     "screen": "pcconfig-11",
+     "text": "〔驾驶舱〕就读这份说明"
+    },
+    {
+     "target": "/rules/charter/#L28",
+     "screen": "pcconfig-11",
+     "text": "规矩出自〔约法 L28〕"
+    },
+    {
+     "target": "/skills/google-workspace-direct/",
+     "screen": "pcconfig-20",
+     "text": "跟 AI 怎么说见〔google-workspace-direct 技能〕"
+    }
+   ],
+   "live": [
+    {
+     "slot": "run",
+     "meaning": "本项目 27 个自动任务现在正不正常：一盏状态灯加一句话（运行正常／有任务没按时跑／上次运行失败／暂时读不到）",
+     "source": "看板接口 /computer-access/api/status 的 projects 行（本项目）和 automation 块；第三方软件任务 9/29 起单列“电脑上别的软件”，不再算进本项目运行灯（PCConfig 12171683）"
+    },
+    {
+     "slot": "backup",
+     "meaning": "备份“N 项正常 · M 项要看”",
+     "source": "同一接口的 backups 块：日备 36 小时、周备 9 天内有成功算正常"
+    },
+    {
+     "slot": "image",
+     "meaning": "最新系统镜像完成时间（北京时间）",
+     "source": "backups 块里系统镜像那一条的最近成功时间（来自 E:\\Cache\\PCConfig\\SystemImage\\last-run.json）"
+    }
+   ]
+  },
+  "notes": {
+   "merged": [
+    "inventory#1 查看电脑配置、#2 查改动会影响谁 → f-impact-query（同一个 query_project_impact.mjs）",
+    "inventory#3 查运行环境 → f-env-registry",
+    "inventory#4 检查和更新软件 → f-managed-software",
+    "inventory#5 查启动项 → f-startup-snapshot",
+    "inventory#6 查定时工作 → f-task-table（scan_tasks.ps1）和 f-task-catalog",
+    "inventory#11 保留热备恢复线索 → f-guide-publish；#12 保留离线备份 → f-cold-sync",
+    "inventory#13 备份文档、#14 备份下载文件、#15 保留子系统原件（WSL）→ f-docs-downloads",
+    "inventory#16 备份个人资料媒体 → f-personal-backup",
+    "inventory#18 保留系统镜像、#19 核验系统备份 → f-system-image",
+    "inventory#20 重装换机接续 → f-recovery-guide 和 f-restore-order",
+    "inventory#21 副机恢复准备 → f-laptop-role、f-laptop-veeam",
+    "inventory#23 追查突然卡死（Get-MemoryFreezeEvidence）→ f-memory-log",
+    "inventory#24 安排显卡任务 → f-gpu-queue",
+    "inventory#25 远程操作电脑、#26 远程读取文档、#27 登录前维护电脑、#29 恢复远程入口：能力的家在电脑远程控制页（f-files、f-docs、f-boot、f-maintenance、f-tunnel 等）；本页只留 f-remote-service（机器接线：服务、登记、换机重建）",
+    "inventory#28 双机互相连接、facts #74 副机互通（原草稿功能 67“两台电脑互相操作”）：家在电脑远程控制页（f-codex-peer、f-claude-peer）",
+    "原草稿功能 26“备用远程入口”（facts #31 备用入口）：家在电脑远程控制页（f-fallback-entry）",
+    "原草稿已停用里的“Codex 远程公网入口”：家在电脑远程控制页（f-codex-remote）",
+    "原草稿已停用里的“浏览器 AI 自动填表”：填入口密码那部分的家在电脑远程控制页（f-browser-fill）；整张银行卡盲填随旧受保护策略退役，并入 f-r-protected-platform",
+    "facts #34 远程串流体检、串流画面切换：归远程电脑串流项目，本页第 9 屏一句话链过去",
+    "facts #32 看板数据接口、#79 看板接口 → f-dashboard-api；#77 → f-task-catalog；#78 → f-task-table",
+    "facts #8–#12、#14–#16（微信、开发配置、AI 记忆、Codex 对话、电脑使用记录、Steam 外观、密码中心恢复集写 G）→ f-other-backups",
+    "inventory#33 补齐微信窗口 → f-wechat-dual；#34 恢复显示布局 → f-display-recovery；#35 恢复默认声音 → f-audio-speaker；#36 释放卡住按键 → f-desktop-scripts；#37 取手机验证码 → f-sms-code；#38 排查手机互联 → f-xiaomi-share；#39 回收虚拟磁盘空间 → f-docker-wsl-space；#32 收起桌面图标 → f-desktop-icons",
+    "原草稿功能 8“AI 用过哪些技能”（f-ai-usage-ledger）：家在 Codex 备份恢复页（/projects/codex-memory/#f-usage-ledger，那边定为在用），本页“每天的备份”组名旁一句话链过去",
+    "inventory#40 使用密码中心 → f-pc-install（产品本身的家在密码中心页）",
+    "facts #17 密码中心恢复集复制到 H（原草稿功能 9）、facts #62 密码中心自查（原草稿功能 55）：家在密码中心页（f-cold-h、f-daily-check），本页“密码和资料”组名旁一句话链过去；“H 比 G 落后约 4 天、要手动跑”这件事记在 audit.md A4，并提请密码中心页补上",
+    "inventory#41 查收邮件、#42 处理邮件 → f-gmail；#43 找云盘文件、#44 整理分享云文件 → f-gdrive；#45 管理待办 → f-gtasks；#46 查谷歌相册、#47 整理云端照片 → f-gphotos"
+   ],
+   "dropped": [
+    "inventory#7 发现配置漂移、#8 检查恢复准备、#10 检查开发存储：工具已在 348632a2（北京时间 9/28 03:59）随综合自查退役，列在 f-r-governance（已停用），不单独占卡",
+    "inventory#17 保留本地模型：9/26 本人 DU2 决定不再备份，列为 f-r-model-backup（已停用）",
+    "inventory#31 保持鼠标样式：9561183b（北京时间 9/28 01:24）退役，列为 f-r-cursor（已停用）",
+    "旧网站画廊 10 张截图本页只用 2 张：02 BitLocker 条目放第 5 屏，09 动态码窗口放亮点屏。07 验证方式选择在密码中心页第 4 屏已用，本页不再重复放；01 API 密钥分类、03 已连接的手机、06 解锁时长密码中心页已用。08 通行密钥、10 账号验证无痕窗口两张现在哪页都没放，它们讲的是密码中心的验证方式，家在密码中心页，已在 batch2.md 提请密码中心页放回；04、05 剪贴板历史不上本页（owner-decisions 第 1678 行：04 露出半截疑似密钥，L4）",
+    "仓库 docs/design/assets 里 sensitive-data-access-*.png、panel-*.svg 是“设计示意 · 示例状态”的样稿，不是真实截图；授权与状态页的家在第 2 批 /computer-access/，不上本页"
+   ],
+   "unsure": [
+    "替本人口吻写的句子（沿用标杆原稿，上线前请本人过目）：第 7 屏“我决定不演练”；第 11 屏“35 个等我决定”；功能“整机空盘还原”的“我决定不演练”、“自动任务重建表”的“35 个等我定”、“浏览器连接检查”的“我的 Chrome”。",
+    "同一页讲两遍：亮点 1（离线取回）和第 7 屏“实测过”卡片、亮点 3（自己留证据）和第 8 屏“自动留现场”卡片内容几乎一样；第 14 屏七步流程和第 6 屏六张卡也有重叠。标杆已被本人认可，这次没删；若按“不重复介绍”收紧，建议把第 7、8 屏那两张卡缩成一句“见亮点”，要重画这两屏。",
+    "manifest 里 password-center 条目写“未独立成仓，源码在 PCConfig 的 main”，但 PCConfig 提交 5f60e02b 和总索引 repository-paths.json 都显示 9/28 已拆到私有仓库 wlyaaaaa/PasswordCenter；本页按已拆写（“密码中心 9 月 28 日独立成项目”）。",
+    "H 盘已用从 9/28 14:0x 的约 1086 GiB 涨到 19:5x 的 1418 GiB（剩 490 GiB），发生在 14:30–16:36 那次冷备之后。修复对话 9/29 查明多出来的主要是新一条系统镜像链，现剩约 489 GiB（北京 9/29 03:3x Get-Volume 复核一致）；10 月 20 日主动全量时 H 够不够，修复对话没给结论，页面没写。",
+    "演进日期：底稿说提交日期是本机时间，折成北京时间可能晚一天；9 月 27 日、28 日两个节点按北京时间写，个别事项可能差一天。",
+    "“2 层备份”（第 1 屏）与第 3 屏“三块盘＋云端”：标杆原话保留；本人 9/28 说过“EGH 是三块硬盘+云端”，这里 2 层指 G、H 两份备份，第 3–5 屏已说清。",
+    "第 7 屏（电脑坏了怎么办）只为一个标点重画：原图第 3 步“镜像密码”后面跟冒号和字，会被自检当成写了密码而报错，改成破折号，scene 里写明拿原图做底只改这一处。",
+    "CoreGoal“单因子引导”的解释（只要一种本人验证方式就能启动的安装和恢复引导）是从提交标题“Implement one-factor CoreGoal bootstrap”和退役提交说明推出来的，决定记录里没有本人对它的描述。",
+    "第 2、3、10 屏原是复用图，这次只改几处字（第 2 屏去掉已停用的 AI 记忆备份、改 2 小时；第 3 屏云端去掉“AI 记忆”；第 10 屏 11 个软件全名和 GiB），scene 写明拿原图做底只改那几处。",
+    "第 6 屏（复用图）“36 小时没成功就报警”写“每类备份……每天 14:15 检查，哪类 36 小时内没有成功回执，驾驶舱上就亮黄”：14:15 那次查登记过的 11 类（9/29 起加上电脑使用记录、AI 使用小记录，两类只提醒；密码中心恢复集不在其中，冷备回执另列 G、H 日期）；驾驶舱的备份灯另按任务历史判断、覆盖更全，所以“驾驶舱亮黄”大体成立，但“每天 14:15 检查每类”说满了。这次没动复用图；要改就把“每天 14:15 检查”删掉，局部改一处。",
+    "第 1 屏数字卡：本人截图指出第 1 屏数字卡，决定记录只写“数字……写进最终设计”；我理解为缺截至日期，加了“截至 9 月 28 日”。若本人指的是别的（例如卡片空白或数字选得不对），需要再改。"
+   ]
+  }
+ },
+ "source": {
+  "page": "sources/pages/pcconfig/page.json",
+  "sha256": "0c5e918a6a75b5683263272a98f4428fe237332978c29a4f6076be1609beae7e",
+  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+ }
+}
+---
+
+::screen{#pcconfig-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-01",
+  "section": "top",
+  "title": "开头",
+  "scene": "横版：和已通过的第 1 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-01-desktop.png）同一版式、同一幅插画，拿它做底只改四处。①大标题右侧、和标题同一行，放一个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。②四张数字卡片下沿右侧加一行灰色小字“截至 9 月 28 日”。③四张数字卡片和“截至”小字下面、“现在”横条上面，加一条横跨整屏的细长圆角卡片“恢复验到了哪”：左半是绿色小对勾加“已验证：取密码、解镜像、提出文件，逐个核对一致（9 月 22 日，笔记本接 H）”，右半是灰色空心圆加“没验证：整机空盘还原（我决定不演练）”，最右端一个白底细浅绿描边的圆角按钮〔坏了怎么恢复〕；这条卡片要和“1 块盘”那张数字卡上下对得上，读者一眼看出这张卡说的实测只到取文件。为放下这条，插画可以略缩、数字卡可以略矮，数字卡里的字一个不改。④最下面“现在”横条：左边“现在”两个毛笔字，接着三个等宽的浅色圆角空框（每个约占横条宽度的 18%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边的按钮字改成“现在正不正常 → 驾驶舱”。其余字、插画、卡片不动。首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "portrait": "竖版：从上到下——大标题；标题下一行放〔在整套系统里的位置 → 怎么协作〕按钮；介绍段；插画（机箱、外接固态、笔记本、手机、云、翻开的指南）缩到屏宽；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“恢复验到了哪”卡片满宽，里面上下两行：先绿色对勾“已验证……”一行，再灰色空心圆“没验证……”一行，〔坏了怎么恢复〕按钮在卡片底部右对齐；“现在”横条改成竖排：先“现在”二字，下面三个等宽空框上下排（每个满宽、高约一行半字，框里一个字都不画，对应 live 的 run、backup、image 三个槽位，网页程序往里填实时文字），最下面是〔现在正不正常 → 驾驶舱〕按钮。那一排按钮里同样有〔复制 AI 续作说明〕。",
+  "links": [
+   {
+    "text": "在整套系统里的位置 → 怎么协作",
+    "href": "/how/#pcconfig"
+   },
+   {
+    "text": "现在正不正常 → 驾驶舱",
+    "href": "/cockpit/#pcconfig"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/pcconfig/#ai-brief"
+   },
+   {
+    "text": "坏了怎么恢复",
+    "href": "/projects/pcconfig/#recover-steps"
+   }
+  ],
+  "anchors": [],
+  "live": [
+   "run",
+   "backup",
+   "image"
+  ],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑配置与恢复",
+     "align": "center",
+     "size": "large",
+     "row": "hero",
+     "width": "55%"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这台电脑每天自动跑什么、东西备份在哪、坏了怎么恢复，",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "125个自动任务，每个都有人话说明：做什么、怎么停4",
+     "columns": 4,
+     "columns_v": 2,
+     "icons": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至9月28日",
+     "align": "right"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "恢复验到了哪已验证：取密码、解镜像、提出文件，逐个核",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "live_strip",
+     "text_ref": "现在现在正不正常→驾驶舱",
+     "slots": 3,
+     "frame_mode": "plain"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；按文字构图要求调整块顺序：text_ref “恢复验到了哪已验证：取密” 不在顺序位置上",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：和已通过的第 1 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-01-desktop.png）同一版式、同一幅插画，拿它做底只改四处。①大标题右侧、和标题同一行，放一个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。②四张数字卡片下沿右侧加一行灰色小字“截至 9 月 28 日”。③四张数字卡片和“截至”小字下面、“现在”横条上面，加一条横跨整屏的细长圆角卡片“恢复验到了哪”：左半是绿色小对勾加“已验证：取密码、解镜像、提出文件，逐个核对一致（9 月 22 日，笔记本接 H）”，右半是灰色空心圆加“没验证：整机空盘还原（我决定不演练）”，最右端一个白底细浅绿描边的圆角按钮〔坏了怎么恢复〕；这条卡片要和“1 块盘”那张数字卡上下对得上，读者一眼看出这张卡说的实测只到取文件。为放下这条，插画可以略缩、数字卡可以略矮，数字卡里的字一个不改。④最下面“现在”横条：左边“现在”两个毛笔字，接着三个等宽的浅色圆角空框（每个约占横条宽度的 18%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边的按钮字改成“现在正不正常 → 驾驶舱”。其余字、插画、卡片不动。首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+     "portrait": "竖版：从上到下——大标题；标题下一行放〔在整套系统里的位置 → 怎么协作〕按钮；介绍段；插画（机箱、外接固态、笔记本、手机、云、翻开的指南）缩到屏宽；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“恢复验到了哪”卡片满宽，里面上下两行：先绿色对勾“已验证……”一行，再灰色空心圆“没验证……”一行，〔坏了怎么恢复〕按钮在卡片底部右对齐；“现在”横条改成竖排：先“现在”二字，下面三个等宽空框上下排（每个满宽、高约一行半字，框里一个字都不画，对应 live 的 run、backup、image 三个槽位，网页程序往里填实时文字），最下面是〔现在正不正常 → 驾驶舱〕按钮。那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "prose",
+     "action_button",
+     "stat_card",
+     "content_card",
+     "live_strip",
+     "monospace",
+     "inline_link",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "prose",
+     "action_button",
+     "illustration",
+     "stat_card",
+     "content_card",
+     "live_strip",
+     "monospace",
+     "chapter_title",
+     "inline_link",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "首屏定稿“现在”被解析为 card；live_strip 目前只消费 now，需保留定稿卡名与三个 run/backup/image 留空槽位、驾驶舱按钮。",
+    "恢复验到了哪卡内绿色对勾、灰色空心圆及右侧恢复按钮需组件保持，不能只排普通正文。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑配置与恢复",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这台电脑每天自动跑什么、东西备份在哪、坏了怎么恢复，"
+    },
+    {
+     "type": "illustration"
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "125个自动任务，每个都有人话说明：做什么、怎么停4",
+     "columns": 2,
+     "columns_v": 2,
+     "icons": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至9月28日",
+     "align": "right"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "恢复验到了哪已验证：取密码、解镜像、提出文件，逐个核",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "live_strip",
+     "text_ref": "现在现在正不正常→驾驶舱",
+     "slots": 3,
+     "frame_mode": "plain"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；按文字构图要求调整块顺序：text_ref “恢复验到了哪已验证：取密” 不在顺序位置上",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：和已通过的第 1 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-01-desktop.png）同一版式、同一幅插画，拿它做底只改四处。①大标题右侧、和标题同一行，放一个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕。②四张数字卡片下沿右侧加一行灰色小字“截至 9 月 28 日”。③四张数字卡片和“截至”小字下面、“现在”横条上面，加一条横跨整屏的细长圆角卡片“恢复验到了哪”：左半是绿色小对勾加“已验证：取密码、解镜像、提出文件，逐个核对一致（9 月 22 日，笔记本接 H）”，右半是灰色空心圆加“没验证：整机空盘还原（我决定不演练）”，最右端一个白底细浅绿描边的圆角按钮〔坏了怎么恢复〕；这条卡片要和“1 块盘”那张数字卡上下对得上，读者一眼看出这张卡说的实测只到取文件。为放下这条，插画可以略缩、数字卡可以略矮，数字卡里的字一个不改。④最下面“现在”横条：左边“现在”两个毛笔字，接着三个等宽的浅色圆角空框（每个约占横条宽度的 18%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边的按钮字改成“现在正不正常 → 驾驶舱”。其余字、插画、卡片不动。首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+     "portrait": "竖版：从上到下——大标题；标题下一行放〔在整套系统里的位置 → 怎么协作〕按钮；介绍段；插画（机箱、外接固态、笔记本、手机、云、翻开的指南）缩到屏宽；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“恢复验到了哪”卡片满宽，里面上下两行：先绿色对勾“已验证……”一行，再灰色空心圆“没验证……”一行，〔坏了怎么恢复〕按钮在卡片底部右对齐；“现在”横条改成竖排：先“现在”二字，下面三个等宽空框上下排（每个满宽、高约一行半字，框里一个字都不画，对应 live 的 run、backup、image 三个槽位，网页程序往里填实时文字），最下面是〔现在正不正常 → 驾驶舱〕按钮。那一排按钮里同样有〔复制 AI 续作说明〕。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "prose",
+     "action_button",
+     "stat_card",
+     "content_card",
+     "live_strip",
+     "monospace",
+     "inline_link",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "prose",
+     "action_button",
+     "illustration",
+     "stat_card",
+     "content_card",
+     "live_strip",
+     "monospace",
+     "chapter_title",
+     "inline_link",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "首屏定稿“现在”被解析为 card；live_strip 目前只消费 now，需保留定稿卡名与三个 run/backup/image 留空槽位、驾驶舱按钮。",
+    "恢复验到了哪卡内绿色对勾、灰色空心圆及右侧恢复按钮需组件保持，不能只排普通正文。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "125 个　自动任务，每个都有人话说明：做什么、怎么停",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "锁",
+   "source_phrase": "403 GiB　每天 13:30 自动做的加密系统镜像",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "2 层备份　原件每天进机箱里的固态，再同步到外接固态，逐个核对",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "1 块盘　就能取回密码、解开镜像：9 月 22 日在笔记本上实测过",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "main-pcconfig",
+   "source_phrase": "横版：和已通过的第 1 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-01-desktop.png）同一版式、同一幅插画，拿它做底只改四处。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-0fccb035975673fc63f8.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-0fccb035975673fc63f8",
+   "title_text": "电脑配置与恢复",
+   "sha256": "1fcd800b41d916bfcdfad5102ff82ba45159f043be7d1c2b27cbf0c54b2f49f4",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 电脑配置与恢复
+
+〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕
+
+这台电脑每天自动跑什么、东西备份在哪、坏了怎么恢复，全由它管。它每天把原件备份到两块固态硬盘，再做一份加密的系统镜像；电脑坏了，接上任意一块备份盘，就能在另一台电脑上取回密码、解开镜像，照着指南还原；离线取密码需有效匹配的恢复码。
+
+- **125 个**　自动任务，每个都有人话说明：做什么、怎么停
+- **403 GiB**　每天 13:30 自动做的加密系统镜像
+- **2 层备份**　原件每天进机箱里的固态，再同步到外接固态，逐个核对
+- **1 块盘**　就能取回密码、解开镜像：9 月 22 日在笔记本上实测过
+
+**恢复验到了哪**　已验证：取密码、解镜像、提出文件，逐个核对一致（9 月 22 日，笔记本接 H）　没验证：整机空盘还原（我决定不演练）　〔坏了怎么恢复〕
+
+截至 9 月 28 日
+
+**现在**　〔现在正不正常 → 驾驶舱〕
+
+::screen{#pcconfig-07 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-07",
+  "section": "usage",
+  "title": "电脑坏了怎么办",
+  "scene": "横版：拿已通过的第 5 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-05-desktop.png）做底，只改两处：①第 3 步“取出镜像密码”后面那个冒号换成破折号“——”；②第 1 步“接上 G 或 H”后面补上括号“（机箱里和外接的两块备份盘）”，字多了这一步可以多占一行。其余字、插画、版式一点不动。左边七步弯弯的小路，右边三张小卡片。 ③第 6 步改成：“第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。”字多了这一步可以多占一行。",
+  "portrait": "竖版：标题；七步改成一条从上到下的竖路，每步一行（编号圆圈、小图标、字），1、3 步旁边画小手；下面三张小卡片（实测过、没演练、顺带保住）上下排、满宽。",
+  "links": [
+   {
+    "text": "密码中心",
+    "href": "/projects/password-center/"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "recover-steps",
+    "text": "电脑坏了怎么办"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑坏了怎么办",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1找一台能用的Windows电脑，接上G或H（机箱里",
+     "direction": "vertical",
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "path": "curved"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "实测过9月22日在笔记本上接H，用手机验证码打开密码",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 5 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-05-desktop.png）做底，只改两处：①第 3 步“取出镜像密码”后面那个冒号换成破折号“——”；②第 1 步“接上 G 或 H”后面补上括号“（机箱里和外接的两块备份盘）”，字多了这一步可以多占一行。其余字、插画、版式一点不动。左边七步弯弯的小路，右边三张小卡片。 ③第 6 步改成：“第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。”字多了这一步可以多占一行。",
+     "portrait": "竖版：标题；七步改成一条从上到下的竖路，每步一行（编号圆圈、小图标、字），1、3 步旁边画小手；下面三张小卡片（实测过、没演练、顺带保住）上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "numbered_steps",
+     "content_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "numbered_steps",
+     "icon",
+     "content_card",
+     "chapter_title",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "恢复七步的弯弯小路、1和3步小手不由现有直线 flow 实现。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑坏了怎么办",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1找一台能用的Windows电脑，接上G或H（机箱里",
+     "direction": "vertical",
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "path": "curved"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "实测过9月22日在笔记本上接H，用手机验证码打开密码",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 5 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-05-desktop.png）做底，只改两处：①第 3 步“取出镜像密码”后面那个冒号换成破折号“——”；②第 1 步“接上 G 或 H”后面补上括号“（机箱里和外接的两块备份盘）”，字多了这一步可以多占一行。其余字、插画、版式一点不动。左边七步弯弯的小路，右边三张小卡片。 ③第 6 步改成：“第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。”字多了这一步可以多占一行。",
+     "portrait": "竖版：标题；七步改成一条从上到下的竖路，每步一行（编号圆圈、小图标、字），1、3 步旁边画小手；下面三张小卡片（实测过、没演练、顺带保住）上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "numbered_steps",
+     "content_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "numbered_steps",
+     "icon",
+     "content_card",
+     "chapter_title",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "找一台能用的 Windows 电脑，接上 G 或 H（机箱里和外接的两块备份盘），自己解锁。",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "打开 Codex，说“我要换机恢复”。",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "在盘里的〔密码中心〕自己取出镜像密码——不用先登记这台电脑；离线取密码需有效匹配的恢复码。",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/启动U盘.png",
+   "fallback": false,
+   "semantic_status": "round3_exact_request_theme_prepared",
+   "key": "启动U盘",
+   "source_phrase": "横版：拿已通过的第 5 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-05-desktop.png）做底，只改两处：①第 3 步“取出镜像密码”后面那个冒号换成破折号“——”；②第 1 步“接上 G 或 H”后面补上括号“（机箱里和外接的两块备份盘）”，字多了这一步可以多占一行。其余字、插画、版式一点不动。左边七步弯弯的小路，右边三张小卡片。 ③第 6 步改成：“第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。”字多了这一步可以多占一行。",
+   "sha256": "d2f0482b2f2c9952d1494d120c1a38959842ef71a1b1e68f28fa1157190f02c1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "外接硬盘",
+   "source_phrase": "用它把 Windows 和 C 盘还原到新硬盘。",
+   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件夹同步",
+   "source_phrase": "第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。",
+   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "再打开 Codex，说“这是新电脑，继续恢复”：按顺序装回软件、重建 33 个必需的自动任务，最后装本地 AI。",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-c6fb3995f9a727621f6c.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-07-v.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-c6fb3995f9a727621f6c",
+   "title_text": "电脑坏了怎么办",
+   "sha256": "cc64b0c96c85f96aa3888a279c039b3dba7f02a009593fa3d980ff2c2fdfcf49",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 电脑坏了怎么办
+
+1. 找一台能用的 Windows 电脑，接上 G 或 H（机箱里和外接的两块备份盘），自己解锁。
+2. 打开 Codex，说“我要换机恢复”。
+3. 在盘里的〔密码中心〕自己取出镜像密码——不用先登记这台电脑；离线取密码需有效匹配的恢复码。
+4. 做一个启动 U 盘（Veeam 恢复盘）。
+5. 用它把 Windows 和 C 盘还原到新硬盘。
+6. 第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。
+7. 再打开 Codex，说“这是新电脑，继续恢复”：按顺序装回软件、重建 33 个必需的自动任务，最后装本地 AI。
+
+**实测过**　9 月 22 日在笔记本上接 H，用手机验证码打开密码中心、取到密码，Veeam（备份软件）真的解密了镜像、提出文件，逐个核对一致。
+
+**没演练**　整台电脑空盘还原——我决定不演练，所以还没有“要多久”的实测数。
+
+**顺带保住**　镜像里带着三个核心仓库没推送的提交和没提交的修改，已导出 8381 个文件核对过。
+
+::screen{#pcconfig-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-02",
+  "section": "usage",
+  "title": "每天自动发生什么",
+  "scene": "横版：沿用已通过第 2 屏的画法（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-02-desktop.png）：绿色丝带时间轴，上下错开的小旗，从 00:10 到 18:17 共 11 面。最左边新加一面“00:10”小旗，下面的字是“统计前一天我纠正 AI 的次数”，小旗里画一个小计数器的水彩图标；其余 10 面小旗的字、图标照 text（10:45 已装软件清单、14:30 约 2 小时逐个核对），整条时间轴按 11 面重新均分。下面“一直在跑”“每周”两张卡，字按 text；“一直在跑”字多，卡片加高、字号不缩小；“每周”里的“个人健康”画成绿色链接样式。最下面一条链接。",
+  "portrait": "竖版：标题；时间轴改成竖的——左边一条绿色竖丝带，从上到下按时间排 11 个节点（00:10 在最上），每个节点右边是时间（粗体绿色）、小水彩图标和一两行字；下面“一直在跑”“每周”两张卡上下排、满宽；最下面一条链接横条。",
+  "links": [
+   {
+    "text": "去驾驶舱看",
+    "href": "/cockpit/#pcconfig"
+   },
+   {
+    "text": "个人健康",
+    "href": "/projects/personal-health/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每天自动发生什么（北京时间）",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "00:10",
+     "direction": "horizontal",
+     "columns": 5,
+     "connector": "ribbon",
+     "illustration": "above_card",
+     "icons": [
+      "_library/icons/日历时钟.png",
+      "_library/icons/微信标志.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/icons/云.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/icons/版本循环文件.png",
+      "_library/round3/clean-assets/png/12-文件核验-clean.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/icons/钥匙.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "一直在跑",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "always",
+     "width": "50%"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "每周",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "always",
+     "width": "50%"
+    },
+    {
+     "type": "prose",
+     "text_ref": "每个任务现在正不正常：去驾驶舱看"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：沿用已通过第 2 屏的画法（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-02-desktop.png）：绿色丝带时间轴，上下错开的小旗，从 00:10 到 18:17 共 11 面。最左边新加一面“00:10”小旗，下面的字是“统计前一天我纠正 AI 的次数”，小旗里画一个小计数器的水彩图标；其余 10 面小旗的字、图标照 text（10:45 已装软件清单、14:30 约 2 小时逐个核对），整条时间轴按 11 面重新均分。下面“一直在跑”“每周”两张卡，字按 text；“一直在跑”字多，卡片加高、字号不缩小；“每周”里的“个人健康”画成绿色链接样式。最下面一条链接。",
+     "portrait": "竖版：标题；时间轴改成竖的——左边一条绿色竖丝带，从上到下按时间排 11 个节点（00:10 在最上），每个节点右边是时间（粗体绿色）、小水彩图标和一两行字；下面“一直在跑”“每周”两张卡上下排、满宽；最下面一条链接横条。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "icon",
+     "timeline",
+     "inline_link",
+     "bullet_list",
+     "content_card"
+    ],
+    "portrait_component_order": [
+     "timeline",
+     "icon",
+     "inline_link",
+     "chapter_title",
+     "bullet_list",
+     "content_card"
+    ]
+   },
+   "pending_requirements": [
+    "十节点绿色丝带时间轴需小旗上下错开；现有 timeline 为同排节点，交组件族恢复交错旗帜。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每天自动发生什么（北京时间）",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "00:10",
+     "direction": "vertical",
+     "columns": 1,
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/日历时钟.png",
+      "_library/icons/微信标志.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/icons/云.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/icons/版本循环文件.png",
+      "_library/round3/clean-assets/png/12-文件核验-clean.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/icons/钥匙.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "一直在跑",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "每周",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "prose",
+     "text_ref": "每个任务现在正不正常：去驾驶舱看"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：沿用已通过第 2 屏的画法（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-02-desktop.png）：绿色丝带时间轴，上下错开的小旗，从 00:10 到 18:17 共 11 面。最左边新加一面“00:10”小旗，下面的字是“统计前一天我纠正 AI 的次数”，小旗里画一个小计数器的水彩图标；其余 10 面小旗的字、图标照 text（10:45 已装软件清单、14:30 约 2 小时逐个核对），整条时间轴按 11 面重新均分。下面“一直在跑”“每周”两张卡，字按 text；“一直在跑”字多，卡片加高、字号不缩小；“每周”里的“个人健康”画成绿色链接样式。最下面一条链接。",
+     "portrait": "竖版：标题；时间轴改成竖的——左边一条绿色竖丝带，从上到下按时间排 11 个节点（00:10 在最上），每个节点右边是时间（粗体绿色）、小水彩图标和一两行字；下面“一直在跑”“每周”两张卡上下排、满宽；最下面一条链接横条。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "icon",
+     "timeline",
+     "inline_link",
+     "bullet_list",
+     "content_card"
+    ],
+    "portrait_component_order": [
+     "timeline",
+     "icon",
+     "inline_link",
+     "chapter_title",
+     "bullet_list",
+     "content_card"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": ":30　微信聊天备份",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": ":45　已装软件清单",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": ":40　电脑使用记录备份",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云下载",
+   "source_phrase": ":05–12:35　开发配置、Codex 对话、文档、下载备份",
+   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/云.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云",
+   "source_phrase": ":00　开发配置传 Google 云盘",
+   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "锁",
+   "source_phrase": ":30　加密系统镜像（约 25 分钟）",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": ":15　发布最新的换机恢复指南",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": ":30　同步到外接盘（约 2 小时，逐个核对）",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": ":10　照片视频和个人资料备份",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/钥匙.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "钥匙",
+   "source_phrase": ":17　密码中心自查",
+   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-e1b5c254742b22d0842c.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-e1b5c254742b22d0842c",
+   "title_text": "每天自动发生什么（北京时间）",
+   "sha256": "815fea34ce6e1a859226afb5c1466f5738984e3f62a552855531a500e838956b",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 每天自动发生什么（北京时间）
+
+- 00:10　统计前一天我纠正 AI 的次数
+- 09:30　微信聊天备份
+- 10:45　已装软件清单
+- 11:40　电脑使用记录备份
+- 12:05–12:35　开发配置、Codex 对话、文档、下载备份
+- 13:00　开发配置传 Google 云盘
+- 13:30　加密系统镜像（约 25 分钟）
+- 14:15　发布最新的换机恢复指南
+- 14:30　同步到外接盘（约 2 小时，逐个核对）
+- 17:10　照片视频和个人资料备份
+- 18:17　密码中心自查
+
+**一直在跑**：每分钟记一次各程序的流量和代理套餐用量；每 5 分钟看一眼三块屏幕和小米妙享；每 10 秒看一次有没有程序卡住；每 15 分钟从外面打开一次驾驶舱，连续 10 分钟打不开就发邮件给我；每小时看一次各盘空闲，第 50 分钟把过期的 AI 缓存放进回收站，回收站 0、6、12、18 点照常清、哪块盘快满了当场清；显卡排队服务
+
+**每周**：周一 11:00 微信备份传云盘；周日 23:30 查一遍软件版本；手环数据每 7 天自动刷新一次（〔个人健康〕）
+
+每个任务现在正不正常：〔去驾驶舱看〕
+
+::screen{#pcconfig-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-03",
+  "section": "usage",
+  "title": "三块盘：一份原件，两份备份",
+  "scene": "横版：拿已通过的第 3 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-03-desktop.png）做底，只改右上角云旁那段字：删掉“AI 记忆、”四个字（AI 记忆备份 9 月 28 日已停用）。其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字。",
+  "portrait": "竖版：标题；三块盘改成从上到下排：E 盘插画 → 向下的绿箭头（写“E→G：每天 09:30–17:10”）→ G 盘插画 → 向下箭头（写“G→H：每天 14:30 和每次登录”）→ H 盘插画；每块盘插画右边紧跟它的说明卡；云和它的说明放在最上面标题下；最下面一行小字。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "三块盘：一份原件，两份备份",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "prose",
+     "text_ref": "E→G：每天09:30–17:10G→H：每天14:"
+    },
+    {
+     "type": "illustration",
+     "size": "banner"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "E盘·原件（4TB固态，和系统盘C是同一块）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "drives",
+     "width": "33%"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "G盘·第一份备份（机箱里的2TB固态）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "drives",
+     "width": "33%"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "H盘·第二份备份（外接2TB固态，平时一直插着）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "drives",
+     "width": "34%"
+    },
+    {
+     "type": "notice",
+     "text_ref": "云端：开发配置每天、微信备份每周传Google云盘；"
+    },
+    {
+     "type": "prose",
+     "text_ref": "不备份的：D盘（游戏，重装即可）、V盘（开发盘，代码"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 3 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-03-desktop.png）做底，只改右上角云旁那段字：删掉“AI 记忆、”四个字（AI 记忆备份 9 月 28 日已停用）。其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字。",
+     "portrait": "竖版：标题；三块盘改成从上到下排：E 盘插画 → 向下的绿箭头（写“E→G：每天 09:30–17:10”）→ G 盘插画 → 向下箭头（写“G→H：每天 14:30 和每次登录”）→ H 盘插画；每块盘插画右边紧跟它的说明卡；云和它的说明放在最上面标题下；最下面一行小字。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "prose",
+     "content_card"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "prose",
+     "chapter_title",
+     "content_card"
+    ]
+   },
+   "pending_requirements": [
+    "E→G→H 盘图和两条粗箭头须与各盘说明一一对应，竖版云端在标题下、三盘图逐卡旁放；现有整屏插画无法拆成三盘逐卡绑定。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "三块盘：一份原件，两份备份",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "prose",
+     "text_ref": "E→G：每天09:30–17:10G→H：每天14:"
+    },
+    {
+     "type": "illustration",
+     "size": "banner"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "E盘·原件（4TB固态，和系统盘C是同一块）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "G盘·第一份备份（机箱里的2TB固态）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "H盘·第二份备份（外接2TB固态，平时一直插着）",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "notice",
+     "text_ref": "云端：开发配置每天、微信备份每周传Google云盘；"
+    },
+    {
+     "type": "prose",
+     "text_ref": "不备份的：D盘（游戏，重装即可）、V盘（开发盘，代码"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 3 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-03-desktop.png）做底，只改右上角云旁那段字：删掉“AI 记忆、”四个字（AI 记忆备份 9 月 28 日已停用）。其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字。",
+     "portrait": "竖版：标题；三块盘改成从上到下排：E 盘插画 → 向下的绿箭头（写“E→G：每天 09:30–17:10”）→ G 盘插画 → 向下箭头（写“G→H：每天 14:30 和每次登录”）→ H 盘插画；每块盘插画右边紧跟它的说明卡；云和它的说明放在最上面标题下；最下面一行小字。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "prose",
+     "content_card"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "prose",
+     "chapter_title",
+     "content_card"
+    ]
+   },
+   "pending_requirements": [
+    "E→G→H 盘图和两条粗箭头须与各盘说明一一对应，竖版云端在标题下、三盘图逐卡旁放；现有整屏插画无法拆成三盘逐卡绑定。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/硬盘备份.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "硬盘备份",
+   "source_phrase": "其余一点不动：E→G→H 三块盘的水彩插画和两条粗绿箭头，右上云；下面三张说明卡；最下一行小字。",
+   "sha256": "03905e7132eec0e7e9dc7a0b4d38523e9d6c47be69ee8b66ba47a0f3512d251b",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "pcconfig/pcconfig-03-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-03-v.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-b00d7f59634d783b64da",
+   "title_text": "三块盘：一份原件，两份备份",
+   "sha256": "8c2d3f696c45541c9a3e9315985eaaaaaf90a5cf9e27130455afd74ff6001204",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 三块盘：一份原件，两份备份
+
+E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
+
+**E 盘 · 原件**（4 TB 固态，和系统盘 C 是同一块）
+照片视频、个人资料、文档、各个项目和三个核心仓库的原件都在这里。不整盘备份，按类别每天复制到 G。
+
+**G 盘 · 第一份备份**（机箱里的 2 TB 固态）
+各类资料每天陆续复制进来；13:30 做加密系统镜像，按 3 个备份日保留。
+
+**H 盘 · 第二份备份**（外接 2 TB 固态，平时一直插着）
+每天 14:30 和每次开机登录时跟 G 同步，逐个文件回读核对；系统镜像只同步 G 上当前这一套完整镜像，不另留上一代。
+
+**云端**：开发配置每天、微信备份每周传 Google 云盘；三个核心仓库、密码中心的代码在私人 GitHub。
+
+不备份的：D 盘（游戏，重装即可）、V 盘（开发盘，代码都在 GitHub）、Z 盘（内存盘，只放可丢的缓存）。三个核心仓库＝电脑配置、规则库、仓库总表。
+
+::screen{#pcconfig-06 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-06",
+  "section": "usage",
+  "title": "备份怎么保证靠得住",
+  "scene": "横版：已通过，原样复用。六张两列三行的卡片，最下面一条实测数字。",
+  "portrait": "竖版：标题和右上插画上下排；六张卡片改成一列，每张满宽（左图标、右字）；最下面实测数字那条改成两行。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-04-desktop.png"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "备份怎么保证靠得住",
+     "align": "center",
+     "size": "large",
+     "row": "intro",
+     "width": "65%"
+    },
+    {
+     "type": "illustration",
+     "row": "intro",
+     "width": "35%"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "复制完不算，核对完才算。每个文件复制后回读核对；微信",
+     "columns": 2,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "notice",
+     "text_ref": "9月27日那次同步到外接盘，逐个核对一致：个人资料2"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。六张两列三行的卡片，最下面一条实测数字。",
+     "portrait": "竖版：标题和右上插画上下排；六张卡片改成一列，每张满宽（左图标、右字）；最下面实测数字那条改成两行。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "bullet_list",
+     "icon",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "content_card",
+     "chapter_title",
+     "bullet_list",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "备份怎么保证靠得住",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "复制完不算，核对完才算。每个文件复制后回读核对；微信",
+     "columns": 2,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "notice",
+     "text_ref": "9月27日那次同步到外接盘，逐个核对一致：个人资料2"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。六张两列三行的卡片，最下面一条实测数字。",
+     "portrait": "竖版：标题和右上插画上下排；六张卡片改成一列，每张满宽（左图标、右字）；最下面实测数字那条改成两行。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "bullet_list",
+     "icon",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "content_card",
+     "chapter_title",
+     "bullet_list",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "复制完不算，核对完才算。　每个文件复制后回读核对；微信聊天逐个文件重算 SHA-256（内容指纹），大小时间一样、内容变了也查得出。",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "镜像整代换，不留半截。　系统镜像先整条复制到临时位置、逐个文件核对，确认来源没变，才一下切换过去；失败就留着旧的。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "删了能后悔 30 天。　E 上删掉的照片视频和个人资料，在 G 和 H 的待删区各留 30 天，满了整批清。",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "锁",
+   "source_phrase": "盘没接上，不算删了。　盘没插、锁着、读不全，一律不跟着删，只报告。",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "写之前先认盘。　写 G、H 之前核对盘的身份、BitLocker（Windows 整盘加密）状态、剩余空间，防止写错盘。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "36 小时没成功就报警。　每类备份每次都写回执；每天 14:15 检查，哪类 36 小时内没有成功回执，驾驶舱上就亮黄。",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-9724920e1e6c9b",
+   "source_phrase": "横版：已通过，原样复用。六张两列三行的卡片，最下面一条实测数字。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-520520f493b37c7e1cce.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-06-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-520520f493b37c7e1cce",
+   "title_text": "备份怎么保证靠得住",
+   "sha256": "fcf45aa438b86e43adb3203bf2eefbe7a7505c3721d1d16b7bfbbd86dd8890a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 备份怎么保证靠得住
+
+- **复制完不算，核对完才算。**　每个文件复制后回读核对；微信聊天逐个文件重算 SHA-256（内容指纹），大小时间一样、内容变了也查得出。
+- **镜像整代换，不留半截。**　系统镜像先整条复制到临时位置、逐个文件核对，确认来源没变，才一下切换过去；失败就留着旧的。
+- **删了能后悔 30 天。**　E 上删掉的照片视频和个人资料，在 G 和 H 的待删区各留 30 天，满了整批清。
+- **盘没接上，不算删了。**　盘没插、锁着、读不全，一律不跟着删，只报告。
+- **写之前先认盘。**　写 G、H 之前核对盘的身份、BitLocker（Windows 整盘加密）状态、剩余空间，防止写错盘。
+- **36 小时没成功就报警。**　每类备份每次都写回执；每天 14:15 检查，哪类 36 小时内没有成功回执，驾驶舱上就亮黄。
+
+9 月 27 日那次同步到外接盘，逐个核对一致：个人资料 280333 个文件 · 照片视频 19267 个 · 微信 146091 个 · 文档 93348 个
+
+::screen{#pcconfig-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-04",
+  "section": "usage",
+  "title": "每块盘干什么（一）：机箱里的盘",
+  "scene": "横版：左上标题。上面约三分之二高是一张四行五列的水彩风表格（圆角外框、细浅绿格线、表头行浅绿底）：第一列是盘（每格左边一个小水彩硬盘图标：C 和 E 画成同一根 NVMe 固态上的两个分区，D 画成机械硬盘，G 画成机箱里的 NVMe 固态），后四列是“放什么”“谁往里写、什么时候”“怎么核对”“坏了怎么办”。下面约三分之一高左边是一张横向条形图卡片“G 盘里都放了什么”：13 条水平绿色水彩条从长到短排，条头写名称、条尾写数字（单位都是 GiB）；右边窄卡片放最后那一句小字。表格里的字较多，字号用正文小号，行距要松，不许挤。",
+  "portrait": "竖版：标题；表格改成一盘一张卡片，四张卡片从上到下（C、E、D、G），每张卡片第一行是盘名和容量，下面四行依次是“放什么／谁往里写、什么时候／怎么核对／坏了怎么办”，每行前面是灰色小标签；条形图卡片满宽放在最后，条改成满宽的横条；右侧那一句小字放在条形图下面。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "disks",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每块盘干什么（一）：机箱里的盘",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "table",
+     "text_ref": "盘放什么谁往里写、什么时候怎么核对坏了怎么办C盘59",
+     "variant": "disk_cards",
+     "row_icons": "auto"
+    },
+    {
+     "type": "chart",
+     "text_ref": "G盘里都放了什么（GiB，9月28日）",
+     "chart_type": "bar"
+    },
+    {
+     "type": "notice",
+     "text_ref": "C、E同在一块盘上：这块盘坏了，靠G、H上的镜像和备"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。上面约三分之二高是一张四行五列的水彩风表格（圆角外框、细浅绿格线、表头行浅绿底）：第一列是盘（每格左边一个小水彩硬盘图标：C 和 E 画成同一根 NVMe 固态上的两个分区，D 画成机械硬盘，G 画成机箱里的 NVMe 固态），后四列是“放什么”“谁往里写、什么时候”“怎么核对”“坏了怎么办”。下面约三分之一高左边是一张横向条形图卡片“G 盘里都放了什么”：13 条水平绿色水彩条从长到短排，条头写名称、条尾写数字（单位都是 GiB）；右边窄卡片放最后那一句小字。表格里的字较多，字号用正文小号，行距要松，不许挤。",
+     "portrait": "竖版：标题；表格改成一盘一张卡片，四张卡片从上到下（C、E、D、G），每张卡片第一行是盘名和容量，下面四行依次是“放什么／谁往里写、什么时候／怎么核对／坏了怎么办”，每行前面是灰色小标签；条形图卡片满宽放在最后，条改成满宽的横条；右侧那一句小字放在条形图下面。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "table",
+     "chart",
+     "content_card",
+     "prose"
+    ],
+    "portrait_component_order": [
+     "table",
+     "content_card",
+     "prose",
+     "chart",
+     "chapter_title"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每块盘干什么（一）：机箱里的盘",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "table",
+     "text_ref": "盘放什么谁往里写、什么时候怎么核对坏了怎么办C盘59",
+     "variant": "disk_cards",
+     "row_icons": "auto"
+    },
+    {
+     "type": "chart",
+     "text_ref": "G盘里都放了什么（GiB，9月28日）",
+     "chart_type": "bar"
+    },
+    {
+     "type": "notice",
+     "text_ref": "C、E同在一块盘上：这块盘坏了，靠G、H上的镜像和备"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。上面约三分之二高是一张四行五列的水彩风表格（圆角外框、细浅绿格线、表头行浅绿底）：第一列是盘（每格左边一个小水彩硬盘图标：C 和 E 画成同一根 NVMe 固态上的两个分区，D 画成机械硬盘，G 画成机箱里的 NVMe 固态），后四列是“放什么”“谁往里写、什么时候”“怎么核对”“坏了怎么办”。下面约三分之一高左边是一张横向条形图卡片“G 盘里都放了什么”：13 条水平绿色水彩条从长到短排，条头写名称、条尾写数字（单位都是 GiB）；右边窄卡片放最后那一句小字。表格里的字较多，字号用正文小号，行距要松，不许挤。",
+     "portrait": "竖版：标题；表格改成一盘一张卡片，四张卡片从上到下（C、E、D、G），每张卡片第一行是盘名和容量，下面四行依次是“放什么／谁往里写、什么时候／怎么核对／坏了怎么办”，每行前面是灰色小标签；条形图卡片满宽放在最后，条改成满宽的横条；右侧那一句小字放在条形图下面。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "table",
+     "chart",
+     "content_card",
+     "prose"
+    ],
+    "portrait_component_order": [
+     "table",
+     "content_card",
+     "prose",
+     "chart",
+     "chapter_title"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-b000122009331d61164e.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-b000122009331d61164e",
+   "title_text": "每块盘干什么（一）：机箱里的盘",
+   "sha256": "dc3e6b952d4cf8aece9db73cd16603e358938110b4e63610cb151e23d277a375",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 每块盘干什么（一）：机箱里的盘
+
+| 盘 | 放什么 | 谁往里写、什么时候 | 怎么核对 | 坏了怎么办 |
+|---|---|---|---|---|
+| **C 盘** 599 GiB，已用 488 GiB · 和 E 同一块 4 TB 固态 · BitLocker 开 | Windows 和软件；分页文件 | 每天 13:30 Veeam 把 Windows 必需分区和 C 做进加密镜像，写到 G | 看 Veeam 自己的完成记录和整条镜像链是否完整；每天的增量 31–47 GiB，几乎都来自 C | 用 G 或 H 上的镜像加 Veeam 恢复盘还原到新硬盘（整机还原没实测） |
+| **E 盘** 3214 GiB，已用 1491 GiB · BitLocker 开 | 原件：个人资料、图片、视频、音乐、媒体五个资料目录，文档、下载，三个核心仓库，各个项目，运行数据，本地模型 | 不整盘备份：09:30–17:10 各任务按类别复制到 G；三个核心仓库随镜像走；有 GitHub 的项目靠 GitHub；模型不备份 | 每个任务写回执；每天 14:15 查登记过的 11 类备份 36 小时内有没有成功（Steam 外观 9 天） | 从 G 或 H 按类别挑着拿回原样的文件，不整包覆盖；模型按来源重下并核对哈希 |
+| **D 盘** 3726 GiB 机械盘 · BitLocker 关 | 游戏 | 不备份 | — | 重装游戏 |
+| **G 盘** 1908 GiB，已用 916 GiB · 机箱里的 2 TB 固态 · BitLocker 开 | 每天的第一份备份；只有这一份原件的旧项目和软件文件夹（20_Projects、70_Software）；根目录一份独立的密码中心和《换机恢复》 | 各备份任务 09:30–17:10 陆续写；系统镜像 13:30；恢复指南 14:15 | 写之前核对盘的身份、卷标和格式；每类一份回执；镜像由 Veeam 自己查健康 | 用 H：H 上有同样的各类备份和当前这一套完整镜像 |
+
+**G 盘里都放了什么**（GiB，9 月 28 日）
+系统镜像 403.2 · 微信 147.4 · 照片视频 140.5 · 文档 92.2 · 个人资料 75.9 · 电脑使用记录 51.5 · 只在 G 上的软件 37.7 · 待删区 26.4 · 恢复材料 22.0 · AI 记忆等 16.7 · 开发配置 14.7 · 下载 14.1 · 只在 G 上的项目 9.2
+
+C、E 同在一块盘上：这块盘坏了，靠 G、H 上的镜像和备份一起恢复。
+
+::screen{#pcconfig-05 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-05",
+  "section": "usage",
+  "title": "每块盘干什么（二）：外接盘、U 盘、虚拟盘和云端",
+  "scene": "横版：左上标题。左边约 68% 宽是和上一屏同一种样式的表格（五行：H、F、V、Z、云端；第一列每格一个小水彩图标：外接 USB 固态连着线、U 盘、虚拟盘（一个画在大硬盘里的小盘）、内存条、云），列名和上一屏一样。右边约 30% 宽：上面是一个带 1px 浅灰细边框、圆角 8px 的空白截图位，宽约屏宽 28%、高宽比 3:2（拼页时原样贴真实截图，框里什么都不画），截图位下面一行灰色小字是图注；截图位上方一行小字“BitLocker 恢复密钥都登记在〔密码中心〕里”。最下面一条横跨整屏的浅绿细卡片放“删了的也跟着删”那句和链接。",
+  "portrait": "竖版按实际阅读顺序分4张，文件名顺序由显式portrait_order登记为v、v3、v4、v2；构建器已接入明确顺序，生产方必须先完成新增分张登记和交付，不能直接按旧数字顺序拼接。第1张（pcconfig-05-v.png）：仅原文标题、表格字段和H/F两张盘卡原文，顺序不变；卡片整宽上下排，小图标只靠卡名，不占一整列，字段和说明使用卡内整宽，不留截图空框。第2张（新增pcconfig-05-v3.png）：仅原文V/Z/云端三张盘卡原文，顺序不变；不重复整屏大标题，不留截图空框。第3张（新增pcconfig-05-v4.png）：仅原文“BitLocker 恢复密钥都登记在〔密码中心〕里”、真实BitLocker条目截图空位及原图注。空框保持1806:1213的宽高比（约1.49:1），示例宽880、高约591源像素，图注在下；不压扁、缩窄截图来塞正文。第4张（现有正确pcconfig-05-v2.png）：仅原文“删了的也跟着删”整条尾卡，原文件路径、原字节、原审稿绑定均保留，不生图、不重审、不改编号或覆盖。正文参考40源像素，在941宽显示到370时约15.7px；这只是AI空间建议，不改原文字或实际数据，也不把张数当硬门。每张使用原生9:16画布；不重复整屏标题，不新增正文或空框填剩余空间，外部连续空白由现役crop_box处理，保留源分辨率及全宽。\n本轮仅指定本张排版恢复（其它分张原约定保护）：本屏真实顺序v、v3、v4、v2；仅重排第1分张v，在941×1672正常竖画布保留全部原标题及五个表字段一次，H/F两张卡整宽上下排。H/F每张卡的盘属性、放什么、谁往里写什么时候、怎么核对、坏了怎么办按原表顺序整宽下排；小水彩USB硬盘与U盘图标只在盘名旁，不占文字列。所有数字、路径、同步待验收、F救急说明一字不删。正常正文约36源像素、行距44、净宽860，标题可自然两行。无截图框，无V/Z/云端、BitLocker条目和尾卡文字。保持白底纯绿主色、深蓝灰正文、细浅绿描边圆角卡片。",
+  "links": [
+   {
+    "text": "内存盘守护",
+    "href": "/projects/ramdisk-guardian/"
+   },
+   {
+    "text": "密码中心",
+    "href": "/projects/password-center/"
+   },
+   {
+    "text": "约法 L21",
+    "href": "/rules/charter/#L21"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [
+   {
+    "file": "sources/assets/_references/68d3a8284ed952021ddba1fdb0b97f566e28d40d478789f2ef63f0eb79ef6b6a.png",
+    "where": "右边约 30% 宽、表格右侧上方，带 1px 浅灰细边框的 3:2 空位",
+    "caption": "只显示条目类型",
+    "crop_h": [
+     60,
+     127,
+     1261,
+     1213
+    ]
+   }
+  ],
+  "chain": "disks",
+  "reuse": "",
+  "portrait_order": [
+   "pcconfig-05-v.png",
+   "pcconfig-05-v3.png",
+   "pcconfig-05-v4.png",
+   "pcconfig-05-v2.png"
+  ]
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每块盘干什么（二）：外接盘、U盘、虚拟盘和云端",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "table",
+     "text_ref": "盘放什么谁往里写、什么时候怎么核对坏了怎么办H盘外接",
+     "variant": "disk_cards",
+     "row_icons": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "BitLocker恢复密钥都登记在密码中心里"
+    },
+    {
+     "type": "screenshot",
+     "ratio": "1806:1213"
+    },
+    {
+     "type": "prose",
+     "text_ref": "只显示条目类型"
+    },
+    {
+     "type": "notice",
+     "text_ref": "删了的也跟着删：照片视频、个人资料，以及G上只有一份"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。左边约 68% 宽是和上一屏同一种样式的表格（五行：H、F、V、Z、云端；第一列每格一个小水彩图标：外接 USB 固态连着线、U 盘、虚拟盘（一个画在大硬盘里的小盘）、内存条、云），列名和上一屏一样。右边约 30% 宽：上面是一个带 1px 浅灰细边框、圆角 8px 的空白截图位，宽约屏宽 28%、高宽比 3:2（拼页时原样贴真实截图，框里什么都不画），截图位下面一行灰色小字是图注；截图位上方一行小字“BitLocker 恢复密钥都登记在〔密码中心〕里”。最下面一条横跨整屏的浅绿细卡片放“删了的也跟着删”那句和链接。",
+     "portrait": "竖版按实际阅读顺序分4张，文件名顺序由显式portrait_order登记为v、v3、v4、v2；构建器已接入明确顺序，生产方必须先完成新增分张登记和交付，不能直接按旧数字顺序拼接。第1张（pcconfig-05-v.png）：仅原文标题、表格字段和H/F两张盘卡原文，顺序不变；卡片整宽上下排，小图标只靠卡名，不占一整列，字段和说明使用卡内整宽，不留截图空框。第2张（新增pcconfig-05-v3.png）：仅原文V/Z/云端三张盘卡原文，顺序不变；不重复整屏大标题，不留截图空框。第3张（新增pcconfig-05-v4.png）：仅原文“BitLocker 恢复密钥都登记在〔密码中心〕里”、真实BitLocker条目截图空位及原图注。空框保持1806:1213的宽高比（约1.49:1），示例宽880、高约591源像素，图注在下；不压扁、缩窄截图来塞正文。第4张（现有正确pcconfig-05-v2.png）：仅原文“删了的也跟着删”整条尾卡，原文件路径、原字节、原审稿绑定均保留，不生图、不重审、不改编号或覆盖。正文参考40源像素，在941宽显示到370时约15.7px；这只是AI空间建议，不改原文字或实际数据，也不把张数当硬门。每张使用原生9:16画布；不重复整屏标题，不新增正文或空框填剩余空间，外部连续空白由现役crop_box处理，保留源分辨率及全宽。\n本轮仅指定本张排版恢复（其它分张原约定保护）：本屏真实顺序v、v3、v4、v2；仅重排第1分张v，在941×1672正常竖画布保留全部原标题及五个表字段一次，H/F两张卡整宽上下排。H/F每张卡的盘属性、放什么、谁往里写什么时候、怎么核对、坏了怎么办按原表顺序整宽下排；小水彩USB硬盘与U盘图标只在盘名旁，不占文字列。所有数字、路径、同步待验收、F救急说明一字不删。正常正文约36源像素、行距44、净宽860，标题可自然两行。无截图框，无V/Z/云端、BitLocker条目和尾卡文字。保持白底纯绿主色、深蓝灰正文、细浅绿描边圆角卡片。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "table",
+     "icon",
+     "screenshot",
+     "prose",
+     "notice",
+     "content_card",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "table",
+     "content_card",
+     "icon",
+     "screenshot",
+     "prose",
+     "chapter_title",
+     "notice",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "每块盘干什么（二）：外接盘、U盘、虚拟盘和云端",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "table",
+     "text_ref": "盘放什么谁往里写、什么时候怎么核对坏了怎么办H盘外接",
+     "variant": "disk_cards",
+     "row_icons": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "BitLocker恢复密钥都登记在密码中心里"
+    },
+    {
+     "type": "screenshot",
+     "ratio": "1806:1213"
+    },
+    {
+     "type": "prose",
+     "text_ref": "只显示条目类型"
+    },
+    {
+     "type": "notice",
+     "text_ref": "删了的也跟着删：照片视频、个人资料，以及G上只有一份"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "portrait_order": [
+    "pcconfig-05-v.png",
+    "pcconfig-05-v3.png",
+    "pcconfig-05-v4.png",
+    "pcconfig-05-v2.png"
+   ],
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。左边约 68% 宽是和上一屏同一种样式的表格（五行：H、F、V、Z、云端；第一列每格一个小水彩图标：外接 USB 固态连着线、U 盘、虚拟盘（一个画在大硬盘里的小盘）、内存条、云），列名和上一屏一样。右边约 30% 宽：上面是一个带 1px 浅灰细边框、圆角 8px 的空白截图位，宽约屏宽 28%、高宽比 3:2（拼页时原样贴真实截图，框里什么都不画），截图位下面一行灰色小字是图注；截图位上方一行小字“BitLocker 恢复密钥都登记在〔密码中心〕里”。最下面一条横跨整屏的浅绿细卡片放“删了的也跟着删”那句和链接。",
+     "portrait": "竖版按实际阅读顺序分4张，文件名顺序由显式portrait_order登记为v、v3、v4、v2；构建器已接入明确顺序，生产方必须先完成新增分张登记和交付，不能直接按旧数字顺序拼接。第1张（pcconfig-05-v.png）：仅原文标题、表格字段和H/F两张盘卡原文，顺序不变；卡片整宽上下排，小图标只靠卡名，不占一整列，字段和说明使用卡内整宽，不留截图空框。第2张（新增pcconfig-05-v3.png）：仅原文V/Z/云端三张盘卡原文，顺序不变；不重复整屏大标题，不留截图空框。第3张（新增pcconfig-05-v4.png）：仅原文“BitLocker 恢复密钥都登记在〔密码中心〕里”、真实BitLocker条目截图空位及原图注。空框保持1806:1213的宽高比（约1.49:1），示例宽880、高约591源像素，图注在下；不压扁、缩窄截图来塞正文。第4张（现有正确pcconfig-05-v2.png）：仅原文“删了的也跟着删”整条尾卡，原文件路径、原字节、原审稿绑定均保留，不生图、不重审、不改编号或覆盖。正文参考40源像素，在941宽显示到370时约15.7px；这只是AI空间建议，不改原文字或实际数据，也不把张数当硬门。每张使用原生9:16画布；不重复整屏标题，不新增正文或空框填剩余空间，外部连续空白由现役crop_box处理，保留源分辨率及全宽。\n本轮仅指定本张排版恢复（其它分张原约定保护）：本屏真实顺序v、v3、v4、v2；仅重排第1分张v，在941×1672正常竖画布保留全部原标题及五个表字段一次，H/F两张卡整宽上下排。H/F每张卡的盘属性、放什么、谁往里写什么时候、怎么核对、坏了怎么办按原表顺序整宽下排；小水彩USB硬盘与U盘图标只在盘名旁，不占文字列。所有数字、路径、同步待验收、F救急说明一字不删。正常正文约36源像素、行距44、净宽860，标题可自然两行。无截图框，无V/Z/云端、BitLocker条目和尾卡文字。保持白底纯绿主色、深蓝灰正文、细浅绿描边圆角卡片。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "table",
+     "icon",
+     "screenshot",
+     "prose",
+     "notice",
+     "content_card",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "table",
+     "content_card",
+     "icon",
+     "screenshot",
+     "prose",
+     "chapter_title",
+     "notice",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "显式竖版 v、v3、v4、v2 四张及保护尾卡：H/F，V/Z/云端，BitLocker说明+原比例截图，尾卡分张；核心不消费 portrait_order/节点内分张，尚未完成。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "外接硬盘",
+   "source_phrase": "外接 USB 固态连着线",
+   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round2/title-colors/color-title-4310b5b5c1d812ae9f45-c4e6792a4209.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-4310b5b5c1d812ae9f45",
+   "title_text": "每块盘干什么（二）：外接盘、U 盘、虚拟盘和云端",
+   "sha256": "746259d934808d4ffa3833f02d6c00dc82913cb059f2c848dcb801c9383f4cb5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 每块盘干什么（二）：外接盘、U 盘、虚拟盘和云端
+
+| 盘 | 放什么 | 谁往里写、什么时候 | 怎么核对 | 坏了怎么办 |
+|---|---|---|---|---|
+| **H 盘** 外接 USB 固态 1908 GiB，已用 1418 GiB、剩约 489 GiB（9 月 28 日下午以来多出的主要是新的一整套系统镜像：全量加增量）· BitLocker 开 | 自动备份区：G 上 19 类备份的副本、当前这一套完整镜像（不另留上一代）、30 天待删区；人工保留区：恢复材料、当前恢复指南、密码中心恢复集；根目录一份独立的密码中心和《换机恢复》 | 平时一直插着：每天 14:30 和每次登录时跟 G 同步；没插就只记“跳过”；密码中心恢复集 9 月 29 日起随每天的同步一起复制，最近冷备已核对通过，G、H 上最新的恢复副本一致 | 同步前核对两块盘的身份、H 是不是 USB 外接、BitLocker 已解锁、剩余空间不少于 100 GiB；复制后逐个文件核对 | 接到任何一台 Windows 电脑，自己解锁，照《换机恢复》做 |
+| **F 盘** 32 GB 救急 U 盘 · 不加密 | PE 工具、主板 BIOS 回刷包、风扇配置、《救急先看》 | 不自动写，改说明时手动更新 | 盘里一份校验清单 | 做 Veeam 启动盘时别用它，另找一个能清空的 U 盘 |
+| **V 盘** 300 GiB 开发盘，文件放在 E 上 · BitLocker 开 | 新项目、克隆下来的仓库、工作副本、包缓存 | 不进镜像，全靠 GitHub | — | 从 GitHub 重新拉 |
+| **Z 盘** 12 GiB 内存盘 | 只放可丢的缓存和临时文件 | 〔内存盘守护〕每 15 分钟照看 | — | 丢了自动重建 |
+| **云端** | Google 云盘：开发配置（每天 13:00）、核对过的微信备份（每周一 11:00）；私人 GitHub：三个核心仓库、密码中心仓库；Claude、Codex、Gemini 记忆仓库 9 月 28 日起只留档、不再更新 | 各自的项目上传；Codex 对话不上网 | 微信上云用 rclone 按校验和核对 | 只剩 GitHub 和网络、又没有已核验的数据备份时，能找回项目、软件和非秘密设置。密码还需完整有效的恢复集、完整程序及可用的本人验证；微信另需已核验的 Google 云盘备份。没备份的个人文件找不回 |
+
+BitLocker 恢复密钥都登记在〔密码中心〕里
+
+只显示条目类型
+
+删了的也跟着删：照片视频、个人资料，以及 G 上只有一份的项目和软件，先在待删区留 30 天再清；盘没接上不算删了。规矩出自〔约法 L21〕
+
+::screen{#pcconfig-08 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-08",
+  "section": "usage",
+  "title": "电脑卡死了",
+  "scene": "横版：已通过，原样复用。左半边急救卡和按键的手，右半边“自动留现场”“救急 U 盘”两张卡。",
+  "portrait": "竖版：标题；急救卡插画满宽（手按右 Ctrl 和 Scroll Lock 的键盘画在卡下面）；下面“自动留现场”“救急 U 盘”两张卡上下排、满宽。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-06-desktop.png"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑卡死了",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "急救卡（两个AI一起卡住时照着做）：",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "row": "firstaid",
+     "width": "60%"
+    },
+    {
+     "type": "illustration",
+     "size": "banner",
+     "row": "firstaid"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "自动留现场远程服务每10秒看一次进程；新开的程序一直",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "row": "firstaid",
+     "width": "40%"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。左半边急救卡和按键的手，右半边“自动留现场”“救急 U 盘”两张卡。",
+     "portrait": "竖版：标题；急救卡插画满宽（手按右 Ctrl 和 Scroll Lock 的键盘画在卡下面）；下面“自动留现场”“救急 U 盘”两张卡上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "icon",
+     "illustration",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "chapter_title",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": [
+    "急救卡下方手按右Ctrl/ScrollLock插画必须确认素材语义，不能用其他本屏插画自动替代。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "电脑卡死了",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "急救卡（两个AI一起卡住时照着做）：",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left"
+    },
+    {
+     "type": "illustration",
+     "size": "banner"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "自动留现场远程服务每10秒看一次进程；新开的程序一直",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。左半边急救卡和按键的手，右半边“自动留现场”“救急 U 盘”两张卡。",
+     "portrait": "竖版：标题；急救卡插画满宽（手按右 Ctrl 和 Scroll Lock 的键盘画在卡下面）；下面“自动留现场”“救急 U 盘”两张卡上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "icon",
+     "illustration",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "chapter_title",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": [
+    "急救卡下方手按右Ctrl/ScrollLock插画必须确认素材语义，不能用其他本屏插画自动替代。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "代码窗口",
+   "source_phrase": "只开一次新的 PowerShell 看看。",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/笔记本电脑.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "笔记本电脑",
+   "source_phrase": "不用先按键蓝屏留现场，直接重启就行；电脑会自动留现场，但不一定来得及写完。",
+   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/外接恢复通用构图.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "外接恢复通用构图",
+   "source_phrase": "左半边急救卡和按键的手，右半边“自动留现场”“救急 U 盘”两张卡。",
+   "sha256": "7b741c8138bf750e27b87179703b3b6de0f580198f685f080dd72e51d836aaca",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-dd11f99fbf00f941fa1a.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-08-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-dd11f99fbf00f941fa1a",
+   "title_text": "电脑卡死了",
+   "sha256": "c887048064b7538a3897a061b830a089a5e66d37cb4e69168baaf2ca4de0b450",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 电脑卡死了
+
+**急救卡（两个 AI 一起卡住时照着做）：**
+1. 只开一次新的 PowerShell 看看。
+2. 不用先按键蓝屏留现场，直接重启就行；电脑会自动留现场，但不一定来得及写完。
+3. 不留现场：Ctrl+Alt+Del 重启。
+4. 重启后告诉 AI 几点卡的。
+
+**自动留现场**　远程服务每 10 秒看一次进程；新开的程序一直卡着超过约 60 秒、同时有两个，就自动记下“谁在等谁”，30 分钟最多记一次。9 月 28 日 11:41 它就自己记过一次。
+
+**救急 U 盘**　32 GB，装着 PE 工具（不进系统也能用的急救系统）、主板 BIOS 回刷包和风扇配置，根目录一份《救急先看》。
+
+::screen{#pcconfig-09 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-09",
+  "section": "usage",
+  "title": "远程连这台电脑",
+  "scene": "横版：左上标题。中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字）。插画左右各一张较宽的卡片：左边“AI 连进来办事”，右边“远程看和操作画面”，两张卡片最后一行是链接。下面一排四张同样大小的横向小卡片（各带小水彩图标：带锁的开机界面、带盾牌的显示器、带信号的地球、断开又接上的网线插头）。最下面一行灰色小字。",
+  "portrait": "竖版：标题；插画缩到屏宽；“AI 连进来办事”“远程看和操作画面”两张卡片上下排、满宽；四张小卡片两行两列；最下面灰色小字。",
+  "links": [
+   {
+    "text": "电脑远程控制",
+    "href": "/projects/remote-control/"
+   },
+   {
+    "text": "远程电脑串流",
+    "href": "/projects/sunshine-remote-streaming/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "远程连这台电脑",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "size": "banner"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "AI连进来办事手机、笔记本上的AI连进这台电脑干活，",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "没登录也能连开机停在登录界面时，ToDesk也能连上",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/round3/clean-assets/png/46-地球-clean.png",
+      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/断线.png"
+     ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "已停用：natpierce内网穿透、向日葵。"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字）。插画左右各一张较宽的卡片：左边“AI 连进来办事”，右边“远程看和操作画面”，两张卡片最后一行是链接。下面一排四张同样大小的横向小卡片（各带小水彩图标：带锁的开机界面、带盾牌的显示器、带信号的地球、断开又接上的网线插头）。最下面一行灰色小字。",
+     "portrait": "竖版：标题；插画缩到屏宽；“AI 连进来办事”“远程看和操作画面”两张卡片上下排、满宽；四张小卡片两行两列；最下面灰色小字。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "content_card",
+     "prose",
+     "inline_link",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "content_card",
+     "chapter_title",
+     "prose",
+     "inline_link",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "原图为电脑插画两侧各一张主卡；当前上下块无法让左右卡围绕中间插画，主卡位置仍待布局接口。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "远程连这台电脑",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "size": "banner"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "AI连进来办事手机、笔记本上的AI连进这台电脑干活，",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "没登录也能连开机停在登录界面时，ToDesk也能连上",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/round3/clean-assets/png/46-地球-clean.png",
+      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/断线.png"
+     ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "已停用：natpierce内网穿透、向日葵。"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字）。插画左右各一张较宽的卡片：左边“AI 连进来办事”，右边“远程看和操作画面”，两张卡片最后一行是链接。下面一排四张同样大小的横向小卡片（各带小水彩图标：带锁的开机界面、带盾牌的显示器、带信号的地球、断开又接上的网线插头）。最下面一行灰色小字。",
+     "portrait": "竖版：标题；插画缩到屏宽；“AI 连进来办事”“远程看和操作画面”两张卡片上下排、满宽；四张小卡片两行两列；最下面灰色小字。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "content_card",
+     "prose",
+     "inline_link",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "content_card",
+     "chapter_title",
+     "prose",
+     "inline_link",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "锁",
+   "source_phrase": "带锁的开机界面",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/08-盾牌-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "盾牌",
+   "source_phrase": "带盾牌的显示器",
+   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/46-地球-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "地球",
+   "source_phrase": "带信号的地球",
+   "sha256": "ac56f3226534dce51ae1467157715713692b75189e1704150aff1687049b4e4b",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "断开插头",
+   "source_phrase": "断开又接上的网线插头",
+   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/手机电脑连接.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "手机电脑连接",
+   "source_phrase": "手机和笔记本借电脑上网 两个代理入口，只在 Tailscale 里，不开公网。",
+   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/断线.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "断线",
+   "source_phrase": "代理和断网 登录后自动打开 Clash Verge；突然断网时先查哪一项，只做一项能撤回的恢复。",
+   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/家庭设备网络.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "家庭设备网络",
+   "source_phrase": "中间偏上是这台电脑（机箱＋显示器）的水彩插画，左上一部手机、左下一台笔记本、右上一朵画 Cloudflare 标志的云、右下一个 Tailscale 标志，用绿色虚线箭头连到电脑（线上不写字）。",
+   "sha256": "fe3b44c69ff4b7bcde96e4d4c2cbcc12dc7a7e7c4bf9ff24067cd348ed0b8c25",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-4304486579c882df1250.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-09-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-4304486579c882df1250",
+   "title_text": "远程连这台电脑",
+   "sha256": "62fcec3dcc01249bbd0f0dcbb206b28c5cf96b41835a0cca498c68b9ef74b20c",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 远程连这台电脑
+
+**AI 连进来办事**　手机、笔记本上的 AI 连进这台电脑干活，靠的是一个自建的远程服务。它的源码、登记和开机自启都在这里：电脑配置与恢复负责把它装好、守着它，换机时按表重建。怎么连、能做什么见〔电脑远程控制〕
+
+**远程看和操作画面**　平时用手机、笔记本远程看和操作这台电脑的桌面，见〔远程电脑串流〕
+
+**没登录也能连**　开机停在登录界面时，ToDesk 也能连上：看门狗每 2 分钟检查一次，只认官方签名的程序。
+
+**远程桌面只放行两台**　Windows 远程桌面只对 Tailscale（只连自己设备的私人网络）里的笔记本和手机开放。
+
+**手机和笔记本借电脑上网**　两个代理入口，只在 Tailscale 里，不开公网。
+
+**代理和断网**　登录后自动打开 代理程序；突然断网时先查哪一项，只做一项能撤回的恢复。
+
+已停用：natpierce 内网穿透、向日葵。
+
+::screen{#pcconfig-10 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-10",
+  "section": "usage",
+  "title": "日常的小守护",
+  "scene": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底。右栏照上次的改法：第一条括号里写全 11 个软件（字多了这张卡加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条写“300 GiB”“12 GiB”。左栏“开机和桌面”书桌插画和前五条不动；第六条换成 text 里回收站和 AI 缓存那条新字，字多了这张卡加高、字号不变，左栏插画可略缩。",
+  "portrait": "竖版：标题；“开机和桌面”一栏在上（插画满宽，下面六条），“软件和环境”一栏在下（插画满宽，下面四条）。",
+  "links": [
+   {
+    "text": "中文语音转写",
+    "href": "/projects/chinese-asr/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "日常的小守护",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "banner",
+     "align": "center",
+     "target_width": 326
+    },
+    {
+     "type": "points_card",
+     "text_ref": "开机和桌面",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+     ],
+     "row": "daily",
+     "width": "50%"
+    },
+    {
+     "type": "points_card",
+     "text_ref": "软件和环境",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "row": "daily",
+     "width": "50%"
+    }
+   ],
+   "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底。右栏照上次的改法：第一条括号里写全 11 个软件（字多了这张卡加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条写“300 GiB”“12 GiB”。左栏“开机和桌面”书桌插画和前五条不动；第六条换成 text 里回收站和 AI 缓存那条新字，字多了这张卡加高、字号不变，左栏插画可略缩。",
+     "portrait": "竖版：标题；“开机和桌面”一栏在上（插画满宽，下面六条），“软件和环境”一栏在下（插画满宽，下面四条）。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "bullet_list",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "chapter_title",
+     "bullet_list",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "日常的小守护",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "banner",
+     "align": "center",
+     "target_width": 350
+    },
+    {
+     "type": "points_card",
+     "text_ref": "开机和桌面",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+     ]
+    },
+    {
+     "type": "points_card",
+     "text_ref": "软件和环境",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "left_inside",
+     "icon_position": "header_left"
+    }
+   ],
+   "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底。右栏照上次的改法：第一条括号里写全 11 个软件（字多了这张卡加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条写“300 GiB”“12 GiB”。左栏“开机和桌面”书桌插画和前五条不动；第六条换成 text 里回收站和 AI 缓存那条新字，字多了这张卡加高、字号不变，左栏插画可略缩。",
+     "portrait": "竖版：标题；“开机和桌面”一栏在上（插画满宽，下面六条），“软件和环境”一栏在下（插画满宽，下面四条）。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "illustration",
+     "bullet_list",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "illustration",
+     "chapter_title",
+     "bullet_list",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "显示器",
+   "source_phrase": "开机和桌面\n三块屏幕偶尔只亮一块，每5分钟检查一次，自动恢复。小米妙享没开就补开：手机和电脑互通、短信验证码都靠它。桌面图标平时藏起来，双击桌面空白处显示，30秒后自动再藏。Ctrl+Win+R给OLED主屏盖一层黑幕，串流时远程照样看得到桌面。声音固定走音箱；登录后自动开两个微信。每周一清掉回收站里放了7天以上的东西。",
+   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-5ba0605f5144b1",
+   "source_phrase": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底，只改右栏两条的字：第一条括号里写全 11 个软件（字多了就把这张卡片加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条的“300 GB”“12 GB”改成“300 GiB”“12 GiB”。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-1e753f61b75cac",
+   "source_phrase": "横版：拿已通过的第 8 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-08-desktop.png）做底，只改右栏两条的字：第一条括号里写全 11 个软件（字多了就把这张卡片加高、字号不变，右栏其余三条相应下移，右栏插画可略缩），最后一条的“300 GB”“12 GB”改成“300 GiB”“12 GiB”。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-3b276e880e873ffb0d13.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-3b276e880e873ffb0d13",
+   "title_text": "日常的小守护",
+   "sha256": "91204ff9087e54e58f7f69855c19d44be5148163c8ff5b0755e309eb89de7fe0",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 日常的小守护
+
+**开机和桌面**
+- 三块屏幕偶尔只亮一块，每 5 分钟检查一次，自动恢复。
+- 小米妙享没开就补开：手机和电脑互通、短信验证码都靠它。
+- 桌面图标平时藏起来，双击桌面空白处显示，30 秒后自动再藏。
+- Ctrl+Win+R 给 OLED 主屏盖一层黑幕，串流时远程照样看得到桌面。
+- 声音固定走音箱；登录后自动开两个微信。
+- 每小时把过期、确认能重建的 AI 缓存放进回收站；回收站每天 0、6、12、18 点清：AI 缓存目录删进去的满 6 小时、其他满 7 天才永久删；哪块盘快满了，每小时都清这块盘，上面的 AI 缓存只留 1 小时。
+
+**软件和环境**
+- 11 个开发软件统一查版本（Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go），每周日 23:30 查一次；Python 稳定补丁和 Codex 正式版可在空闲时自动更新。
+- 本地大模型和中文听写共用显卡，自建的排队服务让它们轮流用。见〔中文语音转写〕
+- 登记了 94 个环境变量、62 条 PATH（程序查找路径），换机时照着重建。
+- 盘的分工：稳定的放 E，新项目和包缓存放 V（300 GiB 开发盘），能丢的缓存放 Z（12 GiB 内存盘）。
+
+::screen{#pcconfig-11 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-11",
+  "section": "usage",
+  "title": "自动任务的总账",
+  "scene": "横版：拿已通过的第 9 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-09-desktop.png）做底：标题、右边圆环图、下面三张卡片的位置和画法不变。改动一：左边那本翻开的账本，两页纸上要画出真实内容——text 里“名字｜做什么｜怎么停｜停了会怎样”是左页顶上的表头（竖线画成细分隔线），紧跟的前三条记录（第二备份盘同步、照片视频资料备份、回收站定时清理）写在左页，后三条（三块屏幕恢复、卡死自动留现场、小米妙享守护）写在右页；“125 个”写在圆环正中，下面三组数字和名称标在圆环三块旁边；每条记录两三行手写感的深绿小字，行间有浅绿横线，账本仍是水彩画法，字必须清楚可读（字号不小于正文小号）；回收站那条字比原来多，可占三四行。账本旁的闹钟和笔筒可以缩小让位。改动二：第一张卡片最后加一句链接“规矩出自〔约法 L28〕”。三张卡片里的字和数按 text（第一张开头是“9 月 28 日有 125 个自动任务”；88、37；5、49、38；43）。圆环正中仍是“125 个”，三块的数字和比例是 28、26、71。",
+  "portrait": "竖版：标题；圆环图在上（居中，三块的标注放在圆环下面排成三行）；账本满宽放中间，左右两页改成上下两页；三张卡片上下排、满宽。",
+  "links": [
+   {
+    "text": "驾驶舱",
+    "href": "/cockpit/#pcconfig"
+   },
+   {
+    "text": "约法 L28",
+    "href": "/rules/charter/#L28"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "自动任务的总账",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "名字做什么怎么停停了会怎样",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "none",
+     "layout": "ledger",
+     "width": "100%"
+    },
+    {
+     "type": "chart",
+     "text_ref": "125个",
+     "chart_type": "donut",
+     "width": "100%",
+     "number_first": true,
+     "center_node": 0
+    },
+    {
+     "type": "content_card",
+     "text_ref": "每一个都说得清",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+      "_library/icons/打勾清单.png"
+     ]
+    }
+   ],
+   "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 9 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-09-desktop.png）做底：标题、右边圆环图、下面三张卡片的位置和画法不变。改动一：左边那本翻开的账本，两页纸上要画出真实内容——text 里“名字｜做什么｜怎么停｜停了会怎样”是左页顶上的表头（竖线画成细分隔线），紧跟的前三条记录（第二备份盘同步、照片视频资料备份、回收站定时清理）写在左页，后三条（三块屏幕恢复、卡死自动留现场、小米妙享守护）写在右页；“125 个”写在圆环正中，下面三组数字和名称标在圆环三块旁边；每条记录两三行手写感的深绿小字，行间有浅绿横线，账本仍是水彩画法，字必须清楚可读（字号不小于正文小号）；回收站那条字比原来多，可占三四行。账本旁的闹钟和笔筒可以缩小让位。改动二：第一张卡片最后加一句链接“规矩出自〔约法 L28〕”。三张卡片里的字和数按 text（第一张开头是“9 月 28 日有 125 个自动任务”；88、37；5、49、38；43）。圆环正中仍是“125 个”，三块的数字和比例是 28、26、71。",
+     "portrait": "竖版：标题；圆环图在上（居中，三块的标注放在圆环下面排成三行）；账本满宽放中间，左右两页改成上下两页；三张卡片上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "chart",
+     "content_card",
+     "document_mock",
+     "inline_link",
+     "bullet_list",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "chart",
+     "content_card",
+     "chapter_title",
+     "document_mock",
+     "inline_link",
+     "bullet_list",
+     "illustration"
+    ]
+   },
+   "pending_requirements": [
+    "账本真实四列表头和六条记录跨两页、圆环中心125个与28/26/71三段标签，需准确图表/文字覆盖接口；不得仅排普通说明。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "自动任务的总账",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "chart",
+     "text_ref": "125个",
+     "chart_type": "donut",
+     "number_first": true,
+     "center_node": 0
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "名字做什么怎么停停了会怎样",
+     "whole_block": true,
+     "columns": 1,
+     "illustration": "none",
+     "layout": "ledger"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "每一个都说得清",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
+      "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
+      "_library/icons/打勾清单.png"
+     ]
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；按文字构图要求调整块顺序：text_ref “名字做什么怎么停停了会怎” 不在顺序位置上\n2026-10-03 13:46:49 page-fixer-01 第二轮：现有字段修复数字卡窄列/环图真实数字解析/明确文件夹图标绑定。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 9 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-09-desktop.png）做底：标题、右边圆环图、下面三张卡片的位置和画法不变。改动一：左边那本翻开的账本，两页纸上要画出真实内容——text 里“名字｜做什么｜怎么停｜停了会怎样”是左页顶上的表头（竖线画成细分隔线），紧跟的前三条记录（第二备份盘同步、照片视频资料备份、回收站定时清理）写在左页，后三条（三块屏幕恢复、卡死自动留现场、小米妙享守护）写在右页；“125 个”写在圆环正中，下面三组数字和名称标在圆环三块旁边；每条记录两三行手写感的深绿小字，行间有浅绿横线，账本仍是水彩画法，字必须清楚可读（字号不小于正文小号）；回收站那条字比原来多，可占三四行。账本旁的闹钟和笔筒可以缩小让位。改动二：第一张卡片最后加一句链接“规矩出自〔约法 L28〕”。三张卡片里的字和数按 text（第一张开头是“9 月 28 日有 125 个自动任务”；88、37；5、49、38；43）。圆环正中仍是“125 个”，三块的数字和比例是 28、26、71。",
+     "portrait": "竖版：标题；圆环图在上（居中，三块的标注放在圆环下面排成三行）；账本满宽放中间，左右两页改成上下两页；三张卡片上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "chart",
+     "content_card",
+     "document_mock",
+     "inline_link",
+     "bullet_list",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "chart",
+     "content_card",
+     "chapter_title",
+     "document_mock",
+     "inline_link",
+     "bullet_list",
+     "illustration"
+    ]
+   },
+   "pending_requirements": [
+    "账本真实四列表头和六条记录跨两页、圆环中心125个与28/26/71三段标签，需准确图表/文字覆盖接口；不得仅排普通说明。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "时钟",
+   "source_phrase": "每一个都说得清 125 个自动任务（不算 Windows 自带的），88 个开着、37 个停着。每一个都有一条人话说明：叫什么、做什么、怎么停、停了影响什么、北京时间几点跑。〔驾驶舱〕就读这份说明，第三方软件的任务单列一栏，不算进电脑配置的运行灯。规矩出自〔约法 L28〕",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "灯泡",
+   "source_phrase": "换机照表重建 33 个必须重建，5 个可选，49 个装回软件后软件自己会装，38 个等我决定。",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "打勾清单",
+   "source_phrase": "待验收都记在一处 所有“要等时机才能核”的事登记在一张清单里（9 月 28 日：43 项），驾驶舱上随时能看。",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/账本.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "账本",
+   "source_phrase": "改动一：左边那本翻开的账本，两页纸上要画出真实内容——text 里“名字｜做什么｜怎么停｜停了会怎样”是左页顶上的表头（竖线画成细分隔线），紧跟的前三条记录（第二备份盘同步、照片视频资料备份、回收站每周清理）写在左页，后三条（三块屏幕恢复、卡死自动留现场、小米妙享守护）写在右页；“125 个”写在圆环正中，下面三组数字和名称标在圆环三块旁边；每条记录两三行手写感的深绿小字，行间有浅绿横线，账本仍是水彩画法，字必须清楚可读（字号不小于正文小号）。",
+   "sha256": "df5149a9dd4aa27c3fc3c6f0300186d80b7ed032d354c7f1041850e9753487da",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-6d220e572819d98e4c69.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-pcconfig-11-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-6d220e572819d98e4c69",
+   "title_text": "自动任务的总账",
+   "sha256": "3d4d1c23b25082c2a970ce39748f4e41bc3bdb1639b55a1716260e3e7b3fa2e7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 自动任务的总账
+
+名字｜做什么｜怎么停｜停了会怎样
+- **第二备份盘同步**（每天 14:30）　把在线备份同步到第二块备份盘｜跟 AI 说停掉第二备份盘同步｜第二块备份盘不再更新，旧副本保留
+- **照片视频资料备份**（每天 17:10）　照片、视频、音乐和资料同步到备份盘，删掉的留 30 天｜跟 AI 说停掉照片资料备份｜新存的照片、视频和资料没有备份
+- **回收站定时清理**（每小时看盘，0、6、12、18 点常规清）　AI 缓存目录删进去的满 6 小时、其他满 7 天才永久删；盘快满时，那块盘的 AI 缓存只留 1 小时｜跟 AI 说停掉回收站清理｜回收站会越积越多，要自己清
+- **三块屏幕恢复**（每 5 分钟）　三块屏幕偶尔只亮一块时，自动恢复成三块｜跟 AI 说停掉屏幕恢复｜屏幕只亮一块时要自己去设置
+- **卡死自动留现场**（每 10 秒）　电脑卡住时自动把当时的现场存下来，事后好查原因｜跟 AI 说停掉卡死自动留现场｜电脑卡死时不会自动留现场，事后难查原因
+- **小米妙享守护**（每 5 分钟）　小米妙享没开就补开，开机后弹一次主界面｜跟 AI 说停掉小米妙享守护｜小米妙享关了要自己打开
+
+125 个
+28 个 · 电脑配置自己的　26 个 · 别的项目的　71 个 · 第三方软件自带的
+
+**每一个都说得清**　9 月 28 日有 125 个自动任务（不算 Windows 自带的），88 个开着、37 个停着；之后加的驾驶舱巡检、每天的纠正统计等也一样有说明。每一个都有一条人话说明：叫什么、做什么、怎么停、停了影响什么、北京时间几点跑。〔驾驶舱〕就读这份说明，第三方软件的任务单列一栏，不算进电脑配置的运行灯。规矩出自〔约法 L28〕
+
+**换机照表重建**　33 个必须重建，5 个可选，49 个装回软件后软件自己会装，38 个等我决定。
+
+**待验收都记在一处**　所有“要等时机才能核”的事登记在一张清单里（9 月 28 日：43 项），驾驶舱上随时能看。
+
+::screen{#pcconfig-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-12",
+  "section": "tech",
+  "title": "它是怎么搭的",
+  "scene": "横版：已通过的这一屏，只改第 4 个节点“看板接口”下面的字（按 text；字多了这个节点的文字区加高、字号不变），其余四个节点、“这台电脑”“测试和指南”两张卡原样复用。",
+  "portrait": "竖版：标题；五个节点改成从上到下的竖流程（节点之间向下的绿箭头），每个节点左图标右字；下面“这台电脑”“测试和指南”两张卡上下排、满宽。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-10-desktop.png"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "它是怎么搭的",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1登记机器的事实只记一处：45个登记文件，记着盘、端",
+     "columns": 5,
+     "direction": "horizontal",
+     "connector": "arrow",
+     "illustration": "left_inside"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "这台电脑技嘉X870E主板·AMD9950X3D·6",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过的这一屏，只改第 4 个节点“看板接口”下面的字（按 text；字多了这个节点的文字区加高、字号不变），其余四个节点、“这台电脑”“测试和指南”两张卡原样复用。",
+     "portrait": "竖版：标题；五个节点改成从上到下的竖流程（节点之间向下的绿箭头），每个节点左图标右字；下面“这台电脑”“测试和指南”两张卡上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "flow",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "flow",
+     "chapter_title",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "它是怎么搭的",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1登记机器的事实只记一处：45个登记文件，记着盘、端",
+     "columns": 1,
+     "direction": "vertical",
+     "connector": "arrow",
+     "illustration": "left_inside"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "这台电脑技嘉X870E主板·AMD9950X3D·6",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过的这一屏，只改第 4 个节点“看板接口”下面的字（按 text；字多了这个节点的文字区加高、字号不变），其余四个节点、“这台电脑”“测试和指南”两张卡原样复用。",
+     "portrait": "竖版：标题；五个节点改成从上到下的竖流程（节点之间向下的绿箭头），每个节点左图标右字；下面“这台电脑”“测试和指南”两张卡上下排、满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "flow",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "flow",
+     "chapter_title",
+     "content_card",
+     "icon",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "登记　机器的事实只记一处：45 个登记文件，记着盘、端口、任务、软件、环境变量、恢复材料",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "代码窗口",
+   "source_phrase": "工具和自动任务　读登记干活，用 PowerShell、Python、Node.js、C# 写成",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "红色警示",
+   "source_phrase": "回执　每次运行写一份结果：成功、失败、跳过都写清",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "代码窗口",
+   "source_phrase": "看板接口　网站打开时临时采样，读登记和回执，不另起常驻程序",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "驾驶舱　把这些翻成人话显示在网站上",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-b5b4dae881cd56890248.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\engine\\production-b1-r1\\state\\b1-pcconfig-12-h\\round-01\\candidate-2.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-b5b4dae881cd56890248",
+   "title_text": "它是怎么搭的",
+   "sha256": "5ff003545290b929c681d3d624faeefbc9518fdd5841b212babf6410143f9a46",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 它是怎么搭的
+
+1. **登记**　机器的事实只记一处：45 个登记文件，记着盘、端口、任务、软件、环境变量、恢复材料
+2. **工具和自动任务**　读登记干活，用 PowerShell、Python、Node.js、C# 写成
+3. **回执**　每次运行写一份结果：成功、失败、跳过都写清
+4. **看板接口**　10 月 4 日起，电脑上原有的状态服务里，采集线程每 30 秒更新一次显示缓存（慢的来源按各自时效），读的是登记和回执；网站来取时直接给最近一份，不让页面干等，也没为它另起常驻程序
+5. **驾驶舱**　把这些翻成人话显示在网站上
+
+**这台电脑**　技嘉 X870E 主板 · AMD 9950X3D · 64 GB 内存 · RTX 5090 D · 三块显示器；硬盘：4 TB 固态（C、E）、2 TB 固态（G）、2 TB 外接固态（H）、4 TB 机械盘（D）
+
+**测试和指南**　196 项登记测试，分 15 组，按改动挑着跑；换机恢复指南每天自动发布到 G 和 H。
+
+::screen{#pcconfig-13 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-13",
+  "section": "tech",
+  "title": "为什么这样设计",
+  "scene": "横版：已通过，原样复用。左边六张小卡片，右边三张大数字卡。",
+  "portrait": "竖版：标题；三张大数字卡在上排成一行三个（数字大、说明小）；六张小卡片一列排下，每张满宽。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": "E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-11-desktop.png"
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "为什么这样设计",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "110620行代码（PowerShell、Pytho",
+     "columns": 3,
+     "columns_v": 1,
+     "icons": [
+      "_library/icons/代码窗口.png",
+      "_library/icons/打勾清单.png",
+      "_library/icons/版本循环文件.png"
+     ]
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "事实只记一处。盘、端口、任务都在登记文件里，工具和驾",
+     "columns": 2,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。左边六张小卡片，右边三张大数字卡。",
+     "portrait": "竖版：标题；三张大数字卡在上排成一行三个（数字大、说明小）；六张小卡片一列排下，每张满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "stat_card",
+     "bullet_list",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "stat_card",
+     "content_card",
+     "chapter_title",
+     "bullet_list",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "为什么这样设计",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "110620行代码（PowerShell、Pytho",
+     "columns": 1,
+     "columns_v": 1,
+     "icons": [
+      "_library/icons/代码窗口.png",
+      "_library/icons/打勾清单.png",
+      "_library/icons/版本循环文件.png"
+     ]
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "事实只记一处。盘、端口、任务都在登记文件里，工具和驾",
+     "columns": 2,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto"
+    }
+   ],
+   "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：已通过，原样复用。左边六张小卡片，右边三张大数字卡。",
+     "portrait": "竖版：标题；三张大数字卡在上排成一行三个（数字大、说明小）；六张小卡片一列排下，每张满宽。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "stat_card",
+     "bullet_list",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "stat_card",
+     "content_card",
+     "chapter_title",
+     "bullet_list",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "齿轮",
+   "source_phrase": "事实只记一处。　盘、端口、任务都在登记文件里，工具和驾驶舱都从这里读，不会两处说法对不上。",
+   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "每一步都留回执。　看回执就知道备份是真的成功了，而不是“应该跑过了”。",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "不确定就不删。　读不到、锁着、盘没接，一律当“不知道”，不当“删了”。",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "密码不出密码中心。　密码只放在密码中心里；环境变量备份时，秘密值打码。",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "后台不打扰。　自建的自动任务全部隐藏启动，不弹黑窗口。",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "换机照表来。　恢复顺序、要重建的任务、要装的软件都有表，AI 照着做。",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "代码窗口",
+   "source_phrase": "110620 行 代码（PowerShell、Python、Node.js、C#）",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/日历时钟.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "日历时钟",
+   "source_phrase": "178 个 自动测试",
+   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "日历",
+   "source_phrase": "1437 次 提交（7 月 9 日起）",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-9ce99a7f5a6a4d1b80fa.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-9ce99a7f5a6a4d1b80fa",
+   "title_text": "为什么这样设计",
+   "sha256": "43506416825bbd48b039007b6ab8bcbf460c707042fe39a984e499e4e9967de8",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 为什么这样设计
+
+- **事实只记一处。**　盘、端口、任务都在登记文件里，工具和驾驶舱都从这里读，不会两处说法对不上。
+- **每一步都留回执。**　看回执就知道备份是真的成功了，而不是“应该跑过了”。
+- **不确定就不删。**　读不到、锁着、盘没接，一律当“不知道”，不当“删了”。
+- **密码不出密码中心。**　密码只放在密码中心里；环境变量备份时，秘密值打码。
+- **后台不打扰。**　自建的自动任务全部隐藏启动，不弹黑窗口。
+- **换机照表来。**　恢复顺序、要重建的任务、要装的软件都有表，AI 照着做。
+
+**110620 行**　代码（PowerShell、Python、Node.js、C#）
+**196 项**　登记测试
+**1437 次**　提交（7 月 9 日起）
+
+::screen{#pcconfig-14 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-14",
+  "section": "tech",
+  "title": "同步到外接盘，一次走七步",
+  "scene": "横版：左上标题。中间一条从左到右的七节点流程图（和“它是怎么搭的”那屏同样的圆角节点卡片和绿色箭头，节点上的小水彩图标依次是：一把锁、放大镜照着两块盘、两张对照的清单、文件从 G 飞向 H、放大镜照着一叠文件、一个带 30 的小垃圾桶、两卷胶片中间一个切换开关），每个节点下面两三行小字；七个节点排成两行（上排 4 个、下排 3 个，蛇形连接）也可以，字不能挤。最下面一条横跨整屏的浅绿细卡片，放 9 月 28 日那次的实测数字，数字用粗体绿色。",
+  "portrait": "竖版：标题；七个节点改成从上到下的竖流程，每个节点左边图标、右边字；最下面实测数字卡片满宽，数字分成三四行。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "同步到外接盘，一次走七步",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1拿锁14:30或开机登录后开始；同一时间只让一个任",
+     "columns": 4,
+     "direction": "horizontal",
+     "connector": "arrow",
+     "illustration": "left_inside",
+     "layout": "snake",
+     "row_counts": [
+      4,
+      3
+     ]
+    },
+    {
+     "type": "notice",
+     "text_ref": "9月28日那次（14:30开始，16:36完成）：1"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。中间一条从左到右的七节点流程图（和“它是怎么搭的”那屏同样的圆角节点卡片和绿色箭头，节点上的小水彩图标依次是：一把锁、放大镜照着两块盘、两张对照的清单、文件从 G 飞向 H、放大镜照着一叠文件、一个带 30 的小垃圾桶、两卷胶片中间一个切换开关），每个节点下面两三行小字；七个节点排成两行（上排 4 个、下排 3 个，蛇形连接）也可以，字不能挤。最下面一条横跨整屏的浅绿细卡片，放 9 月 28 日那次的实测数字，数字用粗体绿色。",
+     "portrait": "竖版：标题；七个节点改成从上到下的竖流程，每个节点左边图标、右边字；最下面实测数字卡片满宽，数字分成三四行。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "flow",
+     "content_card",
+     "icon",
+     "notice",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "flow",
+     "content_card",
+     "chapter_title",
+     "icon",
+     "notice",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": [
+    "七步4+3蛇形连接须保持转弯关系；现有 flow 多行只画行内连接。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "同步到外接盘，一次走七步",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "flow",
+     "text_ref": "1拿锁14:30或开机登录后开始；同一时间只让一个任",
+     "columns": 1,
+     "direction": "vertical",
+     "connector": "arrow",
+     "illustration": "left_inside"
+    },
+    {
+     "type": "notice",
+     "text_ref": "9月28日那次（14:30开始，16:36完成）：1"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。中间一条从左到右的七节点流程图（和“它是怎么搭的”那屏同样的圆角节点卡片和绿色箭头，节点上的小水彩图标依次是：一把锁、放大镜照着两块盘、两张对照的清单、文件从 G 飞向 H、放大镜照着一叠文件、一个带 30 的小垃圾桶、两卷胶片中间一个切换开关），每个节点下面两三行小字；七个节点排成两行（上排 4 个、下排 3 个，蛇形连接）也可以，字不能挤。最下面一条横跨整屏的浅绿细卡片，放 9 月 28 日那次的实测数字，数字用粗体绿色。",
+     "portrait": "竖版：标题；七个节点改成从上到下的竖流程，每个节点左边图标、右边字；最下面实测数字卡片满宽，数字分成三四行。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "flow",
+     "content_card",
+     "icon",
+     "notice",
+     "numbered_steps"
+    ],
+    "portrait_component_order": [
+     "flow",
+     "content_card",
+     "chapter_title",
+     "icon",
+     "notice",
+     "numbered_steps"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "锁",
+   "source_phrase": "拿锁　14:30 或开机登录后开始；同一时间只让一个任务写 H。",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "认盘　核对 G、H 的身份：H 必须是 USB 外接、不是系统盘、BitLocker 已解锁、剩余空间不少于 100 GiB；不对就整次不写。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "对清单　登记里的 19 类备份要和程序里的清单一模一样，对不上就停在这一步。9 月 27 日 21:26 那次就停在这里，没写 H。",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "复制　只复制变了的文件；复制途中来源又变了，这一类这次就不删任何东西。",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "逐个回读　复制完逐个文件核对大小、时间、属性；微信和 Codex 对话逐个重算 SHA-256。",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "删多余的　H 上有、G 上已经没有的文件：照片视频、个人资料和只有一份的项目、软件移进待删区留 30 天，别的直接删。",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "镜像换代、写回执　镜像先整条复制到临时位置、逐个核对 SHA-256，来源没变才切换；回执本机和 H 各存一份，内容一致。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-fb563e8aab6d0213c803.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-14-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-fb563e8aab6d0213c803",
+   "title_text": "同步到外接盘，一次走七步",
+   "sha256": "83edce443f2830eac2a0794e32ba0817d2faf8960511e6236e2258e3f30ac757",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 同步到外接盘，一次走七步
+
+1. **拿锁**　14:30 或开机登录后开始；同一时间只让一个任务写 H。
+2. **认盘**　核对 G、H 的身份：H 必须是 USB 外接、不是系统盘、BitLocker 已解锁、剩余空间不少于 100 GiB；不对就整次不写。
+3. **对清单**　登记里的 19 类备份要和程序里的清单一模一样，对不上就停在这一步。9 月 27 日 21:26 那次就停在这里，没写 H。
+4. **复制**　只复制变了的文件；复制途中来源又变了，这一类这次就不删任何东西。
+5. **逐个回读**　复制完逐个文件核对大小、时间、属性；微信和 Codex 对话逐个重算 SHA-256。
+6. **删多余的**　H 上有、G 上已经没有的文件：照片视频、个人资料和只有一份的项目、软件移进待删区留 30 天，别的直接删。
+7. **镜像换代、写回执**　镜像先整条复制到临时位置、逐个核对 SHA-256，来源没变才切换；回执本机和 H 各存一份，内容一致。
+
+**9 月 28 日那次**（14:30 开始，16:36 完成）：19 类全部完成 · 微信 146,300 个文件 · 个人资料 280,789 个 · 照片视频 19,272 个 · 文档 93,552 个 · 只有一份的项目 55,686 个、软件 88,879 个 · 镜像链在 H 上核对完整
+
+::screen{#pcconfig-15 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-15",
+  "section": "tech",
+  "title": "系统镜像怎么做",
+  "scene": "横版：左上标题。上半部分是一条水彩“镜像链”示意：一卷粗的胶片（全量）后面接三小卷细胶片（增量），用绿色链条连起来，每卷下面标大小和日期，链条末端一个大括号合计。下半部分五张横向小卡片排成一行（各带小水彩图标：Veeam 软件窗口、带锁的盘、日历、两块盘、带 30 天的沙漏式计时），卡片宽度相同。右下角一张黄色小便签样式的卡片（容量观察）。",
+  "portrait": "竖版：标题；镜像链改成从上到下：全量一卷在上，三卷增量依次往下，合计在最下；五张小卡片上下排、满宽；黄色便签卡片放最后。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "系统镜像怎么做",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "segmented_band",
+     "text_ref": "镜像链（9月28日13:55）：全量280.9GiB",
+     "variant": "film",
+     "columns": 5,
+     "direction": "horizontal",
+     "connector": "ribbon",
+     "illustration": "none"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "用什么Veeam免费版。它自带的日程关着，只由一个计",
+     "columns": 5,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/代码窗口.png",
+      "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/icons/版本循环文件.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "已核对",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "tone": "yellow"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。上半部分是一条水彩“镜像链”示意：一卷粗的胶片（全量）后面接三小卷细胶片（增量），用绿色链条连起来，每卷下面标大小和日期，链条末端一个大括号合计。下半部分五张横向小卡片排成一行（各带小水彩图标：Veeam 软件窗口、带锁的盘、日历、两块盘、带 30 天的沙漏式计时），卡片宽度相同。右下角一张黄色小便签样式的卡片（待验收）。",
+     "portrait": "竖版：标题；镜像链改成从上到下：全量一卷在上，三卷增量依次往下，合计在最下；五张小卡片上下排、满宽；黄色便签卡片放最后。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "segmented_band",
+     "content_card",
+     "icon",
+     "notice",
+     "bullet_list"
+    ],
+    "portrait_component_order": [
+     "segmented_band",
+     "content_card",
+     "notice",
+     "chapter_title",
+     "icon",
+     "bullet_list"
+    ]
+   },
+   "pending_requirements": [
+    "待验收黄色便签样式属未批准新样式，需组件样张；镜像链须真胶片插画，程序胶片边线仍待审样。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "系统镜像怎么做",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "segmented_band",
+     "text_ref": "镜像链（9月28日13:55）：全量280.9GiB",
+     "variant": "film",
+     "columns": 5,
+     "direction": "vertical",
+     "connector": "ribbon",
+     "illustration": "none"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "用什么Veeam免费版。它自带的日程关着，只由一个计",
+     "columns": 5,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/代码窗口.png",
+      "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/icons/版本循环文件.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
+     ]
+    },
+    {
+     "type": "content_card",
+     "text_ref": "已核对",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "tone": "yellow"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：左上标题。上半部分是一条水彩“镜像链”示意：一卷粗的胶片（全量）后面接三小卷细胶片（增量），用绿色链条连起来，每卷下面标大小和日期，链条末端一个大括号合计。下半部分五张横向小卡片排成一行（各带小水彩图标：Veeam 软件窗口、带锁的盘、日历、两块盘、带 30 天的沙漏式计时），卡片宽度相同。右下角一张黄色小便签样式的卡片（待验收）。",
+     "portrait": "竖版：标题；镜像链改成从上到下：全量一卷在上，三卷增量依次往下，合计在最下；五张小卡片上下排、满宽；黄色便签卡片放最后。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "segmented_band",
+     "content_card",
+     "icon",
+     "notice",
+     "bullet_list"
+    ],
+    "portrait_component_order": [
+     "segmented_band",
+     "content_card",
+     "notice",
+     "chapter_title",
+     "icon",
+     "bullet_list"
+    ]
+   },
+   "pending_requirements": [
+    "待验收黄色便签样式属未批准新样式，需组件样张；镜像链须真胶片插画，程序胶片边线仍待审样。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/scene-r3-pcconfig15-veeam-backup-window.png",
+   "fallback": false,
+   "semantic_status": "independently_approved_original_pcconfig15_card_subject",
+   "key": "代码窗口",
+   "source_phrase": "Veeam 软件窗口",
+   "sha256": "3c55ffd8c0e5a62a29c2734fe76e1cdb51892f5067262d50608c23f36b930f15",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/scene-r3-pcconfig15-drive-with-lock.png",
+   "fallback": false,
+   "semantic_status": "independently_approved_original_pcconfig15_card_subject",
+   "key": "外接硬盘",
+   "source_phrase": "带锁的盘",
+   "sha256": "e3c2e28cda1f3cd69c4de1d5433510c21de11ac9e899656dfba8266a1e0954cd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/scene-r3-pcconfig15-clean-calendar.png",
+   "fallback": false,
+   "semantic_status": "independently_approved_original_pcconfig15_card_subject",
+   "key": "日历",
+   "source_phrase": "日历",
+   "sha256": "98ef98007e026866b0ad815b081b5004871f724ad4f6f8c45de832d435979e48",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/scene-r3-pcconfig15-exact-two-drives.png",
+   "fallback": false,
+   "semantic_status": "independently_approved_original_pcconfig15_card_subject",
+   "key": "外接硬盘",
+   "source_phrase": "两块盘",
+   "sha256": "cbce9667fa9f3e117c662dc15cdec75fb31d42149a631978127167479bcc84f9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/scene-r3-pcconfig15-hourglass-30days.png",
+   "fallback": false,
+   "semantic_status": "independently_approved_original_pcconfig15_card_subject",
+   "key": "沙漏",
+   "source_phrase": "带 30 天的沙漏式计时",
+   "sha256": "31e991da6d73cd0bdd73d432f4973517346b6ddb3a30f98b38dbc9dc88e94f39",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "pcconfig/pcconfig-15-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-15-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-70a61068914efbdfe5b3",
+   "title_text": "系统镜像怎么做",
+   "sha256": "03d7095e821eb3bf39a9e6e747cfa74ec919ef2c21fc0000751111b131fa33ad",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 系统镜像怎么做
+
+镜像链（9 月 28 日 13:55）：全量 280.9 GiB（9 月 20 日）＋ 增量 37.5 GiB ＋ 38.1 GiB ＋ 46.6 GiB ＝ 403 GiB
+
+- **用什么**　Veeam 免费版。它自带的日程关着，只由一个计划任务每天 13:30 叫它，免得两套日程打架。
+- **备份什么**　Windows 必需分区和 C 盘，再加三个核心仓库的目录，连同没推送的提交和没提交的修改。
+- **加密**　镜像加密，密码只放在密码中心；G、H 根目录各有一份独立的密码中心；离线打开需有效匹配的恢复码。
+- **全量和增量**　平时每天做增量，约 25 分钟；离上次全量满一个月自动做一次全量，下一次约在 10 月 20 日，到时 G 上要有约 202 GB 空位。
+- **留多久**　G 上按 3 个备份日保留；H 只同步 G 上当前这一套完整镜像，不另留上一代。
+
+**已核对**　按 3 个备份日保留已通过；容量继续观察，10 月 10 日再按同一口径回看，不把容量下降当成通过条件。
+
+::screen{#pcconfig-16 section="highlights"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-16",
+  "section": "highlights",
+  "title": "亮点",
+  "scene": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。腾出的底部：第一张卡片正下方放一个截图位，带 1px 浅灰细边框、圆角 8px，宽约屏宽 26%、高宽比 2:1，框里什么都不画（拼页时贴真实截图），下面一行灰色小字图注；截图位和第一张卡片用一条浅绿细虚线连起来。第二、第三张卡片下方保持干净留白。",
+  "portrait": "竖版只画一张9:16，按941×1672预算，正文保持原图清楚字号约29px、行高40px，不缩字。三张卡片上下整宽，原插画在上、字在下，第一卡之后紧跟截图和原图注。标题y24–104。第一卡y120–963：原有外接盘、笔记本、书本和薄荷叶插画收成72px高的紧凑原生水彩组，不拉伸，y134–206；卡标题y216–274；第一段正文y286–486（5行、800px宽，Google、GitHub、Veeam等完整单词不拆到两行）；截图框外沿y498–911、净空784×405，框里留白，图注y921–949（24px字一行）。第二卡y979–1305：原有硬盘柱与复用箭头水彩插画收成100px高、y991–1091；标题y1101–1159；第二段正文y1171–1291（3行）。第三卡y1321–1647：原有沙漏与证据关系图水彩插画收成100px高、y1333–1433；标题y1443–1501；第三段正文y1513–1633（3行）。三段正文宽800px，截图与原图注同张，图注仍在截图下，第二三卡顺序不变。画布底部仍余25px，不加新字或编号。横版不动。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [
+   {
+    "file": "sources/assets/_references/dbcb6e09c475d189f267c271e96ff05c578d802da530cc1fff8a17d93d5ed429.png",
+    "where": "第一张卡片正下方的截图位，宽约屏宽 26%，高宽比 2:1，1px 浅灰细边框",
+    "caption": "密码中心里输入手机验证器 6 位动态码的窗口（9 月 24 日在主机上截图）",
+    "crop_h": [
+     40,
+     128,
+     720,
+     298
+    ],
+    "crop_v": [
+     40,
+     135,
+     720,
+     291
+    ]
+   }
+  ],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "亮点",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "一块外接盘，取回密码、解开镜像。",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/钥匙.png",
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/icons/日历时钟.png"
+     ],
+     "icon_size": 160
+    },
+    {
+     "type": "screenshot",
+     "ratio": "784:405"
+    },
+    {
+     "type": "prose",
+     "text_ref": "密码中心里输入手机验证器6位动态码的窗口（9月24日"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。\n1920宽复核：左侧三卡图标用现役icon_size=160保持自然比例，减少三卡总高与完整验证码窗的差，截图仍694×359且原图784×405不放大不裁切。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。腾出的底部：第一张卡片正下方放一个截图位，带 1px 浅灰细边框、圆角 8px，宽约屏宽 26%、高宽比 2:1，框里什么都不画（拼页时贴真实截图），下面一行灰色小字图注；截图位和第一张卡片用一条浅绿细虚线连起来。第二、第三张卡片下方保持干净留白。",
+     "portrait": "竖版只画一张9:16，按941×1672预算，正文保持原图清楚字号约29px、行高40px，不缩字。三张卡片上下整宽，原插画在上、字在下，第一卡之后紧跟截图和原图注。标题y24–104。第一卡y120–963：原有外接盘、笔记本、书本和薄荷叶插画收成72px高的紧凑原生水彩组，不拉伸，y134–206；卡标题y216–274；第一段正文y286–486（5行、800px宽，Google、GitHub、Veeam等完整单词不拆到两行）；截图框外沿y498–911、净空784×405，框里留白，图注y921–949（24px字一行）。第二卡y979–1305：原有硬盘柱与复用箭头水彩插画收成100px高、y991–1091；标题y1101–1159；第二段正文y1171–1291（3行）。第三卡y1321–1647：原有沙漏与证据关系图水彩插画收成100px高、y1333–1433；标题y1443–1501；第三段正文y1513–1633（3行）。三段正文宽800px，截图与原图注同张，图注仍在截图下，第二三卡顺序不变。画布底部仍余25px，不加新字或编号。横版不动。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "illustration",
+     "prose",
+     "screenshot"
+    ],
+    "portrait_component_order": [
+     "prose",
+     "content_card",
+     "illustration",
+     "chapter_title",
+     "screenshot"
+    ]
+   },
+   "pending_requirements": [
+    "三张亮点卡要主插画在上、正文在下；content_card 仅领小图标，需逐卡 illustration 素材绑定。截图应在第一卡后而非整组之后，横版虚线绑定第一卡；核心无组内插入截图接口。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "亮点",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "一块外接盘，取回密码、解开镜像。",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": [
+      "_library/icons/钥匙.png",
+      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/icons/日历时钟.png"
+     ]
+    },
+    {
+     "type": "screenshot"
+    },
+    {
+     "type": "prose",
+     "text_ref": "密码中心里输入手机验证器6位动态码的窗口（9月24日"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。腾出的底部：第一张卡片正下方放一个截图位，带 1px 浅灰细边框、圆角 8px，宽约屏宽 26%、高宽比 2:1，框里什么都不画（拼页时贴真实截图），下面一行灰色小字图注；截图位和第一张卡片用一条浅绿细虚线连起来。第二、第三张卡片下方保持干净留白。",
+     "portrait": "竖版只画一张9:16，按941×1672预算，正文保持原图清楚字号约29px、行高40px，不缩字。三张卡片上下整宽，原插画在上、字在下，第一卡之后紧跟截图和原图注。标题y24–104。第一卡y120–963：原有外接盘、笔记本、书本和薄荷叶插画收成72px高的紧凑原生水彩组，不拉伸，y134–206；卡标题y216–274；第一段正文y286–486（5行、800px宽，Google、GitHub、Veeam等完整单词不拆到两行）；截图框外沿y498–911、净空784×405，框里留白，图注y921–949（24px字一行）。第二卡y979–1305：原有硬盘柱与复用箭头水彩插画收成100px高、y991–1091；标题y1101–1159；第二段正文y1171–1291（3行）。第三卡y1321–1647：原有沙漏与证据关系图水彩插画收成100px高、y1333–1433；标题y1443–1501；第三段正文y1513–1633（3行）。三段正文宽800px，截图与原图注同张，图注仍在截图下，第二三卡顺序不变。画布底部仍余25px，不加新字或编号。横版不动。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "content_card",
+     "illustration",
+     "prose",
+     "screenshot"
+    ],
+    "portrait_component_order": [
+     "prose",
+     "content_card",
+     "illustration",
+     "chapter_title",
+     "screenshot"
+    ]
+   },
+   "pending_requirements": [
+    "三张亮点卡要主插画在上、正文在下；content_card 仅领小图标，需逐卡 illustration 素材绑定。截图应在第一卡后而非整组之后，横版虚线绑定第一卡；核心无组内插入截图接口。",
+    "原竖版941×1672明确同张预算与29px正文和统一36px下限冲突；保持统一字高且保留全部文字，不报告固定一张恢复完成。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/钥匙.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "钥匙",
+   "source_phrase": "一块外接盘，取回密码、解开镜像。 \n9月22日，把H接到笔记本上，不登录GitHub，用手机验证码打开盘里的密码中心，取到镜像密码；Veeam真的解密了镜像、提出文件，逐个核对一致。之后通行密钥、Google账号、微软账号三种验证方式也都打开过；恢复码没测。",
+   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "文件核验",
+   "source_phrase": "271 GiB 没复制，只复制了 63 GiB。 \n外接盘只同步G上当前这一套完整镜像，不另留上一代。当时9月21日那次同步，271GiB直接复用，只真正复制了63GiB，每个文件都核对过SHA-256才切换。",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/日历时钟.png",
+   "fallback": false,
+   "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
+   "key": "日历时钟",
+   "source_phrase": "卡住的时候，它自己留证据。 \n两个AI一起卡住、人也进不去时最难查。现在远程服务每10秒看一眼进程，发现一起卡住就自动记下“谁在等谁”；9月28日11:41它就自己记过一次。",
+   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-196da31da8a90a",
+   "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-ad192a99dcffa1",
+   "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "round2_same_project_main_reuse",
+   "key": "ill-5fd8eb171f4f0f",
+   "source_phrase": "横版：拿已通过的第 12 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-12-desktop.png）做底：三张大卡片的插画和版式不变，第一张卡片最后一句改成 text 里的新字（多一行，第一张卡片可略加高）；三张卡片整体上移、插画高度缩约 20%，把底部原来的空白腾出来。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/titles/title-r3-ba0d3fdcc635f736cc8b.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-16-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-r3-ba0d3fdcc635f736cc8b",
+   "title_text": "亮点",
+   "sha256": "30317b0c45077d07548237258c116d682fdfc22e75a08438b2426ea01e68f4b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 亮点
+
+**一块外接盘，取回密码、解开镜像。**
+9 月 22 日，把 H 接到笔记本上，不登录 GitHub，用手机验证码打开盘里的密码中心，取到镜像密码；Veeam 真的解密了镜像、提出文件，逐个核对一致。之后通行密钥、Google 账号、微软账号三种验证方式也都打开过；恢复码没测。
+
+**271 GiB 没复制，只复制了 63 GiB。**
+外接盘只同步 G 上当前这一套完整镜像，不另留上一代。当时 9 月 21 日那次同步，271 GiB 直接复用，只真正复制了 63 GiB，每个文件都核对过 SHA-256 才切换。
+
+**卡住的时候，它自己留证据。**
+两个 AI 一起卡住、人也进不去时最难查。现在远程服务每 10 秒看一眼进程，发现一起卡住就自动记下“谁在等谁”；9 月 28 日 11:41 它就自己记过一次。
+
+密码中心里输入手机验证器 6 位动态码的窗口（9 月 24 日在主机上截图）
+
+::screen{#pcconfig-17 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-17",
+  "section": "features",
+  "title": "全部功能（1）",
+  "scene": "横版：“全部功能”的第 1 张，顶上有大标题和一行图例（图例画成六个圆点加文字）。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“每天的备份”组名横条右半边写那句小字，其中“AI 使用小记录”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+  "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [
+   {
+    "text": "AI 使用小记录",
+    "href": "/projects/codex-memory/#f-usage-ledger",
+    "orientations": [
+     "v"
+    ]
+   }
+  ],
+  "anchors": [
+   {
+    "id": "g-backup",
+    "text": "每天的备份"
+   },
+   {
+    "id": "f-system-image",
+    "text": "加密系统镜像"
+   },
+   {
+    "id": "f-personal-backup",
+    "text": "照片视频和个人资料备份"
+   },
+   {
+    "id": "f-media-cloud-start",
+    "text": "照片视频云端维护开关"
+   },
+   {
+    "id": "f-docs-downloads",
+    "text": "文档、下载备份"
+   },
+   {
+    "id": "f-software-list",
+    "text": "已装软件清单"
+   },
+   {
+    "id": "f-guide-publish",
+    "text": "发布恢复指南"
+   },
+   {
+    "id": "f-cold-sync",
+    "text": "同步到外接盘"
+   },
+   {
+    "id": "f-other-backups",
+    "text": "别的项目的备份"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "全部功能（87项）",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "status_legend",
+     "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "每天的备份AI工具的配置、记忆、对话各备没备，连同A",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+      "_library/icons/云图片.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/硬盘循环.png",
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {
+      "11": 3,
+      "16": 3,
+      "55": 3,
+      "7": 2,
+      "8": 3
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 1 张，顶上有大标题和一行图例（图例画成六个圆点加文字）。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“每天的备份”组名横条右半边写那句小字，其中“AI 使用小记录”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "chapter_title",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "全部功能（87项）",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "status_legend",
+     "text_ref": "●在用●待验收○待实施●没用过●说不准✕已停用"
+    },
+    {
+     "type": "feature_card",
+     "text_ref": "每天的备份AI工具的配置、记忆、对话各备没备，连同A",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
+      "_library/icons/云图片.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/硬盘循环.png",
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 1 张，顶上有大标题和一行图例（图例画成六个圆点加文字）。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“每天的备份”组名横条右半边写那句小字，其中“AI 使用小记录”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：大标题和图例在最上面（图例排成两行三个）；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "chapter_title",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/43-文件柜-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件柜",
+   "source_phrase": "加密系统镜像　每天 13:30 用 Veeam 把 Windows、C 盘和三个核心仓库做成加密镜像放到 G，留最近 3 天；满一个月自动做一次全量（下一次约 10 月 20 日）　〈在用〉",
+   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "照片视频和个人资料备份　每天 17:10 把五个资料目录复制到 G；E 上删掉的，在 G 待删区留 30 天　〈在用〉",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/波形照片.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "波形照片",
+   "source_phrase": "照片视频云端维护开关　17:10 的备份做完后，开关开着就启动照片视频录音管理的云端维护：电脑删了云端跟删、新内容上云；云端做没做完看它自己的回执　〈在用〉",
+   "sha256": "0be5de041a835e7d7b125f5edf51ffd4fb98807c67f7ba7b495f1bd757cecce9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云下载",
+   "source_phrase": "文档、下载备份　每天 12:35 复制到 G，删掉的留 30 天；顺带存上 WSL 里选定的 Linux 文件　〈在用〉",
+   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "已装软件清单　每天 10:45 导出已装软件、winget 清单和环境变量（秘密值打码），换机照着装　〈在用〉",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "发布恢复指南　每天 14:15 把最新的换机恢复指南和校验工具发布到 G（H 随 14:30 的同步拿到），并查登记过的 11 类备份最近有没有成功（Steam 外观 9 天，其余 36 小时）　〈在用〉",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "同步到外接盘　每天 14:30 和每次登录时，把 G 上 19 类备份同步到 H，逐个核对；照片视频这几类删掉的在 H 也留 30 天　〈在用〉",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "别的项目的备份　微信、开发配置（9 月 29 日 12:05 起按新清单带上 Codex 配置和记忆、Antigravity 设置，不再带 OpenClaw，那次跑完才算落实）、Codex 对话、电脑使用记录、Steam 外观、密码中心各自写进 G，这里统一同步到 H；14:15 的检查除微信、开发配置、Codex 对话和 Steam 外观，也查电脑使用记录和 AI 使用小记录（只提醒、不拦同步）；密码中心恢复集不在这 11 类里，同步回执单列它在 G、H 上各自的最新日期　〈在用〉",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-4d1074a1cc01153ce3e6.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-17-h.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-4d1074a1cc01153ce3e6",
+   "title_text": "全部功能（84 项）",
+   "sha256": "12518b31aca18454f9af3629347f5b1b7c7304c8b1fbc5bbf279b7b67d3c2479",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 全部功能（87 项）
+● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
+
+**每天的备份**　AI 工具的配置、记忆、对话各备没备，连同〔AI 使用小记录〕，见 AI 备份那页
+1. **加密系统镜像**　每天 13:30 用 Veeam 把 Windows、C 盘和三个核心仓库做成加密镜像放到 G，按 3 个备份日保留；满一个月自动做一次全量（下一次约 10 月 20 日）　〈在用〉
+2. **照片视频和个人资料备份**　每天 17:10 把五个资料目录复制到 G；E 上删掉的，在 G 待删区留 30 天　〈在用〉
+3. **照片视频云端维护开关**　17:10 的备份做完后，开关开着就启动照片视频录音管理的云端维护：电脑删了云端跟删、新内容上云；云端做没做完看它自己的回执　〈在用〉
+4. **文档、下载备份**　每天 12:35 复制到 G，删掉的留 30 天；顺带存上 WSL 里选定的 Linux 文件　〈在用〉
+5. **已装软件清单**　每天 10:45 导出已装软件、winget 清单和环境变量（秘密值打码），换机照着装　〈在用〉
+6. **发布恢复指南**　每天 14:15 把最新的换机恢复指南和校验工具发布到 G（H 随 14:30 的同步拿到），并查登记过的 11 类备份最近有没有成功（Steam 外观 9 天，其余 36 小时）　〈在用〉
+7. **同步到外接盘**　每天 14:30 和每次登录时，把 G 上 19 类备份同步到 H，逐个核对；照片视频这几类删掉的在 H 也留 30 天　〈在用〉
+8. **别的项目的备份**　微信、开发配置（当前包已核对带上 Codex 配置和记忆、Antigravity 设置，OpenClaw 已排除，10 月 3 日修复后核对通过）、Codex 对话、电脑使用记录、Steam 外观、密码中心各自写进 G，这里统一同步到 H；14:15 的检查除微信、开发配置、Codex 对话和 Steam 外观，也查电脑使用记录和 AI 使用小记录（只提醒、不拦同步）；密码中心恢复集不在这 11 类里，同步回执单列它在 G、H 上各自的最新日期　〈在用〉
+
+::screen{#pcconfig-18 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-18",
+  "section": "features",
+  "title": "全部功能（2）",
+  "scene": "横版：“全部功能”的第 2 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+  "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "g-recovery",
+    "text": "坏了怎么办"
+   },
+   {
+    "id": "f-recovery-guide",
+    "text": "换机恢复指南"
+   },
+   {
+    "id": "f-offline-password",
+    "text": "离线取镜像密码"
+   },
+   {
+    "id": "f-veeam-media",
+    "text": "Veeam 恢复盘"
+   },
+   {
+    "id": "f-rescue-usb",
+    "text": "救急 U 盘"
+   },
+   {
+    "id": "f-recovery-kit",
+    "text": "恢复材料清单"
+   },
+   {
+    "id": "f-unpushed-code",
+    "text": "找回没推送的代码"
+   },
+   {
+    "id": "f-task-rebuild",
+    "text": "自动任务重建表"
+   },
+   {
+    "id": "f-restore-order",
+    "text": "恢复顺序"
+   },
+   {
+    "id": "f-windows-baseline",
+    "text": "Windows 稳定设置记录"
+   },
+   {
+    "id": "f-bare-metal",
+    "text": "整机空盘还原"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "坏了怎么办",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "group_heading": "brush",
+     "item_spans": {
+      "12": 3,
+      "13": 3,
+      "18": 2
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 2 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "坏了怎么办",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 2 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "坏了怎么办",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "换机恢复指南　7 步：接盘、取密码、做启动盘、还原、首次开机隔离、接着恢复；G、H 上各一份　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "离线取镜像密码　G、H 根目录都有独立的密码中心，不用先登记电脑；离线打开需有效匹配的恢复码　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "Veeam 恢复盘　做启动 U 盘用的镜像文件，G、H 各一份；从 U 盘真的启动还没测　〈待验收〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "救急 U 盘　32 GB，装着 PE 工具、主板 BIOS 回刷包、风扇配置和《救急先看》　〈在用〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "恢复材料清单　18 样，各带校验值：Veeam 恢复盘镜像、Veeam 整包校验工具、救急 U 盘里隐藏的 PE 启动分区、主板 BIOS F4b 回刷文件、BIOS 风扇配置备份、电脑恢复中文说明、救急 U 盘中文速查、Windows 11 25H2 中文安装镜像、Windows ADK 安装器、ADK 离线清单、ADK 补丁 KB5079391、WinPE 插件安装器、WinPE 离线清单、本机驱动全量导出、技嘉官方 BIOS 和驱动包、BIOS 设置记录、恢复材料校验清单、U 盘可见分区校验清单　〈在用〉",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "找回没推送的代码　镜像里带着三个核心仓库没推送的提交和没提交的修改，恢复时提到新目录　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "自动任务重建表　换机时 33 个必须重建、5 个可选、49 个软件自己装回、38 个等我定　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "恢复顺序　先网络和 Codex，再常用软件，最后本地 AI；模型不备份，按来源重下并核对哈希　〈在用〉",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "Windows 稳定设置记录　记下验证过的系统设置和原因，例如 TCP 用 CUBIC，因为 BBR2 曾让本机卡住　〈在用〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-1ef7844ae1e4078fc386.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-1ef7844ae1e4078fc386",
+   "title_text": "坏了怎么办",
+   "sha256": "07c3e6619cbc9033efda4484378c81330143717c3939f04f8f01b56f12336978",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**坏了怎么办**
+9. **换机恢复指南**　7 步：接盘、取密码、做启动盘、还原、首次开机隔离、接着恢复；G、H 上各一份　〈在用〉
+10. **离线取镜像密码**　G、H 根目录都有独立的密码中心，不用先登记电脑；离线打开需有效匹配的恢复码　〈在用〉
+11. **Veeam 恢复盘**　做启动 U 盘用的镜像文件，G、H 各一份；从 U 盘真的启动还没测　〈待验收〉
+12. **救急 U 盘**　32 GB，装着 PE 工具、主板 BIOS 回刷包、风扇配置和《救急先看》　〈在用〉
+13. **恢复材料清单**　19 样，各带校验值：Veeam 恢复盘镜像、Veeam 整包校验工具、救急 U 盘里隐藏的 PE 启动分区、主板 BIOS F4b 回刷文件、BIOS 风扇配置备份、电脑恢复中文说明、救急 U 盘中文速查、Windows 11 25H2 中文安装镜像、Windows ADK 安装器、ADK 离线清单、ADK 补丁 KB5079391、WinPE 插件安装器、WinPE 离线清单、本机驱动全量导出、技嘉官方 BIOS 和驱动包、BIOS 设置记录、恢复材料校验清单、U 盘可见分区校验清单、换新电脑后取回备份区访问权限的入口　〈在用〉
+14. **找回没推送的代码**　镜像里带着三个核心仓库没推送的提交和没提交的修改，恢复时提到新目录　〈在用〉
+15. **自动任务重建表**　换机时 33 个必须重建、5 个可选、49 个软件自己装回、38 个等我定　〈在用〉
+16. **恢复顺序**　先网络和 Codex，再常用软件，最后本地 AI；模型不备份，按来源重下并核对哈希　〈在用〉
+17. **Windows 稳定设置记录**　记下验证过的系统设置和原因，例如 TCP 用 CUBIC，因为 BBR2 曾让本机卡住　〈在用〉
+18. **整机空盘还原**　在新硬盘上从镜像把整台电脑还原；我决定不演练　〈没用过〉
+
+::screen{#pcconfig-19 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-19",
+  "section": "features",
+  "title": "全部功能（3）",
+  "scene": "横版：“全部功能”的第 3 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“密码和资料”组名横条右半边写那句小字，其中“密码中心”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+  "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [
+   {
+    "text": "密码中心",
+    "href": "/projects/password-center/",
+    "locator_instances": {
+     "v": {
+      "input_sha256": "dad25c760fc0599c2b2f4374f029fdfc7dd4730404872f3adb54827fe2f60dde",
+      "instances": [
+       {
+        "context_text": "每天18:17自查，见密码中心；",
+        "context_rect": [
+         348,
+         3811,
+         831,
+         3851
+        ],
+        "expected_rect": [
+         642,
+         3816,
+         806,
+         3851
+        ]
+       }
+      ]
+     }
+    }
+   }
+  ],
+  "anchors": [
+   {
+    "id": "g-freeze",
+    "text": "卡死和排障"
+   },
+   {
+    "id": "f-freeze-card",
+    "text": "卡死急救卡"
+   },
+   {
+    "id": "f-freeze-capture",
+    "text": "卡死自动留现场"
+   },
+   {
+    "id": "f-stutter-check",
+    "text": "回查卡顿原因"
+   },
+   {
+    "id": "f-known-issues",
+    "text": "已知问题手册"
+   },
+   {
+    "id": "f-memory-log",
+    "text": "内存用量记录"
+   },
+   {
+    "id": "f-laptop-takeover",
+    "text": "笔记本接管预案"
+   },
+   {
+    "id": "g-remote",
+    "text": "远程和网络"
+   },
+   {
+    "id": "f-remote-service",
+    "text": "远程服务的机器接线"
+   },
+   {
+    "id": "f-todesk-prelogin",
+    "text": "没登录也能连 ToDesk"
+   },
+   {
+    "id": "f-rdp-tailscale",
+    "text": "远程桌面只放行两台"
+   },
+   {
+    "id": "f-proxy-share",
+    "text": "借电脑上网"
+   },
+   {
+    "id": "f-proxy-autostart",
+    "text": "代理开机自启"
+   },
+   {
+    "id": "f-network-rescue",
+    "text": "断网急救"
+   },
+   {
+    "id": "f-grafana-public",
+    "text": "图表公网入口"
+   },
+   {
+    "id": "g-secrets",
+    "text": "密码和资料"
+   },
+   {
+    "id": "f-pc-install",
+    "text": "密码中心安装和绑定"
+   },
+   {
+    "id": "f-data-lock-guide",
+    "text": "资料锁接入说明"
+   },
+   {
+    "id": "f-extra-encrypted-copy",
+    "text": "清手机前的加密副本"
+   },
+   {
+    "id": "f-encrypt-data-dirs",
+    "text": "资料目录整体加密"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "卡死和排障",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/round3/clean-assets/png/07-相机-clean.png",
+      "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/趋势图.png",
+      "_library/icons/笔记本电脑.png",
+      "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
+      "_library/icons/盾牌对勾.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/开关.png",
+      "_library/icons/断线.png",
+      "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png",
+      "_library/icons/保险箱.png",
+      "_library/icons/钥匙.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/封印文稿.png",
+      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {
+      "11": 3,
+      "16": 3,
+      "55": 3,
+      "22": 3,
+      "24": 2
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 3 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“密码和资料”组名横条右半边写那句小字，其中“密码中心”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "卡死和排障",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/round3/clean-assets/png/07-相机-clean.png",
+      "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/趋势图.png",
+      "_library/icons/笔记本电脑.png",
+      "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
+      "_library/icons/盾牌对勾.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/开关.png",
+      "_library/icons/断线.png",
+      "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png",
+      "_library/icons/保险箱.png",
+      "_library/icons/钥匙.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/封印文稿.png",
+      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 3 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“密码和资料”组名横条右半边写那句小字，其中“密码中心”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "卡死和排障",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "卡死急救卡　两个 AI 一起卡住时照着做：能存的先存，约 2 分钟还不好就重启，不用按键留现场　〈没用过〉",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "卡死自动留现场　每 10 秒看一次进程，一起卡住超过约 60 秒就自动记下谁在等谁　〈在用〉",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "回查卡顿原因　刚卡过时，按时间把硬件、程序和系统记录对齐，查有证据的原因；只看不修　〈在用〉",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "听诊器检查",
+   "source_phrase": "已知问题手册　查明过的问题和以后的做法：显卡只跑 PCIe 5.0 x4（应至少 x8）；卡死、强制重启的排查顺序；内存被吃光的诊断结论；9 月 26 日、27 日两次新程序打不开的记录；画面卡和输入卡分开判断；Edge 更新被 360 关掉；natpierce 退役后留下两个代理入口；9 月 26 日顺带做的调整（卸向日葵、停 VMware 服务）　〈在用〉",
+   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "内存用量记录　开机后一直记内存用量；异常重启后 AI 从中查内存是不是被吃光　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "笔记本接管预案　主机固态装进硬盘盒接到笔记本时怎么处理　〈没用过〉",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "远程和网络",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "远程服务的机器接线　远程服务装在这台电脑上：开机自启的服务和登录任务、端口和隧道登记，换机按表重建；能做什么见电脑远程控制页　〈在用〉",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "没登录也能连 ToDesk　看门狗每 2 分钟把 ToDesk 服务修回“自动＋运行”；登录前真连一次还没测　〈待验收〉",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "远程桌面只放行两台　Windows 远程桌面只对 Tailscale 里的笔记本和手机开放　〈在用〉",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/手机电脑连接.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "手机电脑连接",
+   "source_phrase": "借电脑上网　手机、笔记本经 Tailscale 用这台电脑的两个代理入口，不开公网　〈待验收〉",
+   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/身份盾牌.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "身份盾牌",
+   "source_phrase": "代理开机自启　登录后以管理员身份打开 Clash Verge，恢复上次设置　〈在用〉",
+   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/断线.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "断线",
+   "source_phrase": "断网急救　突然断网时先查哪一项，只做一项能撤回的恢复　〈在用〉",
+   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "图表公网入口　电脑使用记录的 Grafana 图表经 Cloudflare 隧道（远程服务的外网入口也走它）公开在 grafana.wly0829.cn，要登录　〈在用〉",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 16,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "密码中心安装和绑定　密码中心 9 月 28 日独立成项目，这里只管把它装到这台电脑并绑定　〈待验收〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 17,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "资料锁接入说明　各项目读私人资料前怎么查锁（9 个项目的调用点表）　〈在用〉",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-2a00d050cecd3903db53.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-2a00d050cecd3903db53",
+   "title_text": "卡死和排障",
+   "sha256": "f1996ffc79bf970a8800e5ffb76cda575614c9ea2c0241a405e8af897f11e8c0",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-e1d4152eeb43a0830741.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-e1d4152eeb43a0830741",
+   "title_text": "远程和网络",
+   "sha256": "778939ecdb55922e0f93a929cde31761b2bf6a713c4e3af897d76f7ea32d817b",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**卡死和排障**
+19. **卡死急救卡**　两个 AI 一起卡住时照着做：能存的先存，约 2 分钟还不好就重启，不用按键留现场　〈没用过〉
+20. **卡死自动留现场**　每 10 秒看一次进程，一起卡住超过约 60 秒就自动记下谁在等谁　〈在用〉
+21. **回查卡顿原因**　刚卡过时，按时间把硬件、程序和系统记录对齐，查有证据的原因；只看不修　〈在用〉
+22. **已知问题手册**　查明过的问题和以后的做法：显卡只跑 PCIe 5.0 x4（应至少 x8）；卡死、强制重启的排查顺序；内存被吃光的诊断结论；9 月 26 日、27 日两次新程序打不开的记录；画面卡和输入卡分开判断；Edge 更新被 360 关掉；natpierce 退役后留下两个代理入口；9 月 26 日顺带做的调整（卸向日葵、停 VMware 服务）　〈在用〉
+23. **内存用量记录**　开机后一直记内存用量；异常重启后 AI 从中查内存是不是被吃光　〈在用〉
+24. **笔记本接管预案**　主机固态装进硬盘盒接到笔记本时怎么处理　〈没用过〉
+
+**远程和网络**
+25. **远程服务的机器接线**　远程服务装在这台电脑上：开机自启的服务和登录任务、端口和隧道登记，换机按表重建；能做什么见电脑远程控制页　〈在用〉
+26. **没登录也能连 ToDesk**　看门狗每 2 分钟把 ToDesk 服务修回“自动＋运行”；登录前真连一次还没测　〈待验收〉
+27. **远程桌面只放行两台**　Windows 远程桌面只对 Tailscale 里的笔记本和手机开放　〈在用〉
+28. **借电脑上网**　手机、笔记本经 Tailscale 用这台电脑的两个代理入口，不开公网　〈待验收〉
+29. **代理开机自启**　登录后以管理员身份打开 代理程序，恢复上次设置　〈在用〉
+30. **断网急救**　突然断网时先查哪一项，只做一项能撤回的恢复　〈在用〉
+31. **图表公网入口**　电脑使用记录的 Grafana 图表经 Cloudflare 隧道（远程服务的外网入口也走它）开放在 grafana.wly0829.cn；公开状态小看板免登录，完整看板仍要登录　〈在用〉
+
+**密码和资料**　密码中心本身，连同恢复集复制到 H、每天 18:17 自查，见〔密码中心〕；这里只列这台电脑上的接线
+32. **密码中心安装和绑定**　密码中心 9 月 28 日独立成项目，这里只管把它装到这台电脑并绑定　〈待验收〉
+33. **资料锁接入说明**　各项目读私人资料前怎么查锁（9 个项目的调用点表）　〈在用〉
+34. **清手机前的加密副本**　给照片视频录音管理清手机前多做一份加密副本　〈待实施〉
+35. **资料目录整体加密**　五个资料目录改成加密盘，解锁时才打开　〈待实施〉
+
+::screen{#pcconfig-20 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-20",
+  "section": "features",
+  "title": "全部功能（4）",
+  "scene": "横版：“全部功能”的第 4 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“Google 直连”组名横条右半边写那句小字，其中“google-workspace-direct 技能”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 43 回收站定时清理、44 AI 缓存清扫），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“开机和桌面”组共 36–46 十一项。",
+  "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [
+   {
+    "text": "google-workspace-direct 技能",
+    "href": "/skills/google-workspace-direct/"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "g-desktop",
+    "text": "开机和桌面"
+   },
+   {
+    "id": "f-display-recovery",
+    "text": "三块屏幕恢复"
+   },
+   {
+    "id": "f-xiaomi-share",
+    "text": "小米妙享守护"
+   },
+   {
+    "id": "f-desktop-icons",
+    "text": "桌面图标自动隐藏"
+   },
+   {
+    "id": "f-oled-blackout",
+    "text": "主屏黑幕"
+   },
+   {
+    "id": "f-audio-speaker",
+    "text": "声音固定走音箱"
+   },
+   {
+    "id": "f-wechat-dual",
+    "text": "微信双开"
+   },
+   {
+    "id": "f-claude-background",
+    "text": "Claude 不自启、退出清理",
+    "locator_text": {
+     "h": "42. Claude 不自启、退出清理"
+    }
+   },
+   {
+    "id": "f-recycle-weekly",
+    "text": "回收站定时清理"
+   },
+   {
+    "id": "f-ai-cache-sweep",
+    "text": "AI 缓存清扫"
+   },
+   {
+    "id": "f-desktop-scripts",
+    "text": "桌面急救小脚本"
+   },
+   {
+    "id": "f-startup-snapshot",
+    "text": "启动项快照"
+   },
+   {
+    "id": "g-google",
+    "text": "Google 直连"
+   },
+   {
+    "id": "f-gmail",
+    "text": "邮件"
+   },
+   {
+    "id": "f-gdrive",
+    "text": "云盘"
+   },
+   {
+    "id": "f-gtasks",
+    "text": "待办"
+   },
+   {
+    "id": "f-gphotos",
+    "text": "相册"
+   },
+   {
+    "id": "g-ai-tools",
+    "text": "给 AI 用的小工具"
+   },
+   {
+    "id": "f-sms-code",
+    "text": "取短信验证码"
+   },
+   {
+    "id": "f-browser-runtime",
+    "text": "浏览器连接检查"
+   },
+   {
+    "id": "f-task-wakeup",
+    "text": "任务监测提醒"
+   },
+   {
+    "id": "f-codex-repair",
+    "text": "Codex 卡住自动修"
+   },
+   {
+    "id": "f-pending-list",
+    "text": "待验收清单"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "开机和桌面",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/icons/版本循环文件.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/icons/工具箱回收站.png",
+      "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+      "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+      "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+      "_library/icons/齿轮.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
+      "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {
+      "11": 3,
+      "16": 3,
+      "43": 3,
+      "44": 3
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 4 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“Google 直连”组名横条右半边写那句小字，其中“google-workspace-direct 技能”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 43 回收站定时清理、44 AI 缓存清扫），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“开机和桌面”组共 36–46 十一项。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "开机和桌面",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/icons/版本循环文件.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/icons/工具箱回收站.png",
+      "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+      "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+      "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+      "_library/icons/齿轮.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
+      "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 4 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。“Google 直连”组名横条右半边写那句小字，其中“google-workspace-direct 技能”画成链接样式。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 43 回收站定时清理、44 AI 缓存清扫），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“开机和桌面”组共 36–46 十一项。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon",
+     "inline_link"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "显示器",
+   "source_phrase": "开机和桌面",
+   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "三块屏幕恢复　三块屏偶尔只亮一块，每 5 分钟检查，自动恢复　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "小米妙享守护　没开就补开，开机后弹一次主界面　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "桌面图标自动隐藏　双击桌面空白处显示，30 秒后自动再藏；主屏重新接上时顺手修好任务栏　〈在用〉",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "主屏黑幕　Ctrl+Win+R 给 OLED 主屏盖黑幕，串流照样看得到桌面　〈在用〉",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "声音固定走音箱　登录后把默认输出固定到音箱，不被别的设备抢走　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "微信双开　登录后自动开两个微信　〈在用〉",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "显示器",
+   "source_phrase": "Claude 不自启、退出清理　开机不自动开 Claude 桌面，关掉后清掉它留在后台的程序　〈在用〉",
+   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "回收站文件",
+   "source_phrase": "回收站每周清理　每周一 06:30 清掉放了 7 天以上的东西；9 月 28 日第一次自动跑，清掉 21 项　〈在用〉",
+   "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "桌面急救小脚本　“释放卡住按键”“修复音响声音”，双击就用　〈说不准〉",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "启动项快照　记下 23 个开机自启项，换机时参考　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "气泡钢笔",
+   "source_phrase": "邮件　按条件找邮件和附件、读正文；把确认过的回复、草稿和整理交给 AI 办　〈在用〉",
+   "sha256": "0885f03d0fd8605a1e8158ed683043f68c0a9f2176cb524056d398071c4424c1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件夹放大镜",
+   "source_phrase": "云盘　找文件、下载原件；按指定对象上传、移动、分享　〈在用〉",
+   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "待办　记待办、查询、修改、标记完成　〈在用〉",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件夹上传",
+   "source_phrase": "相册　单独一份授权：查已连接的相册，把选定照片上传并加入或移出相册　〈说不准〉",
+   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 16,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "齿轮",
+   "source_phrase": "给 AI 用的小工具",
+   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 17,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/手机电脑连接.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "手机电脑连接",
+   "source_phrase": "取短信验证码　手机验证码经小米妙享转到电脑，AI 读最近 60 秒的通知取码，不留日志；还没真用过　〈待验收〉",
+   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 18,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "Chrome标志",
+   "source_phrase": "浏览器连接检查　AI 连不上我的 Chrome 时，查清缺哪个已装组件；只看不改　〈在用〉",
+   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 19,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "红色警示",
+   "source_phrase": "任务监测提醒　让电脑盯一件事，条件满足就提醒原来的 Codex 任务　〈在用〉",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-e5dfba635c85da18dc74.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-e5dfba635c85da18dc74",
+   "title_text": "Google 直连",
+   "sha256": "5811e56222eadd11f205df52a5ed3e24c2e6c547cd2b167f3669d9ebeb463033",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-f3cce2f38e5b727e806d.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-f3cce2f38e5b727e806d",
+   "title_text": "开机和桌面",
+   "sha256": "a245f0eb4db7c97bcb58facba3314796a5e0d8c1bfc1b142097999bd5cdc4d14",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-39599d46e0ff65ab6454.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-39599d46e0ff65ab6454",
+   "title_text": "给 AI 用的小工具",
+   "sha256": "f16fca3de08f6e74d1615895a21b2dab7d3b2b854d9e68bbd55e3ae20dc63aa0",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**开机和桌面**
+36. **三块屏幕恢复**　三块屏偶尔只亮一块，每 5 分钟检查，自动恢复　〈在用〉
+37. **小米妙享守护**　没开就补开，开机后弹一次主界面　〈在用〉
+38. **桌面图标自动隐藏**　双击桌面空白处显示，30 秒后自动再藏；主屏重新接上时顺手修好任务栏　〈在用〉
+39. **主屏黑幕**　Ctrl+Win+R 给 OLED 主屏盖黑幕，串流照样看得到桌面　〈在用〉
+40. **声音固定走音箱**　登录后把默认输出固定到音箱，不被别的设备抢走　〈在用〉
+41. **微信双开**　登录后自动开两个微信　〈在用〉
+42. **Claude 不自启、退出清理**　开机不自动开 Claude 桌面，关掉后清掉它留在后台的程序　〈在用〉
+43. **回收站定时清理**　每小时看一次各盘；北京时间 0、6、12、18 点常规清：AI 缓存目录删进去的满 6 小时、其他满 7 天才永久删；某块盘空闲低于警戒线（容量的 5%，最少 20 GB、最多 100 GB）时，每小时都清这块盘，AI 缓存只留 1 小时；9 月 28 日第一次自动跑（那时是每周一 06:30 一次），清掉 21 项　〈在用〉
+44. **AI 缓存清扫**　每小时第 50 分钟量一遍 AI 缓存，把确认能重建、已验收、24 小时没再用到的子任务产物，和闲置 7 天的旧临时目录放进回收站；在跑的、近期用到的、没提交或没合并的一律留着；期限按每个子任务自己的验收和活动算，不跟着整个会话走。10 月 7 日上线；10 月 8 日凌晨看时，几轮都因引用没扫完，一项也没动　〈待验收〉
+45. **桌面急救小脚本**　“释放卡住按键”“修复音响声音”，双击就用　〈说不准〉
+46. **启动项快照**　记下 23 个开机自启项，换机时参考　〈在用〉
+
+**Google 直连**（固定账号，日历不接）跟 AI 怎么说见〔google-workspace-direct 技能〕
+47. **邮件**　按条件找邮件和附件、读正文；把确认过的回复、草稿和整理交给 AI 办　〈在用〉
+48. **云盘**　找文件、下载原件；按指定对象上传、移动、分享　〈在用〉
+49. **待办**　记待办、查询、修改、标记完成　〈在用〉
+50. **相册**　单独一份授权：查已连接的相册，把选定照片上传并加入或移出相册　〈说不准〉
+
+**给 AI 用的小工具**
+51. **取短信验证码**　手机验证码经小米妙享转到电脑，AI 读最近 60 秒的通知取码，不留日志；还没真用过　〈待验收〉
+52. **浏览器连接检查**　AI 连不上我的 Chrome 时，查清缺哪个已装组件；只看不改　〈在用〉
+53. **任务监测提醒**　让电脑盯一件事，条件满足就提醒原来的 Codex 任务　〈在用〉
+54. **Codex 卡住自动修**　Codex 桌面卡在加载时，开始菜单一键让命令行 Codex 诊断修复　〈说不准〉
+55. **待验收清单**　所有要等时机才能核的事登记在一处（9 月 28 日 43 项），驾驶舱读它　〈在用〉
+
+::screen{#pcconfig-21 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-21",
+  "section": "features",
+  "title": "全部功能（5）",
+  "scene": "横版：“全部功能”的第 5 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+  "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "g-software",
+    "text": "软件和环境"
+   },
+   {
+    "id": "f-managed-software",
+    "text": "受管软件"
+   },
+   {
+    "id": "f-weekly-software",
+    "text": "软件每周检查"
+   },
+   {
+    "id": "f-gpu-queue",
+    "text": "显卡排队"
+   },
+   {
+    "id": "f-ollama-start",
+    "text": "本地模型启动"
+   },
+   {
+    "id": "f-dictation-start",
+    "text": "听写开机启动"
+   },
+   {
+    "id": "f-env-registry",
+    "text": "环境变量登记"
+   },
+   {
+    "id": "f-drive-roles",
+    "text": "盘的分工"
+   },
+   {
+    "id": "f-port-check",
+    "text": "端口检查"
+   },
+   {
+    "id": "f-impact-query",
+    "text": "改动影响查询"
+   },
+   {
+    "id": "f-move-dry-run",
+    "text": "搬目录前预演"
+   },
+   {
+    "id": "f-docker-wsl-space",
+    "text": "Docker、WSL 空间压缩"
+   },
+   {
+    "id": "f-pagefile",
+    "text": "分页文件和转储设置"
+   },
+   {
+    "id": "g-laptop",
+    "text": "笔记本和手机"
+   },
+   {
+    "id": "f-laptop-role",
+    "text": "笔记本的分工"
+   },
+   {
+    "id": "f-laptop-veeam",
+    "text": "笔记本读主机镜像"
+   },
+   {
+    "id": "f-laptop-check",
+    "text": "笔记本巡检"
+   },
+   {
+    "id": "f-phone",
+    "text": "手机"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "软件和环境",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "group_heading": "brush",
+     "item_spans": {
+      "11": 3,
+      "16": 3,
+      "67": 3,
+      "66": 2,
+      "71": 3
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 5 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "软件和环境",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 5 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件三张），这张卡片横跨三列画成一整行宽卡，字号不缩小。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "软件和环境",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "代码窗口",
+   "source_phrase": "受管软件　11 个开发软件统一查状态、更新：Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go　〈在用〉",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "软件每周检查　每周日 23:30 查版本，空闲时给 Python 打补丁；精简后的新版 10 月 4 日第一次跑　〈待验收〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "显卡排队　本地大模型、中文听写和文字识别轮流用显卡，排队服务停了每 5 分钟补开　〈待验收〉",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "本地模型启动　登录后打开 Ollama　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "听写开机启动　登录时启动中文听写，按 Win+H 说话出字　〈在用〉",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "环境变量登记　94 个环境变量、62 条 PATH、各运行环境版本；软件打不开时先查缺哪个环境　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/数据库.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "数据库",
+   "source_phrase": "盘的分工　稳定的放 E，新项目和缓存放 V，能丢的放 Z　〈在用〉",
+   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "端口检查　新开固定端口前先查会不会和别的程序冲突　〈在用〉",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "改动影响查询　给一个路径，查出配置在哪、会影响哪些项目（164 个配置项、21 个恢复锚点）　〈在用〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "搬目录前预演　把软件或项目搬到别的盘之前，先列出影响和怎么恢复；只预演不动手　〈说不准〉",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "问号气泡",
+   "source_phrase": "Docker、WSL 空间压缩　压缩虚拟盘腾空间，默认只预演　〈说不准〉",
+   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "分页文件和转储设置　分页文件固定在 C（约 97.7 GiB），E 上取消；键盘触发转储已生效；分页文件重启后待核　〈待验收〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "笔记本和手机",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "笔记本的分工　平时 Moonlight 远控主机；主机坏了时，笔记本能自己上网、让 Codex 干活、接 H 盘取密码　〈在用〉",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 16,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "笔记本读主机镜像　笔记本装了 Veeam，只用来读备份、验证密码、提取文件　〈在用〉",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-18117d3ca0e2842e4845.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-18117d3ca0e2842e4845",
+   "title_text": "笔记本和手机",
+   "sha256": "6f9e99e16e7f2f6dcabd146b9f6321809cac4d6538179e308e6aa77b4596d185",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-62168348bd3392884a9d.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-62168348bd3392884a9d",
+   "title_text": "软件和环境",
+   "sha256": "4964cded59dae5f0a40e0d3f1079a3c33f2abba1e261ba7675368bcfb6408b43",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**软件和环境**
+56. **受管软件**　11 个开发软件统一查状态、更新：Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go　〈在用〉
+57. **软件每周检查**　每周日 23:30 查版本，空闲时更新 Python 稳定补丁和 Codex 正式版；新版 10 月 4 日首次定时跑　〈待验收〉
+58. **显卡排队**　本地大模型、中文听写和文字识别轮流用显卡，排队服务停了每 5 分钟补开　〈待验收〉
+59. **本地模型启动**　登录后打开 Ollama　〈在用〉
+60. **听写开机启动**　登录时启动中文听写，按 Win+H 说话出字　〈在用〉
+61. **环境变量登记**　94 个环境变量、62 条 PATH、各运行环境版本；软件打不开时先查缺哪个环境　〈在用〉
+62. **盘的分工**　稳定的放 E，新项目和缓存放 V，能丢的放 Z　〈在用〉
+63. **端口检查**　新开固定端口前先查会不会和别的程序冲突　〈在用〉
+64. **改动影响查询**　给一个路径，查出配置在哪、会影响哪些项目（164 个配置项、21 个恢复锚点）　〈在用〉
+65. **搬目录前预演**　把软件或项目搬到别的盘之前，先列出影响和怎么恢复；只预演不动手　〈说不准〉
+66. **Docker、WSL 空间压缩**　压缩虚拟盘腾空间，默认只预演　〈说不准〉
+67. **分页文件和转储设置**　分页文件固定在 C（约 97.7 GiB），E 上取消；正常重启后已核对生效，E 上旧文件已消失；键盘触发转储设置已生效　〈在用〉
+
+**笔记本和手机**
+68. **笔记本的分工**　平时 Moonlight 远控主机；主机坏了时，笔记本能自己上网、让 Codex 干活、接 H 盘取密码　〈在用〉
+69. **笔记本读主机镜像**　笔记本装了 Veeam，只用来读备份、验证密码、提取文件　〈在用〉
+70. **笔记本巡检**　检查笔记本上的恢复说明、备份和 U 盘副本，同步约法；平时暂停，需要时手动开　〈待验收〉
+71. **手机**　手机上的密码中心、经 Tailscale 借电脑上网、小米妙享互通　〈在用〉
+
+::screen{#pcconfig-22 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-22",
+  "section": "features",
+  "title": "全部功能（6）",
+  "scene": "横版：“全部功能”的第 6 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 75 驾驶舱巡检、76 流量记录和套餐提醒），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“驾驶舱数据”组共 72–76 五项。“已停用”这组的卡片整体用浅灰色调，图标去饱和，右上角是灰色叉。",
+  "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。",
+  "links": [],
+  "anchors": [
+   {
+    "id": "g-cockpit",
+    "text": "驾驶舱数据"
+   },
+   {
+    "id": "f-task-catalog",
+    "text": "自动任务人话目录"
+   },
+   {
+    "id": "f-task-table",
+    "text": "自动任务总表"
+   },
+   {
+    "id": "f-dashboard-api",
+    "text": "看板接口"
+   },
+   {
+    "id": "f-cockpit-monitor",
+    "text": "驾驶舱巡检"
+   },
+   {
+    "id": "f-traffic-package",
+    "text": "流量记录和套餐提醒"
+   },
+   {
+    "id": "g-retired",
+    "text": "已停用"
+   },
+   {
+    "id": "f-r-claude-memory",
+    "text": "Claude 记忆备份"
+   },
+   {
+    "id": "f-r-codex-memory",
+    "text": "Codex 配置和记忆备份"
+   },
+   {
+    "id": "f-r-gemini-memory",
+    "text": "Gemini 备份"
+   },
+   {
+    "id": "f-r-natpierce",
+    "text": "natpierce 内网穿透"
+   },
+   {
+    "id": "f-r-sunlogin",
+    "text": "向日葵"
+   },
+   {
+    "id": "f-r-governance",
+    "text": "综合自查"
+   },
+   {
+    "id": "f-r-cursor",
+    "text": "鼠标样式守护"
+   },
+   {
+    "id": "f-r-model-backup",
+    "text": "本地模型备份"
+   },
+   {
+    "id": "f-r-protected-platform",
+    "text": "旧受保护数据平台"
+   },
+   {
+    "id": "f-r-coregoal",
+    "text": "CoreGoal 单因子引导"
+   },
+   {
+    "id": "f-r-macrium",
+    "text": "Macrium 系统镜像"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "features",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "驾驶舱数据",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/数据库.png",
+      "_library/icons/GitHub标志.png",
+      "_library/icons/版本循环文件.png",
+      "_library/icons/报警灯.png",
+      "_library/icons/趋势图.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/icons/开关.png",
+      "_library/icons/文件齿轮.png",
+      "_library/icons/文件齿轮.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/12-文件核验-clean.png",
+      "_library/icons/盾牌对勾.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {
+      "11": 3,
+      "16": 3,
+      "75": 3,
+      "76": 3
+     },
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 6 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 75 驾驶舱巡检、76 流量记录和套餐提醒），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“驾驶舱数据”组共 72–76 五项。“已停用”这组的卡片整体用浅灰色调，图标去饱和，右上角是灰色叉。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "feature_card",
+     "text_ref": "驾驶舱数据",
+     "columns": 3,
+     "portrait_columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/数据库.png",
+      "_library/icons/GitHub标志.png",
+      "_library/icons/版本循环文件.png",
+      "_library/icons/报警灯.png",
+      "_library/icons/趋势图.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/icons/开关.png",
+      "_library/icons/文件齿轮.png",
+      "_library/icons/文件齿轮.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/12-文件核验-clean.png",
+      "_library/icons/盾牌对勾.png"
+     ],
+     "group_heading": "brush",
+     "item_spans": {},
+     "status_text": "dot_only"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：“全部功能”的第 6 张，没有标题、没有图例，接着上一张往下排，上下边不画边框。和照片视频录音管理页“全部功能”同样的卡片画法（左边小水彩图标、粗体“编号. 功能名”、下面一句话、右上角一个状态小圆点），但**组名不再单独占左边一整列**：每组先画一条横跨整屏的组名横条（左边一个小水彩图标、毛笔字组名，横条下沿一条浅绿细线），组名横条下面是这一组的卡片，排成三列、从左到右再换行；一组画完紧接着下一组的组名横条。每行末尾〈…〉里是状态，不画成字，画成卡片右上角的圆点：在用＝绿、待验收＝黄、待实施＝空心绿圈、没用过＝灰、说不准＝浅灰、已停用＝灰色叉。卡片高度随字数自适应、同一行等高；卡片之间留一致的间距，不留大块空白。卡片里的字较长时（例如恢复材料清单、已知问题手册、受管软件，以及本张的 75 驾驶舱巡检、76 流量记录和套餐提醒），这张卡片横跨三列画成一整行宽卡，字号不缩小。本张“驾驶舱数据”组共 72–76 五项。“已停用”这组的卡片整体用浅灰色调，图标去饱和，右上角是灰色叉。",
+     "portrait": "竖版：没有标题和图例；每组的组名横条满宽，下面卡片一行一张（左图标、右边粗体标题和一句话、右上角状态圆点），同组卡片连续往下排；组与组之间留一点距离。"
+    },
+    "desktop_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ],
+    "portrait_component_order": [
+     "status_legend",
+     "section_heading",
+     "feature_card",
+     "icon"
+    ]
+   },
+   "pending_requirements": [
+    "组名要求模型毛笔标题和左侧图标，当前 feature_card 用普通字体组头；状态词应只画圆点，组件仍显示状态原字。"
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/数据库.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "数据库",
+   "source_phrase": "驾驶舱数据",
+   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/GitHub标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "GitHub标志",
+   "source_phrase": "自动任务人话目录　143 条说明：本机 125 个，加上云端、Codex、笔记本、GitHub、远程服务里的，和登录后常驻的桌面图标自动隐藏、屏保、主屏黑幕监听，随备份启动的材料同步、照片视频云端维护，共 18 个　〈在用〉",
+   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "自动任务总表　完整扫描一次，发布 125 个任务的现状（88 个开着、37 个停着）　〈在用〉",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "看板接口　网站打开时临时采样：自动任务、备份、待验收、今天的动态、项目现状　〈在用〉",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "已停用",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/开关.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "开关",
+   "source_phrase": "Claude 记忆备份　原每天 10:35；9 月 28 日停用：Claude 记忆开关关着，配置照旧由开发配置备份带上，用量改由 12:15 的 Codex 对话备份记　〈已停用〉",
+   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "Codex 配置和记忆备份　原每天 11:05、13:05；9 月 28 日停用：和开发配置备份重复，Codex 配置和记忆改由开发配置备份每天带上；Codex 对话备份照常　〈已停用〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "Gemini 备份　原每天 11:10、13:10，实际备 Antigravity 的设置、状态和它记下的知识；9 月 28 日停用，Antigravity 设置改由开发配置备份带上　〈已停用〉",
+   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "natpierce 内网穿透　9 月 26 日退役，远程改走 Cloudflare 隧道和 Tailscale　〈已停用〉",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "向日葵　卸掉了，没登录时改用 ToDesk；留下的三个驱动下次重启后删　〈已停用〉",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "听诊器检查",
+   "source_phrase": "综合自查　配置漂移、恢复准备、开发盘健康等每周体检；9 月 28 日退役，只留软件每周检查　〈已停用〉",
+   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "鼠标样式守护　主题或登录把鼠标样式重置后改回来；9 月 28 日退役　〈已停用〉",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "本地模型备份　9 月 26 日起模型不再备份，缺了按来源重下并核对哈希　〈已停用〉",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/盾牌对勾.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "盾牌对勾",
+   "source_phrase": "旧受保护数据平台　自动锁盘、“设备不可信”状态、十分钟保护邀请和整张银行卡盲填；密码中心恢复集继续保留　〈已停用〉",
+   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-a8c3698b5b8c485d8bd4.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-a8c3698b5b8c485d8bd4",
+   "title_text": "已停用",
+   "sha256": "109419764a0213c3c797117892861b41eba1c925b8ea33a3c2d91df372cd05da",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-f4e24edf435f5d0a4fc4.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-f4e24edf435f5d0a4fc4",
+   "title_text": "驾驶舱数据",
+   "sha256": "c43980f9c6f18f752c7787ca8d98b53ba96ed7d9744b33fce86a043320b90dec",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+**驾驶舱数据**
+72. **自动任务人话目录**　143 条说明：本机 125 个，加上云端、Codex、笔记本、GitHub、远程服务里的，和登录后常驻的桌面图标自动隐藏、屏保、主屏黑幕监听，随备份启动的材料同步、照片视频云端维护，共 18 个　〈在用〉
+73. **自动任务总表**　完整扫描一次，发布 125 个任务的现状（88 个开着、37 个停着）　〈在用〉
+74. **看板接口**　10 月 4 日起，电脑上原有的状态服务每 30 秒更新一次显示缓存，网站来取时直接给最近一份：自动任务、备份、待验收、今天的动态、项目现状　〈在用〉
+75. **驾驶舱巡检**　每 15 分钟从这台电脑请求一次驾驶舱页面、主数据接口和一个小对照文件，不下载图片视频；打不开就每分钟复查，连续 10 分钟仍不行才给我的 Gmail 发一封，恢复后再发一封。对照文件也打不开时只算“本机网络说不准”，不当网站坏了。资料锁着、我没登录 Windows、整台电脑断电断网时发不出；真实的故障、恢复两封信还没出现过，只发过测试信　〈待验收〉
+76. **流量记录和套餐提醒**　每分钟记一次各程序走代理、走直连各用了多少；最近一小时代理超过 12 GB，或某个程序上传超过 2 GB 时提醒。套餐按登记的订阅来源读已用、总量和重置日：哪个代理软件在跑就读哪个，不绑定某一个，也不读订阅链接和密钥；预计撑不到重置日，每天记一条提醒。只记录和提醒，不改网络、不停任何工作　〈在用〉
+
+**已停用**
+77. **Claude 记忆备份**　原每天 10:35；9 月 28 日停用：Claude 记忆开关关着，配置照旧由开发配置备份带上，用量改由 12:15 的 Codex 对话备份记　〈已停用〉
+78. **Codex 配置和记忆备份**　原每天 11:05、13:05；9 月 28 日停用：和开发配置备份重复，Codex 配置和记忆改由开发配置备份每天带上；Codex 对话备份照常　〈已停用〉
+79. **Gemini 备份**　原每天 11:10、13:10，实际备 Antigravity 的设置、状态和它记下的知识；9 月 28 日停用，Antigravity 设置改由开发配置备份带上　〈已停用〉
+80. **natpierce 内网穿透**　9 月 26 日退役，远程改走 Cloudflare 隧道和 Tailscale　〈已停用〉
+81. **向日葵**　卸掉了，没登录时改用 ToDesk；留下的三个驱动下次重启后删　〈已停用〉
+82. **综合自查**　配置漂移、恢复准备、开发盘健康等每周体检；9 月 28 日退役，只留软件每周检查　〈已停用〉
+83. **鼠标样式守护**　主题或登录把鼠标样式重置后改回来；9 月 28 日退役　〈已停用〉
+84. **本地模型备份**　9 月 26 日起模型不再备份，缺了按来源重下并核对哈希　〈已停用〉
+85. **旧受保护数据平台**　自动锁盘、“设备不可信”状态、十分钟保护邀请和整张银行卡盲填；密码中心恢复集继续保留　〈已停用〉
+86. **CoreGoal 单因子引导**　旧受保护数据平台的安装和恢复引导，只要一种本人验证方式就能启动；8 月 19–22 日上线，9 月 25 日随旧平台退役，这件事现在归密码中心　〈已停用〉
+87. **Macrium 系统镜像**　9 月 19–20 日换成 Veeam　〈已停用〉
+
+::screen{#pcconfig-23 section="history"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-23",
+  "section": "history",
+  "title": "演进",
+  "scene": "横版：拿已通过的第 17 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-17-desktop.png）的画法：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点比原来多，分成左右两列时间线（左列 7 月 9 日–9 月 15 日，右列 9 月 19 日–10 月 6–7 日），右下角留原来那幅机箱、两块固态、外接盘、笔记本依次排开的小插画（缩小）。",
+  "portrait": "竖版：标题；一条竖向时间线从上到下排全部节点；小插画放最下面。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "演进",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "7月9日建库：恢复顺序、自动任务重建表7月13–22",
+     "direction": "vertical",
+     "columns": 2,
+     "split_after": "9月8日",
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/版本循环文件.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/icons/打勾清单.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/icons/盾牌对勾.png",
+      "_library/icons/云.png",
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+      "_library/icons/云.png",
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+      "_library/icons/版本循环文件.png"
+     ]
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。 2026-10-04 第三轮：依wave2b退回意见，演进两列时间线通宽；撤重复首屏主图与其25%空栏；全21原节点与竖版不改；按退回意见允许的双列排法，将原13/8不均分界改为9月8日后的11/10列，实际列高差复测。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 17 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-17-desktop.png）的画法：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点比原来多，分成左右两列时间线（左列 7 月 9 日–9 月 15 日，右列 9 月 19 日–10 月 6–7 日），右下角留原来那幅机箱、两块固态、外接盘、笔记本依次排开的小插画（缩小）。",
+     "portrait": "竖版：标题；一条竖向时间线从上到下排全部节点；小插画放最下面。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "timeline",
+     "icon",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "timeline",
+     "illustration",
+     "chapter_title",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "演进",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "timeline",
+     "text_ref": "7月9日建库：恢复顺序、自动任务重建表7月13–22",
+     "direction": "vertical",
+     "columns": 1,
+     "split_after": "9月15日",
+     "connector": "ribbon",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/版本循环文件.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/icons/打勾清单.png",
+      "_library/icons/微信标志.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/icons/盾牌对勾.png",
+      "_library/icons/云.png",
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/04-锁-clean.png",
+      "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+      "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+      "_library/icons/打勾清单.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+      "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+      "_library/icons/云.png",
+      "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+      "_library/icons/版本循环文件.png"
+     ]
+    },
+    {
+     "type": "illustration"
+    }
+   ],
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "layout_requirements": {
+    "source_layout": {
+     "desktop": "横版：拿已通过的第 17 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-17-desktop.png）的画法：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点比原来多，分成左右两列时间线（左列 7 月 9 日–9 月 15 日，右列 9 月 19 日–10 月 6–7 日），右下角留原来那幅机箱、两块固态、外接盘、笔记本依次排开的小插画（缩小）。",
+     "portrait": "竖版：标题；一条竖向时间线从上到下排全部节点；小插画放最下面。"
+    },
+    "desktop_component_order": [
+     "chapter_title",
+     "timeline",
+     "icon",
+     "illustration"
+    ],
+    "portrait_component_order": [
+     "timeline",
+     "illustration",
+     "chapter_title",
+     "icon"
+    ]
+   },
+   "pending_requirements": []
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/版本循环文件.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "版本循环文件",
+   "source_phrase": "7 月 9 日　建库：恢复顺序、自动任务重建表",
+   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "7 月 13–22 日　外接盘备份和待删区的雏形；7 月 22 日起开发配置、微信每天备份",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "7 月 23 日　登记 12 GiB 内存盘 Z",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "7 月 25–26 日　密码中心的前身（本机密码代理）；每周综合自查的前身（持续检查，9 月 28 日退役）",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "8 月 4 日　微信双开",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "8 月 11 日　ToDesk 登录前可连",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/盾牌对勾.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "盾牌对勾",
+   "source_phrase": "8 月 19–22 日　CoreGoal 单因子引导：旧受保护数据平台的安装和恢复引导（9 月 25 日随旧平台退役）",
+   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/云.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云",
+   "source_phrase": "8 月 24 日　Google 邮件、云盘、待办直连",
+   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文稿堆.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文稿堆",
+   "source_phrase": "8 月 26 日　资料加密方案",
+   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云下载",
+   "source_phrase": "9 月 4 日　文档、下载、个人资料每天备份",
+   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "双屏同步",
+   "source_phrase": "9 月 8 日　本机的 AI 远程服务",
+   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "9 月 11 日　Cloudflare 公网入口和经笔记本的备用入口",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "9 月 15 日　Grafana 图表经同一条隧道公开",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/04-锁-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "锁",
+   "source_phrase": "9 月 19–20 日　换成 Veeam，首份加密全量镜像",
+   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "日历",
+   "source_phrase": "9 月 21 日　换机流程定稿；外接盘第一次收到整条镜像",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 16,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/06-绿封面册-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "绿封面册",
+   "source_phrase": "9 月 22 日　笔记本上实测取密码、解密镜像、提文件",
+   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 17,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "9 月 25 日　驾驶舱显示自动任务；待验收清单固定",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 18,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "9 月 26 日　照片视频 30 天后悔期；只有一份的项目和软件进外接盘；natpierce、浏览器自动填表退役；模型不再备份",
+   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 19,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/47-回收站文件-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "回收站文件",
+   "source_phrase": "9 月 27 日　回收站每周清理；镜像改留 3 天；分页文件改到 C",
+   "sha256": "d71f70f2ef8e55126d0f2d5ad821da30ff08a54adce39f5ecd0fd14c3d31eea6",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 20,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/云.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "云",
+   "source_phrase": "9 月 28 日　综合自查退役；密码中心独立成项目，这里只留机器接线；照片视频备份做完顺带启动云端维护；Claude、Codex、Gemini 记忆备份停用，AI 工具的配置改由开发配置备份带上",
+   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 21,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件夹同步",
+   "source_phrase": "9 月 29 日　新鲜度检查从 9 类加到 11 类；密码中心恢复集接进每天的外接盘同步（待验收）；驾驶舱的任务显示人话名，第三方软件单列；三个常驻程序和材料同步登记进目录",
+   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-pcconfig.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "main-pcconfig",
+   "source_phrase": "横版：拿已通过的第 17 屏（E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\pcconfig\\screen-17-desktop.png）的画法：左边一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字；节点比原来多，分成左右两列时间线（左列 7 月 9 日–9 月 15 日，右列 9 月 19 日–9 月 29 日），右下角留原来那幅机箱、两块固态、外接盘、笔记本依次排开的小插画（缩小）。",
+   "sha256": "7f09f5188f01ade5bb16abf7509273982bf9be4037aa03f676f981ce804d4164",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/pcconfig-23-brush-v2.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pcconfig\\img\\pcconfig-23-v.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-f8367a4ec7c3aa408a9e",
+   "title_text": "演进",
+   "sha256": "aa00164d5ddf1c298b0abf6e6d2eb5ee2632f16f1af41bdaf2498e4496292023",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 演进
+
+- **7 月 9 日**　建库：恢复顺序、自动任务重建表
+- **7 月 13–22 日**　外接盘备份和待删区的雏形；7 月 22 日起开发配置、微信每天备份
+- **7 月 23 日**　登记 12 GiB 内存盘 Z
+- **7 月 25–26 日**　密码中心的前身（本机密码代理）；每周综合自查的前身（持续检查，9 月 28 日退役）
+- **8 月 4 日**　微信双开
+- **8 月 11 日**　ToDesk 登录前可连
+- **8 月 19–22 日**　CoreGoal 单因子引导：旧受保护数据平台的安装和恢复引导（9 月 25 日随旧平台退役）
+- **8 月 24 日**　Google 邮件、云盘、待办直连
+- **8 月 26 日**　资料加密方案
+- **9 月 4 日**　文档、下载、个人资料每天备份
+- **9 月 8 日**　本机的 AI 远程服务
+- **9 月 11 日**　Cloudflare 公网入口和经笔记本的备用入口
+- **9 月 15 日**　Grafana 图表经同一条隧道公开
+- **9 月 19–20 日**　换成 Veeam，首份加密全量镜像
+- **9 月 21 日**　换机流程定稿；外接盘第一次收到整条镜像
+- **9 月 22 日**　笔记本上实测取密码、解密镜像、提文件
+- **9 月 25 日**　驾驶舱显示自动任务；待验收清单固定
+- **9 月 26 日**　照片视频 30 天后悔期；只有一份的项目和软件进外接盘；natpierce、浏览器自动填表退役；模型不再备份
+- **9 月 27 日**　回收站每周清理；镜像改留 3 天；分页文件改到 C
+- **9 月 28 日**　综合自查退役；密码中心独立成项目，这里只留机器接线；照片视频备份做完顺带启动云端维护；Claude、Codex、Gemini 记忆备份停用，AI 工具的配置改由开发配置备份带上
+- **9 月 29 日**　新鲜度检查从 9 类加到 11 类；密码中心恢复集接进每天的外接盘同步（待验收）；驾驶舱的任务显示人话名，第三方软件单列；三个常驻程序和材料同步登记进目录
+- **10 月 6–7 日**　回收站改成每小时看盘、0/6/12/18 点常规清，AI 缓存回收项只留 6 小时；AI 缓存按单清扫上线；驾驶舱巡检，挂了发 Gmail；流量记录加代理套餐提醒；每天的纠正统计登记成自动任务
+
+::screen{#pcconfig-gallery section="gallery"}
+
+```typeset
+{
+ "screen": {
+  "id": "pcconfig-gallery",
+  "section": "gallery",
+  "title": "画廊",
+  "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。",
+  "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。",
+  "links": [],
+  "anchors": [],
+  "live": [],
+  "screenshots": [
+   {
+    "file": "public/media/pcconfig/01-api-catalog.png",
+    "caption": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/02-bitlocker-records.png",
+    "caption": "BitLocker 分类将登记项按设备和磁盘卷展示；列表中的恢复标识用于定位条目，图中没有展开恢复密钥。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/03-phone-bindings.png",
+    "caption": "桌面端查看已绑定手机，并提供批准绑定、解除绑定与删除记录入口；这是桌面管理窗口。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/04-clipboard-filter.png",
+    "caption": "剪贴板历史按内容类别筛选，显示最近复制时间和合并后的复制次数；沿用本人提供的已打码版本。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/05-clipboard-date-range.png",
+    "caption": "通过双月日历、今天、近7天与近30天选择查询范围；底部明确显示已选择的起止日期。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/06-access-duration.png",
+    "caption": "填写0.5～72小时，可使用小数和常用时长；是否同时开启无限制授权由本人明确选择，两项分别计时。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/07-factor-picker.png",
+    "caption": "同一验证入口提供通行密钥、动态验证码、恢复码和账号验证；选择可用方式继续，取消只结束本次验证。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/08-passkey-browser.png",
+    "caption": "Passkey 使用已登记的通行密钥，并由浏览器或设备展示确认；它与账号验证使用隔离无痕窗口的规则分别处理。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   },
+   {
+    "file": "public/media/pcconfig/10-account-private-window.png",
+    "caption": "账号验证使用隔离的无痕浏览器，本次回调绑定该验证窗口；不能把授权链接复制到普通已登录浏览器复用登录态绕过。",
+    "where": "画廊：完整原图，点击放大",
+    "preserve_original": true
+   }
+  ],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "text_ref": "画廊",
+     "type": "chapter_title",
+     "align": "center",
+     "size": "medium"
+    },
+    {
+     "type": "screenshot",
+     "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。",
+     "indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "columns": 3,
+     "columns_v": 1,
+     "equal_row_height": true,
+     "ratios": [
+      "1806:1213",
+      "1806:1213",
+      "979:602",
+      "1806:1213",
+      "2297:1244",
+      "994:669",
+      "964:605",
+      "868:1244",
+      "1920:2100"
+     ],
+     "caption_mode": "source_order",
+     "slot_groups": [
+      {
+       "index": 0,
+       "node_indices": [
+        0
+       ]
+      },
+      {
+       "index": 1,
+       "node_indices": [
+        1
+       ]
+      },
+      {
+       "index": 2,
+       "node_indices": [
+        2
+       ]
+      },
+      {
+       "index": 3,
+       "node_indices": [
+        3
+       ]
+      },
+      {
+       "index": 4,
+       "node_indices": [
+        4
+       ]
+      },
+      {
+       "index": 5,
+       "node_indices": [
+        5
+       ]
+      },
+      {
+       "index": 6,
+       "node_indices": [
+        6
+       ]
+      },
+      {
+       "index": 7,
+       "node_indices": [
+        7
+       ]
+      },
+      {
+       "index": 8,
+       "node_indices": [
+        8
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "text_ref": "画廊",
+     "type": "chapter_title",
+     "align": "center",
+     "size": "medium"
+    },
+    {
+     "type": "screenshot",
+     "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。",
+     "indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+     ],
+     "columns": 3,
+     "columns_v": 1,
+     "ratios": [
+      "1806:1213",
+      "1806:1213",
+      "979:602",
+      "1806:1213",
+      "2297:1244",
+      "994:669",
+      "964:605",
+      "868:1244",
+      "1920:2100"
+     ],
+     "caption_mode": "source_order",
+     "slot_groups": [
+      {
+       "index": 0,
+       "node_indices": [
+        0
+       ]
+      },
+      {
+       "index": 1,
+       "node_indices": [
+        1
+       ]
+      },
+      {
+       "index": 2,
+       "node_indices": [
+        2
+       ]
+      },
+      {
+       "index": 3,
+       "node_indices": [
+        3
+       ]
+      },
+      {
+       "index": 4,
+       "node_indices": [
+        4
+       ]
+      },
+      {
+       "index": 5,
+       "node_indices": [
+        5
+       ]
+      },
+      {
+       "index": 6,
+       "node_indices": [
+        6
+       ]
+      },
+      {
+       "index": 7,
+       "node_indices": [
+        7
+       ]
+      },
+      {
+       "index": 8,
+       "node_indices": [
+        8
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "personal-media/personal-media-04-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-6f966a995ad3884757df",
+   "title_text": "画廊",
+   "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 画廊
+
+点击图片，可以查看完整原图。
+
+密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。
+
+BitLocker 分类将登记项按设备和磁盘卷展示；列表中的恢复标识用于定位条目，图中没有展开恢复密钥。
+
+桌面端查看已绑定手机，并提供批准绑定、解除绑定与删除记录入口；这是桌面管理窗口。
+
+剪贴板历史按内容类别筛选，显示最近复制时间和合并后的复制次数；沿用本人提供的已打码版本。
+
+通过双月日历、今天、近7天与近30天选择查询范围；底部明确显示已选择的起止日期。
+
+填写0.5～72小时，可使用小数和常用时长；是否同时开启无限制授权由本人明确选择，两项分别计时。
+
+同一验证入口提供通行密钥、动态验证码、恢复码和账号验证；选择可用方式继续，取消只结束本次验证。
+
+Passkey 使用已登记的通行密钥，并由浏览器或设备展示确认；它与账号验证使用隔离无痕窗口的规则分别处理。
+
+账号验证使用隔离的无痕浏览器，本次回调绑定该验证窗口；不能把授权链接复制到普通已登录浏览器复用登录态绕过。

@@ -39,11 +39,19 @@ if _names == ["all"]:
     _names = sorted(d for d in os.listdir(os.path.join(os.path.dirname(ROOT), "sources", "pages")) if os.path.exists(os.path.join(os.path.dirname(ROOT), "sources", "pages", d, "page.json")))
 PAIRS = []
 for _n in _names:
-    _url = json.load(open(os.path.join(os.path.dirname(ROOT), "sources", "pages", _n, "page.json"), encoding="utf-8"))["url"]
-    if os.path.exists(os.path.join(DIST, *_url.strip("/").split("/"), "index.html")):
-        PAIRS.append((_n, _url.strip("/")))
+    _url = json.load(open(os.path.join(os.path.dirname(ROOT), "sources", "pages", _n, "page.json"), encoding="utf-8-sig"))["url"]
+    if _url:
+        _f = os.path.join(DIST, *_url.strip("/").split("/"), "index.html")
+    else:
+        # 没有网址的页：404 对应现在网站根目录的 404.html；GitHub 个人主页稿现在网站上没有这一页，不抄
+        # （以前网址空时拼出来的是根目录 index.html，把首页的目录条和页面数据抄给了这两页）
+        _f = os.path.join(DIST, _n + ".html")
+    if os.path.exists(_f):
+        PAIRS.append((_n, _f))
+    else:
+        print(_n, "：现在网站上没有对应的页，不抄运行件")
 for page, rel in PAIRS:
-    h = open(os.path.join(DIST, *rel.split("/"), "index.html"), encoding="utf-8").read()
+    h = open(rel, encoding="utf-8").read()
     toc = re.search(r'<nav data-toc-consistency[^>]*>(.*?)</nav>', h, re.S)
     items = []
     if toc:
@@ -51,7 +59,11 @@ for page, rel in PAIRS:
             items.append({"id": m[1], "label": m[2], "img": m[3]})
     labels[page] = items
     html_all = h
-json.dump(labels, open(os.path.join(ROOT, "src", "chrome", "toc-labels.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+# 只抄了几页时不丢别的页已有的目录标签
+_lp = os.path.join(ROOT, "src", "chrome", "toc-labels.json")
+_all = json.load(open(_lp, encoding="utf-8")) if os.path.exists(_lp) else {}
+_all.update(labels)
+json.dump(_all, open(_lp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 # 复制页头页尾、目录条和样式里引用到的 /_shared 文件
 refs = set(re.findall(r'(/_shared/[^"\')\s,]+)', header + footer))
@@ -89,7 +101,7 @@ HEAD_PATTERNS = [
 ]
 copy_refs = set()
 for page, rel in PAIRS:
-    h = open(os.path.join(DIST, *rel.split("/"), "index.html"), encoding="utf-8").read()
+    h = open(rel, encoding="utf-8").read()
     head = h[:h.index("</head>")]
     parts = []
     for pat in HEAD_PATTERNS:

@@ -1,0 +1,2157 @@
+---
+{
+ "title": "微信记录交给 AI",
+ "kind": "frozen",
+ "url": "/projects/wechat-history-ai-bridge/",
+ "tagline": "经 WeFlow 把电脑上的微信记录交给 AI 读",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "why-frozen",
+   "label": "两条路差在哪"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "features",
+   "label": "全部功能"
+  },
+  {
+   "id": "history",
+   "label": "演进"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "wechat-history-ai-bridge",
+  "kind": "frozen",
+  "title": "微信记录交给 AI",
+  "url": "/projects/wechat-history-ai-bridge/",
+  "tagline": "经 WeFlow 把电脑上的微信记录交给 AI 读",
+  "status": "冻结",
+  "public": true,
+  "repo_url": "https://github.com/wlyaaaaa/wechat-history-ai-bridge",
+  "capability": "把电脑上的微信记录交给 AI 读（已停用）",
+  "based_on": {
+   "commit": "7510c29ae3a95b36363b4d6ba2d1c47c4e602f85",
+   "commit_time": "2026-09-08T10:42:11+08:00",
+   "files": [
+    "WeFlowBridge README.md、AGENTS.md、WATCHDOG.md、project_manifest.json、docs/closeout_audit.md、docs/privacy_boundary.md、docs/superpowers/specs/2026-07-09-ai-integration-1-0-design.md（7510c29）；提交记录 35 条",
+    "旧网站 V:\\Personal\\Projects\\wly0829.cn\\app\\content-wechat-history-ai-bridge.js",
+    "E:\\.agents\\docs\\owner-decisions.md（D5、“个人网站：冻结项目的原因和去留”节）；E187 agents.context-sources.md 冻结名单",
+    "E:\\PCConfig\\registries\\task_purpose_catalog.json、tasks.json（2026-09-27 扫描）",
+    "E:\\.agents 提交 40baacf、09bb468、d42d398、dc9a47d、2ed452e、68a89c6",
+    "E:\\Projects\\Tools\\WeFlowBridge\\logs\\weflow_heartbeat.log（只数行）"
+   ]
+  },
+  "video_prompt": "5–8 秒无缝循环，白底、纯绿主色的水彩插画风，画面里不出现任何文字。从开头这屏右侧的插画出发：左边笔记本屏幕上的微信绿色标志轻轻亮一下；中间那座落了薄霜的小木桥上，灰色的小服务器图标静静不动，桥头趴着的小狗随呼吸轻轻起伏、慢慢闭上眼睛；木桥上方那条笔直的绿色细线上，一颗小光点从微信标志滑向右边并排的 Claude 和 Codex 标志，到了以后标志轻轻一闪；几片绿叶从上方缓缓飘落，落在木桥的霜上。最后回到起始画面接上循环。",
+  "registry": {
+   "groups": [
+    {
+     "id": "g-read",
+     "name": "给 AI 取微信"
+    },
+    {
+     "id": "g-run",
+     "name": "让 WeFlow 一直在线"
+    },
+    {
+     "id": "g-check",
+     "name": "检查和交接"
+    }
+   ],
+   "features": [
+    {
+     "id": "f-consumer-contract",
+     "group": "g-read",
+     "name": "取数约定",
+     "what": "规定 AI 怎样认准微信号和聊天、取最新和历史、保留回复关系和附件线索、换算时间、交代缺口；保存的结果只记范围和数量，不含正文",
+     "how": "AI 调用前照 docs/ai_consumer_contract.md 办；结果格式由 schemas/ai-consumer-envelope.v2.schema.json 核对",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "旧网站 content-wechat-history-ai-bridge.js:140–169；README“推荐给 AI Agent 的读取方式”；project_manifest.json required_output_envelope"
+    },
+    {
+     "id": "f-endpoint-map",
+     "group": "g-read",
+     "name": "接口地图",
+     "what": "说明会话、联系人、消息、群成员、朋友圈、实时推送各从哪个接口读；会改东西的接口标成 AI 默认不许调",
+     "how": "docs/openapi.yaml（OpenAPI 3.1.0，以 WeFlow 26.7.3 为准）；AGENTS.md 速查表",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "旧网站 :171–195；README“核心接口”“调用注意”；AGENTS.md“写操作 / 流”"
+    },
+    {
+     "id": "f-ai-skill",
+     "group": "g-read",
+     "name": "AI 读微信的技能",
+     "what": "Codex、Claude 实际去取微信记录的入口；多个微信号按端口各连一份 WeFlow，取之前先核对微信号身份",
+     "how": "weflow-toolkit 插件里的 weflow-history 技能和取数脚本；8 月 22 日技能撤下，9 月 26 日插件撤下",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "E:\\.agents 提交 40baacf（技能 SKILL.md 删除前的原文）、09bb468、d42d398、2ed452e；AGENTS.md“实际 AI 调用层是 weflow-toolkit”"
+    },
+    {
+     "id": "f-watchdog",
+     "group": "g-run",
+     "name": "看门狗",
+     "what": "让 WeFlow 一直开着：登录时和每 15 分钟查一次，没开才拉起一次，开着却不通只记日志",
+     "how": "计划任务 WeFlow Watchdog 调 weflow_heartbeat.vbs → weflow_heartbeat.ps1；9 月 26 日停用",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "WATCHDOG.md“计划任务”“多 profile heartbeat”；旧网站 :197–220；PCConfig task_purpose_catalog.json \\WeFlow Watchdog"
+    },
+    {
+     "id": "f-multi-profile",
+     "group": "g-run",
+     "name": "两份 WeFlow 分开守",
+     "what": "第二个微信库那份 WeFlow（16000 端口）单独识别、单独拉起；配置文件夹不在就报错退出，不新建空配置",
+     "how": "weflow_heartbeat.ps1 -Port/-UserDataDir 参数；第二份的任务 WeFlow Secondary Watchdog 由 PCConfig 装，9 月 26 日停用",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "WATCHDOG.md“多 profile heartbeat”；提交 448e2cf、15c0af2；PCConfig task_purpose_catalog.json \\WeFlow Secondary Watchdog"
+    },
+    {
+     "id": "f-silent",
+     "group": "g-run",
+     "name": "后台不闪黑框",
+     "what": "每 15 分钟的检查不在桌面上闪出黑色命令窗口",
+     "how": "用 VBS 包一层静默运行 PowerShell，并把退出码传回",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "WATCHDOG.md“静默执行包装器”；提交 631fde2、800bcc8"
+    },
+    {
+     "id": "f-wechat-autostart",
+     "group": "g-run",
+     "name": "登录后打开微信",
+     "what": "登录 Windows 后自动打开微信，WeFlow 才有数据可读",
+     "how": "原由 weflow_boot_guardian.ps1 注册 WeChat AutoStart；后来这个任务归 PCConfig 的微信双开（带归属标记，本项目不再覆盖），那边仍在用",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "WATCHDOG.md“与 PCConfig 微信双开的兼容边界”；PCConfig task_purpose_catalog.json \\WeChat AutoStart；tasks.json enabled=true"
+    },
+    {
+     "id": "f-autologin",
+     "group": "g-run",
+     "name": "开机自动登录 Windows",
+     "what": "关机重启后没人操作也能自动登录，微信和 WeFlow 随之起来",
+     "how": "管理员运行 enable-autologin.ps1；密码以可逆方式存进注册表，撤销要改 AutoAdminLogon=0 并删掉存的密码",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "WATCHDOG.md“关于非登录运行”；旧网站 :214"
+    },
+    {
+     "id": "f-probe",
+     "group": "g-check",
+     "name": "接口自检",
+     "what": "检查 WeFlow 接口通不通：可以只查健康页，或者只看概况不读正文；5 个必需入口任一失败就报失败",
+     "how": "probe-weflow.ps1 -Json -Mode MetadataOnly -NoMessages；8 月 31 日起必需入口失败即失败",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "旧网站 :223–246；README“快速开始”；提交 e9e7418、61ff840"
+    },
+    {
+     "id": "f-public-check",
+     "group": "g-check",
+     "name": "公开前自查",
+     "what": "保证公开仓库里没有密钥、聊天、截图、数据库和媒体；31 项自动测试",
+     "how": "tools/test-ci-local.ps1（本机）和 GitHub Actions 跑同一入口",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "docs/privacy_boundary.md；docs/closeout_audit.md；旧网站 :16–22、:238；提交 c81a860、014ff82、7510c29"
+    },
+    {
+     "id": "f-snapshot-check",
+     "group": "g-check",
+     "name": "已取得文件的两遍核对",
+     "what": "对已经导出的一批微信文件逐个算 SHA-256、完整读两遍，一致才给核对收据；不导出、不解密、不是备份",
+     "how": "python tools/build_private_snapshot_manifest.py --source-root … --destination …（输出必须在仓库外的新目录）",
+     "status": "已停用",
+     "screen": "wechat-history-ai-bridge-04",
+     "source": "旧网站 :249–272；提交 c8e9063、94bff1f、4b31776、bbfb5bf"
+    }
+   ],
+   "numbers": [
+    {
+     "id": "n-commits",
+     "text": "35 次",
+     "meaning": "本仓库全部提交，6 月 20 日—9 月 8 日（北京时间）",
+     "as_of": "2026-09-28",
+     "source": "git -C E:\\Projects\\Tools\\WeFlowBridge rev-list --count HEAD；首尾提交 3cc1321、7510c29 换算成北京时间",
+     "screens": [
+      "wechat-history-ai-bridge-01"
+     ]
+    },
+    {
+     "id": "n-watchdog-checks",
+     "text": "8,448 次看门狗检查，8,236 次一查就健康",
+     "meaning": "默认那份 WeFlow（5031）的看门狗检查轮数，6 月 20 日 14:12—9 月 26 日 04:11（北京时间）；每轮只算第一行（“[OK] 5031 健康”或“无响应”），同一轮后续的拉起、等待、恢复行不算；第二份（16000）的日志不在其中",
+     "as_of": "2026-09-28",
+     "source": "E:\\Projects\\Tools\\WeFlowBridge\\logs\\weflow_heartbeat.log：总行数 8,722；首行“健康”8,236（含“[OK]”8,247 减去 11 行“WeFlow 已拉起，5031 恢复”）＋“无响应”212＝8,448；其余 274 行都是同一轮的后续行",
+     "screens": [
+      "wechat-history-ai-bridge-01",
+      "wechat-history-ai-bridge-02"
+     ]
+    },
+    {
+     "id": "n-watchdog-down",
+     "text": "212 次没响应：101 次开着不通、111 次去拉起",
+     "meaning": "“无响应”212 轮；其中紧跟着“进程在但端口未通/进程已运行但端口未通”的 100+1=101 轮只记日志；其余 111 轮（旧格式 47＋新格式 64）去拉起 WeFlow",
+     "as_of": "2026-09-28",
+     "source": "同上日志按内容分组计数，并核对每条“端口未通”都紧跟在“无响应”行之后（只数行，不含任何聊天内容）",
+     "screens": [
+      "wechat-history-ai-bridge-02"
+     ]
+    },
+    {
+     "id": "n-tests",
+     "text": "31 项",
+     "meaning": "自动测试（26 项约定测试＋5 项文件核对测试），9 月 8 日本机和 GitHub Actions 34180971929 都全部通过",
+     "as_of": "2026-09-08",
+     "source": "旧网站 content-wechat-history-ai-bridge.js:12、:19、:22",
+     "screens": [
+      "wechat-history-ai-bridge-01",
+      "wechat-history-ai-bridge-04",
+      "wechat-history-ai-bridge-05"
+     ]
+    },
+    {
+     "id": "n-weflow-version",
+     "text": "26.7.3",
+     "meaning": "取数约定最后对准的 WeFlow 版本（ProductVersion 26.7.3.0），7 月 9 日实测；第一版对准 26.5.27",
+     "as_of": "2026-07-09",
+     "source": "README“适用基线”；project_manifest.json weflow_baseline；提交 f14a3f8",
+     "screens": [
+      "wechat-history-ai-bridge-01",
+      "wechat-history-ai-bridge-05"
+     ]
+    },
+    {
+     "id": "n-ports",
+     "text": "5031、16000 端口",
+     "meaning": "默认那份 WeFlow 和第二份 WeFlow 的本机接口端口",
+     "as_of": "2026-09-26",
+     "source": "WATCHDOG.md；PCConfig task_purpose_catalog.json 两个看门狗条目",
+     "screens": [
+      "wechat-history-ai-bridge-02",
+      "wechat-history-ai-bridge-03",
+      "wechat-history-ai-bridge-04"
+     ]
+    },
+    {
+     "id": "n-required-endpoints",
+     "text": "5 个必需入口",
+     "meaning": "自检必须全部成功的入口：健康页，加上会话列表两种格式、联系人、朋友圈统计 4 个读取入口",
+     "as_of": "2026-09-08",
+     "source": "旧网站 :236",
+     "screens": [
+      "wechat-history-ai-bridge-03",
+      "wechat-history-ai-bridge-04"
+     ]
+    },
+    {
+     "id": "n-frozen-date",
+     "text": "9 月 12 日",
+     "meaning": "列进冻结名单的日子（北京时间）",
+     "as_of": "2026-09-12",
+     "source": "E:\\.agents 提交 68a89c6（2026-09-12T05:37-07:00＝北京 20:37）；E187 agents.context-sources.md 第 30 行",
+     "screens": [
+      "wechat-history-ai-bridge-01",
+      "wechat-history-ai-bridge-05"
+     ]
+    },
+    {
+     "id": "n-stop-date",
+     "text": "9 月 26 日",
+     "meaning": "停掉全部 WeFlow 进程、两个看门狗任务停用、weflow-toolkit 插件撤下（北京时间）",
+     "as_of": "2026-09-26",
+     "source": "PCConfig task_purpose_catalog.json 两个 WeFlow 看门狗条目；owner-decisions.md 第二轮（北京时间 9 月 26 日 04:13）T5“第二个微信库读取接口：停掉”、D5；E:\\.agents 提交 2ed452e 说明",
+     "screens": [
+      "wechat-history-ai-bridge-01",
+      "wechat-history-ai-bridge-05"
+     ]
+    }
+   ],
+   "relations": [
+    {
+     "id": "r-replaced-by-wechatdirect",
+     "with": "wechatdirect",
+     "direction": "被取代",
+     "flow": "AI 读微信原来经 WeFlow 的本机接口取；8 月 22–25 日换成微信聊天读取直接读本地数据库，不调用 WeFlow",
+     "source": "owner-decisions.md“个人网站：冻结项目的原因和去留”（本人原话）；E:\\.agents 提交 40baacf、dc9a47d；旧网站 :21"
+    },
+    {
+     "id": "r-openclaw",
+     "with": "openclaw",
+     "direction": "交出去（已停）",
+     "flow": "OpenClaw 网关的“查微信”技能调 WeFlow 接口取消息；看门狗说明里写着给 OpenClaw 这类本机服务稳定取数",
+     "source": "WATCHDOG.md 开头；openclaw/page.json registry.relations r-wechat"
+    },
+    {
+     "id": "r-pcconfig",
+     "with": "pcconfig",
+     "direction": "被登记",
+     "flow": "PCConfig 登记两个 WeFlow 看门狗任务（现停用、换机不重建、留给本人决定）；第二份 WeFlow 的安装器在 PCConfig；登录后打开微信的任务归 PCConfig 的微信双开",
+     "source": "PCConfig task_purpose_catalog.json；E:\\PCConfig\\tools\\Install-WeFlowSecondaryWatchdog.ps1；WATCHDOG.md 兼容边界"
+    },
+    {
+     "id": "r-agents-plugin",
+     "with": "E:\\.agents 的 weflow-toolkit 插件",
+     "direction": "被调用（已撤）",
+     "flow": "AI 取数的实际入口；8 月 22 日 weflow-history 技能撤下，9 月 26 日插件撤出",
+     "source": "AGENTS.md；E:\\.agents 提交 40baacf、2ed452e"
+    },
+    {
+     "id": "r-weflow",
+     "with": "WeFlow（GitHub hicccc77/WeFlow）",
+     "direction": "外部程序",
+     "flow": "在本机解密微信 4 的聊天库，开 127.0.0.1:5031 接口；本项目只写它的用法、检查和守护",
+     "source": "README“致谢”“核心接口”；AGENTS.md“它是什么”"
+    },
+    {
+     "id": "r-github",
+     "with": "GitHub",
+     "direction": "外部服务",
+     "flow": "公开仓库 wlyaaaaa/wechat-history-ai-bridge；GitHub Actions 跑同一套自查",
+     "source": "README；旧网站 :22"
+    }
+   ],
+   "highlights": [
+    {
+     "id": "h-latest-without-date",
+     "title": "取最新消息不带日期",
+     "screen": "wechat-history-ai-bridge-03"
+    },
+    {
+     "id": "h-health-not-read",
+     "title": "健康页正常 ≠ 能读",
+     "screen": "wechat-history-ai-bridge-03"
+    },
+    {
+     "id": "h-unknown-account-refuse",
+     "title": "认不出是哪个号，就不读",
+     "screen": "wechat-history-ai-bridge-03"
+    },
+    {
+     "id": "h-openclaw-found-group",
+     "title": "提一句群，自己找过去",
+     "screen": "wechat-history-ai-bridge-03"
+    }
+   ],
+   "mentions": [
+    {
+     "target": "/projects/wechatdirect/",
+     "screen": "wechat-history-ai-bridge-01",
+     "text": "微信聊天读取"
+    },
+    {
+     "target": "/projects/openclaw/",
+     "screen": "wechat-history-ai-bridge-01",
+     "text": "OpenClaw 网关"
+    },
+    {
+     "target": "/projects/wechat-history-ai-bridge/#why-frozen",
+     "screen": "wechat-history-ai-bridge-01",
+     "text": "两条路差在哪"
+    },
+    {
+     "target": "/rules/charter/#L24",
+     "screen": "wechat-history-ai-bridge-01",
+     "text": "约法 L24"
+    },
+    {
+     "target": "/projects/wechatdirect/",
+     "screen": "wechat-history-ai-bridge-02",
+     "text": "微信聊天读取"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "wechat-history-ai-bridge-02",
+     "text": "电脑配置与恢复"
+    },
+    {
+     "target": "/projects/openclaw/",
+     "screen": "wechat-history-ai-bridge-03",
+     "text": "OpenClaw 网关"
+    },
+    {
+     "target": "/projects/pcconfig/",
+     "screen": "wechat-history-ai-bridge-04",
+     "text": "电脑配置与恢复"
+    },
+    {
+     "target": "/projects/wechatdirect/",
+     "screen": "wechat-history-ai-bridge-05",
+     "text": "微信聊天读取"
+    }
+   ],
+   "live": []
+  },
+  "notes": {
+   "merged": [
+    "底稿 5 条全部保留：AI 消费契约→f-consumer-contract（取数约定）；接口地图→f-endpoint-map；开机看门狗→f-watchdog；接口自检→f-probe；文件回读交接→f-snapshot-check（已取得文件的两遍核对）。",
+    "旧网站把“AI 消费结果格式（JSON Schema）”和取数约定放在同一模块，这里也并进 f-consumer-contract，不单列。",
+    "旧网站“开机看门狗”模块拆成 5 条：看门狗、两份 WeFlow 分开守、后台不闪黑框、登录后打开微信、开机自动登录 Windows——它们是不同的能力，读者要能看出哪些后来交给了别的项目。",
+    "另从 E:\\.agents 的提交补了“AI 读微信的技能”（weflow-toolkit 插件的 weflow-history 技能）：这是当初 AI 实际取数的入口，旧网站只提了一句“weflow-toolkit”。v0.1.0 标签只写进演进，不算功能。"
+   ],
+   "dropped": [
+    "旧网站的运行证据细节不上：两个健康页的具体 HTTP 状态和时刻、GitHub Actions 编号、证据分层表、各脚本退出码、超时毫秒数、Schema 的 18 个属性等——项目已冻结，读者用不上。",
+    "接口的具体路径（/api/v1/...）、ChatLab Pull、sync 游标字段名不上：行话，冻结页用不上；只在 facts.md 留底。",
+    "sha256:be024c6a0ccb97a5dc666950b46b3b25571f17a0a25158a4f62cc12116972ee8",
+    "WeFlow 数据接口要本地凭据（token）这件事没写：读者用不上；页面和底稿都没有写任何凭据的值。"
+   ],
+   "unsure": [
+    "“两条路差在哪”那张对照表是 AI 按两个项目的说明整理的差别，本人只说过“被‘微信聊天读取’取代”，没说为什么换。页面上已写明“不是本人逐条说的理由”。请本人确认这样放可以。",
+    "看门狗的数字（8,448 次检查、8,236 次一查就健康、212 次没响应＝101 次开着不通＋111 次去拉起）来自本机日志 logs\\weflow_heartbeat.log，只数行、没读聊天；Claude 已同意保留、要求按检查轮数写清口径。审稿人提的 8,549 把 101 行“开着不通”当成了单独的轮，实际这 101 行都紧跟在“无响应”行后面，属于同一轮，所以取 8,448。",
+    "原稿“第二个微信号”已改成本人 T5 的说法“第二个微信库”：PCConfig registries\\weflow_secondary_watchdog.json:34 写明 16000 那份认不出是哪个号（WeFlow 26.7.3 没有不读聊天就能查当前账号的接口），所以不能说它就是副号。",
+    "替本人口吻的句子（上线前请本人过目）：第 1 屏“6 月 20 日，我让 AI 把 WeFlow 的看门狗和登录后打开微信装好、再检查一遍”。依据是 OpenClawGateway 旧日志 journal/2026-06-20.md 的任务清单第 4、5 项（WeFlow 看门狗＋微信开机自启、WeFlow 检查调优），日志是 AI 按本人的要求列的，没有本人原话。",
+    "“8 月 22 日起，AI 日常读微信就不走这里了”：依据是 E:\\.agents 提交 40baacf（北京时间 8 月 22 日 15:47 删掉 weflow-history 技能），插件说明同时改成“不再用于读微信”。8 月 22–25 日之间 AI 读微信走的是另一个本人决定不上网站的项目，页面没写；微信聊天读取的技能 8 月 25 日 02:04 加入。微信聊天读取页的演进写“8 月 24–26 日起步”，两页日期大体对得上。",
+    "“开机自动登录 Windows”这项是否真的在这台电脑上开过，没查（冻结项目不查运行状态）；按旧功能照列、标已停用。",
+    "首屏没放〔在整套系统里的位置 → 怎么协作〕：照 OpenClaw 冻结页样板，冻结项目和现役项目已没有来往，关系只剩“被谁取代”。第 2 批的怎么协作页若给冻结项目留位置，再补。",
+    "页名用 manifest 的“微信记录交给 AI”；首屏写明仓库对外叫“微信聊天记录 AI 本地桥”、工程名 WeFlowBridge、冻结名单上叫“微信历史桥”，方便对上。"
+   ]
+  }
+ },
+ "source": {
+  "page": "sources/pages/wechat-history-ai-bridge/page.json",
+  "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
+  "converted_at_beijing": "2026-10-10T03:45:10+08:00"
+ }
+}
+---
+
+::screen{#wechat-history-ai-bridge-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-history-ai-bridge-01",
+  "section": "top",
+  "title": "开头",
+  "scene": "横版 16:9。左侧约 55% 宽：左上大标题毛笔艺术字“微信记录交给 AI”，标题右边一枚灰绿色圆角小标签“已冻结”；标题下面是介绍段。介绍段下面一条浅绿底圆角横条放“一个例子”（左边一个小扳手和一只小狗的图标，“OpenClaw 网关”是带下划线的链接）；横条下面三张并排的说明卡，卡顶各一个小水彩图标：第一张（为什么不用了）画一座落霜的旧木桥；第二张（现在怎么读微信）画一条笔直发亮的绿色小路；第三张（停到什么程度）画一个拔下来的电源插头。每张卡第一行粗体小标题，下面几行正文；“微信聊天读取”“两条路差在哪”是带下划线的链接。右侧约 45%：一幅水彩插画：左边一台笔记本电脑，屏幕上是微信的绿色标志；右边一个小圆台上并排画 Claude 和 Codex（OpenAI）的标志；两者之间是一座落了薄霜、颜色偏灰的小木桥，桥中间立着一台小小的旧服务器图标（代表 WeFlow），桥头一只打盹的小狗（看门狗）趴着；木桥上方另有一条笔直、发亮的绿色细线从微信标志直接连到 AI 标志。画面下部一排四张数字卡片（上面小插画，大号绿色数字，下面一行小字），整体偏灰淡一点，表示是历史数字；四张的小插画依次是：一串提交圆点、一只小狗和一个钟、一张打勾的清单、一个版本号小牌子。最下面一行：左边一个白底细浅绿描边的圆角按钮，里面是 GitHub 标志和“GitHub”字样；右边一行小字和链接。不画“现在”横条（项目已冻结，没有在跑的任务）。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "portrait": "竖版 9:16，从上往下：大标题和“已冻结”标签；右侧那幅插画放到标题下面，占满宽度；介绍段；“一个例子”横条；三张说明卡改成上下三张，每张一整行；四张数字卡改成两行两张；最下面 GitHub 按钮单独一行，下面一行小字和链接。字完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+  "links": [
+   {
+    "text": "微信聊天读取",
+    "href": "/projects/wechatdirect/"
+   },
+   {
+    "text": "OpenClaw 网关",
+    "href": "/projects/openclaw/"
+   },
+   {
+    "text": "两条路差在哪",
+    "href": "/projects/wechat-history-ai-bridge/#why-frozen"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/wechat-history-ai-bridge"
+   },
+   {
+    "text": "约法 L24",
+    "href": "/rules/charter/#L24"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/wechat-history-ai-bridge/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "row": "hero",
+     "width": "50%",
+     "align": "left",
+     "size": "medium",
+     "text_ref": "微信记录交给 AI"
+    },
+    {
+     "type": "tag",
+     "row": "hero",
+     "align": "left",
+     "text_ref": "已冻结"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "align": "left",
+     "text_ref": "原来想让 AI"
+    },
+    {
+     "type": "notice",
+     "row": "hero",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/打勾清单.png"
+     ],
+     "align": "left",
+     "text_ref": "一个例子"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "为什么不用了",
+     "row": "summary",
+     "width": "50%"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "现在怎么读微信",
+     "row": "summary",
+     "width": "50%"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "停到什么程度"
+    },
+    {
+     "type": "prose",
+     "text_ref": "数字卡片（竖线前大字"
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "illustration": "none",
+     "icons": "none",
+     "align": "center",
+     "text_ref": "135次提交，6月20日—9月8日28,448次默认那份"
+    },
+    {
+     "type": "action_button",
+     "columns": 2,
+     "align": "left",
+     "text_ref": "GitHub",
+     "promote_links": [
+      "GitHub",
+      "复制 AI 续作说明"
+     ]
+    }
+   ],
+   "notes": "以 pages-approved 的 01-h 替换图为构图来源。上半屏实际左右约各 50%：左列依次标题、标签、导语、例子横条；右列无字大桥插画跨左列整段高度。已冻结标签应贴标题右侧，同一行，不能因为独立 tag 块而另起大段。下半屏三张说明卡占左半，四张数字卡占右半，不按 scene 改成整宽数字卡。卡顶图在卡内。最后 GitHub 与复制 AI 续作说明两个按钮在左，冻结说明和约法链接在右。末行在定稿中是一个 para，组件需保留其完整字句和两个按钮，不能用内部子串造第二个起点；视图位置照替换图。数字卡片（竖线前大字，竖线后小字）：这一句是定稿独立 para，已纳入数字块，当前逐字基准也计入，不能默默丢掉。第 4 卡木牌上的版本数字必须去掉图中文字再由程序排字，不能与主数值重复。；本轮实测原定三卡占半屏时，core top_inside 小图宽140px而sideic固定150px，实际卡内宽少于150px，G3溢出。保持已记录构图，提交组件适配请求；未缩字号或改变列数。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第1/3条：简介卡改为整宽横3列/竖1列、取消卡内插图；四数字卡独占整宽横4列/竖2列且无图标。第2条内部说明属于定稿，未获改定稿权限，保留并交回。第4条仅将GitHub和复制提升为按钮，约法L24保持行内链接；跨中间正文合成两按钮行的缺口另交comp-text。；简介三卡以相邻同row的三块分别排33.333%，由现有row align-items:start保证卡高按内容走，不用grid整排拉高短卡。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "medium",
+     "text_ref": "微信记录交给 AI"
+    },
+    {
+     "type": "tag",
+     "align": "center",
+     "text_ref": "已冻结"
+    },
+    {
+     "type": "illustration",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "text_ref": "原来想让 AI"
+    },
+    {
+     "type": "notice",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/打勾清单.png"
+     ],
+     "align": "left",
+     "text_ref": "一个例子"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "为什么不用了|现在怎么读微信|停到什么程度"
+    },
+    {
+     "type": "prose",
+     "text_ref": "数字卡片（竖线前大字"
+    },
+    {
+     "type": "stat_card",
+     "columns": 2,
+     "illustration": "none",
+     "icons": "none",
+     "align": "center",
+     "text_ref": "135次提交，6月20日—9月8日28,448次默认那份",
+     "columns_v": 2
+    },
+    {
+     "type": "action_button",
+     "columns": 1,
+     "align": "center",
+     "text_ref": "GitHub",
+     "promote_links": [
+      "GitHub",
+      "复制 AI 续作说明"
+     ]
+    }
+   ],
+   "notes": "已看 v、v2。整宽标题居中，冻结标签贴标题右侧。v 原图标题为粗体字，按统一标准仍需用合格毛笔标题图。大桥插画整宽在标题下；介绍后例子块是浅绿图标＋标题横条，下接白底正文，不把整段例子正文塞进窄横条。v2 三张说明卡各占一整行，插画在左、文字在右；数字卡 2×2，最后按钮与说明居中。原 v2 缺复制 AI 续作说明，但定稿已有，按同样按钮样式补齐。定稿数字引导句的 G1 问题同 h。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第1/3条：简介卡改为整宽横3列/竖1列、取消卡内插图；四数字卡独占整宽横4列/竖2列且无图标。第2条内部说明属于定稿，未获改定稿权限，保留并交回。第4条仅将GitHub和复制提升为按钮，约法L24保持行内链接；跨中间正文合成两按钮行的缺口另交comp-text。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "一座落霜的旧木桥",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/late-clean-review/pen-bottom-frame-clean.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "钢笔",
+   "source_phrase": "一条笔直发亮的绿色小路",
+   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/插头.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "插头",
+   "source_phrase": "一个拔下来的电源插头",
+   "sha256": "9f19b0993d47ecb67a994c3988d36efb98a1b9dca540cacc914abb5755b33ebe",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "key": "打勾清单",
+   "source_phrase": "6月20日，我让AI把WeFlow的看门狗和登录后打开微信装好、再检查一遍：AI注册了两个计划任务，自检把会话、联系人、群成员、朋友圈都读通了。当天在OpenClaw网关里一提某个微信群，OpenClaw自己经WeFlow找到了那个群。",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "key": "打勾清单",
+   "source_phrase": "6月20日，我让AI把WeFlow的看门狗和登录后打开微信装好、再检查一遍：AI注册了两个计划任务，自检把会话、联系人、群成员、朋友圈都读通了。当天在OpenClaw网关里一提某个微信群，OpenClaw自己经WeFlow找到了那个群。",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/main-wechat-history-ai-bridge.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "main-wechat-history-ai-bridge",
+   "source_phrase": "右侧约 45%：一幅水彩插画：左边一台笔记本电脑，屏幕上是微信的绿色标志；右边一个小圆台上并排画 Claude 和 Codex（OpenAI）的标志；两者之间是一座落了薄霜、颜色偏灰的小木桥，桥中间立着一台小小的旧服务器图标（代表 WeFlow），桥头一只打盹的小狗（看门狗）趴着；木桥上方另有一条笔直、发亮的绿色细线从微信标志直接连到 AI 标志。",
+   "sha256": "d8fd30018536ab47bc4df2c6e23158e31470b94f7053b32768b758789ee71793",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "wechat-history-ai-bridge/wechat-history-ai-bridge-01-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechat-history-ai-bridge-01-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-5ee1e7ad6f7b7b8cd8c2",
+   "title_text": "微信记录交给 AI",
+   "sha256": "55997de4c3f58f84e9354e73ac8b9be0bac03da7d52ca5a65d8b6388338b4b7e",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 微信记录交给 AI
+
+已冻结
+
+原来想让 AI 读懂电脑上的微信。数据靠 WeFlow 取：它是 GitHub 上的第三方程序，在电脑上解密微信 4 的聊天库，再开一个只有本机能连的接口。这个项目不存聊天，只管两件事：告诉 AI 怎么从这个接口取对、取全，并让 WeFlow 一直开着。仓库对外叫“微信聊天记录 AI 本地桥”（wechat-history-ai-bridge），工程名 WeFlowBridge，冻结名单上叫“微信历史桥”。
+
+**一个例子**
+6 月 20 日，我让 AI 把 WeFlow 的看门狗和登录后打开微信装好、再检查一遍：AI 注册了两个计划任务，自检把会话、联系人、群成员、朋友圈都读通了。当天在〔OpenClaw 网关〕里一提某个微信群，OpenClaw 自己经 WeFlow 找到了那个群。
+
+**为什么不用了**
+被〔微信聊天读取〕取代。
+
+**现在怎么读微信**
+AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别见〔两条路差在哪〕。
+
+**停到什么程度**
+8 月 22 日起，AI 日常读微信就不走这里了；9 月 12 日冻结。9 月 26 日停掉全部 WeFlow 进程，两个看门狗计划任务停用（没删，能恢复），给 AI 用的旧插件撤下；换电脑不重建。公开仓库原样留着。
+
+数字卡片（竖线前大字，竖线后小字）：
+1. 35 次｜提交，6 月 20 日—9 月 8 日
+2. 8,448 次｜默认那份 WeFlow 的看门狗检查，每 15 分钟一次，6 月 20 日—9 月 26 日
+3. 31 项｜自动测试，9 月 8 日最后一次全部通过
+4. 26.7.3｜最后对准的 WeFlow 版本，7 月 9 日实测
+
+〔GitHub〕　冻结的项目，AI 不主动看、不维护：〔约法 L24〕　〔复制 AI 续作说明〕
+
+::screen{#wechat-history-ai-bridge-02 section="why-frozen"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-history-ai-bridge-02",
+  "section": "why-frozen",
+  "title": "两条路差在哪",
+  "scene": "横版 16:9。左上标题，标题下一行导语（浅灰小字）。上半部一张横向对照表占满宽度：表头浅绿底，三列（第一列窄，放行名；第二列“旧”整列底色偏灰，列头旁画一座落霜的小木桥图标；第三列“新”列头旁画一条发亮的绿色小路图标，“微信聊天读取”是带下划线的链接），四行。下半部左右两块：左边约 55% 是“看门狗这 3 个多月”：标题下画一只趴着的水彩小狗和一个钟，旁边三行数字清单，每行的数字用大号绿色字；数字下画一条细细的水平条：8,448 格里 8,236 是绿色、其余浅灰，示意健康的占多数。右边约 45% 是“停下以后还留着的”：浅灰底圆角卡，三行带小图标的清单（GitHub 标志、两个并排的微信标志、一个暂停的开关），“电脑配置与恢复”是带下划线的链接。",
+  "portrait": "竖版 9:16：标题、导语在上；对照表改成四张小卡，每张卡上面一行粗体行名，下面两行写两列的内容：旧的一行底色偏灰、行首一个落霜小木桥图标，新的一行行首一个发亮的绿色小路图标（不加文字标签）；四张卡上方放一行列头（旧、新两个列头并排，字和横版列头一样）。然后“看门狗这 3 个多月”一块（小狗和钟在上，三行数字在下，水平条在最下）；最后“停下以后还留着的”一块。字完全一样。",
+  "links": [
+   {
+    "text": "微信聊天读取",
+    "href": "/projects/wechatdirect/",
+    "locator_instances": {
+     "v": {
+      "input_sha256": "a183e1d3e8f5152421d5ff3f93a0ce8837b7210bf20a9961b35a3d4e3018d37f",
+      "instances": [
+       {
+        "context_text": "新：微信聊天读取",
+        "context_rect": [
+         643,
+         307,
+         909,
+         344
+        ],
+        "expected_rect": [
+         705,
+         314,
+         873,
+         342
+        ],
+        "lookup_text": "微信聊天读取",
+        "confirm_region": true,
+        "underline_rect": [
+         705,
+         347,
+         873,
+         350
+        ]
+       }
+      ]
+     }
+    }
+   },
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "row": "header",
+     "width": "66%",
+     "align": "left",
+     "size": "large",
+     "text_ref": "两条路差在哪"
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "text_ref": "本人只说了一句",
+     "row": "header"
+    },
+    {
+     "type": "illustration",
+     "row": "header",
+     "width": "34%",
+     "align": "center",
+     "size": "small",
+     "asset": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\claude-gate-1001\\typeset-assets\\_library\\illustrations\\main-wechat-history-ai-bridge.png",
+     "target_height": 220,
+     "target_width": "90%"
+    },
+    {
+     "type": "table",
+     "columns": 3,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "旧：微信记录交给 AI"
+    },
+    {
+     "type": "content_card",
+     "row": "lower",
+     "width": "56%",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "看门狗这 3 个多月"
+    },
+    {
+     "type": "content_card",
+     "row": "lower",
+     "width": "44%",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/代码窗口.png"
+     ],
+     "text_ref": "停下以后还留着的"
+    }
+   ],
+   "notes": "实际图标题占左半、右半是大桥与亮路两幅相接插画，须保留标题旁插画；导语在下一整行。三列表第一列约 16%、旧约 43%、新约 41%，表头小桥和小路图在各列名字左侧；不能另写表头副本 text_ref。下部看门狗卡在左，左侧狗＋钟，右侧说明及两条数字条，8,448 与 212 大号强调，8,236 仍在第一条原文中；细水平健康比例条置于第一条数字下，不加新标签。右侧保留内容卡三条，GitHub、双微信、暂停开关图分别在条目前。样式按批准 v2 深蓝灰正文和淡绿卡，仅状态点带状态色，不因历史页把正文变淡。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第5条：导语并入标题左栏，左66%/右34%，右图高上限220px，清除标题下空白。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "两条路差在哪"
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "text_ref": "本人只说了一句"
+    },
+    {
+     "type": "table",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "旧：微信记录交给 AI"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "看门狗这 3 个多月"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "none",
+     "icons": "none",
+     "text_ref": "停下以后还留着的"
+    }
+   ],
+   "notes": "已看 v、v2。v 四张对照行卡整宽顺排：表头仅上方一行旧／新双栏；每卡上方行名，下面旧内容浅灰条、新内容浅绿条，各条左侧是桥／路小图，不能把横表直接缩窄。v2 看门狗标题独立一行，下有日志范围说明，再是两个整宽数字说明卡；原图没有狗钟或比例条，不按 scene 另加。停下以后还留着的标题一行、三个整宽文字卡无插画。看门狗段标题和后面的括号说明在定稿是单一 para，交同一 content_card 保留全文；不可用括号内子串另起块。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "｜旧：微信记录交给 AI｜新：〔微信聊天读取〕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/代码窗口.png",
+   "fallback": false,
+   "key": "代码窗口",
+   "source_phrase": "停下以后还留着的 \n公开仓库：说明、脚本和测试原样留着，按规矩从不放聊天内容登录后自动打开微信：早就交给电脑配置与恢复的“微信双开”，照常在用两个看门狗任务：停用没删，本人要用时能一键恢复",
+   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/illustrations/main-wechat-history-ai-bridge.png",
+   "fallback": false,
+   "semantic_status": "final_gap_same_project_main_reuse",
+   "key": "main-wechat-history-ai-bridge",
+   "source_phrase": "横版 16:9。左上标题，标题下一行导语（浅灰小字）。上半部一张横向对照表占满宽度：表头浅绿底，三列（第一列窄，放行名；第二列“旧”整列底色偏灰，列头旁画一座落霜的小木桥图标；第三列“新”列头旁画一条发亮的绿色小路图标，“微信聊天读取”是带下划线的链接），四行。下半部左右两块：左边约 55% 是“看门狗这 3 个多月”：标题下画一只趴着的水彩小狗和一个钟，旁边三行数字清单，每行的数字用大号绿色字；数字下画一条细细的水平条：8,448 格里 8,236 是绿色、其余浅灰，示意健康的占多数。右边约 45% 是“停下以后还留着的”：浅灰底圆角卡，三行带小图标的清单（GitHub 标志、两个并排的微信标志、一个暂停的开关），“电脑配置与恢复”是带下划线的链接。",
+   "sha256": "d8fd30018536ab47bc4df2c6e23158e31470b94f7053b32768b758789ee71793",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "wechat-history-ai-bridge/wechat-history-ai-bridge-02-title-01.png",
+   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\wechat-history-ai-bridge\\img\\wechat-history-ai-bridge-02-h.png",
+   "fallback": false,
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-9aa465b9d24921fade17",
+   "title_text": "两条路差在哪",
+   "sha256": "f101f3f481eb670ac028f414220ba511f5a96bcbe6b1dcb81873135ccf9285e5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 两条路差在哪
+
+本人只说了一句：被“微信聊天读取”取代。下面是两条路实际的差别，不是本人逐条说的理由。
+
+| | 旧：微信记录交给 AI | 新：〔微信聊天读取〕 |
+|---|---|---|
+| 数据从哪来 | WeFlow 解密后，从本机 5031 端口的接口取 | 直接读电脑上微信 4 的本地数据库 |
+| 要一直开着什么 | WeFlow 要在桌面上开着、登录着，第一次还要在它设置里打开“API 服务”；第二个微信库再开一份（16000 端口） | 没有常驻程序，也没有自动任务，AI 问到时才调用一次 |
+| 谁盯着它 | 两个看门狗计划任务，每 15 分钟查一次 | 不用盯 |
+| 谁真正去取 | 本仓库只写规矩和检查脚本；真正取数的是 E:\.agents 里的 weflow-toolkit 插件（里面有 weflow-history 技能），还有 OpenClaw 的“查微信” | 一个程序从取数到交回都包了 |
+
+**看门狗这 3 个多月**（默认那份 WeFlow，6 月 20 日—9 月 26 日，按它自己的日志数：每轮检查算一次，一轮里的后续几行不重复算）
+- 8,448 次检查，8,236 次一查就健康
+- 212 次发现接口没响应：其中 101 次程序还开着、接口却不通，日志判断多半是 WeFlow 里的“API 服务”没开，看门狗只记下来，不反复开新的；另外 111 次程序没开，去拉起 WeFlow
+
+**停下以后还留着的**
+- 公开仓库：说明、脚本和测试原样留着，按规矩从不放聊天内容
+- 登录后自动打开微信：早就交给〔电脑配置与恢复〕的“微信双开”，照常在用
+- 两个看门狗任务：停用没删，本人要用时能一键恢复
+
+::screen{#wechat-history-ai-bridge-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-history-ai-bridge-03",
+  "section": "usage",
+  "title": "当初想解决什么、怎么用",
+  "scene": "横版 16:9。左上标题。标题下左侧约 40% 是“想解决的麻烦”一段，旁边一个小水彩图标：一只放大镜对着一串聊天气泡，其中一个气泡是空的、一个气泡上带着引用的小钩。上半部右侧约 60% 是一条从左到右的水彩流程图，五个节点用粗绿色箭头连起来：①一台笔记本，屏幕上微信标志 → ②一台小服务器图标带一把钥匙（WeFlow，整个节点偏灰）→ ③一本摊开的说明书和一只小狗（这个项目）→ ④并排的 Claude、Codex（OpenAI）标志，旁边一只小小的红色小龙虾（OpenClaw）→ ⑤一个回复气泡，气泡下挂着一张小标签。每个节点下面：粗体节点名一行，小字一行；“OpenClaw 网关”是带下划线的链接。下半部两张卡左右并排：左边“两个例子”，两行清单，第一行前画一只小小的红色小龙虾对着一个群聊气泡，第二行前画一台小服务器旁一个问号和一把挂锁；右边“后来补上的两条规矩”，两行带绿色小勾的清单，每条的粗体开头单独一行。",
+  "portrait": "竖版 9:16：标题；“想解决的麻烦”一段；流程图改成从上到下五个节点，箭头朝下，节点名和小字在图标右边；“两个例子”卡；“后来补上的两条规矩”卡。字完全一样。",
+  "links": [
+   {
+    "text": "OpenClaw 网关",
+    "href": "/projects/openclaw/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "当初想解决什么、怎么用"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "想解决的麻烦"
+    },
+    {
+     "type": "flow",
+     "columns": 2,
+     "connector": "arrow",
+     "illustration": "top_inside",
+     "icons": [
+      "_library/icons/微信标志.png",
+      "_library/icons/代码窗口.png",
+      "_library/icons/文件齿轮.png",
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+      "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+     ],
+     "align": "center",
+     "text_ref": "微信|WeFlow|这个项目|AI|回答",
+     "direction": "horizontal",
+     "attach_following_para": true,
+     "enclosure": "single_card"
+    },
+    {
+     "type": "section_heading",
+     "row": "examples-rules",
+     "width": "50%",
+     "text_ref": "两个例子",
+     "align": "left",
+     "size": "small"
+    },
+    {
+     "type": "section_heading",
+     "row": "examples-rules",
+     "width": "50%",
+     "text_ref": "后来补上的两条规矩",
+     "align": "left",
+     "size": "small"
+    }
+   ],
+   "notes": "标题占整宽，按追加要求居中。上排问题卡约 36%、流程约 64%。问题卡标题在左上、聊天放大镜图在卡内右上，正文绕下，不放在卡外。五站流程共在一个圆角容器内，每节点插画在上、编号名在下、说明再下，绿色粗箭头穿过图像间空隙；flow 接收 5 个 steps 与交替的 5 个 para，需把紧随步骤的 para 当该步骤正文，不把步骤名与正文拆散。下排两张等宽大卡，每张两条，图标在条目左侧，右边粗体开头和正文；两规矩行首绿勾。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第6条：例子和规矩改为section_heading承接原标题及清单，不再生成灯泡空标题卡。流程五图明确对应微信/接口窗口/约定文件/AI机器人/回答气泡钢笔，复用现有语义素材。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "当初想解决什么、怎么用"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "想解决的麻烦"
+    },
+    {
+     "type": "flow",
+     "columns": 1,
+     "connector": "arrow",
+     "illustration": "left_inside",
+     "icons": [
+      "_library/icons/微信标志.png",
+      "_library/icons/代码窗口.png",
+      "_library/icons/文件齿轮.png",
+      "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
+      "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
+     ],
+     "align": "left",
+     "text_ref": "微信|WeFlow|这个项目|AI|回答",
+     "direction": "vertical",
+     "attach_following_para": true
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "两个例子",
+     "align": "left",
+     "size": "small"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "后来补上的两条规矩",
+     "align": "left",
+     "size": "small"
+    }
+   ],
+   "notes": "已看 v、v2。v 整宽问题卡的放大镜聊天图位于卡内右上，左侧标题与正文；五站各为独立整宽圆角卡，左图右文，卡与卡之间向下绿色粗箭头。v2 两个整宽大卡：两个例子、后来补上的两条规矩；各卡两条绿点，原续图没有每条水彩插画，不从横版复制进来。flow 的步骤／紧随说明 para 接续同 h。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第6条：例子和规矩改为section_heading承接原标题及清单，不再生成灯泡空标题卡。流程五图明确对应微信/接口窗口/约定文件/AI机器人/回答气泡钢笔，复用现有语义素材。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "放大镜",
+   "source_phrase": "一只放大镜对着一串聊天气泡",
+   "sha256": "84904c9325e20f1cc5a64be3b7621158834c1e37275ad7b03a515f4bd515ab4a",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": true,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "绿叶装饰",
+   "source_phrase": "",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "key": "微信标志",
+   "source_phrase": "微信",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "WeFlow",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "这个项目",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "AI",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "回答",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "两个例子 \n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
+   "fallback": false,
+   "key": "气泡钢笔",
+   "source_phrase": "提一句群，自己找过去 ：6 月 20 日测 OpenClaw，消息里只提到一个微信群、没点任何接口，OpenClaw 自己走 WeFlow 查到了那个群。\n",
+   "sha256": "0885f03d0fd8605a1e8158ed683043f68c0a9f2176cb524056d398071c4424c1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "key": "微信标志",
+   "source_phrase": "认不出是哪个号，就不读 ：第二个微信库（16000 端口）一直能连上，但 WeFlow 26.7.3 没有“不读聊天就能查当前是哪个号”的接口，认不出它是哪个号；于是凡是按微信号去读它的请求一律拒绝，不猜。9 月 26 日本人决定把这个读取接口停掉。\n",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "后来补上的两条规矩 \n",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/icons/日历时钟.png",
+   "fallback": false,
+   "key": "日历时钟",
+   "source_phrase": "取最新消息不带日期 ：直接要最近 100 条，再跟会话列表里记的“最后一条时间”对一下。WeFlow 读的是微信正在写的本地库，带日期查会漏；一次读到空，也可能只是碰上微信正在写，要重试。\n",
+   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 13,
+   "orientations": [
+    "h"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "key": "红色警示",
+   "source_phrase": "健康页正常 ≠ 能读 ：健康页只说明程序开着。自检要走 5 个必需入口：健康页，加上会话列表（两种格式）、联系人、朋友圈统计这 4 个读取入口，有一个失败就报失败。\n",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "key": "微信标志",
+   "source_phrase": "微信",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 15,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "WeFlow",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 16,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "这个项目",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 17,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "AI",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 18,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "fallback": false,
+   "key": "灯泡",
+   "source_phrase": "回答",
+   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-dee7d8d741cbf8bc4f55.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-dee7d8d741cbf8bc4f55",
+   "title_text": "当初想解决什么、怎么用",
+   "sha256": "42d7bf08ebd1843e296bb8267c2305622af91724ca588ef557b4fda2d2815e59",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 当初想解决什么、怎么用
+
+**想解决的麻烦**
+让 AI 总结一段微信群讨论，最容易错的不是总结，是取数：读错了微信号、漏掉最新几条、把引用的旧话当成刚说的、一次读到空就说“从来没聊过”。这个项目把取数的规矩写成 AI 能照着做、能核对的约定。
+
+1. **微信**
+电脑上登录着的微信 4
+2. **WeFlow**
+解密聊天库，在本机 5031 端口开接口
+3. **这个项目**
+接口地图、取数约定、自检、看门狗
+4. **AI**
+Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微信”也走这里
+5. **回答**
+带上读的是哪个号、哪段时间、多少条、缺了什么
+
+**两个例子**
+- **提一句群，自己找过去**：6 月 20 日测 OpenClaw，消息里只提到一个微信群、没点任何接口，OpenClaw 自己走 WeFlow 查到了那个群。
+- **认不出是哪个号，就不读**：第二个微信库（16000 端口）一直能连上，但 WeFlow 26.7.3 没有“不读聊天就能查当前是哪个号”的接口，认不出它是哪个号；于是凡是按微信号去读它的请求一律拒绝，不猜。9 月 26 日本人决定把这个读取接口停掉。
+
+**后来补上的两条规矩**
+- **取最新消息不带日期**：直接要最近 100 条，再跟会话列表里记的“最后一条时间”对一下。WeFlow 读的是微信正在写的本地库，带日期查会漏；一次读到空，也可能只是碰上微信正在写，要重试。
+- **健康页正常 ≠ 能读**：健康页只说明程序开着。自检要走 5 个必需入口：健康页，加上会话列表（两种格式）、联系人、朋友圈统计这 4 个读取入口，有一个失败就报失败。
+
+::screen{#wechat-history-ai-bridge-04 section="features"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-history-ai-bridge-04",
+  "section": "features",
+  "title": "全部旧功能",
+  "scene": "横版 16:9，和其他项目页“全部功能”同一种画法，但整屏色调偏灰淡，表示都已停用。左上标题，标题右边图例（只有一种：灰色叉“已停用”）。三组功能从上往下排；每组的组名用毛笔字写在这一组卡片上方的一行（不单独占一整列）；卡片三列排（第一组 3 张一行；第二组 5 张排两行；第三组 3 张一行）：每张卡左边一个灰调小水彩图标，粗体功能名，下面两三行说明，右上角一个灰色叉。图标：取数约定画一张带勾的规则纸，接口地图画一张摊开的地图，AI 读微信的技能画 Claude、Codex 标志旁一个微信气泡，看门狗画一只趴着的小狗，两份 WeFlow 分开守画两个并排的小服务器，后台不闪黑框画一个盖着布的小屏幕，登录后打开微信画两个并排的微信标志，开机自动登录 Windows 画一把插在电脑上的钥匙，接口自检画一个听诊器，公开前自查画一个盾牌和 GitHub 标志，已取得文件的两遍核对画两张叠在一起的文件和一个指纹。“电脑配置与恢复”是带下划线的链接。",
+  "portrait": "竖版 9:16：标题和图例在上；每组组名一行，下面卡片改成一行一张（图标在左、字在右、叉在右上）；三组依次往下。字完全一样。",
+  "links": [
+   {
+    "text": "电脑配置与恢复",
+    "href": "/projects/pcconfig/"
+   }
+  ],
+  "anchors": [
+   {
+    "id": "g-read",
+    "text": "给 AI 取微信"
+   },
+   {
+    "id": "f-consumer-contract",
+    "text": "取数约定"
+   },
+   {
+    "id": "f-endpoint-map",
+    "text": "接口地图"
+   },
+   {
+    "id": "f-ai-skill",
+    "text": "AI 读微信的技能"
+   },
+   {
+    "id": "g-run",
+    "text": "让 WeFlow 一直在线"
+   },
+   {
+    "id": "f-watchdog",
+    "text": "看门狗"
+   },
+   {
+    "id": "f-multi-profile",
+    "text": "两份 WeFlow 分开守"
+   },
+   {
+    "id": "f-silent",
+    "text": "后台不闪黑框"
+   },
+   {
+    "id": "f-wechat-autostart",
+    "text": "登录后打开微信"
+   },
+   {
+    "id": "f-autologin",
+    "text": "开机自动登录 Windows"
+   },
+   {
+    "id": "g-check",
+    "text": "检查和交接"
+   },
+   {
+    "id": "f-probe",
+    "text": "接口自检"
+   },
+   {
+    "id": "f-public-check",
+    "text": "公开前自查"
+   },
+   {
+    "id": "f-snapshot-check",
+    "text": "已取得文件的两遍核对"
+   }
+  ],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "row": "header",
+     "width": "84%",
+     "align": "center",
+     "size": "large",
+     "text_ref": "全部旧功能"
+    },
+    {
+     "type": "status_legend",
+     "row": "header",
+     "width": "16%",
+     "size": "small",
+     "text_ref": "图例："
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "给 AI 取微信"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "取数约定"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "让 WeFlow 一直在线"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "看门狗",
+     "row_counts": [
+      3,
+      2
+     ],
+     "last_row_fill": true,
+     "last_row": "fill"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "检查和交接"
+    },
+    {
+     "type": "feature_card",
+     "columns": 3,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "接口自检"
+    }
+   ],
+   "notes": "整宽章节标题区域居中，灰叉图例在右。三个组名照原图左置，整宽章节大标题居中。实际卡组：第一组 3 张一行；中间组上排 3 张，下排登录后打开微信与开机自动登录 Windows 两张各半宽，须由 feature_card 在同一个含 5 items 的 bullets 节点内做 3+2，不能以第 4 条子串作为 text_ref；最后组 3 张。插画都在卡内左、字在右、灰叉在右上，卡仍按批准淡绿风格，标题和正文不可淡化。图例定稿是 para（含图例：），status_legend 必须全文保留，不能只渲染叉和已停用。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；qa-10第7条：三个功能组名改用小号Sans粗体section_heading，取消大尺寸毛笔素材造成的层级倒置。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "全部旧功能"
+    },
+    {
+     "type": "status_legend",
+     "size": "small",
+     "text_ref": "图例："
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "给 AI 取微信"
+    },
+    {
+     "type": "feature_card",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "取数约定"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "让 WeFlow 一直在线"
+    },
+    {
+     "type": "feature_card",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "看门狗"
+    },
+    {
+     "type": "section_heading",
+     "align": "left",
+     "size": "small",
+     "text_ref": "检查和交接"
+    },
+    {
+     "type": "feature_card",
+     "columns": 1,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "align": "left",
+     "text_ref": "接口自检"
+    }
+   ],
+   "notes": "已看 v、v2。v：整宽大标题、图例、第一组名、三张整宽图文卡。v2 从第二组名接起，五张整宽图文卡，第三组名，再三张整宽图文卡。续张不重复章标题和图例。各卡左图约 35%、右文约 65%，叉贴右上；组标题照原图左置。最后一张必须完整展示定稿，原图底边极紧，渲染分张不得截断正文。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；qa-10第7条：三个功能组名改用小号Sans粗体section_heading，取消大尺寸毛笔素材造成的层级倒置。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "取数约定：先认准微信号和聊天，再取最新或按时间分页取历史；保留谁回复谁、附件线索，时间一律按北京时间；读不全就交代缺口。存下来的结果只记范围、条数、重试次数这些，不含正文 ✕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "地图定位",
+   "source_phrase": "接口地图：会话、联系人、消息、群成员、朋友圈、实时推送各从哪个接口读；导出、删朋友圈这类会改东西的接口标成“AI 默认不许调” ✕",
+   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "AI 读微信的技能：Codex、Claude 用 weflow-history 技能去取；每个微信库各连一份 WeFlow，取之前先核对是哪个微信号，对不上就不读。它放在 E:\\.agents 的 weflow-toolkit 插件里，不在本仓库；8 月 22 日先撤技能，9 月 26 日再撤整个插件 ✕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "时钟",
+   "source_phrase": "看门狗：登录时和每 15 分钟查一次；WeFlow 没开才拉起一次，开着却不通只记日志，不反复开新的 ✕",
+   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "两份 WeFlow 分开守：第二个微信库那份（16000 端口）单独认、单独守；它的配置文件夹不在就直接报错，不新建一个空的 ✕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "打勾清单",
+   "source_phrase": "后台不闪黑框：检查脚本包一层，在后台静悄悄地跑 ✕",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "登录后打开微信：后来交给〔电脑配置与恢复〕的“微信双开”，那边照常在用 ✕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "微信标志",
+   "source_phrase": "开机自动登录 Windows：可选；为了没人操作时微信也能起来，但登录密码会存进注册表，只适合放在家里的电脑 ✕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "红色警示",
+   "source_phrase": "接口自检：两种用法。只问健康页，只能说明程序开着；要查能不能读，就读会话、联系人、群成员、朋友圈统计这些概况（不读消息正文），5 个必需入口有一个失败就报失败 ✕",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/GitHub标志.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "GitHub标志",
+   "source_phrase": "公开前自查：31 项自动测试，加上扫一遍要公开的文件：密钥、聊天、截图、数据库一样都不许进仓库；GitHub 上跑同一套 ✕",
+   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件核验",
+   "source_phrase": "已取得文件的两遍核对：对已经导出的一批文件逐个算指纹、完整读两遍，一致才给一份核对收据；它不是备份，也不导出 ✕",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-746a4ff7a2c4f592dc6f.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-746a4ff7a2c4f592dc6f",
+   "title_text": "全部旧功能（11 项，全部已停用）",
+   "sha256": "adb656101d8347a60b11c57635447161d37afadfcddd50b028e025952062fb66",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 2,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-425a4a69604f12b4a165.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-425a4a69604f12b4a165",
+   "title_text": "检查和交接",
+   "sha256": "4bec32bfa413d2b7157c06fa78cbc32d683c57ec5d96a13d7f8504489d1e4740",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 3,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-de515c7d522bb39efb1e.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-de515c7d522bb39efb1e",
+   "title_text": "给 AI 取微信",
+   "sha256": "83ff8a22121f79d68496d924e58908956e44d8bf03fd43b76a919c8e539b8c98",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 4,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-9175bd83f94f3bc6ea9a.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-9175bd83f94f3bc6ea9a",
+   "title_text": "让 WeFlow 一直在线",
+   "sha256": "a332c5cdee2e71bba9006d8e01053b1227c9a2c2ff4f16e35453e22d9ef1d99e",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 全部旧功能（11 项，全部已停用）
+
+图例：✕ 已停用
+
+**给 AI 取微信**
+- **取数约定**：先认准微信号和聊天，再取最新或按时间分页取历史；保留谁回复谁、附件线索，时间一律按北京时间；读不全就交代缺口。存下来的结果只记范围、条数、重试次数这些，不含正文 ✕
+- **接口地图**：会话、联系人、消息、群成员、朋友圈、实时推送各从哪个接口读；导出、删朋友圈这类会改东西的接口标成“AI 默认不许调” ✕
+- **AI 读微信的技能**：Codex、Claude 用 weflow-history 技能去取；每个微信库各连一份 WeFlow，取之前先核对是哪个微信号，对不上就不读。它放在 E:\.agents 的 weflow-toolkit 插件里，不在本仓库；8 月 22 日先撤技能，9 月 26 日再撤整个插件 ✕
+
+**让 WeFlow 一直在线**
+- **看门狗**：登录时和每 15 分钟查一次；WeFlow 没开才拉起一次，开着却不通只记日志，不反复开新的 ✕
+- **两份 WeFlow 分开守**：第二个微信库那份（16000 端口）单独认、单独守；它的配置文件夹不在就直接报错，不新建一个空的 ✕
+- **后台不闪黑框**：检查脚本包一层，在后台静悄悄地跑 ✕
+- **登录后打开微信**：后来交给〔电脑配置与恢复〕的“微信双开”，那边照常在用 ✕
+- **开机自动登录 Windows**：可选；为了没人操作时微信也能起来，但登录密码会存进注册表，只适合放在家里的电脑 ✕
+
+**检查和交接**
+- **接口自检**：两种用法。只问健康页，只能说明程序开着；要查能不能读，就读会话、联系人、群成员、朋友圈统计这些概况（不读消息正文），5 个必需入口有一个失败就报失败 ✕
+- **公开前自查**：31 项自动测试，加上扫一遍要公开的文件：密钥、聊天、截图、数据库一样都不许进仓库；GitHub 上跑同一套 ✕
+- **已取得文件的两遍核对**：对已经导出的一批文件逐个算指纹、完整读两遍，一致才给一份核对收据；它不是备份，也不导出 ✕
+
+::screen{#wechat-history-ai-bridge-05 section="history"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-history-ai-bridge-05",
+  "section": "history",
+  "title": "演进",
+  "scene": "横版 16:9。左上标题。中间一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，12 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤。8 月 22–25 日那面小旗旁边，丝带分出一条更亮的绿色细枝往右上方伸出画面（代表换成了微信聊天读取），“微信聊天读取”是带下划线的链接。分枝之后主丝带越往右颜色越淡、越偏灰。最右端丝带的尽头画那座落了薄霜的小木桥，桥头的小狗趴着睡着了。",
+  "portrait": "竖版 9:16：标题；时间轴改成从上到下一条竖丝带，12 个小旗依次往下，日期在左、小字在右；8 月 22–25 日处的亮绿色细枝往右伸出；最下面是落霜的小木桥和睡着的小狗。字完全一样。",
+  "links": [
+   {
+    "text": "微信聊天读取",
+    "href": "/projects/wechatdirect/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "演进（6 月 20 日"
+    },
+    {
+     "type": "timeline",
+     "columns": 6,
+     "connector": "none",
+     "illustration": "none",
+     "icons": "none",
+     "align": "left",
+     "text_ref": "6 月 20 日",
+     "direction": "horizontal",
+     "path": "z_order",
+     "rows": [
+      6,
+      6
+     ]
+    }
+   ],
+   "notes": "整宽标题居中。timeline 接收包含 12 项的单一 stats 节点；日期当时间，不得当 12 张数字卡。构图是两排蛇形水彩丝带：上排 6 月 20 日至 8 月 5–7 日，左至右；下排 8 月 16 日至 9 月 26 日，右至左；每项旗帜日期在上、正文浅绿描边框在下，旗杆和丝带相接。8 月 22–25 日节点旁亮绿支线朝右上伸出，支线没有新增字；主丝带向结束变淡灰。右下冻桥与睡狗在卡外。日期和正文仍按定稿一次完整出现，不因视觉蛇形把取数顺序反转。timeline 的旗帜／丝带／分支为批准样板未出现外观，待组件样张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；qa-10第8条：日期两排均从左至右（z_order），取消连接与支线，保留12项源顺序。"
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "align": "center",
+     "size": "large",
+     "text_ref": "演进（6 月 20 日"
+    },
+    {
+     "type": "timeline",
+     "columns": 1,
+     "connector": "none",
+     "illustration": "none",
+     "icons": "none",
+     "align": "left",
+     "text_ref": "6 月 20 日",
+     "direction": "vertical"
+    }
+   ],
+   "notes": "已看 v、v2。不能仅按 scene 做 12 项同一种竖丝带：v 实际前 5 项（至 7 月 28 日）左侧绿叶竖线＋圆点旗帜日期，右侧正文圆角框；这 5 项下面有一幅整宽冻桥睡狗插画。v2 实际后 7 项（8 月 5–7 日至 9 月 26 日）改成整宽横卡，左约 44% 为各自的溪流／桥／路插画，细绿竖分隔线，右侧日期和说明，续图没有丝带、旗杆、分支或睡狗结尾。两段都属于同一 stats 节点，因此不能在 8 月 5–7 日处另造 text_ref；timeline 组件需内部按 item 索引 0–4 与 5–11 两种排法，装饰桥放第 5 项之后，分张边界亦在这里。这是现图明确的构图分段，当前 API 没有 item 分段参数，已记入 notes，不能兜底成同样 12 卡声称保真。旗帜和多段时间线样式待组件样张。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；用新text_ref内条目切分，把前5旗帜、其后主插画/换张、后7左图右文无连接卡分成实际块；是否复现竖旗日期左右位置仍需审页，缺素材继续报未完成。；qa-10第9条：取消中插画和后7项不同图文卡，将12项合成同一种无图竖时间线，不重复日期或说明。"
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/12-文件核验-clean.png",
+   "fallback": false,
+   "key": "文件核验",
+   "source_phrase": "8 月 5–7 日 ：第二个微信库那份 WeFlow 也能单独守；加上已取得文件的两遍核对",
+   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/身份盾牌.png",
+   "fallback": false,
+   "key": "身份盾牌",
+   "source_phrase": "8 月 16 日 ：AI 取数前先核对微信号身份",
+   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/微信标志.png",
+   "fallback": false,
+   "key": "微信标志",
+   "source_phrase": "8 月 22–25 日 ：AI 读微信的技能撤下，换成〔微信聊天读取〕",
+   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "fallback": false,
+   "key": "红色警示",
+   "source_phrase": "8 月 31 日 ：自检改严，5 个必需入口一个失败就报失败",
+   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "key": "日历",
+   "source_phrase": "9 月 8 日 ：最后一次提交，自动测试补齐到 31 项；同一天最后一次看状态，两份 WeFlow 的健康页都正常",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/icons/禁止文件.png",
+   "fallback": false,
+   "key": "禁止文件",
+   "source_phrase": "9 月 12 日 ：本人决定冻结",
+   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "key": "日历",
+   "source_phrase": "9 月 26 日 ：停掉全部 WeFlow 进程，两个看门狗停用，weflow-toolkit 插件整个撤下",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "v"
+   ],
+   "asset": "_library/illustrations/main-wechat-history-ai-bridge.png",
+   "fallback": false,
+   "semantic_status": "final_gap_same_project_main_reuse",
+   "key": "main-wechat-history-ai-bridge",
+   "source_phrase": "横版 16:9。左上标题。中间一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，12 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤。8 月 22–25 日那面小旗旁边，丝带分出一条更亮的绿色细枝往右上方伸出画面（代表换成了微信聊天读取），“微信聊天读取”是带下划线的链接。分枝之后主丝带越往右颜色越淡、越偏灰。最右端丝带的尽头画那座落了薄霜的小木桥，桥头的小狗趴着睡着了。",
+   "sha256": "d8fd30018536ab47bc4df2c6e23158e31470b94f7053b32768b758789ee71793",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/title-0c690f026d942d20dcf7.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "title-0c690f026d942d20dcf7",
+   "title_text": "演进（6 月 20 日—9 月 26 日）",
+   "sha256": "6b5b7088a814987ade9b2e47844af4f7dbe6400a8966939b98cd65a1f75374b8",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 演进（6 月 20 日—9 月 26 日）
+
+- **6 月 20 日**：第一版，对着 WeFlow 26.5.27 把接口一个个测过写成说明：取消息的接口不稳，实时推送报错是 WeFlow 设置里的开关没开。当天加上看门狗和登录后打开微信，仓库公开
+- **6 月 30 日**：看门狗改在后台静悄悄地跑，不再每 15 分钟闪一下黑框
+- **7 月 7 日**：写清取最新消息的办法，和 AI 能碰什么、不能碰什么
+- **7 月 9 日**：对准 WeFlow 26.7.3 重写取数约定（第 2 版），补上机器能读的接口地图、只看概况的自检、公开前自查；打 v0.1.0，改名“微信聊天记录 AI 本地桥”
+- **7 月 28 日**：定下已导出的微信文件怎么交接
+- **8 月 5–7 日**：第二个微信库那份 WeFlow 也能单独守；加上已取得文件的两遍核对
+- **8 月 16 日**：AI 取数前先核对微信号身份
+- **8 月 22–25 日**：AI 读微信的技能撤下，换成〔微信聊天读取〕
+- **8 月 31 日**：自检改严，5 个必需入口一个失败就报失败
+- **9 月 8 日**：最后一次提交，自动测试补齐到 31 项；同一天最后一次看状态，两份 WeFlow 的健康页都正常
+- **9 月 12 日**：本人决定冻结
+- **9 月 26 日**：停掉全部 WeFlow 进程，两个看门狗停用，weflow-toolkit 插件整个撤下

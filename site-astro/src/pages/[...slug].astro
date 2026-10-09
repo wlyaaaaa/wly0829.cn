@@ -21,13 +21,18 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const r = rendered[`../content/rendered/${entry.id}.json`];
 if (!r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
+// 只给比对用：SX_RULE_CANVAS=1 构建时规则原文屏出排好的原文卡（不出网页字），用来和现在的原文排版图逐屏比；正式构建不设
+const ruleCanvas = process.env.SX_RULE_CANVAS === '1';
 const esc = (v: string) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 const screen = (s: any) => `<section class="ts-screen" id="${esc(s.id)}" data-screen="${esc(s.id)}" data-section="${esc(s.section || '')}">`
   + (s.anchor ? `<div class="section-anchor" id="${esc(s.anchor)}"></div>` : '')
-  + (s.article ? `<article class="rule-original-prose">${s.article}</article><details open class="rule-original-evidence"><summary tabindex="-1">原文排版图与技术证据</summary>` : '')
-  + (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
-  + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : '')
-  + (s.article ? `</details>` : '')
+  // 屏内定位点：别的页链到这屏里的细位置（例如约法的 #L18）时落在这屏开头；站点样式里 .point-anchor 是绝对定位、不占位
+  + (s.points || []).map((a: string) => `<span class="point-anchor typeset-screen-anchor" id="${esc(a)}" data-anchor-binding="screen"></span>`).join('')
+  + (s.article && !ruleCanvas
+    // 规则原文屏：只出网页字原文（水彩框），上面一行版本标签；原来下面那份排好的原文卡（“原文排版图与技术证据”）撤掉，免得原文出现两遍
+    ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose">${s.article}</article>`
+    : (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
+      + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : ''))
   + `</section>`;
 const canvas = (o: string, x: any) =>
   `<div class="ts-canvas o-${o} ts-shape-${x.shape || ''}" style="min-height:${x.height}px;${x.style || ''}">${x.html}</div>${x.overlay || ''}`;
@@ -41,6 +46,6 @@ for (const s of r.screens) {
 }
 if (grid.length) parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`);
 ---
-<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r}>
+<Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page}>
   <Fragment set:html={parts.join('')} />
 </Site>

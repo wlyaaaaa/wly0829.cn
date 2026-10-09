@@ -21,6 +21,8 @@ SITE = os.path.dirname(HERE)
 REPO = os.path.dirname(SITE)
 ASSETS = os.path.join(REPO, "sources", "assets")
 OUT_MD = os.environ.get("CONVERT_OUT_MD") or os.path.join(SITE, "src", "content", "pages")
+# 公开入口模板（按活动版本重出时一起写）；试跑时设了 CONVERT_OUT_MD 就写在它旁边，不碰站点
+OUT_PUBLIC = os.path.join(os.environ["CONVERT_OUT_MD"], "public") if os.environ.get("CONVERT_OUT_MD") else os.path.join(SITE, "public")
 TOC_LABELS = os.path.join(SITE, "src", "chrome", "toc-labels.json")
 SECTION_LABEL = {"top": "开头", "usage": "怎么用", "tech": "技术", "highlights": "亮点", "features": "全部功能",
                  "history": "演进", "examples": "例子", "abilities": "能做的事", "limits": "边界",
@@ -105,6 +107,116 @@ def screen_images(sid, layout=None):
 
 SCREEN_SKIP = ("text",)
 
+# —— 规则原文按活动版本重出：--rules-release <规则发布目录>（例如 E:\.agents\releases\E251）——
+#    用同一套摘录边界（rule_original_contract.excerpts）从这个版本的规则文件里重新取每屏原文，首行版本号换成这个版本；
+#    之后照常走公开过滤和公开投影。不给这个参数就用 page.json 里固定的那一版。
+RULES_RELEASE = None
+
+
+def rule_release_text(page, screen):
+    src = screen.get("source") or {}
+    if not RULES_RELEASE or not src.get("file"):
+        return None
+    if not POLICY_FILE:
+        raise SystemExit("按活动版本重出原文需要公开过滤表 rule-public-policy.json，找不到就不生成（不绕开过滤）")
+    sys.path.insert(0, os.path.join(REPO, "scripts"))
+    import private_rule_policy as pol
+    from pathlib import Path
+    pol.POLICY_PATH = Path(POLICY_FILE)
+    import rule_original_contract as rc
+    rel = src["file"].replace("\\", "/").split(".publish/private/rule-sources/")[-1]
+    raw_bytes = open(os.path.join(RULES_RELEASE, *rel.split("/")), "rb").read()
+    raw = raw_bytes.decode("utf-8-sig")
+    version = os.path.basename(os.path.normpath(RULES_RELEASE))
+    rec = os.path.join(RULES_RELEASE, "release.json")
+    if os.path.exists(rec):
+        r = json.load(open(rec, encoding="utf-8-sig"))
+        version = r.get("release_id") or r.get("version") or version
+    chosen = {ident.split("/")[-1]: text for ident, text, _ in rc.excerpts(raw, page)}
+    if screen["id"] not in chosen:
+        return None
+    old_first = screen.get("text", "").split("\n", 1)[0]
+    import re as _re
+    first = _re.sub(r"E\d+", version, old_first, count=1)
+    body = chosen[screen["id"]]
+    if page == "charter":
+        body = charter_with_headings(raw, body, rc)
+    screen["text"] = first + "\n\n" + body
+    src.update(release=version, sha256=hashlib.sha256(raw_bytes).hexdigest())
+    # 原文里链到的公开入口模板（/rule-sources/templates/…）也按这个版本重出：同一套公开投影，写进 public/，构建时原样发布
+    for tpl in ("templates/claude-home/CLAUDE.md", "templates/codex-home/AGENTS.md"):
+        f = os.path.join(RULES_RELEASE, *tpl.split("/"))
+        if os.path.exists(f) and tpl not in RELEASE_TEMPLATES_DONE:
+            out = os.path.join(OUT_PUBLIC, "rule-sources", *tpl.split("/"))
+            os.makedirs(os.path.dirname(out), exist_ok=True)
+            open(out, "w", encoding="utf-8", newline="\n").write(rc.public_markdown(open(f, encoding="utf-8-sig").read(), tpl))
+            RELEASE_TEMPLATES_DONE.add(tpl)
+    return (old_first, first) if first != old_first else None
+
+
+def charter_with_headings(raw, body, rc):
+    """约法原文屏：摘录边界（rule_original_contract.excerpts）只取条文；约法的构图按“一、怎样对我说话”这类小节标题分卡，
+    所以把落在这一屏的小节标题（和标题下的说明行，链接照样公开化）按原位置插回条文前面，和现在网站的内容文件同一结构。
+    条文本身（含已批准的省略）原样用摘录的结果。"""
+    import re as _re
+    raw = raw.replace("\r\n", "\n").replace("\r", "\n")
+    sec = raw[raw.index("## 我的 AI 约法"):raw.index("## 每次都要做的几件事")]
+    heads = {}
+    for h in _re.finditer(r"^###\s+.+$", sec, _re.M):
+        nxt = _re.search(r"^- \*\*L(\d+)\b", sec[h.end():], _re.M)
+        if not nxt:
+            continue
+        notes = [line.strip() for line in sec[h.end():h.end() + nxt.start()].split("\n") if line.strip()]
+        notes = [_re.sub(r"\]\(([^)]+)\)", lambda m: "](" + rc.source_link_target(m[1]) + ")", line) for line in notes]
+        heads[int(nxt[1])] = "\n".join([h[0].strip()] + notes)
+    out = []
+    for part in _re.split(r"(?m)^(?=\*\*L\d+\b)", body):
+        if not part.strip():
+            continue
+        n = int(_re.match(r"\*\*L(\d+)", part)[1])
+        if n in heads:
+            out.append(heads[n])
+        out.append(part.strip())
+    return "\n\n".join(out)
+
+
+def swap_text_ref(node, old, new):
+    """构图里认首行版本标签的 text_ref 跟着换成新版本号，不然区块库按 text_ref 分块时找不到这一行，标签会混进原文正文。"""
+    if isinstance(node, dict):
+        return {k: (new if k == "text_ref" and v == old else swap_text_ref(v, old, new)) for k, v in node.items()}
+    if isinstance(node, list):
+        return [swap_text_ref(x, old, new) for x in node]
+    return node
+
+
+RELEASE_TEMPLATES_DONE = set()
+
+
+# —— 画廊屏的标题：项目注册表生成的“画廊”屏原来用小号的 section_heading，和别的小节（毛笔大标题）不一样；
+#    统一成 chapter_title，毛笔标题图用素材库里同字的那张（“画廊”，个人媒体 04 已在用）——
+def gallery_title(meta, text):
+    lay = meta.get("layout") or {}
+    hit = False
+    for o, sp in lay.items():
+        blocks = (sp or {}).get("blocks") or []
+        if blocks and blocks[0].get("type") == "section_heading" and blocks[0].get("text_ref") == "画廊":
+            blocks[0] = {**{k: v for k, v in blocks[0].items() if k not in ("type",)}, "type": "chapter_title", "align": "center", "size": "medium"}
+            hit = True
+    if not hit:
+        return text
+    if not any(r.get("role") == "title" for r in meta["images"]):
+        for rows in library().values():
+            for r in rows:
+                if r.get("role") == "title" and (r.get("title_text") == "画廊" or r.get("text") == "画廊"):
+                    meta["images"].append({k: r[k] for k in IMAGE_KEYS if k in r})
+                    break
+            if any(r.get("role") == "title" for r in meta["images"]):
+                break
+    lines = text.split("\n", 1)
+    if lines[0].strip() == "画廊":
+        text = "# 画廊" + ("\n" + lines[1] if len(lines) > 1 else "")
+    return text
+
 
 def convert(page):
     src = os.path.join(REPO, "sources", "pages", page, "page.json")
@@ -126,6 +238,7 @@ def convert(page):
         if s.get("hidden"):
             continue
         s = json.loads(json.dumps(s))
+        swap = rule_release_text(page, s)
         rule_gate(s)
         bad = [x for x in (s.get("links") or []) if not isinstance(x, dict)]
         if bad:  # 链接字段不是链接列表（例如模板占位符没展开、被拆成单字）：按没有链接处理，提示出来
@@ -134,7 +247,9 @@ def convert(page):
         meta = {"screen": {k: v for k, v in s.items() if k not in SCREEN_SKIP},
                 "layout": {o: specs[(s["id"], o)] for o in ("h", "v") if (s["id"], o) in specs},
                 "images": screen_images(s["id"], {o: specs[(s["id"], o)] for o in ("h", "v") if (s["id"], o) in specs})}
-        text = s.get("text", "")
+        if swap:  # 按活动版本重出时，构图里认首行标签的 text_ref 跟着换
+            meta["layout"] = swap_text_ref(meta["layout"], *swap)
+        text = gallery_title(meta, s.get("text", ""))
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
         if s.get("section") and s["section"] not in [x[0] for x in sections]:
@@ -169,6 +284,10 @@ def all_pages():
 
 if __name__ == "__main__":
     names = sys.argv[1:]
+    if "--rules-release" in names:
+        i = names.index("--rules-release")
+        RULES_RELEASE = names[i + 1]
+        del names[i:i + 2]
     if names == ["--all"]:
         names = all_pages()
     failed = []

@@ -35,32 +35,25 @@
 .ts-card-grid > .ts-screen { min-width: 0; margin: 0; }
 .ts-card-grid .ts-h { --tz: var(--tz-card, .41); }
 @media (max-width: 767.98px) { .ts-card-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
-/* 站点的全局样式不进画布：现在出图时画布里只有区块库自己的样式。站点给 img、a、button 和 .source-prose
-   定的全局规则（区块 HTML 里只有这几处撞上，见第四轮报告），在画布里退回浏览器默认；区块库自己更具体的规则照常生效。 */
+/* 站点的全局样式不进画布：现在出图时画布里只有区块库自己的样式。站点给 img、a、button 定的全局规则在画布里退回浏览器默认，
+   区块库自己更具体的规则照常生效；和站点撞名的 .source-prose 在生成时改名为 .ts-source-prose（见 render_blocks.rename_site_classes）。 */
 .ts-canvas img { display: revert; max-width: revert; }
 .ts-canvas a { color: revert; -webkit-tap-highlight-color: revert; }
 .ts-canvas button { font: revert; cursor: revert; -webkit-tap-highlight-color: revert; }
-.ts-canvas .source-prose { grid-column: revert; grid-row: revert; font-family: revert; font-size: revert; line-height: revert; color: revert; overflow-wrap: revert; }
-.ts-canvas .source-prose :is(h1, h2, h3) { font-family: revert; color: revert; line-height: revert; font-size: revert; }
 .ts-canvas header { position: revert; top: revert; z-index: revert; height: revert; background: revert; }
 .ts-canvas header::before, .ts-canvas header::after { content: revert; position: revert; top: revert; bottom: revert; left: revert; right: revert; width: revert; display: revert; background: revert; pointer-events: revert; }
 .ts-canvas footer { background: revert; position: revert; padding: revert; }
 .ts-canvas dialog { border: revert; border-radius: revert; background: revert; max-width: revert; max-height: revert; }
 
 /* —— 规则原文屏：和现在网站一样，上面是网页字原文（水彩框，border-image 用素材库 rule-paper 的两张框图），
-   下面“原文排版图与技术证据”默认展开、里面是排好的原文卡。规则照搬现在网站出站时写进页面的那段样式，只把 .screen 换成 .ts-screen —— */
+   规则照搬现在网站出站时写进页面的那段样式。下面那份排好的原文卡（“原文排版图与技术证据”）按主持 10 月 10 日的决定撤掉，原文只出现一遍 —— */
 .rule-original-prose{--rule-paper:url("/assets/rule-paper/source-frame-h.webp");--frame-slices:263 301 263 301;--frame-widths:61.28511628px 70.14000000px 61.28511628px 70.14000000px;padding:clamp(1.2rem,3vw,2.5rem);border:solid transparent;border-width:var(--frame-widths);border-image-source:var(--rule-paper);border-image-slice:var(--frame-slices) fill;border-image-width:var(--frame-widths);border-image-repeat:stretch;font-size:clamp(1.05rem,1.2vw,1.2rem);line-height:1.85;color:#334d63;overflow-wrap:anywhere}
 .rule-original-prose h2,.rule-original-prose h3{color:#285d3c;line-height:1.5}
 .rule-original-prose a{color:#276942;text-decoration:underline}
 .rule-original-prose pre{white-space:pre-wrap;overflow-wrap:anywhere}
-.rule-original-evidence{margin:.8rem 0 2rem;color:#486153}
-.rule-original-evidence summary{cursor:pointer;line-height:1.6}
-.ts-screen>.rule-original-evidence>summary{cursor:default;pointer-events:none;list-style:none;font-weight:600;color:#285d3c;padding:.3rem calc(100% * 36 / 1672)}
-.ts-screen>.rule-original-evidence>summary::-webkit-details-marker{display:none}
 .rule-original-prose .ct-table:has(th:nth-child(2)) :is(th,td):first-child{min-width:4em}
 @media(max-width:767.98px){
 .rule-original-prose{--rule-paper:url("/assets/rule-paper/source-frame-v.webp");--frame-slices:284 245 284 245;--frame-widths:34.86824490px 30.08000000px 34.86824490px 30.08000000px;}
-.ts-screen>.rule-original-evidence>summary{padding-inline:calc(100% * 28 / 941)}
 .rule-original-prose .ct-table:has(th:nth-child(2)),.rule-original-prose .ct-table:has(th:nth-child(2)) :is(thead,tbody,tr,td){display:block;width:auto;min-width:0}
 .rule-original-prose .ct-table:has(th:nth-child(2)) tr{margin:.7rem 0;padding:.6rem .8rem;border:1px solid #cfe3d3;border-radius:.6rem;background:#fff}
 .rule-original-prose .ct-table:has(th:nth-child(2)) thead tr{background:#eef7f0}
@@ -68,5 +61,29 @@
 .rule-original-prose .ct-table:has(th:nth-child(2)) th+th::before{content:" / "}
 .rule-original-prose .ct-table:has(th:nth-child(2)) td{padding:.2rem 0;border:0;text-align:left}
 }
-/* 现在网站的整屏 .screen 是独立排版上下文（container-type），“技术证据”的下边距算在屏内；这里同样不让它穿出屏外 */
-.ts-screen:has(> .rule-original-evidence){display:flow-root}
+/* 原文屏上面的版本标签（“原文 · E230 版，公开副本”“原文 · E230 版 · 续”）：小号深绿粗体，和现在原文卡里的标签同色 */
+.rule-original-version{margin:0 0 .4rem;padding-inline:calc(100% * 36 / 1672);font-size:.95rem;line-height:1.6;font-weight:600;color:#285d3c}
+@media(max-width:767.98px){.rule-original-version{padding-inline:calc(100% * 28 / 941)}}
+.ts-screen:has(> .rule-original-prose){display:flow-root;margin-bottom:2rem}
+
+/* “复制 AI 续作说明”的真实位置（脚本没跑时按钮跳到这里；脚本在时这块隐藏，照旧弹对话框） */
+.ai-brief-static{margin:24px 0 8px;padding:16px 20px;border:1px solid #cfe3d3;border-radius:12px;background:#f6fbf7;color:#334d63;line-height:1.75}
+.ai-brief-static h2{margin:0 0 6px;font-size:1.1rem;color:#285d3c}
+.ai-brief-static p{margin:0}
+.ai-brief-static .ai-brief-note{margin-top:6px;font-size:.9rem;color:#5a7262}
+
+/* 手机：子导航一行放不下时可以横滑。停下时总是停在“一项的开头”（最后一项停在它的结尾），不会停在半个字上；
+   哪一头后面还有项，哪一头就淡出（脚本按滚动位置加 toc-more-left / toc-more-right），露出半截的那一项只剩三成浓淡，提示可以接着滑。
+   回到顶部按钮小一号，往下读时收起 */
+@media (max-width: 767.98px) {
+  nav.toc .toc-inner { scroll-snap-type: x mandatory; scroll-padding-inline: 14px; --toc-fl: 0px; --toc-fr: 0px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.3) calc(var(--toc-fl) - 12px), #000 var(--toc-fl), #000 calc(100% - var(--toc-fr)), rgba(0,0,0,.3) calc(100% - var(--toc-fr) + 12px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.3) calc(var(--toc-fl) - 12px), #000 var(--toc-fl), #000 calc(100% - var(--toc-fr)), rgba(0,0,0,.3) calc(100% - var(--toc-fr) + 12px), transparent 100%); }
+  /* 没有脚本时的淡出宽度；有脚本时按露出半截的那一项改写（见 Site.astro） */
+  nav.toc .toc-inner.toc-more-left:not([style*="--toc-fl"]) { --toc-fl: 32px; }
+  nav.toc .toc-inner.toc-more-right:not([style*="--toc-fr"]) { --toc-fr: 32px; }
+  nav.toc .toc-inner > a { scroll-snap-align: start; flex: none; white-space: nowrap; }
+  nav.toc .toc-inner > a:last-child { scroll-snap-align: end; }
+  .back-to-top { width: 36px !important; height: 36px !important; right: 8px !important; bottom: 12px !important; transition: opacity .2s, transform .2s; }
+  html.btt-hide .back-to-top { opacity: 0 !important; transform: translateY(12px); pointer-events: none; }
+}

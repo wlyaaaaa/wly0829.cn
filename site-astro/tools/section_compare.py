@@ -129,9 +129,14 @@ with sync_playwright() as p:
           try:  # 一页一宽出错（例如截图超时）记下来，不拦后面的页
             open_ready(pg, a.base + url)
             ids = pg.evaluate("[...document.querySelectorAll('section.ts-screen')].map(s=>s.id)")
+            # 规则原文屏只出网页字原文（排好的原文卡撤了），没法和现在的整屏图比，这里跳过，网页字另比（tools/rule_article_check.py）
+            art_ids = set(pg.evaluate("[...document.querySelectorAll('section.ts-screen > article.rule-original-prose')].map(a=>a.parentElement.id)"))
             o = "h" if w >= 768 else "v"
             gs = groups.get((page, w)) or [[i] for i in ids]
             for k, g in enumerate(gs, 1):
+                g = [sid for sid in g if sid not in art_ids]
+                if not g:
+                    continue
                 news = []
                 for sid in g:
                     if sid not in ids:

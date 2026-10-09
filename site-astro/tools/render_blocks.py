@@ -31,9 +31,10 @@ from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
 
-MD_DIR = os.path.join(SITE, "src", "content", "pages")
-OUT_DIR = os.path.join(SITE, "src", "content", "rendered")
-PUB = os.path.join(SITE, "public")
+# 三个目录都可以用环境变量换到别处（例如按活动版本试排一份规则页、不碰站点）：BLOCK_MD_DIR、BLOCK_OUT_DIR、BLOCK_PUB_DIR
+MD_DIR = os.environ.get("BLOCK_MD_DIR") or os.path.join(SITE, "src", "content", "pages")
+OUT_DIR = os.environ.get("BLOCK_OUT_DIR") or os.path.join(SITE, "src", "content", "rendered")
+PUB = os.environ.get("BLOCK_PUB_DIR") or os.path.join(SITE, "public")
 WORK = os.path.join(SITE, ".cache", "blocks")
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
@@ -430,7 +431,11 @@ def rule_original_html(body):
         raw = re.sub(r'(<[^>]*\s[\w-]+)=""', r"\1", raw)
     for _ in range(3):
         raw = re.sub(r'<span data-typeset-word="true">([^<]*)</span>', r"\1", raw)
-    return rc.project_original_html(raw) if raw.strip() else ""
+    if not raw.strip():
+        return ""
+    html_out = rc.project_original_html(raw)
+    # 规则文件开头的“owner: E:\.agents”是给维护者看的元信息，页面上不显示（主持 10 月 10 日）
+    return re.sub(r'<p\b[^>]*>\s*owner:.*?</p>', "", html_out, count=1, flags=re.S)
 
 
 def fill_shot_frames(body):
@@ -459,6 +464,16 @@ def fill_shot_frames(body):
     return re.sub(r'<div class="slot-shot-frame[^"]*"[^>]*data-shot-source="([^"]+)"[^>]*>', one, body)
 
 
+def rename_site_classes(body):
+    """画布里和站点全局样式撞名的类改名：站点给 .source-prose 定了段距、表格、粗体等整套样式（规则原文页用），
+    区块库只拿这个类当“原文正文”的标记、没有给它写样式。不改名的话站点那套会进画布，段落多出 1.1em 段距、
+    表格多出边框和最小宽度，屏就比现在高（第四轮 D 类：约法 02、隐私 09 等）。区块库自己的样式不受影响。"""
+    def one(m):
+        names = ["ts-source-prose" if c == "source-prose" else c for c in m.group(2).split()]
+        return m.group(1) + " ".join(names) + m.group(3)
+    return re.sub(r'(\bclass=")([^"]*)(")', one, body)
+
+
 def finish_page(name, fm, results, cssv):
     rt_p = os.path.join(SITE, "src", "chrome", "runtime", name + ".json")
     rt = json.load(open(rt_p, encoding="utf-8")) if os.path.exists(rt_p) else {}
@@ -469,7 +484,7 @@ def finish_page(name, fm, results, cssv):
         sid = r["screen"]
         if sid not in screens:
             screens[sid] = {"id": sid}; order.append(sid)
-        body = fill_shot_frames(r["html"])
+        body = rename_site_classes(fill_shot_frames(r["html"]))
         for a, b in (r.get("replace") or {}).items():  # 内容文件写明的“显示时替换”（规则原文首行标签）
             body = body.replace(a, b)
         art_src = r.get("art")
@@ -518,24 +533,47 @@ def finish_page(name, fm, results, cssv):
                 if o in screens[sid]:
                     screens[sid][o]["html"] = screens[sid][o]["html"].replace(
                         f'src="{mm["brush"]["src"]}"', f'src="{mm["brush"]["src"]}" data-title-key="{mm["brush"]["key"]}"', 1)
-    # 规则原文屏：和现在网站一样，上面是网页字原文（水彩框），下面“原文排版图与技术证据”里是排好的原文卡
+    # 规则原文屏：页面上只出网页字原文（水彩框，和现在网站同一取法），上面一行版本标签；排好的原文卡不再另出一份（主持 10 月 10 日）
     if (fm.get("url") or "").startswith("/rules/"):
+        md_text = {m["screen"]["id"]: t for m, t in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
         for r in results:
             if r["o"] == "h" and r.get("shape") == "source_text" and r["screen"] in screens:
                 art = rule_original_html(r["html"])
                 if art:
                     screens[r["screen"]]["article"] = art
+                    first = next((x.strip() for x in md_text.get(r["screen"], "").split("\n") if x.strip()), "")
+                    first = first.lstrip("#").strip().strip("*").strip()
+                    for a, b in (r.get("replace") or {}).items():
+                        first = first.replace(a, b)
+                    if re.search(r"E\d+", first):  # “原文 · E230 版 · 续”“约法 · L18–L23 · E230”这类版本标签行
+                        screens[r["screen"]]["article_label"] = first
                 else:
                     print(f"  {r['screen']}：原文屏取不到原文正文，不出网页字", flush=True)
     out = {"page": name, "css": f"/assets/_typeset/typeset.css?v={cssv}", "font": font, "motion": mm,
            "sections": [], "screens": [screens[s] for s in order]}
     sec_seen = set()
     fm_screens = {m["screen"]["id"]: m["screen"] for m, _ in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
+    # 屏内定位点（和现在网站同一取法）：内容文件里每屏的 anchors，加上现在网站页面数据里这屏的 screen_anchors
+    # （规则页的小节别名、约法的 L1…L30 等）。别的页链到“/rules/charter/#L18”“/how/#agents”这种细位置时，落在所属那一屏的开头。
+    page_points = {}
+    m = re.search(r'<script id="page-data" type="application/json">(.*?)</script>', rt.get("tail", ""), re.S)
+    if m:
+        try:
+            page_points = {x.get("id"): x.get("screen_anchors") or [] for x in json.loads(m.group(1)).get("screens") or []}
+        except ValueError:
+            page_points = {}
+    # 本页的小节名留给小节锚点（目录条“#practice”要落到那一节开头，不落到别处同名的定位点上）
+    all_secs = {fm_screens.get(s["id"], {}).get("section") for s in out["screens"]} - {None, ""}
     for s in out["screens"]:
         sec = fm_screens.get(s["id"], {}).get("section")
         s["section"] = sec
         if sec and sec not in sec_seen:
             sec_seen.add(sec); s["anchor"] = sec
+        ids = [a.get("id") if isinstance(a, dict) else a for a in fm_screens.get(s["id"], {}).get("anchors") or []]
+        ids = [a for a in dict.fromkeys(ids + page_points.get(s["id"], [])) if a and a not in sec_seen and a not in all_secs and a != s["id"]]
+        sec_seen.update(ids)
+        if ids:
+            s["points"] = ids
     os.makedirs(OUT_DIR, exist_ok=True)
     json.dump(out, open(os.path.join(OUT_DIR, name + ".json"), "w", encoding="utf-8", newline="\n"), ensure_ascii=False)
     return out
@@ -597,7 +635,51 @@ def run(names, workers=6):
             finish_page(n, fms[n], by_page.get(n, []), cssv)
         except Exception as e:
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
+    fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
+
+
+# 页面外壳里固定有的锚点（页头“开头”、跳到正文、项目页的“复制 AI 续作说明”）
+CHROME_IDS = {"top", "content", "ai-brief"}
+
+
+def fix_dead_fragments(names):
+    """站内链接带的 #锚点在目标页里找不到时，退回到目标页本身（现在网站上这类链接也是指向页面开头）。
+    目标页不在这次构建里（首页、驾驶舱由别的任务合入）的不动。"""
+    ids_by_url = {}
+    for f in os.listdir(OUT_DIR):
+        n = f[:-5]
+        if not f.endswith(".json") or not os.path.exists(os.path.join(MD_DIR, n + ".md")):
+            continue
+        url = parse_md(os.path.join(MD_DIR, n + ".md"))[0].get("url") or f"/{n}/"
+        d = json.load(open(os.path.join(OUT_DIR, f), encoding="utf-8"))
+        ids = set(CHROME_IDS)
+        for s in d["screens"]:
+            ids.add(s["id"]); ids.update(x for x in [s.get("anchor")] + (s.get("points") or []) if x)
+            for blob in [s.get("article") or ""] + [(s.get(o) or {}).get("html", "") for o in ("h", "v")]:
+                ids.update(H.unescape(x) for x in re.findall(r'\sid="([^"]+)"', blob))
+        ids_by_url[url] = ids
+    pat = re.compile(r'((?:href|data-href)=")(/[^"#?]*)#([^"]+)(")')
+    for n in names:
+        p = os.path.join(OUT_DIR, n + ".json")
+        d = json.load(open(p, encoding="utf-8"))
+        fixed = []
+
+        def one(m):
+            path, frag = m.group(2), urllib.parse.unquote(H.unescape(m.group(3)))
+            if path in ids_by_url and frag not in ids_by_url[path]:
+                fixed.append(path + "#" + frag)
+                return m.group(1) + path + m.group(4)
+            return m.group(0)
+        for s in d["screens"]:
+            if s.get("article"):
+                s["article"] = pat.sub(one, s["article"])
+            for o in ("h", "v"):
+                if s.get(o):
+                    s[o]["html"] = pat.sub(one, s[o]["html"])
+        if fixed:
+            json.dump(d, open(p, "w", encoding="utf-8", newline="\n"), ensure_ascii=False)
+            print(f"  {n}：{len(fixed)} 个站内链接的锚点在目标页里没有，退回目标页本身：{sorted(set(fixed))}", flush=True)
 
 
 def all_pages():
