@@ -38,7 +38,7 @@
         "columns_v": 2,
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "540万秒每秒一条的硬件记录（6月16日–9月28日）2,6"
+        "text_ref": "637万秒每秒一条的硬件记录（6月16日起）3,123万次记"
       },
       {
         "type": "live_strip",
@@ -100,7 +100,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "540万秒每秒一条的硬件记录（6月16日–9月28日）2,6",
+        "text_ref": "637万秒每秒一条的硬件记录（6月16日起）3,123万次记",
         "portrait_columns": 1
       },
       {
@@ -277,7 +277,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "打开：本机浏览器开localhost:43000，外面用gr"
+        "text_ref": "打开：在这台电脑的浏览器里打开图表网页，人在外面用grafa"
       }
     ],
     "notes": "横图真实左表约44%右浏览器插画及留空截图56%，不是scene所写62/38；表内原图缺回答什么列，须补定稿完整3列同时保留左表右截图布局。竖图6行卡依次：左图/看板名/右数字，定稿补充回答什么，不删字；截图及其日期说明后再页底3段说明。浏览器插画在框外上方，截图只留空。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
@@ -706,7 +706,7 @@
         "type": "notice",
         "tone": "green",
         "link_style": "button",
-        "text_ref": "8月31日记下5,234次复制，9月28日10,344次；不"
+        "text_ref": "8月31日记下5,234次复制，到10月9日累计11,194"
       }
     ],
     "notes": "横版39%左标题+剪贴板大图，61%右六条单列图文卡，图在卡内左，最下数字和密码中心链接一条窄卡；竖原图先标题大图，首张含怎么记/不记什么2卡，v2接其余4卡和数字窄卡；续图不重复标题。6条不得合为一张长卡，数字和链接不可重复。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\npage-fixer-06：按 2026-10-03 审查意见调整规格；当前 blocks 为本轮构图，前文旧栏宽/列数说明仅为此前构图证据。截图位保持定稿规定的运行时空槽。",
@@ -795,7 +795,7 @@
         "type": "notice",
         "tone": "green",
         "link_style": "button",
-        "text_ref": "8月31日记下5,234次复制，9月28日10,344次；不"
+        "text_ref": "8月31日记下5,234次复制，到10月9日累计11,194"
       }
     ],
     "notes": "横版39%左标题+剪贴板大图，61%右六条单列图文卡，图在卡内左，最下数字和密码中心链接一条窄卡；竖原图先标题大图，首张含怎么记/不记什么2卡，v2接其余4卡和数字窄卡；续图不重复标题。6条不得合为一张长卡，数字和链接不可重复。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
@@ -1207,7 +1207,7 @@
             ]
           }
         ],
-        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah",
+        "text_ref": "1窗口记录器一个AutoHotkey小脚本：记前台程序、离开",
         "direction": "vertical"
       },
       {
@@ -1304,7 +1304,7 @@
             ]
           }
         ],
-        "text_ref": "1窗口记录器AutoHotkey脚本TimeAudit.ah",
+        "text_ref": "1窗口记录器一个AutoHotkey小脚本：记前台程序、离开",
         "direction": "vertical"
       },
       {
@@ -1554,7 +1554,7 @@
         "columns": 4,
         "icons": "none",
         "illustration": "none",
-        "text_ref": "约 2.3 万行"
+        "text_ref": "约2.4万行"
       }
     ],
     "notes": "实际横图左65%五张横卡单列纵排，右35%四张数字卡纵排；纸带插画从左下卡角探出，右数字栏上方有仪表盘小插画。竖图五张左图标右文字卡单列，四数字卡在末尾2×2，不带插画。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
@@ -1614,7 +1614,7 @@
         "columns": 1,
         "icons": "none",
         "illustration": "none",
-        "text_ref": "约 2.3 万行",
+        "text_ref": "约2.4万行",
         "columns_v": 1,
         "portrait_columns": 1
       }
@@ -2745,6 +2745,6 @@
     },
     "prior_visual_verified": true
   },
-  {"screen": "timeaudit-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]},
-  {"screen": "timeaudit-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "2026-08-29 的真实界面，展示屏幕使用、专注上下文、最近切换以及睡眠和暂离边界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]}
+  {"screen": "timeaudit-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "8月29日的真实界面：屏幕使用时间、专注时段、最近的切换，以及睡眠和离开的分界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]},
+  {"screen": "timeaudit-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "8月29日的真实界面：屏幕使用时间、专注时段、最近的切换，以及睡眠和离开的分界。", "indices": [0, 1, 2, 3, 4, 5, 6], "columns": 3, "columns_v": 1, "ratios": ["3814:2050", "3840:2147", "3840:1807", "3840:2028", "3685:2146", "3840:2044", "3840:2057"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}]}]}
 ]

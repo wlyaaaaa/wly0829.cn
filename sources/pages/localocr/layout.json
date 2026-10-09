@@ -33,11 +33,11 @@
         "illustration": "top_inside",
         "icons": "auto",
         "expected_cards": 4,
-        "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+        "text_ref": "16,074次识别，共14,977份材料"
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年9月28日20:26（北京时间）"
+        "text_ref": "截至2026年10月10日05:17（北京时间"
       },
       {
         "type": "action_button",
@@ -77,11 +77,11 @@
         "illustration": "top_inside",
         "icons": "auto",
         "expected_cards": 4,
-        "text_ref": "684次识别，555份材料、706页（7月8日–9月28"
+        "text_ref": "16,074次识别，共14,977份材料"
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年9月28日20:26（北京时间）"
+        "text_ref": "截至2026年10月10日05:17（北京时间"
       },
       {
         "type": "action_button",
@@ -780,7 +780,7 @@
       {
         "type": "prose",
         "row": "highlight",
-        "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+        "text_ref": "结果7月8日–9月28日，自动选模型的300次里有277",
         "frame": "localocr-highlight"
       }
     ],
@@ -836,7 +836,7 @@
       {
         "type": "prose",
         "row": "highlight",
-        "text_ref": "结果7月8日–9月28日，自动选模型的300次识别里，2",
+        "text_ref": "结果7月8日–9月28日，自动选模型的300次里有277",
         "frame": "localocr-highlight"
       }
     ],

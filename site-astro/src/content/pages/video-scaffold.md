@@ -42,8 +42,8 @@
   "repo_url": "https://github.com/wlyaaaaa/video-scaffold",
   "capability": "做视频：配音、踩点动画、4K 渲染",
   "based_on": {
-   "commit": "2c512511b27edfc5b005428a5aacd6812cad7fc2",
-   "commit_time": "2026-09-26T17:13:07+08:00"
+   "commit": "8c9be9e8e77874c0f0dd3ea937e3c5f359996846",
+   "commit_time": "2026-10-08T02:52:33-05:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的水彩插画出发，镜头不动：显示器里浅绿色的毛玻璃背景缓缓流动，“核心结论”四个深绿字随着麦克风旁那条声波的起伏一个字一个字打出来，打完后轻轻浮起一下；打板轻轻合上一次，显卡的绿光慢慢呼吸，周围水彩叶子微微摇动；最后字淡回半透明，回到起始画面，首尾能无缝接上。不出现任何别的文字。",
   "registry": {
@@ -67,6 +67,10 @@
     {
      "id": "g-check",
      "name": "验收和收尾"
+    },
+    {
+     "id": "g-webfilm",
+     "name": "另一条线：网页成片"
     },
     {
      "id": "g-retired",
@@ -285,6 +289,16 @@
      "source": "pipeline/smoke.py；.github/workflows/validation.yml；9 月 28 日实跑通过"
     },
     {
+     "id": "f-webfilm",
+     "group": "g-webfilm",
+     "name": "网页成片",
+     "what": "AI 直接写一张会动的网页，程序按时间逐帧拍成 4K 视频；能先看关键几帧、只渲其中一段，不走分场配音那一套",
+     "how": "把题目和要求交给 AI，让它按网页成片的约定写作品再渲染",
+     "status": "待验收",
+     "screen": "video-scaffold-09",
+     "source": "webfilm/README.md；提交 b3e9b8f（北京 10/4 16:38）、7b7db63、0679e62（北京 10/8）；E:\\Projects\\VideoProductions\\20261004-webfilm-rehearsal 只有彩排产物，没有真视频"
+    },
+    {
      "id": "f-all-in-one",
      "group": "g-retired",
      "name": "一键全流程",
@@ -330,8 +344,8 @@
      "id": "n-canvas",
      "text": "3840×2160 · 60 帧",
      "meaning": "成片画布和帧率（默认配置）",
-     "as_of": "2026-09-28",
-     "source": "config.py 第 34–36 行",
+     "as_of": "2026-10-10",
+     "source": "config.py 第 34–36 行（9 月 26 日后 config.py 未改）",
      "screens": [
       "video-scaffold-01"
      ]
@@ -340,8 +354,8 @@
      "id": "n-animations",
      "text": "32 种动画",
      "meaning": "场景模板支持的动画写法种数",
-     "as_of": "2026-09-28",
-     "source": "templates/scene_base.html 第 255–430 行动画 switch 的 case 去重计数",
+     "as_of": "2026-10-10",
+     "source": "templates/scene_base.html 第 255–430 行动画 switch 的 case 去重计数；9 月 26 日后 scene_base.html 只加了一行配色声明，动画未变（10 月 10 日 git diff 复核）",
      "screens": [
       "video-scaffold-01",
       "video-scaffold-05",
@@ -352,8 +366,8 @@
      "id": "n-videos",
      "text": "1 期",
      "meaning": "用它做完并发布的视频期数",
-     "as_of": "2026-09-28",
-     "source": "提交 f346d4e 说明（第一期已发布）；之后没找到第二期成片的提交或文件",
+     "as_of": "2026-10-10",
+     "source": "提交 f346d4e 说明（第一期已发布）；之后没找到第二期成片的提交或文件；10 月 10 日复查：之后只有网页成片彩排和下一期的素材准备，没有第二期发布的记录",
      "screens": [
       "video-scaffold-01",
       "video-scaffold-10"
@@ -361,10 +375,10 @@
     },
     {
      "id": "n-tests",
-     "text": "91 个",
+     "text": "130 个",
      "meaning": "自动测试用例数（tests/ 下 def test 计数）",
-     "as_of": "2026-09-28",
-     "source": "grep -c \"def test\" tests/*.py：35＋6＋17＋33",
+     "as_of": "2026-10-10",
+     "source": "grep -c \"def test\" tests/*.py：35＋6＋17＋17＋5＋3＋9＋5＋33（HEAD 8c9be9e，含网页成片 22 个）",
      "screens": [
       "video-scaffold-01",
       "video-scaffold-06"
@@ -372,20 +386,20 @@
     },
     {
      "id": "n-lines",
-     "text": "6419 行",
-     "meaning": "Git 里不在 tests/ 下的 33 个 .py 文件总行数（含空行注释）",
-     "as_of": "2026-09-28",
-     "source": "git ls-files | grep .py$ | grep -v ^tests/ | xargs wc -l",
+     "text": "8963 行",
+     "meaning": "Git 里不在 tests/ 下的 45 个 .py 文件总行数（含空行注释）；其中原有分场生产线 6,492 行，10 月新加的 webfilm/ 约 2,471 行",
+     "as_of": "2026-10-10",
+     "source": "git ls-files | grep .py$ | grep -v ^tests/ | xargs wc -l（HEAD 8c9be9e）",
      "screens": [
       "video-scaffold-06"
      ]
     },
     {
      "id": "n-commits",
-     "text": "37 次",
-     "meaning": "全部提交数，6 月 26 日–9 月 26 日（北京时间）",
-     "as_of": "2026-09-28",
-     "source": "git log --oneline | wc -l",
+     "text": "58 次",
+     "meaning": "全部提交数，6 月 26 日–10 月 8 日（北京时间）",
+     "as_of": "2026-10-10",
+     "source": "git rev-list --count HEAD（HEAD 8c9be9e，北京 10/8 15:52）",
      "screens": [
       "video-scaffold-06"
      ]
@@ -426,9 +440,9 @@
     },
     {
      "id": "n-features",
-     "text": "25 项",
-     "meaning": "全部功能条数（21 项现役＋4 项已停用）",
-     "as_of": "2026-09-28",
+     "text": "26 项",
+     "meaning": "全部功能条数（22 项现役＋4 项已停用）",
+     "as_of": "2026-10-10",
      "source": "本页 registry.features 条数",
      "screens": [
       "video-scaffold-08"
@@ -584,8 +598,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
-  "sha256": "c37454aeb2a64f63669c06160bf04c354a104b3595cf14b7d14c0bf2ea803ae9",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "2a1ce44160081c87f09f5e6179d818512e3bf65ce6f9be62b12ef0ad95864087",
+  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
  }
 }
 ---
@@ -629,32 +643,14 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "row": "hero",
-     "width": "48%",
      "align": "left",
      "size": "large",
      "text_ref": "本地视频制作"
     },
     {
      "type": "tag",
-     "row": "hero",
      "align": "left",
      "text_ref": "偶尔用 · 只修报错"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "align": "left",
-     "text_ref": "把定好的文案和素材交给 AI"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "52%",
-     "align": "center",
-     "illustration": "outside",
-     "index": 0,
-     "asset": "_library/fix-round-2/video-monitor-labeled.png"
     },
     {
      "type": "stat_card",
@@ -672,7 +668,24 @@
     {
      "type": "prose",
      "align": "left",
-     "text_ref": "数字截至 9 月 28 日"
+     "text_ref": "数字截至10月10"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "align": "left",
+     "text_ref": "把定好的文案和素材交给 AI",
+     "width": "48%",
+     "row_valign": "center"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "52%",
+     "align": "center",
+     "illustration": "outside",
+     "index": 0,
+     "asset": "_library/fix-round-2/video-monitor-labeled.png"
     },
     {
      "type": "prose",
@@ -704,18 +717,6 @@
      "text_ref": "偶尔用 · 只修报错"
     },
     {
-     "type": "prose",
-     "align": "left",
-     "text_ref": "把定好的文案和素材交给 AI"
-    },
-    {
-     "type": "illustration",
-     "align": "center",
-     "illustration": "outside",
-     "index": 0,
-     "asset": "_library/fix-round-2/video-monitor-labeled.png"
-    },
-    {
      "type": "stat_card",
      "columns": 1,
      "columns_v": 1,
@@ -733,7 +734,19 @@
     {
      "type": "prose",
      "align": "left",
-     "text_ref": "数字截至 9 月 28 日"
+     "text_ref": "数字截至10月10"
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "text_ref": "把定好的文案和素材交给 AI"
+    },
+    {
+     "type": "illustration",
+     "align": "center",
+     "illustration": "outside",
+     "index": 0,
+     "asset": "_library/fix-round-2/video-monitor-labeled.png"
     },
     {
      "type": "prose",
@@ -863,9 +876,9 @@
 - **3840×2160 · 60 帧**｜成片画面，显卡 AV1 编码
 - **32 种动画**｜打字、描线、数字滚动、3D 翻牌……都能踩着旁白的字出现
 - **1 期**｜做完并发布的视频：6 月的《游戏王 MD 氪金指南》
-- **91 个**｜自动测试；每次推送还在 GitHub 上用合成声音完整出一条短片
+- **130 个**｜自动测试；每次推送还在 GitHub 上用合成声音完整出一条短片
 
-数字截至 9 月 28 日
+数字截至 10 月 10 日
 
 核心结论
 
@@ -888,7 +901,7 @@
    {
     "file": "sources/assets/_references/5600d0cbabf061be9dc1f1d70e3727f9ef43ccb02bb6e6778872c1ec7e80f4de.png",
     "where": "右栏上半，宽高比 5:4 的细浅绿边框空位（竖版在标题下面占满宽度）",
-    "caption": "有声预览（真实截图，画面是用合成声音做的测试样片；最底下那行“使用真实配音”是预览页固定的提示）：左边选场，下面点词跳到那一秒；展开后能改某个动画跟第几次出现的词、提前或推后几秒，导出新的画面文件，不改原件",
+    "caption": "有声预览的真实截图。片子是自测用的示例，配的是合成声音，不是哪一期真视频；底部那行“使用真实配音”是预览页的固定提示。左边选场，下面点词跳到那一秒；展开后能改某个动画踩第几次出现的词、提前或推后几秒，另存成新的画面文件，不改原件",
     "portrait_locator_text": "定题、写好旁白，连同图片素材交给 AI。",
     "crop_h": [
      280,
@@ -946,7 +959,7 @@
     {
      "type": "prose",
      "align": "left",
-     "text_ref": "有声预览（真实截图",
+     "text_ref": "有声预览的真实截图",
      "row": "balanced-preview",
      "width": "65%"
     },
@@ -1011,7 +1024,7 @@
     {
      "type": "prose",
      "align": "left",
-     "text_ref": "有声预览（真实截图"
+     "text_ref": "有声预览的真实截图"
     }
    ],
    "notes": "原竖版顺序v→v2：v为标题、解释、整宽空白截图、步骤1–6；v2为步骤7、8、四句便签、最下整宽caption卡。实图caption并未紧贴截图，和portrait描述冲突，此规格按实图留在最后；须保留唯一完整caption。第6、8步黄色，步骤7、8的原续图去掉右端插画、用大编号和大角色名，角色语义不丢。按完整步骤拆张，不截卡。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
@@ -1223,7 +1236,7 @@
 - “预览没问题，出成片”
 - “渲染断了，接着做”
 
-有声预览（真实截图，画面是用合成声音做的测试样片；最底下那行“使用真实配音”是预览页固定的提示）：左边选场，下面点词跳到那一秒；展开后能改某个动画跟第几次出现的词、提前或推后几秒，导出新的画面文件，不改原件
+有声预览的真实截图。片子是自测用的示例，配的是合成声音，不是哪一期真视频；底部那行“使用真实配音”是预览页的固定提示。左边选场，下面点词跳到那一秒；展开后能改某个动画踩第几次出现的词、提前或推后几秒，另存成新的画面文件，不改原件
 
 ::screen{#video-scaffold-03 section="usage"}
 
@@ -1242,7 +1255,7 @@
    {
     "file": "sources/assets/_references/f63d478b4550f44b34d54887cf5d3807c341d1ee7c443ca2c3f20371752a3f40.png",
     "where": "左栏下方，16:9 细浅绿边框空位，约左栏宽度的三分之二（竖版占满宽度）",
-    "caption": "封面（真实截图，测试样片生成的，标题是测试名）",
+    "caption": "示例封面：自测样片自动生成的，标题是测试用的名字，不是哪一期真视频",
     "crop_h": [
      0,
      315,
@@ -1304,7 +1317,7 @@
      "type": "prose",
      "row": "delivery",
      "align": "left",
-     "text_ref": "封面（真实截图"
+     "text_ref": "示例封面：自测"
     },
     {
      "type": "section_heading",
@@ -1380,7 +1393,7 @@
     {
      "type": "prose",
      "align": "center",
-     "text_ref": "封面（真实截图"
+     "text_ref": "示例封面：自测"
     },
     {
      "type": "section_heading",
@@ -1633,7 +1646,7 @@
 - **字幕**：SRT 和 WebVTT 两个单独的文件，不烧进画面
 - **交付清单**：记下每个文件的内容指纹（SHA-256，文件改一个字节就变）和来源，写明“还要人看过”
 
-封面（真实截图，测试样片生成的，标题是测试名）
+示例封面：自测样片自动生成的，标题是测试用的名字，不是哪一期真视频
 
 **出了事怎么办**
 - **没有自动提醒。** 它不在后台跑，出问题直接跟 AI 说。
@@ -1666,7 +1679,7 @@
    {
     "file": "sources/assets/_references/1eca69a57c1985645dd89fc8cbfa4d8620fec58d0c14ed6c818c0fccad610b9e.png",
     "where": "下半屏左边，16:9 细浅绿边框空位，约屏幕宽度的一半（竖版占满宽度）",
-    "caption": "成片里的一帧（测试样片，CPU 编码）：字叠在循环的玻璃背景上",
+    "caption": "示例画面：自测样片里的一帧（用 CPU 编码），字叠在循环的玻璃背景上",
     "crop_h": [
      0,
      134,
@@ -1722,7 +1735,7 @@
      "type": "prose",
      "row": "bottom",
      "align": "left",
-     "text_ref": "成片里的一帧"
+     "text_ref": "示例画面：自"
     }
    ],
    "notes": "source_image为pages-approved明确批准的替换图，已查看替换图和旧横图；两者布局同构：六卡一排，图在卡内上方，绿色箭头从图高度串联；下面左半唯一纯白截图框＋外部caption、右半无字胶片与四画笔插画。第三图中原有data-cue示例字不是本屏定稿独立节点，复用资产必须去带字；只排定稿写画面段原文，不另造代码条或重加Fish Audio标题。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
@@ -1764,7 +1777,7 @@
     {
      "type": "prose",
      "align": "left",
-     "text_ref": "成片里的一帧"
+     "text_ref": "示例画面：自"
     }
    ],
    "notes": "已亲眼查看当前04-v；现图确为单张六个整宽横条，无任何左侧大插画、无箭头；编号、粗体名、竖线、正文从同一行开始，长文自然续行。下方唯一平整纯白16:9框，caption在外部下方，无胶片画笔插画。不得按旧左图右文重建。当前源图968×1624，最终输出941×1672的标准9:16并按定稿portrait净正文860、正文36、行高44等约定排；这类同一行短卡需组件样张核对，现flow默认可能把名称和正文拆行。；page-fixer-09（按审页意见）：六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
@@ -1909,12 +1922,12 @@
 
 1. **配音**｜Fish Audio 把每场旁白读成一段声音
 2. **对时间**｜记下每个字几点几秒说出：优先用 Fish 返回的时间戳，没有才交给〔中文语音转写〕按已知的文字对齐
-3. **写画面**｜每场一个矢量图（SVG）片段，用 data-cue 属性标出动画的触发词；填“核心结论”，说到时就出现
+3. **写画面**｜每场一个矢量图（SVG）片段，给每个动画标上由旁白里哪个词触发；比如标“核心结论”，旁白说到这四个字时它才出现
 4. **按时间画**｜每场的片段装进同一个网页模板，成了这场的场景网页；它只认一个时间：给它第几秒，它就画出那一秒的样子，和电脑快慢无关
 5. **逐帧拍下**｜4 个无头浏览器（不开窗口的浏览器）并行，整条视频切成每段 5 秒，逐帧截透明图
 6. **叠背景、编码**｜FFmpeg 把透明画面叠到 60 秒循环的 4K 玻璃背景上，显卡 AV1 编码；各段拼好，再合上旁白
 
-成片里的一帧（测试样片，CPU 编码）：字叠在循环的玻璃背景上
+示例画面：自测样片里的一帧（用 CPU 编码），字叠在循环的玻璃背景上
 
 ::screen{#video-scaffold-05 section="tech"}
 
@@ -2166,11 +2179,11 @@
 | 画面 | SVG ＋ 32 种动画 ＋ 组件库 | 组件库里有标题、数字爆开、对比表、仪表盘、3D 看板、粒子、路径变形这类现成件 |
 | 转场和质感 | 场景之间 0.5 秒上浮淡入；轻暗角、细颗粒 | 渲染时直接做进画面 |
 | 截帧 | Playwright 控制的无头 Chromium | 每个浏览器最多在内存里留 6 个场景页面，防止内存撑爆 |
-| 编码 | FFmpeg，av1_nvenc（显卡 AV1） | 恒定质量 22、10 位色深；哪段失败自动重试 2 次 |
+| 编码 | FFmpeg，用显卡做 AV1 编码 | 恒定质量 22、10 位色深；哪段失败自动重试 2 次 |
 | 声音 | FFmpeg | 旁白统一成 48 kHz 拼好；背景音乐音量 0.34，旁白一响就自动压低，片尾 1.2 秒淡出 |
 | 显卡排队 | 〔电脑配置与恢复〕的显卡排队服务 | 渲染前领一张 120 秒的租约（不续就自动还回去），每 40 秒续一次；本地大模型和听写也用这块显卡 |
-| 预览 | 本机临时网页服务 | 只开在 127.0.0.1 的随机端口，只放预览用得到的文件 |
-| 自动测试 | GitHub Actions | 每次推送：Windows、Linux 各跑一遍测试，Linux 上再用 CPU 完整出一条短片 |
+| 预览 | 本机临时网页服务 | 只在这台电脑上开，外面连不进来；只放预览用得到的文件 |
+| 自动测试 | GitHub 自动测试 | 每次推送：Windows、Linux 各跑一遍测试，Linux 上再用 CPU 完整出一条短片 |
 
 ::screen{#video-scaffold-06 section="tech"}
 
@@ -2217,7 +2230,7 @@
      "align": "left",
      "illustration": "top_inside",
      "icons": "auto",
-     "text_ref": "6419 行"
+     "text_ref": "8963行"
     },
     {
      "type": "notice",
@@ -2259,7 +2272,7 @@
      "align": "left",
      "illustration": "none",
      "icons": "none",
-     "text_ref": "6419 行"
+     "text_ref": "8963行"
     },
     {
      "type": "notice",
@@ -2497,9 +2510,9 @@
 5. **不抢显卡，不碰别人的东西。**｜渲染先排队领显卡，忙就停下说明，不结束别人的任务；清理只删认得的、能重新生成的文件，原件和不认识的文件一律不动。
 6. **视频项目不装语音模型。**｜对时间交给中文语音转写，模型只在那边装一份；视频项目直接依赖的 Python 包只有 Playwright 和 requests 两个，换机好装。
 
-- **6419 行**｜Python 正式代码（33 个文件，不算测试）
-- **91 个**｜自动测试
-- **37 次**｜提交（6 月 26 日–9 月 26 日）
+- **8963 行**｜Python 正式代码，不算测试（含 10 月新加的网页成片）
+- **130 个**｜自动测试
+- **58 次**｜提交（6 月 26 日–10 月 8 日）
 
 **这几招：自测里跑通了，还没在一期真视频上用过**
 - **改一场，只重做一场**：每段渲染结果记着它用到的场景、素材、背景和编码设置的内容指纹；改了一场，旧成片被拒收，只重渲涉及这场的段。9 月 28 日的自测里改一场颜色：2 段复用、3 段重渲。
@@ -2827,7 +2840,7 @@
      "width": "34%",
      "align": "left",
      "size": "large",
-     "text_ref": "全部功能（25 项）"
+     "text_ref": "全部功能（26项）"
     },
     {
      "type": "status_legend",
@@ -2896,7 +2909,7 @@
      "type": "chapter_title",
      "align": "center",
      "size": "large",
-     "text_ref": "全部功能（25 项）"
+     "text_ref": "全部功能（26项）"
     },
     {
      "type": "status_legend",
@@ -3265,7 +3278,7 @@
 }
 ```
 
-# 全部功能（25 项）
+# 全部功能（26 项）
 
 ● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
 
@@ -3796,11 +3809,14 @@
 20. 清理中间文件｜只删认得的、能重新生成的中间文件，可以先只列不删；原件和成品不动，删不掉的列出来｜待验收
 21. 隔离整链自测｜在一个新的空项目里用合成声音从头做到交付，再改一场，确认旧成片被拒、片段复用｜在用
 
+**另一条线：网页成片**
+22. 网页成片｜AI 直接写一张会动的网页，程序按时间逐帧拍成 4K 视频；能先看关键几帧、只渲其中一段，不走分场配音那一套｜待验收
+
 **已停用**
-22. 一键全流程｜一条命令从写旁白文件跑到成片；8 月 15 日换成分步骤，每步能停下来看｜已停用
-23. 投稿文案包｜按旁白生成 B 站标题、简介、标签和投稿自检清单；随旧脚本停用，9 月 18 日删掉｜已停用
-24. 一键归档｜做完一期把素材和成品整体挪进归档文件夹；随旧脚本停用，现在每期开一个新项目｜已停用
-25. 本地 Whisper 对时间｜视频项目自己装 faster-whisper large-v3 对时间；9 月 18 日停用，改由中文语音转写统一对齐｜已停用
+23. 一键全流程｜一条命令从写旁白文件跑到成片；8 月 15 日换成分步骤，每步能停下来看｜已停用
+24. 投稿文案包｜按旁白生成 B 站标题、简介、标签和投稿自检清单；随旧脚本停用，9 月 18 日删掉｜已停用
+25. 一键归档｜做完一期把素材和成品整体挪进归档文件夹；随旧脚本停用，现在每期开一个新项目｜已停用
+26. 本地 Whisper 对时间｜视频项目自己装 faster-whisper large-v3 对时间；9 月 18 日停用，改由中文语音转写统一对齐｜已停用
 
 ::screen{#video-scaffold-10 section="history"}
 
@@ -4003,6 +4019,51 @@
    "status": "ready"
   },
   {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": false,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "video-scaffold-10-icon-09",
+   "source_phrase": "9 月 30 日：GitHub 自动测试补齐依赖（新加的条目，用这条时间线里常用的绿芽图标）",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/小放映机.png",
+   "fallback": false,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "video-scaffold-10-icon-10",
+   "source_phrase": "10 月 4 日：另开“网页成片”线（新加的条目，用素材库已有的小放映机图标）",
+   "sha256": "7f176ae6f0f6c24c8c6a6886cd28fc21614f9c6b0a4bc7d09b5735893fa07eac",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "fallback": false,
+   "semantic_status": "unresolved_semantics_fallback",
+   "key": "video-scaffold-10-icon-11",
+   "source_phrase": "10 月 8 日：网页成片能先看关键几帧（新加的条目，用这条时间线里常用的绿芽图标）",
+   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "status": "ready"
+  },
+  {
    "role": "illustration",
    "slot_ordinal": 1,
    "orientations": [
@@ -4052,3 +4113,6 @@
 - **9 月 18 日**　有声预览、字幕、交付清单、查进度、隔离自测和 GitHub 自动测试；对时间改用 Fish 时间戳和中文语音转写，本地 Whisper 停用，旧的一体化脚本删掉
 - **9 月 26 日**　说明文档精简到五句话。我定了：以后做不做视频再说，但这个项目要留着，想做的时候随时能做出来
 - **9 月 29 日**　修好有声预览：画面区域原来被一层白底挡住，看不到玻璃背景
+- **9 月 30 日**　GitHub 自动测试补齐依赖；清理中间文件改成放进回收站，出错就停下
+- **10 月 4 日**　按我点名的需求，另开一条独立的“网页成片”线（10 月 4—8 日加的，维护档位仍是偶尔用、只修报错）：AI 直接写一张会动的网页，程序按时间逐帧拍成 4K 视频；在草稿文件夹里彩排过，还没用在真视频上
+- **10 月 8 日**　网页成片能先看关键几帧、只渲其中一段；补了一份创作指南和一条原创示例短片

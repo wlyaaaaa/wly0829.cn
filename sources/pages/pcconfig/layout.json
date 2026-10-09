@@ -28,14 +28,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "125个自动任务，每个都有人话说明：做什么、怎么停4",
+        "text_ref": "127个自动任务，每个都有人话说明：做什么、怎么停4",
         "columns": 4,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "截至9月28日",
+        "text_ref": "截至10月10日",
         "align": "right"
       },
       {
@@ -115,14 +115,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "125个自动任务，每个都有人话说明：做什么、怎么停4",
+        "text_ref": "127个自动任务，每个都有人话说明：做什么、怎么停4",
         "columns": 2,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "截至9月28日",
+        "text_ref": "截至10月10日",
         "align": "right"
       },
       {
@@ -1379,7 +1379,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "125个",
+        "text_ref": "127个",
         "chart_type": "donut",
         "width": "100%",
         "number_first": true,
@@ -1443,7 +1443,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "125个",
+        "text_ref": "127个",
         "chart_type": "donut",
         "number_first": true,
         "center_node": 0

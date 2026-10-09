@@ -768,18 +768,18 @@
      "id": "n-sets-g",
      "text": "61 份",
      "meaning": "G 上的恢复副本份数，时间 9/16 12:15–9/28 07:20（北京时间）",
-     "as_of": "2026-09-28",
-     "source": "G:\\80_Backup\\PCConfig\\SecretBroker\\RecoverySets\\sets 目录计数（9/28 19:46 北京时间读）",
+     "as_of": "2026-10-10",
+     "source": "G:\\80_Backup\\PCConfig\\SecretBroker\\RecoverySets\\sets 目录计数（10 月 10 日 05:3x 北京时间读）；最早 9 月 16 日、最新 9 月 28 日 07:20，之后没有新副本",
      "screens": [
       "password-center-10"
      ]
     },
     {
      "id": "n-sets-h",
-     "text": "50 份",
+     "text": "61 份",
      "meaning": "H 上的恢复副本份数，最新 9/24 02:38（北京时间）",
-     "as_of": "2026-09-28",
-     "source": "H:\\90_人工保留区\\PasswordCenter\\RecoverySets\\sets 目录计数",
+     "as_of": "2026-10-10",
+     "source": "H:\\90_人工保留区\\PasswordCenter\\RecoverySets\\sets 目录计数（10 月 10 日读）；最近一次写入 9 月 30 日 22:51（北京）",
      "screens": [
       "password-center-10"
      ]
@@ -788,8 +788,8 @@
      "id": "n-package",
      "text": "2218 个文件",
      "meaning": "G 上现役程序包（manifest 06a37382…）的文件数",
-     "as_of": "2026-09-28",
-     "source": "G:\\PasswordCenter\\06a37382…\\ 递归计数；password_center_program_maintenance.json approved_record",
+     "as_of": "2026-10-10",
+     "source": "G:\\PasswordCenter\\06a37382…\\ 递归计数（10 月 10 日），仍是最新的程序包目录",
      "screens": [
       "password-center-10"
      ]
@@ -1066,8 +1066,8 @@
  },
  "source": {
   "page": "sources/pages/password-center/page.json",
-  "sha256": "1572f91317677a0ab79b4abf2bfeb2e895cd9328cd3996618d967ea0e6389548",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "0e90c5fcf8aa14ee49c8270b62b2542700b4f00ec73e89cc810230b384706e30",
+  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
  }
 }
 ---
@@ -1110,16 +1110,29 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "row": "hero",
-     "width": "47%",
      "align": "left",
      "size": "large",
      "text_ref": "密码中心"
     },
     {
+     "type": "live_strip",
+     "text_ref": "现在",
+     "frame_mode": "plain"
+    },
+    {
+     "type": "stat_card",
+     "columns": 2,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "numbered_pipe": true,
+     "text_ref": "14 种"
+    },
+    {
      "type": "prose",
      "row": "hero",
-     "text_ref": "这台电脑上所有秘密的保险柜"
+     "text_ref": "这台电脑上所有秘密的保险柜",
+     "width": "47%",
+     "row_valign": "center"
     },
     {
      "type": "action_button",
@@ -1132,19 +1145,6 @@
      "width": "53%",
      "illustration": "outside",
      "size": "large"
-    },
-    {
-     "type": "stat_card",
-     "columns": 2,
-     "illustration": "left_inside",
-     "icons": "auto",
-     "numbered_pipe": true,
-     "text_ref": "14 种"
-    },
-    {
-     "type": "live_strip",
-     "text_ref": "现在",
-     "frame_mode": "plain"
     }
    ],
    "notes": "使用已批准01-h：左标题/两段介绍/两按钮，右卡外保险柜插画。中间四数字卡一排，原图每卡左插画、右大编号与定稿数字，不是编号流程；无丝带。现在横条两个空槽+按钮。steps.cols须按统计卡排且保留定稿编号，不得删字。",
@@ -1161,17 +1161,9 @@
      "text_ref": "密码中心"
     },
     {
-     "type": "prose",
-     "text_ref": "这台电脑上所有秘密的保险柜"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "size": "large"
-    },
-    {
-     "type": "action_button",
-     "text_ref": "在整套系统里的位置"
+     "type": "live_strip",
+     "text_ref": "现在",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -1183,9 +1175,17 @@
      "text_ref": "14 种"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "这台电脑上所有秘密的保险柜"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "size": "large"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置"
     }
    ],
    "notes": "按01-v及已批准01-v2合并看：首张标题、两段正文、下方卡外保险柜；续张为链接/按钮与四张数字卡一列、左图右数字正文，末尾现在上下排两空槽和按钮。虽然旧portrait写两列，实际批准续图为一列，以原图构图为准。不要把旧图漏掉的复制按钮带入新图。数字卡前固定换张，保留v→v2。",
@@ -4003,7 +4003,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "截至 9 月 28 日"
+     "text_ref": "截至10月10"
     }
    ],
    "notes": "左35%标题介绍与备份清单，中31%卡外恢复纸箱，右34%三个目的地卡竖排，箭头由纸箱分出；下两横卡一排左图右文；最底整宽数字说明窄条。目的地名和程序名只可定稿词回显，禁止重复伪字。 qa-11 接入组件回复：topology.text_layout:inline 已登记并消费，原卡名、冒号、正文同段，保持共享 name/body 字号。 qa-11 新同段接口真实浏览器产生 dg-name/dg-body 的 G3 重叠失败，已撤回本轮新增 inline 字段；前导冒号仍待组件修正，不回退已修图宽和明确绕线。",
@@ -4053,7 +4053,7 @@
     },
     {
      "type": "notice",
-     "text_ref": "截至 9 月 28 日"
+     "text_ref": "截至10月10"
     }
    ],
    "notes": "以批准10-v+现v2：第一张顶大恢复说明外卡（左标题正文、右纸箱），然后GitHub/G/H三卡一列右插画；第四条G/H程序包说明并入H卡内，不另造第四目的地卡。v2两大卡上下，顶标题正文、下大插画，底数字条。不得在资料中已有普通H盘字样上新增状态字。",
@@ -4176,14 +4176,14 @@
 
 - **私人 GitHub**：电脑配置库的私人分支 secret-broker-backup，每次整份提交。
 - **G 盘**：自动写入，留最近 14 天。
-- **H 盘**：从 G 复制已核对过的副本。9 月 29 日起接进〔电脑配置与恢复〕每天的外接盘同步，回执分别写 G、H 上最新一份的日期；接上后还没自然跑过，H 仍停在 9 月 24 日，待验收。
+- **H 盘**：从 G 复制已核对过的副本。9 月 29 日起接进〔电脑配置与恢复〕每天的外接盘同步，回执分别写 G、H 上最新一份的日期；9 月 30 日 H 已追平 G。
 - G、H 根目录各放一份完整的“密码中心.exe”程序包，接到任何 Windows 电脑都能直接打开。
 
 **怎么保证不坏**　先写到同一块盘的临时目录，逐个文件核对哈希，最后才切换“最新”指针；中途失败，旧的原封不动。恢复时只补缺的、或者和原来完全一致的条目，对不上就停，不会用旧盘复活已经删掉的条目。
 
 **手机和电脑怎么同步**　两边都从“上次共同确认的那一份”出发改，提交时要求 GitHub 上还是那一份，否则先拉下来合并；两边同时改的同一条两份都留。关窗时后台还在同步，会先提示“正在同步，稍等一下再关”，最多等 3 分钟；这一条刚装好，还没在真实使用里验过。
 
-截至 9 月 28 日：G 上 61 份（9 月 16 日 12:15 到 9 月 28 日 07:20），H 上 50 份（最新 9 月 24 日 02:38）；G 上现役程序包 2218 个文件。
+截至 10 月 10 日：G、H 上各有 61 份恢复副本，最新一份都是 9 月 28 日 07:20 存的。G 上现役程序包 2218 个文件。
 
 ::screen{#password-center-11 section="tech"}
 

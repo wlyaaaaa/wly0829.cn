@@ -37,7 +37,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "19851",
+        "text_ref": "3357张",
         "columns": 4,
         "columns_v": 1,
         "icons": "none",
@@ -48,7 +48,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026",
+        "text_ref": "截至10月9",
         "align": "right"
       },
       {
@@ -110,7 +110,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "19851",
+        "text_ref": "3357张",
         "columns": 4,
         "columns_v": 1,
         "icons": "none",
@@ -121,7 +121,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026",
+        "text_ref": "截至10月9",
         "align": "right"
       },
       {
@@ -810,7 +810,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "16439行",
+        "text_ref": "16,433",
         "columns": 1,
         "columns_v": 1,
         "icons": [
@@ -852,7 +852,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "16439行",
+        "text_ref": "16,433",
         "columns": 3,
         "columns_v": 1,
         "icons": "auto",

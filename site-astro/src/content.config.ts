@@ -10,6 +10,7 @@ const pages = defineCollection({
     kind: z.string(),
     url: z.string(),
     old_urls: z.array(z.string()).optional(),  // 改过地址的页：旧地址出一句话的去向页
+    redirect: z.any().optional(),  // 退役技能的去向页（kind=skill-redirect）：一句话加链接，共用版式
     tagline: z.string().optional(),
     toc: z.array(z.object({ id: z.string(), label: z.string(), img: z.string().optional() })).default([]),
     page: z.any().optional(),

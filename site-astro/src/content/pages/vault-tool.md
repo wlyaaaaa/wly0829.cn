@@ -593,7 +593,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "67666fafb031b6e89042e223d9377c159b8cf1b74907bad30bd2e6f71067a2a1",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
  }
 }
 ---
@@ -643,25 +643,7 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "47%",
      "text_ref": "本地加密库"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "把我选中的文件"
-    },
-    {
-     "type": "action_button",
-     "columns": 3,
-     "row": "hero",
-     "text_ref": "在整套系统里的位置"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "53%"
     },
     {
      "type": "stat_card",
@@ -674,6 +656,24 @@
      "type": "notice",
      "align": "left",
      "text_ref": "偶尔用"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "把我选中的文件",
+     "width": "47%",
+     "row_valign": "center"
+    },
+    {
+     "type": "action_button",
+     "columns": 3,
+     "row": "hero",
+     "text_ref": "在整套系统里的位置"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "53%"
     }
    ],
    "notes": "原图左文右插画，文字栏内标题—介绍—按钮竖排。原图横版只有两按钮，第三按钮以定稿补齐同样式。四张数字卡一行；底部两句在同一整宽浅条内。插画信封到云用绿色虚线箭头；没有实时横条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -687,6 +687,18 @@
      "text_ref": "本地加密库"
     },
     {
+     "type": "stat_card",
+     "columns": 2,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "1",
+     "columns_v": 2
+    },
+    {
+     "type": "notice",
+     "text_ref": "偶尔用"
+    },
+    {
      "type": "prose",
      "text_ref": "把我选中的文件"
     },
@@ -698,18 +710,6 @@
     },
     {
      "type": "illustration"
-    },
-    {
-     "type": "stat_card",
-     "columns": 2,
-     "illustration": "top_inside",
-     "icons": "auto",
-     "text_ref": "1",
-     "columns_v": 2
-    },
-    {
-     "type": "notice",
-     "text_ref": "偶尔用"
     },
     {
      "type": "notice",

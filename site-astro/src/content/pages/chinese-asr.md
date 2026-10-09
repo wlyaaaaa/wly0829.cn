@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "a2d14d6a37f1bc5300a0a84a4c56a7ce158e7466aaa7c9aaf370b6cca2fd78b8",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
  }
 }
 ---
@@ -841,28 +841,18 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "52%",
      "text_ref": "中文语音转写"
     },
     {
      "type": "prose",
      "size": "large",
      "bold": true,
-     "row": "intro",
      "text_ref": "把中文录音和口述变成能逐句核对的文字。"
     },
     {
-     "type": "prose",
-     "row": "intro",
-     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "index": 0,
-     "row": "intro",
-     "width": "48%"
+     "type": "live_strip",
+     "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -872,9 +862,18 @@
      "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "type": "prose",
+     "row": "intro",
+     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A",
+     "width": "52%",
+     "row_valign": "center"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "index": 0,
+     "row": "intro",
+     "width": "48%"
     },
     {
      "type": "action_button",
@@ -900,13 +899,9 @@
      "text_ref": "把中文录音和口述变成能逐句核对的文字。"
     },
     {
-     "type": "prose",
-     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "index": 0
+     "type": "live_strip",
+     "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -916,9 +911,13 @@
      "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "index": 0
     },
     {
      "type": "action_button",

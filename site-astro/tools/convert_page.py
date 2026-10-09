@@ -222,6 +222,153 @@ def gallery_title(meta, text):
     return text
 
 
+# —— K1-A 首屏先放状态（本人 10 月 10 日 05:29 选 A）：项目页、技能页的第 1 屏，标题下面先放状态——
+#    “现在”实时条（live_strip / live_box，实时位由 live-dom.js 填；“运行”那一格读到时带上次运行时间），
+#    再放首屏的数字卡（连同卡前、卡后给数字注日期和来源的那一句，见 STATUS_ASOF）；讲解、插画、清单和按钮照原顺序往后挪，一字不删。
+#    只是挪现有的块：样式、颜色、字号都不变。首屏既没有实时位也没有数字卡的页不加状态行（不硬塞空行）；
+#    冻结页的状态就是标题下的“已冻结”标签，数字是冻结前的历史数，不挪。
+STATUS_KINDS = ("project", "skill")
+STATUS_LIVE = ("live_strip", "live_box")
+STATUS_REPORT = {}   # 页 → 首屏状态行里有什么（转换结束时打印）
+# 数字卡的随附说明：卡前的“数字卡片……”或“截至……”标题行；卡后紧跟的那一句——数字的日期（“截至……”“数字截至……”“前三个数截至……”）、
+# 来源注（notice 的 source_note，如“0.48 秒和 2 / 9 条是……合成样例跑出来的”）、现状说明（“偶尔用：只修报错……”）。
+# 这几句是给数字卡注日期、注来源的，跟着数字卡一起挪；不跟着挪，日期就和数字隔开一大段（10 月 10 日 07:00 复查发现 7 页这样）
+STATUS_ASOF = re.compile(r"^(数字|前三个数)?截至")
+
+
+def status_note_before(b):
+    ref = str(b.get("text_ref", ""))
+    return b.get("type") == "section_heading" and (ref.startswith("数字卡片") or bool(STATUS_ASOF.match(ref)))
+
+
+def status_note_after(b):
+    ref = str(b.get("text_ref", ""))
+    if b.get("type") not in ("prose", "notice"):
+        return False
+    return bool(STATUS_ASOF.match(ref)) or ref.startswith("偶尔用") or (b.get("type") == "notice" and b.get("variant") == "source_note")
+
+
+def status_first(page, meta):
+    got = set()
+    for o, sp in (meta.get("layout") or {}).items():
+        bl = list((sp or {}).get("blocks") or [])
+        ti = next((i for i, b in enumerate(bl) if b.get("type") == "chapter_title"), None)
+        if ti is None:
+            continue
+        # 标题组：大标题，加紧跟着的标签（tag）和加粗大字的副标题
+        tj = ti + 1
+        while tj < len(bl) and (bl[tj].get("type") == "tag" or (
+                bl[tj].get("type") == "prose" and bl[tj].get("bold") and bl[tj].get("size") == "large")):
+            tj += 1
+        live = [i for i in range(tj, len(bl)) if bl[i].get("type") in STATUS_LIVE]
+        stats = []
+        for i in range(tj, len(bl)):
+            if bl[i].get("type") != "stat_card":
+                continue
+            if i - 1 >= tj and status_note_before(bl[i - 1]):
+                stats.append(i - 1)
+            stats.append(i)
+            if i + 1 < len(bl) and status_note_after(bl[i + 1]):
+                stats.append(i + 1)
+        if not live and not stats:
+            continue
+        moved = live + [i for i in stats if i not in live]
+        title, status = bl[ti:tj], [bl[i] for i in moved]
+        rest = [b for i, b in enumerate(bl) if i >= tj and i not in moved]
+        row = title[0].get("row")
+        if row:  # 标题组从并排的那一行里拿出来占整行；原来标题那一栏的宽度交给这一行剩下的第一块，左右比例不变
+            w = title[0].get("width")
+            for b in title:
+                b.pop("row", None); b.pop("width", None)
+            nxt = next((b for b in rest if b.get("row") == row), None)
+            if nxt is not None and w and not nxt.get("width"):
+                nxt["width"] = w
+            # 标题（和原来同栏的数字卡）挪走后，左栏的字变短：右栏只留插画，插画后面原来同栏的块（对话、提示等）挪到这一行下面占整行，
+            # 左右两栏再上下居中对齐——不在短的一栏下面空一大块
+            cols = []
+            for b in (x for x in rest if x.get("row") == row):
+                if b.get("width") or not cols:
+                    cols.append([b])
+                else:
+                    cols[-1].append(b)
+            if len(cols) >= 2 and cols[-1][0].get("type") == "illustration":
+                for b in cols[-1][1:]:
+                    b.pop("row", None); b.pop("width", None)
+                if not any(b.get("row_valign") for b in rest if b.get("row") == row):
+                    cols[0][0]["row_valign"] = "center"
+        for b in status:  # 状态块占整行
+            b.pop("row", None); b.pop("width", None)
+        sp["blocks"] = bl[:ti] + title + status + rest
+        got.add("实时" if live else "数字")
+    if got:
+        STATUS_REPORT[page] = "+".join(sorted(got, reverse=True))
+    return bool(got)
+
+
+# —— 构图里写死数字的 text_ref：内容组刷新数字以后（例如“125个自动任务”变成“127 个自动任务”），区块库按 text_ref 认不出这一块，
+#    这一块的字会被前一块带走（数字卡跑进正文那一栏）。只差数字时，text_ref 换成源里现在的写法；别的认不出的列出来 ——
+HEALED, UNMATCHED = [], []
+
+
+def heal_text_refs(s, meta):
+    sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
+    from engine.parse import parse, original_markdown, canon, normalize, node_text
+    from engine.layout import _starts, LIST_TYPES
+    nodes = parse(s.get("text", ""), markdown_links=original_markdown(s))
+    texts = []
+    for n in nodes:
+        texts.append(node_text(n))
+        if n["type"] in LIST_TYPES and len(n.get("src", [])) == len(n.get("items", [])):
+            texts += [node_text({"src": [n["src"][i]]}) for i in range(1, len(n["items"]))]
+    digits = lambda x: re.sub(r"\d[\d,.]*", "#", x)
+    for o, sp in (meta.get("layout") or {}).items():
+        for b in (sp or {}).get("blocks") or []:
+            ref = b.get("text_ref")
+            if not isinstance(ref, str) or not ref.strip():
+                continue
+            head = ref.split("|")[0]
+            r = canon(normalize(head))
+            if not r or any(_starts(n, ref) for n in nodes) or any(t.startswith(r) or re.sub(r"^\d+", "", t).startswith(r) for t in texts):
+                continue
+            if any(canon(n.get("raw_lead") or "").startswith(canon(head)) for n in nodes):
+                continue  # 指向说明前缀行（如“数字卡片（竖线前大字……）：”），区块库按裁定不显示这一行，不算认不出
+            want, cands = digits(r), set()
+            if want != r:  # text_ref 里有数字才按“只差数字”认
+                for t in texts:
+                    k = next((k for k in range(1, min(len(t), len(r) + 12) + 1) if digits(t[:k]) == want), None)
+                    if k:
+                        cands.add(t[:k])
+            if len(cands) == 1:
+                new = cands.pop()
+                HEALED.append(f"{s['id']} {o}：{head} → {new}")
+                b["text_ref"] = new + ref[len(head):]
+            else:
+                UNMATCHED.append(f"{s['id']} {o}：{head}")
+
+
+# —— 退役技能的去向页（kind=skill-redirect）：共用一个简单版式——标题加一句话、话里的链接能点，不逐页构图 ——
+def redirect_parts(data):
+    s = next((x for x in data["screens"] if not x.get("hidden")), None)
+    if not s:
+        return {"destination": data.get("destination", ""), "paragraphs": []}
+    links = {x["text"]: x["href"] for x in (s.get("links") or []) if isinstance(x, dict) and x.get("text") and x.get("href")}
+    paras = [p.strip() for p in re.split(r"\n\s*\n", s.get("text", "")) if p.strip()]
+    if paras and paras[0] == data["title"]:
+        paras = paras[1:]
+    out = []
+    for p in paras:
+        segs = []
+        for k, piece in enumerate(re.split(r"〔([^〕]+)〕", p)):
+            if not piece:
+                continue
+            if k % 2 and piece in links:
+                segs.append({"text": piece, "href": links[piece]})
+            else:
+                segs.append({"text": piece})
+        out.append(segs)
+    return {"destination": data.get("destination", ""), "paragraphs": out}
+
+
 def convert(page):
     src = os.path.join(REPO, "sources", "pages", page, "page.json")
     raw = open(src, "rb").read()
@@ -238,7 +385,9 @@ def convert(page):
             specs[(it["screen"], it.get("orientation", "h"))] = {k: v for k, v in it.items()
                                                                  if k not in ("screen", "orientation", "source_image", "source_images", "composition_basis")}
     parts, sections = [], []
-    for s in data["screens"]:
+    redirect = data.get("kind") == "skill-redirect"
+    first = True
+    for s in ([] if redirect else data["screens"]):
         if s.get("hidden"):
             continue
         s = json.loads(json.dumps(s))
@@ -258,6 +407,10 @@ def convert(page):
                 "images": screen_images(s["id"], {o: specs[(s["id"], o)] for o in ("h", "v") if (s["id"], o) in specs})}
         if swap:  # 按活动版本重出时，构图里认首行标签的 text_ref 跟着换
             meta["layout"] = swap_text_ref(meta["layout"], *swap)
+        heal_text_refs(s, meta)
+        if first and data.get("kind") in STATUS_KINDS and not os.environ.get("CONVERT_NO_STATUS_FIRST"):  # 设这个变量只为出“改前”对照
+            status_first(page, meta)
+        first = False
         text = gallery_title(meta, s.get("text", ""))
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
@@ -278,6 +431,8 @@ def convert(page):
         "title": data["title"], "kind": data["kind"], "url": data["url"], "tagline": data.get("tagline", ""),
         # 改过地址的页：旧地址出一句话的去向页、站内链到旧地址的都改指现在的地址（page.json 的 old_urls）
         **({"old_urls": data["old_urls"]} if data.get("old_urls") else {}),
+        # 退役技能的去向页：标题加一句话（链接能点），共用版式，见 src/pages/[...slug].astro
+        **({"redirect": redirect_parts(data)} if redirect else {}),
         "toc": toc,
         "page": {k: v for k, v in data.items() if k != "screens"},
         "source": {"page": f"sources/pages/{page}/page.json", "sha256": hashlib.sha256(raw).hexdigest(), "converted_at_beijing": now},
@@ -323,4 +478,10 @@ if __name__ == "__main__":
         print(n, "转换完成", k, "屏")
     for g in GATE_LOG:
         print("  规则原文公开过滤：", json.dumps(g, ensure_ascii=False))
+    if STATUS_REPORT:
+        print("  首屏状态行：", json.dumps(STATUS_REPORT, ensure_ascii=False))
+    for h in HEALED:
+        print("  构图 text_ref 只差数字，已按源里现在的写法认：", h)
+    for u in UNMATCHED:
+        print("  构图 text_ref 在源里找不到：", u)
     print(f"共 {len(names)} 页，失败 {len(failed)} 页")

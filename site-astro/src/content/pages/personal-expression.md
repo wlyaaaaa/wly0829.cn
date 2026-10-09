@@ -558,7 +558,7 @@
  "source": {
   "page": "sources/pages/personal-expression/page.json",
   "sha256": "7ee6b7daabc203fdfa7ee4a36ccdf81d1bbdd662a7ff16812c08482056317165",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
  }
 }
 ---
@@ -596,14 +596,22 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "个人表达",
-     "row": "hero",
-     "width": "57%"
+     "text_ref": "个人表达"
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "11 条原则 · 6 条读懂我的话"
     },
     {
      "type": "prose",
      "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时",
-     "row": "hero"
+     "row": "hero",
+     "width": "57%",
+     "row_valign": "center"
     },
     {
      "type": "illustration",
@@ -614,14 +622,6 @@
     {
      "type": "quote",
      "text_ref": "真实的一次（9月27日）：AI报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核"
-    },
-    {
-     "type": "stat_card",
-     "columns": 4,
-     "columns_v": 1,
-     "illustration": "top_inside",
-     "icons": "auto",
-     "text_ref": "11 条原则 · 6 条读懂我的话"
     },
     {
      "type": "action_button",
@@ -639,6 +639,14 @@
      "text_ref": "个人表达"
     },
     {
+     "type": "stat_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "top_inside",
+     "icons": "auto",
+     "text_ref": "11 条原则 · 6 条读懂我的话"
+    },
+    {
      "type": "prose",
      "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时"
     },
@@ -649,14 +657,6 @@
     {
      "type": "quote",
      "text_ref": "真实的一次（9月27日）：AI报告“理解库手机日报里的‘假应用’问题彻底修好了”，接着列了一串核"
-    },
-    {
-     "type": "stat_card",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "top_inside",
-     "icons": "auto",
-     "text_ref": "11 条原则 · 6 条读懂我的话"
     },
     {
      "type": "action_button",

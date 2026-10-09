@@ -8,6 +8,7 @@ const rendered = import.meta.glob('../content/rendered/*.json', { eager: true, i
 export async function getStaticPaths() {
   const done = import.meta.glob('../content/rendered/*.json');  // getStaticPaths 单独运行，只能用这里自己导入的
   const pages = (await getCollection('pages')).filter((entry) => {
+    if (entry.data.redirect) return true;  // 退役技能的去向页不排版
     if (done[`../content/rendered/${entry.id}.json`]) return true;
     console.warn(`${entry.id}：没有排版结果（tools/render_blocks.py 这一页出错或没跑），这一页不生成`);
     return false;
@@ -25,8 +26,9 @@ export async function getStaticPaths() {
   })), ...moved];
 }
 const { entry, moved } = Astro.props as { entry?: any; moved?: { to: string; title: string } };
-const r = entry ? rendered[`../content/rendered/${entry.id}.json`] : null;
-if (entry && !r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
+const redirect = entry?.data.redirect as undefined | { destination: string; paragraphs: { text: string; href?: string }[][] };
+const r = entry && !redirect ? rendered[`../content/rendered/${entry.id}.json`] : null;
+if (entry && !redirect && !r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
 // 只给比对用：SX_RULE_CANVAS=1 构建时规则原文屏出排好的原文卡（不出网页字），用来和现在的原文排版图逐屏比；正式构建不设
 const ruleCanvas = process.env.SX_RULE_CANVAS === '1';
 const esc = (v: string) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -55,6 +57,13 @@ if (grid.length) parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`);
 {moved ? (
   <Site title={moved.title} kind="moved" toc={[]} url={moved.to} page="moved" moved={moved.to}>
     <p class="moved-notice">“{moved.title}”换了地址，现在的页面在 <a href={moved.to}>{moved.to}</a>，两秒后自动跳过去。</p>
+  </Site>
+) : redirect ? (
+  <Site title={entry.data.title} kind="moved" toc={[]} url={entry.data.url} page="moved" noindex>
+    <div class="moved-notice">
+      <h1 class="moved-title">{entry.data.title}</h1>
+      {redirect.paragraphs.map((p) => <p>{p.map((x) => (x.href ? <a href={x.href}>{x.text}</a> : x.text))}</p>)}
+    </div>
   </Site>
 ) : (
   <Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page}>

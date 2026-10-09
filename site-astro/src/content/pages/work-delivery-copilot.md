@@ -357,7 +357,7 @@
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
   "sha256": "6cf8e5a770edae351bbdd3234f139a31d281a485c6bd4be34ec6afa4e5dd916e",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
  }
 }
 ---
@@ -429,27 +429,12 @@
      "type": "chapter_title",
      "text_ref": "工作支持与交付",
      "align": "left",
-     "size": "large",
-     "row": "hero",
-     "width": "50%"
+     "size": "large"
     },
     {
      "type": "tag",
      "text_ref": "偶尔用",
-     "row": "hero",
      "shape": "rounded_strip"
-    },
-    {
-     "type": "prose",
-     "text_ref": "工作上的事直接交给 AI 办",
-     "row": "hero",
-     "align": "left"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%",
-     "index": 0
     },
     {
      "type": "stat_card",
@@ -464,6 +449,20 @@
      "align": "center",
      "variant": "source_note",
      "size": "small"
+    },
+    {
+     "type": "prose",
+     "text_ref": "工作上的事直接交给 AI 办",
+     "row": "hero",
+     "align": "left",
+     "width": "50%",
+     "row_valign": "center"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%",
+     "index": 0
     },
     {
      "type": "action_button",
@@ -488,15 +487,6 @@
      "shape": "rounded_strip"
     },
     {
-     "type": "prose",
-     "text_ref": "工作上的事直接交给 AI 办"
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "size": "banner"
-    },
-    {
      "type": "stat_card",
      "text_ref": "2–5 份|6 个文件|0.48 秒|2 / 9 条",
      "columns": 1,
@@ -508,6 +498,15 @@
      "type": "notice",
      "text_ref": "0.48 秒和 2 / 9 条是",
      "variant": "source_note"
+    },
+    {
+     "type": "prose",
+     "text_ref": "工作上的事直接交给 AI 办"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "banner"
     },
     {
      "type": "action_button",

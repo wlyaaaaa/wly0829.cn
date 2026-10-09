@@ -525,8 +525,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "64dcb7d87b5c8817f0fc9d85305c3a6366c01c58681db6c62e822189d591d422",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "27eed6d1705f258a9c6b13b786754ae63b5fca11bd2c42cac3ca3d6a6c9567dc",
+  "converted_at_beijing": "2026-10-10T06:24:13+08:00"
  }
 }
 ---
@@ -574,8 +574,6 @@
      "type": "chapter_title",
      "text_ref": "个人材料查找",
      "align": "left",
-     "row": "hero",
-     "width": "55%",
      "size": "large",
      "asset": "personal-materials\\personal-materials-01-title-01.png",
      "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-01-h.png",
@@ -590,31 +588,16 @@
      "type": "prose",
      "text_ref": "记得有份文件，想不起放在哪：说个大概，AI找出那一份原件，再翻到要看的那一页。",
      "size": "large",
-     "bold": true,
-     "row": "hero"
+     "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
-     "row": "hero"
-    },
-    {
-     "type": "source_text_card",
-     "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "none",
-     "row": "hero",
-     "whole_block": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
+     "type": "live_box",
+     "text_ref": "现在每天17:10同步",
+     "slots": 1
     },
     {
      "type": "stat_card",
-     "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
+     "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
      "variant": "number_header_table",
      "columns": 4,
      "columns_v": 2,
@@ -629,13 +612,29 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至2026年9月28日20:55（北京时间）",
+     "text_ref": "截至10月9日",
      "align": "right"
     },
     {
-     "type": "live_box",
-     "text_ref": "现在每天17:10同步",
-     "slots": 1
+     "type": "prose",
+     "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
+     "row": "hero",
+     "width": "55%",
+     "row_valign": "center"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "hero",
+     "whole_block": true
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "action_button",
@@ -680,6 +679,31 @@
      ]
     },
     {
+     "type": "live_box",
+     "text_ref": "现在每天17:10同步",
+     "slots": 1
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
+     "variant": "number_header_table",
+     "columns": 1,
+     "columns_v": 1,
+     "label_position": "above",
+     "illustration": "top_inside",
+     "icons": [
+      "_library/icons/打勾清单.png",
+      "_library/icons/文件夹.png",
+      "_library/icons/文稿堆.png",
+      "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
+     ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至10月9日",
+     "align": "right"
+    },
+    {
      "type": "illustration"
     },
     {
@@ -699,31 +723,6 @@
      "columns_v": 1,
      "illustration": "none",
      "whole_block": true
-    },
-    {
-     "type": "stat_card",
-     "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
-     "variant": "number_header_table",
-     "columns": 1,
-     "columns_v": 1,
-     "label_position": "above",
-     "illustration": "top_inside",
-     "icons": [
-      "_library/icons/打勾清单.png",
-      "_library/icons/文件夹.png",
-      "_library/icons/文稿堆.png",
-      "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
-     ]
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026年9月28日20:55（北京时间）",
-     "align": "right"
-    },
-    {
-     "type": "live_box",
-     "text_ref": "现在每天17:10同步",
-     "slots": 1
     },
     {
      "type": "action_button",
@@ -868,11 +867,11 @@
 
 **真实的一次**　9 月 25 日，我让 AI 把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这 46 个文件（约 1 GB）逐个算内容指纹，跟材料库和〔照片视频录音管理〕的记录比：一个都不重复，于是全部拿给我看；我看完，让它删了。
 
-| **164 份** | **53 个来源** | **至少 74,939 个** | **31 次，全部成功** |
+| **165 份** | **58 个来源** | **15,105 条** | **41 次，全部成功** |
 |---|---|---|---|
-| 精确登记的原件，每份都核对过内容指纹 | 登记过的文件夹、单个文件和文件名清单 | 这些来源里的非媒体文件，没登记的用时现找 | 9 月 5–28 日每天 17:10 一次（24 次），另有手动补跑 7 次 |
+| 精确登记的原件，每份都核对过内容指纹 | 登记过的文件夹、单个文件和文件名清单 | 微信收到的文件和下载文件夹的文件名，每天更新 | 9 月 5 日起每天 17:10 的同步，含手动补跑 8 次 |
 
-截至 2026 年 9 月 28 日 20:55（北京时间）
+截至 10 月 9 日
 
 **现在**　每天 17:10 同步
 
@@ -1650,6 +1649,7 @@
 - 逐条看登记过的原件还在不在；我删掉的，去掉那一条，连同只属于它的文字（为什么这样定，见〔亮点〕）
 - 刷新微信收到的文件和下载文件夹的文件名清单
 - 做完，整份登记随个人资料一起复制到备份硬盘
+- 那天个人资料锁着，这一步就推迟到下一次（10 月 2 日、5 日各推迟过一次）
 
 除此之外没有后台程序，不扫整台电脑。
 
@@ -1696,7 +1696,7 @@
     },
     {
      "type": "flow",
-     "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+     "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
      "columns": 3,
      "direction": "horizontal",
      "connector": "arrow",
@@ -1753,7 +1753,7 @@
     },
     {
      "type": "flow",
-     "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+     "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
      "columns": 1,
      "direction": "vertical",
      "connector": "arrow",
@@ -1917,7 +1917,7 @@
 # 一次查找经过哪几步
 
 1. **听懂你的话**｜AI 把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词
-2. **先查登记**｜在登记过的 164 份里比对标题、来源和已知文字，平时给 4 个候选，最多 10 个
+2. **先查登记**｜在登记过的 165 份里比对标题、来源和已知文字，平时给 4 个候选，最多 10 个
 3. **不够再现找**｜挑最相关的至多 8 个来源按文件名找：合计不超过 2,500 个文件、每个来源 12 层、8 秒；微信和下载查文件名清单
 
 不够才走这步
@@ -2002,7 +2002,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+     "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
      "columns": 3,
      "columns_v": 3,
      "icons": "none"
@@ -2068,7 +2068,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+     "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
      "columns": 1,
      "columns_v": 1,
      "icons": "none"
@@ -2190,13 +2190,13 @@
 SHA-256 相同才算一模一样的副本；名字像、日期近都不算。
 
 **存位置、指纹和可搜文字**
-一个 SQLite 数据库，五张表：53 个来源、164 份原件、4 条原件之间的关系（比如哪份属于哪个文件包）、44 份可搜的文字（能删了重建）、15,210 条文件名。不复制原件，不存人物、事件、重要程度。
+一个 SQLite 数据库，五张表：来源、原件、原件之间的关系（比如哪份属于哪个文件包）、可搜的文字（能删了重建）、文件名清单。10 月 9 日：58 个来源，165 份原件，15,105 条文件名。不复制原件，不存人物、事件、重要程度。
 
 **读文档用的库**
 PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT 和 Markdown 按行读（UTF-8 或带 BOM 的 UTF-16）。
 
-**4,192 行**｜Python，就一个文件
-**106 个**｜自动测试，9 月 28 日全部通过
+**4,242 行**｜Python，就一个文件
+**110 个**｜自动测试（10 月 10 日数）
 **0 字节**｜复制的原件
 
 ::screen{#personal-materials-07 section="tech"}
@@ -2235,7 +2235,7 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
     },
     {
      "type": "section_heading",
-     "text_ref": "53个来源是什么",
+     "text_ref": "58个来源是什么",
      "row": "ranges",
      "width": "50%",
      "align": "left",
@@ -2243,14 +2243,14 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
     },
     {
      "type": "chart",
-     "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+     "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新13个交接文件夹：别",
      "variant": "stacked",
      "row": "ranges",
      "chart_type": "stacked"
     },
     {
      "type": "section_heading",
-     "text_ref": "164份登记原件，共1.2GB",
+     "text_ref": "165份登记原件，共1.2GB",
      "row": "ranges",
      "width": "50%",
      "align": "left",
@@ -2258,14 +2258,14 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
     },
     {
      "type": "chart",
-     "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+     "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
      "variant": "stacked",
      "row": "ranges",
      "chart_type": "stacked"
     },
     {
      "type": "prose",
-     "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+     "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
     }
    ],
    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：分段带按现有 funnel 分两列两排，扩大末格可用宽度；单独的其余用时现找是原定稿段落，完整保留。第5项的两图均已使用现有 stacked，图例数值和说明分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -2303,31 +2303,31 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
     },
     {
      "type": "section_heading",
-     "text_ref": "53个来源是什么",
+     "text_ref": "58个来源是什么",
      "align": "left",
      "size": "medium"
     },
     {
      "type": "chart",
-     "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+     "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新13个交接文件夹：别",
      "variant": "stacked",
      "chart_type": "stacked"
     },
     {
      "type": "section_heading",
-     "text_ref": "164份登记原件，共1.2GB",
+     "text_ref": "165份登记原件，共1.2GB",
      "align": "left",
      "size": "medium"
     },
     {
      "type": "chart",
-     "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+     "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
      "variant": "stacked",
      "chart_type": "stacked"
     },
     {
      "type": "prose",
-     "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+     "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
     }
    ],
    "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：采用现有 stack 纵排等宽四段，保留所有源字和原独立说明段。第5项的两图使用现有 stacked；图例分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -2383,21 +2383,21 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
 **85,189 个**　看过的文件（重叠的来源只算一次）
 **10,250 个**　是照片、视频、录音，跳过
 **至少 74,939 个**　非媒体文件
-**164 份**　精确登记　　其余 74,775 个用时现找
+**164 份**　当时精确登记　　其余 74,775 个用时现找
 
 其余用时现找
 
-**53 个来源是什么**
+**58 个来源是什么**（10 月 9 日）
 - 35 个文件夹：没登记的文件按文件名现找
 - 5 份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新
-- 8 个交接文件夹：别的项目把原件精确交进来的地方
+- 13 个交接文件夹：别的项目把原件精确交进来的地方
 - 5 个单独登记的文件
 
-**164 份登记原件，共 1.2 GB**
-PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 15
+**165 份登记原件，共 1.2 GB**（10 月 9 日）
+PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 16
 其中 44 份有可搜的文字：18 份是文件自带的完整文字，26 份是提取出的部分文字。
 
-2026 年 9 月 28 日 20:55 数了一遍，用时 6 秒。有一个来源超过 5 万个文件，只数到 5 万，所以总数写“至少”。
+上面的文件总数是 9 月 28 日 20:55 数的，那次用时 6 秒。10 月 10 日再数，20 秒上限内没数完，所以总数仍用 9 月 28 日的。有一个来源超过 5 万个文件，只数到 5 万，所以总数写“至少”。
 
 ::screen{#personal-materials-08 section="highlights"}
 
@@ -2630,7 +2630,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
 
 **只记一小份，其余现找**
 麻烦：以前的个人知识库把材料都收进一个 10 GB 的数据库，记了 219 万条材料位置，还自己推断事件和人物关系；能收能查，却给不出我真正要的答案，8 月 25 日退役。
-解法：反过来，只记“哪份在哪、叫什么、指纹多少”。现在精确登记 164 份；其余七万多份不预先登记，用到时在允许的文件夹里现找；你要打开或要收进来时才登记。
+解法：反过来，只记“哪份在哪、叫什么、指纹多少”。现在精确登记 165 份；其余七万多份不预先登记，用到时在允许的文件夹里现找；你要打开或要收进来时才登记。
 
 **删了就是删了，没接上不算删**
 麻烦：我在文件夹里删了文件，旧记录还把它当原件给出来；反过来，硬盘没接上时，又不能把整盘当成删光。

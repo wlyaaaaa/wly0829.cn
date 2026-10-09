@@ -891,7 +891,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "6 月 24 日–9 月 29 日共",
+        "text_ref": "6月24日–10月6日共",
         "align": "center",
         "size": "small"
       }
@@ -933,7 +933,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "6 月 24 日–9 月 29 日共",
+        "text_ref": "6月24日–10月6日共",
         "align": "center",
         "size": "small"
       }
@@ -955,6 +955,6 @@
       "ribbon_position": "left"
     }
   },
-  {"screen": "proxyclean-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
-  {"screen": "proxyclean-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "打开程序先检查当前代理，检查过程中能看到真实步骤，也可以取消。此时还没有修改网络。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
+  {"screen": "proxyclean-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "检查中（9月24日旧网站用的截图）：打开程序先查当前代理，能看到正在做哪一步，也可", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
+  {"screen": "proxyclean-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "检查中（9月24日旧网站用的截图）：打开程序先查当前代理，能看到正在做哪一步，也可", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["1092:876", "1092:876", "1092:876"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
 ]

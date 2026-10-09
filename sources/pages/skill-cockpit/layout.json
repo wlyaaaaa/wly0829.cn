@@ -1,0 +1,99 @@
+[
+  {
+    "screen": "skill-cockpit-01",
+    "orientation": "h",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "看驾驶舱", "align": "center", "size": "large", "row": "hero", "width": "50%"},
+      {"type": "prose", "text_ref": "技能名", "row": "hero"},
+      {"type": "section_heading", "text_ref": "它做什么", "row": "hero"},
+      {"type": "prose", "text_ref": "驾驶舱是", "row": "hero"},
+      {"type": "notice", "text_ref": "不用点名", "row": "hero"},
+      {"type": "prose", "text_ref": "10 月 7–8 日", "row": "hero"},
+      {"type": "illustration", "illustration": "outside", "size": "medium", "row": "hero", "align": "center", "target_height": 220},
+      {"type": "dialogue", "text_ref": "怎么跟 AI 说", "columns": 2, "split_paras": true, "illustration": "none", "row": "hero", "width": "50%"}
+    ],
+    "notes": "新页，照结构相同的“查电脑卡顿”技能页第 1 屏写：左栏标题、技能名、它做什么、不用点名、使用小记录；右栏插画和六句说法。插画用驾驶舱页主插画（素材库没有画面描述里的仪表盘小插画）。"
+  },
+  {
+    "screen": "skill-cockpit-01",
+    "orientation": "v",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "看驾驶舱", "align": "center", "size": "large"},
+      {"type": "prose", "text_ref": "技能名"},
+      {"type": "section_heading", "text_ref": "它做什么"},
+      {"type": "prose", "text_ref": "驾驶舱是"},
+      {"type": "illustration", "illustration": "outside", "size": "banner"},
+      {"type": "dialogue", "text_ref": "怎么跟 AI 说", "columns": 1, "split_paras": true, "illustration": "none"},
+      {"type": "notice", "text_ref": "不用点名"},
+      {"type": "prose", "text_ref": "10 月 7–8 日"}
+    ],
+    "notes": "竖版照画面描述：标题和技能名、它做什么两段、插画一行、六个气泡一行一个，浅绿小字和灰色小字在最后。"
+  },
+  {
+    "screen": "skill-cockpit-02",
+    "orientation": "h",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "一个完整例子", "align": "center", "size": "large"},
+      {"type": "tag", "text_ref": "示例："},
+      {"type": "dialogue", "text_ref": "我：", "sides": ["right"], "illustration": "none"},
+      {"type": "timeline", "text_ref": "AI 做了什么", "direction": "vertical", "columns": 1, "connector": "ribbon", "illustration": "left_inside", "icons": "auto"},
+      {"type": "dialogue", "text_ref": "AI 交回", "sides": ["left"], "illustration": "none"},
+      {"type": "dialogue", "text_ref": "往里加东西", "split_paras": true, "sides": ["right", "left"], "illustration": "none"}
+    ],
+    "notes": "照查电脑卡顿第 2 屏：我的问话、AI 做了什么四步（各一个小图标）、AI 交回，最后“往里加东西”一问一答。"
+  },
+  {
+    "screen": "skill-cockpit-02",
+    "orientation": "v",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "一个完整例子", "align": "center", "size": "large"},
+      {"type": "tag", "text_ref": "示例："},
+      {"type": "dialogue", "text_ref": "我：", "sides": ["right"], "illustration": "none"},
+      {"type": "timeline", "text_ref": "AI 做了什么", "direction": "vertical", "columns": 1, "connector": "ribbon", "illustration": "left_inside", "icons": "auto"},
+      {"type": "dialogue", "text_ref": "AI 交回", "sides": ["left"], "illustration": "none"},
+      {"type": "dialogue", "text_ref": "往里加东西", "split_paras": true, "sides": ["right", "left"], "illustration": "none"}
+    ]
+  },
+  {
+    "screen": "skill-cockpit-03",
+    "orientation": "h",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "能做的事", "size": "large", "align": "center"},
+      {"type": "notice", "text_ref": "读驾驶舱、讲清结论"},
+      {"type": "points_card", "text_ref": "用这个技能时", "columns": 1, "item_cards": true, "inner_columns": 2, "icons": "auto", "illustration": "left_inside"}
+    ],
+    "notes": "照查电脑卡顿第 3 屏：一句能做的事（带去看驾驶舱的链接），下面八条规矩两列小卡，每条一个小图标。"
+  },
+  {
+    "screen": "skill-cockpit-03",
+    "orientation": "v",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "能做的事", "size": "large", "align": "center"},
+      {"type": "notice", "text_ref": "读驾驶舱、讲清结论"},
+      {"type": "points_card", "text_ref": "用这个技能时", "columns": 1, "item_cards": true, "inner_columns": 1, "icons": "auto", "illustration": "left_inside"}
+    ]
+  },
+  {
+    "screen": "skill-cockpit-04",
+    "orientation": "h",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "边界", "align": "center", "size": "large"},
+      {"type": "points_card", "text_ref": "管", "columns": 1, "illustration": "left_inside", "icon_position": "header_left", "header_icon": [0]},
+      {"type": "section_heading", "text_ref": "不管，交给谁"},
+      {"type": "table", "text_ref": "这些事"},
+      {"type": "points_card", "text_ref": "不做", "columns": 1, "illustration": "left_inside", "icon_position": "header_left", "header_icon": ["_library/icons/禁止文件.png"]}
+    ],
+    "notes": "照查电脑卡顿第 4 屏：管、不管交给谁（表格）、不做。"
+  },
+  {
+    "screen": "skill-cockpit-04",
+    "orientation": "v",
+    "blocks": [
+      {"type": "chapter_title", "text_ref": "边界", "align": "center", "size": "large"},
+      {"type": "points_card", "text_ref": "管", "columns": 1, "illustration": "left_inside", "icon_position": "header_left", "header_icon": [0]},
+      {"type": "section_heading", "text_ref": "不管，交给谁"},
+      {"type": "table", "text_ref": "这些事"},
+      {"type": "points_card", "text_ref": "不做", "columns": 1, "illustration": "left_inside", "icon_position": "header_left", "header_icon": ["_library/icons/禁止文件.png"]}
+    ]
+  }
+]

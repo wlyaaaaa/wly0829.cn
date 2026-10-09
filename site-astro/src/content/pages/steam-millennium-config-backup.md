@@ -606,8 +606,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
-  "sha256": "674e8b199941c4ab4be9df79f953ba6491404cb85058d8bc5b45f6a35fbfbced",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "737a689a30e03794b0c8f88cfdd8c7d04963ac2dc82f53e2c9599ef80271958f",
+  "converted_at_beijing": "2026-10-10T06:26:50+08:00"
  }
 }
 ---
@@ -689,9 +689,41 @@
      "illustration": "none",
      "connector": "none",
      "text_ref": "Steam 外观备份",
-     "row": "hero",
      "inline_row": "steam-brand-title",
      "inline_width": "1fr"
+    },
+    {
+     "type": "live_strip",
+     "align": "left",
+     "size": "medium",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "现在",
+     "empty_slots": 1,
+     "slot_width": "55%",
+     "button_position": "right",
+     "frame_mode": "plain"
+    },
+    {
+     "type": "stat_card",
+     "align": "left",
+     "size": "medium",
+     "columns": 4,
+     "illustration": "top_inside",
+     "connector": "none",
+     "text_ref": "20 个文件",
+     "icons": "auto",
+     "item_count": 4
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "size": "small",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "截至 2026 年"
     },
     {
      "type": "section_heading",
@@ -736,39 +768,6 @@
      "row": "hero"
     },
     {
-     "type": "stat_card",
-     "align": "left",
-     "size": "medium",
-     "columns": 4,
-     "illustration": "top_inside",
-     "connector": "none",
-     "text_ref": "20 个文件",
-     "icons": "auto",
-     "item_count": 4
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "size": "small",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "截至 2026 年"
-    },
-    {
-     "type": "live_strip",
-     "align": "left",
-     "size": "medium",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "现在",
-     "empty_slots": 1,
-     "slot_width": "55%",
-     "button_position": "right",
-     "frame_mode": "plain"
-    },
-    {
      "type": "action_button",
      "align": "left",
      "size": "medium",
@@ -805,8 +804,40 @@
      "text_ref": "Steam 外观备份",
      "inline_row": "steam-brand-title",
      "inline_width": "1fr",
-     "row": "steam-brand-title",
      "row_v": true
+    },
+    {
+     "type": "live_strip",
+     "align": "left",
+     "size": "medium",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "现在",
+     "empty_slots": 1,
+     "button_position": "below",
+     "frame_mode": "plain"
+    },
+    {
+     "type": "stat_card",
+     "align": "left",
+     "size": "medium",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "20 个文件",
+     "columns_v": 1,
+     "icons": "none",
+     "item_count": 4
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "size": "small",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "截至 2026 年"
     },
     {
      "type": "section_heading",
@@ -844,39 +875,6 @@
      "illustration": "none",
      "connector": "none",
      "text_ref": "截图说明："
-    },
-    {
-     "type": "stat_card",
-     "align": "left",
-     "size": "medium",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "20 个文件",
-     "columns_v": 1,
-     "icons": "none",
-     "item_count": 4
-    },
-    {
-     "type": "prose",
-     "align": "left",
-     "size": "small",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "截至 2026 年"
-    },
-    {
-     "type": "live_strip",
-     "align": "left",
-     "size": "medium",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "现在",
-     "empty_slots": 1,
-     "button_position": "below",
-     "frame_mode": "plain"
     },
     {
      "type": "action_button",
@@ -1003,12 +1001,12 @@
 
 截图说明：Adwaita 主题作者随主题附带的官方样张（浅色）。我用的就是这套主题，但强调色和配色是自己调的绿；图里的游戏列表是作者的示例，不是我的。
 
-20 个文件｜一份备份：2 个能装回的设置文件，加 18 个插件和主题清单，共 52 KB
-3 处｜E 盘项目文件夹、G 盘、外接 H 盘各一份，每份都逐个文件比对指纹
-5 个插件 · 2 套主题｜清单记下名字、版本和上游提交号；正在用其中 3 个插件、1 套主题
-每周一 10:30｜自动存一次（北京时间）；9 月 28 日这次 20 个文件全部核对通过
+20 个文件｜一份备份：能装回的设置，加上插件和主题清单，一共 52 KB
+3 处｜E 盘项目文件夹、G 盘、外接 H 盘各存一份，逐个文件比对指纹，三处现在一字不差
+5 个插件｜连同 2 套主题记进清单：名字、版本、从哪下的；平时开着其中 3 个
+每周一 10:30｜自动存一次（北京时间）；最近一次是 10 月 5 日，全部文件核对通过
 
-截至 2026 年 9 月 28 日 21:52（北京时间）
+截至 2026 年 10 月 10 日 05:20（北京时间）
 
 现在　〔现在正不正常 → 驾驶舱〕
 
@@ -2246,7 +2244,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
 | 外接 H 盘 | H:\80_自动备份区\SteamMillennium | 和 G 一样，由电脑配置与恢复同步 |
 | GitHub（公开） | 本仓库 | 手动提交，现在停在 9 月 18 日那一代 |
 
-**代码**｜Python 核心 1,056 行，只用标准库；PowerShell 入口 4 个共 347 行；隐藏启动用的 VBS 2 个；测试 55 项加 Windows 检查 11 项，9 月 18 日全过。
+**代码**｜Python 核心 1,212 行，另有一个 74 行的读文件告警模块，都只用标准库；PowerShell 入口 4 个共 339 行；隐藏启动用的 VBS 2 个。
+**测试**｜Python 测试 63 项，10 月 10 日重跑全过；另有 Windows 检查 11 项，最近一次全过是 9 月 18 日。
 
 ::screen{#steam-millennium-config-backup-06 section="tech"}
 
@@ -4120,4 +4119,4 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
 **9 月 28 日**｜最近一次自动存：Millennium 升到 3.5.0，存了新的一代（还没推到 GitHub）。
 **9 月 29 日**｜自查改成按同一时刻核对，不再因电脑时区误报；重装任务固定北京周一 10:30，也不再装回开始菜单入口。
 
-**现在**｜18 个提交。属于“偶尔用”的项目：出了报错才修，不再加功能（〔约法 L25〕）。
+**现在**｜20 个提交（截至 10 月 10 日）。属于“偶尔用”的项目：出了报错才修，不再加功能（〔约法 L25〕）。

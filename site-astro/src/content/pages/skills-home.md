@@ -151,13 +151,14 @@
     {
      "id": "g-pc",
      "name": "电脑、网页和账号",
-     "line": "网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、把大文件放云上省流量。",
+     "line": "网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、看驾驶舱、把大文件放云上省流量。",
      "screen": "skills-home-04",
      "members": [
       "/skills/browser-control-continuity/",
       "/skills/google-workspace-direct/",
       "/skills/tailscale-safe-exposure/",
       "/skills/timeaudit-diagnostics/",
+      "/skills/cockpit/",
       "/skills/cloud-asset-channel/"
      ]
     },
@@ -175,10 +176,10 @@
    "numbers": [
     {
      "id": "n-skills",
-     "text": "26 个技能",
+     "text": "27 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-02",
-     "source": "E208 安装清单 config/personal-skill-supply.json 28 项全部 install=true，减去本人定不上网站的 2 项（工作副本 2a0fda9 现数）；即 b1 下在用技能页 25 个加新增的 skill-cloud-asset-channel",
+     "as_of": "2026-10-10",
+     "source": "网站技能子页 kind=skill 共 27 个：原 26 个加新增 skill-cockpit；control-plane-doctor、file-intake-router 两页改成去向页不计入。与本机 personal-skill-supply.json 29 个 install=true 减去不上网站的 2 个一致",
      "screens": [
       "skills-home-01"
      ]
@@ -197,8 +198,8 @@
      "id": "n-entry",
      "text": "18 个",
      "meaning": "是某个项目入口的技能数（卡上带“属于”标签）",
-     "as_of": "2026-10-02",
-     "source": "本页脚本 ENTRY；判据和逐个出处见 facts.md 第 3 节",
+     "as_of": "2026-10-10",
+     "source": "本页卡片带“属于”的个数；新增的看驾驶舱不是项目入口（驾驶舱是网站自己的页），仍为 18",
      "screens": [
       "skills-home-01"
      ]
@@ -543,6 +544,11 @@
      "target": "/projects/github-local-index/",
      "screen": "skills-home-04",
      "text": "属于：GitHub 项目总索引"
+    },
+    {
+     "target": "/skills/cockpit/",
+     "screen": "skills-home-04",
+     "text": "看驾驶舱"
     }
    ],
    "live": []
@@ -562,7 +568,8 @@
     "替本人口吻写的句子（第 1 屏）：“技能是 AI 碰到某类事时照着办的说明书。”“直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。”依据写稿说明和基座项目页第 8 屏“AI 按我要做的事挑，我不用记技能名”。",
     "总数 25 只数有技能页、仍在用的技能，页面上不提别的技能（10 月 2 日 control-plane-doctor、file-intake-router 退役，27→25）。",
     "链接字互相包含：第 2 屏〔本地文字识别〕是〔属于：本地文字识别〕的一部分，〔属于：中文语音转写〕是〔中文语音转写技能〕的一部分。拼页程序按图上文字找链接位置时要按整段文字匹配、不能只找包含关系，否则会点错；也可以改这两个技能页的 title 从根上避开。",
-    "E208（10 月 2 日）：新增〔省流量的云端素材〕放“电脑、网页和账号”组；全页卡片排法统一成每排 4 张、同宽同高、最后一排靠左。第 1 屏 27→26、9 月 28 日→10 月 2 日、19→18 已直接写进 text，冻结改稿 fix/page-edits.json 里对应几条要跳过。gen_skills_home.py 没同步，不要重跑。"
+    "E208（10 月 2 日）：新增〔省流量的云端素材〕放“电脑、网页和账号”组；全页卡片排法统一成每排 4 张、同宽同高、最后一排靠左。第 1 屏 27→26、9 月 28 日→10 月 2 日、19→18 已直接写进 text，冻结改稿 fix/page-edits.json 里对应几条要跳过。gen_skills_home.py 没同步，不要重跑。",
+    "10 月 10 日：新增〔看驾驶舱〕卡放在“电脑、网页和账号”组，排在查电脑卡顿之后、省流量的云端素材之前；它不是项目入口，不带“属于”。layout.json 里还没有这张卡的图标映射，需要版式那边补。"
    ],
    "bar_labels": [
     "技能是什么",
@@ -578,8 +585,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "1152ac1729bb56f9cd2d616d443d05746165a10bc2a49360ebf67cc0a16b74c9",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "e4b1c92495508210cd51cca357e1ffdc32eff038d495454170f34b7de6a80059",
+  "converted_at_beijing": "2026-10-10T06:32:57+08:00"
  }
 }
 ---
@@ -592,8 +599,8 @@
   "id": "skills-home-01",
   "section": "top",
   "title": "技能是什么、怎么用",
-  "scene": "横版 16:9。风格照规则总页和已通过的规则原文样张 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png（白底、纯绿、深蓝灰正文、细浅绿描边圆角卡），毛笔标题写法和规则总页开头一屏相同。左右分栏。左边约占 55%：左上毛笔艺术字大标题“技能”，下面一道绿色笔刷线；笔刷线下粗体深绿一句（技能是……说明书。），再下面一段深蓝灰常规字；然后一张浅绿底圆角小卡写“怎么用”那一句，“怎么用”粗体深绿；小卡下面一个醒目的大数字块：“26 个技能”里的“26”用很大的深绿数字，“个技能”粗体，后面灰绿色小字写截至日期和分组数；数字块下面一行小字说明“属于：项目名”标签，其中“属于：项目名”画成和后面卡片上一样的浅绿小标签样式（不是链接）。右边约占 45% 画一幅水彩插画：一张木书桌上立着一排 26 本薄薄的小手册（书脊从深绿到浅绿渐变，书脊不写字），一只小机器人助手正从中抽出一本翻开来看，机器人胸前一左一右两枚小圆徽章：Claude 的橙色星芒标志和 OpenAI 的黑色花结标志（代表 Codex）；书桌另一侧飘着一个空白的对话气泡（表示我说了一句话，气泡里不写字）；周围几片水彩绿叶。插画里不出现任何字。整屏最下面一条贯通全宽的细长浅绿圆角横条，里面是“技能怎么写……项目里讲。”那句，行末〔技能怎么装到各个 AI → 基座〕画成白底细绿描边的圆角按钮。",
-  "portrait": "竖版 9:16，字完全一样，从上往下：毛笔大标题“技能”和笔刷线；粗体一句；说明段；“怎么用”小卡；大数字块“26 个技能”和截至日期；“属于”标签说明；水彩插画（书桌、一排小手册、抽书的机器人和两枚徽章、空白气泡）缩成宽约 75% 居中；最下面横条，文字在上，〔技能怎么装到各个 AI → 基座〕按钮换到文字下面单独一行居中。",
+  "scene": "横版 16:9。风格照规则总页和已通过的规则原文样张 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png（白底、纯绿、深蓝灰正文、细浅绿描边圆角卡），毛笔标题写法和规则总页开头一屏相同。左右分栏。左边约占 55%：左上毛笔艺术字大标题“技能”，下面一道绿色笔刷线；笔刷线下粗体深绿一句（技能是……说明书。），再下面一段深蓝灰常规字；然后一张浅绿底圆角小卡写“怎么用”那一句，“怎么用”粗体深绿；小卡下面一个醒目的大数字块：“27 个技能”里的“27”用很大的深绿数字，“个技能”粗体，后面灰绿色小字写截至日期和分组数；数字块下面一行小字说明“属于：项目名”标签，其中“属于：项目名”画成和后面卡片上一样的浅绿小标签样式（不是链接）。右边约占 45% 画一幅水彩插画：一张木书桌上立着一排 27 本薄薄的小手册（书脊从深绿到浅绿渐变，书脊不写字），一只小机器人助手正从中抽出一本翻开来看，机器人胸前一左一右两枚小圆徽章：Claude 的橙色星芒标志和 OpenAI 的黑色花结标志（代表 Codex）；书桌另一侧飘着一个空白的对话气泡（表示我说了一句话，气泡里不写字）；周围几片水彩绿叶。插画里不出现任何字。整屏最下面一条贯通全宽的细长浅绿圆角横条，里面是“技能怎么写……项目里讲。”那句，行末〔技能怎么装到各个 AI → 基座〕画成白底细绿描边的圆角按钮。",
+  "portrait": "竖版 9:16，字完全一样，从上往下：毛笔大标题“技能”和笔刷线；粗体一句；说明段；“怎么用”小卡；大数字块“27 个技能”和截至日期；“属于”标签说明；水彩插画（书桌、一排小手册、抽书的机器人和两枚徽章、空白气泡）缩成宽约 75% 居中；最下面横条，文字在上，〔技能怎么装到各个 AI → 基座〕按钮换到文字下面单独一行居中。",
   "links": [
    {
     "text": "技能怎么装到各个 AI → 基座",
@@ -662,7 +669,7 @@
      "connector": "none",
      "row": "summary",
      "width": "48%",
-     "text_ref": "26 个技能",
+     "text_ref": "27 个技能",
      "row_equal_height": true
     },
     {
@@ -737,7 +744,7 @@
       "_library/icons/打勾清单.png"
      ],
      "connector": "none",
-     "text_ref": "26 个技能"
+     "text_ref": "27 个技能"
     },
     {
      "type": "content_card",
@@ -876,7 +883,7 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**26 个技能**　截至 10 月 2 日，按用途分 7 组。
+**27 个技能**　截至 10 月 10 日，按用途分 7 组。
 
 卡片右下角带“属于：项目名”的 18 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 
@@ -1823,6 +1830,10 @@
     "href": "/projects/timeaudit/"
    },
    {
+    "text": "看驾驶舱",
+    "href": "/skills/cockpit/"
+   },
+   {
     "text": "省流量的云端素材",
     "href": "/skills/cloud-asset-channel/"
    },
@@ -1919,6 +1930,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -1949,6 +1961,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -1979,6 +1992,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -2015,6 +2029,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -2047,6 +2062,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -2079,6 +2095,7 @@
       "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
       "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
       "查电脑卡顿": "_library/icons/秒表.png",
+      "看驾驶舱": "_library/icons/显示器.png",
       "省流量的云端素材": "_library/icons/云图片.png",
       "改项目前先核对": "_library/icons/GitHub标志.png"
      }
@@ -2200,6 +2217,21 @@
     "h",
     "v"
    ],
+   "asset": "_library/icons/显示器.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "skills-home-04-icon-cockpit",
+   "source_phrase": "一台显示器：看驾驶舱（新加的卡，素材库已有图标）",
+   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 9,
+   "orientations": [
+    "h",
+    "v"
+   ],
    "asset": "_library/icons/云图片.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
@@ -2210,7 +2242,7 @@
   },
   {
    "role": "icon",
-   "slot_ordinal": 9,
+   "slot_ordinal": 10,
    "orientations": [
     "h",
     "v"
@@ -2287,12 +2319,13 @@
 - 〔加密文件〕点名的文件，交给密码中心加密保管　〔属于：密码中心〕
 - 〔加密库操作〕让 AI 管本地加密库，密码只在本机窗口里输　〔属于：本地加密库〕
 
-**电脑、网页和账号**　网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、把大文件放云上省流量。
+**电脑、网页和账号**　网页上办事、查邮箱云盘、开远程连接、查电脑卡顿、看驾驶舱、把大文件放云上省流量。
 
 - 〔网页上的事接着办〕网页卡住、要登录时，接着把事办完。
 - 〔邮件、云盘和待办〕查邮件、找云盘文件、记待办，也能等验证码。　〔属于：电脑配置与恢复〕
 - 〔远程只让自己连〕开个服务给自己的设备用，外人连不上。
 - 〔查电脑卡顿〕说一句“刚才卡了”，AI 按时间对齐证据去查。　〔属于：电脑使用与性能记录〕
+- 〔看驾驶舱〕问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听。
 - 〔省流量的云端素材〕AI 要反复读的大文件，云上放一份，AI 在云里读。
 
 **维护代码**　改代码之前，先把仓库的事实核对清楚再动手。

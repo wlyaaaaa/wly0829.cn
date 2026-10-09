@@ -776,7 +776,7 @@
  "source": {
   "page": "sources/pages/github-local-index/page.json",
   "sha256": "862beec5c9c0e046b6f8837f132ca71fda48c799de54ba1c6e2ad0c00baaa904",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
  }
 }
 ---
@@ -829,26 +829,18 @@
      "type": "chapter_title",
      "text_ref": "GitHub项目总索引",
      "align": "center",
-     "size": "large",
-     "row": "hero",
-     "width": "55%"
+     "size": "large"
     },
     {
      "type": "prose",
      "text_ref": "找全代码仓库，查清副本和同步情况。",
      "size": "large",
-     "bold": true,
-     "row": "hero"
+     "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
-     "row": "hero"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
+     "type": "live_strip",
+     "text_ref": "现在基座体检各项目和GitHub同步没有",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -862,9 +854,16 @@
      "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在基座体检各项目和GitHub同步没有",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
+     "row": "hero",
+     "width": "55%",
+     "row_valign": "center"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "action_button",
@@ -917,11 +916,9 @@
      "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在"
-    },
-    {
-     "type": "illustration"
+     "type": "live_strip",
+     "text_ref": "现在基座体检各项目和GitHub同步没有",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -935,9 +932,11 @@
      "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在基座体检各项目和GitHub同步没有",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在"
+    },
+    {
+     "type": "illustration"
     },
     {
      "type": "action_button",

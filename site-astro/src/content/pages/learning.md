@@ -262,8 +262,8 @@
      "id": "n-lessons",
      "text": "28 课",
      "meaning": "学习路线的课数（A 6、B 3、C 5、D 7、M 3、P 4），不含更早的第 01–06 篇",
-     "as_of": "2026-09-28",
-     "source": "学习进度.json lessons 共 28 项（updated_at 2026-09-28T05:00+08:00）",
+     "as_of": "2026-10-10",
+     "source": "学习进度.json lessons 共 28 项（updated_at 2026-10-02T06:45+08:00，10 月 10 日读）",
      "screens": [
       "learning-01",
       "learning-05",
@@ -272,20 +272,20 @@
     },
     {
      "id": "n-lectures",
-     "text": "28 篇讲义，约 46 万字",
+     "text": "28 篇讲义",
      "meaning": "第 07–34 篇讲义草稿的字符数，含代码、表格和标点",
-     "as_of": "2026-09-28",
-     "source": "讲义/07–34 共 28 个文件 wc -m = 459,273",
+     "as_of": "2026-10-10",
+     "source": "讲义目录第 07–34 篇编号齐全（10 月 10 日列目录）；字数不再上首屏：讲义已另出网页版，9 月 28 日的约 46 万字口径对不上现在的文件，演进和亮点里保留当时的事实",
      "screens": [
       "learning-01"
      ]
     },
     {
      "id": "n-exercises",
-     "text": "13 组练习，约 1.25 万行代码",
+     "text": "13 组练习",
      "meaning": "练习/代码 下的目录数；.py 与 .java 文件总行数",
-     "as_of": "2026-09-28",
-     "source": "ls 练习/代码 = 13；逐目录 wc -l 合计 12,513",
+     "as_of": "2026-10-10",
+     "source": "练习/代码 下 13 个目录（10 月 10 日列目录）；行数不再上首屏，9 月 28 日为约 1.25 万行",
      "screens": [
       "learning-01",
       "learning-05",
@@ -544,8 +544,8 @@
  },
  "source": {
   "page": "sources/pages/learning/page.json",
-  "sha256": "92e0270a080bc548ff9845afe1c2a1aa83692a012b3ff3fa2e8c87bc2f126936",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "e34c22939d152680d729fe42729f96c59055c80e639999fbb03df1e48387103e",
+  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
  }
 }
 ---
@@ -591,26 +591,18 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "48%",
      "text_ref": "学习方法"
     },
     {
      "type": "prose",
      "text_ref": "让 AI 当老师，按一条路线把 AI 应用学明白。",
      "size": "large",
-     "bold": true,
-     "row": "hero"
+     "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、",
-     "row": "hero"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%"
+     "type": "live_strip",
+     "text_ref": "现在",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -626,9 +618,16 @@
      "text_ref": "数字截至"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、",
+     "row": "hero",
+     "width": "48%",
+     "row_valign": "center"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "action_button",
@@ -653,11 +652,9 @@
      "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、"
-    },
-    {
-     "type": "illustration"
+     "type": "live_strip",
+     "text_ref": "现在",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -675,9 +672,11 @@
      "text_ref": "数字截至"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、"
+    },
+    {
+     "type": "illustration"
     },
     {
      "type": "action_button",
@@ -797,13 +796,13 @@
 AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、写讲义、上课、判对错；GPT-6 Astra Max 搭练习、复核讲义。路线、讲义、练习、进度和我的反馈都存在文件里，换个对话、换个老师，也从停下的地方接着学。
 
 **28 课**｜一条路线分六段：模型调用 → 做成可用 → 知识问答 → 工具与 Agent → 模型原理 → 产品判断
-**28 篇讲义**｜开课前全部写好草稿，约 46 万字（含代码和表格）
-**13 组练习**｜Python 和 Java，约 1.25 万行代码
-**306 项测试**｜练习的离线测试，开课前终审时全部通过
+**28 篇讲义**｜第 07–34 篇，开课前全部写好草稿（含代码和表格）
+**13 组练习**｜Python 和 Java 的练习代码
+**306 项测试**｜练习的离线测试，9 月 28 日开课前终审时全部通过
 
-数字截至 9 月 28 日
+数字截至 10 月 10 日
 
-现在　学完几课　近 7 天　练习　〔看电脑和项目状态 → 驾驶舱〕
+现在　学完几课　近一周　练习　〔看电脑和项目状态 → 驾驶舱〕
 
 〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕
 
