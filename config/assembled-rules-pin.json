@@ -1,19 +1,19 @@
 {
   "schema": "wly.assembled-rules-pin.v2",
-  "version": "E229",
-  "release_commit": "058f7fcaa51317210ff781e753987516261a3617",
-  "release_record_sha256": "36cf15e184bd77440a9d48eb9a84d610fcaf9b0a7493639d62a54eb1ab175dd5",
-  "ruleset_sha256": "8d6c58386d967e052ef9f064685e41ab5f3213771d3a868b416240de92ec38a8",
+  "version": "E230",
+  "release_commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+  "release_record_sha256": "da212fc3acc98e0e5d5229add74b88d8339a8dc58966b3e1038d0c289e1e55d7",
+  "ruleset_sha256": "16b62ace3b9b567358b60abc212b3e129f6bb61231880a5f8627aeaddfae44b6",
   "documents": {
     "AGENTS.md": {
-      "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
-      "source_bytes": 19045,
-      "public_source_sha256": "acc21004c81a24ce05199978948858429c1c53f57c017dd3f2c8a5cc09451291",
-      "rendered_text_sha256": "9ae12c97a45ee69976d81fe1be2499391ca8b3c8a4ace2331c6ff34e772b9c1c",
-      "complete_rendered_text_sha256": "db6704f3a2717a3b25de7147d4c610fbf0e0d74e1b7a81fc7969dca368889e3c",
+      "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
+      "source_bytes": 19247,
+      "public_source_sha256": "517fa2ce84712a6c16a660b1852cf2e0d3240e4abd65a0a3e64973208426ba2f",
+      "rendered_text_sha256": "eb8f0186d84239dd73332d5e6832709b506216a2260e66ae5255662ed2d39e1a",
+      "complete_rendered_text_sha256": "ad1c888370d5317b8a1dd78b4049f9a3ec1c5f21f01de633c6205dc0cbec03d7",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.authorization.md": {
       "source_sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
@@ -23,27 +23,27 @@
       "complete_rendered_text_sha256": "5a7f086dd639ace4dc11b069b9f8eb505a75ae80c91440c8260db31f452c8632",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.capabilities-runtime.md": {
-      "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
-      "source_bytes": 21734,
-      "public_source_sha256": "7f365f33b6c653cd21d7629de0a7adbcae987d14719a9abe70e1b836ada3741a",
-      "rendered_text_sha256": "708c5579d3a1b878e04c20c3d72855e858375d4e873bc0bcff3d410b2b85dd19",
-      "complete_rendered_text_sha256": "708c5579d3a1b878e04c20c3d72855e858375d4e873bc0bcff3d410b2b85dd19",
+      "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+      "source_bytes": 22356,
+      "public_source_sha256": "355bd6b1751f0a584fdd164f0260a73aee8e7f27f3af15373c76a15495ca0af0",
+      "rendered_text_sha256": "f49a679034bda3fce22a1a035de88e88051a01fe7d83b97d23bec869cd8bc8c6",
+      "complete_rendered_text_sha256": "f49a679034bda3fce22a1a035de88e88051a01fe7d83b97d23bec869cd8bc8c6",
       "approved_omitted_count": 2,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.claude-adapter.md": {
-      "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
-      "source_bytes": 28338,
-      "public_source_sha256": "271d8b009067a39dd5d609c92e7f54ea09d6f4543d8ed7b19f2ba7aa3c94f98b",
-      "rendered_text_sha256": "decb4f32dfbd7396ad056efe8725e76bac816264db967e57674aee262eb567eb",
-      "complete_rendered_text_sha256": "decb4f32dfbd7396ad056efe8725e76bac816264db967e57674aee262eb567eb",
+      "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
+      "source_bytes": 28725,
+      "public_source_sha256": "5178ddf436f04eed9e1654df8c1000a4c0d734c8fc6844b0da9d26b60bb28a18",
+      "rendered_text_sha256": "fbb62b0c76638adcaf04078792d85d1d4f99e211893ed068ca3bf8183bb4d33e",
+      "complete_rendered_text_sha256": "fbb62b0c76638adcaf04078792d85d1d4f99e211893ed068ca3bf8183bb4d33e",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.codex-adapter.md": {
       "source_sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
@@ -53,17 +53,17 @@
       "complete_rendered_text_sha256": "569f7f4e254938c2b59d796ff10e7e72b1277ab161c11514a820f281f0473aef",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.context-sources.md": {
-      "source_sha256": "c1a1d712102c3eb46ab993c673d782ff6b8740ca6e62b1e4f56f659958231c49",
-      "source_bytes": 14744,
-      "public_source_sha256": "ad706928ae0f1d2dad4b23115919120e9c2185dc19d662b6e52425568822a4f3",
-      "rendered_text_sha256": "8e8d9c1f9dca8866fb5f263a208b67702607b3d815479fd6844caff394b96899",
-      "complete_rendered_text_sha256": "8e8d9c1f9dca8866fb5f263a208b67702607b3d815479fd6844caff394b96899",
+      "source_sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
+      "source_bytes": 14814,
+      "public_source_sha256": "f8e1aed01fce112c25930f18f81d419532482e4d59d33681073cd0f14c994cd2",
+      "rendered_text_sha256": "af9329534fbfab9a08df9b4e74debd9e21d332df5ab5363080d2affcfcb33548",
+      "complete_rendered_text_sha256": "af9329534fbfab9a08df9b4e74debd9e21d332df5ab5363080d2affcfcb33548",
       "approved_omitted_count": 4,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.engineering-delivery.md": {
       "source_sha256": "052a2dbbb2d00efacd5615080f17945cb73a42d0d00f0ac575655ce60f5f7ca2",
@@ -73,7 +73,7 @@
       "complete_rendered_text_sha256": "62d61072ba0905fc47977e8d03bc42f0577cda1e237e05103c557a9d48bf01d6",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.execution-coordination.md": {
       "source_sha256": "abb1c015992a910ce19dcbefe1cfc2b2f5e6da22fe0840f50d8d1067a3f31858",
@@ -83,7 +83,7 @@
       "complete_rendered_text_sha256": "f092feb1f2263b3dd64459060b03af2965a15977aa7c2070b9e8c721ec4d1ffe",
       "approved_omitted_count": 1,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.privacy-data.md": {
       "source_sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
@@ -93,7 +93,7 @@
       "complete_rendered_text_sha256": "3614364cc16e5630fdf85094bb0b3607a22b416be2609769125125b17d3f239f",
       "approved_omitted_count": 3,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.protected-actions.md": {
       "source_sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
@@ -103,7 +103,7 @@
       "complete_rendered_text_sha256": "7527a1de077949fd68050166d4288f83ff944b64e3a5ad9cc24b673c0236a5aa",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     },
     "docs/contracts/agents.rule-release.md": {
       "source_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
@@ -113,17 +113,17 @@
       "complete_rendered_text_sha256": "4f5c765e102801abc45b4e9e22f448403282e22448cfba6bc63feaa810fef98e",
       "approved_omitted_count": 0,
       "public_projection": "approved-source-omissions-and-local-literals-v1",
-      "basis": "独立核验 E229 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
+      "basis": "独立核验 E230 清单中的完整来源；从固定来源及既有批准范围生成摘要，未读取候选正文"
     }
   },
   "excerpt_contract": {
-    "id": "e229-original-ranges-v1",
+    "id": "e230-original-ranges-v1",
     "excerpts": {
       "charter/charter-02": {
         "page": "charter",
         "screen": "charter-02",
         "relative_file": "AGENTS.md",
-        "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
+        "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
         "selection": {
           "articles": [
             1,
@@ -147,7 +147,7 @@
         "page": "charter",
         "screen": "charter-03",
         "relative_file": "AGENTS.md",
-        "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
+        "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
         "selection": {
           "articles": [
             11,
@@ -169,7 +169,7 @@
         "page": "charter",
         "screen": "charter-04",
         "relative_file": "AGENTS.md",
-        "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
+        "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
         "selection": {
           "articles": [
             18,
@@ -193,7 +193,7 @@
         "page": "charter",
         "screen": "charter-05",
         "relative_file": "AGENTS.md",
-        "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
+        "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
         "selection": {
           "articles": [
             24,
@@ -202,8 +202,8 @@
           "approved_omissions": []
         },
         "approved_omitted_count": 0,
-        "rendered_text_sha256": "12acbe10c0e782c79d0b78c896aa50e04cd7b92bb1d32dacdae3fd0d9f8a3195",
-        "markdown_sha256": "1f91c543e635454e99e61525a51b7bff41612611701dc4f3b90b208be7d80067",
+        "rendered_text_sha256": "c8f9ad7b4b90fd69c54363eab7690808c12a7fc1c829614f9b515f280ed7dd5c",
+        "markdown_sha256": "6b1ca51378edc021eb36dd3d29d7d0575f196a60669d851e2256259990b91d00",
         "heading_aliases": [
           "八、项目与维护",
           "八项目与维护",
@@ -272,7 +272,7 @@
         "page": "rule-capabilities-runtime",
         "screen": "rule-capabilities-runtime-11",
         "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-        "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
+        "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
         "selection": {
           "from": null,
           "to": "## 常用入口",
@@ -290,7 +290,7 @@
         "page": "rule-capabilities-runtime",
         "screen": "rule-capabilities-runtime-12",
         "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-        "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
+        "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
         "selection": {
           "from": "## 常用入口",
           "to": "## 浏览器",
@@ -311,7 +311,7 @@
         "page": "rule-capabilities-runtime",
         "screen": "rule-capabilities-runtime-13",
         "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-        "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
+        "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
         "selection": {
           "from": "## 浏览器",
           "to": "## 汇报、网站和自动运行的东西",
@@ -328,15 +328,15 @@
         "page": "rule-capabilities-runtime",
         "screen": "rule-capabilities-runtime-14",
         "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-        "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
+        "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
         "selection": {
           "from": "## 汇报、网站和自动运行的东西",
           "to": "## 安装位置、配置和本机约定",
           "approved_omissions": []
         },
         "approved_omitted_count": 0,
-        "rendered_text_sha256": "d4ac598482d53bb02ce76ecc8477d2d7bef63ff18e397793caa0a4fbac4e0d13",
-        "markdown_sha256": "5e77b5c0c91ec1da0fc869b319cde1c8fba49ef8ff0884636f4d9ec5e383ce79",
+        "rendered_text_sha256": "8d8625ee4514873111e9a280d75a099751203c8732a79e83d1bb5ccb96e1e087",
+        "markdown_sha256": "dc9be3e204e8e46d2c904aec03265691ff42dbee6ab27effc7ad927ec7c0d1d7",
         "heading_aliases": [
           "汇报、网站和自动运行的东西",
           "汇报网站和自动运行的东西",
@@ -347,7 +347,7 @@
         "page": "rule-capabilities-runtime",
         "screen": "rule-capabilities-runtime-15",
         "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-        "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
+        "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
         "selection": {
           "from": "## 安装位置、配置和本机约定",
           "to": null,
@@ -365,7 +365,7 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-11",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": null,
           "to": "## 派子代理：Claude 的不同处",
@@ -385,7 +385,7 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-12",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "## 派子代理：Claude 的不同处",
           "to": "- **从包装器进入。**",
@@ -405,22 +405,22 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-13",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "- **从包装器进入。**",
           "to": "Steer 的长消息可用",
           "approved_omissions": []
         },
         "approved_omitted_count": 0,
-        "rendered_text_sha256": "5a73774151a6de3cd8b44551c65c4fa90c945824bbf7e330476abfa302b7007f",
-        "markdown_sha256": "3a17dee67e22052c9fd6408287a6772a505b39a6b9855bd5ebab02b180d32ab6",
+        "rendered_text_sha256": "d4ea0ae4e3bd9bf77c360f25599f1a1b192792a49b978332a173bc7670910470",
+        "markdown_sha256": "1d04bfd21340325f216fc5c72229d20b91b480b1ad7d00572ab2cfcbba99a129",
         "heading_aliases": []
       },
       "rule-claude-adapter/rule-claude-adapter-14": {
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-14",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "Steer 的长消息可用",
           "to": "- **改了 MCP 之后的验收**",
@@ -437,7 +437,7 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-15",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "- **改了 MCP 之后的验收**",
           "to": "## Hook 和个人资料状态",
@@ -452,7 +452,7 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-16",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "## Hook 和个人资料状态",
           "to": "## 受信任 AI 的其他能力",
@@ -471,7 +471,7 @@
         "page": "rule-claude-adapter",
         "screen": "rule-claude-adapter-17",
         "relative_file": "docs/contracts/agents.claude-adapter.md",
-        "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
+        "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
         "selection": {
           "from": "## 受信任 AI 的其他能力",
           "to": null,
@@ -531,7 +531,7 @@
         "page": "rule-context-sources",
         "screen": "rule-context-sources-08",
         "relative_file": "docs/contracts/agents.context-sources.md",
-        "source_sha256": "c1a1d712102c3eb46ab993c673d782ff6b8740ca6e62b1e4f56f659958231c49",
+        "source_sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
         "selection": {
           "from": null,
           "to": "## 三档维护",
@@ -555,7 +555,7 @@
         "page": "rule-context-sources",
         "screen": "rule-context-sources-09",
         "relative_file": "docs/contracts/agents.context-sources.md",
-        "source_sha256": "c1a1d712102c3eb46ab993c673d782ff6b8740ca6e62b1e4f56f659958231c49",
+        "source_sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
         "selection": {
           "from": "## 三档维护",
           "to": "### 一样东西只存一处",
@@ -574,15 +574,15 @@
         "page": "rule-context-sources",
         "screen": "rule-context-sources-10",
         "relative_file": "docs/contracts/agents.context-sources.md",
-        "source_sha256": "c1a1d712102c3eb46ab993c673d782ff6b8740ca6e62b1e4f56f659958231c49",
+        "source_sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
         "selection": {
           "from": "### 一样东西只存一处",
           "to": null,
           "approved_omissions": []
         },
         "approved_omitted_count": 0,
-        "rendered_text_sha256": "cce6a223169c77bed50a08f873a37a8a708409dbb19b2a3a1563c1718ee198fb",
-        "markdown_sha256": "3b530bbc0f0d44d574422a3705041a9ef25ef75623830b286a20166473507316",
+        "rendered_text_sha256": "1827deaa4a644ea11b04aa5202367e2c857995b381bd6b2d218d6df4b313a8b8",
+        "markdown_sha256": "10584dfa25ed220f4d2f59356b02a159d2bcce2d2925d07e791eb459cc415e80",
         "heading_aliases": [
           "一样东西只存一处",
           "共享经验的落点"
@@ -691,7 +691,7 @@
           "from": "Claude 主持、和 GPT 协作时",
           "to": null,
           "approved_omissions": [
-            "omit:b86a80b6e47a420c1426f29d952d4c2cda1901976449c30d890187d7562bcef1"
+            "omit:14af7f47a7846c9b4c8007345ee111a72709ec2ac3c8742cf9d4d68dc71430f5"
           ]
         },
         "approved_omitted_count": 1,
@@ -861,35 +861,35 @@
     }
   },
   "public_source_resources": {
-    "/_typeset/rule-sources/acc21004c81a24ce05199978948858429c1c53f57c017dd3f2c8a5cc09451291.md": {
+    "/_typeset/rule-sources/517fa2ce84712a6c16a660b1852cf2e0d3240e4abd65a0a3e64973208426ba2f.md": {
       "relative_file": "AGENTS.md",
-      "source_sha256": "799ce7c673c162e317427251bab31a42e646414ced32fc86d7607cb841172d27",
-      "public_source_sha256": "acc21004c81a24ce05199978948858429c1c53f57c017dd3f2c8a5cc09451291"
+      "source_sha256": "d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
+      "public_source_sha256": "517fa2ce84712a6c16a660b1852cf2e0d3240e4abd65a0a3e64973208426ba2f"
     },
     "/_typeset/rule-sources/34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b.md": {
       "relative_file": "docs/contracts/agents.authorization.md",
       "source_sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
       "public_source_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
     },
-    "/_typeset/rule-sources/7f365f33b6c653cd21d7629de0a7adbcae987d14719a9abe70e1b836ada3741a.md": {
+    "/_typeset/rule-sources/355bd6b1751f0a584fdd164f0260a73aee8e7f27f3af15373c76a15495ca0af0.md": {
       "relative_file": "docs/contracts/agents.capabilities-runtime.md",
-      "source_sha256": "482c70c3e8015560fc52c122c2e94e605b55a06ebdcc552aab0ff577cf56dab3",
-      "public_source_sha256": "7f365f33b6c653cd21d7629de0a7adbcae987d14719a9abe70e1b836ada3741a"
+      "source_sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+      "public_source_sha256": "355bd6b1751f0a584fdd164f0260a73aee8e7f27f3af15373c76a15495ca0af0"
     },
-    "/_typeset/rule-sources/271d8b009067a39dd5d609c92e7f54ea09d6f4543d8ed7b19f2ba7aa3c94f98b.md": {
+    "/_typeset/rule-sources/5178ddf436f04eed9e1654df8c1000a4c0d734c8fc6844b0da9d26b60bb28a18.md": {
       "relative_file": "docs/contracts/agents.claude-adapter.md",
-      "source_sha256": "e5b950c5eceed899ef28c1036174c26531e937739416dfd3cd4453b54bb80401",
-      "public_source_sha256": "271d8b009067a39dd5d609c92e7f54ea09d6f4543d8ed7b19f2ba7aa3c94f98b"
+      "source_sha256": "f20931f2c84735a7f962b916b5a64ac84b3c596d9af4c8abdfde13943a0f63cc",
+      "public_source_sha256": "5178ddf436f04eed9e1654df8c1000a4c0d734c8fc6844b0da9d26b60bb28a18"
     },
     "/_typeset/rule-sources/d9465f6c1fdcab327a718cc254b689ad49502df9e5eeeccaa35e6628bcb18a34.md": {
       "relative_file": "docs/contracts/agents.codex-adapter.md",
       "source_sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
       "public_source_sha256": "d9465f6c1fdcab327a718cc254b689ad49502df9e5eeeccaa35e6628bcb18a34"
     },
-    "/_typeset/rule-sources/ad706928ae0f1d2dad4b23115919120e9c2185dc19d662b6e52425568822a4f3.md": {
+    "/_typeset/rule-sources/f8e1aed01fce112c25930f18f81d419532482e4d59d33681073cd0f14c994cd2.md": {
       "relative_file": "docs/contracts/agents.context-sources.md",
-      "source_sha256": "c1a1d712102c3eb46ab993c673d782ff6b8740ca6e62b1e4f56f659958231c49",
-      "public_source_sha256": "ad706928ae0f1d2dad4b23115919120e9c2185dc19d662b6e52425568822a4f3"
+      "source_sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
+      "public_source_sha256": "f8e1aed01fce112c25930f18f81d419532482e4d59d33681073cd0f14c994cd2"
     },
     "/_typeset/rule-sources/5e656083aee74459253b947df9f5bf039c58ab047703c16e15f616e4735aadb6.md": {
       "relative_file": "docs/contracts/agents.engineering-delivery.md",

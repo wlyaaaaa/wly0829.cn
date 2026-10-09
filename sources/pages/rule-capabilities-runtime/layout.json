@@ -682,9 +682,20 @@
         "icons": [
           "_library/icons/日历时钟.png"
         ]
+      },
+      {
+        "type": "points_card",
+        "row": "points",
+        "icons": "auto",
+        "illustration": "left_inside",
+        "text_ref": "要本人做或选的事不会漏",
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/fix-round-2/icon-clean-6a38e42190b5f0212a91.png"
+        ]
       }
     ],
-    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。",
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\nE230 新增第四张卡接在右列“现在的登记”小框之后，沿用同一行组且不另开列。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   {
@@ -725,9 +736,15 @@
         "type": "notice",
         "illustration": "none",
         "text_ref": "现在的登记"
+      },
+      {
+        "type": "points_card",
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "要本人做或选的事不会漏"
       }
     ],
-    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。",
+    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\n2026-10-03 页修复员 page-fixer-01：依据本页 _qa/review 审查意见调整构图；本轮 fields 以实际重出 report/notes 核验，原 notes 是旧规格说明，不作为本轮已完成证据。\nE230 新增第四张卡排在“现在的登记”小框之后，手机阅读顺序到末尾。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-v.png",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-capabilities-runtime\\img\\rule-capabilities-runtime-07-v2.png"
@@ -943,7 +960,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版"
+        "text_ref": "原文 · E230 版"
       },
       {
         "type": "chapter_title",
@@ -986,7 +1003,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版"
+        "text_ref": "原文 · E230 版"
       },
       {
         "type": "chapter_title",
@@ -1024,7 +1041,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1055,7 +1072,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1078,7 +1095,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1107,7 +1124,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1132,7 +1149,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1159,7 +1176,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1182,7 +1199,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
@@ -1205,7 +1222,7 @@
     "blocks": [
       {
         "type": "prose",
-        "text_ref": "原文 · E229 版 · 续"
+        "text_ref": "原文 · E230 版 · 续"
       },
       {
         "type": "source_text_card",
