@@ -54,7 +54,7 @@ function chapter(node) {
   const level = data(node, 'level') === '1' ? 'h1' : 'h2';
   let brushImg = null;
   if (brush) {
-    brushImg = img(brush, title, { loading: 'eager', className: ['brush'] });
+    brushImg = img(brush, title, { loading: 'eager', decoding: 'sync', className: ['brush'] });
     const box = (data(node, 'brushbox') || '').split(',').map(Number);
     const d = dims(brush);
     if (d && box.length === 4 && box.every((v) => Number.isFinite(v))) {
@@ -74,7 +74,8 @@ function chapter(node) {
   let fig = null;
   if (art) {
     const living = data(node, 'living');
-    fig = el('figure', { className: ['chapter-art'], dataArtKey: fileKey(art) }, [img(art, '', { loading: 'eager' })]);
+    // 同步解码：下载完的那一帧就画出整张图，不会出现“占位底撤了、图还没画出来”的一瞬空白
+    fig = el('figure', { className: ['chapter-art'], dataArtKey: fileKey(art) }, [img(art, '', { loading: 'eager', decoding: 'sync' })]);
     if (living) fig.properties.dataLivingConfig = living;
     const aw = data(node, 'artw');
     if (aw && /^[0-9.]+%$/.test(aw)) fig.properties.style = `--artw:${aw}`;
