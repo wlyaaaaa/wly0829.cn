@@ -51,7 +51,7 @@ async def review(page, base, route, width, dom, blocked=None, native_routes=()):
     if not response or response.status >= 400: fail('route-http', route, {'status': response.status if response else None})
     if route in native_routes:
         await page.wait_for_timeout(2000)
-        texts = await page.evaluate("html=>[new DOMParser().parseFromString(html,'text/html'),document].map(d=>{const main=d.querySelector('main')?.cloneNode(true);main?.querySelectorAll('.image-loading-wrap').forEach(e=>e.remove());return (main?.textContent||'').replace(/\\s+/g,' ').trim()})", await response.text() if response else '')
+        texts = await page.evaluate("html=>[new DOMParser().parseFromString(html,'text/html'),document].map(d=>{const main=d.querySelector('main')?.cloneNode(true);main?.querySelectorAll('.image-loading-wrap,noscript').forEach(e=>e.remove());return (main?.textContent||'').replace(/\\s+/g,' ').trim()})", await response.text() if response else '')
         checks['native_readability'] = {'consistent': bool(texts[0]) and texts[0]==texts[1], **{name:{'sha256':hashlib.sha256(value.encode('utf8')).hexdigest(),'characters':len(value)} for name,value in zip(('ssr','browser'),texts)}}
         if not checks['native_readability']['consistent']: fail('native-main-rewritten', 'main', checks['native_readability'])
     await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
