@@ -17,6 +17,7 @@ from checks import audit_pages
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
 NUMBER = re.compile(r"\d[\d,]*(?:\.\d+)?")
+TIERS = (("block", "发布前阻断"), ("advisory", "提醒，不阻断"))
 
 
 def read_text(path):
@@ -92,7 +93,7 @@ def retrieve(method, root):
             raise ValueError("目录可读但没有匹配到代码文件；核对统计路径和范围，不能用零冒充新数")
         value = len(files) if kind == "file_count" else sum(
             read_text(p).count("\n") if method.get("newline_only") else
-            sum(bool(line.strip()) or not method.get("nonempty")
+            sum(bool(line) if method.get("empty_only") else bool(line.strip()) or not method.get("nonempty")
                 for line in read_text(p).splitlines()) for p in files)
     elif kind in ("json", "rules_inspect"):
         value = read_json(resolve(method["path"], root)) if kind == "json" else json.loads(bounded([
@@ -197,6 +198,8 @@ def collect(root, registry, total_seconds=120, item_seconds=6, today=None):
             row.update(status="needs_personal_data", reason="需本人资料：仅登记个数来源，本轮未读取")
         elif not record.get("automatic"):
             row["reason"] = record["retrieve"].get("instructions", "人工口径，未取得新值")
+        elif record.get("scope_status") != "verified":
+            row.update(status="scope_pending", reason=record.get("scope_reason", "统计口径未确认一致，不能算作变化"))
         elif row.get("page_error"):
             row["reason"] = row["page_error"]
         else:
@@ -240,16 +243,18 @@ def task_text(result, registry):
     for title, selected in (
         ("已重取且变化", [r for r in result["rows"] if r["status"] == "changed"]),
         ("未取得新值", [r for r in result["rows"] if r["status"] in ("unavailable", "needs_personal_data")]),
+        ("口径待核，不计入变化", [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]),
         ("超过七天仍待处理", [r for r in result["rows"] if r["overdue"]])):
         lines += [f"## {title}", ""]
         lines += [f"- {r['page']} / {r['screen']}：{r['label']}；页面 {r['old_value']} → 重取 {r['new_value']}；"
-                  f"原日期 {r.get('page_date')}；来源 {r['source_location']}；{r['reason']}" for r in selected] or ["无。"]
+                  f"原日期 {r.get('page_date')}；来源 {r['source_location']}；口径 {r.get('measurement_scope', '')}；{r['reason']}；{r.get('scope_reason', '')}" for r in selected] or ["无。"]
         lines.append("")
     lines += ["## 来源口径与基线缺口", ""]
     lines += [f"- {r['page']} / {r['screen']}：{r['known_gap']}" for r in result["rows"] if r.get("known_gap")]
-    lines += ["", "## 写法检查命中（逐项判断，不自动删改）", ""]
-    lines += [f"- {f['page']} / {f['screen']} / {f['field']}:{f['line']}：{f['message']}；{f['excerpt']}"
-              for f in result["findings"]] or ["无。"]
+    for tier, title in TIERS:
+        lines += ["", f"## {title}", ""]
+        lines += [f"- {f['page']} / {f['screen']} / {f['field']}:{f['line']}：{f['message']}；{f['excerpt']}"
+                  for f in result["findings"] if f["tier"] == tier] or ["无。"]
     return "\n".join(lines)
 
 
@@ -257,20 +262,22 @@ def report_content(result, task):
     changed = [r for r in result["rows"] if r["status"] == "changed"]
     missing = [r for r in result["rows"] if r["status"] in ("unavailable", "needs_personal_data")]
     overdue = [r for r in result["rows"] if r["overdue"]]
+    pending = [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]
     blocks = [{"type": "metrics", "items": [{"value": v, "label": k} for k, v in (
         ("检查页面", result["pages_checked"]), ("登记数字", result["numbers_checked"]),
         ("重取后变化", len(changed)), ("未取得新值", len(missing)), ("写法命中", len(result["findings"])))]}]
-    for title, selected in (("变了哪些", changed), ("取不到哪些", missing), ("超过七天待处理", overdue)):
+    for title, selected in (("同口径的真变化", changed), ("口径待核，不计入变化", pending), ("取不到哪些", missing), ("超过七天待处理", overdue)):
         blocks += [{"type": "heading", "text": title}, {"type": "table", "columns":
             ["页 / 段", "数字含义", "页面旧数", "重取新数", "原日期", "来源与说明"], "rows":
             [[r["page_title"] + " / " + r["screen_title"] + "（" + r["screen"] + "）", r["label"], str(r["old_value"]) if r["old_value"] is not None else "未绑定正文数字",
               str(r["new_value"]) if r["new_value"] is not None else "未取到", r.get("page_date") or "未登记日期",
-              r["source_location"] + "；" + r["reason"] + ("；" + r["known_gap"] if r.get("known_gap") else "")] for r in selected]}] if selected else [
+              r["source_location"] + "；" + r.get("measurement_scope", "") + "；" + r["reason"] + "；" + r.get("scope_reason", "") + ("；" + r["known_gap"] if r.get("known_gap") else "")] for r in selected]}] if selected else [
                 {"type": "heading", "text": title}, {"type": "text", "text": "本次无此项。"}]
-    blocks += [{"type": "heading", "text": "写法检查命中"}, {"type": "table", "columns":
-               ["页 / 段", "位置", "要复核的原因", "原文"], "rows":
-               [[f["page_title"] + " / " + f["screen"], f"{f['field']}:{f['line']}", f["message"], f["excerpt"]]
-                for f in result["findings"]]}] if result["findings"] else []
+    for tier, title in TIERS:
+        found = [f for f in result["findings"] if f["tier"] == tier]
+        blocks += [{"type": "heading", "text": f"{title}（{len(found)}项）"}, {"type": "table", "columns":
+                   ["页 / 段", "位置", "原因", "原文"], "rows":
+                   [[f["page_title"] + " / " + f["screen"], f"{f['field']}:{f['line']}", f["message"], f["excerpt"]] for f in found]}]
     gaps = [r for r in result["rows"] if r.get("known_gap")]
     if gaps:
         blocks += [{"type": "heading", "text": "来源口径与基线缺口"}, {"type": "points", "items":
@@ -279,7 +286,7 @@ def report_content(result, task):
                 [{"type": "markdown", "text": task}], "open": False}]
     return {"title": "个人总看板 · 按需更新结果", "generator": "内容重取程序", "purpose":
             "把页面数字与登记来源对照，指出这次需要更新的句子。", "conclusion":
-            [f"检查于 {result['observed_at']}（北京时间）；{len(changed)} 个数字有变化，{len(overdue)} 个超过七天待处理。",
+            [f"内容基线 {result['baseline']}；检查于 {result['observed_at']}（北京时间）；{len(changed)} 个同口径真变化，{len(pending)} 个口径待核。",
              "本次完成的是只读检查，页面内容尚未修改或发布。私人来源未读取；人工口径与取不到的新数保留原日期。"], "blocks": blocks}
 
 
