@@ -106,7 +106,7 @@ def cockpit_model(root: Path) -> tuple[str, dict]:
         pending = between(text, 'function pendingRows(){', 'function liveValue(')
         displayed = between(text, 'const slotKeys=', 'function slotTime(') + between(text, 'function value(slot){', 'function syncChildren(')
         retained = between(text, 'const cockpitLastValues=', 'function rememberCockpitValues(') if 'const cockpitLastValues=' in text else ''
-        extra = freshness + policy + connection + offline + lamp + pending + displayed + retained
+        extra = freshness + policy + connection + offline + lamp + pending + displayed + retained + between(text, 'const cpGroupSlots=', 'function cpFacts(') + between(text, 'function cpGroups(){', 'function cpItemState(')
     else:
         extra = (between(text, 'const online=', 'const offline=')
                  + between(text, 'const offline=', 'const stateLabel='))
