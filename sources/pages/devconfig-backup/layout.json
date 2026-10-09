@@ -1460,6 +1460,7 @@
         "portrait_columns": 1,
         "illustration": "left_inside",
         "text_ref": "1按清单收集配置66个来源：用户目录19个文件夹、17个单文件，AppData2",
+        "item_spans": {"10": 3},
         "fill_last_row": true
       }
     ],

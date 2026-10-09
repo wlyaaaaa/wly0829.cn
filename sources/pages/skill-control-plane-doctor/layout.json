@@ -26,6 +26,12 @@
         "text_ref": "它做什么"
       },
       {
+        "type": "illustration",
+        "index": 0,
+        "row": "intro",
+        "width": "45%"
+      },
+      {
         "type": "notice",
         "row": "intro",
         "text_ref": "不用点名：问技能装没装好、能不能用"
@@ -34,12 +40,6 @@
         "type": "prose",
         "row": "intro",
         "text_ref": "9月21–28日，AI读这个技能11次，跑检查命令3次（使用小记录）。"
-      },
-      {
-        "type": "illustration",
-        "index": 0,
-        "row": "intro",
-        "width": "45%"
       },
       {
         "type": "dialogue",
