@@ -180,7 +180,8 @@ addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','PageUp','PageDown'
  function preserveReader(){
   if(resizing||innerWidth!==typesetReadingState.width||innerHeight!==typesetReadingState.height)return ()=>{};
   const line=Math.min(180,innerHeight/4),hit=document.elementFromPoint(innerWidth/2,line);
-  const node=hit?.closest('article,[data-row-key]:not(details),.cp-section,.typeset-part,#today-river')||[...document.querySelectorAll('.cp-section,.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
+  const semantic=el=>el?.closest('article,[data-row-key]:not(details)');
+  const node=semantic(hit)||semantic(document.elementFromPoint(innerWidth/4,line))||hit?.closest('.cp-section,.typeset-part,#today-river')||[...document.querySelectorAll('.cp-section,.typeset-part:not([hidden]),#today-river')].find(el=>{const r=el.getBoundingClientRect();return r.top<=line&&r.bottom>line;});
   if(!node)return ()=>{};
   const top=node.getBoundingClientRect().top,host=node.closest('.cp-section,.typeset-part,#today-river'),key=node.dataset.rowKey,input=readerInput,at=performance.now(),revision=typesetReadingState.revision,width=innerWidth,height=innerHeight;
   const place=()=>{const current=node.isConnected?node:key&&host?.querySelector('[data-row-key="'+CSS.escape(key)+'"]');if(!resizing&&revision===typesetReadingState.revision&&width===innerWidth&&height===innerHeight&&input===readerInput&&current?.isConnected){const delta=current.getBoundingClientRect().top-top;if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});}};
