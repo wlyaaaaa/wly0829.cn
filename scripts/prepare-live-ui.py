@@ -123,6 +123,9 @@ def prepare_toc_recipe(site, recipe):
     inputs[str(stylesheet)] = proof(stylesheet.read_bytes())
     css_url = '/_typeset/runtime/toc-consistency-' + inputs[str(stylesheet)]['sha256'][:20] + '.css'
     (site / css_url.lstrip('/')).write_bytes(stylesheet.read_bytes())
+    for page in site.rglob('*.html'):
+        body = page.read_bytes()
+        page.write_bytes(re.sub(rb'(?<=href=")/_typeset/runtime/toc-consistency-[0-9a-f]+\.css(?=")', css_url.encode(), body))
     for row in result['pages']:
         target_page = site / row['page']
         body = target_page.read_bytes().replace(result['assets']['.css'].encode(), css_url.encode())
