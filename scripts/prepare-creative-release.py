@@ -258,7 +258,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
     # update. Reuse the existing navigation contract and retain each original href.
     navigation_pages={rel:hybrid.nav_repair.PageFacts(tail_updates.get(rel,source_path(current,rel).read_bytes()).decode('utf8'),current) for rel in files if rel.endswith('.html')}
     navigation_repairs=[]
-    for rel in ('skills/documents/index.html','skills/pdf/index.html','system/index.html'):
+    for rel in sorted({'skills/documents/index.html','skills/pdf/index.html','system/index.html'} | accepted_files):
         path=current/rel
         if rel not in files:continue
         original=tail_updates.get(rel,source_path(current,rel).read_bytes())
