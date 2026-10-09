@@ -100,3 +100,6 @@
 .motion-off .hotspot:hover,.motion-off .raster-card:hover,.motion-off .shape-card:has(.card-main,.project-main):hover{transform:none}
 .motion-stalled .hero-video{display:none!important}
 .motion-off *,.motion-off *::before,.motion-off *::after{animation:none!important;transition:none!important}
+@media(max-width:767.98px){body[data-page-kind="charter"] .toc{display:block}}
+@media(max-width:767.98px){body[data-page-kind="charter"] .toc-inner.toc-text{display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;white-space:nowrap;height:44px}}
+@media(max-width:767.98px){body[data-page-kind="charter"] .toc-inner.toc-text>a{flex:0 0 auto;min-height:44px;display:inline-flex;align-items:center}}
