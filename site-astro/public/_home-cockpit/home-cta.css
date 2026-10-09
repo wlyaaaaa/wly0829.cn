@@ -1,0 +1,13 @@
+/* 覆盖原画左下CTA形状带（横版约2.4%—47.5%、86%—94%）；原图和page-data不变。 */
+#home-01 .home-hero-cta { position: absolute; left: 2.3%; top: 86%; width: 45.3%; height: 7.95%; min-height: 44px; display: grid; grid-template-columns: 1.32fr 1.08fr .8fr; gap: clamp(6px, .8vw, 12px); background: #fff; z-index: 7; opacity: var(--hero-intro-ui, 1); }
+#home-01 .home-hero-cta a { display: flex; align-items: center; justify-content: center; min-width: 0; padding: 5px 10px; border: 1.5px solid #00964c; border-radius: 999px; background: #fff; color: #007737; font: 700 clamp(14px, 1.15vw, 22px)/1.1 "Sans", sans-serif; text-align: center; text-decoration: none; word-break: keep-all; box-sizing: border-box; }
+#home-01 .home-hero-cta a:first-child { background: #00994c; border-color: #00994c; color: #fff; }
+#home-01 .home-hero-cta a:focus-visible { outline: 3px solid #005d37; outline-offset: 3px; }
+#home-01 .hotspot:is([data-link-id="home-01-link-1-0"], [data-link-id="home-01-link-2-0"]) { display: none !important; }
+@media (orientation: portrait) {
+  #home-01[data-home-cta] { margin-bottom: 140px; }
+  #home-01 .home-hero-cta { left: 4.1%; top: 87.8%; width: 91.8%; height: 146px; grid-template-columns: 1fr; grid-template-rows: repeat(3, 44px); gap: 7px; }
+  #home-01 .home-hero-cta a { font-size: 16px; }
+  #home-01[data-home-cta] .home-time-controls { bottom: -132px !important; }
+}
+@media (max-width: 352px) and (orientation: portrait) { #home-01[data-home-cta] { margin-bottom: 188px; } #home-01[data-home-cta] .home-time-controls { bottom: -180px !important; } }

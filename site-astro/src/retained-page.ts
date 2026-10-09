@@ -1,6 +1,7 @@
 import home from './chrome/retained/home.html?raw';
 import cockpit from './chrome/retained/cockpit.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
+import homeCta from '../public/_home-cockpit/home-cta.css?raw';
 import blocks from './styles/blocks.css?raw';
 
 // 这两页保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
@@ -12,6 +13,11 @@ export function retainedPage(page: 'home' | 'cockpit') {
   // 顶栏使用透明原 WebP；不在它显示后升级到尚未接收完的 AVIF 背景。
   html = html.replace('</head>', `<style data-retained-header>:root{--nav-band-tile:url("${data.shared.art.header_tile}")!important}</style></head>`);
   if (page === 'home') {
+    const buttons = data.screens[0].layouts.h.links.filter((link: any) => link.button);
+    const practice = html.match(/<\/section>\s*<div class="screen-control-row" data-home-practice-link><a href="([^"]+)">([^<]+)<\/a><\/div>/)!;
+    const links = [...buttons.map((link: any) => [link.href, link.text]), [practice[1], practice[2]]];
+    html = html.replace(practice[0], `<nav class="home-hero-cta" aria-label="首页入口">${links.map(([href, text]) => `<a href="${href}">${text}</a>`).join('')}</nav></section>`);
+    html = html.replace('id="home-01"', 'id="home-01" data-home-cta="group"');
     const native = ['h', 'v'].map((orientation) => {
       const sizes = data.screens.map((screen: any) => {
         const [width, height] = screen.layouts[orientation].size;
@@ -25,6 +31,7 @@ export function retainedPage(page: 'home' | 'cockpit') {
   }
   const style = page === 'home' ? 'time-labels.css' : 'cockpit-offline.css';
   html = html.replace('</head>', `<link rel="stylesheet" href="/_home-cockpit/${style}"></head>`);
+  if (page === 'home') html = html.replace('</head>', `<style data-home-cta-layout>${homeCta}</style></head>`);
   if (page === 'cockpit') html = html.replace('</body>', '<script src="/_home-cockpit/cockpit-offline.js" defer></script></body>');
   return html;
 }
