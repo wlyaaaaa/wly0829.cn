@@ -177,7 +177,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/麦克风.png"
         ],
         "text_ref": "口述：按Win+H就说"
@@ -214,7 +214,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/麦克风.png"
         ],
         "text_ref": "口述：按Win+H就说"
@@ -891,8 +891,8 @@
         "columns": 1,
         "columns_v": 3,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
         "row": "design",
@@ -930,8 +930,8 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
         "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"

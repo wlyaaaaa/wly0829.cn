@@ -979,7 +979,7 @@
             "column": 1,
             "row_v": 2,
             "column_v": 1,
-            "icon": "_library/icons/数据库.png"
+            "icon": "_library/hires-icons/数据库.png"
           },
           {
             "id": "file-root",
@@ -988,7 +988,7 @@
             "column": 2,
             "row_v": 3,
             "column_v": 1,
-            "icon": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+            "icon": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
           },
           {
             "id": "phone",
@@ -1092,7 +1092,7 @@
             "column": 1,
             "row_v": 2,
             "column_v": 1,
-            "icon": "_library/icons/数据库.png"
+            "icon": "_library/hires-icons/数据库.png"
           },
           {
             "id": "file-root",
@@ -1101,7 +1101,7 @@
             "column": 2,
             "row_v": 3,
             "column_v": 1,
-            "icon": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+            "icon": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
           },
           {
             "id": "phone",
@@ -1228,7 +1228,7 @@
             "count": 1,
             "row": 2,
             "column": 2,
-            "icon": "_library/icons/数据库.png",
+            "icon": "_library/hires-icons/数据库.png",
             "align_self": "stretch"
           },
           {
@@ -1236,7 +1236,7 @@
             "count": 1,
             "row": 2,
             "column": 3,
-            "icon": "_library/icons/数据库.png",
+            "icon": "_library/hires-icons/数据库.png",
             "align_self": "stretch",
             "row_note_from": "9 月 29 日起",
             "row_note_row": 3

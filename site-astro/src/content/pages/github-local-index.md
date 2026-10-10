@@ -776,7 +776,7 @@
  "source": {
   "page": "sources/pages/github-local-index/page.json",
   "sha256": "01b3019a0d5d0af69c092c44281c35aeac3f4d899e866b1197ef07e4b950baa0",
-  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---

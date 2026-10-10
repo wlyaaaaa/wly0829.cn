@@ -815,8 +815,8 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
         ],
         "row": "reasons",

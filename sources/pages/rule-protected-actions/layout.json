@@ -204,7 +204,7 @@
             "column_span": 1,
             "row_v": 2,
             "column_v": 1,
-            "icon": "_library/icons/打勾清单.png"
+            "icon": "_library/hires-icons/打勾清单.png"
           },
           {
             "id": "executor",
@@ -468,7 +468,7 @@
             "column_span": 1,
             "row_v": 2,
             "column_v": 1,
-            "icon": "_library/icons/打勾清单.png"
+            "icon": "_library/hires-icons/打勾清单.png"
           },
           {
             "id": "executor",

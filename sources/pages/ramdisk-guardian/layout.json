@@ -132,7 +132,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
           "_library/icons/画笔调色板.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "1.平时不用管"
       }
@@ -162,7 +162,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
           "_library/icons/画笔调色板.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "1.平时不用管"
       }
@@ -326,7 +326,7 @@
         "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
         "icons": [
           "_library/icons/秒表.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
         ]
@@ -374,7 +374,7 @@
         "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
         "icons": [
           "_library/icons/秒表.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
         ]
@@ -428,7 +428,7 @@
         "columns": 3,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/版本循环文件.png"
         ],
@@ -473,7 +473,7 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/版本循环文件.png"
         ],
@@ -505,8 +505,8 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/画笔调色板.png",
-          "_library/icons/代码窗口.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "吃过一次亏，从此只放丢得起的。"
       }
@@ -535,8 +535,8 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/画笔调色板.png",
-          "_library/icons/代码窗口.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "吃过一次亏，从此只放丢得起的。"
       }

@@ -181,7 +181,7 @@
  "source": {
   "page": "sources/pages/mcp/page.json",
   "sha256": "374660f1e3de6277d77811c83eecc0c6fd9a68652c33e68bc063ad5854c06000",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:11:28+08:00"
  }
 }
 ---
@@ -1716,6 +1716,21 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
     "h",
     "v"
    ],
+   "asset": "_library/hires-icons/代码窗口.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "代码窗口",
+   "source_phrase": "在主机终端运行：",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
    "asset": "_library/icons/Claude标志.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
@@ -1727,7 +1742,7 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
   },
   {
    "role": "icon",
-   "slot_ordinal": 1,
+   "slot_ordinal": 2,
    "orientations": [
     "h",
     "v"
@@ -1736,7 +1751,7 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
-   "source_phrase": "在主机终端运行：",
+   "source_phrase": "在能交互的终端运行 claude mcp login secondary_laptop，在弹出的浏览器里登录；后台程序做不了这一步。",
    "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
@@ -1755,21 +1770,6 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "sha256": "d5e37ca41dfb31132d6efa380695341971364f891ab4002f15821513909e5c0c",
    "status": "ready",
    "via": "brand"
-  },
-  {
-   "role": "icon",
-   "slot_ordinal": 2,
-   "orientations": [
-    "h",
-    "v"
-   ],
-   "asset": "_library/hires-icons/代码窗口.png",
-   "fallback": false,
-   "semantic_status": "text_inferred_object_unverified",
-   "key": "代码窗口",
-   "source_phrase": "在能交互的终端运行 claude mcp login secondary_laptop，在弹出的浏览器里登录；后台程序做不了这一步。",
-   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
-   "status": "ready"
   },
   {
    "role": "illustration",

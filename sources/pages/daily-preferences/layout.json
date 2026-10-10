@@ -177,7 +177,7 @@
         "connector": "none",
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/icons/共享节点.png"
@@ -222,7 +222,7 @@
         "connector": "none",
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/icons/共享节点.png"
@@ -269,8 +269,8 @@
         "illustration": "top_inside",
         "connector": "none",
         "icons": [
-          "_library/icons/打勾清单.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/气泡.png",
           "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
         ]
@@ -302,8 +302,8 @@
         "connector": "none",
         "columns_v": 1,
         "icons": [
-          "_library/icons/打勾清单.png",
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png"
         ]
       },
       {
@@ -693,7 +693,7 @@
             "column": 2,
             "row_v": 3,
             "column_v": 1,
-            "icon": "_library/icons/数据库.png",
+            "icon": "_library/hires-icons/数据库.png",
             "row_span": 2
           },
           {
@@ -830,7 +830,7 @@
             "column": 3,
             "row_v": 3,
             "column_v": 1,
-            "icon": "_library/icons/数据库.png"
+            "icon": "_library/hires-icons/数据库.png"
           },
           {
             "id": "views",
@@ -1073,7 +1073,7 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ]
       }
     ],
@@ -1131,7 +1131,7 @@
         "illustration": "left_inside",
         "connector": "none",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ]
       }
     ],

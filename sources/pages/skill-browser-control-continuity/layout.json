@@ -322,7 +322,7 @@
         "page_break_after": true,
         "direction": "vertical",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_layout": "inline"
       },
