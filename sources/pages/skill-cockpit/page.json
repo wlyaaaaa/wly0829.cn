@@ -6,6 +6,16 @@
   "url": "/skills/cockpit/",
   "tagline": "问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听；新东西顺手加进去。",
   "status": "",
+  "status_line": {
+    "state": "常用",
+    "last": {
+      "label": "上次使用",
+      "at": "2026-10-08 23:43"
+    },
+    "facts": [],
+    "as_of": "2026-10-10",
+    "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",

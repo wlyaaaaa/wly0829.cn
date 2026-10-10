@@ -6,6 +6,18 @@
   "url": "/skills/report-page/",
   "tagline": "要展开说明的汇报、请我裁定和长回答做成网页，点选就能答复；一两句的回执直接在对话里说。",
   "status": "",
+  "status_line": {
+    "state": "常用",
+    "last": {
+      "label": "上次使用",
+      "at": "2026-10-08 22:58"
+    },
+    "facts": [
+      "近 7 天 AI 用了 53 次"
+    ],
+    "as_of": "2026-10-10",
+    "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
     "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
     "commit_time": "2026-09-28T19:28:54+08:00",
