@@ -6,6 +6,18 @@
   "url": "/projects/daily-preferences/",
   "tagline": "让 AI 了解我的背景和偏好，说错了一纠正就改。",
   "status": "常用",
+  "status_line": {
+    "state": "在用",
+    "last": {
+      "label": "上次使用",
+      "at": "2026-10-07 09:14"
+    },
+    "facts": [
+      "近 7 天 AI 用了 16 次"
+    ],
+    "as_of": "2026-10-10",
+    "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "了解我这个人",

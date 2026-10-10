@@ -6,6 +6,16 @@
   "url": "/projects/work-delivery-copilot/",
   "tagline": "帮我办工作的事，做出有出处、前后一致的交付文件",
   "status": "偶尔用",
+  "status_line": {
+    "state": "偶尔用",
+    "last": {
+      "label": "上次使用",
+      "at": "2026-09-29 01:09"
+    },
+    "facts": [],
+    "as_of": "2026-10-10",
+    "source": "AI 使用记录"
+  },
   "public": false,
   "repo_url": null,
   "capability": "做有出处、跟得上资料变化的工作文件",

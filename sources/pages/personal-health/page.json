@@ -6,6 +6,19 @@
   "url": "/projects/personal-health/",
   "tagline": "结合我的实际情况答健康问题，按需更新穿戴设备数据。",
   "status": "常用",
+  "status_line": {
+    "state": "在用",
+    "last": {
+      "label": "上次运行",
+      "at": "2026-10-07 18:23"
+    },
+    "facts": [
+      "每周自动刷新一次，上次成功",
+      "近 7 天 AI 用了 8 次"
+    ],
+    "as_of": "2026-10-10",
+    "source": "自动任务“PersonalHealth Weekly Refresh”；AI 使用记录"
+  },
   "public": false,
   "repo_url": null,
   "capability": "结合我的身体情况答健康问题",
