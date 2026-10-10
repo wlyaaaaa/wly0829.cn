@@ -4051,7 +4051,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "9 月 29 日　开发配置备份不再带 Antigravity 命令行版的对话、标注和知识；按我的决定，Codex 对话也不随配置包上云盘，只留在 G、H 两块盘",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {

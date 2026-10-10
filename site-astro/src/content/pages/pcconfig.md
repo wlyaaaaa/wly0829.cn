@@ -1828,7 +1828,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "403 GiB　每天 13:30 自动做的加密系统镜像",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2476,7 +2476,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": ":05–12:35　开发配置、Codex 对话、文档、下载备份",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -2506,7 +2506,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": ":30　加密系统镜像（约 25 分钟）",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3014,7 +3014,7 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "盘没接上，不算删了。　盘没插、锁着、读不全，一律不跟着删，只报告。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3874,7 +3874,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "带锁的开机界面",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3934,7 +3934,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "手机和笔记本借电脑上网 两个代理入口，只在 Tailscale 里，不开公网。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3949,7 +3949,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "断线",
    "source_phrase": "代理和断网 登录后自动打开 Clash Verge；突然断网时先查哪一项，只做一项能撤回的恢复。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -4062,7 +4062,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ],
      "row": "daily",
      "width": "50%"
@@ -4122,7 +4122,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ]
     },
     {
@@ -4164,12 +4164,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "开机和桌面\n三块屏幕偶尔只亮一块，每5分钟检查一次，自动恢复。小米妙享没开就补开：手机和电脑互通、短信验证码都靠它。桌面图标平时藏起来，双击桌面空白处显示，30秒后自动再藏。Ctrl+Win+R给OLED主屏盖一层黑幕，串流时远程照样看得到桌面。声音固定走音箱；登录后自动开两个微信。每周一清掉回收站里放了7天以上的东西。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -5195,7 +5195,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "拿锁　14:30 或开机登录后开始；同一时间只让一个任务写 H。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -6087,7 +6087,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "加密系统镜像　每天 13:30 用 Veeam 把 Windows、C 盘和三个核心仓库做成加密镜像放到 G，留最近 3 天；满一个月自动做一次全量（下一次约 10 月 20 日）　〈在用〉",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -6132,7 +6132,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "文档、下载备份　每天 12:35 复制到 G，删掉的留 30 天；顺带存上 WSL 里选定的 Linux 文件　〈在用〉",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -6991,7 +6991,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "借电脑上网　手机、笔记本经 Tailscale 用这台电脑的两个代理入口，不开公网　〈待验收〉",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -7006,7 +7006,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "代理开机自启　登录后以管理员身份打开 Clash Verge，恢复上次设置　〈在用〉",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -7021,7 +7021,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "断网急救　突然断网时先查哪一项，只做一项能撤回的恢复　〈在用〉",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -7260,14 +7260,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/hires-icons/09-时钟-clean.png",
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/微信标志.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/工具箱回收站.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
@@ -7325,14 +7325,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/hires-icons/09-时钟-clean.png",
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/微信标志.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/工具箱回收站.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
@@ -7385,12 +7385,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "开机和桌面",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -7490,12 +7490,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "Claude 不自启、退出清理　开机不自动开 Claude 桌面，关掉后清掉它留在后台的程序　〈在用〉",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -7630,7 +7630,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "取短信验证码　手机验证码经小米妙享转到电脑，AI 读最近 60 秒的通知取码，不留日志；还没真用过　〈待验收〉",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -8992,7 +8992,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "9 月 4 日　文档、下载、个人资料每天备份",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -9052,7 +9052,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "9 月 19–20 日　换成 Veeam，首份加密全量镜像",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

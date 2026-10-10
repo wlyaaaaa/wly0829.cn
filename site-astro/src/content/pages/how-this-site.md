@@ -1403,7 +1403,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支钢笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1418,7 +1418,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把小锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1733,7 +1733,7 @@
      "illustration": "top_inside",
      "icons": [
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/illustrations/页面扇形网格核验.png"
      ],
@@ -1795,7 +1795,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/illustrations/页面扇形网格核验.png"
      ],
@@ -2119,12 +2119,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "裁和压　裁掉图四周多余的白边，压成几档宽度：横版 1280、1920、2880 像素，竖版 828、1280 像素，浏览器按屏幕挑一档。格式用 AVIF 和 WebP，标准是肉眼看不出和原图有差别；不为了快先放模糊图。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -2164,12 +2164,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "先快后全　先加载第一屏；往下滚，离屏幕还有 600 像素时才加载下一屏。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -2743,7 +2743,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "照片堆",
    "source_phrase": "我说一句，常常配一张截图。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {

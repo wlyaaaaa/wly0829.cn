@@ -1441,7 +1441,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "一大批图片或整份扫描件",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {

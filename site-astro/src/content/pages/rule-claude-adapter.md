@@ -1903,7 +1903,7 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "Claude 桌面版是两个受信任的 AI 之一；桌面身份怎么认、怎么登记和撤销，统一见〔用户授权〕，这里只补 Claude 这条实际的启动链。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

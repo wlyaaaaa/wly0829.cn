@@ -139,8 +139,8 @@
         "columns": 2,
         "illustration": "left_inside",
         "icons": [
-          "proto:a02-sub",
-          "proto:a02-cal"
+          "_library/hires-icons-r2/a02-sub.png",
+          "_library/hires-icons-r2/a02-cal.png"
         ],
         "text_ref": "子代理也一样|每周一 13:00"
       }
@@ -186,8 +186,8 @@
         "type": "content_card",
         "illustration": "left_inside",
         "icons": [
-          "proto:a02-sub",
-          "proto:a02-cal"
+          "_library/hires-icons-r2/a02-sub.png",
+          "_library/hires-icons-r2/a02-cal.png"
         ],
         "text_ref": "子代理也一样"
       }

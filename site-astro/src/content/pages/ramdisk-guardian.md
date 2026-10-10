@@ -2347,7 +2347,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "动手前再核一遍　重建前再核 Primo 盘号、卷的身份、暂停和登记；重建后回读卷标，补文件夹和说明，Primo 命令失败就报错　〈待验收〉",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

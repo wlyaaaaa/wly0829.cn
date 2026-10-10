@@ -2302,12 +2302,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一个没有窗口的空白屏幕",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -2630,7 +2630,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "文件互传｜在任务栏的 KDE Connect 里选文件发过去，对方收进“下载”文件夹｜说不准",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {

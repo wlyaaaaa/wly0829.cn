@@ -700,7 +700,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "28 课｜一条路线分六段：模型调用 → 做成可用 → 知识问答 → 工具与 Agent → 模型原理 → 产品判断",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {

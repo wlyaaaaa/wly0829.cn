@@ -1105,7 +1105,7 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件柜",
    "source_phrase": "一个带锁的抽屉",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

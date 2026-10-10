@@ -1290,7 +1290,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
      "columns_v": 1,
      "icon_position": "header_top",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
      ],
@@ -1324,7 +1324,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
      "columns_v": 1,
      "icon_position": "card_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
      ],
@@ -1352,11 +1352,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "key": "显示器",
    "source_phrase": " \n1.在Codex桌面版里选模型（最常用）\n新建任务时在模型菜单里直接选GLM-5.3、DeepSeekFlash或本机Qwen，用法和官方模型一样。9月16–28日开了131个这样的任务，用得最多的是GLM-5.3Flash（61个）。\n跟AI说：不用说，菜单里选。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -1391,11 +1391,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "key": "显示器",
    "source_phrase": " \n1.在Codex桌面版里选模型（最常用）\n新建任务时在模型菜单里直接选GLM-5.3、DeepSeekFlash或本机Qwen，用法和官方模型一样。9月16–28日开了131个这样的任务，用得最多的是GLM-5.3Flash（61个）。\n跟AI说：不用说，菜单里选。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3146,7 +3146,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "断了能接回同一个会话 \n很多“断点续作”其实是新开一个会话、塞一段摘要假装接上，连用的模型都可能变了。它只用Codex原生能力恢复同一个会话，并核对会话编号、工作目录、配置档指纹、模型和服务、思考档位、权限全都一致；任一项对不上就明说接不上，在新目录从头重跑，旧的半成品不混进结果。恢复记录只存身份和进度，不存任务正文、隐藏推理和工具原文。\n现在：8月15日故意打断实测过；真实后台任务还没有一次需要接回。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3185,7 +3185,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "断了能接回同一个会话 \n很多“断点续作”其实是新开一个会话、塞一段摘要假装接上，连用的模型都可能变了。它只用Codex原生能力恢复同一个会话，并核对会话编号、工作目录、配置档指纹、模型和服务、思考档位、权限全都一致；任一项对不上就明说接不上，在新目录从头重跑，旧的半成品不混进结果。恢复记录只存身份和进度，不存任务正文、隐藏推理和工具原文。\n现在：8月15日故意打断实测过；真实后台任务还没有一次需要接回。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -4904,7 +4904,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "其他路线的本机加密｜自定义端点这类路线的钥匙用 Windows 按当前用户加密保存，只交给目标程序",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

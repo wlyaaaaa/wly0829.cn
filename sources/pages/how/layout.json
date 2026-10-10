@@ -332,7 +332,7 @@
             "count": 1,
             "row": 2,
             "column": 1,
-            "icon": "_library/icons/显示器.png",
+            "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
             "icon_badge": "_library/icons/Claude标志.png"
           },
           {
@@ -340,7 +340,7 @@
             "count": 1,
             "row": 2,
             "column": 3,
-            "icon": "_library/icons/显示器.png",
+            "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
             "icon_badge": "_library/icons/OpenAI标志.png"
           },
           {
@@ -364,7 +364,7 @@
             "count": 1,
             "row": 4,
             "column": 2,
-            "icon": "_library/icons/手机.png"
+            "icon": "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
           }
         ],
         "edges": [
@@ -418,7 +418,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/人物.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
@@ -461,7 +461,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/人物.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
@@ -1244,7 +1244,7 @@
         "connector": "none",
         "illustration": "right_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
           "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/icons/日历时钟.png",
@@ -1284,7 +1284,7 @@
         "connector": "none",
         "illustration": "right_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
         ]
       },
       {
@@ -1810,7 +1810,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/手机电脑连接.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/illustrations/main-proxyclean.png"
         ],
@@ -1879,7 +1879,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/手机电脑连接.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/illustrations/main-proxyclean.png"
         ],

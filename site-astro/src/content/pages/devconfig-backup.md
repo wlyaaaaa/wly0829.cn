@@ -4071,7 +4071,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "Google标志",
    "source_phrase": "每周传 Google 云盘　每周一 11:00，只传 G 上核对过的那一份（条件见亮点 1）；每次最多传 8 GB，没传完自动重试；传完两遍比对，G 上没有了的云端也删　〈在用〉",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {

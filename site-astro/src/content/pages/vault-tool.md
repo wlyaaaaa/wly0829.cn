@@ -768,7 +768,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "个｜默认 scrypt 下，Windows 上要另装的第三方库：加密直接用系统自带的接口",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1006,7 +1006,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "照片堆",
    "source_phrase": "一只手从信封里抽出一张照片",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1693,7 +1693,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "锁",
    "source_phrase": "尾部  ：只有一套内容时，这里全是随机数；有第二套时，第二套加密后正好填满这里，从外面看和随机数没有区别。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1732,7 +1732,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "锁",
    "source_phrase": "旧格式 VAULT01（PBKDF2-SHA256 迭代 60 万次 + AES-CBC）和 VAULT02（scrypt + AES-GCM）都还能打开；“升级”把它们重新加密成 VAULT03，动手前先留一份旧库。\n",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1771,7 +1771,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "锁",
    "source_phrase": "尾部  ：只有一套内容时，这里全是随机数；有第二套时，第二套加密后正好填满这里，从外面看和随机数没有区别。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1823,7 +1823,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "锁",
    "source_phrase": "旧格式 VAULT01（PBKDF2-SHA256 迭代 60 万次 + AES-CBC）和 VAULT02（scrypt + AES-GCM）都还能打开；“升级”把它们重新加密成 VAULT03，动手前先留一份旧库。\n",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2041,7 +2041,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一块内存条上一把小锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3164,7 +3164,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "旧格式升级｜VAULT01、02 重新加密成 VAULT03，先留旧库｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3436,7 +3436,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "6 月 23 日：第一版：scrypt 加 AES-256-GCM 的离线加密小工具。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3541,7 +3541,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "9 月 26 日：按我的决定，“帮我加密这个文件”默认改走密码中心，这里只管 vault.enc 和 Key 仓库。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

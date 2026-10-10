@@ -885,7 +885,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "4K｜雨林黑猫，所有屏的桌面底图和锁屏共用一张",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1442,7 +1442,7 @@
      "icons": [
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -1513,7 +1513,7 @@
      "icons": [
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -1586,12 +1586,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "这张图怎么来的：照原来那张桌面图（雨林、苔石、右上角探头的黑猫）重新生成，更清楚、更绿；再用 Real-ESRGAN（放大模型 realesrgan-x4plus）放大 4 倍，缩到 3840×2160。不是原生 4K，也不是 HDR。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -1636,7 +1636,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "换新电脑：拿到仓库跑一条命令就装回来，不要管理员权限，也不依赖原来的盘符和用户名。还没在新电脑上真用过。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2151,7 +2151,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "满 6 分钟｜按硬件身份挑出主屏；主屏关着、盖着黑幕，就不放。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2379,12 +2379,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一个虚线显示器打叉",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -2772,7 +2772,7 @@
       "emerald-veil\\emerald-veil-09-icon-02.png",
       "emerald-veil\\emerald-veil-09-icon-03.png",
       "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "emerald-veil\\emerald-veil-09-icon-06.png",
       "emerald-veil\\emerald-veil-09-icon-07.png",
       "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -2839,7 +2839,7 @@
       "emerald-veil\\emerald-veil-09-icon-02.png",
       "emerald-veil\\emerald-veil-09-icon-03.png",
       "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "emerald-veil\\emerald-veil-09-icon-06.png",
       "emerald-veil\\emerald-veil-09-icon-07.png",
       "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -2988,7 +2988,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "只放实体主屏｜按硬件身份挑；虚拟屏、水冷曲面屏、认不出的屏不放；主屏关着就待命｜在用",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3370,7 +3370,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "原图留底｜第一次换之前存下原桌面图、每块屏原图、原锁屏｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

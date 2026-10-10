@@ -3079,7 +3079,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件柜",
    "source_phrase": "一个整理抽屉的手",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -4126,7 +4126,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把小锁挂在一张空白卡片上",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -5003,7 +5003,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "离开、锁屏、息屏、睡眠｜人离开、锁屏、息屏、睡眠各记各的；计时被耽误的单独记成采集空档",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -6251,7 +6251,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "8 月 30 日–9 月 2 日：给 AI 的历史诊断摘要；会带崩程序的网络统计挪进子进程；硬件传感器只由一个程序管；帧率改为先读 RTSS。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {

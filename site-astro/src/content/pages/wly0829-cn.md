@@ -1325,7 +1325,7 @@
       "_library/icons/铃铛.png",
       "_library/icons/钥匙.png",
       "_library/icons/双气泡.png",
-      "_library/icons/手机.png"
+      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
      ]
     }
    ],
@@ -1361,7 +1361,7 @@
       "_library/icons/铃铛.png",
       "_library/icons/钥匙.png",
       "_library/icons/双气泡.png",
-      "_library/icons/手机.png"
+      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
      ]
     }
    ],
@@ -1600,7 +1600,7 @@
      "width": "100%",
      "icons": [
       "_library/icons/气泡灯泡.png",
-      "_library/icons/显示器.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/断链.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/报警灯.png"
@@ -1638,7 +1638,7 @@
      "width": "100%",
      "icons": [
       "_library/icons/气泡灯泡.png",
-      "_library/icons/显示器.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/断链.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/报警灯.png"
@@ -2037,7 +2037,7 @@
       "_library/icons/气泡灯泡.png",
       "_library/icons/相机.png",
       "_library/icons/画笔调色板.png",
-      "_library/icons/显示器.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ]
     }
    ],
@@ -2070,7 +2070,7 @@
       "_library/icons/气泡灯泡.png",
       "_library/icons/相机.png",
       "_library/icons/画笔调色板.png",
-      "_library/icons/显示器.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ]
     }
    ],
@@ -2869,7 +2869,7 @@
       "_library/icons/画笔调色板.png",
       "../bird/poses/sample/sprites/bird-idle.png",
       "_library/icons/小放映机.png",
-      "_library/icons/手机.png"
+      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
      ],
      "status_position": "top_right",
      "status_text": "dot_only",
@@ -2915,7 +2915,7 @@
       "_library/icons/画笔调色板.png",
       "../bird/poses/sample/sprites/bird-idle.png",
       "_library/icons/小放映机.png",
-      "_library/icons/手机.png"
+      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
      ],
      "status_position": "top_right",
      "status_text": "dot_only",

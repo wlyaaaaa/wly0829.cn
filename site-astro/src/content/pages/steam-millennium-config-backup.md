@@ -2699,7 +2699,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "公开仓库，也不漏私事 \n麻烦Millennium的设置文件里不只有外观，还有代理地址、代理账号、代理密码三栏，也可能夹带能认出账号的SteamID。仓库是公开的，整份照搬就等于把这些一起公开。\n解法只收21个认得的外观和开关字段，代理这三栏有值就不收；收下的再扫一遍：字段名像password、token、cookie、steamid64且有值，或内容里有SteamID、私钥、GitHub令牌、带账号密码的网址，命中就整次不写。新版Millennium冒出新字段时只报名字，不悄悄公开。6月20日第一版是手动剔掉SteamID，现在每周自动做。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

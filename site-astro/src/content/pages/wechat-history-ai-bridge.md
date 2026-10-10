@@ -652,7 +652,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一条笔直发亮的绿色小路",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -2061,7 +2061,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "8 月 16 日 ：AI 取数前先核对微信号身份",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

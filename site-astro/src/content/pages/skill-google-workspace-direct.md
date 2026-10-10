@@ -1299,7 +1299,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件写作",
    "source_phrase": "云盘按名字找｜先按完整文件名找，完全没有才放宽到“名字里包含”，最多 5 个候选；“redis 笔记”只拿“redis”去找；同名几份时看文件夹、类型、修改时间，真分不清才问我；结果不全时明说",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {

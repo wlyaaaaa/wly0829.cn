@@ -1215,7 +1215,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "种｜本人验证方式任选一种：通行密钥、手机动态码、恢复码、Google 或微软账号",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2510,7 +2510,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "断线",
    "source_phrase": "一根被剪断的网线",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2525,7 +2525,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2555,7 +2555,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "保险箱",
    "source_phrase": "一个空保险箱",
-   "sha256": "698397f49e11f200f06aef455dbe7cf76df92e224101f281300a9f0a4924bd28",
+   "sha256": "baacc4cbdc7cafb6288f2b13ebc8132f8f9800fa156d3b11e3135a48fadc9efd",
    "status": "ready"
   },
   {
@@ -2570,7 +2570,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "实测过 9 月 22 日，把 H 盘接到笔记本上，用手机动态码打开盘里的密码中心，取到系统镜像的密码；另外几种验证的实测见“亮点”。整台电脑怎么换机见〔电脑配置与恢复〕。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3066,7 +3066,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "入口：开始菜单里的窗口｜AI 调用的命令｜手机 App｜网页授权页",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3111,7 +3111,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "程序用 Python 3.14 和 PowerShell 7 写，窗口是 WinForms；手机 App 用 Kotlin，读写同一个 KDBX；手机端源码 9 月 29 日放进同一个私有仓库的 android 文件夹，和电脑端一起管版本，之前没有版本记录。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3195,11 +3195,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "key": "显示器",
    "source_phrase": "开始菜单里的窗口",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3225,7 +3225,7 @@
    "fallback": false,
    "key": "手机",
    "source_phrase": "手机 App",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3251,7 +3251,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "→SecretBroker（守门的程序：核对是谁、要什么、有没有授权；不对就停，不猜）",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3264,7 +3264,7 @@
    "fallback": false,
    "key": "保险箱",
    "source_phrase": "KDBX 密码库",
-   "sha256": "698397f49e11f200f06aef455dbe7cf76df92e224101f281300a9f0a4924bd28",
+   "sha256": "baacc4cbdc7cafb6288f2b13ebc8132f8f9800fa156d3b11e3135a48fadc9efd",
    "status": "ready"
   },
   {
@@ -3277,7 +3277,7 @@
    "fallback": false,
    "key": "锁",
    "source_phrase": "文件加密",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3312,11 +3312,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "key": "显示器",
    "source_phrase": "开始菜单里的窗口",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3342,7 +3342,7 @@
    "fallback": false,
    "key": "手机",
    "source_phrase": "手机 App",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3368,7 +3368,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "→SecretBroker（守门的程序：核对是谁、要什么、有没有授权；不对就停，不猜）",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3381,7 +3381,7 @@
    "fallback": false,
    "key": "保险箱",
    "source_phrase": "KDBX 密码库",
-   "sha256": "698397f49e11f200f06aef455dbe7cf76df92e224101f281300a9f0a4924bd28",
+   "sha256": "baacc4cbdc7cafb6288f2b13ebc8132f8f9800fa156d3b11e3135a48fadc9efd",
    "status": "ready"
   },
   {
@@ -3394,7 +3394,7 @@
    "fallback": false,
    "key": "锁",
    "source_phrase": "文件加密",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3764,7 +3764,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机：手机在 Android Keystore 里生成一把导不出来的 RSA-3072 私钥，电脑用它的公钥只包住“密码库钥匙”。所以撤销一台手机只换这一把密码库钥匙，四种验证不用重来（真实经过见亮点）。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -4647,7 +4647,7 @@ AI 用 key，却看不见 key
    "semantic_status": "scene_explicit_primary_object",
    "key": "断线",
    "source_phrase": "一根断开的网线旁边一把完好的钥匙",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -4691,7 +4691,7 @@ AI 用 key，却看不见 key
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "断线",
    "source_phrase": "断网不等于密码坏了。  网络错、超时、限流、服务端故障都分开记，只有厂商明确说认证失败才改这条 key 的状态，免得把好好的 key 误判作废。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -5562,12 +5562,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "认出桌面 AI｜只认我账户里、由 Claude 或 Codex 桌面版启动的程序｜在用",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -6088,7 +6088,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "打开备用密码库｜原电脑用不了时，打开一份完整的加密副本｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -6471,7 +6471,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "起疑就锁盘｜觉得不对就锁 BitLocker；9 月 26 日整套删掉｜已停用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -6730,7 +6730,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "7 月底–8 月：加了一大套自我防护：起疑就锁盘、重大动作要开票据、五种验证下限、无人值守的目标登记（CoreGoal）。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

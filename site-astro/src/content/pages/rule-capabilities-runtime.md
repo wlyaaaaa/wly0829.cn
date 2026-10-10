@@ -1434,7 +1434,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "几扇并排的小门、每扇门上一片不同颜色的叶子、“Gmail、Google 云盘和待办”配 Gmail 标志、Google 云盘三色三角标志和 Google Tasks 标志并排",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -1908,7 +1908,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1922,7 +1922,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2843,7 +2843,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "置和密钥”配一把小钥匙挂在一个带锁的小盒子上、“技能和插件”配几块拼在一起的积木、“Windows”配 Windows 的四格窗标志",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

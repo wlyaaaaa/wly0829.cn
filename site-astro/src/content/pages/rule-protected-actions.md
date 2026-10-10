@@ -1148,7 +1148,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "别的 AI 或程序 → **先请本人验证**。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1223,7 +1223,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "没开，资料也锁着 → **先请本人验证一次**。对话里一句“别验证了”代替不了。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1587,7 +1587,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "身份盾牌",
    "source_phrase": "一只贴着红封条的小纸箱、“什么时候请本人验证”配一个小沙漏旁边立着一把黄铜钥匙、“这份清单怎么来的”配一页被划掉一半的旧草稿纸",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

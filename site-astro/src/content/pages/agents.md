@@ -1285,8 +1285,8 @@
      "columns": 2,
      "illustration": "left_inside",
      "icons": [
-      "proto:a02-sub",
-      "proto:a02-cal"
+      "_library/hires-icons-r2/a02-sub.png",
+      "_library/hires-icons-r2/a02-cal.png"
      ],
      "text_ref": "子代理也一样|每周一 13:00"
     }
@@ -1326,8 +1326,8 @@
      "type": "content_card",
      "illustration": "left_inside",
      "icons": [
-      "proto:a02-sub",
-      "proto:a02-cal"
+      "_library/hires-icons-r2/a02-sub.png",
+      "_library/hires-icons-r2/a02-cal.png"
      ],
      "text_ref": "子代理也一样"
     }
@@ -1377,7 +1377,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一本翻开的册子",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {
@@ -1608,7 +1608,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件写作",
    "source_phrase": "铅笔改一页纸",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {
@@ -4041,7 +4041,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "仓库根的入口文件｜仓库根放一份 CLAUDE.md，防止改了一半的 AGENTS.md 被 Claude 当规则读｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -4561,7 +4561,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "仓库体量预算｜三个基座各有文件数和总大小的参考上限，测试拦住不该进库的报告和临时文件｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -4934,7 +4934,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "已停用的几样｜旧分工门禁和施工登记（9 月 27 日删）、Codex 经济路由技能、G 盘热备份（8 月初停）、技能安装事务记录、十分钟本人验证邀请｜已停用",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   }
  ]

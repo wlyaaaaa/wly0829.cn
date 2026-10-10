@@ -688,7 +688,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "要用本人的私人资料 ：偏好、履历、通信、健康、财务、私人关系、以前的个人经历。资料锁开着才用；锁着就请本人验证一次，不换来源绕过，也不拿缩水的回答凑。资料锁怎么走",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1326,7 +1326,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "挂锁旁一块小表盘",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1386,7 +1386,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "锁着、过期或说不清 → **请本人验证一次**：本机四种方式任选一种（通行密钥、手机验证码、恢复码、Google 或微软账号，同〔约法 L17〕），手机上用现有的验证器；不先派别的模型批准，也不让本人验证两次。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

@@ -2507,7 +2507,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2537,7 +2537,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机带感叹号",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2954,7 +2954,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3330,7 +3330,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3345,7 +3345,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "Google 的彩色 G 标志",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -3987,7 +3987,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "说错了一纠正，旧结论自己退场 \n麻烦：AI的“记忆”改了一处，别处还在用旧结论；过几天旧说法又冒出来。\n解法：我的每句原话按补充、临时、更正、撤回分开记。更正当场用在这次回答；引用旧说法的卡——包括别的项目引用的——自动退出当前结果。AI复核时必须重新写详述，不能悄悄带回旧的；临时说法到期作废，也不会反过来改掉长期喜好。到9月28日，有48个卡版本因为我的原话变了而退场复核。\n例子：9月24日我说手机上的使用记录软件后台保不住活，之前的屏幕时长失真，9月23日起开了常驻通知。引用旧说法的“手机使用怎么理解”那张卡当场退场；复核后的新卡写明9月23日以前的时长和排名不作依据，之后的默认可信。",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -4907,7 +4907,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机电脑用在哪｜一段时间里手机、电脑各自的总量、主要应用和每天变化；两台设备的时长不相加",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -5485,7 +5485,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "两份视图自动重建｜给 AI 的首页和完整详档，每次写入都在同一把数据库锁里重建",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

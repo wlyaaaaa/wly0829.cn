@@ -1875,7 +1875,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "查过才替换｜是 PDF、读得开、没加密、至少 1 页、原文和 CSS 指纹没变，全过才换上｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

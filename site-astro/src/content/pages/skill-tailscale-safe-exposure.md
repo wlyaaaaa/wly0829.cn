@@ -556,7 +556,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "一部手机和笔记本连向电脑的两条线",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -895,7 +895,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "先摸底｜记下本机和对面设备的身份、端口谁在监听、Serve 和 Funnel 现状、相关防火墙规则；从对面 ping 一次留底",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1015,7 +1015,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "对外报告不露底｜给网站、公开报告的结果不写设备身份、地址、账号和整份访问策略",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

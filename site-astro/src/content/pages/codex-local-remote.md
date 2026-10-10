@@ -682,7 +682,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "一部手机，屏幕上是一个缩小的电脑桌面",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -917,7 +917,7 @@ AI 补充：在外面要管电脑，把整个桌面串流到手机上操作就�
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ],
      "row": "comparison",
      "width": "50%"
@@ -958,7 +958,7 @@ AI 补充：在外面要管电脑，把整个桌面串流到手机上操作就�
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ]
     },
     {
@@ -982,12 +982,12 @@ AI 补充：在外面要管电脑，把整个桌面串流到手机上操作就�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "它自己也没稳下来 \nCodex桌面版没有给别的程序接进同一个任务的公开入口。要让手机和电脑共用一个任务，桌面版得接到自己的中转程序上；它平时原样开着、没接上，所以“打开远程”时往往得先关掉它，再连着中转重新打开。这一步在Windows上反复出事：负责重开的程序跟着桌面版一起被关掉；旧进程死了还占着端口；高权限下读不到进程信息……每修好一层，又冒出下一层。\n7月28日有过一次连接全通（本机和公网都返回正常），但启动过程仍有毛病；本人前后确认过约5次重启成功但成功没法稳定重现。最后一次现场：公网报502，交接卡在“接上桌面版”这一步，本人只能手动把Codex原样打开本人估计前后投入100多小时；最后那个对话里本人发了192条消息，80条在说重启、切换或接管（含重复的短消息）\n8月3日决定：停止修补，Codex回到原样启动，远程入口标成“不可用”。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -1377,7 +1377,7 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "手机打开网址",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -1654,7 +1654,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "接着同一个任务：手机和电脑用同一个任务编号；电脑上的 Codex 先接上这个任务，手机的第一句才放行，不会各跑一份 ✕",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1684,7 +1684,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机开新任务：在电脑上登记过的项目里开，或在单独的临时文件夹里开；手机不能随便指定路径 ✕",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1699,7 +1699,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "实时工作记录：公开的思考摘要、跑过的命令和输出、改动的文件（逐行对比）、图片；模型隐藏的推理不显示；长对话先显示最近的，可逐段展开全部；浏览器标签页标题提示断线、等你处理、运行中、失败 ✕",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -1774,7 +1774,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "下一轮排队：先写好下一句，能改、调顺序、删；在电脑上加密存着；断线后说不清发没发出去，就停住不重发 ✕",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -1789,7 +1789,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "手机审批和回答提问：看要执行的命令和影响的文件，再选允许或拒绝；按钮只用 Codex 当时给的选项，不自己编 ✕",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -1804,7 +1804,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "下一轮的模型和模式：换模型、思考档位、速度、权限、计划模式，设任务目标；只对下一轮生效，不中途换 ✕",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2172,7 +2172,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "任务不停也能换网页层：先不接新请求、等手上的做完，再换手机网页和网页服务；新的起不来就换回旧的；底层任务服务不动 ✕",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {

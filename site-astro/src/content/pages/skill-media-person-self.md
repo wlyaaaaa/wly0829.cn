@@ -531,7 +531,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "找脸：本机用 YuNet 找出照片里每一张脸。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -741,7 +741,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "照片里指出哪张脸是我｜给出脸的编号和框的位置",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -756,7 +756,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "一次查一小批照片｜一次最多 20 张，要一张张点名",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1044,7 +1044,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1134,7 +1134,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1175,7 +1175,7 @@
    "fallback": false,
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1253,7 +1253,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1292,7 +1292,7 @@
    "fallback": false,
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1370,7 +1370,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {

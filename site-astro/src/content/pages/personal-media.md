@@ -2933,7 +2933,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "认内容，不认文件名。SHA-256 内容指纹：改名、搬家、换手机都认得，同一件不会存两遍。",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3050,7 +3050,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "照片堆",
    "source_phrase": "25 张 一张总览里的缩略图",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -3574,7 +3574,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机上删了，电脑跟着删｜放回手机的精选我在手机上删了，下次连上时电脑那份也删｜绿·只修报错",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3963,7 +3963,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "收进单个文件｜不是从手机来的，比如电脑录屏，直接收进来；在文件夹里却没登记的，原地补上记录｜绿",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -4023,7 +4023,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "挑哪些放回手机｜精选的自动放，普通的写出理由才放，我在审批页留下的默认放，总共不超过 60 GB｜绿",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -4038,7 +4038,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "每天更新要放回的精选｜电脑上备着一份要放回手机的精选，每天按最新挑选自动增删｜绿",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -4113,7 +4113,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "看还有多少没上云｜列出已传的、还没到 30 天的、等着删的各有多少｜绿",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {
@@ -4456,7 +4456,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "补回丢失的处理记号｜某批手机文件“已处理”的记号丢了，用当时的回执补回来，免得重复处理｜绿",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -4471,7 +4471,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "私密的默认搜不出来｜比如健康和基因检测结果这类照片，平时搜不出来；我说“包括私密的”，或 AI 更新对我的理解、私密的会改变结论时，才带上，只拿出需要的那几件｜绿",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -4651,7 +4651,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "照片堆",
    "source_phrase": "一叠照片",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -4711,7 +4711,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机打勾",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {

@@ -445,12 +445,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/显示器.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-02-icon-01",
    "source_phrase": "一块屏幕：先读驾驶舱的摘要",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -617,12 +617,12 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
-   "asset": "_library/icons/显示器.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "skill-cockpit-03-icon-01",
    "source_phrase": "一块屏幕：先读摘要，只讲四件事",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -712,7 +712,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-03-icon-07",
    "source_phrase": "一把小锁：给 AI 的细节只放在本机",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

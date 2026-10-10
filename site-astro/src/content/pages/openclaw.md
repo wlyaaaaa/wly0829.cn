@@ -1547,7 +1547,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "手机\n在Telegram或飞书里发一句任务",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {

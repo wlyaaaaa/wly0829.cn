@@ -1781,7 +1781,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "8 月 15 日 ：外部工具的答卷跑完打了分（Antigravity 13 份；OpenCode 交接后陆续加组合，跑了 11 份）；同一天自查出方法和评分有问题，仓库改成私有",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

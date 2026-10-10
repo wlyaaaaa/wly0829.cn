@@ -2532,7 +2532,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "密码中心一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2547,7 +2547,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "本地加密库一只上锁的小箱子",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2562,7 +2562,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "个人理解库一本翻开的笔记本",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {
@@ -3418,7 +3418,7 @@
        "count": 1,
        "row": 2,
        "column": 1,
-       "icon": "_library/icons/显示器.png",
+       "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
        "icon_badge": "_library/icons/Claude标志.png"
       },
       {
@@ -3426,7 +3426,7 @@
        "count": 1,
        "row": 2,
        "column": 3,
-       "icon": "_library/icons/显示器.png",
+       "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
        "icon_badge": "_library/icons/OpenAI标志.png"
       },
       {
@@ -3450,7 +3450,7 @@
        "count": 1,
        "row": 4,
        "column": 2,
-       "icon": "_library/icons/手机.png"
+       "icon": "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
       }
      ],
      "edges": [
@@ -3504,7 +3504,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/人物.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
@@ -3540,7 +3540,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/人物.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
@@ -3573,12 +3573,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "两台显示器",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3608,7 +3608,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3842,7 +3842,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "① 路上：手机连回家 \n谁做：手机上的ChatGPT，经电脑远程控制连到家里的主机。\n传什么：我→ChatGPT，一句话（文字）；ChatGPT→主机，把这句话写成家里电脑上的一份任务说明（文件）。\n注意：手机连上的是电脑，不是电脑上开着的Claude对话；这三天拍的东西还在手机里，远程连接不会把手机原件搬回家。",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -5218,7 +5218,7 @@ Codex
      "connector": "none",
      "illustration": "right_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/icons/日历时钟.png",
@@ -5252,7 +5252,7 @@ Codex
      "connector": "none",
      "illustration": "right_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
      ]
     },
     {
@@ -5352,7 +5352,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "锁",
    "source_phrase": "⑪ 开锁、上锁 〔授权与状态〕\n能做：手机上输验证器的6位动态码，打开个人资料或无限制授权；也能一键锁资料、锁Windows。\n限制：锁Windows不影响授权计时；它不能替我开机或重启。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -6510,7 +6510,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/手机电脑连接.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/illustrations/main-proxyclean.png"
      ],
@@ -6575,7 +6575,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/手机电脑连接.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/illustrations/main-proxyclean.png"
      ],

@@ -988,7 +988,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "54 次｜云端复核成功（8 月 1 日–9 月 28 日，含点名上云）",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {
@@ -2025,7 +2025,7 @@ P2　12:03　这句两个模型差得多，建议回听
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2353,12 +2353,12 @@ P2　12:03　这句两个模型差得多，建议回听
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "两块屏幕",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3214,7 +3214,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把小锁挂在模型盒上",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -4262,7 +4262,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "手动暂停｜让 AI 暂停疑难录音的自动复核，写上原因；换模型、改免费期都不会自己重开，我说恢复才再开，点名上云照常",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {
@@ -4532,7 +4532,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "查有没有新版本｜手动查上游模型出没出新版本，不自动下载、不自动换",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -4752,7 +4752,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "8 月 1 日：重要录音可以点名上云（Qwen Audio 3.0）。",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {
@@ -4797,7 +4797,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "9 月 5–6 日：按原音指纹找回已有转写；Win+H 桌面听写上线；存疑的转写也能上云复核。",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {

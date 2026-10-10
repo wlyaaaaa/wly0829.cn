@@ -1880,7 +1880,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "最新的永远看得到｜手机通知最多留 3 条，第 4 条来了就挤掉最旧的；最新一条放在最下面，别的卡再多也不会把它挤走。",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2214,7 +2214,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "Windows 设备管理器里曲面屏报 Code 10（设备无法启动，多半是供电或接线）｜立刻停手，不重试｜关机断电，查 USB 排针、线和辅助供电",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2493,7 +2493,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3036,7 +3036,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "size": "large",
      "text_ref": "程序活着",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
@@ -3056,7 +3056,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "size": "large",
      "text_ref": "程序活着",
      "icons": [
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
@@ -3074,12 +3074,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "程序活着，不等于屏幕在动。 \n机箱屏最难查的坏法是“冻住”：进程都在，画面却停在某一秒。所以看门狗不看进程，看心跳里的帧号、周期和整帧重画是否按时。9月27日21:27到28日21:22，它连续发了85,063帧，失败0次。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {
@@ -3875,7 +3875,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "手机电量｜电量和是否在充电，两个来源取更新的｜在用",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3890,7 +3890,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "耳机音箱切换、断网｜显示新设备名，或断网、恢复，12 秒｜在用",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -4290,7 +4290,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "硬件告警｜水泵、温度、磁盘健康和空间、长期断网；9 月 27 日删掉｜已停用",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -4320,7 +4320,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "长任务进度｜复制、下载、渲染主动登记后显示进度；9 月 27 日删掉｜已停用",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {

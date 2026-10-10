@@ -1003,7 +1003,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "75 个｜本机工作目录：每个仓库一个主目录，另有 30 个是 AI 同时干活时开的临时目录",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -1675,7 +1675,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "依次：一本旧账本和一支笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -2034,7 +2034,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "私有配套查询：公开项目的内部说明放在哪个私有仓库",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2049,7 +2049,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "仓库大动作入口：新建、改名、改公开范围、删库、转移",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2064,7 +2064,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "给驾驶舱的项目数字：不联网，每个仓库最多算 1.2 秒",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2482,7 +2482,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "一个仓库，九个工作目录 \n几个AI同时干活，各开各的临时工作目录。9月28日凌晨，电脑配置与恢复一个仓库就开着9个。收尾只看当前窗口，别的目录里做完没合的活就会被忘掉，或者被当成垃圾清掉。总索引把每条分支都拿去和GitHub上的主线比：内容已进主线的标“残留，可以收”；有独有提交的写明“主线缺N个提交”，先并进去；有没提交改动的只提醒核对，不碰别人的东西。那天它就找出一条比主线多9个提交的临时分支。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2743,7 +2743,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "认准是哪个仓库｜回读文件夹里的 .git，确认连着的仓库和登记一致，不凭目录名猜｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2803,7 +2803,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "查全部工作目录｜同一个仓库的所有工作目录和分支一起查：没提交的、没推送的、领先落后几个｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3096,7 +3096,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "敏感文件提示｜公开仓库的目录里出现 .env、私钥、secrets 文件夹这类文件，查询直接判“挡住”；日志、数据库文件列出来请 AI 复看｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3126,7 +3126,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "找到私有配套说明｜公开项目的内部说明放在一个私有仓库里，AI 维护时按登记找到；现在登记了 3 个项目｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3186,7 +3186,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "新仓库放哪｜新的个人仓库放 V:\\Personal\\Projects，临时工作目录放 V:\\Personal\\Worktrees，Z 盘不放仓库｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3851,7 +3851,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "7 月 10 日　AI 能单独查一个仓库，开始看它的全部工作目录",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3881,7 +3881,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "8 月 1 日　删库、转移走专门的入口；8 月 12 日加新建私有仓库，8 月 21 日加改名",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3911,7 +3911,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "9 月 1 日　登记到 48 个仓库，之后陆续删掉不用的",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3926,7 +3926,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "9 月 17–18 日　能找到公开项目的私有配套说明；读失败和身份冲突分开",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3971,7 +3971,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "9 月 28 日　登记新拆出来的密码中心仓库，登记各项目上不上网站；现在 45 个仓库",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

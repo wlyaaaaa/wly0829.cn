@@ -603,7 +603,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "断线",
    "source_phrase": "一段断了又接上的线",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -853,7 +853,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "断线",
    "source_phrase": "学到的：修之前先找断在哪一层——调用写错、本机组件缺、插件没初始化、只有一个标签页失控，还是网站本身——一次只改一处，改完重试原来失败的那一步。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -867,7 +867,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "断线",
    "source_phrase": "学到的：修之前先找断在哪一层——调用写错、本机组件缺、插件没初始化、只有一个标签页失控，还是网站本身——一次只改一处，改完重试原来失败的那一步。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -1126,7 +1126,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "先判断要不要开浏览器｜我明确要看网页、测交互、在网站上办事，就一定办到；只是生成文件不开；我没指定要在网页上办时，有直连接口的事走接口；可开可不开的预览，按值不值得定，没验的地方说清",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -1156,7 +1156,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "按证据修｜分清断在哪一层：调用写错、本机组件、插件初始化、单个标签页、页面、网站操作；用最小的检查把几种可能分开，一次只改一处，改完重试原来那一步",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {

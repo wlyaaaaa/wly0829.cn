@@ -1389,7 +1389,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一摞叠起的书页加一个绕回的圆箭头",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {

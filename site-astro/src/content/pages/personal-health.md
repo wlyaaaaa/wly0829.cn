@@ -1001,7 +1001,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件写作",
    "source_phrase": "一张报告纸上一支绿笔在改一行，报告纸只画灰线",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {
@@ -1175,7 +1175,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "断线",
    "source_phrase": "一根断开又接上的绿线",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -1220,7 +1220,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把挂着小锁的钥匙",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1265,7 +1265,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把合上的小锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1507,7 +1507,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云下载",
    "source_phrase": "一朵云往下连一个文件夹",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -1567,7 +1567,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件柜",
    "source_phrase": "一个上锁的仓库和一个文件柜",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -1753,12 +1753,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-4205bfa25ba5315c2689.png",
+   "asset": "_library/hires-icons-r2/icon-clean-4205bfa25ba5315c2689.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "漏斗",
    "source_phrase": "一个漏斗",
-   "sha256": "ede7778f6db273cb31678380c9d65def129e76b30ab5223b81fec106dde796fa",
+   "sha256": "f9da51c597ecd23a0a9b23ff5925e01976e0669282f2be48547aa707ffde018a",
    "status": "ready"
   },
   {
@@ -2828,7 +2828,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "8 月 26 日：更新可以断点接着来；加离线简报，只有够格的记录才拿来判断；只取 Fitbit Air 设备自己的数据，不要手动录入和手机估算的",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {

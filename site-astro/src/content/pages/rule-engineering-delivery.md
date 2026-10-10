@@ -1261,7 +1261,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云下载",
    "source_phrase": "一个整齐的小抽屉柜、“下载、临时文件和清理”配一只浅绿色小回收桶，几片落叶正落进去",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {

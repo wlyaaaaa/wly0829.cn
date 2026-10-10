@@ -1317,7 +1317,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "默认路线｜上网默认走哪块网卡；网关是 198.18、198.19 开头的，是代理的隧道（TUN）｜只删指向已断开网卡的那条",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2504,7 +2504,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "复制脱敏诊断｜复制一份给 AI 看的技术数据，不含代理密码、公网 IP 和设置原值｜说不准",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {

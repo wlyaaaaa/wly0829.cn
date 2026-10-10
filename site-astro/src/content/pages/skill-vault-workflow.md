@@ -523,7 +523,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "先查，不要密码。　AI 查环境和这个库的结构：格式对不对、要不要密钥文件、Key 是不是私有仓库。有一项不对就停下来说清楚。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -757,7 +757,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "锁",
    "source_phrase": "这个技能是本地加密库的AI入口。它能做的，以及只能我自己在终端里做的（往已有的库里加文件用菜单，另做一份新副本用rebuild命令），全部列在项目页的“全部功能”里，这里不再抄一遍：\n本地加密库·全部功能",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

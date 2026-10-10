@@ -1811,7 +1811,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件写作",
    "source_phrase": "几个贴了不同颜色标签的小抽屉、“经验当场写进文件，不写进记忆区”配一支笔正往一本登记簿上写字、“说明文档只给 AI，给本人看的都在网站”配一块小屏幕上一片绿叶图案、“第三方 AI 命令行工具的长任务”配夹着绿书签的书（和开头插画同一本）",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {

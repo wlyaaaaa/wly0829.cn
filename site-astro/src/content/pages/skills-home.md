@@ -2117,7 +2117,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "保险箱",
    "source_phrase": "一把钥匙和一只小保险箱",
-   "sha256": "698397f49e11f200f06aef455dbe7cf76df92e224101f281300a9f0a4924bd28",
+   "sha256": "baacc4cbdc7cafb6288f2b13ebc8132f8f9800fa156d3b11e3135a48fadc9efd",
    "status": "ready"
   },
   {
@@ -2177,7 +2177,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "Gmail 的信封标志和 Google 云盘的三角标志并排",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -2217,12 +2217,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/显示器.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "skills-home-04-icon-cockpit",
    "source_phrase": "一台显示器：看驾驶舱（新加的卡，素材库已有图标）",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
    "status": "ready"
   },
   {

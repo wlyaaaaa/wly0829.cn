@@ -2098,7 +2098,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "门口和屋里分开。｜认证和维护放在 SYSTEM 服务里，桌面操作只在我登录的会话里做，不拿最高权限代替我的账户。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2128,7 +2128,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "连上电脑不等于解锁资料。｜资料只有一份解锁状态，本机、网页、手机共用；登录电脑只证明能连，不算我本人同意。电脑上的 Codex、Claude 做一些重大的事可以免验证，经这个连接进来的 AI 没有这个待遇。见〔个人资料规则〕〔用户授权规则〕",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2890,7 +2890,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "主机备用入口｜隧道断了，改连副机域名下的 /main-computer，经私网转到主机；第一次要单独登录｜在用",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2905,7 +2905,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "ChatGPT 两个连接｜“我的电脑”项目里有“主机 MCP”“副机 MCP”，手机和网页都能用｜在用",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3025,7 +3025,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件写作",
    "source_phrase": "大文件局部修改｜10 万行的文本只读目标附近，按唯一锚点改一段再回读｜在用",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {
@@ -3100,7 +3100,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "管理员和 SYSTEM 维护｜用管理员或 SYSTEM 身份跑命令；长命令先给编号，之后凭编号取结果｜在用",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3374,7 +3374,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "资料锁共用一份｜手机、网页、本机 AI 用同一份资料解锁和截止；连上电脑不算解锁｜在用",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3869,7 +3869,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机接续说明｜讲手机上的对话怎么借已连接的电脑接着办事｜说不准",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {

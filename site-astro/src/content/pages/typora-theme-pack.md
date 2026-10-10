@@ -1768,7 +1768,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支笔和一张信封分开摆",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -2479,7 +2479,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "更新前留旧版｜主题文件和仓库不一样时，先把旧的复制进 old-themes，文件名带时间｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
