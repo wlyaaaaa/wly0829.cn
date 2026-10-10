@@ -337,8 +337,9 @@ globalThis.TypesetApply = () => {
       if (!parts[0]?.matches(solo) || parts.length!==1 || [...next.textContent.trim()].length>400) break;
       tallest().append(next);pulled.push(parts[0].dataset.comp);
     }
-    const title=tallest().querySelector('[data-comp="chapter_title"]');
-    if (contentH(tallest())<260 && title && media.every(c=>!c.querySelector('[data-comp="screenshot"],[data-comp="prose"]'))) {
+    const title=tallest().querySelector('[data-comp="chapter_title"],[data-comp="section_heading"]'),single=media.length===1 && columnParts(media[0]).length===1 && columnParts(media[0])[0].matches('[data-comp="illustration"]')?media[0].querySelector('img'):null;
+    const natural=single?media[0].getBoundingClientRect().width*single.naturalHeight/single.naturalWidth:0;
+    if ((contentH(tallest())<260 || single && natural>=100 && (contentH(tallest())-natural)/2>144) && title && media.every(c=>!c.querySelector('[data-comp="screenshot"],[data-comp="prose"]'))) {
       const wrap=document.createElement('div'),height=Math.max(100,title.getBoundingClientRect().height);
       wrap.style.cssText='display:flex;align-items:center;gap:22px;min-width:0';title.before(wrap);wrap.append(title);
       for (const c of media) {
