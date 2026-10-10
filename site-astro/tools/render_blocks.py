@@ -761,7 +761,9 @@ def run(names, workers=2):
     reg, owner, css, warn = load_registry()
     css_files = [os.path.join(PROTO, "style", "base.css")] + css
     cssv = build_css(css_files)
-    libfp = library_fingerprint() + cssv + RENDER_VERSION
+    # 冻结代码（HYDRATE_JS 等）就在本文件里，改了它旧排版结果也要作废
+    code_fp = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:16]
+    libfp = library_fingerprint() + cssv + RENDER_VERSION + code_fp
     all_jobs, fms, binds, source_shas = [], {}, {}, {}
     failed = []
     for n in names:
