@@ -368,6 +368,7 @@ HYDRATE_JS = r"""async (bind) => {
   // 区块自己的脚本已经画完（连线、箭头、虚线），HTML 里不再带脚本
   main.querySelectorAll('script').forEach(s => s.remove());
   // 图片固定成排好的大小：画布宽度不变，图没下载完时版面也不跳
+  // contain/cover 已按原图比例绘制，保留固定框；只校正 fill（含默认值）造成的实际拉伸。
   const imgs = [...main.querySelectorAll('img')], imageCorrections = [];
   for (const im of imgs) {
     if (im.naturalWidth && im.naturalHeight) { im.setAttribute('width', im.naturalWidth); im.setAttribute('height', im.naturalHeight); }
@@ -410,7 +411,8 @@ HYDRATE_JS = r"""async (bind) => {
   }
   const titles = [...main.querySelectorAll('.title-img img')].map(i => i.getAttribute('src'));
   return {html: main.innerHTML, style: main.getAttribute('style') || '', height: Math.ceil(document.documentElement.scrollHeight),
-          width: document.documentElement.scrollWidth, art: art ? art.getAttribute('src') : null, artBox, titles, imageCorrections};
+          width: document.documentElement.scrollWidth, art: art ? art.getAttribute('src') : null, artBox, titles, imageCorrections,
+          imageCorrectionPolicy: {correct: 'fill', preserve: ['contain', 'cover'], scope: 'o-h', tolerance: .01}};
 }"""
 
 
