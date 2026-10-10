@@ -1,5 +1,6 @@
 """首页新加载与刷新都从纸色开场；图片到达后超时和连续慢帧才跳完成图。"""
 import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -77,6 +78,28 @@ def adjust_home(html, source, public):
     patch('float warn = step(0.5, u_pcMode)*live;', 'float warn = 0.0;')
     patch('vec3 rgb = mix(vec3(raw.r, top, top*0.45), vec3(raw.r, top*0.62, top), wave);', 'vec3 rgb = vec3(raw.r, top, top*0.45);')
     patch('vec3 neonCol = mix(mix(vec3(0.15,1.0,0.45), vec3(0.15,0.62,1.0), wave), vec3(1.0,0.72,0.20), warn);', 'vec3 neonCol = vec3(0.15,1.0,0.45);')
+    # 复用白色外设的原图边界；保色纹理的 R 仍保护文字，G 单独存外设。
+    masks = json.loads((Path(__file__).resolve().parents[2] /
+                        'sources/home-white-gear/masks.json').read_text(encoding='utf-8'))
+    gear = {orientation: [[parts[key] for key in keys] for keys in
+                         [('monitor', 'stand', 'keyboard', 'mouse', 'case'),
+                          ('screen', 'glass', 'led', 'pens')]]
+            for orientation, parts in masks.items()}
+    gear_json = json.dumps(gear, separators=(',', ':'))
+    patch('const de=j.getContext("2d",{willReadFrequently:!0}),Ge=de.getImageData(0,0,o,s);',
+          'const _gear=t(),_gc=_gear.getContext("2d",{willReadFrequently:!0});'
+          '_gc.scale(o/m,s/_);_gc.fillStyle="#fff";'
+          'const _shapes=(' + gear_json + ')[Q?"v":"h"];'
+          '_shapes.forEach((group,index)=>{_gc.globalCompositeOperation=index?"destination-out":"source-over";'
+          'group.forEach(poly=>{_gc.beginPath();poly.forEach(([x,y],i)=>i?_gc.lineTo(x,y):_gc.moveTo(x,y));'
+          '_gc.closePath();_gc.fill();});});'
+          'const _soft=t(),_sc=_soft.getContext("2d",{willReadFrequently:!0});'
+          '_sc.filter="blur(1px)";_sc.drawImage(_gear,0,0);'
+          'const _gm=_gc.getImageData(0,0,o,s).data,_gs=_sc.getImageData(0,0,o,s).data;'
+          'const de=j.getContext("2d",{willReadFrequently:!0}),Ge=de.getImageData(0,0,o,s);')
+    patch('Ge.data[v]=Ge.data[v+1]=Ge.data[v+2]=Ge.data[v+3],Ge.data[v+3]=255;',
+          'Ge.data[v]=Ge.data[v+2]=Ge.data[v+3],'
+          'Ge.data[v+1]=_gm[v+3]*_gs[v+3]/255,Ge.data[v+3]=255;')
     # 已开始的开场沿原时段自然结束；只有尚未开画的回退才从原图接手。
     patch('let Ct=!1,le=!1,r0="loading",c0=0;',
           'let Ct=!1,le=!1,r0="loading",c0=0,_homeLiveAt=Infinity,'
@@ -108,6 +131,8 @@ def adjust_home(html, source, public):
     patch('"u_preserve","u_ambientGamma"]', '"u_preserve","u_ambientGamma","u_handoff","u_native"]')
     patch('r.uniform1f(L.u_t,e)', 'r.uniform1f(L.u_handoff,_homeMotion),r.uniform1f(L.u_t,e)')
     patch('gl_FragColor = vec4(clamp(col,0.0,1.0), 1.0);',
+          'float _homeGear=texture2D(u_preserve,v_uv).g*smoothstep(0.75,1.0,u_night)*nightReach;\\n'
+          'col=mix(col,texture2D(u_tex,v_uv).rgb*vec3(0.82,0.85,0.90),_homeGear);\\n'
           'if (u_it >= 6.5) col = mix(texture2D(u_native,v_uv).rgb,col,u_handoff);\\n'
           'gl_FragColor = vec4(clamp(col,0.0,1.0), 1.0);')
     # 原加载链已经读到native AVIF；独立纹理保留它完整的构图与原画小鸟。

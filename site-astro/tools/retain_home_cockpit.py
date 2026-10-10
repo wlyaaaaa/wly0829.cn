@@ -246,7 +246,7 @@ def regenerate_runtimes(work):
              'scripts/build-assembled-site.py', 'scripts/repair-release-navigation.py',
              'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
     white_root = repo / 'sources/home-white-gear'
-    names += ['sources/home-white-gear/build.py', 'sources/signature/assets-manifest.json']
+    names += ['sources/home-white-gear/build.py', 'sources/home-white-gear/masks.json', 'sources/signature/assets-manifest.json']
     names += ['site-astro/tools/cockpit_layout.py', 'site-astro/tools/pack_living.py',
               'scripts/prepare-oss-release.py', 'site-astro/tools/adapt_motion.py',
               'scripts/prepare-today-river.py', 'scripts/album-runtime.js', 'scripts/album-runtime.css',
