@@ -11,29 +11,19 @@
         "type": "chapter_title",
         "text_ref": "怎么协作",
         "align": "left",
-        "size": "large",
+        "size": "medium",
         "row": "top",
         "width": "40%",
-        "row_fit_illustration": true,
-        "inline_row": "head",
-        "inline_width": "56%"
-      },
-      {
-        "type": "live_strip",
-        "frame_mode": "plain",
-        "static_items": [
-          {
-            "text": "现行派法：模型清单更新于 2026-10-08（北京时间）",
-            "state": "ok"
-          }
-        ],
-        "row": "top",
-        "inline_row": "head",
-        "inline_width": "44%"
+        "row_fit_illustration": true
       },
       {
         "type": "prose",
         "text_ref": "想看一件事怎么办成",
+        "row": "top"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "现行派法：",
         "row": "top"
       },
       {
@@ -64,7 +54,7 @@
         ]
       }
     ],
-    "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题（状态行并排在标题右边，同项目页状态行的放法）、介绍、四种线型图例，右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行用静态 live_strip，日期取 page.json based_on.model_roster_generated_beijing_date。"
+    "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题、介绍、状态行（一行，带圆点，不要“现在”小标题）、四种线型图例（单列四行），右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行日期取 page.json based_on.model_roster_generated_beijing_date。"
   },
   {
     "screen": "how-01",
@@ -86,14 +76,8 @@
         "text_ref": "想看一件事怎么办成"
       },
       {
-        "type": "live_strip",
-        "frame_mode": "plain",
-        "static_items": [
-          {
-            "text": "现行派法：模型清单更新于 2026-10-08（北京时间）",
-            "state": "ok"
-          }
-        ]
+        "type": "bullet_list",
+        "text_ref": "现行派法："
       },
       {
         "type": "illustration",

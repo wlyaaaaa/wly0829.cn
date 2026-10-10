@@ -1850,8 +1850,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "ef5c0d0d4abae414cd721fa008f02cd5d153924de06b532ad4b308614b27ee17",
-  "converted_at_beijing": "2026-10-11T04:55:53+08:00"
+  "sha256": "d1a1eb9335cfcf9db88f339af6b4da77260947c8e37124437dbdaf44acd0ad01",
+  "converted_at_beijing": "2026-10-11T05:19:07+08:00"
  }
 }
 ---
@@ -1913,29 +1913,19 @@
      "type": "chapter_title",
      "text_ref": "怎么协作",
      "align": "left",
-     "size": "large",
+     "size": "medium",
      "row": "top",
      "width": "40%",
-     "row_fit_illustration": true,
-     "inline_row": "head",
-     "inline_width": "56%"
-    },
-    {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "现行派法：模型清单更新于 2026-10-08（北京时间）",
-       "state": "ok"
-      }
-     ],
-     "row": "top",
-     "inline_row": "head",
-     "inline_width": "44%"
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
      "text_ref": "想看一件事怎么办成",
+     "row": "top"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "现行派法：",
      "row": "top"
     },
     {
@@ -1966,7 +1956,7 @@
      ]
     }
    ],
-   "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题（状态行并排在标题右边，同项目页状态行的放法）、介绍、四种线型图例，右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行用静态 live_strip，日期取 page.json based_on.model_roster_generated_beijing_date。"
+   "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题、介绍、状态行（一行，带圆点，不要“现在”小标题）、四种线型图例（单列四行），右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行日期取 page.json based_on.model_roster_generated_beijing_date。"
   },
   "v": {
    "blocks": [
@@ -1981,14 +1971,8 @@
      "text_ref": "想看一件事怎么办成"
     },
     {
-     "type": "live_strip",
-     "frame_mode": "plain",
-     "static_items": [
-      {
-       "text": "现行派法：模型清单更新于 2026-10-08（北京时间）",
-       "state": "ok"
-      }
-     ]
+     "type": "bullet_list",
+     "text_ref": "现行派法："
     },
     {
      "type": "illustration",
@@ -2184,6 +2168,8 @@
 # 怎么协作
 
 想看一件事怎么办成，点一句话；想查一个项目从谁拿、给谁，看全景图。这里也能查现行派法和三个底座怎样配合。
+
+- 现行派法：模型清单更新于 2026-10-08（北京时间）
 
 **线上传的东西分四种**
 - **实线 · 文件**　照片、录音、备份包、任务文件、成片
