@@ -94,7 +94,7 @@ def images(ctx, spec, kind="icons"):
             continue
         if str(value).startswith(("file:", "data:")):
             result.append(str(value)); continue
-        path = Path(value)
+        path = Path(assets.local_path(str(value)))
         if not path.is_absolute():
             # 主接口的相对路径从素材根起算；旧样张也允许只写本页文件名。
             rooted = root / path
