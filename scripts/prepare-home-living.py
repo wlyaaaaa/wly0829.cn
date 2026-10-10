@@ -185,7 +185,7 @@ def patch_runtime(text: str, model: str, bridge: str) -> str:
     text = replace_once(text, 'window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout};',
                         "window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout,snapshot:livingSnapshot};")
     text = replace_once(text, 'function display(){',
-                        "function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase)});}\nfunction display(){")
+                        "function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase),overview:last?.overview});}\nfunction display(){")
     return model + '\n' + text + '\n' + bridge
 
 

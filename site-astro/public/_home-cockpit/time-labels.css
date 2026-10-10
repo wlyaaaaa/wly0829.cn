@@ -3,33 +3,33 @@ html[data-home-opening="pending"] #home-01 { background: #fff; }
 /* 等待读取或读不到时，也在静态接替帧隐藏时钟；读到后沿原状态恢复。 */
 #home-01 .hero-live-layer [data-hl="screen"].off .time,
 #home-01 .hero-live-layer [data-hl="screen"].off .date { display: none; }
+/* 四个时段标签：画面右下角一排、等宽，和左下三个入口按钮在同一条中线上（入口按钮带 top 86%、高 7.95%）。 */
 #home-01 .home-time-controls {
-  top: auto !important;
-  bottom: 2.4% !important;
-  right: 8.8% !important;
-  max-width: 48% !important;
-  gap: clamp(6px, 1vw, 14px) !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
+  top: calc(89.975% - 24px) !important;
+  bottom: auto !important;
+  right: 3.2% !important;
+  width: 24% !important;
+  max-width: none !important;
+  gap: clamp(6px, .7vw, 12px) !important;
   align-items: center;
 }
-#home-01 .home-time-controls button { padding: 9px 10px !important; min-height: 44px !important; border-width: 0 !important; }
+#home-01 .home-time-controls button { width: auto !important; min-width: 0 !important; padding: 9px 0 !important; min-height: 48px !important; border-width: 0 !important; }
 #home-01 .home-time-controls button img { width: 38px; height: 24px; }
-#home-01 .home-time-controls button:nth-child(5) img { width: 123px; }
-@media (min-width: 768px) and (max-width: 1100px) and (orientation: landscape) {
-  #home-01 .home-time-controls { right: 3% !important; }
-}
 @media (orientation: portrait) {
   #home-01 { overflow: visible; margin-bottom: 60px; }
   #home-01 .home-time-controls {
-    left: 3.5% !important;
-    right: 3.5% !important;
+    top: auto !important;
+    left: 4.1% !important;
+    right: 4.1% !important;
     bottom: -52px !important;
+    width: auto !important;
     max-width: none !important;
-    justify-content: center !important;
-    gap: 4px !important;
+    gap: 8px !important;
   }
-  #home-01 .home-time-controls button { min-width: 44px !important; padding: 7px 6px !important; }
+  #home-01 .home-time-controls button { min-height: 44px !important; padding: 9px 0 !important; }
   #home-01 .home-time-controls button img { max-width: 100%; width: 34.833333px; height: 22px; }
-  #home-01 .home-time-controls button:nth-child(5) img { width: 112.75px; }
 }
 @media (max-width: 352px) and (orientation: portrait) { #home-01 { margin-bottom: 108px; } #home-01 .home-time-controls { bottom: -100px !important; } }
 /* 标签绘色 */

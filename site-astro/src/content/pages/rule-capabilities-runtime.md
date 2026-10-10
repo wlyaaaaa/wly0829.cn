@@ -354,7 +354,7 @@
      "text": "日常技术默认"
     },
     {
-     "target": "/how-this-site/#traffic",
+     "target": "/how-this-site/#repairs",
      "screen": "rule-capabilities-runtime-05b",
      "text": "来由见〔这个网页是怎么做的〕"
     },
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "5c5414a874042eb3a81995e69bae5a3f5845c115ac0eced1743eefd6aa56dfa6",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "138c56b5bfeb89e75711f43d3ad0de5df3ceb4b0275184751929e60fb6f7f0c1",
+  "converted_at_beijing": "2026-10-11T07:32:24+08:00"
  }
 }
 ---
@@ -1486,7 +1486,7 @@
   "links": [
    {
     "text": "这个网页是怎么做的",
-    "href": "/how-this-site/#traffic"
+    "href": "/how-this-site/#repairs"
    },
    {
     "text": "省流量的云端素材",

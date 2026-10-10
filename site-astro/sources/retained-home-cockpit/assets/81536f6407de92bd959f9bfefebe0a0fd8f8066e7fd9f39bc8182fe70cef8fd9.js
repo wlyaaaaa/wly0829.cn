@@ -452,7 +452,7 @@ function currentResult(slot){
  if(phase==='loading'&&!last)return cached?{...offlineResult(cached),text:'正在重新读取 · '+cached.result.text,retained:true}:loading;
  return offlineResult(cached);
 }
-function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase)});}
+function livingSnapshot(){return Object.freeze({phase,overall:window.HomeLivingStatusModel(last,phase),overview:last?.overview});}
 function display(){
  resetOfflineLayout();
  for(const strip of document.querySelectorAll('.live-strip')){
@@ -505,7 +505,7 @@ window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout,snapshot
   const hero = window.HeroLive.mount(container, {plateImage: image, status: initial, intro: opening?.pending === true, opening});
   const controls = document.createElement('div'); controls.className = 'home-time-controls'; controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', '选择这次画面的时间');
   Object.assign(controls.style, {position:'absolute',right:'12px',bottom:'15%',display:'flex',flexWrap:'wrap',justifyContent:'flex-end',gap:'6px',maxWidth:'calc(100% - 24px)',zIndex:'4',opacity:'var(--hero-intro-ui, 1)'});
-  for (const [mode, label] of [['morning','清晨'],['day','白天'],['evening','傍晚'],['night','晚上'],['cycle','一分钟循环一天']]) {
+  for (const [mode, label] of [['morning','清晨'],['day','白天'],['evening','傍晚'],['night','晚上']]) {
     const button = document.createElement('button'); button.type = 'button'; button.disabled = true; button.dataset.daytime = mode; button.setAttribute('aria-label', label); button.setAttribute('aria-pressed', 'false');
     const picture = document.createElement('img'); picture.alt = label; picture.height = 24; picture.width = label.length * 17 + 4;
     picture.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${picture.width}" height="24"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Noto Sans SC,sans-serif" font-size="16" font-weight="600" fill="#0c6932">${label}</text></svg>`);
@@ -529,9 +529,41 @@ window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout,snapshot
       if (layer.isConnected && visibleLayer === layer) layer.style.visibility = '';
     });
   };
+  // 画里的显示器挂驾驶舱总览屏的小号版：显示由共用脚本 window.OverviewScreen 负责（归 O1），分数由后端 overview 字段给（首页不算分）。
+  // 首帧沿用上次读到的总览和读取时间；取不到时显示灰色“读不到（上次 时:分）”，屏幕大小和位置不变。
+  const OVERVIEW_KEY = 'home-overview-last-v1';
+  let overview = null, overviewAt = 0;
+  try { const saved = JSON.parse(localStorage.getItem(OVERVIEW_KEY)); if (saved?.overview) { overview = saved.overview; overviewAt = saved.at || 0; } } catch {}
+  const hm = at => at ? new Date(at).toLocaleTimeString('zh-CN', {timeZone: 'Asia/Shanghai', hour: '2-digit', minute: '2-digit', hour12: false}) : '';
+  const paintOverview = host => {
+    const api = window.OverviewScreen;
+    // 没读到新的时也交上次的总览（带 as_of），过没过期由共用脚本判断，过期就显示灰色“读不到（上次 时:分）”。
+    if (api && typeof api.render === 'function') { api.render(host, overview, {size: 'small'}); return; }
+    // 共用脚本还没到：只画灰色“读不到”，不自己算分、不画数字。
+    host.dataset.state = 'unreadable';
+    host.innerHTML = '<div class="home-overview-fallback"><i></i><b>读不到</b><span>' + (overviewAt ? '上次 ' + hm(overviewAt) : '还没读到') + '</span></div>';
+  };
+  const overviewHost = () => {
+    const screen = container.querySelector('.hero-live-layer [data-hl="screen"]');
+    if (!screen) return null;
+    let host = screen.querySelector(':scope > .home-overview');
+    if (!host) { host = document.createElement('div'); host.className = 'home-overview'; screen.append(host); paintOverview(host); }
+    if (!screen.classList.contains('has-overview')) screen.classList.add('has-overview');
+    return host;
+  };
+  const showOverview = snapshot => {
+    const next = snapshot?.overview;
+    if (next) {
+      overview = next; overviewAt = Date.now();
+      try { localStorage.setItem(OVERVIEW_KEY, JSON.stringify({overview, at: overviewAt})); } catch {}
+    }
+    const host = overviewHost();
+    if (host) paintOverview(host);
+  };
   const continueScene = () => {
     const layer = container.querySelector('.hero-live-layer');
     if (!layer) return;
+    overviewHost();
     const pill = layer.querySelector('[data-hl="spill"]');
     if (pill) Object.assign(pill.style, {maxWidth:'620px',whiteSpace:'normal',overflowWrap:'anywhere',lineHeight:'1.2',boxSizing:'border-box'});
     if (layer === visibleLayer) {
@@ -566,7 +598,10 @@ window.SiteStatus={parse,refresh,history,resetLayout:resetOfflineLayout,snapshot
     scenes.observe(container, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
     continueScene();
   });
+  // 共用总览脚本是 module，晚于本脚本执行；页面 load 时再画一次，换掉临时的灰色占位。
+  addEventListener('load', () => showOverview(window.SiteStatus?.snapshot?.()), {once: true});
   const update = snapshot => {
+    showOverview(snapshot);
     if (!snapshot?.overall) return;
     const full = snapshot.overall;
     window.HeroLive.setStatus(full);
