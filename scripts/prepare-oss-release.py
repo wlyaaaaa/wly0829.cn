@@ -30,6 +30,7 @@ from urllib.parse import quote, unquote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'scripts'))
 MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
 # These files describe the HTML host rather than page content. Moving robots or
@@ -291,6 +292,8 @@ class Rewriter:
         self.version = version
         self.source_root = Path(source_root) if source_root else None
         self._dependencies = {}
+        self.asset_keys = {}
+        self.previous_urls = {}
 
     @staticmethod
     def resource_kind(rel):
@@ -405,7 +408,7 @@ class Rewriter:
             rel, kind = pending.pop(); kinds.add(kind)
             if rel in seen: continue
             seen.add(rel)
-            if self.source_root and Path(rel).suffix in TEXT_ASSETS:
+            if self.source_root and Path(rel).suffix in TEXT_ASSETS and (self.source_root/rel).is_file():
                 if rel not in self._dependencies:
                     context = 'css' if rel.endswith('.css') else 'js' if rel.endswith(('.js','.mjs')) else 'json'
                     self._dependencies[rel] = list(self.literal_dependencies((self.source_root/rel).read_text('utf8'), rel, context))
@@ -427,7 +430,7 @@ class Rewriter:
 
     def target(self, rel):
         if rel in getattr(self, 'retained', {}): return self.retained[rel]['url']
-        return self.base + '/' + self.prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
+        return self.base + '/' + quote(self.asset_keys.get(rel, self.prefix + '/' + rel), safe='/~!$&()*+,;=:@-._')
 
     def resolve(self, raw, owner, context):
         value = html.unescape(raw)
@@ -439,6 +442,10 @@ class Rewriter:
             raise
         if parts.scheme or parts.netloc:
             if (parts.scheme+'://'+parts.netloc).rstrip('/') == self.base and parts.path.strip('/'):
+                previous_url = unquote(urlunsplit((parts.scheme, parts.netloc, parts.path, '', '')))
+                previous_rel = self.previous_urls.get(previous_url)
+                if previous_rel in self.assets:
+                    return previous_rel, parts
                 self.absolute_references.add(unquote(parts.path).lstrip('/'))
             if (parts.scheme + '://' + parts.netloc).rstrip('/') != self.origin:
                 return None
@@ -498,7 +505,12 @@ class Rewriter:
         edits = []
         literals=javascript_literals(text) if context=='js' and self.version>=3 else STRINGS.finditer(text)
         for m in literals:
-            new = m['value'] if self.version>=6 and context=='js' and owner.endswith('/bird.js') and m['value']=='bird-atlas.webp' else self.url(m['value'], owner, context)
+            bird_atlas = self.version>=6 and context=='js' and owner.endswith('/bird.js') and m['value']=='bird-atlas.webp'
+            new = m['value'] if bird_atlas and not self.asset_keys else self.url(m['value'], owner, context)
+            if bird_atlas and self.asset_keys and owner in self.retained:
+                found = self.resolve(m['value'], owner, context)
+                if found and found[0] in self.retained and posixpath.dirname(self.target(owner)) == posixpath.dirname(self.target(found[0])):
+                    new = m['value']
             if new != m['value']:
                 edits.append((offset + m.start('value'), offset + m.end('value'), new, context + '_url'))
         return edits
@@ -588,11 +600,6 @@ class Rewriter:
 
     def rewrite(self, data, owner):
         text = data.decode('utf-8')
-        addresses = re.findall(re.escape(self.base)+r'/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
-        for address in addresses:
-            key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
-            if key.startswith('releases/'):
-                self.absolute_references.add(key)
         suffix = Path(owner).suffix
         if suffix == '.html':
             edits = self.html(text, owner)
@@ -621,7 +628,44 @@ class Rewriter:
             text = text[:change['start']] + change['after'] + text[change['end']:]
         if changes:
             self.changes[owner] = changes
+        addresses = re.findall(re.escape(self.base)+r'/[^\s<>"\'`)\]}]+', html.unescape(text).replace('\\/', '/'))
+        for address in addresses:
+            key = unquote(urlsplit(html.unescape(address)).path).lstrip('/')
+            if key.startswith('releases/'):
+                self.absolute_references.add(key)
         return text.encode('utf8')
+
+
+def offline_asset_keys(rewriter, source, inherited):
+    """Address each resource from its complete dependency closure, including cycles."""
+    local = rewriter.assets - inherited.keys()
+    rewriter.asset_keys = {rel: rewriter.prefix + '/' + rel for rel in local}
+    rewriter.references.clear()
+    for rel in sorted(local):
+        if Path(rel).suffix in TEXT_ASSETS:
+            rewriter.rewrite((source/rel).read_bytes(), rel)
+    graph = {rel: set(refs) for rel, refs in rewriter.references.items()}
+    options = {'scheme': 'raw-dependency-closure.v1', 'rewriter_version': rewriter.version,
+               'base': rewriter.base, 'origin': rewriter.origin}
+    keys = {}
+    for rel in sorted(local):
+        seen, pending = set(), [rel]
+        while pending:
+            dependency = pending.pop()
+            if dependency in seen:
+                continue
+            seen.add(dependency)
+            if dependency == rel or dependency not in rewriter.retained:
+                pending.extend(graph.get(dependency, ()))
+        files = {dependency: dict(rewriter.files[dependency]) for dependency in sorted(seen)}
+        for dependency in seen - {rel}:
+            if dependency in rewriter.retained:
+                files[dependency]['retained'] = {name: rewriter.retained[dependency][name]
+                                               for name in ('key', 'url', 'sha256', 'bytes')}
+        signature = hashlib.sha256(json.dumps({'options': options, 'files': files},
+                                             sort_keys=True, separators=(',', ':')).encode()).hexdigest()
+        keys[rel] = 'releases/' + signature + '/' + rel
+    return keys
 
 
 def validate_retained_text(rewriter, source, inherited):
@@ -676,8 +720,24 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             previous = verify_manifest(predecessor)
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
+    if offline:
+        previous_oss = source_manifest.get('previous_oss', {})
+        if previous_oss.get('asset_base_url') == base:
+            rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
+                previous_oss['objects'].items(), key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+            rewriter.retained.update({rel: row for rel, row in previous_oss['objects'].items()
+                                     if rel in rewriter.assets and row['sha256'] == actual[rel]['sha256']})
+        rewriter.retained.update(inherited)
+        while True:
+            retained_before = set(rewriter.retained)
+            rewriter.asset_keys = offline_asset_keys(rewriter, source, inherited)
+            validate_retained_text(rewriter, source, inherited)
+            if retained_before == set(rewriter.retained):
+                break
     validate_retained_text(rewriter, source, inherited)
     rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear()
+    if offline:
+        rewriter.absolute_references.clear()
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source,version=rewriter_version)
     objects, github = {}, {}
@@ -697,7 +757,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         if host:
             github[rel] = value
         else:
-            objects[rel] = {**value, 'key': prefix + '/' + rel, 'url': rewriter.target(rel),
+            objects[rel] = {**value, 'key': rewriter.asset_keys.get(rel, prefix + '/' + rel), 'url': rewriter.target(rel),
                             'content_type': content_type(rel), 'source': actual[rel],
                             'byte_preserved': value == actual[rel]}
             if rel in rewriter.retained: objects[rel] = rewriter.retained[rel]
@@ -712,6 +772,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                     'oss': {'schema': 'wly.oss-assets.v1', 'asset_base_url': base, 'prefix': prefix,
                             'source_release_id': source_manifest['release_id'], 'objects': objects,'rewriter_version':rewriter_version},
                     'prepared_at_beijing': observed}
+    new_manifest.pop('previous_oss', None)
     write(output / 'github' / MANIFEST, new_manifest)
     github[MANIFEST] = {'bytes': (output/'github'/MANIFEST).stat().st_size, 'sha256': digest(output/'github'/MANIFEST)}
     plan = {'schema': 'wly.oss-release-plan.v1', 'prepared_at_beijing': observed, 'release_id': release_id,
@@ -726,8 +787,13 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                         'mp4_files': sum(x.endswith('.mp4') for x in objects),
                         'rewritten_files': len(rewriter.changes)},
             'remote_verified': False}
-    plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel] for rel in rewriter.retained}
+    plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel]
+                                for rel in rewriter.retained if rel in previous['oss']['objects']
+                                and rewriter.retained[rel] == previous['oss']['objects'][rel]} if previous else {}
     plan['retained_objects'].update(inherited_receipts)
+    if offline:
+        plan['asset_keys'] = rewriter.asset_keys
+        plan['retained_addresses'] = rewriter.retained
     plan['inherited_assets'] = source_manifest.get('inherited_assets', {})
     if previous:
         write(output / 'previous-publication.json', previous)
@@ -794,7 +860,16 @@ def verify_local(output):
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
     rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
-    rewriter.retained = {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})}
+    rewriter.retained = plan.get('retained_addresses', {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})})
+    if 'asset_keys' in plan:
+        previous_oss = source_manifest.get('previous_oss', {})
+        if previous_oss.get('asset_base_url') == rewriter.base:
+            rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
+                previous_oss['objects'].items(), key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+        if offline_asset_keys(rewriter, source, inherited) != plan['asset_keys']:
+            raise ValueError('Offline dependency keys are not reproducible')
+        rewriter.asset_keys = plan['asset_keys']
+        rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear(); rewriter.absolute_references.clear()
     home_bytes,home_proof=current_home_links(source,version=plan.get('rewriter_version',1))
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
