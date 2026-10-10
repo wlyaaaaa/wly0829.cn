@@ -1188,7 +1188,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我的人脸模板和声音样本只在本机，只有一份；删掉或换掉，以后的判断就跟着变，旧结果不再作数。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1201,7 +1201,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "不认别人是谁，也不数一共有几个人。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1305,7 +1305,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我的人脸模板和声音样本只在本机，只有一份；删掉或换掉，以后的判断就跟着变，旧结果不再作数。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1318,7 +1318,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "不认别人是谁，也不数一共有几个人。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

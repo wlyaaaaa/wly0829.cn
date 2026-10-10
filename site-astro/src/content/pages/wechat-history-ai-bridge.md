@@ -1265,7 +1265,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "WeFlow",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1278,7 +1278,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "这个项目",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1291,7 +1291,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1304,7 +1304,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "回答",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1317,7 +1317,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "两个例子 \n",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1356,7 +1356,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "后来补上的两条规矩 \n",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1408,7 +1408,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "WeFlow",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1421,7 +1421,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "这个项目",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1434,7 +1434,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1447,7 +1447,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "回答",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

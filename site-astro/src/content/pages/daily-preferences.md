@@ -1463,7 +1463,7 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "我说一句，当场改 \nAI把原话记下，分清是补充、临时、更正还是撤回；更正立刻用在这次回答里。依赖旧说法的卡怎么退场，见亮点。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -5410,7 +5410,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "灯泡",
    "source_phrase": "该导出哪一段｜列出每个来源实际覆盖到哪天，建议从哪天开始重叠导出",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

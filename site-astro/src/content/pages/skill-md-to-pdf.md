@@ -1181,7 +1181,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "默认：中性 \n黑字、灰线、A4、页边约1.5厘米、正文12像素。表格每行不拆到两页，标题不孤零零落在页底。什么都不说，就是这个样子。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2345,7 +2345,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "有硬要求：几页、哪些字必须在、图一张不能少",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2397,7 +2397,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "排得好不好看：样子由选的 CSS 定，它只保证照样打出来",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2449,7 +2449,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "有硬要求：几页、哪些字必须在、图一张不能少",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2501,7 +2501,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "排得好不好看：样子由选的 CSS 定，它只保证照样打出来",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

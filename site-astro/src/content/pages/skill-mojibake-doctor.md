@@ -1052,7 +1052,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "查",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1065,7 +1065,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "修",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1078,7 +1078,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "守",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1091,7 +1091,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "查",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1104,7 +1104,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "修",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1117,7 +1117,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "守",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
