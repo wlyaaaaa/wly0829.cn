@@ -63,7 +63,9 @@ export function normalize(raw) {
     automation: { state: st(auto.state), observed_at: auto.observed_at || null, groups: list(auto.groups), items: list(auto.items) },
     sections: { computer: list(sections.computer), remote: list(sections.remote), backup_cloud: list(sections.backup_cloud), today: list(sections.today) },
     today: { state: st(today.state), observed_at: today.observed_at || null, items: list(today.items) },
-    grafana: { state: st(grafana.state), checked_at: grafana.checked_at || null, links: list(grafana.links).filter((x) => /^https:\/\//.test(x.url || '')) },
+    grafana: { state: st(grafana.state), checked_at: grafana.checked_at || null, links: list(grafana.links).filter((x) => /^https:\/\//.test(x.url || '')),
+      // 后台根地址：接口的 grafana.url；精简视图没带时取公开图表链接的同一个站点
+      url: /^https:\/\//.test(grafana.url || '') ? grafana.url : (() => { try { return new URL(list(grafana.links).find((x) => /^https:\/\//.test(x.url || ''))?.url).origin + '/'; } catch { return null; } })() },
     projects: { state: st(projects.state), observed_at: projects.observed_at || null, items: list(projects.items) },
     source_gaps: list(v.source_gaps),
     owner_corrections: obj(v.owner_corrections),

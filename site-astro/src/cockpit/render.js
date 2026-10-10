@@ -62,9 +62,11 @@ export function computer(v, ctx) {
   const graf = charts.length
     ? charts.map((l) => `<a class="cp-card cp-chart is-green" href="${esc(l.url)}" target="_blank" rel="noopener"><h3><span class="cp-chart-icon" aria-hidden="true"></span>${esc(l.label)} 24 小时曲线</h3><p>在新标签页打开图表网页（Grafana）。</p></a>`).join('')
     : `<article class="cp-card is-gray"><h3>${dot('unavailable')}24 小时曲线</h3><p>图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}。</p></article>`;
+  // Grafana 后台登录：根地址来自接口，后面拼 login；接口没给地址就不出这张卡
+  const login = g.url ? `<a class="cp-card cp-chart cp-login" href="${esc(new URL('login', g.url).href)}" target="_blank" rel="noopener"><h3><span class="cp-login-icon" aria-hidden="true"></span>Grafana 后台登录 →</h3><p>登录后看全部图表、改面板（新标签页）。</p></a>` : '';
   const cards = dedupeCards(v.sections.computer).map((c) => card(c, ctx.now)).join('');
   const remote = dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now);
-  return `<div class="cp-grid">${cards}${remote}</div><div class="cp-grid cp-charts">${graf}</div>`;
+  return `<div class="cp-grid">${cards}${remote}</div><div class="cp-grid cp-charts">${graf}${login}</div>`;
 }
 
 export function backup(v, ctx) {
