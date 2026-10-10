@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "21527d45e4e9a36fc097e85bb4cb4ecbbb956552c8e00d3e692f19421b4fd962",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
  }
 }
 ---
@@ -3802,7 +3802,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "小窗放对屏幕｜只显示一个小窗，优先放串流用的虚拟屏，拔掉回主屏；拖过的位置保留",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {

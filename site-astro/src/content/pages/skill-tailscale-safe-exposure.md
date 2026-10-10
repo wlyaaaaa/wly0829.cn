@@ -122,7 +122,7 @@
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
   "sha256": "12a51862502614b7a247ecfe015b2f7597e7b558b6f9ea54770cefabbfee84d8",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:31+08:00"
  }
 }
 ---
@@ -556,7 +556,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "一部手机和笔记本连向电脑的两条线",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {

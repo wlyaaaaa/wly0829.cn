@@ -880,7 +880,7 @@
  "source": {
   "page": "sources/pages/personal-media/page.json",
   "sha256": "905e850440e6407ff6caaf0730e79e8e8d66a198472dce90659b43cc3103eee8",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
  }
 }
 ---
@@ -3575,7 +3575,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机上删了，电脑跟着删｜放回手机的精选我在手机上删了，下次连上时电脑那份也删｜绿·只修报错",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -3964,7 +3964,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "收进单个文件｜不是从手机来的，比如电脑录屏，直接收进来；在文件夹里却没登记的，原地补上记录｜绿",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {

@@ -498,7 +498,7 @@
  "source": {
   "page": "sources/pages/codex-local-remote/page.json",
   "sha256": "e12d7fb4b1f27714b6ae0772df7277d08e75cf3e48cce616dcb544097687b367",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
  }
 }
 ---
@@ -668,7 +668,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一台电脑屏幕整块画面投到一部手机上（串流）",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -683,7 +683,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "一部手机，屏幕上是一个缩小的电脑桌面",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -1363,7 +1363,7 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "说“打开远程”",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -1423,7 +1423,7 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "说“关闭远程”",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -1655,7 +1655,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "接着同一个任务：手机和电脑用同一个任务编号；电脑上的 Codex 先接上这个任务，手机的第一句才放行，不会各跑一份 ✕",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -1685,7 +1685,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机开新任务：在电脑上登记过的项目里开，或在单独的临时文件夹里开；手机不能随便指定路径 ✕",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -2128,7 +2128,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "打开和关闭远程：平时 Codex 原样启动；“打开”时才接管，必要时重开一次 Codex；“关闭”只关公网入口、不重开 Codex；网页服务崩了能自己拉起 ✕",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {

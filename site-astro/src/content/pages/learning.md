@@ -545,7 +545,7 @@
  "source": {
   "page": "sources/pages/learning/page.json",
   "sha256": "e34c22939d152680d729fe42729f96c59055c80e639999fbb03df1e48387103e",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
  }
 }
 ---
@@ -2840,7 +2840,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "拿我的项目举例｜用我亲手做过的项目讲原理；中文语音转写第一课已用上，个人理解库、远程电脑 MCP、AI 分工记录还没讲到｜老师自己挑，只读不改；我也可以说“拿我的某个项目举个例子”｜在用",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {

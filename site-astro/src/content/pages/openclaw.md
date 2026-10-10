@@ -490,7 +490,7 @@
  "source": {
   "page": "sources/pages/openclaw/page.json",
   "sha256": "419f26996ab20dd536f658523d86b7627d5d60f4bdf3078c45c11ddc7e7a154e",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
  }
 }
 ---
@@ -1578,7 +1578,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "模型\n9月默认用本机的qwen3.8:27b；要更强的，手选远程21条路线（通义千问11、DeepSeek2、Z.AI8）",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {

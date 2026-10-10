@@ -933,7 +933,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
  }
 }
 ---
@@ -4909,7 +4909,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机电脑用在哪｜一段时间里手机、电脑各自的总量、主要应用和每天变化；两台设备的时长不相加",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {

@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "4e1f0ee71f5a493ac2ad5b8f18045a2d027eb651f9b6a9b1de0014fc7798dc3a",
-  "converted_at_beijing": "2026-10-10T10:22:27+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
  }
 }
 ---
@@ -1407,7 +1407,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱回收站",
    "source_phrase": "一个工具箱和一个回收站",
-   "sha256": "268078c44c18687a31aa92b995dfd62806795483e899086802b64af9c05fbd0a",
+   "sha256": "359e84c6214837b5d3e12e7068eb41c82125f41a67043c035ecd8d359f582bd2",
    "status": "ready"
   },
   {

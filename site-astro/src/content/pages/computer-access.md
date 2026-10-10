@@ -151,7 +151,7 @@
  "source": {
   "page": "sources/pages/computer-access/page.json",
   "sha256": "3c63959f7f639ae841d9b53e01ffe325bba4617a92be23420665aff2d4b08227",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
  }
 }
 ---
@@ -1782,7 +1782,7 @@
    "fallback": false,
    "key": "双屏同步",
    "source_phrase": "这一页怎么工作\n页面开在前台时，每60秒读一次电脑；切回来马上读。刷新不会延长授权。时间都是北京时间。网页只是遥控器：判断和执行都在电脑上，由密码中心的授权程序办；网页自己不存授权状态。每次办理都和这个浏览器绑定；结果不明时只查原来那次，不会把同一个动作做第二遍。只能在wly0829.cn或电脑自己的授权页上办理；在别处打开只能看。",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {

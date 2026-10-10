@@ -1047,7 +1047,7 @@
     },
     {
      "id": "n-pending",
-     "text": "75 项",
+     "text": "77 项",
      "meaning": "待验收清单的全部条目（含已通过、暂缓、已被取代的），口径同 9 月 28 日的 43 项",
      "as_of": "2026-10-10",
      "source": "E:\\PCConfig\\registries\\pending_acceptance.json items 条数（最后修改 10 月 9 日 08:56 北京时间）",
@@ -1208,7 +1208,7 @@
     },
     {
      "id": "n-tests",
-     "text": "206 项登记测试，15 组",
+     "text": "207 项登记测试，15 组",
      "meaning": "tests/test-registry.json 的 tests 条数，按 subsystem 分 15 组",
      "as_of": "2026-10-10",
      "source": "E:\\PCConfig\\tests\\test-registry.json（提交 f45f22dd）",
@@ -1229,7 +1229,7 @@
     },
     {
      "id": "n-commits",
-     "text": "1770 次",
+     "text": "1772 次",
      "meaning": "main 分支提交数（口径同 9 月 28 日的 1437 次，只算 main）",
      "as_of": "2026-10-10",
      "source": "git -C E:\\PCConfig rev-list --count main（最后一次提交 10 月 10 日 06:20 北京时间）",
@@ -1586,8 +1586,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig/page.json",
-  "sha256": "7af96084d696debedad175fa9784f89e107cdaac73a0aed563b59afa50e84cf0",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "sha256": "b7e77d75b72be5d66b6ce05fd7e0b957e012f9bfcb0783c2c629532315a9a141",
+  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
  }
 }
 ---
@@ -3940,7 +3940,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "手机和笔记本借电脑上网 两个代理入口，只在 Tailscale 里，不开公网。",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -4520,7 +4520,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 
 **换机照表重建**　按 9 月 28 日的表：33 个必须重建，5 个可选，49 个装回软件后软件自己会装，38 个等我决定。
 
-**待验收都记在一处**　所有“要等时机才能核”的事登记在一张清单里（10 月 10 日共 75 项，含已验过的），驾驶舱上随时能看。
+**待验收都记在一处**　所有“要等时机才能核”的事登记在一张清单里（10 月 10 日共 77 项，含已验过的），驾驶舱上随时能看。
 
 ::screen{#pcconfig-12 section="tech"}
 
@@ -4779,7 +4779,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 
 **这台电脑**　技嘉 X870E 主板 · AMD 9950X3D · 64 GB 内存 · RTX 5090 D · 三块显示器；硬盘：4 TB 固态（C、E）、2 TB 固态（G）、2 TB 外接固态（H）、4 TB 机械盘（D）
 
-**测试和指南**　206 项登记测试，分 15 组，按改动挑着跑；换机恢复指南每天自动发布到 G 和 H。
+**测试和指南**　207 项登记测试，分 15 组，按改动挑着跑；换机恢复指南每天自动发布到 G 和 H。
 
 ::screen{#pcconfig-13 section="tech"}
 
@@ -5066,8 +5066,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 - **换机照表来。**　恢复顺序、要重建的任务、要装的软件都有表，AI 照着做。
 
 **110620 行**　代码（PowerShell、Python、Node.js、C#）
-**206 项**　登记测试
-**1770 次**　提交（7 月 9 日起，截至 10 月 10 日）
+**207 项**　登记测试
+**1772 次**　提交（7 月 9 日起，截至 10 月 10 日）
 
 ::screen{#pcconfig-14 section="tech"}
 
@@ -6936,7 +6936,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "远程和网络",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -6951,7 +6951,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "远程服务的机器接线　远程服务装在这台电脑上：开机自启的服务和登录任务、端口和隧道登记，换机按表重建；能做什么见电脑远程控制页　〈在用〉",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -6981,7 +6981,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "远程桌面只放行两台　Windows 远程桌面只对 Tailscale 里的笔记本和手机开放　〈在用〉",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -6996,7 +6996,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "借电脑上网　手机、笔记本经 Tailscale 用这台电脑的两个代理入口，不开公网　〈待验收〉",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -7041,7 +7041,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "图表公网入口　电脑使用记录的 Grafana 图表经 Cloudflare 隧道（远程服务的外网入口也走它）公开在 grafana.wly0829.cn，要登录　〈在用〉",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -7455,7 +7455,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "主屏黑幕　Ctrl+Win+R 给 OLED 主屏盖黑幕，串流照样看得到桌面　〈在用〉",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -7635,7 +7635,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "取短信验证码　手机验证码经小米妙享转到电脑，AI 读最近 60 秒的通知取码，不留日志；还没真用过　〈待验收〉",
-   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
+   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
    "status": "ready"
   },
   {
@@ -8563,7 +8563,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "natpierce 内网穿透　9 月 26 日退役，远程改走 Cloudflare 隧道和 Tailscale　〈已停用〉",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
@@ -9012,7 +9012,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "9 月 8 日　本机的 AI 远程服务",
-   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
+   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
    "status": "ready"
   },
   {
