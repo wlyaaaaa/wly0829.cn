@@ -1,16 +1,12 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches:
-      - site-dist
   workflow_dispatch:
     inputs:
-      ref:
+      sha:
         description: 'site-dist commit to deploy; use an earlier SHA to restore that exact artifact'
         type: string
-        required: false
-        default: site-dist
+        required: true
 
 permissions:
   contents: read
@@ -23,21 +19,32 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Check out prepared artifact
+      - name: Check out main
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.ref || github.sha }}
+          ref: main
+      - name: Validate and check out site-dist commit
+        shell: bash
+        env:
+          DEPLOY_SHA: ${{ inputs.sha }}
+        run: |
+          [[ "$DEPLOY_SHA" =~ ^[0-9a-fA-F]{40}$ ]] || { echo 'sha must be 40 hexadecimal characters' >&2; exit 1; }
+          git fetch --no-tags origin refs/heads/site-dist:refs/remotes/origin/site-dist
+          git merge-base --is-ancestor "$DEPLOY_SHA" origin/site-dist
+          git checkout --detach "$DEPLOY_SHA"
       - name: Configure Pages
         uses: actions/configure-pages@v6
       - name: Upload prepared artifact
         uses: actions/upload-pages-artifact@v5
         with:
+          # The action always excludes .git and .github, including hidden-file uploads.
           path: .
           include-hidden-files: true
           retention-days: 1
