@@ -290,7 +290,7 @@
    "numbers": [
     {
      "id": "n-runs",
-     "text": "7,330 轮",
+     "text": "6,226 轮",
      "meaning": "守护巡查轮数（日志里 guardian run 行），日志最早到北京 7/24 14:19，更早的已轮换",
      "as_of": "2026-09-28",
      "source": "logs\\guardian.log.1 + guardian.log，logstats.py 现算，截至北京 22:20",
@@ -547,8 +547,8 @@
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian/page.json",
-  "sha256": "f7c872044db13947ff9f686c2f87542e2f860477076299d2029848a198a965e1",
-  "converted_at_beijing": "2026-10-10T11:36:50+08:00"
+  "sha256": "8ae1573434e46212cb4012e0f1ad6920953344f3ae807e719390f5949d4c2da7",
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -601,37 +601,21 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "intro",
+     "width": "60%",
      "text_ref": "内存盘守护"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
-    },
-    {
-     "type": "stat_card",
-     "columns": 4,
-     "columns_v": 2,
-     "icons": [
-      "_library/icons/日历时钟.png",
-      "_library/hires-icons-r2/版本循环文件.png",
-      "_library/icons/文件夹.png",
-      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
-     ],
-     "text_ref": "7,330轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至10月10日09:32（北京时间"
+     "frame_mode": "plain",
+     "row": "intro"
     },
     {
      "type": "action_button",
      "columns": 3,
      "row": "intro",
-     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明",
-     "width": "60%",
-     "row_fit_illustration": true
+     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
     },
     {
      "type": "prose",
@@ -644,6 +628,23 @@
      "index": 0,
      "row": "intro",
      "width": "40%"
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "columns_v": 2,
+     "icons": [
+      "_library/icons/日历时钟.png",
+      "_library/hires-icons-r2/版本循环文件.png",
+      "_library/icons/文件夹.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
+     ],
+     "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "截至10月10日05:01（北京时间"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左上毛笔艺术字大标题，标题右边同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（后者带 GitHub 小猫标志）。下面一段介绍，介绍下一行灰色小字（含〔电脑配置与恢复〕链接）。右上一幅水彩插画：一根绿色内存条被画成一块小硬盘的样子，盘面写着“Z”，盘里飘着几片半透明的浏览器小图标（像落叶一样轻）；旁边一位小小的园丁拿着水壶和一把小扫帚照看它，园丁脚边一个小闹钟指着一刻钟；内存条下方一条细细的绿色光带流回主板，表示腾回来的内存。中间一排四张数字卡（上面小插画、大号绿色数字、下面一行小字）：一个转着的小闹钟、一把扫帚扫出一团绿色光点、一小片浏览器图标、一叠打着对勾的试卷。数字卡下沿右侧一行灰色小字“截至 9 月 28 日 22:20（北京时间）”。最下面一条细长圆角横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 30%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
@@ -672,12 +673,12 @@
       "_library/icons/文件夹.png",
       "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
-     "text_ref": "7,330轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
+     "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
     },
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月10日09:32（北京时间"
+     "text_ref": "截至10月10日05:01（北京时间"
     },
     {
      "type": "action_button",
@@ -808,12 +809,12 @@
 
 Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；这里只讲照看 Z 盘的程序。
 
-- **7,330 轮**　巡查：7 月 24 日以来每 15 分钟一轮，一轮不落（更早的记录已轮换掉）
+- **7,312 轮**　巡查：7 月 24 日以来每 15 分钟一轮，一轮不落（更早的记录已轮换掉）
 - **38 次**　自动清空重建，9 月 7 日以后再没需要过
 - **0.5 GiB**　Z 盘现在只用这么多，基本是 Chrome 的三类缓存
 - **124 项**　隔离测试，不碰真盘，10 月 10 日重跑全部通过
 
-截至 10 月 10 日 09:32（北京时间）
+截至 10 月 10 日 05:01（北京时间）
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 

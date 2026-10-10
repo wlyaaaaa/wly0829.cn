@@ -564,7 +564,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "1f6405c3a0fcb982d53bd77cb8d8cf20b5d42fc64a4e6074335369207be26b93",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -602,9 +602,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "个人健康",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "首屏",
+     "width": "42%",
+     "text_ref": "个人健康"
     },
     {
      "type": "live_strip",
@@ -624,23 +624,7 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · 每周自动刷新；AI 使用记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "stat_card",
-     "columns": 4,
-     "columns_v": 2,
-     "illustration": "left_inside",
-     "icons": "auto",
-     "text_ref": "1 台"
-    },
-    {
-     "type": "prose",
-     "text_ref": "我问健康问题时，AI先读",
-     "row": "首屏",
-     "width": "42%",
-     "row_fit_illustration": true
+     "row": "首屏"
     },
     {
      "type": "illustration",
@@ -652,6 +636,14 @@
      "size": "large",
      "target_height": 360,
      "target_width": 434
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "columns_v": 2,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "text_ref": "1 台"
     },
     {
      "type": "action_button",

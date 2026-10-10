@@ -7,6 +7,7 @@ box 和遮罩范围改成整张图 [0,0,1,1]、image.size 改成插画原图尺�
 import json
 import os
 import shutil
+import hashlib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POINT = ("center", "pivot", "from", "to", "home")
@@ -71,8 +72,37 @@ def adapt(page):
     return "/_living/" + page + "/astro/config.json"
 
 
+def adapt_album():
+    """沿用旧站过渡画法；新版标题直接参与快照，准备与播放各用自己的时钟。"""
+    repo = os.path.dirname(ROOT)
+    js = open(os.path.join(repo, "scripts", "album-runtime.js"), encoding="utf-8").read()
+    css = open(os.path.join(repo, "scripts", "album-runtime.css"), encoding="utf-8").read()
+    old = "    let title = titleNode && pixelLayer(titleNode, titleNode.title, 'album-title', participants, holes);"
+    new = """    let title = (incoming || outgoingTitle) && [...document.querySelectorAll('.ts-canvas :is([data-title-key],[data-comp="chapter_title"] img,[data-comp="chapter_title"] .brushfont)')].find(el => {
+      const r = el.getBoundingClientRect(); return visible(el) && (!screen || el.closest('[data-screen]')?.dataset.screen === screen)
+        && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+    });
+    if (title) { altered.push([title, title.style.viewTransitionName]); title.style.viewTransitionName = 'album-title'; }
+    else title = titleNode && pixelLayer(titleNode, titleNode.title, 'album-title', participants, holes);"""
+    if js.count(old) != 1 or js.count("nominal = 720") != 1 or css.count("--album-duration: 720ms") != 1:
+        raise ValueError("旧站过渡入口已变，需核对标题与时钟")
+    js = js.replace(old, new).replace("nominal = 720", "nominal = 1200")
+    css = css.replace("720 ms movement", "1200 ms movement").replace("--album-duration: 720ms", "--album-duration: 1200ms")
+    dst = os.path.join(ROOT, "public", "_album")
+    os.makedirs(dst, exist_ok=True)
+    manifest = {"source": js}
+    for kind, source in (("css", css), ("js", js)):
+        name = "album-" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:20] + "." + kind
+        open(os.path.join(dst, name), "w", encoding="utf-8", newline="\n").write(source)
+        manifest[kind] = "/_album/" + name
+    json.dump(manifest, open(os.path.join(dst, "astro-runtime.json"), "w", encoding="utf-8"), ensure_ascii=False)
+
+
 if __name__ == "__main__":
     import sys
+    adapt_album()
+    if sys.argv[1:] == ["--album-only"]:
+        sys.exit(0)
     # 页名写在命令行；不写就是 src/chrome/runtime 里已抄出的全部页（不按页名写死）
     names = sys.argv[1:] or sorted(f[:-5] for f in os.listdir(os.path.join(ROOT, "src", "chrome", "runtime")) if f.endswith(".json"))
     for p in names:

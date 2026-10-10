@@ -941,8 +941,8 @@
  },
  "source": {
   "page": "sources/pages/agents/page.json",
-  "sha256": "4e1f0ee71f5a493ac2ad5b8f18045a2d027eb651f9b6a9b1de0014fc7798dc3a",
-  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
+  "sha256": "857a4662ee19358a9f4a259436f51d58d3b924eb67a1c5c28fb323600a3f34f3",
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -1015,12 +1015,26 @@
       748,
       182
      ],
+     "row": "top",
+     "width": "47%",
      "text_ref": "AI 规则与技能基座"
     },
     {
      "type": "live_strip",
      "text_ref": "现在",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "top"
+    },
+    {
+     "type": "prose",
+     "row": "top",
+     "text_ref": "我给 AI 定的规矩"
+    },
+    {
+     "type": "illustration",
+     "row": "top",
+     "width": "53%",
+     "asset": "proto:a01-hero-h"
     },
     {
      "type": "stat_card",
@@ -1032,19 +1046,6 @@
       "proto:a01-ic4"
      ],
      "text_ref": "160次"
-    },
-    {
-     "type": "prose",
-     "row": "top",
-     "text_ref": "我给 AI 定的规矩",
-     "width": "47%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "top",
-     "width": "53%",
-     "asset": "proto:a01-hero-h"
     }
    ],
    "notes": "首屏：标题和介绍在左、插画在右；四张数字卡；现在横条。示范规格（主工程师写）"
@@ -1407,7 +1408,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱回收站",
    "source_phrase": "一个工具箱和一个回收站",
-   "sha256": "359e84c6214837b5d3e12e7068eb41c82125f41a67043c035ecd8d359f582bd2",
+   "sha256": "268078c44c18687a31aa92b995dfd62806795483e899086802b64af9c05fbd0a",
    "status": "ready"
   },
   {

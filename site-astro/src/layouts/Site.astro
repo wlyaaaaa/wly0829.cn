@@ -8,6 +8,7 @@ import header from '../chrome/header.html?raw';
 import footer from '../chrome/footer.html?raw';
 import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
+import albumRuntime from '../../public/_album/astro-runtime.json';
 import '../styles/typeset-page.css';
 import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
@@ -44,17 +45,22 @@ const tocHtml = (() => {
 })();
 const withoutTocRuntime = (html: string) => html.replace(/<script\b[^>]*\b(?:data-src|src)="[^"]*toc-consistency[^"]*"[^>]*><\/script>/g, '');
 const head = rt ? withoutTocRuntime(rt.head.map((h: string) => h.startsWith('<script id="album-page"')
-  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>` : h).join('\n')) : '';
+  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>`
+  : /<script[^>]*data-album-inline/.test(h) ? `<script data-album-inline>${albumRuntime.source}</script>`
+  : h.replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css)).join('\n')) : '';
 // 站点运行脚本按 page-data 里的旧“整屏图”逐屏排版；新页没有整屏图，把屏清单置空，其余（落叶、水彩、页头、目录用的共用数据）原样
 // “复制 AI 续作说明”（项目页、冻结页）：现在网站只在脚本里临时造一个 #ai-brief 对话框，脚本没跑时按钮点了没反应。
 // 这里在页面末尾放一个真实的 #ai-brief：没有脚本也能跳到这里、看到并手动复制说明；脚本在时照旧弹对话框（静态这块隐藏、改名让出 id）。
 // 现在网站上没有对应页、因而没有运行件的页（例如旧项目名的别名页），用内容文件里的页面数据
 const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } })() ?? pageMeta ?? null;
+const authorPages = import.meta.glob('../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
 const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
 const briefText = pageData && ['project', 'frozen'].includes(pageData.kind)
   ? `项目：${pageData.title}；${briefRepo.startsWith('private-project-') ? '项目键' : '仓库'}：${briefRepo}；范围：整个项目；目标：（这里写这次要做的事）。先读项目的 AGENTS.md 和说明，按现行规则做。` : '';
 const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
-  const d = JSON.parse(body); d.screens = []; return a + safe(d) + c;
+  const d = JSON.parse(body); d.screens = [];
+  d.status_binding = { ...d.status_binding, empty_text: Object.fromEntries((authorPages[`../../../sources/pages/${page}/page.json`]?.registry?.live || []).filter((x: any) => typeof x.empty_text === 'string').map((x: any) => [x.slot, x.empty_text])) };
+  return a + safe(d) + c;
 }) : '';
 ---
 <!doctype html>
@@ -121,5 +127,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
   <Fragment set:html={tail} />
   <script is:inline defer src={tocConsistency}></script>
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
+  {blocks && <script is:inline>(()=>{/* 屏淡入（照旧站 reveal 实测：整屏一起从下方 100px 升起、透明度 0→1，800 毫秒；第一屏、卡片网格里的卡片屏、
+    带 # 进来的那屏、motion-off、减少动态效果时不播；屏进视口 6% 时加 .ts-entering，播完摘掉。样式在 typeset-page.css） */
+    if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    const go=()=>{const all=[...document.querySelectorAll('main.ts-page section.ts-screen')],first=all[0];
+      const hit=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1)))?.closest('.ts-screen'):null;
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const sec=e.target;io.unobserve(sec);
+        if(sec===first||sec===hit||sec.dataset.seen||sec.parentElement?.classList.contains('ts-card-grid')||document.body.classList.contains('motion-off'))return;
+        sec.dataset.seen='1';sec.classList.add('ts-entering');
+        sec.addEventListener('animationend',ev=>{if(ev.target===sec)sec.classList.remove('ts-entering');});}),{threshold:.06});
+      all.forEach(x=>io.observe(x));};
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go,{once:true});else go();})();</script>}
 </body>
 </html>

@@ -97,7 +97,7 @@
  "source": {
   "page": "sources/pages/skill-vault-workflow/page.json",
   "sha256": "0b55aa9942bf458e7bdc6bc3074a0a018bc74f8829a6db7fe124cb5ca6b5b19e",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -132,8 +132,8 @@
      "align": "left",
      "size": "large",
      "text_ref": "加密库操作",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "balanced-heading",
+     "width": "88%"
     },
     {
      "type": "live_strip",
@@ -149,15 +149,13 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "balanced-heading"
     },
     {
      "type": "illustration",
      "illustration": "outside",
-     "row": "k1a-head",
-     "width": "auto",
-     "align": "right"
+     "row": "balanced-heading",
+     "width": "12%"
     },
     {
      "type": "prose",

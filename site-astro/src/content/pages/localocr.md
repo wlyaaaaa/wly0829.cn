@@ -633,7 +633,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "e43d3cf443ae2eea49e11e430861380bc45f959a01f1796e280c1dcd6c6618de",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -675,9 +675,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "本地文字识别",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "50%",
+     "text_ref": "本地文字识别"
     },
     {
      "type": "live_strip",
@@ -693,8 +693,17 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · 识别服务日志；AI 使用记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "stat_card",
@@ -709,18 +718,6 @@
     {
      "type": "prose",
      "text_ref": "截至2026年10月10日05:17（北京时间"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全",
-     "width": "50%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%"
     },
     {
      "type": "action_button",

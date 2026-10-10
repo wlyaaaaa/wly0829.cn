@@ -106,7 +106,7 @@
  "source": {
   "page": "sources/pages/skill-personal-formal-documents/page.json",
   "sha256": "72b95fd2dc5ba32ecf04edefd75385c0d62262bd63d9bae52887362a0c65af66",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -143,9 +143,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "个人正式文书技能",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "55%",
+     "text_ref": "个人正式文书技能"
     },
     {
      "type": "live_strip",
@@ -161,15 +161,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "技能名",
-     "width": "55%",
-     "row_fit_illustration": true
+     "text_ref": "技能名"
     },
     {
      "type": "content_card",

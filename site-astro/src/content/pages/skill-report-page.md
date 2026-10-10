@@ -529,7 +529,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "538dcecf234364b92cd8180d160dcd08a4495edbf347cc354cb2c925608bf8c6",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -564,8 +564,8 @@
      "align": "left",
      "size": "large",
      "text_ref": "汇报网页",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "52%"
     },
     {
      "type": "live_strip",
@@ -581,24 +581,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "stat_card",
-     "columns": 3,
-     "columns_v": 1,
-     "illustration": "none",
-     "icons": "none",
-     "number_style": "stat",
-     "text_ref": "151份"
+     "row": "intro"
     },
     {
      "type": "prose",
      "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页",
-     "row": "intro",
-     "width": "52%",
-     "row_fit_illustration": true
+     "row": "intro"
     },
     {
      "type": "points_card",
@@ -626,11 +614,22 @@
       "left",
       "left"
      ],
-     "text_ref": "怎么跟AI说"
+     "text_ref": "怎么跟AI说",
+     "row": "intro"
     },
     {
      "type": "notice",
-     "text_ref": "不用点名：要展开说明的汇报"
+     "text_ref": "不用点名：要展开说明的汇报",
+     "row": "intro"
+    },
+    {
+     "type": "stat_card",
+     "columns": 3,
+     "columns_v": 1,
+     "illustration": "none",
+     "icons": "none",
+     "number_style": "stat",
+     "text_ref": "151份"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。三数字来自三个原 group，需数字样式而非普通组标题；八气泡包括原粘回答复括注，正文不添加词。；page-fixer-09（按审页意见）：三个数字组改用stat_card，原字与数字字号保留；八气泡横版两列，收紧两栏高差"

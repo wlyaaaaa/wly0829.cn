@@ -776,7 +776,7 @@
  "source": {
   "page": "sources/pages/github-local-index/page.json",
   "sha256": "01b3019a0d5d0af69c092c44281c35aeac3f4d899e866b1197ef07e4b950baa0",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -829,18 +829,32 @@
      "type": "chapter_title",
      "text_ref": "GitHub项目总索引",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "hero",
+     "width": "55%"
     },
     {
      "type": "prose",
      "text_ref": "找全代码仓库，查清副本和同步情况。",
      "size": "large",
-     "bold": true
+     "bold": true,
+     "row": "hero"
     },
     {
      "type": "live_strip",
      "text_ref": "现在基座体检各项目和GitHub同步没有",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -852,18 +866,6 @@
     {
      "type": "prose",
      "text_ref": "截至10月10日。本机工作目录"
-    },
-    {
-     "type": "prose",
-     "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",

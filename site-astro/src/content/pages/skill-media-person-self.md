@@ -101,7 +101,7 @@
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
   "sha256": "de7a644ef36cf6abe865be5534528667aa7a2ac738484cc2ae99897abff5ef01",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -130,9 +130,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "照片录音里有没有我",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "47%",
+     "text_ref": "照片录音里有没有我"
     },
     {
      "type": "live_strip",
@@ -148,15 +148,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "指定一张照片",
-     "width": "47%",
-     "row_fit_illustration": true
+     "text_ref": "指定一张照片"
     },
     {
      "type": "illustration",

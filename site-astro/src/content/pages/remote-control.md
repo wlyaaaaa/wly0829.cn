@@ -841,7 +841,7 @@
  "source": {
   "page": "sources/pages/remote-control/page.json",
   "sha256": "fc4f4b235b6bc56a0045859537081660322efab0f5d215cc1c123c5d76078e7c",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -901,12 +901,25 @@
      "type": "chapter_title",
      "text_ref": "大标题：电脑远程控制",
      "align": "left",
+     "row": "hero",
+     "width": "55%",
      "size": "large"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "介绍：手机或网页上的ChatGPT、笔记本上的Codex、主机上的Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "section_heading",
@@ -920,18 +933,6 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto"
-    },
-    {
-     "type": "prose",
-     "text_ref": "介绍：手机或网页上的ChatGPT、笔记本上的Codex、主机上的Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",
@@ -2128,7 +2129,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "连上电脑不等于解锁资料。｜资料只有一份解锁状态，本机、网页、手机共用；登录电脑只证明能连，不算我本人同意。电脑上的 Codex、Claude 做一些重大的事可以免验证，经这个连接进来的 AI 没有这个待遇。见〔个人资料规则〕〔用户授权规则〕",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3375,7 +3376,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "资料锁共用一份｜手机、网页、本机 AI 用同一份资料解锁和截止；连上电脑不算解锁｜在用",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3870,7 +3871,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机接续说明｜讲手机上的对话怎么借已连接的电脑接着办事｜说不准",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3885,7 +3886,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "主机状态｜在线没、锁没锁屏、处理器显卡内存、每块盘、网速；连不上时提示怎么远程开机｜待验收",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3960,7 +3961,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "Codex 远程公网入口｜手机网页看 Codex 任务；9 月 26 日决定撤掉｜已停用",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4056,6 +4057,13 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
      "size": "medium"
     },
     {
+     "type": "illustration",
+     "width": "100%",
+     "align": "center",
+     "size": "small",
+     "target_height": 230
+    },
+    {
      "type": "timeline",
      "text_ref": "9月9日：主机的电脑连接上线；连接时自动附上规则；加上管理员和SYSTEM维护；笔记本装上同一套9月10日：开机就启动，没登录也能维护；Ch",
      "direction": "vertical",
@@ -4063,14 +4071,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "ribbon",
-     "width": "60%",
-     "row": "lone-ill-1",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "width": "40%",
-     "row": "lone-ill-1"
+     "width": "100%"
     }
    ],
    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：主插画移到标题后居中，最高230px；时间线满宽，不留空的长右栏。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
@@ -4222,7 +4223,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "9 月 26–27 日：撤掉 Codex 远程公网入口和 AI 代填入口密码",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

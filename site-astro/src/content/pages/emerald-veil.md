@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -683,10 +683,13 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "55%",
      "text_ref": "屏保与壁纸"
     },
     {
      "type": "prose",
+     "row": "hero",
      "size": "large",
      "bold": true,
      "text_ref": "电脑闲6分钟，主屏飘起Windows自带的泡泡。"
@@ -694,7 +697,19 @@
     {
      "type": "live_strip",
      "text_ref": "现在常驻程序现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "桌上的主屏是一块OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6分钟没"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -708,19 +723,6 @@
      ],
      "illustration": "top_inside",
      "text_ref": "6 分钟"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "桌上的主屏是一块OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6分钟没",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",
@@ -870,7 +872,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "1 块屏｜只放桌上的 OLED 主屏，串流用的虚拟屏和机箱小屏都不放",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1562,7 +1564,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "管哪些地方：每块屏的 Windows 桌面底图（包括串流用的虚拟屏，和 Windows 还记得的已拔下的屏），加上系统锁屏，统一成这一张。",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2958,7 +2960,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "不理远程假动作｜纹丝不动的鼠标事件不算；单独一次小挪动，250 毫秒内再来一次才算｜在用",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3481,6 +3483,13 @@
      "text_ref": "演进"
     },
     {
+     "type": "illustration",
+     "index": 0,
+     "size": "banner",
+     "align": "center",
+     "target_width": 360
+    },
+    {
      "type": "timeline",
      "direction": "vertical",
      "connector": "ribbon",
@@ -3497,16 +3506,7 @@
       "_library/icons/文稿堆.png",
       "_library/icons/文件齿轮.png"
      ],
-     "text_ref": "8月11日：建库。起因是主屏是OLED，本人想要一层护屏：“像WindowsXP的泡",
-     "row": "lone-ill-1",
-     "width": "60%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "lone-ill-1",
-     "width": "40%"
+     "text_ref": "8月11日：建库。起因是主屏是OLED，本人想要一层护屏：“像WindowsXP的泡"
     },
     {
      "type": "prose",
@@ -3624,7 +3624,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 12–14 日：改用 Windows 原版泡泡，透明地叠在桌面上，闲 5 分钟出现；查出“泡泡自己消失”的一个原因（远程软件的假动作）并修掉。",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

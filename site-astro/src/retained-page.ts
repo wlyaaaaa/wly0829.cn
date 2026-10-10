@@ -2,10 +2,13 @@ import home from './chrome/retained/home.html?raw';
 import cockpit from './chrome/retained/cockpit.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
 import homeCta from '../public/_home-cockpit/home-cta.css?raw';
+import albumRuntime from '../public/_album/astro-runtime.json';
 
 // 这两页保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
 export function retainedPage(page: 'home' | 'cockpit') {
   let html = page === 'home' ? home : cockpit;
+  html = html.replace(/<script[^>]*data-album-inline[^>]*>.*?<\/script>/s, () => `<script data-album-inline>${albumRuntime.source}</script>`)
+    .replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css);
   // 编码先于含中文的同步脚本；慢网和无 JS 也保持原图正确的横竖比例。
   html = html.replace(/<meta\s+charset=[^>]+>/i, '').replace('<head>', '<head><meta charset="utf-8">');
   const data = JSON.parse(html.match(/<script id="page-data"[^>]*>(.*?)<\/script>/s)![1]);

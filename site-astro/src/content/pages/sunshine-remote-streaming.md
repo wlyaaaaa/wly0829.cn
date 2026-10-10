@@ -576,7 +576,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
   "sha256": "eaabd0bf1018079a412baaa60bcc3d0fb8515a600b78f17ba8cadb9b1bce90e9",
-  "converted_at_beijing": "2026-10-10T11:58:31+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -669,19 +669,20 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "60%",
      "text_ref": "大标题：远程电脑串流"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S",
-     "width": "60%",
-     "row_fit_illustration": true
+     "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S"
     },
     {
      "type": "illustration",
@@ -1990,7 +1991,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "串流画面切换：我登录后启动，一直跑，每 3 秒看一次屏幕和连接，每 10 秒写一次心跳（证明自己还活着的记录）；挂了 1 分钟后自己重开，同一时间只跑一份",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2005,7 +2006,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "远程串流体检：每天 14:30，查 Tailscale 在不在线、无人值守开没开、编码能力、Tailscale 的公开功能（Funnel，能把本机服务公开到互联网）有没有公开 Sunshine；3 分钟内做完，写一行回执",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3829,7 +3830,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "串流修复｜服务改回自动、开无人值守、清写死的代理、开网卡 IPv6；默认只出计划，改前存原样，失败倒着退回｜说不准",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3844,7 +3845,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "停和恢复画面切换｜跟 AI 说“停掉串流画面切换”，先等正在做的一步做完再停，不直接停 Sunshine｜说不准",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3859,7 +3860,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "维护小窗｜开始菜单里的“RAMDisk 与远程串流维护”，9 月 26 日按我的决定撤掉，改在网站看｜已停用",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4156,7 +4157,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 3 日：〔Codex 远程〕停止修补，在外面管 Codex 改成串流看桌面",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4186,7 +4187,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 9 日：加固没登录时的串流和 HDR 检查",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

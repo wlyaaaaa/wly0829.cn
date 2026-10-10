@@ -603,7 +603,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "f9574c19821b0102daf818ca5b312b027acebc13cc431f55473cd7a4a00ad4c1",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -653,9 +653,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "本地加密库",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "47%",
+     "text_ref": "本地加密库"
     },
     {
      "type": "live_strip",
@@ -667,8 +667,23 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "把我选中的文件"
+    },
+    {
+     "type": "action_button",
+     "columns": 3,
+     "row": "hero",
+     "text_ref": "在整套系统里的位置"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "53%"
     },
     {
      "type": "stat_card",
@@ -681,24 +696,6 @@
      "type": "notice",
      "align": "left",
      "text_ref": "偶尔用"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "把我选中的文件",
-     "width": "47%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "action_button",
-     "columns": 3,
-     "row": "hero",
-     "text_ref": "在整套系统里的位置"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "53%"
     }
    ],
    "notes": "原图左文右插画，文字栏内标题—介绍—按钮竖排。原图横版只有两按钮，第三按钮以定稿补齐同样式。四张数字卡一行；底部两句在同一整宽浅条内。插画信封到云用绿色虚线箭头；没有实时横条。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"

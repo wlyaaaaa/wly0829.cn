@@ -123,7 +123,7 @@
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
   "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
-  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -158,8 +158,9 @@
      "text_ref": "看驾驶舱",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "live_strip",
@@ -171,15 +172,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "text_ref": "技能名",
-     "row": "hero",
-     "width": "50%",
-     "row_fit_illustration": true
+     "row": "hero"
     },
     {
      "type": "section_heading",

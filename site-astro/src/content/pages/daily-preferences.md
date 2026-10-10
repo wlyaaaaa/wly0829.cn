@@ -933,7 +933,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -975,8 +975,8 @@
      "columns": 1,
      "illustration": "none",
      "connector": "none",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "48%"
     },
     {
      "type": "live_strip",
@@ -992,8 +992,27 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "让 AI 了解",
+     "align": "left",
+     "size": "medium",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "align": "left",
+     "size": "large",
+     "columns": 1,
+     "illustration": "outside",
+     "connector": "none",
+     "row": "hero",
+     "width": "52%"
     },
     {
      "type": "stat_card",
@@ -1013,28 +1032,6 @@
      "columns": 1,
      "illustration": "none",
      "connector": "none"
-    },
-    {
-     "type": "prose",
-     "text_ref": "让 AI 了解",
-     "align": "left",
-     "size": "medium",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "row": "hero",
-     "width": "48%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "align": "left",
-     "size": "large",
-     "columns": 1,
-     "illustration": "outside",
-     "connector": "none",
-     "row": "hero",
-     "width": "52%"
     },
     {
      "type": "content_card",
@@ -2444,18 +2441,17 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "columns": 2,
      "illustration": "left_inside",
      "connector": "none",
-     "icons": "auto",
-     "row": "lone-ill-2",
-     "width": "60%",
-     "row_fit_illustration": true
+     "icons": "auto"
     },
     {
      "type": "illustration",
+     "align": "center",
+     "size": "large",
      "columns": 1,
      "illustration": "outside",
      "connector": "none",
-     "row": "lone-ill-2",
-     "width": "40%"
+     "target_height": 230,
+     "target_width": 465
     }
    ],
    "notes": "实看替换横图：左约68%两列表7行，首列图标与情况，右列正文，右约32%数据库抽屉→备份硬盘插画。表格整个节点起点为情况。现有 table 未使用 icons/illustration，行图标需适配；表格外观未在批准样板，待样张。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
@@ -4909,7 +4905,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机电脑用在哪｜一段时间里手机、电脑各自的总量、主要应用和每天变化；两台设备的时长不相加",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {

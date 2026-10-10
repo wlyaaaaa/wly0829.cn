@@ -476,7 +476,7 @@
  "source": {
   "page": "sources/pages/proxyclean/page.json",
   "sha256": "dd0f2468d7bebd3767a73ebe15a7085cbb6d9b80f6db18afb5934504ce89516e",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -517,10 +517,10 @@
     {
      "type": "chapter_title",
      "text_ref": "代理上网修复",
+     "row": "hero",
+     "width": "49%",
      "align": "left",
-     "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "size": "large"
     },
     {
      "type": "live_strip",
@@ -532,23 +532,13 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · 项目修改记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "stat_card",
-     "text_ref": "8 层",
-     "columns": 4,
-     "icons": "auto",
-     "illustration": "top_inside"
+     "row": "hero"
     },
     {
      "type": "prose",
      "text_ref": "代理程序退出后上不了网",
      "row": "hero",
-     "align": "left",
-     "width": "49%",
-     "row_fit_illustration": true
+     "align": "left"
     },
     {
      "type": "illustration",
@@ -556,6 +546,13 @@
      "width": "51%",
      "index": 0,
      "illustration": "outside"
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "8 层",
+     "columns": 4,
+     "icons": "auto",
+     "illustration": "top_inside"
     },
     {
      "type": "action_button",

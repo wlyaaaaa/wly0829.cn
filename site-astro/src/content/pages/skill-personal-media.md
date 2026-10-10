@@ -129,7 +129,7 @@
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
   "sha256": "5b21dde262b4c29e3a93077e0ffccc5acd365f0fa3d50237bb335314d89726d5",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -159,8 +159,8 @@
      "text_ref": "找照片和录音",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "66%"
     },
     {
      "type": "live_strip",
@@ -176,18 +176,20 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "illustration",
-     "row": "k1a-head",
-     "align": "right",
-     "width": "auto"
+     "row": "intro"
     },
     {
      "type": "prose",
-     "text_ref": "说个大概"
+     "text_ref": "说个大概",
+     "row": "intro"
+    },
+    {
+     "type": "illustration",
+     "row": "intro",
+     "width": "34%",
+     "align": "center",
+     "target_width": 290,
+     "target_height": 240
     },
     {
      "type": "section_heading",

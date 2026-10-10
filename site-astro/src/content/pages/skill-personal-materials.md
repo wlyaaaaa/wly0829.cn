@@ -124,7 +124,7 @@
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
   "sha256": "da3da8b564da7ab9767dfa7735b69ef3a942d6fc5739bdba7566813c57bdd01d",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -158,9 +158,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "找文件原件",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "55%",
+     "text_ref": "找文件原件"
     },
     {
      "type": "live_strip",
@@ -176,19 +176,18 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
     },
     {
      "type": "illustration",
      "index": 0,
-     "row": "k1a-head",
-     "width": "auto",
-     "align": "right"
-    },
-    {
-     "type": "prose",
-     "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "dialogue",

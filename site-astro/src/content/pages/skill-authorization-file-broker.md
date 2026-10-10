@@ -99,7 +99,7 @@
  "source": {
   "page": "sources/pages/skill-authorization-file-broker/page.json",
   "sha256": "c7f54e315bc71195db63e7b77650f5d4b8049ea94d5d25501990c6280cf278f5",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -136,9 +136,9 @@
     {
      "type": "chapter_title",
      "align": "left",
-     "text_ref": "加密文件",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "55%",
+     "text_ref": "加密文件"
     },
     {
      "type": "live_strip",
@@ -154,15 +154,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "intro"
     },
     {
      "type": "prose",
      "row": "intro",
-     "text_ref": "把我点名的文件或文件夹，交给密码中心加密成一个.pcaf文件夹",
-     "width": "55%",
-     "row_fit_illustration": true
+     "text_ref": "把我点名的文件或文件夹，交给密码中心加密成一个.pcaf文件夹"
     },
     {
      "type": "illustration",

@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -851,12 +851,25 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "50%",
      "text_ref": "AI工具配置管理"
     },
     {
      "type": "live_strip",
      "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "选好模型，打开原版AI编程工具来用。"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "stat_card",
@@ -865,18 +878,6 @@
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "选好模型，打开原版AI编程工具来用。",
-     "width": "50%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%"
     },
     {
      "type": "action_button",
@@ -4995,7 +4996,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "卸载｜普通卸载保留配置和钥匙；彻底清理另列范围；删本地登录不等于远程撤销",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

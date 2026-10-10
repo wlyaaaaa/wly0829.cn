@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "a4de92c64240c16e3bf3b9be4d26bd00fda000e871e97668b491ca814ea085e4",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -707,12 +707,31 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "55%",
      "text_ref": "开发配置备份"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "action_button",
+     "row": "hero",
+     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "重装系统或电脑坏了，最难重建的是各种开发软件和AI工具的设置，还有微信里的聊天记"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -725,24 +744,6 @@
      "type": "prose",
      "align": "right",
      "text_ref": "截至10月10"
-    },
-    {
-     "type": "action_button",
-     "row": "hero",
-     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "重装系统或电脑坏了，最难重建的是各种开发软件和AI工具的设置，还有微信里的聊天记"
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "hero",
-     "width": "45%"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",

@@ -1851,7 +1851,7 @@
  "source": {
   "page": "sources/pages/how/page.json",
   "sha256": "58623fff58d26659d7dbfd6e9af4454b558a4b57c65b23227ef662f01ecec508",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T12:00:15+08:00"
  }
 }
 ---
@@ -1915,12 +1915,18 @@
      "align": "left",
      "size": "large",
      "row": "top",
-     "width": "53%",
-     "row_fit_illustration": true
+     "width": "53%"
     },
     {
      "type": "prose",
      "text_ref": "想看一件事怎么办成",
+     "row": "top"
+    },
+    {
+     "type": "line_legend",
+     "text_ref": "线上传的东西分四种",
+     "layout": "rows",
+     "columns": 2,
      "row": "top"
     },
     {
@@ -1931,12 +1937,6 @@
      "index": 0,
      "size": "large",
      "target_width": "100%"
-    },
-    {
-     "type": "line_legend",
-     "text_ref": "线上传的东西分四种",
-     "layout": "rows",
-     "columns": 2
     },
     {
      "type": "action_button",
@@ -2805,7 +2805,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "电脑远程控制一只伸向电脑的机械手",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2820,7 +2820,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "远程电脑串流一块小屏幕",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

@@ -420,7 +420,7 @@
  "source": {
   "page": "sources/pages/codex-agent-model-benchmark/page.json",
   "sha256": "2a3b80644222c99d885082dbd27646194c1ca5e4005967ea62cc9b9b9ec9d77e",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
  }
 }
 ---
@@ -1642,17 +1642,13 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/禁止文件.png",
       "_library/icons/禁止文件.png"
-     ],
-     "row": "lone-ill-2",
-     "width": "60%",
-     "row_fit_illustration": true
+     ]
     },
     {
      "type": "illustration",
      "illustration": "outside",
      "index": 0,
-     "row": "lone-ill-2",
-     "width": "40%"
+     "size": "banner"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左上标题。中间一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，9 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤；8 月 11 日到 15 日那一段小旗挨得最密。越往右丝带颜色越淡、越偏灰。最右端丝带的尽头画那张考场课桌：试卷收成一叠、用绳子捆好，天平收起来靠在桌边，桌面落了几片叶子。",

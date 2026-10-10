@@ -282,7 +282,7 @@
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
   "sha256": "b97d6fbac272b1fcf21918ed2cd987952bee0ee3685f39efe66ad4c83447c0eb",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -316,16 +316,16 @@
      "type": "chapter_title",
      "text_ref": "省流量的云端素材",
      "align": "left",
-     "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "55%",
+     "size": "large"
     },
     {
      "type": "prose",
      "text_ref": "AI要反复读的文件，从我电脑传到云上一份，之后AI在云里读，不再一遍遍走我电脑的流量。",
      "size": "large",
      "bold": true,
-     "row": "k1a-head"
+     "row": "hero"
     },
     {
      "type": "live_strip",
@@ -341,15 +341,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "text_ref": "做网站时，同一批图要被AI画、审、复核好几轮，每读一次都从我电脑再传一遍，流量远远超过图本身。这个技能告诉AI：同一个文件要读两次以上，或一",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
+     "row": "hero"
     },
     {
      "type": "illustration",

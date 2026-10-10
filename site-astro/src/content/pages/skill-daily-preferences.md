@@ -167,7 +167,7 @@
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
   "sha256": "843edc9caa622efc8f35fb77f3b5dc5cb27a5d1407e14689dae99f411611ef59",
-  "converted_at_beijing": "2026-10-10T11:58:31+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -201,9 +201,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "记得我是谁",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "60%",
+     "text_ref": "记得我是谁"
     },
     {
      "type": "live_strip",
@@ -219,19 +219,20 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "illustration",
-     "row": "k1a-head",
-     "illustration": "outside",
-     "align": "right",
-     "width": "auto"
+     "row": "intro"
     },
     {
      "type": "prose",
+     "row": "intro",
      "text_ref": "问题的答案取决于我是谁时"
+    },
+    {
+     "type": "illustration",
+     "row": "intro",
+     "width": "40%",
+     "illustration": "outside",
+     "align": "center",
+     "target_width": 358
     },
     {
      "type": "section_heading",
@@ -983,7 +984,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "已知的消费、行踪、手机和电脑使用这些事实。",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {

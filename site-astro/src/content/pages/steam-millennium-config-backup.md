@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "737a689a30e03794b0c8f88cfdd8c7d04963ac2dc82f53e2c9599ef80271958f",
-  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -676,9 +676,10 @@
      "align": "left",
      "target_width": 72,
      "target_height": 72,
+     "row": "hero",
+     "width": "55%",
      "inline_row": "steam-brand-title",
-     "inline_width": "72px",
-     "row": "k1a-title"
+     "inline_width": "72px"
     },
     {
      "type": "chapter_title",
@@ -688,9 +689,9 @@
      "illustration": "none",
      "connector": "none",
      "text_ref": "Steam 外观备份",
+     "row": "hero",
      "inline_row": "steam-brand-title",
-     "inline_width": "1fr",
-     "row": "k1a-title"
+     "inline_width": "1fr"
     },
     {
      "type": "live_strip",
@@ -703,27 +704,8 @@
      "empty_slots": 1,
      "slot_width": "55%",
      "button_position": "right",
-     "frame_mode": "plain"
-    },
-    {
-     "type": "stat_card",
-     "align": "left",
-     "size": "medium",
-     "columns": 4,
-     "illustration": "top_inside",
-     "connector": "none",
-     "text_ref": "20 个文件",
-     "icons": "auto",
-     "item_count": 4
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "size": "small",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "text_ref": "截至 2026 年"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "section_heading",
@@ -733,9 +715,7 @@
      "illustration": "none",
      "connector": "none",
      "text_ref": "调好的 Steam 皮肤",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
+     "row": "hero"
     },
     {
      "type": "prose",
@@ -768,6 +748,26 @@
      "connector": "none",
      "text_ref": "截图说明：",
      "row": "hero"
+    },
+    {
+     "type": "stat_card",
+     "align": "left",
+     "size": "medium",
+     "columns": 4,
+     "illustration": "top_inside",
+     "connector": "none",
+     "text_ref": "20 个文件",
+     "icons": "auto",
+     "item_count": 4
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "size": "small",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "text_ref": "截至 2026 年"
     },
     {
      "type": "action_button",

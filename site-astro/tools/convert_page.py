@@ -311,6 +311,8 @@ def plain_ill(b):
 
 
 PAIR_SKIP_SIZES = ("banner", "large")
+# 不和单独插画配一行的块：标题类，以及时间线、功能卡、表格、流程、编号步骤、对比这类长块（文字栏太高、图放不大，空得更多）
+PAIR_SKIP_TYPES = ("chapter_title", "section_heading", "tag", "action_button", "timeline", "feature_card", "table", "flow", "numbered_steps", "comparison")
 
 
 def pair_lone_illustrations(blocks, lens=None):
@@ -375,7 +377,7 @@ def pair_lone_illustrations(blocks, lens=None):
         for j in (i0 - 1, i0 + 1):
             if 0 <= j < len(blocks):
                 t = blocks[j]
-                if (not t.get("row") and t.get("type") in TEXTISH_ALL and t.get("type") not in ("chapter_title", "section_heading", "tag", "action_button")
+                if (not t.get("row") and t.get("type") in TEXTISH_ALL and t.get("type") not in PAIR_SKIP_TYPES
                         and (not big or lens.get(id(t), 0) >= 40)):
                     cand = j
                     break
@@ -539,6 +541,26 @@ def status_first(page, meta, s=None, status_line=None):
         title, status = bl[t0:tj], ([st_block] if st_block else []) + [bl[i] for i in moved]
         rest = [b for i, b in enumerate(bl) if i >= tj and i not in moved and i not in dropped]
         row = bl[ti].get("row")
+        if o == "h" and row and any(b.get("row") == row for b in rest) and not os.environ.get("CONVERT_K1A_HEAD_ROW"):
+            # 主持 10 月 10 日 11:52（本人对照旧站）：插画回到标题右边（右上角），状态块放在左栏标题下面，数字卡和其余往下排
+            st_list = ([st_block] if st_block else []) + [bl[i] for i in live]
+            for b in st_list:
+                b.pop("width", None)
+                b["row"] = row
+            bl[ti]["align"] = "left"
+            hero = [b for b in rest if b.get("row") == row]
+            others = [b for b in rest if b.get("row") != row]
+            below = [bl[i] for i in moved if i not in live]
+            for b in below:
+                if b.get("row") not in keep_rows:
+                    b.pop("row", None); b.pop("width", None)
+            sp["blocks"] = bl[:t0] + title + st_list + hero + below + others
+            HERO_ROW.append(page)
+            FITTED[page] = FITTED.get(page, 0) + fit_rows(sp["blocks"])
+            if s:
+                fill_dialogue_rows(page, sp, s, bl)
+            got.add("实时" if live else ("状态行" if st_block else "数字"))
+            continue
         if row:  # 标题组从并排的那一行里拿出来占整行；原来标题那一栏的宽度交给这一行剩下的第一块，左右比例不变
             w = next((b.get("width") for b in title if b.get("width")), None)
             add_ref = title_absorbed(s, bl, t0, tj) if s else None
@@ -624,6 +646,7 @@ def status_first(page, meta, s=None, status_line=None):
 
 ABSORBED, FITTED, HEAD_ILL, DIALOGUE_ROWS, SAME_DAY, DROP_NOTES = [], {}, [], [], [], {}
 LONE, FITTED_ALL = {}, {}
+HERO_ROW = []
 # 演示用临时状态行（不进仓库）：CONVERT_STATUS_LINE_DEMO=<json 文件，{页: status_line}>
 STATUS_DEMO = json.load(open(os.environ["CONVERT_STATUS_LINE_DEMO"], encoding="utf-8")) if os.environ.get("CONVERT_STATUS_LINE_DEMO") else {}
 
@@ -817,6 +840,8 @@ if __name__ == "__main__":
         print("  首屏对话框每排排满：", d)
     for d in SAME_DAY:
         print("  数字卡下面和状态行同一天的截至日期不再单独显示：", d)
+    if HERO_ROW:
+        print("  首屏插画回到标题右边、状态块在左栏标题下面：", len(set(HERO_ROW)), "页")
     if LONE:
         print("  单独一幅插画和旁边文字排成一行：", json.dumps({k: v for k, v in LONE.items() if v}, ensure_ascii=False))
     if FITTED_ALL:

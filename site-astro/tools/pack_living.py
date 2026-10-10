@@ -32,6 +32,29 @@ NEW_TEXTURE = 'const q=new URL(p.src,u.base).href,y=q===(T.currentSrc||T.src)&&C
 if fixed.count(OLD_TEXTURE) != 1:
     sys.exit("找不到原纹理加载入口")
 fixed = fixed.replace(OLD_TEXTURE, NEW_TEXTURE)
+# 读页小鸟只改停靠点的 DOM 适配；飞行、精灵图、停留节奏和旧页分支原样保留。
+bird_src = os.path.join(ENG, "bird.fffa187360")
+bird = open(os.path.join(bird_src, "bird.js"), encoding="utf-8").read()
+OLD_GUIDE = 'function ee(){xe=[],le.parts.forEach'
+NEW_GUIDE = '''function ee(){xe=[];if(document.querySelector(".ts-page")){
+document.querySelectorAll(".ts-screen").forEach(function(o){
+var part=o.querySelector(Z.orient==="v"?".ts-v":".ts-h")||o.querySelector(".ts-h.ts-both"),m=part&&part.querySelector('[data-comp="chapter_title"] img, [data-comp="chapter_title"] .brushfont');
+if(!m)return;var H={getBoundingClientRect:function(){return m.getBoundingClientRect()}},d={s:o.id,perches:[["title",.4,0,1,1],["title",.65,0,-1,1]]};
+function ink(){if(!m.naturalWidth)return;try{var c=document.createElement("canvas");c.width=m.naturalWidth;c.height=m.naturalHeight;
+var g=c.getContext("2d",{willReadFrequently:true});g.drawImage(m,0,0);d.perches.forEach(function(q){
+var p=g.getImageData(Math.floor(q[1]*c.width),0,1,c.height).data;for(var y=0;y<c.height;y++){var k=y*4;
+if(p[k+3]>96&&p[k]<160&&p[k+1]>p[k]*1.15&&p[k+1]>p[k+2]*1.05){q[2]=y/c.height;break}}});}catch(e){}}
+ink();if(m.tagName==="IMG"&&!m.naturalWidth)m.addEventListener("load",ink,{once:true});xe.push({el:H,d:d});
+});}else le.parts.forEach'''
+if bird.count(OLD_GUIDE) != 1:
+    sys.exit("找不到小鸟读页停靠点入口")
+bird = bird.replace(OLD_GUIDE, NEW_GUIDE)
+bird = bird.replace('}),Y.setPageSize(G()?M.phonePageMin:M.pageMin)}', '});Y.setPageSize(G()?M.phonePageMin:M.pageMin)}', 1)
+bird_name = "bird." + hashlib.sha256(bird.encode("utf-8")).hexdigest()[:10]
+import shutil
+shutil.copytree(bird_src, os.path.join(ENG, bird_name), dirs_exist_ok=True)
+open(os.path.join(ENG, bird_name, "bird.js"), "w", encoding="utf-8", newline="\n").write(bird)
+fixed = fixed.replace('Jt="bird.fffa187360/"', 'Jt="' + bird_name + '/"')
 fixed = fixed.encode("utf-8")
 name = f"living.{hashlib.sha256(fixed).hexdigest()[:10]}.js"
 open(os.path.join(ENG, name), "wb").write(fixed)

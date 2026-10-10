@@ -201,6 +201,8 @@ def regenerate_runtimes(work):
              'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
     white_root = repo / 'sources/home-white-gear'
     names += ['sources/home-white-gear/build.py', 'sources/signature/assets-manifest.json']
+    names += ['site-astro/tools/cockpit_white_gear.py',
+              'sources/assets/_library/illustrations/ill-53b8c5c622e8b9.png']
     names += ['sources/home-white-gear/' + name + '.png' for name in
               ('master-h', 'master-v', 'plate-h', 'plate-h-nobird', 'plate-v', 'plate-v-nobird', 'native-h', 'native-v-fallback')]
     runtime_paths = sorted((ROOT / 'src/chrome/runtime').glob('*.json'))
@@ -258,6 +260,19 @@ def regenerate_runtimes(work):
     work = Path(work); work.mkdir(parents=True, exist_ok=True)
     cockpit = work / 'cockpit/index.html'; cockpit.parent.mkdir(parents=True, exist_ok=True)
     cockpit.write_text(replace(pages['cockpit']), encoding='utf8', newline='')
+    cockpit_white = run_path(str(ROOT / 'tools/cockpit_white_gear.py'))['build'](public, cockpit)
+    pages['cockpit'] = cockpit.read_text('utf8')
+    head = re.search(r'<section\b[^>]*\bid="cockpit-01"[^>]*>', pages['cockpit'])[0]
+    binding = json.loads(html.unescape(re.search(r'data-living-binding="([^"]+)"', head)[1]))
+    config_url = re.search(r'data-living-config="([^"]+)"', head)[1]
+    config = json.loads((public / config_url.lstrip('/')).read_text('utf8'))
+    cockpit_resources = {config_url, *(item['src'] for item in binding.values()),
+                         *(config[side]['texture']['src'] for side in binding)}
+    for url in cockpit_resources:
+        rel = url.lstrip('/'); raw = (public / rel).read_bytes(); proof = descriptor(raw)
+        asset = source / 'assets' / (proof['sha256'] + Path(rel).suffix)
+        asset.write_bytes(raw); outputs[rel] = proof
+        dependencies[rel] = {**proof, 'source_path': asset.relative_to(repo).as_posix()}
     (work / '.release-delta.json').write_text(json.dumps({'baseline': str(public),
         'sources': {'cockpit/index.html': str(cockpit)}}), encoding='utf8')
     model, _ = home.cockpit_model(work)
@@ -319,6 +334,8 @@ def regenerate_runtimes(work):
         if row['path'] not in outputs:
             manifest['files'].pop(row['path'], None); dependencies.pop(row['path'], None)
     manifest['home_white_gear'] = white_gear
+    manifest['cockpit_white_gear'] = cockpit_white
+    for url in cockpit_resources: manifest['files'][url.lstrip('/')] = outputs[url.lstrip('/')]
     for page, text in pages.items():
         raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
         manifest['pages'][page] = descriptor(raw)

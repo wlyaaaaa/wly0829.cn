@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "0ac0aaed501cf35caafc7d5d04ccbe4b6c295018b21366c9aeb38cc10a70ac52",
-  "converted_at_beijing": "2026-10-10T11:58:29+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -750,12 +750,31 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "AI备份"
+     "text_ref": "AI备份",
+     "row": "hero",
+     "width": "58%"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我在用的五个AI工具，配置、记忆、对话各备没备、为什么，都在这一页。真正要单独备的只有一样：Co",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "width": "42%"
     },
     {
      "type": "stat_card",
@@ -769,24 +788,6 @@
      "type": "prose",
      "align": "right",
      "text_ref": "截至10月9日"
-    },
-    {
-     "type": "action_button",
-     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
-     "row": "hero",
-     "width": "58%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "prose",
-     "text_ref": "我在用的五个AI工具，配置、记忆、对话各备没备、为什么，都在这一页。真正要单独备的只有一样：Co",
-     "row": "hero"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "hero",
-     "width": "42%"
     },
     {
      "type": "prose",
@@ -2040,7 +2041,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "两台电脑之间一个箭头",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

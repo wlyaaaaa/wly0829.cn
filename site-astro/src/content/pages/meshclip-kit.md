@@ -514,7 +514,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
   "sha256": "33bc59575239882b74ba5810b3b9414de3431d4ec3849524f0e79da7589b25f9",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -570,23 +570,25 @@
      "type": "chapter_title",
      "text_ref": "大标题：双机剪贴板",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "hero",
+     "width": "55%"
     },
     {
      "type": "tag",
-     "text_ref": "偶尔用·只修报错、不加新功能（约法L2"
+     "text_ref": "偶尔用·只修报错、不加新功能（约法L2",
+     "row": "hero"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "prose",
      "text_ref": "介绍：主机（台式机）和副机（笔记本）不在同一个网络，",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
+     "row": "hero"
     },
     {
      "type": "illustration",
@@ -3227,15 +3229,12 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
      "text_ref": "8月11日在副机上建库：Tailscale连通、KD",
      "direction": "vertical",
      "connector": "ribbon",
-     "illustration": "left_inside",
-     "row": "lone-ill-2",
-     "width": "60%",
-     "row_fit_illustration": true
+     "illustration": "left_inside"
     },
     {
      "type": "illustration",
-     "row": "lone-ill-2",
-     "width": "40%"
+     "size": "small",
+     "align": "center"
     }
    ],
    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",

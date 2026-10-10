@@ -119,7 +119,7 @@
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
   "sha256": "4831d7dcecc58921103291843c7d252ba90b71eb8dcf74fc168cd3d3a6cb1a27",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -153,9 +153,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "密码和本人验证",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "53%",
+     "text_ref": "密码和本人验证"
     },
     {
      "type": "live_strip",
@@ -171,16 +171,13 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "align": "left",
      "row": "hero",
-     "text_ref": "这是 AI 用",
-     "width": "53%",
-     "row_fit_illustration": true
+     "text_ref": "这是 AI 用"
     },
     {
      "type": "illustration",
