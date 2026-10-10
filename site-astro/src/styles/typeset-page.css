@@ -125,7 +125,10 @@ body.astro-page [data-b2-connection-notice],body.astro-page aside[data-computer-
 .ts-canvas [data-hot="live"] .live-row:is([data-state="warn"],[data-state="waiting"],[data-state="expired"]) .live-dot{background:#d2a111}
 .ts-canvas [data-hot="live"] .live-rows .live-text,.ts-canvas [data-href="ca-personal-data"] .live-text,.ts-canvas [data-href="ca-connection"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
 .ts-canvas [data-hot="live"]:is([data-href="ca-personal-data"],[data-href="ca-connection"]){height:auto;min-height:var(--slot-live-frame-height,84px)}
-/* 模块淡入（照旧站 motion：enter 关键帧，1 秒，cubic-bezier(.2,.7,.25,1)，卡片每张晚 0.06 秒；脚本在 Site.astro，屏滚进视口时加 .ts-entering） */
-@keyframes ts-enter{from{opacity:.6;transform:translateY(20px)}to{opacity:1;transform:none}}
-.ts-page .ts-entering{animation:ts-enter var(--motion-screen-duration,1s) cubic-bezier(.2,.7,.25,1) both;animation-delay:calc(var(--enter-index,0) * .06s)}
-@media (prefers-reduced-motion:reduce){.ts-page .ts-entering{animation:none}}
+/* 屏淡入（照旧站实测：section.screen 整屏一起，透明度 0→1、从下方 100px 升到原位，800 毫秒，cubic-bezier(.2,.7,.25,1)，fill both，没有逐卡延迟；
+   第一屏等不播，脚本在 Site.astro） */
+@keyframes ts-screen-enter{from{opacity:0;transform:translateY(var(--motion-screen-enter-y,100px))}to{opacity:1;transform:none}}
+.ts-page section.ts-screen.ts-entering{animation:ts-screen-enter var(--motion-screen-duration,800ms) cubic-bezier(.2,.7,.25,1) both}
+@media (prefers-reduced-motion:reduce){.ts-page section.ts-screen.ts-entering{animation:none}}
+/* 并排行栏里的“现在”状态（首屏左栏标题下面）：栏窄，字换行、不截断（主持 10 月 10 日 12:08） */
+.ts-canvas .row > .col [data-hot="live"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}

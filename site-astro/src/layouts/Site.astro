@@ -121,19 +121,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
   <Fragment set:html={tail} />
   <script is:inline defer src={tocConsistency}></script>
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
-  {blocks && <script is:inline>(()=>{/* 模块淡入（照旧站运行件：屏滚进视口时，屏里的模块和卡片逐个从透明度 .6、低 20px 升起，1 秒，每个晚 0.06 秒；
-    挂动画引擎的那幅插画不参与，免得和引擎画布错位；减少动态效果时不播；带 # 进来的那一屏不播） */
+  {blocks && <script is:inline>(()=>{/* 屏淡入（照旧站 reveal 实测：整屏一起从下方 100px 升起、透明度 0→1，800 毫秒；第一屏、卡片网格里的卡片屏、
+    带 # 进来的那屏、motion-off、减少动态效果时不播；屏进视口 6% 时加 .ts-entering，播完摘掉。样式在 typeset-page.css） */
     if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    const mods=sec=>{const out=[];for(const cv of sec.querySelectorAll('.ts-canvas'))for(const el of cv.querySelectorAll('[data-comp]')){
-      if(el.parentElement.closest('[data-comp]')||el.matches('[data-comp="live_strip"]')||el.querySelector('figure[data-living-config]'))continue;
-      const cards=[...el.querySelectorAll('.card')].filter(c=>!c.parentElement.closest('.card'));
-      if(cards.length>=2)out.push(...cards);else out.push(el);}return out;};
-    const hit=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1)))?.closest('.ts-screen'):null;
-    const io=new IntersectionObserver(rows=>{for(const r of rows){if(!r.isIntersecting)continue;const sec=r.target;io.unobserve(sec);
-      if(sec===hit||sec.dataset.entered)continue;sec.dataset.entered='1';
-      mods(sec).forEach((el,i)=>{el.style.setProperty('--enter-index',String(Math.min(i,24)));el.classList.add('ts-entering');
-        el.addEventListener('animationend',e=>{if(e.target===el&&e.animationName==='ts-enter'){el.classList.remove('ts-entering');el.style.removeProperty('--enter-index');}});});}},{rootMargin:'0px 0px -8% 0px'});
-    const go=()=>document.querySelectorAll('main.ts-page section.ts-screen').forEach(s=>io.observe(s));
+    const go=()=>{const all=[...document.querySelectorAll('main.ts-page section.ts-screen')],first=all[0];
+      const hit=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1)))?.closest('.ts-screen'):null;
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const sec=e.target;io.unobserve(sec);
+        if(sec===first||sec===hit||sec.dataset.seen||sec.parentElement?.classList.contains('ts-card-grid')||document.body.classList.contains('motion-off'))return;
+        sec.dataset.seen='1';sec.classList.add('ts-entering');
+        sec.addEventListener('animationend',ev=>{if(ev.target===sec)sec.classList.remove('ts-entering');});}),{threshold:.06});
+      all.forEach(x=>io.observe(x));};
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go,{once:true});else go();})();</script>}
 </body>
 </html>
