@@ -398,7 +398,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "1847e3d4b039f7abbeb4216602d67c7752935bbc87af3b176d2f11d9c29d6d54",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -2947,7 +2947,8 @@
      "row": "intro",
      "width": "50%",
      "text_ref": "能力与运行方式",
-     "source_prose": true
+     "source_prose": true,
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

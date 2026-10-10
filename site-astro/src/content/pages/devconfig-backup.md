@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "a4de92c64240c16e3bf3b9be4d26bd00fda000e871e97668b491ca814ea085e4",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1422,15 +1422,18 @@
      "text_ref": "开发配置包（现行清单：70个来源）"
     },
     {
-     "type": "illustration",
-     "index": 0,
-     "target_width": 240,
-     "align": "center"
-    },
-    {
      "type": "bullet_list",
      "columns": 1,
-     "text_ref": "用户目录19个文件夹：Claude、Codex、Antigravity、Curs"
+     "text_ref": "用户目录19个文件夹：Claude、Codex、Antigravity、Curs",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "lone-ill-2",
+     "width": "40%"
     },
     {
      "type": "points_card",
@@ -1454,7 +1457,8 @@
      "size": "medium",
      "text_ref": "微信",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

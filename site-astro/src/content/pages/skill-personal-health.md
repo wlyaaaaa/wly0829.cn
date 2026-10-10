@@ -112,7 +112,7 @@
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
   "sha256": "a3de3e277c2f7efbd1fc95bfac2c6c6f55dbc9c9ff6b07a638192046a6fa2c45",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -752,7 +752,8 @@
       78,
       555,
       259
-     ]
+     ],
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

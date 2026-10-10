@@ -529,7 +529,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "538dcecf234364b92cd8180d160dcd08a4495edbf347cc354cb2c925608bf8c6",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -1332,7 +1332,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "row_icons": "auto",
      "text_ref": "要说的内容用哪种两三个关键数字大数字卡几样东西比多少横条，或柱状图（可几组并排）随时间涨跌折线图",
      "row": "charts",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "feature_card",
@@ -2601,12 +2602,16 @@ AI 写这种页的规矩
     },
     {
      "type": "prose",
-     "text_ref": "时间为北京时间，取技能改动的提交时间；我的话按意思转述。"
+     "text_ref": "时间为北京时间，取技能改动的提交时间；我的话按意思转述。",
+     "row": "lone-ill-5",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "illustration": "outside",
-     "size": "small"
+     "row": "lone-ill-5",
+     "width": "40%"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。九个事件是 para 节点，须按真实日期串成时间线；不新增“我说/它改成”等定稿外字。最后正常事件绿点，停用叉只在原横幅。"

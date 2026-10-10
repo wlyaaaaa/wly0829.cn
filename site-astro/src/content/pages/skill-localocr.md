@@ -122,7 +122,7 @@
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
   "sha256": "1a43b19b43358cc669cbb755aa15e1d9b6e1af08cbf88ddea0657ab14a01f999",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -591,7 +591,8 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
      "align": "left",
      "size": "large",
      "row": "example-top",
-     "width": "55%"
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",
@@ -874,7 +875,8 @@ AI：“16 页都读完了。第 1–14 页和第 16 页用快模型读，把握
      "align": "left",
      "size": "large",
      "row": "mixed-top",
-     "width": "65%"
+     "width": "65%",
+     "row_fit_illustration": true
     },
     {
      "type": "dialogue",
@@ -1139,7 +1141,8 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
      "align": "center",
      "size": "large",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

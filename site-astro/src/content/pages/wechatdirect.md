@@ -675,7 +675,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
-  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -3773,7 +3773,8 @@
      "align": "center",
      "size": "large",
      "row": "history-head",
-     "width": "78%"
+     "width": "78%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

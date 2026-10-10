@@ -181,7 +181,7 @@
  "source": {
   "page": "sources/pages/mcp/page.json",
   "sha256": "374660f1e3de6277d77811c83eecc0c6fd9a68652c33e68bc063ad5854c06000",
-  "converted_at_beijing": "2026-10-10T10:11:28+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -237,7 +237,8 @@
      "connector": "none",
      "row": "hero",
      "width": "60%",
-     "text_ref": "连接电脑"
+     "text_ref": "连接电脑",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -920,7 +921,8 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
      "connector": "none",
      "row": "hero",
      "width": "54%",
-     "text_ref": "让 AI 用电脑"
+     "text_ref": "让 AI 用电脑",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

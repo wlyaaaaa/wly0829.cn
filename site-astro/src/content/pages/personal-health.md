@@ -564,7 +564,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "1f6405c3a0fcb982d53bd77cb8d8cf20b5d42fc64a4e6074335369207be26b93",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1107,7 +1107,8 @@
      "icons": "auto",
      "row": "左右栏",
      "width": "52%",
-     "text_ref": "更新到一半断了"
+     "text_ref": "更新到一半断了",
+     "row_fit_illustration": true
     },
     {
      "type": "content_card",

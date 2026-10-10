@@ -476,7 +476,7 @@
  "source": {
   "page": "sources/pages/proxyclean/page.json",
   "sha256": "dd0f2468d7bebd3767a73ebe15a7085cbb6d9b80f6db18afb5934504ce89516e",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -806,7 +806,8 @@
       "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
       "_library/icons/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
-     ]
+     ],
+     "row_fit_illustration": true
     },
     {
      "type": "screenshot",

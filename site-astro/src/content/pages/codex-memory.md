@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "0ac0aaed501cf35caafc7d5d04ccbe4b6c295018b21366c9aeb38cc10a70ac52",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -2140,12 +2140,6 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "text_ref": "出事怎么办"
     },
     {
-     "type": "illustration",
-     "illustration": "outside",
-     "size": "small",
-     "align": "center"
-    },
-    {
      "type": "content_card",
      "columns": 2,
      "columns_v": 1,
@@ -2156,7 +2150,16 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
       "_library/icons/版本循环文件.png",
       "_library/icons/门.png"
      ],
-     "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不"
+     "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不",
+     "row": "lone-ill-1",
+     "width": "60%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "lone-ill-1",
+     "width": "40%"
     },
     {
      "type": "notice",
@@ -3768,7 +3771,8 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      ],
      "text_ref": "6月21日Claude记忆开始备份到私人GitHub（当时挂在OpenClaw的任务上）7月1日",
      "row": "history",
-     "width": "50%"
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

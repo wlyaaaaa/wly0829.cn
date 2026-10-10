@@ -247,7 +247,7 @@
  "source": {
   "page": "sources/pages/rescue/page.json",
   "sha256": "c8a45984a632adf3160a973fd4a84484e48667e8e25f21c6da5484b61328ca25",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -339,7 +339,8 @@
      "align": "left",
      "size": "large",
      "row": "hero",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

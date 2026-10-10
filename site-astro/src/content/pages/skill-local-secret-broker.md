@@ -119,7 +119,7 @@
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
   "sha256": "4831d7dcecc58921103291843c7d252ba90b71eb8dcf74fc168cd3d3a6cb1a27",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -483,7 +483,8 @@
      "connector": "none",
      "row": "example",
      "width": "58%",
-     "text_ref": "1只搜名称"
+     "text_ref": "1只搜名称",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -761,7 +762,8 @@
      "row": "abilities",
      "width": "41%",
      "frame": "abilities",
-     "align": "center"
+     "align": "center",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:15+08:00"
  }
 }
 ---
@@ -1560,7 +1560,8 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
      "icons": "auto",
      "row": "detail",
      "width": "67%",
-     "text_ref": "菜单里多了8个。本机的Qwen3.827B、Qwen3."
+     "text_ref": "菜单里多了8个。本机的Qwen3.827B、Qwen3.",
+     "row_fit_illustration": true
     },
     {
      "type": "screenshot",

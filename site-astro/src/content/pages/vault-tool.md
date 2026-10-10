@@ -603,7 +603,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "f9574c19821b0102daf818ca5b312b027acebc13cc431f55473cd7a4a00ad4c1",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -2334,7 +2334,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
      "size": "large",
      "row": "highlight",
      "width": "47%",
-     "text_ref": "亮点：AI 帮我改了私人仓库"
+     "text_ref": "亮点：AI 帮我改了私人仓库",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -3353,7 +3354,8 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
      "size": "large",
      "row": "history-header",
      "width": "58%",
-     "text_ref": "演进"
+     "text_ref": "演进",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -1067,7 +1067,7 @@
  "source": {
   "page": "sources/pages/password-center/page.json",
   "sha256": "0e90c5fcf8aa14ee49c8270b62b2542700b4f00ec73e89cc810230b384706e30",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1837,7 +1837,8 @@
      "row": "verification",
      "width": "70%",
      "columns": 2,
-     "text_ref": "这件事"
+     "text_ref": "这件事",
+     "row_fit_illustration": true
     },
     {
      "type": "screenshot",
@@ -3909,7 +3910,8 @@
      "width": "78%",
      "align": "center",
      "size": "large",
-     "text_ref": "恢复副本和同步"
+     "text_ref": "恢复副本和同步",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -4913,7 +4915,8 @@ AI 用 key，却看不见 key
      "width": "55%",
      "align": "left",
      "size": "large",
-     "text_ref": "全部功能"
+     "text_ref": "全部功能",
+     "row_fit_illustration": true
     },
     {
      "type": "status_legend",
@@ -6628,7 +6631,8 @@ AI 用 key，却看不见 key
      "size": "large",
      "text_ref": "演进",
      "row": "history-head",
-     "width": "78%"
+     "width": "78%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

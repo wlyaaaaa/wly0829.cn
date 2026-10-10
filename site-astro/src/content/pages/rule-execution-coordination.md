@@ -207,7 +207,7 @@
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
   "sha256": "93fe1dadfc7f24367a23895110daba8fad204eb0d1c98987144749b52f3f1ceb",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -274,14 +274,16 @@
     },
     {
      "type": "prose",
-     "text_ref": "主对话管战略、头脑风暴、抽查、QA"
+     "text_ref": "主对话管战略、头脑风暴、抽查、QA",
+     "row": "lone-ill-3",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "asset": "_library/illustrations/motion-rule-execution-coordination-01-legacy-video.png",
-     "align": "center",
-     "target_width": 720,
-     "target_height": 440
+     "row": "lone-ill-3",
+     "width": "40%"
     },
     {
      "type": "table",

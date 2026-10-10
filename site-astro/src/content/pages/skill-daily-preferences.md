@@ -167,7 +167,7 @@
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
   "sha256": "843edc9caa622efc8f35fb77f3b5dc5cb27a5d1407e14689dae99f411611ef59",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -749,7 +749,8 @@
      "size": "large",
      "row": "banner",
      "width": "62%",
-     "text_ref": "能做的事"
+     "text_ref": "能做的事",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

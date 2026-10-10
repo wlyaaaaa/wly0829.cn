@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "d54cb03c814b50b6fcea5f1ff6131a2060092abfb997692b7e37ee64dfd50f5f",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -339,7 +339,8 @@
      "text_ref": "我只做三件事",
      "align": "left",
      "row": "hero",
-     "width": "56fr"
+     "width": "56fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -1747,7 +1748,8 @@
      "illustration": "none",
      "icons": "none",
      "row": "quality-example",
-     "width": "62fr"
+     "width": "62fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2020,7 +2022,8 @@
      "size": "medium",
      "target_height": 370,
      "row": "video-fallback",
-     "width": "38%"
+     "width": "38%",
+     "row_fit_illustration": true
     },
     {
      "type": "content_card",
@@ -2677,7 +2680,8 @@
      "text_ref": "AI 把要我定的事",
      "align": "left",
      "row": "decisions",
-     "width": "62fr"
+     "width": "62fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

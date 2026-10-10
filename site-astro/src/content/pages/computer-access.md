@@ -151,7 +151,7 @@
  "source": {
   "page": "sources/pages/computer-access/page.json",
   "sha256": "3c63959f7f639ae841d9b53e01ffe325bba4617a92be23420665aff2d4b08227",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -341,7 +341,8 @@
      "illustration": "none",
      "connector": "none",
      "row": "hero",
-     "width": "52fr"
+     "width": "52fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -797,7 +797,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1819,7 +1819,8 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "size": "large",
      "text_ref": "手机提醒怎么排",
      "row": "hero",
-     "width": "55%"
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

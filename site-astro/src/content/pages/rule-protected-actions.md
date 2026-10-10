@@ -256,7 +256,7 @@
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
   "sha256": "6bc149284f9473ffb3a861e7d9716b818f5b30dc6d8eca49b871a52cd46434fd",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:26+08:00"
  }
 }
 ---
@@ -324,7 +324,8 @@
      "size": "large",
      "row": "hero",
      "width": "55%",
-     "text_ref": "重大动作与本人验证"
+     "text_ref": "重大动作与本人验证",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -1755,7 +1756,8 @@
     {
      "type": "illustration",
      "index": 0,
-     "size": "banner"
+     "row": "judgement",
+     "width": "30%"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
@@ -2472,14 +2474,16 @@
      "inset_prefixes": [
       "实例："
      ],
-     "text_ref": "各产品各管各的"
+     "text_ref": "各产品各管各的",
+     "row": "lone-ill-3",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "index": 0,
-     "align": "center",
-     "target_height": 230,
-     "target_width": 356
+     "row": "lone-ill-3",
+     "width": "40%"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",

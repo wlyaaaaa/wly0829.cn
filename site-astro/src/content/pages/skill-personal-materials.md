@@ -124,7 +124,7 @@
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
   "sha256": "da3da8b564da7ab9767dfa7735b69ef3a942d6fc5739bdba7566813c57bdd01d",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -719,7 +719,8 @@
      "size": "large",
      "row": "abilities",
      "width": "60%",
-     "text_ref": "能做的事"
+     "text_ref": "能做的事",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

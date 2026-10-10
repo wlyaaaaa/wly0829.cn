@@ -490,7 +490,7 @@
  "source": {
   "page": "sources/pages/openclaw/page.json",
   "sha256": "419f26996ab20dd536f658523d86b7627d5d60f4bdf3078c45c11ddc7e7a154e",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -542,7 +542,8 @@
      "size": "large",
      "row": "hero",
      "width": "55%",
-     "text_ref": "OpenClaw 网关"
+     "text_ref": "OpenClaw 网关",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",
@@ -2409,7 +2410,8 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
      "size": "medium",
      "text_ref": "演进（6 月 19 日—9 月 28 日，65 次提交）",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

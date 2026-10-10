@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "737a689a30e03794b0c8f88cfdd8c7d04963ac2dc82f53e2c9599ef80271958f",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -1043,7 +1043,8 @@
      "connector": "none",
      "text_ref": "存了什么、没存什么",
      "row": "hero",
-     "width": "55%"
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1695,7 +1696,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "换电脑怎么装回",
      "row": "hero",
-     "width": "45%"
+     "width": "45%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

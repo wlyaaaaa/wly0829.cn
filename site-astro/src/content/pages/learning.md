@@ -545,7 +545,7 @@
  "source": {
   "page": "sources/pages/learning/page.json",
   "sha256": "e34c22939d152680d729fe42729f96c59055c80e639999fbb03df1e48387103e",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1061,7 +1061,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "size": "large",
      "row": "hero",
      "width": "58%",
-     "text_ref": "一课长什么样"
+     "text_ref": "一课长什么样",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1235,7 +1236,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "size": "large",
      "row": "hero",
      "width": "68%",
-     "text_ref": "觉得不对"
+     "text_ref": "觉得不对",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -1555,7 +1557,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "size": "large",
      "row": "hero",
      "width": "47%",
-     "text_ref": "它是怎么搭的"
+     "text_ref": "它是怎么搭的",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1824,7 +1827,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "size": "large",
      "row": "hero",
      "width": "55%",
-     "text_ref": "用了哪些模型"
+     "text_ref": "用了哪些模型",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2207,7 +2211,8 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "size": "large",
      "row": "hero",
      "width": "54%",
-     "text_ref": "拿我自己的项目当例子"
+     "text_ref": "拿我自己的项目当例子",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",

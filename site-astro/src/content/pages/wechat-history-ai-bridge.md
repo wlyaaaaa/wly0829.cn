@@ -421,7 +421,7 @@
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
   "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -477,7 +477,8 @@
      "width": "50%",
      "align": "left",
      "size": "medium",
-     "text_ref": "微信记录交给 AI"
+     "text_ref": "微信记录交给 AI",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",
@@ -909,7 +910,8 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
      "width": "66%",
      "align": "left",
      "size": "large",
-     "text_ref": "两条路差在哪"
+     "text_ref": "两条路差在哪",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

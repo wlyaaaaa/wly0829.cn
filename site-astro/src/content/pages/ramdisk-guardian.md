@@ -548,7 +548,7 @@
  "source": {
   "page": "sources/pages/ramdisk-guardian/page.json",
   "sha256": "8ae1573434e46212cb4012e0f1ad6920953344f3ae807e719390f5949d4c2da7",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -2727,18 +2727,20 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
      "indices": [
       0
      ],
-     "max_width": "38%"
+     "row": "lone-shot-2",
+     "width": "55%"
     },
     {
      "type": "prose",
-     "text_ref": "6月14日的Primo界面截图：当时这块盘还是20GB，红绿标注是当时写给自己看的"
+     "text_ref": "6月14日的Primo界面截图：当时这块盘还是20GB，红绿标注是当时写给自己看的",
+     "row": "lone-shot-2",
+     "width": "45%"
     },
     {
      "type": "illustration",
      "illustration": "outside",
      "index": 0,
-     "size": "small",
-     "align": "center"
+     "row": "lone-shot-2"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左边约 62% 宽一条竖向时间线，每个节点一个小水彩图标、粗体日期、一行字。右边约 36% 宽：上面一个带 1px 浅灰细边框、圆角 8px 的空白截图位，宽约屏宽 34%、高宽比 4:3（拼页时原样贴真实截图，框里什么都不画），截图位下面一行灰色小字图注；截图位下面一幅小插画：一根内存条从一块大硬盘的样子慢慢缩成一块小巧的盘，旁边一个园丁在扫落叶。",

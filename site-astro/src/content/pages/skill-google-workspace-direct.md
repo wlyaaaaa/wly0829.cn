@@ -146,7 +146,7 @@
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
   "sha256": "314b330bbe7b499851d2a97c170d933d91b099b1c68118dc2f9dce216c0e7b17",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -858,7 +858,8 @@
      "index": 0,
      "row": "after-steps",
      "width": "35%",
-     "size": "small"
+     "size": "small",
+     "row_fit_illustration": true
     },
     {
      "type": "quote",

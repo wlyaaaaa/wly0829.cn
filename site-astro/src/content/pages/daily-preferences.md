@@ -933,7 +933,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
  }
 }
 ---
@@ -2444,17 +2444,18 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "columns": 2,
      "illustration": "left_inside",
      "connector": "none",
-     "icons": "auto"
+     "icons": "auto",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
-     "align": "center",
-     "size": "large",
      "columns": 1,
      "illustration": "outside",
      "connector": "none",
-     "target_height": 230,
-     "target_width": 465
+     "row": "lone-ill-2",
+     "width": "40%"
     }
    ],
    "notes": "实看替换横图：左约68%两列表7行，首列图标与情况，右列正文，右约32%数据库抽屉→备份硬盘插画。表格整个节点起点为情况。现有 table 未使用 icons/illustration，行图标需适配；表格外观未在批准样板，待样张。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
@@ -3229,7 +3230,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      "illustration": "none",
      "connector": "none",
      "row": "head",
-     "width": "56%"
+     "width": "56%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -5572,7 +5574,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      "illustration": "none",
      "connector": "none",
      "row": "history-head",
-     "width": "78%"
+     "width": "78%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

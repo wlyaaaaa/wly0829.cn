@@ -1587,7 +1587,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "7af96084d696debedad175fa9784f89e107cdaac73a0aed563b59afa50e84cf0",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
  }
 }
 ---
@@ -2865,7 +2865,8 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
      "align": "center",
      "size": "large",
      "row": "intro",
-     "width": "65%"
+     "width": "65%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -3520,7 +3521,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icon_position": "header_left",
      "row": "firstaid",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -3743,15 +3745,19 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "size": "large"
     },
     {
-     "type": "illustration",
-     "size": "banner"
-    },
-    {
      "type": "content_card",
      "text_ref": "AI连进来办事手机、笔记本上的AI连进这台电脑干活，",
      "columns": 2,
      "columns_v": 1,
-     "illustration": "left_inside"
+     "illustration": "left_inside",
+     "row": "lone-ill-1",
+     "width": "60%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "row": "lone-ill-1",
+     "width": "40%"
     },
     {
      "type": "content_card",
@@ -4048,13 +4054,6 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "size": "large"
     },
     {
-     "type": "illustration",
-     "index": 0,
-     "size": "banner",
-     "align": "center",
-     "target_width": 326
-    },
-    {
      "type": "points_card",
      "text_ref": "开机和桌面",
      "whole_block": true,
@@ -4076,6 +4075,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icon_position": "header_left",
      "row": "daily",
      "width": "50%"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "daily",
+     "width": "30%"
     }
    ],
    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",

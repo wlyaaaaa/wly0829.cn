@@ -168,7 +168,7 @@
  "source": {
   "page": "sources/pages/charter/page.json",
   "sha256": "d79be8ba11080d63fa4997afd24eefea0426b4f48d7d8c6fa9ac44138b626e42",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:15+08:00"
  }
 }
 ---
@@ -258,7 +258,8 @@
       222
      ],
      "inline_row": "hero-title",
-     "inline_width": "38%"
+     "inline_width": "38%",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -1386,7 +1387,8 @@
      "header_navigation": "inline_right",
      "row": "body",
      "width": "58%",
-     "text_ref": "八、项目与维护"
+     "text_ref": "八、项目与维护",
+     "row_fit_illustration": true
     },
     {
      "type": "source_text_card",

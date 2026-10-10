@@ -129,7 +129,7 @@
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
   "sha256": "5b21dde262b4c29e3a93077e0ffccc5acd365f0fa3d50237bb335314d89726d5",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -847,7 +847,8 @@
      "align": "left",
      "size": "large",
      "row": "hero",
-     "width": "68%"
+     "width": "68%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

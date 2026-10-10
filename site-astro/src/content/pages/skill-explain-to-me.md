@@ -114,7 +114,7 @@
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
   "sha256": "c156b7b972f58a17b92bd2c701a6e72d57ab2f7f7db9ff92e81c7961861e318a",
-  "converted_at_beijing": "2026-10-10T09:52:01+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -484,7 +484,8 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
      "tail": true,
      "speaker_role": "ai",
      "row": "body",
-     "width": "65%"
+     "width": "65%",
+     "row_fit_illustration": true
     },
     {
      "type": "dialogue",
@@ -1012,7 +1013,8 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
      "size": "large",
      "text_ref": "边界",
      "row": "head",
-     "width": "31%"
+     "width": "31%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

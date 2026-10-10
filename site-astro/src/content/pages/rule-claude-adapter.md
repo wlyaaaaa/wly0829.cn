@@ -236,7 +236,7 @@
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
   "sha256": "dcd5f18d203607ff77afc0867aa5d3b2b5fa26f4d65ba9eebc46f8417035364e",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -354,7 +354,8 @@
      "type": "prose",
      "text_ref": "Codex和Claude共用的规则写在别的专题里，这一页只写Claude不同的地方，管八件事：密码中心怎么认出Claude桌面版；五个思考档",
      "row": "intro",
-     "width": "55%"
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

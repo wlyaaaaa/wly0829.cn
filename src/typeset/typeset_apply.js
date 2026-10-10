@@ -332,7 +332,7 @@ globalThis.TypesetApply = () => {
       if (x===null || x<rb.left+rb.width*.3 || x>rb.left+rb.width*.75) x=rb.left+rb.width/2;
       const tEl=tc.querySelector('[data-comp="chapter_title"]'),tImg=tEl.querySelector('img');
       const tw=(tImg||tEl).getBoundingClientRect().width;
-      const left=Math.max(x-rb.left-gap,tw);
+      let left=Math.max(x-rb.left-gap,tw);
       row.style.gridTemplateColumns=`${left.toFixed(1)}px minmax(0,1fr)`;
       let where='';
       if (img) {
@@ -352,7 +352,52 @@ globalThis.TypesetApply = () => {
         h=Math.max(100,h);
         Object.assign(img.style,{width:'auto',maxWidth:'none',height:h+'px',maxHeight:'none'});
       }
+      // 标题短、旁边又没插画：对齐以后标题和状态之间空超过 360 画布像素（约屏幕 300），状态紧跟标题（主持 10:36 看驾驶舱）
+      const used=tw+(where==='title'&&img?gap+img.getBoundingClientRect().width:0);
+      if (left-used>360) {left=used+2*gap;row.style.gridTemplateColumns=`${left.toFixed(1)}px minmax(0,1fr)`;where+=' follow';}
       receipt.balance.push({kind:'fit_head_row',left:Math.round(left),align:Math.round(x-rb.left),title:Math.round(tw),ill:where});
+    }
+  }
+  function fillShortColumns() {
+    // 并排行里一栏比最长那栏短一截（主持 10 月 10 日 10:36：非首屏也不留空，只有实时数据预留位可以空）：
+    // ①短栏里有一幅插画：按空出来的高度放大（最多到栏宽，不裁图）；②短栏最后是对话框：框拉到和长栏齐，气泡在框里均匀分开；
+    // ③其余整栏上下居中。标题行不动；图文并排行（首屏 K1-A 文字顶对齐）只做①②。最后跑：只在行内补，行高不变。
+    const SL=60;
+    const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
+      return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
+    for (const row of root.querySelectorAll('.row')) {
+      if (row.matches('[data-inline-row]') || row.querySelector('[data-status-line]')) continue;
+      const cols=[...row.children].filter(c=>c.matches('.col'));
+      if (cols.length<2) continue;
+      const fit=row.matches('.fit-ill'),H=Math.max(...cols.map(contentH));
+      for (const c of cols) {
+        let d=H-contentH(c);
+        if (d<=SL) continue;
+        const how=[];
+        const ill=[...c.children].find(k=>k.matches('[data-comp="illustration"]') && k.querySelectorAll('img').length===1);
+        if (ill) {
+          const img=ill.querySelector('img'),ib=img.getBoundingClientRect();
+          const aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height);
+          const nh=Math.min(c.getBoundingClientRect().width/aspect,ib.height+d);
+          if (nh>ib.height+4) {
+            Object.assign(ill.style,{display:'flex',justifyContent:'center'});
+            Object.assign(img.style,{width:'auto',maxWidth:'100%',height:nh+'px',maxHeight:'none'});
+            d=H-contentH(c);how.push('ill');
+          }
+        }
+        if (d>SL) {
+          const fr=c.lastElementChild && c.lastElementChild.querySelector('.ct-dialogue-frame');
+          const items=fr && fr.querySelector('.ct-dialogue-items');
+          if (items) {
+            const fh=fr.getBoundingClientRect().height;
+            Object.assign(fr.style,{display:'flex',flexDirection:'column',minHeight:(fh+d)+'px'});
+            Object.assign(items.style,{flex:'1 1 auto',alignContent:'space-evenly'});
+            d=H-contentH(c);how.push('dialogue');
+          }
+        }
+        if (d>SL && !fit) {c.style.alignSelf='stretch';c.style.justifyContent='center';how.push('center');}
+        if (how.length) receipt.balance.push({kind:'fill_short_column',gap:Math.round(H-contentH(c)),how:how.join('+')});
+      }
     }
   }
   function fitIllustrationRows() {
@@ -387,7 +432,7 @@ globalThis.TypesetApply = () => {
         }
         const ib=img.getBoundingClientRect(),aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height),hostW=host.getBoundingClientRect().width,natural=hostW/aspect;   // 比例按原图（显示框可能被档位样式压扁）
         let h=Math.max(160,Math.min(natural,room));
-        if (hostW-h*aspect>2*LIMIT) h=Math.min(natural,Math.max(h,Math.min((hostW-2*LIMIT)/aspect,room+OVER)));   // 两边空太多：图再大一点，另一栏底下最多多空 OVER
+        if (hostW-h*aspect>2*LIMIT) h=natural;   // 两边空太多：图铺满栏宽（主持 10:36 查电脑卡顿），另一栏由 fillShortColumns 补齐
         Object.assign(ill.style,{display:'flex',justifyContent:'center'});
         Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
         receipt.balance.push({kind:'fit_illustration_tail',before,after:[Math.round(contentH(oc)),Math.round(contentH(fc))],moved:host===oc});
@@ -406,11 +451,14 @@ globalThis.TypesetApply = () => {
       const side=()=>isIll && img?mc.getBoundingClientRect().width-img.getBoundingClientRect().width:0;
       if (Math.abs(mh0-th0)<=SLACK && side()<=40) continue;
       let pulled='',mw=mw0;
-      if (mh0-th0>SLACK) {
+      // ①紧跟这一行的文字块一块块挪进文字栏，挪到文字栏比图高为止（挪进去以后文字栏比图高出 SLACK 以上就退回、停）
+      const PULL='[data-comp="action_button"],[data-comp="notice"],[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="bullet_list"]';
+      for (let k=0;k<8 && contentH(mc)-contentH(tc)>SLACK;k++) {
         const nx=row.nextElementSibling;
-        if (nx && (nx.matches('[data-comp="action_button"]') || (nx.matches('[data-comp="notice"],[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="bullet_list"]') && nx.textContent.trim().length<=160))) {
-          tc.append(nx);pulled=nx.getAttribute('data-comp');
-        }
+        if (!nx || !nx.matches(PULL)) break;
+        tc.append(nx);
+        if (contentH(tc)>contentH(mc)+SLACK) {row.after(nx);break;}
+        pulled+=(pulled?',':'')+nx.getAttribute('data-comp');
       }
       const twMax=Math.min(total-120,tw0*1.6);
       if (fixedW) mw=Math.max(Math.min(fixedW,mw0),total-twMax);   // 定了像素宽的插画：图栏收到图宽
@@ -449,7 +497,7 @@ globalThis.TypesetApply = () => {
   receipt.balance=[];
   keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
-  applyText();equalCompoundCards();equalCards();fillPage();
+  applyText();equalCompoundCards();equalCards();fillPage();fillShortColumns();
   C.collectTextBlocks(root);
   receipt.after=C.check({root});
   globalThis.TypesetApplyReceipt=receipt;

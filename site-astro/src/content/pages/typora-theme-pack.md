@@ -456,7 +456,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
   "sha256": "e30ee35d3b9cb035dc4ce469fc60643793fb3e72f0dd944b23a1f73a17e608e5",
-  "converted_at_beijing": "2026-10-10T09:37:36+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -1892,7 +1892,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
      "align": "center",
      "size": "medium",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

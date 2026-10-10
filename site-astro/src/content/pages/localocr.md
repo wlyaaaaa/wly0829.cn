@@ -633,7 +633,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "e43d3cf443ae2eea49e11e430861380bc45f959a01f1796e280c1dcd6c6618de",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -950,7 +950,8 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     {
      "type": "illustration",
      "row": "routes",
-     "width": "22%"
+     "width": "22%",
+     "row_fit_illustration": true
     },
     {
      "type": "content_card",
@@ -2509,7 +2510,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
      "size": "large",
      "text_ref": "跑在哪、怎么不打架",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2811,7 +2813,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
      "type": "illustration",
      "row": "highlight",
      "width": "35%",
-     "frame": "localocr-highlight"
+     "frame": "localocr-highlight",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",

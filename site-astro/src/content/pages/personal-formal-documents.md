@@ -422,7 +422,7 @@
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
   "sha256": "e293d7ce50c6cdb2700d41e17fdfe71f3f38a77ef7e2f2008a21b7a11af93425",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -965,7 +965,8 @@
      "type": "section_heading",
      "text_ref": "电子版和打印版",
      "row": "versions",
-     "width": "80%"
+     "width": "80%",
+     "row_fit_illustration": true
     },
     {
      "type": "table",
@@ -1353,7 +1354,8 @@
      "align": "center",
      "size": "medium",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

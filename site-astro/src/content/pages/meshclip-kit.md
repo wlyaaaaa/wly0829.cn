@@ -514,7 +514,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
   "sha256": "33bc59575239882b74ba5810b3b9414de3431d4ec3849524f0e79da7589b25f9",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -3227,12 +3227,15 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
      "text_ref": "8月11日在副机上建库：Tailscale连通、KD",
      "direction": "vertical",
      "connector": "ribbon",
-     "illustration": "left_inside"
+     "illustration": "left_inside",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
-     "size": "small",
-     "align": "center"
+     "row": "lone-ill-2",
+     "width": "40%"
     }
    ],
    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",

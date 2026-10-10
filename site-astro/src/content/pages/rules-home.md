@@ -263,7 +263,7 @@
  "source": {
   "page": "sources/pages/rules-home/page.json",
   "sha256": "7ccdaf050e3333f39898ba6e8bc05556c9a6a9a84cbff02d2f9a735150f01331",
-  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -821,7 +821,8 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
      "size": "large",
      "text_ref": "碰到一件事",
      "row": "balanced-heading",
-     "width": "92%"
+     "width": "92%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -498,7 +498,7 @@
  "source": {
   "page": "sources/pages/codex-local-remote/page.json",
   "sha256": "e12d7fb4b1f27714b6ae0772df7277d08e75cf3e48cce616dcb544097687b367",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -550,7 +550,8 @@
      "align": "left",
      "size": "large",
      "row": "hero",
-     "width": "55%"
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",

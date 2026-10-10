@@ -1851,7 +1851,7 @@
  "source": {
   "page": "sources/pages/how/page.json",
   "sha256": "58623fff58d26659d7dbfd6e9af4454b558a4b57c65b23227ef662f01ecec508",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
  }
 }
 ---
@@ -1915,7 +1915,8 @@
      "align": "left",
      "size": "large",
      "row": "top",
-     "width": "53%"
+     "width": "53%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -2443,14 +2444,16 @@
     },
     {
      "type": "prose",
-     "text_ref": "电脑上把鼠标移到一个项目上"
+     "text_ref": "电脑上把鼠标移到一个项目上",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "asset": "_library/illustrations/系统群岛.png",
-     "size": "large",
-     "align": "center",
-     "target_width": 760
+     "row": "lone-ill-2",
+     "width": "40%"
     },
     {
      "type": "directory_tile",
@@ -3115,7 +3118,8 @@
      "align": "left",
      "size": "large",
      "row": "intro",
-     "width": "58%"
+     "width": "58%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -6791,7 +6795,8 @@ Codex
      "variant": "lead_value",
      "icons": "none",
      "width": "42%",
-     "row": "practice-main"
+     "row": "practice-main",
+     "row_fit_illustration": true
     },
     {
      "type": "bullet_list",

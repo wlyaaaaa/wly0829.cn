@@ -239,7 +239,7 @@
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
   "sha256": "8a2f7e1ca5775a6982bad266c836343600daca70592958fd753966dc632c2f0f",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -315,7 +315,8 @@
       6,
       643,
       187
-     ]
+     ],
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

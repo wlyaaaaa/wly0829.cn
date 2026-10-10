@@ -880,7 +880,7 @@
  "source": {
   "page": "sources/pages/personal-media/page.json",
   "sha256": "905e850440e6407ff6caaf0730e79e8e8d66a198472dce90659b43cc3103eee8",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1423,7 +1423,8 @@
       "gray"
      ],
      "row": "discard",
-     "width": "74%"
+     "width": "74%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -4553,7 +4554,8 @@
      "align": "center",
      "size": "medium",
      "row": "history-title",
-     "width": "80%"
+     "width": "80%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -99,7 +99,7 @@
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
   "sha256": "1c191eb99a9a5ddd4665428c5af57d01601684bf0c2d31dc6fda9e83d66fa77a",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -825,7 +825,8 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
      "size": "large",
      "row": "hero",
      "width": "70%",
-     "text_ref": "能做的事"
+     "text_ref": "能做的事",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
