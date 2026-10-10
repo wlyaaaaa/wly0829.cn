@@ -65,10 +65,12 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   {moved && <meta http-equiv="refresh" content={`2; url=${moved}`} />}
   {(moved || noindex) && <meta name="robots" content="noindex" />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script is:inline defer src={blocks?.loader || '/_living/living-mount.js'}></script>
   {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
   <Fragment set:html={head} />
   {blocks && <link rel="preload" as="font" type="font/woff2" href={blocks.font} crossorigin="anonymous" />}
   {blocks && <link rel="stylesheet" href={blocks.css} />}
+  <noscript><style>.ts-page [data-ts-src],.ts-page [data-ts-lazy] {display:none!important}</style></noscript>
   {blocks && <Fragment set:html={`<style>@font-face{font-family:"Sans";src:url("${blocks.font}") format("woff2");font-weight:100 900;font-display:block}</style>`} />}
 </head>
 <body data-page-kind={kind} class="astro-page">
@@ -112,7 +114,6 @@ document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
-  <script is:inline defer src="/_living/living-mount.js"></script>
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
 </body>
 </html>

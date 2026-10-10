@@ -207,9 +207,9 @@ def _badge_icon(style, ctx):
                 '<rect x="4" y="10" width="16" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>'
                 '<circle cx="12" cy="15" r="1.5" fill="currentColor"/>'
                 '<path d="M12 16v3" stroke="currentColor" stroke-width="2"/></svg>')
-    # 原图 22 已点名并画出 GitHub 白猫头。SVG 视口只引用该无字区域，
-    # 不引入臆造品牌形状；其后方 GitHub 字样不在视口里。
-    source = Path(__file__).resolve().parent / "assets" / "projects-home-22.png"
+    # 原图 22 的猫头及采样邻边逐像素保留，视口外透明；原画布和 SVG 坐标不变，
+    # Chrome 缩小采样也和整张原图一致，只下载 28 KB 独立徽标。
+    source = Path(__file__).resolve().parent / "assets" / "github-badge-original-pixels.png"
     if not source.is_file():
         ctx.warn("公开项目徽章缺少已核对的本地 GitHub 猫头原图；保留定稿徽章文字。")
         return ""

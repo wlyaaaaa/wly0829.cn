@@ -64,26 +64,91 @@ def _under(p, root):
         return False
 
 
+_published = {}
+_living_configs = {}
+
+
 def publish_path(p):
     p = os.path.normpath(p)
-    if _under(p, os.path.join(REPO, "sources", "assets")):
-        rel = os.path.relpath(p, os.path.join(REPO, "sources", "assets")).replace("\\", "/"); dst = os.path.join(PUB, "assets", *rel.split("/")); url = "/assets/" + rel
-    elif _under(p, os.path.join(REPO, ".publish", "typeset-out", "_cache")):
-        rel = "_titles/" + os.path.basename(p); dst = os.path.join(PUB, "assets", "_titles", os.path.basename(p)); url = "/assets/" + rel
-    elif _under(p, PROTO):
-        rel = "_typeset/" + os.path.relpath(p, PROTO).replace("\\", "/"); dst = os.path.join(PUB, "assets", *rel.split("/")); url = "/assets/" + rel
-    elif _under(p, REPO):
-        rel = "_repo/" + os.path.relpath(p, REPO).replace("\\", "/"); dst = os.path.join(PUB, "assets", *rel.split("/")); url = "/assets/" + rel
-    else:
+    if not (_under(p, REPO) or _under(p, PUB)):
         raise ValueError("仓库外的文件不发布：" + p)
-    if not os.path.exists(dst) or os.path.getsize(dst) != os.path.getsize(p):
+    st = os.stat(p)
+    key = (p, st.st_size, st.st_mtime_ns)
+    if key in _published:
+        return _published[key]
+    # 同一内容只有一个地址；内容变了地址必变，沿用发布器已有的一年 immutable 缓存。
+    url = "/assets/_fingerprinted/" + sha(p) + os.path.splitext(p)[1].lower()
+    dst = os.path.join(PUB, *url.lstrip("/").split("/"))
+    if not os.path.exists(dst):
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copyfile(p, dst)
-    return urllib.parse.quote(url, safe="/")
+    _published[key] = url
+    return url
 
 
 def rewrite_urls(text):
     return re.sub(r'file:///[^"\'\)\s<>]+', lambda m: publish_path(file_url_to_path(m.group(0))), text)
+
+
+def defer_images(body, first=False):
+    """首屏关键图直连；其余图片和 SVG 按视口取图，保留无 JS 原图。"""
+    def inert(tag, attr):
+        return re.sub(r'\b' + attr + r'="([^"]+)"', r'data-ts-src="\1"', tag, count=1)
+
+    def svg(m):
+        original = m.group(0)
+        if not re.search(r'<image\b[^>]*\bhref=', original):
+            return original
+        lazy = re.sub(r'<image\b[^>]*>', lambda x: inert(x[0], "href"), original)
+        return lazy.replace('<svg ', '<svg data-ts-lazy ', 1) + '<noscript>' + original + '</noscript>'
+
+    if first: body = re.sub(r'(<[^>]*data-comp="illustration"[^>]*>\s*<img)\b(?![^>]*\bdata-ts-art=)', r'\1 data-ts-art="1"', body)
+    body = re.sub(r'<svg\b[^>]*>.*?</svg>', svg, body, flags=re.S)
+    def img(m):
+        original = m.group(0)
+        if 'src="' not in original:
+            return original
+        tag = inert(original, "src")
+        if 'data-ts-src="/' in tag and 'crossorigin=' not in tag:
+            tag = tag.replace('<img ', '<img crossorigin="anonymous" ', 1)
+        for attr, data in (("width", "data-ts-w"), ("height", "data-ts-h")):
+            size = re.search(r'\b' + data + r'="([^"]+)"', tag)
+            if size and not re.search(r'\b' + attr + r'=', tag):
+                tag = tag.replace('<img ', f'<img {attr}="{size[1]}" ', 1)
+        if first and ('data-title-' in tag or 'data-ts-art' in tag):
+            return tag.replace('data-ts-src=', 'src=', 1).replace('<img ', '<img fetchpriority="high" ', 1)
+        return tag + '<noscript>' + original + '</noscript>'
+    return re.sub(r'<img\b[^>]*>', img, body)
+
+
+def share_living_texture(config_url, art_src):
+    """静图和纹理解码像素完全相同时复用静图，不转码，不动尺寸、遮罩或效果。"""
+    from PIL import Image
+    path = os.path.join(PUB, *config_url.lstrip("/").split("/"))
+    config = _living_configs.setdefault(path, json.load(open(path, encoding="utf-8")))
+    art = file_url_to_path(art_src)
+    with Image.open(art) as image:
+        for side in ("h", "v"):
+            texture = config.get(side, {}).get("texture", {})
+            src = texture.get("src", "")
+            if not src.startswith("/"):
+                continue
+            tp = os.path.join(PUB, *urllib.parse.unquote(src).lstrip("/").split("/"))
+            if not os.path.isfile(tp):
+                continue
+            with Image.open(tp) as other:
+                color = ("icc_profile", "gamma", "srgb")
+                if (getattr(image, "n_frames", 1) == getattr(other, "n_frames", 1) == 1 and image.size == other.size and all(image.info.get(k) == other.info.get(k) for k in color)
+                        and image.convert("RGBA").tobytes() == other.convert("RGBA").tobytes()):
+                    # 复用现有原文件中较小的一份；解码像素、尺寸和色彩信息已逐一核对。
+                    url = publish_path(tp if os.path.getsize(tp) < os.path.getsize(art) else art)
+                    st = os.stat(art)
+                    _published[(art, st.st_size, st.st_mtime_ns)] = url
+                    texture["src"] = url
+    shared = os.path.join(os.path.dirname(path), "shared-config.json")
+    os.makedirs(os.path.dirname(shared), exist_ok=True)
+    json.dump(config, open(shared, "w", encoding="utf-8"), ensure_ascii=False)
+    return publish_path(shared)
 
 
 # —— 区块样式：原样搬过来，只把选择器限定在画布 .ts-canvas 里（不影响页头页尾），出图时的视口单位换成画布单位 ——
@@ -571,15 +636,16 @@ def finish_page(name, fm, results, cssv):
             # 动画宿主放在画布外、和插画同一位置（画布整体缩放，宿主不缩放，引擎量到的尺寸就是屏幕上的尺寸）；
             # 宿主里是同一张图（同一个地址，只下载一次），静态图一直在，动画画好第一帧才盖上
             x, y, w, h = r["artBox"]
-            overlay = (f'<figure class="ts-art" data-living-config="{living}" data-art-key="%ART_KEY%" '
+            shared_living = share_living_texture(living, art_src)
+            overlay = (f'<figure class="ts-art" data-living-config="{shared_living}" data-art-key="%ART_KEY%" '
                        f'style="left:calc({x}px * var(--tz));top:calc({y}px * var(--tz));width:calc({w}px * var(--tz));height:calc({h}px * var(--tz))">'
-                       f'<img src="{art_src}" alt="" decoding="sync"></figure>')
-        body = rewrite_urls(body)
+                       f'<img src="{art_src}" alt="" data-ts-art="1" decoding="sync"></figure>')
+        body = defer_images(rewrite_urls(body), first)
         style = rewrite_urls(r["style"])
-        screens[sid][r["o"]] = {"html": body, "style": style, "height": r["height"], "shape": r["shape"], "overlay": rewrite_urls(overlay)}
+        screens[sid][r["o"]] = {"html": body, "style": style, "height": r["height"], "shape": r["shape"], "overlay": defer_images(rewrite_urls(overlay), first)}
         texts.append(re.sub(r"<[^>]+>", "", H.unescape(body)))
         if art_src and r["o"] == "h" and living:
-            motion = {"screen": sid, "art_url": publish_path(file_url_to_path(art_src))}
+            motion = {"screen": sid, "art_url": publish_path(file_url_to_path(art_src)), "art_key": sha(file_url_to_path(art_src))}
         if r["o"] == "h" and r.get("titles") and motion is not None and motion.get("screen") == sid and "brush_url" not in motion:
             motion["brush_url"] = publish_path(file_url_to_path(r["titles"][0])) if r["titles"][0].startswith("file:///") else None
     font = font_subset(name, texts + [fm.get("title", ""), fm.get("tagline", "")])
@@ -595,10 +661,13 @@ def finish_page(name, fm, results, cssv):
                 size = list(im.size)
             return {"src": url, "size": size, "key": sha(p)}
         mm = {"screen": motion["screen"], "art": meta(motion.get("art_url")), "brush": meta(motion.get("brush_url"))}
+        mm["art"]["key"] = motion["art_key"]
+        latest_living = publish_path(os.path.join(PUB, "_living", name, "astro", "shared-config.json"))
         for sid in screens:
             for o in ("h", "v"):
                 if o in screens[sid] and mm["art"]:
                     screens[sid][o]["overlay"] = screens[sid][o].get("overlay", "").replace("%ART_KEY%", mm["art"]["key"])
+                    screens[sid][o]["overlay"] = re.sub(r'data-living-config="[^"]+"', f'data-living-config="{latest_living}"', screens[sid][o]["overlay"])
         if mm["brush"]:
             sid = mm["screen"]
             for o in ("h", "v"):
@@ -621,7 +690,8 @@ def finish_page(name, fm, results, cssv):
                         screens[r["screen"]]["article_label"] = first
                 else:
                     print(f"  {r['screen']}：原文屏取不到原文正文，不出网页字", flush=True)
-    out = {"page": name, "css": f"/assets/_typeset/typeset.css?v={cssv}", "font": font, "motion": mm,
+    out = {"page": name, "css": publish_path(CSS_OUT), "font": font, "motion": mm,
+           "loader": publish_path(os.path.join(SITE, "src", "scripts", "living-mount.js")),
            "sections": [], "screens": [screens[s] for s in order]}
     sec_seen = set()
     fm_screens = {m["screen"]["id"]: m["screen"] for m, _ in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
@@ -662,6 +732,7 @@ def bindings(name, first_screen):
 
 
 def run(names, workers=6):
+    _published.clear(); _living_configs.clear()
     t0 = time.time()
     os.chdir(REPO)  # page.json 里截图等路径相对仓库根（和现在出图时一样）
     mount = os.path.join(SITE, "src", "scripts", "living-mount.js")
@@ -670,7 +741,10 @@ def run(names, workers=6):
     # 内容页“现在”实时位：取数、读不到时只说一次并保留上次的值（Site.astro 引用）
     shutil.copyfile(os.path.join(SITE, "src", "scripts", "live-dom.js"), os.path.join(PUB, "_living", "live-dom.js"))
     for f in RULE_FRAMES:
-        publish_path(os.path.join(REPO, "sources", "assets", *f.split("/")))
+        # 这两张框图由全站 CSS 按固定地址引用，须同时支持空 public 的干净构建。
+        dst = os.path.join(PUB, "assets", *f.split("/"))
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        shutil.copyfile(os.path.join(REPO, "sources", "assets", *f.split("/")), dst)
     reg, owner, css, warn = load_registry()
     css_files = [os.path.join(PROTO, "style", "base.css")] + css
     cssv = build_css(css_files)
