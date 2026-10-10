@@ -279,6 +279,8 @@ def build(pages=None):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
     stage('finish')
+    run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist), cwd=ROOT)
+    stage('finalize')
     run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), cwd=ROOT)
     stage('public')
     files = [{'path': p.relative_to(dist).as_posix(), **proof(p)} for p in sorted(dist.rglob('*'))
