@@ -35,9 +35,9 @@ npm run build               # 完整静态站 + 公开内容检查
 npm run dev -- --host 127.0.0.1 --port 4173
 ```
 
-`dev` 先运行同一完整构建，再用 Astro 预览 仓库根 `dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
+`dev` 先运行同一完整构建，再用 `tools/preview_site.py` 预览仓库根 `dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
 
-`python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `site-astro/.cache/build-report.json`。
+`python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图 → 最终资源处理与公开检查。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `dist/.build-receipt.json`。
 
 `scripts/prepare-astro-release.py` 现在只保留规则源 `refresh`，旧 `prepare` 拼装入口已移除。后续发布接线由 G2 读取仓库根 `dist` 和 `.build-receipt.json`；当前构建不上传、不封存、不切换线上版本。
 
@@ -133,6 +133,8 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 在仓库根运行 `npm run build`。内部只有 `scripts/build-site.py` 一条链，输出完整 `dist`；`site-astro` 的 npm 命令只转发到根入口。`npm run dev -- --host 127.0.0.1 --port 4321` 先走同一构建，再用 `tools/preview_site.py` 预览同一目录，包含冻结页和三个关键页。
 
+同一工作树的 `dist` 只有一个写入者；连续构建等前一轮结束再启动，独立任务用各自工作树。宿主 `Invoke-HeavyTaskSlot.ps1` 当前只检查物理内存，不提供同一输出目录的互斥；预览读取独立且核过指纹的快照时，可以与另一工作树的构建并行。
+
 `npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和驾驶舱的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
 
 首页、驾驶舱和授权页直接从 `sources/retained-home-cockpit/*.html` 读取。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
@@ -144,4 +146,4 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 - `rebuilt_pages`：本次重建或成品字节改变的路由数组；`html_files`：完整成品 HTML 数；`output`：实际输出目录。
 - `files`：完整文件数组，每项 `{path, bytes, sha256}`；路径相对 `dist`，SHA256 为实际成品字节。回执自身不进入清单，避免自引用；`release-manifest.json` 属于实际成品文件并列入。
 
-G2 的发布与扫描直接消费这份回执，不再由构建调用 `oss.prepare`。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节。按 O6 本轮后续裁决，成品的资源引用统一改为本站路径；正文、结构、样式及源图字节保持，原始 HTML 与成品差异只允许这类资源地址替换。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出。相册更新只新增当前指纹表，仍被引用的旧表保留。
+G2 的发布与扫描直接消费这份回执。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节，旧发布目录地址由来源清单先映射到当前资源；构建最后通过 G2 的唯一 `finalize-dist` 命令完成部署资源引用与发布策略，回执绑定最终字节。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出；当前 OSS 地址下仍被引用的脚本照常保留。相册更新只新增当前指纹表，仍被引用的旧表保留，已最终处理的表不会在下一轮被解开当前地址。
