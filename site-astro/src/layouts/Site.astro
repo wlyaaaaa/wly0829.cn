@@ -50,11 +50,14 @@ const head = rt ? withoutTocRuntime(rt.head.map((h: string) => h.startsWith('<sc
 // 这里在页面末尾放一个真实的 #ai-brief：没有脚本也能跳到这里、看到并手动复制说明；脚本在时照旧弹对话框（静态这块隐藏、改名让出 id）。
 // 现在网站上没有对应页、因而没有运行件的页（例如旧项目名的别名页），用内容文件里的页面数据
 const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]) : null; } catch { return null; } })() ?? pageMeta ?? null;
+const authorPages = import.meta.glob('../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
 const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
 const briefText = pageData && ['project', 'frozen'].includes(pageData.kind)
   ? `项目：${pageData.title}；${briefRepo.startsWith('private-project-') ? '项目键' : '仓库'}：${briefRepo}；范围：整个项目；目标：（这里写这次要做的事）。先读项目的 AGENTS.md 和说明，按现行规则做。` : '';
 const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
-  const d = JSON.parse(body); d.screens = []; return a + safe(d) + c;
+  const d = JSON.parse(body); d.screens = [];
+  d.status_binding = { ...d.status_binding, empty_text: Object.fromEntries((authorPages[`../../../sources/pages/${page}/page.json`]?.registry?.live || []).filter((x: any) => typeof x.empty_text === 'string').map((x: any) => [x.slot, x.empty_text])) };
+  return a + safe(d) + c;
 }) : '';
 ---
 <!doctype html>

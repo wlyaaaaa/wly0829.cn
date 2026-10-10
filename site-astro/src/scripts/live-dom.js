@@ -2,7 +2,7 @@
    现在网站的运行脚本只认整屏图上叠的 [data-slot]，新页上它不取数、不画；这里借它对外的 SiteLiveRuntime.readStatus / parse
    （授权与状态、连接电脑两页借 SiteB2）取值，按键填进实时位。
    读不到时照驾驶舱的做法（public/_home-cockpit/cockpit-offline.js）：页面上只说一次，显示上次读到的值和北京时间，实时位整体变淡；
-   从没读到过就安静占位，不写“读不到电脑”；读到后自动恢复。上次读到的值只在真正读到时存（localStorage：site-live-dom:v1:<页>）。
+   首次读取只占位约两秒，超时整块提示一次；读到数据但某项无值时显示作者说明或默认文案。上次读到的值只在真正读到时存（localStorage：site-live-dom:v1:<页>）。
    页面里没有 [data-slot]，现在运行脚本自己的“读不到电脑”提示不会出现；SiteB2 那条连接提示由样式藏掉（typeset-page.css）。 */
 (() => {
   'use strict';
@@ -24,7 +24,8 @@
     const p = Object.fromEntries(fmt.formatToParts(new Date(ms)).map((x) => [x.type, x.value]));
     return `${p.month}月${p.day}日 ${p.hour}:${p.minute}`;
   };
-  let saved = null, notice = null, last = null, busy = false, ctl = null, freshKeys = new Set();
+  let saved = null, notice = null, last = null, busy = false, ctl = null, freshKeys = new Set(), firstWaitExpired = false;
+  const emptyText = pd.status_binding?.empty_text || {};
   try {
     const v = JSON.parse(localStorage.getItem(KEY));
     if (v && v.project === project && v.at > 0 && v.at <= Date.now() + 6e4 && v.values && typeof v.values === 'object') saved = v;
@@ -56,7 +57,7 @@
     return window.SiteLiveRuntime?.formatTime?.(at.toISOString(), now) || bj(at.getTime());
   }
 
-  // mode：live 刚读到 / loading 正在读（先显示上次的值）/ cached 读不到、有上次的值 / empty 从没读到过
+  // mode：live 刚读到 / loading 正在读（先显示上次的值）/ cached 读不到、有上次的值 / empty 首次等候 / unavailable 首次等候超时
   function paint(mode) {
     root.dataset.liveDom = mode;
     const pre = pd.status_binding?.prefixes || {};
@@ -88,7 +89,7 @@
           b.replaceChildren();
         }
       }
-      b.dataset.state = !v ? 'empty' : fresh ? (v.state || 'ok') : 'cached';
+      b.dataset.state = !v ? (mode === 'empty' ? 'empty' : 'not_applicable') : fresh ? (v.state || 'ok') : 'cached';
       b.dataset.liveFresh = String(fresh);
       const href = fresh ? (v?.href || '') : '';
       b.dataset.liveLink = href;
@@ -99,7 +100,7 @@
     }
     const say = mode === 'cached'
       ? '暂时读不到电脑，“现在”一栏保留最后一次读到的状态：' + bj(saved.at) + '（北京时间）。恢复连接后会自动更新。'
-      : '';
+      : mode === 'unavailable' ? '暂时读不到实时状态' : '';
     if (say && !notice) {
       notice = document.createElement('aside');
       notice.className = 'live-dom-notice';
@@ -120,23 +121,19 @@
 
   function settle(ok, at) {
     freshKeys = new Set();
-    if (!ok) return paint(saved ? 'cached' : 'empty');
+    if (!ok) return paint(saved ? 'cached' : (firstWaitExpired ? 'unavailable' : 'empty'));
     const values = { ...(saved?.values || {}) };
-    let any = false;
     for (const b of boxes()) {
-      const v = compute(b.dataset.href);
+      const v = compute(b.dataset.href) || { text: emptyText[b.dataset.href]?.trim() || '现在没有这一项的记录', state: 'not_applicable' };
       if (v) {
         values[b.dataset.href] = { text: String(v.text || ''), state: v.state, href: v.href || '', at,
           ...(v.rows ? { rows: v.rows.filter((r) => r.text).map((r) => ({ text: String(r.text), state: r.state })) } : {}) };
-        freshKeys.add(b.dataset.href); any = true;
+        freshKeys.add(b.dataset.href);
       }
     }
-    if (any) {
-      saved = { project, at, values };
-      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch { /* 存不下就只在这次显示 */ }
-    }
-    // 读到了：这次没算出的项保持变淡（有上次的值）或空位，不出页面提示
-    paint(any ? 'live' : (saved ? 'cached' : 'empty'));
+    saved = { project, at, values };
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch { /* 存不下就只在这次显示 */ }
+    paint('live');
   }
 
   async function refresh() {
@@ -163,6 +160,7 @@
   document.addEventListener('keydown', open);
 
   paint(saved ? 'loading' : 'empty');
+  setTimeout(() => { firstWaitExpired = true; if (!saved) paint('unavailable'); }, 2000);
   if (b2) {
     const upd = () => {
       const s = window.SiteB2?.getSnapshot?.(), ph = s?.phase || document.body.dataset.b2StatusPhase;
