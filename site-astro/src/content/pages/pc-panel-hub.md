@@ -797,7 +797,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -846,27 +846,22 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "48%",
      "text_ref": "双屏信息中心"
     },
     {
      "type": "prose",
-     "row": "hero",
      "text_ref": "抬眼就知道",
      "size": "large",
      "bold": true
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "机箱里有两块"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "hero",
-     "width": "52%"
+     "type": "live_strip",
+     "labels": [
+      "看门狗",
+      "机箱屏画面"
+     ],
+     "text_ref": "现在",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -877,13 +872,17 @@
      "text_ref": "1 秒一刷"
     },
     {
-     "type": "live_strip",
-     "labels": [
-      "看门狗",
-      "机箱屏画面"
-     ],
-     "text_ref": "现在",
-     "frame_mode": "plain"
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "机箱里有两块",
+     "width": "48%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "width": "52%"
     },
     {
      "type": "action_button",
@@ -909,12 +908,13 @@
      "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "机箱里有两块"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside"
+     "type": "live_strip",
+     "labels": [
+      "看门狗",
+      "机箱屏画面"
+     ],
+     "text_ref": "现在",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -925,13 +925,12 @@
      "text_ref": "1 秒一刷"
     },
     {
-     "type": "live_strip",
-     "labels": [
-      "看门狗",
-      "机箱屏画面"
-     ],
-     "text_ref": "现在",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "机箱里有两块"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside"
     },
     {
      "type": "action_button",

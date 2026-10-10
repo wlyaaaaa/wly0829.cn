@@ -42,8 +42,8 @@
   "repo_url": "https://github.com/wlyaaaaa/ai-cli-profile-manager",
   "capability": "换用别家和本机的模型",
   "based_on": {
-   "commit": "7a2e38db85a668ac590bb6f3f3d8b3f754263a0c",
-   "commit_time": "2026-09-28T05:53:55+08:00"
+   "commit": "6e689efe9a063192700ea79b92361338f4dabbe5",
+   "commit_time": "2026-10-08T09:55:07+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：Codex 桌面窗口里的模型下拉菜单轻轻展开又收起，品牌小标志一个接一个亮一下（OpenAI、智谱、DeepSeek 小鲸鱼、通义千问、Ollama 小羊驼）；旁边的小保险箱门开一条缝，一把绿色小钥匙沿一条细线滑向其中一个窗口，到了就消失，门合上；终端窗口里的光标一闪一闪；显卡侧面的绿光像呼吸一样明暗；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，最后一帧回到第一帧，无缝循环。",
   "registry": {
@@ -100,7 +100,7 @@
      "id": "f-start",
      "group": "g-launch",
      "name": "指定路线启动",
-     "what": "aicli start 加路线名和项目目录；原版参数写在 -- 后面，和路线冲突的服务、认证覆盖会被拒绝",
+     "what": "一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置会被拒绝",
      "how": "“用本机 Qwen3.8 27B 开 Codex 做这个项目”",
      "status": "在用",
      "screen": "ai-cli-profile-manager-14",
@@ -120,7 +120,7 @@
      "id": "f-model-switch",
      "group": "g-launch",
      "name": "同一家换型号",
-     "what": "启动时加 --model，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小",
+     "what": "启动时临时指定型号，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小",
      "how": "“用 GLM 的新型号开一个，钥匙还用原来那把”",
      "status": "待验收",
      "screen": "ai-cli-profile-manager-14",
@@ -450,7 +450,7 @@
      "id": "f-handbook",
      "group": "g-install",
      "name": "两本中文手册",
-     "what": "使用手册和三个原版工具的中文手册，各带 PDF；aicli help 按主题看",
+     "what": "使用手册和三个原版工具的中文手册，各带 PDF；终端里也能按主题查帮助",
      "how": "“aicli 怎么配 GLM，查手册”",
      "status": "说不准",
      "screen": "ai-cli-profile-manager-16",
@@ -472,8 +472,8 @@
      "id": "n-routes",
      "text": "21 条路线",
      "meaning": "随程序发布的公开路线模板数（data/providers 共 23 份，去掉 hidden=true 的 codex-custom-responses、codex-ollama 两份）；其中 2 条本机眼下用不上：claude-ollama、oi-ollama 的模型本机没装。claude-chatgpt-ccp、claude-chatgpt-cliproxy 9 月 29 日退役删掉",
-     "as_of": "2026-09-29",
-     "source": "提交 8f0a538 的 data/providers/*.json，筛 hidden 不为 true；另见 tech 屏的“23 份”",
+     "as_of": "2026-10-10",
+     "source": "HEAD 6e689ef 的 data/providers/*.json 23 份，筛 hidden 不为 true 得 21；ollama list 现查只有 qwen3.6-35b、qwen3.8-27b 及去限制版，qwen3:8b、qwen3-coder:30b 仍没装",
      "screens": [
       "ai-cli-profile-manager-01",
       "ai-cli-profile-manager-09",
@@ -484,7 +484,7 @@
      "id": "n-tools",
      "text": "5 种原版工具",
      "meaning": "21 条路线的 engine 去重：Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter",
-     "as_of": "2026-09-29",
+     "as_of": "2026-10-10",
      "source": "同上",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -494,8 +494,8 @@
      "id": "n-desktop-models",
      "text": "8 个模型",
      "meaning": "Codex 桌面版菜单里由它加入的模型：本机 4 + 云端 4；云端只有配好钥匙引用才出现",
-     "as_of": "2026-09-28",
-     "source": "data/local-model-set.json profiles 4 个 + data/desktop-cloud-model-set.json profiles 4 个",
+     "as_of": "2026-10-10",
+     "source": "HEAD 6e689ef：data/local-model-set.json profiles 4 个 + data/desktop-cloud-model-set.json profiles 4 个",
      "screens": [
       "ai-cli-profile-manager-01",
       "ai-cli-profile-manager-04"
@@ -504,9 +504,9 @@
     {
      "id": "n-desktop-tasks",
      "text": "131 个任务",
-     "meaning": "9 月 16–28 日 Codex 桌面版里用现役接入模型开的任务（含 22 个原生子代理会话），删掉的对话不算，是下限",
-     "as_of": "2026-09-28",
-     "source": "E:\\Data\\AppData\\Codex\\sessions 与 archived_sessions 每个 .jsonl 首行 session_meta：originator=Codex Desktop 且 model_provider 为 aicli_glm_5_3_flash 61、aicli_glm_5_3 32、aicli_deepseek_flash 18、aicli_qwen38_max_paygo 14、aicli_desktop_local 6",
+     "meaning": "9 月 16 日–10 月 10 日 Codex 桌面版里用现役接入模型开的任务（含原生子代理会话），删掉的对话不算，是下限；9 月 29 日以后为 0",
+     "as_of": "2026-10-10",
+     "source": "E:\\Data\\AppData\\Codex\\sessions 与 archived_sessions 每个 .jsonl 首行 session_meta：originator=Codex Desktop 且 model_provider 为 aicli_glm_5_3_flash 61、aicli_glm_5_3 32、aicli_deepseek_flash 18、aicli_qwen38_max_paygo 14、aicli_desktop_local 6（另有已退役 aicli_google_antigravity 8 不计）；10 月 10 日重扫",
      "screens": [
       "ai-cli-profile-manager-01",
       "ai-cli-profile-manager-03"
@@ -516,7 +516,7 @@
      "id": "n-glm-flash-tasks",
      "text": "61 个",
      "meaning": "同上口径里 GLM-5.3 Flash 的任务数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-10",
      "source": "同上",
      "screens": [
       "ai-cli-profile-manager-03"
@@ -524,19 +524,19 @@
     },
     {
      "id": "n-code",
-     "text": "42,072 行代码",
-     "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 130 个文件；不含文档、JSON 数据和 PDF",
-     "as_of": "2026-09-28",
-     "source": "git ls-files '*.ps1' '*.psm1' '*.psd1' '*.cs' '*.py' '*.js' 逐个数行",
+     "text": "39,957 行代码",
+     "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 125 个文件的非空行；不含文档、JSON 数据和 PDF",
+     "as_of": "2026-10-10",
+     "source": "git ls-files '*.ps1' '*.psm1' '*.psd1' '*.cs' '*.py' '*.js' 逐个数非空行（同法在 7a2e38d 复核得 42,072，与原数一致）；HEAD 6e689ef",
      "screens": [
       "ai-cli-profile-manager-01"
      ]
     },
     {
      "id": "n-test-lines",
-     "text": "测试 16,736 行",
-     "meaning": "tests/ 下 59 个代码文件的行数",
-     "as_of": "2026-09-28",
+     "text": "测试 16,252 行",
+     "meaning": "tests/ 下代码文件的非空行",
+     "as_of": "2026-10-10",
      "source": "同上，筛 tests/*",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -544,9 +544,9 @@
     },
     {
      "id": "n-commits",
-     "text": "128 次提交",
-     "meaning": "7 月 14 日–9 月 28 日（北京时间）main 上的提交数",
-     "as_of": "2026-09-28",
+     "text": "133 次提交",
+     "meaning": "7 月 14 日–10 月 8 日（北京时间）main 上的提交数；已从首屏数字卡移到演进末尾",
+     "as_of": "2026-10-10",
      "source": "git rev-list --count HEAD",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -554,9 +554,9 @@
     },
     {
      "id": "n-bridge-builds",
-     "text": "33 个版本",
-     "meaning": "9 月 15–28 日构建过的桌面桥版本（按内容命名的目录）",
-     "as_of": "2026-09-28",
+     "text": "35 个版本",
+     "meaning": "9 月 15 日–10 月 3 日构建过的桌面桥版本（按内容命名的目录）",
+     "as_of": "2026-10-10",
      "source": "%LOCALAPPDATA%\\AiCliProfileManager\\desktop\\releases 下的目录数；PCConfig registries\\aicli_desktop_bridge.json 登记了其中 22 个",
      "screens": [
       "ai-cli-profile-manager-09"
@@ -587,7 +587,7 @@
      "id": "n-features",
      "text": "全部功能（38 项）",
      "meaning": "本页功能清单条数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-10",
      "source": "本页 registry.features",
      "screens": [
       "ai-cli-profile-manager-14"
@@ -801,8 +801,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "2b5909ed9ad001342c0b1f8623982891006d69c754446459900fe86abe093bef",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -851,19 +851,12 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%",
      "text_ref": "AI工具配置管理"
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "选好模型，打开原版AI编程工具来用。"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%"
+     "type": "live_strip",
+     "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -871,12 +864,19 @@
      "columns_v": 2,
      "illustration": "top_inside",
      "icons": "auto",
-     "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑"
+     "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机"
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
-     "frame_mode": "plain"
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "选好模型，打开原版AI编程工具来用。",
+     "width": "50%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "action_button",
@@ -896,11 +896,9 @@
      "text_ref": "AI工具配置管理"
     },
     {
-     "type": "prose",
-     "text_ref": "选好模型，打开原版AI编程工具来用。"
-    },
-    {
-     "type": "illustration"
+     "type": "live_strip",
+     "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
+     "frame_mode": "plain"
     },
     {
      "type": "stat_card",
@@ -908,13 +906,15 @@
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": "auto",
-     "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑",
+     "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机",
      "portrait_columns": 1
     },
     {
-     "type": "live_strip",
-     "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
-     "frame_mode": "plain"
+     "type": "prose",
+     "text_ref": "选好模型，打开原版AI编程工具来用。"
+    },
+    {
+     "type": "illustration"
     },
     {
      "type": "action_button",
@@ -1034,10 +1034,10 @@ AI 工具配置管理
 
 Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。
 
-**21 条路线**｜5 种原版工具配云端和本机模型，其中 2 条这台电脑眼下用不上（截至 9 月 29 日）
+**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 10 日）
 **8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个
-**131 个任务**｜9 月 16–28 日在桌面版里用这些模型开的（至少）
-**42,072 行代码**｜其中测试 16,736 行；128 次提交（7 月 14 日–9 月 28 日）
+**131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
+**39,957 行代码**｜其中测试 16,252 行
 
 现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕
 
@@ -1506,7 +1506,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
 三种用法
 
 **1. 在 Codex 桌面版里选模型**（最常用）
-新建任务时在模型菜单里直接选 GLM-5.3、DeepSeek Flash 或本机 Qwen，用法和官方模型一样。9 月 16–28 日开了 131 个这样的任务，用得最多的是 GLM-5.3 Flash（61 个）。
+新建任务时在模型菜单里直接选 GLM-5.3、DeepSeek Flash 或本机 Qwen，用法和官方模型一样。9 月 16 日以来开了 131 个这样的任务，用得最多的是 GLM-5.3 Flash（61 个）。这些都开在 9 月 28 日以前，之后还没再用过。
 跟 AI 说：不用说，菜单里选。
 
 **2. 在终端里敲 aicli**
@@ -1536,7 +1536,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
    {
     "file": "public/media/ai-cli-profile-manager/01-desktop-qwen38-codex-harness.png",
     "where": "完整原图，点击放大",
-    "caption": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。",
+    "caption": "9 月 15 日：在桌面版里选本机 Qwen3.8 27B，按规则查一项饮品偏好，用时 7 分 30 秒；工具过程、结论和思考摘要都是中文。",
     "preserve_original": true
    }
   ],
@@ -1564,7 +1564,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     },
     {
      "type": "screenshot",
-     "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。",
+     "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则",
      "caption_mode": "source_order",
      "slot_groups": [
       {
@@ -1580,11 +1580,6 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
      "row": "detail",
      "width": "33%",
      "ratio": "789:1614"
-    },
-    {
-     "type": "prose",
-     "row": "detail",
-     "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
     }
    ],
    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 55% 宽，四条带小水彩图标的说明（一个下拉菜单、一个放大镜照着 OpenAI 标志、两张任务卡中间一道分隔线、一个说话的气泡），每条第一句粗体。右边约 45% 宽，留一个带细绿边框的竖长空位放截图（宽高比约 1:2，占右栏大部分高度），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
@@ -1609,7 +1604,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     },
     {
      "type": "screenshot",
-     "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。",
+     "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则",
      "caption_mode": "source_order",
      "slot_groups": [
       {
@@ -1625,11 +1620,6 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
      "row": "detail",
      "width": "45%",
      "ratio": "1:2"
-    },
-    {
-     "type": "prose",
-     "row": "detail",
-     "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
     }
    ],
    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上，四条说明一条一行排下来；截图空位放在说明下面，占整行宽，图说在截图下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -1728,9 +1718,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
 
 **别家模型也说中文进度。** 开始前说准备解决什么，中途讲清重要发现，GLM 的思考过程照样显示成思考摘要。
 
-桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。
-
-9 月 15 日：桌面版里选本机 Qwen3.8 27B，按规则查我的饮品偏好，用时 7 分 30 秒，思考摘要也是中文。
+9 月 15 日：在桌面版里选本机 Qwen3.8 27B，按规则查一项饮品偏好，用时 7 分 30 秒；工具过程、结论和思考摘要都是中文。
 
 ::screen{#ai-cli-profile-manager-05 section="usage"}
 
@@ -1749,7 +1737,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
    {
     "file": "public/media/ai-cli-profile-manager/02-cli-profile-selection.png",
     "where": "完整原图，点击放大",
-    "caption": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
+    "caption": "9 月 15 日的终端列表：选了本机 Qwen3.8 27B 这条路线，打开前先写清用的模型、项目目录、完全访问权限和连的本机服务。列表里 DeepSeek V4 的几条后来已退役。",
     "preserve_original": true
    }
   ],
@@ -1784,7 +1772,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     },
     {
      "type": "screenshot",
-     "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
+     "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路",
      "caption_mode": "source_order",
      "slot_groups": [
       {
@@ -1798,10 +1786,6 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
       0
      ],
      "ratio": "1436:1737"
-    },
-    {
-     "type": "prose",
-     "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
     }
    ],
    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 45% 宽，四个编号步骤竖排，每步一个小水彩图标（一个终端提示符、一张清单打勾、一个 Codex 窗口、一扇门）；步骤下面一行灰色小字。右边约 55% 宽，留一个带细绿边框的空位放截图（宽高比约 5:6），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
@@ -1833,7 +1817,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     },
     {
      "type": "screenshot",
-     "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
+     "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路",
      "caption_mode": "source_order",
      "slot_groups": [
       {
@@ -1849,11 +1833,6 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
      "row": "cli",
      "width": "55%",
      "ratio": "1436:1737"
-    },
-    {
-     "type": "prose",
-     "row": "cli",
-     "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
     }
    ],
    "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版分2张，每张使用原生9:16画布，按默认v、v2顺序展示。第1张（ai-cli-profile-manager-05-v.png）：仅原标题“在终端里”、4个步骤及Qwen Code和OpenCode灰色说明。每步整宽上下排，图标缩成标题旁小标；正文参考36源像素、行高44源像素，在941宽显示到370时约14.16px。这张没有截图、截图图注或任何空框，不在步骤里面画假截图框。第2张（新增ai-cli-profile-manager-05-v2.png）：仅唯一真实截图空位和原9月15日图注，不新增标题，不重复步骤或灰色说明。截图空框占正文整行宽，内部完全空白，宽高比1436:1737；参考宽880、高1064源像素，原图注紧跟其下。真实截图由现役编译器完整保比例贴入，不能压扁或缩窄截图塞正文。不增删改写原字、不添装饰或空卡填满画布，连续外白交现役crop_box裁边。横版scene、原text和正确h保持。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -1951,9 +1930,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
 
 Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
-在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。
-
-9 月 15 日的列表：选 1 号本机 Qwen3.8 27B，打开前先写清连哪、用谁。列表里 DeepSeek V4 的几条后来已退役。
+9 月 15 日的终端列表：选了本机 Qwen3.8 27B 这条路线，打开前先写清用的模型、项目目录、完全访问权限和连的本机服务。列表里 DeepSeek V4 的几条后来已退役。
 
 ::screen{#ai-cli-profile-manager-06 section="usage"}
 
@@ -1972,7 +1949,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    {
     "file": "public/media/ai-cli-profile-manager/03-cli-rule-loading.png",
     "where": "完整原图，点击放大",
-    "caption": "CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+    "caption": "先核对当前生效的规则版本，再读要用的技能说明。",
     "preserve_original": true,
     "frame_bindings": {
      "h": {
@@ -2008,13 +1985,13 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    {
     "file": "public/media/ai-cli-profile-manager/04-cli-personal-access-check.png",
     "where": "完整原图，点击放大",
-    "caption": "同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。",
+    "caption": "同一个会话先确认个人资料现在能不能读、该读哪些，再去查要用的资料。",
     "preserve_original": true
    },
    {
     "file": "public/media/ai-cli-profile-manager/05-cli-preference-result.png",
     "where": "完整原图，点击放大",
-    "caption": "CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。",
+    "caption": "最后把查到的条目、读到的资料和中文回答串成一条完整记录：本机 27B 模型也能做完一件较长的中文任务。",
     "preserve_original": true
    }
   ],
@@ -2036,7 +2013,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     },
     {
      "type": "screenshot",
-     "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+     "text_ref": "①先核对当前生效的规则版本",
      "indices": [
       0,
       1,
@@ -2086,7 +2063,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     },
     {
      "type": "screenshot",
-     "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+     "text_ref": "①先核对当前生效的规则版本",
      "indices": [
       0,
       1,
@@ -2150,9 +2127,9 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
 还是 9 月 15 日那个终端会话：本机 Qwen3.8 27B 在原版 Codex 里按规则一步步来，每一步的命令和结果都留在原版的工作记录里。
 
-① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。
-② 同一 CLI 会话完成个人环境状态与 screen 级访问检查后，再调用对应能力查询所需资料。
-③ CLI 最终把索引命中、资料读取和中文回答串成一条可见工作记录，展示本地 27B 模型处理长中文任务的实际结果。
+① 先核对当前生效的规则版本，再读要用的技能说明。
+② 同一个会话先确认个人资料现在能不能读、该读哪些，再去查要用的资料。
+③ 最后把查到的条目、读到的资料和中文回答串成一条完整记录：本机 27B 模型也能做完一件较长的中文任务。
 
 ::screen{#ai-cli-profile-manager-07 section="usage"}
 
@@ -2415,7 +2392,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
      ],
-     "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+     "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检：它说缺哪"
     },
     {
      "type": "notice",
@@ -2443,7 +2420,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
      ],
-     "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+     "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检：它说缺哪"
     },
     {
      "type": "notice",
@@ -2569,7 +2546,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
 | 碰到什么 | 先做什么 |
 |---|---|
-| 某条路线用不了 | 先跑不花钱的体检（aicli doctor）：它说缺哪样就补哪样。钥匙只显示“引用已配置，密钥未验证”，要确认真能用再做一次真实测试 |
+| 某条路线用不了 | 先跑不花钱的体检：它说缺哪样就补哪样。钥匙只显示“引用已配置，密钥未验证”，要确认真能用再做一次真实测试 |
 | 官方 Claude 意外走了第三方 | 体检会指出是哪个设置文件、哪个字段在抢，只报名字不显示值；不让工具自动改原版设置 |
 | 桌面版菜单里没有新模型 | 桌面自己缓存列表约 5 分钟；升级过桌面接入之后，要正常退出再打开 |
 | 本机模型半天不出字 | 多半在排队等听写或文字识别让出显卡（最多 90 秒，见技术一节），或模型空闲 3 分钟后被卸载、正在重新加载 |
@@ -2753,12 +2730,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 它是怎么搭的
 
 1. **路线声明**｜23 份随程序发布的数据文件（21 条公开路线，另有 2 份不在列表里显示：一份 Codex 自定义端点模板、一份旧的 qwen3:8b 模板）：哪个工具、哪个模型、发到哪家、上下文多大、要不要钥匙；只是数据，不能执行
-2. **我的配置档**｜只存选了哪条路线和钥匙的引用，例如 passwordcenter:glm，不存钥匙本身
+2. **我的配置档**｜只存选了哪条路线和钥匙的引用（相当于一句“用密码中心里 GLM 那一把”），不存钥匙本身
 3. **启动计划**｜每次启动现做：只给这一个程序设环境和临时配置，不改全局的服务设置和官方登录
 4. **原版工具**｜Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter
 5. **回读核对**｜后台运行时核对实际模型、服务、权限，对不上就停
 
-**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15–28 日一共构建过 33 个版本。
+**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15 日到 10 月 3 日一共构建过 35 个版本。
 
 ::screen{#ai-cli-profile-manager-10 section="tech"}
 
@@ -2861,7 +2838,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 | DeepSeek | DeepSeek Flash（官方自动升到最新的 Flash，能看图）、DeepSeek V4 Pro 0813（只在终端），上下文约 100 万 token | 云端 |
 | 阿里云百炼 | Qwen3.8 Max 0902、Qwen3.7 Max 06-08，北京按量计费，上下文约 98 万 token | 云端 |
 | 本机模型 | Qwen3.8 27B、Qwen3.6 35B 和各自的去限制版，4 位量化，上下文 262,144 token | 本机显卡 |
-| 模型服务 | Ollama 0.34.4，同一时间只跑一个请求，空闲 3 分钟卸载；经电脑配置的显卡排队服务（本机 32100 端口） | 本机 |
+| 模型服务 | Ollama 0.35.0，同一时间只跑一个请求，空闲 3 分钟卸载；用显卡前经电脑配置的显卡排队服务 | 本机 |
 | 桌面桥 | .NET 10 的 C# 程序 | 本机 |
 | 后台运行 | Codex app-server（Codex 自带的后台服务接口）和它原生的“恢复同一会话” | 本机 |
 
@@ -4154,9 +4131,9 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
 **启动和路线**
 1. 选单启动｜敲 aicli 不带参数，列出这次能开的路线，最近用过的排第一，选编号就开
-2. 指定路线启动｜aicli start 加路线名和项目目录；原版参数写在 -- 后面，和路线冲突的服务、认证覆盖会被拒绝
+2. 指定路线启动｜一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置会被拒绝
 3. 路线管理｜列出、查看（脱敏显示端点、模型、数据去向）、配置、设默认、删除自己的配置档
-4. 同一家换型号｜启动时加 --model，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小
+4. 同一家换型号｜启动时临时指定型号，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小
 5. 启动前预览｜不启动，只脱敏显示这次会用哪个程序、哪些参数、环境加减了什么、请求发到哪
 6. 导出配方｜导出一份不含钥匙和登录的独立配置，不用这个工具也能照着启动
 7. 首次设置向导｜检查系统、原版工具和 Ollama，引导配第一条路线
@@ -5143,7 +5120,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 34. 安装和替换｜先验证临时候选再替换，失败恢复原版本；不用管理员权限
 35. 旧路线退役｜已退役的路线名直接拒绝，不偷偷改绑到别的模型；旧文件原样保留
 36. 卸载｜普通卸载保留配置和钥匙；彻底清理另列范围；删本地登录不等于远程撤销
-37. 两本中文手册｜使用手册和三个原版工具的中文手册，各带 PDF；aicli help 按主题看
+37. 两本中文手册｜使用手册和三个原版工具的中文手册，各带 PDF；终端里也能按主题查帮助
 38. AI 工具升级观察｜Codex 里的一个自动任务：看原版工具有没有新版、有没有更好的模型，能安全修的直接修；平时停着，按需启动
 
 ::screen{#ai-cli-profile-manager-17 section="history"}
@@ -5374,6 +5351,21 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "status": "ready"
   },
   {
+   "role": "icon",
+   "slot_ordinal": 12,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "ai-cli-profile-manager-17-icon-12",
+   "source_phrase": "10 月 2–8 日：别家模型的长对话压缩只走厂商支持的方式（新加的条目，用这条时间线里同类条目的图标）",
+   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "status": "ready"
+  },
+  {
    "role": "illustration",
    "slot_ordinal": 1,
    "orientations": [
@@ -5424,5 +5416,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 - **9 月 18 日**：别家模型能请 GPT 帮手，来回追问同一个
 - **9 月 22–23 日**：0.3.18 发行；GPT-6 自己进了桌面菜单；Sol、Astra 两档专用判断
 - **9 月 27 日**：显卡被占时本地模型排队等；退役 Gemini 路线
-- **9 月 28 日**：退役 Toolkit；钥匙改成按厂商从密码中心取，同一家换型号不重录（0.3.19，已装上，还没发 GitHub 版本）
+- **9 月 28 日**：退役旧的配套工具包（Toolkit）；钥匙改成按厂商从密码中心取，同一家换型号不重录（0.3.19，已装上，还没发 GitHub 版本）
 - **9 月 29 日**：退役 Claude Code 经 ChatGPT 的两条转接（本人定的），可见路线 23 条减到 21 条；离线测试 470/470 通过；DeepSeek 在桌面版里真实显示思考摘要还待验收
+- **10 月 2–8 日**：别家模型的长对话压缩只走厂商支持的方式；桌面版自更新后桥接得更稳；后台运行的子程序沿用原有的代理设置
+
+7 月 14 日到 10 月 8 日共 133 次提交。

@@ -91,6 +91,8 @@
 /* 改过地址的页：旧地址上一句话的去向页 */
 .moved-notice{max-width:720px;margin:min(18vh,160px) auto;padding:0 16px;text-align:center;font-size:1.15rem;line-height:1.9;color:#334d63}
 .moved-notice a{color:#285d3c;font-weight:600;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.moved-notice .moved-title{margin:0 0 14px;font-size:1.6rem;line-height:1.4;color:#0a7232}
+.moved-notice p{margin:0 0 8px}
 
 /* 内容页“现在”实时位（live-dom.js 填）：圆点加一行字。读不到时保留上次的值、整体变淡，页面上只说一次；从没读到过安静占位 */
 .ts-canvas [data-hot="live"][data-state]{display:flex;align-items:center;gap:.4em;min-width:0;padding:0 .55em;font-size:var(--fs-body);line-height:1.3;font-weight:600;color:#08743e;cursor:default;transition:opacity .35s ease,filter .35s ease}

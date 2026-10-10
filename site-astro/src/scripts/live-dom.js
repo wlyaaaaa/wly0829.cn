@@ -38,7 +38,22 @@
     }
     if (pd.page === 'remote-control' && k === 'run') return { text: '电脑连接服务在线', state: 'ok' };  // 读到状态本身就说明在线（同现在网站）
     const r = window.SiteLiveRuntime?.parse?.(last, k, pd.project);
-    return r && r.state !== 'unknown' && r.text ? r : null;
+    if (!r || r.state === 'unknown' || !r.text) return null;
+    const t = k === 'run' ? lastRun() : '';  // 首屏状态行：“运行”那一格带上次运行时间
+    return t ? { ...r, text: r.text + ' · 上次运行 ' + t } : r;
+  }
+
+  // 这个项目的自动任务里最近一次运行的时间（读到的自动任务数据要新鲜；没有就不写）
+  function lastRun() {
+    const a = last?.automation, now = Date.now();
+    if (!a || !['ok', 'partial', 'empty'].includes(a.state) || !Array.isArray(a.items) || !pd.project) return '';
+    const seen = Date.parse(a.observed_at);
+    if (!Number.isFinite(seen) || seen > now + 6e4 || now - seen > (Number(a.max_age_seconds) || 120) * 1000) return '';
+    const ts = a.items.filter((x) => x?.project === pd.project && x.enabled !== false && x.state !== 'disabled')
+      .map((x) => Date.parse(x.last_run_at)).filter((t) => Number.isFinite(t) && t <= now + 6e4);
+    if (!ts.length) return '';
+    const at = new Date(Math.max(...ts));
+    return window.SiteLiveRuntime?.formatTime?.(at.toISOString(), now) || bj(at.getTime());
   }
 
   // mode：live 刚读到 / loading 正在读（先显示上次的值）/ cached 读不到、有上次的值 / empty 从没读到过

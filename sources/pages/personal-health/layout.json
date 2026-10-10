@@ -34,7 +34,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至 9 月 28 日"
+        "text_ref": "截至10月10"
       },
       {
         "type": "action_button",
@@ -83,7 +83,7 @@
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至 9 月 28 日"
+        "text_ref": "截至10月10"
       },
       {
         "type": "action_button",
@@ -420,7 +420,7 @@
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
-        "text_ref": "8454 行"
+        "text_ref": "8,591"
       }
     ],
     "notes": "真实原图：左约65%区域先标题再六卡2列3行，图标内左；右约34%三张数字卡从屏顶到屏底纵排，数字左、图标内右、说明在数字下。此处标题不整屏宽，照原图左对齐。当前基础行结构无法让右数字栏跨标题及六卡高度，需要复合左右容器或跨行能力；草案记录目的，不得伪称已复现。right_inside 原图必需，API未列该变体。",
@@ -459,7 +459,7 @@
           "_library/icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
-        "text_ref": "8454 行"
+        "text_ref": "8,591"
       }
     ],
     "notes": "六卡从上到下单列、插画内左；三张数字卡在下单列，数字左、插画内右、正文在数字下。无连线。right_inside 需组件支持。",

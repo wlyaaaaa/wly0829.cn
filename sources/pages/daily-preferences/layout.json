@@ -46,7 +46,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "76 张",
+        "text_ref": "78张现",
         "align": "left",
         "size": "medium",
         "columns": 4,
@@ -119,7 +119,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "76 张",
+        "text_ref": "78张现",
         "align": "left",
         "size": "medium",
         "columns": 2,
@@ -921,7 +921,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "材料从哪来（30 类）",
+        "text_ref": "材料从哪来（33类）",
         "align": "left",
         "size": "large",
         "columns": 1,
@@ -979,7 +979,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "材料从哪来（30 类）",
+        "text_ref": "材料从哪来（33类）",
         "align": "center",
         "size": "large",
         "columns": 1,
@@ -1157,7 +1157,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "39 份",
+        "text_ref": "43份冻",
         "align": "left",
         "size": "medium",
         "columns": 4,
@@ -1204,7 +1204,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "39 份",
+        "text_ref": "43份冻",
         "align": "left",
         "size": "medium",
         "columns": 2,

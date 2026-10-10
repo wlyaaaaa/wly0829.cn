@@ -10,7 +10,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "as_of": "2026-10-07",
+    "as_of": "2026-10-10",
     "manifest": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\manifest.json",
     "files": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
@@ -260,19 +260,19 @@
       "links": [
         {
           "text": "GitHub 项目总索引",
-          "href": "/projects/github-local-index/"
+          "href": "/projects/github-index/"
         },
         {
           "text": "找到和认准仓库",
-          "href": "/projects/github-local-index/#g-find"
+          "href": "/projects/github-index/#g-find"
         },
         {
           "text": "查同步",
-          "href": "/projects/github-local-index/#g-sync"
+          "href": "/projects/github-index/#g-sync"
         },
         {
           "text": "公开和分享之前",
-          "href": "/projects/github-local-index/#g-publish"
+          "href": "/projects/github-index/#g-publish"
         }
       ],
       "anchors": [
@@ -287,7 +287,7 @@
       "reuse": "",
       "card": {
         "name": "GitHub 项目总索引",
-        "href": "/projects/github-local-index/",
+        "href": "/projects/github-index/",
         "status": "常用",
         "visibility": "private",
         "github": null,
@@ -295,15 +295,15 @@
         "links": [
           {
             "text": "找到和认准仓库",
-            "href": "/projects/github-local-index/#g-find"
+            "href": "/projects/github-index/#g-find"
           },
           {
             "text": "查同步",
-            "href": "/projects/github-local-index/#g-sync"
+            "href": "/projects/github-index/#g-sync"
           },
           {
             "text": "公开和分享之前",
-            "href": "/projects/github-local-index/#g-publish"
+            "href": "/projects/github-index/#g-publish"
           }
         ]
       }
@@ -2228,11 +2228,11 @@
       "links": [
         {
           "text": "Codex 远程",
-          "href": "/projects/codex-local-remote/"
+          "href": "/projects/codex-remote/"
         },
         {
           "text": "为什么冻结",
-          "href": "/projects/codex-local-remote/#why-frozen"
+          "href": "/projects/codex-remote/#why-frozen"
         },
         {
           "text": "远程电脑串流",
@@ -2251,7 +2251,7 @@
       "reuse": "",
       "card": {
         "name": "Codex 远程",
-        "href": "/projects/codex-local-remote/",
+        "href": "/projects/codex-remote/",
         "status": "冻结",
         "visibility": "frozen",
         "github": null,
@@ -2259,7 +2259,7 @@
         "links": [
           {
             "text": "为什么冻结",
-            "href": "/projects/codex-local-remote/#why-frozen"
+            "href": "/projects/codex-remote/#why-frozen"
           }
         ],
         "now": "现在：〔远程电脑串流〕把整个桌面连到手机上，Codex 原样用",
@@ -2370,7 +2370,7 @@
         "members": [
           "/projects/agents/",
           "/projects/ai-cli-profile-manager/",
-          "/projects/github-local-index/"
+          "/projects/github-index/"
         ],
         "screen": "projects-home-02",
         "cards": [
@@ -2511,7 +2511,7 @@
         "line": "为什么停下、现在用什么代替，点名字进去看。",
         "members": [
           "/projects/openclaw/",
-          "/projects/codex-local-remote/",
+          "/projects/codex-remote/",
           "/projects/codex-agent-model-benchmark/",
           "/projects/wechat-history-ai-bridge/"
         ],
@@ -2712,22 +2712,22 @@
         "text": "本机模型"
       },
       {
-        "target": "/projects/github-local-index/",
+        "target": "/projects/github-index/",
         "screen": "projects-home-05",
         "text": "GitHub 项目总索引"
       },
       {
-        "target": "/projects/github-local-index/#g-find",
+        "target": "/projects/github-index/#g-find",
         "screen": "projects-home-05",
         "text": "找到和认准仓库"
       },
       {
-        "target": "/projects/github-local-index/#g-sync",
+        "target": "/projects/github-index/#g-sync",
         "screen": "projects-home-05",
         "text": "查同步"
       },
       {
-        "target": "/projects/github-local-index/#g-publish",
+        "target": "/projects/github-index/#g-publish",
         "screen": "projects-home-05",
         "text": "公开和分享之前"
       },
@@ -3277,12 +3277,12 @@
         "text": "为什么冻结"
       },
       {
-        "target": "/projects/codex-local-remote/",
+        "target": "/projects/codex-remote/",
         "screen": "projects-home-43",
         "text": "Codex 远程"
       },
       {
-        "target": "/projects/codex-local-remote/#why-frozen",
+        "target": "/projects/codex-remote/#why-frozen",
         "screen": "projects-home-43",
         "text": "为什么冻结"
       },
@@ -3312,22 +3312,23 @@
   "notes": {
     "merged": [],
     "dropped": [
-      "卡上不放上下游、介绍段落、冻结原因：家在各项目页和“怎么协作”（不重复介绍）。数字是快照，每卡最多 6 个，原样取自项目页第 1 屏的数字卡，口径和截至日期不在卡上重写。",
+      "卡上不放上下游、介绍段落、冻结原因：家在各项目页和“怎么协作”（不重复介绍）。卡上也不放数字（10 月 7 日起）：各项目的数字只在它自己项目页的第 1 屏，按需更新时由项目页负责，首页不另存一份快照。",
       "直达只挑每个项目 2–3 组，已停用的组不放（AI 备份的“已停用的备份”除外，见 unsure）；没挑上的组从项目名进项目页就能看到。",
       "开头不写自动任务个数，理由见 unsure。"
     ],
     "unsure": [
       "分组是我定的：依据各页 capability 归成 8 组，冻结的放最后一组。AI 备份按它补的本事（保全 AI 对话）归进“让 AI 管好备份和恢复”，不单设组。“个人网站（总看板）”卡放进“让电脑顺手、状态看得见”，理由是约法 L27 说网站是我真实在用的看板。屏保与壁纸、Steam 外观备份这类和 AI 关系弱的，也照它们页上的 capability 归组。",
-      "替本人口吻写的句子（上线前请本人过目）：第 1 屏标题下的大白话“30 个在用的项目，让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。”；8 个组名和各组那一句话（例如“按我的背景、偏好和身体情况回答，也按一条路线带我学”“重大的事先确认是我本人”）；网站卡的一句话使用中性描述“唯一总看板：有没有事、是否需要本人处理，一眼看清。”",
+      "替本人口吻写的句子（上线前请本人过目）：第 1 屏标题下的大白话“N 个在用的项目（N 构建时按各项目页的 status 现算），让 AI 真能替我办事：管电脑和备份、找照片视频和文件原件、读微信聊天、听录音、认图片里的字、守密码，替我拟消息、写正式文书；我不在电脑前，手机上的 AI 也能在这台电脑上动手。”；8 个组名和各组那一句话（例如“按我的背景、偏好和身体情况回答，也按一条路线带我学”“重大的事先确认是我本人”）；网站卡的一句话使用中性描述“唯一总看板：有没有事、是否需要本人处理，一眼看清。”",
       "直达的组是我挑的（每张卡 2–3 组，挑最常用、最能代表本事的，不放已停用的）。为避开同屏链接字相同或互相包含，放弃了：AI 规则与技能基座的〔技能〕（是项目名的一部分）、密码中心的〔加密文件〕（它的一句话里就有）、开发配置备份的〔开发配置备份〕（和项目名同字）和〔恢复〕、Steam 外观备份的〔装回〕、照片视频录音管理的〔云端〕、个人材料查找的〔找〕（单字，同屏到处都是）。所以个人材料查找只剩 2 组、开发配置备份只剩 2 组。建议把个人材料查找页的 g-find 组名改成“找原件”这类，改后可加回。",
       "避不开的同字：projects-home-45（微信记录交给 AI 的卡片）项目名又出现在它自己的一句话里，拼页程序按字面找链接时取第一处（名字）。现在每张卡单独一张图，别的卡之间不再有同屏同字的问题。",
       "AI 备份：卡上的一句话“五个 AI 工具各备了什么，为什么。”和功能组照当前 codex-memory/page.json。今晚第二次决定（Gemini 备份和 Codex 配置任务退役）后这页如果重写，组编号可能变，要重跑本脚本。直达里放了〔已停用的备份〕（组里全是已停用功能），因为讲清哪些不再备正是这页的要点；不要的话从 DIRECT 删掉即可。",
       "常用、偶尔用按 page.json 算；和 manifest 对不上的有：个人正式文书：manifest 写“常用”，page.json 写“偶尔用”。协调方已确认以各页 page.json 为准，不改。",
       "自动任务个数没写：决定记录“设计稿逐项审定”一节提到开头讲“多少自动任务”，写作说明没列；page.json 里没有统一口径——电脑配置与恢复的 125 个是整台电脑的计划任务（不含系统任务），它的实时槽又写“本项目 27 个自动任务”，其他页各记各的，相加会重复算。要放的话建议由驾驶舱实时读，或请本人定口径。",
-      "功能 921 条是六种状态都算（在用 494、说不准 174、已停用 115、待验收 107、没用过 26、待实施 5）。图上只注明含冻结项目的 59 条；没冻结的项目里另有 56 条已停用。若觉得“921 条”说大了，可以改写成“在用 494 条”。",
+      "功能条数构建时按各项目页“全部功能”现算，六种状态都算；10 月 10 日核对时是 973 条（在用 536、说不准 172、已停用 118、待验收 114、没用过 24、待实施 9）。图上只注明含冻结项目的已停用条数；没冻结的项目里另有已停用的。若觉得总条数说大了，可以改写成只算“在用”。",
       "卡上的一句话照各页 tagline 原样：超过 25 字的有 屏保与壁纸 28 字、Typora 薄荷主题 26 字；末尾没有句号的有 密码中心、本地加密库、双机剪贴板、工作支持与交付、本地视频制作、OpenClaw 网关、Codex 远程、AI 模型评测、微信记录交给 AI。要统一的话应改各项目页再重跑，不在这里改。",
       "本人北京时间2026-10-07 17:40要求网站本身作为个人网站（总看板）正式项目；本卡计入项目数，展示状态、GitHub与直达入口，链接到独立项目页。",
-      "E208 占位（10 月 2 日写）：基座卡片的 26 个、118 次、E208 按 E208 发布写，发布后回读核对。"
+      "基座卡片不写规则版本号和技能个数（10 月 10 日核对）：现行版本以规则入口核验结果为准，写在基座项目页；首页卡只放名字、一句话和直达，换版不用改这里。",
+      "10 月 10 日项目清单核对：项目页 35 个（常用 23、偶尔用 8、冻结 4），和首页 35 张卡一一对上。llm-backend-toolkit 本人 9 月 27 日决定整个删掉，首页不列；密码中心 9 月 28 日拆成独立私有项目，已在“让 AI 管好秘密”组；Codex 远程、GitHub 项目总索引两页第六批换了网址，首页指向它们的链接改成 /projects/codex-remote/、/projects/github-index/，卡片锚点 p-codex-local-remote、p-github-local-index 不改，免得站内旧锚点失效。"
     ],
     "bar_labels": [
       "全部项目",

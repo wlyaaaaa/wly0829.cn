@@ -10,8 +10,8 @@ import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
 import '../styles/typeset-page.css';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
-interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; toc: { id: string; label: string; img?: string }[] }
-const { title, kind, url, toc, page, motion, blocks, pageMeta, moved } = Astro.props;
+interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; noindex?: boolean; toc: { id: string; label: string; img?: string }[] }
+const { title, kind, url, toc, page, motion, blocks, pageMeta, moved, noindex } = Astro.props;
 const rt = runtimes[`../chrome/runtime/${page}.json`];
 
 function albumMeta() {
@@ -63,7 +63,7 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   <title>{title} · 吴乐阳</title>
   <link rel="canonical" href={new URL(url, 'https://wly0829.cn').href} />
   {moved && <meta http-equiv="refresh" content={`2; url=${moved}`} />}
-  {moved && <meta name="robots" content="noindex" />}
+  {(moved || noindex) && <meta name="robots" content="noindex" />}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   {chrome.css.map((href) => <link rel="stylesheet" href={href} />)}
   <Fragment set:html={head} />

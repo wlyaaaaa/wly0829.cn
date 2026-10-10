@@ -83,12 +83,12 @@
         "columns": 4,
         "columns_v": 2,
         "icons": "none",
-        "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
+        "text_ref": "70个来源开发配置清单；Codex的配置和记忆、Antigravity和Open"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至9月28日"
+        "text_ref": "截至10月10"
       },
       {
         "type": "live_strip",
@@ -192,12 +192,12 @@
         "columns": 2,
         "columns_v": 2,
         "icons": "none",
-        "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
+        "text_ref": "70个来源开发配置清单；Codex的配置和记忆、Antigravity和Open"
       },
       {
         "type": "prose",
         "align": "right",
-        "text_ref": "截至9月28日"
+        "text_ref": "截至10月10"
       },
       {
         "type": "live_strip",
@@ -493,7 +493,7 @@
         "type": "chapter_title",
         "align": "left",
         "size": "medium",
-        "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+        "text_ref": "开发配置包（现行清单：70个来源）"
       },
       {
         "type": "illustration",
@@ -625,7 +625,7 @@
         "type": "chapter_title",
         "align": "left",
         "size": "medium",
-        "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+        "text_ref": "开发配置包（现行清单：70个来源）"
       },
       {
         "type": "illustration",

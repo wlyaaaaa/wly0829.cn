@@ -714,7 +714,7 @@
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
   "sha256": "07c949c827231a63e869218541546899aa33822183b32b0cd8494e36b615fd5f",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -768,23 +768,6 @@
      "size": "large"
     },
     {
-     "type": "prose",
-     "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
-     "align": "left",
-     "row": "hero",
-     "width": "56fr"
-    },
-    {
-     "type": "illustration",
-     "asset": "wly0829-cn/wly0829-cn-12-overview-illustration-v1.png",
-     "illustration": "outside",
-     "align": "center",
-     "size": "medium",
-     "row": "hero",
-     "width": "42fr",
-     "target_height": 390
-    },
-    {
      "type": "stat_card",
      "text_ref": "1 分钟",
      "columns": 4,
@@ -795,6 +778,24 @@
       "_library/icons/手机电脑连接.png",
       "_library/icons/沙漏.png"
      ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
+     "align": "left",
+     "row": "hero",
+     "width": "56fr",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "asset": "wly0829-cn/wly0829-cn-12-overview-illustration-v1.png",
+     "illustration": "outside",
+     "align": "center",
+     "size": "medium",
+     "row": "hero",
+     "width": "42fr",
+     "target_height": 390
     },
     {
      "type": "action_button",
@@ -824,6 +825,18 @@
      "size": "large"
     },
     {
+     "type": "stat_card",
+     "text_ref": "1 分钟",
+     "columns": 4,
+     "columns_v": 2,
+     "icons": [
+      "_library/icons/日历时钟.png",
+      "_library/icons/文稿堆.png",
+      "_library/icons/手机电脑连接.png",
+      "_library/icons/沙漏.png"
+     ]
+    },
+    {
      "type": "prose",
      "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
      "align": "left"
@@ -835,18 +848,6 @@
      "align": "center",
      "size": "medium",
      "target_height": 470
-    },
-    {
-     "type": "stat_card",
-     "text_ref": "1 分钟",
-     "columns": 4,
-     "columns_v": 2,
-     "icons": [
-      "_library/icons/日历时钟.png",
-      "_library/icons/文稿堆.png",
-      "_library/icons/手机电脑连接.png",
-      "_library/icons/沙漏.png"
-     ]
     },
     {
      "type": "action_button",

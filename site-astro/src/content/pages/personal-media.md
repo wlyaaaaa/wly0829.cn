@@ -879,8 +879,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "b82ca0788ddd3672a69ffc561098d9a8694cd883c21c86fd0b691ca43bd007f5",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "f382150fc98714cab6dc6c4cb12350be0703e27fca6e955b958b3a667f06015c",
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -893,7 +893,7 @@
   "id": "personal-media-01",
   "section": "top",
   "title": "开头",
-  "scene": "以已通过的横版第 1 屏 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-01-desktop.png 为底，版式、插画、四张数字卡和介绍段落都不动，只加四样：⓪介绍段落下面紧跟一段小一号的例子（“比如 9 月 26 日早上……逐个核对都在。”），左边一条细绿竖线，和介绍段落同宽；①四张数字卡下面右对齐一行小字“截至 2026 年 9 月 28 日”；②数字卡下方横跨整屏一条细长的圆角横条，最左边绿色粗体“现在”，右边并排两组：每组先写小字标签（“每天 17:10 维护”“云端维护”），标签右边各留一个白底细浅绿描边的圆角空框，约宽 260、高 40 像素（按 1672 宽的画面算），框里什么都不画，网页程序往里填状态字；③横条下面左对齐两个白底细浅绿描边的圆角按钮，绿色字：“在整套系统里的位置 → 怎么协作”“现在正不正常 → 驾驶舱”。为放下这四样，插画可以略缩、四张数字卡可以略矮，数字卡里的字一个不改。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。 另加一样：④例子段落下面紧跟一行和例子同样大小的提示字（“清手机只删手机上的……结果各不一样，见〔不同的“不要”，结果不一样〕。”），左边不画竖线，〔〕里的字画成绿色链接字；为放下这一行，插画可以再略缩。",
+  "scene": "以已通过的横版第 1 屏 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-01-desktop.png 为底，版式、插画、四张数字卡和介绍段落都不动，只加四样：⓪介绍段落下面紧跟一段小一号的例子（“比如 9 月 26 日早上……逐个核对都在。”），左边一条细绿竖线，和介绍段落同宽；①四张数字卡下面右对齐一行小字“截至 10 月 9 日”；②数字卡下方横跨整屏一条细长的圆角横条，最左边绿色粗体“现在”，右边并排两组：每组先写小字标签（“每天 17:10 维护”“云端维护”），标签右边各留一个白底细浅绿描边的圆角空框，约宽 260、高 40 像素（按 1672 宽的画面算），框里什么都不画，网页程序往里填状态字；③横条下面左对齐两个白底细浅绿描边的圆角按钮，绿色字：“在整套系统里的位置 → 怎么协作”“现在正不正常 → 驾驶舱”。为放下这四样，插画可以略缩、四张数字卡可以略矮，数字卡里的字一个不改。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。 另加一样：④例子段落下面紧跟一行和例子同样大小的提示字（“清手机只删手机上的……结果各不一样，见〔不同的“不要”，结果不一样〕。”），左边不画竖线，〔〕里的字画成绿色链接字；为放下这一行，插画可以再略缩。",
   "portrait": "竖版 9:16，从上到下：大标题；右上那幅插画缩到整宽放在标题下；介绍段落；例子段落（左边细绿竖线）；四张数字卡改成两行两列；“截至 2026 年 9 月 28 日”一行；“现在”横条改成上下两行（每行一个标签加一个空框，空框约宽 60%、高 5%）；最下面两个按钮上下叠放、各占整宽。字和横版完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。 例子段落下面紧跟那行提示，链接字绿色。",
   "links": [
    {
@@ -932,10 +932,36 @@
      "size": "medium"
     },
     {
+     "type": "live_box",
+     "text_ref": "现在",
+     "layout": "maintenance_pair",
+     "keys": [
+      "run",
+      "cloud"
+     ]
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "3357张",
+     "columns": 4,
+     "columns_v": 1,
+     "icons": "none",
+     "variant": "header_value_table",
+     "label_position": "below",
+     "portrait_columns": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至10月9",
+     "align": "right"
+    },
+    {
      "type": "prose",
      "text_ref": "手机和电脑里的",
      "row": "intro",
-     "width": "70%"
+     "width": "70%",
+     "row_fit_illustration": true
     },
     {
      "type": "quote",
@@ -953,32 +979,6 @@
      "index": 0,
      "row": "intro",
      "width": "30%"
-    },
-    {
-     "type": "stat_card",
-     "text_ref": "19851",
-     "columns": 4,
-     "columns_v": 1,
-     "icons": "none",
-     "variant": "header_value_table",
-     "label_position": "below",
-     "portrait_columns": 1,
-     "illustration": "none"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026",
-     "align": "right"
-    },
-    {
-     "type": "live_box",
-     "text_ref": "现在",
-     "layout": "maintenance_pair",
-     "keys": [
-      "run",
-      "cloud"
-     ],
-     "width": "100%"
     },
     {
      "type": "action_button",
@@ -1005,6 +1005,31 @@
      "size": "medium"
     },
     {
+     "type": "live_box",
+     "text_ref": "现在",
+     "layout": "maintenance_pair",
+     "keys": [
+      "run",
+      "cloud"
+     ]
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "3357张",
+     "columns": 4,
+     "columns_v": 1,
+     "icons": "none",
+     "variant": "header_value_table",
+     "label_position": "below",
+     "portrait_columns": 1,
+     "illustration": "none"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至10月9",
+     "align": "right"
+    },
+    {
      "type": "illustration",
      "index": 0
     },
@@ -1020,32 +1045,6 @@
     {
      "type": "prose",
      "text_ref": "清手机只删"
-    },
-    {
-     "type": "stat_card",
-     "text_ref": "19851",
-     "columns": 4,
-     "columns_v": 1,
-     "icons": "none",
-     "variant": "header_value_table",
-     "label_position": "below",
-     "portrait_columns": 1,
-     "illustration": "none"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026",
-     "align": "right"
-    },
-    {
-     "type": "live_box",
-     "text_ref": "现在",
-     "layout": "maintenance_pair",
-     "keys": [
-      "run",
-      "cloud"
-     ],
-     "width": "100%"
     },
     {
      "type": "action_button",
@@ -1178,11 +1177,11 @@
 
 清手机只删手机上的，电脑和云端照留；从手机撤下、不再算精选、真的不要，结果各不一样，见〔不同的“不要”，结果不一样〕。
 
-| **19851 → 3357 张** | **4363 件 · 近 99 GB** | **三块硬盘 + 云端** | **2376 件** |
+| **3357 张** | **4366 件 · 近 99 GB** | **三块硬盘 + 云端** | **2377 件** |
 |---|---|---|---|
-| 9 月一次整理后剩下的图片 | 现在登记的照片、视频、录音 | 原件一份，两块备份硬盘各一份，Google 云端再一份 | 挑出来放回手机的精选照片视频 |
+| 9 月一次整理后剩下的图片（整理前 19851 张） | 现在登记的照片、视频、录音 | 原件一份，两块备份硬盘各一份，Google 云端再一份 | 选进精选、要放回手机的照片视频 |
 
-截至 2026 年 9 月 28 日
+截至 10 月 9 日
 
 **现在**　每天 17:10 维护　云端维护
 
@@ -2312,7 +2311,7 @@
  "screen": {
   "id": "personal-media-04",
   "section": "usage",
-  "title": "画廊",
+  "title": "我拍的风景",
   "scene": "横版：左上毛笔艺术字标题“画廊”加绿色笔刷线，右上角几枝水彩绿叶；标题下一行说明。下面两行、每行五个照片空位（白底、细浅绿描边、圆角，里面什么都不画），同一行的空位一样高：第 3 张（灯笼）和第 7 张（金色中庭）是竖图，这两格画成竖向 3:4，其余八格横向 4:3，每行按实际宽度排开、左右对齐。空位下面一行小字说明（第 4 张说明较长，可折成三行，其余一行）。拼页程序往格子里贴旧网站已压好的缩略图（横图 720×540、竖图 405×540，按原比例完整放进、不裁），点开再显示原图（design\\v3\\preview\\photos 下那张，只压缩一次）。版面参照 E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round02\\source-snapshots\\personal-media\\3cc14c94409aec87-screen-11-desktop.png 右半边的画廊，但占满整屏宽，左边不再放演进。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
   "portrait": "竖版 9:16：标题和说明在上；照片空位改成两列五行，第 3、7 张竖向 3:4、其余横向 4:3，同一行一样高，说明在各自空位下面。字和横版完全一样。",
   "links": [],
@@ -2423,7 +2422,7 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "text_ref": "画廊",
+     "text_ref": "我拍的风景",
      "align": "center",
      "size": "medium"
     },
@@ -2449,7 +2448,11 @@
       "4:3"
      ],
      "caption_per_slot": true,
-     "equal_row_height": true
+     "equal_row_height": true,
+     "row_items": [
+      5,
+      5
+     ]
     }
    ],
    "portrait_required": true,
@@ -2467,7 +2470,7 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "text_ref": "画廊",
+     "text_ref": "我拍的风景",
      "align": "center",
      "size": "medium"
     },
@@ -2537,7 +2540,7 @@
 }
 ```
 
-# 画廊
+# 我拍的风景
 
 我自己拍的 10 张风景，大多在“精选”里。点一张看大图。
 
@@ -2845,7 +2848,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "16439行",
+     "text_ref": "16,433",
      "columns": 1,
      "columns_v": 1,
      "icons": [
@@ -2881,7 +2884,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "16439行",
+     "text_ref": "16,433",
      "columns": 3,
      "columns_v": 1,
      "icons": "auto",
@@ -3125,9 +3128,9 @@
 - **不会重复上传。**每件记下 Google 给的编号，断了重跑也不传第二遍。
 - **记录坏了能重建。**用 GitHub 私有仓库里的文字版重建，云端编号一起恢复，不用重新上传。
 
-**16439 行**　Python 正式代码（6 个文件）
+**16,433 行**　Python 正式代码（6 个文件，10 月 10 日数）
 
-**455 个**　自动测试
+**453 个**　自动测试
 
 **25 张**　一张总览里的缩略图
 

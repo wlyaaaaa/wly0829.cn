@@ -49,7 +49,7 @@
       {
         "type": "prose",
         "align": "left",
-        "text_ref": "数字截至 9 月 28 日"
+        "text_ref": "数字截至10月10"
       },
       {
         "type": "prose",
@@ -113,7 +113,7 @@
       {
         "type": "prose",
         "align": "left",
-        "text_ref": "数字截至 9 月 28 日"
+        "text_ref": "数字截至10月10"
       },
       {
         "type": "prose",
@@ -172,7 +172,7 @@
       {
         "type": "prose",
         "align": "left",
-        "text_ref": "有声预览（真实截图",
+        "text_ref": "有声预览的真实截图",
         "row": "balanced-preview",
         "width": "65%"
       },
@@ -240,7 +240,7 @@
       {
         "type": "prose",
         "align": "left",
-        "text_ref": "有声预览（真实截图"
+        "text_ref": "有声预览的真实截图"
       }
     ],
     "notes": "原竖版顺序v→v2：v为标题、解释、整宽空白截图、步骤1–6；v2为步骤7、8、四句便签、最下整宽caption卡。实图caption并未紧贴截图，和portrait描述冲突，此规格按实图留在最后；须保留唯一完整caption。第6、8步黄色，步骤7、8的原续图去掉右端插画、用大编号和大角色名，角色语义不丢。按完整步骤拆张，不截卡。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
@@ -296,7 +296,7 @@
         "type": "prose",
         "row": "delivery",
         "align": "left",
-        "text_ref": "封面（真实截图"
+        "text_ref": "示例封面：自测"
       },
       {
         "type": "section_heading",
@@ -375,7 +375,7 @@
       {
         "type": "prose",
         "align": "center",
-        "text_ref": "封面（真实截图"
+        "text_ref": "示例封面：自测"
       },
       {
         "type": "section_heading",
@@ -455,7 +455,7 @@
         "type": "prose",
         "row": "bottom",
         "align": "left",
-        "text_ref": "成片里的一帧"
+        "text_ref": "示例画面：自"
       }
     ],
     "notes": "source_image为pages-approved明确批准的替换图，已查看替换图和旧横图；两者布局同构：六卡一排，图在卡内上方，绿色箭头从图高度串联；下面左半唯一纯白截图框＋外部caption、右半无字胶片与四画笔插画。第三图中原有data-cue示例字不是本屏定稿独立节点，复用资产必须去带字；只排定稿写画面段原文，不另造代码条或重加Fish Audio标题。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
@@ -500,7 +500,7 @@
       {
         "type": "prose",
         "align": "left",
-        "text_ref": "成片里的一帧"
+        "text_ref": "示例画面：自"
       }
     ],
     "notes": "已亲眼查看当前04-v；现图确为单张六个整宽横条，无任何左侧大插画、无箭头；编号、粗体名、竖线、正文从同一行开始，长文自然续行。下方唯一平整纯白16:9框，caption在外部下方，无胶片画笔插画。不得按旧左图右文重建。当前源图968×1624，最终输出941×1672的标准9:16并按定稿portrait净正文860、正文36、行高44等约定排；这类同一行短卡需组件样张核对，现flow默认可能把名称和正文拆行。；page-fixer-09（按审页意见）：六步图标明确，手机编号/标题/正文分层并保留小图；横版删重复底图",
@@ -586,7 +586,7 @@
         "align": "left",
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "6419 行"
+        "text_ref": "8963行"
       },
       {
         "type": "notice",
@@ -631,7 +631,7 @@
         "align": "left",
         "illustration": "none",
         "icons": "none",
-        "text_ref": "6419 行"
+        "text_ref": "8963行"
       },
       {
         "type": "notice",
@@ -770,7 +770,7 @@
         "width": "34%",
         "align": "left",
         "size": "large",
-        "text_ref": "全部功能（25 项）"
+        "text_ref": "全部功能（26项）"
       },
       {
         "type": "status_legend",
@@ -842,7 +842,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（25 项）"
+        "text_ref": "全部功能（26项）"
       },
       {
         "type": "status_legend",

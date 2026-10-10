@@ -37,7 +37,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "19851",
+        "text_ref": "3357张",
         "columns": 4,
         "columns_v": 1,
         "icons": "none",
@@ -48,7 +48,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026",
+        "text_ref": "截至10月9",
         "align": "right"
       },
       {
@@ -110,7 +110,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "19851",
+        "text_ref": "3357张",
         "columns": 4,
         "columns_v": 1,
         "icons": "none",
@@ -121,7 +121,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026",
+        "text_ref": "截至10月9",
         "align": "right"
       },
       {
@@ -614,7 +614,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "画廊",
+        "text_ref": "我拍的风景",
         "align": "center",
         "size": "medium"
       },
@@ -640,7 +640,8 @@
           "4:3"
         ],
         "caption_per_slot": true,
-        "equal_row_height": true
+        "equal_row_height": true,
+        "row_items": [5, 5]
       }
     ],
     "portrait_required": true,
@@ -664,7 +665,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "画廊",
+        "text_ref": "我拍的风景",
         "align": "center",
         "size": "medium"
       },
@@ -810,7 +811,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "16439行",
+        "text_ref": "16,433",
         "columns": 1,
         "columns_v": 1,
         "icons": [
@@ -852,7 +853,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "16439行",
+        "text_ref": "16,433",
         "columns": 3,
         "columns_v": 1,
         "icons": "auto",

@@ -24,7 +24,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "数字卡片（截至9月28日）：",
+        "text_ref": "截至10月10",
         "align": "left",
         "size": "medium"
       },
@@ -92,7 +92,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "数字卡片（截至9月28日）：",
+        "text_ref": "截至10月10",
         "align": "left",
         "size": "medium"
       },
@@ -191,7 +191,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：9月26日16:56至28日15:43，主机收到268次工具调用",
+        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
         "variant": "stacked",
         "width": "100%",
         "chart_type": "stacked",
@@ -252,7 +252,7 @@
       },
       {
         "type": "chart",
-        "text_ref": "最近真用了多少：9月26日16:56至28日15:43，主机收到268次工具调用",
+        "text_ref": "最近真用了多少：10月8日07:09至9日01:25，主机收到163次工具调用（",
         "variant": "stacked",
         "chart_type": "stacked",
         "labels_layout": "rows"
@@ -294,7 +294,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用地址（副机域名下的/main-compute",
+        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用入口（经笔记本转到主机的那个地址），第一次要",
         "columns": 2,
         "columns_v": 1,
         "connector": "none",
@@ -336,7 +336,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用地址（副机域名下的/main-compute",
+        "text_ref": "1主机入口连不上先确认是主机通往公网的那条通道（Cloudflare隧道）断了，再把连接改成备用入口（经笔记本转到主机的那个地址），第一次要",
         "columns": 1,
         "columns_v": 1,
         "connector": "none",
@@ -396,7 +396,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1主机公网入口mcp.wly0829.cn：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用Tailsc",
+        "text_ref": "1主机公网入口：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用TailscaleFunnel（把本机服",
         "columns": 1,
         "direction": "horizontal",
         "connector": "none",
@@ -418,7 +418,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.6（Python、FastMCP），我在外面加了开工核对、读文档片段、"
+        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.7（Python、FastMCP），我在外面加了开工核对、读文档片段、"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：谁发起移到三条路上方满宽，三条路标题独立一行，路径与电脑两层保留60/40并排。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
@@ -465,7 +465,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1主机公网入口mcp.wly0829.cn：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用Tailsc",
+        "text_ref": "1主机公网入口：Cloudflare免费隧道，电脑只往外连，不开端口，没买服务器2副机入口：笔记本用TailscaleFunnel（把本机服",
         "columns": 1,
         "direction": "vertical",
         "connector": "none",
@@ -487,7 +487,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.6（Python、FastMCP），我在外面加了开工核对、读文档片段、"
+        "text_ref": "底座和模型：23个工具里20个来自开源的Windows-MCP0.8.7（Python、FastMCP），我在外面加了开工核对、读文档片段、"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",
@@ -546,7 +546,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "10,747行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）7,508行自动测试，45个测试文",
+        "text_ref": "约1.2万行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）",
         "columns": 1,
         "columns_v": 1,
         "row": "main",
@@ -597,7 +597,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "10,747行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）7,508行自动测试，45个测试文",
+        "text_ref": "约1.2万行程序（Python、PowerShell，远程服务和副机部署，不含同住一处的驾驶舱看板接口）",
         "columns": 1,
         "columns_v": 1,
         "icons": "none"
@@ -635,7 +635,7 @@
       },
       {
         "type": "table",
-        "text_ref": "主机（台式机WLY）副机（笔记本LAPTOP-E48N0DRJ）地址mcp.wly0829.cn/mcp；备用走副机域名下的/main-co"
+        "text_ref": "主机（台式机）副机（笔记本）地址自己的公网域名；备用入口挂在副机的地址下Tailscale分给笔记本的公网地址公网怎么进Cloudflare"
       },
       {
         "type": "prose",
@@ -668,7 +668,7 @@
       },
       {
         "type": "table",
-        "text_ref": "主机（台式机WLY）副机（笔记本LAPTOP-E48N0DRJ）地址mcp.wly0829.cn/mcp；备用走副机域名下的/main-co"
+        "text_ref": "主机（台式机）副机（笔记本）地址自己的公网域名；备用入口挂在副机的地址下Tailscale分给笔记本的公网地址公网怎么进Cloudflare"
       },
       {
         "type": "prose",
@@ -880,7 +880,7 @@
       },
       {
         "type": "feature_card",
-        "text_ref": "1主机公网入口mcp.wly0829.cn经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用Tailscale",
+        "text_ref": "1主机公网入口经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用TailscaleFunnel开出自己的地址，",
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -943,7 +943,7 @@
       },
       {
         "type": "feature_card",
-        "text_ref": "1主机公网入口mcp.wly0829.cn经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用Tailscale",
+        "text_ref": "1主机公网入口经Cloudflare免费隧道进主机，电脑不开端口；要登录在用2副机入口笔记本用TailscaleFunnel开出自己的地址，",
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",

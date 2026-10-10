@@ -12,7 +12,8 @@ SHOT_SPEC_FIELDS = {
                    "align", "text_position", "caption_mode", "caption_per_slot", "slot_groups", "number_position",
                    "label_above", "equal_row_height", "connector", "frame_style", "protected_parts",
                    "items_layout", "requested_slots", "aspect_ratio", "index", "screenshot_index", "caption",
-                   "size", "illustration", "decoration", "after_step", "withdrawn_indices", "withdrawal_note"],
+                   "size", "illustration", "decoration", "after_step", "withdrawn_indices", "withdrawal_note",
+                   "row_items", "row_items_v"],
     "screenshot_compare": ["indices", "columns", "columns_v", "ratio", "ratios", "max_width", "max_width_v",
                            "align", "items_layout", "aspect_ratio", "index", "screenshot_index", "text_position",
                            "caption", "size"],
@@ -356,11 +357,18 @@ def render_screenshot(block, ctx):
     limits = [spec.get("max_width_v" if orient == "v" else "max_width"), spec.get("width") if orient == "h" else None] if equal_height else []
     row_width = min([row_width] + [float(v[:-1]) * row_width / 100 if isinstance(v, str) else float(v) for v in limits if type(v) in (int, float) and v > 0 or isinstance(v, str) and re.fullmatch(r'\d+(?:\.\d+)?%', v) and 0 < float(v[:-1]) <= 100])
     minimum, gap = 14 * (24 if orient == "h" else 36), 16 if orient == "h" else 18
+    # 等高排时每排几张由构图写明（row_items / row_items_v，如 [5, 5]）：照写的分排，不再按“最窄一张不小于 14 字宽”自动断排
+    per_row = spec.get("row_items_v" if orient == "v" else "row_items")
+    if per_row is not None and not (isinstance(per_row, list) and per_row and all(type(n) is int and n > 0 for n in per_row)):
+        _incomplete(ctx, '截图 row_items 必须是正整数列表（每排几张）；未执行该分排。')
+        per_row = None
     for pos, (index, shot) in enumerate(selected):
         ratio = ratios[pos]
         trial = ratios[row_start:pos + 2]
         row_end = (pos + 1) % cols == 0 or pos + 1 == len(selected)
-        if equal_height:
+        if equal_height and per_row and len(rows) < len(per_row):
+            row_end = pos + 1 == len(selected) or pos + 1 - row_start >= per_row[len(rows)]
+        elif equal_height:
             row_end = pos + 1 == len(selected) or pos + 1 - row_start >= cols or (row_width - gap * (len(trial) - 1)) * min(trial) / sum(trial) < minimum
         last_row = len(selected) % cols
         offset = cols - last_row + 1 if last_row and pos == len(selected) - last_row else None

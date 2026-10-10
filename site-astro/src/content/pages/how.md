@@ -1634,10 +1634,10 @@
     },
     {
      "id": "n-media",
-     "text": "4,363 件（照片 3,485、视频 118、录音 760）",
+     "text": "4,366 件（照片 3,486、视频 118、录音 762）",
      "meaning": "媒体库 SQLite media 表条目数，不是全部电脑文件",
-     "as_of": "2026-10-01",
-     "source": "facts-how.md:78,102（只读 count，18:08:40）",
+     "as_of": "2026-10-10",
+     "source": "只读 count：file:E:/Media/_manifests/personal-media-current/catalog.sqlite3?mode=ro，select media_type,count(*) from media（北京时间 10 月 10 日 05:3x）",
      "screens": [
       "how-09"
      ]
@@ -1850,8 +1850,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "f3936fe0bfceda5ad5f633bb899028bbb320b871b715a734169aca0c79d743c0",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "58623fff58d26659d7dbfd6e9af4454b558a4b57c65b23227ef662f01ecec508",
+  "converted_at_beijing": "2026-10-10T05:59:15+08:00"
  }
 }
 ---
@@ -3944,7 +3944,7 @@ Codex
 **③ 收素材、挑镜头**
 谁做：我把手机插上电脑，〔照片视频录音管理〕收进媒体库；Claude 挑。
 传什么：手机 → 媒体库，三天的照片、视频、录音（文件）；Claude → 媒体库，日期和地点（文字）；媒体库 → Claude，一张张 25 格的缩略总览图（文件）。Claude 看总览，去掉重复、拍糊的、误拍的。
-注意：媒体库现有 4,363 件（照片 3,485、视频 118、录音 760，截至 10 月 1 日）；找得到靠已有的日期和地点；缩略总览会发给云端的模型看。
+注意：媒体库现有 4,366 件（照片 3,486、视频 118、录音 762，截至 10 月 10 日）；找得到靠已有的日期和地点；缩略总览会发给云端的模型看。
 
 这一例用到：手机 · 电脑远程控制 · Claude · GPT · 照片视频录音管理 · 中文语音转写 · 本地文字识别 · 个人理解库 · 本地视频制作 · 电脑配置与恢复 · Google 云端
 

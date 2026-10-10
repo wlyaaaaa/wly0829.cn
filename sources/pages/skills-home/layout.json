@@ -57,7 +57,7 @@
         "connector": "none",
         "row": "summary",
         "width": "48%",
-        "text_ref": "26 个技能",
+        "text_ref": "27 个技能",
         "row_equal_height": true
       },
       {
@@ -135,7 +135,7 @@
           "_library/icons/打勾清单.png"
         ],
         "connector": "none",
-        "text_ref": "26 个技能"
+        "text_ref": "27 个技能"
       },
       {
         "type": "content_card",
@@ -501,7 +501,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -517,7 +517,7 @@
       },
       {
         "type": "directory_tile",
-        "columns": 5,
+        "columns": 3,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
@@ -531,7 +531,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -561,7 +561,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -600,7 +600,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -632,7 +632,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -664,7 +664,7 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png",
+          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }

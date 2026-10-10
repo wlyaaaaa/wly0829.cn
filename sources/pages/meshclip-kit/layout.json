@@ -13,7 +13,7 @@
       },
       {
         "type": "tag",
-        "text_ref": "偶尔用·只修报错，不加新功能约法L25",
+        "text_ref": "偶尔用·只修报错、不加新功能（约法L2",
         "row": "hero"
       },
       {
@@ -29,7 +29,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "数字卡片（截至9月29日）："
+        "text_ref": "截至10月10"
       },
       {
         "type": "feature_card",
@@ -109,7 +109,7 @@
       },
       {
         "type": "tag",
-        "text_ref": "偶尔用·只修报错，不加新功能约法L25"
+        "text_ref": "偶尔用·只修报错、不加新功能（约法L2"
       },
       {
         "type": "prose",
@@ -121,7 +121,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "数字卡片（截至9月29日）："
+        "text_ref": "截至10月10"
       },
       {
         "type": "feature_card",
@@ -352,7 +352,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现在能不能用（9月29日查）",
+        "text_ref": "现在能不能用（主机10月10",
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",
@@ -433,7 +433,7 @@
       },
       {
         "type": "points_card",
-        "text_ref": "现在能不能用（9月29日查）",
+        "text_ref": "现在能不能用（主机10月10",
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",

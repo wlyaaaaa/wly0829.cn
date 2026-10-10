@@ -48,7 +48,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
+        "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
         "variant": "number_header_table",
         "columns": 4,
         "columns_v": 2,
@@ -63,7 +63,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年9月28日20:55（北京时间）",
+        "text_ref": "截至10月9日",
         "align": "right"
       },
       {
@@ -139,7 +139,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "164份53个来源至少74,939个31次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单这些来源里的非媒",
+        "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
         "variant": "number_header_table",
         "columns": 1,
         "columns_v": 1,
@@ -154,7 +154,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年9月28日20:55（北京时间）",
+        "text_ref": "截至10月9日",
         "align": "right"
       },
       {
@@ -570,7 +570,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
         "columns": 3,
         "direction": "horizontal",
         "connector": "arrow",
@@ -630,7 +630,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的164份里比对标题、来源和已知文字，平时",
+        "text_ref": "1听懂你的话AI把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词2先查登记在登记过的165份里比对标题、来源和已知文字，平时",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
@@ -734,7 +734,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+        "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
         "columns": 3,
         "columns_v": 3,
         "icons": "none"
@@ -803,7 +803,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,192行Python，就一个文件106个自动测试，9月28日全部通过0字节复制的原件",
+        "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
         "columns": 1,
         "columns_v": 1,
         "icons": "none"
@@ -848,7 +848,7 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "53个来源是什么",
+        "text_ref": "58个来源是什么",
         "row": "ranges",
         "width": "50%",
         "align": "left",
@@ -856,14 +856,14 @@
       },
       {
         "type": "chart",
-        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新13个交接文件夹：别",
         "variant": "stacked",
         "row": "ranges",
         "chart_type": "stacked"
       },
       {
         "type": "section_heading",
-        "text_ref": "164份登记原件，共1.2GB",
+        "text_ref": "165份登记原件，共1.2GB",
         "row": "ranges",
         "width": "50%",
         "align": "left",
@@ -871,14 +871,14 @@
       },
       {
         "type": "chart",
-        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
         "variant": "stacked",
         "row": "ranges",
         "chart_type": "stacked"
       },
       {
         "type": "prose",
-        "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+        "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：分段带按现有 funnel 分两列两排，扩大末格可用宽度；单独的其余用时现找是原定稿段落，完整保留。第5项的两图均已使用现有 stacked，图例数值和说明分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -919,31 +919,31 @@
       },
       {
         "type": "section_heading",
-        "text_ref": "53个来源是什么",
+        "text_ref": "58个来源是什么",
         "align": "left",
         "size": "medium"
       },
       {
         "type": "chart",
-        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新8个交接文件夹：别的",
+        "text_ref": "35个文件夹：没登记的文件按文件名现找5份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新13个交接文件夹：别",
         "variant": "stacked",
         "chart_type": "stacked"
       },
       {
         "type": "section_heading",
-        "text_ref": "164份登记原件，共1.2GB",
+        "text_ref": "165份登记原件，共1.2GB",
         "align": "left",
         "size": "medium"
       },
       {
         "type": "chart",
-        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他15",
+        "text_ref": "PDF74·网页20·Markdown17·Word18·表格11·JSON9·其他16",
         "variant": "stacked",
         "chart_type": "stacked"
       },
       {
         "type": "prose",
-        "text_ref": "2026年9月28日20:55数了一遍，用时6秒。有一个来源超过5万个文件，只数到5万，所以总数写“至少”。"
+        "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：采用现有 stack 纵排等宽四段，保留所有源字和原独立说明段。第5项的两图使用现有 stacked；图例分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",

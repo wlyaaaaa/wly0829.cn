@@ -24,7 +24,7 @@
    },
    {
     "type": "screenshot",
-    "text_ref": "截图说明",
+    "text_ref": "薄荷主题",
     "indices": [
      0
     ],
@@ -92,7 +92,7 @@
    },
    {
     "type": "screenshot",
-    "text_ref": "截图说明",
+    "text_ref": "薄荷主题",
     "indices": [
      0
     ],
@@ -225,7 +225,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "同一份公开样例"
+    "text_ref": "同一份示例文稿"
    },
    {
     "type": "screenshot",
@@ -277,7 +277,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "图是PDF"
+    "text_ref": "三张图都是"
    }
   ],
   "portrait_required": true,
@@ -309,7 +309,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "同一份公开样例"
+    "text_ref": "同一份示例文稿"
    },
    {
     "type": "screenshot",
@@ -355,7 +355,7 @@
    },
    {
     "type": "prose",
-    "text_ref": "图是PDF"
+    "text_ref": "三张图都是"
    }
   ],
   "portrait_required": true,
@@ -807,7 +807,7 @@
     "max_width_v": 800,
     "row": "highlights",
     "width": "50%",
-    "text_ref": "截图说明：修好后的代码块",
+    "text_ref": "示例样张：修好后的代码块",
     "caption_per_slot": true,
     "slot_groups": [
      {
@@ -868,7 +868,7 @@
     "columns": 1,
     "columns_v": 1,
     "max_width_v": 800,
-    "text_ref": "截图说明：修好后的代码块",
+    "text_ref": "示例样张：修好后的代码块",
     "caption_per_slot": true,
     "slot_groups": [
      {
@@ -1067,6 +1067,6 @@
   "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。",
   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\typora-theme-pack\\img\\typora-theme-pack-10-v.png"
  },
-  {"screen": "typora-theme-pack-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["827:1170", "827:1170", "827:1170"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
-  {"screen": "typora-theme-pack-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["827:1170", "827:1170", "827:1170"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
+  {"screen": "typora-theme-pack-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "原版：中性的石墨文字和细分隔线（9月7日用示例文稿实际导出的PDF，1页）。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["827:1170", "827:1170", "827:1170"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
+  {"screen": "typora-theme-pack-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "原版：中性的石墨文字和细分隔线（9月7日用示例文稿实际导出的PDF，1页）。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["827:1170", "827:1170", "827:1170"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
 ]

@@ -2316,10 +2316,10 @@
       },
       {
         "id": "n-media",
-        "text": "4,363 件（照片 3,485、视频 118、录音 760）",
+        "text": "4,366 件（照片 3,486、视频 118、录音 762）",
         "meaning": "媒体库 SQLite media 表条目数，不是全部电脑文件",
-        "as_of": "2026-10-01",
-        "source": "facts-how.md:78,102（只读 count，18:08:40）",
+        "as_of": "2026-10-10",
+        "source": "只读 count：file:E:/Media/_manifests/personal-media-current/catalog.sqlite3?mode=ro，select media_type,count(*) from media（北京时间 10 月 10 日 05:3x）",
         "screens": [
           "how-09"
         ]

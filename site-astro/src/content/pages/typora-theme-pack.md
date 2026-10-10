@@ -46,8 +46,8 @@
   "repo_url": "https://github.com/wlyaaaaa/typora-theme-pack",
   "capability": "把文稿排得好看、按读者导出 PDF",
   "based_on": {
-   "commit": "f9e1f60d535096524cc5441c4d68cdd4dc7d26af",
-   "commit_time": "2026-09-26T04:23:21-05:00"
+   "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
+   "commit_time": "2026-09-28T12:36:45-05:00"
   },
   "video_prompt": "6 秒无缝循环，白底水彩风格，从开头这屏出发：一片薄荷叶轻轻落在一个打开的写字窗口上，窗口边框和标题下的横条慢慢染成薄荷绿；窗口里飘出三张 A4 纸，依次停在右边排成一排，一张变成石墨灰、一张变成薄荷绿、一张变成墨蓝，每张纸落定时边上亮一下小小的绿色对勾；最后薄荷叶被风带回起点。镜头不动，没有文字，结尾回到起始画面。",
   "registry": {
@@ -236,8 +236,8 @@
      "id": "n-theme-count",
      "text": "1 套",
      "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
-     "as_of": "2026-09-28",
-     "source": "themes/ 目录；tests test_package_exposes_exactly_one_typora_app_theme；profile.data theme 字段",
+     "as_of": "2026-10-10",
+     "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 10 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
      "screens": [
       "typora-theme-pack-01"
      ]
@@ -246,7 +246,7 @@
      "id": "n-styles",
      "text": "3 种",
      "meaning": "PDF 样式：original、personal、company",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-10",
      "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
      "screens": [
       "typora-theme-pack-01",
@@ -260,7 +260,6 @@
      "as_of": "2026-09-28",
      "source": "本页写稿时实跑 export_pdf.py，pdf-render-safe 报告 source_page_count=2（见 facts.md 第四节）",
      "screens": [
-      "typora-theme-pack-01",
       "typora-theme-pack-03"
      ]
     },
@@ -268,8 +267,8 @@
      "id": "n-tests",
      "text": "21 项",
      "meaning": "tests/test_project.py 的测试数，全部通过",
-     "as_of": "2026-09-29",
-     "source": "9 月 29 日修复汇报：python -m unittest discover -s tests -v，21 项通过（提交 f30ac9c）；本机按 unittest 计数也是 21",
+     "as_of": "2026-10-10",
+     "source": "10 月 10 日在临时副本（git archive HEAD f30ac9c）跑 python -m pytest tests：21 passed；def test_ 计数 21",
      "screens": [
       "typora-theme-pack-01",
       "typora-theme-pack-05",
@@ -282,8 +281,8 @@
      "id": "n-commits",
      "text": "6 次",
      "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-     "as_of": "2026-09-29",
-     "source": "git log（北京时间换算）",
+     "as_of": "2026-10-10",
+     "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 10 日现查）",
      "screens": [
       "typora-theme-pack-01",
       "typora-theme-pack-10"
@@ -314,8 +313,8 @@
      "id": "n-code-lines",
      "text": "720、469、1023、43、13、438 行",
      "meaning": "编辑主题 CSS、PDF 样式 CSS、Python 工具、JS、PowerShell、测试的行数",
-     "as_of": "2026-09-29",
-     "source": "wc -l themes/ export-profiles/ tools/ tests/（提交 f30ac9c）",
+     "as_of": "2026-10-10",
+     "source": "wc -l themes/ export-profiles/ tools/ tests/（HEAD f30ac9c，10 月 10 日复核未变）",
      "screens": [
       "typora-theme-pack-05"
      ]
@@ -334,7 +333,7 @@
      "id": "n-features",
      "text": "16 项",
      "meaning": "本页 registry.features 条数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-10",
      "source": "本文件",
      "screens": [
       "typora-theme-pack-09"
@@ -446,8 +445,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "9c8ad625cba4baa12035927ca8d9bab013fc9178817c9571367eef6c0f726197",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "f83c3a06f4b3237811a1b784698d3116179d52607e44002eebe6adad4fd8585c",
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -486,7 +485,7 @@
    {
     "file": "sources/assets/_references/7e7646c37cb6cbf5c55b1921773ef4288a4d4554aa9daf0c06d54cc5ede08013.png",
     "where": "右边约 40% 宽、接近正方形的空位",
-    "caption": "截图说明：薄荷主题在 Typora 里的样子（8 月 2 日实拍，文稿是仓库里的公开样例）",
+    "caption": "薄荷主题在 Typora 里的样子（8 月 2 日实拍；打开的是仓库里的示例文稿）",
     "crop_h": [
      576,
      230,
@@ -520,12 +519,8 @@
      "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "我用Markdown"
-    },
-    {
      "type": "screenshot",
-     "text_ref": "截图说明",
+     "text_ref": "薄荷主题",
      "indices": [
       0
      ],
@@ -533,7 +528,8 @@
      "columns": 1,
      "columns_v": 1,
      "row": "media-stats",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "stat_card",
@@ -549,6 +545,10 @@
      "type": "prose",
      "text_ref": "截至2026",
      "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我用Markdown"
     },
     {
      "type": "action_button",
@@ -581,20 +581,6 @@
      "bold": true
     },
     {
-     "type": "prose",
-     "text_ref": "我用Markdown"
-    },
-    {
-     "type": "screenshot",
-     "text_ref": "截图说明",
-     "indices": [
-      0
-     ],
-     "ratio": "1:1",
-     "columns": 1,
-     "columns_v": 1
-    },
-    {
      "type": "stat_card",
      "text_ref": "1套",
      "columns": 4,
@@ -606,6 +592,20 @@
      "type": "prose",
      "text_ref": "截至2026",
      "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我用Markdown"
+    },
+    {
+     "type": "screenshot",
+     "text_ref": "薄荷主题",
+     "indices": [
+      0
+     ],
+     "ratio": "1:1",
+     "columns": 1,
+     "columns_v": 1
     },
     {
      "type": "action_button",
@@ -719,14 +719,14 @@
 
 我用 Markdown 写作软件 Typora 写文稿。这个项目给它一套薄荷绿的编辑主题，再配三种 PDF 样式：原版（中性，忠于原文）、个人（把薄荷主题搬进 PDF，字大行宽）、公司（墨蓝克制，不加任何品牌）。同一份 .md 一个字不改，选一种就导出一份，文件名后面分别带“-原版”“-个人”“-公司”。它自己不带 PDF 引擎，转换交给〔文稿转 PDF〕背后的转换器；新 PDF 查过没问题，才替换旧文件。
 
-截图说明：薄荷主题在 Typora 里的样子（8 月 2 日实拍，文稿是仓库里的公开样例）
+薄荷主题在 Typora 里的样子（8 月 2 日实拍；打开的是仓库里的示例文稿）
 
-1 套｜编辑主题，Typora 现在用的就是它（Typora 设置和装好的两个主题文件都核对过）
-3 种｜PDF 样式：原版、个人、公司，用公开样例各导出一份，都是 2 页
+1 套｜编辑主题，Typora 现在用的就是它（已核对 Typora 设置）
+3 种｜PDF 样式：原版、个人、公司，同一份文稿选一种导一份
 21 项｜自动测试全过（本机重跑；GitHub 每次推送也自动跑）
-6 次｜提交：8 月 12 日公开，9 月 29 日最后一次改（修好个人版表头和导出菜单）
+6 次｜提交；最近一次在 9 月 29 日，修好个人版表头和导出菜单
 
-截至 2026 年 9 月 29 日（北京时间）
+截至 2026 年 10 月 10 日（北京时间）
 
 〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 
@@ -915,7 +915,7 @@
 “主题菜单里找不到薄荷了，查一下。”
 AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查〕。
 
-**实际用得多少**｜主题一直是 Typora 的当前主题。PDF 这一半很少用：9 月 28 日查了所有硬盘，没有一个带“-原版”“-个人”“-公司”后缀的 PDF；AI 在 9 月 1–28 日的记录里也没替我导出过一次（更早的记录没留下来）。
+**实际用得多少**｜主题一直是 Typora 的当前主题。不过 9 月 29 日为修 PDF 表头改过一个主题文件，Typora 里装的还是改之前那份，只差表头底色这一行；让 AI 重装一次就齐。PDF 这一半很少用：9 月 28 日查了所有硬盘，没有一个带“-原版”“-个人”“-公司”后缀的 PDF；AI 在 9 月 1–28 日的记录里也没替我导出过一次（更早的记录没留下来）。
 
 ::screen{#typora-theme-pack-03 section="usage"}
 
@@ -939,7 +939,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    {
     "file": "sources/assets/_references/e80a2f0adde1274bc5f1916e77ee46c97052d2cb40b71141a59dbfa7d14c13eb.png",
     "where": "中间的 A4 空位",
-    "caption": "**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头是主题的浅绿（9 月 29 日修好；之前被转换器自带的默认样式盖成了灰色）。"
+    "caption": "**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头本该是主题的浅绿：这张图是 9 月 28 日导出的，表头还被转换器的默认样式盖成灰色，9 月 29 日已修好。"
    },
    {
     "file": "sources/assets/_references/7507d9c083ad445aa46e496f3a6bc7aa9defbcc7797ec260083faede711b4830.png",
@@ -961,7 +961,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "prose",
-     "text_ref": "同一份公开样例"
+     "text_ref": "同一份示例文稿"
     },
     {
      "type": "screenshot",
@@ -1013,7 +1013,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "prose",
-     "text_ref": "图是PDF"
+     "text_ref": "三张图都是"
     }
    ],
    "portrait_required": true,
@@ -1037,7 +1037,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "prose",
-     "text_ref": "同一份公开样例"
+     "text_ref": "同一份示例文稿"
     },
     {
      "type": "screenshot",
@@ -1083,7 +1083,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "prose",
-     "text_ref": "图是PDF"
+     "text_ref": "三张图都是"
     }
    ],
    "portrait_required": true,
@@ -1130,15 +1130,15 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 ```
 
 ## 三种 PDF 长什么样
-同一份公开样例《春序 · 智能工作台方案简报》，9 月 28 日现场导出三次，每份 2 页，导出前后原文的内容指纹（SHA-256）一样。下面是每份的第 1 页。
+同一份示例文稿《春序 · 智能工作台方案简报》（虚构的公开样例），9 月 28 日现场导出三次，每份 2 页，导出前后原文的内容指纹（SHA-256）一样。下面是每份的第 1 页。
 
 **原版**｜石墨黑字、细灰分隔线，像在 GitHub 上看 Markdown，不带任何主题色。适合只要干净排版的时候。
 
-**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头是主题的浅绿（9 月 29 日修好；之前被转换器自带的默认样式盖成了灰色）。
+**个人**｜整套薄荷主题搬进 PDF：标题下的绿色渐变条、圆角浅绿卡片；打印正文 11.2 磅、行距 1.84。给自己反复读的。表头本该是主题的浅绿：这张图是 9 月 28 日导出的，表头还被转换器的默认样式盖成灰色，9 月 29 日已修好。
 
 **公司**｜墨蓝标题左边一道竖线、深蓝表头、灰白分区。不加 logo、水印和客户名。给同事看的。
 
-图是 PDF 第 1 页按 110 DPI 转成的图片（用PDF 逐页检查转的）。
+三张图都是对应 PDF 的第 1 页，由〔PDF 逐页检查〕转成图片。
 
 ::screen{#typora-theme-pack-04 section="usage"}
 
@@ -1354,7 +1354,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 
 **导出失败**｜旧 PDF 原样留着，这次生成到一半的临时文件清掉，报出转换器给的原因。不会拿一个坏文件或上次的旧文件冒充这次的成果。
 
-**找不到转换器**｜直接报错，并列出三种配法：命令里写 --converter、设环境变量、或者运行一次 configure_converter.py 记进本机配置。不会自己去找系统里别的打印程序。
+**找不到转换器**｜直接报错，并列出三种配法：在导出命令里指定、设一个环境变量，或者跑一次配置脚本记进本机配置。不会自己去找系统里别的打印程序。
 
 **导出时原文被改了**｜导出前后各算一次 .md 的指纹，对不上就不报成功。这只能发现改动，挡不住别的程序去改原文。
 
@@ -1605,11 +1605,11 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 
 ## 一次导出经过哪几步
 
-1. **选样式**｜Typora 菜单或 AI 运行 export_pdf.py，带上样式：original、personal 或 company。
-2. **先记下原文**｜算 .md 的 SHA-256 指纹；在目标文件旁边预约一个短名字的暂存文件。
-3. **备好 CSS**｜原版、公司各用自己的 CSS；个人版＝薄荷主题的两份 CSS 加上个人版的大字号，拼成一份临时 CSS。转换器把正文装进一个和 Typora 编辑区同名的 write 容器，所以薄荷主题的样式不用改就能直接用在 PDF 上。
+1. **选样式**｜从 Typora 菜单点，或让 AI 运行导出脚本，选原版、个人或公司。
+2. **先记下原文**｜给 .md 算一个内容指纹；在目标文件旁边预约一个短名字的暂存文件。
+3. **备好 CSS**｜原版、公司各用自己的 CSS；个人版＝薄荷主题的两份 CSS 加上个人版的大字号，拼成一份临时 CSS。转换器把正文放进和 Typora 编辑区同名的容器里，所以薄荷主题的样式不用改就能直接用在 PDF 上。
 4. **找转换器**｜按顺序找：命令参数 → 环境变量 → 本机配置。这台电脑配的是〔文稿转 PDF〕的转换脚本。
-5. **转换**｜Markdown 转成网页、套上 CSS，由 Playwright 驱动本机 Edge 按 A4 打印成 PDF。转换器（不属于本项目）
+5. **转换**｜Markdown 转成网页、套上 CSS，由 Playwright（浏览器自动化工具）驱动本机 Edge 按 A4 打印成 PDF。这一步归转换器，不属于本项目。
 6. **查过再换**｜原文指纹没变、PDF 读得开、至少 1 页，才一次替换成正式文件；不过关，旧 PDF 不动
 
 **主题怎么装**｜比较仓库和 Typora 里两个主题文件的指纹 → 不一样的先把旧的复制进 old-themes、文件名加上时间 → 用临时文件整个换上 → 再算一遍指纹，全对才报成功。别的主题、Typora 程序和授权都不碰。
@@ -1837,7 +1837,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 
 **公司版不编造。** 手上没有真的公司品牌材料，就不加 logo、水印、客户名，只用克制的墨蓝和灰白。
 
-**只动自己的两个文件。** 装主题只写 verdant-mint.css 和 verdant/base.css；测试用临时文件夹，不往真正的 Typora 主题文件夹里装。
+**只动自己的两个文件。** 装主题只写它自己的两个主题文件；测试用临时文件夹，不往真正的 Typora 主题文件夹里装。
 
 公开仓库，MIT 许可；不含 Typora 程序、授权和 PDF 引擎。
 
@@ -2039,7 +2039,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    {
     "file": "sources/assets/_references/24b6a0e77dfa3b2ef9c878f95f38c100bbaa69337c18e038366348d8c32c5911.png",
     "where": "第 2 张卡片上部的 4:3 空位",
-    "caption": "截图说明：修好后的代码块（浏览器模拟 Typora 1.14 代码块结构的预览样张，8 月 2 日生成），整段一个框，语法颜色照旧",
+    "caption": "示例样张：修好后的代码块，整段一个框，语法颜色照旧（8 月 2 日在浏览器里按 Typora 的代码块结构模拟生成，不是 Typora 实拍）",
     "crop_h": [
      155,
      230,
@@ -2089,7 +2089,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
      "max_width_v": 800,
      "row": "highlights",
      "width": "50%",
-     "text_ref": "截图说明：修好后的代码块",
+     "text_ref": "示例样张：修好后的代码块",
      "caption_per_slot": true,
      "slot_groups": [
       {
@@ -2144,7 +2144,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
      "columns": 1,
      "columns_v": 1,
      "max_width_v": 800,
-     "text_ref": "截图说明：修好后的代码块",
+     "text_ref": "示例样张：修好后的代码块",
      "caption_per_slot": true,
      "slot_groups": [
       {
@@ -2231,7 +2231,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 **2. 代码块不再每行一张卡片**
 麻烦｜Typora 1.14 把代码块里的每一行都画成一个单独的块，主题给代码块的圆角、底色和绿竖线就被套到了每一行上。
 解法｜主题里把代码块内部每一行的样式清掉，只在整块外面画一次框；有一项测试专门查。
-截图说明：修好后的代码块（浏览器模拟 Typora 1.14 代码块结构的预览样张，8 月 2 日生成），整段一个框，语法颜色照旧
+示例样张：修好后的代码块，整段一个框，语法颜色照旧（8 月 2 日在浏览器里按 Typora 的代码块结构模拟生成，不是 Typora 实拍）
 
 ::screen{#typora-theme-pack-09 section="features"}
 
@@ -2912,19 +2912,19 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
   "screenshots": [
    {
     "file": "public/assets/typora-theme-pack/original-pdf.webp",
-    "caption": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。",
+    "caption": "原版：中性的石墨文字和细分隔线（9 月 7 日用示例文稿实际导出的 PDF，1 页）。",
     "where": "画廊：完整原图，点击放大",
     "preserve_original": true
    },
    {
     "file": "public/assets/typora-theme-pack/personal-pdf.webp",
-    "caption": "个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。",
+    "caption": "个人版：薄荷色背景、更舒展的字号与间距。这张也是 9 月 7 日导出的，比 9 月 29 日修表头早，表头颜色以现在为准。",
     "where": "画廊：完整原图，点击放大",
     "preserve_original": true
    },
    {
     "file": "public/assets/typora-theme-pack/company-pdf.webp",
-    "caption": "公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。",
+    "caption": "公司版：墨蓝标题和灰白分区，保持克制。三张用的是同一份示例文稿，没加客户、品牌或虚构内容。",
     "where": "画廊：完整原图，点击放大",
     "preserve_original": true
    }
@@ -2943,7 +2943,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "screenshot",
-     "text_ref": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。",
+     "text_ref": "原版：中性的石墨文字和细分隔线（9月7日用示例文稿实际导出的PDF，1页）。",
      "indices": [
       0,
       1,
@@ -2991,7 +2991,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     },
     {
      "type": "screenshot",
-     "text_ref": "原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。",
+     "text_ref": "原版：中性的石墨文字和细分隔线（9月7日用示例文稿实际导出的PDF，1页）。",
      "indices": [
       0,
       1,
@@ -3062,8 +3062,8 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
 
 点击图片，可以查看完整原图。
 
-原版：中性的石墨文字和细分隔线。2026-09-07 实际 PDF 导出后渲染，1 页。
+原版：中性的石墨文字和细分隔线（9 月 7 日用示例文稿实际导出的 PDF，1 页）。
 
-个人版：薄荷色背景、更舒展的字号与间距。与另两张使用同一正文。
+个人版：薄荷色背景、更舒展的字号与间距。这张也是 9 月 7 日导出的，比 9 月 29 日修表头早，表头颜色以现在为准。
 
-公司版：墨蓝标题和灰白分区，保持克制。正文未增加客户、品牌或虚构事实。
+公司版：墨蓝标题和灰白分区，保持克制。三张用的是同一份示例文稿，没加客户、品牌或虚构内容。

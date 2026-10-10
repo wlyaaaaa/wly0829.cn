@@ -362,7 +362,7 @@ def auto_blocks(nodes, screen, orient):
 # ---------- 规格字段有没有被执行 ----------
 # 主程序自己消费的字段（排版行、分张、共享外框）和纯说明性字段：哪个组件都不用管
 GENERIC_FIELDS = {"type", "text_ref", "row", "row_v", "width", "frame", "container", "page_break_after", "page_break_before",
-                  "row_equal_height", "row_align", "row_valign", "row_width", "row_card_notes",
+                  "row_equal_height", "row_align", "row_valign", "row_width", "row_card_notes", "row_fit_illustration",
                   "inline_row", "inline_width",
                   "notes", "note", "comment", "id", "role", "description", "illustration_description", "auto",
                   "textless", "omit_unapproved_text", "asset_role", "container_id", "verification", "source_note", "source_prose", "motion_text", "motion_card_refs"}
@@ -444,10 +444,12 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
         frame = fr(row[0][0]) if len(names) == 1 else None   # 整行同名：整行一张卡；否则在各栏里分别包
         sp0 = {}
         for b, _ in row:  # 行级字段写在行内任一块上都算
-            for k in ("row_equal_height", "row_align", "row_valign", "row_width", "row_card_notes"):
+            for k in ("row_equal_height", "row_align", "row_valign", "row_width", "row_card_notes", "row_fit_illustration"):
                 if b["spec"].get(k) not in (None, "", False):
                     sp0.setdefault(k, b["spec"][k])
         rcls = (" eqh" if sp0.get("row_equal_height") else "") + (" mid" if sp0.get("row_valign") == "center" else "")
+        if sp0.get("row_fit_illustration") is True:  # 文字栏 + 图栏（插画，或截图连图注）：排版时图按文字栏高度定大小（typeset_apply.js fitIllustrationRows）
+            rcls += " fit-ill"
         if sp0.get("row_card_notes") is True:
             rcls += " card-notes"
         rst = ""

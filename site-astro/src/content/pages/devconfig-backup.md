@@ -70,11 +70,11 @@
      "id": "f-config-sources",
      "group": "g-config",
      "name": "按清单收集配置",
-     "what": "66 个来源：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”；必需的 AI 配置目录缺了明确报缺口",
+     "what": "70 个来源：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”；必需的 AI 配置目录缺了明确报缺口",
      "how": "自动：DevConfigBackup-Local；改范围改 sources.psd1",
      "status": "在用",
      "screen": "devconfig-backup-08",
-     "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1（bd651fa 后 65 个）；DevConfig.Sources.ps1:2-52；9/28 包清单为改前 59 个来源"
+     "source": "E:\\Projects\\Backups\\devconfig-backup\\sources.psd1（10 月 7 日 2cc7be0 加入代理程序 FlyingBird 的 4 项后为 70 个）；DevConfig.Sources.ps1"
     },
     {
      "id": "f-system-export",
@@ -300,32 +300,50 @@
    "numbers": [
     {
      "id": "n-config-files",
+     "text": "6,266 个文件",
+     "meaning": "北京 10 月 9 日 12:07 完成的开发配置包里的文件数",
+     "as_of": "2026-10-09",
+     "source": "out\\latest.zip.receipt.json file_count（devconfig-20261008-230721-2f23e2bc.zip）",
+     "screens": [
+      "devconfig-backup-01"
+     ]
+    },
+    {
+     "id": "n-config-files-0928",
      "text": "10,498 个文件",
-     "meaning": "9 月 28 日 12:05 那个开发配置包里的文件数",
+     "meaning": "9 月 28 日 12:05 那个开发配置包里的文件数（历史快照：这些屏按当时日期写明，未随首屏刷新）",
      "as_of": "2026-09-28",
      "source": "out\\latest.zip.receipt.json file_count",
      "screens": [
-      "devconfig-backup-01",
       "devconfig-backup-03"
      ]
     },
     {
      "id": "n-config-size",
+     "text": "压缩后 286 MiB · 压缩前 0.88 GiB",
+     "meaning": "同一个包：299,545,722 字节；清单 bytes 941,389,373",
+     "as_of": "2026-10-09",
+     "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
+     "screens": [
+      "devconfig-backup-01"
+     ]
+    },
+    {
+     "id": "n-config-size-0928",
      "text": "压缩后 1.11 GiB · 压缩前 1.92 GiB",
-     "meaning": "同一个包：1,195,940,714 字节；清单 bytes 2,061,071,802",
+     "meaning": "同一个包：1,195,940,714 字节；清单 bytes 2,061,071,802（历史快照：这些屏按当时日期写明，未随首屏刷新）",
      "as_of": "2026-09-28",
      "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
      "screens": [
-      "devconfig-backup-01",
       "devconfig-backup-03"
      ]
     },
     {
      "id": "n-sources",
-     "text": "66 个来源",
-     "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出）：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 1 项；9 月 29 日凌晨 73556a9 把 .config\\opencode 加成精确目录（为了把它登记成必需来源）后是 66 个；bd651fa 后是 65 个，再之前 59 个",
-     "as_of": "2026-09-29",
-     "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 9d35282：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppData 29＋ExtraDirs 1）",
+     "text": "70 个来源",
+     "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出和对话历史段）：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 1 项；9 月 29 日为 66 个，10 月 7 日 2cc7be0 加 FlyingBird 4 项",
+     "as_of": "2026-10-10",
+     "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 2cc7be0：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppDataRoamingFiles 16＋AppDataRoamingDirs 11＋AppDataLocalDirs 5＋AppDataLocalFiles 1＋ExtraDirs 1）；同法数 9d35282 得 66，与旧稿一致",
      "screens": [
       "devconfig-backup-01",
       "devconfig-backup-03",
@@ -335,12 +353,21 @@
     },
     {
      "id": "n-wechat-files",
+     "text": "148,470 个文件 · 42.8 GiB",
+     "meaning": "北京 10 月 9 日 10:11 完成的那份微信备份（45,947,989,585 字节）",
+     "as_of": "2026-10-09",
+     "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json file_count、bytes",
+     "screens": [
+      "devconfig-backup-01"
+     ]
+    },
+    {
+     "id": "n-wechat-files-0928",
      "text": "146,300 个文件 · 42.5 GiB",
-     "meaning": "9 月 28 日 09:30 那份微信备份（45,603,489,818 字节），同日上云的也是这一份",
+     "meaning": "9 月 28 日 09:30 那份微信备份（45,603,489,818 字节），同日上云的也是这一份（历史快照：这些屏按当时日期写明，未随首屏刷新）",
      "as_of": "2026-09-28",
      "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json；state\\wechat-drive-success.json",
      "screens": [
-      "devconfig-backup-01",
       "devconfig-backup-05",
       "devconfig-backup-07",
       "devconfig-backup-10"
@@ -350,8 +377,8 @@
      "id": "n-tasks",
      "text": "4 个自动任务",
      "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-     "as_of": "2026-09-28",
-     "source": "Get-ScheduledTask",
+     "as_of": "2026-10-10",
+     "source": "Get-ScheduledTask（10 月 10 日只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -583,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "b966684fa221237aa441b216e75ac249c09b9cb564bb937e1061ac3049f4b047",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "a4de92c64240c16e3bf3b9be4d26bd00fda000e871e97668b491ca814ea085e4",
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -597,8 +624,8 @@
   "id": "devconfig-backup-01",
   "section": "top",
   "title": "开头",
-  "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 9 月 28 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
-  "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 9 月 28 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
+  "scene": "横版：左右分栏。左边约 55%：大标题“开发配置备份”，标题右侧同一行两个白底细浅绿描边的圆角按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕（GitHub 按钮前画 GitHub 猫头小标志）；标题下一段介绍；介绍下面四张数字卡片排成两行两列（大号绿色数字＋一行小字），卡片下沿右侧一行灰色小字“截至 10 月 10 日”。右边约 45% 一幅水彩插画：一台侧透机箱里伸出两条细绿线——一条连着一个打开的纸箱，箱里露出齿轮、终端窗口“>_”、VS Code 蓝色小图标、Claude 和 Codex 小图标组成的一叠文件夹卡片，箱盖上盖着一个绿色对勾印章；另一条连着一个相机，相机前面是一只绿色微信聊天气泡，快门闪光把气泡定格成一叠照片卡片。两样东西再沿绿线流进旁边一块写着“G”的固态硬盘，一缕光点从硬盘飞向右上角的白云（云上画 Google 云盘三色小标志）。插画里除“G”外不写字。最下面横跨整屏一条浅绿“现在”横条：左边“现在”两个毛笔字，接着两个等宽的浅色圆角空框（每个约占横条宽度 26%、高约横条的 70%，垂直居中，框里一个字都不画，网页程序往里填实时文字），最右边一个按钮〔现在正不正常 → 驾驶舱〕。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "portrait": "竖版：从上到下——大标题；标题下一行并排两个按钮〔在整套系统里的位置 → 怎么协作〕〔GitHub〕；介绍段；插画缩到屏宽（机箱、纸箱、相机和微信气泡、G 盘、云）；四张数字卡片排成两行两列；“截至 10 月 10 日”小字靠右；“现在”横条改成竖排：先“现在”二字，下面两个等宽空框上下排（每个满宽、高约一行半字），最下面是〔现在正不正常 → 驾驶舱〕按钮。 那一排按钮里同样有〔复制 AI 续作说明〕。",
   "links": [
    {
     "text": "在整套系统里的位置 → 怎么协作",
@@ -680,14 +707,31 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
      "text_ref": "开发配置备份"
+    },
+    {
+     "type": "live_strip",
+     "text_ref": "现在现在正不正常→驾驶舱",
+     "frame_mode": "plain"
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "columns_v": 2,
+     "icons": "none",
+     "text_ref": "70个来源开发配置清单；Codex的配置和记忆、Antigravity和Open"
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "截至10月10"
     },
     {
      "type": "action_button",
      "row": "hero",
-     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
+     "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -699,23 +743,6 @@
      "index": 0,
      "row": "hero",
      "width": "45%"
-    },
-    {
-     "type": "stat_card",
-     "columns": 4,
-     "columns_v": 2,
-     "icons": "none",
-     "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至9月28日"
-    },
-    {
-     "type": "live_strip",
-     "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
@@ -792,6 +819,23 @@
      "text_ref": "开发配置备份"
     },
     {
+     "type": "live_strip",
+     "text_ref": "现在现在正不正常→驾驶舱",
+     "frame_mode": "plain"
+    },
+    {
+     "type": "stat_card",
+     "columns": 2,
+     "columns_v": 2,
+     "icons": "none",
+     "text_ref": "70个来源开发配置清单；Codex的配置和记忆、Antigravity和Open"
+    },
+    {
+     "type": "prose",
+     "align": "right",
+     "text_ref": "截至10月10"
+    },
+    {
      "type": "action_button",
      "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明"
     },
@@ -802,23 +846,6 @@
     {
      "type": "illustration",
      "index": 0
-    },
-    {
-     "type": "stat_card",
-     "columns": 2,
-     "columns_v": 2,
-     "icons": "none",
-     "text_ref": "66个来源开发配置清单（9月29日凌晨起）；Codex的配置和记忆、Antigr"
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至9月28日"
-    },
-    {
-     "type": "live_strip",
-     "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。",
@@ -954,12 +981,12 @@
 
 重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。
 
-- **66 个来源**　开发配置清单（9 月 29 日凌晨起）；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
-- **146,300 个文件**　微信原始文件 42.5 GiB，每天拍快照复制一份到 G
-- **10,498 个文件**　9 月 28 日的开发配置包，压缩后 1.11 GiB（按改之前的清单）
+- **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
+- **148,470 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G
+- **6,266 个文件**　最新一个开发配置包，压缩后 286 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
 
-截至 9 月 28 日
+截至 10 月 10 日
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 
@@ -1392,7 +1419,7 @@
      "type": "chapter_title",
      "align": "left",
      "size": "medium",
-     "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+     "text_ref": "开发配置包（现行清单：70个来源）"
     },
     {
      "type": "illustration",
@@ -1516,7 +1543,7 @@
      "type": "chapter_title",
      "align": "left",
      "size": "medium",
-     "text_ref": "开发配置包（9月29日凌晨起的清单：66个来源）"
+     "text_ref": "开发配置包（现行清单：70个来源）"
     },
     {
      "type": "illustration",
@@ -1702,10 +1729,10 @@
 
 # 备份里有什么，没有什么
 
-## 开发配置包（9 月 29 日凌晨起的清单：66 个来源）
+## 开发配置包（现行清单：70 个来源）
 
 - **用户目录**　19 个文件夹：Claude、Codex、Antigravity、Cursor、Cline、Copilot、OpenCode 等 AI 和编程工具的设置，GPG、Docker 上下文；17 个单文件：Git、npm、conda、WSL、WakaTime、Claude 的设置等
-- **AppData 里 29 项**　VS Code、Cursor、JetBrains、Typora、Apifox、OBS、PowerToys、Windows Terminal、代理程序、SignalRGB、GitHub CLI、Docker Desktop、OpenCode 桌面版、PixPin、FinalShell，还有自己装的字体
+- **AppData 里 33 项**　VS Code、Cursor、JetBrains、Typora、Apifox、OBS、PowerToys、Windows Terminal、代理程序、SignalRGB、GitHub CLI、Docker Desktop、OpenCode 桌面版、PixPin、FinalShell，还有自己装的字体
 - **Scoop**　用 Scoop 装的软件各自的设置
 - **系统**　用户和系统环境变量、系统 PATH、hosts、Wi-Fi 配置、Xshell 会话、按名字挑出的 16 个计划任务的定义（其中 8 个停用）
 - **换机清单**　已装软件表、winget 和 Scoop 清单、VS Code 和 Cursor 扩展、JetBrains 插件，以及选的是哪个云盘账号
@@ -2662,7 +2689,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 # 它是怎么搭的
 
 ## 开发配置
-1. **按清单找来源**　66 个来源写在一个清单文件里，改备份范围只改它
+1. **按清单找来源**　70 个来源写在一个清单文件里，改备份范围只改它
 2. **逐个复制**　普通文件复制到临时区并核对 SHA-256；选定的活动 SQLite 数据库先做一致副本，再核对完整性
 3. **再扫一遍**　复制完再看一遍来源：文件名单变了，重新收集整份，最多 3 轮；持续变化才失败；已复制的文件后来又改了，只记个数（9 月 28 日是 0）。所以它是逐个文件核对过的，不是同一瞬间的快照
 4. **打包、三道核对**　7-Zip 打成 zip；7-Zip 自检；包里每个文件和清单逐项对上；算整包 SHA-256
@@ -2670,7 +2697,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 ## 微信
 1. **拍快照**　用 Windows 卷影快照（VSS）定格 E 盘那一刻，微信照常写也不影响
-2. **复制新一份**　在 G 上旁边建新目录；和上一份一样的文件用硬链接，不重复占空间，所以 42.5 GiB 只用 12 分钟
+2. **复制新一份**　在 G 上旁边建新目录；和上一份一样的文件用硬链接，不重复占空间，所以 9 月 28 日那次 42.5 GiB 只用了 12 分钟
 3. **整份核对、换上**　每个文件的 SHA-256 都对上才换上，上一份留着
 4. **每周一上云**　先查回执，再用 rclone 传，传完两遍比对
 

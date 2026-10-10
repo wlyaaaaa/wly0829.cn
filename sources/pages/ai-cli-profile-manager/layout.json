@@ -31,7 +31,7 @@
         "columns_v": 2,
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑"
+        "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机"
       },
       {
         "type": "live_strip",
@@ -75,7 +75,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "21条路线5种原版工具配云端和本机模型，其中2条这台电脑",
+        "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机",
         "portrait_columns": 1
       },
       {
@@ -274,18 +274,13 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
         "row": "detail",
         "width": "33%",
         "ratio": "789:1614"
-      },
-      {
-        "type": "prose",
-        "row": "detail",
-        "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 55% 宽，四条带小水彩图标的说明（一个下拉菜单、一个放大镜照着 OpenAI 标志、两张任务卡中间一道分隔线、一个说话的气泡），每条第一句粗体。右边约 45% 宽，留一个带细绿边框的竖长空位放截图（宽高比约 1:2，占右栏大部分高度），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
@@ -316,18 +311,13 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "桌面版 Codex harness 中，本地 Qwen3.8 27B 完成一次中文偏好查询，并呈现工具过程、结论和中文思考摘要。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
         "row": "detail",
         "width": "45%",
         "ratio": "1:2"
-      },
-      {
-        "type": "prose",
-        "row": "detail",
-        "text_ref": "9月15日：桌面版里选本机Qwen3.827B，按规则查"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题在上，四条说明一条一行排下来；截图空位放在说明下面，占整行宽，图说在截图下。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -365,7 +355,7 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。",
+        "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路",
         "caption_mode": "source_order",
         "slot_groups": [
           {
@@ -379,10 +369,6 @@
           0
         ],
         "ratio": "1436:1737"
-      },
-      {
-        "type": "prose",
-        "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版画面：左上标题。左边约 45% 宽，四个编号步骤竖排，每步一个小水彩图标（一个终端提示符、一张清单打勾、一个 Codex 窗口、一扇门）；步骤下面一行灰色小字。右边约 55% 宽，留一个带细绿边框的空位放截图（宽高比约 5:6），空位下面一行小字是图说。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 空白专查：按本人点名授权调整本屏排版，原定稿文字、截图及图标含义保留。"
@@ -421,18 +407,13 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "在 PowerShell 输入 aicli 后选择本地 Qwen3.8 27B Profile；启动页明确回读模型、目录、完全访问权限和本地兼容端点。", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
         "indices": [
           0
         ],
         "row": "cli",
         "width": "55%",
         "ratio": "1436:1737"
-      },
-      {
-        "type": "prose",
-        "row": "cli",
-        "text_ref": "9月15日的列表：选1号本机Qwen3.827B，打开前"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版分2张，每张使用原生9:16画布，按默认v、v2顺序展示。第1张（ai-cli-profile-manager-05-v.png）：仅原标题“在终端里”、4个步骤及Qwen Code和OpenCode灰色说明。每步整宽上下排，图标缩成标题旁小标；正文参考36源像素、行高44源像素，在941宽显示到370时约14.16px。这张没有截图、截图图注或任何空框，不在步骤里面画假截图框。第2张（新增ai-cli-profile-manager-05-v2.png）：仅唯一真实截图空位和原9月15日图注，不新增标题，不重复步骤或灰色说明。截图空框占正文整行宽，内部完全空白，宽高比1436:1737；参考宽880、高1064源像素，原图注紧跟其下。真实截图由现役编译器完整保比例贴入，不能压扁或缩窄截图塞正文。不增删改写原字、不添装饰或空卡填满画布，连续外白交现役crop_box裁边。横版scene、原text和正确h保持。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -457,7 +438,7 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+        "text_ref": "①先核对当前生效的规则版本",
         "indices": [
           0,
           1,
@@ -515,7 +496,7 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "① CLI 任务先核对活动规则，再读取所需能力说明；命令、回执和阶段说明都保留在原生 Codex 工作流里。",
+        "text_ref": "①先核对当前生效的规则版本",
         "indices": [
           0,
           1,
@@ -653,7 +634,7 @@
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
         ],
-        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检：它说缺哪"
       },
       {
         "type": "notice",
@@ -687,7 +668,7 @@
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
         ],
-        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检（aicl"
+        "text_ref": "碰到什么先做什么某条路线用不了先跑不花钱的体检：它说缺哪"
       },
       {
         "type": "notice",
