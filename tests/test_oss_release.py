@@ -207,11 +207,6 @@ class OssReleaseTests(unittest.TestCase):
         shutil.copyfile(ROOT/'scripts/prepare-oss-release.py', module.ROOT/'scripts/prepare-oss-release.py')
         return module
 
-    def seal(self, output, hybrid):
-        with patch.object(oss, 'importlib') as loader, patch.object(hybrid.builder, 'load_public_repos'), \
-                patch.object(hybrid, 'validate_content', return_value={'status':'pass'}):
-            loader.util.module_from_spec.return_value = hybrid
-            return oss.seal_remote(output)
 
     def prepare(self, origin='https://fixture-bucket.oss-cn-beijing.aliyuncs.com', test=False):
         output = self.root/'output'
@@ -315,8 +310,6 @@ class OssReleaseTests(unittest.TestCase):
                 served['/' + obj['key']] = obj, (output/'oss'/rel).read_bytes()
             report = oss.verify_remote(output, workers=2)
             self.assertTrue(report['html_ready'])
-            with self.assertRaisesRegex(ValueError, 'loopback rehearsal'):
-                oss.seal_remote(output)
             rel = 'projects/demo/assets/hero.mp4'
             self.assertEqual(report['objects'][rel]['range']['http'], 206)
             obj = plan['objects'][rel]
@@ -363,7 +356,7 @@ class OssReleaseTests(unittest.TestCase):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 oss.verify_manifest(altered)
 
-    def test_seal_binds_actual_report_and_current_html_inventory(self):
+    def test_receipt_binds_actual_report_and_retains_exact_object_bytes(self):
         output, plan = self.prepare()
         hybrid = self.hybrid()
         retention_spec = importlib.util.spec_from_file_location('lifecycle_retention', ROOT/'scripts/oss-retention.py')
@@ -399,7 +392,9 @@ class OssReleaseTests(unittest.TestCase):
         serve = lambda req, timeout:Response(addresses[req.full_url], req)
         with patch.object(oss, 'urlopen', side_effect=serve):
             oss.verify_remote(output, workers=2)
-        manifest = self.seal(output, hybrid)
+        manifest = oss.read(output/'github'/oss.MANIFEST); manifest['oss']['verification'] = oss.read(output/'remote-verification.json'); oss.write(output/'github'/oss.MANIFEST, manifest)
+        plan['github_files'][oss.MANIFEST] = {'bytes': (output/'github'/oss.MANIFEST).stat().st_size, 'sha256': oss.digest(output/'github'/oss.MANIFEST)}
+        plan['remote_verified'] = True; oss.write(output/oss.PLAN, plan)
         with patch.object(retention, 'shared', return_value=self.root/'shared'), patch.object(retention, 'BASE', plan['asset_base_url']), patch.object(retention, 'BUCKET', 'fixture-bucket'):
             retention.pin(output)
             after_pin = retention.read(pin_path); managed = retention.read(self.root/'shared/managed.json')
@@ -412,20 +407,6 @@ class OssReleaseTests(unittest.TestCase):
             oss.write(output/oss.PLAN, sealed_plan)
         oss.verify_manifest(manifest)
         oss.verify_local(output)
-        hybrid.verify_release(output/'github')
-        report = self.root/'head-gate.json'
-        with patch.object(hybrid, 'oss_module', return_value=oss), patch.object(oss, 'urlopen', side_effect=serve) as network:
-            self.assertEqual(hybrid.validate_content(output/'github', report)['oss_download_bytes'], 0)
-        self.assertEqual([call.args[0].get_method() for call in network.call_args_list], ['HEAD']*len(plan['objects']))
-        def tamper(request, timeout):
-            response = serve(request, timeout)
-            if addresses[request.full_url] == 'assets/main.js':
-                response.headers.replace_header('x-oss-hash-crc64ecma', '99999')
-                response.body = b'tampered JavaScript'
-            return response
-        with patch.object(hybrid, 'oss_module', return_value=oss), patch.object(oss, 'urlopen', side_effect=tamper):
-            with self.assertRaisesRegex(ValueError, 'Remote body differs'):
-                hybrid.validate_content(output/'github', report)
         incremental = self.root/'incremental'
         next_plan = oss.prepare(self.source, plan['asset_base_url'], 'releases/fixture-002', incremental,
                                 previous_manifest=output/'github'/oss.MANIFEST)
@@ -434,88 +415,10 @@ class OssReleaseTests(unittest.TestCase):
         with patch.object(oss, 'verify_object_with_retries') as download:
             self.assertTrue(oss.verify_remote(incremental)['complete'])
         download.assert_not_called()
-        if pwsh := shutil.which('pwsh'):
-            no_upload, no_python = self.root/'no-upload.ps1', self.root/'no-python.ps1'
-            no_lock = self.root/'no-lock.ps1'
-            no_lock.write_text('param($Mode,$Name,$Holder,$Minutes,$Reason,[switch]$Json)\nif($Mode -eq "Acquire"){\'{"status":"acquired"}\'}else{\'{"status":"ok","locks":[]}\'}', encoding='utf8')
-            no_upload.write_text('throw "Unchanged object uploaded"', encoding='utf8')
-            no_python.write_text('$global:LASTEXITCODE = 0', encoding='utf8')
-            process = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'),
-                '-Preparation', str(incremental), '-Upload', '-CliPath', str(no_upload), '-CliProfile', 'fixture',
-                '-Python', str(no_python), '-ShortLockTool', str(no_lock), '-LockHolder', 'Codex/oss-release-test'], capture_output=True, text=True,
-                encoding='utf8', errors='replace', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
-            self.assertEqual(process.returncode, 0, process.stderr)
-            pin_calls = self.root/'pin-calls.jsonl'
-            no_python.write_text("$args|ConvertTo-Json -Compress|Add-Content -LiteralPath '" + str(pin_calls).replace("'", "''") + "'; $global:LASTEXITCODE=0", encoding='utf8')
-            retry = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'), '-Preparation', str(incremental),
-                '-VerifyRemote', '-Python', str(no_python), '-ShortLockTool', str(no_lock), '-LockHolder', 'Codex/oss-release-test'], capture_output=True, text=True,
-                encoding='utf8', errors='replace', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
-            self.assertEqual(retry.returncode, 0, retry.stderr)
-            self.assertTrue(any('oss-retention.py' in row[0] and row[1]=='pin' for row in (json.loads(line) for line in pin_calls.read_text().splitlines())))
         (output/'github/index.html').write_bytes(b'changed after sealing')
-        with self.assertRaisesRegex(ValueError, 'Release bytes differ'):
-            hybrid.verify_release(output/'github')
+        with self.assertRaisesRegex(ValueError, 'Prepared GitHub inventory/bytes changed'):
+            oss.verify_local(output)
 
-    def test_original_repository_and_resource_gates_still_check_local_bodies(self):
-        (self.source/'404.html').write_bytes(b'<!doctype html><title>missing</title>')
-        page=self.source/'projects/demo/index.html'
-        page.write_bytes(page.read_bytes().replace(b'"src":"image.webp"',b'"src":"assets/image.webp"'))
-        source_manifest = oss.read(self.source/oss.MANIFEST)
-        source_manifest.update({'accepted_pages':['/', '/projects/demo/'], 'baseline_files':{}, 'release_overlay':{}})
-        hybrid = self.hybrid()
-        for case in ('repository', 'missing_import', 'valid_import'):
-            base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com/releases/fixture-001/'
-            body = (b'const r="https://github.com/wlyaaaaa/oss-test-unregistered";' if case=='repository' else
-                    ('import "'+base+('assets/missing.js' if case=='missing_import' else 'assets/mod.js')+'";').encode())
-            (self.source/'assets/main.js').write_bytes(body)
-            source_manifest['files'] = {k:v for k,v in oss.inventory(self.source).items() if k!=oss.MANIFEST}
-            source_manifest['release_id'] = oss.hashlib.sha256(json.dumps(source_manifest['files'], sort_keys=True).encode()).hexdigest()
-            oss.write(self.source/oss.MANIFEST, source_manifest)
-            output = self.root/case
-            plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output)
-            addresses = {obj['url']:rel for rel,obj in plan['objects'].items()}
-            class Response:
-                def __init__(self, request):
-                    rel = addresses[request.full_url]; obj = plan['objects'][rel]
-                    self.headers = Message(); self.headers['Content-Type']=obj['content_type']
-                    self.headers['Access-Control-Allow-Origin']='https://wly0829.cn'
-                    self.headers['Content-Length']=str(obj['bytes'])
-                    self.headers['ETag']='"opaque-'+obj['sha256'][:8]+'"'
-                    self.body=(output/'oss'/rel).read_bytes();self.offset=0
-                    self.status=206 if request.has_header('Range') else 200
-                    if self.status==206:
-                        size=len(self.body);self.body=self.body[:32]
-                        self.headers['Content-Range']=f'bytes 0-{len(self.body)-1}/{size}'
-                def read(self,n):
-                    value=self.body[self.offset:self.offset+n];self.offset+=len(value);return value
-                def __enter__(self):return self
-                def __exit__(self,*_):pass
-            serve=lambda request,timeout:Response(request)
-            report=self.root/(case+'-gate.json')
-            with self.subTest(case=case), patch.object(oss,'urlopen',side_effect=serve), patch.object(hybrid.builder,'PUBLIC_REPOS',{'wlyaaaaa/known-public'}):
-                oss.verify_remote(output,workers=2)
-                if case=='valid_import': hybrid.validate_content(self.source, output/'content-verification.json')
-                sealed=self.seal(output, hybrid)
-                if case=='valid_import':
-                    result=hybrid.validate_content(output/'github',report,local_assets=output/'oss')
-                    self.assertEqual(result['status'],'pass')
-                    bad=copy.deepcopy(sealed);bad['oss']['content_verification']['output_files']['projects/demo/assets/image.webp']['bytes']+=1
-                    oss.write(output/'github'/oss.MANIFEST,bad)
-                    with self.assertRaisesRegex(ValueError,'content evidence differs'):hybrid.validate_content(output/'github',report,local_assets=output/'oss')
-                    for field in ('output_files', 'sealed_release_id'):
-                        bad=copy.deepcopy(sealed)
-                        bad['oss']['content_verification'].pop(field)
-                        oss.write(output/'github'/oss.MANIFEST,bad)
-                        with self.assertRaisesRegex(ValueError,'content evidence differs'):
-                            hybrid.validate_content(output/'github',report,seal_only=True)
-                    sealed['oss'].pop('content_verification');oss.write(output/'github'/oss.MANIFEST,sealed)
-                    self.assertEqual(hybrid.validate_content(output/'github',report,local_assets=output/'oss')['status'],'pass')
-                else:
-                    with self.assertRaisesRegex(ValueError,'Hybrid content gate failed'):
-                        hybrid.validate_content(output/'github',report,local_assets=output/'oss')
-                    result=oss.read(report)
-                    if case=='repository':self.assertTrue(any(row['type']=='repository_not_public' for row in result['findings']))
-                    else:self.assertTrue(any('assets/missing.js' in row['type'] for row in result['findings']))
 
     def test_historical_asset_preparation_restores_only_named_home_entries(self):
         records=[{'id':identity,'href':'/'} for _ in range(2)

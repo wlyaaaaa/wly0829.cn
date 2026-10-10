@@ -88,11 +88,6 @@ def artifact(preparation, release=None):
         raise ValueError('Manifest routes do not cover every actual HTML document')
     if not {'/computer-access/', '/cockpit/'} <= set(routes):
         raise ValueError('Mandatory status pages are absent from the release')
-    evidence = manifest['oss'].get('content_verification', {})
-    affected = evidence.get('affected_routes')
-    if (os.environ.get('WLY_RELEASE_FULL') != '1' and evidence.get('checker_sha256') == hybrid.checker_version()
-            and isinstance(affected, list) and all(isinstance(route, str) and route in documents for route in affected)):
-        documents = {route: rel for route, rel in documents.items() if route in set(affected) | {'/', '/cockpit/'}}
     return plan, manifest, root, documents
 
 

@@ -814,7 +814,7 @@ def acceptance_plan(build, manifest, release):
         urls.update(manifest['routes'])
     pages = {}
     for url in sorted(urls, key=lambda url: (url not in {entry['url'] for entry in build['pages'].values()}, url)):
-        match = hybrid.builder.PAGE_DATA.search((release/hybrid.route_file(url)).read_text('utf8'))
+        match = hybrid.PAGE_DATA.search((release/hybrid.route_file(url)).read_text('utf8'))
         data = json.loads(match[2]) if match else {}
         if data.get('typeset'):
             key = data['page'] if data['page'] not in pages else data['page']+'@'+url
@@ -1284,7 +1284,7 @@ def prepare(args):
     if result['status'] == 'ready' and getattr(args, 'copy_to', None):
         target = args.copy_to.resolve()
         if target.is_relative_to(release) or release.is_relative_to(target): raise ValueError('Candidate copy must be disjoint')
-        shutil.copytree(release, target, copy_function=getattr(hybrid.builder, 'copy_release_asset', shutil.copy2))
+        shutil.copytree(release, target, copy_function=hybrid.copy_release_asset)
     write(args.output, result)
     return result
 

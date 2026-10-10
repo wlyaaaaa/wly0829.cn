@@ -1,30 +1,82 @@
-"""Prepare byte-preserving partial releases and exact, non-deploying restores."""
+"""Prepare and verify byte-preserving partial source packages."""
 from __future__ import annotations
 import argparse
-import contextlib
 import hashlib
 import html
 import importlib.util
-import io
 import json
 import os
 import re
 import shutil
 import subprocess
-from concurrent.futures import ThreadPoolExecutor
+import sys
 from html.parser import HTMLParser
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT/'scripts') not in sys.path: sys.path.insert(0, str(ROOT/'scripts'))
 MANIFEST = 'release-manifest.json'
-spec = importlib.util.spec_from_file_location('assembled_builder', ROOT/'scripts/build-assembled-site.py')
-builder = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(builder)
 nav_spec = importlib.util.spec_from_file_location('release_navigation', ROOT/'scripts/repair-release-navigation.py')
 nav_repair = importlib.util.module_from_spec(nav_spec)
 nav_spec.loader.exec_module(nav_repair)
+
+PAGE_DATA = nav_repair.PAGE_DATA
+
+
+
+class Refs(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.refs = []
+        self.ids = set()
+    def handle_starttag(self, tag, attrs):
+        d = dict(attrs)
+        if d.get('id'): self.ids.add(d['id'])
+        for key, value in attrs:
+            if not value: continue
+            if key == 'data-href' and 'slot-shot-frame' in d.get('class', '').split():
+                self.refs.append((value, False))
+            elif key in {'href', 'src', 'data-src', 'data-lazy-src', 'poster', 'data-poster', 'action', 'data-living-config'} or key == 'data-ts-src' and tag in {'img', 'image'}:
+                self.refs.append((value, tag == 'a' and key == 'href'))
+            elif key.endswith('srcset'):
+                self.refs.extend((v.strip().split()[0], False) for v in value.split(',') if v.strip())
+
+def nested_refs(value, navigation_enabled=True):
+    if isinstance(value, dict):
+        for k, v in value.items():
+            if isinstance(v, str) and k in {'src', 'avif', 'href', 'poster', 'mask', 'script_bundle', 'style_bundle', 'repo_url'}:
+                if k == 'href' and not navigation_enabled: continue
+                # Screenshot metadata stores basenames; the runtime prepends assets/.
+                yield ('assets/'+v if k == 'src' and v.startswith('screenshot-') else v), k == 'href'
+            elif k == 'avif_assets':
+                for a, b in v.items(): yield a, False; yield b, False
+            elif k == 'leaves':
+                for a in v: yield a, False
+            elif k == 'today_river_assets':
+                # The river runtime selects these named images dynamically.
+                for a in v.values(): yield a, False
+            # Shared component definitions include navigation for many other pages.
+            # Their assets are all checked; rendered links are checked from HTML.
+            else: yield from nested_refs(v,navigation_enabled and k != 'shared')
+    elif isinstance(value, list):
+        for v in value: yield from nested_refs(v,navigation_enabled)
+
+def resolve_ref(root, owner, ref, asset_prefix=None):
+    ref = html.unescape(ref).strip()
+    parts = urlsplit(ref)
+    if asset_prefix and ref.startswith(asset_prefix):
+        path = '/'+unquote(urlsplit(ref[len(asset_prefix):]).path)
+    else:
+        if parts.scheme or parts.netloc or ref.startswith(('data:', 'blob:', 'javascript:')): return None
+        path = unquote(parts.path)
+    if not path: return owner if parts.fragment else None
+    target = (root / path.lstrip('/') if path.startswith('/') else owner.parent / path).resolve()
+    if not target.is_relative_to(root): raise ValueError('Reference escapes output: ' + ref)
+    if path.endswith('/') or target.is_dir(): target /= 'index.html'
+    return target
+
 
 def digest(path):
     with Path(path).open('rb') as f:
@@ -176,11 +228,11 @@ def references(path, content=None):
     text = content if content is not None else path.read_text('utf-8-sig')
     refs = []
     if path.suffix == '.html':
-        parser = builder.Refs(); parser.feed(text); refs += parser.refs
-        for m in builder.PAGE_DATA.finditer(text): refs += list(builder.nested_refs(json.loads(m.group(2))))
+        parser = Refs(); parser.feed(text); refs += parser.refs
+        for m in PAGE_DATA.finditer(text): refs += list(nested_refs(json.loads(m.group(2))))
     if path.suffix == '.json':
         value=json.loads(text)
-        refs += [(ref,nav) for ref,nav in builder.nested_refs(value) if not (isinstance(value,dict) and value.get('schema')=='living-art/1' and re.fullmatch(r'm\d+\.[rgba]',ref))]
+        refs += [(ref,nav) for ref,nav in nested_refs(value) if not (isinstance(value,dict) and value.get('schema')=='living-art/1' and re.fullmatch(r'm\d+\.[rgba]',ref))]
     if path.suffix in {'.html', '.css'}:
         refs += [(m[1], False) for m in re.finditer(r'url\(["\']?([^\s)"\']+)', text)]
         refs += [(m[1], False) for m in re.finditer(r'@import\s+["\']([^"\']+)', text)]
@@ -193,7 +245,7 @@ def local_reference(root, owner, reference):
     parts = urlsplit(html.unescape(reference))
     if parts.hostname in {'wly0829.cn','www.wly0829.cn'}:
         reference = parts.path + ('?'+parts.query if parts.query else '') + ('#'+parts.fragment if parts.fragment else '')
-    return builder.resolve_ref(root, owner, reference)
+    return resolve_ref(root, owner, reference)
 
 def rewrite_links(text, root, owner, available, mappings, preserved_root=None, accepted_files=None, navigation_pages=None):
     # Preserve candidate HTML except href values, including href fields in page-data.
@@ -298,51 +350,9 @@ def unchanged_search_finding(output, finding, overlay):
     return False
 
 
-def inherited_assets(manifest):
-    mapping = manifest.get('inherited_assets', {})
-    if not mapping: return {}, {}
-    ref = manifest.get('baseline_production_commit', '')
-    if not re.fullmatch(r'[0-9a-f]{40}', ref): raise ValueError('Inherited OSS assets need an exact baseline commit')
-    previous = json.loads(subprocess.check_output(['git', 'show', ref + ':site-release/' + MANIFEST], cwd=ROOT))
-    oss_module().verify_manifest(previous)
-    objects = {alias: previous['oss']['objects'][original] for alias, original in mapping.items()}
-    if any(alias != row['key'].removeprefix('releases/') for alias, row in objects.items()): raise ValueError('Inherited object alias changed')
-    return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
-def verify_release(output, require_remote=True):
-    manifest = read(output/MANIFEST)
-    inherited, _ = inherited_assets(manifest) if not manifest.get('oss') else ({}, {})
-    actual = {**inventory(output), **{rel: row['source'] for rel, row in inherited.items()}}
-    if manifest.get('schema') != 'wly.hybrid-release.v1' or actual != manifest['files']:
-        raise ValueError('Release bytes differ from manifest')
-    if 'oss' in manifest:
-        oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
-        oss = importlib.util.module_from_spec(oss_spec)
-        oss_spec.loader.exec_module(oss)
-        oss.verify_manifest(manifest, require_remote=require_remote)
-        for route in manifest['routes']:
-            if route_file(route) not in manifest['files']:
-                raise ValueError('Missing protected route: '+route)
-        return manifest
-    expected_id = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
-    if manifest['release_id'] != expected_id: raise ValueError('Release identifier mismatch')
-    accepted = {route_file(x) for x in manifest['accepted_pages']}
-    overlays = manifest.get('release_overlay', {})
-    if set(overlays) & accepted: raise ValueError('Overlay overlaps rebuilt pages')
-    for rel, entry in overlays.items():
-        if manifest['files'].get(rel) != entry.get('after') or manifest['baseline_files'].get(rel) != entry.get('before'):
-            raise ValueError('Overlay file identity differs: '+rel)
-        if entry.get('kind') == 'runtime_reference' or entry.get('runtime_replacements'):
-            recovered = (output/rel).read_bytes()
-            for original, replacement in entry.get('runtime_replacements', entry.get('replacements', {})).items(): recovered = recovered.replace(replacement.encode(),original.encode())
-            if hashlib.sha256(recovered).hexdigest() != entry.get('runtime_before', entry['before'])['sha256']:
-                raise ValueError('Runtime overlay did not preserve original content: '+rel)
-    for rel, entry in manifest['baseline_files'].items():
-        if rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
-    for route in manifest['routes']:
-        if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
-    return manifest
+
 
 def topic_units(text):
     """Keep full authored HTML blocks and JSON strings with their field identity."""
@@ -458,259 +468,11 @@ def oss_module():
     return module
 
 
-def checker_version():
-    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py',
-             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json']
-    return hashlib.sha256(json.dumps({p: (builder.ROOT/p).read_text('utf-8-sig') for p in paths}, sort_keys=True).encode()).hexdigest()
 
 
 def fingerprint(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
 
 
-def validate_content(output, report, oss_preparation=None, local_assets=None, confirmed=False, seal_only=False, previous_report=None):
-    output=output.resolve()
-    manifest = verify_release(output)
-    asset_prefix = None
-    budget_root = output if manifest.get('oss') else None
-    try: prior = dict(read(previous_report)) if previous_report else {}
-    except (OSError, ValueError, TypeError): prior = {}
-    if oss_preparation is not None:
-        preparation = Path(oss_preparation).resolve()
-        plan = oss_module().verify_local(preparation)
-        prior = prior or plan.get('previous_content') or {}
-        split = read(preparation/'github'/MANIFEST);oss_module().verify_manifest(split,require_remote=False)
-        if plan['release_id'] != split['release_id']:
-            raise ValueError('OSS budget preparation and sealed split identities differ')
-        if manifest.get('oss'):
-            if manifest['release_id'] != split['release_id'] or manifest['files'] != split['files']:
-                raise ValueError('OSS budget preparation belongs to another split')
-        else:
-            source_files = {rel: value for rel, value in plan['source_files'].items() if rel != MANIFEST}
-            if (plan['source_release_id'] != manifest['release_id']
-                    or split['oss']['source_release_id'] != manifest['release_id']
-                    or source_files != manifest['files']):
-                raise ValueError('OSS budget preparation belongs to another source or inventory')
-            budget_root = preparation/'github'
-    if manifest.get('oss'):
-        oss = oss_module()
-        evidence = manifest['oss'].get('content_verification')
-        if evidence is not None:
-            coverage = evidence.get('output_files', {})
-            source_files = {rel: entry for rel, entry in coverage.items() if rel != MANIFEST}
-            if (evidence.get('status') != 'pass' or evidence.get('sealed_release_id') != manifest['release_id']
-                    or set(coverage) != set(manifest['files']) | set(manifest['oss']['objects']) | {MANIFEST}
-                    or hashlib.sha256(json.dumps(source_files, sort_keys=True).encode()).hexdigest() != manifest['oss']['source_release_id']
-                    or any(coverage.get(rel) != obj['source'] for rel, obj in manifest['oss']['objects'].items())):
-                write(report, {'status':'block', 'reason':'OSS content evidence differs from manifest'})
-                raise ValueError('OSS content evidence differs from manifest')
-            if evidence.get('checker_sha256') != checker_version(): evidence = None
-        objects = manifest['oss']['objects']; rows = {}
-        def materialize(item):
-            rel,obj=item
-            previous = manifest['oss']['verification']['objects'][rel]
-            old_headers = {k.lower(): v for k, v in previous['headers'].items()}
-            unchanged = False
-            try:
-                request = oss.Request(obj['url'], method='HEAD', headers={'Origin':'https://wly0829.cn', 'Referer':'https://wly0829.cn/', 'Accept-Encoding':'identity'})
-                with oss.urlopen(request, timeout=20) as response:
-                    headers = {k.lower(): v for k, v in response.headers.items()}
-                    fingerprint = 'x-oss-hash-crc64ecma' if old_headers.get('x-oss-hash-crc64ecma') else 'etag'
-                    unchanged = (response.status == 200 and int(headers.get('content-length', -1)) == obj['bytes']
-                                 and bool(old_headers.get(fingerprint)) and headers.get(fingerprint) == old_headers[fingerprint]
-                                 and headers.get('content-encoding', 'identity') == 'identity'
-                                 and headers.get('content-type', '').split(';')[0] in {obj['content_type'], 'text/javascript' if obj['content_type']=='application/javascript' else obj['content_type']}
-                                 and headers.get('access-control-allow-origin') in ('*', 'https://wly0829.cn'))
-            except (OSError, ValueError): pass
-            if unchanged:
-                return rel, {**previous, 'metadata_verified':True, 'downloaded_bytes':0, 'head_headers':headers}
-            row=oss.verify_object_with_retries(None,rel,obj,'https://wly0829.cn',60)
-            return rel, {**row, 'downloaded_bytes':obj['bytes']+row.get('range',{}).get('bytes',0)}
-        if local_assets:
-            cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
-            inherited, _ = inherited_assets(manifest)
-            for rel in list(manifest['files'])+[MANIFEST]+list(objects):
-                if rel in inherited:
-                    if objects[rel] != inherited[rel]: raise ValueError('Inherited sealed object differs: ' + rel)
-                    continue
-                source = Path(local_assets)/rel if rel in objects else output/rel
-                if rel in objects and (source.stat().st_size != objects[rel]['bytes'] or digest(source) != objects[rel]['sha256']):
-                    raise ValueError('Local content body differs from sealed object: '+rel)
-                target=cache/rel;target.parent.mkdir(parents=True,exist_ok=True);builder.copy_release_asset(source,target)
-            output=cache
-        else:
-            gate = evidence or {}
-            if gate.get('status') != 'pass' or gate.get('release_id') != manifest['release_id'] or gate.get('checker_sha256') != checker_version():
-                raise ValueError('Missing release-bound local full-package content gate')
-            if builder.PUBLIC_REPOS and not set(gate.get('public_repositories', [])) <= builder.PUBLIC_REPOS:
-                raise ValueError('Sealed repository inventory changed; rerun the local content gate')
-            if seal_only: return gate
-            pending = {rel:obj for rel,obj in objects.items() if os.environ.get('WLY_RELEASE_FULL') == '1'
-                       or gate.get('retained_objects', {}).get(rel) != fingerprint(obj)}
-            oss.estimate_download(pending, confirmed)
-            with ThreadPoolExecutor(max_workers=16) as pool: rows=dict(pool.map(materialize,pending.items()))
-            entries=[p for p in output.rglob('*') if p.is_file() or p.is_dir()]
-            size=sum(p.stat().st_size for p in entries if p.is_file()); tar=builder.tar_estimated_bytes(output,entries)
-            if size>builder.BUDGET or tar>builder.BUDGET: raise ValueError('GitHub deployment budget exceeded')
-            result={key:gate[key] for key in ('status','release_id','checker_sha256')}
-            result.update(ready_to_publish=True,oss_download_bytes=sum(row.get('downloaded_bytes',0) for row in rows.values()),
-                          objects_checked=len(rows),objects_retained=len(objects)-len(rows),github_deployment_bytes=size,github_deployment_tar_estimated_bytes=tar)
-            write(report,result); print(json.dumps(result)); return result
-        asset_prefix=manifest['oss']['asset_base_url']+'/'+manifest['oss']['prefix']+'/'
-    original = builder.rule_pin_findings; original_resolve = builder.resolve_ref
-    if manifest.get('oss'):
-        addresses = {obj['url']:rel for rel,obj in objects.items()}
-        def resolve(root, owner, ref, prefix=None):
-            url=ref.split('#')[0].split('?')[0]
-            if url in addresses: return root/addresses[url] if local_assets else None
-            if url.startswith(manifest['oss']['asset_base_url']+'/'): raise ValueError('Unsealed OSS reference: '+ref)
-            return original_resolve(root,owner,ref,prefix)
-        builder.resolve_ref=resolve
-    # The owner keeps old rule pages. Only newly accepted rule pages use current pin.
-    def selected_pin(root, files):
-        selected = {route_file(x) for x in manifest['accepted_pages']}
-        findings = original(root,[p for p in files if p.relative_to(root).as_posix() in selected])
-        def verified_source(finding):
-            if finding['type'] != 'rule_original_source_evidence_mismatch' or not manifest.get('oss'):
-                return False
-            text = (root/finding['file']).read_text('utf8')
-            match = builder.PAGE_DATA.search(text)
-            objects = {obj['url']: obj for obj in manifest['oss']['objects'].values()}
-            rows = json.loads(match[2]).get('screens', []) if match else []
-            bound = [row.get('source_meta', {}) for row in rows if row.get('source_meta', {}).get('relative_file') == finding.get('document')]
-            return bool(bound) and all(objects.get(meta.get('src'), {}).get('sha256') == meta.get('public_source_sha256',meta.get('source_sha256'))
-                                       and objects.get(meta.get('src'), {}).get('byte_preserved') is True for meta in bound)
-        return [x for x in findings if x['type'] != 'pinned_rule_page_missing' and not verified_source(x)]
-    builder.rule_pin_findings = selected_pin
-    current_files = inventory(output)
-    source_inherited, _ = inherited_assets(manifest) if not manifest.get('oss') else ({}, {})
-    current_files.update({rel: row['source'] for rel, row in source_inherited.items()})
-    current_files[MANIFEST] = {'bytes':(output/MANIFEST).stat().st_size, 'sha256':digest(output/MANIFEST)}
-    field = 'checked_files' if local_assets else 'output_files'
-    coverage = prior.get(field, {})
-    policy = {key:manifest.get(key) for key in ('baseline_production_commit','baseline_input_kind','audit_repair')}
-    selected_files = {route_file(x) for x in manifest['accepted_pages']}
-    exempt_files = set(manifest.get('baseline_files', {}))-selected_files-{rel for rel,row in manifest.get('release_overlay', {}).items() if row['kind'] != 'runtime_reference'}
-    reusable = (os.environ.get('WLY_RELEASE_FULL') != '1' and isinstance(coverage, dict) and prior.get('status') == 'pass'
-                and prior.get('checker_sha256') == checker_version() and prior.get(field+'_sha256') == fingerprint(coverage)
-                and prior.get('content_policy') == policy and prior.get('public_repositories') == sorted(builder.PUBLIC_REPOS))
-    verified = {rel:value for rel,value in current_files.items() if coverage.get(rel) == value
-                and (rel in selected_files) == (rel in prior.get('selected_files', []))
-                and (rel in exempt_files) == (rel in prior.get('exempt_files', []))} if reusable else {}
-    if local_assets:
-        verified.update({rel: {'bytes': row['bytes'], 'sha256': row['sha256']} for rel, row in inherited.items()})
-    verified.update({rel: row['source'] for rel, row in source_inherited.items()})
-    changed = set(current_files)-set(verified) | (set(coverage)-set(current_files))
-    if reusable:
-        for rel in list(verified):
-            if rel in source_inherited or local_assets and rel in inherited: continue
-            for ref,navigation in references(output/rel):
-                try: target = builder.resolve_ref(output, output/rel, ref, asset_prefix)
-                except ValueError: verified.pop(rel); break
-                if (target is not None and target.relative_to(output).as_posix() in changed
-                        and (not navigation or urlsplit(ref).fragment or not target.is_file())):
-                    verified.pop(rel); break
-    try:
-        # Topic and engineering-location exclusions govern newly adopted content.
-        # The owner explicitly preserves the captured production bytes.
-        # The complete artifact
-        # still receives every credential, private-repository and resource check.
-        with contextlib.redirect_stdout(io.StringIO()):
-            try: builder.validate(output, report, asset_prefix=asset_prefix, budget_root=budget_root, verified_files=verified)
-            except SystemExit: pass
-        result = read(report)
-        selected = {route_file(x) for x in manifest['accepted_pages']}
-        changed_content = {rel for rel,entry in manifest.get('release_overlay',{}).items() if entry['kind'] != 'runtime_reference'}
-        retained = {rel for rel in manifest['baseline_files'] if rel not in selected and rel not in changed_content}
-        # OSS relocation changes resource URLs in historical HTML. Only the
-        # existing topic exceptions carry forward; routes and all credentials
-        # still receive the same content checks.
-        kept = []; retained_topics = []; retained_findings=[];audit_topics=[];baseline_cache={}
-        for finding in result['findings']:
-            if finding['type'] == 'javascript_missing' and manifest.get('oss'):
-                # verify_release has already required sealed full-body GET
-                # evidence for the actual external JavaScript inventory.
-                continue
-            overlay = manifest.get('release_overlay',{}).get(finding['file']) or manifest.get('search_preserved_records',{}).get(finding['file'])
-            unchanged_record=unchanged_search_finding(output/finding['file'],finding,overlay)
-            audit_retained=retained_audit_topic(output,finding,manifest,baseline_cache)
-            if audit_retained: audit_topics.append(finding)
-            if unchanged_record or audit_retained or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
-                retained_findings.append(finding)
-                if finding['type']in {'excluded_topic','excluded_topic_filename','private_path'}:retained_topics.append(finding)
-            else: kept.append(finding)
-        result['findings'] = kept
-        result['preserved_baseline_topic_findings'] = retained_topics
-        result['preserved_baseline_findings_outside_current_release']=retained_findings
-        result['preserved_audit_baseline_topic_findings']=audit_topics
-        def retained_reference(finding):
-            if finding['file'] not in retained: return False
-            try:
-                target = builder.resolve_ref(output, output/finding['file'], finding['reference'], asset_prefix)
-                return target is not None and target.relative_to(output).as_posix() in retained
-            except ValueError: return False
-        # A preserved page can lose a working link when its destination is
-        # replaced. Only findings whose source AND destination remain old
-        # production content qualify for the historical exception.
-        result['preserved_baseline_reference_findings_outside_current_release']=[x for x in result['missing_references'] if retained_reference(x)]
-        result['missing_references']=[x for x in result['missing_references'] if not retained_reference(x)]
-        result['missing_reference_count']=len(result['missing_references'])
-        result['content_gate_scope']='Current accepted pages and their assets; direct navigation resolves against all preserved production routes. Exact baseline bytes remain verified separately.'
-        result['ready_to_publish'] = not kept and not result['missing_references'] and not result['required_missing']
-        result['status'] = 'pass' if result['ready_to_publish'] else 'block'
-        result.update(checker_sha256=checker_version(),checked_at_beijing=datetime.now(timezone(timedelta(hours=8))).isoformat())
-        result.update(output_files_sha256=fingerprint(result['output_files']),content_policy=policy,
-                      selected_files=sorted(selected_files),exempt_files=sorted(exempt_files),public_repositories=sorted(builder.PUBLIC_REPOS),
-                      files_checked=len(current_files)-len(verified),files_retained=len(verified))
-        if manifest.get('oss'): result['oss_download_bytes']=sum(row.get('downloaded_bytes',0) for row in rows.values())
-        write(report, result)
-        print(json.dumps({'status':result['status'],'findings':len(kept),'preserved_baseline_topic_findings':len(retained_topics),'missing_references':len(result['missing_references'])}))
-        if not result['ready_to_publish']: raise ValueError('Hybrid content gate failed; inspect '+str(report))
-        return result
-    finally: builder.rule_pin_findings = original; builder.resolve_ref = original_resolve
 
-def restore_git(ref, output):
-    if output.exists(): raise ValueError('Restore output must be fresh')
-    commit = subprocess.check_output(['git','rev-parse','--verify',ref+'^{commit}'],cwd=ROOT,text=True).strip()
-    tree = subprocess.check_output(['git','-c','core.quotepath=false','ls-tree','-rz','--name-only',commit,'--','site-release'],cwd=ROOT).decode('utf8').split('\0')
-    tree = [x for x in tree if x]
-    if 'site-release/index.html' not in tree: raise ValueError('Ref has no exact static release; source rebuild is not rollback')
-    output.mkdir(parents=True)
-    for filename in tree:
-        relative = Path(filename).relative_to('site-release')
-        target = output/relative; target.parent.mkdir(parents=True,exist_ok=True)
-        target.write_bytes(subprocess.check_output(['git','show',commit+':'+filename],cwd=ROOT))
-    manifest=verify_release(output)
-    seal_path=ROOT/'config/oss-content-seals.json'
-    seals=read(seal_path) if seal_path.is_file() else {}
-    if manifest['release_id'] in seals:
-        manifest['oss']['content_verification']=seals[manifest['release_id']]
-        write(output/MANIFEST,manifest)
-    return commit
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    commands = parser.add_subparsers(dest='command', required=True)
-    verify = commands.add_parser('verify'); verify.add_argument('--output',type=Path,required=True)
-    verify.add_argument('--content-report',type=Path)
-    verify.add_argument('--oss-preparation',type=Path,help='Bind the GitHub deployment budget to this sealed split while checking the complete source')
-    verify.add_argument('--public-repos-from-github',action='store_true')
-    verify.add_argument('--confirm-download-over-5gb',action='store_true')
-    verify.add_argument('--check-sealed-content',action='store_true')
-    verify.add_argument('--previous-content-report',type=Path)
-    restore = commands.add_parser('restore'); restore.add_argument('--ref', required=True); restore.add_argument('--output',type=Path,required=True)
-    args = parser.parse_args()
-    if args.command == 'restore': print(restore_git(args.ref,args.output)); return
-    if args.command == 'verify':
-        manifest = verify_release(args.output)
-        if manifest.get('astro'):
-            import astro_rules
-            astro_rules.verify(args.output, manifest['rules_pin'])
-        if args.public_repos_from_github: builder.load_public_repos()
-        if args.content_report or args.check_sealed_content: validate_content(args.output,args.content_report,args.oss_preparation,confirmed=args.confirm_download_over_5gb,seal_only=args.check_sealed_content,previous_report=args.previous_content_report)
-        print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
-
-if __name__ == '__main__':
-    try: main()
-    except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
-        raise SystemExit(str(error))

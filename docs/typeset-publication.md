@@ -1,227 +1,67 @@
-# 程序排版页面的发布准备
+# 源包准备与独立排版检查
 
-这套入口把程序排版页面混入当前生产网站，保留已经上线的首页、未发布的旧页面和资产。默认只检查本地证据。全站预览与程序验收逐项通过、获得发布审核授权的总控看过结果并明确发出一条“发布”指令后，才执行带 `-Publish` 的命令。本人尚未视觉验收不影响发布。
+当前维护从仓库根 `npm run build` 开始，发布只用本机 `site-astro/tools/publish_site.py`。本页保留源包、量测、阅读和迁移的技术契约，方便核对现成输入与恢复材料；它不是另一条构建或发布流程。日常命令见 [网站维护](maintenance.md)，差量传送与回执见 [发布与扫描](publish-and-scan.md)。
 
-执行依据是本人北京时间 2026-10-03 10:15 的更正（指令 `55676eb6-6494-4d9c-923c-92205c8bbce5`）：此前必须本人认可的门已撤销，改为 Claude 的明确发布指令；真实程序问题仍须解决，确认上线失败时精确自动回退，传输不明时不盲目回退。
+## 页面源与完整包
 
-旧 `publish-hybrid.ps1` 的批准条件针对旧图页；新程序排版不能拿旧 `pages-approved.json` 当成通过凭据。新入口复用 `hybrid-release.py` 的混合清单校验、基线包装和 Git 精确恢复，不另建部署工作流。
-
-## 准备什么
-
-| 参数 | 内容 |
+| 材料 | 当前用途 |
 |---|---|
-| `TypesetRoot` | 每页一个目录，目录内有本代 `page-manifest.json`、图片和链接坐标文件 |
-| `Inventory` | 当前 `screens.jsonl`，含页面、逻辑屏、源路径和源指纹 |
-| `Geometry` | 显式传入的本代 DOM 量测快照，例如 `integration/motion-geometry.json`；本地检查与发布前重建必须使用同一个文件 |
-| `Baseline` | 当前实际生产静态包，必须包含已经上线的首页；优先使用已核对生产身份的 `site-release` 或完整生产包 |
-| `BaselineManifest` | 与基线完全对应的清单；省略时读 `Baseline/release-manifest.json` |
-| `Release` | 构建器输出的完整混合静态包，带 `wly.hybrid-release.v1` 清单 |
-| `BuildReport` | `wly.typeset-build.v1` 的本代构建报告 |
-| `Verification` | 同一构建及版本的 `wly.typeset-verification.v1` 桌面、手机 DOM 验收 |
-| `Directive` | 总控看过全站程序验收后实际发出的 `wly.typeset-publish-directive.v1`；本地检查可以省略，此时完整回执标记发布指令缺失并阻断，不生成替代指令 |
-| `LegacySite` | 发布前重建需要的既有静态网站目录，`-Publish` 时必填 |
-| `AssetCache` | 可选的已验证无损传输缓存；省略时沿用审查过的构建报告中的路径，快照构建不另起重复缓存 |
-| `Pages` | 可选的明确页名列表；省略时检查当前期待的全部 84 页 |
-| `RunRoot` | 可选的新目录，保存本次准备、上线回读和回退材料；默认在 `.publish/` 下 |
-| `LockHolder` | `-Publish` 时必填，格式为 `Claude/真实任务号` 或 `Codex/真实任务号`；不自行生成虚构任务号 |
+| `sources/pages/<id>/page.json`、相邻 `layout.json` | 正文和构图源，构图的文字引用须对应原文；转换方式见 Astro 说明 |
+| `site-astro/src/content/pages/` | Astro 读取的 Markdown 内容，须与所属源一致 |
+| `site-astro/sources/retained-home-cockpit/` | 已选首页与驾驶舱的保留 HTML、入口和依赖身份；首页不重新排版或自动检查 |
+| `dist/`、`release-manifest.json`、`.build-receipt.json` | 本代静态成品、文件身份与构建计时/变化页；缺回执时扫描与发布分别按实际文件哈希判断 |
+| `scripts/snapshot-typeset-inputs.py` | 保存既有排版输入及资源映射，供有明确需要的迁移和独立量测使用，不是发布入口 |
 
-基线必须反映当前生产网站。原 `online-production-manifest.json` 曾记录旧生产快照；它是否适用由本轮生产字节决定，不能因文件存在就继续用。发布入口会在拉取最新 `origin/main` 后，把本地基线全部文件与该提交的 `site-release` 对齐，并核对线上发布清单和首页字节。基线里未包含当前上线首页、漏文件或字节不一致时停止。
+完整源包须包含需要的资源字节。只有 HTML 与外置 OSS 地址的部署包不能冒充完整媒体源；源图、视频、遮罩、封面和截图不因迁移而重画或重编码。未选择的旧路由及其资源不能因为本批只改几页而丢失。
 
-## 本代证据怎样对应
+## 仍在使用的准备库
 
-上游还在重出图时，先用 `snapshot-typeset-inputs.py --typeset-root 原排版目录 --inventory 原库存 --output 新快照目录` 保存一组稳定输入。随后 TypesetRoot 指向快照的 `typeset-out`，Inventory 指向快照的 `typeset-inventory/screens.jsonl`，Geometry 保存于同一快照。源定稿和 PNG 保持原字节，HTML/CSS 的实际文件引用指向稳定副本；明确声明的截图 file/full 通过 snapshot.json 的 resource_map 读取副本。系统字体保持原 URI，记录 SHA 与字节数并作为构建外部输入核对。快照只服务本批构建的实际依赖，不备份未使用裁片或原图溯源库；后来的源变化进入下一批。
+当前 Astro 构建直接生成完整成品，再调用 `prepare-oss-release.py finalize-dist` 离线定稿。旧 `prepare-astro-release.py`、creative 准备器、hybrid 装配、全包核验与 CLI 已退役，不能将它们接回日常构建或 CI。
 
-构建报告须有 `pages` 对象、完整输出 `files`、`baseline_root`、`baseline_index_sha256`、`built_at_beijing`、`geometry_path` 和 `geometry_sha256`；可记录当前 `baseline_production_commit`。每页须有 `url`、`status`、`html_sha256`、`issues`、`inputs`、`quality` 和同一 `geometry_sha256`。`inputs` 的键是绝对路径，值是 `sha256`、`bytes`；全局共有输入也可放在报告顶层 `inputs`。每页清单、清单列出的全部图片和链接文件、库存及对应源文件都必须有本代输入指纹。构建器把实际秒数写入报告的 `seconds`；它是测得的统计值，不是调用者填写的 `--seconds` 参数。
+`hybrid-release.py` 仅保留仍被定稿器使用的库存、路由与资源引用解析。资源复制和 `inherited_assets` 集中在 `prepare-oss-release.py`，不在两个库里留同一实现；历史继承仍使用准确 `baseline_production_commit` 中的 `site-release/release-manifest.json`。当前回退使用同一 Pages 工作流的 `ref`。
 
-geometry 快照须为 `wly.typeset-geometry.v1`、`geometry_version: 2`，使用与生产 PNG 相同的视口高度量测。每个实际发布页的屏、方向须恰好覆盖其清单，不缺失、不重复；每条记录的生产 HTML 路径与 SHA-256、按清单顺序排列的 PNG 分片尺寸与 SHA-256 都须对应当前文件，量测没有 `issues` 或 `broken_images`。程序直接读取 PNG 文件头核对尺寸，不看图片。快照本身也须登记在构建 `inputs` 中，文件指纹同时进入 DOM 验收和发布证据。全局 `complete` 标记不能替代逐页覆盖校验；部分批次可以使用只完成该批次的快照，未测完的页仍不可发布。全缺 geometry 的旧构建即使有图片，也不具备发布所需证据。
+`prepare-oss-release.py` 负责将完整源包分为 GitHub 文档与 OSS 资源，保留相同对象地址和真实旧回执，确定性重放地址改写并核对文件身份。清单、控制文件、地址和失败边界见 [OSS 资源契约](oss-publication.md)。这些库保留源码与历史解析用途，不向 `main` 推送成品。
 
-渲染器质量报告按真实状态记录。旧记录、没有 `status`、`visual_pending`、`legacy` 和纯视觉 `incomplete` 不会单独拦住发布，也不会被改成“源质量通过”；总控要看报告里的这些待看或未知项，再决定是否发布。报告明确的 `fail`、G1–G6 实际失败及真实问题列表仍会阻断，发布指令不能绕过它们。缺图、缺热区、错误链接、截图或实时槽位丢失、视频或动效程序验收失败属于必修问题。
+## 几何与输入绑定
 
-DOM 验收须包含 `build_report_sha256`、`release_id`、`verified_at_beijing` 和逐页结果。每页的 `url` 与构建一致，`status` 为 `pass`，`checks` 同时覆盖 `width: 1440` 与 `width: 390`，每条 `issues` 都为空。程序检查真实字段、指纹和页面字节；它不会冒充主观的视觉验收。
-
-每页构建还须有 `effects_expected`，只列旧站真实具备的能力。每页验收的 `effects` 是独立对象，须为 `status: "pass"`、`issues: []`；它的 `expected` 与构建一致，`preserved` 覆盖这些能力。证据必须真实包含 `normal_branch`、`new_geometry_bound`、`hotspot_css_feedback`、`native_buttons_bound` 均为 `true`，`geometry_sha256` 与本代快照一致，`geometry_counts` 的 cards、numbers、dots、arrows 是新布局的非负整数，`running_animation_count` 是实际观察的非负整数。`new_geometry_bound` 来自正常 DOM 对当前 `page-data` 中分片坐标和尺寸的真实绑定检查，单独一个布尔值不证明量测输入正确。新组件数量可以变化，不与旧图片坐标或旧组件数量硬比。正常分支未验、绑定假几何、原有实时槽位、截图、点击、悬停或动效缺失都不放行。
-
-`effects.evidence.checks` 须恰有 1440 与 390 两档正常分支观察，各自记录真实绑定、交互、原生条件、组件数、动画数和保留能力，`issues` 为空、`hidden` 与 `reduced_motion` 为假。顶层组件数须等于两档观察之和，动画数为两档最大值，保留能力须等于两档观察的并集；只有汇总值、缺少实际分档观察的旧文件不能放行。无视频页也须在这两档真实观察 `hero_video_attached: false`、`video_spec: null`。
-
-每页构建须明确 `video_expected: null` 或现役视频与 mask 的 src、bytes、sha256。`video_checks` 也是独立对象，不能用它的条件测试替换普通桌面和手机检查。存在视频时，须同时有视频和 mask 两项文件证据，HTTP 为 200，实际 bytes、sha256 与构建期待值及最终包一致；desktop（1440 横屏）、below_width（1023）、portrait（390 竖屏）、reduced_motion、offscreen、document_hidden 六个条件都须通过，实际展示和播放与期待完全一致。`mounted` 记录有效展示的播放器，`attached` 另记仍有播放器对象；只在宽度至少 1024、非竖屏、可见、非减弱动效且文档未隐藏的分支展示并播放。无视频的页面必须真实观察 `mounted: false`，文件和条件列表为空；缺证据不当作“本页没视频”。
-
-视频文件相对 `src`、`mask` 按实际页面 URL 解析，须与发布清单的完整资产路径一致。六类条件分别用正常页面分支观察；每条须记录真实的 `reduced_motion`、`portrait`、`section_visible`、`hidden`、`attached`、`phase` 和 `time_advanced`。desktop 须真正展示、播放且时间前进；其余五类须停止有效展示和播放，时间不增长、状态为图片。禁用条件下可以保留播放器 DOM，`attached` 如实记录；仍有播放器时必须实际观察 `video_paused: true`、`video_hidden: true`，并记录停止前后的播放时间。desktop 的两项值须为假。`section_visible` 只在 desktop 要求真、offscreen 要求假；竖屏里被隐藏的横屏分片可以如实记录为假，不把它误报为视频条件失败。
-
-减弱动效使用 Chrome 原生媒体条件。文档隐藏使用真实导航：先在 1440 横屏正常播放，再把本地验收 iframe 导航到 `about:blank`，捕捉旧文档原生的 `visibilitychange` 和 `doc.hidden: true`，保留旧对象引用观察网站自身的暂停、隐藏与图片状态，等待 350 毫秒确认播放时间没有增长。证据须有 `method: "navigation_visibilitychange"`、真实来源页、目标、`visibility_event_observed`、`visibility_state: "hidden"`、`parent_hidden: false` 和 `before_navigation` 的实际可见播放正例。无头 Chrome 另开一个标签不会可靠地隐藏旧文档，不用这个动作冒充验收，也不能改写 `matchMedia` 或 `document.hidden`。视频的新位置来自本代量测；用于同图匹配的原插图资产清单也须登记为构建输入。
-
-首页保持当前生产字节；`rules-home` 必须保留经过现役 video-5 审核的视频和 mask 原字节。源图片、源 HTML 和新布局几何的输入指纹属于本代构建绑定。旧审查模式的结果或缺正常分支证据的旧验收文件不能冒充本轮通过。
-
-总控发布指令的字段如下。下面是**未发出指令的结构示例**，执行入口会拒绝它：
-
-```json
-{
-  "schema": "wly.typeset-publish-directive.v1",
-  "instruction": "待总控明确发出发布指令",
-  "reviewed": false,
-  "pages": ["实际指令覆盖的页名"],
-  "build_report_sha256": "实际构建报告的 SHA-256",
-  "release_id": "实际静态包的版本标识",
-  "recorded_by": "Claude",
-  "instructed_at_beijing": "实际指令时间，含 +08:00",
-  "source": "可回查到总控这条发布指令的编号或原话"
-}
-```
-
-只有总控看过本代全站程序验收结果且实际发出“发布”以后，才把真实指令记录为 `instruction: "发布"`、`reviewed: true`，填入实际版本、页名和出处。脚本不生成指令、不伪造通过，不把程序构建成功解释为 总控已经看过结果。所有证据时间均采用带 `+08:00` 的北京时间。
-
-指令覆盖的页名必须与本次请求完全相同；发布清单的 `accepted_pages` 必须恰好对应这些页的 URL。首页任何别名都不能出现在接受清单中，最终 `index.html` 必须与生产基线逐字节一致。`404` 使用 `/404.html`。
-
-`github-profile` 的源没有网站原路由，本地 `/github-profile/` 仅供预览；发布准备明确阻断它，报告为“Claude 待确定发布目标”。此入口不默认新增它的网站页，也不改 GitHub README。因此，当前 84 页默认整批检查会如实指出它尚未就绪；其他页的质量或验收缺口也逐项列出。
-
-若总控的明确发布指令只覆盖部分网站页面，传精确的 `-Pages` 列表，构建、程序验收与指令须针对同一部分批次。回执标 `batch: partial` 并列出全部 `deferred_pages`；部分批次不能报告为全部 84 页完成。
-
-本地一键检查同样支持 `--pages 页名 页名`，选择贯通快照、几何量测、构建、两档浏览器验收和发布准备。使用完整快照验收部分页时，只处理选中页；构建器默认不加入其他页面的预览壳。需要本地样板的额外链接支持时可单独使用 `build-typeset-site.py --preview-support`，该产物不能用于精确批次发布。
-
-混合包沿用既有临时链接映射：尚未上线的子路由落到现存父页，保留旧页缺少的新锚点落到该旧页正文，映射逐项写入 `temporary_href_mappings`。新页的原始来源地址保存在 `original_href`，浏览器验收核对真正可点击的 `href`；旧页字节不变。
-
-## 本地检查命令
-
-上游重出图片后，在网站工作副本中填入本轮文件的实际路径，运行下面一条命令即可重新冻结输入、量测全部横竖版面、构建 84 页、执行两档布局和视频动效验收，并写本地发布准备回执。`RunRoot` 必须是新目录，旧证据保留；命令使用本机安装的 Chrome、独立临时配置和系统分配的本地端口，结束时关闭自己启动的服务和浏览器。它不执行 Git 或发布动作。
+独立几何检查继续由 `run-typeset-checks.py --mode geometry` 提供，需要现成预览的 `/__typeset/measure` 接口和明确的非首页页名。它不负责创建成品。已有 `/__typeset/qa` 的预览也可使用脚本原有 QA 能力；该能力不成为 CI 发布门，动效与开场仍由本人判断。
 
 ```powershell
-python scripts/check-typeset-site.py `
-  --typeset-root '当前 typeset-out 的绝对路径' --inventory '当前 screens.jsonl 的绝对路径' `
-  --baseline '已核对生产基线的绝对路径' --legacy-site '既有静态网站的绝对路径' `
-  --asset-cache '本轮已验证的无损缓存目录' --run-root '新的检查目录'
+python -B -X utf8 scripts/run-typeset-checks.py --mode geometry `
+  --url <已有本机预览地址> --task-cache <任务缓存目录> --pages <非首页页名>
 ```
 
-当前任务的运行依赖是登记过的 Python、现有 Playwright 和已安装的 Chrome，精确运行路径写在该轮汇报里。换机器时使用当地已验证的 Python 和 Chrome；`run-typeset-checks.py --chrome` 可显式指定同品牌安装。临时配置、日志、快照和编译产物均写在任务目录所在的数据盘。浏览器临时配置随后按活动规则回收；检查脚本不会永久删除它们。
+已有排版量测使用 `wly.typeset-geometry.v1`、`geometry_version: 2`。量测的页、屏、方向和顺序须覆盖被检查内容；生产 HTML 路径与 SHA-256、PNG 分片尺寸及 SHA-256 必须对应实际输入。每条 `issues`、`broken_images` 都保留，顶层 complete 不能代替逐页覆盖。记录字体、视口、源文件和几何路径/指纹，不能把另一版量测套到当前页面。
 
-`local-run.json.summary` 区分通过、失败和未验页，`publication-preparation.json` 列出发布阻塞项。程序完成仍可以有失败页，发布准备也可以因真实问题或缺少总控指令而阻塞。退出码 `0` 表示本地程序及成品检查通过，`2` 表示有失败或未完成；任何一种都不表示已经得到发布指令。几何检查无法消除的源 HTML/PNG 不一致会留下证据，继续构建并完成全部页面验收，不把失败版面硬拉伸到通过。
+已有 `wly.typeset-build.v1` 报告中的 `pages`、输出 `files`、`baseline_root`、`baseline_index_sha256`、`built_at_beijing`、`geometry_path`、`geometry_sha256` 和每页 `url`、输入/HTML 指纹仍是迁移证据。它与新构建回执是不同材料；不存在的字段和未做的检查保持 Unknown，不能靠补标签变成已验证。
 
-已有稳定快照需要复验同一批次时加 `--snapshot '该快照目录'`，其他参数不变；要验上游最新产物时省略它。新的几何文件写入新的 RunRoot；已有快照含几何时只复制到本轮后继续量测，不覆盖旧证据所依赖的文件。不要把旧快照的通过结论套给重出的源文件。
+## 独立阅读检查
 
-在网站工作副本中执行，填写本代成品、程序证据和 总控实际发布指令的路径：
+阅读入口只检查已有成品，不修改运行件、HTML 或 manifest；临时预览仅提供现成文件和不可用状态提示。`check-typeset-site.py` 适配器接受 `--dist`、已有 `--build-report`、`--out` 和可选 `--cache`，把其余阅读选项交给 `check-typeset-reading.py`。输出与缓存必须在 `dist` 外。首页 `/`、`/index.html` 及 home/homepage/index 别名在启动浏览器前排除，不能靠显式选页重新加入。
 
-```powershell
-$parameters = @{
-    TypesetRoot = '本代排版根目录'
-    Inventory = '当前 screens.jsonl 的绝对路径'
-    Geometry = '本代 integration/motion-geometry.json 的绝对路径'
-    Baseline = '当前生产静态包的绝对路径'
-    Release = '本代完整混合 dist 的绝对路径'
-    BuildReport = '本代 build-report.json 的绝对路径'
-    Verification = '本代 verification.json 的绝对路径'
-    LegacySite = '当前既有静态网站的绝对路径'
-}
-# 尚无真实指令时省略 Directive，得到明确阻断的完整本地回执；已有指令才填其实际路径。
-# $parameters.Directive = '真实 publish-directive.json 的绝对路径'
-& ./scripts/publish-typeset.ps1 @parameters
-```
+原阅读检查保留以下证据：
 
-也可直接运行 Python 准备器；`prepare` 可以省略：
+- `.screen` 中的阅读位置和实际语义节点，屏幕缩放前后的位置差；允许的边界为两像素，保留测得误差，不把不同卡片当成同一位置。
+- 横竖变化、宽度断点和连续快速改变尺寸；回到顶部、目录点击、带锚点刷新与浏览器历史返回。
+- 实际文档/脚本响应状态及 SHA-256，manifest、HTML 和本地脚本在检查前后不变。
+- 本机独立 Chrome 配置、实际失败、响应缺失、清理结果和带北京时间的回执。
 
-```powershell
-python scripts/prepare-typeset-release.py prepare `
-  --typeset-root '本代排版根目录' --inventory '当前 screens.jsonl' `
-  --geometry '本代 integration/motion-geometry.json' `
-  --baseline '当前生产目录' --baseline-manifest '当前生产清单' `
-  --release '本代完整 dist' --build-report '本代构建报告' `
-  --verification '本代 DOM 验收' `
-  --output '.publish/typeset-preparation.json'
-```
+运行件没有所需阅读状态，或页面没有可量测屏、响应与成品不一致时，就记录真实失败，不生成替代运行件。`--navigation-only`、`--desktop-height`、Chrome 路径，以及已有封闭候选来源下的单次静态补取选项仍保留；受控补取不能冒充原生冷网络或速度达标。
 
-默认命令只读取成品和证据，写本地准备回执；不构建、不拉取、不合并、不暂存、不提交、不推送、不联网。准备回执写在静态包外，保持验收过的成品字节不变。Python 准备器退出码 `0` 为就绪，`2` 为阻断；PowerShell 包装入口遇到阻断时失败退出，提前显示同一回执的路径。其他必需输入文件缺失或损坏也以失败退出。
+## 保留的迁移材料
 
-尚无实际发布指令时，`directive_sha256` 为 `null`，回执包含 `publication_instruction` 阻断项。检查其余证据不需要另造“待发布”文件。真实指令到达后才在 Python 命令加入 `--directive '实际文件'`，或填写 PowerShell 参数 `Directive`；带 `-Publish` 但没有真实指令，也会在任何网络或 Git 动作前停止。
+`src/typeset/render_page.py` 及 `src/typeset/` 中的引擎、注册组件、样式和资产属于旧页面源与迁移工具。独立任务需要它们时使用实际输入，不将它们接成自动备用构建链。
 
-## 总控明确指令后的一键发布
+屏清单工具 `scripts/inventory.py` 默认输出 `.publish/inventory/`，可用 `TYPESET_INVENTORY_OUT` 指定任务目录。`sources/screens.jsonl` 保留原始迁移清单；迁移记录的原始 740 行与当时重生成 736 行、路径和图片库存差异保持原有证据身份，不是本次重新统计。解析该清单时重绑定相邻 `page.json`，不改写原件冒充同字节重生。
 
-先由本轮唯一发布者把经过审查的源码定向提交在 `prep/*` 分支。总控看过全站程序验收并明确发出对应批次的“发布”以后，在同一参数基础上运行，锁持有人填写当前宿主和真实任务号：
+资产引擎默认读取 `sources/assets/`，独立迁移可显式指定已核实的 `TYPESET_ASSET_ROOT`。2f 撤图修复由同版 `engine/render.py`、`components/comp-slots/shots.py` 和 AI CLI 页的构图/正文承接。A1 交接目录的 `not-moved.json` 保留未迁原型、demo、缓存、样片驱动和历史审查文件的路径、字节与原因，退役前核对实际用途。
 
-```powershell
-& ./scripts/publish-typeset.ps1 @parameters -LockHolder 'Claude/实际任务号' -Publish
-```
+系统字体仍按原 file URL 引用，不复制字体。下列版本和字节身份观察于北京时间 2026-10-06，没有作为本次机器状态重测：
 
-发布流程依次执行：
-
-1. 核验原成品、真实程序故障、全站预览、桌面和手机视频动效证据及总控明确发布指令，检查工作副本没有未提交或来历不明的改动。
-2. 经活动规则的 `Invoke-ShortLock.ps1` 先 Inspect 再 Acquire `website-publication` 短锁，正常拉取并合并最新 `origin/main`；别人的有效锁不抢，冲突时不强推、不覆盖其他改动。
-3. 核对当前生产身份和保留首页，调用 `build-typeset-site.py --typeset-root --inventory --geometry --baseline --legacy-site --output --report`，显式使用检查过的 geometry 路径，部分批次再带 `--pages`。
-4. 重建的 `release_id` 与原指令版本必须相同；原报告的输入和输出指纹也须完全匹配重建包。准备器带 `--rebuilt-report` 再核对重建报告，每个选中页须仍为 `built`、无 `issues`，输入、HTML、质量和视频动效契约与审查过的报告一致。构建时间、实测秒数和输出目录可以变化，新报告不替换原程序依据。任何版本、输入、HTML 或程序契约改变时，停止，对新包重新做全站程序验收、总控看结果并发出新指令；不要求本人先验收。
-5. 运行既有混合内容检查和公开内容检查，把当前生产包包成精确回退版本并定向提交到 `site-release`，从这个 Git 提交提取一次精确恢复进行校验。
-6. 写入回退引用和逐页清单、构建、源质量状态、DOM、总控指令的真实指纹后，把本代成品复制至 `site-release`，再次验证，定向暂存并正常提交，推送 `HEAD:main`。这一步只更新发布清单元数据，HTML 和资产保持程序验收过的字节。
-7. 回读远端 `main`，等本提交的 `.github/workflows/pages.yml` 成功，逐个核对线上 HTML 与资产指纹，最后再次核对本地和远端提交一致。全部完成才记录 `published`。等待与回读期间续领短锁，退出时在 `finally` 释放。
-
-脚本复用已有登录，不执行 `gh auth login`、改账号、改令牌或改代理。`-Publish` 是实际合并和发布入口；本轮只准备代码和文档时不要执行它。
-
-Actions API 的连续读取失败最多重试三次，每次间隔三秒；间歇断连不另挡发布。查询不明时，改在既有等待上限内轮询线上发布标识，再按原流程回读全部页面和资产字节；回滚也用线上旧版本标识和完整字节确认。账号、令牌及代理配置不变。处理依据是 Claude 北京时间 2026-10-03 19:30 引导 `c058a441-61c1-412c-9ea6-422da7609cc4`。
-
-## 耗时怎样估计
-
-准备回执的 `local_build_statistics` 引用实际构建报告，列出页数、发布文件数和总字节数。本轮 full-13 记录 84 页、2,844 个文件，构建实际 54.252 秒，两档布局及视频动效检查实际 342.703 秒；复用快照的完整本地流程实际 492.383 秒。完整源快照另测得 140.265 秒，源图重出后的首次无损压缩可能更长。该代仍有真实问题，计时完成不代表发布就绪。只有有限、非负的实测秒数才显示为 `elapsed_seconds`，其余保持未知；耗时统计缺失不会另设发布审批。
-
-2026-10-03 第一批 29 页已实测：重建 28.238 秒、正常推送 72.756 秒，从发布开始到全部线上字节和六档浏览器核验完成约 81.3 分钟。该次完整 HTTP 回读约 32 分钟，网络速度和原整页图片等待明显影响总耗时。字节数不能直接当作 Git 实际压缩传输量；Pages 默认二十分钟是等待上限。以后引用 `publication-state.json.timings` 中的同规模实测，不把本地验收时间写成总上线时间。
-
-## 按页名清单复用入口
-
-后续批次使用 `scripts/Publish-Pages.ps1 -Batch <batch.json>`。批次文件采用 `wly.typeset-batch.v1`：`page_list` 指向 UTF-8 的逐行页名清单；`paths` 包含既有发布参数 `TypesetRoot`、`Inventory`、`Geometry`、`Baseline`、`Release`、`BuildReport`、`Verification`、`LegacySite`。路径相对批次文件所在目录解析；页名不能重复。可选 `AssetCache`、`ReleaseOverlay`、`RuntimeVerification`、`ReadingPlan` 也使用同一口径。
-
-```powershell
-pwsh -NoProfile -File scripts/Publish-Pages.ps1 -Batch '实际批次文件'
-# 实际“发布”指令到达后，在同一批次上执行：
-pwsh -NoProfile -File scripts/Publish-Pages.ps1 -Batch '实际批次文件' `
-  -Directive '实际指令 JSON' -LockHolder 'Codex/实际任务号' -Publish
-```
-
-运行层脚本更新会使已发布页面的脚本地址变化。`ReleaseOverlay` 精确记录每个文件原、新 SHA 及字节数：搜索索引从新定稿重建；旧 HTML 只允许把已有 app 地址改到新内容哈希地址；旧脚本资产继续保留。`RuntimeVerification` 必须是实际成品的通过回执，绑定 `ReadingPlan` 的真实 SHA、完整页名与 URL、每页 HTML 和实际脚本集合，且成品在验收中未变化。诊断用的 HTTP 脚本替换预览不能作为发布证据。
-
-若生产基线就是工作副本的 `site-release`，先在旧包仍原样时完整核验重建、所有源输入、运行层证据和真实指令；复制后用 `stage-check` 核对整份实际清单、文件字节和正式元数据，并绑定已通过的准备回执。此时站点目录已经是新包，不能把它再次当旧基线。
-
-## 当前托管绑定位置
-
-下面仅登记迁移会涉及的接点，不改变托管：
-
-- `.github/workflows/pages.yml`：Pages 权限、`configure-pages`、静态 `dist` 上传、`deploy-pages`、部署任务与临时 artifact 清理。
-- `scripts/publish-typeset.ps1` 和 `rollback-hybrid.ps1`：现有仓库身份、`main`、Pages 工作流路径、Actions API 状态查询和部署等待。
-- `scripts/prepare-typeset-release.py` 的 `SITE`、`check-typeset-online.py` 默认网址和发布脚本的线上清单 URL：线上发布标识、全部字节与浏览器抽查。
-- `site-release/CNAME` 及 `hybrid-release.py` 的域名文件补齐：当前 Pages 自定义域名配置，HTTP 回读明确排除 CNAME。
-- 现有 canonical、Open Graph、搜索 URL 和 sitemap 使用 `wly0829.cn`；迁移时要核对域名及目录路由行为。它们不要求换 Git 仓库，也不在本轮自动改写。
-
-## 回读与精确恢复
-
-线上回读采用有限重试，分别记录真实字节不符与网络结果不明。默认三轮确认，每轮未解决文件再做三次读取，轮间隔十秒；已核对通过的同代文件沿前轮完整回执保留，后续只重查未解决文件和发布清单。三轮均出现同样的错误文件与错误指纹，才认定持续字节不符；错误变化、传输中断、接口超时或不可核对的结论都记录为不明。
-
-Pages 明确终态失败，或者持续字节不符被确认后，自动执行原 `rollback-hybrid.ps1 -RestoreRef <精确引用> -Publish`：先再次核对本地 HEAD、远端 `main` 仍是本次推送，原工具再 fetch 并检查二者一致，用原字节正常提交推送，等回退 Pages 成功并回读旧 HTML 与全部资产。发现别人的后续提交时停止自动恢复，不强推、不回掉后续提交。恢复通过记为 `rolled_back`，发布命令仍以失败返回，让调用者知道新版本没有完成上线。
-
-未知结果不会盲目恢复。三轮后仍不明时保留 `pages_unknown`、`readback_unconfirmed` 或 `rollback_unconfirmed` 和原因，由总控继续核查；需要改为尽力恢复时，依据本人或总控的后续明确指令再执行。`publication-state.json` 记录已推送、恢复是否发送、Pages、线上指纹及并发状态，不把它们写成已经完成。
-
-只重试线上验证，不触发推送或回退：
-
-```powershell
-python scripts/prepare-typeset-release.py readback `
-  --release '本轮已推送的 site-release' `
-  --output '.publish/typeset-online-readback-retry.json'
-```
-
-回读覆盖发布清单内全部 HTML 与资产。`CNAME` 是 GitHub Pages 的部署元数据，不能通过普通网页读取，单独列为不经 HTTP 读取的部署文件。Python `readback` 单独执行只读网络，退出码 `0` 为全部通过、`2` 为字节不符、`3` 为网络结果不明；自动恢复由带明确发布指令和短锁的 PowerShell 包装按上述确认条件执行。
-
-精确恢复也可沿用原入口先准备本地包。对未知结果的手工恢复，要先取得本轮后续明确指令并核对远端并发状态，再带 `-Publish`：
-
-```powershell
-pwsh -NoProfile -File scripts/rollback-hybrid.ps1 -RestoreRef '实际回退提交'
-```
-
-生产恢复后仍须等 Pages 成功并回读上线字节。保留本轮恢复包及对应 Git 引用，直到本代上线被确认且不再需要恢复；清理本轮临时材料遵照活动规则放进回收站，不永久删除来历不明的文件。
-
-## 仓库内页面源（迁移 A1）
-
-生产入口为 `src/typeset/render_page.py`；引擎、注册组件、样式、排版前端脚本及闭包内资产位于 `src/typeset/`。每页唯一源为 `sources/pages/<id>/page.json` 与相邻 `layout.json`，原稿格式保持。
-生成屏清单用 `python scripts/inventory.py`，默认输出 `.publish/inventory/`；可通过 `TYPESET_INVENTORY_OUT` 指定任务输出目录。
-`sources/screens.jsonl` 保留原始 740 行清单，因当前源重生为 736 行且路径、图片库存与后续定稿已变，无法原字节重生。它作为原始迁移证据保留；生成入口从仓库页面目录解析源文件，读取该清单时重绑定到相邻 page.json。
-从仓库根运行 `python src/typeset/render_page.py <id> --no-compare --out .publish/typeset-out`；全页选项沿用 `--all`。
-D05 资产尚由下一组迁移：引擎默认读取 `sources/assets/`，本阶段验证通过 `TYPESET_ASSET_ROOT` 显式指定已存在的生产资产库；缓存写入本工作树 `.publish/`。
-先运行库存生成工具，再运行现有 `build-typeset-site.py`、`check-typeset-site.py`、`snapshot-typeset-inputs.py`；三者默认读取仓库内 `.publish/inventory/screens.jsonl`，保留显式参数以消费独立冻结快照或原始迁移清单。
-2f 最终撤图修复由同版 `engine/render.py`、`components/comp-slots/shots.py` 及 AI CLI 页构图、定稿共同承接。
-系统字体仍按 base.css 原 file URL 引用，不复制字体；版本和字节身份观察于北京时间 2026-10-06。
 | 系统字体 | 版本 | 字节 | SHA-256 |
 |---|---|---:|---|
 | `C:\Windows\Fonts\NotoSansSC-VF.ttf` | Version 2.04;241114210130;non-release | 17773244 | `763146584cf0710223441356b4395e279021b0806c196614377a7a0174ae074a` |
 | `C:\Windows\Fonts\STXINGKA.TTF` | Version 1.02 | 4016288 | `7f901dfb0526d542740264fb5ba8dfe483293ad060270d273593e2f04a69d080` |
 | `C:\Windows\Fonts\FZSTK.TTF` | Version 1.00 | 7574196 | `0b5a903376fe4d97306c943b690b04a5080889b4f87f8d704962939d3ceef1c4` |
-未迁原型、demo、缓存、样片驱动和历史审查文件不在生产闭包；A1 交接目录的 `not-moved.json` 列出逐文件路径、字节与原因，后续退役前由主持核对。
+
+当前源包库、单次独立检查与历史迁移证据各自核对；保存这些材料不表示旧批处理、旧推送或自动回退流程仍可用。当前成品回退和实际公网确认见 [网站维护](maintenance.md)。

@@ -21,7 +21,7 @@ ids_cache = {}
 def ids_of(path):
     if path not in ids_cache:
         s = open(path, encoding="utf-8", errors="replace").read()
-        ids_cache[path] = set(H.unescape(x) for x in re.findall(r'\sid="([^"]+)"', s))
+        ids_cache[path] = set(H.unescape(x[1]) for x in re.findall(r'\bid\s*=\s*([\"\x27])(.*?)\1', s))
     return ids_cache[path]
 
 
@@ -43,13 +43,15 @@ def target_file(url_path):
 bad, skipped, total = [], 0, 0
 for rel, p in sorted(pages.items()):
     s = open(p, encoding="utf-8", errors="replace").read()
-    base = rel.rsplit("/", 1)[0] + "/"
-    for m in re.finditer(r'<a\b[^>]*?\s(?:href|data-href)="([^"]*)"', s):
-        href = H.unescape(m.group(1)).strip()
-        if not href or re.match(r'^(?:[a-z][a-z0-9+.-]*:|//)', href, re.I):
+    base = "https://wly0829.cn" + rel
+    # data-href on livebox divs is an action id, while anchor data-href is a URL.
+    pattern = r'<(?:a\b[^>]*?\s(?:href|data-href)|[a-z][\w:-]*\b[^>]*?\shref)\s*=\s*([\"\x27])(.*?)\1'
+    for m in re.finditer(pattern, s, re.I):
+        href = H.unescape(m.group(2)).strip()
+        u = urllib.parse.urlsplit(urllib.parse.urljoin(base, href))
+        if not href or u.scheme not in ('http', 'https') or u.hostname not in ('wly0829.cn', 'www.wly0829.cn'):
             continue
         total += 1
-        u = urllib.parse.urlsplit(urllib.parse.urljoin(base, href))
         path, frag = u.path, urllib.parse.unquote(u.fragment)
         if any(path == x for x in skip):
             skipped += 1

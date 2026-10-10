@@ -1,7 +1,7 @@
 """Exact object collection, live pins and uncertain provider responses."""
 import argparse
 import importlib.util
-import json
+import json, io
 import os
 from pathlib import Path
 import tempfile
@@ -9,7 +9,6 @@ import unittest
 import sys
 from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
-from urllib.error import HTTPError
 from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('retention', Path(__file__).resolve().parents[1] / 'scripts/oss-retention.py')
@@ -93,10 +92,14 @@ class RetentionTests(unittest.TestCase):
         retention.write(self.shared/'published.json', {'commit': 'old'})
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'command', return_value='[]'):
             with self.assertRaises(ValueError): retention.predecessor()
+        payload = b'{"release_id":"actual-old-ref"}'
+        identity = json.dumps({'release_id': 'actual-old-ref', 'manifest_sha256': retention.hashlib.sha256(payload).hexdigest()}).encode()
+        responses = [io.BytesIO(payload), io.BytesIO(identity)]
+        for response in responses: response.status = 200
         with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'command', side_effect=[json.dumps([{'id': 7, 'sha': 'new'}]), json.dumps([{'state': 'success'}])]), \
-             patch.object(retention, 'manifest', return_value={'release_id': 'new'}) as manifests:
-            self.assertEqual(retention.predecessor(), {'release_id': 'new'})
-        manifests.assert_called_once_with('new')
+             patch.object(retention, 'urlopen', side_effect=responses), \
+             patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)):
+            self.assertEqual(retention.predecessor(), {'release_id': 'actual-old-ref'})
 
     def test_retire_exact_pin_after_preparation_disappeared(self):
         pin_id = 'a'*64; pin_path = self.shared/'pins'/(pin_id+'.json')
@@ -126,27 +129,6 @@ class RetentionTests(unittest.TestCase):
             self.assertNotIn(self.obsolete, retention.rollback_keep(self.preparation, plan, 'first'))
             snapshot.write_text('{}')
             with self.assertRaisesRegex(ValueError, 'snapshot changed'): retention.rollback_keep(self.preparation, plan)
-
-    def test_local_rollback_checks_every_object_and_blocks_missing_or_same_size_changes(self):
-        output = self.root/'restored'; assets = self.root/'assets'; assets.mkdir()
-        body = assets/'x.js'; body.write_bytes(b'good')
-        restored = {'release_id': 'old', 'oss': {'objects': {'x.js': {'key': self.obsolete, 'bytes': 4, 'sha256': retention.digest(body)}}}}
-        retention.write(output/'release-manifest.json', restored)
-        args = argparse.Namespace(output=output, local_assets=assets, report=self.root/'rollback.json')
-        with patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)), \
-             patch.object(retention, 'urlopen') as remote:
-            self.assertEqual(retention.verify_rollback(args), 0)
-            body.write_bytes(b'evil'); self.assertEqual(retention.verify_rollback(args), 1)
-            args.local_assets = self.root/'missing'; self.assertEqual(retention.verify_rollback(args), 1)
-            self.assertEqual(retention.read(args.report)['checks']['x.js']['state'], 'missing')
-            remote.assert_not_called()
-            restored['oss']['objects']['x.js']['url'] = retention.BASE + '/' + self.obsolete
-            restored['oss']['verification'] = {'objects': {'x.js': {'headers': {'ETag': 'old'}}}}
-            retention.write(output/'release-manifest.json', restored); args.local_assets = None
-            for status, state in ((404, 'missing'), (403, 'unknown')):
-                remote.side_effect = HTTPError('https://example.invalid/x.js', status, 'unavailable', {}, None)
-                self.assertEqual(retention.verify_rollback(args), 1)
-                self.assertEqual(retention.read(args.report)['checks']['x.js']['state'], state)
 
 
 if __name__ == '__main__': unittest.main()

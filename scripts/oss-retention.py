@@ -5,10 +5,8 @@ import importlib.util
 import json
 import subprocess
 import sys
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
@@ -42,7 +40,8 @@ def shared():
 
 
 def manifest(ref):
-    return json.loads(command('git', 'show', ref + ':site-release/release-manifest.json'))
+    return json.loads(command('gh', 'api', 'repos/wlyaaaaa/wly0829.cn/contents/release-manifest.json?ref='+ref,
+                              '-H', 'Accept: application/vnd.github.raw+json'))
 
 
 def predecessor():
@@ -50,7 +49,24 @@ def predecessor():
     for deployment in deployments:
         statuses = json.loads(command('gh', 'api', 'repos/wlyaaaaa/wly0829.cn/deployments/' + str(deployment['id']) + '/statuses?per_page=1'))
         if statuses and statuses[0]['state'] == 'success':
-            return manifest(deployment['sha'])
+            with urlopen(Request('https://wly0829.cn/release-manifest.json', headers={'Cache-Control': 'no-cache'}), timeout=30) as response:
+                if response.status != 200:
+                    raise ValueError('Current public manifest GET is not 200')
+                payload = response.read()
+            with urlopen(Request('https://wly0829.cn/release-identity.json', headers={'Cache-Control': 'no-cache'}), timeout=30) as response:
+                if response.status != 200:
+                    raise ValueError('Current public identity GET is not 200')
+                identity = json.load(response)
+            current = json.loads(payload)
+            if identity.get('release_id') != current.get('release_id') or identity.get('manifest_sha256') != hashlib.sha256(payload).hexdigest():
+                raise ValueError('Current public deployment identity is inconsistent')
+            if current.get('finalized_dist'):
+                saved_path = shared()/'published.json'
+                saved = read(saved_path).get('manifest', {}) if saved_path.is_file() else {}
+                if saved.get('release_id') != current['release_id']:
+                    raise ValueError('Public finalized release lacks its same-release local HEAD verification')
+                current['oss']['verification'] = oss_contract().verify_manifest(saved)['oss']['verification']
+            return oss_contract().verify_manifest(current)
     local_manifest = ROOT / 'site-release' / 'release-manifest.json'
     if deployments or (shared() / 'published.json').exists() or (local_manifest.exists() and read(local_manifest).get('oss')):
         raise ValueError('No confirmed successful publication; supply its exact previous-manifest')
@@ -94,54 +110,6 @@ def rollback_keep(preparation, plan, commit=None):
     return {key for row in live.values() for key in row['objects']}
 
 
-def verify_rollback(args):
-    restored = read(Path(args.output) / 'release-manifest.json')
-    if not restored.get('oss'):
-        write(args.report, {'status': 'pass', 'objects_checked': 0, 'checks': {}})
-        return 0
-    oss_contract().verify_manifest(restored)
-    objects = restored['oss']['objects']
-    retry_path = getattr(args, 'retry_report', None)
-    prior = read(retry_path) if retry_path else {}
-    if prior and (prior.get('release_id') != restored['release_id'] or set(prior.get('checks', {})) != set(objects)):
-        raise ValueError('Rollback retry receipt belongs to another release')
-    def check(item):
-        rel, obj = item
-        previous = prior.get('checks', {}).get(rel, {})
-        if previous.get('state') == 'present' and previous.get('key') == obj['key']: return rel, previous
-        try:
-            if args.local_assets:
-                source = Path(args.local_assets) / rel
-                if not source.is_file():
-                    raise FileNotFoundError('Local rollback object is missing')
-                if source.stat().st_size != obj['bytes'] or digest(source) != obj['sha256']:
-                    raise ValueError('Local rollback object differs from its sealed bytes')
-            else:
-                old = {key.lower(): value for key, value in restored['oss']['verification']['objects'][rel]['headers'].items()}
-                request = Request(obj['url'], method='HEAD', headers={'Origin': 'https://wly0829.cn', 'Referer': 'https://wly0829.cn/', 'Accept-Encoding': 'identity'})
-                with urlopen(request, timeout=30) as response:
-                    headers = {key.lower(): value for key, value in response.headers.items()}
-                    fingerprint = 'x-oss-hash-crc64ecma' if old.get('x-oss-hash-crc64ecma') else 'etag'
-                    if (response.status != 200 or int(headers.get('content-length', -1)) != obj['bytes']
-                            or not old.get(fingerprint) or headers.get(fingerprint) != old[fingerprint]
-                            or headers.get('content-encoding', 'identity') != 'identity'
-                            or headers.get('access-control-allow-origin') not in ('*', 'https://wly0829.cn')):
-                        raise ValueError('Remote rollback object differs from its verified receipt')
-            return rel, {'key': obj['key'], 'state': 'present'}
-        except (OSError, ValueError) as error:
-            missing = isinstance(error, FileNotFoundError) or isinstance(error, HTTPError) and error.code in (404, 410)
-            return rel, {'key': obj['key'], 'state': 'missing' if missing else 'unknown', 'error': str(error)}
-    with ThreadPoolExecutor(max_workers=8) as pool:
-        checks = dict(pool.map(check, objects.items()))
-    passed = all(row['state'] == 'present' for row in checks.values())
-    write(args.report, {'status': 'pass' if passed else 'block', 'release_id': restored['release_id'],
-                        'method': 'local SHA256' if args.local_assets else 'anonymous HEAD receipt fingerprint',
-                        'objects_checked': len(checks), 'checks': checks,
-                        'observed_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
-                        'previous_receipt_sha256': digest(retry_path) if retry_path else None})
-    return 0 if passed else 1
-
-
 def require_lock(holder):
     locks = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Inspect', '-Name', 'wly0829-publication', '-Json'))
     active = [row for row in locks.get('locks', []) if row.get('active')]
@@ -156,6 +124,8 @@ def plan_pin(preparation):
     if plan.get('schema') != 'wly.oss-release-plan.v1' or plan.get('test_only') or plan['asset_base_url'] != BASE:
         raise ValueError('Only the existing Shanghai website generation is authorized')
     objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in plan['objects'].values()}
+    for key in plan.get('reference_keys', []):
+        objects.setdefault(key, {})
     if not objects or any(not key.startswith('releases/') for key in objects):
         raise ValueError('Invalid website object keys')
     pin_id = hashlib.sha256(str(preparation).encode('utf-8')).hexdigest()
@@ -222,15 +192,14 @@ def versions(cli, profile):
 
 def collect(args):
     current = manifest(args.commit)
-    if command('git', 'ls-remote', 'origin', 'refs/heads/main').split()[0] != args.commit:
-        raise ValueError('Production main changed; collection is incomplete')
+    if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
+        raise ValueError('Production site-dist changed; collection is incomplete')
     if current['rollback_ref'] != args.rollback or current['oss']['asset_base_url'] != BASE:
         raise ValueError('Publication or rollback identity does not match the existing target')
     keep = {row['key'] for row in current['oss']['objects'].values()}
     own, own_value, plan = plan_pin(args.preparation)
     rollback = rollback_keep(args.preparation, plan, args.commit)
     keep.update(rollback)
-    write(shared() / 'published.json', {'commit': args.commit, 'rollback': args.rollback})
     for path in (shared() / 'pins').glob('*.json'):
         value = read(path)
         if value.get('schema') != 'wly.oss-pin.v1' or value.get('bucket') != BUCKET or digest(value['plan']) != value['plan_sha256']:
@@ -274,17 +243,12 @@ def collect(args):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('operation', choices=('pin', 'collect', 'retire', 'verify-rollback'))
+    parser.add_argument('operation', choices=('pin', 'collect', 'retire'))
     for name in ('preparation', 'lock-holder', 'commit', 'rollback', 'cli', 'profile', 'pin-id', 'plan-sha256'):
         parser.add_argument('--' + name)
     parser.add_argument('--report', type=Path)
-    parser.add_argument('--output', type=Path)
-    parser.add_argument('--local-assets', type=Path)
-    parser.add_argument('--retry-report', type=Path)
     args = parser.parse_args()
     try:
-        if args.operation == 'verify-rollback':
-            return verify_rollback(args)
         require_lock(args.lock_holder)
         if args.operation == 'pin':
             print(pin(args.preparation))

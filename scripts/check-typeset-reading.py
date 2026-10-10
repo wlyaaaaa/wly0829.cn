@@ -1,7 +1,6 @@
 """Measure reading position across resizes in installed headless Chrome.
 
-Loopback preview only; no screenshots, pixel inspection or publication. A patched
-runtime preview derives each app from the legacy source recorded by the build.
+Loopback preview only; no screenshots, pixel inspection or publication.
 """
 import argparse
 import asyncio
@@ -106,7 +105,7 @@ async def run(args, base, build):
         except Exception as error:row['body_error']=str(error)
         responses.append(row)
     result={'schema':'wly.typeset-reading-check.v1',
-            'evidence_mode':'patched-runtime-preview' if args.patched_runtime else 'artifact',
+            'evidence_mode':'artifact',
             'root':str(args.root.resolve()),'release_id':json.loads(manifest.read_text('utf8'))['release_id'],
             'manifest_sha256':hashlib.sha256(manifest.read_bytes()).hexdigest(),
             'build_report_sha256':hashlib.sha256(args.build_report.read_bytes()).hexdigest(),
@@ -271,28 +270,19 @@ def main():
     ap.add_argument('--pages',nargs='+')
     ap.add_argument('--navigation-only',action='store_true',help='Run rapid resizes and navigation without the full position matrix')
     ap.add_argument('--desktop-height',type=int,default=900,help='Use 640 to cross the width breakpoint without changing CSS orientation')
-    ap.add_argument('--patched-runtime',action='store_true')
     ap.add_argument('--port',type=int,default=0,help='Fixed registered loopback origin for OSS CORS verification')
     ap.add_argument('--static-retry-once',action='store_true',help='08:52 acceptance: actual static HTTPS body retrieval with at most one retry, preserving response hashes and first failures')
     ap.add_argument('--browser-origin',help='Sealed production document origin for the actual loopback candidate')
     ap.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     args=ap.parse_args()
     if args.browser_origin and not args.static_retry_once:ap.error('--browser-origin requires sealed --static-retry-once mode')
+    build=json.loads(args.build_report.read_text('utf8'))
+    args.pages=[name for name in args.pages or build['pages']
+                if name.strip('/').lower() not in ('','home','homepage','index','index.html')
+                and urlsplit(build['pages'][name]['url']).path not in ('','/','/index.html')]
+    if not args.pages:ap.error('Home is excluded; select at least one non-home reading page')
     args.cache.mkdir(parents=True,exist_ok=True)
     for key in ['TEMP','TMP','TMPDIR']:os.environ[key]=str(args.cache.resolve())
-    build=json.loads(args.build_report.read_text('utf8'));overrides={}
-    if args.patched_runtime:
-        spec=importlib.util.spec_from_file_location('typeset_builder',HERE/'build-typeset-site.py')
-        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-        for entry in build['pages'].values():
-            source=next(Path(p) for p in entry['inputs'] if Path(p).name.startswith('app-') and Path(p).suffix=='.js')
-            html=args.root/(entry['url'].lstrip('/')+'index.html' if entry['url'].endswith('/') else entry['url'].lstrip('/'))
-            href=re.search(r'src="(/_typeset/runtime/app-[^"]+\.js)"',html.read_text('utf8'))[1]
-            app_text,app_proof=module.text_bound(source)
-            if app_proof!=entry['inputs'][str(source)]:raise ValueError('Legacy runtime source changed')
-            patched=module.patch_app(app_text).encode('utf8')
-            if href in overrides and overrides[href]!=patched:raise ValueError('Ambiguous app source')
-            overrides[href]=patched
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self,*a,**kw):super().__init__(*a,directory=str(args.root.resolve()),**kw)
         def log_message(self,*a):pass
@@ -304,8 +294,7 @@ def main():
             except (BrokenPipeError,ConnectionAbortedError,ConnectionResetError):pass
         def do_GET(self):
             path=self.path.split('?')[0]
-            body=overrides.get(path)
-            if path=='/__status':body=b'{"state":"unavailable","reason":"local_preview"}'
+            body=b'{"state":"unavailable","reason":"local_preview"}' if path=='/__status' else None
             if body is None:return super().do_GET()
             self.send_response(200);self.send_header('Content-Type','text/javascript' if path.endswith('.js') else 'application/json')
             self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body)
@@ -313,7 +302,7 @@ def main():
     thread=threading.Thread(target=server.serve_forever,daemon=True);thread.start()
     try:
         result=asyncio.run(run(args,'http://127.0.0.1:'+str(server.server_port),build))
-        result['runtime_sha256']={url:hashlib.sha256(body).hexdigest() for url,body in overrides.items()}
+        result['runtime_sha256']={}
         unchanged=hashlib.sha256((args.root/'release-manifest.json').read_bytes()).hexdigest()==result['manifest_sha256']
         actual_by_url={}
         for response in result['responses']:
@@ -326,8 +315,8 @@ def main():
             if not actual_html or any(row['status']!=200 or row.get('sha256')!=entry['html_sha256'] for row in actual_html):
                 response_failures.append({'url':entry['url'],'kind':'html','responses':actual_html})
             for script in entry['scripts']:
-                script['overridden']=script['url'] in overrides
-                expected=result['runtime_sha256'].get(script['url'],script['sha256'])
+                script['overridden']=False
+                expected=script['sha256']
                 actual=actual_by_url.get(script['response_url'],[])
                 script['expected_served_sha256']=expected
                 script['observed_sha256']=[row.get('sha256') for row in actual]

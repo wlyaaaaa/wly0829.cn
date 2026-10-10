@@ -27,7 +27,6 @@ class PublicationSpeedTests(unittest.TestCase):
         self.put('projects/demo/index.html', '<h1 id="anchor">Original page</h1>')
         self.put('404.html', '<h1>Missing page</h1>'); self.put('assets/main.js', 'void 1;')
         self.refresh(); self.counter = 0
-        self.previous = self.root/'previous-content.json'; h.validate_content(self.source, self.previous)
 
     def put(self, relative, body):
         target = self.source/relative; target.parent.mkdir(parents=True, exist_ok=True)
@@ -40,40 +39,11 @@ class PublicationSpeedTests(unittest.TestCase):
             'accepted_pages':{'/':{}, '/projects/demo/':{}, '/404.html':{}}, 'baseline_files':{}, 'release_overlay':{}}
         h.write(self.source/h.MANIFEST, self.manifest)
 
-    def check(self, previous=None):
-        self.counter += 1
-        with patch.object(h.builder, 'validate', wraps=h.builder.validate) as scan:
-            result = h.validate_content(self.source, self.root/('content-'+str(self.counter)+'.json'), previous_report=previous)
-        return result, scan.call_args.kwargs.get('verified_files') or {}
 
-    def test_matching_content_reuses_files_but_keeps_complete_inventory(self):
-        result, retained = self.check(self.previous)
-        self.assertIn('index.html', retained); self.assertEqual(result['output_files'], h.inventory(self.source) | {
-            h.MANIFEST:{'sha256':h.digest(self.source/h.MANIFEST), 'bytes':(self.source/h.MANIFEST).stat().st_size}})
 
-    def test_new_credential_is_blocked_after_a_pass(self):
-        self.put('assets/main.js', 'const value="'+('sk-'+'X'*24)+'";'); self.refresh()
-        with self.assertRaisesRegex(ValueError, 'content gate failed'): self.check(self.previous)
 
-    def test_manifest_changes_scan_and_invalid_previous_checksum_runs_full(self):
-        self.manifest['rollback_ref'] = 'metadata'; h.write(self.source/h.MANIFEST, self.manifest)
-        result, retained = self.check(self.previous)
-        self.assertNotIn(h.MANIFEST, retained)
-        data = h.read(self.previous); data['output_files_sha256'] = '0'*64; h.write(self.previous, data)
-        self.assertFalse(self.check(self.previous)[1])
 
-    def test_checker_change_and_full_switch_scan_every_file(self):
-        with patch.object(h, 'checker_version', return_value='0'*64):
-            self.assertFalse(self.check(self.previous)[1])
-        with patch.dict(os.environ, {'WLY_RELEASE_FULL':'1'}):
-            self.assertFalse(self.check(self.previous)[1])
 
-    def test_missing_target_and_removed_anchor_still_block(self):
-        target = self.source/'projects/demo/index.html'
-        self.put('projects/demo/index.html', '<h1>Anchor removed</h1>'); self.refresh()
-        with self.assertRaisesRegex(ValueError, 'content gate failed'): self.check(self.previous)
-        target.rename(self.root/'removed-target.html'); self.refresh()
-        with self.assertRaisesRegex(ValueError, 'content gate failed'): self.check(self.previous)
 
     def online(self, previous=None, retry=None, bad_identity=False):
         self.counter += 1; output = self.root/('online-'+str(self.counter)+'.json')
@@ -101,53 +71,10 @@ class PublicationSpeedTests(unittest.TestCase):
         self.assertEqual(current['retried_files'], current['checked_files'])
         self.assertTrue(current['previous_report_fallback_reason'])
 
-    def test_automatic_readback_baseline_requires_current_passing_identity(self):
-        import subprocess
-        source = (ROOT/'scripts/publish-typeset.ps1').read_text('utf-8-sig')
-        helper = source[source.index('function ResolveReadbackBaseline'):source.index('function ConfirmReadback')]
-        script = self.root/'readback-baseline.ps1'
-        script.write_text('param([string]$CachePath,[string]$Identity)\n$ErrorActionPreference="Stop"; $online=$Identity|ConvertFrom-Json\nfunction ReadJson([string]$Path){Get-Content -Raw -LiteralPath $Path|ConvertFrom-Json}\nfunction Invoke-RestMethod{return $online}\n'+helper+'\nResolveReadbackBaseline $CachePath|ConvertTo-Json -Compress\n', encoding='utf8')
-        first, unused, cache = self.online()
-        identity = json.dumps({'release_id':first['release_id'], 'manifest_sha256':first['manifest_sha256']})
-        for cache_path, fingerprint, mode in ((cache, first['manifest_sha256'], 'candidate_previous'), (cache, '0'*64, 'full'), (self.root/'absent.json', None, 'full')):
-            first['manifest_sha256'] = fingerprint
-            h.write(cache, first)
-            result = json.loads(subprocess.check_output(['pwsh', '-NoProfile', '-File', str(script), str(cache_path), identity], text=True))
-            self.assertEqual(result['mode'], mode)
-            if mode == 'full': self.assertTrue(result['reason'])
-
     def test_same_release_id_changed_manifest_rejects_old_retry(self):
         first, unused, old = self.online()
         self.manifest['rollback_ref'] = 'new-metadata'; h.write(self.source/h.MANIFEST, self.manifest)
         with self.assertRaisesRegex(ValueError, 'different release'): self.online(retry=old)
-
-    def test_fail_fast_online_keeps_partial_warnings_but_rejects_unavailable(self):
-        import subprocess
-        source = (ROOT/'scripts/publish-typeset.ps1').read_text('utf-8-sig')
-        helpers = source[source.index('function ConfirmOnlineDom'):source.index('function RecoverConfirmedFailure')]
-        script = self.root/'fail-fast.ps1'
-        script.write_text(r'''param([string]$Fixture,[string]$Mode,[bool]$Fast)
-$ErrorActionPreference='Stop';$FailFastOnline=$Fast;$AstroPreparation='mock';$RunRoot=$PSScriptRoot;$repoRoot=$PSScriptRoot;$receipt=@{selected_pages=@('/computer-access/')};$ReadbackConfirmationRounds=3;$ReadbackRetrySeconds=0;$script:calls=0
-function HoldPublicationLock{}
-function ReadJson($Path){Get-Content -LiteralPath $Path -Raw|ConvertFrom-Json}
-function python{$script:calls++;$out=$args[[array]::IndexOf($args,'--output')+1];[IO.File]::WriteAllText($out,$Fixture);$global:LASTEXITCODE=0}
-''' + helpers + r'''
-$gate=if($Mode -eq 'dom'){ConfirmOnlineDom 'probe'}else{ConfirmReadback $PSScriptRoot 'probe'}
-@{status=$gate.status;calls=$script:calls;provider_status=$gate.provider_status;warnings=$gate.warnings}|ConvertTo-Json -Depth 20 -Compress
-''', encoding='utf8')
-        partial = {'status':'partial','blocker_count':0,'records':[{'issues':[{'kind':'known-layout','known':True}]}]}
-        cases = [(partial, 'dom', True, 'pass', 1),
-                 ({**partial, 'records':[{'issues':[{'kind':'check-error'}]}]}, 'dom', True, 'unknown', 1),
-                 ({**partial, 'records':[{'dependency_unavailable':True,'issues':[]}]}, 'dom', True, 'unknown', 1),
-                 ({**partial, 'records':[{'issues':[{'kind':'new-layout','known':False}]}]}, 'dom', True, 'unknown', 1),
-                 ({'status':'unknown','issues':[]}, 'bytes', True, 'unknown', 1),
-                 ({'status':'unknown','issues':[]}, 'bytes', False, 'unknown', 3)]
-        for proof, mode, fast, status, calls in cases:
-            encoded = '$true' if fast else '$false'
-            command = f"& '{script.as_posix()}' -Fixture '{json.dumps(proof)}' -Mode '{mode}' -Fast {encoded}"
-            result = json.loads(subprocess.check_output(['pwsh','-NoProfile','-Command',command], text=True))
-            self.assertEqual((result['status'], result['calls']), (status, calls))
-            if status == 'pass': self.assertEqual(result['provider_status'], 'partial'); self.assertTrue(result['warnings'])
 
     def test_small_identity_mismatch_reads_and_checks_full_manifest(self):
         first, calls, unused = self.online(bad_identity=True)
