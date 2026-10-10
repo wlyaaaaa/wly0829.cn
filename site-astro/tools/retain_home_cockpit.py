@@ -1,4 +1,4 @@
-"""把指定候选站的首页、驾驶舱及实际依赖原样带进 Astro；不修改候选站。
+"""把指定候选站的首页、驾驶舱、授权页及实际依赖原样带进 Astro；不修改候选站。
 用法：python tools/retain_home_cockpit.py <候选站构建目录>
 生成物不入库；先逐字节复制原依赖，再从审定 master 生成首页换色图片。
 """
@@ -63,7 +63,8 @@ def references(text, bases):
 output = ROOT / 'src/chrome/retained'
 output.mkdir(parents=True, exist_ok=True)
 pages = {}
-for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html')]:
+for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html'),
+                  ('computer-access', 'computer-access/index.html')]:
     source = SOURCE / rel
     data = source.read_bytes()
     (output / f'{page}.html').write_bytes(data)
@@ -72,6 +73,7 @@ for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html')]:
 
 # 这些独立动效包还通过运行时拼接路径取图；保留它们完整的原生包边界。
 for rel in ['_shared/home-living', '_shared/home-comic', '_living/cockpit',
+            '_living/computer-access',
             '_typeset/cockpit', '_typeset/home-highlights', '_living/_engine']:
     for path in (SOURCE / rel).rglob('*'):
         copy_file(path)

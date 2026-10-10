@@ -1,12 +1,13 @@
 import home from './chrome/retained/home.html?raw';
 import cockpit from './chrome/retained/cockpit.html?raw';
+import access from './chrome/retained/computer-access.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
 import homeCta from '../public/_home-cockpit/home-cta.css?raw';
 import albumRuntime from '../public/_album/astro-runtime.json';
 
-// 这两页保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
-export function retainedPage(page: 'home' | 'cockpit') {
-  let html = page === 'home' ? home : cockpit;
+// 保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
+export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
+  let html = page === 'home' ? home : page === 'cockpit' ? cockpit : access;
   html = html.replace(/<script[^>]*data-album-inline[^>]*>.*?<\/script>/s, () => `<script data-album-inline>${albumRuntime.source}</script>`)
     .replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css);
   // 编码先于含中文的同步脚本；慢网和无 JS 也保持原图正确的横竖比例。
@@ -34,8 +35,10 @@ export function retainedPage(page: 'home' | 'cockpit') {
       + 'linear-gradient(165deg, #f2fbf5 0%, #fbfefc 55%, #f7fcf9 100%)';
     html = html.replace('<meta charset="utf-8">', `<meta charset="utf-8"><style data-retained-native-layout>${native}${critical}html:not([data-home-opening="pending"]) .image-loading-wrap,#content>.screen:not(#home-01) .image-loading-wrap{background:${watercolor}!important}</style>`);
   }
-  const style = page === 'home' ? 'time-labels.css' : 'cockpit-offline.css';
-  html = html.replace('</head>', `<link rel="stylesheet" href="/_home-cockpit/${style}"></head>`);
+  if (page !== 'computer-access') {
+    const style = page === 'home' ? 'time-labels.css' : 'cockpit-offline.css';
+    html = html.replace('</head>', `<link rel="stylesheet" href="/_home-cockpit/${style}"></head>`);
+  }
   if (page === 'home') html = html.replace('</head>', `<style data-home-cta-layout>${homeCta}</style></head>`);
   if (page === 'cockpit') html = html.replace('</body>', '<script src="/_home-cockpit/cockpit-offline.js" defer></script></body>');
   return html;
