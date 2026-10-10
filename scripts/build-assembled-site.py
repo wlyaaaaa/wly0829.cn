@@ -462,6 +462,9 @@ def nested_refs(value, navigation_enabled=True):
                 for a, b in v.items(): yield a, False; yield b, False
             elif k == 'leaves':
                 for a in v: yield a, False
+            elif k == 'today_river_assets':
+                # The river runtime selects these named images dynamically.
+                for a in v.values(): yield a, False
             # Shared component definitions include navigation for many other pages.
             # Their assets are all checked; rendered links are checked from HTML.
             else: yield from nested_refs(v,navigation_enabled and k != 'shared')

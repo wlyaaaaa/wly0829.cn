@@ -44,6 +44,21 @@ class HybridRelease(unittest.TestCase):
         out,manifest=self.assemble()
         self.assertEqual((out/'assets/hero-mask.png').read_bytes(),(self.new/'assets/hero-mask.png').read_bytes())
         self.assertIn('assets/hero-mask.png',manifest['files'])
+    def test_dynamic_river_images_survive_assembly_and_oss_rewriting(self):
+        assets={name:'/cockpit/assets/today-river-assets2/'+name for name in
+            ['river.webp','mask.png',*[f'boat{i}.webp' for i in range(4)],
+             *[f'bird-{pose}.webp' for pose in ['idle','look','tilt','sing','sleep']]]}
+        self.put(self.new,'index.html','<script id="page-data" type="application/json">'+json.dumps({'today_river_assets':assets})+'</script>')
+        for name,url in assets.items(): self.put(self.new,url.lstrip('/'),'original river asset '+name)
+        out,manifest=self.assemble()
+        oss=h.oss_module(); rewrite=oss.Rewriter(manifest['files'],'https://example.oss.invalid','releases/one','https://wly0829.cn',version=6)
+        rewritten=rewrite.rewrite((out/'index.html').read_bytes(),'index.html')
+        for url in assets.values():
+            rel=url.lstrip('/')
+            self.assertEqual((out/rel).read_bytes(),(self.new/rel).read_bytes())
+            self.assertIn(('https://example.oss.invalid/releases/one/'+rel).encode(),rewritten)
+        self.assertEqual(rewrite.references['index.html'],set(url.lstrip('/') for url in assets.values()))
+        self.assertFalse(rewrite.missing)
     def test_candidate_tamper_is_rejected(self):
         proof=h.inventory(self.new);self.put(self.new,'assets/nested.js','replaced')
         with self.assertRaisesRegex(ValueError,'changed after preparation'):self.assemble(candidate_files=proof)
