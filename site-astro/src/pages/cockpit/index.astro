@@ -1,4 +1,70 @@
 ---
-import { retainedPage } from '../../retained-page';
+// 驾驶舱：Astro 原生页（O6 裁定的 b 做法），外壳、页头、目录条、页尾和全站一样。
+// 首帧用构建时读到的最近一份数据画好最终版式；读不到就用仓库里的上一份（src/cockpit/snapshot.json），都标明读取时间。
+// 浏览器里 src/cockpit/client.js 读新数据、原地换字，不换版式。
+import Site from '../../layouts/Site.astro';
+import fallback from '../../cockpit/snapshot.json';
+import { normalize } from '../../cockpit/model.js';
+import { asView } from '../../cockpit/full-adapter.js';
+import { page } from '../../cockpit/render.js';
+import '../../cockpit/cockpit.css';
+import '../../cockpit/refresh-button.css';
+import riverJs from '../../../../scripts/today-river.js?url&no-inline';
+import riverCss from '../../../../scripts/today-river.css?url';
+
+// 精简视图；边缘函数还没转发 view 时 live 回全量，asView 照样认
+const ENDPOINTS = ['https://live.wly0829.cn/computer-access/state?view=cockpit', 'https://mcp.wly0829.cn/computer-access/api/status?view=cockpit'];
+async function latest() {
+  for (const url of ENDPOINTS) {
+    try {
+      const r = await fetch(url, { headers: { Origin: 'https://wly0829.cn' }, signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const v = asView(await r.json());
+      if (normalize(v).ok) return v;
+    } catch { /* 用下一个，最后用仓库里的上一份 */ }
+  }
+  return fallback;
+}
+const snapshot = await latest();
+const view = normalize(snapshot);
+
+// 项目名 → 项目页地址（项目页的唯一来源是 sources/pages/*/page.json）
+const authorPages = import.meta.glob('../../../../sources/pages/*/page.json', { eager: true, import: 'default' }) as Record<string, any>;
+// 接口里的项目显示名有的和页面标题不同，按驾驶舱页面登记里的 live_anchors（api_project ↔ site_title）对上
+const byTitle = Object.fromEntries(Object.values(authorPages).filter((p: any) => ['project', 'frozen'].includes(p?.kind) && p.title && p.url).map((p: any) => [p.title, p.url]));
+const anchors = (authorPages['../../../../sources/pages/cockpit/page.json']?.registry?.live_anchors || []) as any[];
+const projectUrls = { ...byTitle, ...Object.fromEntries(anchors.filter((a) => a.api_project && byTitle[a.site_title]).map((a) => [a.api_project, byTitle[a.site_title]])) };
+
+// 今天的河的图（河脚本从 #page-data 的 today_river_assets 取地址）
+const riverFiles = import.meta.glob('../../../../sources/creative/today-river/assets2/*.{webp,png}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const riverAssets = Object.fromEntries(Object.entries(riverFiles).map(([path, url]) => [path.split('/').pop(), url]));
+
+// 驾驶舱的标题图、插画、图标（sources/assets/cockpit/）
+const imgFiles = import.meta.glob('../../../../sources/assets/cockpit/*.png', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const img = Object.fromEntries(Object.entries(imgFiles).map(([path, url]) => [path.split('/').pop(), url]));
+
+const toc = [
+  { id: 'top', label: '开头' }, { id: 'need-you', label: '要我处理' }, { id: 'tasks', label: '自动任务' }, { id: 'computer', label: '电脑' },
+  { id: 'backup', label: '备份和云端' }, { id: 'projects', label: '项目' }, { id: 'today', label: '今天' },
+];
+const html = page(view, { now: new Date(), offline: false, projectUrls, img });
+const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
+const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
 ---
-<Fragment set:html={retainedPage('cockpit')} />
+<Site title="驾驶舱" kind="cockpit" url="/cockpit/" page="cockpit" toc={toc}>
+  <link rel="stylesheet" href={riverCss} />
+  <div class="cp-page"><Fragment set:html={html} /></div>
+  <div class="cockpit-refresh-wrap">
+    <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新驾驶舱数据" title="立刻重读电脑">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>
+    </button>
+    <span class="cockpit-refresh-note" data-cockpit-refresh-note role="status" hidden></span>
+  </div>
+  <script is:inline id="cockpit-boot" type="application/json" set:html={boot}></script>
+  <script is:inline type="module" set:html={`(()=>{const n=document.getElementById('page-data');if(!n)return;try{const d=JSON.parse(n.textContent);d.today_river_assets=${safe(riverAssets)};n.textContent=JSON.stringify(d);}catch{}})();`}></script>
+  <script is:inline type="module" src={riverJs}></script>
+</Site>
+<script>
+  import '../../cockpit/client.js';
+  import '../../cockpit/refresh-button.js';
+</script>
