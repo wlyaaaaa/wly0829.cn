@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "857a4662ee19358a9f4a259436f51d58d3b924eb67a1c5c28fb323600a3f34f3",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -1015,12 +1015,26 @@
       748,
       182
      ],
+     "row": "top",
+     "width": "47%",
      "text_ref": "AI 规则与技能基座"
     },
     {
      "type": "live_strip",
      "text_ref": "现在",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "top"
+    },
+    {
+     "type": "prose",
+     "row": "top",
+     "text_ref": "我给 AI 定的规矩"
+    },
+    {
+     "type": "illustration",
+     "row": "top",
+     "width": "53%",
+     "asset": "proto:a01-hero-h"
     },
     {
      "type": "stat_card",
@@ -1032,19 +1046,6 @@
       "proto:a01-ic4"
      ],
      "text_ref": "160次"
-    },
-    {
-     "type": "prose",
-     "row": "top",
-     "text_ref": "我给 AI 定的规矩",
-     "width": "47%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "top",
-     "width": "53%",
-     "asset": "proto:a01-hero-h"
     }
    ],
    "notes": "首屏：标题和介绍在左、插画在右；四张数字卡；现在横条。示范规格（主工程师写）"

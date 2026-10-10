@@ -316,7 +316,7 @@
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
   "sha256": "699d46612ea53e70681fbdfca5f721eb154544c877d65f068dddd0958f86f49c",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -351,8 +351,8 @@
      "text_ref": "PDF 逐页检查",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "47%"
     },
     {
      "type": "live_strip",
@@ -368,16 +368,13 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "intro"
     },
     {
      "type": "prose",
      "text_ref": "把 PDF 一页页摊成图片",
      "align": "left",
-     "row": "intro",
-     "width": "47%",
-     "row_fit_illustration": true
+     "row": "intro"
     },
     {
      "type": "illustration",

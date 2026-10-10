@@ -526,7 +526,7 @@
  "source": {
   "page": "sources/pages/personal-materials/page.json",
   "sha256": "f4ccda04c156f606fa89eb1a457b156e51f0470ee64ee7532d809b2474c0b9e3",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -574,6 +574,8 @@
      "type": "chapter_title",
      "text_ref": "个人材料查找",
      "align": "left",
+     "row": "hero",
+     "width": "55%",
      "size": "large",
      "asset": "personal-materials\\personal-materials-01-title-01.png",
      "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-personal-materials-01-h.png",
@@ -588,12 +590,33 @@
      "type": "prose",
      "text_ref": "记得有份文件，想不起放在哪：说个大概，AI找出那一份原件，再翻到要看的那一页。",
      "size": "large",
-     "bold": true
+     "bold": true,
+     "row": "hero"
     },
     {
      "type": "live_box",
      "text_ref": "现在每天17:10同步",
-     "slots": 1
+     "slots": 1,
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
+     "row": "hero"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "row": "hero",
+     "whole_block": true
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -614,27 +637,6 @@
      "type": "prose",
      "text_ref": "截至10月9日",
      "align": "right"
-    },
-    {
-     "type": "prose",
-     "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "source_text_card",
-     "text_ref": "真实的一次9月25日，我让AI把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这46个文件（约1GB）逐个",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "none",
-     "row": "hero",
-     "whole_block": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",

@@ -21,6 +21,13 @@
         "row": "top"
       },
       {
+        "type": "line_legend",
+        "text_ref": "线上传的东西分四种",
+        "layout": "rows",
+        "columns": 2,
+        "row": "top"
+      },
+      {
         "type": "illustration",
         "row": "top",
         "width": "47%",
@@ -28,12 +35,6 @@
         "index": 0,
         "size": "large",
         "target_width": "100%"
-      },
-      {
-        "type": "line_legend",
-        "text_ref": "线上传的东西分四种",
-        "layout": "rows",
-        "columns": 2
       },
       {
         "type": "action_button",

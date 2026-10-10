@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T10:58:15+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -851,12 +851,25 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "50%",
      "text_ref": "AI工具配置管理"
     },
     {
      "type": "live_strip",
      "text_ref": "现在升级观察（Codex里按需启动的自动任务，平时停着）",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "选好模型，打开原版AI编程工具来用。"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "stat_card",
@@ -865,18 +878,6 @@
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "21条路线5种原版工具配云端和本机模型；其中2条连的本机"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "选好模型，打开原版AI编程工具来用。",
-     "width": "50%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%"
     },
     {
      "type": "action_button",

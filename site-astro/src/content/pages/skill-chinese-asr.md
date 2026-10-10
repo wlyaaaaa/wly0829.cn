@@ -99,7 +99,7 @@
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
   "sha256": "1c191eb99a9a5ddd4665428c5af57d01601684bf0c2d31dc6fda9e83d66fa77a",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -133,9 +133,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "中文语音转写技能",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "70%",
+     "text_ref": "中文语音转写技能"
     },
     {
      "type": "live_strip",
@@ -151,19 +151,21 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "illustration",
-     "row": "k1a-head",
-     "illustration": "outside",
-     "align": "right",
-     "width": "auto"
+     "row": "hero"
     },
     {
      "type": "prose",
+     "row": "hero",
      "text_ref": "技能名"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "30%",
+     "illustration": "outside",
+     "size": "banner",
+     "target_width": 259,
+     "align": "right"
     },
     {
      "type": "content_card",

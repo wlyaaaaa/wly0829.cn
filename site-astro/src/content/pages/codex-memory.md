@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "0ac0aaed501cf35caafc7d5d04ccbe4b6c295018b21366c9aeb38cc10a70ac52",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -750,12 +750,31 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "AI备份"
+     "text_ref": "AI备份",
+     "row": "hero",
+     "width": "58%"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我在用的五个AI工具，配置、记忆、对话各备没备、为什么，都在这一页。真正要单独备的只有一样：Co",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "width": "42%"
     },
     {
      "type": "stat_card",
@@ -769,24 +788,6 @@
      "type": "prose",
      "align": "right",
      "text_ref": "截至10月9日"
-    },
-    {
-     "type": "action_button",
-     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
-     "row": "hero",
-     "width": "58%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "prose",
-     "text_ref": "我在用的五个AI工具，配置、记忆、对话各备没备、为什么，都在这一页。真正要单独备的只有一样：Co",
-     "row": "hero"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "hero",
-     "width": "42%"
     },
     {
      "type": "prose",

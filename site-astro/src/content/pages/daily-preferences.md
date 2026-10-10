@@ -933,7 +933,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
-  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -975,8 +975,8 @@
      "columns": 1,
      "illustration": "none",
      "connector": "none",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "48%"
     },
     {
      "type": "live_strip",
@@ -992,8 +992,27 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "让 AI 了解",
+     "align": "left",
+     "size": "medium",
+     "columns": 1,
+     "illustration": "none",
+     "connector": "none",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "align": "left",
+     "size": "large",
+     "columns": 1,
+     "illustration": "outside",
+     "connector": "none",
+     "row": "hero",
+     "width": "52%"
     },
     {
      "type": "stat_card",
@@ -1013,28 +1032,6 @@
      "columns": 1,
      "illustration": "none",
      "connector": "none"
-    },
-    {
-     "type": "prose",
-     "text_ref": "让 AI 了解",
-     "align": "left",
-     "size": "medium",
-     "columns": 1,
-     "illustration": "none",
-     "connector": "none",
-     "row": "hero",
-     "width": "48%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "align": "left",
-     "size": "large",
-     "columns": 1,
-     "illustration": "outside",
-     "connector": "none",
-     "row": "hero",
-     "width": "52%"
     },
     {
      "type": "content_card",

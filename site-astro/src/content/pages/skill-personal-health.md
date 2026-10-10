@@ -112,7 +112,7 @@
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
   "sha256": "a3de3e277c2f7efbd1fc95bfac2c6c6f55dbc9c9ff6b07a638192046a6fa2c45",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -139,6 +139,8 @@
    "blocks": [
     {
      "type": "chapter_title",
+     "row": "hero",
+     "width": "60%",
      "align": "left",
      "size": "large",
      "text_ref": "健康问题",
@@ -149,9 +151,7 @@
       78,
       596,
       287
-     ],
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     ]
     },
     {
      "type": "live_strip",
@@ -167,15 +167,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "我问和自己身体有关的问题",
-     "width": "60%",
-     "row_fit_illustration": true
+     "text_ref": "我问和自己身体有关的问题"
     },
     {
      "type": "illustration",

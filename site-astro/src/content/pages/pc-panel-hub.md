@@ -797,7 +797,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -846,10 +846,13 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "48%",
      "text_ref": "双屏信息中心"
     },
     {
      "type": "prose",
+     "row": "hero",
      "text_ref": "抬眼就知道",
      "size": "large",
      "bold": true
@@ -861,7 +864,19 @@
       "机箱屏画面"
      ],
      "text_ref": "现在",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "机箱里有两块"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "width": "52%"
     },
     {
      "type": "stat_card",
@@ -870,19 +885,6 @@
      "illustration": "left_inside",
      "card_count": 4,
      "text_ref": "1 秒一刷"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "机箱里有两块",
-     "width": "48%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "hero",
-     "width": "52%"
     },
     {
      "type": "action_button",

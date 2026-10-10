@@ -1067,7 +1067,7 @@
  "source": {
   "page": "sources/pages/password-center/page.json",
   "sha256": "0e90c5fcf8aa14ee49c8270b62b2542700b4f00ec73e89cc810230b384706e30",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -1110,6 +1110,8 @@
    "blocks": [
     {
      "type": "chapter_title",
+     "row": "hero",
+     "width": "47%",
      "align": "left",
      "size": "large",
      "text_ref": "密码中心"
@@ -1117,22 +1119,13 @@
     {
      "type": "live_strip",
      "text_ref": "现在",
-     "frame_mode": "plain"
-    },
-    {
-     "type": "stat_card",
-     "columns": 2,
-     "illustration": "left_inside",
-     "icons": "auto",
-     "numbered_pipe": true,
-     "text_ref": "14 种"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "这台电脑上所有秘密的保险柜",
-     "width": "47%",
-     "row_fit_illustration": true
+     "text_ref": "这台电脑上所有秘密的保险柜"
     },
     {
      "type": "action_button",
@@ -1145,6 +1138,14 @@
      "width": "53%",
      "illustration": "outside",
      "size": "large"
+    },
+    {
+     "type": "stat_card",
+     "columns": 2,
+     "illustration": "left_inside",
+     "icons": "auto",
+     "numbered_pipe": true,
+     "text_ref": "14 种"
     }
    ],
    "notes": "使用已批准01-h：左标题/两段介绍/两按钮，右卡外保险柜插画。中间四数字卡一排，原图每卡左插画、右大编号与定稿数字，不是编号流程；无丝带。现在横条两个空槽+按钮。steps.cols须按统计卡排且保留定稿编号，不得删字。",

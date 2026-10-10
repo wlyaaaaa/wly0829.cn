@@ -146,7 +146,7 @@
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
   "sha256": "314b330bbe7b499851d2a97c170d933d91b099b1c68118dc2f9dce216c0e7b17",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -184,16 +184,16 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "大标题：邮件、云盘和待办",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "55%",
+     "text_ref": "大标题：邮件、云盘和待办"
     },
     {
      "type": "prose",
+     "row": "hero",
      "size": "large",
      "bold": true,
-     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go",
-     "row": "k1a-head"
+     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
     },
     {
      "type": "live_strip",
@@ -209,15 +209,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个",
-     "width": "55%",
-     "row_fit_illustration": true
+     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个"
     },
     {
      "type": "illustration",

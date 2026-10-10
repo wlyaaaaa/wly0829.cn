@@ -114,7 +114,7 @@
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
   "sha256": "c156b7b972f58a17b92bd2c701a6e72d57ab2f7f7db9ff92e81c7961861e318a",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -149,8 +149,8 @@
      "align": "left",
      "size": "large",
      "text_ref": "讲给我听",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "52%"
     },
     {
      "type": "live_strip",
@@ -166,12 +166,17 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "技能名"
     },
     {
      "type": "illustration",
-     "row": "k1a-head",
+     "row": "hero",
+     "width": "46%",
      "index": 0,
      "illustration": "outside",
      "motion_asset_sha256": "45119e65957d2caee38c7f30a533e33b44f58def734b45218225885dce1fd109",
@@ -185,13 +190,7 @@
         0.038461538461538464
        ]
       }
-     ],
-     "width": "auto",
-     "align": "right"
-    },
-    {
-     "type": "prose",
-     "text_ref": "技能名"
+     ]
     },
     {
      "type": "content_card",

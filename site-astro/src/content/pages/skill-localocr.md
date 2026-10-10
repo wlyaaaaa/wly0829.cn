@@ -122,7 +122,7 @@
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
   "sha256": "1a43b19b43358cc669cbb755aa15e1d9b6e1af08cbf88ddea0657ab14a01f999",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -157,8 +157,8 @@
      "text_ref": "本地文字识别",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "49%"
     },
     {
      "type": "live_strip",
@@ -174,15 +174,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "intro"
     },
     {
      "type": "prose",
      "text_ref": "要逐字准确",
-     "row": "intro",
-     "width": "49%",
-     "row_fit_illustration": true
+     "row": "intro"
     },
     {
      "type": "illustration",

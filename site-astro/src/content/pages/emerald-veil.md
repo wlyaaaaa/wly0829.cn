@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -683,10 +683,13 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "55%",
      "text_ref": "屏保与壁纸"
     },
     {
      "type": "prose",
+     "row": "hero",
      "size": "large",
      "bold": true,
      "text_ref": "电脑闲6分钟，主屏飘起Windows自带的泡泡。"
@@ -694,7 +697,19 @@
     {
      "type": "live_strip",
      "text_ref": "现在常驻程序现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "桌上的主屏是一块OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6分钟没"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -708,19 +723,6 @@
      ],
      "illustration": "top_inside",
      "text_ref": "6 分钟"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "桌上的主屏是一块OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6分钟没",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",

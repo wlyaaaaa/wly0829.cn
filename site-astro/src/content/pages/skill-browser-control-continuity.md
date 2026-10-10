@@ -169,7 +169,7 @@
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
   "sha256": "5ce153372803f9f3cec74fa01271340b600eb4787cfe691074458d9318954b4e",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -204,8 +204,8 @@
      "align": "left",
      "size": "large",
      "text_ref": "大标题：网页上的事接着办",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "49%"
     },
     {
      "type": "live_strip",
@@ -221,15 +221,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话：",
-     "width": "49%",
-     "row_fit_illustration": true
+     "text_ref": "一句话："
     },
     {
      "type": "illustration",

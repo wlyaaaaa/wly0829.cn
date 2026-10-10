@@ -675,7 +675,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:35+08:00"
  }
 }
 ---
@@ -717,6 +717,8 @@
      "type": "chapter_title",
      "text_ref": "微信聊天读取",
      "align": "left",
+     "row": "hero",
+     "width": "55%",
      "size": "large",
      "asset": "wechatdirect\\wechatdirect-01-title-01.png",
      "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\shortjob\\v2\\state\\fixer\\b1-wechatdirect-01-h.png",
@@ -725,9 +727,7 @@
       26,
       717,
       197
-     ],
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     ]
     },
     {
      "type": "live_strip",
@@ -743,8 +743,17 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我问AI一件微信里的事，AI就用它直接读这台电脑上微信的本地数据库：只读我点名的那个人或群、够回答问题的那一小段，把谁说的、回的是哪句、附件",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -752,18 +761,6 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto"
-    },
-    {
-     "type": "prose",
-     "text_ref": "我问AI一件微信里的事，AI就用它直接读这台电脑上微信的本地数据库：只读我点名的那个人或群、够回答问题的那一小段，把谁说的、回的是哪句、附件",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "action_button",

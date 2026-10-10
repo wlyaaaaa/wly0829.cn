@@ -367,7 +367,7 @@
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
   "sha256": "819b3d95b053db85534eed73ba752a3f2f13b2ceb1b1b8ed5f5efd8ec5018782",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:35+08:00"
  }
 }
 ---
@@ -440,14 +440,14 @@
      "text_ref": "工作支持与交付",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "50%"
     },
     {
      "type": "tag",
      "text_ref": "偶尔用",
-     "shape": "rounded_strip",
-     "row": "k1a-head"
+     "row": "hero",
+     "shape": "rounded_strip"
     },
     {
      "type": "live_strip",
@@ -459,8 +459,19 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "工作上的事直接交给 AI 办",
+     "row": "hero",
+     "align": "left"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "50%",
+     "index": 0
     },
     {
      "type": "stat_card",
@@ -475,20 +486,6 @@
      "align": "center",
      "variant": "source_note",
      "size": "small"
-    },
-    {
-     "type": "prose",
-     "text_ref": "工作上的事直接交给 AI 办",
-     "row": "hero",
-     "align": "left",
-     "width": "50%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "50%",
-     "index": 0
     },
     {
      "type": "action_button",

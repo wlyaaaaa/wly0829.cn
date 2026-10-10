@@ -570,7 +570,7 @@
  "source": {
   "page": "sources/pages/personal-expression/page.json",
   "sha256": "047c8c9f5d4829e635ec8b84d979bd045e45aa81450e328d8bdaa27018fee5d6",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -609,8 +609,8 @@
      "align": "left",
      "size": "large",
      "text_ref": "个人表达",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "57%"
     },
     {
      "type": "live_strip",
@@ -626,8 +626,18 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "width": "43%"
     },
     {
      "type": "stat_card",
@@ -640,19 +650,6 @@
     {
      "type": "prose",
      "text_ref": "按 9 月 15–27 日的旧使用记录"
-    },
-    {
-     "type": "prose",
-     "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时",
-     "row": "hero",
-     "width": "57%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "hero",
-     "width": "43%"
     },
     {
      "type": "quote",

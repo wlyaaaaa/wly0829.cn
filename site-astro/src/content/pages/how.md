@@ -1851,7 +1851,7 @@
  "source": {
   "page": "sources/pages/how/page.json",
   "sha256": "58623fff58d26659d7dbfd6e9af4454b558a4b57c65b23227ef662f01ecec508",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "converted_at_beijing": "2026-10-10T12:00:15+08:00"
  }
 }
 ---
@@ -1915,12 +1915,18 @@
      "align": "left",
      "size": "large",
      "row": "top",
-     "width": "53%",
-     "row_fit_illustration": true
+     "width": "53%"
     },
     {
      "type": "prose",
      "text_ref": "想看一件事怎么办成",
+     "row": "top"
+    },
+    {
+     "type": "line_legend",
+     "text_ref": "线上传的东西分四种",
+     "layout": "rows",
+     "columns": 2,
      "row": "top"
     },
     {
@@ -1931,12 +1937,6 @@
      "index": 0,
      "size": "large",
      "target_width": "100%"
-    },
-    {
-     "type": "line_legend",
-     "text_ref": "线上传的东西分四种",
-     "layout": "rows",
-     "columns": 2
     },
     {
      "type": "action_button",

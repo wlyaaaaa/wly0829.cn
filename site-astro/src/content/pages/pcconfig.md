@@ -1587,7 +1587,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "7af96084d696debedad175fa9784f89e107cdaac73a0aed563b59afa50e84cf0",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -1637,13 +1637,31 @@
      "type": "chapter_title",
      "text_ref": "电脑配置与恢复",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "hero",
+     "width": "55%"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
      "slots": 3,
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这台电脑每天自动跑什么、东西备份在哪、坏了怎么恢复，",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%"
     },
     {
      "type": "stat_card",
@@ -1656,23 +1674,6 @@
      "type": "prose",
      "text_ref": "截至10月10日",
      "align": "right"
-    },
-    {
-     "type": "action_button",
-     "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "prose",
-     "text_ref": "这台电脑每天自动跑什么、东西备份在哪、坏了怎么恢复，",
-     "row": "hero"
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "45%"
     },
     {
      "type": "content_card",

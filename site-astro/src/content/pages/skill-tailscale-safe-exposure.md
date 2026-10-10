@@ -122,7 +122,7 @@
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
   "sha256": "12a51862502614b7a247ecfe015b2f7597e7b558b6f9ea54770cefabbfee84d8",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -151,9 +151,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "大标题：远程只让自己连",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "50%",
+     "text_ref": "大标题：远程只让自己连"
     },
     {
      "type": "live_strip",
@@ -169,15 +169,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话：",
-     "width": "50%",
-     "row_fit_illustration": true
+     "text_ref": "一句话："
     },
     {
      "type": "illustration",

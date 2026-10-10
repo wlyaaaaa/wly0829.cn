@@ -241,7 +241,7 @@
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
   "sha256": "b33f94b4f2e00a1fd109455175ed9954865a5a57990bb3cda6e6a682a91450da",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -271,8 +271,8 @@
      "text_ref": "修乱码",
      "align": "left",
      "size": "large",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "68%"
     },
     {
      "type": "live_strip",
@@ -288,20 +288,22 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "illustration",
-     "row": "k1a-head",
-     "index": 0,
-     "illustration": "outside",
-     "align": "right",
-     "width": "auto"
+     "row": "hero"
     },
     {
      "type": "prose",
-     "text_ref": "技能名"
+     "text_ref": "技能名",
+     "row": "hero"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "32%",
+     "index": 0,
+     "illustration": "outside",
+     "size": "banner",
+     "target_width": 340,
+     "align": "right"
     },
     {
      "type": "points_card",

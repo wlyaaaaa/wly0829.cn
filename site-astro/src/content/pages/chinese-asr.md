@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "21527d45e4e9a36fc097e85bb4cb4ecbbb956552c8e00d3e692f19421b4fd962",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -841,32 +841,27 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "intro",
+     "width": "52%",
      "text_ref": "中文语音转写"
     },
     {
      "type": "prose",
      "size": "large",
      "bold": true,
+     "row": "intro",
      "text_ref": "把中文录音和口述变成能逐句核对的文字。"
     },
     {
      "type": "live_strip",
      "text_ref": "现在听写云端复核现在正不正常→驾驶舱",
-     "frame_mode": "plain"
-    },
-    {
-     "type": "stat_card",
-     "columns": 4,
-     "columns_v": 2,
-     "icons": "auto",
-     "text_ref": "434段8月18日–10月7日"
+     "frame_mode": "plain",
+     "row": "intro"
     },
     {
      "type": "prose",
      "row": "intro",
-     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A",
-     "width": "52%",
-     "row_fit_illustration": true
+     "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A"
     },
     {
      "type": "illustration",
@@ -874,6 +869,13 @@
      "index": 0,
      "row": "intro",
      "width": "48%"
+    },
+    {
+     "type": "stat_card",
+     "columns": 4,
+     "columns_v": 2,
+     "icons": "auto",
+     "text_ref": "434段8月18日–10月7日"
     },
     {
      "type": "action_button",

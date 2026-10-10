@@ -576,7 +576,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
   "sha256": "eaabd0bf1018079a412baaa60bcc3d0fb8515a600b78f17ba8cadb9b1bce90e9",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -669,19 +669,20 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
+     "row": "hero",
+     "width": "60%",
      "text_ref": "大标题：远程电脑串流"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S",
-     "width": "60%",
-     "row_fit_illustration": true
+     "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S"
     },
     {
      "type": "illustration",

@@ -107,7 +107,7 @@
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
   "sha256": "52668fe98fcc1274589150c20bcbff4291c2897b75a280c5ca944171561fa8f2",
-  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -140,9 +140,9 @@
     {
      "type": "chapter_title",
      "align": "left",
-     "text_ref": "看微信聊天",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "intro",
+     "width": "64%",
+     "text_ref": "看微信聊天"
     },
     {
      "type": "live_strip",
@@ -158,15 +158,12 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "intro"
     },
     {
      "type": "prose",
      "row": "intro",
-     "text_ref": "技能名：wechat-direct",
-     "width": "64%",
-     "row_fit_illustration": true
+     "text_ref": "技能名：wechat-direct"
     },
     {
      "type": "illustration",

@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "735573a49b620ffdc73b0518a60f55e4a84008cf7e2de099ff8b2ca819178b71",
-  "converted_at_beijing": "2026-10-10T11:35:27+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -655,17 +655,17 @@
    "blocks": [
     {
      "type": "chapter_title",
+     "row": "hero",
+     "width": "48%",
      "align": "left",
      "size": "large",
-     "text_ref": "本地视频制作",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "text_ref": "本地视频制作"
     },
     {
      "type": "tag",
+     "row": "hero",
      "align": "left",
-     "text_ref": "偶尔用 · 只修报错",
-     "row": "k1a-head"
+     "text_ref": "偶尔用 · 只修报错"
     },
     {
      "type": "live_strip",
@@ -681,8 +681,22 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · 项目修改记录",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "align": "left",
+     "text_ref": "把定好的文案和素材交给 AI"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "52%",
+     "align": "center",
+     "illustration": "outside",
+     "index": 0,
+     "asset": "_library/fix-round-2/video-monitor-labeled.png"
     },
     {
      "type": "stat_card",
@@ -696,23 +710,6 @@
       1,
       3
      ]
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "align": "left",
-     "text_ref": "把定好的文案和素材交给 AI",
-     "width": "48%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "52%",
-     "align": "center",
-     "illustration": "outside",
-     "index": 0,
-     "asset": "_library/fix-round-2/video-monitor-labeled.png"
     },
     {
      "type": "prose",

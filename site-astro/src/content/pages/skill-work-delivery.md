@@ -145,7 +145,7 @@
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
   "sha256": "b24f8fd3ad3a1806b42585714b96859b92b91b22d3cf051e7ba73ed77eb2f5ea",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -223,9 +223,9 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "工作支持与交付技能",
-     "row": "k1a-head",
-     "width": "fit-content(60%)"
+     "row": "hero",
+     "width": "55%",
+     "text_ref": "工作支持与交付技能"
     },
     {
      "type": "live_strip",
@@ -241,19 +241,18 @@
       }
      ],
      "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "k1a-head",
-     "width": "minmax(0,1fr)"
-    },
-    {
-     "type": "illustration",
-     "row": "k1a-head",
-     "illustration": "outside",
-     "width": "auto",
-     "align": "right"
+     "row": "hero"
     },
     {
      "type": "prose",
+     "row": "hero",
      "text_ref": "技能名"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "45%",
+     "illustration": "outside"
     },
     {
      "type": "content_card",

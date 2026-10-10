@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
-  "converted_at_beijing": "2026-10-10T11:35:27+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
  }
 }
 ---
@@ -762,10 +762,13 @@
      "type": "chapter_title",
      "size": "large",
      "align": "left",
+     "row": "hero",
+     "width": "49%",
      "text_ref": "电脑使用与性能记录"
     },
     {
      "type": "prose",
+     "row": "hero",
      "text_ref": "事后查电脑为什么卡，也能看时间花在哪。",
      "size": "large",
      "bold": true
@@ -773,7 +776,18 @@
     {
      "type": "live_strip",
      "text_ref": "现在记录备份图表网页现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
+    },
+    {
+     "type": "prose",
+     "row": "hero",
+     "text_ref": "这台电脑从登录起就在后台一直记：每秒一条硬件和游戏帧率，每3"
+    },
+    {
+     "type": "illustration",
+     "row": "hero",
+     "width": "51%"
     },
     {
      "type": "stat_card",
@@ -782,18 +796,6 @@
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "637万秒每秒一条的硬件记录（6月16日起）3,123万次记"
-    },
-    {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "这台电脑从登录起就在后台一直记：每秒一条硬件和游戏帧率，每3",
-     "width": "49%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "hero",
-     "width": "51%"
     },
     {
      "type": "action_button",

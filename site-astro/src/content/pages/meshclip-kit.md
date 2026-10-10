@@ -514,7 +514,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
   "sha256": "33bc59575239882b74ba5810b3b9414de3431d4ec3849524f0e79da7589b25f9",
-  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
+  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
  }
 }
 ---
@@ -570,23 +570,25 @@
      "type": "chapter_title",
      "text_ref": "大标题：双机剪贴板",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "hero",
+     "width": "55%"
     },
     {
      "type": "tag",
-     "text_ref": "偶尔用·只修报错、不加新功能（约法L2"
+     "text_ref": "偶尔用·只修报错、不加新功能（约法L2",
+     "row": "hero"
     },
     {
      "type": "live_strip",
      "text_ref": "现在现在正不正常→驾驶舱",
-     "frame_mode": "plain"
+     "frame_mode": "plain",
+     "row": "hero"
     },
     {
      "type": "prose",
      "text_ref": "介绍：主机（台式机）和副机（笔记本）不在同一个网络，",
-     "row": "hero",
-     "width": "55%",
-     "row_fit_illustration": true
+     "row": "hero"
     },
     {
      "type": "illustration",
