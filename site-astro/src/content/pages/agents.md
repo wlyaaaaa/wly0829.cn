@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "857a4662ee19358a9f4a259436f51d58d3b924eb67a1c5c28fb323600a3f34f3",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -1038,7 +1038,7 @@
      "row": "top",
      "text_ref": "我给 AI 定的规矩",
      "width": "47%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -153,6 +153,16 @@ def action_button(block, ctx):
 
 
 def live_strip(block, ctx):
+    items = block["spec"].get("static_items")
+    if items:  # 没有实时数据的页：首屏状态行（page.json 的 status_line，转换器排成几项），样子同“现在”实时条，字在排版时就写好
+        boxes = "".join(f'<div class="livebox" data-status-item="1" data-state="{E(str(it.get("state") or "ok"))}" role="status">'
+                        f'<i class="live-dot" aria-hidden="true"></i><span class="live-text tb">{E(str(it.get("text", "")))}</span></div>'
+                        for it in items if isinstance(it, dict) and it.get("text"))
+        note = block["spec"].get("static_note")
+        return (f'<div class="nowbar live-plain status-static" data-comp="live_strip" data-live-frame="plain" data-status-line="static">'
+                f'<div class="nowlabel tb">现在</div>'
+                f'<div class="live-plain-slots" style="--live-plain-columns:{max(1, min(3, len(items)))}">{boxes}</div>'
+                + (f'<div class="status-asof tb">{E(str(note))}</div>' if note else "") + '</div>')
     n = next((x for x in block["nodes"] if x["type"] == "now"), None)
     frame_mode = block["spec"].get("frame_mode")
     live = block["spec"].get("keys") or ctx.screen.get("live") or []
@@ -881,7 +891,7 @@ SPEC_FIELDS = {
     "numbered_steps": ["columns", "columns_v", "illustration", "icons", "connector", "name_in_card", "reading_order",
                        "page_break_after_item", "part_after_steps", "item_illustration_v", "human_action_items", "size", "item_layout",
                        "annotation_target", "annotation_connector", "annotation_anchors", "annotation_geometry"],
-    "live_strip": ["keys", "labels", "slots", "slot_width", "frame_widths", "label_layout", "size", "columns", "empty_slots", "button_position", "frame_mode"],
+    "live_strip": ["keys", "labels", "slots", "slot_width", "frame_widths", "label_layout", "size", "columns", "empty_slots", "button_position", "frame_mode", "static_items", "static_note"],
     "illustration": ["illustration", "asset", "index", "size", "align", "bleed", "target_width", "target_height", "motion_regions", "motion_asset_sha256", "panels", "panel_asset_sha256", "panel_renderer", "connector", "gallery_assets", "caption_count", "columns", "columns_v"],
     "stat_card": ["columns", "columns_v", "icons"],
 }

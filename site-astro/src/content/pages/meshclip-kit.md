@@ -514,7 +514,7 @@
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
   "sha256": "33bc59575239882b74ba5810b3b9414de3431d4ec3849524f0e79da7589b25f9",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -569,7 +569,7 @@
     {
      "type": "chapter_title",
      "text_ref": "大标题：双机剪贴板",
-     "align": "center",
+     "align": "left",
      "size": "large"
     },
     {
@@ -586,7 +586,7 @@
      "text_ref": "介绍：主机（台式机）和副机（笔记本）不在同一个网络，",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

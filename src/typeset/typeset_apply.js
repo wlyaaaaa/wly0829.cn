@@ -219,7 +219,7 @@ globalThis.TypesetApply = () => {
     // 仍不齐时依次试①②挪一张独立说明卡、③长栏后段绕到短栏下方用整宽。不删字、不改字号、不改画风。
     for (const row of root.querySelectorAll('.row')) {
       const cols=[...row.children];
-      if (cols.length<2 || cols.some(c=>!c.matches('.col')) || row.matches('.card-notes') ||
+      if (cols.length<2 || cols.some(c=>!c.matches('.col')) || row.matches('.card-notes') || row.matches('.fit-ill') ||
           row.closest('.c-diagram') || row.querySelector('[data-comp="chapter_title"],.title-wrap,[data-flow],.feature-masonry-grid')) continue;
       // 横版短卡和侧栏保留审定分栏，不能为齐高移到整宽或绕成通栏。
       const text=C.collectTextBlocks(row).map(block=>C.measureTextBlock(block));
@@ -289,6 +289,104 @@ globalThis.TypesetApply = () => {
       receipt.balance.push({kind:'widths',before,after:h.map(Math.round),moved,widths:w.map(x=>Math.round(x/total*100))});
     }
   }
+  function fitStatValues() {
+    // 数字卡的大号数一行读完（主持 10 月 10 日 08:06：“4366 件 · 近 99 GB”“三块硬盘 + 云端”“6 张看板 · 80 个图”折成两行）：
+    // 一行放不下的按比例缩小大号字（最小到名称字号），不是数字的（如“三块硬盘 + 云端”）先用小一号的字；不改字、不删字。
+    const sel='.c-hub-stats :is(.hub-stat-value[data-role="num"],.hub-stat-side-value,.hub-field-value)';
+    for (const v of root.querySelectorAll(sel)) {
+      const txt=v.textContent.replace(/\s+/g,' ').trim(),avail=v.clientWidth;
+      if (!txt || avail<=0) continue;
+      const need=()=>{const ws=v.style.whiteSpace;v.style.whiteSpace='nowrap';const n=v.scrollWidth;v.style.whiteSpace=ws;return n;};
+      const numeric=/\d/.test(txt);
+      if (numeric && need()<=avail+1) continue;
+      const cs=getComputedStyle(v),base=parseFloat(cs.fontSize);
+      const minPx=parseFloat(cs.getPropertyValue('--fs-name'))||Math.round(base*.47);
+      let size=numeric?base:Math.max(minPx,Math.min(base,base*.62));
+      v.style.fontSize=size+'px';
+      for (let it=0;it<20 && need()>avail+1 && size>minPx;it++) {size=Math.max(minPx,size*.94);v.style.fontSize=size+'px';}
+      if (Math.abs(size-base)<.5) {v.style.fontSize='';continue;}
+      receipt.cards.push({kind:'stat_value_fit',text:txt.slice(0,16),from:Math.round(base),to:Math.round(size),fits:need()<=avail+1});
+    }
+  }
+  function fitIllustrationRows() {
+    // 文字栏 + 图栏（一幅插画，或一张截图连同它下面的图注；构图写 row_fit_illustration，如项目页、技能页首屏“先放状态”以后挪下去的介绍和插画）：
+    // 文字顶对齐，图按文字栏的高度定大小，不留一大截空白（本人：除了放实时数据的位置，不留空）。
+    // 插画先铺满本栏宽（构图定了像素宽的照原宽，图栏收到图宽）；图栏比文字栏高出一截时，①紧跟这一行的按钮行或一张短说明（≤160 字）挪进文字栏底部；
+    // ②按实测高度调栏宽让两栏一样高（文字栏最多 1.6 倍宽；图最小到原高的 45%、不低于 260 画布像素；文字比图高时图栏最多加宽到 1.4 倍）；
+    // ③还差太多时插画按文字高度再缩，图栏收到图宽。只改栏宽和图的显示大小，不删字、不改字号、不裁图、不换图。
+    // 图在一栏最后（上面是对话气泡等）的行：插画按这一栏空出来的高度放，最大到栏宽。
+    const SLACK=60,LIMIT=140;   // 画布像素：差 60 以内不动；最后剩下的差不超过 140（约屏幕上 120 像素）
+    const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
+      return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
+    const isMedia=c=>{const k=[...c.children];
+      return k.length>0 && (k[0].matches('[data-comp="illustration"]') && !!k[0].querySelector('img') ||
+        k[0].matches('[data-comp="screenshot"]') && k[0].querySelectorAll('.slot-shot-item').length===1) &&
+        k.slice(1).every(x=>x.matches('[data-comp="prose"]'));};
+    for (const row of root.querySelectorAll('.row.fit-ill')) {
+      const cols=[...row.children].filter(c=>c.matches('.col'));
+      if (cols.length!==2) continue;
+      const mc=cols.find(isMedia),tc=cols.find(c=>c!==mc);
+      if (!mc) {
+        const tail=c=>{const k=[...c.children];return k.length>=2 && k.at(-1).matches('[data-comp="illustration"]') && !!k.at(-1).querySelector('img');};
+        const fc=cols.find(tail),oc=cols.find(c=>c!==fc);
+        if (!fc || !oc) continue;
+        row.style.alignItems='start';
+        const ill=fc.lastElementChild,img=ill.querySelector('img');
+        const before=[Math.round(contentH(oc)),Math.round(contentH(fc))];
+        const A=contentH(fc)-ill.getBoundingClientRect().height,B=contentH(oc);   // 图所在栏不算图的高度、另一栏的高度
+        let host=fc,room=B-A;
+        if (B<A-SLACK) {   // 另一栏更矮：图挪到那一栏最后，按那里空出来的高度放（看驾驶舱技能页：右栏气泡下面）
+          oc.append(ill);host=oc;room=A-B-(parseFloat(getComputedStyle(oc).rowGap)||12);
+        }
+        const ib=img.getBoundingClientRect(),aspect=ib.width/Math.max(1,ib.height),natural=host.getBoundingClientRect().width/aspect;
+        const h=Math.max(160,Math.min(natural,room));
+        Object.assign(ill.style,{display:'flex',justifyContent:'center'});
+        Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
+        receipt.balance.push({kind:'fit_illustration_tail',before,after:[Math.round(contentH(oc)),Math.round(contentH(fc))],moved:host===oc});
+        continue;
+      }
+      if (!tc || isMedia(tc)) continue;
+      const media=mc.firstElementChild,img=media.querySelector('img'),isIll=media.matches('[data-comp="illustration"]');
+      row.style.alignItems='start';
+      const fixedW=isIll && img && /px$/.test(img.style.width)?parseFloat(img.style.width):0;
+      if (isIll && img && !fixedW) Object.assign(img.style,{width:'100%',maxWidth:'100%',height:'auto',maxHeight:'none'});   // 先铺满本栏宽
+      const ti=cols.indexOf(tc),tw0=tc.getBoundingClientRect().width,mw0=mc.getBoundingClientRect().width,total=tw0+mw0;
+      const set=mw=>{const v=[0,0];v[ti]=total-mw;v[1-ti]=mw;row.style.gridTemplateColumns=v.map(x=>`minmax(0,${x.toFixed(1)}fr)`).join(' ');};
+      const diff=mw=>{set(mw);return contentH(mc)-contentH(tc);};
+      const mh0=contentH(mc),th0=contentH(tc);
+      const before=[Math.round(th0),Math.round(mh0)];
+      const side=()=>isIll && img?mc.getBoundingClientRect().width-img.getBoundingClientRect().width:0;
+      if (Math.abs(mh0-th0)<=SLACK && side()<=40) continue;
+      let pulled='',mw=mw0;
+      if (mh0-th0>SLACK) {
+        const nx=row.nextElementSibling;
+        if (nx && (nx.matches('[data-comp="action_button"]') || (nx.matches('[data-comp="notice"],[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="bullet_list"]') && nx.textContent.trim().length<=160))) {
+          tc.append(nx);pulled=nx.getAttribute('data-comp');
+        }
+      }
+      const twMax=Math.min(total-120,tw0*1.6);
+      if (fixedW) mw=Math.max(Math.min(fixedW,mw0),total-twMax);   // 定了像素宽的插画：图栏收到图宽
+      else {
+        const minH=Math.min(mh0,Math.max(260,mh0*.45));
+        let lo=Math.max(total-twMax,mw0*minH/Math.max(1,mh0)),hi=Math.max(lo,Math.min(mw0*1.4,total-240));
+        if (diff(lo)>=0) mw=lo;
+        else if (diff(hi)<=0) mw=hi;
+        else {for (let it=0;it<16 && hi-lo>2;it++) {const mid=(lo+hi)/2;if (diff(mid)>0) hi=mid;else lo=mid;} mw=(lo+hi)/2;}
+      }
+      set(mw);
+      if (isIll && img) {   // ③ 插画仍比文字高出一大截：按文字高度再缩，图栏收到图宽（再量一次，文字变宽会再矮一点）
+        for (let it=0;it<3;it++) {
+          const th=contentH(tc),extra=contentH(mc)-media.getBoundingClientRect().height;
+          if (contentH(mc)-th<=LIMIT) break;
+          const h=Math.max(th-extra+LIMIT*.5,160);
+          Object.assign(media.style,{display:'flex',justifyContent:'center'});
+          Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
+          mw=Math.max(img.getBoundingClientRect().width,total-twMax);set(mw);
+        }
+      }
+      receipt.balance.push({kind:'fit_illustration',before,after:[Math.round(contentH(tc)),Math.round(contentH(mc))],pulled,width:Math.round(mw/total*100)});
+    }
+  }
   function fillPage() {
     // 电脑整屏有最小高度（16:9 等）时，内容不够高的余量平均分到各块之间，不在底部留一条白带。
     if (!document.body.classList.contains('o-h') || !parseFloat(root.style.minHeight)) return;
@@ -301,7 +399,7 @@ globalThis.TypesetApply = () => {
     }
   }
   receipt.balance=[];
-  keepLatinWords();balanceRows();applyLabels();
+  keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
   applyText();equalCompoundCards();equalCards();fillPage();
   C.collectTextBlocks(root);

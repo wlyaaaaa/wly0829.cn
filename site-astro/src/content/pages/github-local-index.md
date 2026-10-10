@@ -776,7 +776,7 @@
  "source": {
   "page": "sources/pages/github-local-index/page.json",
   "sha256": "862beec5c9c0e046b6f8837f132ca71fda48c799de54ba1c6e2ad0c00baaa904",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -828,7 +828,7 @@
     {
      "type": "chapter_title",
      "text_ref": "GitHub项目总索引",
-     "align": "center",
+     "align": "left",
      "size": "large"
     },
     {
@@ -858,7 +858,7 @@
      "text_ref": "我在GitHub上的每个代码仓库都记在这里：本机放在",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

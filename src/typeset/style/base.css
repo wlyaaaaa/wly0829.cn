@@ -446,3 +446,13 @@ b { font-weight: 700; color: var(--accent); }
 .nowbar.btn-below { flex-wrap: wrap; }
 .nowbar.btn-below .nowbtn { flex: 1 1 100%; margin-left: 0; }
 .card.side.ibottom.img-right .sideic { justify-content: flex-end; }
+/* 首屏状态行（没有实时数据的项目页、技能页：page.json 的 status_line）：样子同“现在”实时条里读到时的一格——绿点 + 绿色粗体字，
+   字在排版时写好、不靠实时取数；下面一行小字写截至日期和来源 */
+.nowbar [data-status-item] { display: flex; align-items: center; gap: .4em; min-width: 0; height: auto; min-height: 1.6em; font-size: var(--fs-body); line-height: 1.3; font-weight: 600; color: #08743e; }
+.nowbar [data-status-item] .live-dot { flex: none; width: .5em; height: .5em; border-radius: 50%; background: #00a24e; }
+.nowbar [data-status-item][data-state="waiting"] .live-dot { background: #d2a111; }
+.nowbar [data-status-item][data-state="fact"] .live-dot { background: #9db8a8; }
+.nowbar [data-status-item][data-state="disabled"] { color: #5d7266; }
+.nowbar [data-status-item][data-state="disabled"] .live-dot { background: #8e9991; }
+.nowbar [data-status-item] .live-text { min-width: 0; }
+.nowbar.status-static .status-asof { font-size: calc(var(--fs-body) * .8); line-height: 1.4; color: #5d7266; font-weight: 400; }

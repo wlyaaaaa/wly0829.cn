@@ -593,7 +593,7 @@
  "source": {
   "page": "sources/pages/vault-tool/page.json",
   "sha256": "67666fafb031b6e89042e223d9377c159b8cf1b74907bad30bd2e6f71067a2a1",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -662,7 +662,7 @@
      "row": "hero",
      "text_ref": "把我选中的文件",
      "width": "47%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "action_button",

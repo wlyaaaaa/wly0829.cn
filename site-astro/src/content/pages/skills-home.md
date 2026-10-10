@@ -586,7 +586,7 @@
  "source": {
   "page": "sources/pages/skills-home/page.json",
   "sha256": "e4b1c92495508210cd51cca357e1ffdc32eff038d495454170f34b7de6a80059",
-  "converted_at_beijing": "2026-10-10T06:32:57+08:00"
+  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
  }
 }
 ---
@@ -1946,7 +1946,7 @@
     },
     {
      "type": "directory_tile",
-     "columns": 5,
+     "columns": 3,
      "align": "left",
      "size": "medium",
      "illustration": "left_inside",

@@ -357,7 +357,7 @@
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
   "sha256": "6cf8e5a770edae351bbdd3234f139a31d281a485c6bd4be34ec6afa4e5dd916e",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -456,7 +456,7 @@
      "row": "hero",
      "align": "left",
      "width": "50%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -788,7 +788,7 @@
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
   "sha256": "a2d14d6a37f1bc5300a0a84a4c56a7ce158e7466aaa7c9aaf370b6cca2fd78b8",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -866,7 +866,7 @@
      "row": "intro",
      "text_ref": "在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-A",
      "width": "52%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

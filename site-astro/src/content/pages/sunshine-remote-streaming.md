@@ -576,7 +576,7 @@
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
   "sha256": "eaabd0bf1018079a412baaa60bcc3d0fb8515a600b78f17ba8cadb9b1bce90e9",
-  "converted_at_beijing": "2026-10-10T06:24:13+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -681,7 +681,7 @@
      "row": "hero",
      "text_ref": "介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的S",
      "width": "60%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

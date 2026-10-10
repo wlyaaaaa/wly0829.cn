@@ -517,7 +517,7 @@
       },
       {
         "type": "directory_tile",
-        "columns": 5,
+        "columns": 3,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",

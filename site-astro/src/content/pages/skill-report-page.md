@@ -517,7 +517,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "acb4035cbaa1a302d80f681a30eb1839c7045894adf7986c05fa7109dfb3592d",
-  "converted_at_beijing": "2026-10-10T06:26:50+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -567,7 +567,7 @@
      "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页",
      "row": "intro",
      "width": "52%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "points_card",

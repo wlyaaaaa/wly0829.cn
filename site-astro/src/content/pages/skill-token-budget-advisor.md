@@ -4,23 +4,6 @@
  "kind": "skill-redirect",
  "url": "/skills/token-budget-advisor/",
  "tagline": "已退役",
- "redirect": {
-  "destination": "/skills/",
-  "paragraphs": [
-   [
-    {
-     "text": "已退役：这个技能 9 月 25 日因为不用而撤下，没有接替它的技能。现在在用的技能见"
-    },
-    {
-     "text": "技能首页",
-     "href": "/skills/"
-    },
-    {
-     "text": "。"
-    }
-   ]
-  ]
- },
  "toc": [],
  "page": {
   "schema": "site-b1.page.v1",
@@ -60,8 +43,84 @@
  "source": {
   "page": "sources/pages/skill-token-budget-advisor/page.json",
   "sha256": "ead561d8943c43186166317ec3f6c5fa1e11741ad00e248297844457f920851c",
-  "converted_at_beijing": "2026-10-10T05:59:16+08:00"
+  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
  }
 }
 ---
 
+::screen{#skill-token-budget-advisor-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-token-budget-advisor-01",
+  "section": "top",
+  "title": "去向",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "技能首页",
+    "href": "/skills/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "额度估算",
+     "align": "left",
+     "size": "large",
+     "row": "go",
+     "width": "70%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "prose",
+     "text_ref": "已退役：这个技能9月",
+     "row": "go"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "row": "go",
+     "width": "30%"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "额度估算",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "已退役：这个技能9月"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+额度估算
+
+已退役：这个技能 9 月 25 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。

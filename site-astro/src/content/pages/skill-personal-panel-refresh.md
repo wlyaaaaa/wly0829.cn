@@ -4,23 +4,6 @@
  "kind": "skill-redirect",
  "url": "/skills/personal-panel-refresh/",
  "tagline": "已退役",
- "redirect": {
-  "destination": "/projects/wly0829-cn/",
-  "paragraphs": [
-   [
-    {
-     "text": "这个技能 9 月 25 日退役了。网站不再定时自动刷新，我说一声或项目真有变化时才更新，做法见"
-    },
-    {
-     "text": "个人网站",
-     "href": "/projects/wly0829-cn/"
-    },
-    {
-     "text": "。"
-    }
-   ]
-  ]
- },
  "toc": [],
  "page": {
   "schema": "site-b1.page.v1",
@@ -60,8 +43,84 @@
  "source": {
   "page": "sources/pages/skill-personal-panel-refresh/page.json",
   "sha256": "9998335f89f0623dc5d887be3fc1bfcafd30dd0dcb3f7200c188f119d36a7cc0",
-  "converted_at_beijing": "2026-10-10T05:59:16+08:00"
+  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
  }
 }
 ---
 
+::screen{#skill-personal-panel-refresh-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-personal-panel-refresh-01",
+  "section": "top",
+  "title": "去向",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "个人网站",
+    "href": "/projects/wly0829-cn/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "网站自动刷新",
+     "align": "left",
+     "size": "large",
+     "row": "go",
+     "width": "70%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "prose",
+     "text_ref": "这个技能9月25日退",
+     "row": "go"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "row": "go",
+     "width": "30%"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "网站自动刷新",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这个技能9月25日退"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+网站自动刷新
+
+这个技能 9 月 25 日退役了。网站不再定时自动刷新，我说一声或项目真有变化时才更新，做法见〔个人网站〕。

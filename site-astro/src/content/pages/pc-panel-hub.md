@@ -797,7 +797,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -876,7 +876,7 @@
      "row": "hero",
      "text_ref": "机箱里有两块",
      "width": "48%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

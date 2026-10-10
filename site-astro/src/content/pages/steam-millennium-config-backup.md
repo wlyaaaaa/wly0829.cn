@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "737a689a30e03794b0c8f88cfdd8c7d04963ac2dc82f53e2c9599ef80271958f",
-  "converted_at_beijing": "2026-10-10T06:26:50+08:00"
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -676,10 +676,9 @@
      "align": "left",
      "target_width": 72,
      "target_height": 72,
-     "row": "hero",
-     "width": "55%",
      "inline_row": "steam-brand-title",
-     "inline_width": "72px"
+     "inline_width": "72px",
+     "row": "k1a-title"
     },
     {
      "type": "chapter_title",
@@ -690,7 +689,8 @@
      "connector": "none",
      "text_ref": "Steam 外观备份",
      "inline_row": "steam-brand-title",
-     "inline_width": "1fr"
+     "inline_width": "1fr",
+     "row": "k1a-title"
     },
     {
      "type": "live_strip",
@@ -733,7 +733,9 @@
      "illustration": "none",
      "connector": "none",
      "text_ref": "调好的 Steam 皮肤",
-     "row": "hero"
+     "row": "hero",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -788,15 +790,14 @@
      "align": "left",
      "target_width": 72,
      "target_height": 72,
-     "row": "steam-brand-title",
-     "width": "100%",
      "inline_row": "steam-brand-title",
      "inline_width": "72px",
-     "row_v": true
+     "row_v": true,
+     "row": "k1a-title"
     },
     {
      "type": "chapter_title",
-     "align": "center",
+     "align": "left",
      "size": "large",
      "columns": 1,
      "illustration": "none",
@@ -804,7 +805,8 @@
      "text_ref": "Steam 外观备份",
      "inline_row": "steam-brand-title",
      "inline_width": "1fr",
-     "row_v": true
+     "row_v": true,
+     "row": "k1a-title"
     },
     {
      "type": "live_strip",

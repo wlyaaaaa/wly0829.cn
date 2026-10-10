@@ -714,7 +714,7 @@
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
   "sha256": "07c949c827231a63e869218541546899aa33822183b32b0cd8494e36b615fd5f",
-  "converted_at_beijing": "2026-10-10T06:20:59+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -784,7 +784,8 @@
      "text_ref": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
      "align": "left",
      "row": "hero",
-     "width": "56fr"
+     "width": "56fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

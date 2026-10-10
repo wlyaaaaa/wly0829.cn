@@ -841,7 +841,7 @@
  "source": {
   "page": "sources/pages/remote-control/page.json",
   "sha256": "fc4f4b235b6bc56a0045859537081660322efab0f5d215cc1c123c5d76078e7c",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -926,7 +926,7 @@
      "text_ref": "介绍：手机或网页上的ChatGPT、笔记本上的Codex、主机上的Claude，都能连进我的两台电脑办事：读写文件、跑命令、读文档片段、截图",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

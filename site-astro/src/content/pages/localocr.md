@@ -621,7 +621,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "ce12e530a9c436e69bae81578c35aa09689163e3f27194e531da81fbb4ad1d3e",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -684,7 +684,7 @@
      "row": "hero",
      "text_ref": "在自己电脑的显卡上，把图片、截图和扫描件里的字读准、读全",
      "width": "50%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

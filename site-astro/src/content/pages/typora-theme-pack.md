@@ -446,7 +446,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
   "sha256": "f83c3a06f4b3237811a1b784698d3116179d52607e44002eebe6adad4fd8585c",
-  "converted_at_beijing": "2026-10-10T06:20:59+08:00"
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -519,23 +519,6 @@
      "bold": true
     },
     {
-     "type": "stat_card",
-     "text_ref": "1套",
-     "columns": 2,
-     "columns_v": 2,
-     "variant": "para_fields",
-     "icons": "auto"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026",
-     "align": "right"
-    },
-    {
-     "type": "prose",
-     "text_ref": "我用Markdown"
-    },
-    {
      "type": "screenshot",
      "text_ref": "薄荷主题",
      "indices": [
@@ -545,7 +528,27 @@
      "columns": 1,
      "columns_v": 1,
      "row": "media-stats",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "stat_card",
+     "text_ref": "1套",
+     "columns": 2,
+     "columns_v": 2,
+     "variant": "para_fields",
+     "icons": "auto",
+     "row": "media-stats",
+     "width": "40%"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至2026",
+     "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我用Markdown"
     },
     {
      "type": "action_button",

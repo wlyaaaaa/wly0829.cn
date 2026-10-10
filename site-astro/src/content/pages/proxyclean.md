@@ -466,7 +466,7 @@
  "source": {
   "page": "sources/pages/proxyclean/page.json",
   "sha256": "512440f1499c09f86df0fe0193b97ffa5d30ac99b36ff3548828614bdc21d758",
-  "converted_at_beijing": "2026-10-10T06:24:13+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -529,7 +529,7 @@
      "row": "hero",
      "align": "left",
      "width": "49%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

@@ -409,8 +409,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "162aad4bcbbdf4f7a37c2c64750d9e6e37d2994361d39be9a400502ffff7bcee",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "sha256": "55dd5da984cbfced44ef151b29d46b8776cb4a32f91a4e2f638e26092849e6a4",
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -475,7 +475,8 @@
      "type": "prose",
      "text_ref": "我说要签",
      "row": "intro",
-     "width": "60%"
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2570,6 +2571,10 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
   "h": {
    "blocks": [
     {
+     "type": "status_legend",
+     "text_ref": "●在用"
+    },
+    {
      "type": "feature_card",
      "text_ref": "检查和签名",
      "columns": 3,
@@ -2594,6 +2599,10 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
   },
   "v": {
    "blocks": [
+    {
+     "type": "status_legend",
+     "text_ref": "●在用"
+    },
     {
      "type": "feature_card",
      "text_ref": "检查和签名",
@@ -2797,6 +2806,8 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
  ]
 }
 ```
+
+● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
 
 **检查和签名**
 逐页检查｜每页转成图片查空白页、压边、页码，读回签名图；没过不出材料包｜●待验收

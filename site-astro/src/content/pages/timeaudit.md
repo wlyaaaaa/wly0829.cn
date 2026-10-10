@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "c9a5f7bdb068b50fcb98e7a0a95a4f2083eec89cd078ad3aedbce5c94a448e8a",
-  "converted_at_beijing": "2026-10-10T06:41:28+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -788,7 +788,7 @@
      "row": "hero",
      "text_ref": "这台电脑从登录起就在后台一直记：每秒一条硬件和游戏帧率，每3",
      "width": "49%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

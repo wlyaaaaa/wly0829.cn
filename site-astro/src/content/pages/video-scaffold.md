@@ -599,7 +599,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "2a1ce44160081c87f09f5e6179d818512e3bf65ce6f9be62b12ef0ad95864087",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -676,7 +676,7 @@
      "align": "left",
      "text_ref": "把定好的文案和素材交给 AI",
      "width": "48%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

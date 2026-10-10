@@ -1587,7 +1587,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "024654ac18d4cbe8a005b8cfd7d5a86c019cff35021e8c81e90f4218464bcaef",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:27:56+08:00"
  }
 }
 ---
@@ -1636,7 +1636,7 @@
     {
      "type": "chapter_title",
      "text_ref": "电脑配置与恢复",
-     "align": "center",
+     "align": "left",
      "size": "large"
     },
     {
@@ -1662,7 +1662,7 @@
      "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

@@ -777,6 +777,10 @@
     ],
     "blocks": [
       {
+        "type": "status_legend",
+        "text_ref": "●在用"
+      },
+      {
         "type": "feature_card",
         "text_ref": "检查和签名",
         "columns": 3,
@@ -807,6 +811,10 @@
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-formal-documents\\img\\personal-formal-documents-09-v.png"
     ],
     "blocks": [
+      {
+        "type": "status_legend",
+        "text_ref": "●在用"
+      },
       {
         "type": "feature_card",
         "text_ref": "检查和签名",

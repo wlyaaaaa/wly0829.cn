@@ -526,7 +526,7 @@
  "source": {
   "page": "sources/pages/personal-materials/page.json",
   "sha256": "27eed6d1705f258a9c6b13b786754ae63b5fca11bd2c42cac3ca3d6a6c9567dc",
-  "converted_at_beijing": "2026-10-10T06:24:13+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -620,7 +620,7 @@
      "text_ref": "合同、说明书、发票、课件这类文档，散在几十个文件夹、微信收到的文件和下载文件夹里。这个项目只记“哪份文件在哪、叫什么、内容指纹是多少”，不复",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "source_text_card",

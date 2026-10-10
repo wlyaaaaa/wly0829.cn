@@ -113,7 +113,7 @@
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
   "sha256": "2b27fee9690a7d37dbcbfe82701edc4b464ab07094f90df477860d83363e2361",
-  "converted_at_beijing": "2026-10-10T06:07:30+08:00"
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -149,7 +149,8 @@
      "align": "center",
      "size": "large",
      "row": "hero",
-     "width": "50%"
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -177,14 +178,6 @@
      "row": "hero"
     },
     {
-     "type": "illustration",
-     "illustration": "outside",
-     "size": "medium",
-     "row": "hero",
-     "align": "center",
-     "target_height": 220
-    },
-    {
      "type": "dialogue",
      "text_ref": "怎么跟 AI 说",
      "columns": 2,
@@ -192,9 +185,15 @@
      "illustration": "none",
      "row": "hero",
      "width": "50%"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "hero",
+     "align": "center"
     }
    ],
-   "notes": "新页，照结构相同的“查电脑卡顿”技能页第 1 屏写：左栏标题、技能名、它做什么、不用点名、使用小记录；右栏插画和六句说法。插画用驾驶舱页主插画（素材库没有画面描述里的仪表盘小插画）。"
+   "notes": "新页，照结构相同的“查电脑卡顿”技能页第 1 屏写：左栏标题、技能名、它做什么、不用点名、使用小记录；右栏六句说法，下面放插画，按右栏空出来的高度放（主持 10 月 10 日 07:18）。插画暂用驾驶舱页主插画（素材库没有画面描述里的仪表盘小插画，新图另做）。"
   },
   "v": {
    "blocks": [

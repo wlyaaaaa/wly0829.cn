@@ -921,7 +921,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "75260c97d0e36cdfecab155ffa427f0c26f7a7fed0bf0db2fb2660a29b812ec5",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -993,7 +993,7 @@
      "connector": "none",
      "row": "hero",
      "width": "48%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

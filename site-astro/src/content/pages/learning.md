@@ -545,7 +545,7 @@
  "source": {
   "page": "sources/pages/learning/page.json",
   "sha256": "e34c22939d152680d729fe42729f96c59055c80e639999fbb03df1e48387103e",
-  "converted_at_beijing": "2026-10-10T06:53:38+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -622,7 +622,7 @@
      "text_ref": "AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Opus 5.5）排路线、",
      "row": "hero",
      "width": "48%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

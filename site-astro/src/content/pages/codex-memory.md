@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "0ac0aaed501cf35caafc7d5d04ccbe4b6c295018b21366c9aeb38cc10a70ac52",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -775,7 +775,7 @@
      "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明",
      "row": "hero",
      "width": "58%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

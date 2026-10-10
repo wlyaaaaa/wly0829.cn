@@ -4,23 +4,6 @@
  "kind": "skill-redirect",
  "url": "/skills/native-economy-routing/",
  "tagline": "已退役",
- "redirect": {
-  "destination": "/rules/execution-coordination/",
-  "paragraphs": [
-   [
-    {
-     "text": "这个技能 9 月 27 日退役了。AI 之间怎么分工、派哪个模型和档位，现在写在规则"
-    },
-    {
-     "text": "分工与并行施工",
-     "href": "/rules/execution-coordination/"
-    },
-    {
-     "text": "里。"
-    }
-   ]
-  ]
- },
  "toc": [],
  "page": {
   "schema": "site-b1.page.v1",
@@ -60,8 +43,84 @@
  "source": {
   "page": "sources/pages/skill-native-economy-routing/page.json",
   "sha256": "c013717a64357f5fe09dbf6887911304fad8135d6b9687f3719d6272be4bbcda",
-  "converted_at_beijing": "2026-10-10T05:59:16+08:00"
+  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
  }
 }
 ---
 
+::screen{#skill-native-economy-routing-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "skill-native-economy-routing-01",
+  "section": "top",
+  "title": "去向",
+  "scene": "",
+  "portrait": "",
+  "links": [
+   {
+    "text": "分工与并行施工",
+    "href": "/rules/execution-coordination/"
+   }
+  ],
+  "anchors": [],
+  "live": [],
+  "screenshots": [],
+  "chain": "",
+  "reuse": ""
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "AI 分工门禁",
+     "align": "left",
+     "size": "large",
+     "row": "go",
+     "width": "70%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "prose",
+     "text_ref": "这个技能9月27日退",
+     "row": "go"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "row": "go",
+     "width": "30%"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "AI 分工门禁",
+     "align": "center",
+     "size": "large"
+    },
+    {
+     "type": "illustration",
+     "asset": "_library/icons/工具箱回收站.png",
+     "align": "center",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这个技能9月27日退"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+AI 分工门禁
+
+这个技能 9 月 27 日退役了。AI 之间怎么分工、派哪个模型和档位，现在写在规则〔分工与并行施工〕里。

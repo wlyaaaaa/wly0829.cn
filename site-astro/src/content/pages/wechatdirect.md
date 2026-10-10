@@ -663,7 +663,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "5053a5fcb520e960587e182d8681f31a99ec735f06a754e4ae255abb71ba6727",
-  "converted_at_beijing": "2026-10-10T06:24:13+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
  }
 }
 ---
@@ -727,7 +727,7 @@
      "text_ref": "我问AI一件微信里的事，AI就用它直接读这台电脑上微信的本地数据库：只读我点名的那个人或群、够回答问题的那一小段，把谁说的、回的是哪句、附件",
      "row": "hero",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

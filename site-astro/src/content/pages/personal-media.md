@@ -879,8 +879,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "79e3a0c07a984f47e443966b88fb975871d9472dc3ac5208856acc81af2dcd81",
-  "converted_at_beijing": "2026-10-10T06:20:58+08:00"
+  "sha256": "f382150fc98714cab6dc6c4cb12350be0703e27fca6e955b958b3a667f06015c",
+  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
  }
 }
 ---
@@ -960,7 +960,8 @@
      "type": "prose",
      "text_ref": "手机和电脑里的",
      "row": "intro",
-     "width": "70%"
+     "width": "70%",
+     "row_fit_illustration": true
     },
     {
      "type": "quote",
@@ -2310,7 +2311,7 @@
  "screen": {
   "id": "personal-media-04",
   "section": "usage",
-  "title": "画廊",
+  "title": "我拍的风景",
   "scene": "横版：左上毛笔艺术字标题“画廊”加绿色笔刷线，右上角几枝水彩绿叶；标题下一行说明。下面两行、每行五个照片空位（白底、细浅绿描边、圆角，里面什么都不画），同一行的空位一样高：第 3 张（灯笼）和第 7 张（金色中庭）是竖图，这两格画成竖向 3:4，其余八格横向 4:3，每行按实际宽度排开、左右对齐。空位下面一行小字说明（第 4 张说明较长，可折成三行，其余一行）。拼页程序往格子里贴旧网站已压好的缩略图（横图 720×540、竖图 405×540，按原比例完整放进、不裁），点开再显示原图（design\\v3\\preview\\photos 下那张，只压缩一次）。版面参照 E:\\Cache\\Claude\\Temp\\4bd59299\\research\\sr-compress\\round02\\source-snapshots\\personal-media\\3cc14c94409aec87-screen-11-desktop.png 右半边的画廊，但占满整屏宽，左边不再放演进。风格照已通过的本页各屏（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。",
   "portrait": "竖版 9:16：标题和说明在上；照片空位改成两列五行，第 3、7 张竖向 3:4、其余横向 4:3，同一行一样高，说明在各自空位下面。字和横版完全一样。",
   "links": [],
@@ -2421,7 +2422,7 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "text_ref": "画廊",
+     "text_ref": "我拍的风景",
      "align": "center",
      "size": "medium"
     },
@@ -2447,7 +2448,11 @@
       "4:3"
      ],
      "caption_per_slot": true,
-     "equal_row_height": true
+     "equal_row_height": true,
+     "row_items": [
+      5,
+      5
+     ]
     }
    ],
    "portrait_required": true,
@@ -2465,7 +2470,7 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "text_ref": "画廊",
+     "text_ref": "我拍的风景",
      "align": "center",
      "size": "medium"
     },
@@ -2535,7 +2540,7 @@
 }
 ```
 
-# 画廊
+# 我拍的风景
 
 我自己拍的 10 张风景，大多在“精选”里。点一张看大图。
 

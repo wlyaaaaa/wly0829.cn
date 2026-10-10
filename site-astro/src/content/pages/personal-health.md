@@ -551,7 +551,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "53ea74eb19885d079e1d2cc591d849eba41ce970c62a4579316f5304ebaae3d3",
-  "converted_at_beijing": "2026-10-10T06:26:49+08:00"
+  "converted_at_beijing": "2026-10-10T07:27:56+08:00"
  }
 }
 ---
@@ -603,6 +603,13 @@
      "type": "prose",
      "align": "right",
      "text_ref": "截至10月10"
+    },
+    {
+     "type": "prose",
+     "text_ref": "我问健康问题时，AI先读",
+     "row": "首屏",
+     "width": "42%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

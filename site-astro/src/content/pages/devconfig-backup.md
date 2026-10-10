@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "a4de92c64240c16e3bf3b9be4d26bd00fda000e871e97668b491ca814ea085e4",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -731,7 +731,7 @@
      "row": "hero",
      "text_ref": "在整套系统里的位置→怎么协作GitHub复制AI续作说明",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

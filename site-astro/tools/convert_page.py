@@ -248,16 +248,106 @@ def status_note_after(b):
     return bool(STATUS_ASOF.match(ref)) or ref.startswith("偶尔用") or (b.get("type") == "notice" and b.get("variant") == "source_note")
 
 
-def status_first(page, meta):
+TEXTISH = ("prose", "action_button", "notice", "points_card", "content_card", "bullet_list", "section_heading", "source_text_card", "quote", "dialogue", "tag", "stat_card")
+
+
+def title_absorbed(s, bl, t0, tj):
+    """标题组后面紧跟的段落要是没有自己的块（构图里漏了），区块库会把它算进标题那一块（个人健康横版就是这样）。
+    返回给这些段落补的 prose 块的 text_ref（没有就 None）。"""
+    sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
+    from engine.parse import parse, original_markdown, node_text
+    from engine.layout import assign_by_spec, _starts
+    nodes = parse(s.get("text", ""), markdown_links=original_markdown(s))
+    got = assign_by_spec(nodes, [dict(b) for b in bl], [], [])
+    extra = [n for g in got[t0:tj] for n in g["nodes"][1:]]
+    if not extra or extra[0].get("type") != "para":
+        return None
+    t = node_text(extra[0])
+    ref = t[:min(len(t), 12)]
+    return ref if _starts(extra[0], ref) else None
+
+
+def fit_rows(blocks):
+    """横版：一行两栏、一栏是图（一幅插画，或一张截图连同下面的图注）、另一栏是文字（含数字卡）的，标上 row_fit_illustration
+    （排版时图按文字栏高度定大小，见区块库 typeset_apply.js 的 fitIllustrationRows）。"""
+    n = 0
+    i = 0
+    while i < len(blocks):
+        r = blocks[i].get("row")
+        if not r:
+            i += 1
+            continue
+        j = i
+        while j < len(blocks) and blocks[j].get("row") == r:
+            j += 1
+        cols = []
+        for b in blocks[i:j]:
+            if b.get("width") or not cols:
+                cols.append([b])
+            else:
+                cols[-1].append(b)
+        ill = [c for c in cols if (len(c) == 1 and c[0].get("type") == "illustration" and not c[0].get("panels") and "gallery_assets" not in c[0])
+               or (c[0].get("type") == "screenshot" and all(b.get("type") == "prose" for b in c[1:]))]
+        txt = [c for c in cols if c not in ill and all(b.get("type") in TEXTISH for b in c)]
+        tail = [c for c in cols if len(c) >= 2 and c[-1].get("type") == "illustration" and not c[-1].get("panels") and "gallery_assets" not in c[-1]
+                and all(b.get("type") in TEXTISH for b in c[:-1])]
+        if len(cols) == 2 and not ill and len(tail) == 1 and all(b.get("type") in TEXTISH for c in cols if c not in tail for b in c):
+            for b in blocks[i:j]:
+                b.pop("row_valign", None)
+            blocks[i]["row_fit_illustration"] = True
+            n += 1
+        elif len(cols) == 2 and len(ill) == 1 and len(txt) == 1:
+            for b in blocks[i:j]:
+                b.pop("row_valign", None)
+            blocks[i]["row_fit_illustration"] = True
+            n += 1
+        i = j
+    return n
+
+
+STATUS_STATE = {"在用": "ok", "常用": "ok", "偶尔用": "ok", "待验收": "waiting", "待实施": "waiting", "已停用": "disabled", "已冻结": "disabled"}
+
+
+def status_items(sl):
+    """page.json 顶层 status_line（主持 10 月 10 日 08:00 定的字段，见 status-line-schema.md）→ 首屏状态行：
+    第一项“状态 · 上次……”，后面每条事实一项（最多 2 条）；下面一行小字“截至……（来源）”。查不到的项省略，不编。"""
+    if not isinstance(sl, dict) or not sl.get("state"):
+        return [], ""
+    yr = str(sl.get("as_of") or "")[:4]
+
+    def day(v):
+        m = re.match(r"(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?", str(v or ""))
+        if not m:
+            return ""
+        y, mo, d, hh, mm = m.groups()
+        return (f"{y} 年 " if y != yr else "") + f"{int(mo)} 月 {int(d)} 日" + (f" {int(hh):02d}:{mm}" if hh else "")
+
+    first = str(sl["state"]).strip()
+    last = sl.get("last") if isinstance(sl.get("last"), dict) else {}
+    if last.get("at") and day(last["at"]):
+        first += " · " + (str(last.get("label") or "上次运行").strip()) + " " + day(last["at"])
+    items = [{"text": first, "state": STATUS_STATE.get(str(sl["state"]).strip(), "ok")}]
+    items += [{"text": str(f).strip(), "state": "fact"} for f in (sl.get("facts") or [])[:2] if str(f).strip()]  # 事实项：中性圆点
+    note = ""
+    if day(sl.get("as_of")):
+        note = "截至 " + day(sl["as_of"]) + (f"（{str(sl['source']).strip()}）" if str(sl.get("source") or "").strip() else "")
+    return items, note
+
+
+def status_first(page, meta, s=None, status_line=None):
     got = set()
     for o, sp in (meta.get("layout") or {}).items():
         bl = list((sp or {}).get("blocks") or [])
         ti = next((i for i, b in enumerate(bl) if b.get("type") == "chapter_title"), None)
         if ti is None:
             continue
-        # 标题组：大标题，加紧跟着的标签（tag）和加粗大字的副标题
+        # 标题组：大标题（连同和它用 inline_row 并排的品牌小图标），加紧跟着的标签（tag）和加粗大字的副标题
+        il = bl[ti].get("inline_row")
+        t0 = ti
+        while il and t0 > 0 and bl[t0 - 1].get("inline_row") == il:
+            t0 -= 1
         tj = ti + 1
-        while tj < len(bl) and (bl[tj].get("type") == "tag" or (
+        while tj < len(bl) and ((il and bl[tj].get("inline_row") == il) or bl[tj].get("type") == "tag" or (
                 bl[tj].get("type") == "prose" and bl[tj].get("bold") and bl[tj].get("size") == "large")):
             tj += 1
         live = [i for i in range(tj, len(bl)) if bl[i].get("type") in STATUS_LIVE]
@@ -270,21 +360,44 @@ def status_first(page, meta):
             stats.append(i)
             if i + 1 < len(bl) and status_note_after(bl[i + 1]):
                 stats.append(i + 1)
-        if not live and not stats:
+        st_block = None   # 没有实时条的页：page.json 的 status_line 排成一条静态“现在”条，放在数字卡前面（有实时条的页实时条优先）
+        if not live and status_line:
+            items, note = status_items(status_line)
+            if items:
+                st_block = {"type": "live_strip", "frame_mode": "plain", "static_items": items, **({"static_note": note} if note else {})}
+        if not live and not stats and not st_block:
             continue
-        moved = live + [i for i in stats if i not in live]
-        title, status = bl[ti:tj], [bl[i] for i in moved]
+        # 数字卡和截图/插画并排成一行（Typora 薄荷主题：截图 60% + 数字卡 40%）：整行一起挪到标题下，保持原来的并排，
+        # 不把截图单独留在下面（单独留下就是一张 60% 宽的图、右边空一大块）
+        keep_rows = set()
+        for i in stats:
+            r = bl[i].get("row")
+            if r and bl[i].get("type") == "stat_card":
+                others = [b for k, b in enumerate(bl) if k >= tj and b.get("row") == r and k != i]
+                if others and all(b.get("type") in ("screenshot", "illustration") for b in others):
+                    keep_rows.add(r)
+        stat_set = set(stats) | {k for k in range(tj, len(bl)) if bl[k].get("row") in keep_rows}
+        moved = live + sorted(k for k in stat_set if k not in live)
+        title, status = bl[t0:tj], ([st_block] if st_block else []) + [bl[i] for i in moved]
         rest = [b for i, b in enumerate(bl) if i >= tj and i not in moved]
-        row = title[0].get("row")
+        row = bl[ti].get("row")
         if row:  # 标题组从并排的那一行里拿出来占整行；原来标题那一栏的宽度交给这一行剩下的第一块，左右比例不变
-            w = title[0].get("width")
+            w = next((b.get("width") for b in title if b.get("width")), None)
+            add_ref = title_absorbed(s, bl, t0, tj) if s else None
             for b in title:
                 b.pop("row", None); b.pop("width", None)
+                if il and b.get("inline_row") == il:   # 品牌小图标和标题照旧并排：只装这几块的一行（inline_row 要在行里才排得出来）
+                    b["row"] = "k1a-title"
+            # 标题原来在并排行的左栏（看着靠左）：挪出来占整行后照原样靠左，不居中（主持 10 月 10 日 07:18）
+            bl[ti]["align"] = "left"
+            if add_ref:  # 标题那一块原来顺带装着的介绍段：补一块 prose 留在原来的栏里，跟插画并排，不跟着标题挪到状态上面
+                k = next((x for x, b in enumerate(rest) if b.get("row") == row), 0)
+                rest.insert(k, {"type": "prose", "text_ref": add_ref, "row": row, **({"width": w} if w else {})})
+                ABSORBED.append(f"{page} {o}：{add_ref}")
             nxt = next((b for b in rest if b.get("row") == row), None)
             if nxt is not None and w and not nxt.get("width"):
                 nxt["width"] = w
-            # 标题（和原来同栏的数字卡）挪走后，左栏的字变短：右栏只留插画，插画后面原来同栏的块（对话、提示等）挪到这一行下面占整行，
-            # 左右两栏再上下居中对齐——不在短的一栏下面空一大块
+            # 右栏插画后面原来同栏的块（对话、提示等）挪到这一行下面占整行，这一行只剩文字和插画两栏
             cols = []
             for b in (x for x in rest if x.get("row") == row):
                 if b.get("width") or not cols:
@@ -294,15 +407,24 @@ def status_first(page, meta):
             if len(cols) >= 2 and cols[-1][0].get("type") == "illustration":
                 for b in cols[-1][1:]:
                     b.pop("row", None); b.pop("width", None)
-                if not any(b.get("row_valign") for b in rest if b.get("row") == row):
-                    cols[0][0]["row_valign"] = "center"
-        for b in status:  # 状态块占整行
+        for b in status:  # 状态块占整行（和截图并排的数字卡那一行照旧并排）
+            if b is st_block:
+                continue
+            if b.get("row") in keep_rows:
+                continue
             b.pop("row", None); b.pop("width", None)
-        sp["blocks"] = bl[:ti] + title + status + rest
-        got.add("实时" if live else "数字")
+        sp["blocks"] = bl[:t0] + title + status + rest
+        if o == "h":
+            FITTED[page] = FITTED.get(page, 0) + fit_rows(sp["blocks"])
+        got.add("实时" if live else ("状态行" if st_block else "数字"))
     if got:
         STATUS_REPORT[page] = "+".join(sorted(got, reverse=True))
     return bool(got)
+
+
+ABSORBED, FITTED = [], {}
+# 演示用临时状态行（不进仓库）：CONVERT_STATUS_LINE_DEMO=<json 文件，{页: status_line}>
+STATUS_DEMO = json.load(open(os.environ["CONVERT_STATUS_LINE_DEMO"], encoding="utf-8")) if os.environ.get("CONVERT_STATUS_LINE_DEMO") else {}
 
 
 # —— 构图里写死数字的 text_ref：内容组刷新数字以后（例如“125个自动任务”变成“127 个自动任务”），区块库按 text_ref 认不出这一块，
@@ -346,27 +468,25 @@ def heal_text_refs(s, meta):
                 UNMATCHED.append(f"{s['id']} {o}：{head}")
 
 
-# —— 退役技能的去向页（kind=skill-redirect）：共用一个简单版式——标题加一句话、话里的链接能点，不逐页构图 ——
-def redirect_parts(data):
-    s = next((x for x in data["screens"] if not x.get("hidden")), None)
-    if not s:
-        return {"destination": data.get("destination", ""), "paragraphs": []}
-    links = {x["text"]: x["href"] for x in (s.get("links") or []) if isinstance(x, dict) and x.get("text") and x.get("href")}
-    paras = [p.strip() for p in re.split(r"\n\s*\n", s.get("text", "")) if p.strip()]
-    if paras and paras[0] == data["title"]:
-        paras = paras[1:]
-    out = []
-    for p in paras:
-        segs = []
-        for k, piece in enumerate(re.split(r"〔([^〕]+)〕", p)):
-            if not piece:
-                continue
-            if k % 2 and piece in links:
-                segs.append({"text": piece, "href": links[piece]})
-            else:
-                segs.append({"text": piece})
-        out.append(segs)
-    return {"destination": data.get("destination", ""), "paragraphs": out}
+# —— 退役技能的去向页（kind=skill-redirect）：共用一个简单版式，不逐页构图（主持 10 月 10 日 08:06 改成和全站一样）——
+#    电脑上一行两栏：左栏毛笔大标题（没有同字标题图，排版时用行楷字截图）和那一句话（〔〕里的词按 links 变成能点的链接），
+#    右栏一张小图标（素材库已有的“工具箱进回收站”），按文字高度定大小；手机上标题、图标、那句话从上到下。卡片按内容高，不留大块空；不收录（noindex）。
+REDIRECT_ICON = "_library/icons/工具箱回收站.png"
+
+
+def redirect_layout(s, title):
+    sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
+    from engine.parse import parse, original_markdown, node_text
+    nodes = parse(s.get("text", ""), markdown_links=original_markdown(s))
+    ref = next((node_text(n)[:10] for n in nodes[1:] if n.get("type") == "para" and node_text(n)), None)
+    h = [{"type": "chapter_title", "text_ref": title, "align": "left", "size": "large", "row": "go", "width": "70%", "row_fit_illustration": True}]
+    v = [{"type": "chapter_title", "text_ref": title, "align": "center", "size": "large"},
+         {"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "size": "medium"}]
+    if ref:
+        h.append({"type": "prose", "text_ref": ref, "row": "go"})
+        v.append({"type": "prose", "text_ref": ref})
+    h.append({"type": "illustration", "asset": REDIRECT_ICON, "align": "center", "row": "go", "width": "30%"})
+    return {"h": {"blocks": h}, "v": {"blocks": v}}
 
 
 def convert(page):
@@ -387,7 +507,7 @@ def convert(page):
     parts, sections = [], []
     redirect = data.get("kind") == "skill-redirect"
     first = True
-    for s in ([] if redirect else data["screens"]):
+    for s in data["screens"]:
         if s.get("hidden"):
             continue
         s = json.loads(json.dumps(s))
@@ -405,16 +525,18 @@ def convert(page):
         meta = {"screen": {k: v for k, v in s.items() if k not in SCREEN_SKIP},
                 "layout": {o: specs[(s["id"], o)] for o in ("h", "v") if (s["id"], o) in specs},
                 "images": screen_images(s["id"], {o: specs[(s["id"], o)] for o in ("h", "v") if (s["id"], o) in specs})}
+        if redirect:  # 去向页不用各页旧的构图：照共用版式排（见 redirect_layout）
+            meta["layout"], meta["images"] = redirect_layout(s, data["title"]), []
         if swap:  # 按活动版本重出时，构图里认首行标签的 text_ref 跟着换
             meta["layout"] = swap_text_ref(meta["layout"], *swap)
         heal_text_refs(s, meta)
         if first and data.get("kind") in STATUS_KINDS and not os.environ.get("CONVERT_NO_STATUS_FIRST"):  # 设这个变量只为出“改前”对照
-            status_first(page, meta)
+            status_first(page, meta, s, data.get("status_line") or STATUS_DEMO.get(page))
         first = False
         text = gallery_title(meta, s.get("text", ""))
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
-        if s.get("section") and s["section"] not in [x[0] for x in sections]:
+        if s.get("section") and s["section"] not in [x[0] for x in sections] and not redirect:   # 去向页只有一屏，不出目录条
             sections.append((s["section"], s.get("title", "")))
     labels = {}
     if os.path.exists(TOC_LABELS):
@@ -431,8 +553,6 @@ def convert(page):
         "title": data["title"], "kind": data["kind"], "url": data["url"], "tagline": data.get("tagline", ""),
         # 改过地址的页：旧地址出一句话的去向页、站内链到旧地址的都改指现在的地址（page.json 的 old_urls）
         **({"old_urls": data["old_urls"]} if data.get("old_urls") else {}),
-        # 退役技能的去向页：标题加一句话（链接能点），共用版式，见 src/pages/[...slug].astro
-        **({"redirect": redirect_parts(data)} if redirect else {}),
         "toc": toc,
         "page": {k: v for k, v in data.items() if k != "screens"},
         "source": {"page": f"sources/pages/{page}/page.json", "sha256": hashlib.sha256(raw).hexdigest(), "converted_at_beijing": now},
@@ -480,6 +600,10 @@ if __name__ == "__main__":
         print("  规则原文公开过滤：", json.dumps(g, ensure_ascii=False))
     if STATUS_REPORT:
         print("  首屏状态行：", json.dumps(STATUS_REPORT, ensure_ascii=False))
+    if FITTED:
+        print("  首屏文字+插画并排行（插画按文字高度定大小）：", json.dumps({k: v for k, v in FITTED.items() if v}, ensure_ascii=False))
+    for a in ABSORBED:
+        print("  标题块顺带装着的介绍段，补成单独一块留在原栏：", a)
     for h in HEALED:
         print("  构图 text_ref 只差数字，已按源里现在的写法认：", h)
     for u in UNMATCHED:

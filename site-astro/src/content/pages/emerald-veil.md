@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -714,7 +714,7 @@
      "row": "hero",
      "text_ref": "桌上的主屏是一块OLED，画面长时间一动不动，容易留下残影。它常驻在托盘里：6分钟没",
      "width": "55%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

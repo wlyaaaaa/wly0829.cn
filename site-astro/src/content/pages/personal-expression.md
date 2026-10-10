@@ -558,7 +558,7 @@
  "source": {
   "page": "sources/pages/personal-expression/page.json",
   "sha256": "7ee6b7daabc203fdfa7ee4a36ccdf81d1bbdd662a7ff16812c08482056317165",
-  "converted_at_beijing": "2026-10-10T06:24:12+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
  }
 }
 ---
@@ -611,7 +611,7 @@
      "text_ref": "AI跟我说话、替我给别人写消息，都照这里的手册和样本来。讲给我听：AI向我汇报、解释、请我拍板时",
      "row": "hero",
      "width": "57%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",

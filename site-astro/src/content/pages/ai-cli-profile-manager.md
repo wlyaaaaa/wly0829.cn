@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T06:41:28+08:00"
+  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
  }
 }
 ---
@@ -871,7 +871,7 @@
      "row": "hero",
      "text_ref": "选好模型，打开原版AI编程工具来用。",
      "width": "50%",
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
