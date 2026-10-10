@@ -1,5 +1,4 @@
 import home from '../sources/retained-home-cockpit/home.html?raw';
-const cockpit = Object.values(import.meta.glob('../sources/retained-home-cockpit/cockpit.html', { eager: true, query: '?raw', import: 'default' }))[0] as string;
 import access from '../sources/retained-home-cockpit/computer-access.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
 import homeCta from '../public/_home-cockpit/home-cta.css?raw';
@@ -8,12 +7,12 @@ import motionRuntime from '../public/_living/quality-runtime/manifest.json';
 import typesetStyles from './styles/typeset-page.css?raw';
 
 // 保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
-export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
+export function retainedPage(page: 'home' | 'computer-access') {
   const activate = (document: string) => document.replace('</head>', '<script src="/_live/site-live-runtime.js" defer></script></head>')
     .replace(/<script\b[^>]*\bdata-src="[^"]*b2-(?:typeset|live)-[^"/]+\.js"[^>]*>/g, tag => tag.replace(/\sdata-album-runtime\b/g, '').replace('data-src=', 'src='));
   if (page === 'computer-access') return activate(access).replace('</head>', '<link rel="stylesheet" href="/_interactions/anchor-offset.css"></head>')
     .replace('</body>', '<script src="/_interactions/anchor-offset.js" defer></script></body>');
-  let html = page === 'home' ? home : page === 'cockpit' ? cockpit : access;
+  let html = page === 'home' ? home : access;
   for (const [from, to] of Object.entries(motionRuntime.urls)) html = html.replaceAll(from, to as string);
   html = html.replace('</head>', `<style data-motion-quality>${typesetStyles.split('/* motion-quality-v2 */')[1]}</style></head>`);
   html = html.replace(/<script[^>]*data-album-inline[^>]*>.*?<\/script>/s, () => `<script data-album-inline>${albumRuntime.source}</script>`)
@@ -45,11 +44,9 @@ export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
     html = html.replace('<meta charset="utf-8">', `<meta charset="utf-8"><style data-retained-native-layout>${native}${critical}html:not([data-home-opening="pending"]) .image-loading-wrap,#content>.screen:not(#home-01) .image-loading-wrap{background:${watercolor}!important}</style>`);
   }
   if (page !== 'computer-access') {
-    const style = page === 'home' ? 'time-labels.css' : 'cockpit-offline.css';
-    html = html.replace('</head>', `<link rel="stylesheet" href="/_home-cockpit/${style}"></head>`);
+    html = html.replace('</head>', '<link rel="stylesheet" href="/_home-cockpit/time-labels.css"></head>');
   }
   if (page === 'home') html = html.replace('</head>', `<style data-home-cta-layout>${homeCta}</style></head>`);
-  if (page === 'cockpit') html = html.replace('</body>', '<script src="/_home-cockpit/cockpit-offline.js" defer></script></body>');
   if (page !== 'home') html = html.replace('</head>', '<link rel="stylesheet" href="/_interactions/anchor-offset.css"></head>')
     .replace('</body>', '<script src="/_interactions/anchor-offset.js" defer></script></body>');
   return activate(html);
