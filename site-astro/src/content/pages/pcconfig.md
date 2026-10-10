@@ -1047,7 +1047,7 @@
     },
     {
      "id": "n-pending",
-     "text": "75 项",
+     "text": "77 项",
      "meaning": "待验收清单的全部条目（含已通过、暂缓、已被取代的），口径同 9 月 28 日的 43 项",
      "as_of": "2026-10-10",
      "source": "E:\\PCConfig\\registries\\pending_acceptance.json items 条数（最后修改 10 月 9 日 08:56 北京时间）",
@@ -1208,7 +1208,7 @@
     },
     {
      "id": "n-tests",
-     "text": "206 项登记测试，15 组",
+     "text": "207 项登记测试，15 组",
      "meaning": "tests/test-registry.json 的 tests 条数，按 subsystem 分 15 组",
      "as_of": "2026-10-10",
      "source": "E:\\PCConfig\\tests\\test-registry.json（提交 f45f22dd）",
@@ -1229,7 +1229,7 @@
     },
     {
      "id": "n-commits",
-     "text": "1770 次",
+     "text": "1772 次",
      "meaning": "main 分支提交数（口径同 9 月 28 日的 1437 次，只算 main）",
      "as_of": "2026-10-10",
      "source": "git -C E:\\PCConfig rev-list --count main（最后一次提交 10 月 10 日 06:20 北京时间）",
@@ -1586,8 +1586,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig/page.json",
-  "sha256": "7af96084d696debedad175fa9784f89e107cdaac73a0aed563b59afa50e84cf0",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "sha256": "b7e77d75b72be5d66b6ce05fd7e0b957e012f9bfcb0783c2c629532315a9a141",
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -4515,7 +4515,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 
 **换机照表重建**　按 9 月 28 日的表：33 个必须重建，5 个可选，49 个装回软件后软件自己会装，38 个等我决定。
 
-**待验收都记在一处**　所有“要等时机才能核”的事登记在一张清单里（10 月 10 日共 75 项，含已验过的），驾驶舱上随时能看。
+**待验收都记在一处**　所有“要等时机才能核”的事登记在一张清单里（10 月 10 日共 77 项，含已验过的），驾驶舱上随时能看。
 
 ::screen{#pcconfig-12 section="tech"}
 
@@ -4774,7 +4774,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 
 **这台电脑**　技嘉 X870E 主板 · AMD 9950X3D · 64 GB 内存 · RTX 5090 D · 三块显示器；硬盘：4 TB 固态（C、E）、2 TB 固态（G）、2 TB 外接固态（H）、4 TB 机械盘（D）
 
-**测试和指南**　206 项登记测试，分 15 组，按改动挑着跑；换机恢复指南每天自动发布到 G 和 H。
+**测试和指南**　207 项登记测试，分 15 组，按改动挑着跑；换机恢复指南每天自动发布到 G 和 H。
 
 ::screen{#pcconfig-13 section="tech"}
 
@@ -5061,8 +5061,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
 - **换机照表来。**　恢复顺序、要重建的任务、要装的软件都有表，AI 照着做。
 
 **110620 行**　代码（PowerShell、Python、Node.js、C#）
-**206 项**　登记测试
-**1770 次**　提交（7 月 9 日起，截至 10 月 10 日）
+**207 项**　登记测试
+**1772 次**　提交（7 月 9 日起，截至 10 月 10 日）
 
 ::screen{#pcconfig-14 section="tech"}
 

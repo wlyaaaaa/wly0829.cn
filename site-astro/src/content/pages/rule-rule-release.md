@@ -153,7 +153,7 @@
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
   "sha256": "4450239d24ba36023060a6d49a36529687a1323ffb634fb21de7b4932700f1ab",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -1318,7 +1318,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1348,7 +1348,7 @@ E186　E187　当前　上一版　SYSTEM
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1500,7 +1500,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -1523,7 +1523,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",

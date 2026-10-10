@@ -206,7 +206,7 @@
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
   "sha256": "e1691a0180a7f447dc44f511535082a0020619624a5bf5a4ea7ed3a696f5b42b",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -1480,7 +1480,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1510,7 +1510,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1690,7 +1690,7 @@ Claude 主持、和 GPT 协作时，按约法 L22 和模型清单：Claude 想�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -1764,7 +1764,7 @@ Claude 主持、和 GPT 协作时，按约法 L22 和模型清单：Claude 想�
     {
      "type": "section_heading",
      "size": "small",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",

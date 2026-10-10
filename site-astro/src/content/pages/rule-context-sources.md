@@ -411,7 +411,7 @@
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
   "sha256": "5d3fa770fd69eae8d7a647613e3ad64c09520072150acf50172f4dd8b35d9192",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -2439,7 +2439,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2473,7 +2473,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2630,7 +2630,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -2661,7 +2661,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -2825,7 +2825,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -2855,7 +2855,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",

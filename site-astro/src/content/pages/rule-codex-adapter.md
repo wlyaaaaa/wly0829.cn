@@ -222,7 +222,7 @@
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
   "sha256": "e55224e24adf911105e84697818e584db5953944cf3082450b58ad3a3755498d",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -1261,7 +1261,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1286,7 +1286,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1452,7 +1452,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -1479,7 +1479,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",

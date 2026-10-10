@@ -260,7 +260,7 @@
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
   "sha256": "55d7da8742987a7c3cca65ff2a6b318e0aed42d48842282da0e4df94ed052c7d",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -1861,7 +1861,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版，一字不改",
+     "text_ref": "原文·E251版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1901,7 +1901,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版，一字不改",
+     "text_ref": "原文·E251版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2144,7 +2144,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },
@@ -2191,7 +2191,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },
@@ -2348,7 +2348,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },
@@ -2389,7 +2389,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },
@@ -2532,7 +2532,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },
@@ -2576,7 +2576,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文 · E230 版 · 续",
+     "text_ref": "原文·E251版·续",
      "align": "left",
      "size": "small"
     },

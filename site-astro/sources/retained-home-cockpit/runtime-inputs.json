@@ -74,8 +74,8 @@
       "bytes": 18230
     },
     "scripts/build-assembled-site.py": {
-      "sha256": "78e97129b3acf2d23d883b9728553c74a4a4093c4a130bf0c4d9a3a5d3d35c10",
-      "bytes": 57416
+      "sha256": "170e87e32930bb3821563ce309ae80c7bf3fd5690dc1b08b1db30e28e90e9679",
+      "bytes": 57640
     },
     "scripts/repair-release-navigation.py": {
       "sha256": "b51f58fda3f303c5d5eaabfffee1a907dad41dd8fb4b0859dd5bd48983a7f3cc",
@@ -462,8 +462,8 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "9ce49d610621d124707fa6049a05e086b97736918ef6f4d2b2192413622ced49",
-      "bytes": 248749
+      "sha256": "28bda3c51924272ad0b9036db6a46f555284672ac095873921edf4b7aab44d30",
+      "bytes": 248751
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
       "sha256": "f5093dd15ddd9be4155b5af7e114d565d449653d87d1130c5ec791f2167122c3",

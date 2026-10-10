@@ -235,7 +235,7 @@
  "source": {
   "page": "sources/pages/rule-claude-adapter/page.json",
   "sha256": "2df4f7c4414a65fdd209c0a2095b3d57970def51158c2c8c204618191c2757e9",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
  }
 }
 ---
@@ -3062,7 +3062,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3100,7 +3100,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版，一字不改"
+     "text_ref": "原文·E251版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -3275,7 +3275,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3312,7 +3312,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3436,7 +3436,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3469,7 +3469,7 @@ Ultracode 不是比 max 更高的档，而是 xhigh 加多智能体编排（工�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3573,7 +3573,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3608,7 +3608,7 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3721,7 +3721,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3747,7 +3747,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3821,7 +3821,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3857,7 +3857,7 @@ Steer 的长消息可用 `-PromptFile` 替换 `-Message`，不同时传；消息
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -3996,7 +3996,7 @@ Claude 会话和本机、图形界面、电脑 MCP 用同一份个人资料状�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
@@ -4033,7 +4033,7 @@ Claude 会话和本机、图形界面、电脑 MCP 用同一份个人资料状�
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文 · E230 版 · 续"
+     "text_ref": "原文·E251版·续"
     },
     {
      "type": "source_text_card",
