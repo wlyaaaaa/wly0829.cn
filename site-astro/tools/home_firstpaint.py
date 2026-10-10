@@ -10,13 +10,13 @@ OPENING = r"""(() => {
   const opening=window.HomeOpening={pending:!back&&!reduced.matches,
     reason:reduced.matches?'reduced-motion':back?'back-forward':'preparing',
     imageAt:null,started:false};
-  let timer=0;
+  const startupGraceMs=6000;let timer=0;
   opening.release=reason=>{if(!opening.pending)return;opening.pending=false;
     opening.reason=reason;delete root.dataset.homeOpening;clearTimeout(timer);};
   opening.dataReady=image=>{if(!opening.pending||opening.started||opening.imageAt!==null)return;
     opening.imageAt=performance.getEntriesByName(image.currentSrc||image.src).at(-1)?.responseEnd||performance.now();
-    timer=setTimeout(()=>opening.release('startup-timeout'),Math.max(0,3000-(performance.now()-opening.imageAt)));};
-  opening.start=()=>{if(!opening.pending||opening.imageAt!==null&&performance.now()-opening.imageAt>=3000){
+    timer=setTimeout(()=>opening.release('startup-timeout'),Math.max(0,startupGraceMs-(performance.now()-opening.imageAt)));};
+  opening.start=()=>{if(!opening.pending||opening.imageAt!==null&&performance.now()-opening.imageAt>=startupGraceMs){
     opening.release('startup-timeout');return false;}
     opening.started=true;clearTimeout(timer);return true;};
   if(opening.pending)root.dataset.homeOpening='pending';
