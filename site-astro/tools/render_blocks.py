@@ -83,7 +83,7 @@ def publish_path(p):
     if not os.path.exists(dst) or os.path.getsize(dst) != st.st_size or sha(dst) != source_sha:
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copyfile(p, dst)
-        if os.path.getsize(dst) != st.st_size or sha(dst) != source_sha:
+        if not os.path.isfile(dst) or os.path.getsize(dst) != st.st_size or sha(dst) != source_sha:
             raise ValueError("原图复制后的 SHA256 不同：" + p)
     _published[key] = url
     return url

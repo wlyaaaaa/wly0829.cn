@@ -39,19 +39,22 @@ class AstroReleaseTests(unittest.TestCase):
                         'parts': [{'id': 'charter/charter-02', 'label': self.label, 'markdown_sha256': sha, 'prose_sha256': sha}]}}}
         self.current = {'release_id': self.pin['version'], 'ruleset_sha256': 'a'*64, 'release_record_sha256': 'b'*64}
 
-    def test_same_size_changed_asset_replaces_published_original_bytes(self):
+    def test_same_size_changed_asset_publishes_current_bytes_at_a_new_address(self):
         assets = self.root/'sources/assets'; assets.mkdir(parents=True); source = assets/'image.svg'
         old = b'<svg xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="red"/></svg>'
         new = old.replace(b'red', b'tan'); source.write_bytes(old)
         with patch.object(renderer, 'REPO', str(self.root)), patch.object(renderer, 'PUB', str(self.root/'public')):
-            self.assertEqual(renderer.publish_path(str(source)), '/assets/image.svg')
-            destination = self.root/'public/assets/image.svg'
+            old_url = renderer.publish_path(str(source))
+            self.assertIn(hashlib.sha256(old).hexdigest(), old_url)
+            destination = self.root/'public'/old_url.lstrip('/')
             self.assertEqual(destination.read_bytes(), old)
             source.write_bytes(new)
             self.assertEqual(source.stat().st_size, destination.stat().st_size)
             self.assertNotEqual(hashlib.sha256(new).digest(), hashlib.sha256(old).digest())
-            renderer.publish_path(str(source))
-            self.assertEqual(destination.read_bytes(), new)
+            new_url = renderer.publish_path(str(source))
+            self.assertNotEqual(new_url, old_url)
+            self.assertEqual((self.root/'public'/new_url.lstrip('/')).read_bytes(), new)
+            self.assertEqual(destination.read_bytes(), old)
 
     def test_current_rule_version_ruleset_or_record_drift_is_rejected(self):
         self.assertEqual(astro_rules.verify(self.root, self.pin, self.current)['status'], 'pass')
@@ -148,7 +151,7 @@ class AstroReleaseTests(unittest.TestCase):
         path.write_text('---\n' + json.dumps(fm) + '\n---\n\n::screen{#charter-04}\n\n```typeset\n'
             + json.dumps({'screen': screen}) + '\n```\n\n' + current + '\n', encoding='utf8')
         result = {'screen': 'charter-04', 'o': 'h', 'shape': 'source_text', 'html': '<p>Old canvas text</p>', 'style': '', 'height': 100}
-        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'):
+        with patch.object(renderer, 'SITE', str(self.root)), patch.object(renderer, 'MD_DIR', str(md)), patch.object(renderer, 'OUT_DIR', str(out)), patch.object(renderer, '_ALIASES', {}), patch.object(renderer, 'font_subset', return_value='/font.woff2'), patch.object(renderer, 'publish_path', return_value='/fixture-resource'):
             rendered = renderer.finish_page('charter', fm, [result], 'fixture')
         article = rendered['screens'][0]
         self.assertIn('Current text', article['article']); self.assertIn('E:\\.agents', article['article'])
