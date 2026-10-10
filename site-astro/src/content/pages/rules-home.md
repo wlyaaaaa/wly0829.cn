@@ -1269,7 +1269,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一面绿色盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

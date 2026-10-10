@@ -459,7 +459,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "row": "principles",
         "width": "27%",
@@ -499,7 +499,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "3595 行",
         "columns_v": 1

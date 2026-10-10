@@ -1639,7 +1639,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "带箭头的方框",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1684,7 +1684,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个折叠箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {

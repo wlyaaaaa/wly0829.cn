@@ -1777,11 +1777,11 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "key": "双屏同步",
    "source_phrase": "这一页怎么工作\n页面开在前台时，每60秒读一次电脑；切回来马上读。刷新不会延长授权。时间都是北京时间。网页只是遥控器：判断和执行都在电脑上，由密码中心的授权程序办；网页自己不存授权状态。每次办理都和这个浏览器绑定；结果不明时只查原来那次，不会把同一个动作做第二遍。只能在wly0829.cn或电脑自己的授权页上办理；在别处打开只能看。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

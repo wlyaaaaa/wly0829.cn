@@ -747,7 +747,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵云和两张并排的纸",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1038,7 +1038,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1377,7 +1377,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "一只打钩的麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {

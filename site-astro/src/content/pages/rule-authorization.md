@@ -1249,7 +1249,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "里那把金色钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1478,7 +1478,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "同一组），中间绿色盾牌徽章不写字",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

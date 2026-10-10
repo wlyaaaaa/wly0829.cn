@@ -859,7 +859,7 @@ E186　E187　当前　上一版　SYSTEM
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一个扎好的小包裹、“只用一个发布入口”配一扇只有一个门把手的小木门、“同时有人发布”配两只小手同时伸向一本书、“失败和回退”配一个往回绕的绿色箭头",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {

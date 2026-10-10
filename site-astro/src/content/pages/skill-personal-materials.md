@@ -1090,7 +1090,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "选中后核对大小和内容指纹，翻到页码、段落或行号。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

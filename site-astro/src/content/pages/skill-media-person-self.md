@@ -576,7 +576,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "先看有没有现成的：这段录音以前查过、结果还有效，就直接用。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -816,7 +816,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "查过的不重跑｜同一段录音已有有效结果，直接复用",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1104,7 +1104,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1149,7 +1149,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1227,7 +1227,7 @@
    "fallback": false,
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1266,7 +1266,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1344,7 +1344,7 @@
    "fallback": false,
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1383,7 +1383,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

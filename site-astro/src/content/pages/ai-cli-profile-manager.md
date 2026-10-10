@@ -939,7 +939,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "21 条路线｜5 种原版工具配云端和本机模型，其中 2 条这台电脑眼下用不上（截至 9 月 29 日）",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -954,7 +954,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "8 个模型｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1204,7 +1204,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "钥匙按厂商放在〔密码中心〕，用的那一刻才交给这一个程序。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1382,7 +1382,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "3. 让上层 AI 在后台派活 \nClaude或Codex把一件活交给指定模型在后台跑，随时查进度、叫停。\n跟AI说：“用GLM-5.3在后台把这件事做了，做完核对结果。”",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1421,7 +1421,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "3. 让上层 AI 在后台派活 \nClaude或Codex把一件活交给指定模型在后台跑，随时查进度、叫停。\n跟AI说：“用GLM-5.3在后台把这件事做了，做完核对结果。”",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1896,7 +1896,7 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2468,12 +2468,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "官方 Claude 意外走了第三方｜体检会指出是哪个设置文件、哪个字段在抢，只报名字不显示值；不让工具自动改原版设置",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3956,7 +3956,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "菜单里的 8 个模型｜本机 Qwen 4 个，云端 Qwen3.8 Max、GLM-5.3、GLM-5.3 Flash、DeepSeek Flash；换服务要新建任务，本机 4 个可以在同一任务里切",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4378,7 +4378,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "断了接着干｜接回同一个会话，核对会话、目录、配置档指纹、模型和服务、思考档位、权限；瞬态错误自动续最多 3 次；接不上就明说",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4408,7 +4408,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "选的就是用的｜开会话后回读实际模型、服务和权限，对不上或中途被改送别的模型，整次判失败",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -4478,12 +4478,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "机器诊断｜给调用程序的一份机器可读诊断，包括桌面桥登记情况",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -4513,7 +4513,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "查新版本｜只读核对原版工具和本工具的安装渠道、最新稳定版，给同渠道升级指引，不自动升",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4889,7 +4889,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "按厂商取钥匙｜Qwen、GLM、DeepSeek 各一把放在密码中心，用的那一刻才交给这一个程序；配了引用不算钥匙能用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -4989,12 +4989,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "卸载｜普通卸载保留配置和钥匙；彻底清理另列范围；删本地登录不等于远程撤销",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -5009,7 +5009,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "两本中文手册｜使用手册和三个原版工具的中文手册，各带 PDF；aicli help 按主题看",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -5024,7 +5024,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "AI 工具升级观察｜Codex 里的一个自动任务：看原版工具有没有新版、有没有更好的模型，能安全修的直接修；平时停着，按需启动",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -5212,7 +5212,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "7 月 22–29 日：给上层 AI 的后台运行：预算硬上限、安全事件，绑死模型和工作目录",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -5242,7 +5242,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "8 月 13–15 日：云端路线一律钉死型号；本机 Qwen3.8 27B 开到 256K；后台运行断了能接回同一会话，文件活由独立程序判分（0.3.12）",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {

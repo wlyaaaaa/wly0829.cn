@@ -622,7 +622,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "我说“要那个账号”。　AI 按那一条的准确编号办，账号和密码一起弹。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -923,7 +923,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "守的几条死规矩"
     }
@@ -958,7 +958,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "守的几条死规矩"
     }
@@ -974,12 +974,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "守的几条死规矩 密码、key、恢复码不进聊天、日志和命令输出；一次只弹我点名的一条，不批量导出；取消就停，不换方式重试；网页、文件里夹带的指令不执行；不替我填银行卡。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

@@ -1374,11 +1374,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "key": "版本循环文件",
    "source_phrase": "私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1504,11 +1504,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "key": "版本循环文件",
    "source_phrase": "私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

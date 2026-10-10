@@ -2296,7 +2296,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个小对话气泡里画一支笔、“决定原话只存一处”配一本封面写着书名号的厚本子（封面不写字）、“什么写到哪”配一排贴着标签的小信箱、“每周一次查漏”配一本台历翻在星期一",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {

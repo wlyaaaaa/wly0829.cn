@@ -35,7 +35,7 @@
         "columns_v": 2,
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/文件夹.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
         ],
@@ -89,7 +89,7 @@
         "columns_v": 2,
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/文件夹.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
         ],
@@ -418,7 +418,7 @@
           "_library/icons/铃铛.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/秒表.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "last_row_fill": true,
         "text_ref": "1只放丢得起的东西。死机断电、盘突然不见时，上次存盘以后写的内容会没，这是内存盘的本性；6月还吃过一次亏"
@@ -430,7 +430,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
       }
@@ -463,7 +463,7 @@
           "_library/icons/铃铛.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/秒表.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "last_row_fill": true,
         "text_ref": "1只放丢得起的东西。死机断电、盘突然不见时，上次存盘以后写的内容会没，这是内存盘的本性；6月还吃过一次亏"
@@ -475,7 +475,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
       }

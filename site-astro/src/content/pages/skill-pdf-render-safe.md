@@ -1454,12 +1454,12 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "先复制一份再看｜复制到纯英文路径的临时文件夹再渲染，中文路径不出错；原件中途被改就不发布｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1484,12 +1484,12 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "一份固定的报告｜每次成功才更新同一个报告文件，记下原件指纹、页数、所选页、渲染器版本、DPI、每页尺寸和指纹｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

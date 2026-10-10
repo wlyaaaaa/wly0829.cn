@@ -809,7 +809,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个循环箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1859,7 +1859,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "选中再核对｜只完整读选中的这一份，算 SHA-256 内容指纹，和登记时的大小、指纹比",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2545,7 +2545,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打开门",
    "source_phrase": "只记一小份，其余现找\n麻烦：以前的个人知识库把材料都收进一个10GB的数据库，记了219万条材料位置，还自己推断事件和人物关系；能收能查，却给不出我真正要的答案，8月25日退役。\n解法：反过来，只记“哪份在哪、叫什么、指纹多少”。现在精确登记164份；其余七万多份不预先登记，用到时在允许的文件夹里现找；你要打开或要收进来时才登记。",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -3174,12 +3174,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "按版本找｜说“签字版”“草稿”“定稿”，只列出带同样版本词的候选｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3224,7 +3224,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "确认是那一份｜选中后重算大小和 SHA-256，和登记时比；只核对，不写登记，不弹窗口｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3269,7 +3269,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "打开原件｜核对无误后，用电脑的默认软件打开真正的原件｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3608,7 +3608,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "9 月 5 日 只核对、不打开；能翻到选中文件的那一页",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

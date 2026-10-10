@@ -887,7 +887,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-04-icon-01",
    "source_phrase": "管",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {

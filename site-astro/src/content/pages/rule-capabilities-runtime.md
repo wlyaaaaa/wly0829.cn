@@ -874,12 +874,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一架小天平一边是扳手一边是硬币、“另一台电脑上的 AI”配两台笔记本电脑之间一根细绿线、“软件界面上的点选，默认交本人”配一根食指点在一个小按钮上",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1391,7 +1391,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -1412,7 +1412,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -2433,8 +2433,8 @@
      "header_icon": [
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+      "_library/hires-icons-r2/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -2451,12 +2451,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个绕成圈的绿色箭头、“锁版本”配一把小挂锁、“改在用的软件时保什么”配一只手护着一株小苗、“更新不该打扰本人”配一个挂着“请勿打扰”形状的小门牌（门牌上不画字）",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

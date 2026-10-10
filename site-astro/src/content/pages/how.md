@@ -2607,7 +2607,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "学习书笔",
    "source_phrase": "学习方法一顶学士帽",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2667,7 +2667,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "中文语音转写一只麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2712,7 +2712,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "个人正式文书一支钢笔",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2797,12 +2797,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "电脑远程控制一只伸向电脑的机械手",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2812,12 +2812,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "远程电脑串流一块小屏幕",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2877,7 +2877,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "电脑使用与性能记录一个小折线图",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -3593,7 +3593,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "分叉的箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -4113,7 +4113,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "麦克风",
    "source_phrase": "④ 听录音、认字 \n谁做：中文语音转写本地文字识别，都在本机显卡上跑，可以同时跑；同类任务排队，本地大模型要用时，这两家先让开。\n传什么：媒体库→中文语音转写，选中的录音（文件）→逐句文字和时间，分出几个不同的声音（文字）；媒体库→本地文字识别，门票、菜单、路牌的照片（文件）→字和位置（文字）。Claude拿这些字补地点和说明。\n注意：分出声音不等于认出是谁；照片里读到地名，不证明照片就拍在那儿。本地标出疑点的普通录音或重要录音，免费期内会自动加跑云端复核，我可以暂停；桌面听写不上云。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -5615,7 +5615,7 @@ Codex
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "规则基座一本绿皮书",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -6511,7 +6511,7 @@ Codex
      "icons": [
       "_library/icons/手机电脑连接.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/illustrations/main-proxyclean.png"
      ],
      "connector": "none",
@@ -6576,7 +6576,7 @@ Codex
      "icons": [
       "_library/icons/手机电脑连接.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/illustrations/main-proxyclean.png"
      ],
      "connector": "none",

@@ -739,7 +739,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇带对勾的小门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -995,7 +995,7 @@ AI：“有 2 条指标定义对不上新版，标了过期，其余照旧不用
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇只开一道的小门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {

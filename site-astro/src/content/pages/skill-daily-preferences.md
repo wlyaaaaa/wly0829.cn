@@ -1027,7 +1027,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "合同、正式材料：归〔个人正式文书〕。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1072,7 +1072,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "秒表",
    "source_phrase": "电脑卡顿、性能：归〔电脑使用与性能记录〕。",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -1087,7 +1087,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "密码、卡号、真实付款：归〔密码中心〕。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {

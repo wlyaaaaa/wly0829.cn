@@ -876,12 +876,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "真要停代理，才选“关闭代理，恢复普通上网”；想撤回，选“恢复上次修改”。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1085,12 +1085,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "之前在托盘里暂停过快捷键：先恢复快捷键。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1297,12 +1297,12 @@ Start-ScheduledTask -TaskPath '\' -TaskName 'ChineseASR Dictation'
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "先用 ToDesk 或网易 UU 进桌面看看；或者让 AI 跑串流体检：",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1312,12 +1312,12 @@ Start-ScheduledTask -TaskPath '\' -TaskName 'ChineseASR Dictation'
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "按体检结果分清：是显卡那道关卡没过，还是抓错了屏幕。别乱改显示器设置。",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -1550,12 +1550,12 @@ Get-SunshineHealth.ps1 -Json
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "只剩原生模式：等稳定 30 秒，每次开机或恢复只试一次切成 Windows 副屏。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2006,7 +2006,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "先用平常的“密码中心”入口试。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2051,7 +2051,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "手机上的密码中心还能用：直接在手机上查已有的条目。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2219,12 +2219,12 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "先别以为对话丢了。用命令行接着做：运行 codex resume --all 找到原来那个任务，或者按已知的会话编号恢复。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2264,12 +2264,12 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "开始菜单里的“Codex AI Auto Repair”是应急入口，不是平时打开的方式；让 AI 先读完恢复说明再用。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

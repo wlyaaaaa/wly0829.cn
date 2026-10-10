@@ -843,12 +843,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "2 个｜自动任务：画面切换每 3 秒看一次，体检每天 14:30",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -1930,7 +1930,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "客户端｜笔记本：Moonlight；手机：Moonlight 或 Artemis。配对一次就记住，Sunshine 里现在记着 4 个",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1985,12 +1985,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "串流画面切换：我登录后启动，一直跑，每 3 秒看一次屏幕和连接，每 10 秒写一次心跳（证明自己还活着的记录）；挂了 1 分钟后自己重开，同一时间只跑一份",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2000,12 +2000,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "远程串流体检：每天 14:30，查 Tailscale 在不在线、无人值守开没开、编码能力、Tailscale 的公开功能（Funnel，能把本机服务公开到互联网）有没有公开 Sunshine；3 分钟内做完，写一行回执",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2301,7 +2301,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个往回的箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -3739,7 +3739,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "显卡安全闸｜最近 15 分钟有显卡驱动出错、内核错误或蓝屏就不自动换屏，安静满 15 分钟自己恢复；单凭上次没正常关机不挡；查询出错也挡｜在用",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -3754,7 +3754,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改坏能退｜改配置前先比对指纹、整份替换并留备份；Sunshine 重启失败就换回原样再启动｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3779,12 +3779,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "每天体检｜14:30 查 Tailscale 在线、无人值守、编码能力、Funnel 有没有公开 Sunshine；9 月 18—28 日天天通过｜在用",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3799,7 +3799,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "主机端体检｜只读：两个服务、配置、安全闸、有没有人连着、守护心跳、现在抓主屏还是备用屏｜在用",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -3824,12 +3824,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "串流修复｜服务改回自动、开无人值守、清写死的代理、开网卡 IPv6；默认只出计划，改前存原样，失败倒着退回｜说不准",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3839,12 +3839,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "停和恢复画面切换｜跟 AI 说“停掉串流画面切换”，先等正在做的一步做完再停，不直接停 Sunshine｜说不准",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3854,12 +3854,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "维护小窗｜开始菜单里的“RAMDisk 与远程串流维护”，9 月 26 日按我的决定撤掉，改在网站看｜已停用",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4136,12 +4136,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "7 月 5–9 日：每天自动体检，后台不弹窗；加查有没有把服务放到公网",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -4151,12 +4151,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 3 日：〔Codex 远程〕停止修补，在外面管 Codex 改成串流看桌面",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4181,12 +4181,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 9 日：加固没登录时的串流和 HDR 检查",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4231,7 +4231,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "9 月 4 日：显卡安全闸补全（后来发现误伤，见亮点）",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -4241,12 +4241,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "9 月 18 日：守护心跳和主机端体检；备用屏设置改成整套可退回；修复开始写回执",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -4261,7 +4261,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "9 月 26 日：修好安全闸的误判；开始菜单的维护小窗撤掉，改在网站看；说明文档改成人话",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -4276,7 +4276,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "9 月 29 日：安全闸不再单凭“上次没正常关机”挡一整次开机，只看最近 15 分钟的显卡和显示故障，安静后自己恢复",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {

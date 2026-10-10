@@ -1072,7 +1072,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n难页：快读后体检不过关（一个字没读出来、把握分偏低、读出∑∫这类公式符号、带横竖线的表格）\n→只把这一页交给强模型：PaddleOCR-VL-1.6＋PP-DocLayoutV3版面检测\n用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约50秒、内存约16GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1085,7 +1085,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标 \n→结构还原：PP-StructureV3（内部识字用PP-OCRv5，另有表格、公式PP-FormulaNet_plus-L、印章模型）\n只在明确说要结构时走，不参与自动选择；真实材料上还没用过，只在项目自带的样例上跑过。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1111,7 +1111,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n难页：快读后体检不过关（一个字没读出来、把握分偏低、读出∑∫这类公式符号、带横竖线的表格）\n→只把这一页交给强模型：PaddleOCR-VL-1.6＋PP-DocLayoutV3版面检测\n用于读表格、公式、多栏等难页，读不准的仍要核对；首次加载加识别约50秒、内存约16GB，所以只给有问题的页，快读结果留着对照。已知是多栏论文、公式很多的文档，直接说“用强模型”。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1124,7 +1124,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标 \n→结构还原：PP-StructureV3（内部识字用PP-OCRv5，另有表格、公式PP-FormulaNet_plus-L、印章模型）\n只在明确说要结构时走，不参与自动选择；真实材料上还没用过，只在项目自带的样例上跑过。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1389,7 +1389,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1402,7 +1402,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1467,7 +1467,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1480,7 +1480,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": " \n3整理照片时读屏幕上的字\n照片视频录音管理整理截图时，画面由AI自己看，屏幕上的字交给它逐字读；读出的字只作参考，不作为删图的理由。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2390,7 +2390,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "旋转箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -2651,7 +2651,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "每天用的是验收过的一版 正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。\n",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2716,7 +2716,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "每天用的是验收过的一版 正式服务从快照运行，留当前版和上一版；新版要过依赖、181 项测试（无失败，16 项按条件跳过）、9 个合成样例的真实显卡识别三道验收才切换，退回上一版也要它自己的验收记录。\n",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2923,12 +2923,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "解法｜每页先快读，再逐页体检，下面任一条成立，只把这一页交给强模型：",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3471,7 +3471,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "扫描件逐页识字｜扫描 PDF 按 216 DPI 逐页渲染再读，多页 TIFF 逐帧读，并核对实际页数｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3541,12 +3541,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "先快后强自动选｜每页先用快模型读，体检不过的页才换强模型｜在用",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3982,7 +3982,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "识过不重识｜同样的材料和请求再来，核对指纹后直接交上次结果｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4042,7 +4042,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "领显卡、和语音转写同时跑｜向显卡调度员领租约才加载模型；可和语音转写并行，和本地大模型互斥｜在用",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -4132,7 +4132,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "换版前三道验收｜依赖、181 项测试无失败、9 个合成样例的真实显卡识别全过才切换｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {

@@ -393,7 +393,7 @@
         "icon_position": "header_left",
         "header_icon": [
           "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-          "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+          "_library/icons/云.png"
         ],
         "illustration_description": "原规格插画位置：left_inside"
       }
@@ -417,7 +417,7 @@
         "icon_position": "header_left",
         "header_icon": [
           "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-          "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+          "_library/icons/云.png"
         ],
         "illustration_description": "原规格插画位置：left_inside"
       }
@@ -805,8 +805,8 @@
         "header_icon": [
           "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
           "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
-          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
-          "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+          "_library/hires-icons-r2/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "illustration_description": "原规格插画位置：left_inside"
       }

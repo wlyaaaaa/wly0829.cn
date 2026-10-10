@@ -2443,7 +2443,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/数据库.png"
@@ -2482,7 +2482,7 @@
      "icons": [
       "_library/icons/云图片.png",
       "_library/illustrations/账本.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/数据库.png"
@@ -2872,7 +2872,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/秒表.png"
      ]
     },
@@ -2884,7 +2884,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]
     },
@@ -2950,7 +2950,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/秒表.png"
      ]
     },
@@ -2962,7 +2962,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]
     },

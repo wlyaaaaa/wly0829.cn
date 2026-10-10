@@ -981,12 +981,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "听诊器检查",
    "source_phrase": "一张处方笺旁边一个听诊器",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -1492,7 +1492,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一把钥匙穿过一扇小门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1552,7 +1552,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个人坐着看卡片并在一本小册子上写",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1688,7 +1688,7 @@
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "8,591"
     }
@@ -1721,7 +1721,7 @@
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "8,591"
     }
@@ -1743,7 +1743,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一本合上的小册子",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1803,7 +1803,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇只开一道的小门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2466,7 +2466,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "急症提醒｜说症状和什么时候开始的，先看有没有要尽快去医院的信号｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2481,7 +2481,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "看懂医生建议｜查当前权威医学资料，讲清好处、风险、别的选择和什么时候停下或复查；不代替医生｜在用",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -2541,7 +2541,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "一次授权｜第一次用时授权一次 Google，长期凭据直接存进密码中心，之后不用再授权｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2556,7 +2556,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "更新设备数据｜从上次没采完的那天补齐 21 类数据：存原件、核对、出简报，AI 审阅后再改现状｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2631,7 +2631,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "查没采全的日子｜核对某次采集里哪几天可能没采全；只读，不补采｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2646,7 +2646,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "重新核对原件｜对一份采集完的清单，重算每个原件的指纹和记录数｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2776,7 +2776,7 @@
       "_library/icons/盾牌对勾.png",
       "_library/icons/断线.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/hires-icons/09-时钟-clean.png",
       "_library/hires-icons/打勾清单.png",
@@ -2813,7 +2813,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "8 月 25 日：建项目：整理好的健康现状为准；能把 Fitbit 数据原样存下来；一次授权，凭据存进受保护的凭据中心",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -2853,12 +2853,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "9 月 5 日：能按指定日期区间统计；中断后的恢复更稳",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2918,7 +2918,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 25–26 日：数据换盘后核对回执照样有效；Codex、Claude 都能跑更新；加新鲜度检查",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

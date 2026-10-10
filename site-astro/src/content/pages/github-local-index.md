@@ -1018,7 +1018,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 个｜冻结的项目：只核对身份和位置，不查改动、不修",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1270,7 +1270,7 @@ GitHub 项目总索引
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇半开的门，门外一个小地球、门内一把小锁",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1285,7 +1285,7 @@ GitHub 项目总索引
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一把剪刀旁边一只小盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1494,7 +1494,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "有 36 个仓库这次没联网核对 \n那次刷新时，这些仓库的远端状态用的是本机上次拉下来的记录（缓存），没有现场问GitHub。旧一点不算出错；真要推送或删东西，再现场查一次。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1705,7 +1705,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵带叉的云旁边一个问号",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1720,7 +1720,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一只小盾牌挡在一把剪刀前",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1735,7 +1735,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一个从云里落下的小箱子",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1989,7 +1989,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "生成器｜按远端地址（origin）把两边对上，逐个读分支、工作目录、没提交的改动、和主线差几个提交；冻结名单从当前生效的规则读",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2277,7 +2277,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个“1”字形的小书架",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2773,7 +2773,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "标出冻结的项目｜名单从生效的规则读；9 个冻结的只核对身份和位置｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3166,12 +3166,12 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "给别的基座的状态摘要｜别的基座（例如体检）来问“Git 这块现在怎样”时，它不改任何文件，只回答“当前、要复核、被挡住、不知道”四种之一｜在用",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3466,7 +3466,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "新建仓库｜只在我的账号下建空仓库，先核对同名仓库确实不存在｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3481,7 +3481,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "仓库改名｜核对旧名、公开范围、默认分支，确认新名没被占，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3496,7 +3496,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改公开范围｜核对当前是公开还是私有再改，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3511,7 +3511,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改默认分支｜核对当前默认分支再改，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3586,7 +3586,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "提交前拦密钥｜7 月 8 日加，9 月 27 日删：AI 对密钥本来就警觉，密钥放密码中心｜已停用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {

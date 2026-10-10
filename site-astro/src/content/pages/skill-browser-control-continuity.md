@@ -543,7 +543,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一把钥匙和一部手机",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1171,7 +1171,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "保住现场｜已填、已登录、我自己的标签页，先看再动；一个标签页失控就保住它和没提交的内容；控制失败不等于网站出错，重新读页面再下结论",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1216,7 +1216,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "表单核对到底｜联动下拉框一层层等选项出来再选；提交前读回关键字段、附件个数和名字；提交后打开生成的记录核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1261,7 +1261,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "云端浏览器另算｜ChatGPT 的云端浏览器是另一套登录，走它自己的安全登录流程，不把本机的密码、Cookie 导给它",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {

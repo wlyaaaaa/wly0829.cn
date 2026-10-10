@@ -727,7 +727,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵云和一条虚线",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -757,7 +757,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
    "semantic_status": "scene_explicit_primary_object",
    "key": "书签册",
    "source_phrase": "一本夹着书签的登记簿",
-   "sha256": "20f4795dc0d8f7abe660aafaa372d12e9cb680bd5c9b91cfe29bc84f3d1445aa",
+   "sha256": "c363edd0cb76d7fcdcf03abae41e213c92ebca7b434076607db2620e00e62e33",
    "status": "ready"
   },
   {

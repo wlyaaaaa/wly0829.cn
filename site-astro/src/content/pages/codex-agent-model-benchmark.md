@@ -1393,7 +1393,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "三种接法：Codex 原生子代理、本机模型（经〔AI工具配置管理〕接进 Codex，显卡排队轮流用）、云端接口；一种失败不偷偷换另一种 ✕",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1483,7 +1483,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "蒙眼评审：每份合格答卷交给一个全新的 Sol 最高档，按正确、覆盖、证据、稳健、安全与范围、清晰好维护六个方面打 1000 分；看不到是谁答的、别人的答卷和价格 ✕",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -1498,7 +1498,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "失败归因和挑选：分清能力不够、题有毛病、环境坏了、证据缺了；样本不齐不排名，也不挑最好的一次 ✕",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {

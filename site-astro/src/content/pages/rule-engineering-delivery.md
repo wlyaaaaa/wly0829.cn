@@ -836,7 +836,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "回读　从远端默认分支读回，确认真的看得到；计划任务和技能在用的活动检出快进到最新；改过的每个仓库都回读，包括私人配套库。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -851,7 +851,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "清理　这次的下载和临时文件放进回收站，核对回执；用过的分支和工作副本合并后删掉，或写明用途和什么时候删再留。〔下载、临时文件和清理〕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

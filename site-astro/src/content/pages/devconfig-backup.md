@@ -1257,7 +1257,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "12:05（每次开机登录后 20 分钟也跑一次）　开发配置：收集、打包、核对，本机和 G 各存一份（约 3 分钟）",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1272,7 +1272,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "13:00　开发配置包传 Google 云盘，传完和本机逐个比对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2013,7 +2013,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2410,7 +2410,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "再扫一遍　复制完再看一遍来源：文件名单变了，整次作废；已复制的文件后来又改了，只记个数（9 月 28 日是 0）。所以它是逐个文件核对过的，不是同一瞬间的快照",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2425,7 +2425,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "打包、三道核对　7-Zip 打成 zip；7-Zip 自检；包里每个文件和清单逐项对上；算整包 SHA-256",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2440,7 +2440,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "发布　本机→G→云盘，每处复制完都比对哈希，最后才把“当前是哪个包”指过去",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2485,7 +2485,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "整份核对、换上　每个文件的 SHA-256 都对上才换上，上一份留着",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2500,7 +2500,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "每周一上云　先查回执，再用 rclone 传，传完两遍比对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2877,7 +2877,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -2922,7 +2922,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3588,7 +3588,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "可选来源的单个文件可跳过　可选来源的单文件被占用，试 3 次后跳过；拒绝访问直接跳过，都写进回执，不报“完整”；必需来源读不了或有其他读取错误，就整次失败　〈待验收〉",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3603,7 +3603,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "打包后三道核对　7-Zip 自检、包里每个文件和清单逐项对上、算整包 SHA-256；有一道不过就不发布，上一个好包原样留着　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3648,7 +3648,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "每天传 Google 云盘　13:00 有网才跑，限速每秒 4 MB；传完和本机逐个比对，云端留最近 3 份　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4056,7 +4056,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "整份换、留上一份　新的一份核对完才换上，上一份留着；没变的文件两份共用，不另占空间　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4086,7 +4086,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "云端补传监控　每小时看一次云端和 G 对不对得上，缺了就补传，对上了自己停掉；7 月 11 日起一直停着　〈已停用〉",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4126,12 +4126,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "恢复",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4146,7 +4146,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "配置包解到单独文件夹　先只读核对包，你同意后解到单独的文件夹并逐个核对；目标不空时原文件夹改名留作退路；包里记着选的是哪个云盘账号，重新登录云盘后手动放回即可　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

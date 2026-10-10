@@ -1076,7 +1076,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "**19851 → 3357 张**｜**4363 件 · 近 99 GB**｜**三块硬盘 + 云端**｜**2376 件**",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1837,7 +1837,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "电脑的三块硬盘：原件在主硬盘；每天 17:10 同步到机箱里的备份硬盘，外接的第三块硬盘每天 14:30 和每次开机登录时再跟它同步。删掉的在两块备份硬盘的待删区各留 30 天，能反悔。清空手机前，主硬盘和备份硬盘先各存一份并核对。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1897,7 +1897,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "Google Drive：录音和音乐。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2694,7 +2694,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "存两份再删：主硬盘、备份硬盘各一份，核对无误才删手机",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2902,7 +2902,7 @@
       "_library/icons/GitHub标志.png",
       "_library/icons/云.png",
       "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     },
     {
@@ -2948,7 +2948,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "先有两份，再删手机。两块硬盘上的副本都核对过，才删手机上的那一个文件。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2978,7 +2978,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "读不到不等于删了。硬盘没接上、云端读不到，只报告，什么都不删。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3544,7 +3544,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "新文件存两份｜已有的跳过，新的在主硬盘、备份硬盘各存一份，逐个核对指纹｜绿·只修报错",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3649,7 +3649,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "撤回｜已经留下的，事后不想留了就撤出来，手机和云端跟着撤，30 天内能找回｜绿",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3679,7 +3679,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "我在电脑上直接删｜在文件夹里删了原件，不用告诉 AI：备份硬盘上的当天移进待删区、30 天后删，云端随后删，下次连手机时手机上也删｜黄",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3993,7 +3993,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "编相册｜挑中的照片编成一个起好名字的相册，Google 相册和手机上也有同名相册｜绿",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4008,7 +4008,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "改日期、地点｜照片日期或地点标错了，告诉它改成什么，电脑、手机、云端一起改｜绿",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4053,7 +4053,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "放回手机｜第二次连上时只补新的、删多余的、挪位置，断了接着来，最后确认相册里看得到｜绿·只修报错",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4068,7 +4068,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "只核对，不放回｜只检查手机上的精选是不是都在，不往手机放东西｜灰·只修报错",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4098,7 +4098,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "上传并核对｜新留下的满 30 天才传，每件记下 Google 给的编号，重跑也不会重复传｜绿",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4441,7 +4441,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "整体验收｜大改之后跑一遍测试和真实查询，核对电脑、手机、云端的记录对不对得上｜绿",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4636,7 +4636,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "笔记本电脑",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4681,7 +4681,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "相册",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4726,7 +4726,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "云加循环箭头",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {

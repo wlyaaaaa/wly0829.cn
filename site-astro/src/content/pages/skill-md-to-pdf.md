@@ -1211,7 +1211,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打开门",
    "source_phrase": "项目自己的 CSS \n项目或文稿有自己的样子，就把它的CSS交给转换器，可以交好几份。Typora薄荷主题的原版、个人、公司三种样式就是这样接进来的。",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1860,7 +1860,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "缺图缺样式就失败｜图片、样式只从文稿和 CSS 所在的文件夹读，加载不上就整份失败｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {

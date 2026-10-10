@@ -893,7 +893,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "row": "design",
         "width": "32%",
@@ -932,7 +932,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
       }

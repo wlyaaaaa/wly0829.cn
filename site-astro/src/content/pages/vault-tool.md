@@ -783,7 +783,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "套｜一个库里最多放两套内容，各用各的密码。被逼交密码时可以只交出一套，从文件上看不出还有另一套",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1036,7 +1036,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵带锁的云和一个往上的箭头",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1199,7 +1199,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一台冒烟的电脑旁边一朵云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1214,7 +1214,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个写到一半的文件和一个回卷箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1667,7 +1667,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "文件头（21 字节）  ：格式名 VAULT03、要不要密钥文件、算钥匙用的参数。不记录有没有第二套内容。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1706,7 +1706,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "钥匙怎么算 每次建库前先试算，让算一次钥匙花约 0.6 秒：scrypt 从 16 MiB 内存起翻倍，最多约 1 GiB；Argon2id 最多 1 GiB。参数写进文件头，解的时候照着算。遇到要 4 GiB 以上内存的参数直接拒绝，免得被人改过的文件把电脑拖死。\n",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1719,7 +1719,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "输错密码 第 2 次起分别等 2、4、8、16 秒再让输，5 次都错就结束这次操作，回到菜单。\n",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1745,7 +1745,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "文件头（21 字节）  ：格式名 VAULT03、要不要密钥文件、算钥匙用的参数。不记录有没有第二套内容。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1784,7 +1784,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "总大小只看第一层 至少 64 KiB，按第一层的两倍往上取整（64 MiB 以内取 2 的幂）。所以从文件大小也看不出尾部装没装东西；打开时还会核对大小合不合这个规则，被截断的直接认出来。\n",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1797,7 +1797,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "钥匙怎么算 每次建库前先试算，让算一次钥匙花约 0.6 秒：scrypt 从 16 MiB 内存起翻倍，最多约 1 GiB；Argon2id 最多 1 GiB。参数写进文件头，解的时候照着算。遇到要 4 GiB 以上内存的参数直接拒绝，免得被人改过的文件把电脑拖死。\n",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1810,7 +1810,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "fallback": false,
    "key": "钥匙",
    "source_phrase": "输错密码 第 2 次起分别等 2、4、8、16 秒再让输，5 次都错就结束这次操作，回到菜单。\n",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1911,7 +1911,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "row": "principles",
      "width": "27%",
@@ -1944,7 +1944,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "3595 行",
      "columns_v": 1
@@ -2180,7 +2180,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个文件被换到架子上、旁边一个回卷箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -3119,7 +3119,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "不开库看结构｜不用密码看格式、参数、要不要密钥文件、结构坏没坏｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3144,12 +3144,12 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "恢复自检｜用临时密码在内存里跑一遍，确认这台电脑能开库｜待验收",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3239,7 +3239,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "密文传到 Key｜把 vault.enc 原样传到私人 Key 仓库，读回比对字节｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3254,7 +3254,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对 Key 仓库｜确认目标是私有仓库、路径在｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3496,7 +3496,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "8 月 31 日–9 月 3 日：安全删除只删自己的文件；拒绝被截断的库；保存改成写完读回再核对。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3506,12 +3506,12 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "9 月 18 日：保存、导出、回滚整套加固；加文件改成在内存里合并，另一套不再受牵连；加了另做新副本、恢复自检、动手前预演。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

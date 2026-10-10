@@ -1602,7 +1602,7 @@
       "_library/icons/气泡灯泡.png",
       "_library/icons/显示器.png",
       "_library/icons/断链.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/报警灯.png"
      ]
     },
@@ -1640,7 +1640,7 @@
       "_library/icons/气泡灯泡.png",
       "_library/icons/显示器.png",
       "_library/icons/断链.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/报警灯.png"
      ]
     },
@@ -1744,7 +1744,7 @@
       "_library/hires-icons/打勾清单.png",
       "_library/icons/放大镜.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     },
     {
@@ -1781,7 +1781,7 @@
       "_library/hires-icons/打勾清单.png",
       "_library/icons/放大镜.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     },
     {
@@ -1887,7 +1887,7 @@
      "columns_v": 1,
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云.png"
      ]
     },
@@ -1939,7 +1939,7 @@
      "columns_v": 2,
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云.png"
      ]
     },
@@ -2155,7 +2155,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件夹.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/账本.png"
      ]
     }
@@ -2185,7 +2185,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件夹.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/账本.png"
      ]
     }
@@ -2339,7 +2339,7 @@
       "_library/icons/报警灯.png",
       "_library/hires-icons/打勾清单.png",
       "_library/icons/气泡.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/手机电脑连接.png",
       "_library/icons/秒表.png",
       "_library/icons/云对勾.png",
@@ -2390,7 +2390,7 @@
       "_library/icons/报警灯.png",
       "_library/hires-icons/打勾清单.png",
       "_library/icons/气泡.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/手机电脑连接.png",
       "_library/icons/秒表.png",
       "_library/icons/云对勾.png",
@@ -2635,7 +2635,7 @@
       "_library/icons/浏览器标签页.png",
       "_library/icons/云对勾.png",
       "_library/illustrations/电脑后台闹钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "status_position": "top_right",
      "status_text": "dot_only",
@@ -2708,7 +2708,7 @@
       "_library/icons/浏览器标签页.png",
       "_library/icons/云对勾.png",
       "_library/illustrations/电脑后台闹钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "status_position": "top_right",
      "status_text": "dot_only",

@@ -1519,7 +1519,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一个程序窗口伸手接过一把钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1823,7 +1823,7 @@
      "icons": [
       "_library/icons/钥匙.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "text_ref": "通行密钥"
@@ -1880,7 +1880,7 @@
      "icons": [
       "_library/icons/钥匙.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "text_ref": "通行密钥"
@@ -1939,7 +1939,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "钥匙",
    "source_phrase": "通行密钥 用 Chrome 里的通行密钥（Passkey）验证。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1964,12 +1964,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "恢复码 一串写下来收好的恢复码，完全不联网也能用。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2217,7 +2217,7 @@
      "columns": 2,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/手机点桌面.png"
      ],
      "text_ref": "同步"
@@ -2319,7 +2319,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "绑定三步①手机上发起绑定，显示一个绑定码②电脑窗口点“手机”，核对是同一个码，点“批准绑定”③回到手机，用指纹确认",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2495,7 +2495,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一块外接硬盘插在笔记本上",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3096,7 +3096,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "密码库是 KeePass 的 KDBX 格式（用 pykeepass 4.2.0 读写），密码、API 密钥、银行卡、笔记、BitLocker 都在这一个文件里；银行卡的卡号、有效期、安全码作为一整条一起存。",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -3156,7 +3156,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "〔电脑配置与恢复〕管“装到这台电脑上”：装进受保护的 C:\\ProgramData\\PCConfig\\AuthorityHost、核对每个文件的哈希、每天的计划任务、复制到 G 和 H。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3238,7 +3238,7 @@
    "fallback": false,
    "key": "盾牌",
    "source_phrase": "网页授权页",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -3355,7 +3355,7 @@
    "fallback": false,
    "key": "盾牌",
    "source_phrase": "网页授权页",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -3583,7 +3583,7 @@
      "icons": [
       "_library/icons/钥匙.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
      ],
@@ -3696,7 +3696,7 @@
      "icons": [
       "_library/icons/钥匙.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
      ],
@@ -3734,7 +3734,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "密码库钥匙：真正打开 KDBX 的是一把单独的随机钥匙，由根钥匙用 AES-256-GCM 包着（HKDF-SHA256 派生）。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3779,7 +3779,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "通行密钥：WebAuthn 的 PRF 扩展从通行密钥算出 32 字节，解开它那份封装。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3794,7 +3794,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "手机动态码：换了电脑时，由一个独立的验证服务（Cloudflare Worker）核对 6 位码，再用这台电脑临时生成的 RSA-3072 公钥加密送回。这个验证服务另有自己的一套限制，只管它：15 分钟错 5 次就冷却 15 分钟，24 小时最多错 20 次。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3804,12 +3804,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "恢复码 ：在本机直接解，不联网。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4115,7 +4115,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "H 盘：从 G 复制已核对过的副本。9 月 29 日起接进〔电脑配置与恢复〕每天的外接盘同步，回执分别写 G、H 上最新一份的日期；接上后还没自然跑过，H 仍停在 9 月 24 日，待验收。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4376,7 +4376,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "3 个走传话程序（中文语音转写的疑难录音复核、智谱 GLM、DeepSeek）：调用方把准备好的请求交给密码中心，它核对调用者、把请求文件的哈希绑定到这一次，再把 key 通过标准输入交给一个固定的“传话程序”；传话程序只连这家厂商的官方地址、校验证书、不走代理、不跟随跳转，写回的结果先去掉 key。调用方和 AI 都拿不到 key。这条路 9 月 28 日 07:06 装上，当天就用真实请求走通，见亮点。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4401,12 +4401,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "秘密不进 AI 的对话。　密码、key、恢复码不进聊天、日志和命令输出；要看只在本机窗口里给我看。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4421,7 +4421,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "拿不准就停。　认不出调用者、对不上目标、回读不一致，一律当失败，不猜着放行。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -4436,7 +4436,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "回读对上才算成功。　每次改动先写候选、再加密写入、读回核对、更新恢复副本，任何一步不对就退回原样。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4445,12 +4445,12 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "不防自己的设备。  明文窗口允许截屏和远程串流，复制的内容可以经小米妙享到手机，见〔约法 L14〕。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -4465,7 +4465,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "红色警示",
    "source_phrase": "拿不准就停。  认不出调用者、对不上目标、回读不一致，一律当失败，不猜着放行。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -4480,7 +4480,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "回读对上才算成功。  每次改动先写候选、再加密写入、读回核对、更新恢复副本，任何一步不对就退回原样。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4705,7 +4705,7 @@ AI 用 key，却看不见 key
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "钥匙",
    "source_phrase": "浏览器密码表，少了的不删。  导入 Chrome 导出的密码表时，表里没有的条目只进“待复核”，不会被删；加密写入、回读、备份都成功后，才删掉那份明文表。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -4719,7 +4719,7 @@ AI 用 key，却看不见 key
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "云",
    "source_phrase": "复制不进剪贴板历史。  复制密码时带上 Windows 的专用标记，不进 Win+V 历史、不传微软云剪贴板；每次写入后立刻读回确认。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -5076,7 +5076,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "添加条目｜新账号、key、银行卡、笔记都加密存进同一个库｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -5091,7 +5091,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "编辑条目｜密码或备注变了，直接改原来那一条｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -5136,7 +5136,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "复制｜把账号或密码复制去粘贴，不进剪贴板历史｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -5151,7 +5151,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "五类条目｜账号密码、API 密钥、银行卡、笔记、BitLocker 同在一个 KDBX｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -5226,7 +5226,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "让 AI 弹一个密码给我看｜说出要哪一条，AI 在本机弹窗显示，值不经过 AI｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -5256,7 +5256,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对凭据来源｜同一个账号存了几份时，查清哪份有效｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5532,12 +5532,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "四选一验证｜通行密钥、手机动态码、恢复码、账号任选一种｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -5702,7 +5702,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核验加密文件｜不解出原文，确认加密包没坏｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5762,7 +5762,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "中断接着加密｜大批文件加密到一半断了，核对后接着做｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5998,7 +5998,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "绑定手机｜由电脑核对绑定码、批准这台手机｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -6013,7 +6013,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "撤销手机｜换手机或不用了，收回旧手机的钥匙｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -6058,7 +6058,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "恢复副本冷备到 H｜每天随外接盘同步，把 G 上核对过的副本复制到 H；9 月 29 日接上，等自然运行追平｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -6143,12 +6143,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "程序包自动更新｜批准的新版本自动更新到 E、G；H 随冷备更新｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -6391,12 +6391,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "看全部磁盘恢复钥匙｜硬盘要恢复时，在本机窗口看各盘的恢复钥匙｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -6421,12 +6421,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "检查钥匙备齐没｜只看每块盘的恢复钥匙存了没有，不显示钥匙｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -6745,7 +6745,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "8 月 30 日：第一版便携密码中心，能离开这台电脑单独打开。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {

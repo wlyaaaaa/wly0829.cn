@@ -1382,7 +1382,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "健康页正常 ≠ 能读 ：健康页只说明程序开着。自检要走 5 个必需入口：健康页，加上会话列表（两种格式）、联系人、朋友圈统计这 4 个读取入口，有一个失败就报失败。\n",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1836,7 +1836,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "接口自检：两种用法。只问健康页，只能说明程序开着；要查能不能读，就读会话、联系人、群成员、朋友圈统计这些概况（不读消息正文），5 个必需入口有一个失败就报失败 ✕",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1866,7 +1866,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "已取得文件的两遍核对：对已经导出的一批文件逐个算指纹、完整读两遍，一致才给一份核对收据；它不是备份，也不导出 ✕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2048,7 +2048,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "8 月 5–7 日 ：第二个微信库那份 WeFlow 也能单独守；加上已取得文件的两遍核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2087,7 +2087,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "8 月 31 日 ：自检改严，5 个必需入口一个失败就报失败",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {

@@ -840,12 +840,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "1 期｜做完并发布的视频：6 月的《游戏王 MD 氪金指南》",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1184,7 +1184,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "程序＋我　程序核对成片的来源、时长、帧数，过了才开交付清单；我完整看一遍、听一遍，决定发不发。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1508,7 +1508,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "书签册",
    "source_phrase": "书签",
-   "sha256": "20f4795dc0d8f7abe660aafaa372d12e9cb680bd5c9b91cfe29bc84f3d1445aa",
+   "sha256": "c363edd0cb76d7fcdcf03abae41e213c92ebca7b434076607db2620e00e62e33",
    "status": "ready"
   },
   {
@@ -1583,7 +1583,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "渲染断了。 接着渲染：核对过的片段直接用，只补缺的和坏的。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2045,7 +2045,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2060,7 +2060,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "声波",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2454,7 +2454,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "书签册",
    "source_phrase": "一个书签",
-   "sha256": "20f4795dc0d8f7abe660aafaa372d12e9cb680bd5c9b91cfe29bc84f3d1445aa",
+   "sha256": "c363edd0cb76d7fcdcf03abae41e213c92ebca7b434076607db2620e00e62e33",
    "status": "ready"
   },
   {
@@ -3126,7 +3126,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "逐字时间轴｜记下每个字几点几秒说出：优先用 Fish 返回的时间戳，没有就交给中文语音转写对齐；换方法不重配音｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3542,7 +3542,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "断点渲染｜4 路并行逐帧渲染，每段数帧核对；断了接着做，只补缺的和坏的。6 月用过，9 月加了显卡排队、按指纹判断哪段要重渲｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3587,7 +3587,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "章节｜按场分组生成 B 站章节，从 00:00 开始；章太多、标题太长、两章太近都会提醒｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3602,7 +3602,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "字幕｜从逐字时间轴出 SRT 和 WebVTT 字幕文件，不烧进画面｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3617,7 +3617,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "成片核验｜逐项核对来源、尺寸、帧率、编码、总帧数、时长、音画起点和封面；全过才算“就绪”｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3632,7 +3632,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "交付清单｜核验通过后记下成片、封面、章节、字幕的内容指纹和来源，注明还要人看｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4020,7 +4020,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一个带对勾的盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -4035,7 +4035,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一本变薄的小册子",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {

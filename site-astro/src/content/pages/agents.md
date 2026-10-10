@@ -1100,12 +1100,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个带循环箭头的版本标签",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1120,7 +1120,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一只秒表",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -1347,7 +1347,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇打开的门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1834,12 +1834,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个向左弯的回退箭头",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1879,12 +1879,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "听诊器检查",
    "source_phrase": "一个听诊器贴着一个小方块",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -2138,7 +2138,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "两扇小门，一扇Claude标志一扇OpenAI标志",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2153,7 +2153,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "三个大窗口牵着几个小窗口，旁边笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2275,7 +2275,7 @@
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "width": "100%",
      "row": "why"
@@ -2308,7 +2308,7 @@
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     }
    ],
@@ -2429,12 +2429,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "为什么要这么多道 规则一发布，所有 AI 下一次开工就照着做。发出半截，或者把别人刚发的改动盖掉，错的不是一个对话，而是之后的每一个。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2839,7 +2839,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱",
    "source_phrase": "装满卡片的木箱",
-   "sha256": "f2ee2e038fd95e74d2931aa25aee0476964dbed0c7e000bc46bdfb5de475c261",
+   "sha256": "37f5c6a705967fa0907c2069cc8f4398087977585b3ac6c9ec9fa9bf20e095d7",
    "status": "ready"
   },
   {
@@ -3146,7 +3146,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "查重工具 Find-DuplicateContent 扫三个基座的文件，找跨文件重复的段落，列出每处的位置；比对部分用 C# 写，免得 PowerShell 逐对比较太慢。9 月 27–28 日用过 33 次。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3410,7 +3410,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "两本书，旁边一个装着很多旧书的箱子正被搬走",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3425,7 +3425,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一把钥匙挂在墙上没被取下",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3440,7 +3440,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一个按一下就停的秒表",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -3951,7 +3951,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "开工核验｜每个 AI 开工、续作、上下文压缩后跑一次，约 0.6 秒，逐个比对这一版文件的内容指纹｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3961,12 +3961,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "标准发布｜从已推送的提交打包新的一版，切换“当前”和“上一版”，出错原样恢复｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4006,12 +4006,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "防随手改｜生效目录、指针和入口归 SYSTEM，其他人只读；只有发布器能临时打开再封回｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4021,12 +4021,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "入口随版本部署｜发布时把两份入口写进 Claude 和 Codex 的家目录，回退时一起换回｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4056,7 +4056,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "按事找专题｜核验结果带一张目录：每份专题管什么、什么情况该读｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4071,7 +4071,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "规则目录表｜32 条规则文件登记在一张表里，测试核对四个仓库的规则文件都登记了｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4324,7 +4324,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
       "_library/icons/日历时钟.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/共享节点.png",
-      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/hires-icons-r2/42-听诊器检查-clean.png",
       "_library/round3/clean-assets/png/43-文件柜-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
      ],
@@ -4371,7 +4371,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
       "_library/icons/日历时钟.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/共享节点.png",
-      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/hires-icons-r2/42-听诊器检查-clean.png",
       "_library/round3/clean-assets/png/43-文件柜-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
      ],
@@ -4456,7 +4456,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "查技能能不能用｜只读体检脚本分开回答源码和安装、运行条件；它说明不了技能好不好用，真实用成过没有一律写“未核验”｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4541,12 +4541,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "每周基座体检｜每周一 13:00 Astra 最高档查三个基座、修看得见的错；只排 10 月 5、12、19、26 日四次，第四次交我评审｜待验收",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -4576,7 +4576,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "网站内容周检｜核对网站上的说明准不准；暂停中，我按需启动｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   }
  ]
@@ -4844,7 +4844,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "Claude 档位子代理｜Claude Opus 5.5 的 low 到 max 五档，派时显式选档；第一句都是先核验规则｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5037,18 +5037,18 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/hires-icons-r2/42-听诊器检查-clean.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/GitHub标志.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/云.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "width": "100%",
      "row": "history",
@@ -5075,18 +5075,18 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+      "_library/hires-icons-r2/42-听诊器检查-clean.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/GitHub标志.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/云.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     },
     {
@@ -5148,12 +5148,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "7 月 10–11 日　技能清单和目录链接安装器；只读的基座体检；规则目录表",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -5193,12 +5193,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "8 月 30 日　现在这套版本发布器上线，第一版 E81；同一天有了快速发布",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -5223,12 +5223,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "9 月 25 日　Claude 登记成第二个受信任的 AI：有了 Claude 钩子，发布时一起部署 Claude 的入口",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -5288,7 +5288,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 29 日　E190 生效：每周基座体检只排 10 月 5–26 日四次，第四次交我评审；Google 入口写明包括待办；技能体检改成只核对源码和安装，不再回答是否真用过",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5303,7 +5303,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "10 月 2 日　E208 生效：加了〔云端素材通道〕，AI 要反复读的大文件在云上放一份、AI 在云里读，配套技能〔省流量的云端素材〕",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {

@@ -770,12 +770,12 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "听诊器检查",
    "source_phrase": "逐页体检，只有第 15 页不过关，单独交给强模型；其余页保留快读结果。",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -1456,7 +1456,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "取消了就不再自动重试；AI那边等不及先退出，不等于识别失败，先回查任务，不盲目重交。把握分高、结论“有字”都不等于每个字都对，关键内容回原图核对。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1471,7 +1471,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "取消了就不再自动重试；AI那边等不及先退出，不等于识别失败，先回查任务，不盲目重交。把握分高、结论“有字”都不等于每个字都对，关键内容回原图核对。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

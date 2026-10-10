@@ -715,7 +715,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "学习书笔",
    "source_phrase": "28 篇讲义｜开课前全部写好草稿，约 46 万字（含代码和表格）",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -929,7 +929,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "学习书笔",
    "source_phrase": "一叠讲义加一支笔",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -944,7 +944,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "黑板流程",
    "source_phrase": "一块小黑板",
-   "sha256": "57e1e0525de39a8546d96e0fc78b21c492a0ab87f0dbe7ea351bbfa67c6ce9c4",
+   "sha256": "6d6ab8d436b84a863059c1e39489fe50e62577873cf6aac49a57b47f8ec72510",
    "status": "ready"
   },
   {
@@ -1374,7 +1374,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "两位老师交接一本书",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1404,7 +1404,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一根插头和一个小循环箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1680,7 +1680,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "学习书笔",
    "source_phrase": "一叠讲义",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2040,7 +2040,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "先有路线再写讲义：顺序、前后依赖和深度先定下来，讲义临上课再定稿；不讲到哪算哪。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2054,7 +2054,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "先有路线再写讲义：顺序、前后依赖和深度先定下来，讲义临上课再定稿；不讲到哪算哪。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2068,7 +2068,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "从零讲起：Python、数学、机器学习都不预设基础；AI 概念先拿写程序时常见的东西打比方，比如调模型就像调一个传 JSON、回 JSON 的接口。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2096,7 +2096,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "先回忆再看书，隔一段再讲一遍：核心内容在后面的课换个场景，让我先凭记忆讲，卡住再回看。依据是关于主动回忆、间隔和反馈的研究（9 月 14 日核对过）；它说明这样做有用，不说明哪个天数最好，所以间隔按我的真实表现调。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2287,7 +2287,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2513,7 +2513,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "2. 讲义不是老师一个人说了算 \n麻烦：同一个AI写、同一个AI查，容易看不见自己的错。\n解法：开课前做了一次内容终审。一个没看过前面对话的全新Opus5.5通读第07–34篇，提出必须改37条、建议改47条；GPT-6AstraMax核数字、事实和命令能不能跑通，必须改9条，306项离线测试全部通过。改完才开课。平时也一样：练习由Astra搭，再请一个全新的Astra复核，老师验收。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2541,7 +2541,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "云",
    "source_phrase": "4. 真调云端模型，密钥不进课程 \n麻烦：要真调云端模型才学得会；可密钥一旦写进练习代码或配置文件，就散得到处都是。\n解法：练习程序只连本机转发口127.0.0.1:18765，配置里的密钥一栏只填一串假字符。真密钥只在转发口那个进程里，由密码中心启动它时注入。转发口只连阿里云百炼北京，只放行两类接口；用时开、用完关，最长开5小时自动关。每次调用记下时间、模型、用了多少词元、花了多久，不记提问和回答的内容。备课搭练习时，老师和Astra已经这样真实调用过多次。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2805,7 +2805,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "学习书笔",
    "source_phrase": "排学习路线｜定学什么、先后顺序、学多深；28 课分六段，每课写明学完要能讲清的问题｜说“按现在的进度排接下来怎么学”；大纲我认可了才开课｜在用",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2830,12 +2830,12 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "拿我的项目举例｜用我亲手做过的项目讲原理；中文语音转写第一课已用上，个人理解库、远程电脑 MCP、AI 分工记录还没讲到｜老师自己挑，只读不改；我也可以说“拿我的某个项目举个例子”｜在用",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2850,7 +2850,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "学习书笔",
    "source_phrase": "新资料先审再用｜现成课程资料有更新、网上有新说法，老师先读，再定不改、换例子、调顺序还是改深度；讲错的在讲义里点破｜说“有新的课程资料了，看看要不要改课”｜在用",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -2925,7 +2925,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "真调云端模型｜课上的练习程序经本机转发口调阿里云百炼的千问，密钥由密码中心注入，不进课程文件｜老师课前开、下课关；练习程序连 127.0.0.1:18765｜在用",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3185,7 +3185,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "学习书笔",
    "source_phrase": "讲错就改、一次改齐｜改讲法或改内容，顺着找出受影响的讲义、草稿、练习和题目一起改，在对话里说清改了什么｜指出哪里不懂或前后矛盾｜在用",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -3275,7 +3275,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "text_inferred_object_unverified",
    "key": "学习书笔",
    "source_phrase": "学习进度｜学完的课记日期，每个上课日记一条：我报的学习时长（没报就空着）、讲了哪几课、练习做了几道（只记数量，不算正确率）；学习方法页读这一份｜老师每个上课日下课时问我学了多久，一起更新｜在用",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -3449,7 +3449,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "9 月 5–14 日 写了第 01–06 篇讲义，边读边交流。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -3494,7 +3494,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "学习书笔",
    "source_phrase": "9 月 28 日 28 篇讲义全部写完；内容终审；现成课程资料逐课对照；新增学习进度，给网站驾驶舱读（10 月 1 日起改在学习方法页看）。备课完成。",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {

@@ -662,12 +662,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一台电脑屏幕整块画面投到一部手机上（串流）",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1357,12 +1357,12 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "说“打开远程”",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1417,12 +1417,12 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "说“关闭远程”",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1664,12 +1664,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "任务列表：正在跑、置顶、最近、归档，顺序和桌面版一样；能改名、复制任务编号、归档和恢复 ✕",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2097,7 +2097,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "登录和请求保护：一个本机设的密码，只存加盐后的哈希；输错多次临时锁定；改东西的请求必须来自这个网页本身，别的网页借不了登录；任务里的本机文件路径换成短时有效的引用 ✕",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -2112,7 +2112,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "断线不丢、不重发：断线后按事件编号接着收；草稿和排队的话都留着；结果说不清就先核对，不自动再发一遍 ✕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2122,12 +2122,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "打开和关闭远程：平时 Codex 原样启动；“打开”时才接管，必要时重开一次 Codex；“关闭”只关公网入口、不重开 Codex；网页服务崩了能自己拉起 ✕",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2152,12 +2152,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "能退回的版本：每个版本按内容算出编号、单独存一份，记着“当前”和“上一个”，出问题退回上一个 ✕",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2394,7 +2394,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一个秒表上画着一条红线",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {

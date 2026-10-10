@@ -1237,7 +1237,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "一支麦克风和几道声波",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1612,7 +1612,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "书签册",
    "source_phrase": "一本带绿丝带书签的小笔记本，封面一颗小心形",
-   "sha256": "20f4795dc0d8f7abe660aafaa372d12e9cb680bd5c9b91cfe29bc84f3d1445aa",
+   "sha256": "c363edd0cb76d7fcdcf03abae41e213c92ebca7b434076607db2620e00e62e33",
    "status": "ready"
   },
   {
@@ -1627,7 +1627,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "黑板流程",
    "source_phrase": "一块小黑板上画着三个方框连成的简单流程图（不写字）",
-   "sha256": "57e1e0525de39a8546d96e0fc78b21c492a0ab87f0dbe7ea351bbfa67c6ce9c4",
+   "sha256": "6d6ab8d436b84a863059c1e39489fe50e62577873cf6aac49a57b47f8ec72510",
    "status": "ready"
   },
   {
@@ -1672,7 +1672,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "学习书笔",
    "source_phrase": "一本摊开的书和一支铅笔",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -1702,7 +1702,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿钢笔",
    "source_phrase": "一张纸、一支钢笔和一道签名横线（不写字）",
-   "sha256": "2a041f8aaa6b062c3fe0713d712b48ad45b776cf77bb0a48c942ed653e81c885",
+   "sha256": "6c316777b7f5f2a0a2b52969ee6407b35094f036a681be3f8b0a1a4041865e10",
    "status": "ready"
   },
   {
@@ -2147,7 +2147,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇圆形的厚重保险库门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2192,7 +2192,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "两台小设备之间一条连线，连线中间一面小盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -2207,7 +2207,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一只秒表压在一条起伏的折线上",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {

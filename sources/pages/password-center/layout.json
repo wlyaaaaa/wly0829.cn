@@ -312,7 +312,7 @@
         "icons": [
           "_library/icons/钥匙.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
         ],
         "text_ref": "通行密钥"
@@ -372,7 +372,7 @@
         "icons": [
           "_library/icons/钥匙.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
         ],
         "text_ref": "通行密钥"
@@ -474,7 +474,7 @@
         "columns": 2,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/手机点桌面.png"
         ],
         "text_ref": "同步"
@@ -1035,7 +1035,7 @@
         "icons": [
           "_library/icons/钥匙.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/云图片.png",
           "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
         ],
@@ -1151,7 +1151,7 @@
         "icons": [
           "_library/icons/钥匙.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/云图片.png",
           "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
         ],

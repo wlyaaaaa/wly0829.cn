@@ -1193,7 +1193,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "开着 → **不弹验证**。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2587,7 +2587,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "开头插画里那只四选一托盘（同一只，四样东西不变，但这里托盘和小牌子都不写字）、“各产品各管各的”配三个并排的小木柜，柜门上分别画一把钥匙、一个对勾盾牌、一块硬盘",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

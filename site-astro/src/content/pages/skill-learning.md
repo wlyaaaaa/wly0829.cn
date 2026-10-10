@@ -585,7 +585,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "学习书笔",
    "source_phrase": "一叠讲义抽出一张",
-   "sha256": "e530829777d976851aa4bc955588d2d57067982b42afaad93111baf06920b1cc",
+   "sha256": "ed8e762f9bcc6fd578a8f0ce9e8c5f65c8b59c9bf8551e33dfb34daebb770ff1",
    "status": "ready"
   },
   {
@@ -799,7 +799,7 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一把钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {

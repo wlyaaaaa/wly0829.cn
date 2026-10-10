@@ -685,12 +685,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "2 个｜首页按钮：检查并修复上网问题；关闭代理，恢复普通上网",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -804,7 +804,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ]
     },
@@ -846,7 +846,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ]
     }
@@ -889,12 +889,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "不想用代理了，要把飞鸟或 Clash Verge 关掉 \n点“关闭代理，恢复普通上网”。只开着一个代理就直接关它；两个都开着，先让你选一个，另一个保留。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2049,7 +2049,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "检查并修复上网问题｜列出失效设置，确认后存原样、修、读回核对，再测网页｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2064,7 +2064,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "关闭代理，恢复普通上网｜请它正常退出，4 秒没退再结束核对过的残留进程，清它的设置，保住下次启动｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

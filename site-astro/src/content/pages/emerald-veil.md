@@ -703,7 +703,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/hires-icons/开关.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
      "illustration": "top_inside",
@@ -780,7 +780,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/hires-icons/开关.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
      "illustration": "top_inside",
@@ -865,12 +865,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "1 块屏｜只放桌上的 OLED 主屏，串流用的虚拟屏和机箱小屏都不放",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1440,7 +1440,7 @@
      "item_cards": true,
      "inner_columns": 2,
      "icons": [
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
@@ -1511,7 +1511,7 @@
      "item_cards": true,
      "inner_columns": 1,
      "icons": [
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
@@ -1556,12 +1556,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "管哪些地方：每块屏的 Windows 桌面底图（包括串流用的虚拟屏，和 Windows 还记得的已拔下的屏），加上系统锁屏，统一成这一张。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2399,7 +2399,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个上锁的小笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2424,12 +2424,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个圆形的回退箭头带一个 3",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2953,12 +2953,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "不理远程假动作｜纹丝不动的鼠标事件不算；单独一次小挪动，250 毫秒内再来一次才算｜在用",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3340,7 +3340,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "只检查不改｜逐块屏回读，锁屏按解码后的画面比对｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3494,7 +3494,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/GitHub标志.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
@@ -3553,7 +3553,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/GitHub标志.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
@@ -3617,12 +3617,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 12–14 日：改用 Windows 原版泡泡，透明地叠在桌面上，闲 5 分钟出现；查出“泡泡自己消失”的一个原因（远程软件的假动作）并修掉。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

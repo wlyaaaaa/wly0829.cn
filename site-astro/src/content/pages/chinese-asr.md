@@ -1131,7 +1131,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "一只麦克风压在键盘上",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1161,7 +1161,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "普通录音",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1176,7 +1176,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "带星的录音",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1457,7 +1457,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "麦克风",
    "source_phrase": "录音：交给 AI \n微信语音、会议、电话、口述笔记、课程录音，把文件交给AI就行。AI交给本机的转写服务，最多等15秒；没跑完就先拿回任务编号，接着回话，不被长录音卡住。跑完交回：干净的正文；一份疑点清单（哪一句、在第几秒、为什么可疑）；要求高质量时再加一个本地回听网页。疑难的录音，AI会自动请云端再听一遍，两份并排放，不覆盖本地稿。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1670,7 +1670,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "一只递出录音文件的手",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2100,7 +2100,7 @@ P2　12:03　这句两个模型差得多，建议回听
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一把钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2403,7 +2403,7 @@ P2　12:03　这句两个模型差得多，建议回听
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "拔掉的麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2701,7 +2701,7 @@ P2　12:03　这句两个模型差得多，建议回听
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "暂停的云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2868,7 +2868,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "本机转写服务｜只在 127.0.0.1:18666 监听；收下任务就回编号，任务历史存最近 200 条，重启不丢",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -2928,7 +2928,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "结果｜正文、对照记录、两份原始结果、防改动清单；云端结果另存一份",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3129,7 +3129,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "row": "design",
      "width": "32%",
@@ -3162,7 +3162,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
     }
@@ -3757,7 +3757,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "给本地大模型让显卡｜本地大模型在用显卡时听写先等，录音存在内存里，让出来就接着出字",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -3787,7 +3787,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "状态点｜麦克风右上角的小圆点：绿就绪、黄准备或等显卡、红故障，点开看原因和怎么办",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -3797,12 +3797,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "小窗放对屏幕｜只显示一个小窗，优先放串流用的虚拟屏，拔掉回主屏；拖过的位置保留",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3827,12 +3827,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "把 Win+H 暂时还给系统｜托盘里一键释放两组快捷键，再点一次恢复",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3847,7 +3847,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "开始菜单入口｜程序没开时，从开始菜单点“中文听写”打开并开始录音",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -3907,7 +3907,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "长录音分段续跑｜按停顿切段；中断了再提交，已核对过的段跳过",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3937,7 +3937,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "只转一个声道｜双声道录音可以只转左或右一路，不据此判断是谁",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -4187,7 +4187,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "防改动清单｜把正文、对照记录、两份原始结果的指纹绑在一张清单里，有一样被改过就不再算“已核对”",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4217,7 +4217,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "疑难录音自动复核｜免费期内，疑难录音由处理它的 AI 送阿里云再听一遍，并排存，不覆盖本地稿",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4277,7 +4277,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "旧疑难录音补跑｜列出以前的疑难录音一次补跑；原音搬了家，按指纹在 E:\\Music 找回",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   }
  ]
@@ -4442,7 +4442,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "哪几句是我说的｜拿唯一一份“我”的声音参考比对，再看声道、谁打给谁、说的内容；结论能推翻，不常用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4502,7 +4502,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "模型版本锁定｜Qwen3-ASR、FireRedASR2-LLM 和强制对齐模型运行前核对版本、大小和指纹，其他模型没有这一步",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4517,7 +4517,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "秒表",
    "source_phrase": "比过才换模型、一键退回｜同一批带标准答案的录音分开比字错、关键错、静音出字、耗时，更好才换",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -4547,7 +4547,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "准确率评测｜拿自己的录音配标准答案，算字错和漏字",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -4557,12 +4557,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "体检和试跑｜一条命令查代理、显卡、模型配置和依赖；拿一段样例录音从头试跑一遍",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -4722,7 +4722,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "7 月 7 日：一天搭起骨架：两个模型严格转写、幻觉风险规则、按轻重排的回听队列、本机转写服务、长录音断点续跑、批量转写。",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -4827,7 +4827,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "9 月 17–18 日：本地回听网页、词对到时间、模型版本锁定和一键退回；给视频配音找时间的入口。收尾验收跑了 482 项测试，零失败。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -4842,7 +4842,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "9 月 26 日：疑难录音在免费期内自动请云端复核（Qwen Audio 3.1）。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4872,7 +4872,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "9 月 28 日：云端的 key 改由密码中心送出，这里只准备请求。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -4887,7 +4887,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 29 日：云端自动复核可以手动暂停；核对并补齐重要录音的标记，确保它一路传到云端复核；离线备用建好一份，待断网安装验收。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

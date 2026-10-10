@@ -664,7 +664,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "1 套｜编辑主题，Typora 现在用的就是它（Typora 设置和装好的两个主题文件都核对过）",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1338,12 +1338,12 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "两台电脑之间一个箭头",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1543,7 +1543,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "scene_explicit_primary_object",
    "key": "红色警示",
    "source_phrase": "一条向下的细灰线，通向一个小节点“失败留旧 PDF”",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2464,7 +2464,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "安装和核对主题｜只复制两个主题文件，装完逐个比指纹；也能只核对不装｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2599,7 +2599,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "原文不被改写｜导出前后比对 .md 的指纹，对不上就不报成功｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

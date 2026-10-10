@@ -1708,7 +1708,7 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "semantic_status": "scene_explicit_primary_object",
    "key": "书签册",
    "source_phrase": "一张夹在书里的书签",
-   "sha256": "20f4795dc0d8f7abe660aafaa372d12e9cb680bd5c9b91cfe29bc84f3d1445aa",
+   "sha256": "c363edd0cb76d7fcdcf03abae41e213c92ebca7b434076607db2620e00e62e33",
    "status": "ready"
   }
  ]
@@ -1918,7 +1918,7 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "Claude 桌面 → 命令进程 → `pwsh` 包装器 → `node codex.js` → Codex 后台服务（`codex app-server`）→ 它的命令进程和所有后代：密码中心顺着桌面祖先，都认作 `claude-root`（Claude 派 GPT 子代理时就是这样启动 Codex 的，见后面派 GPT 一节）。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2234,7 +2234,7 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个合上并扣着小锁扣的笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2525,7 +2525,7 @@ Sol、Luna 的任务先写清任务、原话出处、已定方案、仓库和基
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇敞开的小门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2950,7 +2950,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "可以用密码中心现役入口里、已登记的运行时实际能用的动作和秘密引用（`SecretRef`）。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2965,7 +2965,7 @@ Hook 是 Claude 在固定时刻自动运行的程序，现在有两个，共用�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "浏览器自动填密码已经退役，不再用 `AgentLogin`；手机号和验证码登录按〔能力与运行方式〕和宿主当时的真实能力处理。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
