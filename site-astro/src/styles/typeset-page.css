@@ -125,3 +125,7 @@ body.astro-page [data-b2-connection-notice],body.astro-page aside[data-computer-
 .ts-canvas [data-hot="live"] .live-row:is([data-state="warn"],[data-state="waiting"],[data-state="expired"]) .live-dot{background:#d2a111}
 .ts-canvas [data-hot="live"] .live-rows .live-text,.ts-canvas [data-href="ca-personal-data"] .live-text,.ts-canvas [data-href="ca-connection"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
 .ts-canvas [data-hot="live"]:is([data-href="ca-personal-data"],[data-href="ca-connection"]){height:auto;min-height:var(--slot-live-frame-height,84px)}
+/* 模块淡入（照旧站 motion：enter 关键帧，1 秒，cubic-bezier(.2,.7,.25,1)，卡片每张晚 0.06 秒；脚本在 Site.astro，屏滚进视口时加 .ts-entering） */
+@keyframes ts-enter{from{opacity:.6;transform:translateY(20px)}to{opacity:1;transform:none}}
+.ts-page .ts-entering{animation:ts-enter var(--motion-screen-duration,1s) cubic-bezier(.2,.7,.25,1) both;animation-delay:calc(var(--enter-index,0) * .06s)}
+@media (prefers-reduced-motion:reduce){.ts-page .ts-entering{animation:none}}
