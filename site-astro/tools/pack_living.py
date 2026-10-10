@@ -25,8 +25,15 @@ for a, b in PAIRS:
     if fixed.count(a) != 1:
         sys.exit("找不到位移效果参数：" + a[:30])
     fixed = fixed.replace(a, b)
+# 纹理和静图同址、且静图已经可读时直接复用图像对象；禁缓存的首次访问也不重复取图。
+# 保留纹理框、尺寸检查与原有画布处理，不同地址或不可读仍走原加载函数。
+OLD_TEXTURE = 'const q=new URL(p.src,u.base).href,y=await dt(q,!0),a=y.naturalWidth'
+NEW_TEXTURE = 'const q=new URL(p.src,u.base).href,y=q===(T.currentSrc||T.src)&&Ct(T)?T:await dt(q,!0),a=y.naturalWidth'
+if fixed.count(OLD_TEXTURE) != 1:
+    sys.exit("找不到原纹理加载入口")
+fixed = fixed.replace(OLD_TEXTURE, NEW_TEXTURE)
 fixed = fixed.encode("utf-8")
 name = f"living.{hashlib.sha256(fixed).hexdigest()[:10]}.js"
 open(os.path.join(ENG, name), "wb").write(fixed)
-json.dump({"deployed": "living.521533a56a.js", "fixed": name}, open(os.path.join(ROOT, "src", "chrome", "living-engine.json"), "w"), indent=1)
+json.dump({"deployed": "living.521533a56a.js", "fixed": name}, open(os.path.join(ROOT, "src", "chrome", "living-engine.json"), "w", newline="\n"), indent=1)
 print("修正版：", name)
