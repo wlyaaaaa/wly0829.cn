@@ -7,6 +7,7 @@ import albumRuntime from '../public/_album/astro-runtime.json';
 
 // 保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
 export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
+  if (page === 'computer-access') return access;
   let html = page === 'home' ? home : page === 'cockpit' ? cockpit : access;
   html = html.replace(/<script[^>]*data-album-inline[^>]*>.*?<\/script>/s, () => `<script data-album-inline>${albumRuntime.source}</script>`)
     .replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css);

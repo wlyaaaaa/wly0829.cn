@@ -379,7 +379,7 @@ def finalize_runtime(site=ROOT):
             body = path.read_text('utf-8')
             match = re.search(r'<script\b[^>]*id="album-page"[^>]*>(.*?)</script>', body, re.S)
             routes[route] = {'images': json.loads(match[1]).get('images', []) if match else []}
-            if base == dist: pages[path] = body
+            if base == dist and rel != 'computer-access/index.html': pages[path] = body
     old = {value for body in pages.values() for value in re.findall(r'/_album/routes-[a-f0-9]+\.json', body)}
     if not old: return {'routes': len(routes), 'updated_pages': 0}
     raw = (json.dumps({'schema': 'wly.album-routes.v1', 'routes': routes}, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n').encode('utf8')
