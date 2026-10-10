@@ -594,9 +594,10 @@ function cpInsightRows(){
   details:[when(health.observed_at_unix),
    ...changeRows.map(([key,label])=>'24小时变化（'+label+'）：'+(num(changes[key])===null?'暂无可用对比':(changes[key]>0?'+':'')+amount(changes[key],key==='handle_count'?'个':'GB',key==='handle_count'?1:1e9))),
    '这里只判断资源压力和记录趋势，卡顿根因及驱动突发仍未确认。']});
- const e=(hw.volumes||[]).find(v=>v.letter==='E:'),hardwareAt=status?.hardware_observed_at_unix;
- rows.computer.push({text:'E盘：'+(fresh(hardwareAt,180)?'':'这是当时的数；')+(e?.connected===false?'没接上':amount(e?.free_bytes,'TB',1e12)+' 可用'),
-  state:fresh(hardwareAt,180)&&num(e?.free_bytes)!==null&&e?.connected!==false?'ok':'unknown',details:[when(hardwareAt),'当前容量采用十进制字节换算。']});
+ const eValue=v=>v&&typeof v==='object'&&Object.hasOwn(v,'value')?v.value:v;
+ const e=(hw.volumes||[]).find(v=>eValue(v.letter)==='E:'),hardwareAt=numeric(status?.hardware_observed_at_unix),eFree=numeric(e?.free_bytes),eTotal=numeric(e?.total_bytes),eConnected=eValue(e?.connected);
+ rows.computer.push({text:'E盘：'+(fresh(hardwareAt,180)?'':'这是当时的数；')+(eConnected===false?'没接上':eFree===null?'这次没读到剩余空间':amount(eFree,'GiB',2**30)+' 可用'+(eTotal>0?'（剩余 '+(eFree/eTotal*100).toFixed(1)+'%）':'')),
+  state:fresh(hardwareAt,180)&&eFree!==null&&eConnected!==false?'ok':'unknown',details:[when(hardwareAt),'当前容量按 GiB 换算；占比来自本次同源的剩余和总容量。']});
  const cleanup=tasks.find(t=>t.cleanup)?.cleanup,disk=cleanup?.disks?.find(v=>v.letter==='E:'),delta=disk?.free_delta_bytes;
  rows.computer.push({record_id:tasks.find(t=>t.cleanup)?.id,text:cleanup?'回收站清理：'+(cleanup.state==='success'?'最近一轮已完成':cleanup.state==='failed'?'最近一轮失败':'最近一轮结果未确认')+'；E盘可用空间变化 '+(num(delta)===null?'未读到':(delta>0?'+':'')+amount(delta,'GB',1e9)):'回收站清理：执行回执尚未读到',
   state:!live?'unknown':cleanup?.state==='failed'?'warn':cleanup?.state==='success'?'ok':'unknown',

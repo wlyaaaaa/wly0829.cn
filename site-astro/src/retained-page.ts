@@ -41,5 +41,7 @@ export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
   }
   if (page === 'home') html = html.replace('</head>', `<style data-home-cta-layout>${homeCta}</style></head>`);
   if (page === 'cockpit') html = html.replace('</body>', '<script src="/_home-cockpit/cockpit-offline.js" defer></script></body>');
+  if (page !== 'home') html = html.replace('</head>', '<link rel="stylesheet" href="/_interactions/anchor-offset.css"></head>')
+    .replace('</body>', '<script src="/_interactions/anchor-offset.js" defer></script></body>');
   return html;
 }

@@ -1705,7 +1705,7 @@
     {
      "id": "n-devconfig",
      "text": "8,470 个文件、约 1.0 GB",
-     "meaning": "开发配置备份最新包，1,000,007,148 字节，文件时间北京 10 月 1 日 04:18",
+     "meaning": "开发配置备份包，1,000,007,148 字节，文件时间北京 10 月 1 日 04:18",
      "as_of": "2026-10-01",
      "source": "facts-how.md:149 命令证据 R2",
      "screens": [
@@ -1850,8 +1850,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "58623fff58d26659d7dbfd6e9af4454b558a4b57c65b23227ef662f01ecec508",
-  "converted_at_beijing": "2026-10-10T12:00:15+08:00"
+  "sha256": "87b6625e64d2106709d93e8f4d7c2b11ca54951fc206d4ca2107b7a0c94b9bb9",
+  "converted_at_beijing": "2026-10-10T20:09:35+08:00"
  }
 }
 ---
@@ -4703,7 +4703,7 @@ Codex
 **⑤ 开发工具的设置**
 谁做：〔开发配置备份〕提供配置包，AI 按工具一个个放回。
 传什么：G 盘、H 盘或私人 Google 云端硬盘上的配置包 → 新电脑（文件）。
-10 月 1 日 04:18 最新一包：8,470 个文件、约 1.0 GB，含 Codex、Claude、OpenCode、Antigravity 的设置；不含 Codex 的对话本身和账号凭据，凭据走密码中心。
+10 月 1 日 04:18 的配置包：8,470 个文件、约 1.0 GB，含 Codex、Claude、OpenCode、Antigravity 的设置；不含 Codex 的对话本身和账号凭据，凭据走密码中心。
 还没做过：在一台新电脑上把这一包全部放回去、逐个工具验过。
 
 **⑥ AI 的对话**
