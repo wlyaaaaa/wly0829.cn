@@ -53,7 +53,8 @@ b { font-weight: 700; color: var(--accent); }
 .core-illustration-gallery figure { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .core-illustration-gallery img { display: block; width: 100%; height: auto; }
 .core-illustration-gallery figcaption { text-align: center; }
-.ic { display: block; object-fit: contain; }
+/* 自然尺寸属性只是比例依据；图栏宽度变化时，默认按比例算高。显式图位高度仍由各组件覆盖。 */
+.ic { display: block; height: auto; object-fit: contain; }
 .name { font-weight: 800; color: var(--accent); }
 
 /* 按钮：白底细绿边，绿字；放得下就并排，放不下各占一行 */
