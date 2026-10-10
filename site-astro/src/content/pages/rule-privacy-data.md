@@ -393,7 +393,7 @@
      "inner_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+      "_library/icons/盾牌对勾.png",
       "_library/icons/身份盾牌.png",
       "_library/icons/文稿堆.png"
      ],
@@ -592,7 +592,7 @@
      "inner_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+      "_library/icons/盾牌对勾.png",
       "_library/icons/身份盾牌.png",
       "_library/icons/文稿堆.png"
      ],
@@ -673,7 +673,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "只是普通技术工作：代码、天气、学习和项目实施、电脑配置、性能排查照常做，不用解锁；普通的业务和技术事实，不因为属于本人就升级保护。",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -688,7 +688,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "要用本人的私人资料 ：偏好、履历、通信、健康、财务、私人关系、以前的个人经历。资料锁开着才用；锁着就请本人验证一次，不换来源绕过，也不拿缩水的回答凑。资料锁怎么走",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1326,7 +1326,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "挂锁旁一块小表盘",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1341,7 +1341,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一张验证卡和一把钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1386,7 +1386,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "锁着、过期或说不清 → **请本人验证一次**：本机四种方式任选一种（通行密钥、手机验证码、恢复码、Google 或微软账号，同〔约法 L17〕），手机上用现有的验证器；不先派别的模型批准，也不让本人验证两次。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1687,7 +1687,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一把关着的挂锁挡在几条岔路前、“各管各的权限”配三把不同颜色的钥匙各挂一个钩、“入口”配一扇半开的小木门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1869,7 +1869,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -1965,7 +1965,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -2042,7 +2042,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一台电脑、一块硬盘和一朵小云围成一圈、“原样保存”配一本摊开的账本上一张没被涂黑的纸条、“本机安全就这几样”配一面小盾牌上挂一把小钥匙、“秘密放在哪里”配一只关着的小保险箱",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

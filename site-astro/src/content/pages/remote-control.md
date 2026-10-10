@@ -1044,7 +1044,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "2 台｜主机（台式机）和副机（笔记本）各跑一套，同一份源码",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1549,7 +1549,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "断掉的云朵丝带",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1564,7 +1564,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "自己转圈的箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1831,7 +1831,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "Cloudflare 云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2098,7 +2098,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "门口和屋里分开。｜认证和维护放在 SYSTEM 服务里，桌面操作只在我登录的会话里做，不拿最高权限代替我的账户。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2113,7 +2113,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "规则只存一处。｜手机那边不存规则副本，由电脑在连接时发过去；核验失败就明说，不拿旧规则凑数。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2128,7 +2128,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "连上电脑不等于解锁资料。｜资料只有一份解锁状态，本机、网页、手机共用；登录电脑只证明能连，不算我本人同意。电脑上的 Codex、Claude 做一些重大的事可以免验证，经这个连接进来的 AI 没有这个待遇。见〔个人资料规则〕〔用户授权规则〕",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2158,7 +2158,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "入口放公网，靠登录挡人。｜人在外面就得能从公网进来：这是我知道并决定保留的。只认登记过的客户端，不开放自动注册；不另加审批层（约法〔L14〕）。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2289,7 +2289,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "｜主机（台式机 WLY）｜副机（笔记本 LAPTOP-E48N0DRJ）",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2876,7 +2876,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "副机入口｜笔记本用 Tailscale Funnel 开出自己的地址，单独登录｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2891,7 +2891,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "主机备用入口｜隧道断了，改连副机域名下的 /main-computer，经私网转到主机；第一次要单独登录｜在用",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2906,7 +2906,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机",
    "source_phrase": "ChatGPT 两个连接｜“我的电脑”项目里有“主机 MCP”“副机 MCP”，手机和网页都能用｜在用",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2921,7 +2921,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "两台 Codex 互连｜笔记本 Codex 连主机，主机 Codex 连笔记本｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2936,7 +2936,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "主机 Claude 连副机｜主机上的 Claude 直接操作笔记本｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2951,7 +2951,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "别的账号和客户端｜另一个 OpenAI 账号可自己加连接；别的客户端可用应用凭据接入｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2966,7 +2966,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "副机备用连接保温｜笔记本连过一次主机后，一小时内保持连接，下次不用重新建立、响应更快；开始菜单能看能停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3026,7 +3026,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件写作",
    "source_phrase": "大文件局部修改｜10 万行的文本只读目标附近，按唯一锚点改一段再回读｜在用",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {
@@ -3101,7 +3101,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "管理员和 SYSTEM 维护｜用管理员或 SYSTEM 身份跑命令；长命令先给编号，之后凭编号取结果｜在用",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3345,7 +3345,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "连上就给规则｜每次连接握手附上规则原文：主机现场核验当前版本，笔记本发自己那份｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3360,7 +3360,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "开工先核对｜先查是哪台电脑、用哪版规则、资料锁开没开、电脑有没有卡住｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3375,7 +3375,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "资料锁共用一份｜手机、网页、本机 AI 用同一份资料解锁和截止；连上电脑不算解锁｜在用",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3420,7 +3420,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "卡死时给急救做法｜独立探测确认卡死时，回复直接写重启或按键留现场；真卡死时还没见它出现过｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3450,7 +3450,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "无限制授权跟到电脑上｜对话开无限制授权时会拿到一个配对编号，可随命令带到电脑，由密码中心核对；连接本身不算授权｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3465,7 +3465,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "自己的入口密码｜主机、副机各一个入口密码，都存在密码中心；只认登记过的客户端｜在用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3495,7 +3495,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "挂了自己拉起｜每 10 秒探测，连续 3 次失败就重启；服务本身退出按 5、15、30 秒重启｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3510,7 +3510,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "主机不睡｜主机请求保持唤醒；笔记本不唤醒，睡着就连不上｜在用",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3535,12 +3535,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "副机公网自动恢复｜每 3 分钟查，连续 3 次不通才恢复，至少隔 30 分钟、一天最多 3 次｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3555,7 +3555,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "每周检查升级｜每周查 Windows-MCP 新版，测试通过自动升级，副机先、主机后；笔记本的每周巡检平时暂停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3870,7 +3870,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机接续说明｜讲手机上的对话怎么借已连接的电脑接着办事｜说不准",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -3880,12 +3880,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "主机状态｜在线没、锁没锁屏、处理器显卡内存、每块盘、网速；连不上时提示怎么远程开机｜待验收",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3955,12 +3955,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "Codex 远程公网入口｜手机网页看 Codex 任务；9 月 26 日决定撤掉｜已停用",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -3975,7 +3975,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "AI 浏览器代填入口密码｜改由我自己从密码中心复制｜已停用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -4132,7 +4132,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 9 日：主机的电脑连接上线；连接时自动附上规则；加上管理员和 SYSTEM 维护；笔记本装上同一套",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4147,7 +4147,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 10 日：开机就启动，没登录也能维护；ChatGPT 接入笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4162,7 +4162,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 11 日：主机改走 Cloudflare 隧道和自己的域名，加上经笔记本的备用入口，当天停隧道真演练",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4172,12 +4172,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "9 月 14–15 日：读私人资料前先查资料锁；笔记本公网自动恢复；每周检查升级；监控图表走同一条隧道",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4192,7 +4192,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 18–19 日：笔记本备用连接保温；无限制授权接进来",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4207,7 +4207,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 24–25 日：网页“授权与状态”上线；主机 Claude 能连笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4217,12 +4217,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "9 月 26–27 日：撤掉 Codex 远程公网入口和 AI 代填入口密码",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

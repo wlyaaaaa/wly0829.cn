@@ -685,12 +685,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "2 个｜首页按钮：检查并修复上网问题；关闭代理，恢复普通上网",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -803,8 +803,8 @@
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ],
      "row_fit_illustration": true
@@ -846,8 +846,8 @@
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ]
     }
@@ -875,12 +875,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "断开插头",
    "source_phrase": "一个断开的插头",
-   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
    "status": "ready"
   },
   {
@@ -890,12 +890,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "不想用代理了，要把飞鸟或 Clash Verge 关掉 \n点“关闭代理，恢复普通上网”。只开着一个代理就直接关它；两个都开着，先让你选一个，另一个保留。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1303,7 +1303,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "网卡｜哪些是真的物理网卡、连没连上｜只在维护工具里点名才动",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -1318,7 +1318,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "默认路线｜上网默认走哪块网卡；网关是 198.18、198.19 开头的，是代理的隧道（TUN）｜只删指向已断开网卡的那条",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2050,7 +2050,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "检查并修复上网问题｜列出失效设置，确认后存原样、修、读回核对，再测网页｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2065,7 +2065,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "关闭代理，恢复普通上网｜请它正常退出，4 秒没退再结束核对过的残留进程，清它的设置，保住下次启动｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2095,7 +2095,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "关闭手动代理｜不管端口死活，关掉当前用户的手动代理、代理变量和 Git 代理，并删掉隧道的默认路线；不退出代理程序｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2125,7 +2125,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "检查联网情况｜分别测国内、海外和 AI 服务，IPv4、IPv6 和开着的 HTTP 代理都测；解析失败和连不上分开报｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2140,7 +2140,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "比较联网出口｜问 ipify 几条路各从哪出去，只说相同还是不同，不显示 IP｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2430,7 +2430,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新连接｜给选定网卡刷新域名缓存、释放再续租地址；固定地址的网卡不动｜说不准",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -2445,7 +2445,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "重启网卡｜禁用再启用选定网卡，出错也会尝试重新启用｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2460,7 +2460,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新域名缓存｜只清缓存，不换 DNS 服务器｜说不准",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -2490,7 +2490,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "检查详情｜分层列出查了什么、哪个端口在跑、保留了什么，还有这次每一步的时间｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2505,7 +2505,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "复制脱敏诊断｜复制一份给 AI 看的技术数据，不含代理密码、公网 IP 和设置原值｜说不准",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -2535,7 +2535,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "旧版入口｜11 个旧快捷方式（一键修复网络、关闭 7892 飞鸟等）还能用，现在只打开窗口预览｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

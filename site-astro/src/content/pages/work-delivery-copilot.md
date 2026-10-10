@@ -994,7 +994,7 @@
      "icons": [
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/hires-icons/打勾清单.png",
       "_library/icons/文稿堆.png",
@@ -1056,7 +1056,7 @@
      "icons": [
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
      ]
     },
@@ -1153,7 +1153,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI  读完先交回：用了哪几份、关键事实、哪里对不上、打算怎么排；再挑出要写进文件的事实，每条抄下原文那一句。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1166,7 +1166,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "程序  核对那句原文确实在资料里，自己算出位置：“第 5 行，第 38 列”；表格写到第几行、哪一列。金额存成 CNY 605000.00，日期存成 2026-10-12。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1218,7 +1218,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我  看成品：每条事实在文件里都带着它在原文的位置。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1244,7 +1244,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI  读完先交回：用了哪几份、关键事实、哪里对不上、打算怎么排；再挑出要写进文件的事实，每条抄下原文那一句。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1257,7 +1257,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "程序  核对那句原文确实在资料里，自己算出位置：“第 5 行，第 38 列”；表格写到第几行、哪一列。金额存成 CNY 605000.00，日期存成 2026-10-12。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1309,7 +1309,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我  看成品：每条事实在文件里都带着它在原文的位置。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1747,7 +1747,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "出文件超过 15 秒。 事实定好之后，程序这一段按产品合同不许超过 15 秒（平时不到 1 秒），超了就当失败报错，免得慢得离谱还当正常。但这时包和事实可能已经存进去了，同一个包名不能再新建；让 AI 往这个已有的包里接着补资料、补事实，再出文件。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2693,7 +2693,7 @@
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "失败不留半成品 ：三种 Office 文件先在临时文件夹里一起生成，全部成功才挪进正式目录，哪个出错就一个都不放进去。\n",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3119,7 +3119,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "文件验真｜出正式文件前从数据库重算事实清单、逐字段核对；缺项、冲突、过期时只出“待确认草稿”",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3149,7 +3149,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "差异续版｜处理完失效的事实再出下一版，放新目录；旧版原样留着，变更和决定记录写清改了哪些（不生成逐字对比文件）",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3489,7 +3489,7 @@ ready
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一个没上锁的小箱子",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

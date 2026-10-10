@@ -836,7 +836,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "回读　从远端默认分支读回，确认真的看得到；计划任务和技能在用的活动检出快进到最新；改过的每个仓库都回读，包括私人配套库。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -851,7 +851,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "清理　这次的下载和临时文件放进回收站，核对回执；用过的分支和工作副本合并后删掉，或写明用途和什么时候删再留。〔下载、临时文件和清理〕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1261,7 +1261,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云下载",
    "source_phrase": "一个整齐的小抽屉柜、“下载、临时文件和清理”配一只浅绿色小回收桶，几片落叶正落进去",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -1739,7 +1739,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一支箭插在靶心上、“依赖出问题要修好”配一把扳手拧着一个齿轮",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {

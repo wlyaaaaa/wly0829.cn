@@ -1360,7 +1360,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
      "icons": [
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
       "_library/icons/笔记本电脑.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/双气泡.png"
      ],
@@ -1458,7 +1458,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
      "icons": [
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
       "_library/icons/笔记本电脑.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/双气泡.png"
      ],
@@ -1548,7 +1548,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "手机\n在Telegram或飞书里发一句任务",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -1573,12 +1573,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "模型\n9月默认用本机的qwen3.8:27b；要更强的，手选远程21条路线（通义千问11、DeepSeek2、Z.AI8）",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2081,7 +2081,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "渠道交办：在 Telegram 或飞书发任务，结果回原对话；“收到、执行、回原对话”三段都通才算通 ✕",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2096,7 +2096,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "模型与花费：默认本机模型，远程路线可手选；只报哪些地方可能花钱，不假装有“全局零费用” ✕",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {
@@ -2156,7 +2156,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "网关常驻：开机自启；每 15 分钟查一次，不健康才用官方命令启动或安全重启；发现两个程序在听或有对外监听就停手，不乱杀程序 ✕",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -2171,7 +2171,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "受控更新：不自动追新；要升级时先备份、再升级、再逐项核对，核对没过就照实写“部分完成” ✕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2231,7 +2231,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "官方备份和恢复演练：用 OpenClaw 自带命令做带校验的归档（9 月 3 日一份 224,287,339 字节），只恢复到新建的空文件夹里查，不碰正在用的 ✕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

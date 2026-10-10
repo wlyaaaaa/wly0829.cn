@@ -1181,7 +1181,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "默认：中性 \n黑字、灰线、A4、页边约1.5厘米、正文12像素。表格每行不拆到两页，标题不孤零零落在页底。什么都不说，就是这个样子。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1211,7 +1211,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打开门",
    "source_phrase": "项目自己的 CSS \n项目或文稿有自己的样子，就把它的CSS交给转换器，可以交好几份。Typora薄荷主题的原版、个人、公司三种样式就是这样接进来的。",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1710,7 +1710,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "一个文件夹一起转｜文件夹里每份 .md 各出一份同名 PDF，最后报几份成功；只能用中性或老绿色样式｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1785,7 +1785,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "套项目自己的 CSS｜交一份或几份 CSS，PDF 按它排｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1830,7 +1830,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "页数要求｜要求正好几页，实际页数不对就不交｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1845,7 +1845,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "必须有的字｜列出必须能从 PDF 里读出的字，少一个就不交｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1860,7 +1860,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "缺图缺样式就失败｜图片、样式只从文稿和 CSS 所在的文件夹读，加载不上就整份失败｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1875,7 +1875,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "查过才替换｜是 PDF、读得开、没加密、至少 1 页、原文和 CSS 指纹没变，全过才换上｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2345,7 +2345,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "有硬要求：几页、哪些字必须在、图一张不能少",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2371,7 +2371,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "齿轮",
    "source_phrase": "Word、PPT、Excel：用各自的工具",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2384,7 +2384,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "齿轮",
    "source_phrase": "已经是 PDF 的文件改内容、拆分合并：用 PDF 工具",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2397,7 +2397,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "排得好不好看：样子由选的 CSS 定，它只保证照样打出来",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2449,7 +2449,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "有硬要求：几页、哪些字必须在、图一张不能少",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2475,7 +2475,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "齿轮",
    "source_phrase": "Word、PPT、Excel：用各自的工具",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2488,7 +2488,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "齿轮",
    "source_phrase": "已经是 PDF 的文件改内容、拆分合并：用 PDF 工具",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2501,7 +2501,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "排得好不好看：样子由选的 CSS 定，它只保证照样打出来",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

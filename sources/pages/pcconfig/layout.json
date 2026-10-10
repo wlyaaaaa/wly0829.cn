@@ -312,7 +312,7 @@
           "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
           "_library/icons/云.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/icons/钥匙.png"
@@ -397,7 +397,7 @@
           "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
           "_library/icons/云.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/icons/钥匙.png"
@@ -1120,7 +1120,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
           "_library/icons/手机电脑连接.png",
           "_library/icons/断线.png"
         ]
@@ -1190,7 +1190,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
           "_library/icons/手机电脑连接.png",
           "_library/icons/断线.png"
         ]
@@ -1254,7 +1254,7 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "header_icon": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
         ],
         "row": "daily",
         "width": "50%"
@@ -1320,7 +1320,7 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "header_icon": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png"
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
         ]
       },
       {
@@ -1627,7 +1627,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ]
       },
       {
@@ -1684,7 +1684,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ]
       },
       {
@@ -1864,7 +1864,7 @@
           "_library/hires-icons/代码窗口.png",
           "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
         ]
       },
@@ -1937,7 +1937,7 @@
           "_library/hires-icons/代码窗口.png",
           "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png"
         ]
       },
@@ -1999,7 +1999,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/钥匙.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/日历时钟.png"
         ],
         "icon_size": 160
@@ -2060,7 +2060,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/钥匙.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/日历时钟.png"
         ]
       },
@@ -2355,7 +2355,7 @@
           "_library/icons/笔记本电脑.png",
           "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
           "_library/icons/盾牌对勾.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/手机电脑连接.png",
           "_library/hires-icons/开关.png",
           "_library/icons/断线.png",
@@ -2425,7 +2425,7 @@
           "_library/icons/笔记本电脑.png",
           "_library/fix-round-2/icon-clean-10b2a9e171c500a5d21a.png",
           "_library/icons/盾牌对勾.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/手机电脑连接.png",
           "_library/hires-icons/开关.png",
           "_library/icons/断线.png",
@@ -2484,14 +2484,14 @@
         "portrait_columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/hires-icons/09-时钟-clean.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/icons/微信标志.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/icons/工具箱回收站.png",
           "_library/round3/clean-assets/png/47-回收站文件-clean.png",
           "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
@@ -2555,14 +2555,14 @@
         "portrait_columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/hires-icons/09-时钟-clean.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/icons/微信标志.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/icons/工具箱回收站.png",
           "_library/round3/clean-assets/png/47-回收站文件-clean.png",
           "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
@@ -2712,7 +2712,7 @@
         "icons": [
           "_library/hires-icons/数据库.png",
           "_library/icons/GitHub标志.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/报警灯.png",
           "_library/icons/趋势图.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
@@ -2720,9 +2720,9 @@
           "_library/hires-icons/开关.png",
           "_library/icons/文件齿轮.png",
           "_library/icons/文件齿轮.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/hires-icons-r2/42-听诊器检查-clean.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/icons/盾牌对勾.png"
@@ -2777,7 +2777,7 @@
         "icons": [
           "_library/hires-icons/数据库.png",
           "_library/icons/GitHub标志.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/报警灯.png",
           "_library/icons/趋势图.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
@@ -2785,9 +2785,9 @@
           "_library/hires-icons/开关.png",
           "_library/icons/文件齿轮.png",
           "_library/icons/文件齿轮.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-          "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+          "_library/hires-icons-r2/42-听诊器检查-clean.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/icons/盾牌对勾.png"
@@ -2846,7 +2846,7 @@
         "connector": "ribbon",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/微信标志.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/hires-icons/打勾清单.png",
@@ -2856,7 +2856,7 @@
           "_library/icons/云.png",
           "_library/icons/文稿堆.png",
           "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/round3/clean-assets/png/06-绿封面册-clean.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
@@ -2867,7 +2867,7 @@
           "_library/round3/clean-assets/png/47-回收站文件-clean.png",
           "_library/icons/云.png",
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ]
       }
     ],
@@ -2915,7 +2915,7 @@
         "connector": "ribbon",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/微信标志.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/hires-icons/打勾清单.png",
@@ -2925,7 +2925,7 @@
           "_library/icons/云.png",
           "_library/icons/文稿堆.png",
           "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/round3/clean-assets/png/06-绿封面册-clean.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/round3/clean-assets/png/04-锁-clean.png",
@@ -2936,7 +2936,7 @@
           "_library/round3/clean-assets/png/47-回收站文件-clean.png",
           "_library/icons/云.png",
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ]
       },
       {

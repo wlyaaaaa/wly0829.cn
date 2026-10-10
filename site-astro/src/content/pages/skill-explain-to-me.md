@@ -341,7 +341,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "绿封面册",
    "source_phrase": "它做什么 \nAI向我汇报、解释、请我拍板时，需要就照这本手册讲；我说没听懂、说它答偏了，它回到我原来的问题重讲，再把这次的教训写回手册，下次换哪个AI都用得上。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -356,7 +356,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "为什么有它 \n我反复要AI说人话、别当谜语人（约法L2L5），这个技能就是这条要求的落地；手册里有什么，见个人表达项目页。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -371,7 +371,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "不用点名 \nAI向我说明时需要就自己读，同一件事里读过就接着用；我说哪句难懂、太绕，它也会用上。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -672,7 +672,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹链接",
    "source_phrase": "先自己查清再开口：DriveUpload 是谷歌云盘电脑版留下的上传临时文件夹，里面的链接早就没用了。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -687,7 +687,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "把教训写回手册：这类取舍用真实的文件夹、数量和日常说法讲影响；选项编号跨轮不重复；我说“最优解即可”是让 AI 去选，不等于我已经听懂。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -884,7 +884,7 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个循环小箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -914,7 +914,7 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "一个问号气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

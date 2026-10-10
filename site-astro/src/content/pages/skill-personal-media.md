@@ -701,7 +701,7 @@
    "fallback": false,
    "key": "文件夹链接",
    "source_phrase": "我要文件夹，就在同一块盘上建一个临时文件夹，用硬链接放进去，不多占空间、不复制原件。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -753,7 +753,7 @@
    "fallback": false,
    "key": "文件夹链接",
    "source_phrase": "我要文件夹，就在同一块盘上建一个临时文件夹，用硬链接放进去，不多占空间、不复制原件。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -1222,7 +1222,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1353,7 +1353,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "结果数正好等于要的张数时，说“至少这么多”，不说“全部”。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1366,7 +1366,7 @@
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1375,11 +1375,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "key": "版本循环文件",
    "source_phrase": "私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1483,7 +1483,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "结果数正好等于要的张数时，说“至少这么多”，不说“全部”。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1496,7 +1496,7 @@
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1505,11 +1505,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "key": "版本循环文件",
    "source_phrase": "私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {

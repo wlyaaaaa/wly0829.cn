@@ -703,7 +703,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/hires-icons/开关.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
      "illustration": "top_inside",
@@ -780,7 +780,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/hires-icons/开关.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
      "illustration": "top_inside",
@@ -865,12 +865,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "1 块屏｜只放桌上的 OLED 主屏，串流用的虚拟屏和机箱小屏都不放",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -885,7 +885,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "4K｜雨林黑猫，所有屏的桌面底图和锁屏共用一张",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1441,9 +1441,9 @@
      "item_cards": true,
      "inner_columns": 2,
      "icons": [
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -1512,9 +1512,9 @@
      "item_cards": true,
      "inner_columns": 1,
      "icons": [
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/文件齿轮.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/文件夹.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -1557,12 +1557,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "管哪些地方：每块屏的 Windows 桌面底图（包括串流用的虚拟屏，和 Windows 还记得的已拔下的屏），加上系统锁屏，统一成这一张。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1587,12 +1587,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "这张图怎么来的：照原来那张桌面图（雨林、苔石、右上角探头的黑猫）重新生成，更清楚、更绿；再用 Real-ESRGAN（放大模型 realesrgan-x4plus）放大 4 倍，缩到 3840×2160。不是原生 4K，也不是 HDR。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -1637,7 +1637,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "换新电脑：拿到仓库跑一条命令就装回来，不要管理员权限，也不依赖原来的盘符和用户名。还没在新电脑上真用过。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2152,7 +2152,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "满 6 分钟｜按硬件身份挑出主屏；主屏关着、盖着黑幕，就不放。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2380,12 +2380,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一个虚线显示器打叉",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2400,7 +2400,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个上锁的小笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2415,7 +2415,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一枚单独的齿轮",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2425,12 +2425,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个圆形的回退箭头带一个 3",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2772,7 +2772,7 @@
       "emerald-veil\\emerald-veil-09-icon-02.png",
       "emerald-veil\\emerald-veil-09-icon-03.png",
       "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "emerald-veil\\emerald-veil-09-icon-06.png",
       "emerald-veil\\emerald-veil-09-icon-07.png",
       "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -2839,7 +2839,7 @@
       "emerald-veil\\emerald-veil-09-icon-02.png",
       "emerald-veil\\emerald-veil-09-icon-03.png",
       "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "emerald-veil\\emerald-veil-09-icon-06.png",
       "emerald-veil\\emerald-veil-09-icon-07.png",
       "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -2913,7 +2913,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "马上放泡泡｜Ctrl+Win+E、双击托盘图标或托盘菜单，一直飘到你动｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2928,7 +2928,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "预览 15 秒｜托盘菜单里看一眼效果，最多 15 秒自己收｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2953,12 +2953,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "不理远程假动作｜纹丝不动的鼠标事件不算；单独一次小挪动，250 毫秒内再来一次才算｜在用",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2988,7 +2988,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "只放实体主屏｜按硬件身份挑；虚拟屏、水冷曲面屏、认不出的屏不放；主屏关着就待命｜在用",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3003,7 +3003,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "黑幕时让路｜主屏盖着黑幕（Ctrl+Win+R）时不放，撤掉后恢复｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3063,7 +3063,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "查看状态｜托盘里看开没开、目标屏、闲了几秒、最近一次失败｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3108,7 +3108,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "卸载｜删掉程序和开机项｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3340,7 +3340,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "只检查不改｜逐块屏回读，锁屏按解码后的画面比对｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3370,7 +3370,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "原图留底｜第一次换之前存下原桌面图、每块屏原图、原锁屏｜在用",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3487,7 +3487,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/GitHub标志.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
@@ -3555,7 +3555,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/GitHub标志.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
@@ -3619,12 +3619,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "8 月 12–14 日：改用 Windows 原版泡泡，透明地叠在桌面上，闲 5 分钟出现；查出“泡泡自己消失”的一个原因（远程软件的假动作）并修掉。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "737a689a30e03794b0c8f88cfdd8c7d04963ac2dc82f53e2c9599ef80271958f",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
  }
 }
 ---
@@ -919,7 +919,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "3 处｜E 盘项目文件夹、G 盘、外接 H 盘各一份，每份都逐个文件比对指纹",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -929,12 +929,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "5 个插件 · 2 套主题｜清单记下名字、版本和上游提交号；正在用其中 3 个插件、1 套主题",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -949,7 +949,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "每周一 10:30｜自动存一次（北京时间）；9 月 28 日这次 20 个文件全部核对通过",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1227,7 +1227,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "自写样式 我自己写的 4 条样式：所有滚动条收成 4 像素细线，平时半透明淡灰，鼠标移上去才加深，轨道透明。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1257,7 +1257,7 @@
    "semantic_status": "matched_existing_objects",
    "key": "ill-080add9cd0030c",
    "source_phrase": "三张竖向大卡片横排：左卡（绿色细边，标签“能装回的：2 个文件”）顶部一幅小水彩插画：一个浅色的 Steam 窗口草图，右上角一个绿色按钮，右侧一条极细的滚动条被一枚放大镜照着；下面两段（粗体小标题＋正文）。",
-   "sha256": "a9f8b16c6185ffdf792475613ab2868f8164ee2f2ceef9eedc843e171aee4a55",
+   "sha256": "f54950e85fb6681a8cde8e229570c56f118778ca6a3bd57a9deb1d23e3c8bd44",
    "status": "ready",
    "original_elements": [
     "一个浅色的 Steam 窗口草图，右上角一个绿色按钮，右侧一条极细的滚动条被一枚放大镜照着"
@@ -1571,7 +1571,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "红色警示",
    "source_phrase": "G 盘没接上或认不出 E 盘这份照样存好，但这次记为失败，不冒充成功；下次 G 在了再补上。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1761,7 +1761,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "实际用过多少",
      "tone": "yellow",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1888,7 +1888,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一只眼睛看着一个浅色 Steam 窗口，窗口角上一个弯弯的“撤回”箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1902,7 +1902,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "实际用过多少预览9月18日在这台电脑真的Steam目录上跑过一次，结果“可以装、没有阻碍”。真正的装回和撤回只在隔离的测试目录里演练过（装回再撤回，文件逐字节还原），还没在真的Steam上做过，也还没换过电脑。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1916,7 +1916,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "实际用过多少预览9月18日在这台电脑真的Steam目录上跑过一次，结果“可以装、没有阻碍”。真正的装回和撤回只在隔离的测试目录里演练过（装回再撤回，文件逐字节还原），还没在真的Steam上做过，也还没换过电脑。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2127,12 +2127,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "一张写着路径的小地图",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2147,7 +2147,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "一把只开特定格子的钥匙串",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2177,7 +2177,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一枚盾牌下压着一张被拦住的纸",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -2318,7 +2318,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "装回要带预览编号",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "cards-2",
      "width": "50%"
@@ -2394,7 +2394,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "装回要带预览编号",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -2438,7 +2438,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一个云朵旁边一只犹豫的手和一张写着差异的纸",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2453,7 +2453,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一把挂锁锁着一扇门，门外一张小纸条写着“忙”",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -2498,7 +2498,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一台电脑旁边一本登记簿，登记簿上一枚小硬盘图标",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -2701,7 +2701,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "公开仓库，也不漏私事 \n麻烦Millennium的设置文件里不只有外观，还有代理地址、代理账号、代理密码三栏，也可能夹带能认出账号的SteamID。仓库是公开的，整份照搬就等于把这些一起公开。\n解法只收21个认得的外观和开关字段，代理这三栏有值就不收；收下的再扫一遍：字段名像password、token、cookie、steamid64且有值，或内容里有SteamID、私钥、GitHub令牌、带账号密码的网址，命中就整次不写。新版Millennium冒出新字段时只报名字，不悄悄公开。6月20日第一版是手动剔掉SteamID，现在每周自动做。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2716,7 +2716,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "绿封面册",
    "source_phrase": "读不全，不算删了 \n麻烦我定过备份跟着原件走，但没读全不能当成我删了（约法L21）。Steam更新到一半、某个插件目录暂时读不到时，如果照常存，这次读到的残缺版就会盖掉上一份完整的备份，读不到的那些插件主题清单跟着没了。\n解法每次存之前都查：三个目录都在、每个已装插件和主题的主文件都在、开着的插件和当前主题真的装着，读完再读一遍结果一样；差一样就整次不存，旧备份原样留着，报出原因。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3026,7 +3026,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
       "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/hires-icons/01-绿叶装饰-clean.png",
@@ -3136,12 +3136,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "插件清单｜名字、版本、上游提交号、开着哪几个｜在用",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3171,7 +3171,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "每周自动存｜每周一 10:30（北京），错过补跑，失败隔 15 分钟重试 3 次，窗口隐藏｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3201,7 +3201,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "没变化不重复｜文件和软件版本都没变，只核对、不新增一代｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3231,7 +3231,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "卸载跟着删｜目录读全、两遍一致时，卸掉的插件主题也从备份删；读不全不删｜没用过",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3275,7 +3275,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "复制到 G 盘｜先认盘再复制当前和历史各代，逐份核对｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3290,7 +3290,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "同步到 H 盘｜电脑配置与恢复每天同步外接盘时一起同步、核对｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3616,7 +3616,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个弯弯的回家箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -3830,10 +3830,10 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/文件齿轮.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "item_count": 9,
      "stagger": true,
@@ -3961,7 +3961,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "红色警示",
    "source_phrase": "7 月 23 日 自动存更稳：失败隔 15 分钟重试，最多 3 次。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3998,12 +3998,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "9 月 18 日 2.0：每份带指纹清单、写入可留底恢复、G 和 H 两处副本、装回预览、装回和撤回、任务自查和状态窗口；55 项测试。同一天 2.0.1：装回记录不全时也不丢撤回编号。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -4017,7 +4017,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "绿封面册",
    "source_phrase": "9 月 26 日 状态窗口的开始菜单入口按我的决定撤掉；说明书精简成一屏人话。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -4045,7 +4045,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "9 月 29 日 自查改成按同一时刻核对，不再因电脑时区误报；重装任务固定北京周一 10:30，也不再装回开始菜单入口。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4073,7 +4073,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "绿封面册",
    "source_phrase": "现在18个提交。属于“偶尔用”的项目：出了报错才修，不再加功能（约法L25）。",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {

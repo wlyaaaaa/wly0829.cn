@@ -614,9 +614,9 @@
      "columns_v": 2,
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
     },
@@ -668,9 +668,9 @@
      "columns_v": 2,
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
     },
@@ -897,7 +897,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "红色警示",
    "source_phrase": "1. 平时不用管 \n登录时和之后每15分钟，后台跑一轮，不弹窗口：认准盘、补文件夹和盘根的《使用说明》、记下空间和内存，一轮几秒钟。9月18日15:00到28日22:20记了996轮结果：990轮正常，6轮只是内存偏紧的提醒。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1144,7 +1144,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个转回原位的循环箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1304,7 +1304,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一根变成硬盘的内存条",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -1462,7 +1462,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/秒表.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -1504,7 +1504,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/秒表.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -1666,9 +1666,9 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/文件夹.png",
       "_library/fix-round-2/icon-clean-7079fea533a5aaa393b7.png",
       "_library/icons/铃铛.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/秒表.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "last_row_fill": true,
      "text_ref": "1只放丢得起的东西。死机断电、盘突然不见时，上次存盘以后写的内容会没，这是内存盘的本性；6月还吃过一次亏"
@@ -1679,8 +1679,8 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns_v": 1,
      "icons": [
       "_library/hires-icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
     }
@@ -1705,9 +1705,9 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/文件夹.png",
       "_library/fix-round-2/icon-clean-7079fea533a5aaa393b7.png",
       "_library/icons/铃铛.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/秒表.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "last_row_fill": true,
      "text_ref": "1只放丢得起的东西。死机断电、盘突然不见时，上次存盘以后写的内容会没，这是内存盘的本性；6月还吃过一次亏"
@@ -1718,8 +1718,8 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns_v": 1,
      "icons": [
       "_library/hires-icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
     }
@@ -2227,7 +2227,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "补齐文件夹和说明　补 12 个缓存和草稿文件夹、盘根《使用说明》（和仓库里的比对指纹，不一样就重抄）、隐藏的就绪标记　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2242,7 +2242,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "空间和内存盯梢　五条提醒线：盘剩余少于 2 GiB、已用超过 8 GiB、可用内存少于 8 GB、提交余量少于 4 GB、不可归属内存达到 4 GB；只记不弹　〈在用〉",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2332,7 +2332,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "腾不出就停手　离上次动手至少 1 小时；失败就报错、1 小时内不试；腾出不到 1 GB 就 6 小时内不再试　〈待验收〉",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2347,7 +2347,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "动手前再核一遍　重建前再核 Primo 盘号、卷的身份、暂停和登记；重建后回读卷标，补文件夹和说明，Primo 命令失败就报错　〈待验收〉",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2520,7 +2520,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "查询、部署和维护",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2530,12 +2530,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "健康体检　只读、不写任何文件：查盘、文件夹、说明、计划任务和最近一轮结果（怎样算正常见“为什么这样设计”第 4 条）　〈在用〉",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -2550,7 +2550,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "划不划算　只报量得到的：容量、已用、电脑内存；管理员加一项可读 Primo 的内存模式和镜像实际大小。不猜提速，驱动实际占多少读不到　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2565,7 +2565,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "部署和恢复　默认只出预览；确认后装计划任务、核对盘，失败按相反顺序退回；可以只恢复任务、不动别的　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2625,7 +2625,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "镜像瘦身　镜像比盘里内容大很多时，用 Primo 官方命令另存成紧凑镜像，核对后替换，旧的留作退路。9 月 18 日做过一次：12 GiB 缩到 0.55 GiB　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2655,7 +2655,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "正式文件备份通道　Z 上放项目、文档和其他文件，每 15 分钟备份到 E 盘、掉盘后自动还原。7 月 21 日退役，Z 只放缓存　〈已停用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   }
  ]
@@ -2828,7 +2828,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "6 月 28 日　读空间偶尔失败会误弹窗，改成重试 3 次",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2843,7 +2843,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "7 月 21 日　Z 只放缓存，三条备份通道退役",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2903,7 +2903,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "8 月 13 日　普通提醒不再弹窗",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2918,7 +2918,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "8 月 31 日　动盘前先核对卷的身份",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2933,7 +2933,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "9 月 7 日　一天白重建 33 次；第二天改成按 Primo 里的真实盘号动手，命令失败要报错",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2943,12 +2943,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "9 月 18 日　动手前四道关、暂停和登记、带退路的部署、新鲜的体检；划不划算的检查；镜像瘦身 95.4%",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -2993,7 +2993,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 29 日　触发改成要看到相关增长，单是可用内存低不再重建；拿 38 次旧记录回放核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

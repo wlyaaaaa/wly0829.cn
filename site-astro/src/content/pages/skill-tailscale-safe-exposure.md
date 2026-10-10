@@ -556,7 +556,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "一部手机和笔记本连向电脑的两条线",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -571,7 +571,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个退回箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -815,7 +815,7 @@
       "_library/icons/身份盾牌.png",
       "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件齿轮.png"
      ],
      "row": "functions",
@@ -865,7 +865,7 @@
       "_library/icons/身份盾牌.png",
       "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
@@ -895,7 +895,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "先摸底｜记下本机和对面设备的身份、端口谁在监听、Serve 和 Funnel 现状、相关防火墙规则；从对面 ping 一次留底",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -940,7 +940,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改前留原样、坏了退回｜一次只改一个端口的一种做法；改完核对，不对就按存好的原样退回，再核对一次",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -985,7 +985,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "串流线路体检｜Sunshine、Moonlight 只查网络走哪条路，跑串流项目自己的只读体检；不改分辨率、HDR、刷新率",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -1015,7 +1015,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "对外报告不露底｜给网站、公开报告的结果不写设备身份、地址、账号和整份访问策略",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1025,12 +1025,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "双机剪贴板排障｜先用双机剪贴板项目自己的诊断和恢复入口",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -1196,7 +1196,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "管",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1211,7 +1211,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "管",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1226,7 +1226,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "不管",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

@@ -1157,7 +1157,7 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "一个拿着清单打勾的小人、“Claude 和 GPT 一起干时”配 Claude 橙色星芒和 OpenAI 黑色花结两个标志并排握手、“快速模式、故障和额度”配一个电量回满的小电池、“什么时候新开对话”配一个新打开的对话气泡",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {

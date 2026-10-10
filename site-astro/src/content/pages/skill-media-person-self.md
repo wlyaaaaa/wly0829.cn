@@ -531,7 +531,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "找脸：本机用 YuNet 找出照片里每一张脸。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -561,7 +561,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "给结论：有我（指出第几张脸、框在哪）／没检出我／判断不了（没脸、太小、太糊）。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -576,7 +576,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "先看有没有现成的：这段录音以前查过、结果还有效，就直接用。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -606,7 +606,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "逐句给结论：每句标成我、别人或判断不了；没比过声音的句子靠上下文判，判不了就标判断不了；视频只听声音，不看画面。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -741,7 +741,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "照片里指出哪张脸是我｜给出脸的编号和框的位置",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -756,7 +756,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "一次查一小批照片｜一次最多 20 张，要一张张点名",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -801,7 +801,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "看不清就说判断不了｜没脸、太小、太糊、太短、太吵，都不硬判",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -816,7 +816,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "查过的不重跑｜同一段录音已有有效结果，直接复用",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1044,7 +1044,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1104,7 +1104,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1134,7 +1134,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1149,7 +1149,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1175,7 +1175,7 @@
    "fallback": false,
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1188,7 +1188,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我的人脸模板和声音样本只在本机，只有一份；删掉或换掉，以后的判断就跟着变，旧结果不再作数。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1201,7 +1201,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "不认别人是谁，也不数一共有几个人。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1227,7 +1227,7 @@
    "fallback": false,
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1253,7 +1253,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1266,7 +1266,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1292,7 +1292,7 @@
    "fallback": false,
    "key": "照片堆",
    "source_phrase": "照片和声音分开判断：可能出现了没说话，也可能说了话没入镜，不合成一个结论。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1305,7 +1305,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "我的人脸模板和声音样本只在本机，只有一份；删掉或换掉，以后的判断就跟着变，旧结果不再作数。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1318,7 +1318,7 @@
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "不认别人是谁，也不数一共有几个人。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1344,7 +1344,7 @@
    "fallback": false,
    "key": "麦克风",
    "source_phrase": "不从要判断的那段录音里学我的声音。",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {
@@ -1370,7 +1370,7 @@
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "结果只是本机的推断，不当身份证明用。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1383,7 +1383,7 @@
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "不把模板、声纹、比对分数传出去或写进别的库。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

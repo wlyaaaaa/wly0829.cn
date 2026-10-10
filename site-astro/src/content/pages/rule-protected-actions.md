@@ -690,7 +690,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -947,7 +947,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -1134,7 +1134,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "右窗角 Claude 橙色星芒",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -1149,7 +1149,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "别的 AI 或程序 → **先请本人验证**。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1179,7 +1179,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "不是 → 往下看。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1194,7 +1194,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "开着 → **不弹验证**。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1224,7 +1224,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "没开，资料也锁着 → **先请本人验证一次**。对话里一句“别验证了”代替不了。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1588,7 +1588,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "身份盾牌",
    "source_phrase": "一只贴着红封条的小纸箱、“什么时候请本人验证”配一个小沙漏旁边立着一把黄铜钥匙、“这份清单怎么来的”配一页被划掉一半的旧草稿纸",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2111,7 +2111,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一把黄铜钥匙插在小锁上、“普通收尾，不验证”配一个装好的小纸箱贴着绿色对勾",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2469,7 +2469,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -2539,7 +2539,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -2591,7 +2591,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "开头插画里那只四选一托盘（同一只，四样东西不变，但这里托盘和小牌子都不写字）、“各产品各管各的”配三个并排的小木柜，柜门上分别画一把钥匙、一个对勾盾牌、一块硬盘",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

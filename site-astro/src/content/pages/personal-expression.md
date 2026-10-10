@@ -733,7 +733,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "11 条原则 · 6 条读懂我的话｜讲给我听的手册，背后是 50 条带日期的真实案例（9 月 8–28 日）",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -1494,7 +1494,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支钢笔和一个信封",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1671,7 +1671,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支正在改稿的红笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1731,7 +1731,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1746,7 +1746,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支没墨的笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1776,7 +1776,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个往回绕的小箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1791,7 +1791,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "岔路",
    "source_phrase": "一个分成两条岔路的路牌",
-   "sha256": "c1b5779519e87e89cb54664c27f250e2939f343e2db0c38b790e3d9b8eb5a5c8",
+   "sha256": "60c8c99a88b19baf8d010994b8a9b34841a6138e79791cbeef9e79686267047a",
    "status": "ready"
   },
   {
@@ -2246,7 +2246,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "三支颜色不同的笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -2393,7 +2393,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
      "text_ref": "1.教会一个AI，所有AI都会",
      "header_icon": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/icons/打勾清单.png"
      ]
     }
@@ -2417,7 +2417,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
      "text_ref": "1.教会一个AI，所有AI都会",
      "header_icon": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/icons/打勾清单.png"
      ]
     }
@@ -2448,12 +2448,12 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "2.“调用了技能”不等于“记下了”\n麻烦：9月26日第一次回头查我的原话，发现9月15–25日约35起表达反馈，只有2起写进了资料：AI当场改了，却没写回。\n解法：没真改进资料、没回读，就不能说记下了；每次更新我的个人资料时，AI只读回扫最近几天我说过的话，按“听不懂”“说人话”“我问的是”“不是不是”“？？？”这些信号找出漏的，合并后回读。9月28日又从ChatGPT导出里补了3条。",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -2705,7 +2705,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "照手册讲 ● 在用｜AI 向我汇报、解释、请我拍板时，先照手册组织：先说有什么用，再讲结论和依据",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2765,7 +2765,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "状态差时换讲法 ● 说不准｜我状态很差时，按我事先确认过的默认做法说话",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2795,7 +2795,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "看关系选说法 ● 说不准｜先按发给谁、什么关系挑我的样本，场合只排序；关系不同的不借口吻",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2810,7 +2810,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "参考我评过的 AI 稿 ● 说不准｜我评过的 AI 稿分认可、勉强接受、否定三档，否定的写原因；动笔前先看原因",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2840,7 +2840,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对样本出处 ● 说不准｜要核对某条样本时，显示原消息编号和校验码（哈希）；平时藏起来",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3035,7 +3035,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "记住纠正 ● 在用｜当场改好，写回对应的资料，校验、回读、存快照；不用我说“保存”",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3095,7 +3095,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "大合并交给独立核对 ● 没用过｜要重排多条时先写方案，派没参与的 AI 逐条核对我的原话一处不丢，再写回；不请我逐条对照",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3125,7 +3125,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "锁着就不读 ● 在用｜每条读取命令（连校验在内）先查个人资料锁，没放行就一行不读",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3140,7 +3140,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "校验资料 ● 在用｜查每条样本的出处、编号、对象和关系齐不齐，再对照私有快照（见亮点 3）",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3170,7 +3170,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "找回旧版 ● 说不准｜从 Git 历史里取出要的那一版快照，先读出来核对，再还原到资料目录",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   }
  ]
@@ -3273,7 +3273,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一本新笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3303,7 +3303,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -3333,7 +3333,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁连着一根线到一台电脑",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

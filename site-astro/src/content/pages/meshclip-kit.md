@@ -1399,7 +1399,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一支倒着走的箭头绕回原点",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1512,7 +1512,7 @@
      "illustration": "above_card",
      "icons": [
       "_library/icons/地球.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/地球.png",
       "_library/icons/共享节点.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
@@ -1594,7 +1594,7 @@
      "illustration": "above_card",
      "icons": [
       "_library/icons/地球.png",
-      "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+      "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/地球.png",
       "_library/icons/共享节点.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
@@ -1688,7 +1688,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇门",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1718,7 +1718,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱",
    "source_phrase": "一个包裹",
-   "sha256": "f2ee2e038fd95e74d2931aa25aee0476964dbed0c7e000bc46bdfb5de475c261",
+   "sha256": "37f5c6a705967fa0907c2069cc8f4398087977585b3ac6c9ec9fa9bf20e095d7",
    "status": "ready"
   },
   {
@@ -1865,7 +1865,7 @@
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "row": "why",
      "width": "32%"
@@ -1920,7 +1920,7 @@
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ]
     }
    ],
@@ -2023,7 +2023,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一支倒着走的箭头绕回原点",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -2053,7 +2053,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一台亮着屏的台式机旁边一台合上盖子的笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2292,7 +2292,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵带斜杠的小云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2302,12 +2302,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一个没有窗口的空白屏幕",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2630,7 +2630,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云下载",
    "source_phrase": "文件互传｜在任务栏的 KDE Connect 里选文件发过去，对方收进“下载”文件夹｜说不准",
-   "sha256": "1c603627d116f903dd0148f2befe4ca071a81c48dd15f3542fd34ce8ea256685",
+   "sha256": "a149b95737b7aae5ced9666a2cebe730366ea2410c938467df8d9e92e9459c39",
    "status": "ready"
   },
   {
@@ -2994,7 +2994,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "控制中心｜看守护开没开、上次心跳、下次检查、有没有做了一半的操作；只在主机上｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3004,12 +3004,12 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "暂停自动拉起｜暂停一小时、暂停直到恢复、恢复守护｜没用过",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3024,7 +3024,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "自检｜22 项分层检查，不打印地址和设备编号；副机按需模式下 KDE Connect 关着也算正常；严格模式把“提醒”也算不过｜在用",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -3069,7 +3069,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "副机按需部署｜先核对提交号；装两个官方包，保留配对和放行规则，只删项目建的登录启动，不装看门狗，记成按需模式；9 月 29 日在副机上用过｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3099,7 +3099,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "中断恢复｜装到一半断了，先看预览再倒着撤回；别的程序改过的不动｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3375,7 +3375,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一支绕回原点的箭头和一块小面板",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -3390,7 +3390,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一本变薄的小册子",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3405,7 +3405,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个转圈的重启箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {

@@ -25,7 +25,7 @@
         "inner_columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+          "_library/icons/盾牌对勾.png",
           "_library/icons/身份盾牌.png",
           "_library/icons/文稿堆.png"
         ],
@@ -231,7 +231,7 @@
         "inner_columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "rule-privacy-data/rule-privacy-data-01-icon-01.png",
+          "_library/icons/盾牌对勾.png",
           "_library/icons/身份盾牌.png",
           "_library/icons/文稿堆.png"
         ],
@@ -999,7 +999,7 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "header_icon": [
-          "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "inset_prefixes": [
           "实例："
@@ -1103,7 +1103,7 @@
         "illustration": "left_inside",
         "icon_position": "header_left",
         "header_icon": [
-          "rule-privacy-data/rule-privacy-data-04-icon-02.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "inset_prefixes": [
           "实例："

@@ -1490,7 +1490,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "趋势图",
    "source_phrase": "一条折线",
-   "sha256": "93f561327ed7d183c4ffc3ca973b78e9ec9cc8de258aa4facce704e52f997d5a",
+   "sha256": "840e34005f97891bcc6f8b0621a1e081cfae3d452a215b4eb6a9efa57ae723ab",
    "status": "ready"
   },
   {
@@ -1580,7 +1580,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "编号台阶",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {
@@ -1640,7 +1640,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "带箭头的方框",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1685,7 +1685,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个折叠箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1927,7 +1927,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "好读：页首、大屏、手机、打印\n页首用处和结论：第一屏一句看完能解决什么，再先说结论（说不准）本页导航：三节以上自动出现，点节名就跳过去（说不准）自动放大和字号：半屏960像素宽放大1.15倍，1280像素1.3倍，大窗口最多1.75倍，手机和打印不放大；右上角“字号−/+”八档，调一次所有页面都记住（在用）手机表格变卡片：多列表格变成一行一张卡片，列太多就表内横滑（说不准）打印展开：折叠的证据自动展开，没写的说明框不印（说不准）",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2044,7 +2044,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/齿轮.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/纸箱.png"
      ],
@@ -2102,7 +2102,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/齿轮.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/纸箱.png"
      ],
@@ -2153,7 +2153,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件写作",
    "source_phrase": "一张纸和一支笔",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {
@@ -2183,7 +2183,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→ **自检**",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2198,7 +2198,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→ **打开**",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2213,7 +2213,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→ **清理**",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

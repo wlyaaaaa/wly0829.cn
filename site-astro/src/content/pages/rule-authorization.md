@@ -477,7 +477,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "一句话答案\n直接做：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的五项（Git收尾、申请管理员权限、选型号和档位、Claude派Sol和Luna、在用的目标继续收尾）也不用再问。先要本人明确同意：发消息、对外发布、花钱、删除只有一份的数据、撤不回的迁移、项目第一次公开发布。同意过的，也不自动扩到第一次新建的目标、别的账号或新的公开地方。重大的事另有一关：例如删库、查看密码明文、把私人资料发到外面，动手前先把关、看要不要请本人验证，见重大动作与本人验证。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1250,7 +1250,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "里那把金色钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1479,7 +1479,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "同一组），中间绿色盾牌徽章不写字",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {

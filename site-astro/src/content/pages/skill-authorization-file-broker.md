@@ -344,7 +344,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -501,7 +501,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹链接",
    "source_phrase": "只认点名的路径。　AI 只处理这一个文件夹，不去扫下载、文档或整块盘；遇到符号链接、目录联接这类指向别处的链接直接拒绝。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -546,7 +546,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "读回核对。　加密完再认一遍整个包，核对每个文件的哈希，才报“完成”。中途断了，下次核对已完成的部分再接着做。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -561,7 +561,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "跟着备份走。　这个文件夹随文档每天备份到 G、再到 H；G、H 各自确认，H 没接上就写“待定”。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

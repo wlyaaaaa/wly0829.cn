@@ -884,7 +884,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "66.3 GB　8 月 30 日试恢复：4,441 个文件还原到空文件夹，逐个核对一致",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1167,7 +1167,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "齿轮",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -1660,9 +1660,9 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "illustration": "top_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "多大9,530个文件，33.0GB几点每天12:15，Codex开着也照常存到哪G盘；14:30"
     },
@@ -1700,9 +1700,9 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "illustration": "top_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-      "_library/icons/版本循环文件.png"
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "多大9,530个文件，33.0GB几点每天12:15，Codex开着也照常存到哪G盘；14:30"
     },
@@ -1768,12 +1768,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "留几份　G 和 H 各留最新两份（每天存下的一份叫一个恢复点）",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -1798,12 +1798,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "版本循环文件",
    "source_phrase": "留几份 G 和 H 各留最新两份（每天存下的一份叫一个恢复点）",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2025,7 +2025,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一块裂开的硬盘和旁边完好的外接盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -2035,12 +2035,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "两台电脑之间一个箭头",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2147,7 +2147,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "icons": [
       "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
       "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/门.png"
      ],
      "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不",
@@ -2190,7 +2190,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "icons": [
       "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
       "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/门.png"
      ],
      "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不"
@@ -2216,7 +2216,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一块带问号的硬盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -2358,11 +2358,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "illustration": "above_card",
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/禁止文件.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/指向手.png"
      ],
      "row_counts": [
@@ -2403,11 +2403,11 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/禁止文件.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/指向手.png"
      ],
      "row_counts": [
@@ -2462,7 +2462,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "认盘　核对 G 的身份和加密状态",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2522,7 +2522,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "写清单、封口　清单记下每个文件对应哪个指纹；清单本身再算一个指纹封口，然后把引用到的内容逐个重算核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2699,7 +2699,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "为什么按内容存 \n同一个文件没变，就不再存第二遍，两个恢复点共用。9月28日那份11.3GB里，2.9GB是直接复用的；每天变的文件不少，新写了8.4GB。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2714,7 +2714,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "为什么只留两份 \n每天要新写几GB，全留着盘会越来越满。留当前和前一天两份：一份坏了还有一份；删旧的之前，先把要留的两份都核对完整。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2941,7 +2941,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "没做完的备份，不会被当成“最新”。 \n麻烦：备份到一半断电、盘满或出错，留下半份；下次恢复要是拿到这半份，就找不回东西。\n解法：新的一份先放在暂存区，整份核对完才挪进正式位置，最后一步才把“最新”指过来。外接盘上还要整份再核一遍，才换外接盘的“最新”。哪一步失败，恢复时拿到的都是上一份完整的。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3171,7 +3171,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "对话每日备份　每天 12:15 在 Codex 开着时给 E 盘拍卷影，从卷影里读对话、附件、听写记录、状态数据库等，存进 G 盘；存完删掉卷影　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3181,12 +3181,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "同样内容只存一份　每个文件按 SHA-256 存，没变的直接复用，几个恢复点共用同一份内容　〈在用〉",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3201,7 +3201,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "只留最新两份　G 上留当前和前一个恢复点；先把两份都核对完整，再删更旧的点和没有哪份还在用的内容，9 月 28 日删了 1 个点、6.5 GB　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3231,7 +3231,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对恢复点　只读核对 G 或 H 上的某一份：逐个内容重算 SHA-256，不写任何东西，不用管理员权限　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3246,7 +3246,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "试恢复到空文件夹　把某一份还原到一个新的空文件夹，边还原边核对，不碰正在用的 Codex。8 月 30 日试过：66.3 GB、4,441 个文件，逐个核对一致　〈在用〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3261,7 +3261,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "看现状　不读内容，只报 Codex 目录现在多少文件、多大，G 上最新一份是哪个，H 在不在；用了不留记录，查不到用过没有　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3276,7 +3276,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "进度文件　备份和恢复时随时写出阶段、处理了多少、百分比、速度和预计还要多久，不含文件名　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3291,7 +3291,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "计划任务自检　核对 12:15 那个任务的时间、权限、启动方式有没有被改。现在它把电脑时区的变化误报成“要修”，任务其实照常在 12:15 跑；用了不留记录，查不到用过没有　〈说不准〉",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3573,7 +3573,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "笔记本",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3648,7 +3648,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "已停用的备份",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3678,7 +3678,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "云端旧记忆不删　主机那一路：原件删掉的记忆，仓库里还留着，和约法 L21 不一致；随上一项停，私人仓库留档　〈已停用〉",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3920,7 +3920,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "8 月 30 日　Codex 完整对话备份上线：卷影、按内容存、放 G 盘；当天试恢复 66.3 GB",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3935,7 +3935,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 1 日　Codex 目录搬到 E:\\Data\\AppData\\Codex，备份跟着改",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3950,7 +3950,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "9 月 10 日　笔记本用上同一套",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3980,7 +3980,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 17 日　Gemini 命令行卸掉，原来的 Gemini 备份只剩 Antigravity 的东西",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3995,7 +3995,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 26 日　Claude 记忆备份有了自己的程序；OpenClaw 自己的备份停了",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4010,7 +4010,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 27 日　对话备份顺手记下 AI 用过的技能和命令名",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4025,7 +4025,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 28 日　这份小记录第一次随备份跑完，补记 195,872 条",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4055,7 +4055,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云上传",
    "source_phrase": "9 月 29 日　开发配置备份不再带 Antigravity 命令行版的对话、标注和知识；按我的决定，Codex 对话也不随配置包上云盘，只留在 G、H 两块盘",
-   "sha256": "75d46560d72a220dcc5052816b305979da0acf1ad3b2320258fc8d03fa813d39",
+   "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760",
    "status": "ready"
   },
   {

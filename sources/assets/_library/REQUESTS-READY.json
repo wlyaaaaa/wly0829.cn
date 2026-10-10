@@ -5,7 +5,7 @@
   "gen_requests": "gen-requests.jsonl",
   "gen_requests_sha256": "51c10c46a58e5f92a2ecc6ca391517fb69995c21c3fc12fa5f9bfa18332d18ec",
   "asset_map": "asset-map.jsonl",
-  "asset_map_sha256": "abc796a42fc4b99ca0d2c7828e39758a685db68af5772b79c0f4a49e7a75176f",
+  "asset_map_sha256": "2cfdfe190e44ea56b896a72c84634a1736997eada920049d194c4785ed8d547e",
   "summary": "summary.json",
   "requests_count": 714,
   "generation_required_count": 4,

@@ -874,12 +874,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一架小天平一边是扳手一边是硬币、“另一台电脑上的 AI”配两台笔记本电脑之间一根细绿线、“软件界面上的点选，默认交本人”配一根食指点在一个小按钮上",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1009,7 +1009,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
@@ -1031,7 +1031,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
@@ -1391,7 +1391,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -1412,7 +1412,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -1434,7 +1434,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "几扇并排的小门、每扇门上一片不同颜色的叶子、“Gmail、Google 云盘和待办”配 Gmail 标志、Google 云盘三色三角标志和 Google Tasks 标志并排",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -1908,7 +1908,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1922,7 +1922,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2200,7 +2200,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一张白底绿色的小网页（只画色块和一个小图表）、“网站怎么更新”配一个小地球和一片绿叶、“自动运行的东西要看得见”配一个小齿轮旁边一盏亮着的小绿灯",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2433,8 +2433,8 @@
      "header_icon": [
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+      "_library/hires-icons-r2/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -2451,12 +2451,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个绕成圈的绿色箭头、“锁版本”配一把小挂锁、“改在用的软件时保什么”配一只手护着一株小苗、“更新不该打扰本人”配一个挂着“请勿打扰”形状的小门牌（门牌上不画字）",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2843,7 +2843,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "置和密钥”配一把小钥匙挂在一个带锁的小盒子上、“技能和插件”配几块拼在一起的积木、“Windows”配 Windows 的四格窗标志",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
