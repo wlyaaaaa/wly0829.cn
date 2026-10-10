@@ -2757,7 +2757,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "AI 备份一个带对话气泡的小硬盘",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2787,7 +2787,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "Steam 外观备份 Steam 标志",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2842,12 +2842,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/扳手.png",
+   "asset": "_library/hires-icons-r2/扳手.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "扳手",
    "source_phrase": "代理上网修复一个地球加小扳手",
-   "sha256": "52f3ffa5b6e07c8b49bad87fee5c6ce6903b5deea4171b3a90eaa98cdebcc150",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
    "status": "ready"
   },
   {
@@ -3236,7 +3236,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 的橙色星芒标志，旁边一支笔压着一张纸",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -3251,7 +3251,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 橙色星芒标志和 ChatGPT 标志并排、中间一架小木天平",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -3266,7 +3266,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "一个小一号、颜色偏灰的 Claude 星芒标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {

@@ -2055,7 +2055,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "找一台能用的 Windows 电脑，接上 G 或 H（机箱里和外接的两块备份盘），自己解锁。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2461,7 +2461,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": ":40　电脑使用记录备份",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2551,7 +2551,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": ":10　照片视频和个人资料备份",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3044,7 +3044,7 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "36 小时没成功就报警。　每类备份每次都写回执；每天 14:15 检查，哪类 36 小时内没有成功回执，驾驶舱上就亮黄。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4925,7 +4925,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "每一步都留回执。　看回执就知道备份是真的成功了，而不是“应该跑过了”。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4955,7 +4955,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "密码不出密码中心。　密码只放在密码中心里；环境变量备份时，秘密值打码。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5225,7 +5225,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "对清单　登记里的 19 类备份要和程序里的清单一模一样，对不上就停在这一步。9 月 27 日 21:26 那次就停在这里，没写 H。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -6102,7 +6102,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "照片视频和个人资料备份　每天 17:10 把五个资料目录复制到 G；E 上删掉的，在 G 待删区留 30 天　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -8157,7 +8157,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "笔记本读主机镜像　笔记本装了 Veeam，只用来读备份、验证密码、提取文件　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -8483,7 +8483,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "看板接口　网站打开时临时采样：自动任务、备份、待验收、今天的动态、项目现状　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -9112,7 +9112,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 26 日　照片视频 30 天后悔期；只有一份的项目和软件进外接盘；natpierce、浏览器自动填表退役；模型不再备份",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

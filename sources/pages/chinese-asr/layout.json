@@ -962,7 +962,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/icons/气泡.png",
+          "_library/hires-icons-r2/气泡.png",
           "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
         ],
         "text_ref": "它会指出哪里可能错。"
@@ -992,7 +992,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/icons/气泡.png",
+          "_library/hires-icons-r2/气泡.png",
           "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
         ],
         "text_ref": "它会指出哪里可能错。"

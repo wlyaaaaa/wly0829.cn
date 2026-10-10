@@ -1678,7 +1678,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "icons": [
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
      ]
     }
@@ -1719,7 +1719,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "connector": "none",
      "columns_v": 1,
      "icons": [
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
      ]
     }
@@ -1765,12 +1765,12 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "“这句话我当时怎么说的？” \n问到手机高刷，AI按编号取出原话：“我用了6年。感觉省电模式的60hz我觉得没有任何区别”，并注明它来自2025年12月保存的一张对话截图、说话时间不详。卡上的结论也就收在“手机省电模式下没感觉出差别”，不推到所有屏幕。",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -2109,7 +2109,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "手机高刷新率｜证据：中等",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -2300,7 +2300,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "导入：原件先挪进 E:\\PersonalData 下的来源投递区保全（这个目录每天有备份），按内容指纹去重，默认增量导入。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3510,7 +3510,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      ],
      "icons": [
       "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
-      "_library/icons/气泡.png"
+      "_library/hires-icons-r2/气泡.png"
      ]
     },
     {
@@ -3565,7 +3565,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      ],
      "icons": [
       "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
-      "_library/icons/气泡.png"
+      "_library/hires-icons-r2/气泡.png"
      ]
     },
     {
@@ -3616,12 +3616,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "我的原话（我怎么说）",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -4892,7 +4892,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "花钱核对｜任意日期区间按日或按月汇总；净消费＝实付扣成功退款，订单和支付不重复算，币种分开",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {

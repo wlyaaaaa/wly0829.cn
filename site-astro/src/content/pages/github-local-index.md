@@ -3141,7 +3141,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新总表｜重新扫描，看板页和仓库清单一起重写，每个文件整份替换｜在用",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -3526,7 +3526,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "删库和转移｜固定先预演：把所有分支、标签拉到本地各留一个备份记号，列出 issue、发布包等只在网页上的东西，拿给我看过再正式删或转移｜待验收",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3956,7 +3956,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "9 月 27 日　大动作入口瘦身，拆掉拦密钥的检查；删掉一个不用的仓库后刷新",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {

@@ -2429,7 +2429,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新连接｜给选定网卡刷新域名缓存、释放再续租地址；固定地址的网卡不动｜说不准",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -2459,7 +2459,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新域名缓存｜只清缓存，不换 DNS 服务器｜说不准",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {

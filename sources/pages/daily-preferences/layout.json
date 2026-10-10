@@ -271,7 +271,7 @@
         "icons": [
           "_library/hires-icons/打勾清单.png",
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/气泡.png",
+          "_library/hires-icons-r2/气泡.png",
           "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
         ]
       }
@@ -315,7 +315,7 @@
         "connector": "none",
         "columns_v": 1,
         "icons": [
-          "_library/icons/气泡.png",
+          "_library/hires-icons-r2/气泡.png",
           "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
         ]
       }
@@ -1053,7 +1053,7 @@
         ],
         "icons": [
           "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
-          "_library/icons/气泡.png"
+          "_library/hires-icons-r2/气泡.png"
         ]
       },
       {
@@ -1111,7 +1111,7 @@
         ],
         "icons": [
           "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
-          "_library/icons/气泡.png"
+          "_library/hires-icons-r2/气泡.png"
         ]
       },
       {

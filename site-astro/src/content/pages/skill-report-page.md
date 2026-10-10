@@ -1489,7 +1489,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "趋势图",
    "source_phrase": "一条折线",
-   "sha256": "93f561327ed7d183c4ffc3ca973b78e9ec9cc8de258aa4facce704e52f997d5a",
+   "sha256": "840e34005f97891bcc6f8b0621a1e081cfae3d452a215b4eb6a9efa57ae723ab",
    "status": "ready"
   },
   {
@@ -1579,7 +1579,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "编号台阶",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {

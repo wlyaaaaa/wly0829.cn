@@ -868,7 +868,7 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "五级小台阶",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {

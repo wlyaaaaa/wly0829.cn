@@ -595,12 +595,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/扳手.png",
+   "asset": "_library/hires-icons-r2/扳手.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "扳手",
    "source_phrase": "一把往回拧的扳手",
-   "sha256": "52f3ffa5b6e07c8b49bad87fee5c6ce6903b5deea4171b3a90eaa98cdebcc150",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
    "status": "ready"
   },
   {
@@ -630,7 +630,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一个上了锁的备份盒",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

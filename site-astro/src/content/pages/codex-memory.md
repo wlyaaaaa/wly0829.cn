@@ -2938,7 +2938,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "没做完的备份，不会被当成“最新”。 \n麻烦：备份到一半断电、盘满或出错，留下半份；下次恢复要是拿到这半份，就找不回东西。\n解法：新的一份先放在暂存区，整份核对完才挪进正式位置，最后一步才把“最新”指过来。外接盘上还要整份再核一遍，才换外接盘的“最新”。哪一步失败，恢复时拿到的都是上一份完整的。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3168,7 +3168,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "对话每日备份　每天 12:15 在 Codex 开着时给 E 盘拍卷影，从卷影里读对话、附件、听写记录、状态数据库等，存进 G 盘；存完删掉卷影　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3273,7 +3273,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "进度文件　备份和恢复时随时写出阶段、处理了多少、百分比、速度和预计还要多久，不含文件名　〈在用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3645,7 +3645,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "已停用的备份",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3916,7 +3916,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "8 月 30 日　Codex 完整对话备份上线：卷影、按内容存、放 G 盘；当天试恢复 66.3 GB",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3931,7 +3931,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 1 日　Codex 目录搬到 E:\\Data\\AppData\\Codex，备份跟着改",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3976,7 +3976,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 17 日　Gemini 命令行卸掉，原来的 Gemini 备份只剩 Antigravity 的东西",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3991,7 +3991,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 26 日　Claude 记忆备份有了自己的程序；OpenClaw 自己的备份停了",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4006,7 +4006,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 27 日　对话备份顺手记下 AI 用过的技能和命令名",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -4021,7 +4021,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 28 日　这份小记录第一次随备份跑完，补记 195,872 条",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

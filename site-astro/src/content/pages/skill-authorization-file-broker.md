@@ -561,7 +561,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "跟着备份走。　这个文件夹随文档每天备份到 G、再到 H；G、H 各自确认，H 没接上就写“待定”。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

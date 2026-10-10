@@ -702,7 +702,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "剪刀",
    "source_phrase": "剪刀剪开一段波形",
-   "sha256": "70cb61682b6ecc2fc6e262b6c309d0ad67fb83036817d0263db7d9d72ea2d070",
+   "sha256": "18efcc5f95ce2b5b8c0939799620a9389dcc063c3e42dff881d10ecacb9d5682",
    "status": "ready"
   },
   {

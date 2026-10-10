@@ -2428,7 +2428,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "columns": 2,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
       "_library/icons/文稿堆.png",
       "_library/icons/云.png"
@@ -2453,7 +2453,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/气泡.png"
+      "_library/hires-icons-r2/气泡.png"
      ]
     },
     {

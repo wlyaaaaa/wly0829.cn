@@ -2393,7 +2393,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
      "text_ref": "1.教会一个AI，所有AI都会",
      "header_icon": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/icons/打勾清单.png"
      ]
     }
@@ -2417,7 +2417,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
      "text_ref": "1.教会一个AI，所有AI都会",
      "header_icon": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/icons/打勾清单.png"
      ]
     }
@@ -2448,12 +2448,12 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "2.“调用了技能”不等于“记下了”\n麻烦：9月26日第一次回头查我的原话，发现9月15–25日约35起表达反馈，只有2起写进了资料：AI当场改了，却没写回。\n解法：没真改进资料、没回读，就不能说记下了；每次更新我的个人资料时，AI只读回扫最近几天我说过的话，按“听不懂”“说人话”“我问的是”“不是不是”“？？？”这些信号找出漏的，合并后回读。9月28日又从ChatGPT导出里补了3条。",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {

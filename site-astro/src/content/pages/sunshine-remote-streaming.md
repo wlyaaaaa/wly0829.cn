@@ -3317,7 +3317,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "备用屏设置｜改分辨率、刷新率、缩放、HDR；默认只预览，确认才改；上次真改是 9 月 2 日｜在用",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {

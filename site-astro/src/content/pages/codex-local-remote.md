@@ -2349,7 +2349,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "五级台阶，只有最高一级是亮绿色",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {

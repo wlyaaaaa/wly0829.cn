@@ -1881,7 +1881,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钱包",
    "source_phrase": "一只小钱罐",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {

@@ -663,7 +663,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 的橙色星芒标志，旁边一支笔压着一张纸",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -678,7 +678,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 橙色星芒标志和 ChatGPT 标志并排、中间一架小木天平",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -693,7 +693,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "一个小一号、颜色偏灰的 Claude 星芒标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -1374,7 +1374,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "Claude标志",
    "source_phrase": "Claude 的橙色星芒标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {

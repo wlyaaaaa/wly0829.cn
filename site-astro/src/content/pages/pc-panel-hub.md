@@ -1427,7 +1427,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "报警灯",
    "source_phrase": "状态条｜“系统正常”或“采集异常 N 项”，前台程序，多久更新一次（这里说的是数据取没取到，不是硬件告警）",
-   "sha256": "7d8b567ece232f80dfd165062cf1b9f742ec33ec9723bf986053c32c6ad631a5",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
    "status": "ready"
   },
   {
@@ -2952,7 +2952,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "报警灯",
    "source_phrase": "曲面屏少放东西不是偷懒：9月27日本人终审时说，温度一高CPU会自己降频，温度告警意义不大，于是这块屏只留下每天真会看的六类。",
-   "sha256": "7d8b567ece232f80dfd165062cf1b9f742ec33ec9723bf986053c32c6ad631a5",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
    "status": "ready"
   },
   {
@@ -2967,7 +2967,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "报警灯",
    "source_phrase": "曲面屏少放东西不是偷懒：9月27日本人终审时说，温度一高CPU会自己降频，温度告警意义不大，于是这块屏只留下每天真会看的六类。",
-   "sha256": "7d8b567ece232f80dfd165062cf1b9f742ec33ec9723bf986053c32c6ad631a5",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
    "status": "ready"
   },
   {
@@ -3524,7 +3524,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "每秒刷新｜平时只发变化，约 15 分钟整帧重画一次｜在用",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -3905,7 +3905,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "趋势图",
    "source_phrase": "六张卡自动排｜最多六张，来电优先，只画有内容的卡，不跨曲面折线｜在用",
-   "sha256": "93f561327ed7d183c4ffc3ca973b78e9ec9cc8de258aa4facce704e52f997d5a",
+   "sha256": "840e34005f97891bcc6f8b0621a1e081cfae3d452a215b4eb6a9efa57ae723ab",
    "status": "ready"
   },
   {
@@ -4577,7 +4577,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "报警灯",
    "source_phrase": "9 月 27 日：本人终审后给曲面屏瘦身，只留六类，删掉硬件告警、音量、长任务、U 盘和读播放进度，删了 5,520 行；装到正式位置。",
-   "sha256": "7d8b567ece232f80dfd165062cf1b9f742ec33ec9723bf986053c32c6ad631a5",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
    "status": "ready"
   },
   {

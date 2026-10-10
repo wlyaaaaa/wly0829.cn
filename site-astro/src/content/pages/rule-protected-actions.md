@@ -1133,7 +1133,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "右窗角 Claude 橙色星芒",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -2109,7 +2109,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一把黄铜钥匙插在小锁上、“普通收尾，不验证”配一个装好的小纸箱贴着绿色对勾",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

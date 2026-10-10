@@ -2380,7 +2380,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "按清单找来源　66 个来源写在一个清单文件里，改备份范围只改它",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2892,7 +2892,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "相机",
    "source_phrase": "相机",
-   "sha256": "77925010736b298e7af1ea880431cfea1ade08d7b9daa6d47d6a5f2de961356c",
+   "sha256": "cfd6fd980c8ac0166d1d5e668fa84686c538502efb29a06bdfd9f7a0e0db5f2b",
    "status": "ready"
   },
   {
@@ -2952,7 +2952,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "剪刀",
    "source_phrase": "剪刀",
-   "sha256": "70cb61682b6ecc2fc6e262b6c309d0ad67fb83036817d0263db7d9d72ea2d070",
+   "sha256": "18efcc5f95ce2b5b8c0939799620a9389dcc063c3e42dff881d10ecacb9d5682",
    "status": "ready"
   },
   {
@@ -3663,7 +3663,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "先预演再备份　只列出这次会备份哪些、比上次多了几个、改了几个、少了几个，一个字节都不写　〈说不准〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

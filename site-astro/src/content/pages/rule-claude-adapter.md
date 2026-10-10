@@ -512,7 +512,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "要用本人已登录的 Chrome  ：Claude 自己操作不了，默认派一个 GPT 子任务在本人开着的 Chrome 里做；不用登录的网页，Claude 用自己的内置浏览器看。〔详见：用登录的 Chrome〕",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -525,7 +525,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "给当前 Claude 开无限制授权  ：在主对话里明确说要开，会弹出密码中心的授权窗口；本人填时长和范围、验证一次，下一条消息时 Claude 读回授权，用到截止为止，不自动续期。〔详见：开授权的四步〕",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -538,7 +538,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "要用本人已登录的 Chrome  ：Claude 自己操作不了，默认派一个 GPT 子任务在本人开着的 Chrome 里做；不用登录的网页，Claude 用自己的内置浏览器看。〔详见：用登录的 Chrome〕",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -551,7 +551,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "给当前 Claude 开无限制授权  ：在主对话里明确说要开，会弹出密码中心的授权窗口；本人填时长和范围、验证一次，下一条消息时 Claude 读回授权，用到截止为止，不自动续期。〔详见：开授权的四步〕",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {

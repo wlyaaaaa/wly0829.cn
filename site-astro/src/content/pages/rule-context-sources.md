@@ -874,7 +874,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一块三叉指路牌、“按需要一步步读”配一串由近到远的脚印、“基座的日常治理：修问题，不补跑备份”配一把扳手压着一张打了勾的回执",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -1272,7 +1272,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一只贴着雪花封条的小木箱（和开头插画同一只）、“冻结名单”配一张夹在小木板上的清单、“冻结不等于删”配一个上了霜的箱子旁边照常亮着绿灯的小备份硬盘",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -1543,7 +1543,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "三级小木台阶（最高一级插一片新绿叶、中间一级放一把小扳手、最低一级放那只冻结小木箱）、“偶用名单”配一个半开的工具抽屉、“谁在读这张表”配一块小仪表盘",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {

@@ -3303,7 +3303,7 @@
    "fallback": false,
    "key": "纸箱对勾",
    "source_phrase": "→恢复副本：私人GitHub、G盘、H盘",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3420,7 +3420,7 @@
    "fallback": false,
    "key": "纸箱对勾",
    "source_phrase": "→恢复副本：私人GitHub、G盘、H盘",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3839,7 +3839,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "本机免密开库 ：用 Windows 的 DPAPI 把开库材料绑在这台电脑的我的账户上，日常开库和自动备份不用每次验证；它不算第五种验证。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5582,7 +5582,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "本机免密开库｜日常开库和自动备份不用每次验证｜在用",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -6516,7 +6516,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "登记式恢复载体｜每块备份盘先登记才能用；9 月 26 日退役，现在盘符随便变｜已停用",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

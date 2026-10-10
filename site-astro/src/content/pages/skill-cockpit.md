@@ -490,12 +490,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-02-icon-04",
    "source_phrase": "一张对话纸：AI 在跟的只报个数",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {

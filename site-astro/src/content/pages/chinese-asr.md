@@ -1231,12 +1231,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "气泡",
    "source_phrase": "两个说话气泡",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -1730,7 +1730,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "封印文稿",
    "source_phrase": "一叠三张纸加一枚指纹印章",
-   "sha256": "ab5fbfb72ba8ee66933b6800d2ca76bc304e0901fa87f6c425ac60e4dd2ae238",
+   "sha256": "49dc9f261f75038d023a855365baea65981bb92e37f2615336060521b10d7aaf",
    "status": "ready"
   },
   {
@@ -3374,7 +3374,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "illustration": "top_inside",
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "text_ref": "它会指出哪里可能错。"
@@ -3398,7 +3398,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "illustration": "top_inside",
      "icons": [
       "_library/icons/日历时钟.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "text_ref": "它会指出哪里可能错。"
@@ -3431,12 +3431,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "没转出字，不等于没人说话。 \n麻烦：结果是空的，很容易被当成“这段是静音”，再被别的程序当成“没说过”。\n解法：结论分四种：转出了字、确实没人说话、有人说话但没转出来、说不准。只有整段都覆盖到、人声检测给出了“没有人声”的证据，才敢说没人说话；别的一律不下这个结论。",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -3772,7 +3772,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "选麦克风｜点小箭头或右键麦克风选设备、刷新；选中的麦克风断了只提示，不偷换别的",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -4577,7 +4577,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "离线重装｜E 盘另存一份当前在用的模型和锁定版本的依赖安装包（约 35 GiB），防上游撤包；换模型、升级依赖时一起刷新。待断网安装验收",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {

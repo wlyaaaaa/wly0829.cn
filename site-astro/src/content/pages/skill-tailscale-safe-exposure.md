@@ -985,7 +985,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "串流线路体检｜Sunshine、Moonlight 只查网络走哪条路，跑串流项目自己的只读体检；不改分辨率、HDR、刷新率",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {

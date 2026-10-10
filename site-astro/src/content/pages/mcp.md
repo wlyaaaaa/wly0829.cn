@@ -1736,7 +1736,7 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude橙色星形标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready",
    "via": "brand"
   },

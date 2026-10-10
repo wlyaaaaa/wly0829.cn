@@ -2095,7 +2095,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "模型与花费：默认本机模型，远程路线可手选；只报哪些地方可能花钱，不假装有“全局零费用” ✕",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {

@@ -2655,7 +2655,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "正式文件备份通道　Z 上放项目、文档和其他文件，每 15 分钟备份到 E 盘、掉盘后自动还原。7 月 21 日退役，Z 只放缓存　〈已停用〉",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   }
  ]
@@ -2841,7 +2841,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "7 月 21 日　Z 只放缓存，三条备份通道退役",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

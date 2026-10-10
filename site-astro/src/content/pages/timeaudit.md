@@ -3828,7 +3828,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "每天 11:40 把整个数据库压缩备份到 G:\\80_Backup\\TimeAudit\\postgresql，一份约 3.8 GiB，留 14 天（现在 12 份）。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3842,7 +3842,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "每天 11:40 把整个数据库压缩备份到 G:\\80_Backup\\TimeAudit\\postgresql，一份约 3.8 GiB，留 14 天（现在 12 份）。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5048,7 +5048,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "功耗和电费｜11 个图：今天几度电、按峰谷电价折多少钱、月底预计、最费电的程序；电量只按 CPU 和显卡功率算",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {
@@ -5078,7 +5078,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "趋势图",
    "source_phrase": "资源大户｜10 个图：占用前 25 名、后台高占用、写盘和联网大户、内存只涨不跌、各软件按小时和按天的 CPU、内存趋势",
-   "sha256": "93f561327ed7d183c4ffc3ca973b78e9ec9cc8de258aa4facce704e52f997d5a",
+   "sha256": "840e34005f97891bcc6f8b0621a1e081cfae3d452a215b4eb6a9efa57ae723ab",
    "status": "ready"
   },
   {
@@ -5480,7 +5480,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "现在正不正常｜一次查齐：在不在写、入库积压、传感器、图表、备份、看门狗上次结果；双击“检查运行状态.vbs”也是它",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5940,7 +5940,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "隔离恢复演练｜在不联网的临时数据库里把备份恢复一遍再读回，不碰正在用的库；还没拿真实备份跑过",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5970,7 +5970,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "换电脑重装｜照《快速部署》装回运行环境、容器和计划任务，再从 G 盘备份恢复历史",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -6341,7 +6341,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 27 日：备份写到一半中断也认得出来；逐程序明细只留 60 天，另存长期汇总。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

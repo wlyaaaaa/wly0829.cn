@@ -1768,7 +1768,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "先找一台能用的 Windows 电脑，接上一块完整的备份盘（G 或 H 都行），由本人解锁（BitLocker 整盘加密）。别在坏电脑上反复折腾；这台准备电脑也不是要清空还原的那台。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -1783,7 +1783,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "在准备电脑上打开 Codex，说“我要换机恢复”；或者先看备份盘根目录的“换机恢复.txt”。之后每一步 AI 陪着指导。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -1798,7 +1798,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "取出镜像密码。在备份盘根目录打开“密码中心.exe”，自己验证、搜“镜像”。密码自己看，不发进聊天。打不开见〔密码中心打不开〕。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -1813,7 +1813,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "做启动 U 盘：把备份盘里的 Veeam 恢复盘写进一个可以清空的 U 盘。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2021,7 +2021,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "旧电脑用不了：接上带完整程序和完整密码备份的移动硬盘或 U 盘，从盘根打开“密码中心.exe”，按窗口提示选备份库。G、H 两块备份盘根目录各有一份。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2036,7 +2036,7 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "完全不联网也能开：用和这份备份匹配、还有效的恢复码。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {

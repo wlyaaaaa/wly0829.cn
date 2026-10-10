@@ -1009,7 +1009,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
@@ -1031,7 +1031,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"

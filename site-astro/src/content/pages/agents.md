@@ -2329,7 +2329,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云对勾",
    "source_phrase": "云朵上一个对勾",
-   "sha256": "1c513362317a71a3f4389eb1b03ae9f9e4abb2848f5c4cf75b83977c6a8e310c",
+   "sha256": "8761a30b9f1f9c10d9ccbb9bccec27fb917f919b95649d81208f72b96ddab513",
    "status": "ready"
   },
   {
@@ -2419,7 +2419,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "一串只往上的台阶",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {
@@ -2593,7 +2593,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude橙色星形标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -2621,7 +2621,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "Claude（每条新消息前一个钩子）",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -2647,7 +2647,7 @@
    "fallback": false,
    "key": "Claude标志",
    "source_phrase": "Claude（每条新消息前一个钩子）",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -2864,12 +2864,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/扳手.png",
+   "asset": "_library/hires-icons-r2/扳手.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "扳手",
    "source_phrase": "一个小扳手",
-   "sha256": "52f3ffa5b6e07c8b49bad87fee5c6ce6903b5deea4171b3a90eaa98cdebcc150",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
    "status": "ready"
   },
   {
@@ -2899,7 +2899,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "两个小窗口Claude标志、OpenAI标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -2974,7 +2974,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "三级小台阶，最后一级虚线",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {
