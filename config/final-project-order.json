@@ -1,7 +1,7 @@
 {
   "schema": "wly.personal-panel-final-project-order.v1",
   "finalized_at": "2026-10-07",
-  "target_project_count": 34,
+  "target_project_count": 35,
   "ranking_basis": "consensus total net value for a broad rational audience, balanced by a capped multiplier for proven consumers in the actual personal AI, Windows and Git ecosystem; count direct utility, loss avoidance and reusable value, adjust for maturity, then subtract adoption, maintenance, complexity and side-effect costs",
   "ranking_rules": [
     "give proven shared infrastructure a bounded multiplier instead of ignoring it or adding every downstream project's full value again",
@@ -10,7 +10,7 @@
     "do not add points for the owner's current usage frequency, historical build order, current card position, personal preference or construction convenience"
   ],
   "display_rule": "render only published projects in final_rank order, with consecutive visible card numbers from 1 through the displayed project count; missing internal ranks never create placeholder cards or routes",
-  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused. The 2026-09-22 value-order correction places personal-expression after daily-preferences at rank 18; prior ranks 18–33 move down one slot while their relative order is preserved. The unused rank 15 remains unused.",
+  "rank_retirement_rule": "An owner-removed independent project normally leaves its final_rank unused; surviving projects are never silently renumbered. The owner explicitly removed rank 27 Playbook from display and decremented every later rank by one on 2026-09-07. The earlier vacant rank 15 remains unused. The owner also retired the planned rank 32 RTX bundle on 2026-09-07 and decremented later ranks by one; rank 15 remains unused. The 2026-09-22 value-order correction places personal-expression after daily-preferences at rank 18; prior ranks 18–33 move down one slot while their relative order is preserved. The unused rank 15 remains unused. The owner removed the entire LLM Backend Toolkit project on 2026-09-27; rank 25 remains unused. Existing independently authored Password Center and remote computer control pages are registered at appended ranks 36 and 37 without changing any retained rank.",
   "construction_rule": "The website AI selects the smallest final_rank still marked planned after the owner reports its latest completed project; an independent next assignment does not wait for unrelated acceptance, UI work, integration or publication. Native collaborators may work on UI, content, source-project acceptance, necessary repairs and package integration in parallel with non-overlapping ownership when useful. Choose actual model and effort through active economy routing, combine results for final acceptance and follow the owner's current publication request.",
   "projects": [
     {
@@ -157,13 +157,6 @@
       "state": "published"
     },
     {
-      "final_rank": 25,
-      "id": "llm-backend-toolkit",
-      "title": "LLM Backend Toolkit",
-      "state": "published",
-      "source": "wlyaaaaa/llm-backend-toolkit"
-    },
-    {
       "final_rank": 26,
       "id": "typora-theme-pack",
       "title": "Typora Theme Pack",
@@ -231,6 +224,24 @@
       "source": "wlyaaaaa/wly0829.cn",
       "content_format": "typeset",
       "content_path": "sources/pages/wly0829-cn/page.json"
+    },
+    {
+      "final_rank": 36,
+      "id": "password-center",
+      "title": "密码中心",
+      "state": "published",
+      "source": "wlyaaaaa/PasswordCenter",
+      "content_format": "typeset",
+      "content_path": "sources/pages/password-center/page.json"
+    },
+    {
+      "final_rank": 37,
+      "id": "remote-control",
+      "title": "电脑远程控制",
+      "state": "published",
+      "source": "wlyaaaaa/PCConfig",
+      "content_format": "typeset",
+      "content_path": "sources/pages/remote-control/page.json"
     }
   ],
   "non_card_explanations": [
@@ -299,5 +310,12 @@
     "excluded_project_count": 4,
     "public_todo_forbidden": true,
     "authority": "docs/design/private-content-rules.md"
-  }
+  },
+  "retired_routes": [
+    {
+      "route": "/projects/llm-backend-toolkit/",
+      "destination": "/projects/",
+      "title": "LLM Backend Toolkit"
+    }
+  ]
 }

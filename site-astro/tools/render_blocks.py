@@ -15,6 +15,7 @@ import hashlib
 import html as H
 import json
 import os
+from pathlib import Path
 import re
 import shutil
 import sys
@@ -40,7 +41,7 @@ WORK = os.environ.get("BLOCK_WORK_DIR") or os.path.join(SITE, ".cache", "blocks"
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
-RENDER_VERSION = "r4-9"  # 排版做法改了就换，旧结果全部重排
+RENDER_VERSION = "r4-10"  # 同版公共原文绑定和原图尺寸改变，旧结果全部重排
 
 
 def file_url_to_path(u):
@@ -76,9 +77,12 @@ def publish_path(p):
         rel = "_repo/" + os.path.relpath(p, REPO).replace("\\", "/"); dst = os.path.join(PUB, "assets", *rel.split("/")); url = "/assets/" + rel
     else:
         raise ValueError("仓库外的文件不发布：" + p)
-    if not os.path.exists(dst) or os.path.getsize(dst) != os.path.getsize(p):
+    source_sha = sha(p)
+    if not os.path.exists(dst) or os.path.getsize(dst) != os.path.getsize(p) or sha(dst) != source_sha:
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         shutil.copyfile(p, dst)
+        if os.path.getsize(dst) != os.path.getsize(p) or sha(dst) != source_sha:
+            raise ValueError("原图复制后的 SHA256 不同：" + p)
     return urllib.parse.quote(url, safe="/")
 
 
@@ -213,7 +217,7 @@ def build_css(css_files):
 
 # —— 内容文件 ——
 def parse_md(path):
-    src = open(path, encoding="utf-8").read()
+    src = Path(path).read_text("utf-8")
     m = re.match(r"^---\n(.*?)\n---\n", src, re.S)
     fm = json.loads(m.group(1))
     body = src[m.end():]
@@ -302,6 +306,7 @@ HYDRATE_JS = r"""async (bind) => {
   // 图片固定成排好的大小：画布宽度不变，图没下载完时版面也不跳
   const imgs = [...main.querySelectorAll('img')];
   for (const im of imgs) {
+    if (im.naturalWidth && im.naturalHeight) { im.setAttribute('width', im.naturalWidth); im.setAttribute('height', im.naturalHeight); }
     const r = im.getBoundingClientRect();
     if (r.width > 0 && r.height > 0) {
       im.setAttribute('data-ts-w', Math.round(r.width * 100) / 100);
@@ -359,6 +364,7 @@ def hydrate(jobs, binds):
                     r["html"] = brush_titles(b, j, js, binds, r["html"])
                 except Exception as e:
                     print(f"  {j['screen']}-{j['o']} 毛笔字标题转图出错：{repr(e)[:160]}", flush=True)
+                    r = None
             if r:
                 out.append({**j, **r})
         b.close()
@@ -404,7 +410,7 @@ def brush_titles(b, j, js, binds, html_in):
             return m.group(0)
         dst, w, h, dx, dy = cap
         url = "file:///" + dst.replace("\\", "/")
-        return (f'<div class="brushfont brushfont-img"{m.group(1)}><img src="{url}" alt="" '
+        return (f'<div class="brushfont brushfont-img"{m.group(1)}><img src="{url}"{image_size_attrs(url)} alt="" '
                 f'style="display:block;width:{w + 2 * BRUSH_PAD:.2f}px;height:{h + 2 * BRUSH_PAD:.2f}px;'
                 f'margin:-{dy:.2f}px -{2 * BRUSH_PAD - dx:.2f}px -{2 * BRUSH_PAD - dy:.2f}px -{dx:.2f}px">'
                 f'<span style="position:absolute;left:0;top:0;width:100%;overflow:hidden;white-space:nowrap;color:transparent;'
@@ -427,68 +433,34 @@ def font_subset(name, texts):
         f = subset.load_font(SANS_FONT, opts)
         sub = subset.Subsetter(opts); sub.populate(text=txt); sub.subset(f)
         subset.save_font(f, dst, opts)
+        f.close()
     return "/assets/" + rel
 
 
 RULE_FRAMES = ("rule-paper/source-frame-h.webp", "rule-paper/source-frame-v.webp")
 
 
-def rule_original_html(body):
-    """规则原文屏的“网页字”正文：和现在网站一样，取横版排好的原文卡正文（ct-source-body 子树），
-    再走公开投影 rule_original_contract.project_original_html（去掉图、链接换成公开地址）。取不到返回空串。"""
-    from html.parser import HTMLParser
-    sys.path.insert(0, os.path.join(REPO, "scripts"))
-    import rule_original_contract as rc
+def rule_body(text):
+    """版本标签在 article 外；当前 Markdown 正文直接用于网页原文，不再投影画布。"""
+    first, separator, rest = text.partition("\n")
+    label = first.lstrip("#").strip().strip("*").strip()
+    if separator and re.search(r"\bE\d+\b", label) and label.startswith(("原文", "约法")):
+        return rest.lstrip("\n"), label
+    return text, ""
 
-    class Cards(HTMLParser):
-        def __init__(self):
-            super().__init__(convert_charrefs=False); self.stack = []; self.parts = []
-        def handle_starttag(self, tag, attrs):
-            data = dict(attrs)
-            inherited = self.stack[-1][2] if self.stack else False
-            classes = set((data.get("class") or "").split())
-            # 原文根：原文卡正文，或原文屏里单独的原文表格（和 rule_original_contract.source_root 同一规则；这里只处理原文屏，不再看 body/main）
-            selected = bool(classes & {"ct-source-body", "source-prose"}) or (
-                tag == "div" and "c-table" in classes and data.get("data-comp") == "table"
-                and not rc.source_node_excluded(data) and not any(rc.source_node_excluded(a) for _, a, _ in self.stack))
-            active = inherited or selected
-            if active:
-                opening = self.get_starttag_text()
-                if selected and not inherited:
-                    opening = rc.source_root_opening(tag, attrs, opening)
-                self.parts.append(opening)
-            if tag not in rc.HTML_VOID_TAGS:
-                self.stack.append((tag, data, active))
-        def handle_startendtag(self, tag, attrs):
-            self.handle_starttag(tag, attrs)
-            if tag not in rc.HTML_VOID_TAGS:
-                self.handle_endtag(tag)
-        def handle_endtag(self, tag):
-            for i in range(len(self.stack) - 1, -1, -1):
-                if self.stack[i][0] == tag:
-                    if self.stack[i][2]:
-                        self.parts.append("</" + tag + ">")
-                    del self.stack[i:]; break
-        def handle_data(self, v):
-            if self.stack and self.stack[-1][2]: self.parts.append(v)
-        def handle_entityref(self, n):
-            if self.stack and self.stack[-1][2]: self.parts.append("&" + n + ";")
-        def handle_charref(self, n):
-            if self.stack and self.stack[-1][2]: self.parts.append("&#" + n + ";")
-    c = Cards(); c.feed(body)
-    raw = "".join(c.parts)
-    # 去掉排版脚本在浏览器里加的标记（断行用的 text-wrap 和英文词包裹），回到和现在网站一样的原文卡 HTML
-    raw = re.sub(r'\s*style="text-wrap-style: pretty;"', "", raw)
-    raw = re.sub(r'\shref="[^"]*"', "", raw)  # 生成时给链接补的 href（现在网站的原文卡只有 data-href，由公开投影换成公开地址）
-    for _ in range(4):  # 浏览器序列化时空属性写成 x=""，还原成原来的 x（一个标签里可能有几个）
-        raw = re.sub(r'(<[^>]*\s[\w-]+)=""', r"\1", raw)
-    for _ in range(3):
-        raw = re.sub(r'<span data-typeset-word="true">([^<]*)</span>', r"\1", raw)
-    if not raw.strip():
-        return ""
-    html_out = rc.project_original_html(raw)
-    # 规则文件开头的“owner: E:\.agents”是给维护者看的元信息，页面上不显示（主持 10 月 10 日）
-    return re.sub(r'<p\b[^>]*>\s*owner:.*?</p>', "", html_out, count=1, flags=re.S)
+
+def rule_original_html(text):
+    sys.path.insert(0, os.path.join(REPO, "scripts"))
+    import astro_rules
+    return astro_rules.render(rule_body(text)[0])
+
+
+def image_size_attrs(url):
+    from PIL import Image
+    path = file_url_to_path(url) if url.startswith("file:///") else os.path.join(PUB, *urllib.parse.unquote(urllib.parse.urlsplit(url).path).lstrip("/").split("/"))
+    with Image.open(path) as image:
+        width, height = image.size
+    return f' width="{width}" height="{height}"'
 
 
 def fill_shot_frames(body):
@@ -511,7 +483,7 @@ def fill_shot_frames(body):
         tag = re.sub(r'\sdata-href="[^"]*"', "", tag)
         tag = tag[:-1] + (f' data-href="{H.escape(href, quote=True)}"' if href else "") + ">"
         tag = tag.replace('style="', 'style="position:relative;', 1) if 'style="' in tag else tag[:-1] + ' style="position:relative">'
-        img = (f'<img src="{H.escape(url, quote=True)}" alt="" loading="lazy" decoding="async" '
+        img = (f'<img src="{H.escape(url, quote=True)}"{image_size_attrs(url)} alt="" loading="lazy" decoding="async" '
                f'style="position:absolute;inset:0;width:100%;height:100%;object-fit:{(fit.group(1) if fit else "contain") or "contain"}">')
         return tag + img
     return re.sub(r'<div class="slot-shot-frame[^"]*"[^>]*data-shot-source="([^"]+)"[^>]*>', one, body)
@@ -548,9 +520,13 @@ def rename_site_classes(body):
 
 def finish_page(name, fm, results, cssv):
     rt_p = os.path.join(SITE, "src", "chrome", "runtime", name + ".json")
-    rt = json.load(open(rt_p, encoding="utf-8")) if os.path.exists(rt_p) else {}
-    living = f"/_living/{name}/astro/config.json" if os.path.exists(os.path.join(PUB, "_living", name, "astro", "config.json")) else None
+    rt = json.loads(Path(rt_p).read_text("utf-8")) if os.path.exists(rt_p) else {}
+    living_path = os.path.join(PUB, "_living", name, "astro", "config.json")
+    if rt.get("living_config") and not os.path.isfile(living_path):
+        raise ValueError(f"{name}：声明了环境动效，但插画坐标配置未生成；先运行 tools/adapt_motion.py")
+    living = f"/_living/{name}/astro/config.json" if os.path.isfile(living_path) else None
     screens, order, texts = {}, [], []
+    source_screens = {meta["screen"]["id"]: (meta["screen"], text) for meta, text in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
     motion = None
     for r in results:
         sid = r["screen"]
@@ -573,7 +549,7 @@ def finish_page(name, fm, results, cssv):
             x, y, w, h = r["artBox"]
             overlay = (f'<figure class="ts-art" data-living-config="{living}" data-art-key="%ART_KEY%" '
                        f'style="left:calc({x}px * var(--tz));top:calc({y}px * var(--tz));width:calc({w}px * var(--tz));height:calc({h}px * var(--tz))">'
-                       f'<img src="{art_src}" alt="" decoding="sync"></figure>')
+                       f'<img src="{art_src}"{image_size_attrs(art_src)} alt="" decoding="sync"></figure>')
         body = rewrite_urls(body)
         style = rewrite_urls(r["style"])
         screens[sid][r["o"]] = {"html": body, "style": style, "height": r["height"], "shape": r["shape"], "overlay": rewrite_urls(overlay)}
@@ -582,7 +558,7 @@ def finish_page(name, fm, results, cssv):
             motion = {"screen": sid, "art_url": publish_path(file_url_to_path(art_src))}
         if r["o"] == "h" and r.get("titles") and motion is not None and motion.get("screen") == sid and "brush_url" not in motion:
             motion["brush_url"] = publish_path(file_url_to_path(r["titles"][0])) if r["titles"][0].startswith("file:///") else None
-    font = font_subset(name, texts + [fm.get("title", ""), fm.get("tagline", "")])
+    font = font_subset(name, texts + [text for screen, text in source_screens.values() if screen.get("source_logical_id")] + [fm.get("title", ""), fm.get("tagline", "")])
     # 翻页过渡要的“这页的插画和标题是哪张图”：按文件内容算指纹
     mm = None
     if motion:
@@ -605,26 +581,29 @@ def finish_page(name, fm, results, cssv):
                 if o in screens[sid]:
                     screens[sid][o]["html"] = screens[sid][o]["html"].replace(
                         f'src="{mm["brush"]["src"]}"', f'src="{mm["brush"]["src"]}" data-title-key="{mm["brush"]["key"]}"', 1)
-    # 规则原文屏：页面上只出网页字原文（水彩框，和现在网站同一取法），上面一行版本标签；排好的原文卡不再另出一份（主持 10 月 10 日）
+    # 规则原文屏只出一份当前 Markdown 网页正文及版本标签；排版画布不再参与原文抽取。
     if (fm.get("url") or "").startswith("/rules/"):
-        md_text = {m["screen"]["id"]: t for m, t in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
         for r in results:
             if r["o"] == "h" and r.get("shape") == "source_text" and r["screen"] in screens:
-                art = alias_links(rule_original_html(r["html"]))
+                screen, text = source_screens[r["screen"]]
+                if not screen.get("source_logical_id") or not screen.get("source_public_sha256"):
+                    raise ValueError("规则原文缺少同版公共来源绑定：" + r["screen"])
+                art = alias_links(rule_original_html(text))
                 if art:
                     screens[r["screen"]]["article"] = art
-                    first = next((x.strip() for x in md_text.get(r["screen"], "").split("\n") if x.strip()), "")
-                    first = first.lstrip("#").strip().strip("*").strip()
-                    for a, b in (r.get("replace") or {}).items():
-                        first = first.replace(a, b)
-                    if re.search(r"E\d+", first):  # “原文 · E230 版 · 续”“约法 · L18–L23 · E230”这类版本标签行
-                        screens[r["screen"]]["article_label"] = first
+                    screens[r["screen"]]["source_logical_id"] = screen["source_logical_id"]
+                    screens[r["screen"]]["source_public_sha256"] = screen["source_public_sha256"]
+                    screens[r["screen"]]["source_rule_part"] = screen["source_rule_part"]
+                    label = rule_body(text)[1]
+                    if label:
+                        screens[r["screen"]]["article_label"] = label
                 else:
-                    print(f"  {r['screen']}：原文屏取不到原文正文，不出网页字", flush=True)
+                    raise ValueError("规则原文正文为空：" + r["screen"])
     out = {"page": name, "css": f"/assets/_typeset/typeset.css?v={cssv}", "font": font, "motion": mm,
+           "source_md_sha256": sha(os.path.join(MD_DIR, name + ".md")), "render_version": RENDER_VERSION,
            "sections": [], "screens": [screens[s] for s in order]}
     sec_seen = set()
-    fm_screens = {m["screen"]["id"]: m["screen"] for m, _ in parse_md(os.path.join(MD_DIR, name + ".md"))[1]}
+    fm_screens = {sid: screen for sid, (screen, text) in source_screens.items()}
     # 屏内定位点（和现在网站同一取法）：内容文件里每屏的 anchors，加上现在网站页面数据里这屏的 screen_anchors
     # （规则页的小节别名、约法的 L1…L30 等）。别的页链到“/rules/charter/#L18”“/how/#agents”这种细位置时，落在所属那一屏的开头。
     page_points = {}
@@ -646,8 +625,13 @@ def finish_page(name, fm, results, cssv):
         sec_seen.update(ids)
         if ids:
             s["points"] = ids
+    # 原文别名可能与另一屏的定位点重名，按全页已有锚点去重，正文不动。
+    owned = all_secs | sec_seen | set(order)
+    for s in out["screens"]:
+        if s.get("article"):
+            s["article"] = re.sub(r'<span id="([^"]+)"></span>', lambda m: "" if H.unescape(m[1]) in owned else m[0], s["article"])
     os.makedirs(OUT_DIR, exist_ok=True)
-    json.dump(out, open(os.path.join(OUT_DIR, name + ".json"), "w", encoding="utf-8", newline="\n"), ensure_ascii=False)
+    Path(OUT_DIR, name + ".json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8", newline="\n")
     return out
 
 
@@ -675,10 +659,11 @@ def run(names, workers=6):
     css_files = [os.path.join(PROTO, "style", "base.css")] + css
     cssv = build_css(css_files)
     libfp = library_fingerprint() + cssv + RENDER_VERSION
-    all_jobs, fms, binds = [], {}, {}
+    all_jobs, fms, binds, source_shas = [], {}, {}, {}
     failed = []
     for n in names:
         try:
+            source_shas[n] = sha(os.path.join(MD_DIR, n + ".md"))
             fm, page, jobs = prepare_page(n, reg, css_files, libfp)
         except Exception as e:  # 一页出错不拦别的页，最后列出来
             failed.append(n); print(f"{n}：区块库排这一页出错 {repr(e)[:200]}", flush=True); continue
@@ -688,7 +673,7 @@ def run(names, workers=6):
     names = [n for n in names if n not in failed]
     # 增量：指纹没变的屏用上次的结果
     cache_p = os.path.join(WORK, "_cache.json")
-    cache = json.load(open(cache_p, encoding="utf-8")) if os.path.exists(cache_p) else {}
+    cache = json.loads(Path(cache_p).read_text("utf-8")) if os.path.exists(cache_p) else {}
     todo = [j for j in all_jobs if j["key"] not in cache]
     print(f"区块排版：{len(all_jobs)} 份（{len(names)} 页），要重排 {len(todo)} 份，用时 {time.time() - t0:.1f} 秒准备")
     chunks = [todo[i::workers] for i in range(workers)] if todo else []
@@ -699,18 +684,26 @@ def run(names, workers=6):
                 done += res
     for r in done:
         cache[r["key"]] = {k: r.get(k) for k in ("html", "style", "height", "width", "art", "artBox", "titles")}
-    json.dump(cache, open(cache_p, "w", encoding="utf-8"), ensure_ascii=False)
+    Path(cache_p).write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
     by_page = {}
+    missing = [j for j in all_jobs if j["key"] not in cache]
+    incomplete_pages = {j["page"] for j in missing}
     for j in all_jobs:
         if j["key"] in cache:
             by_page.setdefault(j["page"], []).append({**j, **cache[j["key"]]})
     for n in names:
+        if n in incomplete_pages:
+            failed.append(n); print(f"{n}：排版缺块，不写入不完整结果", flush=True); continue
         try:
+            if sha(os.path.join(MD_DIR, n + ".md")) != source_shas[n]:
+                raise ValueError("排版过程中内容文件已改变，需要按新内容重新排版")
             finish_page(n, fms[n], by_page.get(n, []), cssv)
         except Exception as e:
             failed.append(n); print(f"{n}：收尾出错 {repr(e)[:200]}", flush=True)
     fix_dead_fragments([n for n in names if n not in failed])
     print(f"区块排版完成：{len(names) - len([f for f in failed if f in names])} 页，{time.time() - t0:.1f} 秒；出错 {len(failed)} 页 {failed}")
+    if failed or missing:
+        raise SystemExit("区块排版未完成：" + repr({"failed_pages": failed, "missing_jobs": [j["page"] + "/" + j["screen"] + "-" + j["o"] for j in missing]}))
 
 
 # 页面外壳里固定有的锚点（页头“开头”、跳到正文、项目页的“复制 AI 续作说明”）

@@ -2,6 +2,47 @@
 // linked only when current project evidence proves implementation ownership or
 // a real runtime dependency. Source location inside .agents is never enough.
 export const skillProjectLinks = {
+  "learning": [
+    {
+      relation: "owned-by-project",
+      projectSlug: "learning",
+      label: "学习方法项目"
+    }
+  ],
+  "cloud-asset-channel": [
+    {
+      relation: "owned-by-project",
+      projectSlug: "agents",
+      moduleSlug: "skills-plugins",
+      label: ".agents 云端素材通道"
+    },
+    {
+      relation: "rules",
+      href: "/rules/?rule=capabilities_runtime_contract#rule-panel-capabilities_runtime_contract",
+      label: "现行云端素材通道规则"
+    }
+  ],
+  "cockpit": [
+    {
+      relation: "presentation-infrastructure",
+      href: "/cockpit/",
+      label: "驾驶舱：当前状态与需要你"
+    },
+    {
+      relation: "uses-project",
+      projectSlug: "pcconfig",
+      moduleSlug: "machine-facts",
+      label: "PCConfig：状态来源与事项登记"
+    }
+  ],
+  "report-page": [
+    {
+      relation: "owned-by-project",
+      projectSlug: "agents",
+      moduleSlug: "skills-plugins",
+      label: ".agents 本地汇报网页能力"
+    }
+  ],
   "explain-to-me": [
     { relation: "owned-by-project", projectSlug: "personal-expression", moduleSlug: "explain-to-me", label: "个人表达：向本人讲明白" }
   ],
@@ -31,17 +72,15 @@ export const skillProjectLinks = {
     { relation: "uses-project", projectSlug: "daily-preferences", moduleSlug: "mobile-context-delivery", label: "手机与云端使用同一理解库" }
   ],
   "local-secret-broker": [
-    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig 凭据中心" }
+    { relation: "owned-by-project", href: "/projects/password-center", label: "密码中心：凭据、验证与程序供给" },
+    { relation: "uses-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig：本机安装与恢复接线" }
   ],
   "google-workspace-direct": [
     { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "secrets-providers", label: "PCConfig：Gmail、Drive 与 Google Tasks 固定入口" }
   ],
   "authorization-file-broker": [
-    { relation: "owned-by-project", projectSlug: "pcconfig", moduleSlug: "authorization-files", label: "PCConfig：文件加密、本地编辑与恢复技术参考" }
-  ],
-  "native-economy-routing": [
-    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 协作路由" },
-    { relation: "rules", href: "/rules/?rule=codex_adapter_contract#rule-panel-codex_adapter_contract", label: "现行 Codex 适配完整规则" }
+    { relation: "owned-by-project", href: "/projects/password-center", label: "密码中心：文件加密、本地编辑与恢复" },
+    { relation: "uses-project", projectSlug: "pcconfig", moduleSlug: "authorization-files", label: "PCConfig：文件加密安装与恢复接线" }
   ],
   "localocr": [
     { relation: "owned-by-project", projectSlug: "localocr", moduleSlug: "input-routing", label: "LocalOCR 本地文字识别与文档解析" }
@@ -55,9 +94,6 @@ export const skillProjectLinks = {
   ],
   "document-materials": [
     { relation: "owned-by-project", projectSlug: "document-materials", moduleSlug: "current-matter-sources", label: "文书和材料制作项目" }
-  ],
-  "llm-backend-toolkit": [
-    { relation: "owned-by-project", projectSlug: "llm-backend-toolkit", moduleSlug: "versioned-backend-registry-routing", label: "LLM Backend Toolkit：任务与模型入口" }
   ],
   "vault-workflow": [
     { relation: "owned-by-project", projectSlug: "vault-tool", moduleSlug: "ai-local-interface", label: "vault-tool 本地文件加密与恢复" },
@@ -81,32 +117,18 @@ export const skillProjectLinks = {
   "mojibake-doctor": [
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 能力与插件供应" }
   ],
-  "file-intake-router": [
-    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "capability-routing", label: ".agents 能力路由" }
-  ],
   "browser-control-continuity": [
     { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 浏览器连续性能力" }
   ],
   "personal-media": [
     { relation: "owned-by-project", projectSlug: "personal-media", moduleSlug: "search-browse", label: "个人媒体整理与恢复项目" }
   ],
-  "personal-panel-refresh": [
-    { relation: "presentation-infrastructure", label: "由当前网站呈现仓库实现，不作为展示项目" }
-  ],
   "tailscale-safe-exposure": [
     { relation: "cross-cutting", label: "跨机器事实、目标服务与远程连接，不设单一项目 Owner" },
     { relation: "uses-project", projectSlug: "sunshine-remote-streaming", label: "Sunshine：串流路径与恢复技术参考" },
     { relation: "uses-project", projectSlug: "meshclip-kit", label: "meshclip-kit：诊断与中断恢复技术参考" }
-  ],
-  "control-plane-doctor": [
-    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "context-evidence", label: ".agents 跨控制面上下文" },
-    { relation: "uses-project", projectSlug: "github-index", moduleSlug: "project-admission", label: "GitHub 项目事实" },
-    { relation: "uses-project", projectSlug: "pcconfig", moduleSlug: "machine-facts", label: "PCConfig 机器事实" }
-  ],
-  "token-budget-advisor": [
-    { relation: "owned-by-project", projectSlug: "agents", moduleSlug: "skills-plugins", label: ".agents 能力与插件供应" },
-    { relation: "host-integrated", label: "宿主账号与计量入口" }
   ]
+
 };
 
 export const projectReferenceLinks = {
@@ -129,6 +151,7 @@ export const projectReferenceLinks = {
   "wechat-direct": [
     { relation: "uses-project", href: "/projects/chinese-asr/task-routing", label: "语音转写交给 ChineseASR" }
   ]
+
 };
 
 export const capabilityRelationLabels = {
@@ -141,4 +164,5 @@ export const capabilityRelationLabels = {
   "cross-cutting": "跨项目能力",
   skill: "能力入口",
   rules: "现行规则"
+
 };

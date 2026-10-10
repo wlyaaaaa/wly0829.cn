@@ -30,14 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E230",
-   "file": ".publish/private/rule-sources/docs/contracts/agents.rule-release.md",
+   "release": "E251",
+   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
+   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "file": "sources/rules/docs/contracts/agents.rule-release.md",
    "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
-   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
-   "commit_time": "2026-10-09T09:10:42+08:00",
-   "activated_at": "2026-10-09T09:12:52.097645+08:00",
-   "excerpt_contract": "e230-original-ranges-v1",
-   "omitted_count": 0
+   "public_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：玻璃柜里书架上标着 E187 的那本书轻轻发出一圈淡绿的光，路标上“当前”那块木牌微微晃动后稳稳指向它；一只手伸过来想推开玻璃柜门，黄铜锁扣上的“SYSTEM”小铜牌闪一下，门纹丝不动，手缩回；地上两只印着 Claude 和 OpenAI 标志的小信封轻轻翻开又合上；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，书脊和牌子上的字保持不动、不变形。",
   "registry": {
@@ -153,8 +152,8 @@
  },
  "source": {
   "page": "sources/pages/rule-rule-release/page.json",
-  "sha256": "a20d1cc589ae2ee5ebf2a0e63993969cd94b1d7470f147ba4ddd143aa2c1116a",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "4450239d24ba36023060a6d49a36529687a1323ffb634fb21de7b4932700f1ab",
+  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
  }
 }
 ---
@@ -1289,11 +1288,14 @@ E186　E187　当前　上一版　SYSTEM
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.rule-release.md",
-   "from": 1,
-   "to": 17,
-   "release": "E230",
+   "release": "E251",
    "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
-   "omit": []
+   "public_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+   "from": null,
+   "to": "## 发布和回退",
+   "start": 0,
+   "end": 799,
+   "approved_omissions": []
   },
   "title": "原文（一）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行是列表，画成小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和字段名用等宽字体、浅绿底小框，反引号不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 规则发布与恢复”到“## 什么算活动规则”这一节结束；右卡放“## 读规则”这一节。",
@@ -1305,9 +1307,9 @@ E186　E187　当前　上一版　SYSTEM
   "chain": "original",
   "reuse": "",
   "source_excerpt_id": "rule-rule-release/rule-rule-release-05",
-  "display_replace": {
-   "一字不改": "公开副本"
-  }
+  "source_logical_id": "rule_release_contract",
+  "source_public_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+  "source_rule_part": "rule-rule-release/rule-rule-release-05"
  },
  "layout": {
   "h": {
@@ -1439,7 +1441,7 @@ E186　E187　当前　上一版　SYSTEM
 }
 ```
 
-原文 · E230 版，一字不改
+原文 · E251 版，一字不改
 
 # 规则发布与恢复
 
@@ -1468,13 +1470,15 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.rule-release.md",
-   "from": 19,
-   "to": 34,
-   "release": "E230",
+   "release": "E251",
    "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
-   "omit": []
+   "public_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+   "from": "## 发布和回退",
+   "to": null,
+   "start": 799,
+   "end": 2174,
+   "approved_omissions": []
   },
   "title": "原文（二）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行是列表，画成小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和字段名用等宽字体、浅绿底小框，反引号不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## 发布和回退”和它下面的前四条（到“失败和回退”这一条）；右卡放“入口模板随版本部署”“防随手改”两条和“## 验证”这一节。字多，行距紧一点但不挤。",
@@ -1485,7 +1489,10 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-rule-release/rule-rule-release-06"
+  "source_excerpt_id": "rule-rule-release/rule-rule-release-06",
+  "source_logical_id": "rule_release_contract",
+  "source_public_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+  "source_rule_part": "rule-rule-release/rule-rule-release-06"
  },
  "layout": {
   "h": {
@@ -1586,7 +1593,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 ## 发布和回退
 

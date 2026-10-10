@@ -14,7 +14,9 @@ import datetime
 import hashlib
 import json
 import os
+from pathlib import Path
 import re
+import shutil
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -29,38 +31,70 @@ SECTION_LABEL = {"top": "开头", "usage": "怎么用", "tech": "技术", "highl
                  "history": "演进", "examples": "例子", "abilities": "能做的事", "limits": "边界",
                  "points": "要点", "original": "原文"}
 
-# —— 规则原文的公开副本：照现在网站发布时的公开投影（scripts/prepare-rule-public-projection.py）做同样三件事——
-#    正文走 rule_original_contract.public_markdown、链接走 source_link_target、排好以后首行“一字不改”显示成“公开副本”；
-#    另核对过滤表要省略的内容一条都不在，在就停，不生成。过滤表 .publish/private/rule-public-policy.json 不进仓库。
-POLICY_FILE = os.environ.get("WLY_RULE_POLICY") or next((p for p in (
-    os.path.join(REPO, ".publish", "private", "rule-public-policy.json"),
-    "V:/Personal/Projects/wly0829.cn/.publish/private/rule-public-policy.json") if os.path.exists(p)), None)
+# 规则只认显式刷新形成的同版公共快照，不读旧私有过滤表，不二次改写正文。
 GATE_LOG = []
 
 
-def rule_gate(screen):
+def rule_snapshot():
+    root = Path(RULES_RELEASE) if RULES_RELEASE else Path(REPO, "sources/rules")
+    pin = json.loads((root / "release.json").read_text("utf-8-sig"))
+    if pin.get("schema") != "wly.astro-rules-pin.v1":
+        raise ValueError("规则转换需要 sources/rules 的同版公共快照，请先刷新公共规则源")
+    return root, pin
+
+
+def rule_source(root, pin, source):
+    rel = source["file"].replace("\\", "/").split(".publish/private/rule-sources/")[-1]
+    matched = [(key, row) for key, row in pin.get("documents", {}).items() if row["relative_path"] == rel]
+    if len(matched) != 1:
+        raise ValueError("规则来源没有唯一的同版公共绑定：" + rel)
+    key, row = matched[0]
+    raw = (root / row["relative_path"]).read_bytes()
+    if hashlib.sha256(raw).hexdigest() != row["public_source_sha256"]:
+        raise ValueError("规则公共源字节与同版快照指纹不同：" + rel)
+    return key, row, raw
+
+
+def copy_public_source(source, target, expected_sha):
+    """公开原件逐字节复制，同大小的新内容也按 SHA256 更新并核验。"""
+    raw = source.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected_sha:
+        raise ValueError("待复制的规则公共源指纹不同：" + str(source))
+    if not target.exists() or hashlib.sha256(target.read_bytes()).hexdigest() != expected_sha:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        if target.stat().st_size != len(raw) or hashlib.sha256(target.read_bytes()).hexdigest() != expected_sha:
+            raise ValueError("规则公共源复制后的 SHA256 不同：" + str(target))
+
+
+def rule_gate(screen, page=None):
     if not screen.get("source"):
         return
-    if not POLICY_FILE:
-        raise SystemExit("规则原文需要公开过滤表 rule-public-policy.json，找不到就不生成（不绕开过滤）")
-    sys.path.insert(0, os.path.join(REPO, "scripts"))
-    import private_rule_policy as pol
-    from pathlib import Path
-    pol.POLICY_PATH = Path(POLICY_FILE)
-    rel = screen["source"]["file"].replace("\\", "/").split(".publish/private/rule-sources/")[-1]
-    values = pol.load_policy()["omissions"].get(rel, [])
-    leaked = sum(1 for v in values if v in screen.get("text", ""))
-    if leaked:
-        raise SystemExit(f"{screen['id']}: 正文里还有 {leaked} 处过滤表要求省略的内容，停止生成")
-    import rule_original_contract as rc
-    screen["text"] = rc.public_markdown(screen.get("text", ""), rel, apply_omissions=False)
-    for link in screen.get("links", []) or []:
-        link["href"] = rc.source_link_target(link["href"])
-    # 首行标签：构图按原文首行认块，所以文字照原样；显示时把“一字不改”换成“公开副本”（现在网站发布时也是排好以后再换）
-    if "一字不改" in screen["text"].split("\n", 1)[0]:
-        screen["display_replace"] = {"一字不改": "公开副本"}
-    GATE_LOG.append({"screen": screen["id"], "file": rel, "policy_omissions_for_file": len(values), "leaked": 0,
-                     "display_replace": screen.get("display_replace")})
+    root, pin = rule_snapshot()
+    source = screen["source"]
+    key, row, raw = rule_source(root, pin, source)
+    if source.get("release") != pin["version"] or source.get("sha256") != row["sha256"]:
+        raise ValueError(f"{screen['id']}: 规则版本或作者源指纹与同版公共快照不同")
+    if source.get("public_sha256", row["public_source_sha256"]) != row["public_source_sha256"]:
+        raise ValueError(f"{screen['id']}: 规则公共源绑定不同")
+    part = screen.get("source_excerpt_id") or (page + "/" + screen["id"] if page else screen["id"])
+    entries = [entry for entry in row.get("parts", []) if entry["id"] == part]
+    if len(entries) != 1:
+        raise ValueError(f"{screen['id']}: 规则正文没有唯一的同版分段绑定")
+    label, separator, body = screen.get("text", "").partition("\n")
+    if not separator or label.strip() != entries[0]["label"] or pin["version"] not in label:
+        raise ValueError(f"{screen['id']}: 规则原文版本标签与同版公共快照不同")
+    if hashlib.sha256(body.strip().encode()).hexdigest() != entries[0]["markdown_sha256"]:
+        raise ValueError(f"{screen['id']}: 规则当前正文与同版公共分段不同")
+    screen["source_logical_id"] = key
+    screen["source_public_sha256"] = row["public_source_sha256"]
+    screen["source_rule_part"] = part
+    for template in pin["documents"].values():
+        if template["relative_path"].startswith("templates/"):
+            source_path = root / template["relative_path"]
+            for rel in (template["src"].lstrip("/"), "rule-sources/" + template["relative_path"]):
+                copy_public_source(source_path, Path(OUT_PUBLIC, rel), template["public_source_sha256"])
+    GATE_LOG.append({"screen": screen["id"], "file": row["relative_path"], "version": pin["version"], "source_logical_id": key, "part": part})
 
 
 # —— 素材库：只认发布标记 ready、文件在的行（和现在网站出图时的读法一样）——
@@ -111,77 +145,31 @@ def screen_images(sid, layout=None):
 
 SCREEN_SKIP = ("text",)
 
-# —— 规则原文按活动版本重出：--rules-release <规则发布目录>（例如 E:\.agents\releases\E251）——
-#    用同一套摘录边界（rule_original_contract.excerpts）从这个版本的规则文件里重新取每屏原文，首行版本号换成这个版本；
-#    之后照常走公开过滤和公开投影。不给这个参数就用 page.json 里固定的那一版。
+# —— 按同版公共快照重出：--rules-release <公共快照目录>（例如 sources/rules）——
+#    活动原件先由 astro_rules.refresh 冻结，再以同版完整正文的分段接口重出；不读取私有过滤表。
 RULES_RELEASE = None
 
 
-def rule_release_text(page, screen):
+def rule_release_text(page, screen, screens):
     src = screen.get("source") or {}
     if not RULES_RELEASE or not src.get("file"):
         return None
-    if not POLICY_FILE:
-        raise SystemExit("按活动版本重出原文需要公开过滤表 rule-public-policy.json，找不到就不生成（不绕开过滤）")
+    root, pin = rule_snapshot()
+    key, row, raw = rule_source(root, pin, src)
     sys.path.insert(0, os.path.join(REPO, "scripts"))
-    import private_rule_policy as pol
-    from pathlib import Path
-    pol.POLICY_PATH = Path(POLICY_FILE)
-    import rule_original_contract as rc
-    rel = src["file"].replace("\\", "/").split(".publish/private/rule-sources/")[-1]
-    raw_bytes = open(os.path.join(RULES_RELEASE, *rel.split("/")), "rb").read()
-    raw = raw_bytes.decode("utf-8-sig")
-    version = os.path.basename(os.path.normpath(RULES_RELEASE))
-    rec = os.path.join(RULES_RELEASE, "release.json")
-    if os.path.exists(rec):
-        r = json.load(open(rec, encoding="utf-8-sig"))
-        version = r.get("release_id") or r.get("version") or version
-    chosen = {ident.split("/")[-1]: text for ident, text, _ in rc.excerpts(raw, page)}
-    if screen["id"] not in chosen:
-        return None
+    import astro_rules
+    part = screen.get("source_excerpt_id") or page + "/" + screen["id"]
+    chosen = astro_rules.public_parts(raw.decode("utf-8"), page, screens)
+    entries = [entry for entry in row.get("parts", []) if entry["id"] == part]
+    if len(entries) != 1 or part not in chosen:
+        raise ValueError("规则原文没有同版公共分段：" + part)
     old_first = screen.get("text", "").split("\n", 1)[0]
-    import re as _re
-    first = _re.sub(r"E\d+", version, old_first, count=1)
-    body = chosen[screen["id"]]
-    if page == "charter":
-        body = charter_with_headings(raw, body, rc)
+    first = entries[0]["label"]
+    body, selection = chosen[part]
     screen["text"] = first + "\n\n" + body
-    src.update(release=version, sha256=hashlib.sha256(raw_bytes).hexdigest())
-    # 原文里链到的公开入口模板（/rule-sources/templates/…）也按这个版本重出：同一套公开投影，写进 public/，构建时原样发布
-    for tpl in ("templates/claude-home/CLAUDE.md", "templates/codex-home/AGENTS.md"):
-        f = os.path.join(RULES_RELEASE, *tpl.split("/"))
-        if os.path.exists(f) and tpl not in RELEASE_TEMPLATES_DONE:
-            out = os.path.join(OUT_PUBLIC, "rule-sources", *tpl.split("/"))
-            os.makedirs(os.path.dirname(out), exist_ok=True)
-            open(out, "w", encoding="utf-8", newline="\n").write(rc.public_markdown(open(f, encoding="utf-8-sig").read(), tpl))
-            RELEASE_TEMPLATES_DONE.add(tpl)
+    screen["source_excerpt_id"] = part
+    src.update(file=row["relative_path"], release=pin["version"], sha256=row["sha256"], public_sha256=row["public_source_sha256"], **selection)
     return (old_first, first) if first != old_first else None
-
-
-def charter_with_headings(raw, body, rc):
-    """约法原文屏：摘录边界（rule_original_contract.excerpts）只取条文；约法的构图按“一、怎样对我说话”这类小节标题分卡，
-    所以把落在这一屏的小节标题（和标题下的说明行，链接照样公开化）按原位置插回条文前面，和现在网站的内容文件同一结构。
-    条文本身（含已批准的省略）原样用摘录的结果。"""
-    import re as _re
-    raw = raw.replace("\r\n", "\n").replace("\r", "\n")
-    sec = raw[raw.index("## 我的 AI 约法"):raw.index("## 每次都要做的几件事")]
-    heads = {}
-    for h in _re.finditer(r"^###\s+.+$", sec, _re.M):
-        nxt = _re.search(r"^- \*\*L(\d+)\b", sec[h.end():], _re.M)
-        if not nxt:
-            continue
-        notes = [line.strip() for line in sec[h.end():h.end() + nxt.start()].split("\n") if line.strip()]
-        notes = [_re.sub(r"\]\(([^)]+)\)", lambda m: "](" + rc.source_link_target(m[1]) + ")", line) for line in notes]
-        heads[int(nxt[1])] = "\n".join([h[0].strip()] + notes)
-    out = []
-    for part in _re.split(r"(?m)^(?=\*\*L\d+\b)", body):
-        if not part.strip():
-            continue
-        n = int(_re.match(r"\*\*L(\d+)", part)[1])
-        if n in heads:
-            out.append(heads[n])
-        out.append(part.strip())
-    return "\n\n".join(out)
 
 
 def swap_text_ref(node, old, new):
@@ -191,9 +179,6 @@ def swap_text_ref(node, old, new):
     if isinstance(node, list):
         return [swap_text_ref(x, old, new) for x in node]
     return node
-
-
-RELEASE_TEMPLATES_DONE = set()
 
 
 # —— 画廊屏的标题：项目注册表生成的“画廊”屏原来用小号的 section_heading，和别的小节（毛笔大标题）不一样；
@@ -229,7 +214,6 @@ def convert(page):
     # 和现在出图时一样在这一步冻结进内容文件；数据变了重新转换这一页即可
     sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
     from engine.content import bound_json
-    from pathlib import Path
     data = bound_json(src, read=lambda p: Path(p).read_text("utf-8-sig"))
     specs = {}
     lay_p = os.path.join(REPO, "sources", "pages", page, "layout.json")
@@ -247,8 +231,8 @@ def convert(page):
             # 源里整屏的换行被写成了字面的 \n（一整段连成一行，区块库认不出标题和要点，例如能力运行第 6 屏）：还原成换行
             print(f"  {s['id']}: 源文字里的换行写成了字面的 \\n，已还原（源文件也该改）")
             s["text"] = t.replace("\\n", "\n")
-        swap = rule_release_text(page, s)
-        rule_gate(s)
+        swap = rule_release_text(page, s, data["screens"])
+        rule_gate(s, page)
         bad = [x for x in (s.get("links") or []) if not isinstance(x, dict)]
         if bad:  # 链接字段不是链接列表（例如模板占位符没展开、被拆成单字）：按没有链接处理，提示出来
             print(f"  {s['id']}: links 不是链接列表（{''.join(map(str, bad))[:60]}），按没有链接处理")
@@ -322,5 +306,7 @@ if __name__ == "__main__":
             failed.append((n, repr(e)[:200])); print(n, "转换失败", repr(e)[:200]); continue
         print(n, "转换完成", k, "屏")
     for g in GATE_LOG:
-        print("  规则原文公开过滤：", json.dumps(g, ensure_ascii=False))
+        print("  规则同版公共绑定：", json.dumps(g, ensure_ascii=False))
     print(f"共 {len(names)} 页，失败 {len(failed)} 页")
+    if failed:
+        raise SystemExit("内容转换未完成：" + repr(failed))

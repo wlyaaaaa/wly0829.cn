@@ -2748,120 +2748,6 @@
       }
     },
     {
-      "id": "llm-backend-toolkit",
-      "order": 25,
-      "title": "LLM Backend Toolkit",
-      "enabled": true,
-      "presentation_mode": "real_dashboard",
-      "route": "/projects/llm-backend-toolkit",
-      "ai_refresh": {
-        "content_path": "app/content-llm-backend-toolkit.js",
-        "semantic_revision": 6,
-        "scope": "Seven modules retain explicit backend/model registry, async lifecycle, source/context compaction, AICLI execution, specialist media and observer/probe scope. Add zero-write diagnose/inspect/jobs and immutable control-file run identity; cancellation targets the same native run and process/GPU cleanup is separately verified. Current source0.9.2 and registry proof do not make all configured models live or authorize silent backend fallback.",
-        "collectors": [
-          "git -C V:\\Personal\\Projects\\llm-backend-toolkit status --porcelain=v2 --branch",
-          "V:\\Personal\\Projects\\llm-backend-toolkit\\.venv\\Scripts\\python.exe -m llm_backend_toolkit status",
-          "V:\\Personal\\Projects\\llm-backend-toolkit\\.venv\\Scripts\\python.exe -m unittest discover -s V:\\Personal\\Projects\\llm-backend-toolkit\\tests -q"
-        ],
-        "conditional_collectors": [
-          "inspect model registry, job store, input spool, and observer state read-only; never invoke live model generation, acquire GPU locks, or mutate local configuration merely to refresh the panel",
-          "never capture, display or persist raw prompts, hidden thinking text, tool commands, or unredacted secrets",
-          "legacy agent routes (opencode, claude-code, qwen-code) and 35B crosscheck agent route remain unverified/pending_reacceptance"
-        ]
-      },
-      "source": {
-        "repo": "wlyaaaaa/llm-backend-toolkit",
-        "visibility": "PRIVATE",
-        "default_branch": "main",
-        "local_root": "V:\\Personal\\Projects\\llm-backend-toolkit"
-      },
-      "displayed_areas": [
-        "source_backed_product_and_technical_reference",
-        "registry_direct_agent_identity_and_evidence",
-        "async_spool_cache_lifecycle_and_cleanup",
-        "context_compaction_source_retrieval_and_portable_continuation",
-        "aicli_agent_execution_and_budget",
-        "specialist_media_and_gpu_broker",
-        "read_only_observer_and_real_usage",
-        "bounded_probes_and_benchmark_evidence"
-      ],
-      "impact_sources": [
-        {
-          "kind": "product_boundary_and_architecture_manual",
-          "paths": [
-            "README.md",
-            "docs/model-observer.md",
-            "docs/local-async-worker-contract.md",
-            "docs/agent-data-factory.md",
-            "docs/general-agent-benchmark-v1.md",
-            "docs/local-crosscheck-35b.md"
-          ]
-        },
-        {
-          "kind": "backend_registry_and_job_lifecycle",
-          "paths": [
-            "src/llm_backend_toolkit/backends.py",
-            "src/llm_backend_toolkit/default_backends.json",
-            "src/llm_backend_toolkit/jobs.py",
-            "src/llm_backend_toolkit/input_integrity.py"
-          ]
-        },
-        {
-          "kind": "agent_runners_multimodal_and_observer",
-          "paths": [
-            "src/llm_backend_toolkit/agent_runners.py",
-            "src/llm_backend_toolkit/worker_contract.py",
-            "src/llm_backend_toolkit/media.py",
-            "src/llm_backend_toolkit/sources.py",
-            "src/llm_backend_toolkit/observer.py",
-            "src/llm_backend_toolkit/observer_ui/app.js",
-            "scripts/Start-LlmBackendObserver.ps1"
-          ]
-        },
-        {
-          "kind": "cli_and_automated_test_suites",
-          "paths": [
-            "src/llm_backend_toolkit/cli.py",
-            "tests/test_backends.py",
-            "tests/test_jobs.py",
-            "tests/test_job_input_integrity.py",
-            "tests/test_agent_execution.py",
-            "tests/test_media.py",
-            "tests/test_observer.py"
-          ]
-        },
-        {
-          "kind": "context_result_and_worker_contract",
-          "paths": [
-            "src/llm_backend_toolkit/context.py",
-            "src/llm_backend_toolkit/toolkit.py",
-            "src/llm_backend_toolkit/input_lifecycle.py",
-            "docs/aicli-agent-acceptance-contract.md",
-            "src/llm_backend_toolkit/worker_contract.py",
-            "scripts/run_general_agent_benchmark.py",
-            "benchmarks/general_agent_v1/**",
-            "schemas/worker-contract.schema.json"
-          ]
-        }
-      ],
-      "refresh_rules": {
-        "semantic_review_required_when": [
-          "default backend, model artifact, reasoning parameters or fail-closed routing behavior changes",
-          "JobStore lease contract, input-spool handle locking, canonical containment or hash verification changes",
-          "AICLI runner adapter, agent policy, watchdog budget or benchmark harness changes",
-          "LocalOCR/ChineseASR adapter, GPU arbitration or multimodal pipeline changes",
-          "Observer WinForms/WebView2 host, SSE streaming, token tracking or context window monitoring changes"
-        ],
-        "snapshot_only_when": [
-          "the clean PUBLIC main commit, Python test pass status, or observation time changes while every displayed capability remains true"
-        ],
-        "ignore_when": [
-          "runtime job IDs, transient timestamps or temporary cache hits fluctuate in normal execution without altering architecture",
-          "internal comments, formatting or test refactors leave every displayed capability, failure recovery and owner decision unchanged"
-        ]
-      }
-    },
-    {
       "id": "typora-theme-pack",
       "order": 26,
       "title": "Typora Theme Pack",
@@ -3570,7 +3456,7 @@
         "manual_refresh_rule": "source, rule and Skill events never update this page or create a website task; only an explicit owner request for CACB or an explicitly owner-requested full refresh may produce a new snapshot"
       },
       "source": {
-        "repo": "PRIVATE_MANAGED_SOURCE",
+        "repo": "wlyaaaaa/codex-agent-model-benchmark",
         "visibility": "PRIVATE",
         "default_branch": "main",
         "public_identity": "private-cacb-product-source",
@@ -3658,15 +3544,172 @@
       }
     },
     {
+      "id": "wly0829-cn",
+      "order": 35,
+      "title": "个人网站（总看板）",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/wly0829-cn",
+      "content_format": "typeset",
+      "ai_refresh": {
+        "content_path": "sources/pages/wly0829-cn/page.json",
+        "semantic_revision": 1,
+        "scope": "Existing authored website overview, project/rule/Skill navigation, collaboration entrypoints and the single personal dashboard; this registration preserves the existing page and does not rebuild its narrative.",
+        "collectors": [
+          "Read the existing public-safe authored snapshot sources/pages/wly0829-cn/page.json and its dated evidence without reading private payloads",
+          "For a source-owner-confirmed material published delta, verify only bounded product facts from wlyaaaaa/wly0829.cn; source reading is not performed by registry registration"
+        ],
+        "conditional_collectors": [
+          "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
+          "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/wly0829.cn",
+        "visibility": "PUBLIC",
+        "default_branch": "main",
+        "local_root": "V:\\Personal\\Projects\\wly0829.cn"
+      },
+      "displayed_areas": [
+        "existing_authored_product_and_technical_reference",
+        "owning_source_and_dated_evidence",
+        "actual_user_entrypoints_and_limits"
+      ],
+      "impact_sources": [
+        {
+          "kind": "website_product_and_publication",
+          "paths": [
+            "AGENTS.md",
+            "app/**",
+            "config/**",
+            "scripts/**",
+            "site-astro/**",
+            "sources/pages/**",
+            "tests/**"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a source owner confirms that a displayed product capability, ownership, limit or evidence interpretation changes"
+        ],
+        "snapshot_only_when": [
+          "an observation time or named evidence receipt changes without semantic change"
+        ],
+        "ignore_when": [
+          "formatting, refactors or candidates leave every displayed fact and explanation correct"
+        ]
+      }
+    },
+    {
       "id": "password-center",
+      "order": 36,
       "title": "密码中心",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
       "route": "/projects/password-center",
+      "content_format": "typeset",
+      "ai_refresh": {
+        "content_path": "sources/pages/password-center/page.json",
+        "semantic_revision": 1,
+        "scope": "Independent PRIVATE Password Center owner with its existing authored product page; preserve credential values outside the website and keep historical PCConfig implementation evidence distinct from current independent ownership.",
+        "collectors": [
+          "Read the existing public-safe authored snapshot sources/pages/password-center/page.json and its dated evidence without reading private payloads",
+          "For a source-owner-confirmed material published delta, verify only bounded product facts from wlyaaaaa/PasswordCenter; source reading is not performed by registry registration"
+        ],
+        "conditional_collectors": [
+          "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
+          "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
+        ]
+      },
       "source": {
         "repo": "wlyaaaaa/PasswordCenter",
         "visibility": "PRIVATE",
         "default_branch": "main",
         "local_root": "E:\\Projects\\Tools\\PasswordCenter"
+      },
+      "displayed_areas": [
+        "existing_authored_product_and_technical_reference",
+        "owning_source_and_dated_evidence",
+        "actual_user_entrypoints_and_limits"
+      ],
+      "impact_sources": [
+        {
+          "kind": "independent_password_center_source",
+          "paths": [
+            "**"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a source owner confirms that a displayed product capability, ownership, limit or evidence interpretation changes"
+        ],
+        "snapshot_only_when": [
+          "an observation time or named evidence receipt changes without semantic change"
+        ],
+        "ignore_when": [
+          "formatting, refactors or candidates leave every displayed fact and explanation correct"
+        ]
       }
+    },
+    {
+      "id": "remote-control",
+      "order": 37,
+      "title": "电脑远程控制",
+      "enabled": true,
+      "presentation_mode": "real_dashboard",
+      "route": "/projects/remote-control",
+      "content_format": "typeset",
+      "ai_refresh": {
+        "content_path": "sources/pages/remote-control/page.json",
+        "semantic_revision": 1,
+        "scope": "Existing independent authored remote computer control explanation, using PCConfig as the service-code owner; retain real website repository links for the public web portion, host/secondary machine boundaries, connection entrypoints and dated runtime evidence.",
+        "collectors": [
+          "Read the existing public-safe authored snapshot sources/pages/remote-control/page.json and its dated evidence without reading private payloads",
+          "For a source-owner-confirmed material published delta, verify only bounded product facts from wlyaaaaa/PCConfig; source reading is not performed by registry registration"
+        ],
+        "conditional_collectors": [
+          "Read current runtime or delivery receipts only when they change a displayed decision; configuration and authored snapshots do not prove current operation",
+          "Never run credential access, private-data export, remote-control effects or source maintenance merely to refresh this page"
+        ]
+      },
+      "source": {
+        "repo": "wlyaaaaa/PCConfig",
+        "visibility": "PRIVATE",
+        "default_branch": "main",
+        "local_root": "E:\\PCConfig",
+        "public_component_repositories": [
+          "wlyaaaaa/wly0829.cn"
+        ]
+      },
+      "displayed_areas": [
+        "existing_authored_product_and_technical_reference",
+        "owning_source_and_dated_evidence",
+        "actual_user_entrypoints_and_limits"
+      ],
+      "impact_sources": [
+        {
+          "kind": "remote_computer_mcp_product_and_runtime",
+          "paths": [
+            "registries/remote_computer_mcp*.json",
+            "tools/remote-computer-mcp/**",
+            "tools/secondary-laptop-access/**"
+          ]
+        }
+      ],
+      "refresh_rules": {
+        "semantic_review_required_when": [
+          "a source owner confirms that a displayed product capability, ownership, limit or evidence interpretation changes"
+        ],
+        "snapshot_only_when": [
+          "an observation time or named evidence receipt changes without semantic change"
+        ],
+        "ignore_when": [
+          "formatting, refactors or candidates leave every displayed fact and explanation correct"
+        ]
+      },
+      "runtime_status_key": "remote-control"
     }
   ]
 }

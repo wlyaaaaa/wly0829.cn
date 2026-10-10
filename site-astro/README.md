@@ -18,7 +18,7 @@
 
 首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
 
-首页与驾驶舱生成：`python tools/retain_home_cockpit.py <候选站构建目录>`，然后 `npm run build`。生成脚本只读候选站，复制两页实际依赖和自有动效包，逐文件核对 SHA-256；清单在 `src/chrome/retained/manifest.json`。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
+首页与驾驶舱入口来自版本化的 `sources/retained-home-cockpit`：已选样板的补丁后两份 HTML、唯一首页首帧脚本及依赖清单。运行 `python tools/retain_home_cockpit.py` 可在没有本机忽略文件时恢复入口，逐字节核验后写入 `src/chrome/retained` 和 `public/_home-cockpit`；其余图像、字体、动效依赖由发布流程按清单 SHA-256 复用，不降低图像质量。清单的 `pages` 绑定实际补丁后页面，`inputs` 保留补丁前输入依据。只有显式选定新候选站时才运行 `python tools/retain_home_cockpit.py <候选站构建目录>`，它只读候选站并生成下一份待审输入。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
 
 首页按浏览器会话首次从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。回访、后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
@@ -82,11 +82,11 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 ## 规则原文
 
-规则原文屏照现在网站发布时的公开投影处理（`scripts/rule_original_contract.public_markdown`、链接公开化、首行标“公开副本”），并核对私有过滤表 `.publish/private/rule-public-policy.json` 要省略的内容一条都不在；找不到过滤表就停止生成，不绕开。
+按需更新时，`scripts/astro_rules.py` 从核验通过的活动规则生成 `sources/rules` 和各规则页的原文分段；活动原件、公开副本、catalog、指针和入口模板分别绑定 SHA。普通转换和构建只读这份已提交的规则源，不读取私人过滤文件，也不在构建时把本机的新版本写进网页。
 
 页面上只出网页字原文（横版原文卡正文，经 `project_original_html` 公开投影，放在素材库 `rule-paper` 的水彩框里），上面一行版本标签；规则文件开头给维护者看的 owner 行不显示，排好的原文卡也不再另出一份（原文只出现一遍）。
 
-按活动版本重出原文：`python tools/convert_page.py --rules-release E:\.agents\releases\E251 <规则页…>`，用同一套摘录边界（`rule_original_contract.excerpts`）从这个版本的规则文件重新取每屏原文，首行版本号换成这个版本，再照常走公开过滤和投影。约法屏把落在这一屏的小节标题插回条文前面（构图按小节分卡）；构图里认首行版本标签的 `text_ref` 跟着换成新版本号；原文链到的公开入口模板一起重出。
+按需更新活动规则：在仓库根运行 `python scripts/prepare-astro-release.py refresh --output <审计JSON>`，再全量转换和构建。转换器按每页现有的原文屏重建分段，保留完整正文和顺序；渲染器从当前 Markdown 生成单份 article 和版本标签。发布前核验活动原件是否仍与这份规则源一致，正文、模板、分段或当前版本不匹配时阻断发布。
 
 只想试排、不碰站点时，用环境变量把目录换到别处：`CONVERT_OUT_MD=<目录>`（转换结果，公开入口模板写在它下面的 `public/`），`BLOCK_MD_DIR`、`BLOCK_OUT_DIR`、`BLOCK_PUB_DIR`、`BLOCK_WORK_DIR`（区块排版读的内容、写的结果、发布文件和排版缓存；和站点排版同时跑时缓存要分开）。
 

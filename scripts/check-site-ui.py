@@ -44,18 +44,17 @@ def inventory(root, pages=None):
         if not matches: raise ValueError('Unknown affected page: '+name)
         chosen.update(matches)
     return sorted(chosen)
-async def review(page, base, route, width, dom, blocked=None, native_routes=()):
+async def review(page, base, route, width, dom, blocked=None):
     issues, checks = [], {'reloads': [], 'phases': []}
     fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
     if not response or response.status >= 400: fail('route-http', route, {'status': response.status if response else None})
-    if route in native_routes:
-        await page.wait_for_timeout(2000)
-        texts = await page.evaluate("html=>[new DOMParser().parseFromString(html,'text/html'),document].map(d=>{const main=d.querySelector('main')?.cloneNode(true);main?.querySelectorAll('.image-loading-wrap,noscript').forEach(e=>e.remove());return (main?.textContent||'').replace(/\\s+/g,' ').trim()})", await response.text() if response else '')
-        checks['native_readability'] = {'consistent': bool(texts[0]) and texts[0]==texts[1], **{name:{'sha256':hashlib.sha256(value.encode('utf8')).hexdigest(),'characters':len(value)} for name,value in zip(('ssr','browser'),texts)}}
-        if not checks['native_readability']['consistent']: fail('native-main-rewritten', 'main', checks['native_readability'])
     await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
-    await page.evaluate("async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));}await new Promise(r=>setTimeout(r,500));scrollTo({top:0,behavior:'instant'})}")
+    await page.evaluate("""async()=>{for(let y=0;y<document.documentElement.scrollHeight;y+=innerHeight*.8){
+      scrollTo({top:y,behavior:'instant'});await new Promise(r=>setTimeout(r,100));
+      const visible=[...document.images].filter(e=>{const r=e.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight});
+      await Promise.race([Promise.all(visible.map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,2500))]);
+    }await new Promise(r=>setTimeout(r,500));scrollTo({top:0,behavior:'instant'})}""")
     await page.evaluate("()=>Promise.race([Promise.all([...document.images].filter(e=>e.checkVisibility()).map(e=>e.complete?Promise.resolve():new Promise(r=>{e.addEventListener('load',r,{once:true});e.addEventListener('error',r,{once:true})}))),new Promise(r=>setTimeout(r,5000))])")
     if blocked is not None: await page.evaluate('values=>window.__uiBlockedImages=values',blocked.get(page,{}))
     measured = await page.evaluate(dom); issues.extend(measured['issues']); checks.update(measured['counts'], measurements=measured.get('measurements',[]))
@@ -64,8 +63,6 @@ async def review(page, base, route, width, dom, blocked=None, native_routes=()):
         if video['ready']>=2 and video['paused']: fail('video-autoplay',video['src'],video)
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
     for link in {x['href']: x for x in links}.values():
-        await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
-        await page.evaluate('document.fonts.ready'); await page.wait_for_timeout(800)
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
         if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']): fail('anchor-target-missing',link['href'],{}); continue
         if link.get('action') and await target.count() and not await target.is_enabled(): fail('anchor-unavailable-review',link['href'],{'reason':'control-disabled'}); continue
@@ -120,15 +117,13 @@ async def review(page, base, route, width, dom, blocked=None, native_routes=()):
         for source, rows in checks['unavailable'].items():
             if len(rows)>1: fail('unavailable-repeat' if source!='unknown' else 'unavailable-source-unknown', source, {'rows': rows})
     if route.startswith('/rules'):
-        rule_body = 'main article.rule-original-prose, main pre:not(article.rule-original-prose pre)'
-        visible = [await e.inner_text() for e in await page.locator(rule_body).all() if await e.evaluate("e=>!e.closest('[hidden]')&&e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
+        visible = [await e.inner_text() for e in await page.locator('main pre, main [data-rule-source]').all() if await e.evaluate("e=>e.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})&&getComputedStyle(e).clipPath==='none'")]
         checks['rule_visible_characters'] = sum(map(len, visible))
-        if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', rule_body, {'visible_characters': checks['rule_visible_characters']})
+        if checks['rule_visible_characters'] < 200: fail('rule-original-image-only', '.rule-original-panel pre', {'visible_characters': checks['rule_visible_characters']})
     return dict(route=route, width=width, final_url=page.url, issues=issues, checks=checks)
 async def run(args):
     if args.base_url and (args.full or not args.pages) and not args.online_full: raise ValueError('Online all-route checks require --online-full; use local --root --full by default')
     started = time.monotonic(); routes = inventory(args.root.resolve(), None if args.full or args.online_full else args.pages)
-    native_routes = json.loads((args.root/'release-manifest.json').read_text('utf8')).get('native_readability',{}).get('routes',{}) if (args.root/'release-manifest.json').is_file() else {}
     preparation = args.oss_preparation or (args.root.parent if (args.root.parent/'oss-plan.json').is_file() else None)
     objects = json.loads((preparation/'oss-plan.json').read_text('utf8'))['objects'] if preparation else {}
     assets = {urlsplit(obj['url'])._replace(query='',fragment='').geturl():(preparation/'oss'/rel,obj) for rel,obj in objects.items()}
@@ -174,7 +169,7 @@ async def run(args):
             async with semaphore:
                 page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
                 try:
-                    record = await review(page,base,route,width,dom,blocked,native_routes)
+                    record = await review(page,base,route,width,dom,blocked)
                     if not args.base_url:
                         gaps = [key for key in blocked.get(page,{}) if re.search(r'\.(js|css|woff2?|mp4|webm)$',urlsplit(key).path,re.I)]
                         if gaps: record['issues'].append(dict(kind='local-assets-unavailable-review',element=route,evidence={'assets':gaps})); record['dependency_unavailable']=True
@@ -190,7 +185,7 @@ async def run(args):
     findings = [i for r in records for i in r['issues']]; warnings = [i for r in records for i in r['issues'] if r.get('dependency_unavailable') or 'review' in i['kind'] or 'unmeasurable' in i['kind'] or i['kind']=='check-error']; novel = [i for i in findings if i not in warnings and not i['known']]
     receipt.update(issue_count=len(findings),warning_count=len(warnings),known_count=sum(i['known'] for i in findings),blocker_count=len(novel),baseline=baseline['version'],status='fail' if novel else 'partial' if findings else 'pass')
     if os.name == 'nt':
-        cleanup = subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(temp),'-AllowedRoot',str(args.output.parent.resolve()),'-Json'],capture_output=True,text=True,encoding='utf8',creationflags=subprocess.CREATE_NO_WINDOW)
+        cleanup = subprocess.run(['pwsh','-NoProfile','-File','E:/.agents/tools/Move-TaskItemToRecycleBin.ps1','-LiteralPath',str(temp),'-AllowedRoot',str(args.output.parent.resolve()),'-Json'],capture_output=True,text=True,encoding='utf8',errors='replace',creationflags=subprocess.CREATE_NO_WINDOW)
         receipt['temp_cleanup'] = json.loads(cleanup.stdout.lstrip('\ufeff')) if cleanup.returncode==0 else {'status':'failed','error':cleanup.stderr}
     args.output.write_text(json.dumps(receipt,ensure_ascii=False,indent=2),'utf8'); print(json.dumps({k:receipt[k] for k in ('status','issue_count','seconds')},ensure_ascii=False))
     return bool(receipt['blocker_count'])

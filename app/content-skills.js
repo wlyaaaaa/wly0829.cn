@@ -1,7 +1,11 @@
 import { generatedPanelFacts } from "./panel-facts.generated.js";
 import { skillUsage } from "./content-skill-guides.js";
 
-const currentERules = generatedPanelFacts.authority;
+const retainedERules = generatedPanelFacts.authority;
+const currentSkillSupply = generatedPanelFacts.skills.supplyEvidence || {
+  sourceCommit: generatedPanelFacts.sourceCommit,
+  observedAtBeijing: generatedPanelFacts.observedAt
+};
 
 function skill(definition) {
   return {
@@ -9,15 +13,15 @@ function skill(definition) {
     sourceKind: "personal_install",
     availability: "available",
     statusTone: "mixed",
-    sourceState: `当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)} 中的唯一源码已核对`,
+    sourceState: `供给 source ${currentSkillSupply.sourceCommit.slice(0, 7)} 的规范源码校验通过；本页保留的字节与指纹仍按此前快照，不在本轮重取`,
     installState: "canonical junction 已安装",
-    transactionState: "供应事务检查通过；0 个坏事务",
+    transactionState: "供应来源与安装检查通过；本轮回执未返回独立供应事务层",
     currentTaskState: "本轮宿主回执未知",
     freshTaskState: "新任务回执未知",
     endToEndState: "按场景验收",
-    evidenceObservedAt: `供应链现场：${generatedPanelFacts.observedAt}；项目场景按各项记录`,
-    evidenceBasis: `.agents ${currentERules.releaseId} release ${currentERules.gitCommit.slice(0, 7)}、当前 Personal Skill supply（个人能力供应链），以及本页明确标注的既有项目/Provider（固定服务入口）证据；source/install/transaction 通过不冒充 current/fresh/E2E`,
-    evidenceSourceCommit: generatedPanelFacts.sourceCommit,
+    evidenceObservedAt: `供给来源与安装：${currentSkillSupply.observedAtBeijing}；此前字节快照：${generatedPanelFacts.observedAt}；项目场景按各项原记录`,
+    evidenceBasis: `本次 Personal Skill supply（个人能力供应）仅核对 source/install；旧 ${retainedERules.releaseId} release ${retainedERules.gitCommit.slice(0, 7)} 规则参考和各项既有项目/Provider（固定服务入口）证据保留原日期，不作为当前规则身份。独立事务未返回，current/fresh/E2E 未重验，保留来源字节不冒充本次重取`,
+    evidenceSourceCommit: currentSkillSupply.sourceCommit,
     supplyEvidenceCommand: "E:\\.agents\\tools\\Test-PersonalSkillSupply.ps1 -RequireInstalled -NoExternalEvidence -Json",
     ...definition,
     ...skillUsage[definition.slug]
@@ -348,7 +352,7 @@ export const skills = [
     freshTaskState: "历史来源任务发布和回读不等于此次全新任务自主选择并完成查询",
     evidenceObservedAt: `当前 Skill 来源/安装供应回读：${generatedPanelFacts.observedAt}；一小时真实查询现场：2026-08-31 12:13（中国时间）`,
     evidenceSourceCommit: "a3477df3339878f53de8122311682134cb12fd1b",
-    evidenceBasis: `当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${currentERules.releaseId} 中可发现的 TimeAudit diagnostics Skill、TimeAudit PUBLIC main 44a842e 的 provider/contract/tests，以及既有一小时真实聚合查询；个人应用/屏幕使用由个人活动来源查询。源码、安装、provider 现场与因果结论保持分层。`,
+    evidenceBasis: `当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${retainedERules.releaseId} 中可发现的 TimeAudit diagnostics Skill、TimeAudit PUBLIC main 44a842e 的 provider/contract/tests，以及既有一小时真实聚合查询；个人应用/屏幕使用由个人活动来源查询。源码、安装、provider 现场与因果结论保持分层。`,
     endToEndState: "2026-09-08现有固定诊断入口已真实回读：冻结窗3600条GPU异常仍保留，修复后180条完整有效；最初触发原因未知，未做游戏验收，也未把这次精确命令调用冒充新的自然语言盲验",
     productProcesses: [
     {
@@ -421,6 +425,69 @@ export const skills = [
     sourceBytes: 6696,
     sourceSha256: "00ba711564a4ab5f42ed54f70042eba822a77dd6b202cbad5fb7ec962fc0d69e",
     readerStatus: "历史查询有带日期的真实使用记录；综合卡顿、当前健康与原生内存入口已在发布原文确认，但本次没有运行，不能据这页判断电脑此刻正常。",
+  }),
+  skill({
+    slug: "cockpit",
+    name: "cockpit",
+    title: "看驾驶舱",
+    status: "已安装 / 读状态与登记",
+    maturity: "A",
+    summary: "问电脑和项目现在好不好、有没有要我处理的，AI 先读驾驶舱背后的摘要，讲清偏差、要我做的事、我问的那件和今天该知道的变化。做事时带来的新自动任务、数据来源或长期项目状态，也在同一次改动里登记进驾驶舱。",
+    useWhen: [
+      "问电脑和项目现在怎么样、有没有要处理的事",
+      "解释备份、自动任务等某一块为什么不是正常状态",
+      "把新的长期事项加进驾驶舱，或核实一条已完成事项后关闭"
+    ],
+    avoidWhen: [
+      "全机巡检",
+      "替代出错项目自己的修复",
+      "在网页上停任务、删条目、锁资料或结束授权"
+    ],
+    inputs: [
+      "要了解的电脑、项目或驾驶舱栏目，以及具体问题",
+      "当前任务带来的新长期事项、负责人、时间和完成标准"
+    ],
+    outputs: [
+      "偏差、要我做的事、所问现状和今天变化的简明结论",
+      "仅相关来源的明细、观察时间和缺口",
+      "新长期事项的登记、可核实的关闭条件及驾驶舱二级页"
+    ],
+    flow: [
+      "先读总灯、要你做、知道就行与 AI 在跟的摘要",
+      "只调出与问题相关的一块核对标准、来源和观察时间",
+      "来源中断超过十分钟时单列缺口，不直接当成故障",
+      "说明具体行动和完成标准，AI 在跟只报条数",
+      "当前工作新增长期事项时顺手登记；一页放不下先拆二级页",
+      "已有事项达到完成标准后，AI 核实并关闭"
+    ],
+    boundaries: [
+      "只按登记标准判断正常；未设标准、未接通、资料锁着分别说明",
+      "今天有提交不代表已上线，上线结论看发布回执",
+      "顶层只有一个驾驶舱，优先使用其二级页",
+      "同一个问题只说一次，正常状态简短带过",
+      "修复交给对应项目；驾驶舱网页不直接控制任务或删除事项"
+    ],
+    dependencies: [
+      "驾驶舱摘要及各块来源数据",
+      "PCConfig 的状态投影和事项登记入口",
+      "个人网站 /cockpit/ 与相关二级页"
+    ],
+    tests: "公开作者源给出驾驶舱读取和登记的普通请求、八条判断边界及示例；本轮仅接目录和导航，不运行全机巡检、事项写入或状态刷新。",
+    sourcePath: "E:\\.agents\\skills\\cockpit\\SKILL.md",
+    currentTaskState: "本轮未刷新驾驶舱或写入事项",
+    freshTaskState: "本轮未重放新对话驾驶舱查询",
+    endToEndState: "目录接线不证明本次真实状态；来源回执按对应项目核对",
+    technicalSections: [
+      {
+        title: "来源判断与事项生命周期",
+        paragraphs: [
+          "先摘要后相关明细；要你做、知道就行、AI在跟各自保留含义。只认登记标准，来源断开超过十分钟单列缺口，旧记录保留观察时间。",
+          "事项需写清人话、负责人、时间和通过标准；只有 AI 核实后关闭。每条、每块、整页可复制给 AI 的说明，技术细节指向本机条目，网页不执行停任务或删除。",
+          "本轮文案依据 content/jia 的 skill-cockpit 作者页，使用记录与例子保持各自证据角色；没有读取或修改私人事项。"
+        ],
+        commands: []
+      }
+    ]
   }),
   skill({
     slug: "localocr",
@@ -635,6 +702,71 @@ export const skills = [
     evidenceBasis: "已发布 main 83db4ff 的 skills/reply-as-me/SKILL.md 与活动 E166 相关合同；正文、源码身份与安装/运行/E2E各自区分，未将文字核对当成业务验收。"
   }),
   skill({
+    slug: "report-page",
+    name: "report-page",
+    title: "汇报网页",
+    status: "已安装 / 本地网页交付",
+    maturity: "A",
+    summary: "要展开说明的汇报、请我裁定和长回答，AI 把文字、数字和最合适的图做成白底绿色本地网页：先说结论，再逐项讲清。决策卡让我点选并写说明，一次生成答复粘回对话；简单完成回执和短状态直接在对话里说。",
+    useWhen: [
+      "需要展开说明的汇报、进度或长回答",
+      "有几件事要我裁定，做成有后果说明的决策卡",
+      "图、媒体或文档放在页面上更便于理解与判断"
+    ],
+    avoidWhen: [
+      "一句话完成回执或短状态，且没有明确要网页",
+      "发布到互联网或替代个人网站",
+      "在普通网页里保存密码、密钥和恢复码"
+    ],
+    inputs: [
+      "要讲清的问题、结论、核对过的事实和数字来源",
+      "确定做法的选项、各自后果与单列的 AI 建议",
+      "明确选择的本地图片、媒体或文件路径"
+    ],
+    outputs: [
+      "经自检的本地 HTML、可读图表和需要时的决策卡",
+      "每题的我的说明与整页固定格式答复",
+      "页面链接和少量结论；长期开出的决定回到对应项目记录"
+    ],
+    flow: [
+      "先查事实并逐项形成内容文件，选择帮助理解的图",
+      "用现有生成命令负责版式、配色、转义和图表",
+      "在 Chrome 按代表宽度自检，失败时修正而不交已通过标签",
+      "通过后按北京时间命名，存到本地汇报目录，由根会话打开",
+      "我点选并填写说明，一次生成答复粘回对话",
+      "AI 逐条处理答复；有说明时以说明为准，旧临时页按现有生命周期清理"
+    ],
+    boundaries: [
+      "子代理默认交文字和链接，由根会话决定要不要网页、是否打开",
+      "私人照片、视频和录音只引用原文件，不复制成附件或缩略图",
+      "页面不替代长期决定记录，不自行对外发布",
+      "找不到浏览器或自检未完成时不能报自检通过",
+      "本机打开按钮已停用，现役入口保留复制路径、复制原文和页内预览",
+      "普通技术取舍由 AI 决定，不为了流程形式制造决策卡"
+    ],
+    dependencies: [
+      "report-page 内容文件、生成模板与自检命令",
+      "本人 Chrome 的本地页面验收",
+      "E:\\Documents\\AI汇报"
+    ],
+    tests: "公开作者源区分现存页面使用证据、开发自检和说不准的交互；代表宽度自检覆盖内容结构、决策卡、字号、溢出、媒体与脚本，找不到浏览器不报通过。本轮仅接技能目录，没有生成或打开新汇报页。",
+    sourcePath: "E:\\.agents\\skills\\report-page\\SKILL.md",
+    currentTaskState: "本轮未生成或打开汇报页",
+    freshTaskState: "本轮未重放生成与浏览器自检",
+    endToEndState: "网页生成和答复使用有既有证据；当前任务实际页面另验",
+    technicalSections: [
+      {
+        title: "生成、自检与答复",
+        paragraphs: [
+          "AI 写内容文件，现有命令生成、检查、存放和打开。代表宽度为390、960、1280、1920像素，半屏再以1.5倍字号检查；字段、卡片编号、说明框、DOM、脚本、溢出与媒体代表交互各自核对。",
+          "页面答复第一行是标题，每题一行，最后整体补充。有说明时以说明为准；矛盾、误选或没听懂时下一轮讲清，不能替我改选择。",
+          "临时页面按现有14天生命周期清理，决定原话归对应长期记录。历史本机打开程序和按钮已停用，保留复制路径、复制原文和页内预览。"
+        ],
+        commands: []
+      }
+    ]
+  }),
+  skill({
     slug: "document-materials",
     name: "document-materials",
     registryName: "personal-formal-documents",
@@ -655,13 +787,13 @@ export const skills = [
     publicSourceLabel: "个人 Skill 供应链中的“文书和材料制作”入口",
     sourceBytes: 2681,
     sourceSha256: "6c86770191a0895d87eba2fd1657b5f08c0d905bf5581bf9181024898403f0ae",
-    sourceState: `文书和材料制作 Skill 内容已正式回读；当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${currentERules.releaseId} 与供应安装现场另行回读，各层分开说明`,
+    sourceState: `文书和材料制作 Skill 内容已正式回读；当前 .agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${retainedERules.releaseId} 与供应安装现场另行回读，各层分开说明`,
     installState: "canonical junction 已安装并与规范源码一致",
     currentTaskState: "历史安装验收只使用完全虚构样张；本批未制作或递送真实个人材料",
     freshTaskState: "安装后的全新 Sol Max 任务已发现“文书和材料制作”入口；发现通过不等于真实事项执行通过",
     evidenceObservedAt: `当前供应链：${generatedPanelFacts.observedAt}；实现与隔离安装验收：2026-09-01`,
     evidenceSourceCommit: generatedPanelFacts.sourceCommit,
-    evidenceBasis: `文书和材料制作 Skill 当前说明、.agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${currentERules.releaseId}、公开范围内 ${generatedPanelFacts.skills.publicInstallIntentCount} 个 active install intent、供应事务检查通过、实现项目 PRIVATE main 3ab7fb4、全仓/聚焦回归与隔离 wheel 虚构验收；供应、实现和真实事项证据保持分层。`,
+    evidenceBasis: `文书和材料制作 Skill 当前说明、.agents source ${generatedPanelFacts.sourceCommit.slice(0, 7)}、活动 ${retainedERules.releaseId}、公开范围内 ${generatedPanelFacts.skills.publicInstallIntentCount} 个 active install intent、供应事务检查通过、实现项目 PRIVATE main 3ab7fb4、全仓/聚焦回归与隔离 wheel 虚构验收；供应、实现和真实事项证据保持分层。`,
     endToEndState: "PASS（完全虚构安装后 plan/build/verify）；真实个人材料、真实签名和外部递送 E2E 为 not_run"
   }),
   skill({
@@ -717,6 +849,67 @@ export const skills = [
     evidenceSourceCommit: "156387f2bdc92ebb43aca9e10509518e206fe8e8",
     evidenceBasis: "已发布156387f skills/work-delivery/SKILL.md；本轮范围为持续来源交付的两个同时条件，以及多产物/单PRD未来变化的OR分支。内容与源身份已核对，安装、运行、新任务和真实端到端证据分别保留，未虚报重测。",
     endToEndState: "既有持续来源包的合成 Office 与无提示 draft 阻断有历史通过；真实工作、首次真实来源变化和同模型同质量时间价值仍为 not_run / baseline_required"
+  }),
+  skill({
+    slug: "learning",
+    name: "career-development",
+    title: "学习方法技能",
+    status: "已安装 / 项目入口",
+    maturity: "A",
+    summary: "我说要上课、接着学、没听懂或觉得不对，AI 先读学习项目的规则和当前状态，找到今天该讲哪一课，按当天讲义开讲，讲完把学到哪写回去。它只管我的学习、练习、反馈和接续。",
+    useWhen: [
+      "安排自己的学习路线、讲义和课程",
+      "接着上次上课、做练习或确认现在停在哪",
+      "没听懂、凭直觉觉得讲义不对，要求重讲和纠错"
+    ],
+    avoidWhen: [
+      "真实工作事项和交付",
+      "合同、协议、通知等正式文书",
+      "替别人排课，或维护拿来举例的其他项目"
+    ],
+    inputs: [
+      "今天要学的问题、接着上次讲的请求，或具体没听懂的句子",
+      "本次练习、反馈或更正；已有当前状态不用从旧计划恢复"
+    ],
+    outputs: [
+      "当天完整讲义与一段一段的讲解、追问和练习",
+      "这一课完成没有、日期和分钟，以及下次从哪里继续",
+      "有依据的讲义纠错和受影响内容一起修正"
+    ],
+    flow: [
+      "先读学习项目规则，再完整读当前状态",
+      "只读当天和当前问题需要的讲义与材料",
+      "先说今天讲清什么问题，拿真实请求或只读项目实例解释",
+      "讲一小段后停下来让我复述，再按理解追问",
+      "核对技术质疑的证据，修改当前讲义和同类错误",
+      "下课前说明完成情况，写回当前进度和下一课接续"
+    ],
+    boundaries: [
+      "读取我的学习记录前核对个人资料解锁状态",
+      "讲课、写讲义和审稿的模型按学习项目规则，环境做不到时如实说明",
+      "技术对错由老师按证据判断；个人经历、目标、花钱、授权和对外动作由我决定",
+      "其他项目只读作例子，不改、不跑、不维护",
+      "不把整套资料一次读进来，不从旧计划接任务"
+    ],
+    dependencies: [
+      "学习项目的规则、当前状态与当天讲义",
+      "E:\\.agents\\skills\\career-development\\SKILL.md"
+    ],
+    tests: "本项按已公开作者源的学习入口与边界接线；本轮仅核对现役安装清单和网页数据，不重放真实上课、练习或进度写回。",
+    sourcePath: "E:\\.agents\\skills\\career-development\\SKILL.md",
+    currentTaskState: "本轮未重放真实上课与进度写回",
+    freshTaskState: "本轮未在全新学习对话验收",
+    endToEndState: "作者源保留既有课程方法；真实课堂结果不由目录接线证明",
+    technicalSections: [
+      {
+        title: "规范入口和网页别名",
+        paragraphs: [
+          "网站 /skills/learning/ 对应现役 career-development；发现与安装使用 personal-skill-supply.json 的规范名称。入口先读学习项目规则和当前状态，真实模型安排、讲义和课堂验收由学习项目拥有。",
+          "本轮来源限已有公开作者文案 sources/pages/skill-learning/page.json；没有读取个人讲义、学习记录或项目私有材料，也没有把一次安装核对当作课堂端到端结果。"
+        ],
+        commands: []
+      }
+    ]
   }),
   skill({
     slug: "documents",
@@ -1090,43 +1283,6 @@ export const skills = [
     readerStatus: "本地诊断和可逆修复有回归证据；本次没有修真实文件。当前文件是否可无损修复，要由原字节、诊断计划与写前核验决定。",
   }),
   skill({
-    slug: "file-intake-router",
-    name: "file-intake-router",
-    title: "混合附件分流",
-    status: "已安装 / 薄路由",
-    maturity: "A-",
-    summary: "当我一次给出 Word、PDF、表格、图片、压缩包或整个文件夹，不知道该用哪个读取工具时，它先看清文件结构，再把每一类材料交给真正适合的读取器；单个已知文件不需要它。",
-    useWhen: [
-      "附件类型混杂",
-      "不确定 PDF 有可提取文字还是只有扫描图",
-      "输入是压缩包或目录",
-      "需要先清点当前问题有关的文件与结构"
-    ],
-    avoidWhen: ["一个已知 Word、PDF、表格或图片", "把本来能直接读的文件全部当图片做文字识别", "扫描无关子目录", "选好读取方式后仍在这层重复处理文件"],
-    inputs: ["少量文件 inventory", "用户想得到的最终结果"],
-    outputs: [
-      "针对每类实际材料选择适合的读取入口；单个已知类型直接交给对应读取器",
-      "只包含完成当前问题所必需的后续输入范围"
-    ],
-    flow: ["识别容器和文件结构", "优先结构化提取", "选择 Word、PDF、表格、OCR、ASR 或其他原生 reader", "交接后退出路由"],
-    boundaries: ["单一已知类型直接 reader", "先结构化提取后 OCR", "目录只检查满足请求的子集", "默认不上传私有材料"],
-    dependencies: ["当前宿主可用的原生 readers"],
-    tests: "source、install、quick validation 与 Personal Skill 语义回归均已通过。",
-    sourcePath: "E:\\.agents\\skills\\file-intake-router\\SKILL.md",
-    technicalSections: [
-      {
-        "title": "按实际输入选择读取器",
-        "paragraphs": [
-          "文本、代码、JSON/YAML/XML与日志直接读取、解析或rg；Word用documents，PowerPoint用presentations，表格/CSV用spreadsheets。原生结构优先是为了保留公式、批注、修订、演讲者备注与类型。",
-          "数字PDF用pdf，扫描或纯图PDF用localocr。一两张普通照片/截图先原生视觉；批量、精确、结构化、必须本地或难读文字走LocalOCR。中文语音走ChineseASR。",
-          "压缩包先安全列目录，再处理当前问题相关内容；数据库、数据框和notebook使用其原生工具，不能OCR。SVG、drawio、Mermaid先看源文件，只有视觉验收才渲染。",
-          "MarkItDown仅在具体异构批次确实需要统一Markdown表示时作为可选本地归一后备，不自动安装、不成为MCP/core依赖、不放在原生Office/PDF读取器之前。Markdown是派生分析副本，原文件仍是权威。单个已知类型直接进入reader，路由完成就退出。"
-        ],
-        "commands": []
-      }
-    ],
-  }),
-  skill({
     slug: "browser-control-continuity",
     evidenceSourceCommit: "156387f2bdc92ebb43aca9e10509518e206fe8e8",
     name: "browser-control-continuity",
@@ -1261,6 +1417,70 @@ export const skills = [
         "commands": []
       }
     ],
+  }),
+  skill({
+    slug: "cloud-asset-channel",
+    name: "cloud-asset-channel",
+    title: "省流量的云端素材",
+    status: "已安装 / 云端审图未启用",
+    maturity: "B",
+    summary: "同一文件预计让 AI 读两次以上，或一批文件处理流量明显超过文件本身时，把点名文件传到 Cloudflare R2 一份，让能在云里读取的 AI 使用同一版本；本机只收文字结论。上传、版本核对和云端命令任务有入口，正式云端审图仍须通过校准。",
+    useWhen: [
+      "同一批网站图要审、复核好几轮",
+      "以后按需更新还要继续使用的素材",
+      "查询本任务流量、云端空间或清理确定没用的云副本"
+    ],
+    avoidWhen: [
+      "只读一次的文件",
+      "密码、密钥、恢复码、身份证件和银行卡照片",
+      "把上传成功当成正式审图验收，或在云上画图"
+    ],
+    inputs: [
+      "明确点名的文件、用途，以及哪位 AI 会反复读取",
+      "要保留、替换或清理的版本状态和实际任务范围"
+    ],
+    outputs: [
+      "绑定本机内容指纹的素材网址和版本登记",
+      "云端任务的文字结论与受理状态，失败时的具体缺口",
+      "本任务实际上传与下载记录、另列的网络实测和容量提醒"
+    ],
+    flow: [
+      "先判断重复读取是否值得走云端通道",
+      "核对点名文件的内容指纹，已有同样内容时复用",
+      "上传到 Cloudflare R2，登记路径、指纹、大小、用途、网址和状态",
+      "给 AI 使用前重核本机版本；变化时传新版、旧版标已被替换",
+      "云端命令任务在云里读素材，本机从文字收件箱取回结论",
+      "收尾按状态清理没用的云副本，保留仍有引用的版本并记录流量"
+    ],
+    boundaries: [
+      "正式云端审图未通过校准，当前关闭；命令接通不代表审图可以启用",
+      "Codex 本机不能直接收网址图，不下载再上传来冒充省流量",
+      "Claude 的本机复核每张图一次读完、一次答完；画图仍在本机",
+      "只用 Wrangler 已有网页授权，不新建 API 令牌、不经手密钥原文",
+      "不改代理或网络设置，不降低图片质量，不盲目重复提交",
+      "云副本无固定过期；有用继续留，只按明确状态清理"
+    ],
+    dependencies: [
+      "Cloudflare R2 桶 wly-ai-assets 与 https://ai.wly0829.cn/",
+      "Wrangler 现有网页授权、素材登记表与文字收件箱",
+      "Codex 云端命令任务及真实读者能力"
+    ],
+    tests: "公开作者源区分上传、逐字节核对、去重、删除和记账的开发回执与真实任务验收；旧版云端命令读者已接通，自报 GPT-5.6 Sol，正式审图未通过校准，新版 GPT-6.1 Sol 命令读者待升级。",
+    sourcePath: "E:\\.agents\\skills\\cloud-asset-channel\\SKILL.md",
+    currentTaskState: "本轮未提交云端任务、上传或删除素材",
+    freshTaskState: "新版 GPT-6.1 Sol 命令读者待升级",
+    endToEndState: "上传与文字收件箱有既有证据；正式审图关闭，真实任务验收另列",
+    technicalSections: [
+      {
+        title: "版本、流量与读者证据",
+        paragraphs: [
+          "对象按 SHA-256 内容指纹命名并保留扩展名；每次使用前核对本机版本。同内容去重，改动形成新版本，已被替换或确定没用且无其他引用的云副本按状态清理。",
+          "公开作者源保留旧版云端命令读者自报 GPT-5.6 Sol，GPT-6.1 Sol 接线待升级；正式审图必须另通过校准，网站图当前由 Claude Opus 终审。",
+          "每个任务记录本机实际上传、下载及网络实测；目标流量不超过所用内容版本大小之和的2倍，超过2.5倍提醒核对重复传输，未观测的失败重试不记作零。容量接近免费10GB时提醒查看付款，10GB不是硬上限。"
+        ],
+        commands: []
+      }
+    ]
   }),
   skill({
     slug: "media-person-self",
@@ -1563,113 +1783,6 @@ export const skills = [
     readerStatus: "仓库事实入口有回归和既有真实使用；仓库、分支与远端是动态状态，真正推送前仍读取那次目标的现场事实。",
   }),
   skill({
-    slug: "personal-panel-refresh",
-    name: "personal-panel-refresh",
-    title: "个人看板实质刷新与发布合并",
-    status: "已安装 / 来源暂停与对应快照合并边界已更新",
-    maturity: "A-",
-    summary: "一个已登记项目、规则或能力发布后，它只检查网站里对应的说明会不会因此说错话。需要更新时优先交给正在发布的网站负责人合并；没人负责才开新任务，不扩成全站重做，也不让来源项目原地等待。",
-    useWhen: ["来源项目已经完成发布和正式回读", "本次变化涉及网站登记的项目、规则或能力", "页面里的事实、解释、边界、成熟度或使用判断可能因此变错", "网站可能已经有另一项更新正在施工，需要避免重复发布或两边互相覆盖"],
-    avoidWhen: ["来源还只是草稿、候选或未验证状态", "只有格式、注释、内部重构、时间戳或仅哈希变化", "当前页面已经准确说明受阻状态，没有新的实质失真", "需要本人明确启动的页面没有新的更新请求", "试图让来源工作直接修改、测试或发布网站"],
-    inputs: ["网站登记的项目、规则或能力", "来源身份、正式远端回读提交、改动路径、观察时间与活动代际", "assessor（影响评估器）原因与为什么页面会实质失真的 Source Owner 判断", "产品、Rules、Skills、System 中确实由这个来源直接影响的公共表面"],
-    outputs: [
-      "来源返回对应页面无需更新，或会实质失真的判断、理由与有界来源证据",
-      "发送给精确活动发布Owner的一次增量，或无合格Owner时一次新网站任务的受理回执",
-      "failed、unavailable或dispatch-unconfirmed的真实区别；受理不证明已读、合并或发布",
-      "来源任务立即继续的交接结果；网站的语义差分、构建、Pages与公网回读由接收发布任务另行完成"
-    ],
-    flow: ["本人暂停更新或要求稍后合并时，先暂停该范围的自动评估与交接；来源本身的编辑、测试、发布继续", "等来源 Owner 完成自己的发布和正式回读", "每次重新读取网站登记清单，把来源解析到唯一对应快照，只运行相关路径影响评估，不枚举无关项目或转成全站复核", "Source Owner 对照当前页面判断是否真的实质失真", "不影响页面或需要本人明确启动的页面没有新请求时明确 no-op", "读取实时任务列表；只有状态精确为 active 且当前 Owner 范围覆盖本次网站发布才复用，标题、更新时间、旧交接、历史 Owner 或来源对话都不充分，其他状态全部排除", "存在唯一合格发布 Owner 时只发送一次来源身份、提交、路径、原因、实质判断和受影响表面；即使它由另一来源创建或正在刷新别的登记快照，也由它合并同一候选", "没有合格发布 Owner 时按当前网站 Registry、本人选择与活动原生经济路由判断型号和 effort，核对实际身份、限制与可用组合后安排一份全新网站工作；来源 Skill 旧版 Astra 要求不是网站作者门槛", "安排受理只证明发送或创建成功，不证明已读、合并或完成；来源立即继续，不等待、不轮询", "网站负责人为每个增量绑定来源身份、回读提交、路径、观察时间和活动代际；同源后继提交只替换被它包含的同源证据，其他来源增量继续保留", "只有来源输入、E 代际、Registry revision（登记表修订号）和负责表面仍匹配时才复用证据；同源新提交本身不制造 Owner 范围反复变更", "先完成一个连贯编辑批次和对应聚焦检查；批次稳定后只运行一次完整测试、构建、公开内容门和最终浏览验收", "同一失败类别在输入未变时重复两次就先诊断共同原因；预览服务使用可控后台会话、就绪期限和仅清理本任务进程的收口", "全部检查通过后只发布一次现有 PUBLIC main，等待 Pages 并从公网回读"],
-    boundaries: ["每次来源事件只更新它的对应登记快照与会因此说错的直接表面，不调用全站复核", "不复制网站登记清单", "不建 watcher（监视器）、daemon（后台进程）、定时任务或轮询", "不在来源工作里编辑、构建、测试或发布网站", "不把草稿、候选或未验证状态当成已发布事实", "同一来源提交与同一网站目标不重复发送或创建", "现有活动发布 Owner 优先；发送失败时不另开竞争任务", "不把开发或预览服务当前台长任务等待；只启动可控制、可限时并能准确关闭的后台会话", "网站语义判断、正文、设计和独立验收按当前项目规则与原生经济路由选择实际型号和 effort；不静默替换本人指定的组合", "跨任务派发受理不等于对方已读或完成，来源不读取进度、不等待、不轮询", "现有长期授权不跳过 system/developer/platform、Owner scope、目标解析、拒绝、补证、网站检查或本人预览，也不覆盖新公网目标、付费、秘密暴露、force-push（强制推送）或用户明确暂缓", "恢复只按本人后续指令取当前已发布事实，不自动重放暂停期间每个提交，也不建立暂停登记表、积压队列或第二定时任务", "全站增量由网站既有统一任务或本人明确全量请求负责；来源 Skill 仍只处理一个对应快照", "来源 Skill 保留旧 Astra Max 默认叙述，网站现行项目规则已取消这个固定门槛；来源冲突须由其 Owner 修正，网站实际选型以现行规则为准"],
-    dependencies: ["wly0829.cn Registry 与路径影响评估器", "网站 Execution Owner 与当前任务状态解析", "native-economy-routing 的当前模型家族与思考强度选择", "桌面 AI 工作台的现有任务跟进与全新工作入口", "已验收的 PUBLIC main、GitHub Pages 与公网回读路径"],
-    tests: "当前 Skill source、install 与供应事务通过；原有单快照、精确 active Owner、失败不创建竞争任务和稳定批次语义继续保留。当前源增加暂停时先停自动交接、恢复按新指令读取已发布事实，不回放积压或建队列。",
-    sourceState: "personal-panel-refresh 已发布来源仍写 Astra High 网页门槛与 Max 默认；网站现行 AGENTS 已取消网站专属模型门槛。旧来源状态与现行网站执行规则冲突，待来源 Owner 修正；原 2026-09-12 来源证据时间保留",
-    currentTaskState: "本批核对当前Skill与安装，未单独重放来源自动派发；网站发布及Pages回读由发布批次独立证明",
-    freshTaskState: "既有无活动 Owner 新建路线和活动 Owner 跟进路线为历史验收；本轮以当前明确请求和真实施工范围推进",
-    evidenceObservedAt: "2026-09-12：.agents b4f2bba 远端回读；所选 Skill source、install、transaction 通过，未把这些结果作为真实派发或 Pages 验收",
-    evidenceSourceCommit: generatedPanelFacts.sourceCommit,
-    evidenceBasis: "已发布 Skill b4f2bba、2026-09-12 当时的活动 E128、本人 High 及以上更正和本轮精确源码范围；没有用历史 Pages 或旧 active Owner 接受回执证明本候选发布",
-    sourcePath: "E:\\.agents\\skills\\personal-panel-refresh\\SKILL.md",
-    sourceBytes: 7334,
-    sourceSha256: "9539fcbe477cccc73ce0fa659d955da9d56da4876ad3f30b061fbecb194f76cf",
-    endToEndState: "历史派发与发布路线保留；当前任务实际身份、独立内容验收、Pages 与公网回读各自核对。网站现行型号与 effort 依任务和用户限制选择",
-    readerStatus: "已发布来源仍带旧网站模型门槛，当前网站按现行项目规则和本人选择安排任务；本页说明交接机制，本轮网站是否真正发布另看发布与公网回读。",
-    technicalSections: [
-      {
-        "title": "本人排除与暂停先于自动评估",
-        "paragraphs": [
-          "本人明确排除某一来源或Skill的范围跨后续更新持续有效，先读来源personal_website: excluded（或metadata.personal_website）。路径命中不能覆盖排除，也不能经目录、聚合、其他来源透露该项名称、内容、存在或进度；公开页只说明这条通用机制，不列被排除的私人项。",
-          "暂停只停指定范围的自动评估/交接，来源编辑、测试和发布仍可继续；恢复按本人新指令读当前已发布事实，不逐条回放或另建暂停表、积压队列。unregistered/disabled与需要本人点名的页面都不自动派发。"
-        ],
-        "commands": []
-      },
-      {
-        "title": "来源只交接，发布任务才交网页结果",
-        "paragraphs": [
-          "来源先正式发布和回读，再用assess-panel-impact单项目/changed paths定位候选；AI先判断material，确认后才加material-change。impact_candidate、material_change_confirmed、task_required全true且返回指定action才派发，不让脚本判重要性。",
-          "派发前list_threads+当前scope，只复用实时active且负责此次publication的任务，发送一次bounded delta；无合格者才一次projectless创建。active发送失败不建竞争任务。真正tool缺失/deny为unavailable，error为failed，没可跟踪ID为dispatch-unconfirmed，不能统称已安排。",
-          "来源返回no-op、发送/创建受理或精确失败，立即继续，不等待网页。clientThreadId只表示设置待完成，生命周期调用前须真实threadId；若平台要求创建状态检查只用timeoutMs:0的一次快照。",
-          "网站发布者另读references/publisher-workflow.md，持有自己的精确施工/发布范围，原位合并、验证、正常推送、等Pages并公网回读。下面技术列表中发布与语义差分是接收网站任务的责任，不是来源Skill本次就完成的返回。"
-        ],
-        "commands": []
-      }
-    ],
-  }),
-  skill({
-    slug: "control-plane-doctor",
-    sourceBytes: 8181,
-    sourceSha256: "1366a889054a67e0476a7094d47a986f298d4eec71f16c0be88855b5201224fe",
-    name: "control-plane-doctor",
-    title: "能力与基础设施体检",
-    status: "已安装 / 回归通过",
-    statusTone: "pass",
-    maturity: "A",
-    summary: "问“这个能力现在能用吗”时，可先只查具名Skill的源码、安装和使用验证覆盖；当前机器状态会影响答案时，再明确加运行检查。恢复或Google接口变化可选择对应合同检查，不用全机扫描。配置、运行、新会话与端到端分别说明，诊断不代替业务任务，也不自动修复。",
-    useWhen: [
-      "想知道某个能力的安装、当前运行、新任务使用和真实效果分别验到哪里",
-      "明确检查规则、Git 仓库或电脑配置的健康状态",
-      "发现配置、来源或安装不一致，需要定位责任",
-      "恢复或迁移后核对相关入口是否一致"
-    ],
-    avoidWhen: [
-      "普通项目实现",
-      "直接实施修复",
-      "没有选定相关责任来源就扫描全部基础设施",
-      "把旧缓存警告当成当前阻断"
-    ],
-    inputs: ["可单独给 SkillName；不必知道控制面内部 check 名", "Owner、check 和 freshness"],
-    outputs: ["各 Owner 的 health、convergence、warning 和 block", "精确 remediation owner", "supply_health 与 verification_coverage 分开；未知的使用覆盖不把健康供应判坏，也不声称真实可用"],
-    flow: ["具名 Skill 可只用 -SkillName，等价于 agents/skill_supply；显式 Owner/CheckId 会保留并验证所选范围","按选择的 Owner 调用精确 provider","默认 cached 和 zero-write","聚合而不篡改原状态","需要修复时退出 Doctor 并交给真实 Owner","具名Skill的-CheckRuntime显式选择agents/pcconfig及skill_supply/skill_runtime；仅复用该能力的既有配置、零网络Google或Tailscale状态检查，不运行全机漂移。","确需核对协议时，显式选择agents,pcconfig及core_recovery_consumers或google_workspace_contract；前者运行已有三项manifest/maintenance/task检查，后者两次零网络配置接口核对，不执行复制、恢复、邮件或文件业务。"],
-    boundaries: ["不修复、不安装、不改任务","不 commit 或 push","未选择的 Owner 连 provider 路径都不读取","warning 与 block 分开","未安装意图、退役或未知名称只报告限制，不自动安装或复活","普通状态问题不先跑仓库测试；只有当前实现改动或怀疑缺陷才验证相应代码","默认不传 Owner 时兼容选择三个责任源；正常具名问题主动收窄，不把全扫作为前置门","SYSTEM观察者读取登记的用户安装或显式ObservedUserProfile，不把systemprofile空目录当用户未安装，也不冒充登录用户。依赖/Python/validator缺失表示验证没执行，不表示源损坏。","当前运行检查不证明全新会话或业务端到端；规范接口一致不证明有效OAuth、目标设备可达或还原成功。"],
-    dependencies: ["Personal Skill validator", "Git admission", "PCConfig drift provider"],
-    tests: "Owner scope 与 Skill metadata 测试通过；description 已恢复为显式 Use when 入口。",
-    sourcePath: "E:\\.agents\\skills\\control-plane-doctor\\SKILL.md",
-    technicalSections: [
-      {
-        "title": "缓存只读与现场Git刷新不同",
-        "paragraphs": [
-          "默认-Freshness Cached不fetch，write_mode=zero_write。仅远端引用的新鲜度影响判断时选择Live；它通过admission -Fetch更新本地.git元数据，返回mode=read_with_local_git_metadata_write及write_mode=local_git_metadata_write，不是零写。两种模式都不改工作树、业务资料、任务、安装、commit或push。",
-          "top-level status是控制面健康，convergence_status是所选Git目标此刻能否收口；缓存、公开性未知、无关dirty或公开冲突可能阻收口但健康仅warn。退出非零只针对health block，不能用它抹去convergence block。非Git provider为not_applicable。",
-          "selected_check_ids、providers_invoked、freshness_mode和write_mode保留真实范围。普通-SkillName只选agents/skill_supply；-CheckRuntime才显式选agents,pcconfig/skill_supply,skill_runtime。显式Owner/CheckId范围不会被扩大，排除PCConfig时供应不读其外部证据。"
-        ],
-        "commands": [
-          "# 具名能力安装与使用覆盖\npwsh -NoProfile -File E:\\.agents\\tools\\Invoke-ControlPlaneDoctor.ps1 -SkillName <精确名称> -Json",
-          "# 当前运行确会改变判断时\npwsh -NoProfile -File E:\\.agents\\tools\\Invoke-ControlPlaneDoctor.ps1 -SkillName <精确名称> -CheckRuntime -Json",
-          "# 确需新鲜Git引用\npwsh -NoProfile -File E:\\.agents\\tools\\Invoke-ControlPlaneDoctor.ps1 -Owner git -Freshness Live -Json"
-        ]
-      },
-      {
-        "title": "观察身份、提供方与下一次真实验收",
-        "paragraphs": [
-          "机器事实由Test-PCConfigDrift.ps1 -NoWrite返回pcconfig.drift.v1/v2，个人供应由Test-PersonalSkillSupply.ps1 -RequireInstalled返回，Git由Get-ProjectAdmission.ps1负责；聚合不改原状态。",
-          "SYSTEM维护进程依manifest或ObservedUserProfile检查目标安装，不能用systemprofile空目录判本人没安装。需要时显式PythonPath/ValidatorRoot，记录observer_environment，不持久改HOME/PATH、不冒充用户或安装另一份。缺Python/PyYAML/validator意味着未执行，状态unknown。",
-          "恢复/Google接口检查只有显式选择对应owner/check才做，不执行Hot/Cold复制、还原、邮件、文件或真实OAuth。next_verification指向最小相关真实任务；自然发现需无预期工具提示的新上下文，精确调用只证明该命令。"
-        ],
-        "commands": []
-      }
-    ],
-    readerStatus: "范围检查与供应分层已有回归；实际点名能力时才读取其当前来源。装好了、当前能运行和真实任务已成功会分开说明。",
-  }),
-  skill({
     slug: "tailscale-safe-exposure",
     evidenceBasis: "已发布156387f skills/tailscale-safe-exposure/SKILL.md；本轮范围为当前有效策略、指定peer排他访问、正反对端与业务层证据，以及中断恢复。内容与源身份已核对，安装、运行、新任务和真实端到端证据分别保留，未虚报重测。",
     currentTaskState: "本轮修正网站已有说明的来源遗漏或冲突；未执行该能力的真实业务、策略变更、验证码获取或对端测试。",
@@ -1760,183 +1873,6 @@ export const skills = [
         "commands": []
       }
     ],
-  }),
-  skill({
-    slug: "llm-backend-toolkit",
-    name: "llm-backend-toolkit",
-    title: "额外模型任务工具箱",
-    status: "已安装 / 回归通过",
-    maturity: "A",
-    summary: "当原生子代理之外的某个模型更适合一个范围明确、结果可独立验收的任务时，它从当前清单选择真实后端，保存任务与结果，再交主AI验收。可以不调用模型先诊断，也可以纯只读看进展；命令行取消要等确切执行和显卡释放才算结束。它不是原生子代理，也不自行换模型。",
-    useWhen: [
-      "有封闭任务，并能独立检查答案或产物是否正确",
-      "现有 AI 分工之外，另一个明确模型确实适合这个可验收任务",
-      "允许保存这次任务记录、结果与执行证明"
-    ],
-    avoidWhen: [
-      "普通子代理分工已经足够",
-      "没有能独立判断结果对错的办法",
-      "把明确要求的模型复核偷换成失败后的自动替补",
-      "材料未获准进入拟选的云端路线"
-    ],
-    inputs: ["有明确目标和 verifier 的 request JSON", "隐私是否允许云端"],
-    outputs: ["job id、result 和 receipt","由顶层模型独立验收后的结论","diagnose的实际解释器/包/目录与零写入检查，以及jobs/inspect的有界任务元数据","cancel的准确受理、运行身份和清理结果；cleanup_unconfirmed不当作已停止，partial不变成成功缓存"],
-    flow: ["读取 live backends","选择符合边界的一条 route","submit","按推荐时间回读一次；jobs和inspect是纯只读，显式--result才读取结果；兼容job可能恢复或清理死任务，不能把两者混为一谈。","保留 receipt，由顶层模型验收","llm_backend_toolkit.ps1 backends返回当前可选择ID、模型、上下文、runner、证据与隐私/凭据要求；local-default仅为稳定默认别名，不在Skill写死具体模型","Agent在安装或路线变化后先用preflight核对当前请求与真实AICLI接口；configured允许有界使用但不是Live能力声明。PONG、静态清单和Toolkit执行回执都不替代模型、工具、结果与恢复验收。","异步submit保留job_id、recommended_check_utc与monitor_until_utc，到建议时间只读一次；不连续轮询或超过结束窗口","需要检查入口时用diagnose，不读取任务材料或发网络/模型请求；可比较显式候选入口，但不能自动fallback。","cancel --id使用执行前已绑定的不可变AICLI控制句柄；只向同一已验证入口发送准确run abort，进程树与GPU释放确认后才算停止。","严格JSON或其他验收未通过保留partial，不能去掉多余文字假装模型遵守合同；只有完整ok且输入、模型身份匹配的结果可复用。"],
-    boundaries: ["不是原生 child（子代理）", "不自动 fallback（切换后备路线）", "失败不能冒充 complete（完成）", "registry（登记表）状态会漂移，必须现场读取", "执行权限读runner_capabilities：Codex使用danger-full-access，其他machine runner使用其声明的workspace-write或read-only；权限宽度不扩大本人授权。", "execution.budget.limit_mode只支持watchdog_only或bounded；不使用旧budget.mode、completion_driven或explicit-limits说明。当前预算控制、任务终态和结果验收是不同层。", "可变工作区不填任意cache_key；文件经task.sources传入，云任务需privacy.cloud_allowed=true，凭据仅进调用进程环境"],
-    dependencies: ["E:\\.agents\\config\\llm-backend-registry.json", "对应 Provider runtime"],
-    tests: "9月18日通过规范Skill入口零写入diagnose回读0.9.2实际解释器、注册表和AICLI0.3.17能力及七文件登记；没有网络、材料读取、工作单或模型生成。9月17日Owner408项Toolkit联动回归按原日期保留，配置不升级为全模型Live。",
-    sourcePath: "E:\\.agents\\skills\\llm-backend-toolkit\\SKILL.md",
-    technicalSections: [
-      {
-        "title": "请求形状与本地执行会话",
-        "paragraphs": [
-          "真实backends拥有可选ID、模型、上下文C、runner、证据、隐私和凭据要求；只有省略backend时才用它声明的local-default。不能从历史回执或模型自报重建路由。",
-          "默认context.mode=compact，只有确需原样传递才passthrough；C≥262144时目标262144，否则floor(0.9*C)。质量工作省略reasoning或设reasoning.mode=on，off只用于明确的延时/质量取舍。",
-          "文件用task.sources，输出约束在task.expected_output，不在请求顶层。机器消费者可严格JSON，人用文件任务也可文本再独立验证；partial不能去掉多余文字伪成成功。可变工作区不写任意execution.cache_key，其余需真输入hash。",
-          "云任务正文、源片段和媒体须privacy.cloud_allowed=true，路由要求凭据只进调用进程环境。Local GPU Agent必须运行于拥有GPU runtime的普通登录用户会话，SYSTEM/提权维护进程不代跑；owner_process_unavailable按原broker身份核验处理。"
-        ],
-        "commands": []
-      },
-      {
-        "title": "回执、控制与上级判断",
-        "paragraphs": [
-          "异步submit绑定job_id及真实backend/model/runner，保存recommended_check_utc/monitor_until_utc，到建议时点只读一次，不持续或超期轮询。同步invoke绑定execution_receipt，它们都不是原生child lineage或AICLI验收回执。",
-          "jobs/inspect纯读，兼容job还可能恢复和清理；full-result和force只为明确证据或新运行需要。cancel请求不证明已停止，精确cleanup_unconfirmed未解决前不重试；独立验收由主任务承担。",
-          "高影响、边界不明、涉及授权判断或无法验收的工作留上级；修改规范/不可替代数据前需要隔离root、lineage、receipt和独立verifier。runner权限宽度不扩大本人授权，失败不静默换route，重型GPU仍消费当前LocalGpuBroker。"
-        ],
-        "commands": []
-      }
-    ],
-    readerStatus: "最近保留的9月18日证据是零写入诊断，没有调用模型；既有联动回归仍按原日期。一次真实任务要另核选定后端、实际输出和取消清理。",
-  }),
-  skill({
-    slug: "native-economy-routing",
-    evidenceBasis: "已发布 .agents main e734251 中的规范 Skill 与活动 E171 Codex 适配完整单元；源码身份、安装、真实启动与任务结果分别证明。",
-    evidenceObservedAt: "2026-09-24：本轮核对已发布 Skill 与 E171 合同；旧测试保留原范围，未自行运行模型能力或费用评测。",
-    evidenceSourceCommit: "56524f9f670511c0adcdac94ee71777daa6770b0",
-    sourceState: "当前已发布 Skill 原文与活动 E171 Codex 适配合同同向；Sol High 常规保护判断和 Astra High 重大保护判断由活动保护合同拥有，普通网站维护仍按任务难度与用户限制选型。",
-    sourceBytes: 7792,
-    sourceSha256: "7a826f52163eb018e2b45db1a88720594ab4fc5e6892b98c98a953ef4333d3b6",
-    name: "native-economy-routing",
-    title: "原生子代理分工与模型选择",
-    status: "已安装 / 宿主条件型",
-    maturity: "B",
-    summary: "在真实宿主身份、用户明确许可和实际可用入口下，根据独立工作、质量和任务总成本选择原生分工。型号与effort可以因质量需要高于根或父，业务/资料权限不扩大；第三方根默认不委派，有适用OpenAI许可才沿专用子会话入口。旧会话复用或新建按当前相关性、执行状态与总成本判断。",
-    useWhen: [
-      "任务出现真正可独立完成并验收的部分",
-      "重要更正、上下文变化或阻塞会改变原分工",
-      "子任务结束后需要整合结果或重新分配工作",
-      "当前真实入口与用户许可允许原生并行"
-    ],
-    avoidWhen: [
-      "没有可信的实际模型与宿主身份",
-      "只有普通顺序工具步骤，没有独立工作",
-      "把代理名字当作实际运行身份",
-      "无论什么任务都固定选同一模型"
-    ],
-    inputs: ["UserPromptSubmit（用户请求进入时）或 SubagentStart（子代理启动时）注入的 verified model（已验证模型）、effective effort（实际思考强度）、root/child（根/子代理）、turn hash（本轮指纹）、E release 与 contract SHA", "旧 root 完全没有 Hook（宿主钩子）或注入时，同一任务中用户已经给出的自然语言 model/effort 确认；确认层规范化别名，thread binding（任务绑定）只保存 canonical ID（规范标识）", "当前任务的独立支路、slots（并行槽位）、资源和写入冲突", "PreToolUse（工具创建前复核）在真实 spawn（创建子代理）前取得的身份、家族、effort 与参数"],
-    outputs: [
-      "按实际收益作出的直属子代理数量与工作划分",
-      "真实model/effort、用户许可、业务scope与上下文选择",
-      "原生或专用OpenAI子会话的实际启动身份、结果与未完成责任"
-    ],
-    flow: [
-      "消费真实turn_context提供的model、effective effort、root/child与同E身份；首次或压缩/换代时完整读取当前原生委派决策单元。",
-      "旧root缺宿主身份时才使用同task已明确型号/effort的耐久绑定；宿主verified优先，child不借父身份，user_attested不能成为受保护判断模型证据。",
-      "先比较当前根直接完成与根子协作的未来总投入：交接、执行、往返、验收和返工一起考虑；零个子代理是正常结果，根可亲自研究、实现和验证，不只调度。",
-      "普通自主候选为宿主真实支持且本人许可内的 GPT-6 Luna、Sol、Astra。按子任务剩余难度和组合收益选型号，再独立选择明确effort；三者不固定岗位，不统一High/Max，也不建立跨型号总序。",
-      "有价值的独立审查按错误影响、不确定性与覆盖选择，不默认Astra，也不因根自审就免除；少量必要根子往返正常，持续依赖根代做推理时重新划界、接回或换组合。",
-      "非OpenAI根默认不委派；存在适用的精确OpenAI许可才直接调用openai_child，显式agent_type/model/reasoning_effort/task_name/message且不传fork_turns。普通自主分工不开放厂商域。",
-      "PreToolUse在真实调用前重建身份与E，复核TOCTOU、用户限制、可用组合与参数；Hook只验证、不调度、不产生授权。",
-      "同一子任务准确相关且有接续收益时复用；独立新工作、无关历史或重大更正使旧上下文无助时新建。替换前检查、停止或交接原执行，保留已验成果和残余。",
-      "原生跨model/effort用none或有限fork；同身份且完整历史确有价值才all。桥接续聊使用原thread/session，受限桥接child的进一步分工交原父任务。",
-      "撤销/收窄/到期停止受影响执行并核对；只读已有结果与停止自己的任务不要求重授模型许可，资料权限仍独立。",
-      "root继续方向、集成和不冲突工作；创建、实际启动、产物、取消与完成分别验收，partial不作complete，不空等或周期轮询。"
-    ],
-    boundaries: [
-      "Hook只核验身份、E identity、用户限制、参数与真实支持，不调度、不产生授权。",
-      "业务scope、authorization、sandbox与资料权限只取允许交集；根/父当前model/effort不是经济硬上限，不使用model_effort_combination_v1或跨家族加法推算准入。",
-      "非OpenAI默认不委派，同谱系Flash不是默认例外；普通OpenAI委派需要适用许可并直接调用openai_child，不借spawn、AICLI Profile、backend job或顶层任务绕行。",
-      "同task许可跨续作、压缩、重连与E换代保持原范围，单次许可不扩成第二child或重置使用；已撤销原话不能重放。",
-      "旧root绑定只用于缺宿主身份；child不继承。CODEX_THREAD_ID不得由MCP借用或编造，标题与模型自述不证身份。",
-      "独立OpenAI原生child可按实际名额与净收益继续分工；受限桥接child仍由原父任务统一安排。",
-      "session可恢复不等于应复用；替换要先核执行状态，停止未确认不称已停，失败不机械升级型号。",
-      "task name按用途命名，可附实际model/effort，不作为身份或创建门；跨身份用none或有限fork，openai_child不传fork_turns。",
-      "app version/build、versioned path与optional metadata不作永久准入；缺精确capability只影响对应路线。",
-      "委派身份缺失只关闭委派，不免除私人资料共享状态与实际保护条件。"
-    ],
-    dependencies: [
-      "当前活动Codex适配合同与真实宿主身份",
-      "原生spawn与真实child identity/名额，或有用户许可的openai_child入口",
-      "创建前参数与身份复核",
-      "仅旧root需要时的耐久用户选择绑定"
-    ],
-    tests: "聚焦 Gate 与 Hook 回归覆盖判断前身份注入、旧 root 对话绑定、PreToolUse 创建前复核、无 Stop Hook 依赖和更新连续性；真实可用性仍由每个任务的宿主身份、E identity、授权与 slots 决定。",
-    sourcePath: "E:\\.agents\\skills\\native-economy-routing\\SKILL.md",
-    currentTaskState: "本轮核对已发布 Skill 与相关活动合同并修正网页说明；未处理私人业务材料或运行真实能力任务。",
-    freshTaskState: "每个新任务必须重新取得自己的宿主身份；只有完全无 Hook 的旧 root 可建立耐久绑定，child 不继承",
-    endToEndState: "判断前注入与创建前复核是两层独立证据；创建成功只证明该次宿主路径，每个任务仍需独立验证模型、effort、E identity 与结果",
-    readerStatus: "现行活动规则按任务需要决定是否分工，零个子代理也正常；受保护判断分档只管对应判断。一次创建受理不能证明子代理已按预期模型启动或完成结果。",
-    technicalSections: [
-      {
-        "title": "先保存真实许可，而不是让参数创造许可",
-        "paragraphs": [
-          "原话先排除否定、引用、示例和撤销。派一个Luna High已许可该一次任务与精确High；最高High才是ceiling；本对话允许才是conversation；未限制且已允许自主选档才auto。普通自主分工不能替第三方根开放OpenAI厂商域。",
-          "SetRouting用实际Model/Effort/EffortMode/RoutingScope/TaskName/UserQuote，conversation省略TaskName；多型号用OpenAIModelsJson且不与单Model/Effort混用。厂商级*只适用本人明确开放整个候选域的原话。",
-          "ExpiresAt沿本人原截止和时区；重新授权同一child可用ChildThreadId，不能另建替身或把单次许可变成第二child。首次定位真实用户消息，省略UserMessageId与ExpectedBindingSha256，Hook human_prompt_id不是transcript消息ID。",
-          "已有许可直接使用，同许可重试unchanged；确有变更/撤销才InspectRouting取当前hash，以ExpectedBindingSha256更新或RemoveRouting。更新替换集合而非隐式并集，保留旧来源和撤销状态；旧v1按原话范围迁移，不让本人重复许可。"
-        ],
-        "commands": [
-          "# 记录本人精确单次许可的示例\n& E:\\.agents\\tools\\Invoke-CodexNativeEconomyThreadBinding.ps1 -Mode SetRouting -Model gpt-6-luna -Effort high -EffortMode exact -RoutingScope task -TaskName <本次真实任务名> -UserQuote <本人真实原话> -Json",
-          "# 变更前回读许可\n& E:\\.agents\\tools\\Invoke-CodexNativeEconomyThreadBinding.ps1 -Mode InspectRouting -Json"
-        ]
-      },
-      {
-        "title": "原父子会话的往返与当前活动合同",
-        "paragraphs": [
-          "第三方根普通OpenAI委派直接调用openai_child，显式agent_type/model/reasoning_effort/task_name/message，不传fork_turns；spawn_agent同名角色不等价。续作传真实原thread_id，父子消息不是本人新授权。",
-          "子向父使用openai_parent，只回复真实待答问题才传对应reply_to，不能用最终消息ID冒充问题。查看/等待/停止用openai_child_control。一次回答完成不要求销毁仍有接续价值的会话。",
-          "入口参数错误可原范围修复；创建结果不明先核原请求，恢复或替换先核执行、停止或交接，不以失败自动升级、换厂商、AICLI/backend绕行或新建顶层任务。停止未确认就保留未知，已有结果只读与停止本任务不要求重授模型执行许可。",
-          "模型/effort完整选型、11条原生规则及受保护判断窄例外，以当前Rules的Codex适配完整专题为准。Skill只发现与接续这份合同，页面保留来源版本与观察，不维护第二个模型名单。"
-        ],
-        "commands": []
-      },
-      {
-        "title": "受保护判断与普通分工分开",
-        "paragraphs": [
-          "E171：常规专用判断为gpt6_sol_high_protected_judgment、gpt-6-sol/high；升级为gpt6_astra_high_protected_judgment、gpt-6-astra/high。真实合格根可自判，旧未分档qualified仍为Astra-only；选择器不证明principal或effect授权。普通网站维护的模型选择按当前任务需要，不套用受保护判断档位。",
-          "非OpenAI根的专用openai_child桥接同步返回持久判断与原生证据定位，仅传agent_type/model/reasoning_effort/task_name/message，不带wait_ms/thread_id/reply_to/fork_turns或null额外项；专用子代理只判断、不实施或再委派。旧父进程未加载新版时按真实缺口处理，不借普通角色绕过。",
-          "这两个专项入口不是普通OpenAI委派许可；普通任务继续按完整经济路由与真实用户许可选型号、档位和会话。常规Sol确实不可用时可用同样合格的Astra，升级不能反向降档。"
-        ],
-        "commands": []
-      }
-    ],
-  }),
-  skill({
-    slug: "token-budget-advisor",
-    name: "token-budget-advisor",
-    title: "Codex 配额与 GPT-5.6 Sol 文本计量",
-    status: "已安装 / 现行官方计数路线按任务验收",
-    maturity: "A",
-    summary: "仅在用户明确询问当前 Codex配额或 reset（重置）状态，或要求按 GPT-5.6 Sol 的权威口径计算、比较可见文本的模型计量单位（Token）时触发。配额走只读账号用量入口；Token 优先使用完成响应 usage 或官方 input_tokens，不能取得时返回 Unknown。",
-    useWhen: [
-      "用户明确询问当前 Codex 配额或何时重置",
-      "用户明确要求按 GPT-5.6 Sol 统计可见文本 Token（模型计数单位）",
-      "比较两个 Prompt（提示词）或文件的 Token 数",
-      "接近明确 Token 边界，需要官方计数"
-    ],
-    avoidWhen: ["仅仅因为任务长或可能压缩就自动触发", "猜测隐藏的系统说明、工具内容或模型内部推理", "把估算当成正式账单", "为了报告数字而回显用户正文"],
-    inputs: ["明确的 quota/reset 问题，或一段可见文本/明确文件", "GPT-5.6 Sol 计数口径", "可选的明确 Token 数值预算"],
-    outputs: ["只读配额已用/剩余百分比、窗口、重置时间、是否达限、方案与可用重置次数；不兑换重置", "GPT-5.6 Sol官方Token计数，区分输入、缓存输入、输出、推理输出和总数等实际存在字段", "计数范围、usage/input_tokens来源、排除项，以及safely_below、clearly_above或unknown的判断"],
-    flow: ["配额问题读取只读 account/rateLimits 状态", "Token 问题优先使用响应 usage 或官方 input_tokens", "官方计数不可用时返回 Unknown", "只报告数字、方法、排除项和边界判断", "配额用read_codex_quota.py读取登录账号的account/rateLimits/read，不能转算Token或兑换reset", "estimate_tokens.py --file只计UTF-8解码正文，不含文件名、附件包装、隐藏上下文或工具；完整请求形状需--request-json", "PDF、Word、图片、音频和归档先取得实际模型可见内容，不统计二进制字节；不存在权威Token到汉字的反向固定比率"],
-    boundaries: ["不猜隐藏上下文", "不回显正文或账号标识", "不计算 API 价格或美元成本", "不把字符、字节或其他模型计数冒充 GPT-5.6 Sol"],
-    dependencies: [
-      "Codex 只读 usage 状态入口或官方 input_tokens 计数"
-    ],
-    tests: "历史Fresh 0.150.1 root曾执行旧o200k_base计数，exact=3、预算10返回safely_below；它不证明现行GPT-5.6 Sol官方计数路线。当前Skill明确使用响应usage或POST /responses/input_tokens，本批未执行配额查询或官方计数请求。",
-    sourcePath: "E:\\.agents\\skills\\token-budget-advisor\\SKILL.md",
-    freshTaskState: "旧root的发现与旧计数实现属于历史；现行官方Sol计数的新任务结果未在本批重验",
-    endToEndState: "当前账号配额与官方Sol计数只在本人明确请求时现场执行；旧离线计数不作为现行E2E",
   })
 ];
 

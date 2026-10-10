@@ -30,14 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E230",
-   "file": ".publish/private/rule-sources/docs/contracts/agents.privacy-data.md",
+   "release": "E251",
+   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
+   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
-   "commit_time": "2026-10-09T09:10:42+08:00",
-   "activated_at": "2026-10-09T09:12:52.097645+08:00",
-   "excerpt_contract": "e230-original-ranges-v1",
-   "omitted_count": 3
+   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：一只手把验证卡轻轻贴到小木柜的绿色挂锁上，挂锁“咔”地弹开，旁边的小沙漏翻转、细沙开始往下流；中间五级石台阶从 L1 到 L5 依次微微亮一下，L4 台阶上的小保险箱始终关着；下面 G、H 两块硬盘之间一道细绿光从左流到右，H 盘旁小木箱上的日历牌翻过一页；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -292,8 +291,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "3e64e1ffd1304366f44afe95353b0eb16b897e7001f30acc89d50da7d946e502",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "507378f50815f5e6a5ec27e098965c76a839e9c2a3995dbe485eb27022d548f4",
+  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
  }
 }
 ---
@@ -2710,14 +2709,14 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "from": 1,
-   "to": 15,
-   "release": "E230",
+   "release": "E251",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "omit": [
-    "omit:05e01a30c649fea1aafce6cbadd92d19b3c1af75eee4c94060b46463dbe13d66",
-    "omit:0a3c72763924e0632640fc417059456566266425c4113edccac0a164b566651e"
-   ]
+   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "from": null,
+   "to": "- **入口。**",
+   "start": 0,
+   "end": 1622,
+   "approved_omissions": []
   },
   "title": "原文（一）：开头和个人资料的锁和解锁",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 个人资料与数据处理”到“怎么解锁”那条结束；右卡放“时长”“取消只结束这一次”“锁着的时候”“各管各的权限”四条。",
@@ -2742,9 +2741,9 @@
   "chain": "original",
   "reuse": "",
   "source_excerpt_id": "rule-privacy-data/rule-privacy-data-07",
-  "display_replace": {
-   "一字不改": "公开副本"
-  }
+  "source_logical_id": "privacy_data_contract",
+  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_rule_part": "rule-privacy-data/rule-privacy-data-07"
  },
  "layout": {
   "h": {
@@ -2869,7 +2868,7 @@
 }
 ```
 
-原文 · E230 版，一字不改
+原文 · E251 版，一字不改
 
 # 个人资料与数据处理
 
@@ -2880,7 +2879,7 @@ owner: `E:\.agents`
 ## 个人资料的锁和解锁
 
 - **只有一份状态。** 本人资料只有一份解锁状态和截止时间，由 PasswordCenter 的 SecretBroker 管理；本机、图形界面、所有 AI 和已认证的电脑 MCP 共用它。每条真实的新消息开始时，从 Hook（Codex、Claude）或 `ComputerContext`（电脑 MCP）读当前状态；状态缺失、过期或不明时，不取用私人资料，需要资料时按下面的解锁顺序办理。MCP 连上了、文件能读或磁盘加密了，都不等于资料已解锁。
-- **什么时候需要解锁。** 问的是本人自己的情况（身体、心理、生活、学习等），就算需要；回答要用到本人的偏好、履历、通信、健康、财务、私人关系或以前的个人经历时也需要。拿不准按需要处理。不依赖本人情况的通用讲解、代码、天气和项目实施、PCConfig 配置、性能排查、规则维护照常做，不需要。不先读私人库、索引或摘要来判断要不要解锁，也不按关键词自动弹验证窗口；普通技术事实不因为属于本人就升级保护。
+- **什么时候需要解锁。** 问的是本人自己的情况（身体、心理、生活、学习求职、感情等），就算需要；回答要用到本人的偏好、履历、通信、健康、财务、私人关系或以前的个人经历时也需要。拿不准按需要处理。不依赖本人情况的通用讲解、代码、天气和项目实施、PCConfig 配置、性能排查、规则维护照常做，不需要。不先读私人库、索引或摘要来判断要不要解锁，也不按关键词自动弹验证窗口；普通技术事实不因为属于本人就升级保护。
 - **怎么解锁。** 判断资料需求和发起解锁只由根会话做；根会话在派活前判断，需要就先解锁再派。解锁是第一步，先于检索、派子代理和作答：需要资料就直接走现有解锁入口，请本人验证一次（本机四选一，手机用现有验证器），不先派别的模型批准，也不验证两次。验证真正通过、资料能读之后，再查资料、派活并完整处理原来的问题；锁着时不给降级回答。
 - **时长。** 当前默认时长读密码中心的 `duration_policy.default_minutes`，不把程序出厂的 8 小时当成当前设置；本人可填 0.5～72 小时，可以有小数。改这一次不改默认；改默认不影响已开的这一次。电脑重启、到期或本人明确锁定，这一次就结束；重开窗口、新消息、子代理、换模型和续作都不延长它。
 - **取消只结束这一次。** 本人取消、拒绝或超时，只结束这一次验证：锁着的还锁着，已开的照样有效；不连带锁别的，也不自动重试或换个入口重来。本人之后明确再要，才重新办。
@@ -2896,15 +2895,15 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.privacy-data.md",
-   "from": 16,
-   "to": 23,
-   "release": "E230",
+   "release": "E251",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "omit": [
-    "omit:7b299e1905d5c9e3c0a0d6c016c0ec9175296e591675ef0d5c7e849c7f164aad"
-   ]
+   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "from": "- **入口。**",
+   "to": "## 公开个人数据分级表",
+   "start": 1622,
+   "end": 3202,
+   "approved_omissions": []
   },
   "title": "原文（二）：入口、可信位置和原样保存",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“入口”那一条和“## 可信位置和原样保存”下的“可信位置”一条；右卡放“原样保存”“本机安全就这几样”“秘密放哪里”三条。",
@@ -2915,7 +2914,10 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08"
+  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-08",
+  "source_logical_id": "privacy_data_contract",
+  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_rule_part": "rule-privacy-data/rule-privacy-data-08"
  },
  "layout": {
   "h": {
@@ -3016,7 +3018,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3025,7 +3027,7 @@ owner: `E:\.agents`
 - **可信位置。** 本机、工作区、BitLocker 保护的本地硬盘和 U 盘，以及本人自己账号下默认私有的空间（例如 Google Drive、Notion、私有 GitHub、Dropbox、OneDrive）都是可信位置，不因为联网或在云上就降级。账号归属不明、共享范围不明或可见性有冲突时，按“不明”处理，不靠推定越过证据；确定公开的目标另按公开分级办。
 - **原样保存**（约法 L19）：在可信位置里读取、编辑、复制、备份、恢复或输出时，`.env`、令牌、密码、私钥、OAuth 文件按任务需要原样保留，不遮盖、删除、截断或换成占位符。手机号这类私人联系方式在本机和私有仓库里也照原样记，不打码；只有要公开时才按公开分级判断。可信不等于可以写入，写入授权另看。
 - **本机安全就这几样**（约法 L14）：BitLocker、开机和 Windows 登录密码、密码中心（SecretBroker）和本人明确选用的加密技能。本机当前用户、文件、进程、软件和私人账号空间默认可信；本人的远程访问工具（如 ToDesk、Sunshine/Moonlight、Windows 远程桌面）和跨设备同步工具（如 KDE Connect、小米妙享、手机连接）连着的设备也可信，经它们查看、串流或同步密码是正常用法。不为想象中的本地攻击者加遮盖、防截屏、防同步、定时清理、身份层、审计链或安全流程；误删、损坏、失败和回滚按正确性和可恢复性处理，“安全”不是加流程或逃避验收的理由。本人明确要求的具体安全任务，或外部平台对这次动作真实提出的条件除外。
-- **秘密放哪里。** 密码、令牌、密钥和 SecretRef 只放在密码中心、SecretBroker 或加密技能里，不写进规则、聊天或普通配置。私密内容和凭据不上网搜索，只用脱敏的关键词。`local-secret-broker` 管 SecretRef；Vault（VAULT03、vault-tool）走 `vault-workflow`，普通文件加解密走 `authorization-file-broker`。BitLocker 恢复密钥的专用本机全量查看，是批量显示秘密明文的唯一例外；结果不进模型、聊天、标准输出、JSON、剪贴板或文件。
+- **秘密放哪里。** 密码、令牌、密钥和 SecretRef 只放在密码中心、SecretBroker 或加密技能里，不写进规则、聊天或普通配置。私密内容和凭据不上网搜索，只用脱敏的关键词。`local-secret-broker` 管 SecretRef；`wlyaaaaa/Key` 仓库和 Vault（VAULT03、vault-tool）走 `vault-workflow`，普通文件加解密走 `authorization-file-broker`。BitLocker 恢复密钥的专用本机全量查看，是批量显示秘密明文的唯一例外；结果不进模型、聊天、标准输出、JSON、剪贴板或文件。
 
 ::screen{#rule-privacy-data-09 section="original"}
 
@@ -3036,13 +3038,15 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.privacy-data.md",
-   "from": 25,
-   "to": 37,
-   "release": "E230",
+   "release": "E251",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "omit": []
+   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "from": "## 公开个人数据分级表",
+   "to": "## 私人仓库收口",
+   "start": 3202,
+   "end": 4397,
+   "approved_omissions": []
   },
   "title": "原文（三）：公开个人数据分级表",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。这屏不分两卡：上面一张整宽卡片放“## 公开个人数据分级表”和它下面的那段话；中间是原文表格，画成三列表格（表头“等级 / 含义和典型内容 / 公开时默认”，“|---|”那一行是 Markdown 的表格分隔线，画成表头下的一条细线、不画成字），每行最左格等级字加粗；下面一张整宽卡片放“`below_l3_publication_default`”开头那一段。",
@@ -3058,7 +3062,10 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09"
+  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-09",
+  "source_logical_id": "privacy_data_contract",
+  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_rule_part": "rule-privacy-data/rule-privacy-data-09"
  },
  "layout": {
   "h": {
@@ -3194,7 +3201,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3219,13 +3226,15 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.privacy-data.md",
-   "from": 39,
-   "to": 47,
-   "release": "E230",
+   "release": "E251",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
-   "omit": []
+   "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+   "from": "## 私人仓库收口",
+   "to": null,
+   "start": 4397,
+   "end": 5049,
+   "approved_omissions": []
   },
   "title": "原文（四）：私人仓库收口、备份跟着原件走",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排（另有说明的照说明）。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的是列表，画小绿圆点；**…** 是粗体，星号不画；`…` 里的路径、命令和英文标识用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## 私人仓库收口”和它下面两段；右卡放“## 备份跟着原件走”和它下面那一大段。字少，行距和卡片留白放宽，卡片下方画一条水彩叶子装饰带。",
@@ -3236,7 +3245,10 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10"
+  "source_excerpt_id": "rule-privacy-data/rule-privacy-data-10",
+  "source_logical_id": "privacy_data_contract",
+  "source_public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+  "source_rule_part": "rule-privacy-data/rule-privacy-data-10"
  },
  "layout": {
   "h": {
@@ -3371,7 +3383,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 ## 私人仓库收口
 

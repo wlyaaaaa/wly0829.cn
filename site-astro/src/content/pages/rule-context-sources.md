@@ -30,14 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E230",
-   "file": ".publish/private/rule-sources/docs/contracts/agents.context-sources.md",
+   "release": "E251",
+   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
+   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "file": "sources/rules/docs/contracts/agents.context-sources.md",
    "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
-   "commit_time": "2026-10-09T09:10:42+08:00",
-   "activated_at": "2026-10-09T09:12:52.097645+08:00",
-   "excerpt_contract": "e230-original-ranges-v1",
-   "omitted_count": 4
+   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -411,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "d268bb33bae46c1660884aa067c33b89bb7e3dd1d9628442a0a2d2d427414971",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "5d3fa770fd69eae8d7a647613e3ad64c09520072150acf50172f4dd8b35d9192",
+  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
  }
 }
 ---
@@ -2412,16 +2411,14 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "from": 1,
-   "to": 38,
-   "release": "E230",
+   "release": "E251",
    "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "omit": [
-    "omit:6f2251e6acf9469f03ac8d382b5e0181e40442afe4c8e545be01a5f5d9ef9583",
-    "omit:35ec6d15edf422a2dbc950b96dcf4a6ee5bb57e2dd2003629cb4ecd2dcf6e4cf",
-    "omit:80e21e5fcf5db7b7d6304f541ad48a02e17836313688ef88deee01450d87805e",
-    "omit:8ee5515bfd37fef20c1e9eaa61f895b9552a069d9aeb91f47e67d171f7cdb9f2"
-   ]
+   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "from": null,
+   "to": "## 三档维护",
+   "start": 0,
+   "end": 1597,
+   "approved_omissions": []
   },
   "title": "原文（一）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”“###”开头的行是节标题，画成深绿粗体（### 比 ## 小一号）、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；“|”开头的几行是表格，画成细线表格（第一行是表头，浅绿底；“|---|”那一行只是分隔，不画成字），竖线不画成字；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 事实来源与任务上下文”到“## 冻结的项目”下面第一段（“冻结的项目（约法 L24）……”）结束；右卡放“冻结名单只维护在这里……”、冻结名单表格、表下那行说明和“冻结管的是 AI 维护范围……”一段。表下那行“（表中另有 4 行是本人定了不在网站上出现的旧项目，没有放上来。）”不是原文，用小一号的浅灰斜体，和原文区分开。",
@@ -2433,9 +2430,9 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "chain": "",
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
-  "display_replace": {
-   "一字不改": "公开副本"
-  }
+  "source_logical_id": "context_sources_contract",
+  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
   "h": {
@@ -2554,7 +2551,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E230 版，一字不改
+原文 · E251 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2581,11 +2578,15 @@ owner: `E:\.agents`
 
 | 项目 | 仓库 |
 |---|---|
+| PersonalOS（含退役留档） | `PersonalOS-Retired` |
+| 个人知识库 | `PersonalKnowledgeBase` |
 | Codex 远程 | `codex-local-remote` |
 | CACB 模型评测（整个项目） | `codex-agent-model-benchmark` |
 | 微信历史桥 WeFlowBridge | `wechat-history-ai-bridge` |
 | OpenClaw 网关 | `OpenClawGateway` |
 | OpenClaw 备份 | `openclaw-backup` |
+| 游戏求解 | `md-triple-tactics-talent-solver` |
+| 对齐数据集 | `human-alignment-dataset-001` |
 | Gemini 记忆备份（退役留档） | `gemini-memory` |
 | Claude 记忆备份（退役留档） | `claude-memory` |
 
@@ -2600,13 +2601,15 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.context-sources.md",
-   "from": 40,
-   "to": 78,
-   "release": "E230",
+   "release": "E251",
    "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "omit": []
+   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "from": "## 三档维护",
+   "to": "### 一样东西只存一处",
+   "start": 1597,
+   "end": 4062,
+   "approved_omissions": []
   },
   "title": "原文（二）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”“###”开头的行是节标题，画成深绿粗体（### 比 ## 小一号）、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；“|”开头的几行是表格，画成细线表格（第一行是表头，浅绿底；“|---|”那一行只是分隔，不画成字），竖线不画成字；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## 三档维护”一整节（含档位表格；表格“偶用”那一格字多，格子里自动换行）；右卡放“## 长任务接续”和它下面的三段。",
@@ -2617,7 +2620,10 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "source_excerpt_id": "rule-context-sources/rule-context-sources-09"
+  "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
+  "source_logical_id": "context_sources_contract",
+  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
   "h": {
@@ -2722,7 +2728,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 ## 三档维护
 
@@ -2754,7 +2760,7 @@ README 只给 AI 和维护使用，简短列出现行入口，不再另写一份
 
 Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务做增量复核；正常工作不等它。根会话持续维护并在压缩前更新项目已有的短任务状态；没有现成入口时用本任务 `work/task-state.md`，保留当前目标、要求出处、已完成与未结事项、下一步和证据位置，不再复制整段历史。当前用 Sol ultra，资料定位优先脚本；不让 Luna 的初筛成为跳过最终复核的唯一依据。（出处：决定文档“压缩后增量复核与汇报提问”）
 
-纯技术工作不依赖资料解锁（约法 L18）。根会话按每条真实新消息判断范围；能确认整个现有会话均为技术内容时，随首个正常工具调用用[技术范围登记](../operations/context-hooks.md#锁定时的技术复核)记录当前原话边界及确为技术资料的证据位置，压缩前确认登记仍覆盖最新消息。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
+纯技术工作不依赖资料解锁（约法 L18）。根会话按每条真实新消息判断范围；能确认整个现有会话均为技术内容时，随首个正常工具调用用技术范围登记（`../operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，压缩前确认登记仍覆盖最新消息。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
 
 - 每个新压缩边界只排一次，同根会话最多一批在跑；普通新消息不新开复核，子代理的压缩不递归派发。未覆盖部分保留，不把重复恢复当成新一批。
 - 对照本批全部新增用户原话，查交接或待办漏记的小要求，并对照仍有效的旧未结要求；检查事实出处、实际完成证据、擅改决定及压缩接续。按[原话分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)核对，分类分歧只把禁令边界上的作为提醒交回，不阻塞工作；审查意见不产生用户决定。
@@ -2762,7 +2768,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 - 复核只读，短结果在原根会话下一可投递的工具或消息边界送回，详细证据按需读取。根先对照当前版本，再处理仍存在的问题；已经修好的不重复打扰。普通提醒不阻塞主任务，影响当前决定或交付的实质问题由根核实处理，重大动作仍按原把关规则。
 - 每批有效工作预算当前为 8 分钟，正常短回报目标 500 字；这是可调的 AI 实现参数，不是牺牲覆盖或删除关键问题的理由。排队、重试和收尾宽限单列；不自动无限延时。中断在原批次接续，不反复新建替身。
 
-程序入口、暂停开关和两宿主实际支持的事件见[上下文 Hook 运维](../operations/context-hooks.md)。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。
+程序入口、暂停开关和两宿主实际支持的事件见上下文 Hook 运维（`../operations/context-hooks.md`）。纯模型主动换窗与原生压缩分别验收，不能从一种事件的成功推定另一种也已接通。
 
 ::screen{#rule-context-sources-10 section="original"}
 
@@ -2773,13 +2779,15 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "section": "original",
   "shape": "source_text",
   "source": {
-   "continued": true,
    "file": "docs/contracts/agents.context-sources.md",
-   "from": 80,
-   "to": 102,
-   "release": "E230",
+   "release": "E251",
    "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "omit": []
+   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "from": "### 一样东西只存一处",
+   "to": null,
+   "start": 4062,
+   "end": 6231,
+   "approved_omissions": []
   },
   "title": "原文（三）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”“###”开头的行是节标题，画成深绿粗体（### 比 ## 小一号）、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；“|”开头的几行是表格，画成细线表格（第一行是表头，浅绿底；“|---|”那一行只是分隔，不画成字），竖线不画成字；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“### 一样东西只存一处”一整节和“### 共享经验的落点”下面的前两段；右卡放“内容／写到哪里”表格和最后“每周的三基座治理任务……”一段。",
@@ -2807,7 +2815,10 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "screenshots": [],
   "chain": "",
   "reuse": "",
-  "source_excerpt_id": "rule-context-sources/rule-context-sources-10"
+  "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
+  "source_logical_id": "context_sources_contract",
+  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
   "h": {
@@ -2862,7 +2873,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E230 版 · 续
+原文 · E251 版 · 续
 
 ### 一样东西只存一处
 

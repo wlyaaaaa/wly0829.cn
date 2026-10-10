@@ -22,7 +22,8 @@ async () => {
   const report = (kind, el, evidence) => issues.push({kind, element: selector(el), evidence: {text: text(el), ...evidence}});
   const union = rects => ({left: Math.min(...rects.map(r => r.left)), right: Math.max(...rects.map(r => r.right)), top: Math.min(...rects.map(r => r.top)), bottom: Math.max(...rects.map(r => r.bottom))});
   const content = el => {
-    const r = el.getBoundingClientRect(), s = css(el), inset = side => (parseFloat(s['border' + side + 'Width']) || 0) + (parseFloat(s['padding' + side]) || 0);
+    const r = el.getBoundingClientRect(), s = css(el), sx = el.offsetWidth ? r.width / el.offsetWidth : 1, sy = el.offsetHeight ? r.height / el.offsetHeight : 1;
+    const inset = side => ((parseFloat(s['border' + side + 'Width']) || 0) + (parseFloat(s['padding' + side]) || 0)) * (side === 'Left' || side === 'Right' ? sx : sy);
     return {left: r.left + inset('Left'), right: r.right - inset('Right'), top: r.top + inset('Top'), bottom: r.bottom - inset('Bottom')};
   };
   const blocked = img => {
@@ -106,6 +107,7 @@ async () => {
   }
   const grids = all.filter(el => visible(el) && /^(inline-)?grid$/.test(css(el).display) && (/card|grants|stats|steps|(^|[-\s])grid($|\s)/.test(el.className) || [...el.children].filter(visible).every(child => child.matches('article,.card,[class*="-card"]'))));
   for (const grid of grids) {
+    if (grid.matches('.dd-annotation-grid') && grid.querySelector(':scope > .dd-media') && grid.querySelector(':scope > .dd-callout')) continue;
     const children = [...grid.children].filter(visible).map(el => ({el, r: el.getBoundingClientRect()})), rows = [];
     if (children.length < 3) continue;
     for (const item of children.sort((a, b) => a.r.top - b.r.top || a.r.left - b.r.left)) {
@@ -120,7 +122,7 @@ async () => {
   }
   const images = all.filter(el => el.matches('img,svg') && visible(el));
   for (const el of images) {
-    const src = el.currentSrc || el.getAttribute('src') || '', marker = [src, el.getAttribute('alt'), el.getAttribute('class')].join(' ');
+    const src = el.currentSrc || el.getAttribute('src') || '', marker = [src, el.getAttribute('class')].join(' ');
     if (/placeholder|placehold\.(co|it)|dummyimage|占位|待替换|missing[-_](image|asset)/i.test(marker)) report('image-placeholder', el, {src: src.slice(0, 180)});
     if (el.localName === 'img') {
       if (blocked(el) !== undefined) report(Number(blocked(el)) >= 400 ? 'image-load-failed' : 'image-not-loaded-review', el, {src: src.slice(0, 180), policy: 'blocked', headStatus: blocked(el)});
@@ -132,6 +134,8 @@ async () => {
         catch (error) { report('image-pixels-review', el, {src: src.slice(0, 180), reason: error.name}); }
       }
     } else {
+      const sequence = el.closest('.c-sequence');
+      if (sequence?.dataset.sourceConnectors === 'true' && sequence.dataset.connector === 'none' && sequence.dataset.sequenceEdgeCount === '0' && sequence.querySelector('.sequence-source-connector')) continue;
       const shapes = [...el.querySelectorAll('path,rect,circle,ellipse,line,polyline,polygon,text,image,use,foreignObject')].filter(shape => !shape.closest('defs,clipPath,mask,symbol') && shown(shape));
       try { if (!shapes.some(shape => { const b = shape.getBBox(); return b.width + b.height > 0 && (css(shape).fill !== 'none' || css(shape).stroke !== 'none' || shape.matches('image,use,foreignObject')); })) report('svg-empty', el, {drawableElements: shapes.length}); }
       catch (error) { report('svg-review', el, {reason: error.name}); }

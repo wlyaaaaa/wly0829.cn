@@ -112,6 +112,9 @@ jobs:
           python3 -m unittest discover -s tests -p 'test_oss_release.py'
           python3 -c "import shutil; shutil.copytree('site-release', 'dist')"
           python3 scripts/hybrid-release.py verify --output dist --content-report hybrid-content-report.json --public-repos-from-github
+          if python3 -c "import json; from pathlib import Path; raise SystemExit(0 if json.loads(Path('dist/release-manifest.json').read_text('utf8')).get('astro') else 1)"; then
+            python3 scripts/prepare-astro-release.py verify --release dist --offline
+          fi
 
       - name: Upload failed hybrid content report
         if: failure() && steps.source.outputs.site == 'hybrid'
@@ -159,6 +162,8 @@ jobs:
               manifest = json.load(stream)
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf8') as stream:
               stream.write('\nStatic release: `' + manifest['release_id'] + '`\n')
+              if manifest.get('publication_changes'):
+                  stream.write('\nComplete publication changes:\n```json\n' + json.dumps(manifest['publication_changes'], ensure_ascii=False, indent=2) + '\n```\n')
               stream.write('\nWorkflow source commit: `' + os.environ['SOURCE_COMMIT'] + '`\n')
               if os.environ.get('RESTORE_REF'):
                   stream.write('\nExact bytes restored from: `' + os.environ['RESTORE_REF'] + '`. This dispatch does not change main.\n')

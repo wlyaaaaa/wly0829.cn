@@ -17,3 +17,8 @@ src/content/rendered/
 src/chrome/retained/
 public/cockpit/
 public/_home-cockpit/home-firstpaint-*.js
+public/rule-sources/
+# 由版本化依赖表恢复的各页原尺寸 hero 素材
+public/projects/
+public/rules/
+public/skills/

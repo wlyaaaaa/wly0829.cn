@@ -26,26 +26,11 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E230",
-   "files": [
-    ".publish/private/rule-sources/AGENTS.md",
-    ".publish/private/rule-sources/rules-catalog.json",
-    "sources/pages/charter/page.json",
-    "sources/pages/rule-authorization/page.json",
-    "sources/pages/rule-capabilities-runtime/page.json",
-    "sources/pages/rule-claude-adapter/page.json",
-    "sources/pages/rule-codex-adapter/page.json",
-    "sources/pages/rule-context-sources/page.json",
-    "sources/pages/rule-engineering-delivery/page.json",
-    "sources/pages/rule-execution-coordination/page.json",
-    "sources/pages/rule-privacy-data/page.json",
-    "sources/pages/rule-protected-actions/page.json",
-    "sources/pages/rule-rule-release/page.json"
-   ],
-   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
-   "commit_time": "2026-10-09T09:10:42+08:00",
-   "activated_at": "2026-10-09T09:12:52.097645+08:00",
-   "excerpt_contract": "e230-original-ranges-v1"
+   "release": "E251",
+   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
+   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "file": "sources/rules/release.json"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "registry": {
@@ -262,8 +247,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "2326303ad9d1835784cb5f210791f1bbc837a31f5ed9f151a03d4ab6c6b40d1f",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "dfd786a4dd13beb89ef18c3175f6ec3d90c7488ff16fea5f5835df83a377297f",
+  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
  }
 }
 ---
@@ -551,7 +536,7 @@
 
 〔约法全文〕
 
-当前生效版本 E230（北京时间 10 月 9 日 09:12 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
+当前生效版本 E251（北京时间 10 月 10 日 01:51 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
 
 ::screen{#rules-home-03 section="top"}
 

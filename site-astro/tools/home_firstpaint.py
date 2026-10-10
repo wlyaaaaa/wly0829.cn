@@ -3,6 +3,28 @@ import hashlib
 import re
 from pathlib import Path
 
+
+def install_frozen_engine(html, source, public, manifest):
+    """从版本化入口包部署已选首帧脚本，不从本机 public 偶然存在的脚本兜底。"""
+    matches = set(re.findall(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', html))
+    if len(matches) != 1:
+        raise ValueError('冻结首页的首帧脚本入口不唯一')
+    relative = matches.pop()
+    entry = manifest.get('bundled', {}).get(relative)
+    if not entry or manifest.get('files', {}).get(relative) != {key: entry[key] for key in ('sha256', 'bytes')}:
+        raise ValueError('冻结首页的首帧脚本没有依赖绑定')
+    raw = (Path(source) / entry['source']).read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if len(raw) != entry['bytes'] or digest != entry['sha256'] or Path(relative).name != 'home-firstpaint-' + digest[:20] + '.js':
+        raise ValueError('冻结首页的首帧脚本字节不同')
+    target = Path(public) / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.exists() or target.read_bytes() != raw:
+        target.write_bytes(raw)
+    if target.read_bytes() != raw:
+        raise ValueError('冻结首页的首帧脚本复制核验失败')
+    return relative
+
 OPENING = r"""(() => {
   const root=document.documentElement, key='site-home-firstpaint-v1';
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -129,7 +151,9 @@ def adjust_home(html, source, public):
     name = 'home-firstpaint-' + hashlib.sha256(engine.encode()).hexdigest()[:20] + '.js'
     target = public / '_home-cockpit' / name
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(engine, encoding='utf-8', newline='')
+    target.write_bytes(engine.encode('utf-8'))
+    if hashlib.sha256(target.read_bytes()).hexdigest()[:20] != name.removeprefix('home-firstpaint-').removesuffix('.js'):
+        raise ValueError('首页首帧脚本写入后指纹不同')
     html = html.replace('/' + match[1], '/_home-cockpit/' + name)
     # 只提前下载；执行和挂载仍由 SiteAlbum 按原顺序负责。
     app = re.search(r'data-src="(/_shared/home-app-[a-f0-9]+\.js)"', html)

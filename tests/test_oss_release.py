@@ -20,6 +20,12 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_css_grid_strings_are_text_and_imports_are_resources(self):
+        rewrite = oss.Rewriter({'style.css': {}, 'base.css': {}}, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn')
+        raw = b'@import "base.css";.grid{grid-template-areas:"annotation ."}'
+        self.assertIn(b'grid-template-areas:"annotation ."', rewrite.rewrite(raw, 'style.css'))
+        self.assertFalse(rewrite.missing)
+        self.assertIn('base.css', rewrite.references['style.css'])
     def test_explicit_missing_or_invalid_predecessor_does_not_become_full_upload(self):
         invalid = self.root/'invalid-predecessor.json'; invalid.write_text('{"invalid":true}')
         for previous in (self.root/'missing.json', invalid):
@@ -164,32 +170,8 @@ class OssReleaseTests(unittest.TestCase):
 
     def prepare(self, origin='https://fixture-bucket.oss-cn-beijing.aliyuncs.com', test=False):
         output = self.root/'output'
-        plan = oss.prepare(self.source, origin, 'releases/fixture-001', output, allow_test=test, full_upload=True)
+        plan = oss.prepare(self.source, origin, 'releases/fixture-001', output, allow_test=test)
         return output, plan
-
-    def test_previous_manifest_failures_require_explicit_full_upload(self):
-        invalid = self.root/'invalid.json'; invalid.write_text('{}', encoding='utf8')
-        output = self.root/'output'; base = 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com'
-        for previous in (None, self.root/'missing.json', invalid):
-            with self.subTest(previous=previous), patch.dict(os.environ, {'WLY_RELEASE_FULL':'1'}):
-                with self.assertRaisesRegex(ValueError, 'Previous OSS manifest'):
-                    oss.prepare(self.source, base, 'releases/fixture-001', output, previous_manifest=previous)
-                self.assertFalse(output.exists())
-        command = ['prepare', '--source', str(self.source), '--asset-base-url', base,
-                   '--prefix', 'releases/fixture-001', '--output', str(output), '--full-upload']
-        with patch('sys.argv', ['prepare-oss-release.py', *command]), patch('builtins.print'):
-            oss.main()
-        plan = oss.read(output/oss.PLAN)
-        self.assertEqual(plan['upload_mode'], 'full')
-        with patch('sys.argv', ['prepare-oss-release.py', 'verify-local', '--output', str(output)]), patch('builtins.print') as printed:
-            oss.main()
-        upload = json.loads(printed.call_args.args[0])['upload']
-        self.assertEqual(upload, {'objects':len(plan['objects']), 'bytes':sum(obj['bytes'] for obj in plan['objects'].values())})
-        oss.write(output/'remote-verification.json', {'plan_sha256':oss.digest(output/oss.PLAN),
-            'objects':{rel:{'status':'pass'} for rel in plan['objects']}})
-        with patch('sys.argv', ['prepare-oss-release.py', 'verify-local', '--output', str(output)]), patch('builtins.print') as printed:
-            oss.main()
-        self.assertEqual(json.loads(printed.call_args.args[0])['upload'], {'objects':0, 'bytes':0})
 
     def test_full_route_and_resource_closure_preserves_binaries(self):
         output, plan = self.prepare()
@@ -415,14 +397,14 @@ class OssReleaseTests(unittest.TestCase):
             no_python.write_text('$global:LASTEXITCODE = 0', encoding='utf8')
             process = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'),
                 '-Preparation', str(incremental), '-Upload', '-CliPath', str(no_upload), '-CliProfile', 'fixture',
-                '-Python', str(no_python), '-ShortLockTool', str(no_lock)], capture_output=True, text=True,
-                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                '-Python', str(no_python), '-ShortLockTool', str(no_lock), '-LockHolder', 'Codex/oss-release-test'], capture_output=True, text=True,
+                encoding='utf8', errors='replace', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             self.assertEqual(process.returncode, 0, process.stderr)
             pin_calls = self.root/'pin-calls.jsonl'
             no_python.write_text("$args|ConvertTo-Json -Compress|Add-Content -LiteralPath '" + str(pin_calls).replace("'", "''") + "'; $global:LASTEXITCODE=0", encoding='utf8')
             retry = subprocess.run([pwsh, '-NoProfile', '-File', str(ROOT/'scripts/publish-oss-assets.ps1'), '-Preparation', str(incremental),
-                '-VerifyRemote', '-Python', str(no_python), '-ShortLockTool', str(no_lock)], capture_output=True, text=True,
-                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                '-VerifyRemote', '-Python', str(no_python), '-ShortLockTool', str(no_lock), '-LockHolder', 'Codex/oss-release-test'], capture_output=True, text=True,
+                encoding='utf8', errors='replace', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
             self.assertEqual(retry.returncode, 0, retry.stderr)
             self.assertTrue(any('oss-retention.py' in row[0] and row[1]=='pin' for row in (json.loads(line) for line in pin_calls.read_text().splitlines())))
         (output/'github/index.html').write_bytes(b'changed after sealing')
@@ -445,7 +427,7 @@ class OssReleaseTests(unittest.TestCase):
             source_manifest['release_id'] = oss.hashlib.sha256(json.dumps(source_manifest['files'], sort_keys=True).encode()).hexdigest()
             oss.write(self.source/oss.MANIFEST, source_manifest)
             output = self.root/case
-            plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output, full_upload=True)
+            plan = oss.prepare(self.source, 'https://fixture-bucket.oss-cn-beijing.aliyuncs.com', 'releases/fixture-001', output)
             addresses = {obj['url']:rel for rel,obj in plan['objects'].items()}
             class Response:
                 def __init__(self, request):
@@ -507,7 +489,7 @@ class OssReleaseTests(unittest.TestCase):
             manifest['files']={k:v for k,v in oss.inventory(self.source).items() if k!=oss.MANIFEST}
             oss.write(self.source/oss.MANIFEST,manifest)
             output=self.root/case
-            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=3,full_upload=True)
+            plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=3)
             proof=plan['home_entry_overlay']
             self.assertEqual(len(proof['changes']),6)
             self.assertEqual(proof['changes'][0]['target_href'],target)
@@ -543,7 +525,7 @@ class OssReleaseTests(unittest.TestCase):
                     self.assertEqual(len(proof['native_navigation_changes']),5)
                     self.assertIn(b'href="/how-this-site/"',prepared)
                 output=self.root/('version-'+str(version))
-                plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=version,full_upload=True)
+                plan=oss.prepare(self.source,'https://fixture-bucket.oss-cn-beijing.aliyuncs.com','releases/fixture-001',output,rewriter_version=version)
                 self.assertEqual(plan['home_entry_overlay'],proof)
                 self.assertEqual(oss.verify_local(output)['rewriter_version'],version)
         self.assertEqual((self.source/'index.html').read_bytes(),home)

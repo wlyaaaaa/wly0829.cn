@@ -25,6 +25,11 @@ const imports = [];
 const rows = [];
 for (const registration of enabled) {
   if (!registration.ai_refresh?.content_path) throw new Error(`Enabled project lacks ai_refresh.content_path: ${registration.id}`);
+  if (registration.ai_refresh.content_format === "typeset" || registration.content_format === "typeset") {
+    const authored = JSON.parse(await readFile(path.join(projectRoot, registration.ai_refresh.content_path), "utf8"));
+    if (authored.kind !== "project" || authored.url.replace(/\/$/, "") !== registration.route.replace(/\/$/, "")) throw new Error(`Typeset project source mismatch: ${registration.id}`);
+    continue;
+  }
   const identifier = safeIdentifier(registration.id);
   imports.push(`import { project as project_${identifier}, modules as modules_${identifier} } from ${JSON.stringify(safeImportPath(registration.ai_refresh.content_path))};`);
   rows.push(`  [${JSON.stringify(registration.id)}, { project: project_${identifier}, modules: modules_${identifier}, kind: ${JSON.stringify(registration.id)} }]`);

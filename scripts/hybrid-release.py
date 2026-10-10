@@ -16,15 +16,9 @@ from html.parser import HTMLParser
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
-try:
-    from release_delta import inventory as delta_inventory, sources, source_path, stable_evidence, LEDGER
-except ModuleNotFoundError:
-    from scripts.release_delta import inventory as delta_inventory, sources, source_path, stable_evidence, LEDGER
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = 'release-manifest.json'
-RETIRED_ARTIFACT = '_typeset/rule-sources/0057134e1ae9250111cbdde2ba3d64e44d54bffed4cfee5a341bd3e8d077bffb.md'
-RETIRED_PROOF = {'sha256':'0057134e1ae9250111cbdde2ba3d64e44d54bffed4cfee5a341bd3e8d077bffb', 'bytes':19537}
 spec = importlib.util.spec_from_file_location('assembled_builder', ROOT/'scripts/build-assembled-site.py')
 builder = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(builder)
@@ -43,15 +37,13 @@ def write(path, value):
     Path(path).write_text(json.dumps(value, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
 
 def inventory(root):
-    if sources(Path(root).resolve()):
-        return delta_inventory(root)
     result = {}
     for p in sorted(root.rglob('*')):
         if p.is_symlink():
             raise ValueError('Symlink is not a release asset: '+str(p))
-        if p.is_file() and p.relative_to(root).as_posix() not in (MANIFEST, 'release-identity.json', LEDGER):
+        if p.is_file() and p.relative_to(root).as_posix() not in (MANIFEST, 'release-identity.json'):
             result[p.relative_to(root).as_posix()] = {'sha256': digest(p), 'bytes': p.stat().st_size}
-    return dict(sorted(result.items()))
+    return result
 
 def route_file(url):
     path = unquote(urlsplit(url).path)
@@ -307,38 +299,28 @@ def unchanged_search_finding(output, finding, overlay):
 
 
 def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None,
-             baseline_production_commit=None, baseline_input_kind=None, defer=False):
+             baseline_production_commit=None, baseline_input_kind=None):
     baseline = baseline.resolve(); candidate = candidate.resolve(); output = output.resolve()
     if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
         raise ValueError('Choose a fresh, disjoint output directory')
     old, routes = verify_baseline(baseline, baseline_manifest)
-    retired = {RETIRED_ARTIFACT:{'kind':'retired_artifact', 'before':RETIRED_PROOF}} if RETIRED_ARTIFACT in old else {}
-    if retired and old[RETIRED_ARTIFACT] != RETIRED_PROOF:
-        raise ValueError('Approved retired artifact baseline identity differs')
-    overlays = dict(sorted(overlay.get('files', {}).items())) if overlay else {}
+    overlays = overlay.get('files', {}) if overlay else {}
     if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
     accepted_files = {route_file(x) for x in accepted}
     available = {x for x in old if x.endswith('.html')} | accepted_files
-    if defer:
-        output.mkdir(parents=True)
-    else:
-        shutil.copytree(baseline, output, copy_function=getattr(builder, 'copy_release_asset', shutil.copy2),
-                        ignore=lambda directory,names:[name for name in names if (Path(directory)/name).relative_to(baseline).as_posix() in retired])
+    shutil.copytree(baseline, output, copy_function=builder.copy_release_asset)
     # HTTP snapshots do not expose Pages' domain configuration file.
     # Adding that deployment metadata preserves every captured HTTP byte.
-    if not (baseline/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
+    if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
     # Old release-manifest is replaced by this generation; old content remains exact.
     mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
-    paths = {'CNAME':str(output/'CNAME')} if defer and not (baseline/'CNAME').exists() else {}
-    navigation_pages = nav_repair.page_inventory(baseline,exclude=accepted_files)
-    for rel in sorted(accepted_files):
-        navigation_pages[rel] = nav_repair.PageFacts(source_path(candidate,rel).read_text('utf-8-sig'),candidate)
+    navigation_pages = nav_repair.page_inventory(output, exclude=accepted_files)
+    for rel in accepted_files:
+        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'),candidate)
     while pending:
         rel = pending.pop()
-        if rel in retired:raise ValueError('Approved retired artifact is still a dependency: '+rel)
         if rel in copied: continue
-        logical = candidate/rel
-        path = source_path(candidate, rel)
+        path = candidate/rel
         if not path.is_file(): raise ValueError('Candidate dependency missing: '+rel)
         if candidate_files is not None:
             proof = candidate_files.get(rel)
@@ -350,50 +332,42 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
         target = output/rel
         text = None
         if rel in accepted_files:
-            text = rewrite_links(path.read_text('utf-8-sig'), candidate, logical, available, mappings, baseline if defer else output, accepted_files, navigation_pages)
+            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files, navigation_pages)
         elif rel in old and rel not in overlays:
             if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
         target.parent.mkdir(parents=True, exist_ok=True)
-        if text is None and defer: target = path
-        elif text is None: getattr(builder, 'copy_release_asset', shutil.copy2)(path, target)
+        if text is None: builder.copy_release_asset(path, target)
         else: target.write_text(text, encoding='utf8')
-        paths[rel] = str(target)
         copied.add(rel)
-        content = text if text is not None else path.read_text('utf-8-sig') if path.suffix in {'.html','.css','.js','.json'} else None
-        for ref, navigation in references(logical, content):
-            dependency = local_reference(candidate, logical, ref)
+        for ref, navigation in references(path, text):
+            dependency = local_reference(candidate, path, ref)
             if dependency is None: continue
             dep = dependency.relative_to(candidate).as_posix()
             if navigation and dependency.suffix == '.html':
                 if dep not in available and not (output/dep).is_file(): raise ValueError('Unresolved navigation: '+ref)
                 continue
-            if dep in old and not source_path(candidate, dep).is_file(): continue
+            if dep in old and not dependency.is_file(): continue
             pending.append(dep)
     # Bind every inherited and rebuilt navigation role after the complete
     # package exists, rather than retaining an earlier partial-release fallback.
-    navigation_pages = nav_repair.page_inventory(output) if not defer else navigation_pages
-    for rel in nav_repair.restore_pending_links(output, navigation_pages) if not defer else []:
+    navigation_pages = nav_repair.page_inventory(output)
+    for rel in nav_repair.restore_pending_links(output, navigation_pages):
         if rel not in accepted_files:
             overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),
                              'after':{'sha256':digest(output/rel),'bytes':(output/rel).stat().st_size}}
     for rel, entry in old.items():
-        if not defer and rel not in retired and rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
+        if rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
             raise ValueError('Old file changed: '+rel)
     for route in routes:
-        if not defer and not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
-    files = {**{rel:entry for rel,entry in old.items() if rel not in retired}, **{rel:{'sha256':digest(Path(path)),'bytes':Path(path).stat().st_size} for rel,path in paths.items()}} if defer else inventory(output)
-    if defer:
-        write(output/LEDGER, {'baseline':str(baseline),'sources':paths})
-        sources.cache_clear()
-        files = dict(sorted(files.items()))
+        if not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
+    files = inventory(output)
     release_id = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
     manifest = {'schema':'wly.hybrid-release.v1', 'release_id':release_id,
-                'baseline_prepared_at_beijing':baseline_manifest.get('prepared_at_beijing') or baseline_manifest.get('baseline_prepared_at_beijing'),
+                'prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),
                 'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_production_commit or baseline_manifest.get('production_commit'),
                 'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
                 'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
     if overlays: manifest['release_overlay'] = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlays.items()}
-    if retired:manifest['retired_artifacts'] = retired
     if baseline_input_kind:
         manifest['baseline_input_kind'] = baseline_input_kind
         manifest['baseline_source_release_id'] = baseline_manifest.get('release_id')
@@ -401,13 +375,24 @@ def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=
     verify_release(output)
     return manifest
 
+def inherited_assets(manifest):
+    mapping = manifest.get('inherited_assets', {})
+    if not mapping: return {}, {}
+    ref = manifest.get('baseline_production_commit', '')
+    if not re.fullmatch(r'[0-9a-f]{40}', ref): raise ValueError('Inherited OSS assets need an exact baseline commit')
+    previous = json.loads(subprocess.check_output(['git', 'show', ref + ':site-release/' + MANIFEST], cwd=ROOT))
+    oss_module().verify_manifest(previous)
+    objects = {alias: previous['oss']['objects'][original] for alias, original in mapping.items()}
+    if any(alias != row['key'].removeprefix('releases/') for alias, row in objects.items()): raise ValueError('Inherited object alias changed')
+    return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
+
+
 def verify_release(output, require_remote=True):
     manifest = read(output/MANIFEST)
-    if manifest.get('schema') != 'wly.hybrid-release.v1' or inventory(output) != manifest['files']:
+    inherited, _ = inherited_assets(manifest) if not manifest.get('oss') else ({}, {})
+    actual = {**inventory(output), **{rel: row['source'] for rel, row in inherited.items()}}
+    if manifest.get('schema') != 'wly.hybrid-release.v1' or actual != manifest['files']:
         raise ValueError('Release bytes differ from manifest')
-    retired = manifest.get('retired_artifacts', {})
-    if retired and (retired != {RETIRED_ARTIFACT:{'kind':'retired_artifact', 'before':RETIRED_PROOF}} or manifest['baseline_files'].get(RETIRED_ARTIFACT) != RETIRED_PROOF or RETIRED_ARTIFACT in manifest['files']):
-        raise ValueError('Retired artifact identity or omission differs')
     if 'oss' in manifest:
         oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
         oss = importlib.util.module_from_spec(oss_spec)
@@ -425,13 +410,13 @@ def verify_release(output, require_remote=True):
     for rel, entry in overlays.items():
         if manifest['files'].get(rel) != entry.get('after') or manifest['baseline_files'].get(rel) != entry.get('before'):
             raise ValueError('Overlay file identity differs: '+rel)
-        if entry.get('kind') == 'runtime_reference':
+        if entry.get('kind') == 'runtime_reference' or entry.get('runtime_replacements'):
             recovered = (output/rel).read_bytes()
-            for original, replacement in entry['replacements'].items(): recovered = recovered.replace(replacement.encode(),original.encode())
-            if hashlib.sha256(recovered).hexdigest() != entry['before']['sha256']:
+            for original, replacement in entry.get('runtime_replacements', entry.get('replacements', {})).items(): recovered = recovered.replace(replacement.encode(),original.encode())
+            if hashlib.sha256(recovered).hexdigest() != entry.get('runtime_before', entry['before'])['sha256']:
                 raise ValueError('Runtime overlay did not preserve original content: '+rel)
     for rel, entry in manifest['baseline_files'].items():
-        if rel not in retired and rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
+        if rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
     for route in manifest['routes']:
         if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
     return manifest
@@ -551,11 +536,8 @@ def oss_module():
 
 
 def checker_version():
-    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py', 'scripts/prepare-rules-pin.py',
-             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json',
-             'scripts/private_rule_policy.py']
-    policy = '.publish/private/rule-public-policy.json'
-    if (builder.ROOT/policy).is_file(): paths.append(policy)
+    paths = ['scripts/hybrid-release.py', 'scripts/prepare-oss-release.py', 'scripts/build-assembled-site.py', 'scripts/rule_original_contract.py',
+             'scripts/public_page_contract.py', 'scripts/verify-public-content.mjs', 'config/assembled-rules-pin.json', 'config/panel-projects.json']
     return hashlib.sha256(json.dumps({p: (builder.ROOT/p).read_text('utf-8-sig') for p in paths}, sort_keys=True).encode()).hexdigest()
 
 
@@ -623,7 +605,11 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
             return rel, {**row, 'downloaded_bytes':obj['bytes']+row.get('range',{}).get('bytes',0)}
         if local_assets:
             cache = ROOT/'.publish/oss-gate'/manifest['release_id']/'dist'
+            inherited, _ = inherited_assets(manifest)
             for rel in list(manifest['files'])+[MANIFEST]+list(objects):
+                if rel in inherited:
+                    if objects[rel] != inherited[rel]: raise ValueError('Inherited sealed object differs: ' + rel)
+                    continue
                 source = Path(local_assets)/rel if rel in objects else output/rel
                 if rel in objects and (source.stat().st_size != objects[rel]['bytes'] or digest(source) != objects[rel]['sha256']):
                     raise ValueError('Local content body differs from sealed object: '+rel)
@@ -674,6 +660,8 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
         return [x for x in findings if x['type'] != 'pinned_rule_page_missing' and not verified_source(x)]
     builder.rule_pin_findings = selected_pin
     current_files = inventory(output)
+    source_inherited, _ = inherited_assets(manifest) if not manifest.get('oss') else ({}, {})
+    current_files.update({rel: row['source'] for rel, row in source_inherited.items()})
     current_files[MANIFEST] = {'bytes':(output/MANIFEST).stat().st_size, 'sha256':digest(output/MANIFEST)}
     field = 'checked_files' if local_assets else 'output_files'
     coverage = prior.get(field, {})
@@ -686,9 +674,13 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
     verified = {rel:value for rel,value in current_files.items() if coverage.get(rel) == value
                 and (rel in selected_files) == (rel in prior.get('selected_files', []))
                 and (rel in exempt_files) == (rel in prior.get('exempt_files', []))} if reusable else {}
+    if local_assets:
+        verified.update({rel: {'bytes': row['bytes'], 'sha256': row['sha256']} for rel, row in inherited.items()})
+    verified.update({rel: row['source'] for rel, row in source_inherited.items()})
     changed = set(current_files)-set(verified) | (set(coverage)-set(current_files))
     if reusable:
         for rel in list(verified):
+            if rel in source_inherited or local_assets and rel in inherited: continue
             for ref,navigation in references(output/rel):
                 try: target = builder.resolve_ref(output, output/rel, ref, asset_prefix)
                 except ValueError: verified.pop(rel); break
@@ -716,7 +708,8 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
                 # verify_release has already required sealed full-body GET
                 # evidence for the actual external JavaScript inventory.
                 continue
-            unchanged_record=unchanged_search_finding(output/finding['file'],finding,manifest.get('release_overlay',{}).get(finding['file']))
+            overlay = manifest.get('release_overlay',{}).get(finding['file']) or manifest.get('search_preserved_records',{}).get(finding['file'])
+            unchanged_record=unchanged_search_finding(output/finding['file'],finding,overlay)
             audit_retained=retained_audit_topic(output,finding,manifest,baseline_cache)
             if audit_retained: audit_topics.append(finding)
             if unchanged_record or audit_retained or finding['file'] in retained and finding['type']not in {'credential','symlink','git_object_limit'}:
@@ -727,8 +720,17 @@ def validate_content(output, report, oss_preparation=None, local_assets=None, co
         result['preserved_baseline_topic_findings'] = retained_topics
         result['preserved_baseline_findings_outside_current_release']=retained_findings
         result['preserved_audit_baseline_topic_findings']=audit_topics
-        result['preserved_baseline_reference_findings_outside_current_release']=[x for x in result['missing_references']if x['file']in retained]
-        result['missing_references']=[x for x in result['missing_references']if x['file']not in retained]
+        def retained_reference(finding):
+            if finding['file'] not in retained: return False
+            try:
+                target = builder.resolve_ref(output, output/finding['file'], finding['reference'], asset_prefix)
+                return target is not None and target.relative_to(output).as_posix() in retained
+            except ValueError: return False
+        # A preserved page can lose a working link when its destination is
+        # replaced. Only findings whose source AND destination remain old
+        # production content qualify for the historical exception.
+        result['preserved_baseline_reference_findings_outside_current_release']=[x for x in result['missing_references'] if retained_reference(x)]
+        result['missing_references']=[x for x in result['missing_references'] if not retained_reference(x)]
         result['missing_reference_count']=len(result['missing_references'])
         result['content_gate_scope']='Current accepted pages and their assets; direct navigation resolves against all preserved production routes. Exact baseline bytes remain verified separately.'
         result['ready_to_publish'] = not kept and not result['missing_references'] and not result['required_missing']
@@ -773,7 +775,6 @@ def main():
     prepare.add_argument('--rollback-ref')
     verify = commands.add_parser('verify'); verify.add_argument('--output',type=Path,required=True)
     verify.add_argument('--content-report',type=Path)
-    verify.add_argument('--local-assets',type=Path)
     verify.add_argument('--oss-preparation',type=Path,help='Bind the GitHub deployment budget to this sealed split while checking the complete source')
     verify.add_argument('--public-repos-from-github',action='store_true')
     verify.add_argument('--confirm-download-over-5gb',action='store_true')
@@ -784,9 +785,11 @@ def main():
     if args.command == 'restore': print(restore_git(args.ref,args.output)); return
     if args.command == 'verify':
         manifest = verify_release(args.output)
-        if args.public_repos_from_github or args.local_assets: builder.load_public_repos()
-        report = args.content_report or (args.output.parent/'local-content-gate.json' if args.local_assets else None)
-        if report or args.check_sealed_content: validate_content(args.output,report,args.oss_preparation,local_assets=args.local_assets,confirmed=args.confirm_download_over_5gb,seal_only=args.check_sealed_content,previous_report=args.previous_content_report)
+        if manifest.get('astro'):
+            import astro_rules
+            astro_rules.verify(args.output, manifest['rules_pin'])
+        if args.public_repos_from_github: builder.load_public_repos()
+        if args.content_report or args.check_sealed_content: validate_content(args.output,args.content_report,args.oss_preparation,confirmed=args.confirm_download_over_5gb,seal_only=args.check_sealed_content,previous_report=args.previous_content_report)
         print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
     approvals = read(args.approvals); states = read(args.status)['pages']; report = read(args.candidate_report); proof = report.get('input',{})
     candidate_files = report.get('output_files')

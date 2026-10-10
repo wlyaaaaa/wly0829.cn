@@ -188,14 +188,14 @@ def release_identifier(source, base, prefix, github, objects):
                                     sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
-def current_home_links(source, version=7, rule_pin=None):
-    if version not in (1,2,3,4,5,6,7):raise ValueError('Unsupported homepage navigation replay version')
+def current_home_links(source, version=4):
+    if version not in (1,2,3,4,5,6):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
     spec=importlib.util.spec_from_file_location('home_entry_links',Path(__file__).with_name('prepare-home-entry-links.py'))
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    return module.prepare_links(source,return_bytes=True,legacy=version<4,rule_pin=rule_pin,home_trip_anchor=version>=7)
+    return module.prepare_links(source,return_bytes=True,legacy=version<4)
 
 
 def verify_manifest(manifest, require_remote=True):
@@ -265,7 +265,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5,6,7):
+        if version not in (1,2,3,4,5,6):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -470,9 +470,11 @@ class Rewriter:
             if new != value:
                 start = m.start('value') + len(m['value']) - len(m['value'].lstrip())
                 edits.append((offset + start, offset + start + len(value), new, 'css_url'))
-        # Handles quoted @import and all exact local strings; url() duplicates
-        # are discarded when the spans are merged.
-        edits += self.strings(text, owner, 'css', offset)
+        # Selector values and content strings are ordinary text; only quoted
+        # @import strings carry a resource outside url().
+        for m in re.finditer(r'@import\s+(["\'])(?P<value>[^"\']+)\1', text, re.I):
+            value = m['value']; new = self.url(value, owner, 'css')
+            if new != value: edits.append((offset+m.start('value'), offset+m.end('value'), new, 'css_import'))
         return edits
 
     def strings(self, text, owner, context, offset=0):
@@ -598,7 +600,7 @@ class Rewriter:
         return text.encode('utf8')
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=7, previous_manifest=None, full_upload=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None):
     spec = importlib.util.spec_from_file_location('oss_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
     builder = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(builder)
@@ -609,7 +611,10 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         raise ValueError('Output must be a new directory')
     base, prefix = validate_target(base, prefix, allow_test)
     source_manifest = read(source / MANIFEST)
-    actual = inventory(source)
+    inherited_spec = importlib.util.spec_from_file_location('oss_inherited', Path(__file__).with_name('hybrid-release.py'))
+    inherited_module = importlib.util.module_from_spec(inherited_spec); inherited_spec.loader.exec_module(inherited_module)
+    inherited, inherited_receipts = inherited_module.inherited_assets(source_manifest)
+    actual = {**inventory(source), **{rel: row['source'] for rel, row in inherited.items()}}
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
@@ -619,16 +624,13 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         try:
             previous = verify_manifest(read(previous_manifest))
         except (OSError, ValueError, KeyError, TypeError) as error:
-            raise ValueError('Previous OSS manifest cannot be verified: '+str(previous_manifest)+': '+str(error)) from error
-    elif not full_upload and not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
+            raise ValueError('Explicit previous-manifest is unavailable or invalid: ' + str(previous_manifest)) from error
+    elif not allow_test and base == 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com':
         spec = importlib.util.spec_from_file_location('oss_retention', Path(__file__).with_name('oss-retention.py'))
         retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
         predecessor = retention.predecessor()
         if predecessor and predecessor.get('oss'):
             previous = verify_manifest(predecessor)
-    if not full_upload and previous is None:
-        raise ValueError('Previous OSS manifest is required; select --full-upload explicitly for a full upload')
-    if full_upload: previous = None
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
     while rewriter.retained:
@@ -641,6 +643,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     home_bytes,home_proof=current_home_links(source,version=rewriter_version)
     objects, github = {}, {}
     for rel in actual:
+        if rel in inherited: continue
         host = rel.endswith('.html') or rel in HOST_CONTROLS
         destination = output / ('github' if host else 'oss') / rel
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -662,6 +665,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if rewriter.missing:
         write(output / 'unresolved-resources.json', rewriter.missing)
         raise ValueError('Missing local resources; inspect unresolved-resources.json')
+    if inherited and any(not row['url'].startswith(base + '/') for row in inherited.values()): raise ValueError('Inherited assets belong to another origin')
+    objects.update(inherited)
     release_id = release_identifier(source_manifest['release_id'], base, prefix, github, objects)
     new_manifest = {**source_manifest, 'release_id': release_id, 'files': github,
                     'oss': {'schema': 'wly.oss-assets.v1', 'asset_base_url': base, 'prefix': prefix,
@@ -672,7 +677,6 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     plan = {'schema': 'wly.oss-release-plan.v1', 'prepared_at_beijing': stamp(), 'release_id': release_id,
             'source_release_id': source_manifest['release_id'], 'source_root': str(source), 'source_files': actual,'rewriter_version':rewriter_version,
             'asset_base_url': base, 'prefix': prefix, 'html_origin': origin.rstrip('/'), 'test_only': allow_test,
-            'upload_mode': 'full' if full_upload else 'incremental',
             'github_files': github, 'objects': objects, 'url_changes': rewriter.changes,
             'closure': {k: sorted(v) for k, v in sorted(rewriter.references.items())},
             'host_control_exceptions': sorted(set(actual) & HOST_CONTROLS),
@@ -682,7 +686,12 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                         'rewritten_files': len(rewriter.changes)},
             'remote_verified': False}
     plan['retained_objects'] = {rel: previous['oss']['verification']['objects'][rel] for rel in rewriter.retained}
-    added = {rel: row for rel, row in objects.items() if rel not in rewriter.retained}
+    plan['retained_objects'].update(inherited_receipts)
+    plan['inherited_assets'] = source_manifest.get('inherited_assets', {})
+    if previous:
+        write(output / 'previous-publication.json', previous)
+        plan['previous_publication_sha256'] = digest(output / 'previous-publication.json')
+    added = {rel: row for rel, row in objects.items() if rel not in plan['retained_objects']}
     plan['summary'].update(new_objects=len(added), new_bytes=sum(row['bytes'] for row in added.values()))
     if previous: plan['retained_receipt'] = {key:previous['oss']['verification'].get(key)
         for key in ('method','release_id','verified_at_beijing','sampled_gets')}
@@ -708,11 +717,15 @@ def verify_local(output):
         raise ValueError('Unsupported OSS plan')
     validate_target(plan['asset_base_url'], plan['prefix'], plan['test_only'])
     source = Path(plan['source_root'])
-    if inventory(source) != plan['source_files']:
+    source_manifest = read(source / MANIFEST)
+    inherited_spec = importlib.util.spec_from_file_location('oss_inherited_check', Path(__file__).with_name('hybrid-release.py'))
+    inherited_module = importlib.util.module_from_spec(inherited_spec); inherited_spec.loader.exec_module(inherited_module)
+    inherited, _ = inherited_module.inherited_assets(source_manifest)
+    if {**inventory(source), **{rel: row['source'] for rel, row in inherited.items()}} != plan['source_files']:
         raise ValueError('Source changed since preparation')
     if inventory(output/'github') != plan['github_files']:
         raise ValueError('Prepared GitHub inventory/bytes changed')
-    expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items()}
+    expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items() if k not in inherited}
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
     rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
@@ -722,6 +735,9 @@ def verify_local(output):
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
         raise ValueError('Home entry restoration evidence is not reproducible')
     for rel in plan['source_files']:
+        if rel in inherited:
+            if plan['objects'][rel] != inherited[rel]: raise ValueError('Inherited object changed: ' + rel)
+            continue
         if rel == MANIFEST:
             continue
         target = output / ('github' if rel in plan['github_files'] else 'oss') / rel
@@ -863,10 +879,10 @@ def seal_remote(output):
         manifest['oss']['content_verification'] = {key:content[key] for key in ('status','checker_sha256','checked_at_beijing','output_files')}
         manifest['oss']['content_verification']['sealed_release_id'] = plan['release_id']
     verify_manifest(manifest)
+    write(path, manifest)
     spec = importlib.util.spec_from_file_location('oss_local_gate', Path(__file__).with_name('hybrid-release.py'))
     hybrid = importlib.util.module_from_spec(spec); spec.loader.exec_module(hybrid)
     hybrid.builder.load_public_repos()
-    write(path, manifest)
     previous_path = output/'previous-content-verification.json'
     write(previous_path, plan.get('previous_content', {}))
     gate = hybrid.validate_content(output/'github', output/'local-content-verification.json', local_assets=output/'oss', previous_report=previous_path)
@@ -897,9 +913,8 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7),default=7)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6),default=6)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
-    p.add_argument('--full-upload',action='store_true',help='Explicitly upload all objects to the new prefix without retaining a previous release')
     for command in ('verify-local', 'verify-remote', 'seal-remote'):
         p = commands.add_parser(command)
         p.add_argument('--output', required=True)
@@ -910,19 +925,12 @@ def main():
             p.add_argument('--retry-failed',action='store_true',help='Recheck unresolved same-plan objects; preserve prior full-body proofs')
     args = parser.parse_args()
     if args.command == 'prepare':
-        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest,args.full_upload)
+        plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)
         print(json.dumps({'status': 'prepared', 'summary': plan['summary'], 'release_id': plan['release_id']}, ensure_ascii=False))
     elif args.command == 'verify-local':
         plan = verify_local(args.output)
         estimate_download({rel:obj for rel,obj in plan['objects'].items() if rel not in plan.get('retained_objects',{})},args.confirm_download_over_5gb)
-        pending = {rel:obj for rel,obj in plan['objects'].items() if rel not in plan.get('retained_objects',{})}
-        receipt_path = Path(args.output)/'remote-verification.json'
-        if receipt_path.is_file():
-            receipt = read(receipt_path)
-            if receipt.get('plan_sha256') == digest(Path(args.output)/PLAN):
-                pending = {rel:obj for rel,obj in pending.items() if receipt.get('objects',{}).get(rel,{}).get('status') != 'pass'}
-        print(json.dumps({'status': 'pass', 'summary': plan['summary'],
-            'upload': {'objects': len(pending), 'bytes': sum(obj['bytes'] for obj in pending.values())}}, ensure_ascii=False), flush=True)
+        print(json.dumps({'status': 'pass', 'summary': plan['summary']}, ensure_ascii=False))
     elif args.command == 'verify-remote':
         report = verify_remote(args.output, args.workers, args.timeout, args.retry_failed,args.confirm_download_over_5gb)
         print(json.dumps({'status': 'pass', 'html_ready': report['html_ready'], 'objects': len(report['objects'])}))

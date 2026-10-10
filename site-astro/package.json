@@ -6,7 +6,7 @@
   "scripts": {
     "convert": "python tools/convert_page.py",
     "dev": "astro dev",
-    "build": "python tools/render_blocks.py --all && astro build --force",
+    "build": "python tools/retain_home_cockpit.py --assets && python tools/adapt_motion.py && python tools/render_blocks.py --all && astro build --force && python tools/retain_home_cockpit.py --finalize",
     "preview": "astro preview"
   },
   "dependencies": {

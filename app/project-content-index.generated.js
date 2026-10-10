@@ -22,7 +22,6 @@ import { project as project_codex_memory, modules as modules_codex_memory } from
 import { project as project_meshclip_kit, modules as modules_meshclip_kit } from "./content-meshclip-kit.js";
 import { project as project_video_scaffold, modules as modules_video_scaffold } from "./content-video-scaffold.js";
 import { project as project_sunshine_remote_streaming, modules as modules_sunshine_remote_streaming } from "./content-sunshine-remote-streaming.js";
-import { project as project_llm_backend_toolkit, modules as modules_llm_backend_toolkit } from "./content-llm-backend-toolkit.js";
 import { project as project_typora_theme_pack, modules as modules_typora_theme_pack } from "./content-typora-theme-pack.js";
 import { project as project_openclaw_gateway, modules as modules_openclaw_gateway } from "./content-openclaw-gateway.js";
 import { project as project_wechat_history_ai_bridge, modules as modules_wechat_history_ai_bridge } from "./content-wechat-history-ai-bridge.js";
@@ -57,7 +56,6 @@ export const projectContentPackages = new Map([
   ["meshclip-kit", { project: project_meshclip_kit, modules: modules_meshclip_kit, kind: "meshclip-kit" }],
   ["video-scaffold", { project: project_video_scaffold, modules: modules_video_scaffold, kind: "video-scaffold" }],
   ["sunshine-remote-streaming", { project: project_sunshine_remote_streaming, modules: modules_sunshine_remote_streaming, kind: "sunshine-remote-streaming" }],
-  ["llm-backend-toolkit", { project: project_llm_backend_toolkit, modules: modules_llm_backend_toolkit, kind: "llm-backend-toolkit" }],
   ["typora-theme-pack", { project: project_typora_theme_pack, modules: modules_typora_theme_pack, kind: "typora-theme-pack" }],
   ["openclaw-gateway", { project: project_openclaw_gateway, modules: modules_openclaw_gateway, kind: "openclaw-gateway" }],
   ["wechat-history-ai-bridge", { project: project_wechat_history_ai_bridge, modules: modules_wechat_history_ai_bridge, kind: "wechat-history-ai-bridge" }],

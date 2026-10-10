@@ -37,7 +37,7 @@ function registeredContent(entry) {
 }
 
 export const projectCatalog = panelRegistry.projects
-  .filter((entry) => entry.enabled)
+  .filter((entry) => entry.enabled && entry.content_format !== "typeset" && entry.ai_refresh?.content_format !== "typeset")
   .sort((left, right) => left.order - right.order)
   .map(registeredContent);
 

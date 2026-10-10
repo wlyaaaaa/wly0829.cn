@@ -225,17 +225,9 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
         raise ValueError('Prepared inventory changed during replay')
     tail_updates={}
     if static_2f:
-        import html, re
-        app_inputs = [ROOT / 'app' / name for name in ('content-skills.js', 'content-skill-guides.js', 'panel-facts.generated.js', 'style.css')] + [HERE / 'toc-consistency.css']
+        import re
+        app_inputs = [ROOT / 'app/style.css', HERE / 'toc-consistency.css']
         inputs.update({str(path): stamp(path) for path in app_inputs})
-        status = json.loads(subprocess.check_output(['node', '--input-type=module', '-e',
-            "import {skills} from './app/content-skills.js'; console.log(JSON.stringify(skills.find(s=>s.slug==='native-economy-routing').readerStatus))"], cwd=ROOT).decode('utf8'))
-        status_rel = 'skills/native-economy-routing/index.html'
-        status_page = source_path(current,status_rel)
-        body = status_page.read_bytes().decode('utf8')
-        matches = re.findall(r'<span class="status-pill status-mixed">([^<]*按任务需要决定是否分工[^<]*)</span>', body)
-        if len(matches) != 1: raise ValueError('Legacy routing status is missing or ambiguous')
-        tail_updates[status_rel]=body.replace(matches[0], html.escape(status)).encode('utf8')
         source_css = (ROOT / 'app/style.css').read_text('utf8')
         rules = re.findall(r'\.back-to-top \{[^}]+\}', source_css)
         header = re.search(r'@media \(min-width: 681px\) \{ \.site-header \.header-inner \{[^}]+\} \}', source_css)

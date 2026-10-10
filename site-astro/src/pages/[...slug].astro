@@ -7,11 +7,9 @@ const rendered = import.meta.glob('../content/rendered/*.json', { eager: true, i
 
 export async function getStaticPaths() {
   const done = import.meta.glob('../content/rendered/*.json');  // getStaticPaths 单独运行，只能用这里自己导入的
-  const pages = (await getCollection('pages')).filter((entry) => {
-    if (done[`../content/rendered/${entry.id}.json`]) return true;
-    console.warn(`${entry.id}：没有排版结果（tools/render_blocks.py 这一页出错或没跑），这一页不生成`);
-    return false;
-  });
+  const pages = await getCollection('pages');
+  const missing = pages.filter((entry) => !done[`../content/rendered/${entry.id}.json`]).map((entry) => entry.id);
+  if (missing.length) throw new Error(`页面没有排版结果，先完成 tools/render_blocks.py：${missing.join('、')}`);
   // 改过地址的页（page.json 的 old_urls）：旧地址出一句话的去向页，指到现在的页面
   // （现在网站上旧地址只剩素材目录，打开是目录列表）
   const moved = pages.flatMap((entry) => (entry.data.old_urls || []).map((from: string) => ({
@@ -36,7 +34,7 @@ const screen = (s: any) => `<section class="ts-screen" id="${esc(s.id)}" data-sc
   + (s.points || []).map((a: string) => `<span class="point-anchor typeset-screen-anchor" id="${esc(a)}" data-anchor-binding="screen"></span>`).join('')
   + (s.article && !ruleCanvas
     // 规则原文屏：只出网页字原文（水彩框），上面一行版本标签；原来下面那份排好的原文卡（“原文排版图与技术证据”）撤掉，免得原文出现两遍
-    ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose">${s.article}</article>`
+    ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose" data-rule-source="${esc(s.source_logical_id)}" data-rule-part="${esc(s.source_rule_part)}" data-rule-public-sha256="${esc(s.source_public_sha256)}">${s.article}</article>`
     : (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
       + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : ''))
   + `</section>`;

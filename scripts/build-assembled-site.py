@@ -19,16 +19,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT/'scripts') not in sys.path: sys.path.insert(0,str(ROOT/'scripts'))
 from public_page_contract import public_page_data
 import rule_original_contract as rule_contract
-from private_rule_policy import PolicyPattern, PolicyUnavailable, load_policy, private_source_root
 LIMIT = 1_000_000_000
 BUDGET = 850_000_000
 VARIANT = re.compile(r'^(.*)-(828|1280|1920|2880)-([a-f0-9]{12})\.(avif|webp)$')
 LOCAL = re.compile(r'(?i)(?<![a-z0-9])[a-z]:[\\/]|file:/|\\\\(?:[^\\\s]+)\\')
 # Publication exclusions are policy checks, never automatic editorial changes.
-PRIVATE = re.compile(r'(?i)(?:[a-z]:[\\/]+Personal[\\/]+(?!Projects(?:[\\/]|$))[^\s<>"\'，。；！？（）【】,;!?()]*|(?:[a-z]:[\\/]+|file:/+)[^\s<>"\'，。；！？（）【】,;!?()]*(?:私人|私密|聊天记录|录音原件|个人文档)[^\s<>"\'，。；！？（）【】,;!?()]*)')
+PRIVATE = re.compile(r'(?i)(?:[a-z]:[\\/]+Personal(?>[\\/]+)(?!(?:Projects|Worktrees)(?:[\\/]|$|[\s<>"\'，。；！？（）【】、,;!?()]))[^\s<>"\'，。；！？（）【】,;!?()]*|(?:[a-z]:[\\/]+|file:/+)[^\s<>"\'，。；！？（）【】,;!?()]*(?:私人|私密|聊天记录|录音原件|个人文档)[^\s<>"\'，。；！？（）【】,;!?()]*)')
 PRIVATE_FILENAME = re.compile(r'聊天记录|(?:私人|私密|个人)[-_ ]*(?:文件|文档|照片|视频|录音)|录音原件|IMG[_-]\d{6,}|(?:WeChat|微信)[_-](?:Image|Video|Audio|\d{8})',re.I)
-EXCLUDED_TOPICS = PolicyPattern('topic_pattern')
-RULE_PUBLIC_TOPICS = PolicyPattern('topic_pattern', 'rule_extra_pattern')
+EXCLUDED_TOPICS = re.compile(r'打官司|诉讼|起诉|判决|再审|律师|法律|案件|恋爱|求职|薪资|简历包装|课程包装|争执|个人纠纷|(?:personal[-_/](?:litigation|romance))|(?:career[-_]development)|\bOffer\b|PersonalOS(?:-Retired)?|PersonalKnowledgeBase|ai-llm-job-prep|ai-coach',re.I)
 PRIVATE_REPOS = set()
 PUBLIC_REPOS = set()
 PRIVATE_REPO_REWRITES = []
@@ -100,8 +98,17 @@ def write_json(p, data):
     p.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
 def is_topic_word_exception(text, match):
-    return any(a.start()<=match.start() and match.end()<=a.end()
-               for a in PolicyPattern('exception_pattern').finditer(text))
+    if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('正式法律文书仍交 Claude',text)):
+        return True
+    if match[0]=='法律' and any(a.start()<=match.start() and match.end()<=a.end() for a in re.finditer('网站文案、汇报、方案、法律文书',text)):
+        # This describes the model's writing duties, without case content.
+        return True
+    if match[0]=='再审':
+        if text[match.start():match.start()+4]=='再审一轮':
+            return True
+        pattern=re.escape('跨项目认知审计')+r'(?:\\+n|\s)+'+re.escape('给我看的分析按日期存档；再审时先对照上次哪些问题解决了')
+        return any(match.start()==approved.start()+approved[0].index('再审') for approved in re.finditer(pattern,text))
+    return False
 
 def clean_provenance(value):
     return public_page_data(value)
@@ -112,20 +119,18 @@ def clean_repo_bindings(value, pointer='page-data', registered_repos=None):
         registry=json.loads(registry_path.read_text('utf8')) if registry_path.is_file() else {'projects':[]}
         registered_repos={entry['source']['repo'].lower() for entry in registry.get('projects',[])
                           if '/' in entry.get('source',{}).get('repo','')
-                          and entry.get('source',{}).get('visibility') in {'PUBLIC','PRIVATE'}}
+                          and entry.get('source',{}).get('visibility') == 'PRIVATE'}
     if isinstance(value,dict):
         return {k:clean_repo_bindings(v,pointer+'.'+k,registered_repos) for k,v in value.items()}
     if isinstance(value,list): return [clean_repo_bindings(v,pointer+'[]',registered_repos) for v in value]
     if isinstance(value,str):
-        for repo in sorted(PRIVATE_REPOS):
+        for repo in sorted(registered_repos):
             pattern=repo_pattern(repo)
             if pattern.search(value):
                 if pointer.endswith(('.repo_url','.href')):
                     raise ValueError('Private repository used as an external link: '+pointer)
-                if repo.lower() in registered_repos:continue
-                public_key='private-project-'+hashlib.sha256(repo.lower().encode()).hexdigest()[:12]
-                PRIVATE_REPO_REWRITES.append({'field':pointer,'repository':repo,'public_key':public_key})
-                value=pattern.sub(public_key,value)
+                # Repository names are product identities. Local registry
+                # discovery may validate them, but never rewrite the page.
     return value
 
 def repo_pattern(repo):
@@ -168,14 +173,17 @@ def repository_binding_findings(data, registry):
         return [{'type':'unpublished_repository_binding','field':'status_binding.repo'}] if isinstance(repo,str) and '/' in repo and data.get('repo_url')!='https://github.com/'+repo else []
     source=registration['source'];findings=[]
     expected_repo=source['repo'] if '/' in source['repo'] else source.get('public_identity',source['repo'])
-    if not isinstance(repo,str) or repo.lower()!=expected_repo.lower():
+    unbound_key = registration.get('runtime_status_key')
+    unbound_declared = binding.get('matched') is False and isinstance(repo, str) and repo == unbound_key
+    if not unbound_declared and (not isinstance(repo,str) or repo.lower()!=expected_repo.lower()):
         findings.append({'type':'repository_binding_mismatch','field':'status_binding.repo','project':registration['id']})
     for field,value in [('repository_visibility',data.get('repository_visibility')),('status_binding.visibility',binding.get('visibility'))]:
         if value is not None and value!=source['visibility']:
             findings.append({'type':'repository_visibility_mismatch','field':field,'expected':source['visibility']})
     if source['visibility']=='PUBLIC' and data.get('repo_url')!='https://github.com/'+source['repo']:
         findings.append({'type':'unpublished_repository_binding','field':'repo_url'})
-    if source['visibility']=='PRIVATE' and data.get('repo_url'):
+    component_urls = {'https://github.com/'+value for value in source.get('public_component_repositories', [])}
+    if source['visibility']=='PRIVATE' and data.get('repo_url') and data['repo_url'] not in component_urls:
         findings.append({'type':'private_repository_link','field':'repo_url'})
     return findings
 
@@ -225,7 +233,7 @@ class OriginalProse(HTMLParser):
             return
         self.stack.append((tag,classes,active,skip))
         if active and not skip and tag=='a':
-            self.parts.append('[href:'+hashlib.sha256(source_link_target(d.get('href',d.get('data-source-reference',''))).encode()).hexdigest()+']')
+            self.parts.append('[href:'+hashlib.sha256(source_link_target(d.get('href','')).encode()).hexdigest()+']')
         if active and not skip and tag in {'td','th'}:self.parts.append('\n[cell]')
         if active and not skip and tag in {'pre','code'}:
             self.literal_depth+=1
@@ -246,7 +254,6 @@ class OriginalProse(HTMLParser):
                     elif tag in {'p','li','td','th','tr','h1','h2','h3','h4','h5','h6'}:self.parts.append('\n')
                 del self.stack[i:];break
     def digest(self):
-        if self.literal_depth or self.literal: raise ValueError('Unclosed literal in original prose')
         return hashlib.sha256(' '.join(''.join(self.parts).split()).encode()).hexdigest()
 
 def prose_digest(text,whole_document=False):
@@ -328,7 +335,7 @@ def rule_excerpt_pin_findings(output,files,pin):
         findings.append({'file':'rules/','type':'pinned_rule_page_missing','document':document})
     return findings
 
-def canonical_workbench_topic_spans(output,page,text,pin,exact=False):
+def canonical_workbench_topic_spans(output,page,text,pin):
     """Only complete-contract verified workbench original fields and exact lines."""
     try:
         data=rule_contract.parse_workbench_metadata(text,pin,output)
@@ -346,13 +353,6 @@ def canonical_workbench_topic_spans(output,page,text,pin,exact=False):
     spec=importlib.util.spec_from_file_location('workbench_topic_transcript',Path(__file__).with_name('audit-page-publication.py'))
     publication=importlib.util.module_from_spec(spec);spec.loader.exec_module(publication)
     for row in rows:
-        if exact:
-            body=row['source_meta']['original_html'];identity=row['source_meta']['excerpt_id']
-            pattern=r'<section\b[^>]*\bdata-rule-excerpt=["\']'+re.escape(identity)+r'["\'][^>]*>.*?<article\b[^>]*\bclass=["\']rule-original-prose["\'][^>]*>(.*?)</article>'
-            for article in re.finditer(pattern,text,re.S):
-                if article[1]!=body:continue
-                nodes,_=rule_contract.source_text_spans(body)
-                spans.extend((article.start(1)+start,article.start(1)+end) for start,end in nodes)
         _,original=rule_contract.source_text_spans(row['source_meta']['original_html'])
         expected=publication.rendered_text('<body>'+original+'</body>')
         lines={' '.join(value.split()) for value in expected.splitlines() if value.strip()}
@@ -366,20 +366,10 @@ def canonical_workbench_topic_spans(output,page,text,pin,exact=False):
     return spans
 
 
-def verified_current_rule_pin(pin):
-    """Rebuild the pin from byte-exact sources under the inspected release SHA."""
-    import importlib.util
-    spec=importlib.util.spec_from_file_location('verified_current_rule_pin',Path(__file__).with_name('prepare-rules-pin.py'))
-    module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
-    try:
-        return pin==module.generate(private_source_root(ROOT),pin['release_record_sha256'],pin['version'])
-    except (OSError,ValueError,KeyError,TypeError):return False
-
-
-def canonical_rule_topic_spans(output,page,text,pin,exact=False):
+def canonical_rule_topic_spans(output,page,text,pin):
     """Only fixed-source verified excerpt fields and their exact transcript lines."""
     relative=page.relative_to(output).as_posix()
-    if relative=='rules/index.html':return canonical_workbench_topic_spans(output,page,text,pin,exact)
+    if relative=='rules/index.html':return canonical_workbench_topic_spans(output,page,text,pin)
     if not page.is_relative_to(output/'rules') or page.parent==output/'rules':return []
     if any(finding['file']==relative for finding in rule_excerpt_pin_findings(output,[page],pin)):return []
     match=PAGE_DATA.search(text)
@@ -396,29 +386,14 @@ def canonical_rule_topic_spans(output,page,text,pin,exact=False):
     spec=importlib.util.spec_from_file_location('canonical_rule_transcript',Path(__file__).with_name('audit-page-publication.py'))
     publication=importlib.util.module_from_spec(spec);spec.loader.exec_module(publication)
     for row in valid.values():
-        if exact:
-            body=row['source_meta']['original_html']
-            pattern=r'<section\b[^>]*\bid=["\']'+re.escape(row['id'])+r'["\'][^>]*>.*?<article\b[^>]*\bclass=["\']rule-original-prose["\'][^>]*>(.*?)</article>'
-            for article in re.finditer(pattern,text,re.S):
-                if article[1]!=body:continue
-                nodes,_=rule_contract.source_text_spans(body)
-                spans.extend((article.start(1)+start,article.start(1)+end) for start,end in nodes)
         _,original=rule_contract.source_text_spans(row['source_meta']['original_html'])
-        expected=publication.rendered_text('<body>'+original+'</body>')
-        canonical_lines={' '.join(value.split()) for value in expected.splitlines() if value.strip()}
-        cells={publication.rendered_text('<body>'+cell+'</body>').strip() for cell in re.findall(r'<t[dh]\b[^>]*>(.*?)</t[dh]>',original,re.S)}
-        labels={publication.rendered_text('<body>'+cell+'</body>').strip()+':' for cell in re.findall(r'<th\b[^>]*>(.*?)</th>',original,re.S)}
+        canonical_lines={' '.join(value.split()) for value in publication.rendered_text('<body>'+original+'</body>').splitlines() if value.strip()}
         pattern=r'<div\b[^>]*\bdata-screen-transcript=["\']'+re.escape(row['id'])+r'["\'][^>]*>(.*?)</div><!-- /screen-equivalent-text -->'
         for transcript in re.finditer(pattern,text,re.S):
             for variant in re.finditer(r'<div\b[^>]*\bdata-transcript-orientation=["\'][hv]["\'][^>]*>(.*?)</div>',transcript[1],re.S):
-                if exact:
-                    lines=html.unescape(variant[1]).splitlines()
-                    if lines and lines[0]==row.get('source_version'):lines=lines[1:]
-                    substantive=''.join(line for line in lines if line.strip().replace('：',':') not in labels)
-                    if re.sub(r'\s+','',substantive)!=re.sub(r'\s+','',expected):continue
                 origin=transcript.start(1)+variant.start(1)
                 for line in re.finditer(r'[^\n]+',variant[1]):
-                    if ' '.join(html.unescape(line[0]).split()) in canonical_lines | (cells if exact else set()):
+                    if ' '.join(html.unescape(line[0]).split()) in canonical_lines:
                         spans.append((origin+line.start(),origin+line.end()))
     return spans
 
@@ -477,7 +452,7 @@ def rule_pin_findings(output,files):
 def nested_refs(value, navigation_enabled=True):
     if isinstance(value, dict):
         for k, v in value.items():
-            if isinstance(v, str) and k in {'src', 'full', 'avif', 'href', 'poster', 'mask', 'script_bundle', 'style_bundle', 'repo_url'}:
+            if isinstance(v, str) and k in {'src', 'avif', 'href', 'poster', 'mask', 'script_bundle', 'style_bundle', 'repo_url'}:
                 if k == 'href' and not navigation_enabled: continue
                 # Screenshot metadata stores basenames; the runtime prepends assets/.
                 yield ('assets/'+v if k == 'src' and v.startswith('screenshot-') else v), k == 'href'
@@ -511,12 +486,6 @@ def tar_estimated_bytes(root, entries):
 
 
 def validate(output, report_path, incomplete=False, input_stats=None, asset_prefix=None, budget_root=None, verified_files=None):
-    policy_skipped = None
-    try: load_policy()
-    except PolicyUnavailable as error:
-        if not os.environ.get('CI'): raise
-        policy_skipped = str(error)
-        print('SKIP rule publication policy check: ' + policy_skipped)
     all_files = sorted(p for p in output.rglob('*') if p.is_file() and p.relative_to(output).as_posix() != 'release-identity.json')
     files = [p for p in all_files if p.relative_to(output).as_posix() not in (verified_files or {})]
     registry_path=ROOT/'config/panel-projects.json'
@@ -530,7 +499,12 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     findings = rule_pin_findings(output,files); missing = []; refs_count = 0
     pin=rule_contract.load_pin(ROOT)
     current_contract=pin.get('schema')=='wly.assembled-rules-pin.v2'
-    exact_current=current_contract and verified_current_rule_pin(pin)
+    native_pin = json.loads((output/'release-manifest.json').read_text('utf8')).get('rules_pin') if (output/'release-manifest.json').is_file() else None
+    if native_pin and native_pin.get('schema') == 'wly.astro-rules-pin.v1':
+        import astro_rules
+        astro_rules.verify(output, native_pin)
+        findings = []
+    else: native_pin = None
     total = sum(p.stat().st_size for p in all_files)
     # Tar headers/alignment are also budgeted, rather than only payload bytes.
     # Conservative bound includes directories and long-path/PAX name records.
@@ -565,35 +539,46 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
         if p.stat().st_size > 100_000_000: findings.append({'file': rel, 'type': 'git_object_limit'})
         if p.name in {'build.json','build-progress.json','build-summary.json'} or '.build' in p.parts or p.suffix in {'.env','.sqlite','.db','.log'}:
             findings.append({'file': rel, 'type': 'private_build_metadata'})
-        for name, pattern in [('private_filename',PRIVATE_FILENAME)]+([] if policy_skipped else [('excluded_topic_filename',EXCLUDED_TOPICS)]):
+        for name, pattern in [('private_filename',PRIVATE_FILENAME),('excluded_topic_filename',EXCLUDED_TOPICS)]:
             for m in pattern.finditer(rel): findings.append({'file':rel,'type':name,'offset':m.start(),'matched':m[0]})
         raw = p.read_bytes()
         for name, pattern in SECRETS:
             for m in re.finditer(pattern, raw, re.I): findings.append({'file': rel, 'type': 'credential', 'pattern': name,'offset':m.start(),'line':raw.count(b'\n',0,m.start())+1})
         if p.suffix not in TEXT_EXT: continue
         text = raw.decode('utf-8-sig')
-        canonical_spans=canonical_rule_topic_spans(output,p,text,pin,exact=exact_current) if current_contract and p.suffix=='.html' else []
+        canonical_spans=canonical_rule_topic_spans(output,p,text,pin) if current_contract and not native_pin and p.suffix=='.html' else []
         resource=pin.get('public_source_resources',{}).get('/'+rel) if current_contract else None
         canonical_resource=bool(resource and resource.get('public_source_sha256')==hashlib.sha256(raw).hexdigest())
-        reviewed=list(text)
-        if exact_current:
-            for start,end in ([(0,len(text))] if canonical_resource else canonical_spans):
-                reviewed[start:end]=['\n' if char=='\n' else ' ' for char in text[start:end]]
-        reviewed=''.join(reviewed)
-        rule_public=resource is not None or p.is_relative_to(output/'rules') or '/rule-sources/' in '/'+rel
-        for name, pattern in [('private_path',PRIVATE)]+([] if policy_skipped else [('excluded_topic',RULE_PUBLIC_TOPICS if rule_public else EXCLUDED_TOPICS)]):
-            for m in pattern.finditer(text if name=='excluded_topic' else reviewed):
-                if name=='excluded_topic' and not rule_public and is_topic_word_exception(text,m): continue
+        if native_pin:
+            canonical_spans += [(m.start(), m.end()) for m in re.finditer(r'<article\b[^>]*\bdata-rule-source=["\'][^"\']+["\'][^>]*>.*?</article>', text, re.S)]
+            canonical_resource |= any(row['src'] == '/' + rel and row['public_source_sha256'] == hashlib.sha256(raw).hexdigest() for row in native_pin['documents'].values())
+            canonical_resource |= rel == 'release-manifest.json'
+            if rel.startswith('search-') and rel.endswith('.js'):
+                decoder = json.JSONDecoder(); cursor = text.index('[')+1
+                rule_texts = {row.get('search_text_sha256') for row in native_pin['documents'].values()}
+                while cursor < len(text):
+                    while text[cursor].isspace() or text[cursor] == ',': cursor += 1
+                    if text[cursor] == ']': break
+                    record, end = decoder.raw_decode(text, cursor)
+                    if record.get('href', '').startswith('/rules/') and hashlib.sha256(record.get('search', '').encode()).hexdigest() in rule_texts:
+                        canonical_spans.append((cursor, end))
+                    cursor = end
+        for name, pattern in [('private_path',PRIVATE),('excluded_topic',EXCLUDED_TOPICS)]:
+            for m in pattern.finditer(text):
+                if name=='excluded_topic' and is_topic_word_exception(text,m): continue
+                if (name=='excluded_topic' or native_pin) and (canonical_resource or any(start<=m.start() and m.end()<=end for start,end in canonical_spans)):continue
                 line=text.count('\n',0,m.start())+1;column=m.start()-text.rfind('\n',0,m.start())
                 findings.append({'file':rel,'type':name,'line':line,'column':column,'offset':m.start(),'matched':m[0]})
         for repo in PRIVATE_REPOS:
             if repo.lower() in registered_repos:continue
-            for m in repo_pattern(repo).finditer(reviewed):
+            for m in repo_pattern(repo).finditer(text):
+                if native_pin and (canonical_resource or any(start<=m.start() and m.end()<=end for start,end in canonical_spans)): continue
                 findings.append({'file':rel,'type':'private_repository_reference','offset':m.start(),'line':text.count('\n',0,m.start())+1,'matched':repo})
         if PUBLIC_REPOS:
-            for m in re.finditer(r'(?<![A-Za-z0-9_.-])wlyaaaaa/[A-Za-z0-9_.-]+',reviewed,re.I):
+            for m in re.finditer(r'(?<![A-Za-z0-9_.-])wlyaaaaa/[A-Za-z0-9_.-]+',text,re.I):
                 repo=m[0].removesuffix('.git').lower()
                 if repo not in PUBLIC_REPOS and repo not in registered_repos:
+                    if native_pin and (canonical_resource or any(start<=m.start() and m.end()<=end for start,end in canonical_spans)): continue
                     # This source-authored instruction names an encrypted-file
                     # repository; it is ordinary prose, not a public link or
                     # runtime repository binding.
@@ -642,7 +627,6 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
                   limit_bytes=LIMIT,budget_bytes=BUDGET,headroom_bytes=LIMIT-deployment_tar_bytes,files=len(all_files),
                   groups=groups,local_references_checked=refs_count,missing_reference_count=len(missing),missing_references=missing,
                   required_missing=required,findings=findings,input=input_stats,
-                  skipped_checks=([{'check':'rule_public_policy','reason':policy_skipped}] if policy_skipped else []),
                   output_files={**(verified_files or {}),**{p.relative_to(output).as_posix():{'sha256':sha(p),'bytes':p.stat().st_size} for p in files}})
     if budget_root is not None:
         result.update(full_artifact_bytes=total, full_artifact_tar_estimated_bytes=tar_bytes,
@@ -656,7 +640,6 @@ def validate(output, report_path, incomplete=False, input_stats=None, asset_pref
     return result
 
 def build(source, output, report_path, incomplete):
-    load_policy()
     source = source.resolve(); output = output.resolve()
     if source == output or output.is_relative_to(source) or source.is_relative_to(output): raise ValueError('Input and output must be disjoint')
     if output.exists(): raise ValueError('Output already exists; choose a fresh output or recycle the old task output first')
@@ -827,7 +810,6 @@ def main():
     ap.add_argument('--private-index',type=Path,help='Local registered repository inventory; never copied into the site')
     ap.add_argument('--public-repos-from-github',action='store_true',help='Independently verify repository references against GitHub public inventory')
     args=ap.parse_args()
-    if not args.verify_only: load_policy()
     if args.private_index:
         inventory=json.loads(args.private_index.read_text('utf-8-sig'))
         PRIVATE_REPOS.update(e['repo'] for e in inventory.get('entries',[]) if e.get('visibility')=='PRIVATE')

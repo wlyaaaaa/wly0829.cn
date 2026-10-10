@@ -7,6 +7,9 @@ from pathlib import Path
 import tempfile
 import unittest
 import sys
+from datetime import datetime, timedelta, timezone
+from types import SimpleNamespace
+from urllib.error import HTTPError
 from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location('retention', Path(__file__).resolve().parents[1] / 'scripts/oss-retention.py')
@@ -45,7 +48,7 @@ class RetentionTests(unittest.TestCase):
             with self.subTest(page=page), patch.object(retention, 'command', return_value=json.dumps(page)):
                 with self.assertRaises(ValueError): retention.versions('fake', 'fixture')
 
-    def test_current_and_inflight_are_kept_but_rollback_only_objects_are_collected(self):
+    def test_current_and_inflight_are_kept_but_unpinned_obsolete_objects_are_collected(self):
         pin_path = self.shared / 'pins' / 'pending.json'
         plan_path = self.root / 'pending-plan.json'; retention.write(plan_path, {'fixture': True})
         retention.write(pin_path, {'schema': 'wly.oss-pin.v1', 'bucket': retention.BUCKET, 'plan': str(plan_path),
@@ -102,6 +105,48 @@ class RetentionTests(unittest.TestCase):
              patch.object(sys, 'argv', ['retention', 'retire', '--pin-id', pin_id, '--plan-sha256', 'original', '--lock-holder', 'fixture']):
             self.assertEqual(retention.main(), 0)
         self.assertFalse(pin_path.exists())
+
+    def test_previous_snapshot_survives_more_releases_without_sliding_expiry(self):
+        snapshot = self.preparation/'previous-publication.json'
+        old = {'release_id': 'old', 'oss': {'asset_base_url': retention.BASE,
+               'objects': {'x.js': {'key': self.obsolete, **self.fingerprint}}}}
+        retention.write(snapshot, old); plan = {'previous_publication_sha256': retention.digest(snapshot)}
+        now = datetime(2026, 10, 10, tzinfo=timezone.utc)
+        with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'datetime') as clock, \
+             patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)):
+            clock.now.return_value = now; clock.fromisoformat.side_effect = datetime.fromisoformat
+            self.assertIn(self.obsolete, retention.rollback_keep(self.preparation, plan, 'first'))
+            expiry = retention.read(self.shared/'rollback-retention.json')['records'][plan['previous_publication_sha256']]['expires_at']
+            clock.now.return_value = now + timedelta(days=6)
+            self.assertIn(self.obsolete, retention.rollback_keep(self.preparation, {}, 'second'))
+            retention.rollback_keep(self.preparation, plan, 'first')
+            self.assertEqual(retention.read(self.shared/'rollback-retention.json')['records'][plan['previous_publication_sha256']]['expires_at'], expiry)
+            clock.now.return_value = now + timedelta(days=7)
+            self.assertNotIn(self.obsolete, retention.rollback_keep(self.preparation, {}, 'third'))
+            self.assertNotIn(self.obsolete, retention.rollback_keep(self.preparation, plan, 'first'))
+            snapshot.write_text('{}')
+            with self.assertRaisesRegex(ValueError, 'snapshot changed'): retention.rollback_keep(self.preparation, plan)
+
+    def test_local_rollback_checks_every_object_and_blocks_missing_or_same_size_changes(self):
+        output = self.root/'restored'; assets = self.root/'assets'; assets.mkdir()
+        body = assets/'x.js'; body.write_bytes(b'good')
+        restored = {'release_id': 'old', 'oss': {'objects': {'x.js': {'key': self.obsolete, 'bytes': 4, 'sha256': retention.digest(body)}}}}
+        retention.write(output/'release-manifest.json', restored)
+        args = argparse.Namespace(output=output, local_assets=assets, report=self.root/'rollback.json')
+        with patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)), \
+             patch.object(retention, 'urlopen') as remote:
+            self.assertEqual(retention.verify_rollback(args), 0)
+            body.write_bytes(b'evil'); self.assertEqual(retention.verify_rollback(args), 1)
+            args.local_assets = self.root/'missing'; self.assertEqual(retention.verify_rollback(args), 1)
+            self.assertEqual(retention.read(args.report)['checks']['x.js']['state'], 'missing')
+            remote.assert_not_called()
+            restored['oss']['objects']['x.js']['url'] = retention.BASE + '/' + self.obsolete
+            restored['oss']['verification'] = {'objects': {'x.js': {'headers': {'ETag': 'old'}}}}
+            retention.write(output/'release-manifest.json', restored); args.local_assets = None
+            for status, state in ((404, 'missing'), (403, 'unknown')):
+                remote.side_effect = HTTPError('https://example.invalid/x.js', status, 'unavailable', {}, None)
+                self.assertEqual(retention.verify_rollback(args), 1)
+                self.assertEqual(retention.read(args.report)['checks']['x.js']['state'], state)
 
 
 if __name__ == '__main__': unittest.main()

@@ -218,14 +218,35 @@ export const generatedPanelFacts = {
     "rule_release_contract"
   ],
   "skills": {
-    "publicRegisteredCount": 46,
-    "publicInstallIntentCount": 31,
-    "publicInactiveIntentCount": 15,
-    "retiredSkillCount": 8,
-    "personalSelectedCount": 29,
+    "publicRegisteredCount": 27,
+    "publicInstallIntentCount": 27,
+    "publicInactiveIntentCount": 0,
+    "retiredSkillCount": 0,
+    "personalSelectedCount": 27,
     "hostIntegratedCount": 2,
     "hostIntegratedDiscovery": "not_rerun_by_agents_snapshot_refresh",
-    "selectedPublicCount": 31
+    "selectedPublicCount": 29,
+    "supplyEvidence": {
+      "schema": "wly.skill-supply-observation.v1",
+      "observedAtUtc": "2026-10-09T22:09:40.1947151+00:00",
+      "observedAtBeijing": "2026-10-10 06:09:40（北京时间）",
+      "sourceCommit": "744fe7b71068c1d38373f8b23fb73291466ae208",
+      "supplyManifestSha256": "95ff19b22cded06f4428cc030d2e56e3bd2a42da9d98f6772b66747da57045e6",
+      "managedSkillTreeSha256": "f8ce5106e00966f861dbf47bea9fdd9716c870c0b8a6cd842a8e8d71b1a063b4",
+      "command": "E:\\.agents\\tools\\Test-PersonalSkillSupply.ps1 -RequireInstalled -NoExternalEvidence -Json",
+      "activeManagedCount": 29,
+      "websiteUnselectedCount": 2,
+      "sourceStatus": "pass",
+      "installStatus": "pass",
+      "transactionStatus": "not_returned",
+      "currentTaskStatus": "unknown",
+      "freshTaskStatus": "unknown",
+      "endToEndStatus": "unknown",
+      "hostIntegratedStatus": "retained_observed_snapshot",
+      "hostIntegratedFreshTaskStatus": "unknown",
+      "hostIntegratedEndToEndStatus": "unknown",
+      "boundary": "本次只读工程检查核对29个现役安装意图的源码和canonical junction；公开选择27个个人入口，2个宿主能力保留此前来源快照，不计入个人安装数。未重跑业务、新会话、宿主发现或独立事务；不改变整份旧规则快照的日期、commit或E171身份。"
+    }
   },
   "authority": {
     "status": "e_rules_active_verified",
@@ -313,7 +334,10 @@ export const generatedPanelFacts = {
         "layer": "Skill supply（能力供应）",
         "status": "pass",
         "label": "通过",
-        "detail": "公开目录中的 29 个个人 Skill 已分别通过 source/install/transaction 检查；2 个宿主集成 Skill 保留各卡片已有的 observed source snapshot，本快速刷新不重跑宿主 capability discovery。Current/Fresh/E2E 按各项证据分别说明。"
+        "detail": "2026-10-10 06:09:40（北京时间）按需检查29个现役安装意图，source/install通过；公开目录选择27 个个人 Skill与2个宿主能力。个人配置意图、已核canonical junction和真实业务效果分别说明；宿主保留此前observed source snapshot，未重跑发现、Fresh或E2E。独立供应事务层回执未返回，Current/Fresh/E2E仍Unknown；本行不把旧E171规则参考升级成当前规则证据。",
+        "observedAtUtc": "2026-10-09T22:09:40.1947151+00:00",
+        "sourceCommit": "744fe7b71068c1d38373f8b23fb73291466ae208",
+        "evidenceBoundary": "本次只读工程检查核对29个现役安装意图的源码和canonical junction；公开选择27个个人入口，2个宿主能力保留此前来源快照，不计入个人安装数。未重跑业务、新会话、宿主发现或独立事务；不改变整份旧规则快照的日期、commit或E171身份。"
       },
       {
         "layer": "Contract coverage（跨控制面合同覆盖）",
@@ -327,6 +351,6 @@ export const generatedPanelFacts = {
   "integrity": {
     "schema": "wly.panel-facts-integrity.v1",
     "algorithm": "sha256",
-    "payloadSha256": "0da0cc48d2f237cfa261e8e6d0903c46788c7896ef84ae61a8bcf8ea42224a09"
+    "payloadSha256": "7e2365dffda04d9b16d91466fcc557df29307723b90237a6877b0fbf3cc643ea"
   }
 };

@@ -33,9 +33,11 @@ function safeContentPath(relativePath) {
 const projects = [];
 for (const registration of selected) {
   const entry = projectCatalog.find((candidate) => candidate.registration.id === registration.id);
-  if (!entry) throw new Error(`Registered content package is not loaded: ${registration.id}`);
+  const typeset = registration.content_format === "typeset" || registration.ai_refresh.content_format === "typeset";
+  if (!entry && !typeset) throw new Error(`Registered content package is not loaded: ${registration.id}`);
   const contentPath = safeContentPath(registration.ai_refresh.content_path);
   const contentBytes = await readFile(contentPath);
+  const authored = typeset ? JSON.parse(contentBytes.toString("utf8")) : null;
   const isAgents = registration.id === "agents";
   projects.push({
     id: registration.id,
@@ -55,10 +57,10 @@ for (const registration of selected) {
     source_fingerprint_state: registration.ai_refresh.mode === "manual_owner_only"
       ? "Fresh Owner evidence is allowed only after an explicit owner refresh request"
       : "AI must populate from the selected decision-relevant Owner observations and dated retained evidence; registered collectors are candidate entrypoints, not a mandatory full-run checklist",
-    observed_at: isAgents ? panelSnapshot.observedAt : entry.project.currentState?.observedAt || null,
+    observed_at: isAgents ? panelSnapshot.observedAt : authored?.observed_at || entry?.project.currentState?.observedAt || null,
     current_gap_count: isAgents
       ? panelSnapshot.validation.rows.filter((row) => row.status !== "pass").length
-      : entry.project.currentState?.gaps?.length || 0,
+      : typeset ? null : entry.project.currentState?.gaps?.length || 0,
     collectors: registration.ai_refresh.collectors,
     collector_requirements: registration.ai_refresh.collector_requirements || [],
     conditional_collectors: registration.ai_refresh.conditional_collectors || [],

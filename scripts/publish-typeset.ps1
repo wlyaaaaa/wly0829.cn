@@ -1,12 +1,13 @@
 param(
-    [Parameter(Mandatory)][string]$TypesetRoot,
-    [Parameter(Mandatory)][string]$Inventory,
-    [Parameter(Mandatory)][string]$Geometry,
+    [string]$TypesetRoot,
+    [string]$Inventory,
+    [string]$Geometry,
     [Parameter(Mandatory)][string]$Baseline,
     [string]$BaselineManifest,
     [Parameter(Mandatory)][string]$Release,
-    [Parameter(Mandatory)][string]$BuildReport,
-    [Parameter(Mandatory)][string]$Verification,
+    [string]$BuildReport,
+    [string]$Verification,
+    [string]$AstroPreparation,
     [string]$Directive,
     [string]$LayoutAcceptance,
     [string]$LegacySite,
@@ -41,13 +42,22 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 $invocationRoot = (Get-Location).Path
 function Absolute([string]$Value) { return [IO.Path]::GetFullPath($Value, $invocationRoot) }
 foreach ($name in @('TypesetRoot','Inventory','Geometry','Baseline','Release','BuildReport','Verification')) {
-    Set-Variable -Name $name -Value (Absolute (Get-Variable -Name $name -ValueOnly))
+    $value = Get-Variable -Name $name -ValueOnly
+    if ($value) { Set-Variable -Name $name -Value (Absolute $value) }
+    elseif (-not $AstroPreparation) { throw "Missing required typeset input: $name" }
 }
 if (-not $BaselineManifest) { $BaselineManifest = Join-Path $Baseline 'release-manifest.json' }
 else { $BaselineManifest = Absolute $BaselineManifest }
+if ($AstroPreparation) {
+    $AstroPreparation = Absolute $AstroPreparation
+    $native = Get-Content -Raw -LiteralPath $AstroPreparation | ConvertFrom-Json -DateKind String
+    if (-not $OssPreparation) { $OssPreparation = $native.oss_preparation }
+    if (-not $BuildReport) { $BuildReport = $AstroPreparation }
+    if (-not $Pages) { $Pages = @($native.selected_pages) }
+}
 if ($LegacySite) { $LegacySite = Absolute $LegacySite }
 if ($AssetCache) { $AssetCache = Absolute $AssetCache }
-else {
+elseif ($BuildReport) {
     $reviewedBuild = Get-Content -Raw -LiteralPath $BuildReport | ConvertFrom-Json -DateKind String
     if ($reviewedBuild.asset_cache) { $AssetCache = Absolute $reviewedBuild.asset_cache }
 }
@@ -63,7 +73,7 @@ foreach ($name in @('OssPreparation','OssQaPlan','OssVerification','OssReading',
     $value=Get-Variable -Name $name -ValueOnly
     if ($value) { Set-Variable -Name $name -Value (Absolute $value) }
 }
-if ($OssPreparation -and (-not $OssQaPlan -or -not $OssVerification -or -not $OssReading -or -not $OssCold)) {
+if (-not $AstroPreparation -and $OssPreparation -and (-not $OssQaPlan -or -not $OssVerification -or -not $OssReading -or -not $OssCold)) {
     throw 'OSS publication requires its exact browser plan, full DOM, reading and cold-browser evidence.'
 }
 if ($RunRoot) { $RunRoot = Absolute $RunRoot }
@@ -74,13 +84,6 @@ else {
 if (Test-Path -LiteralPath $RunRoot) { throw 'RunRoot must be a fresh directory.' }
 New-Item -ItemType Directory -Path $RunRoot | Out-Null
 Set-Location -LiteralPath $repoRoot
-$publisherTempRoots = @('TEMP','TMP','TMPDIR') | ForEach-Object { [Environment]::GetEnvironmentVariable($_, 'Process') } | Where-Object { -not [string]::IsNullOrEmpty($_) } | Sort-Object -Unique
-foreach ($publisherTempRoot in $publisherTempRoots) {
-    [void][IO.Directory]::CreateDirectory($publisherTempRoot)
-    $publisherTempProbe = [IO.Path]::Combine($publisherTempRoot, 'wly-temp-probe-' + [guid]::NewGuid().ToString('N') + '.tmp')
-    $publisherTempStream = [IO.FileStream]::new($publisherTempProbe, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None, 4096, [IO.FileOptions]::DeleteOnClose)
-    try { $publisherTempStream.WriteByte(1); $publisherTempStream.Flush($true) } finally { $publisherTempStream.Dispose() }
-}
 function Checked([string]$Program, [string[]]$Arguments) {
     & $Program @Arguments
     if ($LASTEXITCODE -ne 0) { throw "$Program failed: exit $LASTEXITCODE. Inspect this run's reports for the exact publication or recovery state." }
@@ -89,7 +92,14 @@ function ReadJson([string]$Path) { return Get-Content -Raw -LiteralPath $Path | 
 function SaveJson([string]$Path, $Value) {
     [IO.File]::WriteAllText($Path, ($Value | ConvertTo-Json -Depth 100) + "`n", [Text.UTF8Encoding]::new($false))
 }
-function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport, [string]$CopyTo) {
+function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport) {
+    if ($AstroPreparation) {
+        $arguments = @('scripts/prepare-astro-release.py','verify','--preparation',$AstroPreparation,'--output',$Receipt)
+        if ($Directive) { $arguments += @('--directive',$Directive) }
+        if ($RebuildReport) { $arguments += @('--copy-to',$Candidate) }
+        Checked 'python' $arguments
+        return
+    }
     $arguments = @('scripts/prepare-typeset-release.py','prepare','--typeset-root',$TypesetRoot,'--inventory',$Inventory,
         '--geometry',$Geometry,
         '--baseline',$Baseline,'--baseline-manifest',$BaselineManifest,'--release',$Candidate,
@@ -97,13 +107,19 @@ function Prepare([string]$Candidate, [string]$Receipt, [string]$RebuildReport, [
     if ($Directive) { $arguments += @('--directive',$Directive) }
     if ($LayoutAcceptance) { $arguments += @('--layout-acceptance',$LayoutAcceptance) }
     if ($RebuildReport) { $arguments += @('--rebuilt-report',$RebuildReport) }
-    if ($CopyTo) { $arguments += @('--copy-to',$CopyTo) }
     if ($RuntimeVerification) { $arguments += @('--runtime-verification',$RuntimeVerification) }
     if ($ReadingPlan) { $arguments += @('--reading-plan',$ReadingPlan) }
     if ($Pages) { $arguments += @('--pages') + $Pages }
     Checked 'python' $arguments
 }
 function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
+    if ($AstroPreparation) {
+        $nativeArguments = @('scripts/prepare-astro-release.py','verify','--preparation',$AstroPreparation,'--output',$Receipt)
+        if ($Publish) { $nativeArguments += '--require-remote' }
+        Checked 'python' $nativeArguments
+        if ($Staged) { Checked 'python' @('scripts/hybrid-release.py','verify','--output',$Staged,'--check-sealed-content') }
+        return
+    }
     $arguments=@('scripts/verify-typeset-oss.py','--preparation',$OssPreparation,'--build-report',$BuildReport,
         '--qa-plan',$OssQaPlan,'--verification',$OssVerification,'--reading',$OssReading,'--cold',$OssCold,'--output',$Receipt)
     if ($RebuiltSource) { $arguments+=@('--rebuilt-source',$RebuiltSource) }
@@ -115,35 +131,22 @@ function VerifyOss([string]$Receipt, [string]$RebuiltSource, [string]$Staged) {
 }
 function OssBrowserNetwork([string]$Mode, [string]$Staged) {
     $output=Join-Path $RunRoot "oss-browser-$Mode.json"
-    $fresh = -not (Test-Path -LiteralPath $output)
     $arguments=@('scripts/verify-oss-browser-network.py','--preparation',$OssPreparation,'--release',$Staged,
         '--mode',$Mode,'--output',$output,'--task-cache',(Join-Path $RunRoot 'browser-network-temp'))
     & python @arguments
     $code=$LASTEXITCODE
-    if ($fresh -and $code -eq 2 -and $Mode -eq 'live' -and (Test-Path -LiteralPath $output) -and (ReadJson $output).failure_class.retryable) {
-        $firstOutput = $output
-        $output = Join-Path $RunRoot 'oss-browser-live-retry.json'
-        $fresh = -not (Test-Path -LiteralPath $output)
-        $arguments[[array]::IndexOf($arguments, '--output') + 1] = $output
-        & python @arguments '--retry-failed' $firstOutput
-        $code = $LASTEXITCODE
-    }
     $state["oss_browser_$Mode"]=[ordered]@{ exit=$code; report=$output; status=$(if($code -eq 0){'pass'}else{'fail'}) }
     SaveState
     if($code -ne 0){
         if($Mode -eq 'live') {
-            $failure = if ($fresh -and $code -eq 2 -and (Test-Path -LiteralPath $output)) { (ReadJson $output).failure_class.kind } else { 'unknown' }
-            $state.status = if ($failure -eq 'confirmed') { 'online_native_network_failed' } else { 'online_native_network_unconfirmed' }
-            if ($failure -eq 'confirmed') { $script:confirmedPublicationFailure='Mandatory final-origin public Chrome network gate failed; restore this publication through the exact existing rollback path.' }
+            $state.status='online_native_network_failed'
+            $script:confirmedPublicationFailure='Mandatory final-origin public Chrome network gate failed; restore this publication through the exact existing rollback path.'
             SaveState
         }
         throw "Mandatory OSS $Mode browser network gate failed. Actual events: $output"
     }
 }
 $prepared = Join-Path $RunRoot 'preparation.json'
-if ($Publish -and (-not $RuntimeVerification -or -not $ReadingPlan -or -not (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'check-site-ui.py') -PathType Leaf))) {
-    throw 'Publication requires the installed UI checker and bound complete reading/UI evidence.'
-}
 Write-Output "Local release evidence: $prepared"
 if ($OssPreparation) { VerifyOss (Join-Path $RunRoot 'oss-preparation.json') }
 Prepare $Release $prepared
@@ -153,6 +156,8 @@ if (-not $Publish) {
     Write-Output 'Prepared locally. No fetch, merge, staging, commit, push or online readback was requested.'
     return
 }
+if ($AstroPreparation -and -not $Directive) { throw 'Publication needs the actual review instruction for this exact Astro preparation.' }
+if (-not $AstroPreparation -and -not $LegacySite) { throw '-Publish requires -LegacySite for the exact reviewed build command.' }
 if (-not $LockHolder -or $LockHolder -notmatch '^(Claude|Codex)/.+$') { throw '-Publish requires -LockHolder containing the actual harness and real task id, for example Claude/<real-task-id>.' }
 if (-not (Test-Path -LiteralPath $ShortLockTool -PathType Leaf)) { throw 'The registered wly0829-publication short-lock entrypoint is unavailable.' }
 $remote = (& git remote get-url origin).Trim()
@@ -168,19 +173,14 @@ if ($LASTEXITCODE -ne 0 -or $attribute -notmatch ': text: unset$') { throw 'Exac
 $statePath = Join-Path $RunRoot 'publication-state.json'
 $state = [ordered]@{ schema='wly.typeset-publication.v1'; status='preparing'; release_id=$receipt.release_id;
     started_at_beijing=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o');
-    selected_pages=$receipt.selected_pages; batch=$receipt.batch; pushed_commit=$null; rollback_ref=$null;
+    publication_changes=$receipt.publication_changes; selected_pages=$receipt.selected_pages; batch=$receipt.batch; pushed_commit=$null; rollback_ref=$null;
     directive_sha256=$receipt.directive_sha256; geometry_sha256=$receipt.geometry_sha256;
-    automatic_rollback=$false; lock_holder=$LockHolder; timings=[ordered]@{}; stages=[ordered]@{} }
+    automatic_rollback=$false; lock_holder=$LockHolder; timings=[ordered]@{} }
 function SaveState { SaveJson $statePath $state }
 function TimedChecked([string]$Program, [string[]]$Arguments, [string]$Field) {
     $watch = [Diagnostics.Stopwatch]::StartNew()
-    $started = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
     try { Checked $Program $Arguments }
-    finally {
-        $state.timings[$Field] = $watch.Elapsed.TotalSeconds
-        $state.stages[$Field] = [ordered]@{started_at_beijing=$started; ended_at_beijing=[DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o'); seconds=$watch.Elapsed.TotalSeconds}
-        SaveState
-    }
+    finally { $state.timings[$Field] = $watch.Elapsed.TotalSeconds; SaveState }
 }
 $script:publicationLockAcquired = $false
 $script:confirmedPublicationFailure = $null
@@ -274,6 +274,10 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
         $domInput = if ($OssQaPlan -and -not $Legacy) { $OssQaPlan } elseif ($RuntimeVerification -and -not $Legacy) { $RuntimeVerification } else { $BuildReport }
         $arguments = @('scripts/check-typeset-online.py','--build-report',$domInput,
             '--output',$lastReport,'--task-cache',(Join-Path $RunRoot "$Prefix-browser-cache"))
+        if ($AstroPreparation -and -not $Legacy) {
+            $arguments = @('scripts/check-site-ui.py','--root',(Join-Path $repoRoot 'site-release'),
+                '--base-url','https://wly0829.cn','--output',$lastReport,'--pages') + @($receipt.selected_pages)
+        }
         if ($RuntimeVerification -and -not $Legacy) {
             $runtimePages = (ReadJson $RuntimeVerification).pages.PSObject.Properties.Name
             $samples = @(@('404','cockpit','localocr','proxyclean','rescue') | Where-Object { $_ -in $runtimePages })
@@ -285,23 +289,14 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
         $code = $LASTEXITCODE
         $proof = if (Test-Path -LiteralPath $lastReport -PathType Leaf) { ReadJson $lastReport } else { $null }
         if ($code -eq 0 -and $proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$lastReport } }
-        if ($code -eq 2 -and $proof.status -eq 'fail') {
-            $current = @($proof.checks | Where-Object status -eq 'fail' | Sort-Object page,width | Select-Object page,width,issues) | ConvertTo-Json -Depth 10 -Compress
+        if ($code -in @(1,2) -and $proof.status -eq 'fail') {
+            $failedRows = if ($AstroPreparation -and -not $Legacy) { $proof.records | Where-Object { $_.issues.Count -gt 0 } } else { $proof.checks | Where-Object status -eq 'fail' }
+            $current = @($failedRows | Sort-Object route,page,width | Select-Object route,page,width,issues) | ConvertTo-Json -Depth 10 -Compress
             if ($current -ceq $signature) { $stableFailures++ } else { $stableFailures=1; $signature=$current }
         } else { $stableFailures=0; $signature=$null }
         if ($attempt -lt 3) { Start-Sleep -Seconds 3 }
     }
     return [pscustomobject]@{ status=$(if ($stableFailures -eq 3) { 'confirmed_failure' } else { 'unknown' }); report=$lastReport }
-}
-function ResolveReadbackBaseline([string]$CachePath) {
-    try {
-        $cached = ReadJson $CachePath
-        $online = Invoke-RestMethod -Uri ('https://wly0829.cn/release-identity.json?readback_baseline='+[DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()) -Headers @{'Cache-Control'='no-cache'} -TimeoutSec 30
-        if ($cached.schema -eq 'wly.typeset-online-readback.v1' -and $cached.status -eq 'pass' -and $cached.release_id -and $cached.release_id -ceq $online.release_id -and $cached.manifest_sha256 -ceq $online.manifest_sha256) {
-            return [ordered]@{mode='candidate_previous'; report=$CachePath; reason=$null}
-        }
-        return [ordered]@{mode='full'; report=$null; reason='Cached passing readback does not match the current public identity.'}
-    } catch { return [ordered]@{mode='full'; report=$null; reason=$_.Exception.Message} }
 }
 function ConfirmReadback([string]$Candidate, [string]$Prefix) {
     $previous = $null
@@ -319,10 +314,7 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
             return [pscustomobject]@{ status='unknown'; report=$report; reason='Readback command did not produce valid evidence.' }
         }
         $proof = ReadJson $report
-        if ($proof.status -eq 'pass') {
-            SaveJson $readbackCache $proof
-            return [pscustomobject]@{ status='pass'; report=$report; reason=$null }
-        }
+        if ($proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$report; reason=$null } }
         if ($proof.status -eq 'mismatch' -and $proof.issues.Count) {
             $signature = @($proof.issues | Sort-Object path | ForEach-Object {
                 [ordered]@{ path=$_.path; actual=$_.actual; actual_release_id=$_.actual_release_id; actual_files_sha256=$_.actual_files_sha256 }
@@ -431,17 +423,44 @@ try {
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $productionCheck = Join-Path $RunRoot 'production-check.json'
     $productionArguments=@('scripts/prepare-typeset-release.py','production-check','--baseline',$Baseline,
-        '--baseline-manifest',$BaselineManifest,'--production-ref','origin/main','--build-report',$BuildReport,'--output',$productionCheck)
+        '--baseline-manifest',$BaselineManifest,'--production-ref','origin/main','--output',$productionCheck)
+    if ($BuildReport) { $productionArguments += @('--build-report',$BuildReport) }
     if ($RuntimeBaseline) { $productionArguments+='--runtime-baseline' }
     Checked 'python' $productionArguments
     $state.production_commit = (ReadJson $productionCheck).production_commit
-    $readbackCache = Join-Path ([IO.Path]::GetFullPath((& git rev-parse --git-common-dir).Trim(), $repoRoot)) 'latest-typeset-readback.json'
-    $state.readback_baseline = if ($PreviousReadback) { [ordered]@{mode='explicit'; report=$PreviousReadback; reason=$null} } else { ResolveReadbackBaseline $readbackCache }
-    $PreviousReadback = $state.readback_baseline.report
     SaveState
     $rebuilt = Join-Path $RunRoot 'rebuilt-dist'
-    Prepare $Release (Join-Path $RunRoot 'rebuilt-preparation.json') '' $rebuilt
+    $rebuiltReport = Join-Path $RunRoot 'rebuilt-build-report.json'
+    if ($AstroPreparation) {
+        Prepare $rebuilt (Join-Path $RunRoot 'rebuilt-preparation.json') $rebuiltReport
+        $rebuiltIdentity = ReadJson (Join-Path $rebuilt 'release-manifest.json')
+    } else {
+    $buildArguments = @('scripts/build-typeset-site.py','--typeset-root',$TypesetRoot,'--inventory',$Inventory,
+        '--geometry',$Geometry,
+        '--baseline',$Baseline,'--legacy-site',$LegacySite,'--output',$rebuilt,'--report',$rebuiltReport)
+    if ($Pages) { $buildArguments += @('--pages') + $Pages }
+    if ($AssetCache) { $buildArguments += @('--asset-cache',$AssetCache) }
+    if ($ReuseAssetCache) { $buildArguments += '--reuse-asset-cache' }
+    if ($ReleaseOverlay) { $buildArguments += @('--release-overlay',$ReleaseOverlay) }
+    if ($CreativePreparation) { $buildArguments += @('--creative-preparation',$CreativePreparation) }
+    if ($LiveUiPreparation) { $buildArguments += @('--live-ui-preparation',$LiveUiPreparation) }
+    if ($RulePublicProjection) { $buildArguments += @('--rule-public-projection',$RulePublicProjection) }
+    if ($RuntimeBaseline) { $buildArguments+=@('--runtime-baseline','--baseline-ref',$state.production_commit) }
+    TimedChecked 'python' $buildArguments 'build_seconds'
+    $rebuiltProof = ReadJson $rebuiltReport
+    if ($rebuiltProof.geometry_path -ne $Geometry -or $rebuiltProof.geometry_sha256 -cne $receipt.geometry_sha256) {
+        $state.status = 'requires_new_verification'
+        throw 'Rebuild changed its geometry input. Repeat program verification, Claude review, and the explicit publication instruction for the new build.'
+    }
     $rebuiltIdentity = ReadJson (Join-Path $rebuilt 'release-manifest.json')
+    if ($rebuiltIdentity.release_id -ne $receipt.release_id) {
+        $state.status = 'requires_new_verification'
+        throw 'Rebuild changed release_id. Repeat the full program verification, Claude review, and explicit publication instruction for the new build.'
+    }
+    # built_at may change. The Claude-reviewed report remains immutable; its input and
+    # output hashes must still match every byte of the rebuilt release.
+    Prepare $rebuilt (Join-Path $RunRoot 'rebuilt-preparation.json') $rebuiltReport
+    }
     HoldPublicationLock
     $contentArguments=@('scripts/hybrid-release.py','verify','--output',$rebuilt,
         '--content-report',(Join-Path $RunRoot 'content-report.json'),'--public-repos-from-github')
@@ -449,7 +468,8 @@ try {
     Checked 'python' $contentArguments
     Checked 'node' @('scripts/verify-public-content.mjs','--dist',$rebuilt)
     $uiRoot = if ($OssPreparation) { Join-Path $OssPreparation 'github' } else { $rebuilt }
-    $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'),'--geometry',$Geometry)
+    $uiArguments = @('scripts/check-site-ui.py','--root',$uiRoot,'--output',(Join-Path $RunRoot 'ui-check.json'))
+    if ($Geometry) { $uiArguments += @('--geometry',$Geometry) }
     if ($UiFull -or -not $Pages) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
     if ($OssPreparation) { $uiArguments += @('--oss-preparation',$OssPreparation) }
     Checked 'python' $uiArguments
@@ -505,9 +525,9 @@ try {
     CommitRelease 'Publish Claude-reviewed typeset static release'
     Checked 'git' @('merge-base','--is-ancestor','origin/main','HEAD')
     $state.status = 'push_requested'
-    $state.requested_commit = (& git rev-parse HEAD).Trim()
     SaveState
     HoldPublicationLock
+    if ($AstroPreparation) { Checked 'python' @('scripts/prepare-astro-release.py','verify','--release','site-release') }
     TimedChecked 'git' @('push','origin','HEAD:main') 'push_seconds'
     $commit = (& git rev-parse HEAD).Trim()
     $state.pushed_commit = $commit
@@ -566,8 +586,8 @@ try {
         throw 'Local HEAD or remote main changed during readback; verify the current deployment before reporting completion.'
     }
     $state.status = 'published'
-    Checked 'python' @('scripts/run-typeset-checks.py','--mode','baseline','--verification',$Verification,
-        '--baseline-output',(Join-Path $repoRoot '.publish/quality-baseline.json'),'--production-commit',$commit,'--task-cache',$RunRoot)
+    if (-not $AstroPreparation) { Checked 'python' @('scripts/run-typeset-checks.py','--mode','baseline','--verification',$Verification,
+        '--baseline-output',(Join-Path $repoRoot '.publish/quality-baseline.json'),'--production-commit',$commit,'--task-cache',$RunRoot) }
     $state.completed_at_beijing = [DateTimeOffset]::UtcNow.ToOffset([TimeSpan]::FromHours(8)).ToString('o')
     SaveState
     Write-Output "Published commit $commit; Pages run $($deploymentResult.run); all public HTML and asset hashes passed."

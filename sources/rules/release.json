@@ -1,0 +1,1253 @@
+{
+  "schema": "wly.astro-rules-pin.v1",
+  "version": "E251",
+  "release_commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+  "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
+  "release_record_sha256": "13eb87e23a8a66a28729fa1176b09bd3462a7b9e367ee02caa2d86121e79a7b2",
+  "files": [
+    {
+      "bytes": 19071,
+      "logical_id": "agents_root_rules",
+      "relative_path": "AGENTS.md",
+      "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed"
+    },
+    {
+      "bytes": 8842,
+      "logical_id": "authorization_contract",
+      "relative_path": "docs/contracts/agents.authorization.md",
+      "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6"
+    },
+    {
+      "bytes": 22335,
+      "logical_id": "capabilities_runtime_contract",
+      "relative_path": "docs/contracts/agents.capabilities-runtime.md",
+      "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5"
+    },
+    {
+      "bytes": 28808,
+      "logical_id": "claude_adapter_contract",
+      "relative_path": "docs/contracts/agents.claude-adapter.md",
+      "sha256": "84ed0581d00ca220740e958af5f9ba68f3303b9b80e3befbc89b06a508f7b603"
+    },
+    {
+      "bytes": 2597,
+      "logical_id": "claude_entry_template",
+      "relative_path": "templates/claude-home/CLAUDE.md",
+      "sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e"
+    },
+    {
+      "bytes": 11170,
+      "logical_id": "codex_adapter_contract",
+      "relative_path": "docs/contracts/agents.codex-adapter.md",
+      "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7"
+    },
+    {
+      "bytes": 2323,
+      "logical_id": "codex_entry_template",
+      "relative_path": "templates/codex-home/AGENTS.md",
+      "sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9"
+    },
+    {
+      "bytes": 14814,
+      "logical_id": "context_sources_contract",
+      "relative_path": "docs/contracts/agents.context-sources.md",
+      "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b"
+    },
+    {
+      "bytes": 28989,
+      "logical_id": "engineering_delivery_contract",
+      "relative_path": "docs/contracts/agents.engineering-delivery.md",
+      "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac"
+    },
+    {
+      "bytes": 27473,
+      "logical_id": "execution_coordination_contract",
+      "relative_path": "docs/contracts/agents.execution-coordination.md",
+      "sha256": "4d919b01aee09716e09421d5ed1890c3431db379423d02df9dfd3d70dc43e544"
+    },
+    {
+      "bytes": 12323,
+      "logical_id": "privacy_data_contract",
+      "relative_path": "docs/contracts/agents.privacy-data.md",
+      "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db"
+    },
+    {
+      "bytes": 5380,
+      "logical_id": "protected_actions_contract",
+      "relative_path": "docs/contracts/agents.protected-actions.md",
+      "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa"
+    },
+    {
+      "bytes": 5074,
+      "logical_id": "rule_release_contract",
+      "relative_path": "docs/contracts/agents.rule-release.md",
+      "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997"
+    },
+    {
+      "bytes": 8974,
+      "logical_id": "rules_catalog",
+      "relative_path": "rules-catalog.json",
+      "sha256": "ca4f86d7d28b4f5b1f1159f26b8a80574730f6dd45e13a6ac25f3f7aa6028d23"
+    }
+  ],
+  "catalog": {
+    "aliases": [],
+    "documents": [
+      {
+        "contract_id": "agents.rule-ownership",
+        "logical_id": "agents_root_rules",
+        "owner_scope": "implementation/rules-common",
+        "purpose": "约法（最高层）、优先顺序、规则核验和专题导航",
+        "related": [
+          "context_sources_contract",
+          "engineering_delivery_contract"
+        ],
+        "relative_path": "AGENTS.md",
+        "title": "我的 AI 约法与工作约定",
+        "triggers": [
+          "rule",
+          "instruction_priority",
+          "fact_owner",
+          "conflict",
+          "ai_charter",
+          "user_values",
+          "entry_verification",
+          "technical_defaults",
+          "ai_memory_cache",
+          "embedded_instruction",
+          "prompt_injection"
+        ]
+      },
+      {
+        "contract_id": "agents.authorization",
+        "logical_id": "authorization_contract",
+        "owner_scope": "implementation/rules-authorization",
+        "purpose": "直接做和要同意的事、长期授权、无限制授权、受信任的 AI",
+        "related": [
+          "privacy_data_contract",
+          "protected_actions_contract"
+        ],
+        "relative_path": "docs/contracts/agents.authorization.md",
+        "title": "用户授权",
+        "triggers": [
+          "authorization",
+          "authorization_requirement",
+          "external_effect",
+          "standing_user_authorization",
+          "durable_explicit_user_authorization",
+          "durable_authorization_attempt_once",
+          "standing_uac_authorization",
+          "uac",
+          "standing_change_convergence_authorization",
+          "highest_authority_agent",
+          "trusted_ai",
+          "emergency_conversation_authorization",
+          "owner_takeover_authorization",
+          "unrestricted_authorization",
+          "owner_takeover_direct_entry",
+          "project_rule_nonoverride",
+          "first_public_release",
+          "trusted_ai_major_action"
+        ]
+      },
+      {
+        "contract_id": "agents.capabilities-runtime",
+        "logical_id": "capabilities_runtime_contract",
+        "owner_scope": "implementation/rules-capabilities-runtime",
+        "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
+        "related": [
+          "authorization_contract"
+        ],
+        "relative_path": "docs/contracts/agents.capabilities-runtime.md",
+        "title": "能力与运行方式",
+        "triggers": [
+          "skill",
+          "plugin",
+          "connector",
+          "runtime_identity",
+          "cross_agent_compatibility",
+          "software_update_continuity",
+          "cross_harness_common_contract",
+          "semantic_capability_mapping",
+          "shared_execution_resources",
+          "google_workspace_standalone_route",
+          "active_capability_discovery",
+          "evidence_based_degradation",
+          "method_autonomy",
+          "model_preservation",
+          "local_tool_catalog",
+          "lightweight_local_tool",
+          "existing_local_tool",
+          "image_super_resolution",
+          "image_generation",
+          "cloud_asset_channel",
+          "existing_local_solution",
+          "native_environment_provisioning",
+          "install_location",
+          "dynamic_configuration_admission",
+          "project_config_snapshot_sync",
+          "time_sensitive_response_flow",
+          "english_chinese_gloss",
+          "report_page",
+          "website_update",
+          "automation_visibility"
+        ]
+      },
+      {
+        "contract_id": "agents.claude-adapter",
+        "logical_id": "claude_adapter_contract",
+        "owner_scope": "implementation/rules-claude-adapter",
+        "purpose": "Claude 身份、思考档位、子代理与工作流、宿主接线、Hook、无限制授权与升级",
+        "related": [
+          "authorization_contract",
+          "protected_actions_contract"
+        ],
+        "relative_path": "docs/contracts/agents.claude-adapter.md",
+        "title": "Claude适配",
+        "triggers": [
+          "claude_root",
+          "claude_effort_semantics",
+          "ultracode",
+          "claude_subagent_routing",
+          "claude_workflow_routing",
+          "claude_host_wiring",
+          "claude_code_hook",
+          "claude_missing_hook",
+          "claude_owner_takeover",
+          "claude_official_update_continuity",
+          "claude_mcp_new_session_acceptance",
+          "claude_command_text_block",
+          "ai_memory_cache",
+          "claude_temp_dir"
+        ]
+      },
+      {
+        "contract_id": "agents.codex-adapter",
+        "logical_id": "codex_adapter_contract",
+        "owner_scope": "implementation/rules-codex-adapter",
+        "purpose": "Codex 入口与 Hook、无限制授权入口、派子代理的不同处、官方升级",
+        "related": [
+          "authorization_contract",
+          "execution_coordination_contract"
+        ],
+        "relative_path": "docs/contracts/agents.codex-adapter.md",
+        "title": "Codex适配",
+        "triggers": [
+          "codex_root_protected_judgment",
+          "spawn_agent",
+          "openai_child",
+          "agent_type",
+          "fork_turns",
+          "codex_owner_takeover",
+          "codex_official_update_continuity",
+          "codex_harness_upgrade_compatibility",
+          "codex_harness_integration",
+          "chatgpt_codex_native",
+          "delegation_quality_and_cost"
+        ]
+      },
+      {
+        "contract_id": "agents.context-sources",
+        "logical_id": "context_sources_contract",
+        "owner_scope": "implementation/rules-context-sources",
+        "purpose": "事实找谁、冻结名单、三档维护、长任务接续",
+        "related": [],
+        "relative_path": "docs/contracts/agents.context-sources.md",
+        "title": "事实来源与任务上下文",
+        "triggers": [
+          "architecture_review_entry",
+          "three_control_review",
+          "foundation_owner_change",
+          "contract_coverage",
+          "project_maintenance_freeze",
+          "frozen_project",
+          "bulk_project_maintenance",
+          "maintenance_tier",
+          "backup_governance",
+          "decision_context",
+          "context_compilation",
+          "reader_routing",
+          "durable_state_reconstructability",
+          "shared_experience_writeback",
+          "continuity_checkpoint"
+        ]
+      },
+      {
+        "contract_id": "agents.engineering-delivery",
+        "logical_id": "engineering_delivery_contract",
+        "owner_scope": "implementation/rules-engineering-delivery",
+        "purpose": "实现、本人原话分类与对待、依赖修复、验证、临时文件进回收站、Git 收尾",
+        "related": [
+          "authorization_contract",
+          "execution_coordination_contract"
+        ],
+        "relative_path": "docs/contracts/agents.engineering-delivery.md",
+        "title": "工程与交付",
+        "triggers": [
+          "verification",
+          "stage_completion",
+          "product_completion",
+          "git_closeout",
+          "evidence_status_mapping",
+          "observed_at",
+          "superseded_by",
+          "task_file_lifecycle_cleanup",
+          "recycle_bin_cleanup",
+          "task_delete_failure",
+          "cross_owner_dependency_budget",
+          "change_amplification",
+          "evolvable_code",
+          "implementation_bloat_guard",
+          "repository_bloat_governance",
+          "retirement_deletion",
+          "bloat_budget_is_not_product_gate",
+          "semantic_fidelity_over_compression",
+          "user_intent_over_implementation",
+          "requirement_inflation_review",
+          "minimum_sufficient_implementation_guard",
+          "complexity_failure_collapse",
+          "real_task_acceptance",
+          "capability_evidence",
+          "skill_supply",
+          "doctor",
+          "end_to_end",
+          "private_companion_lookup",
+          "security_scan_opt_out",
+          "approved_design_freeze",
+          "requirement_provenance",
+          "ai_supplement_disclosure"
+        ]
+      },
+      {
+        "contract_id": "agents.execution-coordination",
+        "logical_id": "execution_coordination_contract",
+        "owner_scope": "implementation/rules-execution-coordination",
+        "purpose": "派子代理的共同原则、模型清单、新型号公开数据调研和做错后的处理、各用工作副本、单点动作短锁、接续",
+        "related": [
+          "authorization_contract"
+        ],
+        "relative_path": "docs/contracts/agents.execution-coordination.md",
+        "title": "分工与并行施工",
+        "triggers": [
+          "subagent",
+          "delegation",
+          "parallel",
+          "model_choice",
+          "model_roster",
+          "independent_review",
+          "top_level_task",
+          "execution_owner",
+          "git_worktree_isolation",
+          "single_point_lock",
+          "handoff",
+          "active_checkout_fast_forward",
+          "short_lock_usage",
+          "model_research"
+        ]
+      },
+      {
+        "contract_id": "agents.privacy-data",
+        "logical_id": "privacy_data_contract",
+        "owner_scope": "implementation/rules-privacy-data",
+        "purpose": "资料锁和解锁、可信位置、公开分级、私人仓库、备份跟随删除",
+        "related": [
+          "authorization_contract",
+          "protected_actions_contract"
+        ],
+        "relative_path": "docs/contracts/agents.privacy-data.md",
+        "title": "个人资料与数据处理",
+        "triggers": [
+          "personal_environment_privacy",
+          "privacy_access_classification",
+          "privacy_history_verification",
+          "privacy_access_validity",
+          "personal_data_lock",
+          "personal_data_verification_cancel",
+          "personal_environment_freeze",
+          "personal_environment_recovery",
+          "backup_source_follow_deletion",
+          "backup_regret_period",
+          "destination_visibility",
+          "default_trusted_target",
+          "preserve_exact_content",
+          "explicit_public_gate",
+          "user_private_account_space_presumption",
+          "public_personal_data_classification",
+          "below_l3_publication_default",
+          "project_publication_restriction_authority",
+          "private_repository_convergence",
+          "public_project_private_companion_migration",
+          "trusted_local_security_sufficiency"
+        ]
+      },
+      {
+        "contract_id": "agents.protected-actions",
+        "logical_id": "protected_actions_contract",
+        "owner_scope": "implementation/rules-protected-actions",
+        "purpose": "重大的事（高风险动作）、动手前把关、GitHub 重大动作、本人验证方式",
+        "related": [
+          "authorization_contract",
+          "privacy_data_contract"
+        ],
+        "relative_path": "docs/contracts/agents.protected-actions.md",
+        "title": "重大动作与本人验证",
+        "triggers": [
+          "protected_major_action",
+          "high_risk_action",
+          "codex_root_protected_judgment",
+          "github_major_action",
+          "destructive_action",
+          "passkey_step_up",
+          "owner_verification_factor",
+          "human_presence_approval",
+          "highest_authority_factor_loss",
+          "legacy_lock_transition"
+        ]
+      },
+      {
+        "contract_id": "agents.rule-release",
+        "logical_id": "rule_release_contract",
+        "owner_scope": "implementation/rules-rule-release",
+        "purpose": "同版规则集合、发布、回退、防随手改",
+        "related": [],
+        "relative_path": "docs/contracts/agents.rule-release.md",
+        "title": "规则发布与恢复",
+        "triggers": [
+          "e_rules_tamper",
+          "e_rules_release",
+          "e_rules_fast_release",
+          "e_rules_rollback",
+          "e_rules_release_speed_budget",
+          "e_rules_read_only"
+        ]
+      }
+    ],
+    "entry_logical_id": "agents_root_rules",
+    "schema": "agents.e-rules-catalog.v1",
+    "templates": [
+      {
+        "logical_id": "claude_entry_template",
+        "relative_path": "templates/claude-home/CLAUDE.md"
+      },
+      {
+        "logical_id": "codex_entry_template",
+        "relative_path": "templates/codex-home/AGENTS.md"
+      }
+    ]
+  },
+  "pointer": {
+    "activated_at_utc": "2026-10-09T17:51:17.6788613+00:00",
+    "current": {
+      "git_commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
+      "release_id": "E251",
+      "release_record_sha256": "13eb87e23a8a66a28729fa1176b09bd3462a7b9e367ee02caa2d86121e79a7b2",
+      "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102"
+    },
+    "pointer_revision": 160,
+    "previous": {
+      "git_commit": "d821152c42079feed4112478fc1f5fb96c59106e",
+      "release_id": "E250",
+      "release_record_sha256": "a5100ec1eee71c98a49d897051c50cd8028b1658ef4736f91db56fb3396fca7f",
+      "ruleset_sha256": "8c32497e4293f1c227d85a0170d77f11bd1a80c524e31cd8c5b1a8bdfcba3552"
+    },
+    "schema": "agents.e-rules-current.v1"
+  },
+  "pointer_sha256": "9e612b1d21fa1b46e8e94660393cc4a4fc4c180781d412bf949b57021bd42462",
+  "documents": {
+    "agents_root_rules": {
+      "bytes": 19071,
+      "logical_id": "agents_root_rules",
+      "relative_path": "AGENTS.md",
+      "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
+      "title": "我的 AI 约法与工作约定",
+      "purpose": "约法（最高层）、优先顺序、规则核验和专题导航",
+      "primary": true,
+      "slug": "charter",
+      "public_source_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
+      "public_source_bytes": 18799,
+      "src": "/_typeset/rule-sources/efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d.md",
+      "prose_sha256": "72cd02c209f3a3d71870c5f349019a9b2cc2077593e1cfd12529228c1116d3eb",
+      "search_text_sha256": "705ee2e3977747c3d8574a0f0283af88aa6ac430e68feaeb09516caaf65f89b7",
+      "page": "charter",
+      "route": "/rules/charter/",
+      "parts": [
+        {
+          "id": "charter/charter-02",
+          "label": "约法 · L1–L10 · E251",
+          "markdown_sha256": "a17ea7a886c8c4e0db81ca9e2af3de9d5625c9ffeb2870c97c4bafbc57628025",
+          "prose_sha256": "7e66c64d0ac4e2139f5fe079957c12639a9e21fbc3b98af5d5c5b48ccd6bf9d1",
+          "selection": {
+            "from": null,
+            "to": "### 三、怎样做事",
+            "start": 0,
+            "end": 1710,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "charter/charter-03",
+          "label": "约法 · L11–L17 · E251",
+          "markdown_sha256": "463019b5e3196b84da63cb756a7828320171104460ff75f6b3db07a5cfaffa58",
+          "prose_sha256": "2d91644a3a030106ff2f21477a99e704e0e4d3a1e947249566f52993cf848f2f",
+          "selection": {
+            "from": "### 三、怎样做事",
+            "to": "### 五、我的个人资料",
+            "start": 1710,
+            "end": 2947,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "charter/charter-04",
+          "label": "约法 · L18–L23 · E251",
+          "markdown_sha256": "a7907428f5273f274c2d12e1069558a77987eee083fd9f0924919f785ec0cb34",
+          "prose_sha256": "1dc7ee61a1991a0e5ff99477c5d90a76c019169696af9a1c2004c9c2d7525c92",
+          "selection": {
+            "from": "### 五、我的个人资料",
+            "to": "### 八、项目与维护",
+            "start": 2947,
+            "end": 4827,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "charter/charter-05",
+          "label": "约法 · L24–L30 · E251",
+          "markdown_sha256": "52865bb2d68466cf9c6cf6499467b0eb278b0b2da74813525f4a530cd5629377",
+          "prose_sha256": "e950a3c88fe184ef9a55065ceb062bf00d19200660d601a175ed2483055ba83f",
+          "selection": {
+            "from": "### 八、项目与维护",
+            "to": null,
+            "start": 4827,
+            "end": 7443,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "authorization_contract": {
+      "bytes": 8842,
+      "logical_id": "authorization_contract",
+      "relative_path": "docs/contracts/agents.authorization.md",
+      "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
+      "title": "用户授权",
+      "purpose": "直接做和要同意的事、长期授权、无限制授权、受信任的 AI",
+      "primary": true,
+      "slug": "authorization",
+      "public_source_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
+      "public_source_bytes": 8830,
+      "src": "/_typeset/rule-sources/34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b.md",
+      "prose_sha256": "157dfd940045e9ced36e2df1db37541341d033279c6118e5216615dc9389eb43",
+      "search_text_sha256": "8dcb50855b073a18657355eadfcbd6f8bdffa7d06944a50adfe64552cd3c95b6",
+      "page": "rule-authorization",
+      "route": "/rules/authorization/",
+      "parts": [
+        {
+          "id": "rule-authorization/rule-authorization-05",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "adfa68ca1cf3cb20547ec20d7dbbd7c00957842fdab2999b6ed023910f7a59ca",
+          "prose_sha256": "6b4d0fafaead7437ef745f2249de544fa07c7b6be81e80e8f9ee2dcfe6d1f7c5",
+          "selection": {
+            "from": null,
+            "to": "## 子代理和项目规则不扩大授权",
+            "start": 0,
+            "end": 1527,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-authorization/rule-authorization-06",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "b3cce8eee55932bf9c32db9a3c37ed38c83b6641546467540d9cab47af5cdb30",
+          "prose_sha256": "ca3060e92b4fb33c9c7abd2946a4f3dbef8e61bb49c41436778dc033d586e54d",
+          "selection": {
+            "from": "## 子代理和项目规则不扩大授权",
+            "to": "## 受信任的 AI",
+            "start": 1527,
+            "end": 2833,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-authorization/rule-authorization-07",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "c80ef867f6f49a499cbc76cdf1a44f58960fd891c5013118c2488ed9119e15af",
+          "prose_sha256": "3cc74cee0c9e6640178ac00e80332aa8c407cc666ec87794bbec2724293f88fa",
+          "selection": {
+            "from": "## 受信任的 AI",
+            "to": null,
+            "start": 2833,
+            "end": 3498,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "capabilities_runtime_contract": {
+      "bytes": 22335,
+      "logical_id": "capabilities_runtime_contract",
+      "relative_path": "docs/contracts/agents.capabilities-runtime.md",
+      "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
+      "title": "能力与运行方式",
+      "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
+      "primary": true,
+      "slug": "capabilities-runtime",
+      "public_source_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
+      "public_source_bytes": 22329,
+      "src": "/_typeset/rule-sources/055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d.md",
+      "prose_sha256": "22533d3ba6ef1b41cff9fb73086c0fd4a9b53546bc0d362e792d34bfa82e3fc4",
+      "search_text_sha256": "5f3472977124b6b112520e1a62326eb7272501829ca4063bebe3beb0e80e8eb9",
+      "page": "rule-capabilities-runtime",
+      "route": "/rules/capabilities-runtime/",
+      "parts": [
+        {
+          "id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
+          "label": "原文 · E251 版",
+          "markdown_sha256": "967ebb2d931cda145b57f3a8c4fd8e87a1897ea647a20b80792b22f24c932a46",
+          "prose_sha256": "7eea263e678514f0c4eeb77c25842f828d3cb549b1f1b4901e553c51e8066ac4",
+          "selection": {
+            "from": null,
+            "to": "## 常用入口",
+            "start": 0,
+            "end": 1419,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "450f8e4ea6f6797ab60a956b9c7a847569b57183627391c2a694f36243f366f1",
+          "prose_sha256": "42b4d9572b0fc080bd12c91da8c291efe66acd85f77538bd22223604369311e8",
+          "selection": {
+            "from": "## 常用入口",
+            "to": "## 浏览器",
+            "start": 1419,
+            "end": 5273,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "df2b93f9817ec3bd50f8dda15cb549402307c2b0161044b84b89d4b3a3bb8f19",
+          "prose_sha256": "76ffa2a34695175e8d14ed093863586e4078f1bce813dd911ef1bf4f94e8c53d",
+          "selection": {
+            "from": "## 浏览器",
+            "to": "## 汇报、网站和自动运行的东西",
+            "start": 5273,
+            "end": 6337,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "79dce4f67e53b30805c637def10cb0b921af0e505b24c3354547ba4a06f21a33",
+          "prose_sha256": "4c7f0524d3300286b3009b383b1dc835e9014f53ee70d816b3b4e7084f706c8e",
+          "selection": {
+            "from": "## 汇报、网站和自动运行的东西",
+            "to": "## 安装位置、配置和本机约定",
+            "start": 6337,
+            "end": 7647,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "0df78b5b01030a311ccafbafd2eea66c98fafdefe15080513b452308ca3b3777",
+          "prose_sha256": "c135c608669f1acf4c8d5fbc2f1c9e334f481b721e304c6250ab544e98ef4625",
+          "selection": {
+            "from": "## 安装位置、配置和本机约定",
+            "to": null,
+            "start": 7647,
+            "end": 9057,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "claude_adapter_contract": {
+      "bytes": 28808,
+      "logical_id": "claude_adapter_contract",
+      "relative_path": "docs/contracts/agents.claude-adapter.md",
+      "sha256": "84ed0581d00ca220740e958af5f9ba68f3303b9b80e3befbc89b06a508f7b603",
+      "title": "Claude适配",
+      "purpose": "Claude 身份、思考档位、子代理与工作流、宿主接线、Hook、无限制授权与升级",
+      "primary": true,
+      "slug": "claude-adapter",
+      "public_source_sha256": "fcb2d056ca9d534c7b0da83449aa903c61cf19abe313b262d132a0b03fe3ed51",
+      "public_source_bytes": 28794,
+      "src": "/_typeset/rule-sources/fcb2d056ca9d534c7b0da83449aa903c61cf19abe313b262d132a0b03fe3ed51.md",
+      "prose_sha256": "f68b7828f985dc5e1bdbac7aed9f93baedd9b20d00004a636c2afb91d2b5c809",
+      "search_text_sha256": "ac30fb437c4a97212c46e3f0dd5912b03ab442bb1da993d8e7e19724a73ca592",
+      "page": "rule-claude-adapter",
+      "route": "/rules/claude-adapter/",
+      "parts": [
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-11",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "918e6ffc47cc4db1639280ef2eb0fa20aab55a4bfcb2a99d9aa6058eeb569486",
+          "prose_sha256": "181d8e906012c46266128b709be81f5020735de73af80cdb1feb9556d30f55a2",
+          "selection": {
+            "from": null,
+            "to": "## 派子代理：Claude 的不同处",
+            "start": 0,
+            "end": 798,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-12",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "3093607cb84de52f2fba33f772c5ecd4f1e330cf7077e1d016347174af17821c",
+          "prose_sha256": "676a0540e0a29258f8086d139983c72e985e8e4ca20ab4b2f868f420179e9fce",
+          "selection": {
+            "from": "## 派子代理：Claude 的不同处",
+            "to": "- **从包装器进入。**",
+            "start": 798,
+            "end": 2823,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-13",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "345c0b8a826920766be435c16317512e40d3923801a5c3c3188a5d758803c85a",
+          "prose_sha256": "c3290cc693d17648fcf346587d9e643994ae448f41283d8463ce154e1d154840",
+          "selection": {
+            "from": "- **从包装器进入。**",
+            "to": "Steer 的长消息可用",
+            "start": 2823,
+            "end": 7129,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-14",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "5244b37591ea11d0af0e0488955e8617ee7814a8be8c3da7287eb57918a487df",
+          "prose_sha256": "1481147b45d12309130262b78d915781dbdcb73bceac70de4361b0e02633cff2",
+          "selection": {
+            "from": "Steer 的长消息可用",
+            "to": "- **要在新会话里验收的**",
+            "start": 7129,
+            "end": 9120,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-15",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "5a772ade7a3f497168adee46839f3a0ebcc8371fd1aa3712540a36f8b6f3445c",
+          "prose_sha256": "e246ace9f4d84d8e8d67e5ced613af8380b096c9b94bfcc8c890794d719fe542",
+          "selection": {
+            "from": "- **要在新会话里验收的**",
+            "to": "## Hook 和个人资料状态",
+            "start": 9120,
+            "end": 10686,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-16",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "6f0698354f11058a7c1e14a25b10c0b538af51e604cb95c81ddd5783a44b28d6",
+          "prose_sha256": "b4b409076dc269b2a4147ade7747457acf2b4d3b582ea89cd888c3645b04e53e",
+          "selection": {
+            "from": "## Hook 和个人资料状态",
+            "to": "## 受信任 AI 的其他能力",
+            "start": 10686,
+            "end": 13044,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-claude-adapter/rule-claude-adapter-17",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "56f998fdbb9cb5a4433c87a449dfab868bd855a733da4594aa4984c7adbe088c",
+          "prose_sha256": "3412697cdd848c7104a7bbad080646de230cf5575f0b9ccd59432b8b89507f0e",
+          "selection": {
+            "from": "## 受信任 AI 的其他能力",
+            "to": null,
+            "start": 13044,
+            "end": 13828,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "claude_entry_template": {
+      "bytes": 2597,
+      "logical_id": "claude_entry_template",
+      "relative_path": "templates/claude-home/CLAUDE.md",
+      "sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e",
+      "title": "CLAUDE.md",
+      "purpose": "AI 的规则入口",
+      "primary": false,
+      "slug": "CLAUDE",
+      "public_source_sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e",
+      "public_source_bytes": 2597,
+      "src": "/_typeset/rule-sources/9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e.md",
+      "prose_sha256": "48d5f7f06f956e847abfdc8e1f9710ff2500fc928ea80fcbd11a5806a4198e9f",
+      "search_text_sha256": "f5347dfa19b8415f81406a603d6ffa123c423853b5f9b99e893d548a629f4ce0"
+    },
+    "codex_adapter_contract": {
+      "bytes": 11170,
+      "logical_id": "codex_adapter_contract",
+      "relative_path": "docs/contracts/agents.codex-adapter.md",
+      "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
+      "title": "Codex适配",
+      "purpose": "Codex 入口与 Hook、无限制授权入口、派子代理的不同处、官方升级",
+      "primary": true,
+      "slug": "codex-adapter",
+      "public_source_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
+      "public_source_bytes": 11166,
+      "src": "/_typeset/rule-sources/c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9.md",
+      "prose_sha256": "b9623e5da475b10e1c1a9139f23840250e99406d70c383524639a5cb4f5c6431",
+      "search_text_sha256": "b8baa0cf4d48f230d680768950c61e0fb90e4bb84b6e491dbe9888d8f41af283",
+      "page": "rule-codex-adapter",
+      "route": "/rules/codex-adapter/",
+      "parts": [
+        {
+          "id": "rule-codex-adapter/rule-codex-adapter-05",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "337d0a7ea9e386e0c0b5a5f4dcd1516bd3cce3adeb369ccf781fc03dc75880de",
+          "prose_sha256": "f0371c8be55d8ac37c5fa0f625d89c7f28acdbbd4f546d37823ac2dd5e3783a7",
+          "selection": {
+            "from": null,
+            "to": "## 派子代理：Codex 的不同处",
+            "start": 0,
+            "end": 1311,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-codex-adapter/rule-codex-adapter-06",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "d5b3c3db1a7954dbeb30ffc97bd5a0806ae0b65fa4d9896e011d10f4fb72d8bd",
+          "prose_sha256": "0e487c5ae15947d0ef8fc489be77b3957d38c3c8e15886e672f1fc0923eaa9c5",
+          "selection": {
+            "from": "## 派子代理：Codex 的不同处",
+            "to": null,
+            "start": 1311,
+            "end": 5284,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "codex_entry_template": {
+      "bytes": 2323,
+      "logical_id": "codex_entry_template",
+      "relative_path": "templates/codex-home/AGENTS.md",
+      "sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9",
+      "title": "AGENTS.md",
+      "purpose": "AI 的规则入口",
+      "primary": false,
+      "slug": "AGENTS",
+      "public_source_sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9",
+      "public_source_bytes": 2323,
+      "src": "/_typeset/rule-sources/bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9.md",
+      "prose_sha256": "d066b501fbd6a24f20478e033e962affff85a76a041689b89660ccdd03220d18",
+      "search_text_sha256": "b205abd163cde20f7e6593a5725e4f73a36e0344bcf45e5a24cec1c5214df0e7"
+    },
+    "context_sources_contract": {
+      "bytes": 14814,
+      "logical_id": "context_sources_contract",
+      "relative_path": "docs/contracts/agents.context-sources.md",
+      "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
+      "title": "事实来源与任务上下文",
+      "purpose": "事实找谁、冻结名单、三档维护、长任务接续",
+      "primary": true,
+      "slug": "context-sources",
+      "public_source_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+      "public_source_bytes": 14808,
+      "src": "/_typeset/rule-sources/9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4.md",
+      "prose_sha256": "2312390d2f51141ee4327f3d9305704da16922adadb9ddd1afec06ae66d37d15",
+      "search_text_sha256": "0f9dcc8825e649026e8d5d4b3e6e1933ee9983ab5c7050b2d362536162e79074",
+      "page": "rule-context-sources",
+      "route": "/rules/context-sources/",
+      "parts": [
+        {
+          "id": "rule-context-sources/rule-context-sources-08",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "ae06dcb7deefeb6ab587bf41474ea898d35153eeec0aca9f4b90b516badfe6db",
+          "prose_sha256": "be294353241642e7acbf264b5c1f148a147ebd41621f8a1130e0710770a0004f",
+          "selection": {
+            "from": null,
+            "to": "## 三档维护",
+            "start": 0,
+            "end": 1597,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-context-sources/rule-context-sources-09",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "e9d7dc3092f09ed7bb94d11375691f5f46d534952614bf79cbf6f30333bea077",
+          "prose_sha256": "d91779254716adfa426d49a16c29b000a48f30ddf5097382a6f077609d2736dc",
+          "selection": {
+            "from": "## 三档维护",
+            "to": "### 一样东西只存一处",
+            "start": 1597,
+            "end": 4062,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-context-sources/rule-context-sources-10",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "10584dfa25ed220f4d2f59356b02a159d2bcce2d2925d07e791eb459cc415e80",
+          "prose_sha256": "ff5478cc0a924cb402a7a2386283b861990b27383038ef9509106cf81fc2211d",
+          "selection": {
+            "from": "### 一样东西只存一处",
+            "to": null,
+            "start": 4062,
+            "end": 6231,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "engineering_delivery_contract": {
+      "bytes": 28989,
+      "logical_id": "engineering_delivery_contract",
+      "relative_path": "docs/contracts/agents.engineering-delivery.md",
+      "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
+      "title": "工程与交付",
+      "purpose": "实现、本人原话分类与对待、依赖修复、验证、临时文件进回收站、Git 收尾",
+      "primary": true,
+      "slug": "engineering-delivery",
+      "public_source_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+      "public_source_bytes": 28969,
+      "src": "/_typeset/rule-sources/a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378.md",
+      "prose_sha256": "387351e13a435966608dfa41b57feba0f9dd753db295d9c1318d7483bc1c266e",
+      "search_text_sha256": "7f4a19759c82313b0757db7d7a2a7f190845e8f3605120370fc66bf9ab09c873",
+      "page": "rule-engineering-delivery",
+      "route": "/rules/engineering-delivery/",
+      "parts": [
+        {
+          "id": "rule-engineering-delivery/rule-engineering-delivery-06",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "7370cdc9f4f792378a8117baa995cba681bc9e491e6febc4bb664b000c4b7d83",
+          "prose_sha256": "0681d9850604dea7bd5e48e1e75a81eefba85a77c84eceaf058b2262d7d8c45b",
+          "selection": {
+            "from": null,
+            "to": "## 验证",
+            "start": 0,
+            "end": 6636,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-engineering-delivery/rule-engineering-delivery-07",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "5e57a3609a21b53eb35939cd5cad3982d2a99168896cb9247724f865702af198",
+          "prose_sha256": "b966366002a9d480100d0ca511893de95482712bd1994c4327f70ee585e436f7",
+          "selection": {
+            "from": "## 验证",
+            "to": "## 下载、临时文件和清理",
+            "start": 6636,
+            "end": 8734,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-engineering-delivery/rule-engineering-delivery-08",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "31009b428cdb71039f2b9ce14456e49e49de9a97feec05fdc10e5dae102bedd7",
+          "prose_sha256": "a9c39fc5f97c38b8b3fee4b0f1dd4d1a9f71a7f9d27dd055850fbf6cba145bc4",
+          "selection": {
+            "from": "## 下载、临时文件和清理",
+            "to": "## Git 收尾",
+            "start": 8734,
+            "end": 9625,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-engineering-delivery/rule-engineering-delivery-09",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "41b8856265902787b67ffffcf75629937a889f810a6d4efa9c9db5ff660ffb2d",
+          "prose_sha256": "018890db046da19546fd37acfcb1480e698e68ab1af0c40ab7ed010ec090819c",
+          "selection": {
+            "from": "## Git 收尾",
+            "to": null,
+            "start": 9625,
+            "end": 10879,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "execution_coordination_contract": {
+      "bytes": 27473,
+      "logical_id": "execution_coordination_contract",
+      "relative_path": "docs/contracts/agents.execution-coordination.md",
+      "sha256": "4d919b01aee09716e09421d5ed1890c3431db379423d02df9dfd3d70dc43e544",
+      "title": "分工与并行施工",
+      "purpose": "派子代理的共同原则、模型清单、新型号公开数据调研和做错后的处理、各用工作副本、单点动作短锁、接续",
+      "primary": true,
+      "slug": "execution-coordination",
+      "public_source_sha256": "41b06a9471d073433bbb3d4ae69d7c49bee4916d662a1e39b684a8de67bc0cbc",
+      "public_source_bytes": 27461,
+      "src": "/_typeset/rule-sources/41b06a9471d073433bbb3d4ae69d7c49bee4916d662a1e39b684a8de67bc0cbc.md",
+      "prose_sha256": "808547182861f37ae8fb4e649cdc8319c17df029e9f079eafcf442a42084e8e5",
+      "search_text_sha256": "4f6899a462d6c85908d04ef1d994e71b49ee2a23610e5059def82fac2906c9d8",
+      "page": "rule-execution-coordination",
+      "route": "/rules/execution-coordination/",
+      "parts": [
+        {
+          "id": "rule-execution-coordination/rule-execution-coordination-06",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "02d2ba58122ee2b5c8711065358748ec63ab6dce25924c0ab113352f02a28459",
+          "prose_sha256": "1dd8d27333acf65f00111e3ff8488bf9079732874255dd6b7955d4aa4b5cae87",
+          "selection": {
+            "from": null,
+            "to": "## 改动与花费成比例",
+            "start": 0,
+            "end": 4454,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-execution-coordination/rule-execution-coordination-07",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "38522fba8b531d13a7975d53ac8791bc4370a1dd0fc494bf32408088f451b377",
+          "prose_sha256": "a20b4bf8443a4010b5fd56b4b62d27c624707230a83cfcf688918e563c20436a",
+          "selection": {
+            "from": "## 改动与花费成比例",
+            "to": null,
+            "start": 4454,
+            "end": 10891,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "privacy_data_contract": {
+      "bytes": 12323,
+      "logical_id": "privacy_data_contract",
+      "relative_path": "docs/contracts/agents.privacy-data.md",
+      "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
+      "title": "个人资料与数据处理",
+      "purpose": "资料锁和解锁、可信位置、公开分级、私人仓库、备份跟随删除",
+      "primary": true,
+      "slug": "privacy-data",
+      "public_source_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
+      "public_source_bytes": 12315,
+      "src": "/_typeset/rule-sources/0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5.md",
+      "prose_sha256": "f43d81a1afa35079e476997f7539238fe0665db2e1ca4cb69e685b3c9e69215f",
+      "search_text_sha256": "97f40dd9d6974fa9e35dcd5d1a37721e223da90172efcaa8f929723e5a9a85e6",
+      "page": "rule-privacy-data",
+      "route": "/rules/privacy-data/",
+      "parts": [
+        {
+          "id": "rule-privacy-data/rule-privacy-data-07",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "d8325fcae97b9c1b8c8d61aef2ad15499ea9f069f0c56939800eacd6563e08f6",
+          "prose_sha256": "cdf82fb76df7fc3c9951752457d183f550118f331aae542ae3c3e3b416bfbede",
+          "selection": {
+            "from": null,
+            "to": "- **入口。**",
+            "start": 0,
+            "end": 1622,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-privacy-data/rule-privacy-data-08",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "4c8613b739fb43f4aeb79f7a0297a0d024aca9f7ed5a8d7b4899aac95e2789aa",
+          "prose_sha256": "c1234e363941781116d69ea01668c30ccad573d4faed4489cc3b248ead320e50",
+          "selection": {
+            "from": "- **入口。**",
+            "to": "## 公开个人数据分级表",
+            "start": 1622,
+            "end": 3202,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-privacy-data/rule-privacy-data-09",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "2a746b503364a18ce066ac2499da85a7a9110052e4fd5f282aab13c0d158d50f",
+          "prose_sha256": "9dff9bf62bddc09c3f43477a7d8dcce819e80af3d2517e8fe5ba760717773247",
+          "selection": {
+            "from": "## 公开个人数据分级表",
+            "to": "## 私人仓库收口",
+            "start": 3202,
+            "end": 4397,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-privacy-data/rule-privacy-data-10",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "4026ef6bbf373a87efe7960e9f2b390cc0d19c34616b1d6cef14ec84b5543f1c",
+          "prose_sha256": "f910a54343dc79b91f342a5ee4217ad93b67a285a35ef00a9c344685106e9533",
+          "selection": {
+            "from": "## 私人仓库收口",
+            "to": null,
+            "start": 4397,
+            "end": 5049,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "protected_actions_contract": {
+      "bytes": 5380,
+      "logical_id": "protected_actions_contract",
+      "relative_path": "docs/contracts/agents.protected-actions.md",
+      "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
+      "title": "重大动作与本人验证",
+      "purpose": "重大的事（高风险动作）、动手前把关、GitHub 重大动作、本人验证方式",
+      "primary": true,
+      "slug": "protected-actions",
+      "public_source_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
+      "public_source_bytes": 5374,
+      "src": "/_typeset/rule-sources/29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1.md",
+      "prose_sha256": "3bfbce7e91882fb988629ff91e09e6b823a7add3695e0aad953361ffc179ac54",
+      "search_text_sha256": "1afff7eb5e5d9778a871bbc2d7d6e7e67e6ac5eae326701fc6571e293d4fccf6",
+      "page": "rule-protected-actions",
+      "route": "/rules/protected-actions/",
+      "parts": [
+        {
+          "id": "rule-protected-actions/rule-protected-actions-07",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "3018164db23872504366da370a58abb744899d859ec292c4cf49a82a4653100a",
+          "prose_sha256": "b1cb37b69c6900c97270b1197721b3d1055381653fcc16f9636458a26785da66",
+          "selection": {
+            "from": null,
+            "to": "## GitHub 重大动作",
+            "start": 0,
+            "end": 979,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-protected-actions/rule-protected-actions-08",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "6f4b1e7d0f0b8becc1faf79f807b89c9be986c4ff037bd1f319963cd6e5c33f3",
+          "prose_sha256": "083b743852a5b4e10759ef706a86547fce92d413810646f85de87af3e5ded015",
+          "selection": {
+            "from": "## GitHub 重大动作",
+            "to": null,
+            "start": 979,
+            "end": 2156,
+            "approved_omissions": []
+          }
+        }
+      ]
+    },
+    "rule_release_contract": {
+      "bytes": 5074,
+      "logical_id": "rule_release_contract",
+      "relative_path": "docs/contracts/agents.rule-release.md",
+      "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+      "title": "规则发布与恢复",
+      "purpose": "同版规则集合、发布、回退、防随手改",
+      "primary": true,
+      "slug": "rule-release",
+      "public_source_sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
+      "public_source_bytes": 5074,
+      "src": "/_typeset/rule-sources/d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997.md",
+      "prose_sha256": "3408c989e9d31f92df1ca03113a0c0de49b28d0b0240aaf0f50097cddf94a1b3",
+      "search_text_sha256": "7c4b20e8e71cf4479fa3a959e04c36523730d7069860532edbc99be087789a40",
+      "page": "rule-rule-release",
+      "route": "/rules/rule-release/",
+      "parts": [
+        {
+          "id": "rule-rule-release/rule-rule-release-05",
+          "label": "原文 · E251 版，一字不改",
+          "markdown_sha256": "c4035daa6a0b88c6f7855ec734593a4a4682bb25ee0c6fcbde38211064e602a0",
+          "prose_sha256": "eca7e8438c201709f9c7aa7b69fda9ba8a1dbfe0f9257f6b95c942607fe434f1",
+          "selection": {
+            "from": null,
+            "to": "## 发布和回退",
+            "start": 0,
+            "end": 799,
+            "approved_omissions": []
+          }
+        },
+        {
+          "id": "rule-rule-release/rule-rule-release-06",
+          "label": "原文 · E251 版 · 续",
+          "markdown_sha256": "f0da2d6832d4a85e6cd94c09337841560d93e700958387e8e91027273eefcfbb",
+          "prose_sha256": "e8f12b63c341d6b2c7393cd05a3edc53071c2df30962e9c039b2dce0e28372a6",
+          "selection": {
+            "from": "## 发布和回退",
+            "to": null,
+            "start": 799,
+            "end": 2174,
+            "approved_omissions": []
+          }
+        }
+      ]
+    }
+  },
+  "public_files": {
+    "AGENTS.md": {
+      "bytes": 18799,
+      "sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d"
+    },
+    "current-rules.json": {
+      "bytes": 643,
+      "sha256": "9e612b1d21fa1b46e8e94660393cc4a4fc4c180781d412bf949b57021bd42462"
+    },
+    "docs/contracts/agents.authorization.md": {
+      "bytes": 8830,
+      "sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
+    },
+    "docs/contracts/agents.capabilities-runtime.md": {
+      "bytes": 22329,
+      "sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d"
+    },
+    "docs/contracts/agents.claude-adapter.md": {
+      "bytes": 28794,
+      "sha256": "fcb2d056ca9d534c7b0da83449aa903c61cf19abe313b262d132a0b03fe3ed51"
+    },
+    "docs/contracts/agents.codex-adapter.md": {
+      "bytes": 11166,
+      "sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9"
+    },
+    "docs/contracts/agents.context-sources.md": {
+      "bytes": 14808,
+      "sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4"
+    },
+    "docs/contracts/agents.engineering-delivery.md": {
+      "bytes": 28969,
+      "sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378"
+    },
+    "docs/contracts/agents.execution-coordination.md": {
+      "bytes": 27461,
+      "sha256": "41b06a9471d073433bbb3d4ae69d7c49bee4916d662a1e39b684a8de67bc0cbc"
+    },
+    "docs/contracts/agents.privacy-data.md": {
+      "bytes": 12315,
+      "sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5"
+    },
+    "docs/contracts/agents.protected-actions.md": {
+      "bytes": 5374,
+      "sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1"
+    },
+    "docs/contracts/agents.rule-release.md": {
+      "bytes": 5074,
+      "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997"
+    },
+    "rules-catalog.json": {
+      "bytes": 8974,
+      "sha256": "ca4f86d7d28b4f5b1f1159f26b8a80574730f6dd45e13a6ac25f3f7aa6028d23"
+    },
+    "templates/claude-home/CLAUDE.md": {
+      "bytes": 2597,
+      "sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e"
+    },
+    "templates/codex-home/AGENTS.md": {
+      "bytes": 2323,
+      "sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9"
+    }
+  }
+}
