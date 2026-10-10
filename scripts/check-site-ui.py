@@ -44,7 +44,7 @@ def inventory(root, pages=None):
         if not matches: raise ValueError('Unknown affected page: '+name)
         chosen.update(matches)
     return sorted(chosen)
-async def review(page, base, route, width, dom, blocked=None):
+async def review(page, base, route, width, dom, blocked=None, readonly=False):
     issues, checks = [], {'reloads': [], 'phases': []}
     fail = lambda kind, element, evidence: issues.append(dict(kind=kind, element=element, evidence=evidence))
     response = await page.goto(base+route, wait_until='domcontentloaded', timeout=30000)
@@ -62,6 +62,8 @@ async def review(page, base, route, width, dom, blocked=None):
     for video in checks['video_before_interaction']:
         if video['ready']>=2 and video['paused']: fail('video-autoplay',video['src'],video)
     links = await page.locator('a[href^="#"]:not(.skip):not(.skip-link),button[data-b2-action^="choose-"]').evaluate_all("es=>es.filter(e=>e.checkVisibility({checkOpacity:true})&&!e.closest('.screen-equivalent-text')).map(e=>({href:e.getAttribute('href')||e.dataset.b2Action,action:e.dataset.b2Action,text:e.innerText})).filter(x=>x.href.length>1)")
+    if readonly: links = []
+    checks['readonly'] = readonly
     for link in {x['href']: x for x in links}.values():
         target = page.locator(('[data-b2-action='+json.dumps(link['action'])+']' if link.get('action') else 'a[href='+json.dumps(link['href'])+']')+':visible').first
         if not link.get('action') and not await page.evaluate("id=>!!document.getElementById(decodeURIComponent(id.slice(1)))",link['href']): fail('anchor-target-missing',link['href'],{}); continue
@@ -140,6 +142,9 @@ async def run(args):
             await context.add_init_script('window.__uiGlyphs='+json.dumps(glyphs))
         async def resources(handler):
             request = handler.request; parsed = urlsplit(request.url); key = parsed._replace(query='',fragment='').geturl()
+            if request.method not in ('GET','HEAD') and urlsplit(request.frame.url).path in args.readonly_routes:
+                policy.setdefault('blocked_writes', []).append({'url': request.url, 'method': request.method})
+                return await handler.abort('blockedbyclient')
             image = request.resource_type=='image' or bool(re.search(r'\.(png|webp|jpe?g|gif|svg|avif)$',parsed.path,re.I))
             if not args.base_url and parsed.netloc==urlsplit(base).netloc:
                 file = (args.root.resolve()/unquote(parsed.path).lstrip('/')).resolve()
@@ -169,7 +174,7 @@ async def run(args):
             async with semaphore:
                 page = await context.new_page(); await page.set_viewport_size({'width':width,'height':900})
                 try:
-                    record = await review(page,base,route,width,dom,blocked)
+                    record = await review(page,base,route,width,dom,blocked,route in args.readonly_routes)
                     if not args.base_url:
                         gaps = [key for key in blocked.get(page,{}) if re.search(r'\.(js|css|woff2?|mp4|webm)$',urlsplit(key).path,re.I)]
                         if gaps: record['issues'].append(dict(kind='local-assets-unavailable-review',element=route,evidence={'assets':gaps})); record['dependency_unavailable']=True
@@ -193,6 +198,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--base-url'); parser.add_argument('--pages',nargs='+'); parser.add_argument('--full',action='store_true'); parser.add_argument('--geometry',type=Path)
+    parser.add_argument('--readonly-routes',nargs='*',default=[])
     parser.add_argument('--oss-preparation',type=Path); parser.add_argument('--ink-assets',nargs='*',default=[]); parser.add_argument('--online-full',action='store_true'); parser.add_argument('--estimate-mb',type=int)
     parser.add_argument('--chrome',type=Path,default=Path('C:/Program Files/Google/Chrome/Application/chrome.exe'))
     raise SystemExit(asyncio.run(run(parser.parse_args())))
