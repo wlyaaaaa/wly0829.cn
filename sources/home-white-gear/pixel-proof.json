@@ -11,15 +11,15 @@
     {"label":"plate-v-nobird","reconstructed_sha256":"9fcb76bd2645a55c9b03bf3043aa291c7282fead756cf708197ece690763def0","baseline_sha256":"9fcb76bd2645a55c9b03bf3043aa291c7282fead756cf708197ece690763def0","encoded_equal":true}
   ],
   "items": [
-    {"image":"master-h.png","dimensions":[2880,1621],"changed_pixels":195464,"outside_mask_changed_pixels":0,"sha256":"b27ba146998b1c7a0ba92ef5ad227c82cc52934e4883c7649fa879322131bf56"},
-    {"image":"plate-h.png","dimensions":[2880,1621],"changed_pixels":14913,"outside_mask_changed_pixels":0,"sha256":"915f516ac1e92683a396412f3a7731a2aa8beb01c08350d547c06fc070006542"},
-    {"image":"plate-h-nobird.png","dimensions":[2880,1621],"changed_pixels":14913,"outside_mask_changed_pixels":0,"sha256":"dc2dac46ff4c6c6eb55f9007d2240dd210ab5ad7ff4e0c890edfa567218a16dd"},
-    {"image":"master-v.png","dimensions":[1280,2227],"changed_pixels":96532,"outside_mask_changed_pixels":0,"sha256":"e2f40049f3bf49d42a07ffcaf398883b510f1e98a3a27f7eeea75269967b1e1c"},
-    {"image":"plate-v.png","dimensions":[1280,2227],"changed_pixels":7252,"outside_mask_changed_pixels":0,"sha256":"77605d44532343417f6e11c64ec296faa70bc29b33ec75251f3bd6053ef7f963"},
-    {"image":"plate-v-nobird.png","dimensions":[1280,2227],"changed_pixels":7252,"outside_mask_changed_pixels":0,"sha256":"77943c46073533a55d366f03a8061e344177f5bc13352f35140a677a8ef40fea"},
-    {"image":"native-h.png","dimensions":[1672,941],"changed_pixels":65882,"outside_mask_changed_pixels":0,"sha256":"a602c7719c476bfa01a8b9092874b62a955c2d8f8e19de132df57f63f578017b"},
-    {"image":"native-v-fallback.png","dimensions":[941,1637],"changed_pixels":51983,"outside_mask_changed_pixels":0,"sha256":"ffb3f363ced9a58d55067f18cbd68997d78f07f8d6880013f12b27afed19f911"}
+    {"image":"master-h.png","dimensions":[2880,1621],"changed_pixels":434229,"outside_mask_changed_pixels":0,"sha256":"f48044595c06dce8e1e1006984246a00f1469faee5c2125dd71a9ea9a21ed51f"},
+    {"image":"plate-h.png","dimensions":[2880,1621],"changed_pixels":18802,"outside_mask_changed_pixels":0,"sha256":"42a4d8c6c7ee3287bafe7b84c394909ac91e58867ff41aca49960dbd99cd5334"},
+    {"image":"plate-h-nobird.png","dimensions":[2880,1621],"changed_pixels":18802,"outside_mask_changed_pixels":0,"sha256":"039dfdedf27e53be7c77dece473f11ff915c113495ea02579f34aaff54c14424"},
+    {"image":"master-v.png","dimensions":[1280,2227],"changed_pixels":195603,"outside_mask_changed_pixels":0,"sha256":"792fea17a2154c35614f539b243335c7dc1a40e189f8434d88c2cbb61a4abf55"},
+    {"image":"plate-v.png","dimensions":[1280,2227],"changed_pixels":106323,"outside_mask_changed_pixels":0,"sha256":"b2c62b4e29051fe4e539c959d5a1fcb7d0bb7e944e662a4152986311d14048c8"},
+    {"image":"plate-v-nobird.png","dimensions":[1280,2227],"changed_pixels":106323,"outside_mask_changed_pixels":0,"sha256":"3bed18bc0a61032b53555c5ac5056eda8a2c14af19ed6254636a055b2ac862b4"},
+    {"image":"native-h.png","dimensions":[1672,941],"changed_pixels":146283,"outside_mask_changed_pixels":0,"sha256":"b0234b6ca94cac1644f5aaea117761b93d5f9009f3f00eb793dae546e675daab"},
+    {"image":"native-v-fallback.png","dimensions":[941,1637],"changed_pixels":105518,"outside_mask_changed_pixels":0,"sha256":"f6d7f84a5ef196fec9113e4fbbca9638de2b186493ae6df065aa9e8bfc9d603a"}
   ],
-  "feather": "1.2px Gaussian clipped inside the drawn mask; zero alpha elsewhere",
+  "feather": "1.2px inward Gaussian, with opaque replacement of bright old phone-glass pixels to avoid a green rim; zero outside the masks",
   "sources": "Exact reconstructed pre-encode masters; not decoded lossy output"
 }

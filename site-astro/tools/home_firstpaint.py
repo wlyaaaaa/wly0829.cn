@@ -51,9 +51,11 @@ def adjust_home(html, source, public):
     if not config:
         raise ValueError('首页引擎配置入口不明')
     patch('new URL("' + config[1] + '"', 'new URL("/_shared/home-living/' + config[1] + '"')
-    # 手机屏幕只保留柔和低亮度；夜里随房间曝光变暗，避免贴上白天画面的亮块。
-    patch('col = mix(col, raw, phone*0.85);',
-          'col = mix(col, raw*mix(1.0,0.38,u_night), phone*0.85);')
+    patch('col = mix(col, raw, phone*0.85);', '')
+    patch('col = mix(col, raw*(1.0+0.05*u_night), scr*u_scrOn);', 'col = mix(col, raw*mix(1.0,0.55,u_night), scr*u_scrOn);')
+    patch('float warn = step(0.5, u_pcMode)*live;', 'float warn = 0.0;')
+    patch('vec3 rgb = mix(vec3(raw.r, top, top*0.45), vec3(raw.r, top*0.62, top), wave);', 'vec3 rgb = vec3(raw.r, top, top*0.45);')
+    patch('vec3 neonCol = mix(mix(vec3(0.15,1.0,0.45), vec3(0.15,0.62,1.0), wave), vec3(1.0,0.72,0.20), warn);', 'vec3 neonCol = vec3(0.15,1.0,0.45);')
     # 已开始的开场沿原时段自然结束；只有尚未开画的回退才从原图接手。
     patch('let Ct=!1,le=!1,r0="loading",c0=0;',
           'let Ct=!1,le=!1,r0="loading",c0=0,_homeLiveAt=Infinity,'
