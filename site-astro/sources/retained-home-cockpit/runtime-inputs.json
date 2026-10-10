@@ -42,8 +42,8 @@
       "bytes": 13195
     },
     "site-astro/tools/retain_home_cockpit.py": {
-      "sha256": "2412279a29a2f49641f5122b4a193611b537832cd00f78639729d0a313574b64",
-      "bytes": 27713
+      "sha256": "ba2dd1f84c8c7af92d2a308e73acd2546b9d7f928cb5fc1dfcc1af0bd5dcfa4a",
+      "bytes": 27753
     },
     "scripts/release_delta.py": {
       "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
@@ -474,8 +474,8 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "cbb9e73eedd78745e6b8a84b65f06a4de8bfe5aa3f2464e8edfbd4b329e450b7",
-      "bytes": 248768
+      "sha256": "2a9da7f0018473f66f2c6a275bbc126ec849ddf027d0f947f1ccae7145a33bca",
+      "bytes": 248770
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
       "sha256": "aaec6f46e71e503cc61a9bd786e5c5e20db2a0ba90bd1e671eb4e4adcb7897d8",
@@ -587,17 +587,17 @@
       "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
       "bytes": 522736
     },
-    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
-      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
-      "bytes": 6882
+    "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
+      "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
+      "bytes": 882349
     },
     "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js": {
       "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
       "bytes": 142449
     },
-    "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
-      "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
-      "bytes": 882349
+    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
+      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
+      "bytes": 6882
     },
     "_shared/home-app-92ff384787b4b26d0794.js": {
       "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",

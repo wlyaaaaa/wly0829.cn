@@ -17,8 +17,8 @@
   },
   "pages": {
     "home": {
-      "sha256": "cbb9e73eedd78745e6b8a84b65f06a4de8bfe5aa3f2464e8edfbd4b329e450b7",
-      "bytes": 248768
+      "sha256": "2a9da7f0018473f66f2c6a275bbc126ec849ddf027d0f947f1ccae7145a33bca",
+      "bytes": 248770
     },
     "cockpit": {
       "sha256": "aaec6f46e71e503cc61a9bd786e5c5e20db2a0ba90bd1e671eb4e4adcb7897d8",
@@ -5945,7 +5945,7 @@
   },
   "runtime_recipe": {
     "schema": "wly.retained-runtime-recipe.v1",
-    "inputs_sha256": "ad9e52791a3320329ba56c208a5427a396589f78b07ed0a6cc537ee8502873e2",
+    "inputs_sha256": "ecd2f9f0f29d669f4fa5b2f41ab02514cc5a310cf44c28b1b7700ba655b03dd2",
     "original_engine": "_shared/home-living/hero-live.576f7d6f10.js",
     "base_images": "sources/signature/assets-manifest.json",
     "image_recipe": "sources/home-white-gear/build.py",
