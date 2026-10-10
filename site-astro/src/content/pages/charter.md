@@ -38,10 +38,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "release": "E252",
+   "commit": "fcf992136918510e3839eef2c9c10cda74731c53",
+   "ruleset_sha256": "697e55656b761d6ffc643f664e608941368c47279120c77922b325d35c1e34f0",
+   "activated_at": "2026-10-10T14:48:45.509944+08:00",
    "file": "sources/rules/AGENTS.md",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d"
@@ -165,8 +165,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "1300a1d98924ba20959210403b71f90baa7e1e5e86587d4d31c8ca9592ea8341",
-  "converted_at_beijing": "2026-10-10T11:36:49+08:00"
+  "sha256": "d7da401c793b31faf89abdd1b0a6d4fe5898f6eaab7bb449bf06b836ac9715d1",
+  "converted_at_beijing": "2026-10-10T15:11:15+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
 - 〔九、汇报、网站和我的电脑〕 L26–L29
 - 〔十、关于规则本身〕 L30
 
-当前生效版本 E251（北京时间 10 月 10 日 01:51 起）。按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
+当前生效版本 E252（北京时间 10 月 10 日 14:48 起）。按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
 
 ::screen{#charter-02 section="talk"}
 
@@ -487,7 +487,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": null,
@@ -655,7 +655,7 @@
 }
 ```
 
-约法 · L1–L10 · E251
+约法 · L1–L10 · E252
 
 # 我的 AI 约法与工作约定
 
@@ -695,7 +695,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 三、怎样做事",
@@ -890,7 +890,7 @@
 }
 ```
 
-约法 · L11–L17 · E251
+约法 · L11–L17 · E252
 
 ### 三、怎样做事
 
@@ -915,7 +915,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 五、我的个人资料",
@@ -1139,7 +1139,7 @@
 }
 ```
 
-约法 · L18–L23 · E251
+约法 · L18–L23 · E252
 
 ### 五、我的个人资料
 
@@ -1171,7 +1171,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 八、项目与维护",
@@ -1380,7 +1380,7 @@
 }
 ```
 
-约法 · L24–L30 · E251
+约法 · L24–L30 · E252
 
 ### 八、项目与维护
 

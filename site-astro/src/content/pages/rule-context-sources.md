@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "release": "E252",
+   "commit": "fcf992136918510e3839eef2c9c10cda74731c53",
+   "ruleset_sha256": "697e55656b761d6ffc643f664e608941368c47279120c77922b325d35c1e34f0",
+   "activated_at": "2026-10-10T14:48:45.509944+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4"
+   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
+   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "5d3fa770fd69eae8d7a647613e3ad64c09520072150acf50172f4dd8b35d9192",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "4edd591557f1f107e1d49bd6ddca914c70f440ea4f425cac655d59ea722696a5",
+  "converted_at_beijing": "2026-10-10T15:11:16+08:00"
  }
 }
 ---
@@ -2411,9 +2411,9 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E251",
-   "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "release": "E252",
+   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
+   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
@@ -2431,7 +2431,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2439,7 +2439,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文·E252版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2473,7 +2473,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文·E252版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2551,7 +2551,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E251 版，一字不改
+原文 · E252 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2602,9 +2602,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E251",
-   "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "release": "E252",
+   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
+   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
    "start": 1597,
@@ -2622,7 +2622,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2630,7 +2630,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -2661,7 +2661,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -2728,7 +2728,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E252 版 · 续
 
 ## 三档维护
 
@@ -2780,13 +2780,13 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E251",
-   "sha256": "b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
-   "public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+   "release": "E252",
+   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
+   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": "### 一样东西只存一处",
    "to": null,
    "start": 4062,
-   "end": 6231,
+   "end": 6412,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2817,7 +2817,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "9674d7a1d278f9014f95541388af94b7aa76b63d24097754fef16f907989faa4",
+  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2825,7 +2825,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -2855,7 +2855,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E252 版 · 续
 
 ### 一样东西只存一处
 
@@ -2883,18 +2883,18 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 
 记忆的使用边界按[约法 L30](/rules/charter/#十关于规则本身)，两个宿主的关闭配置见各自适配专题。本人纠正、本人新定的规矩和踩过的坑，当轮写到下面对应的共享位置，写完在回复里一句话说明写在哪；不能因为记忆关了就不记。
 
-本人对 AI、项目和电脑的决定原话，现行存 `docs/owner-decisions.md`。新增或大改功能、新定或推翻决定时，当场原样记原话与北京时间；分类含义、混合消息拆分、AI 取法、哪些消息不进决定文档和索引、本人改分类，按[工程与交付的唯一分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)。决定索引另标来源、性质、范围和取代关系。同一主题新决定默认覆盖旧决定；被取代或已办完的一次性记录整节原样移入 `docs/archive/`，默认搜索不命中，只供审查；历史另在 Git。别处只写现行做法与出处，不抄原话。移动时标取代关系，搜旧编号和节名改引用，行号改节标题；别的负责人管的发给对应会话。拿不准的留现行交本人定。编号和引用写法见决定文档开头。本人自己的事实、偏好和价值记在理解库明示。
+本人对 AI、项目和电脑的决定原话，现行存 `docs/owner-decisions/YYYY-MM.md`，分卷索引为 `docs/owner-decisions.md`。新增原话用 `python -B -X utf8 tools/owner_decision_store.py append --input <原话节.md>` 写入月卷，分卷索引只作导航。新增或大改功能、新定或推翻决定时，当场原样记原话与北京时间；分类含义、混合消息拆分、AI 取法、哪些消息不进决定文档和索引、本人改分类，按[工程与交付的唯一分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)。决定索引另标来源、性质、范围和取代关系。同一主题新决定默认覆盖旧决定；被取代或已办完的一次性记录整节原样移入 `docs/archive/`，默认搜索不命中，只供审查；历史另在 Git。别处只写现行做法与出处，不抄原话。移动时标取代关系，搜旧编号和节名改引用，行号改节标题；别的负责人管的发给对应会话。拿不准的留现行交本人定。编号和引用写法见决定文档分卷索引。本人自己的事实、偏好和价值记在理解库明示。
 
 原话整条原样放引用块，连发各占一块，写来源（会话、源消息 UUID）；分类行写 `- 分类：①类别〔范围·修饰〕「片段」；②…`，每单元带范围（本次、项目或主题名、长期、至 YYYY-MM-DD，可组合），片段必须是同节某个引用块一字不差的子串，尽量在 20 字以内。选项、纠正、询问或回答 AI 请示的，写回答对象；新主题新开带北京时间的节，不追加到按会话命名的节。
 
-记录原话的根会话当轮分类，两个宿主一致，不设审批；子代理不记原话、不改分类。“性质和范围／性质与范围”等旧段落原样保留。按类别搜 `rg -n "^- 分类：.*禁令〔" E:\.agents\docs\owner-decisions.md`，换类别词即可。
+记录原话的根会话当轮分类，两个宿主一致，不设审批；子代理不记原话、不改分类。“性质和范围／性质与范围”等旧段落原样保留。按类别搜 `rg -n "^- 分类：.*禁令〔" E:\.agents\docs\owner-decisions -g "*.md"`，换类别词即可。
 
 | 内容 | 写到哪里 |
 |---|---|
 | 怎么跟本人说话 | 经 `skills/explain-to-me` 按个人表达项目的流程维护；新增时先查同类并合并，保留本人原话和适用范围。 |
 | Claude 或 Codex 自己工具的坑 | 对应的[Claude 适配](/rules/claude-adapter/)或[Codex 适配](/rules/codex-adapter/)。 |
 | 某个项目的事 | 该项目的 AGENTS.md 或相关文档。 |
-| 本人的决定原话 | 决定文档 `docs/owner-decisions.md`；别处写现行做法加出处编号。 |
+| 本人的决定原话 | 决定月卷 `docs/owner-decisions/YYYY-MM.md`（索引 `docs/owner-decisions.md`）；别处写现行做法加出处编号。 |
 | 拿不准放哪里 | 先写进现有共享文档的待办，发布规则时归位。 |
 
 三基座治理按决定 ZS35 先过四周稳定期：北京时间 2026 年 10 月 5、12、19、26 日各跑一次，第四次交本人评审；之后转为常驻每周治理（本人 10 月 8 日 23:37：大概率常驻，绝对不可能就四周），本人评审时可再改。任务用 Astra 最高档，顺带检查两边的记忆区和这周的对话记录：记忆区又有内容时，挪进对应共享文件；本周本人纠正和新规矩还没落到共享文件的，补上；现行文档又抄了原话、或还在引用已被取代的决定编号的，改成现行做法加出处编号；再用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1) 扫一遍三个基座和各日用项目（冻结的不扫）里跨文件重复的段落，新冒出来的副本按上一节收成一处；长期文档里写死、已经或很快会过时的数，也按上一节改成指向。仍按现行个人资料状态取用私人内容，合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核；暂停的手动入口仅在本人启动时运行，不算正在定时更新（出处：决定文档“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。

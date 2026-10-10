@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
+   "release": "E252",
+   "commit": "fcf992136918510e3839eef2c9c10cda74731c53",
+   "ruleset_sha256": "697e55656b761d6ffc643f664e608941368c47279120c77922b325d35c1e34f0",
+   "activated_at": "2026-10-10T14:48:45.509944+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
    "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
    "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9"
@@ -221,8 +221,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "e55224e24adf911105e84697818e584db5953944cf3082450b58ad3a3755498d",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "01ebf563a1fff3dbe27736c6b5db083fd92a8938e5efe787d8ff8e57413a1bac",
+  "converted_at_beijing": "2026-10-10T15:11:16+08:00"
  }
 }
 ---
@@ -1222,7 +1222,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
    "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
    "from": null,
@@ -1261,7 +1261,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文·E252版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1286,7 +1286,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文·E252版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1377,7 +1377,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 }
 ```
 
-原文 · E251 版，一字不改
+原文 · E252 版，一字不改
 
 # Codex 适配
 
@@ -1409,7 +1409,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E251",
+   "release": "E252",
    "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
    "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
    "from": "## 派子代理：Codex 的不同处",
@@ -1452,7 +1452,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -1479,7 +1479,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文·E252版·续"
     },
     {
      "type": "source_text_card",
@@ -1597,7 +1597,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E252 版 · 续
 
 ## 派子代理：Codex 的不同处
 
