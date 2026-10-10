@@ -22,7 +22,7 @@
 
 首页、驾驶舱、授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
 
-209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；大图和视频使用原尺寸仓库原件或已核验的 OSS 对象，不新复制进 Git。资源缓存缺失时只恢复清单中的确切对象并核验 SHA，暖缓存构建不联网取壳。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
+209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
 ## 一次完整生成
@@ -35,7 +35,7 @@ npm run build               # 完整静态站 + 公开内容检查
 npm run dev -- --host 127.0.0.1 --port 4173
 ```
 
-`dev` 先运行同一完整构建，再用 Astro 预览 `site-astro/dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
+`dev` 先运行同一完整构建，再用 Astro 预览 仓库根 `dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
 
 `python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `site-astro/.cache/build-report.json`。
 
@@ -126,3 +126,20 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 ## “现在”实时位
 
 区块库排好的实时位（`[data-hot="live"][data-href=<键>]`）由 `src/scripts/live-dom.js` 填（排版时复制到 `/_living/live-dom.js`）：借现在网站运行件对外的 `SiteLiveRuntime.readStatus / parse` 取数（授权与状态、连接电脑两页借 `SiteB2`），一分钟一次，切回页面时立刻读。读不到时照驾驶舱的做法：页面上只说一次“暂时读不到电脑，保留最后一次读到的状态（北京时间）”，实时位显示上次读到的值、整体变淡；从没读到过就安静占位，不出“读不到”；读到后自动恢复。上次读到的值只在真正读到时存（浏览器本地 `site-live-dom:v1:<页>`）。实时位放在哪一屏都一样填，挪到首屏标题下的状态行也不用改脚本。
+
+## 唯一构建入口与回执
+
+在仓库根运行 `npm run build`。内部只有 `scripts/build-site.py` 一条链，输出完整 `dist`；`site-astro` 的 npm 命令只转发到根入口。`npm run dev -- --host 127.0.0.1 --port 4321` 先走同一构建，再用 `tools/preview_site.py` 预览同一目录，包含冻结页和三个关键页。
+
+`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和驾驶舱的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
+
+首页、驾驶舱和授权页直接从 `sources/retained-home-cockpit/*.html` 读取。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
+
+每次成功构建写 `dist/.build-receipt.json`，格式为 `wly.site-build-receipt.v1`：
+
+- `status`：`built`；`prepared_at_beijing`：带 `+08:00` 的观察时间；`seconds`：整个构建秒数。
+- `steps`：按执行顺序列出 `{name, seconds}`，包括来源、指纹、依赖准备、运行件、屏幕排版、Astro、收尾、公开门与文件清单。
+- `rebuilt_pages`：本次重建或成品字节改变的路由数组；`html_files`：完整成品 HTML 数；`output`：实际输出目录。
+- `files`：完整文件数组，每项 `{path, bytes, sha256}`；路径相对 `dist`，SHA256 为实际成品字节。回执自身不进入清单，避免自引用；`release-manifest.json` 属于实际成品文件并列入。
+
+G2 的发布与扫描直接消费这份回执，不再由构建调用 `oss.prepare`。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节。按 O6 本轮后续裁决，成品的资源引用统一改为本站路径；正文、结构、样式及源图字节保持，原始 HTML 与成品差异只允许这类资源地址替换。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出。相册更新只新增当前指纹表，仍被引用的旧表保留。

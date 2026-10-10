@@ -19315,6 +19315,41 @@
       "sha256": "8e3947f318e9b33462dd4e8b3a777dad0daf754dbbebaae4d0241ee7594ecea6",
       "bytes": 1075178,
       "source_path": "site-astro/sources/frozen-site/assets/_runtime/8e3947f318e9b33462dd/search-projects.js"
+    },
+    "assets/home-01-h-fallback640-cc8b2ccf8653.webp": {
+      "source_path": "sources/signature/originals/home-01-h-fallback640-cc8b2ccf8653.webp",
+      "bytes": 62106,
+      "sha256": "cc8b2ccf8653f3d8768198485e45bf5e2b992eb26457286203825c6bbbea1015"
+    },
+    "images/personal-ai-experience/codex-204-4.png": {
+      "source_path": "public/images/personal-ai-experience/codex-204-4.png",
+      "bytes": 285634,
+      "sha256": "ebe3973aebaf4b6a4a3f2ecf0a178f1bbb2855028ee1668ee5379d01ff33c322"
+    },
+    "images/personal-ai-experience/codex-296-5.png": {
+      "source_path": "public/images/personal-ai-experience/codex-296-5.png",
+      "bytes": 166983,
+      "sha256": "1fb1f26017656bf596b8b1cab78359ad4f257575d186378ec9adb86826e15dae"
+    },
+    "images/personal-ai-experience/codex-521-9.png": {
+      "source_path": "public/images/personal-ai-experience/codex-521-9.png",
+      "bytes": 199488,
+      "sha256": "f4fb47d115f3ef8be260715a23b821a77c922f760ac4e9b2e7a58285d59e5ea7"
+    },
+    "media/brand/wuleyang-logo-full.png": {
+      "source_path": "public/media/brand/wuleyang-logo-full.png",
+      "bytes": 381038,
+      "sha256": "1cc3a03f2dde6d95fcc1c3a1b21a25c041a0a2d51ed645ea8d79380cd9f03db5"
+    },
+    "media/localocr/sample-table-actual.json": {
+      "source_path": "public/media/localocr/sample-table-actual.json",
+      "bytes": 71158,
+      "sha256": "9166e6012c0e30e9e392367e4dfb08ee6a8c9290d8e07cfd3e4cedcb1d695527"
+    },
+    "media/vault-tool/synthetic-roundtrip.json": {
+      "source_path": "public/media/vault-tool/synthetic-roundtrip.json",
+      "bytes": 4231,
+      "sha256": "4add06a29a8b12f68a9f41783bb859a4463c546bc014ec3eaf69940800211c36"
     }
   },
   "inherited_assets": {

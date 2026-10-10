@@ -14,9 +14,8 @@ import json
 from pathlib import Path
 import re
 import shutil
-spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
-builder = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(builder)
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 try:
     from release_delta import inventory, source_path, write_changes
 except ModuleNotFoundError:
@@ -66,6 +65,9 @@ def patch_runtime(text: str) -> str:
 
 
 def prepare(release: Path, output: Path, handoff: Path) -> dict:
+    spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
     release, output, handoff = release.resolve(), output.resolve(), handoff.resolve()
     if output == release or output.is_relative_to(release) or release.is_relative_to(output):
         raise ValueError('Output must not overlap the immutable input')

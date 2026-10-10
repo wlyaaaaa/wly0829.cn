@@ -5,49 +5,44 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site-astro'
 SNAPSHOT = SITE / 'sources/frozen-site'
+HASH_CACHE_PATH = SITE / '.cache/file-fingerprints.json'
+HASH_CACHE = None
 sys.path.insert(0, str(ROOT / 'scripts'))
 import astro_rules
-
 
 def load(name, relative):
     spec = importlib.util.spec_from_file_location(name, ROOT / relative)
     value = importlib.util.module_from_spec(spec); spec.loader.exec_module(value)
     return value
 
-
 def read(path):
     return json.loads(Path(path).read_text('utf8'))
-
 
 def write(path, value):
     path = Path(path); path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
-
 def proof(path):
-    with Path(path).open('rb') as stream:
-        return {'bytes': Path(path).stat().st_size, 'sha256': hashlib.file_digest(stream, 'sha256').hexdigest()}
-
-
-def seed_asset(relative):
-    """Return the exact versioned search/runtime seed, without reading a deployment."""
-    row = read(SNAPSHOT / 'manifest.json')['assets'][relative]
-    path = ROOT / row['source_path']
-    if proof(path) != {key: row[key] for key in ('bytes', 'sha256')}:
-        raise ValueError('Versioned asset changed: ' + relative)
-    return path
-
+    global HASH_CACHE
+    if HASH_CACHE is None: HASH_CACHE = read(HASH_CACHE_PATH) if HASH_CACHE_PATH.is_file() else {}
+    path = Path(path); st = path.stat(); stamp = [st.st_size, st.st_mtime_ns, st.st_ctime_ns]; key = str(path)
+    cached = HASH_CACHE.get(key)
+    if not cached or cached['stamp'] != stamp:
+        with path.open('rb') as stream:
+            cached = {'stamp': stamp, 'proof': {'bytes': st.st_size, 'sha256': hashlib.file_digest(stream, 'sha256').hexdigest()}}
+        HASH_CACHE[key] = cached
+    return dict(cached['proof'])
 
 def restore(snapshot):
     public = SITE / 'public'; cache_path = SITE / '.cache/materialized.json'
@@ -69,15 +64,13 @@ def restore(snapshot):
             from engine.assets import title_ready
             source = Path(title_ready(str(ROOT / row['generated_title'])))
         else:
-            source = SITE / '.cache/remote-assets' / row['sha256']
-            if not checked(source, row):
-                oss = load('build_asset_oss', 'scripts/prepare-oss-release.py')
-                oss.verify_object_with_retries(None, relative, {**row, 'url': row['verified_url'],
-                    'content_type': oss.content_type(relative)}, 'https://wly0829.cn', 60, download_to=source)
-        if not checked(source, row): raise ValueError('Asset source differs: ' + relative)
-        if not checked(target, row):
+            source = SITE / 'sources/vendor-deps' / relative
+        author_source = row.get('source_path', '').startswith(('site-astro/public/_home-cockpit/', 'site-astro/sources/retained-home-cockpit/'))
+        expected = proof(source) if author_source else row
+        if not checked(source, expected): raise ValueError('Asset source differs: ' + relative)
+        if not checked(target, expected):
             target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
-            if not checked(target, row): raise ValueError('Asset copy differs: ' + relative)
+            if not checked(target, expected): raise ValueError('Asset copy differs: ' + relative)
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         list(pool.map(asset, snapshot['assets'].items()))
     for relative, row in snapshot['pages'].items():
@@ -87,91 +80,213 @@ def restore(snapshot):
             target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
     write(cache_path, cache)
 
+def run(*args, cwd=SITE, env=None):
+    subprocess.run(args, cwd=cwd, check=True, env=env)
 
-def run(*args, cwd=SITE):
-    subprocess.run(args, cwd=cwd, check=True)
+def fingerprint(paths):
+    files = set()
+    for path in paths:
+        path = Path(path)
+        files.update(p for p in path.rglob('*') if p.is_file()) if path.is_dir() else files.add(path)
+    digest = hashlib.sha256()
+    for path in sorted(files):
+        if '__pycache__' in path.parts or path.suffix in {'.pyc', '.pyo'}: continue
+        digest.update(path.relative_to(ROOT).as_posix().encode() + b'\0')
+        digest.update(proof(path)['sha256'].encode() if path.is_file() else b'missing')
+    return digest.hexdigest()
 
+def route_file(route):
+    return 'index.html' if route == '/' else route.lstrip('/') if route.endswith('.html') else route.strip('/') + '/index.html'
 
-def build():
-    started = time.monotonic(); snapshot = read(SNAPSHOT / 'manifest.json')
-    stages = {}; previous_stage = started
+def file_route(relative):
+    return '/' if relative == 'index.html' else '/' + relative[:-10] if relative.endswith('/index.html') else '/' + relative
+
+def normalize_route(route):
+    route = route.strip()
+    if not route.startswith('/') or any(x in route for x in ('..', '?', '#', '\\')):
+        raise ValueError('Expected a site route such as /how/: ' + route)
+    return route if route == '/' or route.endswith(('/', '.html')) else route + '/'
+
+def copy_changed(source, target):
+    if target.is_file() and proof(source) == proof(target): return False
+    target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
+    return True
+
+def markdown_frontmatter(path):
+    match = re.match(r'^---\n(.*?)\n---\n', path.read_text('utf8'), re.S)
+    if not match: raise ValueError('Missing JSON frontmatter: ' + str(path))
+    return json.loads(match[1])
+
+def retained_inputs(name, snapshot):
+    base = SITE / 'sources/retained-home-cockpit'; html = base / (name + '.html')
+    dependencies = read(base / 'dependencies.json'); bundled = read(base / 'manifest.json')['bundled']
+    refs = set(re.findall(r'''["']((?:https?://|/|assets/)[^"'\s<>]+)["']''', html.read_text('utf8')))
+    refs.update('/' + path for path in ({'home': ['_home-cockpit/time-labels.css', '_home-cockpit/home-cta.css'],
+        'cockpit': ['_home-cockpit/cockpit-offline.css', '_home-cockpit/cockpit-offline.js'],
+        'computer-access': []}[name] + ['_live/site-live-runtime.js']))
+    if name != 'home': refs.update({'/_interactions/anchor-offset.css', '/_interactions/anchor-offset.js'})
+    paths = [html, SITE / 'src/retained-page.ts',
+        SITE / 'src/pages' / ('index.astro' if name == 'home' else name + '/index.astro')]
+    if name != 'computer-access':
+        paths += [SITE / 'src/styles/typeset-page.css', SITE / 'public/_album/astro-runtime.json',
+            SITE / 'public/_living/quality-runtime/manifest.json']
+    for ref in refs:
+        relative = snapshot['runtime_urls'].get(ref, ref).split('?', 1)[0].split('#', 1)[0].lstrip('/')
+        if relative.startswith('_home-cockpit/'):
+            paths.append(SITE / 'public' / relative)
+        if relative in bundled:
+            paths.append((base / bundled[relative]['source']).resolve())
+        elif relative in dependencies:
+            row = dependencies[relative]
+            paths.append(ROOT / row['source_path'] if 'source_path' in row else SITE / 'sources/vendor-deps' / relative)
+        elif (SITE / 'public' / relative).is_file(): paths.append(SITE / 'public' / relative)
+    return paths
+
+def sync_markdown(previous):
+    converter = load('build_converter', 'site-astro/tools/convert_page.py')
+    records, pending = {}, []
+    for name in converter.all_pages():
+        md = SITE / 'src/content/pages' / (name + '.md')
+        source_fp = fingerprint([ROOT / 'sources/pages' / name])
+        old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
+        direct = bool(old.get('direct') or (old.get('md_sha256') and current != old['md_sha256']))
+        if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct): pending.append(name)
+        elif old and old.get('fingerprint') != source_fp and direct:
+            print(name + ': 保留直接编辑的 Markdown，不覆盖为 JSON 转换结果', flush=True)
+        records[name] = {'fingerprint': source_fp, 'direct': direct}
+    if pending: run(sys.executable, 'tools/convert_page.py', *pending)
+    for name, row in records.items(): row['md_sha256'] = proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']
+    return records
+
+def build(pages=None):
+    started = time.monotonic(); previous_stage = started; steps = []
     def stage(name):
         nonlocal previous_stage
-        now = time.monotonic(); stages[name] = round(now - previous_stage, 2); previous_stage = now
-        print(name + ': ' + str(stages[name]) + 's', flush=True)
+        now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
+        steps.append({'name': name, 'seconds': seconds}); print(f'{name}: {seconds}s', flush=True)
+    snapshot = read(SNAPSHOT / 'manifest.json'); dist = ROOT / 'dist'; public = SITE / 'public'
+    state_path = SITE / '.cache/build-state.json'; old = read(state_path) if state_path.is_file() else {}
+    (dist / '.build-receipt.json').unlink(missing_ok=True)
     if snapshot['schema'] != 'wly.frozen-site.v1': raise ValueError('Unsupported frozen site')
-    restore(snapshot); pin = astro_rules.generate(SITE / 'public')
-    transport = load('build_same_origin', 'scripts/same-origin-runtime.py')
-    transport.localize(SITE / 'public', snapshot, patch_readers=True)
-    live_target = SITE / 'public/_live/site-live-runtime.js'; live_target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(ROOT / 'scripts/site-live-runtime.js', live_target)
-    stage('restore')
-    # These native inputs live in the repository; no previous build is extracted.
-    run(sys.executable, 'tools/convert_page.py', '--all')
-    run(sys.executable, 'tools/pack_living.py')
-    run(sys.executable, 'tools/adapt_motion.py')
-    stutter = load('build_stutter', 'site-astro/tools/cockpit_stutter.py').build(SITE / 'public')
+    complete = all((dist / route_file(route)).is_file() for route in snapshot['routes'])
+    if pages and not complete: raise ValueError('--pages requires a complete dist; first run npm run build')
+    requested = {normalize_route(value) for value in pages.split(',')} if pages else None
+    before = {file_route(p.relative_to(dist).as_posix()): proof(p) for p in dist.rglob('*.html')}
+    sources = sync_markdown(old.get('json_sources', {})); stage('source')
+    preparation = [SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
+        SITE / 'sources/vendor-deps', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
+        ROOT / 'sources/rules', ROOT / 'sources/assets', ROOT / 'src/typeset',
+        SITE / 'tools/build_runtime.py', SITE / 'tools/pack_living.py', SITE / 'tools/adapt_motion.py',
+        SITE / 'tools/cockpit_stutter.py', ROOT / 'scripts/astro_rules.py', ROOT / 'scripts/album-runtime.js',
+        ROOT / 'scripts/album-runtime.css', ROOT / 'scripts/same-origin-runtime.py', ROOT / 'scripts/site-live-runtime.js']
+    preparation += [ROOT / row['source_path'] for row in snapshot['assets'].values() if 'source_path' in row]
+    stutter_inputs = [ROOT / 'scripts' / name for name in ['prepare-stutter-page.py', 'stutter-page-copy.json', 'stutter-page.html', 'stutter-page.js', 'stutter-page.css', 'site-live-runtime.js']]
+    preparation += stutter_inputs
+    prepared_fp = fingerprint(preparation)
+    stage('fingerprint')
+    prepare_changed = not complete or old.get('prepared') != prepared_fp or not (public / '_album/astro-runtime.json').is_file()
+    prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'])
+    runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
+    if prepare_changed:
+        restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
+    else: pin = old['pin']
+    stage('prepare')
+    if prepare_changed:
+        run(sys.executable, 'tools/pack_living.py'); run(sys.executable, 'tools/adapt_motion.py')
+        load('build_stutter', 'site-astro/tools/cockpit_stutter.py').build(public)
+        prepared_fp = fingerprint(preparation)
     stage('native_inputs')
-    run(sys.executable, 'tools/render_blocks.py', '--all')
-    stage('blocks')
-    rendered = {path.stem: read(path) for path in (SITE / 'src/content/rendered').glob('*.json')}
-    for page in (SITE / 'src/content/pages').glob('*.md'):
-        if rendered.get(page.stem, {}).get('source_md_sha256') != proof(page)['sha256']:
-            raise ValueError('Rendered Markdown changed: ' + page.stem)
-    run('node', 'node_modules/astro/bin/astro.mjs', 'build', '--force')
-    stage('astro')
-    dist = SITE / 'dist'
-    prepare = load('build_preparation', 'scripts/prepare-astro-release.py')
-    hybrid = prepare.hybrid
-    prepare.retired_project_routes(dist, {'routes': snapshot['routes']})
-    shutil.copyfile(dist / '404/index.html', dist / '404.html')
-    frozen = set(snapshot['pages'])
-    converted = {hybrid.file_route(path.relative_to(dist).as_posix()): {'producer': 'astro'}
-                 for path in dist.rglob('*.html') if path.relative_to(dist).as_posix() not in frozen}
-    nav = hybrid.nav_repair
-    navigation = {nav.route_file(route): SimpleNamespace(ids=set()) for route in snapshot['routes']}
-    for route in set(converted) & set(nav.SITE_NAVIGATION.values()) - {'/', '/cockpit/', '/computer-access/'}:
-        path = dist / nav.route_file(route)
-        body, _ = nav.repair_owned_navigation(path.read_text('utf8'), navigation, owner_route=route)
-        path.write_text(body, encoding='utf8', newline='')
-    # Search follows current native content while preserving the frozen modules.
-    previous = {'oss': {'objects': snapshot['search_objects']}, 'files': snapshot['pages']}
-    prepare.sync_search(dist, previous, converted, pin)
-    transport.localize(dist, snapshot)
-    transport.verify(dist)
-    stage('search')
-    finalize = load('build_album_routes', 'site-astro/tools/retain_home_cockpit.py').finalize_runtime(SITE)
-    routes = sorted(hybrid.file_route(path.relative_to(dist).as_posix()) for path in dist.rglob('*.html'))
-    if not set(snapshot['routes']) <= set(routes): raise ValueError('Complete build lost a required route')
+    engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py'])
+    wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
+        and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
+        and p.name != 'living-engine.json']
+    wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json'])
+    entries = {}; render_fps = {}
+    for md in sorted((SITE / 'src/content/pages').glob('*.md')):
+        fm = markdown_frontmatter(md); name = md.stem
+        render_fps[name] = fingerprint([md, SITE / 'src/chrome/runtime' / (name + '.json')]) + engine_fp
+        for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
+            entries[normalize_route(route)] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
+    for name, route in [('home', '/'), ('cockpit', '/cockpit/'), ('computer-access', '/computer-access/')]:
+        retained_fp = fingerprint(retained_inputs(name, snapshot))
+        entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
-        expected = (SNAPSHOT / 'pages' / relative).read_text('utf8')
-        expected = transport.URL.sub(lambda m: snapshot['runtime_urls'].get(m[0], m[0]), expected)
-        if (dist / relative).read_text('utf8') != expected: raise ValueError('Frozen page changed beyond runtime transport: ' + relative)
-    prepare.write_sitemap(dist, routes)
-    stage('routes')
-    inherited = {rel: value for rel, value in snapshot['inherited_assets'].items() if Path(rel).suffix not in transport.HOSTED}
-    files = hybrid.inventory(dist); files.update({rel: snapshot['inherited_files'][rel] for rel in inherited})
-    manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes,
-        'release_id': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
+        entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})
+    generated_fp = fingerprint([ROOT / 'config/final-project-order.json', SITE / 'tools/cockpit_stutter.py'])
+    for route in set(snapshot['routes']) - entries.keys():
+        entries[route] = {'fingerprint': generated_fp, 'kind': 'generated'}
+    entries['/cockpit/stutter/']['fingerprint'] = fingerprint(stutter_inputs + [SITE / 'tools/cockpit_stutter.py'])
+    if requested and requested - entries.keys(): raise ValueError('Unknown routes: ' + ', '.join(sorted(requested - entries.keys())))
+    selected = requested if requested is not None else set(entries)
+    changed = {route for route in selected if not (dist / route_file(route)).is_file()
+        or old.get('pages', {}).get(route) != entries[route]['fingerprint']}
+    if '/404.html' in changed: changed.add('/404/')
+    names = {entries[route]['name'] for route in changed if entries[route]['kind'] == 'native'}
+    render_names = [name for name in sorted(names) if old.get('rendered', {}).get(name) != render_fps[name]
+        or not (SITE / 'src/content/rendered' / (name + '.json')).is_file()]
+    if render_names: run(sys.executable, 'tools/render_blocks.py', *render_names)
+    for name in names:
+        if read(SITE / 'src/content/rendered' / (name + '.json')).get('source_md_sha256') != proof(SITE / 'src/content/pages' / (name + '.md'))['sha256']:
+            raise ValueError('Rendered Markdown changed: ' + name)
+    stage('blocks')
+    astro_routes = {route for route in changed if entries[route]['kind'] in {'native', 'retained'}}
+    stage_dir = SITE / '.cache/astro-build'
+    if astro_routes:
+        env = {**os.environ, 'SITE_BUILD_PAGES': ','.join(sorted(astro_routes)), 'SITE_BUILD_OUT_DIR': str(stage_dir)}
+        run('node', 'node_modules/astro/bin/astro.mjs', 'build', '--force', env=env)
+        for route in astro_routes:
+            source = stage_dir / route_file(route)
+            if not source.is_file(): raise ValueError('Astro did not generate selected route: ' + route)
+            copy_changed(source, dist / route_file(route))
+    stage('astro')
+    assets_changed = False; asset_sources = dict(old.get('asset_sources', {}))
+    for source_root in ([public] if prepare_changed or astro_routes else []) + ([stage_dir] if astro_routes else []):
+        for source in source_root.rglob('*'):
+            if not source.is_file(): continue
+            relative = source.relative_to(source_root).as_posix()
+            if source.suffix == '.html':
+                if source_root != public or file_route(relative) not in changed or file_route(relative) in astro_routes: continue
+            else:
+                key = ('public/' if source_root == public else 'astro/') + relative
+                source_sha = proof(source)['sha256']
+                if asset_sources.get(key) == source_sha and (dist / relative).is_file(): continue
+                asset_sources[key] = source_sha
+            assets_changed = copy_changed(source, dist / relative) or assets_changed
+    stage('assets')
+    converted = {route: {'producer': 'astro'} for route, row in entries.items() if row['kind'] != 'frozen'}
+    if changed or prepare_changed or assets_changed:
+        runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})
+    for relative, expected in snapshot['pages'].items():
+        if entries[file_route(relative)]['kind'] != 'frozen': continue
+        if (dist / relative).read_bytes() != runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot).encode('utf8'):
+            raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
+    if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
+    stage('finish')
+    run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), cwd=ROOT)
+    stage('public')
+    files = [{'path': p.relative_to(dist).as_posix(), **proof(p)} for p in sorted(dist.rglob('*'))
+        if p.is_file() and p.name != '.build-receipt.json']
+    after = {file_route(row['path']): {key: row[key] for key in ('bytes', 'sha256')} for row in files if row['path'].endswith('.html')}
+    rebuilt = changed | {route for route in after if before.get(route) != after[route]}
+    stage('inventory')
+    receipt = {'schema': 'wly.site-build-receipt.v1', 'status': 'built',
         'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
-        'baseline_production_commit': snapshot['baseline_production_commit'], 'rollback_ref': snapshot['baseline_production_commit'],
-        'baseline_files': {}, 'accepted_pages': {**converted, **{hybrid.file_route(rel): {'producer': 'frozen-runtime-transport'} for rel in frozen}}, 'rejected_pages': {}, 'temporary_href_mappings': [],
-        'inherited_assets': inherited, 'rules_pin': pin,
-        'same_origin_assets': sorted(rel for rel in files if Path(rel).suffix in transport.HOSTED),
-        'astro': {'schema': 'wly.astro-publication.v1', 'sample_commit': snapshot['source_commit'],
-            'converted_routes': list(converted), 'selected_pages': sorted(path.stem for path in (SITE / 'src/content/pages').glob('*.md')),
-            'html_files': len(routes), 'baseline_html_files': len(snapshot['routes']),
-            'retained_sample': {'source': 'site-astro/sources/retained-home-cockpit'},
-            'frozen_pages': len(frozen)}}
-    write(dist / 'release-manifest.json', manifest)
-    stage('manifest')
-    report = {'status': 'built', 'seconds': round(time.monotonic() - started, 2), 'html_files': len(routes),
-        'frozen_pages': len(frozen), 'native_pages': len(converted), 'output': str(dist),
-        'release_id': manifest['release_id'], 'stages': stages, 'album': finalize, 'stutter': stutter}
-    write(SITE / '.cache/build-report.json', report); print(json.dumps(report, ensure_ascii=False))
-    return manifest
-
+        'seconds': round(time.monotonic() - started, 3), 'steps': steps, 'rebuilt_pages': sorted(rebuilt),
+        'html_files': len(after), 'files': files, 'output': str(dist)}
+    write(dist / '.build-receipt.json', receipt)
+    write(state_path, {'prepared': prepared_fp, 'pin': pin, 'json_sources': sources, 'asset_sources': asset_sources,
+        'pages': {**old.get('pages', {}), **{route: entries[route]['fingerprint'] for route in changed}},
+        'rendered': {**old.get('rendered', {}), **{name: render_fps[name] for name in render_names}}})
+    write(SITE / '.cache/build-report.json', {key: value for key, value in receipt.items() if key != 'files'})
+    print(json.dumps({key: value for key, value in receipt.items() if key != 'files'}, ensure_ascii=False))
+    return receipt
 
 if __name__ == '__main__':
-    argparse.ArgumentParser(description=__doc__).parse_args()
-    build()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--pages', help='Comma-separated site routes; requires an existing complete dist')
+    try: build(parser.parse_args().pages)
+    except Exception as error:
+        write(ROOT / 'dist/.build-receipt.json', {'schema': 'wly.site-build-receipt.v1', 'status': 'failed', 'error': str(error)})
+        raise
+    finally:
+        if HASH_CACHE is not None: write(HASH_CACHE_PATH, HASH_CACHE)
