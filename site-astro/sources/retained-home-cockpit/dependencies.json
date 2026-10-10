@@ -55,8 +55,8 @@
     "source_path": "site-astro/public/_home-cockpit/cockpit-offline.js"
   },
   "_home-cockpit/home-cta.css": {
-    "sha256": "c6823b2486a278ce664378db7701a8289277ce9f15ae83a9e08e42e62d95feca",
-    "bytes": 2971,
+    "sha256": "c913aeb659f39768af885281eb9ebb5f27a28fd71fabdc35bd4721c6c29c744c",
+    "bytes": 3861,
     "source_path": "site-astro/public/_home-cockpit/home-cta.css"
   },
   "_home-cockpit/time-labels.css": {
@@ -9149,10 +9149,10 @@
     "bytes": 67988,
     "source_path": "site-astro/sources/retained-home-cockpit/assets/48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e.js"
   },
-  "_shared/home-app-398939334868e767a745.js": {
-    "sha256": "398939334868e767a745d866122024334b26134301940e31e396fad9ac529c78",
-    "bytes": 123247,
-    "source_path": "site-astro/sources/retained-home-cockpit/assets/398939334868e767a745d866122024334b26134301940e31e396fad9ac529c78.js"
+  "_shared/home-app-81536f6407de92bd959f.js": {
+    "sha256": "81536f6407de92bd959f9bfefebe0a0fd8f8066e7fd9f39bc8182fe70cef8fd9",
+    "bytes": 125686,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/81536f6407de92bd959f9bfefebe0a0fd8f8066e7fd9f39bc8182fe70cef8fd9.js"
   },
   "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
     "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",

@@ -17,8 +17,8 @@
   },
   "pages": {
     "home": {
-      "sha256": "be238c13492c5c78867fa2b6530aea7bd022575171379475152b4430ca85c646",
-      "bytes": 248656
+      "sha256": "f3731d22a0b1f3df38515be26d1bb8ae25ed4676b63f0f695b93d3a80a93938c",
+      "bytes": 248784
     },
     "cockpit": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
@@ -37,8 +37,8 @@
     },
     "_home-cockpit/home-cta.css": {
       "source": "../../public/_home-cockpit/home-cta.css",
-      "sha256": "c6823b2486a278ce664378db7701a8289277ce9f15ae83a9e08e42e62d95feca",
-      "bytes": 2971
+      "sha256": "c913aeb659f39768af885281eb9ebb5f27a28fd71fabdc35bd4721c6c29c744c",
+      "bytes": 3861
     },
     "_home-cockpit/cockpit-offline.css": {
       "source": "../../public/_home-cockpit/cockpit-offline.css",
@@ -5635,9 +5635,9 @@
       "sha256": "48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e",
       "bytes": 67988
     },
-    "_shared/home-app-398939334868e767a745.js": {
-      "sha256": "398939334868e767a745d866122024334b26134301940e31e396fad9ac529c78",
-      "bytes": 123247
+    "_shared/home-app-81536f6407de92bd959f.js": {
+      "sha256": "81536f6407de92bd959f9bfefebe0a0fd8f8066e7fd9f39bc8182fe70cef8fd9",
+      "bytes": 125686
     },
     "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
       "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
@@ -5733,7 +5733,7 @@
     }
   },
   "count": 1401,
-  "bytes": 88208824,
+  "bytes": 88211263,
   "home_white_gear": {
     "inputs": [
       {

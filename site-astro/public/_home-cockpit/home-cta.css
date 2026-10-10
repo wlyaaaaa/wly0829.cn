@@ -23,3 +23,9 @@
   #home-01[data-home-cta] .home-time-controls { bottom: -132px !important; }
 }
 @media (max-width: 352px) and (orientation: portrait) { #home-01[data-home-cta] { margin-bottom: 188px; } #home-01[data-home-cta] .home-time-controls { bottom: -180px !important; } }
+/* 画里的显示器：挂驾驶舱总览屏小号版后，原来的锁屏时钟、长句和提示都藏起来；总览铺满屏幕层（原生 670×370）。 */
+#home-01 .hero-live-layer [data-hl="screen"].has-overview > :not(.home-overview) { display: none !important; }
+#home-01 .hero-live-layer [data-hl="screen"] > .home-overview { position: absolute; inset: 0; overflow: hidden; box-sizing: border-box; }
+#home-01 .home-overview-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: #1b2420; color: #b9c4bf; font: 600 34px/1.2 "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+#home-01 .home-overview-fallback i { width: 132px; height: 132px; border-radius: 50%; border: 16px solid #6f7b76; box-sizing: border-box; }
+#home-01 .home-overview-fallback b { font-size: 44px; color: #d5dcd9; }

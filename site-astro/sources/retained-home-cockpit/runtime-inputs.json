@@ -751,9 +751,9 @@
       "sha256": "4ed2e6c8c80bd099ca692bced23a1e5726afd5cea4d75e71f6c03f833fe1141d",
       "bytes": 2259
     },
-    "_shared/home-app-398939334868e767a745.js": {
-      "sha256": "398939334868e767a745d866122024334b26134301940e31e396fad9ac529c78",
-      "bytes": 123247
+    "_shared/home-app-81536f6407de92bd959f.js": {
+      "sha256": "81536f6407de92bd959f9bfefebe0a0fd8f8066e7fd9f39bc8182fe70cef8fd9",
+      "bytes": 125686
     },
     "assets/home-01-h-1920-bio-white-gear-db226b5dc07c.avif": {
       "sha256": "db226b5dc07c92e68f3808e60aeeed7d40654ddf3243dd15864eff8429171996",
@@ -814,7 +814,7 @@
     "/_typeset/runtime/app-c7ea357566aa882de1c8.js": "/_typeset/runtime/app-a1b2628768cbb2d59ce9.js",
     "/_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": "/_typeset/runtime/b2-typeset-1f648eb89aaf1cda0e64.js",
     "/cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": "/cockpit/assets/b2-typeset-9a690d5820eb00d4d806.js",
-    "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-398939334868e767a745.js"
+    "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-81536f6407de92bd959f.js"
   },
   "firstpaint_source": "_shared/home-living/hero-live.576f7d6f10.js",
   "home_white_gear": {
