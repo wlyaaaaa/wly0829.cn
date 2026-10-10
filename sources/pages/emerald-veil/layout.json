@@ -40,7 +40,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/hires-icons/开关.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
         ],
         "illustration": "top_inside",
@@ -118,7 +118,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/hires-icons/开关.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
         ],
         "illustration": "top_inside",
@@ -488,9 +488,9 @@
         "item_cards": true,
         "inner_columns": 2,
         "icons": [
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/文件齿轮.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/icons/文件夹.png",
           "_library/icons/文件齿轮.png",
           "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -566,9 +566,9 @@
         "item_cards": true,
         "inner_columns": 1,
         "icons": [
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/文件齿轮.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/icons/文件夹.png",
           "_library/icons/文件齿轮.png",
           "_library/fix-round-2/icon-clean-267cc9c529fc1d472fde.png",
@@ -1123,7 +1123,7 @@
           "emerald-veil\\emerald-veil-09-icon-02.png",
           "emerald-veil\\emerald-veil-09-icon-03.png",
           "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "emerald-veil\\emerald-veil-09-icon-06.png",
           "emerald-veil\\emerald-veil-09-icon-07.png",
           "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -1197,7 +1197,7 @@
           "emerald-veil\\emerald-veil-09-icon-02.png",
           "emerald-veil\\emerald-veil-09-icon-03.png",
           "_library/fix-round-2/icon-clean-c295ed91a3978f4f7a0c.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "emerald-veil\\emerald-veil-09-icon-06.png",
           "emerald-veil\\emerald-veil-09-icon-07.png",
           "emerald-veil\\emerald-veil-09-icon-08.png",
@@ -1378,7 +1378,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/GitHub标志.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/icons/文稿堆.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
@@ -1444,7 +1444,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/GitHub标志.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
           "_library/icons/文稿堆.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",

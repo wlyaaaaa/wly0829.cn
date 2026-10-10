@@ -181,7 +181,7 @@
  "source": {
   "page": "sources/pages/mcp/page.json",
   "sha256": "374660f1e3de6277d77811c83eecc0c6fd9a68652c33e68bc063ad5854c06000",
-  "converted_at_beijing": "2026-10-10T10:11:28+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -237,7 +237,8 @@
      "connector": "none",
      "row": "hero",
      "width": "60%",
-     "text_ref": "连接电脑"
+     "text_ref": "连接电脑",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -394,12 +395,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一只眼睛对着一块屏幕",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -703,7 +704,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "手机上点一台电脑",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -713,12 +714,12 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "手指点屏幕",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -728,12 +729,12 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "断开插头",
    "source_phrase": "断开的插头和原位的窗口",
-   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
    "status": "ready"
   },
   {
@@ -920,7 +921,8 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
      "connector": "none",
      "row": "hero",
      "width": "54%",
-     "text_ref": "让 AI 用电脑"
+     "text_ref": "让 AI 用电脑",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1397,7 +1399,7 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -1736,7 +1738,7 @@ https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude橙色星形标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready",
    "via": "brand"
   },
@@ -2076,7 +2078,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "两把不同的钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2101,12 +2103,12 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2115,12 +2117,12 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2157,12 +2159,12 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "连不上先看〔救急先看：远程连不上〕。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2171,12 +2173,12 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2213,12 +2215,12 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "连不上先看〔救急先看：远程连不上〕。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

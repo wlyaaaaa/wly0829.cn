@@ -422,7 +422,7 @@
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
   "sha256": "e293d7ce50c6cdb2700d41e17fdfe71f3f38a77ef7e2f2008a21b7a11af93425",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -613,7 +613,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "绿封面册",
    "source_phrase": "2 种文书｜合同协议（两方以上签），通知声明（我一方出具）",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -628,7 +628,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "6 级状态｜做好、签好、可交出、已交出、已收到、已办理，每级要凭据",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -643,7 +643,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "1 份内容｜同时出 Word 和 PDF，生成后逐字读回核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -965,7 +965,8 @@
      "type": "section_heading",
      "text_ref": "电子版和打印版",
      "row": "versions",
-     "width": "80%"
+     "width": "80%",
+     "row_fit_illustration": true
     },
     {
      "type": "table",
@@ -1065,7 +1066,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一本翻开的条款小册子",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {
@@ -1353,7 +1354,8 @@
      "align": "center",
      "size": "medium",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -1524,7 +1526,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1755,7 +1757,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "读回核对｜Word 和 PDF 里的字逐条对照输入；签名图按内容指纹在 Word 里找得到，PDF 里至少有一张图；每页都有页码",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1985,7 +1987,7 @@ Python 写成：主程序 1,839 行（不算空行），另用共用的检查模
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "一份内容，两种文件。 Word 给我改，PDF 给人看；都从同一份请求生成，生成后逐字读回，两边不会各说各的。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2060,7 +2062,7 @@ Python 写成：主程序 1,839 行（不算空行），另用共用的检查模
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "材料包自带证明。 输入、每页检查图、签名快照都在包里，拷到 U 盘或发给别人后，在空文件夹里也能单独核对缺没缺、改没改。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2435,7 +2437,7 @@ Python 写成：主程序 1,839 行（不算空行），另用共用的检查模
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "一份内容出 Word 和 PDF｜能改的 Word 和阅读用的 PDF 同时出，生成后逐字读回对照输入｜●待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2716,7 +2718,7 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "材料包验真｜拷到哪都能按清单核对：文件一个不少、一个字节没改｜●待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2731,7 +2733,7 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对早一版的材料包｜早一版做的包照样能查，并明说它缺哪些自带证明｜●待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2761,7 +2763,7 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件写作",
    "source_phrase": "对方签回单独记｜对方签好寄回的文件放进原件，单记一笔，不推断已付款或已验收｜●待验收",
-   "sha256": "78fcd9b3010d8edec8e13e231dfa01eb6e1bf1de47e99caa67705f10f6b47ec8",
+   "sha256": "28af955cf2d0855d3f91be0690a129e092af2b43346eb766b773beab8f70519b",
    "status": "ready"
   },
   {

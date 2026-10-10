@@ -1058,7 +1058,7 @@
  "source": {
   "page": "sources/pages/projects-home/page.json",
   "sha256": "209ecf96746e686829ff52dc0c265b95322ed23205d9ec98e059c2a0757d17eb",
-  "converted_at_beijing": "2026-10-10T06:07:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -1137,7 +1137,8 @@
      "size": "large",
      "text_ref": "项目",
      "row": "hero",
-     "width": "58%"
+     "width": "58%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",

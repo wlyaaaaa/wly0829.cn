@@ -420,7 +420,7 @@
  "source": {
   "page": "sources/pages/codex-agent-model-benchmark/page.json",
   "sha256": "2a3b80644222c99d885082dbd27646194c1ca5e4005967ea62cc9b9b9ec9d77e",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
  }
 }
 ---
@@ -471,7 +471,8 @@
      "align": "left",
      "row": "intro",
      "width": "70%",
-     "text_ref": "AI模型评测"
+     "text_ref": "AI模型评测",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",
@@ -1393,7 +1394,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "三种接法：Codex 原生子代理、本机模型（经〔AI工具配置管理〕接进 Codex，显卡排队轮流用）、云端接口；一种失败不偷偷换另一种 ✕",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1453,7 +1454,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "核实答题者：按 Codex 等工具自己留下的运行记录认定是谁在答、用的哪一档，不信模型自报 ✕",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -1483,7 +1484,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "盾牌对勾",
    "source_phrase": "蒙眼评审：每份合格答卷交给一个全新的 Sol 最高档，按正确、覆盖、证据、稳健、安全与范围、清晰好维护六个方面打 1000 分；看不到是谁答的、别人的答卷和价格 ✕",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {
@@ -1498,7 +1499,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "失败归因和挑选：分清能力不够、题有毛病、环境坏了、证据缺了；样本不齐不排名，也不挑最好的一次 ✕",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1641,13 +1642,17 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/禁止文件.png",
       "_library/icons/禁止文件.png"
-     ]
+     ],
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "illustration": "outside",
      "index": 0,
-     "size": "banner"
+     "row": "lone-ill-2",
+     "width": "40%"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版 16:9。左上标题。中间一条从左到右、分上下两行蜿蜒的水彩绿色丝带时间轴，9 个小旗按时间插在上面，每个小旗：日期（粗体绿色）＋一两行小字；上下错开不挤；8 月 11 日到 15 日那一段小旗挨得最密。越往右丝带颜色越淡、越偏灰。最右端丝带的尽头画那张考场课桌：试卷收成一叠、用绳子捆好，天平收起来靠在桌边，桌面落了几片叶子。",
@@ -1781,7 +1786,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "8 月 15 日 ：外部工具的答卷跑完打了分（Antigravity 13 份；OpenCode 交接后陆续加组合，跑了 11 份）；同一天自查出方法和评分有问题，仓库改成私有",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

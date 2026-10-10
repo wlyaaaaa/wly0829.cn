@@ -595,12 +595,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/扳手.png",
+   "asset": "_library/hires-icons-r2/扳手.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "扳手",
    "source_phrase": "一把往回拧的扳手",
-   "sha256": "52f3ffa5b6e07c8b49bad87fee5c6ce6903b5deea4171b3a90eaa98cdebcc150",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
    "status": "ready"
   },
   {
@@ -615,7 +615,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "一个问号小气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -630,7 +630,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一个上了锁的备份盒",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -645,7 +645,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一个往回转的箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -1039,7 +1039,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "扫文件夹：挑出哪些文件乱码，报告只有统计和结论，不带正文（说不准）",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1052,7 +1052,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "查",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1065,7 +1065,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "修",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1078,7 +1078,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "守",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1091,7 +1091,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "查",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1104,7 +1104,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "修",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1117,7 +1117,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "守",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {

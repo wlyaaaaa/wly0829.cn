@@ -362,11 +362,30 @@ def render_screenshot(block, ctx):
     if per_row is not None and not (isinstance(per_row, list) and per_row and all(type(n) is int and n > 0 for n in per_row)):
         _incomplete(ctx, '截图 row_items 必须是正整数列表（每排几张）；未执行该分排。')
         per_row = None
+    # 等高排自动断排时，一张竖图单独一排会限宽居中、两边各空一大截（主持 10 月 10 日 10:36：图库排不满不留空）：
+    # 有别的横图就拼成“竖图一栏 + 其余各图上下叠一栏”，两栏宽度按真实比例算到等高（不裁、不拉伸原图）。
+    mosaic = None
+    if equal_height and not per_row and connector != "arrow" and len(selected) > 1:
+        plan, rs = [], 0
+        for pos in range(len(selected)):
+            trial = ratios[rs:pos + 2]
+            if pos + 1 == len(selected) or pos + 1 - rs >= cols or (row_width - gap * (len(trial) - 1)) * min(trial) / sum(trial) < minimum:
+                plan.append((rs, pos + 1))
+                rs = pos + 1
+        lone = [a for a, b in plan if b - a == 1 and ratios[a] < 1]
+        others = [r for i, r in enumerate(ratios) if not lone or i != lone[0]]
+        if len(lone) == 1 and len(others) <= 4 and all(r >= 1 for r in others):
+            rp, inv = ratios[lone[0]], sum(1 / r for r in others)
+            wl = ((row_width - gap) / rp - gap * (len(others) - 1)) / (inv + 1 / rp)
+            if row_width - gap - wl >= 200:
+                mosaic = (lone[0], row_width - gap - wl, wl)
     for pos, (index, shot) in enumerate(selected):
         ratio = ratios[pos]
         trial = ratios[row_start:pos + 2]
         row_end = (pos + 1) % cols == 0 or pos + 1 == len(selected)
-        if equal_height and per_row and len(rows) < len(per_row):
+        if mosaic:
+            row_end = pos + 1 == len(selected)
+        elif equal_height and per_row and len(rows) < len(per_row):
             row_end = pos + 1 == len(selected) or pos + 1 - row_start >= per_row[len(rows)]
         elif equal_height:
             row_end = pos + 1 == len(selected) or pos + 1 - row_start >= cols or (row_width - gap * (len(trial) - 1)) * min(trial) / sum(trial) < minimum
@@ -407,11 +426,24 @@ def render_screenshot(block, ctx):
         if full_width and row_end:
             (row_items if equal_height else slots).append(f'<div class="slot-shot-full-captions">{"".join(full_captions)}{down}</div>')
             full_captions = []
-        if equal_height and row_end:
+        if equal_height and row_end and mosaic:
+            items = [x for x in row_items if x.startswith('<div class="slot-shot-item')]
+            extra = [x for x in row_items if not x.startswith('<div class="slot-shot-item')]
+            lp, wp, wl = mosaic
+            stack = (f'<div class="slot-shot-stack" style="display:flex;flex-direction:column;gap:var(--gap-card);min-width:0">'
+                     f'{"".join(items[:lp] + items[lp + 1:])}</div>')
+            body, weights = ((items[lp] + stack, f'minmax(0,{wp:.6g}fr) minmax(0,{wl:.6g}fr)') if lp == 0
+                             else (stack + items[lp], f'minmax(0,{wl:.6g}fr) minmax(0,{wp:.6g}fr)'))
+            rows.append(f'<div class="slot-shot-row slot-shot-mosaic" data-shot-row="0" '
+                        f'style="grid-template-columns:{weights}">{body}{"".join(extra)}</div>')
+            row_items = []
+            row_start = pos + 1
+        elif equal_height and row_end:
             row_ratios = ratios[row_start:pos + 1]
             # 以真实比例分配宽度：宽/比例一致，所以同排框等高；不拉伸或裁原图。
             weights = ' '.join(f'minmax(0,{r / min(row_ratios):.12g}fr)' for r in row_ratios)
-            cap = 'max-width:min(100%,14em);margin-inline:auto;' if len(row_ratios) == 1 and ratio < 1 else ''
+            # 一排只有一张竖图时限宽居中；整组只有这一张就占满整排（列数改成 1，主持 10:36 图库排不满不留空）
+            cap = 'max-width:min(100%,14em);margin-inline:auto;' if len(row_ratios) == 1 and ratio < 1 and len(selected) > 1 else ''
             rows.append(f'<div class="slot-shot-row" data-shot-row="{len(rows)}" '
                         f'style="grid-template-columns:{weights};{cap}">{"".join(row_items)}</div>')
             row_items = []

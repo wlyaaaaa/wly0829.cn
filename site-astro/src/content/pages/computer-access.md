@@ -151,7 +151,7 @@
  "source": {
   "page": "sources/pages/computer-access/page.json",
   "sha256": "3c63959f7f639ae841d9b53e01ffe325bba4617a92be23420665aff2d4b08227",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -341,7 +341,8 @@
      "illustration": "none",
      "connector": "none",
      "row": "hero",
-     "width": "52fr"
+     "width": "52fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -664,7 +665,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "挂锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -694,7 +695,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "带锁的窗",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1157,7 +1158,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "一部手机和回旋箭头",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -1528,7 +1529,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "锁",
    "source_phrase": "操作结果 锁定、结束、锁屏都记在［操作结果］里，可以［查询结果］；在网站上办的，也能［在主机查询此请求］。",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1762,12 +1763,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "断开插头",
    "source_phrase": "连不上电脑时\n页首写“暂时无法连接电脑”或“连接服务暂时异常”：可能是网络、休眠、关机或连接服务出了问题，光凭这一条分不出是哪个。\n1点重新检查连接。2还不通：用ToDesk或网易UU看看电脑实际怎么了，别光凭连不上就反复断电。3更多见救急先看：远程连不上。",
-   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
    "status": "ready"
   },
   {
@@ -1777,11 +1778,11 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "key": "双屏同步",
    "source_phrase": "这一页怎么工作\n页面开在前台时，每60秒读一次电脑；切回来马上读。刷新不会延长授权。时间都是北京时间。网页只是遥控器：判断和执行都在电脑上，由密码中心的授权程序办；网页自己不存授权状态。每次办理都和这个浏览器绑定；结果不明时只查原来那次，不会把同一个动作做第二遍。只能在wly0829.cn或电脑自己的授权页上办理；在别处打开只能看。",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

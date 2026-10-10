@@ -838,7 +838,7 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一本翻开的说明书",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {
@@ -868,7 +868,7 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "semantic_status": "scene_explicit_primary_object",
    "key": "上升台阶",
    "source_phrase": "五级小台阶",
-   "sha256": "7c96e3300b57acb3d30c526bdbbb5c5ed24e0ed8621d6f7a3a64960eaa97537d",
+   "sha256": "fb447e90e43d25696e5e3b5a53d4c4c3c9227bdd19db3c5ee3776fb2938cdb17",
    "status": "ready"
   },
   {
@@ -898,7 +898,7 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -913,7 +913,7 @@ AI：“已放进原件，记下‘对方已签回’。照片上两方签名都
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "一本通讯录和一个回头箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {

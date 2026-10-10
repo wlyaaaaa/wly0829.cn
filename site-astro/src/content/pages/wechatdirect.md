@@ -675,7 +675,7 @@
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
   "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
-  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -1516,7 +1516,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "照片堆",
    "source_phrase": "一张缺了角的照片",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -1546,7 +1546,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支正在写字的笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1733,7 +1733,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "身份盾牌",
    "source_phrase": "一张盖着指纹章的身份卡",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1763,7 +1763,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把钥匙插在锁里",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1778,7 +1778,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一本翻开的小日志",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {
@@ -1823,7 +1823,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "照片堆",
    "source_phrase": "一个回形针别着一张照片和一个小喇叭",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -2067,7 +2067,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "循环箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -3013,7 +3013,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "● 在用　● 待验收　● 说不准　｜　真实数据测过＝9 月 18 日在真实的聊天和朋友圈上从头到尾验收通过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3088,7 +3088,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "长消息分段读｜一条消息太长时先给开头，再按段接着读，整条的指纹能核对；源变了就拒绝拼接｜说不准",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3178,7 +3178,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "语音转成 WAV｜原始 SILK 保留，另转一份 WAV，交给中文语音转写｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3529,7 +3529,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "阅读包｜把选定的一段连同附件存成一个文件夹：完整消息、附件、给 AI 的摘要，别的项目也能直接读｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3544,7 +3544,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "网页版查看｜阅读包可以顺带生成一页网页，给人看；AI 用不着它｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3574,7 +3574,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "整份重核｜重新核对这个人或群在本机能看到的全部历史，补上后来才下载到本机的附件｜说不准·真实数据测过",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3589,7 +3589,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "定点补附件｜只补一个档案里缺的附件或 WAV，不重扫聊天、不联网｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3619,7 +3619,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "看朋友圈｜读某个号缓存着的朋友圈，看某个人的或我自己的；必须说是哪个号｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3634,7 +3634,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "存朋友圈快照｜把这台电脑现在看得到的朋友圈存一份，以后再存只更新变化｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3649,7 +3649,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "完整存一段聊天｜我明确要求时，把一个时间段的聊天、附件、编号和指纹存成一个能单独看懂的文件夹｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3664,7 +3664,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对以前导出的｜只读检查档案、朋友圈快照、阅读包、存底包：文件指纹、大小、账号和附件关系对不对得上｜说不准·真实数据测过",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3674,12 +3674,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "环境体检｜检查 Python、语音解码、ffmpeg 和配置，可以完全不碰账号配置｜在用",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3694,7 +3694,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "中断后恢复｜更新档案时被打断，先查看现场，再撤回或完成这次更新｜说不准·真实数据测过",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3773,7 +3773,8 @@
      "align": "center",
      "size": "large",
      "row": "history-head",
-     "width": "78%"
+     "width": "78%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -3896,12 +3897,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "9 月 1 日：导出中途出错能恢复。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -3946,7 +3947,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 18 日：长消息分段读、定点补附件、中断后恢复，核对扩到四种导出；在真实聊天上从头到尾验收一遍。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

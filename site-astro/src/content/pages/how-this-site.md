@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "d54cb03c814b50b6fcea5f1ff6131a2060092abfb997692b7e37ee64dfd50f5f",
-  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -339,7 +339,8 @@
      "text_ref": "我只做三件事",
      "align": "left",
      "row": "hero",
-     "width": "56fr"
+     "width": "56fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -732,7 +733,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -747,7 +748,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "Claude 写字",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -762,7 +763,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -792,7 +793,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -822,7 +823,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "→",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1173,7 +1174,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "按钮也是画的 页眉、页脚、按钮、标签都画在图里；能点的地方，网页在图上盖一层看不见的可点区域。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1203,7 +1204,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "改字不重画整屏 内容有小改动，在原图上只换那几个字；版面变了才整屏重画。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1403,7 +1404,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支钢笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1418,7 +1419,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把小锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1733,7 +1734,7 @@
      "illustration": "top_inside",
      "icons": [
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/illustrations/页面扇形网格核验.png"
      ],
@@ -1747,7 +1748,8 @@
      "illustration": "none",
      "icons": "none",
      "row": "quality-example",
-     "width": "62fr"
+     "width": "62fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -1795,7 +1797,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/illustrations/页面扇形网格核验.png"
      ],
@@ -1881,7 +1883,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钱包",
    "source_phrase": "一只小钱罐",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {
@@ -2020,7 +2022,8 @@
      "size": "medium",
      "target_height": 370,
      "row": "video-fallback",
-     "width": "38%"
+     "width": "38%",
+     "row_fit_illustration": true
     },
     {
      "type": "content_card",
@@ -2119,12 +2122,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "裁和压　裁掉图四周多余的白边，压成几档宽度：横版 1280、1920、2880 像素，竖版 828、1280 像素，浏览器按屏幕挑一档。格式用 AVIF 和 WebP，标准是肉眼看不出和原图有差别；不为了快先放模糊图。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2164,12 +2167,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "先快后全　先加载第一屏；往下滚，离屏幕还有 600 像素时才加载下一屏。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2312,12 +2315,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "天平",
    "source_phrase": "天平",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -2443,7 +2446,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/数据库.png"
@@ -2482,7 +2485,7 @@
      "icons": [
       "_library/icons/云图片.png",
       "_library/illustrations/账本.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/hires-icons/数据库.png"
@@ -2677,7 +2680,8 @@
      "text_ref": "AI 把要我定的事",
      "align": "left",
      "row": "decisions",
-     "width": "62fr"
+     "width": "62fr",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2743,7 +2747,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "照片堆",
    "source_phrase": "我说一句，常常配一张截图。",
-   "sha256": "ea6c42cf780bf1135d5f08a696c3a91e26537335e74a0c2165b27b44e15f09b5",
+   "sha256": "bb6bf0eedf25e5b0ba6427527091df9c684a6e635943b440f443ad5280e33f5c",
    "status": "ready"
   },
   {
@@ -2771,7 +2775,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "不只改我点到的那一处：提炼成规矩，同类的页一起改。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -2780,12 +2784,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "改完在真网页里截改前、改后的图对比。",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -2872,7 +2876,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/秒表.png"
      ]
     },
@@ -2884,7 +2888,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]
     },
@@ -2950,7 +2954,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/秒表.png"
      ]
     },
@@ -2962,7 +2966,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]
     },

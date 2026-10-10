@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
  }
 }
 ---
@@ -1149,7 +1149,7 @@
    "semantic_status": "common_subject_reused_per_b2bc0efe",
    "key": "显示器等待",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready",
    "original_elements": [
     "一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点"
@@ -1561,7 +1561,8 @@
      "type": "illustration",
      "row": "heading",
      "width": "18%",
-     "index": 0
+     "index": 0,
+     "row_fit_illustration": true
     },
     {
      "type": "chapter_title",
@@ -1707,7 +1708,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "电费怎么算的 \n电量＝CPU功率＋显卡功率，按实际采样间隔累加；中间断了超过60秒的不往里算。不含主板、风扇、灯、显示器和电源自己的损耗，所以比插座上的实际用电少。看板上的“整机功耗”是估算：在CPU和显卡之外加一条“外设/主板”（30瓦加上CPU和显卡功率的12%），插座那头再按电源效率折算；不是电表实测，和上面的电量、电费不是一个口径，两边的数不能直接比。电价默认峰段8–22点0.58元/度、谷段0.27元/度，看板顶上可以改。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1799,7 +1800,8 @@
      "align": "left",
      "row": "diagnosis-heading",
      "text_ref": "卡了，问AI",
-     "width": "70%"
+     "width": "70%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1954,7 +1956,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "秒表",
    "source_phrase": "Windows 内存黑匣子：系统自带的性能日志，看内存是不是吃紧到卡死。",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -2123,7 +2125,8 @@
      "align": "left",
      "row": "clipboard-heading",
      "text_ref": "找回复制过的东西",
-     "width": "70%"
+     "width": "70%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2264,7 +2267,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "不记什么｜复制时带了“不进剪贴板历史”标记的一律不存，比如从密码中心复制的密码。",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -2294,7 +2297,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "疑似密钥｜看着像 API 密钥、令牌、恢复码的单独归一类，提醒小心；只看格式，不保证都认得出。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -2319,12 +2322,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "暂停｜在同一个标签里可以暂停记录，恢复后从当下重新算起。",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2415,7 +2418,8 @@
      "align": "left",
      "text_ref": "时间花在哪",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2622,7 +2626,8 @@
      "align": "left",
      "row": "rescue-head",
      "width": "64%",
-     "text_ref": "出事怎么办"
+     "text_ref": "出事怎么办",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -2810,7 +2815,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵断开的云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3004,7 +3009,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "依次：一把钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3019,7 +3024,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一只秒表",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -3079,7 +3084,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件柜",
    "source_phrase": "一个整理抽屉的手",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3109,7 +3114,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一枚回形针和硬盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -3709,7 +3714,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "秒表、一叠小方块、一本按月装订的账本、一扇进出的门、一本登记册、一扇窗户、一个离开的小人、一个圆柱数据库",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -3828,7 +3833,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "每天 11:40 把整个数据库压缩备份到 G:\\80_Backup\\TimeAudit\\postgresql，一份约 3.8 GiB，留 14 天（现在 12 份）。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3842,7 +3847,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "纸箱对勾",
    "source_phrase": "每天 11:40 把整个数据库压缩备份到 G:\\80_Backup\\TimeAudit\\postgresql，一份约 3.8 GiB，留 14 天（现在 12 份）。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3856,7 +3861,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "先写成“半成品”文件，校验能读、记下 SHA-256 指纹后才改名成正式备份；写到一半断电，不会把坏的当成好的。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3870,7 +3875,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "旧备份要删，至少留 3 份校验过的。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4081,7 +4086,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "秒表",
    "source_phrase": "一块手表和一个秒表",
-   "sha256": "890b43946e5151700c769f602a756dc44336fabd95e3fd5eb8855ee368d6e326",
+   "sha256": "f121f21414f8af87c5b41de891573f1730a4ade5ab2db1f743ea7e85f5f25b29",
    "status": "ready"
   },
   {
@@ -4126,7 +4131,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把小锁挂在一张空白卡片上",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -4361,7 +4366,7 @@
    "semantic_status": "matched_existing_objects",
    "key": "ill-4084221892ddb5",
    "source_phrase": "插画：1 一只守门的小狗趴在一台机箱旁，机箱上方飘着一条跳动的心跳线，其中一小段变成平线，小狗正抬头看着那段平线；2 右边这张卡片的插画位换成一个带细绿边框的截图空位（宽高比约 2:1），截图位下面一行灰色小字（截图说明）。",
-   "sha256": "adf0466595d685a8e7e81d0713e37579844b78c5489f69228933b3139bbc679a",
+   "sha256": "4322a88db44cd63bfde38d1ceddf51070d2d2f1ba809071acfc3c8d9bd3a195b",
    "status": "ready",
    "original_elements": [
     "守门小狗趴在机箱旁，机箱上方心跳线中一段变平，小狗抬头看平线"
@@ -5003,7 +5008,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "离开、锁屏、息屏、睡眠｜人离开、锁屏、息屏、睡眠各记各的；计时被耽误的单独记成采集空档",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -5018,7 +5023,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "外接硬盘",
    "source_phrase": "整机硬件大盘｜21 个图：温度功率、降频原因、内存和换页、磁盘延迟、网络、散热有没有变差",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -5028,12 +5033,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "流畅度诊断｜9 个图：帧率、1% Low、卡顿时刻、CPU 还是显卡拖后腿、全屏和窗口对比",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -5048,7 +5053,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "功耗和电费｜11 个图：今天几度电、按峰谷电价折多少钱、月底预计、最费电的程序；电量只按 CPU 和显卡功率算",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {
@@ -5078,7 +5083,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "趋势图",
    "source_phrase": "资源大户｜10 个图：占用前 25 名、后台高占用、写盘和联网大户、内存只涨不跌、各软件按小时和按天的 CPU、内存趋势",
-   "sha256": "93f561327ed7d183c4ffc3ca973b78e9ec9cc8de258aa4facce704e52f997d5a",
+   "sha256": "840e34005f97891bcc6f8b0621a1e081cfae3d452a215b4eb6a9efa57ae723ab",
    "status": "ready"
   },
   {
@@ -5445,12 +5450,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "刚才卡了｜AI 用电脑配置与恢复的卡顿总诊断，把这里的历史摘要和运行健康、内存黑匣子、系统事件对到同一段时间，刚发生的再加几秒现场采样",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -5460,12 +5465,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "历史诊断摘要｜按时间段一次汇总记录覆盖、空档、温度功率、帧率和超阈值次数，摘要不含程序名和窗口标题；9 月 29 日查 24 小时约 2.5 秒、168 小时约 6.4 秒，都能出结果",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -5480,7 +5485,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "现在正不正常｜一次查齐：在不在写、入库积压、传感器、图表、备份、看门狗上次结果；双击“检查运行状态.vbs”也是它",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5570,7 +5575,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "疑似密钥归类｜看着像 API 密钥、令牌、恢复码的单独一类，提醒小心；只看格式",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -5585,7 +5590,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "不存标了“不进历史”的复制｜复制时带了 Windows 专用标记的一律不存，比如从密码中心复制的密码",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -5595,12 +5600,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "暂停记录｜在剪贴板历史标签里暂停，恢复后从当下重新算起",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -5630,7 +5635,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "剪贴板每天备份｜每天 18:25 一致备份到 G 盘并核对条数和完整性",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   }
  ]
@@ -5743,14 +5748,17 @@
       "pale_gray"
      ],
      "status_position": "top_right",
-     "text_ref": "登录自动开始"
+     "text_ref": "登录自动开始",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
-     "align": "left",
      "connector": "none",
      "index": 0,
-     "size": "banner"
+     "row": "lone-ill-2",
+     "width": "40%"
     }
    ],
    "notes": "无章节标题、无图例。横图实际保底第一排28/29两张半宽卡，第二排30/31/32三卡，第三排33/34/35三卡；下方整宽纸带/狗/回形针插画在卡外。第32项原图黄，定稿scene明确绿，按定稿标绿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",
@@ -5895,7 +5903,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "明细 60 天、汇总长期｜逐程序明细只留 60 天，删之前先汇总成按小时、按天的统计并核对条数",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5910,7 +5918,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "数据库每日备份｜每天 11:40 整库备份到 G 盘，校验、记指纹后才算数，留 14 天",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5940,7 +5948,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "隔离恢复演练｜在不联网的临时数据库里把备份恢复一遍再读回，不碰正在用的库；还没拿真实备份跑过",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -5955,7 +5963,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "整库数据审计｜逐表逐字段检查数据对不对：各表行数、数值有没有越界、该有的是不是空的、有没有孤儿记录和时间倒退；只打印到屏幕，不留记录，日常查卡顿不用它",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5970,7 +5978,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "换电脑重装｜照《快速部署》装回运行环境、容器和计划任务，再从 G 盘备份恢复历史",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -6049,7 +6057,8 @@
      "illustration": "none",
      "text_ref": "演进",
      "row": "balanced-heading",
-     "width": "88%"
+     "width": "88%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -6251,7 +6260,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "断线",
    "source_phrase": "8 月 30 日–9 月 2 日：给 AI 的历史诊断摘要；会带崩程序的网络统计挪进子进程；硬件传感器只由一个程序管；帧率改为先读 RTSS。",
-   "sha256": "8e40c182f809b7bca502da171ca29213f9bcf0ad1022eafd8ede55bfb7524e46",
+   "sha256": "2688e27cd119e922f2bf91c47cc822e4158fcc2dc56dddc34e97327a184bd6f1",
    "status": "ready"
   },
   {
@@ -6296,7 +6305,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 17 日：运行健康、卡顿证据、校验过的备份统一成一套。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -6341,7 +6350,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "9 月 27 日：备份写到一半中断也认得出来；逐程序明细只留 60 天，另存长期汇总。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -6356,7 +6365,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 29 日：长时段诊断摘要不再超时；看板设置备份改成按内容比对；显卡热点明确标“不支持”。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {

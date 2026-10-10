@@ -1201,7 +1201,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一支打钩的钢笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {

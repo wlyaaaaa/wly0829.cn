@@ -123,7 +123,7 @@
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
   "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
  }
 }
 ---
@@ -287,12 +287,45 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-01-illustration-01",
    "source_phrase": "驾驶舱页的主插画（书桌上的侧透机箱和屏幕）；画面描述里的仪表盘小插画素材库没有，用它代替",
-   "sha256": "220e4babb91d16ee83700fc8f89b91373e9f08e81ffc6eb96dfdbc2f5ea08331",
+   "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
    "status": "ready",
    "original_elements": [
     "一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字"
    ],
    "hidden": false
+  },
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/illustrations/skill-cockpit-dashboard.png",
+   "fallback": false,
+   "semantic_status": "explicit_owner_selected_asset",
+   "key": "skill-cockpit-01-illustration-01",
+   "source_phrase": "总灯与红黄绿指示、贴入新便签",
+   "sha256": "3058a090d21aee5edea850a68754a5f878bca91e474c9eda0f9ef890984f3bde",
+   "status": "ready"
+  },
+  {
+   "role": "title",
+   "slot_ordinal": 1,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/titles/看驾驶舱.png",
+   "fallback": false,
+   "semantic_status": "explicit_owner_selected_asset",
+   "title_exact_match": true,
+   "text_verified": true,
+   "key": "skill-cockpit-01-title-01",
+   "title_text": "看驾驶舱",
+   "source_phrase": "看驾驶舱",
+   "sha256": "5e9d16a8303a684be85a2e813db3945177181d1d54f2ce8e5bb613f02ed323db",
+   "status": "ready"
   }
  ]
 }
@@ -445,12 +478,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/显示器.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-02-icon-01",
    "source_phrase": "一块屏幕：先读驾驶舱的摘要",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -490,12 +523,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-02-icon-04",
    "source_phrase": "一张对话纸：AI 在跟的只报个数",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -617,12 +650,12 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
-   "asset": "_library/icons/显示器.png",
+   "asset": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
    "fallback": false,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "skill-cockpit-03-icon-01",
    "source_phrase": "一块屏幕：先读摘要，只讲四件事",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -677,6 +710,21 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
+   "asset": "_library/icons/火箭问号.png",
+   "fallback": false,
+   "semantic_status": "explicit_owner_selected_asset",
+   "key": "skill-cockpit-03-icon-05",
+   "source_phrase": "火箭打了问号",
+   "sha256": "ca398b39da7e61a76a4e47a112604038277f7bc375d382f82dae5649472cf200",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
    "asset": "_library/icons/盖章信封.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
@@ -712,7 +760,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-03-icon-07",
    "source_phrase": "一把小锁：给 AI 的细节只放在本机",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -887,7 +935,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-04-icon-01",
    "source_phrase": "管",
-   "sha256": "efa72ad5b46fa3bcc8c2d4899624f8a80caf3612354699a5da47660955af70a5",
+   "sha256": "f0f7bf71ee382c538ac4758d72c99d915b243d5f916a3d42a70d900089769784",
    "status": "ready"
   },
   {

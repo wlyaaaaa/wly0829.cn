@@ -99,7 +99,7 @@
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
   "sha256": "1c191eb99a9a5ddd4665428c5af57d01601684bf0c2d31dc6fda9e83d66fa77a",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -702,7 +702,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "剪刀",
    "source_phrase": "剪刀剪开一段波形",
-   "sha256": "70cb61682b6ecc2fc6e262b6c309d0ad67fb83036817d0263db7d9d72ea2d070",
+   "sha256": "18efcc5f95ce2b5b8c0939799620a9389dcc063c3e42dff881d10ecacb9d5682",
    "status": "ready"
   },
   {
@@ -747,7 +747,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵云和两张并排的纸",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -825,7 +825,8 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
      "size": "large",
      "row": "hero",
      "width": "70%",
-     "text_ref": "能做的事"
+     "text_ref": "能做的事",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -1038,7 +1039,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1068,7 +1069,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "两个问号气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1083,7 +1084,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -1377,7 +1378,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "麦克风",
    "source_phrase": "一只打钩的麦克风",
-   "sha256": "94119402f1f4bebbe169fbe11dd19fe64801a8a7f555c2b7a08353103aa64bf9",
+   "sha256": "cea9f4749442b691ce487ee15121c3b015313056f57ade43ae892e4046e0043e",
    "status": "ready"
   },
   {

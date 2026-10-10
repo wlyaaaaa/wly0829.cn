@@ -589,7 +589,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/illustrations/页面扇形网格核验.png"
         ],
@@ -655,7 +655,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
-          "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
+          "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/illustrations/页面扇形网格核验.png"
         ],
@@ -975,7 +975,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/齿轮.png",
           "_library/icons/文件齿轮.png",
           "_library/hires-icons/数据库.png"
@@ -1018,7 +1018,7 @@
         "icons": [
           "_library/icons/云图片.png",
           "_library/illustrations/账本.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/齿轮.png",
           "_library/icons/文件齿轮.png",
           "_library/hires-icons/数据库.png"
@@ -1168,7 +1168,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文件写作.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/秒表.png"
         ]
       },
@@ -1180,7 +1180,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/illustrations/电脑后台闹钟.png"
         ]
       },
@@ -1250,7 +1250,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/文件写作.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/秒表.png"
         ]
       },
@@ -1262,7 +1262,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/hires-icons/打勾清单.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/illustrations/电脑后台闹钟.png"
         ]
       },

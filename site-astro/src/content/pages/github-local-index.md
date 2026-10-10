@@ -1003,7 +1003,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "75 个｜本机工作目录：每个仓库一个主目录，另有 30 个是 AI 同时干活时开的临时目录",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -1018,7 +1018,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 个｜冻结的项目：只核对身份和位置，不查改动、不修",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1270,7 +1270,7 @@ GitHub 项目总索引
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一扇半开的门，门外一个小地球、门内一把小锁",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1285,7 +1285,7 @@ GitHub 项目总索引
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一把剪刀旁边一只小盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1377,7 +1377,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
      "width": "30%",
      "icons": [
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1434,7 +1434,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1494,7 +1494,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "有 36 个仓库这次没联网核对 \n那次刷新时，这些仓库的远端状态用的是本机上次拉下来的记录（缓存），没有现场问GitHub。旧一点不算出错；真要推送或删东西，再现场查一次。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1675,7 +1675,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "依次：一本旧账本和一支笔",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -1705,7 +1705,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一朵带叉的云旁边一个问号",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1720,7 +1720,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一只小盾牌挡在一把剪刀前",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1735,7 +1735,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "一个从云里落下的小箱子",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -1989,7 +1989,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "生成器｜按远端地址（origin）把两边对上，逐个读分支、工作目录、没提交的改动、和主线差几个提交；冻结名单从当前生效的规则读",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2034,7 +2034,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "私有配套查询：公开项目的内部说明放在哪个私有仓库",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2049,7 +2049,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "仓库大动作入口：新建、改名、改公开范围、删库、转移",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2064,7 +2064,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "给驾驶舱的项目数字：不联网，每个仓库最多算 1.2 秒",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2227,12 +2227,12 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "依次：一张地图和一个指向真实房子的箭头",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2277,7 +2277,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "一个“1”字形的小书架",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -2482,7 +2482,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件柜",
    "source_phrase": "一个仓库，九个工作目录 \n几个AI同时干活，各开各的临时工作目录。9月28日凌晨，电脑配置与恢复一个仓库就开着9个。收尾只看当前窗口，别的目录里做完没合的活就会被忘掉，或者被当成垃圾清掉。总索引把每条分支都拿去和GitHub上的主线比：内容已进主线的标“残留，可以收”；有独有提交的写明“主线缺N个提交”，先并进去；有没提交改动的只提醒核对，不碰别人的东西。那天它就找出一条比主线多9个提交的临时分支。",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2743,7 +2743,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "认准是哪个仓库｜回读文件夹里的 .git，确认连着的仓库和登记一致，不凭目录名猜｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2773,7 +2773,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "标出冻结的项目｜名单从生效的规则读；9 个冻结的只核对身份和位置｜在用",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2803,7 +2803,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "查全部工作目录｜同一个仓库的所有工作目录和分支一起查：没提交的、没推送的、领先落后几个｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -2863,7 +2863,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "只看这次的目标｜一个仓库开着好几个目录时，只让这次要推的那个参与判断，别的照样列出｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3096,7 +3096,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "敏感文件提示｜公开仓库的目录里出现 .env、私钥、secrets 文件夹这类文件，查询直接判“挡住”；日志、数据库文件列出来请 AI 复看｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3111,7 +3111,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "推送放行规则｜一张表写清什么情况能推、什么情况先停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3126,7 +3126,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "找到私有配套说明｜公开项目的内部说明放在一个私有仓库里，AI 维护时按登记找到；现在登记了 3 个项目｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3141,7 +3141,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "刷新总表｜重新扫描，看板页和仓库清单一起重写，每个文件整份替换｜在用",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -3166,12 +3166,12 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
+   "asset": "_library/hires-icons-r2/42-听诊器检查-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "听诊器检查",
    "source_phrase": "给别的基座的状态摘要｜别的基座（例如体检）来问“Git 这块现在怎样”时，它不改任何文件，只回答“当前、要复核、被挡住、不知道”四种之一｜在用",
-   "sha256": "18d3aa616e0ec2aa16db0867599d221f862df22750e2e388ca3ad86630ecd1be",
+   "sha256": "38adc2f33129bb6867d702884c21813e4cb94804311d51a68bcf03398d90243b",
    "status": "ready"
   },
   {
@@ -3186,7 +3186,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "新仓库放哪｜新的个人仓库放 V:\\Personal\\Projects，临时工作目录放 V:\\Personal\\Worktrees，Z 盘不放仓库｜在用",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3466,7 +3466,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "新建仓库｜只在我的账号下建空仓库，先核对同名仓库确实不存在｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3481,7 +3481,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "仓库改名｜核对旧名、公开范围、默认分支，确认新名没被占，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3496,7 +3496,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改公开范围｜核对当前是公开还是私有再改，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3511,7 +3511,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "改默认分支｜核对当前默认分支再改，改完读回｜待验收",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -3526,7 +3526,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "删库和转移｜固定先预演：把所有分支、标签拉到本地各留一个备份记号，列出 issue、发布包等只在网页上的东西，拿给我看过再正式删或转移｜待验收",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -3586,7 +3586,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "钥匙",
    "source_phrase": "提交前拦密钥｜7 月 8 日加，9 月 27 日删：AI 对密钥本来就警觉，密钥放密码中心｜已停用",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -3851,7 +3851,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "7 月 10 日　AI 能单独查一个仓库，开始看它的全部工作目录",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3881,7 +3881,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "8 月 1 日　删库、转移走专门的入口；8 月 12 日加新建私有仓库，8 月 21 日加改名",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3911,7 +3911,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "9 月 1 日　登记到 48 个仓库，之后陆续删掉不用的",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {
@@ -3926,7 +3926,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "身份盾牌",
    "source_phrase": "9 月 17–18 日　能找到公开项目的私有配套说明；读失败和身份冲突分开",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -3956,7 +3956,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "9 月 27 日　大动作入口瘦身，拆掉拦密钥的检查；删掉一个不用的仓库后刷新",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -3971,7 +3971,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件柜",
    "source_phrase": "9 月 28 日　登记新拆出来的密码中心仓库，登记各项目上不上网站；现在 45 个仓库",
-   "sha256": "f0b9ee3efc4f0022c96df1fbce4b8dff8c95bbc70ef0fee81367044b19e4fa88",
+   "sha256": "5175a67856332d2607ebee3d06e3cb1dc3ee89bb1a730da21084cf5d7ebd3cb5",
    "status": "ready"
   },
   {

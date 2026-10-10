@@ -26,11 +26,26 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
-   "file": "sources/rules/release.json"
+   "release": "E230",
+   "files": [
+    ".publish/private/rule-sources/AGENTS.md",
+    ".publish/private/rule-sources/rules-catalog.json",
+    "sources/pages/charter/page.json",
+    "sources/pages/rule-authorization/page.json",
+    "sources/pages/rule-capabilities-runtime/page.json",
+    "sources/pages/rule-claude-adapter/page.json",
+    "sources/pages/rule-codex-adapter/page.json",
+    "sources/pages/rule-context-sources/page.json",
+    "sources/pages/rule-engineering-delivery/page.json",
+    "sources/pages/rule-execution-coordination/page.json",
+    "sources/pages/rule-privacy-data/page.json",
+    "sources/pages/rule-protected-actions/page.json",
+    "sources/pages/rule-rule-release/page.json"
+   ],
+   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+   "commit_time": "2026-10-09T09:10:42+08:00",
+   "activated_at": "2026-10-09T09:12:52.097645+08:00",
+   "excerpt_contract": "e230-original-ranges-v1"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "registry": {
@@ -247,8 +262,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "27b8394ead8301ebf9801ab3a3b1307acef4da0ce4c0a5c19203490be6052ac2",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "7ccdaf050e3333f39898ba6e8bc05556c9a6a9a84cbff02d2f9a735150f01331",
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -536,7 +551,7 @@
 
 〔约法全文〕
 
-当前生效版本 E251（北京时间 10 月 10 日 01:51 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
+当前生效版本 E230（北京时间 10 月 9 日 09:12 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
 
 ::screen{#rules-home-03 section="top"}
 
@@ -648,7 +663,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 的橙色星芒标志，旁边一支笔压着一张纸",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -663,7 +678,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "Claude 橙色星芒标志和 ChatGPT 标志并排、中间一架小木天平",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -678,7 +693,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "一个小一号、颜色偏灰的 Claude 星芒标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -707,7 +722,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "ClaudeFable5.1现在不如Opus5.5，不派。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -721,7 +736,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "ClaudeFable5.1现在不如Opus5.5，不派。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -806,7 +821,8 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
      "size": "large",
      "text_ref": "碰到一件事",
      "row": "balanced-heading",
-     "width": "92%"
+     "width": "92%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -975,7 +991,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "scene_explicit_budget_correction",
    "key": "问号气泡",
    "source_phrase": "④一个带问号的小对话气泡。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1254,7 +1270,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "一面绿色盾牌",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1359,7 +1375,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "Claude标志",
    "source_phrase": "Claude 的橙色星芒标志",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -1374,7 +1390,7 @@ Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的�
    "semantic_status": "scene_explicit_primary_object",
    "key": "翻开册子",
    "source_phrase": "一摞叠起的书页加一个绕回的圆箭头",
-   "sha256": "64a392d9602be0e7bbd9b30f9fbb30480912524b373c7a630aa7276cae985c21",
+   "sha256": "443a1e26f04d1a582103f4475c613c05b9c1f1c9e854081d0d14073fc8e51894",
    "status": "ready"
   },
   {

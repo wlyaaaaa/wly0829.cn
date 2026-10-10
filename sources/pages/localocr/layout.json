@@ -127,7 +127,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ],
         "row": "routes-bottom",
         "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出",
@@ -139,7 +139,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ],
         "row": "routes-bottom",
         "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标",
@@ -185,7 +185,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ],
         "row": "routes",
         "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出"
@@ -196,7 +196,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ],
         "row": "routes",
         "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标"
@@ -265,7 +265,7 @@
         "whole_block": true,
         "icon_position": "header_left",
         "header_icon": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ]
       }
     ],
@@ -328,7 +328,7 @@
         "whole_block": true,
         "icon_position": "header_left",
         "header_icon": [
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
         ]
       }
     ],

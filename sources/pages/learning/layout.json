@@ -809,7 +809,7 @@
         "columns": 2,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/气泡.png",
+          "_library/hires-icons-r2/气泡.png",
           "_library/fix-round-2/icon-clean-38a3e62e6a9c7275cc49.png",
           "_library/icons/文稿堆.png",
           "_library/icons/云.png"
@@ -846,7 +846,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/气泡.png"
+          "_library/hires-icons-r2/气泡.png"
         ]
       },
       {

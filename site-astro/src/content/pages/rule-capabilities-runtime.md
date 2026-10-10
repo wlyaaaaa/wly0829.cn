@@ -30,13 +30,14 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
-   "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d"
+   "release": "E230",
+   "file": ".publish/private/rule-sources/docs/contracts/agents.capabilities-runtime.md",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+   "commit_time": "2026-10-09T09:10:42+08:00",
+   "activated_at": "2026-10-09T09:12:52.097645+08:00",
+   "excerpt_contract": "e230-original-ranges-v1",
+   "omitted_count": 2
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小 AI 助手抬手从洞洞板上取下放大镜看了看又挂回去，洞洞板上的 Chrome、Gmail、Google 云盘三个标志轻轻晃动；脚边贴着“E:”的绿色储物箱里几片绿叶慢慢舒展；右下笔记本电脑屏幕上的看板里，三个小圆点状态灯依次轻轻呼吸（绿、绿、黄）；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，三块小牌子上的字保持不动、不变形。",
   "registry": {
@@ -396,8 +397,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "e024a053015923233b638aa4e0993ebc103e4757632a6c81e29358c5c9014bb4",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "1847e3d4b039f7abbeb4216602d67c7752935bbc87af3b176d2f11d9c29d6d54",
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -873,12 +874,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+   "asset": "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一架小天平一边是扳手一边是硬币、“另一台电脑上的 AI”配两台笔记本电脑之间一根细绿线、“软件界面上的点选，默认交本人”配一根食指点在一个小按钮上",
-   "sha256": "0caa7ff3f8dccbf8dce76ca29ccf3ae9a459292696a3bdbedf85f69ecfdfc3e3",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1008,7 +1009,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
@@ -1030,7 +1031,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/capability-missing-puzzle-icon.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-02.png",
+      "_library/hires-icons-r2/气泡.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-03-icon-03.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
@@ -1390,7 +1391,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -1411,7 +1412,7 @@
      "icon_position": "header_left",
      "header_icon": [
       "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-05-icon-02.png"
+      "_library/icons/云.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -1433,7 +1434,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "几扇并排的小门、每扇门上一片不同颜色的叶子、“Gmail、Google 云盘和待办”配 Gmail 标志、Google 云盘三色三角标志和 Google Tasks 标志并排",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -1907,7 +1908,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1921,7 +1922,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2199,7 +2200,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一张白底绿色的小网页（只画色块和一个小图表）、“网站怎么更新”配一个小地球和一片绿叶、“自动运行的东西要看得见”配一个小齿轮旁边一盏亮着的小绿灯",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2432,8 +2433,8 @@
      "header_icon": [
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-01.png",
       "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-02.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-03.png",
-      "rule-capabilities-runtime/rule-capabilities-runtime-08-icon-04.png"
+      "_library/hires-icons-r2/版本循环文件.png",
+      "_library/hires-icons-r2/版本循环文件.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
     }
@@ -2450,12 +2451,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "版本循环文件",
    "source_phrase": "一个绕成圈的绿色箭头、“锁版本”配一把小挂锁、“改在用的软件时保什么”配一只手护着一株小苗、“更新不该打扰本人”配一个挂着“请勿打扰”形状的小门牌（门牌上不画字）",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -2842,7 +2843,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "置和密钥”配一把小钥匙挂在一个带锁的小盒子上、“技能和插件”配几块拼在一起的积木、“Windows”配 Windows 的四格窗标志",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2910,14 +2911,11 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E251",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-   "from": null,
-   "to": "## 常用入口",
-   "start": 0,
-   "end": 1419,
-   "approved_omissions": []
+   "from": 1,
+   "to": 15,
+   "release": "E230",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "omit": []
   },
   "title": "原文（一）：开头、选能力",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E187 版”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成前面带小绿圆点的一条，短横不画；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文照抄，标点照抄，不加任何没给的字。左卡放从“# 能力与运行方式”到“界面上的点选默认交本人”那一条结束；右卡放“能力缺失或真的不兼容时……”“默认简体中文……”“短时流程要跟住……”三条。",
@@ -2933,17 +2931,14 @@
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
-  "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-  "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-11"
+  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-11"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版"
+     "text_ref": "原文 · E230 版"
     },
     {
      "type": "chapter_title",
@@ -2952,7 +2947,8 @@
      "row": "intro",
      "width": "50%",
      "text_ref": "能力与运行方式",
-     "source_prose": true
+     "source_prose": true,
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -2983,7 +2979,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版"
+     "text_ref": "原文 · E230 版"
     },
     {
      "type": "chapter_title",
@@ -3076,7 +3072,7 @@
 }
 ```
 
-原文 · E251 版
+原文 · E230 版
 
 # 能力与运行方式
 
@@ -3087,7 +3083,7 @@ owner: `E:\.agents`
 ## 选能力
 
 - 按目标、风险、信息增益、能否撤回、等待时间和总花费选工具和方法，保留本人选的模型和框架。能力目录只是候选：需要时查当前真实的工具、现有入口和说明；不把当前列表当上限，也不把“工具存在”当成“一定能用”。技能、模板和计划不能自己生出新目标或审批。
-- 独立电脑 MCP 和本机宿主遵守同一套工作约定，但各用自己真实的身份和能力。缺某个宿主特有的事件或工具，只影响相关动作，不让别的工作停下，也不冒充别的宿主的身份。共用的桌面、鼠标键盘和浏览器会话按当前动作协调，用完归还。新接入宿主或 AI 时，个人资料链路投影正式的同一份共享状态，使用共同来源的根/子角色提示，按宿主真实接口接入结构化资料兜底并通过共同语义、误拦/漏拦和错误放行测试；不能另维护名单或提示，不猜模型措辞。技能加载与源码维护无法区分时，不按技能文件读取拦截。确实缺相关接口时写明那项缺口，不报已接通，其余普通工作照常。资料策略与调用办法统一见[个人资料与数据处理](/rules/privacy-data/)和状态钩子维护手册（`../operations/context-hooks.md#按需维护与回滚`）。
+- 独立电脑 MCP 和本机宿主遵守同一套工作约定，但各用自己真实的身份和能力。缺某个宿主特有的事件或工具，只影响相关动作，不让别的工作停下，也不冒充别的宿主的身份。共用的桌面、鼠标键盘和浏览器会话按当前动作协调，用完归还。新接入宿主或 AI 时，个人资料链路投影正式的同一份共享状态，使用共同来源的根/子角色提示，按宿主真实接口接入结构化资料兜底并通过共同语义、误拦/漏拦和错误放行测试；不能另维护名单或提示，不猜模型措辞。技能加载与源码维护无法区分时，不按技能文件读取拦截。确实缺相关接口时写明那项缺口，不报已接通，其余普通工作照常。资料策略与调用办法统一见[个人资料与数据处理](/rules/privacy-data/)和[状态钩子维护手册](../operations/context-hooks.md#按需维护与回滚)。
 - **快速操作由 AI 执行。** 本人提出“快速操作”“快速开关”“一键开关”时，默认由 AI 使用现有工具直接执行并回读结果。不要把它理解为让本人点击快捷方式、运行命令或照步骤操作，也不要因此自行新增快捷方式或按钮。只有本人明确选择手动操作，或实际流程确实需要本人在场时，才交本人完成对应步骤（出处：`docs/owner-decisions.md`“快速操作由 AI 执行”）。
 - **界面上的点选默认交本人。** 现在的点屏工具（computer use）还不够成熟，需要在软件界面上点选的操作（例如安全软件里恢复被禁止的启动项、Codex 桌面里编辑定时任务），AI 先查清并写好几步说明交本人点，点完由 AI 回读结果；AI 不主动用点屏工具代点，本人明确要 AI 点时照办。命令行、配置文件和官方命令能完成的照常由 AI 做；浏览器里的网页操作按下文“浏览器”一节。
 - 能力缺失或真的不兼容时，只停依赖它的那部分，其余继续，用人话说清影响；不悄悄降质量、删功能或绕过身份、权限和保护要求。本人自己的能力坏了要修好或正式替换（见[工程与交付](/rules/engineering-delivery/)）；暂缓、回退旧版或局部停用只是处置状态，不算修好。
@@ -3103,15 +3099,16 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E251",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-   "from": "## 常用入口",
-   "to": "## 浏览器",
-   "start": 1419,
-   "end": 5273,
-   "approved_omissions": []
+   "from": 17,
+   "to": 48,
+   "release": "E230",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "omit": [
+    "omit:bbfd2ba5e732b426fe390d41c28a985a94be8eebef9ff0a524388c8e960c27e5",
+    "omit:0ceffb55fe0508bf4e67e6c677648eedf832f2e087034df9df682df8dda3329f"
+   ]
   },
   "title": "原文（二）：常用入口",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成前面带小绿圆点的一条，短横不画；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文照抄，标点照抄，不加任何没给的字。左卡放“## 常用入口”和“本机小工具”“生成图片和设计画面”两条；右卡放“个人领域直达”“Google”两条。",
@@ -3122,17 +3119,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
-  "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-  "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-12"
+  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-12"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3160,7 +3154,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3206,7 +3200,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 常用入口
 
@@ -3218,7 +3212,7 @@ owner: `E:\.agents`
   - **谁画、谁复核。** 要派出去生图时交 Luna（Codex 主对话可以自己直接调），档位见模型清单。复核按需，不是每张都要：成批的图交 Sol，很重要的交 Claude；只有几张图时不为复核另派子代理，主持的对话自己看。复核时图里的字逐字和原文核对，错了只修那一块；像不像拿整张图和参考并排比，先看第一眼像不像，再看细节。
   - **哪些仍用代码。** Claude 不自己用代码画这类画面；数据图表、流程图、进度条这类数字和文字要准确的，以及会变的内容（实时数据、计数、日期、状态），仍用代码画，或由代码填进图里留的空白；固定不变的艺术字和文字可以直接画进图里。
   - 个人网站另按项目已定的单层分工：Luna 画、Sol 审，不合格交 Claude 定；这只管网站，不外推为其他项目的默认（出处：`docs/owner-decisions.md`“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。
-- **个人领域直达。** 健康、本人诉讼和微信分别直达 `personal-health`、`personal-litigation`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
+- **个人领域直达。** 健康和微信分别直达 `personal-health`、`wechat-direct`；只有原件位置不明、要跨已允许的位置查找或原来的定位失效时，才用 `personal-materials` 找到、打开并核对原件；精确录音和扫描件分别交给 `chinese-asr`、`localocr`。照片视频只在本人明确要求时做成独立的有界任务。没有独立领域项目时，直接用当前对话的事实和会改变答案的最少原件回答。不恢复中央个人数据库、统一事件图、跨领域画像、后台同步、总技能或默认的全景上下文。
 - **Google。** 现行入口是 `google-workspace-direct`：仅通过固定 PCConfig OAuth/provider 处理 Gmail、Google Drive 和 Google Tasks（待办），各自按能力验收，具体操作见该技能；日历保持冻结。本人明确要写入时，也只调用这个入口已有的精确操作；不落库、不自动同步、不换账号，也不悄悄改走别的接入、连接器、浏览器或 rclone。入口没接好、账号失效或能力不够时如实说不可用或有限，不造第二 provider；写入、分享、发送和邀请要有对应能力和授权，删除、公开分享、发送和邀请还须绑定精确外部动作授权。Google Admin、支付和 Photos 不属于该入口。配置和凭据文件存在不说明账号、读取或写入现在可用。
 
 ## 云端素材通道
@@ -3250,15 +3244,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E251",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-   "from": "## 浏览器",
-   "to": "## 汇报、网站和自动运行的东西",
-   "start": 5273,
-   "end": 6337,
-   "approved_omissions": []
+   "from": 50,
+   "to": 58,
+   "release": "E230",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "omit": []
   },
   "title": "原文（三）：浏览器",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成前面带小绿圆点的一条，短横不画；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文照抄，标点照抄，不加任何没给的字。左卡放“## 浏览器”和第一段（浏览器默认用……）、第二段（已授权的本人账号登录……）；右卡放第三段（需要真实浏览器预览本地HTML时……）；右卡下方空处画一幅小水彩：Chrome 彩色圆形标志旁边一个小浏览器窗口，窗口里只画色块，不画字。",
@@ -3274,17 +3266,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
-  "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-  "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-13"
+  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-13"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3310,7 +3299,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3384,7 +3373,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 浏览器
 
@@ -3405,15 +3394,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E251",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-   "from": "## 汇报、网站和自动运行的东西",
-   "to": "## 安装位置、配置和本机约定",
-   "start": 6337,
-   "end": 7647,
-   "approved_omissions": []
+   "from": 60,
+   "to": 73,
+   "release": "E230",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "omit": []
   },
   "title": "原文（四）：汇报、网站和自动运行；软件更新和兼容",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成前面带小绿圆点的一条，短横不画；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文照抄，标点照抄，不加任何没给的字。左卡放“## 汇报、网站和自动运行的东西”和它下面三条；右卡放“## 软件更新和兼容”和它下面四条。",
@@ -3424,17 +3411,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
-  "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-  "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-14"
+  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-14"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3458,7 +3442,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3528,11 +3512,11 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
-- **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理，统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。
+- **汇报网页**：什么时候用、做成什么样见约法 L26。各模型的提问、推荐、说明框及生成、存放、到期清理（放进回收站），统一按 `report-page` 技能；需要长期留下的结论写进对应项目的记录，不靠网页保存。
 - **网站**（约法 L27）：本人说“更新网站”时，按 `V:\Personal\Projects\wly0829.cn` 的 AGENTS.md 更新一次。不建自动定时更新。
 - **自动运行的东西**（约法 L28）：计划任务、看门狗和其他自动运行的东西，要在网站看板上看得见：在做什么、上次和下次什么时候运行、有没有出错、怎么停、停了会影响什么。新增或修改自动运行的东西时，把这些状态写进看板能读的状态文件或登记（按 PCConfig 的现行做法）；看板怎么显示另行建设，不为此在本机另开窗口。后台命令不弹黑窗口。
 - **要本人做、要本人选、可能漏看的事**：根会话在回复本人的同时，用 `pwsh -NoProfile -File E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add` 登记到驾驶舱“需要你”，填写 `-PassCriteria` 完成条件；可机核的方法用 `-AiHint` 写入条目的 `ai_hint`。Claude、Codex 用同一命令；子代理不登记，交根会话决定。
@@ -3554,15 +3538,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E251",
-   "sha256": "f6ec15b4b5cf245c38518a1c066275785c4041bddaf4fdeda317aa34c79b2ae5",
-   "public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-   "from": "## 安装位置、配置和本机约定",
-   "to": null,
-   "start": 7647,
-   "end": 9057,
-   "approved_omissions": []
+   "from": 75,
+   "to": 81,
+   "release": "E230",
+   "sha256": "3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+   "omit": []
   },
   "title": "原文（五）：安装位置、配置和本机约定",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成前面带小绿圆点的一条，短横不画；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文照抄，标点照抄，不加任何没给的字。左卡放“## 安装位置、配置和本机约定”和“缺什么装什么”“东西放 E 盘”两条；右卡放“配置”“技能和插件”“Windows”三条。",
@@ -3578,17 +3560,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
-  "source_logical_id": "capabilities_runtime_contract",
-  "source_public_sha256": "055e9e011319f02f9c03d48a0354cc28d981399cb856f39164f2d4a5feedc92d",
-  "source_rule_part": "rule-capabilities-runtime/rule-capabilities-runtime-15"
+  "source_excerpt_id": "rule-capabilities-runtime/rule-capabilities-runtime-15"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3608,7 +3587,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3654,7 +3633,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 安装位置、配置和本机约定
 

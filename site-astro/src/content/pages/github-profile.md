@@ -116,7 +116,7 @@
  "source": {
   "page": "sources/pages/github-profile/page.json",
   "sha256": "a6d7e685e74b2cff0566a21c32600445e129adc00397827dbee707c7319a8fbd",
-  "converted_at_beijing": "2026-10-10T08:22:26+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -152,7 +152,8 @@
      "align": "left",
      "size": "large",
      "row": "banner",
-     "width": "45%"
+     "width": "45%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -349,7 +350,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
      "row": "project",
      "width": "40%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -452,7 +453,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
      "row": "project",
      "width": "40%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -555,7 +556,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
      "row": "project",
      "width": "40%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -658,7 +659,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
      "row": "project",
      "width": "40%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -761,7 +762,7 @@ AI 工具配置管理
      "row": "project",
      "width": "32%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -864,7 +865,7 @@ AI 工具配置管理
      "row": "project",
      "width": "40%",
      "row_equal_height": true,
-     "row_valign": "center"
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",

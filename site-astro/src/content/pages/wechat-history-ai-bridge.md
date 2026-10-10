@@ -421,7 +421,7 @@
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
   "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
-  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
+  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
  }
 }
 ---
@@ -477,7 +477,8 @@
      "width": "50%",
      "align": "left",
      "size": "medium",
-     "text_ref": "微信记录交给 AI"
+     "text_ref": "微信记录交给 AI",
+     "row_fit_illustration": true
     },
     {
      "type": "tag",
@@ -652,7 +653,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钢笔",
    "source_phrase": "一条笔直发亮的绿色小路",
-   "sha256": "6c4493be74e722fa3e8f1c2c95574768fe9c5da8b6afa27a3f66406d68c9a6a8",
+   "sha256": "2d0d521fc4bad84cc12f472e1930bd6d0045f3efa00a238ee6dd31d23d3bb1c2",
    "status": "ready"
   },
   {
@@ -909,7 +910,8 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
      "width": "66%",
      "align": "left",
      "size": "large",
-     "text_ref": "两条路差在哪"
+     "text_ref": "两条路差在哪",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1265,7 +1267,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "WeFlow",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1278,7 +1280,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "这个项目",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1291,7 +1293,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1304,7 +1306,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "回答",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1317,7 +1319,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "两个例子 \n",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1356,7 +1358,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "后来补上的两条规矩 \n",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1382,7 +1384,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "健康页正常 ≠ 能读 ：健康页只说明程序开着。自检要走 5 个必需入口：健康页，加上会话列表（两种格式）、联系人、朋友圈统计这 4 个读取入口，有一个失败就报失败。\n",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1408,7 +1410,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "WeFlow",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1421,7 +1423,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "这个项目",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1434,7 +1436,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "AI",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1447,7 +1449,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "灯泡",
    "source_phrase": "回答",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1726,12 +1728,12 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "地图定位",
    "source_phrase": "接口地图：会话、联系人、消息、群成员、朋友圈、实时推送各从哪个接口读；导出、删朋友圈这类会改东西的接口标成“AI 默认不许调” ✕",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -1836,7 +1838,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "接口自检：两种用法。只问健康页，只能说明程序开着；要查能不能读，就读会话、联系人、群成员、朋友圈统计这些概况（不读消息正文），5 个必需入口有一个失败就报失败 ✕",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -1866,7 +1868,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "已取得文件的两遍核对：对已经导出的一批文件逐个算指纹、完整读两遍，一致才给一份核对收据；它不是备份，也不导出 ✕",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2048,7 +2050,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "文件核验",
    "source_phrase": "8 月 5–7 日 ：第二个微信库那份 WeFlow 也能单独守；加上已取得文件的两遍核对",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -2061,7 +2063,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "身份盾牌",
    "source_phrase": "8 月 16 日 ：AI 取数前先核对微信号身份",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -2087,7 +2089,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "红色警示",
    "source_phrase": "8 月 31 日 ：自检改严，5 个必需入口一个失败就报失败",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {

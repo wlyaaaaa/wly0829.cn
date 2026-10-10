@@ -408,9 +408,9 @@
         "illustration": "top_inside",
         "icons": [
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "多大9,530个文件，33.0GB几点每天12:15，Codex开着也照常存到哪G盘；14:30"
       },
@@ -459,9 +459,9 @@
         "illustration": "top_inside",
         "icons": [
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "text_ref": "多大9,530个文件，33.0GB几点每天12:15，Codex开着也照常存到哪G盘；14:30"
       },
@@ -630,7 +630,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
           "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/门.png"
         ],
         "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不"
@@ -675,7 +675,7 @@
         "icons": [
           "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
           "_library/fix-round-2/icon-clean-6f03b8cd4ae25eb62ff9.png",
-          "_library/icons/版本循环文件.png",
+          "_library/hires-icons-r2/版本循环文件.png",
           "_library/icons/门.png"
         ],
         "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不"
@@ -718,11 +718,11 @@
         "illustration": "above_card",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/禁止文件.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件夹.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/指向手.png"
         ],
         "row_counts": [
@@ -774,11 +774,11 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/日历时钟.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/禁止文件.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件夹.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/指向手.png"
         ],
         "row_counts": [

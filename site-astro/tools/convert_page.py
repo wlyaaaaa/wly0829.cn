@@ -236,6 +236,8 @@ def status_note_after(b):
 
 
 TEXTISH = ("prose", "action_button", "notice", "points_card", "content_card", "bullet_list", "section_heading", "source_text_card", "quote", "dialogue", "tag", "stat_card")
+# 非首屏“文字 + 图”行里文字栏还认这几种（大标题、图例、流程、时间线、编号步骤、功能卡、表格）
+TEXTISH_ALL = TEXTISH + ("chapter_title", "status_legend", "flow", "timeline", "numbered_steps", "feature_card", "table")
 
 
 def title_absorbed(s, bl, t0, tj):
@@ -254,9 +256,10 @@ def title_absorbed(s, bl, t0, tj):
     return ref if _starts(extra[0], ref) else None
 
 
-def fit_rows(blocks):
+def fit_rows(blocks, textish=None):
     """横版：一行两栏、一栏是图（一幅插画，或一张截图连同下面的图注）、另一栏是文字（含数字卡）的，标上 row_fit_illustration
     （排版时图按文字栏高度定大小，见区块库 typeset_apply.js 的 fitIllustrationRows）。"""
+    textish = textish or TEXTISH
     n = 0
     i = 0
     while i < len(blocks):
@@ -275,10 +278,10 @@ def fit_rows(blocks):
                 cols[-1].append(b)
         ill = [c for c in cols if (len(c) == 1 and c[0].get("type") == "illustration" and not c[0].get("panels") and "gallery_assets" not in c[0])
                or (c[0].get("type") == "screenshot" and all(b.get("type") == "prose" for b in c[1:]))]
-        txt = [c for c in cols if c not in ill and all(b.get("type") in TEXTISH for b in c)]
+        txt = [c for c in cols if c not in ill and all(b.get("type") in textish for b in c)]
         tail = [c for c in cols if len(c) >= 2 and c[-1].get("type") == "illustration" and not c[-1].get("panels") and "gallery_assets" not in c[-1]
-                and all(b.get("type") in TEXTISH for b in c[:-1])]
-        if len(cols) == 2 and not ill and len(tail) == 1 and all(b.get("type") in TEXTISH for c in cols if c not in tail for b in c):
+                and all(b.get("type") in textish for b in c[:-1])]
+        if len(cols) == 2 and not ill and len(tail) == 1 and all(b.get("type") in textish for c in cols if c not in tail for b in c):
             for b in blocks[i:j]:
                 b.pop("row_valign", None)
             blocks[i]["row_fit_illustration"] = True
@@ -304,6 +307,93 @@ def block_text_len(s, bl):
 
 def plain_ill(b):
     return b.get("type") == "illustration" and not b.get("panels") and "gallery_assets" not in b
+
+
+
+PAIR_SKIP_SIZES = ("banner", "large")
+
+
+def pair_lone_illustrations(blocks, lens=None):
+    """单独占一行、没铺满宽的插画和前面一块文字（没有就后面一块）排成“文字 + 图”一行（标 row_fit_illustration，图按文字高度定大小）。
+    只动没有 row 的块；标题、分节小标题不配（配了标题会挤到一边）。返回配成的行数。"""
+    n = 0
+    for i, b in enumerate(blocks):
+        mw = str(b.get("max_width") or "")
+        if (b.get("type") == "screenshot" and not b.get("row") and len(b.get("indices") or []) == 1 and not b.get("equal_row_height")
+                and re.fullmatch(r"\d+(?:\.\d+)?%", mw) and float(mw[:-1]) <= 60):
+            # 单独一张限宽截图：和后面的图注段（没有就前面一块文字）排成一行，截图在左
+            cand = next((j for j in (i + 1, i - 1) if 0 <= j < len(blocks) and not blocks[j].get("row")
+                         and blocks[j].get("type") in TEXTISH_ALL and blocks[j].get("type") not in ("chapter_title", "section_heading", "tag", "action_button")), None)
+            if cand is None:
+                continue
+            t, name = blocks[cand], f"lone-shot-{i}"
+            if cand < i:
+                blocks[i], blocks[cand] = t, b
+            b["row"], t["row"], b["width"], t["width"] = name, name, "55%", "45%"
+            b.pop("max_width", None)
+            n += 1
+    lens = lens or {}
+    i = 0
+    while i < len(blocks):
+        b = blocks[i]
+        i += 1
+        if b.get("row") or not plain_ill(b) or b.get("bleed") or b.get("panels"):
+            continue
+        big = b.get("size") in PAIR_SKIP_SIZES
+        if big:
+            # A 横幅紧挨着一行（最多两栏、全是文字）：并进那一行当最右一栏
+            done = False
+            for j in (i, i - 2):
+                if 0 <= j < len(blocks) and blocks[j].get("row") and not done:
+                    r = blocks[j]["row"]
+                    mem = [k for k, x in enumerate(blocks) if x.get("row") == r]
+                    ncol = 1 + sum(1 for k in mem[1:] if blocks[k].get("width"))
+                    if ncol <= 2 and mem == list(range(mem[0], mem[-1] + 1)) and all(blocks[k].get("type") in TEXTISH_ALL for k in mem):
+                        blocks.remove(b)
+                        last = max(k for k, x in enumerate(blocks) if x.get("row") == r)
+                        blocks.insert(last + 1, b)
+                        b["row"], b["width"] = r, "30%"
+                        for k in ("size", "target_width", "target_height", "align"):
+                            b.pop(k, None)
+                        n += 1
+                        done = True
+                        i = 0
+            if done:
+                continue
+        i0 = blocks.index(b)
+        prev = blocks[i0 - 1] if i0 else None
+        if (prev and prev.get("row") and prev.get("type") in TEXTISH_ALL and not big
+                and not (i0 + 1 < len(blocks) and blocks[i0 + 1].get("row") == prev["row"])):
+            # 紧跟在某一行最后一栏的文字后面：并进那一栏，排在文字下面
+            b["row"] = prev["row"]
+            b.pop("width", None)
+            for k in ("size", "target_width", "target_height", "align"):
+                b.pop(k, None)
+            n += 1
+            continue
+        cand = None
+        for j in (i0 - 1, i0 + 1):
+            if 0 <= j < len(blocks):
+                t = blocks[j]
+                if (not t.get("row") and t.get("type") in TEXTISH_ALL and t.get("type") not in ("chapter_title", "section_heading", "tag", "action_button")
+                        and (not big or lens.get(id(t), 0) >= 40)):
+                    cand = j
+                    break
+        if cand is None:
+            continue
+        name = f"lone-ill-{i0}"
+        t = blocks[cand]
+        t["row"], b["row"] = name, name
+        if cand < i0:
+            t["width"], b["width"] = "60%", "40%"
+        else:   # 图在前、文字在后：图仍放右边（换顺序）
+            blocks[i0], blocks[cand] = t, b
+            t["width"], b["width"] = "60%", "40%"
+        for k in ("size", "target_width", "target_height", "align"):
+            b.pop(k, None)
+        t["row_fit_illustration"] = True
+        n += 1
+    return n
 
 
 def even_rows(n, c):
@@ -533,6 +623,7 @@ def status_first(page, meta, s=None, status_line=None):
 
 
 ABSORBED, FITTED, HEAD_ILL, DIALOGUE_ROWS, SAME_DAY, DROP_NOTES = [], {}, [], [], [], {}
+LONE, FITTED_ALL = {}, {}
 # 演示用临时状态行（不进仓库）：CONVERT_STATUS_LINE_DEMO=<json 文件，{页: status_line}>
 STATUS_DEMO = json.load(open(os.environ["CONVERT_STATUS_LINE_DEMO"], encoding="utf-8")) if os.environ.get("CONVERT_STATUS_LINE_DEMO") else {}
 
@@ -639,9 +730,16 @@ def convert(page):
         if swap:  # 按活动版本重出时，构图里认首行标签的 text_ref 跟着换
             meta["layout"] = swap_text_ref(meta["layout"], *swap)
         heal_text_refs(s, meta)
+        did_status = False
         if first and data.get("kind") in STATUS_KINDS and not os.environ.get("CONVERT_NO_STATUS_FIRST"):  # 设这个变量只为出“改前”对照
-            status_first(page, meta, s, data.get("status_line") or STATUS_DEMO.get(page))
+            did_status = status_first(page, meta, s, data.get("status_line") or STATUS_DEMO.get(page))
         first = False
+        hsp = (meta.get("layout") or {}).get("h")
+        if hsp and hsp.get("blocks") and not redirect and not os.environ.get("CONVERT_NO_FILL_ROWS"):
+            # 非首屏也不留空（主持 10 月 10 日 10:36）：单独一幅没铺满的插画和旁边的文字排成一行；“文字 + 图”行图按文字高度定大小
+            if not did_status:   # 首屏已按 K1-A 排好（扫过 0 处），不再动
+                LONE[page] = LONE.get(page, 0) + pair_lone_illustrations(hsp["blocks"], block_text_len(s, hsp["blocks"])[0])
+                FITTED_ALL[page] = FITTED_ALL.get(page, 0) + fit_rows(hsp["blocks"], TEXTISH_ALL)
         text = gallery_title(meta, s.get("text", ""))
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
@@ -719,6 +817,10 @@ if __name__ == "__main__":
         print("  首屏对话框每排排满：", d)
     for d in SAME_DAY:
         print("  数字卡下面和状态行同一天的截至日期不再单独显示：", d)
+    if LONE:
+        print("  单独一幅插画和旁边文字排成一行：", json.dumps({k: v for k, v in LONE.items() if v}, ensure_ascii=False))
+    if FITTED_ALL:
+        print("  非首屏图文并排行（图按文字高度定大小）：", sum(FITTED_ALL.values()), "行")
     for h in HEALED:
         print("  构图 text_ref 只差数字，已按源里现在的写法认：", h)
     for u in UNMATCHED:

@@ -521,7 +521,7 @@
         "illustration": "above_card",
         "icons": [
           "_library/icons/地球.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/地球.png",
           "_library/icons/共享节点.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
@@ -609,7 +609,7 @@
         "illustration": "above_card",
         "icons": [
           "_library/icons/地球.png",
-          "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
+          "_library/hires-icons-r2/icon-clean-52188346609616ef9b0b.png",
           "_library/icons/地球.png",
           "_library/icons/共享节点.png",
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
@@ -692,7 +692,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/icons/日历时钟.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ],
         "row": "why",
         "width": "32%"
@@ -753,7 +753,7 @@
         "icons": [
           "_library/hires-icons/代码窗口.png",
           "_library/icons/日历时钟.png",
-          "_library/icons/版本循环文件.png"
+          "_library/hires-icons-r2/版本循环文件.png"
         ]
       }
     ],

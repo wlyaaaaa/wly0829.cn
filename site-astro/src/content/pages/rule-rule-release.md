@@ -858,7 +858,7 @@ E186　E187　当前　上一版　SYSTEM
    "semantic_status": "scene_explicit_primary_object",
    "key": "打开门",
    "source_phrase": "一个扎好的小包裹、“只用一个发布入口”配一扇只有一个门把手的小木门、“同时有人发布”配两只小手同时伸向一本书、“失败和回退”配一个往回绕的绿色箭头",
-   "sha256": "852456776417cc516beae0cdfd5902ea8ffca347edec2806254ff247171b1766",
+   "sha256": "2b7b218dd7772a0030adfc51f1a230b31265718645392911b4ef5df384ddc02b",
    "status": "ready"
   },
   {
@@ -1174,7 +1174,7 @@ E186　E187　当前　上一版　SYSTEM
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "两只小信封（一只印 Claude 橙色星芒、一只印 OpenAI 黑色花结）、“防随手改”配一个挂着小铜牌的黄铜锁扣（同开头插画）、“发布前后核对什么”配一张打了几个绿勾的小清单、“快速发布还是标准发布”配一条岔路口的两块路牌（不写字）",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {

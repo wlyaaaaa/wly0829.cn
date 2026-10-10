@@ -520,7 +520,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "并排的温度计和硬盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -752,7 +752,7 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "一把锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {

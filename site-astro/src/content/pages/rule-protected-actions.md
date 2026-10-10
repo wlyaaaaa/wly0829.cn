@@ -30,13 +30,14 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
-   "file": "sources/rules/docs/contracts/agents.protected-actions.md",
+   "release": "E230",
+   "file": ".publish/private/rule-sources/docs/contracts/agents.protected-actions.md",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
-   "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1"
+   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+   "commit_time": "2026-10-09T09:10:42+08:00",
+   "activated_at": "2026-10-09T09:12:52.097645+08:00",
+   "excerpt_contract": "e230-original-ranges-v1",
+   "omitted_count": 0
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：推小推车的小 AI 助手走到白绿木栏杆前停下；岗亭里戴眼镜的小 AI 助手抬头看一眼单子、点点头；桌上四选一托盘里的黄铜钥匙轻轻亮一下，手机屏幕上的六个圆点依次亮起又熄灭；木栏杆缓缓抬起一半又落回原位；远处 GitHub 小木屋的烟囱冒出一缕淡绿的烟；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子和纸条上的字保持不动、不变形，手机屏幕上不出现数字。",
   "registry": {
@@ -254,8 +255,8 @@
  },
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
-  "sha256": "25c093d924a5217401fbf2a57a1448d4523c7077891f11c9b2552da8648f7c46",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "6bc149284f9473ffb3a861e7d9716b818f5b30dc6d8eca49b871a52cd46434fd",
+  "converted_at_beijing": "2026-10-10T11:19:26+08:00"
  }
 }
 ---
@@ -323,7 +324,8 @@
      "size": "large",
      "row": "hero",
      "width": "55%",
-     "text_ref": "重大动作与本人验证"
+     "text_ref": "重大动作与本人验证",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -688,7 +690,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -945,7 +947,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -1132,7 +1134,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Claude标志",
    "source_phrase": "右窗角 Claude 橙色星芒",
-   "sha256": "0e6f72d3f1cee7a82969c2dace6f680c240133ea4f5698eef851d87db5349619",
+   "sha256": "1ce8251fc7f1c135f39a832485a5a310cd19efbcee4363ecf3b88e28763ef482",
    "status": "ready"
   },
   {
@@ -1147,7 +1149,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "别的 AI 或程序 → **先请本人验证**。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1177,7 +1179,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "不是 → 往下看。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1192,7 +1194,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件核验",
    "source_phrase": "开着 → **不弹验证**。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -1222,7 +1224,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "身份盾牌",
    "source_phrase": "没开，资料也锁着 → **先请本人验证一次**。对话里一句“别验证了”代替不了。",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1586,7 +1588,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "身份盾牌",
    "source_phrase": "一只贴着红封条的小纸箱、“什么时候请本人验证”配一个小沙漏旁边立着一把黄铜钥匙、“这份清单怎么来的”配一页被划掉一半的旧草稿纸",
-   "sha256": "faba1a9345b3cdd9cab82c6e7d1509c4314366445446b4bab03139eab4f0afcc",
+   "sha256": "b790d221cc6a4f38c4b7fc2dd839a84c7b54faecd903de73bcd5d02b76939897",
    "status": "ready"
   },
   {
@@ -1754,7 +1756,8 @@
     {
      "type": "illustration",
      "index": 0,
-     "size": "banner"
+     "row": "judgement",
+     "width": "30%"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
@@ -2108,7 +2111,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "纸箱对勾",
    "source_phrase": "一把黄铜钥匙插在小锁上、“普通收尾，不验证”配一个装好的小纸箱贴着绿色对勾",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2466,19 +2469,21 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："
      ],
-     "text_ref": "各产品各管各的"
+     "text_ref": "各产品各管各的",
+     "row": "lone-ill-3",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "index": 0,
-     "align": "center",
-     "target_height": 230,
-     "target_width": 356
+     "row": "lone-ill-3",
+     "width": "40%"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
@@ -2534,7 +2539,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -2586,7 +2591,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "开头插画里那只四选一托盘（同一只，四样东西不变，但这里托盘和小牌子都不写字）、“各产品各管各的”配三个并排的小木柜，柜门上分别画一把钥匙、一个对勾盾牌、一块硬盘",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -2676,14 +2681,11 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E251",
+   "from": 1,
+   "to": 31,
+   "release": "E230",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
-   "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
-   "from": null,
-   "to": "## GitHub 重大动作",
-   "start": 0,
-   "end": 979,
-   "approved_omissions": []
+   "omit": []
   },
   "title": "原文（一）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 重大动作与本人验证”到“什么时候请本人验证：”下面五条结束；右卡放“## 重大动作前的把关”和它下面两段。",
@@ -2708,9 +2710,9 @@
   "chain": "original",
   "reuse": "",
   "source_excerpt_id": "rule-protected-actions/rule-protected-actions-07",
-  "source_logical_id": "protected_actions_contract",
-  "source_public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
-  "source_rule_part": "rule-protected-actions/rule-protected-actions-07"
+  "display_replace": {
+   "一字不改": "公开副本"
+  }
  },
  "layout": {
   "h": {
@@ -2719,7 +2721,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文 · E230 版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2762,7 +2764,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文 · E230 版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2862,7 +2864,7 @@
 }
 ```
 
-原文 · E251 版，一字不改
+原文 · E230 版，一字不改
 
 # 重大动作与本人验证
 
@@ -2905,15 +2907,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.protected-actions.md",
-   "release": "E251",
+   "from": 33,
+   "to": 56,
+   "release": "E230",
    "sha256": "5928788380abde6b5ffb7111367e8b57c8c7b6a9545123e3e18713c9deb75caa",
-   "public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
-   "from": "## GitHub 重大动作",
-   "to": null,
-   "start": 979,
-   "end": 2156,
-   "approved_omissions": []
+   "omit": []
   },
   "title": "原文（二）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E230 版 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“- ”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和技能名用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## GitHub 重大动作”和它下面三段；右卡放“## 本人验证方式”“## 各产品各管各的”两节。",
@@ -2924,10 +2924,7 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-protected-actions/rule-protected-actions-08",
-  "source_logical_id": "protected_actions_contract",
-  "source_public_sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
-  "source_rule_part": "rule-protected-actions/rule-protected-actions-08"
+  "source_excerpt_id": "rule-protected-actions/rule-protected-actions-08"
  },
  "layout": {
   "h": {
@@ -2936,7 +2933,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -2980,7 +2977,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -3086,7 +3083,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## GitHub 重大动作
 

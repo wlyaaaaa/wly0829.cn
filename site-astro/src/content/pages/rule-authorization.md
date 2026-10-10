@@ -30,13 +30,14 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
-   "file": "sources/rules/docs/contracts/agents.authorization.md",
+   "release": "E230",
+   "file": ".publish/private/rule-sources/docs/contracts/agents.authorization.md",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
+   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+   "commit_time": "2026-10-09T09:10:42+08:00",
+   "activated_at": "2026-10-09T09:12:52.097645+08:00",
+   "excerpt_contract": "e230-original-ranges-v1",
+   "omitted_count": 0
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：小路起点的 AI 助手抱着文件轻快走几步，“直接做”木牌旁的草叶轻轻摇；栅栏门前的信封、硬币和小木箱静静排着，门边的人影抬手，栅栏门缓缓打开一条缝又合上；木桩上的绿色通行证随风轻摆；小桌上的沙漏翻转一次、细沙往下流，旁边的金色钥匙闪一下光；右上角两扇小窗户里亮起柔和的光，中间的绿色盾牌徽章轻轻呼吸；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -237,8 +238,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "887b806cc01ed7c9800514ca46c2c57c84061511aad4dea86675dc91b8c0c956",
-  "converted_at_beijing": "2026-10-10T10:22:28+08:00"
+  "sha256": "8a2f7e1ca5775a6982bad266c836343600daca70592958fd753966dc632c2f0f",
+  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
  }
 }
 ---
@@ -314,7 +315,8 @@
       6,
       643,
       187
-     ]
+     ],
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -475,7 +477,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "一句话答案\n直接做：本人给的范围内，本机普通、能撤回的读取、编辑、测试和验证；本人长期授权过的五项（Git收尾、申请管理员权限、选型号和档位、Claude派Sol和Luna、在用的目标继续收尾）也不用再问。先要本人明确同意：发消息、对外发布、花钱、删除只有一份的数据、撤不回的迁移、项目第一次公开发布。同意过的，也不自动扩到第一次新建的目标、别的账号或新的公开地方。重大的事另有一关：例如删库、查看密码明文、把私人资料发到外面，动手前先把关、看要不要请本人验证，见重大动作与本人验证。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1248,7 +1250,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "钥匙",
    "source_phrase": "里那把金色钥匙",
-   "sha256": "bcf00ea5f0ddd7619d3c2f1ed6acde97a99f54db98805c4aa4fa72d1e10eec58",
+   "sha256": "c521280de777763c3cfeb238750a1871f8e263be5a6aa081993bd462c3cca2cf",
    "status": "ready"
   },
   {
@@ -1477,7 +1479,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "盾牌",
    "source_phrase": "同一组），中间绿色盾牌徽章不写字",
-   "sha256": "606a89c71ab7e8571f578b4ff9d83ea50a6562e027cbd1f7740e29feb44b0f24",
+   "sha256": "53bd06dc245ab3fd8f472ad56e57f14d775fdac2c8fda524a89513012cafe440",
    "status": "ready"
   },
   {
@@ -1552,14 +1554,11 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E251",
+   "from": 1,
+   "to": 28,
+   "release": "E230",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-   "from": null,
-   "to": "## 子代理和项目规则不扩大授权",
-   "start": 0,
-   "end": 1527,
-   "approved_omissions": []
+   "omit": []
   },
   "title": "原文（一）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E187 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 用户授权”到“## 直接做的和要本人同意的”那一节结束；右卡放“## 长期授权”到“授权已经覆盖……”那一段。",
@@ -1580,16 +1579,16 @@
   "chain": "original",
   "reuse": "",
   "source_excerpt_id": "rule-authorization/rule-authorization-05",
-  "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-  "source_rule_part": "rule-authorization/rule-authorization-05"
+  "display_replace": {
+   "一字不改": "公开副本"
+  }
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文 · E230 版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1624,7 +1623,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版，一字不改"
+     "text_ref": "原文 · E230 版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1718,7 +1717,7 @@
 }
 ```
 
-原文 · E251 版，一字不改
+原文 · E230 版，一字不改
 
 # 用户授权
 
@@ -1758,15 +1757,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E251",
+   "release": "E230",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-   "from": "## 子代理和项目规则不扩大授权",
-   "to": "## 受信任的 AI",
-   "start": 1527,
-   "end": 2833,
-   "approved_omissions": []
+   "from": 30,
+   "to": 46,
+   "omit": []
   },
   "title": "原文（二）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放“## 子代理和项目规则不扩大授权”两段和“## 无限制授权”的第一段；右卡放“看到无限制授权……”起的其余四段。",
@@ -1794,17 +1791,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-authorization/rule-authorization-06",
-  "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-  "source_rule_part": "rule-authorization/rule-authorization-06"
+  "source_excerpt_id": "rule-authorization/rule-authorization-06"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -1841,7 +1835,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -1918,7 +1912,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1947,15 +1941,13 @@ owner: `E:\.agents`
   "section": "original",
   "shape": "source_text",
   "source": {
+   "continued": true,
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E251",
+   "release": "E230",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
-   "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-   "from": "## 受信任的 AI",
-   "to": null,
-   "start": 2833,
-   "end": 3498,
-   "approved_omissions": []
+   "from": 48,
+   "to": 54,
+   "omit": []
   },
   "title": "原文（三）",
   "scene": "横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · 续”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“-”开头的行画成小绿圆点列表；**…** 是粗体，星号不画；`…` 里的路径、命令和名字用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。这一屏字少：左卡放“## 受信任的 AI”和第一段，右卡放后两段。卡片下方留一条窄窄的水彩叶子装饰带，和前两屏的叶子同一种画法，带里不写字。",
@@ -1971,17 +1963,14 @@ owner: `E:\.agents`
   "screenshots": [],
   "chain": "original",
   "reuse": "",
-  "source_excerpt_id": "rule-authorization/rule-authorization-07",
-  "source_logical_id": "authorization_contract",
-  "source_public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
-  "source_rule_part": "rule-authorization/rule-authorization-07"
+  "source_excerpt_id": "rule-authorization/rule-authorization-07"
  },
  "layout": {
   "h": {
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -2018,7 +2007,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E251版·续"
+     "text_ref": "原文 · E230 版 · 续"
     },
     {
      "type": "source_text_card",
@@ -2071,7 +2060,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E251 版 · 续
+原文 · E230 版 · 续
 
 ## 受信任的 AI
 

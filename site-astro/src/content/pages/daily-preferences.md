@@ -933,7 +933,7 @@
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
   "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
-  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
+  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
  }
 }
 ---
@@ -1463,7 +1463,7 @@ AI 每开一个新对话都不认识我。这个库把我的经历、眼下的�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "灯泡",
    "source_phrase": "我说一句，当场改 \nAI把原话记下，分清是补充、临时、更正还是撤回；更正立刻用在这次回答里。依赖旧说法的卡怎么退场，见亮点。",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -1678,7 +1678,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "icons": [
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons/打勾清单.png",
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
      ]
     }
@@ -1719,7 +1719,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "connector": "none",
      "columns_v": 1,
      "icons": [
-      "_library/icons/气泡.png",
+      "_library/hires-icons-r2/气泡.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png"
      ]
     }
@@ -1765,12 +1765,12 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "“这句话我当时怎么说的？” \n问到手机高刷，AI按编号取出原话：“我用了6年。感觉省电模式的60hz我觉得没有任何区别”，并注明它来自2025年12月保存的一张对话截图、说话时间不详。卡上的结论也就收在“手机省电模式下没感觉出差别”，不推到所有屏幕。",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -2109,7 +2109,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库循环",
    "source_phrase": "手机高刷新率｜证据：中等",
-   "sha256": "e414fe17b63dfbc2cf6cfdf658cbbceadcab9c35f1f6c700b2dce327c3bb7629",
+   "sha256": "894f72432d69ebe5a435a11509bc73a6dbd83eb6b5f77468cc9cf402de4362ad",
    "status": "ready"
   },
   {
@@ -2270,7 +2270,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "先看谁停了：30 类来源各有应有的节奏——定位每小时、短信每天、支付宝每月、网易云每半年。超期的标“静默”：停了的几个手动导出来源并成一个问题，一次问我，写清要哪份、从哪天开始重叠；自动来源停了，有我的说明就按说明，没有就照实报，不认定是故障，也不认定我没活动。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -2300,7 +2300,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "text_inferred_object_unverified",
    "key": "纸箱对勾",
    "source_phrase": "导入：原件先挪进 E:\\PersonalData 下的来源投递区保全（这个目录每天有备份），按内容指纹去重，默认增量导入。",
-   "sha256": "3777dffcebd18959634f0a7223b9ff2e81e3b6c7498df0f7a8941dcf69f8a0bd",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
   },
   {
@@ -2444,17 +2444,18 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
      "columns": 2,
      "illustration": "left_inside",
      "connector": "none",
-     "icons": "auto"
+     "icons": "auto",
+     "row": "lone-ill-2",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
-     "align": "center",
-     "size": "large",
      "columns": 1,
      "illustration": "outside",
      "connector": "none",
-     "target_height": 230,
-     "target_width": 465
+     "row": "lone-ill-2",
+     "width": "40%"
     }
    ],
    "notes": "实看替换横图：左约68%两列表7行，首列图标与情况，右列正文，右约32%数据库抽屉→备份硬盘插画。表格整个节点起点为情况。现有 table 未使用 icons/illustration，行图标需适配；表格外观未在批准样板，待样张。；blank-audit：撤无效固定高、图文顺序整宽及末行卡填满，截图沿完整图比例；定稿不改。；独立复核收敛：装饰图按自然比例限高，截图与统计并排，避免仅消白却增大页面。",
@@ -2507,7 +2508,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁",
    "source_phrase": "锁",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -2537,7 +2538,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机带感叹号",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2552,7 +2553,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿色箭头",
    "source_phrase": "倒转的箭头",
-   "sha256": "4c8b24f4690ddc583ca222e8084661258efa002ca92ca8c824c85bda3e179954",
+   "sha256": "017a3e9b325d6fbe67b330c9f3e1a0df2fb40ea3315c9820879a309d577c1b07",
    "status": "ready"
   },
   {
@@ -2577,12 +2578,12 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "问号定位针",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2954,7 +2955,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -2969,7 +2970,7 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
    "semantic_status": "scene_explicit_primary_object",
    "key": "云",
    "source_phrase": "云",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3229,7 +3230,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      "illustration": "none",
      "connector": "none",
      "row": "head",
-     "width": "56%"
+     "width": "56%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -3330,7 +3332,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机",
    "source_phrase": "手机",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -3345,7 +3347,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "scene_explicit_primary_object",
    "key": "Google标志",
    "source_phrase": "Google 的彩色 G 标志",
-   "sha256": "3b139a473fa17e34bee876bd7e627121582b3bf37568c5511473bcd21ecbac17",
+   "sha256": "b2c5eb25686b4d888e1f384affd927ebef3b0f641d7ce74c9518a02c3933485f",
    "status": "ready"
   },
   {
@@ -3360,7 +3362,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿封面册",
    "source_phrase": "笔记本电脑",
-   "sha256": "761f14c1bca2c5744a2525af6bcaa8a4384d6a9473430d2d060d98b7c7ac1328",
+   "sha256": "8e233e6fb5a4417bc0c8a7ae48b29de9b2cb1b793e3767a7c195b834e9e632f2",
    "status": "ready"
   },
   {
@@ -3509,8 +3511,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
       }
      ],
      "icons": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
-      "_library/icons/气泡.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/气泡.png"
      ]
     },
     {
@@ -3564,8 +3566,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
       }
      ],
      "icons": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
-      "_library/icons/气泡.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/气泡.png"
      ]
     },
     {
@@ -3601,12 +3603,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "三层分开放\n原始记录（发生了什么）",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -3616,12 +3618,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/icons/气泡.png",
+   "asset": "_library/hires-icons-r2/气泡.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "气泡",
    "source_phrase": "我的原话（我怎么说）",
-   "sha256": "4ffd11a1805d6fcd443e6d721ff92690ba8469f4bbdb231be34373895d4565ac",
+   "sha256": "a58ff382f40a593b35aed5fb214cfba69d55f1157e3ea7db20331bee0b345d24",
    "status": "ready"
   },
   {
@@ -3631,12 +3633,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "三层分开放\n原始记录（发生了什么）",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -3778,7 +3780,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "一处维护，大家来读来写。 不在每个项目各存一份“我是谁”，免得几份各说各话、越改越偏。",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -3838,7 +3840,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "手机和云端不另存一份。 它们经电脑 MCP 调同一套命令；原来放在 Google Drive 的两份快照已停更。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -3987,7 +3989,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机",
    "source_phrase": "说错了一纠正，旧结论自己退场 \n麻烦：AI的“记忆”改了一处，别处还在用旧结论；过几天旧说法又冒出来。\n解法：我的每句原话按补充、临时、更正、撤回分开记。更正当场用在这次回答；引用旧说法的卡——包括别的项目引用的——自动退出当前结果。AI复核时必须重新写详述，不能悄悄带回旧的；临时说法到期作废，也不会反过来改掉长期喜好。到9月28日，有48个卡版本因为我的原话变了而退场复核。\n例子：9月24日我说手机上的使用记录软件后台保不住活，之前的屏幕时长失真，9月23日起开了常驻通知。引用旧说法的“手机使用怎么理解”那张卡当场退场；复核后的新卡写明9月23日以前的时长和排名不作依据，之后的默认可信。",
-   "sha256": "2d2811a87008b221e7dec14f189f43393989e1b15a5b682824c03cbe742b7fec",
+   "sha256": "f53fa849b6a80f1f9a9c8a27907b1062764e6be8c17026920823a01a548850d6",
    "status": "ready"
   },
   {
@@ -4427,7 +4429,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "近况过期提醒｜窗口结束超过 7 天或之后有新记录就标过期；回答时说明截至哪天，只补读之后的记录",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -4502,7 +4504,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "写认识卡｜摘要、详述、检索别名、证据一起写，证据分支持、反例、语境；多张卡先全部校验再一次写入",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4862,7 +4864,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "核对原话｜按编号读原话全文、说的时间和语境",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -4892,7 +4894,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "钱包",
    "source_phrase": "花钱核对｜任意日期区间按日或按月汇总；净消费＝实付扣成功退款，订单和支付不重复算，币种分开",
-   "sha256": "9e78dada240f9a9cd01b53535c4fdd7473e490dfd7a53e8cf2404ad727011e98",
+   "sha256": "cb2bc88524ac3d8fbe65a63f4fc3dc1dd41c818d31beab524c8112b9bad9ef00",
    "status": "ready"
   },
   {
@@ -4907,7 +4909,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机电脑连接",
    "source_phrase": "手机电脑用在哪｜一段时间里手机、电脑各自的总量、主要应用和每天变化；两台设备的时长不相加",
-   "sha256": "e6a52f20c9ed3fcd5cffb31c493bce640a7e585eecb6bfdcd41a24f38ece4745",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -4992,12 +4994,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/icons/版本循环文件.png",
+   "asset": "_library/hires-icons-r2/版本循环文件.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "版本循环文件",
    "source_phrase": "别的项目写回来｜带投递编号、来源项目、出处和读到的版本号；重试不重复写，迟到的旧版本盖不掉新更正",
-   "sha256": "23f66aeb4b0bf95338544f426a7cc9662a5d8085cb54b1aa7ec0c516469d89b4",
+   "sha256": "1d65d5fe0ed0a3f6e4e94b2a7024700038f5b2e771e081f97c5ce90d3dbf3bb0",
    "status": "ready"
   },
   {
@@ -5027,7 +5029,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "手机和云端同一份｜手机、云端的 AI 经电脑 MCP 调同样的命令，不另存副本",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -5380,7 +5382,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "来源静默提醒｜每类来源有应有的节奏，超期在给 AI 读的首页（CURRENT.md）顶部标“静默”；停了的几个手动导出来源并成一个问题一次问我",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
@@ -5410,7 +5412,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "灯泡",
    "source_phrase": "该导出哪一段｜列出每个来源实际覆盖到哪天，建议从哪天开始重叠导出",
-   "sha256": "5b07d3188e7e7273cb2c737b5d9912964ff5331a55b1316e445674b0587f849f",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
    "status": "ready"
   },
   {
@@ -5425,7 +5427,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "别的项目有新结果吗｜比对引用过的别项目文件变没变，变了才去读",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5440,7 +5442,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "存疑录音再请云端听｜本库挑的录音本地转写存疑时，经〔中文语音转写〕的阿里云入口复核",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -5485,7 +5487,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁",
    "source_phrase": "两份视图自动重建｜给 AI 的首页和完整详档，每次写入都在同一把数据库锁里重建",
-   "sha256": "ed304e783e881716371e4b9d7dd992fa770c9c936fda9d4fc234f5d367d1fc00",
+   "sha256": "e9be58c66ad552ea1aa18cf5f0796168edeb3bb0813b4e6b66a7ce6b1e6ca808",
    "status": "ready"
   },
   {
@@ -5500,7 +5502,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "撤回错误的 B站 导入｜先出只读方案，核对方案指纹、备份数据库后才执行",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5515,7 +5517,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "原件搬家后改指向｜核对大小和 SHA-256 后改原件位置，不重新导入",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   }
  ]
@@ -5572,7 +5574,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
      "illustration": "none",
      "connector": "none",
      "row": "history-head",
-     "width": "78%"
+     "width": "78%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -5710,7 +5713,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "云",
    "source_phrase": "9 月 8–9 日：手机和云端改用同一份库，经电脑 MCP 直接调命令。",
-   "sha256": "01332f157c15b884efe343411d7b8e1915859c37e0dd82fff326bee27665ff67",
+   "sha256": "90c9bf9cc6beae234027a022585184318573c9f990ff7da6788845987bfa47f3",
    "status": "ready"
   },
   {
@@ -5770,7 +5773,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件核验",
    "source_phrase": "9 月 18 日：网页订单增量更新、净消费核对。",
-   "sha256": "827f125e690505d54320a842e5eb97301f7fb4627563545a827d122d27d6e974",
+   "sha256": "df68c5dfe8a18cb72dc31763b522c78b2ddaad96fb0490ce1123357f3cbed634",
    "status": "ready"
   },
   {
@@ -5830,7 +5833,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "红色警示",
    "source_phrase": "9 月 27 日：“最近在做什么”近况卡和过期提醒。",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "6be8a220f000b19729cdca6b3ceb7b241ff819043979ed4fb900d0ef855d9143",
    "status": "ready"
   },
   {
