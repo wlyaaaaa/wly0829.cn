@@ -106,9 +106,9 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
 const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);document.addEventListener('site-live-layout',fit);
 const activate=e=>{if(!(e.target instanceof Element))return;const t=e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(!t)return;
 if(t.matches('button[data-href="刷新状态"]')){e.preventDefault();window.SiteB2?.refresh?.();return;}
-if(t.matches('.slot-shot-frame')&&window.SiteImageViewer?.openGallery){const shots=[...m.querySelectorAll('.slot-shot-frame[data-href]')].filter(s=>s.getClientRects().length);const list=shots.map(s=>({src:new URL(s.dataset.href,location.href).href,title:s.closest('.c-slot-shots')?.querySelector(`[data-shot-caption-index="${s.closest('.slot-shot-item')?.dataset.shotIndex}"]`)?.textContent.trim()||'截图'}));e.preventDefault();window.SiteImageViewer.openGallery(list,shots.indexOf(t),t);}else location.href=t.dataset.href;};
+if(t.matches('.slot-shot-frame,.dd-shot')&&window.SiteImageViewer?.openGallery){const shots=[...m.querySelectorAll('.slot-shot-frame[data-href],.dd-shot[data-href]')].filter(s=>s.getClientRects().length);const list=shots.map(s=>({src:new URL(s.dataset.href,location.href).href,title:s.closest('.c-slot-shots')?.querySelector(`[data-shot-caption-index="${s.closest('.slot-shot-item')?.dataset.shotIndex}"]`)?.textContent.trim()||'截图'}));e.preventDefault();window.SiteImageViewer.openGallery(list,shots.indexOf(t),t);}else location.href=t.dataset.href;};
 document.addEventListener('click',activate);
-document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.target instanceof Element&&e.target.closest('.slot-shot-frame[data-href]')))activate(e);});})();</script>
+document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.target instanceof Element&&e.target.closest('.slot-shot-frame[data-href],.dd-shot[data-href]')))activate(e);});})();</script>
     <slot />
     {briefText && (
       <section id="ai-brief" class="ai-brief-static" aria-label="复制 AI 续作说明">
