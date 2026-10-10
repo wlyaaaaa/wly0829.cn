@@ -37,6 +37,18 @@
 .ts-card-grid > .ts-screen { min-width: 0; margin: 0; }
 .ts-card-grid .ts-h { --tz: var(--tz-card, .41); }
 @media (max-width: 767.98px) { .ts-card-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; } }
+/* 项目页三列功能组：末排两卡平分整行；中间整行卡继续占满，保留其他显式跨列和插画布局。 */
+@media (min-width: 768px) {
+  body[data-page-kind="project"] .ts-canvas.o-h .c-feature-card .feature-group-grid[style="--feature-columns:3"]:not([data-flow]):not([data-tail-grid]):not(:has(> :not(.feature-item), > .feature-item[style*="grid-column"]:not([style="grid-column:span 3"]))):is(
+    :not(:has(> .feature-item[style*="grid-column"])):has(> .feature-item:last-child:nth-child(3n+2)),
+    :has(> .feature-item[style="grid-column:span 3"]:nth-last-child(1 of [style*="grid-column"]):nth-last-child(3n+3))
+  ) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    > .feature-item { grid-column: span 2; }
+    > .feature-item[style="grid-column:span 3"] { grid-column: 1 / -1 !important; }
+    > .feature-item:nth-last-child(-n+2) { grid-column: span 3; }
+  }
+}
 /* 站点的全局样式不进画布：现在出图时画布里只有区块库自己的样式。站点给 img、a、button 定的全局规则在画布里退回浏览器默认，
    区块库自己更具体的规则照常生效；和站点撞名的 .source-prose 在生成时改名为 .ts-source-prose（见 render_blocks.rename_site_classes）。 */
 .ts-canvas img { display: revert; max-width: revert; }
@@ -76,7 +88,7 @@
 
 /* 手机：子导航一行放不下时可以横滑。停下时总是停在“一项的开头”（最后一项停在它的结尾），不会停在半个字上；
    哪一头后面还有项，哪一头就淡出（脚本按滚动位置加 toc-more-left / toc-more-right），露出半截的那一项只剩三成浓淡，提示可以接着滑。
-   回到顶部按钮小一号，往下读时收起 */
+   回到顶部保持可见可点，触控区域至少 44px */
 @media (max-width: 767.98px) {
   nav.toc .toc-inner { scroll-snap-type: x mandatory; scroll-padding-inline: 14px; --toc-fl: 0px; --toc-fr: 0px;
     -webkit-mask-image: linear-gradient(90deg, transparent 0, rgba(0,0,0,.3) calc(var(--toc-fl) - 12px), #000 var(--toc-fl), #000 calc(100% - var(--toc-fr)), rgba(0,0,0,.3) calc(100% - var(--toc-fr) + 12px), transparent 100%);
@@ -86,8 +98,7 @@
   nav.toc .toc-inner.toc-more-right:not([style*="--toc-fr"]) { --toc-fr: 32px; }
   nav.toc .toc-inner > a { scroll-snap-align: start; flex: none; white-space: nowrap; }
   nav.toc .toc-inner > a:last-child { scroll-snap-align: end; }
-  .back-to-top { width: 36px !important; height: 36px !important; right: 8px !important; bottom: 12px !important; transition: opacity .2s, transform .2s; }
-  html.btt-hide .back-to-top { opacity: 0 !important; transform: translateY(12px); pointer-events: none; }
+  .back-to-top { width: 44px !important; height: 44px !important; right: 8px !important; bottom: 12px !important; z-index: 100 !important; pointer-events: auto; }
 }
 
 /* 改过地址的页：旧地址上一句话的去向页 */
