@@ -21,7 +21,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 - 显式 `--previous-manifest <文件>` 无效时直接报错；未指定时，沿用 `oss-retention.py` 对真实成功 GitHub Pages 部署的发现方式。不会把未部署的最新提交当成上一版。
 - 先逐个比较整份 dist 的文件 SHA256 与指定扫描记录，增、删、改任何文件均拒绝发布并列出差异。再按最终成品清单与真实成功前版计算上传计划；对象地址变化也必须上传对应字节，不能因为哈希相同就跳过新地址。资源先上传 OSS，随后把原字节的 Pages 成品提交到专用 `site-dist` 分支；全部部署和回读通过后，最后写既有 Git 共享目录的 `wly-oss/published.json` 成功记录。
-- OSS 对本次上传对象做 HEAD，核大小及 ETag 或 Content-MD5；首页、驾驶舱、`/computer-access/` 和变化的 HTML 做 GET，核 HTTP 200 和正文 SHA256。GitHub Pages 必须确认对应提交部署成功，才开始页面回读。
+- OSS 对本次上传对象做 HEAD，核大小及 ETag 或 Content-MD5；首页、驾驶舱、`/computer-access/` 和变化的 HTML 做 GET，核 HTTP 200 和正文 SHA256。推完 `site-dist` 后，从 `main` 手动触发 `pages.yml` 并传入刚推的 `sha`；按触发命令返回的运行网址取得 run id，等待该次运行成功才开始页面回读。`--pages-timeout`（默认 600 秒）覆盖触发和等待，失败或超时直接报错；若 GitHub CLI 未返回运行网址，也报错而不猜是哪次运行。
 - `oss-retention.py pin` 在上传前保留本次所需对象。保留集包含清单对象，以及成品 HTML、CSS、JS 中实际引用的绝对 OSS 地址。发布不调用回收，不删除任何线上对象。
 - 沿用已有 `aliyun ossutil` 的 `website-images` 配置，程序不读取、复制或记录凭据内容。没有新增 CDN 刷新步骤，既有被替换的发布链也没有这一步。
 
@@ -29,7 +29,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 `--dry-run` 同样先核扫描文件哈希，只读上一版清单，计算差异，并在独立临时仓库生成真实的 `site-dist` 提交。首次提交没有父提交；已存在分支时从其提交接续。预演不领发布锁、不 pin、不上传、不推送、不触发部署、不写成功记录。传输时间按固定 10,000,000 字节/秒估算；回执明确记录这个假设，它不是网络实测，也不包含 GitHub Pages 排队时间。
 
-成品仓库包含全部 Pages 文件、资源清单、成品身份和最小部署工作流，源码工作树不切分支。关闭 Git 换行转换后逐文件核暂存 blob 原始字节；普通 push 不强推。`--source-commit <40位源码SHA>` 可说明成品对应的源码，优先使用成品已有构建回执；缺失写 `Unknown`，不把当前源码 HEAD 冒充构建证据。
+成品仓库包含全部 Pages 文件、资源清单和成品身份，部署工作流只保留在 `main`，源码工作树不切分支。关闭 Git 换行转换后逐文件核暂存 blob 原始字节；普通 push 不强推。`--source-commit <40位源码SHA>` 可说明成品对应的源码，优先使用成品已有构建回执；缺失写 `Unknown`，不把当前源码 HEAD 冒充构建证据。
 
 ## 扫描做什么
 
@@ -53,6 +53,6 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## 与构建链的接线
 
-这次只改发布和扫描，不接管构建。`pages.yml` 仅在 push `site-dist` 或手动指定 ref 时运行，使用 Ubuntu 完成 checkout、configure-pages、upload-pages-artifact、deploy-pages 四步；CI 不构建、不扫描。官方成品上传动作始终排除 `.git`、`.github`。`check-typeset-site.py` 现只读已有 dist，阅读位置、转屏、导航和哈希检查保留。构建调用 `finalize-dist`；必要的资源复制和历史继承逻辑集中在 `prepare-oss-release.py`，旧 hybrid 装配、全量验证及其 CLI 已退出。
+这次只改发布和扫描，不接管构建。`pages.yml` 只允许从 `main` 手动触发，必填 `sha` 是 40 位十六进制的 `site-dist` 提交号；先 fetch 该分支并核实提交属于其历史，再 checkout 该提交、configure-pages、upload-pages-artifact、deploy-pages；CI 不构建、不扫描。官方成品上传动作始终排除 `.git`、`.github`。`check-typeset-site.py` 现只读已有 dist，阅读位置、转屏、导航和哈希检查保留。构建调用 `finalize-dist`；必要的资源复制和历史继承逻辑集中在 `prepare-oss-release.py`，旧 hybrid 装配、全量验证及其 CLI 已退出。
 
-现有 `github-pages` 环境于北京时间 2026 年 10 月 11 日 05:17 只读确认仅允许 `main`，尚未允许 `site-dist`。首次发布窗口须先新增允许 `site-dist` 的环境分支规则并保留 `main`，再执行发布命令；本次没有改设置、建远程分支或部署。回退仍用同一工作流：`gh workflow run pages.yml --repo wlyaaaaa/wly0829.cn --ref site-dist -f ref=<旧成品SHA>`，随后核公网资源清单和成品身份。不能把本地预演说成真实上传、Pages 部署或五分钟发布已经验收。
+现有 `github-pages` 环境于北京时间 2026 年 10 月 11 日 05:17 只读确认仅允许 `main`，保持该设置；发布窗口先把本次工作流合入 `main`，再执行发布命令，本次没有改设置、建远程分支或部署。回退用同一入口：`gh workflow run pages.yml --repo wlyaaaaa/wly0829.cn --ref main -f sha=<上一个site-dist提交号>`，等待返回的 run id 成功后核公网资源清单和成品身份。不能把本地预演说成真实上传、Pages 部署或五分钟发布已经验收。
