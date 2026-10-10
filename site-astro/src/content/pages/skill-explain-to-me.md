@@ -30,6 +30,18 @@
   "url": "/skills/explain-to-me/",
   "tagline": "AI 向我说明时照同一本手册讲，讲到我一遍就懂。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 22:26"
+   },
+   "facts": [
+    "近 7 天 AI 用了 16 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "64c67cacad880fbe6c121db838db8e82bdcb3768",
    "commit_time": "2026-09-28T01:16:12+08:00",
@@ -101,8 +113,8 @@
  },
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
-  "sha256": "083826d713037844843d9e378a874360e2683836c0a129ed6391e8020c2fd93e",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "c156b7b972f58a17b92bd2c701a6e72d57ab2f7f7db9ff92e81c7961861e318a",
+  "converted_at_beijing": "2026-10-10T09:52:01+08:00"
  }
 }
 ---
@@ -137,18 +149,29 @@
      "align": "left",
      "size": "large",
      "text_ref": "讲给我听",
-     "row": "hero",
-     "width": "52%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "技能名"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 22:26",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "hero",
-     "width": "46%",
+     "row": "k1a-head",
      "index": 0,
      "illustration": "outside",
      "motion_asset_sha256": "45119e65957d2caee38c7f30a533e33b44f58def734b45218225885dce1fd109",
@@ -162,12 +185,18 @@
         0.038461538461538464
        ]
       }
-     ]
+     ],
+     "width": "auto",
+     "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
     },
     {
      "type": "content_card",
      "row": "body",
-     "width": "52%",
+     "width": "60%",
      "columns": 1,
      "illustration": "left_inside",
      "text_ref": "它做什么",
@@ -184,7 +213,7 @@
      "columns": 1,
      "row": "body",
      "columns_v": 1,
-     "width": "46%"
+     "width": "38%"
     },
     {
      "type": "prose",
@@ -224,6 +253,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "讲给我听"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 22:26",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -426,7 +470,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
      "type": "tag",
      "row": "head",
      "width": "62%",
-     "text_ref": "真实的一次："
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -522,7 +566,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
     },
     {
      "type": "tag",
-     "text_ref": "真实的一次："
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -607,12 +651,12 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "认出“听不懂”和“你只需要告诉我”：上一版答偏了，回到我原来的问题——这东西对我有什么用。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -683,7 +727,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
 
 ## 一个完整例子
 
-真实的一次：9 月 25 日，一个 Claude 对话在请我定一批收尾的事
+真事：9 月 25 日，一个 Claude 对话在请我定一批收尾的事（出处：讲给我听的讲解手册案例记录）
 
 AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 DriveUpload 的文件夹“复制还是链接”，它自己还没查清这是什么。
 
@@ -1070,12 +1114,12 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一只打钩的耳朵",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {

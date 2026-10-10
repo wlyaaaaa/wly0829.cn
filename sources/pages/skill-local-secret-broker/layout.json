@@ -116,6 +116,10 @@
         "text_ref": "一个完整的例子"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "flow",
         "direction": "vertical",
         "columns": 1,
@@ -190,6 +194,10 @@
         "align": "center",
         "size": "medium",
         "text_ref": "一个完整的例子"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "flow",

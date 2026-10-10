@@ -133,7 +133,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "9 月 28 日写",
+        "text_ref": "真事：",
         "align": "left"
       },
       {
@@ -240,7 +240,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "9 月 28 日写",
+        "text_ref": "真事：",
         "align": "left"
       },
       {
@@ -727,7 +727,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ]
       }
     ],
@@ -798,7 +798,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ]
       }
     ],

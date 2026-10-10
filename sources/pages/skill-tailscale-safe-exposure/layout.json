@@ -107,6 +107,10 @@
         "text_ref": "标题：一个完整例子"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "prose",
         "text_ref": "假如我说："
       },
@@ -158,6 +162,10 @@
         "align": "center",
         "size": "medium",
         "text_ref": "标题：一个完整例子"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "prose",
@@ -219,7 +227,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/身份盾牌.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件齿轮.png"
@@ -235,9 +243,9 @@
         "connector": "none",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/身份盾牌.png",
           "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png"
         ],
@@ -276,13 +284,13 @@
         "text_ref": "1先摸底",
         "icons": [
           "_library/icons/身份盾牌.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
           "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/文件齿轮.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/身份盾牌.png",
           "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png"
         ]

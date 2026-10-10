@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "d54cb03c814b50b6fcea5f1ff6131a2060092abfb997692b7e37ee64dfd50f5f",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -420,12 +420,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "75 页　第 1 批：34 个项目、27 个技能、10 个规则专题、约法和 3 个总页",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -435,12 +435,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "922 张图　65 页新画的横版和竖版，每张都审过；另外 10 页沿用早先审过的图",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -450,12 +450,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "75 条小视频　每页开头 6 秒；新做 41 条花 410 点，付费返工 0 点",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -465,12 +465,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "84 条意见　独立审查挑出来，复核后定下 58 处要改",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -480,12 +480,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -495,12 +495,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -510,12 +510,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -525,12 +525,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -633,7 +633,7 @@
      "icons": [
       "_library/icons/人物.png",
       "_library/icons/文稿堆.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
@@ -678,7 +678,7 @@
      "icons": [
       "_library/icons/人物.png",
       "_library/icons/文稿堆.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/fix-round-2/icon-clean-f9fad72a795ea7d99a23.png"
@@ -717,7 +717,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "人物",
    "source_phrase": "我的要求",
-   "sha256": "84f7098cd979eb8bdeccc7587fcf2d78e42d4ff3014093cd65a9829739e0ca28",
+   "sha256": "221ee5da99dd4bcd2d636a62584d34405663986eebdce306093f0944b39360be",
    "status": "ready"
   },
   {
@@ -777,7 +777,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "画笔调色板",
    "source_phrase": "Luna 画图",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -975,7 +975,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "9 月 27 日　风格样图 \nGPT-6Astra照我挑中的白底、绿色、手绘水彩风格画了17张样图：网站9张，头像候选3张和定稿1张，GitHub横幅3张和主页1张。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -1153,12 +1153,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张画框",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1188,7 +1188,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "笔记本电脑",
    "source_phrase": "只有会变的留空框 项目页开头的“现在”横条、驾驶舱的状态，画面上留空框，网页从电脑读到实时状态再填进去。",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -1295,7 +1295,7 @@
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/画笔调色板.png",
       "_library/icons/浏览器标签页.png",
       "_library/icons/文件齿轮.png"
@@ -1337,7 +1337,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/画笔调色板.png",
       "_library/icons/浏览器标签页.png",
       "_library/icons/文件齿轮.png"
@@ -1373,7 +1373,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一摞资料纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1388,7 +1388,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张分成三格的稿纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1589,7 +1589,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "画笔调色板",
    "source_phrase": "画笔",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -1614,12 +1614,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一枚带指纹纹路的小标签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1634,7 +1634,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一叠画稿",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1891,12 +1891,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张打满对勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1999,7 +1999,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ]
     },
     {
@@ -2069,7 +2069,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ]
     },
     {
@@ -2134,12 +2134,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "认出链接　程序认出图上链接的字，在那个位置盖可点区域；每节的跳转位置也在这一步接上。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -2149,12 +2149,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库",
    "source_phrase": "接实时数据　“现在”横条、驾驶舱里的空框，接上电脑的实时状态。",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -2238,8 +2238,8 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/云.png",
-      "_library/icons/代码窗口.png",
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/09-时钟-clean.png",
       "_library/icons/late-r3-pdf-clarity-slider.png",
       "_library/icons/盾牌对勾.png"
      ],
@@ -2271,8 +2271,8 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/云.png",
-      "_library/icons/代码窗口.png",
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/09-时钟-clean.png",
       "_library/icons/late-r3-pdf-clarity-slider.png",
       "_library/icons/盾牌对勾.png"
      ],
@@ -2332,7 +2332,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "画笔调色板",
    "source_phrase": "钢笔和画笔交叉",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -2446,7 +2446,7 @@
       "_library/icons/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
-      "_library/icons/数据库.png"
+      "_library/hires-icons/数据库.png"
      ],
      "equal_height": false
     },
@@ -2485,7 +2485,7 @@
       "_library/icons/版本循环文件.png",
       "_library/icons/齿轮.png",
       "_library/icons/文件齿轮.png",
-      "_library/icons/数据库.png"
+      "_library/hires-icons/数据库.png"
      ],
      "equal_height": false
     },
@@ -2551,12 +2551,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一只小眼睛",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2571,7 +2571,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一个对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2586,7 +2586,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "两摞纸并在一起",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2757,7 +2757,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "AI 把原话连日期记进决定记录，以后谁接手都查得到。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2883,7 +2883,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]
@@ -2961,7 +2961,7 @@ AI 把要我定的事做成一张本地决策网页：先说结论和有什么�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png",
       "_library/illustrations/电脑后台闹钟.png"
      ]

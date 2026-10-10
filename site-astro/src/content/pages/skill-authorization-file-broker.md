@@ -30,6 +30,18 @@
   "url": "/skills/authorization-file-broker/",
   "tagline": "点名的文件，交给密码中心加密保管",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 04:04"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -86,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-authorization-file-broker/page.json",
-  "sha256": "10bfd7b458cc2627256eac4e6ed0b83e107ed8e321f830c69657a5a9ee0cf5d8",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "c7f54e315bc71195db63e7b77650f5d4b8049ea94d5d25501990c6280cf278f5",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -124,14 +136,33 @@
     {
      "type": "chapter_title",
      "align": "left",
-     "row": "intro",
-     "width": "55%",
-     "text_ref": "加密文件"
+     "text_ref": "加密文件",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 04:04",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "intro",
-     "text_ref": "把我点名的文件或文件夹，交给密码中心加密成一个.pcaf文件夹"
+     "text_ref": "把我点名的文件或文件夹，交给密码中心加密成一个.pcaf文件夹",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -173,6 +204,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "加密文件"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 04:04",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -390,6 +436,10 @@
      "text_ref": "一个完整的例子：“帮我加密E:\\扫描件\\合同这个文件夹”"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "flow",
      "columns": 5,
      "direction": "horizontal",
@@ -414,6 +464,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "一个完整的例子：“帮我加密E:\\扫描件\\合同这个文件夹”"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "flow",
@@ -457,12 +511,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "验证一次。　没开着无限制授权，就弹四选一窗口，我挑一种。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -477,7 +531,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "加密。　没说放哪，就放在 E:\\Documents\\PasswordCenterEncryptedFiles 下面新建的 .pcaf 文件夹里；原件原地不动。怎么加密见〔密码中心 · 钥匙一层套一层〕。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -533,6 +587,8 @@
 ```
 
 一个完整的例子：“帮我加密 E:\扫描件\合同 这个文件夹”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **只认点名的路径。**　AI 只处理这一个文件夹，不去扫下载、文档或整块盘；遇到符号链接、目录联接这类指向别处的链接直接拒绝。
 2. **验证一次。**　受信任的桌面 AI 复用有效资料期或无限制授权；否则让我四选一验证。

@@ -697,7 +697,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个拔下来的网线插头和一个上了封条的纸箱",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -707,12 +707,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -722,12 +722,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -737,12 +737,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -752,12 +752,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -767,12 +767,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1387,12 +1387,12 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "看同一个任务",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1402,12 +1402,12 @@ Codex 桌面版没有给别的程序接进同一个任务的公开入口。要�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "动手",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1709,12 +1709,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "进出子任务：看每个子任务在做什么，点进去只读看完整记录，再回主任务补要求；做完的、归档的也在 ✕",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1724,12 +1724,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "中英切换：默认中文，一键切英文 ✕",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1754,12 +1754,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "叫停：停掉当前这一轮 ✕",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1814,12 +1814,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "额度和上下文：上下文用了多少（绿色圆环）、账号额度和重置时间（北京时间）、上下文压缩到了哪一步；空闲时可手动压缩 ✕",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2067,7 +2067,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "电脑文件页：浏览和搜索这台电脑检测到的全部磁盘，预览文本、Markdown、图片和 PDF，上传、新建、编辑、改名、复制、移动、下载、删除；删除先进回收站，覆盖和永久删除要再确认一次 ✕",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -2082,7 +2082,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "外网入口：经 Tailscale Funnel 的一个公网地址进来，手机只要浏览器；9 月 26 日撤掉 ✕",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2137,12 +2137,12 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "一句话让 AI 开关：跟 AI 说“打开远程”“关闭远程”“远程状态”；8 月 13 日改成只回答“不可用”，9 月 26 日卸载 ✕",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -2187,7 +2187,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "交给 AI 安装：仓库里有一段现成的提示词，贴给 Codex 桌面版，让它自己装 ✕",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2364,7 +2364,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "scene_explicit_primary_object",
    "key": "笔记本电脑",
    "source_phrase": "一台电脑和一个先后顺序的箭头",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2379,7 +2379,7 @@ AI 调控制入口；必要时电脑上的 Codex 重开一次，接到中转程�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一台主力电脑旁边一个一次性的纸盒电脑",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

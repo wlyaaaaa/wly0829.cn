@@ -184,7 +184,7 @@
         "connector": "line",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/放大镜.png",
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-03.png",
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-04.png"
@@ -269,7 +269,7 @@
         "connector": "line",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/放大镜.png",
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-03.png",
           "skill-control-plane-doctor/skill-control-plane-doctor-02-icon-04.png"

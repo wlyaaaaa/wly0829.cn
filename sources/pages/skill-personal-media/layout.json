@@ -36,7 +36,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "“找 1 月下雪",
+        "text_ref": "“找那次下雪",
         "columns": 3,
         "columns_v": 5,
         "split_items": true,
@@ -101,7 +101,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "“找 1 月下雪",
+        "text_ref": "“找那次下雪",
         "columns": 1,
         "split_items": true,
         "illustration": "left_inside",
@@ -147,8 +147,12 @@
         "size": "large"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "dialogue",
-        "text_ref": "我：找 1 月下雪",
+        "text_ref": "我：找那次下雪",
         "columns": 1,
         "sides": [
           "left"
@@ -172,7 +176,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "AI：一共 140 张",
+        "text_ref": "AI：一共一百多张",
         "columns": 1,
         "sides": [
           "right"
@@ -225,8 +229,12 @@
         "size": "large"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "dialogue",
-        "text_ref": "我：找 1 月下雪",
+        "text_ref": "我：找那次下雪",
         "columns": 1,
         "sides": [
           "left"
@@ -250,7 +258,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "AI：一共 140 张",
+        "text_ref": "AI：一共一百多张",
         "columns": 1,
         "sides": [
           "right"

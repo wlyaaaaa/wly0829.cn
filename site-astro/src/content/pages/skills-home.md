@@ -586,7 +586,7 @@
  "source": {
   "page": "sources/pages/skills-home/page.json",
   "sha256": "e4b1c92495508210cd51cca357e1ffdc32eff038d495454170f34b7de6a80059",
-  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
  }
 }
 ---
@@ -664,7 +664,7 @@
      "align": "left",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
      "row": "summary",
@@ -691,7 +691,7 @@
      "align": "left",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "inline_button": "技能怎么装到各个 AI → 基座",
      "button_placement": "right",
@@ -741,7 +741,7 @@
      "align": "left",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
      "text_ref": "27 个技能"
@@ -771,7 +771,7 @@
      "align": "left",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "inline_button": "技能怎么装到各个 AI → 基座",
      "button_placement": "below_center",
@@ -805,12 +805,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "26 个技能",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1192,7 +1192,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个文件夹里抽出一页纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1222,7 +1222,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "微信标志",
    "source_phrase": "微信的绿色双气泡标志",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1282,7 +1282,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张散开的纸变成一本装订好的小册子",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1637,12 +1637,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一扇白底绿边的小网页窗，里面一个柱状图和两个勾选框",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2127,12 +2127,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "锁文件夹",
    "source_phrase": "一个文件夹上挂一把小锁",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -2162,7 +2162,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "Chrome标志",
    "source_phrase": "Chrome 的标志加一个向前的绿色箭头",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -2252,7 +2252,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "GitHub标志",
    "source_phrase": "GitHub 的黑色章鱼猫标志旁边一个放大镜。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {

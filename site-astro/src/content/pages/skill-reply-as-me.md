@@ -30,6 +30,18 @@
   "url": "/skills/reply-as-me/",
   "tagline": "意思我定，AI 看发给谁、什么关系，写得自然。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-27 20:17"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "64c67cacad880fbe6c121db838db8e82bdcb3768",
    "commit_time": "2026-09-28T01:16:12+08:00",
@@ -91,8 +103,8 @@
  },
  "source": {
   "page": "sources/pages/skill-reply-as-me/page.json",
-  "sha256": "989d3980eed6ab1e854890263e7c0c43b0b1013d973a5afe09855efd0b14bb83",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b218193bfb3c21e389306cf047b2c4b8cff151580b6228c497001ca50ac46c56",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -169,9 +181,28 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "align": "center",
+     "align": "left",
      "size": "large",
-     "text_ref": "替我拟消息"
+     "text_ref": "替我拟消息",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 27 日 20:17",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
@@ -183,7 +214,8 @@
      "whole_block": true,
      "row": "intro",
      "width": "50%",
-     "text_ref": "它做什么"
+     "text_ref": "它做什么",
+     "row_fit_illustration": true
     },
     {
      "type": "points_card",
@@ -205,7 +237,13 @@
      "columns": 2,
      "tail": true,
      "text_ref": "怎么跟AI说",
-     "bubble_columns": 2
+     "bubble_columns": 2,
+     "row_counts": [
+      2,
+      2,
+      2,
+      1
+     ]
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n横版右侧一大‘怎么跟AI说’外卡内七个气泡：dialogue.split_paras 已支持七句、一列、组名一次；钢笔便签/三个空白标签/未封信封插画在右上，当前没有与该外卡顶部绑定的 overlay 位置接口。竖版插画在两段说明后、七泡前。\n当前该屏 manifest 没有 illustration 记录，不能由现有其他页的小图标替代。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。",
@@ -275,6 +313,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "替我拟消息"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 27 日 20:17",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -453,7 +506,7 @@
     },
     {
      "type": "tag",
-     "text_ref": "真实的一次：9月8日的一次试写（场景是编的，两版稿子和我的评价是真的）。意思已经"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -552,7 +605,7 @@
     },
     {
      "type": "tag",
-     "text_ref": "真实的一次：9月8日的一次试写（场景是编的，两版稿子和我的评价是真的）。意思已经"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -631,7 +684,7 @@
 
 ## 一个完整例子
 
-真实的一次：9 月 8 日的一次试写（场景是编的，两版稿子和我的评价是真的）。意思已经定了：今晚不去朋友的饭局；答应过的硬盘，今晚叫跑腿送过去，要对方给个地址。
+真事：9 月 8 日的一次试写，出自个人表达的对照记录（场景是编的，两版稿子和我的评价是真的）。意思已经定了：今晚不去朋友的饭局；答应过的硬盘，今晚叫跑腿送过去，要对方给个地址。
 
 **被我否掉的一稿**
 “吃饭唱歌都别算我”
@@ -871,7 +924,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一只手把一张纸递回对话框",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

@@ -111,6 +111,10 @@
     "text_ref": "一个完整例子"
    },
    {
+    "type": "tag",
+    "text_ref": "示例："
+   },
+   {
     "type": "dialogue",
     "sides": [
      "right"
@@ -153,6 +157,10 @@
     "align": "center",
     "size": "large",
     "text_ref": "一个完整例子"
+   },
+   {
+    "type": "tag",
+    "text_ref": "示例："
    },
    {
     "type": "dialogue",

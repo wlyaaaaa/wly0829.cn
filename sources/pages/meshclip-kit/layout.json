@@ -690,7 +690,7 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/日历时钟.png",
           "_library/icons/版本循环文件.png"
         ],
@@ -751,7 +751,7 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/日历时钟.png",
           "_library/icons/版本循环文件.png"
         ]

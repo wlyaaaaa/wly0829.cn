@@ -30,6 +30,18 @@
   "url": "/skills/tailscale-safe-exposure/",
   "tagline": "开个服务给自己的设备用，外人连不上。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 15:03"
+   },
+   "facts": [
+    "近 7 天 AI 用了 7 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -109,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
-  "sha256": "eb2f38f373d1393fde7b8320f579fb3ca0320bf9abb39d89bbfa0060a154abab",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "12a51862502614b7a247ecfe015b2f7597e7b558b6f9ea54770cefabbfee84d8",
+  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
  }
 }
 ---
@@ -139,14 +151,33 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%",
-     "text_ref": "大标题：远程只让自己连"
+     "text_ref": "大标题：远程只让自己连",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 15:03",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 7 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话："
+     "text_ref": "一句话：",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -183,6 +214,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "大标题：远程只让自己连"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 15:03",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 7 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -361,6 +407,10 @@
      "text_ref": "标题：一个完整例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我说："
     },
@@ -405,6 +455,10 @@
      "align": "center",
      "size": "medium",
      "text_ref": "标题：一个完整例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -482,12 +536,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一面只开小窗的墙",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -532,7 +586,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "要注意：账本上是这台电脑现在的真实结果，归电脑配置与恢复管；当初是不是经这个技能做的，没有找到记录。“只有这两台能连”还要看Tailscale的访问策略，读不到就只说不知道。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -546,7 +600,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "要注意：账本上是这台电脑现在的真实结果，归电脑配置与恢复管；当初是不是经这个技能做的，没有找到记录。“只有这两台能连”还要看Tailscale的访问策略，读不到就只说不知道。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -560,7 +614,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "要注意：账本上是这台电脑现在的真实结果，归电脑配置与恢复管；当初是不是经这个技能做的，没有找到记录。“只有这两台能连”还要看Tailscale的访问策略，读不到就只说不知道。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -605,6 +659,8 @@
 ```
 
 标题：一个完整例子：照这套做法，“远程桌面只让笔记本和手机连”会这样办
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 假如我说：“远程桌面只让我的笔记本和手机连。”
 
@@ -757,7 +813,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/身份盾牌.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件齿轮.png"
@@ -773,9 +829,9 @@
      "connector": "none",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/身份盾牌.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png"
      ],
@@ -807,13 +863,13 @@
      "text_ref": "1先摸底",
      "icons": [
       "_library/icons/身份盾牌.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-80633705edf9063e00f8.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/文件齿轮.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/身份盾牌.png",
       "_library/fix-round-2/icon-clean-abb681c78df7ffa17f9a.png"
      ]
@@ -849,12 +905,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "选最小的开法｜只听本机的服务用 Tailscale Serve 开一个端口；服务自己监听的，用一条只认 Tailscale 网卡和指定设备的防火墙规则",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -864,12 +920,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "默认不上公网｜不用 Funnel；要公开，得我单独同意公开什么、开哪个端口",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -899,7 +955,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "分层验收｜配置、服务、监听、对面设备真连，四样分开报；写清是直连，还是经 Tailscale 的公共中转服务器或自己的一台设备中转，以及延迟",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -909,12 +965,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "查访问策略｜读 Tailscale 策略，并实测允许设备能连、被禁设备被拒；先排除离线和服务故障，读不到或测不了就标“不知道”，不宣称",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -939,12 +995,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "中断了接着收拾｜按存好的原样对比；别的程序改过的地方不动，没收拾完就留着“还没做完”的记号，下次先处理它",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1185,7 +1241,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "它不会做的事：不重置整份Serve或Funnel配置；不建“任何地址都放行”的规则；不因为ping通、服务在跑就说“连上了”；不为了验收通过放宽检查。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {

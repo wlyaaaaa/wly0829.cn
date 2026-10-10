@@ -26,11 +26,26 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E251",
-   "commit": "042d459642b979e78ff2d34c1fe3f13099a78046",
-   "ruleset_sha256": "3f0a475800e7d8e30c4e55ae38127b9245a6e5d76f16a7b041cede50a5f8e102",
-   "activated_at": "2026-10-10T01:51:17.678861+08:00",
-   "file": "sources/rules/release.json"
+   "release": "E230",
+   "files": [
+    ".publish/private/rule-sources/AGENTS.md",
+    ".publish/private/rule-sources/rules-catalog.json",
+    "sources/pages/charter/page.json",
+    "sources/pages/rule-authorization/page.json",
+    "sources/pages/rule-capabilities-runtime/page.json",
+    "sources/pages/rule-claude-adapter/page.json",
+    "sources/pages/rule-codex-adapter/page.json",
+    "sources/pages/rule-context-sources/page.json",
+    "sources/pages/rule-engineering-delivery/page.json",
+    "sources/pages/rule-execution-coordination/page.json",
+    "sources/pages/rule-privacy-data/page.json",
+    "sources/pages/rule-protected-actions/page.json",
+    "sources/pages/rule-rule-release/page.json"
+   ],
+   "commit": "4c0c4955b8b7a58d35c5576f66ea3f1d30fb279e",
+   "commit_time": "2026-10-09T09:10:42+08:00",
+   "activated_at": "2026-10-09T09:12:52.097645+08:00",
+   "excerpt_contract": "e230-original-ranges-v1"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
   "registry": {
@@ -247,8 +262,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "dfd786a4dd13beb89ef18c3175f6ec3d90c7488ff16fea5f5835df83a377297f",
-  "converted_at_beijing": "2026-10-10T06:26:11+08:00"
+  "sha256": "7ccdaf050e3333f39898ba6e8bc05556c9a6a9a84cbff02d2f9a735150f01331",
+  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
  }
 }
 ---
@@ -536,7 +551,7 @@
 
 〔约法全文〕
 
-当前生效版本 E251（北京时间 10 月 10 日 01:51 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
+当前生效版本 E230（北京时间 10 月 9 日 09:12 起）。改过的规则要发布成新的版本号才生效，AI 开工前先核对哪一版在生效、只读那一版。哪一版算数、怎么发布和退回的规矩，见下面的“规则发布与恢复”专题；发布器怎么搭、怎么做到不出半截，在“AI 规则与技能基座”项目里讲。〔怎么发布和核验 → 基座〕
 
 ::screen{#rules-home-03 section="top"}
 
@@ -571,6 +586,10 @@
      "text_ref": "派谁：什么活"
     },
     {
+     "type": "prose",
+     "text_ref": "Claude Opus 当主持"
+    },
+    {
      "type": "action_button",
      "text_ref": "现行型号、档位和分工 → 怎么协作",
      "align": "left"
@@ -586,6 +605,10 @@
      "align": "center",
      "size": "medium",
      "text_ref": "派谁：什么活"
+    },
+    {
+     "type": "prose",
+     "text_ref": "Claude Opus 当主持"
     },
     {
      "type": "action_button",
@@ -685,7 +708,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "画笔调色板",
    "source_phrase": "一支画笔和一块调色板，旁边一个小 ChatGPT 标志",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -745,6 +768,8 @@
 ```
 
 # 派谁：什么活交哪个 AI
+
+Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的成品、网站文字和正式文书。范围写死、有验收办法的施工、修复和核对，派给 GPT-6.1 Sol；批量读取、摘录、格式转换这类机械活交给 GPT-6 Luna，它不花额度。最贵的 GPT-6 Astra 要我给这个对话或项目授权才派。谁能胜任只看厂商公布的数据和 AA 这类权威评测，不在本机自己测。
 
 〔现行型号、档位和分工 → 怎么协作〕
 
@@ -920,7 +945,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "木匣锁",
    "source_phrase": "一只挂着绿色挂锁的小木柜",
-   "sha256": "3339993e398ea5a4fe0180ef08c8cd1fd08b815fa6569d9b00b27abf70bfe4b3",
+   "sha256": "7d2d9db7dc508562b6bc40ca9a8ddb33765e7a694539a6e19dcd6cd2839ac50e",
    "status": "ready"
   },
   {
@@ -935,7 +960,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "托盘里的钥匙、手机、纸条和Google及微软卡片",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1259,7 +1284,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "木匣锁",
    "source_phrase": "一只带小锁的木匣",
-   "sha256": "3339993e398ea5a4fe0180ef08c8cd1fd08b815fa6569d9b00b27abf70bfe4b3",
+   "sha256": "7d2d9db7dc508562b6bc40ca9a8ddb33765e7a694539a6e19dcd6cd2839ac50e",
    "status": "ready"
   },
   {
@@ -1289,7 +1314,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双机器人",
    "source_phrase": "两个小机器人一起搬积木",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1299,12 +1324,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张打了勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1314,12 +1339,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "工具箱",
    "source_phrase": "一只打开的工具箱",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {

@@ -52,7 +52,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "connector": "none",
         "row": "summary",
@@ -79,7 +79,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "inline_button": "技能怎么装到各个 AI → 基座",
         "button_placement": "right",
@@ -132,7 +132,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "connector": "none",
         "text_ref": "27 个技能"
@@ -162,7 +162,7 @@
         "align": "left",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "inline_button": "技能怎么装到各个 AI → 基座",
         "button_placement": "below_center",

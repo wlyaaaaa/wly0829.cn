@@ -421,7 +421,7 @@
  "source": {
   "page": "sources/pages/wechat-history-ai-bridge/page.json",
   "sha256": "da1138907eb95b2ee945061f96011258ffdb0b6f69089659384c508903048325",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:23+08:00"
  }
 }
 ---
@@ -496,7 +496,7 @@
      "row": "hero",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "align": "left",
      "text_ref": "一个例子"
@@ -585,7 +585,7 @@
      "type": "notice",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "align": "left",
      "text_ref": "一个例子"
@@ -632,12 +632,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一座落霜的旧木桥",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -677,12 +677,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -692,12 +692,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -707,12 +707,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -722,12 +722,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -737,12 +737,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -751,11 +751,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "6月20日，我让AI把WeFlow的看门狗和登录后打开微信装好、再检查一遍：AI注册了两个计划任务，自检把会话、联系人、群成员、朋友圈都读通了。当天在OpenClaw网关里一提某个微信群，OpenClaw自己经WeFlow找到了那个群。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -764,11 +764,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "6月20日，我让AI把WeFlow的看门狗和登录后打开微信装好、再检查一遍：AI注册了两个计划任务，自检把会话、联系人、群成员、朋友圈都读通了。当天在OpenClaw网关里一提某个微信群，OpenClaw自己经WeFlow找到了那个群。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -951,7 +951,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "停下以后还留着的"
     }
@@ -1010,7 +1010,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "｜旧：微信记录交给 AI｜新：〔微信聊天读取〕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1019,11 +1019,11 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "停下以后还留着的 \n公开仓库：说明、脚本和测试原样留着，按规矩从不放聊天内容登录后自动打开微信：早就交给电脑配置与恢复的“微信双开”，照常在用两个看门狗任务：停用没删，本人要用时能一键恢复",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1133,7 +1133,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
      "illustration": "top_inside",
      "icons": [
       "_library/icons/微信标志.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
@@ -1185,7 +1185,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/微信标志.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
@@ -1234,12 +1234,12 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1252,7 +1252,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "微信标志",
    "source_phrase": "微信",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1343,7 +1343,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "微信标志",
    "source_phrase": "认不出是哪个号，就不读 ：第二个微信库（16000 端口）一直能连上，但 WeFlow 26.7.3 没有“不读聊天就能查当前是哪个号”的接口，认不出它是哪个号；于是凡是按微信号去读它的请求一律拒绝，不猜。9 月 26 日本人决定把这个读取接口停掉。\n",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1369,7 +1369,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "日历时钟",
    "source_phrase": "取最新消息不带日期 ：直接要最近 100 条，再跟会话列表里记的“最后一条时间”对一下。WeFlow 读的是微信正在写的本地库，带日期查会漏；一次读到空，也可能只是碰上微信正在写，要重试。\n",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -1395,7 +1395,7 @@ AI 直接读这台电脑上微信的本地数据库，不经过 WeFlow。区别�
    "fallback": false,
    "key": "微信标志",
    "source_phrase": "微信",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1716,7 +1716,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "取数约定：先认准微信号和聊天，再取最新或按时间分页取历史；保留谁回复谁、附件线索，时间一律按北京时间；读不全就交代缺口。存下来的结果只记范围、条数、重试次数这些，不含正文 ✕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1746,7 +1746,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "AI 读微信的技能：Codex、Claude 用 weflow-history 技能去取；每个微信库各连一份 WeFlow，取之前先核对是哪个微信号，对不上就不读。它放在 E:\\.agents 的 weflow-toolkit 插件里，不在本仓库；8 月 22 日先撤技能，9 月 26 日再撤整个插件 ✕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1756,12 +1756,12 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "看门狗：登录时和每 15 分钟查一次；WeFlow 没开才拉起一次，开着却不通只记日志，不反复开新的 ✕",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1776,7 +1776,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "两份 WeFlow 分开守：第二个微信库那份（16000 端口）单独认、单独守；它的配置文件夹不在就直接报错，不新建一个空的 ✕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1786,12 +1786,12 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "后台不闪黑框：检查脚本包一层，在后台静悄悄地跑 ✕",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1806,7 +1806,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "登录后打开微信：后来交给〔电脑配置与恢复〕的“微信双开”，那边照常在用 ✕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1821,7 +1821,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "开机自动登录 Windows：可选；为了没人操作时微信也能起来，但登录密码会存进注册表，只适合放在家里的电脑 ✕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1851,7 +1851,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "公开前自查：31 项自动测试，加上扫一遍要公开的文件：密钥、聊天、截图、数据库一样都不许进仓库；GitHub 上跑同一套 ✕",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -2074,7 +2074,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "微信标志",
    "source_phrase": "8 月 22–25 日 ：AI 读微信的技能撤下，换成〔微信聊天读取〕",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2100,7 +2100,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "日历",
    "source_phrase": "9 月 8 日 ：最后一次提交，自动测试补齐到 31 项；同一天最后一次看状态，两份 WeFlow 的健康页都正常",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2113,7 +2113,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "禁止文件",
    "source_phrase": "9 月 12 日 ：本人决定冻结",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -2126,7 +2126,7 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
    "fallback": false,
    "key": "日历",
    "source_phrase": "9 月 26 日 ：停掉全部 WeFlow 进程，两个看门狗停用，weflow-toolkit 插件整个撤下",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

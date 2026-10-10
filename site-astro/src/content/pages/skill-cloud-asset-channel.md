@@ -30,6 +30,18 @@
   "url": "/skills/cloud-asset-channel/",
   "tagline": "AI 要反复读的文件，云上放一份，AI 在云里读。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-02 15:23"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -269,8 +281,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
-  "sha256": "afc3176c0b8d5d9c47a10ed8c9945445ab7520c0f23ead1dc2cc78a7c553e8dc",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b97d6fbac272b1fcf21918ed2cd987952bee0ee3685f39efe66ad4c83447c0eb",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -304,21 +316,40 @@
      "type": "chapter_title",
      "text_ref": "省流量的云端素材",
      "align": "left",
-     "row": "hero",
-     "width": "55%",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
      "text_ref": "AI要反复读的文件，从我电脑传到云上一份，之后AI在云里读，不再一遍遍走我电脑的流量。",
      "size": "large",
      "bold": true,
-     "row": "hero"
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 2 日 15:23",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "做网站时，同一批图要被AI画、审、复核好几轮，每读一次都从我电脑再传一遍，流量远远超过图本身。这个技能告诉AI：同一个文件要读两次以上，或一",
-     "row": "hero"
+     "row": "hero",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -336,8 +367,11 @@
      "text_ref": "“这批图要审好几轮，先放到云上。”",
      "split_paras": true,
      "columns": 2,
-     "flow": "column",
-     "rows": 3
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     },
     {
      "type": "prose",
@@ -372,6 +406,21 @@
      "text_ref": "AI要反复读的文件，从我电脑传到云上一份，之后AI在云里读，不再一遍遍走我电脑的流量。",
      "size": "large",
      "bold": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 2 日 15:23",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -500,6 +549,10 @@
      "size": "large"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
      "text_ref": "我：“这40张网站图要审三轮。”",
      "split_paras": true,
@@ -562,6 +615,10 @@
      "text_ref": "一个完整例子",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -676,7 +733,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "本机只取回几 KB 的文字；第二轮、第三轮审同一张图，本机不再传图。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -731,6 +788,8 @@
 ```
 
 ## 一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“这 40 张网站图要审三轮。”
 
@@ -933,12 +992,12 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "只传点名的文件：一次一个文件、写明用途，不扫整个文件夹（待验收）",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1122,12 +1181,12 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "同一个文件要被 AI 读两次以上",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1137,12 +1196,12 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一批文件的处理流量明显超过文件本身，例如逐张审图、看视频帧",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1157,7 +1216,7 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "画笔调色板",
    "source_phrase": "画图：仍在本机",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -1167,12 +1226,12 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹上传",
    "source_phrase": "不新建 API 令牌、不经手密钥原文：上传只用 Wrangler 已有的网页授权",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1187,7 +1246,7 @@ AI：“40 张已各传到云上一份，其中 3 张和上一轮内容一样，
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "不改代理和网络设置；不为省流量降低图片质量或拉长任务时间",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {

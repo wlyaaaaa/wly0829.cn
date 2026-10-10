@@ -30,6 +30,18 @@
   "url": "/skills/local-secret-broker/",
   "tagline": "让 AI 按规矩用密码中心：查、用、验证、授权",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:45"
+   },
+   "facts": [
+    "近 7 天 AI 用了 68 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -106,8 +118,8 @@
  },
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
-  "sha256": "172a125fc1fdc1fbde86eae5b27e9cf5aebf311f5e2cc174cd4c005c3f67b7ef",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "4831d7dcecc58921103291843c7d252ba90b71eb8dcf74fc168cd3d3a6cb1a27",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -141,15 +153,34 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "53%",
-     "text_ref": "密码和本人验证"
+     "text_ref": "密码和本人验证",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 68 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "align": "left",
      "row": "hero",
-     "text_ref": "这是 AI 用"
+     "text_ref": "这是 AI 用",
+     "width": "53%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -195,6 +226,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "密码和本人验证"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 68 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -333,12 +379,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "窗口里画一把钥匙和一个“已显示”对勾",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -421,6 +467,10 @@
      "text_ref": "一个完整的例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "flow",
      "direction": "vertical",
      "columns": 1,
@@ -494,6 +544,10 @@
      "text_ref": "一个完整的例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "flow",
      "direction": "vertical",
      "columns": 1,
@@ -538,7 +592,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "只搜名称。　AI 用我的原话做一次只看名称的搜索，不先列全部、不看值。",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -548,12 +602,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "找到两条就问我。　搜出一个账号和一张相关的银行卡时，列出两条候选让我选，不自己挑，更不会一次全弹出来。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -583,7 +637,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "看要不要验证。　资料解锁期或无限制授权还有效，就直接弹；没有，就弹四选一窗口，我挑一种验证。点了“取消”，这次就到此为止，AI 不换方式重试。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -598,7 +652,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "本机弹窗。　窗口里显示账号和密码，我自己点“复制”；本机复制不进 Windows 剪贴板历史（开着跨设备同步时例外）。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -638,6 +692,8 @@
 ```
 
 一个完整的例子：“哔哩哔哩账号给我看一下”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **只搜名称。**　AI 用我的原话做一次只看名称的搜索，不先列全部、不看值。
 2. **只挑账号候选。**　问账号时先筛登录条目，不把相关银行卡混进来；同名账号有几条才列出来让我选，不会一次全弹出来。
@@ -966,7 +1022,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "共享节点",
    "source_phrase": "不管，交给谁",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -994,7 +1050,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "共享节点",
    "source_phrase": "不管，交给谁",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {

@@ -103,6 +103,10 @@
         "text_ref": "标题：一个完整例子"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "prose",
         "text_ref": "假如我说："
       },
@@ -161,6 +165,10 @@
         "align": "center",
         "size": "large",
         "text_ref": "标题：一个完整例子"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "prose",
@@ -314,7 +322,7 @@
         "page_break_after": true,
         "direction": "vertical",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_layout": "inline"
       },

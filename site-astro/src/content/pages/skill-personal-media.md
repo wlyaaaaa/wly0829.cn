@@ -30,6 +30,18 @@
   "url": "/skills/personal-media/",
   "tagline": "说个大概，找出照片视频原件或录音里那句话。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 02:29"
+   },
+   "facts": [
+    "近 7 天 AI 用了 4 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -108,7 +120,7 @@
     "SKILL.md 里 --include-private 用于理解本人时的几种场景举例不上网站（涉及不公开的事），只写“你说包括私密的才找”。"
    ],
    "unsure": [
-    "说法和例子是假设的（本人：例子可以是假设）；只有“1 月 21 日洞山公园 140 张（生活与回忆 136、精选 4）”取自查询结果，和项目页第 7 屏一致。",
+    "说法和例子是假设的（本人：例子可以是假设）；原先的地点、日期和张数取自一次真实查询；10 月 10 日按主持决定改成不点名的通用说法（示例不用真实地点、日期和张数）。",
     "找文件原件技能页的网址按 /skills/personal-materials/ 写，要和负责那页的写稿人对齐技能页名。",
     "页名沿用旧网站和项目页第 7 屏的“找照片和录音”；技能自己的显示名是“个人媒体检索”（agents\\openai.yaml），两者不一样。"
    ]
@@ -116,8 +128,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
-  "sha256": "fc0f4ff3e6d98669a4e8fe61cce902245105d71c7a91dce4fd92390b5af21aad",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "5b21dde262b4c29e3a93077e0ffccc5acd365f0fa3d50237bb335314d89726d5",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -147,21 +159,35 @@
      "text_ref": "找照片和录音",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "66%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "text_ref": "说个大概",
-     "row": "intro"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 02:29",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "intro",
-     "width": "34%",
-     "align": "center",
-     "target_width": 290,
-     "target_height": 240
+     "row": "k1a-head",
+     "align": "right",
+     "width": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "说个大概"
     },
     {
      "type": "section_heading",
@@ -171,7 +197,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "“找 1 月下雪",
+     "text_ref": "“找那次下雪",
      "columns": 3,
      "columns_v": 5,
      "split_items": true,
@@ -216,6 +242,21 @@
      "size": "large"
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 02:29",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+    },
+    {
      "type": "prose",
      "text_ref": "说个大概"
     },
@@ -230,7 +271,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "“找 1 月下雪",
+     "text_ref": "“找那次下雪",
      "columns": 1,
      "split_items": true,
      "illustration": "left_inside",
@@ -446,7 +487,7 @@
 
 **这样说就行**
 
-- “找 1 月下雪那天在洞山公园拍的照片。”
+- “找那次下雪去公园拍的照片。”
 - “找我毕业那天拍的照片。”
 - “有段录音里说过‘周五前交表’，在第几分钟？”
 - “把这些放进一个文件夹给我翻翻，看完帮我清掉。”
@@ -479,8 +520,12 @@
      "size": "large"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
-     "text_ref": "我：找 1 月下雪",
+     "text_ref": "我：找那次下雪",
      "columns": 1,
      "sides": [
       "left"
@@ -504,7 +549,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "AI：一共 140 张",
+     "text_ref": "AI：一共一百多张",
      "columns": 1,
      "sides": [
       "right"
@@ -551,8 +596,12 @@
      "size": "large"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
-     "text_ref": "我：找 1 月下雪",
+     "text_ref": "我：找那次下雪",
      "columns": 1,
      "sides": [
       "left"
@@ -576,7 +625,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "AI：一共 140 张",
+     "text_ref": "AI：一共一百多张",
      "columns": 1,
      "sides": [
       "right"
@@ -626,7 +675,7 @@
    "fallback": false,
    "key": "日历",
    "source_phrase": "把我的话拆成条件：地点“洞山公园”（我确认过的现场地点）、日期 1 月 21 日、只要照片；不自己加猜的条件。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -639,7 +688,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "在媒体记录里查，先取 8 张；每张先确认原件还在硬盘上，再拿给我。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -665,7 +714,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "我说看完了，只清掉这一个文件夹，原件不动。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -678,7 +727,7 @@
    "fallback": false,
    "key": "日历",
    "source_phrase": "把我的话拆成条件：地点“洞山公园”（我确认过的现场地点）、日期 1 月 21 日、只要照片；不自己加猜的条件。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -691,7 +740,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "在媒体记录里查，先取 8 张；每张先确认原件还在硬盘上，再拿给我。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -717,7 +766,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "我说看完了，只清掉这一个文件夹，原件不动。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -750,17 +799,19 @@
 
 # 一个完整的例子
 
-**我：**找 1 月下雪那天在洞山公园拍的照片。
+示例：照这个技能的做法写的，不是某一次的记录
 
-**AI：**（几秒）先给 8 张，至少这么多：都是 1 月 21 日在洞山公园拍的，每张附原件在硬盘上的位置。要全部吗？
+**我：**找那次下雪去公园拍的照片。
+
+**AI：**（几秒）先给 8 张，至少这么多：都是下雪那天在那个公园拍的，每张附原件在硬盘上的位置。要全部吗？
 
 **我：**要全部，放进一个文件夹给我翻。
 
-**AI：**一共 140 张（136 张在“生活与回忆”，4 张在“精选”），都放进临时文件夹了，看完告诉我清掉。
+**AI：**一共一百多张，大多在“生活与回忆”，几张在“精选”，都放进临时文件夹了，看完告诉我清掉。
 
 **它背后做了什么**
 
-1. 把我的话拆成条件：地点“洞山公园”（我确认过的现场地点）、日期 1 月 21 日、只要照片；不自己加猜的条件。
+1. 把我的话拆成条件：地点是那个公园（我确认过的现场地点）、日期是下雪那天、只要照片；不自己加猜的条件。
 2. 在媒体记录里查，先取 8 张；每张先确认原件还在硬盘上，再拿给我。
 3. 我要文件夹，就在同一块盘上建一个临时文件夹，用硬链接放进去，不多占空间、不复制原件。
 4. 我说看完了，只清掉这一个文件夹，原件不动。
@@ -951,7 +1002,7 @@
 
 | 你说的 | 它查的 |
 |---|---|
-| “在洞山公园拍的” | 照片自带 GPS 登记的地点；地点没登记就直说，不改成按字搜 |
+| “在那个公园拍的” | 照片自带 GPS 登记的地点；地点没登记就直说，不改成按字搜 |
 | “写着‘毕业典礼’的” | 画面里认出的字、描述、录音转成的文字，只挑 1–4 个关键词 |
 | “上个月”“只要视频” | 日期范围、照片或视频或录音，你说了才加 |
 | “那句话在第几分钟” | 先选定那段录音，再读它已有的带时间的转写 |
@@ -1150,12 +1201,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "结果数正好等于要的张数时，说“至少这么多”，不说“全部”。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1180,12 +1231,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1230,7 +1281,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "不找文档、合同这类非媒体文件：归〔找文件原件〕。",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -1240,12 +1291,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "录音没有带时间的转写时，只说缺什么；你同意了，才在本机补这一段的时间，不上传录音。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1255,12 +1306,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "视频里的某句话在第几分钟，它找不了。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1275,7 +1326,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "不另建索引、不复制原件进别的库。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1366,7 +1417,7 @@
    "fallback": false,
    "key": "文件夹放大镜",
    "source_phrase": "不找文档、合同这类非媒体文件：归〔找文件原件〕。",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -1375,11 +1426,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "key": "文件夹上传",
    "source_phrase": "录音没有带时间的转写时，只说缺什么；你同意了，才在本机补这一段的时间，不上传录音。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1388,11 +1439,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "key": "时钟",
    "source_phrase": "视频里的某句话在第几分钟，它找不了。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1405,7 +1456,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "不另建索引、不复制原件进别的库。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1496,7 +1547,7 @@
    "fallback": false,
    "key": "文件夹放大镜",
    "source_phrase": "不找文档、合同这类非媒体文件：归〔找文件原件〕。",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -1505,11 +1556,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "key": "文件夹上传",
    "source_phrase": "录音没有带时间的转写时，只说缺什么；你同意了，才在本机补这一段的时间，不上传录音。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1518,11 +1569,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "key": "时钟",
    "source_phrase": "视频里的某句话在第几分钟，它找不了。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1535,7 +1586,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "不另建索引、不复制原件进别的库。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

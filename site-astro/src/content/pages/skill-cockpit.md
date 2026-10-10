@@ -30,6 +30,16 @@
   "url": "/skills/cockpit/",
   "tagline": "问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听；新东西顺手加进去。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:43"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -112,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "2b27fee9690a7d37dbcbfe82701edc4b464ab07094f90df477860d83363e2361",
-  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
+  "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -146,16 +156,30 @@
     {
      "type": "chapter_title",
      "text_ref": "看驾驶舱",
-     "align": "center",
+     "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%",
-     "row_fit_illustration": true
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "技能名",
-     "row": "hero"
+     "row": "hero",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -202,6 +226,17 @@
      "text_ref": "看驾驶舱",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -440,12 +475,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "skill-cockpit-02-icon-03",
    "source_phrase": "一个时钟：核对数据什么时候读到的",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -597,12 +632,12 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-03-icon-02",
    "source_phrase": "一张三行的清单：要你做、知道就行、AI 在跟",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -627,12 +662,12 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-03-icon-04",
    "source_phrase": "一个时钟：同一问题只说一次，旧数写明什么时候读到",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -867,7 +902,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "skill-cockpit-04-icon-02",
    "source_phrase": "不做",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {

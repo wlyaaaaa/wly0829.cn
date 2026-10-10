@@ -492,7 +492,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "找1月下雪",
+        "text_ref": "找那次下雪",
         "avatars": "auto",
         "avatar_source": "illustrations",
         "avatar_position": "outside-left",
@@ -507,7 +507,7 @@
       },
       {
         "type": "illustration",
-        "text_ref": "1月21日",
+        "text_ref": "下雪那天",
         "gallery_assets": [
           "_library/illustrations/personal-media-07-snow-01.png",
           "_library/illustrations/personal-media-07-snow-02.png",
@@ -556,7 +556,7 @@
       },
       {
         "type": "dialogue",
-        "text_ref": "找1月下雪",
+        "text_ref": "找那次下雪",
         "avatars": "auto",
         "avatar_source": "illustrations",
         "avatar_position": "outside-left",
@@ -571,7 +571,7 @@
       },
       {
         "type": "illustration",
-        "text_ref": "1月21日",
+        "text_ref": "下雪那天",
         "gallery_assets": [
           "_library/illustrations/personal-media-07-snow-01.png",
           "_library/illustrations/personal-media-07-snow-02.png",
@@ -815,8 +815,8 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
         ],
         "row": "reasons",

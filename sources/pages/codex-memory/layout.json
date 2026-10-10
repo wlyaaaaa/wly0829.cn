@@ -232,7 +232,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "Claude：只备配置",
         "row": "tools-1",
@@ -258,7 +258,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "OpenCode：只备配置",
         "row": "tools-2",
@@ -273,7 +273,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/开关.png"
+          "_library/hires-icons/开关.png"
         ],
         "text_ref": "OpenClaw：什么都不留",
         "row": "tools-2",
@@ -326,7 +326,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "Claude：只备配置",
         "corner_symbol": "cross"
@@ -348,7 +348,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "OpenCode：只备配置",
         "corner_symbol": "check"
@@ -359,7 +359,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "icons": [
-          "_library/icons/开关.png"
+          "_library/hires-icons/开关.png"
         ],
         "text_ref": "OpenClaw：什么都不留",
         "corner_symbol": "pause"
@@ -1220,7 +1220,7 @@
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-5fbd5c4a89d6e83599d1.png"
         ],
         "text_ref": "9月10日笔记本用上同一套",

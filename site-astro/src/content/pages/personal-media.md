@@ -496,20 +496,20 @@
     },
     {
      "id": "n-catalog",
-     "text": "4363 件 · 近 99 GB",
+     "text": "4366 件 · 近 99 GB",
      "meaning": "目录库 media 表条数（图片 3485、视频 118、音频 760），大小按每件原件路径取文件大小相加＝98.63 GB（十进制）",
-     "as_of": "2026-09-28",
-     "source": "只读打开 E:\\Media\\_manifests\\personal-media-current\\catalog.sqlite3 现算",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字（截至 10 月 9 日）",
      "screens": [
       "personal-media-01"
      ]
     },
     {
      "id": "n-phone-picks",
-     "text": "2376 件",
+     "text": "2377 件",
      "meaning": "要放回手机的精选包件数（45.42 GB）",
-     "as_of": "2026-09-28",
-     "source": "E:\\Media\\_manifests\\personal-media-current\\recovery-sync-receipt.json（9 月 28 日 17:11 北京时间，status=PASS，items=2376）",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-media-01"
      ]
@@ -549,8 +549,8 @@
     },
     {
      "id": "n-dongshan",
-     "text": "4 秒找出那天的 140 张",
-     "meaning": "真实查询 search --place 洞山公园 --media-type image --from-date 2026-01-21 --to-date 2026-01-21：matched 140（生活与回忆 136、精选 4）；--limit 8 实测用时 3.99 秒",
+     "text": "4 秒找出那天的一百多张",
+     "meaning": "一次真实查询：按那次下雪去的公园和当天日期、只要照片，找到一百多张（生活与回忆、精选两类）；只取前 8 张时实测用时 3.99 秒。示例不点名地点和日期",
      "as_of": "2026-09-28",
      "source": "V:\\Personal\\Projects\\personal-media\\personal_media.py search 只读实跑",
      "screens": [
@@ -870,7 +870,7 @@
     "底稿（inventory）把手机保全、清理、差异回写、反向删除和本人复核标“待验收”，本页沿用 v7 的“在用”：依据是本人 9 月 27 日 ZS15 终审“手机部分做完，之后只修报错”和 9 月 26 日的实际回执；底稿的“待验收”只是它这次没现场核。",
     "第 9 屏第 3 张卡改了说法：v7 写“语音转写都在本机显卡上跑”，但中文语音转写对难听清的录音会在免费期内自动送云端复核（E:\\.agents\\skills\\chinese-asr\\SKILL.md 第 16 行），改成“只有难听清的录音在免费期内整段送云端复核一遍”（审稿第 1 条纠正：送的是整段不是片段，见 chinese-asr references\\cloud-and-important-evidence.md），同一张卡补写看图的是正在干活的 Codex 或 Claude、缩略图会发到云端。",
     "第 9 屏数字从 16304 行、443 个改成 16439 行、455 个（9 月 28 日提交 7cb814c 新增云维护代码和 12 个测试），口径同 v7。",
-    "资料解锁后重查（后按协调者更正停止找例子）：第 7 屏按查询结果改成“4 秒找出那天的 140 张”（--place 洞山公园、1 月 21 日、只要照片；地点来源是本人确认的现场地点，所以说明卡补“或我确认过的地点”）；第 2 屏“上次”改成“9 月 26 日那次”（那天之后还连过两次）；第 1 屏的例子是 9 月 26 日那次连手机的回执数字（只有件数，没有私人内容）；第 35 项例子按 README 第 150 行写“健康和基因检测结果这类”；第 3、15 项找到使用记录，恢复“在用”。第 2、7 屏因此改为局部修改，不再沿用原图。",
+    "资料解锁后重查（后按协调者更正停止找例子）：第 7 屏按查询结果改成“4 秒找出那天的一百多张”（按地点和当天日期、只要照片；地点来源是本人确认的现场地点，所以说明卡补“或我确认过的地点”）；第 2 屏“上次”改成“9 月 26 日那次”（那天之后还连过两次）；第 1 屏的例子是 9 月 26 日那次连手机的回执数字（只有件数，没有私人内容）；第 35 项例子按 README 第 150 行写“健康和基因检测结果这类”；第 3、15 项找到使用记录，恢复“在用”。第 2、7 屏因此改为局部修改，不再沿用原图。",
     "替本人口吻写的新句子（上线前请本人过目）：第 4 屏“点一张看大图。”；第 5 屏“手机上的文档：留下的放进它所属项目的原件文件夹（比如合同进‘正式事项’，学习资料进‘学习资料’），交给个人材料查找去找；不放回手机。”；第 11 屏“找到后想知道里面有没有我：见照片录音里有没有我”；第 13 屏第 35 项新说法；第 14 屏 9 月 28 日那条。",
     "Drive 被挡的原因（协调者 9 月 28 日告知）：网盘接口要求调用方声明个人资料访问分级，本项目这边没带，正有人修；页面不等它，第 13、26 项照实标待验收。",
     "拼页配置 personal-media-build-config.json 里第 2 屏审批页小样的两个热区指向 #approval，本页没有这个锚点；建议改指 #f-review-page。第 8 屏“中文语音转写”热区原指 /projects/chineseasr/，manifest 的 slug 是 chinese-asr，本页按 /projects/chinese-asr/ 写。"
@@ -879,8 +879,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "f382150fc98714cab6dc6c4cb12350be0703e27fca6e955b958b3a667f06015c",
-  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
+  "sha256": "905e850440e6407ff6caaf0730e79e8e8d66a198472dce90659b43cc3103eee8",
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -1101,12 +1101,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1116,12 +1116,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1639,12 +1639,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1654,12 +1654,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1669,12 +1669,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1684,12 +1684,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1867,7 +1867,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "手机上的文档：留下的放进它所属项目的原件文件夹（比如合同进“正式事项”，学习资料进“学习资料”），交给〔个人材料查找〕去找；不放回手机。",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -1877,12 +1877,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "Google 相册：留下的照片视频满 30 天才传，免得我反悔还得去云端删；还没上传的先留在电脑。精选的分进各个相册，其余进一个叫“其他归档”的相册；同一张只传一份，换相册不重传。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1907,12 +1907,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "PSD 设计稿：只留在电脑，不上传。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1982,8 +1982,8 @@
   "id": "personal-media-07",
   "section": "usage",
   "title": "找东西",
-  "scene": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-06-desktop.png 为底，用局部修改只改三处：大字“几秒找出那天的 20 张。”改成“4 秒找出那天的 140 张。”；四张结果图下的“1 月　洞山公园”都改成“1 月 21 日　洞山公园”；第一张说明卡里“（照片自带的 GPS）”改成“（照片自带的 GPS，或我确认过的地点）”，字多了可以多一行。其余一律不动。画面：左上一个戴眼镜的人拿手机说话，对话气泡；右上机器人拿放大镜，雪中公园石碑；中间四张雪景结果图；下面三张说明卡；最底一条“怎么跟 AI 说”和右边的按钮。",
-  "portrait": "竖版 9:16：人物和气泡在上，“4 秒找出那天的 140 张。”跟在下面，机器人和石碑缩小放在右侧；四张结果图改成两行两列；三张说明卡一行一张；最底那条保留，按钮换到这条字下面、右对齐。字和横版完全一样。",
+  "scene": "以已通过的横版原图 E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\personal-media\\screen-06-desktop.png 为底，用局部修改只改三处：大字“几秒找出那天的 20 张。”改成“4 秒找出那天的一百多张。”；四张结果图下的“1 月　公园”都改成“下雪那天　公园”；第一张说明卡里“（照片自带的 GPS）”改成“（照片自带的 GPS，或我确认过的地点）”，字多了可以多一行。其余一律不动。画面：左上一个戴眼镜的人拿手机说话，对话气泡；右上机器人拿放大镜，雪中公园石碑；中间四张雪景结果图；下面三张说明卡；最底一条“怎么跟 AI 说”和右边的按钮。",
+  "portrait": "竖版 9:16：人物和气泡在上，“4 秒找出那天的一百多张。”跟在下面，机器人和石碑缩小放在右侧；四张结果图改成两行两列；三张说明卡一行一张；最底那条保留，按钮换到这条字下面、右对齐。字和横版完全一样。",
   "links": [
    {
     "text": "找照片和录音",
@@ -2011,7 +2011,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "找1月下雪",
+     "text_ref": "找那次下雪",
      "avatars": "auto",
      "avatar_source": "illustrations",
      "avatar_position": "outside-left",
@@ -2026,7 +2026,7 @@
     },
     {
      "type": "illustration",
-     "text_ref": "1月21日",
+     "text_ref": "下雪那天",
      "gallery_assets": [
       "_library/illustrations/personal-media-07-snow-01.png",
       "_library/illustrations/personal-media-07-snow-02.png",
@@ -2069,7 +2069,7 @@
     },
     {
      "type": "dialogue",
-     "text_ref": "找1月下雪",
+     "text_ref": "找那次下雪",
      "avatars": "auto",
      "avatar_source": "illustrations",
      "avatar_position": "outside-left",
@@ -2084,7 +2084,7 @@
     },
     {
      "type": "illustration",
-     "text_ref": "1月21日",
+     "text_ref": "下雪那天",
      "gallery_assets": [
       "_library/illustrations/personal-media-07-snow-01.png",
       "_library/illustrations/personal-media-07-snow-02.png",
@@ -2146,7 +2146,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "AI 查的是每件的记录：拍摄时间、地点、一句描述、画面里的字、录音转成的文字，不用去翻硬盘。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2292,11 +2292,11 @@
 
 # 找东西
 
-找 1 月下雪那天在洞山公园拍的照片。
+找那次下雪去公园拍的照片。
 
-**4 秒找出那天的 140 张。**
+**4 秒找出那天的一百多张。**
 
-1 月 21 日　洞山公园　1 月 21 日　洞山公园　1 月 21 日　洞山公园　1 月 21 日　洞山公园
+下雪那天　公园　下雪那天　公园　下雪那天　公园　下雪那天　公园
 
 - 可以按哪天、在哪（照片自带的 GPS，或我确认过的地点）、拍了什么、画面里写着什么字、录音里说过什么来找，照片和视频能分开找。
 - AI 查的是每件的记录：拍摄时间、地点、一句描述、画面里的字、录音转成的文字，不用去翻硬盘。
@@ -2659,12 +2659,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库",
    "source_phrase": "连上手机：USB 数据线 + ADB，手机上不装 App",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -2674,12 +2674,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "认出已有的：每个文件算 SHA-256 内容指纹，和记录里已有的比，已有的不再拉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2709,7 +2709,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "看内容：25 张缩略图拼一张，交给正在干活的 Codex 或 Claude 看（缩略图会发到云端，原件不发）；截图里的字交给〔本地文字识别〕，录音交给〔中文语音转写〕",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2719,12 +2719,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "定去留：没用的出去，重复的留一张，留下的分类、写描述；拿不准的上审批页",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2739,7 +2739,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "记下来：SQLite 记录 + FTS5 全文检索；文字版存在 GitHub 私有仓库",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -2749,12 +2749,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "送出去：精选放回手机（≤ 60 GB）；满 30 天上传 Google 相册、Drive",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -2769,7 +2769,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "每天 17:10 维护：更新记录，备份硬盘跟着同步，更新要放回手机的精选，再启动云端维护",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2852,8 +2852,8 @@
      "columns": 1,
      "columns_v": 1,
      "icons": [
-      "_library/icons/代码窗口.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
      ],
      "row": "reasons",
@@ -2963,7 +2963,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "给模型看的只是缩略图。缩略图拼成总览，交给正在干活的 Codex 或 Claude 看（会发到云端），原件不发；文字识别（PP-OCRv6）在本机显卡上跑，语音转写（SenseVoice、Qwen3-ASR 等）也在本机，只有难听清的录音在免费期内整段送云端复核一遍。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2988,12 +2988,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "不会重复上传。每件记下 Google 给的编号，断了重跑也不传第二遍。",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -3008,7 +3008,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "记录坏了能重建。用 GitHub 私有仓库里的文字版重建，云端编号一起恢复，不用重新上传。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3017,12 +3017,12 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "16439 行 Python 正式代码（6 个文件）",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3031,12 +3031,12 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "455 个 自动测试",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3060,12 +3060,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "16439 行 Python 正式代码（6 个文件）",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3080,7 +3080,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "455 个 自动测试",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -3514,7 +3514,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "找录音里的某句话｜说出那句话里的几个词，它告诉我在第几分第几秒（那段录音要先转过带时间的文字）｜黄",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3529,7 +3529,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "把找到的放进一个文件夹｜找到的原件临时放进一个文件夹给我翻，不多占空间，看完就清掉｜绿",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3584,12 +3584,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "挑出值得留的｜没用的不留（有用的事实先记进理解库），重复的只留一张，留下的分类、写描述、写出删掉会失去什么｜绿·只修报错",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3604,7 +3604,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "录音和文档一起整理｜录音看转写定去留，文档交给〔个人材料查找〕｜绿·只修报错",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -3629,12 +3629,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "审批页｜拿不准的做成一页，看着实物点保留或不留，带一栏抽查；我留下的它以后不能再撤｜绿",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3973,12 +3973,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "同一段视频只留一种格式｜同一段视频有 MP4 和 MOV 两个文件，画面完全一样就只留一个｜绿",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4123,12 +4123,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "传完叫回 AI｜上传要跑几个小时，传完或出错自动把 AI 叫回来收尾｜绿",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -4138,12 +4138,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "云端自动跟上｜每天维护后自动处理云端：满 30 天的新文件上传；电脑上删了的，录音进 Drive 回收站，照片视频攒够 30 张由 AI 开网页一次删｜黄",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -4351,7 +4351,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "每天维护｜每天 17:10 按硬盘上的实际情况更新记录，同步到备份硬盘，更新要放回手机的精选｜绿",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -4366,7 +4366,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "记录坏了重建｜从存档的文字版把整份记录重建出来，云端编号一起恢复，不用重新上传｜灰",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4381,7 +4381,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "记录存进 GitHub｜整理完把整份记录的文字版存进私有仓库｜绿",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -4396,7 +4396,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "清理搜索里的杂音｜把混进描述里的整理过程挪出去，搜索不再冒出无关结果｜绿",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -4421,12 +4421,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "检查记录是否完好｜记录有没有坏、一共多少件、硬盘接没接着｜绿",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4661,12 +4661,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件夹上传",
    "source_phrase": "上传的云",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -4691,12 +4691,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "打勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {

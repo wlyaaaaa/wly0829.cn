@@ -570,7 +570,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "只给汇总：查卡顿用的这几个入口只回数字，从不返回程序名、窗口",
         "row": "diagnosis-result",
@@ -642,7 +642,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "只给汇总：查卡顿用的这几个入口只回数字，从不返回程序名、窗口"
       },

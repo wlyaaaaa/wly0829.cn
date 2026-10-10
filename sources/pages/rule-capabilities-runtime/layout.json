@@ -313,7 +313,7 @@
       {
         "type": "notice",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "illustration": "left_inside",
         "text_ref": "清单现在写的"
@@ -358,7 +358,7 @@
       {
         "type": "notice",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "illustration": "left_inside",
         "text_ref": "清单现在写的"

@@ -281,7 +281,7 @@
         "text_ref": "能装回的：2 个文件",
         "icons": [
           "_library/icons/绿叶装饰.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
         ],
         "grouped_items": true,
@@ -299,7 +299,7 @@
         "connector": "none",
         "text_ref": "只记清单：18 个文件",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "list_layout": "seven_plugin_theme_rows",
         "active_icon_rows": [
@@ -322,7 +322,7 @@
         "connector": "none",
         "text_ref": "不碰的",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "tone": "gray",
         "last_full_width": true,
@@ -364,7 +364,7 @@
         "text_ref": "能装回的：2 个文件",
         "icons": [
           "_library/icons/绿叶装饰.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
         ],
         "illustration_order": "before_heading"
@@ -378,7 +378,7 @@
         "connector": "none",
         "text_ref": "只记清单：18 个文件",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "list_layout": "seven_plugin_theme_rows",
         "active_icon_rows": [
@@ -453,8 +453,8 @@
         "icons": [
           "_library/icons/绿叶装饰.png",
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/hires-icons/打勾清单.png"
         ],
         "item_count": 4
       }
@@ -547,7 +547,7 @@
         "connector": "none",
         "text_ref": "存到一半断电",
         "icons": [
-          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
         ]
       },
       {
@@ -559,7 +559,7 @@
         "connector": "none",
         "text_ref": "好久没存上",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ]
       }
     ],
@@ -617,10 +617,10 @@
         "text_ref": "先装软件",
         "columns_v": 1,
         "icons": [
-          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/icons/指向手.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "name_in_card": true,
         "item_illustration_v": [
@@ -686,10 +686,10 @@
         "text_ref": "先装软件",
         "columns_v": 1,
         "icons": [
-          "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+          "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
           "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "_library/icons/指向手.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "name_in_card": true,
         "item_illustration_v": [
@@ -917,7 +917,7 @@
         "connector": "none",
         "text_ref": "Python 只用标准库",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "row": "cards-2",
         "width": "50%"
@@ -994,7 +994,7 @@
         "connector": "none",
         "text_ref": "Python 只用标准库",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ]
       },
       {
@@ -1264,13 +1264,13 @@
         "text_ref": "核心设置",
         "portrait_columns": 1,
         "icons": [
-          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/icons/文件齿轮.png",
-          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/icons/版本循环文件.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png"
         ],
         "item_count": 8,
@@ -1286,7 +1286,7 @@
         "text_ref": "卸载跟着删",
         "portrait_columns": 1,
         "icons": [
-          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png"
+          "_library/hires-icons/01-绿叶装饰-clean.png"
         ],
         "item_count": 1,
         "status_position": "bottom_right",
@@ -1313,7 +1313,7 @@
         "icons": [
           "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
           "_library/icons/followup-r3-steam08-three-drives.png",
-          "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+          "_library/hires-icons/01-绿叶装饰-clean.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png",
           "_library/round3/clean-assets/png/12-文件核验-clean.png"
         ],

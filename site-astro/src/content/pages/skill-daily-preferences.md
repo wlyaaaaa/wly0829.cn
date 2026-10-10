@@ -30,6 +30,18 @@
   "url": "/skills/daily-preferences/",
   "tagline": "带着对我的了解回答，说错了一纠正就改。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:14"
+   },
+   "facts": [
+    "近 7 天 AI 用了 16 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -154,8 +166,8 @@
  },
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
-  "sha256": "8e44b1645806f9b923099352d4548164b9a5e60815f88674085a3bfa87e5075b",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "843edc9caa622efc8f35fb77f3b5dc5cb27a5d1407e14689dae99f411611ef59",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -189,22 +201,37 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "60%",
-     "text_ref": "记得我是谁"
+     "text_ref": "记得我是谁",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "intro",
-     "text_ref": "问题的答案取决于我是谁时"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "intro",
-     "width": "40%",
+     "row": "k1a-head",
      "illustration": "outside",
-     "align": "center",
-     "target_width": 358
+     "align": "right",
+     "width": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "问题的答案取决于我是谁时"
     },
     {
      "type": "section_heading",
@@ -246,6 +273,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "记得我是谁"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -479,14 +521,14 @@
      "align": "left",
      "size": "large",
      "row": "heading",
-     "width": "84%",
+     "width": "40%",
      "text_ref": "一个完整的例子"
     },
     {
      "type": "tag",
      "row": "heading",
-     "width": "16%",
-     "text_ref": "示意"
+     "width": "60%",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -535,16 +577,12 @@
      "align": "left",
      "size": "large",
      "row": "heading",
-     "row_v": true,
-     "width": "84%",
      "text_ref": "一个完整的例子"
     },
     {
      "type": "tag",
      "row": "heading",
-     "row_v": true,
-     "width": "16%",
-     "text_ref": "示意"
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -663,7 +701,7 @@
 
 # 一个完整的例子
 
-示意
+示例：照这个技能的做法写的，不是某一次的记录
 
 **我：**这两周在赶工，推荐吃的先挑快的、能外卖的，下个月恢复。
 
@@ -929,7 +967,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "我的经历、眼下的处境、做事的取舍，和吃喝、购物、出行、娱乐、数码、工具习惯、审美这些日常偏好。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -954,12 +992,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "别的项目做事时发现的、以后还用得上的我的新情况。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1059,12 +1097,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "预算、负债、投资的规划不在这里做，这里只给消费事实和生活取舍。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1074,12 +1112,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "不替我下单，也不替我只选一个（我说“直接替我选”时除外）。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1094,7 +1132,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "不判断“现在用电脑的是不是本人”；资料锁着时不读，也不换个来源绕过去。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

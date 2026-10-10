@@ -112,7 +112,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+          "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
           "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
           "_library/icons/文件夹.png",
           "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
@@ -121,13 +121,8 @@
         "text_ref": "放进去"
       },
       {
-        "type": "document_mock",
-        "text_ref": "常用",
-        "variant": "terminal"
-      },
-      {
         "type": "prose",
-        "text_ref": "在终端里运行"
+        "text_ref": "运行后的菜单分三类"
       },
       {
         "type": "prose",
@@ -159,7 +154,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+          "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
           "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
           "_library/icons/文件夹.png",
           "_library/fix-round-2/icon-clean-15ef475fee6a286d05b7.png",
@@ -169,13 +164,8 @@
         "columns_v": 1
       },
       {
-        "type": "document_mock",
-        "text_ref": "常用",
-        "variant": "terminal"
-      },
-      {
         "type": "prose",
-        "text_ref": "在终端里运行"
+        "text_ref": "运行后的菜单分三类"
       },
       {
         "type": "prose",
@@ -467,8 +457,8 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
         "row": "principles",
@@ -507,8 +497,8 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
           "_library/icons/版本循环文件.png"
         ],
         "text_ref": "3595 行",

@@ -200,10 +200,10 @@
    "numbers": [
     {
      "id": "n-registered",
-     "text": "164 份",
+     "text": "165 份",
      "meaning": "精确登记的原件定位，全部核对过 SHA-256",
-     "as_of": "2026-09-28",
-     "source": "materials.py status 与只读 SQL（open_state=verified 164）",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字（截至 10 月 9 日）",
      "screens": [
       "personal-materials-01",
       "personal-materials-05",
@@ -214,10 +214,10 @@
     },
     {
      "id": "n-sources",
-     "text": "53 个来源",
+     "text": "58 个来源",
      "meaning": "已登记来源：文件夹 35、文件名清单 5、交接文件夹 8、单个文件 5",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL group by source_kind；status sources=53",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-01",
       "personal-materials-06",
@@ -267,20 +267,20 @@
     },
     {
      "id": "n-sync-runs",
-     "text": "31 次，全部成功",
+     "text": "41 次，全部成功",
      "meaning": "每日维护里 materials_sync_current 这一步的次数：9 月 5–28 日每天 17:10 共 24 次，另有手动补跑 7 次（北京 9 月 7、9 日各 1 次，13 日 4 次，14 日 1 次）",
-     "as_of": "2026-09-28",
-     "source": "%LOCALAPPDATA%\\PCConfig\\logs\\hot-backup\\personal-replica-*.log，9 月 5–28 日北京 17:10",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-01"
      ]
     },
     {
      "id": "n-filenames",
-     "text": "15,210 条",
+     "text": "15,105 条",
      "meaning": "微信收到的文件和下载文件夹的文件名清单条目",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL count(*) from filename_entries",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-03",
       "personal-materials-06"
@@ -525,8 +525,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "27eed6d1705f258a9c6b13b786754ae63b5fca11bd2c42cac3ca3d6a6c9567dc",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "sha256": "f4ccda04c156f606fa89eb1a457b156e51f0470ee64ee7532d809b2474c0b9e3",
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -604,7 +604,7 @@
      "label_position": "above",
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文件夹.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
@@ -692,7 +692,7 @@
      "label_position": "above",
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文件夹.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
@@ -759,12 +759,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一页带对勾的文件",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -794,7 +794,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一堆纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1250,7 +1250,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "凭印象找一份合同\n说“去年租房签的那份合同”。它在登记过的原件里比对标题和已知文字，给出4个以内的候选，写明是标题对上了还是正文对上了，分清草稿、签字版和一模一样的副本。\n草稿签字版",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1533,7 +1533,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "两页纸中间一个不等号",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1548,7 +1548,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一页只有空白的扫描纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1573,12 +1573,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个红色感叹号",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1809,12 +1809,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "听懂你的话｜AI 把你的描述交给它；它先去掉“帮我找”“那份”“放哪了”这类口头词",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1829,7 +1829,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "先查登记｜在登记过的 164 份里比对标题、来源和已知文字，平时给 4 个候选，最多 10 个",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1844,7 +1844,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "不够再现找｜挑最相关的至多 8 个来源按文件名找：合计不超过 2,500 个文件、每个来源 12 层、8 秒；微信和下载查文件名清单",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1874,7 +1874,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "翻到那一页｜读出这一份的文字，返回页码、段落或行号，附不超过 280 字的原文",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1889,7 +1889,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "交出去｜AI 直接读这个位置；你要自己看，才用电脑的默认软件打开",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2097,12 +2097,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "4,192 行｜Python，就一个文件",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2117,7 +2117,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "106 个｜自动测试，9 月 28 日全部通过",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2132,7 +2132,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "0 字节｜复制的原件",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2142,12 +2142,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2791,12 +2791,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2806,12 +2806,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2821,12 +2821,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2836,12 +2836,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3164,7 +3164,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "凭印象找｜说记得的标题、用途或一句话，在登记过的原件里给出几个候选，写明是标题对上还是正文对上｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3209,7 +3209,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "微信和下载的文件名清单｜微信收到的文件、下载文件夹每天记一份文件名清单，扩大找时一起查，排前面的现场确认还在｜在用",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -3254,7 +3254,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "扫描件先认字｜PDF 没有文字层时，只把这一份交给本地文字识别，找到的位置对回原 PDF 的页码｜说不准",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3284,7 +3284,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "精确登记｜别的项目交来一份文件的路径、大小和指纹，现场复算对上才登记；只记位置，不复制原件｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3299,7 +3299,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "按内容查重｜交来一批内容指纹（一次最多 1000 个），告诉你哪些已有一模一样的原件、在哪｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3314,7 +3314,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "删了就不再找｜每天 17:10 去掉我已删掉的原件那一条；文件夹打不开、内容变了都不删｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3324,12 +3324,12 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "看还有多少｜按需数一遍来源里有多少非媒体文件、多少已登记，写明几点数的、是不是“至少”｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3344,7 +3344,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "撤掉失效的来源｜整个文件夹已经不存在、也不再指向任何原件时，才撤掉这条来源登记｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3533,7 +3533,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹放大镜",
    "source_phrase": "8 月 25 日 旧的个人知识库退役；同一天建成个人材料查找：只在登记范围里给少量候选，听得懂平常说法",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -3578,7 +3578,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "9 月 2 日 能数清来源里还有多少文件",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3593,7 +3593,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹放大镜",
    "source_phrase": "9 月 3 日 我删了就是删了；去掉失效登记挪进每天的维护，查找不再顺手改登记",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -3623,7 +3623,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "9 月 11 日 按内容指纹查重，清手机时用上",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3638,7 +3638,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "9 月 24 日 读私人资料前先过统一的资料锁",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3653,7 +3653,7 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "9 月 26 日 微信收到的文件和下载文件夹也能按文件名找到；两个已清空的学习资料文件夹（Jenkins 参考、Linux 与 Kafka）撤掉了来源登记，原件一个没动",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

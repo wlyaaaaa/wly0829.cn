@@ -30,6 +30,18 @@
   "url": "/skills/google-workspace-direct/",
   "tagline": "查邮件、找云盘文件、记待办，也能等验证码。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 22:11"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -133,8 +145,8 @@
  },
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
-  "sha256": "41fc28ca1b8852703d4b4975268be8991276e5786c0798dd322d568da2cedd58",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "314b330bbe7b499851d2a97c170d933d91b099b1c68118dc2f9dce216c0e7b17",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -172,21 +184,40 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
-     "text_ref": "大标题：邮件、云盘和待办"
+     "text_ref": "大标题：邮件、云盘和待办",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
-     "row": "hero",
      "size": "large",
      "bold": true,
-     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 22:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个"
+     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -198,7 +229,12 @@
      "type": "dialogue",
      "columns": 2,
      "split_items": true,
-     "text_ref": "怎么跟 AI 说"
+     "text_ref": "怎么跟 AI 说",
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-google-workspace-direct\\page.json",
@@ -241,6 +277,21 @@
      "size": "large",
      "bold": true,
      "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 22:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -367,6 +418,10 @@
      "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”"
     },
@@ -483,6 +538,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -619,12 +678,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一只手从几张卡片里挑出一张",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -649,12 +708,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张被划掉的信封",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -664,12 +723,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "时钟",
    "source_phrase": "一只时钟",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -730,6 +789,8 @@
 
 标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办
 
+示例：照这个技能的做法写的，不是某一次的记录
+
 假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”
 
 1. **不反问**：资料已解锁（锁着就先请我验证）；不问是哪个网站、要哪类码，直接查最近 10 分钟收到的全部邮件（翻完所有页），读新邮件的正文，按收到时间从新到旧排。
@@ -772,6 +833,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "numbered_steps",
@@ -840,6 +905,10 @@
      "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "numbered_steps",
      "columns": 1,
      "columns_v": 1,
@@ -901,12 +970,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个信封",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -916,12 +985,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一根把两封信串在一起的绿线",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -931,12 +1000,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一枚回形针别着一份 PDF",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -946,12 +1015,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张写着“草稿”的便签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1011,6 +1080,8 @@
 ```
 
 标题：再一个例子：“按这个意思回复原邮件，附上桌面那份 PDF”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **找到原邮件**：按我给的线索搜，读正文；要看来回经过才读整个线程。
 2. **回到原线程**：用原邮件指定的回复地址和原主题，接上原线程的编号，不靠在标题前加“Re:”假装同一个线程；有别的收件人时去掉我自己，只有我发给自己的线程才保留我；密送的人不复制；不借回复另换收件人或主题。
@@ -1193,12 +1264,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "搜邮件一次带正文｜一次调用搜一页（默认 10 封）并读出正文；只要定位就只取主题、发件人和时间。只在这一页里排时间，不假称“全邮箱最新”；要汇总全部，就翻完所有页并去重",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1213,7 +1284,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "把话翻成搜索条件｜人、主题、时间、文件夹一起拼成 Gmail 和云盘自己的查询，不把整句原话当精确短语；没结果先查条件是不是太窄、换别名和同义词，不马上说“没有”",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -1243,7 +1314,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "找到就接着读｜Google 文档导出成文字，普通文件下载后由 AI 选合适的读法来读，并附上原文件链接",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1253,12 +1324,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "等邮箱验证码｜见第一个例子",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1283,12 +1354,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "待办按原意｜先拿准清单编号再查改；到期只到日期，不当成几点截止；修改只改我点名的字段；“隐藏”只能查、不能设",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {

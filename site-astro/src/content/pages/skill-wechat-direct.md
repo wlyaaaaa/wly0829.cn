@@ -30,6 +30,18 @@
   "url": "/skills/wechat-direct/",
   "tagline": "问微信里的事，AI 只读点名的那一段。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:21"
+   },
+   "facts": [
+    "近 7 天 AI 用了 12 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -94,8 +106,8 @@
  },
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
-  "sha256": "3ed9a9e2e5e0589adaa13462129142a2b291cdffe00aed4bbcf71b2998626bc9",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "52668fe98fcc1274589150c20bcbff4291c2897b75a280c5ca944171561fa8f2",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -128,14 +140,33 @@
     {
      "type": "chapter_title",
      "align": "left",
-     "row": "intro",
-     "width": "64%",
-     "text_ref": "看微信聊天"
+     "text_ref": "看微信聊天",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "intro",
-     "text_ref": "技能名：wechat-direct"
+     "text_ref": "技能名：wechat-direct",
+     "width": "64%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -178,6 +209,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "看微信聊天"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -306,6 +352,10 @@
      "text_ref": "一个完整例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
      "sides": [
       "right"
@@ -342,6 +392,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "一个完整例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -387,7 +441,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "两个名牌只亮了一个",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -449,6 +503,8 @@
 ```
 
 ## 一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 **我说**：项目群上周五最后定的交付时间是哪天？那句“可以”回的是哪条？
 
@@ -547,12 +603,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张列着勾选项的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {

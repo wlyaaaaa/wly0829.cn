@@ -1067,7 +1067,7 @@
  "source": {
   "page": "sources/pages/password-center/page.json",
   "sha256": "0e90c5fcf8aa14ee49c8270b62b2542700b4f00ec73e89cc810230b384706e30",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -1230,7 +1230,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "处｜加密恢复副本：私人 GitHub、机箱里的 G 盘、外接的 H 盘，任一处加一种验证就能找回",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -1240,12 +1240,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "个｜登记过能取 key 的程序，key 直接交给程序",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1260,7 +1260,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "–72 小时｜验证一次，AI 在这段时间里可以用我的私人资料",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1544,12 +1544,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一顶绿色小皇冠",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1949,12 +1949,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "时钟",
    "source_phrase": "手机动态码 手机验证器上的 6 位码，每 30 秒换一次（TOTP）。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1999,7 +1999,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "验证连错会冷却（本机窗口和网页各算各的）：5分钟内错到第6次，停5分钟；冷却完再错，依次停15、30、60分钟……最长24小时。点“取消”只结束这一次，不会顺手锁资料，也不会自动换一种方式重来。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2014,7 +2014,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "验证连错会冷却（本机窗口和网页各算各的）：5分钟内错到第6次，停5分钟；冷却完再错，依次停15、30、60分钟……最长24小时。点“取消”只结束这一次，不会顺手锁资料，也不会自动换一种方式重来。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2540,7 +2540,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "GitHub标志",
    "source_phrase": "一朵云里的 GitHub 小猫标志",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3081,7 +3081,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "→ KDBX 密码库｜文件加密｜资料解锁期和无限制授权的状态",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3126,7 +3126,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "约 10.2 万行自有代码（Python 7.9 万行、PowerShell 2.2 万行），134 项登记测试，7 月 26 日起 389 次提交。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3136,12 +3136,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "密码中心管产品：密码、验证方式、手机协议、加密文件格式、恢复副本格式。",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -3166,12 +3166,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3181,12 +3181,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3208,11 +3208,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "AI 调用的命令",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3290,7 +3290,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "资料解锁期和无限制授权的状态",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3325,11 +3325,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "AI 调用的命令",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3407,7 +3407,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "资料解锁期和无限制授权的状态",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3527,7 +3527,7 @@
        "column": 1,
        "row_v": 2,
        "column_v": 1,
-       "icon": "_library/icons/数据库.png"
+       "icon": "_library/hires-icons/数据库.png"
       },
       {
        "id": "file-root",
@@ -3536,7 +3536,7 @@
        "column": 2,
        "row_v": 3,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+       "icon": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
       },
       {
        "id": "phone",
@@ -3637,7 +3637,7 @@
        "column": 1,
        "row_v": 2,
        "column_v": 1,
-       "icon": "_library/icons/数据库.png"
+       "icon": "_library/hires-icons/数据库.png"
       },
       {
        "id": "file-root",
@@ -3646,7 +3646,7 @@
        "column": 2,
        "row_v": 3,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+       "icon": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
       },
       {
        "id": "phone",
@@ -3744,12 +3744,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "文件根钥匙：加密文件另有一把随机根钥匙；每个 .pcaf 一把包钥匙，包里每个文件再一把钥匙，按 4 MiB 分块用 AES-256-GCM 加密。",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -3951,7 +3951,7 @@
        "count": 1,
        "row": 2,
        "column": 2,
-       "icon": "_library/icons/数据库.png",
+       "icon": "_library/hires-icons/数据库.png",
        "align_self": "stretch"
       },
       {
@@ -3959,7 +3959,7 @@
        "count": 1,
        "row": 2,
        "column": 3,
-       "icon": "_library/icons/数据库.png",
+       "icon": "_library/hires-icons/数据库.png",
        "align_self": "stretch",
        "row_note_from": "9 月 29 日起",
        "row_note_row": 3
@@ -4085,7 +4085,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "私人 GitHub：电脑配置库的私人分支 secret-broker-backup，每次整份提交。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -4095,12 +4095,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "G 盘：自动写入，留最近 14 天。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4391,7 +4391,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "4 个放进程序自己的环境（高德出行查询、GitHub 账号读取、Google 健康数据导入、学习用的百炼转发）：核对是登记过的程序后，把 key 放进它运行时的环境变量里，程序用完即走，AI 的对话里看不到值。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -4627,12 +4627,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个被轻轻放下的“取消”按钮",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4657,12 +4657,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张表格被划掉一半",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4672,12 +4672,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个剪贴板上贴着“不进历史”的小标签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5046,7 +5046,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "搜索条目｜按名称、账号或用途找到要用的那一条｜在用",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -5056,12 +5056,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "查看条目｜忘了账号信息时，在本机窗口看完整内容｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5161,12 +5161,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "剪贴板历史标签｜同一个窗口里看最近复制过的内容｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5176,12 +5176,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "把 key 交给登记的程序｜登记过的程序要调用服务时，key 直接交给程序｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -5191,12 +5191,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "按厂商登记 key｜通义千问、智谱 GLM、DeepSeek 各登记一把，换模型换项目不用重登｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5211,7 +5211,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "给 Codex 交 key｜AI 工具配置管理让 Codex 用厂商 key 时，经本机管道交过去｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -5241,7 +5241,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "导入浏览器密码｜Chrome 导出的整张密码表收进库，表里少的不删｜在用",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -5547,12 +5547,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "验证冷却｜连错 6 次停 5 分钟，再错逐级加长到 24 小时｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -5597,7 +5597,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "资料解锁期｜验证一次，一段时间内 AI 可以用私人资料｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -5612,7 +5612,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "锁定资料｜不想让 AI 再用私人资料时立刻结束｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -5622,12 +5622,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "限时无限制授权｜我定的时间里，我的明确指令优先于 AI 自己的规则｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -5637,12 +5637,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "网页上办授权｜人在外面时在网页填动态码，开资料期或无限制授权｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5652,12 +5652,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "网页一键减权｜网页上不用登录就能按“锁定个人资料”“锁屏 Windows”，只能减权，不能解锁或拿秘密｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5672,7 +5672,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "GitHub 重大动作验证｜删库、转移、改公开前验证一次｜说不准",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -5682,12 +5682,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "加密文件｜把点名的文件或文件夹加密成 .pcaf，原件不动｜在用",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -5712,12 +5712,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "解开加密文件｜解到指定文件夹，已有的同名文件不覆盖｜说不准",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -5727,12 +5727,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "查看加密文件｜只在本机窗口看包里一个文本文件｜说不准",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -5742,12 +5742,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "修改加密文件｜改包里一个文本文件，另存成新包，原包保留｜说不准",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -5983,7 +5983,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "手机 App｜手机上分类、搜索、查看、复制、增改删｜在用",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -6028,7 +6028,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "手机和电脑互相同步｜两边改的都同步过来，冲突两份都留｜待验收",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -6043,7 +6043,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "自动加密恢复副本｜每次保存都整份加密备份到私人 GitHub 和 G 盘｜在用",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -6103,7 +6103,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "新电脑整套恢复｜从私人 GitHub 取回并登记新电脑、新的 AI｜说不准",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -6118,7 +6118,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "分清保存和同步｜断网时分得清是只存在本机，还是已经同步｜在用",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -6133,7 +6133,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "关窗等同步｜关窗时还在同步，先等最多 3 分钟｜待验收",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -6436,12 +6436,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "每天自查｜每天 18:17 查登记齐不齐、来源有没有更新，顺带更新程序包｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -6456,7 +6456,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "AI 代填网页登录｜Chrome 扩展和本机通道替 AI 填密码；9 月 27 日撤掉，登录由我自己来｜已停用",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -6486,7 +6486,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "遮住的复制面板｜只能复制、看不到内容的面板；9 月 25 日删掉｜已停用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -6496,12 +6496,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "分钟清剪贴板｜复制后 30 分钟自动清掉；9 月 25 日取消｜已停用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -6531,7 +6531,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "目标登记（CoreGoal）｜动手前先登记一个无人值守目标才放行；9 月 25 日退役｜已停用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -6546,7 +6546,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "重大动作票据｜GitHub 重大动作先开 30 秒能力票据、两段式提案；9 月 27 日删掉，改成直接验证一次｜已停用",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -6556,12 +6556,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "设备邀请｜10 分钟有效的新设备邀请；9 月 26 日退役｜已停用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -6576,7 +6576,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "禁止文件",
    "source_phrase": "OpenClaw 专用代码｜给已冻结的 OpenClaw 取 key 的专用分支；9 月 27 日后删掉，凭据留作普通条目｜已停用",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   }
  ]
@@ -6715,7 +6715,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "7 月 26–28 日：在电脑配置库里起步：守门的 Secret Broker、KDBX 密码库、加密恢复副本。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -6755,12 +6755,12 @@ AI 用 key，却看不见 key
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png",
+   "asset": "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "锁文件夹",
    "source_phrase": "9 月 10 日：加密文件可以在本机窗口里查看、修改。",
-   "sha256": "a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607",
+   "sha256": "78acc36e374518879cc0c4c5b223e31ab40d194c265c4eebe81873ade5d0649b",
    "status": "ready"
   },
   {
@@ -6775,7 +6775,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 14–20 日：资料解锁期、限时无限制授权、四选一验证统一成一个窗口。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -6790,7 +6790,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "9 月 21–23 日：独立密码库窗口；手机正式接入同一个库；9 月 22 日笔记本离线实测；Chrome 密码表整批导入。",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -6805,7 +6805,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 25–26 日：接入 Claude 桌面版，和 Codex 一样算受信任的 AI。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -6820,7 +6820,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "硬盘循环",
    "source_phrase": "9 月 25–27 日：按我的决定拆掉：起疑锁盘、目标登记、重大动作票据、登记式恢复载体、遮住的复制面板、30 分钟清剪贴板、AI 代填网页登录。",
-   "sha256": "a0d2c8ef15ae2f0925f2bc6aad15ead47feea27a5485abee9220489ccbf3e087",
+   "sha256": "0684abe6ca8acb20d34fd7053f7feb74499d5651e267a8c28a352779b689b5b9",
    "status": "ready"
   },
   {
@@ -6835,7 +6835,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "9 月 28 日：00:42 拆成独立的私人仓库，电脑配置库只留安装和机器接线；07:06 起 API key 按厂商登记。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -6850,7 +6850,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "9 月 29 日：手机端源码放进同一个私有仓库；H 盘的恢复副本接进每天的外接盘同步（待验收）。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {

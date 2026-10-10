@@ -42,7 +42,7 @@
       {
         "type": "content_card",
         "row": "body",
-        "width": "52%",
+        "width": "60%",
         "columns": 1,
         "illustration": "left_inside",
         "text_ref": "它做什么",
@@ -59,7 +59,7 @@
         "columns": 1,
         "row": "body",
         "columns_v": 1,
-        "width": "46%"
+        "width": "38%"
       },
       {
         "type": "prose",
@@ -184,7 +184,7 @@
         "type": "tag",
         "row": "head",
         "width": "62%",
-        "text_ref": "真实的一次："
+        "text_ref": "真事："
       },
       {
         "type": "dialogue",
@@ -286,7 +286,7 @@
       },
       {
         "type": "tag",
-        "text_ref": "真实的一次："
+        "text_ref": "真事："
       },
       {
         "type": "dialogue",

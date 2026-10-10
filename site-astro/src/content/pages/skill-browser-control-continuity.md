@@ -34,6 +34,18 @@
   "url": "/skills/browser-control-continuity/",
   "tagline": "网页卡住、要登录时，接着把事办完。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:45"
+   },
+   "facts": [
+    "近 7 天 AI 用了 73 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -156,8 +168,8 @@
  },
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
-  "sha256": "d39ab250141513c17c2b5411c88472573942faac2bd8e2634cdb78d9bd3eb59e",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "5ce153372803f9f3cec74fa01271340b600eb4787cfe691074458d9318954b4e",
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -192,13 +204,32 @@
      "align": "left",
      "size": "large",
      "text_ref": "大标题：网页上的事接着办",
-     "row": "hero",
-     "width": "49%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 73 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话："
+     "text_ref": "一句话：",
+     "width": "49%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -224,8 +255,11 @@
      },
      "text_ref": "怎么跟 AI 说",
      "split_items": true,
-     "flow": "column",
-     "rows": 3
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     }
    ],
    "notes": "横版左标题介绍、右浏览器修线插画；下面全宽对话卡，五句按左列前三句、右列后两句。竖版先标题和全部介绍，再整宽插画，再五句气泡。定稿大标题/一句话/说明前缀原样交给渲染，不凭原图删字。 2026-10-03 本轮文字核对：已补split_items，横版列优先左3右2；未重新看图。"
@@ -237,6 +271,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "大标题：网页上的事接着办"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 73 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -350,6 +399,10 @@
      "text_ref": "标题：一个完整例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我说："
     },
@@ -401,6 +454,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：一个完整例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -501,7 +558,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个文件夹里飞出一张纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -526,12 +583,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "打勾清单",
    "source_phrase": "一张打钩的回执",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -560,7 +617,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "要注意：这是照技能写的做法串起来的例子，不是某一次办事的记录。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -574,7 +631,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "要注意：这是照技能写的做法串起来的例子，不是某一次办事的记录。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -619,6 +676,8 @@
 ```
 
 标题：一个完整例子：照这套做法，在网站上交一份带两个附件的申请会这样办
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 假如我说：“在这个网站上把申请交了，附件是桌面上那两个 PDF。”
 
@@ -738,7 +797,7 @@
      "page_break_after": true,
      "direction": "vertical",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_layout": "inline"
     },
@@ -775,12 +834,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "9月18日13:54：Codex更新后，Chrome扩展连回本机用的配置里，还指着旧版本的4个程序路径（Codex命令行、Node、Node交互环境、浏览器客户端）。技能自带的修复脚本只改这4项，代理、通道和其他字段原样留着；改前存了备份、留了回执，能照回执退回；再跑一次会显示“已是最新”。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1082,7 +1141,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "用我的 Chrome｜沿用我已登录的状态和已开的标签页；Chrome 没开时用现有的方式打开或重连，先看再新建",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -1122,12 +1181,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "登录接着办｜已登录就直接用；要账号密码的，把登录页留给我；手机号登录，能填码的 AI 用〔取短信验证码〕，取不到交我；邮箱验证码交邮件技能；通行密钥、扫码、人机验证停在那一步等我，完成后在同一页接着办",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1137,12 +1196,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "上传看得见｜一次传一个；点上传后截屏看选文件窗口弹没弹，页面结构里看不到它不等于没弹；100% 不算完，要等网页的成功标记并读回文件名",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1167,12 +1226,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "本机网页预览｜不用 file:// 打开；先用项目已有的预览服务，没有才临时开一个只听本机（127.0.0.1）、端口由系统分配的服务，用完只关自己开的",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1217,7 +1276,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "只记验证过的教训｜只留真出过、真修好的经验和我的明确要求；不留私人信息、截图、完整日志和临时编号",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -702,7 +702,7 @@
      "columns_v": 1,
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
@@ -779,7 +779,7 @@
      "columns_v": 1,
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
      ],
@@ -835,12 +835,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "6 分钟｜没碰键盘鼠标就放泡泡，一动就收",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -850,12 +850,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "Ctrl+Win+E｜不用等，马上放；双击托盘图标也行",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1576,7 +1576,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "和动态壁纸的关系：Wallpaper Engine（动态壁纸软件）开着时，桌面上看到的是它的画面，这张垫在下面；锁屏用的是这张。它不改 Wallpaper Engine 的设置，也不在后台跟它抢。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1621,7 +1621,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "原图留底：第一次换之前，原桌面图、每块屏的原图和原锁屏都存在本机；想换回去，在“设置 → 个性化”里选。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1651,7 +1651,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "手机壁纸：手机上用的那张也原样存了一份在仓库里，换手机时直接拿。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1834,12 +1834,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "开关",
    "source_phrase": "空空的显示器、一个一闪而过的泡泡、一个键盘按键、一个小齿轮、一个画框、一个开关、一个倒回的箭头",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -1849,12 +1849,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1864,12 +1864,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1879,12 +1879,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1894,12 +1894,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1909,12 +1909,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1924,12 +1924,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2005,7 +2005,7 @@
       "_library/icons/身份盾牌.png",
       "_library/icons/文稿堆.png",
       "_library/icons/文稿堆.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "1登录就启动Windows开机项直接打开一个常驻程序：C#写的，.NET10，打包成"
     },
@@ -2068,7 +2068,7 @@
       "_library/icons/身份盾牌.png",
       "_library/icons/文稿堆.png",
       "_library/icons/文稿堆.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "1登录就启动Windows开机项直接打开一个常驻程序：C#写的，.NET10，打包成"
     },
@@ -2121,7 +2121,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历时钟",
    "source_phrase": "登录就启动｜Windows 开机项直接打开一个常驻程序：C# 写的，.NET 10，打包成一个约 173 MB 的单文件；托盘里一个绿图标。没有服务，也没有计划任务。",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -2131,12 +2131,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "盯着有没有人｜每 50 毫秒读一次 Windows 记的“最后一次输入时间”；键盘鼠标钩子只在内存里判断假动作，不记内容。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2166,7 +2166,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "先铺底图｜把虚拟屏上 Wallpaper Engine 选的那张铺到主屏，没有就用 Windows 壁纸；这一层鼠标点得穿。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2181,7 +2181,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "放泡泡｜启动 C:\\Windows\\System32\\Bubbles.scr /s，按物理像素摆到主屏最上层、不抢焦点。泡泡启动时对底图拍一次快照，所以泡泡底下是静止的一帧，不是还在动的动态壁纸。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2191,12 +2191,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "一动就收｜先撤底图，再关泡泡。泡泡进程挂在“程序一关就跟着关”的 Windows 作业对象里，常驻程序退出或崩溃都不会留下泡泡。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -2364,12 +2364,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "时钟",
    "source_phrase": "一只关掉的闹钟",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2439,12 +2439,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个问号旁边一只停下的手",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2454,12 +2454,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "开关",
    "source_phrase": "一个拨到“关”的拨动开关",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -2893,12 +2893,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "闲时泡泡｜6 分钟没碰键盘鼠标，主屏飘起 Windows 原版泡泡｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2938,12 +2938,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一动就收｜动鼠标、点击、滚轮、按键，泡泡马上收起｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2973,7 +2973,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "泡泡底下垫壁纸｜先铺虚拟屏上 Wallpaper Engine 选的那张，没有就用 Windows 壁纸；泡泡底下是静止的一帧｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3018,7 +3018,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "开启｜AI 装好并开启，顺手存下原来的屏保设置｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3028,12 +3028,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "登录自启｜托盘里可勾选；崩溃或卡死后，Windows 会提示重新打开，我点确认才开｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3048,7 +3048,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "设置自修｜每 30 秒查 Windows 屏保设置，只把偏掉的改回｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3073,12 +3073,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "紧急停用｜先挡住下一次启动，再收画面；开关不会自己弹回｜说不准",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -3093,7 +3093,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "撤回原设置｜把屏保相关设置恢复到第一次开启前｜说不准",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3325,7 +3325,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "雨林黑猫壁纸｜所有屏的桌面底图和锁屏统一成一张 4K 图｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3350,12 +3350,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "换机装回｜新电脑跑一条命令，不要管理员、不依赖原盘符｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3385,7 +3385,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "手机壁纸留底｜手机上用的那张原样存一份在仓库里｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3400,7 +3400,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "修左边缘错位｜多屏加动态壁纸时，泡泡底图左边可能错开；修法测过，没装上｜待实施",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3410,12 +3410,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "泡泡稍快一点｜想把原版泡泡调快一点，还没做｜待实施",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3430,7 +3430,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "会下雨的动态壁纸｜9 月 8 日的实验，猫抠出来毛边走样，本人否掉，已终止；9 月 29 日实验文件删了，只留一页方向记录｜已停用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   }
  ]
@@ -3607,7 +3607,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "8 月 11 日：建库。起因是主屏是 OLED，本人想要一层护屏：“像 Windows XP 的泡泡屏保”、有透明度、偏纯绿、不能丑。先比过开源的 OLEDShift（它跳过最大化的窗口，不合用），先自己画了一版护屏层，GitHub 上发了 v0.1.0、v0.1.1。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3632,12 +3632,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "8 月 24 日：改成闲 10 分钟。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3652,7 +3652,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 1 日：改成闲 6 分钟；泡泡底下铺一张选好的壁纸，不再透出当时的桌面。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3667,7 +3667,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 6 日：主屏盖黑幕时泡泡让路。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3682,7 +3682,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 8 日：试做会下雨的动态壁纸和会动的黑猫。猫抠出来毛边变了样，本人否掉，实验终止；本人认可的雨（绿色鲜度 50%、雨量 75%、薄雾 50%）留档。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3697,7 +3697,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 8–9 日：雨林黑猫 4K 版做成所有屏的桌面底图和锁屏，换机一条命令装回；手机壁纸也存了一份。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3712,7 +3712,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 18 日：只放实体主屏，泡泡底图改用虚拟屏上 Wallpaper Engine 选的那张；去掉“暂停”，只留开和关；Ctrl+Win+E 交给常驻程序。左边缘错位、泡泡提速两件先放下。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3727,7 +3727,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 26 日：说明文档压成五句话。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3742,7 +3742,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "9 月 29 日：删掉 8 月的两个旧 Release（v0.1.0、v0.1.1，标签和源码历史还在），不再发安装包，改为从源码安装当前版本；雨景实验的文件也删了，只留方向记录和本人认可的雨幕参数。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {

@@ -490,7 +490,7 @@
  "source": {
   "page": "sources/pages/openclaw/page.json",
   "sha256": "419f26996ab20dd536f658523d86b7627d5d60f4bdf3078c45c11ddc7e7a154e",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:22+08:00"
  }
 }
 ---
@@ -789,12 +789,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -804,12 +804,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -819,12 +819,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -834,12 +834,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -849,12 +849,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -864,12 +864,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1211,12 +1211,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "越聊越满",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1226,12 +1226,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "每轮都先背一大段说明",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1246,7 +1246,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "官方升级可能改坏设置",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1256,12 +1256,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "自己时不时卡住",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1360,7 +1360,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
       "_library/icons/笔记本电脑.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/双气泡.png"
      ],
      "text_ref": "1手机"
@@ -1458,7 +1458,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
       "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png",
       "_library/icons/笔记本电脑.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/双气泡.png"
      ],
      "text_ref": "1手机"
@@ -1562,7 +1562,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "笔记本电脑",
    "source_phrase": "电脑上的网关\n一直开着，只在本机18789端口收消息，转给OpenClaw",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -1587,12 +1587,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "技能\n写代码交给更便宜的编程助手Cline、查微信、收发邮件、看Gmail和日历、多步流程……",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1607,7 +1607,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双气泡",
    "source_phrase": "回到原对话\n结果发回发消息的那个聊天",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2110,7 +2110,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "聊天里的技能：砍剩 10 个：写代码交给 Cline、查微信、邮件、Gmail 和日历、GitHub、天气、待办流程、多步流程等 ✕",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -2125,7 +2125,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "记忆和做梦：每个会话记得前文；夜里用便宜模型把日志整理进长期记忆 ✕",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2140,7 +2140,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "外网入口：经 Tailscale Funnel 从外网连到电脑上的网关；9 月 26 日撤掉 ✕",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2185,7 +2185,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "部署与引导：换电脑时，公开模板只给结构，私人配置填好先预演；有没填的就停，写坏了自动退回旧配置 ✕",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2200,7 +2200,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "接进 CodeG：让 CodeG 里的 Cline 用 OpenClaw 的工具（读写会话、收发消息、审批），网关密码不写进配置；6 月实测列出 9 个工具 ✕",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2210,12 +2210,12 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "旧“API 一键开关”：点一次就清空密钥，零花费；8 月底退役：它只看一个旧文件，远程路线还能用时也显示“已关” ✕",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -2245,7 +2245,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "OpenClaw 设置和工作区备份：设置（含密钥）和工作区（人格、记忆、技能）存本地、G 盘和私有仓库 openclaw-backup；6 月 21 日到 9 月 1 日共 29 个快照 ✕",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2260,7 +2260,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "顺带的三套 AI 备份：Claude、Gemini、Codex 的记忆和设置备份原来也挂在这里，后来各自迁出 ✕",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2275,7 +2275,7 @@ OpenClaw 这个 AI 代理本身不好用，不是网关的问题：会话越聊�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "公开仓库每日归档：每天 21:15 把能公开的改动推上 GitHub；查到密钥、别人的改动或远端分叉就停 ✕",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {

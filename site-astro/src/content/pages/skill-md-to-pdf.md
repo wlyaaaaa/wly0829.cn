@@ -30,6 +30,18 @@
   "url": "/skills/md-to-pdf/",
   "tagline": "把 Markdown 转成能打印的 PDF，查过再交。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:21"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -379,8 +391,8 @@
  },
  "source": {
   "page": "sources/pages/skill-md-to-pdf/page.json",
-  "sha256": "c55f95af4fb758c54ddff4f9f119d0e01e85cdcba3f6eff1839f021de8762dbd",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b4b00d6cce9141a282ff21722d81d2c1a599e002bf27546a8583c641b0515e16",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -455,21 +467,40 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "62%",
-     "text_ref": "文稿转PDF"
+     "text_ref": "文稿转PDF",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
      "size": "large",
      "bold": true,
-     "row": "hero",
-     "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。"
+     "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "AI写的说明、讲义、报告大多是Markdown。这个技能告诉AI怎么把它转成PD"
+     "text_ref": "AI写的说明、讲义、报告大多是Markdown。这个技能告诉AI怎么把它转成PD",
+     "width": "62%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -495,7 +526,12 @@
       "left"
      ],
      "tail": true,
-     "text_ref": "“这份讲义转成PDF，我要打印。”"
+     "text_ref": "“这份讲义转成PDF，我要打印。”",
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     },
     {
      "type": "prose",
@@ -566,6 +602,21 @@
      "size": "large",
      "bold": true,
      "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -739,7 +790,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
     },
     {
      "type": "prose",
-     "text_ref": "9月28日写这页时实跑的，文稿是公开样例《项目简报》。"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -832,7 +883,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
     },
     {
      "type": "prose",
-     "text_ref": "9月28日写这页时实跑的，文稿是公开样例《项目简报》。"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -908,7 +959,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
 ```
 
 ## 一个完整例子
-9 月 28 日写这页时实跑的，文稿是公开样例《项目简报》。
+真事：9 月 28 日写这页时实跑的，文稿是公开样例《项目简报》；AI 的回话是转述。
 
 我：“这份简报转成 PDF，要正好 1 页，‘三项原则’这几个字必须在。”
 AI：“好了，1 页，‘三项原则’在第 1 页；原文没被改动，用的是默认中性样式。”
@@ -1145,7 +1196,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "老绿色：只给老文稿 \n早期一批项目说明用过绿色标题。那些文稿重新导出时才用它，不当所有PDF的统一风格。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1639,12 +1690,12 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "单篇转换｜一份 .md 转成一份 PDF，中文文件名、中文内容都行｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1674,7 +1725,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "用登记好的 Python 跑｜不管命令行里碰巧是哪个 python，都用电脑配置里登记的那一个｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1689,7 +1740,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "打印工具按登记找｜Node 和 Playwright 装在 E:\\Tools\\MD-PDF-Runtime，位置记在电脑配置里；登记或文件缺了就说缺哪一项，不去 Codex 的缓存里找｜待验收",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1699,12 +1750,12 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "默认中性样式｜黑字灰线、A4、表格行不拆页｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1719,7 +1770,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "老绿色样式｜早期项目说明的绿色标题，只给老文稿重新导出｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1749,7 +1800,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "文稿自带样式怎么办｜保留、忽略或拒绝三选一，默认保留；代码块里的样式示例不算｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1764,7 +1815,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "手动分页｜文稿里写 <!-- PDF_PAGE_BREAK --> 或 page-break 的 div，就在那里换页｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1839,7 +1890,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "默认不联网、不跑脚本｜网上的图和文稿里的脚本默认挡掉，可信文稿才明确打开｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1849,12 +1900,12 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "不盖掉原文和样式｜输出路径等于 Markdown 或 CSS 时直接拒绝｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1864,12 +1915,12 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "同一份输出只让一个任务写｜两个任务同时写同一个 PDF，后来的直接报错｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2253,7 +2304,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "Markdown 文稿要变成能打印、能发出去的 PDF",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2263,12 +2314,12 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "有硬要求：几页、哪些字必须在、图一张不能少",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2281,7 +2332,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "Markdown 文稿要变成能打印、能发出去的 PDF",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2307,7 +2358,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "已有一份好的 PDF，这次重导出不能把它弄坏",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2355,11 +2406,11 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "看排版有没有乱：交给 PDF 逐页检查",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2368,11 +2419,11 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "key": "文件夹上传",
    "source_phrase": "转完提交、发邮件、上传、分享：转换不等于同意发出去",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -2385,7 +2436,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "Markdown 文稿要变成能打印、能发出去的 PDF",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2411,7 +2462,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "已有一份好的 PDF，这次重导出不能把它弄坏",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2459,11 +2510,11 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "看排版有没有乱：交给 PDF 逐页检查",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2472,11 +2523,11 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "key": "文件夹上传",
    "source_phrase": "转完提交、发邮件、上传、分享：转换不等于同意发出去",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {

@@ -30,6 +30,18 @@
   "url": "/skills/media-person-self/",
   "tagline": "看指定的照片或录音里有没有我，不认别人。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 03:04"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -88,8 +100,8 @@
  },
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
-  "sha256": "75a55fc01816129b6388ad83eab1a6af6eaba8d405a3e116b917a59510a954e0",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "de7a644ef36cf6abe865be5534528667aa7a2ac738484cc2ae99897abff5ef01",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -118,14 +130,33 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "47%",
-     "text_ref": "照片录音里有没有我"
+     "text_ref": "照片录音里有没有我",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 03:04",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "指定一张照片"
+     "text_ref": "指定一张照片",
+     "width": "47%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -165,6 +196,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "照片录音里有没有我"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 03:04",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -399,7 +445,7 @@
      "icons": [
       "_library/fix-round-2/snow-album-icon.png"
      ],
-     "text_ref": "一例："
+     "text_ref": "一例（真事"
     },
     {
      "type": "notice",
@@ -460,7 +506,7 @@
      "icons": [
       "_library/fix-round-2/snow-album-icon.png"
      ],
-     "text_ref": "一例："
+     "text_ref": "一例（真事"
     },
     {
      "type": "notice",
@@ -620,7 +666,7 @@
 2. **没有就交给〔中文语音转写〕：**本机 Paraformer 分出带时间的句子，每个说话人挑一两句清楚的，用 CAM++ 声纹和我的声音样本比，再结合声道、通话里谁是谁、说了什么。
 3. **逐句给结论：**每句标成我、别人或判断不了；没比过声音的句子靠上下文判，判不了就标判断不了；视频只听声音，不看画面。
 
-**一例：**拿同一次出游的 7 张照片试，6 张各检出 1 张脸，都判为我；1 张没检出能比的脸，结论是判断不了。
+**一例（真事，9 月底写这页时按技能实跑的）：**拿同一次出游的 7 张照片试，6 张各检出 1 张脸，都判为我；1 张没检出能比的脸，结论是判断不了。
 
 “没检出我”不等于“一定没有我”；结果随时可以推翻。
 
@@ -720,12 +766,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "录音逐句分出我和别人｜每句标我、别人或判断不了，带时间",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1008,12 +1054,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "我的人脸模板和声音样本只在本机，只有一份；删掉或换掉，以后的判断就跟着变，旧结果不再作数。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1023,12 +1069,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "不认别人是谁，也不数一共有几个人。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1073,7 +1119,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "不读照片上的字（那是〔本地文字识别〕的事）。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1194,7 +1240,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "不读照片上的字（那是〔本地文字识别〕的事）。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1311,7 +1357,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "不读照片上的字（那是〔本地文字识别〕的事）。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

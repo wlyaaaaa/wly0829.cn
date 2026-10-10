@@ -605,9 +605,9 @@
         "columns": 3,
         "columns_v": 3,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png"
         ]
       },
       {
@@ -663,9 +663,9 @@
         "columns": 1,
         "columns_v": 1,
         "icons": [
-          "_library/icons/代码窗口.png",
-          "_library/icons/打勾清单.png",
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/代码窗口.png",
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/打勾清单.png"
         ],
         "portrait_columns": 1
       },

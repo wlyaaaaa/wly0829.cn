@@ -802,7 +802,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
  }
 }
 ---
@@ -969,7 +969,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "131 个任务｜9 月 16–28 日在桌面版里用这些模型开的（至少）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -984,7 +984,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "42,072 行代码｜其中测试 16,736 行；128 次提交（7 月 14 日–9 月 28 日）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -1144,7 +1144,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "换模型要改全局设置和环境变量，容易把官方登录弄乱。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1159,7 +1159,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "各家钥匙明文散在不同的配置文件里。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1189,7 +1189,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "选一条路线就开工；设置只给这一次打开的程序，不改全局的服务设置和官方登录。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1214,12 +1214,12 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "启动前写清用谁、发到哪；运行中回读实际模型，对不上就停。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1365,11 +1365,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "2. 在终端里敲 aicli \n从列表里选一条路线，比如“CodexCLI+本机Qwen3.827B”；它先写清连哪、用谁，再打开原版Codex。\n跟AI说：“用本机Qwen3.827B开Codex做这个项目，先给我看启动计划。”",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1404,11 +1404,11 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "2. 在终端里敲 aicli \n从列表里选一条路线，比如“CodexCLI+本机Qwen3.827B”；它先写清连哪、用谁，再打开原版Codex。\n跟AI说：“用本机Qwen3.827B开Codex做这个项目，先给我看启动计划。”",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1633,12 +1633,12 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1678,12 +1678,12 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1846,12 +1846,12 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "代码窗口",
    "source_phrase": "一个终端提示符",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1861,12 +1861,12 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张清单打勾",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1876,12 +1876,12 @@ Claude 或 Codex 把一件活交给指定模型在后台跑，随时查进度、
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个 Codex 窗口",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2272,7 +2272,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "scene_explicit_primary_object",
    "key": "共享节点",
    "source_phrase": "一根断开又接上的绳子",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -2438,12 +2438,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "碰到什么｜先做什么",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2483,12 +2483,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "桌面版菜单里没有新模型｜桌面自己缓存列表约 5 分钟；升级过桌面接入之后，要正常退出再打开",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2503,7 +2503,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "本机模型半天不出字｜多半在排队等听写或文字识别让出显卡（最多 90 秒，见技术一节），或模型空闲 3 分钟后被卸载、正在重新加载",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2668,12 +2668,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2934,12 +2934,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱",
    "source_phrase": "一个原样的工具箱",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -2994,12 +2994,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一本小账本",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3155,11 +3155,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "key": "显卡",
    "source_phrase": "显卡让给听写 \n本机大模型、听写和文字识别共用一块显卡。听写或文字识别占着时，本地模型请求排队等最多90秒并提示在等，不直接报错；只打开aicli窗口不占显卡。另一边见中文语音转写。\n现在：用模拟的模型服务测过；等真碰上两边同时要用显卡时验收。",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -3194,11 +3194,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "key": "显卡",
    "source_phrase": "显卡让给听写 \n本机大模型、听写和文字识别共用一块显卡。听写或文字识别占着时，本地模型请求排队等最多90秒并提示在等，不直接报错；只打开aicli窗口不占显卡。另一边见中文语音转写。\n现在：用模拟的模型服务测过；等真碰上两边同时要用显卡时验收。",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -3354,8 +3354,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "勤快汇报不会被“步数上限”掐断"
     }
@@ -3389,8 +3389,8 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "勤快汇报不会被“步数上限”掐断"
     }
@@ -3426,7 +3426,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张考卷上只写着 PONG 四个字母",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3435,11 +3435,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "key": "工具箱",
    "source_phrase": "勤快汇报不会被“步数上限”掐断 \n后台任务设了“最多走多少步”；如果每发一句进度都算一步，越勤快汇报越早被掐掉。现在步数只数推理、计划、调工具这些真干活的步骤，公开进度不占预算；工具调用次数另算。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -3448,11 +3448,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "测试回答必须一字不差 \n文字测试要求模型最后只回“PONG”，而且一次工具都没调；能打开程序不算通过，模型自己说“完成了”也不算。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3461,11 +3461,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "key": "工具箱",
    "source_phrase": "勤快汇报不会被“步数上限”掐断 \n后台任务设了“最多走多少步”；如果每发一句进度都算一步，越勤快汇报越早被掐掉。现在步数只数推理、计划、调工具这些真干活的步骤，公开进度不占预算；工具调用次数另算。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -3474,11 +3474,11 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "测试回答必须一字不差 \n文字测试要求模型最后只回“PONG”，而且一次工具都没调；能打开程序不算通过，模型自己说“完成了”也不算。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3846,12 +3846,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "选单启动｜敲 aicli 不带参数，列出这次能开的路线，最近用过的排第一，选编号就开",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3896,7 +3896,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "同一家换型号｜启动时加 --model，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3906,12 +3906,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "启动前预览｜不启动，只脱敏显示这次会用哪个程序、哪些参数、环境加减了什么、请求发到哪",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3926,7 +3926,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "导出配方｜导出一份不含钥匙和登录的独立配置，不用这个工具也能照着启动",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3941,7 +3941,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "首次设置向导｜检查系统、原版工具和 Ollama，引导配第一条路线",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3981,12 +3981,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "别家模型说中文进度｜开始前说要解决什么，中途讲清重要发现和影响，最后把必要细节说明白；GLM 已在实际使用中验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3996,12 +3996,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "思考过程照样显示｜GLM 返回的原始思考内容显示在桌面版的思考摘要里，翻历史也保留；DeepSeek 的推理摘要过了协议测试，在桌面版里真实显示还待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4016,7 +4016,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "桥的登记、启用和切回｜新版本先在电脑配置登记全部 7 个文件的指纹才能启用，保留上一版能切回；官方自更新后自动认新引擎",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4026,12 +4026,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "后台 GPT 帮手｜别家模型主持的任务在后台请 GPT 帮手；帮手中途能报进度、提问题，做完还能接着追问同一个",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4046,7 +4046,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "Sol／Astra 专用判断｜专用入口源码仍固定旧 GPT-6 Sol high 做常规判断，后果重大或有实质疑点升 GPT-6 Astra high；只判断，不动手。型号待同步，通用现役选型见〔型号与派法〕",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -4358,12 +4358,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "查进度、叫停｜按运行编号查状态、等结果、协作叫停",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4388,12 +4388,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "硬预算｜墙钟时间、步数、工具调用次数各有上限，超了停下整棵进程树；公开进度不算步数",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -4453,7 +4453,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "受管网页搜索｜默认带一个只查必应公开搜索结果的工具，不能访问任意网址，不需要时可关",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -4498,7 +4498,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "真实测试｜分文字、工具、文件活三层，由独立程序判分；会花额度，要明说才跑",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4859,7 +4859,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "本机模型统一同步｜一条命令同步桌面版、OpenCode、Ollama 的模型集合；增删换型、批处理大小、空闲保留时间都走它，先预览再应用",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -4874,7 +4874,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "显卡被占时排队｜听写或文字识别占着显卡时，本地模型请求等最多 90 秒并提示在等，不直接报错",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4914,12 +4914,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "ChatGPT 双转接｜经两个第三方转接程序让 Claude Code 用 ChatGPT 订阅，装上后从没完成登录。9 月 29 日退役（本人定的）：现在没有要接 ChatGPT 的需要，将来要接也不参考这份代码；路线和代码已删",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4934,7 +4934,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "从 OpenClaw 导入｜把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4949,7 +4949,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "小旗",
    "source_phrase": "压缩前先记下｜别家模型上下文用到 90% 自动压缩；压缩前把目标和改动写进项目，压缩后重读规则和改动；没见过的模型不猜窗口",
-   "sha256": "82bc1bb88359214e45118a170a073967861053d0dc9816995fe4ec6b0cb16cb4",
+   "sha256": "0628ee273e0d9f24798e011c669fc1570520b8efe366277623d439405970dd8b",
    "status": "ready"
   },
   {
@@ -4964,7 +4964,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "安装和替换｜先验证临时候选再替换，失败恢复原版本；不用管理员权限",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4974,12 +4974,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "旧路线退役｜已退役的路线名直接拒绝，不偷偷改绑到别的模型；旧文件原样保留",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5227,7 +5227,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "8 月 1–3 日：Codex 接入 DeepSeek V4 Flash；定下别家模型的长对话约定",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5252,12 +5252,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "9 月 15 日：菜单写真名；本机 Qwen 进了 Codex 桌面版，当天实际用过后验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5272,7 +5272,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 16–17 日：桌面版加入 Qwen3.8 Max、GLM-5.3 两款、DeepSeek Flash；别家模型说中文进度；35B 提速",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5287,7 +5287,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 18 日：别家模型能请 GPT 帮手，来回追问同一个",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5302,7 +5302,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 22–23 日：0.3.18 发行；GPT-6 自己进了桌面菜单；Sol、Astra 两档专用判断",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5317,7 +5317,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 27 日：显卡被占时本地模型排队等；退役 Gemini 路线",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5332,7 +5332,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "9 月 28 日：退役 Toolkit；钥匙改成按厂商从密码中心取，同一家换型号不重录（0.3.19，已装上，还没发 GitHub 版本）",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -5342,12 +5342,12 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "9 月 29 日：退役 Claude Code 经 ChatGPT 的两条转接（本人定的），可见路线 23 条减到 21 条；离线测试 470/470 通过；DeepSeek 在桌面版里真实显示思考摘要还待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5362,7 +5362,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "ai-cli-profile-manager-17-icon-12",
    "source_phrase": "10 月 2–8 日：别家模型的长对话压缩只走厂商支持的方式（新加的条目，用这条时间线里同类条目的图标）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

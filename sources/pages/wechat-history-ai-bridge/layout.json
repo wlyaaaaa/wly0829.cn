@@ -32,7 +32,7 @@
         "row": "hero",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "align": "left",
         "text_ref": "一个例子"
@@ -128,7 +128,7 @@
         "type": "notice",
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/打勾清单.png"
+          "_library/hires-icons/打勾清单.png"
         ],
         "align": "left",
         "text_ref": "一个例子"
@@ -222,7 +222,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": [
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "停下以后还留着的"
       }
@@ -302,7 +302,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/微信标志.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/文件齿轮.png",
           "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
           "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"
@@ -361,7 +361,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/微信标志.png",
-          "_library/icons/代码窗口.png",
+          "_library/hires-icons/代码窗口.png",
           "_library/icons/文件齿轮.png",
           "_library/fix-round-2/icon-clean-7a6ac71307734801d4b7.png",
           "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png"

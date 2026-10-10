@@ -39,7 +39,7 @@
         "columns_v": 1,
         "icons": [
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
         ],
@@ -117,7 +117,7 @@
         "columns_v": 1,
         "icons": [
           "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-          "_library/icons/开关.png",
+          "_library/hires-icons/开关.png",
           "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
           "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png"
         ],
@@ -759,7 +759,7 @@
           "_library/icons/身份盾牌.png",
           "_library/icons/文稿堆.png",
           "_library/icons/文稿堆.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "1登录就启动Windows开机项直接打开一个常驻程序：C#写的，.NET10，打包成"
       },
@@ -829,7 +829,7 @@
           "_library/icons/身份盾牌.png",
           "_library/icons/文稿堆.png",
           "_library/icons/文稿堆.png",
-          "_library/icons/代码窗口.png"
+          "_library/hires-icons/代码窗口.png"
         ],
         "text_ref": "1登录就启动Windows开机项直接打开一个常驻程序：C#写的，.NET10，打包成"
       },

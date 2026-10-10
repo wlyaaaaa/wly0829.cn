@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "0ac0aaed501cf35caafc7d5d04ccbe4b6c295018b21366c9aeb38cc10a70ac52",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "converted_at_beijing": "2026-10-10T10:13:21+08:00"
  }
 }
 ---
@@ -854,7 +854,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双气泡",
    "source_phrase": "11.3 GB　Codex 完整对话，2,461 个文件，每天 12:15 存一份",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -869,7 +869,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "硬盘循环",
    "source_phrase": "2 块加密盘　对话正文的备份只放在这两块盘上，不上网",
-   "sha256": "a0d2c8ef15ae2f0925f2bc6aad15ead47feea27a5485abee9220489ccbf3e087",
+   "sha256": "0684abe6ca8acb20d34fd7053f7feb74499d5651e267a8c28a352779b689b5b9",
    "status": "ready"
   },
   {
@@ -899,7 +899,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "3 套退役　Codex 设置和记忆、Claude 记忆、Antigravity 设置和知识的备份，9 月 28 日停掉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1177,12 +1177,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "便签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1197,7 +1197,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -1207,12 +1207,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1222,12 +1222,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1237,12 +1237,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1252,12 +1252,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1267,12 +1267,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1365,7 +1365,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "Claude：只备配置",
      "row": "tools-1",
@@ -1391,7 +1391,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "OpenCode：只备配置",
      "row": "tools-2",
@@ -1406,7 +1406,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/开关.png"
+      "_library/hires-icons/开关.png"
      ],
      "text_ref": "OpenClaw：什么都不留",
      "row": "tools-2",
@@ -1447,7 +1447,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "Claude：只备配置",
      "corner_symbol": "cross"
@@ -1469,7 +1469,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "OpenCode：只备配置",
      "corner_symbol": "check"
@@ -1480,7 +1480,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/开关.png"
+      "_library/hires-icons/开关.png"
      ],
      "text_ref": "OpenClaw：什么都不留",
      "corner_symbol": "pause"
@@ -1501,12 +1501,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1516,12 +1516,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1531,12 +1531,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1546,12 +1546,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1561,12 +1561,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1723,12 +1723,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "多大　2,461 个文件，11.3 GB",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1738,12 +1738,12 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "几点　每天 12:15，Codex 开着也照常",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1758,7 +1758,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "存到哪　G 盘；14:30 随同步进 H 盘；这份备份从不上网",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -1788,7 +1788,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹同步",
    "source_phrase": "存到哪 G 盘；14:30 随同步进 H 盘；这份备份从不上网",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2010,7 +2010,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一串断开的对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2223,12 +2223,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一根拔掉的 USB 线",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2238,12 +2238,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "两只同时伸过来的手",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2444,7 +2444,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "记使用小记录　先把前一天 Codex、Claude 调用过的技能、工具和命令名记下来（见全部功能第 11 项），所以 12:15 开跑、12:18 左右才拍卷影",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2474,7 +2474,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "禁止文件",
    "source_phrase": "拍卷影　用 Windows 的卷影复制（VSS）把 E 盘冻结在这一瞬间，从冻结的样子里读",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -2484,12 +2484,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "算指纹　每个文件算一遍 SHA-256（内容指纹）",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2499,12 +2499,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "只存新内容　按指纹存进 G 的内容库，库里已有的不再存",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2534,7 +2534,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "指向手",
    "source_phrase": "换“最新”　全部对上才把“最新”指向这一份；再删掉卷影和比这两份更早的点，写回执",
-   "sha256": "078174b6b61f6c5cc665cc91fea9cff5f7f02da36fbfcff6fc003c6d34599eb7",
+   "sha256": "b91d58864458ae828bac8c417ce629dc5c21bbafc9cb56094265107503bfe26c",
    "status": "ready"
   },
   {
@@ -2549,7 +2549,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹同步",
    "source_phrase": "14:30外接盘（电脑配置与恢复的同步任务）把G上的两份复制到H，在H上整份重算SHA-256，清单和封口都和G一样，才把H的“最新”换过去，再删H上G已经不要的旧点。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2564,7 +2564,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件夹同步",
    "source_phrase": "14:30外接盘（电脑配置与恢复的同步任务）把G上的两份复制到H，在H上整份重算SHA-256，清单和封口都和G一样，才把H的“最新”换过去，再删H上G已经不要的旧点。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2681,7 +2681,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双气泡",
    "source_phrase": "为什么对话正文不上网 \n十几GB，全是私人内容，GitHub放不下也不该放，只放本机的两块加密盘。附件、图片这些零碎的，原先也随开发配置备份进私人Google云盘；9月29日定下Codex对话不上云盘，之后不再带（见“每个AI工具备了什么”）。",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2923,7 +2923,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双气泡",
    "source_phrase": "Codex 开着，照样拍下完整对话。 \n麻烦：Codex开着时，对话和数据库一直在写，直接复制会拷到写了一半的文件；为了备份把Codex关掉，又会打断手头的工作。\n解法：先给E盘拍一个卷影，从这个冻结的瞬间读，读完马上删掉卷影。9月28日12:18–12:22，3分18秒存好2,461个文件、11.3GB。它相当于那一瞬间突然断电时的样子，正写到一半的那一步可能没存全，所以回执上标着“崩溃一致”，不说成完美。",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -3153,7 +3153,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双气泡",
    "source_phrase": "Codex 完整对话",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -3213,7 +3213,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "外接盘一份　每天 14:30 的外接盘同步把它复制到 H；H 上整份重算 SHA-256、和 G 一致，才换 H 的“最新”，H 跟着 G 删旧点；H 没接时只记一笔　〈在用〉",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -3535,12 +3535,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "用了哪些技能",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3555,7 +3555,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "AI 使用小记录　往一份长期记录里追加 AI 调用过的技能、工具和命令名，Codex 和 Claude 两路都挂在每天 12:15 的对话备份开头（Claude 那一路 9 月 28 日前挂在 10:35 的 Claude 记忆备份上，新接法从 9 月 29 日 12:15 那次起）。每次只补运行当天的前一天：某天任务整天没启动或采集失败，它前一天的调用就可能漏记，之后也不会自动补；G 盘不在线，本地照常记，只跳过 G 上的副本。只记名字、时间和工作目录，不记内容，也不管调用成没成功；删了对话也查得到最近一次调用；哪些算真用、哪些是测试或维护，将来由网站的功能总账按工作目录另算（功能总账还没做）。记录在 E:\\Data\\PCConfig\\AiUsageLedger，北京时间 9 月 28 日 12:18 Codex 写完之后共 329,091 条（Codex 从 9 月 15 日补起，这次补了 195,872 条；Claude 从 9 月 24 日补起）；G 盘正常时把整份记录发布到 G，14:30 的外接盘同步再复制到 H。记录没写成，原来的备份照跑　〈在用〉",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -3585,7 +3585,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "笔记本用同一套　笔记本每天 09:00、21:00 用同一套程序备份自己的 Codex：设置先滤掉私人配置，再推到私人仓库里单独的分支（9 月 10–28 日 36 次）；对话存笔记本本机和加密 U 盘，各留两份。9 月 10 日在笔记本上试恢复后，Codex 在隔离环境里读出了其中一段对话。怎么装、怎么接线归电脑配置与恢复　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3600,7 +3600,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "推到私人 GitHub　笔记本的设置快照推到私人仓库单独的分支，推完再现问一次，和本机一致才算成功；两边对不上就拒绝上传。主机那一路 9 月 28 日停　〈在用〉",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3615,7 +3615,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "断网不耽误本地　GitHub 连不上时笔记本本机那份照常存好，上传在 2 秒、5 秒后各重试一次。主机那一路 9 月 28 日停　〈在用〉",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3630,7 +3630,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "不收登录凭据　登录凭据、设备编号、对话、数据库、缓存不进 GitHub，笔记本的设置文件还先过滤掉私人配置。主机那一路 9 月 28 日停　〈在用〉",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3660,7 +3660,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "Codex 设置和记忆备份　主机每天 11:05、13:05 把设置、记忆、技能存本机和 G 盘各 30 份、推私人 GitHub；9 月 28 日 23:26 停，和开发配置备份重复　〈已停用〉",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3790,7 +3790,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-5fbd5c4a89d6e83599d1.png"
      ],
      "text_ref": "9月10日笔记本用上同一套",
@@ -3841,7 +3841,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "6 月 21 日　Claude 记忆开始备份到私人 GitHub（当时挂在 OpenClaw 的任务上）",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3856,7 +3856,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "7 月 1 日　Codex 的设置和记忆、Gemini 的设置开始每天备份到私人 GitHub",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3871,7 +3871,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "7 月 6 日　Codex 设置和记忆定在每天 11:05、13:05 各跑一次",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3886,7 +3886,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "7 月 23 日　传完向 GitHub 现问一次，对上才算成功",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3901,7 +3901,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "8 月 22 日　G 盘快照和上一份一样就不另存",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3961,7 +3961,7 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 13–14 日　对话只留最新两份，外接盘跟着 G 删旧点；外接盘没接也能照常存 G",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4031,12 +4031,12 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "9 月 28 日 23:10–23:26　只留真正要单独备的：Claude 记忆开关关着，Claude 记忆备份停，它记用量的那一路挪到 12:15；Codex 设置和记忆备份和开发配置备份重复，停；Antigravity 只留配置，原 Gemini 备份停；开发配置备份补上漏掉的 Codex 记忆，拿掉冻结的 OpenClaw。这一页从“Codex 备份恢复”改成“AI 备份”",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {

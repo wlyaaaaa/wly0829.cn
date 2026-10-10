@@ -38,6 +38,18 @@
   "url": "/projects/wechatdirect/",
   "tagline": "让 AI 读懂电脑上的微信，只读点名的那一段。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:21"
+   },
+   "facts": [
+    "近 7 天 AI 用了 12 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/WeChatDirect",
   "capability": "读懂微信聊天",
@@ -662,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "5053a5fcb520e960587e182d8681f31a99ec735f06a754e4ae255abb71ba6727",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
+  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
  }
 }
 ---
@@ -713,7 +725,26 @@
       26,
       717,
       197
-     ]
+     ],
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -773,6 +804,21 @@
      ]
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
+    },
+    {
      "type": "stat_card",
      "text_ref": "4份聊天档案，共7934条消息（截至10月10日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
      "columns": 4,
@@ -822,7 +868,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "4 份｜聊天档案，共 7934 条消息（截至 9 月 28 日）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -837,7 +883,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "839 段｜聊天替理解库读过，共 10561 条消息（9 月 8–27 日，6 次）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -852,7 +898,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "0 次｜写微信数据库：9 月 18 日实测读了 45 次源文件，一次都没写",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -862,12 +908,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "220 个｜自动测试，11158 行 Python",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1440,7 +1486,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "两个同名小名牌",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1480,12 +1526,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个没有名字的头像",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1515,7 +1561,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张被涂改的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1702,7 +1748,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张复印出来的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1742,12 +1788,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张只亮了一行的表格",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1762,7 +1808,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "几个拼好的对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -1792,7 +1838,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个文档和一把小扫帚",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1802,12 +1848,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2051,7 +2097,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一把镊子夹起一小张纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2061,12 +2107,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2076,12 +2122,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2091,12 +2137,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2106,12 +2152,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2121,12 +2167,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2136,12 +2182,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2151,12 +2197,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2433,7 +2479,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "只读点名的，不整号同步。｜问的是一件事，就只该碰那一个人或群的那一段：范围一眼看得清，也不会顺手把整个号的聊天搬出来。整批导出聊天记录，属于约法里的〔重大的事〕。它不做的事列在〔技能页的边界〕。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2448,7 +2494,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "直接读本地库，不经过别的服务。｜旧做法要另开一个取数服务、再交给 AI，多一个要一直开着、会坏的环节；现在调用一次、读完就退出，电脑上不留常驻程序。",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2463,7 +2509,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "要 Python 3.14。｜微信 4 的正文用 zstd 压缩，3.14 的标准库自带解压；这样依赖只有 cryptography、Pillow、tzdata 三个。语音解码用的 pilk 另装在一个单独的 Python 3.11 里。",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2473,12 +2519,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "测试不用真实聊天。｜仓库是公开的，所以测试全用编出来的消息、加密数据库和故意弄坏的日志；真实聊天只在本机验收，结果只记数字。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2977,12 +3023,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "查一段聊天｜说哪个人或群、哪天或什么关键词，读够回答的一小段，带时间和谁说的｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3007,12 +3053,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "接着往下读｜一段没读完时给出续读位置，下一次接着读，账号、聊天和时间范围不会变｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3022,12 +3068,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "只看我在大群说过的｜先按发送者筛出我的发言再解码，适合几千条的群；别人的回应再按时间补读｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3057,7 +3103,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "看懂特殊消息｜转账、红包、通话、位置、拍一拍、撤回、系统提示按微信自己的结构写清楚｜在用",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -3067,12 +3113,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "分清主号副号｜每次绑定一个号，同名联系人不跨号串；没说哪个号又两边都有，就列候选｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3082,12 +3128,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "看哪些聊天有新消息｜列出某个时间之后有变化的会话，两个号分开列，不读正文、不截断｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3102,7 +3148,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "算账号指纹｜装机配置时，从已有配置算出两个号的 SHA-256 指纹填进去，只输出指纹｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3117,7 +3163,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "打开消息的附件｜只打开这条消息自己的图片、表情、文件、视频，交回类型、大小和指纹；微信特有的 WXGF 图片转成 PNG 或 GIF｜在用",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -3147,7 +3193,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "表情从原地址取回｜本机没有的表情，按这条消息记着的微信地址取回并核对；可以禁止联网｜说不准",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -3513,7 +3559,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "人物",
    "source_phrase": "建档和补新的｜点名一个人或群，第一次存下本机能看到的全部，以后同一句话只补新的｜在用",
-   "sha256": "84f7098cd979eb8bdeccc7587fcf2d78e42d4ff3014093cd65a9829739e0ca28",
+   "sha256": "221ee5da99dd4bcd2d636a62584d34405663986eebdce306093f0944b39360be",
    "status": "ready"
   },
   {
@@ -3553,12 +3599,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "旧档案升级｜旧格式的档案下次更新时，自动按新规则重认一遍每条是谁发的｜待验收·真实数据测过",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3658,12 +3704,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "清理临时解密文件｜查看或清掉某次任务留下的临时解密文件，只动认得出的那一次｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   }
  ]
@@ -3825,7 +3871,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "8 月 24–26 日：起步。直接读微信 4 的本地数据库，取代旧项目〔微信记录交给 AI〕；第一次把一条微信语音交给转写；加上建档和朋友圈；修好文件传输助手的乱码和贴反的主号副号。",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -3840,7 +3886,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "8 月 30 日：代码公开到 GitHub。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -3870,7 +3916,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 5–7 日：给 AI 的阅读包，图片语音按原来的位置排在消息旁边；通话、转账、红包、系统提示按原样还原。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3885,7 +3931,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 8–9 日：看哪些聊天有新消息；只看我在大群说过的；拍一拍算系统提示，不算我说的话。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3915,7 +3961,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "9 月 25–26 日：按两份审计报告修配置、加密库读取和档案更新的问题；按我的决定删掉 1307 行用不到的代码。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {

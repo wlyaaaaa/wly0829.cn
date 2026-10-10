@@ -30,6 +30,18 @@
   "url": "/skills/project-entry-gate/",
   "tagline": "动代码之前，先认准仓库、查清同步。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:49"
+   },
+   "facts": [
+    "近 7 天 AI 用了 311 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
    "commit_time": "2026-10-02T01:01:18+08:00",
@@ -40,10 +52,10 @@
    "numbers": [
     {
      "id": "n-reads",
-     "text": "Codex 读这个技能 264 次，Claude 2 次",
+     "text": "Codex 读这个技能 604 次，Claude 4 次",
      "meaning": "使用小记录里 kind=skill、name=project-entry-gate 的条数",
-     "as_of": "2026-09-28",
-     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；Codex 9 月 16 日 22:15–28 日 06:47，Claude 9 月 27 日 18:33–19:20（北京）",
+     "as_of": "2026-10-08",
+     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；Codex 9 月 16 日 22:15–10 月 8 日 23:49，Claude 9 月 27 日–10 月 2 日（北京），记录记到 10 月 8 日 23:59",
      "screens": [
       "skill-project-entry-gate-01"
      ]
@@ -132,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "9fa6f1e56994626552cecbdc03a2e6b54b7051c11e04410fe8ab4fd820ff8159",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "a2a6abb28d0f45343f81e0e67816d1da8fc2a91bb37ca12b5c19ef449f9b4cc5",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -165,9 +177,35 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "align": "center",
+     "align": "left",
      "size": "large",
-     "text_ref": "改项目前先核对"
+     "text_ref": "改项目前先核对",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:49",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 311 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "align": "right",
+     "row": "k1a-head",
+     "width": "auto"
     },
     {
      "type": "prose",
@@ -184,13 +222,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "9月16–28日，Codex读这个技能264次，Claude2次（使用小记录）。"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "size": "small",
-     "align": "center"
+     "text_ref": "使用小记录开始记以来"
     },
     {
      "type": "dialogue",
@@ -216,6 +248,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "改项目前先核对"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:49",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 311 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -250,7 +297,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "9月16–28日，Codex读这个技能264次，Claude2次（使用小记录）。"
+     "text_ref": "使用小记录开始记以来"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。；page-fixer-07：章节标题统一居中。"
@@ -317,7 +364,7 @@
 
 不用点名：说到改哪个项目、同步、推送、公开、换电脑恢复代码，AI 自己会用上它。
 
-9 月 16–28 日，Codex 读这个技能 264 次，Claude 2 次（使用小记录）。
+使用小记录开始记以来，Codex 读这个技能 604 次，Claude 4 次。
 
 ::screen{#skill-project-entry-gate-02 section="examples"}
 
@@ -452,12 +499,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一本登记簿",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -467,12 +514,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一棵分两个杈的小树",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -482,12 +529,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个黄色的注意牌",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -502,7 +549,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一只捏着一张纸的手",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -650,7 +697,7 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张写着“证据”的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -660,12 +707,12 @@ AI：“登记了私有去处：私有仓库 public-project-private-backup，但
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个问号",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {

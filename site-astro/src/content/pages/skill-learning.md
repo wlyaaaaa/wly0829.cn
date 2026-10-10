@@ -30,6 +30,18 @@
   "url": "/skills/learning/",
   "tagline": "说一句“接着上次讲”，AI 老师就接着教。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 13:06"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "ad3980780006354b3637de3734aa7c0be2673ac2",
    "commit_time": "2026-09-26T04:00:04+08:00",
@@ -82,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "5fba45eaa9fe28a669ff4682331a72bbaa8374673629b955c2ef1ccde88b61d2",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "e80934a65546deab41414444c8ef6c5366ab230c28ef66f7dbb1799b4dd4ab15",
+  "converted_at_beijing": "2026-10-10T08:46:17+08:00"
  }
 }
 ---
@@ -116,11 +128,30 @@
     {
      "type": "chapter_title",
      "text_ref": "学习方法技能",
-     "align": "center",
+     "align": "left",
      "columns": 1,
      "illustration": "none",
      "connector": "none",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
@@ -134,7 +165,8 @@
      "type": "section_heading",
      "text_ref": "它做什么",
      "row": "body",
-     "width": "42%"
+     "width": "42%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -194,6 +226,21 @@
      "illustration": "none",
      "connector": "none",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -518,12 +565,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张图钉钉着的便签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -553,7 +600,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一块发绿光的小显卡和三个对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -568,7 +615,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "日历",
    "source_phrase": "一本日历打上绿勾",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -594,7 +641,7 @@
 
 一个完整例子
 
-示例：对话是编的，做法照这个技能和学习项目的实际规矩
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“接着上次讲。”
 
@@ -717,12 +764,12 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张图钉便签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -737,7 +784,7 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一只按住整叠纸的手",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -762,12 +809,12 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "两个模型标志",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -797,7 +844,7 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一个对话气泡里一个“改”字",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -807,12 +854,12 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一只小乌龟",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1002,12 +1049,12 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "管\n我自己的学习：路线、讲义、上课、练习、学到哪了。课上要用的真实调用、练习代码和配套材料。我对学习安排的决定和更正：原话记进AI规则库的决定记录，学习文件只写现在怎么做。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1022,7 +1069,7 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "禁止文件",
    "source_phrase": "老师只读我的其他项目当例子，不改、不跑、不维护它们。",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -1037,7 +1084,7 @@ AI：“我拿这句去对：‘同一个问题每次答得不一样，是因为
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "禁止文件",
    "source_phrase": "老师只读我的其他项目当例子，不改、不跑、不维护它们。",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {

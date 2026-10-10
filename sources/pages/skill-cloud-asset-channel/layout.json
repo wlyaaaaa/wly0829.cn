@@ -133,6 +133,10 @@
         "size": "large"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "dialogue",
         "text_ref": "我：“这40张网站图要审三轮。”",
         "split_paras": true,
@@ -198,6 +202,10 @@
         "text_ref": "一个完整例子",
         "align": "center",
         "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "dialogue",

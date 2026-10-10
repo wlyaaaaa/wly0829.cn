@@ -219,6 +219,8 @@ STATUS_REPORT = {}   # 页 → 首屏状态行里有什么（转换结束时打�
 # 来源注（notice 的 source_note，如“0.48 秒和 2 / 9 条是……合成样例跑出来的”）、现状说明（“偶尔用：只修报错……”）。
 # 这几句是给数字卡注日期、注来源的，跟着数字卡一起挪；不跟着挪，日期就和数字隔开一大段（10 月 10 日 07:00 复查发现 7 页这样）
 STATUS_ASOF = re.compile(r"^(数字|前三个数)?截至")
+# 卡后注数字来源的那一句也可能以“按……记录”开头（个人表达：“按 9 月 15–27 日的旧使用记录，AI 调用‘讲给我听’33 次……”，10 月 10 日内容对齐时从卡里挪出来的）
+STATUS_SRC = re.compile(r"^按[^，。]{0,30}(记录|统计|日志)")
 
 
 def status_note_before(b):
@@ -230,7 +232,7 @@ def status_note_after(b):
     ref = str(b.get("text_ref", ""))
     if b.get("type") not in ("prose", "notice"):
         return False
-    return bool(STATUS_ASOF.match(ref)) or ref.startswith("偶尔用") or (b.get("type") == "notice" and b.get("variant") == "source_note")
+    return bool(STATUS_ASOF.match(ref) or STATUS_SRC.match(ref)) or ref.startswith("偶尔用") or (b.get("type") == "notice" and b.get("variant") == "source_note")
 
 
 TEXTISH = ("prose", "action_button", "notice", "points_card", "content_card", "bullet_list", "section_heading", "source_text_card", "quote", "dialogue", "tag", "stat_card")
@@ -290,6 +292,64 @@ def fit_rows(blocks):
     return n
 
 
+def block_text_len(s, bl):
+    """每一块分到多少字（区块库同样的分块办法）：{id(块): 字数}。"""
+    sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
+    from engine.parse import parse, original_markdown, node_text
+    from engine.layout import assign_by_spec
+    nodes = parse(s.get("text", ""), markdown_links=original_markdown(s))
+    got = assign_by_spec(nodes, [dict(b) for b in bl], [], [])
+    return {id(b): sum(len(node_text(n)) for n in g["nodes"]) for b, g in zip(bl, got)}, {id(b): g["nodes"] for b, g in zip(bl, got)}
+
+
+def plain_ill(b):
+    return b.get("type") == "illustration" and not b.get("panels") and "gallery_assets" not in b
+
+
+def even_rows(n, c):
+    """n 个气泡排 c 列、最后一排不满时：排数不变，平均分到各排（前几排多一个），每排排满。"""
+    rows = -(-n // c)
+    base, extra = divmod(n, rows)
+    return [base + 1] * extra + [base] * (rows - extra)
+
+
+def dialogue_turns(nodes, spec):
+    """对话块里气泡的条数，和气泡是不是连成一段（区块库 comp-text _dialogue_items 同样的认法）；认不准返回 None。"""
+    kinds = []
+    for n in nodes:
+        t = n.get("type")
+        if t in ("group", "h1", "h2", "h3"):
+            kinds.append(False)
+        elif t == "para" and not kinds and spec.get("split_items") and len(str(n.get("text") or "")) <= 24 and str(n.get("text") or "").rstrip().endswith((":", "：")):
+            kinds.append(False)
+        elif t == "bullets" and spec.get("split_items"):
+            kinds += [True] * len(n.get("items") or [])
+        elif t == "para" and spec.get("split_paras"):
+            kinds += [True] * len([x for x in str(n.get("text") or "").splitlines() if x.strip()])
+        else:
+            kinds.append(False)
+    runs = sum(1 for i, k in enumerate(kinds) if k and (i == 0 or not kinds[i - 1]))
+    return sum(kinds) if runs == 1 else None
+
+
+def fill_dialogue_rows(page, sp, s, bl):
+    """F2：首屏横版里多列对话框，气泡数不是列数整数倍的，按 row_counts 平均分到各排（每排排满，不留空格）。"""
+    _, nodes = block_text_len(s, bl)
+    for b in sp["blocks"]:
+        if b.get("type") != "dialogue" or not (b.get("split_items") or b.get("split_paras")) or b.get("row_counts") or b.get("last_full_width"):
+            continue
+        try:
+            c = int(b.get("columns", 1))
+        except (TypeError, ValueError):
+            continue
+        n = dialogue_turns(nodes.get(id(b)) or [], b) if c >= 2 else None
+        if not n or n % c == 0 or n < c:
+            continue
+        b["row_counts"] = even_rows(n, c)
+        b.pop("flow", None); b.pop("rows", None)
+        DIALOGUE_ROWS.append(f"{page}：{n} 条 {c} 列 → 每排 {b['row_counts']}")
+
+
 STATUS_STATE = {"在用": "ok", "常用": "ok", "偶尔用": "ok", "待验收": "waiting", "待实施": "waiting", "已停用": "disabled", "已冻结": "disabled"}
 
 
@@ -315,8 +375,22 @@ def status_items(sl):
     items += [{"text": str(f).strip(), "state": "fact"} for f in (sl.get("facts") or [])[:2] if str(f).strip()]  # 事实项：中性圆点
     note = ""
     if day(sl.get("as_of")):
-        note = "截至 " + day(sl["as_of"]) + (f"（{str(sl['source']).strip()}）" if str(sl.get("source") or "").strip() else "")
+        # 来源常自带括号（“AI 使用小记录（记到 10 月 8 日）”），用“ · ”隔开，不套两层括号
+        note = "截至 " + day(sl["as_of"]) + (f" · {str(sl['source']).strip()}" if str(sl.get("source") or "").strip() else "")
     return items, note
+
+
+SAME_DAY_NOTE = re.compile(r"^(?:数字|前三个数)?截至(?:(\d{4})年)?(\d{1,2})月(\d{1,2})日(?:（北京时间）)?。?$")
+
+
+def same_day_note(text, as_of):
+    """数字卡下面只写日期的那一句，日期和状态行的截至日期是同一天：True。"""
+    m = SAME_DAY_NOTE.match(text or "")
+    a = re.match(r"(\d{4})-(\d{1,2})-(\d{1,2})", str(as_of or ""))
+    if not m or not a:
+        return False
+    y, mo, d = m.groups()
+    return (y is None or y == a.group(1)) and int(mo) == int(a.group(2)) and int(d) == int(a.group(3))
 
 
 def status_first(page, meta, s=None, status_line=None):
@@ -352,6 +426,15 @@ def status_first(page, meta, s=None, status_line=None):
                 st_block = {"type": "live_strip", "frame_mode": "plain", "static_items": items, **({"static_note": note} if note else {})}
         if not live and not stats and not st_block:
             continue
+        dropped = set()
+        if st_block is not None and s:  # 数字卡下面只写日期、和状态行同一天的那一句不再单独显示（主持 09:33）
+            _, nodes_by = block_text_len(s, bl)   # （顺带把区块库加进 sys.path）
+            from engine.parse import node_text
+            for i in stats:
+                if bl[i].get("type") != "stat_card" and same_day_note("".join(node_text(n) for n in nodes_by.get(id(bl[i])) or []), status_line.get("as_of")):
+                    dropped.add(i)
+                    DROP_NOTES.setdefault(id(s), set()).update(node_text(n) for n in nodes_by.get(id(bl[i])) or [])
+            stats = [i for i in stats if i not in dropped]
         # 数字卡和截图/插画并排成一行（Typora 薄荷主题：截图 60% + 数字卡 40%）：整行一起挪到标题下，保持原来的并排，
         # 不把截图单独留在下面（单独留下就是一张 60% 宽的图、右边空一大块）
         keep_rows = set()
@@ -364,7 +447,7 @@ def status_first(page, meta, s=None, status_line=None):
         stat_set = set(stats) | {k for k in range(tj, len(bl)) if bl[k].get("row") in keep_rows}
         moved = live + sorted(k for k in stat_set if k not in live)
         title, status = bl[t0:tj], ([st_block] if st_block else []) + [bl[i] for i in moved]
-        rest = [b for i, b in enumerate(bl) if i >= tj and i not in moved]
+        rest = [b for i, b in enumerate(bl) if i >= tj and i not in moved and i not in dropped]
         row = bl[ti].get("row")
         if row:  # 标题组从并排的那一行里拿出来占整行；原来标题那一栏的宽度交给这一行剩下的第一块，左右比例不变
             w = next((b.get("width") for b in title if b.get("width")), None)
@@ -392,8 +475,42 @@ def status_first(page, meta, s=None, status_line=None):
             if len(cols) >= 2 and cols[-1][0].get("type") == "illustration":
                 for b in cols[-1][1:]:
                     b.pop("row", None); b.pop("width", None)
+        if o == "h" and st_block is not None:
+            # 电脑版：静态状态行放在标题右边，不另起一行（主持 10 月 10 日 08:00 状态行说明：“状态行和标题、数字卡排在一起，不另起一块空白”）。
+            # 标题组一栏按标题自身宽度（最多 60%），状态行一栏占其余，几项上下排（base.css 的 .row .status-static）；手机照旧上下排
+            for b in title:
+                b.pop("width", None)
+                b.pop("row_fit_illustration", None)   # 原来那一行的行级标记不跟着标题走（看驾驶舱技能页标在标题块上）
+                b["row"] = "k1a-head"
+            title[0]["width"] = "fit-content(60%)"
+            bl[ti]["align"] = "left"   # 标题在左栏照原样靠左（主持 07:18：首屏标题统一照原页面靠左）
+            st_block["row"], st_block["width"] = "k1a-head", "minmax(0,1fr)"
+            # F1 插画挪到标题行最右一栏（高度跟标题、状态行一样，typeset_apply.js fitHeadIllustration）：原来和标题同一行的插画，
+            # 标题挪走以后旁边只剩一句短话（技能名那一行，≤60 字）或什么都不剩；或整屏只有一幅单独占一行的小插画（两边空着）。
+            # 不然那一行就是“一句话 + 一幅图”，中间空一大块（10 月 10 日 09:05 扫描：讲给我听、修乱码、中文语音转写等）
+            lens = block_text_len(s, bl)[0] if s else {}
+            head_ill = None
+            if row:
+                rem = [b for b in rest if b.get("row") == row]
+                ills = [b for b in rem if plain_ill(b)]
+                txt = [b for b in rem if b not in ills]
+                if len(ills) == 1 and all(b.get("type") == "prose" for b in txt) and sum(lens.get(id(b), 999) for b in txt) <= 60:
+                    head_ill = ills[0]
+                    for b in txt:
+                        b.pop("row", None); b.pop("width", None); b.pop("row_fit_illustration", None)
+            if head_ill is None:
+                solo = [b for b in rest if plain_ill(b) and not b.get("row") and b.get("size") == "small"]
+                if len(solo) == 1:
+                    head_ill = solo[0]
+            if head_ill is not None:
+                rest.remove(head_ill)
+                for k in ("width", "size", "target_width", "target_height", "row_fit_illustration"):
+                    head_ill.pop(k, None)
+                head_ill.update({"row": "k1a-head", "width": "auto", "align": "right"})
+                status.insert(status.index(st_block) + 1, head_ill)
+                HEAD_ILL.append(page)
         for b in status:  # 状态块占整行（和截图并排的数字卡那一行照旧并排）
-            if b is st_block:
+            if b is st_block or b.get("row") == "k1a-head":
                 continue
             if b.get("row") in keep_rows:
                 continue
@@ -401,13 +518,21 @@ def status_first(page, meta, s=None, status_line=None):
         sp["blocks"] = bl[:t0] + title + status + rest
         if o == "h":
             FITTED[page] = FITTED.get(page, 0) + fit_rows(sp["blocks"])
+            if s:
+                fill_dialogue_rows(page, sp, s, bl)
         got.add("实时" if live else ("状态行" if st_block else "数字"))
     if got:
         STATUS_REPORT[page] = "+".join(sorted(got, reverse=True))
+    gone = DROP_NOTES.pop(id(s), None) if s else None
+    if gone:  # 正文里拿掉这几段（只拿整段就是这句日期的行），h、v 两份构图都已去掉对应的块
+        from engine.parse import canon, normalize
+        keep = [ln for ln in s["text"].split("\n") if not (ln.strip() and canon(normalize(ln)) in gone)]
+        s["text"] = re.sub(r"\n{3,}", "\n\n", "\n".join(keep))
+        SAME_DAY.append(f"{page}：{'、'.join(sorted(gone))}")
     return bool(got)
 
 
-ABSORBED, FITTED = [], {}
+ABSORBED, FITTED, HEAD_ILL, DIALOGUE_ROWS, SAME_DAY, DROP_NOTES = [], {}, [], [], [], {}
 # 演示用临时状态行（不进仓库）：CONVERT_STATUS_LINE_DEMO=<json 文件，{页: status_line}>
 STATUS_DEMO = json.load(open(os.environ["CONVERT_STATUS_LINE_DEMO"], encoding="utf-8")) if os.environ.get("CONVERT_STATUS_LINE_DEMO") else {}
 
@@ -588,6 +713,12 @@ if __name__ == "__main__":
         print("  首屏文字+插画并排行（插画按文字高度定大小）：", json.dumps({k: v for k, v in FITTED.items() if v}, ensure_ascii=False))
     for a in ABSORBED:
         print("  标题块顺带装着的介绍段，补成单独一块留在原栏：", a)
+    if HEAD_ILL:
+        print("  首屏插画挪到标题行最右（旁边只剩一句短话或单独一幅小图）：", " ".join(HEAD_ILL))
+    for d in DIALOGUE_ROWS:
+        print("  首屏对话框每排排满：", d)
+    for d in SAME_DAY:
+        print("  数字卡下面和状态行同一天的截至日期不再单独显示：", d)
     for h in HEALED:
         print("  构图 text_ref 只差数字，已按源里现在的写法认：", h)
     for u in UNMATCHED:
