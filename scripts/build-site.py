@@ -56,6 +56,7 @@ def restore(snapshot):
         return cache[key]['proof'] == {key: row[key] for key in ('bytes', 'sha256')}
     def asset(item):
         relative, row = item; target = public / relative
+        if relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file(): return
         if Path(relative).is_absolute() or '..' in Path(relative).parts: raise ValueError('Asset escapes public: ' + relative)
         if 'source_path' in row:
             source = ROOT / row['source_path']
@@ -119,6 +120,7 @@ def markdown_frontmatter(path):
 
 def retained_inputs(name, snapshot):
     base = SITE / 'sources/retained-home-cockpit'; html = base / (name + '.html')
+    if name == 'cockpit' and not html.is_file(): return [SITE / 'src/pages/cockpit', SITE / 'src/cockpit', SITE / 'public/_overview']
     dependencies = read(base / 'dependencies.json'); bundled = read(base / 'manifest.json')['bundled']
     refs = set(re.findall(r'''["']((?:https?://|/|assets/)[^"'\s<>]+)["']''', html.read_text('utf8')))
     refs.update('/' + path for path in ({'home': ['_home-cockpit/time-labels.css', '_home-cockpit/home-cta.css'],
@@ -185,7 +187,7 @@ def build(pages=None):
     prepared_fp = fingerprint(preparation)
     stage('fingerprint')
     prepare_changed = not complete or old.get('prepared') != prepared_fp or not (public / '_album/astro-runtime.json').is_file()
-    prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'])
+    prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
     runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
     if prepare_changed:
         restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
@@ -199,16 +201,26 @@ def build(pages=None):
     engine_fp = fingerprint([ROOT / 'src/typeset', ROOT / 'sources/assets', SITE / 'tools/render_blocks.py'])
     wrapper_paths = [p for p in (SITE / 'src').rglob('*') if p.is_file()
         and 'content' not in p.relative_to(SITE / 'src').parts and p.parent.name not in {'runtime', 'retained'}
-        and p.name != 'living-engine.json']
+        and p.name not in {'living-engine.json', 'retained-page.ts'} and 'cockpit' not in p.relative_to(SITE / 'src').parts]
     wrapper_fp = fingerprint(wrapper_paths + [SITE / 'astro.config.mjs', SITE / 'package-lock.json'])
-    entries = {}; render_fps = {}
+    entries = {}; render_fps = {}; fixed = {}
+    for path in (SITE / 'src/pages').rglob('*.astro'):
+        rel = path.relative_to(SITE / 'src/pages').as_posix()
+        if '[' in rel: continue
+        route = normalize_route('/' + rel.removesuffix('.astro').removesuffix('/index')) if rel != 'index.astro' else '/'
+        if route in fixed: raise ValueError('同一路由由两处产出：' + route)
+        fixed[route] = path
     for md in sorted((SITE / 'src/content/pages').glob('*.md')):
         fm = markdown_frontmatter(md); name = md.stem
         render_fps[name] = fingerprint([md, SITE / 'src/chrome/runtime' / (name + '.json')]) + engine_fp
         for route in [fm.get('url') or '/' + name + '/', *(fm.get('old_urls') or [])]:
-            entries[normalize_route(route)] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
+            route = normalize_route(route)
+            if route in {'/', '/cockpit/', '/computer-access/'}: continue
+            if route in entries or route in fixed: raise ValueError('同一路由由两处产出：' + route)
+            entries[route] = {'name': name, 'fingerprint': render_fps[name] + wrapper_fp, 'kind': 'native'}
     for name, route in [('home', '/'), ('cockpit', '/cockpit/'), ('computer-access', '/computer-access/')]:
-        retained_fp = fingerprint(retained_inputs(name, snapshot))
+        native_cockpit = name == 'cockpit' and "retainedPage('cockpit')" not in fixed[route].read_text('utf8')
+        retained_fp = fingerprint([fixed[route], SITE / 'src/cockpit', SITE / 'public/_overview'] if native_cockpit else retained_inputs(name, snapshot))
         entries[route] = {'fingerprint': retained_fp, 'kind': 'retained'}
     for relative in snapshot['pages']:
         entries.setdefault(file_route(relative), {'fingerprint': fingerprint([SNAPSHOT / 'pages' / relative]), 'kind': 'frozen'})

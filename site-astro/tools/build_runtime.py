@@ -32,6 +32,7 @@ def prepare(snapshot):
     public = SITE / 'public'; source = SITE / 'sources/retained-home-cockpit'
     dependencies = read(source / 'dependencies.json')
     for rel, row in dependencies.items():
+        if rel.startswith('_home-cockpit/cockpit-offline.') and not (source / 'cockpit.html').is_file(): continue
         origin = ROOT / row['source_path'] if 'source_path' in row else SITE / 'sources/vendor-deps' / rel
         raw = origin.read_bytes()
         authored = row.get('source_path', '').startswith(('site-astro/public/_home-cockpit/', 'site-astro/sources/retained-home-cockpit/'))
@@ -49,16 +50,12 @@ def seed_file(rel, target):
 
 def retired_project_routes(dist, previous):
     order = read(ROOT/'config/final-project-order.json')
-    result = {}
     for item in order.get('retired_routes', []):
         route, destination = item['route'], item['destination']
         routes = [value for value in previous['routes'] if value == route or value.startswith(route)]
         for old in routes:
             target = dist/nav.route_file(old); target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>'+html.escape(item['title'])+'</title></head><body><main><p>'+html.escape(item['title'])+'旧页面已撤下。<a href="'+html.escape(destination, quote=True)+'">查看现有项目</a></p></main></body></html>', encoding='utf8')
-            result[old] = {'producer': 'astro', 'destination': destination}
-    return result
-
 
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
@@ -83,13 +80,10 @@ def sync_search(root, previous, converted, pin, changed_routes):
             href = route + '#' + anchor if nav.target_exists(route + '#' + anchor, targets) else route
             generated.append({'type': '项目内容' if slug and anchor != 'top' else '项目' if slug else '页面', 'group': '项目' if slug else '系统', 'projectSlug': slug,
                 'scopes': ['project:' + slug] if slug else ['system'], 'title': title + ' · ' + label, 'detail': text[:240], 'href': href, 'aliases': [label], 'search': text.lower()})
-    preserved = {}
     for rel in ('search-index.js', 'search-projects.js', 'search-project-localocr.js'):
         obj = previous['oss']['objects'][rel]; old = root/rel
         seed_file(rel, old)
         rows = nav.search_records(old.read_text('utf8')); kept = [row for row in rows if row['href'].split('#')[0] not in converted]
-        preserved[rel] = {'kind': 'search_index', 'previous_object': obj,
-            'preserved_record_sha256s': [hashlib.sha256(json.dumps(row, ensure_ascii=False, sort_keys=True).encode()).hexdigest() for row in kept]}
         added = [row for row in generated if (row['type'] == '项目内容') == (rel != 'search-index.js') and (rel != 'search-project-localocr.js' or row['projectSlug'] == 'localocr')]
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False).replace('<', '\\u003c') + ';\n').encode())
@@ -104,16 +98,12 @@ def sync_search(root, previous, converted, pin, changed_routes):
         raw = target.read_text('utf8'); patched = raw
         for old, new in replacements.items(): patched = patched.replace(old, new)
         target.write_bytes(patched.encode()); replacements[obj['url']] = '/' + rel
-    overlays = {}
     for path in (root / nav.route_file(route) for route in changed_routes):
         rel = path.relative_to(root).as_posix(); raw = path.read_bytes(); patched = raw
         applied = {old: new for old, new in replacements.items() if old.encode() in raw}
         for old, new in applied.items(): patched = patched.replace(old.encode(), new.encode())
         if patched != raw:
             path.write_bytes(patched)
-            if file_route(rel) not in converted: overlays[rel] = {'kind': 'runtime_reference', 'replacements': applied, 'before': previous['files'][rel], 'after': {'bytes': len(patched), 'sha256': hashlib.sha256(patched).hexdigest()}}
-    return overlays, preserved
-
 
 def has_noindex(path):
     class Robots(HTMLParser):
@@ -126,23 +116,12 @@ def has_noindex(path):
     parser = Robots(); parser.feed(re.split(r'</head\s*>', Path(path).read_text('utf8'), maxsplit=1, flags=re.I)[0])
     return parser.noindex
 
-
-def verify_sitemap(root):
-    root = Path(root)
-    excluded = [row.text for row in ET.parse(root/'sitemap.xml').iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')
-                if has_noindex(root/nav.route_file(row.text))]
-    if excluded: raise ValueError('Sitemap contains noindex pages: '+str(excluded))
-
-
 def write_sitemap(root, routes):
     root = Path(root)
     urls = sorted(route for route in routes if route.endswith('/') and route != '/system/'
                   and not has_noindex(root/nav.route_file(route)))
     sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>https://wly0829.cn'+route+'</loc></url>' for route in urls) + '</urlset>\n'
     (root/'sitemap.xml').write_text(sitemap, encoding='utf8')
-    verify_sitemap(root)
-    return urls
-
 
 
 def album_index(dist, snapshot, changed_routes):

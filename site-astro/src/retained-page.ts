@@ -1,5 +1,5 @@
 import home from '../sources/retained-home-cockpit/home.html?raw';
-import cockpit from '../sources/retained-home-cockpit/cockpit.html?raw';
+const cockpit = Object.values(import.meta.glob('../sources/retained-home-cockpit/cockpit.html', { eager: true, query: '?raw', import: 'default' }))[0] as string;
 import access from '../sources/retained-home-cockpit/computer-access.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
 import homeCta from '../public/_home-cockpit/home-cta.css?raw';
