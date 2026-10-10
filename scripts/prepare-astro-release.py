@@ -93,10 +93,11 @@ def hydrate(previous, shell_assets=None):
     shutil.copyfile(SITE/'src/scripts/living-mount.js', mount)
 
 
-def seed_retained(assets):
+def seed_retained(assets, work):
     loader = module('astro_retained', 'site-astro/tools/retain_home_cockpit.py')
-    manifest = loader.materialize_frozen(); restored = loader.materialize_dependencies()
-    return {'source': 'site-astro/sources/retained-home-cockpit', 'pages': manifest['pages'], 'dependencies': restored}
+    runtime = loader.regenerate_runtimes(work)
+    manifest = loader.materialize_frozen()
+    return {'source': 'site-astro/sources/retained-home-cockpit', 'pages': manifest['pages'], 'dependencies': runtime['dependencies'], 'runtime': runtime}
 
 
 def retired_project_routes(dist, previous):
@@ -169,10 +170,10 @@ def prepare(args):
     ref = subprocess.check_output(['git', 'rev-parse', args.baseline_ref+'^{commit}'], cwd=ROOT, text=True).strip()
     if json.loads(subprocess.check_output(['git', 'show', ref+':site-release/release-manifest.json'], cwd=ROOT)) != previous:
         raise ValueError('Baseline does not belong to the exact supplied production commit')
-    inputs = author_inputs()
     hybrid.verify_release(args.baseline); pin = astro_rules.generate(SITE/'public')
-    retained = seed_retained(args.shell_assets)
+    retained = seed_retained(args.shell_assets, output/'runtime-input')
     hydrate(previous, args.shell_assets)
+    inputs = author_inputs()
     run(sys.executable, 'tools/adapt_motion.py', cwd=SITE)
     run(sys.executable, 'tools/pack_living.py', cwd=SITE)
     run(sys.executable, 'tools/convert_page.py', '--all', cwd=SITE)

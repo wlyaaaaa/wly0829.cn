@@ -164,6 +164,127 @@ def retain_candidate(source):
     return manifest
 
 
+def regenerate_runtimes(work):
+    """按当前归属源码重生运行件；不可变发布壳只承担未改动的原始功能。"""
+    repo, public = ROOT.parent, ROOT / 'public'
+    source = ROOT / 'sources/retained-home-cockpit'
+    record = source / 'runtime-inputs.json'
+    previous = json.loads(record.read_text('utf8')) if record.is_file() else {}
+    manifest = json.loads((source / 'manifest.json').read_text('utf8'))
+    dependencies = json.loads((source / 'dependencies.json').read_text('utf8'))
+    owned = []
+    for rel, row in manifest['bundled'].items():
+        if not row['source'].startswith('../../public/'): continue
+        path = (source / row['source']).resolve(); proof = descriptor(path.read_bytes())
+        row.update(proof); manifest['files'][rel] = proof
+        dependencies[rel] = {**proof, 'source_path': path.relative_to(repo).as_posix()}
+        owned.append(path.relative_to(repo).as_posix())
+    manifest['bytes'] = sum(row['bytes'] for row in manifest['files'].values())
+    for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies)]:
+        path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
+    materialize_frozen(); restored = materialize_dependencies()
+    names = ['scripts/build-typeset-site.py', 'scripts/typeset-layout.js',
+             'scripts/update-live-release.py', 'scripts/site-live-runtime.js',
+             'scripts/typeset-live-display.js', 'scripts/b2-live-runtime.js',
+             'scripts/prepare-cockpit-cache.py', 'scripts/prepare-home-living.py',
+             'scripts/home-living-bind.js', 'site-astro/tools/home_firstpaint.py',
+             'site-astro/tools/retain_home_cockpit.py', 'scripts/release_delta.py',
+             'scripts/public_page_contract.py', 'scripts/prepare_native_readability.py',
+             'scripts/rule_original_contract.py', 'scripts/audit-page-publication.py',
+             'scripts/hybrid-release.py', 'scripts/prepare-motion-release.py',
+             'scripts/build-assembled-site.py', 'scripts/repair-release-navigation.py',
+             'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
+    runtime_paths = sorted((ROOT / 'src/chrome/runtime').glob('*.json'))
+    names += [path.relative_to(repo).as_posix() for path in runtime_paths]
+    names += [(source / (page + '.html')).relative_to(repo).as_posix() for page in ('home', 'cockpit')]
+    def current_inputs(): return {name: descriptor((repo / name).read_bytes()) for name in names + owned}
+    inputs = current_inputs()
+    if previous.get('inputs') == inputs:
+        for rel, proof in previous['outputs'].items():
+            if descriptor((public / rel).read_bytes()) != proof:
+                raise ValueError('当前源绑定的运行件字节不同：' + rel)
+        return {'status': 'reused', 'inputs': inputs, 'outputs': previous['outputs'], 'dependencies': restored}
+    def load(name, relative):
+        spec = importlib.util.spec_from_file_location(name, repo / relative)
+        module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+        return module
+    typeset = load('retained_typeset', 'scripts/build-typeset-site.py')
+    live = load('retained_live', 'scripts/update-live-release.py')
+    home = load('retained_home', 'scripts/prepare-home-living.py')
+    pages = {page: (source / (page + '.html')).read_text('utf8') for page in ('home', 'cockpit')}
+    texts = {path: path.read_text('utf8') for path in runtime_paths}
+    dependencies = json.loads((source / 'dependencies.json').read_text('utf8'))
+    pattern = r'/((?:_typeset/runtime|_shared|cockpit/assets)/(?:home-app-|app-|b2-typeset-)[a-f0-9]+\.js)'
+    base = previous.get('base') or {rel: dependencies[rel] for text in [*texts.values(), *pages.values()]
+                                  for rel in re.findall(pattern, text)}
+    replacements, outputs, generated = {}, {}, {}
+    def emit(rel, text, stem):
+        raw = text.encode('utf8'); proof = descriptor(raw)
+        new = (Path(rel).parent / (stem + proof['sha256'][:20] + '.js')).as_posix()
+        asset = source / 'assets' / (proof['sha256'] + '.js')
+        asset.write_bytes(raw); (public / new).parent.mkdir(parents=True, exist_ok=True)
+        (public / new).write_bytes(raw)
+        dependencies[new] = {**proof, 'source_path': asset.relative_to(repo).as_posix()}
+        replacements['/' + rel] = '/' + new
+        old = previous.get('replacements', {}).get('/' + rel)
+        if old: replacements[old] = '/' + new
+        generated[rel] = new; outputs[new] = proof
+        return new
+    home_base = []
+    for rel, proof in sorted(base.items()):
+        raw = (public / rel).read_bytes()
+        if descriptor(raw) != {key: proof[key] for key in ('sha256', 'bytes')}:
+            raise ValueError('运行件不可变发布壳不同：' + rel)
+        text = raw.decode('utf8')
+        if Path(rel).name.startswith('home-app-'):
+            home_base.append((rel, text)); continue
+        if Path(rel).name.startswith('app-'):
+            text = home.patch_event_targets(live.patch_shared_runtime(typeset.patch_inherited_app(text)))
+            emit(rel, text, 'app-')
+        else:
+            emit(rel, live.patch_b2_runtime(text), 'b2-typeset-')
+    def replace(text):
+        for old, new in replacements.items(): text = text.replace(old, new)
+        return text
+    work = Path(work); work.mkdir(parents=True, exist_ok=True)
+    cockpit = work / 'cockpit/index.html'; cockpit.parent.mkdir(parents=True, exist_ok=True)
+    cockpit.write_text(replace(pages['cockpit']), encoding='utf8', newline='')
+    (work / '.release-delta.json').write_text(json.dumps({'baseline': str(public),
+        'sources': {'cockpit/index.html': str(cockpit)}}), encoding='utf8')
+    model, _ = home.cockpit_model(work)
+    for rel, text in home_base:
+        emit(rel, home.patch_runtime(text, model, (repo / 'scripts/home-living-bind.js').read_text('utf8')), 'home-app-')
+    pages = {page: replace(text) for page, text in pages.items()}
+    # 从原引擎重新执行首帧补丁；先移除上轮的预热标签，避免重复插入。
+    original_engine = previous.get('firstpaint_source', '_shared/home-living/hero-live.576f7d6f10.js')
+    old_firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', pages['home'])[1]
+    pages['home'] = re.sub(r'<link\b[^>]*(?:_home-cockpit/home-firstpaint-|modulepreload)[^>]*>', '', pages['home'])
+    pages['home'] = pages['home'].replace('/' + old_firstpaint, '/' + original_engine)
+    pages['home'] = adjust_home(pages['home'], public, public)
+    firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', pages['home'])[1]
+    raw = (public / firstpaint).read_bytes(); outputs[firstpaint] = descriptor(raw)
+    (source / Path(firstpaint).name).write_bytes(raw)
+    dependencies[firstpaint] = {**outputs[firstpaint], 'source_path': (source / Path(firstpaint).name).relative_to(repo).as_posix()}
+    manifest = json.loads((source / 'manifest.json').read_text('utf8'))
+    manifest['bundled'].pop(old_firstpaint, None)
+    manifest['bundled'][firstpaint] = {'source': Path(firstpaint).name, **outputs[firstpaint]}
+    for rel, new in generated.items():
+        if rel in manifest['files']: manifest['files'][new] = outputs[new]
+    manifest['files'].pop(old_firstpaint, None); manifest['files'][firstpaint] = outputs[firstpaint]
+    for page, text in pages.items():
+        raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
+        manifest['pages'][page] = descriptor(raw)
+    for path, text in texts.items(): path.write_bytes(replace(text).encode('utf8'))
+    manifest.update(count=len(manifest['files']), bytes=sum(row['bytes'] for row in manifest['files'].values()))
+    for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies),
+                        (record, {'schema': 'wly.retained-runtime-inputs.v1', 'inputs': current_inputs(), 'base': base,
+                                  'outputs': outputs, 'replacements': {('/' + rel): ('/' + new) for rel, new in generated.items()},
+                                  'firstpaint_source': original_engine})]:
+        path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
+    materialize_frozen()
+    return {'status': 'regenerated', 'inputs': current_inputs(), 'outputs': outputs, 'dependencies': restored}
+
+
 def finalize_runtime(site=ROOT):
     """从实际生成页和保留正式页更新翻页预热表，不保留旧整屏图引用。"""
     site = Path(site); dist = site / 'dist'; routes = {}; pages = {}

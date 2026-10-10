@@ -1,0 +1,548 @@
+{
+  "schema": "wly.retained-runtime-inputs.v1",
+  "inputs": {
+    "scripts/build-typeset-site.py": {
+      "sha256": "eaa4309f4bb203ead34046d6e20eacb04cabd7408502e336102df9be3aafd912",
+      "bytes": 95157
+    },
+    "scripts/typeset-layout.js": {
+      "sha256": "7f543b985c8ec0916a7289087a9d7c5828ecba55a67aefdcf6193a704c349282",
+      "bytes": 45991
+    },
+    "scripts/update-live-release.py": {
+      "sha256": "4cf309d3254b104935484f9cd955f7b4b128a5dbc5ce9e885934f3a4914499a5",
+      "bytes": 6351
+    },
+    "scripts/site-live-runtime.js": {
+      "sha256": "0fe059c637ff196ccc5d441d5c00e5596c827b25f738bd9be089d1711b1dddc3",
+      "bytes": 23284
+    },
+    "scripts/typeset-live-display.js": {
+      "sha256": "31df2ba573061ff04d8ddcad9745ead8c5664db81995a8539cd11996725072e9",
+      "bytes": 1820
+    },
+    "scripts/b2-live-runtime.js": {
+      "sha256": "cb3e414591bb6f66c2d4c7d108fcb2c74e4fe3cc2ffc34838b208d64f1dfa38b",
+      "bytes": 134277
+    },
+    "scripts/prepare-cockpit-cache.py": {
+      "sha256": "ba1fae96c15c2f8a56dc9423cc96e1ce1f47a0d02c7b69ddbc91e155fa710ed2",
+      "bytes": 11798
+    },
+    "scripts/prepare-home-living.py": {
+      "sha256": "682515a2c9d1d6f27fc7fd94fab16ab4f0a7081bc242f5ebea62af2949d0ce3c",
+      "bytes": 26634
+    },
+    "scripts/home-living-bind.js": {
+      "sha256": "0fa5c64368fd2d33266fe99f83504b0a3fe227e24bf0f4faea8b5432fc8d9746",
+      "bytes": 7260
+    },
+    "site-astro/tools/home_firstpaint.py": {
+      "sha256": "41647ab26ba17a847ef8f136d6483748b29ae75152d4c4280ddeaad4c48bd5c0",
+      "bytes": 12662
+    },
+    "site-astro/tools/retain_home_cockpit.py": {
+      "sha256": "267448f153e53982790d4d2cc646a03c32d440dbda0b2e4c4d7bb8011bcef6de",
+      "bytes": 20904
+    },
+    "scripts/release_delta.py": {
+      "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
+      "bytes": 3571
+    },
+    "scripts/public_page_contract.py": {
+      "sha256": "615bb59a2c5902c014997959a417198830cdc0e33441f6a179e463292e1aad6d",
+      "bytes": 7181
+    },
+    "scripts/prepare_native_readability.py": {
+      "sha256": "0f49b843b6b01c8f585800dd1b06907de9c5816c263ab9f5cd60ee2e8ac3af53",
+      "bytes": 3476
+    },
+    "scripts/rule_original_contract.py": {
+      "sha256": "8a249ddc0f3d90a24a388db852aaed02f86ea61e2d4125abbec260be77f8b239",
+      "bytes": 31666
+    },
+    "scripts/audit-page-publication.py": {
+      "sha256": "a93b15bbfe366251bdbf33219e4ed450a78b162fa9c1f3835b07282f4696da15",
+      "bytes": 24175
+    },
+    "scripts/hybrid-release.py": {
+      "sha256": "254e228c096baac80032d8576f4ebac45651f5d7f38d9592184ec5fbf701bdd8",
+      "bytes": 54808
+    },
+    "scripts/prepare-motion-release.py": {
+      "sha256": "18bd7df059d81fe6644ac89f009c908d06ffe2e983cd7a5f5f8a524dda7cb053",
+      "bytes": 18230
+    },
+    "scripts/build-assembled-site.py": {
+      "sha256": "c170e9519e8c398480edb9241201ee32f9e424baf0d997040aff46d85e32bd52",
+      "bytes": 57278
+    },
+    "scripts/repair-release-navigation.py": {
+      "sha256": "b51f58fda3f303c5d5eaabfffee1a907dad41dd8fb4b0859dd5bd48983a7f3cc",
+      "bytes": 37933
+    },
+    "config/rule-navigation-mappings.json": {
+      "sha256": "2b0236d9bf4200c5d16f266a991c1ee513581aed3fbde51fc58aa7bbb5157b93",
+      "bytes": 36461
+    },
+    "app/computer-access-model.js": {
+      "sha256": "cbf4f6c5e93666972c79d7415e5666f75e2f6093df937cbdc77eee058ca1f85e",
+      "bytes": 26513
+    },
+    "site-astro/src/chrome/runtime/404.json": {
+      "sha256": "6cdb81adf2e4b8e1db0cc87774a33f1adc2cb19b30a1c398edc28e65af0a290b",
+      "bytes": 60058
+    },
+    "site-astro/src/chrome/runtime/agents.json": {
+      "sha256": "b1f4b9d18b0748afc1d9150d4423d1bf42a14a93a515e73e9be8fb38b0349cd7",
+      "bytes": 196683
+    },
+    "site-astro/src/chrome/runtime/ai-cli-profile-manager.json": {
+      "sha256": "f85e4d93a891758569012a429f3f206c8b071b896e4aab3a2a8e7a3250e5ce45",
+      "bytes": 167285
+    },
+    "site-astro/src/chrome/runtime/charter.json": {
+      "sha256": "bb0e965d06e93a9e656535bd94fd8cb74f3db76451459d79f4b721855384fdcc",
+      "bytes": 138280
+    },
+    "site-astro/src/chrome/runtime/chinese-asr.json": {
+      "sha256": "f7863f7377fb3496c68e8081d2b8cdcbf5abe791e5fefd2341f49d36dceb5a24",
+      "bytes": 136860
+    },
+    "site-astro/src/chrome/runtime/codex-agent-model-benchmark.json": {
+      "sha256": "ef41140842584a4ef8a6a965d122f753c8c1cd7e63168a2d52a8b8d563b5a733",
+      "bytes": 108993
+    },
+    "site-astro/src/chrome/runtime/codex-local-remote.json": {
+      "sha256": "04a3ae2fa27812b6aefe65b0d69cc059548fcd1729381e37c4900f1338adabc5",
+      "bytes": 142302
+    },
+    "site-astro/src/chrome/runtime/codex-memory.json": {
+      "sha256": "b51336883e6455b2278cc15761818244113ea14a42ed2fd3706fd75520d647a1",
+      "bytes": 140363
+    },
+    "site-astro/src/chrome/runtime/computer-access.json": {
+      "sha256": "49a8425dca4a3b3a4fb83c7c3d4f8fedeb225266b4abcf40dcdd3ef54c943f98",
+      "bytes": 112003
+    },
+    "site-astro/src/chrome/runtime/daily-preferences.json": {
+      "sha256": "57c7626e399a070f56e9d6a26cb5ef8b6621a2692f78ac4a8ace95b02db4959d",
+      "bytes": 152571
+    },
+    "site-astro/src/chrome/runtime/devconfig-backup.json": {
+      "sha256": "88835a881555e9134f8595e3d67679401854ccffa3973afa2f60d015bfae6325",
+      "bytes": 137238
+    },
+    "site-astro/src/chrome/runtime/emerald-veil.json": {
+      "sha256": "d1fd31bb0ea68043615a59f5080cc082a04a1c035fa73c6434ee70a9770eb3d9",
+      "bytes": 124518
+    },
+    "site-astro/src/chrome/runtime/github-local-index.json": {
+      "sha256": "08f1a0e1235f42b850965410ca2f26e69b7b37a7a5bd0ac9fc4a5b50bd2c012b",
+      "bytes": 150336
+    },
+    "site-astro/src/chrome/runtime/how-this-site.json": {
+      "sha256": "d6493850605c609c37a0eadc0d8aa84cf5c6f0ca53807f7090f5949c780eb735",
+      "bytes": 111858
+    },
+    "site-astro/src/chrome/runtime/how.json": {
+      "sha256": "debc10227aa70edb44f4563df8272cf012efd4b3480fd5dd0fef2d90dccc7481",
+      "bytes": 340022
+    },
+    "site-astro/src/chrome/runtime/learning.json": {
+      "sha256": "94b222f4cee89ca2dafb071725fd80afb462ffaf41ca16940d3d065664e59987",
+      "bytes": 127959
+    },
+    "site-astro/src/chrome/runtime/localocr.json": {
+      "sha256": "38344b9772dd0f000e0c5e1489df4af629096d0b90f14a976bc5fccecfd7cd1d",
+      "bytes": 136234
+    },
+    "site-astro/src/chrome/runtime/mcp.json": {
+      "sha256": "9c14bc611c8877e529e93ddc3f3d34fadc09368854f3a6f93f1fbe41167a09ea",
+      "bytes": 121664
+    },
+    "site-astro/src/chrome/runtime/meshclip-kit.json": {
+      "sha256": "b78ab3fcc357eb2f4da92a6427299f7e95622ceaa890048ced46e696c79ae362",
+      "bytes": 124298
+    },
+    "site-astro/src/chrome/runtime/openclaw.json": {
+      "sha256": "f89e1f161d4f7589fa37f0c6fd52ced469346183bc69d01928253909443345e1",
+      "bytes": 110617
+    },
+    "site-astro/src/chrome/runtime/password-center.json": {
+      "sha256": "7ea8a0ae2c2a02b093f0460eefa65efedbd781f3f814df0a47241827155edc01",
+      "bytes": 175345
+    },
+    "site-astro/src/chrome/runtime/pc-panel-hub.json": {
+      "sha256": "b09571549acdb12f877352190d7170bf2e5b9481fa913072359b60940ea1473d",
+      "bytes": 167142
+    },
+    "site-astro/src/chrome/runtime/pcconfig.json": {
+      "sha256": "408c2d7e927573ff66e8d090432fb80eabf270849126a81f04df30171a81b749",
+      "bytes": 262434
+    },
+    "site-astro/src/chrome/runtime/personal-expression.json": {
+      "sha256": "496c49e30951dfd9f1a52f805f0c11079b41542adac00fe1935635ef0c122e52",
+      "bytes": 136993
+    },
+    "site-astro/src/chrome/runtime/personal-formal-documents.json": {
+      "sha256": "c2ed5cccd28b398abb1e2ece2949ec9b90beae14e831eb6e5f85cd87efa36e2d",
+      "bytes": 121403
+    },
+    "site-astro/src/chrome/runtime/personal-health.json": {
+      "sha256": "69883f4d2a89efaa897fd685c510a15a5373d0e0aa80b736965f89ee598094ad",
+      "bytes": 117381
+    },
+    "site-astro/src/chrome/runtime/personal-materials.json": {
+      "sha256": "4c0556661d89dadb5ac5e3a9c90fa10115993dd6b060d8c6fac129443619b91c",
+      "bytes": 138339
+    },
+    "site-astro/src/chrome/runtime/personal-media.json": {
+      "sha256": "8b978780a600fcc46f5a02ab76289086ea179c30501631aa02b6790997e87c2f",
+      "bytes": 179857
+    },
+    "site-astro/src/chrome/runtime/projects-home.json": {
+      "sha256": "8e561f5a7d03b751e6863c774986a0140c3313300fa78bf59c929e54a1400382",
+      "bytes": 521296
+    },
+    "site-astro/src/chrome/runtime/proxyclean.json": {
+      "sha256": "23e65e33e68d8cb9dac3c623c34994537cc8f776c88e9303bb326aa34f1dd40c",
+      "bytes": 129917
+    },
+    "site-astro/src/chrome/runtime/ramdisk-guardian.json": {
+      "sha256": "7ad5425ad1893f75582d13adca8953aaf7aeb9f2a7f1ef616a445edb61eebb6c",
+      "bytes": 123542
+    },
+    "site-astro/src/chrome/runtime/remote-control.json": {
+      "sha256": "30d8e8fbaab136c8388846009f9125d366d5c58973d2b72c9d39639fd35d30f8",
+      "bytes": 171091
+    },
+    "site-astro/src/chrome/runtime/rescue.json": {
+      "sha256": "febc095698632cab6d5a9b61ef95ad649a718ab157c2ef0af9f2a6a86317a18f",
+      "bytes": 125373
+    },
+    "site-astro/src/chrome/runtime/rule-authorization.json": {
+      "sha256": "e38b116664ef15edbe3a600394233e44e59973a6605c5c4f9f02b05150691526",
+      "bytes": 163395
+    },
+    "site-astro/src/chrome/runtime/rule-capabilities-runtime.json": {
+      "sha256": "3fc58e23bc83a659b2487c7db32a6fbfd07c537d631b3c5f29917ebef665fc6b",
+      "bytes": 264822
+    },
+    "site-astro/src/chrome/runtime/rule-claude-adapter.json": {
+      "sha256": "9eaec8a0e9b06e0415130ef69b40c293f974e41c2953734f6248cc2924acaab2",
+      "bytes": 268276
+    },
+    "site-astro/src/chrome/runtime/rule-codex-adapter.json": {
+      "sha256": "ff7594cb2c6090346eb7b6419a9ded54818a6d9ec1f0e0e6af380e5018210ea9",
+      "bytes": 168694
+    },
+    "site-astro/src/chrome/runtime/rule-context-sources.json": {
+      "sha256": "2d1c0a9c80e4c85506208133f41b558657955808cd9df0c2692bc101399bb1f7",
+      "bytes": 291416
+    },
+    "site-astro/src/chrome/runtime/rule-engineering-delivery.json": {
+      "sha256": "7998a497846ec89e9a5624bcac5633bdac562faddc8509d87161a021084dc830",
+      "bytes": 239530
+    },
+    "site-astro/src/chrome/runtime/rule-execution-coordination.json": {
+      "sha256": "121390df21365d39f7381a178bd4c4519cfc51e6e1555f381f624e1442291c9f",
+      "bytes": 181613
+    },
+    "site-astro/src/chrome/runtime/rule-privacy-data.json": {
+      "sha256": "d4878b52524970ee5281479c63055cce46f0478e1b30fd51891783a5bb20b3cd",
+      "bytes": 211717
+    },
+    "site-astro/src/chrome/runtime/rule-protected-actions.json": {
+      "sha256": "e3a337637b56dbd008efe4312cc6b4d082ab54d57b8a2bf54abac15f92ec7bd6",
+      "bytes": 163020
+    },
+    "site-astro/src/chrome/runtime/rule-rule-release.json": {
+      "sha256": "81b467b8e807a24e8823ffada114b7233928a311dd196e0dd8b5e4ad1a6d8f72",
+      "bytes": 96489
+    },
+    "site-astro/src/chrome/runtime/rules-home.json": {
+      "sha256": "49d84e8653c39ef8ce12df10bdfe270c1434349a8d8f9f6850b6f1c53d9a3408",
+      "bytes": 137000
+    },
+    "site-astro/src/chrome/runtime/skill-authorization-file-broker.json": {
+      "sha256": "9b8aed929986051d4606554537ce56c7be1a0214910f3d9912bf13680399b523",
+      "bytes": 86483
+    },
+    "site-astro/src/chrome/runtime/skill-browser-control-continuity.json": {
+      "sha256": "aebf8059f750d6a1d76f205173dc3598928d70d7eea5fd5f6ca2f426b7c30d59",
+      "bytes": 95433
+    },
+    "site-astro/src/chrome/runtime/skill-chinese-asr.json": {
+      "sha256": "6f62c405fdee5dc556a9b494318de320d64a9d1edcc6403f5289ed1dff0d4298",
+      "bytes": 89713
+    },
+    "site-astro/src/chrome/runtime/skill-cloud-asset-channel.json": {
+      "sha256": "4864e21577577c0d2e6e417f7b7fb6453a30a68bb6ac460570ebbe2044628d53",
+      "bytes": 77120
+    },
+    "site-astro/src/chrome/runtime/skill-control-plane-doctor.json": {
+      "sha256": "e0a4ad6c6b563132f6a319338157be8a44577fe731408be582690abed712c448",
+      "bytes": 90398
+    },
+    "site-astro/src/chrome/runtime/skill-daily-preferences.json": {
+      "sha256": "adf8e79a5abed55aa05a338fdd737c0c36379731adcad30b3341859cb9fa6c8f",
+      "bytes": 95121
+    },
+    "site-astro/src/chrome/runtime/skill-explain-to-me.json": {
+      "sha256": "46e6008eff6cec0d948303cb68a47c642690ce98127f9d3892d251d655dc9d69",
+      "bytes": 84443
+    },
+    "site-astro/src/chrome/runtime/skill-file-intake-router.json": {
+      "sha256": "c47b58ec9848586afc7ccb73b85c30a0b8b424b98b5cf3426f12498d1a75ea61",
+      "bytes": 82421
+    },
+    "site-astro/src/chrome/runtime/skill-google-workspace-direct.json": {
+      "sha256": "0b6e7f9de9ac14a79a41d0228503cc91aea55ee6a814c72e46aacefd114d8859",
+      "bytes": 84483
+    },
+    "site-astro/src/chrome/runtime/skill-learning.json": {
+      "sha256": "0338b5dabfd51d58e173423628bbbe923fcd980526136081c63b3805469cdb76",
+      "bytes": 89655
+    },
+    "site-astro/src/chrome/runtime/skill-local-secret-broker.json": {
+      "sha256": "91f05767a5233ea3374369c5ec159267f0281458775408bbd30603d58dddf87a",
+      "bytes": 91425
+    },
+    "site-astro/src/chrome/runtime/skill-localocr.json": {
+      "sha256": "f9e178444f75789bb4a9250f58534a42c5a58ed291a207c6e5e097c9e81e016d",
+      "bytes": 73773
+    },
+    "site-astro/src/chrome/runtime/skill-md-to-pdf.json": {
+      "sha256": "f4b925bf3eb307df0a9ef28b87a120a3141e6551a514225c039b742edc59a22b",
+      "bytes": 95105
+    },
+    "site-astro/src/chrome/runtime/skill-media-person-self.json": {
+      "sha256": "f17f8a8aa6fc6db876287f517343ab76937865594452808bc51ae42bf5db6933",
+      "bytes": 79050
+    },
+    "site-astro/src/chrome/runtime/skill-mojibake-doctor.json": {
+      "sha256": "4336297393ca241293694cc4aa78ef7cbf180bc0ee1b28a9d800d997d23690a6",
+      "bytes": 79250
+    },
+    "site-astro/src/chrome/runtime/skill-pdf-render-safe.json": {
+      "sha256": "7d98dbefa38f9d1eec9fb826cf31de8d786291e287a3fd5b7066479b949075f1",
+      "bytes": 86614
+    },
+    "site-astro/src/chrome/runtime/skill-personal-formal-documents.json": {
+      "sha256": "4feca0f03d3622f9b26642d74bf3a027e326141e5d2a288d744bafce693471ce",
+      "bytes": 91811
+    },
+    "site-astro/src/chrome/runtime/skill-personal-health.json": {
+      "sha256": "9d3c91d2cad44d29c7331ea4f74c00b6b613c849196aa6f1fd08e9c6497872c7",
+      "bytes": 85008
+    },
+    "site-astro/src/chrome/runtime/skill-personal-materials.json": {
+      "sha256": "de5d77d690c9a8e0c7e9c1f758cfd5b710e50ffe72344c250964159107b40643",
+      "bytes": 83647
+    },
+    "site-astro/src/chrome/runtime/skill-personal-media.json": {
+      "sha256": "e032ebd6ef3d4096fe235fa17453a0456c9f07f98c044c270c5f2a0285f4efe7",
+      "bytes": 81677
+    },
+    "site-astro/src/chrome/runtime/skill-project-entry-gate.json": {
+      "sha256": "1c0f1a034a8e3f3d10fbc47c98042d8b6dbe9ce5b9faf8b342917a3d859f6584",
+      "bytes": 92159
+    },
+    "site-astro/src/chrome/runtime/skill-reply-as-me.json": {
+      "sha256": "bdda153fe363541e15c82b964e5238f07a595c8f01495d42f0f4148f781af0e4",
+      "bytes": 89687
+    },
+    "site-astro/src/chrome/runtime/skill-report-page.json": {
+      "sha256": "a6fcf2610db1e46b5fb3cbc57d1486b9989c8707437a899cb2cd426b6a3fa300",
+      "bytes": 113202
+    },
+    "site-astro/src/chrome/runtime/skill-tailscale-safe-exposure.json": {
+      "sha256": "870dfcd9d1d9c8bb58080879feec15941b2a74245ff72d7d1cacfd2f3c987899",
+      "bytes": 79932
+    },
+    "site-astro/src/chrome/runtime/skill-timeaudit-diagnostics.json": {
+      "sha256": "d691697360869ea8a6b99dc86f46674679c02d0553cc54d0ebdefbaa95fc5478",
+      "bytes": 86920
+    },
+    "site-astro/src/chrome/runtime/skill-vault-workflow.json": {
+      "sha256": "08d12139526bb789ed099435aa2a5985e9f188021c5307c1ba6c2a73cf9c97e9",
+      "bytes": 74899
+    },
+    "site-astro/src/chrome/runtime/skill-wechat-direct.json": {
+      "sha256": "6d142dd0d509e1db4cf234f9ef26dccfcedafe6bfa43363e27c0af5dfef0d6bf",
+      "bytes": 81825
+    },
+    "site-astro/src/chrome/runtime/skill-work-delivery.json": {
+      "sha256": "49a5a700aae750e6edb1225280b55eb336accd5f80b549ed22fe4825f2640c41",
+      "bytes": 96283
+    },
+    "site-astro/src/chrome/runtime/skills-home.json": {
+      "sha256": "0484260da4ce251abd0b0462298b2fadb9b045dde0322e8be5aaeb1841441480",
+      "bytes": 191166
+    },
+    "site-astro/src/chrome/runtime/steam-millennium-config-backup.json": {
+      "sha256": "87d83da2fd2263abf7f0ce050c89eae61af0a12e364a726be3407d0163bb1db2",
+      "bytes": 138845
+    },
+    "site-astro/src/chrome/runtime/sunshine-remote-streaming.json": {
+      "sha256": "aea11aceaabb3a8f08015b001d727b121a0e3f18696823f3a3abf6be715940fe",
+      "bytes": 134338
+    },
+    "site-astro/src/chrome/runtime/timeaudit.json": {
+      "sha256": "aeb7473c8b17bf88ab0f8e9f1d6f8e8f7e161e84298c109f8db05e4f809f35ef",
+      "bytes": 173411
+    },
+    "site-astro/src/chrome/runtime/typora-theme-pack.json": {
+      "sha256": "227f8295898f39dd74651f270579b3a113e5f716661655664344967d753165b8",
+      "bytes": 134768
+    },
+    "site-astro/src/chrome/runtime/vault-tool.json": {
+      "sha256": "e3bb85f5109ec1d3d2821ce6afdf0ccd6856a9fb646179a0f8d701769bdd73ec",
+      "bytes": 118636
+    },
+    "site-astro/src/chrome/runtime/video-scaffold.json": {
+      "sha256": "98ccd4545e480e6f263bb03908b8f2fbbeda54abc1beddd8a86b90e5d6ebd919",
+      "bytes": 122631
+    },
+    "site-astro/src/chrome/runtime/wechat-history-ai-bridge.json": {
+      "sha256": "49d672ff54d5d9d1e1ab04dea70bedf538e9e969ef37be3d15aabb9306864f21",
+      "bytes": 119197
+    },
+    "site-astro/src/chrome/runtime/wechatdirect.json": {
+      "sha256": "897638613663dc33132610e7de277eeb95a9e2dc8184cc6859ae797fa8021239",
+      "bytes": 126882
+    },
+    "site-astro/src/chrome/runtime/wly0829-cn.json": {
+      "sha256": "68db69dc608bf6888ae211ab6f001f0e491b418d229748f6c62811aec631e0b8",
+      "bytes": 151177
+    },
+    "site-astro/src/chrome/runtime/work-delivery-copilot.json": {
+      "sha256": "5440da654853eb00fdd54c56c5ec2df6428bdbec13e9dbf947a6f01a3fe627e7",
+      "bytes": 126200
+    },
+    "site-astro/sources/retained-home-cockpit/home.html": {
+      "sha256": "c45c9b6eaf4dce42a84cdb096f43274c8123dff6c4f2601ea8cdb9d739656d6d",
+      "bytes": 248510
+    },
+    "site-astro/sources/retained-home-cockpit/cockpit.html": {
+      "sha256": "f5093dd15ddd9be4155b5af7e114d565d449653d87d1130c5ec791f2167122c3",
+      "bytes": 164478
+    },
+    "site-astro/public/_home-cockpit/time-labels.css": {
+      "sha256": "845ecb757a54efd4f163f9d4606cea4fc9f5f74ffe3f1d1b15591f7abc80e002",
+      "bytes": 2708
+    },
+    "site-astro/public/_home-cockpit/home-cta.css": {
+      "sha256": "46b7482763d003486b3cd336aa6ae7bdc5b03c4b96981b1eea851ae126ff475e",
+      "bytes": 2139
+    },
+    "site-astro/public/_home-cockpit/cockpit-offline.css": {
+      "sha256": "35c91f30a503443267f09a980b052f1603782b104fa0aa7b73e086ad097b6dc2",
+      "bytes": 1501
+    },
+    "site-astro/public/_home-cockpit/cockpit-offline.js": {
+      "sha256": "ddfb00ce8b6acd6e3e1b7875b3f1c0e97598ae5c9f9639649f1603775d5c5b1d",
+      "bytes": 7647
+    }
+  },
+  "base": {
+    "_typeset/runtime/app-26e883f3941c1b7c80b6.js": {
+      "bytes": 125637,
+      "sha256": "26e883f3941c1b7c80b6516b1b91bb6e0467d047fb47145bf77c98e7246360f0",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/26e883f3941c1b7c80b6516b1b91bb6e0467d047fb47145bf77c98e7246360f0.js"
+    },
+    "_typeset/runtime/app-c7ea357566aa882de1c8.js": {
+      "bytes": 134324,
+      "sha256": "c7ea357566aa882de1c87c18b616eb934dc7dce529a2bcd2a81ffd636052dbbb",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/c7ea357566aa882de1c87c18b616eb934dc7dce529a2bcd2a81ffd636052dbbb.js"
+    },
+    "_typeset/runtime/app-926d8badfbfc6fe1b5a9.js": {
+      "bytes": 132660,
+      "sha256": "926d8badfbfc6fe1b5a9b562382328c61918230f00570d28a8852b54a1ad0897",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/926d8badfbfc6fe1b5a9b562382328c61918230f00570d28a8852b54a1ad0897.js"
+    },
+    "_typeset/runtime/app-9d34f206132f6b9e3eb8.js": {
+      "bytes": 134342,
+      "sha256": "9d34f206132f6b9e3eb81b040b14c445bcb6f6d20baf1651cabbf1a41a7f95a1",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/9d34f206132f6b9e3eb81b040b14c445bcb6f6d20baf1651cabbf1a41a7f95a1.js"
+    },
+    "_typeset/runtime/app-c33b8583ab454accec01.js": {
+      "bytes": 132678,
+      "sha256": "c33b8583ab454accec01fb9769b72f885c2df5614157efe20552770680b08ce9",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/c33b8583ab454accec01fb9769b72f885c2df5614157efe20552770680b08ce9.js"
+    },
+    "_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": {
+      "bytes": 139359,
+      "sha256": "b0989c55bbdd0929f6523b8ad2648d11da65edc1c9418c254b2598d2f3c68357",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/b0989c55bbdd0929f6523b8ad2648d11da65edc1c9418c254b2598d2f3c68357.js"
+    },
+    "_typeset/runtime/app-246cb63b1358d012ab7f.js": {
+      "bytes": 127738,
+      "sha256": "246cb63b1358d012ab7f5e3c8c412ae1726832aedb6f9acc67677021d66bd47c",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/246cb63b1358d012ab7f5e3c8c412ae1726832aedb6f9acc67677021d66bd47c.js"
+    },
+    "_typeset/runtime/app-ab81ea88de788c87787c.js": {
+      "bytes": 125655,
+      "sha256": "ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc.js"
+    },
+    "_shared/home-app-c4e1023b5c497a376915.js": {
+      "bytes": 105462,
+      "sha256": "c4e1023b5c497a3769152f6615c142b55fd5c4dd429a78b0d1c8cf01e7852b37",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/c4e1023b5c497a3769152f6615c142b55fd5c4dd429a78b0d1c8cf01e7852b37.js"
+    },
+    "cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": {
+      "bytes": 140186,
+      "sha256": "54c34818e37d6f61a971b0325dd9b8243c82bfe886ff4e34bfb00fa73849fb33",
+      "source_path": "site-astro/sources/retained-home-cockpit/assets/54c34818e37d6f61a971b0325dd9b8243c82bfe886ff4e34bfb00fa73849fb33.js"
+    }
+  },
+  "outputs": {
+    "_typeset/runtime/app-f5e2ad11626403071bb0.js": {
+      "sha256": "f5e2ad11626403071bb0576278721a562d0217ce748b97e735db06febfd36309",
+      "bytes": 134151
+    },
+    "_typeset/runtime/app-81168e082fec19adc219.js": {
+      "sha256": "81168e082fec19adc2196f20d0b7476d84673730eb8be04df08e6af1a7f26349",
+      "bytes": 134384
+    },
+    "_typeset/runtime/app-bfc5ea2af98f89d40e7a.js": {
+      "sha256": "bfc5ea2af98f89d40e7aaa51267fda21633fcec362eecbd0723da462bc1afa42",
+      "bytes": 134169
+    },
+    "_typeset/runtime/app-a1b2628768cbb2d59ce9.js": {
+      "sha256": "a1b2628768cbb2d59ce93db8cdc57a22af50fb418ba39baabe40166ac755167e",
+      "bytes": 134366
+    },
+    "_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js": {
+      "sha256": "c4a0ace52372f02f6fd95244a404d347c83ceddaf897c5cb74741670f2056323",
+      "bytes": 140079
+    },
+    "cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js": {
+      "sha256": "705bbbe582ccf87a8acfd91524138aa485a98d67dfe9507d3ed639c95d1cc8f6",
+      "bytes": 140906
+    },
+    "_shared/home-app-21feadb7d813f3110b07.js": {
+      "sha256": "21feadb7d813f3110b07b1495116b687e921a968b20e16636912254244fd88a0",
+      "bytes": 157233
+    },
+    "_home-cockpit/home-firstpaint-450767f33b1a3003adf3.js": {
+      "sha256": "450767f33b1a3003adf35f9368ea8aeaa9880a82049ffb29f66650999c6c99f3",
+      "bytes": 70483
+    }
+  },
+  "replacements": {
+    "/_typeset/runtime/app-246cb63b1358d012ab7f.js": "/_typeset/runtime/app-f5e2ad11626403071bb0.js",
+    "/_typeset/runtime/app-26e883f3941c1b7c80b6.js": "/_typeset/runtime/app-f5e2ad11626403071bb0.js",
+    "/_typeset/runtime/app-926d8badfbfc6fe1b5a9.js": "/_typeset/runtime/app-f5e2ad11626403071bb0.js",
+    "/_typeset/runtime/app-9d34f206132f6b9e3eb8.js": "/_typeset/runtime/app-81168e082fec19adc219.js",
+    "/_typeset/runtime/app-ab81ea88de788c87787c.js": "/_typeset/runtime/app-bfc5ea2af98f89d40e7a.js",
+    "/_typeset/runtime/app-c33b8583ab454accec01.js": "/_typeset/runtime/app-bfc5ea2af98f89d40e7a.js",
+    "/_typeset/runtime/app-c7ea357566aa882de1c8.js": "/_typeset/runtime/app-a1b2628768cbb2d59ce9.js",
+    "/_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": "/_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js",
+    "/cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": "/cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js",
+    "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-21feadb7d813f3110b07.js"
+  },
+  "firstpaint_source": "_shared/home-living/hero-live.576f7d6f10.js"
+}
