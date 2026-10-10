@@ -32,7 +32,7 @@ def select_pages(dist, mode, hashes, previous, locked=False):
 class Preview(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *args): pass
     def upstream(self, url, headers, head):
-        local = getattr(self.server, "local_objects", {}).get(url)
+        objects = getattr(self.server, "local_objects", {}); local = objects.get(url) or objects.get(url.split("?", 1)[0])  # OSS 静态对象忽略查询串（页面重试会加 ?__wly_resource_retry=）
         if local and local.is_file():
             return 200, {"Content-Type": self.guess_type(str(local)), "X-Glance-Local-Object": "1"}, local.read_bytes()
         cacheable = not head and url.startswith(UPSTREAMS["oss"] + "/")
