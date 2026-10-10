@@ -2,7 +2,7 @@
 
 无参数：从 sources/retained-home-cockpit 恢复两份 HTML、清单与首帧脚本。
 带候选站构建目录：复制实际依赖并执行既有首帧补丁；只读候选站。
-图片始终逐字节复制并核验 SHA256，不转码、不改尺寸。
+原依赖逐字节复制；首页白色外设由当前审定母图按既有配方生成。
 """
 import argparse
 import concurrent.futures
@@ -14,6 +14,7 @@ import importlib.util
 import subprocess
 import sys
 from pathlib import Path
+from runpy import run_path
 from urllib.parse import unquote, urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -149,7 +150,10 @@ def retain_candidate(source):
         path = pending.pop()
         references(path.read_text(encoding='utf-8'), [path.parent, source, source / 'cockpit'])
     home = output / 'home.html'
-    home.write_text(adjust_home(home.read_text(encoding='utf-8'), source, public), encoding='utf-8', newline='')
+    white_gear = run_path(str(ROOT.parent / 'sources/home-white-gear/build.py'))['build'](public, home)
+    for row in white_gear['images'] + white_gear['bindings']:
+        copied[row['path']] = descriptor((public / row['path']).read_bytes())
+    home.write_text(adjust_home(home.read_text(encoding='utf-8'), public, public), encoding='utf-8', newline='')
     subprocess.run([sys.executable, str(ROOT / 'tools/pack_living.py')], check=True)
     engine = json.loads((ROOT / 'src/chrome/living-engine.json').read_text(encoding='utf-8'))
     cockpit = output / 'cockpit.html'
@@ -160,6 +164,7 @@ def retain_candidate(source):
     manifest = {'schema': 'wly.retained-home-cockpit.v1', 'inputs': inputs,
         'pages': {page: descriptor((output / (page + '.html')).read_bytes()) for page in inputs},
         'files': copied, 'count': len(copied), 'bytes': sum(row['bytes'] for row in copied.values())}
+    manifest['home_white_gear'] = white_gear
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return manifest
 
@@ -194,6 +199,10 @@ def regenerate_runtimes(work):
              'scripts/hybrid-release.py', 'scripts/prepare-motion-release.py',
              'scripts/build-assembled-site.py', 'scripts/repair-release-navigation.py',
              'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
+    white_root = repo / 'sources/home-white-gear'
+    names += ['sources/home-white-gear/build.py', 'sources/signature/assets-manifest.json']
+    names += ['sources/home-white-gear/' + name + '.png' for name in
+              ('master-h', 'master-v', 'plate-h', 'plate-h-nobird', 'plate-v', 'plate-v-nobird', 'native-h', 'native-v-fallback')]
     runtime_paths = sorted((ROOT / 'src/chrome/runtime').glob('*.json'))
     names += [path.relative_to(repo).as_posix() for path in runtime_paths]
     names += [(source / (page + '.html')).relative_to(repo).as_posix() for page in ('home', 'cockpit')]
@@ -260,6 +269,23 @@ def regenerate_runtimes(work):
     old_firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', pages['home'])[1]
     pages['home'] = re.sub(r'<link\b[^>]*(?:_home-cockpit/home-firstpaint-|modulepreload)[^>]*>', '', pages['home'])
     pages['home'] = pages['home'].replace('/' + old_firstpaint, '/' + original_engine)
+    # 上一轮派生只用于当前展示；重生始终回到真实原始取样链，再读当前母图。
+    inventory = json.loads((repo / 'sources/signature/assets-manifest.json').read_text('utf8'))['items']
+    baseline_images = {item['new_name']: item for item in inventory}
+    for row in previous.get('home_white_gear', {}).get('images', []):
+        before = Path(row['before']).name
+        pages['home'] = pages['home'].replace(Path(row['path']).name, before)
+        pages['home'] = pages['home'].replace(row['sha256'], baseline_images[before]['sha256'])
+    home_work = work / 'index.html'; home_work.write_text(pages['home'], encoding='utf8', newline='')
+    white_gear = run_path(str(white_root / 'build.py'))['build'](public, home_work)
+    pages['home'] = home_work.read_text('utf8')
+    for row in white_gear['images'] + white_gear['bindings']:
+        rel = row['path']; raw = (public / rel).read_bytes(); proof = descriptor(raw)
+        if proof != {key: row[key] for key in ('sha256', 'bytes')}:
+            raise ValueError('当前白图派生写入后不同：' + rel)
+        asset = source / 'assets' / (proof['sha256'] + Path(rel).suffix)
+        asset.write_bytes(raw); outputs[rel] = proof
+        dependencies[rel] = {**proof, 'source_path': asset.relative_to(repo).as_posix()}
     pages['home'] = adjust_home(pages['home'], public, public)
     firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', pages['home'])[1]
     raw = (public / firstpaint).read_bytes(); outputs[firstpaint] = descriptor(raw)
@@ -271,15 +297,26 @@ def regenerate_runtimes(work):
     for rel, new in generated.items():
         if rel in manifest['files']: manifest['files'][new] = outputs[new]
     manifest['files'].pop(old_firstpaint, None); manifest['files'][firstpaint] = outputs[firstpaint]
+    if old_firstpaint != firstpaint: dependencies.pop(old_firstpaint, None)
+    for row in white_gear['images'] + white_gear['bindings']: manifest['files'][row['path']] = outputs[row['path']]
+    for row in previous.get('home_white_gear', {}).get('images', []) + previous.get('home_white_gear', {}).get('bindings', []):
+        if row['path'] not in outputs:
+            manifest['files'].pop(row['path'], None); dependencies.pop(row['path'], None)
+    manifest['home_white_gear'] = white_gear
     for page, text in pages.items():
         raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
         manifest['pages'][page] = descriptor(raw)
     for path, text in texts.items(): path.write_bytes(replace(text).encode('utf8'))
     manifest.update(count=len(manifest['files']), bytes=sum(row['bytes'] for row in manifest['files'].values()))
+    manifest['runtime_recipe'] = {'schema': 'wly.retained-runtime-recipe.v1',
+        'inputs_sha256': hashlib.sha256(json.dumps(current_inputs(), sort_keys=True).encode()).hexdigest(),
+        'original_engine': original_engine, 'base_images': 'sources/signature/assets-manifest.json',
+        'image_recipe': 'sources/home-white-gear/build.py', 'image_evidence': 'home_white_gear',
+        'base_use': 'Exact pre-white encoding references; current display uses only the recorded derived images.'}
     for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies),
                         (record, {'schema': 'wly.retained-runtime-inputs.v1', 'inputs': current_inputs(), 'base': base,
                                   'outputs': outputs, 'replacements': {('/' + rel): ('/' + new) for rel, new in generated.items()},
-                                  'firstpaint_source': original_engine})]:
+                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear})]:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
     materialize_frozen()
     return {'status': 'regenerated', 'inputs': current_inputs(), 'outputs': outputs, 'dependencies': restored}

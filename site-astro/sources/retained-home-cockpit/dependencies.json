@@ -59,14 +59,9 @@
     "bytes": 2139,
     "source_path": "site-astro/public/_home-cockpit/home-cta.css"
   },
-  "_home-cockpit/home-firstpaint-450767f33b1a3003adf3.js": {
-    "sha256": "450767f33b1a3003adf35f9368ea8aeaa9880a82049ffb29f66650999c6c99f3",
-    "bytes": 70483,
-    "source_path": "site-astro/sources/retained-home-cockpit/home-firstpaint-450767f33b1a3003adf3.js"
-  },
   "_home-cockpit/time-labels.css": {
-    "sha256": "845ecb757a54efd4f163f9d4606cea4fc9f5f74ffe3f1d1b15591f7abc80e002",
-    "bytes": 2708,
+    "sha256": "a812e7930a4ea0567e528eeebfc0fce1936902dd5e500d3ff32804dea17e205f",
+    "bytes": 2941,
     "source_path": "site-astro/public/_home-cockpit/time-labels.css"
   },
   "_how-demo/how-demo-1f4da78c1ee50cb6f02c.js": {
@@ -9108,5 +9103,65 @@
     "sha256": "21feadb7d813f3110b07b1495116b687e921a968b20e16636912254244fd88a0",
     "bytes": 157233,
     "source_path": "site-astro/sources/retained-home-cockpit/assets/21feadb7d813f3110b07b1495116b687e921a968b20e16636912254244fd88a0.js"
+  },
+  "assets/home-01-h-1920-bio-white-gear-53db98b56ba4.avif": {
+    "sha256": "53db98b56ba4d69f171863951d2542a41f9e76479d3e5da3548f8d7840d63fd1",
+    "bytes": 185400,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/53db98b56ba4d69f171863951d2542a41f9e76479d3e5da3548f8d7840d63fd1.avif"
+  },
+  "assets/home-01-h-2880-bio-white-gear-5cb64167107e.avif": {
+    "sha256": "5cb64167107e87cd45d58269fabee9c32443858a3237322edc8fbfa594e51251",
+    "bytes": 295911,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/5cb64167107e87cd45d58269fabee9c32443858a3237322edc8fbfa594e51251.avif"
+  },
+  "assets/home-01-h-fallback640-bio-white-gear-7072cd5afbaf.webp": {
+    "sha256": "7072cd5afbafd0d78437a21d4db589afc9e479a4dda72037fbee8064c2b34e44",
+    "bytes": 62566,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/7072cd5afbafd0d78437a21d4db589afc9e479a4dda72037fbee8064c2b34e44.webp"
+  },
+  "assets/home-01-v-1280-bio-white-gear-9b7cd01fa9d1.avif": {
+    "sha256": "9b7cd01fa9d1e140e9bc1ac31a7bd6fdfe70fa8cae7b25c66483258a3b6e3889",
+    "bytes": 234146,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/9b7cd01fa9d1e140e9bc1ac31a7bd6fdfe70fa8cae7b25c66483258a3b6e3889.avif"
+  },
+  "assets/home-01-v-fallback640-bio-white-gear-13dd4b9a10fe.webp": {
+    "sha256": "13dd4b9a10febfc863272bd7515367724385ad16f257a4ff23bc779d8a1186c7",
+    "bytes": 153086,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/13dd4b9a10febfc863272bd7515367724385ad16f257a4ff23bc779d8a1186c7.webp"
+  },
+  "_shared/home-living/assets/plate-h-white-nobird-bio-white-gear-b59a94a3f193.webp": {
+    "sha256": "b59a94a3f1938237470b848c64a56d1c510c9c1942c6d5b514caa52380de3ae4",
+    "bytes": 688906,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/b59a94a3f1938237470b848c64a56d1c510c9c1942c6d5b514caa52380de3ae4.webp"
+  },
+  "_shared/home-living/assets/plate-h-white-bio-white-gear-32c83f7b86a5.webp": {
+    "sha256": "32c83f7b86a56b03545dabc687fae7f3192cbb458726fe08e09fdd68ce771550",
+    "bytes": 671998,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/32c83f7b86a56b03545dabc687fae7f3192cbb458726fe08e09fdd68ce771550.webp"
+  },
+  "_shared/home-living/assets/plate-v-white-nobird-bio-white-gear-e7346c13c233.webp": {
+    "sha256": "e7346c13c233fce80863eb65ec1a1d204d899ab23e7130296bc3316f8e0d0628",
+    "bytes": 529574,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/e7346c13c233fce80863eb65ec1a1d204d899ab23e7130296bc3316f8e0d0628.webp"
+  },
+  "_shared/home-living/assets/plate-v-white-bio-white-gear-ecf105ba574f.webp": {
+    "sha256": "ecf105ba574f29f0b920459773aedcdc108d054d974d97848f84c175b6be9512",
+    "bytes": 531346,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/ecf105ba574f29f0b920459773aedcdc108d054d974d97848f84c175b6be9512.webp"
+  },
+  "_shared/home-living/hero-live.config.d4ca2f87a8.json": {
+    "sha256": "d4ca2f87a845e463b730ba09125dcc3d332ec12a3996f6707ba452748dcb76ed",
+    "bytes": 2850,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/d4ca2f87a845e463b730ba09125dcc3d332ec12a3996f6707ba452748dcb76ed.json"
+  },
+  "_shared/home-living/hero-live.48770fe6a2.js": {
+    "sha256": "48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e",
+    "bytes": 67988,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e.js"
+  },
+  "_home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js": {
+    "sha256": "d2eea6de9fbe5865fa417d160fc939eee06a75c3a18ef1a8d1e4f17100f49a30",
+    "bytes": 70330,
+    "source_path": "site-astro/sources/retained-home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js"
   }
 }
