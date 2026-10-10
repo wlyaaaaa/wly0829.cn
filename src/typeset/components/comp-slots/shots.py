@@ -414,7 +414,7 @@ def render_screenshot(block, ctx):
             frame = (f'<div class="slot-shot-frame slot-shot-frame-{frame_style}" '
                      f'style="aspect-ratio:{ratio:.8f}" {ctx.hot("screenshot", index)} '
                      f'data-shot-source="{attr(shot.get("file", ""))}" '
-                     f'data-shot-full-source="{attr(shot.get("full", ""))}" data-shot-fit="contain"></div>')
+                     f'data-shot-full-source="{attr(shot.get("full") or shot.get("file", ""))}" data-shot-fit="contain"></div>')
         item = (
             f'<div class="slot-shot-item{arrow_class}" data-shot-index="{index}" style="{start}">{number}'
             f'<div class="slot-shot-visual{deco_class}">{decoration}{frame}{right}</div>'

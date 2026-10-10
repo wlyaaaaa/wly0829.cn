@@ -15,6 +15,10 @@ from home_firstpaint import adjust_home
 from cockpit_white_gear import build as white_cockpit
 from cockpit_mobile_todo import build as mobile_todo
 from cockpit_layout import build as cockpit_layout
+from cockpit_metrics import build as cockpit_metrics
+from computer_access_native import build as native_access
+from cockpit_stutter import build as cockpit_stutter
+from native_anchor_offsets import build as native_anchor_offsets
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = Path(sys.argv[1]).resolve()
@@ -75,12 +79,12 @@ for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html'),
 # 这些独立动效包还通过运行时拼接路径取图；保留它们完整的原生包边界。
 for rel in ['_shared/home-living', '_shared/home-comic', '_living/cockpit',
             '_living/computer-access',
-            '_typeset/cockpit', '_typeset/home-highlights', '_living/_engine']:
+            '_typeset/cockpit', '_typeset/computer-access', '_typeset/charter', '_typeset/home-highlights', '_living/_engine']:
     for path in (SOURCE / rel).rglob('*'):
         copy_file(path)
 while pending:
     path = pending.pop()
-    references(path.read_text(encoding='utf-8'), [path.parent, SOURCE, SOURCE / 'cockpit'])
+    references(path.read_text(encoding='utf-8'), [path.parent, SOURCE, SOURCE / 'cockpit', SOURCE / 'computer-access'])
 
 home = output / 'home.html'
 white_gear = run_path(str(ROOT.parent / 'sources/home-white-gear/build.py'))['build'](PUBLIC, home)
@@ -96,6 +100,10 @@ cockpit.write_text(cockpit.read_text(encoding='utf-8').replace(engine['deployed'
 cockpit_white_gear = white_cockpit(PUBLIC, cockpit)
 cockpit_mobile_todo = mobile_todo(PUBLIC, cockpit)
 cockpit_layout_result = cockpit_layout(PUBLIC, cockpit)
+cockpit_metrics_result = cockpit_metrics(PUBLIC, cockpit)
+computer_access_result = native_access(PUBLIC, output / 'computer-access.html')
+stutter_result = cockpit_stutter(PUBLIC)
+anchor_results = {page: native_anchor_offsets(PUBLIC, output / f'{page}.html') for page in ['cockpit', 'computer-access']}
 
 manifest = {'pages': pages, 'files': copied, 'count': len(copied),
             'bytes': sum(item['bytes'] for item in copied.values())}
@@ -103,5 +111,9 @@ manifest['home_white_gear'] = white_gear
 manifest['cockpit_white_gear'] = cockpit_white_gear
 manifest['cockpit_mobile_todo'] = cockpit_mobile_todo
 manifest['cockpit_layout'] = cockpit_layout_result
+manifest['cockpit_metrics'] = cockpit_metrics_result
+manifest['computer_access'] = computer_access_result
+manifest['stutter_page'] = stutter_result
+manifest['native_anchor_offsets'] = anchor_results
 (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
 print(json.dumps({key: manifest[key] for key in ['pages', 'count', 'bytes']}, ensure_ascii=False))
