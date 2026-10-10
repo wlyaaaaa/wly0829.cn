@@ -186,5 +186,9 @@ class AstroReleaseTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Sitemap contains noindex pages'):
             preparation.verify_sitemap(self.root)
 
+    def test_author_preview_route_matches_its_built_page(self):
+        self.assertEqual(preparation.author_route({'url': '', 'page': '404'}), '/404/')
+        self.assertEqual(preparation.author_route({'url': '/projects/agents/', 'page': 'agents'}), '/projects/agents/')
+
 
 if __name__ == '__main__': unittest.main()

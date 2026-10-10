@@ -194,6 +194,10 @@ def write_sitemap(root, routes):
     return urls
 
 
+def author_route(page):
+    return page['url'] or '/' + page['page'] + '/'
+
+
 def prepare(args):
     output = args.output.resolve()
     if output.exists() or output.is_relative_to(SITE): raise ValueError('Use a fresh preparation outside site-astro')
@@ -275,9 +279,9 @@ def prepare(args):
         links = {ref.split('#')[0] for ref, navigation in hybrid.references(merged/hybrid.route_file(route)) if navigation}
         if route not in converted or destination not in manifest['routes'] or destination not in links:
             report['pending_retired_routes'].append(route)
-    report['pending_content_routes'] = sorted({hybrid.read(ROOT/row['path'])['url'] for row in report['files']
+    report['pending_content_routes'] = sorted({author_route(hybrid.read(ROOT/row['path'])) for row in report['files']
         if row['path'].startswith('sources/pages/') and row['path'].endswith('/page.json') and row['action'] != 'deleted'
-        and hybrid.read(ROOT/row['path'])['url'] not in converted})
+        and author_route(hybrid.read(ROOT/row['path'])) not in converted})
     report['pages'] = [{'route': hybrid.file_route(rel), 'before': previous['files'].get(rel), 'after': row} for rel, row in manifest['files'].items() if rel.endswith('.html') and previous['files'].get(rel) != row]
     report['affected']['pages'] = sorted(set(report['affected']['pages']) | {row['route'] for row in report['pages']})
     manifest.update(rules_pin=pin, publication_changes=report, publication_snapshot=report.pop('publication_snapshot'),
