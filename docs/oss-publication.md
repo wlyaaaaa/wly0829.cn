@@ -1,105 +1,48 @@
-# HTML 留在 GitHub、资源迁往上海 OSS
+# GitHub Pages 文档与 OSS 资源契约
 
-用户北京时间 2026-10-04 00:07 同意图片、视频迁到阿里云北京生产桶默认 HTTPS 地址，并明确说“我同意，视频也换这个地址，你不要忘记视频”。迁移保留内容图片、MP4、遮罩和封面的原字节；静态脚本、样式、字体和搜索数据一并迁走。本站导航和状态 API 保持原目标。视频运行时更新与首页指定导航更正先由各自维护者准备，再交本管线改资源地址。
+本站将 HTML 与站点控制文件交给 GitHub Pages，把图片、视频、样式、脚本、字体和搜索资源放在上海 OSS。资源迁移保留内容及素材原字节，导航和实时状态 API 保持原目标。当前上传和成品推送只使用本机 `site-astro/tools/publish_site.py`；完整命令、计时和失败回执见 [发布与扫描](publish-and-scan.md)。本页说明仍在使用的准备库与历史证据解析，不另设上传、封口或回退入口。
 
-同日 02:53 引导 `3ac11b33-8a56-4beb-9b60-a948f8fc75e6` 将正式源改为上海桶 `wly0829-img-media-shanghai`（cn-shanghai），默认地址 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com`；北京桶原样留作备用，已上传对象保留。切换前，隔离候选须在本人电脑完成电脑、手机模拟各至少两轮冷缓存整页验收，稳定在 2 秒内；失败轮次保留。
+## 目标与输入
 
-`prepare-oss-release.py` 只准备本地发布包；`publish-oss-assets.ps1` 上传并核验资源。最终 HTML 由既有 Pages 发布负责人集成、验证和发布。两者不读取凭据文件，不登录，不创建账号，不提交或推送，不改桶设置。
+正式资源目标为 `wly0829-img-media-shanghai`、`cn-shanghai`，默认 HTTPS 地址为 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com`。这是北京时间 2026-10-04 02:53 引导 `3ac11b33-8a56-4beb-9b60-a948f8fc75e6` 选定的目标；此前北京桶保留备用的迁移事实不授权改变本次目标。
 
-同版附加要求来自 00:12 引导 `aac557ef-ebb6-4a14-9ff5-d495dce33fdc` 和 01:25 引导 `3071ed41-1b86-4536-98db-ea25c9e82042`：首页仅修改指定六处链接；视频直接流式加载；只有视频与当前插画有可靠一致性证据时挂载，其余保留静图和所有原媒体。跨来源迁移不授权重画或重编码素材。
+本机发布器沿用 `E:\Tools\aliyun-cli\aliyun.exe` 和已有 `website-images` profile，不查看或复制凭据，不另登录，不改桶、Referer 或 CORS 设置。素材不因跨来源而重画、重编码或改分辨率。视频挂载、遮罩和封面需要它们自己的真实来源证据；准备器只改资源地址，不替产品选择新的媒体。
 
-## 输入与输出
+输入是完整当前源包。`release-manifest.json` 中的文件大小、SHA-256 和库存须对应实际文件，旧下层路由不能因只改部分页面而被裁掉。只有 HTML 和远端地址的 Pages 包不能冒充完整媒体源；上一清单仅提供同代、已有成功证据的对象地址和回执，不替代缺失源材料。
 
-输入必须是完整当前发布包，`release-manifest.json` 的 `files` 与真实文件逐项 SHA-256、大小及库存一致。不要从页名列表裁剪包：旧下层路由也必须保留。视频运行时和首页更正产生的 staging 包需先重建同一清单，再用作输入。
+## 准备库输出
 
-正式首版统一入口先绑定首页链接、视频证据，再分离资源。首页目标 `/how/` 只有在源清单和真实文件指纹中存在时恢复；未发布时使用现有协作说明页。视频证据须与完整源包、视频、遮罩和首屏静图指纹一致。
+`prepare-oss-release.py` 的准备与本地核验继续供源包准备器和新发布器使用。输出目录必须是新的，输入目录保持不变：
 
-```powershell
-python scripts/prepare-oss-publication.py `
-  --source <完整当前发布包> --output <全新统一准备目录> `
-  --video-bindings <完整来源核对JSON> `
-  --asset-base-url <已选定的上海HTTPS origin> --prefix releases/<本次唯一版本>
-```
+- `github/`：全部 HTML 与必要控制文件，HTML 只改资源引用；正文、普通导航、API、热区和转屏行为保留。
+- `oss/`：非 HTML 内容资源，保留原相对路径及二进制字节。
+- `oss-plan.json`：源包与输出身份、大小、版本对象键、引用闭包、逐字符 URL 改写记录、控制文件例外与汇总。本地准备状态不会冒充远端通过。
+- `release-manifest.json`：`files` 对应 Pages 文件，`oss.objects` 对应 OSS 对象；已有批次、基线或回退字段保持它们原来的历史证据身份。
 
-统一输出的 `runtime/` 是保留全部媒体的完整包，`assets/` 是下面的资源分离结果。后版动效和其他页面修复从这份完整包继续生成，不能拿仅含 HTML 的 GitHub 输出冒充完整媒体源。
+控制文件包括 `CNAME`、存在时的 `.nojekyll`、`robots.txt`、`sitemap.xml` 和发布清单，保留域名及抓取行为。当前 `site-dist` 成品另带最小 `.github/workflows/pages.yml`，使成品 push 能触发部署；该目录和 `.git` 不进入 Pages 上传包。
 
-```powershell
-python scripts/prepare-oss-release.py prepare `
-  --source <完整已核实发布包> `
-  --asset-base-url <已选定的上海桶默认HTTPS origin> `
-  --prefix releases/<本次唯一版本> `
-  --output <全新准备目录>
-```
+## 确定性地址改写
 
-桶名、profile（配置身份）、CLI 位置来自 OSS 迁移交接及本人选定目标，不能从旧桶或测速例子推定。准备器支持北京与上海的默认 HTTPS origin；本次正式发布使用上海，不带路径、查询参数或图片处理参数。版本前缀不能重复使用给不同内容。
+HTML 资源属性、srcset、内联 CSS 和 JSON 都按原页面地址解析；JSON 的 `avif_assets` 键和值同步改写。CSS 的根路径、相对 `url()` 和 `@import` 按 CSS 自身路径解析；JavaScript 模块 import、动态 import 和 Vite 预加载数组指向同代对象。普通导航和搜索记录的正文不因资源迁移而替换。
 
-输出为：
+改写版本 2 覆盖 `data-lazy-srcset` 与 `data-lazy-style`，版本写入计划和清单。旧清单缺版本号时按版本 1 重放，不能用新改写逻辑冒充旧确定性产物。Vite 预加载数组的 URL 前缀、截图运行件的 `assets/` 拼接前缀变更完整记入 URL 日志，不改其他业务分支。
 
-- `github/`：全部原 HTML 路由和必要站点控制文件；HTML 只改资源引用。普通导航链接、内联正文、实时状态 API、热区和转屏逻辑保留。
-- `oss/`：全部非 HTML 内容资源，保持原相对路径。引用和历史资源均保留，不暗删旧资源。图片、MP4、遮罩、封面等二进制逐字节原样复制。
-- `oss-plan.json`：输入及输出大小/指纹、版本对象键、真实引用闭包、逐字符 URL 改写位置、改前改后内容、控制文件例外及汇总。`remote_verified: false` 表示本地准备从不冒充远端通过。
-- `remote-verification.json`：运行远端核验后生成，绑定 `oss-plan.json` 的真实文件指纹。只有完整 GET 正文核验成功才有 `html_ready: true`。
+本地核验重放同一改写并逐字节比较。输入漂移、未登记改动、二进制变化或缺失本地资源均报错。相同内容且地址不变的对象沿用原键、地址与真实回执；哈希相同但对象键变化也按本次变化处理，不能据哈希相同漏传新键。
 
-“只留 HTML”的必要技术例外为 `CNAME`、`.nojekyll`（存在时）、`robots.txt`、`sitemap.xml` 和 `release-manifest.json`。它们服务 GitHub 的域名、抓取与既有生产恢复入口，保留原控制行为；页面内容资源全部去 OSS。清单 `files` 对应 GitHub 文件，`oss.objects` 对应 OSS 文件。原 `baseline_files`、接受批次和回退引用仍是原发布历史证据，不伪造为本次云核验。
+## 当前传送与回读
 
-## 地址改写范围
+显式提供的上一清单无效时直接失败；未提供时查实际成功部署的版本，不把仅本地 commit 或未部署成品当成上一成功发布。新发布器在本地独立成品仓库准备普通 `site-dist` 提交；源码分支不因发布而变动，也不把资源混进源码提交。
 
-HTML 的资源属性、srcset（多尺寸图片地址）、内联 CSS 和内联 JSON 都按原页面地址解析。JSON 中 `avif_assets` 的对象键和值同时更新，避免 AVIF 回退映射失配。CSS 的根路径及相对 `url()`、`@import` 按原 CSS 文件解析。JavaScript 的模块 import、动态 import 和 Vite 预加载数组指向同一版本。
+发布持既有 `wly0829-publication` 短锁，保留对象 pin，先上传变化资源，再传变化 HTML，最后更新清单。资源设置真实 MIME 和不可变长期缓存头；只对本次新传对象 HEAD 核大小及 ETag/Content-MD5，未变对象继承已核回执。再 GET 首页、驾驶舱、`/computer-access/` 与本次变化页，核 200 和 HTML 哈希。HEAD 是大小与对象内容摘要核对，不标作完整 GET 正文证明。
 
-当前改写版本2也覆盖 `data-lazy-srcset` 和 `data-lazy-style`，确保懒加载激活后仍使用同代OSS地址。版本号写入计划与发布清单；旧清单没有版本号时按版本1重放。校验旧版来源时不能用新版本替换旧确定性改写。
+本次发布不做整库 GET、不运行 seal、不清理线上对象。回收能力仍在所属保留工具中，与发布分开；`rollback_keep` 等实际仍被 pin/collect 使用的留存能力保持。旧恢复专用封口登记和旧上传/回退 CLI 已退役。
 
-Vite 共享预加载器原先给数组地址添加 `/`；数组迁成绝对 URL 后，只把这一个 URL 前缀字符串改为空。截图运行时原先给 `shot.src` 添加 `assets/`；页面数据已改成绝对 URL，只移除该 URL 拼接前缀。这两项都完整写入 URL 差异日志，不改业务分支。搜索记录脚本本身保留原 bytes，其中的 HTML 导航和技术正文不替换。
+CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内容门或旧全包核验。`upload-pages-artifact@v5` 的官方 tar 代码始终排 `.git`、`.github`；当前设置 `include-hidden-files: true`，保留成品中其余隐藏文件，不使用不存在的 exclude 输入。实际定义见 [官方 action.yml](https://raw.githubusercontent.com/actions/upload-pages-artifact/v5/action.yml)。
 
-每次本地核验都从源重新执行同一改写并逐字节对照产物；未记录的改动、输入漂移、二进制变化和丢失的本地资源都会失败。准备输出须为全新目录，输入目录永不修改。
+## 旧回执与迁移解析
 
-## 上传与远端核验
+准备库继续解析旧完整 GET、HEAD/CRC64/MD5、混合复用以及同版本机内容核验回执。它们分别保留原 `release_id`、checker 身份、对象指纹与核验方法，不把旧全包封口写成新发布的必要步骤，也不把新 HEAD 改名为旧正文核验。
 
-```powershell
-# 只检查本地，不上传、不发布。
-pwsh -NoProfile -File scripts/publish-oss-assets.ps1 -Preparation <准备目录>
+`hybrid-release.py` 的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；源包库存、导航和资源闭包仍核对。仅服务旧 Git 提取回退的函数、CLI 和登记已删。当前回退通过同一个 Pages workflow 的 `ref` 输入部署实际旧 `site-dist` SHA，具体未来命令见 [网站维护](maintenance.md)，没有备用源码重建链。
 
-# OSS 交接到位后由负责人执行。身份直接交官方 CLI，不经过模型。
-pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
-  -Preparation <准备目录> -CliPath <handoff中的aliyun程序> `
-  -CliProfile <handoff中的OAuth配置身份> -Upload
-
-# 已传好时，可单独重新核验所有对象。
-pwsh -NoProfile -File scripts/publish-oss-assets.ps1 `
-  -Preparation <准备目录> -VerifyRemote
-```
-
-上传按 MIME 类型分组，每组保留原路径，指定正确 `Content-Type` 和版本资源的长期缓存头。使用已交接的现代 `aliyun ossutil cp` OAuth profile，region 从默认域名解析；不使用长期 Key 参数、配置查看或调试输出。公共读、允许本站的 Referer、GET CORS（跨域读取）由桶交接提供，上传工具不自行修改。模块脚本和视频读取必须在实际本站来源下通过 CORS。
-
-上传使用 `--ignore-existing --force`：前者跳过已有对象，后者免除交互提示；已实测同一计划第二次上传为零对象。发生部分传输失败时，保留真实 CLI 记录并生成实际 GET 核验结果。`retry-failed` 只重查同一计划指纹和完整对象集合中失败的项目，旧失败回执另存，保留的通过项仍来自真实完整 GET。已存在的错误正文不覆盖，另起新版本前缀解决。
-
-未指定上一清单时，准备器核对真实成功 Pages 部署，不能因本地发布账存在而跳过权威版本；显式指定但无效的清单直接报错，计划明确显示新增对象数和字节。上海上传与回收共用 `wly0829-publication`，已持锁的调用者传入同一真实 `-LockHolder`。上传前把计划 SHA、不可变对象及源身份和完整键集登记到 Git 共享目录 `wly-oss/pins`，失败仍保留；正常封口只允许验证状态和清单自身指纹变化，对象及源输入不可变；按实际封口清单绑定回执补入 `managed.json`，单独 VerifyRemote 重试成功也补登记，不按时间过期。候选明确废弃后，原负责人在同锁内以 `oss-retention.py retire --pin-id <登记文件名中的64位ID> --plan-sha256 <登记原SHA> --lock-holder <持有人>` 清退确切登记，原目录移走或计划被替代也可执行。
-
-正式上线全部回读成功后，只回收上传器管理的生成对象中不被当前网页及在途登记引用的确切 null 版本，不长期保留上一版本。未完成发布前原线上仍须保护。未知登记或计划漂移时整轮不删；个别对象的版本或实际回执不明确时保留并单列，已证对象继续回收，不能冒全清；每批最多 1,000 个显式键，回收后重新列举确认，独立 `oss-cleanup.json` 记录数量和字节。清理失败保持已成功的发布状态并报告清理未完成，不触发发布回滚。桶内其它来源、未经授权的旧孤立对象和新的桶不套用此回收范围。
-
-外置 CSS 的背景资源使用 CSS 自己的 OSS 地址作为 Referer。桶名单除了本站，还须允许自身默认 HTTPS 域名；否则浏览器背景图会被拒绝。首版先实际回读确认两桶 Referer/CORS 相同，随后仅为上海补上 `https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/*`，保留禁止空 Referer、其他来源和 CORS 原值；北京不改。此配置修复由负责人持短锁单独执行及回读，不由上传器隐式改桶。
-
-同日07:10的明确指令另外授权两桶 `ResponseVary=true`；这项配置已经单独回读并用同URL普通图片→CORS图片→GL上传测试。北京上述Referer未改。以后是否改配置仍依据真实指令，上传入口不隐式改桶。
-
-远端核验对首次上传或变化的对象执行匿名完整 GET 封口，未变对象沿用已有回执；请求带实际本站 Origin/Referer，检查 HTTP 200、实际流式正文大小与 SHA-256、正确 MIME 和 CORS。不能用 HEAD、自填 `x-oss-meta-sha256`、ETag 或上传退出码代替远端正文证明。每个新 MP4 另执行真实 Range GET，要求 206、正确 `Content-Range` 和本地相同分段 bytes。
-
-封口在本机对完整发布包运行内容门，保留原 source coverage 并用 release_id 与当前 checker_sha256 绑定最终 HTML/对象指纹。CI 逐对象 HEAD 核大小、CRC64（旧回执无 CRC 时用 ETag）、MIME/CORS/编码；不符或请求失败才完整 GET。完整正文内容检查复用同一检查器、同一完整包的本机结果，源码及 HTML 的凭据扫描仍由第二公开门执行。首次完整 GET、已接受的全库存 HEAD CRC64/MD5＋样本 GET 及混合复用证据保持各自身份，不把 HEAD 标作完整 GET。
-
-远端全通过之后，发布负责人还须完成真实浏览器验收：首页及旧下层导航、搜索、模块跨源加载、LocalOCR 冷缓存整页 1–2 秒目标、视频开播与拖动、HTTP 状态、热区/动效及实时转屏。完整 GET 能证明文件与传输契约，不能单独证明浏览器性能或体验达标。最后才发布 `github/`，不能把本地准备成功当作可上线。既有发布/回读脚本中依赖全资源留在 GitHub 的检查需由负责人兼容 OSS 清单后调用。
-
-## 回滚与本地演练
-
-回滚恢复前一版 HTML 和控制文件。稳定上线后云端不额外保留上一版本资源；真正需要回退时，先从已有源码和本地素材补上传该版缺失对象，再恢复 HTML，不能宣称清理后仍可无上传即时回退。发布未完成时仍保留原线上对象。首次迁移的旧 HTML 原引用 GitHub 资源，首次切换保留旧完整包/提交作为本地恢复材料，不主动重复生图。
-
-本地演练可传 `--test-loopback --asset-base-url http://127.0.0.1:<端口>`，无需生产桶/profile。此计划明确标为 `test_only`，发布入口拒绝上传，也拒绝把其核验当成生产证据。针对性测试通过真实本地 HTTP 服务验证正文指纹、CORS、MIME 和视频 Range；伪造的正确元数据搭配错误正文必须失败。
-
-上传分组副本、演练和失败回执属于当前任务的接续材料。负责人完成发布/恢复验收后，按现有回收站工具回收本次生成目录，旧云对象按上文精确键回收规则处理。
-
-## 后续排版批次的OSS发布
-
-`Publish-Pages.ps1` 的 batch 可显式提供 `runtime_baseline=true` 及 `OssPreparation`、`OssQaPlan`、`OssVerification`、`OssReading`、`OssCold`。先验完整当前源码与已发布Git split的对应关系，再验排版源码、同代OSS分拆和实际浏览器证据。发布时重建全部源码，输入、HTML、媒体、geometry及产物身份必须与已审版一致；Git只放已验分拆结果，不把完整源码当GitHub成品。
-
-2026-10-04 14:52 引导 `8c5b469a-9178-475c-92aa-b59dd6fa5292` 将 08:52 的有界重试裁定明确扩至 2e、2f 和以后各版：本机冷启动空响应和长耗时，每个资源最多重试一次后完整取到且字节一致即通过，不再等稳定 2 秒。`OssRetryProof` 保留首次原生失败、长耗时、实际一次补取及完整 body/大小/SHA/MIME/CORS；网站图片、CSS、动态脚本各一次的真实恢复仍单独验收。受控 HTTPS 取回和证据复用不冒充原生 2 秒通过，不改代理/网络设置。既有 2b/2c 回执继续按原 08:52 指令及其副机直连证据核对。
-
-`verify-typeset-oss.py` 绑定源码与split库存、实际QA的完整页集合、实际阅读中的HTML/脚本响应SHA，以及原始冷加载和单次补取证明。预发布源码gate仍要真实Claude发布指令；不得制造。staged只允许manifest的回滚引用和已审页证据更新，HTML/资源字节必须保持。未完成发布的自动恢复使用原真实生产Git提交及仍保留的原线上对象；稳定后需要旧版时按上文补上传资源。并发、普通push、Pages、全量线上回读和自动恢复沿用既有发布分支。
-
-省流量入口：prepare --previous-manifest 保留未变对象地址与旧回执；只传、只完整 GET 新对象，稳定上线后按当前引用和实际在途登记回收旧生成对象。C10 默认共享隐藏 Chrome 缓存并复用已核 SHA，--retry-failed 只补失败路由，--cold-cache 单独运行；开始估算超过5GB需 --confirm-download-over-5gb 或 PS -ConfirmDownloadOver5GB。旧回滚清单的同版本本机内容结果登记在 config/oss-content-seals.json，恢复时补入该结果，HTML、媒体及实际原生产 GitRef 不变。
+本地准备器保留 `--test-loopback` 的测试材料语义：loopback 计划明确为 `test_only`，不能作为生产传送。已有受控静态补取回执记录首次失败和一次实际补取、响应正文及 MIME/CORS，不能冒充原生冷网络或速度达标。记录这些迁移材料不表示本轮上传、Pages 部署或旧回退已执行。

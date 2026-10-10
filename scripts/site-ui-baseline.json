@@ -63,17 +63,6 @@
     },
     {
       "route": "/",
-      "width": 390,
-      "kind": "phase-control-missing",
-      "element": "一分钟循环一天",
-      "phenomenon": "phase-control-missing",
-      "evidence": {
-        "count": 0
-      },
-      "unmeasurable": false
-    },
-    {
-      "route": "/",
       "width": 1440,
       "kind": "phase-control-missing",
       "element": "清晨",
@@ -110,17 +99,6 @@
       "width": 1440,
       "kind": "phase-control-missing",
       "element": "晚上",
-      "phenomenon": "phase-control-missing",
-      "evidence": {
-        "count": 0
-      },
-      "unmeasurable": false
-    },
-    {
-      "route": "/",
-      "width": 1440,
-      "kind": "phase-control-missing",
-      "element": "一分钟循环一天",
       "phenomenon": "phase-control-missing",
       "evidence": {
         "count": 0

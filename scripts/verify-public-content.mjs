@@ -73,23 +73,17 @@ if (distFiles.includes(manifestPath)) {
     hasOssManifest = true;
     try {
       execFileSync(process.platform === "win32" ? "python" : "python3", [
-        path.join(scriptDirectory, "hybrid-release.py"), "verify", "--output", distRoot, ...(process.argv.includes('--rollback') ? [] : ['--check-sealed-content'])
+        "-c", [
+          "import importlib.util,pathlib,sys",
+          "s=importlib.util.spec_from_file_location('public_finalized',sys.argv[1]); o=importlib.util.module_from_spec(s); s.loader.exec_module(o)",
+          "d=pathlib.Path(sys.argv[2]); m=o.read(d/o.MANIFEST)",
+          "assert m.get('finalized_dist'), 'Run finalize-dist before the public gate'",
+          "o.finalize_dist(d)"
+        ].join("\n"), path.join(scriptDirectory, "prepare-oss-release.py"), distRoot
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
-      const textExtensions = new Set([".js", ".mjs", ".css", ".svg", ".json", ".webmanifest"]);
-      const entries = Object.entries(manifest.oss.objects);
-      let cursor = 0;
-      await Promise.all(Array.from({ length: Math.min(4, entries.length) }, async () => {
-        while (cursor < entries.length) {
-          const [relative, object] = entries[cursor++];
-          try {
-            remoteArtifactCount++;
-            if (textExtensions.has(path.extname(relative))) remoteTextCount++;
-            if ([".js", ".mjs"].includes(path.extname(relative))) remoteJavaScriptCount++;
-          } catch (error) {
-            findings.push({ file: `OSS/${relative}`, type: "production_remote_asset_unverified", detail: error.message });
-          }
-        }
-      }));
+      remoteJavaScriptCount = Object.keys(manifest.oss.objects).filter(relative =>
+        [".js", ".mjs"].includes(path.extname(relative)) &&
+        !distFiles.includes(path.join(distRoot, relative))).length;
     } catch (error) {
       findings.push({ file: "dist/release-manifest.json", type: "production_oss_manifest_invalid", detail: error.message });
     }
@@ -137,6 +131,7 @@ const report = {
   production_remote_artifact_scanned_count: remoteArtifactCount,
   production_remote_verified_cache_used_count: remoteCachedCount,
   production_remote_content_evidence_reused_count: remoteEvidenceCount,
+  inherited_remote_content: { measurement: "not_rechecked", reason: "Local finalized inventory is verified; absent inherited OSS bodies are not re-fetched by this gate" },
   ui_gate: process.env.GITHUB_ACTIONS === "true" && hasOssManifest && distRoot === path.join(projectRoot, "dist") ? { status: "warning", measurement: "not_performed", reason: "UI measurement lacks local OSS asset bodies in this CI checkout; this is not a pass" } : null,
   scanned_file_count: files.length + remoteArtifactCount,
   finding_count: findings.length,

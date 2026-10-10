@@ -167,7 +167,7 @@ def prepare(source, baseline, config, output, evidence_root, staged_build_report
             args = ['prepare-home-comic.py', '--baseline', current, '--package', paths['comic_package'], '--output', dest, '--report', proof]
         elif name == 'living':
             args = ['prepare-home-living.py', '--baseline', current, '--package', paths['living_package'], '--output', dest, '--report', proof]
-            home_data=hybrid.builder.PAGE_DATA.search(source_path(current,'index.html').read_text('utf8'))if full_2f else None
+            home_data=hybrid.PAGE_DATA.search(source_path(current,'index.html').read_text('utf8'))if full_2f else None
             if full_2f and home_data and json.loads(home_data[2]).get('home_living'):
                 args=['prepare-home-living.py','--baseline',current,'--output',dest,'--report',proof,'--rebind-only']
         elif name == 'album':

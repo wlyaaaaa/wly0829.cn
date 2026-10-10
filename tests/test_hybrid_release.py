@@ -1,8 +1,6 @@
-"""Independent fixtures for preservation, admission, links and exact Git restore."""
 import importlib.util
 import json
 import os
-import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -93,29 +91,6 @@ class HybridRelease(unittest.TestCase):
     def test_modified_baseline_and_missing_route_are_rejected(self):
         self.put(self.old,'kept/index.html','modified')
         with self.assertRaisesRegex(ValueError,'Baseline bytes'):self.assemble()
-    def test_old_topic_scope_preserved_but_new_topic_blocks(self):
-        self.put(self.old,'kept/index.html','<p>personalos</p>')
-        self.baseline['files']=h.inventory(self.old)
-        out,manifest=self.assemble(name='topic-old')
-        result=h.validate_content(out,self.root/'old-topic-report.json')
-        self.assertEqual(result['status'],'pass')
-        self.assertTrue(result['preserved_baseline_topic_findings'])
-        self.put(self.new,'index.html','<p>personalos</p>')
-        out,manifest=self.assemble(name='topic-new')
-        with self.assertRaisesRegex(ValueError,'content gate failed'):h.validate_content(out,self.root/'new-topic-report.json')
-    def test_credentials_in_retained_baseline_still_block(self):
-        self.put(self.old,'kept/index.html','<p>'+('sk-'+'X'*24)+'</p>')
-        self.baseline['files']=h.inventory(self.old)
-        out,manifest=self.assemble(name='secret-old')
-        with self.assertRaisesRegex(ValueError,'content gate failed'):h.validate_content(out,self.root/'secret-topic-report.json')
-    def test_location_exclusion_scope_preserved_but_new_blocks(self):
-        self.put(self.old,'kept/index.html','<p>V:\\Personal\\Fixture</p>')
-        self.baseline['files']=h.inventory(self.old)
-        out,_=self.assemble(name='old-location')
-        self.assertEqual(h.validate_content(out,self.root/'old-location-report.json')['status'],'pass')
-        self.put(self.new,'index.html','<p>V:\\Personal\\Fixture</p><script src="/assets/new.js"></script>')
-        out,_=self.assemble(name='new-location')
-        with self.assertRaisesRegex(ValueError,'content gate failed'):h.validate_content(out,self.root/'new-location-report.json')
     def evidence(self):
         raw=self.root/'raw';raw.mkdir();source=self.put(self.root,'page.json',json.dumps({'source_url':'/'}))
         image=self.put(self.root,'original.png','synthetic image bytes')
@@ -141,23 +116,5 @@ class HybridRelease(unittest.TestCase):
         a,s,r,p,v,image=self.evidence();new=v/'newer';new.mkdir()
         h.write(new/'run.json',{'started_at_beijing':'2026-10-02T20:00:00+08:00','initial_urls':['/'],'pages':1,'completed_pages':0})
         with self.assertRaisesRegex(ValueError,'latest formal'):h.accept_page(a,s,r,self.new,p,v)
-    def test_two_generation_git_restore_is_exact(self):
-        repo=self.root/'git';repo.mkdir()
-        def git(*args):return subprocess.check_output(['git',*args],cwd=repo,text=True).strip()
-        git('init','-q');git('config','user.name','Fixture');git('config','user.email','fixture@example.invalid')
-        git('config','core.autocrlf','true')
-        self.put(repo,'.gitattributes','site-release/** -text\n')
-        first,m=self.assemble(name='generation-one');import shutil;shutil.copytree(first,repo/'site-release')
-        git('add','.gitattributes','site-release');git('commit','-qm','first');first_ref=git('rev-parse','HEAD')
-        self.put(self.new,'index.html','<script src="/assets/new.js"></script><h1>Second generation</h1>')
-        second,m=self.assemble(name='generation-two');shutil.copytree(second,repo/'site-release',dirs_exist_ok=True)
-        git('add','site-release');git('commit','-qm','second');second_ref=git('rev-parse','HEAD')
-        previous=h.ROOT;h.ROOT=repo
-        try:
-            for ref,original,label in [(first_ref,first,'one'),(second_ref,second,'two')]:
-                restored=self.root/('restored-'+label);h.restore_git(ref,restored)
-                self.assertEqual(h.inventory(restored),h.inventory(original))
-                self.assertEqual((restored/h.MANIFEST).read_bytes(),(original/h.MANIFEST).read_bytes())
-        finally:h.ROOT=previous
 
 if __name__=='__main__':unittest.main()

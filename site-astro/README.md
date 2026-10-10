@@ -102,7 +102,7 @@ python tools/serve_dist_only.py 18963                                        # �
 python tools/check.py out.json --base http://127.0.0.1:18963                 # 五种宽度：溢出、图片、逐屏文字和现在比、重叠、空卡
 python tools/section_compare.py <输出目录> <现在网站构建目录> --suffix=-r4      # 逐屏新旧并排 + 像不像分数（tools/likeness.py）
 python tools/slow_swap.py <输出目录> --base http://127.0.0.1:18963            # 慢网慢机下插画“静态图 → 动画”逐帧
-python tools/fullsite_check.py out.json --pages all                          # 全站五种宽度：横向溢出、坏图、4xx/5xx
+python tools/scan_glance.py --dist dist --pages changed                     # 本次改页：六类一眼错误、两种桌面视口、稳定后截图
 python tools/link_check.py links.json                                        # 全站站内链接和锚点（离线读 dist）
 python tools/rule_article_check.py <现在网站构建目录> rules.json               # 规则原文网页字和现在逐字节比、页面不再出现 owner 行和“技术证据”
 ```

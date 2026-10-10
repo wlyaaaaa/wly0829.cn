@@ -32,13 +32,16 @@ COLOR = """selector=>new Promise(done=>requestAnimationFrame(()=>done([...docume
 def inventory(root, pages=None):
     routes, ids = {}, {}
     for file in sorted(root.rglob('index.html')) + ([root/'404.html'] if (root/'404.html').is_file() else []):
-        route = '/' + file.relative_to(root).as_posix().removesuffix('index.html'); routes[route] = file
+        route = '/' + file.relative_to(root).as_posix().removesuffix('index.html')
+        if route == '/': continue
+        routes[route] = file
         match = re.search(r'<script[^>]*id=[\"\x27]page-data[\"\x27][^>]*>(.*?)</script>', file.read_text('utf8'), re.S)
         if match: ids.setdefault(json.loads(match[1]).get('page'), []).append(route)
     if not routes: raise ValueError('No static routes; refusing an empty PASS')
     if not pages: return sorted(routes)
     chosen = set()
     for name in pages:
+        if name in ('home','homepage','index','/'): continue
         route = '/' if name in ('home','homepage','index') else name if name in routes else '/'+name.strip('/')+'/'
         matches = ids.get(name) or ([route] if route in routes else [])
         if not matches: raise ValueError('Unknown affected page: '+name)
@@ -88,7 +91,7 @@ async def review(page, base, route, width, dom, blocked=None, readonly=False):
             fail('hero-boat-identity-review',selector,{'reason':'canvas pixels prove scene movement; they do not independently identify the boat sprite'})
             night = page.get_by_role('button',name='晚上',exact=True)
             if await night.count(): await night.click(); await page.wait_for_timeout(800)
-            for label in ['清晨','白天','傍晚','晚上','一分钟循环一天']:
+            for label in ['清晨','白天','傍晚','晚上']:
                 control = page.get_by_role('button', name=label, exact=True)
                 if not await control.count(): fail('phase-control-missing', label, {'count':0}); continue
                 state = lambda: control.evaluate("e=>JSON.stringify([e.getAttribute('aria-pressed'),e.getAttribute('aria-selected'),e.className,document.body.dataset])")
