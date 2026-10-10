@@ -1,5 +1,6 @@
 """The one-command artifact contains every retained and native route."""
 import json
+import re
 from pathlib import Path
 import unittest
 
@@ -15,9 +16,12 @@ class CompleteBuildTests(unittest.TestCase):
             self.assertTrue((dist / rel).is_file(), route)
 
     def test_complete_artifact_has_no_old_aliyun_release_addresses(self):
+        snapshot = (ROOT / 'site-astro/sources/frozen-site/manifest.json').read_text('utf8')
+        prefixes = {url.encode() for url in re.findall(r'https://[^/]*\.aliyuncs\.com/releases/[^/"\s]+/', snapshot)}
+        prefixes |= {b'releases/' + url.split(b'/releases/', 1)[1] for url in prefixes}
         for path in (ROOT / 'dist').rglob('*'):
             if path.is_file():
                 raw = path.read_bytes()
-                self.assertFalse(b'aliyuncs.com/releases/' in raw or b'releases/2h-20261007-bird-atlas/' in raw, str(path))
+                self.assertFalse(any(prefix in raw for prefix in prefixes), str(path))
 
 if __name__ == '__main__': unittest.main()
