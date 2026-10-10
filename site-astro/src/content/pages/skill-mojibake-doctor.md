@@ -30,6 +30,18 @@
   "url": "/skills/mojibake-doctor/",
   "tagline": "查清中文乱码怎么来的，能严格倒回才修。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 22:56"
+   },
+   "facts": [
+    "近 7 天 AI 用了 9 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
    "commit_time": "2026-09-28T19:28:54+08:00",
@@ -170,10 +182,10 @@
    "numbers": [
     {
      "id": "n-usage",
-     "text": "读这个技能 17 次，跑它的命令 1 次",
-     "meaning": "使用小记录：kind=skill 的 mojibake-doctor（Codex 14、Claude 3），name=mojibake_doctor.py 的命令 1 次（Codex，9 月 17 日 03:19）",
-     "as_of": "2026-09-28",
-     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；9 月 17 日 02:24–28 日 07:18（北京）",
+     "text": "读这个技能 26 次，跑它的命令 2 次",
+     "meaning": "使用小记录：kind=skill 的 mojibake-doctor（Codex 23、Claude 3），name=mojibake_doctor.py 的命令 2 次（Codex，9 月 17 日 03:19、10 月 7 日 02:55）",
+     "as_of": "2026-10-08",
+     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl；9 月 17 日 02:24–10 月 7 日 22:56（北京），记录记到 10 月 8 日 23:59",
      "screens": [
       "skill-mojibake-doctor-01"
      ]
@@ -182,8 +194,8 @@
      "id": "n-repairs",
      "text": "还没有真正修过一个文件",
      "meaning": "默认备份目录 CODEX_HOME\\MojibakeDoctor\\transactions 不存在；每次真修都会在这里留一份",
-     "as_of": "2026-09-28",
-     "source": "列目录 E:\\Data\\AppData\\Codex\\MojibakeDoctor",
+     "as_of": "2026-10-10",
+     "source": "列目录 E:\\Data\\AppData\\Codex\\MojibakeDoctor（10 月 10 日仍不存在）",
      "screens": [
       "skill-mojibake-doctor-01",
       "skill-mojibake-doctor-04"
@@ -228,8 +240,8 @@
  },
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
-  "sha256": "dce4d7fdd83036cd08e9d13e85b02ef46314bbcb583ec54b723b5231a966f5fa",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b33f94b4f2e00a1fd109455175ed9954865a5a57990bb3cda6e6a682a91450da",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -259,23 +271,37 @@
      "text_ref": "修乱码",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "68%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "text_ref": "技能名",
-     "row": "hero"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 22:56",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 9 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "hero",
-     "width": "32%",
+     "row": "k1a-head",
      "index": 0,
      "illustration": "outside",
-     "size": "banner",
-     "target_width": 340,
-     "align": "right"
+     "align": "right",
+     "width": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
     },
     {
      "type": "points_card",
@@ -291,7 +317,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "9 月 17",
+     "text_ref": "使用小记录开始记以来",
      "row": "body"
     },
     {
@@ -314,6 +340,21 @@
      "text_ref": "修乱码",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 22:56",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 9 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "illustration",
@@ -346,7 +387,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "9 月 17"
+     "text_ref": "使用小记录开始记以来"
     }
    ],
    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。"
@@ -411,7 +452,7 @@
 
 不用点名：说到乱码、中文显示成怪字、UTF-8 和 GBK 弄混、文件头的 BOM 坏了，AI 自己会用上它。
 
-9 月 17–28 日，AI 读这个技能 17 次，跑它的命令 1 次；这台电脑上还没有真正修过一个文件（使用小记录和备份目录）。
+使用小记录开始记以来，AI 读这个技能 26 次，跑它的命令 2 次。这台电脑上还没有真正修过一个文件（10 月 10 日查的备份目录）。
 
 ::screen{#skill-mojibake-doctor-02 section="examples"}
 
@@ -647,7 +688,7 @@
 
 一个完整例子
 
-示例：文件是为这个例子造的，结果是工具 9 月 28 日 22:10–22:22 真跑出来的
+示例：照这个技能的做法写的，不是某一次的记录；文件是为这个例子造的，结果是 9 月 28 日真跑出来的
 
 我：“docs 文件夹里好几个文件打开是乱码，看看。”
 

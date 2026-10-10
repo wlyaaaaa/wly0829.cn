@@ -38,6 +38,18 @@
   "url": "/projects/daily-preferences/",
   "tagline": "让 AI 了解我的背景和偏好，说错了一纠正就改。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:14"
+   },
+   "facts": [
+    "近 7 天 AI 用了 16 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "了解我这个人",
@@ -920,8 +932,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "75260c97d0e36cdfecab155ffa427f0c26f7a7fed0bf0db2fb2660a29b812ec5",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "sha256": "dc7aa6a11ac0fa3da13983de8f77be7e13672dddc43f38e1e51dc7ade441aa96",
+  "converted_at_beijing": "2026-10-10T08:43:29+08:00"
  }
 }
 ---
@@ -962,7 +974,26 @@
      "size": "large",
      "columns": 1,
      "illustration": "none",
-     "connector": "none"
+     "connector": "none",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -1037,6 +1068,21 @@
      "columns": 1,
      "illustration": "none",
      "connector": "none"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
     },
     {
      "type": "stat_card",

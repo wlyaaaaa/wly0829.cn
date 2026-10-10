@@ -30,6 +30,16 @@
   "url": "/skills/cockpit/",
   "tagline": "问电脑和项目现在好不好、要我做什么，AI 读驾驶舱讲给我听；新东西顺手加进去。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:43"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -112,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "2b27fee9690a7d37dbcbfe82701edc4b464ab07094f90df477860d83363e2361",
-  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
+  "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -146,16 +156,30 @@
     {
      "type": "chapter_title",
      "text_ref": "看驾驶舱",
-     "align": "center",
+     "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%",
-     "row_fit_illustration": true
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "技能名",
-     "row": "hero"
+     "row": "hero",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -202,6 +226,17 @@
      "text_ref": "看驾驶舱",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",

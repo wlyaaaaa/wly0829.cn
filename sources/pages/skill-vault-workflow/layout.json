@@ -118,6 +118,10 @@
         "text_ref": "一个完整的例子："
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "flow",
         "columns": 5,
         "connector": "arrow",
@@ -157,6 +161,10 @@
         "align": "center",
         "size": "large",
         "text_ref": "一个完整的例子："
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "flow",

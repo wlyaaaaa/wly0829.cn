@@ -30,14 +30,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
-        "columns": 4,
+        "text_ref": "47个GitHub上的全部仓库，其中21个公开",
+        "columns": 3,
         "columns_v": 2,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+        "text_ref": "截至10月10日。本机工作目录"
       },
       {
         "type": "live_strip",
@@ -109,14 +109,14 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
-        "columns": 2,
-        "columns_v": 2,
+        "text_ref": "47个GitHub上的全部仓库，其中21个公开",
+        "columns": 1,
+        "columns_v": 1,
         "icons": "auto"
       },
       {
         "type": "prose",
-        "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+        "text_ref": "截至10月10日。本机工作目录"
       },
       {
         "type": "live_strip",

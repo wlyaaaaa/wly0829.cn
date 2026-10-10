@@ -456,3 +456,5 @@ b { font-weight: 700; color: var(--accent); }
 .nowbar [data-status-item][data-state="disabled"] .live-dot { background: #8e9991; }
 .nowbar [data-status-item] .live-text { min-width: 0; }
 .nowbar.status-static .status-asof { font-size: calc(var(--fs-body) * .8); line-height: 1.4; color: #5d7266; font-weight: 400; }
+/* 电脑版状态行在标题行右半边那一栏（转换器排的 k1a-head 行，左边缘对齐下面的第二栏，见 typeset_apply.js fitHeadRow）：几项上下排，一项一行 */
+.row .nowbar.status-static .live-plain-slots { grid-template-columns: minmax(0, 1fr); gap: 6px; }

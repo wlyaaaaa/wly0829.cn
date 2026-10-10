@@ -38,6 +38,19 @@
   "url": "/projects/personal-health/",
   "tagline": "结合我的实际情况答健康问题，按需更新穿戴设备数据。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次运行",
+    "at": "2026-10-07 18:23"
+   },
+   "facts": [
+    "每周自动刷新一次，上次成功",
+    "近 7 天 AI 用了 8 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "每周自动刷新；AI 使用记录"
+  },
   "public": false,
   "repo_url": null,
   "capability": "结合我的身体情况答健康问题",
@@ -550,8 +563,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health/page.json",
-  "sha256": "53ea74eb19885d079e1d2cc591d849eba41ce970c62a4579316f5304ebaae3d3",
-  "converted_at_beijing": "2026-10-10T07:27:56+08:00"
+  "sha256": "1f6405c3a0fcb982d53bd77cb8d8cf20b5d42fc64a4e6074335369207be26b93",
+  "converted_at_beijing": "2026-10-10T09:37:35+08:00"
  }
 }
 ---
@@ -589,7 +602,30 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "个人健康"
+     "text_ref": "个人健康",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次运行 10 月 7 日 18:23",
+       "state": "ok"
+      },
+      {
+       "text": "每周自动刷新一次，上次成功",
+       "state": "fact"
+      },
+      {
+       "text": "近 7 天 AI 用了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 每周自动刷新；AI 使用记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -598,11 +634,6 @@
      "illustration": "left_inside",
      "icons": "auto",
      "text_ref": "1 台"
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至10月10"
     },
     {
      "type": "prose",
@@ -641,17 +672,31 @@
      "text_ref": "个人健康"
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次运行 10 月 7 日 18:23",
+       "state": "ok"
+      },
+      {
+       "text": "每周自动刷新一次，上次成功",
+       "state": "fact"
+      },
+      {
+       "text": "近 7 天 AI 用了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 每周自动刷新；AI 使用记录"
+    },
+    {
      "type": "stat_card",
      "columns": 1,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto",
      "text_ref": "1 台"
-    },
-    {
-     "type": "prose",
-     "align": "right",
-     "text_ref": "截至10月10"
     },
     {
      "type": "prose",
@@ -807,8 +852,6 @@
 | **1 台** | **21 类** | **63 天** | **13 次** |
 |---|---|---|---|
 | Fitbit Air 手环，经 Google Health 接口读；手机只管同步 | 设备数据每次全部补齐：睡眠、步数、心率、血氧…… | 完整覆盖 8 月 5 日（账号起点）到 10 月 6 日；有的日子没有记录 | 完整采集，分在 6 个更新日；最近一次是 10 月 7 日的每周自动刷新 |
-
-截至 10 月 10 日
 
 〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕
 

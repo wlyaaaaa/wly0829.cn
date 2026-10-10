@@ -144,6 +144,10 @@
         "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "prose",
         "text_ref": "假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”"
       },
@@ -267,6 +271,10 @@
         "align": "center",
         "size": "large",
         "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "prose",
@@ -394,6 +402,10 @@
         "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
       },
       {
+        "type": "tag",
+        "text_ref": "示例："
+      },
+      {
         "type": "numbered_steps",
         "columns": 1,
         "columns_v": 1,
@@ -464,6 +476,10 @@
         "align": "center",
         "size": "large",
         "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "numbered_steps",

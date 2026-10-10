@@ -414,10 +414,10 @@
    "numbers": [
     {
      "id": "n-repos",
-     "text": "45 个｜21 个公开、24 个私有",
+     "text": "47 个｜21 个公开、26 个私有",
      "meaning": "GitHub 账号下登记的全部仓库",
-     "as_of": "2026-09-28",
-     "source": "00_总览/当前同步看板.md 第 11–13 行；config/repository-paths.json 45 条（北京 9 月 28 日 01:40 刷新）",
+     "as_of": "2026-10-10",
+     "source": "gh repo list wlyaaaaa --limit 200（10 月 10 日只读查询：PUBLIC 21、PRIVATE 26）；总表最近一次刷新仍是 9 月 28 日 01:40 的 45 个",
      "screens": [
       "github-local-index-01",
       "github-local-index-03",
@@ -437,10 +437,10 @@
     },
     {
      "id": "n-frozen",
-     "text": "9 个",
-     "meaning": "看板“维护状态”为已冻结的仓库",
-     "as_of": "2026-09-28",
-     "source": "看板第 13 行",
+     "text": "11 个",
+     "meaning": "活动规则冻结名单里的仓库，都在 GitHub 上",
+     "as_of": "2026-10-10",
+     "source": "E251 agents.context-sources.md 冻结名单 11 个，逐个对 gh repo list 都在",
      "screens": [
       "github-local-index-01",
       "github-local-index-08"
@@ -448,10 +448,10 @@
     },
     {
      "id": "n-admission-calls",
-     "text": "160 次（9 月 16–28 日）",
-     "meaning": "AI 使用记录里 Get-ProjectAdmission.ps1 的调用条数（Codex 157、Claude 3；Claude 记录 9 月 24 日才开始）",
-     "as_of": "2026-09-28",
-     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl 按命令名精确计数",
+     "text": "398 次（9 月 16 日–10 月 9 日）",
+     "meaning": "AI 使用记录里 Get-ProjectAdmission.ps1 的调用条数（Codex 391、Claude 7；同口径 9 月 28 日 01:40 前为 160 次）",
+     "as_of": "2026-10-10",
+     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl 按命令名精确计数（记录到 10 月 9 日 00:00）",
      "screens": [
       "github-local-index-01"
      ]
@@ -775,8 +775,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "862beec5c9c0e046b6f8837f132ca71fda48c799de54ba1c6e2ad0c00baaa904",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "sha256": "01b3019a0d5d0af69c092c44281c35aeac3f4d899e866b1197ef07e4b950baa0",
+  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
  }
 }
 ---
@@ -844,14 +844,14 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
-     "columns": 4,
+     "text_ref": "47个GitHub上的全部仓库，其中21个公开",
+     "columns": 3,
      "columns_v": 2,
      "icons": "auto"
     },
     {
      "type": "prose",
-     "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+     "text_ref": "截至10月10日。本机工作目录"
     },
     {
      "type": "prose",
@@ -922,14 +922,14 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "45个GitHub上的全部仓库：21个公开、24个私",
-     "columns": 2,
-     "columns_v": 2,
+     "text_ref": "47个GitHub上的全部仓库，其中21个公开",
+     "columns": 1,
+     "columns_v": 1,
      "icons": "auto"
     },
     {
      "type": "prose",
-     "text_ref": "前三个数截至9月28日01:40，总表最近一次刷新"
+     "text_ref": "截至10月10日。本机工作目录"
     },
     {
      "type": "prose",
@@ -1083,12 +1083,11 @@ GitHub 项目总索引
 
 我在 GitHub 上的每个代码仓库都记在这里：本机放在哪个文件夹、公开还是私有、默认分支是哪条、本机开着几个工作目录、改动有没有真的进了 GitHub 上的默认分支（下面叫主线）。AI 拿不准一个文件夹是哪个仓库、改动同步没有时，就拿它查；删库、改名、改公开范围，这里也有专门的入口。它和〔AI 规则与技能基座〕、〔电脑配置与恢复〕是整套系统的三个基座：规矩归前者，电脑归后者，代码仓库归它。
 
-**45 个**｜GitHub 上的全部仓库：21 个公开、24 个私有，本机都有副本
-**75 个**｜本机工作目录：每个仓库一个主目录，另有 30 个是 AI 同时干活时开的临时目录
-**9 个**｜冻结的项目：只核对身份和位置，不查改动、不修
-**160 次**｜AI 用它查一个仓库的身份和同步（9 月 16–28 日）
+**47 个**｜GitHub 上的全部仓库，其中 21 个公开
+**11 个**｜冻结的项目：只核对身份和位置，不查改动、不修
+**398 次**｜AI 用它查一个仓库的身份和同步（9 月 16 日–10 月 9 日）
 
-前三个数截至 9 月 28 日 01:40，总表最近一次刷新
+截至 10 月 10 日。本机工作目录按总表最近一次刷新（9 月 28 日 01:40）是 75 个，其中 30 个是 AI 同时干活时开的临时目录。
 
 现在　基座体检　各项目和 GitHub 同步没有　〔现在正不正常 → 驾驶舱〕
 

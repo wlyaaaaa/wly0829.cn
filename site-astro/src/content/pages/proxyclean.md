@@ -42,6 +42,16 @@
   "url": "/projects/proxyclean/",
   "tagline": "代理退出后上不了网，查出残留设置、只修失效的。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-10-06 05:52"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "项目修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/ProxyClean",
   "capability": "查清代理留下的断网，只修失效项",
@@ -465,8 +475,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean/page.json",
-  "sha256": "512440f1499c09f86df0fe0193b97ffa5d30ac99b36ff3548828614bdc21d758",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "sha256": "dd0f2468d7bebd3767a73ebe15a7085cbb6d9b80f6db18afb5934504ce89516e",
+  "converted_at_beijing": "2026-10-10T09:37:35+08:00"
  }
 }
 ---
@@ -508,7 +518,22 @@
      "type": "chapter_title",
      "text_ref": "代理上网修复",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 6 日 05:52",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -516,12 +541,6 @@
      "columns": 4,
      "icons": "auto",
      "illustration": "top_inside"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至 2026",
-     "align": "right",
-     "size": "small"
     },
     {
      "type": "prose",
@@ -556,18 +575,23 @@
      "size": "large"
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 6 日 05:52",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录"
+    },
+    {
      "type": "stat_card",
      "text_ref": "8 层",
      "columns": 2,
      "columns_v": 2,
      "illustration": "top_inside",
      "icons": "auto"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至 2026",
-     "align": "center",
-     "size": "small"
     },
     {
      "type": "content_card",
@@ -725,8 +749,6 @@
 317 项｜自动测试：用假进程、假服务和临时设置测，不碰正在用的代理
 0 个｜后台任务：不开机自启，不自动清理，要用时自己打开
 2 个｜首页按钮：检查并修复上网问题；关闭代理，恢复普通上网
-
-截至 2026 年 10 月 10 日（北京时间）
 
 〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 

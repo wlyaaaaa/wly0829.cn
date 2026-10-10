@@ -42,6 +42,18 @@
   "url": "/projects/wly0829-cn/",
   "tagline": "唯一总看板：有没有事、是否需要本人处理，一眼看清。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-10-08 08:42"
+   },
+   "facts": [
+    "近 7 天提交 272 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "网站仓库主线修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/wly0829.cn",
   "capability": "把我要知道的事都放在一个地方",
@@ -713,8 +725,8 @@
  },
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
-  "sha256": "07c949c827231a63e869218541546899aa33822183b32b0cd8494e36b615fd5f",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "a55538ea16329b385eb7888fa42b57727e34d390681e7e745ba68089fc729ad8",
+  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
  }
 }
 ---
@@ -765,7 +777,26 @@
      "type": "chapter_title",
      "text_ref": "个人网站（总看板）",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 8 日 08:42",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天提交 272 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 网站仓库主线修改记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -823,6 +854,21 @@
      "text_ref": "个人网站（总看板）",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次更新 10 月 8 日 08:42",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天提交 272 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 网站仓库主线修改记录"
     },
     {
      "type": "stat_card",
@@ -1847,7 +1893,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "当前状态从",
+     "text_ref": "“现在”框里的状态从",
      "align": "left"
     }
    ],
@@ -1899,7 +1945,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "当前状态从",
+     "text_ref": "“现在”框里的状态从",
      "align": "left"
     }
    ],
@@ -1948,9 +1994,9 @@
 **468 次**｜提交（到 10 月 7 日）
 **2 处托管**｜网页放 GitHub Pages，图片放阿里云上海
 
-当前状态从 `https://live.wly0829.cn/computer-access/state` 读取，失败时回退既有 Cloudflare 入口。电脑资源预警采用 `pcconfig.pc-health.v1`：样本最长有效180秒，趋势至少积累25小时后才判断。北京时间10月7日18:14的回读是资源状态正常、趋势处于观察期；这条后端证据不表示驾驶舱已经显示它，也不保证捕捉所有驱动或DPC突发卡顿。
+“现在”框里的状态从电脑上的只读接口现读，读不到就换备用入口。电脑资源预警只认最近 3 分钟内的数据，趋势要攒满一天多才下判断；10 月 7 日 18:14 回读时资源正常，趋势还在观察期。这只说明后台已经有这份数据，驾驶舱还不一定显示，一闪而过的卡顿也不一定抓得到。
 
-排版和交互检查已接入发布入口：scripts/publish-typeset.ps1 调用 scripts/check-site-ui.py，以 scripts/site-ui-baseline.json 的已批准现有问题为基线，只拦本轮新增问题。接入与检查依据为 main 5417b8b82b9827746307dab51d1fab933ed26e46；这不表示此前已知问题已经修好。
+每次发布前会自动检查排版和交互。已知的旧问题记在一张认可过的清单上，检查只拦这次新冒出来的问题；接上检查不代表旧问题已经修好。
 
 ::screen{#wly0829-cn-09 section="tech"}
 

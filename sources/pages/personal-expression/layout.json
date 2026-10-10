@@ -39,6 +39,10 @@
         "text_ref": "11 条原则 · 6 条读懂我的话"
       },
       {
+        "type": "prose",
+        "text_ref": "按 9 月 15–27 日的旧使用记录"
+      },
+      {
         "type": "action_button",
         "text_ref": "在整套系统里的位置→怎么协作复制AI续作说明"
       }
@@ -84,6 +88,10 @@
         "illustration": "top_inside",
         "icons": "auto",
         "text_ref": "11 条原则 · 6 条读懂我的话"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按 9 月 15–27 日的旧使用记录"
       },
       {
         "type": "action_button",

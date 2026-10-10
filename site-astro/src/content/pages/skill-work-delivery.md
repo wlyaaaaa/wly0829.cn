@@ -30,6 +30,18 @@
   "url": "/skills/work-delivery/",
   "tagline": "工作上的事交给 AI，要长期维护的交付才建包",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:09"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": null,
   "repo_url": null,
   "capability": "",
@@ -132,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
-  "sha256": "174c1e9bc2238866e1ee17e1cc995cf6437276572a60c737a23681d37f2e0a62",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b24f8fd3ad3a1806b42585714b96859b92b91b22d3cf051e7ba73ed77eb2f5ea",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -211,20 +223,37 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
-     "text_ref": "工作支持与交付技能"
+     "text_ref": "工作支持与交付技能",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "技能名"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "hero",
-     "width": "45%",
-     "illustration": "outside"
+     "row": "k1a-head",
+     "illustration": "outside",
+     "width": "auto",
+     "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
     },
     {
      "type": "content_card",
@@ -245,12 +274,17 @@
      "type": "dialogue",
      "columns": 3,
      "split_paras": true,
-     "flow": "row",
      "illustration": "none",
      "icons": "none",
      "width": "100%",
      "text_ref": "怎么跟 AI 说",
-     "row": "talk"
+     "row": "talk",
+     "row_counts": [
+      3,
+      3,
+      2,
+      2
+     ]
     }
    ],
    "notes": "构图来源：定稿 scene/portrait，库存 source_layout；横版标题和技能名在左上、主插画右上卡外，下方左栏说明卡和浅绿提示、右栏一张对话大卡；10 个原话段各一气泡，横版两列按列读取，竖版按定稿单列。引号原样保留。竖版插画在说明和提示之后、问法之前。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
@@ -282,6 +316,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "工作支持与交付技能"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -731,7 +780,7 @@
 
 一个完整例子
 
-示例：资料是项目自带的合成样例（编出来的工作资料），交回的数字照 9 月 28 日重跑的实际结果
+示例：照这个技能的做法写的，不是某一次的记录；资料是项目自带的合成样例，数字照 9 月 28 日重跑的结果
 
 我：“需求说明、评审纪要、指标口径表这三份以后还会改，帮我出需求文档，目标是让日报、周报、月报用同一套指标定义。”
 

@@ -30,6 +30,18 @@
   "url": "/skills/personal-formal-documents/",
   "tagline": "说一句要签什么，AI 做成能签能核对的文书。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-28 21:18"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": null,
   "repo_url": null,
   "capability": "",
@@ -93,8 +105,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-formal-documents/page.json",
-  "sha256": "345ac4c9b59dafd7803c74b13305d0d117ce5e4a155da9b48eff73f920773366",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "72b95fd2dc5ba32ecf04edefd75385c0d62262bd63d9bae52887362a0c65af66",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -131,14 +143,33 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
-     "text_ref": "个人正式文书技能"
+     "text_ref": "个人正式文书技能",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "技能名"
+     "text_ref": "技能名",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "content_card",
@@ -163,11 +194,15 @@
      "type": "dialogue",
      "columns": 2,
      "split_paras": true,
-     "flow": "column",
-     "rows": 4,
      "illustration": "none",
      "icons": "none",
-     "text_ref": "怎么跟 AI 说"
+     "text_ref": "怎么跟 AI 说",
+     "row_counts": [
+      2,
+      2,
+      2,
+      1
+     ]
     }
    ],
    "notes": "本轮依据审查原文逐条修正规格；未出图、未看图，质量关和观感由主会话重渲染复核。01 横版将它做什么 content_card 与不用点名 notice 直接并入 hero 左55%栏，紧随标题和技能名；主插画与原4+3双列对话同属右45%栏。保留所有定稿节点与链接一次，不缩字号、不改定稿。；page-fixer-03第二轮：主图下的长对话退出hero窄右栏，独占下一整宽行，保留原双列按列读与所有气泡；避免左下大片空白。",
@@ -209,6 +244,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "个人正式文书技能"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -625,7 +675,7 @@
 
 一个完整例子
 
-示例：人和事都是编的，做法和交回的样子照这个技能的实际规矩
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“把我们谈好的合租分摊条件写成正式协议，我这边签好名。”（附上谈条件的聊天截图）
 

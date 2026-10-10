@@ -30,6 +30,18 @@
   "url": "/skills/learning/",
   "tagline": "说一句“接着上次讲”，AI 老师就接着教。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 13:06"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "ad3980780006354b3637de3734aa7c0be2673ac2",
    "commit_time": "2026-09-26T04:00:04+08:00",
@@ -82,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "5fba45eaa9fe28a669ff4682331a72bbaa8374673629b955c2ef1ccde88b61d2",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "e80934a65546deab41414444c8ef6c5366ab230c28ef66f7dbb1799b4dd4ab15",
+  "converted_at_beijing": "2026-10-10T08:46:17+08:00"
  }
 }
 ---
@@ -116,11 +128,30 @@
     {
      "type": "chapter_title",
      "text_ref": "学习方法技能",
-     "align": "center",
+     "align": "left",
      "columns": 1,
      "illustration": "none",
      "connector": "none",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
@@ -134,7 +165,8 @@
      "type": "section_heading",
      "text_ref": "它做什么",
      "row": "body",
-     "width": "42%"
+     "width": "42%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -194,6 +226,21 @@
      "illustration": "none",
      "connector": "none",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -594,7 +641,7 @@
 
 一个完整例子
 
-示例：对话是编的，做法照这个技能和学习项目的实际规矩
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“接着上次讲。”
 

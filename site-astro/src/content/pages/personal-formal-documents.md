@@ -38,6 +38,18 @@
   "url": "/projects/personal-formal-documents/",
   "tagline": "把合同、协议、通知做成能核对、能签的正式文件。",
   "status": "偶尔用",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-28 21:18"
+   },
+   "facts": [
+    "近 7 天改进了 8 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录；项目修改记录"
+  },
   "public": false,
   "repo_url": null,
   "capability": "写能签字、能核对的正式文书",
@@ -409,8 +421,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "55dd5da984cbfced44ef151b29d46b8776cb4a32f91a4e2f638e26092849e6a4",
-  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
+  "sha256": "e293d7ce50c6cdb2700d41e17fdfe71f3f38a77ef7e2f2008a21b7a11af93425",
+  "converted_at_beijing": "2026-10-10T08:46:16+08:00"
  }
 }
 ---
@@ -451,8 +463,27 @@
     {
      "type": "chapter_title",
      "text_ref": "个人正式文书",
-     "align": "center",
-     "size": "medium"
+     "align": "left",
+     "size": "medium",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天改进了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录；项目修改记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -510,6 +541,21 @@
      "text_ref": "个人正式文书",
      "align": "center",
      "size": "medium"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天改进了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",

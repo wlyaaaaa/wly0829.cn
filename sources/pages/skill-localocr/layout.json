@@ -117,7 +117,6 @@
           "left"
         ],
         "row": "quotes-3",
-        "width": "50%",
         "avatars": [
           "_library/avatars/本人-通用.png"
         ],
@@ -283,6 +282,11 @@
         "width": "55%"
       },
       {
+        "type": "tag",
+        "text_ref": "示例：",
+        "row": "example-top"
+      },
+      {
         "type": "dialogue",
         "text_ref": "我：“这份扫描讲义",
         "columns": 1,
@@ -358,6 +362,10 @@
         "text_ref": "一个完整例子",
         "align": "center",
         "size": "large"
+      },
+      {
+        "type": "tag",
+        "text_ref": "示例："
       },
       {
         "type": "dialogue",

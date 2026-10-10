@@ -30,6 +30,18 @@
   "url": "/skills/tailscale-safe-exposure/",
   "tagline": "开个服务给自己的设备用，外人连不上。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 15:03"
+   },
+   "facts": [
+    "近 7 天 AI 用了 7 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -109,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
-  "sha256": "eb2f38f373d1393fde7b8320f579fb3ca0320bf9abb39d89bbfa0060a154abab",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "12a51862502614b7a247ecfe015b2f7597e7b558b6f9ea54770cefabbfee84d8",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -139,14 +151,33 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%",
-     "text_ref": "大标题：远程只让自己连"
+     "text_ref": "大标题：远程只让自己连",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 15:03",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 7 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话："
+     "text_ref": "一句话：",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -183,6 +214,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "大标题：远程只让自己连"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 15:03",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 7 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -361,6 +407,10 @@
      "text_ref": "标题：一个完整例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我说："
     },
@@ -405,6 +455,10 @@
      "align": "center",
      "size": "medium",
      "text_ref": "标题：一个完整例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -605,6 +659,8 @@
 ```
 
 标题：一个完整例子：照这套做法，“远程桌面只让笔记本和手机连”会这样办
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 假如我说：“远程桌面只让我的笔记本和手机连。”
 

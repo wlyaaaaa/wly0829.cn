@@ -30,6 +30,18 @@
   "url": "/skills/cloud-asset-channel/",
   "tagline": "AI 要反复读的文件，云上放一份，AI 在云里读。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-02 15:23"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -269,8 +281,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
-  "sha256": "afc3176c0b8d5d9c47a10ed8c9945445ab7520c0f23ead1dc2cc78a7c553e8dc",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b97d6fbac272b1fcf21918ed2cd987952bee0ee3685f39efe66ad4c83447c0eb",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -304,21 +316,40 @@
      "type": "chapter_title",
      "text_ref": "省流量的云端素材",
      "align": "left",
-     "row": "hero",
-     "width": "55%",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
      "text_ref": "AI要反复读的文件，从我电脑传到云上一份，之后AI在云里读，不再一遍遍走我电脑的流量。",
      "size": "large",
      "bold": true,
-     "row": "hero"
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 2 日 15:23",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "做网站时，同一批图要被AI画、审、复核好几轮，每读一次都从我电脑再传一遍，流量远远超过图本身。这个技能告诉AI：同一个文件要读两次以上，或一",
-     "row": "hero"
+     "row": "hero",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -336,8 +367,11 @@
      "text_ref": "“这批图要审好几轮，先放到云上。”",
      "split_paras": true,
      "columns": 2,
-     "flow": "column",
-     "rows": 3
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     },
     {
      "type": "prose",
@@ -372,6 +406,21 @@
      "text_ref": "AI要反复读的文件，从我电脑传到云上一份，之后AI在云里读，不再一遍遍走我电脑的流量。",
      "size": "large",
      "bold": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 2 日 15:23",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -500,6 +549,10 @@
      "size": "large"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
      "text_ref": "我：“这40张网站图要审三轮。”",
      "split_paras": true,
@@ -562,6 +615,10 @@
      "text_ref": "一个完整例子",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -731,6 +788,8 @@
 ```
 
 ## 一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“这 40 张网站图要审三轮。”
 

@@ -38,6 +38,18 @@
   "url": "/projects/personal-expression/",
   "tagline": "把事讲到我听懂，也照我的意思帮我拟消息。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 22:26"
+   },
+   "facts": [
+    "近 7 天 AI 用“讲给我听”16 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "把话讲明白、把消息写自然",
@@ -557,8 +569,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "7ee6b7daabc203fdfa7ee4a36ccdf81d1bbdd662a7ff16812c08482056317165",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "sha256": "047c8c9f5d4829e635ec8b84d979bd045e45aa81450e328d8bdaa27018fee5d6",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -596,7 +608,26 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "个人表达"
+     "text_ref": "个人表达",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 8 日 22:26",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用“讲给我听”16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -605,6 +636,10 @@
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "11 条原则 · 6 条读懂我的话"
+    },
+    {
+     "type": "prose",
+     "text_ref": "按 9 月 15–27 日的旧使用记录"
     },
     {
      "type": "prose",
@@ -639,12 +674,31 @@
      "text_ref": "个人表达"
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 8 日 22:26",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用“讲给我听”16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
+    },
+    {
      "type": "stat_card",
      "columns": 1,
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": "auto",
      "text_ref": "11 条原则 · 6 条读懂我的话"
+    },
+    {
+     "type": "prose",
+     "text_ref": "按 9 月 15–27 日的旧使用记录"
     },
     {
      "type": "prose",
@@ -782,8 +836,9 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
 
 - **11 条原则 · 6 条读懂我的话**｜讲给我听的手册，背后是 50 条带日期的真实案例（9 月 8–28 日）
 - **45 条**｜我在微信里真实发过的话，每条标着发给谁、什么关系；另有 5 份我评过的 AI 稿
-- **33 次 · 22 次**｜AI 调用“讲给我听”“替我拟消息”（9 月 15–27 日的使用记录；Claude 9 月 24 日起才有记录；含维护这个项目时的调用）
 - **327 行 Python**｜只读资料：不调模型、不在后台跑；24 个自动测试
+
+按 9 月 15–27 日的旧使用记录，AI 调用“讲给我听”33 次。同期“替我拟消息”22 次，都含维护这个项目时的调用。
 
 〔在整套系统里的位置 → 怎么协作〕　〔复制 AI 续作说明〕
 

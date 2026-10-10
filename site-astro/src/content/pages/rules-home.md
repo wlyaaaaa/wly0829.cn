@@ -262,8 +262,8 @@
  },
  "source": {
   "page": "sources/pages/rules-home/page.json",
-  "sha256": "2326303ad9d1835784cb5f210791f1bbc837a31f5ed9f151a03d4ab6c6b40d1f",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "7ccdaf050e3333f39898ba6e8bc05556c9a6a9a84cbff02d2f9a735150f01331",
+  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
  }
 }
 ---
@@ -586,6 +586,10 @@
      "text_ref": "派谁：什么活"
     },
     {
+     "type": "prose",
+     "text_ref": "Claude Opus 当主持"
+    },
+    {
      "type": "action_button",
      "text_ref": "现行型号、档位和分工 → 怎么协作",
      "align": "left"
@@ -601,6 +605,10 @@
      "align": "center",
      "size": "medium",
      "text_ref": "派谁：什么活"
+    },
+    {
+     "type": "prose",
+     "text_ref": "Claude Opus 当主持"
     },
     {
      "type": "action_button",
@@ -760,6 +768,8 @@
 ```
 
 # 派谁：什么活交哪个 AI
+
+Claude Opus 当主持：想方案、把关、抽查，也亲手写给我看的成品、网站文字和正式文书。范围写死、有验收办法的施工、修复和核对，派给 GPT-6.1 Sol；批量读取、摘录、格式转换这类机械活交给 GPT-6 Luna，它不花额度。最贵的 GPT-6 Astra 要我给这个对话或项目授权才派。谁能胜任只看厂商公布的数据和 AA 这类权威评测，不在本机自己测。
 
 〔现行型号、档位和分工 → 怎么协作〕
 

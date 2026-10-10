@@ -121,13 +121,8 @@
         "text_ref": "放进去"
       },
       {
-        "type": "document_mock",
-        "text_ref": "常用",
-        "variant": "terminal"
-      },
-      {
         "type": "prose",
-        "text_ref": "在终端里运行"
+        "text_ref": "运行后的菜单分三类"
       },
       {
         "type": "prose",
@@ -169,13 +164,8 @@
         "columns_v": 1
       },
       {
-        "type": "document_mock",
-        "text_ref": "常用",
-        "variant": "terminal"
-      },
-      {
         "type": "prose",
-        "text_ref": "在终端里运行"
+        "text_ref": "运行后的菜单分三类"
       },
       {
         "type": "prose",

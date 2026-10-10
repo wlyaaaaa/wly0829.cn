@@ -30,6 +30,18 @@
   "url": "/skills/google-workspace-direct/",
   "tagline": "查邮件、找云盘文件、记待办，也能等验证码。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 22:11"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -133,8 +145,8 @@
  },
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
-  "sha256": "41fc28ca1b8852703d4b4975268be8991276e5786c0798dd322d568da2cedd58",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "314b330bbe7b499851d2a97c170d933d91b099b1c68118dc2f9dce216c0e7b17",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -172,21 +184,40 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
-     "text_ref": "大标题：邮件、云盘和待办"
+     "text_ref": "大标题：邮件、云盘和待办",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
-     "row": "hero",
      "size": "large",
      "bold": true,
-     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+     "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 22:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个"
+     "text_ref": "说明：账号授权由电脑配置与恢复保管，只认这一个账号，用的时候换不了。AI手边有11个",
+     "width": "55%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -198,7 +229,12 @@
      "type": "dialogue",
      "columns": 2,
      "split_items": true,
-     "text_ref": "怎么跟 AI 说"
+     "text_ref": "怎么跟 AI 说",
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-google-workspace-direct\\page.json",
@@ -241,6 +277,21 @@
      "size": "large",
      "bold": true,
      "text_ref": "一句话：用电脑上接好的那一个Google账号，读写Gmail、Google云盘和Go"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 22:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -367,6 +418,10 @@
      "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”"
     },
@@ -483,6 +538,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -730,6 +789,8 @@
 
 标题：一个完整例子：照这套做法，“看看邮箱里刚来的验证码”会这样办
 
+示例：照这个技能的做法写的，不是某一次的记录
+
 假如我在某个网站点了“发送邮箱验证码”，然后说：“看看邮箱里刚来的验证码。”
 
 1. **不反问**：资料已解锁（锁着就先请我验证）；不问是哪个网站、要哪类码，直接查最近 10 分钟收到的全部邮件（翻完所有页），读新邮件的正文，按收到时间从新到旧排。
@@ -772,6 +833,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "numbered_steps",
@@ -838,6 +903,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：再一个例子：“按这个意思回复原邮件，附上桌面那份PDF”"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "numbered_steps",
@@ -1011,6 +1080,8 @@
 ```
 
 标题：再一个例子：“按这个意思回复原邮件，附上桌面那份 PDF”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **找到原邮件**：按我给的线索搜，读正文；要看来回经过才读整个线程。
 2. **回到原线程**：用原邮件指定的回复地址和原主题，接上原线程的编号，不靠在标题前加“Re:”假装同一个线程；有别的收件人时去掉我自己，只有我发给自己的线程才保留我；密送的人不复制；不借回复另换收件人或主题。

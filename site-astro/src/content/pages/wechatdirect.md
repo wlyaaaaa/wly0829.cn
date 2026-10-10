@@ -38,6 +38,18 @@
   "url": "/projects/wechatdirect/",
   "tagline": "让 AI 读懂电脑上的微信，只读点名的那一段。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:21"
+   },
+   "facts": [
+    "近 7 天 AI 用了 12 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/WeChatDirect",
   "capability": "读懂微信聊天",
@@ -662,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "5053a5fcb520e960587e182d8681f31a99ec735f06a754e4ae255abb71ba6727",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
+  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
  }
 }
 ---
@@ -713,7 +725,26 @@
       26,
       717,
       197
-     ]
+     ],
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -771,6 +802,21 @@
       717,
       197
      ]
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 7 日 09:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 12 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
     },
     {
      "type": "stat_card",

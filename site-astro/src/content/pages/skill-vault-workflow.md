@@ -30,6 +30,18 @@
   "url": "/skills/vault-workflow/",
   "tagline": "让 AI 管本地加密库，密码只在本机窗口里输",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:11"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -84,8 +96,8 @@
  },
  "source": {
   "page": "sources/pages/skill-vault-workflow/page.json",
-  "sha256": "23eb1bd17815443e20ca9758db36a9c2f0e5194b28e8ba195107e9e718397d69",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "0b55aa9942bf458e7bdc6bc3074a0a018bc74f8829a6db7fe124cb5ca6b5b19e",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -120,14 +132,32 @@
      "align": "left",
      "size": "large",
      "text_ref": "加密库操作",
-     "row": "balanced-heading",
-     "width": "88%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
      "illustration": "outside",
-     "row": "balanced-heading",
-     "width": "12%"
+     "row": "k1a-head",
+     "width": "auto",
+     "align": "right"
     },
     {
      "type": "prose",
@@ -168,6 +198,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "加密库操作"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:11",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "illustration",
@@ -394,6 +439,10 @@
      "text_ref": "一个完整的例子："
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "flow",
      "columns": 5,
      "connector": "arrow",
@@ -427,6 +476,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "一个完整的例子："
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "flow",
@@ -608,6 +661,8 @@
 ```
 
 一个完整的例子：“把 vault.enc 里的清单改一句，改完备份到 Key”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **先查，不要密码。**　AI 查环境和这个库的结构：格式对不对、要不要密钥文件、Key 是不是私有仓库。有一项不对就停下来说清楚。
 2. **弹出本机窗口。**　顶栏写着“VAULT”；我输密码，要密钥文件就在窗口里选。密码框一拿到光标就断开输入法。

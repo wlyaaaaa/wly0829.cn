@@ -30,6 +30,18 @@
   "url": "/skills/localocr/",
   "tagline": "要逐字准确、成批或只在本机时，交给本地识字。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 10:13"
+   },
+   "facts": [
+    "近 7 天 AI 用了 4 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/LocalOCR",
   "capability": "",
@@ -109,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
-  "sha256": "ba4bb1ac3d804b95c784668243faa203d45144a336d5fbeeb289754e5446d3c6",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "1a43b19b43358cc669cbb755aa15e1d9b6e1af08cbf88ddea0657ab14a01f999",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -145,13 +157,32 @@
      "text_ref": "本地文字识别",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "49%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 8 日 10:13",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "要逐字准确",
-     "row": "intro"
+     "row": "intro",
+     "width": "49%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -250,7 +281,6 @@
       "left"
      ],
      "row": "quotes-3",
-     "width": "50%",
      "avatars": [
       "_library/avatars/本人-通用.png"
      ],
@@ -281,6 +311,21 @@
      "text_ref": "本地文字识别",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 8 日 10:13",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -549,6 +594,11 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
      "width": "55%"
     },
     {
+     "type": "tag",
+     "text_ref": "示例：",
+     "row": "example-top"
+    },
+    {
      "type": "dialogue",
      "text_ref": "我：“这份扫描讲义",
      "columns": 1,
@@ -618,6 +668,10 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
      "text_ref": "一个完整例子",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -779,6 +833,8 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
 ```
 
 ## 一个完整例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“这份扫描讲义转成文字。”
 

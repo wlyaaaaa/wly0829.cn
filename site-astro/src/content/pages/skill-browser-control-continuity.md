@@ -34,6 +34,18 @@
   "url": "/skills/browser-control-continuity/",
   "tagline": "网页卡住、要登录时，接着把事办完。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:45"
+   },
+   "facts": [
+    "近 7 天 AI 用了 73 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -156,8 +168,8 @@
  },
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
-  "sha256": "d39ab250141513c17c2b5411c88472573942faac2bd8e2634cdb78d9bd3eb59e",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "5ce153372803f9f3cec74fa01271340b600eb4787cfe691074458d9318954b4e",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -192,13 +204,32 @@
      "align": "left",
      "size": "large",
      "text_ref": "大标题：网页上的事接着办",
-     "row": "hero",
-     "width": "49%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 73 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "一句话："
+     "text_ref": "一句话：",
+     "width": "49%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -224,8 +255,11 @@
      },
      "text_ref": "怎么跟 AI 说",
      "split_items": true,
-     "flow": "column",
-     "rows": 3
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     }
    ],
    "notes": "横版左标题介绍、右浏览器修线插画；下面全宽对话卡，五句按左列前三句、右列后两句。竖版先标题和全部介绍，再整宽插画，再五句气泡。定稿大标题/一句话/说明前缀原样交给渲染，不凭原图删字。 2026-10-03 本轮文字核对：已补split_items，横版列优先左3右2；未重新看图。"
@@ -237,6 +271,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "大标题：网页上的事接着办"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 73 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -350,6 +399,10 @@
      "text_ref": "标题：一个完整例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "prose",
      "text_ref": "假如我说："
     },
@@ -401,6 +454,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "标题：一个完整例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "prose",
@@ -619,6 +676,8 @@
 ```
 
 标题：一个完整例子：照这套做法，在网站上交一份带两个附件的申请会这样办
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 假如我说：“在这个网站上把申请交了，附件是桌面上那两个 PDF。”
 

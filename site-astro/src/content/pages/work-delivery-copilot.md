@@ -38,6 +38,16 @@
   "url": "/projects/work-delivery-copilot/",
   "tagline": "帮我办工作的事，做出有出处、前后一致的交付文件",
   "status": "偶尔用",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:09"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录"
+  },
   "public": false,
   "repo_url": null,
   "capability": "做有出处、跟得上资料变化的工作文件",
@@ -356,8 +366,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
-  "sha256": "6cf8e5a770edae351bbdd3234f139a31d281a485c6bd4be34ec6afa4e5dd916e",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "819b3d95b053db85534eed73ba752a3f2f13b2ceb1b1b8ed5f5efd8ec5018782",
+  "converted_at_beijing": "2026-10-10T08:43:31+08:00"
  }
 }
 ---
@@ -429,12 +439,28 @@
      "type": "chapter_title",
      "text_ref": "工作支持与交付",
      "align": "left",
-     "size": "large"
+     "size": "large",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "tag",
      "text_ref": "偶尔用",
-     "shape": "rounded_strip"
+     "shape": "rounded_strip",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -485,6 +511,17 @@
      "type": "tag",
      "text_ref": "偶尔用",
      "shape": "rounded_strip"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录"
     },
     {
      "type": "stat_card",

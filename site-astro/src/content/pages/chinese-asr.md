@@ -458,30 +458,30 @@
    "numbers": [
     {
      "id": "n-transcribed",
-     "text": "375 段",
-     "meaning": "8 月 18 日–9 月 26 日转成文字的不同录音，按原音 SHA-256 去重，去掉测试目录；下限",
-     "as_of": "2026-09-28",
-     "source": "outputs/**/*objective-result.json 的 audio.raw_sha256 去重（389 个文件→375 段），见 facts.md 第三节",
+     "text": "434 段",
+     "meaning": "8 月 18 日–10 月 7 日转成文字的不同录音，按原音 SHA-256 去重，去掉测试和验收目录；下限",
+     "as_of": "2026-10-10",
+     "source": "E:\\Projects\\Tools\\ChineseASR\\outputs\\**\\*objective-result.json 的 audio.raw_sha256 去重（不含 a4-demo、acceptance、quality-acceptance 目录；448 个文件→434 段；按同口径重算 9 月 28 日前为 375 段）",
      "screens": [
       "chinese-asr-01"
      ]
     },
     {
      "id": "n-dictation-median",
-     "text": "0.53 秒",
+     "text": "0.45 秒",
      "meaning": "桌面听写识别一段用时的中位数",
-     "as_of": "2026-09-28",
-     "source": "outputs/dictation/runtime.log 两种识别行，154 段合算",
+     "as_of": "2026-10-10",
+     "source": "outputs/dictation/runtime.log 两种识别行（transcribed elapsed_sec、model operation=transcribe seconds），445 段合算；同口径重算 9 月 28 日前为 154 段、0.53 秒",
      "screens": [
       "chinese-asr-01"
      ]
     },
     {
      "id": "n-dictation-count",
-     "text": "154 段",
-     "meaning": "9 月 6–28 日桌面听写识别的段数",
-     "as_of": "2026-09-28",
-     "source": "同上，日志北京时间 9 月 6 日 02:21 至 9 月 28 日 00:17",
+     "text": "445 段",
+     "meaning": "9 月 6 日–10 月 4 日桌面听写识别的段数",
+     "as_of": "2026-10-10",
+     "source": "同上，日志北京时间 9 月 6 日 02:21 至 10 月 4 日 03:15",
      "screens": [
       "chinese-asr-01"
      ]
@@ -501,8 +501,8 @@
      "id": "n-cloud-ok",
      "text": "54 次",
      "meaning": "全部云端调用里成功的次数（68 次尝试，51 段不同录音；含点名上云、质量复核和 9 月 26 日前的 3.0 旧模型）",
-     "as_of": "2026-09-28",
-     "source": "outputs/cloud-jobs/*.result.json，北京时间 8 月 1 日 19:37 至 9 月 28 日 07:16",
+     "as_of": "2026-10-10",
+     "source": "outputs/cloud-jobs/*.result.json status=succeeded 54、failed 14；最晚一次北京时间 9 月 27 日 01:11，之后没有新的云端复核",
      "screens": [
       "chinese-asr-01",
       "chinese-asr-06"
@@ -787,8 +787,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
-  "sha256": "a2d14d6a37f1bc5300a0a84a4c56a7ce158e7466aaa7c9aaf370b6cca2fd78b8",
-  "converted_at_beijing": "2026-10-10T07:28:21+08:00"
+  "sha256": "21527d45e4e9a36fc097e85bb4cb4ecbbb956552c8e00d3e692f19421b4fd962",
+  "converted_at_beijing": "2026-10-10T08:30:08+08:00"
  }
 }
 ---
@@ -859,7 +859,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
+     "text_ref": "434段8月18日–10月7日"
     },
     {
      "type": "prose",
@@ -908,7 +908,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "375段8月18日–9月26日转成文字的不同录音（至少）0.53秒听写识别一段的中位用时（9月6–28日"
+     "text_ref": "434段8月18日–10月7日"
     },
     {
      "type": "prose",
@@ -1038,10 +1038,10 @@
 
 在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-ASR-1.7B 主听、SenseVoiceSmall 对照），对不上的地方标出时间点。重要录音可以点名走高质量路线，另给回听网页。按 Win+H 也能口述，把文字打进当前输入框。各种录音走哪条路见〔选哪条路〕。
 
-**375 段**｜8 月 18 日–9 月 26 日转成文字的不同录音（至少）
-**0.53 秒**｜听写识别一段的中位用时（9 月 6–28 日，共 154 段）
+**434 段**｜8 月 18 日–10 月 7 日转成文字的不同录音（至少）
+**0.45 秒**｜听写识别一段的中位用时（9 月 6 日–10 月 4 日，共 445 段）
 **9 个模型**｜都在本机跑，共 28.5 GiB
-**54 次**｜云端复核成功（8 月 1 日–9 月 28 日，含点名上云）
+**54 次**｜云端复核成功（8 月 1 日起，含点名上云；截至 10 月 10 日）
 
 现在　听写　云端复核　〔现在正不正常 → 驾驶舱〕
 

@@ -30,6 +30,18 @@
   "url": "/skills/daily-preferences/",
   "tagline": "带着对我的了解回答，说错了一纠正就改。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 09:14"
+   },
+   "facts": [
+    "近 7 天 AI 用了 16 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -154,8 +166,8 @@
  },
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
-  "sha256": "8e44b1645806f9b923099352d4548164b9a5e60815f88674085a3bfa87e5075b",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "843edc9caa622efc8f35fb77f3b5dc5cb27a5d1407e14689dae99f411611ef59",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -189,22 +201,37 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "60%",
-     "text_ref": "记得我是谁"
+     "text_ref": "记得我是谁",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "intro",
-     "text_ref": "问题的答案取决于我是谁时"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "intro",
-     "width": "40%",
+     "row": "k1a-head",
      "illustration": "outside",
-     "align": "center",
-     "target_width": 358
+     "align": "right",
+     "width": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "问题的答案取决于我是谁时"
     },
     {
      "type": "section_heading",
@@ -246,6 +273,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "记得我是谁"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 16 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -479,14 +521,14 @@
      "align": "left",
      "size": "large",
      "row": "heading",
-     "width": "84%",
+     "width": "40%",
      "text_ref": "一个完整的例子"
     },
     {
      "type": "tag",
      "row": "heading",
-     "width": "16%",
-     "text_ref": "示意"
+     "width": "60%",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -535,16 +577,12 @@
      "align": "left",
      "size": "large",
      "row": "heading",
-     "row_v": true,
-     "width": "84%",
      "text_ref": "一个完整的例子"
     },
     {
      "type": "tag",
      "row": "heading",
-     "row_v": true,
-     "width": "16%",
-     "text_ref": "示意"
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -663,7 +701,7 @@
 
 # 一个完整的例子
 
-示意
+示例：照这个技能的做法写的，不是某一次的记录
 
 **我：**这两周在赶工，推荐吃的先挑快的、能外卖的，下个月恢复。
 

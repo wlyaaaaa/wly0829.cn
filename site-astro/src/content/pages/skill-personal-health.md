@@ -30,6 +30,18 @@
   "url": "/skills/personal-health/",
   "tagline": "问健康问题、交新报告、更新设备数据，都找它。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 17:18"
+   },
+   "facts": [
+    "近 7 天 AI 用了 8 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -99,8 +111,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
-  "sha256": "90a11cd9e32248251168482cad040eeebecbc1c75a9533ab4f132dabb9839671",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "a3de3e277c2f7efbd1fc95bfac2c6c6f55dbc9c9ff6b07a638192046a6fa2c45",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -127,8 +139,6 @@
    "blocks": [
     {
      "type": "chapter_title",
-     "row": "hero",
-     "width": "60%",
      "align": "left",
      "size": "large",
      "text_ref": "健康问题",
@@ -139,12 +149,33 @@
       78,
       596,
       287
-     ]
+     ],
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 17:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "我问和自己身体有关的问题"
+     "text_ref": "我问和自己身体有关的问题",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -196,6 +227,21 @@
       596,
       287
      ]
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 7 日 17:18",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 8 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -411,6 +457,10 @@
      "text_ref": "一个完整的例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
      "sides": [
       "right"
@@ -460,6 +510,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "一个完整的例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -644,6 +698,8 @@
 ```
 
 # 一个完整的例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 **我：**更新健康数据，主要看这周。
 

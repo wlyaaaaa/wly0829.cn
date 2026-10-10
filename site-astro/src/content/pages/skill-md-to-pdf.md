@@ -30,6 +30,18 @@
   "url": "/skills/md-to-pdf/",
   "tagline": "把 Markdown 转成能打印的 PDF，查过再交。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:21"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -379,8 +391,8 @@
  },
  "source": {
   "page": "sources/pages/skill-md-to-pdf/page.json",
-  "sha256": "c55f95af4fb758c54ddff4f9f119d0e01e85cdcba3f6eff1839f021de8762dbd",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "b4b00d6cce9141a282ff21722d81d2c1a599e002bf27546a8583c641b0515e16",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -455,21 +467,40 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "62%",
-     "text_ref": "文稿转PDF"
+     "text_ref": "文稿转PDF",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
      "size": "large",
      "bold": true,
-     "row": "hero",
-     "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。"
+     "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "row": "hero",
-     "text_ref": "AI写的说明、讲义、报告大多是Markdown。这个技能告诉AI怎么把它转成PD"
+     "text_ref": "AI写的说明、讲义、报告大多是Markdown。这个技能告诉AI怎么把它转成PD",
+     "width": "62%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -495,7 +526,12 @@
       "left"
      ],
      "tail": true,
-     "text_ref": "“这份讲义转成PDF，我要打印。”"
+     "text_ref": "“这份讲义转成PDF，我要打印。”",
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     },
     {
      "type": "prose",
@@ -566,6 +602,21 @@
      "size": "large",
      "bold": true,
      "text_ref": "把Markdown文稿变成能打印、能交出去的PDF，查过再交。"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -739,7 +790,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
     },
     {
      "type": "prose",
-     "text_ref": "9月28日写这页时实跑的，文稿是公开样例《项目简报》。"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -832,7 +883,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
     },
     {
      "type": "prose",
-     "text_ref": "9月28日写这页时实跑的，文稿是公开样例《项目简报》。"
+     "text_ref": "真事："
     },
     {
      "type": "dialogue",
@@ -908,7 +959,7 @@ AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎�
 ```
 
 ## 一个完整例子
-9 月 28 日写这页时实跑的，文稿是公开样例《项目简报》。
+真事：9 月 28 日写这页时实跑的，文稿是公开样例《项目简报》；AI 的回话是转述。
 
 我：“这份简报转成 PDF，要正好 1 页，‘三项原则’这几个字必须在。”
 AI：“好了，1 页，‘三项原则’在第 1 页；原文没被改动，用的是默认中性样式。”

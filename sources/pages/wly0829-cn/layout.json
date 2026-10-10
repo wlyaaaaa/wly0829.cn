@@ -680,7 +680,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "当前状态从",
+        "text_ref": "“现在”框里的状态从",
         "align": "left"
       }
     ],
@@ -736,7 +736,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "当前状态从",
+        "text_ref": "“现在”框里的状态从",
         "align": "left"
       }
     ],

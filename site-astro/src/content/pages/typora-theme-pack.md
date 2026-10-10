@@ -42,6 +42,16 @@
   "url": "/projects/typora-theme-pack/",
   "tagline": "Typora 用的薄荷主题，外加三种 PDF 样式。",
   "status": "偶尔用",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-09-29 01:36"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "项目修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/typora-theme-pack",
   "capability": "把文稿排得好看、按读者导出 PDF",
@@ -445,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "f83c3a06f4b3237811a1b784698d3116179d52607e44002eebe6adad4fd8585c",
-  "converted_at_beijing": "2026-10-10T07:40:12+08:00"
+  "sha256": "e30ee35d3b9cb035dc4ce469fc60643793fb3e72f0dd944b23a1f73a17e608e5",
+  "converted_at_beijing": "2026-10-10T09:37:36+08:00"
  }
 }
 ---
@@ -509,14 +519,30 @@
     {
      "type": "chapter_title",
      "text_ref": "Typora薄荷主题",
-     "align": "center",
-     "size": "medium"
+     "align": "left",
+     "size": "medium",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "prose",
      "text_ref": "写东西时看着舒服",
      "size": "large",
-     "bold": true
+     "bold": true,
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次更新 9 月 29 日 01:36",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "screenshot",
@@ -540,11 +566,6 @@
      "icons": "auto",
      "row": "media-stats",
      "width": "40%"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026",
-     "align": "right"
     },
     {
      "type": "prose",
@@ -581,17 +602,23 @@
      "bold": true
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次更新 9 月 29 日 01:36",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录"
+    },
+    {
      "type": "stat_card",
      "text_ref": "1套",
      "columns": 4,
      "columns_v": 2,
      "variant": "para_fields",
      "icons": "auto"
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至2026",
-     "align": "right"
     },
     {
      "type": "prose",
@@ -725,8 +752,6 @@
 3 种｜PDF 样式：原版、个人、公司，同一份文稿选一种导一份
 21 项｜自动测试全过（本机重跑；GitHub 每次推送也自动跑）
 6 次｜提交；最近一次在 9 月 29 日，修好个人版表头和导出菜单
-
-截至 2026 年 10 月 10 日（北京时间）
 
 〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 

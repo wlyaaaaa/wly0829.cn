@@ -428,10 +428,10 @@
    "numbers": [
     {
      "id": "n-hw-samples",
-     "text": "540 万秒 / 540 万条",
+     "text": "637 万秒",
      "meaning": "fact_system_hardware 行数，每秒一条",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL count(*)=5,401,748，6/16 02:23–9/28 20:39",
+     "as_of": "2026-10-10",
+     "source": "同页第 1 屏现行数字（每秒一条的硬件记录，6 月 16 日起）",
      "screens": [
       "timeaudit-01",
       "timeaudit-10"
@@ -439,10 +439,10 @@
     },
     {
      "id": "n-lifecycle",
-     "text": "2,610 万次",
+     "text": "3,123 万次",
      "meaning": "程序启动和退出事件行数",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL count(*)=26,099,097",
+     "as_of": "2026-10-10",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "timeaudit-01",
       "timeaudit-10"
@@ -462,10 +462,10 @@
     },
     {
      "id": "n-clip",
-     "text": "10,344 次（8 月 31 日 5,234 次；不同内容 3,872 份）",
+     "text": "11,194 次",
      "meaning": "剪贴板 events 表行数；blobs 表行数",
-     "as_of": "2026-09-28",
-     "source": "Test-TimeAuditClipboardHistory.ps1 database 字段；旧网站 8/31 数",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字（复制次数截至 10 月 9 日）",
      "screens": [
       "timeaudit-01",
       "timeaudit-06"
@@ -711,8 +711,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit/page.json",
-  "sha256": "c9a5f7bdb068b50fcb98e7a0a95a4f2083eec89cd078ad3aedbce5c94a448e8a",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
+  "converted_at_beijing": "2026-10-10T08:22:27+08:00"
  }
 }
 ---

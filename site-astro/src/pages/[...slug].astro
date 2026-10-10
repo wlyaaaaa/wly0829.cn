@@ -27,7 +27,8 @@ export async function getStaticPaths() {
 const { entry, moved } = Astro.props as { entry?: any; moved?: { to: string; title: string } };
 const r = entry ? rendered[`../content/rendered/${entry.id}.json`] : null;
 if (entry && !r) throw new Error(`${entry.id}：还没排版，先运行 python tools/render_blocks.py ${entry.id}`);
-// 不收录：退役技能的去向页（共用版式，一句话说去哪）、GitHub 个人主页稿（站内没有入口，只给 GitHub 用）
+// 不收录：退役技能的去向页（共用版式，一句话说去哪）、GitHub 个人主页稿（站内没有入口，只给 GitHub 用）。
+// 去向页不用旧技能页的运行件（page 传 moved）：旧运行件带着旧目录条，指向已经撤下的小节
 const noindex = ['skill-redirect', 'github-profile'].includes(entry?.data.kind);
 // 只给比对用：SX_RULE_CANVAS=1 构建时规则原文屏出排好的原文卡（不出网页字），用来和现在的原文排版图逐屏比；正式构建不设
 const ruleCanvas = process.env.SX_RULE_CANVAS === '1';
@@ -59,7 +60,7 @@ if (grid.length) parts.push(`<div class="ts-card-grid">${grid.join('')}</div>`);
     <p class="moved-notice">“{moved.title}”换了地址，现在的页面在 <a href={moved.to}>{moved.to}</a>，两秒后自动跳过去。</p>
   </Site>
 ) : (
-  <Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page} noindex={noindex}>
+  <Site title={entry.data.title} kind={entry.data.kind} toc={entry.data.toc} url={entry.data.url} page={entry.data.kind === 'skill-redirect' ? 'moved' : entry.id} motion={r.motion} blocks={r} pageMeta={entry.data.page} noindex={noindex}>
     <Fragment set:html={parts.join('')} />
   </Site>
 )}

@@ -30,6 +30,18 @@
   "url": "/skills/chinese-asr/",
   "tagline": "跟 AI 说一句，录音就变成能核对的文字。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-07 08:15"
+   },
+   "facts": [
+    "近 7 天 AI 用了 3 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "98829877960b32e0f62685a859f449d9308edec3",
    "commit_time": "2026-09-28T07:17:30+08:00",
@@ -86,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "33e69bf8c27d7b84564727de1b24efba4d211aec6758b1a371b1589b4619a14d",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "1c191eb99a9a5ddd4665428c5af57d01601684bf0c2d31dc6fda9e83d66fa77a",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -121,23 +133,37 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "70%",
-     "text_ref": "中文语音转写技能"
+     "text_ref": "中文语音转写技能",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "技能名"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 08:15",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
-     "row": "hero",
-     "width": "30%",
+     "row": "k1a-head",
      "illustration": "outside",
-     "size": "banner",
-     "target_width": 259,
-     "align": "right"
+     "align": "right",
+     "width": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "技能名"
     },
     {
      "type": "content_card",
@@ -158,11 +184,16 @@
      "type": "dialogue",
      "columns": 3,
      "split_paras": true,
-     "flow": "column",
-     "rows": 5,
      "illustration": "none",
      "icons": "none",
-     "text_ref": "怎么跟 AI 说"
+     "text_ref": "怎么跟 AI 说",
+     "row_counts": [
+      3,
+      3,
+      3,
+      2,
+      2
+     ]
     }
    ],
    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
@@ -203,6 +234,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "中文语音转写技能"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 7 日 08:15",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 3 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -727,7 +773,7 @@
 
 一个完整例子
 
-示例：录音和内容是编的，做法和交回的样子照这个技能的实际规矩
+示例：照这个技能的做法写的，不是某一次的记录
 
 我：“这段会议录音挺重要，转成文字，拿不准的地方给我标出来。”（附一段 40 分钟的录音）
 

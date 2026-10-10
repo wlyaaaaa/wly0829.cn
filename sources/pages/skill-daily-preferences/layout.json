@@ -117,14 +117,14 @@
     "align": "left",
     "size": "large",
     "row": "heading",
-    "width": "84%",
+    "width": "40%",
     "text_ref": "一个完整的例子"
    },
    {
     "type": "tag",
     "row": "heading",
-    "width": "16%",
-    "text_ref": "示意"
+    "width": "60%",
+    "text_ref": "示例："
    },
    {
     "type": "dialogue",
@@ -176,16 +176,12 @@
     "align": "left",
     "size": "large",
     "row": "heading",
-    "row_v": true,
-    "width": "84%",
     "text_ref": "一个完整的例子"
    },
    {
     "type": "tag",
     "row": "heading",
-    "row_v": true,
-    "width": "16%",
-    "text_ref": "示意"
+    "text_ref": "示例："
    },
    {
     "type": "dialogue",

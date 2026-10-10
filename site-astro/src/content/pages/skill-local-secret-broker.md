@@ -30,6 +30,18 @@
   "url": "/skills/local-secret-broker/",
   "tagline": "让 AI 按规矩用密码中心：查、用、验证、授权",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:45"
+   },
+   "facts": [
+    "近 7 天 AI 用了 68 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -106,8 +118,8 @@
  },
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
-  "sha256": "172a125fc1fdc1fbde86eae5b27e9cf5aebf311f5e2cc174cd4c005c3f67b7ef",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "4831d7dcecc58921103291843c7d252ba90b71eb8dcf74fc168cd3d3a6cb1a27",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -141,15 +153,34 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "53%",
-     "text_ref": "密码和本人验证"
+     "text_ref": "密码和本人验证",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 68 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "align": "left",
      "row": "hero",
-     "text_ref": "这是 AI 用"
+     "text_ref": "这是 AI 用",
+     "width": "53%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -195,6 +226,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "密码和本人验证"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 68 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -421,6 +467,10 @@
      "text_ref": "一个完整的例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "flow",
      "direction": "vertical",
      "columns": 1,
@@ -492,6 +542,10 @@
      "align": "center",
      "size": "medium",
      "text_ref": "一个完整的例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "flow",
@@ -638,6 +692,8 @@
 ```
 
 一个完整的例子：“哔哩哔哩账号给我看一下”
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 1. **只搜名称。**　AI 用我的原话做一次只看名称的搜索，不先列全部、不看值。
 2. **只挑账号候选。**　问账号时先筛登录条目，不把相关银行卡混进来；同名账号有几条才列出来让我选，不会一次全弹出来。

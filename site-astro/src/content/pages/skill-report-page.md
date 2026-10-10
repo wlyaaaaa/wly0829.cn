@@ -34,6 +34,18 @@
   "url": "/skills/report-page/",
   "tagline": "要展开说明的汇报、请我裁定和长回答做成网页，点选就能答复；一两句的回执直接在对话里说。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 22:58"
+   },
+   "facts": [
+    "近 7 天 AI 用了 53 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
    "commit_time": "2026-09-28T19:28:54+08:00",
@@ -516,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "acb4035cbaa1a302d80f681a30eb1839c7045894adf7986c05fa7109dfb3592d",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "538dcecf234364b92cd8180d160dcd08a4495edbf347cc354cb2c925608bf8c6",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -551,7 +563,26 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "汇报网页"
+     "text_ref": "汇报网页",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 53 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -611,6 +642,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "汇报网页"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 53 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "stat_card",

@@ -30,6 +30,18 @@
   "url": "/skills/pdf-render-safe/",
   "tagline": "把 PDF 摊成一页页的图，让 AI 真的看一遍。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:21"
+   },
+   "facts": [
+    "近 7 天没用过"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -303,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "97d183bd2efcb6d69888e2084ff70a0a0fcbbb26d18b98c989828693605a8233",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "699d46612ea53e70681fbdfca5f721eb154544c877d65f068dddd0958f86f49c",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -339,14 +351,33 @@
      "text_ref": "PDF 逐页检查",
      "align": "left",
      "size": "large",
-     "row": "intro",
-     "width": "47%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "把 PDF 一页页摊成图片",
      "align": "left",
-     "row": "intro"
+     "row": "intro",
+     "width": "47%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
@@ -364,7 +395,12 @@
      "text_ref": "“这份 PDF",
      "columns": 2,
      "split_paras": true,
-     "illustration": "none"
+     "illustration": "none",
+     "row_counts": [
+      2,
+      2,
+      1
+     ]
     },
     {
      "type": "prose",
@@ -399,6 +435,21 @@
      "text_ref": "PDF 逐页检查",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天没用过",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -566,7 +617,7 @@ PDF 是 Markdown 转出来的，先用〔文稿转 PDF〕，再用它看。
     },
     {
      "type": "prose",
-     "text_ref": "9 月 28 日写",
+     "text_ref": "真事：",
      "align": "left"
     },
     {
@@ -670,7 +721,7 @@ PDF 是 Markdown 转出来的，先用〔文稿转 PDF〕，再用它看。
     },
     {
      "type": "prose",
-     "text_ref": "9 月 28 日写",
+     "text_ref": "真事：",
      "align": "left"
     },
     {
@@ -786,7 +837,7 @@ PDF 是 Markdown 转出来的，先用〔文稿转 PDF〕，再用它看。
 ```
 
 ## 一个完整例子
-9 月 28 日写“Typora 薄荷主题”那页时实跑的：个人版样张 PDF，2 页。
+真事：9 月 28 日写“Typora 薄荷主题”那页时实跑的：个人版样张 PDF，2 页。
 
 我：“这份 PDF 看一下排版。”
 AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：第 1 页表格的表头是灰色，编辑器和预览里是浅绿。原因是转换器的默认样式盖住了主题的表头颜色，PDF 本身没坏。”

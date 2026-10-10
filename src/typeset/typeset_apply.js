@@ -298,7 +298,7 @@ globalThis.TypesetApply = () => {
       if (!txt || avail<=0) continue;
       const need=()=>{const ws=v.style.whiteSpace;v.style.whiteSpace='nowrap';const n=v.scrollWidth;v.style.whiteSpace=ws;return n;};
       const numeric=/\d/.test(txt);
-      if (numeric && need()<=avail+1) continue;
+      if (need()<=avail+1) continue;  // 一行放得下的不动（不是数字的也一样：主持说“必要时”才不用大号字）
       const cs=getComputedStyle(v),base=parseFloat(cs.fontSize);
       const minPx=parseFloat(cs.getPropertyValue('--fs-name'))||Math.round(base*.47);
       let size=numeric?base:Math.max(minPx,Math.min(base,base*.62));
@@ -308,6 +308,53 @@ globalThis.TypesetApply = () => {
       receipt.cards.push({kind:'stat_value_fit',text:txt.slice(0,16),from:Math.round(base),to:Math.round(size),fits:need()<=avail+1});
     }
   }
+  function fitHeadRow() {
+    // 首屏标题行（转换器排的：标题组一栏、静态状态行一栏，可能还有一栏插画）。主持 10 月 10 日 09:33：状态行别紧跟毛笔标题、把最右边空出来，
+    // 放到标题行右半边，左边缘对齐下面的第二栏（技能页“怎么跟 AI 说”框、项目页第 3 张数字卡）——找下面第一个多栏的东西：并排行的第二栏，
+    // 或数字卡里左边缘最靠近中线的那张；找不到按中线。标题比对齐线还宽时状态行紧跟标题。
+    // 插画放在标题右边（标题栏剩的宽度 ≥120 才放得下，否则放状态行右边），高度跟状态行一样、宽按图的比例。手机不走这里。
+    for (const row of root.querySelectorAll('.row')) {
+      const cols=[...row.children].filter(c=>c.matches('.col'));
+      const sc=cols.find(c=>c.querySelector('[data-status-line="static"]')),tc=cols.find(c=>c.querySelector('[data-comp="chapter_title"]'));
+      if (!sc || !tc || sc===tc) continue;
+      const ic=cols.find(c=>c!==sc && c!==tc && c.firstElementChild && c.firstElementChild.matches('[data-comp="illustration"]') && !c.querySelector('.tb'));   // 插画带动效坐标时栏里还有别的层
+      const ill=ic?ic.firstElementChild:null,img=ill?ill.querySelector('img'):null;
+      const aspect=img&&img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:1;
+      if (ic) {ill.remove();ic.remove();}
+      row.style.gridTemplateColumns='minmax(0,1fr) minmax(0,1fr)';
+      const rb=row.getBoundingClientRect(),gap=parseFloat(getComputedStyle(row).columnGap)||22;
+      let x=null;
+      for (let el=row.nextElementSibling,n=0;el && x===null && n<6;el=el.nextElementSibling,n++) {
+        if (el.matches('.row')) {const c2=[...el.children].filter(c=>c.matches('.col'));if (c2.length>=2) x=c2[1].getBoundingClientRect().left;continue;}
+        const cards=[...el.querySelectorAll('.card.stat')].map(c=>c.getBoundingClientRect().left);   // 数字卡（两种样式都带 .card.stat）
+        if (cards.length>=2) {const mid=rb.left+rb.width/2;x=cards.reduce((a,b)=>Math.abs(b-mid)<Math.abs(a-mid)?b:a);}
+      }
+      if (x===null || x<rb.left+rb.width*.3 || x>rb.left+rb.width*.75) x=rb.left+rb.width/2;
+      const tEl=tc.querySelector('[data-comp="chapter_title"]'),tImg=tEl.querySelector('img');
+      const tw=(tImg||tEl).getBoundingClientRect().width;
+      const left=Math.max(x-rb.left-gap,tw);
+      row.style.gridTemplateColumns=`${left.toFixed(1)}px minmax(0,1fr)`;
+      let where='';
+      if (img) {
+        Object.assign(img.style,{width:'auto',maxWidth:'none',height:'100px',maxHeight:'none'});
+        const wrap=document.createElement('div');
+        wrap.style.cssText=`display:flex;align-items:center;justify-content:space-between;gap:${gap}px;min-width:0`;
+        const nb=sc.querySelector('[data-status-line="static"]');
+        const room=left-tw-gap;
+        let h;
+        if (room>=120) {
+          tEl.before(wrap);wrap.append(tEl,ill);where='title';
+          h=Math.min(Math.max(sc.getBoundingClientRect().height,tEl.getBoundingClientRect().height),room/aspect,300);
+        } else {
+          nb.before(wrap);wrap.append(nb,ill);nb.style.flex='1 1 auto';where='status';
+          h=Math.min(nb.getBoundingClientRect().height,sc.getBoundingClientRect().width*.4/aspect,300);
+        }
+        h=Math.max(100,h);
+        Object.assign(img.style,{width:'auto',maxWidth:'none',height:h+'px',maxHeight:'none'});
+      }
+      receipt.balance.push({kind:'fit_head_row',left:Math.round(left),align:Math.round(x-rb.left),title:Math.round(tw),ill:where});
+    }
+  }
   function fitIllustrationRows() {
     // 文字栏 + 图栏（一幅插画，或一张截图连同它下面的图注；构图写 row_fit_illustration，如项目页、技能页首屏“先放状态”以后挪下去的介绍和插画）：
     // 文字顶对齐，图按文字栏的高度定大小，不留一大截空白（本人：除了放实时数据的位置，不留空）。
@@ -315,7 +362,7 @@ globalThis.TypesetApply = () => {
     // ②按实测高度调栏宽让两栏一样高（文字栏最多 1.6 倍宽；图最小到原高的 45%、不低于 260 画布像素；文字比图高时图栏最多加宽到 1.4 倍）；
     // ③还差太多时插画按文字高度再缩，图栏收到图宽。只改栏宽和图的显示大小，不删字、不改字号、不裁图、不换图。
     // 图在一栏最后（上面是对话气泡等）的行：插画按这一栏空出来的高度放，最大到栏宽。
-    const SLACK=60,LIMIT=140;   // 画布像素：差 60 以内不动；最后剩下的差不超过 140（约屏幕上 120 像素）
+    const SLACK=60,LIMIT=140,OVER=100;   // 画布像素：差 60 以内不动；最后剩下的差不超过 140（约屏幕上 120 像素）；③图比文字高出 OVER 以上再缩（加上行间距，文字下面的空不到屏幕 120 像素）
     const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
       return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
     const isMedia=c=>{const k=[...c.children];
@@ -338,8 +385,9 @@ globalThis.TypesetApply = () => {
         if (B<A-SLACK) {   // 另一栏更矮：图挪到那一栏最后，按那里空出来的高度放（看驾驶舱技能页：右栏气泡下面）
           oc.append(ill);host=oc;room=A-B-(parseFloat(getComputedStyle(oc).rowGap)||12);
         }
-        const ib=img.getBoundingClientRect(),aspect=ib.width/Math.max(1,ib.height),natural=host.getBoundingClientRect().width/aspect;
-        const h=Math.max(160,Math.min(natural,room));
+        const ib=img.getBoundingClientRect(),aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height),hostW=host.getBoundingClientRect().width,natural=hostW/aspect;   // 比例按原图（显示框可能被档位样式压扁）
+        let h=Math.max(160,Math.min(natural,room));
+        if (hostW-h*aspect>2*LIMIT) h=Math.min(natural,Math.max(h,Math.min((hostW-2*LIMIT)/aspect,room+OVER)));   // 两边空太多：图再大一点，另一栏底下最多多空 OVER
         Object.assign(ill.style,{display:'flex',justifyContent:'center'});
         Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
         receipt.balance.push({kind:'fit_illustration_tail',before,after:[Math.round(contentH(oc)),Math.round(contentH(fc))],moved:host===oc});
@@ -377,8 +425,8 @@ globalThis.TypesetApply = () => {
       if (isIll && img) {   // ③ 插画仍比文字高出一大截：按文字高度再缩，图栏收到图宽（再量一次，文字变宽会再矮一点）
         for (let it=0;it<3;it++) {
           const th=contentH(tc),extra=contentH(mc)-media.getBoundingClientRect().height;
-          if (contentH(mc)-th<=LIMIT) break;
-          const h=Math.max(th-extra+LIMIT*.5,160);
+          if (contentH(mc)-th<=OVER) break;
+          const h=Math.max(th-extra+OVER*.5,160);
           Object.assign(media.style,{display:'flex',justifyContent:'center'});
           Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
           mw=Math.max(img.getBoundingClientRect().width,total-twMax);set(mw);
@@ -399,7 +447,7 @@ globalThis.TypesetApply = () => {
     }
   }
   receipt.balance=[];
-  keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();applyLabels();
+  keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
   applyText();equalCompoundCards();equalCards();fillPage();
   C.collectTextBlocks(root);

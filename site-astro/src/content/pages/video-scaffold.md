@@ -38,6 +38,18 @@
   "url": "/projects/video-scaffold/",
   "tagline": "把定好的文案和素材做成 4K 视频",
   "status": "偶尔用",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次更新",
+    "at": "2026-10-08 15:52"
+   },
+   "facts": [
+    "近 7 天改进了 19 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "项目修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/video-scaffold",
   "capability": "做视频：配音、踩点动画、4K 渲染",
@@ -598,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
-  "sha256": "2a1ce44160081c87f09f5e6179d818512e3bf65ce6f9be62b12ef0ad95864087",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "735573a49b620ffdc73b0518a60f55e4a84008cf7e2de099ff8b2ca819178b71",
+  "converted_at_beijing": "2026-10-10T09:37:36+08:00"
  }
 }
 ---
@@ -645,12 +657,32 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "本地视频制作"
+     "text_ref": "本地视频制作",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
      "type": "tag",
      "align": "left",
-     "text_ref": "偶尔用 · 只修报错"
+     "text_ref": "偶尔用 · 只修报错",
+     "row": "k1a-head"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次更新 10 月 8 日 15:52",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天改进了 19 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -664,11 +696,6 @@
       1,
       3
      ]
-    },
-    {
-     "type": "prose",
-     "align": "left",
-     "text_ref": "数字截至10月10"
     },
     {
      "type": "prose",
@@ -717,6 +744,21 @@
      "text_ref": "偶尔用 · 只修报错"
     },
     {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次更新 10 月 8 日 15:52",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天改进了 19 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 项目修改记录"
+    },
+    {
      "type": "stat_card",
      "columns": 1,
      "columns_v": 1,
@@ -730,11 +772,6 @@
       1,
       1
      ]
-    },
-    {
-     "type": "prose",
-     "align": "left",
-     "text_ref": "数字截至10月10"
     },
     {
      "type": "prose",
@@ -877,8 +914,6 @@
 - **32 种动画**｜打字、描线、数字滚动、3D 翻牌……都能踩着旁白的字出现
 - **1 期**｜做完并发布的视频：6 月的《游戏王 MD 氪金指南》
 - **130 个**｜自动测试；每次推送还在 GitHub 上用合成声音完整出一条短片
-
-数字截至 10 月 10 日
 
 核心结论
 

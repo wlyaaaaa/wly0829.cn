@@ -38,6 +38,16 @@
   "url": "/projects/vault-tool/",
   "tagline": "用自己记住的密码，把选中的文件锁进一个加密包",
   "status": "偶尔用",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-09-29 01:11"
+   },
+   "facts": [],
+   "as_of": "2026-10-10",
+   "source": "AI 使用记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/vault-tool",
   "capability": "安全地保管和使用秘密、确认是本人",
@@ -592,8 +602,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool/page.json",
-  "sha256": "67666fafb031b6e89042e223d9377c159b8cf1b74907bad30bd2e6f71067a2a1",
-  "converted_at_beijing": "2026-10-10T07:28:23+08:00"
+  "sha256": "f9574c19821b0102daf818ca5b312b027acebc13cc431f55473cd7a4a00ad4c1",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -643,7 +653,22 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "本地加密库"
+     "text_ref": "本地加密库",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:11",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -685,6 +710,17 @@
      "align": "center",
      "size": "large",
      "text_ref": "本地加密库"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 9 月 29 日 01:11",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用记录"
     },
     {
      "type": "stat_card",
@@ -880,13 +916,8 @@
      "text_ref": "放进去"
     },
     {
-     "type": "document_mock",
-     "text_ref": "常用",
-     "variant": "terminal"
-    },
-    {
      "type": "prose",
-     "text_ref": "在终端里运行"
+     "text_ref": "运行后的菜单分三类"
     },
     {
      "type": "prose",
@@ -921,13 +952,8 @@
      "columns_v": 1
     },
     {
-     "type": "document_mock",
-     "text_ref": "常用",
-     "variant": "terminal"
-    },
-    {
      "type": "prose",
-     "text_ref": "在终端里运行"
+     "text_ref": "运行后的菜单分三类"
     },
     {
      "type": "prose",
@@ -1065,11 +1091,8 @@
 
 **备份**　改完让 AI 把 vault.enc 原样传到私人 Key 仓库，传完从 GitHub 读回来比对字节。
 
-常用　[1] 解密查看 / 搜索内容　[2] 加密 / 添加文件
-管理　[3] 修改密码 / 密钥文件　[4] 查看库信息（不需要密码）
-进阶　[5] 设置诱饵密码（抗胁迫 / 似真否认）　[6] 隐写：把 vault.enc 藏进图片　[7] 隐写：从图片提取 vault.enc
-[0] 退出
-在终端里运行 python vault_tool.py 看到的菜单
+运行后的菜单分三类：常用的是查看、搜索和往库里加文件；管理是改密码或密钥文件、不输密码看库的基本信息。
+进阶的是设一个诱饵密码（被逼着打开时只露出假内容），以及把加密库藏进一张图片、需要时再取出来。
 
 跟 AI 具体怎么说：〔加密库操作技能〕
 

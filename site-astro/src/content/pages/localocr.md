@@ -44,6 +44,18 @@
   "url": "/projects/localocr/",
   "tagline": "在本机显卡上把图片和扫描件里的字读准、读全。",
   "status": "常用",
+  "status_line": {
+   "state": "在用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-09 10:24"
+   },
+   "facts": [
+    "近 7 天 AI 点名用了 4 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "识别服务日志；AI 使用记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/LocalOCR",
   "capability": "看懂图片和扫描件里的字",
@@ -364,8 +376,8 @@
    "numbers": [
     {
      "id": "n-jobs",
-     "text": "16,074 次识别，14,977 份材料、16,157 页（7 月 8 日–10 月 10 日 05:17）",
-     "meaning": "任务登记里完成的识别，去掉项目自带样例、冒烟测试和 8 月 18 日开发时的空白测试图；材料按原件指纹去重；页数累加；命中缓存不新增记录",
+     "text": "16,074 次识别",
+     "meaning": "7 月 8 日–10 月 10 日 05:17 的识别次数；共 14,977 份材料、16,157 页。任务登记里完成的识别，去掉项目自带样例、冒烟测试和 8 月 18 日开发时的空白测试图；材料按原件指纹去重；页数累加；命中缓存不新增记录",
      "as_of": "2026-10-10",
      "source": "E:\\Projects\\Tools\\LocalOCR\\_server\\jobs\\*.json 只读字段现算（口径同 9 月 28 日，复算 9 月 28 日 20:26 得 684/555/706 与旧稿一致）；9 月 28 日后新增多来自网站截图检查和图片压缩试验",
      "screens": [
@@ -620,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "ce12e530a9c436e69bae81578c35aa09689163e3f27194e531da81fbb4ad1d3e",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "sha256": "e43d3cf443ae2eea49e11e430861380bc45f959a01f1796e280c1dcd6c6618de",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -663,7 +675,26 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "text_ref": "本地文字识别"
+     "text_ref": "本地文字识别",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 9 日 10:24",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 点名用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 识别服务日志；AI 使用记录",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "stat_card",
@@ -707,6 +738,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "本地文字识别"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "在用 · 上次使用 10 月 9 日 10:24",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 点名用了 4 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · 识别服务日志；AI 使用记录"
     },
     {
      "type": "stat_card",

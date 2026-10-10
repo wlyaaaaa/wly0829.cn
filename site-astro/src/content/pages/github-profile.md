@@ -36,9 +36,9 @@
    "numbers": [
     {
      "id": "n-asr-recordings",
-     "text": "375+ 段",
-     "meaning": "8 月 18 日–9 月 26 日转成文字的不同录音（至少）",
-     "as_of": "2026-09-28",
+     "text": "434+ 段",
+     "meaning": "8 月 18 日–10 月 7 日转成文字的不同录音（至少）",
+     "as_of": "2026-10-10",
      "source": "chinese-asr 页第 1 屏",
      "screens": [
       "github-profile-03"
@@ -46,20 +46,20 @@
     },
     {
      "id": "n-ocr-runs",
-     "text": "684 次 · 706 页",
-     "meaning": "真实识别次数和页数",
-     "as_of": "2026-09-28",
-     "source": "localocr 页第 1 屏；E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\p2\\facts-home.md 1.3 第 2 条",
+     "text": "16,074 次 · 16,157 页",
+     "meaning": "真实识别次数和页数（7 月 8 日–10 月 10 日 05:17）",
+     "as_of": "2026-10-10",
+     "source": "localocr 页第 1 屏和登记 n-jobs",
      "screens": [
       "github-profile-04"
      ]
     },
     {
      "id": "n-timeaudit-seconds",
-     "text": "540 万秒",
-     "meaning": "每秒一条的硬件记录 5,401,748 行",
-     "as_of": "2026-09-28",
-     "source": "timeaudit 页第 1 屏；E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\p2\\facts-home.md 1.3 第 3 条",
+     "text": "637 万秒",
+     "meaning": "每秒一条的硬件记录，6 月 16 日起",
+     "as_of": "2026-10-10",
+     "source": "timeaudit 页第 1 屏",
      "screens": [
       "github-profile-05"
      ]
@@ -68,8 +68,8 @@
      "id": "n-routes",
      "text": "21 条",
      "meaning": "5 种原版工具配云端和本机模型，其中 2 条这台电脑眼下用不上",
-     "as_of": "2026-09-29",
-     "source": "ai-cli-profile-manager 页第 1 屏",
+     "as_of": "2026-10-10",
+     "source": "ai-cli-profile-manager 页第 1 屏（截至 10 月 10 日仍是 21 条）",
      "screens": [
       "github-profile-06"
      ]
@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "c5b661fc285e0dfc9fb9d291ec37a20c3ed8dd9c1154bfa9f7833d6c730a016a",
-  "converted_at_beijing": "2026-10-10T05:26:52+08:00"
+  "sha256": "a6d7e685e74b2cff0566a21c32600445e129adc00397827dbee707c7319a8fbd",
+  "converted_at_beijing": "2026-10-10T08:22:26+08:00"
  }
 }
 ---
@@ -364,7 +364,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "375+段",
+     "text_ref": "434+段",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -419,7 +419,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机把录音转成逐句可核对的文字；按 Win+H 说话直接打字。
 
-**375+ 段**　录音已转写（截至 9 月 26 日）
+**434+ 段**　录音已转写（截至 10 月 10 日）
 
 ::screen{#github-profile-04 section="projects"}
 
@@ -467,7 +467,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "684次",
+     "text_ref": "16,074次",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -522,7 +522,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机显卡上把图片、扫描件里的字读准，没把握的地方标出来。
 
-**684 次**　识别 706 页（截至 9 月 28 日）
+**16,074 次**　识别 16,157 页（截至 10 月 10 日）
 
 ::screen{#github-profile-05 section="projects"}
 
@@ -570,7 +570,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "540万秒",
+     "text_ref": "637万秒",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -625,7 +625,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
 
-**540 万秒**　硬件记录（截至 9 月 28 日）
+**637 万秒**　硬件记录（截至 10 月 10 日）
 
 ::screen{#github-profile-06 section="projects"}
 
@@ -728,7 +728,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 9 月 29 日）
+**21 条**　模型路线（截至 10 月 10 日）
 
 ::screen{#github-profile-07 section="projects"}
 

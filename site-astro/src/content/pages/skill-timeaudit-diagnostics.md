@@ -30,6 +30,18 @@
   "url": "/skills/timeaudit-diagnostics/",
   "tagline": "说一句“刚才卡了”，AI 按时间对齐证据去查。",
   "status": "",
+  "status_line": {
+   "state": "常用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 23:45"
+   },
+   "facts": [
+    "近 7 天 AI 用了 54 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": null,
   "repo_url": null,
   "capability": "",
@@ -89,8 +101,8 @@
  },
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
-  "sha256": "12dc000bbf187f3b08e59c19ce978f0bb21c4c7aee13f969b8b5b2dffc6fced5",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "662e18ae59bafc9c4fbea627131605d638a7c03176b6f5f63c6c3affd21e7e76",
+  "converted_at_beijing": "2026-10-10T08:43:30+08:00"
  }
 }
 ---
@@ -125,15 +137,34 @@
     {
      "type": "chapter_title",
      "text_ref": "查电脑卡顿",
-     "align": "center",
+     "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "50%"
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 54 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "prose",
      "text_ref": "技能名",
-     "row": "hero"
+     "row": "hero",
+     "width": "50%",
+     "row_fit_illustration": true
     },
     {
      "type": "section_heading",
@@ -184,6 +215,21 @@
      "text_ref": "查电脑卡顿",
      "align": "center",
      "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 54 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -500,7 +546,7 @@
 
 一个完整例子
 
-示例：数字取自 9 月 28 日 17:53–20:53 的真实摘要和 20:35 的真实健康检查，问话和回话是编的
+示例：照这个技能的做法写的，不是某一次的记录；数字取自 9 月 28 日的真实摘要和健康检查
 
 我：“过去三小时游戏帧率怎么样？”
 

@@ -200,10 +200,10 @@
    "numbers": [
     {
      "id": "n-registered",
-     "text": "164 份",
+     "text": "165 份",
      "meaning": "精确登记的原件定位，全部核对过 SHA-256",
-     "as_of": "2026-09-28",
-     "source": "materials.py status 与只读 SQL（open_state=verified 164）",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字（截至 10 月 9 日）",
      "screens": [
       "personal-materials-01",
       "personal-materials-05",
@@ -214,10 +214,10 @@
     },
     {
      "id": "n-sources",
-     "text": "53 个来源",
+     "text": "58 个来源",
      "meaning": "已登记来源：文件夹 35、文件名清单 5、交接文件夹 8、单个文件 5",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL group by source_kind；status sources=53",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-01",
       "personal-materials-06",
@@ -267,20 +267,20 @@
     },
     {
      "id": "n-sync-runs",
-     "text": "31 次，全部成功",
+     "text": "41 次，全部成功",
      "meaning": "每日维护里 materials_sync_current 这一步的次数：9 月 5–28 日每天 17:10 共 24 次，另有手动补跑 7 次（北京 9 月 7、9 日各 1 次，13 日 4 次，14 日 1 次）",
-     "as_of": "2026-09-28",
-     "source": "%LOCALAPPDATA%\\PCConfig\\logs\\hot-backup\\personal-replica-*.log，9 月 5–28 日北京 17:10",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-01"
      ]
     },
     {
      "id": "n-filenames",
-     "text": "15,210 条",
+     "text": "15,105 条",
      "meaning": "微信收到的文件和下载文件夹的文件名清单条目",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL count(*) from filename_entries",
+     "as_of": "2026-10-09",
+     "source": "同页第 1 屏现行数字",
      "screens": [
       "personal-materials-03",
       "personal-materials-06"
@@ -525,8 +525,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "27eed6d1705f258a9c6b13b786754ae63b5fca11bd2c42cac3ca3d6a6c9567dc",
-  "converted_at_beijing": "2026-10-10T07:28:22+08:00"
+  "sha256": "f4ccda04c156f606fa89eb1a457b156e51f0470ee64ee7532d809b2474c0b9e3",
+  "converted_at_beijing": "2026-10-10T08:22:26+08:00"
  }
 }
 ---

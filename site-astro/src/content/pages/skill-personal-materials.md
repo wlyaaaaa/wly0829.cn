@@ -30,6 +30,18 @@
   "url": "/skills/personal-materials/",
   "tagline": "说个大概，找出文档原件，翻到要看的那一页。",
   "status": "",
+  "status_line": {
+   "state": "偶尔用",
+   "last": {
+    "label": "上次使用",
+    "at": "2026-10-08 14:43"
+   },
+   "facts": [
+    "近 7 天 AI 用了 5 次"
+   ],
+   "as_of": "2026-10-10",
+   "source": "AI 使用小记录（记到 10 月 8 日）"
+  },
   "public": false,
   "repo_url": null,
   "capability": "",
@@ -111,8 +123,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
-  "sha256": "fca9594f53440b26fe3bdfc7881c33aaa81f1439afe641f3c6b325b55a3460d6",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "sha256": "da3da8b564da7ab9767dfa7735b69ef3a942d6fc5739bdba7566813c57bdd01d",
+  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
  }
 }
 ---
@@ -146,20 +158,37 @@
      "type": "chapter_title",
      "align": "left",
      "size": "large",
-     "row": "hero",
-     "width": "55%",
-     "text_ref": "找文件原件"
+     "text_ref": "找文件原件",
+     "row": "k1a-head",
+     "width": "fit-content(60%)"
     },
     {
-     "type": "prose",
-     "row": "hero",
-     "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 8 日 14:43",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 5 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "row": "k1a-head",
+     "width": "minmax(0,1fr)"
     },
     {
      "type": "illustration",
      "index": 0,
-     "row": "hero",
-     "width": "45%"
+     "row": "k1a-head",
+     "width": "auto",
+     "align": "right"
+    },
+    {
+     "type": "prose",
+     "text_ref": "不知道一份文档放在哪时，说个大概，AI找出那一份原件，核对确实是它，再翻到你要看的那"
     },
     {
      "type": "dialogue",
@@ -175,7 +204,12 @@
       "_library/avatars/本人-通用.png"
      ],
      "illustration": "left_inside",
-     "text_ref": "这样说就行"
+     "text_ref": "这样说就行",
+     "row_counts": [
+      3,
+      2,
+      2
+     ]
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-personal-materials\\page.json",
@@ -212,6 +246,21 @@
      "align": "center",
      "size": "large",
      "text_ref": "找文件原件"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "偶尔用 · 上次使用 10 月 8 日 14:43",
+       "state": "ok"
+      },
+      {
+       "text": "近 7 天 AI 用了 5 次",
+       "state": "fact"
+      }
+     ],
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
@@ -460,6 +509,10 @@
      "text_ref": "一个完整的例子"
     },
     {
+     "type": "tag",
+     "text_ref": "示例："
+    },
+    {
      "type": "dialogue",
      "sides": [
       "right"
@@ -527,6 +580,10 @@
      "align": "center",
      "size": "large",
      "text_ref": "一个完整的例子"
+    },
+    {
+     "type": "tag",
+     "text_ref": "示例："
     },
     {
      "type": "dialogue",
@@ -614,6 +671,8 @@
 ```
 
 # 一个完整的例子
+
+示例：照这个技能的做法写的，不是某一次的记录
 
 **我：**去年租房签的那份合同，要签字版，讲押金怎么退的是哪一条？
 
