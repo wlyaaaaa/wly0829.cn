@@ -25,8 +25,8 @@ def load(name):
 
 oss, retention = load('prepare-oss-release'), load('oss-retention')
 
-def command(*args):
-    return subprocess.check_output([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)).strip()
+def command(*args, timeout=None):
+    return subprocess.check_output([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)).strip()
 
 def delta(current, previous):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
@@ -62,18 +62,22 @@ def get_page(item):
 
 def pages(commit, timeout):
     deadline = time.monotonic()+timeout
+    repository = REPO.removeprefix('repos/')
+    dispatched = command('gh', 'workflow', 'run', 'pages.yml', '--repo', repository,
+                         '--ref', 'main', '-f', 'sha='+commit, timeout=timeout)
+    match = oss.re.fullmatch(r'https://github.com/'+oss.re.escape(repository)+r'/actions/runs/([0-9]+)', dispatched)
+    if not match:
+        raise ValueError('Pages dispatch returned no run id; deployment is unconfirmed for '+commit)
+    run_id = int(match[1])
     while time.monotonic() < deadline:
-        deployments = json.loads(command('gh', 'api', REPO+'/deployments?environment=github-pages&per_page=10'))
-        for deployment in deployments:
-            if deployment['sha'] != commit:
-                continue
-            status = json.loads(command('gh', 'api', REPO+'/deployments/'+str(deployment['id'])+'/statuses?per_page=1'))
-            if status and status[0]['state'] == 'success':
-                return deployment['id']
-            if status and status[0]['state'] in ('failure', 'error'):
-                raise ValueError('Pages deployment failed for '+commit)
-        time.sleep(2)
-    raise TimeoutError('Pages success is unconfirmed for '+commit)
+        run = json.loads(command('gh', 'run', 'view', str(run_id), '--repo', repository,
+                                 '--json', 'status,conclusion', timeout=deadline-time.monotonic()))
+        if run['status'] == 'completed':
+            if run['conclusion'] != 'success':
+                raise ValueError('Pages run '+str(run_id)+' failed: '+str(run['conclusion']))
+            return run_id
+        time.sleep(min(2, max(0, deadline-time.monotonic())))
+    raise TimeoutError('Pages run '+str(run_id)+' success is unconfirmed for '+commit)
 
 def artifact_commit(dist, plan, output, source_commit):
     destination = output/'site-dist'
@@ -91,16 +95,13 @@ def artifact_commit(dist, plan, output, source_commit):
         git('fetch', '--depth=1', 'origin', 'site-dist')
         git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
     for rel in git('ls-files').splitlines():
-        if rel not in {*plan['github_files'], 'release-identity.json', '.github/workflows/pages.yml'}:
+        if rel not in {*plan['github_files'], 'release-identity.json'}:
             (destination/rel).unlink()
     for rel, row in plan['github_files'].items():
         target = destination/rel
         if not target.exists() or oss.digest(target) != row['sha256']:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(dist/rel, target)
-    workflow = destination/'.github/workflows/pages.yml'
-    workflow.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(ROOT/'.github/workflows/pages.yml', workflow)
     git('add', '--all')
     changed = git('diff', '--cached', '--name-only').splitlines()
     for line in git('ls-files', '-s').splitlines():
