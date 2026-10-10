@@ -44,16 +44,6 @@
     "sha256": "58ce597dedbd75f3f3445c8b80c2cc67ef1acfafb130488e1e8202b54dbed833",
     "source_path": "scripts/toc-consistency.css"
   },
-  "_home-cockpit/cockpit-offline.css": {
-    "sha256": "f39514e3a454020b98e00b5ce824557bcac89237b1d4f0edb1674b782ed6af45",
-    "bytes": 1775,
-    "source_path": "site-astro/public/_home-cockpit/cockpit-offline.css"
-  },
-  "_home-cockpit/cockpit-offline.js": {
-    "sha256": "ddfb00ce8b6acd6e3e1b7875b3f1c0e97598ae5c9f9639649f1603775d5c5b1d",
-    "bytes": 7647,
-    "source_path": "site-astro/public/_home-cockpit/cockpit-offline.js"
-  },
   "_home-cockpit/home-cta.css": {
     "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
     "bytes": 2412,
