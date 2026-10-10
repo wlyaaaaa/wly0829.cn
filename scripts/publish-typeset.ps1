@@ -35,6 +35,7 @@ param(
     [ValidateRange(1,60)][int]$PagesTimeoutMinutes = 20,
     [ValidateRange(2,6)][int]$ReadbackConfirmationRounds = 3,
     [ValidateRange(0,60)][int]$ReadbackRetrySeconds = 10,
+    [switch]$FailFastOnline,
     [switch]$Publish
 )
 $ErrorActionPreference = 'Stop'
@@ -268,7 +269,8 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
     $signature = $null
     $stableFailures = 0
     $lastReport = $null
-    for ($attempt=1; $attempt -le 3; $attempt++) {
+    $attemptLimit = if ($FailFastOnline) { 1 } else { 3 }
+    for ($attempt=1; $attempt -le $attemptLimit; $attempt++) {
         HoldPublicationLock
         $lastReport = Join-Path $RunRoot "$Prefix-$attempt.json"
         $domInput = if ($OssQaPlan -and -not $Legacy) { $OssQaPlan } elseif ($RuntimeVerification -and -not $Legacy) { $RuntimeVerification } else { $BuildReport }
@@ -276,7 +278,7 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
             '--output',$lastReport,'--task-cache',(Join-Path $RunRoot "$Prefix-browser-cache"))
         if ($AstroPreparation -and -not $Legacy) {
             $arguments = @('scripts/check-site-ui.py','--root',(Join-Path $repoRoot 'site-release'),
-                '--base-url','https://wly0829.cn','--output',$lastReport,'--pages') + @($receipt.selected_pages)
+                '--base-url','https://wly0829.cn','--output',$lastReport,'--readonly-routes','/computer-access/','--pages') + @($receipt.selected_pages)
         }
         if ($RuntimeVerification -and -not $Legacy) {
             $runtimePages = (ReadJson $RuntimeVerification).pages.PSObject.Properties.Name
@@ -289,12 +291,18 @@ function ConfirmOnlineDom([string]$Prefix, [switch]$Legacy, [string]$Release) {
         $code = $LASTEXITCODE
         $proof = if (Test-Path -LiteralPath $lastReport -PathType Leaf) { ReadJson $lastReport } else { $null }
         if ($code -eq 0 -and $proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$lastReport } }
+        $unavailable = @($proof.records | Where-Object { $_.dependency_unavailable -or @($_.issues | Where-Object kind -eq 'check-error').Count })
+        $unsupported = @($proof.records | ForEach-Object { $_.issues } | Where-Object { -not $_.known -and $_.kind -notmatch 'review|unmeasurable' })
+        if ($FailFastOnline -and $AstroPreparation -and -not $Legacy -and $code -eq 0 -and $proof.status -eq 'partial' -and $proof.blocker_count -eq 0 -and @($proof.records).Count -gt 0 -and -not $unavailable.Count -and -not $unsupported.Count) {
+            return [pscustomobject]@{ status='pass'; provider_status='partial'; report=$lastReport; warnings=@($proof.records | Where-Object { $_.issues.Count }) }
+        }
+        if ($FailFastOnline) { return [pscustomobject]@{ status='unknown'; provider_status=$proof.status; report=$lastReport; reason="First online DOM check did not pass (exit $code, provider $($proof.status)); actual evidence: $lastReport" } }
         if ($code -in @(1,2) -and $proof.status -eq 'fail') {
             $failedRows = if ($AstroPreparation -and -not $Legacy) { $proof.records | Where-Object { $_.issues.Count -gt 0 } } else { $proof.checks | Where-Object status -eq 'fail' }
             $current = @($failedRows | Sort-Object route,page,width | Select-Object route,page,width,issues) | ConvertTo-Json -Depth 10 -Compress
             if ($current -ceq $signature) { $stableFailures++ } else { $stableFailures=1; $signature=$current }
         } else { $stableFailures=0; $signature=$null }
-        if ($attempt -lt 3) { Start-Sleep -Seconds 3 }
+        if ($attempt -lt $attemptLimit) { Start-Sleep -Seconds 3 }
     }
     return [pscustomobject]@{ status=$(if ($stableFailures -eq 3) { 'confirmed_failure' } else { 'unknown' }); report=$lastReport }
 }
@@ -302,7 +310,8 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
     $previous = $null
     $lastSignature = $null
     $stableMismatchRounds = 0
-    for ($round = 1; $round -le $ReadbackConfirmationRounds; $round++) {
+    $roundLimit = if ($FailFastOnline) { 1 } else { $ReadbackConfirmationRounds }
+    for ($round = 1; $round -le $roundLimit; $round++) {
         HoldPublicationLock
         $report = Join-Path $RunRoot "$Prefix-$round.json"
         $arguments = @('scripts/prepare-typeset-release.py','readback','--release',$Candidate,'--output',$report)
@@ -315,6 +324,7 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
         }
         $proof = ReadJson $report
         if ($proof.status -eq 'pass') { return [pscustomobject]@{ status='pass'; report=$report; reason=$null } }
+        if ($FailFastOnline) { return [pscustomobject]@{ status=$proof.status; report=$report; reason="First public byte readback did not pass ($($proof.status)); actual evidence: $report" } }
         if ($proof.status -eq 'mismatch' -and $proof.issues.Count) {
             $signature = @($proof.issues | Sort-Object path | ForEach-Object {
                 [ordered]@{ path=$_.path; actual=$_.actual; actual_release_id=$_.actual_release_id; actual_files_sha256=$_.actual_files_sha256 }
@@ -323,7 +333,7 @@ function ConfirmReadback([string]$Candidate, [string]$Prefix) {
             else { $lastSignature = $signature; $stableMismatchRounds = 1 }
         } else { $lastSignature = $null; $stableMismatchRounds = 0 }
         $previous = $report
-        if ($round -lt $ReadbackConfirmationRounds) { Start-Sleep -Seconds $ReadbackRetrySeconds }
+        if ($round -lt $roundLimit) { Start-Sleep -Seconds $ReadbackRetrySeconds }
     }
     if ($stableMismatchRounds -eq $ReadbackConfirmationRounds) {
         return [pscustomobject]@{ status='confirmed_mismatch'; report=$previous; reason='The same incorrect public bytes persisted across every bounded confirmation round.' }
@@ -472,6 +482,7 @@ try {
     if ($Geometry) { $uiArguments += @('--geometry',$Geometry) }
     if ($UiFull -or -not $Pages) { $uiArguments += '--full' } else { $uiArguments += @('--pages') + $Pages }
     if ($OssPreparation) { $uiArguments += @('--oss-preparation',$OssPreparation) }
+    if ($AstroPreparation) { $uiArguments += @('--readonly-routes','/computer-access/') }
     Checked 'python' $uiArguments
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt
@@ -559,6 +570,7 @@ try {
     SaveState
     $readback = ConfirmReadback (Join-Path $repoRoot 'site-release') 'online-readback'
     $state.readback = $readback
+    if ($FailFastOnline -and $readback.status -ne 'pass') { $script:confirmedPublicationFailure=$readback.reason; throw $script:confirmedPublicationFailure }
     if ($readback.status -eq 'confirmed_mismatch') {
         $state.status = 'confirmed_public_byte_mismatch'
         $script:confirmedPublicationFailure = $readback.reason
@@ -571,6 +583,7 @@ try {
     if ($OssPreparation) { OssBrowserNetwork 'live' (Join-Path $repoRoot 'site-release') }
     $onlineDom = ConfirmOnlineDom 'online-dom'
     $state.online_dom = $onlineDom
+    if ($FailFastOnline -and $onlineDom.status -ne 'pass') { $script:confirmedPublicationFailure=$onlineDom.reason; throw $script:confirmedPublicationFailure }
     if ($onlineDom.status -eq 'confirmed_failure') {
         $state.status = 'online_dom_failed'
         $script:confirmedPublicationFailure = 'Public desktop/mobile DOM checks failed; inspect the actual online report.'

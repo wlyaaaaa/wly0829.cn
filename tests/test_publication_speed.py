@@ -121,6 +121,34 @@ class PublicationSpeedTests(unittest.TestCase):
         self.manifest['rollback_ref'] = 'new-metadata'; h.write(self.source/h.MANIFEST, self.manifest)
         with self.assertRaisesRegex(ValueError, 'different release'): self.online(retry=old)
 
+    def test_fail_fast_online_keeps_partial_warnings_but_rejects_unavailable(self):
+        import subprocess
+        source = (ROOT/'scripts/publish-typeset.ps1').read_text('utf-8-sig')
+        helpers = source[source.index('function ConfirmOnlineDom'):source.index('function RecoverConfirmedFailure')]
+        script = self.root/'fail-fast.ps1'
+        script.write_text(r'''param([string]$Fixture,[string]$Mode,[bool]$Fast)
+$ErrorActionPreference='Stop';$FailFastOnline=$Fast;$AstroPreparation='mock';$RunRoot=$PSScriptRoot;$repoRoot=$PSScriptRoot;$receipt=@{selected_pages=@('/computer-access/')};$ReadbackConfirmationRounds=3;$ReadbackRetrySeconds=0;$script:calls=0
+function HoldPublicationLock{}
+function ReadJson($Path){Get-Content -LiteralPath $Path -Raw|ConvertFrom-Json}
+function python{$script:calls++;$out=$args[[array]::IndexOf($args,'--output')+1];[IO.File]::WriteAllText($out,$Fixture);$global:LASTEXITCODE=0}
+''' + helpers + r'''
+$gate=if($Mode -eq 'dom'){ConfirmOnlineDom 'probe'}else{ConfirmReadback $PSScriptRoot 'probe'}
+@{status=$gate.status;calls=$script:calls;provider_status=$gate.provider_status;warnings=$gate.warnings}|ConvertTo-Json -Depth 20 -Compress
+''', encoding='utf8')
+        partial = {'status':'partial','blocker_count':0,'records':[{'issues':[{'kind':'known-layout','known':True}]}]}
+        cases = [(partial, 'dom', True, 'pass', 1),
+                 ({**partial, 'records':[{'issues':[{'kind':'check-error'}]}]}, 'dom', True, 'unknown', 1),
+                 ({**partial, 'records':[{'dependency_unavailable':True,'issues':[]}]}, 'dom', True, 'unknown', 1),
+                 ({**partial, 'records':[{'issues':[{'kind':'new-layout','known':False}]}]}, 'dom', True, 'unknown', 1),
+                 ({'status':'unknown','issues':[]}, 'bytes', True, 'unknown', 1),
+                 ({'status':'unknown','issues':[]}, 'bytes', False, 'unknown', 3)]
+        for proof, mode, fast, status, calls in cases:
+            encoded = '$true' if fast else '$false'
+            command = f"& '{script.as_posix()}' -Fixture '{json.dumps(proof)}' -Mode '{mode}' -Fast {encoded}"
+            result = json.loads(subprocess.check_output(['pwsh','-NoProfile','-Command',command], text=True))
+            self.assertEqual((result['status'], result['calls']), (status, calls))
+            if status == 'pass': self.assertEqual(result['provider_status'], 'partial'); self.assertTrue(result['warnings'])
+
     def test_small_identity_mismatch_reads_and_checks_full_manifest(self):
         first, calls, unused = self.online(bad_identity=True)
         self.assertEqual(first['status'], 'pass'); self.assertIn('release-manifest.json', calls)
