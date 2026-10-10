@@ -59,10 +59,10 @@ def retired_project_routes(dist, previous):
 
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
-    targets = nav.page_inventory(root)
+    targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
     author = {data['url']: data for data in (read(path) for path in (ROOT/'sources/pages').glob('*/page.json')) if data.get('url')}
     for route in converted:
-        if converted[route].get('destination') or route not in author: continue
+        if route not in changed_routes or converted[route].get('destination') or route not in author: continue
         if route.startswith('/rules/'):
             rows = [row for row in pin['documents'].values() if row['primary'] and (route == '/rules/' or route == '/rules/' + row['slug'] + '/')]
             title = '我的 AI 约法与工作约定' if route == '/rules/' else rows[0]['title']
@@ -82,8 +82,8 @@ def sync_search(root, previous, converted, pin, changed_routes):
                 'scopes': ['project:' + slug] if slug else ['system'], 'title': title + ' · ' + label, 'detail': text[:240], 'href': href, 'aliases': [label], 'search': text.lower()})
     for rel in ('search-index.js', 'search-projects.js', 'search-project-localocr.js'):
         obj = previous['oss']['objects'][rel]; old = root/rel
-        seed_file(rel, old)
-        rows = nav.search_records(old.read_text('utf8')); kept = [row for row in rows if row['href'].split('#')[0] not in converted]
+        if not old.is_file(): seed_file(rel, old)
+        rows = nav.search_records(old.read_text('utf8')); kept = [row for row in rows if row['href'].split('#')[0] not in changed_routes]
         added = [row for row in generated if (row['type'] == '项目内容') == (rel != 'search-index.js') and (rel != 'search-project-localocr.js' or row['projectSlug'] == 'localocr')]
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False).replace('<', '\\u003c') + ';\n').encode())
@@ -172,6 +172,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         path.write_bytes(text.encode('utf8'))
     for url in unused: (dist / url.lstrip('/')).unlink()
     album = album_index(dist, snapshot, changed_routes)
+    if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     for path in (dist / '_album').glob('routes-*.json'):
         path.write_bytes(transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
