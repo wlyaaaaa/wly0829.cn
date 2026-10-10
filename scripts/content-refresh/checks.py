@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 from urllib.parse import urlsplit
 DATE = re.compile(r'(?:(20\d{2})\s*(?:年|[-/])\s*)?(\d{1,2})\s*(?:月|[-/])\s*(\d{1,2})(?:\s*[–—~～至-]\s*(\d{1,2}))?\s*日?')
-URL = re.compile(r'https?://[^\s<>\[\]〔〕（）()\u3002，；“”`]+')
+URL = re.compile(r'https?://(?:<端口>|[^\s<>\[\]〔〕（）()\u3002，；“”`])+')
 LOCAL = re.compile(r'(?<![A-Za-z0-9])[A-Za-z]:[\\/][^\s`\u3002，；“”]+|\\\\[A-Za-z0-9][^\s`\u3002，；“”]+|/(?:Users|home|mnt|tmp)/[^\s`]+')
 COMMIT = re.compile(r'(?<![A-Za-z0-9])(?=[a-fA-F0-9]{7,40}(?![A-Za-z0-9]))(?=[a-fA-F0-9]*[a-fA-F])[a-fA-F0-9]{7,40}(?![A-Za-z0-9])')
 VERSION = re.compile(r'(?:现行|当前|活动|现在用|生效)[^\n。！？]{0,80}\bE2\d{2}\b|\bE2\d{2}\b[^\n。！？]{0,35}(?:现行|当前|活动|生效)')
@@ -43,10 +43,16 @@ def _numbers(text):
     text = re.sub(r'\b[A-Za-z][A-Za-z0-9_-]*\d[A-Za-z0-9_.-]*\b|(?:Python|Windows|GPT[- ]?|PowerShell|PS)\s*\d+(?:\.\d+)*(?:\s*/\s*\d+(?:\.\d+)*)*|\d+(?:\.\d+)+\s*版', '', text, flags=re.I)
     return len(NUMBER.findall(text))
 
-def audit_pages(pages_root: Path, today: date | None = None, retired_names=()) -> dict:
+def audit_pages(pages_root: Path, today: date | None = None, retired_names=(), interface_url_allowlist=None) -> dict:
     """No host reads; line numbers are one-based within the named visible field."""
     today = today or datetime.now(timezone(timedelta(hours=8))).date()
     pages_root = Path(pages_root)
+    if interface_url_allowlist is None:
+        registry_path = pages_root.parent/'refresh/registry.json'
+        try:
+            interface_url_allowlist = json.loads(registry_path.read_text('utf-8-sig')).get('interface_url_allowlist', {})
+        except (OSError, ValueError):
+            interface_url_allowlist = {}
     paths = sorted(pages_root.rglob('page.json'))
     findings, documents = [], []
     for path in paths:
@@ -60,6 +66,7 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=()) -
     skill_total = None if findings else sum(data.get('kind') == 'skill' for _, data in documents)
     for page, data in documents:
         kind = data.get('kind')
+        if kind == 'skill-redirect': continue
         first = next(iter(data.get('screens', [])), {})
         identity = data.get('page', '').removeprefix('skill-') if kind == 'skill' else data.get('page', '')
         if kind in {'skill', 'project'} and identity in retired_names and data.get('status') not in {'frozen', '冻结', '已冻结', 'historical', '历史'} and first.get('section') not in {'history', 'evolution', 'timeline'} and not HISTORY.search(first.get('title', '')):
@@ -69,6 +76,7 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=()) -
             if matched and skill_total is not None and int(matched[1]) != skill_total:
                 findings.append(dict(page=page, screen=next(iter(number.get('screens', [])), first.get('id', '')), field='registry.numbers[n-skills].text', line=1, code='count-mismatch', tier='block', excerpt=number['text'], message=f'技能登记数{matched[1]}与kind=skill子页实数{skill_total}不符。'))
         for screen in data.get('screens', []):
+            if kind in {'rule-topic', 'charter', 'rules-home'} and (screen.get('source_excerpt_id') or (screen.get('source_meta') or {}).get('excerpt_id')): continue
             historical = screen.get('section') in {'history', 'evolution', 'timeline'} or bool(HISTORY.search(screen.get('title', '')))
             top = screen.get('section') == 'top' or screen.get('id') == first.get('id')
             retired_page = data.get('kind') in {'retired', 'redirect', 'skill-redirect', 'retired-skill', 'retired-project'} or bool(re.search(r'退役|去向|已停用', data.get('title', '')))
@@ -78,7 +86,7 @@ def audit_pages(pages_root: Path, today: date | None = None, retired_names=()) -
                     def add(code, message):
                         tier = 'block' if code in BLOCK or (code == 'stale-as-of' and top) else 'advisory'
                         findings.append(dict(page=page, screen=screen.get('id', ''), field=field, line=line_number, code=code, tier=tier, excerpt=line[:220], message=message))
-                    if any(_endpoint(match[0]) for match in URL.finditer(line)):
+                    if any(_endpoint(match[0]) and match[0] not in interface_url_allowlist.get(data.get('page'), ()) for match in URL.finditer(line)):
                         add('interface-url', '正文含接口网址；人工核对是否应放在技术与依据中。')
                     if LOCAL.search(URL.sub('', line)):
                         add('local-path', '正文含本机路径；人工核对读者解释和技术依据的位置。')

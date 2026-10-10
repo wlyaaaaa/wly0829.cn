@@ -250,7 +250,7 @@ def prepare(args):
     report['pages'] = [{'route': hybrid.file_route(rel), 'before': previous['files'].get(rel), 'after': row} for rel, row in manifest['files'].items() if rel.endswith('.html') and previous['files'].get(rel) != row]
     report['affected']['pages'] = sorted(set(report['affected']['pages']) | {row['route'] for row in report['pages']})
     manifest.update(rules_pin=pin, publication_changes=report, publication_snapshot=report.pop('publication_snapshot'),
-        astro={'schema': 'wly.astro-publication.v1', 'sample_commit': 'bbcf1c802ba4c9d36aa939bdbd7475e2772b0048', 'retained_sample': retained, 'converted_routes': sorted(converted), 'selected_pages': pages,
+        astro={'schema': 'wly.astro-publication.v1', 'sample_commit': subprocess.check_output(['git', 'rev-parse', args.sample_ref], cwd=ROOT, text=True).strip(), 'retained_sample': retained, 'converted_routes': sorted(converted), 'selected_pages': pages,
                'author_sources': len(author), 'unique_author_urls': len({row['url'] for row in author}),
                'html_files': sum(rel.endswith('.html') for rel in manifest['files']),
                'baseline_html_files': sum(rel.endswith('.html') for rel in previous['files'])})
@@ -311,6 +311,7 @@ def main():
     build = commands.add_parser('prepare'); build.add_argument('--baseline', type=Path, default=ROOT/'site-release'); build.add_argument('--baseline-ref', default='main')
     build.add_argument('--asset-base-url', default='https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com'); build.add_argument('--prefix', required=True); build.add_argument('--output', type=Path, required=True)
     build.add_argument('--shell-assets', type=Path, help='The selected sample public assets, needed only before its first publication')
+    build.add_argument('--sample-ref', default='a08a54c7b4f142bfc7db621c2a454465601e72fc', help='Exact accepted sample Git object for this preparation')
     check = commands.add_parser('verify'); check.add_argument('--preparation', type=Path); check.add_argument('--release', type=Path); check.add_argument('--offline', action='store_true')
     check.add_argument('--require-remote', action='store_true'); check.add_argument('--directive', type=Path); check.add_argument('--copy-to', type=Path); check.add_argument('--output', type=Path)
     args = parser.parse_args()

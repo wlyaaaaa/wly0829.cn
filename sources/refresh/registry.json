@@ -1,6 +1,16 @@
 {
   "schema": "content-refresh.sources.v1",
   "baseline": "f2834b3e",
+  "interface_url_allowlist": {
+    "mcp": [
+      "https://mcp.wly0829.cn/mcp",
+      "https://laptop-e48n0drj.tailbe620b.ts.net/computer/mcp",
+      "https://laptop-e48n0drj.tailbe620b.ts.net/main-computer/mcp",
+      "http://localhost:33418/callback",
+      "http://127.0.0.1/callback"
+    ],
+    "rule-claude-adapter": ["http://localhost:<端口>/callback"]
+  },
   "writing_points": [
     "一句话里别塞两个以上数字。",
     "开发细节改成人话，技术依据仍完整保留。",

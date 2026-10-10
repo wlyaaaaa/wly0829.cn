@@ -6,7 +6,11 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 ROOT = Path(__file__).resolve().parents[1]
+sys.path[:0] = [str(ROOT/'scripts/content-refresh'), str(ROOT/'src/typeset')]
+from checks import audit_pages
+from engine.content import bound_json
 SUPPLY = Path('E:/.agents/config/personal-skill-supply.json')
 ENTRY = Path('E:/.agents/tools/Invoke-EAgentRulesRelease.ps1')
 SKILL_ALIASES = {'learning': 'career-development', 'document-materials': 'personal-formal-documents'}
@@ -51,12 +55,14 @@ def dated_numbers(path, screen, first, now, unknown):
             'action': '更新来源；无新数时保留截至日期，并从首屏数字卡移至有日期的证据说明' if card else '核对来源，保留截至日期'})
     return rows
 def audit(root=ROOT, now=None):
-    root = Path(root); now = datetime.fromisoformat(now) if isinstance(now, str) else now or datetime.now(timezone(timedelta(hours=8)))
+    root = Path(root).resolve(); now = datetime.fromisoformat(now) if isinstance(now, str) else now or datetime.now(timezone(timedelta(hours=8)))
     if now.tzinfo is None: now = now.replace(tzinfo=timezone(timedelta(hours=8)))
     now = now.astimezone(timezone(timedelta(hours=8))); unknown = []
     def read(path):
-        try: return json.loads(Path(path).read_text('utf-8-sig'))
-        except (OSError, ValueError) as error:
+        def local_read(source):
+            return Path(source).read_text('utf-8-sig')
+        try: return bound_json(path, local_read, root=root) if Path(path).name == 'page.json' else json.loads(local_read(path))
+        except (OSError, ValueError, KeyError, IndexError, StopIteration) as error:
             unknown.append({'path': str(path), 'reason': 'Unknown: '+type(error).__name__}); return {}
     supply = read(SUPPLY); registry = read(root/'config/panel-projects.json'); order = read(root/'config/final-project-order.json')
     try:
@@ -93,13 +99,13 @@ def audit(root=ROOT, now=None):
     expected_rules = ['charter' if item['logical_id'] == 'agents_root_rules' else Path(item['relative_path']).stem.removeprefix('agents.') for item in active.get('catalog', {}).get('documents', [])]
     author_rules = ['charter' if data.get('kind') == 'charter' or data.get('page') == 'agents-charter' else data.get('page', '').removeprefix('rule-') for path, data in pages if data.get('kind') in ('rule-topic', 'charter') or data.get('page') == 'agents-charter']
     rules = {'current': expected_rules, 'website_author_source': author_rules, **difference(expected_rules, author_rules), 'version': active.get('release_id', 'Unknown'), 'ruleset_sha256': active.get('ruleset_sha256', 'Unknown')}
-    counts = []; versions = []; stale = []
+    counts = []; versions = []; stale = []; stale_unknown = []
     actual_counts = {'技能': len(author_skills), '项目': len(author_projects), '专题': sum(data.get('kind') == 'rule-topic' for path, data in pages)}
     for path, data in pages:
         for index, screen in enumerate(data.get('screens', [])):
             text = screen.get('text', '')
             if screen.get('section') == 'history': continue
-            stale += dated_numbers(path, screen, index == 0 or screen.get('section') == 'top', now, unknown)
+            stale += dated_numbers(path, screen, index == 0 or screen.get('section') == 'top', now, stale_unknown)
             for match in re.finditer(r'(\d+)\s*个[\s·*]*(在用的\s*)?(技能|项目|专题)', text):
                 if data.get('page') not in ('skills-home', 'projects-home', 'rules-home', 'agents'): continue
                 if match[3] == '项目' and (data.get('page') != 'projects-home' or '〕' in text[max(0, match.start()-8):match.start()]): continue
@@ -129,13 +135,17 @@ def audit(root=ROOT, now=None):
         clear_owners = all(item['page'] and item['kind'] for item in owning) and len({item['kind'] for item in owning}) == len(owning)
         duplicates.append({'url': url, 'owners': owning, 'blocking': not clear_owners, 'reason': '不同页面类型的明确别名' if clear_owners else '相同类型的重复网址或归属不明'})
     cards = [row for row in stale if row['number_card']]
-    misaligned = any(item.get(key) for item in (skills, projects, rules, projects['registry_mismatches']) for key in ('missing', 'retired_or_unselected', 'duplicate', 'app_retired', 'app_missing_selected', 'selected_source_missing')) or counts or versions or any(item['blocking'] for item in duplicates) or cards
+    for row in (*stale, *stale_unknown): row['tier'] = 'advisory'
+    refresh_registry = read(root/'sources/refresh/registry.json')
+    writing = audit_pages(root/'sources/pages', now.date(), refresh_registry.get('retired_names', []), refresh_registry.get('interface_url_allowlist', {}))
+    misaligned = any(item.get(key) for item in (skills, projects, rules, projects['registry_mismatches']) for key in ('missing', 'retired_or_unselected', 'duplicate', 'app_retired', 'app_missing_selected', 'selected_source_missing')) or counts or versions or any(item['blocking'] for item in duplicates) or any(row['tier'] == 'block' for row in writing['findings'])
     return {'schema': 'wly.content-refresh-audit.v1', 'observed_at_beijing': now.isoformat(), 'status': 'Unknown' if unknown else 'block' if misaligned else 'pass',
         'aligned': not unknown and not bool(misaligned), 'skills': skills, 'projects': projects, 'rules': rules,
         'website_author_source': [{'path': path, 'page': data.get('page'), 'kind': data.get('kind'), 'url': data.get('url')} for path, data in pages],
         'duplicate_urls': duplicates, 'count_mismatches': counts, 'version_mismatches': versions, 'unknown': unknown, 'stale_numbers': stale,
+        'stale_date_unknown': stale_unknown, 'writing_audit': writing,
         'stale_summary': {'paragraphs': len(stale), 'numbers': sum(len(row['numbers']) for row in stale), 'first_screen_paragraphs': sum(row['first_screen'] for row in stale), 'first_screen_numbers': sum(len(row['numbers']) for row in stale if row['first_screen']), 'first_screen_number_card_paragraphs': len(cards)},
-        'boundaries': ['个人技能子页按本机 personal-skill-supply.json 中 install=true 的当前清单核对；仅排除本次网站明确不展示的 personal-litigation、personal-romance 两领域，新增已安装技能同样进入缺页检查。', '两个领域的排除来自本次网站选择，不是 L3 敏感规则；不扩展到全部厂商技能或未选项目库。', '宿主集成能力不属于个人技能供应清单，安装及版本为 Unknown，未计入个人技能子页预期。', '固定数字为阿拉伯数字出现次数；移除日期、时间和列表序号，不推定新实数。', '日期适用于同屏最近的快照声明；无年份按最近过去的同月日解释，演进历史屏排除。', '仅首屏数字卡的过期记录阻断对齐；有截至日期的其他历史快照保留供人工核对。']}
+        'boundaries': ['个人技能子页按本机 personal-skill-supply.json 中 install=true 的当前清单核对；仅排除本次网站明确不展示的 personal-litigation、personal-romance 两领域，新增已安装技能同样进入缺页检查。', '两个领域的排除来自本次网站选择，不是 L3 敏感规则；不扩展到全部厂商技能或未选项目库。', '宿主集成能力不属于个人技能供应清单，安装及版本为 Unknown，未计入个人技能子页预期。', '固定数字为阿拉伯数字出现次数；移除日期、时间和列表序号，不推定新实数。', '日期适用于同屏最近的快照声明；无年份按最近过去的同月日解释，演进历史屏排除。', '旧固定数字及日期未知只提醒；完整页面写法审计附报告，仅 tier=block 影响对齐。页面审计不采集来源，不改正文或数字。']}
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True); parser.add_argument('--require-aligned', action='store_true')
