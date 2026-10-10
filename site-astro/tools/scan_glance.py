@@ -43,10 +43,12 @@ class Preview(http.server.SimpleHTTPRequestHandler):
             meta = file.with_suffix(".json") if file else None
             if meta and meta.is_file():
                 saved = read_json(meta); return saved["status"], saved["headers"], file.read_bytes()
-            try:
-                response = urllib.request.urlopen(urllib.request.Request(url, method="HEAD" if head else "GET", headers=headers), timeout=20)
-            except urllib.error.HTTPError as error: response = error
-            except Exception as error: return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
+            for attempt in range(3):  # 本机直连 OSS 偶发约 19 秒连接停滞；只重试传输异常，HTTP 状态照实返回
+                try:
+                    response = urllib.request.urlopen(urllib.request.Request(url, method="HEAD" if head else "GET", headers=headers), timeout=8); break
+                except urllib.error.HTTPError as error: response = error; break
+                except Exception as error:
+                    if attempt == 2: return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
             with response:
                 try: raw = response.read()
                 except Exception as error: return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
