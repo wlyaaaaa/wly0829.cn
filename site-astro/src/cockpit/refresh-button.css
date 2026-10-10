@@ -1,0 +1,46 @@
+/* 驾驶舱刷新按钮：和“回到顶部”同样大小、同一列，放在它正上方，常驻（手机上回到顶部会收起，刷新不收） */
+.cockpit-refresh-wrap {
+  position: fixed;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: calc(16px + 44px + 12px + env(safe-area-inset-bottom));
+  z-index: 91;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: row-reverse;
+}
+.cockpit-refresh {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #cfe6d7;
+  background: rgba(255, 255, 255, .96);
+  color: #1d7a45;
+  box-shadow: 0 4px 14px rgba(31, 92, 58, .14);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+.cockpit-refresh:hover { background: #f1faf4; }
+.cockpit-refresh:focus-visible { outline: 2px solid #1d7a45; outline-offset: 2px; }
+.cockpit-refresh svg { width: 22px; height: 22px; }
+.cockpit-refresh[aria-busy="true"] { cursor: progress; }
+.cockpit-refresh[aria-busy="true"] svg { animation: cockpit-spin .9s linear infinite; }
+@keyframes cockpit-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .cockpit-refresh[aria-busy="true"] svg { animation-duration: 2.4s; } }
+.cockpit-refresh-note {
+  font-size: 13px;
+  line-height: 1.4;
+  color: #35584a;
+  background: rgba(255, 255, 255, .97);
+  border: 1px solid #d8eadf;
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-shadow: 0 4px 14px rgba(31, 92, 58, .1);
+  white-space: nowrap;
+}
+@media (max-width: 767.98px) {
+  .cockpit-refresh-wrap { bottom: calc(16px + 42px + 10px + env(safe-area-inset-bottom)); }
+  .cockpit-refresh { width: 42px; height: 42px; }
+}
