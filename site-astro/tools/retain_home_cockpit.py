@@ -445,14 +445,15 @@ def regenerate_runtimes(work):
 def finalize_runtime(site=ROOT):
     """从实际生成页和保留正式页更新翻页预热表，不保留旧整屏图引用。"""
     site = Path(site); dist = site / 'dist'; routes = {}; pages = {}
-    for base in (site.parent / 'site-release', dist):
+    for base in (site / 'sources/frozen-site/pages', dist):
         for path in base.rglob('*.html'):
             rel = path.relative_to(base).as_posix()
             route = '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
             body = path.read_text('utf-8')
             match = re.search(r'<script\b[^>]*id="album-page"[^>]*>(.*?)</script>', body, re.S)
             routes[route] = {'images': json.loads(match[1]).get('images', []) if match else []}
-            if base == dist and rel != 'computer-access/index.html': pages[path] = body
+            frozen = site / 'sources/frozen-site/pages' / rel
+            if base == dist and rel != 'computer-access/index.html' and not frozen.is_file(): pages[path] = body
     old = {value for body in pages.values() for value in re.findall(r'''(?:https?://[^\s"'<>]+)?/_album/routes-[a-f0-9]+\.json''', body)}
     if not old: return {'routes': len(routes), 'updated_pages': 0}
     raw = (json.dumps({'schema': 'wly.album-routes.v1', 'routes': routes}, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n').encode('utf8')

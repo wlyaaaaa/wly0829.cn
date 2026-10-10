@@ -1,6 +1,5 @@
-"""Compose native Astro routes with exact deployed HTML, then use the existing OSS split."""
+"""Prepare the complete source-built site, then use the existing OSS split."""
 import argparse
-import concurrent.futures
 import hashlib
 import html
 import importlib.util
@@ -38,68 +37,8 @@ def author_inputs():
 
 
 def published_file(previous, rel, obj, destination):
-    cached = ROOT/'.publish/astro-shell-cache'/previous['release_id']/rel
-    if not cached.is_file() or hybrid.digest(cached) != obj['sha256']:
-        cached.parent.mkdir(parents=True, exist_ok=True)
-        oss.verify_object_with_retries(None, rel, obj, 'https://wly0829.cn', 60, download_to=cached)
-    destination.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(cached, destination)
-
-
-def hydrate(previous, shell_assets=None):
-    """Fetch only the sample shell's exact published dependencies, preserving bytes."""
-    public = SITE / 'public'; objects = previous.get('oss', {}).get('objects', {})
-    frozen = hybrid.read(SITE/'sources/retained-home-cockpit/dependencies.json')
-    seeds = [SITE/'src/chrome/header.html', SITE/'src/chrome/footer.html']
-    texts = [path.read_text('utf8') for path in seeds]
-    for path in (SITE/'src/chrome/runtime').glob('*.json'):
-        row = json.loads(path.read_text('utf8')); texts += row['head'] + [row['tail'], row.get('toc_html') or '', row.get('living_config') or '']
-    pending = list(json.loads((SITE/'src/chrome/chrome.json').read_text('utf8'))['css'])
-    pending += ['/source-tools/Find-DuplicateContent.ps1']
-    pending += [row for text in texts for row in re.findall(r'(/_(?:shared|album|living|typeset/runtime)/[^"\'\s<>),]+)', text)]
-    pending += ['/' + rel for rel in objects if rel.startswith('_living/_engine/')]
-    visited = set(); addresses = {row['url']: rel for rel, row in objects.items()}
-    while pending:
-        rel = unquote(urlsplit(pending.pop()).path).lstrip('/')
-        if rel in visited: continue
-        visited.add(rel); target = public / rel
-        if not target.is_relative_to(public): raise ValueError('Shell resource escapes public directory')
-        if rel in frozen and target.is_file() and hybrid.digest(target) == frozen[rel]['sha256']:
-            pass
-        elif shell_assets and (shell_assets/rel).is_file():
-            original = shell_assets/rel; target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(original, target)
-            if hybrid.digest(original) != hybrid.digest(target): raise ValueError('Sample asset copy changed: '+rel)
-        elif rel in objects: published_file(previous, rel, objects[rel], target)
-        if not target.exists():
-            if rel.startswith('assets/'):
-                source = ROOT/'sources/assets'/rel.removeprefix('assets/')
-                target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
-            else:
-                found = objects.get(rel)
-                if not found and rel.startswith('_chrome/'):
-                    matches = [row for key, row in objects.items() if Path(key).name == Path(rel).name]
-                    if len(matches) == 1: found = matches[0]
-                target.parent.mkdir(parents=True, exist_ok=True)
-                if found:
-                    proof = oss.verify_object_with_retries(None, rel, found, 'https://wly0829.cn', 60, download_to=target)
-                    if proof['status'] != 'pass': raise ValueError('Shell bytes unavailable: ' + rel)
-                elif shell_assets and (shell_assets/rel).is_file(): shutil.copyfile(shell_assets/rel, target)
-                else: raise ValueError('Unbound shell resource; supply the selected sample shell-assets: ' + rel)
-        if target.suffix in {'.json', '.js', '.css'}:
-            text = target.read_text('utf8')
-            for url, original in addresses.items():
-                if url in text and original.startswith(('_shared/', '_living/', '_album/', '_typeset/runtime/')): text = text.replace(url, '/' + original); pending.append('/' + original)
-            if rel.endswith('/bird.js'): text = text.replace('/' + str(Path(rel).parent).replace('\\', '/') + '/bird-atlas.webp', 'bird-atlas.webp')
-            target.write_bytes(text.encode('utf8'))
-            pending += [ref for ref, navigation in hybrid.references(target) if not navigation and ref.startswith(('/_shared/', '/_living/', '/_album/', '/_typeset/runtime/', '/_how-demo/'))]
-    mount = public/'_living/living-mount.js'; mount.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(SITE/'src/scripts/living-mount.js', mount)
-
-
-def seed_retained(assets, work):
-    loader = module('astro_retained', 'site-astro/tools/retain_home_cockpit.py')
-    runtime = loader.regenerate_runtimes(work)
-    manifest = loader.materialize_frozen()
-    return {'source': 'site-astro/sources/retained-home-cockpit', 'pages': manifest['pages'], 'dependencies': runtime['dependencies'], 'runtime': runtime}
+    source = module('astro_build_inputs', 'scripts/build-site.py').seed_asset(rel)
+    destination.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, destination)
 
 
 def retired_project_routes(dist, previous):
@@ -205,67 +144,18 @@ def prepare(args):
     ref = subprocess.check_output(['git', 'rev-parse', args.baseline_ref+'^{commit}'], cwd=ROOT, text=True).strip()
     if json.loads(subprocess.check_output(['git', 'show', ref+':site-release/release-manifest.json'], cwd=ROOT)) != previous:
         raise ValueError('Baseline does not belong to the exact supplied production commit')
-    hybrid.verify_release(args.baseline); pin = astro_rules.generate(SITE/'public')
-    retained = seed_retained(args.shell_assets, output/'runtime-input')
-    hydrate(previous, args.shell_assets)
+    # The baseline is publication metadata only; the complete build owns all HTML.
+    oss.verify_manifest(previous)
     inputs = author_inputs()
-    run(sys.executable, 'tools/adapt_motion.py', cwd=SITE)
-    run(sys.executable, 'tools/pack_living.py', cwd=SITE)
-    run(sys.executable, 'tools/convert_page.py', '--all', cwd=SITE)
-    pages = sorted(path.stem for path in (SITE/'src/content/pages').glob('*.md'))
-    run('npm.cmd' if sys.platform == 'win32' else 'npm', 'run', 'build', cwd=SITE)
-    for page in pages:
-        rendered = hybrid.read(SITE/'src/content/rendered'/(page+'.json'))
-        if rendered.get('source_md_sha256') != hybrid.digest(SITE/'src/content/pages'/(page+'.md')):
-            raise ValueError('Shared block renderer has no current result for '+page)
+    run('npm.cmd' if sys.platform == 'win32' else 'npm', 'run', 'build', cwd=ROOT)
+    dist = SITE/'dist'; manifest = hybrid.read(dist/'release-manifest.json')
+    pin = manifest['rules_pin']; pages = manifest['astro']['selected_pages']
+    retained = manifest['astro']['retained_sample']
     rendered_inputs = delta.snapshot(ROOT)
-    for page in pages:
-        if rendered_inputs.get('site-astro/src/content/pages/'+page+'.md') != hybrid.read(SITE/'src/content/rendered'/(page+'.json'))['source_md_sha256']:
-            raise ValueError('Rendered Markdown changed before source binding: '+page)
-    dist = SITE/'dist'; astro_rules.verify(dist, pin, astro_rules.inspect())
-    remaining_assets = {}
-    for path in list(dist.rglob('*.html')):
-        for reference, navigation in hybrid.references(path):
-            dependency = hybrid.local_reference(dist, path, reference)
-            if navigation or dependency is None or dependency.is_file(): continue
-            rel = dependency.relative_to(dist).as_posix(); obj = previous.get('oss', {}).get('objects', {}).get(rel)
-            if not obj: continue
-            remaining_assets[rel] = obj
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
-        list(pool.map(lambda item: published_file(previous, item[0], item[1], dist/item[0]), remaining_assets.items()))
-    # Source drafts without a URL retain their selected sample preview route.
-    if (dist/'404/index.html').is_file(): shutil.copyfile(dist/'404/index.html', dist/'404.html')
-    project_redirects = retired_project_routes(dist, previous)
-    converted = {hybrid.file_route(path.relative_to(dist).as_posix()): {'producer': 'astro'} for path in dist.rglob('*.html')}
-    converted.update(project_redirects)
-    expected_routes = {hybrid.read(ROOT/'sources/pages'/page/'page.json')['url'] or '/'+page+'/' for page in pages}
-    expected_routes.update({'/', '/cockpit/'})
-    expected_routes.update('/rules/'+row['slug']+'/' for row in pin['documents'].values() if row['primary'])
-    expected_routes.add('/rules/')
-    if expected_routes-set(converted): raise ValueError('Native build lost required current routes: '+str(expected_routes-set(converted)))
-    # Preserve every deployment route, including modules and compatibility URLs.
-    merged = output/'source'
-    manifest = hybrid.assemble(args.baseline, dist, merged, previous, converted, rollback_ref=ref,
-        candidate_files=hybrid.inventory(dist), baseline_production_commit=ref)
-    # The existing runtime selects portrait labels and artwork from JSON at
-    # runtime; their exact prepared files are not all static HTML references.
-    rule_resources = {row['src'].lstrip('/') for row in pin['documents'].values()}
-    rule_resources.update('rule-sources/'+row['relative_path'] for row in pin['documents'].values() if row['relative_path'].startswith('templates/'))
-    for rel in hybrid.inventory(dist):
-        if (rel not in rule_resources and not rel.startswith(('_shared/', '_home-cockpit/', '_living/', '_typeset/runtime/', '_how-demo/', '_album/'))) or (merged/rel).is_file(): continue
-        target = merged/rel; target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(dist/rel, target)
-    overlays, preserved = sync_search(merged, previous, converted, pin)
-    for rel, overlay in overlays.items():
-        existing = manifest.setdefault('release_overlay', {}).get(rel)
-        if existing and existing['kind'] != 'runtime_reference':
-            existing.update(after=overlay['after'], runtime_replacements=overlay['replacements'], runtime_before=existing['after'])
-        else: manifest['release_overlay'][rel] = overlay
-    manifest['search_preserved_records'] = preserved
-    manifest['files'] = hybrid.inventory(merged)
-    inherited = {row['key'].removeprefix('releases/'): rel for rel, row in previous.get('oss', {}).get('objects', {}).items()}
-    manifest['inherited_assets'] = inherited
-    manifest['files'].update({alias: previous['oss']['objects'][rel]['source'] for alias, rel in inherited.items()})
+    converted = {route: {'producer': 'astro'} for route in manifest['astro']['converted_routes']}
+    merged = output/'source'; shutil.copytree(dist, merged)
+    astro_rules.verify(merged, pin, astro_rules.inspect())
+    hybrid.verify_release(merged)
     author = [hybrid.read(path) for path in (ROOT/'sources/pages').glob('*/page.json')]
     report = delta.changes(previous, pin, root=ROOT, baseline_ref=ref)
     report['content_refresh'] = content.audit(ROOT)
@@ -293,7 +183,7 @@ def prepare(args):
     manifest['release_id'] = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
     write(merged/'release-manifest.json', manifest); hybrid.verify_release(merged)
     write_sitemap(merged, manifest['routes'])
-    manifest.setdefault('release_overlay', {})['sitemap.xml'] = {'kind': 'astro_sitemap', 'before': previous['files'].get('sitemap.xml'), 'after': {'sha256': hybrid.digest(merged/'sitemap.xml'), 'bytes': (merged/'sitemap.xml').stat().st_size}}
+    manifest.setdefault('release_overlay', {})['sitemap.xml'] = {'kind': 'astro_sitemap', 'before': manifest['baseline_files'].get('sitemap.xml'), 'after': {'sha256': hybrid.digest(merged/'sitemap.xml'), 'bytes': (merged/'sitemap.xml').stat().st_size}}
     manifest['files']['sitemap.xml'] = manifest['release_overlay']['sitemap.xml']['after']
     manifest['release_id'] = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
     write(merged/'release-manifest.json', manifest)
@@ -303,7 +193,7 @@ def prepare(args):
         raise ValueError('Author sources changed during native conversion; rebuild this preparation')
     receipt = {'schema': 'wly.astro-preparation.v1', 'source': str(merged), 'oss_preparation': str(preparation),
         'baseline': str(args.baseline.resolve()), 'baseline_ref': ref, 'source_release_id': manifest['release_id'],
-        'inputs': rendered_inputs, 'rules_pin': pin, 'selected_pages': sorted(converted), 'pages': {route: {'url': route, 'evidence': {'producer': 'astro'}} for route in converted},
+        'inputs': rendered_inputs, 'rules_pin': pin, 'selected_pages': sorted(manifest['accepted_pages']), 'pages': {route: {'url': route, 'evidence': value} for route, value in manifest['accepted_pages'].items()},
         'batch': 'astro', 'release_id': manifest['release_id'], 'deferred_pages': [], 'publication_changes': report}
     write(output/'preparation.json', receipt); verify_preparation(output/'preparation.json')
     (output/'pages.txt').write_text('\n'.join(receipt['selected_pages']) + '\n', encoding='utf8')
@@ -319,6 +209,7 @@ def verify_preparation(path, require_remote=False, directive=None, copy_to=None)
     if manifest['release_id'] != receipt['source_release_id']: raise ValueError('Prepared native release changed')
     astro_rules.verify(source, receipt['rules_pin'], astro_rules.inspect())
     plan = oss.verify_local(receipt['oss_preparation'])
+    module('astro_same_origin_gate', 'scripts/same-origin-runtime.py').verify(Path(receipt['oss_preparation'])/'github')
     if plan['source_release_id'] != manifest['release_id']: raise ValueError('OSS split belongs to another Astro source')
     if require_remote:
         if manifest['publication_changes'].get('pending_retired_routes'):
@@ -344,7 +235,6 @@ def main():
     refresh = commands.add_parser('refresh'); refresh.add_argument('--output', type=Path, required=True)
     build = commands.add_parser('prepare'); build.add_argument('--baseline', type=Path, default=ROOT/'site-release'); build.add_argument('--baseline-ref', default='main')
     build.add_argument('--asset-base-url', default='https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com'); build.add_argument('--prefix', required=True); build.add_argument('--output', type=Path, required=True)
-    build.add_argument('--shell-assets', type=Path, help='The selected sample public assets, needed only before its first publication')
     build.add_argument('--sample-ref', default='a08a54c7b4f142bfc7db621c2a454465601e72fc', help='Exact accepted sample Git object for this preparation')
     check = commands.add_parser('verify'); check.add_argument('--preparation', type=Path); check.add_argument('--release', type=Path); check.add_argument('--offline', action='store_true')
     check.add_argument('--require-remote', action='store_true'); check.add_argument('--directive', type=Path); check.add_argument('--copy-to', type=Path); check.add_argument('--output', type=Path)

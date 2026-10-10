@@ -28,16 +28,16 @@ Scripts 的能力由对应项目直接承接，不生成独立卡片、路由、
 ## 本地命令
 
 ```powershell
-npm install
-npm run dev -- --host 0.0.0.0 --port 4173 --strictPort
+npm ci --prefix site-astro
+npm run dev -- --host 127.0.0.1 --port 4173
 npm run build
-npm run preview -- --host 127.0.0.1 --port 5194 --strictPort
+npm run preview -- --host 127.0.0.1 --port 5194
 npm test
 npm run verify:snapshot
 npm run verify:public
 ```
 
-供本人审阅的本地预览使用同一次完整构建，先 `build` 再 `preview`，保证 HTML、样式和交互脚本属于同一版。`dev` 用于开发调试；看到源码变化不能据此认定正在打开的预览也已更新。保留已有 5194 预览时复用可控会话，不另开重复服务。
+`npm run build` 生成完整静态站到 `site-astro/dist`；`npm run dev` 一条命令先构建再启动同一成品的本地预览，`preview` 只启动已有成品。修改内容后重新运行，当前不承诺热更新。构建从版本化源码和已入库运行件生成首页、驾驶舱、授权页，原样带上 209 个冻结旧页；不读取旧站构建目录。来源、缓存、准备链和按需迁移方法见 [site-astro/README.md](site-astro/README.md)。保留已有 5194 预览时复用可控会话，不另开重复服务。
 
 ## AI 快速刷新
 

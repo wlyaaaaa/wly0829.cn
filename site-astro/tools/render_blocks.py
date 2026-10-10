@@ -732,7 +732,8 @@ def bindings(name, first_screen):
     return {(sid, o): lb[o]["rect"] for o in ("h", "v") if o in lb and lb[o].get("rect")}
 
 
-def run(names, workers=6):
+def run(names, workers=2):
+    workers = min(2, max(1, workers))
     _published.clear(); _living_configs.clear()
     t0 = time.time()
     os.chdir(REPO)  # page.json 里截图等路径相对仓库根（和现在出图时一样）
@@ -848,4 +849,4 @@ if __name__ == "__main__":
     names = sys.argv[1:]
     if not names or names == ["--all"]:
         names = all_pages()
-    run(names, int(os.environ.get("BLOCK_WORKERS", "6")))
+    run(names, int(os.environ.get("BLOCK_WORKERS", "2")))

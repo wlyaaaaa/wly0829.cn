@@ -20,26 +20,28 @@
 
 首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
 
-首页与驾驶舱入口来自版本化的 `sources/retained-home-cockpit`：已选样板的补丁后两份 HTML、唯一首页首帧脚本及依赖清单。运行 `python tools/retain_home_cockpit.py` 可在没有本机忽略文件时恢复入口，逐字节核验后写入 `src/chrome/retained` 和 `public/_home-cockpit`；其余图像、字体、动效依赖由发布流程按清单 SHA-256 复用，不降低图像质量。清单的 `pages` 绑定实际补丁后页面，`inputs` 保留补丁前输入依据。只有显式选定新候选站时才运行 `python tools/retain_home_cockpit.py <候选站构建目录>`，它只读候选站并生成下一份待审输入。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
+首页、驾驶舱、授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
 
+209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；大图和视频使用原尺寸仓库原件或已核验的 OSS 对象，不新复制进 Git。资源缓存缺失时只恢复清单中的确切对象并核验 SHA，暖缓存构建不联网取壳。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
 ## 一次完整生成
 
+在仓库根执行：
+
 ```powershell
-cd site-astro
-npm install                                                # 只第一次
-python tools/extract_chrome.py <现在网站的构建目录> all     # 抄页头页尾、目录条、动效运行件（原文件逐字节复制）
-python tools/copy_runtime_refs.py <现在网站的构建目录> all  # 补齐运行件实际会加载、脚本 import 到的文件（例如 how 页演示脚本、b2-access-model）
-python tools/convert_page.py --all                         # page.json + layout.json → 内容文件（源改了就重新转换；同一份源转换两遍逐字节相同）
-python tools/adapt_motion.py                               # 环境动画配置改绑到插画（电脑、手机两份）
-python tools/pack_living.py                                # 环境动画引擎“已显示的图不再晕开、位移从 0 渐入”修正版
-npm run build                                              # = render_blocks.py --all（区块排版，没改的屏不重排）+ astro build
+npm ci --prefix site-astro   # 只在首次安装或锁文件改变时
+npm run build               # 完整静态站 + 公开内容检查
+npm run dev -- --host 127.0.0.1 --port 4173
 ```
 
-`public/` 下的 `assets/`、`_shared/`、`_living/`、`_album/`、`_chrome/`、`_typeset/`、`_how-demo/`，以及 `.cache/`、`src/content/rendered/` 都由上面几步生成，不进仓库。
+`dev` 先运行同一完整构建，再用 Astro 预览 `site-astro/dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
 
-`public/rule-sources/`、`public/source-tools/` 是规则原文里链到的公开文件（公开入口模板、`Find-DuplicateContent.ps1`），和现在网站发布的逐字节一致，进仓库；按活动版本重出原文时（`convert_page.py --rules-release`）公开入口模板跟着重出。
+`python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `site-astro/.cache/build-report.json`。
+
+`scripts/prepare-astro-release.py prepare` 调用仓库根 `npm run build`，复制这份完整站，再执行既有版本、来源和 OSS 分拆核验。旧发布清单仅用于运输差额、对象复用和来源比较，不再提供缺页或外壳。此命令仍只做准备，上传、封存与切换另走已授权的发布入口。
+
+`public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
 
 ## 内容文件怎么写
 

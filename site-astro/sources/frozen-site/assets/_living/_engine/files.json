@@ -1,0 +1,23 @@
+{
+ "engine": "living.9b9dc7e36d.js",
+ "style": "living.211dfd0c4c.css",
+ "bird": "bird.fffa187360/",
+ "engine_source_sha256": "23789c03c6216cd20162112b839bb7d1da38cc346b680e0a3df20d25fd8b12a6",
+ "bird_source_sha256": "cd95a0c12379f7cd0bbac7b25830d2ae5f1b9295d3930cc37c37017cc601d346",
+ "guide_source_sha256": "7b89feb6423a607b15222401200f8f1250c2e8517421223bb05991589482ce8d",
+ "files": {
+  "living.9b9dc7e36d.js": 54841,
+  "living.211dfd0c4c.css": 399,
+  "bird.fffa187360/bird.js": 29070,
+  "bird.fffa187360/bird-atlas.webp": 3304704
+ },
+ "sizes": {
+  "engine_total": 55240,
+  "bird_js": 29070,
+  "bird_atlas": 3304704,
+  "engine_js": 54841,
+  "engine_css": 399
+ },
+ "atlas_identical_to": "bird.a886a7c866/bird-atlas.webp",
+ "built_at_beijing": "2026-10-10 04:46"
+}

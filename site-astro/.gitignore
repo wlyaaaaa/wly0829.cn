@@ -24,3 +24,12 @@ public/rule-sources/
 public/projects/
 public/rules/
 public/skills/
+# Complete-build controls and frozen routes are restored from sources/frozen-site.
+public/CNAME
+public/robots.txt
+public/search*.js
+public/sitemap.xml
+public/search/
+public/system/
+public/_runtime/
+public/_live/

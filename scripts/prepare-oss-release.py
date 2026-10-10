@@ -33,6 +33,7 @@ PLAN = 'oss-plan.json'
 # the sitemap to OSS would change crawler behavior; CNAME/.nojekyll are Pages
 # controls. The release manifest remains the existing online recovery entry.
 HOST_CONTROLS = {MANIFEST, 'CNAME', '.nojekyll', 'robots.txt', 'sitemap.xml'}
+SAME_ORIGIN_EXTENSIONS = {'.js', '.mjs', '.css', '.woff', '.woff2', '.ttf', '.otf'}
 TEXT_ASSETS = {'.js', '.mjs', '.css', '.svg', '.json', '.webmanifest'}
 STRINGS = re.compile(r'(?P<quote>["\'`])(?P<value>(?:\\.|(?!(?P=quote)).)*)(?P=quote)', re.S)
 TAG = re.compile(r'<[^>]+>', re.S)
@@ -209,9 +210,12 @@ def verify_manifest(manifest, require_remote=True):
         raise ValueError('Unsupported OSS manifest')
     base, prefix = validate_target(oss['asset_base_url'], oss['prefix'])
     files, objects = manifest['files'], oss['objects']
-    if not objects or not any(x.endswith(('.js', '.mjs')) for x in objects):
+    hosted = set(manifest.get('same_origin_assets', []))
+    if not hosted <= set(files) or any(Path(rel).suffix not in SAME_ORIGIN_EXTENSIONS for rel in hosted):
+        raise ValueError('Invalid same-origin runtime inventory')
+    if not objects or not any(x.endswith(('.js', '.mjs')) for x in set(objects) | hosted):
         raise ValueError('OSS release lacks runtime objects')
-    if any(not (rel.endswith('.html') or rel in HOST_CONTROLS) for rel in files):
+    if any(not (rel.endswith('.html') or rel in HOST_CONTROLS or rel in hosted) for rel in files):
         raise ValueError('Unexpected asset retained in HTML-host inventory')
     for rel, obj in objects.items():
         if rel.startswith('/') or '\\' in rel or any(x in ('', '.', '..') for x in rel.split('/')):
@@ -264,11 +268,12 @@ def verify_manifest(manifest, require_remote=True):
 
 
 class Rewriter:
-    def __init__(self, files, base, prefix, origin, version=1, source_root=None):
+    def __init__(self, files, base, prefix, origin, version=1, source_root=None, same_origin_assets=()):
         if version not in (1,2,3,4,5,6):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
+        self.same_origin_assets = set(same_origin_assets)
         self.base, self.prefix, self.origin = base, prefix, origin.rstrip('/')
         self.changes = {}
         self.references = {}
@@ -411,6 +416,7 @@ class Rewriter:
         return edits
 
     def target(self, rel):
+        if rel in self.same_origin_assets: return '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
         if rel in getattr(self, 'retained', {}): return self.retained[rel]['url']
         return self.base + '/' + self.prefix + '/' + quote(rel, safe='/~!$&()*+,;=:@-._')
 
@@ -628,7 +634,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
         raise ValueError('Source release inventory/bytes differ from release-manifest.json')
-    rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source)
+    hosted = set(source_manifest.get('same_origin_assets', []))
+    rewriter = Rewriter(actual, base, prefix, origin, version=rewriter_version, source_root=source, same_origin_assets=hosted)
     previous = None
     if previous_manifest:
         try:
@@ -650,7 +657,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     objects, github = {}, {}
     for rel in actual:
         if rel in inherited: continue
-        host = rel.endswith('.html') or rel in HOST_CONTROLS
+        host = rel.endswith('.html') or rel in HOST_CONTROLS or rel in hosted
         destination = output / ('github' if host else 'oss') / rel
         destination.parent.mkdir(parents=True, exist_ok=True)
         if rel == MANIFEST:
@@ -734,7 +741,7 @@ def verify_local(output):
     expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items() if k not in inherited}
     if inventory(output/'oss') != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
-    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
+    rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source, same_origin_assets=source_manifest.get('same_origin_assets', []))
     rewriter.retained = {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})}
     home_bytes,home_proof=current_home_links(source,version=plan.get('rewriter_version',1))
     if (home_proof!=plan.get('home_entry_overlay')
