@@ -8,6 +8,7 @@ import header from '../chrome/header.html?raw';
 import footer from '../chrome/footer.html?raw';
 import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
+import albumRuntime from '../../public/_album/astro-runtime.json';
 import '../styles/typeset-page.css';
 import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
@@ -44,7 +45,9 @@ const tocHtml = (() => {
 })();
 const withoutTocRuntime = (html: string) => html.replace(/<script\b[^>]*\b(?:data-src|src)="[^"]*toc-consistency[^"]*"[^>]*><\/script>/g, '');
 const head = rt ? withoutTocRuntime(rt.head.map((h: string) => h.startsWith('<script id="album-page"')
-  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>` : h).join('\n')) : '';
+  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>`
+  : /<script[^>]*data-album-inline/.test(h) ? `<script data-album-inline>${albumRuntime.source}</script>`
+  : h.replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css)).join('\n')) : '';
 // 站点运行脚本按 page-data 里的旧“整屏图”逐屏排版；新页没有整屏图，把屏清单置空，其余（落叶、水彩、页头、目录用的共用数据）原样
 // “复制 AI 续作说明”（项目页、冻结页）：现在网站只在脚本里临时造一个 #ai-brief 对话框，脚本没跑时按钮点了没反应。
 // 这里在页面末尾放一个真实的 #ai-brief：没有脚本也能跳到这里、看到并手动复制说明；脚本在时照旧弹对话框（静态这块隐藏、改名让出 id）。
