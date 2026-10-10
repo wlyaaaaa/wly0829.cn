@@ -1,24 +1,22 @@
-"""会话首次从纸色开场；图片到达后超时和连续慢帧才跳完成图。"""
+"""首页新加载与刷新都从纸色开场；图片到达后超时和连续慢帧才跳完成图。"""
 import hashlib
 import re
 from pathlib import Path
 
 OPENING = r"""(() => {
-  const root=document.documentElement, key='site-home-firstpaint-v1';
+  const root=document.documentElement;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  let first=false;
-  try { first=!sessionStorage.getItem(key); sessionStorage.setItem(key,'1'); } catch {}
   const back=performance.getEntriesByType('navigation')[0]?.type==='back_forward';
-  const opening=window.HomeOpening={pending:first&&!back&&!reduced.matches,
-    reason:reduced.matches?'reduced-motion':back?'back-forward':first?'preparing':'session-return',
+  const opening=window.HomeOpening={pending:!back&&!reduced.matches,
+    reason:reduced.matches?'reduced-motion':back?'back-forward':'preparing',
     imageAt:null,started:false};
-  let timer=0;
+  const startupGraceMs=6000;let timer=0;
   opening.release=reason=>{if(!opening.pending)return;opening.pending=false;
     opening.reason=reason;delete root.dataset.homeOpening;clearTimeout(timer);};
   opening.dataReady=image=>{if(!opening.pending||opening.started||opening.imageAt!==null)return;
     opening.imageAt=performance.getEntriesByName(image.currentSrc||image.src).at(-1)?.responseEnd||performance.now();
-    timer=setTimeout(()=>opening.release('startup-timeout'),Math.max(0,3000-(performance.now()-opening.imageAt)));};
-  opening.start=()=>{if(!opening.pending||opening.imageAt!==null&&performance.now()-opening.imageAt>=3000){
+    timer=setTimeout(()=>opening.release('startup-timeout'),Math.max(0,startupGraceMs-(performance.now()-opening.imageAt)));};
+  opening.start=()=>{if(!opening.pending||opening.imageAt!==null&&performance.now()-opening.imageAt>=startupGraceMs){
     opening.release('startup-timeout');return false;}
     opening.started=true;clearTimeout(timer);return true;};
   if(opening.pending)root.dataset.homeOpening='pending';
@@ -51,6 +49,7 @@ def adjust_home(html, source, public):
     if not config:
         raise ValueError('首页引擎配置入口不明')
     patch('new URL("' + config[1] + '"', 'new URL("/_shared/home-living/' + config[1] + '"')
+    patch('Ee=Number(ne.speed)>0?Number(ne.speed):2.5', 'Ee=1')
     patch('col = mix(col, raw, phone*0.85);', '')
     patch('col = mix(col, raw*(1.0+0.05*u_night), scr*u_scrOn);', 'col = mix(col, raw*mix(1.0,0.55,u_night), scr*u_scrOn);')
     patch('float warn = step(0.5, u_pcMode)*live;', 'float warn = 0.0;')
@@ -101,7 +100,7 @@ def adjust_home(html, source, public):
           'vec2 _homeNativeUv=u_it<7.0?uv:v_uv;\\n  col=mix(col,mix(texture2D(u_native,_homeNativeUv).rgb,_homeInkBg,_homeInkHide),texture2D(u_preserve,_homeNativeUv).r);\\n  if (u_it < 7.0) col = mix(vec3(1.0), col, vis);')
     patch('  vec3 originalColor=pow(texture2D(u_tex,v_uv).rgb,u_ambientGamma);\\n  float preserve=texture2D(u_preserve,v_uv).r*step(7.0,u_it);\\n  col=mix(col,originalColor,preserve*(1.0-nightReach));\\n', '')
     patch('r.uniform1i(L.u_tex,0),r.uniform1i(L.u_preserve,1)',
-          '_homeNative=(()=>{Ht();const im=d.plateImage&&d.plateImage.complete&&d.plateImage.naturalWidth?d.plateImage:_homeNative||e;'
+          '_homeNative=(()=>{Ht();const im=_homeNative||e;'
           'const frame=document.createElement("canvas");frame.width=Z.width;frame.height=Z.height;'
           'frame.getContext("2d").drawImage(im,0,0,frame.width,frame.height);return frame;})(),'
           '_homeNativeTex=r.createTexture(),r.activeTexture(r.TEXTURE2),r.bindTexture(r.TEXTURE_2D,_homeNativeTex),'

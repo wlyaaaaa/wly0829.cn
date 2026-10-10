@@ -29,7 +29,7 @@ MOUNT = '<section class="today-river" data-today-river aria-label="今天的河"
 
 RELAY = r"""
 /* Relay only the existing cockpit automation read to todayRiver. */
-let todayRiverSignature='';
+let todayRiverSignature='',todayRiverIntroPlayed=false;
 function relayTodayRiver(){
  if(data.kind!=='cockpit'||!window.todayRiver)return;
  const automation=status?.automation,health=blockHealth('automation');
@@ -37,7 +37,8 @@ function relayTodayRiver(){
  const at=blockTime(automation),captured_at=Number.isFinite(at)?new Date(at*1000).toISOString():null;
  const snapshot={captured_at,sample_kind:'live',automation,reason};
  const signature=JSON.stringify(snapshot);if(signature===todayRiverSignature)return;
- todayRiverSignature=signature;window.todayRiver.setSnapshot(snapshot,!window.todayRiver.model&&!reason&&performance.getEntriesByType('navigation')[0]?.type!=='reload');
+ todayRiverSignature=signature;const intro=!todayRiverIntroPlayed&&!reason;
+ todayRiverIntroPlayed ||= intro;window.todayRiver.setSnapshot(snapshot,intro);
 }
 document.addEventListener('today-river-ready',()=>{todayRiverSignature='';relayTodayRiver();});
 """
@@ -56,6 +57,9 @@ def once(text: str, before: str, after: str) -> str:
 def patch_runtime(text: str) -> str:
     # The cockpit-light renderer owns task counts, group names and lamp policy.
     # Only relay its existing automation read; do not revise those decisions.
+    text = text.replace("&&!reason&&performance.getEntriesByType('navigation')[0]?.type!=='reload'", "&&!reason")
+    text = text.replace("let todayRiverSignature='';", "let todayRiverSignature='',todayRiverIntroPlayed=false;")
+    text = text.replace("todayRiverSignature=signature;window.todayRiver.setSnapshot(snapshot,!window.todayRiver.model&&!reason);", "todayRiverSignature=signature;const intro=!todayRiverIntroPlayed&&!reason;\n todayRiverIntroPlayed ||= intro;window.todayRiver.setSnapshot(snapshot,intro);")
     if RELAY_MARKER not in text:
         text = once(text, 'function render(){', RELAY + '\nfunction render(){\n relayTodayRiver();')
     return text

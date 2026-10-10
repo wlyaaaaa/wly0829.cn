@@ -176,44 +176,6 @@ globalThis.TypesetApply = () => {
       } else receipt.tails.push({selector:block.selector,text:before.text,before:before.lines.at(-1).text,after:after.lines.at(-1).text,cross_node:crossNode});
     }
   }
-  function equalCards() {
-    // 先齐前排才会出现下一排的真实对应关系；只补同结构、同级卡片。
-    // 独立纵排和下挂支线由checker明确区分，不能机械地越拉越高。
-    for (let pass=0;pass<4;pass++) {
-      C.collectTextBlocks(root);
-      let changed=0;
-      for (const row of C.cardRows(root)) {
-        if (row.logical_peer!==true || row.bottom_delta<=1) continue;
-        const parent=root.querySelector(row.selector);
-        if (!parent || parent.closest('.feature-masonry-grid,[data-flow="masonry"],[data-flow="independent_columns"]')) continue;
-        const cards=row.cards.map(c=>root.querySelector(c.selector)).filter(Boolean);
-        if (cards.length!==row.cards.length) continue;
-        const bottom=Math.max(...cards.map(card=>card.getBoundingClientRect().bottom));
-        const heights=cards.map(card=>bottom-card.getBoundingClientRect().top);
-        cards.forEach(card=>{
-          card.style.minHeight=(bottom-card.getBoundingClientRect().top)+'px';
-          if (card.matches('.card.side') && !card.querySelector('.sideic,img,svg')) card.style.alignItems='flex-start';
-        });
-        receipt.cards.push({selector:row.selector,before_delta:row.height_delta,before_bottom_delta:row.bottom_delta,min_heights:heights,count:cards.length,pass:pass+1});
-        changed++;
-      }
-      if (!changed) break;
-    }
-  }
-  function equalCompoundCards() {
-    for (const row of root.querySelectorAll('.sequence-row')) {
-      const items=[...row.children].filter(e=>e.matches('.sequence-item'));
-      if (items.length<2 || !row.querySelector('.sequence-main-and-branch:not([data-side="right"])')) continue;
-      const cards=items.map(item=>item.querySelector(':scope > .sequence-card,:scope > .sequence-main-and-branch > .sequence-main-card'));
-      if (cards.some(card=>!card)) continue;
-      const height=Math.max(...cards.map(card=>card.getBoundingClientRect().height));
-      // 主卡齐高，支线继续留在原节点下面；卡不随带支线的整节点再次伸展。
-      for (const card of cards) {
-        card.style.flex='0 0 auto';card.style.height=height+'px';card.style.minHeight=height+'px';
-      }
-      receipt.cards.push({kind:'compound_main_cards',count:cards.length,min_height:height});
-    }
-  }
   function balanceRows() {
     // 并排栏按实测高度均衡：先在原宽 0.6～1.6 倍内挪栏宽让各栏一样高；
     // 仍不齐时依次试①②挪一张独立说明卡、③长栏后段绕到短栏下方用整宽。不删字、不改字号、不改画风。
@@ -359,9 +321,8 @@ globalThis.TypesetApply = () => {
     }
   }
   function fillShortColumns() {
-    // 并排行里一栏比最长那栏短一截（主持 10 月 10 日 10:36：非首屏也不留空，只有实时数据预留位可以空）：
-    // ①短栏里有一幅插画：按空出来的高度放大（最多到栏宽，不裁图）；②短栏最后是对话框：框拉到和长栏齐，气泡在框里均匀分开；
-    // ③其余整栏上下居中。标题行不动；图文并排行（首屏 K1-A 文字顶对齐）只做①②。最后跑：只在行内补，行高不变。
+    // 短栏按内容高：插画可在原栏宽内等比放大，其余整栏居中，不撑高卡片或拉散气泡。
+    // 标题行不动；图文行的文字仍顶对齐。只调整行内构图，不增加行高。
     const SL=60;
     const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
       return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
@@ -385,17 +346,7 @@ globalThis.TypesetApply = () => {
             d=H-contentH(c);how.push('ill');
           }
         }
-        if (d>SL) {
-          const fr=c.lastElementChild && c.lastElementChild.querySelector('.ct-dialogue-frame');
-          const items=fr && fr.querySelector('.ct-dialogue-items');
-          if (items) {
-            const fh=fr.getBoundingClientRect().height;
-            Object.assign(fr.style,{display:'flex',flexDirection:'column',minHeight:(fh+d)+'px'});
-            Object.assign(items.style,{flex:'1 1 auto',alignContent:'space-evenly'});
-            d=H-contentH(c);how.push('dialogue');
-          }
-        }
-        if (d>SL && (!fit || ill)) {c.style.alignSelf='stretch';c.style.justifyContent='center';how.push('center');}   // 图文行只居中图栏，文字照旧顶对齐
+        if (d>SL && (!fit || ill)) {c.style.alignSelf='center';c.style.justifyContent='flex-start';how.push('center');}   // 图文行只居中图栏，文字照旧顶对齐
         if (how.length) receipt.balance.push({kind:'fill_short_column',gap:Math.round(H-contentH(c)),how:how.join('+')});
       }
     }
@@ -432,9 +383,8 @@ globalThis.TypesetApply = () => {
         }
         const ib=img.getBoundingClientRect(),aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height),hostW=host.getBoundingClientRect().width,natural=hostW/aspect;   // 比例按原图（显示框可能被档位样式压扁）
         let h=Math.max(160,Math.min(natural,room));
-        const other=host===fc?oc:fc,stretch=!!(other.lastElementChild && other.lastElementChild.querySelector('.ct-dialogue-frame'));
-        // 两边空太多：另一栏最后是对话框（fillShortColumns 能拉齐）就铺满栏宽（主持 10:36 查电脑卡顿），否则再大一点、另一栏底下最多多空 OVER
-        if (hostW-h*aspect>2*LIMIT) h=stretch?natural:Math.min(natural,Math.max(h,Math.min((hostW-2*LIMIT)/aspect,room+OVER)));
+        // 两边空太多时适度放大，但不再依赖拉长另一栏的对话框来补齐。
+        if (hostW-h*aspect>2*LIMIT) h=Math.min(natural,Math.max(h,Math.min((hostW-2*LIMIT)/aspect,room+OVER)));
         Object.assign(ill.style,{display:'flex',justifyContent:'center'});
         Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
         receipt.balance.push({kind:'fit_illustration_tail',before,after:[Math.round(contentH(oc)),Math.round(contentH(fc))],moved:host===oc});
@@ -482,21 +432,14 @@ globalThis.TypesetApply = () => {
       receipt.balance.push({kind:'fit_illustration',before,after:[Math.round(contentH(tc)),Math.round(contentH(mc))],pulled,width:Math.round(mw/total*100)});
     }
   }
-  function fillPage() {
-    // 电脑整屏有最小高度（16:9 等）时，内容不够高的余量平均分到各块之间，不在底部留一条白带。
-    if (!document.body.classList.contains('o-h') || !parseFloat(root.style.minHeight)) return;
-    const top=root.getBoundingClientRect().top,pad=parseFloat(getComputedStyle(root).paddingBottom)||0;
-    const used=Math.max(...[...root.children].map(e=>e.getBoundingClientRect().bottom-top))+pad;
-    const spare=parseFloat(root.style.minHeight)-used;
-    if (spare>parseFloat(root.style.minHeight)*.03) {
-      if ([...root.children].filter(e=>e.getBoundingClientRect().height>0).length===1) root.style.minHeight=used+'px';
-      root.style.justifyContent='space-evenly';receipt.page_fill=Math.round(spare);
-    }
+  function compactPage() {
+    // 横竖版都先解除画布比例的最低高度，让实际内容决定屏高，保留正常块间距。
+    root.style.minHeight='';root.style.justifyContent='flex-start';
   }
   receipt.balance=[];
-  keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
+  compactPage();keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
-  applyText();equalCompoundCards();equalCards();fillPage();fillShortColumns();
+  applyText();fillShortColumns();
   C.collectTextBlocks(root);
   receipt.after=C.check({root});
   globalThis.TypesetApplyReceipt=receipt;

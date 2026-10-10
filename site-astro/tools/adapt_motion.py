@@ -8,6 +8,9 @@ import json
 import os
 import shutil
 import hashlib
+import re
+from pathlib import Path
+from runpy import run_path
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POINT = ("center", "pivot", "from", "to", "home")
@@ -98,9 +101,58 @@ def adapt_album():
     json.dump(manifest, open(os.path.join(dst, "astro-runtime.json"), "w", encoding="utf-8"), ensure_ascii=False)
 
 
+def adapt_runtime_assets():
+    """仅生成实际引用脚本的慢档副本；指纹地址与映射可重建，原种子不改。"""
+    root = Path(ROOT)
+    inputs = list((root / "src/chrome/runtime").glob("*.json")) + list((root / "src/chrome/retained").glob("*.html"))
+    refs = lambda text: set(re.findall(r'/[^\s"\'<>\\]+\.js', text))
+    pending = set().union(*(refs(p.read_text(encoding="utf-8")) for p in inputs))
+    seen, sources = set(), {}
+    river_patch = run_path(str(root.parent / "scripts/prepare-today-river.py"))["patch_runtime"]
+    while pending:
+        url = pending.pop()
+        if url in seen:
+            continue
+        seen.add(url)
+        path = root / "public" / url.lstrip("/")
+        if not path.is_file():
+            continue
+        source = path.read_text(encoding="utf-8")
+        if "window.comicLive =" in source:
+            source = source.replace("const SPEED = 2.5;", "const SPEED = 1;")
+        if "/* Relay only the existing cockpit automation read to todayRiver. */" in source:
+            source = river_patch(source)
+        pending.update(refs(source) - seen)
+        config = re.search(r'window\.SiteMotionAppearance=(\{[^\n]+?\});', source)
+        if config:
+            cfg = re.sub(r'("?speed_multiplier"?\s*:\s*)[\d.]+', r'\g<1>1', config[1])
+            for key, value in dict(cards=900, card_stagger=60, screen_enter=800, numbers=1200, pulse=3000, arrows=2800, seam=1400, update=1800).items():
+                cfg = re.sub(r'("?' + key + r'"?\s*:\s*)\d+', lambda m: m[1] + str(value), cfg)
+            cfg = re.sub(r'("?selection"?\s*:\s*)"[^"]*"', r'\g<1>"2026-10-10 18:11 引导：统一柔和慢档；具体时长是技术取法，待本人验收"', cfg, count=1)
+            cfg = re.sub(r'("?duration_basis"?\s*:\s*)"[^"]*"', r'\g<1>"名义时长即实际时长，视觉时间线倍率为1；环境引擎原生时钟保持"', cfg)
+            cfg = re.sub(r'("?acceptance_items"?\s*:\s*)\[[^\]]*\]', r'\g<1>["卡片900ms、整屏800ms、数字1200ms、呼吸3000ms、箭头2800ms、接缝1400ms、更新1800ms；具体观感待本人验收"]', cfg)
+            source = source[:config.start(1)] + cfg + source[config.end(1):]
+        source = re.sub(r"function motionAppearanceSpeed\(config\)\{[^\n]+?\}", "function motionAppearanceSpeed(config){return config.speed_multiplier;}", source)
+        # 只适配回顶彩蛋，不能给正文加旧 .screen 类而触发旧布局。
+        source = source.replace("const screen=document.querySelector('.screen'),r=screen.getBoundingClientRect(),first=", "const screen=document.querySelector('.screen,.ts-screen');if(!screen)return;const r=screen.getBoundingClientRect(),first=")
+        if source != path.read_text(encoding="utf-8"):
+            sources[url] = source
+    dst = root / "public/_living/quality-runtime"
+    dst.mkdir(parents=True, exist_ok=True)
+    urls = {}
+    for url, source in sorted(sources.items()):
+        name = "motion-" + hashlib.sha256(source.encode("utf-8")).hexdigest()[:20] + ".js"
+        target = root / "public" / url.lstrip("/")
+        target.with_name(name).write_text(source, encoding="utf-8", newline="\n")
+        urls[url] = str(Path(url).with_name(name)).replace("\\", "/")
+    (dst / "manifest.json").write_text(json.dumps({"urls": urls}, ensure_ascii=False), encoding="utf-8")
+    print("统一慢档脚本", len(urls))
+
+
 if __name__ == "__main__":
     import sys
     adapt_album()
+    adapt_runtime_assets()
     if sys.argv[1:] == ["--album-only"]:
         sys.exit(0)
     # 页名写在命令行；不写就是 src/chrome/runtime 里已抄出的全部页（不按页名写死）
