@@ -144,6 +144,8 @@ def album_index(dist, snapshot, changed_routes):
 
 def finish(dist, snapshot, pin, converted, changed_routes=None):
     dist = Path(dist); changed_routes = set(converted) if changed_routes is None else set(changed_routes)
+    finalized = (dist / 'release-manifest.json').is_file() and read(dist / 'release-manifest.json').get('finalized_dist', False)
+    legacy = tuple({match[0] for url in snapshot['runtime_urls'] if (match := transport.PREFIX.match(url))})
     retired_project_routes(dist, {'routes': snapshot['routes']})
     navigation = {nav.route_file(route): SimpleNamespace(ids=set()) for route in snapshot['routes']}
     for route in changed_routes & set(nav.SITE_NAVIGATION.values()) - {'/', '/cockpit/', '/computer-access/'}:
@@ -158,11 +160,12 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         path = dist / nav.route_file(route)
         if path.is_file():
             body = path.read_bytes().decode('utf8')
-            body = transport.localize(body, snapshot)
+            if not finalized or any(prefix in body for prefix in legacy): body = transport.localize(body, snapshot)
             if path.read_bytes() != body.encode('utf8'): path.write_bytes(body.encode('utf8'))
     for path in dist.rglob('*'):
         if path.is_file() and path.suffix in transport.TEXT - {'.html'} and path.name != 'release-manifest.json':
             before = path.read_text('utf8'); after = transport.localize(before, snapshot)
+            if finalized and not any(prefix in before for prefix in legacy): continue
             if after != before: path.write_bytes(after.encode('utf8'))
     scripts = {match for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
