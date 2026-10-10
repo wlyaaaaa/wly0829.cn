@@ -437,6 +437,11 @@ def bundle(text, candidate, label, suffix):
     dest.write_bytes(text.encode('utf8'))
     return '/_typeset/runtime/'+name
 
+def patch_bird_runtime(text):
+    return text.replace("const screen=document.querySelector('.screen'),r=screen.getBoundingClientRect()",
+                        "const screen=document.querySelector('.ts-screen,.screen');if(!screen||!bird)return;const r=screen.getBoundingClientRect()")
+
+
 def patch_inherited_app(text):
     marker = '// Shared appearance helpers also run on the existing homepage runtime.'
     if text.count(marker) != 1 or text.count('function layout(){') != 1: raise ValueError('Unsupported inherited layout runtime')
@@ -447,7 +452,7 @@ def patch_inherited_app(text):
     new = 'let initialReadingRevision=typesetReadingState.revision;const restoreInitialHash=()=>{if(!resizing&&typesetReadingState.revision===initialReadingRevision){scrollToCurrentHash();initialReadingRevision=typesetReadingState.revision;}};'
     if text.count(old) == 1: text = text.replace(old, new, 1)
     elif text.count(new) != 1: raise ValueError('Unsupported inherited initial hash restore')
-    return text
+    return patch_bird_runtime(text)
 
 
 def patch_app(text):
@@ -515,7 +520,7 @@ def patch_app(text):
     # selectstart can target a DOM Text node; resolve its owning element first.
     text=text.replace('e.target.closest(', '(e.target instanceof Element?e.target:e.target?.parentElement)?.closest(')
     text=live_update.patch_shared_runtime(text)
-    return motion_prep.patch_runtime(text)
+    return motion_prep.patch_runtime(patch_bird_runtime(text))
 
 def patch_b2(text):
     text = text.replace("document.querySelectorAll('.screen')", "document.querySelectorAll('.screen:not(.typeset-screen),.typeset-part:not([hidden])')")

@@ -47,7 +47,7 @@ def album_images(picture: str) -> list:
 
 def remove_living_runtime(text: str) -> str:
     """Invert the source-owned living injection without rolling back the app."""
-    text = text.replace('\r\n', '\n').replace('\r', '\n')
+    text = living.patch_event_targets(text.replace('\r\n', '\n').replace('\r', '\n'))
     if living.MODEL_START in text:
         if text.count(living.MODEL_START) != 1 or text.count(living.MODEL_END) != 1:
             raise ValueError('Homepage living model markers changed')

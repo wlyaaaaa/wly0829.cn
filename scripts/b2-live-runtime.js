@@ -808,8 +808,26 @@ function mount(){
 
 }
 
+function renderTypesetForm(){
+ if(data.kind!=='computer-access')return;
+ const v=value('ca-form');
+ for(const el of document.querySelectorAll('.ts-canvas [data-hot="live"][data-href="ca-form"]')){
+  el.removeAttribute('tabindex');
+  if(el.dataset.livePart==='preview'){
+   el.textContent=v.text;el.dataset.state=v.state;el.title=v.text;el.setAttribute('role','status');
+  }else if(el.tagName==='INPUT'){
+   el.removeAttribute('role');
+   if(el.dataset.livePart==='duration'){
+    if(document.activeElement!==el)el.value=hours;
+    el.oninput=()=>{hoursTouched=true;hours=el.value;render();};
+   }
+  }
+ }
+ document.dispatchEvent(new Event('site-live-layout'));
+}
 function render(){
  const restoreReading=window.TypesetLiveFlow?.preserveReader?.();
+ renderTypesetForm();
  if(online())for(const key of Object.keys(grafanaGroupTitles)){const row=grafanaGroupRow(key);if(row.iframe)lastGrafanaGroups.set(key,row);}
 
  if(typeof globalToast!=='undefined'&&globalToast._rendered!==JSON.stringify([toast,toastState])){globalToast._rendered=JSON.stringify([toast,toastState]);globalToast.hidden=!toast;globalToast.textContent=toast;globalToast.dataset.state=toastState;if(toast){const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','关闭提示');close.onclick=()=>{toast='';clearTimeout(toastTimer);render();};globalToast.append(close);}}
@@ -1002,4 +1020,4 @@ document.addEventListener('site-layout',mount);mount();if(!document.hidden&&wind
 
 addEventListener('hashchange',()=>{target=liveAnchors.find(x=>x.id===decodeURIComponent(location.hash.slice(1)))||null;render();});
 
-window.SiteB2={refresh:()=>readStatus({replace:true}),getSnapshot:()=>({phase,lastRead,requestId:grant?.request_id,actions:actions.map(x=>({request_id:x.request_id,action:x.action,state:x.state})),slots:[...document.querySelectorAll('[data-b2-slot]')].map(x=>({slot:x.dataset.b2Slot,text:x.textContent,disabled:x.disabled}))}),value};
+window.SiteB2={refresh:()=>busy?Promise.resolve():readStatus({replace:true,refresh:true}),getSnapshot:()=>({phase,lastRead,requestId:grant?.request_id,actions:actions.map(x=>({request_id:x.request_id,action:x.action,state:x.state})),slots:[...document.querySelectorAll('[data-b2-slot]')].map(x=>({slot:x.dataset.b2Slot,text:x.textContent,disabled:x.disabled}))}),value};

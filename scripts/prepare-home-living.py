@@ -137,7 +137,13 @@ window.HomeLivingStatusModel = (() => {
     return body, evidence
 
 
+def patch_event_targets(text: str) -> str:
+    # Match the shared app guard: selectstart can target a DOM Text node.
+    return text.replace('e.target.closest(', '(e.target instanceof Element?e.target:e.target?.parentElement)?.closest(')
+
+
 def patch_runtime(text: str, model: str, bridge: str) -> str:
+    text = patch_event_targets(text)
     # Rebinding the model after the live reader is refreshed must be repeatable.
     if MODEL_START in text:
         if text.count(MODEL_START) != 1 or text.count(MODEL_END) != 1:
