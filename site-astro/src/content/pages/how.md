@@ -2021,7 +2021,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双机器人",
    "source_phrase": "派谁：每个型号干什么",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -2035,7 +2035,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "共享节点",
    "source_phrase": "我、Claude 和 GPT 怎么分工",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -2063,7 +2063,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "笔记本电脑",
    "source_phrase": "例二：电脑坏了换一台",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2077,7 +2077,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "笔记本电脑",
    "source_phrase": "例三：人不在电脑前",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2105,7 +2105,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "共享节点",
    "source_phrase": "每个项目从谁拿、给谁",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -2577,7 +2577,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "个人表达一个对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2637,7 +2637,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件夹放大镜",
    "source_phrase": "个人材料查找一个文件夹",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -2652,7 +2652,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "微信标志",
    "source_phrase": "微信聊天读取微信标志",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2692,12 +2692,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "本地视频制作一卷胶片",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2737,12 +2737,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿叶装饰",
    "source_phrase": "Typora 薄荷主题一片薄荷叶",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2772,7 +2772,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件齿轮",
    "source_phrase": "开发配置备份一把扳手和小硬盘",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2827,12 +2827,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "双机剪贴板两张叠着的便签",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2857,12 +2857,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "双屏信息中心两块竖着的小屏",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2887,12 +2887,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "内存盘守护一根内存条",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2907,7 +2907,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "屏保与壁纸几个泡泡",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2922,7 +2922,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件齿轮",
    "source_phrase": "AI 工具配置管理一个齿轮",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -2932,12 +2932,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2947,12 +2947,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2962,12 +2962,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2977,12 +2977,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2992,12 +2992,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3007,12 +3007,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3022,12 +3022,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3281,7 +3281,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "画笔调色板",
    "source_phrase": "一支画笔和一块调色板，旁边一个小 ChatGPT 标志",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -3296,7 +3296,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "这个网站就是这样分的 文字由 Claude 写；GPT 收集事实、出图、审图：GPT-6 Luna 调生图工具出图，GPT-6.1 Sol 审图、跟进生产。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3558,12 +3558,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "人像",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3857,7 +3857,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双机器人",
    "source_phrase": "② 到家：Claude 接手拆活 \n谁做：到家后，家里电脑上的ClaudeOpus5.5接手这份任务说明，当主对话。\n传什么：我→Claude，“照那份任务说明做”（文字）；Claude→子代理，一份份任务文件；子代理→Claude，报告和产物放在哪（文件）。\n怎么分：机械的调用交GPT-6Luna，核字幕交GPT-6.1Sol，旁白由Claude自己写，每份结果Claude都核一遍。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -4530,7 +4530,7 @@ Codex
      "icons": [
       "_library/icons/文件齿轮.png",
       "_library/icons/双气泡.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     },
     {
@@ -4584,7 +4584,7 @@ Codex
      "connector": "none",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     },
     {
@@ -4616,7 +4616,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "⑤ 开发工具的设置 \n谁做：开发配置备份提供配置包，AI按工具一个个放回。\n传什么：G盘、H盘或私人Google云端硬盘上的配置包→新电脑（文件）。\n10月1日04:18最新一包：8,470个文件、约1.0GB，含Codex、Claude、OpenCode、Antigravity的设置；不含Codex的对话本身和账号凭据，凭据走密码中心。\n还没做过：在一台新电脑上把这一包全部放回去、逐个工具验过。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4630,7 +4630,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双气泡",
    "source_phrase": "⑥ AI 的对话 \n谁做：AI备份提供Codex的恢复点，AI还原到一个空的隔离目录，再逐个核对。\n传什么：恢复点→隔离目录，逐个核对文件；Codex能否读回任务列表、接着聊，还没实测。\n真做过8月30日：隔离还原4,441个文件、66.3GB，逐个核对一致。Claude等工具放在C盘的数据，靠系统镜像兜底。",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -4639,12 +4639,12 @@ Codex
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "⑦ 重新登录、逐项验收 \n谁做：我扫码登录各个账号；AI装软件、恢复任务，逐个回读验收。\n传什么：验证结果、安装状态、功能回执→恢复记录和驾驶舱（状态）。\n还没做过：一台全新电脑从零走完这七步。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4657,7 +4657,7 @@ Codex
    "fallback": false,
    "key": "笔记本电脑",
    "source_phrase": "还没做过：在一台新电脑上把这一包全部放回去、逐个工具验过。",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -4666,11 +4666,11 @@ Codex
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "⑦重新登录、逐项验收\n谁做：我扫码登录各个账号；AI装软件、恢复任务，逐个回读验收。\n传什么：验证结果、安装状态、功能回执→恢复记录和驾驶舱（状态）。\n还没做过：一台全新电脑从零走完这七步。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4835,12 +4835,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4850,12 +4850,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4865,12 +4865,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4880,12 +4880,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5220,9 +5220,9 @@ Codex
      "icons": [
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/fix-round-2/icon-clean-2a8efcedc56db75fbba3.png",
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/沙漏.png"
      ]
     },
@@ -5276,7 +5276,7 @@ Codex
      "connector": "none",
      "illustration": "right_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
      ]
     },
     {
@@ -5300,7 +5300,7 @@ Codex
      "connector": "none",
      "illustration": "right_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     },
     {
@@ -5332,12 +5332,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5361,12 +5361,12 @@ Codex
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "工具箱",
    "source_phrase": "⑫ 出事先看 〔救急先看〕\n能做：电脑出事、接口都打不开时，手机照样能读最短的急救步骤。\n限制：它告诉人怎么做，不会替人修。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -5380,7 +5380,7 @@ Codex
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "⑬ 按点自动跑 计划任务\n能做：备份、照片视频上云、串流体检这些按时间自己跑，不用我盯着。\n限制：做没做完以回执为准，在驾驶舱看。",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -5389,12 +5389,12 @@ Codex
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "⑭ 盯一件事 Codex 一次性任务监测\n能做：让电脑盯一个条件（比如云端视频处理完），到了就给原来那个任务排一条提醒，让AI接着收尾。\n限制：原任务要开着、AI停下等着；关了应用不保证叫得醒。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5417,11 +5417,11 @@ Codex
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "⑭盯一件事Codex一次性任务监测\n能做：让电脑盯一个条件（比如云端视频处理完），到了就给原来那个任务排一条提醒，让AI接着收尾。\n限制：原任务要开着、AI停下等着；关了应用不保证叫得醒。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -5630,7 +5630,7 @@ Codex
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件齿轮",
    "source_phrase": "电脑配置与恢复一台机箱带一块外接固态",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -5645,7 +5645,7 @@ Codex
    "semantic_status": "scene_explicit_primary_object",
    "key": "GitHub标志",
    "source_phrase": "GitHub 项目总索引一个带 GitHub 标志的卡片盒",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -5655,12 +5655,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "实线",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5807,7 +5807,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/保险箱.png",
-      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+      "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5892,7 +5892,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/保险箱.png",
-      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+      "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -5960,12 +5960,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6310,12 +6310,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6535,9 +6535,9 @@ Codex
      "icons": [
       "_library/icons/双模型窗口.png",
       "_library/icons/趋势图.png",
-      "_library/icons/数据库.png",
+      "_library/hires-icons/数据库.png",
       "_library/icons/月亮.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -6600,9 +6600,9 @@ Codex
      "icons": [
       "_library/icons/双模型窗口.png",
       "_library/icons/趋势图.png",
-      "_library/icons/数据库.png",
+      "_library/hires-icons/数据库.png",
       "_library/icons/月亮.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "connector": "none",
      "copy_labels": [
@@ -6627,12 +6627,12 @@ Codex
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {

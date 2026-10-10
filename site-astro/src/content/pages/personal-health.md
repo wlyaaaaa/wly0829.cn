@@ -735,7 +735,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手环心形",
    "source_phrase": "手腕上的设备",
-   "sha256": "5f2678aaf0e5c505e5d03b567d11b1fb5504b4385ae1311704b2fc7e8f90ff93",
+   "sha256": "a7b8917c6567212dc729ba65aa4ce31b59234784e8a5641e26c7946a8e9bba2d",
    "status": "ready"
   },
   {
@@ -745,12 +745,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一叠分成几格的卡片",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -765,7 +765,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "日历",
    "source_phrase": "一本日历",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -775,12 +775,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一个带对勾的循环箭头",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -790,12 +790,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -971,7 +971,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一个对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -1016,7 +1016,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "手环心形",
    "source_phrase": "手腕上的设备连到一台电脑",
-   "sha256": "5f2678aaf0e5c505e5d03b567d11b1fb5504b4385ae1311704b2fc7e8f90ff93",
+   "sha256": "a7b8917c6567212dc729ba65aa4ce31b59234784e8a5641e26c7946a8e9bba2d",
    "status": "ready"
   },
   {
@@ -1190,7 +1190,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "柱状图",
    "source_phrase": "一个到顶的计数表",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -1235,7 +1235,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "日历",
    "source_phrase": "一本日历上连着七格灰色",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -1250,7 +1250,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "禁止文件",
    "source_phrase": "一页纸上一格打了灰叉",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -1477,7 +1477,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一个对话气泡",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -1537,7 +1537,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "柱状图",
    "source_phrase": "一张只有四根柱子的小卡片",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -1577,12 +1577,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1686,8 +1686,8 @@
      "columns_v": 1,
      "illustration": "right_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png"
      ],
      "text_ref": "8,591"
@@ -1719,8 +1719,8 @@
      "columns_v": 1,
      "illustration": "right_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png"
      ],
      "text_ref": "8,591"
@@ -1813,12 +1813,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱",
    "source_phrase": "一个工具箱上画一个灰色小叉",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -1945,7 +1945,7 @@
      "connector": "none",
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文稿堆.png"
      ],
      "text_ref": "隔一周再更新，也只要 69 秒。"
@@ -1980,7 +1980,7 @@
      "illustration": "top_inside",
      "connector": "none",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文稿堆.png"
      ],
      "text_ref": "设备停了，它分得清是哪边的问题。"
@@ -1997,12 +1997,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "设备停了，它分得清是哪边的问题。 \n更新是我开口才跑，没有后台同步；设备、手机App或账号同步停了，电脑这边看不出来，只有拿日期一比才暴露。新鲜度检查只读日期、不读任何数值：最新记录离今天满7天标“该更新”，满10天电脑这边还没跑更新，才标“超期静默”。我每周更新一次，不留这3天余量，每次更新前一刻都会被误标成静默。要是一周内刚更新过、设备仍没有新记录，就不等10天，直接标“静默”，说明该查的是设备、手机App或账号同步。9月26日它查出最新记录已经8天，原因是电脑这边没跑更新；当天补采后恢复正常。个人理解库查“哪些来源好久没动”时也读它。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2016,7 +2016,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "有记录，不等于能下结论。 \n设备会漏记、重复，也会把一段睡眠同时标成主睡眠和小睡；直接拿来算，结论会被噪声带偏。简报只用睡眠、步数、活动分钟、运动4类；一段时间里有记录的天数不到80%，或记录有重复、残缺、归不清，就标“部分可用”，不拿来下结论。同时标了主睡眠和小睡的，时长只算一次，也不去猜它是哪种。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2026,12 +2026,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "时钟",
    "source_phrase": "隔一周再更新，也只要 69 秒。 \n以前每次都从8月5日整段重采：9月12日那次发了284个请求，用了约32分钟。提速分两步。9月12日起记住上次采到哪天，只从没采完的那天补起，已完成的历史直接引用旧原件、不再联网：9月19日05:03补一周，请求降到73个，但还是用了约17分半。05:33改成复用网络连接，不再每个请求重新握手：05:41补当天，22个请求、26秒。到9月26日补一周，77个请求、69秒；紧接着补当天，23个请求、39秒，传输开了gzip压缩，这次网上只走了约0.1MB，解开是4.5MB。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2041,12 +2041,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "设备停了，它分得清是哪边的问题。 \n更新是我开口才跑，没有后台同步；设备、手机App或账号同步停了，电脑这边看不出来，只有拿日期一比才暴露。新鲜度检查只读日期、不读任何数值：最新记录离今天满7天标“该更新”，满10天电脑这边还没跑更新，才标“超期静默”。我每周更新一次，不留这3天余量，每次更新前一刻都会被误标成静默。要是一周内刚更新过、设备仍没有新记录，就不等10天，直接标“静默”，说明该查的是设备、手机App或账号同步。9月26日它查出最新记录已经8天，原因是电脑这边没跑更新；当天补采后恢复正常。个人理解库查“哪些来源好久没动”时也读它。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2340,7 +2340,7 @@
       "_library/icons/钥匙.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "size": "medium",
      "text_ref": "更新设备数据",
@@ -2352,8 +2352,8 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/09-时钟-clean.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
@@ -2413,7 +2413,7 @@
       "_library/icons/钥匙.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/日历时钟.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "size": "medium",
      "text_ref": "更新设备数据"
@@ -2424,8 +2424,8 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/09-时钟-clean.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
@@ -2511,7 +2511,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "新报告和纠错｜只打开相关的那份原件，改现状里受影响的几段，记下出处；以后不再翻原件｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2526,7 +2526,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "双气泡",
    "source_phrase": "新认识写回理解库｜健康对话里出现值得以后用的本人信息，写回个人理解库；病历和设备数据不复制过去｜在用",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2566,12 +2566,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "中断接着采｜断了或请求到上限被截停，下次接着同一份清单往下采，不重下、不另起｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2581,12 +2581,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "一段时间简报｜问某段时间睡眠或活动怎么样：只用够格的记录算，不够格的说清缺在哪｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2596,12 +2596,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "查某天记录｜不重新采集，按那一天、那一类从原件里窄查｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2616,7 +2616,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "记录新不新｜只给日期：设备记录到哪天；满 7 天标“该更新”，满 10 天没更新才标“超期静默”，说清是哪边停了｜在用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2778,8 +2778,8 @@
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/版本循环文件.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/09-时钟-clean.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/文稿堆.png",
       "_library/icons/日历时钟.png"
@@ -2843,7 +2843,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "8 月 31 日：采集结果不完整，就整份不接受",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2873,7 +2873,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 12 日：改成只补新的：从上次没采完的那天补起；传输开 gzip 压缩",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2883,12 +2883,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "9 月 19 日：复用网络连接，补当天从几分钟降到半分钟以内",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2898,12 +2898,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "9 月 24 日：写下设备采集约定；修正一天从哪算到哪、断了以后怎么接着采，以及资料锁检查",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2933,7 +2933,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "9 月 27 日：资料锁改用统一接法",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {

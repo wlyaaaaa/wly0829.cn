@@ -706,12 +706,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿叶装饰",
    "source_phrase": "像落叶一样轻",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -721,12 +721,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -736,12 +736,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -751,12 +751,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -851,7 +851,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "icons": [
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/icons/画笔调色板.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "1.平时不用管"
     }
@@ -875,7 +875,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "icons": [
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/icons/画笔调色板.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "1.平时不用管"
     }
@@ -912,7 +912,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "画笔调色板",
    "source_phrase": "2. 想知道好不好，问 AI \n“看看内存盘现在健康吗？”AI跑一次只读体检，不写任何文件。怎样才算“正常”，见“为什么这样设计”第4条。",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -922,12 +922,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "3. 跑长任务前打个招呼 \n“我要跑几个小时的任务，先暂停内存盘自动重建，跑完再恢复。”暂停只停清空重建，文件夹维护和体检照常。也可以让用缓存的程序登记“我在用、用到几点”，登记有效期间不会被清盘。这两样做好了，还找不到真用过的记录。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1094,12 +1094,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个弹出的小消息框",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1109,12 +1109,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一块虚线画的空盘位",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1124,12 +1124,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一根被压扁的内存条",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1159,7 +1159,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个搬家的纸箱",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1169,12 +1169,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "开关",
    "source_phrase": "一个关掉的小开关",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -1314,12 +1314,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "时钟",
    "source_phrase": "一个小闹钟",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1329,12 +1329,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个转圈的绿色循环",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1344,12 +1344,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张写着字的小卡片",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1364,7 +1364,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "一个聊天气泡和一个仪表盘",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -1460,7 +1460,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
      "icons": [
       "_library/icons/秒表.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
      ]
@@ -1502,7 +1502,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
      "icons": [
       "_library/icons/秒表.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
      ]
@@ -1529,12 +1529,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "不可归属内存达到 8 GB（像是驱动卡着内存）；",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1544,12 +1544,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "相关增长达到 8 GB：和过去 24 小时的基线比，不可归属内存涨了多少、可用内存跌了多少，取小的那个。两边都得动才算：程序正常吃内存只让可用内存变少，不会让不可归属变多；",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1564,7 +1564,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "text_inferred_object_unverified",
    "key": "柱状图",
    "source_phrase": "可用内存低于 5 GB，而且相关增长至少 4 GB。",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -1574,12 +1574,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1678,7 +1678,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns": 3,
      "columns_v": 1,
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/版本循环文件.png"
      ],
@@ -1717,7 +1717,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns": 1,
      "columns_v": 1,
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/版本循环文件.png"
      ],
@@ -1736,12 +1736,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "绿叶装饰",
    "source_phrase": "一片可以随风飘走的落叶",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1771,7 +1771,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "35 次 提交（6 月 15 日至 9 月 29 日）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -1848,8 +1848,8 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "illustration": "top_inside",
      "icons": [
       "_library/icons/画笔调色板.png",
-      "_library/icons/代码窗口.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "吃过一次亏，从此只放丢得起的。"
     }
@@ -1872,8 +1872,8 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "illustration": "top_inside",
      "icons": [
       "_library/icons/画笔调色板.png",
-      "_library/icons/代码窗口.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png"
      ],
      "text_ref": "吃过一次亏，从此只放丢得起的。"
     }
@@ -1895,7 +1895,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "画笔调色板",
    "source_phrase": "吃过一次亏，从此只放丢得起的。 \n7月21日以前，Z盘也放项目和文档，每15分钟用“照搬式同步”备份到E盘——源头少了什么，备份也跟着删什么。6月中旬以前有一次盘突然不见，重新出来时项目文件夹是空的，照搬式同步就把E上的备份也删空了，这些文件在本机再没有别的副本。6月15日先改成只增不减，7月21日干脆不让Z盘放任何正式文件，三条备份通道全部退役。现在守护一样东西都不备份：盘没了只补文件夹，浏览器自己再生成缓存。",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -1905,12 +1905,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "删了文件不还内存，就帮它清零。 \nPrimo的动态内存按写入量占内存，删文件时却不一定还：7月23日盘里只剩约1GiB，驱动还锁着约31GB。当天把容量从32GiB收到12GiB，并让守护盯着不可归属内存，像是驱动卡住、盘里缓存又不多时清空重建。7月29日、8月14日、8月20日凌晨三次，可用内存从16.2、12.3、9.4GB升到45.8、39.3、32.7GB（和15分钟前那一轮比）。\n也有白做的：8月20日下午和9月7日那35次，内存是别的程序吃的，重建后不见好。9月18日因此加了“腾不出就6小时不再试”；9月29日又把触发改成要看到相关增长（见“自动重建”那一屏，待验收）。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1920,12 +1920,12 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "镜像从 12 GiB 瘦到 0.55 GiB。 \n9月18日查到，盘里真实内容只有0.5GiB，镜像文件却有12GiB：驱动的整张占用表跟着镜像来回存。用Primo官方命令另存一份紧凑镜像，核对SHA-256后替换，旧镜像先留作退路，缩小95.4%。9月25日16:14正常重启，这份小镜像照常存盘、开机装回；9月27、28日两次意外关机后，盘也从这份镜像回来了。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -2177,12 +2177,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "每 15 分钟的照看",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2197,7 +2197,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历时钟",
    "source_phrase": "定时巡查　登录时和之后每 15 分钟在后台跑一轮，不弹窗口；盘没出来最多等 150 秒；同一时间只跑一份，一轮最长 10 分钟　〈在用〉",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -2207,12 +2207,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "认准这块盘　卷标必须是 RAMDISK，Primo 里正好一块盘对应 Z；对不上就报错，什么都不动　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2252,12 +2252,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "出错弹一次　连续出错时只在第一轮弹一次 Windows 消息（留 60 秒）并记下。弹过 2 次：7 月 23 日改容量时、9 月 2 日读不到盘的名字时　〈在用〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2267,12 +2267,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "自动腾内存",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2287,7 +2287,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "自动清空重建　盘里缓存不超过 8 GiB、又有证据像是这块盘卡着内存时，用 Primo 命令清空重建、把空盘存回镜像。共 38 次（都按 9 月 29 日以前的旧条件），前 3 次各腾出 23–30 GB　〈在用〉",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2297,12 +2297,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "看增长才动手　只是可用内存低不再动手：要不可归属内存达到 8 GB，或和 24 小时基线比的相关增长达到 8 GB（可用内存低于 5 GB 时 4 GB 就够）；相关增长要隔 5 分钟以上再看到一次。9 月 29 日上线，还没触发过　〈待验收〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2312,12 +2312,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "连续三次才算　连续 3 次读数（每 5 秒一次，前后至少跨 10 秒）都紧才算；两次读数隔超过 30 秒就重新数　〈待验收〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2580,7 +2580,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "Chrome 缓存接进来　把 Chrome 的网页缓存、代码缓存、显卡缓存三个文件夹连到 Z；Chrome 开着就先不动；旧文件夹改名留着，不删　〈在用〉",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -2595,7 +2595,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "关掉快速启动　Windows 的快速启动会打断 Primo 关机存盘、开机建盘；6 月 15 日关掉后一直关着　〈在用〉",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2605,12 +2605,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "换盘符和间隔　盘不叫 Z 时可以换盘符；巡查间隔可调 1 分钟到 1 天　〈没用过〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2635,12 +2635,12 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "已停用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2796,7 +2796,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "6 月 15 日　建起来：Primo 开机建盘、关机存镜像，守护每 15 分钟把盘上的项目和文档备份到 E；查出盘老是不见是快速启动惹的，关掉；照搬式同步删空过备份，改成只增不减",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2811,7 +2811,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "6 月 16 日　Chrome 的代码缓存、显卡缓存搬进 Z；镜像从 C 盘挪到 E 盘",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -2856,7 +2856,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "7 月 23 日　32 GiB 收到 12 GiB；盯不可归属内存，卡住就清空重建",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2871,7 +2871,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历时钟",
    "source_phrase": "7 月 25 日　缓存由写它的程序自己清，守护不整盘定时清",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -2886,7 +2886,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "7 月 29 日—8 月 20 日　三次重建各腾出 23–30 GB",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2961,7 +2961,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 25 日　正常重启，瘦身后的镜像照常存盘、装回",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2976,7 +2976,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 26 日　开始菜单的维护小窗撤掉，改在网站看；说明改成人话",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

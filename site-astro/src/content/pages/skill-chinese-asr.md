@@ -717,7 +717,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张号码牌",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -978,7 +978,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "指向手",
    "source_phrase": "一根手指点着一个文件",
-   "sha256": "078174b6b61f6c5cc665cc91fea9cff5f7f02da36fbfcff6fc003c6d34599eb7",
+   "sha256": "b91d58864458ae828bac8c417ce629dc5c21bbafc9cb56094265107503bfe26c",
    "status": "ready"
   },
   {
@@ -993,7 +993,7 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张号码牌",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1003,12 +1003,12 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个“≠”号",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1018,12 +1018,12 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个空盒子",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1048,12 +1048,12 @@ AI：“按声音分成 2 组，分组可能多分或少分，不等于人数。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显卡",
    "source_phrase": "排队的小显卡",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {

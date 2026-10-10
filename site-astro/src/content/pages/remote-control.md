@@ -1059,7 +1059,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "23 个｜工具：文件、命令、文档、桌面、维护",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1089,7 +1089,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "268 次｜主机收到的工具调用（9 月 26 日 16:56 至 28 日 15:43）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -1331,7 +1331,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "人在外面，让家里的电脑干活",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -1594,7 +1594,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "scene_explicit_primary_object",
    "key": "笔记本电脑",
    "source_phrase": "冒汗的电脑",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -1604,12 +1604,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "没亮的登录界面",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1841,12 +1841,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "Tailscale 网",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1861,7 +1861,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "笔记本电脑",
    "source_phrase": "主机备用入口：副机地址下的 /main-computer，经两台电脑的 Tailscale 私网转到主机；和副机入口共用同一个公网域名，所以不算完全独立的第二条路",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2083,7 +2083,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "双气泡",
    "source_phrase": "想在对话里，做在电脑上。｜推理留在我正在用的对话里，不为一条命令在电脑上另起一个 AI 任务。",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2860,7 +2860,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "主机公网入口｜mcp.wly0829.cn 经 Cloudflare 免费隧道进主机，电脑不开端口；要登录｜在用",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -2990,12 +2990,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "命令和脚本｜用 PowerShell 7 跑命令、Python、Node、Git 和现成管理脚本，拿回输出和退出码｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3010,7 +3010,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "读文档片段｜只读文本某几行、PDF 某页、Word 某段、Excel 某行，不回传整份｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3035,12 +3035,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "桌面操作｜截图、读界面元素、点、打字、快捷键、滚动、拖动、开关应用、等某个画面出现｜在用",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -3055,7 +3055,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "操作我的 Chrome｜在原来的 Chrome 里开标签、输入、点链接、截图核对，不动已开的页面｜在用",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -3065,12 +3065,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "填表和上传｜输入、下拉、勾选、选附件、提交；只在本机测试页验过，真网站的登录验证码没测｜说不准",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -3085,7 +3085,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "系统小工具｜进程、注册表、剪贴板、弹通知、显示器清单、抓网页文字｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3429,12 +3429,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "命令不弹黑窗口｜给上游打补丁，PowerShell 隐藏启动；上游修好后自动跳过｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3474,12 +3474,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "没登录也能维护｜开机就起 SYSTEM 服务，没登录也能跑维护命令；桌面操作要等登录｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3519,12 +3519,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "隧道查和修｜一条命令查隧道和公网通不通，修复登记过的服务｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3569,7 +3569,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "两台同一份源码｜两台用同一个提交，各自配置、登录凭据、部署和回退｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   }
  ]
@@ -3854,7 +3854,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "连接电脑说明｜三个地址、每台的验收记录、一键复制给 AI 的配置说明｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3894,12 +3894,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "个人资料授权｜输验证器里的 6 位动态码，办理、延长或结束资料解锁，0.5 到 72 小时｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3909,12 +3909,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "无限制授权｜同一页办理、延长或结束全局无限制授权，和资料授权分别计时｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3924,12 +3924,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "锁资料、锁屏｜一键锁住资料，或只锁 Windows 屏幕；锁屏不影响授权计时｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3939,12 +3939,12 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "监控入口｜显示监控面板在不在线，点过去看电脑使用记录的图表｜待验收",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4004,7 +4004,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "旧“电脑 MCP”单个连接｜拆成“主机 MCP”“副机 MCP”两个｜已停用",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   }
  ]

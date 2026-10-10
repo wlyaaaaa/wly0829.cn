@@ -950,12 +950,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "1 秒一刷｜机箱屏 480×1920，时钟每秒跳一下",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -980,12 +980,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "6 类｜曲面屏只放时钟、音乐、手机通知、系统事件、手机电量、Steam 游戏",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -995,12 +995,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "1 个自动任务｜登录后隐身启动，两块屏都由它照看",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1407,12 +1407,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "时钟和天气｜时:分:秒、日期星期；天气、空气质量、湿度",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1437,12 +1437,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "CPU｜使用率大字，温度、功耗、主频、核心电压，60 秒负载曲线",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1452,12 +1452,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显卡",
    "source_phrase": "显卡｜使用率、温度、功耗、核心频率、电压、负载曲线",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -1482,12 +1482,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "内存和显存｜使用率，主板和两根内存条的温度",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1497,12 +1497,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "网络｜下载、上传速度，延迟、抖动、丢包，DPC 占用（驱动处理硬件中断占了多少 CPU，高了容易卡顿）",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -1527,12 +1527,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "应用排行｜最占 CPU 和内存的前 3 个程序",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -1542,12 +1542,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显卡",
    "source_phrase": "数据从哪来：温度和功耗读LibreHardwareMonitor；显卡读NVIDIA驱动接口；CPU使用率用Windows计数器，和任务管理器对得上；帧率只读电脑使用记录采到的数据；天气和空气质量取Open-Meteo（免费的天气服务）。",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -1890,12 +1890,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "60 秒只算真正亮着的时间｜被来电这类更急的卡暂时挤下去时，倒计时暂停；腾出位置时，从到达算起还不满 3 分钟，它会回来；超过就不再出现。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -1925,7 +1925,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "验证码只认明确的｜通知里得有“验证码”这类字样，才取出 4–8 位数字放大显示；订单号、手机号、日期、取件码、邀请码、优惠码都不算。新码在原位置替换旧码；日志不记验证码。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2119,12 +2119,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "看到什么｜它自己会做｜还不行，跟 AI 说",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2134,12 +2134,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "机箱屏时钟不跳了｜看门狗每轮查心跳：帧号不涨、整帧重画没按时，都算坏了；等旧程序放开串口、冷却 30 秒，再起一套新的｜“机箱屏冻住了”：AI 跑修复脚本，认准那一个 USB 串口再重启",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2149,12 +2149,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "机箱屏不亮、串口没反应｜只重启那一个 USB 串口设备（见亮点）｜“机箱屏黑了”",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2184,7 +2184,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "程序窗口跑到曲面屏上｜每 250 毫秒看一眼，把普通窗口悄悄搬回主屏；壁纸、浮层、桌面不碰｜“窗口老往水冷屏跑”",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2199,7 +2199,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "显示器变化后动态壁纸停了｜三块屏都正常 30 秒后，让 Wallpaper Engine 停一下再播，15 分钟最多一次｜“壁纸不动了”",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2413,12 +2413,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "温度计和芯片",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2443,12 +2443,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "画板",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2503,12 +2503,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "时钟",
    "source_phrase": "钟和音符",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2533,12 +2533,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "曲面屏",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2672,12 +2672,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "整帧太慢，只发变化太悬｜这块屏认两种命令：整帧重画屏会回话，但发一帧要约 2.3 秒；只发变了的部分快得多（一般几十毫秒），可屏幕不回话，发丢了也不知道。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2687,12 +2687,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "所以两样一起用｜平时每秒只发变化；每 900 帧（约 15 分钟）重开一次串口、整帧重画一次，停约 2.5 秒；每次启动后第 60、120、180 帧再各多做一次，防止屏幕没跟上新会话。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2717,12 +2717,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "写成功不等于屏上亮了｜这块屏没法回读像素，所以看门狗查的是帧号、周期、整帧重画有没有按时；最后认不认，要人看一眼实体屏。另有一个 3 秒整帧的保守模式，只在排查兼容问题时手动打开。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3037,7 +3037,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "text_ref": "程序活着",
      "icons": [
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
     }
@@ -3057,7 +3057,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "text_ref": "程序活着",
      "icons": [
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
     }
@@ -3089,12 +3089,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "一上午被拉起 759 次，之后只修那一根线。 \n8月26日8点到14点，机箱屏的USB串口卡住，取数程序被一遍遍重新拉起，6个小时759次。13:48加了自愈：调亮度连续失败3次，就只重启那一个USB串口设备，5分钟最多一次，别的都不碰；那天后来只再拉起过4次。9月21日00:45它自己修好过一次。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3369,12 +3369,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "时钟和日期｜时:分:秒、日期星期，北京时间，每秒跳一下｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3389,7 +3389,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "天气和空气质量｜天气、空气质量、湿度，取 Open-Meteo；9 月 28 日坏过，29 日凌晨修好，01:56 屏上是“20°C 阵雨、AQI 70、湿度 95%”｜在用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3399,12 +3399,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库",
    "source_phrase": "状态条｜数据取没取到、前台程序、多久更新一次｜在用",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -3414,12 +3414,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "CPU｜使用率、温度、功耗、主频、电压、60 秒曲线；使用率和任务管理器对得上｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3429,12 +3429,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显卡",
    "source_phrase": "显卡｜使用率、温度、功耗、核心频率、电压、曲线｜在用",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -3444,12 +3444,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "游戏帧率｜平均、1% 低帧、帧时间，只读电脑使用记录的数据｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3459,12 +3459,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "内存和显存｜使用率，主板和内存条温度｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3474,12 +3474,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "网速和网络质量｜下载上传、延迟、抖动、丢包、DPC，只算物理网卡｜在用",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -3504,12 +3504,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "应用排行｜最占 CPU 和内存的前 3 个程序，每 3 秒单独采｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3554,7 +3554,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "数据可信度｜每份数据按九项打 0–100 分，记进日志｜在用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3795,12 +3795,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "时钟｜只到分钟，整分钟翻页；Win+F2 显示或隐藏｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3825,12 +3825,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "Steam 游戏｜游戏名、封面、这次玩了多久，退出后总结 60 秒｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3840,12 +3840,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "手机通知和来电｜最多 3 条，每条 60 秒；来电、传输进行时一直在｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3855,12 +3855,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "验证码｜只认明确的验证码，大号数字 15 秒；日志不记｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3930,12 +3930,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "登录自启和看门狗｜登录后隐身启动，盯心跳，坏了冷却 30 秒再起一套｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3975,12 +3975,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "曲面屏找回｜开机、唤醒各试一次切回副屏，认不准就等｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3995,7 +3995,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "窗口不乱跑｜普通窗口误入曲面屏就搬回主屏，壁纸、浮层不碰｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4025,7 +4025,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "动态壁纸重连｜显示器变化后让 Wallpaper Engine 停一下再播，15 分钟最多一次｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   }
  ]
@@ -4240,12 +4240,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "给网站的网络质量｜只给延迟、抖动、丢包和 DPC，不给程序名和地址｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -4260,7 +4260,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "公开源码｜源码公开在 GitHub，打包时自动剔除厂商文件、本机配置和天气地点｜在用",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -4275,7 +4275,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "厂商自带软件和天气补丁｜6 月底先用厂商软件，天气坏了打过补丁；7 月起换成自己画，9 月 29 日补丁脚本也删了｜已停用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4300,12 +4300,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "音量提示｜调音量时显示百分比 6 秒；9 月 27 日删掉｜已停用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -4335,7 +4335,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "U 盘提示｜U 盘插拔提示；9 月 27 日删掉｜已停用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4457,7 +4457,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "6 月 30 日：先用两块屏厂商自带的软件，设成登录后自动启动。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4497,12 +4497,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "8 月 2–8 日：两块屏一起睡眠、关机；Steam 时间统一换成北京时间；曲面屏改成自适应卡片；改名 PC Panel Hub。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -4532,7 +4532,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "8 月 26 日：串口卡死自愈。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4562,7 +4562,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 25 日：把网络质量和 DPC 接给网站。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4592,7 +4592,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 28 日：本人看过新版曲面屏，“粗看正常”。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4607,7 +4607,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 29 日：修好机箱屏天气；删掉旧的天气补丁和“唤醒后重启”脚本；指标服务的启动日志最多留最近 32 批，再被反复拉起也不会堆出成千上万个文件。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

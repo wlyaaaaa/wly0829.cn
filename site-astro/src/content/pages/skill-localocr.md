@@ -747,7 +747,7 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "AI 看出这是扫描件、要逐字，不自己看图，交给本地文字识别，走自动路线。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -761,7 +761,7 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "它先给原件留一份只读副本，等显卡空出来，再一页页快读。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -789,7 +789,7 @@ AI 自己能看图：一两张普通截图、只想知道大意或画面里有�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双机器人",
    "source_phrase": "AI 读结果里每一页用的模型和客观结论，照实告诉我，不把“整份读完”说成“每个字都对”。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1032,7 +1032,7 @@ AI：“16 页都读完了。第 1–14 页和第 16 页用快模型读，把握
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "禁止文件",
    "source_phrase": "AI回我时分四块：画面、原字、识别状态、有疑问的地方。两边对同一个字说法不一样，就把原图那一块放大再看，不拿一边悄悄改掉另一边；AI自己看出的更正单独标明，不改识别的原始结果。\n我要求图片不出电脑时，AI不把图交给自己的视觉，只用本地识别。",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -1047,7 +1047,7 @@ AI：“16 页都读完了。第 1–14 页和第 16 页用快模型读，把握
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "禁止文件",
    "source_phrase": "AI回我时分四块：画面、原字、识别状态、有疑问的地方。两边对同一个字说法不一样，就把原图那一块放大再看，不拿一边悄悄改掉另一边；AI自己看出的更正单独标明，不改识别的原始结果。\n我要求图片不出电脑时，AI不把图交给自己的视觉，只用本地识别。",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -1426,7 +1426,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "要一字不差的文字，尤其是很小、很淡的关键字",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
