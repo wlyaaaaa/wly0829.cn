@@ -104,7 +104,7 @@ export function todayBlock(v, ctx) {
 
 // 总览屏和分区灯由共用脚本 /_overview/overview-screen.js 画（ctx.ov 传进来：构建时 import，浏览器里是 window.OverviewScreen）
 const overview = (v, ctx) => ctx.ov ? ctx.ov.html(v.overview, { size: 'big', now: ctx.now.getTime() }) : '';
-const LAMPS = { 'need-you': 'need_you', tasks: 'tasks', computer: 'computer', backup: 'backup', projects: 'projects', today: 'today' };
+const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
 export const REGIONS = { overview, security, 'need-you': needYou, computer, backup, projects, today: todayBlock,
   ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) };

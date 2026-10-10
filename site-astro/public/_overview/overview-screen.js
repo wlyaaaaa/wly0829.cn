@@ -1,11 +1,11 @@
 // 总览屏：驾驶舱第一屏（大号，6 块信号）和首页电脑屏幕（小号，3 块）共用这一份。
-// 输入后端给的 overview 对象（字段见 PCConfig 合同 overview.v1）；这里不算分，只画，并且只判断一件事：数据过期没有。
+// 输入后端给的 overview 对象（字段见 PCConfig 合同 overview.v1：level 取 ok|watch|act|unknown）；这里不算分，只画，并且只判断一件事：数据过期没有。
 // 服务端（驾驶舱构建时）import 它画首帧；浏览器里用 <script type="module" src="/_overview/overview-screen.js"> 加载，
 // 用 window.OverviewScreen.render(元素, overview, { size: 'big' | 'small' }) 原地更新。
 const TZ = 'Asia/Shanghai';
-const COLOR = { ok: 'green', attention: 'yellow', red: 'red', unavailable: 'gray', reading: 'gray', locked: 'gray' };
-const WORD = { ok: '正常', attention: '留意', red: '要处理', unavailable: '读不到', reading: '读不到', locked: '锁着' };
-const LEVEL_WORD = { ok: '稳', attention: '留意', red: '要你处理' };
+const COLOR = { ok: 'green', watch: 'yellow', act: 'red', unknown: 'gray' };
+const WORD = { ok: '正常', watch: '留意', act: '要处理', unknown: '读不到' };
+const LEVEL_WORD = { ok: '稳', watch: '留意', act: '要你处理' };
 // 首页小屏放哪 3 块：要你做、电脑、备份——一眼回答“要不要我动手、电脑好不好、东西保住没有”
 export const SMALL_SIGNALS = ['todo', 'computer', 'backup'];
 const ORDER = ['todo', 'ai_followup', 'computer', 'backup', 'today_tasks', 'security'];
@@ -40,9 +40,9 @@ function ring(score, color, size) {
 }
 
 function signal(s, off) {
-  const state = off ? 'unavailable' : (s?.state || 'unavailable');
-  const color = COLOR[state] || 'gray';
-  const word = off ? '读不到' : (s?.word || WORD[state] || '读不到');
+  const level = off || s?.locked ? 'unknown' : (s?.level || 'unknown');
+  const color = COLOR[level] || 'gray';
+  const word = off ? '读不到' : s?.locked ? '锁着' : (s?.word || WORD[level] || '读不到');
   const has = s?.value != null && s.value !== '';
   return `<li class="ov-sig is-${color}${off && has ? ' is-old' : ''}" data-signal="${esc(s?.id)}">${icon(s?.id)}<span class="ov-sig-label">${esc(s?.label || LABEL[s?.id] || '')}</span>`
     + `<span class="ov-sig-value">${has ? esc(s.value) : '—'}${has && s.unit ? `<small>${esc(s.unit)}</small>` : ''}</span>`
@@ -53,18 +53,19 @@ function signal(s, off) {
 export function html(ov, { size = 'big', now = Date.now() } = {}) {
   const off = stale(ov, now);
   const at = parse(ov?.as_of);
-  const level = off ? 'unavailable' : (ov.level || 'unavailable');
+  const level = off ? 'unknown' : (ov.level || 'unknown');
   const color = COLOR[level] || 'gray';
   const word = off ? '读不到' : (ov.word || LEVEL_WORD[level] || '读不到');
   const ids = size === 'big' ? ORDER : SMALL_SIGNALS;
   const sigs = ids.map((id) => signal({ id, ...((ov?.signals || []).find((x) => x?.id === id) || {}) }, off)).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
-  const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.points) && r.points ? ` <b>${r.points > 0 ? '+' : '−'}${Math.abs(r.points)}</b>` : ''}</li>`;
+  const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
+  const rules = !off && Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
   const why = size !== 'big' ? '' : reasons.length
     ? `<ul class="ov-why">${reasons.slice(0, 3).map(line).join('')}</ul>`
-      + `<details class="ov-more"><summary>${reasons.length > 3 ? `全部 ${reasons.length} 条扣分 · ` : ''}分数怎么算</summary>${reasons.length > 3 ? `<ul class="ov-why">${reasons.map(line).join('')}</ul>` : ''}${Array.isArray(ov.rules) && ov.rules.length ? `<ul class="ov-rules">${ov.rules.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</details>`
+      + `<details class="ov-more"><summary>${reasons.length > 3 ? `全部 ${reasons.length} 条扣分 · ` : ''}分数怎么算</summary>${reasons.length > 3 ? `<ul class="ov-why">${reasons.map(line).join('')}</ul>` : ''}${rules.length ? `<ul class="ov-rules">${rules.map(line).join('')}</ul>` : ''}</details>`
     : `<p class="ov-why ov-why-none">${!ov ? '还没读到电脑的总览。' : off ? '电脑那边这会儿没读到，下面灰着的是上次的情况。' : '没有扣分的地方。'}</p>`
-      + (!off && Array.isArray(ov.rules) && ov.rules.length ? `<details class="ov-more"><summary>分数怎么算</summary><ul class="ov-rules">${ov.rules.map((t) => `<li>${esc(t)}</li>`).join('')}</ul></details>` : '');
+      + (rules.length ? `<details class="ov-more"><summary>分数怎么算</summary><ul class="ov-rules">${rules.map(line).join('')}</ul></details>` : '');
   const asof = Number.isFinite(at) ? `<p class="ov-asof">${off ? `（上次 ${hm(at)}）` : hm(at) + ' 读到（北京时间）'}</p>` : '';
   return `<div class="ov ov-${size} is-${color}" role="group" aria-label="电脑总览：${esc(word)}${!off && Number.isFinite(ov?.score) ? `，${Math.round(ov.score)} 分` : ''}">`
     + `<div class="ov-head">${ring(off ? NaN : ov.score, color, size)}<div class="ov-verdict"><p class="ov-word">${esc(word)}</p>${size === 'big' || off ? asof : ''}${why}</div></div>`
@@ -73,8 +74,8 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
 
 // 分区标题旁的灯：一盏灯 + 一个词，不只靠颜色
 export function lamp(sec, off) {
-  const state = off || !sec ? 'unavailable' : sec.state || 'unavailable';
-  return `<span class="ov-sec is-${COLOR[state] || 'gray'}"><i class="ov-lamp" aria-hidden="true"></i>${esc(off || !sec ? '读不到' : sec.word || WORD[state] || '读不到')}</span>`;
+  const level = off || !sec ? 'unknown' : sec.level || 'unknown';
+  return `<span class="ov-sec is-${COLOR[level] || 'gray'}"><i class="ov-lamp" aria-hidden="true"></i>${esc(off || !sec ? '读不到' : sec.word || WORD[level] || '读不到')}</span>`;
 }
 
 export function render(el, ov, opts = {}) {

@@ -95,6 +95,10 @@
 @media (max-width: 767.98px) {
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
   .cp-hero { grid-template-columns: 1fr; }
+  /* 手机上总览屏紧跟标题，插画放到它后面 */
+  .cp-overview { order: 1; }
+  .cp-hero-art { order: 2; }
+  .cp-security-wrap { order: 3; }
   .cp-hero h1 img { height: 72px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-sec-item { grid-template-columns: 40px 1fr; padding: 6px 4px; }
