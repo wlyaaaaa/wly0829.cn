@@ -174,7 +174,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     previous = {'oss': {'objects': snapshot['search_objects']}, 'files': snapshot['pages']}
     sync_search(dist, previous, converted, pin, changed_routes)
     # Current O6 requires every deployed resource address to be same-origin.
-    for route in changed_routes | {file_route(rel) for rel in snapshot['pages']}:
+    for route in changed_routes | {'/', '/cockpit/', '/computer-access/'} | {file_route(rel) for rel in snapshot['pages']}:
         path = dist / nav.route_file(route)
         if path.is_file():
             body = path.read_bytes().decode('utf8')
