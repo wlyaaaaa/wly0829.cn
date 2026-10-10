@@ -9,7 +9,11 @@ root = Path(__file__).resolve().parents[1]
 source = Path(sys.argv[1]).resolve()
 retained = root / 'src/chrome/retained'
 manifest = json.loads((retained / 'manifest.json').read_text(encoding='utf-8'))
-original = (source / 'computer-access/index.html').read_bytes()
+# 保留页不再挂阿里云 10 月 7 日旧发布目录：候选站里的旧目录绝对前缀统一按本站根路径对照
+original = (source / 'computer-access/index.html').read_bytes().replace(
+    b'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/', b'/').replace(
+    # 翻页路由表放在授权页自己的目录，免得构建收尾把全站共用的旧路由表删掉
+    b'/_album/routes-6ea42164336398a179a1.json', b'/computer-access/assets/routes-6ea42164336398a179a1.json')
 assert (retained / 'computer-access.html').read_bytes() == original
 assert manifest['pages']['computer-access']['sha256'] == hashlib.sha256(original).hexdigest()
 built = (root / 'dist/computer-access/index.html').read_text(encoding='utf-8')
