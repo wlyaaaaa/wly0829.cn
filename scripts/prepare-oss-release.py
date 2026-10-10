@@ -20,6 +20,7 @@ import posixpath
 import re
 import shutil
 import sys
+import subprocess
 import time
 import tempfile
 from datetime import datetime, timedelta, timezone
@@ -28,6 +29,7 @@ from html.parser import HTMLParser
 from urllib.parse import quote, unquote, urlsplit, urlunsplit
 from urllib.request import Request, urlopen
 
+ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = 'release-manifest.json'
 PLAN = 'oss-plan.json'
 # These files describe the HTML host rather than page content. Moving robots or
@@ -630,6 +632,22 @@ def validate_retained_text(rewriter, source, inherited):
         for rel in changed: del rewriter.retained[rel]
 
 
+def copy_release_asset(source, destination):
+    return shutil.copy2(source, destination)
+
+
+def inherited_assets(manifest):
+    mapping = manifest.get('inherited_assets', {})
+    if not mapping: return {}, {}
+    ref = manifest.get('baseline_production_commit', '')
+    if not re.fullmatch(r'[0-9a-f]{40}', ref): raise ValueError('Inherited OSS assets need an exact baseline commit')
+    previous = json.loads(subprocess.check_output(['git', 'show', ref + ':site-release/' + MANIFEST], cwd=ROOT))
+    verify_manifest(previous)
+    objects = {alias: previous['oss']['objects'][original] for alias, original in mapping.items()}
+    if any(alias != row['key'].removeprefix('releases/') for alias, row in objects.items()): raise ValueError('Inherited object alias changed')
+    return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
+
+
 def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None, offline=False):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
@@ -638,9 +656,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         raise ValueError('Output must be a new directory')
     base, prefix = validate_target(base, prefix, allow_test)
     source_manifest = read(source / MANIFEST)
-    inherited_spec = importlib.util.spec_from_file_location('oss_inherited', Path(__file__).with_name('hybrid-release.py'))
-    inherited_module = importlib.util.module_from_spec(inherited_spec); inherited_spec.loader.exec_module(inherited_module)
-    inherited, inherited_receipts = inherited_module.inherited_assets(source_manifest)
+    inherited, inherited_receipts = inherited_assets(source_manifest)
     actual = {**inventory(source), **{rel: row['source'] for rel, row in inherited.items()}}
     expected = source_manifest['files']
     if {k: v for k, v in actual.items() if k != MANIFEST} != expected:
@@ -676,7 +692,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
             destination.write_bytes(rewriter.rewrite(payload, rel))
         else:
-            inherited_module.copy_release_asset(source / rel, destination)
+            copy_release_asset(source / rel, destination)
         value = {'bytes': destination.stat().st_size, 'sha256': digest(destination)}
         if host:
             github[rel] = value
@@ -769,9 +785,7 @@ def verify_local(output):
     validate_target(plan['asset_base_url'], plan['prefix'], plan['test_only'])
     source = Path(plan['source_root'])
     source_manifest = read(source / MANIFEST)
-    inherited_spec = importlib.util.spec_from_file_location('oss_inherited_check', Path(__file__).with_name('hybrid-release.py'))
-    inherited_module = importlib.util.module_from_spec(inherited_spec); inherited_spec.loader.exec_module(inherited_module)
-    inherited, _ = inherited_module.inherited_assets(source_manifest)
+    inherited, _ = inherited_assets(source_manifest)
     if {**inventory(source), **{rel: row['source'] for rel, row in inherited.items()}} != plan['source_files']:
         raise ValueError('Source changed since preparation')
     if inventory(output/'github') != plan['github_files']:

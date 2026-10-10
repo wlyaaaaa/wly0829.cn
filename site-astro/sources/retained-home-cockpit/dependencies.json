@@ -9263,5 +9263,2081 @@
     "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
     "bytes": 72402,
     "source_path": "site-astro/sources/retained-home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js"
+  },
+  "_typeset/computer-access/a7af2e3af28dca0ac228-computer-access-02-h.png": {
+    "sha256": "a7af2e3af28dca0ac228198339caef453eea71684f1c4760212da136b8070e6c",
+    "bytes": 336608,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/a7af2e3af28dca0ac228-computer-access-02-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/a7af2e3af28dca0ac228-computer-access-02-h.png"
+  },
+  "_typeset/computer-access/f7f4ca763a1e2ba1e14d-computer-access-04-h.png": {
+    "sha256": "f7f4ca763a1e2ba1e14d271521e59df767f33b8d31e0c128fc680a3216ede728",
+    "bytes": 281034,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/f7f4ca763a1e2ba1e14d-computer-access-04-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/f7f4ca763a1e2ba1e14d-computer-access-04-h.png"
+  },
+  "_typeset/computer-access/acd1c81ed6d6b4d145f3-computer-access-04-v.png": {
+    "sha256": "acd1c81ed6d6b4d145f33a201ed43c945dbb927dfcfea423439be72b0cd74905",
+    "bytes": 457407,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/acd1c81ed6d6b4d145f3-computer-access-04-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/acd1c81ed6d6b4d145f3-computer-access-04-v.png"
+  },
+  "_typeset/computer-access/067864b5fbe1df3ba205-computer-access-03-h.png": {
+    "sha256": "067864b5fbe1df3ba205ccbef17e56fbf1ac61cb7845dd034b1bda18afb53527",
+    "bytes": 583645,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/067864b5fbe1df3ba205-computer-access-03-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/067864b5fbe1df3ba205-computer-access-03-h.png"
+  },
+  "_typeset/computer-access/07d151045939596e9047-computer-access-02-v.png": {
+    "sha256": "07d151045939596e904762e0e5254f91f7b1588ec18bad69c1400817bead103e",
+    "bytes": 780339,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/07d151045939596e9047-computer-access-02-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/07d151045939596e9047-computer-access-02-v.png"
+  },
+  "_typeset/computer-access/d69ca3bca2c7288c67ef-computer-access-01-v.png": {
+    "sha256": "d69ca3bca2c7288c67efde8711cf33ddca7515e90283dd811247d5f123619c78",
+    "bytes": 768344,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/d69ca3bca2c7288c67ef-computer-access-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/d69ca3bca2c7288c67ef-computer-access-01-v.png"
+  },
+  "_typeset/computer-access/a108e5f2ea77ce4affb5-computer-access-03-v.png": {
+    "sha256": "a108e5f2ea77ce4affb5df7adebada831abeef4261a142b2ad52c0ded1214b5e",
+    "bytes": 1210411,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/a108e5f2ea77ce4affb5-computer-access-03-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/a108e5f2ea77ce4affb5-computer-access-03-v.png"
+  },
+  "_typeset/computer-access/a80cea3dfd6a742eec38-computer-access-01-v2.png": {
+    "sha256": "a80cea3dfd6a742eec381d4b18e723e27ca855b5f9ade0e749b5ba3ce7320094",
+    "bytes": 212014,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/a80cea3dfd6a742eec38-computer-access-01-v2.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/a80cea3dfd6a742eec38-computer-access-01-v2.png"
+  },
+  "_typeset/computer-access/dfd224dc06a74477a209-computer-access-01-h.png": {
+    "sha256": "dfd224dc06a74477a209c2505473faf1d0df840f98849570937bb4b0f1aca592",
+    "bytes": 458852,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/dfd224dc06a74477a209-computer-access-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/dfd224dc06a74477a209-computer-access-01-h.png"
+  },
+  "_typeset/skill-personal-media/0ae1914d71b057d7078c-skill-personal-media-01-h.png": {
+    "sha256": "0ae1914d71b057d7078cb69e64ac4566d5d465d975fd028b9613c5805ec76c85",
+    "bytes": 368500,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-media/0ae1914d71b057d7078c-skill-personal-media-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-media/0ae1914d71b057d7078c-skill-personal-media-01-h.png"
+  },
+  "_typeset/openclaw/bf42f70f03454bacbab0-openclaw-01-v.png": {
+    "sha256": "bf42f70f03454bacbab0b6a231d3c4be76b2449049a5b97ed63cdeb89af5144f",
+    "bytes": 1555157,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/openclaw/bf42f70f03454bacbab0-openclaw-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/openclaw/bf42f70f03454bacbab0-openclaw-01-v.png"
+  },
+  "_typeset/codex-memory/127fe75c4e37d204d3b3-codex-memory-01-v.png": {
+    "sha256": "127fe75c4e37d204d3b3fdb233f972650c7858d5968126edeb4636c81c6c1fa8",
+    "bytes": 1690106,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-memory/127fe75c4e37d204d3b3-codex-memory-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-memory/127fe75c4e37d204d3b3-codex-memory-01-v.png"
+  },
+  "_typeset/codex-agent-model-benchmark/bce11b6e864369beb854-codex-agent-model-benchmark-01-h.png": {
+    "sha256": "bce11b6e864369beb854bf227769ee45d1ffdf82f1b07a0143018cfa337bf12a",
+    "bytes": 1207582,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-agent-model-benchmark/bce11b6e864369beb854-codex-agent-model-benchmark-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-agent-model-benchmark/bce11b6e864369beb854-codex-agent-model-benchmark-01-h.png"
+  },
+  "_typeset/ramdisk-guardian/200ca4a0384b0a0ca2db-ramdisk-guardian-01-h.png": {
+    "sha256": "200ca4a0384b0a0ca2db743e2da05ae1878588da4a2d88075ea07d661c273d9b",
+    "bytes": 1091746,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ramdisk-guardian/200ca4a0384b0a0ca2db-ramdisk-guardian-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ramdisk-guardian/200ca4a0384b0a0ca2db-ramdisk-guardian-01-h.png"
+  },
+  "_typeset/pcconfig/f63a662bf5cddf7a9071-pcconfig-01-v.png": {
+    "sha256": "f63a662bf5cddf7a9071740059b2953adb94890b7867010ea6733b1ca38b4f7f",
+    "bytes": 1682137,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pcconfig/f63a662bf5cddf7a9071-pcconfig-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pcconfig/f63a662bf5cddf7a9071-pcconfig-01-v.png"
+  },
+  "_typeset/skill-localocr/4677a5a5540bea8e2989-skill-localocr-01-v.png": {
+    "sha256": "4677a5a5540bea8e29894565c58478faf847f169fe7cd56aacdba11afae8d7ff",
+    "bytes": 1228597,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-localocr/4677a5a5540bea8e2989-skill-localocr-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-localocr/4677a5a5540bea8e2989-skill-localocr-01-v.png"
+  },
+  "_typeset/wechatdirect/096c164d173241eb2a6a-wechatdirect-01-h.png": {
+    "sha256": "096c164d173241eb2a6a3d9a3d80757e9d19aa5c884558c4f25cecc20cf0b78a",
+    "bytes": 1143167,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechatdirect/096c164d173241eb2a6a-wechatdirect-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechatdirect/096c164d173241eb2a6a-wechatdirect-01-h.png"
+  },
+  "_typeset/skill-personal-formal-documents/3a0e90c3e8cf42159812-skill-personal-formal-documents-01-h.png": {
+    "sha256": "3a0e90c3e8cf4215981276b73c6917e1044eed9a6e1ec43615ecd81b673e36c0",
+    "bytes": 1071361,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-formal-documents/3a0e90c3e8cf42159812-skill-personal-formal-documents-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-formal-documents/3a0e90c3e8cf42159812-skill-personal-formal-documents-01-h.png"
+  },
+  "_typeset/skill-browser-control-continuity/9de03247a9879ba64539-skill-browser-control-continuity-01-v.png": {
+    "sha256": "9de03247a9879ba645397ca91c1c1083947194231f2f1c34c284b2065c66899e",
+    "bytes": 902411,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-browser-control-continuity/9de03247a9879ba64539-skill-browser-control-continuity-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-browser-control-continuity/9de03247a9879ba64539-skill-browser-control-continuity-01-v.png"
+  },
+  "_typeset/skill-cloud-asset-channel/e8fc9c3aacea824def88-skill-cloud-asset-channel-01-h.png": {
+    "sha256": "e8fc9c3aacea824def88926215270fef94d337742a57775762fcdd022e48e3d7",
+    "bytes": 968474,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-cloud-asset-channel/e8fc9c3aacea824def88-skill-cloud-asset-channel-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-cloud-asset-channel/e8fc9c3aacea824def88-skill-cloud-asset-channel-01-h.png"
+  },
+  "_typeset/chinese-asr/ce9fbb06fac2049d05da-chinese-asr-01-v.png": {
+    "sha256": "ce9fbb06fac2049d05dafb130db41fd4c36426f714e0a63b7bfff274bf0523ae",
+    "bytes": 1429546,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/chinese-asr/ce9fbb06fac2049d05da-chinese-asr-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/chinese-asr/ce9fbb06fac2049d05da-chinese-asr-01-v.png"
+  },
+  "_typeset/personal-expression/cb7525505fefe99b6a3c-personal-expression-01-v.png": {
+    "sha256": "cb7525505fefe99b6a3cc0ef6e0ab366a90cb966f8ee9b959bba1a2f77e706d8",
+    "bytes": 1234364,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-expression/cb7525505fefe99b6a3c-personal-expression-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-expression/cb7525505fefe99b6a3c-personal-expression-01-v.png"
+  },
+  "_typeset/404/82e388da7ef4a181ba3c-404-01-v.png": {
+    "sha256": "82e388da7ef4a181ba3c11d639a8877e07c1be6ecf51c365ab39011fc48e341f",
+    "bytes": 1111344,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/404/82e388da7ef4a181ba3c-404-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/404/82e388da7ef4a181ba3c-404-01-v.png"
+  },
+  "_typeset/skill-vault-workflow/eb7b7fdd737910f26030-skill-vault-workflow-01-v.png": {
+    "sha256": "eb7b7fdd737910f2603044db15813111f1901fb70d062523c4e5ad7fd48ae398",
+    "bytes": 1169949,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-vault-workflow/eb7b7fdd737910f26030-skill-vault-workflow-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-vault-workflow/eb7b7fdd737910f26030-skill-vault-workflow-01-v.png"
+  },
+  "_typeset/skill-cloud-asset-channel/029f482dff66e4e6bcee-skill-cloud-asset-channel-01-v.png": {
+    "sha256": "029f482dff66e4e6bcee716f9d27bdb47bd078bad1af4a4f9cf3acde6798b75e",
+    "bytes": 1272947,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-cloud-asset-channel/029f482dff66e4e6bcee-skill-cloud-asset-channel-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-cloud-asset-channel/029f482dff66e4e6bcee-skill-cloud-asset-channel-01-v.png"
+  },
+  "_typeset/daily-preferences/40b35c5a7698afffa5e8-daily-preferences-01-h.png": {
+    "sha256": "40b35c5a7698afffa5e8d25e50f0b54561314c1e6e72573f4e660d47cf55de5b",
+    "bytes": 1322261,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/daily-preferences/40b35c5a7698afffa5e8-daily-preferences-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/daily-preferences/40b35c5a7698afffa5e8-daily-preferences-01-h.png"
+  },
+  "_typeset/typora-theme-pack/3002253c192a11f209ec-typora-theme-pack-01-v.png": {
+    "sha256": "3002253c192a11f209ec70c48ad4a4d56be8221ad52ea8f21e25622a7373b20f",
+    "bytes": 754088,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/typora-theme-pack/3002253c192a11f209ec-typora-theme-pack-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/typora-theme-pack/3002253c192a11f209ec-typora-theme-pack-01-v.png"
+  },
+  "_typeset/learning/9276cd50451f7d2a5e63-learning-01-v.png": {
+    "sha256": "9276cd50451f7d2a5e632e0b97754b058eddb609280fbd8f508694731e5bdc94",
+    "bytes": 1086384,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/learning/9276cd50451f7d2a5e63-learning-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/learning/9276cd50451f7d2a5e63-learning-01-v.png"
+  },
+  "_typeset/codex-memory/86ada0c2f2a3f34521ec-codex-memory-01-h.png": {
+    "sha256": "86ada0c2f2a3f34521eccec79d7b6980d4a7622902e963f9e0adafa309bcc448",
+    "bytes": 1050013,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-memory/86ada0c2f2a3f34521ec-codex-memory-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-memory/86ada0c2f2a3f34521ec-codex-memory-01-h.png"
+  },
+  "_typeset/skill-md-to-pdf/7c11e0e2c48a4706e4b5-skill-md-to-pdf-01-v.png": {
+    "sha256": "7c11e0e2c48a4706e4b536f3743de4d3901c0283b467f0b4412b741fbb18e91d",
+    "bytes": 878122,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-md-to-pdf/7c11e0e2c48a4706e4b5-skill-md-to-pdf-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-md-to-pdf/7c11e0e2c48a4706e4b5-skill-md-to-pdf-01-v.png"
+  },
+  "_typeset/personal-media/b6603a0bdc79a7d0e0c1-personal-media-01-h.png": {
+    "sha256": "b6603a0bdc79a7d0e0c132ebb2587a576092af91d38c7bbeecb8c2a44cda65b9",
+    "bytes": 471394,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-media/b6603a0bdc79a7d0e0c1-personal-media-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-media/b6603a0bdc79a7d0e0c1-personal-media-01-h.png"
+  },
+  "_typeset/steam-millennium-config-backup/734a8d244268a4553642-steam-millennium-config-backup-01-h.png": {
+    "sha256": "734a8d244268a45536424b4726ddb94dc6545049859c0974a877803d1f6587f5",
+    "bytes": 556783,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/steam-millennium-config-backup/734a8d244268a4553642-steam-millennium-config-backup-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/steam-millennium-config-backup/734a8d244268a4553642-steam-millennium-config-backup-01-h.png"
+  },
+  "_typeset/skill-personal-formal-documents/3ade2bd0ce348831743d-skill-personal-formal-documents-01-v.png": {
+    "sha256": "3ade2bd0ce348831743d8dbc316900a9393cc1dad71e5cce203be5fb4dac5292",
+    "bytes": 991153,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-formal-documents/3ade2bd0ce348831743d-skill-personal-formal-documents-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-formal-documents/3ade2bd0ce348831743d-skill-personal-formal-documents-01-v.png"
+  },
+  "_typeset/skill-personal-health/64630174150fad6d9a1b-skill-personal-health-01-v.png": {
+    "sha256": "64630174150fad6d9a1b9c9f7e9f02b9b34f8d560612a153e4a7fe484d7fec23",
+    "bytes": 1354490,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-health/64630174150fad6d9a1b-skill-personal-health-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-health/64630174150fad6d9a1b-skill-personal-health-01-v.png"
+  },
+  "assets/home-01-h-1920-e0eb3ea434d7.avif": {
+    "sha256": "e0eb3ea434d7b17b5574add40b269b683b55c41ba0831642a2b1536ade967fc8",
+    "bytes": 185176,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/assets/home-01-h-1920-e0eb3ea434d7.avif",
+    "source_path": "site-astro/sources/vendor-deps/assets/home-01-h-1920-e0eb3ea434d7.avif"
+  },
+  "_typeset/images/github-local-index-01-v-fix-748dd6c3291c4e49.webp": {
+    "sha256": "0849ccb4b186a47f324bca77e7ac7297f0e09f7563ca848d7b208aa983736a6c",
+    "bytes": 1197890,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/images/github-local-index-01-v-fix-748dd6c3291c4e49.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/images/github-local-index-01-v-fix-748dd6c3291c4e49.webp"
+  },
+  "_typeset/timeaudit/659ec0e0284facf40918-timeaudit-01-v.png": {
+    "sha256": "659ec0e0284facf40918068c49a7672d802ab73ee447778c16a7a838a540ee7e",
+    "bytes": 1504332,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/timeaudit/659ec0e0284facf40918-timeaudit-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/timeaudit/659ec0e0284facf40918-timeaudit-01-v.png"
+  },
+  "_typeset/mcp/6590f1c60c5cd0569eb2-mcp-01-h.png": {
+    "sha256": "6590f1c60c5cd0569eb24ffc8534d81e0b3573c8d06e0486e4386fb80b531fec",
+    "bytes": 708683,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/mcp/6590f1c60c5cd0569eb2-mcp-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/mcp/6590f1c60c5cd0569eb2-mcp-01-h.png"
+  },
+  "_typeset/emerald-veil/57221550d24b19df6051-emerald-veil-01-h.png": {
+    "sha256": "57221550d24b19df6051ab96ff97aa51a374350733a466b2ae53ba29b9c21663",
+    "bytes": 1153998,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/emerald-veil/57221550d24b19df6051-emerald-veil-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/emerald-veil/57221550d24b19df6051-emerald-veil-01-h.png"
+  },
+  "_typeset/skill-authorization-file-broker/6612cb39cab3f0924623-skill-authorization-file-broker-01-h.png": {
+    "sha256": "6612cb39cab3f0924623937942235b13d418ec1417ea5707fa419746fa7c20fe",
+    "bytes": 948778,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-authorization-file-broker/6612cb39cab3f0924623-skill-authorization-file-broker-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-authorization-file-broker/6612cb39cab3f0924623-skill-authorization-file-broker-01-h.png"
+  },
+  "_typeset/personal-formal-documents/72871fda7824b5301b91-personal-formal-documents-01-v.png": {
+    "sha256": "72871fda7824b5301b918908594f0f96f28e74e5bde32e4c3251a4a2a6764968",
+    "bytes": 1702223,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-formal-documents/72871fda7824b5301b91-personal-formal-documents-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-formal-documents/72871fda7824b5301b91-personal-formal-documents-01-v.png"
+  },
+  "_typeset/skill-daily-preferences/5bd160e23ff9dad5c77f-skill-daily-preferences-01-v.png": {
+    "sha256": "5bd160e23ff9dad5c77f0470db086fb5549415b0ec92c3d5aaa94f3334ae6e52",
+    "bytes": 1246543,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-daily-preferences/5bd160e23ff9dad5c77f-skill-daily-preferences-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-daily-preferences/5bd160e23ff9dad5c77f-skill-daily-preferences-01-v.png"
+  },
+  "_typeset/wechat-history-ai-bridge/c129eff46407eaf62dc0-wechat-history-ai-bridge-01-v.png": {
+    "sha256": "c129eff46407eaf62dc02500e5b4539f1549ef645c42d5d8bd53f6b5a0a23605",
+    "bytes": 1873087,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechat-history-ai-bridge/c129eff46407eaf62dc0-wechat-history-ai-bridge-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechat-history-ai-bridge/c129eff46407eaf62dc0-wechat-history-ai-bridge-01-v.png"
+  },
+  "_typeset/skill-work-delivery/c4455f64c52ed952ff0f-skill-work-delivery-01-h.png": {
+    "sha256": "c4455f64c52ed952ff0fe0891951fc879b1755c705cd680e0658d4c30445dd91",
+    "bytes": 833932,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-work-delivery/c4455f64c52ed952ff0f-skill-work-delivery-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-work-delivery/c4455f64c52ed952ff0f-skill-work-delivery-01-h.png"
+  },
+  "_typeset/daily-preferences/73462c4e6a314f9deb6a-daily-preferences-01-v.png": {
+    "sha256": "73462c4e6a314f9deb6a372dc355a354ada1a28a41058313bf4a1677263ed709",
+    "bytes": 1591988,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/daily-preferences/73462c4e6a314f9deb6a-daily-preferences-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/daily-preferences/73462c4e6a314f9deb6a-daily-preferences-01-v.png"
+  },
+  "_typeset/skill-project-entry-gate/1ad3ddea872cb01b328d-skill-project-entry-gate-01-v.png": {
+    "sha256": "1ad3ddea872cb01b328dee38d41d3a70c6d6a5dfa8bb6c4475f3169cab8b7741",
+    "bytes": 1444663,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-project-entry-gate/1ad3ddea872cb01b328d-skill-project-entry-gate-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-project-entry-gate/1ad3ddea872cb01b328d-skill-project-entry-gate-01-v.png"
+  },
+  "_typeset/skill-media-person-self/a5a6cbbef9307f4090d1-skill-media-person-self-01-h.png": {
+    "sha256": "a5a6cbbef9307f4090d11a450b39d710172b6074d14118f393212e411a4ce041",
+    "bytes": 760664,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-media-person-self/a5a6cbbef9307f4090d1-skill-media-person-self-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-media-person-self/a5a6cbbef9307f4090d1-skill-media-person-self-01-h.png"
+  },
+  "_typeset/skill-md-to-pdf/e856cca9681a2e26117d-skill-md-to-pdf-01-h.png": {
+    "sha256": "e856cca9681a2e26117d3a2e30a92f9683051223050cf4d9ad8c6e72d0ca006a",
+    "bytes": 547915,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-md-to-pdf/e856cca9681a2e26117d-skill-md-to-pdf-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-md-to-pdf/e856cca9681a2e26117d-skill-md-to-pdf-01-h.png"
+  },
+  "_typeset/skill-learning/883575876b718dad1fd2-skill-learning-01-h.png": {
+    "sha256": "883575876b718dad1fd26aa0e41c1a6d0ea0d565e0a2e61d771f9b19bf5268b8",
+    "bytes": 780935,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-learning/883575876b718dad1fd2-skill-learning-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-learning/883575876b718dad1fd2-skill-learning-01-h.png"
+  },
+  "_typeset/skill-mojibake-doctor/70b8c8dd2b08590819bb-skill-mojibake-doctor-01-h.png": {
+    "sha256": "70b8c8dd2b08590819bbed17b842280077a208edbe5518b91bb0dca76069faac",
+    "bytes": 566668,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-mojibake-doctor/70b8c8dd2b08590819bb-skill-mojibake-doctor-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-mojibake-doctor/70b8c8dd2b08590819bb-skill-mojibake-doctor-01-h.png"
+  },
+  "_typeset/skill-vault-workflow/56d4c31b14646072585f-skill-vault-workflow-01-h.png": {
+    "sha256": "56d4c31b14646072585feea290d4e59105c9220dd1c54f2bacb251037d9d96a3",
+    "bytes": 366020,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-vault-workflow/56d4c31b14646072585f-skill-vault-workflow-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-vault-workflow/56d4c31b14646072585f-skill-vault-workflow-01-h.png"
+  },
+  "_typeset/skill-reply-as-me/c267070168545e7a0528-skill-reply-as-me-01-v.png": {
+    "sha256": "c267070168545e7a0528fa4da6c7a526c98fb1dddee2f352252df4b1521936bb",
+    "bytes": 863467,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-reply-as-me/c267070168545e7a0528-skill-reply-as-me-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-reply-as-me/c267070168545e7a0528-skill-reply-as-me-01-v.png"
+  },
+  "_typeset/codex-agent-model-benchmark/b8394b317ba7035a0215-codex-agent-model-benchmark-01-v.png": {
+    "sha256": "b8394b317ba7035a0215bb7c41f238b64f681e9cb66439b8cd871ab58995ba3a",
+    "bytes": 2308786,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-agent-model-benchmark/b8394b317ba7035a0215-codex-agent-model-benchmark-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-agent-model-benchmark/b8394b317ba7035a0215-codex-agent-model-benchmark-01-v.png"
+  },
+  "_typeset/skill-file-intake-router/873aa3fa2948a8aef3c4-skill-file-intake-router-01-h.png": {
+    "sha256": "873aa3fa2948a8aef3c40c2928dee0ca2f474be97d2d91eb748aeb947892ca96",
+    "bytes": 1151435,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-file-intake-router/873aa3fa2948a8aef3c4-skill-file-intake-router-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-file-intake-router/873aa3fa2948a8aef3c4-skill-file-intake-router-01-h.png"
+  },
+  "_typeset/skill-personal-health/6c0e6fd852a2b77d9ac9-skill-personal-health-01-h.png": {
+    "sha256": "6c0e6fd852a2b77d9ac9e540c5bd2c5e9de4050d84b823321aee5b2260ac96eb",
+    "bytes": 508209,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-health/6c0e6fd852a2b77d9ac9-skill-personal-health-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-health/6c0e6fd852a2b77d9ac9-skill-personal-health-01-h.png"
+  },
+  "_typeset/skill-personal-materials/eac094d28715e287a629-skill-personal-materials-01-v.png": {
+    "sha256": "eac094d28715e287a629b7adc745dd12190bce842bac9a63203188e1fb556583",
+    "bytes": 953972,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-materials/eac094d28715e287a629-skill-personal-materials-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-materials/eac094d28715e287a629-skill-personal-materials-01-v.png"
+  },
+  "_typeset/vault-tool/460afb719aa0a6912344-vault-tool-01-h.png": {
+    "sha256": "460afb719aa0a6912344108501499055704f43ab563da0b56f783ca67c239197",
+    "bytes": 1250312,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/vault-tool/460afb719aa0a6912344-vault-tool-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/vault-tool/460afb719aa0a6912344-vault-tool-01-h.png"
+  },
+  "_typeset/localocr/45e1d9eefafe1d6d1369-localocr-01-h.png": {
+    "sha256": "45e1d9eefafe1d6d1369326cd5db9337cd99f10ae8c281b6290753c8896ce32e",
+    "bytes": 1226969,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/localocr/45e1d9eefafe1d6d1369-localocr-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/localocr/45e1d9eefafe1d6d1369-localocr-01-h.png"
+  },
+  "_typeset/pc-panel-hub/f93abf004fc8f7a87a85-pc-panel-hub-01-v.png": {
+    "sha256": "f93abf004fc8f7a87a85bbbbf654851fd7cfcc9471b80b25bad4874c87186dff",
+    "bytes": 1677239,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pc-panel-hub/f93abf004fc8f7a87a85-pc-panel-hub-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pc-panel-hub/f93abf004fc8f7a87a85-pc-panel-hub-01-v.png"
+  },
+  "_typeset/skill-mojibake-doctor/acd12a1c670b734753b1-skill-mojibake-doctor-01-v.png": {
+    "sha256": "acd12a1c670b734753b13524bbe75cc4584e3064fa6e1774398f13cb844a6fc3",
+    "bytes": 746987,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-mojibake-doctor/acd12a1c670b734753b1-skill-mojibake-doctor-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-mojibake-doctor/acd12a1c670b734753b1-skill-mojibake-doctor-01-v.png"
+  },
+  "_typeset/personal-media/413009c989b629516d08-personal-media-01-v.png": {
+    "sha256": "413009c989b629516d084267ce3ec4ff7a0ec5005861d5338bf36136f5c3edcf",
+    "bytes": 1228851,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-media/413009c989b629516d08-personal-media-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-media/413009c989b629516d08-personal-media-01-v.png"
+  },
+  "_typeset/skills-home/e372c25e8101e4f7d385-skills-home-01-v.png": {
+    "sha256": "e372c25e8101e4f7d38509ed4f1ff003ec04cd949887fe777b590476e7e2ac32",
+    "bytes": 1344707,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skills-home/e372c25e8101e4f7d385-skills-home-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skills-home/e372c25e8101e4f7d385-skills-home-01-v.png"
+  },
+  "_typeset/steam-millennium-config-backup/607e9fc517296e3b4c01-steam-millennium-config-backup-01-v.png": {
+    "sha256": "607e9fc517296e3b4c01019cb2be1f9d71bf63170d35943e7d27d95c019e70cd",
+    "bytes": 692759,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/steam-millennium-config-backup/607e9fc517296e3b4c01-steam-millennium-config-backup-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/steam-millennium-config-backup/607e9fc517296e3b4c01-steam-millennium-config-backup-01-v.png"
+  },
+  "_typeset/proxyclean/d318a946e82bed700503-proxyclean-01-h.png": {
+    "sha256": "d318a946e82bed700503649eea17f3fe34e05225737c18480f254c80f4615a53",
+    "bytes": 1280635,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/proxyclean/d318a946e82bed700503-proxyclean-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/proxyclean/d318a946e82bed700503-proxyclean-01-h.png"
+  },
+  "_typeset/password-center/26908dc996408c456c72-password-center-01-h.png": {
+    "sha256": "26908dc996408c456c72c6002854993c3c11e7b79e6a45b50e0be8dc2a701345",
+    "bytes": 1402865,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/password-center/26908dc996408c456c72-password-center-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/password-center/26908dc996408c456c72-password-center-01-h.png"
+  },
+  "_typeset/rescue/58326cda401a52db83d3-rescue-01-h.png": {
+    "sha256": "58326cda401a52db83d3a89c658d628a1ef767878ed792d3ee6f23af8701292d",
+    "bytes": 440386,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rescue/58326cda401a52db83d3-rescue-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rescue/58326cda401a52db83d3-rescue-01-h.png"
+  },
+  "_typeset/skill-daily-preferences/bab8ee414b93aeac04dc-skill-daily-preferences-01-h.png": {
+    "sha256": "bab8ee414b93aeac04dccb5f1c3bf67c9c5184452a3345881b2915e935fd22f5",
+    "bytes": 463198,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-daily-preferences/bab8ee414b93aeac04dc-skill-daily-preferences-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-daily-preferences/bab8ee414b93aeac04dc-skill-daily-preferences-01-h.png"
+  },
+  "_typeset/chinese-asr/b1f19a7c6feef394794a-chinese-asr-01-h.png": {
+    "sha256": "b1f19a7c6feef394794a8038c106f19dd00c2c780698d833f5ea4391bc08068e",
+    "bytes": 1047600,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/chinese-asr/b1f19a7c6feef394794a-chinese-asr-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/chinese-asr/b1f19a7c6feef394794a-chinese-asr-01-h.png"
+  },
+  "_typeset/personal-materials/af9c13d3bbd50235dd3f-personal-materials-01-h.png": {
+    "sha256": "af9c13d3bbd50235dd3fef7d7f382456dbb557235ea05976a853394e594b4bf6",
+    "bytes": 1051750,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-materials/af9c13d3bbd50235dd3f-personal-materials-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-materials/af9c13d3bbd50235dd3f-personal-materials-01-h.png"
+  },
+  "_typeset/skill-chinese-asr/1e1ec31e44d920a66c83-skill-chinese-asr-01-h.png": {
+    "sha256": "1e1ec31e44d920a66c837eb0a12382e97558a17fd53edc7164c71d58c12f77e8",
+    "bytes": 680776,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-chinese-asr/1e1ec31e44d920a66c83-skill-chinese-asr-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-chinese-asr/1e1ec31e44d920a66c83-skill-chinese-asr-01-h.png"
+  },
+  "_typeset/sunshine-remote-streaming/f377771d3c5d4cec2dcd-sunshine-remote-streaming-01-v.png": {
+    "sha256": "f377771d3c5d4cec2dcdc429f65de5b7f5c08bec08f97874fbe209992d68dd0b",
+    "bytes": 1193048,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/sunshine-remote-streaming/f377771d3c5d4cec2dcd-sunshine-remote-streaming-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/sunshine-remote-streaming/f377771d3c5d4cec2dcd-sunshine-remote-streaming-01-v.png"
+  },
+  "_typeset/meshclip-kit/bdb55da909d7357851a2-meshclip-kit-01-h.png": {
+    "sha256": "bdb55da909d7357851a26d3809a79150d45d247c036ef91c0e8d8166b8cf187c",
+    "bytes": 812818,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/meshclip-kit/bdb55da909d7357851a2-meshclip-kit-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/meshclip-kit/bdb55da909d7357851a2-meshclip-kit-01-h.png"
+  },
+  "_typeset/wechat-history-ai-bridge/58a10ade8caa7362aac9-wechat-history-ai-bridge-01-h.png": {
+    "sha256": "58a10ade8caa7362aac9e9ceeb1ef06e66cced917a68ffc24ffc2b6f58f58ab5",
+    "bytes": 1403497,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechat-history-ai-bridge/58a10ade8caa7362aac9-wechat-history-ai-bridge-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechat-history-ai-bridge/58a10ade8caa7362aac9-wechat-history-ai-bridge-01-h.png"
+  },
+  "_typeset/sunshine-remote-streaming/ac69a99c5dd0f51890c8-sunshine-remote-streaming-01-h.png": {
+    "sha256": "ac69a99c5dd0f51890c8fe03bce1d47f76a0f56ef6948489ecd9372c60d7a5e6",
+    "bytes": 668967,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/sunshine-remote-streaming/ac69a99c5dd0f51890c8-sunshine-remote-streaming-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/sunshine-remote-streaming/ac69a99c5dd0f51890c8-sunshine-remote-streaming-01-h.png"
+  },
+  "_typeset/wechatdirect/60a26511f8fe176e7ecb-wechatdirect-01-v.png": {
+    "sha256": "60a26511f8fe176e7ecbe9f5edd1f5d54e4f9bcdd8d12afc84a2a03c6fe8a36d",
+    "bytes": 1694828,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechatdirect/60a26511f8fe176e7ecb-wechatdirect-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechatdirect/60a26511f8fe176e7ecb-wechatdirect-01-v.png"
+  },
+  "_typeset/learning/dc1276f2ab565022183c-learning-01-h.png": {
+    "sha256": "dc1276f2ab565022183c0dfd6126a167dbcd76b3b0d9a1c85fd40a7c7f4432bb",
+    "bytes": 671735,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/learning/dc1276f2ab565022183c-learning-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/learning/dc1276f2ab565022183c-learning-01-h.png"
+  },
+  "_typeset/skill-local-secret-broker/92471d96dd36688c9764-skill-local-secret-broker-01-h.png": {
+    "sha256": "92471d96dd36688c97643cfa63d716f808378ed0452449c14719b669e4f641c8",
+    "bytes": 1174334,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-local-secret-broker/92471d96dd36688c9764-skill-local-secret-broker-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-local-secret-broker/92471d96dd36688c9764-skill-local-secret-broker-01-h.png"
+  },
+  "_typeset/ramdisk-guardian/d3f388f7d59d58011528-ramdisk-guardian-01-v.png": {
+    "sha256": "d3f388f7d59d580115281615602ac680bc1fd534f6bd302254bea5ad651bd43c",
+    "bytes": 1727592,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ramdisk-guardian/d3f388f7d59d58011528-ramdisk-guardian-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ramdisk-guardian/d3f388f7d59d58011528-ramdisk-guardian-01-v.png"
+  },
+  "_typeset/skill-project-entry-gate/2c8d28c56ec5f7c65358-skill-project-entry-gate-01-h.png": {
+    "sha256": "2c8d28c56ec5f7c653584e6ee19f275f9d7cf97570c6dd32caf024dd5a396c95",
+    "bytes": 752240,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-project-entry-gate/2c8d28c56ec5f7c65358-skill-project-entry-gate-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-project-entry-gate/2c8d28c56ec5f7c65358-skill-project-entry-gate-01-h.png"
+  },
+  "_typeset/skill-tailscale-safe-exposure/4475d3e9add7d36dc496-skill-tailscale-safe-exposure-01-h.png": {
+    "sha256": "4475d3e9add7d36dc49620261213d96a2c86ec1f3d66f369d66a4c911a951590",
+    "bytes": 800546,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-tailscale-safe-exposure/4475d3e9add7d36dc496-skill-tailscale-safe-exposure-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-tailscale-safe-exposure/4475d3e9add7d36dc496-skill-tailscale-safe-exposure-01-h.png"
+  },
+  "_typeset/404/00f364d2c3cb6ce51c90-404-01-h.png": {
+    "sha256": "00f364d2c3cb6ce51c9079245f65e0a8d69513e9be3c593027dfc7d3c3fe4fd3",
+    "bytes": 788412,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/404/00f364d2c3cb6ce51c90-404-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/404/00f364d2c3cb6ce51c90-404-01-h.png"
+  },
+  "_typeset/emerald-veil/3d73674abb5dc60deb98-emerald-veil-01-v.png": {
+    "sha256": "3d73674abb5dc60deb98fbe3068b3737fadf164678e3fdc73eceefde786761b0",
+    "bytes": 1694442,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/emerald-veil/3d73674abb5dc60deb98-emerald-veil-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/emerald-veil/3d73674abb5dc60deb98-emerald-veil-01-v.png"
+  },
+  "_typeset/skill-pdf-render-safe/9a6d16fde159640db432-skill-pdf-render-safe-01-v.png": {
+    "sha256": "9a6d16fde159640db4320c9069933a12f2f614d8a330d8db51c1b8627efee2ae",
+    "bytes": 913731,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-pdf-render-safe/9a6d16fde159640db432-skill-pdf-render-safe-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-pdf-render-safe/9a6d16fde159640db432-skill-pdf-render-safe-01-v.png"
+  },
+  "_typeset/skill-wechat-direct/3e8f8ebc77889ccf1893-skill-wechat-direct-01-v.png": {
+    "sha256": "3e8f8ebc77889ccf1893acfcd064c00d9445e325b40656bc6775839f8a73b06d",
+    "bytes": 1347297,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-wechat-direct/3e8f8ebc77889ccf1893-skill-wechat-direct-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-wechat-direct/3e8f8ebc77889ccf1893-skill-wechat-direct-01-v.png"
+  },
+  "_typeset/skill-media-person-self/daddbcf4f056a6032841-skill-media-person-self-01-v.png": {
+    "sha256": "daddbcf4f056a6032841673cae44a56c78f2a2bfae4852b8c02f46f1e761dad7",
+    "bytes": 883085,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-media-person-self/daddbcf4f056a6032841-skill-media-person-self-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-media-person-self/daddbcf4f056a6032841-skill-media-person-self-01-v.png"
+  },
+  "_typeset/skill-tailscale-safe-exposure/6e1a8a0eca3e590b09ff-skill-tailscale-safe-exposure-01-v.png": {
+    "sha256": "6e1a8a0eca3e590b09ff3a1316fd6a019aa5782c3bf8a15daa1329eedc702724",
+    "bytes": 1014852,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-tailscale-safe-exposure/6e1a8a0eca3e590b09ff-skill-tailscale-safe-exposure-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-tailscale-safe-exposure/6e1a8a0eca3e590b09ff-skill-tailscale-safe-exposure-01-v.png"
+  },
+  "_typeset/ai-cli-profile-manager/737b5eec1cc1822a8d61-ai-cli-profile-manager-01-h.png": {
+    "sha256": "737b5eec1cc1822a8d617bfe182d42bd5b6b749754224f06683a85f5236287e3",
+    "bytes": 1221317,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ai-cli-profile-manager/737b5eec1cc1822a8d61-ai-cli-profile-manager-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ai-cli-profile-manager/737b5eec1cc1822a8d61-ai-cli-profile-manager-01-h.png"
+  },
+  "_typeset/skill-authorization-file-broker/4990aaa9196d95a3616e-skill-authorization-file-broker-01-v.png": {
+    "sha256": "4990aaa9196d95a3616e4e3debf7dc8aba960b6a3d9df3d0ea2c1926a57f2578",
+    "bytes": 1287073,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-authorization-file-broker/4990aaa9196d95a3616e-skill-authorization-file-broker-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-authorization-file-broker/4990aaa9196d95a3616e-skill-authorization-file-broker-01-v.png"
+  },
+  "_typeset/personal-materials/3d5be57aac5e10180268-personal-materials-01-v.png": {
+    "sha256": "3d5be57aac5e101802684e91a6574c7b3e0574c144d34ec6934ff1785efbe724",
+    "bytes": 1357814,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-materials/3d5be57aac5e10180268-personal-materials-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-materials/3d5be57aac5e10180268-personal-materials-01-v.png"
+  },
+  "_typeset/rescue/3532a124c84eb70bc518-rescue-01-v.png": {
+    "sha256": "3532a124c84eb70bc5186e32fd608ee7930299b78aba7dda183be287aa939860",
+    "bytes": 606505,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rescue/3532a124c84eb70bc518-rescue-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rescue/3532a124c84eb70bc518-rescue-01-v.png"
+  },
+  "_typeset/skills-home/2103b5fde1ea77dfec63-skills-home-01-h.png": {
+    "sha256": "2103b5fde1ea77dfec63c4c0e6ed226eccf7d635e8f9c507b5890d3e1ca549ee",
+    "bytes": 1241474,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skills-home/2103b5fde1ea77dfec63-skills-home-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skills-home/2103b5fde1ea77dfec63-skills-home-01-h.png"
+  },
+  "_typeset/skill-local-secret-broker/5ce08638ce0ecd3fe27a-skill-local-secret-broker-01-v.png": {
+    "sha256": "5ce08638ce0ecd3fe27af901c55d81f570e1eb591a541726dd541a51436bcb9d",
+    "bytes": 1345973,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-local-secret-broker/5ce08638ce0ecd3fe27a-skill-local-secret-broker-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-local-secret-broker/5ce08638ce0ecd3fe27a-skill-local-secret-broker-01-v.png"
+  },
+  "assets/home-01-h-2880-9442e7824a16.avif": {
+    "sha256": "9442e7824a16e7bea9602d2686020cdd958e3b0fed6fa5a8d862111e1e19bf78",
+    "bytes": 293299,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/assets/home-01-h-2880-9442e7824a16.avif",
+    "source_path": "site-astro/sources/vendor-deps/assets/home-01-h-2880-9442e7824a16.avif"
+  },
+  "_typeset/openclaw/c124345c47496f2e5c88-openclaw-01-h.png": {
+    "sha256": "c124345c47496f2e5c88acecc60569d7fef946315fb26a8c845ca421921d13a1",
+    "bytes": 1209308,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/openclaw/c124345c47496f2e5c88-openclaw-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/openclaw/c124345c47496f2e5c88-openclaw-01-h.png"
+  },
+  "_typeset/work-delivery-copilot/3fbb04cb3f090937476d-work-delivery-copilot-01-v.png": {
+    "sha256": "3fbb04cb3f090937476d7a4fc7896a411334cd583af38fd48d27f2819a81acd5",
+    "bytes": 1024595,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/work-delivery-copilot/3fbb04cb3f090937476d-work-delivery-copilot-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/work-delivery-copilot/3fbb04cb3f090937476d-work-delivery-copilot-01-v.png"
+  },
+  "_typeset/personal-formal-documents/4aa3b67be40394c86da8-personal-formal-documents-01-h.png": {
+    "sha256": "4aa3b67be40394c86da86d318c6c824562fc5adfc92ddecf6a8b997166122ef4",
+    "bytes": 547009,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-formal-documents/4aa3b67be40394c86da8-personal-formal-documents-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-formal-documents/4aa3b67be40394c86da8-personal-formal-documents-01-h.png"
+  },
+  "_typeset/skill-localocr/f13475a2981c6d51f10f-skill-localocr-01-h.png": {
+    "sha256": "f13475a2981c6d51f10fac10c52c0ad6aa14c09917495f8090a01df4f2b44739",
+    "bytes": 778838,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-localocr/f13475a2981c6d51f10f-skill-localocr-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-localocr/f13475a2981c6d51f10f-skill-localocr-01-h.png"
+  },
+  "_typeset/skill-explain-to-me/fe72cad288bfc01eb48a-skill-explain-to-me-01-v.png": {
+    "sha256": "fe72cad288bfc01eb48a27c2d8ba6e80bc3830093df641a49b0c115954bcc5ab",
+    "bytes": 1246126,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-explain-to-me/fe72cad288bfc01eb48a-skill-explain-to-me-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-explain-to-me/fe72cad288bfc01eb48a-skill-explain-to-me-01-v.png"
+  },
+  "_typeset/meshclip-kit/45ad20bf1b4c2ea025de-meshclip-kit-01-v.png": {
+    "sha256": "45ad20bf1b4c2ea025de34c90145cdecaf379044d1b5ec5d48b54e0705d678be",
+    "bytes": 1219409,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/meshclip-kit/45ad20bf1b4c2ea025de-meshclip-kit-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/meshclip-kit/45ad20bf1b4c2ea025de-meshclip-kit-01-v.png"
+  },
+  "_typeset/images/github-local-index-01-h-fix-4aa57cb7e3d2c281.webp": {
+    "sha256": "c03e83282c250ded17f64ca32f3f3dfa4dfc8c8294c2eea42c26fb25827c2adb",
+    "bytes": 849020,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/images/github-local-index-01-h-fix-4aa57cb7e3d2c281.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/images/github-local-index-01-h-fix-4aa57cb7e3d2c281.webp"
+  },
+  "assets/home-01-v-1280-fae12132939e.avif": {
+    "sha256": "fae12132939ebbb287a31238e7d1fafa39ec21c302b307617d8204d13c352d80",
+    "bytes": 225482,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/assets/home-01-v-1280-fae12132939e.avif",
+    "source_path": "site-astro/sources/vendor-deps/assets/home-01-v-1280-fae12132939e.avif"
+  },
+  "_typeset/typora-theme-pack/f9024cc45323ab033a9c-typora-theme-pack-01-h.png": {
+    "sha256": "f9024cc45323ab033a9c26a757f0806a01986f0586f8d9ebb7c3ebcbea8d1731",
+    "bytes": 495644,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/typora-theme-pack/f9024cc45323ab033a9c-typora-theme-pack-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/typora-theme-pack/f9024cc45323ab033a9c-typora-theme-pack-01-h.png"
+  },
+  "_typeset/video-scaffold/10a585fa433670527840-video-scaffold-01-h.png": {
+    "sha256": "10a585fa433670527840b49f3981ead008e50370eec30a46c4adc029fbf153ca",
+    "bytes": 1385590,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/video-scaffold/10a585fa433670527840-video-scaffold-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/video-scaffold/10a585fa433670527840-video-scaffold-01-h.png"
+  },
+  "_typeset/ai-cli-profile-manager/379f308386f37cfc8fc4-ai-cli-profile-manager-01-v.png": {
+    "sha256": "379f308386f37cfc8fc456a9956d8debc3b739b99d407fca59e5728c288fede9",
+    "bytes": 1883323,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ai-cli-profile-manager/379f308386f37cfc8fc4-ai-cli-profile-manager-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ai-cli-profile-manager/379f308386f37cfc8fc4-ai-cli-profile-manager-01-v.png"
+  },
+  "_typeset/skill-reply-as-me/bc42c64e0c248b911c5a-skill-reply-as-me-01-h.png": {
+    "sha256": "bc42c64e0c248b911c5a0f08d920871ec38fa174620fc1fdd7fe0f55cff3b1ab",
+    "bytes": 699110,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-reply-as-me/bc42c64e0c248b911c5a-skill-reply-as-me-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-reply-as-me/bc42c64e0c248b911c5a-skill-reply-as-me-01-h.png"
+  },
+  "_typeset/codex-local-remote/fa295f0fce37497bc722-codex-local-remote-01-v.png": {
+    "sha256": "fa295f0fce37497bc7223bbaf7c5bf6c3eb278aec679fd38871fb2bd0523edf6",
+    "bytes": 1254002,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-local-remote/fa295f0fce37497bc722-codex-local-remote-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-local-remote/fa295f0fce37497bc722-codex-local-remote-01-v.png"
+  },
+  "_typeset/mcp/5ecc91b333ebeab02c61-mcp-01-v.png": {
+    "sha256": "5ecc91b333ebeab02c6122c3a5f3d90d7b84fca1570909fe91918eaa68d231b3",
+    "bytes": 1128652,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/mcp/5ecc91b333ebeab02c61-mcp-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/mcp/5ecc91b333ebeab02c61-mcp-01-v.png"
+  },
+  "_typeset/skill-personal-media/12a541e8a1d4fac5f9a6-skill-personal-media-01-v.png": {
+    "sha256": "12a541e8a1d4fac5f9a64ecac56015d0d883dcb8267f238e5841c6c021a6ae95",
+    "bytes": 1144250,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-media/12a541e8a1d4fac5f9a6-skill-personal-media-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-media/12a541e8a1d4fac5f9a6-skill-personal-media-01-v.png"
+  },
+  "_typeset/proxyclean/2fc1dec7d5cbd73f08ec-proxyclean-01-v.png": {
+    "sha256": "2fc1dec7d5cbd73f08ecd2bf5ea8a24bbde0c91f76f26f7f5918648f8d1bd1e6",
+    "bytes": 1706499,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/proxyclean/2fc1dec7d5cbd73f08ec-proxyclean-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/proxyclean/2fc1dec7d5cbd73f08ec-proxyclean-01-v.png"
+  },
+  "_typeset/timeaudit/8e1e537fc15a2d4a7357-timeaudit-01-h.png": {
+    "sha256": "8e1e537fc15a2d4a735787dc1329a831c06a6fa9a235212e6485e37e1d6b00b2",
+    "bytes": 1041045,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/timeaudit/8e1e537fc15a2d4a7357-timeaudit-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/timeaudit/8e1e537fc15a2d4a7357-timeaudit-01-h.png"
+  },
+  "_typeset/skill-chinese-asr/9aa45c41d1076ec0c6f7-skill-chinese-asr-01-v.png": {
+    "sha256": "9aa45c41d1076ec0c6f7155a67c4c247fe13faa6cbde318feb0b8548810f34a4",
+    "bytes": 1434721,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-chinese-asr/9aa45c41d1076ec0c6f7-skill-chinese-asr-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-chinese-asr/9aa45c41d1076ec0c6f7-skill-chinese-asr-01-v.png"
+  },
+  "_typeset/pc-panel-hub/a3ad79f4ee03c75a048f-pc-panel-hub-01-h.png": {
+    "sha256": "a3ad79f4ee03c75a048f76e28ab263d967576ccfadd31e8b1f5c76d22f222200",
+    "bytes": 1204767,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pc-panel-hub/a3ad79f4ee03c75a048f-pc-panel-hub-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pc-panel-hub/a3ad79f4ee03c75a048f-pc-panel-hub-01-h.png"
+  },
+  "_typeset/video-scaffold/d6f505e7823332f0ae19-video-scaffold-01-v.png": {
+    "sha256": "d6f505e7823332f0ae191638b146e7aae894a0724c21c70713d216e0d0640dff",
+    "bytes": 1728379,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/video-scaffold/d6f505e7823332f0ae19-video-scaffold-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/video-scaffold/d6f505e7823332f0ae19-video-scaffold-01-v.png"
+  },
+  "_typeset/password-center/52234f7a8c9c2fe3d7e4-password-center-01-v.png": {
+    "sha256": "52234f7a8c9c2fe3d7e44a8527c92d7dec1adfe563a8fbefb5e9684217db0956",
+    "bytes": 1758739,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/password-center/52234f7a8c9c2fe3d7e4-password-center-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/password-center/52234f7a8c9c2fe3d7e4-password-center-01-v.png"
+  },
+  "_typeset/skill-learning/0ba331377ba8fe323c18-skill-learning-01-v.png": {
+    "sha256": "0ba331377ba8fe323c18fd472c04486fce42407f6fd53dadd540ae45056d54d2",
+    "bytes": 892480,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-learning/0ba331377ba8fe323c18-skill-learning-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-learning/0ba331377ba8fe323c18-skill-learning-01-v.png"
+  },
+  "_typeset/localocr/40a3a2760aa0fe860e65-localocr-01-v.png": {
+    "sha256": "40a3a2760aa0fe860e653a975dba94bc76e20506bf7602b4a6ef4508a7f6a2d2",
+    "bytes": 1580096,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/localocr/40a3a2760aa0fe860e65-localocr-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/localocr/40a3a2760aa0fe860e65-localocr-01-v.png"
+  },
+  "_typeset/skill-timeaudit-diagnostics/a19ae5b1148028ee6813-skill-timeaudit-diagnostics-01-h.png": {
+    "sha256": "a19ae5b1148028ee68131c6e419b3e0b7973d707aa094b6a2c76940184f520ab",
+    "bytes": 470162,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-timeaudit-diagnostics/a19ae5b1148028ee6813-skill-timeaudit-diagnostics-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-timeaudit-diagnostics/a19ae5b1148028ee6813-skill-timeaudit-diagnostics-01-h.png"
+  },
+  "_typeset/skill-explain-to-me/fb4de7083bbd8c0af454-skill-explain-to-me-01-h.png": {
+    "sha256": "fb4de7083bbd8c0af454286d4b6ba1db03b867cd9b2e5f3ee0e0a87f2afb0c15",
+    "bytes": 1153683,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-explain-to-me/fb4de7083bbd8c0af454-skill-explain-to-me-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-explain-to-me/fb4de7083bbd8c0af454-skill-explain-to-me-01-h.png"
+  },
+  "_typeset/skill-personal-materials/9ade29ec54577e11a4af-skill-personal-materials-01-h.png": {
+    "sha256": "9ade29ec54577e11a4afd7207526573da5afb54b80bdc3ebe3932ba09786c622",
+    "bytes": 801108,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-materials/9ade29ec54577e11a4af-skill-personal-materials-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-materials/9ade29ec54577e11a4af-skill-personal-materials-01-h.png"
+  },
+  "_typeset/skill-timeaudit-diagnostics/33d7a273d78516076bf9-skill-timeaudit-diagnostics-01-v.png": {
+    "sha256": "33d7a273d78516076bf9ac226f3d83873a3d4f4736e4456cb3f99c9629c01b85",
+    "bytes": 704427,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-timeaudit-diagnostics/33d7a273d78516076bf9-skill-timeaudit-diagnostics-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-timeaudit-diagnostics/33d7a273d78516076bf9-skill-timeaudit-diagnostics-01-v.png"
+  },
+  "_typeset/skill-google-workspace-direct/0e300083297dc3083697-skill-google-workspace-direct-01-v.png": {
+    "sha256": "0e300083297dc3083697b08347e6641afefb2c3d2e254ed8b31fe89508ea70dd",
+    "bytes": 1079068,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-google-workspace-direct/0e300083297dc3083697-skill-google-workspace-direct-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-google-workspace-direct/0e300083297dc3083697-skill-google-workspace-direct-01-v.png"
+  },
+  "_typeset/skill-work-delivery/43582db1671b14513823-skill-work-delivery-01-v.png": {
+    "sha256": "43582db1671b1451382380583205852b4a6b1166997556c9bb4387329b166161",
+    "bytes": 1095337,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-work-delivery/43582db1671b14513823-skill-work-delivery-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-work-delivery/43582db1671b14513823-skill-work-delivery-01-v.png"
+  },
+  "_typeset/skill-file-intake-router/c8772a17399a4547ff0c-skill-file-intake-router-01-v.png": {
+    "sha256": "c8772a17399a4547ff0c2121e79902f4fa540679be53504907789bb6373e504a",
+    "bytes": 1350096,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-file-intake-router/c8772a17399a4547ff0c-skill-file-intake-router-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-file-intake-router/c8772a17399a4547ff0c-skill-file-intake-router-01-v.png"
+  },
+  "_typeset/pcconfig/580c7a4b2562db3ade37-pcconfig-01-h.png": {
+    "sha256": "580c7a4b2562db3ade37477c383089aa5f9409438dc6e3c1cec062ae91af32be",
+    "bytes": 1175294,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pcconfig/580c7a4b2562db3ade37-pcconfig-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pcconfig/580c7a4b2562db3ade37-pcconfig-01-h.png"
+  },
+  "_typeset/personal-expression/255b7a375202ac71b713-personal-expression-01-h.png": {
+    "sha256": "255b7a375202ac71b7138150a95b9d57892f541dfff72b1df19149a66eab718c",
+    "bytes": 816965,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-expression/255b7a375202ac71b713-personal-expression-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-expression/255b7a375202ac71b713-personal-expression-01-h.png"
+  },
+  "_typeset/codex-local-remote/8de47463cad17819fa68-codex-local-remote-01-h.png": {
+    "sha256": "8de47463cad17819fa685e53900f50e21b12067f83c00c0a00575ee8b93b2b55",
+    "bytes": 886048,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-local-remote/8de47463cad17819fa68-codex-local-remote-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-local-remote/8de47463cad17819fa68-codex-local-remote-01-h.png"
+  },
+  "_typeset/skill-browser-control-continuity/3b20993017512e67289f-skill-browser-control-continuity-01-h.png": {
+    "sha256": "3b20993017512e67289fcd459256018dc9a92a2efc9c1e95d910f20f2faa9188",
+    "bytes": 772664,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-browser-control-continuity/3b20993017512e67289f-skill-browser-control-continuity-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-browser-control-continuity/3b20993017512e67289f-skill-browser-control-continuity-01-h.png"
+  },
+  "_typeset/vault-tool/857e0647f143de21b9a5-vault-tool-01-v.png": {
+    "sha256": "857e0647f143de21b9a5159cb3c0ad099f76a08f4c6d55114ff7d4526c023032",
+    "bytes": 1622816,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/vault-tool/857e0647f143de21b9a5-vault-tool-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/vault-tool/857e0647f143de21b9a5-vault-tool-01-v.png"
+  },
+  "_typeset/skill-wechat-direct/53738defa54c98ff5f27-skill-wechat-direct-01-h.png": {
+    "sha256": "53738defa54c98ff5f27fbc7f16c7179b787684967788ebeb7dd0e72b53d7cf8",
+    "bytes": 460078,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-wechat-direct/53738defa54c98ff5f27-skill-wechat-direct-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-wechat-direct/53738defa54c98ff5f27-skill-wechat-direct-01-h.png"
+  },
+  "_typeset/skill-google-workspace-direct/a6fc4c8871ca8677f5a2-skill-google-workspace-direct-01-h.png": {
+    "sha256": "a6fc4c8871ca8677f5a2bfa5371e3632775a587ee0c8494630341e88b51cdeea",
+    "bytes": 778230,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-google-workspace-direct/a6fc4c8871ca8677f5a2-skill-google-workspace-direct-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-google-workspace-direct/a6fc4c8871ca8677f5a2-skill-google-workspace-direct-01-h.png"
+  },
+  "_typeset/work-delivery-copilot/b46d5f2c94c31b1ab223-work-delivery-copilot-01-h.png": {
+    "sha256": "b46d5f2c94c31b1ab223ef428a7e1c3ca09b290d6733504792da2935fc9d9258",
+    "bytes": 823923,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/work-delivery-copilot/b46d5f2c94c31b1ab223-work-delivery-copilot-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/work-delivery-copilot/b46d5f2c94c31b1ab223-work-delivery-copilot-01-h.png"
+  },
+  "_typeset/skill-pdf-render-safe/5bf204edcb18e7ddbf4a-skill-pdf-render-safe-01-h.png": {
+    "sha256": "5bf204edcb18e7ddbf4a3b4787d0cc642d89ef11e5451c8cfaa2e99b1c72392f",
+    "bytes": 824908,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-pdf-render-safe/5bf204edcb18e7ddbf4a-skill-pdf-render-safe-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-pdf-render-safe/5bf204edcb18e7ddbf4a-skill-pdf-render-safe-01-h.png"
+  },
+  "_typeset/devconfig-backup/a583c3d24dcec80a0ea6-devconfig-backup-01-v.png": {
+    "sha256": "a583c3d24dcec80a0ea64f4b4dfddbed0bd5e9a8e83d66226ff763c947392645",
+    "bytes": 1407928,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/devconfig-backup/a583c3d24dcec80a0ea6-devconfig-backup-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/devconfig-backup/a583c3d24dcec80a0ea6-devconfig-backup-01-v.png"
+  },
+  "_typeset/devconfig-backup/a5d99398441ac4fbea9b-devconfig-backup-01-h.png": {
+    "sha256": "a5d99398441ac4fbea9bbd23243b036347b30c4f358392880b31e87fd84f2b96",
+    "bytes": 962486,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/devconfig-backup/a5d99398441ac4fbea9b-devconfig-backup-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/devconfig-backup/a5d99398441ac4fbea9b-devconfig-backup-01-h.png"
+  },
+  "_living/wly0829-cn/bird-source.1602469644a4/config.json": {
+    "sha256": "1602469644a46c8aa3235f3d56d736f0f774a5a16c80be363a591d01cfd7e949",
+    "bytes": 1218,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261008-update-e-final-v10/_living/wly0829-cn/bird-source.1602469644a4/config.json",
+    "source_path": "site-astro/sources/vendor-deps/_living/wly0829-cn/bird-source.1602469644a4/config.json"
+  },
+  "_typeset/rule-codex-adapter/031d92685500f8caa0d7-rule-codex-adapter-01-h.png": {
+    "sha256": "031d92685500f8caa0d71a98cfe5772788e17510cf9b883e092526c625b445e2",
+    "bytes": 745192,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-codex-adapter/031d92685500f8caa0d7-rule-codex-adapter-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-codex-adapter/031d92685500f8caa0d7-rule-codex-adapter-01-h.png"
+  },
+  "_typeset/github-local-index/f26020a4aacc0ece40ab-github-local-index-01-h.png": {
+    "sha256": "f26020a4aacc0ece40ab830d52b590ca87bbd3b1d98717a727964c7124d34a4c",
+    "bytes": 1167440,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/github-local-index/f26020a4aacc0ece40ab-github-local-index-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/github-local-index/f26020a4aacc0ece40ab-github-local-index-01-h.png"
+  },
+  "_typeset/projects-home/ca2dd96c8dbdd9663b2f-projects-home-01-h.png": {
+    "sha256": "ca2dd96c8dbdd9663b2fa8afd491475301059e5204e23183e9f1edb5831dac27",
+    "bytes": 704329,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/projects-home/ca2dd96c8dbdd9663b2f-projects-home-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/projects-home/ca2dd96c8dbdd9663b2f-projects-home-01-h.png"
+  },
+  "_typeset/rule-codex-adapter/235cea457435705f3066-rule-codex-adapter-01-v.png": {
+    "sha256": "235cea457435705f3066e89cbc2b8d9f07bcf451a97e29fad72c86a72b7dc3f8",
+    "bytes": 1665648,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-codex-adapter/235cea457435705f3066-rule-codex-adapter-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-codex-adapter/235cea457435705f3066-rule-codex-adapter-01-v.png"
+  },
+  "_typeset/rule-authorization/e652747f6c7141ab6a78-rule-authorization-01-v.png": {
+    "sha256": "e652747f6c7141ab6a78894886013f3ce008c3dda4376028d53f529e7387eb11",
+    "bytes": 1364455,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-authorization/e652747f6c7141ab6a78-rule-authorization-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-authorization/e652747f6c7141ab6a78-rule-authorization-01-v.png"
+  },
+  "_typeset/rule-engineering-delivery/246e30e88a24e6089ae4-rule-engineering-delivery-01-h.png": {
+    "sha256": "246e30e88a24e6089ae4dea929818d04c7eea9d12c59e26999c72d17b6d53675",
+    "bytes": 1167775,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/246e30e88a24e6089ae4-rule-engineering-delivery-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/246e30e88a24e6089ae4-rule-engineering-delivery-01-h.png"
+  },
+  "_typeset/personal-health/a26465329e34ad7528ca-personal-health-01-v.png": {
+    "sha256": "a26465329e34ad7528cab9ed4da59fb750289b14314e8430989b486e39028be9",
+    "bytes": 1258018,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-health/a26465329e34ad7528ca-personal-health-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-health/a26465329e34ad7528ca-personal-health-01-v.png"
+  },
+  "_typeset/rule-rule-release/a35a53299877818b7a2a-rule-rule-release-01-v.png": {
+    "sha256": "a35a53299877818b7a2a1783e2b8bb36634c8b4a3265b9f4f5037e6211d587cd",
+    "bytes": 1478032,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-rule-release/a35a53299877818b7a2a-rule-rule-release-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-rule-release/a35a53299877818b7a2a-rule-rule-release-01-v.png"
+  },
+  "_typeset/agents/95a89da260b435db1352-agents-01-v.png": {
+    "sha256": "95a89da260b435db1352cde803a20fc08bd4c6c967bbf5d195203b7b78c72c1b",
+    "bytes": 1731053,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/agents/95a89da260b435db1352-agents-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/agents/95a89da260b435db1352-agents-01-v.png"
+  },
+  "_typeset/rule-capabilities-runtime/f16dfaf34c0fd1a437a4-rule-capabilities-runtime-01-h.png": {
+    "sha256": "f16dfaf34c0fd1a437a40d38fb6174ba873d140c99ee8a2c38cacd5f94efebdb",
+    "bytes": 2262262,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-capabilities-runtime/f16dfaf34c0fd1a437a4-rule-capabilities-runtime-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-capabilities-runtime/f16dfaf34c0fd1a437a4-rule-capabilities-runtime-01-h.png"
+  },
+  "_typeset/rule-execution-coordination/f9dcab6009e52d33354d-rule-execution-coordination-01-v.png": {
+    "sha256": "f9dcab6009e52d33354de80a18e486826e6622d2133b3fe6b3520e2193224465",
+    "bytes": 1676443,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-execution-coordination/f9dcab6009e52d33354d-rule-execution-coordination-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-execution-coordination/f9dcab6009e52d33354d-rule-execution-coordination-01-v.png"
+  },
+  "_typeset/how-this-site/6180d8c5e258aec304da-how-this-site-01-h.png": {
+    "sha256": "6180d8c5e258aec304da0fa5dc30bf0c33b990224bb97415c24c07c73dcf87ac",
+    "bytes": 593653,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how-this-site/6180d8c5e258aec304da-how-this-site-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how-this-site/6180d8c5e258aec304da-how-this-site-01-h.png"
+  },
+  "_typeset/agents/c8e3451afa887ed5ef5f-agents-01-h.png": {
+    "sha256": "c8e3451afa887ed5ef5f36293a7121a5bad76e739fe82f8699b5409695635aea",
+    "bytes": 1110715,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/agents/c8e3451afa887ed5ef5f-agents-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/agents/c8e3451afa887ed5ef5f-agents-01-h.png"
+  },
+  "_typeset/rule-claude-adapter/0da140a7ae83b22729df-rule-claude-adapter-01-v.png": {
+    "sha256": "0da140a7ae83b22729dfac6c1dd7aea3ea8564ee748220bbaf54ca134443358b",
+    "bytes": 1475681,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-claude-adapter/0da140a7ae83b22729df-rule-claude-adapter-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-claude-adapter/0da140a7ae83b22729df-rule-claude-adapter-01-v.png"
+  },
+  "_typeset/rule-claude-adapter/5853b118d46143b33eb5-rule-claude-adapter-01-h.png": {
+    "sha256": "5853b118d46143b33eb5d487cec73975957bfed3ef65631d4fe4ad4469ce8b4d",
+    "bytes": 1141184,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-claude-adapter/5853b118d46143b33eb5-rule-claude-adapter-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-claude-adapter/5853b118d46143b33eb5-rule-claude-adapter-01-h.png"
+  },
+  "_typeset/how/e4858cf02d7d11f3691c-how-01-h.png": {
+    "sha256": "e4858cf02d7d11f3691c0e8b4f0c2855aeb1d8608949fe78b5ca2ca6cb04660a",
+    "bytes": 1044143,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how/e4858cf02d7d11f3691c-how-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how/e4858cf02d7d11f3691c-how-01-h.png"
+  },
+  "_typeset/skill-report-page/e9098e19017ab8ad70df-skill-report-page-01-h.png": {
+    "sha256": "e9098e19017ab8ad70df318b1af966ccc609d072397aeebcdea7d49b4d173b91",
+    "bytes": 980330,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-report-page/e9098e19017ab8ad70df-skill-report-page-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-report-page/e9098e19017ab8ad70df-skill-report-page-01-h.png"
+  },
+  "_typeset/rule-protected-actions/ccf0bc8092529bc14c8f-rule-protected-actions-01-v.png": {
+    "sha256": "ccf0bc8092529bc14c8fb414e319b7fffcb03e2461c8aa608b02b65f4670fdec",
+    "bytes": 1507608,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-protected-actions/ccf0bc8092529bc14c8f-rule-protected-actions-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-protected-actions/ccf0bc8092529bc14c8f-rule-protected-actions-01-v.png"
+  },
+  "_typeset/charter/067e87174fdae8004582-charter-01-v.png": {
+    "sha256": "067e87174fdae80045821c9b6c91702eea45104ba0e4db40d633bb06dec40aa8",
+    "bytes": 1293961,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/charter/067e87174fdae8004582-charter-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/charter/067e87174fdae8004582-charter-01-v.png"
+  },
+  "_typeset/charter/ace1f82e3304ba1faf83-charter-01-h.png": {
+    "sha256": "ace1f82e3304ba1faf83ca76a1ff5dcf886d763d93b5b12967179294c93d1343",
+    "bytes": 941842,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/charter/ace1f82e3304ba1faf83-charter-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/charter/ace1f82e3304ba1faf83-charter-01-h.png"
+  },
+  "_typeset/rule-execution-coordination/7fc919534b898608efae-rule-execution-coordination-01-h.png": {
+    "sha256": "7fc919534b898608efae2370588b05604a99e94da92eb1e3c7a45e0623b39e2d",
+    "bytes": 1054389,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-execution-coordination/7fc919534b898608efae-rule-execution-coordination-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-execution-coordination/7fc919534b898608efae-rule-execution-coordination-01-h.png"
+  },
+  "_typeset/rule-capabilities-runtime/e8efb1d8509ebaca684b-rule-capabilities-runtime-01-v.png": {
+    "sha256": "e8efb1d8509ebaca684be8acfd878af2b9a082d0cadb84f9ac6800ae46881308",
+    "bytes": 2258043,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-capabilities-runtime/e8efb1d8509ebaca684b-rule-capabilities-runtime-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-capabilities-runtime/e8efb1d8509ebaca684b-rule-capabilities-runtime-01-v.png"
+  },
+  "_typeset/rule-context-sources/79b1d50315d54bdccf06-rule-context-sources-01-v.png": {
+    "sha256": "79b1d50315d54bdccf06d0b66fdc47d171a87c299d957d82a9fc1680e3e28b67",
+    "bytes": 1802960,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-context-sources/79b1d50315d54bdccf06-rule-context-sources-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-context-sources/79b1d50315d54bdccf06-rule-context-sources-01-v.png"
+  },
+  "_typeset/remote-control/831390990db11d6e7c8e-remote-control-01-h.png": {
+    "sha256": "831390990db11d6e7c8effce07150280c897ab416bd963d4a0e313395cc59b15",
+    "bytes": 759680,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/remote-control/831390990db11d6e7c8e-remote-control-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/remote-control/831390990db11d6e7c8e-remote-control-01-h.png"
+  },
+  "_typeset/github-local-index/b7a9485930033a17a898-github-local-index-01-v.png": {
+    "sha256": "b7a9485930033a17a898c2806ba4937ecc6c6b6d2d5a2f579aa96719eb5462c6",
+    "bytes": 1653814,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/github-local-index/b7a9485930033a17a898-github-local-index-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/github-local-index/b7a9485930033a17a898-github-local-index-01-v.png"
+  },
+  "_typeset/how/83e7509e929cee430643-how-01-v.png": {
+    "sha256": "83e7509e929cee43064300d04c0373a5a342a5a292e9655e761405bd8a06a663",
+    "bytes": 1517593,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how/83e7509e929cee430643-how-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how/83e7509e929cee430643-how-01-v.png"
+  },
+  "_typeset/personal-health/eb2dcef0a2b13f4da5b1-personal-health-01-h.png": {
+    "sha256": "eb2dcef0a2b13f4da5b1b6e09e587c5b45ae1537a04c90340469707e09b04b30",
+    "bytes": 495729,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-health/eb2dcef0a2b13f4da5b1-personal-health-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-health/eb2dcef0a2b13f4da5b1-personal-health-01-h.png"
+  },
+  "_typeset/rule-engineering-delivery/b78a8d7ecdd30d8f4f7d-rule-engineering-delivery-01-v.png": {
+    "sha256": "b78a8d7ecdd30d8f4f7d6021f38d5df662e6a1db1e860d76ae420b4cb081a49b",
+    "bytes": 1603330,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/b78a8d7ecdd30d8f4f7d-rule-engineering-delivery-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/b78a8d7ecdd30d8f4f7d-rule-engineering-delivery-01-v.png"
+  },
+  "_typeset/rule-authorization/f65783d8664d84f7d084-rule-authorization-01-h.png": {
+    "sha256": "f65783d8664d84f7d0849bf634a2300fd69229aecf5007224b9a34d63895ecf9",
+    "bytes": 911579,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-authorization/f65783d8664d84f7d084-rule-authorization-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-authorization/f65783d8664d84f7d084-rule-authorization-01-h.png"
+  },
+  "_typeset/how-this-site/3ca22b54ff693140f0af-how-this-site-01-v.png": {
+    "sha256": "3ca22b54ff693140f0af2839f1e4423209e5e5504a1ccfa7aaef197276eb9fe1",
+    "bytes": 1095963,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how-this-site/3ca22b54ff693140f0af-how-this-site-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how-this-site/3ca22b54ff693140f0af-how-this-site-01-v.png"
+  },
+  "_typeset/rules-home/75eb02dd2991748e388d-rules-home-01-v.png": {
+    "sha256": "75eb02dd2991748e388d029063ed0fa5e15179233629539fc299a22626c9cb37",
+    "bytes": 969021,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rules-home/75eb02dd2991748e388d-rules-home-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rules-home/75eb02dd2991748e388d-rules-home-01-v.png"
+  },
+  "_typeset/rule-protected-actions/bdaea97dcd7eb6b6b266-rule-protected-actions-01-h.png": {
+    "sha256": "bdaea97dcd7eb6b6b266e63d88fc97b5bb31218708d66aaf524fece428153344",
+    "bytes": 1061822,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-protected-actions/bdaea97dcd7eb6b6b266-rule-protected-actions-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-protected-actions/bdaea97dcd7eb6b6b266-rule-protected-actions-01-h.png"
+  },
+  "_typeset/rule-context-sources/e831f19e75140cf93022-rule-context-sources-01-h.png": {
+    "sha256": "e831f19e75140cf93022f231df2c6e028ef0f6395b21d39fbc46933e1382e412",
+    "bytes": 3436902,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-context-sources/e831f19e75140cf93022-rule-context-sources-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-context-sources/e831f19e75140cf93022-rule-context-sources-01-h.png"
+  },
+  "_typeset/rule-privacy-data/a24d6f45561757555b66-rule-privacy-data-01-v.png": {
+    "sha256": "a24d6f45561757555b66e9e97b2c6258a1515655d5fe1dc6eb846af10abd38ed",
+    "bytes": 1675258,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-privacy-data/a24d6f45561757555b66-rule-privacy-data-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-privacy-data/a24d6f45561757555b66-rule-privacy-data-01-v.png"
+  },
+  "_typeset/rule-privacy-data/33aff9ec5d530d18be50-rule-privacy-data-01-h.png": {
+    "sha256": "33aff9ec5d530d18be502dee9b0b7dc3686a1be3ad8f5a594ff19be25cad3092",
+    "bytes": 2734053,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-privacy-data/33aff9ec5d530d18be50-rule-privacy-data-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-privacy-data/33aff9ec5d530d18be50-rule-privacy-data-01-h.png"
+  },
+  "_typeset/skill-control-plane-doctor/2ea132449f446e7bc776-skill-control-plane-doctor-01-h.png": {
+    "sha256": "2ea132449f446e7bc776ef65f1bff5c74b63e4df3e7581c4c4e0e8284e06cf09",
+    "bytes": 1000597,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-control-plane-doctor/2ea132449f446e7bc776-skill-control-plane-doctor-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-control-plane-doctor/2ea132449f446e7bc776-skill-control-plane-doctor-01-h.png"
+  },
+  "_typeset/skills-home/4f0f7fe600fbb344db88-skills-home-01-h.png": {
+    "sha256": "4f0f7fe600fbb344db883eaae66490fef7177f291be1d8fc991f74eaa17ba02a",
+    "bytes": 1390241,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skills-home/4f0f7fe600fbb344db88-skills-home-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skills-home/4f0f7fe600fbb344db88-skills-home-01-h.png"
+  },
+  "_typeset/remote-control/472c0f4964d7d2859c76-remote-control-01-v.png": {
+    "sha256": "472c0f4964d7d2859c7672e23ef90e5ef65f33aebe4283581307c734d2ba3422",
+    "bytes": 1151502,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/remote-control/472c0f4964d7d2859c76-remote-control-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/remote-control/472c0f4964d7d2859c76-remote-control-01-v.png"
+  },
+  "_typeset/skill-control-plane-doctor/93ff1ee547c02ca4aa6c-skill-control-plane-doctor-01-v.png": {
+    "sha256": "93ff1ee547c02ca4aa6c532803881fda999c63220b25db470395e32d33f6c550",
+    "bytes": 1017269,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-control-plane-doctor/93ff1ee547c02ca4aa6c-skill-control-plane-doctor-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-control-plane-doctor/93ff1ee547c02ca4aa6c-skill-control-plane-doctor-01-v.png"
+  },
+  "_typeset/rules-home/30b92f85447cb242f013-rules-home-01-h.png": {
+    "sha256": "30b92f85447cb242f0139a36eac910e18c28116036a8b2b75eb8d10eb60e095e",
+    "bytes": 494287,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rules-home/30b92f85447cb242f013-rules-home-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rules-home/30b92f85447cb242f013-rules-home-01-h.png"
+  },
+  "_typeset/rule-rule-release/4359d09277e9bea757f3-rule-rule-release-01-h.png": {
+    "sha256": "4359d09277e9bea757f394f27450bc2d7edfc416f15f36c867c6bb01284a28d6",
+    "bytes": 2718116,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-rule-release/4359d09277e9bea757f3-rule-rule-release-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-rule-release/4359d09277e9bea757f3-rule-rule-release-01-h.png"
+  },
+  "_typeset/skill-report-page/45955181549dadf05498-skill-report-page-01-v.png": {
+    "sha256": "45955181549dadf05498469817b5813c77e1ed45b1b7d47971cb59a8ad2ae662",
+    "bytes": 1463810,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-report-page/45955181549dadf05498-skill-report-page-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-report-page/45955181549dadf05498-skill-report-page-01-v.png"
+  },
+  "_typeset/projects-home/424c9e4d54645783cfed-projects-home-01-v.png": {
+    "sha256": "424c9e4d54645783cfed335e652df5acb9a1f17b9225a66f9e9a8f3f3dbf96f0",
+    "bytes": 783433,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/projects-home/424c9e4d54645783cfed-projects-home-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/projects-home/424c9e4d54645783cfed-projects-home-01-v.png"
+  },
+  "_typeset/skills-home/d05368bae4fe64327388-skills-home-01-h.webp": {
+    "sha256": "d05368bae4fe6432738837aa3efd9933a2f0a24ce7587d043e6104ad02e155dd",
+    "bytes": 818180,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skills-home/d05368bae4fe64327388-skills-home-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skills-home/d05368bae4fe64327388-skills-home-01-h.webp"
+  },
+  "_typeset/skill-personal-health/1178ae1be84284398a6a-skill-personal-health-01-h.webp": {
+    "sha256": "1178ae1be84284398a6aeaf412babf159a27afda5afdc01acdc875be8c56386b",
+    "bytes": 357838,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-health/1178ae1be84284398a6a-skill-personal-health-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-health/1178ae1be84284398a6a-skill-personal-health-01-h.webp"
+  },
+  "_typeset/skill-daily-preferences/ff2a2f39085eb92e6045-skill-daily-preferences-01-v.webp": {
+    "sha256": "ff2a2f39085eb92e604571ff16117569c656755ce4b5d45de2c9a812919772a0",
+    "bytes": 868840,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-daily-preferences/ff2a2f39085eb92e6045-skill-daily-preferences-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-daily-preferences/ff2a2f39085eb92e6045-skill-daily-preferences-01-v.webp"
+  },
+  "_typeset/skill-personal-media/1c6792e17745cc0f2639-skill-personal-media-01-v.webp": {
+    "sha256": "1c6792e17745cc0f2639d35ebc1f956c6b615b1a2506204c48275fd47bc97ae2",
+    "bytes": 802770,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-media/1c6792e17745cc0f2639-skill-personal-media-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-media/1c6792e17745cc0f2639-skill-personal-media-01-v.webp"
+  },
+  "_typeset/sunshine-remote-streaming/1b4b6844921d4327b3fa-sunshine-remote-streaming-01-v.webp": {
+    "sha256": "1b4b6844921d4327b3faf48fa570e02113c75fa954bb8658dc2cfa9b01dd79dd",
+    "bytes": 784198,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/sunshine-remote-streaming/1b4b6844921d4327b3fa-sunshine-remote-streaming-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/sunshine-remote-streaming/1b4b6844921d4327b3fa-sunshine-remote-streaming-01-v.webp"
+  },
+  "_typeset/devconfig-backup/4001304c057d0e634820-devconfig-backup-01-v.webp": {
+    "sha256": "4001304c057d0e634820625bad50e81e2ea1ff0e6163fae7cb949c2d543e36a3",
+    "bytes": 1001778,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/devconfig-backup/4001304c057d0e634820-devconfig-backup-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/devconfig-backup/4001304c057d0e634820-devconfig-backup-01-v.webp"
+  },
+  "_typeset/learning/8e5401cb3064d44a2339-learning-01-v.webp": {
+    "sha256": "8e5401cb3064d44a23395fc0e569cd8e14425d929ad53b5e960124a479e1f5b0",
+    "bytes": 732826,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/learning/8e5401cb3064d44a2339-learning-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/learning/8e5401cb3064d44a2339-learning-01-v.webp"
+  },
+  "_typeset/rule-capabilities-runtime/cb9e184c355527101d58-rule-capabilities-runtime-01-v.webp": {
+    "sha256": "cb9e184c355527101d581a56e583a0bfb8eceb376e58c43a2fe8625a19a42168",
+    "bytes": 1652654,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-capabilities-runtime/cb9e184c355527101d58-rule-capabilities-runtime-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-capabilities-runtime/cb9e184c355527101d58-rule-capabilities-runtime-01-v.webp"
+  },
+  "_typeset/pcconfig/d8ad56634d98dfc3e0f6-pcconfig-01-v.webp": {
+    "sha256": "d8ad56634d98dfc3e0f6ac96478cafd470dae4b22b6990436d8b65bc8c23d37d",
+    "bytes": 1201064,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pcconfig/d8ad56634d98dfc3e0f6-pcconfig-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pcconfig/d8ad56634d98dfc3e0f6-pcconfig-01-v.webp"
+  },
+  "_typeset/sunshine-remote-streaming/adbce395debd5ecd5519-sunshine-remote-streaming-01-h.webp": {
+    "sha256": "adbce395debd5ecd5519941b50269a3803256eeb56da92b965bbdfd61dfe756b",
+    "bytes": 489378,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/sunshine-remote-streaming/adbce395debd5ecd5519-sunshine-remote-streaming-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/sunshine-remote-streaming/adbce395debd5ecd5519-sunshine-remote-streaming-01-h.webp"
+  },
+  "_typeset/wechat-history-ai-bridge/00695be4b36119933689-wechat-history-ai-bridge-01-v.webp": {
+    "sha256": "00695be4b36119933689c666786832f36a6ab0da05a08b11edc935642a9130f5",
+    "bytes": 1361592,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechat-history-ai-bridge/00695be4b36119933689-wechat-history-ai-bridge-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechat-history-ai-bridge/00695be4b36119933689-wechat-history-ai-bridge-01-v.webp"
+  },
+  "_typeset/skill-file-intake-router/0395f1bfad0e1b0019a9-skill-file-intake-router-01-h.webp": {
+    "sha256": "0395f1bfad0e1b0019a9bcb700fe509ac42ce0a469742ec73973c50e45087b70",
+    "bytes": 792578,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-file-intake-router/0395f1bfad0e1b0019a9-skill-file-intake-router-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-file-intake-router/0395f1bfad0e1b0019a9-skill-file-intake-router-01-h.webp"
+  },
+  "_typeset/rule-claude-adapter/cccc848481f9388181d3-rule-claude-adapter-01-h.webp": {
+    "sha256": "cccc848481f9388181d39e15f74968030638cd2b6f617fb61c0e666a834e24dd",
+    "bytes": 765438,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-claude-adapter/cccc848481f9388181d3-rule-claude-adapter-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-claude-adapter/cccc848481f9388181d3-rule-claude-adapter-01-h.webp"
+  },
+  "_typeset/skill-browser-control-continuity/6f6d8755bd9d78ee3f74-skill-browser-control-continuity-01-h.webp": {
+    "sha256": "6f6d8755bd9d78ee3f74dff4943a29cb5c8028b06aa4ee5a2a1f40da546e4d1e",
+    "bytes": 502392,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-browser-control-continuity/6f6d8755bd9d78ee3f74-skill-browser-control-continuity-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-browser-control-continuity/6f6d8755bd9d78ee3f74-skill-browser-control-continuity-01-h.webp"
+  },
+  "_typeset/skill-reply-as-me/5d61e484b95caf25d574-skill-reply-as-me-01-h.webp": {
+    "sha256": "5d61e484b95caf25d574c3ba0a0d284d4f75b135e1ba0245f590c603c4840c94",
+    "bytes": 469192,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-reply-as-me/5d61e484b95caf25d574-skill-reply-as-me-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-reply-as-me/5d61e484b95caf25d574-skill-reply-as-me-01-h.webp"
+  },
+  "_typeset/localocr/63923130a4c2383ea0ec-localocr-01-h.webp": {
+    "sha256": "63923130a4c2383ea0ec11158c8ccc67f9453594aba157076e707148589eb0ee",
+    "bytes": 865462,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/localocr/63923130a4c2383ea0ec-localocr-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/localocr/63923130a4c2383ea0ec-localocr-01-h.webp"
+  },
+  "_typeset/skill-vault-workflow/7714d900a4abdc2e9415-skill-vault-workflow-01-v.webp": {
+    "sha256": "7714d900a4abdc2e9415cefc77bfce0ef6dc612e93c4291bb150784ed56c3086",
+    "bytes": 785266,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-vault-workflow/7714d900a4abdc2e9415-skill-vault-workflow-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-vault-workflow/7714d900a4abdc2e9415-skill-vault-workflow-01-v.webp"
+  },
+  "_typeset/chinese-asr/58629596a65a4e424685-chinese-asr-01-h.webp": {
+    "sha256": "58629596a65a4e42468543cd28255707e080f02b2cba7120ff51d7806d3cca86",
+    "bytes": 761324,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/chinese-asr/58629596a65a4e424685-chinese-asr-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/chinese-asr/58629596a65a4e424685-chinese-asr-01-h.webp"
+  },
+  "_typeset/skill-wechat-direct/926110be5ceaccfecdac-skill-wechat-direct-01-h.webp": {
+    "sha256": "926110be5ceaccfecdacee9d6431846ee3e39daf894a6c9ff3ca52baa6669311",
+    "bytes": 304672,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-wechat-direct/926110be5ceaccfecdac-skill-wechat-direct-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-wechat-direct/926110be5ceaccfecdac-skill-wechat-direct-01-h.webp"
+  },
+  "_typeset/daily-preferences/6f3ad166cff7117cb966-daily-preferences-01-h.webp": {
+    "sha256": "6f3ad166cff7117cb96680ee6bf4f8b47170621f59dbb18ba8926e2f36565145",
+    "bytes": 988440,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/daily-preferences/6f3ad166cff7117cb966-daily-preferences-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/daily-preferences/6f3ad166cff7117cb966-daily-preferences-01-h.webp"
+  },
+  "_typeset/learning/558843d71b683b78f3bf-learning-01-h.webp": {
+    "sha256": "558843d71b683b78f3bfa6e922fe6714a52212b2cd9d8299747f8c17e73acece",
+    "bytes": 480850,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/learning/558843d71b683b78f3bf-learning-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/learning/558843d71b683b78f3bf-learning-01-h.webp"
+  },
+  "_typeset/skill-mojibake-doctor/576b9d32e344cce53006-skill-mojibake-doctor-01-h.webp": {
+    "sha256": "576b9d32e344cce53006366003b710b7d7dcf54ac858e585e22813bd08afb9ae",
+    "bytes": 352416,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-mojibake-doctor/576b9d32e344cce53006-skill-mojibake-doctor-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-mojibake-doctor/576b9d32e344cce53006-skill-mojibake-doctor-01-h.webp"
+  },
+  "_typeset/pc-panel-hub/be35643e20a92f078b5d-pc-panel-hub-01-v.webp": {
+    "sha256": "be35643e20a92f078b5d8d1922188d803f537383457bf39f1113a5f3a0288477",
+    "bytes": 1043866,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pc-panel-hub/be35643e20a92f078b5d-pc-panel-hub-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pc-panel-hub/be35643e20a92f078b5d-pc-panel-hub-01-v.webp"
+  },
+  "_typeset/skill-browser-control-continuity/8521b9966499d9789203-skill-browser-control-continuity-01-v.webp": {
+    "sha256": "8521b9966499d97892037e79688608ef2f6b7a6a2c3b219353aa0b99d79e6078",
+    "bytes": 601514,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-browser-control-continuity/8521b9966499d9789203-skill-browser-control-continuity-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-browser-control-continuity/8521b9966499d9789203-skill-browser-control-continuity-01-v.webp"
+  },
+  "_typeset/github-local-index/b4db2d916be21ee36693-github-local-index-01-h.webp": {
+    "sha256": "b4db2d916be21ee36693655ad5a33a6659a06e69fbb3d887a586658589e89c6e",
+    "bytes": 796050,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/github-local-index/b4db2d916be21ee36693-github-local-index-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/github-local-index/b4db2d916be21ee36693-github-local-index-01-h.webp"
+  },
+  "_typeset/rule-codex-adapter/7a73493921a5fafd8432-rule-codex-adapter-01-v.webp": {
+    "sha256": "7a73493921a5fafd8432a67c1117664802023bdc549f540788583e39c36b59a5",
+    "bytes": 1219062,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-codex-adapter/7a73493921a5fafd8432-rule-codex-adapter-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-codex-adapter/7a73493921a5fafd8432-rule-codex-adapter-01-v.webp"
+  },
+  "_typeset/video-scaffold/fbb7e02b7922c4acb1b9-video-scaffold-01-h.webp": {
+    "sha256": "fbb7e02b7922c4acb1b9dafa277ef27a261620c1038e7bb8895a81da9c5e3f8f",
+    "bytes": 941274,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/video-scaffold/fbb7e02b7922c4acb1b9-video-scaffold-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/video-scaffold/fbb7e02b7922c4acb1b9-video-scaffold-01-h.webp"
+  },
+  "_typeset/steam-millennium-config-backup/6414ba8d4247506dea3f-steam-millennium-config-backup-01-h.webp": {
+    "sha256": "6414ba8d4247506dea3f74da76afcc69d67b0121308e3831e4efa6f73a607331",
+    "bytes": 420924,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/steam-millennium-config-backup/6414ba8d4247506dea3f-steam-millennium-config-backup-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/steam-millennium-config-backup/6414ba8d4247506dea3f-steam-millennium-config-backup-01-h.webp"
+  },
+  "_typeset/proxyclean/2307c1a6976d0959f981-proxyclean-01-v.webp": {
+    "sha256": "2307c1a6976d0959f981b93c9b16f8535d55d7d993783c0be54133a1d7e40084",
+    "bytes": 1230776,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/proxyclean/2307c1a6976d0959f981-proxyclean-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/proxyclean/2307c1a6976d0959f981-proxyclean-01-v.webp"
+  },
+  "_typeset/ai-cli-profile-manager/ec5902724089f7bb00e1-ai-cli-profile-manager-01-v.webp": {
+    "sha256": "ec5902724089f7bb00e19e79959b5ffd1fe32aeec05ac0fab7403a174baa8f17",
+    "bytes": 1230202,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ai-cli-profile-manager/ec5902724089f7bb00e1-ai-cli-profile-manager-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ai-cli-profile-manager/ec5902724089f7bb00e1-ai-cli-profile-manager-01-v.webp"
+  },
+  "_typeset/skill-tailscale-safe-exposure/0e45cf49c13e36bcadcb-skill-tailscale-safe-exposure-01-v.webp": {
+    "sha256": "0e45cf49c13e36bcadcbccff66fac2449b4c283449c3dd0afd6b815e972358e4",
+    "bytes": 698274,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-tailscale-safe-exposure/0e45cf49c13e36bcadcb-skill-tailscale-safe-exposure-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-tailscale-safe-exposure/0e45cf49c13e36bcadcb-skill-tailscale-safe-exposure-01-v.webp"
+  },
+  "_typeset/rule-claude-adapter/a0b20d1ccf10721a98be-rule-claude-adapter-01-v.webp": {
+    "sha256": "a0b20d1ccf10721a98be398b53d126d4d12b9803786a0dfed5d25fef62e2431b",
+    "bytes": 976932,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-claude-adapter/a0b20d1ccf10721a98be-rule-claude-adapter-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-claude-adapter/a0b20d1ccf10721a98be-rule-claude-adapter-01-v.webp"
+  },
+  "_typeset/rescue/9be6e1922699b0f53fe3-rescue-01-v.webp": {
+    "sha256": "9be6e1922699b0f53fe37989547532511c0766f7f8297783172de0cbc5c6b03a",
+    "bytes": 412634,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rescue/9be6e1922699b0f53fe3-rescue-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rescue/9be6e1922699b0f53fe3-rescue-01-v.webp"
+  },
+  "_typeset/codex-local-remote/5826fe979dbc0ec26b9d-codex-local-remote-01-h.webp": {
+    "sha256": "5826fe979dbc0ec26b9d2389f0ec940619945895fb98b6d1cb62e9536375a102",
+    "bytes": 605668,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-local-remote/5826fe979dbc0ec26b9d-codex-local-remote-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-local-remote/5826fe979dbc0ec26b9d-codex-local-remote-01-h.webp"
+  },
+  "_typeset/skill-cloud-asset-channel/a3a4f25cf5032ed43030-skill-cloud-asset-channel-01-v.webp": {
+    "sha256": "a3a4f25cf5032ed430308685468143f46c477286eaeb2cedda5a72e05e40b59b",
+    "bytes": 872164,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-cloud-asset-channel/a3a4f25cf5032ed43030-skill-cloud-asset-channel-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-cloud-asset-channel/a3a4f25cf5032ed43030-skill-cloud-asset-channel-01-v.webp"
+  },
+  "_typeset/rule-authorization/a0551157cba17009009f-rule-authorization-01-h.webp": {
+    "sha256": "a0551157cba17009009f02ee0539158c764192c5c1032d5cf434da288f98a059",
+    "bytes": 674862,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-authorization/a0551157cba17009009f-rule-authorization-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-authorization/a0551157cba17009009f-rule-authorization-01-h.webp"
+  },
+  "_typeset/rules-home/b5286b6bb4d93574705c-rules-home-01-h.webp": {
+    "sha256": "b5286b6bb4d93574705ca9a0e6d5e9465453bf9cfcafb77598792a4f8a103e46",
+    "bytes": 549066,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rules-home/b5286b6bb4d93574705c-rules-home-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rules-home/b5286b6bb4d93574705c-rules-home-01-h.webp"
+  },
+  "_typeset/how-this-site/9c12f1c6b7e668a16fb3-how-this-site-01-v.webp": {
+    "sha256": "9c12f1c6b7e668a16fb3cf9b4a30cc4c10b3f620e788de147ed9db83b81d728c",
+    "bytes": 785382,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how-this-site/9c12f1c6b7e668a16fb3-how-this-site-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how-this-site/9c12f1c6b7e668a16fb3-how-this-site-01-v.webp"
+  },
+  "_typeset/work-delivery-copilot/d5e6f42987575c72babd-work-delivery-copilot-01-v.webp": {
+    "sha256": "d5e6f42987575c72babdad9fe5341f00421392f0c4a12114a00847accf1e4104",
+    "bytes": 678176,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/work-delivery-copilot/d5e6f42987575c72babd-work-delivery-copilot-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/work-delivery-copilot/d5e6f42987575c72babd-work-delivery-copilot-01-v.webp"
+  },
+  "_typeset/skill-personal-media/8269be7ee3928c184844-skill-personal-media-01-h.webp": {
+    "sha256": "8269be7ee3928c1848441ea1502954a1279ae703dc7d519bb2803254bb5207b1",
+    "bytes": 255712,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-media/8269be7ee3928c184844-skill-personal-media-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-media/8269be7ee3928c184844-skill-personal-media-01-h.webp"
+  },
+  "_typeset/skill-pdf-render-safe/1ba853521bf1c19185d6-skill-pdf-render-safe-01-v.webp": {
+    "sha256": "1ba853521bf1c19185d6260dec2d90b06522e545c6d9f9a417440ab0b8d11234",
+    "bytes": 622094,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-pdf-render-safe/1ba853521bf1c19185d6-skill-pdf-render-safe-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-pdf-render-safe/1ba853521bf1c19185d6-skill-pdf-render-safe-01-v.webp"
+  },
+  "_typeset/personal-health/d38e8e4c139d2d94dbb8-personal-health-01-v.webp": {
+    "sha256": "d38e8e4c139d2d94dbb8b16b9e33931d1662a684b2d53e95e1f5acc5a0bd6658",
+    "bytes": 778772,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-health/d38e8e4c139d2d94dbb8-personal-health-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-health/d38e8e4c139d2d94dbb8-personal-health-01-v.webp"
+  },
+  "_typeset/chinese-asr/26426eac58418c55765d-chinese-asr-01-v.webp": {
+    "sha256": "26426eac58418c55765dfe16432fe896e576b0d581673592dbb45987cc5e686b",
+    "bytes": 1004982,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/chinese-asr/26426eac58418c55765d-chinese-asr-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/chinese-asr/26426eac58418c55765d-chinese-asr-01-v.webp"
+  },
+  "_typeset/ai-cli-profile-manager/6b1837f22a87c3619475-ai-cli-profile-manager-01-h.webp": {
+    "sha256": "6b1837f22a87c361947542bd0edfc6f2e301c590421774612daf6bb1d732379d",
+    "bytes": 891460,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ai-cli-profile-manager/6b1837f22a87c3619475-ai-cli-profile-manager-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ai-cli-profile-manager/6b1837f22a87c3619475-ai-cli-profile-manager-01-h.webp"
+  },
+  "_typeset/skill-media-person-self/d2b0ac4021f8a5c25138-skill-media-person-self-01-v.webp": {
+    "sha256": "d2b0ac4021f8a5c25138a111c1bc9f5b1720cf3ad5788b7ff76c1a6e3490b6a3",
+    "bytes": 589422,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-media-person-self/d2b0ac4021f8a5c25138-skill-media-person-self-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-media-person-self/d2b0ac4021f8a5c25138-skill-media-person-self-01-v.webp"
+  },
+  "_typeset/skill-timeaudit-diagnostics/c87fe425453987d5750e-skill-timeaudit-diagnostics-01-h.webp": {
+    "sha256": "c87fe425453987d5750e3e03d6fd36f866917c1acad5ee2cc9ff2e9a45cc976f",
+    "bytes": 302888,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-timeaudit-diagnostics/c87fe425453987d5750e-skill-timeaudit-diagnostics-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-timeaudit-diagnostics/c87fe425453987d5750e-skill-timeaudit-diagnostics-01-h.webp"
+  },
+  "_typeset/computer-access/03d603d311edb9abec30-computer-access-01-v2.webp": {
+    "sha256": "03d603d311edb9abec309e69b4761b1a60ac76bc9e6712290a8e545a120618bb",
+    "bytes": 132554,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/03d603d311edb9abec30-computer-access-01-v2.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/03d603d311edb9abec30-computer-access-01-v2.webp"
+  },
+  "_typeset/skill-explain-to-me/4b6f2af146146e46cfed-skill-explain-to-me-01-h.webp": {
+    "sha256": "4b6f2af146146e46cfeddc3aa0c9c03cd54b13a6497614b7afadadbe870cd907",
+    "bytes": 719278,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-explain-to-me/4b6f2af146146e46cfed-skill-explain-to-me-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-explain-to-me/4b6f2af146146e46cfed-skill-explain-to-me-01-h.webp"
+  },
+  "_typeset/personal-formal-documents/f2188480580ff16383c5-personal-formal-documents-01-h.webp": {
+    "sha256": "f2188480580ff16383c5adbfe67cee1ef1c98735c236ed47a8107872bd3f03ae",
+    "bytes": 397254,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-formal-documents/f2188480580ff16383c5-personal-formal-documents-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-formal-documents/f2188480580ff16383c5-personal-formal-documents-01-h.webp"
+  },
+  "_typeset/404/6a9e8aed5582e82f3adb-404-01-h.webp": {
+    "sha256": "6a9e8aed5582e82f3adb8e627eacc613410df36b2968bd9a619418b5b3e312f7",
+    "bytes": 608626,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/404/6a9e8aed5582e82f3adb-404-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/404/6a9e8aed5582e82f3adb-404-01-h.webp"
+  },
+  "_typeset/skill-work-delivery/f84653a808d4dffe0c65-skill-work-delivery-01-h.webp": {
+    "sha256": "f84653a808d4dffe0c65392c58dc5bd11b1c05a025b3e32f1b4ff2696b877b54",
+    "bytes": 555062,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-work-delivery/f84653a808d4dffe0c65-skill-work-delivery-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-work-delivery/f84653a808d4dffe0c65-skill-work-delivery-01-h.webp"
+  },
+  "_typeset/codex-memory/b37f9b5e5eb2697fd804-codex-memory-01-h.webp": {
+    "sha256": "b37f9b5e5eb2697fd804d66f3295be937572a8da22a3cf9fbca06b896fe4552d",
+    "bytes": 726994,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-memory/b37f9b5e5eb2697fd804-codex-memory-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-memory/b37f9b5e5eb2697fd804-codex-memory-01-h.webp"
+  },
+  "_typeset/video-scaffold/46cbeb31d4749d561ff1-video-scaffold-01-v.webp": {
+    "sha256": "46cbeb31d4749d561ff1014a9c852e327dfca1376a209c1f8f17011c30adcabb",
+    "bytes": 1180428,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/video-scaffold/46cbeb31d4749d561ff1-video-scaffold-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/video-scaffold/46cbeb31d4749d561ff1-video-scaffold-01-v.webp"
+  },
+  "_typeset/codex-local-remote/e0f37c48cbf5ba1579cd-codex-local-remote-01-v.webp": {
+    "sha256": "e0f37c48cbf5ba1579cd0e5d3e75a77c881036b5da48a1b9bec7e1427b393837",
+    "bytes": 871326,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-local-remote/e0f37c48cbf5ba1579cd-codex-local-remote-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-local-remote/e0f37c48cbf5ba1579cd-codex-local-remote-01-v.webp"
+  },
+  "_typeset/pcconfig/344a45ed0650237dac95-pcconfig-01-h.webp": {
+    "sha256": "344a45ed0650237dac950ee770fa8deaa75f4bc400f7d86e75fddcaa6459c1e3",
+    "bytes": 830936,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pcconfig/344a45ed0650237dac95-pcconfig-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pcconfig/344a45ed0650237dac95-pcconfig-01-h.webp"
+  },
+  "_typeset/personal-health/563ea5e450d2f31d3d61-personal-health-01-h.webp": {
+    "sha256": "563ea5e450d2f31d3d61e6283b8e5b39d18d3a5330432804be0fe119d4ad9d95",
+    "bytes": 328036,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-health/563ea5e450d2f31d3d61-personal-health-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-health/563ea5e450d2f31d3d61-personal-health-01-h.webp"
+  },
+  "_typeset/personal-expression/d6a2d7af47e20f50880b-personal-expression-01-v.webp": {
+    "sha256": "d6a2d7af47e20f50880bfd63d12e3ded3822237ade8c33138c3ae771d7baf92d",
+    "bytes": 784302,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-expression/d6a2d7af47e20f50880b-personal-expression-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-expression/d6a2d7af47e20f50880b-personal-expression-01-v.webp"
+  },
+  "_typeset/wechatdirect/14a09897a81b5b054b55-wechatdirect-01-v.webp": {
+    "sha256": "14a09897a81b5b054b5512daee01104b20824a0a64cd61d46cd8bcf1aaf56da4",
+    "bytes": 1157648,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechatdirect/14a09897a81b5b054b55-wechatdirect-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechatdirect/14a09897a81b5b054b55-wechatdirect-01-v.webp"
+  },
+  "_typeset/typora-theme-pack/a8fb11f5d6590b5a2adc-typora-theme-pack-01-v.webp": {
+    "sha256": "a8fb11f5d6590b5a2adc644f2b449c90d06f52560ea62719c431b48aa89d0433",
+    "bytes": 479194,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/typora-theme-pack/a8fb11f5d6590b5a2adc-typora-theme-pack-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/typora-theme-pack/a8fb11f5d6590b5a2adc-typora-theme-pack-01-v.webp"
+  },
+  "_typeset/skill-pdf-render-safe/3f315a1a98ea1f47125c-skill-pdf-render-safe-01-h.webp": {
+    "sha256": "3f315a1a98ea1f47125cba90c58245ffe46aacf0a227510c0c966ac057bf7203",
+    "bytes": 537364,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-pdf-render-safe/3f315a1a98ea1f47125c-skill-pdf-render-safe-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-pdf-render-safe/3f315a1a98ea1f47125c-skill-pdf-render-safe-01-h.webp"
+  },
+  "_typeset/personal-formal-documents/f6b0c7329b4b0a6d58ab-personal-formal-documents-01-v.webp": {
+    "sha256": "f6b0c7329b4b0a6d58ab65273e53b45b3bf58a744ef74dce7a18f590645c145e",
+    "bytes": 1135366,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-formal-documents/f6b0c7329b4b0a6d58ab-personal-formal-documents-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-formal-documents/f6b0c7329b4b0a6d58ab-personal-formal-documents-01-v.webp"
+  },
+  "_typeset/openclaw/5e993789893ba4e89650-openclaw-01-h.webp": {
+    "sha256": "5e993789893ba4e896507f151e4b6bee99fc30a6e98d5fb5e3930474a47c2bcf",
+    "bytes": 858588,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/openclaw/5e993789893ba4e89650-openclaw-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/openclaw/5e993789893ba4e89650-openclaw-01-h.webp"
+  },
+  "_typeset/codex-agent-model-benchmark/ce255c18451fdf51f73c-codex-agent-model-benchmark-01-h.webp": {
+    "sha256": "ce255c18451fdf51f73c23187452e7664f900513a3619df649ae390dddbb09c2",
+    "bytes": 863280,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-agent-model-benchmark/ce255c18451fdf51f73c-codex-agent-model-benchmark-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-agent-model-benchmark/ce255c18451fdf51f73c-codex-agent-model-benchmark-01-h.webp"
+  },
+  "_typeset/skill-chinese-asr/731e570840b79017b5f0-skill-chinese-asr-01-v.webp": {
+    "sha256": "731e570840b79017b5f0026fbbfcc0c36712d3a05d7792732ab8335e50ca46e1",
+    "bytes": 980406,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-chinese-asr/731e570840b79017b5f0-skill-chinese-asr-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-chinese-asr/731e570840b79017b5f0-skill-chinese-asr-01-v.webp"
+  },
+  "_typeset/password-center/51140260b0d66dfa4697-password-center-01-v.webp": {
+    "sha256": "51140260b0d66dfa469799f6fa6517c1bedb0465426eabbd47d1d2bebc6e5a86",
+    "bytes": 1181026,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/password-center/51140260b0d66dfa4697-password-center-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/password-center/51140260b0d66dfa4697-password-center-01-v.webp"
+  },
+  "_typeset/github-local-index/ece4d9baf1a7497d2e5a-github-local-index-01-v.webp": {
+    "sha256": "ece4d9baf1a7497d2e5ab88111dffc7b76275aabe278f3aeeb0484f7ead1567e",
+    "bytes": 1164490,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/github-local-index/ece4d9baf1a7497d2e5a-github-local-index-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/github-local-index/ece4d9baf1a7497d2e5a-github-local-index-01-v.webp"
+  },
+  "_typeset/skill-cloud-asset-channel/27cde80298da1ea4d066-skill-cloud-asset-channel-01-h.webp": {
+    "sha256": "27cde80298da1ea4d0667c3cf74fffcd89474f2a3d75f7a9bb6edb708afd9875",
+    "bytes": 642530,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-cloud-asset-channel/27cde80298da1ea4d066-skill-cloud-asset-channel-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-cloud-asset-channel/27cde80298da1ea4d066-skill-cloud-asset-channel-01-h.webp"
+  },
+  "_typeset/skill-authorization-file-broker/17db8315a30640375491-skill-authorization-file-broker-01-h.webp": {
+    "sha256": "17db8315a306403754912213c9d1e621472c24d1fe57e8ad39db9f7235eabe43",
+    "bytes": 625140,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-authorization-file-broker/17db8315a30640375491-skill-authorization-file-broker-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-authorization-file-broker/17db8315a30640375491-skill-authorization-file-broker-01-h.webp"
+  },
+  "_typeset/skills-home/9f5d496bebe156f16068-skills-home-01-v.webp": {
+    "sha256": "9f5d496bebe156f16068b53f6a641ff31763addb573daf5272384d99e066f3b8",
+    "bytes": 939268,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skills-home/9f5d496bebe156f16068-skills-home-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skills-home/9f5d496bebe156f16068-skills-home-01-v.webp"
+  },
+  "_typeset/remote-control/bf531e7e2824b88c55ec-remote-control-01-v.webp": {
+    "sha256": "bf531e7e2824b88c55ecd77479a855cceb4f287c7e9dd843bae603190e69df7d",
+    "bytes": 792190,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/remote-control/bf531e7e2824b88c55ec-remote-control-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/remote-control/bf531e7e2824b88c55ec-remote-control-01-v.webp"
+  },
+  "_typeset/skill-tailscale-safe-exposure/b0150088c448df9fcb79-skill-tailscale-safe-exposure-01-h.webp": {
+    "sha256": "b0150088c448df9fcb79d0876049c89302cab41c3ff2c89478d3b10e026da3f3",
+    "bytes": 553058,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-tailscale-safe-exposure/b0150088c448df9fcb79-skill-tailscale-safe-exposure-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-tailscale-safe-exposure/b0150088c448df9fcb79-skill-tailscale-safe-exposure-01-h.webp"
+  },
+  "_typeset/rescue/32f266e9663c56e77fb6-rescue-01-h.webp": {
+    "sha256": "32f266e9663c56e77fb609dc077badedbb1cfeba88322a7919b08f49eb54fb88",
+    "bytes": 289934,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rescue/32f266e9663c56e77fb6-rescue-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rescue/32f266e9663c56e77fb6-rescue-01-h.webp"
+  },
+  "_typeset/charter/9746846d07e7f650f07d-charter-01-h.webp": {
+    "sha256": "9746846d07e7f650f07d7fd1dde6ffd893116b5c7ae531d1fd9f1445f8e90641",
+    "bytes": 638042,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/charter/9746846d07e7f650f07d-charter-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/charter/9746846d07e7f650f07d-charter-01-h.webp"
+  },
+  "_typeset/skill-personal-materials/c619b5a02d8c46649ed8-skill-personal-materials-01-v.webp": {
+    "sha256": "c619b5a02d8c46649ed8a50145d274f6215f670992dcdb058d130507208dbe21",
+    "bytes": 630098,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-materials/c619b5a02d8c46649ed8-skill-personal-materials-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-materials/c619b5a02d8c46649ed8-skill-personal-materials-01-v.webp"
+  },
+  "_typeset/rule-privacy-data/281e14f3fd5696071bdb-rule-privacy-data-01-v.webp": {
+    "sha256": "281e14f3fd5696071bdb0c01e4c95b7db35910de0e84b9a47406127bd070040e",
+    "bytes": 1146488,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-privacy-data/281e14f3fd5696071bdb-rule-privacy-data-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-privacy-data/281e14f3fd5696071bdb-rule-privacy-data-01-v.webp"
+  },
+  "_typeset/projects-home/20049874c06ea62769e0-projects-home-01-v.webp": {
+    "sha256": "20049874c06ea62769e065b176357b9bb0940dbb2d60dd637e03bedf40e48a27",
+    "bytes": 517408,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/projects-home/20049874c06ea62769e0-projects-home-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/projects-home/20049874c06ea62769e0-projects-home-01-v.webp"
+  },
+  "_typeset/ramdisk-guardian/612f1682cdf6b1ecf9b0-ramdisk-guardian-01-v.webp": {
+    "sha256": "612f1682cdf6b1ecf9b096f93bd59110709061cbcf8462c40e76e28a67bb857a",
+    "bytes": 1208564,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ramdisk-guardian/612f1682cdf6b1ecf9b0-ramdisk-guardian-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ramdisk-guardian/612f1682cdf6b1ecf9b0-ramdisk-guardian-01-v.webp"
+  },
+  "_typeset/skill-explain-to-me/b95e620587388077eb94-skill-explain-to-me-01-v.webp": {
+    "sha256": "b95e620587388077eb94b4428b9b675f550337b45299d3088459141ea2cc78ab",
+    "bytes": 891828,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-explain-to-me/b95e620587388077eb94-skill-explain-to-me-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-explain-to-me/b95e620587388077eb94-skill-explain-to-me-01-v.webp"
+  },
+  "_typeset/mcp/0fe5e3e71d4f33abec31-mcp-01-h.webp": {
+    "sha256": "0fe5e3e71d4f33abec3133be97dd64b35d819ae846764d47628f8db7e9d6d7a0",
+    "bytes": 551398,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/mcp/0fe5e3e71d4f33abec31-mcp-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/mcp/0fe5e3e71d4f33abec31-mcp-01-h.webp"
+  },
+  "_typeset/rule-capabilities-runtime/1a4e6e66a60e6bc0f81f-rule-capabilities-runtime-01-h.webp": {
+    "sha256": "1a4e6e66a60e6bc0f81f7f508c30985c773558d218642b5426e9414fc4c44404",
+    "bytes": 1602916,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-capabilities-runtime/1a4e6e66a60e6bc0f81f-rule-capabilities-runtime-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-capabilities-runtime/1a4e6e66a60e6bc0f81f-rule-capabilities-runtime-01-h.webp"
+  },
+  "_typeset/skill-reply-as-me/95687b061ca372da47d3-skill-reply-as-me-01-v.webp": {
+    "sha256": "95687b061ca372da47d332ae142f3a22c0fb9f2ada1065ec9b161a5bd46999db",
+    "bytes": 585504,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-reply-as-me/95687b061ca372da47d3-skill-reply-as-me-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-reply-as-me/95687b061ca372da47d3-skill-reply-as-me-01-v.webp"
+  },
+  "_typeset/pc-panel-hub/c98df318d5a8e9c3540b-pc-panel-hub-01-h.webp": {
+    "sha256": "c98df318d5a8e9c3540bf5acb53de927f8fc5d29158b0edc7eb377978f32b5ff",
+    "bytes": 868858,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/pc-panel-hub/c98df318d5a8e9c3540b-pc-panel-hub-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/pc-panel-hub/c98df318d5a8e9c3540b-pc-panel-hub-01-h.webp"
+  },
+  "_typeset/rules-home/a6eb019ea43e84c24659-rules-home-01-v.webp": {
+    "sha256": "a6eb019ea43e84c246593118dd330dcc99f4ba0cc5dec84ee995b4a05889c8c4",
+    "bytes": 680202,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rules-home/a6eb019ea43e84c24659-rules-home-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rules-home/a6eb019ea43e84c24659-rules-home-01-v.webp"
+  },
+  "_typeset/password-center/5c3047556e83c1abe64a-password-center-01-h.webp": {
+    "sha256": "5c3047556e83c1abe64a0c21c51bb6a0c9ba2d165b67b0f1819fd59d059a2c2d",
+    "bytes": 959170,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/password-center/5c3047556e83c1abe64a-password-center-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/password-center/5c3047556e83c1abe64a-password-center-01-h.webp"
+  },
+  "_typeset/rule-rule-release/f8956906e6fb4f9edee8-rule-rule-release-01-h.webp": {
+    "sha256": "f8956906e6fb4f9edee8334186acba1e25b8f78911a808dabee5292fce7df57a",
+    "bytes": 1963288,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-rule-release/f8956906e6fb4f9edee8-rule-rule-release-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-rule-release/f8956906e6fb4f9edee8-rule-rule-release-01-h.webp"
+  },
+  "_typeset/skill-report-page/8f7d1646f99b051fcdf9-skill-report-page-01-v.webp": {
+    "sha256": "8f7d1646f99b051fcdf9111ca252dab853078b3b8557a560f79eefde9f3fce44",
+    "bytes": 984516,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-report-page/8f7d1646f99b051fcdf9-skill-report-page-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-report-page/8f7d1646f99b051fcdf9-skill-report-page-01-v.webp"
+  },
+  "_typeset/skill-md-to-pdf/e4bb308542d3f092cca5-skill-md-to-pdf-01-h.webp": {
+    "sha256": "e4bb308542d3f092cca529e8bc4656d10608bc9a28b4ea3193fd237dd7c9deca",
+    "bytes": 383474,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-md-to-pdf/e4bb308542d3f092cca5-skill-md-to-pdf-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-md-to-pdf/e4bb308542d3f092cca5-skill-md-to-pdf-01-h.webp"
+  },
+  "_typeset/personal-media/37a1e6f9ca536ce96b3d-personal-media-01-v.webp": {
+    "sha256": "37a1e6f9ca536ce96b3d58262c2b3b0da8a601ce3a375a855613d548c3869b51",
+    "bytes": 842400,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-media/37a1e6f9ca536ce96b3d-personal-media-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-media/37a1e6f9ca536ce96b3d-personal-media-01-v.webp"
+  },
+  "_typeset/localocr/f11ce2be2abb476e74c5-localocr-01-v.webp": {
+    "sha256": "f11ce2be2abb476e74c53bf0693e1268b36dded70a340ca0e2ac35096afa55e9",
+    "bytes": 1150270,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/localocr/f11ce2be2abb476e74c5-localocr-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/localocr/f11ce2be2abb476e74c5-localocr-01-v.webp"
+  },
+  "_typeset/typora-theme-pack/716c313b88dcdcf13ca0-typora-theme-pack-01-h.webp": {
+    "sha256": "716c313b88dcdcf13ca000e75bd729e3c098c6d13075663a4feb9cf2e2ccfc98",
+    "bytes": 324912,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/typora-theme-pack/716c313b88dcdcf13ca0-typora-theme-pack-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/typora-theme-pack/716c313b88dcdcf13ca0-typora-theme-pack-01-h.webp"
+  },
+  "_typeset/rule-context-sources/75bd768dcc371ec8b80f-rule-context-sources-01-v.webp": {
+    "sha256": "75bd768dcc371ec8b80f165f24dab516732f46ee7f4d6567e6df83b9339474a4",
+    "bytes": 1314074,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-context-sources/75bd768dcc371ec8b80f-rule-context-sources-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-context-sources/75bd768dcc371ec8b80f-rule-context-sources-01-v.webp"
+  },
+  "_typeset/projects-home/4924633aab6e1a19b3a4-projects-home-01-h.webp": {
+    "sha256": "4924633aab6e1a19b3a4dd9cc75877c3a97ce70e1bdffe709007f8eeccee94dd",
+    "bytes": 487210,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/projects-home/4924633aab6e1a19b3a4-projects-home-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/projects-home/4924633aab6e1a19b3a4-projects-home-01-h.webp"
+  },
+  "_typeset/skill-timeaudit-diagnostics/175e995e8ccdd70591be-skill-timeaudit-diagnostics-01-v.webp": {
+    "sha256": "175e995e8ccdd70591be231432a53e3d0c7cd00515e11e7fac9b2a6a5b585d54",
+    "bytes": 457690,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-timeaudit-diagnostics/175e995e8ccdd70591be-skill-timeaudit-diagnostics-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-timeaudit-diagnostics/175e995e8ccdd70591be-skill-timeaudit-diagnostics-01-v.webp"
+  },
+  "_typeset/skill-chinese-asr/ce829c42d8c7b4d5d678-skill-chinese-asr-01-h.webp": {
+    "sha256": "ce829c42d8c7b4d5d678908c9a2a339fd2a3824231dda8a88291339c5c131f91",
+    "bytes": 437130,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-chinese-asr/ce829c42d8c7b4d5d678-skill-chinese-asr-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-chinese-asr/ce829c42d8c7b4d5d678-skill-chinese-asr-01-h.webp"
+  },
+  "_typeset/skill-authorization-file-broker/5e34912c0603c4cd2db4-skill-authorization-file-broker-01-v.webp": {
+    "sha256": "5e34912c0603c4cd2db4f8e980f74bbe29f88e00a5763ac42dcc6c08f7b4ff6a",
+    "bytes": 884992,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-authorization-file-broker/5e34912c0603c4cd2db4-skill-authorization-file-broker-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-authorization-file-broker/5e34912c0603c4cd2db4-skill-authorization-file-broker-01-v.webp"
+  },
+  "_typeset/how/62004266cebe7c43f27a-how-01-v.webp": {
+    "sha256": "62004266cebe7c43f27a5339953b9ac12b53d1913cd1cd858d32dd21d2dcdb98",
+    "bytes": 1085970,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how/62004266cebe7c43f27a-how-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how/62004266cebe7c43f27a-how-01-v.webp"
+  },
+  "_typeset/rule-rule-release/474e4a4bddec01e22cf9-rule-rule-release-01-v.webp": {
+    "sha256": "474e4a4bddec01e22cf9337cef00e05217a4c93ca90f580ae9526ce6390abbd2",
+    "bytes": 1026538,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-rule-release/474e4a4bddec01e22cf9-rule-rule-release-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-rule-release/474e4a4bddec01e22cf9-rule-rule-release-01-v.webp"
+  },
+  "_typeset/vault-tool/cbf4a984a90cbe6cce2b-vault-tool-01-h.webp": {
+    "sha256": "cbf4a984a90cbe6cce2bc53d713c5802a8675c7c0af6e4b4b355e636c4347889",
+    "bytes": 861766,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/vault-tool/cbf4a984a90cbe6cce2b-vault-tool-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/vault-tool/cbf4a984a90cbe6cce2b-vault-tool-01-h.webp"
+  },
+  "_typeset/work-delivery-copilot/c0c881e1dfb61f3a4d3a-work-delivery-copilot-01-h.webp": {
+    "sha256": "c0c881e1dfb61f3a4d3a3d9fe63735f8deabbdc40b337bd98347853134ac5ed5",
+    "bytes": 612720,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/work-delivery-copilot/c0c881e1dfb61f3a4d3a-work-delivery-copilot-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/work-delivery-copilot/c0c881e1dfb61f3a4d3a-work-delivery-copilot-01-h.webp"
+  },
+  "_typeset/daily-preferences/0c27536763348ce0eae7-daily-preferences-01-v.webp": {
+    "sha256": "0c27536763348ce0eae7f3c73b9ff01a40674c67f3c0930aff8d9015488d83bd",
+    "bytes": 1190386,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/daily-preferences/0c27536763348ce0eae7-daily-preferences-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/daily-preferences/0c27536763348ce0eae7-daily-preferences-01-v.webp"
+  },
+  "_typeset/computer-access/25765ab8fd8b65eb8003-computer-access-01-h.webp": {
+    "sha256": "25765ab8fd8b65eb80036e6e0f42262312d8ae49f0636d910f50b6dd757b90a3",
+    "bytes": 368828,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/25765ab8fd8b65eb8003-computer-access-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/25765ab8fd8b65eb8003-computer-access-01-h.webp"
+  },
+  "_typeset/ramdisk-guardian/c560bcc1e3a69f006b8e-ramdisk-guardian-01-h.webp": {
+    "sha256": "c560bcc1e3a69f006b8ec890e7048635fd1e4f2e37a0baa729caf6629069bba8",
+    "bytes": 734444,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/ramdisk-guardian/c560bcc1e3a69f006b8e-ramdisk-guardian-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/ramdisk-guardian/c560bcc1e3a69f006b8e-ramdisk-guardian-01-h.webp"
+  },
+  "_typeset/skill-google-workspace-direct/2f50ec5ed0e78704b25a-skill-google-workspace-direct-01-v.webp": {
+    "sha256": "2f50ec5ed0e78704b25a9c8a805ba9a369ca96d1dfa53f2960bdc6acafaa7925",
+    "bytes": 719966,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-google-workspace-direct/2f50ec5ed0e78704b25a-skill-google-workspace-direct-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-google-workspace-direct/2f50ec5ed0e78704b25a-skill-google-workspace-direct-01-v.webp"
+  },
+  "_typeset/skill-personal-formal-documents/0104561672e728534a31-skill-personal-formal-documents-01-h.webp": {
+    "sha256": "0104561672e728534a31c691456c4ee9ef7daefe49b07454a205d512fc1b1ff2",
+    "bytes": 711046,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-formal-documents/0104561672e728534a31-skill-personal-formal-documents-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-formal-documents/0104561672e728534a31-skill-personal-formal-documents-01-h.webp"
+  },
+  "_typeset/skill-personal-health/59543fad479f362a3948-skill-personal-health-01-v.webp": {
+    "sha256": "59543fad479f362a39482888f8cbc64c7d5a150634f446e3e3e33cd417097778",
+    "bytes": 887032,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-health/59543fad479f362a3948-skill-personal-health-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-health/59543fad479f362a3948-skill-personal-health-01-v.webp"
+  },
+  "_typeset/charter/68766d5e4f61edc31a90-charter-01-v.webp": {
+    "sha256": "68766d5e4f61edc31a907df0f70d161775278e3bdcb25137cb06e4361017f448",
+    "bytes": 869472,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/charter/68766d5e4f61edc31a90-charter-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/charter/68766d5e4f61edc31a90-charter-01-v.webp"
+  },
+  "_typeset/skill-daily-preferences/4874f65e495d48cd4f62-skill-daily-preferences-01-h.webp": {
+    "sha256": "4874f65e495d48cd4f6283c32509e557ce5447fffd4c239a5d5d458a87ee563d",
+    "bytes": 322118,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-daily-preferences/4874f65e495d48cd4f62-skill-daily-preferences-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-daily-preferences/4874f65e495d48cd4f62-skill-daily-preferences-01-h.webp"
+  },
+  "_typeset/skill-md-to-pdf/75e5707627aaeb3f41f4-skill-md-to-pdf-01-v.webp": {
+    "sha256": "75e5707627aaeb3f41f463395b0f59da92fddd67362050f3f2f261eaf46c3519",
+    "bytes": 628786,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-md-to-pdf/75e5707627aaeb3f41f4-skill-md-to-pdf-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-md-to-pdf/75e5707627aaeb3f41f4-skill-md-to-pdf-01-v.webp"
+  },
+  "_typeset/skill-wechat-direct/0f778a69d0900d720da7-skill-wechat-direct-01-v.webp": {
+    "sha256": "0f778a69d0900d720da7bf5823949044d36b2f8b4f608938dd8fcf5f300c4ad4",
+    "bytes": 926744,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-wechat-direct/0f778a69d0900d720da7-skill-wechat-direct-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-wechat-direct/0f778a69d0900d720da7-skill-wechat-direct-01-v.webp"
+  },
+  "_typeset/devconfig-backup/86caa49e2993461ab101-devconfig-backup-01-h.webp": {
+    "sha256": "86caa49e2993461ab101acac7d56cda5ef8a6a36b7391b1965dea6e26079558d",
+    "bytes": 678882,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/devconfig-backup/86caa49e2993461ab101-devconfig-backup-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/devconfig-backup/86caa49e2993461ab101-devconfig-backup-01-h.webp"
+  },
+  "_typeset/timeaudit/f7d9bb993a9759675239-timeaudit-01-v.webp": {
+    "sha256": "f7d9bb993a9759675239a25bb94c97625a2d0e3a28e66f6102e0c181115b7498",
+    "bytes": 988198,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/timeaudit/f7d9bb993a9759675239-timeaudit-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/timeaudit/f7d9bb993a9759675239-timeaudit-01-v.webp"
+  },
+  "_typeset/meshclip-kit/bf7a94107c4f1d0ea8d8-meshclip-kit-01-h.webp": {
+    "sha256": "bf7a94107c4f1d0ea8d8ced069fa1297905b32e680b32ef2af70380b224cec10",
+    "bytes": 570644,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/meshclip-kit/bf7a94107c4f1d0ea8d8-meshclip-kit-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/meshclip-kit/bf7a94107c4f1d0ea8d8-meshclip-kit-01-h.webp"
+  },
+  "_typeset/skill-project-entry-gate/0d434f0cc4a6591bca0d-skill-project-entry-gate-01-h.webp": {
+    "sha256": "0d434f0cc4a6591bca0d27c6aff76c0864d95314d777368d24aab344fcbc1654",
+    "bytes": 523962,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-project-entry-gate/0d434f0cc4a6591bca0d-skill-project-entry-gate-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-project-entry-gate/0d434f0cc4a6591bca0d-skill-project-entry-gate-01-h.webp"
+  },
+  "_typeset/skill-vault-workflow/50c4d1637bcfacee8543-skill-vault-workflow-01-h.webp": {
+    "sha256": "50c4d1637bcfacee854341892f402373571d57092c6bc5991a52187d1e5ac44c",
+    "bytes": 707078,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-vault-workflow/50c4d1637bcfacee8543-skill-vault-workflow-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-vault-workflow/50c4d1637bcfacee8543-skill-vault-workflow-01-h.webp"
+  },
+  "_typeset/proxyclean/02ce118be1930209e3b6-proxyclean-01-h.webp": {
+    "sha256": "02ce118be1930209e3b6459fae74bc8d5e88c0265d8ab7ce7e05afe2943824f0",
+    "bytes": 924284,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/proxyclean/02ce118be1930209e3b6-proxyclean-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/proxyclean/02ce118be1930209e3b6-proxyclean-01-h.webp"
+  },
+  "_typeset/rule-protected-actions/bcc5bc20a5a474fe9806-rule-protected-actions-01-v.webp": {
+    "sha256": "bcc5bc20a5a474fe9806011bc4bff0be6ef586033abaaeca162f9ef44ab1089f",
+    "bytes": 1062066,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-protected-actions/bcc5bc20a5a474fe9806-rule-protected-actions-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-protected-actions/bcc5bc20a5a474fe9806-rule-protected-actions-01-v.webp"
+  },
+  "_typeset/vault-tool/e4d1025723f53c378c6c-vault-tool-01-v.webp": {
+    "sha256": "e4d1025723f53c378c6c20023e95bba94871bcfb9e3a5242b260ff14ec020d8a",
+    "bytes": 1124326,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/vault-tool/e4d1025723f53c378c6c-vault-tool-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/vault-tool/e4d1025723f53c378c6c-vault-tool-01-v.webp"
+  },
+  "_typeset/codex-memory/203605849a52a542a9db-codex-memory-01-v.webp": {
+    "sha256": "203605849a52a542a9db97b52cf05b7792adedbb9a09acb13bfceb86ec7004d1",
+    "bytes": 1183404,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-memory/203605849a52a542a9db-codex-memory-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-memory/203605849a52a542a9db-codex-memory-01-v.webp"
+  },
+  "_typeset/404/5921b0d34eeb1e623826-404-01-v.webp": {
+    "sha256": "5921b0d34eeb1e6238267acb134a72f93421643608bc34597bff84241794c977",
+    "bytes": 796228,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/404/5921b0d34eeb1e623826-404-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/404/5921b0d34eeb1e623826-404-01-v.webp"
+  },
+  "_typeset/skill-local-secret-broker/fa129d5b514522aa4a73-skill-local-secret-broker-01-h.webp": {
+    "sha256": "fa129d5b514522aa4a73db5ef4355f6bef69bc26bea54f881b0a28e440ce60a6",
+    "bytes": 812514,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-local-secret-broker/fa129d5b514522aa4a73-skill-local-secret-broker-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-local-secret-broker/fa129d5b514522aa4a73-skill-local-secret-broker-01-h.webp"
+  },
+  "_typeset/rule-engineering-delivery/3670cab9846fb7289de3-rule-engineering-delivery-01-v.webp": {
+    "sha256": "3670cab9846fb7289de35e07bda257e8ee4513a0e096eb40314f1f363313c33f",
+    "bytes": 1122288,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/3670cab9846fb7289de3-rule-engineering-delivery-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/3670cab9846fb7289de3-rule-engineering-delivery-01-v.webp"
+  },
+  "_typeset/mcp/31b4e17c9800a7f70888-mcp-01-v.webp": {
+    "sha256": "31b4e17c9800a7f708885e7066d9ad0892568b2959c1328d755ebcbfd05e9185",
+    "bytes": 827420,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/mcp/31b4e17c9800a7f70888-mcp-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/mcp/31b4e17c9800a7f70888-mcp-01-v.webp"
+  },
+  "_typeset/wechatdirect/796b5f26ee72ec88854e-wechatdirect-01-h.webp": {
+    "sha256": "796b5f26ee72ec88854e2203c77fe103697468e7c074d4a79d12a10ddf3a7fac",
+    "bytes": 810396,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechatdirect/796b5f26ee72ec88854e-wechatdirect-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechatdirect/796b5f26ee72ec88854e-wechatdirect-01-h.webp"
+  },
+  "_typeset/rule-codex-adapter/59c51becc1200f288b6a-rule-codex-adapter-01-h.webp": {
+    "sha256": "59c51becc1200f288b6a3e6e4aaa96c40d247ec40192bd104ceb0358dda52468",
+    "bytes": 524688,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-codex-adapter/59c51becc1200f288b6a-rule-codex-adapter-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-codex-adapter/59c51becc1200f288b6a-rule-codex-adapter-01-h.webp"
+  },
+  "_typeset/agents/0af1f470340185ee9d58-agents-01-v.webp": {
+    "sha256": "0af1f470340185ee9d58a68e9b7cd48b3a2f883af12200900c4a61e89df11b68",
+    "bytes": 1264772,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/agents/0af1f470340185ee9d58-agents-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/agents/0af1f470340185ee9d58-agents-01-v.webp"
+  },
+  "_typeset/openclaw/3200b203677407632dd0-openclaw-01-v.webp": {
+    "sha256": "3200b203677407632dd096ce74e8debb62a4667af2beafb6b2b349799e5c6ce5",
+    "bytes": 1132408,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/openclaw/3200b203677407632dd0-openclaw-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/openclaw/3200b203677407632dd0-openclaw-01-v.webp"
+  },
+  "_typeset/skill-learning/e6dec7178545919e1d46-skill-learning-01-h.webp": {
+    "sha256": "e6dec7178545919e1d46a6aee066162d55740f7493797406a53e7d75903652f8",
+    "bytes": 540580,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-learning/e6dec7178545919e1d46-skill-learning-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-learning/e6dec7178545919e1d46-skill-learning-01-h.webp"
+  },
+  "_typeset/personal-expression/3b1d219840338b2a966c-personal-expression-01-h.webp": {
+    "sha256": "3b1d219840338b2a966c4b5cd7768fa9cf0090f2806aeb5555a182fa0aef7de8",
+    "bytes": 575496,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-expression/3b1d219840338b2a966c-personal-expression-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-expression/3b1d219840338b2a966c-personal-expression-01-h.webp"
+  },
+  "_typeset/rule-protected-actions/cb3b16722177d4068877-rule-protected-actions-01-h.webp": {
+    "sha256": "cb3b16722177d4068877484bb1140dfd3e2610feb7be2ca2d3e8fe4b9abb68e1",
+    "bytes": 724744,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-protected-actions/cb3b16722177d4068877-rule-protected-actions-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-protected-actions/cb3b16722177d4068877-rule-protected-actions-01-h.webp"
+  },
+  "_typeset/skill-personal-materials/137546ef336699a29232-skill-personal-materials-01-h.webp": {
+    "sha256": "137546ef336699a292326685625d23c63628b4ae48e4862ff8e5d51524db8e99",
+    "bytes": 550750,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-materials/137546ef336699a29232-skill-personal-materials-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-materials/137546ef336699a29232-skill-personal-materials-01-h.webp"
+  },
+  "_typeset/agents/c7e187543c53087a36c3-agents-01-h.webp": {
+    "sha256": "c7e187543c53087a36c3a55df1da83005fb898430350885a7c7903b0d7ef5c32",
+    "bytes": 813758,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/agents/c7e187543c53087a36c3-agents-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/agents/c7e187543c53087a36c3-agents-01-h.webp"
+  },
+  "_typeset/personal-media/be9dda80f6ee19045a9e-personal-media-01-h.webp": {
+    "sha256": "be9dda80f6ee19045a9e6252e0ffbe9a33188098e68ead7a042e2d6a2732f491",
+    "bytes": 377324,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-media/be9dda80f6ee19045a9e-personal-media-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-media/be9dda80f6ee19045a9e-personal-media-01-h.webp"
+  },
+  "_typeset/rule-context-sources/fcc547e2225d71b198cf-rule-context-sources-01-h.webp": {
+    "sha256": "fcc547e2225d71b198cfb47a3c023561e2ddce1d6fb9debb5dd6ba3b6114c77c",
+    "bytes": 2586052,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-context-sources/fcc547e2225d71b198cf-rule-context-sources-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-context-sources/fcc547e2225d71b198cf-rule-context-sources-01-h.webp"
+  },
+  "_typeset/rule-execution-coordination/6b216ae02fe59e79f699-rule-execution-coordination-01-v.webp": {
+    "sha256": "6b216ae02fe59e79f69954bfd3d47dd64369244082ca86af1eb43f6b3647a807",
+    "bytes": 1112622,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-execution-coordination/6b216ae02fe59e79f699-rule-execution-coordination-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-execution-coordination/6b216ae02fe59e79f699-rule-execution-coordination-01-v.webp"
+  },
+  "_typeset/computer-access/67e026fbc1c8d3ccc309-computer-access-01-v.webp": {
+    "sha256": "67e026fbc1c8d3ccc309cb6912db26fd4a37bfc169a77fa6586fdd5ddec5b1db",
+    "bytes": 527368,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/computer-access/67e026fbc1c8d3ccc309-computer-access-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/computer-access/67e026fbc1c8d3ccc309-computer-access-01-v.webp"
+  },
+  "_typeset/rule-engineering-delivery/753c066f5c746c61a556-rule-engineering-delivery-01-h.webp": {
+    "sha256": "753c066f5c746c61a5562f6fb57ff7b5c33e95361e0a28c330484f36b7f56a9a",
+    "bytes": 786246,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/753c066f5c746c61a556-rule-engineering-delivery-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/753c066f5c746c61a556-rule-engineering-delivery-01-h.webp"
+  },
+  "_typeset/skill-mojibake-doctor/3aa711d3196cd47540a2-skill-mojibake-doctor-01-v.webp": {
+    "sha256": "3aa711d3196cd47540a26089dea00c7c4e22edaa6c3bcfbfd45b352f58f8b260",
+    "bytes": 490822,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-mojibake-doctor/3aa711d3196cd47540a2-skill-mojibake-doctor-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-mojibake-doctor/3aa711d3196cd47540a2-skill-mojibake-doctor-01-v.webp"
+  },
+  "_typeset/how-this-site/6a4794a374b930c240e1-how-this-site-01-h.webp": {
+    "sha256": "6a4794a374b930c240e122c65c719a78c81c23671e302bd6e594803069569908",
+    "bytes": 484760,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how-this-site/6a4794a374b930c240e1-how-this-site-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how-this-site/6a4794a374b930c240e1-how-this-site-01-h.webp"
+  },
+  "_typeset/personal-materials/83adb2100d56e8546e89-personal-materials-01-v.webp": {
+    "sha256": "83adb2100d56e8546e890366b685f7ec39943868c601ffaaf7eb3b781fe2d3c4",
+    "bytes": 928800,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-materials/83adb2100d56e8546e89-personal-materials-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-materials/83adb2100d56e8546e89-personal-materials-01-v.webp"
+  },
+  "_typeset/skill-local-secret-broker/a5fa9ab389190efcf2ee-skill-local-secret-broker-01-v.webp": {
+    "sha256": "a5fa9ab389190efcf2ee410f42b956195ccd2f8e7916aae02f4d81de3486cab5",
+    "bytes": 927304,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-local-secret-broker/a5fa9ab389190efcf2ee-skill-local-secret-broker-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-local-secret-broker/a5fa9ab389190efcf2ee-skill-local-secret-broker-01-v.webp"
+  },
+  "_typeset/codex-agent-model-benchmark/797169add40aeab9fbac-codex-agent-model-benchmark-01-v.webp": {
+    "sha256": "797169add40aeab9fbace44e103e56830d477827a871e779104fb15f827c4975",
+    "bytes": 1656432,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/codex-agent-model-benchmark/797169add40aeab9fbac-codex-agent-model-benchmark-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/codex-agent-model-benchmark/797169add40aeab9fbac-codex-agent-model-benchmark-01-v.webp"
+  },
+  "_typeset/personal-materials/f972ba3dcb35381e8c4f-personal-materials-01-h.webp": {
+    "sha256": "f972ba3dcb35381e8c4f9821a2a7dab438bf86d43e84bdb3a3cb5394c9544e81",
+    "bytes": 716410,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/personal-materials/f972ba3dcb35381e8c4f-personal-materials-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/personal-materials/f972ba3dcb35381e8c4f-personal-materials-01-h.webp"
+  },
+  "_typeset/skill-localocr/46cb1dc4d0055df0ccf7-skill-localocr-01-h.webp": {
+    "sha256": "46cb1dc4d0055df0ccf750bf1398e95a3501d5852ca5ff170b0505ccf1a8085e",
+    "bytes": 515854,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-localocr/46cb1dc4d0055df0ccf7-skill-localocr-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-localocr/46cb1dc4d0055df0ccf7-skill-localocr-01-h.webp"
+  },
+  "_typeset/meshclip-kit/e0a25dfffd1f0685f0a0-meshclip-kit-01-v.webp": {
+    "sha256": "e0a25dfffd1f0685f0a09241d87fa139f86fe0807abe101cf7a22fd3a0755f37",
+    "bytes": 856984,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/meshclip-kit/e0a25dfffd1f0685f0a0-meshclip-kit-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/meshclip-kit/e0a25dfffd1f0685f0a0-meshclip-kit-01-v.webp"
+  },
+  "_typeset/rule-authorization/bdd85b2d9c76767c9df7-rule-authorization-01-v.webp": {
+    "sha256": "bdd85b2d9c76767c9df791e2e6ea2ad36f84dd1a86395dfd9f5189c3f965993f",
+    "bytes": 988604,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-authorization/bdd85b2d9c76767c9df7-rule-authorization-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-authorization/bdd85b2d9c76767c9df7-rule-authorization-01-v.webp"
+  },
+  "_typeset/how/c2d8b5253349470a718b-how-01-h.webp": {
+    "sha256": "c2d8b5253349470a718b631c70298b265b168883fdb47bb6809c089440f1ae82",
+    "bytes": 720968,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/how/c2d8b5253349470a718b-how-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/how/c2d8b5253349470a718b-how-01-h.webp"
+  },
+  "_typeset/skill-localocr/56e4112e0512a0b3433d-skill-localocr-01-v.webp": {
+    "sha256": "56e4112e0512a0b3433dc7c839181e41f94433f7b6770c844c982312372104cc",
+    "bytes": 832592,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-localocr/56e4112e0512a0b3433d-skill-localocr-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-localocr/56e4112e0512a0b3433d-skill-localocr-01-v.webp"
+  },
+  "_typeset/skill-file-intake-router/75d63a4e7e04983e0cc1-skill-file-intake-router-01-v.webp": {
+    "sha256": "75d63a4e7e04983e0cc1b48709062f87b4d6ca2c0c0c566ac94cb32f62fd2604",
+    "bytes": 930768,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-file-intake-router/75d63a4e7e04983e0cc1-skill-file-intake-router-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-file-intake-router/75d63a4e7e04983e0cc1-skill-file-intake-router-01-v.webp"
+  },
+  "_typeset/skill-google-workspace-direct/a40aa1280255ced1b73d-skill-google-workspace-direct-01-h.webp": {
+    "sha256": "a40aa1280255ced1b73d81b5af22f67fe9eaad4ddfd0add41a607ec433928733",
+    "bytes": 526598,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-google-workspace-direct/a40aa1280255ced1b73d-skill-google-workspace-direct-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-google-workspace-direct/a40aa1280255ced1b73d-skill-google-workspace-direct-01-h.webp"
+  },
+  "_typeset/skill-control-plane-doctor/9c77d828f4a3fb5e36ae-skill-control-plane-doctor-01-h.webp": {
+    "sha256": "9c77d828f4a3fb5e36aea9504e3aaa670c887390ad0f8ecf0b042435184a864f",
+    "bytes": 640460,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-control-plane-doctor/9c77d828f4a3fb5e36ae-skill-control-plane-doctor-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-control-plane-doctor/9c77d828f4a3fb5e36ae-skill-control-plane-doctor-01-h.webp"
+  },
+  "_typeset/rule-privacy-data/4b5dac1e589562e97e09-rule-privacy-data-01-h.webp": {
+    "sha256": "4b5dac1e589562e97e098b592c0361fd90dedbc42699ce949a3e3ae8640b6819",
+    "bytes": 1985106,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-privacy-data/4b5dac1e589562e97e09-rule-privacy-data-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-privacy-data/4b5dac1e589562e97e09-rule-privacy-data-01-h.webp"
+  },
+  "_typeset/emerald-veil/f542145fb994e538f299-emerald-veil-01-v.webp": {
+    "sha256": "f542145fb994e538f299dd94a2c98ef2cdc65f313c7bf868bc16a206f5af2eca",
+    "bytes": 1156948,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/emerald-veil/f542145fb994e538f299-emerald-veil-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/emerald-veil/f542145fb994e538f299-emerald-veil-01-v.webp"
+  },
+  "_typeset/timeaudit/68954c4b7e885738b70d-timeaudit-01-h.webp": {
+    "sha256": "68954c4b7e885738b70d209208da51b4e6d4a7a46345bd8932c04af479830f8e",
+    "bytes": 721496,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/timeaudit/68954c4b7e885738b70d-timeaudit-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/timeaudit/68954c4b7e885738b70d-timeaudit-01-h.webp"
+  },
+  "_typeset/skill-project-entry-gate/afd796b6583e9c0e5558-skill-project-entry-gate-01-v.webp": {
+    "sha256": "afd796b6583e9c0e5558b53edf4da0f2fd06e2daf8fd602ddba76610fb0d3191",
+    "bytes": 1036394,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-project-entry-gate/afd796b6583e9c0e5558-skill-project-entry-gate-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-project-entry-gate/afd796b6583e9c0e5558-skill-project-entry-gate-01-v.webp"
+  },
+  "_typeset/rule-execution-coordination/02b15ea5f97fc3c0fb47-rule-execution-coordination-01-h.webp": {
+    "sha256": "02b15ea5f97fc3c0fb4721fddb6a8a3c36a453d252babb51102f52919408d601",
+    "bytes": 712248,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-execution-coordination/02b15ea5f97fc3c0fb47-rule-execution-coordination-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-execution-coordination/02b15ea5f97fc3c0fb47-rule-execution-coordination-01-h.webp"
+  },
+  "_typeset/skill-learning/771bb26f9bc8e409eff2-skill-learning-01-v.webp": {
+    "sha256": "771bb26f9bc8e409eff292c419cd99a6365d5c580367a5ad1fdaf9129260cdff",
+    "bytes": 607394,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-learning/771bb26f9bc8e409eff2-skill-learning-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-learning/771bb26f9bc8e409eff2-skill-learning-01-v.webp"
+  },
+  "_typeset/skill-report-page/9104ef91811b79a6624d-skill-report-page-01-h.webp": {
+    "sha256": "9104ef91811b79a6624d19660ed6a4cd1260b1a930c83b0acb4a956d588a7a8d",
+    "bytes": 691554,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-report-page/9104ef91811b79a6624d-skill-report-page-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-report-page/9104ef91811b79a6624d-skill-report-page-01-h.webp"
+  },
+  "_typeset/steam-millennium-config-backup/f164d3af39cb939d9ef9-steam-millennium-config-backup-01-v.webp": {
+    "sha256": "f164d3af39cb939d9ef93a72db58c7bb812ac077738134b8081ff7ef5ddc2a07",
+    "bytes": 410492,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/steam-millennium-config-backup/f164d3af39cb939d9ef9-steam-millennium-config-backup-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/steam-millennium-config-backup/f164d3af39cb939d9ef9-steam-millennium-config-backup-01-v.webp"
+  },
+  "_typeset/remote-control/e088bad411188037c3a4-remote-control-01-h.webp": {
+    "sha256": "e088bad411188037c3a4db081d0abb1b36df0ba0161f12bd4906b81eef54d508",
+    "bytes": 538252,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/remote-control/e088bad411188037c3a4-remote-control-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/remote-control/e088bad411188037c3a4-remote-control-01-h.webp"
+  },
+  "_typeset/skill-personal-formal-documents/aa53996c7186655ffeed-skill-personal-formal-documents-01-v.webp": {
+    "sha256": "aa53996c7186655ffeed444689812d8f097bd4923c9699f9fb4f39988b3af13f",
+    "bytes": 672178,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-personal-formal-documents/aa53996c7186655ffeed-skill-personal-formal-documents-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-personal-formal-documents/aa53996c7186655ffeed-skill-personal-formal-documents-01-v.webp"
+  },
+  "_typeset/skill-work-delivery/cd986c2c5f45183a2ffc-skill-work-delivery-01-v.webp": {
+    "sha256": "cd986c2c5f45183a2ffc9549686b72eb73839a3c7697a0f58e562139471c250a",
+    "bytes": 745318,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-work-delivery/cd986c2c5f45183a2ffc-skill-work-delivery-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-work-delivery/cd986c2c5f45183a2ffc-skill-work-delivery-01-v.webp"
+  },
+  "_typeset/wechat-history-ai-bridge/d38dfe7ea7cf5cab6ba9-wechat-history-ai-bridge-01-h.webp": {
+    "sha256": "d38dfe7ea7cf5cab6ba95b4f0e395a84a15633d7c6aef7ceda96a80b7fc729a0",
+    "bytes": 1021602,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/wechat-history-ai-bridge/d38dfe7ea7cf5cab6ba9-wechat-history-ai-bridge-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/wechat-history-ai-bridge/d38dfe7ea7cf5cab6ba9-wechat-history-ai-bridge-01-h.webp"
+  },
+  "_typeset/skill-control-plane-doctor/9a5968c2a29b1e12f1d6-skill-control-plane-doctor-01-v.webp": {
+    "sha256": "9a5968c2a29b1e12f1d69c8f93c8b18cb63b4b12de358452b6db4c0229ef8ef4",
+    "bytes": 659618,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-control-plane-doctor/9a5968c2a29b1e12f1d6-skill-control-plane-doctor-01-v.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-control-plane-doctor/9a5968c2a29b1e12f1d6-skill-control-plane-doctor-01-v.webp"
+  },
+  "_typeset/skill-media-person-self/936133c4edf580db3ffa-skill-media-person-self-01-h.webp": {
+    "sha256": "936133c4edf580db3ffad8cff6ba7ec98125b6488c2a14d1c55e1d43b5ddcd96",
+    "bytes": 535480,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/skill-media-person-self/936133c4edf580db3ffa-skill-media-person-self-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/skill-media-person-self/936133c4edf580db3ffa-skill-media-person-self-01-h.webp"
+  },
+  "_typeset/emerald-veil/683a68f7bc20e8806386-emerald-veil-01-h.webp": {
+    "sha256": "683a68f7bc20e88063864f8325c12ff0df1862ecd30f290a372db24e52f1b70e",
+    "bytes": 775506,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/emerald-veil/683a68f7bc20e8806386-emerald-veil-01-h.webp",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/emerald-veil/683a68f7bc20e8806386-emerald-veil-01-h.webp"
+  },
+  "_typeset/rules-home/850430db731ee8ac9136-rules-home-01-h.png": {
+    "sha256": "850430db731ee8ac91361e187bc6b7d0f0dbeb251051bb681b213f7cb693904c",
+    "bytes": 797865,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rules-home/850430db731ee8ac9136-rules-home-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rules-home/850430db731ee8ac9136-rules-home-01-h.png"
+  },
+  "_typeset/rule-engineering-delivery/275227606a6f5524247b-rule-engineering-delivery-01-h.png": {
+    "sha256": "275227606a6f5524247bd8443753a2e237038203ac3a76b8aa10d981cc32f7ce",
+    "bytes": 1167631,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/275227606a6f5524247b-rule-engineering-delivery-01-h.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/275227606a6f5524247b-rule-engineering-delivery-01-h.png"
+  },
+  "_typeset/rule-engineering-delivery/43cc0fa2bbb0553d73bb-rule-engineering-delivery-01-v.png": {
+    "sha256": "43cc0fa2bbb0553d73bbe26aaa59fa80aed02740e99e49984f0c28238ecf2a88",
+    "bytes": 1603537,
+    "verified_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/rule-engineering-delivery/43cc0fa2bbb0553d73bb-rule-engineering-delivery-01-v.png",
+    "source_path": "site-astro/sources/vendor-deps/_typeset/rule-engineering-delivery/43cc0fa2bbb0553d73bb-rule-engineering-delivery-01-v.png"
   }
 }

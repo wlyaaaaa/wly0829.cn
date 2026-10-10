@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "convert": "python tools/convert_page.py",
-    "dev": "astro dev",
-    "build": "python tools/pack_living.py && python tools/retain_home_cockpit.py --assets && python tools/adapt_motion.py --album-only && python tools/render_blocks.py --all && astro build --force && python tools/retain_home_cockpit.py --finalize",
-    "preview": "astro preview"
+    "dev": "npm --prefix .. run dev --",
+    "build": "npm --prefix .. run build --",
+    "preview": "npm --prefix .. run preview --"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",

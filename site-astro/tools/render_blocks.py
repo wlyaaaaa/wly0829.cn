@@ -300,12 +300,14 @@ def parse_md(path):
 
 def library_fingerprint():
     h = hashlib.sha256()
-    for root, _, files in os.walk(PROTO):
-        if "__pycache__" in root or os.sep + "assets" in root[len(PROTO):] and False:
-            continue
-        for f in sorted(files):
-            if f.endswith((".py", ".css", ".js")):
-                p = os.path.join(root, f); h.update(p.encode()); h.update(open(p, "rb").read())
+    for root, dirs, files in os.walk(PROTO):
+        dirs[:] = sorted(d for d in dirs if d != "__pycache__")
+        for name in sorted(files):
+            if name.endswith((".pyc", ".pyo")):
+                continue
+            p = Path(root, name)
+            h.update(p.relative_to(PROTO).as_posix().encode("utf-8") + b"\0")
+            h.update(hashlib.sha256(p.read_bytes()).digest())
     return h.hexdigest()[:16]
 
 
@@ -732,7 +734,8 @@ def bindings(name, first_screen):
     return {(sid, o): lb[o]["rect"] for o in ("h", "v") if o in lb and lb[o].get("rect")}
 
 
-def run(names, workers=6):
+def run(names, workers=2):
+    workers = min(2, max(1, workers))
     _published.clear(); _living_configs.clear()
     t0 = time.time()
     os.chdir(REPO)  # page.json 里截图等路径相对仓库根（和现在出图时一样）
@@ -848,4 +851,4 @@ if __name__ == "__main__":
     names = sys.argv[1:]
     if not names or names == ["--all"]:
         names = all_pages()
-    run(names, int(os.environ.get("BLOCK_WORKERS", "6")))
+    run(names, int(os.environ.get("BLOCK_WORKERS", "2")))

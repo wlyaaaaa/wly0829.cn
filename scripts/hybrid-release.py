@@ -24,8 +24,6 @@ nav_spec.loader.exec_module(nav_repair)
 
 PAGE_DATA = nav_repair.PAGE_DATA
 
-def copy_release_asset(source, destination):
-    return shutil.copy2(source, destination)
 
 
 class Refs(HTMLParser):
@@ -352,128 +350,9 @@ def unchanged_search_finding(output, finding, overlay):
     return False
 
 
-def assemble(baseline, candidate, output, baseline_manifest, accepted, rejected=None, rollback_ref=None, candidate_files=None, overlay=None,
-             baseline_production_commit=None, baseline_input_kind=None):
-    baseline = baseline.resolve(); candidate = candidate.resolve(); output = output.resolve()
-    if output.exists() or any(output.is_relative_to(x) or x.is_relative_to(output) for x in (baseline,candidate)):
-        raise ValueError('Choose a fresh, disjoint output directory')
-    old, routes = verify_baseline(baseline, baseline_manifest)
-    overlays = overlay.get('files', {}) if overlay else {}
-    if set(overlays) & {route_file(x) for x in accepted}: raise ValueError('Overlay overlaps a rebuilt page')
-    accepted_files = {route_file(x) for x in accepted}
-    available = {x for x in old if x.endswith('.html')} | accepted_files
-    shutil.copytree(baseline, output, copy_function=copy_release_asset)
-    # HTTP snapshots do not expose Pages' domain configuration file.
-    # Adding that deployment metadata preserves every captured HTTP byte.
-    if not (output/'CNAME').exists(): (output/'CNAME').write_text('wly0829.cn\n',encoding='utf8')
-    # Old release-manifest is replaced by this generation; old content remains exact.
-    mappings = []; pending = list(sorted(accepted_files | set(overlays))); copied = set()
-    navigation_pages = nav_repair.page_inventory(output, exclude=accepted_files)
-    for rel in accepted_files:
-        navigation_pages[rel] = nav_repair.PageFacts((candidate/rel).read_text('utf-8-sig'),candidate)
-    while pending:
-        rel = pending.pop()
-        if rel in copied: continue
-        path = candidate/rel
-        if not path.is_file(): raise ValueError('Candidate dependency missing: '+rel)
-        if candidate_files is not None:
-            proof = candidate_files.get(rel)
-            expected = proof.get('sha256') if isinstance(proof,dict) else proof
-            if expected != digest(path): raise ValueError('Candidate output changed after preparation: '+rel)
-        if path.suffix == '.html' and rel not in accepted_files and rel not in overlays:
-            if rel in old: continue
-            raise ValueError('Unapproved HTML dependency: '+rel)
-        target = output/rel
-        text = None
-        if rel in accepted_files:
-            text = rewrite_links(path.read_text('utf-8-sig'), candidate, path, available, mappings, output, accepted_files, navigation_pages)
-        elif rel in old and rel not in overlays:
-            if digest(path) != old[rel]['sha256']: raise ValueError('Old asset collision: '+rel)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        if text is None: copy_release_asset(path, target)
-        else: target.write_text(text, encoding='utf8')
-        copied.add(rel)
-        for ref, navigation in references(path, text):
-            dependency = local_reference(candidate, path, ref)
-            if dependency is None: continue
-            dep = dependency.relative_to(candidate).as_posix()
-            if navigation and dependency.suffix == '.html':
-                if dep not in available and not (output/dep).is_file(): raise ValueError('Unresolved navigation: '+ref)
-                continue
-            if dep in old and not dependency.is_file(): continue
-            pending.append(dep)
-    # Bind every inherited and rebuilt navigation role after the complete
-    # package exists, rather than retaining an earlier partial-release fallback.
-    navigation_pages = nav_repair.page_inventory(output)
-    for rel in nav_repair.restore_pending_links(output, navigation_pages):
-        if rel not in accepted_files:
-            overlays[rel] = {'kind':'navigation_restoration', 'before':old.get(rel),
-                             'after':{'sha256':digest(output/rel),'bytes':(output/rel).stat().st_size}}
-    for rel, entry in old.items():
-        if rel not in accepted_files and rel not in overlays and digest(output/rel) != entry['sha256']:
-            raise ValueError('Old file changed: '+rel)
-    for route in routes:
-        if not (output/route_file(route)).is_file(): raise ValueError('Old route disappeared: '+route)
-    files = inventory(output)
-    release_id = hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
-    manifest = {'schema':'wly.hybrid-release.v1', 'release_id':release_id,
-                'prepared_at_beijing':datetime.now(timezone(timedelta(hours=8))).isoformat(),
-                'rollback_ref':rollback_ref, 'baseline_production_commit':baseline_production_commit or baseline_manifest.get('production_commit'),
-                'baseline_files':old, 'routes':sorted(set(routes)|set(accepted)),
-                'accepted_pages':accepted, 'rejected_pages':rejected or {}, 'temporary_href_mappings':mappings, 'files':files}
-    if overlays: manifest['release_overlay'] = {rel:{key:value for key,value in entry.items() if key!='source_path'} for rel,entry in overlays.items()}
-    if baseline_input_kind:
-        manifest['baseline_input_kind'] = baseline_input_kind
-        manifest['baseline_source_release_id'] = baseline_manifest.get('release_id')
-    write(output/MANIFEST, manifest)
-    verify_release(output)
-    return manifest
-
-def inherited_assets(manifest):
-    mapping = manifest.get('inherited_assets', {})
-    if not mapping: return {}, {}
-    ref = manifest.get('baseline_production_commit', '')
-    if not re.fullmatch(r'[0-9a-f]{40}', ref): raise ValueError('Inherited OSS assets need an exact baseline commit')
-    previous = json.loads(subprocess.check_output(['git', 'show', ref + ':site-release/' + MANIFEST], cwd=ROOT))
-    oss_module().verify_manifest(previous)
-    objects = {alias: previous['oss']['objects'][original] for alias, original in mapping.items()}
-    if any(alias != row['key'].removeprefix('releases/') for alias, row in objects.items()): raise ValueError('Inherited object alias changed')
-    return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
-def verify_release(output, require_remote=True):
-    manifest = read(output/MANIFEST)
-    inherited, _ = inherited_assets(manifest) if not manifest.get('oss') else ({}, {})
-    actual = {**inventory(output), **{rel: row['source'] for rel, row in inherited.items()}}
-    if manifest.get('schema') != 'wly.hybrid-release.v1' or actual != manifest['files']:
-        raise ValueError('Release bytes differ from manifest')
-    if 'oss' in manifest:
-        oss_spec = importlib.util.spec_from_file_location('oss_publication', ROOT/'scripts/prepare-oss-release.py')
-        oss = importlib.util.module_from_spec(oss_spec)
-        oss_spec.loader.exec_module(oss)
-        oss.verify_manifest(manifest, require_remote=require_remote)
-        for route in manifest['routes']:
-            if route_file(route) not in manifest['files']:
-                raise ValueError('Missing protected route: '+route)
-        return manifest
-    expected_id = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
-    if manifest['release_id'] != expected_id: raise ValueError('Release identifier mismatch')
-    accepted = {route_file(x) for x in manifest['accepted_pages']}
-    overlays = manifest.get('release_overlay', {})
-    if set(overlays) & accepted: raise ValueError('Overlay overlaps rebuilt pages')
-    for rel, entry in overlays.items():
-        if manifest['files'].get(rel) != entry.get('after') or manifest['baseline_files'].get(rel) != entry.get('before'):
-            raise ValueError('Overlay file identity differs: '+rel)
-        if entry.get('kind') == 'runtime_reference' or entry.get('runtime_replacements'):
-            recovered = (output/rel).read_bytes()
-            for original, replacement in entry.get('runtime_replacements', entry.get('replacements', {})).items(): recovered = recovered.replace(replacement.encode(),original.encode())
-            if hashlib.sha256(recovered).hexdigest() != entry.get('runtime_before', entry['before'])['sha256']:
-                raise ValueError('Runtime overlay did not preserve original content: '+rel)
-    for rel, entry in manifest['baseline_files'].items():
-        if rel not in accepted and rel not in overlays and manifest['files'].get(rel) != entry: raise ValueError('Preserved baseline differs: '+rel)
-    for route in manifest['routes']:
-        if route_file(route) not in manifest['files']: raise ValueError('Missing protected route: '+route)
-    return manifest
+
 
 def topic_units(text):
     """Keep full authored HTML blocks and JSON strings with their field identity."""
@@ -596,41 +475,4 @@ def fingerprint(value):
 
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    commands = parser.add_subparsers(dest='command', required=True)
-    prepare = commands.add_parser('prepare')
-    for argument in ('baseline','baseline-manifest','candidate','candidate-report','approvals','status','raw-site','verification-root','output'):
-        prepare.add_argument('--'+argument, type=Path, required=True)
-    prepare.add_argument('--pages', nargs='+', required=True)
-    prepare.add_argument('--rollback-ref')
-    verify = commands.add_parser('verify'); verify.add_argument('--output',type=Path,required=True)
-    args = parser.parse_args()
-    if args.command == 'verify':
-        manifest = verify_release(args.output)
-        if manifest.get('astro'):
-            import astro_rules
-            astro_rules.verify(args.output, manifest['rules_pin'])
-        print(json.dumps({'status':'pass','release_id':manifest['release_id'],'routes':len(manifest['routes'])})); return
-    approvals = read(args.approvals); states = read(args.status)['pages']; report = read(args.candidate_report); proof = report.get('input',{})
-    candidate_files = report.get('output_files')
-    if not candidate_files: raise ValueError('Candidate report lacks output file hashes')
-    accepted = {}; rejected = {}
-    for token in args.pages:
-        matching = [a for a in approvals if a.get('page') == token]
-        try:
-            if len(matching)!=1: raise ValueError('One exact approval is required')
-            approval = matching[0]
-            state = next((s for key,s in states.items() if key.split(':',1)[-1]==token),None)
-            if state is None: raise ValueError('No page build status')
-            url,evidence = accept_page(approval,state,args.raw_site,args.candidate,proof,args.verification_root)
-            accepted[url] = evidence
-        except (ValueError, KeyError, OSError) as error: rejected[token] = str(error)
-    if rejected: raise ValueError('Requested page gates failed: '+json.dumps(rejected,ensure_ascii=False))
-    manifest = assemble(args.baseline,args.candidate,args.output,read(args.baseline_manifest),accepted,rollback_ref=args.rollback_ref,candidate_files=candidate_files)
-    print(json.dumps({'status':'prepared','release_id':manifest['release_id'],'accepted_pages':list(accepted),'temporary_links':len(manifest['temporary_href_mappings'])}))
 
-if __name__ == '__main__':
-    try: main()
-    except (ValueError, KeyError, OSError, subprocess.CalledProcessError) as error:
-        raise SystemExit(str(error))

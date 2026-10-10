@@ -104,7 +104,7 @@ def adapt_album():
 def adapt_runtime_assets():
     """仅生成实际引用脚本的慢档副本；指纹地址与映射可重建，原种子不改。"""
     root = Path(ROOT)
-    inputs = list((root / "src/chrome/runtime").glob("*.json")) + list((root / "src/chrome/retained").glob("*.html"))
+    inputs = list((root / "src/chrome/runtime").glob("*.json")) + list((root / "sources/retained-home-cockpit").glob("*.html"))
     refs = lambda text: set(re.findall(r'/[^\s"\'<>\\]+\.js', text))
     pending = set().union(*(refs(p.read_text(encoding="utf-8")) for p in inputs))
     seen, sources = set(), {}

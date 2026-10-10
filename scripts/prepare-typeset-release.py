@@ -1560,19 +1560,12 @@ def main(argv=None):
     online.add_argument("--output", type=Path, required=True)
     online.add_argument("--retry-report", type=Path, help="Recheck unresolved files while retaining the prior full-coverage results")
     online.add_argument('--previous-report', type=Path, help='Reuse unchanged descriptors from a complete passing readback')
-    wrap = commands.add_parser("wrap-baseline", help="Local exact rollback package using hybrid.assemble")
-    for name in ("baseline", "baseline-manifest", "output"):
-        wrap.add_argument("--" + name, type=Path, required=True)
     stage=commands.add_parser('stage-check',help='Check actual staged bytes using the completed pre-replacement evidence receipt')
     for name in ('release','build-report','preparation','output','expected-manifest'):
         stage.add_argument('--'+name,type=Path,required=True)
     stage.add_argument('--rollback-ref',required=True)
     stage.add_argument('--layout-acceptance', type=Path)
     args = parser.parse_args(argv)
-    if args.command == "wrap-baseline":
-        manifest = hybrid.assemble(args.baseline, args.baseline, args.output, read(args.baseline_manifest), {})
-        print(json.dumps({"status": "prepared", "release_id": manifest["release_id"]}))
-        return 0
     result = {"prepare": prepare, "production-check": production_check, "readback": readback,'stage-check':stage_check}[args.command](args)
     print(json.dumps({"status": result["status"], "release_id": result.get("release_id"), "report": str(args.output),
                       "blockers": len(result.get("blockers", result.get("issues", [])))}, ensure_ascii=False))
