@@ -1,5 +1,8 @@
 /* 首次布局：此段同步嵌入首页 head；原按钮和点击逻辑照旧。 */
 html[data-home-opening="pending"] #home-01 { background: #fff; }
+/* 等待读取或读不到时，也在静态接替帧隐藏时钟；读到后沿原状态恢复。 */
+#home-01 .hero-live-layer [data-hl="screen"].off .time,
+#home-01 .hero-live-layer [data-hl="screen"].off .date { display: none; }
 #home-01 .home-time-controls {
   top: auto !important;
   bottom: 2.4% !important;
