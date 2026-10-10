@@ -144,7 +144,8 @@ def album_index(dist, snapshot, changed_routes):
 
 def finish(dist, snapshot, pin, converted, changed_routes=None):
     dist = Path(dist); changed_routes = set(converted) if changed_routes is None else set(changed_routes)
-    finalized = (dist / 'release-manifest.json').is_file() and read(dist / 'release-manifest.json').get('finalized_dist', False)
+    prior = read(dist / 'release-manifest.json') if (dist / 'release-manifest.json').is_file() else {}
+    finalized = prior.get('finalized_dist', False)
     legacy = tuple({match[0] for url in snapshot['runtime_urls'] if (match := transport.PREFIX.match(url))})
     retired_project_routes(dist, {'routes': snapshot['routes']})
     navigation = {nav.route_file(route): SimpleNamespace(ids=set()) for route in snapshot['routes']}
@@ -189,5 +190,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted},
         'astro': {'converted_routes': sorted(converted), 'retained_sample': {'source': 'site-astro/sources/retained-home-cockpit'},
                   'selected_pages': sorted(p.stem for p in (SITE / 'src/content/pages').glob('*.md')), 'html_files': len(routes)}}
+    manifest['previous_oss'] = prior.get('oss', prior.get('previous_oss', {}))
+    manifest.pop('finalized_dist', None)
     (dist / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return {'routes': routes, 'release_id': manifest['release_id'], 'album': album}
