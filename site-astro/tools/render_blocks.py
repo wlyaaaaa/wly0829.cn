@@ -40,7 +40,7 @@ WORK = os.environ.get("BLOCK_WORK_DIR") or os.path.join(SITE, ".cache", "blocks"
 CHROME = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
 SANS_FONT = "C:/Windows/Fonts/NotoSansSC-VF.ttf"
 CSS_OUT = os.path.join(PUB, "assets", "_typeset", "typeset.css")
-RENDER_VERSION = "r4-9"  # 排版做法改了就换，旧结果全部重排
+RENDER_VERSION = "r4-10"  # 排版做法改了就换，旧结果全部重排
 
 
 def file_url_to_path(u):
@@ -76,7 +76,6 @@ def publish_path(p):
     key = (p, st.st_size, st.st_mtime_ns)
     if key in _published:
         return _published[key]
-    # 同一内容只有一个地址；内容变了地址必变，沿用发布器已有的一年 immutable 缓存。
     url = "/assets/_fingerprinted/" + sha(p) + os.path.splitext(p)[1].lower()
     dst = os.path.join(PUB, *url.lstrip("/").split("/"))
     if not os.path.exists(dst):
@@ -140,7 +139,6 @@ def share_living_texture(config_url, art_src):
                 color = ("icc_profile", "gamma", "srgb")
                 if (getattr(image, "n_frames", 1) == getattr(other, "n_frames", 1) == 1 and image.size == other.size and all(image.info.get(k) == other.info.get(k) for k in color)
                         and image.convert("RGBA").tobytes() == other.convert("RGBA").tobytes()):
-                    # 复用现有原文件中较小的一份；解码像素、尺寸和色彩信息已逐一核对。
                     url = publish_path(tp if os.path.getsize(tp) < os.path.getsize(art) else art)
                     st = os.stat(art)
                     _published[(art, st.st_size, st.st_mtime_ns)] = url
@@ -389,6 +387,8 @@ HYDRATE_JS = r"""async (bind) => {
       const iou = ix * iy / (q.width * q.height + R.w * R.h - ix * iy);
       if (iou > best) { best = iou; art = im; }
     }
+    const only = main.querySelectorAll('[data-comp="illustration"] img');
+    if (best <= 0.5 && only.length === 1) { art = only[0]; best = 1; }
     if (art && best > 0.5) { art.setAttribute('data-ts-art', String(Math.round(best * 1000) / 1000)); } else art = null;
   }
   let artBox = null;

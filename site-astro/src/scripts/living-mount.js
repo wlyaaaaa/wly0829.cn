@@ -2,7 +2,7 @@
    减少动态效果：引擎自己读系统设置（living.css 也会隐藏画布），这里不另加判断。 */
 (() => {
   'use strict';
-  let live = null, pending = false, paused = false, epoch = 0, timer = 0, waiting = null, interacted = false;
+  let live = null, pending = false, paused = false, epoch = 0, waiting = null, interacted = false;
   const visible = el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth; };
   function reveal(el) {
     for (const im of el.matches('[data-ts-src]') ? [el] : el.querySelectorAll('[data-ts-src]')) {
@@ -39,22 +39,23 @@
     const token = epoch;
     im.decode().catch(() => {}).then(() => requestAnimationFrame(() => requestAnimationFrame(() => {
       const run = () => {
-        if (token !== epoch) return;
+        if (token !== epoch || !pending) return;
+        waiting = null;
         pending = false;
         if (paused) return;
         if (!visible(shown)) { mount(); return; }
         live = window.pageLiving = window.LivingArt.mount(fig.closest('.ts-screen') || fig, { config: fig.dataset.livingConfig, parts: { h: h || fig, v: v || h || fig } });
         for (const f of [h, v, fig]) if (f) f.dataset.livingStatus = 'mounted';
       };
-      const idle = () => { waiting = null; if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1000 }); else run(); };
-      // 给静图八秒安静阅读时间；开始滚动、触摸或键盘操作时马上提前启动。
-      if (interacted) idle(); else { waiting = idle; timer = setTimeout(idle, 8000); }
+      // 静图已显示后，在浏览器空闲时开始；交互可以直接提前，不额外等待。
+      waiting = run;
+      if (!interacted && 'requestIdleCallback' in window) requestIdleCallback(run, { timeout: 1000 }); else run();
     })));
   }
-  const wake = () => { interacted = true; if (waiting && !paused) { clearTimeout(timer); waiting(); } };
+  const wake = () => { interacted = true; if (waiting && !paused) waiting(); };
   for (const event of ['scroll', 'pointerdown', 'keydown']) addEventListener(event, wake, { passive: true });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true }); else start();
   addEventListener('load', mount, { once: true });
-  addEventListener('pagehide', () => { paused = true; pending = false; epoch++; clearTimeout(timer); waiting = null; if (live) { live.destroy(); live = null; delete window.pageLiving; } });
+  addEventListener('pagehide', () => { paused = true; pending = false; epoch++; waiting = null; if (live) { live.destroy(); live = null; delete window.pageLiving; } });
   addEventListener('pageshow', (e) => { if (e.persisted) { paused = false; interacted = true; mount(); } });
 })();
