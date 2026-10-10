@@ -168,7 +168,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
             before = path.read_text('utf8'); after = transport.localize(before, snapshot)
             if finalized and not any(prefix in before for prefix in legacy): continue
             if after != before: path.write_bytes(after.encode('utf8'))
-    scripts = {match for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
+    scripts = {transport.PREFIX.sub('/', match) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
     for path in dist.rglob('resource-retry-*.js'):
         text = path.read_text('utf8')
@@ -179,6 +179,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     album = album_index(dist, snapshot, changed_routes)
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
     for path in (dist / '_album').glob('routes-*.json'):
+        if finalized and not any(prefix in path.read_text('utf8') for prefix in legacy): continue
         path.write_bytes(transport.localize(path.read_text('utf8'), snapshot).encode('utf8'))
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
     write_sitemap(dist, routes)
