@@ -17,8 +17,8 @@
   },
   "pages": {
     "home": {
-      "sha256": "cef8d984989cdbe1cb8d6f48a852e3b31dbde358378a67bc1ed450f47a53aafb",
-      "bytes": 248654
+      "sha256": "12494244930816e2566909c3c2a5f01d28b17e8a598cd282f0d610eb1b810929",
+      "bytes": 248656
     },
     "cockpit": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
@@ -120,10 +120,10 @@
       "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
       "bytes": 127856
     },
-    "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
-      "source": "home-firstpaint-9735d2e7a1cacffcab6a.js",
-      "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
-      "bytes": 70216
+    "_home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js": {
+      "source": "home-firstpaint-9e34aa6fd6e819db8f08.js",
+      "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
+      "bytes": 72402
     }
   },
   "files": {
@@ -5727,13 +5727,13 @@
       "sha256": "bfc5ea2af98f89d40e7aaa51267fda21633fcec362eecbd0723da462bc1afa42",
       "bytes": 134169
     },
-    "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
-      "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
-      "bytes": 70216
+    "_home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js": {
+      "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
+      "bytes": 72402
     }
   },
   "count": 1401,
-  "bytes": 88229305,
+  "bytes": 88231491,
   "home_white_gear": {
     "inputs": [
       {
@@ -6079,7 +6079,7 @@
   },
   "runtime_recipe": {
     "schema": "wly.retained-runtime-recipe.v1",
-    "inputs_sha256": "ea62aa88e36d19cd01d37db66b736b8050ef9fafa4e6622228b7d07efe33f954",
+    "inputs_sha256": "71575548532f51004fd687f98df4218a90a0a381e9a666ce3b7f806debde710f",
     "original_engine": "_shared/home-living/hero-live.576f7d6f10.js",
     "base_images": "sources/signature/assets-manifest.json",
     "image_recipe": "sources/home-white-gear/build.py",

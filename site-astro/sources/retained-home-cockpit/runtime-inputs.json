@@ -38,12 +38,12 @@
       "bytes": 7260
     },
     "site-astro/tools/home_firstpaint.py": {
-      "sha256": "4d2e882fa051d807109750734f1e072f5d854f2f56ea1f263aac1a7158edd27c",
-      "bytes": 13076
+      "sha256": "568710c1aa44793921bbc0730f517d288f4ff95e778af6e6d9eb8a3c599aac49",
+      "bytes": 14916
     },
     "site-astro/tools/retain_home_cockpit.py": {
-      "sha256": "3486c60d7bfb6b0fd2dadc53889a6a7d0519a4a92bde84f8b0cd7a64b4ac79c0",
-      "bytes": 33970
+      "sha256": "86705ecfd182ca7e5ee1454934924b59ff3f1e5625fe0d166330fca7c1a1ec91",
+      "bytes": 34008
     },
     "scripts/release_delta.py": {
       "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
@@ -92,6 +92,10 @@
     "sources/home-white-gear/build.py": {
       "sha256": "60d712d5bded0509bc0f178a0dd09e1d9672f4a67bf48e27369dee58db4ec1d0",
       "bytes": 6073
+    },
+    "sources/home-white-gear/masks.json": {
+      "sha256": "620efe23368980d9255e92ff407ade0c8f2062a6b28bf91c8fb510fdf0154f67",
+      "bytes": 1957
     },
     "sources/signature/assets-manifest.json": {
       "sha256": "954811a22eccaaeafa7ee86760a37e17c087427f78168de7ea549924b0eb83a4",
@@ -550,8 +554,8 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "cef8d984989cdbe1cb8d6f48a852e3b31dbde358378a67bc1ed450f47a53aafb",
-      "bytes": 248654
+      "sha256": "12494244930816e2566909c3c2a5f01d28b17e8a598cd282f0d610eb1b810929",
+      "bytes": 248656
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
@@ -667,25 +671,37 @@
       "sha256": "9a690d5820eb00d4d8069b1f3adbbc1bb8b3147e501e108bafdacb2b57164255",
       "bytes": 141211
     },
-    "cockpit/stutter/assets/stutter-page-531d50e29cb554b44bb4.js": {
-      "sha256": "531d50e29cb554b44bb4c3a38d3f860c6c6f13f9be5ef617edc3b4e89b37dcfe",
-      "bytes": 9126
+    "_typeset/runtime/b2-access-model-cbf4f6c5e936.js": {
+      "sha256": "cbf4f6c5e93666972c79d7415e5666f75e2f6093df937cbdc77eee058ca1f85e",
+      "bytes": 26513
     },
     "cockpit/assets/b2-typeset-169c0028d2c44ca0ac45.js": {
       "sha256": "169c0028d2c44ca0ac45e3398d0fffa8bc90cc0fdb5ad98f45f2abaa65165024",
       "bytes": 142754
     },
+    "_interactions/anchor-offset.css": {
+      "sha256": "dc99fb527c2e42f3006abe302935021e192be543f3d34cb6b76f00b627f516df",
+      "bytes": 231
+    },
     "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js": {
       "sha256": "0fe059c637ff196ccc5d441d5c00e5596c827b25f738bd9be089d1711b1dddc3",
       "bytes": 23284
     },
-    "_typeset/runtime/b2-access-model-cbf4f6c5e936.js": {
-      "sha256": "cbf4f6c5e93666972c79d7415e5666f75e2f6093df937cbdc77eee058ca1f85e",
-      "bytes": 26513
+    "_living/_textures/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png": {
+      "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
+      "bytes": 543090
     },
-    "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js": {
-      "sha256": "5c723995d2c6b51a1dde662c7ff3bd1779790d1d5c995e69a4474fe8a548b3e9",
-      "bytes": 142929
+    "_typeset/runtime/app-b384f5148a452a1ae93c.js": {
+      "sha256": "b384f5148a452a1ae93c310e5f1db5f4ae0642a477de108227fc6cfaecdcb6cf",
+      "bytes": 134476
+    },
+    "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
+      "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
+      "bytes": 882349
+    },
+    "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
+      "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
+      "bytes": 522736
     },
     "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css": {
       "sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
@@ -695,25 +711,37 @@
       "sha256": "96949f1370f45c5248c0db370700c776fa25cf6a06cf5498837c925adb83915b",
       "bytes": 9874
     },
-    "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
-      "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
-      "bytes": 882349
+    "_typeset/runtime/app-ab81ea88de788c87787c.js": {
+      "sha256": "ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc",
+      "bytes": 125655
     },
-    "_typeset/runtime/app-2699a865b956a944ec7b.js": {
-      "sha256": "d79a0518e9300ffb6f1f256a50772a95aaedf82e37c21abd8100df55740368b8",
-      "bytes": 127746
+    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
+      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
+      "bytes": 6882
     },
     "cockpit/stutter/assets/stutter-page-240a508e760213f27f05.css": {
       "sha256": "240a508e760213f27f05d0a377566caa40b6d5f99bdc5c6386cb2b8e8403204e",
       "bytes": 2485
     },
-    "_typeset/runtime/app-ab81ea88de788c87787c.js": {
-      "sha256": "ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc",
-      "bytes": 125655
+    "_typeset/runtime/app-2699a865b956a944ec7b.js": {
+      "sha256": "d79a0518e9300ffb6f1f256a50772a95aaedf82e37c21abd8100df55740368b8",
+      "bytes": 127746
     },
-    "_living/_textures/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png": {
-      "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
-      "bytes": 543090
+    "_typeset/runtime/app-67a6ffcb373105b3b068.js": {
+      "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
+      "bytes": 127856
+    },
+    "cockpit/stutter/assets/stutter-page-531d50e29cb554b44bb4.js": {
+      "sha256": "531d50e29cb554b44bb4c3a38d3f860c6c6f13f9be5ef617edc3b4e89b37dcfe",
+      "bytes": 9126
+    },
+    "_typeset/runtime/b2-typeset-4460bc78e81a4f62d47a.js": {
+      "sha256": "4460bc78e81a4f62d47adcef6f61992278c04d9b1c8d14de2c404a8c1c1846b5",
+      "bytes": 140360
+    },
+    "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js": {
+      "sha256": "5c723995d2c6b51a1dde662c7ff3bd1779790d1d5c995e69a4474fe8a548b3e9",
+      "bytes": 142929
     },
     "_typeset/runtime/b2-typeset-87d1746f2e22df830589.js": {
       "sha256": "1392d9fe65dbc40e03723d40fc612dfa8c484a2ee4ae05061cab9510e3666b26",
@@ -722,30 +750,6 @@
     "_interactions/anchor-offset.js": {
       "sha256": "4ed2e6c8c80bd099ca692bced23a1e5726afd5cea4d75e71f6c03f833fe1141d",
       "bytes": 2259
-    },
-    "_typeset/runtime/app-67a6ffcb373105b3b068.js": {
-      "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
-      "bytes": 127856
-    },
-    "_typeset/runtime/app-b384f5148a452a1ae93c.js": {
-      "sha256": "b384f5148a452a1ae93c310e5f1db5f4ae0642a477de108227fc6cfaecdcb6cf",
-      "bytes": 134476
-    },
-    "_interactions/anchor-offset.css": {
-      "sha256": "dc99fb527c2e42f3006abe302935021e192be543f3d34cb6b76f00b627f516df",
-      "bytes": 231
-    },
-    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
-      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
-      "bytes": 6882
-    },
-    "_typeset/runtime/b2-typeset-4460bc78e81a4f62d47a.js": {
-      "sha256": "4460bc78e81a4f62d47adcef6f61992278c04d9b1c8d14de2c404a8c1c1846b5",
-      "bytes": 140360
-    },
-    "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
-      "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
-      "bytes": 522736
     },
     "_shared/home-app-92ff384787b4b26d0794.js": {
       "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",
@@ -795,9 +799,9 @@
       "sha256": "48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e",
       "bytes": 67988
     },
-    "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
-      "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
-      "bytes": 70216
+    "_home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js": {
+      "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
+      "bytes": 72402
     }
   },
   "replacements": {
