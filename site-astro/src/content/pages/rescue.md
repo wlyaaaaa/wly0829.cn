@@ -247,7 +247,7 @@
  "source": {
   "page": "sources/pages/rescue/page.json",
   "sha256": "c8a45984a632adf3160a973fd4a84484e48667e8e25f21c6da5484b61328ca25",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -1303,7 +1303,7 @@ Start-ScheduledTask -TaskPath '\' -TaskName 'ChineseASR Dictation'
    "semantic_status": "text_inferred_object_unverified",
    "key": "双屏同步",
    "source_phrase": "先用 ToDesk 或网易 UU 进桌面看看；或者让 AI 跑串流体检：",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

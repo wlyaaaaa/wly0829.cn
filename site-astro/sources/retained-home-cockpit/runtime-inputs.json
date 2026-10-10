@@ -42,8 +42,8 @@
       "bytes": 13195
     },
     "site-astro/tools/retain_home_cockpit.py": {
-      "sha256": "83e083c92279df0fc6274a3e9e18e2605a6d49a0818ca79289e00cfbf3e28a49",
-      "bytes": 25127
+      "sha256": "3d730f7101317645ba722186bc85e571c7cb8e2ab55a5101009c070ec3932a4b",
+      "bytes": 26381
     },
     "scripts/release_delta.py": {
       "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
@@ -96,6 +96,14 @@
     "sources/signature/assets-manifest.json": {
       "sha256": "954811a22eccaaeafa7ee86760a37e17c087427f78168de7ea549924b0eb83a4",
       "bytes": 41666
+    },
+    "site-astro/tools/cockpit_white_gear.py": {
+      "sha256": "9b0cf4577cbf02780714c05ac874b18c9dfef87b589dd0d34d8b33ccf8c37474",
+      "bytes": 3214
+    },
+    "sources/assets/_library/illustrations/ill-53b8c5c622e8b9.png": {
+      "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
+      "bytes": 543090
     },
     "sources/home-white-gear/master-h.png": {
       "sha256": "f48044595c06dce8e1e1006984246a00f1469faee5c2125dd71a9ea9a21ed51f",
@@ -462,12 +470,12 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "28bda3c51924272ad0b9036db6a46f555284672ac095873921edf4b7aab44d30",
-      "bytes": 248751
+      "sha256": "539cd546ef091c86b0ca7d3f9cc9106275b833483c12784cfa374dc975074c7f",
+      "bytes": 248753
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
-      "sha256": "f5093dd15ddd9be4155b5af7e114d565d449653d87d1130c5ec791f2167122c3",
-      "bytes": 164478
+      "sha256": "ce3a89e57a3b7e782dff4e9da73fcd9fef52c0e213ab3cb33ee1656294807856",
+      "bytes": 164763
     },
     "site-astro/public/_home-cockpit/time-labels.css": {
       "sha256": "a812e7930a4ea0567e528eeebfc0fce1936902dd5e500d3ff32804dea17e205f",
@@ -562,6 +570,22 @@
     "cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js": {
       "sha256": "705bbbe582ccf87a8acfd91524138aa485a98d67dfe9507d3ed639c95d1cc8f6",
       "bytes": 140906
+    },
+    "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
+      "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
+      "bytes": 522736
+    },
+    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
+      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
+      "bytes": 6882
+    },
+    "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
+      "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
+      "bytes": 882349
+    },
+    "_living/_textures/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png": {
+      "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
+      "bytes": 543090
     },
     "_shared/home-app-92ff384787b4b26d0794.js": {
       "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",

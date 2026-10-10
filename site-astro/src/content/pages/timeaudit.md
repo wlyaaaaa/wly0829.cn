@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -940,7 +940,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "右上一幅水彩插画：一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录）。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录"
@@ -1189,7 +1189,7 @@
    "semantic_status": "common_subject_reused_per_b2bc0efe",
    "key": "性能证据现图小槽4比3",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针"
@@ -1485,7 +1485,7 @@
    "semantic_status": "round2_same_project_main_reuse",
    "key": "main-timeaudit",
    "source_phrase": "横版画面：左上标题。上半部分一张横跨整屏宽约 62% 的水彩表格（三列七行：看板、回答什么、图；表头浅绿底；“回答什么”一列最宽，“图”一列窄、数字右对齐；每行最左边一个小水彩图标：一块主板、一只游戏手柄、一个电表、一把放大镜照着指纹、一只小老鼠抱着内存条、一个沙漏），表格下面“每个图分别画什么”那句。右边约 38% 宽：上部画一个浏览器小窗口的轮廓和 Grafana 的橙色标志，下面一个带细绿边框的截图空位（宽高比约 4:1，横着放），截图位下面一行灰色小字（截图说明那句）。最下面横跨整屏两段小字（打开方式、“内鬼”说明）。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready"
   },
   {
@@ -2847,7 +2847,7 @@
    "semantic_status": "round2_same_project_main_reuse",
    "key": "main-timeaudit",
    "source_phrase": "横版画面：左上标题。一张两列八行的水彩表格（左列“遇到”，右列“怎么办”），左列每格前一个小水彩图标（空白的曲线图、一只躺着不动的小狗、一轮月亮、一只手柄上画着问号、一支温度计上画着空圈、一张打叉的纸、一朵断开的云、两台电脑）。右上角画一只小急救箱。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready"
   },
   {
@@ -3497,7 +3497,7 @@
    "semantic_status": "round2_same_project_main_reuse",
    "key": "main-timeaudit",
    "source_phrase": "横版画面：左上标题。上半部分一张从左到右的流程图，六个圆角节点（小水彩图标依次：一扇窗户和一个小人、一台带四个小齿轮的机器、一块主板上插着温度计和显卡、一个圆柱形数据库、一块画着曲线的屏幕和 Grafana 橙色标志、一只守门的小狗），绿色箭头依次连起来；看门狗节点画在流程下方，用虚线箭头指向前面几个节点。流程下方另起一条细虚线框，里面一个节点“剪贴板记录”（图标：回形针和一个小数据库），和上面的流程不相连。下半部分一张浅绿底卡片“给 AI 的三个只读入口”。最下面一行小字，左边画 GitHub 小猫标志。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready"
   },
   {
@@ -4534,7 +4534,7 @@
    "semantic_status": "round2_same_project_main_reuse",
    "key": "ill-c1d850f44e8d3e",
    "source_phrase": "插画：1 两段半透明的绿色时间条互相重叠，重叠处颜色更深，上方一只手把它们压成一条（旁边一只合上的笔记本电脑和一轮小月亮表示睡眠）；2 一排按周分隔的小抽屉，最左边几格空了，每个空抽屉前放着一张薄薄的汇总卡片，卡片上画一根小柱状图。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [],
    "hidden": false
@@ -4550,7 +4550,7 @@
    "semantic_status": "round2_same_project_main_reuse",
    "key": "main-timeaudit",
    "source_phrase": "横版画面：接着上一屏的亮点卡片样式，这屏两张大卡片横排。插画：1 两段半透明的绿色时间条互相重叠，重叠处颜色更深，上方一只手把它们压成一条（旁边一只合上的笔记本电脑和一轮小月亮表示睡眠）；2 一排按周分隔的小抽屉，最左边几格空了，每个空抽屉前放着一张薄薄的汇总卡片，卡片上画一根小柱状图。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready"
   }
  ]
@@ -6007,7 +6007,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "三张图上下拼成一整段：同一个网格、同样的卡片宽高和间距，上下边都不画边框；这是第三张：没有标题、没有图例，接着排；卡片排完后下方留出的空白里画一幅浅浅的水彩小插画（一卷心电图纸带绕着一只小狗和一枚回形针，不画字），不要画边框。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "一卷心电图纸带绕着一只小狗和一枚回形针，不画字），不要画边框"
@@ -6379,7 +6379,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "横版画面：左边约 65% 宽一条竖向时间线，每个节点一个小水彩图标、粗体日期、一两行字；右边一幅大一点的水彩插画：一卷心电图纸带从上往下展开，纸带旁依次长出一块仪表盘、一只守门的小狗、一枚回形针、一个放大镜、一朵云和一排抽屉，像一路长出来的样子（插画里不画字）。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "一卷心电图纸带从上往下展开，纸带旁依次长出一块仪表盘、一只守门的小狗、一枚回形针、一个放大镜、一朵云和一排抽屉，像一路长出来的样子（插画里不画字"

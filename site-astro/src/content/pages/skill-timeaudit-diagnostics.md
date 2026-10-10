@@ -102,7 +102,7 @@
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
   "sha256": "662e18ae59bafc9c4fbea627131605d638a7c03176b6f5f63c6c3affd21e7e76",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -278,7 +278,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "右上角一幅小插画：一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字）。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字"

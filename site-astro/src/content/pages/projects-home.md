@@ -1058,7 +1058,7 @@
  "source": {
   "page": "sources/pages/projects-home/page.json",
   "sha256": "209ecf96746e686829ff52dc0c265b95322ed23205d9ec98e059c2a0757d17eb",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -1341,7 +1341,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "项目桌面盆栽",
    "source_phrase": "右边约占 42% 是一幅水彩插画，只做装饰：一张浅木色长桌，桌上一台显示器、一台笔记本、一部手机，周围错落摆着一排大小不一的绿色小盆栽，有的正抽出新叶；最右边几盆罩着浅灰色玻璃罩、叶子颜色发灰；桌面上散落几片水彩绿叶。",
-   "sha256": "2fc77fcda38261964d17e393fc7d5004eac84742c7a3cc63c7ee93e48c560213",
+   "sha256": "0509017546cd5f0c1efc53c938e79b71daccf572286a6419f027558b4273417a",
    "status": "ready",
    "original_elements": [
     "浅木色长桌，桌上显示器、笔记本、手机；周围一排大小不一绿色盆栽，有的抽新叶，最右几盆灰叶植株罩浅灰玻璃罩，桌面几片绿叶；屏幕只画柔和浅绿光，不画连线、箭头或字"
@@ -3759,7 +3759,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-timeaudit",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
-   "sha256": "47b93703a96e0317821cbacc9f4f3a2400ce5dbb94227310a4a037a8d91cd87b",
+   "sha256": "4b03450f4e4fb2573f755522fa2e8d519ff7e1c31de3583f53d11f33df87b651",
    "status": "ready",
    "original_elements": [
     "侧透机箱、心电图纸带、放大镜、夹着短线的便签"
@@ -4233,7 +4233,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "main-how-this-site",
    "source_phrase": "④数字格和⑤直达那两块合起来画一个水彩浏览器窗口插画（窗口里是几块浅绿色色块和一片叶子，不带字）。",
-   "sha256": "9f595df809f1dea3a44f9f3d93bed5c2cd0df26968844017d6e15a8be48a7658",
+   "sha256": "c73f9555f3ef96ffa5710468a2742056575876e84b55d8f540c073c10053782c",
    "status": "ready",
    "original_elements": [
     "机器人、书桌、画架、画稿"
@@ -4669,7 +4669,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "远程主备显示屏",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
-   "sha256": "bec98fa97416223b424093ad5aafd104c2d9007778b72c2768639fea7882f0c5",
+   "sha256": "f0c9f635bf341d663736af34b221cffe82521a671a9b14feba70978209dfaae4",
    "status": "ready",
    "original_elements": [
     "笔记本电脑、手机、暗色主显示器、半透明备用屏"
@@ -7080,7 +7080,7 @@
    "semantic_status": "matched_existing_objects",
    "key": "main-typora-theme-pack",
    "source_phrase": "④右半边上部：一幅和这个项目内容相关的水彩插画，按这张卡的一句话和数字挑 2–4 样实物来画（例如密码中心：绿色保险箱、指纹手机、钥匙、盾牌），配几片水彩绿叶；插画里不写任何字、数字和品牌标志，不和徽章、名字重叠。",
-   "sha256": "15c405fd0bc2978642ed84464064871759d9f3cc9d0e57d22cf04c76eefb32cc",
+   "sha256": "d1a39a289cf0f426dbf8dfbe5be40efb87f686d4ded6f00451b8baf96a44f356",
    "status": "ready",
    "original_elements": [
     "薄荷绿边写字窗口、茶杯"

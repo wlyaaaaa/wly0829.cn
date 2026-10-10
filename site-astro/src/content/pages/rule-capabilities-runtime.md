@@ -397,7 +397,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "e024a053015923233b638aa4e0993ebc103e4757632a6c81e29358c5c9014bb4",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -878,7 +878,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "一架小天平一边是扳手一边是硬币、“另一台电脑上的 AI”配两台笔记本电脑之间一根细绿线、“软件界面上的点选，默认交本人”配一根食指点在一个小按钮上",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -1907,7 +1907,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -1921,7 +1921,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机电脑连接",
    "source_phrase": "取码工具现在的样子（9月27日）：读的是小米妙享从手机转到这台电脑上的通知；只在AI调用时短暂运行，默认往前回看60秒、再等30秒，不常驻，码只交给调用它的AI、不存下来；已经装好，读取通知的许可可用；真的在网页上填码登录，还没验收过。",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {

@@ -456,7 +456,7 @@
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
   "sha256": "e30ee35d3b9cb035dc4ce469fc60643793fb3e72f0dd944b23a1f73a17e608e5",
-  "converted_at_beijing": "2026-10-10T11:58:31+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -860,7 +860,7 @@
    "semantic_status": "matched_existing_objects",
    "key": "main-typora-theme-pack",
    "source_phrase": "三张竖向大卡片横排，每张上面一幅小水彩插画（1 一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶；2 一个展开的“文件 → 导出”下拉菜单，最下面三项“原版”“公司”“个人”，画出这几个字，菜单右边飘出一张 PDF；3 一个对话气泡，里面一张小小的 PDF 和一枚放大镜），插画下面卡片标题粗体，下面正文（第 3 张里“PDF 逐页检查”画成绿色链接样式）。",
-   "sha256": "15c405fd0bc2978642ed84464064871759d9f3cc9d0e57d22cf04c76eefb32cc",
+   "sha256": "d1a39a289cf0f426dbf8dfbe5be40efb87f686d4ded6f00451b8baf96a44f356",
    "status": "ready",
    "original_elements": [
     "一台显示器里开着写字窗口，窗口边框是薄荷绿，旁边一杯茶"
@@ -1343,7 +1343,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "scene_explicit_primary_object",
    "key": "双屏同步",
    "source_phrase": "两台电脑之间一个箭头",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

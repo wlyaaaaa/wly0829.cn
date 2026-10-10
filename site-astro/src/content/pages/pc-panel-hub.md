@@ -762,6 +762,7 @@
     },
     {
      "slot": "panel",
+     "empty_text": "这个网页还没接入机箱小屏画面的实时状态",
      "meaning": "机箱屏画面：最近一次心跳离现在多久、status 是否 ok、失败帧数（例如“每秒刷新中”“45 秒没刷新”“暂时读不到”）",
      "source": "E:\\Projects\\Tools\\TURZX-SideScreen\\tools\\turzx_side_screen\\out\\stream\\stream-heartbeat.json 的 utc、status、failed。看板接口现在不读，第 2 批要接"
     }
@@ -796,8 +797,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
-  "sha256": "2a991c99ba2df85177811b98035376d90041a5008f9026e778f2707b1dc1b611",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "3039fab2d629c2160da99bf04bca941313358519ace0ce7726ae3d500fba9671",
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---

@@ -181,7 +181,7 @@
  "source": {
   "page": "sources/pages/mcp/page.json",
   "sha256": "374660f1e3de6277d77811c83eecc0c6fd9a68652c33e68bc063ad5854c06000",
-  "converted_at_beijing": "2026-10-10T11:58:30+08:00"
+  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
  }
 }
 ---
@@ -704,7 +704,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
    "semantic_status": "scene_explicit_primary_object",
    "key": "手机电脑连接",
    "source_phrase": "手机上点一台电脑",
-   "sha256": "a7ecbe1d0cff3de0a8b68279d7c3dccf11c20346bcf02ed00d57bd8b298711c8",
+   "sha256": "b9b5e9913f3f6a8e6115a17621c7499d5661d8a2319822d2bd32f79c63e7f4b7",
    "status": "ready"
   },
   {
@@ -2164,7 +2164,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "连不上先看〔救急先看：远程连不上〕。",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {
@@ -2220,7 +2220,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "双屏同步",
    "source_phrase": "连不上先看〔救急先看：远程连不上〕。",
-   "sha256": "80a56ba92e42aa6b9141a824b64cb9208b1b2f37b20bc0d462f04e3e15410ca4",
+   "sha256": "c37acf19a83b48fe035ee2e9131af25e6a15b1e09897ebc7d9fc57fbfd01fe5f",
    "status": "ready"
   },
   {

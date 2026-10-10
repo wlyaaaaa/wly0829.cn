@@ -762,6 +762,7 @@
     },
     {
      "slot": "local",
+     "empty_text": "这个网页还没接入本机模型的实时状态",
      "meaning": "本机模型服务：电脑配置的计划任务 OllamaStable32100SelfHeal（每 5 分钟）上次结果，例如“运行正常”“上次运行失败”“暂时读不到”；这个任务归电脑配置，这里只借它的状态说明本机路线能不能用",
      "source": "看板接口的自动任务扫描里 \\OllamaStable32100SelfHeal（Task Scheduler 的 LastTaskResult；dashboard_sources.json 已为 \\OllamaStable32100 结果 1 写了含义）"
     }
@@ -801,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "81bc8b3cc75a674e3d84f73a1f8d646c5f905941c81f42a28b177a204118f608",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "401eba3c08106cf45513495db565409b6c6895e13d272d13c3fcb952b0aa8708",
+  "converted_at_beijing": "2026-10-10T13:23:33+08:00"
  }
 }
 ---
