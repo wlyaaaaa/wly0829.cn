@@ -262,7 +262,20 @@ def regenerate_runtimes(work):
         'sources': {'cockpit/index.html': str(cockpit)}}), encoding='utf8')
     model, _ = home.cockpit_model(work)
     for rel, text in home_base:
-        emit(rel, home.patch_runtime(text, model, (repo / 'scripts/home-living-bind.js').read_text('utf8')), 'home-app-')
+        # 原压缩壳的 model 前有 import，bridge 通过逗号接到末尾；逐段替换，避免旧新各运行一次。
+        old_model = 'window.HomeLivingStatusModel=(()=>'
+        if text.count(old_model) != 1 or text.count('HeroLive.mount') != 1 or text.count('__heroNativePlates') != 1:
+            raise ValueError('首页原 model/bridge 没有唯一归属段：' + rel)
+        start = text.index(old_model); end = text.index(',window.SiteMotionAppearance=', start)
+        text = text[:start] + text[end + 1:]
+        start = text.rfind('(()=>{"use strict"', 0, text.index('__heroNativePlates'))
+        if start < 0 or not text[:start].endswith(',') or not text[start:].rstrip().endswith('})();'):
+            raise ValueError('首页原 bridge 的完整边界不同：' + rel)
+        text = text[:start - 1] + ';\n'
+        text = home.patch_runtime(text, model, (repo / 'scripts/home-living-bind.js').read_text('utf8'))
+        if text.count('HeroLive.mount') != 1 or len(re.findall(r'window\.HomeLivingStatusModel\s*=', text)) != 1:
+            raise ValueError('首页重生后 model/bridge 重复：' + rel)
+        emit(rel, text, 'home-app-')
     pages = {page: replace(text) for page, text in pages.items()}
     # 从原引擎重新执行首帧补丁；先移除上轮的预热标签，避免重复插入。
     original_engine = previous.get('firstpaint_source', '_shared/home-living/hero-live.576f7d6f10.js')
@@ -298,6 +311,9 @@ def regenerate_runtimes(work):
         if rel in manifest['files']: manifest['files'][new] = outputs[new]
     manifest['files'].pop(old_firstpaint, None); manifest['files'][firstpaint] = outputs[firstpaint]
     if old_firstpaint != firstpaint: dependencies.pop(old_firstpaint, None)
+    for rel in set(previous.get('outputs', {})) - set(outputs):
+        if rel not in base:
+            manifest['files'].pop(rel, None); dependencies.pop(rel, None)
     for row in white_gear['images'] + white_gear['bindings']: manifest['files'][row['path']] = outputs[row['path']]
     for row in previous.get('home_white_gear', {}).get('images', []) + previous.get('home_white_gear', {}).get('bindings', []):
         if row['path'] not in outputs:

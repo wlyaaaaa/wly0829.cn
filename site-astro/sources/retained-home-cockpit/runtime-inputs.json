@@ -42,8 +42,8 @@
       "bytes": 13195
     },
     "site-astro/tools/retain_home_cockpit.py": {
-      "sha256": "58e0751b2e7b9303799ce5dead3be3aacba83c68a35ec9d607decbc4a4a443ae",
-      "bytes": 23912
+      "sha256": "83e083c92279df0fc6274a3e9e18e2605a6d49a0818ca79289e00cfbf3e28a49",
+      "bytes": 25127
     },
     "scripts/release_delta.py": {
       "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
@@ -462,8 +462,8 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "9c725e06e97c48a9b848a661d584168d09588514045e376acd67ad93f353b20b",
-      "bytes": 248745
+      "sha256": "9ce49d610621d124707fa6049a05e086b97736918ef6f4d2b2192413622ced49",
+      "bytes": 248749
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
       "sha256": "f5093dd15ddd9be4155b5af7e114d565d449653d87d1130c5ec791f2167122c3",
@@ -563,9 +563,9 @@
       "sha256": "705bbbe582ccf87a8acfd91524138aa485a98d67dfe9507d3ed639c95d1cc8f6",
       "bytes": 140906
     },
-    "_shared/home-app-21feadb7d813f3110b07.js": {
-      "sha256": "21feadb7d813f3110b07b1495116b687e921a968b20e16636912254244fd88a0",
-      "bytes": 157233
+    "_shared/home-app-92ff384787b4b26d0794.js": {
+      "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",
+      "bytes": 123281
     },
     "assets/home-01-h-1920-bio-white-gear-53db98b56ba4.avif": {
       "sha256": "53db98b56ba4d69f171863951d2542a41f9e76479d3e5da3548f8d7840d63fd1",
@@ -626,7 +626,7 @@
     "/_typeset/runtime/app-c7ea357566aa882de1c8.js": "/_typeset/runtime/app-a1b2628768cbb2d59ce9.js",
     "/_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": "/_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js",
     "/cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": "/cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js",
-    "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-21feadb7d813f3110b07.js"
+    "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-92ff384787b4b26d0794.js"
   },
   "firstpaint_source": "_shared/home-living/hero-live.576f7d6f10.js",
   "home_white_gear": {
