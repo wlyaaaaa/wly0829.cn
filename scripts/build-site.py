@@ -168,6 +168,7 @@ def build(pages=None):
         steps.append({'name': name, 'seconds': seconds}); print(f'{name}: {seconds}s', flush=True)
     snapshot = read(SNAPSHOT / 'manifest.json'); dist = ROOT / 'dist'; public = SITE / 'public'
     retired = set(snapshot.get('retired_runtime_assets', []))
+    finalized_before = (dist / 'release-manifest.json').is_file() and read(dist / 'release-manifest.json').get('finalized_dist', False)
     state_path = SITE / '.cache/build-state.json'; old = read(state_path) if state_path.is_file() else {}
     (dist / '.build-receipt.json').unlink(missing_ok=True)
     if snapshot['schema'] != 'wly.frozen-site.v1': raise ValueError('Unsupported frozen site')
@@ -274,7 +275,7 @@ def build(pages=None):
     if changed or prepare_changed or assets_changed:
         runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})
     for relative, expected in snapshot['pages'].items():
-        if entries[file_route(relative)]['kind'] != 'frozen': continue
+        if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
         if (dist / relative).read_bytes() != runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot).encode('utf8'):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
