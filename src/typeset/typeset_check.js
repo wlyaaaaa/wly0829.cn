@@ -261,6 +261,21 @@
     }
     return out;
   }
+  function rowWhitespace(root) {
+    const scale=root.getBoundingClientRect().width/root.offsetWidth || 1;
+    const children=e=>[...e.children].filter(k=>css(k).display!=='none').flatMap(k=>css(k).display==='contents'?children(k):[k]);
+    return [...root.querySelectorAll('.row')].flatMap(row=>{
+      const cols=[...row.children].filter(c=>c.matches('.col'));
+      if (cols.length<2) return [];
+      const rb=row.getBoundingClientRect(),hasMedia=cols.some(c=>c.querySelector('[data-comp="illustration"] img,.slot-shot-frame'));
+      const columns=cols.map(c=>{
+        if (css(c).display==='contents') return {selector:selector(c,root),bottom_blank:null,reason:'共享网格的栏不拥有独立底边'};
+        const kids=children(c),bottom=Math.max(c.getBoundingClientRect().top,...kids.map(k=>k.getBoundingClientRect().bottom));
+        return {selector:selector(c,root),bottom_blank:round(Math.max(0,(rb.bottom-bottom)/scale))};
+      });
+      return [{selector:selector(row,root),media_text:hasMedia && cols.some(c=>c.querySelector('.tb,[data-comp="chapter_title"]')),columns}];
+    });
+  }
   function check(options={}) {
     options=options || {};
     const root=options.root || document.querySelector('#page') || document.body;
@@ -275,7 +290,8 @@
       if (m.lines.length>1) wrapped.push({selector:label.selector,tag:label.element.localName,component:label.element.closest('[data-comp]')?.dataset.comp || '',rect:rect(label.element.getBoundingClientRect()),text:m.text,chars:m.chars,lines:m.lines,...labelMetrics(label,root)});
     }
     const rows=cardRows(root), uneven=rows.filter(r=>r.classification==='uneven' && r.logical_peer);
-    return {version:VERSION,counts:{orphan_lines:orphans.length,uneven_card_rows:uneven.length,wrapped_labels:wrapped.length,text_blocks:blocks.length,card_rows:rows.length,logical_card_rows:rows.filter(r=>r.logical_peer).length,physical_uneven_card_rows:rows.filter(r=>r.classification==='uneven').length,independent_card_rows:rows.filter(r=>!r.logical_peer).length,independent_uneven_card_rows:rows.filter(r=>!r.logical_peer && r.classification==='uneven').length,equal_card_rows:rows.filter(r=>r.classification==='equal').length,within_one_line_card_rows:rows.filter(r=>r.classification==='within_one_line').length,excluded_pre_blocks:pre.length},orphan_lines:orphans,uneven_card_rows:uneven,wrapped_labels:wrapped,card_rows:rows,excluded_pre_blocks:pre};
+    const whitespace=rowWhitespace(root);
+    return {version:VERSION,row_whitespace:whitespace,media_row_whitespace_over_140:whitespace.filter(r=>r.media_text && r.columns.some(c=>c.bottom_blank>140)),counts:{orphan_lines:orphans.length,uneven_card_rows:uneven.length,wrapped_labels:wrapped.length,text_blocks:blocks.length,card_rows:rows.length,logical_card_rows:rows.filter(r=>r.logical_peer).length,physical_uneven_card_rows:rows.filter(r=>r.classification==='uneven').length,independent_card_rows:rows.filter(r=>!r.logical_peer).length,independent_uneven_card_rows:rows.filter(r=>!r.logical_peer && r.classification==='uneven').length,equal_card_rows:rows.filter(r=>r.classification==='equal').length,within_one_line_card_rows:rows.filter(r=>r.classification==='within_one_line').length,excluded_pre_blocks:pre.length},orphan_lines:orphans,uneven_card_rows:uneven,wrapped_labels:wrapped,card_rows:rows,excluded_pre_blocks:pre};
   }
   globalThis.TypesetChecks={version:VERSION,collectTextBlocks,measureTextBlock,collectLabels,labelMetrics,cardRows,classifyPeerRow,isPeerRow,check};
   globalThis.TypesetCheck={...globalThis.TypesetChecks,audit:check,textBlocks:collectTextBlocks,lines:measureTextBlock};

@@ -320,6 +320,77 @@ globalThis.TypesetApply = () => {
       receipt.balance.push({kind:'fit_head_row',left:Math.round(left),align:Math.round(x-rb.left),title:Math.round(tw),ill:where});
     }
   }
+  const columnParts=c=>[...c.children].filter(k=>!k.matches('script,style')).flatMap(k=>k.matches('.card.frame')?columnParts(k):[k]);
+  const mediaColumn=c=>columnParts(c).length>0 && columnParts(c).every(k=>k.matches('[data-comp="prose"]') ||
+    k.matches('[data-comp="illustration"]') && k.querySelectorAll('img').length===1 ||
+    k.matches('[data-comp="screenshot"]') && k.querySelectorAll('.slot-shot-item').length===1) &&
+    !!c.querySelector('[data-comp="illustration"] img,.slot-shot-frame');
+  function fitMediaRow(row,cols,contentH) {
+    const media=cols.filter(mediaColumn),text=cols.filter(c=>!media.includes(c));
+    if (!media.length || !text.length) return false;
+    row.style.alignItems='start';cols.forEach(c=>{c.style.alignSelf='start';c.style.justifyContent='flex-start';});
+    const before=cols.map(contentH),w0=cols.map(c=>c.getBoundingClientRect().width),total=w0.reduce((a,b)=>a+b,0);
+    const tallest=()=>text.reduce((a,b)=>contentH(a)>contentH(b)?a:b);
+    const pulled=[],solo='[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="notice"],[data-comp="bullet_list"],[data-comp="action_button"]';
+    for (let n=0;n<2 && contentH(tallest())<260;n++) {
+      const next=row.nextElementSibling,parts=next?.matches('.row1,.card.frame')?columnParts(next):[next];
+      if (!parts[0]?.matches(solo) || parts.length!==1 || [...next.textContent.trim()].length>400) break;
+      tallest().append(next);pulled.push(parts[0].dataset.comp);
+    }
+    const title=tallest().querySelector('[data-comp="chapter_title"]');
+    if (contentH(tallest())<260 && title && media.every(c=>!c.querySelector('[data-comp="screenshot"],[data-comp="prose"]'))) {
+      const wrap=document.createElement('div'),height=Math.max(100,title.getBoundingClientRect().height);
+      wrap.style.cssText='display:flex;align-items:center;gap:22px;min-width:0';title.before(wrap);wrap.append(title);
+      for (const c of media) {
+        for (const ill of columnParts(c)) {
+          const img=ill.querySelector('img'),aspect=img.naturalWidth/img.naturalHeight;
+          const h=Math.min(height,c.getBoundingClientRect().width/aspect);
+          Object.assign(img.style,{width:'auto',maxWidth:'none',height:h+'px',maxHeight:'none'});
+          ill.style.flex='none';
+        }
+        wrap.append(...[...c.children].filter(k=>!k.matches('script,style')));
+        c.remove();
+      }
+      row.style.gridTemplateColumns=text.map(c=>`minmax(0,${w0[cols.indexOf(c)]}fr)`).join(' ');
+      row.classList.remove('fit-ill');row.dataset.typesetFit='title';
+      receipt.balance.push({kind:'fit_illustration_title',before:before.map(Math.round),pulled});return true;
+    }
+    const visuals=media.map(c=>[...c.querySelectorAll('[data-comp="illustration"] img,.slot-shot-frame')].map(el=>{
+      const shot=el.matches('.slot-shot-frame'),r=el.getBoundingClientRect();
+      const aspect=shot?r.width/r.height:el.naturalWidth/el.naturalHeight;
+      return {el,shot,aspect,natural:w0[cols.indexOf(c)]/aspect};
+    }));
+    let widths=[...w0];
+    for (let pass=0;pass<8;pass++) {
+      const th=contentH(tallest());
+      media.forEach((c,i)=>{
+        const parts=visuals[i],extra=contentH(c)-parts.reduce((s,v)=>s+v.el.getBoundingClientRect().height,0);
+        const budget=th+100-extra,natural=parts.reduce((s,v)=>s+v.natural,0);
+        for (const v of parts) {
+          const h=Math.min(v.natural,Math.max(v.shot?260/v.aspect:100,budget*v.natural/natural));
+          Object.assign(v.el.style,{width:(h*v.aspect)+'px',maxWidth:'100%',height:h+'px',maxHeight:'none'});
+          if (!v.shot) Object.assign(v.el.parentElement.style,{display:'flex',justifyContent:'center'});
+        }
+        const needs=parts.map(v=>{const p=v.el.parentElement,s=getComputedStyle(p),inner=p.clientWidth-(parseFloat(s.paddingLeft)||0)-(parseFloat(s.paddingRight)||0);
+          return v.el.getBoundingClientRect().width+Math.max(0,c.getBoundingClientRect().width-inner);});
+        widths[cols.indexOf(c)]=Math.min(w0[cols.indexOf(c)],Math.max(...needs));
+      });
+      // 图栏收到图宽；文字栏最多原宽1.6倍，余宽保留在媒体栏，不拉伸图。
+      let spare=total-widths.reduce((a,b)=>a+b,0);
+      const room=text.reduce((s,c)=>s+Math.max(0,w0[cols.indexOf(c)]*1.6-widths[cols.indexOf(c)]),0);
+      text.forEach(c=>{const i=cols.indexOf(c);widths[i]+=Math.min(spare,room)*(w0[i]*1.6-widths[i])/Math.max(1,room);});
+      spare=total-widths.reduce((a,b)=>a+b,0);
+      media.forEach(c=>{widths[cols.indexOf(c)]+=spare/media.length;});
+      row.style.gridTemplateColumns=widths.map(w=>`minmax(0,${w.toFixed(2)}fr)`).join(' ');
+    }
+    media.forEach((c,i)=>visuals[i].forEach(v=>{
+      const host=v.el.parentElement,cs=getComputedStyle(host),available=host.clientWidth-(parseFloat(cs.paddingLeft)||0)-(parseFloat(cs.paddingRight)||0);
+      const w=Math.min(parseFloat(v.el.style.width),c.getBoundingClientRect().width,available);
+      Object.assign(v.el.style,{width:w+'px',height:(w/v.aspect)+'px'});
+    }));
+    receipt.balance.push({kind:'fit_illustration',before:before.map(Math.round),after:cols.map(c=>Math.round(contentH(c))),pulled,widths:widths.map(Math.round)});
+    return true;
+  }
   function fillShortColumns() {
     // 短栏按内容高：插画可在原栏宽内等比放大，其余整栏居中，不撑高卡片或拉散气泡。
     // 标题行不动；图文行的文字仍顶对齐。只调整行内构图，不增加行高。
@@ -327,8 +398,10 @@ globalThis.TypesetApply = () => {
     const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
       return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
     for (const row of root.querySelectorAll('.row')) {
-      if (row.matches('[data-inline-row]') || row.querySelector('[data-status-line]')) continue;
       const cols=[...row.children].filter(c=>c.matches('.col'));
+      const horizontal=document.body.classList.contains('o-h');
+      if (horizontal) cols.filter(c=>!mediaColumn(c)).forEach(c=>{c.style.alignSelf='start';c.style.justifyContent='flex-start';});
+      if (row.matches('[data-inline-row]') || !horizontal && row.querySelector('[data-status-line]')) continue;
       if (cols.length<2) continue;
       const fit=row.matches('.fit-ill'),H=Math.max(...cols.map(contentH));
       for (const c of cols) {
@@ -336,7 +409,7 @@ globalThis.TypesetApply = () => {
         if (d<=SL) continue;
         const how=[];
         const ill=[...c.children].find(k=>k.matches('[data-comp="illustration"]') && k.querySelectorAll('img').length===1);
-        if (ill) {
+        if (ill && !(horizontal && fit)) {
           const img=ill.querySelector('img'),ib=img.getBoundingClientRect();
           const aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height);
           const nh=Math.min(c.getBoundingClientRect().width/aspect,ib.height+d);
@@ -346,7 +419,7 @@ globalThis.TypesetApply = () => {
             d=H-contentH(c);how.push('ill');
           }
         }
-        if (d>SL && (!fit || ill)) {c.style.alignSelf='center';c.style.justifyContent='flex-start';how.push('center');}   // 图文行只居中图栏，文字照旧顶对齐
+        if (d>SL && (horizontal ? mediaColumn(c) : (!fit || ill))) {c.style.alignSelf='center';c.style.justifyContent='flex-start';how.push('center');}
         if (how.length) receipt.balance.push({kind:'fill_short_column',gap:Math.round(H-contentH(c)),how:how.join('+')});
       }
     }
@@ -367,6 +440,7 @@ globalThis.TypesetApply = () => {
         k.slice(1).every(x=>x.matches('[data-comp="prose"]'));};
     for (const row of root.querySelectorAll('.row.fit-ill')) {
       const cols=[...row.children].filter(c=>c.matches('.col'));
+      if (document.body.classList.contains('o-h') && fitMediaRow(row,cols,contentH)) continue;
       if (cols.length!==2) continue;
       const mc=cols.find(isMedia),tc=cols.find(c=>c!==mc);
       if (!mc) {
@@ -410,7 +484,8 @@ globalThis.TypesetApply = () => {
         }
       }
       const twMax=Math.min(total-120,tw0*1.6);
-      if (fixedW) mw=Math.max(Math.min(fixedW,mw0),total-twMax);   // 定了像素宽的插画：图栏收到图宽
+      if (document.body.classList.contains('o-h') && th0-mh0>SLACK) mw=mw0;
+      else if (fixedW) mw=Math.max(Math.min(fixedW,mw0),total-twMax);   // 定了像素宽的插画：图栏收到图宽
       else {
         const minH=Math.min(mh0,Math.max(260,mh0*.45));
         let lo=Math.max(total-twMax,mw0*minH/Math.max(1,mh0)),hi=Math.max(lo,Math.min(mw0*1.4,total-240));
