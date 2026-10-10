@@ -293,7 +293,7 @@
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
   "sha256": "3e64e1ffd1304366f44afe95353b0eb16b897e7001f30acc89d50da7d946e502",
-  "converted_at_beijing": "2026-10-10T05:26:53+08:00"
+  "converted_at_beijing": "2026-10-10T19:59:39+08:00"
  }
 }
 ---
@@ -388,6 +388,8 @@
     },
     {
      "type": "points_card",
+     "row": "privacy-intro",
+     "width": "55%",
      "whole_block": true,
      "item_cards": true,
      "inner_columns": 1,
@@ -400,21 +402,9 @@
      "text_ref": "先看是哪种情况"
     },
     {
-     "type": "prose",
-     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
-    },
-    {
-     "type": "action_button",
-     "columns": 2,
-     "text_ref": "跳到：资料的锁和解锁可信位置和秘密公开分级表私人仓库和备份"
-    },
-    {
-     "type": "glossary",
-     "columns": 1,
-     "text_ref": "先认几个词"
-    },
-    {
      "type": "document_mock",
+     "row": "privacy-intro",
+     "width": "45%",
      "variant": "window",
      "text_ref": "资料锁L1L2L3L4L5GH30天",
      "base_asset": "_library/illustrations/ill-r3-313baf1d2fe281cb.png",
@@ -522,6 +512,20 @@
       }
      ],
      "layout": "illustration_labels"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这是Codex、Claude和它们派出的子代理共用的专题，是约法L14我的电脑可信、"
+    },
+    {
+     "type": "action_button",
+     "columns": 2,
+     "text_ref": "跳到：资料的锁和解锁可信位置和秘密公开分级表私人仓库和备份"
+    },
+    {
+     "type": "glossary",
+     "columns": 1,
+     "text_ref": "先认几个词"
     },
     {
      "type": "notice",

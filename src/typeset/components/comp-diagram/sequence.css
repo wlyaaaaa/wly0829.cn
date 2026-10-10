@@ -34,7 +34,7 @@
   display: grid;
   grid-template-columns: repeat(var(--sequence-columns), minmax(0, 1fr));
   gap: var(--sequence-space);
-  align-items: stretch;
+  align-items: start;
   min-width: 0;
 }
 .c-diagram.c-sequence .sequence-item {
@@ -53,7 +53,7 @@
 }
 .c-diagram.c-sequence .sequence-card {
   position: relative;
-  flex: 1;
+  flex: none;
   display: flex;
   flex-direction: column;
   gap: 0.25em;

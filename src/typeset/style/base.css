@@ -41,6 +41,15 @@ b { font-weight: 700; color: var(--accent); }
 .nowbar { position: relative; }
 
 .grid { display: grid; gap: var(--gap-card); align-items: stretch; }
+/* 真实内容卡按内容高；图集、截图和统计表铺底框保留原布局。 */
+.grid.sides, .grid.stats:not(.hub-stat-grid) { align-items: center; }
+.grid.steps { align-items: start; }
+/* 独立卡组件只解除卡本身的拉伸，不影响同网格内的插画或装饰层。 */
+.c-feature-card > .feature-item,
+.c-feature-card :is(.feature-group-grid, .feature-last-row, .feature-layout-row) > .feature-item,
+.c-hub-entry-cards > .hub-entry-card,
+.c-hub-links > .hub-link-cell,
+.c-directory-tiles .hub-directory-grid > :is(.hub-directory-card, .hub-directory-entry) { align-self: center; }
 .core-illustration-gallery figure { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
 .core-illustration-gallery img { display: block; width: 100%; height: auto; }
 .core-illustration-gallery figcaption { text-align: center; }
@@ -158,7 +167,7 @@ b { font-weight: 700; color: var(--accent); }
 .title-img.al-center img { margin: 0 auto; }
 .title-img.al-left img { margin-left: -12px; }
 /* 开放式流程（横版）：图标、丝带在卡外，卡只装文字 */
-.o-h .steps.m-open-name, .o-h .steps.m-open { align-items: stretch; }
+.o-h .steps.m-open-name, .o-h .steps.m-open { align-items: start; }
 .o-h .step.open { display: flex; flex-direction: column; gap: 6px; padding: 0; background: none; border: 0; box-shadow: none; }
 .o-h .step.open .stepic { height: 170px; }
 .o-h .step.open .stepic .ic { max-height: 170px; }
@@ -168,7 +177,7 @@ b { font-weight: 700; color: var(--accent); }
 .o-h .steps.m-open::before { top: 166px; }
 .o-h .step.open .stephead { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
 .o-h .step.open .stephead .badge { position: static; box-shadow: none; }
-.o-h .stepbody { flex: 1; padding: 10px 14px 14px; }
+.o-h .stepbody { flex: none; padding: 10px 14px 14px; }
 .o-h .badgerow { display: flex; justify-content: center; margin: -4px 0 -2px; position: relative; }
 .o-h .badgerow .badge { position: static; width: 48px; height: 48px; font-size: 28px; box-shadow: 0 0 0 4px #fff; }
 .o-h .step.open .stepbody .stephead { padding: 0; margin-bottom: 4px; }
@@ -331,8 +340,6 @@ b { font-weight: 700; color: var(--accent); }
 .card.frame > .row { gap: 22px; }
 /* 分张标记不占位 */
 .pgbreak { height: 0; margin: 0; padding: 0; }
-/* 独立卡画布：最后一块撑满 8:5 的高 */
-.shape-card #page > :last-child { flex-grow: 1; }
 /* 右上角叶子（数字卡、流程末卡）：缩小、大半探出卡外；向上只探 16px（不超过块间距，不压上一块的字） */
 .stat:nth-child(odd)::after, .step:last-child::after { width: 44px; height: 84px; top: -16px; right: 0; }
 .side:first-child::after { left: -30px; }
@@ -405,8 +412,8 @@ b { font-weight: 700; color: var(--accent); }
 .card.side.btn-bottom-right .sidetext > .btnrow, .card.side.btn-bottom .sidetext > .btnrow, .card.side.btn-bottom-left .sidetext > .btnrow { margin-top: auto; }
 .card.side.btn-bottom-right .sidetext > .btnrow { justify-content: flex-end; }
 .card.side.btn-bottom .sidetext > .btnrow { justify-content: center; }
-/* 同组卡等高（equal_height）：网格行拉齐，卡内字顶对齐 */
-.grid.sides.eqh { align-items: stretch; }
+/* 同组卡按内容高在一行中居中，卡内字顶对齐。 */
+.grid.sides.eqh { align-items: center; }
 .grid.sides.eqh > .card.side { align-items: flex-start; }
 /* 卡内图位统一尺寸（icon_size）：图在固定框里等比放，不裁 */
 .grid.sides.sz-icon .sideic { flex: 0 0 var(--card-icon); max-width: var(--card-icon); }
@@ -419,14 +426,12 @@ b { font-weight: 700; color: var(--accent); }
 .nowbar.lbl-above .livename { max-width: none; }
 /* 竖版有图步骤：编号在步骤名前 */
 .o-v .step .stephead .badge { position: static; box-shadow: none; margin-right: 10px; }
-/* 行：等高（row_equal_height）与居中（row_align） */
-.row.eqh { align-items: stretch; }
-.row.eqh > .col > :last-child { flex-grow: 1; }
-.row.eqh > .col > :last-child > .card:only-child, .row.eqh > .col > .card:last-child { height: 100%; }
+/* 行内卡片按内容高；原等高行改为整栏居中，不拉长末卡。 */
+.row.eqh { align-items: center; }
 .row.mid { align-items: center; }
-.row.card-notes { align-items: stretch; }
+.row.card-notes { align-items: center; }
 .row.card-notes > .col, .row.card-notes > .col > .ct-source_text_card { display: contents; }
-.row.card-notes .ct-source-card { grid-row: 1; grid-column: var(--row-card-column); height: 100%; }
+.row.card-notes .ct-source-card { grid-row: 1; grid-column: var(--row-card-column); height: auto; }
 .row.card-notes .ct-row-note { grid-row: 2; grid-column: 1 / -1; min-width: 0; }
 .row1.center { align-self: center; }
 .row1.right { align-self: flex-end; }

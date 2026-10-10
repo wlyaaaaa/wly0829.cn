@@ -9,8 +9,10 @@ import footer from '../chrome/footer.html?raw';
 import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
 import albumRuntime from '../../public/_album/astro-runtime.json';
+import motionRuntime from '../../public/_living/quality-runtime/manifest.json';
 import '../styles/typeset-page.css';
 import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
+import typesetMotion from '../scripts/typeset-motion.js?url&no-inline';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
 interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; noindex?: boolean; toc: { id: string; label: string; img?: string }[] }
 const { title, kind, url, toc, page, motion, blocks, pageMeta, moved, noindex } = Astro.props;
@@ -20,10 +22,12 @@ function albumMeta() {
   const old = rt.album;
   const first = (old.nodes || []).find((n: any) => n.orientation === 'h') || {};
   const nodes: any[] = [];
-  if (motion?.art) nodes.push({ screen: motion.screen, selector: `[data-art-key="${motion.art.key}"]`, src: motion.art.src, size: motion.art.size, orientation: 'h',
+  for (const orientation of ['h', 'v']) {
+  if (motion?.art) nodes.push({ screen: motion.screen, selector: `.ts-${orientation} [data-art-key="${motion.art.key}"]`, src: motion.art.src, size: motion.art.size, orientation,
     arts: [{ key: motion.art.key, rect: [0, 0, 1, 1] }], primary: null, links: first.links || [], title: null });
-  if (motion?.brush) nodes.push({ screen: motion.screen, selector: `[data-title-key="${motion.brush.key}"]`, src: motion.brush.src, size: motion.brush.size, orientation: 'h',
+  if (motion?.brush) nodes.push({ screen: motion.screen, selector: `.ts-${orientation} [data-title-key="${motion.brush.key}"]`, src: motion.brush.src, size: motion.brush.size, orientation,
     arts: [], primary: null, links: [], title: [0, 0, 1, 1], titleKey: first.titleKey });
+  }
   const images = [motion?.art, motion?.brush].filter(Boolean).map((x: any) => ({ src: x.src, both: true }));
   return { ...old, entry: motion?.screen || old.entry, nodes, images };
 }
@@ -43,7 +47,7 @@ const tocHtml = (() => {
     last = i; return m;
   });
 })();
-const withoutTocRuntime = (html: string) => html.replace(/<script\b[^>]*\b(?:data-src|src)="[^"]*toc-consistency[^"]*"[^>]*><\/script>/g, '');
+const withoutTocRuntime = (html: string) => Object.entries(motionRuntime.urls).reduce((text, [from, to]) => text.replaceAll(from, to as string), html.replace(/<script\b[^>]*\b(?:data-src|src)="[^"]*toc-consistency[^"]*"[^>]*><\/script>/g, ''));
 const head = rt ? withoutTocRuntime(rt.head.map((h: string) => h.startsWith('<script id="album-page"')
   ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>`
   : /<script[^>]*data-album-inline/.test(h) ? `<script data-album-inline>${albumRuntime.source}</script>`
@@ -82,6 +86,7 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
   {blocks && <Fragment set:html={`<style>@font-face{font-family:"Sans";src:url("${blocks.font}") format("woff2");font-weight:100 900;font-display:block}</style>`} />}
 </head>
 <body data-page-kind={kind} class="astro-page">
+  <div class="ambient-motion" aria-hidden="true"></div>
   <a class="skip" href="#content">跳到正文</a>
   <Fragment set:html={header} />
   {tocHtml ? <Fragment set:html={tocHtml} /> : toc.length > 0 && (
@@ -125,17 +130,21 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
+  {blocks && <script is:inline defer src={typesetMotion}></script>}
   <script is:inline defer src={tocConsistency}></script>
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
-  {blocks && <script is:inline>(()=>{/* 屏淡入（照旧站 reveal 实测：整屏一起从下方 100px 升起、透明度 0→1，800 毫秒；第一屏、卡片网格里的卡片屏、
+  {blocks && <script is:inline>(()=>{/* 屏淡入：整屏一起从下方 100px 升起、透明度 0→1，统一慢档 800 毫秒；第一屏、卡片网格里的卡片屏、
     带 # 进来的那屏、motion-off、减少动态效果时不播；屏进视口 6% 时加 .ts-entering，播完摘掉。样式在 typeset-page.css） */
-    if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    if(!('IntersectionObserver' in window))return;const reduced=matchMedia('(prefers-reduced-motion: reduce)');
     const go=()=>{const all=[...document.querySelectorAll('main.ts-page section.ts-screen')],first=all[0];
       const hit=location.hash?document.getElementById(decodeURIComponent(location.hash.slice(1)))?.closest('.ts-screen'):null;
-      const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const sec=e.target;io.unobserve(sec);
-        if(sec===first||sec===hit||sec.dataset.seen||sec.parentElement?.classList.contains('ts-card-grid')||document.body.classList.contains('motion-off'))return;
+      const enter=sec=>{if(sec===first||sec===hit||sec.dataset.seen||sec.parentElement?.classList.contains('ts-card-grid')||[...sec.querySelectorAll('.card,.ct-card')].some(card=>card.getClientRects().length))return;
+        if(document.hidden||reduced.matches||document.body.classList.contains('motion-off'))return;
         sec.dataset.seen='1';sec.classList.add('ts-entering');
-        sec.addEventListener('animationend',ev=>{if(ev.target===sec)sec.classList.remove('ts-entering');});}),{threshold:.06});
+        sec.addEventListener('animationend',ev=>{if(ev.target===sec)sec.classList.remove('ts-entering');});};
+      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)enter(e.target);}),{threshold:.06});
+      const sync=()=>all.forEach(sec=>{if(document.hidden||reduced.matches||document.body.classList.contains('motion-off')){if(sec.classList.contains('ts-entering')){sec.classList.remove('ts-entering');delete sec.dataset.seen;}}else{const r=sec.getBoundingClientRect();if(r.bottom>0&&r.top<innerHeight)enter(sec);}});
+      document.addEventListener('site-motion',sync);document.addEventListener('visibilitychange',sync);reduced.addEventListener('change',sync);
       all.forEach(x=>io.observe(x));};
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go,{once:true});else go();})();</script>}
 </body>

@@ -11,6 +11,8 @@
 /* 环境动画的宿主：画布外、和画布里那张插画同一位置同一大小（见 tools/render_blocks.py） */
 .ts-art { position: absolute; margin: 0; z-index: 1; }
 .ts-art > img { display: block; width: 100%; height: 100%; }
+.ts-o:has([data-comp="document_mock"] img[data-ts-art]) .ts-canvas { position:relative; z-index:2; background:transparent; }
+.ts-o:has(.ts-art .living-layer.is-live) .ts-canvas [data-comp="document_mock"] img[data-ts-art] { visibility:hidden; }
 @media (max-width: 767.98px) {
   .paper.ts-page { width: 100%; max-width: none; }
   .ts-screen { margin-bottom: 8px; }
@@ -125,10 +127,42 @@ body.astro-page [data-b2-connection-notice],body.astro-page aside[data-computer-
 .ts-canvas [data-hot="live"] .live-row:is([data-state="warn"],[data-state="waiting"],[data-state="expired"]) .live-dot{background:#d2a111}
 .ts-canvas [data-hot="live"] .live-rows .live-text,.ts-canvas [data-href="ca-personal-data"] .live-text,.ts-canvas [data-href="ca-connection"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
 .ts-canvas [data-hot="live"]:is([data-href="ca-personal-data"],[data-href="ca-connection"]){height:auto;min-height:var(--slot-live-frame-height,84px)}
-/* 屏淡入（照旧站实测：section.screen 整屏一起，透明度 0→1、从下方 100px 升到原位，800 毫秒，cubic-bezier(.2,.7,.25,1)，fill both，没有逐卡延迟；
+/* 屏淡入：整屏透明度 0→1、从下方 100px 升到原位，统一慢档 800 毫秒 ease-out，fill both；
    第一屏等不播，脚本在 Site.astro） */
 @keyframes ts-screen-enter{from{opacity:0;transform:translateY(var(--motion-screen-enter-y,100px))}to{opacity:1;transform:none}}
-.ts-page section.ts-screen.ts-entering{animation:ts-screen-enter var(--motion-screen-duration,800ms) cubic-bezier(.2,.7,.25,1) both}
+.ts-page section.ts-screen.ts-entering{animation:ts-screen-enter var(--motion-screen-duration,800ms) ease-out both}
 @media (prefers-reduced-motion:reduce){.ts-page section.ts-screen.ts-entering{animation:none}}
 /* 并排行栏里的“现在”状态（首屏左栏标题下面）：栏窄，字换行、不截断（主持 10 月 10 日 12:08） */
 .ts-canvas .row > .col [data-hot="live"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+/* motion-quality-v2 */
+/* 统一慢档；保留原幅度，同一段也用于保留页面。 */
+.falling-leaf{animation-duration:29s!important;animation-timing-function:linear!important}
+.watercolour-wash{animation-duration:42s!important;animation-timing-function:ease-in-out!important}
+.status-pulse{animation-duration:3000ms}
+@keyframes pulse{50%{transform:scale(var(--motion-pulse-scale,2.25));opacity:.18}}
+.arrow-flow i{width:10px;height:10px;background:#55e894;box-shadow:0 0 13px #1de777;animation-duration:2800ms}
+.sample-seam:before{box-shadow:inset 0 20px 46px #77bd9678;animation-duration:1400ms}
+@keyframes sample-seam{from{opacity:.9;transform:scaleY(.875)}to{opacity:0;transform:scaleY(1)}}
+.sample-updated:after{inset:-6px;border-width:2px;animation-duration:1800ms}
+@keyframes sample-ripple{from{opacity:.85;transform:scale(.97)}to{opacity:0;transform:scale(1.2)}}
+@keyframes watercolour-drift{from{transform:translate(-200px,-100px) scale(.88);opacity:.35}to{transform:translate(225px,162.5px) scale(1.16);opacity:.9}}
+@keyframes falling-leaf{0%{transform:translate3d(0,-12vh,0) rotate(-87.5deg);opacity:0}10%{opacity:.45}85%{opacity:.38}100%{transform:translate3d(calc(var(--drift) * 2.5),112vh,0) rotate(112.5deg);opacity:0}}
+.screen.entering{animation-duration:800ms;animation-timing-function:ease-out}
+.sample-card{animation-duration:900ms;animation-timing-function:ease-out}
+.hotspot,.shape-card,.raster-card{transition-duration:200ms;transition-timing-function:ease}
+.hotspot:hover{transform:translateY(-5px)}
+.shape-card:has(.card-main,.project-main):hover,.raster-card:hover{transform:translateY(-7.5px)}
+.raster-card:has([data-card-secondary]:hover),.typeset-screen.shape-card:has([data-card-secondary]:hover){transform:none}
+.ts-page .ts-screen{translate:0 var(--sample-y,0px)}
+.ts-card-grid>.ts-screen,.ts-canvas .card:has([data-href]),.ts-canvas .linkbtn{transition:translate 200ms ease,box-shadow 200ms ease}
+.ts-card-grid>.ts-screen:hover,.ts-canvas .card:has([data-href]):hover{translate:0 -7.5px;box-shadow:0 8px 20px #31673b14}
+.ts-canvas .linkbtn:hover{translate:0 -5px;box-shadow:0 6px 20px #2a9d4820}
+.ts-canvas a:hover{text-decoration:underline;text-underline-offset:.18em}
+.ts-canvas .sample-overlay{pointer-events:none!important}
+.ts-canvas :is(.card,.ct-card){position:relative}
+.ts-canvas .sample-updated{position:relative}
+.motion-off .ts-page .ts-screen,.motion-off .ts-canvas :is(.card,.linkbtn):hover{translate:none!important}
+.motion-off *,.motion-off *::before,.motion-off *::after{animation:none!important;transition:none!important}
+.motion-off .sample-seam:before,.motion-off .sample-updated:after{display:none}
+.motion-off .hotspot:hover,.motion-off .raster-card:hover,.motion-off .shape-card:has(.card-main,.project-main):hover{transform:none!important}
+@media(prefers-reduced-motion:reduce){.ts-page .ts-screen,.ts-canvas :is(.card,.linkbtn):hover{translate:none!important}.ambient-motion,.sample-overlay,.sample-seam:before,.sample-updated:after{display:none!important}.hotspot:hover,.raster-card:hover,.shape-card:has(.card-main,.project-main):hover{transform:none!important}}
