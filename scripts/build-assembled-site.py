@@ -216,7 +216,7 @@ class Refs(HTMLParser):
             if not value: continue
             if key == 'data-href' and 'slot-shot-frame' in d.get('class', '').split():
                 self.refs.append((value, False))
-            elif key in {'href', 'src', 'data-src', 'data-lazy-src', 'poster', 'data-poster', 'action', 'data-living-config'}:
+            elif key in {'href', 'src', 'data-src', 'data-lazy-src', 'poster', 'data-poster', 'action', 'data-living-config'} or key == 'data-ts-src' and tag in {'img', 'image'}:
                 self.refs.append((value, tag == 'a' and key == 'href'))
             elif key.endswith('srcset'):
                 self.refs.extend((v.strip().split()[0], False) for v in value.split(',') if v.strip())

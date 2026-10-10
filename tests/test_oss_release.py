@@ -20,6 +20,28 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_lazy_html_and_svg_images_migrate_with_their_no_js_originals(self):
+        files={'index.html':{},'assets/photo.jpg':{},'assets/tile.webp':{}}
+        base='https://example.oss.invalid'; prefix='releases/one'
+        raw=(b'<head><meta http-equiv="Content-Security-Policy" content="img-src \'self\'"></head>'
+             b'<img data-ts-src="/assets/photo.jpg"><noscript><img src="/assets/photo.jpg"></noscript>'
+             b'<svg data-ts-lazy><image data-ts-src="/assets/tile.webp"></image></svg>'
+             b'<noscript><svg><image href="/assets/tile.webp"></image></svg></noscript>'
+             b'<div data-ts-src="symbolic-key" data-href="mcp-grants"></div>')
+        rewrite=oss.Rewriter(files,base,prefix,'https://wly0829.cn',version=6)
+        migrated=rewrite.rewrite(raw,'index.html')
+        for rel,attribute in [('assets/photo.jpg','src'),('assets/tile.webp','href')]:
+            url=(base+'/'+prefix+'/'+rel).encode()
+            self.assertIn(b'data-ts-src="'+url+b'"',migrated)
+            self.assertIn(attribute.encode()+b'="'+url+b'"',migrated)
+        self.assertIn(b"img-src 'self' https://example.oss.invalid",migrated)
+        self.assertIn(b'data-ts-src="symbolic-key" data-href="mcp-grants"',migrated)
+        self.assertEqual(rewrite.references['index.html'],{'assets/photo.jpg','assets/tile.webp'})
+        self.assertFalse(rewrite.missing)
+        absent=oss.Rewriter({'index.html':{}},base,prefix,'https://wly0829.cn',version=6)
+        absent.rewrite(b'<img data-ts-src="/assets/missing.webp">','index.html')
+        self.assertTrue(any(row['url']=='/assets/missing.webp' and row['context']=='resource' for row in absent.missing))
+
     def test_viewer_original_image_migrates_but_live_keys_stay_symbolic(self):
         rewrite = oss.Rewriter({'index.html': {}, 'photo.jpg': {}}, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn', version=6)
         raw = (b'<head><meta http-equiv="Content-Security-Policy" content="img-src \'self\'"></head>'
