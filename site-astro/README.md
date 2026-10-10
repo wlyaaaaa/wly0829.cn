@@ -1,6 +1,6 @@
 # site-astro：内容页（区块照现在的网站，排版在浏览器里自动做）
 
-内容页每页一个内容文件 `src/content/pages/<页>.md`，一律由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成，不手改。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
+内容页每页一个内容文件 `src/content/pages/<页>.md`，通常由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成。直接编辑 Markdown 也会生效；构建记住这次编辑，后续 JSON 变化不会静默覆盖它，而会提示先统一作者输入。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
 
 ## 为什么这样做（第四轮）
 
@@ -39,7 +39,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 
 `python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `site-astro/.cache/build-report.json`。
 
-`scripts/prepare-astro-release.py prepare` 调用仓库根 `npm run build`，复制这份完整站，再执行既有版本、来源和 OSS 分拆核验。旧发布清单仅用于运输差额、对象复用和来源比较，不再提供缺页或外壳。此命令仍只做准备，上传、封存与切换另走已授权的发布入口。
+`scripts/prepare-astro-release.py` 现在只保留规则源 `refresh`，旧 `prepare` 拼装入口已移除。后续发布接线由 G2 读取仓库根 `dist` 和 `.build-receipt.json`；当前构建不上传、不封存、不切换线上版本。
 
 `public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
 
@@ -59,7 +59,7 @@ npm run dev -- --host 127.0.0.1 --port 4173
 这一屏的文字（Markdown）
 ````
 
-内容文件不手改，下面说的都是改源再重新转换（`python tools/convert_page.py <页>`）：
+常规维护改 JSON 作者源再转换（`python tools/convert_page.py <页>`）；若已直接改过 Markdown，先人工统一两份作者输入，再恢复自动转换：
 
 - 改字、数字、链接：改 `sources/pages/<页>/page.json` 里那一屏的 `text`、`links`。
 - 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。
