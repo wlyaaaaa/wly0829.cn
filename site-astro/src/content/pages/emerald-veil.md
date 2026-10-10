@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T11:19:25+08:00"
+  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
  }
 }
 ---
@@ -3481,6 +3481,13 @@
      "text_ref": "演进"
     },
     {
+     "type": "illustration",
+     "index": 0,
+     "size": "banner",
+     "align": "center",
+     "target_width": 360
+    },
+    {
      "type": "timeline",
      "direction": "vertical",
      "connector": "ribbon",
@@ -3497,16 +3504,7 @@
       "_library/icons/文稿堆.png",
       "_library/icons/文件齿轮.png"
      ],
-     "text_ref": "8月11日：建库。起因是主屏是OLED，本人想要一层护屏：“像WindowsXP的泡",
-     "row": "lone-ill-1",
-     "width": "60%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "lone-ill-1",
-     "width": "40%"
+     "text_ref": "8月11日：建库。起因是主屏是OLED，本人想要一层护屏：“像WindowsXP的泡"
     },
     {
      "type": "prose",

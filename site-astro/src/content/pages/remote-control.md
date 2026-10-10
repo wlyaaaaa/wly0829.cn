@@ -841,7 +841,7 @@
  "source": {
   "page": "sources/pages/remote-control/page.json",
   "sha256": "fc4f4b235b6bc56a0045859537081660322efab0f5d215cc1c123c5d76078e7c",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "converted_at_beijing": "2026-10-10T11:35:26+08:00"
  }
 }
 ---
@@ -4056,6 +4056,13 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
      "size": "medium"
     },
     {
+     "type": "illustration",
+     "width": "100%",
+     "align": "center",
+     "size": "small",
+     "target_height": 230
+    },
+    {
      "type": "timeline",
      "text_ref": "9月9日：主机的电脑连接上线；连接时自动附上规则；加上管理员和SYSTEM维护；笔记本装上同一套9月10日：开机就启动，没登录也能维护；Ch",
      "direction": "vertical",
@@ -4063,14 +4070,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "ribbon",
-     "width": "60%",
-     "row": "lone-ill-1",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "width": "40%",
-     "row": "lone-ill-1"
+     "width": "100%"
     }
    ],
    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。\n页修复10：主插画移到标题后居中，最高230px；时间线满宽，不留空的长右栏。\n页修复10：规格档位页标题large、章节medium；当前核心size不改毛笔资产的实际尺寸，统一毛笔标题宽度及删内部前缀请求main，未冒充已执行。",

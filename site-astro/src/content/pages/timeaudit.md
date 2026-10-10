@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
-  "converted_at_beijing": "2026-10-10T11:24:47+08:00"
+  "converted_at_beijing": "2026-10-10T11:35:27+08:00"
  }
 }
 ---
@@ -5748,17 +5748,14 @@
       "pale_gray"
      ],
      "status_position": "top_right",
-     "text_ref": "登录自动开始",
-     "row": "lone-ill-2",
-     "width": "60%",
-     "row_fit_illustration": true
+     "text_ref": "登录自动开始"
     },
     {
      "type": "illustration",
+     "align": "left",
      "connector": "none",
      "index": 0,
-     "row": "lone-ill-2",
-     "width": "40%"
+     "size": "banner"
     }
    ],
    "notes": "无章节标题、无图例。横图实际保底第一排28/29两张半宽卡，第二排30/31/32三卡，第三排33/34/35三卡；下方整宽纸带/狗/回形针插画在卡外。第32项原图黄，定稿scene明确绿，按定稿标绿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。",

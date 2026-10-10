@@ -326,6 +326,8 @@ def plain_ill(b):
 
 
 PAIR_SKIP_SIZES = ("banner", "large")
+# 不和单独插画配一行的块：标题类，以及时间线、功能卡、表格、流程、编号步骤、对比这类长块（文字栏太高、图放不大，空得更多）
+PAIR_SKIP_TYPES = ("chapter_title", "section_heading", "tag", "action_button", "timeline", "feature_card", "table", "flow", "numbered_steps", "comparison")
 
 
 def pair_lone_illustrations(blocks, lens=None):
@@ -390,7 +392,7 @@ def pair_lone_illustrations(blocks, lens=None):
         for j in (i0 - 1, i0 + 1):
             if 0 <= j < len(blocks):
                 t = blocks[j]
-                if (not t.get("row") and t.get("type") in TEXTISH_ALL and t.get("type") not in ("chapter_title", "section_heading", "tag", "action_button")
+                if (not t.get("row") and t.get("type") in TEXTISH_ALL and t.get("type") not in PAIR_SKIP_TYPES
                         and (not big or lens.get(id(t), 0) >= 40)):
                     cand = j
                     break

@@ -395,7 +395,7 @@ globalThis.TypesetApply = () => {
             d=H-contentH(c);how.push('dialogue');
           }
         }
-        if (d>SL && !fit) {c.style.alignSelf='stretch';c.style.justifyContent='center';how.push('center');}
+        if (d>SL && (!fit || ill)) {c.style.alignSelf='stretch';c.style.justifyContent='center';how.push('center');}   // 图文行只居中图栏，文字照旧顶对齐
         if (how.length) receipt.balance.push({kind:'fill_short_column',gap:Math.round(H-contentH(c)),how:how.join('+')});
       }
     }
@@ -432,7 +432,9 @@ globalThis.TypesetApply = () => {
         }
         const ib=img.getBoundingClientRect(),aspect=img.naturalWidth&&img.naturalHeight?img.naturalWidth/img.naturalHeight:ib.width/Math.max(1,ib.height),hostW=host.getBoundingClientRect().width,natural=hostW/aspect;   // 比例按原图（显示框可能被档位样式压扁）
         let h=Math.max(160,Math.min(natural,room));
-        if (hostW-h*aspect>2*LIMIT) h=natural;   // 两边空太多：图铺满栏宽（主持 10:36 查电脑卡顿），另一栏由 fillShortColumns 补齐
+        const other=host===fc?oc:fc,stretch=!!(other.lastElementChild && other.lastElementChild.querySelector('.ct-dialogue-frame'));
+        // 两边空太多：另一栏最后是对话框（fillShortColumns 能拉齐）就铺满栏宽（主持 10:36 查电脑卡顿），否则再大一点、另一栏底下最多多空 OVER
+        if (hostW-h*aspect>2*LIMIT) h=stretch?natural:Math.min(natural,Math.max(h,Math.min((hostW-2*LIMIT)/aspect,room+OVER)));
         Object.assign(ill.style,{display:'flex',justifyContent:'center'});
         Object.assign(img.style,{width:'auto',maxWidth:'100%',height:h+'px',maxHeight:'none'});
         receipt.balance.push({kind:'fit_illustration_tail',before,after:[Math.round(contentH(oc)),Math.round(contentH(fc))],moved:host===oc});
@@ -451,14 +453,11 @@ globalThis.TypesetApply = () => {
       const side=()=>isIll && img?mc.getBoundingClientRect().width-img.getBoundingClientRect().width:0;
       if (Math.abs(mh0-th0)<=SLACK && side()<=40) continue;
       let pulled='',mw=mw0;
-      // ①紧跟这一行的文字块一块块挪进文字栏，挪到文字栏比图高为止（挪进去以后文字栏比图高出 SLACK 以上就退回、停）
-      const PULL='[data-comp="action_button"],[data-comp="notice"],[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="bullet_list"]';
-      for (let k=0;k<8 && contentH(mc)-contentH(tc)>SLACK;k++) {
+      if (mh0-th0>SLACK) {
         const nx=row.nextElementSibling;
-        if (!nx || !nx.matches(PULL)) break;
-        tc.append(nx);
-        if (contentH(tc)>contentH(mc)+SLACK) {row.after(nx);break;}
-        pulled+=(pulled?',':'')+nx.getAttribute('data-comp');
+        if (nx && (nx.matches('[data-comp="action_button"]') || (nx.matches('[data-comp="notice"],[data-comp="prose"],[data-comp="content_card"],[data-comp="points_card"],[data-comp="bullet_list"]') && nx.textContent.trim().length<=160))) {
+          tc.append(nx);pulled=nx.getAttribute('data-comp');
+        }
       }
       const twMax=Math.min(total-120,tw0*1.6);
       if (fixedW) mw=Math.max(Math.min(fixedW,mw0),total-twMax);   // 定了像素宽的插画：图栏收到图宽
