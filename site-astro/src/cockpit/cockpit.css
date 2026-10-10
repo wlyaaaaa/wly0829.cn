@@ -62,6 +62,23 @@
 .cp-big b.is-none { color: var(--cp-gray); }
 .cp-big span { color: var(--cp-soft); font-size: 15px; line-height: 1.4; }
 .cp-cap { margin: 8px 0 6px; font-size: 13px; color: var(--cp-soft); }
+.cp-yesterday { margin-top: -4px; color: var(--cp-ink); }
+.cp-big-line { margin: 2px 0 10px; font-size: 20px; font-weight: 800; color: var(--cp-title); }
+.cp-timeline { list-style: none; margin: 4px 0 0; padding: 0 0 0 4px; max-height: 320px; overflow: auto; }
+.cp-timeline li { display: grid; grid-template-columns: 3.2em 14px 5.2em minmax(0, 1fr); align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; border-bottom: 1px dashed #e1efe5; }
+.cp-timeline li:last-child { border-bottom: 0; }
+.cp-timeline time { color: var(--cp-soft); font-variant-numeric: tabular-nums; }
+.cp-tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--cp-gray); }
+.cp-timeline li.is-green .cp-tl-dot { background: var(--cp-green); } .cp-timeline li.is-yellow .cp-tl-dot { background: var(--cp-yellow); } .cp-timeline li.is-red .cp-tl-dot { background: var(--cp-red); }
+.cp-tl-kind { font-size: 12px; color: var(--cp-soft); }
+.cp-timeline li.is-red span:last-child { color: var(--cp-red); }
+.cp-stats3 { list-style: none; margin: 6px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.cp-stats3 li { display: grid; padding: 10px 12px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fff; }
+.cp-stats3 b { font-size: 30px; line-height: 1.15; font-weight: 800; color: var(--cp-title); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cp-stats3 small { font-size: 14px; font-weight: 600; margin-left: 3px; color: var(--cp-soft); }
+.cp-stats3 span { font-size: 13px; color: var(--cp-soft); }
+.cp-src { margin: 6px 0 0; font-size: 13px; color: var(--cp-soft); }
+.cp-stats3 li.cp-stat-note { grid-column: span 2; align-content: center; border-style: dashed; background: #fbfdfc; }
 .cp-bars { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-end; gap: 8px; height: 110px; }
 .cp-bars li { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
 .cp-bar { width: 70%; max-width: 34px; height: var(--h); background: #bfe8cc; border-radius: 6px 6px 2px 2px; }

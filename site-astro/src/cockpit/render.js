@@ -1,6 +1,6 @@
 // 驾驶舱各块的 HTML。构建时用最近一份快照画出首帧，浏览器拿到新数据后用同一组函数原地换掉每块里面的内容。
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
-import { hm, when, light, splitChecked, dedupeCards } from './model.js';
+import { hm, when, light, splitChecked, dedupeCards, isToday } from './model.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
@@ -116,10 +116,14 @@ function codeCard(v, ctx) {
     const max = Math.max(1, ...c.projects_7d.map((p) => p.commits_7d));
     return `<p class="cp-cap">近 7 天提交最多的项目</p><ul class="cp-hbars">${c.projects_7d.map((p) => `<li><span>${esc(p.project)}</span><i style="--w:${Math.max(3, Math.round(p.commits_7d / max * 100))}%"></i><b>${esc(p.commits_7d)}</b></li>`).join('')}</ul>`;
   })() : '';
-  return `<article class="cp-feature cp-code"><h3>今天代码变化</h3>${head}${trend}${top}<p class="cp-time">提交不等于已经上线${c.observed_at ? ` · ${esc(when(c.observed_at, ctx.now))} 读到` : ''}</p></article>`;
+  const y = c.daily.length > 1 ? c.daily[c.daily.length - 2] : null;
+  const yline = y && Number.isFinite(y.commits) && (early(ctx) || !n) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共 ${esc(y.commits)} 个提交</p>` : '';
+  return `<article class="cp-feature cp-code"><h3>今天代码变化</h3>${head}${yline}${trend}${top}<p class="cp-time">提交不等于已经上线${c.observed_at ? ` · ${esc(when(c.observed_at, ctx.now))} 读到` : ''}</p></article>`;
 }
 
 // 两张常驻卡之二：你对 AI 说的话（9 类）。9 类计数没到时，退回纠正总数和近 7 天，不出空格、不写“未统计”
+const early = (ctx) => Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Shanghai', hour: 'numeric', hourCycle: 'h23' }).format(ctx.now)) < 12;
+const monthDay = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? `${+m[2]} 月 ${+m[3]} 日` : ''; };
 const WORDS9 = ['禁令', '纠正', '授权', '要求', '建议', '偏好', '事实', '询问', '好奇'];
 function wordsCard(v, ctx) {
   const oc = v.owner_corrections;
@@ -133,7 +137,10 @@ function wordsCard(v, ctx) {
       return `<li class="${hot ? 'is-hot' : ''}"><small>${k}</small><b>${esc(count(cats, k))}</b><span>近 7 天 ${esc(week)}</span></li>`;
     }).join('');
     const asof = oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}` : '今天';
-    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">大数字是${asof}，小字是近 7 天；一条话含几类就各算一次</p><ol class="cp-words9">${cells}</ol></article>`;
+    const none = WORDS9.every((k) => count(cats, k) === 0);
+    const prev = days.filter((d) => d.date && d.date < (oc.date || '')).pop();
+    const yline = prev && (early(ctx) || none) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(prev.date))}）：${WORDS9.map((k) => `${k} ${count(prev.by_category, k)}`).join('、')}</p>` : '';
+    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">${none ? (oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}，还没跟 AI 说话（0 条）` : '今天还没跟 AI 说话（0 条）') : `大数字是${asof}，小字是近 7 天；一条话含几类就各算一次`}</p>${yline}<ol class="cp-words9">${cells}</ol></article>`;
   }
   const hist = Array.isArray(oc.history) ? oc.history.filter((d) => d && d.date) : [];
   const known = hist.filter((d) => Number.isFinite(d.total));
@@ -145,13 +152,49 @@ function wordsCard(v, ctx) {
   return `<article class="cp-feature cp-words"><h3>你纠正 AI 的次数</h3>${head}${trend}<p class="cp-time">以后按 9 类分开显示：禁令、纠正、授权、要求、建议、偏好、事实、询问、好奇</p></article>`;
 }
 
+// 电脑后台今天做的事：一行总数 + 按北京时间的时间线（备份、系统镜像、出错、重启、卡住、验收）
+const KIND = { backup: '备份', image: '系统镜像', failed: '出错', restart: '重启', freeze: '卡住', acceptance: '验收' };
+const EVENT_KIND = { acceptance_reviewed: 'acceptance', freeze_captured: 'freeze' };
+function activityBlock(v, ctx) {
+  let a = v.today_activity, s = a.summary;
+  if (!a.timeline.length && !Number.isFinite(s.tasks_run)) {
+    const ran = v.automation.items.filter((t) => t.enabled !== false && isToday(t.last_run_at, ctx.now));
+    s = { tasks_run: v.automation.items.length ? ran.length : null, tasks_failed: v.automation.items.length ? ran.filter((t) => t.state === 'failed').length : null };
+    a = { ...a, observed_at: v.automation.observed_at || a.observed_at, timeline: v.today.items.map((x) => ({ at: x.at, kind: EVENT_KIND[x.type] || '', text: (EVENT[x.type] || (() => '电脑上记了一件事'))(x), level: x.type === 'freeze_captured' ? 'watch' : 'ok' })) };
+  }
+  const num = (x) => (Number.isFinite(x) ? x : '—');
+  const line = `今天跑了 ${num(s.tasks_run)} 个任务、${num(s.tasks_failed)} 个出错${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}${Number.isFinite(s.images_done) && s.images_done ? `、${s.images_done} 次系统镜像` : ''}`;
+  const y = a.yesterday;
+  const yline = y && (early(ctx) || a.timeline.length < 3) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共跑了 ${num(y.tasks_run)} 个任务、${num(y.tasks_failed)} 个出错，完成 ${num(y.backups_done)} 项备份</p>` : '';
+  const items = a.timeline.map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
+  return `<article class="cp-feature cp-activity"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${yline}`
+    + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
+    + (a.observed_at ? `<p class="cp-time">${esc(when(a.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
+}
+
+// 电脑今天的用电和开机；用电是估算，取自 Grafana 后台实时记录（TimeAudit 项目）
+function powerBlock(v, ctx) {
+  const p = v.power_today;
+  const cell = (val, unit, label) => `<li><b>${val == null ? '—' : esc(val)}<small>${unit}</small></b><span>${label}</span></li>`;
+  const kwh = p.energy_kwh == null ? null : Math.round(p.energy_kwh * 10) / 10, up = p.uptime_hours == null ? null : Math.round(p.uptime_hours * 10) / 10;
+  const y = p.yesterday;
+  const yline = y && (early(ctx) || kwh == null) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）开机 ${esc(y.uptime_hours ?? '—')} 小时、用电约 ${esc(y.energy_kwh ?? '—')} 度</p>` : '';
+  const boot = up ?? v.security.computer.uptime_hours;
+  const cells = kwh == null && p.peak_watts == null
+    ? `${cell(boot, '小时', up == null ? '这次开机到现在' : '今天开机')}<li class="cp-stat-note"><span>用电和最高功率还没读到，接上后显示在这里</span></li>`
+    : `${cell(boot, '小时', '今天开机')}${cell(kwh == null ? null : '约 ' + kwh, '度', '今天用电')}${cell(p.peak_watts, '瓦', '今天最高功率')}`;
+  return `<article class="cp-feature cp-power"><h3>电脑今天的用电和开机</h3>`
+    + `<ul class="cp-stats3">${cells}</ul>${yline}`
+    + `<p class="cp-src">用电和功率是估算 · 取自 Grafana 后台实时记录（TimeAudit 项目）</p>`
+    + (p.observed_at ? `<p class="cp-time">${esc(when(p.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
+}
+
 export function todayBlock(v, ctx) {
   const cards = dedupeCards(v.sections.today.filter((c) => c.id !== 'today_changes')).map((c) => card(c, ctx.now)).join('');
-  const events = v.today.items.map((x) => `<li><span class="cp-time">${esc(when(x.at, ctx.now))}</span> ${esc((EVENT[x.type] || (() => '电脑上记了一件事'))(x))}</li>`).join('');
   const gaps = v.source_gaps.length ? `<h3 class="cp-sub">这次没读全的来源</h3><ul class="cp-list">${v.source_gaps.map((g) => `<li>${dot('attention')}${esc(g.title)}${g.since ? `<span class="cp-meta">（${esc(when(g.since, ctx.now))} 起）</span>` : ''}</li>`).join('')}</ul>` : '';
-  return `<div class="cp-features">${codeCard(v, ctx)}${wordsCard(v, ctx)}</div>`
+  return `<div class="cp-features">${codeCard(v, ctx)}${wordsCard(v, ctx)}${activityBlock(v, ctx)}${powerBlock(v, ctx)}</div>`
     + (cards ? `<div class="cp-grid">${cards}</div>` : '')
-    + `<h3 class="cp-sub">今天发生的事</h3>` + (events ? `<ul class="cp-list">${events}</ul>` : `<p class="cp-line">${dot('ok')}今天还没有新事件。</p>`) + gaps;
+    + gaps;
 }
 
 // 总览屏和分区灯由共用脚本 /_overview/overview-screen.js 画（ctx.ov 传进来：构建时 import，浏览器里是 window.OverviewScreen）
@@ -159,7 +202,7 @@ const overview = (v, ctx) => ctx.ov ? ctx.ov.html(v.overview, { size: 'big', now
 const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
 // 今天几号（北京时间，跨过零点浏览器里会自动换）
-const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', weekday: 'long' }).format(ctx.now).replace(/(\d+)月(\d+)日/, '$1 月 $2 日 ') + '（北京时间）';
+const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', weekday: 'long' }).format(ctx.now).replace(/(\d+)月(\d+)日/, '$1 月 $2 日 ') + ' · 北京时间 0 点起';
 export const REGIONS = { overview, security, 'need-you': needYou, computer, backup, projects, today: todayBlock, 'today-date': todayDate,
   ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) };
 
