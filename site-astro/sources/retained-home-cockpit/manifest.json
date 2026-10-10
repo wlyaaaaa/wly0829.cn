@@ -17,11 +17,11 @@
   },
   "pages": {
     "home": {
-      "sha256": "2a9da7f0018473f66f2c6a275bbc126ec849ddf027d0f947f1ccae7145a33bca",
-      "bytes": 248770
+      "sha256": "f3ec811865e2a889872d288083fbc140452db674749910308810216a8d1b1620",
+      "bytes": 248650
     },
     "cockpit": {
-      "sha256": "aaec6f46e71e503cc61a9bd786e5c5e20db2a0ba90bd1e671eb4e4adcb7897d8",
+      "sha256": "8616833f73ba6890285e579a3cea6f40cf30cd5f159a9883c2748efb21960ae5",
       "bytes": 165196
     },
     "computer-access": {
@@ -37,8 +37,8 @@
     },
     "_home-cockpit/home-cta.css": {
       "source": "../../public/_home-cockpit/home-cta.css",
-      "sha256": "46b7482763d003486b3cd336aa6ae7bdc5b03c4b96981b1eea851ae126ff475e",
-      "bytes": 2139
+      "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
+      "bytes": 2412
     },
     "_home-cockpit/cockpit-offline.css": {
       "source": "../../public/_home-cockpit/cockpit-offline.css",
@@ -50,10 +50,10 @@
       "sha256": "ddfb00ce8b6acd6e3e1b7875b3f1c0e97598ae5c9f9639649f1603775d5c5b1d",
       "bytes": 7647
     },
-    "_home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js": {
-      "source": "home-firstpaint-d2eea6de9fbe5865fa41.js",
-      "sha256": "d2eea6de9fbe5865fa417d160fc939eee06a75c3a18ef1a8d1e4f17100f49a30",
-      "bytes": 70330
+    "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
+      "source": "home-firstpaint-9735d2e7a1cacffcab6a.js",
+      "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
+      "bytes": 70216
     }
   },
   "files": {
@@ -5498,8 +5498,8 @@
       "bytes": 2941
     },
     "_home-cockpit/home-cta.css": {
-      "sha256": "46b7482763d003486b3cd336aa6ae7bdc5b03c4b96981b1eea851ae126ff475e",
-      "bytes": 2139
+      "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
+      "bytes": 2412
     },
     "_home-cockpit/cockpit-offline.css": {
       "sha256": "35c91f30a503443267f09a980b052f1603782b104fa0aa7b73e086ad097b6dc2",
@@ -5593,13 +5593,21 @@
       "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
       "bytes": 142449
     },
-    "_home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js": {
-      "sha256": "d2eea6de9fbe5865fa417d160fc939eee06a75c3a18ef1a8d1e4f17100f49a30",
-      "bytes": 70330
+    "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
+      "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
+      "bytes": 70216
+    },
+    "cockpit/assets/b2-typeset-69a4ea9858ff991fbae4.js": {
+      "sha256": "69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab",
+      "bytes": 142624
+    },
+    "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css": {
+      "sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
+      "bytes": 23864
     }
   },
-  "count": 1385,
-  "bytes": 87117118,
+  "count": 1387,
+  "bytes": 87283765,
   "home_white_gear": {
     "inputs": [
       {
@@ -5945,7 +5953,7 @@
   },
   "runtime_recipe": {
     "schema": "wly.retained-runtime-recipe.v1",
-    "inputs_sha256": "ecd2f9f0f29d669f4fa5b2f41ab02514cc5a310cf44c28b1b7700ba655b03dd2",
+    "inputs_sha256": "d8ef68d76a36b18532a90cce91ca8134c569fd85c5fc8fba66bbe87f3bc3e3de",
     "original_engine": "_shared/home-living/hero-live.576f7d6f10.js",
     "base_images": "sources/signature/assets-manifest.json",
     "image_recipe": "sources/home-white-gear/build.py",
@@ -5967,5 +5975,13 @@
     "runtime": "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js",
     "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
     "base_runtime": "cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js"
+  },
+  "cockpit_layout": {
+    "runtime": "cockpit/assets/b2-typeset-69a4ea9858ff991fbae4.js",
+    "sha256": "69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab",
+    "stylesheet": "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css",
+    "stylesheet_sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
+    "base_runtime": "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js",
+    "base_stylesheet": "_typeset/runtime/b2-live-de2248fb01b179cab600.css"
   }
 }

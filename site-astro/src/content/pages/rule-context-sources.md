@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E252",
-   "commit": "fcf992136918510e3839eef2c9c10cda74731c53",
-   "ruleset_sha256": "697e55656b761d6ffc643f664e608941368c47279120c77922b325d35c1e34f0",
-   "activated_at": "2026-10-10T14:48:45.509944+08:00",
+   "release": "E253",
+   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
+   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
+   "activated_at": "2026-10-10T20:55:22.214802+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
    "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
    "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd"
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "4edd591557f1f107e1d49bd6ddca914c70f440ea4f425cac655d59ea722696a5",
-  "converted_at_beijing": "2026-10-10T15:11:16+08:00"
+  "sha256": "b38287b9785f8872e3966b3f99bc1c8fb7a048e63874c75ddbbaefef38612a1b",
+  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
  }
 }
 ---
@@ -2411,7 +2411,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E252",
+   "release": "E253",
    "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
    "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": null,
@@ -2439,7 +2439,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版，一字不改"
+     "text_ref": "原文·E253版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2473,7 +2473,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版，一字不改"
+     "text_ref": "原文·E253版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2551,7 +2551,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E252 版，一字不改
+原文 · E253 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2602,7 +2602,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E252",
+   "release": "E253",
    "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
    "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": "## 三档维护",
@@ -2630,7 +2630,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版·续"
+     "text_ref": "原文·E253版·续"
     },
     {
      "type": "source_text_card",
@@ -2661,7 +2661,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版·续"
+     "text_ref": "原文·E253版·续"
     },
     {
      "type": "source_text_card",
@@ -2728,7 +2728,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E252 版 · 续
+原文 · E253 版 · 续
 
 ## 三档维护
 
@@ -2780,7 +2780,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E252",
+   "release": "E253",
    "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
    "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
    "from": "### 一样东西只存一处",
@@ -2825,7 +2825,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版·续"
+     "text_ref": "原文·E253版·续"
     },
     {
      "type": "source_text_card",
@@ -2855,7 +2855,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E252版·续"
+     "text_ref": "原文·E253版·续"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E252 版 · 续
+原文 · E253 版 · 续
 
 ### 一样东西只存一处
 

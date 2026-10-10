@@ -55,8 +55,8 @@
     "source_path": "site-astro/public/_home-cockpit/cockpit-offline.js"
   },
   "_home-cockpit/home-cta.css": {
-    "sha256": "46b7482763d003486b3cd336aa6ae7bdc5b03c4b96981b1eea851ae126ff475e",
-    "bytes": 2139,
+    "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
+    "bytes": 2412,
     "source_path": "site-astro/public/_home-cockpit/home-cta.css"
   },
   "_home-cockpit/time-labels.css": {
@@ -9159,11 +9159,6 @@
     "bytes": 67988,
     "source_path": "site-astro/sources/retained-home-cockpit/assets/48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e.js"
   },
-  "_home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js": {
-    "sha256": "d2eea6de9fbe5865fa417d160fc939eee06a75c3a18ef1a8d1e4f17100f49a30",
-    "bytes": 70330,
-    "source_path": "site-astro/sources/retained-home-cockpit/home-firstpaint-d2eea6de9fbe5865fa41.js"
-  },
   "_shared/home-app-92ff384787b4b26d0794.js": {
     "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",
     "bytes": 123281,
@@ -9193,5 +9188,20 @@
     "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
     "bytes": 142449,
     "source_path": "site-astro/sources/retained-home-cockpit/assets/0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81.js"
+  },
+  "cockpit/assets/b2-typeset-69a4ea9858ff991fbae4.js": {
+    "sha256": "69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab",
+    "bytes": 142624,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab.js"
+  },
+  "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css": {
+    "sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
+    "bytes": 23864,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df.css"
+  },
+  "_home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js": {
+    "sha256": "9735d2e7a1cacffcab6aeddad2cf2df664e0c25e7ee3e1d36104ade524a2b0e8",
+    "bytes": 70216,
+    "source_path": "site-astro/sources/retained-home-cockpit/home-firstpaint-9735d2e7a1cacffcab6a.js"
   }
 }
