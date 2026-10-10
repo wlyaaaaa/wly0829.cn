@@ -143,7 +143,7 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 
 - `status`：`built`；`prepared_at_beijing`：带 `+08:00` 的观察时间；`seconds`：整个构建秒数。
 - `steps`：按执行顺序列出 `{name, seconds}`，包括来源、指纹、依赖准备、运行件、屏幕排版、Astro、收尾、公开门与文件清单。
-- `rebuilt_pages`：本次重建或成品字节改变的路由数组；`html_files`：完整成品 HTML 数；`output`：实际输出目录。
+- `rebuilt_pages`：本次按源码指纹选择重建的路由数组；它不代表最终资源处理后所有字节变化。实际变化由两轮 `files` 中同路径的 SHA 对比得到。`html_files`：完整成品 HTML 数；`output`：实际输出目录。
 - `files`：完整文件数组，每项 `{path, bytes, sha256}`；路径相对 `dist`，SHA256 为实际成品字节。回执自身不进入清单，避免自引用；`release-manifest.json` 属于实际成品文件并列入。
 
 G2 的发布与扫描直接消费这份回执。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节，旧发布目录地址由来源清单先映射到当前资源；构建最后通过 G2 的唯一 `finalize-dist` 命令完成部署资源引用与发布策略，回执绑定最终字节。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出；当前 OSS 地址下仍被引用的脚本照常保留。相册更新只新增当前指纹表，仍被引用的旧表保留，已最终处理的表不会在下一轮被解开当前地址。
