@@ -95,12 +95,62 @@ export function projects(v, ctx) {
 
 // 今天的动态：今天的变化卡 + 今天的事件 + 你纠正 AI 的次数 + 读不到的来源
 const EVENT = { acceptance_reviewed: (x) => `验收核对了 ${x.count ?? ''} 项${x.passed != null ? `，通过 ${x.passed} 项` : ''}`, freeze_captured: () => '电脑卡住时自动留了一次现场' };
+// 两张常驻卡之一：今天代码变化。大数字 + 近 7 天（有逐日数就画 7 根柱，没有就比今天和日均）+ 提交最多的项目
+const short = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ''); return m ? `${+m[3]}日` : ''; };
+const bars = (rows, unit) => {
+  const max = Math.max(1, ...rows.map((r) => r.n || 0));
+  return `<ol class="cp-bars">${rows.map((r) => `<li class="${r.n == null ? 'is-none' : ''}${r.now ? ' is-now' : ''}" title="${esc(r.label)} ${r.n == null ? '没数' : r.n + unit}"><span class="cp-bar" style="--h:${r.n == null ? 6 : Math.max(6, Math.round(r.n / max * 100))}%"></span><b>${r.n == null ? '—' : esc(r.n)}</b><small>${esc(r.label)}</small></li>`).join('')}</ol>`;
+};
+function codeCard(v, ctx) {
+  const c = v.changes, n = c.today.commits;
+  const head = n == null
+    ? `<div class="cp-big"><b class="is-none">—</b><span>${notRead(c.observed_at, ctx.now)}</span></div>`
+    : `<div class="cp-big"><b>${esc(n)}</b><span>个提交${c.today.repos_changed != null ? `<br>涉及 ${esc(c.today.repos_changed)} 个项目` : ''}</span></div>`;
+  let trend = '';
+  if (c.daily.some((d) => Number.isFinite(d.commits))) trend = `<p class="cp-cap">近 ${c.daily.length} 天每天提交</p>` + bars(c.daily.map((d, i) => ({ label: short(d.date), n: Number.isFinite(d.commits) ? d.commits : null, now: i === c.daily.length - 1 })), ' 个');
+  else if (c.commits_7d != null && n != null) {
+    const avg = Math.round(c.commits_7d / (c.window_days || 7));
+    trend = `<p class="cp-cap">近 ${c.window_days} 天一共 ${esc(c.commits_7d)} 个，日均 ${avg} 个</p>` + bars([{ label: '近 7 天日均', n: avg }, { label: '今天', n, now: true }], ' 个');
+  }
+  const top = c.projects_7d.length ? (() => {
+    const max = Math.max(1, ...c.projects_7d.map((p) => p.commits_7d));
+    return `<p class="cp-cap">近 7 天提交最多的项目</p><ul class="cp-hbars">${c.projects_7d.map((p) => `<li><span>${esc(p.project)}</span><i style="--w:${Math.max(3, Math.round(p.commits_7d / max * 100))}%"></i><b>${esc(p.commits_7d)}</b></li>`).join('')}</ul>`;
+  })() : '';
+  return `<article class="cp-feature cp-code"><h3>今天代码变化</h3>${head}${trend}${top}<p class="cp-time">提交不等于已经上线${c.observed_at ? ` · ${esc(when(c.observed_at, ctx.now))} 读到` : ''}</p></article>`;
+}
+
+// 两张常驻卡之二：你对 AI 说的话（9 类）。9 类计数没到时，退回纠正总数和近 7 天，不出空格、不写“未统计”
+const WORDS9 = ['禁令', '纠正', '授权', '要求', '建议', '偏好', '事实', '询问', '好奇'];
+function wordsCard(v, ctx) {
+  const oc = v.owner_corrections;
+  const cats = Array.isArray(oc.by_category) && oc.by_category.length ? oc.by_category : null;
+  if (cats) {
+    const count = (list, k) => { const x = (list || []).find((y) => y && y.category === k); return Number.isFinite(x?.count) ? x.count : 0; };
+    const days = (Array.isArray(oc.history) ? oc.history : []).filter((d) => d && Array.isArray(d.by_category));
+    const cells = WORDS9.map((k) => {
+      const hot = k === '禁令' || k === '纠正';
+      const week = days.reduce((n, d) => n + count(d.by_category, k), 0);
+      return `<li class="${hot ? 'is-hot' : ''}"><small>${k}</small><b>${esc(count(cats, k))}</b><span>近 7 天 ${esc(week)}</span></li>`;
+    }).join('');
+    const asof = oc.complete === false && oc.observed_at ? `今天截至 ${esc(hm(oc.observed_at))}` : '今天';
+    return `<article class="cp-feature cp-words"><h3>你对 AI 说的话（按 9 类）</h3><p class="cp-cap">大数字是${asof}，小字是近 7 天；一条话含几类就各算一次</p><ol class="cp-words9">${cells}</ol></article>`;
+  }
+  const hist = Array.isArray(oc.history) ? oc.history.filter((d) => d && d.date) : [];
+  const known = hist.filter((d) => Number.isFinite(d.total));
+  const last = Number.isFinite(oc.total) ? { date: oc.date, total: oc.total, today: true } : known.length ? known[known.length - 1] : null;
+  const head = last
+    ? `<div class="cp-big"><b>${esc(last.total)}</b><span>次纠正 AI<br>${last.today ? '今天' : `最近有数的一天（${esc(short(last.date))}）`}</span></div>`
+    : `<div class="cp-big"><b class="is-none">—</b><span>纠正次数还没读到</span></div>`;
+  const trend = hist.length ? `<p class="cp-cap">近 ${hist.length} 天每天纠正几次（— 是那天没有数）</p>` + bars(hist.map((d, i) => ({ label: short(d.date), n: Number.isFinite(d.total) ? d.total : null, now: i === hist.length - 1 })), ' 次') : '';
+  return `<article class="cp-feature cp-words"><h3>你纠正 AI 的次数</h3>${head}${trend}<p class="cp-time">以后按 9 类分开显示：禁令、纠正、授权、要求、建议、偏好、事实、询问、好奇</p></article>`;
+}
+
 export function todayBlock(v, ctx) {
-  const cards = dedupeCards(v.sections.today).map((c) => card(c, ctx.now)).join('');
+  const cards = dedupeCards(v.sections.today.filter((c) => c.id !== 'today_changes')).map((c) => card(c, ctx.now)).join('');
   const events = v.today.items.map((x) => `<li><span class="cp-time">${esc(when(x.at, ctx.now))}</span> ${esc((EVENT[x.type] || (() => '电脑上记了一件事'))(x))}</li>`).join('');
-  const oc = v.owner_corrections.text ? card({ title: '你纠正 AI 的次数', state: v.owner_corrections.status === 'ok' ? 'ok' : 'unavailable', text: v.owner_corrections.text }, ctx.now) : '';
   const gaps = v.source_gaps.length ? `<h3 class="cp-sub">这次没读全的来源</h3><ul class="cp-list">${v.source_gaps.map((g) => `<li>${dot('attention')}${esc(g.title)}${g.since ? `<span class="cp-meta">（${esc(when(g.since, ctx.now))} 起）</span>` : ''}</li>`).join('')}</ul>` : '';
-  return `<div class="cp-grid">${cards}${oc}</div>`
+  return `<div class="cp-features">${codeCard(v, ctx)}${wordsCard(v, ctx)}</div>`
+    + (cards ? `<div class="cp-grid">${cards}</div>` : '')
     + `<h3 class="cp-sub">今天发生的事</h3>` + (events ? `<ul class="cp-list">${events}</ul>` : `<p class="cp-line">${dot('ok')}今天还没有新事件。</p>`) + gaps;
 }
 
@@ -108,13 +158,15 @@ export function todayBlock(v, ctx) {
 const overview = (v, ctx) => ctx.ov ? ctx.ov.html(v.overview, { size: 'big', now: ctx.now.getTime() }) : '';
 const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
-export const REGIONS = { overview, security, 'need-you': needYou, computer, backup, projects, today: todayBlock,
+// 今天几号（北京时间，跨过零点浏览器里会自动换）
+const todayDate = (v, ctx) => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'long', day: 'numeric', weekday: 'long' }).format(ctx.now).replace(/(\d+)月(\d+)日/, '$1 月 $2 日 ') + '（北京时间）';
+export const REGIONS = { overview, security, 'need-you': needYou, computer, backup, projects, today: todayBlock, 'today-date': todayDate,
   ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) };
 
 // 整页：外框固定，内容由上面各函数填
 export function page(v, ctx) {
   const r = (k) => `<div class="cp-body" data-cp="${k}">${REGIONS[k](v, ctx)}</div>`;
-  const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><span class="cp-lamp" data-cp="lamp-${id}">${REGIONS['lamp-' + id](v, ctx)}</span><p>${sub}</p></div>${body}</section>`;
+  const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><span class="cp-lamp" data-cp="lamp-${id}">${REGIONS['lamp-' + id](v, ctx)}</span>${id === 'today' ? `<span class="cp-date" data-cp="today-date">${todayDate(v, ctx)}</span>` : ''}<p>${sub}</p></div>${body}</section>`;
   return `<section class="cp-section cp-hero" id="top">
   <div class="cp-hero-copy">
     <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"></h1>
@@ -127,7 +179,7 @@ export function page(v, ctx) {
 ${sec('need-you', ['cockpit-01-title-02.png', '要我处理的事'], 348, 84, '要你动手的事；做完后 AI 核实，会自己从这里消失。', r('need-you'))}
 ${sec('tasks', ['cockpit-05-title-01.png', '自动任务'], 588, 192, '电脑自己在做的事，有没有按时做、做成没有。点一条船或清单里的一行，看它在做什么、上次下次什么时候跑、怎么停、停了影响什么。', '<div class="cp-river" data-today-river aria-label="今天的河"></div>')}
 ${sec('computer', ['cockpit-02-title-01.png', '电脑'], 317, 184, '这台电脑现在累不累、还剩多少地方；人不在电脑前能不能连上它。', r('computer'))}
+${sec('today', ['cockpit-09-title-01.png', '今天的动态'], 675, 220, '今天有什么变化：代码、你对 AI 说的话、今天发生的事。', r('today'))}
 ${sec('backup', ['cockpit-06-title-01.png', '备份和云端'], 716, 199, '东西有没有按时备份、云端的钱够不够。', r('backup'))}
-${sec('projects', ['cockpit-08-title-01.png', '项目'], 369, 222, '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。', r('projects'))}
-${sec('today', ['cockpit-09-title-01.png', '今天的动态'], 675, 220, '今天有什么变化。代码提交不等于已经上线。', r('today'))}`;
+${sec('projects', ['cockpit-08-title-01.png', '项目'], 369, 222, '每个在用的项目现在怎么样、有没有等你的事。点名字进项目页。', r('projects'))}`;
 }

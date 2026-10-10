@@ -19,7 +19,7 @@ export function when(v, now = new Date()) {
   if (day(d) === day(now)) return hm(d);
   if (day(d) === day(new Date(now.getTime() - 864e5))) return '昨天 ' + hm(d);
   const [m, dd] = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, month: 'numeric', day: 'numeric' }).formatToParts(d).filter((x) => x.type !== 'literal').map((x) => x.value);
-  return `${m}月${dd}日 ${hm(d)}`;
+  return `${Number(m)}月${Number(dd)}日 ${hm(d)}`;
 }
 
 export const isToday = (v, now = new Date()) => { const d = parse(v); return !!d && day(d) === day(now); };
@@ -69,6 +69,11 @@ export function normalize(raw) {
     projects: { state: st(projects.state), observed_at: projects.observed_at || null, items: list(projects.items) },
     source_gaps: list(v.source_gaps),
     owner_corrections: obj(v.owner_corrections),
+    // 今天代码变化（大数字 + 近 7 天）；字段由 PCConfig 精简视图 changes 给
+    changes: (() => { const c = obj(v.changes), t = obj(c.today); return { state: st(c.state), observed_at: c.observed_at || null,
+      today: { commits: Number.isFinite(t.commits) ? t.commits : null, repos_changed: Number.isFinite(t.repos_changed) ? t.repos_changed : null, latest_at: t.latest_at || null },
+      window_days: c.window_days || 7, commits_7d: Number.isFinite(c.commits_7d) ? c.commits_7d : null,
+      daily: list(c.daily), projects_7d: list(c.projects_7d) }; })(),
     // 健康分、扣分原因、6 个信号、各分区的灯都由后端 overview 给（O6 裁定），前端不算
     overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
   };

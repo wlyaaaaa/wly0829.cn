@@ -26,6 +26,7 @@
 .cp-lead { margin: 14px 0 4px; }
 .cp-overview { grid-column: 1 / -1; margin-top: 4px; }
 .cp-head .cp-lamp { align-self: center; margin-bottom: 4px; }
+.cp-date { align-self: center; margin-bottom: 4px; font-size: 18px; font-weight: 800; color: var(--cp-title); }
 .cp-security-wrap { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; margin-top: 14px; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 14px; background: #fff; }
 .cp-security-title { margin: 0; line-height: 0; flex: none; }
 .cp-security-title img { height: 46px; width: auto; }
@@ -52,6 +53,36 @@
 .cp-grid { display: flex; flex-wrap: wrap; gap: 14px; }
 .cp-grid > * { flex: 1 1 340px; }
 .cp-charts { margin-top: 14px; }
+/* 今天的动态：两张常驻大卡 */
+.cp-features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+.cp-feature { padding: 18px 22px; border: 1px solid var(--cp-line); border-radius: 16px; background: linear-gradient(160deg, #f4fbf6 0%, #fff 60%); box-shadow: 0 4px 16px rgba(21, 68, 35, .06); min-width: 0; }
+.cp-feature h3 { margin: 0 0 8px; font-size: 18px; color: var(--cp-title); }
+.cp-big { display: flex; align-items: center; gap: 14px; margin: 4px 0 10px; }
+.cp-big b { font-size: 56px; line-height: 1; font-weight: 800; color: var(--cp-title); font-variant-numeric: tabular-nums; }
+.cp-big b.is-none { color: var(--cp-gray); }
+.cp-big span { color: var(--cp-soft); font-size: 15px; line-height: 1.4; }
+.cp-cap { margin: 8px 0 6px; font-size: 13px; color: var(--cp-soft); }
+.cp-bars { list-style: none; margin: 0; padding: 0; display: flex; align-items: flex-end; gap: 8px; height: 110px; }
+.cp-bars li { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; min-width: 0; }
+.cp-bar { width: 70%; max-width: 34px; height: var(--h); background: #bfe8cc; border-radius: 6px 6px 2px 2px; }
+.cp-bars li.is-now .cp-bar { background: var(--cp-green); }
+.cp-bars li.is-none .cp-bar { background: repeating-linear-gradient(45deg, #e6ece8 0 4px, #f4f7f5 4px 8px); }
+.cp-bars b { font-size: 13px; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.cp-bars li.is-none b { color: var(--cp-gray); font-weight: 400; }
+.cp-bars small { font-size: 12px; color: var(--cp-soft); white-space: nowrap; }
+.cp-hbars { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.cp-hbars li { display: grid; grid-template-columns: minmax(6em, 9em) 1fr auto; align-items: center; gap: 10px; font-size: 13px; }
+.cp-hbars span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cp-hbars i { display: block; height: 8px; width: var(--w); background: #9ddcae; border-radius: 4px; }
+.cp-hbars b { font-variant-numeric: tabular-nums; }
+.cp-feature .cp-time { margin: 10px 0 0; }
+.cp-words9 { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.cp-words9 li { display: grid; padding: 8px 10px; border: 1px solid var(--cp-line); border-radius: 10px; background: #fff; }
+.cp-words9 small { font-size: 13px; color: var(--cp-soft); }
+.cp-words9 b { font-size: 28px; line-height: 1.1; font-weight: 800; color: var(--cp-title); font-variant-numeric: tabular-nums; }
+.cp-words9 span { font-size: 12px; color: var(--cp-soft); }
+.cp-words9 li.is-hot { border-color: #efc3bd; background: #fffaf8; }
+.cp-words9 li.is-hot b, .cp-words9 li.is-hot small { color: var(--cp-red); }
 .cp-login-icon { display: inline-block; width: 14px; height: 16px; margin-right: 8px; vertical-align: -2px; border: 2px solid var(--cp-green); border-radius: 3px; border-top-width: 7px; box-sizing: border-box; }
 .cp-card, .cp-proj { padding: 14px 18px; border: 1px solid var(--cp-line); border-radius: 14px; background: var(--cp-card); box-shadow: 0 2px 10px rgba(21, 68, 35, .04); min-width: 0; }
 .cp-card h3, .cp-proj h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.4; color: var(--cp-title); }
@@ -103,6 +134,8 @@
   .cp-security-wrap { order: 3; }
   .cp-hero h1 img { height: 72px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .cp-features { grid-template-columns: 1fr; }
+  .cp-big b { font-size: 44px; }
   .cp-sec-item { grid-template-columns: 40px 1fr; padding: 6px 4px; }
   .cp-sec-item img, .cp-sec-pc { width: 40px; }
   .cp-security-title img { height: 38px; }

@@ -62,6 +62,10 @@ export function fromFull(full) {
     projects: { state: blockState(f.projects), observed_at: obj(f.projects).observed_at, items: rows(f.projects).map((r) => ({ id: text(r.id), name: text(r.project), mode: text(r.mode), phase: r.phase, run_health: r.run_health, overview: r.overview, waiting_user: r.waiting_user_count, waiting_ai: r.waiting_ai_count, on_hold: r.on_hold_count, health_reason: text(r.health_reason), last_commit_at: r.last_commit_at, commits_7d: r.commits_7d })) },
     source_gaps: (Array.isArray(cp.source_gaps) ? cp.source_gaps : []).map((r) => ({ source_id: text(r.source_id), title: text(r.title), since: r.since, observed_at: r.observed_at })),
     owner_corrections: obj(cp.owner_corrections),
+    changes: (() => { const c = obj(f.changes), t = obj(c.today), w = rows(f.weekly);
+      return { state: stateOf(c.state), observed_at: c.observed_at, today: { commits: t.commits, repos_changed: t.repos_changed, latest_at: t.latest_at },
+        window_days: c.window_days || 7, commits_7d: c.commits, repos_changed_7d: c.repos_changed, daily: Array.isArray(c.daily) ? c.daily : [],
+        projects_7d: w.filter((x) => Number.isFinite(x.commits_7d)).sort((a, b) => b.commits_7d - a.commits_7d).slice(0, 5).map((x) => ({ project: x.project, commits_7d: x.commits_7d, last_commit_at: x.last_commit_at })) }; })(),
     overview: f.overview && typeof f.overview === 'object' ? f.overview : (cp.overview && typeof cp.overview === 'object' ? cp.overview : null),
   };
 }

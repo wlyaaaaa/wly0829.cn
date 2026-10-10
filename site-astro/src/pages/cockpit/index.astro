@@ -46,7 +46,7 @@ const img = Object.fromEntries(Object.entries(imgFiles).map(([path, url]) => [pa
 
 const toc = [
   { id: 'top', label: '开头' }, { id: 'need-you', label: '要我处理' }, { id: 'tasks', label: '自动任务' }, { id: 'computer', label: '电脑' },
-  { id: 'backup', label: '备份和云端' }, { id: 'projects', label: '项目' }, { id: 'today', label: '今天' },
+  { id: 'today', label: '今天' }, { id: 'backup', label: '备份和云端' }, { id: 'projects', label: '项目' },
 ];
 // 总览屏共用脚本（public/_overview/，首页小屏也用它）：构建时直接按文件导入，画首帧
 const ov = await import(/* @vite-ignore */ new URL('public/_overview/overview-screen.js', pathToFileURL(process.cwd() + '/')).href);
