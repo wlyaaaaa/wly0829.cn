@@ -3578,7 +3578,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "两台显示器",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

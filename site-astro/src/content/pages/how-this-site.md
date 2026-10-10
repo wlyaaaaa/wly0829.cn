@@ -2124,7 +2124,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "裁和压　裁掉图四周多余的白边，压成几档宽度：横版 1280、1920、2880 像素，竖版 828、1280 像素，浏览器按屏幕挑一档。格式用 AVIF 和 WebP，标准是肉眼看不出和原图有差别；不为了快先放模糊图。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2169,7 +2169,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "先快后全　先加载第一屏；往下滚，离屏幕还有 600 像素时才加载下一屏。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

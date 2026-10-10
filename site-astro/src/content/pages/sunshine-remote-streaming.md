@@ -1593,7 +1593,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一块屏幕上一个问号",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2271,7 +2271,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一块被玻璃罩罩住的显示器",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -3257,7 +3257,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "虚拟备用屏｜MTT 虚拟显示驱动造的一块屏：2880×1800、60 Hz、150% 缩放、HDR；主屏关着时它就是桌面｜在用",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -3709,7 +3709,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "不碰真显示器｜连上、断开、换屏，都不关、不停用、不重排物理显示器；水冷屏和机箱小屏一概不碰｜在用",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

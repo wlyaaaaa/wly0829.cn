@@ -2222,7 +2222,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "skills-home-04-icon-cockpit",
    "source_phrase": "一台显示器：看驾驶舱（新加的卡，素材库已有图标）",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

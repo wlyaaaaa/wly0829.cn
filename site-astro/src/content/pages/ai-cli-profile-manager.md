@@ -1356,7 +1356,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "fallback": false,
    "key": "显示器",
    "source_phrase": " \n1.在Codex桌面版里选模型（最常用）\n新建任务时在模型菜单里直接选GLM-5.3、DeepSeekFlash或本机Qwen，用法和官方模型一样。9月16–28日开了131个这样的任务，用得最多的是GLM-5.3Flash（61个）。\n跟AI说：不用说，菜单里选。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -1395,7 +1395,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
    "fallback": false,
    "key": "显示器",
    "source_phrase": " \n1.在Codex桌面版里选模型（最常用）\n新建任务时在模型菜单里直接选GLM-5.3、DeepSeekFlash或本机Qwen，用法和官方模型一样。9月16–28日开了131个这样的任务，用得最多的是GLM-5.3Flash（61个）。\n跟AI说：不用说，菜单里选。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

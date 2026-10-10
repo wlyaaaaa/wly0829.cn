@@ -399,7 +399,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一只眼睛对着一块屏幕",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -718,7 +718,7 @@ ChatGPT、Claude、Codex 经电脑 MCP（让 AI 远程用这台电脑的文件�
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "手指点屏幕",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2106,7 +2106,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2120,7 +2120,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2176,7 +2176,7 @@ Claude 连主机、Claude 的手机 App 和网页版连这两台电脑：目前�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "AI 用鼠标、键盘时，占的是我正在用的桌面。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

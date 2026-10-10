@@ -1591,7 +1591,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "这张图怎么来的：照原来那张桌面图（雨林、苔石、右上角探头的黑猫）重新生成，更清楚、更绿；再用 Real-ESRGAN（放大模型 realesrgan-x4plus）放大 4 倍，缩到 3840×2160。不是原生 4K，也不是 HDR。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -2384,7 +2384,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "显示器",
    "source_phrase": "一个虚线显示器打叉",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

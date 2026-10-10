@@ -3199,7 +3199,7 @@
    "fallback": false,
    "key": "显示器",
    "source_phrase": "开始菜单里的窗口",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -3316,7 +3316,7 @@
    "fallback": false,
    "key": "显示器",
    "source_phrase": "开始菜单里的窗口",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -5567,7 +5567,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "认出桌面 AI｜只认我账户里、由 Claude 或 Codex 桌面版启动的程序｜在用",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

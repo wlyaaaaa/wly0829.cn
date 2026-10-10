@@ -450,7 +450,7 @@
    "semantic_status": "automatically_accepted_per_b2bc0efe",
    "key": "skill-cockpit-02-icon-01",
    "source_phrase": "一块屏幕：先读驾驶舱的摘要",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -622,7 +622,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
    "semantic_status": "unresolved_semantics_fallback",
    "key": "skill-cockpit-03-icon-01",
    "source_phrase": "一块屏幕：先读摘要，只讲四件事",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {

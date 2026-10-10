@@ -1149,7 +1149,7 @@
    "semantic_status": "common_subject_reused_per_b2bc0efe",
    "key": "显示器等待",
    "source_phrase": "下面三张同样大小的竖向大卡片横排、占满宽度，每张顶上一幅小水彩插画：①一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点）；②一张一周的热力格子（深浅不一的小绿方格，不画字）加一个小沙漏；③一个剪贴板夹着几张便签（便签只画浅灰短线），一枚回形针。",
-   "sha256": "93ece86ae3430d3926e30507db377cf3b9b75e709d2985119e6f937755addddf",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready",
    "original_elements": [
     "一台显示器上一只转圈的小沙漏，旁边一个对话气泡（只画三个小点"

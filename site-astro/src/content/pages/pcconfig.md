@@ -4169,7 +4169,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "显示器",
    "source_phrase": "开机和桌面\n三块屏幕偶尔只亮一块，每5分钟检查一次，自动恢复。小米妙享没开就补开：手机和电脑互通、短信验证码都靠它。桌面图标平时藏起来，双击桌面空白处显示，30秒后自动再藏。Ctrl+Win+R给OLED主屏盖一层黑幕，串流时远程照样看得到桌面。声音固定走音箱；登录后自动开两个微信。每周一清掉回收站里放了7天以上的东西。",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -7390,7 +7390,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "开机和桌面",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
@@ -7495,7 +7495,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "显示器",
    "source_phrase": "Claude 不自启、退出清理　开机不自动开 Claude 桌面，关掉后清掉它留在后台的程序　〈在用〉",
-   "sha256": "dd6388853e106069d4fe817ff12098350e81e7cd12064ddb894c96b5d94f59e2",
+   "sha256": "55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff",
    "status": "ready"
   },
   {
