@@ -20,6 +20,17 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_viewer_original_image_migrates_but_live_keys_stay_symbolic(self):
+        rewrite = oss.Rewriter({'index.html': {}, 'photo.jpg': {}}, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn', version=6)
+        raw = (b'<head><meta http-equiv="Content-Security-Policy" content="img-src \'self\'"></head>'
+               b'<div class="slot-shot-frame" data-href="/photo.jpg"></div><div data-href="mcp-grants"></div>')
+        migrated = rewrite.rewrite(raw, 'index.html')
+        self.assertIn(b'data-href="https://example.oss.invalid/releases/one/photo.jpg"', migrated)
+        self.assertIn(b'data-href="mcp-grants"', migrated)
+        self.assertIn(b"img-src 'self' https://example.oss.invalid", migrated)
+        self.assertEqual(rewrite.references['index.html'], {'photo.jpg'})
+        self.assertFalse(rewrite.missing)
+
     def test_css_grid_strings_are_text_and_imports_are_resources(self):
         rewrite = oss.Rewriter({'style.css': {}, 'base.css': {}}, 'https://example.oss.invalid', 'releases/one', 'https://wly0829.cn')
         raw = b'@import "base.css";.grid{grid-template-areas:"annotation ."}'

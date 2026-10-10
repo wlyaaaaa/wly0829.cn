@@ -318,7 +318,7 @@ class Rewriter:
             elif name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                 if not value.startswith('data:'):
                     for item in re.findall(r'(?:^|,)\s*([^\s,]+)', value): yield item, 'resource'
-            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
+            elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'data-href' and 'slot-shot-frame' in attrs.get('class', '').split() or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
                 if tag == 'link' and attrs.get('rel') in ('canonical','preconnect','dns-prefetch'): continue
                 yield value, 'resource'
             elif name.startswith('data-') and value.startswith(('{','[')):
@@ -373,7 +373,7 @@ class Rewriter:
                     dependencies.update(self.literal_dependencies(value, owner, 'css')); continue
                 if name in ('srcset', 'data-srcset', 'data-lazy-srcset') or self.version>=5 and name=='imagesrcset':
                     values = re.findall(r'(?:^|,)\s*([^\s,]+)', value) if not value.startswith('data:') else []
-                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
+                elif name in ('src', 'poster', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'data-href' and 'slot-shot-frame' in attrs.get('class', '').split() or self.version>=6 and name=='data-living-config' or name == 'href' and tag == 'link':
                     if tag == 'link' and attrs.get('rel') in ('canonical', 'preconnect', 'dns-prefetch'): continue
                     values = [value]
                 elif name.startswith('data-') and value.startswith(('{', '[')):
@@ -517,6 +517,7 @@ class Rewriter:
             tag = m.group(0)
             if tag.startswith(('<!--', '<!')):
                 continue
+            viewer_image = any(a['name'].lower() == 'class' and 'slot-shot-frame' in html.unescape(a['value']).split() for a in ATTR.finditer(tag))
             meta_image = bool(re.match(r'<meta\b', tag, re.I)) and any(
                 a['name'].lower() in ('property', 'name') and a['value'].lower() in
                 ('og:image', 'og:image:url', 'og:image:secure_url', 'twitter:image', 'twitter:image:src')
@@ -536,7 +537,7 @@ class Rewriter:
                         if new != s['url']:
                             edits.append((position + s.start('url'), position + s.end('url'), new, 'html_srcset'))
                     continue
-                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src') or self.version>=6 and name=='data-living-config' or name == 'content' and meta_image:
+                if name in ('src', 'poster', 'href', 'data-src', 'data-lazy-src', 'data-gallery-src') or name == 'data-href' and viewer_image or self.version>=6 and name=='data-living-config' or name == 'content' and meta_image:
                     context = 'resource' if name != 'href' or tag.lower().startswith('<link') else 'navigation'
                     new = self.url(raw, owner, context)
                     if new != raw:
