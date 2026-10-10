@@ -529,7 +529,7 @@ def image_size_attrs(url):
     return f' width="{width}" height="{height}"'
 
 
-def fill_shot_frames(body):
+def fill_shot_frames(body, shots=()):
     """截图、照片格子（data-shot-source）：现在网站是打开页面时由脚本把缩略图贴进格子；这里生成时直接放进去，
     按原比例完整放进（contain），点开看原图（data-shot-full-source）。文件不在就留空格子并提示。"""
     def one(m):
@@ -551,7 +551,24 @@ def fill_shot_frames(body):
         img = (f'<img src="{H.escape(url, quote=True)}"{image_size_attrs(url)} alt="" loading="lazy" decoding="async" '
                f'style="position:absolute;inset:0;width:100%;height:100%;object-fit:{(fit.group(1) if fit else "contain") or "contain"}">')
         return tag + img
-    return re.sub(r'<div class="slot-shot-frame[^"]*"[^>]*data-shot-source="([^"]+)"[^>]*>', one, body)
+    body = re.sub(r'<div class="slot-shot-frame[^"]*"[^>]*data-shot-source="([^"]+)"[^>]*>', one, body)
+
+    def annotation(m):
+        tag = m.group(0)
+        index = re.search(r'\bdata-href="(\d+)"', tag)
+        if not index:
+            return tag
+        tag = re.sub(r'\s(?:data-href|role|tabindex)="[^"]*"', '', tag)
+        shot = shots[int(index[1])] if int(index[1]) < len(shots) else {}
+        source = shot.get("full") or shot.get("file", "")
+        path = os.path.join(REPO, *source.replace("\\", "/").split("/"))
+        if not source or not os.path.isfile(path):
+            print("  标注截图的原图不在：", source or index[1], flush=True)
+            return tag
+        url = H.escape(publish_path(path), quote=True)
+        return tag[:-1] + f' role="button" tabindex="0" data-href="{url}">'
+
+    return re.sub(r'<div class="[^"]*\bdd-shot\b[^"]*"[^>]*>', annotation, body)
 
 
 _ALIASES = None
@@ -597,7 +614,7 @@ def finish_page(name, fm, results, cssv):
         sid = r["screen"]
         if sid not in screens:
             screens[sid] = {"id": sid}; order.append(sid)
-        body = alias_links(rename_site_classes(fill_shot_frames(r["html"])))
+        body = alias_links(rename_site_classes(fill_shot_frames(r["html"], source_screens[sid][0].get("screenshots", []))))
         for a, b in (r.get("replace") or {}).items():  # 内容文件写明的“显示时替换”（规则原文首行标签）
             body = body.replace(a, b)
         art_src = r.get("art")
