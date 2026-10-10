@@ -289,7 +289,7 @@
       "links": [
         {
           "text": "这个网页是怎么做的",
-          "href": "/how-this-site/#traffic"
+          "href": "/how-this-site/#repairs"
         },
         {
           "text": "省流量的云端素材",
@@ -996,7 +996,7 @@
         "text": "日常技术默认"
       },
       {
-        "target": "/how-this-site/#traffic",
+        "target": "/how-this-site/#repairs",
         "screen": "rule-capabilities-runtime-05b",
         "text": "来由见〔这个网页是怎么做的〕"
       },
