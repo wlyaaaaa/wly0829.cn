@@ -17,7 +17,7 @@
   },
   "pages": {
     "home": {
-      "sha256": "12494244930816e2566909c3c2a5f01d28b17e8a598cd282f0d610eb1b810929",
+      "sha256": "be238c13492c5c78867fa2b6530aea7bd022575171379475152b4430ca85c646",
       "bytes": 248656
     },
     "cockpit": {
@@ -32,13 +32,13 @@
   "bundled": {
     "_home-cockpit/time-labels.css": {
       "source": "../../public/_home-cockpit/time-labels.css",
-      "sha256": "a812e7930a4ea0567e528eeebfc0fce1936902dd5e500d3ff32804dea17e205f",
-      "bytes": 2941
+      "sha256": "8f14ee189cedb60cd4a95619cd8881f5244b7df2f5029c21fe61d7a609b6df3d",
+      "bytes": 2978
     },
     "_home-cockpit/home-cta.css": {
       "source": "../../public/_home-cockpit/home-cta.css",
-      "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
-      "bytes": 2412
+      "sha256": "c6823b2486a278ce664378db7701a8289277ce9f15ae83a9e08e42e62d95feca",
+      "bytes": 2971
     },
     "_home-cockpit/cockpit-offline.css": {
       "source": "../../public/_home-cockpit/cockpit-offline.css",
@@ -120,10 +120,10 @@
       "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
       "bytes": 127856
     },
-    "_home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js": {
-      "source": "home-firstpaint-9e34aa6fd6e819db8f08.js",
-      "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
-      "bytes": 72402
+    "_home-cockpit/home-firstpaint-454be55be41cb476b9da.js": {
+      "source": "home-firstpaint-454be55be41cb476b9da.js",
+      "sha256": "454be55be41cb476b9da6fcb652dadfba5b179be65cbe9d65a1a66b5dd8e6245",
+      "bytes": 72613
     }
   },
   "files": {
@@ -5591,53 +5591,53 @@
       "sha256": "21feadb7d813f3110b07b1495116b687e921a968b20e16636912254244fd88a0",
       "bytes": 157233
     },
-    "assets/home-01-h-1920-bio-white-gear-53db98b56ba4.avif": {
-      "sha256": "53db98b56ba4d69f171863951d2542a41f9e76479d3e5da3548f8d7840d63fd1",
-      "bytes": 185400
+    "assets/home-01-h-1920-bio-white-gear-db226b5dc07c.avif": {
+      "sha256": "db226b5dc07c92e68f3808e60aeeed7d40654ddf3243dd15864eff8429171996",
+      "bytes": 204148
     },
-    "assets/home-01-h-2880-bio-white-gear-5cb64167107e.avif": {
-      "sha256": "5cb64167107e87cd45d58269fabee9c32443858a3237322edc8fbfa594e51251",
-      "bytes": 295911
+    "assets/home-01-h-2880-bio-white-gear-dc2bb6b83043.avif": {
+      "sha256": "dc2bb6b830434023fd89c9616a89e1a4b2b3123435c650066856b783e464090f",
+      "bytes": 323220
     },
-    "assets/home-01-h-fallback640-bio-white-gear-7072cd5afbaf.webp": {
-      "sha256": "7072cd5afbafd0d78437a21d4db589afc9e479a4dda72037fbee8064c2b34e44",
-      "bytes": 62566
+    "assets/home-01-h-fallback640-bio-white-gear-d444083a20c8.webp": {
+      "sha256": "d444083a20c85cdb2941af1749583688f686fe1c83002f3211d976f8ae9462ea",
+      "bytes": 71428
     },
-    "assets/home-01-v-1280-bio-white-gear-9b7cd01fa9d1.avif": {
-      "sha256": "9b7cd01fa9d1e140e9bc1ac31a7bd6fdfe70fa8cae7b25c66483258a3b6e3889",
-      "bytes": 234146
+    "assets/home-01-v-1280-bio-white-gear-f7ecf20d9c94.avif": {
+      "sha256": "f7ecf20d9c944ae0e839afa12ffd6392db5ab8b89e3420bbe80e4f54b4a9e174",
+      "bytes": 253619
     },
-    "assets/home-01-v-fallback640-bio-white-gear-13dd4b9a10fe.webp": {
-      "sha256": "13dd4b9a10febfc863272bd7515367724385ad16f257a4ff23bc779d8a1186c7",
-      "bytes": 153086
+    "assets/home-01-v-fallback640-bio-white-gear-7b677b89ea5f.webp": {
+      "sha256": "7b677b89ea5fbe60458cdc73d0289dc1fab41524cbe9654f645ac939f8297eb9",
+      "bytes": 171124
     },
-    "_shared/home-living/assets/plate-h-white-nobird-bio-white-gear-b59a94a3f193.webp": {
-      "sha256": "b59a94a3f1938237470b848c64a56d1c510c9c1942c6d5b514caa52380de3ae4",
-      "bytes": 688906
+    "_shared/home-living/assets/plate-h-white-nobird-bio-white-gear-4d0c6c57b77b.webp": {
+      "sha256": "4d0c6c57b77b5c9f5c96916687f45219ab234310b340cd01b90453d2fa133e06",
+      "bytes": 660112
     },
-    "_shared/home-living/assets/plate-h-white-bio-white-gear-32c83f7b86a5.webp": {
-      "sha256": "32c83f7b86a56b03545dabc687fae7f3192cbb458726fe08e09fdd68ce771550",
-      "bytes": 671998
+    "_shared/home-living/assets/plate-h-white-bio-white-gear-57be1bc7bcaf.webp": {
+      "sha256": "57be1bc7bcaf1beb1aace966dcaf81d6d513660274344f7ecba391c2922fa389",
+      "bytes": 650848
     },
-    "_shared/home-living/assets/plate-v-white-nobird-bio-white-gear-e7346c13c233.webp": {
-      "sha256": "e7346c13c233fce80863eb65ec1a1d204d899ab23e7130296bc3316f8e0d0628",
-      "bytes": 529574
+    "_shared/home-living/assets/plate-v-white-nobird-bio-white-gear-ea702dc12466.webp": {
+      "sha256": "ea702dc12466009979afefc8e4a54960fd0cdb42a8ede125c7fb01244087005d",
+      "bytes": 497560
     },
-    "_shared/home-living/assets/plate-v-white-bio-white-gear-ecf105ba574f.webp": {
-      "sha256": "ecf105ba574f29f0b920459773aedcdc108d054d974d97848f84c175b6be9512",
-      "bytes": 531346
+    "_shared/home-living/assets/plate-v-white-bio-white-gear-f8e4bb3cdc90.webp": {
+      "sha256": "f8e4bb3cdc902ad5fdaa5f916b02b21222de88861408639916dfda501d5042cf",
+      "bytes": 498030
     },
-    "_shared/home-living/hero-live.config.d4ca2f87a8.json": {
-      "sha256": "d4ca2f87a845e463b730ba09125dcc3d332ec12a3996f6707ba452748dcb76ed",
+    "_shared/home-living/hero-live.config.23693b97df.json": {
+      "sha256": "23693b97df4478a80ae31582cb514b22b91e99bc7732824f7bf87c02660c32e3",
       "bytes": 2850
     },
     "_shared/home-living/hero-live.48770fe6a2.js": {
       "sha256": "48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e",
       "bytes": 67988
     },
-    "_shared/home-app-92ff384787b4b26d0794.js": {
-      "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",
-      "bytes": 123281
+    "_shared/home-app-398939334868e767a745.js": {
+      "sha256": "398939334868e767a745d866122024334b26134301940e31e396fad9ac529c78",
+      "bytes": 123247
     },
     "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
       "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
@@ -5727,13 +5727,13 @@
       "sha256": "bfc5ea2af98f89d40e7aaa51267fda21633fcec362eecbd0723da462bc1afa42",
       "bytes": 134169
     },
-    "_home-cockpit/home-firstpaint-9e34aa6fd6e819db8f08.js": {
-      "sha256": "9e34aa6fd6e819db8f08efaa2c6653e134ab61993675b193c1131c4879ad6f9b",
-      "bytes": 72402
+    "_home-cockpit/home-firstpaint-454be55be41cb476b9da.js": {
+      "sha256": "454be55be41cb476b9da6fcb652dadfba5b179be65cbe9d65a1a66b5dd8e6245",
+      "bytes": 72613
     }
   },
   "count": 1401,
-  "bytes": 88231491,
+  "bytes": 88208824,
   "home_white_gear": {
     "inputs": [
       {
@@ -5804,9 +5804,9 @@
     "images": [
       {
         "before": "assets/home-01-h-1920-bio-683c133434b6.avif",
-        "path": "assets/home-01-h-1920-bio-white-gear-53db98b56ba4.avif",
-        "sha256": "53db98b56ba4d69f171863951d2542a41f9e76479d3e5da3548f8d7840d63fd1",
-        "bytes": 185400,
+        "path": "assets/home-01-h-1920-bio-white-gear-db226b5dc07c.avif",
+        "sha256": "db226b5dc07c92e68f3808e60aeeed7d40654ddf3243dd15864eff8429171996",
+        "bytes": 204148,
         "dimensions": [
           1920,
           1081
@@ -5830,9 +5830,9 @@
       },
       {
         "before": "assets/home-01-h-2880-bio-4b7b95889bf5.avif",
-        "path": "assets/home-01-h-2880-bio-white-gear-5cb64167107e.avif",
-        "sha256": "5cb64167107e87cd45d58269fabee9c32443858a3237322edc8fbfa594e51251",
-        "bytes": 295911,
+        "path": "assets/home-01-h-2880-bio-white-gear-dc2bb6b83043.avif",
+        "sha256": "dc2bb6b830434023fd89c9616a89e1a4b2b3123435c650066856b783e464090f",
+        "bytes": 323220,
         "dimensions": [
           2880,
           1621
@@ -5856,9 +5856,9 @@
       },
       {
         "before": "assets/home-01-h-fallback640-bio-bc68b485462b.webp",
-        "path": "assets/home-01-h-fallback640-bio-white-gear-7072cd5afbaf.webp",
-        "sha256": "7072cd5afbafd0d78437a21d4db589afc9e479a4dda72037fbee8064c2b34e44",
-        "bytes": 62566,
+        "path": "assets/home-01-h-fallback640-bio-white-gear-d444083a20c8.webp",
+        "sha256": "d444083a20c85cdb2941af1749583688f686fe1c83002f3211d976f8ae9462ea",
+        "bytes": 71428,
         "dimensions": [
           640,
           360
@@ -5894,9 +5894,9 @@
       },
       {
         "before": "assets/home-01-v-1280-bio-bc6dd0c3c9ad.avif",
-        "path": "assets/home-01-v-1280-bio-white-gear-9b7cd01fa9d1.avif",
-        "sha256": "9b7cd01fa9d1e140e9bc1ac31a7bd6fdfe70fa8cae7b25c66483258a3b6e3889",
-        "bytes": 234146,
+        "path": "assets/home-01-v-1280-bio-white-gear-f7ecf20d9c94.avif",
+        "sha256": "f7ecf20d9c944ae0e839afa12ffd6392db5ab8b89e3420bbe80e4f54b4a9e174",
+        "bytes": 253619,
         "dimensions": [
           1280,
           2227
@@ -5920,9 +5920,9 @@
       },
       {
         "before": "assets/home-01-v-fallback640-bio-5084364e7deb.webp",
-        "path": "assets/home-01-v-fallback640-bio-white-gear-13dd4b9a10fe.webp",
-        "sha256": "13dd4b9a10febfc863272bd7515367724385ad16f257a4ff23bc779d8a1186c7",
-        "bytes": 153086,
+        "path": "assets/home-01-v-fallback640-bio-white-gear-7b677b89ea5f.webp",
+        "sha256": "7b677b89ea5fbe60458cdc73d0289dc1fab41524cbe9654f645ac939f8297eb9",
+        "bytes": 171124,
         "dimensions": [
           640,
           1113
@@ -5958,9 +5958,9 @@
       },
       {
         "before": "_shared/home-living/assets/plate-h-white-nobird-bio-b6ef7169e64a.webp",
-        "path": "_shared/home-living/assets/plate-h-white-nobird-bio-white-gear-b59a94a3f193.webp",
-        "sha256": "b59a94a3f1938237470b848c64a56d1c510c9c1942c6d5b514caa52380de3ae4",
-        "bytes": 688906,
+        "path": "_shared/home-living/assets/plate-h-white-nobird-bio-white-gear-4d0c6c57b77b.webp",
+        "sha256": "4d0c6c57b77b5c9f5c96916687f45219ab234310b340cd01b90453d2fa133e06",
+        "bytes": 660112,
         "dimensions": [
           2880,
           1621
@@ -5983,9 +5983,9 @@
       },
       {
         "before": "_shared/home-living/assets/plate-h-white-bio-7a8c82580fa4.webp",
-        "path": "_shared/home-living/assets/plate-h-white-bio-white-gear-32c83f7b86a5.webp",
-        "sha256": "32c83f7b86a56b03545dabc687fae7f3192cbb458726fe08e09fdd68ce771550",
-        "bytes": 671998,
+        "path": "_shared/home-living/assets/plate-h-white-bio-white-gear-57be1bc7bcaf.webp",
+        "sha256": "57be1bc7bcaf1beb1aace966dcaf81d6d513660274344f7ecba391c2922fa389",
+        "bytes": 650848,
         "dimensions": [
           2880,
           1621
@@ -6008,9 +6008,9 @@
       },
       {
         "before": "_shared/home-living/assets/plate-v-white-nobird-bio-9fcb76bd2645.webp",
-        "path": "_shared/home-living/assets/plate-v-white-nobird-bio-white-gear-e7346c13c233.webp",
-        "sha256": "e7346c13c233fce80863eb65ec1a1d204d899ab23e7130296bc3316f8e0d0628",
-        "bytes": 529574,
+        "path": "_shared/home-living/assets/plate-v-white-nobird-bio-white-gear-ea702dc12466.webp",
+        "sha256": "ea702dc12466009979afefc8e4a54960fd0cdb42a8ede125c7fb01244087005d",
+        "bytes": 497560,
         "dimensions": [
           1280,
           2227
@@ -6033,9 +6033,9 @@
       },
       {
         "before": "_shared/home-living/assets/plate-v-white-bio-bac77571823d.webp",
-        "path": "_shared/home-living/assets/plate-v-white-bio-white-gear-ecf105ba574f.webp",
-        "sha256": "ecf105ba574f29f0b920459773aedcdc108d054d974d97848f84c175b6be9512",
-        "bytes": 531346,
+        "path": "_shared/home-living/assets/plate-v-white-bio-white-gear-f8e4bb3cdc90.webp",
+        "sha256": "f8e4bb3cdc902ad5fdaa5f916b02b21222de88861408639916dfda501d5042cf",
+        "bytes": 498030,
         "dimensions": [
           1280,
           2227
@@ -6060,8 +6060,8 @@
     "bindings": [
       {
         "before": "_shared/home-living/hero-live.config.2ad572544a.json",
-        "path": "_shared/home-living/hero-live.config.d4ca2f87a8.json",
-        "sha256": "d4ca2f87a845e463b730ba09125dcc3d332ec12a3996f6707ba452748dcb76ed",
+        "path": "_shared/home-living/hero-live.config.23693b97df.json",
+        "sha256": "23693b97df4478a80ae31582cb514b22b91e99bc7732824f7bf87c02660c32e3",
         "bytes": 2850
       },
       {
