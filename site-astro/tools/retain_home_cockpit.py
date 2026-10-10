@@ -1,6 +1,6 @@
 """恢复仓库中已选的首页、驾驶舱入口，或显式从新候选站生成下一份输入。
 
-无参数：从 sources/retained-home-cockpit 恢复两份 HTML、清单与首帧脚本。
+无参数：从 sources/retained-home-cockpit 恢复三份 HTML、清单与首帧脚本。
 带候选站构建目录：复制实际依赖并执行既有首帧补丁；只读候选站。
 原依赖逐字节复制；首页白色外设由当前审定母图按既有配方生成。
 """
@@ -34,12 +34,12 @@ def materialize_frozen(site=ROOT, snapshot=None):
     source = Path(snapshot) if snapshot is not None else Path(site) / 'sources/retained-home-cockpit'
     manifest_bytes = (source / 'manifest.json').read_bytes()
     manifest = json.loads(manifest_bytes)
-    if manifest.get('schema') != 'wly.retained-home-cockpit.v1' or set(manifest.get('pages', {})) != {'home', 'cockpit'}:
-        raise ValueError('首页和驾驶舱缺少版本化入口清单')
+    if manifest.get('schema') != 'wly.retained-home-cockpit.v1' or set(manifest.get('pages', {})) != {'home', 'cockpit', 'computer-access'}:
+        raise ValueError('首页、驾驶舱和授权页缺少版本化入口清单')
     if manifest['count'] != len(manifest['files']) or manifest['bytes'] != sum(row['bytes'] for row in manifest['files'].values()):
         raise ValueError('首页和驾驶舱依赖清单计数不同')
     pages = {}
-    for page in ('home', 'cockpit'):
+    for page in ('home', 'cockpit', 'computer-access'):
         raw = (source / (page + '.html')).read_bytes()
         if descriptor(raw) != manifest['pages'][page]:
             raise ValueError('冻结页面的字节不同：' + page)
@@ -137,12 +137,12 @@ def retain_candidate(source):
 
     output = ROOT / 'src/chrome/retained'; output.mkdir(parents=True, exist_ok=True)
     inputs = {}
-    for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html')]:
+    for page, rel in [('home', 'index.html'), ('cockpit', 'cockpit/index.html'), ('computer-access', 'computer-access/index.html')]:
         path = source / rel; raw = path.read_bytes()
         (output / f'{page}.html').write_bytes(raw); inputs[page] = descriptor(raw)
         references(raw.decode('utf-8'), [path.parent])
     # 独立动效包运行时拼接路径取图，保留其完整原生包边界。
-    for rel in ['_shared/home-living', '_shared/home-comic', '_living/cockpit',
+    for rel in ['_shared/home-living', '_shared/home-comic', '_living/cockpit', '_living/computer-access',
                 '_typeset/cockpit', '_typeset/home-highlights', '_living/_engine']:
         for path in (source / rel).rglob('*'):
             copy_file(path)
@@ -158,6 +158,8 @@ def retain_candidate(source):
     engine = json.loads((ROOT / 'src/chrome/living-engine.json').read_text(encoding='utf-8'))
     cockpit = output / 'cockpit.html'
     cockpit.write_text(cockpit.read_text(encoding='utf-8').replace(engine['deployed'], engine['fixed']), encoding='utf-8', newline='')
+    mobile_todo = run_path(str(ROOT / 'tools/cockpit_mobile_todo.py'))['build'](public, cockpit)
+    copied[mobile_todo['runtime']] = descriptor((public / mobile_todo['runtime']).read_bytes())
     firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', home.read_text('utf-8'))[1]
     for rel in (firstpaint, '_living/_engine/' + engine['fixed']):
         copied[rel] = descriptor((public / rel).read_bytes())
@@ -165,6 +167,7 @@ def retain_candidate(source):
         'pages': {page: descriptor((output / (page + '.html')).read_bytes()) for page in inputs},
         'files': copied, 'count': len(copied), 'bytes': sum(row['bytes'] for row in copied.values())}
     manifest['home_white_gear'] = white_gear
+    manifest['cockpit_mobile_todo'] = mobile_todo
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return manifest
 
@@ -201,13 +204,14 @@ def regenerate_runtimes(work):
              'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
     white_root = repo / 'sources/home-white-gear'
     names += ['sources/home-white-gear/build.py', 'sources/signature/assets-manifest.json']
-    names += ['site-astro/tools/cockpit_white_gear.py',
+    names += ['site-astro/tools/cockpit_white_gear.py', 'site-astro/tools/cockpit_mobile_todo.py',
               'sources/assets/_library/illustrations/ill-53b8c5c622e8b9.png']
     names += ['sources/home-white-gear/' + name + '.png' for name in
               ('master-h', 'master-v', 'plate-h', 'plate-h-nobird', 'plate-v', 'plate-v-nobird', 'native-h', 'native-v-fallback')]
     runtime_paths = sorted((ROOT / 'src/chrome/runtime').glob('*.json'))
     names += [path.relative_to(repo).as_posix() for path in runtime_paths]
     names += [(source / (page + '.html')).relative_to(repo).as_posix() for page in ('home', 'cockpit')]
+    names += [(source / 'computer-access.html').relative_to(repo).as_posix()]
     def current_inputs(): return {name: descriptor((repo / name).read_bytes()) for name in names + owned}
     inputs = current_inputs()
     if previous.get('inputs') == inputs:
@@ -257,16 +261,25 @@ def regenerate_runtimes(work):
     def replace(text):
         for old, new in replacements.items(): text = text.replace(old, new)
         return text
+    previous_mobile = previous.get('cockpit_mobile_todo')
+    if previous_mobile:
+        original = '/' + previous_mobile['base_runtime']
+        replacements['/' + previous_mobile['runtime']] = replacements.get(original, original)
     work = Path(work); work.mkdir(parents=True, exist_ok=True)
     cockpit = work / 'cockpit/index.html'; cockpit.parent.mkdir(parents=True, exist_ok=True)
     cockpit.write_text(replace(pages['cockpit']), encoding='utf8', newline='')
+    if previous_mobile: replacements.pop('/' + previous_mobile['runtime'], None)
     cockpit_white = run_path(str(ROOT / 'tools/cockpit_white_gear.py'))['build'](public, cockpit)
+    cockpit.write_text(re.sub(r'<style data-cockpit-mobile-todo>.*?</style>', '', cockpit.read_text('utf8'), flags=re.S), encoding='utf8', newline='')
+    base_runtime = re.search(r'data-src="([^"]*/b2-typeset-[\w]+\.js)"', cockpit.read_text('utf8'))[1].lstrip('/')
+    mobile_todo = run_path(str(ROOT / 'tools/cockpit_mobile_todo.py'))['build'](public, cockpit)
+    mobile_todo['base_runtime'] = base_runtime
     pages['cockpit'] = cockpit.read_text('utf8')
     head = re.search(r'<section\b[^>]*\bid="cockpit-01"[^>]*>', pages['cockpit'])[0]
     binding = json.loads(html.unescape(re.search(r'data-living-binding="([^"]+)"', head)[1]))
     config_url = re.search(r'data-living-config="([^"]+)"', head)[1]
     config = json.loads((public / config_url.lstrip('/')).read_text('utf8'))
-    cockpit_resources = {config_url, *(item['src'] for item in binding.values()),
+    cockpit_resources = {config_url, '/' + mobile_todo['runtime'], *(item['src'] for item in binding.values()),
                          *(config[side]['texture']['src'] for side in binding)}
     for url in cockpit_resources:
         rel = url.lstrip('/'); raw = (public / rel).read_bytes(); proof = descriptor(raw)
@@ -335,6 +348,7 @@ def regenerate_runtimes(work):
             manifest['files'].pop(row['path'], None); dependencies.pop(row['path'], None)
     manifest['home_white_gear'] = white_gear
     manifest['cockpit_white_gear'] = cockpit_white
+    manifest['cockpit_mobile_todo'] = mobile_todo
     for url in cockpit_resources: manifest['files'][url.lstrip('/')] = outputs[url.lstrip('/')]
     for page, text in pages.items():
         raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
@@ -349,7 +363,7 @@ def regenerate_runtimes(work):
     for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies),
                         (record, {'schema': 'wly.retained-runtime-inputs.v1', 'inputs': current_inputs(), 'base': base,
                                   'outputs': outputs, 'replacements': {('/' + rel): ('/' + new) for rel, new in generated.items()},
-                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear})]:
+                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear, 'cockpit_mobile_todo': mobile_todo})]:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
     materialize_frozen()
     return {'status': 'regenerated', 'inputs': current_inputs(), 'outputs': outputs, 'dependencies': restored}

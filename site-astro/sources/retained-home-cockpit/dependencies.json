@@ -9188,5 +9188,10 @@
     "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
     "bytes": 543090,
     "source_path": "site-astro/sources/retained-home-cockpit/assets/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png"
+  },
+  "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js": {
+    "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
+    "bytes": 142449,
+    "source_path": "site-astro/sources/retained-home-cockpit/assets/0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81.js"
   }
 }

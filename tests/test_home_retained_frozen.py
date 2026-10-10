@@ -41,7 +41,7 @@ class FrozenHomeTests(unittest.TestCase):
         self.assertFalse(self.engine.exists())
         result = self.run_restore()
         self.assertEqual(result.returncode, 0, result.stderr)
-        for page in ('home', 'cockpit'):
+        for page in self.pin['pages']:
             actual = (self.site / 'src/chrome/retained' / (page + '.html')).read_bytes()
             self.assertEqual(actual, (self.snapshot / (page + '.html')).read_bytes())
             self.assertEqual(hashlib.sha256(actual).hexdigest(), self.pin['pages'][page]['sha256'])
@@ -77,6 +77,15 @@ class FrozenHomeTests(unittest.TestCase):
         result = self.run_restore()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('冻结页面的字节不同', result.stderr)
+
+    def test_authorization_remains_exact_and_rejects_same_size_source_change(self):
+        original = (ROOT / 'site-release/computer-access/index.html').read_bytes()
+        self.assertEqual((self.snapshot / 'computer-access.html').read_bytes(), original)
+        source = self.snapshot / 'computer-access.html'
+        source.write_bytes(original[:-1] + (b' ' if original[-1:] != b' ' else b'\n'))
+        result = self.run_restore()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('冻结页面的字节不同：computer-access', result.stderr)
 
 
 if __name__ == '__main__':
