@@ -6,6 +6,16 @@
   "url": "/projects/proxyclean/",
   "tagline": "代理退出后上不了网，查出残留设置、只修失效的。",
   "status": "常用",
+  "status_line": {
+    "state": "在用",
+    "last": {
+      "label": "上次更新",
+      "at": "2026-10-06 05:52"
+    },
+    "facts": [],
+    "as_of": "2026-10-10",
+    "source": "项目修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/ProxyClean",
   "capability": "查清代理留下的断网，只修失效项",

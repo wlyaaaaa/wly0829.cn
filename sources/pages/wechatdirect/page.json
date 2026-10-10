@@ -6,6 +6,18 @@
   "url": "/projects/wechatdirect/",
   "tagline": "让 AI 读懂电脑上的微信，只读点名的那一段。",
   "status": "常用",
+  "status_line": {
+    "state": "在用",
+    "last": {
+      "label": "上次使用",
+      "at": "2026-10-07 09:21"
+    },
+    "facts": [
+      "近 7 天 AI 用了 12 次"
+    ],
+    "as_of": "2026-10-10",
+    "source": "AI 使用记录（记到 10 月 8 日）"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/WeChatDirect",
   "capability": "读懂微信聊天",

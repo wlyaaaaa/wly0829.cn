@@ -6,6 +6,18 @@
   "url": "/projects/video-scaffold/",
   "tagline": "把定好的文案和素材做成 4K 视频",
   "status": "偶尔用",
+  "status_line": {
+    "state": "偶尔用",
+    "last": {
+      "label": "上次更新",
+      "at": "2026-10-08 15:52"
+    },
+    "facts": [
+      "近 7 天改进了 19 次"
+    ],
+    "as_of": "2026-10-10",
+    "source": "项目修改记录"
+  },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/video-scaffold",
   "capability": "做视频：配音、踩点动画、4K 渲染",
