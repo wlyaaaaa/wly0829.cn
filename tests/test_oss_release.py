@@ -20,6 +20,18 @@ spec.loader.exec_module(oss)
 
 
 class OssReleaseTests(unittest.TestCase):
+    def test_delta_reuses_virtual_inherited_text_but_rechecks_physical_text(self):
+        from types import SimpleNamespace
+        path = self.source/'assets/site.css'
+        before = path.read_bytes()
+        rewrite = SimpleNamespace(retained={'legacy/missing.css': {'sha256':'not-physical'},
+            'assets/site.css': {'sha256':oss.hashlib.sha256(before).hexdigest()}}, rewrite=lambda data, owner:data)
+        oss.validate_retained_text(rewrite, self.source, {'legacy/missing.css':{}})
+        self.assertEqual(set(rewrite.retained), {'legacy/missing.css','assets/site.css'})
+        path.write_bytes(before+b'/* changed */')
+        oss.validate_retained_text(rewrite, self.source, {'legacy/missing.css':{}})
+        self.assertEqual(set(rewrite.retained), {'legacy/missing.css'})
+
     def test_lazy_html_and_svg_images_migrate_with_their_no_js_originals(self):
         files={'index.html':{},'assets/photo.jpg':{},'assets/tile.webp':{}}
         base='https://example.oss.invalid'; prefix='releases/one'

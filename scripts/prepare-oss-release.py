@@ -602,6 +602,14 @@ class Rewriter:
         return text.encode('utf8')
 
 
+def validate_retained_text(rewriter, source, inherited):
+    while rewriter.retained:
+        changed = [rel for rel, obj in rewriter.retained.items() if rel not in inherited and Path(rel).suffix in TEXT_ASSETS
+            and hashlib.sha256(rewriter.rewrite((source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
+        if not changed: break
+        for rel in changed: del rewriter.retained[rel]
+
+
 def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None):
     spec = importlib.util.spec_from_file_location('oss_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
     builder = importlib.util.module_from_spec(spec)
@@ -635,11 +643,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             previous = verify_manifest(predecessor)
     rewriter.retained = {rel: obj for rel, obj in previous['oss']['objects'].items()
         if rel in actual and previous['oss']['asset_base_url'] == base and obj.get('source') == actual[rel]} if previous else {}
-    while rewriter.retained:
-        changed = [rel for rel, obj in rewriter.retained.items() if Path(rel).suffix in TEXT_ASSETS
-            and hashlib.sha256(rewriter.rewrite((source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
-        if not changed: break
-        for rel in changed: del rewriter.retained[rel]
+    validate_retained_text(rewriter, source, inherited)
     rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear()
     output.mkdir(parents=True)
     home_bytes,home_proof=current_home_links(source,version=rewriter_version)
