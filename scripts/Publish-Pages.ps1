@@ -5,6 +5,7 @@ param(
     [string]$RunRoot,
     [string]$LockHolder,
     [switch]$FailFastOnline,
+    [string]$CutoverBefore,
     [switch]$Publish
 )
 $ErrorActionPreference='Stop'
@@ -17,7 +18,7 @@ if(-not $PageList){$PageList=BatchPath $settings.page_list}else{$PageList=[IO.Pa
 $pages=@(Get-Content -LiteralPath $PageList -Encoding utf8 | Where-Object { $_.Trim() } | ForEach-Object { $_.Trim() })
 if(-not $pages.Count -or @($pages | Select-Object -Unique).Count -ne $pages.Count){throw 'Page list must be nonempty and contain no duplicates.'}
 if($settings.schema -eq 'wly.typeset-batch.v1' -and ($pages | Where-Object { $_ -cnotmatch '^[a-zA-Z0-9][a-zA-Z0-9._-]*$' })){throw 'Invalid page identity.'}
-$parameters=@{Pages=$pages;Publish=$Publish;FailFastOnline=$FailFastOnline}
+$parameters=@{Pages=$pages;Publish=$Publish;FailFastOnline=$FailFastOnline;CutoverBefore=$CutoverBefore}
 foreach($key in @('AstroPreparation','TypesetRoot','Inventory','Geometry','Baseline','Release','BuildReport','Verification','LegacySite','AssetCache','ReleaseOverlay','CreativePreparation','LiveUiPreparation','RulePublicProjection','LayoutAcceptance','RuntimeVerification','ReadingPlan','OssPreparation','OssQaPlan','OssVerification','OssReading','OssCold','OssRetryProof')){
     $value=$settings.paths.$key
     if($value){$parameters[$key]=BatchPath $value}

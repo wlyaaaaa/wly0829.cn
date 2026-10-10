@@ -36,6 +36,7 @@ param(
     [ValidateRange(2,6)][int]$ReadbackConfirmationRounds = 3,
     [ValidateRange(0,60)][int]$ReadbackRetrySeconds = 10,
     [switch]$FailFastOnline,
+    [string]$CutoverBefore,
     [switch]$Publish
 )
 $ErrorActionPreference = 'Stop'
@@ -178,6 +179,11 @@ $state = [ordered]@{ schema='wly.typeset-publication.v1'; status='preparing'; re
     directive_sha256=$receipt.directive_sha256; geometry_sha256=$receipt.geometry_sha256;
     automatic_rollback=$false; lock_holder=$LockHolder; timings=[ordered]@{} }
 function SaveState { SaveJson $statePath $state }
+function CheckCutoverDeadline {
+    if ($CutoverBefore -and [DateTimeOffset]::UtcNow -ge [DateTimeOffset]::Parse($CutoverBefore)) {
+        $state.status='stopped_before_cutover_deadline'; SaveState; throw 'The requested cutover deadline has passed; push is forbidden.'
+    }
+}
 function TimedChecked([string]$Program, [string[]]$Arguments, [string]$Field) {
     $watch = [Diagnostics.Stopwatch]::StartNew()
     try { Checked $Program $Arguments }
@@ -484,6 +490,7 @@ try {
     if ($OssPreparation) { $uiArguments += @('--oss-preparation',$OssPreparation) }
     if ($AstroPreparation) { $uiArguments += @('--readonly-routes','/computer-access/') }
     Checked 'python' $uiArguments
+    CheckCutoverDeadline
     if ($OssPreparation) {
         VerifyOss (Join-Path $RunRoot 'rebuilt-oss-preparation.json') $rebuilt
         $rollbackRef=$state.production_commit
@@ -539,6 +546,7 @@ try {
     SaveState
     HoldPublicationLock
     if ($AstroPreparation) { Checked 'python' @('scripts/prepare-astro-release.py','verify','--release','site-release') }
+    CheckCutoverDeadline
     TimedChecked 'git' @('push','origin','HEAD:main') 'push_seconds'
     $commit = (& git rev-parse HEAD).Trim()
     $state.pushed_commit = $commit
