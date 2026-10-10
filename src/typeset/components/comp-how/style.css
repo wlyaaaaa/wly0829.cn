@@ -1,0 +1,67 @@
+/* “怎么协作”页分工图（how_flow_cards）。只用 .c-how- 开头的选择器；颜色取站点现有变量。 */
+.c-how-flow {
+  --c-how-flow-color: var(--link);   /* 箭头、回线：站点主绿 */
+  --c-how-stroke: 10px;               /* 与 flow_cards.py 的 S 一致 */
+  --c-how-head-half: 17px;            /* 箭头头部半宽（AW/2） */
+  --c-how-gap: 64px;                  /* 三张大卡之间放箭头的那一栏 */
+  --c-how-loop-h: 66px;               /* 与 flow_cards.py 的 LOOP_H 一致 */
+  display: flex; flex-direction: column; min-width: 0;
+  font-size: var(--fs-body); line-height: var(--lh); color: var(--text);
+}
+.c-how-flow svg { fill: var(--c-how-flow-color); stroke: var(--c-how-flow-color); stroke-width: 0; }
+.c-how-flow .c-how-loop-half path { stroke-width: var(--c-how-stroke); stroke-linecap: butt; fill: none; }
+
+.c-how-top { display: grid; align-items: stretch; min-width: 0; }
+.c-how-flow--h .c-how-top { grid-template-columns: minmax(0, 1fr) var(--c-how-gap) minmax(0, 1fr) var(--c-how-gap) minmax(0, 1fr); }
+.c-how-arrow { display: flex; align-items: center; justify-content: center; min-width: 0; }
+.c-how-arrow svg { display: block; width: 52px; height: auto; overflow: visible; }
+
+.c-how-card { display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 14px 18px 16px; }
+.c-how-name { color: var(--accent); font-size: var(--fs-name); font-weight: 800; line-height: 1.3; text-align: center; }
+.c-how-text { min-width: 0; }
+.c-how-card--top .c-how-text { text-align: left; }
+.c-how-art { position: relative; min-width: 0; }
+.c-how-art-img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.c-how-badge {
+  position: absolute; height: auto; transform: translate(-50%, -50%);
+  padding: 1.2%; border-radius: 50%; background: #fff; box-shadow: 0 2px 8px rgba(40, 110, 70, .22); object-fit: contain;
+}
+
+/* 回线：卡 3 底边 → 卡 1 底边，粗绿圆角线，中间一枚胶囊 */
+.c-how-loop { position: relative; height: var(--c-how-loop-h); margin-top: -2px; }
+.c-how-loop-track {
+  position: absolute; top: 0; bottom: 0; display: flex;
+  left: calc((100% - 2 * var(--c-how-gap)) / 6 - var(--c-how-head-half));
+  right: calc((100% - 2 * var(--c-how-gap)) / 6 - var(--c-how-head-half));
+}
+.c-how-loop-half { display: block; flex: 1 1 50%; width: 50%; overflow: hidden; }
+.c-how-loop-half--mirror { transform: scaleX(-1); }
+.c-how-pill {
+  display: inline-flex; align-items: center; gap: .4em; white-space: nowrap;
+  padding: 6px 26px; border-radius: 999px; background: var(--c-how-flow-color); color: #fff;
+  font-weight: 700; line-height: 1.35; box-shadow: 0 2px 8px rgba(20, 110, 60, .18);
+}
+.c-how-loop .c-how-pill {
+  position: absolute; left: 50%; top: calc(var(--c-how-loop-h) - var(--c-how-stroke) / 2); transform: translate(-50%, -50%);
+}
+
+/* 下面两张宽卡：左图右文 */
+.c-how-low { display: grid; gap: var(--gap-card); min-width: 0; margin-top: 18px; }
+.c-how-flow--h .c-how-low { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.c-how-card--low { display: grid; grid-template-columns: 150px minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 20px; row-gap: 6px; align-items: start; }
+.c-how-card--low .c-how-art { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+.c-how-card--low .c-how-name { grid-column: 2; text-align: left; align-self: end; }
+.c-how-card--low .c-how-text { grid-column: 2; }
+
+/* 竖版：卡片竖排、箭头向下；每张卡左图右文，回线改成末尾一枚胶囊 */
+.c-how-flow--v .c-how-top { grid-template-columns: minmax(0, 1fr); }
+.c-how-flow--v .c-how-arrow { height: 64px; }
+.c-how-flow--v .c-how-arrow svg { width: 36px; }
+.c-how-flow--v .c-how-card--top { display: grid; grid-template-columns: 42% minmax(0, 1fr); grid-template-rows: auto 1fr; column-gap: 20px; row-gap: 6px; }
+.c-how-flow--v .c-how-card--top .c-how-art { grid-column: 1; grid-row: 1 / span 2; align-self: center; }
+.c-how-flow--v .c-how-card--top .c-how-name { grid-column: 2; text-align: left; align-self: end; }
+.c-how-flow--v .c-how-card--top .c-how-text { grid-column: 2; }
+.c-how-flow--v .c-how-low { grid-template-columns: minmax(0, 1fr); margin-top: 22px; }
+.c-how-flow--v .c-how-card--low { grid-template-columns: 26% minmax(0, 1fr); }
+.c-how-return { display: flex; justify-content: center; margin-top: 22px; }
+.c-how-pill-arrow { width: 1.1em; height: auto; fill: #fff !important; flex: none; }

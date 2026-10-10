@@ -320,14 +320,6 @@
       }
     },
     {
-      "type": "daylight",
-      "name": "场景跟杭州天色变化，画外白纸不变",
-      "amount": 1,
-      "region": {
-        "mask": "m0.b"
-      }
-    },
-    {
       "type": "glow",
       "name": "手机黑屏夜里有很淡的光，保持无字无图案",
       "region": {
