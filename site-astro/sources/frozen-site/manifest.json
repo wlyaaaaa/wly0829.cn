@@ -55330,5 +55330,12 @@
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/search-project-work-delivery-copilot.js": "/_runtime/fc75dca58c204c443389/search-project-work-delivery-copilot.js",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/search-project-work-delivery.js": "/_runtime/e95b76867c4da696a94b/search-project-work-delivery.js",
     "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/search-projects.js": "/_runtime/8e3947f318e9b33462dd/search-projects.js"
-  }
+  },
+  "retired_runtime_assets": [
+    "_typeset/runtime/b2-typeset-5f3ac303df638af4e898.js",
+    "_typeset/runtime/b2-typeset-87d1746f2e22df830589.js",
+    "_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js",
+    "_typeset/runtime/b2-typeset-bb6115852e425cf19d7c.js",
+    "_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js"
+  ]
 }

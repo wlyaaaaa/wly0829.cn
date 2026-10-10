@@ -167,6 +167,7 @@ def build(pages=None):
         now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
         steps.append({'name': name, 'seconds': seconds}); print(f'{name}: {seconds}s', flush=True)
     snapshot = read(SNAPSHOT / 'manifest.json'); dist = ROOT / 'dist'; public = SITE / 'public'
+    retired = set(snapshot.get('retired_runtime_assets', []))
     state_path = SITE / '.cache/build-state.json'; old = read(state_path) if state_path.is_file() else {}
     (dist / '.build-receipt.json').unlink(missing_ok=True)
     if snapshot['schema'] != 'wly.frozen-site.v1': raise ValueError('Unsupported frozen site')
@@ -187,7 +188,7 @@ def build(pages=None):
     prepared_fp = fingerprint(preparation)
     stage('fingerprint')
     prepare_changed = not complete or old.get('prepared') != prepared_fp or not (public / '_album/astro-runtime.json').is_file()
-    prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
+    prepare_changed = prepare_changed or any(not (dist / relative).is_file() for relative in snapshot['assets'] if relative not in retired and not (relative.startswith('_home-cockpit/cockpit-offline.') and not (SITE / 'sources/retained-home-cockpit/cockpit.html').is_file()))
     runtime = load('build_runtime', 'site-astro/tools/build_runtime.py')
     if prepare_changed:
         restore(snapshot); pin = astro_rules.generate(public); runtime.prepare(snapshot)
@@ -251,11 +252,15 @@ def build(pages=None):
             if not source.is_file(): raise ValueError('Astro did not generate selected route: ' + route)
             copy_changed(source, dist / route_file(route))
     stage('astro')
+    for path in dist.rglob('*.html'):
+        if any('/' + rel in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', path.read_text('utf8')) for rel in retired):
+            raise ValueError('Retired runtime referenced: ' + str(path))
     assets_changed = False; asset_sources = dict(old.get('asset_sources', {}))
     for source_root in ([public] if prepare_changed or astro_routes else []) + ([stage_dir] if astro_routes else []):
         for source in source_root.rglob('*'):
             if not source.is_file(): continue
             relative = source.relative_to(source_root).as_posix()
+            if relative in retired: continue
             if source.suffix == '.html':
                 if source_root != public or file_route(relative) not in changed or file_route(relative) in astro_routes: continue
             else:
