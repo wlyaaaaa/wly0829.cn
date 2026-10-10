@@ -179,7 +179,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     routes = sorted(file_route(p.relative_to(dist).as_posix()) for p in dist.rglob('*.html'))
     write_sitemap(dist, routes)
     files = {p.relative_to(dist).as_posix(): {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
-             for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json'}}
+             for p in dist.rglob('*') if p.is_file() and p.name not in {'.build-receipt.json', 'release-manifest.json', 'release-identity.json'}}
     manifest = {'schema': 'wly.hybrid-release.v1', 'files': files, 'routes': routes,
         'release_id': hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
         'baseline_production_commit': snapshot['baseline_production_commit'], 'rules_pin': pin,
