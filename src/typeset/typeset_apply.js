@@ -512,10 +512,24 @@ globalThis.TypesetApply = () => {
     // 横竖版都先解除画布比例的最低高度，让实际内容决定屏高，保留正常块间距。
     root.style.minHeight='';root.style.justifyContent='flex-start';
   }
+  function stackMediaRows() { if (!document.body.classList.contains('o-h')) return;
+    const selector='[data-comp="illustration"],[data-comp="screenshot"],[data-comp="numbered_screenshot"]',physical=c=>[...c.children].filter(k=>!k.matches('script,style,noscript') && getComputedStyle(k).display!=='none' && !(k.matches('.deco,[aria-hidden="true"]') && /absolute|fixed/.test(getComputedStyle(k).position))).flatMap(k=>getComputedStyle(k).display==='contents'?physical(k):[k]);
+    for (const [sourceRow,row] of [...root.querySelectorAll('.row')].entries()) {
+      row.dataset.typesetSourceRow=sourceRow;const cols=[...row.children].filter(c=>c.matches('.col'));if (cols.length<2 || !row.querySelector(selector)) continue;
+      const rb=row.getBoundingClientRect(),gaps=cols.map(c=>rb.bottom-Math.max(rb.top,...physical(c).map(k=>k.getBoundingClientRect().bottom)));if (!gaps.some(g=>g>140)) continue;const identities=cols.map((c,i)=>({index:i,components:columnParts(c).map(k=>k.dataset.comp||k.className),bottom_blank:gaps[i]})),down=[];
+      for (const col of cols) for (const block of columnParts(col).filter(k=>k.matches(selector))) {
+        const b=block.getBoundingClientRect(),group=document.createElement('div'),captions=[];for (let n=block.nextElementSibling;n?.matches('[data-comp="prose"]');n=n.nextElementSibling) captions.push(n);
+        if (block.matches('.illustration-panels')) {const scale=Math.min(1,360/b.height);for (const part of [...block.children]) {const q=part.getBoundingClientRect();Object.assign(part.style,{width:q.width*scale+'px',height:q.height*scale+'px',maxHeight:'none'});}Object.assign(block.style,{width:b.width*scale+'px',gap:(parseFloat(getComputedStyle(block).gap)||0)*scale+'px'});}
+        else if (block.matches('[data-comp="illustration"]')) for (const im of block.querySelectorAll('img')) {const q=im.getBoundingClientRect(),a=im.naturalWidth/im.naturalHeight,h=Math.min(360,q.width/a);Object.assign(im.style,{width:h*a+'px',height:h+'px',maxWidth:'100%',maxHeight:'none',alignSelf:'center'});}
+        else Object.assign(block.style,{width:Math.max(260,b.width)+'px',maxWidth:'100%'});
+        Object.assign(group.style,{display:'flex',flexDirection:'column',alignItems:'center',width:'100%',gap:'12px'});group.append(block,...captions);down.push(group);
+      }
+      cols.forEach(c=>{c.classList.remove('col');Object.assign(c.style,{display:'flex',flexDirection:'column',gap:'12px',width:'100%',alignSelf:'start'});c.querySelectorAll('.card.frame').forEach(f=>f.style.width='100%');});Object.assign(row.style,{display:'flex',flexDirection:'column',alignItems:'stretch'});row.append(...down);row.dataset.typesetFit='stacked';receipt.balance.push({kind:'stack_media_row',source_row:sourceRow,columns:identities,media_items:down.length});
+    } }
   receipt.balance=[];
   compactPage();keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
-  applyText();fillShortColumns();
+  applyText();fillShortColumns();stackMediaRows();
   C.collectTextBlocks(root);
   receipt.after=C.check({root});
   globalThis.TypesetApplyReceipt=receipt;
