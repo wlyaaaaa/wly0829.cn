@@ -115,3 +115,13 @@ html[data-live-dom="loading"] .ts-canvas [data-hot="live"][data-state="cached"]{
 .live-dom-notice[hidden]{display:none}
 /* 有了上面一处说明，SiteB2 和现在运行脚本自己的“读不到电脑”提示不再出（免得一页说几遍） */
 body.astro-page [data-b2-connection-notice],body.astro-page aside[data-computer-read-notice]{display:none !important}
+/* 授权逐项显示；长状态保持完整可读，不把到期和读取时间折成省略号。 */
+.ts-canvas [data-hot="live"] .live-rows{display:grid;gap:.3em;min-width:0;width:100%}
+.ts-canvas .nowbar [data-hot="live"]:has(> .live-rows){height:auto;flex-basis:auto;min-height:1.3em;align-items:flex-start}
+.ts-canvas [data-hot="live"] .live-row{display:flex;align-items:flex-start;gap:.4em;min-width:0}
+.ts-canvas [data-hot="live"] .live-row .live-dot{margin-top:.4em;background:#8e9991}
+.ts-canvas [data-hot="live"] .live-row[data-state="ok"] .live-dot{background:#00a24e}
+.ts-canvas [data-hot="live"] .live-row:is([data-state="failed"],[data-state="error"]) .live-dot{background:#d64c45}
+.ts-canvas [data-hot="live"] .live-row:is([data-state="warn"],[data-state="waiting"],[data-state="expired"]) .live-dot{background:#d2a111}
+.ts-canvas [data-hot="live"] .live-rows .live-text,.ts-canvas [data-href="ca-personal-data"] .live-text,.ts-canvas [data-href="ca-connection"] .live-text{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.ts-canvas [data-hot="live"]:is([data-href="ca-personal-data"],[data-href="ca-connection"]){height:auto;min-height:var(--slot-live-frame-height,84px)}

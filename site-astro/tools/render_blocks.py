@@ -495,7 +495,7 @@ def fill_shot_frames(body):
     """截图、照片格子（data-shot-source）：现在网站是打开页面时由脚本把缩略图贴进格子；这里生成时直接放进去，
     按原比例完整放进（contain），点开看原图（data-shot-full-source）。文件不在就留空格子并提示。"""
     def one(m):
-        tag = m.group(0)
+        tag = re.sub(r'\s(?:data-href|role|tabindex)="[^"]*"', '', m.group(0))
         src = H.unescape(m.group(1))
         full = re.search(r'data-shot-full-source="([^"]*)"', tag)
         fit = re.search(r'data-shot-fit="([^"]*)"', tag)
@@ -508,8 +508,7 @@ def fill_shot_frames(body):
         if full:
             fp = os.path.join(REPO, *H.unescape(full.group(1)).replace("\\", "/").split("/"))
             href = publish_path(fp) if os.path.isfile(fp) else None
-        tag = re.sub(r'\sdata-href="[^"]*"', "", tag)
-        tag = tag[:-1] + (f' data-href="{H.escape(href, quote=True)}"' if href else "") + ">"
+        tag = tag[:-1] + (f' role="button" tabindex="0" data-href="{H.escape(href, quote=True)}"' if href else "") + ">"
         tag = tag.replace('style="', 'style="position:relative;', 1) if 'style="' in tag else tag[:-1] + ' style="position:relative">'
         img = (f'<img src="{H.escape(url, quote=True)}" alt="" loading="lazy" decoding="async" '
                f'style="position:absolute;inset:0;width:100%;height:100%;object-fit:{(fit.group(1) if fit else "contain") or "contain"}">')
