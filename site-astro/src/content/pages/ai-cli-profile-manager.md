@@ -1292,7 +1292,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
      "header_icon": [
       "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "paragraph_header_prefix": "**1. 在 Codex 桌面版里选模型**（最常用）",
      "paragraph_bubbles": [
@@ -1326,7 +1326,7 @@ Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex �
      "header_icon": [
       "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "paragraph_header_prefix": "**1. 在 Codex 桌面版里选模型**（最常用）",
      "paragraph_bubbles": [
@@ -4438,7 +4438,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "旁路进度文件｜把公开进度、工具类型、上下文用量写进一个事件文件，任务正文和工具原文不写",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {

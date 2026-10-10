@@ -615,7 +615,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "一个问号小气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1039,7 +1039,7 @@ AI：“先核对备份没被动过、文件还是我修完的样子，才换回
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "扫文件夹：挑出哪些文件乱码，报告只有统计和结论，不带正文（说不准）",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

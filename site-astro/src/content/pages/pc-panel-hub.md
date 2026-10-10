@@ -1910,7 +1910,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机点桌面",
    "source_phrase": "同一条只出现一次｜小米妙享和手机连接常常各转一遍同一条通知；先把全角半角、大小写、空格和标点统一，再比相似度，重复的只留一张。数字不一样（验证码、金额）一律算两条。",
-   "sha256": "fb487a8ef8d13f386a922b8432108b1590af2ed89391fefcab1a2d4a49b20ba8",
+   "sha256": "619cf0826fbe681d5a6ba825c5cd8caff76ae282f27a3fbde93602d3fa956fb1",
    "status": "ready"
   },
   {
@@ -2433,7 +2433,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "齿轮",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -3539,7 +3539,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "秒整帧模式｜保守的兼容模式，只在排查时手动打开｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3920,7 +3920,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "Win+F1 清屏｜清掉看过的通知和事件，歌、游戏、来电留着｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3950,7 +3950,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "看门狗自己崩了也能回来｜异常退出后 30 秒自动拉起替身｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4200,7 +4200,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "手动启动｜双击桌面“TURZX SideScreen Start”整套重新拉起｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4215,7 +4215,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "机箱屏修复｜认准那一个串口设备，重启并等到新心跳｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

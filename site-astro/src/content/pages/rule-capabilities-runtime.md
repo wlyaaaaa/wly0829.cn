@@ -2200,7 +2200,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一张白底绿色的小网页（只画色块和一个小图表）、“网站怎么更新”配一个小地球和一片绿叶、“自动运行的东西要看得见”配一个小齿轮旁边一盏亮着的小绿灯",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {

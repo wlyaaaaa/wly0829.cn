@@ -2312,12 +2312,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "天平",
    "source_phrase": "天平",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -2780,12 +2780,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "改完在真网页里截改前、改后的图对比。",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {

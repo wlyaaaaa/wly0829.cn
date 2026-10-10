@@ -970,7 +970,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "routes-bottom",
      "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出",
@@ -982,7 +982,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "routes-bottom",
      "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标",
@@ -1024,7 +1024,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "routes",
      "text_ref": "难页：快读后体检不过关（一个字没读出来、把握分偏低、读出"
@@ -1035,7 +1035,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "routes",
      "text_ref": "要还原结构：表格变成行列，认公式和印章，给每块区域坐标"
@@ -1262,7 +1262,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "whole_block": true,
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1319,7 +1319,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
      "whole_block": true,
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -3106,7 +3106,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "2. 读不出字，不等于没有字 \n麻烦结果为空时，AI很容易说“这图没字”，其实可能是字太小、太淡或模型出错。\n解法结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。\n证据8月18日起带结论的274份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3145,7 +3145,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "2. 读不出字，不等于没有字 \n麻烦结果为空时，AI很容易说“这图没字”，其实可能是字太小、太淡或模型出错。\n解法结论分三种：有字、没字、说不准。只有整页读全、质量够、另有独立证据才判“没字”；目前唯一的独立证据是“近乎纯色的图”检测，其余空结果一律“说不准”。结论用指纹绑定原件、请求、模型和输出文件。\n证据8月18日起带结论的274份真实结果都是“有字”，还没遇到过空结果；验收里的纯白样例图按“近乎纯色”判为没字。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3486,7 +3486,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹链接",
    "source_phrase": "一个文件夹一起读｜每个文件分别选路线，不支持的文件列为跳过｜说不准",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -3501,7 +3501,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "拖到 start.bat 就识别｜不经过 AI，自己拖文件，结果在 outputs 文件夹｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3591,7 +3591,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "只看走哪条路｜先预览这份材料会走哪条路线，不真的识别｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3937,7 +3937,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "有字、没字、说不准｜每份结果附一份客观结论，空结果不当“没字”｜在用",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3997,7 +3997,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "中断时保住读完的页｜超时或崩溃时已读完的页留作部分结果，不冒充整份｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4027,7 +4027,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "查进度、取消｜按任务编号查到哪一步，或只取消这一项｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4087,7 +4087,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "给看板的任务视图｜只读、不含文件内容的任务列表接口｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

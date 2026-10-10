@@ -2950,7 +2950,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "别的账号和客户端｜另一个 OpenAI 账号可自己加连接；别的客户端可用应用凭据接入｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2965,7 +2965,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "副机备用连接保温｜笔记本连过一次主机后，一小时内保持连接，下次不用重新建立、响应更快；开始菜单能看能停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3419,7 +3419,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "卡死时给急救做法｜独立探测确认卡死时，回复直接写重启或按键留现场；真卡死时还没见它出现过｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3554,7 +3554,7 @@ AI 要用我的私人资料、资料又锁着，它会停下来，给出〔授�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "每周检查升级｜每周查 Windows-MCP 新版，测试通过自动升级，副机先、主机后；笔记本的每周巡检平时暂停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

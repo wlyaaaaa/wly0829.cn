@@ -2043,7 +2043,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/齿轮.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/纸箱.png"
      ],
@@ -2101,7 +2101,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/齿轮.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/代码窗口.png",
       "_library/icons/纸箱.png"
      ],

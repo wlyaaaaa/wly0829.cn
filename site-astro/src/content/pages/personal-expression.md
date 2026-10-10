@@ -1791,7 +1791,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "scene_explicit_primary_object",
    "key": "岔路",
    "source_phrase": "一个分成两条岔路的路牌",
-   "sha256": "c1b5779519e87e89cb54664c27f250e2939f343e2db0c38b790e3d9b8eb5a5c8",
+   "sha256": "60c8c99a88b19baf8d010994b8a9b34841a6138e79791cbeef9e79686267047a",
    "status": "ready"
   },
   {
@@ -2765,7 +2765,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "状态差时换讲法 ● 说不准｜我状态很差时，按我事先确认过的默认做法说话",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2795,7 +2795,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "看关系选说法 ● 说不准｜先按发给谁、什么关系挑我的样本，场合只排序；关系不同的不借口吻",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2810,7 +2810,7 @@ AI 跟我说话、替我给别人写消息，都照这里的手册和样本来�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "参考我评过的 AI 稿 ● 说不准｜我评过的 AI 稿分认可、勉强接受、否定三档，否定的写原因；动笔前先看原因",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -1120,7 +1120,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
           "_library/icons/手机电脑连接.png",
           "_library/icons/断线.png"
         ]
@@ -1190,7 +1190,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/round3/clean-assets/png/46-地球-clean.png",
-          "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
           "_library/icons/手机电脑连接.png",
           "_library/icons/断线.png"
         ]
@@ -1999,7 +1999,7 @@
         "illustration": "left_inside",
         "icons": [
           "_library/icons/钥匙.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/日历时钟.png"
         ],
         "icon_size": 160
@@ -2060,7 +2060,7 @@
         "illustration": "top_inside",
         "icons": [
           "_library/icons/钥匙.png",
-          "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/icons/日历时钟.png"
         ]
       },

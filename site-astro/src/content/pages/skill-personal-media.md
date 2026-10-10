@@ -701,7 +701,7 @@
    "fallback": false,
    "key": "文件夹链接",
    "source_phrase": "我要文件夹，就在同一块盘上建一个临时文件夹，用硬链接放进去，不多占空间、不复制原件。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -753,7 +753,7 @@
    "fallback": false,
    "key": "文件夹链接",
    "source_phrase": "我要文件夹，就在同一块盘上建一个临时文件夹，用硬链接放进去，不多占空间、不复制原件。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -1221,7 +1221,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1365,7 +1365,7 @@
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -1495,7 +1495,7 @@
    "fallback": false,
    "key": "问号气泡",
    "source_phrase": "找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

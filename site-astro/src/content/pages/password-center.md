@@ -2208,7 +2208,7 @@
      "connector": "arrow",
      "text_ref": "绑定三步",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -2251,7 +2251,7 @@
      "layout_hint": "标题旁小图标，①②③紧凑全宽行",
      "text_ref": "绑定三步",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -2304,7 +2304,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "手机点桌面",
    "source_phrase": "撤销 在“手机”里选中旧手机点“解除绑定”，整个库随之换钥匙，9 月 24 日真做过一次，见亮点。旧手机已经缓存的内容没法远程抹掉。",
-   "sha256": "fb487a8ef8d13f386a922b8432108b1590af2ed89391fefcab1a2d4a49b20ba8",
+   "sha256": "619cf0826fbe681d5a6ba825c5cd8caff76ae282f27a3fbde93602d3fa956fb1",
    "status": "ready"
   },
   {
@@ -3582,7 +3582,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/钥匙.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
@@ -3695,7 +3695,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/钥匙.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-2db81b37cc1897643c6f.png"
@@ -4267,9 +4267,9 @@
      "illustration": "left_inside",
      "connector": "none",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png"
      ],
      "text_ref": "1**秘密不进"
@@ -4340,8 +4340,8 @@
      "connector": "none",
      "icons": [
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png"
      ],
      "text_ref": "1**秘密不进"
@@ -5121,7 +5121,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "生成随机密码｜设新密码时一次生成 32 位，不用自己编｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -5777,7 +5777,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "新电脑上解开｜带齐完整程序、匹配的恢复副本和 .pcaf，验证本人后在新电脑解开｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   }
  ]
@@ -6411,7 +6411,7 @@ AI 用 key，却看不见 key
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "录入恢复钥匙｜新盘加密后，把它的恢复钥匙存进库｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

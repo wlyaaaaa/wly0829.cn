@@ -3182,7 +3182,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "手机点桌面",
    "source_phrase": "远程桌面｜笔记本用 Moonlight、手机用 Moonlight 或 Artemis 连主机，看整个桌面、直接操作｜在用",
-   "sha256": "fb487a8ef8d13f386a922b8432108b1590af2ed89391fefcab1a2d4a49b20ba8",
+   "sha256": "619cf0826fbe681d5a6ba825c5cd8caff76ae282f27a3fbde93602d3fa956fb1",
    "status": "ready"
   },
   {
@@ -3212,7 +3212,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "手机在外直连｜两边都用公网 IPv6 直接连，不绕海外中转；6 月打通，现在手机实际走哪条没有记录｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3814,7 +3814,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "查线路｜指定手机后 ping 5 次，看走直连、Tailscale 公共中转还是自己设备中转，报延迟｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -1377,7 +1377,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
      "width": "30%",
      "icons": [
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1434,7 +1434,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
      "illustration": "left_inside",
      "icons": [
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -2227,12 +2227,12 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "依次：一张地图和一个指向真实房子的箭头",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2863,7 +2863,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "只看这次的目标｜一个仓库开着好几个目录时，只让这次要推的那个参与判断，别的照样列出｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3111,7 +3111,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "推送放行规则｜一张表写清什么情况能推、什么情况先停｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -616,7 +616,7 @@
       "_library/icons/日历时钟.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
     },
@@ -670,7 +670,7 @@
       "_library/icons/日历时钟.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/icons/文件夹.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "7,312轮巡查：7月24日以来每15分钟一轮，一轮不落（更早的记录已轮换掉）38次自动清空重建，9月7"
     },
@@ -1304,7 +1304,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一根变成硬盘的内存条",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -1462,7 +1462,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/秒表.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -1504,7 +1504,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/秒表.png",
       "_library/hires-icons/代码窗口.png",
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -1666,7 +1666,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/文件夹.png",
       "_library/fix-round-2/icon-clean-7079fea533a5aaa393b7.png",
       "_library/icons/铃铛.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/秒表.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
@@ -1679,7 +1679,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns_v": 1,
      "icons": [
       "_library/hires-icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
@@ -1705,7 +1705,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
       "_library/icons/文件夹.png",
       "_library/fix-round-2/icon-clean-7079fea533a5aaa393b7.png",
       "_library/icons/铃铛.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/秒表.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
@@ -1718,7 +1718,7 @@ Z 盘和别的盘怎么分工、各放什么，见〔电脑配置与恢复〕；
      "columns_v": 1,
      "icons": [
       "_library/hires-icons/代码窗口.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
      "text_ref": "864行程序：PowerShell7，含10行VBScript启动器124项测试：9组794行，用假的P"
@@ -2520,7 +2520,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "查询、部署和维护",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2550,7 +2550,7 @@ Primo 的动态内存按写入量占内存，删文件时却不一定还：7 月
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "划不划算　只报量得到的：容量、已用、电脑内存；管理员加一项可读 Primo 的内存模式和镜像实际大小。不猜提速，驱动实际占多少读不到　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

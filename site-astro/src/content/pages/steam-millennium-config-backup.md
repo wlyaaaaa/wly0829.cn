@@ -1759,7 +1759,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "实际用过多少",
      "tone": "yellow",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -2125,12 +2125,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "一张写着路径的小地图",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2316,7 +2316,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "装回要带预览编号",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "row": "cards-2",
      "width": "50%"
@@ -2392,7 +2392,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "装回要带预览编号",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     },
     {
@@ -2496,7 +2496,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一台电脑旁边一本登记簿，登记簿上一枚小硬盘图标",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -3831,7 +3831,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "item_count": 9,
      "stagger": true,

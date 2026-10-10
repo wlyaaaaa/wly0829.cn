@@ -1726,12 +1726,12 @@ Codex、Claude 用 weflow-history 技能取；〔OpenClaw 网关〕的“查微�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "地图定位",
    "source_phrase": "接口地图：会话、联系人、消息、群成员、朋友圈、实时推送各从哪个接口读；导出、删朋友圈这类会改东西的接口标成“AI 默认不许调” ✕",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {

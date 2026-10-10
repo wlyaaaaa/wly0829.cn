@@ -974,7 +974,7 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "一张嘴和一个问号气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2077,12 +2077,12 @@ AI 当老师，按一条排好的路线系统地学大模型应用。Claude（Op
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "学到能讲出口：一个问题讲到我能用大白话说清因果和取舍为止，不背原文。",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {

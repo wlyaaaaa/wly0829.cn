@@ -501,7 +501,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹链接",
    "source_phrase": "只认点名的路径。　AI 只处理这一个文件夹，不去扫下载、文档或整块盘；遇到符号链接、目录联接这类指向别处的链接直接拒绝。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {

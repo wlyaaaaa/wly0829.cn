@@ -561,7 +561,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "给结论：有我（指出第几张脸、框在哪）／没检出我／判断不了（没脸、太小、太糊）。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -606,7 +606,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "逐句给结论：每句标成我、别人或判断不了；没比过声音的句子靠上下文判，判不了就标判断不了；视频只听声音，不看画面。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -801,7 +801,7 @@
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "问号气泡",
    "source_phrase": "看不清就说判断不了｜没脸、太小、太糊、太短、太吵，都不硬判",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

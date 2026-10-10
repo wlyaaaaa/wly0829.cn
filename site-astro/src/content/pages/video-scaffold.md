@@ -1336,7 +1336,7 @@
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/icons/书签册.png",
       "_library/icons/文件写作.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "成片"
     },
@@ -1371,7 +1371,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/icons/放大镜.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "text_ref": "没有自动提醒。"
@@ -1415,7 +1415,7 @@
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/icons/书签册.png",
       "_library/icons/文件写作.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "成片"
     },
@@ -1445,7 +1445,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
       "_library/icons/放大镜.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "text_ref": "没有自动提醒。"
@@ -3051,7 +3051,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "真机和配音试一下｜要实证时才跑：真开浏览器和显卡编码试一次；或真向 Fish 配一句测试音，用完就删｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3081,7 +3081,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "旁白分场｜把一整篇旁白按段写成每场一个文本文件；没有单独的命令，要让 AI 调用｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3141,7 +3141,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "逐场画面提示｜每场生成一份提示：旁白、能踩点的词、素材路径和画面规矩，照着写画面｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

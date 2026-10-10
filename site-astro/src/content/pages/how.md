@@ -2002,12 +2002,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "地图定位",
    "source_phrase": "全景图",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -2044,12 +2044,12 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "地图定位",
    "source_phrase": "例一：一次旅行变成一部片子",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -6184,7 +6184,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/剪刀.png",
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
       "_library/icons/公文包清单.png",
       "_library/fix-round-2/icon-clean-73f4eb97ce030aeedfb6.png"
      ],
@@ -6265,7 +6265,7 @@ Codex
      "illustration": "top_inside",
      "icons": [
       "_library/icons/剪刀.png",
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
       "_library/icons/公文包清单.png",
       "_library/fix-round-2/icon-clean-73f4eb97ce030aeedfb6.png"
      ],

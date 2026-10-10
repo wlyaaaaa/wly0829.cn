@@ -2994,7 +2994,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "控制中心｜看守护开没开、上次心跳、下次检查、有没有做了一半的操作；只在主机上｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3099,7 +3099,7 @@ KDE Connect 的命令行在中文系统上会多打一行中文的设备统计�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "中断恢复｜装到一半断了，先看预览再倒着撤回；别的程序改过的不动｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

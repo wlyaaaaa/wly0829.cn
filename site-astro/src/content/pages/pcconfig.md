@@ -2115,7 +2115,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "外接硬盘",
    "source_phrase": "用它把 Windows 和 C 盘还原到新硬盘。",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -3445,7 +3445,7 @@ C、E 同在一块盘上：这块盘坏了，靠 G、H 上的镜像和备份一�
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "外接 USB 固态连着线",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -3761,7 +3761,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/46-地球-clean.png",
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
       "_library/icons/手机电脑连接.png",
       "_library/icons/断线.png"
      ]
@@ -3825,7 +3825,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/46-地球-clean.png",
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
       "_library/icons/手机电脑连接.png",
       "_library/icons/断线.png"
      ]
@@ -3914,12 +3914,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "断开插头",
    "source_phrase": "断开又接上的网线插头",
-   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
    "status": "ready"
   },
   {
@@ -4910,7 +4910,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "事实只记一处。　盘、端口、任务都在登记文件里，工具和驾驶舱都从这里读，不会两处说法对不上。",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -4940,7 +4940,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "不确定就不删。　读不到、锁着、盘没接，一律当“不知道”，不当“删了”。",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -5650,7 +5650,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "left_inside",
      "icons": [
       "_library/icons/钥匙.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/日历时钟.png"
      ],
      "icon_size": 160
@@ -5705,7 +5705,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "illustration": "top_inside",
      "icons": [
       "_library/icons/钥匙.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/icons/日历时钟.png"
      ]
     },
@@ -7525,7 +7525,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "桌面急救小脚本　“释放卡住按键”“修复音响声音”，双击就用　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -7615,7 +7615,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "给 AI 用的小工具",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -8082,7 +8082,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "搬目录前预演　把软件或项目搬到别的盘之前，先列出影响和怎么恢复；只预演不动手　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -8097,7 +8097,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "Docker、WSL 空间压缩　压缩虚拟盘腾空间，默认只预演　〈说不准〉",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

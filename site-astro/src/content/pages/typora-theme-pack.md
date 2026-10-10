@@ -2494,7 +2494,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "原版 PDF｜中性样式，石墨黑字、细灰线，文件名后缀“-原版”｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2509,7 +2509,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "个人 PDF｜薄荷主题加大字号，文件名后缀“-个人”｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2524,7 +2524,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "公司 PDF｜墨蓝、灰白，不加品牌，文件名后缀“-公司”｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2554,7 +2554,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "让 AI 导出｜说哪份、用哪种，AI 运行导出脚本并报结果｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2569,7 +2569,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "指定位置和页数｜可以指定 PDF 存哪、要求正好几页，页数不对就不交｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2584,7 +2584,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "导坏不丢旧版｜新 PDF 先暂存，查过才替换；不过关旧 PDF 原样留着｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2614,7 +2614,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "不用文稿自带的样式｜默认忽略 .md 里写的样式，只用选中的那一种；也可以改成保留或拒绝｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2629,7 +2629,7 @@ AI 运行项目里的脚本；要逐页看排版，再交给〔PDF 逐页检查�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "不盖掉原文和转换器｜输出路径等于原文或转换器时直接拒绝；输出必须是 .pdf｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

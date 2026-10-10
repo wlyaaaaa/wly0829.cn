@@ -1635,7 +1635,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
      "text_ref": "总大小只看第一层",
      "columns_v": 1
@@ -2668,7 +2668,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "往库里加文件｜新文件在内存里并进原内容，同名用新版，另一套不动｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2698,7 +2698,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "窗口里查看｜在本机窗口里挑一个文本文件看｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2728,7 +2728,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "只取出选中的文件｜按关键字只取匹配的文件，同名不覆盖｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2758,7 +2758,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "一键销毁｜清屏、内存清零、删解出的文件夹，立即退出｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2773,7 +2773,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "密钥文件｜除了密码，再要一个文件才能打开｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2788,7 +2788,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "换用 Argon2id｜算钥匙改用 Argon2id，缺依赖就报错｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2803,7 +2803,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "改密码｜只换这次打开那一套的密码，另一套不动｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2818,7 +2818,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "试一下密码对不对｜只验一次密码和密钥文件，不留任何授权｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2848,7 +2848,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "两套内容两个密码｜另一个密码打开另一套内容，从文件上看不出有第二套｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2863,7 +2863,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "藏进图片｜把 vault.enc 接在一张图片后面，也能取回；输出位置已有文件就拒绝，不覆盖｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3134,7 +3134,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "动手前预演｜先查路径、格式、大小超没超限，给出下一步，不执行｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -3194,7 +3194,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "清理残留明文｜清掉上次没清干净的 decrypted/｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -3224,12 +3224,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "天平",
    "source_phrase": "一架天平",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -3375,7 +3375,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "icons": [
       "_library/icons/日历时钟.png",
       "_library/icons/气泡.png",
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "text_ref": "它会指出哪里可能错。"
     }
@@ -3399,7 +3399,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      "icons": [
       "_library/icons/日历时钟.png",
       "_library/icons/气泡.png",
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "text_ref": "它会指出哪里可能错。"
     }
@@ -3446,12 +3446,12 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "一按就能说，模型慢一点也不丢话。 \n麻烦：刚开机模型还在装、或者显卡被本地大模型占着时开口，前半句会丢。\n解法：麦克风图标一变绿就开始收音（和右上角的状态点是两回事），声音先存在内存里，模型准备好再识别；模型进程卡住只重启它自己，没交出去的那段最多重试一次；“等显卡”“准备模型”“麦克风故障”分开显示。模型平时常驻内存，录音时才上显卡，说完就退回，把显卡让出来。",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {

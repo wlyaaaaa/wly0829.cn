@@ -1453,7 +1453,7 @@ C1 跨几个仓库加功能｜C2 不联网排查终端报错｜C3 重启后状�
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "核实答题者：按 Codex 等工具自己留下的运行记录认定是谁在答、用的哪一档，不信模型自报 ✕",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {

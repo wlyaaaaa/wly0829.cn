@@ -689,7 +689,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -946,7 +946,7 @@
        "column_span": 1,
        "row_v": 10,
        "column_v": 1,
-       "icon": "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+       "icon": "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
       },
       {
        "id": "unlocked",
@@ -2467,7 +2467,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："
@@ -2535,7 +2535,7 @@
      "illustration": "left_inside",
      "icon_position": "header_left",
      "header_icon": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png"
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png"
      ],
      "inset_prefixes": [
       "实例："

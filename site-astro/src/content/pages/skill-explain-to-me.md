@@ -671,7 +671,7 @@ AI 向我说明时需要就自己读，同一件事里读过就接着用；我�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹链接",
    "source_phrase": "先自己查清再开口：DriveUpload 是谷歌云盘电脑版留下的上传临时文件夹，里面的链接早就没用了。",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -913,7 +913,7 @@ AI 第一版：列了 7 个待我定的事，其中一件是让我选一个叫 D
    "semantic_status": "scene_explicit_primary_object",
    "key": "问号气泡",
    "source_phrase": "一个问号气泡",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -1334,7 +1334,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
      "tone": "green",
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],
@@ -1398,7 +1398,7 @@ AI 回我时分四块：画面、原字、识别状态、有疑问的地方。�
      "tone": "green",
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png"
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
     }
    ],

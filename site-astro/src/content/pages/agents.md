@@ -1150,7 +1150,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件夹链接",
    "source_phrase": "一个文件夹伸出两根链接线",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -1544,8 +1544,8 @@
      "columns": 2,
      "illustration": "left_inside",
      "icons": [
-      "proto:a03-road",
-      "proto:a03-book"
+      "_library/hires-icons-r2/a03-road.png",
+      "_library/hires-icons-r2/a03-book.png"
      ],
      "text_ref": "两条路"
     }
@@ -1587,8 +1587,8 @@
      "type": "content_card",
      "illustration": "left_inside",
      "icons": [
-      "proto:a03-road",
-      "proto:a03-book"
+      "_library/hires-icons-r2/a03-road.png",
+      "_library/hires-icons-r2/a03-book.png"
      ],
      "text_ref": "两条路"
     }
@@ -1869,7 +1869,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "一块拔掉的硬盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -2108,7 +2108,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "齿轮",
    "source_phrase": "一台带齿轮的印刷机",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2168,7 +2168,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件夹链接",
    "source_phrase": "一个文件夹伸出多根链接线；一个挂钩",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -2884,7 +2884,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文件夹链接",
    "source_phrase": "文件夹伸出很多根链接线",
-   "sha256": "46432a7abe516e7ee3c92a764f8ab92ad1fe435544e50fc825be4383d0a81da0",
+   "sha256": "6fcf197790b6dfee317fb4a82a55e817b702418b0be2201038e927e688c23f0c",
    "status": "ready"
   },
   {
@@ -2929,7 +2929,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "气泡灯泡",
    "source_phrase": "一个对话气泡里一个灯泡",
-   "sha256": "3c25f94e2c70b517bc31e87796eb634e13c1a561078c1101800b4264873e8eff",
+   "sha256": "19477293848a5aea870863f941f057ed325af5b780cb81e83664490f7096061a",
    "status": "ready"
   },
   {
@@ -3069,7 +3069,7 @@
       "_library/icons/文稿堆.png",
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/开关.png",
       "_library/icons/文稿堆.png"
      ],
@@ -3103,7 +3103,7 @@
       "_library/icons/文稿堆.png",
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
-      "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
+      "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/hires-icons/开关.png",
       "_library/icons/文稿堆.png"
      ],
@@ -3996,7 +3996,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "退回上一版｜“当前”和“上一版”对调，两份入口一起换回；测试里验过，正式环境没找到用过的记录｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4486,7 +4486,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "按需插件目录｜8 个官方插件，只在缺能力真影响结果时推荐，不自动装｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -4859,7 +4859,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "Codex 子代理入口｜gpt6_child：不定型号、不给权限，只要求守住父任务的范围｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -803,7 +803,7 @@
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ]
@@ -845,7 +845,7 @@
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
       "_library/hires-icons-r2/版本循环文件.png",
       "_library/hires-icons/打勾清单.png"
      ]
@@ -874,12 +874,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d819641dd52018c42577.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "断开插头",
    "source_phrase": "一个断开的插头",
-   "sha256": "c90bccf55a820d3a09af80cdd6237485d146faace49e2ca45885101d679d4b84",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
    "status": "ready"
   },
   {
@@ -1302,7 +1302,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "网卡｜哪些是真的物理网卡、连没连上｜只在维护工具里点名才动",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
@@ -2094,7 +2094,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "关闭手动代理｜不管端口死活，关掉当前用户的手动代理、代理变量和 Git 代理，并删掉隧道的默认路线；不退出代理程序｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2124,7 +2124,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "检查联网情况｜分别测国内、海外和 AI 服务，IPv4、IPv6 和开着的 HTTP 代理都测；解析失败和连不上分开报｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2139,7 +2139,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "比较联网出口｜问 ipify 几条路各从哪出去，只说相同还是不同，不显示 IP｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2444,7 +2444,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "重启网卡｜禁用再启用选定网卡，出错也会尝试重新启用｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2489,7 +2489,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "检查详情｜分层列出查了什么、哪个端口在跑、保留了什么，还有这次每一步的时间｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {
@@ -2534,7 +2534,7 @@ AI 用命令行跑同一套程序：读一份去掉了地址和密码的状态�
    "semantic_status": "text_inferred_object_unverified",
    "key": "问号气泡",
    "source_phrase": "旧版入口｜11 个旧快捷方式（一键修复网络、关闭 7892 飞鸟等）还能用，现在只打开窗口预览｜说不准",
-   "sha256": "e381f9a8545a544abd34738bd989247e6d2d3b7f0477cf7d4d6655e8f1cc2a34",
+   "sha256": "080be4948e2a7cdb6073e59785c0a5152e99f9ae5fe1774b21048f9b53056b22",
    "status": "ready"
   },
   {

@@ -2577,12 +2577,12 @@ AI 把原话记下，分清是补充、临时、更正还是撤回；更正立�
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-efc86be6e153919921f8.png",
+   "asset": "_library/hires-icons-r2/icon-clean-efc86be6e153919921f8.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "地图定位",
    "source_phrase": "问号定位针",
-   "sha256": "15e471af4ca157edb410cb0bea1e97937c52cc3f22a9fb052fd9396c8c59d844",
+   "sha256": "d5f6c48bfe0e0fd7dc64c01839a98a5065656cccc64f8b997bfeab91cff020a8",
    "status": "ready"
   },
   {
@@ -3509,7 +3509,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
       }
      ],
      "icons": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
       "_library/icons/气泡.png"
      ]
     },
@@ -3564,7 +3564,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
       }
      ],
      "icons": [
-      "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+      "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
       "_library/icons/气泡.png"
      ]
     },
@@ -3601,12 +3601,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "三层分开放\n原始记录（发生了什么）",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -3631,12 +3631,12 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-d62f5aaf71fae96c015f.png",
+   "asset": "_library/hires-icons-r2/icon-clean-d62f5aaf71fae96c015f.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "天平",
    "source_phrase": "三层分开放\n原始记录（发生了什么）",
-   "sha256": "425fc2d20811d84d43bcd5e23cbe8b06796683cbff3e5191e3e123668f91293c",
+   "sha256": "4b72accf42775e0407daa6539d3442c05d1f7885c446c9cd1eee55c2af7077f0",
    "status": "ready"
   },
   {
@@ -3778,7 +3778,7 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "一处维护，大家来读来写。 不在每个项目各存一份“我是谁”，免得几份各说各话、越改越偏。",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {

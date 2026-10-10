@@ -2907,7 +2907,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "岔路",
    "source_phrase": "两条分开的路",
-   "sha256": "c1b5779519e87e89cb54664c27f250e2939f343e2db0c38b790e3d9b8eb5a5c8",
+   "sha256": "60c8c99a88b19baf8d010994b8a9b34841a6138e79791cbeef9e79686267047a",
    "status": "ready"
   },
   {
@@ -2937,7 +2937,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "外接硬盘",
    "source_phrase": "外接硬盘",
-   "sha256": "14193345c562f4b57eabda0a820f9da89afedd27b3445a9c74a4632eaff386e6",
+   "sha256": "418b9ec63f6d1ef6b9b299b25013f729cc73cd0e25bc3a652c78a7c2fe4f2997",
    "status": "ready"
   },
   {
@@ -4191,7 +4191,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "齿轮",
    "source_phrase": "看状态和维护",
-   "sha256": "cd4cdb591b309aadcd7868f102d85c09cf31610c2980decf5052b907ff445bb8",
+   "sha256": "46704458cae272fc381f5968dbc256759f559eb77fb13322b824065f5b41d2d1",
    "status": "ready"
   },
   {
