@@ -13,6 +13,7 @@ from runpy import run_path
 from urllib.parse import unquote, urlsplit
 from home_firstpaint import adjust_home
 from cockpit_white_gear import build as white_cockpit
+from cockpit_mobile_todo import build as mobile_todo
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = Path(sys.argv[1]).resolve()
@@ -90,10 +91,12 @@ cockpit = output / 'cockpit.html'
 cockpit.write_text(cockpit.read_text(encoding='utf-8').replace(engine['deployed'], engine['fixed']),
                    encoding='utf-8', newline='')
 cockpit_white_gear = white_cockpit(PUBLIC, cockpit)
+cockpit_mobile_todo = mobile_todo(PUBLIC, cockpit)
 
 manifest = {'pages': pages, 'files': copied, 'count': len(copied),
             'bytes': sum(item['bytes'] for item in copied.values())}
 manifest['home_white_gear'] = white_gear
 manifest['cockpit_white_gear'] = cockpit_white_gear
+manifest['cockpit_mobile_todo'] = cockpit_mobile_todo
 (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
 print(json.dumps({key: manifest[key] for key in ['pages', 'count', 'bytes']}, ensure_ascii=False))
