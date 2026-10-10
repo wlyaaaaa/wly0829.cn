@@ -9,6 +9,7 @@ import footer from '../chrome/footer.html?raw';
 import chrome from '../chrome/chrome.json';
 import livingEngine from '../chrome/living-engine.json';
 import '../styles/typeset-page.css';
+import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
 interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; noindex?: boolean; toc: { id: string; label: string; img?: string }[] }
 const { title, kind, url, toc, page, motion, blocks, pageMeta, moved, noindex } = Astro.props;
@@ -33,7 +34,7 @@ const tocOrder = new Map<string, number>();
 const tocHtml = (() => {
   if (!rt?.toc_html) return null;
   let last = -1;
-  return rt.toc_html.replace(/<a class="nav-link"([^>]*?) data-section="([^"]+)"/g, (m: string, pre: string, sec: string) => {
+  return rt.toc_html.replace(/<nav\b(?![^>]*\bdata-toc-consistency\b)/, '<nav data-toc-consistency="uniform-v1"').replace(/<a class="nav-link"([^>]*?) data-section="([^"]+)"/g, (m: string, pre: string, sec: string) => {
     const i = tocOrder.get(sec);
     if (i === undefined) return m;
     // data-section 还得留着（目录标签图按它找项），换个页面里没有的名字，高亮脚本就找不到它的目标、跳过这一项
@@ -41,8 +42,9 @@ const tocHtml = (() => {
     last = i; return m;
   });
 })();
-const head = rt ? rt.head.map((h: string) => h.startsWith('<script id="album-page"')
-  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>` : h).join('\n') : '';
+const withoutTocRuntime = (html: string) => html.replace(/<script\b[^>]*\b(?:data-src|src)="[^"]*toc-consistency[^"]*"[^>]*><\/script>/g, '');
+const head = rt ? withoutTocRuntime(rt.head.map((h: string) => h.startsWith('<script id="album-page"')
+  ? `<script id="album-page" type="application/json">${safe(albumMeta())}</script>` : h).join('\n')) : '';
 // 站点运行脚本按 page-data 里的旧“整屏图”逐屏排版；新页没有整屏图，把屏清单置空，其余（落叶、水彩、页头、目录用的共用数据）原样
 // “复制 AI 续作说明”（项目页、冻结页）：现在网站只在脚本里临时造一个 #ai-brief 对话框，脚本没跑时按钮点了没反应。
 // 这里在页面末尾放一个真实的 #ai-brief：没有脚本也能跳到这里、看到并手动复制说明；脚本在时照旧弹对话框（静态这块隐藏、改名让出 id）。
@@ -51,7 +53,7 @@ const pageData = (() => { const m = rt?.tail.match(/<script id="page-data" type=
 const briefRepo = pageData ? (pageData.status_binding?.repo || (pageData.repo_url ? String(pageData.repo_url).replace(/^https:\/\/github.com\//, '') : '页面未提供仓库地址')) : '';
 const briefText = pageData && ['project', 'frozen'].includes(pageData.kind)
   ? `项目：${pageData.title}；${briefRepo.startsWith('private-project-') ? '项目键' : '仓库'}：${briefRepo}；范围：整个项目；目标：（这里写这次要做的事）。先读项目的 AGENTS.md 和说明，按现行规则做。` : '';
-const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
+const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingEngine.deployed}`, `/_living/_engine/${livingEngine.fixed}`).replace(/(<script id="page-data" type="application\/json">)(.*?)(<\/script>)/s, (_m: string, a: string, body: string, c: string) => {
   const d = JSON.parse(body); d.screens = []; return a + safe(d) + c;
 }) : '';
 ---
@@ -87,9 +89,12 @@ const tail = rt ? rt.tail.replace(`/_living/_engine/${livingEngine.deployed}`, `
   )}
   <main id="content" class="paper ts-page">
     <script is:inline>(()=>{const m=document.currentScript.parentElement;const z=()=>{const w=m.clientWidth;if(!w)return;m.style.setProperty('--tz-h',String(w/1672));m.style.setProperty('--tz-v',String(w/941));m.style.setProperty('--tz-card',String((innerWidth<768?w:(w-16)/2)/1672));};z();new ResizeObserver(z).observe(m);
-const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);
-document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});
-document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.target.closest&&e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(t)location.href=t.dataset.href;});})();</script>
+const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);document.addEventListener('site-live-layout',fit);
+const activate=e=>{if(!(e.target instanceof Element))return;const t=e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(!t)return;
+if(t.matches('button[data-href="刷新状态"]')){e.preventDefault();window.SiteB2?.refresh?.();return;}
+if(t.matches('.slot-shot-frame')&&window.SiteImageViewer?.openGallery){const shots=[...m.querySelectorAll('.slot-shot-frame[data-href]')].filter(s=>s.getClientRects().length);const list=shots.map(s=>({src:new URL(s.dataset.href,location.href).href,title:s.closest('.c-slot-shots')?.querySelector(`[data-shot-caption-index="${s.closest('.slot-shot-item')?.dataset.shotIndex}"]`)?.textContent.trim()||'截图'}));e.preventDefault();window.SiteImageViewer.openGallery(list,shots.indexOf(t),t);}else location.href=t.dataset.href;};
+document.addEventListener('click',activate);
+document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.target instanceof Element&&e.target.closest('.slot-shot-frame[data-href]')))activate(e);});})();</script>
     <slot />
     {briefText && (
       <section id="ai-brief" class="ai-brief-static" aria-label="复制 AI 续作说明">
@@ -112,6 +117,7 @@ document.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const t=e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
+  <script is:inline defer src={tocConsistency}></script>
   <script is:inline defer src="/_living/living-mount.js"></script>
   {pageData && <script is:inline defer src="/_living/live-dom.js"></script>}
 </body>

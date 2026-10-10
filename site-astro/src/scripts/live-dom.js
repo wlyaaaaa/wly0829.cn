@@ -24,17 +24,17 @@
     const p = Object.fromEntries(fmt.formatToParts(new Date(ms)).map((x) => [x.type, x.value]));
     return `${p.month}月${p.day}日 ${p.hour}:${p.minute}`;
   };
-  let saved = null, notice = null, last = null, busy = false, ctl = null;
+  let saved = null, notice = null, last = null, busy = false, ctl = null, freshKeys = new Set();
   try {
     const v = JSON.parse(localStorage.getItem(KEY));
     if (v && v.project === project && v.at > 0 && v.at <= Date.now() + 6e4 && v.values && typeof v.values === 'object') saved = v;
   } catch { saved = null; }
 
-  // 一项这次读到的值 {text, state, href?}；这项没算出（读不到，或数据里暂时没有这一项）返回 null
+  // 一项这次读到的值 {text?, rows?, state, href?}；这项没算出（读不到，或数据里暂时没有这一项）返回 null
   function compute(k) {
     if (b2) {
       const v = window.SiteB2?.value?.(k);
-      return v?.text && v.state !== 'unknown' && !v.cached ? v : null;
+      return (v?.text || v?.rows?.some((r) => r.text)) && v.state !== 'unknown' && !v.cached ? v : null;
     }
     if (pd.page === 'remote-control' && k === 'run') return { text: '电脑连接服务在线', state: 'ok' };  // 读到状态本身就说明在线（同现在网站）
     const r = window.SiteLiveRuntime?.parse?.(last, k, pd.project);
@@ -62,12 +62,24 @@
     const pre = pd.status_binding?.prefixes || {};
     for (const b of boxes()) {
       const k = b.dataset.href, v = saved?.values?.[k];
-      const fresh = !!v && mode === 'live' && v.at === saved.at;
+      const fresh = !!v && mode === 'live' && freshKeys.has(k);
       const named = !!b.closest('.liveslot')?.querySelector('.livename');  // 旁边已写名字的不再加前缀（同现在网站的“现在”条）
-      const text = v ? (!named && pre[k] ? pre[k] + '：' : '') + v.text : '';
-      if (b.dataset.liveText !== text) {
-        b.dataset.liveText = text;
-        if (text) {
+      const rows = v?.rows?.length ? v.rows : null;
+      const text = v ? (!named && pre[k] ? pre[k] + '：' : '') + (rows ? rows.map((r) => r.text).join('\n') : v.text) : '';
+      const renderKey = JSON.stringify([text, rows?.map((r) => fresh ? r.state : 'cached')]);
+      if (b.dataset.liveRender !== renderKey) {
+        b.dataset.liveText = text; b.dataset.liveRender = renderKey;
+        if (rows) {
+          const list = document.createElement('span'); list.className = 'live-rows';
+          for (const r of rows) {
+            const row = document.createElement('span'), dot = document.createElement('i'), span = document.createElement('span');
+            row.className = 'live-row'; row.dataset.state = fresh ? (r.state || 'ok') : 'cached';
+            dot.className = 'live-dot'; dot.setAttribute('aria-hidden', 'true');
+            span.className = 'live-text'; span.textContent = r.text;
+            row.append(dot, span); list.append(row);
+          }
+          b.replaceChildren(list);
+        } else if (text) {
           const dot = document.createElement('i'), span = document.createElement('span');
           dot.className = 'live-dot'; dot.setAttribute('aria-hidden', 'true');
           span.className = 'live-text'; span.textContent = text;
@@ -77,7 +89,8 @@
         }
       }
       b.dataset.state = !v ? 'empty' : fresh ? (v.state || 'ok') : 'cached';
-      const href = v?.href || '';
+      b.dataset.liveFresh = String(fresh);
+      const href = fresh ? (v?.href || '') : '';
       b.dataset.liveLink = href;
       b.title = !v ? '' : fresh ? text : text + '（最后读到 ' + bj(v.at) + '，北京时间）';
       if (href) { b.setAttribute('role', 'link'); b.tabIndex = 0; }
@@ -102,15 +115,21 @@
       notice.hidden = !say;
       if (say && notice.textContent !== say) notice.textContent = say;
     }
+    document.dispatchEvent(new Event('site-live-layout'));
   }
 
   function settle(ok, at) {
+    freshKeys = new Set();
     if (!ok) return paint(saved ? 'cached' : 'empty');
     const values = { ...(saved?.values || {}) };
     let any = false;
     for (const b of boxes()) {
       const v = compute(b.dataset.href);
-      if (v) { values[b.dataset.href] = { text: String(v.text), state: v.state, href: v.href || '', at }; any = true; }
+      if (v) {
+        values[b.dataset.href] = { text: String(v.text || ''), state: v.state, href: v.href || '', at,
+          ...(v.rows ? { rows: v.rows.filter((r) => r.text).map((r) => ({ text: String(r.text), state: r.state })) } : {}) };
+        freshKeys.add(b.dataset.href); any = true;
+      }
     }
     if (any) {
       saved = { project, at, values };
@@ -136,7 +155,7 @@
   // 有链接的实时位（例如图表网页）点了或回车打开；别的实时位只是读数
   const open = (e) => {
     const b = e.target instanceof Element ? e.target.closest('.ts-canvas [data-hot="live"]') : null;
-    if (!b?.dataset.liveLink || (e.type === 'keydown' && e.key !== 'Enter')) return;
+    if (!b?.dataset.liveLink || root.dataset.liveDom !== 'live' || b.dataset.liveFresh !== 'true' || (e.type === 'keydown' && e.key !== 'Enter')) return;
     e.preventDefault();
     window.open(b.dataset.liveLink, '_blank', 'noopener');
   };

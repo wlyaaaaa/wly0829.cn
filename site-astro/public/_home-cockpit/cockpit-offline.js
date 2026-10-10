@@ -16,6 +16,7 @@
     value.fragments.length === selectors.length && value.fragments.every((part, index) =>
       part.selector === selectors[index] && typeof part.html === 'string');
   let saved = null, pending = false, notice = null, previous = '', barHome = null;
+  const disabledLinks = new Map(), linkAttributes = ['aria-disabled', 'tabindex', 'title'];
   try { const value = JSON.parse(localStorage.getItem(key)); if (valid(value)) saved = value; } catch {}
   const beijing = value => new Intl.DateTimeFormat('zh-CN', {
     timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit',
@@ -78,6 +79,29 @@
       barHome = null;
     }
   }
+  function updateDirectory() {
+    for (const link of document.querySelectorAll('.toc a[href^="#"]')) {
+      const target = document.getElementById(link.getAttribute('href').slice(1));
+      const blocked = root.dataset.cockpitOffline === 'empty' &&
+        (!target || target.closest('.cp-cockpit, .cp-bar, .cp-details, [data-today-river]'));
+      if (blocked) {
+        if (!disabledLinks.has(link)) disabledLinks.set(link, linkAttributes.map(name => link.getAttribute(name)));
+        link.setAttribute('aria-disabled', 'true');
+        link.setAttribute('tabindex', '-1');
+        link.title = '驾驶舱暂时离线，还没有可展示的成功状态；恢复连接后此目录入口会自动启用。';
+      } else if (disabledLinks.has(link)) {
+        disabledLinks.get(link).forEach((value, index) => value === null
+          ? link.removeAttribute(linkAttributes[index]) : link.setAttribute(linkAttributes[index], value));
+        disabledLinks.delete(link);
+      }
+    }
+  }
+  document.addEventListener('click', event => {
+    const link = event.target instanceof Element ? event.target.closest('.toc a') : null;
+    if (!disabledLinks.has(link)) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
   function update() {
     pending = false;
     if (!document.querySelector('.cp-cockpit')) return;
@@ -94,6 +118,7 @@
       if (saved) retain();
     }
     placeBar(root.dataset.cockpitOffline === 'cached');
+    updateDirectory();
     if (!notice) {
       notice = document.createElement('aside');
       notice.className = 'cockpit-offline-notice';
