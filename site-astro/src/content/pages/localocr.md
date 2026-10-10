@@ -752,7 +752,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "684 次｜识别，555 份材料、706 页（7 月 8 日–9 月 28 日 20:26）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -762,12 +762,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "92%｜自动选模型的 300 次里，277 次快模型就够，23 次换了强模型（其余 384 次是直接指定快模型）",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -792,12 +792,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
+   "asset": "_library/hires-icons/试管对勾.png",
    "fallback": false,
-   "semantic_status": "text_inferred_object_unverified",
-   "key": "红色警示",
+   "semantic_status": "owner_requested_test_pass_icon",
+   "key": "绿色测试通过",
    "source_phrase": "181 项｜测试无失败（16 项按条件跳过），现役版本 9 月 24 日验收",
-   "sha256": "3adac5e6ca30429c0fc934071422cad3eb480d48b6d54d6a842a8516f6a689d4",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
    "status": "ready"
   },
   {
@@ -1291,7 +1291,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1304,7 +1304,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1317,7 +1317,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1330,7 +1330,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1369,7 +1369,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1382,7 +1382,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n1一字不差抄截图\n一批截图要一字不差时，AI交给它读。模型热着时一张截图约2秒；结果带每行字的位置和把握分；有字块把握分低于0.50时，结果会标“置信度较低”，AI据此回原图核对。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1395,7 +1395,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1408,7 +1408,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "双机器人",
    "source_phrase": " \n2扫描讲义转文字\n整份扫描讲义要转成文字时，每页先快读，哪一页读得差、或者像表格公式，只把那一页交给强模型（怎么判断见亮点）。交回全文时，AI会说清哪几页换过模型、哪几页把握不高。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1704,7 +1704,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "TXT 纯文字，按页分开\n",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1743,7 +1743,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "TXT 纯文字，按页分开\n",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1896,12 +1896,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "红灯的排队牌",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1926,12 +1926,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "停止按钮",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1941,12 +1941,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "显卡",
    "source_phrase": "显卡递给另一只手",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -1961,7 +1961,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一半的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1976,7 +1976,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "搬家纸箱",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2114,12 +2114,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一条向下弯的细支线，通向一个小一点的“强模型”节点再回到第 6 个",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2129,12 +2129,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2144,12 +2144,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2159,12 +2159,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2174,12 +2174,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2189,12 +2189,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2204,12 +2204,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2324,12 +2324,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "闪电",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2354,12 +2354,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "望远镜",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2369,12 +2369,12 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "表格网格",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2389,7 +2389,7 @@ AI 自己也能看图，说个大意没问题；要准确抄下扫描件、参�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "被熨平的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2549,11 +2549,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "key": "显卡",
    "source_phrase": "为什么在 Linux 里跑 这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。\n",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -2579,7 +2579,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "一块显卡：两家可同时，大模型单用 文字识别和〔中文语音转写〕可以同时用显卡；本地大模型要用时，前两家都得让开。由〔电脑配置与恢复〕里的显卡调度员按租约分配。\n",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2588,11 +2588,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "h"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "key": "时钟",
    "source_phrase": "有上限 一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。\n",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2614,11 +2614,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "key": "显卡",
    "source_phrase": "为什么在 Linux 里跑 这台电脑是 RTX 5090 D（新一代 Blackwell 架构），Windows 版飞桨显卡版跑不起来；整套放进 WSL2（Windows 自带的 Linux）：Ubuntu 24.04、飞桨 3.4、CUDA 12.9、PaddleOCR 3.7。代价是 Windows 和 Linux 之间要转路径，中文、空格、拖放路径在 9 月 6 日、8 日、24 日都专门修过。\n",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -2644,7 +2644,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "一块显卡：两家可同时，大模型单用 文字识别和〔中文语音转写〕可以同时用显卡；本地大模型要用时，前两家都得让开。由〔电脑配置与恢复〕里的显卡调度员按租约分配。\n",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2653,11 +2653,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "key": "时钟",
    "source_phrase": "有上限 一次请求默认 300 秒、最多 2 小时；服务连同子进程内存上限 30 GB（不是显存），超了只停自己。\n",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2862,12 +2862,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "麻烦｜每页都用强模型最稳，但太慢：强模型首次加载加识别要 50 秒，内存约 16 GB；快模型热着一页约 2 秒。靠文件名猜哪份难，又常常猜错。",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2892,12 +2892,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个字都没读出来",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2907,12 +2907,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "整页平均把握分低于 0.78",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3009,7 +3009,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
      ],
@@ -3026,7 +3026,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
      ],
@@ -3043,11 +3043,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "1. 把握分很高，也可能读错表格 \n麻烦快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。\n解法体检时另外用图像找横线和竖线的交叉点，够6个就判为表格页，交给强模型。\n证据验收样例“自动路线·表格”：快读9行，平均把握分0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9月26日那份16页扫描件的第15页，平均把握分0.997，就是因为表格线才被重读的。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3082,11 +3082,11 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "1. 把握分很高，也可能读错表格 \n麻烦快模型读表格时，每个字都认得很自信，却把表格拆成一串散字，只看把握分发现不了。\n解法体检时另外用图像找横线和竖线的交叉点，够6个就判为表格页，交给强模型。\n证据验收样例“自动路线·表格”：快读9行，平均把握分0.99995，没有一行低分，仍因为查到表格线被送去重读。真实材料也有：9月26日那份16页扫描件的第15页，平均把握分0.997，就是因为表格线才被重读的。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3410,7 +3410,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "图片和截图识字｜png、jpg、webp、bmp 图片和截图，读出全部文字｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3470,7 +3470,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "三种结果文件｜纯文字 TXT、保留标题表格的 Markdown、带坐标和把握分的 JSON｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3480,12 +3480,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "歪的倒的先转正｜两个方向小模型判断整页和每行字的朝向，先转正再读｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3510,12 +3510,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "只重读有问题的页｜多页文件里只把没读好的那几页交给强模型，其余页保留快读结果｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3530,7 +3530,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "禁止文件",
    "source_phrase": "指定模型｜可以直接说用快模型、强模型或结构还原，自动选路不改写｜在用",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -3555,12 +3555,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "表格还原成行列｜PP-StructureV3 把表格还原成行列 HTML，给每块区域坐标｜没用过",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3575,7 +3575,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "公式和印章｜同一条结构还原路线认出公式、检测印章文字｜没用过",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3585,12 +3585,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "每行字的位置和把握分｜JSON 里每块字有框、多边形、阅读顺序和 0–1 的把握分｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3906,7 +3906,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "一句人话摘要｜把覆盖、质量、文字块数和是否升级写成一句话｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3921,7 +3921,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "原件留底再识别｜先算指纹做只读快照，识别完原件变了就不发结果｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3961,12 +3961,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "本机识别服务｜只在本机 18665 端口，同一时间只做一个识别，忙时直说不排队｜在用",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -4006,12 +4006,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/11-显卡-clean.png",
+   "asset": "_library/hires-icons/11-显卡-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "显卡",
    "source_phrase": "用完腾显卡｜关掉工作进程、还回显卡；本地大模型要用时调度员也会先清｜在用",
-   "sha256": "a1f8f6bc994770f2e92d64d220784ac5622c33eb4375e3dd52eb6e7e14bb3285",
+   "sha256": "d13359b8d413de624ca49b04df0ea872f5640703f6b0a026aad8fdfcfa788f07",
    "status": "ready"
   },
   {
@@ -4051,12 +4051,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "正式版和开发代码分开｜每天用的是验收过的快照，改代码不影响它｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4066,12 +4066,12 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "退回上一版｜保留上一版，出问题可以切回，切回也要它自己的验收｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4101,7 +4101,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "换模型只改配置｜模型写在配置档里，新模型先对照验收，不自动当默认｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {

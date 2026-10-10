@@ -439,12 +439,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张打勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -459,7 +459,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "柱状图",
    "source_phrase": "一个帧数计数器旁边几个被划掉的小方块",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -611,12 +611,12 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一只只看不碰的眼睛",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -641,12 +641,12 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个“≠”号",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -686,12 +686,12 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张清单和一个没打勾的框",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -721,7 +721,7 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
    "semantic_status": "scene_explicit_primary_object",
    "key": "柱状图",
    "source_phrase": "一个“只查一次”的小计数器",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -900,7 +900,7 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一卷心电图纸带打着勾",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -910,12 +910,12 @@ AI：“在记。硬件记录不到 1 秒前刚写过，窗口记录没有积压
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "不做\n不自己采集、不写数据库，也不当第二个看门狗。不下“根因已查明”的结论；证据只到“候选”。日常诊断不跑逐表校验整个数据库的审计脚本，也不去Grafana里翻原始数据。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {

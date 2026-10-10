@@ -543,7 +543,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "2–5 份｜一个交付包只收我点名的资料，别的文件一个不读",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -553,12 +553,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "6 个文件｜同一版事实出：Word 需求文档、评审演示、跟踪表，外加 PRD 文本（需求文档的纯文本版）、事实清单、追溯表",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -573,7 +573,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "0.48 秒｜事实都定好、写进一份请求后，程序从建包到出 Word 需求文档的用时（不含 AI 读资料）",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -588,7 +588,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "柱状图",
    "source_phrase": "2 / 9 条｜指标表换了新版，9 条事实里只有 2 条要重看，其余照旧有效",
-   "sha256": "bd524c451ddd9869f223993b61adee245bf3bf8dd4a702e2728c087da609f002",
+   "sha256": "3a240e74ee63c13723583aa802c342fc3f52460f04f836dca6e1890a50b9b6b3",
    "status": "ready"
   },
   {
@@ -958,8 +958,8 @@
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
@@ -1020,7 +1020,7 @@
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
      ]
     },
     {
@@ -1045,7 +1045,7 @@
      ],
      "page_break_after": false,
      "icons": [
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ]
@@ -1103,7 +1103,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "我  点名这三份资料，说清目标：“把正常申请的平均处理时间降低到 2 个工作日”。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1138,11 +1138,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "key": "工具箱",
    "source_phrase": "我  只处理对不上的和拿不准的；AI 照我的意思登记确认、驳回，或留作“假设”，每次写一句理由，记进决定记录。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -1151,11 +1151,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "程序  过一道门：目标、范围、需求、异常、验收五块都有已确认的事实，关键事实都有出处、互不矛盾、没过期，才算能正式出；差一样，只出一份标着“待确认草稿”的 PRD 文本，不做 Office 文件。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1168,7 +1168,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "程序  从这一版事实出文件。这次只要需求文档，就只出 Word，不等演示和表格。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1194,7 +1194,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "我  点名这三份资料，说清目标：“把正常申请的平均处理时间降低到 2 个工作日”。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1229,11 +1229,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "key": "工具箱",
    "source_phrase": "我  只处理对不上的和拿不准的；AI 照我的意思登记确认、驳回，或留作“假设”，每次写一句理由，记进决定记录。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -1242,11 +1242,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": "程序  过一道门：目标、范围、需求、异常、验收五块都有已确认的事实，关键事实都有出处、互不矛盾、没过期，才算能正式出；差一样，只出一份标着“待确认草稿”的 PRD 文本，不做 Office 文件。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1259,7 +1259,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "程序  从这一版事实出文件。这次只要需求文档，就只出 Word，不等演示和表格。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1583,7 +1583,7 @@
      "illustration": "top_inside",
      "illustration_index": 0,
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     }
    ],
@@ -1610,7 +1610,7 @@
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     }
    ],
@@ -1649,7 +1649,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历时钟",
    "source_phrase": "没有自动提醒。 它不在后台跑，也没有定时任务；出问题直接跟 AI 说。",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -1664,7 +1664,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "小旗",
    "source_phrase": "只出了草稿。 草稿开头写着差什么：交付目标、哪几块没内容、哪条没确认、哪条过期、哪条没出处、哪几条互相矛盾。补上再出。",
-   "sha256": "82bc1bb88359214e45118a170a073967861053d0dc9816995fe4ec6b0cb16cb4",
+   "sha256": "0628ee273e0d9f24798e011c669fc1570520b8efe366277623d439405970dd8b",
    "status": "ready"
   },
   {
@@ -1694,7 +1694,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "资料是 Word 或 PDF。 它只可靠地读纯文本、Markdown 和 CSV 表格；Word、PDF、邮件、在线文档要先让 AI 转成文字。直接交 Word 会存下一份乱码，到登记事实时才报“原文找不到”（9 月 28 日试过）。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1724,7 +1724,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "数据库丢了。 资料的各个版本、决定记录、每版文件的记录都只在这一个数据库里，项目自己没有导出和恢复，Git 里只有代码。库所在的个人资料目录每天 17:10 随电脑配置与恢复的个人资料备份复制到 G、再同步到 H；还没有真实交付包，库还没建出来，这份备份也还没核过。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -1733,11 +1733,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": " \n现在能不能用（9月28日查）\n44个自动测试：39个通过，5个跳过（要Codex干活时才有的Office组件）。两套合成样例从建包、出文件到资料换版，各12项检查全部通过；同一天在Claude这边重跑，出Word需求文档也成功。还没用在真实工作上，也没和“AI直接做”比过时间，所以不说省了多少时间。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1746,11 +1746,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "key": "打勾清单",
    "source_phrase": " \n现在能不能用（9月28日查）\n44个自动测试：39个通过，5个跳过（要Codex干活时才有的Office组件）。两套合成样例从建包、出文件到资料换版，各12项检查全部通过；同一天在Claude这边重跑，出Word需求文档也成功。还没用在真实工作上，也没和“AI直接做”比过时间，所以不说省了多少时间。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1913,12 +1913,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "数据库",
    "source_phrase": "一个浅绿色的数据库圆柱，把七个节点都框在一个浅绿色大括号里，表示都存在同一个本地数据库里",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -1928,12 +1928,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1958,12 +1958,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1973,12 +1973,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1988,12 +1988,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2003,12 +2003,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2018,12 +2018,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2033,12 +2033,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2078,12 +2078,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2108,12 +2108,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2306,7 +2306,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一只手只捏着三张纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2336,7 +2336,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双气泡",
    "source_phrase": "两个说法不同的对话气泡中间一个暂停符号",
-   "sha256": "60292b6592be891c5b33705abee2c54bdae380a80322215e7a46049e245144a5",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
    "status": "ready"
   },
   {
@@ -2351,7 +2351,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "日历",
    "source_phrase": "一枚刻着精确数字的硬币旁边一页日历",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -2376,12 +2376,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱",
    "source_phrase": "一个小工具箱",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -2579,12 +2579,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张请求单上画着一个红色小叉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2599,7 +2599,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "两张一模一样的纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2614,7 +2614,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个临时纸箱",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2627,7 +2627,7 @@
    "fallback": false,
    "key": "文稿堆",
    "source_phrase": "请求写错，连库都不建 ：新建时先把整份请求核一遍（原文找不到、缺包名、资料选重了），有错就在建数据库之前拦下；写到一半出错整批撤回，不留半个包。\n",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3006,7 +3006,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "日常工作支持｜工作上的一次性问题：看材料、理思路、审方案、改文件，直接办完，不建包",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3021,7 +3021,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "明确建包｜要长期维护的交付才建：点名 2–5 份资料，给固定的包名、标题和目标；同一个包名不能建两次",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3036,7 +3036,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "来源快照｜每份资料存原样副本和指纹，换版时多存一版、旧版留着；只读点名的文件",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3051,7 +3051,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "事实审阅｜每条事实钉在原文哪一句；分出已确认、假设、互相矛盾、过期；金额日期存精确值；每次决定写理由、留记录",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3061,12 +3061,12 @@ ready
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "同版文件｜同一版事实出 PRD 文本、事实清单、追溯表，以及 Word、演示、表格；只要其中一种就只出那一种",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3096,7 +3096,7 @@ ready
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "变更影响｜交进新版资料，列出哪些事实失效、哪些自动接上新版、哪几版文件过期；没用到这份资料的不动",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3361,7 +3361,7 @@ ready
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一盏亮着的台灯和一摞空白纸",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3371,12 +3371,12 @@ ready
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一枚写着对勾的印章",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3386,12 +3386,12 @@ ready
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个分岔成两条的路标",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3416,12 +3416,12 @@ ready
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一枚图钉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3461,12 +3461,12 @@ ready
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "数据库",
    "source_phrase": "一个被图钉钉在原地的小数据库圆柱",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {

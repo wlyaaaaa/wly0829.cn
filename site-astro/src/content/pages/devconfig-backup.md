@@ -880,7 +880,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "66 个来源　开发配置清单（9 月 29 日凌晨起）；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -895,7 +895,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "146,300 个文件　微信原始文件 42.5 GiB，每天拍快照复制一份到 G",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -910,7 +910,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "10,498 个文件　9 月 28 日的开发配置包，压缩后 1.11 GiB（按改之前的清单）",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -925,7 +925,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "4 个自动任务　配置每天存 G、每天上云；微信每天存 G、每周上云",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1227,7 +1227,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "09:30　微信：先给 E 盘拍一张卷影快照，从快照把微信原始文件复制成 G 上新的一份，逐个核对（9 月 28 日用了 12 分钟）",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1242,7 +1242,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "每周一 11:00　微信：把 G 上核对过的那一份传到 Google 云盘，传完再逐个比对（9 月 28 日用了 1.5 小时）",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -1622,7 +1622,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "用户目录　19 个文件夹：Claude、Codex、Antigravity、Cursor、Cline、Copilot、OpenCode 等 AI 和编程工具的设置，GPG、Docker 上下文；17 个单文件：Git、npm、conda、WSL、WakaTime、Claude 的设置等",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1963,12 +1963,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "工具箱",
    "source_phrase": "工具箱",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -1998,7 +1998,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "scene_explicit_primary_object",
    "key": "微信标志",
    "source_phrase": "微信气泡和手",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2023,12 +2023,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2038,12 +2038,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2390,12 +2390,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "逐个复制　每个文件复制到临时区并算 SHA-256；复制前后大小或时间变了就重来",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -2455,7 +2455,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "拍快照　用 Windows 卷影快照（VSS）定格 E 盘那一刻，微信照常写也不影响",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2510,12 +2510,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2525,12 +2525,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2540,12 +2540,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2555,12 +2555,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2570,12 +2570,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2585,12 +2585,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2600,12 +2600,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2615,12 +2615,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3178,7 +3178,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "一个 0 字节的小文件，让配置备份两天多没出新包。 \nClashVerge运行时锁着自己的一个空文件，备份算指纹时读不了，整次作废，回执也不说是哪个文件；9月24日上午到9月26日中午，一个新包都没出成。现在这个文件按精确路径排除，不一刀切排除所有.lock：项目的依赖锁文件（例如package-lock）是配置的一部分，还要备份。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3193,7 +3193,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "配置包从 2.72 GiB 缩到 0.88 GiB。 \n9月26日16:54，一个6GB多的Codex对话数据库在备份算指纹时被Codex改写，整次作废。对话历史本来就不该算“配置”，Codex对话另有专门的快照备份，于是把它移出配置包：下一个包从2.72GiB降到0.88GiB；之后配置慢慢变多，9月28日的包是1.11GiB，每天要存要传的仍少了一半多。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3543,7 +3543,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "开发配置备份",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3558,7 +3558,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "按清单收集配置　66 个来源：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”，不算失败，必需的 AI 配置目录缺了明确报缺口　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3573,7 +3573,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "系统设置和换机清单　顺带导出环境变量、系统 PATH、hosts、Wi-Fi 配置、Xshell 会话、按名字挑出的 16 个计划任务的定义（其中 8 个停用），以及已装软件表、winget 和 Scoop 清单、VS Code 和 Cursor 扩展、JetBrains 插件　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3613,12 +3613,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "内容没变不重打包　和上一个包的内容指纹一样，就直接用上一个，也不重复上传云盘　〈说不准〉",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -3628,12 +3628,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "每天存到 G 盘　每天 12:05 和开机登录后 20 分钟，本机和 G 各存一份，各留最近 7 份　〈在用〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -3673,12 +3673,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "连对话历史一起备　打开一个开关，把默认排除的各 AI 工具对话历史也打进包；自动任务不开　〈说不准〉",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -4026,7 +4026,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "微信备份",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -4041,7 +4041,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "每天快照备份到 G　09:30 先给 E 盘拍卷影快照，从快照把微信原始文件复制成 G 上新的一份，整份逐个核对 SHA-256　〈在用〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -4101,7 +4101,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "E 盘再存一份　程序还能在 E 盘另存一份微信；9 月 26 日决定清掉 E 盘旧副本，自动任务不用　〈已停用〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -4161,7 +4161,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "微信文件放回原处　你先关掉微信，从 G 或外接盘复制回去；原文件夹改名留着，失败自动退回；要你自己打开微信确认才算恢复好　〈说不准〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -4176,7 +4176,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "从云端取回微信　G 和外接盘都没了时，从 Google 云盘直接取回并比对　〈说不准〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -4206,7 +4206,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "回执　每次运行写一份：成功、失败、跳过了哪些、出错的是哪个文件（只写路径）；驾驶舱和电脑配置与恢复都读它　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4440,7 +4440,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "6 月 23 日　建库：开发配置三级备份（本机、U 盘、Google 云盘），当天加上微信每周备份",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {

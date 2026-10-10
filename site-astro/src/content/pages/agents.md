@@ -1130,12 +1130,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一叠小对勾",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1854,7 +1854,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "禁止文件",
    "source_phrase": "一张被涂改过的纸和一个红叉",
-   "sha256": "021dd20fa27e238fe3c8aa4aca6e699a49c80ad63d4abcad60dc8ff1e0068aa5",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
@@ -2093,7 +2093,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一叠带书签的文稿",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2123,7 +2123,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "木匣锁",
    "source_phrase": "一个带锁的文件盒",
-   "sha256": "3339993e398ea5a4fe0180ef08c8cd1fd08b815fa6569d9b00b27abf70bfe4b3",
+   "sha256": "7d2d9db7dc508562b6bc40ca9a8ddb33765e7a694539a6e19dcd6cd2839ac50e",
    "status": "ready"
   },
   {
@@ -2183,7 +2183,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一摞代码纸和一个小柱子",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2344,7 +2344,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一个只照亮几张纸的手电",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2359,7 +2359,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "共享节点",
    "source_phrase": "两条丝带汇成一条",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -2849,12 +2849,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张清单纸",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2939,12 +2939,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张打勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3070,7 +3070,7 @@
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/文稿堆.png"
      ],
      "item_count": 8
@@ -3104,7 +3104,7 @@
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
       "_library/fix-round-2/icon-clean-73c422e226c420c598eb.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/文稿堆.png"
      ],
      "item_count": 8
@@ -3131,7 +3131,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "决定原话 文件 docs\\owner-decisions.md《本人的决定原话》：截至 9 月 28 日 98 节，约 9.7 万字，是这个仓库里唯一获准超过大文档上限的文件。别处引用写编号，例如“决定：终审 ZS35”。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3156,12 +3156,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "开关",
    "source_phrase": "记忆开关 Claude 的 autoMemoryEnabled、Codex 的三个记忆开关都设成关。",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -3176,7 +3176,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文稿堆",
    "source_phrase": "体量预算 repository-bloat-budget.json 给三个基座各定文件数和总大小的参考上限（这里 235 个文件、2.9 MB），测试拦住报告、临时输出这类不该进库的东西。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3470,7 +3470,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "指向手",
    "source_phrase": "一只指向前方的手",
-   "sha256": "078174b6b61f6c5cc665cc91fea9cff5f7f02da36fbfcff6fc003c6d34599eb7",
+   "sha256": "b91d58864458ae828bac8c417ce629dc5c21bbafc9cb56094265107503bfe26c",
    "status": "ready"
   },
   {
@@ -3515,7 +3515,7 @@
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "55 项  登记的自动测试，改哪块跑哪块",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -3649,11 +3649,11 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "改了一半的源码，冒充不了规则。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3666,7 +3666,7 @@
    "fallback": false,
    "key": "双机器人",
    "source_phrase": "子代理不会冒领父会话的档位。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -3688,11 +3688,11 @@
    "orientations": [
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "key": "代码窗口",
    "source_phrase": "改了一半的源码，冒充不了规则。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3705,7 +3705,7 @@
    "fallback": false,
    "key": "双机器人",
    "source_phrase": "子代理不会冒领父会话的档位。",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -3981,7 +3981,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "快速发布｜普通文字改动一条命令跑完挑测试、提交、推送、发布、核对；9 月 25–28 日用过 14 次｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4086,7 +4086,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "笔记本同步约法｜笔记本上的 Codex 按需巡检时，从主机的生效版本同步约法那一段；主机不反向写｜待验收",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -4101,7 +4101,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "Claude 钩子｜每条新消息前带进型号档位、私人资料状态和无限制授权；收尾查 GPT 子任务有没有人跟进；按内容指纹部署｜在用",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -4111,12 +4111,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "Codex 钩子｜每条新消息前和每个子代理启动时带进同样三样；装前拍快照，能退回｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4126,12 +4126,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "告知型号和档位｜让 AI 知道自己是什么型号、什么档位，好算自己做还是派出去｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4146,7 +4146,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "认出授权请求｜我整句说“开个无限制授权”时替我打开验证窗口；9 月 28 日补回 4 种说法｜在用",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -4299,9 +4299,9 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件夹.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/GitHub标志.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"
@@ -4317,12 +4317,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "last_row": "fill",
      "illustration": "left_inside",
      "icons": [
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/书签册.png",
       "_library/icons/文稿堆.png",
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/共享节点.png",
       "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
       "_library/round3/clean-assets/png/43-文件柜-clean.png",
@@ -4346,9 +4346,9 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件夹.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/icons/GitHub标志.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png"
@@ -4364,12 +4364,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "last_row": "fill",
      "illustration": "left_inside",
      "icons": [
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/书签册.png",
       "_library/icons/文稿堆.png",
       "_library/icons/双气泡.png",
       "_library/icons/日历时钟.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/共享节点.png",
       "_library/round3/clean-assets/png/42-听诊器检查-clean.png",
       "_library/round3/clean-assets/png/43-文件柜-clean.png",
@@ -4406,12 +4406,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "说事就找对技能｜每个技能开头写明什么时候用，AI 按要做的事挑｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4421,12 +4421,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "装、换、停技能｜按清单装一个、更新一个、停一个或整份收拢，先给计划｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4436,12 +4436,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "退役技能不再冒出｜清单留墓碑、拆链接，确认没人用后连源码一起删｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4471,7 +4471,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "查三个基座哪里坏了｜只读体检脚本按需查技能装没装，规则库、电脑配置和 GitHub 项目总索引的登记坏没坏；只查不修，不是每个任务的关卡｜在用",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -4496,12 +4496,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "决定原话｜我的决定原话只存一处，98 节，别处引用编号｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4511,12 +4511,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "查重复段落｜扫三个基座找跨文件重复的段落，收成一处｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4531,7 +4531,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "共享节点",
    "source_phrase": "经验写进共享文件｜两边自动记忆关闭，纠正和教训当轮写进项目文件或专题｜在用",
-   "sha256": "31adf238e3c90edfe100ee0397e51aaf67df9c938b92df1e0f5018d3c32eb3be",
+   "sha256": "2775e570150c9e576ad746098f9ad04499074a0b2baa88fffdfe6514b189dbdc",
    "status": "ready"
   },
   {
@@ -4698,9 +4698,9 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "last_row": "fill",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/放大镜.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
       "_library/icons/日历时钟.png"
@@ -4720,8 +4720,8 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/GitHub标志.png"
      ],
      "status_position": "top_right",
@@ -4757,9 +4757,9 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "last_row": "fill",
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/放大镜.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
       "_library/icons/日历时钟.png"
@@ -4776,8 +4776,8 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
      "illustration": "left_inside",
      "icons": [
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/icons/GitHub标志.png"
      ],
      "status_position": "top_right",
@@ -4809,12 +4809,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "Claude 派 GPT｜包装脚本派 GPT-6.1 Sol、GPT-6 Luna 和需授权的 GPT-6 Astra，能纠偏、续作｜在用",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -4824,12 +4824,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "可派模型清单｜各型号适合什么活、我定过的限制；只作参考，不当门禁｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4874,7 +4874,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历时钟",
    "source_phrase": "单点动作短锁｜装软件、发布规则、改计划任务前领锁，做完释放；9 月 26–28 日用过 29 次｜在用",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -4899,12 +4899,12 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "Codex 旧任务状态定位｜读 Codex 本地记录判断旧任务结束没有；现在没有程序调用它｜没用过",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -4919,7 +4919,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "规则和技能的备份｜提交推到 GitHub 私有仓库；没推的由每天的加密系统镜像带着｜在用",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -5138,7 +5138,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "6 月 30 日　建库，放进规则和技能",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5168,7 +5168,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "7 月 26 日　Claude 的入口模板第一次出现",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5183,7 +5183,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "8 月初　规则库的 G 盘热备份停掉，改靠 GitHub 私有仓库和每天的系统镜像",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -5243,7 +5243,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "9 月 26 日　按我逐条审定的约法 L1–L30 整篇重写规则（E180 生效）；开始记我的决定原话；可派模型清单；Claude 能派 GPT；短锁；技能安装器从 1,615 行瘦到 199 行",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -5258,7 +5258,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 27 日　退掉旧的分工门禁和施工登记，一次删掉 15,387 行；删掉 26 个退役技能；决定记录改成常设的《本人的决定原话》",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5273,7 +5273,7 @@ Codex 分叉派出子代理时，子代理的对话记录开头会复制父会�
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 28 日　钩子不再借父会话的档位；E187 生效；三个基座宣布完善，进入 4 周稳定期；Codex 钩子换上新版",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {

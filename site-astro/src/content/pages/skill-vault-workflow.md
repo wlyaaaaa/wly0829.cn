@@ -495,12 +495,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "在窗口里改。　窗口列出库里的文本文件，选中清单改那一句；不是文本的文件原样保留、不能改。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -530,7 +530,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "先预演，再上传。　AI 先预演一遍往 Key 上传，确认目标是私有仓库、路径对；再真的上传，从 GitHub 读回比对长度和 SHA-256，两样都对才说“备份好了”。",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -804,7 +804,7 @@
      "columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "text_ref": "守的几条死规矩"
     }
@@ -864,12 +864,12 @@
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "守的几条死规矩 密码只在本机窗口里输，不进聊天、命令参数、环境变量和文件；只动点名的那一个库，不去别处找；只读检查不解密；导出只写到点名的文件夹，同名文件不覆盖；建库不删原件；改密码不改算钥匙的参数，另一套内容不碰；只往私有仓库上传，不定时自动传；验一次密码不留授权，下一个操作要再输。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {

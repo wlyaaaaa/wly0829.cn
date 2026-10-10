@@ -902,7 +902,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "20 个文件｜一份备份：2 个能装回的设置文件，加 18 个插件和主题清单，共 52 KB",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -1076,7 +1076,7 @@
      "text_ref": "能装回的：2 个文件",
      "icons": [
       "_library/icons/绿叶装饰.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "grouped_items": true,
@@ -1094,7 +1094,7 @@
      "connector": "none",
      "text_ref": "只记清单：18 个文件",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "list_layout": "seven_plugin_theme_rows",
      "active_icon_rows": [
@@ -1117,7 +1117,7 @@
      "connector": "none",
      "text_ref": "不碰的",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "tone": "gray",
      "last_full_width": true,
@@ -1156,7 +1156,7 @@
      "text_ref": "能装回的：2 个文件",
      "icons": [
       "_library/icons/绿叶装饰.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
      "illustration_order": "before_heading"
@@ -1170,7 +1170,7 @@
      "connector": "none",
      "text_ref": "只记清单：18 个文件",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ],
      "list_layout": "seven_plugin_theme_rows",
      "active_icon_rows": [
@@ -1204,12 +1204,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "游戏光盘",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1234,12 +1234,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "开关",
    "source_phrase": "核心设置 只收 21 个认得的字段：Millennium 本身的强调色 #00ff00，更新和通知开关，启用哪 3 个插件，当前主题 Adwaita，两套主题的 42 个选项（圆角、配色方案、窗口按钮样式等）和 62 个配色值（Adwaita 配色表里另有一组强调色 RGB 39,168,100，也是绿；界面上最终用哪一个由主题决定，没在 Steam 里逐个核对过）。",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -1386,8 +1386,8 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "icons": [
       "_library/icons/绿叶装饰.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/打勾清单.png"
      ],
      "item_count": 4
     }
@@ -1477,7 +1477,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "存到一半断电",
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png"
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
      ]
     },
     {
@@ -1489,7 +1489,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "好久没存上",
      "icons": [
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     }
    ],
@@ -1504,12 +1504,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "成绿色链接样式",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1519,12 +1519,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1534,12 +1534,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1549,12 +1549,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -1577,12 +1577,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "工具箱",
    "source_phrase": "存到一半断电 每次写之前先留底；下次运行先把没写完的那次退回或补完，再开始新的。有人手改过的文件不覆盖，停下来等处理。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
@@ -1591,12 +1591,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "好久没存上 最近一次成功超过 9 天，状态检查就从“正常”变成“要处理”。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1727,10 +1727,10 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "先装软件",
      "columns_v": 1,
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/icons/指向手.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "name_in_card": true,
      "item_illustration_v": [
@@ -1793,10 +1793,10 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "先装软件",
      "columns_v": 1,
      "icons": [
-      "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "_library/icons/指向手.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "name_in_card": true,
      "item_illustration_v": [
@@ -1834,12 +1834,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一个打开的软件包盒子和一张清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1864,12 +1864,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一只手点在 Steam 托盘图标的“退出”上，旁边一个绿色对勾",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2188,7 +2188,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "一张新旧两页对比的纸和一个小天平",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -2198,12 +2198,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一块内置固态硬盘上盖着对勾",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2328,7 +2328,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "Python 只用标准库",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ],
      "row": "cards-2",
      "width": "50%"
@@ -2402,7 +2402,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "connector": "none",
      "text_ref": "Python 只用标准库",
      "icons": [
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/代码窗口.png"
      ]
     },
     {
@@ -2459,12 +2459,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一张带编号的小票",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2474,12 +2474,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "一个只有 Python 标志的小盒子",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3019,13 +3019,13 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "核心设置",
      "portrait_columns": 1,
      "icons": [
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/文件齿轮.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/版本循环文件.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
      ],
      "item_count": 8,
@@ -3041,7 +3041,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "text_ref": "卸载跟着删",
      "portrait_columns": 1,
      "icons": [
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png"
+      "_library/hires-icons/01-绿叶装饰-clean.png"
      ],
      "item_count": 1,
      "status_position": "bottom_right",
@@ -3068,7 +3068,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "icons": [
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/icons/followup-r3-steam08-three-drives.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png",
       "_library/round3/clean-assets/png/12-文件核验-clean.png"
      ],
@@ -3087,12 +3087,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "存一份",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3107,7 +3107,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "核心设置｜只存 21 个认得的字段，能装回｜在用",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3117,12 +3117,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "自写样式｜quick.css 原样存，只统一换行｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3147,12 +3147,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "主题清单｜主题定义、选项和配色，记下在用哪套｜在用",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -3177,12 +3177,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "马上存一份｜不等周一，现在就存｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3207,12 +3207,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "公开前过滤｜白名单之外不收；查 SteamID、令牌、私钥，命中整次拒绝｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3251,12 +3251,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "留最近几代｜E 盘项目里留最近 4 代，可调 2–32｜在用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3637,12 +3637,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3652,12 +3652,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3667,12 +3667,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3682,12 +3682,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3697,12 +3697,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3712,12 +3712,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3727,12 +3727,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -3929,7 +3929,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "6 月 20 日 第一版：手动把设置、自写样式和插件主题清单存进仓库，剔掉 SteamID；附一份 PDF 说明。那时开着 4 个插件。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -3943,7 +3943,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "7 月 5–6 日 变成每周自动存，窗口隐藏不闪黑框。这次自动存就记下了一个变化：HLTB 插件被我关掉了，开着的剩 3 个。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3971,7 +3971,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "8 月 16 日 Adwaita 和 Zehn 升级后，存了一次新的主题定义和选项。",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -3985,7 +3985,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "文件齿轮",
    "source_phrase": "8 月 31 日 拒绝“备份目录套在 Steam 目录里”这类互相套叠的设置。",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -4027,7 +4027,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "9 月 28 日 最近一次自动存：Millennium 升到 3.5.0，存了新的一代（还没推到 GitHub）。",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -4050,12 +4050,12 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
    "orientations": [
     "h"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "工具箱",
    "source_phrase": "现在18个提交。属于“偶尔用”的项目：出了报错才修，不再加功能（约法L25）。",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {

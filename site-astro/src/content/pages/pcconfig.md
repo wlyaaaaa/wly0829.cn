@@ -1808,12 +1808,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "125 个　自动任务，每个都有人话说明：做什么、怎么停",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2130,7 +2130,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "第一次开机前：断网，拔掉数据盘和备份盘；开机后先停掉会同步删除、清理的自动任务，再联网、接盘。",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {
@@ -2155,12 +2155,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2170,12 +2170,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2185,12 +2185,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -2283,7 +2283,7 @@
      "icons": [
       "_library/icons/日历时钟.png",
       "_library/icons/微信标志.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
       "_library/icons/云.png",
@@ -2362,7 +2362,7 @@
      "icons": [
       "_library/icons/日历时钟.png",
       "_library/icons/微信标志.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
       "_library/icons/云.png",
@@ -2431,7 +2431,7 @@
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": ":30　微信聊天备份",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2441,12 +2441,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": ":45　已装软件清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -2969,7 +2969,7 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "复制完不算，核对完才算。　每个文件复制后回读核对；微信聊天逐个文件重算 SHA-256（内容指纹），大小时间一样、内容变了也查得出。",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -2999,7 +2999,7 @@ E→G：每天 09:30–17:10　G→H：每天 14:30 和每次登录
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "删了能后悔 30 天。　E 上删掉的照片视频和个人资料，在 G 和 H 的待删区各留 30 天，满了整批清。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -3624,12 +3624,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "只开一次新的 PowerShell 看看。",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -3644,7 +3644,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "笔记本电脑",
    "source_phrase": "不用先按键蓝屏留现场，直接重启就行；电脑会自动留现场，但不一定来得及写完。",
-   "sha256": "a94819a30d63b31d8f9c3e44cedc1da198bf7c61cd6e92081c44fcb19f2f36a3",
+   "sha256": "ed5b8e2befc42e2596eefd6abfbc175ad0f28cded8b74294024e493cc0623430",
    "status": "ready"
   },
   {
@@ -3904,7 +3904,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "scene_explicit_primary_object",
    "key": "地球",
    "source_phrase": "带信号的地球",
-   "sha256": "ac56f3226534dce51ae1467157715713692b75189e1704150aff1687049b4e4b",
+   "sha256": "7569432760a1d9470b9f37fd397942d19413825986d0ccc36764d8012b1325fa",
    "status": "ready"
   },
   {
@@ -4305,7 +4305,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icons": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     }
    ],
@@ -4370,7 +4370,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icons": [
       "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png",
-      "_library/icons/打勾清单.png"
+      "_library/hires-icons/打勾清单.png"
      ]
     }
    ],
@@ -4412,12 +4412,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "时钟",
    "source_phrase": "每一个都说得清 125 个自动任务（不算 Windows 自带的），88 个开着、37 个停着。每一个都有一条人话说明：叫什么、做什么、怎么停、停了影响什么、北京时间几点跑。〔驾驶舱〕就读这份说明，第三方软件的任务单列一栏，不算进电脑配置的运行灯。规矩出自〔约法 L28〕",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -4442,12 +4442,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "打勾清单",
    "source_phrase": "待验收都记在一处 所有“要等时机才能核”的事登记在一张清单里（9 月 28 日：43 项），驾驶舱上随时能看。",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -4653,12 +4653,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "工具和自动任务　读登记干活，用 PowerShell、Python、Node.js、C# 写成",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -4683,12 +4683,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "看板接口　网站打开时临时采样，读登记和回执，不另起常驻程序",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -4698,12 +4698,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "驾驶舱　把这些翻成人话显示在网站上",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4713,12 +4713,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4728,12 +4728,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4808,8 +4808,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "columns": 3,
      "columns_v": 1,
      "icons": [
-      "_library/icons/代码窗口.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png"
      ]
     },
@@ -4859,8 +4859,8 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "columns": 1,
      "columns_v": 1,
      "icons": [
-      "_library/icons/代码窗口.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/代码窗口.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/版本循环文件.png"
      ]
     },
@@ -4965,12 +4965,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "后台不打扰。　自建的自动任务全部隐藏启动，不弹黑窗口。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -4994,12 +4994,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "orientations": [
     "h"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "代码窗口",
    "source_phrase": "110620 行 代码（PowerShell、Python、Node.js、C#）",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -5013,7 +5013,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "178 个 自动测试",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -5027,7 +5027,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历",
    "source_phrase": "1437 次 提交（7 月 9 日起）",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -5235,12 +5235,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "复制　只复制变了的文件；复制途中来源又变了，这一类这次就不删任何东西。",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -5255,7 +5255,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "逐个回读　复制完逐个文件核对大小、时间、属性；微信和 Codex 对话逐个重算 SHA-256。",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -5270,7 +5270,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "删多余的　H 上有、G 上已经没有的文件：照片视频、个人资料和只有一份的项目、软件移进待删区留 30 天，别的直接删。",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -5371,7 +5371,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
       "_library/round3/clean-assets/png/04-锁-clean.png",
       "_library/icons/版本循环文件.png",
@@ -5438,7 +5438,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/代码窗口.png",
+      "_library/hires-icons/代码窗口.png",
       "_library/round3/clean-assets/png/21-外接硬盘-clean.png",
       "_library/round3/clean-assets/png/04-锁-clean.png",
       "_library/icons/版本循环文件.png",
@@ -5787,7 +5787,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "AI补充：复用同类主体，不承诺源句全部组合/动作细节一致",
    "key": "日历时钟",
    "source_phrase": "卡住的时候，它自己留证据。 \n两个AI一起卡住、人也进不去时最难查。现在远程服务每10秒看一眼进程，发现一起卡住就自动记下“谁在等谁”；9月28日11:41它就自己记过一次。",
-   "sha256": "9175a885bbc49df84792d7cbfc903253f67e4b454ce828427ef35086eef518e0",
+   "sha256": "a604980c998270412615e6b84661adaba773022a7ae8167c4bb69153981a259e",
    "status": "ready"
   },
   {
@@ -5969,7 +5969,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
       "_library/icons/硬盘循环.png",
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
@@ -6036,7 +6036,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png",
       "_library/icons/云图片.png",
       "_library/fix-round-2/icon-clean-f12e6ff1182222417108.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
       "_library/icons/硬盘循环.png",
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png"
@@ -6142,12 +6142,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "已装软件清单　每天 10:45 导出已装软件、winget 清单和环境变量（秘密值打码），换机照着装　〈在用〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -6192,7 +6192,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "别的项目的备份　微信、开发配置（9 月 29 日 12:05 起按新清单带上 Codex 配置和记忆、Antigravity 设置，不再带 OpenClaw，那次跑完才算落实）、Codex 对话、电脑使用记录、Steam 外观、密码中心各自写进 G，这里统一同步到 H；14:15 的检查除微信、开发配置、Codex 对话和 Steam 外观，也查电脑使用记录和 AI 使用小记录（只提醒、不拦同步）；密码中心恢复集不在这 11 类里，同步回执单列它在 G、H 上各自的最新日期　〈在用〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -6387,12 +6387,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "坏了怎么办",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6452,7 +6452,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "救急 U 盘　32 GB，装着 PE 工具、主板 BIOS 回刷包、风扇配置和《救急先看》　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -6492,12 +6492,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "自动任务重建表　换机时 33 个必须重建、5 个可选、49 个软件自己装回、38 个等我定　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6527,7 +6527,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "Windows 稳定设置记录　记下验证过的系统设置和原因，例如 TCP 用 CUBIC，因为 BBR2 曾让本机卡住　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -6709,14 +6709,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/icons/盾牌对勾.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/手机电脑连接.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/断线.png",
       "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png",
       "_library/icons/保险箱.png",
       "_library/icons/钥匙.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
       "_library/icons/封印文稿.png",
-      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+      "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
      ],
      "group_heading": "brush",
      "item_spans": {
@@ -6773,14 +6773,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/icons/盾牌对勾.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
       "_library/icons/手机电脑连接.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/断线.png",
       "_library/fix-round-2/icon-clean-358d5f2fde9fe1e251e1.png",
       "_library/icons/保险箱.png",
       "_library/icons/钥匙.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
       "_library/icons/封印文稿.png",
-      "_library/fix-round-2/icon-clean-ea93827b93a1f34e4c58.png"
+      "_library/hires-icons/icon-clean-ea93827b93a1f34e4c58.png"
      ],
      "group_heading": "brush",
      "item_spans": {},
@@ -6821,12 +6821,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "卡死和排障",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6836,12 +6836,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "卡死急救卡　两个 AI 一起卡住时照着做：能存的先存，约 2 分钟还不好就重启，不用按键留现场　〈没用过〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -6851,12 +6851,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "卡死自动留现场　每 10 秒看一次进程，一起卡住超过约 60 秒就自动记下谁在等谁　〈在用〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -6866,12 +6866,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "回查卡顿原因　刚卡过时，按时间把硬件、程序和系统记录对齐，查有证据的原因；只看不修　〈在用〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -6896,12 +6896,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "内存用量记录　开机后一直记内存用量；异常重启后 AI 从中查内存是不是被吃光　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -6956,12 +6956,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "没登录也能连 ToDesk　看门狗每 2 分钟把 ToDesk 服务修回“自动＋运行”；登录前真连一次还没测　〈待验收〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -7051,7 +7051,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "密码中心安装和绑定　密码中心 9 月 28 日独立成项目，这里只管把它装到这台电脑并绑定　〈待验收〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -7066,7 +7066,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "资料锁接入说明　各项目读私人资料前怎么查锁（9 个项目的调用点表）　〈在用〉",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -7262,20 +7262,20 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icons": [
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/版本循环文件.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/09-时钟-clean.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/工具箱回收站.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
-      "_library/icons/打勾清单.png",
-      "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/33-文件夹上传-clean.png",
       "_library/icons/齿轮.png",
       "_library/icons/手机电脑连接.png",
       "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
@@ -7327,20 +7327,20 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icons": [
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/版本循环文件.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/round3/clean-assets/png/09-时钟-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/09-时钟-clean.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-64b110e28ee97a9a2746.png",
       "_library/icons/工具箱回收站.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/fix-round-2/icon-clean-6d1e5a91e66aac8dcd81.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
       "_library/fix-round-2/icon-clean-ee27e64c97037ad87bcf.png",
       "_library/fix-round-2/icon-clean-42402ae3529ca5be6e19.png",
-      "_library/icons/打勾清单.png",
-      "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/33-文件夹上传-clean.png",
       "_library/icons/齿轮.png",
       "_library/icons/手机电脑连接.png",
       "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
@@ -7415,12 +7415,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "小米妙享守护　没开就补开，开机后弹一次主界面　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -7430,12 +7430,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/09-时钟-clean.png",
+   "asset": "_library/hires-icons/09-时钟-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "时钟",
    "source_phrase": "桌面图标自动隐藏　双击桌面空白处显示，30 秒后自动再藏；主屏重新接上时顺手修好任务栏　〈在用〉",
-   "sha256": "2e461b29cf52358c1e39e7e7a1960c8761fec83d1c3f75aa0938890b50be1012",
+   "sha256": "28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc",
    "status": "ready"
   },
   {
@@ -7460,12 +7460,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "声音固定走音箱　登录后把默认输出固定到音箱，不被别的设备抢走　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -7480,7 +7480,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "微信双开　登录后自动开两个微信　〈在用〉",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -7535,12 +7535,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "启动项快照　记下 23 个开机自启项，换机时参考　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -7570,7 +7570,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹放大镜",
    "source_phrase": "云盘　找文件、下载原件；按指定对象上传、移动、分享　〈在用〉",
-   "sha256": "99ea4809646d31db12b8e216bc463e77f51b435a55e6e70607697f3a0363023c",
+   "sha256": "fb456a1e4d36c484db35e98e2658cdd3995122696d9857e338f9e40f4c5691cc",
    "status": "ready"
   },
   {
@@ -7580,12 +7580,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "待办　记待办、查询、修改、标记完成　〈在用〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -7595,12 +7595,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/33-文件夹上传-clean.png",
+   "asset": "_library/hires-icons/33-文件夹上传-clean.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹上传",
    "source_phrase": "相册　单独一份授权：查已连接的相册，把选定照片上传并加入或移出相册　〈说不准〉",
-   "sha256": "6370948116c73ba01b0aba13328812d5fd2315a881c6dbbb10ce01cbe1d7eb97",
+   "sha256": "88ee65efacac7c0a99ad172a81ea9c1be5688e9fe8e8d13e211ee0db3207c3af",
    "status": "ready"
   },
   {
@@ -7645,7 +7645,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "Chrome标志",
    "source_phrase": "浏览器连接检查　AI 连不上我的 Chrome 时，查清缺哪个已装组件；只看不改　〈在用〉",
-   "sha256": "9402804087291bdb0d78b7cde78aa8063e37b4a2fedaab90f83ab69d6867043a",
+   "sha256": "33767ac43a888209aa81c09bc7a6eb6026ea739411a3ebc03e30e6380f39e8b2",
    "status": "ready"
   },
   {
@@ -7927,12 +7927,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "软件和环境",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -7942,12 +7942,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/代码窗口.png",
+   "asset": "_library/hires-icons/代码窗口.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "代码窗口",
    "source_phrase": "受管软件　11 个开发软件统一查状态、更新：Node.js、PowerShell 7、Git、Python、Ollama、Codex CLI、Claude Code、Antigravity CLI、Cline、opencode、Go　〈在用〉",
-   "sha256": "ec06b2763c41e770bca19764b7c98dab4881a002059343decdb801f1a4f0281f",
+   "sha256": "4969c2bb7191704c4f1fb5e93cd0575b69b5c08e3f42cb32f2451fa50b4eeb69",
    "status": "ready"
   },
   {
@@ -7977,7 +7977,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "显卡排队　本地大模型、中文听写和文字识别轮流用显卡，排队服务停了每 5 分钟补开　〈待验收〉",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -7987,12 +7987,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "本地模型启动　登录后打开 Ollama　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -8002,12 +8002,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "听写开机启动　登录时启动中文听写，按 Win+H 说话出字　〈在用〉",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -8032,12 +8032,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库",
    "source_phrase": "盘的分工　稳定的放 E，新项目和缓存放 V，能丢的放 Z　〈在用〉",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -8047,12 +8047,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "端口检查　新开固定端口前先查会不会和别的程序冲突　〈在用〉",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -8067,7 +8067,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "改动影响查询　给一个路径，查出配置在哪、会影响哪些项目（164 个配置项、21 个恢复锚点）　〈在用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -8112,7 +8112,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "分页文件和转储设置　分页文件固定在 C（约 97.7 GiB），E 上取消；键盘触发转储已生效；分页文件重启后待核　〈待验收〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -8320,14 +8320,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/数据库.png",
+      "_library/hires-icons/数据库.png",
       "_library/icons/GitHub标志.png",
       "_library/icons/版本循环文件.png",
       "_library/icons/报警灯.png",
       "_library/icons/趋势图.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/文件齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
@@ -8379,14 +8379,14 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "portrait_columns": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/数据库.png",
+      "_library/hires-icons/数据库.png",
       "_library/icons/GitHub标志.png",
       "_library/icons/版本循环文件.png",
       "_library/icons/报警灯.png",
       "_library/icons/趋势图.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
-      "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/01-绿叶装饰-clean.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/文件齿轮.png",
       "_library/icons/文件齿轮.png",
       "_library/fix-round-2/icon-clean-52188346609616ef9b0b.png",
@@ -8433,12 +8433,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/数据库.png",
+   "asset": "_library/hires-icons/数据库.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "数据库",
    "source_phrase": "驾驶舱数据",
-   "sha256": "94f411ca3351bc5e50580664619090085a59a72a44a8c344eeaac2b126a0fb3c",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {
@@ -8453,7 +8453,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "GitHub标志",
    "source_phrase": "自动任务人话目录　143 条说明：本机 125 个，加上云端、Codex、笔记本、GitHub、远程服务里的，和登录后常驻的桌面图标自动隐藏、屏保、主屏黑幕监听，随备份启动的材料同步、照片视频云端维护，共 18 个　〈在用〉",
-   "sha256": "0a8164fd36a6e5e669a81ec81f3edbc7742e4c3c56232caa353815e70cab281c",
+   "sha256": "d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f",
    "status": "ready"
   },
   {
@@ -8493,12 +8493,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/round3/clean-assets/png/01-绿叶装饰-clean.png",
+   "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
    "key": "绿叶装饰",
    "source_phrase": "已停用",
-   "sha256": "5f7cf5327986376bfcc69f5e6fd02b46b26f8fd3a5e3a94feb01c51935021232",
+   "sha256": "ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322",
    "status": "ready"
   },
   {
@@ -8508,12 +8508,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/开关.png",
+   "asset": "_library/hires-icons/开关.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "开关",
    "source_phrase": "Claude 记忆备份　原每天 10:35；9 月 28 日停用：Claude 记忆开关关着，配置照旧由开发配置备份带上，用量改由 12:15 的 Codex 对话备份记　〈已停用〉",
-   "sha256": "d7379969d06251f4fe56604d5ab78861ce0838ed74f1b9ea998d74ea26a6a2a9",
+   "sha256": "b0edbda21d608f2e29778b8526baf627f649e9a8ec2751907fa9f5fe02e34586",
    "status": "ready"
   },
   {
@@ -8528,7 +8528,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "Codex 配置和记忆备份　原每天 11:05、13:05；9 月 28 日停用：和开发配置备份重复，Codex 配置和记忆改由开发配置备份每天带上；Codex 对话备份照常　〈已停用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -8543,7 +8543,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件齿轮",
    "source_phrase": "Gemini 备份　原每天 11:10、13:10，实际备 Antigravity 的设置、状态和它记下的知识；9 月 28 日停用，Antigravity 设置改由开发配置备份带上　〈已停用〉",
-   "sha256": "c6826d947b1a5b0e6f5f3c857ffd849b19652e70af280bd81b3b38ef8f86f4ad",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
    "status": "ready"
   },
   {
@@ -8573,7 +8573,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "向日葵　卸掉了，没登录时改用 ToDesk；留下的三个驱动下次重启后删　〈已停用〉",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -8603,7 +8603,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "鼠标样式守护　主题或登录把鼠标样式重置后改回来；9 月 28 日退役　〈已停用〉",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -8734,7 +8734,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/icons/版本循环文件.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/盾牌对勾.png",
@@ -8747,7 +8747,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/round3/clean-assets/png/04-锁-clean.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/icons/云.png",
@@ -8797,7 +8797,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/icons/版本循环文件.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/微信标志.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/icons/盾牌对勾.png",
@@ -8810,7 +8810,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
       "_library/round3/clean-assets/png/04-锁-clean.png",
       "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
       "_library/round3/clean-assets/png/06-绿封面册-clean.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
       "_library/round3/clean-assets/png/47-回收站文件-clean.png",
       "_library/icons/云.png",
@@ -8872,7 +8872,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "7 月 13–22 日　外接盘备份和待删区的雏形；7 月 22 日起开发配置、微信每天备份",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -8887,7 +8887,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "7 月 23 日　登记 12 GiB 内存盘 Z",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -8897,12 +8897,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "7 月 25–26 日　密码中心的前身（本机密码代理）；每周综合自查的前身（持续检查，9 月 28 日退役）",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -8917,7 +8917,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "微信标志",
    "source_phrase": "8 月 4 日　微信双开",
-   "sha256": "009e9b0d3bbfea270bc9b84ba86742831419cad0fd982d8e015db0800bd94626",
+   "sha256": "fa9ca45e53800105388a3bcbd68b78fc3f7c835737907cbc037d32337e8166b3",
    "status": "ready"
   },
   {
@@ -8932,7 +8932,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "8 月 11 日　ToDesk 登录前可连",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -8977,7 +8977,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文稿堆",
    "source_phrase": "8 月 26 日　资料加密方案",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -9037,7 +9037,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 15 日　Grafana 图表经同一条隧道公开",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -9067,7 +9067,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "日历",
    "source_phrase": "9 月 21 日　换机流程定稿；外接盘第一次收到整条镜像",
-   "sha256": "df60f360f11a7654f00fca6918874cd62c11575b707a678cd23d5baad630e8d2",
+   "sha256": "3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749",
    "status": "ready"
   },
   {
@@ -9092,12 +9092,12 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "text_inferred_object_unverified",
    "key": "打勾清单",
    "source_phrase": "9 月 25 日　驾驶舱显示自动任务；待验收清单固定",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -9157,7 +9157,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
    "semantic_status": "text_inferred_object_unverified",
    "key": "文件夹同步",
    "source_phrase": "9 月 29 日　新鲜度检查从 9 类加到 11 类；密码中心恢复集接进每天的外接盘同步（待验收）；驾驶舱的任务显示人话名，第三方软件单列；三个常驻程序和材料同步登记进目录",
-   "sha256": "c1406b3952dfe1326c7d6c43ac634d2d10b2836e0fba5427591d9d0e9460e2a4",
+   "sha256": "4501b95fb0ac26d229723daa24cc261677a6716be664a72ae704ba9b40b38da3",
    "status": "ready"
   },
   {

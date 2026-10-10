@@ -955,7 +955,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/报警灯.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/手机电脑连接.png"
      ]
     },
@@ -993,7 +993,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/报警灯.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/手机电脑连接.png"
      ]
     },
@@ -1122,7 +1122,7 @@
       "_library/icons/上锁仓库箱.png",
       "_library/icons/文稿堆.png",
       "_library/icons/书签册.png",
-      "_library/icons/工具箱.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/illustrations/双人传稿.png",
       "_library/illustrations/电脑故障.png",
       "_library/icons/手机电脑连接.png",
@@ -1162,7 +1162,7 @@
       "_library/icons/上锁仓库箱.png",
       "_library/icons/文稿堆.png",
       "_library/icons/书签册.png",
-      "_library/icons/工具箱.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/illustrations/双人传稿.png",
       "_library/illustrations/电脑故障.png",
       "_library/icons/手机电脑连接.png",
@@ -1694,7 +1694,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/放大镜.png",
       "_library/icons/日历时钟.png",
       "_library/icons/版本循环文件.png"
@@ -1731,7 +1731,7 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文件写作.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/放大镜.png",
       "_library/icons/日历时钟.png",
       "_library/icons/版本循环文件.png"
@@ -1829,8 +1829,8 @@
       "_library/icons/尺子.png",
       "_library/icons/画笔调色板.png",
       "_library/icons/云.png",
-      "_library/icons/数据库.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/数据库.png",
+      "_library/hires-icons/代码窗口.png"
      ]
     },
     {
@@ -1881,8 +1881,8 @@
       "_library/icons/尺子.png",
       "_library/icons/画笔调色板.png",
       "_library/icons/云.png",
-      "_library/icons/数据库.png",
-      "_library/icons/代码窗口.png"
+      "_library/hires-icons/数据库.png",
+      "_library/hires-icons/代码窗口.png"
      ]
     },
     {
@@ -2290,7 +2290,7 @@
       "_library/icons/太阳工具.png",
       "_library/icons/手机点桌面.png",
       "_library/icons/报警灯.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/气泡.png",
       "_library/icons/版本循环文件.png",
       "_library/icons/手机电脑连接.png",
@@ -2341,7 +2341,7 @@
       "_library/icons/太阳工具.png",
       "_library/icons/手机点桌面.png",
       "_library/icons/报警灯.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/气泡.png",
       "_library/icons/版本循环文件.png",
       "_library/icons/手机电脑连接.png",
@@ -2544,7 +2544,7 @@
      "icons": [
       "_library/icons/上锁仓库箱.png",
       "_library/icons/双授权卡严格两张.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/解锁窗口手势.png"
      ],
      "status_position": "top_right",
@@ -2561,8 +2561,8 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文稿堆.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/工具箱.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/icons/双气泡.png",
       "_library/illustrations/电脑故障.png",
       "_library/icons/手机电脑连接.png",
@@ -2583,7 +2583,7 @@
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/秒表.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/盾牌对勾.png",
       "_library/icons/浏览器标签页.png",
       "_library/icons/云对勾.png",
@@ -2617,7 +2617,7 @@
      "icons": [
       "_library/icons/上锁仓库箱.png",
       "_library/icons/双授权卡严格两张.png",
-      "_library/icons/开关.png",
+      "_library/hires-icons/开关.png",
       "_library/icons/解锁窗口手势.png"
      ],
      "status_position": "top_right",
@@ -2634,8 +2634,8 @@
      "illustration": "left_inside",
      "icons": [
       "_library/icons/文稿堆.png",
-      "_library/icons/打勾清单.png",
-      "_library/icons/工具箱.png",
+      "_library/hires-icons/打勾清单.png",
+      "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/icons/双气泡.png",
       "_library/illustrations/电脑故障.png",
       "_library/icons/手机电脑连接.png",
@@ -2656,7 +2656,7 @@
      "icons": [
       "_library/icons/文件写作.png",
       "_library/icons/秒表.png",
-      "_library/icons/打勾清单.png",
+      "_library/hires-icons/打勾清单.png",
       "_library/icons/盾牌对勾.png",
       "_library/icons/浏览器标签页.png",
       "_library/icons/云对勾.png",

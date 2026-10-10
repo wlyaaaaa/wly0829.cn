@@ -700,7 +700,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "画笔调色板",
    "source_phrase": "一支画笔和一块调色板，旁边一个小 ChatGPT 标志",
-   "sha256": "6a6909cabd9e10c5748d7103e00ff25f9bda7bc0551925c9a112b53e29275e81",
+   "sha256": "e753d6f0c05218dbfce4f65f119025ccc453dd77a5da6fb2551f53410cfd3cce",
    "status": "ready"
   },
   {
@@ -935,7 +935,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "木匣锁",
    "source_phrase": "一只挂着绿色挂锁的小木柜",
-   "sha256": "3339993e398ea5a4fe0180ef08c8cd1fd08b815fa6569d9b00b27abf70bfe4b3",
+   "sha256": "7d2d9db7dc508562b6bc40ca9a8ddb33765e7a694539a6e19dcd6cd2839ac50e",
    "status": "ready"
   },
   {
@@ -950,7 +950,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "文稿堆",
    "source_phrase": "托盘里的钥匙、手机、纸条和Google及微软卡片",
-   "sha256": "e2aea4f2809dededd76f1846875ca699b57eec4231132cc3040d6c11c3ae6646",
+   "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
    "status": "ready"
   },
   {
@@ -1274,7 +1274,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "木匣锁",
    "source_phrase": "一只带小锁的木匣",
-   "sha256": "3339993e398ea5a4fe0180ef08c8cd1fd08b815fa6569d9b00b27abf70bfe4b3",
+   "sha256": "7d2d9db7dc508562b6bc40ca9a8ddb33765e7a694539a6e19dcd6cd2839ac50e",
    "status": "ready"
   },
   {
@@ -1304,7 +1304,7 @@
    "semantic_status": "scene_explicit_primary_object",
    "key": "双机器人",
    "source_phrase": "两个小机器人一起搬积木",
-   "sha256": "a1be07de9c279462516e2dd0994facc3f72273bfc75d18baf067e689e4914eb9",
+   "sha256": "24ebab9dc3aba20253c9649452a6cad0693cdbd2bfd29e69f06e07dd2f5dde30",
    "status": "ready"
   },
   {
@@ -1314,12 +1314,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/icons/打勾清单.png",
+   "asset": "_library/hires-icons/打勾清单.png",
    "fallback": false,
    "semantic_status": "scene_explicit_primary_object",
    "key": "打勾清单",
    "source_phrase": "一张打了勾的清单",
-   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
    "status": "ready"
   },
   {
@@ -1329,12 +1329,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/fix-round-2/icon-clean-0432a3e02a060c22b01c.png",
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
    "fallback": false,
    "semantic_status": "round3_request_subject_exact_reuse",
    "key": "工具箱",
    "source_phrase": "一只打开的工具箱",
-   "sha256": "1f27e2e5b55499cd52cec4a8b7fe253b3b84c0357e9939f1039619291f43461a",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
    "status": "ready"
   },
   {
