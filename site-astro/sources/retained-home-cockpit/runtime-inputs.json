@@ -22,8 +22,8 @@
       "bytes": 1820
     },
     "scripts/b2-live-runtime.js": {
-      "sha256": "cb3e414591bb6f66c2d4c7d108fcb2c74e4fe3cc2ffc34838b208d64f1dfa38b",
-      "bytes": 134277
+      "sha256": "a85ad4be84b01e140d5ce872a2d0c4cc823a7ba1102aad674e5208ef9a175e01",
+      "bytes": 134582
     },
     "scripts/prepare-cockpit-cache.py": {
       "sha256": "ba1fae96c15c2f8a56dc9423cc96e1ce1f47a0d02c7b69ddbc91e155fa710ed2",
@@ -42,8 +42,8 @@
       "bytes": 13076
     },
     "site-astro/tools/retain_home_cockpit.py": {
-      "sha256": "b1c9f0480738593cca5a49424bc6f2d1c0a3b202ead1cbfa70cdf22c6b238d9c",
-      "bytes": 29645
+      "sha256": "3486c60d7bfb6b0fd2dadc53889a6a7d0519a4a92bde84f8b0cd7a64b4ac79c0",
+      "bytes": 33970
     },
     "scripts/release_delta.py": {
       "sha256": "378bfc31660f34196aee866c39186db760ecf04953a38921c6068455fecf7718",
@@ -125,6 +125,54 @@
       "sha256": "d884439a9cfb000d16d99a7c239b07e2e7b314cd31cdda95664cab3e615f3106",
       "bytes": 4719
     },
+    "site-astro/tools/computer_access_native.py": {
+      "sha256": "fb92a3fccbdcf1c96276f603bec609aaf25af5f354842bd1ac51c0c136d8ad3e",
+      "bytes": 1489
+    },
+    "site-astro/tools/cockpit_metrics.py": {
+      "sha256": "b6cc2685049cfca623c960696b3dd0bbdf02ced5325457a5dc9070f9bd8fbce4",
+      "bytes": 1377
+    },
+    "site-astro/tools/cockpit_stutter.py": {
+      "sha256": "ced92f271dea4096480e2721325b3bf18f665f37d09614b6474d74d494ef5f93",
+      "bytes": 1138
+    },
+    "site-astro/tools/native_anchor_offsets.py": {
+      "sha256": "2766d286902e1c33807246d96e5bbfbd7914ad2e07b977ad59b080d255f4e809",
+      "bytes": 1119
+    },
+    "scripts/prepare-stutter-page.py": {
+      "sha256": "0b7dd2f7df706f4447bfb81ba164f0e03563b64d712a104f8feec1e63068461c",
+      "bytes": 2444
+    },
+    "scripts/stutter-page-copy.json": {
+      "sha256": "82eb906478b29689c45a35b77d0301a890d8c1d514ba60fa3326bd6558421034",
+      "bytes": 6434
+    },
+    "scripts/stutter-page.css": {
+      "sha256": "240a508e760213f27f05d0a377566caa40b6d5f99bdc5c6386cb2b8e8403204e",
+      "bytes": 2485
+    },
+    "scripts/stutter-page.js": {
+      "sha256": "531d50e29cb554b44bb4c3a38d3f860c6c6f13f9be5ef617edc3b4e89b37dcfe",
+      "bytes": 9126
+    },
+    "scripts/stutter-page.html": {
+      "sha256": "ab05377439993f8bb63c94fbf08d50f2235db61cbc6c2d0ad1ac4081364aac35",
+      "bytes": 2601
+    },
+    "site-release/release-manifest.json": {
+      "sha256": "65b83ab13b0ce6e2bb24f81095ef62e2916e9bed35539b397df312d5a4ae9636",
+      "bytes": 22665253
+    },
+    "site-astro/public/_interactions/anchor-offset.css": {
+      "sha256": "dc99fb527c2e42f3006abe302935021e192be543f3d34cb6b76f00b627f516df",
+      "bytes": 231
+    },
+    "site-astro/public/_interactions/anchor-offset.js": {
+      "sha256": "4ed2e6c8c80bd099ca692bced23a1e5726afd5cea4d75e71f6c03f833fe1141d",
+      "bytes": 2259
+    },
     "site-astro/tools/cockpit_white_gear.py": {
       "sha256": "9b0cf4577cbf02780714c05ac874b18c9dfef87b589dd0d34d8b33ccf8c37474",
       "bytes": 3214
@@ -202,7 +250,7 @@
       "bytes": 140363
     },
     "site-astro/src/chrome/runtime/computer-access.json": {
-      "sha256": "49a8425dca4a3b3a4fb83c7c3d4f8fedeb225266b4abcf40dcdd3ef54c943f98",
+      "sha256": "2ab595ca29d90fc0d123acac5cdf65a9b9db03bce4088fe5f257af7ce21d8da5",
       "bytes": 112003
     },
     "site-astro/src/chrome/runtime/daily-preferences.json": {
@@ -238,7 +286,7 @@
       "bytes": 136234
     },
     "site-astro/src/chrome/runtime/mcp.json": {
-      "sha256": "9c14bc611c8877e529e93ddc3f3d34fadc09368854f3a6f93f1fbe41167a09ea",
+      "sha256": "220c047c1c223ff4dfe9c385a3e0ab606c4f30e7dbacf4db2ceb9c99f338269a",
       "bytes": 121664
     },
     "site-astro/src/chrome/runtime/meshclip-kit.json": {
@@ -502,16 +550,28 @@
       "bytes": 126200
     },
     "site-astro/sources/retained-home-cockpit/home.html": {
-      "sha256": "f3ec811865e2a889872d288083fbc140452db674749910308810216a8d1b1620",
-      "bytes": 248650
+      "sha256": "cef8d984989cdbe1cb8d6f48a852e3b31dbde358378a67bc1ed450f47a53aafb",
+      "bytes": 248654
     },
     "site-astro/sources/retained-home-cockpit/cockpit.html": {
-      "sha256": "8616833f73ba6890285e579a3cea6f40cf30cd5f159a9883c2748efb21960ae5",
+      "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
       "bytes": 165196
     },
     "site-astro/sources/retained-home-cockpit/computer-access.html": {
-      "sha256": "f810362fe0d152b3b61c80b5ae73f1525528e95f71b097694320255d814c52ef",
-      "bytes": 166249
+      "sha256": "22caf81b7e2c5cb2be7a57256b147d835843039daeab93a3741b76ca7bdac0bc",
+      "bytes": 165964
+    },
+    "site-astro/public/_typeset/runtime/app-2699a865b956a944ec7b.js": {
+      "sha256": "d79a0518e9300ffb6f1f256a50772a95aaedf82e37c21abd8100df55740368b8",
+      "bytes": 127746
+    },
+    "site-astro/public/_typeset/runtime/app-ab81ea88de788c87787c.js": {
+      "sha256": "ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc",
+      "bytes": 125655
+    },
+    "site-astro/public/_typeset/runtime/b2-typeset-87d1746f2e22df830589.js": {
+      "sha256": "1392d9fe65dbc40e03723d40fc612dfa8c484a2ee4ae05061cab9510e3666b26",
+      "bytes": 80317
     },
     "site-astro/public/_home-cockpit/time-labels.css": {
       "sha256": "a812e7930a4ea0567e528eeebfc0fce1936902dd5e500d3ff32804dea17e205f",
@@ -522,8 +582,8 @@
       "bytes": 2412
     },
     "site-astro/public/_home-cockpit/cockpit-offline.css": {
-      "sha256": "35c91f30a503443267f09a980b052f1603782b104fa0aa7b73e086ad097b6dc2",
-      "bytes": 1501
+      "sha256": "f39514e3a454020b98e00b5ce824557bcac89237b1d4f0edb1674b782ed6af45",
+      "bytes": 1775
     },
     "site-astro/public/_home-cockpit/cockpit-offline.js": {
       "sha256": "ddfb00ce8b6acd6e3e1b7875b3f1c0e97598ae5c9f9639649f1603775d5c5b1d",
@@ -599,41 +659,93 @@
       "sha256": "a1b2628768cbb2d59ce93db8cdc57a22af50fb418ba39baabe40166ac755167e",
       "bytes": 134366
     },
-    "_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js": {
-      "sha256": "c4a0ace52372f02f6fd95244a404d347c83ceddaf897c5cb74741670f2056323",
-      "bytes": 140079
+    "_typeset/runtime/b2-typeset-1f648eb89aaf1cda0e64.js": {
+      "sha256": "1f648eb89aaf1cda0e64680960152ecad539a0bc6a274115d0336ebb7db3bb30",
+      "bytes": 140384
     },
-    "cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js": {
-      "sha256": "705bbbe582ccf87a8acfd91524138aa485a98d67dfe9507d3ed639c95d1cc8f6",
-      "bytes": 140906
+    "cockpit/assets/b2-typeset-9a690d5820eb00d4d806.js": {
+      "sha256": "9a690d5820eb00d4d8069b1f3adbbc1bb8b3147e501e108bafdacb2b57164255",
+      "bytes": 141211
     },
-    "cockpit/assets/b2-typeset-69a4ea9858ff991fbae4.js": {
-      "sha256": "69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab",
-      "bytes": 142624
+    "cockpit/stutter/assets/stutter-page-531d50e29cb554b44bb4.js": {
+      "sha256": "531d50e29cb554b44bb4c3a38d3f860c6c6f13f9be5ef617edc3b4e89b37dcfe",
+      "bytes": 9126
     },
-    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
-      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
-      "bytes": 6882
+    "cockpit/assets/b2-typeset-169c0028d2c44ca0ac45.js": {
+      "sha256": "169c0028d2c44ca0ac45e3398d0fffa8bc90cc0fdb5ad98f45f2abaa65165024",
+      "bytes": 142754
+    },
+    "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js": {
+      "sha256": "0fe059c637ff196ccc5d441d5c00e5596c827b25f738bd9be089d1711b1dddc3",
+      "bytes": 23284
+    },
+    "_typeset/runtime/b2-access-model-cbf4f6c5e936.js": {
+      "sha256": "cbf4f6c5e93666972c79d7415e5666f75e2f6093df937cbdc77eee058ca1f85e",
+      "bytes": 26513
+    },
+    "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js": {
+      "sha256": "5c723995d2c6b51a1dde662c7ff3bd1779790d1d5c995e69a4474fe8a548b3e9",
+      "bytes": 142929
     },
     "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css": {
       "sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
       "bytes": 23864
     },
-    "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
-      "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
-      "bytes": 522736
-    },
-    "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js": {
-      "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
-      "bytes": 142449
+    "cockpit/stutter/index.html": {
+      "sha256": "96949f1370f45c5248c0db370700c776fa25cf6a06cf5498837c925adb83915b",
+      "bytes": 9874
     },
     "_typeset/cockpit/c9472a04e8f4bc0e2561-cockpit-01-v-white-e52c137b4f83.png": {
       "sha256": "859c4e48b595291644dd436bb3ec20539c0f9ba8b05451b5b37a1b37a5491245",
       "bytes": 882349
     },
+    "_typeset/runtime/app-2699a865b956a944ec7b.js": {
+      "sha256": "d79a0518e9300ffb6f1f256a50772a95aaedf82e37c21abd8100df55740368b8",
+      "bytes": 127746
+    },
+    "cockpit/stutter/assets/stutter-page-240a508e760213f27f05.css": {
+      "sha256": "240a508e760213f27f05d0a377566caa40b6d5f99bdc5c6386cb2b8e8403204e",
+      "bytes": 2485
+    },
+    "_typeset/runtime/app-ab81ea88de788c87787c.js": {
+      "sha256": "ab81ea88de788c87787c0561f08ec72cfac4d9da2a80527f8c977845b8035cfc",
+      "bytes": 125655
+    },
     "_living/_textures/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png": {
       "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
       "bytes": 543090
+    },
+    "_typeset/runtime/b2-typeset-87d1746f2e22df830589.js": {
+      "sha256": "1392d9fe65dbc40e03723d40fc612dfa8c484a2ee4ae05061cab9510e3666b26",
+      "bytes": 80317
+    },
+    "_interactions/anchor-offset.js": {
+      "sha256": "4ed2e6c8c80bd099ca692bced23a1e5726afd5cea4d75e71f6c03f833fe1141d",
+      "bytes": 2259
+    },
+    "_typeset/runtime/app-67a6ffcb373105b3b068.js": {
+      "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
+      "bytes": 127856
+    },
+    "_typeset/runtime/app-b384f5148a452a1ae93c.js": {
+      "sha256": "b384f5148a452a1ae93c310e5f1db5f4ae0642a477de108227fc6cfaecdcb6cf",
+      "bytes": 134476
+    },
+    "_interactions/anchor-offset.css": {
+      "sha256": "dc99fb527c2e42f3006abe302935021e192be543f3d34cb6b76f00b627f516df",
+      "bytes": 231
+    },
+    "_living/cockpit/bird-source.f3ace861a245/config-white-e52c137b4f83.json": {
+      "sha256": "227caed2ebcf0f1658e67f8ce9070393b27b3e0581069812dbbd17151d64b764",
+      "bytes": 6882
+    },
+    "_typeset/runtime/b2-typeset-4460bc78e81a4f62d47a.js": {
+      "sha256": "4460bc78e81a4f62d47adcef6f61992278c04d9b1c8d14de2c404a8c1c1846b5",
+      "bytes": 140360
+    },
+    "_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h-white-e52c137b4f83.png": {
+      "sha256": "acc4d1440be2e812e5e7a558d994dd1882e46ecc669e1a489a54f3e484018a70",
+      "bytes": 522736
     },
     "_shared/home-app-92ff384787b4b26d0794.js": {
       "sha256": "92ff384787b4b26d0794c504849c7bff151eb77c8f7c3e9e9b677fbfd986ea57",
@@ -696,8 +808,8 @@
     "/_typeset/runtime/app-ab81ea88de788c87787c.js": "/_typeset/runtime/app-bfc5ea2af98f89d40e7a.js",
     "/_typeset/runtime/app-c33b8583ab454accec01.js": "/_typeset/runtime/app-bfc5ea2af98f89d40e7a.js",
     "/_typeset/runtime/app-c7ea357566aa882de1c8.js": "/_typeset/runtime/app-a1b2628768cbb2d59ce9.js",
-    "/_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": "/_typeset/runtime/b2-typeset-c4a0ace52372f02f6fd9.js",
-    "/cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": "/cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js",
+    "/_typeset/runtime/b2-typeset-b0989c55bbdd0929f652.js": "/_typeset/runtime/b2-typeset-1f648eb89aaf1cda0e64.js",
+    "/cockpit/assets/b2-typeset-54c34818e37d6f61a971.js": "/cockpit/assets/b2-typeset-9a690d5820eb00d4d806.js",
     "/_shared/home-app-c4e1023b5c497a376915.js": "/_shared/home-app-92ff384787b4b26d0794.js"
   },
   "firstpaint_source": "_shared/home-living/hero-live.576f7d6f10.js",
@@ -1045,16 +1157,66 @@
     }
   },
   "cockpit_mobile_todo": {
-    "runtime": "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js",
-    "sha256": "0bf639b9c0ce3bc6b4dc4e10481a768f52f0d35516acf170defa39baa295db81",
-    "base_runtime": "cockpit/assets/b2-typeset-705bbbe582ccf87a8acf.js"
+    "runtime": "cockpit/assets/b2-typeset-169c0028d2c44ca0ac45.js",
+    "sha256": "169c0028d2c44ca0ac45e3398d0fffa8bc90cc0fdb5ad98f45f2abaa65165024",
+    "base_runtime": "cockpit/assets/b2-typeset-9a690d5820eb00d4d806.js"
   },
   "cockpit_layout": {
-    "runtime": "cockpit/assets/b2-typeset-69a4ea9858ff991fbae4.js",
-    "sha256": "69a4ea9858ff991fbae4f73d11f92ee79e7f113ed1965f9e189b0018f8403bab",
+    "runtime": "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js",
+    "sha256": "5c723995d2c6b51a1dde662c7ff3bd1779790d1d5c995e69a4474fe8a548b3e9",
     "stylesheet": "_typeset/runtime/b2-live-6ba69e3a1a512bc0419b.css",
     "stylesheet_sha256": "6ba69e3a1a512bc0419b7acb7a0a15c0a5d26a4a76a31217a9ea3670e3dae5df",
-    "base_runtime": "cockpit/assets/b2-typeset-0bf639b9c0ce3bc6b4dc.js",
+    "base_runtime": "cockpit/assets/b2-typeset-169c0028d2c44ca0ac45.js",
     "base_stylesheet": "_typeset/runtime/b2-live-de2248fb01b179cab600.css"
+  },
+  "computer_access_bindings": {
+    "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/runtime/app-2699a865b956a944ec7b.js": "/_typeset/runtime/app-2699a865b956a944ec7b.js",
+    "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/runtime/app-ab81ea88de788c87787c.js": "/_typeset/runtime/app-ab81ea88de788c87787c.js",
+    "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/_typeset/runtime/b2-typeset-87d1746f2e22df830589.js": "/_typeset/runtime/b2-typeset-87d1746f2e22df830589.js"
+  },
+  "cockpit_metrics": {
+    "runtime": "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js",
+    "sha256": "5c723995d2c6b51a1dde662c7ff3bd1779790d1d5c995e69a4474fe8a548b3e9",
+    "base_runtime": "cockpit/assets/b2-typeset-5c723995d2c6b51a1dde.js"
+  },
+  "computer_access": {
+    "runtime": "_typeset/runtime/b2-typeset-4460bc78e81a4f62d47a.js",
+    "sha256": "4460bc78e81a4f62d47adcef6f61992278c04d9b1c8d14de2c404a8c1c1846b5",
+    "model": "_typeset/runtime/b2-access-model-cbf4f6c5e936.js",
+    "model_sha256": "cbf4f6c5e93666972c79d7415e5666f75e2f6093df937cbdc77eee058ca1f85e"
+  },
+  "stutter_page": {
+    "route": "/cockpit/stutter/",
+    "files": {
+      "cockpit/stutter/assets/stutter-page-240a508e760213f27f05.css": {
+        "sha256": "240a508e760213f27f05d0a377566caa40b6d5f99bdc5c6386cb2b8e8403204e",
+        "bytes": 2485
+      },
+      "cockpit/stutter/assets/stutter-page-531d50e29cb554b44bb4.js": {
+        "sha256": "531d50e29cb554b44bb4c3a38d3f860c6c6f13f9be5ef617edc3b4e89b37dcfe",
+        "bytes": 9126
+      },
+      "cockpit/stutter/assets/site-live-runtime-0fe059c637ff196ccc5d.js": {
+        "sha256": "0fe059c637ff196ccc5d441d5c00e5596c827b25f738bd9be089d1711b1dddc3",
+        "bytes": 23284
+      },
+      "cockpit/stutter/index.html": {
+        "sha256": "96949f1370f45c5248c0db370700c776fa25cf6a06cf5498837c925adb83915b",
+        "bytes": 9874
+      }
+    },
+    "publication_performed": false
+  },
+  "native_anchor_offsets": {
+    "cockpit": {
+      "runtime": "_typeset/runtime/app-b384f5148a452a1ae93c.js",
+      "sha256": "b384f5148a452a1ae93c310e5f1db5f4ae0642a477de108227fc6cfaecdcb6cf",
+      "base_runtime": "_typeset/runtime/app-a1b2628768cbb2d59ce9.js"
+    },
+    "computer-access": {
+      "runtime": "_typeset/runtime/app-67a6ffcb373105b3b068.js",
+      "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
+      "base_runtime": "_typeset/runtime/app-2699a865b956a944ec7b.js"
+    }
   }
 }

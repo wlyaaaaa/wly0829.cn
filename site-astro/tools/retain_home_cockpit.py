@@ -101,6 +101,27 @@ def materialize_dependencies(site=ROOT):
     return {'files': len(rows), 'restored_bytes': sum(restored), 'source_sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
+def native_repairs(public, paths):
+    """复用审定样板的四个定点修复，返回实际生成文件。"""
+    cockpit, access = paths['cockpit'], paths['computer-access']
+    base = re.search(r'data-src="([^"]*/b2-typeset-[\w]+\.js)"', cockpit.read_text('utf8'))[1].lstrip('/')
+    metrics = run_path(str(ROOT / 'tools/cockpit_metrics.py'))['build'](public, cockpit)
+    metrics['base_runtime'] = base
+    authorization = run_path(str(ROOT / 'tools/computer_access_native.py'))['build'](public, access)
+    stutter = run_path(str(ROOT / 'tools/cockpit_stutter.py'))['build'](public)
+    anchors = {}
+    for page in ('cockpit', 'computer-access'):
+        base = re.search(r'(?:data-)?src="(/_typeset/runtime/app-[\w]+\.js)"', paths[page].read_text('utf8'))[1].lstrip('/')
+        anchors[page] = run_path(str(ROOT / 'tools/native_anchor_offsets.py'))['build'](public, paths[page])
+        anchors[page]['base_runtime'] = base
+    records = {'cockpit_metrics': metrics, 'computer_access': authorization,
+               'stutter_page': stutter, 'native_anchor_offsets': anchors}
+    files = {metrics['runtime'], authorization['runtime'], authorization['model'],
+             *(row['runtime'] for row in anchors.values()), *stutter['files'],
+             '_interactions/anchor-offset.css', '_interactions/anchor-offset.js'}
+    return records, files
+
+
 def retain_candidate(source):
     """显式选定新候选站时重建；不把旧首页或不同 HeroLive 当成已选样板。"""
     source = Path(source).resolve(); public = ROOT / 'public'
@@ -143,12 +164,12 @@ def retain_candidate(source):
         references(raw.decode('utf-8'), [path.parent])
     # 独立动效包运行时拼接路径取图，保留其完整原生包边界。
     for rel in ['_shared/home-living', '_shared/home-comic', '_living/cockpit', '_living/computer-access',
-                '_typeset/cockpit', '_typeset/home-highlights', '_living/_engine']:
+                '_typeset/cockpit', '_typeset/computer-access', '_typeset/charter', '_typeset/home-highlights', '_living/_engine']:
         for path in (source / rel).rglob('*'):
             copy_file(path)
     while pending:
         path = pending.pop()
-        references(path.read_text(encoding='utf-8'), [path.parent, source, source / 'cockpit'])
+        references(path.read_text(encoding='utf-8'), [path.parent, source, source / 'cockpit', source / 'computer-access'])
     home = output / 'home.html'
     white_gear = run_path(str(ROOT.parent / 'sources/home-white-gear/build.py'))['build'](public, home)
     for row in white_gear['images'] + white_gear['bindings']:
@@ -170,6 +191,8 @@ def retain_candidate(source):
     for rel in (layout['runtime'], layout['stylesheet']):
         copied[rel] = descriptor((public / rel).read_bytes())
     copied[mobile_todo['runtime']] = descriptor((public / mobile_todo['runtime']).read_bytes())
+    repairs, files = native_repairs(public, {page: output / (page + '.html') for page in ('cockpit', 'computer-access')})
+    for rel in files: copied[rel] = descriptor((public / rel).read_bytes())
     firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', home.read_text('utf-8'))[1]
     for rel in (firstpaint, '_living/_engine/' + engine['fixed']):
         copied[rel] = descriptor((public / rel).read_bytes())
@@ -180,6 +203,7 @@ def retain_candidate(source):
     manifest['cockpit_white_gear'] = cockpit_white
     manifest['cockpit_mobile_todo'] = mobile_todo
     manifest['cockpit_layout'] = layout
+    manifest.update(repairs)
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return manifest
 
@@ -192,6 +216,13 @@ def regenerate_runtimes(work):
     previous = json.loads(record.read_text('utf8')) if record.is_file() else {}
     manifest = json.loads((source / 'manifest.json').read_text('utf8'))
     dependencies = json.loads((source / 'dependencies.json').read_text('utf8'))
+    access_text = (source / 'computer-access.html').read_text('utf8')
+    objects = json.loads((repo / 'site-release/release-manifest.json').read_text('utf8'))['oss']['objects']
+    access_bindings = previous.get('computer_access_bindings') or {row['url']: '/' + rel for rel, row in objects.items()
+        if row['url'] in access_text and re.search(r'/(?:app|b2-typeset)-[\w]+\.js$', rel)}
+    for url, address in access_bindings.items():
+        rel = address.lstrip('/'); row = objects[rel]
+        dependencies.setdefault(rel, {**{key: row[key] for key in ('sha256', 'bytes')}, 'verified_url': url})
     owned = []
     for rel, row in manifest['bundled'].items():
         if not row['source'].startswith('../../public/'): continue
@@ -219,6 +250,11 @@ def regenerate_runtimes(work):
     names += ['site-astro/tools/cockpit_layout.py', 'site-astro/tools/pack_living.py',
               'scripts/prepare-oss-release.py', 'site-astro/tools/adapt_motion.py',
               'scripts/prepare-today-river.py', 'scripts/album-runtime.js', 'scripts/album-runtime.css',
+              'site-astro/tools/computer_access_native.py', 'site-astro/tools/cockpit_metrics.py',
+              'site-astro/tools/cockpit_stutter.py', 'site-astro/tools/native_anchor_offsets.py',
+              'scripts/prepare-stutter-page.py', 'scripts/stutter-page-copy.json', 'scripts/stutter-page.css',
+              'scripts/stutter-page.js', 'scripts/stutter-page.html', 'site-release/release-manifest.json',
+              'site-astro/public/_interactions/anchor-offset.css', 'site-astro/public/_interactions/anchor-offset.js',
               'site-astro/tools/cockpit_white_gear.py', 'site-astro/tools/cockpit_mobile_todo.py',
               'sources/assets/_library/illustrations/ill-53b8c5c622e8b9.png']
     names += ['sources/home-white-gear/' + name + '.png' for name in
@@ -227,6 +263,7 @@ def regenerate_runtimes(work):
     names += [path.relative_to(repo).as_posix() for path in runtime_paths]
     names += [(source / (page + '.html')).relative_to(repo).as_posix() for page in ('home', 'cockpit')]
     names += [(source / 'computer-access.html').relative_to(repo).as_posix()]
+    names += ['site-astro/public' + address for address in access_bindings.values()]
     def current_inputs(): return {name: descriptor((repo / name).read_bytes()) for name in names + owned}
     inputs = current_inputs()
     if previous.get('inputs') == inputs:
@@ -241,7 +278,10 @@ def regenerate_runtimes(work):
     typeset = load('retained_typeset', 'scripts/build-typeset-site.py')
     live = load('retained_live', 'scripts/update-live-release.py')
     home = load('retained_home', 'scripts/prepare-home-living.py')
-    pages = {page: (source / (page + '.html')).read_text('utf8') for page in ('home', 'cockpit')}
+    pages = {page: (source / (page + '.html')).read_text('utf8') for page in ('home', 'cockpit', 'computer-access')}
+    for page, row in previous.get('native_anchor_offsets', {}).items():
+        pages[page] = pages[page].replace('/' + row['runtime'], '/' + row['base_runtime'])
+    for url, address in access_bindings.items(): pages['computer-access'] = pages['computer-access'].replace(url, address)
     texts = {path: path.read_text('utf8') for path in runtime_paths}
     dependencies = json.loads((source / 'dependencies.json').read_text('utf8'))
     pattern = r'/((?:_typeset/runtime|_shared|cockpit/assets)/(?:home-app-|app-|b2-typeset-)[a-f0-9]+\.js)'
@@ -279,6 +319,8 @@ def regenerate_runtimes(work):
     previous_mobile = previous.get('cockpit_mobile_todo')
     previous_layout = previous.get('cockpit_layout')
     cockpit_text = pages['cockpit']
+    if previous.get('cockpit_metrics'):
+        row = previous['cockpit_metrics']; cockpit_text = cockpit_text.replace('/' + row['runtime'], '/' + row['base_runtime'])
     if previous_layout:
         for key in ('runtime', 'stylesheet'):
             cockpit_text = cockpit_text.replace('/' + previous_layout[key], '/' + previous_layout['base_' + key])
@@ -295,12 +337,16 @@ def regenerate_runtimes(work):
     base_stylesheet = re.search(r'<link\b[^>]*href="([^"]*/b2-live-[\w]+\.css)"', cockpit.read_text('utf8'))[1].lstrip('/')
     layout = run_path(str(ROOT / 'tools/cockpit_layout.py'))['build'](public, cockpit)
     layout.update(base_runtime=mobile_todo['runtime'], base_stylesheet=base_stylesheet)
-    pages['cockpit'] = cockpit.read_text('utf8')
+    access = work / 'computer-access/index.html'; access.parent.mkdir(parents=True, exist_ok=True)
+    access.write_text(pages['computer-access'], encoding='utf8', newline='')
+    repairs, repair_files = native_repairs(public, {'cockpit': cockpit, 'computer-access': access})
+    repair_files.update(address.lstrip('/') for address in access_bindings.values())
+    pages['cockpit'], pages['computer-access'] = cockpit.read_text('utf8'), access.read_text('utf8')
     head = re.search(r'<section\b[^>]*\bid="cockpit-01"[^>]*>', pages['cockpit'])[0]
     binding = json.loads(html.unescape(re.search(r'data-living-binding="([^"]+)"', head)[1]))
     config_url = re.search(r'data-living-config="([^"]+)"', head)[1]
     config = json.loads((public / config_url.lstrip('/')).read_text('utf8'))
-    cockpit_resources = {config_url, '/' + mobile_todo['runtime'], '/' + layout['runtime'], '/' + layout['stylesheet'], *(item['src'] for item in binding.values()),
+    cockpit_resources = {*('/' + rel for rel in repair_files), config_url, '/' + mobile_todo['runtime'], '/' + layout['runtime'], '/' + layout['stylesheet'], *(item['src'] for item in binding.values()),
                          *(config[side]['texture']['src'] for side in binding)}
     for url in cockpit_resources:
         rel = url.lstrip('/'); raw = (public / rel).read_bytes(); proof = descriptor(raw)
@@ -362,7 +408,7 @@ def regenerate_runtimes(work):
     if old_firstpaint != firstpaint: dependencies.pop(old_firstpaint, None)
     for rel in set(previous.get('outputs', {})) - set(outputs):
         if rel not in base:
-            manifest['files'].pop(rel, None); dependencies.pop(rel, None)
+            manifest['files'].pop(rel, None); dependencies.pop(rel, None); manifest['bundled'].pop(rel, None)
     for row in white_gear['images'] + white_gear['bindings']: manifest['files'][row['path']] = outputs[row['path']]
     for row in previous.get('home_white_gear', {}).get('images', []) + previous.get('home_white_gear', {}).get('bindings', []):
         if row['path'] not in outputs:
@@ -371,6 +417,10 @@ def regenerate_runtimes(work):
     manifest['cockpit_white_gear'] = cockpit_white
     manifest['cockpit_mobile_todo'] = mobile_todo
     manifest['cockpit_layout'] = layout
+    manifest.update(repairs)
+    for rel in repair_files:
+        manifest['bundled'][rel] = {'source': Path(dependencies[rel]['source_path']).relative_to(source.relative_to(repo)).as_posix(), **outputs[rel]}
+    manifest['computer_access_origin']['policy'] = 'Previous HTML is the origin; current runtime, model and anchor repairs are bound in computer_access and native_anchor_offsets.'
     for url in cockpit_resources: manifest['files'][url.lstrip('/')] = outputs[url.lstrip('/')]
     for page, text in pages.items():
         raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
@@ -385,7 +435,8 @@ def regenerate_runtimes(work):
     for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies),
                         (record, {'schema': 'wly.retained-runtime-inputs.v1', 'inputs': current_inputs(), 'base': base,
                                   'outputs': outputs, 'replacements': {('/' + rel): ('/' + new) for rel, new in generated.items()},
-                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear, 'cockpit_mobile_todo': mobile_todo, 'cockpit_layout': layout})]:
+                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear, 'cockpit_mobile_todo': mobile_todo, 'cockpit_layout': layout,
+                                  'computer_access_bindings': access_bindings, **repairs})]:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
     materialize_frozen()
     return {'status': 'regenerated', 'inputs': current_inputs(), 'outputs': outputs, 'dependencies': restored}

@@ -8,6 +8,14 @@
   font-size: 14px;
 }
 .cockpit-offline-notice[hidden] { display: none; }
+/* 待办通知卡按正文自然排高，长行不会溢出覆盖后面的明细入口。 */
+.cp-need .cp-notice.cp-action-card { display: block; }
+.cp-need .cp-action-card > .cp-line {
+  height: auto;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 [data-cockpit-offline] [data-b2-connection-notice],
 [data-cockpit-offline] [data-computer-read-notice] { display: none !important; }
 [data-cockpit-offline="cached"] :is(.cp-cockpit, .cp-bar, .cp-details) { opacity: .58; }

@@ -78,14 +78,22 @@ class FrozenHomeTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('冻结页面的字节不同', result.stderr)
 
-    def test_authorization_remains_exact_and_rejects_same_size_source_change(self):
-        original = (ROOT / 'site-release/computer-access/index.html').read_bytes()
-        self.assertEqual((self.snapshot / 'computer-access.html').read_bytes(), original)
+    def test_authorization_selected_repairs_reject_same_size_source_change(self):
+        original = (self.snapshot / 'computer-access.html').read_bytes()
+        self.assertEqual(hashlib.sha256(original).hexdigest(), self.pin['pages']['computer-access']['sha256'])
         source = self.snapshot / 'computer-access.html'
         source.write_bytes(original[:-1] + (b' ' if original[-1:] != b' ' else b'\n'))
         result = self.run_restore()
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('冻结页面的字节不同：computer-access', result.stderr)
+
+    def test_authorization_model_rejects_same_size_source_change(self):
+        relative = self.pin['computer_access']['model']
+        source = self.snapshot / self.pin['bundled'][relative]['source']
+        raw = source.read_bytes(); source.write_bytes(raw[:-1] + (b' ' if raw[-1:] != b' ' else b'\n'))
+        result = self.run_restore()
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('冻结页面辅助文件的字节不同：' + relative, result.stderr)
 
     def test_routes_finalizer_preserves_authorization_and_updates_owned_page(self):
         original = (self.snapshot / 'computer-access.html').read_bytes()

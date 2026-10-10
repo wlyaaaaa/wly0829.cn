@@ -31,16 +31,21 @@ const noindex = ['skill-redirect', 'github-profile'].includes(entry?.data.kind);
 // 只给比对用：SX_RULE_CANVAS=1 构建时规则原文屏出排好的原文卡（不出网页字），用来和现在的原文排版图逐屏比；正式构建不设
 const ruleCanvas = process.env.SX_RULE_CANVAS === '1';
 const esc = (v: string) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const screen = (s: any) => `<section class="ts-screen" id="${esc(s.id)}" data-screen="${esc(s.id)}" data-section="${esc(s.section || '')}">`
+const screen = (s: any) => {
+  // 条号属于对应原文段落；整屏锚点只保留没有段落落点的小节别名。
+  const article = entry?.id === 'charter' ? s.article?.replace(/<(p|div|li)\b([^>]*)>(\s*(?:<span id="L\d+"><\/span>\s*)?(?:<strong\b[^>]*>)?L(\d+)\b)/g,
+    (_m: string, tag: string, attrs: string, lead: string, n: string) => `<${tag}${attrs} id="L${n}">${lead.replace(/<span id="L\d+"><\/span>/, '')}`) : s.article;
+  const points = (s.points || []).filter((id: string) => !article?.includes(`id="${id}"`));
+  return `<section class="ts-screen" id="${esc(s.id)}" data-screen="${esc(s.id)}" data-section="${esc(s.section || '')}">`
   + (s.anchor ? `<div class="section-anchor" id="${esc(s.anchor)}"></div>` : '')
-  // 屏内定位点：别的页链到这屏里的细位置（例如约法的 #L18）时落在这屏开头；站点样式里 .point-anchor 是绝对定位、不占位
-  + (s.points || []).map((a: string) => `<span class="point-anchor typeset-screen-anchor" id="${esc(a)}" data-anchor-binding="screen"></span>`).join('')
+  + points.map((a: string) => `<span class="point-anchor typeset-screen-anchor" id="${esc(a)}" data-anchor-binding="screen"></span>`).join('')
   + (s.article && !ruleCanvas
     // 规则原文屏：只出网页字原文（水彩框），上面一行版本标签；原来下面那份排好的原文卡（“原文排版图与技术证据”）撤掉，免得原文出现两遍
-    ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose" data-rule-source="${esc(s.source_logical_id)}" data-rule-part="${esc(s.source_rule_part)}" data-rule-public-sha256="${esc(s.source_public_sha256)}">${s.article}</article>`
+    ? (s.article_label ? `<p class="rule-original-version">${esc(s.article_label)}</p>` : '') + `<article class="rule-original-prose" data-rule-source="${esc(s.source_logical_id)}" data-rule-part="${esc(s.source_rule_part)}" data-rule-public-sha256="${esc(s.source_public_sha256)}">${article}</article>`
     : (s.h ? `<div class="ts-o ts-h${s.v ? '' : ' ts-both'}" style="--ch:${s.h.height}px">${canvas('h', s.h)}</div>` : '')
       + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : ''))
   + `</section>`;
+};
 const canvas = (o: string, x: any) =>
   `<div class="ts-canvas o-${o} ts-shape-${x.shape || ''}" style="min-height:${x.height}px;${x.style || ''}">${x.html}</div>${x.overlay || ''}`;
 // 和现在网站一样：连续的独立卡（shape=card）放进两列卡片网格（手机一列）；别的屏（例如分类标题条）把网格断开、占满整行
