@@ -1850,8 +1850,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "87b6625e64d2106709d93e8f4d7c2b11ca54951fc206d4ca2107b7a0c94b9bb9",
-  "converted_at_beijing": "2026-10-10T20:09:35+08:00"
+  "sha256": "d1a1eb9335cfcf9db88f339af6b4da77260947c8e37124437dbdaf44acd0ad01",
+  "converted_at_beijing": "2026-10-11T05:19:07+08:00"
  }
 }
 ---
@@ -1913,9 +1913,10 @@
      "type": "chapter_title",
      "text_ref": "怎么协作",
      "align": "left",
-     "size": "large",
+     "size": "medium",
      "row": "top",
-     "width": "53%"
+     "width": "40%",
+     "row_fit_illustration": true
     },
     {
      "type": "prose",
@@ -1923,20 +1924,23 @@
      "row": "top"
     },
     {
+     "type": "bullet_list",
+     "text_ref": "现行派法：",
+     "row": "top"
+    },
+    {
      "type": "line_legend",
      "text_ref": "线上传的东西分四种",
      "layout": "rows",
-     "columns": 2,
+     "columns": 1,
      "row": "top"
     },
     {
      "type": "illustration",
      "row": "top",
-     "width": "47%",
+     "width": "60%",
      "illustration": "outside",
-     "index": 0,
-     "size": "large",
-     "target_width": "100%"
+     "asset": "how/how-01-hero-v1.png"
     },
     {
      "type": "action_button",
@@ -1952,7 +1956,7 @@
      ]
     }
    ],
-   "notes": "横版左上标题、介绍、四行线型图例、按钮 3/3/2，右侧卡外地图占约 47%；竖版顺序为标题、介绍、整宽地图、四行图例、两列四排大入口卡，插画在入口卡内顶部。图例标题和项目名只取定稿，不添字；竖版末尾全部八个入口文字来自三条 linkrow，需目录组件按独立链接拆卡。 qa04 修正：导航移到两栏下方全宽4列2行；保留8项原链接全名。右栏插画使用large并占满本栏可用宽。"
+   "notes": "10 月 11 日本人选第一屏 B（重画协作场景）：左栏标题、介绍、状态行（一行，带圆点，不要“现在”小标题）、四种线型图例（单列四行），右栏新插画 how-01-hero-v1（row_fit_illustration，图按原比例、高度按文字栏定）；8 个入口 4×2 排在这一行下面。状态行日期取 page.json based_on.model_roster_generated_beijing_date。"
   },
   "v": {
    "blocks": [
@@ -1967,9 +1971,14 @@
      "text_ref": "想看一件事怎么办成"
     },
     {
+     "type": "bullet_list",
+     "text_ref": "现行派法："
+    },
+    {
      "type": "illustration",
      "illustration": "outside",
-     "index": 0
+     "asset": "how/how-01-hero-v1.png",
+     "target_height": "590px"
     },
     {
      "type": "line_legend",
@@ -1993,7 +2002,7 @@
      "variant": "entry_cards"
     }
    ],
-   "notes": "横版左上标题、介绍、四行线型图例、按钮 3/3/2，右侧卡外地图占约 47%；竖版顺序为标题、介绍、整宽地图、四行图例、两列四排大入口卡，插画在入口卡内顶部。图例标题和项目名只取定稿，不添字；竖版末尾全部八个入口文字来自三条 linkrow，需目录组件按独立链接拆卡。 本轮修正：directory_tile 把三条 linkrow 当成三张卡，造成入口字重叠；改用已注册 link_grid 将八个原链接逐项分格，两列四行。入口配图和最终样式仍列未完成。 qa04 修正：八项手机入口统一无图标，保留原链接文字、两列四行；依据审查第11项允许全去图标。"
+   "notes": "竖版顺序：标题、介绍、状态行、新插画、四行图例、两列四行入口（入口无图标，保留原链接全名）。"
   }
  },
  "images": [
@@ -2159,6 +2168,8 @@
 # 怎么协作
 
 想看一件事怎么办成，点一句话；想查一个项目从谁拿、给谁，看全景图。这里也能查现行派法和三个底座怎样配合。
+
+- 现行派法：模型清单更新于 2026-10-08（北京时间）
 
 **线上传的东西分四种**
 - **实线 · 文件**　照片、录音、备份包、任务文件、成片
@@ -3379,8 +3390,8 @@
   "id": "how-04",
   "section": "ai-roles",
   "title": "我、Claude 和 GPT 怎么分工",
-  "scene": "横版：标题下面左右两栏。左栏是一张竖的水彩流程图：最上面一个“我”的小人像（同首页插画头像的画风，只画轮廓），往下一条虚线箭头分到两台并排的显示器，左边屏幕上画 Claude 标志、右边屏幕上画 ChatGPT 标志并在底下写“Codex”；从 Claude 那台引出两条线：一条实线连到一排五个小圆点（代表 Opus 的五档子代理），一条实线连到 Codex 那台（线上画一张小纸片代表任务文件），再从 Codex 画一条实线回来（线上一张小纸片代表报告）；右下角画一只手机，一条虚线连到一台机箱。图里只写这几个字：我、Claude、Codex、任务文件、报告、手机。右栏是五段字，每段前一个小水彩图标（人像、两台显示器、分叉的箭头、一只放大镜压着一张带对勾的进度单、手机）。字多时右栏可以比左栏长，流程图顶端对齐，不为对齐压缩正文。",
-  "portrait": "竖版：标题；流程图缩到屏宽放上面；下面五段字上下排。字多时按完整段落之间拆成 -v、-v2。",
+  "scene": "横版：标题下面是分工图。上面一行三张插画大卡片：“我”“主对话”（插画里两台笔记本屏幕上叠 Claude、OpenAI 两个正确徽标）“子代理”，从左到右用粗绿实心箭头连起来；卡片 3 底部到卡片 1 底部连一条粗绿圆角回线，线中间一枚胶囊标签“报告和成品交回来”。下面一行两张较宽的卡片“盯进度、收结果”“手机上”，各带一幅小插画。卡片标题在插画上方，说明在插画下方；插画里不放字。分工图下面保留五段原文细节卡。",
+  "portrait": "竖版：标题；三张大卡竖排，箭头向下，末尾一枚“报告和成品交回来 → 回到我”的胶囊；两张下卡竖排；下面五段原文细节卡上下排。",
   "links": [
    {
     "text": "电脑远程控制",
@@ -3403,120 +3414,45 @@
      "size": "large"
     },
     {
-     "type": "topology",
-     "text_ref": "我",
-     "layout": "graph",
-     "columns": 3,
-     "connector": "none",
-     "illustration": "above_card",
-     "graph_nodes": [
-      {
-       "id": "me",
-       "count": 1,
-       "row": 1,
-       "column": 2,
-       "icon": "_library/icons/人物.png"
-      },
-      {
-       "id": "claude",
-       "count": 1,
-       "row": 2,
-       "column": 1,
-       "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
-       "icon_badge": "_library/icons/Claude标志.png"
-      },
-      {
-       "id": "codex",
-       "count": 1,
-       "row": 2,
-       "column": 3,
-       "icon": "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
-       "icon_badge": "_library/icons/OpenAI标志.png"
-      },
-      {
-       "id": "task",
-       "count": 1,
-       "shape": "papers",
-       "row": 2,
-       "column": 2,
-       "icon": "_library/icons/白纸.png"
-      },
-      {
-       "id": "report",
-       "count": 1,
-       "shape": "papers",
-       "row": 3,
-       "column": 2,
-       "icon": "_library/icons/白纸.png"
-      },
-      {
-       "id": "phone",
-       "count": 1,
-       "row": 4,
-       "column": 2,
-       "icon": "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
-      }
+     "type": "how_flow_cards",
+     "text_ref": "我：提要求、拍板",
+     "arts": [
+      "how/how-04-card-me-v1.png",
+      "how/how-04-card-main-v1.png",
+      "how/how-04-card-sub-v1.png",
+      "how/how-04-card-progress-v2.png",
+      "how/how-04-card-phone-v1.png"
      ],
-     "edges": [
+     "badges": [
       {
-       "from": "me",
-       "to": "claude",
-       "style": "dashed",
-       "from_side": "bottom",
-       "to_side": "top"
+       "card": 1,
+       "asset": "_library/icons/Claude标志.png",
+       "alt": "Claude",
+       "x": 0.341,
+       "y": 0.47,
+       "size": 0.12
       },
       {
-       "from": "me",
-       "to": "codex",
-       "style": "dashed",
-       "from_side": "bottom",
-       "to_side": "top"
-      },
-      {
-       "from": "claude",
-       "to": "task",
-       "from_side": "right",
-       "to_side": "left"
-      },
-      {
-       "from": "task",
-       "to": "codex",
-       "from_side": "right",
-       "to_side": "left"
-      },
-      {
-       "from": "codex",
-       "to": "report",
-       "from_side": "bottom",
-       "to_side": "right"
-      },
-      {
-       "from": "report",
-       "to": "claude",
-       "from_side": "left",
-       "to_side": "bottom"
+       "card": 1,
+       "asset": "_library/icons/OpenAI标志.png",
+       "alt": "OpenAI",
+       "x": 0.68,
+       "y": 0.47,
+       "size": 0.12
       }
      ]
     },
     {
      "type": "content_card",
      "text_ref": "我　提要求、拍板",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1,
      "align": "left",
      "connector": "none",
-     "illustration": "left_inside",
-     "icons": [
-      "_library/icons/人物.png",
-      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
-      "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
-     ],
-     "last_full_width": true
+     "illustration": "none"
     }
    ],
-   "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/盯进度、收结果/手机上五卡单列左图右文。竖版关系图在标题后、五卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+   "notes": "10 月 11 日本人定分工图照 D1 版式、并入 D2 四条说明：三张插画大卡用粗绿实心箭头连起，子代理底边粗绿圆角回线回到“我”、中间胶囊“报告和成品交回来”；下面两张宽卡各带小插画。竖版卡片竖排、箭头向下，回线改成末尾胶囊。原五段长文细节卡保留在图下，文字不改。 细节卡去掉旧小图标（与新水彩插画画风不一致），文字不改；横版改单列，免得两列卡按内容居中造成顶边不齐（引擎 .grid.sides 居中对齐，规格改不了）。"
   },
   "v": {
    "blocks": [
@@ -3527,12 +3463,33 @@
      "size": "large"
     },
     {
-     "type": "tag",
-     "text_ref": "我",
-     "columns": 2,
-     "columns_v": 2,
-     "size": "small",
-     "align": "left"
+     "type": "how_flow_cards",
+     "text_ref": "我：提要求、拍板",
+     "arts": [
+      "how/how-04-card-me-v1.png",
+      "how/how-04-card-main-v1.png",
+      "how/how-04-card-sub-v1.png",
+      "how/how-04-card-progress-v2.png",
+      "how/how-04-card-phone-v1.png"
+     ],
+     "badges": [
+      {
+       "card": 1,
+       "asset": "_library/icons/Claude标志.png",
+       "alt": "Claude",
+       "x": 0.341,
+       "y": 0.47,
+       "size": 0.12
+      },
+      {
+       "card": 1,
+       "asset": "_library/icons/OpenAI标志.png",
+       "alt": "OpenAI",
+       "x": 0.68,
+       "y": 0.47,
+       "size": 0.12
+      }
+     ]
     },
     {
      "type": "content_card",
@@ -3541,17 +3498,10 @@
      "columns_v": 1,
      "align": "left",
      "connector": "none",
-     "illustration": "left_inside",
-     "icons": [
-      "_library/icons/人物.png",
-      "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png",
-      "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png",
-      "_library/round3/clean-assets/png/12-文件核验-clean.png",
-      "_library/fix-round-2/icon-clean-0d5aefedb5c28b43ed21.png"
-     ]
+     "illustration": "none"
     }
    ],
-   "notes": "横版整屏宽章节标题按统一标准居中，下面左边完整关系图、右边我/两个桌面 AI/派子代理/盯进度、收结果/手机上五卡单列左图右文。竖版关系图在标题后、五卡顺排；批准 v2 关系图只是续页复述，输出不再重复同一组图内文字。图里：末节点分给 topology，按规格先显示，定稿节点各只出现一次。复杂多分支和双向箭头由 topology 承接，不能改成普通条目列表。\nmain-closer3：按comp-diagram 22:18现合同接六原角色与两正确品牌徽标层；徽标位置是该族AI补充，未测PNG屏面ROI，列最后审样。保八原边、五子代理点与原全部文字。"
+   "notes": "10 月 11 日本人定分工图照 D1 版式、并入 D2 四条说明：三张插画大卡用粗绿实心箭头连起，子代理底边粗绿圆角回线回到“我”、中间胶囊“报告和成品交回来”；下面两张宽卡各带小插画。竖版卡片竖排、箭头向下，回线改成末尾胶囊。原五段长文细节卡保留在图下，文字不改。 细节卡去掉旧小图标（与新水彩插画画风不一致），文字不改；横版同排等高、顶边对齐。"
   }
  },
  "images": [
@@ -3639,17 +3589,17 @@
 
 # 我、Claude 和 GPT 怎么分工
 
-我
+**我：提要求、拍板**　要紧的事做本人验证；决定原话记进 AI 规则与技能基座，所有 AI 都去那里查。
 
-Claude
+**主对话：想清楚、派活、验收**　Claude 桌面版和 Codex 桌面版读同一版规则、用同一套技能；谁接到活，谁就是主对话。
 
-Codex
+**子代理：动手干活**　Claude 派 Claude Opus 子代理，也经包装脚本派 GPT（Sol、Luna、Astra）；子代理的权限只能比派它的窄。
 
-任务文件
+报告和成品交回来
 
-报告
+**盯进度、收结果**　一单一行，开工约 10 分钟看一次进度摘要；没有实物结果不写“已完成”。
 
-手机
+**手机上**　手机上的 ChatGPT 经电脑远程控制连回家里的电脑干活，不占 Codex 的额度。
 
 **我**　提要求、拍板，要紧的事做本人验证。我说过的决定原话记进 AI 规则与技能基座，所有 AI 都去那里查。我在一个对话里说的话被转到另一个对话时，会自动附上出处：哪个对话、哪条消息、什么时间、前面问的是什么，再加原句；缺了就标“转述”。每次收尾，AI 按消息列出我还有哪些话没记进决定。新开的对话里原生转话还没实测过。
 
