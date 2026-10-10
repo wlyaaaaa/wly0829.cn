@@ -40,6 +40,7 @@ def prepare(snapshot):
             raise ValueError('Retained source dependency changed: ' + rel)
         copy(origin, public / rel)
     for rel, row in read(source / 'manifest.json')['bundled'].items():
+        if rel.startswith('_home-cockpit/cockpit-offline.') and not (source / 'cockpit.html').is_file(): continue
         copy(source / row['source'], public / rel)
     copy(ROOT / 'scripts/site-live-runtime.js', public / '_live/site-live-runtime.js')
     return {'retained_dependencies': len(dependencies)}
