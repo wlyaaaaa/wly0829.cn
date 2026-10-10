@@ -43,6 +43,7 @@ TAG = re.compile(r'<[^>]+>', re.S)
 ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?P<q>["\'])(?P<value>.*?)(?P=q)', re.S)
 ALL_ATTR = re.compile(r'(?P<name>[^\s=<>/]+)\s*=\s*(?:(?P<q>["\'])(?P<quoted>.*?)(?P=q)|(?P<unquoted>[^\s>]+))', re.S)
 BLOCK = re.compile(r'<(?P<tag>script|style)\b[^>]*>(?P<body>.*?)</(?P=tag)\s*>', re.I | re.S)
+WORD = re.compile(r'[$\w]+')
 CSS_URL = re.compile(r'url\(\s*(?P<q>["\']?)(?P<value>[^)"\']+)(?P=q)\s*\)', re.I)
 OSS_REFERRER_POLICY = 'strict-origin-when-cross-origin'
 
@@ -134,7 +135,7 @@ def javascript_literals(text, excluded=None):
                 while index<len(text) and text[index].isalpha():index+=1
                 if excluded is not None: excluded.append((start, index))
                 regex_allowed=False;last_word=None;continue
-        word=re.match(r'[$\w]+',text[index:])
+        word=WORD.match(text,index)
         if word:
             last_word=word[0];index+=len(last_word);regex_allowed=last_word in expression_words
             if last_word in {'break','continue'}:jump_pending=True
@@ -530,17 +531,25 @@ class Rewriter:
             masked[start:end] = ' ' * (end-start)
         code = ''.join(masked)
         identifier = r'[A-Za-z_$][\w$]*'
+        # One pass each, looked up at the whitespace before every literal; a
+        # search over code[:literal.start()] per literal is quadratic.
+        assignments = {m.end(): m['name'] for m in re.finditer(r'(?<![\w$.])(?P<name>'+identifier+r')\s*=(?![=>])', code)}
+        calls = {m.end(): m for m in re.finditer(r'\bnew[ \t]+URL[ \t]*\([ \t]*(?P<argument>(?P<name>'+identifier+r')[ \t]*\+)', code)}
+        tail_pattern = re.compile(r'[ \t]*,[ \t]*(?P<base>'+identifier+r')[ \t]*\)')
+        def before(position, blank):
+            while position and blank(code[position-1]): position -= 1
+            return position
         constants = {}
         for literal in literals:
-            assignment = re.search(r'(?<![\w$.])(?P<name>'+identifier+r')\s*=(?![=>])\s*$', code[:literal.start()])
-            if assignment and '\\' not in literal['value'] and '${' not in literal['value']:
-                constants[assignment['name']] = literal['value']
+            name = assignments.get(before(literal.start(), str.isspace))
+            if name and '\\' not in literal['value'] and '${' not in literal['value']:
+                constants[name] = literal['value']
         def assigned_once(name):
             return len(re.findall(r'(?<![\w$.])'+re.escape(name)+r'\s*(?:=(?![=>])|[+*/%&|^-]=|\+\+|--)', code)) == 1
         edits, spans = [], []
         for literal in literals:
-            call = re.search(r'\bnew[ \t]+URL[ \t]*\([ \t]*(?P<argument>(?P<name>'+identifier+r')[ \t]*\+[ \t]*)$', code[:literal.start()])
-            tail = re.match(r'[ \t]*,[ \t]*(?P<base>'+identifier+r')[ \t]*\)', code[literal.end():])
+            call = calls.get(before(literal.start(), ' \t'.__contains__))
+            tail = tail_pattern.match(code, literal.end())
             if not call or not tail:
                 continue
             name, base = call['name'], tail['base']
