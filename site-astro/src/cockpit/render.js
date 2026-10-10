@@ -64,7 +64,7 @@ export function computer(v, ctx) {
     : `<article class="cp-card is-gray"><h3>${dot('unavailable')}24 小时曲线</h3><p>图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}。</p></article>`;
   const cards = dedupeCards(v.sections.computer).map((c) => card(c, ctx.now)).join('');
   const remote = dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now);
-  return `<div class="cp-grid">${cards}${remote}${graf}</div>`;
+  return `<div class="cp-grid">${cards}${remote}</div><div class="cp-grid cp-charts">${graf}</div>`;
 }
 
 export function backup(v, ctx) {

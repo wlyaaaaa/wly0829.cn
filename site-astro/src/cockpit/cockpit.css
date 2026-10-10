@@ -51,6 +51,7 @@
 /* 弹性换行：一行放得下几张放几张，最后一行的卡自动拉宽填满，不留半行空洞 */
 .cp-grid { display: flex; flex-wrap: wrap; gap: 14px; }
 .cp-grid > * { flex: 1 1 340px; }
+.cp-charts { margin-top: 14px; }
 .cp-card, .cp-proj { padding: 14px 18px; border: 1px solid var(--cp-line); border-radius: 14px; background: var(--cp-card); box-shadow: 0 2px 10px rgba(21, 68, 35, .04); min-width: 0; }
 .cp-card h3, .cp-proj h3 { margin: 0 0 6px; font-size: 17px; line-height: 1.4; color: var(--cp-title); }
 .cp-card p, .cp-proj p { margin: 0 0 6px; overflow-wrap: anywhere; }
