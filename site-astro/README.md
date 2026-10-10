@@ -41,6 +41,8 @@ npm run dev -- --host 127.0.0.1 --port 4173
 
 `scripts/prepare-astro-release.py` 现在只保留规则源 `refresh`，旧 `prepare` 拼装入口已移除。后续发布接线由 G2 读取仓库根 `dist` 和 `.build-receipt.json`；当前构建不上传、不封存、不切换线上版本。
 
+构建最后调用 `python scripts/prepare-oss-release.py finalize-dist --dist dist`，离线完成上线前资源地址处理，再检查公开内容和记录所有最终文件的 SHA。该命令由 G2 提供；尚未合入、命令不存在或执行失败时，构建明确失败，不保留旧成功回执，也不省略这一步。
+
 `public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
 
 ## 内容文件怎么写
