@@ -9,8 +9,10 @@ import re
 import shutil
 import subprocess
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
+import xml.etree.ElementTree as ET
 
 import astro_rules
 
@@ -163,6 +165,35 @@ def sync_search(root, previous, converted, pin):
     return overlays, preserved
 
 
+def has_noindex(path):
+    class Robots(HTMLParser):
+        noindex = False
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if (tag == 'meta' and (attrs.get('name') or '').lower() in {'robots', 'googlebot'}
+                    and 'noindex' in re.split(r'[\s,]+', (attrs.get('content') or '').lower())):
+                self.noindex = True
+    parser = Robots(); parser.feed(re.split(r'</head\s*>', Path(path).read_text('utf8'), maxsplit=1, flags=re.I)[0])
+    return parser.noindex
+
+
+def verify_sitemap(root):
+    root = Path(root)
+    excluded = [row.text for row in ET.parse(root/'sitemap.xml').iter('{http://www.sitemaps.org/schemas/sitemap/0.9}loc')
+                if has_noindex(root/hybrid.route_file(row.text))]
+    if excluded: raise ValueError('Sitemap contains noindex pages: '+str(excluded))
+
+
+def write_sitemap(root, routes):
+    root = Path(root)
+    urls = sorted(route for route in routes if route.endswith('/') and route != '/system/'
+                  and not has_noindex(root/hybrid.route_file(route)))
+    sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>https://wly0829.cn'+route+'</loc></url>' for route in urls) + '</urlset>\n'
+    (root/'sitemap.xml').write_text(sitemap, encoding='utf8')
+    verify_sitemap(root)
+    return urls
+
+
 def prepare(args):
     output = args.output.resolve()
     if output.exists() or output.is_relative_to(SITE): raise ValueError('Use a fresh preparation outside site-astro')
@@ -257,9 +288,7 @@ def prepare(args):
     if manifest['astro']['html_files'] < manifest['astro']['baseline_html_files']: raise ValueError('A deployed HTML entry disappeared')
     manifest['release_id'] = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
     write(merged/'release-manifest.json', manifest); hybrid.verify_release(merged)
-    urls = sorted(route for route in manifest['routes'] if route.endswith('/') and route != '/system/')
-    sitemap = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + ''.join('<url><loc>https://wly0829.cn'+route+'</loc></url>' for route in urls) + '</urlset>\n'
-    (merged/'sitemap.xml').write_text(sitemap, encoding='utf8')
+    write_sitemap(merged, manifest['routes'])
     manifest.setdefault('release_overlay', {})['sitemap.xml'] = {'kind': 'astro_sitemap', 'before': previous['files'].get('sitemap.xml'), 'after': {'sha256': hybrid.digest(merged/'sitemap.xml'), 'bytes': (merged/'sitemap.xml').stat().st_size}}
     manifest['files']['sitemap.xml'] = manifest['release_overlay']['sitemap.xml']['after']
     manifest['release_id'] = hashlib.sha256(json.dumps(manifest['files'], sort_keys=True).encode()).hexdigest()
@@ -281,6 +310,7 @@ def prepare(args):
 
 def verify_preparation(path, require_remote=False, directive=None, copy_to=None):
     receipt = hybrid.read(path); source = Path(receipt['source']); manifest = hybrid.verify_release(source)
+    verify_sitemap(source)
     if receipt['schema'] != 'wly.astro-preparation.v1' or receipt['inputs'] != delta.snapshot(ROOT): raise ValueError('Astro source changed after preparation')
     if manifest['release_id'] != receipt['source_release_id']: raise ValueError('Prepared native release changed')
     astro_rules.verify(source, receipt['rules_pin'], astro_rules.inspect())
@@ -322,6 +352,7 @@ def main():
     if args.preparation: receipt = verify_preparation(args.preparation, args.require_remote, args.directive, args.copy_to)
     else:
         receipt = hybrid.verify_release(args.release); astro_rules.verify(args.release, receipt['rules_pin'], None if args.offline else astro_rules.inspect())
+        verify_sitemap(args.release)
     if args.output: write(args.output, receipt)
     print(json.dumps({'status': 'pass', 'release_id': receipt['release_id']}))
 if __name__ == '__main__': main()

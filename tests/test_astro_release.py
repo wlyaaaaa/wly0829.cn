@@ -16,6 +16,8 @@ spec = importlib.util.spec_from_file_location('astro_renderer_tests', ROOT/'site
 renderer = importlib.util.module_from_spec(spec); spec.loader.exec_module(renderer)
 spec = importlib.util.spec_from_file_location('astro_converter_tests', ROOT/'site-astro/tools/convert_page.py')
 converter = importlib.util.module_from_spec(spec); spec.loader.exec_module(converter)
+spec = importlib.util.spec_from_file_location('astro_preparation_tests', ROOT/'scripts/prepare-astro-release.py')
+preparation = importlib.util.module_from_spec(spec); spec.loader.exec_module(preparation)
 
 class AstroReleaseTests(unittest.TestCase):
     def setUp(self):
@@ -167,6 +169,19 @@ class AstroReleaseTests(unittest.TestCase):
             with self.assertRaisesRegex(SystemExit, 'missing_jobs'): renderer.run(['fixture'], workers=1)
             finish.assert_not_called()
         self.assertEqual(old.read_text('utf8'), 'previous result')
+
+    def test_sitemap_excludes_actual_noindex_and_rejects_reintroduced_page(self):
+        routes = ['/', '/skills/retired/', '/github-profile/', '/normal/']
+        for route, meta in zip(routes, ['', '<meta name="robots" content="noindex">',
+                "<meta content='follow, NOINDEX' name='ROBOTS'>", '<meta name="robots" content="index, follow">']):
+            path = self.root/preparation.hybrid.route_file(route); path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('<html><head>'+meta+'</head><body>Page</body></html>', encoding='utf8')
+        self.assertEqual(preparation.write_sitemap(self.root, routes), ['/', '/normal/'])
+        sitemap = self.root/'sitemap.xml'
+        sitemap.write_text(sitemap.read_text('utf8').replace('</urlset>',
+            '<url><loc>https://wly0829.cn/skills/retired/</loc></url></urlset>'), encoding='utf8')
+        with self.assertRaisesRegex(ValueError, 'Sitemap contains noindex pages'):
+            preparation.verify_sitemap(self.root)
 
 
 if __name__ == '__main__': unittest.main()

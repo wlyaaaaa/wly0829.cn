@@ -14,6 +14,13 @@ const bodyConfig = bodyArgument < 0 ? null : JSON.parse(await readFile(process.a
 const overlayArgument = process.argv.indexOf("--search-overlay");
 const overlayConfig = overlayArgument < 0 ? null : process.argv[overlayArgument + 1];
 if (overlayArgument >= 0 && !overlayConfig) throw new Error("--search-overlay requires a JSON configuration path");
+function hasNoindex(html) {
+  return [...html.split(/<\/head\s*>/i, 1)[0].matchAll(/<meta\b[^>]*>/gi)].some(([tag]) => {
+    const attrs = Object.fromEntries([...tag.matchAll(/([\w-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g)]
+      .map(([, name, double, single, bare]) => [name.toLowerCase(), double ?? single ?? bare]));
+    return ["robots", "googlebot"].includes(attrs.name?.toLowerCase()) && /(?:^|[\s,])noindex(?:$|[\s,])/i.test(attrs.content || "");
+  });
+}
 if (overlayConfig) {
   const report = await generateTypesetSearchOverlay(searchAssets, path.resolve(overlayConfig));
   console.log(JSON.stringify(report, null, 2));
@@ -39,6 +46,7 @@ if (overlayConfig) {
   });
 
   let compactSearchRecordCount = 0;
+  const indexableRoutes = [];
   try {
     const renderer = await vite.ssrLoadModule("/server/render-route.jsx");
     if (bodyConfig) {
@@ -59,7 +67,9 @@ if (overlayConfig) {
     for (const route of routePaths) {
       const targetDirectory = route === "/" ? distRoot : path.join(distRoot, ...route.slice(1).split("/"));
       await mkdir(targetDirectory, { recursive: true });
-      await writeFile(path.join(targetDirectory, "index.html"), renderer.renderDocument(rootHtml, route), "utf8");
+      const document = renderer.renderDocument(rootHtml, route);
+      await writeFile(path.join(targetDirectory, "index.html"), document, "utf8");
+      if (!hasNoindex(document)) indexableRoutes.push(route);
     }
     }
   } finally {
@@ -67,7 +77,7 @@ if (overlayConfig) {
   }
   if (bodyConfig) { console.log(`Generated ${bodyConfig.routes.length} route bodies.`); process.exit(0); }
 
-  const sitemapEntries = routePaths
+  const sitemapEntries = indexableRoutes
     .filter((route) => route !== "/system")
     .map((route) => `  <url>\n    <loc>${canonicalUrl(route)}</loc>\n  </url>`)
     .join("\n");
