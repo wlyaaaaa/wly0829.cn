@@ -407,7 +407,6 @@ class OssReleaseTests(unittest.TestCase):
             oss.write(output/oss.PLAN, sealed_plan)
         oss.verify_manifest(manifest)
         oss.verify_local(output)
-        hybrid.verify_release(output/'github')
         incremental = self.root/'incremental'
         next_plan = oss.prepare(self.source, plan['asset_base_url'], 'releases/fixture-002', incremental,
                                 previous_manifest=output/'github'/oss.MANIFEST)
@@ -417,8 +416,8 @@ class OssReleaseTests(unittest.TestCase):
             self.assertTrue(oss.verify_remote(incremental)['complete'])
         download.assert_not_called()
         (output/'github/index.html').write_bytes(b'changed after sealing')
-        with self.assertRaisesRegex(ValueError, 'Release bytes differ'):
-            hybrid.verify_release(output/'github')
+        with self.assertRaisesRegex(ValueError, 'Prepared GitHub inventory/bytes changed'):
+            oss.verify_local(output)
 
 
     def test_historical_asset_preparation_restores_only_named_home_entries(self):

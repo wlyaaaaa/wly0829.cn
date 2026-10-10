@@ -12,7 +12,7 @@
 
 ## 准备库输出
 
-`prepare-oss-release.py` 的准备与本地核验继续供源包准备器和新发布器使用。输出目录必须是新的，输入目录保持不变：
+`prepare-oss-release.py finalize-dist` 是构建最后的离线步骤，完成地址改写和身份记录。扫描和发布只读取定稿后的同一份字节，发布器不再调用准备器。库内部的 `prepare` 使用新的临时输出目录，保留输入：
 
 - `github/`：全部 HTML 与必要控制文件，HTML 只改资源引用；正文、普通导航、API、热区和转屏行为保留。
 - `oss/`：非 HTML 内容资源，保留原相对路径及二进制字节。
@@ -25,7 +25,7 @@
 
 HTML 资源属性、srcset、内联 CSS 和 JSON 都按原页面地址解析；JSON 的 `avif_assets` 键和值同步改写。CSS 的根路径、相对 `url()` 和 `@import` 按 CSS 自身路径解析；JavaScript 模块 import、动态 import 和 Vite 预加载数组指向同代对象。普通导航和搜索记录的正文不因资源迁移而替换。
 
-改写版本 2 覆盖 `data-lazy-srcset` 与 `data-lazy-style`，版本写入计划和清单。旧清单缺版本号时按版本 1 重放，不能用新改写逻辑冒充旧确定性产物。Vite 预加载数组的 URL 前缀、截图运行件的 `assets/` 拼接前缀变更完整记入 URL 日志，不改其他业务分支。
+改写版本写入计划和清单，旧清单按其版本重放，缺版本号时按版本 1，不能用新逻辑冒充旧确定性产物。版本 2 起覆盖 `data-lazy-srcset` 与 `data-lazy-style`；当前离线定稿按每个资源的实际依赖内容生成地址，保留内容未变的旧地址。Vite 预加载数组和资源拼接前缀变更记入 URL 日志，不改其他业务分支。
 
 本地核验重放同一改写并逐字节比较。输入漂移、未登记改动、二进制变化或缺失本地资源均报错。相同内容且地址不变的对象沿用原键、地址与真实回执；哈希相同但对象键变化也按本次变化处理，不能据哈希相同漏传新键。
 
@@ -43,6 +43,6 @@ CI 使用 Ubuntu，只部署成品，不运行源码构建、扫描、公开内�
 
 准备库继续解析旧完整 GET、HEAD/CRC64/MD5、混合复用以及同版本机内容核验回执。它们分别保留原 `release_id`、checker 身份、对象指纹与核验方法，不把旧全包封口写成新发布的必要步骤，也不把新 HEAD 改名为旧正文核验。
 
-`hybrid-release.py` 的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；源包库存、导航和资源闭包仍核对。仅服务旧 Git 提取回退的函数、CLI 和登记已删。当前回退通过同一个 Pages workflow 的 `ref` 输入部署实际旧 `site-dist` SHA，具体未来命令见 [网站维护](maintenance.md)，没有备用源码重建链。
+定稿器中的继承资源解析仍需准确历史提交中的 `site-release/release-manifest.json`；资源复制和继承逻辑仅存于 `prepare-oss-release.py`，hybrid 装配、全量验证、旧 Git 提取回退及其 CLI 已删。当前回退通过同一个 Pages workflow 的 `ref` 输入部署实际旧 `site-dist` SHA，具体未来命令见 [网站维护](maintenance.md)，没有备用源码重建链。
 
 本地准备器保留 `--test-loopback` 的测试材料语义：loopback 计划明确为 `test_only`，不能作为生产传送。已有受控静态补取回执记录首次失败和一次实际补取、响应正文及 MIME/CORS，不能冒充原生冷网络或速度达标。记录这些迁移材料不表示本轮上传、Pages 部署或旧回退已执行。

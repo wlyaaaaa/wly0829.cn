@@ -16,9 +16,9 @@
 
 ## 仍在使用的准备库
 
-`prepare-astro-release.py` 仍依赖 `hybrid-release.py` 的 `assemble`、`verify_release`、库存、路由与资源引用解析，将 Astro 新页与准确基线的保留页组合，并核对原文、导航、源输入和准备回执。它的规则 refresh、源包 prepare 与 verify 能力保持；CI 不调用它们，也不把其旧完整远端核验选项当作新差量发布的步骤。
+当前 Astro 构建直接生成完整成品，再调用 `prepare-oss-release.py finalize-dist` 离线定稿。旧 `prepare-astro-release.py`、creative 准备器、hybrid 装配、全包核验与 CLI 已退役，不能将它们接回日常构建或 CI。
 
-`hybrid-release.py` 保留 `baseline_entries` 对 HTTP 快照 URL 键与相对文件路径的解析，保留导航映射、原文件字节核对及继承资源读取。`inherited_assets` 使用准确 `baseline_production_commit` 中的历史 `site-release/release-manifest.json`；不能因为部署改到根目录成品分支，就删掉仍用于准备旧基线的迁移解析。其旧 Git 成品提取回退命令已撤掉；当前回退使用同一 Pages 工作流的 `ref`。
+`hybrid-release.py` 仅保留仍被定稿器使用的库存、路由与资源引用解析。资源复制和 `inherited_assets` 集中在 `prepare-oss-release.py`，不在两个库里留同一实现；历史继承仍使用准确 `baseline_production_commit` 中的 `site-release/release-manifest.json`。当前回退使用同一 Pages 工作流的 `ref`。
 
 `prepare-oss-release.py` 负责将完整源包分为 GitHub 文档与 OSS 资源，保留相同对象地址和真实旧回执，确定性重放地址改写并核对文件身份。清单、控制文件、地址和失败边界见 [OSS 资源契约](oss-publication.md)。这些库保留源码与历史解析用途，不向 `main` 推送成品。
 

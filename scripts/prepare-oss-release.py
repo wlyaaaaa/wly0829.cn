@@ -93,7 +93,7 @@ def csp_with_sources(policy, requirements):
     return ';'.join(segments)
 
 
-def javascript_literals(text):
+def javascript_literals(text, excluded=None):
     """Observe quoted literals while skipping comments and regular expressions."""
     index=0;regex_allowed=True;last_word=None;parentheses=[];jump_pending=False
     controls={'if','while','for','with','switch','catch'}
@@ -105,15 +105,18 @@ def javascript_literals(text):
             index+=1;continue
         if text.startswith('//',index):
             end=text.find('\n',index+2)
+            if excluded is not None: excluded.append((index, len(text) if end<0 else end))
             if end>=0 and jump_pending:regex_allowed=True;last_word=None;jump_pending=False
             index=len(text) if end<0 else end+1;continue
         if text.startswith('/*',index):
             end=text.find('*/',index+2)
+            if excluded is not None: excluded.append((index, len(text) if end<0 else end+2))
             if jump_pending and '\n' in text[index:end if end>=0 else len(text)]:regex_allowed=True;last_word=None;jump_pending=False
             index=len(text) if end<0 else end+2;continue
         if char in '\"\'`':
             match=STRINGS.match(text,index)
             if match:
+                if excluded is not None: excluded.append((index, match.end()))
                 yield match
                 index=match.end();regex_allowed=False;last_word=None;continue
         if char=='/' and regex_allowed:
@@ -126,8 +129,10 @@ def javascript_literals(text):
                 elif token=='/' and not in_class:break
                 end+=1
             if end<len(text) and text[end]=='/':
+                start=index
                 index=end+1
                 while index<len(text) and text[index].isalpha():index+=1
+                if excluded is not None: excluded.append((start, index))
                 regex_allowed=False;last_word=None;continue
         word=re.match(r'[$\w]+',text[index:])
         if word:
@@ -193,7 +198,7 @@ def release_identifier(source, base, prefix, github, objects):
 
 
 def current_home_links(source, version=4):
-    if version not in (1,2,3,4,5,6):raise ValueError('Unsupported homepage navigation replay version')
+    if version not in (1,2,3,4,5,6,7):raise ValueError('Unsupported homepage navigation replay version')
     raw=(Path(source)/'index.html').read_bytes()
     if not all(value in raw for value in (b'home-01-link-1-0', b'home-01-link-2-0')):
         return raw,None
@@ -280,7 +285,7 @@ def verify_manifest(manifest, require_remote=True):
 
 class Rewriter:
     def __init__(self, files, base, prefix, origin, version=1, source_root=None):
-        if version not in (1,2,3,4,5,6):
+        if version not in (1,2,3,4,5,6,7):
             raise ValueError('Unknown OSS asset rewriter version')
         self.files = files
         self.assets = set(files) - {x for x in files if x.endswith('.html')} - HOST_CONTROLS
@@ -501,10 +506,12 @@ class Rewriter:
             if new != value: edits.append((offset+m.start('value'), offset+m.end('value'), new, 'css_import'))
         return edits
 
-    def strings(self, text, owner, context, offset=0):
+    def strings(self, text, owner, context, offset=0, ignored_spans=()):
         edits = []
         literals=javascript_literals(text) if context=='js' and self.version>=3 else STRINGS.finditer(text)
         for m in literals:
+            if any(start <= m.start() and m.end() <= end for start, end in ignored_spans):
+                continue
             bird_atlas = self.version>=6 and context=='js' and owner.endswith('/bird.js') and m['value']=='bird-atlas.webp'
             new = m['value'] if bird_atlas and not self.asset_keys else self.url(m['value'], owner, context)
             if bird_atlas and self.asset_keys and owner in self.retained:
@@ -515,8 +522,52 @@ class Rewriter:
                 edits.append((offset + m.start('value'), offset + m.end('value'), new, context + '_url'))
         return edits
 
+    def constant_url_edits(self, text, owner, offset):
+        excluded = []
+        literals = list(javascript_literals(text, excluded))
+        masked = list(text)
+        for start, end in excluded:
+            masked[start:end] = ' ' * (end-start)
+        code = ''.join(masked)
+        identifier = r'[A-Za-z_$][\w$]*'
+        constants = {}
+        for literal in literals:
+            assignment = re.search(r'(?<![\w$.])(?P<name>'+identifier+r')\s*=(?![=>])\s*$', code[:literal.start()])
+            if assignment and '\\' not in literal['value'] and '${' not in literal['value']:
+                constants[assignment['name']] = literal['value']
+        def assigned_once(name):
+            return len(re.findall(r'(?<![\w$.])'+re.escape(name)+r'\s*(?:=(?![=>])|[+*/%&|^-]=|\+\+|--)', code)) == 1
+        edits, spans = [], []
+        for literal in literals:
+            call = re.search(r'\bnew[ \t]+URL[ \t]*\([ \t]*(?P<argument>(?P<name>'+identifier+r')[ \t]*\+[ \t]*)$', code[:literal.start()])
+            tail = re.match(r'[ \t]*,[ \t]*(?P<base>'+identifier+r')[ \t]*\)', code[literal.end():])
+            if not call or not tail:
+                continue
+            name, base = call['name'], tail['base']
+            if name not in constants or not assigned_once(name) or not assigned_once(base):
+                continue
+            base_assignment = r'(?<![\w$.])'+re.escape(base)+r'\s*=\s*document\.currentScript\s*&&\s*document\.currentScript\.src\s*\|\|\s*document\.baseURI\b'
+            if not re.search(base_assignment, code):
+                continue
+            value = constants[name] + literal['value']
+            if not self.resolve(value, owner, 'js'):
+                continue
+            start, end = call.start('argument'), literal.end()
+            edits.append((offset+start, offset+end, json.dumps(self.url(value, owner, 'js')), 'js_constant_url'))
+            spans.append((start, end))
+        if owner.endswith('/bird.js') and any(self.resolve(m['value'], owner, 'js') for m in literals if 'bird-atlas.webp' in m['value']):
+            # A configured sprites directory cannot prefix an absolute atlas URL.
+            for match in re.finditer(r'(?<![\w$.])(?P<directory>'+identifier+r')\s*\+\s*(?P<image>'+identifier+r'\.image)\b', code):
+                image = match['image']
+                if code[:match.start()].endswith('.test('+image+')?'+image+':'):
+                    continue
+                replacement = '(/^https?:\\/\\//.test('+image+')?'+image+':'+match[0]+')'
+                edits.append((offset+match.start(), offset+match.end(), replacement, 'js_absolute_atlas'))
+        return edits, spans
+
     def javascript(self, text, owner, offset=0):
-        edits = self.strings(text, owner, 'js', offset)
+        dynamic, spans = self.constant_url_edits(text, owner, offset) if self.version>=7 else ([], [])
+        edits = dynamic + self.strings(text, owner, 'js', offset, ignored_spans=spans)
         literal_spans={(m.start('value'),m.end('value')) for m in javascript_literals(text)} if self.version>=3 else None
         if '__vite__mapDeps=' in text:
             # Vite's sole preload URL prefix becomes empty because dependency
@@ -692,7 +743,7 @@ def inherited_assets(manifest):
     return objects, {alias: previous['oss']['verification']['objects'][original] for alias, original in mapping.items()}
 
 
-def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=6, previous_manifest=None, offline=False):
+def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_test=False, rewriter_version=7, previous_manifest=None, offline=False):
     source, output = Path(source).resolve(), Path(output).resolve()
     if output == source or output.is_relative_to(source) or source.is_relative_to(output):
         raise ValueError('Source and new output must be disjoint')
@@ -1012,7 +1063,7 @@ def main():
     p.add_argument('--output', required=True)
     p.add_argument('--html-origin', default='https://wly0829.cn')
     p.add_argument('--test-loopback', action='store_true', help='Local rehearsal only; publisher rejects this plan')
-    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6),default=6)
+    p.add_argument('--rewriter-version',type=int,choices=(2,3,4,5,6,7),default=7)
     p.add_argument('--previous-manifest',type=Path,help='Reuse exact objects and original receipts from this sealed release')
     for command in ('verify-local',):
         p = commands.add_parser(command)

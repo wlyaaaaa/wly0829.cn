@@ -13,6 +13,10 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 `<dist>` 是完整构建目录。构建最后调用离线 `finalize-dist`，一次完成资源地址改写和 OSS/Pages 分包身份；扫描和发布都使用收口后的同一份磁盘字节。这个函数不读取线上清单，同一输入的结果可重复，已收口且未改变的目录再次运行不变。G1 接线前可以手动执行第一条命令；发布入口不再改写页面或资源。没有构建回执时，扫描仍能读取成品并自行计算文件哈希。
 
+资源地址由该资源和实际依赖的内容决定。修改一份 JSON 时，无关脚本和页面不会因为整包指纹变化而换地址；读取该 JSON 的脚本会随真正变化的依赖更新。循环引用使用有限的源依赖闭包，重复定稿不在循环中反复换键。
+
+构建部分重建旧成品时，原始清单可带 `previous_oss`，值为上一次本机最终清单的 `oss` 对象。它提供旧对象的 `key`、`url`、`sha256`、`source` 及已有回执，供离线保留字节未变的地址、识别旧绝对引用；这不是一次成功部署证明。旧脚本中真正受依赖变化影响的引用会更新，查询参数和锚点保留。定稿清单保存结果，不再重复保存整个 `previous_oss` 副本。发布仍独立比较真实成功前版，决定哪些对象确实要上传。
+
 ## 发布做什么
 
 - 显式 `--previous-manifest <文件>` 无效时直接报错；未指定时，沿用 `oss-retention.py` 对真实成功 GitHub Pages 部署的发现方式。不会把未部署的最新提交当成上一版。
@@ -49,6 +53,6 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## 与构建链的接线
 
-这次只改发布和扫描，不接管构建。`pages.yml` 仅在 push `site-dist` 或手动指定 ref 时运行，使用 Ubuntu 完成 checkout、configure-pages、upload-pages-artifact、deploy-pages 四步；CI 不构建、不扫描。官方成品上传动作始终排除 `.git`、`.github`。`check-typeset-site.py` 现只读已有 dist，阅读位置、转屏、导航和哈希检查保留；构建仍会使用 `hybrid-release.py` 中的共享装配函数。
+这次只改发布和扫描，不接管构建。`pages.yml` 仅在 push `site-dist` 或手动指定 ref 时运行，使用 Ubuntu 完成 checkout、configure-pages、upload-pages-artifact、deploy-pages 四步；CI 不构建、不扫描。官方成品上传动作始终排除 `.git`、`.github`。`check-typeset-site.py` 现只读已有 dist，阅读位置、转屏、导航和哈希检查保留。构建调用 `finalize-dist`；必要的资源复制和历史继承逻辑集中在 `prepare-oss-release.py`，旧 hybrid 装配、全量验证及其 CLI 已退出。
 
 现有 `github-pages` 环境于北京时间 2026 年 10 月 11 日 05:17 只读确认仅允许 `main`，尚未允许 `site-dist`。首次发布窗口须先新增允许 `site-dist` 的环境分支规则并保留 `main`，再执行发布命令；本次没有改设置、建远程分支或部署。回退仍用同一工作流：`gh workflow run pages.yml --repo wlyaaaaa/wly0829.cn --ref site-dist -f ref=<旧成品SHA>`，随后核公网资源清单和成品身份。不能把本地预演说成真实上传、Pages 部署或五分钟发布已经验收。
