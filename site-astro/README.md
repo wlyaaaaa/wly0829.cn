@@ -1,6 +1,6 @@
 # site-astro：内容页（区块照现在的网站，排版在浏览器里自动做）
 
-内容页每页一个内容文件 `src/content/pages/<页>.md`，一律由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成，不手改。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
+内容页每页一个内容文件 `src/content/pages/<页>.md`，通常由 `tools/convert_page.py` 从 `sources/pages/<页>/page.json`（和 `layout.json`）生成。直接编辑 Markdown 也会生效；构建记住这次编辑，后续 JSON 变化不会静默覆盖它，而会提示先统一作者输入。页头、页尾、目录条、翻页过渡、小鸟、落叶、水彩照现在网站。
 
 ## 为什么这样做（第四轮）
 
@@ -20,26 +20,30 @@
 
 首页、驾驶舱保留候选站原 HTML、原图和动效，由 Astro 静态路由输出。
 
-首页与驾驶舱入口来自版本化的 `sources/retained-home-cockpit`：已选样板的补丁后两份 HTML、唯一首页首帧脚本及依赖清单。运行 `python tools/retain_home_cockpit.py` 可在没有本机忽略文件时恢复入口，逐字节核验后写入 `src/chrome/retained` 和 `public/_home-cockpit`；其余图像、字体、动效依赖由发布流程按清单 SHA-256 复用，不降低图像质量。清单的 `pages` 绑定实际补丁后页面，`inputs` 保留补丁前输入依据。只有显式选定新候选站时才运行 `python tools/retain_home_cockpit.py <候选站构建目录>`，它只读候选站并生成下一份待审输入。这两页不经过内容页的坐标转换和屏幕清单清空。按钮样式在 `public/_home-cockpit/time-labels.css`，断连状态在同目录的 `cockpit-offline.js/css`；删除两条静态路由和这些附加引用即可撤回接入。
+首页、驾驶舱、授权页的 Astro 入口直接读 `sources/retained-home-cockpit/*.html` 的已接受源码；附加样式和交互保持原样。普通构建不再复制到 `src/chrome/retained`，也不从旧站生成运行件或反向改写作者输入。
 
+209 个旧生成器页面及其本地小资源以 probe03 的成品字节存入 `sources/frozen-site`。其 `manifest.json` 列明完整路由、冻结页指纹和资源来源：已有仓库文件直接复用；标题图按既有配方重建；确切的外壳依赖放入本地 `vendor-deps`，原图和视频保持原字节。原远端依赖已一次性入库到 `sources/vendor-deps/<原相对路径>`，按依赖清单核验 SHA 和字节数；所有构建只读本地，缺文件就报具体路径，不联网补取。点名迁移某个旧页时，再转移该路由的生成归属；普通构建不运行旧生成器。
 首页每次新加载、刷新都从纸色播放原开场；图片到达后 3 秒未开播，或开场连续 5 帧超过 100 毫秒，就跳到完成图并恢复环境动画。后退缓存与减少动态不播。顶栏固定用原 WebP 背景，避免显示途中切换未接收完的 AVIF；加载占位和标签行布局在首绘前确定，不用低清预览。
 
 ## 一次完整生成
 
+在仓库根执行：
+
 ```powershell
-cd site-astro
-npm install                                                # 只第一次
-python tools/extract_chrome.py <现在网站的构建目录> all     # 抄页头页尾、目录条、动效运行件（原文件逐字节复制）
-python tools/copy_runtime_refs.py <现在网站的构建目录> all  # 补齐运行件实际会加载、脚本 import 到的文件（例如 how 页演示脚本、b2-access-model）
-python tools/convert_page.py --all                         # page.json + layout.json → 内容文件（源改了就重新转换；同一份源转换两遍逐字节相同）
-python tools/adapt_motion.py                               # 环境动画配置改绑到插画（电脑、手机两份）
-python tools/pack_living.py                                # 环境动画引擎“已显示的图不再晕开、位移从 0 渐入”修正版
-npm run build                                              # = render_blocks.py --all（区块排版，没改的屏不重排）+ astro build
+npm ci --prefix site-astro   # 只在首次安装或锁文件改变时
+npm run build               # 完整静态站 + 公开内容检查
+npm run dev -- --host 127.0.0.1 --port 4173
 ```
 
-`public/` 下的 `assets/`、`_shared/`、`_living/`、`_album/`、`_chrome/`、`_typeset/`、`_how-demo/`，以及 `.cache/`、`src/content/rendered/` 都由上面几步生成，不进仓库。
+`dev` 先运行同一完整构建，再用 `tools/preview_site.py` 预览仓库根 `dist`；打开的就是正式准备会复制的成品，包括所有冻结模块、搜索、规则、兼容路径和 404。修改内容后重新运行；当前入口不承诺热更新。
 
-`public/rule-sources/`、`public/source-tools/` 是规则原文里链到的公开文件（公开入口模板、`Find-DuplicateContent.ps1`），和现在网站发布的逐字节一致，进仓库；按活动版本重出原文时（`convert_page.py --rules-release`）公开入口模板跟着重出。
+`python scripts/build-site.py` 是两处 npm build 共用的构建实现：恢复版本化资产 → 转换当前作者源 → 更新原生运行件 → 区块增量排版 → Astro → 完整路由/搜索/翻页预热/站点地图 → 最终资源处理与公开检查。区块没变就复用结果，实际浏览器并行最多 2 个。源码、素材和字体首次准备的时间另计，完整站的计时写在 `dist/.build-receipt.json`。
+
+`scripts/prepare-astro-release.py` 现在只保留规则源 `refresh`，旧 `prepare` 拼装入口已移除。后续发布接线由 G2 读取仓库根 `dist` 和 `.build-receipt.json`；当前构建不上传、不封存、不切换线上版本。
+
+构建最后调用 `python scripts/prepare-oss-release.py finalize-dist --dist dist`，离线完成上线前资源地址处理，再检查公开内容和记录所有最终文件的 SHA。该命令由 G2 提供；尚未合入、命令不存在或执行失败时，构建明确失败，不保留旧成功回执，也不省略这一步。
+
+`public/` 中的依赖、冻结路由和控制文件，以及 `.cache/`、`src/content/rendered/` 是可重建工作文件，不另入库；维护输入在 `sources/frozen-site`、`sources/retained-home-cockpit`、仓库原件和各原生脚本。公开规则源仍从版本化 `sources/rules` 生成。
 
 ## 内容文件怎么写
 
@@ -57,7 +61,7 @@ npm run build                                              # = render_blocks.py 
 这一屏的文字（Markdown）
 ````
 
-内容文件不手改，下面说的都是改源再重新转换（`python tools/convert_page.py <页>`）：
+常规维护改 JSON 作者源再转换（`python tools/convert_page.py <页>`）；若已直接改过 Markdown，先人工统一两份作者输入，再恢复自动转换：
 
 - 改字、数字、链接：改 `sources/pages/<页>/page.json` 里那一屏的 `text`、`links`。
 - 改图：改素材表 `sources/assets/_library/asset-map.jsonl` 里这一屏这个位置的行（转换时写进 `images`，路径相对 `sources/assets`）。
@@ -124,3 +128,22 @@ python tools/rule_article_check.py <现在网站构建目录> rules.json        
 ## “现在”实时位
 
 区块库排好的实时位（`[data-hot="live"][data-href=<键>]`）由 `src/scripts/live-dom.js` 填（排版时复制到 `/_living/live-dom.js`）：借现在网站运行件对外的 `SiteLiveRuntime.readStatus / parse` 取数（授权与状态、连接电脑两页借 `SiteB2`），一分钟一次，切回页面时立刻读。读不到时照驾驶舱的做法：页面上只说一次“暂时读不到电脑，保留最后一次读到的状态（北京时间）”，实时位显示上次读到的值、整体变淡；从没读到过就安静占位，不出“读不到”；读到后自动恢复。上次读到的值只在真正读到时存（浏览器本地 `site-live-dom:v1:<页>`）。实时位放在哪一屏都一样填，挪到首屏标题下的状态行也不用改脚本。
+
+## 唯一构建入口与回执
+
+在仓库根运行 `npm run build`。内部只有 `scripts/build-site.py` 一条链，输出完整 `dist`；`site-astro` 的 npm 命令只转发到根入口。`npm run dev -- --host 127.0.0.1 --port 4321` 先走同一构建，再用 `tools/preview_site.py` 预览同一目录，包含冻结页和三个关键页。
+
+同一工作树的 `dist` 只有一个写入者；连续构建等前一轮结束再启动，独立任务用各自工作树。宿主 `Invoke-HeavyTaskSlot.ps1` 当前只检查物理内存，不提供同一输出目录的互斥；预览读取独立且核过指纹的快照时，可以与另一工作树的构建并行。
+
+`npm run build -- --pages /how/,/projects/agents/` 在已有完整成品上选择这些路由。未变页不重新排版；页面 Markdown、版式和 `src/typeset/**` 的引擎内容共同决定每屏缓存。页面外壳变化会更新相关页，首页和驾驶舱的附加注入仍由 `src/retained-page.ts` 承接。`src/content/rendered/`、`.cache/` 与 Astro 暂存输出是生成物，不提交。
+
+首页、驾驶舱和授权页直接从 `sources/retained-home-cockpit/*.html` 读取。首页首帧脚本与首页包按 `manifest.json` 的 `bundled` 发布路径拷贝，带指纹文件名由清单提供；构建没有写死文件名。当前相册、环境动画和屏幕缓存仍沿用现有源码算法，六个保留页补丁不再构建时重跑。
+
+每次成功构建写 `dist/.build-receipt.json`，格式为 `wly.site-build-receipt.v1`：
+
+- `status`：`built`；`prepared_at_beijing`：带 `+08:00` 的观察时间；`seconds`：整个构建秒数。
+- `steps`：按执行顺序列出 `{name, seconds}`，包括来源、指纹、依赖准备、运行件、屏幕排版、Astro、收尾、公开门与文件清单。
+- `rebuilt_pages`：本次按源码指纹选择重建的路由数组；它不代表最终资源处理后所有字节变化。实际变化由两轮 `files` 中同路径的 SHA 对比得到。`html_files`：完整成品 HTML 数；`output`：实际输出目录。
+- `files`：完整文件数组，每项 `{path, bytes, sha256}`；路径相对 `dist`，SHA256 为实际成品字节。回执自身不进入清单，避免自引用；`release-manifest.json` 属于实际成品文件并列入。
+
+G2 的发布与扫描直接消费这份回执。旧全站拼装命令已移除；仍被其他工具导入的素材与引用检查函数不承担构建。冻结源 HTML 保留 probe03 原字节，旧发布目录地址由来源清单先映射到当前资源；构建最后通过 G2 的唯一 `finalize-dist` 命令完成部署资源引用与发布策略，回执绑定最终字节。没有实际 script 归属的旧 B2 运行件和对应预热引用从成品退出；当前 OSS 地址下仍被引用的脚本照常保留。相册更新只新增当前指纹表，仍被引用的旧表保留，已最终处理的表不会在下一轮被解开当前地址。

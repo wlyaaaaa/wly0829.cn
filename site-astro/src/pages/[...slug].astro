@@ -8,15 +8,18 @@ const rendered = import.meta.glob('../content/rendered/*.json', { eager: true, i
 export async function getStaticPaths() {
   const done = import.meta.glob('../content/rendered/*.json');  // getStaticPaths 单独运行，只能用这里自己导入的
   const pages = await getCollection('pages');
-  const missing = pages.filter((entry) => !done[`../content/rendered/${entry.id}.json`]).map((entry) => entry.id);
+  const selected = process.env.SITE_BUILD_PAGES ? new Set(process.env.SITE_BUILD_PAGES.split(',')) : null;
+  const route = (entry: any) => entry.data.url || `/${entry.id}/`;
+  const active = pages.filter((entry) => !['/', '/cockpit/', '/computer-access/'].includes(route(entry)) && (!selected || selected.has(route(entry))));
+  const missing = active.filter((entry) => !done[`../content/rendered/${entry.id}.json`]).map((entry) => entry.id);
   if (missing.length) throw new Error(`页面没有排版结果，先完成 tools/render_blocks.py：${missing.join('、')}`);
   // 改过地址的页（page.json 的 old_urls）：旧地址出一句话的去向页，指到现在的页面
   // （现在网站上旧地址只剩素材目录，打开是目录列表）
-  const moved = pages.flatMap((entry) => (entry.data.old_urls || []).map((from: string) => ({
+  const moved = pages.flatMap((entry) => (entry.data.old_urls || []).filter((from: string) => !selected || selected.has(from)).map((from: string) => ({
     params: { slug: from.replace(/^\/|\/$/g, '') },
     props: { moved: { to: entry.data.url, title: entry.data.title } },
   })));
-  return [...pages.map((entry) => ({
+  return [...active.map((entry) => ({
     // 没有网址的页（404、GitHub 个人主页稿）放在 /<页名>/，不和首页撞
     params: { slug: entry.data.url.replace(/^\/|\/$/g, '') || entry.id },
     props: { entry },

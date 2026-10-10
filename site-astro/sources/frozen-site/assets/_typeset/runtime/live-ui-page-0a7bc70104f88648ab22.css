@@ -1,0 +1,124 @@
+:root{--title:#0a7232;--text:#2e4675;--accent:#0a7a33;--link:rgb(9,145,54);--line:#bfe8cc;--cardbg:#fbfefc;--soft:#edfbf3;--badge:#13803d}
+.live-hardware-full,.live-hardware-compact{--hardware-title:var(--title,#0a7232);--hardware-text:var(--text,#2e4675);--hardware-accent:var(--accent,#0a7a33);--hardware-line:var(--line,#bfe8cc);--hardware-soft:var(--soft,#edfbf3);box-sizing:border-box;display:block;width:100%;min-width:0;color:var(--hardware-text);font-family:inherit;font-size:16px;line-height:1.5;text-align:left;white-space:normal;overflow-wrap:anywhere}
+.live-hardware-full *,.live-hardware-compact *{box-sizing:border-box;min-width:0}
+.live-hardware-full p,.live-hardware-full h3,.live-hardware-full dl,.live-hardware-compact p{margin:0}
+.live-hardware-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px 18px;flex-wrap:wrap;margin-bottom:14px}
+.live-hardware-current{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--hardware-title)}
+.live-hardware-current strong{font-weight:800}.live-hardware-screen-state{color:var(--hardware-text)}
+.live-hardware-dot{width:9px;height:9px;flex:0 0 9px;background:#8a9690;border-radius:50%}.live-hardware-dot[data-state=ok]{background:var(--hardware-accent)}
+.live-hardware-read-time{font-size:13px;color:#64766f;line-height:1.5}
+.live-hardware-card-time{font-size:11px;line-height:1.5;color:#73837b;margin-top:9px!important}.live-hardware-collection-notice{font-size:13px;color:#64766f;margin-bottom:12px!important}
+.live-hardware-cache-notice{border-left:3px solid #bda45b;padding:5px 10px;margin-bottom:12px!important;background:#fffcf1;color:#826d2c;font-size:14px}
+.live-hardware-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
+.live-hardware-card{position:relative;border:1.5px solid var(--hardware-line);border-radius:14px;background:linear-gradient(165deg,#f2fbf5 0%,var(--cardbg,#fbfefc) 60%,#f7fcf9 100%);box-shadow:0 3px 12px rgb(40 140 80 / 6%);padding:16px}
+.live-hardware-card-heading{display:flex;align-items:center;gap:9px;min-height:36px;margin-bottom:7px}
+.live-hardware-card-heading h3{font-size:19px;font-weight:800;color:var(--hardware-title)}
+.live-hardware-icon{width:42px;height:36px;flex:0 0 42px;object-fit:contain}
+.live-hardware-model{font-size:13px;color:#60748c;line-height:1.5;min-height:2.9em;margin-bottom:9px!important}
+.live-hardware-main{display:flex;align-items:baseline;gap:9px;margin-bottom:10px}
+.live-hardware-number{font-size:42px;line-height:1.1;font-weight:800;letter-spacing:-.035em;color:var(--hardware-accent);font-variant-numeric:tabular-nums}
+.live-hardware-number[data-state=unknown]{font-size:28px;letter-spacing:0}
+.live-hardware-main-label{font-size:13px;color:#62768b}
+.live-hardware-meter{height:5px;overflow:hidden;border-radius:10px;background:#dbeee2;width:100%;margin:0 0 13px}
+.live-hardware-meter-fill{display:block;height:100%;border-radius:inherit;background:var(--hardware-accent)}
+.live-hardware-meter[data-state=unknown]{background:repeating-linear-gradient(90deg,#dae2dd 0 9px,#eff3f0 9px 14px)}
+.live-hardware-meter[data-state=stale] .live-hardware-meter-fill{opacity:.55}
+.live-hardware-meter[data-risk=warn] .live-hardware-meter-fill{background:#b98b20}.live-hardware-meter[data-risk=error] .live-hardware-meter-fill{background:#bc514b}
+.live-hardware-metrics{display:flex;flex-direction:column;gap:4px}
+.live-hardware-pair{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.live-hardware-pair dt{font-size:13px;color:#62768b}.live-hardware-pair dd{margin:0;font-weight:650;font-size:14px;line-height:1.5;font-variant-numeric:tabular-nums;text-align:right}
+.live-hardware-pair>.live-hardware-meter{flex-basis:100%;margin-bottom:2px}
+.live-hardware-full [data-state=unknown],.live-hardware-compact [data-state=unknown]{color:#7b8580}
+.live-hardware-full [data-state=stale],.live-hardware-compact [data-state=stale]{color:#7a704e}
+.live-hardware-field-age{display:block;font-size:11px;font-weight:400;line-height:1.4;letter-spacing:0;color:#8a7950}
+.live-hardware-details{margin-top:12px;padding-top:9px;border-top:1px solid #d9eadf;font-size:13px}
+.live-hardware-details summary{cursor:pointer;color:#55756b;min-height:24px}
+.live-hardware-details dl{display:grid;gap:5px;padding-top:8px}.live-hardware-source-note{font-size:12px;color:#73837b;margin-top:7px!important}
+.live-hardware-disks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
+.live-hardware-disk{padding:8px 0}.live-hardware-disk-heading{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap}
+.live-hardware-disk-heading>strong:first-child{font-size:18px;color:var(--hardware-title)}
+.live-hardware-disk-type{font-size:12px;color:#7a8981}.live-hardware-disk-percent{font-size:13px;margin-left:auto;color:var(--hardware-accent);font-variant-numeric:tabular-nums}
+.live-hardware-disk-capacity{font-size:13px;margin:3px 0 7px!important;color:#546986}.live-hardware-disk .live-hardware-meter{margin-bottom:0}
+.live-hardware-disk[data-risk=warn] .live-hardware-disk-percent,.live-hardware-compact-tile[data-risk=warn] strong{color:#9b751b}
+.live-hardware-disk[data-risk=error] .live-hardware-disk-percent,.live-hardware-compact-tile[data-risk=error] strong{color:#a53e38}
+.live-hardware-disk-warning{font-size:12px;color:#8f6c22;margin-top:5px!important}.live-hardware-disk[data-risk=error] .live-hardware-disk-warning{color:#a53e38}
+.live-hardware-empty{font-size:14px;color:#7b8580;padding:10px 0}
+.live-hardware-secondary-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;margin-top:14px}
+.live-hardware-network-link{font-size:15px;font-weight:650;color:var(--hardware-title);margin-bottom:12px!important}
+.live-hardware-resolution{display:block;font-size:26px;font-weight:800;color:var(--hardware-accent);font-variant-numeric:tabular-nums;margin-bottom:12px}
+.live-hardware-compact{border:1.5px solid var(--hardware-line);border-radius:12px;background:var(--hardware-soft);padding:13px 15px;color:var(--hardware-text);text-decoration:none;transition:border-color .15s,background .15s}
+.live-hardware-compact:hover{border-color:#61ac7b;background:#f4fcf7}.live-hardware-compact:focus-visible{outline:2px solid var(--hardware-accent);outline-offset:3px}
+.live-hardware-compact .live-hardware-header{margin-bottom:10px;gap:3px 14px}.live-hardware-compact .live-hardware-current{font-size:14px;gap:7px}.live-hardware-compact .live-hardware-screen-state{font-size:13px}.live-hardware-compact .live-hardware-read-time{font-size:12px}
+.live-hardware-compact-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.live-hardware-compact-tile{display:flex;flex-direction:column;gap:2px}.live-hardware-compact-label{font-size:12px;color:#62768b}.live-hardware-compact-tile strong{font-size:21px;color:var(--hardware-accent);font-variant-numeric:tabular-nums;font-weight:800}
+.live-hardware-compact-link{display:block;margin-top:9px;font-size:12px;color:var(--hardware-accent);text-align:right}.live-hardware-compact .live-hardware-cache-notice{font-size:12px;margin-bottom:9px!important}
+@media(max-width:850px){.live-hardware-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.live-hardware-grid>.live-hardware-card:last-child:nth-child(odd){grid-column:1/-1}}
+@media(max-width:599.98px){.live-hardware-full{font-size:15px}.live-hardware-header{margin-bottom:12px}.live-hardware-grid,.live-hardware-secondary-grid{gap:10px}.live-hardware-card{padding:13px;border-radius:12px}.live-hardware-card-heading h3{font-size:18px}.live-hardware-icon{width:34px;height:30px;flex-basis:34px}.live-hardware-number{font-size:37px}.live-hardware-model{font-size:12px}.live-hardware-disks{grid-template-columns:1fr;gap:2px}.live-hardware-secondary-grid{grid-template-columns:1fr}.live-hardware-disk-capacity{font-size:14px}.live-hardware-resolution{font-size:28px}.live-hardware-read-time{font-size:12px}.live-hardware-compact-grid{gap:8px}.live-hardware-compact-tile strong{font-size:19px}}
+@media(max-width:359.98px){.live-hardware-grid{grid-template-columns:1fr}.live-hardware-compact-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.live-hardware-compact{transition:none}}
+
+/* Uses the accepted typeset-proto palette and card treatment. No asset or font dependency. */
+.live-status-card {
+  --live-status-ink: var(--text, #2e4675);
+  --live-status-green: var(--title, #0a7232);
+  --live-status-dot: #188558;
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 7px;
+  min-width: 0;
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--line, #bfe8cc);
+  border-radius: 14px;
+  background: radial-gradient(circle at 0% 0%, rgba(150, 215, 172, .16), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(170, 225, 190, .14), transparent 40%),
+    linear-gradient(165deg, #f2fbf5 0%, var(--cardbg, #fbfefc) 55%, #f7fcf9 100%);
+  box-shadow: 0 3px 12px rgba(40, 140, 80, .08);
+  color: var(--live-status-ink);
+  font-family: "Sans", "Noto Sans SC", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  text-decoration: none;
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  line-break: strict;
+}
+.live-status-card *, .live-status-card *::before, .live-status-card *::after { box-sizing: border-box; }
+.live-status-card .live-status-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 5px 9px; min-width: 0; }
+.live-status-card .live-status-icon { display: block; flex: 0 0 36px; width: 36px; height: 36px; object-fit: contain; }
+.live-status-card .live-status-title { color: var(--live-status-green); font-size: 1em; font-weight: 800; }
+.live-status-card .live-status-summary { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.live-status-card .live-status-state { font-size: 1.04em; font-weight: 700; color: var(--live-status-ink); }
+.live-status-card .live-status-dot {
+  display: block; flex: 0 0 9px; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--live-status-dot); box-shadow: 0 0 0 3px color-mix(in srgb, var(--live-status-dot) 10%, transparent);
+}
+.live-status-card[data-tone="failed"] { --live-status-dot: #bd5452; }
+.live-status-card[data-tone="warn"] { --live-status-dot: #bd8c35; }
+.live-status-card[data-tone="waiting"] { --live-status-dot: #b081aa; }
+.live-status-card[data-tone="running"], .live-status-card[data-tone="loading"] { --live-status-dot: #4385a5; }
+.live-status-card[data-tone="neutral"], .live-status-card[data-tone="unknown"], .live-status-card.live-status-history { --live-status-dot: #909b98; }
+.live-status-card .live-status-value { min-width: 0; font-size: .94em; }
+.live-status-card .live-status-list { display: grid; gap: 4px; margin: 0; padding: 0 0 0 1.15em; list-style: disc; }
+.live-status-card .live-status-line { min-width: 0; margin: 0; color: var(--live-status-ink); font-weight: 400; }
+.live-status-card .live-status-line::marker { color: #97b9a8; }
+.live-status-card .live-status-meta { display: flex; flex-wrap: wrap; gap: 3px 12px; min-width: 0; padding-top: 5px; border-top: 1px solid #dcece2; color: #697873; font-size: .8em; }
+.live-status-card .live-status-history-label { margin-left: auto; padding: 1px 7px; border: 1px solid #d8dfda; border-radius: 999px; color: #697873; background: #f6f8f6; font-size: .72em; white-space: nowrap; }
+.live-status-card .live-status-link { color: var(--link, #099136); font-weight: 600; }
+a.live-status-card[href]:hover { border-color: #76ba90; }
+a.live-status-card[href]:focus-visible { outline: 3px solid #6bac86; outline-offset: 3px; }
+.live-status-card.live-status-compact { gap: 4px; padding: 9px 11px; border-radius: 10px; }
+.live-status-card.live-status-compact .live-status-icon { flex-basis: 25px; width: 25px; height: 25px; }
+.typeset-live.live-status-card { height: auto !important; justify-content: stretch; align-items: stretch; min-height: 0; }
+.typeset-live.live-status-card > * { min-width: 0; }
+@media (max-width: 600px) {
+  .live-status-card { font-size: 16px; padding: 12px 13px; }
+  .live-status-card.live-status-compact { padding: 8px 10px; }
+}
+
+@font-face{font-family:"Sans";src:url("/_typeset/runtime/live-sans-page-cf13958b2ad141312a2e.woff2") format("woff2");font-weight:100 900;font-display:swap;unicode-range:U+20,U+21,U+22,U+23,U+24,U+25,U+26,U+27,U+28,U+29,U+2A,U+2B,U+2C,U+2D,U+2E,U+2F,U+30,U+31,U+32,U+33,U+34,U+35,U+36,U+37,U+38,U+39,U+3A,U+3B,U+3C,U+3D,U+3E,U+3F,U+40,U+41,U+42,U+43,U+44,U+45,U+46,U+47,U+48,U+49,U+4A,U+4B,U+4C,U+4D,U+4E,U+4F,U+50,U+51,U+52,U+53,U+54,U+55,U+56,U+57,U+58,U+5A,U+5B,U+5C,U+5D,U+5E,U+5F,U+60,U+61,U+62,U+63,U+64,U+65,U+66,U+67,U+68,U+69,U+6A,U+6B,U+6C,U+6D,U+6E,U+6F,U+70,U+71,U+72,U+73,U+74,U+75,U+76,U+77,U+78,U+79,U+7A,U+7B,U+7C,U+7D,U+A9,U+B7,U+D7,U+2013,U+201C,U+201D,U+2026,U+2103,U+2191,U+2192,U+2193,U+2197,U+25CB,U+25CF,U+3000,U+3001,U+3002,U+4E00,U+4E03,U+4E07,U+4E09,U+4E0A,U+4E0B,U+4E0D,U+4E0E,U+4E13,U+4E1A,U+4E1C,U+4E22,U+4E24,U+4E25,U+4E2A,U+4E2D,U+4E32,U+4E34,U+4E3A,U+4E3B,U+4E3E,U+4E45,U+4E48,U+4E49,U+4E50,U+4E5F,U+4E60,U+4E66,U+4E86,U+4E8B,U+4E8C,U+4E8E,U+4E91,U+4E92,U+4E94,U+4E9B,U+4EA4,U+4EA7,U+4EAC,U+4EAE,U+4EB2,U+4EBA,U+4EC0,U+4ECA,U+4ECE,U+4ED3,U+4ED6,U+4EE3,U+4EE4,U+4EE5,U+4EF6,U+4EFB,U+4EFD,U+4F1A,U+4F20,U+4F30,U+4F46,U+4F4D,U+4F4F,U+4F53,U+4F59,U+4F5C,U+4F60,U+4F7F,U+4F8B,U+4F9B,U+4F9D,U+4FC3,U+4FDD,U+4FE1,U+503C,U+5047,U+504F,U+505A,U+505C,U+5065,U+5076,U+50A8,U+50CF,U+5143,U+5148,U+514D,U+5165,U+5168,U+516C,U+516D,U+5171,U+5173,U+5176,U+5177,U+5185,U+518D,U+5199,U+51B3,U+51B5,U+51B7,U+51C6,U+51E0,U+51ED,U+51FA,U+5206,U+5207,U+5212,U+5217,U+5219,U+5220,U+5224,U+522B,U+5230,U+5236,U+5237,U+523B,U+524D,U+5269,U+526A,U+526F,U+529E,U+529F,U+52A0,U+52A1,U+52A8,U+5305,U+5317,U+5339,U+5341,U+5343,U+5347,U+534A,U+534F,U+5355,U+5360,U+5361,U+5374,U+5386,U+538B,U+539F,U+53BB,U+53C2,U+53C8,U+53CD,U+53D1,U+53D6,U+53D7,U+53D8,U+53E0,U+53E3,U+53E5,U+53E6,U+53EA,U+53EF,U+53F0,U+53F2,U+53F7,U+5404,U+5408,U+540C,U+540D,U+540E,U+5426,U+542B,U+542C,U+542F,U+5434,U+5458,U+5468,U+547D,U+548C,U+54C1,U+54CD,U+54D4,U+54E9,U+54EA,U+552F,U+5668,U+56DB,U+56DE,U+56E0,U+56FA,U+56FE,U+5708,U+5728,U+5730,U+573A,U+578B,U+57FA,U+585E,U+586B,U+589E,U+5904,U+5907,U+590D,U+5916,U+591A,U+591F,U+5927,U+5929,U+592A,U+5931,U+5934,U+5957,U+597D,U+5982,U+59CB,U+5B50,U+5B57,U+5B58,U+5B66,U+5B83,U+5B89,U+5B8C,U+5B9A,U+5B9E,U+5BA1,U+5BB9,U+5BBD,U+5BC6,U+5BDF,U+5BF8,U+5BF9,U+5BFC,U+5C0F,U+5C11,U+5C14,U+5C1A,U+5C31,U+5C3A,U+5C3D,U+5C3E,U+5C40,U+5C4F,U+5DE5,U+5DEE,U+5DF1,U+5DF2,U+5E03,U+5E08,U+5E26,U+5E27,U+5E2E,U+5E38,U+5E42,U+5E55,U+5E72,U+5E73,U+5E74,U+5E76,U+5E8F,U+5E93,U+5E94,U+5E95,U+5EA6,U+5EB7,U+5EF6,U+5EFA,U+5F00,U+5F02,U+5F03,U+5F0F,U+5F15,U+5F20,U+5F31,U+5F53,U+5F55,U+5F71,U+5F80,U+5F85,U+5F88,U+5F8B,U+5F97,U+5FAE,U+5FC3,U+5FC5,U+5FC6,U+5FEB,U+5FF5,U+6001,U+600E,U+601D,U+602A,U+603B,U+6062,U+606F,U+6084,U+60C5,U+60F3,U+610F,U+611F,U+6162,U+61C2,U+6210,U+6211,U+6216,U+622A,U+6240,U+624B,U+624D,U+6253,U+626D,U+6279,U+627E,U+6280,U+628A,U+6296,U+6298,U+62A4,U+62A5,U+62BD,U+62DF,U+62FF,U+6301,U+6302,U+6307,U+6309,U+6311,U+632A,U+6362,U+636E,U+6388,U+6389,U+6392,U+63A5,U+63A7,U+63A8,U+63D0,U+641C,U+642D,U+64CD,U+6536,U+6539,U+653E,U+6548,U+6559,U+6563,U+6570,U+6574,U+6587,U+6599,U+65AD,U+65B0,U+65B9,U+65BD,U+65E0,U+65E5,U+65E6,U+65E7,U+65E9,U+65EC,U+65F6,U+660E,U+6613,U+662F,U+663E,U+665A,U+666F,U+6682,U+66F2,U+66F4,U+6700,U+6708,U+6709,U+670D,U+671F,U+672A,U+672B,U+672C,U+672F,U+673A,U+6743,U+6750,U+675F,U+6761,U+6765,U+677F,U+679C,U+67D0,U+67E5,U+6807,U+680F,U+6837,U+6838,U+683C,U+6848,U+684C,U+68B0,U+68C0,U+6982,U+69FD,U+6A21,U+6B21,U+6B62,U+6B63,U+6B64,U+6B65,U+6BB5,U+6BCF,U+6BD4,U+6BDB,U+6C42,U+6CA1,U+6CD5,U+6CE8,U+6D3B,U+6D41,U+6D45,U+6D4B,U+6D4F,U+6D88,U+6DA8,U+6DF1,U+6DF7,U+6E05,U+6E29,U+6E90,U+6F0F,U+6F14,U+706F,U+7070,U+70B9,U+70BC,U+70E6,U+7167,U+7247,U+7248,U+7269,U+72B6,U+72EC,U+7387,U+73B0,U+7406,U+751F,U+7528,U+7531,U+7535,U+753B,U+7559,U+7591,U+75C5,U+767B,U+767D,U+767E,U+7684,U+76D1,U+76D8,U+76EE,U+76F4,U+76F8,U+76FE,U+770B,U+771F,U+7740,U+7763,U+77DB,U+77E5,U+77ED,U+7801,U+780D,U+7814,U+7834,U+7840,U+786C,U+786E,U+78C1,U+793A,U+7968,U+79BB,U+79C1,U+79D2,U+79EF,U+79F0,U+79FB,U+7A0B,U+7A0D,U+7A3F,U+7A76,U+7A7A,U+7A7F,U+7ACB,U+7AD9,U+7AEF,U+7B26,U+7B2C,U+7B49,U+7B54,U+7B80,U+7B97,U+7BA1,U+7BB1,U+7BC7,U+7C7B,U+7CFB,U+7D20,U+7D22,U+7D2F,U+7EA0,U+7EA6,U+7EA7,U+7EB2,U+7EB3,U+7EBF,U+7EC3,U+7EC4,U+7EC8,U+7ECF,U+7ED3,U+7ED9,U+7EDC,U+7EDF,U+7EED,U+7EF4,U+7EFF,U+7F13,U+7F16,U+7F3A,U+7F51,U+7F6E,U+8001,U+8003,U+8005,U+800C,U+8017,U+804A,U+8054,U+80CC,U+80FD,U+8111,U+811A,U+817E,U+81EA,U+81F3,U+820D,U+822A,U+8231,U+8282,U+82B1,U+82F1,U+8349,U+83DC,U+843D,U+865A,U+884C,U+8865,U+8868,U+88AB,U+88C5,U+897F,U+8981,U+89C1,U+89C2,U+89C4,U+89C6,U+89C8,U+89C9,U+89E3,U+8BA1,U+8BA2,U+8BA4,U+8BA9,U+8BAD,U+8BAE,U+8BB0,U+8BB2,U+8BBE,U+8BBF,U+8BC1,U+8BC6,U+8BCD,U+8BD5,U+8BDD,U+8BE2,U+8BE5,U+8BE6,U+8BED,U+8BEF,U+8BF4,U+8BF7,U+8BFB,U+8BFE,U+8C01,U+8C03,U+8D25,U+8D28,U+8D2F,U+8D34,U+8D39,U+8D44,U+8D56,U+8D77,U+8D85,U+8DB3,U+8DD1,U+8DDF,U+8DEF,U+8DF3,U+8EAB,U+8F6C,U+8F6E,U+8F6F,U+8F7D,U+8F93,U+8FB9,U+8FC7,U+8FD0,U+8FD1,U+8FD8,U+8FD9,U+8FDB,U+8FDC,U+8FDE,U+8FDF,U+8FF0,U+8FFD,U+9009,U+9010,U+901A,U+901F,U+9047,U+904D,U+9053,U+907F,U+90A3,U+90AE,U+90BB,U+90E8,U+90FD,U+914D,U+91C7,U+91CA,U+91CC,U+91CD,U+91CF,U+949F,U+94A5,U+94FE,U+9501,U+9519,U+952E,U+955C,U+957F,U+95E8,U+95ED,U+95EE,U+95F2,U+95F4,U+961F,U+9632,U+9633,U+9636,U+963F,U+9645,U+9650,U+9664,U+9694,U+96C6,U+96F6,U+9700,U+9760,U+9762,U+97F3,U+9875,U+9876,U+9879,U+987A,U+987B,U+9884,U+9891,U+9898,U+9988,U+9996,U+9A6C,U+9A76,U+9A7E,U+9A8C,U+9AD8,U+9E1F,U+9EBB,U+9EC4,U+9ED8,U+9F50,U+FF08,U+FF09,U+FF0C,U+FF1A,U+FF1B,U+FF1F,U+FF5E}
