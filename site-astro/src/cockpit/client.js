@@ -10,7 +10,7 @@ const local = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
 const endpoints = (local ? boot.local : boot.endpoints) || [];
 let view = normalize(boot.snapshot ? asView(boot.snapshot) : {});
 let offline = false, busy = null;
-const ctx = () => ({ now: new Date(), offline, projectUrls: boot.projectUrls || {}, img: boot.img || {} });
+const ctx = () => ({ now: new Date(), offline, projectUrls: boot.projectUrls || {}, img: boot.img || {}, ov: window.OverviewScreen });
 
 async function read(wake) {
   for (const base of endpoints) {
@@ -31,6 +31,8 @@ function paint() {
   for (const node of document.querySelectorAll('[data-cp]')) {
     const fn = REGIONS[node.dataset.cp];
     if (!fn) continue;
+    // 总览屏脚本还没加载完时先不动这几块，保留首帧
+    if (!c.ov && /^(overview|lamp-)/.test(node.dataset.cp)) continue;
     const html = fn(view, c);
     if (node.innerHTML !== html) {
       // 展开着的“AI 在核对”保持展开

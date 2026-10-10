@@ -67,6 +67,8 @@ export function normalize(raw) {
     projects: { state: st(projects.state), observed_at: projects.observed_at || null, items: list(projects.items) },
     source_gaps: list(v.source_gaps),
     owner_corrections: obj(v.owner_corrections),
+    // 健康分、扣分原因、6 个信号、各分区的灯都由后端 overview 给（O6 裁定），前端不算
+    overview: v.overview && typeof v.overview === 'object' ? v.overview : null,
   };
 }
 
@@ -74,11 +76,6 @@ export function normalize(raw) {
 export function dedupeCards(cards) {
   const seen = new Set();
   return cards.filter((c) => { const k = (c.text || '').trim() || c.id; if (seen.has(k)) return false; seen.add(k); return true; });
-}
-
-// 自动任务里出错、要留意的（停用的不算）
-export function taskAlerts(v) {
-  return v.automation.items.filter((t) => t.enabled !== false && ['failed', 'warn', 'overdue', 'stale'].includes(t.state));
 }
 
 // 给“今天的河”（scripts/today-river.js，代码不动）还原它原来读的任务形状

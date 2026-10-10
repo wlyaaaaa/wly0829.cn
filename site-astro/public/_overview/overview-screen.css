@@ -1,0 +1,99 @@
+/* 总览屏：驾驶舱大号（.ov-big）和首页电脑屏幕小号（.ov-small）共用。浅色屏，和全站水彩纸面一个色调。
+   四种灯色：绿 稳/正常、黄 留意、红 要你处理、灰 读不到；每盏灯旁边都有一个词，不只靠颜色。 */
+.ov {
+  --ov-green: #2f9e5a; --ov-yellow: #d4a21c; --ov-red: #c2473a; --ov-gray: #a9b3ae;
+  --ov-ink: #24352c; --ov-soft: #5d7266; --ov-line: #cfe6d7; --ov-track: #e6f2ea;
+  --ov-c: var(--ov-gray);
+  font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+  color: var(--ov-ink); line-height: 1.5;
+  background: linear-gradient(160deg, #f4fbf6 0%, #ffffff 55%, #f6fbf8 100%);
+  border: 1px solid var(--ov-line); border-radius: 18px;
+  box-shadow: 0 6px 22px rgba(21, 68, 35, .07);
+}
+.ov.is-green, .ov .is-green { --ov-c: var(--ov-green); }
+.ov.is-yellow, .ov .is-yellow { --ov-c: var(--ov-yellow); }
+.ov.is-red, .ov .is-red { --ov-c: var(--ov-red); }
+.ov.is-gray, .ov .is-gray { --ov-c: var(--ov-gray); }
+.ov ul { list-style: none; margin: 0; padding: 0; }
+.ov p { margin: 0; }
+
+/* 分数环 */
+.ov-head { display: flex; align-items: center; }
+.ov-ring { position: relative; flex: none; }
+.ov-ring svg { width: 100%; height: 100%; display: block; }
+.ov-track { fill: none; stroke: var(--ov-track); stroke-width: 11; }
+.ov-arc { fill: none; stroke: var(--ov-c); stroke-width: 11; stroke-linecap: round; }
+.ov-score { position: absolute; inset: 0; display: flex; align-items: baseline; justify-content: center; padding-top: 27%; color: var(--ov-c); }
+.ov-score b { font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.ov-score small { font-weight: 700; margin-left: 2px; }
+.ov-word { font-weight: 800; color: var(--ov-c); line-height: 1.2; }
+.ov-asof { color: var(--ov-soft); }
+
+/* 信号块 */
+.ov-sigs { display: grid; }
+.ov-sig { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto auto; column-gap: 10px; align-items: center; background: #fff; border: 1px solid var(--ov-line); border-radius: 12px; min-width: 0; }
+.ov-icon { grid-row: 1 / 4; color: var(--ov-c); }
+.ov-sig-label { color: var(--ov-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-sig-value { font-weight: 800; color: var(--ov-ink); line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ov-sig-value small { font-weight: 600; margin-left: 2px; color: var(--ov-soft); }
+.ov-sig.is-old .ov-sig-value { color: var(--ov-gray); }
+.ov-sig-word { display: inline-flex; align-items: center; gap: 6px; color: var(--ov-c); font-weight: 700; }
+.ov-lamp { display: inline-block; flex: none; border-radius: 50%; background: var(--ov-c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ov-c) 22%, transparent); }
+
+/* 大号：驾驶舱第一屏 */
+.ov-big { padding: 22px 26px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 18px 28px; align-items: center; }
+.ov-big .ov-head { gap: 22px; }
+.ov-big .ov-ring { width: 150px; height: 150px; }
+.ov-big .ov-score b { font-size: 50px; }
+.ov-big .ov-score small { font-size: 16px; }
+.ov-big .ov-word { font-size: 34px; }
+.ov-big .ov-asof { font-size: 13px; margin-top: 2px; }
+.ov-big .ov-why { margin-top: 8px; font-size: 14px; color: var(--ov-ink); }
+.ov-big .ov-why li { padding: 1px 0; }
+.ov-big .ov-why li::before { content: "·"; margin-right: 6px; color: var(--ov-soft); }
+.ov-big .ov-why b { color: var(--ov-red); font-variant-numeric: tabular-nums; }
+.ov-big .ov-why-none { color: var(--ov-soft); }
+.ov-big .ov-more { margin-top: 4px; font-size: 13px; color: var(--ov-soft); }
+.ov-big .ov-more summary { cursor: pointer; color: #0a7232; }
+.ov-big .ov-rules { margin-top: 4px; }
+.ov-big .ov-rules li::before { content: "– "; }
+.ov-big .ov-sigs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ov-big .ov-sig { padding: 10px 12px; }
+.ov-big .ov-icon { width: 30px; height: 30px; }
+.ov-big .ov-sig-label { font-size: 13px; }
+.ov-big .ov-sig-value { font-size: 24px; }
+.ov-big .ov-sig-value small { font-size: 13px; }
+.ov-big .ov-sig-word { font-size: 13px; }
+.ov-big .ov-lamp { width: 9px; height: 9px; }
+
+/* 小号：首页电脑屏幕（原生 670×370 画布，显示时约缩到一半，所以字号按原生尺寸给大） */
+.ov-small { padding: 20px 24px; display: flex; flex-direction: column; justify-content: center; gap: 18px; height: 100%; box-sizing: border-box; border-radius: 10px; box-shadow: none; }
+.ov-small .ov-head { gap: 26px; justify-content: center; }
+.ov-small .ov-asof { font-size: 20px; }
+.ov-small .ov-ring { width: 140px; height: 140px; }
+.ov-small .ov-score b { font-size: 54px; }
+.ov-small .ov-word { font-size: 46px; }
+.ov-small .ov-sigs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ov-small .ov-sig { padding: 10px 12px; }
+.ov-small .ov-icon { width: 34px; height: 34px; }
+.ov-small .ov-sig-label { font-size: 20px; }
+.ov-small .ov-sig-value { font-size: 30px; }
+.ov-small .ov-sig-value small { font-size: 18px; }
+.ov-small .ov-sig-word { font-size: 18px; }
+.ov-small .ov-lamp { width: 12px; height: 12px; }
+
+/* 分区标题旁的灯 */
+.ov-sec { --ov-c: #a9b3ae; display: inline-flex; align-items: center; gap: 7px; padding: 3px 12px; border-radius: 999px; border: 1px solid #d8e7dd; background: #fff; font-size: 14px; font-weight: 700; color: var(--ov-c); white-space: nowrap; }
+.ov-sec.is-green { --ov-c: #2f9e5a; } .ov-sec.is-yellow { --ov-c: #b88a12; } .ov-sec.is-red { --ov-c: #c2473a; }
+.ov-sec .ov-lamp { width: 10px; height: 10px; background: var(--ov-c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ov-c) 22%, transparent); }
+
+@media (max-width: 900px) {
+  .ov-big { grid-template-columns: 1fr; padding: 16px; }
+  .ov-big .ov-ring { width: 118px; height: 118px; }
+  .ov-big .ov-score b { font-size: 40px; }
+  .ov-big .ov-word { font-size: 28px; }
+}
+@media (max-width: 560px) {
+  .ov-big .ov-sigs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ov-big .ov-sig-value { font-size: 20px; }
+}

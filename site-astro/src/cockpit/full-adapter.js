@@ -62,6 +62,7 @@ export function fromFull(full) {
     projects: { state: blockState(f.projects), observed_at: obj(f.projects).observed_at, items: rows(f.projects).map((r) => ({ id: text(r.id), name: text(r.project), mode: text(r.mode), phase: r.phase, run_health: r.run_health, overview: r.overview, waiting_user: r.waiting_user_count, waiting_ai: r.waiting_ai_count, on_hold: r.on_hold_count, health_reason: text(r.health_reason), last_commit_at: r.last_commit_at, commits_7d: r.commits_7d })) },
     source_gaps: (Array.isArray(cp.source_gaps) ? cp.source_gaps : []).map((r) => ({ source_id: text(r.source_id), title: text(r.title), since: r.since, observed_at: r.observed_at })),
     owner_corrections: obj(cp.owner_corrections),
+    overview: f.overview && typeof f.overview === 'object' ? f.overview : (cp.overview && typeof cp.overview === 'object' ? cp.overview : null),
   };
 }
 

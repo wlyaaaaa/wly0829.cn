@@ -3,6 +3,7 @@
 // 首帧用构建时读到的最近一份数据画好最终版式；读不到就用仓库里的上一份（src/cockpit/snapshot.json），都标明读取时间。
 // 浏览器里 src/cockpit/client.js 读新数据、原地换字，不换版式。
 import Site from '../../layouts/Site.astro';
+import { pathToFileURL } from 'node:url';
 import fallback from '../../cockpit/snapshot.json';
 import { normalize } from '../../cockpit/model.js';
 import { asView } from '../../cockpit/full-adapter.js';
@@ -47,12 +48,15 @@ const toc = [
   { id: 'top', label: '开头' }, { id: 'need-you', label: '要我处理' }, { id: 'tasks', label: '自动任务' }, { id: 'computer', label: '电脑' },
   { id: 'backup', label: '备份和云端' }, { id: 'projects', label: '项目' }, { id: 'today', label: '今天' },
 ];
-const html = page(view, { now: new Date(), offline: false, projectUrls, img });
+// 总览屏共用脚本（public/_overview/，首页小屏也用它）：构建时直接按文件导入，画首帧
+const ov = await import(/* @vite-ignore */ new URL('public/_overview/overview-screen.js', pathToFileURL(process.cwd() + '/')).href);
+const html = page(view, { now: new Date(), offline: false, projectUrls, img, ov });
 const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
 const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
 ---
 <Site title="驾驶舱" kind="cockpit" url="/cockpit/" page="cockpit" toc={toc}>
   <link rel="stylesheet" href={riverCss} />
+  <link rel="stylesheet" href="/_overview/overview-screen.css" />
   <div class="cp-page"><Fragment set:html={html} /></div>
   <div class="cockpit-refresh-wrap">
     <button type="button" class="cockpit-refresh" data-cockpit-refresh aria-label="刷新驾驶舱数据" title="立刻重读电脑">
@@ -62,6 +66,7 @@ const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], sna
   </div>
   <script is:inline id="cockpit-boot" type="application/json" set:html={boot}></script>
   <script is:inline type="module" set:html={`(()=>{const n=document.getElementById('page-data');if(!n)return;try{const d=JSON.parse(n.textContent);d.today_river_assets=${safe(riverAssets)};n.textContent=JSON.stringify(d);}catch{}})();`}></script>
+  <script is:inline type="module" src="/_overview/overview-screen.js"></script>
   <script is:inline type="module" src={riverJs}></script>
 </Site>
 <script>

@@ -1,6 +1,6 @@
 // 驾驶舱各块的 HTML。构建时用最近一份快照画出首帧，浏览器拿到新数据后用同一组函数原地换掉每块里面的内容。
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
-import { hm, when, light, splitChecked, dedupeCards, taskAlerts } from './model.js';
+import { hm, when, light, splitChecked, dedupeCards } from './model.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
@@ -17,29 +17,6 @@ export function card(c, now) {
   return `<article class="cp-card is-${light(c.state)}"><h3>${dot(c.state)}${esc(c.title)}</h3><p>${text}</p>`
     + (c.criteria_text ? `<p class="cp-criteria">判断标准：${esc(c.criteria_text)}</p>` : '')
     + time + (['red', 'attention'].includes(c.state) ? `<div class="cp-actions">${copyBtn(c.copy_ai_id)}</div>` : '') + `</article>`;
-}
-
-// 第一屏“现在”：一句结论 + 读到时间（连不上电脑时在这里说清楚，不在别处插条）
-export function now(v, ctx) {
-  const n = v.counts.need_you, ai = v.counts.ai_following, wait = v.counts.deferred;
-  const head = !v.ok ? `${dot('unavailable')}<strong>${notRead(v.served_at, ctx.now)}</strong>`
-    : n > 0 ? `${dot('red')}<strong>要你处理 ${n} 项</strong>`
-    : `${dot(v.verdict.state === 'attention' ? 'attention' : 'ok')}<strong>现在不用你处理</strong>`;
-  const bits = [ai ? `AI 在核对 ${ai} 项，你不用管` : '', wait ? `${wait} 件等条件到了再办` : ''].filter(Boolean).join(' · ');
-  const read = ctx.offline ? `连不上电脑，下面是 ${esc(when(v.served_at, ctx.now))} 读到的` : v.served_at ? `${esc(when(v.served_at, ctx.now))} 读到（北京时间）` : '';
-  return `<p class="cp-verdict">${head}</p><p class="cp-verdict-sub">${[bits, read].filter(Boolean).join(' · ')}</p>`;
-}
-
-// 四个数字小卡，点了跳到对应分区
-export function tiles(v) {
-  const alerts = taskAlerts(v).length, backup = v.counts.backup_problems;
-  const t = [
-    ['need-you', v.counts.need_you, '项', '要你处理', v.counts.need_you ? 'red' : 'ok'],
-    ['ai', v.counts.ai_following, '项', 'AI 在核对', v.counts.ai_following ? 'attention' : 'ok'],
-    ['tasks', alerts, '个', '自动任务出错或要留意', alerts ? 'attention' : 'ok'],
-    ['backup', backup, '项', '备份要留意', backup ? 'attention' : 'ok'],
-  ];
-  return t.map(([href, num, unit, label, s]) => `<a class="cp-tile is-${light(s)}" href="#${href}"><span class="cp-tile-num">${esc(num)}<small>${unit}</small></span><span class="cp-tile-label">${dot(s)}${label}</span></a>`).join('');
 }
 
 // 安全和授权：只显示，点了去授权页对应卡片办理（锚点和 O3 对齐）
@@ -125,21 +102,24 @@ export function todayBlock(v, ctx) {
     + `<h3 class="cp-sub">今天发生的事</h3>` + (events ? `<ul class="cp-list">${events}</ul>` : `<p class="cp-line">${dot('ok')}今天还没有新事件。</p>`) + gaps;
 }
 
-export const REGIONS = { now, tiles, security, 'need-you': needYou, computer, backup, projects, today: todayBlock };
+// 总览屏和分区灯由共用脚本 /_overview/overview-screen.js 画（ctx.ov 传进来：构建时 import，浏览器里是 window.OverviewScreen）
+const overview = (v, ctx) => ctx.ov ? ctx.ov.html(v.overview, { size: 'big', now: ctx.now.getTime() }) : '';
+const LAMPS = { 'need-you': 'need_you', tasks: 'tasks', computer: 'computer', backup: 'backup', projects: 'projects', today: 'today' };
+const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
+export const REGIONS = { overview, security, 'need-you': needYou, computer, backup, projects, today: todayBlock,
+  ...Object.fromEntries(Object.entries(LAMPS).map(([id, key]) => ['lamp-' + id, lampOf(key)])) };
 
 // 整页：外框固定，内容由上面各函数填
 export function page(v, ctx) {
   const r = (k) => `<div class="cp-body" data-cp="${k}">${REGIONS[k](v, ctx)}</div>`;
-  const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><p>${sub}</p></div>${body}</section>`;
+  const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><span class="cp-lamp" data-cp="lamp-${id}">${REGIONS['lamp-' + id](v, ctx)}</span><p>${sub}</p></div>${body}</section>`;
   return `<section class="cp-section cp-hero" id="top">
   <div class="cp-hero-copy">
     <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"></h1>
-    ${r('now')}
     <p class="cp-lead">这台电脑现在好不好、要我做什么，一页看完。每分钟从电脑读一次，时间都是北京时间；右下角 ↻ 立刻重读。</p>
-    <p class="cp-legend">${dot('ok')}都正常　${dot('attention')}要留意　${dot('red')}要你马上处理　${dot('unavailable')}没读到，或正常关着</p>
   </div>
   <img class="cp-hero-art" src="${src(ctx, 'cockpit-01-illustration-01.png')}" alt="" width="866" height="326" loading="eager">
-  <div class="cp-tiles" data-cp="tiles">${tiles(v)}</div>
+  <div class="cp-overview" data-cp="overview">${overview(v, ctx)}</div>
   <div class="cp-security-wrap"><h2 class="cp-security-title"><img src="${src(ctx, 'cockpit-07-title-01.png')}" alt="安全和授权" width="719" height="180" loading="eager"></h2><div class="cp-security" data-cp="security">${security(v, ctx)}</div></div>
 </section>
 ${sec('need-you', ['cockpit-01-title-02.png', '要我处理的事'], 348, 84, '要你动手的事；做完后 AI 核实，会自己从这里消失。', r('need-you'))}

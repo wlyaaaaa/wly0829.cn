@@ -23,22 +23,9 @@
 .cp-hero h1 { margin: 0; line-height: 0; }
 .cp-hero h1 img { height: 96px; width: auto; }
 .cp-hero-art { width: 100%; align-self: center; }
-.cp-verdict { margin: 10px 0 0; font-size: 26px; line-height: 1.35; }
-.cp-verdict strong { font-weight: 800; }
-.cp-verdict .cp-dot { width: 16px; height: 16px; margin-right: 10px; vertical-align: 2px; }
-.cp-verdict-sub { margin: 4px 0 0; color: var(--cp-soft); font-size: 15px; }
 .cp-lead { margin: 14px 0 4px; }
-.cp-legend { margin: 0; color: var(--cp-soft); font-size: 13px; }
-.cp-legend .cp-dot { width: 9px; height: 9px; margin-right: 4px; }
-.cp-tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 10px; }
-.cp-tile { display: flex; flex-direction: column; gap: 2px; padding: 12px 18px; border: 1px solid var(--cp-line); border-radius: 14px; background: var(--cp-card); text-decoration: none; color: var(--cp-ink) !important; box-shadow: 0 2px 10px rgba(21, 68, 35, .05); }
-.cp-tile:hover { border-color: #9ddcae; }
-.cp-tile-num { font-size: 40px; font-weight: 800; color: var(--cp-title); line-height: 1.15; }
-.cp-tile.is-red .cp-tile-num { color: var(--cp-red); }
-.cp-tile.is-yellow .cp-tile-num { color: #9a7410; }
-.cp-tile-num small { font-size: 16px; font-weight: 600; margin-left: 4px; }
-.cp-tile-label { color: var(--cp-soft); font-size: 15px; }
-.cp-tile-label .cp-dot { width: 9px; height: 9px; margin-right: 6px; }
+.cp-overview { grid-column: 1 / -1; margin-top: 4px; }
+.cp-head .cp-lamp { align-self: center; margin-bottom: 4px; }
 .cp-security-wrap { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; margin-top: 14px; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 14px; background: #fff; }
 .cp-security-title { margin: 0; line-height: 0; flex: none; }
 .cp-security-title img { height: 46px; width: auto; }
@@ -109,10 +96,6 @@
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
   .cp-hero { grid-template-columns: 1fr; }
   .cp-hero h1 img { height: 72px; }
-  .cp-verdict { font-size: 22px; }
-  .cp-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-  .cp-tile { padding: 10px 14px; }
-  .cp-tile-num { font-size: 32px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-sec-item { grid-template-columns: 40px 1fr; padding: 6px 4px; }
   .cp-sec-item img, .cp-sec-pc { width: 40px; }
