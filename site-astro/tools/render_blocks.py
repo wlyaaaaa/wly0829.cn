@@ -372,9 +372,10 @@ HYDRATE_JS = r"""async (bind) => {
   const imgs = [...main.querySelectorAll('img')], imageCorrections = [];
   for (const im of imgs) {
     if (im.naturalWidth && im.naturalHeight) { im.setAttribute('width', im.naturalWidth); im.setAttribute('height', im.naturalHeight); }
-    const r = im.getBoundingClientRect();
+    const r = im.getBoundingClientRect(), objectFit = getComputedStyle(im).objectFit;
+    if (document.body.classList.contains('o-h') && ['contain', 'cover'].includes(objectFit)) im.setAttribute('data-ts-ratio-preserved', objectFit);
     if (r.width > 0 && r.height > 0) {
-      if (document.body.classList.contains('o-h') && getComputedStyle(im).objectFit === 'fill' && im.naturalWidth && im.naturalHeight && Math.abs(r.width / r.height / (im.naturalWidth / im.naturalHeight) - 1) >= .01) {
+      if (document.body.classList.contains('o-h') && objectFit === 'fill' && im.naturalWidth && im.naturalHeight && Math.abs(r.width / r.height / (im.naturalWidth / im.naturalHeight) - 1) >= .01) {
         const height = r.width * im.naturalHeight / im.naturalWidth;
         imageCorrections.push({src: im.getAttribute('src'), before: [r.width, r.height], after: [r.width, height]});
         im.setAttribute('data-ts-ratio-corrected', '1'); im.setAttribute('data-ts-ratio-before', r.width + ',' + r.height);
