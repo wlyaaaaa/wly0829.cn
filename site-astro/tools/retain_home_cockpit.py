@@ -158,7 +158,17 @@ def retain_candidate(source):
     engine = json.loads((ROOT / 'src/chrome/living-engine.json').read_text(encoding='utf-8'))
     cockpit = output / 'cockpit.html'
     cockpit.write_text(cockpit.read_text(encoding='utf-8').replace(engine['deployed'], engine['fixed']), encoding='utf-8', newline='')
+    cockpit_white = run_path(str(ROOT / 'tools/cockpit_white_gear.py'))['build'](public, cockpit)
+    head = re.search(r'<section\b[^>]*\bid="cockpit-01"[^>]*>', cockpit.read_text('utf8'))[0]
+    binding = json.loads(html.unescape(re.search(r'data-living-binding="([^"]+)"', head)[1]))
+    config_url = re.search(r'data-living-config="([^"]+)"', head)[1]
+    config = json.loads((public / config_url.lstrip('/')).read_text('utf8'))
+    for url in {config_url, *(item['src'] for item in binding.values()), *(config[side]['texture']['src'] for side in binding)}:
+        copied[url.lstrip('/')] = descriptor((public / url.lstrip('/')).read_bytes())
     mobile_todo = run_path(str(ROOT / 'tools/cockpit_mobile_todo.py'))['build'](public, cockpit)
+    layout = run_path(str(ROOT / 'tools/cockpit_layout.py'))['build'](public, cockpit)
+    for rel in (layout['runtime'], layout['stylesheet']):
+        copied[rel] = descriptor((public / rel).read_bytes())
     copied[mobile_todo['runtime']] = descriptor((public / mobile_todo['runtime']).read_bytes())
     firstpaint = re.search(r'/(_home-cockpit/home-firstpaint-[a-f0-9]+\.js)', home.read_text('utf-8'))[1]
     for rel in (firstpaint, '_living/_engine/' + engine['fixed']):
@@ -167,7 +177,9 @@ def retain_candidate(source):
         'pages': {page: descriptor((output / (page + '.html')).read_bytes()) for page in inputs},
         'files': copied, 'count': len(copied), 'bytes': sum(row['bytes'] for row in copied.values())}
     manifest['home_white_gear'] = white_gear
+    manifest['cockpit_white_gear'] = cockpit_white
     manifest['cockpit_mobile_todo'] = mobile_todo
+    manifest['cockpit_layout'] = layout
     (output / 'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return manifest
 
@@ -204,7 +216,10 @@ def regenerate_runtimes(work):
              'config/rule-navigation-mappings.json', 'app/computer-access-model.js']
     white_root = repo / 'sources/home-white-gear'
     names += ['sources/home-white-gear/build.py', 'sources/signature/assets-manifest.json']
-    names += ['site-astro/tools/cockpit_white_gear.py', 'site-astro/tools/cockpit_mobile_todo.py',
+    names += ['site-astro/tools/cockpit_layout.py', 'site-astro/tools/pack_living.py',
+              'scripts/prepare-oss-release.py', 'site-astro/tools/adapt_motion.py',
+              'scripts/prepare-today-river.py', 'scripts/album-runtime.js', 'scripts/album-runtime.css',
+              'site-astro/tools/cockpit_white_gear.py', 'site-astro/tools/cockpit_mobile_todo.py',
               'sources/assets/_library/illustrations/ill-53b8c5c622e8b9.png']
     names += ['sources/home-white-gear/' + name + '.png' for name in
               ('master-h', 'master-v', 'plate-h', 'plate-h-nobird', 'plate-v', 'plate-v-nobird', 'native-h', 'native-v-fallback')]
@@ -262,24 +277,30 @@ def regenerate_runtimes(work):
         for old, new in replacements.items(): text = text.replace(old, new)
         return text
     previous_mobile = previous.get('cockpit_mobile_todo')
+    previous_layout = previous.get('cockpit_layout')
+    cockpit_text = pages['cockpit']
+    if previous_layout:
+        for key in ('runtime', 'stylesheet'):
+            cockpit_text = cockpit_text.replace('/' + previous_layout[key], '/' + previous_layout['base_' + key])
     if previous_mobile:
-        original = '/' + previous_mobile['base_runtime']
-        replacements['/' + previous_mobile['runtime']] = replacements.get(original, original)
+        cockpit_text = cockpit_text.replace('/' + previous_mobile['runtime'], '/' + previous_mobile['base_runtime'])
     work = Path(work); work.mkdir(parents=True, exist_ok=True)
     cockpit = work / 'cockpit/index.html'; cockpit.parent.mkdir(parents=True, exist_ok=True)
-    cockpit.write_text(replace(pages['cockpit']), encoding='utf8', newline='')
-    if previous_mobile: replacements.pop('/' + previous_mobile['runtime'], None)
+    cockpit.write_text(replace(cockpit_text), encoding='utf8', newline='')
     cockpit_white = run_path(str(ROOT / 'tools/cockpit_white_gear.py'))['build'](public, cockpit)
     cockpit.write_text(re.sub(r'<style data-cockpit-mobile-todo>.*?</style>', '', cockpit.read_text('utf8'), flags=re.S), encoding='utf8', newline='')
     base_runtime = re.search(r'data-src="([^"]*/b2-typeset-[\w]+\.js)"', cockpit.read_text('utf8'))[1].lstrip('/')
     mobile_todo = run_path(str(ROOT / 'tools/cockpit_mobile_todo.py'))['build'](public, cockpit)
     mobile_todo['base_runtime'] = base_runtime
+    base_stylesheet = re.search(r'<link\b[^>]*href="([^"]*/b2-live-[\w]+\.css)"', cockpit.read_text('utf8'))[1].lstrip('/')
+    layout = run_path(str(ROOT / 'tools/cockpit_layout.py'))['build'](public, cockpit)
+    layout.update(base_runtime=mobile_todo['runtime'], base_stylesheet=base_stylesheet)
     pages['cockpit'] = cockpit.read_text('utf8')
     head = re.search(r'<section\b[^>]*\bid="cockpit-01"[^>]*>', pages['cockpit'])[0]
     binding = json.loads(html.unescape(re.search(r'data-living-binding="([^"]+)"', head)[1]))
     config_url = re.search(r'data-living-config="([^"]+)"', head)[1]
     config = json.loads((public / config_url.lstrip('/')).read_text('utf8'))
-    cockpit_resources = {config_url, '/' + mobile_todo['runtime'], *(item['src'] for item in binding.values()),
+    cockpit_resources = {config_url, '/' + mobile_todo['runtime'], '/' + layout['runtime'], '/' + layout['stylesheet'], *(item['src'] for item in binding.values()),
                          *(config[side]['texture']['src'] for side in binding)}
     for url in cockpit_resources:
         rel = url.lstrip('/'); raw = (public / rel).read_bytes(); proof = descriptor(raw)
@@ -349,6 +370,7 @@ def regenerate_runtimes(work):
     manifest['home_white_gear'] = white_gear
     manifest['cockpit_white_gear'] = cockpit_white
     manifest['cockpit_mobile_todo'] = mobile_todo
+    manifest['cockpit_layout'] = layout
     for url in cockpit_resources: manifest['files'][url.lstrip('/')] = outputs[url.lstrip('/')]
     for page, text in pages.items():
         raw = text.encode('utf8'); (source / (page + '.html')).write_bytes(raw)
@@ -363,7 +385,7 @@ def regenerate_runtimes(work):
     for path, value in [(source / 'manifest.json', manifest), (source / 'dependencies.json', dependencies),
                         (record, {'schema': 'wly.retained-runtime-inputs.v1', 'inputs': current_inputs(), 'base': base,
                                   'outputs': outputs, 'replacements': {('/' + rel): ('/' + new) for rel, new in generated.items()},
-                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear, 'cockpit_mobile_todo': mobile_todo})]:
+                                  'firstpaint_source': original_engine, 'home_white_gear': white_gear, 'cockpit_mobile_todo': mobile_todo, 'cockpit_layout': layout})]:
         path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8', newline='\r\n' if path.name == 'dependencies.json' else '\n')
     materialize_frozen()
     return {'status': 'regenerated', 'inputs': current_inputs(), 'outputs': outputs, 'dependencies': restored}
@@ -380,7 +402,7 @@ def finalize_runtime(site=ROOT):
             match = re.search(r'<script\b[^>]*id="album-page"[^>]*>(.*?)</script>', body, re.S)
             routes[route] = {'images': json.loads(match[1]).get('images', []) if match else []}
             if base == dist and rel != 'computer-access/index.html': pages[path] = body
-    old = {value for body in pages.values() for value in re.findall(r'/_album/routes-[a-f0-9]+\.json', body)}
+    old = {value for body in pages.values() for value in re.findall(r'''(?:https?://[^\s"'<>]+)?/_album/routes-[a-f0-9]+\.json''', body)}
     if not old: return {'routes': len(routes), 'updated_pages': 0}
     raw = (json.dumps({'schema': 'wly.album-routes.v1', 'routes': routes}, ensure_ascii=False, sort_keys=True, separators=(',', ':')) + '\n').encode('utf8')
     address = '/_album/routes-' + hashlib.sha256(raw).hexdigest()[:20] + '.json'
@@ -388,9 +410,9 @@ def finalize_runtime(site=ROOT):
     changed = 0
     for path, body in pages.items():
         updated = body
-        for previous in old: updated = updated.replace(previous, address)
+        for previous in sorted(old, key=len, reverse=True): updated = updated.replace(previous, address)
         if updated != body: path.write_bytes(updated.encode('utf8')); changed += 1
-    for previous in old - {address}:
+    for previous in {url for url in old if url.startswith('/')} - {address}:
         obsolete = dist / previous.lstrip('/')
         if obsolete.is_file(): obsolete.unlink()
     return {'routes': len(routes), 'updated_pages': changed, 'resource': address, **descriptor(raw)}

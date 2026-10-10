@@ -92,11 +92,13 @@ class FrozenHomeTests(unittest.TestCase):
         dist = self.site / 'dist'; access = dist / 'computer-access/index.html'
         access.parent.mkdir(parents=True); access.write_bytes(original)
         owned = dist / 'index.html'
-        owned.write_text('<script id="album-page">{"images":[]}</script><link href="/_album/routes-0123456789abcdef0123.json">', encoding='utf8')
+        owned.write_text('<script id="album-page">{"images":[]}</script><link href="/_album/routes-0123456789abcdef0123.json"><link href="https://old.example/releases/old/_album/routes-0123456789abcdef0123.json">', encoding='utf8')
         result = subprocess.run([sys.executable, str(self.site / 'tools/retain_home_cockpit.py'), '--finalize'], cwd=self.site, text=True, encoding='utf8', capture_output=True)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertEqual(access.read_bytes(), original)
         self.assertNotIn('routes-0123456789abcdef0123.json', owned.read_text('utf8'))
+        self.assertNotIn('https://old.example/releases/old/', owned.read_text('utf8'))
+        self.assertEqual(owned.read_text('utf8').count(json.loads(result.stdout)['resource']), 2)
 
 
 if __name__ == '__main__':

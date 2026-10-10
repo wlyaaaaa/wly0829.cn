@@ -4,11 +4,15 @@ import access from './chrome/retained/computer-access.html?raw';
 import timeLabels from '../public/_home-cockpit/time-labels.css?raw';
 import homeCta from '../public/_home-cockpit/home-cta.css?raw';
 import albumRuntime from '../public/_album/astro-runtime.json';
+import motionRuntime from '../public/_living/quality-runtime/manifest.json';
+import typesetStyles from './styles/typeset-page.css?raw';
 
 // 保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
 export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
   if (page === 'computer-access') return access;
   let html = page === 'home' ? home : page === 'cockpit' ? cockpit : access;
+  for (const [from, to] of Object.entries(motionRuntime.urls)) html = html.replaceAll(from, to as string);
+  html = html.replace('</head>', `<style data-motion-quality>${typesetStyles.split('/* motion-quality-v2 */')[1]}</style></head>`);
   html = html.replace(/<script[^>]*data-album-inline[^>]*>.*?<\/script>/s, () => `<script data-album-inline>${albumRuntime.source}</script>`)
     .replace(/\/_album\/album-[\w]+\.css/g, albumRuntime.css);
   // 编码先于含中文的同步脚本；慢网和无 JS 也保持原图正确的横竖比例。
@@ -20,7 +24,8 @@ export function retainedPage(page: 'home' | 'cockpit' | 'computer-access') {
     const buttons = data.screens[0].layouts.h.links.filter((link: any) => link.button);
     const practice = html.match(/<\/section>\s*<div class="screen-control-row" data-home-practice-link><a href="([^"]+)">([^<]+)<\/a><\/div>/)!;
     const links = [...buttons.map((link: any) => [link.href, link.text]), [practice[1], practice[2]]];
-    html = html.replace(practice[0], `<nav class="home-hero-cta" aria-label="首页入口">${links.map(([href, text]) => `<a href="${href}">${text}</a>`).join('')}</nav></section>`);
+    html = html.replace(practice[0], `<nav class="home-hero-cta" aria-label="首页入口">${links.map(([href, text]) => `<a href="${href}">${text}</a>`).join('')}</nav></section><aside id="home-phone-status" role="status">还没读到电脑状态。</aside>`);
+    html = html.replace('</body>', `<script>(()=>{const row=document.querySelector('#home-phone-status');const update=s=>{const value=s?.overall;if(value)row.textContent=[value.title,value.detail].filter(Boolean).join('\\n');};document.addEventListener('site-status',e=>update(e.detail));update(window.SiteStatus?.snapshot?.());})();</script></body>`);
     html = html.replace('id="home-01"', 'id="home-01" data-home-cta="group"');
     const native = ['h', 'v'].map((orientation) => {
       const sizes = data.screens.map((screen: any) => {

@@ -347,7 +347,8 @@ def prepare_page(name, reg, css_files, libfp):
                 # 和现在出图一样：独立卡（shape=card）、构图写了不要竖版的，手机上照用电脑那份
                 if s.get("shape") == "card" or any((x or {}).get("portrait_required") is False for x in lay.values()):
                     continue
-            key = hashlib.sha256(json.dumps([libfp, meta, text, o], ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
+            art_version = "-mock-art-v1" if any(b.get("type") == "document_mock" for b in (sp or {}).get("blocks", [])) else ""
+            key = hashlib.sha256(json.dumps([libfp + art_version, meta, text, o], ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
             doc, info = build_html(page, s, o, reg, css_files, sp)
             hp = os.path.join(WORK, name, f"{s['id']}-{o}.html")
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
@@ -392,7 +393,7 @@ HYDRATE_JS = r"""async (bind) => {
       const iou = ix * iy / (q.width * q.height + R.w * R.h - ix * iy);
       if (iou > best) { best = iou; art = im; }
     }
-    const only = main.querySelectorAll('[data-comp="illustration"] img');
+    const only = main.querySelectorAll('[data-comp="illustration"] img, [data-comp="document_mock"] img.mock-base-art');
     if (best <= 0.5 && only.length === 1) { art = only[0]; best = 1; }
     if (art && best > 0.5) { art.setAttribute('data-ts-art', String(Math.round(best * 1000) / 1000)); } else art = null;
   }
