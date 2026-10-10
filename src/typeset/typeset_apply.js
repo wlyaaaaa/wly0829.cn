@@ -524,7 +524,7 @@ globalThis.TypesetApply = () => {
         else Object.assign(block.style,{width:Math.max(260,b.width)+'px',maxWidth:'100%'});
         Object.assign(group.style,{display:'flex',flexDirection:'column',alignItems:'center',width:'100%',gap:'12px'});group.append(block,...captions);down.push(group);
       }
-      cols.forEach(c=>{c.classList.remove('col');Object.assign(c.style,{display:'flex',flexDirection:'column',gap:'12px',width:'100%',alignSelf:'start'});c.querySelectorAll('.card.frame').forEach(f=>f.style.width='100%');});Object.assign(row.style,{display:'flex',flexDirection:'column',alignItems:'stretch'});row.append(...down);row.dataset.typesetFit='stacked';receipt.balance.push({kind:'stack_media_row',source_row:sourceRow,columns:identities,media_items:down.length});
+      if (!down.length) continue;cols.forEach(c=>{c.classList.remove('col');Object.assign(c.style,{display:'flex',flexDirection:'column',gap:'12px',width:'100%',alignSelf:'start'});c.querySelectorAll('.card.frame').forEach(f=>f.style.width='100%');});Object.assign(row.style,{display:'flex',flexDirection:'column',alignItems:'stretch'});row.append(...down);row.dataset.typesetFit='stacked';receipt.balance.push({kind:'stack_media_row',source_row:sourceRow,columns:identities,media_items:down.length});
     } }
   receipt.balance=[];
   compactPage();keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
