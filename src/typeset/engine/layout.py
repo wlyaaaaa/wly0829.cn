@@ -448,7 +448,8 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
                 if b["spec"].get(k) not in (None, "", False):
                     sp0.setdefault(k, b["spec"][k])
         rcls = (" eqh" if sp0.get("row_equal_height") else "") + (" mid" if sp0.get("row_valign") == "center" else "")
-        if sp0.get("row_fit_illustration") is True:  # 文字栏 + 图栏（插画，或截图连图注）：排版时图按文字栏高度定大小（typeset_apply.js fitIllustrationRows）
+        fit_disabled = orient == "h" and any(b["spec"].get("row_fit_illustration") is False for b, _ in row)
+        if sp0.get("row_fit_illustration") is True and not fit_disabled:
             rcls += " fit-ill"
         if sp0.get("row_card_notes") is True:
             rcls += " card-notes"
@@ -472,6 +473,13 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
                     cols.append([b["spec"].get("width"), [(b, h)]])
                 else:
                     cols[-1][1].append((b, h))
+            media = [all(b["type"] == "prose" or b["type"] == "illustration" and len(re.findall(r"<img\b", h)) == 1
+                     or b["type"] == "screenshot" and h.count('data-hot="screenshot"') == 1 for b, h in it)
+                     and any(b["type"] != "prose" for b, _ in it)
+                     for _, it in cols]
+            if orient == "h" and not fit_disabled and " fit-ill" not in rcls and any(media) and any(
+                    not media[i] and any(b["nodes"] for b, _ in it) for i, (_, it) in enumerate(cols)):
+                rcls += " fit-ill"
             # 百分比按比例换成 fr，免得加上栏间距后溢出
             tmpl = " ".join(pct(w) for w, _ in cols)
             inner = inline_rows if frame else wrap_frames

@@ -370,11 +370,19 @@ HYDRATE_JS = r"""async (bind) => {
   // 区块自己的脚本已经画完（连线、箭头、虚线），HTML 里不再带脚本
   main.querySelectorAll('script').forEach(s => s.remove());
   // 图片固定成排好的大小：画布宽度不变，图没下载完时版面也不跳
-  const imgs = [...main.querySelectorAll('img')];
+  // contain/cover 已按原图比例绘制，保留固定框；只校正 fill（含默认值）造成的实际拉伸。
+  const imgs = [...main.querySelectorAll('img')], imageCorrections = [];
   for (const im of imgs) {
     if (im.naturalWidth && im.naturalHeight) { im.setAttribute('width', im.naturalWidth); im.setAttribute('height', im.naturalHeight); }
-    const r = im.getBoundingClientRect();
+    const r = im.getBoundingClientRect(), objectFit = getComputedStyle(im).objectFit;
+    if (document.body.classList.contains('o-h') && ['contain', 'cover'].includes(objectFit)) im.setAttribute('data-ts-ratio-preserved', objectFit);
     if (r.width > 0 && r.height > 0) {
+      if (document.body.classList.contains('o-h') && objectFit === 'fill' && im.naturalWidth && im.naturalHeight && Math.abs(r.width / r.height / (im.naturalWidth / im.naturalHeight) - 1) >= .01) {
+        const height = r.width * im.naturalHeight / im.naturalWidth;
+        imageCorrections.push({src: im.getAttribute('src'), before: [r.width, r.height], after: [r.width, height]});
+        im.setAttribute('data-ts-ratio-corrected', '1'); im.setAttribute('data-ts-ratio-before', r.width + ',' + r.height);
+        im.style.maxHeight = 'none'; r.height = height;
+      }
       im.setAttribute('data-ts-w', Math.round(r.width * 100) / 100);
       im.setAttribute('data-ts-h', Math.round(r.height * 100) / 100);
       im.style.width = (Math.round(r.width * 100) / 100) + 'px'; im.style.height = (Math.round(r.height * 100) / 100) + 'px';
@@ -406,7 +414,8 @@ HYDRATE_JS = r"""async (bind) => {
   }
   const titles = [...main.querySelectorAll('.title-img img')].map(i => i.getAttribute('src'));
   return {html: main.innerHTML, style: main.getAttribute('style') || '', height: Math.ceil(document.documentElement.scrollHeight),
-          width: document.documentElement.scrollWidth, art: art ? art.getAttribute('src') : null, artBox, titles};
+          width: document.documentElement.scrollWidth, art: art ? art.getAttribute('src') : null, artBox, titles, imageCorrections,
+          imageCorrectionPolicy: {correct: 'fill', preserve: ['contain', 'cover'], scope: 'o-h', tolerance: .01}};
 }"""
 
 
