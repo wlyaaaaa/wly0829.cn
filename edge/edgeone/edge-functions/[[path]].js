@@ -12,7 +12,11 @@ export default async function onRequest({ request }) {
   if (!['GET', 'HEAD'].includes(request.method)) return new Response('Not found', { status: 404, headers });
   const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 6000);
   try {
-    const upstream = await fetch('https://mcp.wly0829.cn/computer-access/api/status' + (url.searchParams.get('refresh') === '1' ? '?refresh=1' : ''), {
+    // Only two fixed query values pass through: the compact cockpit view and the refresh wake-up.
+    const query = new URLSearchParams();
+    if (url.searchParams.get('view') === 'cockpit') query.set('view', 'cockpit');
+    if (url.searchParams.get('refresh') === '1') query.set('refresh', '1');
+    const upstream = await fetch('https://mcp.wly0829.cn/computer-access/api/status' + (String(query) ? '?' + query : ''), {
       headers: { Accept: 'application/json', 'Cache-Control': 'no-cache' }, signal: controller.signal
     });
     const body = await upstream.text();
