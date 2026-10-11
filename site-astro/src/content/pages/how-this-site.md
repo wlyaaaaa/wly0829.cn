@@ -27,7 +27,7 @@
   },
   {
    "id": "parallel",
-   "label": "分工与并行施工"
+   "label": "分工施工"
   },
   {
    "id": "quality",
@@ -35,7 +35,7 @@
   },
   {
    "id": "motion",
-   "label": "一本会动的水彩画册"
+   "label": "会动的画册"
   },
   {
    "id": "speed",
@@ -43,7 +43,7 @@
   },
   {
    "id": "repairs",
-   "label": "出了岔子怎么修"
+   "label": "出岔子怎么修"
   },
   {
    "id": "decisions",
@@ -272,8 +272,8 @@
  },
  "source": {
   "page": "sources/pages/how-this-site/page.json",
-  "sha256": "a0b7ae85a6d4d9c41f6609b81691a2808e41e8b9c3c1b765456e7c6f0bcfb9f1",
-  "converted_at_beijing": "2026-10-11T13:58:09+08:00"
+  "sha256": "8dc1acfb9603107a188e0e1bf3ea3608250cd3c98d00f985b366d59005197dc3",
+  "converted_at_beijing": "2026-10-11T15:21:10+08:00"
  }
 }
 ---
@@ -1481,7 +1481,7 @@
  "screen": {
   "id": "how-this-site-06",
   "section": "parallel",
-  "title": "分工与并行施工",
+  "title": "分工施工",
   "scene": "横版：分工表与协作说明，配现有施工主题插画或简单流程；不添加具体人数之外的虚构数量。",
   "portrait": "竖版：按同一份文字顺序排列，卡片和表格按手机宽度自然分页；不缩小正文。",
   "links": [],
@@ -1965,7 +1965,7 @@
  "screen": {
   "id": "how-this-site-08",
   "section": "motion",
-  "title": "一本会动的水彩画册",
+  "title": "会动的画册",
   "scene": "横版：分成已经上线、防卡和手机、视频退路三个清晰部分，配已有水彩场景或首页四个时段的小样画；不画未上线的效果。",
   "portrait": "竖版：按同一份文字顺序排列，卡片和表格按手机宽度自然分页；不缩小正文。",
   "links": [],
@@ -2379,7 +2379,7 @@
  "screen": {
   "id": "how-this-site-10",
   "section": "repairs",
-  "title": "出了岔子怎么修",
+  "title": "出岔子怎么修",
   "scene": "横版：六个出事到修法的卡片，两列三行；流量卡和余额卡相邻，复用云审流量对比插画，保留云端校准未通过的当前状态。",
   "portrait": "竖版：按同一份文字顺序排列，卡片和表格按手机宽度自然分页；不缩小正文。",
   "links": [],
