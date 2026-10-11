@@ -271,6 +271,9 @@ def publish(args):
             if unproven:
                 raise ValueError('Objects lack a passing readback: '+', '.join(unproven[:20]))
         step('head_uploaded', verify_heads)
+        if args.upload_only:  # 先传先回读、不切公网；本人点头后再完整运行，已传对象按续传检查复用
+            receipt['status'] = 'uploaded_only'
+            return receipt
         renew_lock()
         manifest = dict(source)
         manifest['oss']['verification'] = {'schema': 'wly.oss-incremental-verification.v1',
@@ -316,6 +319,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dist', type=Path, required=True)
     parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--upload-only', action='store_true', help='upload and read back OSS assets, then stop before site-dist and Pages')
     parser.add_argument('--scan-result', type=Path)
     parser.add_argument('--previous-manifest', type=Path)
     parser.add_argument('--output', type=Path)
