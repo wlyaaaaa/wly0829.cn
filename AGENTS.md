@@ -660,13 +660,15 @@ personal AI collaboration workspace; public presentation is secondary.
   automatic weekly review or source-event refresh. If AI notices stale website
   content while doing other work, it mentions that fact in its report to the
   owner without handing off or creating a website task.
-- An owner-requested website refresh treats personal data as unlocked by
-  default, regardless of the current personal-data lock state (owner,
-  2026-10-11 15:48). It reads the private aggregate counts and product states
-  the pages display through their bounded Owner entrypoints without asking for
-  verification. This changes only access timing for this refresh; what may be
-  published still follows the public-content gate and the active global
-  classification, and it does not extend to other tasks.
+- Website content is not restricted by the personal-data lock (owner,
+  2026-10-11 15:48 and 15:54). Researching, writing and refreshing website
+  content may read the owner's private sources it needs, regardless of the
+  current lock state and without asking for verification. The lock is not a
+  reason to leave website content stale, Unknown or vague. What may actually
+  be published is a separate question that still follows the public-content
+  gate, the active global classification and page-specific rules (for example
+  personal-health never publishes records). This exemption covers website
+  content work only.
 - During an owner-requested refresh, every dated figure the pages display
   ("截至……", "数字截至……", counts, sizes, states) is re-read from its current
   Owner source, including when the change came from a feature change rather
