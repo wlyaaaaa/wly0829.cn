@@ -5,6 +5,7 @@ import importlib.util
 import json
 import subprocess
 import sys
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
@@ -79,7 +80,7 @@ def oss_contract():
     return contract
 
 
-def rollback_keep(preparation, plan, commit=None):
+def rollback_keep(preparation, plan, commit=None, persist=True):
     """Freeze the confirmed predecessor; moving rollback refs never replace it."""
     path = shared() / 'rollback-retention.json'
     state = read(path) if path.exists() else {'schema': 'wly.oss-rollback-retention.v1', 'bucket': BUCKET, 'records': {}}
@@ -95,6 +96,8 @@ def rollback_keep(preparation, plan, commit=None):
         if previous['oss']['asset_base_url'] != BASE:
             raise ValueError('Previous publication belongs to another object target')
         objects = {row['key']: {'bytes': row['bytes'], 'sha256': row['sha256']} for row in previous['oss']['objects'].values()}
+        for key in previous['oss'].get('reference_keys', []):
+            objects.setdefault(key, {})
         record = state['records'].get(snapshot_sha)
         if record and record.get('objects', objects) != objects:
             raise ValueError('Frozen previous publication objects changed')
@@ -106,7 +109,8 @@ def rollback_keep(preparation, plan, commit=None):
     live = {key: row for key, row in state['records'].items() if datetime.fromisoformat(row['expires_at']) > now}
     for key, row in state['records'].items():
         if key not in live: row.pop('objects', None)
-    write(path, state)
+    if persist:
+        write(path, state)
     return {key for row in live.values() for key in row['objects']}
 
 
@@ -162,7 +166,7 @@ def pin(preparation):
             raise ValueError('An immutable managed key changed: ' + row['key'])
         proof = verified.get(rel, plan.get('retained_objects', {}).get(rel, {}))
         matches = proof.get('bytes') == item['bytes'] and proof.get('local_sha256', proof.get('sha256')) == item['sha256']
-        etag = proof.get('headers', {}).get('ETag', '').strip('"') if proof.get('status') == 'pass' and matches else ''
+        etag = {name.lower(): value for name, value in proof.get('headers', {}).items()}.get('etag', '').strip('"') if proof.get('status') == 'pass' and matches else ''
         managed['objects'][row['key']] = {**item, 'etag': etag or (old or {}).get('etag', '')}
     rollback_keep(preparation, plan)
     write(managed_path, managed)
@@ -170,10 +174,10 @@ def pin(preparation):
     return path
 
 
-def versions(cli, profile):
+def versions(cli, profile, prefix=''):
     rows = {}; cursor = ''; seen = set()
     while True:
-        args = [cli, 'oss', 'ls', 'oss://' + BUCKET + '/', '--profile', profile, '--endpoint', 'oss-cn-shanghai.aliyuncs.com',
+        args = [cli, 'oss', 'ls', 'oss://' + BUCKET + '/' + prefix, '--profile', profile, '--endpoint', 'oss-cn-shanghai.aliyuncs.com',
                 '--all-versions', '--cli-output', 'json', '--limited-num', '1000']
         page = json.loads(command(*(args + (['--cli-cursor', cursor] if cursor else []))))
         if page.get('schema_version') != '1' or type(page.get('complete')) is not bool or not isinstance(page.get('items'), list):
@@ -190,31 +194,72 @@ def versions(cli, profile):
         seen.add(cursor)
 
 
+def exact_versions(cli, profile, keys):
+    """A key is a provider prefix; filter adjacent names after complete pagination."""
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        pages = pool.map(lambda key: (key, versions(cli, profile, key)), keys)
+        return {key: page[key] for key, page in pages if key in page}
+
+
 def collect(args):
+    try:
+        return collect_verified(args)
+    except Exception as error:
+        result = read(args.report) if args.report and args.report.exists() else {}
+        if args.report:
+            write(args.report, {**result, 'status': 'incomplete', 'reason': str(error),
+                                'deleted_objects': result.get('deleted_objects'), 'deleted_bytes': result.get('deleted_bytes')})
+        raise
+
+
+def collect_verified(args):
+    dry_run = getattr(args, 'dry_run', False)
     current = manifest(args.commit)
     if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
         raise ValueError('Production site-dist changed; collection is incomplete')
     if current['rollback_ref'] != args.rollback or current['oss']['asset_base_url'] != BASE:
         raise ValueError('Publication or rollback identity does not match the existing target')
+    public = predecessor()
+    if not public or public.get('release_id') != current.get('release_id'):
+        raise ValueError('Current public production does not match the selected site-dist release')
     keep = {row['key'] for row in current['oss']['objects'].values()}
+    keep.update(current['oss'].get('reference_keys', []))
     own, own_value, plan = plan_pin(args.preparation)
-    rollback = rollback_keep(args.preparation, plan, args.commit)
+    rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run)
     keep.update(rollback)
+    retired, pending = None, []
     for path in (shared() / 'pins').glob('*.json'):
         value = read(path)
         if value.get('schema') != 'wly.oss-pin.v1' or value.get('bucket') != BUCKET or digest(value['plan']) != value['plan_sha256']:
             raise ValueError('Unknown or changed in-flight pin; collection is incomplete')
-        if path == own and value['plan_sha256'] == own_value['plan_sha256'] and set(value['objects']) <= keep:
-            path.unlink()
+        if (path == own and value['plan_sha256'] == own_value['plan_sha256'] and current.get('release_id')
+                and value.get('release_id') == plan.get('release_id') == current['release_id']
+                and set(value['objects']) <= keep):
+            retired = path
         else:
             keep.update(value['objects'])
+            pending.append({'pin_id': path.stem, 'plan_sha256': value['plan_sha256'], 'objects': len(value['objects'])})
     managed = read(shared() / 'managed.json')
     if managed.get('schema') != 'wly.oss-managed.v1' or managed.get('bucket') != BUCKET:
         raise ValueError('Unknown managed inventory; collection is incomplete')
-    before = versions(args.cli, args.profile)
-    candidates = sorted(set(managed['objects']) & set(before) - keep)
+    candidates = sorted(set(managed['objects']) - keep)
     targets, deferred = [], {}
+    eligible = []
     for key in candidates:
+        proof = managed['objects'][key]
+        if not key.startswith('releases/'):
+            deferred[key] = 'Outside the registered generated release scope; retained'
+        else:
+            eligible.append(key)
+    budget = getattr(args, 'max_keys', 1000)
+    if budget < 1:
+        raise ValueError('Exact-key read budget must be positive')
+    for key in eligible[budget:]:
+        deferred[key] = 'Exact-key read budget reached; retained for the next on-demand update'
+    inspected = eligible[:budget]
+    before = exact_versions(args.cli, args.profile, inspected)
+    absent = set(inspected) - set(before)
+    for key in sorted(before):
         rows = before[key]; item = rows[0]; proof = managed['objects'][key]
         if len(rows) != 1 or item['kind'] != 'version' or item['version_id'] != 'null' or item['is_latest'] is not True:
             deferred[key] = 'Unexpected object version; retained'
@@ -222,22 +267,49 @@ def collect(args):
             deferred[key] = 'Missing or differing verification receipt; retained'
         else: targets.append(key)
     args.report.parent.mkdir(parents=True, exist_ok=True)
+    result = {'schema': 'wly.oss-collection.v1', 'status': 'incomplete' if deferred else 'complete',
+              'dry_run': dry_run, 'deferred': deferred, 'pending_pins': pending,
+              'retired_pin': retired.stem if retired else None, 'candidate_objects': len(candidates),
+              'inspected_objects': len(inspected), 'max_keys': budget, 'already_absent_objects': len(absent),
+              'planned_keys': targets, 'deleted_objects': 0, 'deleted_bytes': 0,
+              'rollback_retained_objects': len(rollback), 'retained_objects': len(keep)}
+    write(args.report.with_name(args.report.stem+'-plan.json'), {**result, 'status': 'dry_run'})
+    if dry_run:
+        write(args.report, {**result, 'status': 'dry_run'})
+        return 1 if deferred else 0
+    if retired:
+        require_lock(args.lock_holder)
+        retired.unlink()
+    baseline = {str(path): digest(path) for path in shared().rglob('*.json')}
+    deleted = []
     for start in range(0, len(targets), 1000):
         keys = targets[start:start + 1000]
+        require_lock(args.lock_holder)
+        if baseline != {str(path): digest(path) for path in shared().rglob('*.json')}:
+            raise ValueError('Retention inventory changed after the fresh collection plan')
+        if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
+            raise ValueError('Production site-dist changed after the fresh collection plan')
+        fresh = exact_versions(args.cli, args.profile, keys)
+        if fresh != {key: before[key] for key in keys}:
+            raise ValueError('Exact object versions changed after the fresh collection plan')
         body = '<Delete><Quiet>false</Quiet>' + ''.join('<Object><Key>' + escape(key) + '</Key><VersionId>null</VersionId></Object>' for key in keys) + '</Delete>'
         batch = args.report.parent / ('oss-delete-' + str(start) + '.xml')
         batch.write_text(body, encoding='utf-8')
         require_lock(args.lock_holder)
-        result = command(args.cli, 'ossutil', 'api', 'delete-multiple-objects', '--bucket', BUCKET, '--delete', 'file://' + str(batch).replace('\\', '/'),
+        write(args.report, {**result, 'status': 'deleting', 'deleted_objects': None, 'deleted_bytes': None})
+        response = command(args.cli, 'ossutil', 'api', 'delete-multiple-objects', '--bucket', BUCKET, '--delete', 'file://' + str(batch).replace('\\', '/'),
                          '--profile', args.profile, '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com')
-        batch.with_suffix('.result.txt').write_text(result, encoding='utf-8')
-    after = versions(args.cli, args.profile) if targets else before
-    if set(targets) & set(after):
-        raise ValueError('Some exact target keys remain; collection is incomplete')
-    write(args.report, {'status': 'incomplete' if deferred else 'complete', 'deferred': deferred,
-                        'deleted_objects': len(targets), 'deleted_bytes': sum(managed['objects'][key]['bytes'] for key in targets),
-                        'rollback_retained_objects': len(rollback & set(after)),
-                        'retained_objects': len(keep & set(after)), 'bucket_objects': sum(len(rows) for rows in after.values()), 'bucket_bytes': sum(row.get('size', 0) for rows in after.values() for row in rows)})
+        batch.with_suffix('.result.txt').write_text(response, encoding='utf-8')
+        after = exact_versions(args.cli, args.profile, keys)
+        deleted.extend(key for key in keys if key not in after)
+        for key in after:
+            deferred[key] = 'Exact target remains after deletion; retained'
+    result.update(status='incomplete' if deferred else 'complete', deferred=deferred,
+                  deleted_objects=len(deleted), deleted_bytes=sum(managed['objects'][key]['bytes'] for key in deleted))
+    for key in set(deleted) | absent:
+        managed['objects'].pop(key)
+    write(shared()/'managed.json', managed)
+    write(args.report, result)
     return 1 if deferred else 0
 
 
@@ -247,6 +319,8 @@ def main():
     for name in ('preparation', 'lock-holder', 'commit', 'rollback', 'cli', 'profile', 'pin-id', 'plan-sha256'):
         parser.add_argument('--' + name)
     parser.add_argument('--report', type=Path)
+    parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--max-keys', type=int, default=1000, help='maximum exact managed keys inspected per on-demand collection')
     args = parser.parse_args()
     try:
         require_lock(args.lock_holder)
@@ -262,7 +336,7 @@ def main():
         else:
             return collect(args)
     except Exception as error:
-        if args.report:
+        if args.report and args.operation != 'collect':
             write(args.report, {'status': 'incomplete', 'reason': str(error), 'deleted_objects': None, 'deleted_bytes': None})
         print(str(error), file=sys.stderr)
         return 1

@@ -7,6 +7,7 @@ import json
 import shutil
 import subprocess
 import time
+from types import SimpleNamespace
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from urllib.error import HTTPError, URLError
@@ -63,7 +64,8 @@ def net(*args, timeout=None):
     run = (lambda: command(*args)) if timeout is None else (lambda: command(*args, timeout=timeout))
     return retrying(run, connection_level)
 
-retention.command = lambda *args: net(*args, timeout=GH_TIMEOUT)  # 读上一版清单的 gh 调用：有超时、按连接层错误重试
+retention.command = lambda *args: (net(*args, timeout=GH_TIMEOUT) if args[0] in ('git', 'gh')
+                                  else command(*args, timeout=120))  # 删除失败须先回读，不能按网络错误重放写操作
 
 def delta(current, previous):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
@@ -304,6 +306,27 @@ def publish(args):
             'source_commit': source_commit,
             'manifest': manifest, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
+        receipt['publication_status'] = 'published'
+        report = output/'oss-retention.json'
+        try:
+            renew_lock()
+            # Bind the actual HEAD proofs to this immutable plan before its pin is retired.
+            verification = {**manifest['oss']['verification'], 'plan_sha256': retention.digest(output/oss.PLAN)}
+            step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
+            step('retention_inventory', lambda: retention.pin(preparation))
+            code = step('oss_retirement', lambda: retention.collect(SimpleNamespace(
+                preparation=preparation, commit=receipt['commit'], rollback=manifest['rollback_ref'],
+                cli=CLI, profile='website-images', lock_holder=args.lock_holder, report=report,
+                dry_run=False, max_keys=getattr(args, 'retention_max_keys', 1000))))
+            receipt['oss_retention'] = retention.read(report)
+            if code:
+                receipt['status'] = 'published_with_retention_incomplete'
+        except Exception as error:
+            receipt['oss_retention'] = retention.read(report) if report.exists() else {
+                'status': 'incomplete', 'deleted_objects': None, 'deleted_bytes': None}
+            receipt['oss_retention'].update(status='incomplete', reason=str(error))
+            retention.write(report, receipt['oss_retention'])
+            receipt['status'] = 'published_with_retention_incomplete'
         return receipt
     except Exception as error:
         receipt.update(status='failed', error=str(error))
@@ -327,7 +350,10 @@ if __name__ == '__main__':
     parser.add_argument('--source-commit')
     parser.add_argument('--pages-timeout', type=int, default=600)
     parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
+    parser.add_argument('--retention-max-keys', type=int, default=1000, help='maximum exact obsolete managed keys checked after successful publication')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
     result = publish(options)
     print(json.dumps({key: value for key, value in result.items() if key not in ('planned_assets', 'planned_documents', 'head', 'get')}, ensure_ascii=False))
+    if result['status'] == 'published_with_retention_incomplete':
+        raise SystemExit(1)
