@@ -33,6 +33,8 @@ def validate_entries(entries):
             raise ValueError(name + " 必须已核实 read_only=true")
         if not entry.get("owner_project"):
             raise ValueError(name + " 缺 owner_project")
+        if "timeout" in entry:
+            positive(entry["timeout"], name + ".timeout")
         if name == LEDGER:
             if not entry.get("path") or entry.get("format", "jsonl") not in {"jsonl", "json"}:
                 raise ValueError("使用账本须登记 path 和 json/jsonl 格式")
@@ -42,8 +44,6 @@ def validate_entries(entries):
             raise ValueError(name + " 的 argv 必须为非空字符串数组")
         if not isinstance(entry.get("cwd"), str) or not entry["cwd"] or entry.get("output") != "json":
             raise ValueError(name + " 缺 cwd 或 output=json")
-        if "timeout" in entry:
-            positive(entry["timeout"], name + ".timeout")
 
 
 def validate_method(method, entries):

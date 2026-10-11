@@ -27,7 +27,7 @@ class RefreshTests(unittest.TestCase):
     def run_collect(self, **kwargs):
         return refresh.collect(self.root, {"records": [self.record]}, today=date(2026, 10, 10), **kwargs)["rows"][0]
     def test_actual_page_number_and_overdue_not_registration_fallback(self):
-        with patch.object(refresh, "bounded", return_value="2021"):
+        with patch.object(refresh, "bounded", return_value="[2021]"):
             row = self.run_collect()
             self.record["scope_status"] = "pending"
             self.assertEqual(self.run_collect()["status"], "scope_pending")
@@ -38,6 +38,7 @@ class RefreshTests(unittest.TestCase):
             self.assertEqual(self.run_collect()["status"], "unavailable")
             read.assert_not_called()
     def test_private_and_historical_never_read_sources(self):
+        self.record["scope_status"] = "pending"
         for flag, expected in (("private", "domain_fact_task"), ("historical", "historical"), ("frozen", "historical")):
             self.record[flag] = True
             with patch.object(refresh, "bounded") as read:
