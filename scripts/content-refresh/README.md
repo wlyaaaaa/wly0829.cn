@@ -37,6 +37,11 @@ SQLite 以 URI `mode=ro` 打开，只接受一条 select 和单行单列结果�
 仍须通过 field/page_pattern 绑定实际日期。只有所有被注明数字均取得同口径新值时，
 截至日期才更新为这些数字最早的观察日期；任何 Unknown 都保留旧日期。
 盘点输出 `qualifies_suggestion` 供 GPT 核对，建议本身不算登记。
+日期句说明“库最近一次写入”“上次使用”、资料覆盖时间等事件口径时，
+不能拿本轮读数时间替换：结果标 `manual_review`、旧值保留，
+`number-edits.json.manual_reviews` 列“需人工核对”和 `date_candidate`。
+候选值只表示本轮观察日期；GPT/内容 Owner 核对真实事件来源和含义后再处理，
+Opus 负责需要改写的说明，`apply_edits.py` 不应用这些日期候选。
 
 非历史、非 `status_line.state` 的人工记录必须同时有 `manual_reason` 和非空
 `manual_route`。理由仅限 `needs_admin_rescan`、`ui_only`、`external_account`、
