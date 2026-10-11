@@ -1507,8 +1507,8 @@
       "source_path": "scripts/toc-consistency.css"
     },
     "_home-cockpit/home-cta.css": {
-      "sha256": "d92d9359726399bbb16114754e80634a15f448d016561d9a9a35a2c6648844d7",
-      "bytes": 2412,
+      "sha256": "c913aeb659f39768af885281eb9ebb5f27a28fd71fabdc35bd4721c6c29c744c",
+      "bytes": 3861,
       "source_path": "site-astro/public/_home-cockpit/home-cta.css"
     },
     "_home-cockpit/home-firstpaint-450767f33b1a3003adf3.js": {
@@ -1517,8 +1517,8 @@
       "source_path": "site-astro/sources/frozen-site/assets/_home-cockpit/home-firstpaint-450767f33b1a3003adf3.js"
     },
     "_home-cockpit/time-labels.css": {
-      "sha256": "a812e7930a4ea0567e528eeebfc0fce1936902dd5e500d3ff32804dea17e205f",
-      "bytes": 2941,
+      "sha256": "8f14ee189cedb60cd4a95619cd8881f5244b7df2f5029c21fe61d7a609b6df3d",
+      "bytes": 2978,
       "source_path": "site-astro/public/_home-cockpit/time-labels.css"
     },
     "_how-demo/how-demo-1f4da78c1ee50cb6f02c.js": {

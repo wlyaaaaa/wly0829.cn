@@ -17,8 +17,8 @@
   },
   "pages": {
     "home": {
-      "sha256": "f3731d22a0b1f3df38515be26d1bb8ae25ed4676b63f0f695b93d3a80a93938c",
-      "bytes": 248784
+      "sha256": "93b82249baafbf8386be7a3c2916e43864b3de73d8e17b431cf58166c99e0302",
+      "bytes": 248726
     },
     "cockpit": {
       "sha256": "27f3f2b9c72a7a8482f3d2f74dff96d99574a4adfcbe81924e56ea5f82698b92",
@@ -120,10 +120,10 @@
       "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
       "bytes": 127856
     },
-    "_home-cockpit/home-firstpaint-454be55be41cb476b9da.js": {
-      "source": "home-firstpaint-454be55be41cb476b9da.js",
-      "sha256": "454be55be41cb476b9da6fcb652dadfba5b179be65cbe9d65a1a66b5dd8e6245",
-      "bytes": 72613
+    "_home-cockpit/home-firstpaint-14de1de98f876a60fcca.js": {
+      "source": "home-firstpaint-14de1de98f876a60fcca.js",
+      "sha256": "14de1de98f876a60fcca25f279aee48c4a1fef8fe986f52019e26176eec34e53",
+      "bytes": 75596
     }
   },
   "files": {
@@ -5727,13 +5727,13 @@
       "sha256": "bfc5ea2af98f89d40e7aaa51267fda21633fcec362eecbd0723da462bc1afa42",
       "bytes": 134169
     },
-    "_home-cockpit/home-firstpaint-454be55be41cb476b9da.js": {
-      "sha256": "454be55be41cb476b9da6fcb652dadfba5b179be65cbe9d65a1a66b5dd8e6245",
-      "bytes": 72613
+    "_home-cockpit/home-firstpaint-14de1de98f876a60fcca.js": {
+      "sha256": "14de1de98f876a60fcca25f279aee48c4a1fef8fe986f52019e26176eec34e53",
+      "bytes": 75596
     }
   },
   "count": 1401,
-  "bytes": 88211263,
+  "bytes": 88214246,
   "home_white_gear": {
     "inputs": [
       {
