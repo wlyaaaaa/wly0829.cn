@@ -1,6 +1,15 @@
 {
   "materials-status": {
-    "argv": ["C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe", "-B", "-X", "utf8", "V:/Personal/Projects/personal-materials/materials.py", "--database", "E:/PersonalData/材料库/materials.sqlite3", "status"],
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "V:/Personal/Projects/personal-materials/materials.py",
+      "--database",
+      "E:/PersonalData/材料库/materials.sqlite3",
+      "status"
+    ],
     "cwd": "V:/Personal/Projects/personal-materials",
     "read_only": true,
     "owner_project": "personal-materials",
@@ -9,7 +18,18 @@
     "verification": "materials.py:654,661-670 只读连接，3714-3735 仅SELECT计数；2026-10-11 核实并实跑，只输出计数和状态"
   },
   "e-rules-inspect": {
-    "argv": ["pwsh", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "E:/.agents/tools/Invoke-EAgentRulesRelease.ps1", "-Mode", "Inspect", "-Brief"],
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "E:/.agents/tools/Invoke-EAgentRulesRelease.ps1",
+      "-Mode",
+      "Inspect",
+      "-Brief"
+    ],
     "cwd": "E:/.agents",
     "read_only": true,
     "owner_project": "agents",
@@ -22,10 +42,1430 @@
     "format": "jsonl",
     "key_field": "name",
     "time_field": "ts",
-    "filter": {"kind": "skill"},
+    "filter": {
+      "kind": "skill"
+    },
     "read_only": true,
     "owner_project": "codex-memory",
     "timeout": 30,
     "verification": "ai_usage_ledger.py:27-28,244-258,325-333；只读文件，不运行emit；写入恢复与完整性另由源项目核实，不用mtime冒充使用时间"
+  },
+  "daily-preferences-view-sizes": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json;from pathlib import Path;root=Path('E:/PersonalData/日常偏好');print(json.dumps({**{name:(root/name).stat().st_size for name in ('CURRENT.md','PROFILE.md')},'citations_count':sum(p.is_file() for p in (root/'引用快照').rglob('*'))}))"
+    ],
+    "cwd": "V:/Personal/Projects/daily-preferences",
+    "read_only": true,
+    "owner_project": "daily-preferences",
+    "output": "json",
+    "verification": "2026-10-11 源码核实：仅Path.stat/递归列文件并判断is_file；不打开正文、不mkdir、不写文件或库；CURRENT与PROFILE字节数及引用快照文件数已实取复现。"
+  },
+  "personal-expression-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re;from pathlib import Path;root=Path('E:/PersonalData/个人表达');s=(root/'explain-to-me.md').read_text(encoding='utf-8-sig');parts=re.split(r'(?m)^## ',s);principles=next(p for p in parts if p.startswith('一、'));understanding=next(p for p in parts if p.startswith('二、'));cases=next(p for p in parts if p.startswith('三、'));samples=[json.loads(line) for line in (root/'reply-samples.jsonl').read_text(encoding='utf-8-sig').splitlines() if line.strip()];contrasts=[json.loads(line) for line in (root/'reply-contrasts.jsonl').read_text(encoding='utf-8-sig').splitlines() if line.strip()];print(json.dumps({'principles':len(re.findall(r'(?m)^\\d+[.、）)]',principles)),'understanding':len(re.findall(r'(?m)^- \\*\\*',understanding)),'cases_0908_0928':sum('09-08'<=d.removeprefix('2026-')<='09-28' for d in re.findall(r'(?m)^- (?:\\*\\*)?((?:2026-)?\\d{2}-\\d{2})',cases)),'samples':sum(x.get('status')=='reference' and x.get('author') in ('self_message','user_revision') for x in samples),'contrasts':len(contrasts)}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-expression",
+    "read_only": true,
+    "owner_project": "personal-expression",
+    "output": "json",
+    "verification": "2026-10-11 核实固定代码：仅Path.read_text、JSON解析、正则和计数；不导入业务模块，不写文件，不调模型；只输出原则/案例/有效本人样本/AI稿对照的整数，不输出私人正文。"
+  },
+  "personal-expression-usage-display": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\nfrom datetime import datetime,timedelta,timezone\nnow=datetime.now(timezone(timedelta(hours=8)));count=0;last=None\nwith Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl').open(encoding='utf-8-sig') as stream:\n for line in stream:\n  row=json.loads(line)\n  if row.get('kind')!='skill' or row.get('name') not in ('explain-to-me','reply-as-me'):continue\n  used=datetime.fromisoformat(row['ts'])\n  if used>now:continue\n  if last is None or used>last:last=used\n  if row['name']=='reply-as-me' and now-timedelta(days=7)<=used:count+=1\nprint(json.dumps({'reply_fact':'近 7 天没用过' if count==0 else f'近 7 天 AI 用了 {count} 次','personal_expression_last':last.isoformat(timespec='seconds') if last else None},ensure_ascii=False))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-expression",
+    "read_only": true,
+    "owner_project": "personal-expression",
+    "output": "json",
+    "timeout": 30,
+    "verification": "2026-10-11 固定代码仅open只读账本、JSON解析、时间比较及聚合；不导入生产者，不调用emit，不写文件/库。只输出reply-as-me计数所对应的页面事实短句和两个表达技能最新时间；不输出行内容。U两路补采回执complete且水位均推进至2026-10-11零点后启用。"
+  },
+  "timeaudit-db-sizes": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('db_bytes',pg_database_size(current_database()),'activity_rows_estimate',(SELECT sum(greatest(c.reltuples,0)) FROM pg_partition_tree('public.fact_process_activity') t JOIN pg_class c ON c.oid=t.relid WHERE t.isleaf),'activity_bytes',(SELECT sum(pg_total_relation_size(relid)) FROM pg_partition_tree('public.fact_process_activity')),'hardware_bytes',(SELECT sum(pg_total_relation_size(relid)) FROM pg_partition_tree('public.fact_system_hardware')),'lifecycle_bytes',pg_total_relation_size('public.fact_process_lifecycle_events'),'registry_bytes',pg_total_relation_size('public.dim_process_registry'),'summary_bytes',pg_total_relation_size('public.activity_app_hour')+pg_total_relation_size('public.activity_app_day')+pg_total_relation_size('public.activity_system_hour')+pg_total_relation_size('public.activity_system_day'));"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-health": {
+    "argv": [
+      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
+      "-B",
+      "-c",
+      "import json,timeaudit_health; print(json.dumps(timeaudit_health.build_health(),ensure_ascii=True,allow_nan=False,separators=(\",\",\":\")))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 15
+  },
+  "timeaudit-backup-retention": {
+    "argv": [
+      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
+      "-B",
+      "-c",
+      "import json,re; from pathlib import Path; s=Path(r\"E:/Projects/Tools/TimeAudit/backup_db.ps1\").read_text(encoding=\"utf-8-sig\"); m=re.findall(r\"\\$RetentionDays\\s*=\\s*(\\d+)\",s); assert len(m)==1; print(json.dumps({\"retention_days\":int(m[0])}))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 8
+  },
+  "timeaudit-count-hardware": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.fact_system_hardware;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-count-lifecycle": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.fact_process_lifecycle_events;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-count-registry": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.dim_process_registry;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-count-context": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.fact_process_context;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-count-app-usage": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.app_usage_logs;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-count-hourly": {
+    "argv": [
+      "C:/Program Files/Docker/Docker/resources/bin/docker.exe",
+      "exec",
+      "-e",
+      "PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=8000 -c lock_timeout=500",
+      "audit-postgres",
+      "psql",
+      "-X",
+      "-U",
+      "leyang",
+      "-d",
+      "time_audit",
+      "-At",
+      "-v",
+      "ON_ERROR_STOP=1",
+      "-c",
+      "SELECT json_build_object('value',count(*)) FROM public.activity_app_hour;"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 12
+  },
+  "timeaudit-grafana-counts": {
+    "argv": [
+      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
+      "-B",
+      "-c",
+      "import json\nfrom pathlib import Path\nroot=Path(r\"E:/Projects/Tools/TimeAudit/grafana_dashboards\")\ndef count(panels):\n    return sum((0 if p.get(\"type\")==\"row\" else 1)+count(p.get(\"panels\",[])) for p in panels)\nitems=[json.loads(p.read_text(encoding=\"utf-8-sig\")) for p in root.glob(\"*.json\")]\nassert items and len({g[\"uid\"] for g in items})==len(items)\nmain=[g for g in items if not g[\"uid\"].startswith(\"website-computer-status\")]\npublic=[g for g in items if g[\"uid\"].startswith(\"website-computer-status\")]\nprint(json.dumps({\"main_dashboards\":len(main),\"main_panels\":sum(count(g.get(\"panels\",[])) for g in main),\"public_dashboards\":len(public)},separators=(\",\",\":\")))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 10
+  },
+  "timeaudit-snapshot-commits": {
+    "argv": [
+      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
+      "-B",
+      "-c",
+      "import json,subprocess; s=subprocess.check_output([\"git\",\"-C\",r\"E:/Projects/Tools/TimeAudit\",\"log\",\"--format=%s\"],text=True,encoding=\"utf-8\"); print(json.dumps({\"snapshot_commits\":sum(\"chore(grafana): 自动备份仪表盘快照\" in x for x in s.splitlines())}))"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 10
+  },
+  "timeaudit-overhead-20261010": {
+    "argv": [
+      "E:/Projects/Tools/TimeAudit/.venv/Scripts/python.exe",
+      "-B",
+      "E:/Projects/Tools/TimeAudit/timeaudit_diagnostic_summary.py",
+      "--after-utc",
+      "2026-10-09T18:17:00Z",
+      "--until-utc",
+      "2026-10-09T21:17:00Z"
+    ],
+    "cwd": "E:/Projects/Tools/TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 16
+  },
+  "pcconfig-statistics": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-c",
+      "import json,pathlib; p=pathlib.Path(r'E:/PCConfig'); t=json.loads((p/'tests/test-registry.json').read_text(encoding='utf-8')); c=json.loads((p/'registries/core_recovery.json').read_text(encoding='utf-8')); print(json.dumps({'test_groups':len(set(x['subsystem'] for x in t['tests'])),'backup_layers':len(c['backup_media'])}))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 20
+  },
+  "pcconfig-volumes": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $out=[ordered]@{}; foreach($letter in @('C','E','D','G','H','V','Z')){ $v=Get-Volume -DriveLetter $letter -ErrorAction Stop; $out[$letter]=@{size_bytes=$v.Size;used_bytes=($v.Size-$v.SizeRemaining)} }; $out|ConvertTo-Json -Depth 3 -Compress"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 20
+  },
+  "ramdisk-image-size": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-c",
+      "import json,pathlib; p=pathlib.Path(r'E:/RamdiskImage/Z.vdf'); print(json.dumps({'image_bytes':p.stat().st_size}))"
+    ],
+    "cwd": "E:/Projects/Tools/RamdiskGuardian",
+    "read_only": true,
+    "owner_project": "ramdisk-guardian",
+    "output": "json",
+    "timeout": 20
+  },
+  "pc-panel-task-count": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $t=@(Get-ScheduledTask -TaskName 'TURZX SideScreen' -ErrorAction Stop); @{task_count=$t.Count}|ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:/Projects/Tools/TURZX-SideScreen",
+    "read_only": true,
+    "owner_project": "pc-panel-hub",
+    "output": "json",
+    "timeout": 20
+  },
+  "pcconfig-g-directory-bytes": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-c",
+      "import json,pathlib,os; c=json.loads(pathlib.Path(r'E:/PCConfig/registries/core_recovery.json').read_text(encoding='utf-8')); ids=('system_images','wechat','personal_media','g_software','g_projects'); o={};\ndef fail(error): raise error\nfor k in ids:\n p=pathlib.Path(next(s['G_path'] for s in c['backup_sets'] if s['id']==k));\n if not p.is_dir(): raise FileNotFoundError('registered backup root unavailable');\n total=0\n for d,ds,fs in os.walk(p,followlinks=False,onerror=fail):\n  for f in fs: total+=os.stat(os.path.join(d,f),follow_symlinks=False).st_size\n o[k]=total\nprint(json.dumps(o))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 120,
+    "verification": "固定-B Python仅只读目录元数据与汇总；onerror明确重新抛出子目录读取错误，stat失败也失败返回，不把未读全当0或完整大小。"
+  },
+  "ramdisk-health": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $health=(& 'E:/Projects/Tools/RamdiskGuardian/Get-RamdiskHealth.ps1' -Json | ConvertFrom-Json -DateKind String); if($health.WriteMode -ne 'zero_write' -or $null -eq $health.Task -or $health.Task.Enabled -ne $true -or @($health.Reasons) -contains 'guardian-periodic-trigger-missing' -or [double]$health.Task.IntervalSeconds -le 0){throw 'guardian_periodic_trigger_unverified'}; $health | ConvertTo-Json -Depth 10 -Compress"
+    ],
+    "cwd": "E:/Projects/Tools/RamdiskGuardian",
+    "read_only": true,
+    "owner_project": "ramdisk-guardian",
+    "output": "json",
+    "timeout": 20,
+    "verification": "Get-RamdiskHealth及实际模块路径为zero_write；包装仅内存JSON转换并核对WriteMode、Task存在/Enabled、周期>0、Reasons不含guardian-periodic-trigger-missing；缺触发器时拒绝默认900秒。"
+  },
+  "ramdisk-log-cadence": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-c",
+      "import pathlib,json,datetime; p=pathlib.Path(r'E:/Projects/Tools/RamdiskGuardian/logs'); t=[datetime.datetime.strptime(z[:19],'%Y-%m-%d %H:%M:%S') for n in ('guardian.log.1','guardian.log') for z in (p/n).read_text(encoding='utf-8-sig').splitlines() if '--- guardian run' in z]; d=[(b-a).total_seconds()/60 for a,b in zip(t,t[1:])]; print(json.dumps({'runs':len(t),'gaps_gt_15_5_min':sum(z>15.5 for z in d),'max_gap_min_floor':int(max(d)),'max_gap_min_exact':max(d)}))"
+    ],
+    "cwd": "E:/Projects/Tools/RamdiskGuardian",
+    "read_only": true,
+    "owner_project": "ramdisk-guardian",
+    "output": "json",
+    "timeout": 20
+  },
+  "remote-pages-task-counts": {
+    "argv": [
+      "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $sn=@('SunshineCaptureFailover-Interactive','SunshineRemote-VerifyPath-Daily'); $dn=@('DevConfigBackup-Local','DevConfigBackup-Drive-Daily','WeChatBackup-Hot-Daily','WeChatBackup-Drive-Weekly'); $s=@(Get-ScheduledTask -TaskName $sn); $d=@(Get-ScheduledTask -TaskName $dn); if($s.Count-ne 2-or $d.Count-ne 4){throw 'registered_task_missing'}; [pscustomobject]@{sunshine_tasks=$s.Count;devconfig_enabled_tasks=@($d|Where-Object{$_.State-ne 'Disabled'}).Count}|ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:\\PCConfig",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 20
+  },
+  "devconfig-source-counts": {
+    "argv": [
+      "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; $s=Import-PowerShellDataFile -LiteralPath 'E:\\Projects\\Backups\\devconfig-backup\\sources.psd1'; $all=@('HomeDirs','HomePreciseDirs','HomeFiles','HomePreciseFiles','AppDataRoamingDirs','AppDataRoamingFiles','AppDataLocalDirs','AppDataLocalFiles','ExtraDirs'); $app=@('AppDataRoamingDirs','AppDataRoamingFiles','AppDataLocalDirs','AppDataLocalFiles'); $total=0;$ac=0;foreach($k in $all){$total+=@($s[$k]).Count};foreach($k in $app){$ac+=@($s[$k]).Count};[pscustomobject]@{total_sources=$total;appdata_sources=$ac}|ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:\\Projects\\Backups\\devconfig-backup",
+    "read_only": true,
+    "owner_project": "devconfig-backup",
+    "output": "json",
+    "timeout": 20
+  },
+  "remote-current-log-window": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "from pathlib import Path\nimport json,re,statistics\nfiles=sorted(Path(r'E:\\Data\\RemoteComputerMCP\\logs').glob('service*.log'))\nlines=set()\nfor p in files:\n for s in p.read_text(encoding='utf-8-sig',errors='strict').splitlines():\n  if 'rpc=tools/call ' in s: lines.add(s)\nrows=[]\nfor s in lines:\n m=re.search(r'received_utc=(\\S+)\\s+elapsed_ms=([\\d.]+).*?\\brpc=tools/call\\s+tool=(\\S+)',s)\n if m:rows.append((m[1],float(m[2]),m[3]))\nif not rows or len(rows)!=len(lines):raise ValueError('tool_call_metadata_unparsed')\nnames=[r[2] for r in rows]\nprint(json.dumps({'calls':len(rows),'maintenance':names.count('MaintenancePowerShell'),'powershell':names.count('PowerShell'),'context':names.count('ComputerContext'),'desktop':sum(n in ('Snapshot','Screenshot') for n in names),'other':sum(n not in ('MaintenancePowerShell','PowerShell','ComputerContext','Snapshot','Screenshot') for n in names),'median_seconds':statistics.median(r[1] for r in rows)/1000,'first_utc':min(r[0] for r in rows),'last_utc':max(r[0] for r in rows)}))"
+    ],
+    "cwd": "E:\\PCConfig\\tools\\remote-computer-mcp",
+    "read_only": true,
+    "owner_project": "remote-control",
+    "output": "json",
+    "timeout": 20
+  },
+  "remote-installed-tool-catalog": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "from pathlib import Path\nimport ast,json,re\nbase=Path(r'E:\\Data\\RemoteComputerMCP\\.venv\\Lib\\site-packages\\windows_mcp\\tools')\nsource=Path(r'E:\\PCConfig\\tools\\remote-computer-mcp')\nnames=[]\nfor p in list(base.glob('*.py'))+[source/'server.py',source/'maintenance.py']:\n for n in ast.walk(ast.parse(p.read_text(encoding='utf-8-sig'))):\n  if isinstance(n,ast.Call) and isinstance(n.func,ast.Attribute) and n.func.attr=='tool':\n   for k in n.keywords:\n    if k.arg=='name' and isinstance(k.value,ast.Constant):names.append(k.value.value)\nconfig=json.loads(Path(r'E:\\PCConfig\\registries\\remote_computer_mcp.json').read_text(encoding='utf-8-sig'))\nif config.get('maintenance',{}).get('enabled') is not True:raise ValueError('maintenance_configuration_changed')\nversion=re.search(r'^windows-mcp==([^\\s]+)',(source/'requirements.txt').read_text(encoding='utf-8-sig'),re.M).group(1)\nprint(json.dumps({'tool_count':len(set(names)),'base_version':version}))"
+    ],
+    "cwd": "E:\\PCConfig\\tools\\remote-computer-mcp",
+    "read_only": true,
+    "owner_project": "remote-control",
+    "output": "json",
+    "timeout": 20
+  },
+  "remote-path-commit-count": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import subprocess,json; p=['tools/remote-computer-mcp', 'tools/secondary-laptop-access', 'registries/remote_computer_mcp.json', 'registries/remote_computer_mcp.secondary_laptop.json', 'registries/remote_computer_mcp_relay.json', 'registries/remote_computer_cloudflare_tunnel.json']; s=subprocess.check_output(['git','-C',r'E:\\PCConfig','log','--format=%H','--']+p,text=True); print(json.dumps({'commits':len(s.splitlines())}))"
+    ],
+    "cwd": "E:\\PCConfig",
+    "read_only": true,
+    "owner_project": "remote-control",
+    "output": "json",
+    "timeout": 20
+  },
+  "remote-registered-entry-count": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "from pathlib import Path\nimport json\np=Path(r'E:\\PCConfig\\registries')\na=json.loads((p/'remote_computer_mcp.json').read_text(encoding='utf-8-sig'))\nb=json.loads((p/'remote_computer_mcp.secondary_laptop.json').read_text(encoding='utf-8-sig'))\nr=json.loads((p/'remote_computer_mcp_relay.json').read_text(encoding='utf-8-sig'))\nif a['fallback_public_origin']!=r['fallback_public_origin']:raise ValueError('fallback_registry_mismatch')\norigins={a['public_origin'],b['public_origin'],r['fallback_public_origin']}\nif any(not s for s in origins):raise ValueError('empty_connection_origin')\nprint(json.dumps({'entries':len(origins)}))"
+    ],
+    "cwd": "E:\\PCConfig",
+    "read_only": true,
+    "owner_project": "remote-control",
+    "output": "json",
+    "timeout": 20
+  },
+  "agents-decision-volumes-stats": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import sys,json,re,hashlib;from pathlib import Path;sys.path.insert(0,'E:/.agents/tools');import owner_decision_store as s;r=Path('E:/.agents');before=(r/'docs/owner-decisions/order.json').read_bytes();v=s._verify(r);b=s.read_decision_bytes(r);t=b.decode('utf-8-sig');n=len(re.findall(r'^## ',t,re.M));c=len(re.sub(r'\\s','',t));assert v['status']=='pass' and v['sections']==n and before==(r/'docs/owner-decisions/order.json').read_bytes(),'decision_snapshot_changed_or_invalid';print(json.dumps({'sections':n,'nonspace_chars':c,'wan_rounded':int(c/10000+0.5),'volumes':v['volumes'],'sha256':hashlib.sha256(b).hexdigest()},ensure_ascii=False))"
+    ],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20
+  },
+  "agents-shared-skill-source": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json;from pathlib import Path;r=Path('E:/.agents');c=json.loads((r/'config/personal-skill-supply.json').read_text(encoding='utf-8-sig'));d=Path(c['discovery_root']);a=[s for s in c['skills'] if s.get('install')];assert a and Path('C:/Users/10979/.claude/skills').resolve()==d.resolve(),'discovery_mismatch';assert all((r/s['source']).exists() and (d/s['name']).exists() and (r/s['source']).resolve()==(d/s['name']).resolve() for s in a),'source_link_mismatch';print(json.dumps({'shared_source_sets':1,'installed_skills':len(a),'mismatch_count':0}))"
+    ],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20
+  },
+  "agents-inspect-stopwatch": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "$ErrorActionPreference='Stop'; [Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); $samples=@(); $r=$null; foreach($i in 1..2){$sw=[Diagnostics.Stopwatch]::StartNew(); $reply=& 'E:/.agents/tools/Invoke-EAgentRulesRelease.ps1' -Mode Inspect -Json; $sw.Stop(); $r=$reply|ConvertFrom-Json -DateKind String; if($r.status -cne 'pass' -or $r.reason -cne 'e_rules_active_verified'){throw 'inspect_failed'}; $samples+=$sw.Elapsed.TotalSeconds}; $mean=($samples|Measure-Object -Average).Average; [ordered]@{status=$r.status;reason=$r.reason;release_id=$r.verified_current.release_id;pointer_revision=$r.pointer.pointer_revision;files=$r.verified_current.files.Count;rules=@($r.verified_current.required_rule_paths.PSObject.Properties).Count;entries=@($r.verified_current.files|Where-Object {$_.logical_id -in @('claude_entry_template','codex_entry_template')}).Count;catalogs=@($r.verified_current.files|Where-Object {$_.logical_id -eq 'rules_catalog'}).Count;samples_seconds=$samples;mean_seconds=$mean;rounded_seconds=[math]::Round($mean,1,[MidpointRounding]::AwayFromZero)}|ConvertTo-Json -Depth 3 -Compress"
+    ],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 20
+  },
+  "codex-memory-laptop-snapshot-history": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-I",
+      "-B",
+      "-c",
+      "import subprocess,json,re,datetime\nr=subprocess.run([r\"E:\\Scoop\\shims\\gh.exe\",\"api\",\"repos/wlyaaaaa/codex-memory/commits?sha=backup%2Fsecondary-laptop&per_page=100\"],capture_output=True,text=True,encoding=\"utf-8\",timeout=20,check=True)\nrows=json.loads(r.stdout)\nif not isinstance(rows,list) or len(rows)>=100: raise ValueError(\"history_requires_pagination_review\")\npattern=re.compile(r\"^codex memory secondary-laptop snapshot \\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}$\")\nbj=datetime.timezone(datetime.timedelta(hours=8))\nstart=datetime.datetime(2026,9,10,tzinfo=bj)\nend=datetime.datetime(2026,10,11,tzinfo=bj)\ncount=sum(bool(pattern.fullmatch(v[\"commit\"][\"message\"].splitlines()[0])) and start<=datetime.datetime.fromisoformat(v[\"commit\"][\"committer\"][\"date\"].replace(\"Z\",\"+00:00\"))<end for v in rows)\nprint(json.dumps({\"snapshots_in_page_date_range\":count,\"all_commits\":len(rows),\"latest_commit\":rows[0][\"sha\"]}))\n"
+    ],
+    "cwd": "E:\\Projects\\Backups\\codex-memory",
+    "read_only": true,
+    "owner_project": "codex-memory",
+    "output": "json",
+    "timeout": 25
+  },
+  "report-pages-summary": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-I",
+      "-S",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import sys\nsys.dont_write_bytecode=True\nfrom pathlib import Path\nimport re,json\nroot=Path(r\"E:\\Documents\\AI汇报\")\nfiles=[p for p in root.glob(\"*.html\") if p.is_file()]\nlatest={}\nfor p in files:\n    m=re.fullmatch(r\"(\\d{4}-\\d{2}-\\d{2})-(?:(\\d{4})-)?(.+)\\.html\",p.name)\n    if not m:\n        raise ValueError(\"报告文件名格式未知，须核实标题去重口径\")\n    date,clock,title=m.groups()\n    stamp=date+\"-\"+(clock or \"0000\")\n    if title not in latest or stamp>latest[title][0]:\n        latest[title]=(stamp,p)\ncards=0\nwith_cards=0\nfor stamp,p in latest.values():\n    n=len(re.findall(r'(?i)\\sdata-q=\"[^\"]*\"',p.read_text(encoding=\"utf-8-sig\")))\n    cards+=n\n    with_cards+=bool(n)\nprint(json.dumps({\"html_count\":len(files),\"title_count\":len(latest),\"latest_card_count\":cards,\"latest_with_cards\":with_cards}))\n"
+    ],
+    "cwd": "E:/Documents/AI汇报",
+    "read_only": true,
+    "owner_project": "report-page",
+    "output": "json",
+    "timeout": 20
+  },
+  "b3-site-poll-config": {
+    "argv": [
+      "python",
+      "-I",
+      "-S",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re\nfrom pathlib import Path\ns=Path('scripts/b2-live-runtime.js').read_text(encoding='utf-8')\nf=re.findall(r'schedule\\(\\);},early\\?Math\\.max\\(0,\\(deadline-clock\\(\\)\\)\\*1000\\):(\\d+)\\);',s)\nassert len(f)==1,'驾驶舱常规轮询配置必须唯一'\nprint(json.dumps({'poll_minutes':int(f[0])/60000}))"
+    ],
+    "cwd": ".",
+    "read_only": true,
+    "owner_project": "wly0829-cn",
+    "output": "json"
+  },
+  "b3-site-main-git-status": {
+    "argv": [
+      "python",
+      "-I",
+      "-S",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,subprocess,time\nfrom datetime import datetime,timedelta,timezone\nflags=getattr(subprocess,'CREATE_NO_WINDOW',0)\nraw=subprocess.check_output(['git','log','origin/main','--format=%ct'],text=True,creationflags=flags)\nts=[int(v) for v in raw.splitlines()]\nnow=time.time()\nprint(json.dumps({'commits_7d':sum(now-7*86400<=t<=now for t in ts),'last_updated':datetime.fromtimestamp(ts[0],timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M'),'source_ref':'origin/main'}))"
+    ],
+    "cwd": "V:/Personal/Projects/wly0829.cn",
+    "read_only": true,
+    "owner_project": "wly0829-cn",
+    "output": "json"
+  },
+  "learning-counts": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re\nfrom pathlib import Path\nr=Path(r\"V:\\Personal\\Projects\\career-development\")\nd=json.loads((r/\"学习进度.json\").read_text(encoding=\"utf-8-sig\"))\nids={int(p.name[:2]) for p in (r/\"讲义\").iterdir() if p.is_file() and re.match(r\"^(0[7-9]|[12][0-9]|3[0-4])_.*\\.(json|md)$\",p.name)}\nprint(json.dumps({\"lessons\":len(d[\"lessons\"]),\"lectures\":len(ids),\"exercises\":sum(p.is_dir() for p in (r/\"练习/代码\").iterdir())}))"
+    ],
+    "cwd": "V:/Personal/Projects/career-development",
+    "read_only": true,
+    "owner_project": "learning",
+    "output": "json",
+    "timeout": 20
+  },
+  "personal-media-original-bytes": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,sqlite3,stat\nfrom pathlib import Path\np=Path(r\"E:\\Media\\_manifests\\personal-media-current\\catalog.sqlite3\")\nwith sqlite3.connect(p.as_uri()+\"?mode=ro\",uri=True) as c:\n    total=0\n    for (locator,) in c.execute(\"select authority_locator from media\"):\n        s=Path(locator).stat()\n        if not stat.S_ISREG(s.st_mode): raise ValueError(\"original_unavailable\")\n        total+=s.st_size\nprint(json.dumps({\"original_bytes\":total}))\n"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20
+  },
+  "formal-commits-7d": {
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "-C",
+      "E:/Projects/Tools/personal-formal-documents",
+      "rev-list",
+      "--count",
+      "--since=7.days",
+      "HEAD"
+    ],
+    "cwd": "E:/Projects/Tools/personal-formal-documents",
+    "read_only": true,
+    "owner_project": "personal-formal-documents",
+    "output": "json",
+    "timeout": 20,
+    "verification": "git rev-list只读可达提交图，--no-optional-locks不持有可选写锁；仅JSON整数stdout，无提交消息或diff。"
+  },
+  "health-plan": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "V:/Personal/Projects/personal-health/google_health_import.py",
+      "--plan"
+    ],
+    "cwd": "V:/Personal/Projects/personal-health",
+    "read_only": true,
+    "owner_project": "personal-health",
+    "output": "json",
+    "timeout": 20,
+    "verification": "main --plan跳过资料与凭据检查、write_failure_receipt=false，plan仅返回源代码定义与预算；不联网、不读manifest/brief/CURRENT、不写文件，-B禁pyc；实跑field_count=21。"
+  },
+  "health-current-change-count": {
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "-C",
+      "V:/Personal/Projects/personal-health",
+      "rev-list",
+      "--count",
+      "HEAD",
+      "--",
+      "CURRENT.md"
+    ],
+    "cwd": "V:/Personal/Projects/personal-health",
+    "read_only": true,
+    "owner_project": "personal-health",
+    "output": "json",
+    "timeout": 20,
+    "verification": "只读提交图按CURRENT.md路径计数，不读取CURRENT正文、提交消息、patch、报告或健康值；实跑73。"
+  },
+  "health-refresh-status": {
+    "argv": [
+      "pwsh",
+      "-NoProfile",
+      "-NonInteractive",
+      "-Command",
+      "[Console]::OutputEncoding=[System.Text.UTF8Encoding]::new($false); $OutputEncoding=[Console]::OutputEncoding; $ErrorActionPreference='Stop'; $task=Get-ScheduledTask -TaskName 'PersonalHealth Weekly Refresh'; $receipt=Get-Content -Raw -LiteralPath 'E:/Data/PCConfig/HealthRefresh/latest.json' | ConvertFrom-Json; if($receipt.schema -ne 'pcconfig.health-refresh.v1'){throw 'health_receipt_schema_invalid'}; $interval=@($task.Triggers | ForEach-Object {$_.Repetition.Interval} | Where-Object {$_}) -join ','; $last=([datetimeoffset]::Parse($receipt.started_at_beijing)).ToOffset([timespan]::FromHours(8)).ToString('yyyy-MM-dd HH:mm'); $fact=if($interval -eq 'P7D'){if($receipt.status -eq 'completed'){'每周自动刷新一次，上次成功'}elseif($receipt.status -eq 'failed'){'每周自动刷新一次，上次失败'}else{throw 'health_receipt_status_unknown'}}else{throw 'health_schedule_interval_changed'}; @{last=$last;facts=$fact;interval=$interval;last_status=$receipt.status} | ConvertTo-Json -Compress"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "personal-health",
+    "output": "json",
+    "timeout": 20,
+    "verification": "固定命令仅Get-ScheduledTask/Get-Content与转换；读取计划Interval和pcconfig.health-refresh.v1聚合回执，不调用Run/Start/Set/Write或健康采集，不读原始健康数据；已实取P7D/completed。；已按stdout原字节验证原输出为GB18030，固定UTF-8避免替代字符，不修改宿主全局编码。"
+  },
+  "materials-test-collection": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import os,io,json,contextlib;os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD']='1';import pytest\nclass Count: pytest_collection_finish=lambda self,session:setattr(self,'tests',len(session.items))\nwith contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):code=pytest.main(['--collect-only','-q','-p','no:cacheprovider','tests'],plugins=[p:=Count()])\nif code:raise SystemExit(int(code))\nprint(json.dumps({'tests':p.tests,'executed':False}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-materials",
+    "read_only": true,
+    "owner_project": "personal-materials",
+    "output": "json",
+    "timeout": 20,
+    "verification": "固定pytest collect-only，不执行fixture或test；禁自动插件/cacheprovider与-B；根目录仅计数。原材料测试顶层无写入，源文件集合/大小/mtime已核无变化。"
+  },
+  "personal-media-storage-topology": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path,PureWindowsPath\nnodes=ast.parse(Path(r\"V:\\Personal\\Projects\\personal-media\\personal_media.py\").read_text(encoding=\"utf-8\")).body\nroots=[n.value for n in nodes if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id==\"MEDIA_ROOT\" for t in n.targets)]\nassert len(roots)==1 and isinstance(roots[0],ast.Call) and isinstance(roots[0].func,ast.Name) and roots[0].func.id==\"Path\" and len(roots[0].args)==1,\"MEDIA_ROOT_unknown\"\nprimary=ast.literal_eval(roots[0].args[0])\nconfig=json.loads(Path(r\"E:\\PCConfig\\registries\\core_recovery.json\").read_text(encoding=\"utf-8\"))\nsets=[s for s in config[\"backup_sets\"] if s[\"id\"]==\"personal_media\"]\nassert len(sets)==1,\"backup_set_ambiguous\"\ndrives={PureWindowsPath(s).drive.upper() for s in [primary,sets[0][\"G_path\"],sets[0][\"H_path\"]]}\nassert \"\" not in drives,\"drive_unknown\"\nwith Path(r\"E:\\Media\\_manifests\\personal-media-current\\cloud-candidates.ndjson\").open(encoding=\"utf-8\") as f:header=json.loads(f.readline())\nassert header.get(\"schema\")==\"personal-media-cloud-candidate-manifest.v1\" and header.get(\"status\")==\"LOCAL_DESIRED_CLOUD_PLAN\",\"cloud_plan_state_unknown\"\nn=len(drives)\nlabel={1:\"一\",2:\"二\",3:\"三\",4:\"四\",5:\"五\",6:\"六\",7:\"七\",8:\"八\",9:\"九\",10:\"十\"}.get(n,str(n))\nprint(json.dumps({\"location_count\":n,\"location_label\":label,\"cloud_plan_configured\":True,\"live_backup_completeness_asserted\":False},ensure_ascii=False))\n"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20
+  },
+  "media-person-self-usage-display": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\nfrom datetime import datetime,timedelta,timezone\nnow=datetime.now(timezone(timedelta(hours=8)));cutoff=now-timedelta(days=7)\nwith Path(r\"E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl\").open(encoding=\"utf-8-sig\") as f:\n n=sum(1 for e in map(json.loads,f) if e.get(\"kind\")==\"skill\" and e.get(\"name\")==\"media-person-self\" and cutoff<=datetime.fromisoformat(e[\"ts\"].replace(\"Z\",\"+00:00\"))<=now)\nprint(json.dumps({\"fact\":\"近 7 天没用过\" if n==0 else \"近 7 天 AI 用了 \"+str(n)+\" 次\",\"count_7d\":n},ensure_ascii=False))"
+    ],
+    "cwd": "E:/Data/PCConfig/AiUsageLedger",
+    "read_only": true,
+    "owner_project": "media-person-self",
+    "output": "json",
+    "timeout": 30,
+    "verification": "固定标准库代码只读账本，过滤kind=skill/name=media-person-self与当前前7天时间，只输出整数与零次数显示，不输出原始行/cwd，不导入生产者、不写文件，-B禁pyc。"
+  },
+  "health-test-collection": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import os,io,json,contextlib;os.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD']='1';import pytest\nclass Count: pytest_collection_finish=lambda self,session:setattr(self,'tests',len(session.items))\nwith contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):code=pytest.main(['--collect-only','-q','-p','no:cacheprovider','tests'],plugins=[p:=Count()])\nif code:raise SystemExit(int(code))\nprint(json.dumps({'tests':p.tests,'executed':False}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-health",
+    "read_only": true,
+    "owner_project": "personal-health",
+    "output": "json",
+    "timeout": 20,
+    "verification": "11个tests文件与7个生产模块的模块顶层经AST核无文件/库写入；只collect、不执行fixture/setUp/test、禁插件/cache/-B；只输出计数与executed=false；实际213。"
+  },
+  "b5-typora-state": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json,os,pathlib,subprocess,datetime,hashlib; r=pathlib.Path('E:/Projects/Tools/TyporaThemePack'); t=pathlib.Path(os.environ['APPDATA'])/'Typora'; p=json.loads(bytes.fromhex((t/'profile.data').read_text()).decode())\nfiles=['verdant-mint.css','verdant/base.css']; assert p['theme']==files[0], 'current theme differs'\nassert all((t/'themes'/f).is_file() for f in files), 'installed theme files missing'\nraw=subprocess.check_output(['git','-C',str(r),'log','-1','--format=%cI'],text=True).strip()\na=ast.parse((r/'tools/export_pdf.py').read_text(encoding='utf-8-sig')); modes=next(ast.literal_eval(n.value) for n in a.body if isinstance(n,ast.Assign) and any(isinstance(x,ast.Name) and x.id=='MODES' for x in n.targets))\nprint(json.dumps({'theme_count':1,'profiles':len(modes),'last_update':datetime.datetime.fromisoformat(raw).astimezone(datetime.timezone(datetime.timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/TyporaThemePack",
+    "read_only": true,
+    "owner_project": "typora-theme-pack",
+    "output": "json",
+    "timeout": 20
+  },
+  "localocr-jobs-summary": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json; from pathlib import Path; r=Path('E:/Projects/Tools/LocalOCR/_server/jobs');n=pages=auto=fast=0;hashes=set()\nfor p in r.glob('*.json'):\n d=json.loads(p.read_text('utf-8-sig'));s=d.get('source_path','').replace('\\\\','/').lower();result=d.get('result',{})\n if d.get('status')!='completed' or any(x in s for x in ('/tests/samples/','/localocr/inputs/','smoke','/media-empty-acceptance/blank.png')): continue\n n+=1;pages+=len(result.get('pages',[]));hashes.add(d['source_sha256']);a=result.get('route',{}).get('requested_engine')=='auto';auto+=a;fast+=a and result.get('model_id')=='ppocrv6-medium'\nprint(json.dumps({'jobs':n,'materials':len(hashes),'pages':pages,'auto':auto,'fast':fast,'escalated':auto-fast,'explicit':n-auto,'fast_percent':round(fast/auto*100) if auto else None}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/LocalOCR",
+    "read_only": true,
+    "owner_project": "localocr",
+    "output": "json",
+    "timeout": 180
+  },
+  "localocr-runtime-summary": {
+    "argv": [
+      "wsl.exe",
+      "-d",
+      "Ubuntu",
+      "-e",
+      "python3",
+      "-B",
+      "-c",
+      "import json,re,subprocess; from pathlib import Path; r=Path('/root/localocr-runtimes/current/acceptance');d=json.loads((r/'acceptance.json').read_text());t=(r/'unit.log').read_text();n=re.search(r'Ran (\\d+) tests',t);s=re.search(r'OK \\(skipped=(\\d+)\\)',t);assert d['ok'] is True and d['unit_exit_code']==0 and n and s\nm=Path('/root/.paddlex/official_models');b=int(subprocess.check_output(['du','-sb',str(m)],text=True).split()[0])\nprint(json.dumps({'model_count':sum(p.is_dir() for p in m.iterdir()),'model_gib':round(b/1024**3,1),'tests':int(n[1]),'skipped':int(s[1])}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/LocalOCR",
+    "read_only": true,
+    "owner_project": "localocr",
+    "output": "json",
+    "timeout": 25
+  },
+  "chinese-asr-summary": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re,statistics; from pathlib import Path; r=Path('E:/Projects/Tools/ChineseASR');o=r/'outputs';bad=('acceptance','batch-smoke','benchmark-smoke','closeout','cloud-smoke','e2e','maintenance','quality-acceptance','smoke','strict-','a4-demo','cloud-jobs');hashes=set()\nfor p in o.rglob('*objective-result.json'):\n if not p.relative_to(o).parts[0].startswith(bad):\n  h=json.loads(p.read_text('utf-8-sig')).get('audio',{}).get('raw_sha256')\n  if h: hashes.add(h)\nt=(o/'dictation/runtime.log').read_text('utf-8-sig');elapsed=[float(v) for v in re.findall(r'(?:transcribed[^\\n]*?elapsed_sec=|model[^\\n]*?operation=transcribe[^\\n]*?seconds=)([\\d.]+)',t)]\nmodels=list((r/'models/modelscope').glob('*/*'))+[p for p in (r/'models/firered').iterdir() if (p/'model.pth.tar').is_file()]+[p for p in (r/'models/aligner').iterdir() if p.is_dir()]\nprint(json.dumps({'transcribed':len(hashes),'dictation_median':round(statistics.median(elapsed),2),'dictation_samples':len(elapsed),'models':sum(p.is_dir() for p in models),'models_gib':round(sum(p.stat().st_size for p in (r/'models').rglob('*') if p.is_file())/1024**3,1),'cloud_success':sum(json.loads(p.read_text('utf-8-sig')).get('status')=='succeeded' for p in (o/'cloud-jobs').glob('*.result.json'))}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ChineseASR",
+    "read_only": true,
+    "owner_project": "chinese-asr",
+    "output": "json",
+    "timeout": 30
+  },
+  "video-scaffold-published-metrics": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,io,json,re,subprocess,tarfile; from datetime import datetime,timedelta,timezone; from pathlib import Path; root=Path('E:/Projects/Archives/video-scaffold');git=lambda *args:subprocess.check_output(['git','-C',str(root),*args],creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))\nhead=git('rev-parse','origin/main').decode().strip();blob=git('archive',head)\nwith tarfile.open(fileobj=io.BytesIO(blob),mode='r:') as archive:\n texts={m.name:archive.extractfile(m).read().decode('utf-8-sig') for m in archive.getmembers() if m.isfile() and (m.name.endswith('.py') or m.name=='templates/scene_base.html')}\nconfig={n.targets[0].id:ast.literal_eval(n.value) for n in ast.parse(texts['config.py']).body if isinstance(n,ast.Assign) and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id in {'WIDTH','HEIGHT','FPS'}}\ncases=re.findall(r'''case\\s+['\"]([^'\"]+)['\"]\\s*:''',texts['templates/scene_base.html']);test_count=sum(len(re.findall(r'^\\s*(?:async\\s+)?def test',t,re.M)) for p,t in texts.items() if p.startswith('tests/'));line_count=sum(t.count('\\n') for p,t in texts.items() if p.endswith('.py') and not p.startswith('tests/'));file_count=sum(p.endswith('.py') and not p.startswith('tests/') for p in texts);commits=[datetime.fromisoformat(x) for x in git('log',head,'--format=%cI').decode().splitlines()]\nnow=datetime.now(timezone.utc);result={'width':config['WIDTH'],'height':config['HEIGHT'],'fps':config['FPS'],'animations':len(set(cases)),'tests':test_count,'lines':line_count,'files':file_count,'commits':len(commits),'changes_7d':sum(now-timedelta(days=7)<=t<=now for t in commits),'last_change':max(commits).astimezone(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M'),'source_ref':head};print(json.dumps(result))\n"
+    ],
+    "cwd": "E:/Projects/Archives/video-scaffold",
+    "read_only": true,
+    "owner_project": "video-scaffold",
+    "output": "json",
+    "timeout": 20
+  },
+  "ai-cli-profile-config-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os; from pathlib import Path; root=Path('E:/Projects/Tools/ai-cli-profile-manager');read=lambda p:json.loads(p.read_text(encoding='utf-8-sig'));providers=[read(p) for p in (root/'data/providers').glob('*.json')];visible=[p for p in providers if p.get('hidden') is not True];local=read(root/'data/local-model-set.json')['profiles'];cloud=read(root/'data/desktop-cloud-model-set.json')['profiles'];releases=Path(os.environ['LOCALAPPDATA'])/'AiCliProfileManager/desktop/releases'\nif not releases.is_dir():raise FileNotFoundError('registered desktop release directory unavailable')\nprint(json.dumps({'routes':len(visible),'tools':len({p['engine'] for p in visible}),'desktop_models':len(local)+len(cloud),'bridge_builds':sum(p.is_dir() for p in releases.iterdir())}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ai-cli-profile-manager",
+    "read_only": true,
+    "owner_project": "ai-cli-profile-manager",
+    "output": "json",
+    "timeout": 20
+  },
+  "ai-cli-profile-ollama-status": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,urllib.request; from pathlib import Path; read=lambda name:json.loads(Path('E:/Projects/Tools/ai-cli-profile-manager/data/providers',name).read_text(encoding='utf-8-sig'))\ndef get(path):\n with urllib.request.urlopen('http://127.0.0.1:11434'+path,timeout=5) as response:return json.load(response)\ninstalled={m['name'] for m in get('/api/tags')['models']}\nproviders=[read('claude-ollama.json'),read('oi-ollama.json')]\nprint(json.dumps({'uninstalled_routes':sum(p['models']['primary'] not in installed for p in providers),'version':get('/api/version')['version']}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ai-cli-profile-manager",
+    "read_only": true,
+    "owner_project": "ai-cli-profile-manager",
+    "output": "json",
+    "timeout": 15
+  },
+  "vault-source-metrics": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json,sys; from pathlib import Path; t=ast.parse(Path('E:/Projects/Tools/vault-tool/vault_tool.py').read_text(encoding='utf-8-sig'))\nimports=lambda ns:{a.name.split('.')[0] for n in ns if isinstance(n,ast.Import) for a in n.names}|{n.module.split('.')[0] for n in ns if isinstance(n,ast.ImportFrom)}\noptional=[n for n in t.body if isinstance(n,ast.If) and isinstance(n.test,ast.UnaryOp) and isinstance(n.test.op,ast.Not) and isinstance(n.test.operand,ast.Name) and n.test.operand.id=='_IS_WINDOWS' or isinstance(n,ast.Try) and any(isinstance(h.type,ast.Name) and h.type.id=='ImportError' for h in n.handlers)]\nrequired=imports(t.body)-set(sys.stdlib_module_names); assert imports(ast.walk(t))<=imports(t.body)|set(sys.stdlib_module_names)|imports(x for n in optional for x in ast.walk(n)), 'Unknown dependency branch'\nf=next(n for n in t.body if isinstance(n,ast.FunctionDef) and n.name=='slot_capacity')\ng=[n for n in f.body if isinstance(n,ast.If) and isinstance(n.test,ast.Compare) and isinstance(n.test.left,ast.Name) and n.test.left.id=='layer' and isinstance(n.test.ops[0],ast.NotIn)]; assert len(g)==1,'Unknown slot guard'\nslots=ast.literal_eval(g[0].test.comparators[0]); assert isinstance(slots,tuple) and all(isinstance(v,int) for v in slots),'Unknown slots'\nprint(json.dumps({'default_windows_scrypt_required_third_party':len(required),'supported_slots':len(set(slots))}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/vault-tool",
+    "read_only": true,
+    "owner_project": "vault-tool",
+    "output": "json",
+    "timeout": 10
+  },
+  "vault-key-ciphertext-revisions": {
+    "argv": [
+      "git",
+      "-C",
+      "V:/Personal/Projects/Key",
+      "rev-list",
+      "--count",
+      "HEAD",
+      "--",
+      "vault/vault.enc"
+    ],
+    "cwd": "E:/Projects/Tools/vault-tool",
+    "read_only": true,
+    "owner_project": "vault-tool",
+    "output": "json",
+    "timeout": 15
+  },
+  "b6-proxyclean-last-commit": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,subprocess; from datetime import datetime,timezone,timedelta; stamp=subprocess.check_output(['git','-C','E:\\\\Projects\\\\Tools\\\\ProxyClean','log','-1','--format=%cI'],text=True,creationflags=0x08000000).strip(); print(json.dumps({'last':datetime.fromisoformat(stamp).astimezone(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')}))"
+    ],
+    "cwd": "E:\\Projects\\Tools\\ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 20,
+    "verification": "固定git log -1 --format=%cI只读HEAD提交者时间；北京时间转换仅在内存，Python -B不写字节码，git子进程CREATE_NO_WINDOW。"
+  },
+  "password-center-readonly-summary": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,hashlib,json,re\nfrom pathlib import Path\nload=lambda p:json.loads(Path(p).read_text(encoding='utf-8-sig'))\nmachine=load('E:/PCConfig/registries/password_center_machine.json')\nconfig=load('E:/PCConfig/registries/password_center_program_maintenance.json')\nruntime=load('C:/ProgramData/PCConfig/AuthorityHost/registries/secret_broker.json')\napproved=config['approved_record']; assert approved['approved'] is True and approved['status']=='approved'\ntargets={x['role']:x for x in config['resolved_targets']['targets']}\ndef complete_count(role):\n root=Path(targets[role]['selected_vault_path'])/'sets'; assert root.is_dir()\n manifests=[load(x/'manifest.json') for x in root.iterdir() if x.is_dir()]\n assert all(m['schema']=='pcconfig.password-center-recovery-set.v1' and m['complete'] is True and m['plaintext_included'] is False for m in manifests)\n return len(manifests)\npackage=Path(targets['g']['release_store_root'])/approved['manifest_sha256']; assert package.is_dir()\nassert hashlib.sha256((package/'package-manifest.json').read_bytes()).hexdigest()==approved['manifest_sha256']\nchoices=re.findall(r\"(?m)^\\s*\\$choices=@\\((.*)$\",Path('C:/ProgramData/PCConfig/AuthorityHost/tools/SecretBroker.Ui.ps1').read_text(encoding='utf-8-sig'))\nassert choices\nfactors=[re.findall(r\"@\\('([^']+)'\",line) for line in choices]; assert all(x==factors[0] for x in factors)\ntree=ast.parse(Path('C:/ProgramData/PCConfig/AuthorityHost/tools/personal_access_duration.py').read_text(encoding='utf-8-sig'))\nlimits={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and isinstance(n.targets[0],ast.Name) and n.targets[0].id in {'MIN_MINUTES','MAX_MINUTES'}}\nprint(json.dumps({'factor_count':len(factors[0]),'recovery_sites':int(bool(machine['broker']['runtime']['private_git_remote']))+sum(role in targets for role in ['g','h']),'target_count':len(runtime['secretref_targets']),'min_hours':limits['MIN_MINUTES']/60,'max_hours':limits['MAX_MINUTES']/60,'g_sets':complete_count('g'),'h_sets':complete_count('h'),'package_files':sum(p.is_file() for p in package.rglob('*'))},ensure_ascii=True))"
+    ],
+    "cwd": "E:/PCConfig",
+    "read_only": true,
+    "owner_project": "password-center",
+    "output": "json",
+    "timeout": 20
+  },
+  "github-index-readonly-counts": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,re,subprocess\nfrom pathlib import Path\nenv={**os.environ,'GH_NO_UPDATE_NOTIFIER':'1','GH_PROMPT_DISABLED':'1','GIT_OPTIONAL_LOCKS':'0','GIT_TERMINAL_PROMPT':'0','GIT_NO_LAZY_FETCH':'1','PSModuleAnalysisCachePath':'NUL','POWERSHELL_UPDATECHECK':'Off'}\ndef run(argv):\n p=subprocess.run(argv,capture_output=True,text=True,encoding='utf-8',timeout=25,env=env,creationflags=0x08000000); assert p.returncode==0; return p.stdout\nrepos=json.loads(run(['gh','repo','list','wlyaaaaa','--limit','1000','--json','nameWithOwner,isPrivate']))\nassert len(repos)<1000\nrules=json.loads(run(['pwsh','-NoProfile','-ExecutionPolicy','Bypass','-File','E:/.agents/tools/Invoke-EAgentRulesRelease.ps1','-Mode','Inspect','-Brief']))\nassert rules['status']=='pass' and rules['reason']=='e_rules_active_verified'\ntext=Path(rules['required_rule_paths']['context_sources_contract']).read_text(encoding='utf-8-sig')\nsection=re.search(r'(?ms)^## 冻结的项目\\s*\\n(.*?)(?=^## |\\Z)',text); assert section\nnames={'wlyaaaaa/'+x.casefold() for x in re.findall(r'(?m)^\\|[^\\r\\n|]+\\|\\s*`([^`]+)`\\s*\\|',section.group(1))}; assert names\nfound={x['nameWithOwner'].casefold() for x in repos}; assert names<=found\nbaseline=json.loads(Path('E:/GitHub总索引/99_private/registries/git-owner-baselines-v3.json').read_text(encoding='utf-8'))['current']\nknown={x['repo'].casefold() for x in baseline['identities']}\nprint(json.dumps({'repo_count':len(repos),'public_count':sum(not x['isPrivate'] for x in repos),'frozen_count':len(names & found),'baseline_count':baseline['repository_count'],'unregistered_count':len(found-known),'unpushed_count':int(run(['git','-C','E:/GitHub总索引','rev-list','--count','refs/remotes/origin/main..HEAD']).strip())},ensure_ascii=True))"
+    ],
+    "cwd": "E:/GitHub总索引",
+    "read_only": true,
+    "owner_project": "github-local-index",
+    "output": "json",
+    "timeout": 55,
+    "source_evidence": "仅 gh repo list GET 与正式 Inspect 读规则；所有子进程禁提示/更新/模块缓存，缓存上游ref用rev-list只读不fetch；输出只为聚合数。"
+  },
+  "github-admission-fixed-window": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom datetime import datetime,timezone,timedelta\nfrom pathlib import Path\nzone=timezone(timedelta(hours=8)); after=datetime(2026,9,16,tzinfo=zone); until=datetime(2026,10,9,tzinfo=zone); count=0\nwith Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl').open(encoding='utf-8') as stream:\n for line in stream:\n  row=json.loads(line)\n  if row.get('kind')=='command' and row.get('name')=='Get-ProjectAdmission.ps1' and after<=datetime.fromisoformat(row['ts'])<until: count+=1\nprint(json.dumps({'count':count}))"
+    ],
+    "cwd": "E:/GitHub总索引",
+    "read_only": true,
+    "owner_project": "github-local-index",
+    "output": "json",
+    "timeout": 20
+  },
+  "b6-wechat-aggregate": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\narchives=Path('E:/PersonalData/微信项目/exports')\nreading=Path('E:/PersonalData/日常偏好/微信阅读')\nassert archives.is_dir() and reading.is_dir(), 'aggregate_root_unavailable'\nmanifests=[json.loads(p.read_text(encoding='utf-8')) for p in archives.rglob('manifest.json')]\nassert all(j.get('format')=='wechat-direct-contact-export.v1' and isinstance(j.get('messageCount'),int) for j in manifests), 'archive_scope_changed'\nwindows=[json.loads(p.read_text(encoding='utf-8')) for p in reading.rglob('window.json')]\nassert all(j.get('schema')=='daily-preferences.wechat-reading-window.v1' and isinstance(j.get('message_count'),int) and isinstance(j.get('collection_complete'),bool) for j in windows), 'reading_scope_changed'\ncomplete=[j for j in windows if j['collection_complete']]\nassert all(j['message_count']==0 for j in windows if not j['collection_complete']), 'incomplete_nonempty_reading_window'\nprint(json.dumps({'archive_count':len(manifests),'archive_message_count':sum(j['messageCount'] for j in manifests),'reading_window_count':len(windows),'reading_message_count':sum(j['message_count'] for j in complete),'complete_window_count':len(complete),'incomplete_window_count':len(windows)-len(complete),'scope':'metadata_counts_only'}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/WeChatDirect",
+    "read_only": true,
+    "owner_project": "wechatdirect",
+    "output": "json",
+    "timeout": 30
+  },
+  "b6-wechat-source-constants": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\ntree=ast.parse(Path('E:/Projects/Tools/WeChatDirect/wechat_source.py').read_text(encoding='utf-8'))\nwanted={'PAGE_SIZE','PBKDF2_ROUNDS'}\nvalues={n.targets[0].id:ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and len(n.targets)==1 and isinstance(n.targets[0],ast.Name) and n.targets[0].id in wanted}\nassert set(values)==wanted, 'source_constant_missing'\nprint(json.dumps(values))\n"
+    ],
+    "cwd": "E:/Projects/Tools/WeChatDirect",
+    "read_only": true,
+    "owner_project": "wechatdirect",
+    "output": "json",
+    "timeout": 30
+  },
+  "b6-proxy-source-counts": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re\nfrom pathlib import Path\nroot=Path('E:/Projects/Tools/ProxyClean')\ncommon=(root/'ProxyClean.Common.psm1').read_text(encoding='utf-8-sig')\nxaml=(root/'ControlCenter.xaml').read_text(encoding='utf-8-sig')\nlayers=set(re.findall(r'\\$availability\\.([a-zA-Z_]+)\\s*=',common))\nbuttons=re.findall(r'<Button\\s+x:Name=\"(?:Primary|DisconnectButton)\"',xaml)\nassert layers and buttons, 'source_structure_missing'\nprint(json.dumps({'layer_count':len(layers),'home_primary_button_count':len(buttons)}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 30
+  },
+  "b6-proxy-task-count": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess,sys\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nargv=['pwsh', '-NoProfile', '-NonInteractive', '-Command', \"$ErrorActionPreference='Stop'; $tasks=@(Get-ScheduledTask | Where-Object { $_.Actions | Where-Object { ([string]$_.Execute + ' ' + [string]$_.Arguments) -match '(?i)(E:[\\\\/]Projects[\\\\/]Tools[\\\\/]ProxyClean|ProxyClean)' } }); @{task_count=$tasks.Count}|ConvertTo-Json -Compress\"]\nr=subprocess.run(argv,env=env,capture_output=True,text=True,encoding='utf-8',creationflags=subprocess.CREATE_NO_WINDOW,timeout=30)\nif r.returncode: raise SystemExit('readonly_source_failed')\npayload=json.loads(r.stdout)\nvalue=payload['task_count']\nassert isinstance(value,int) and not isinstance(value,bool) and value>=0, 'aggregate_not_nonnegative_integer'\nprint(json.dumps({'task_count':value}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 40
+  },
+  "b6-work-deliverable-count": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\nroot=Path('V:/Personal/Projects/work-delivery-copilot/src/work_delivery')\ncompiler=ast.parse((root/'compiler.py').read_text(encoding='utf-8'))\nartifacts=ast.parse((root/'artifacts.py').read_text(encoding='utf-8'))\ncore=[]\nfor n in ast.walk(compiler):\n if isinstance(n,ast.Dict) and [k.value for k in n.keys if isinstance(k,ast.Constant)]==['prd','manifest','traceability']:\n  assert not core, 'multiple_core_deliverable_definitions'\n  core=[v.right.value for v in n.values if isinstance(v,ast.BinOp) and isinstance(v.right,ast.Constant)]\noffice={}\nfor n in artifacts.body:\n if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='OUTPUT_NAMES' for t in n.targets): office=ast.literal_eval(n.value)\nassert core and office and all(isinstance(v,str) for v in office.values()), 'deliverable_definition_missing'\nprint(json.dumps({'formal_file_count':len(core)+len(office)}))\n"
+    ],
+    "cwd": "V:/Personal/Projects/work-delivery-copilot",
+    "read_only": true,
+    "owner_project": "work-delivery-copilot",
+    "output": "json",
+    "timeout": 30
+  },
+  "b6-proxy-pester-discovery": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess,sys\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nargv=['pwsh', '-NoProfile', '-NonInteractive', '-Command', \"$ErrorActionPreference='Stop'; Import-Module Pester -RequiredVersion 6.0.0; $c=New-PesterConfiguration; $c.Run.Path='E:/Projects/Tools/ProxyClean/tests'; $c.Run.SkipRun=$true; $c.Run.PassThru=$true; $c.TestDrive.Enabled=$false; $c.TestRegistry.Enabled=$false; $c.TestResult.Enabled=$false; $c.CodeCoverage.Enabled=$false; $c.Output.Verbosity='None'; $r=Invoke-Pester -Configuration $c; if($r.FailedContainersCount){throw 'pester_discovery_failed'}; @{discovered_test_count=$r.TotalCount; scope='discovery_only_no_execution'}|ConvertTo-Json -Compress\"]\nr=subprocess.run(argv,env=env,capture_output=True,text=True,encoding='utf-8',creationflags=subprocess.CREATE_NO_WINDOW,timeout=30)\nif r.returncode: raise SystemExit('readonly_source_failed')\npayload=json.loads(r.stdout)\nvalue=payload['discovered_test_count']\nassert isinstance(value,int) and not isinstance(value,bool) and value>=0, 'aggregate_not_nonnegative_integer'\nprint(json.dumps({'discovered_test_count':value,'scope':'discovery_only_no_execution'}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 40
+  },
+  "b6-steam-snapshot-aggregates": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,hashlib,pathlib\np=pathlib.Path(r'E:\\Projects\\Tools\\steam-millennium-config-backup')\nm=json.loads((p/'snapshot-manifest.json').read_text(encoding='utf-8-sig'))\nc=json.loads((p/'config/config.json').read_text(encoding='utf-8-sig'))\nroots=[p,pathlib.Path(r'G:\\80_Backup\\SteamMillennium'),pathlib.Path(r'H:\\80_自动备份区\\SteamMillennium')]\ncopies=0\nfor root in roots:\n if not root.is_dir():raise RuntimeError('副本盘不可用')\n mm=json.loads((root/'snapshot-manifest.json').read_text(encoding='utf-8-sig'))\n if mm!=m:raise RuntimeError('副本清单不一致')\n for f in m['files']:\n  data=(root/f['path']).read_bytes()\n  assert len(data)==f['bytes'] and hashlib.sha256(data).hexdigest().lower()==f['sha256'].lower(),'文件指纹不一致'\n copies+=1\nprint(json.dumps({'bytes':sum(f['bytes'] for f in m['files']),'copies':copies,'plugins':len([q for q in (p/'plugins').iterdir() if q.is_dir()]),'themes':len([q for q in (p/'themes').iterdir() if q.is_dir()]),'active_themes':int(bool(c['themes']['activeTheme']))}))\n"
+    ],
+    "cwd": "E:\\Projects\\Tools\\steam-millennium-config-backup",
+    "read_only": true,
+    "owner_project": "steam-millennium-config-backup",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "b6-mesh-config-aggregates": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,re,pathlib\np=pathlib.Path(r'V:\\Personal\\Projects\\meshclip-kit')\ns=json.loads((pathlib.Path(os.environ['LOCALAPPDATA'])/'MeshClipKit/user-state.json').read_text(encoding='utf-8-sig'))\nw=(p/'scripts/watch-kdeconnect.ps1').read_text(encoding='utf-8-sig')\nc=(p/'scripts/MeshClip.Common.psm1').read_text(encoding='utf-8-sig')\nprint(json.dumps({'machines':len(s['addedPeers'])+1,'rules':len(s['firewallRules']),'interval':int(re.search(r'\\$IntervalSeconds\\s*=\\s*(\\d+)',w).group(1)),'task_minutes':int(re.search(r\"\\$script:WatchdogTaskInterval\\s*=\\s*'PT(\\d+)M'\",c).group(1))}))\n"
+    ],
+    "cwd": "V:\\Personal\\Projects\\meshclip-kit",
+    "read_only": true,
+    "owner_project": "meshclip-kit",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "b6-mesh-doctor-aggregates": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess\nenv=os.environ.copy()\nenv['PSModuleAnalysisCachePath']='NUL'\nenv['POWERSHELL_UPDATECHECK']='Off'\ncmd=['pwsh', '-NoProfile', '-NonInteractive', '-Command', \"$ErrorActionPreference='Stop'; $raw=& 'V:\\\\Personal\\\\Projects\\\\meshclip-kit\\\\scripts\\\\doctor.ps1' -AsJson; $items=@(($raw -join [Environment]::NewLine)|ConvertFrom-Json); if(-not $items.Count){throw 'doctor无检查输出'}; @{total=$items.Count;passed=@($items|Where-Object Status -eq 'PASS').Count;warnings=@($items|Where-Object Status -eq 'WARN').Count;failed=@($items|Where-Object Status -eq 'FAIL').Count;unknown=@($items|Where-Object Status -eq 'UNKNOWN').Count}|ConvertTo-Json -Compress; exit 0\"]\nr=subprocess.run(cmd,cwd='V:\\\\Personal\\\\Projects\\\\meshclip-kit',env=env,capture_output=True,text=True,encoding='utf-8',timeout=85,creationflags=subprocess.CREATE_NO_WINDOW,check=True)\nv=json.loads(r.stdout)\nkeys=('total','passed','warnings','failed','unknown')\nassert all(type(v[k]) is int and v[k]>=0 for k in keys),'自检汇总格式错误'\nprint(json.dumps({k:v[k] for k in keys}))\n"
+    ],
+    "cwd": "V:\\Personal\\Projects\\meshclip-kit",
+    "read_only": true,
+    "owner_project": "meshclip-kit",
+    "output": "json",
+    "timeout": 90,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。 缓存写入更正：Python父包装在pwsh启动前只对子进程环境设置PSModuleAnalysisCachePath=NUL与POWERSHELL_UPDATECHECK=Off，不更改用户/机器环境；微软官方说明NUL禁用ModuleAnalysisCache落盘，兼容PowerShell 7及Windows PowerShell 5.1。固定原pwsh argv、CREATE_NO_WINDOW，stdout仅五个汇总计数，stderr不输出私人数据。",
+    "read_only_reference": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_environment_variables?view=powershell-7.5#psmoduleanalysiscachepath",
+    "read_only_reference_windows_powershell": "https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_windows_powershell_5.1#module-analysis-cache"
+  },
+  "b6-emerald-config-aggregates": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re,pathlib\np=pathlib.Path(r'V:\\Personal\\Projects\\emerald-veil')\na=(p/'src/EmeraldVeil.App/App.xaml.cs').read_text(encoding='utf-8-sig')\nh=(p/'src/EmeraldVeil.App/VeilController.cs').read_text(encoding='utf-8-sig')\nd=(p/'src/EmeraldVeil.Core/DisplayTargetPolicy.cs').read_text(encoding='utf-8-sig')\nb=json.loads((p/'assets/windows-background.json').read_text(encoding='utf-8-sig'))\nassert '.FirstOrDefault()' in d and 'VeilDisplay?' in d,'显示策略已变'\nassert b['width']==3840 and b['height']==2160,'壁纸规格已变，需内容判断'\nprint(json.dumps({'idle_minutes':int(re.search(r'if \\(value is null\\) return TimeSpan.FromMinutes\\((\\d+)\\)',a).group(1)),'hotkey':re.search(r'immediateHotKey\\s*=\\s*\"([^\"]+)\"',h).group(1),'target_count':1,'wallpaper_k':4}))\n"
+    ],
+    "cwd": "V:\\Personal\\Projects\\emerald-veil",
+    "read_only": true,
+    "owner_project": "emerald-veil",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "b6-profile-route-count": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,pathlib\np=pathlib.Path(r'E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\providers')\nfs=list(p.glob('*.json')); assert fs,'来源不可用'\nprint(json.dumps({'routes':sum(json.loads(f.read_text(encoding='utf-8-sig')).get('hidden') is not True for f in fs)}))\n"
+    ],
+    "cwd": "E:\\Projects\\Tools\\ai-cli-profile-manager",
+    "read_only": true,
+    "owner_project": "ai-cli-profile-manager",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "b6-profile-timeaudit-count": {
+    "argv": [
+      "python",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,subprocess\ncmd=['docker','exec','-e','PGOPTIONS=-c default_transaction_read_only=on -c statement_timeout=20000 -c lock_timeout=500','audit-postgres','psql','-X','-U','leyang','-d','time_audit','-At','-v','ON_ERROR_STOP=1','-c',\"SELECT json_build_object('hardware_samples',count(*)) FROM public.fact_system_hardware;\"]\nr=subprocess.run(cmd,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=0x08000000,check=True)\nprint(json.dumps(json.loads(r.stdout)))\n"
+    ],
+    "cwd": "E:\\Projects\\Tools\\TimeAudit",
+    "read_only": true,
+    "owner_project": "timeaudit",
+    "output": "json",
+    "timeout": 35,
+    "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "document-materials-static-test-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json,math\nfrom pathlib import Path\nt=ast.parse(Path('tests/test_formal_documents.py').read_text(encoding='utf-8-sig'))\nfunctions=cases=0\nfor n in t.body:\n if not isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) or not n.name.startswith('test_'):continue\n functions+=1;mult=1\n for d in n.decorator_list:\n  if isinstance(d,ast.Call) and isinstance(d.func,ast.Attribute) and d.func.attr=='parametrize':\n   assert len(d.args)>=2\n   mult*=len(ast.literal_eval(d.args[1]))\n cases+=mult\nprint(json.dumps({'functions':functions,'cases':cases,'executed':False}))"
+    ],
+    "cwd": "E:/Projects/Tools/personal-formal-documents",
+    "read_only": true,
+    "owner_project": "document-materials",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 核实 tests/test_formal_documents.py 只有28个顶层测试函数；五处parametrize值都是字面量且无带params的fixture。固定代码只Path.read_text/AST/literal_eval与计数，不导入源码、不执行测试、不写库或文件；实际28函数/39参数展开定义。"
+  },
+  "personal-media-local-cloud-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import argparse,contextlib,io,json,sqlite3\nfrom pathlib import Path\nimport personal_media as p\ndef ro_catalog(path_value,*,writable=False):\n assert not writable\n path=Path(path_value).resolve(strict=True)\n connection=sqlite3.connect(path.as_uri()+'?mode=ro',uri=True)\n connection.row_factory=sqlite3.Row\n assert connection.execute('PRAGMA user_version').fetchone()[0]==1\n return connection\np.open_catalog=ro_catalog\nb=io.StringIO()\nwith contextlib.redirect_stdout(b):code=p.cloud_status(argparse.Namespace(db=str(p.DEFAULT_DB)))\nassert code==0\nd=json.loads(b.getvalue());o={}\nfor target in ('photos','drive'):\n for key in ('desired','synced','failed','unknown','paused','uploaded_bytes'):o[target+'_'+key]=d['targets'][target][key]\no['desired_total']=o['photos_desired']+o['drive_desired'];o['synced_total']=o['photos_synced']+o['drive_synced']\no['settle_total']=d['upload_holds']['settle_period'];o['issue_total']=sum(o[t+'_'+k] for t in ('photos','drive') for k in ('failed','unknown','paused'))\nwith p.open_catalog(str(p.DEFAULT_DB)) as c:\n h=p.recorded_upload_holds(c,p.DEFAULT_DB)\n for t in ('photos','drive'):o[t+'_settle']=h[t]['settle_period']\n o['phone_eligible']=sum(p.catalog_phone_recovery_selection(json.loads(r[0]))[0] for r in c.execute('select entry_json from media'))\n o['phone_unselected']=o['phone_eligible']-sum(1 for line in Path('E:/Media/_manifests/personal-media-current/phone-recovery-plan.ndjson').open(encoding='utf-8') if line.strip())\nprint(json.dumps(o))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 核实cloud_status/current_cloud_desired/cloud_upload_holds/owner_pending_hashes/recorded_upload_holds/catalog_phone_recovery_selection只本地读取或纯计算，无写入和provider调用。源open_catalog先is_file再普通connect仍有创建间隙，故本入口固定替换为Path.resolve(strict=True)+SQLite URI mode=ro+user_version核验，所有来源连接均严格只读。personal_media/cloud_upload/media_access/storage_layout顶层AST逐项核实只有Path/frozenset/正则/ZoneInfo/datetime与uuid4等纯构造，无文件/库写入；-B禁pyc。仅输出聚合，不输出条目、路径、远端ID、错误正文。"
+  },
+  "personal-media-package-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\np=Path('E:/Media/_manifests/personal-media-current/phone-recovery-plan.ndjson')\nrows=[json.loads(s) for s in p.read_text(encoding='utf-8').splitlines() if s.strip()]\nassert rows and all(r['schema']=='personal-media-phone-recovery-current.v1' for r in rows)\nroots={Path(r['proposed_target_root']) for r in rows};assert all(r.is_dir() for r in roots)\ntargets={Path(r['proposed_target']).resolve() for r in rows};assert len(targets)==len(rows)\nexisting=0\nfor r in rows:\n source=Path(r['source']['authority_locator']);assert source.is_file() and source.stat().st_size==r['byte_size']\n target=Path(r['proposed_target']);existing+=int(target.is_file() and target.stat().st_size==r['byte_size'])\nextras=sum(p.is_file() and p.resolve() not in targets for root in roots for p in root.rglob('*'))\nprint(json.dumps({'items':len(rows),'bytes':sum(r['byte_size'] for r in rows),'existing':existing,'missing':len(rows)-existing,'obsolete':extras,'hash_recomputed':False}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 固定代码与personal_media.py recovery_sync --execute=false同口径：仅读现行计划、校验schema/唯一目标/源与G包存在及大小，并按登记包根计过时文件；根不可用即失败，不把空根当完整。没有调用复制、哈希、手机、写入或provider；仅输出计数与字节。"
+  },
+  "personal-media-closeout-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json\nfrom pathlib import Path\nd=json.loads(Path('E:/Data/PCConfig/PersonalMedia/phone-closeout-status.json').read_text(encoding='utf-8-sig'))\nassert d['status'] in ('PASS','FAIL','SKIPPED')\nb=d['batches'];print(json.dumps({'batches':len(b),'passed':sum(v.get('status')=='PASS' for v in b),'waiting':sum(v.get('status')=='WAITING' for v in b),'status':d['status']}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 固定代码只读PCConfig既有phone-closeout-status.json汇总；不会启动closeout或连接手机；只输出批次数/PASS/WAITING数与总体状态，未输出批次路径或回执正文。实际7/3/4/PASS。"
+  },
+  "personal-media-physical-selected-count": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,sqlite3\nfrom pathlib import Path\np=Path('E:/Pictures/精选');assert p.is_dir()\ndb=Path('E:/Media/_manifests/personal-media-current/catalog.sqlite3')\nwith sqlite3.connect(db.as_uri()+'?mode=ro',uri=True) as c:\n exceptions=sum(Path(v[0]).parent.resolve()!=Path('E:/Videos').resolve() for v in c.execute(\"select authority_locator from media where media_type='video' and category_norm='视频'\"))\nprint(json.dumps({'selected':sum(f.is_file() for f in p.rglob('*')),'ordinary_video_subdir_exceptions':exceptions}))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-media",
+    "read_only": true,
+    "owner_project": "personal-media",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 固定代码只检查现行实体精选目录并递归数普通文件、以SQLite mode=ro数普通视频当前定位父目录不在E:/Videos平铺根的例外；不打开媒体、不hash、不复制，不输出定位值；目录不可用即失败。实际906与1。"
+  },
+  "health-source-registry-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\ntree=ast.parse(Path('google_health_import.py').read_text(encoding='utf-8-sig'))\nout={}\nfor n in tree.body:\n if isinstance(n,ast.Assign) and isinstance(n.value,(ast.Tuple,ast.List)):\n  for t in n.targets:\n   if isinstance(t,ast.Name) and t.id in ('FIELDS','READONLY_SCOPES'):out[t.id]=len(n.value.elts)\nassert set(out)=={'FIELDS','READONLY_SCOPES'}\nprint(json.dumps(out))"
+    ],
+    "cwd": "V:/Personal/Projects/personal-health",
+    "read_only": true,
+    "owner_project": "personal-health",
+    "output": "json",
+    "timeout": 20,
+    "verification": "2026-10-11 固定代码仅只读google_health_import.py源代码，AST取FIELDS与READONLY_SCOPES两个顶层tuple/list字面量长度；不导入业务、不读健康/凭据文件、不访问网络、不写入；实际39/9。"
+  },
+  "b9-devconfig-catalog-counts": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import os,json,subprocess\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nr=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',\"$ErrorActionPreference='Stop'; $s=Import-PowerShellDataFile -LiteralPath 'E:/Projects/Backups/devconfig-backup/sources.psd1'; @{home_dirs=(@($s.HomeDirs).Count+@($s.HomePreciseDirs).Count);home_files=(@($s.HomeFiles).Count+@($s.HomePreciseFiles).Count);required=@($s.RequiredSources).Count;registry=@($s.RegistryExports).Count;task_patterns=@($s.ScheduledTaskPatterns).Count;extra=@($s.ExtraDirs).Count}|ConvertTo-Json -Compress\"],env=env,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)\nif r.returncode:raise RuntimeError('只读入口未完成')\nv=json.loads(r.stdout)\nprint(json.dumps(v,ensure_ascii=False))"
+    ],
+    "cwd": "E:/Projects/Backups/devconfig-backup",
+    "read_only": true,
+    "owner_project": "devconfig-backup",
+    "output": "json",
+    "timeout": 30,
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+  },
+  "b9-devconfig-date-package-counts": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re\nfrom pathlib import Path\nroots=[Path('E:/Projects/Backups/devconfig-backup/out'),Path('G:/80_Backup/DevConfig')]\nassert all(p.is_dir() for p in roots),'源根不可用'\ncounts={k:len([f for f in p.glob('devconfig-*.zip') if f.is_file()]) for k,p in zip(('local','hot'),roots)}\nassert counts['local']==counts['hot'],'两侧日期包数不同，不能更新各有一句'\nprint(json.dumps(counts))"
+    ],
+    "cwd": "E:/Projects/Backups/devconfig-backup",
+    "read_only": true,
+    "owner_project": "devconfig-backup",
+    "output": "json",
+    "timeout": 30,
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+  },
+  "b9-emerald-source-params": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re,struct\nfrom pathlib import Path\np=Path('V:/Personal/Projects/emerald-veil'); c=(p/'src/EmeraldVeil.App/VeilController.cs').read_text(encoding='utf-8-sig'); i=(p/'src/EmeraldVeil.Core/InputActivityFilter.cs').read_text(encoding='utf-8-sig'); w=(p/'src/EmeraldVeil.App/WallpaperEngineBackground.cs').read_text(encoding='utf-8-sig')\ndef one(pattern,text):\n vals=re.findall(pattern,text);assert len(vals)==1,'源码结构改变';return int(vals[0])\nr={'poll_ms':one(r'PollInterval = TimeSpan.FromMilliseconds\\((\\d+)\\)',c),'preview_s':one(r'PreviewDuration = TimeSpan.FromSeconds\\((\\d+)\\)',c),'maintenance_s':one(r'RuntimePolicyMaintenanceInterval = TimeSpan.FromSeconds\\((\\d+)\\)',c),'injected_ms':one(r'InjectedMoveConfirmationWindowMilliseconds = (\\d+)',i),'command_timeout_s':one(r'timeout.CancelAfter\\(TimeSpan.FromSeconds\\((\\d+)\\)',w)}\nfor key,f in [('desktop',p/'assets/verdant-rain-4k.png'),('mobile',p/'assets/mobile-wallpaper/emerald-elf-1440x3200.png')]:\n with f.open('rb') as s:b=s.read(24)\n assert b[:8]==b'\\x89PNG\\r\\n\\x1a\\n','PNG格式改变'\n width,height=struct.unpack('>II',b[16:24]);r[key+'_width']=width;r[key+'_height']=height;r[key+'_bytes']=f.stat().st_size\nprint(json.dumps(r))"
+    ],
+    "cwd": "V:/Personal/Projects/emerald-veil",
+    "read_only": true,
+    "owner_project": "emerald-veil",
+    "output": "json",
+    "timeout": 30,
+    "verification": "固定 Python 代码只有 pathlib 只读、JSON/正则/标准库解析与聚合；不导入生产入口、不写文件，-B 禁字节码。只输出计数/参数；新增 PowerShell 子进程禁模块分析缓存与更新检查、CREATE_NO_WINDOW，不运行测试或效果。"
+  },
+  "b9-mesh-pester-discovery": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nr=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',\"$ErrorActionPreference='Stop';Import-Module Pester -RequiredVersion 6.0.0;$c=New-PesterConfiguration; $c.Run.Path='V:/Personal/Projects/meshclip-kit/tests'; $c.Run.SkipRun=$true;$c.Run.PassThru=$true;$c.TestDrive.Enabled=$false;$c.TestRegistry.Enabled=$false;$c.TestResult.Enabled=$false;$c.CodeCoverage.Enabled=$false;$c.Output.Verbosity='None';$r=Invoke-Pester -Configuration $c;if($r.FailedContainersCount){throw 'discovery_failed'};@{expanded=$r.TotalCount}|ConvertTo-Json -Compress\"],env=env,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)\nif r.returncode:raise RuntimeError('只读发现未完成')\nprint(json.dumps(json.loads(r.stdout),ensure_ascii=False))"
+    ],
+    "cwd": "V:/Personal/Projects/meshclip-kit",
+    "read_only": true,
+    "owner_project": "meshclip-kit",
+    "output": "json",
+    "timeout": 35,
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+  },
+  "b9-proxy-test-subsets": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nr=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',\"$ErrorActionPreference='Stop';Import-Module Pester -RequiredVersion 6.0.0;$c=New-PesterConfiguration; $c.Run.Path='E:/Projects/Tools/ProxyClean/tests/ProxyClean.Clients.Tests.ps1'; $c.Run.SkipRun=$true;$c.Run.PassThru=$true;$c.TestDrive.Enabled=$false;$c.TestRegistry.Enabled=$false;$c.TestResult.Enabled=$false;$c.CodeCoverage.Enabled=$false;$c.Output.Verbosity='None';$r=Invoke-Pester -Configuration $c;if($r.FailedContainersCount){throw 'discovery_failed'};$client=$r.TotalCount;$c=New-PesterConfiguration; $c.Run.Path='E:/Projects/Tools/ProxyClean/tests/ProxyClean.CloseRegression.Tests.ps1'; $c.Run.SkipRun=$true;$c.Run.PassThru=$true;$c.TestDrive.Enabled=$false;$c.TestRegistry.Enabled=$false;$c.TestResult.Enabled=$false;$c.CodeCoverage.Enabled=$false;$c.Output.Verbosity='None';$r=Invoke-Pester -Configuration $c;if($r.FailedContainersCount){throw 'discovery_failed'};@{client=$client;close=$r.TotalCount}|ConvertTo-Json -Compress\"],env=env,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)\nif r.returncode:raise RuntimeError('只读发现未完成')\nprint(json.dumps(json.loads(r.stdout),ensure_ascii=False))"
+    ],
+    "cwd": "E:/Projects/Tools/ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 35,
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+  },
+  "b9-proxy-status-aggregates": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,subprocess\nenv=dict(os.environ,PSModuleAnalysisCachePath='NUL',POWERSHELL_UPDATECHECK='Off')\nr=subprocess.run(['pwsh','-NoProfile','-NonInteractive','-Command',\"$ErrorActionPreference='Stop'; $OutputEncoding=[Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); & 'E:/Projects/Tools/ProxyClean/ProxyStatus.ps1' -SkipExitProbe -Json\"],env=env,capture_output=True,text=True,encoding='utf-8',timeout=30,creationflags=subprocess.CREATE_NO_WINDOW)\nif r.returncode:raise RuntimeError('本机只读状态含Unknown或未完成')\nv=json.loads(r.stdout);a=v['availability'];assert isinstance(a,dict) and a and all(x!='unknown' for x in a.values()),'状态未知'\nprint(json.dumps({'observed_layers':len(a),'published_endpoints':len(v['endpoints']),'working_endpoints':len(v['listeners']),'tun_routes':len(v['tun_routes'])}))"
+    ],
+    "cwd": "E:/Projects/Tools/ProxyClean",
+    "read_only": true,
+    "owner_project": "proxyclean",
+    "output": "json",
+    "timeout": 35,
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。 子进程内显式UTF-8控制台/管道编码，避免中文字段导致主机默认编码解码失败；不改用户/机器配置。"
+  },
+  "b9-steam-history-aggregates": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,hashlib,re\nfrom pathlib import Path\np=Path('G:/80_Backup/SteamMillennium/history');assert p.is_dir(),'G历史目录不可用';count=0\nfor d in p.iterdir():\n if not d.is_dir():continue\n m=json.loads((d/'snapshot-manifest.json').read_text(encoding='utf-8-sig'))\n assert m['generation']==d.name,'历史身份不符'\n for f in m['files']:\n  rel=Path(f['path']);assert not rel.is_absolute() and '..' not in rel.parts,'清单路径越界'\n  b=(d/rel).read_bytes();assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest().lower()==f['sha256'].lower(),'历史内容不符'\n count+=1\nc=(Path('E:/Projects/Tools/steam-millennium-config-backup/tools/Invoke-MillenniumBackup.ps1')).read_text(encoding='utf-8-sig')\nvals=re.findall(r'\\$Keep = (\\d+)',c);assert len(vals)==1,'默认保留参数改变'\nprint(json.dumps({'verified_g_generations':count,'default_keep':int(vals[0])}))"
+    ],
+    "cwd": "E:/Projects/Tools/steam-millennium-config-backup",
+    "read_only": true,
+    "owner_project": "steam-millennium-config-backup",
+    "output": "json",
+    "timeout": 35,
+    "verification": "已读源代码核实固定调用；Python -B、CREATE_NO_WINDOW，PowerShell子进程 PSModuleAnalysisCachePath=NUL/POWERSHELL_UPDATECHECK=Off。仅内存解析与计数，不导入生产写入口，不运行测试/启动/修复，不写文件或输出项目私密正文。"
+  },
+  "b9-github-owner-summary": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,os,re,subprocess,sys\nctx={**os.environ,'GH_NO_UPDATE_NOTIFIER':'1','GH_PROMPT_DISABLED':'1','GIT_OPTIONAL_LOCKS':'0','GIT_TERMINAL_PROMPT':'0','GIT_NO_LAZY_FETCH':'1','PSModuleAnalysisCachePath':'NUL','POWERSHELL_UPDATECHECK':'Off'}\nstep='init'\ndef fail(kind,exit_code=None,raw=None):\n result={'entry':'b9-github-owner-summary','step':step,'exception_type':kind,'state':'source_unavailable'}\n if exit_code is not None: result['source_exit']=exit_code\n if raw:\n  value=raw.casefold()\n  patterns={'timeout':r'timeout|timed out|deadline exceeded','network_eof':r'\\beof\\b|connection reset|connection refused','proxy':r'proxyconnect|proxy error|proxy authentication','rate_limit':r'rate limit|rate_limited','auth':r'authentication|bad credentials|not logged|requires authentication','dns':r'no such host|name resolution|dns','tls':r'tls|ssl|certificate','graphql':r'graphql'}\n  result['error_categories']=[name for name,pattern in patterns.items() if re.search(pattern,value)]\n sys.stderr.write(json.dumps(result)+'\\n');sys.exit(2)\ndef run(argv,input_text=None):\n try:\n  p=subprocess.run(argv,input=input_text,capture_output=True,text=True,encoding='utf-8',errors='strict',timeout=35,env=ctx,creationflags=0x08000000)\n except Exception as exc:fail(type(exc).__name__)\n if p.returncode!=0:fail('NativeExitError',p.returncode,p.stderr)\n return p.stdout\ntry:\n step='github_get'\n raw=run(['gh','repo','list','wlyaaaaa','--limit','1000','--json','nameWithOwner,visibility,defaultBranchRef'])\n repos=json.loads(raw)\n if not isinstance(repos,list) or len(repos)>=1000: fail('RepositoryScopeError')\n if not all(isinstance(r,dict) and isinstance(r.get('nameWithOwner'),str) and r.get('visibility') in ['PUBLIC','PRIVATE'] and isinstance(r.get('defaultBranchRef'),dict) and isinstance(r['defaultBranchRef'].get('name'),str) for r in repos):fail('RepositorySchemaError')\n step='owner_same_observation'\n ps=\"\"\"$ErrorActionPreference='Stop'; [Console]::InputEncoding=[Text.UTF8Encoding]::new($false); [Console]::OutputEncoding=[Text.UTF8Encoding]::new($false); $OutputEncoding=[Text.UTF8Encoding]::new($false)\ntry {\n . 'E:/GitHub总索引/tools/Get-GitOwnerStatus.ps1'\n $metadata=ConvertFrom-Json -InputObject ([Console]::In.ReadToEnd()) -NoEnumerate -Depth 12\n $rows=@($metadata | ForEach-Object { [pscustomobject]@{ NameWithOwner=[string]$_.nameWithOwner; Visibility=[string]$_.visibility; DefaultBranch=[string]$_.defaultBranchRef.name; LocalPath='未发现本地 clone'; ExternalGovernance=$false } })\n $remote=[pscustomobject]@{ available=$true; reason=$null; rows=$rows }\n $reader={param($requestedOwner) if($requestedOwner -cne 'wlyaaaaa'){throw 'owner_scope_changed'}; return $remote}.GetNewClosure()\n $status=Invoke-GitOwnerProvider -Owner 'wlyaaaaa' -ExpectedRepository 'wlyaaaaa/github-local-index' -RepoRoot 'E:/GitHub总索引' -RemoteReader $reader\n [pscustomobject]@{execution_status=[string]$status.execution_status; domain_status=[string]$status.domain_status; zero_write=[bool]$status.zero_write; fetch_performed=[bool]$status.fetch_performed; summary=$status.summary} | ConvertTo-Json -Depth 5 -Compress\n} catch { [Console]::Error.WriteLine((@{step='owner_same_observation';exception_type=$_.Exception.GetType().Name;state='source_unavailable'} | ConvertTo-Json -Compress)); exit 3 }\n\"\"\"\n status=json.loads(run(['pwsh','-NoProfile','-ExecutionPolicy','Bypass','-Command',ps],raw))\n if status.get('execution_status')!='completed' or status.get('zero_write') is not True or status.get('fetch_performed') is not False:fail('OwnerScopeUnavailable')\n if status['summary']['observed_repositories']!=len(repos):fail('SameObservationScopeError')\n result={k:status['summary'][k] for k in ['baseline_repositories','observed_repositories','delta_count','issue_count','attention_count']}\n result.update(repo_count=len(repos),public_count=sum(r['visibility']=='PUBLIC' for r in repos),private_count=sum(r['visibility']=='PRIVATE' for r in repos))\n step='cached_ahead';result['ahead_count']=int(run(['git','-C','E:/GitHub总索引','rev-list','--count','refs/remotes/origin/main..HEAD']).strip())\n step='cached_behind';result['behind_count']=int(run(['git','-C','E:/GitHub总索引','rev-list','--count','HEAD..refs/remotes/origin/main']).strip())\n step='dirty_count';result['dirty_count']=len(run(['git','-C','E:/GitHub总索引','status','--porcelain=v1','--untracked-files=all']).splitlines())\n print(json.dumps(result))\nexcept SystemExit:raise\nexcept Exception as exc:fail(type(exc).__name__)\n"
+    ],
+    "cwd": "E:/GitHub总索引",
+    "read_only": true,
+    "owner_project": "github-local-index",
+    "output": "json",
+    "timeout": 85,
+    "source_evidence": "Get-GitOwnerStatus.ps1:1242–1325 只读provider；:1328–1338 无-MigrateBaseline进入只读分支；:953 gh repo list GET；:776–780基线只读；Registry.psm1:467–501只读加载。固定argv无迁移/刷新/重大操作，禁自动更新、Git锁/提示/lazy fetch和PS模块缓存；仅输出summary及仓库聚合与本库cached ahead/behind/dirty计数，不输出身份、路径或正文。 修正：固定gh一次GET(nameWithOwner/visibility/defaultBranchRef)，标准库严格检查schema与limit后，stdin传入固定只读Invoke-GitOwnerProvider的RemoteReader；它复用同次来源观察，不再第二GET，不改变baseline/merge/status语义。PS子进程显式InputEncoding/OutputEncoding/OutputEncoding=UTF8。产品脚本仅dot-source定义（无MigrateBaseline），仅读基线/registry/本地元数据；失败只输出步骤、异常类型、退出码和稳定类别，无正文或身份。禁止重登录/改凭据/fetch，真实失败保留Unknown。"
+  },
+  "b9-github-operation-count": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json,re\nfrom pathlib import Path\ntext=Path('E:/GitHub总索引/tools/Invoke-ProtectedGitHubMajorAction.ps1').read_text(encoding='utf-8-sig')\npart=re.search(r\"\\[ValidateSet\\((.*?)\\)\\]\\s*\\[string\\]\\s*\\$Operation\",text,re.S)\nassert part,'operation_enum_missing'\nops=re.findall(r\"'([^']+)'\",part.group(1)); assert ops and len(ops)==len(set(ops)),'operation_enum_changed'\nprint(json.dumps({'operation_count':len(ops),'line_count':len(text.splitlines())}))\n"
+    ],
+    "cwd": "E:/GitHub总索引",
+    "read_only": true,
+    "owner_project": "github-local-index",
+    "output": "json",
+    "timeout": 15,
+    "source_evidence": "仅Path.read_text与正则解析脚本第4–7行Operation ValidateSet和splitlines计行，绝不调用重大动作脚本。"
+  },
+  "b9-wechat-source-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\nroot=Path('E:/Projects/Tools/WeChatDirect')\nfiles=sorted((root/'tests').glob('test_*.py')); assert files,'test_sources_missing'\ncount=sum(sum(isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test_') for n in ast.walk(ast.parse(p.read_text(encoding='utf-8-sig')))) for p in files)\nprint(json.dumps({'test_definition_count':count}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/WeChatDirect",
+    "read_only": true,
+    "owner_project": "wechatdirect",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "仅读取tests/test_*.py并ast.parse计FunctionDef/AsyncFunctionDef test_定义；无产品导入、测试执行、缓存/库/账号/聊天读取。"
+  },
+  "b9-wechat-account-archive-aggregate": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\nroot=Path('E:/Projects/Tools/WeChatDirect')\ntree=ast.parse((root/'wechat_cli.py').read_text(encoding='utf-8-sig'))\ndef constant(name):\n nodes=[n for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id==name for t in n.targets)]\n assert len(nodes)==1,'constant_scope_changed'\n return ast.literal_eval(nodes[0].value)\nlabels=constant('ACCOUNT_LABELS'); version=constant('SENDER_IDENTITY_VERSION')\nlocal=json.loads((root/'.wechatdirect.local.json').read_text(encoding='utf-8-sig'))\naccounts=json.loads(Path(local['config']).read_text(encoding='utf-8-sig'))\nassert set(accounts)<=set(labels) and accounts,'account_schema_changed'\narchives=Path('E:/PersonalData/微信项目/exports'); assert archives.is_dir(),'archive_root_unavailable'\nmanifests=[json.loads(p.read_text(encoding='utf-8-sig')) for p in archives.rglob('manifest.json')]\nassert all(j.get('format')=='wechat-direct-contact-export.v1' for j in manifests),'archive_format_changed'\ncurrent=sum(j.get('senderIdentityVersion')==version for j in manifests)\nprint(json.dumps({'configured_account_count':len(accounts),'archive_count':len(manifests),'current_sender_identity_archive_count':current,'noncurrent_sender_identity_archive_count':len(manifests)-current}))\n"
+    ],
+    "cwd": "E:/Projects/Tools/WeChatDirect",
+    "read_only": true,
+    "owner_project": "wechatdirect",
+    "output": "json",
+    "timeout": 25,
+    "source_evidence": "wechat_cli.py:50和:63仅AST读槽位/解释版本；:110–117来源路径选定语义，.wechatdirect.local.json现行config指向已有accounts.json。只解析槽位数和已登记exports下manifest的format/senderIdentityVersion，绝不打开messages.jsonl/context.md、源数据库、媒体、姓名或联系人正文。只输出聚合四数，未调用CLI产品或写文件。"
+  },
+  "b9-work-source-counts": {
+    "argv": [
+      "C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import ast,json\nfrom pathlib import Path\nroot=Path('V:/Personal/Projects/work-delivery-copilot')\ncounts={}\nfor p in sorted((root/'tests').glob('test*.py')):\n tree=ast.parse(p.read_text(encoding='utf-8-sig'))\n counts[p.name]=sum(1 for c in tree.body if isinstance(c,ast.ClassDef) for n in c.body if isinstance(n,(ast.FunctionDef,ast.AsyncFunctionDef)) and n.name.startswith('test'))\nassert counts,'test_sources_missing'\ncore=ast.parse((root/'tests/test_core.py').read_text(encoding='utf-8-sig'))\nmethods=[n for n in ast.walk(core) if isinstance(n,ast.FunctionDef) and n.name=='test_rebinding_preserves_csv_row_key_and_column_and_text_heading']\nassert len(methods)==1,'rebinding_method_missing_or_multiple'\ndefs=[n for n in methods[0].body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='cases' for t in n.targets)]\nassert len(defs)==1,'cases_missing_or_multiple'\ncases=ast.literal_eval(defs[0].value)\nassert cases and all(isinstance(r,tuple) and len(r)==4 and isinstance(r[-1],bool) for r in cases),'unexpected_case_shape'\ns=json.loads((root/'docs/work-delivery-batch-v1.schema.json').read_text(encoding='utf-8-sig'))['properties']['sources']\nb=ast.parse((root/'src/work_delivery/batch.py').read_text(encoding='utf-8-sig'))\nds=[n for n in b.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='MECHANICAL_STAGE_BUDGET_SECONDS' for t in n.targets)]; assert len(ds)==1,'budget_missing_or_multiple'\na=ast.parse((root/'src/work_delivery/acceptance.py').read_text(encoding='utf-8-sig'))\nfs=[n for n in a.body if isinstance(n,ast.FunctionDef) and n.name=='_timing_report']; assert len(fs)==1,'timing_report_missing_or_multiple'\nrs=[n for n in fs[0].body if isinstance(n,ast.Return) and isinstance(n.value,ast.Dict)]; assert len(rs)==1,'timing_return_missing_or_multiple'\nls=[v for k,v in zip(rs[0].value.keys,rs[0].value.values) if isinstance(k,ast.Constant) and k.value=='limits']; assert len(ls)==1,'timing_limits_missing_or_multiple'\nprint(json.dumps({'test_definition_count':sum(counts.values()),'rebind_case_count':len(cases),'rebind_allowed_count':sum(r[-1] for r in cases),'rebind_rejected_count':sum(not r[-1] for r in cases),'selected_source_min':s['minItems'],'selected_source_max':s['maxItems'],'mechanical_stage_budget_seconds':ast.literal_eval(ds[0].value),**ast.literal_eval(ls[0])}))\n"
+    ],
+    "cwd": "V:/Personal/Projects/work-delivery-copilot",
+    "read_only": true,
+    "owner_project": "work-delivery-copilot",
+    "output": "json",
+    "timeout": 20,
+    "source_evidence": "标准库ast/json/Path.read_text；不import或调用work_delivery。tests五个TestCase内test方法定义45；test_core.py:100–118 cases列表/subTest为14/5/9；batch schema:26–27 sources min/max2/5；batch.py:19 budget15；acceptance.py:362 limits1.25/1/0.75。仅源码合同与定义，不证明测试/速度/真实工作/数据库恢复通过。"
   }
 }
