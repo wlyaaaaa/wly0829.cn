@@ -26,8 +26,8 @@
       "sha256": "0fb11575ba1acc379d1f6f3f726f15b51d83ef88886112399117eefd2fcc51f1"
     },
     "github-profile/index.html": {
-      "bytes": 63361,
-      "sha256": "b8952561db43113488ede5f7d01bc44722932a2deceeb3b9eded22ab510b99ce"
+      "bytes": 63363,
+      "sha256": "96ea564ab7f370335f95dccec02e3b7c7808f2cc8444a653c6a497c05104c655"
     },
     "how/index.html": {
       "bytes": 566211,
@@ -46,36 +46,36 @@
       "sha256": "1db52b2f8ce64ebe95a9f08956c30067968f846d4c2d701ca0cfc4a7771cb7bc"
     },
     "projects/agents/authorization-owner/index.html": {
-      "bytes": 172190,
-      "sha256": "8754991be164a57a911a5cb93c498f10ff136500a8075e6a513af297a9e12f1c"
+      "bytes": 176294,
+      "sha256": "801619c666a45b8c82cc729f1328bec74bae4be8efa14cd8ff89f5443d631e94"
     },
     "projects/agents/capability-routing/index.html": {
-      "bytes": 185678,
-      "sha256": "d6e0bc83d5c2e3638ea236444bd1e4e6cdb9b8d1b93387557a7e7ab0a04c0e88"
+      "bytes": 190874,
+      "sha256": "c6a1b16dbda4fb4f03169e8cbc5dacdc7711db166ce33fd261deb0152026e870"
     },
     "projects/agents/context-evidence/index.html": {
-      "bytes": 178806,
-      "sha256": "001c98a5e348f38e2d3e934887acbe127cf85c631199160fd0098c09007dd0b7"
+      "bytes": 180354,
+      "sha256": "f37b1075804574ffec83949b93fbfe853ca4562fe4922dbdfaf250bd553d3068"
     },
     "projects/agents/index.html": {
-      "bytes": 636329,
-      "sha256": "3669c94e6af850b2e3981c61d8bf9840eff85737d1c49555e055b772654655a4"
+      "bytes": 635234,
+      "sha256": "d1b79c8f0745756122a6ac7933e63a083b6df47812731cac76557307133a136b"
     },
     "projects/agents/protected-policy/index.html": {
-      "bytes": 168064,
-      "sha256": "3869cddc1ab266caf3fc4b30a16353c593d1fee7dcb5aec08d9f4c93a719fe68"
+      "bytes": 171029,
+      "sha256": "2a5df0db8a550f6515186fe6154acc6bb338343f5ed012f78d279e4d718be8ba"
     },
     "projects/agents/rules-contracts/index.html": {
-      "bytes": 145210,
-      "sha256": "f544e75bedf3ec5cd2660e5c041197eb993fb6a2cbc0bab4911193922c49f75e"
+      "bytes": 146142,
+      "sha256": "2d466167785a170b6eb662379ae904a9c6767fd2694d216dcaec150d14ff7bd0"
     },
     "projects/agents/skills-plugins/index.html": {
-      "bytes": 171376,
-      "sha256": "8e5f1854fb9d6d705a944eac6dcca34d41dd1c084813f9ce226919ba51b83f30"
+      "bytes": 172410,
+      "sha256": "19f449bb4aaebab3880ea4d906d82770842bca83f59f10243a2f7fbffe3f590f"
     },
     "projects/agents/working-tree-hot-mirror/index.html": {
-      "bytes": 146631,
-      "sha256": "b0526750f9892967ab54ea9927c2f027b08e270b0559c5f14780832edb6a4d75"
+      "bytes": 148005,
+      "sha256": "1b623d47059e24ffb2ed4622d7c2d289eaefd2150442d575fce24bdf6f465d04"
     },
     "projects/ai-cli-profile-manager/background-openai-children/index.html": {
       "bytes": 151232,
@@ -91,7 +91,7 @@
     },
     "projects/ai-cli-profile-manager/index.html": {
       "bytes": 599660,
-      "sha256": "709463836efc282758898583fd3519d6cead43a25e893dccf2e1ae04fab1ed14"
+      "sha256": "a69f6244e5527876c2905af94afdac2797459472c17ee68d426dee3f663d526e"
     },
     "projects/ai-cli-profile-manager/install-recovery/index.html": {
       "bytes": 144595,
@@ -163,7 +163,7 @@
     },
     "projects/chinese-asr/index.html": {
       "bytes": 549088,
-      "sha256": "1f694280a30e1d3a5cad96063786415f6856fc662d96f351c97b1ea8351eb101"
+      "sha256": "94133c2dad4858fdcba77264c8cea7f92a20eb70626d189f37cf79839dba6164"
     },
     "projects/chinese-asr/installation-recovery/index.html": {
       "bytes": 248831,
@@ -287,7 +287,7 @@
     },
     "projects/daily-preferences/index.html": {
       "bytes": 540387,
-      "sha256": "8f654fdf60c987c2e57ad30238903482fef3cff4ff4eee8a17eb900f9ad764cb"
+      "sha256": "83e7a21282e4ba7249b10a6c38f8065823042461056935e7cfba88170214d0f0"
     },
     "projects/daily-preferences/mobile-context-delivery/index.html": {
       "bytes": 167064,
@@ -307,7 +307,7 @@
     },
     "projects/devconfig-backup/index.html": {
       "bytes": 413240,
-      "sha256": "35bda81dffaa9142b96de75163b9d3653f31baeb391586161fd119112bcab59e"
+      "sha256": "0c7941656e9e624262babf906fd50a880e0b072f32d998f92b8125584aa6d792"
     },
     "projects/devconfig-backup/recovery-and-tasks/index.html": {
       "bytes": 183782,
@@ -371,7 +371,7 @@
     },
     "projects/github-index/index.html": {
       "bytes": 424949,
-      "sha256": "2bfe460e9d3b3f374298ddaef98083771994025283e2d4724c7f540f8769bfdf"
+      "sha256": "08d0c95e922fc7f8bbf446ffbf9df339917c9d5962c526dc6001f8b71687a0a0"
     },
     "projects/github-index/project-admission/index.html": {
       "bytes": 179218,
@@ -403,7 +403,7 @@
     },
     "projects/index.html": {
       "bytes": 434576,
-      "sha256": "23ae247035292c96cd8f4f83e986e6b7dd59bd4748ce03d2131c368761507a0b"
+      "sha256": "e6c630a466273f8deaa740009443c18664e6d881b1bc6bc22dbc60e10e3b8c61"
     },
     "projects/learning/authoritative-research/index.html": {
       "bytes": 124607,
@@ -467,11 +467,11 @@
     },
     "projects/localocr/document-structure/index.html": {
       "bytes": 133275,
-      "sha256": "24d4cfbb5f54377a492fef625461e5510fe9fc7b645afe06bf7ef83076b95d67"
+      "sha256": "f5930aa2c4106fe709e23443199292b3bb5241dbc20ab151d406b4b053958227"
     },
     "projects/localocr/index.html": {
       "bytes": 432118,
-      "sha256": "e937a8ce3b98d1350f782bc4c93233e77e85facbc59a9eef77e67137083b6ca9"
+      "sha256": "94b8e57190d85b40b219b46b7f74f7057cac449d239dfe561c2d5b8163e6e62e"
     },
     "projects/localocr/input-routing/index.html": {
       "bytes": 151444,
@@ -499,7 +499,7 @@
     },
     "projects/meshclip-kit/index.html": {
       "bytes": 400169,
-      "sha256": "48a0fef33c9175dd59c77ec0d6832af8c9e9009029cdfa2e287a0c2d9b1ef13f"
+      "sha256": "af0dc9e22f6128f238fde3726c9b20e2cc010ade30c55a5cf3a7d98a709aa25b"
     },
     "projects/meshclip-kit/kde-connect-pairing-sync/index.html": {
       "bytes": 132077,
@@ -551,7 +551,7 @@
     },
     "projects/password-center/index.html": {
       "bytes": 652370,
-      "sha256": "117bd0d047a26961b31bdcdcc24d5f5a23c3894f33a426ad0aa2a25ddf2ca1d4"
+      "sha256": "e8049d0697f59567c92c79af24fe658ed1780a446385107ba036c7184c59b617"
     },
     "projects/pc-panel-hub/case-panel-rendering/index.html": {
       "bytes": 141956,
@@ -586,24 +586,24 @@
       "sha256": "bfccc736691fbaaafc791b1638b1344e75bb01f53e28fcf16fcaa47f2ebcdafa"
     },
     "projects/pcconfig/drift-acceptance/index.html": {
-      "bytes": 146120,
-      "sha256": "dafbc09023aa0d57af6923f83fb3c5717e614e98460a16835008552179392f0c"
+      "bytes": 146184,
+      "sha256": "8a6fa7e5d2014702d9a52697fdf7e131aa4c829129d901b5425d99e3b7041fbf"
     },
     "projects/pcconfig/index.html": {
-      "bytes": 935762,
-      "sha256": "55eb66a32c136c5dc6157b4e8f03d719f9358218a582cb07473259fc49b7c79b"
+      "bytes": 934301,
+      "sha256": "6618486fec083e54a2905cdbd884438688e4cdcb4ce1f180e01a8a882a676c6c"
     },
     "projects/pcconfig/machine-facts/index.html": {
-      "bytes": 174591,
-      "sha256": "0c1050ce9ef20a8bc7a1740f43530ca6e249f921aaa7695b9ccd5354f2f11aaf"
+      "bytes": 177105,
+      "sha256": "938927d0e1043771a6e73e0a29c065827da7eef1d4abe1b757d3930f75a803fd"
     },
     "projects/pcconfig/memory-diagnostics/index.html": {
-      "bytes": 154758,
-      "sha256": "f24ff5106ffe4ba22354c96aed917710eec2e9861797e7ca493ce45bd7067cd3"
+      "bytes": 155804,
+      "sha256": "e8f5157c1987f009cf5ca7ee07bc03ed999f57fb7ac4393ccd6292f442e0ee21"
     },
     "projects/pcconfig/owner-takeover/index.html": {
-      "bytes": 157678,
-      "sha256": "7d8d2b824d7a1b037719c1f82be3a1ebb4373e5235250497b6399a424a1e21f6"
+      "bytes": 158016,
+      "sha256": "fc3846aba56cf4b0d987ed9d4a0d8f9fac105f82531188f0570aeba379389155"
     },
     "projects/pcconfig/protected-actions/index.html": {
       "bytes": 186054,
@@ -614,16 +614,16 @@
       "sha256": "d2e7ec96af9a46a568cdd10f60b7d3e3b6b506a35ecdebbb3883b585bb35221c"
     },
     "projects/pcconfig/recovery-backup/index.html": {
-      "bytes": 194835,
-      "sha256": "65dc85f89641144517ce0f359a77b9b6a24a9d2badc4801137801d3ebaaf9d05"
+      "bytes": 199899,
+      "sha256": "d3376bf275ef8230bcc0243345bc74f3433d6966ea04659959a1dc4a11070f23"
     },
     "projects/pcconfig/remote-computer-mcp/index.html": {
-      "bytes": 182445,
-      "sha256": "c0de7234b5ef4bc35c5fcf9b2c8c380e556347a62b50f2bc2d0a07a7b68ac980"
+      "bytes": 197473,
+      "sha256": "7316bd9e72b88743943266b0fa71b63e73c55fc4945937c7a57589df7892079f"
     },
     "projects/pcconfig/runtime-startup/index.html": {
-      "bytes": 208523,
-      "sha256": "218eaabf693d10931d6a5ef40e5c632dc5e330a8ff2ea428df35e8660a764306"
+      "bytes": 211623,
+      "sha256": "886cefc4688717ff53d6c2ca1172025015d22f4d6552823695ba176fb6ec8ef6"
     },
     "projects/pcconfig/secondary-laptop/index.html": {
       "bytes": 194337,
@@ -655,7 +655,7 @@
     },
     "projects/personal-formal-documents/index.html": {
       "bytes": 371452,
-      "sha256": "4c02c271c2e6209be6e255c74d8cc32d08db6accaed5d4ef4c8fe652893a3fd6"
+      "sha256": "a02dd4f3ce1a7878e3209de97b6be8b6fd2009a0cb934ec572be588948fdd421"
     },
     "projects/personal-health/current-evidence-route/index.html": {
       "bytes": 123446,
@@ -695,7 +695,7 @@
     },
     "projects/personal-materials/index.html": {
       "bytes": 396994,
-      "sha256": "90da84e3771f4baa500625713f685211747fa86a4133d4da85a7e3d5f61107c8"
+      "sha256": "686082cf11ce80705d863757ac092c557d2a2d007be518527d16ff0818376f76"
     },
     "projects/personal-materials/registered-lookup/index.html": {
       "bytes": 171216,
@@ -743,7 +743,7 @@
     },
     "projects/proxyclean/index.html": {
       "bytes": 344130,
-      "sha256": "5a088127b8696e5a6d002a428d6a969439157c91a717d01dcf03884a42576fdc"
+      "sha256": "4e171c0eada1024c0c86cc14233f7d4ad7feff0ef608cff82396f3614e0c8415"
     },
     "projects/proxyclean/ipv6-routing-control/index.html": {
       "bytes": 165213,
@@ -771,7 +771,7 @@
     },
     "projects/ramdisk-guardian/index.html": {
       "bytes": 419092,
-      "sha256": "f6229545793df0526146b08a642b7c17031dc36c47023efa1bc56f98f19f02a2"
+      "sha256": "4b6a0417addd043770bf40c523f4cd9987ab16bfc44be3d50a42f5d6a3c9e12c"
     },
     "projects/ramdisk-guardian/installation-and-application-recovery/index.html": {
       "bytes": 162677,
@@ -870,8 +870,8 @@
       "sha256": "cb9c252235e72c7e60f77830d8b17e806f745e6c3d7f30fbdacba452263e3c3f"
     },
     "projects/typora-theme-pack/index.html": {
-      "bytes": 372282,
-      "sha256": "f7b1176d857784f4b29c044315d3041d5f5108d3a9fdf6b628d407a5c63a055a"
+      "bytes": 372684,
+      "sha256": "13a97db06b42ed3fdc441cb89af6372216387f4f88abeb2a1b42bce674c61c2e"
     },
     "projects/typora-theme-pack/multi-scenario-export-profiles/index.html": {
       "bytes": 137426,
@@ -907,7 +907,7 @@
     },
     "projects/vault-tool/index.html": {
       "bytes": 399060,
-      "sha256": "7feba62c7161aac095ccb8cbf5a9d3563e3e19e237f997aa5547622be5a2908f"
+      "sha256": "c0aa21a657c7d95c2f02143edeba6bd813fb56d6a40aa46db0987a68c8adc22e"
     },
     "projects/vault-tool/maintenance-recovery/index.html": {
       "bytes": 145399,
@@ -1011,11 +1011,11 @@
     },
     "projects/wechatdirect/index.html": {
       "bytes": 395480,
-      "sha256": "f2f4846ad50fba6374f2758ec5955ea3a60f86aa5886edabd1983cb86accb92a"
+      "sha256": "986c94437367f3a81552f0f3ccf534c6ee61133fecf5baeefff525d703afa6e9"
     },
     "projects/wly0829-cn/index.html": {
-      "bytes": 498128,
-      "sha256": "2fb14e285eaee278d2a7b0d4af87bf70d6d327594f7031d7c02ea993b644cb43"
+      "bytes": 500422,
+      "sha256": "3c3f473e7439ea799e9f095e9e751d03709b658d2d7616ac4c3ffd9da8b3109c"
     },
     "projects/work-delivery/consistent-deliverables/index.html": {
       "bytes": 157633,
@@ -1043,7 +1043,7 @@
     },
     "projects/work-delivery-copilot/index.html": {
       "bytes": 400005,
-      "sha256": "8aa8a2cc435d78cdf2d8068b2824d6f83e5f55167cc5428949a84d48d6796979"
+      "sha256": "d9ce1a1ef3a5cdde549f249dbc80610ba8b227ec387f1df8fa900fbb069b48fb"
     },
     "rescue/index.html": {
       "bytes": 282998,
@@ -1055,55 +1055,55 @@
     },
     "rules/authorization/index.html": {
       "bytes": 212385,
-      "sha256": "21b217e481965d7e386bbf0e0c32e955fcb36b2e8585c1b87798284b102e41b3"
+      "sha256": "bceff52f40310407bce4bbf43f2f9ca550c96ccdccc2442bc1d43a903022805d"
     },
     "rules/capabilities-runtime/index.html": {
-      "bytes": 331846,
-      "sha256": "55953926060d3cc2fc77fe7111aa02481dc46ecb4441bb2df02e608115217883"
+      "bytes": 332249,
+      "sha256": "8e9f0c2050ed7c69a550da31e22814e8fa9aaf87e417683d3fabcd045ab17d23"
     },
     "rules/charter/index.html": {
       "bytes": 167215,
-      "sha256": "2c4f2112bd7c8b41e9aba6c811aef02b8e73f06c03607ae21a305f2895f6030c"
+      "sha256": "c478df9fb348c89be59ce04563210439b1d7537bdc4ad47fa1c537bffe5d978a"
     },
     "rules/claude-adapter/index.html": {
       "bytes": 381677,
-      "sha256": "624c2c4ce47d972519e3554cd0265a7984357a4b873747220e92ea4811049e1d"
+      "sha256": "5d8d97885e15869c955e507835524a7f0d3bc8fc69008756b18ae94fa579d907"
     },
     "rules/codex-adapter/index.html": {
       "bytes": 205860,
-      "sha256": "a55c13855e58bdb92bc60bd39c63c3ffeb2ae8971f26f26fbc3cc962018a9450"
+      "sha256": "31562f791adf6d04d90e8d7325856d887d4076741f5770d558b8d60c090cad71"
     },
     "rules/context-sources/index.html": {
       "bytes": 282361,
-      "sha256": "9517bc3609343b5b7ff147b977770bb1e1f097b9529a1b11cb8a2ab2fb9ce796"
+      "sha256": "2344217e39652d0205a3645498fa2c6e59f87a3a06b880f01bc915fd03a78ed2"
     },
     "rules/engineering-delivery/index.html": {
       "bytes": 279868,
-      "sha256": "bd608ac40451bc480029a58855843568f93281411af516a0f7c425961abb030e"
+      "sha256": "a831a127e858310477757ff77b4291d2f69ec2ea1c553c6bea61318e019ff74a"
     },
     "rules/execution-coordination/index.html": {
       "bytes": 267194,
-      "sha256": "7db07831a35d94a066311c9f26cca91aade5dd9460f8c28ba64aa843c95edf77"
+      "sha256": "a48c23b5e8249522bdfbc5f59ce4d0643b6c6af543bfae0e53c52c053ec31213"
     },
     "rules/index.html": {
       "bytes": 193334,
-      "sha256": "4d53bc089da87bd298f9361a9a707c8f9fc68ca09db1e588db95e2fed40782f0"
+      "sha256": "4fe1931efac18f5c648e084bbc9963eec2496e1967f9beac7bd30952035656ec"
     },
     "rules/privacy-data/index.html": {
       "bytes": 285394,
-      "sha256": "6c1ea4756963f697344f2ad375842831ee56e6556eafb3a48e2ecaa2c7bb25d6"
+      "sha256": "8ee0f256358ec7b8aed2916b4e347633086288969c1691f240619d49cd3ecc0f"
     },
     "rules/protected-actions/index.html": {
       "bytes": 257944,
-      "sha256": "8ec390a1fc6cfec7fae46a4694099f03f76dc157657066335446ffe2daedb15e"
+      "sha256": "f345dbc0953976de75da9e1fa26de968edbf484e8a81f0efe27c13a85c7605a1"
     },
     "rules/rule-release/index.html": {
       "bytes": 205938,
-      "sha256": "b94dffb2c56599e4610fccd039576eafafb2ca55ad29d1b0e35c2e1e7bad1ec9"
+      "sha256": "00a75ca1689f2207c49e51e26bf9b10bd45e6a5636ffe893be0648f5b22826f7"
     },
     "search/index.html": {
       "bytes": 62098,
-      "sha256": "61b6eeffed3c81b2c7c21cd684f47cb90d6ea5284202ee48cf380e6e0fb7390a"
+      "sha256": "3e92f2382140c9bf9caba3a7b18a31f1c7c83cfeebe7c858f69bdf972bf37674"
     },
     "sitemap.xml": {
       "bytes": 22972,
@@ -1111,23 +1111,23 @@
     },
     "skills/authorization-file-broker/index.html": {
       "bytes": 175142,
-      "sha256": "44df54bb456b127c7fbf0cbc910ad34a83901c0bfe09e5a56839753864275af7"
+      "sha256": "57c932d24294fc6c8e87c1c1f8b8241d11f9841cfbeea0c87745359f069fcdba"
     },
     "skills/browser-control-continuity/index.html": {
       "bytes": 246917,
-      "sha256": "180607f86b08aedbf4ffb5f0debe355f7cef159e09cea3cb4bd6bd48e6b07b52"
+      "sha256": "f33b1d62f5f5b4182cc638ce9a45072eee789973bebf3aaaaba4ac2f0e7d3344"
     },
     "skills/chinese-asr/index.html": {
       "bytes": 204342,
-      "sha256": "caaf5fb0b33ea1a4e6a2e39b03fb5e49f44fcd895337a85f98b39bc9ff48643b"
+      "sha256": "848a3709672dc8de5e64bc3aa6f0610bd6331336f1acd6868bd85fb69b3358eb"
     },
     "skills/cloud-asset-channel/index.html": {
       "bytes": 183299,
-      "sha256": "db6e8127182c90cf5577a79d8b2f1f9f6a896a59d420d36054a6b3688e379ef0"
+      "sha256": "4fade87ab280f44a2e5fabad2c76f5f4fddf2d522eac1356b452d8029c3dc872"
     },
     "skills/cockpit/index.html": {
       "bytes": 115525,
-      "sha256": "db6440a8a97b68ef69c60b0dbcf8b003f06470aef96f169791050a3a0bc01e16"
+      "sha256": "af1c29c21a0df5506aed1723965e275daebb415d7c6d643d38d4e6b7e8292ef2"
     },
     "skills/control-plane-doctor/index.html": {
       "bytes": 47703,
@@ -1135,7 +1135,7 @@
     },
     "skills/daily-preferences/index.html": {
       "bytes": 174537,
-      "sha256": "be853e88695507bd6b748051e45cadca1de869d2653f346ff2e37d03b014c664"
+      "sha256": "eab8d418e1a3286db7299b926069f48f3e4b456c39a43dff6c42075a375690e1"
     },
     "skills/document-materials/index.html": {
       "bytes": 38129,
@@ -1147,7 +1147,7 @@
     },
     "skills/explain-to-me/index.html": {
       "bytes": 186490,
-      "sha256": "f3aca1185e38359e95aa175b5ccbc75d08d2d967c33b2b1b6f02f9f16f2a26ec"
+      "sha256": "bdc67db6cb58144ea72375567c1ced005fbbfe4e27d62c0df103bc1f59bccd0b"
     },
     "skills/file-intake-router/index.html": {
       "bytes": 47695,
@@ -1155,7 +1155,7 @@
     },
     "skills/google-workspace-direct/index.html": {
       "bytes": 206359,
-      "sha256": "c2f505ffcc1c8a8be08f14d2f271b8a88d5e4fca11b52adccd8b40907e955fc8"
+      "sha256": "9bf62f623531dbf42577aeafc81e59093a37784f589371add7beeb253ed2f0f6"
     },
     "skills/index.html": {
       "bytes": 253642,
@@ -1163,7 +1163,7 @@
     },
     "skills/learning/index.html": {
       "bytes": 188726,
-      "sha256": "c0bf03586336f8ef1944e7d44efa0575b3614c66739323b72915b9bb00b1d187"
+      "sha256": "3dd5b2c247bed5833f5b80bf0dffdb5268d7ae8b5fb2db5541f249c36753c703"
     },
     "skills/llm-backend-toolkit/index.html": {
       "bytes": 45827,
@@ -1171,23 +1171,23 @@
     },
     "skills/local-secret-broker/index.html": {
       "bytes": 192030,
-      "sha256": "10b36d0e1f2e918efc0fa8a688241183a39ee671863a3f87f4ae5ce834865675"
+      "sha256": "17cd6587869f292557bc8bc23984928737ac318db3a1986fd174480d2bc888fa"
     },
     "skills/localocr/index.html": {
       "bytes": 201600,
-      "sha256": "641ed45a549f02584b5c155a9f75deda6ae18b0f37cfe5721e1e55667c5148b7"
+      "sha256": "ea75d1c579788b2278be6794afc1e95206c1e2b37979af9a10c2ac7491c2babc"
     },
     "skills/md-to-pdf/index.html": {
       "bytes": 247732,
-      "sha256": "07901abc8db5886f5de93bca9f5f8d4143c1e28fd42a1b5d6f8fd02dc18d253f"
+      "sha256": "0421a38ffd1afd11b29c947410b5308cf34acd7bcef5867aa7ea0f27494f229f"
     },
     "skills/media-person-self/index.html": {
       "bytes": 202849,
-      "sha256": "60f786b307a7ec5e4fabea61a8ddec0f2467624c79c9a74e84507f1f70b5fae3"
+      "sha256": "68b7add0bb4fd052dae49be0f4840782a249f694def8b7c8a96fc8e8d76845ce"
     },
     "skills/mojibake-doctor/index.html": {
       "bytes": 201300,
-      "sha256": "f2233cdc808d2300809927e6d00cb7a7e8b8e8d00fdf0239888709ea84f4174a"
+      "sha256": "872dd1fd3394fbb611c2eb95c69c69df755ce0ab73045fd5c51c8ddd9cea7cc0"
     },
     "skills/native-economy-routing/index.html": {
       "bytes": 46049,
@@ -1199,23 +1199,23 @@
     },
     "skills/pdf-render-safe/index.html": {
       "bytes": 202538,
-      "sha256": "3f1aa47ef52d19815f497e74c04dbc76014f2e990d0c59c42a286b03082e2655"
+      "sha256": "d302dd0289c2569d5bb85161ccce3664729dc8c30de8d9ccd3b2bdfbac1e9d72"
     },
     "skills/personal-formal-documents/index.html": {
       "bytes": 177417,
-      "sha256": "3b67e062d2c1a0e81dabb5e0764726fcdd3fda9230bb78ef3eab3012174e7a35"
+      "sha256": "dcbf4f5721cd6bcaedf3966a5b1a0d42b2c1deed8e5b0fb8284bd5c4433876c8"
     },
     "skills/personal-health/index.html": {
       "bytes": 195690,
-      "sha256": "d594bee84607c1cd46410f4fd7b37149df32f1e2ac496e5c194c08025ac2e5ca"
+      "sha256": "efe72054142393da8b1948cc73347e612a0b08ff3a5e0b4e7f07cc9a41deff11"
     },
     "skills/personal-materials/index.html": {
       "bytes": 186499,
-      "sha256": "a8eb55382b9a8bc336ab1988ee86c3c84be56465b302646e02a10995d0e73974"
+      "sha256": "fdb20b0aa4c13b22902ce30d232da9734f782840f62c8efda4f82ba737558eb1"
     },
     "skills/personal-media/index.html": {
       "bytes": 206994,
-      "sha256": "b51e08ef25f1d4ee2c561ed83d1ece019838b32f6f940c47f5f1a92da69f64f0"
+      "sha256": "c6bf35b4ffa57429456fb9d09c65622fd4fe5e978840145a8f1637427b9c810f"
     },
     "skills/personal-panel-refresh/index.html": {
       "bytes": 46062,
@@ -1227,19 +1227,19 @@
     },
     "skills/reply-as-me/index.html": {
       "bytes": 158126,
-      "sha256": "3a6a46afc06ab487c65924866e4ef9aa1ab868373d4baa6a30b61fe7f8c7cb8d"
+      "sha256": "4e8f278a85a8dd707800eb7e9a788f7bc09ff386dc0b0deb6aa255c3e4284523"
     },
     "skills/report-page/index.html": {
       "bytes": 305669,
-      "sha256": "05403e9464bcd15e6f6c2fcaa42846d0b68d44ef69c3d08ee535d4bf7ed6c9fa"
+      "sha256": "1306408232f871fc008376263fe5f26847a0c46c9b10cc8f4134b44c9bf64efe"
     },
     "skills/tailscale-safe-exposure/index.html": {
       "bytes": 214090,
-      "sha256": "b23481700399e47f4c710b78f6a8c410b78a65739d016d7640a17bf559171dc3"
+      "sha256": "87c721857569f970cf47d61f51f1ba7de4fb216040d617b4da1d61c3118ed3af"
     },
     "skills/timeaudit-diagnostics/index.html": {
       "bytes": 193268,
-      "sha256": "206cfd1f48f487349e9abae9da480c57c6b6597c09853be337796dcb24470637"
+      "sha256": "c7ec9703e4842a54ee66dcab67b8409552fb7ddd87f9924e4c42f5107cc3f108"
     },
     "skills/token-budget-advisor/index.html": {
       "bytes": 45778,
@@ -1247,15 +1247,15 @@
     },
     "skills/vault-workflow/index.html": {
       "bytes": 189802,
-      "sha256": "bd4cf5f5c2cb78c36b01070365ad21718ec2d8f5cd23d26df5503d03c8282fc5"
+      "sha256": "cfb97528c2485910722b9e687efde5e8ef90ab3357ce3f1cf1888763fb8303b6"
     },
     "skills/wechat-direct/index.html": {
       "bytes": 162901,
-      "sha256": "8d7adb669286616f2a36d0d8dda4aa4631434e2d5c4fbb13750f6ab95c820c3b"
+      "sha256": "735ab4ebd8f9ac62dd2cc6ded6a64c94a43c7f2aaee5335debbc2fbddce53eaa"
     },
     "skills/work-delivery/index.html": {
       "bytes": 188598,
-      "sha256": "fadc246c316fd9298030ffd1bdbc406c23464ad081536ab532ddcc1885be7676"
+      "sha256": "b27d3e494e5731a9ceeb6547808c614e833b6917dbf6196b960cbe3a8b12d938"
     },
     "system/index.html": {
       "bytes": 632,
@@ -1576,14 +1576,14 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "f0263bd2827cde99b44820ab693c27a2f5623331b4984cd7eb016758a22aa0be",
+  "release_id": "c08addca1e0323a4ce84a63e0467ad8feb3498f569087150d41de1b4e658483e",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
-    "version": "E257",
-    "release_commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
-    "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
-    "release_record_sha256": "ef840771923fca5b90d256e869c76235276f5a92af9e5d5c0c9115c9f464fd1f",
+    "version": "E258",
+    "release_commit": "5892e5bbaf0da52aedc49f24427710eac3bfd133",
+    "ruleset_sha256": "7e0bae30083b4835a961149047e6c159529240896c4fdc55511bc6d6eaefb2d7",
+    "release_record_sha256": "11be1d20bcf9909170b880d9ce3c8d610637425bb55879e31e9045811e59a743",
     "files": [
       {
         "bytes": 19071,
@@ -1598,10 +1598,10 @@
         "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6"
       },
       {
-        "bytes": 22351,
+        "bytes": 22723,
         "logical_id": "capabilities_runtime_contract",
         "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-        "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356"
+        "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957"
       },
       {
         "bytes": 28608,
@@ -2034,23 +2034,23 @@
       ]
     },
     "pointer": {
-      "activated_at_utc": "2026-10-11T05:02:36.7738409+00:00",
+      "activated_at_utc": "2026-10-11T18:18:26.2161822+00:00",
       "current": {
+        "git_commit": "5892e5bbaf0da52aedc49f24427710eac3bfd133",
+        "release_id": "E258",
+        "release_record_sha256": "11be1d20bcf9909170b880d9ce3c8d610637425bb55879e31e9045811e59a743",
+        "ruleset_sha256": "7e0bae30083b4835a961149047e6c159529240896c4fdc55511bc6d6eaefb2d7"
+      },
+      "pointer_revision": 167,
+      "previous": {
         "git_commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
         "release_id": "E257",
         "release_record_sha256": "ef840771923fca5b90d256e869c76235276f5a92af9e5d5c0c9115c9f464fd1f",
         "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d"
       },
-      "pointer_revision": 166,
-      "previous": {
-        "git_commit": "8fa46fa7061c46afa060683356728bb9ed4a1a20",
-        "release_id": "E256",
-        "release_record_sha256": "07ec8d298054e429befb24ef28e8867e8ed0a125cc8432058850ec832b4d997c",
-        "ruleset_sha256": "a59e54f767853b87e5292a84c46421435117b88ef03dba2f5abbe57df6b16b63"
-      },
       "schema": "agents.e-rules-current.v1"
     },
-    "pointer_sha256": "65baf0ea75646ca6401ca67af9ca5fc629cf119c7e515bee991f1bab638299fe",
+    "pointer_sha256": "cd8e537aa3f225a5b09af9774a1b61e9b6f2e8d5558f6eaa649d96a46537634c",
     "documents": {
       "agents_root_rules": {
         "bytes": 19071,
@@ -2071,7 +2071,7 @@
         "parts": [
           {
             "id": "charter/charter-02",
-            "label": "约法 · L1–L10 · E257",
+            "label": "约法 · L1–L10 · E258",
             "markdown_sha256": "a17ea7a886c8c4e0db81ca9e2af3de9d5625c9ffeb2870c97c4bafbc57628025",
             "prose_sha256": "7e66c64d0ac4e2139f5fe079957c12639a9e21fbc3b98af5d5c5b48ccd6bf9d1",
             "selection": {
@@ -2084,7 +2084,7 @@
           },
           {
             "id": "charter/charter-03",
-            "label": "约法 · L11–L17 · E257",
+            "label": "约法 · L11–L17 · E258",
             "markdown_sha256": "463019b5e3196b84da63cb756a7828320171104460ff75f6b3db07a5cfaffa58",
             "prose_sha256": "2d91644a3a030106ff2f21477a99e704e0e4d3a1e947249566f52993cf848f2f",
             "selection": {
@@ -2097,7 +2097,7 @@
           },
           {
             "id": "charter/charter-04",
-            "label": "约法 · L18–L23 · E257",
+            "label": "约法 · L18–L23 · E258",
             "markdown_sha256": "a7907428f5273f274c2d12e1069558a77987eee083fd9f0924919f785ec0cb34",
             "prose_sha256": "1dc7ee61a1991a0e5ff99477c5d90a76c019169696af9a1c2004c9c2d7525c92",
             "selection": {
@@ -2110,7 +2110,7 @@
           },
           {
             "id": "charter/charter-05",
-            "label": "约法 · L24–L30 · E257",
+            "label": "约法 · L24–L30 · E258",
             "markdown_sha256": "52865bb2d68466cf9c6cf6499467b0eb278b0b2da74813525f4a530cd5629377",
             "prose_sha256": "e950a3c88fe184ef9a55065ceb062bf00d19200660d601a175ed2483055ba83f",
             "selection": {
@@ -2142,7 +2142,7 @@
         "parts": [
           {
             "id": "rule-authorization/rule-authorization-05",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "adfa68ca1cf3cb20547ec20d7dbbd7c00957842fdab2999b6ed023910f7a59ca",
             "prose_sha256": "6b4d0fafaead7437ef745f2249de544fa07c7b6be81e80e8f9ee2dcfe6d1f7c5",
             "selection": {
@@ -2155,7 +2155,7 @@
           },
           {
             "id": "rule-authorization/rule-authorization-06",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "b3cce8eee55932bf9c32db9a3c37ed38c83b6641546467540d9cab47af5cdb30",
             "prose_sha256": "ca3060e92b4fb33c9c7abd2946a4f3dbef8e61bb49c41436778dc033d586e54d",
             "selection": {
@@ -2168,7 +2168,7 @@
           },
           {
             "id": "rule-authorization/rule-authorization-07",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "c80ef867f6f49a499cbc76cdf1a44f58960fd891c5013118c2488ed9119e15af",
             "prose_sha256": "3cc74cee0c9e6640178ac00e80332aa8c407cc666ec87794bbec2724293f88fa",
             "selection": {
@@ -2182,25 +2182,25 @@
         ]
       },
       "capabilities_runtime_contract": {
-        "bytes": 22351,
+        "bytes": 22723,
         "logical_id": "capabilities_runtime_contract",
         "relative_path": "docs/contracts/agents.capabilities-runtime.md",
-        "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
+        "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
         "title": "能力与运行方式",
         "purpose": "选工具和技能、领域入口、浏览器、软件更新、安装位置、汇报网页、网站和自动运行",
         "primary": true,
         "slug": "capabilities-runtime",
-        "public_source_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
-        "public_source_bytes": 22345,
-        "src": "/_typeset/rule-sources/f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b.md",
-        "prose_sha256": "6df1c3fb57401db70f12c2d8c4cfb7d1690826fecfe8668d441ddd604869d771",
-        "search_text_sha256": "caccbdbd9d29bf598b250ea747aff5fac4d39525249f165d4efdb4863f54edf2",
+        "public_source_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+        "public_source_bytes": 22717,
+        "src": "/_typeset/rule-sources/23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498.md",
+        "prose_sha256": "5d460df9d6eecfb1ed48fceb097ee703ba29e1833ac57b982ccb10cd921ec1fc",
+        "search_text_sha256": "cc2924f643dff7a0df7ef3105decab32f1d2ee60e8a9d3ec0192d5baacdf9432",
         "page": "rule-capabilities-runtime",
         "route": "/rules/capabilities-runtime/",
         "parts": [
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-11",
-            "label": "原文 · E257 版",
+            "label": "原文 · E258 版",
             "markdown_sha256": "584ecc9d79dd2f8f30a90adf65dc35aa6966977cf1366c5201c26d1523a64a20",
             "prose_sha256": "ee26c9c6f4a45daa4e9646a5651f83d775061061eaef0959fcf8f123f75ac578",
             "selection": {
@@ -2213,53 +2213,53 @@
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-12",
-            "label": "原文 · E257 版 · 续",
-            "markdown_sha256": "c06baa25da935451ea90c133bd887945e5827c82526daf2f6e4ce944dab72033",
-            "prose_sha256": "4b5fac3f2a3c672cb1139aee74fb479f647eaa00242b62e9ca91fc24b3107f48",
+            "label": "原文 · E258 版 · 续",
+            "markdown_sha256": "4ba2572d6bd098ff497fea175a41a51f89396a41b1bb38fae6beec296af05834",
+            "prose_sha256": "727fda2f7d06fd226933db7ab425f9066069a3022fc81cf851c6ffdf1026c74a",
             "selection": {
               "from": "## 常用入口",
               "to": "## 浏览器",
               "start": 1427,
-              "end": 5289,
+              "end": 5455,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-13",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "df2b93f9817ec3bd50f8dda15cb549402307c2b0161044b84b89d4b3a3bb8f19",
             "prose_sha256": "76ffa2a34695175e8d14ed093863586e4078f1bce813dd911ef1bf4f94e8c53d",
             "selection": {
               "from": "## 浏览器",
               "to": "## 汇报、网站和自动运行的东西",
-              "start": 5289,
-              "end": 6353,
+              "start": 5455,
+              "end": 6519,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-14",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "79dce4f67e53b30805c637def10cb0b921af0e505b24c3354547ba4a06f21a33",
             "prose_sha256": "4c7f0524d3300286b3009b383b1dc835e9014f53ee70d816b3b4e7084f706c8e",
             "selection": {
               "from": "## 汇报、网站和自动运行的东西",
               "to": "## 安装位置、配置和本机约定",
-              "start": 6353,
-              "end": 7663,
+              "start": 6519,
+              "end": 7829,
               "approved_omissions": []
             }
           },
           {
             "id": "rule-capabilities-runtime/rule-capabilities-runtime-15",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "0df78b5b01030a311ccafbafd2eea66c98fafdefe15080513b452308ca3b3777",
             "prose_sha256": "c135c608669f1acf4c8d5fbc2f1c9e334f481b721e304c6250ab544e98ef4625",
             "selection": {
               "from": "## 安装位置、配置和本机约定",
               "to": null,
-              "start": 7663,
-              "end": 9073,
+              "start": 7829,
+              "end": 9239,
               "approved_omissions": []
             }
           }
@@ -2284,7 +2284,7 @@
         "parts": [
           {
             "id": "rule-claude-adapter/rule-claude-adapter-11",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "918e6ffc47cc4db1639280ef2eb0fa20aab55a4bfcb2a99d9aa6058eeb569486",
             "prose_sha256": "181d8e906012c46266128b709be81f5020735de73af80cdb1feb9556d30f55a2",
             "selection": {
@@ -2297,7 +2297,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-12",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "3093607cb84de52f2fba33f772c5ecd4f1e330cf7077e1d016347174af17821c",
             "prose_sha256": "676a0540e0a29258f8086d139983c72e985e8e4ca20ab4b2f868f420179e9fce",
             "selection": {
@@ -2310,7 +2310,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-13",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "8451203dce0c7b55f067c579d0948e1e8ce07599e5520357207b394c1fa2fe4e",
             "prose_sha256": "ee127d0b83cd191d38ab132346cf6437e6f232497b0240847f9c19d915acec9e",
             "selection": {
@@ -2323,7 +2323,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-14",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "5244b37591ea11d0af0e0488955e8617ee7814a8be8c3da7287eb57918a487df",
             "prose_sha256": "1481147b45d12309130262b78d915781dbdcb73bceac70de4361b0e02633cff2",
             "selection": {
@@ -2336,7 +2336,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-15",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "5a772ade7a3f497168adee46839f3a0ebcc8371fd1aa3712540a36f8b6f3445c",
             "prose_sha256": "e246ace9f4d84d8e8d67e5ced613af8380b096c9b94bfcc8c890794d719fe542",
             "selection": {
@@ -2349,7 +2349,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-16",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "e1d15b3968549393b158d08600a6e9c2db069be182294d7488a13bbbe896938e",
             "prose_sha256": "5b85fd5185e4f450488a8bbb3b2ac9b0641120959759cc728fcd6389dbd90754",
             "selection": {
@@ -2362,7 +2362,7 @@
           },
           {
             "id": "rule-claude-adapter/rule-claude-adapter-17",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "56f998fdbb9cb5a4433c87a449dfab868bd855a733da4594aa4984c7adbe088c",
             "prose_sha256": "3412697cdd848c7104a7bbad080646de230cf5575f0b9ccd59432b8b89507f0e",
             "selection": {
@@ -2409,7 +2409,7 @@
         "parts": [
           {
             "id": "rule-codex-adapter/rule-codex-adapter-05",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "0471c2d6db09e7ca3a120066832d2f48f22ab5722c6881b8d2e032187b3b7665",
             "prose_sha256": "637d94efede2029db7f3b9d0d2b84051937e2feecb394dfac0790905a058f336",
             "selection": {
@@ -2422,7 +2422,7 @@
           },
           {
             "id": "rule-codex-adapter/rule-codex-adapter-06",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "060cd26bd49e7c95f4fc1559829081a8b118a5e0313c90ffcbf3a6162654a010",
             "prose_sha256": "5978b2b13f98c7650a955be54d5d9263020ccb97f7247518ad10b24276803bbe",
             "selection": {
@@ -2469,7 +2469,7 @@
         "parts": [
           {
             "id": "rule-context-sources/rule-context-sources-08",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "ae06dcb7deefeb6ab587bf41474ea898d35153eeec0aca9f4b90b516badfe6db",
             "prose_sha256": "be294353241642e7acbf264b5c1f148a147ebd41621f8a1130e0710770a0004f",
             "selection": {
@@ -2482,7 +2482,7 @@
           },
           {
             "id": "rule-context-sources/rule-context-sources-09",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "24e048b67069192763e1ddca536400f43fce44c0514efa1a32509c0e99045ee6",
             "prose_sha256": "d0efa44573fb66bd4dc38e3b670dbce9ba5a26c05691846f2d40340d7690beed",
             "selection": {
@@ -2495,7 +2495,7 @@
           },
           {
             "id": "rule-context-sources/rule-context-sources-10",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "e2de622f8a22cbb917fbb86666b2fd307d52afcc7f48e79da8e09f727cd7e985",
             "prose_sha256": "9af31742d467d629977604e605fb7be2fa173fdc641ca340b028eb38490faebe",
             "selection": {
@@ -2527,7 +2527,7 @@
         "parts": [
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-06",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "0e28d8d40f8db2663fdc533584da7fe67ca82cf6ecdd1063b4ad60236aa30de7",
             "prose_sha256": "0779bff7eaaf6ac8744ac5f91e14600278734c0c01b22ce964660168923a6dfe",
             "selection": {
@@ -2540,7 +2540,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-07",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "5e57a3609a21b53eb35939cd5cad3982d2a99168896cb9247724f865702af198",
             "prose_sha256": "b966366002a9d480100d0ca511893de95482712bd1994c4327f70ee585e436f7",
             "selection": {
@@ -2553,7 +2553,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-08",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "31009b428cdb71039f2b9ce14456e49e49de9a97feec05fdc10e5dae102bedd7",
             "prose_sha256": "a9c39fc5f97c38b8b3fee4b0f1dd4d1a9f71a7f9d27dd055850fbf6cba145bc4",
             "selection": {
@@ -2566,7 +2566,7 @@
           },
           {
             "id": "rule-engineering-delivery/rule-engineering-delivery-09",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "41b8856265902787b67ffffcf75629937a889f810a6d4efa9c9db5ff660ffb2d",
             "prose_sha256": "018890db046da19546fd37acfcb1480e698e68ab1af0c40ab7ed010ec090819c",
             "selection": {
@@ -2598,7 +2598,7 @@
         "parts": [
           {
             "id": "rule-execution-coordination/rule-execution-coordination-06",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "28be7ab8eac840aa7dde99b58bdb534ac1302ab89cb7a64ebda2e64438422314",
             "prose_sha256": "9e38659e8f9fde914d850baa07cbda596643bf38b4c31e3c82fb0ca0fef8b2c8",
             "selection": {
@@ -2611,7 +2611,7 @@
           },
           {
             "id": "rule-execution-coordination/rule-execution-coordination-07",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "0d813aaf5630e18ffb022f77665f5048967df20cd690f3fdf3b4a0e6244f6ee1",
             "prose_sha256": "7ede57d27d0896423fb885d1c97aeb8b8fa1ce8c814d97f79d0ec4cf92d900e7",
             "selection": {
@@ -2643,7 +2643,7 @@
         "parts": [
           {
             "id": "rule-privacy-data/rule-privacy-data-07",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "d8325fcae97b9c1b8c8d61aef2ad15499ea9f069f0c56939800eacd6563e08f6",
             "prose_sha256": "cdf82fb76df7fc3c9951752457d183f550118f331aae542ae3c3e3b416bfbede",
             "selection": {
@@ -2656,7 +2656,7 @@
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-08",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "4c8613b739fb43f4aeb79f7a0297a0d024aca9f7ed5a8d7b4899aac95e2789aa",
             "prose_sha256": "c1234e363941781116d69ea01668c30ccad573d4faed4489cc3b248ead320e50",
             "selection": {
@@ -2669,7 +2669,7 @@
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-09",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "2a746b503364a18ce066ac2499da85a7a9110052e4fd5f282aab13c0d158d50f",
             "prose_sha256": "9dff9bf62bddc09c3f43477a7d8dcce819e80af3d2517e8fe5ba760717773247",
             "selection": {
@@ -2682,7 +2682,7 @@
           },
           {
             "id": "rule-privacy-data/rule-privacy-data-10",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "4026ef6bbf373a87efe7960e9f2b390cc0d19c34616b1d6cef14ec84b5543f1c",
             "prose_sha256": "f910a54343dc79b91f342a5ee4217ad93b67a285a35ef00a9c344685106e9533",
             "selection": {
@@ -2714,7 +2714,7 @@
         "parts": [
           {
             "id": "rule-protected-actions/rule-protected-actions-07",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "3018164db23872504366da370a58abb744899d859ec292c4cf49a82a4653100a",
             "prose_sha256": "b1cb37b69c6900c97270b1197721b3d1055381653fcc16f9636458a26785da66",
             "selection": {
@@ -2727,7 +2727,7 @@
           },
           {
             "id": "rule-protected-actions/rule-protected-actions-08",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "6f4b1e7d0f0b8becc1faf79f807b89c9be986c4ff037bd1f319963cd6e5c33f3",
             "prose_sha256": "083b743852a5b4e10759ef706a86547fce92d413810646f85de87af3e5ded015",
             "selection": {
@@ -2759,7 +2759,7 @@
         "parts": [
           {
             "id": "rule-rule-release/rule-rule-release-05",
-            "label": "原文 · E257 版，一字不改",
+            "label": "原文 · E258 版，一字不改",
             "markdown_sha256": "c4035daa6a0b88c6f7855ec734593a4a4682bb25ee0c6fcbde38211064e602a0",
             "prose_sha256": "eca7e8438c201709f9c7aa7b69fda9ba8a1dbfe0f9257f6b95c942607fe434f1",
             "selection": {
@@ -2772,7 +2772,7 @@
           },
           {
             "id": "rule-rule-release/rule-rule-release-06",
-            "label": "原文 · E257 版 · 续",
+            "label": "原文 · E258 版 · 续",
             "markdown_sha256": "f0da2d6832d4a85e6cd94c09337841560d93e700958387e8e91027273eefcfbb",
             "prose_sha256": "e8f12b63c341d6b2c7393cd05a3edc53071c2df30962e9c039b2dce0e28372a6",
             "selection": {
@@ -2793,15 +2793,15 @@
       },
       "current-rules.json": {
         "bytes": 643,
-        "sha256": "65baf0ea75646ca6401ca67af9ca5fc629cf119c7e515bee991f1bab638299fe"
+        "sha256": "cd8e537aa3f225a5b09af9774a1b61e9b6f2e8d5558f6eaa649d96a46537634c"
       },
       "docs/contracts/agents.authorization.md": {
         "bytes": 8830,
         "sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
       },
       "docs/contracts/agents.capabilities-runtime.md": {
-        "bytes": 22345,
-        "sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b"
+        "bytes": 22717,
+        "sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498"
       },
       "docs/contracts/agents.claude-adapter.md": {
         "bytes": 28596,
@@ -3756,34 +3756,34 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+    "/projects/llm-backend-toolkit/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
       "producer": "astro"
     },
     "/cockpit/stutter/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+    "/404.html": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
       "producer": "astro"
     }
   },
@@ -4338,12 +4338,12 @@
     "html_files": 312
   },
   "previous_oss_source": "published",
-  "previous_release_id": "6a9387ade2b01f2748fbf41658f5ac59c3044d62cbed3f99849afd66c4fa468a",
+  "previous_release_id": "f0263bd2827cde99b44820ab693c27a2f5623331b4984cd7eb016758a22aa0be",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/254203b62f0438b73c7e8a585ac3807f5b87d7d512cff0e9053a45fa6ec1e387",
-    "source_release_id": "f78fdd6ea50a2e47628a0e1e6ec5f324fc3de0cb4f6b7643b314b681c4e35786",
+    "prefix": "releases/89d3a2e4c39bd2c06e92c564d12f766493303c3e38fda6fc021610638fe09502",
+    "source_release_id": "f448b38d1ef51e7a8440be201821c2e6d1cf11fafad0b3ba0fa7ce6fd2678eaa",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -27637,6 +27637,18 @@
         },
         "byte_preserved": true
       },
+      "_typeset/rule-sources/23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498.md": {
+        "bytes": 22717,
+        "sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
+        "key": "releases/87e9c2760373cd1833a1a94726d929d7adef6508ee2d8b1a50276a5df24b02ad/_typeset/rule-sources/23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498.md",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/87e9c2760373cd1833a1a94726d929d7adef6508ee2d8b1a50276a5df24b02ad/_typeset/rule-sources/23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498.md",
+        "content_type": "text/markdown",
+        "source": {
+          "bytes": 22717,
+          "sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498"
+        },
+        "byte_preserved": true
+      },
       "_typeset/rule-sources/29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1.md": {
         "bytes": 5374,
         "sha256": "29781dbb14f188cfc5763e5d6c76b49d595a2c52aed80af98f17fbfcc9d1fdb1",
@@ -36217,6 +36229,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fingerprinted/008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6.png": {
+        "bytes": 612982,
+        "sha256": "008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6",
+        "key": "releases/3597b9debd5ecf8ea4a6242b95ad388cec17dbd3378a4f757d31394f6697b241/assets/_fingerprinted/008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/3597b9debd5ecf8ea4a6242b95ad388cec17dbd3378a4f757d31394f6697b241/assets/_fingerprinted/008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 612982,
+          "sha256": "008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6"
+        },
+        "byte_preserved": true
+      },
       "assets/_fingerprinted/008cd90a9db6d2ad06f1154ace74366c3c58ad6bb448d88dbc50aeda710dbc7b.json": {
         "bytes": 19471,
         "sha256": "ccf63e10455688f787383ce8f8b4d5bf8483d4d68bf66952e2801a3c715b650e",
@@ -40198,6 +40222,18 @@
         "source": {
           "bytes": 432967,
           "sha256": "304137e839c7290c3c689e0544ffc2dafccddf6e7479fd95426a6e7ccb83e359"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fingerprinted/30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e.png": {
+        "bytes": 398812,
+        "sha256": "30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e",
+        "key": "releases/779bf60525e45d8683fbe778b08196ab9fb5abff39702abf3cc0e0d933560458/assets/_fingerprinted/30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e.png",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/779bf60525e45d8683fbe778b08196ab9fb5abff39702abf3cc0e0d933560458/assets/_fingerprinted/30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e.png",
+        "content_type": "image/png",
+        "source": {
+          "bytes": 398812,
+          "sha256": "30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e"
         },
         "byte_preserved": true
       },
@@ -57853,6 +57889,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/agents-20b8437f909d.woff2": {
+        "bytes": 231516,
+        "sha256": "c431c735fe70b52cb5c96c34537d6ad5f66bd043263ae28e0a554656ba0c6c07",
+        "key": "releases/386da23092b5bd4cb4f02b3242feee5ad2a035b3e798ad86265bb62e3a6667ac/assets/_fonts/agents-20b8437f909d.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/386da23092b5bd4cb4f02b3242feee5ad2a035b3e798ad86265bb62e3a6667ac/assets/_fonts/agents-20b8437f909d.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 231516,
+          "sha256": "c431c735fe70b52cb5c96c34537d6ad5f66bd043263ae28e0a554656ba0c6c07"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/agents-aee6c0a76124.woff2": {
         "bytes": 217820,
         "sha256": "34bd9ac27c48824ac03c7d10715a9c561da5e0084bbaad393f3ff0a3f2683d86",
@@ -57877,6 +57925,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/agents-authorization-owner-c254940206c2.woff2": {
+        "bytes": 198228,
+        "sha256": "5d3b2034df61f2e0fbf0a4441dab4fe4f2ae606a7ddb3f098a8d465274ae476e",
+        "key": "releases/b85fc55e64579325da184fdd47bfaa9e685231ca0a454d0258e31aa0d8b964e2/assets/_fonts/agents-authorization-owner-c254940206c2.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/b85fc55e64579325da184fdd47bfaa9e685231ca0a454d0258e31aa0d8b964e2/assets/_fonts/agents-authorization-owner-c254940206c2.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 198228,
+          "sha256": "5d3b2034df61f2e0fbf0a4441dab4fe4f2ae606a7ddb3f098a8d465274ae476e"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/agents-ca8ae138f261.woff2": {
         "bytes": 231032,
         "sha256": "1f2f36b0dc078386b9dc41369ecb93823118babda7c99f635bd88df2ff55b7a8",
@@ -57886,6 +57946,18 @@
         "source": {
           "bytes": 231032,
           "sha256": "1f2f36b0dc078386b9dc41369ecb93823118babda7c99f635bd88df2ff55b7a8"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/agents-capability-routing-4270c28054b9.woff2": {
+        "bytes": 217048,
+        "sha256": "c6f2a5a8f0d021300dc8f26d0f797849777a88ae6106afc1362d2f9da7ee9e79",
+        "key": "releases/54e01dad4e176f1e1c371d370fe504642dcb26ffd6fbe8ad7b3e6d95a6bd4722/assets/_fonts/agents-capability-routing-4270c28054b9.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/54e01dad4e176f1e1c371d370fe504642dcb26ffd6fbe8ad7b3e6d95a6bd4722/assets/_fonts/agents-capability-routing-4270c28054b9.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 217048,
+          "sha256": "c6f2a5a8f0d021300dc8f26d0f797849777a88ae6106afc1362d2f9da7ee9e79"
         },
         "byte_preserved": true
       },
@@ -57913,6 +57985,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/agents-context-evidence-56b60386ebe6.woff2": {
+        "bytes": 199392,
+        "sha256": "62a69fb7bdf8dd8d5d2d48037ed94ab5edf002716a36bc26cea6b32dcb834ffe",
+        "key": "releases/a78637caad52d2dd362a1cd32046047fa0489b5fae705db6e2bbb8ac727f25d8/assets/_fonts/agents-context-evidence-56b60386ebe6.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a78637caad52d2dd362a1cd32046047fa0489b5fae705db6e2bbb8ac727f25d8/assets/_fonts/agents-context-evidence-56b60386ebe6.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 199392,
+          "sha256": "62a69fb7bdf8dd8d5d2d48037ed94ab5edf002716a36bc26cea6b32dcb834ffe"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/agents-f685e21267b3.woff2": {
         "bytes": 231420,
         "sha256": "cc00ca394fc4e7f81d9293c7bf7a4058184753895f0e33f7b97d1ee0292a8965",
@@ -57937,6 +58021,30 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/agents-protected-policy-ff8fe341246c.woff2": {
+        "bytes": 186144,
+        "sha256": "ca3b4209558183a16fb45d9d1256603b0f757566559dd2cb120af714d98d6978",
+        "key": "releases/55a7d7c2e3db7b0d1d9cc6bdfdc5b6b9e7e76917ed70907cee95d987c7012fbf/assets/_fonts/agents-protected-policy-ff8fe341246c.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/55a7d7c2e3db7b0d1d9cc6bdfdc5b6b9e7e76917ed70907cee95d987c7012fbf/assets/_fonts/agents-protected-policy-ff8fe341246c.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 186144,
+          "sha256": "ca3b4209558183a16fb45d9d1256603b0f757566559dd2cb120af714d98d6978"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/agents-rules-contracts-9dfb5a00b2ee.woff2": {
+        "bytes": 170300,
+        "sha256": "e567cbf414a06330aa395d77b38cc99950542e8359b1563812f4f8c9bfc2431c",
+        "key": "releases/de68d5caa504890606927eb9788a5c9b1031f35bdef5a6b2b684622a5fc5ba4e/assets/_fonts/agents-rules-contracts-9dfb5a00b2ee.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/de68d5caa504890606927eb9788a5c9b1031f35bdef5a6b2b684622a5fc5ba4e/assets/_fonts/agents-rules-contracts-9dfb5a00b2ee.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 170300,
+          "sha256": "e567cbf414a06330aa395d77b38cc99950542e8359b1563812f4f8c9bfc2431c"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/agents-rules-contracts-f88e67a34470.woff2": {
         "bytes": 169436,
         "sha256": "b3705dba3779678b3bc1dfd588c56e763cdf049a7932bb8750bee5c3a9742aea",
@@ -57949,6 +58057,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/agents-skills-plugins-938b0a978c74.woff2": {
+        "bytes": 194144,
+        "sha256": "1b6bd53640d71fb9190a682bd9600dbeae295bc00578ebfe3c3b43d63819c167",
+        "key": "releases/aff8720d6159c01f9a5b56f6e6eae276c59292cb07378cec7cb445eb51af36b5/assets/_fonts/agents-skills-plugins-938b0a978c74.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/aff8720d6159c01f9a5b56f6e6eae276c59292cb07378cec7cb445eb51af36b5/assets/_fonts/agents-skills-plugins-938b0a978c74.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 194144,
+          "sha256": "1b6bd53640d71fb9190a682bd9600dbeae295bc00578ebfe3c3b43d63819c167"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/agents-skills-plugins-d5bf784304b5.woff2": {
         "bytes": 192732,
         "sha256": "7e23d1c5cda55d4af30144cba45a25142706d33c99d93b987e81bc46b5591761",
@@ -57958,6 +58078,18 @@
         "source": {
           "bytes": 192732,
           "sha256": "7e23d1c5cda55d4af30144cba45a25142706d33c99d93b987e81bc46b5591761"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/agents-working-tree-hot-mirror-57ec172b4164.woff2": {
+        "bytes": 151440,
+        "sha256": "e7e3d6a998b1f5ac1d599a5f6589e8ab9dc8df8a8009fd8c900a6e3e1c9b6689",
+        "key": "releases/18539480589d1460d52413566b2f51a6ce47a2bfb3f6cdc02a86a21f627209a7/assets/_fonts/agents-working-tree-hot-mirror-57ec172b4164.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/18539480589d1460d52413566b2f51a6ce47a2bfb3f6cdc02a86a21f627209a7/assets/_fonts/agents-working-tree-hot-mirror-57ec172b4164.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 151440,
+          "sha256": "e7e3d6a998b1f5ac1d599a5f6589e8ab9dc8df8a8009fd8c900a6e3e1c9b6689"
         },
         "byte_preserved": true
       },
@@ -59425,6 +59557,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/pcconfig-6ef91571cc98.woff2": {
+        "bytes": 239380,
+        "sha256": "d932b61c858964268703182075b280d265d4cbda0be0882d23b7578e813cc8a1",
+        "key": "releases/2321db719a97cea964505ceadc749c70d60332c356604ce95c8c8bc21571e81f/assets/_fonts/pcconfig-6ef91571cc98.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2321db719a97cea964505ceadc749c70d60332c356604ce95c8c8bc21571e81f/assets/_fonts/pcconfig-6ef91571cc98.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 239380,
+          "sha256": "d932b61c858964268703182075b280d265d4cbda0be0882d23b7578e813cc8a1"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/pcconfig-6f8887863e20.woff2": {
         "bytes": 232272,
         "sha256": "0103985be0c5aec3791b757eff79948179739a04dbff840b3c2fd0849457c410",
@@ -59473,6 +59617,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/pcconfig-machine-facts-405bdc2f9640.woff2": {
+        "bytes": 188160,
+        "sha256": "56f78ad68e9a56fb6e590f5eaa432805afd5b827c63d3123c7372a02e6756c5a",
+        "key": "releases/0047773b9f9acd37aa1b948dabe6a505ac373e55db274c24591fca2fcca5c4d7/assets/_fonts/pcconfig-machine-facts-405bdc2f9640.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0047773b9f9acd37aa1b948dabe6a505ac373e55db274c24591fca2fcca5c4d7/assets/_fonts/pcconfig-machine-facts-405bdc2f9640.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 188160,
+          "sha256": "56f78ad68e9a56fb6e590f5eaa432805afd5b827c63d3123c7372a02e6756c5a"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/pcconfig-machine-facts-d72082716d29.woff2": {
         "bytes": 185676,
         "sha256": "12a2d15c3db3de58f2e2cec4fa6b36cafa100612e0534cac5daf3cc9d0bf98f7",
@@ -59485,6 +59641,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/pcconfig-memory-diagnostics-715d9704705a.woff2": {
+        "bytes": 176568,
+        "sha256": "9b81d03cb559df01c3df4a7375f4b7c250959f7d2c14bedb44186f1d0a8fc6b3",
+        "key": "releases/9e5bacb86ffd40f627e97ddf9548fa21d489b7ca15a69f7d6967110b03fb0cd2/assets/_fonts/pcconfig-memory-diagnostics-715d9704705a.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/9e5bacb86ffd40f627e97ddf9548fa21d489b7ca15a69f7d6967110b03fb0cd2/assets/_fonts/pcconfig-memory-diagnostics-715d9704705a.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 176568,
+          "sha256": "9b81d03cb559df01c3df4a7375f4b7c250959f7d2c14bedb44186f1d0a8fc6b3"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/pcconfig-memory-diagnostics-bbda9fd793cb.woff2": {
         "bytes": 175792,
         "sha256": "0ab3e56b3b96489c47596724950c76d2f7bdfde1b9c149956590e641ce647993",
@@ -59494,6 +59662,18 @@
         "source": {
           "bytes": 175792,
           "sha256": "0ab3e56b3b96489c47596724950c76d2f7bdfde1b9c149956590e641ce647993"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/pcconfig-owner-takeover-0e983188ab8d.woff2": {
+        "bytes": 166640,
+        "sha256": "e1eef2ddbad455b759f98db522351b9ea703b126d4b683b2596e294354d2daca",
+        "key": "releases/0916d9d64c7cfd1140fa704fcd661eeaf09bf708351d4cc1289851108432dc2d/assets/_fonts/pcconfig-owner-takeover-0e983188ab8d.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0916d9d64c7cfd1140fa704fcd661eeaf09bf708351d4cc1289851108432dc2d/assets/_fonts/pcconfig-owner-takeover-0e983188ab8d.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 166640,
+          "sha256": "e1eef2ddbad455b759f98db522351b9ea703b126d4b683b2596e294354d2daca"
         },
         "byte_preserved": true
       },
@@ -59545,6 +59725,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/pcconfig-recovery-backup-fc218f785dc5.woff2": {
+        "bytes": 204340,
+        "sha256": "566ffe73110dae31f18069e889c1a537d8faa0f0d87745734ffd38b2b2c18a88",
+        "key": "releases/84de70c1d1b4f8a12fab665861048e9792ce7ca79a584aa514486c27b3adecd1/assets/_fonts/pcconfig-recovery-backup-fc218f785dc5.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/84de70c1d1b4f8a12fab665861048e9792ce7ca79a584aa514486c27b3adecd1/assets/_fonts/pcconfig-recovery-backup-fc218f785dc5.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 204340,
+          "sha256": "566ffe73110dae31f18069e889c1a537d8faa0f0d87745734ffd38b2b2c18a88"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/pcconfig-remote-computer-mcp-4dfa063f4ef2.woff2": {
         "bytes": 195720,
         "sha256": "e913be60aedb0f63277da12717ef275669656c8187c6faa773b71fb634f23646",
@@ -59557,6 +59749,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/pcconfig-remote-computer-mcp-f77aad480ae3.woff2": {
+        "bytes": 204700,
+        "sha256": "53cb4e86388acc2b537267c103511aba655f0fd59aa9e9ce3ade052620d161b3",
+        "key": "releases/94e9b17c1f459a5d3842d0bba78f158f91604851c7a337c3e4288370b140308d/assets/_fonts/pcconfig-remote-computer-mcp-f77aad480ae3.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/94e9b17c1f459a5d3842d0bba78f158f91604851c7a337c3e4288370b140308d/assets/_fonts/pcconfig-remote-computer-mcp-f77aad480ae3.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 204700,
+          "sha256": "53cb4e86388acc2b537267c103511aba655f0fd59aa9e9ce3ade052620d161b3"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/pcconfig-runtime-startup-40ea8d505114.woff2": {
         "bytes": 201520,
         "sha256": "b93aa9b607a0d37dca1b830ca8efd1dc33d6e0614e267cd1bbcfbedd2d637e00",
@@ -59566,6 +59770,18 @@
         "source": {
           "bytes": 201520,
           "sha256": "b93aa9b607a0d37dca1b830ca8efd1dc33d6e0614e267cd1bbcfbedd2d637e00"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/pcconfig-runtime-startup-8d796e3afbbe.woff2": {
+        "bytes": 203784,
+        "sha256": "d7ce4b61c5bf0685c8d8e4a1764e728b9f4d1f650012a43955b9ae4c51b05cf2",
+        "key": "releases/51dc95169894655f655d9c12fa8b4b1566cc3ae190429381a1ce0ad992fdc48a/assets/_fonts/pcconfig-runtime-startup-8d796e3afbbe.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/51dc95169894655f655d9c12fa8b4b1566cc3ae190429381a1ce0ad992fdc48a/assets/_fonts/pcconfig-runtime-startup-8d796e3afbbe.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 203784,
+          "sha256": "d7ce4b61c5bf0685c8d8e4a1764e728b9f4d1f650012a43955b9ae4c51b05cf2"
         },
         "byte_preserved": true
       },
@@ -60298,6 +60514,18 @@
         "source": {
           "bytes": 184860,
           "sha256": "dda4c87ac350468bf889aa04c4d16efd1e89cedfb93fd30f375bfdd174f92126"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/rule-capabilities-runtime-2c939d356b37.woff2": {
+        "bytes": 253204,
+        "sha256": "218dd6cb73f255c48109a446be7f2fc5ad61449195f3c03dd1495bd9b29836b4",
+        "key": "releases/0313a22c6c6a4e1de45c527f1340085628130e249cddb31dd2a2fc2334645256/assets/_fonts/rule-capabilities-runtime-2c939d356b37.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/0313a22c6c6a4e1de45c527f1340085628130e249cddb31dd2a2fc2334645256/assets/_fonts/rule-capabilities-runtime-2c939d356b37.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 253204,
+          "sha256": "218dd6cb73f255c48109a446be7f2fc5ad61449195f3c03dd1495bd9b29836b4"
         },
         "byte_preserved": true
       },
@@ -61669,6 +61897,18 @@
         },
         "byte_preserved": true
       },
+      "assets/_fonts/typora-theme-pack-a9e59379e6d1.woff2": {
+        "bytes": 171944,
+        "sha256": "2c1351a50a7db6337f98d229b180644039fe1c5ded8bae98fd0fd0f280056a45",
+        "key": "releases/79c46be4d2fff80f056b18788a534aba7da46bed3949880957996af8e6022fc6/assets/_fonts/typora-theme-pack-a9e59379e6d1.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/79c46be4d2fff80f056b18788a534aba7da46bed3949880957996af8e6022fc6/assets/_fonts/typora-theme-pack-a9e59379e6d1.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 171944,
+          "sha256": "2c1351a50a7db6337f98d229b180644039fe1c5ded8bae98fd0fd0f280056a45"
+        },
+        "byte_preserved": true
+      },
       "assets/_fonts/typora-theme-pack-b296f6f53d2f.woff2": {
         "bytes": 171244,
         "sha256": "6edb571ca97225f6af7ebe45d057b9f8ee939e64fe65aba57122887010a7edea",
@@ -62194,6 +62434,18 @@
         "source": {
           "bytes": 197060,
           "sha256": "e6c9120ec8e308b2d22150639b3ee89dba9c6f45f117aab5c7cd78bd8331defc"
+        },
+        "byte_preserved": true
+      },
+      "assets/_fonts/wly0829-cn-7cee7dfb2352.woff2": {
+        "bytes": 213148,
+        "sha256": "dba20d41096078a2e07c0a31c66794daa509f69b3c78b8c29a1e58e707d544e2",
+        "key": "releases/93a7df8ebe75262db0c789704107cab68f0e532005fbe6c44ade2be47d02b6a5/assets/_fonts/wly0829-cn-7cee7dfb2352.woff2",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/93a7df8ebe75262db0c789704107cab68f0e532005fbe6c44ade2be47d02b6a5/assets/_fonts/wly0829-cn-7cee7dfb2352.woff2",
+        "content_type": "font/woff2",
+        "source": {
+          "bytes": 213148,
+          "sha256": "dba20d41096078a2e07c0a31c66794daa509f69b3c78b8c29a1e58e707d544e2"
         },
         "byte_preserved": true
       },
@@ -64202,38 +64454,38 @@
         "byte_preserved": true
       },
       "search-index.js": {
-        "bytes": 1513510,
-        "sha256": "3cd4955fa301535fadb2ddfaa916a06ef7a6ae911686cb76531e8f656c46e9a3",
-        "key": "releases/4343d8cc4d6a53167f106a65dcbfde0be97657d70beb5216a2064ae2183edaf7/search-index.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/4343d8cc4d6a53167f106a65dcbfde0be97657d70beb5216a2064ae2183edaf7/search-index.js",
+        "bytes": 1516113,
+        "sha256": "e10c5deefbdba3b4e12a8232241826a22bfc12b7215c2d30ffc1fbcf4fb8946a",
+        "key": "releases/db0e9de0a69580ec9e13d8722e9cd30a66d5a2659fcbac3f6c61481b85d45b3c/search-index.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/db0e9de0a69580ec9e13d8722e9cd30a66d5a2659fcbac3f6c61481b85d45b3c/search-index.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 1513510,
-          "sha256": "3cd4955fa301535fadb2ddfaa916a06ef7a6ae911686cb76531e8f656c46e9a3"
+          "bytes": 1516113,
+          "sha256": "e10c5deefbdba3b4e12a8232241826a22bfc12b7215c2d30ffc1fbcf4fb8946a"
         },
         "byte_preserved": true
       },
       "search-project-localocr.js": {
         "bytes": 134947,
-        "sha256": "cea36e4ce7d71d0b87a8f458a18513c886efcab552fa240240fe9506e0ee59cb",
-        "key": "releases/cece9499d25e5d88f3af8998b95b1ab11f42438233d992caf661598db5dae9cd/search-project-localocr.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/cece9499d25e5d88f3af8998b95b1ab11f42438233d992caf661598db5dae9cd/search-project-localocr.js",
+        "sha256": "3bf666f809b61fa9ff8424eff65319b4843e374f021ce874d12a6c034d3a3d1c",
+        "key": "releases/a20a3dbcf8b1db44127e034eb77df7bd2b303f0d626d59d10d4c3d41f2c873a3/search-project-localocr.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a20a3dbcf8b1db44127e034eb77df7bd2b303f0d626d59d10d4c3d41f2c873a3/search-project-localocr.js",
         "content_type": "application/javascript",
         "source": {
           "bytes": 134947,
-          "sha256": "cea36e4ce7d71d0b87a8f458a18513c886efcab552fa240240fe9506e0ee59cb"
+          "sha256": "3bf666f809b61fa9ff8424eff65319b4843e374f021ce874d12a6c034d3a3d1c"
         },
         "byte_preserved": true
       },
       "search-projects.js": {
-        "bytes": 4646719,
-        "sha256": "3380b0e52f48457e8057e84da72180174a531facebbf384e2d9534904c4680df",
-        "key": "releases/a76db8ccc5c90c04e65b3f81282f3f285a8642519b57c8b4c3a1c80d86c98278/search-projects.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a76db8ccc5c90c04e65b3f81282f3f285a8642519b57c8b4c3a1c80d86c98278/search-projects.js",
+        "bytes": 4669585,
+        "sha256": "31e03a000bb1444bd8c3553c758f70c58db8c6576f1b85e3b0bd0b1856262285",
+        "key": "releases/8bce4561739ab31da8a48d49bd32eb9b15f6adc8eebdeb292b5d2e6e60f34709/search-projects.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/8bce4561739ab31da8a48d49bd32eb9b15f6adc8eebdeb292b5d2e6e60f34709/search-projects.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 4646719,
-          "sha256": "3380b0e52f48457e8057e84da72180174a531facebbf384e2d9534904c4680df"
+          "bytes": 4669585,
+          "sha256": "31e03a000bb1444bd8c3553c758f70c58db8c6576f1b85e3b0bd0b1856262285"
         },
         "byte_preserved": true
       },
@@ -64785,6 +65037,7 @@
       "releases/0028a884cdeeaf3b9352f5f63aaaeb859d88679496c58a3bb8815fa7b19e8b9b/assets/home-01-v-1280-fae12132939e.avif",
       "releases/00293bed792cfa4c348277253b255abbfe21c5d9c0e64a36d8756a53f6959009/assets/_fingerprinted/686b63c28ecf3d7a867265f2927230422b138e020ef9c8317cfe4fd89ea2e9b6.png",
       "releases/003781e012718b2fa3779f0bb404c6e0ed5dcaf8deb79d33cf65b7187686eea2/_typeset/runtime/live-sans-part-e2-f09c668453d722cc686f.woff2",
+      "releases/0047773b9f9acd37aa1b948dabe6a505ac373e55db274c24591fca2fcca5c4d7/assets/_fonts/pcconfig-machine-facts-405bdc2f9640.woff2",
       "releases/00571c4bd243644b40c69617004ee566c23f176ee9d7d72efcf6677747dc5f1d/assets/_fingerprinted/e010ca7001948622ae4e18db3eea512568d933314d2ef2a8d4249bdb31d7d41e.png",
       "releases/006ceb1bfc782d1f3a13e2723115d5d05ab960ec884c947c334f1d5e44b12f86/assets/_fonts/learning-plain-language-4732edfc4c54.woff2",
       "releases/00796a8416ee94cc037276df6e7089e265f789572accdf76b518e637d79193b4/_typeset/runtime/b2-typeset-1f648eb89aaf1cda0e64.js",
@@ -64831,13 +65084,13 @@
       "releases/02ff43ddc54fb3fc318e9433b14cb529feeb3b8ee009461e9571de7bc3b2eca9/_shared/nav-a7d6625f8c-81c134b2d5a9.webp",
       "releases/030d6afb98bf094b50216f580a3e91808ec500e1f4b1f4e210610465536d256b/assets/_fingerprinted/1fc97c678c852bef2e781fd96027cd8ff86f0e4e32d8592a056aa4ff4c8863bb.json",
       "releases/03125583b06cc1a1ab32c145c2ac22e43b88bd96e6d6f50c567d2dd13136c956/_shared/nav-b4cd545c83-552a39ba69a4.avif",
+      "releases/0313a22c6c6a4e1de45c527f1340085628130e249cddb31dd2a2fc2334645256/assets/_fonts/rule-capabilities-runtime-2c939d356b37.woff2",
       "releases/031b65e5a065651073bdfc5310f80d7ec8b3017213eaed06b0893528e49fd1c4/_shared/home-living/assets/bird-crouch.fa50c67a6c.webp",
       "releases/031bf4d7d0707e781ccc312a6d63aafb4a10c0af247f28cc21d5e5c3bd82de75/assets/home-02-h-2880-9b996bf070d6.avif",
       "releases/038145400cac254f72f144a24789fbd0db9c57a8d6651d62725700a32f3171c5/assets/_fingerprinted/0b821c7eee23f39875d70b58601037971de2f3c1c28c1da470f961293f1b884b.png",
       "releases/038e9bcf0a10ca26b6a0c5dae3dbdf77bf974ac19e5d531c783b25ed069a9560/_living/password-center/bird-first-only.2d55dbe0ae06/m1.fe0edb5a66.webp",
       "releases/03aaff820d3a2b2ad1b024085a446f524177e4b0fba138e70ebd5e719171a262/assets/_fingerprinted/fb961f51f4916854a1b62f14086abba968a431b595f696cb14f23c8a7b2feb94.png",
       "releases/03ec338f13547047a61c5a66e2f63b682630b8c9af21e0d5bfc3c02c77697748/assets/_fingerprinted/1ef3958cf3e8147b5c9e3126b7f050fa377d067e9e25a2e0d1c9361d33acfa8e.json",
-      "releases/03ee95f7fa1e1824fbb9573933ef6c0c5eb5b4f13e0dec01acd4a13c0fb9b081/assets/_fonts/agents-rules-contracts-f88e67a34470.woff2",
       "releases/03f5fb53c97cd0b4b30bb1f257b715a1617ee9361b5aee60ebfdc42dcd00cddd/_living/daily-preferences/bird-first-only.256408dafa62/config.json",
       "releases/0408929f5a3ce1bae02bc0144e020316f355dae609222ecc1d921ecd997a165a/_shared/nav-f911e414cf6b.avif",
       "releases/0426183d313e3a1ecb3a3f2ecedba44e1747ad8f0fed6ab089b10a84ab267528/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/v-a-title-chars-14.png",
@@ -64935,6 +65188,7 @@
       "releases/0902a186bce07bbc5c6663e9ae6d4e8de5381e3c69fe973af0ef150d0d0e990e/_typeset/personal-media/be9dda80f6ee19045a9e-personal-media-01-h.webp",
       "releases/0905ec12cf96d75c70c6da2eb8fc39e5ee7f420ee3aa4da448ce071e573f61d9/_shared/nav-0ceab1e2ae9c.webp",
       "releases/09135a766cc789c1c88f9e116d218ade32ed5b8ee14e3b98ef2804a60c39a3ee/projects/personal-formal-documents/assets/hero-83243fbc9397095a-mask.png",
+      "releases/0916d9d64c7cfd1140fa704fcd661eeaf09bf708351d4cc1289851108432dc2d/assets/_fonts/pcconfig-owner-takeover-0e983188ab8d.woff2",
       "releases/092c9eae238eb7314d50512da63a45739321018de4b6166888e774e610a320e4/_typeset/runtime/app-957b1bcd307e632148e5.js",
       "releases/092e21badbc9643a15da9a96262f7bd482b70f1f6b8b099983e1200f4dd6b69e/assets/_fingerprinted/80492c31a2d554edc2c2cbcbfdae37c8fb91180d6ae4dcc9c2385a0103878e1a.png",
       "releases/095a5866cde6996470ada2e5823ed891b6daa55804daba8c2182eb2bb6a63702/_living/proxyclean/bird-first-only.c6dd7e09bced/config.json",
@@ -65045,10 +65299,8 @@
       "releases/0ea19b317f2c0e66a43381797bb507cda9f2c27456ede7293ab5d9d0fca3d4e8/_living/skill-explain-to-me/bird-first-only.f6499ab9f7eb/m0.864c54049a.webp",
       "releases/0ea8ed34a21033e4cdb912f295eea1923d827dae2a5637aee85e3af3e36cb94a/_typeset/runtime/live-sans-part-7-3c354cd8e273ee31b164.woff2",
       "releases/0ebee0db5bc0580cdb40d31fa21526256125a0207d88c2f606a5f29bed143934/assets/_fingerprinted/f3a938c987a565ad553b91c9371c031e2844ad934960f80e7b5600976bb4b8b9.jpg",
-      "releases/0edae2f9d95d8c9e3cac2273eca0463644513602412cfc9bf8a77f48ef40b302/assets/_fonts/agents-f685e21267b3.woff2",
       "releases/0eebf87267922a8e76b57c0f4004b8daf12b3cbf8a3ba706629138146920146f/assets/_fingerprinted/9fa16b6faf6b66ee876a4ceffb9e6ababfbcbdd1ea0bc6312fad348536b97c64.png",
       "releases/0f01aa51e44ca5783b5174c0f5c6e06893b3b147309537f1b35849e78f573779/assets/_fingerprinted/52e27a29e0206bf48fbff4ab5e4713901bd28b658e5da2424771e5bb883f1db2.webp",
-      "releases/0f0f21fb6217fafec0dc3115211eef9af63e37e4080733b6fe9cd1a79ea18a2c/assets/_fonts/agents-context-evidence-3740eef40479.woff2",
       "releases/0f31f3e15599e20753375cea1d7fa06b6230e827806ed42a0024cd89ecdabb9d/_shared/nav-4aa1a3c6743f.webp",
       "releases/0f40158d211661d283eeab3b56e3e51b64ef6c6e1b2f50d7740111ca0b579012/_shared/nav-bdeaa8d446-99ce1c44fd2c.avif",
       "releases/0f49fc9845121052b504d07c07df275024f8bfb2595355dda7d9fa17d5fdff37/skills/personal-health/assets/hero-06bc43bdf9ba1655.mp4",
@@ -65144,7 +65396,6 @@
       "releases/142fe02fd8e76c01e2607ae28a714e26b896723cf0b18a2ab8eeea33a5de62d1/assets/_fingerprinted/10ca5d6b8d55f5617f8b46d8d54f044f90a4df8a31ec2d87b1d4a992e3a3aa87.png",
       "releases/145f8a65ac13c0a626a40ec8e0ba9eb547a936e1e3bf5480a7775b2740093e21/_typeset/rule-codex-adapter/59c51becc1200f288b6a-rule-codex-adapter-01-h.webp",
       "releases/146d1ed320ba3779bbfbb6581b0580b7352d24c028159a04a6593684c37d0bac/assets/_fingerprinted/cd1abb8904cbf6c2055d6038b4b20f73d36d1b43700a7920c300a81700e619b3.png",
-      "releases/1473fabc47458a4fe87632fe7d71d1028ec430195fa633c872d0712263c3a99f/assets/_fonts/agents-authorization-owner-a42d428a6a79.woff2",
       "releases/1479664e002cafe48a2bea112b653f5eac2ffa3d4c3a422fd72e4705baf37a4d/assets/_fingerprinted/468d48a979a9aae0bd523175246d21a2153cb221219c70cae07d5b81084217f0.png",
       "releases/147afdccb93efe75d167a68cdc79699ad9acee85018800cec7cf57ad0e2f2536/assets/_fingerprinted/448b4c7a67cccf9e27e77a937c2ed23ee366686409c3c4649af5199022a81073.png",
       "releases/1489a1506a199322038b999a52c36baf4dfdd589fcd768e91f544bad2006ab7d/assets/_fingerprinted/c9596ee41b3949d3edb3416253efb511b586fc9f61fd47c5fa444f971326def1.png",
@@ -65217,6 +65468,7 @@
       "releases/1845f7ee49e5a8ed8022f8b425712879b2c921169a4670d4ea410fd437e7e7f2/assets/_fingerprinted/92794254164af3bfb2606b096ab3eaed6ff3da19cdfd433386ed0b4d614d23a1.png",
       "releases/184772ffc546fdf3b1526f0b57ebcbcba5ae6bdf0936fcf196f6020fde3d7c57/_typeset/skill-localocr/4677a5a5540bea8e2989-skill-localocr-01-v.png",
       "releases/184caea885b962605b4c6be6b7283cf0afe3fc8eceec2ce279d9bd3b1fa22007/_shared/nav-unify-standard/nav-unify-label-67-47c38255d5.webp",
+      "releases/18539480589d1460d52413566b2f51a6ce47a2bfb3f6cdc02a86a21f627209a7/assets/_fonts/agents-working-tree-hot-mirror-57ec172b4164.woff2",
       "releases/1859fc09281406ad54f4acd7ac7952954add546873116c557262a3badb96b623/_shared/nav-599652b09be1.webp",
       "releases/185c27c4a4cf9e8b660b2507f08a6cdd66c41948c62294467497fd6fac49e941/_shared/end-project-v-b9f8e4b60401.webp",
       "releases/1863b7ca34897a73af32ef8612c3095ac9c85342fd174e3565ce3ee3ea008c1f/assets/_fingerprinted/2e7e599aaab63a54eef05cd153e32fcbda44fd0b8c5c1c1ea910e028655e090a.json",
@@ -65380,6 +65632,7 @@
       "releases/22dcfb7f8fa6c4549be4e15019ed66ab2eaec345edf1b4222b71058e0e556e34/_typeset/runtime/live-sans-part-cb-633626854f38979eea38.woff2",
       "releases/22ffb230db723734f1c08a7f25195888b33680b5f5462b62d05de02a6b25ce06/_shared/nav-2c093b1f4d-71f93744e1c9.avif",
       "releases/23085984fd8b61382553d50a38f0960ba5b6deef5a0d2e1f12893297514726d1/assets/_fingerprinted/cdd00fb6065b2e5032a59b765b21643ac32688ab496cc17f42a04a0d74b147da.png",
+      "releases/2321db719a97cea964505ceadc749c70d60332c356604ce95c8c8bc21571e81f/assets/_fonts/pcconfig-6ef91571cc98.woff2",
       "releases/2339aac480a1d06d7c4ed3a643caa44a437ca1cf87f684d17ae9b33f2b7a1fd8/_shared/nav-507ea0dd26-f65d9ba9f465.avif",
       "releases/233faa4b8b271174d0c811128df359b2b366edfaf5b34e3a74a985ec66a032f2/_shared/nav-b317940f68-bb9126c7ac59.webp",
       "releases/23503d6e9060fa788165927a540a7c01d187a5ab3c152b3e579dce28070a4f37/_typeset/runtime/live-sans-part-67-7226a02462e8eaf9706a.woff2",
@@ -65423,7 +65676,6 @@
       "releases/25992b8bccbccd04a2cb6c3e514c6cb4c1168a77540546befcb5853024cf927f/assets/_fingerprinted/5c07d1676f931edb2aa3745fc8ec2527bcacaaef0419f905e3323cced5debf61.png",
       "releases/25af100606212690c21504739176c7a9d3257f34c82507df98fededb4592dc7d/assets/_fingerprinted/3f1a4857af2f7ca2a494026c1df22fcf8eb098a1f43de926f6c93dcf06bfe749.png",
       "releases/25ca47a4885bcfe8e440d4f56a134af6aaf44f086d2caa20aaa83cc0fd8f0500/_shared/app-a86fd4dfcf0c.js",
-      "releases/25d26823e36a1416340878b6f501ad9c61d664c6a5331a96719c76e9a91d775b/assets/_fonts/wly0829-cn-94c55d17ddd0.woff2",
       "releases/25f29f234ab303985c2483ae24eccb3b938f6c2657a942068a41b04127fff5f3/_shared/label-cfc3d445066f.webp",
       "releases/2619736288e878b0fd71f1f5f3c62f20eb1eb9d75545e4b3f0f50a7f800d5f12/_typeset/skill-wechat-direct/0f778a69d0900d720da7-skill-wechat-direct-01-v.webp",
       "releases/2619f6e3903b03e4fa2431d097e8de010f5793c1d896f986e2efb81e766dcf32/_typeset/learning/9276cd50451f7d2a5e63-learning-01-v.png",
@@ -65604,7 +65856,6 @@
       "releases/3012e7f1dd52d029ac9ecb3c02a8e254acbb545f21c7a01f4ab567c127551835/_typeset/runtime/live-sans-part-b1-b3c9f72e0874e4d21b5f.woff2",
       "releases/30214c2218dab2e89ffc3073fb217cb7fc9ab9101c8b045d67ff188d98623455/assets/_fingerprinted/ebc2db3dd42215e8a13339b7bf4d865c98756971c45ee06fa057b3cfb0aadbcb.png",
       "releases/3021c26d19153a46927c5e291e3235eed041ef270e000f1de87458f24a2c54de/assets/_fingerprinted/2a21d10406127f346815d5200a98eb14e27bb863dc3a05549a98e330b47d683f.png",
-      "releases/3021d8c4349c4fd0232c53c38a0fd27a08ef0053ff633c237a9a86f3c5015f02/assets/_fingerprinted/6a9e56947b17befe66841084697f9204c588ce5d902168ae623af8240c187540.png",
       "releases/303c9eea377cb11b8e826a6b02cac7492f648aea6fd9bc35b05b876663bd3b44/assets/_fingerprinted/50192eda1d1dc273fc1993aaef6639a8a7042cf886e83f8523fdbb2cfcbc106d.png",
       "releases/3045b69108205913e812366571cd0fe1cf6e951ac24c04f932a34601bb0e3ff4/assets/_fingerprinted/b79706567413fb1e718627845a666285f2f0b5812dd0be10563865736ebaf051.png",
       "releases/30470047d9bd3c38c6819cbe1d27da6d24b8549651a9209e002256d6c8be1b26/assets/_fonts/skill-report-page-ff8fee7cd7b5.woff2",
@@ -65696,6 +65947,7 @@
       "releases/35540cd12cd7197afa8531bd25f0c64ea06f0bfca64bbae2d13272bdf8e4ca7d/assets/_fingerprinted/4358f175dfec21470c46acc70dac915815a1ebccb102e2ba8e89ad5bb830fc19.png",
       "releases/35717485cb1eea2978f6a1e29f2a619ab799b85fcea60add853adad0b70aba22/assets/_fingerprinted/ef2c3839b60a79365cabf763157c377ef6cbdf75499d2d47566fce2f25ccb4ac.json",
       "releases/357522c55c9fbefbc608a0c42a5cf5433f82606bb9d40084facf002fbfc67cef/_shared/nav-0571025156-44fb3c90818c.webp",
+      "releases/3597b9debd5ecf8ea4a6242b95ad388cec17dbd3378a4f757d31394f6697b241/assets/_fingerprinted/008a140f3153a727ff401191849fe05dca0b9e36cb8e9697238f36d3342532b6.png",
       "releases/359b5849096308fa47c553f486b5bbe551e644d54d67db15f251d5d9d156b9be/_shared/nav-73075237fd-4e476b4ee481.webp",
       "releases/35c9dff075d4d94c558a2dcf29dd0b4bdcaeae5537a0dea9b094df5bb8d13fda/_typeset/skill-reply-as-me/5d61e484b95caf25d574-skill-reply-as-me-01-h.webp",
       "releases/35d0f47df9e73a1077fd29e47d582386cfb21c0d8c1385c7255e6c1bdfcdf114/_typeset/personal-materials/f972ba3dcb35381e8c4f-personal-materials-01-h.webp",
@@ -65728,7 +65980,6 @@
       "releases/376a91220565827530505befeba38dcc1400cb679a3063003fe9d0fbd9479789/_living/skill-browser-control-continuity/bird-first-only.6307548b2d01/config.json",
       "releases/37771d39de40fe75494ecf4f87c26da94661d3264f834d81e78f5df6208f1b0c/assets/_fonts/personal-health-offline-decision-brief-5c462511fa2a.woff2",
       "releases/379a931b36f5c5570db3b0937943aa6d677e4aa8b30d21265f71ff17ebb7fcb1/_typeset/runtime/live-sans-part-89-b6c1f1e146dbf111079f.woff2",
-      "releases/37a087a9489419379e956593edc41b15d1a2b2f1f67b3a456ea18e33a08fd23e/assets/_fonts/pcconfig-machine-facts-d72082716d29.woff2",
       "releases/37a9db428421ffc85f161836d7d3306e6e58cf09934524d600bb6285af59fba2/_shared/nav-203c08e0d4-1df0ac875013.avif",
       "releases/37b0ae54e6cd6a2fe7d165fa4cfe457384b63561d11f36d296093c08a2f27a1f/_living/skill-browser-control-continuity/bird-source.d145d85f7bac/config.json",
       "releases/37b35004be01aa0c4a9fcd107ebc848417f7702a02481bab0c4e9ef731638ff1/assets/_fingerprinted/3317f722ba53b862b350f39fe53147912db4d115fd2e82e9f181c1023b9d7054.png",
@@ -65749,6 +66000,7 @@
       "releases/384576e35ecf4afe37a9854a00cd8038650850785d6dd32745847a22c04dee2d/assets/_fingerprinted/9c5b0f0ed0baeaa4ed439b5f5ffe1be735aa753ac575219635637ca100f16c9c.png",
       "releases/384b5145804756abf117bee5b32eb545b1ffef106f9df26895d065807f504a79/assets/_fingerprinted/284af24ff9885a93ab5672c8cc32d9a1dcd44edc3debc2ec020d8fbbc3fc0c35.png",
       "releases/38631cfa1d9ab3a4aaf28ce14208605f87f576f098679a6b994ae7cafa4a65cf/_shared/label-84a3b8153a01.avif",
+      "releases/386da23092b5bd4cb4f02b3242feee5ad2a035b3e798ad86265bb62e3a6667ac/assets/_fonts/agents-20b8437f909d.woff2",
       "releases/387ef2e3fc280a94ddb9e6c20ecff9c0052d4a847e492721f13c7cf407daa808/assets/_fingerprinted/387cb02d54134278319f0d92e21beb6b3090d556c439a027c8cb4d3fad6f5443.png",
       "releases/388eafb59b8b46d306fdceccd5cae948b28b3a2dedb8c8d443aa59d043061dda/_typeset/skill-daily-preferences/bab8ee414b93aeac04dc-skill-daily-preferences-01-h.png",
       "releases/38a93e816a71def13b7589abc7459e87d31137a608be948491b468dbe8512af9/assets/_fingerprinted/eb0fb6d33e2dc55ec3307a07d01c2b4f57a93ff319c47f619075e5e536ae9f36.png",
@@ -65860,7 +66112,6 @@
       "releases/3f307a03cb9f663f74b29e9b912798eb61fa2196348cd62774d6838b0b50ee58/_typeset/runtime/live-sans-part-c1-55d0befe27fcc02efdc7.woff2",
       "releases/3f3e251b9c65fd08694e290f8e7e36bab3e3593c7d72c02e5e5a8914de74eb99/assets/_fingerprinted/d20ebe54030e271b9ff21172fd716f5bfaf26bd56e79fcf946f0f610654b67a6.png",
       "releases/3f44617975a446f8994d5e3f1a9426b654b2d15a88c199806b629bda9c9e2d34/assets/_fingerprinted/ec76ae49ba6fa1fd08a90bd5f7a730566b17a58fcc8c33f6a5650303ad9909ef.png",
-      "releases/3f47f06474613f1c0f6255842de52e03400f9fd39c6083c1764cdd6f782a4cbd/assets/_fonts/pcconfig-memory-diagnostics-bbda9fd793cb.woff2",
       "releases/3f4b8d2cbbf8cb74faa13bd1bba4c979ab2e47f88a67d4cd2a0042ff5021a58a/assets/_fingerprinted/66ef383d691eb37a1968b64c04fb3e550520e3a9254b876129fb93e81730aacb.png",
       "releases/3f4c4d5fed654cef4e66de97f6f73feb36359d71bf52aa4ff6bca22c20442400/assets/_fingerprinted/df05658b491ed508048a1e02fb0ab7315d7bebb428a6bf268de79b2810b88c77.png",
       "releases/3f5059354cc20ef3a6a64cd25488d9a9bffac5a13513113d26751a00413e0b0d/assets/_fingerprinted/28abf04a8f3a08fb89397e48b8b375da590410a098a0625245d25b52e1e4a7dc.png",
@@ -65944,7 +66195,6 @@
       "releases/43201a37557dc3a823026136caf489c841ee0fa6608f93a07746d0ddc4d7f63d/_typeset/runtime/live-ui-d282030e7052244c99e2.css",
       "releases/43272a9ef66528e889312c838ff46f10da82759757952f34a53c5032a1fcfdf5/assets/_fingerprinted/f91b2ddb15b202dcd40019cb0e32e825411b3aabf13a2947732ac0d93a1926a5.png",
       "releases/4333c7cbb7debad59b1a4ff9c4ec0da0e45485024a7cbcc5f576eb4b3478db23/_shared/home-comic/a554b08e4d2a2e262568/assets/v-b-p4docs-0-lines-6.png",
-      "releases/4343d8cc4d6a53167f106a65dcbfde0be97657d70beb5216a2064ae2183edaf7/search-index.js",
       "releases/4366fb715bfce91e0aac26f9a3212c7ac07cc1540b0245f47294c3b18aea0f2f/_typeset/runtime/motion-eeebbc833098935e5d91.css",
       "releases/43693faef4bab4ad111fe5c3dd5fd0e3d58f9fa981f68aa346191321f144330f/_runtime/69df1920ad696fa85751/search-project-cacb.js",
       "releases/4377118afdde54f1eda986c4197a4024e74bd9dda4e4be9aa86956f85c119a3e/assets/_fonts/typora-theme-pack-verdant-mint-theme-system-a4ff7fcb6fae.woff2",
@@ -66092,7 +66342,6 @@
       "releases/4bc59449cfbe711664edf307cf85ea798e44e6abd612810b32ac6211f92f5c6d/_living/skill-wechat-direct/bird-first-only.6108c6a82cb7/m1.c1db11b0fb.webp",
       "releases/4bca0d1683098847bb21bc529dde64a4383924fda79d19cd8387826e8de8f5b4/_typeset/runtime/live-sans-part-6b-e953d3eef783cc5b9601.woff2",
       "releases/4bd2aef180b831aa8d683a5e9e94795fb45286c0848e7b71ee061c588af84600/_typeset/proxyclean/2307c1a6976d0959f981-proxyclean-01-v.webp",
-      "releases/4be84b1d4ffa02e8871c362c5c2c6646e6046336a869e2f76ae3bd0400badfcc/assets/_fonts/pcconfig-remote-computer-mcp-4dfa063f4ef2.woff2",
       "releases/4bea6e9e63cdcc007ee6213a9091db3653fed95907f89c35c9ff0698efd2d5ab/assets/_fingerprinted/2e6fa2efc695f969d26db2636eaae02929c65e0b802aea518305729f603f5a07.png",
       "releases/4bfd59f66b19923c31167a36d3d5e000995084030a11d661622b335ec217f0ee/assets/_fingerprinted/425ea1a82101ad3ce8e4e107c6c1a8e8d8cd5c759d3b7e8f1b6b4a1f12d003df.png",
       "releases/4bfdb65d9dd538b830004fd90acae93d419091046445f3404d5e83cfbf9b28b2/_living/proxyclean/bird-first-only.c6dd7e09bced/m0.8508aa8ed9.webp",
@@ -66191,6 +66440,7 @@
       "releases/5192c017c3c921631c14daca908fb4ea7ae31dfd59d0b1fa265fbedb2f79b54f/_typeset/cockpit/64b35d04344bed044b22-cockpit-01-h.png",
       "releases/519da2f6c221d09fc1bf23acb8ffdaceb3c446de0b46dda0f89ac6a95420df2e/_typeset/runtime/motion-2fbbdac6b72a1d02a3df.js",
       "releases/51b22e35f3637babaa6b5f614ee44683287339c84451a0c927224ad145923a45/assets/_fingerprinted/1912d67c52bbd848db3c1d5fc1c4abd1cbcad29b73f7acf6baa4216c67052f65.png",
+      "releases/51dc95169894655f655d9c12fa8b4b1566cc3ae190429381a1ce0ad992fdc48a/assets/_fonts/pcconfig-runtime-startup-8d796e3afbbe.woff2",
       "releases/51e3a77e09dfcccf8b0fdad5a9986d098a63b4f3a8a051f0fb860bf0f5e1ae17/assets/_fingerprinted/f447631806fbe26406a963d2cf87942ad03e7893db6ced3bd0608c60a34d0c22.webp",
       "releases/51eb5fd17f64ea2a520b1e1a795aeda4e1edda116836f540a0c0df4b410f1491/_living/localocr/bird-first-only.d60d60d44620/config.json",
       "releases/523a1b1b6d3fb2151b031bb0ae7adc3a4313f55cc79821e6ae0b6f9f4d6259e5/assets/_fingerprinted/2c7752fc96c9673744d728fc8a47e2028b7a73ccdddd9224cd1ea7e86922092c.png",
@@ -66248,6 +66498,7 @@
       "releases/54b430b4545af699c879f30388eb0996b297d39d84967fa2802bbf4a97a6993a/assets/_fingerprinted/6f253cf2eab2dcd50369961a4f55231fc5b915a5ccd09d3c4979a7778bb76aec.png",
       "releases/54bf7f69076f15e39aef1fd4cfa2234412fd65c21b4c5fc12f48ad27c2ec58c2/_living/pcconfig/bird-source.c5f8eb9a8651/config.json",
       "releases/54df392b8cbfa1c24a97e912deb3f080ebe07df78044519b1b6f89faaee75215/assets/_fingerprinted/724f8117c4bb02c491f248863002df37ba7c99b69fcbf8b615057470d1f0ca75.png",
+      "releases/54e01dad4e176f1e1c371d370fe504642dcb26ffd6fbe8ad7b3e6d95a6bd4722/assets/_fonts/agents-capability-routing-4270c28054b9.woff2",
       "releases/550fc67e248b526db4b1bd031286e98f1c95cb6c09bdb3ceb0bdf32f9bb7093a/assets/_fingerprinted/b223a362f0a6ac773d193d6b9aebf335e4a197e5b0eab8003decaff212f211c2.png",
       "releases/551f42d03366800b79cc2f44a801ed2784511bd73f7b25ef3671aaa57b67ecaa/_typeset/personal-expression/d6a2d7af47e20f50880b-personal-expression-01-v.webp",
       "releases/5520f407c611e0bb358b1428cddc19ed84566e565a62348c3cece7b7f0d05a68/assets/_fingerprinted/bba9e4f133c4bf79a4f4fb204eaf7e3661140d81890b5d73717fdd9367a2fd38.png",
@@ -66261,6 +66512,7 @@
       "releases/558636d161ff36f5c5a1b26b09f6c06a1b83709e514e2a13a958b76931691681/_runtime/1480ad1898a30ac802e3/app-8b77d6f1b0ac52c5db3c.js",
       "releases/558b17670944939f39404a3824dfa02beff36c6aad332b50434ec26fb91c185a/assets/_fingerprinted/a165662ab90c1fb87bb74d162e51c86eb9823de7342ef0f18c7d4cc6e89fa879.png",
       "releases/5590d5d453f98469aae0cb80bab75c5fb542cea8b8c249ee5c27dd6647c06db9/_living/skills-home/bird-source.3102a3916a48/config.json",
+      "releases/55a7d7c2e3db7b0d1d9cc6bdfdc5b6b9e7e76917ed70907cee95d987c7012fbf/assets/_fonts/agents-protected-policy-ff8fe341246c.woff2",
       "releases/55ac7c59f77aa1ab7b87ecd66c853b0fb086ffa380c38f2eb56b6bfdb2ca614d/_shared/home-comic/a554b08e4d2a2e262568/assets/h-b-p4docs-1-lines-2.png",
       "releases/55b5274ac242991afe32e2203bce9f65cd71b7f6e22f818e5984aa30b9b6a3d4/assets/_fingerprinted/f6a901141597e2b1dbcf09b4f877c218684341d61af946c32322106e218791d1.png",
       "releases/55d3f51234d5080e55919ca876ad6a987bcf94f580d5744e6f6a90c5811b10a7/assets/_fingerprinted/bcae3d5b9c64c33c599326d97116d0c379f2b51ad0971d82107a3393ae71af3d.png",
@@ -66343,7 +66595,6 @@
       "releases/5a6ba966ce835d2ff3946ad989e2aef51c8ff456fc70afd34da6d581d29cc2fb/assets/_fingerprinted/33c337c6349418d13670b364558f4611301f7f12e362e31d4b03f142f4453aa3.png",
       "releases/5a8e3ef0d63190a34d615b68aff3c3acb9454183f7f06ff911185dd100dc6518/assets/_fonts/steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-da556cf5e603.woff2",
       "releases/5a904ebf81613217869ff8b4c7c27dc5cf283182027e6ec6fcd568bf10af8348/assets/_fingerprinted/79dd20d79df53b01582207c406486e89fbe7d79f5631c846c216607291b7f9b1.png",
-      "releases/5a9f49b71da91060116b2c68acee26e8ea58f33ef4086c9ff7ce1222d20aa8c4/assets/_fonts/rule-capabilities-runtime-a78373d5c08a.woff2",
       "releases/5aa3559e5428bb3e9af1faf60f19254237ce48dde49dcd4f3e40bd806152cf52/_typeset/runtime/live-sans-part-4c-550d9669f0f5fa1783d7.woff2",
       "releases/5aa8df80fdc7919accb86de131cd04163bf68483a9efce4413b139d78fc89238/assets/_fingerprinted/7d1e4aaf958262b3ecc1d108314a82ef17f0d88c696a42be8bcdcd50f62f2676.png",
       "releases/5abc02bd0e7636d95ac3fbebaf79d1e3eacd464a2ae6ee95bc5c994b4166312c/projects/proxyclean/assets/hero-13c8bb6217be4f89-mask.png",
@@ -66742,7 +66993,6 @@
       "releases/71122a6eb2784c96b99570e1dfc7d77a52b0714c0951e281016add77bf5462d8/_living/skill-media-person-self/bird-source.83f235fdb477/config.json",
       "releases/7119f7f16300eb3d1e6467458663fcb3422ad5763456173fd220931534c0bcba/assets/_fingerprinted/4ee86d35ab9cb3a912c62c82e5ca49eb5c546891f7bcf400addc9cc98ac8232d.png",
       "releases/713640fa45289ac2f7048e4f21ae12e589bb8e521a2efc5436c5905353a9d7fe/assets/_fingerprinted/f66851b6d578afa18b700ccae1e1cb98a30e217b7e7e6b1f1709d950586b4cfe.png",
-      "releases/71415e66687a511c27f8021d521047f2a56422d6336333c64c727977cd34bdea/assets/_fonts/pcconfig-runtime-startup-40ea8d505114.woff2",
       "releases/71467da9236e23295d641a49c72e06915f19ad7a4bce1a4caa6aad96a76f7515/_living/skill-vault-workflow/bird-first-only.0f8bd9aba980/m0.0b54ad54e5.webp",
       "releases/71688eeb0bb9199900c3d2788f3c9a73ca638d6f40f544ab19a334d8f55b3d52/_shared/nav-unify-standard/nav-unify-label-26-d2909f1647.webp",
       "releases/717cebe5c08760c15ce6fc87d4a6ddf9844393bfa9999005c2b76e80205145df/_living/_engine/metadata.3e3194b58281/files.json",
@@ -66854,6 +67104,7 @@
       "releases/779203f501eb742e5bb94f1f1ca8f925abfb99eab356d44a4421eddfa5be0b93/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-a-title-chars-11.png",
       "releases/7794d68968a23df14aeee35b16643900c94a15f46512e091a6721e820c75c7ca/_typeset/runtime/live-sans-part-1f2-8e17834263265b6f1293.woff2",
       "releases/779587f25f1704647b7e321390326cf68d1d49f595317b0785b72bbcf682f571/assets/_fingerprinted/0649216bf2a516ee915ca20d31ca4a613494b85a721cc70842ae1620c633b31e.webp",
+      "releases/779bf60525e45d8683fbe778b08196ab9fb5abff39702abf3cc0e0d933560458/assets/_fingerprinted/30483314566e957abb9e4c5f629bceb6629624067aa79d63b81783c2b683896e.png",
       "releases/77bd7fe4c1e00f71391eee2642e7167f989a6d6c323424d84bca04537af1cef3/assets/_fingerprinted/1215a2df00fedaac9ce8cc8b4a496dba33ff38ba0928b97597653e229788dd16.png",
       "releases/77c683986be61baeaa6227938e02fe6ab2dd755ebb6ece56254baddf056f4133/assets/_fingerprinted/5255903b1a719f21aa60e1691d41bdc2f3abfa731d5b936a14bc1dbff0de5630.png",
       "releases/77d01bdb8fbe537c0117c91f6663120e2138e83308a8adb5fb240334bdab1397/assets/_fingerprinted/06db0df576075f5894abc48bd58c62fa0a539f15bed77f159e6c3c73a5b73a5a.png",
@@ -66894,6 +67145,7 @@
       "releases/798ac5c8fad0579003e501508eb6b41f8e0a6d0df939d89d5e7782899d873904/assets/_fingerprinted/26b0814465c6a2965538ae905487ff1f4bd1b9409015acbfe98fbce645bc6ece.png",
       "releases/79920f230764a4e0dacea547d1bcc17f572d68c30cf0e93a4ad3bffaaa8eb081/_shared/home-comic/a554b08e4d2a2e262568/assets/h-b-p4docs-1-lines-5.png",
       "releases/79a0ce8a5e833ce211d237ce49ecf059e67de7c7b4e780d3a2625f75f6c7190c/_shared/nav-c3b187c6f34b.avif",
+      "releases/79c46be4d2fff80f056b18788a534aba7da46bed3949880957996af8e6022fc6/assets/_fonts/typora-theme-pack-a9e59379e6d1.woff2",
       "releases/79edbdbbd8b87cdea2f4b441bc2131f00230d98c05a77f1e2445e1ff1c200808/_typeset/runtime/live-sans-part-3-21143adf1ffdc2991965.woff2",
       "releases/7a03bdddeb144651f155a0837f0e95880f01ea2c9cf2b7ff4398431a97399fff/assets/home-02-h-fallback640-0002f728a814.webp",
       "releases/7a03e8c28a277e56cf57efe80bc7622fffde6fb99d88fffd6ef31a4e16d4fc48/assets/_fingerprinted/5afe7ff1f7809893ba42ea8a2336e8bb99fedde9a95370169fab88dd4e18dd6e.png",
@@ -67096,6 +67348,7 @@
       "releases/84afbba4b0d8c1a4a89867e6333dc1afe8149aa3f5f58a3a605a694d83b5b770/_typeset/skill-report-page/9104ef91811b79a6624d-skill-report-page-01-h.webp",
       "releases/84d03ea09dfb287cc09b40e976b4ea4943e692031d95880d3efa03c0376d791b/assets/_fingerprinted/5b29fa4386fa4855f0bb3bc8084be4b90a102df80307850e79917346886adbca.png",
       "releases/84de6ed12d175d90cc234b81c6f33f5a356eeab96e2c70476c0b89a8748b2848/assets/_fingerprinted/1fac93a70b29ae0133d155e2661679ea3c3b16ff02a1ce68a66d6854626b8718.png",
+      "releases/84de70c1d1b4f8a12fab665861048e9792ce7ca79a584aa514486c27b3adecd1/assets/_fonts/pcconfig-recovery-backup-fc218f785dc5.woff2",
       "releases/84eb132ee3efe273c6822a82e005cef6afa23903b63a1e22e3e63b3d3e812c79/_shared/nav-84d31f2883-596a7e160fa0.webp",
       "releases/84fa50e5c4d9621248c5727c235a6fc39887b5c3d92227efb78ef935e9c9871b/assets/_fonts/skill-mojibake-doctor-7b6ac415cc1a.woff2",
       "releases/84ff86951b766caf274a8d9610f551ee816edf4a8c9113f682c6a7b05abbaf25/_living/timeaudit/bird-first-only.a07df7515cfd/config.json",
@@ -67113,10 +67366,8 @@
       "releases/85a2bf2fb23970f9d20e7166d7b9436f24b4bd50220c80add4c32233e2922929/assets/_fingerprinted/acfa5891f8dbdfe81ee9717732e250d2ee22b82c7746d41cbff30172262236c5.png",
       "releases/85a2e1938a1bd4c6e25ecfafe923a2529d405425f4455840cdf9b52727b35fec/cockpit/assets/today-river-f36ca903ec4e711209dc.css",
       "releases/85bb316134a12710f2fabbc51117843ace90f064affeafcb07226206b14915eb/assets/_fingerprinted/88d0a3c6e9416a5fd39029161f690d77b03a31acff277249f0c3ef6352d961a3.png",
-      "releases/85bc7faf4add82e38941dd9f37093b3ec583cbe3d27199674751954039d1229b/assets/_fonts/typora-theme-pack-b296f6f53d2f.woff2",
       "releases/85c1c5fce18dec49d0afe636d5b0382e12a747278767d24b8d6ba204f01aa664/assets/_fingerprinted/bf4ac866b623b0dccbf1f845874ba59ae3fadc94a5711041c2d4a948485f3bb3.json",
       "releases/85d8520e35aadd2d2af0d76a071c248676e8bea8ec6547d6d7045fd75303f19c/_typeset/runtime/live-sans-part-4ff-bb3f63db618b4cfbacc4.woff2",
-      "releases/85e43a423432c79a77ce6b2941c2876f1cb9ee651cd6500112a97a719d9d9cf1/assets/_fingerprinted/5ee130746fe9d41d939357b358e99ac94b1fa4b58ac97beee6306da8c2abd1fb.png",
       "releases/85f16b8f2df0b0a043522bbd9b284c3ad16fb53258e34a3672259e151ba91174/_typeset/runtime/b2-live-ea1619d1ff642d2966df.css",
       "releases/85f2e5ae2a271176556cb6411f4d6ee00a23500d61e33c1aea803cafd814845d/_shared/nav-08aa6600cac6.webp",
       "releases/863771c8d388345d25e8624b746aba0d13aefde4a50165b83c90f628a07acee7/_shared/nav-6622024dba-d314c24a06ee.avif",
@@ -67224,6 +67475,7 @@
       "releases/8b93bd1fd8f52e08626e8982ac7ed2a51439d6426d3607c50fc81f891f318a8b/assets/_fingerprinted/c0a5752a0d680ff98960a574f21c0e8e2b5fa84e43510ba99badf29787849660.png",
       "releases/8b952ea52a58f2b26ed6384d0a225715dcc0905cdbfc0c9336db7ee76a0de974/assets/_fonts/personal-materials-verified-open-7c9a617aa49a.woff2",
       "releases/8baa2e48444e981c2fa0052ff1fbf9dd7621de8ec182fffcb83bea3d0f938050/assets/_fingerprinted/3bc6d91db4875cdacf3bc98a7a1ea99104cd23bc148aa052e410e54566d6dce5.png",
+      "releases/8bce4561739ab31da8a48d49bd32eb9b15f6adc8eebdeb292b5d2e6e60f34709/search-projects.js",
       "releases/8bd9e21f5b24df43acf966a3351bcb27b7b81b7cd2faa06e15cfc7bc53380343/_runtime/173bc4730f865c131e39/b2-access-model-173bc4730f865c131e39.js",
       "releases/8c0b9c75877d9638970a37b292ffebd83214bc8cb22be4f5e780f48f9053c74d/assets/_fonts/meshclip-kit-kde-connect-pairing-sync-7b063a4001ab.woff2",
       "releases/8c3145470be8202c4b541e3fca4b6fd2a44a78f24212cf7ff5ab79f57b378f6c/_typeset/ai-cli-profile-manager/379f308386f37cfc8fc4-ai-cli-profile-manager-01-v.png",
@@ -67270,7 +67522,6 @@
       "releases/8e9c124e663fc58e9600ae157c007de2c6dc8eb2e25692d4d8626b69fb0aa12f/_shared/nav-6904d6772a-ccdc03c36b4a.avif",
       "releases/8ea4621778dff2cb285bf89b74ea9654398e207bd702f59a231d534f25003df8/assets/_fonts/daily-preferences-current-corrections-a5b96d2d1de4.woff2",
       "releases/8ec7cff5c1121d320db6d8f2660374b90bdddc830837acbf384db6c9b65e6e6f/assets/_fingerprinted/0149f406a2f77ca2af465c037dc6e54af3765a21cf0ac57b22b7d59a10f55dd1.png",
-      "releases/8ecdd1cff9215530749253a28e3ad8feda498797afb34fc89a8501ffee958d93/assets/_fonts/agents-skills-plugins-d5bf784304b5.woff2",
       "releases/8ecf1ffe8135acc72fcf9394d280d78c4bd4fd596ee8163c231cf3a7a75e3b27/assets/_fonts/timeaudit-runtime-reliability-02eda3c592d6.woff2",
       "releases/8ee2d4c5507d8c0130555d74a7944140ed88a1553dc9847117fbff60ee66c958/_typeset/runtime/live-sans-part-4a-449ba9414451985d6cd0.woff2",
       "releases/8eefc5ef4372a83e4e3b3797bcf15eeb2086d6e2be491af65a5d8880cb63c128/_living/_engine/bird.fffa187360/bird.js",
@@ -67355,6 +67606,7 @@
       "releases/937d284b63dd912f153cb53bfd9630f66ed24b56c20ad4f0c8315c1517f3cd8c/assets/_fingerprinted/fb359c488e879b67b26f6e81fb169f9ce5d6162313f59dae249974f9fefea50e.png",
       "releases/93835e5fc7fdcdb009a8dc97ed75643f53751127f31848df572f2be83ffd884e/_typeset/meshclip-kit/bdb55da909d7357851a2-meshclip-kit-01-h.png",
       "releases/93a7199faa750a7371faee139d5b0d518de13483f7925042fa72b3560c25707a/_living/skill-authorization-file-broker/bird-first-only.5d38197d1285/m0.c9ea50eb29.webp",
+      "releases/93a7df8ebe75262db0c789704107cab68f0e532005fbe6c44ade2be47d02b6a5/assets/_fonts/wly0829-cn-7cee7dfb2352.woff2",
       "releases/93aaea61ef83a12d5ce20b6c579e9cd02b301f1273b38243c945576a1e822a05/_shared/home-comic/a554b08e4d2a2e262568/assets/v-b-p4docs-0-lines-1.png",
       "releases/93bf30bf8fc25b9bd997954570ff1e7b58de3b489c4db41c60d1db380e6102c3/_shared/site-0ba0c812dca7.css",
       "releases/93c04d1716d4107af0214259bea45d62eaed4e892c4f0272e584a20bde81f767/assets/_fingerprinted/9f791b5eb7d8d70eb7161abc9bf2a2dace9840aac804c089bb184fc20a46b039.json",
@@ -67369,6 +67621,7 @@
       "releases/94bd097692fa631ad0c84f81a04a22253795c7f2eb89aef14735fc1f4700618d/assets/_fingerprinted/6fcf0c29a17da81b8e623117bc7b02a5c7a35ddea146edfe531ef905670ebe42.png",
       "releases/94d2877ad3befa77a1bd5f3d08c5c2aac37608641414cabf1a00e4222c1cff00/rules/privacy-data/assets/hero-503011727f87e5d8-mask.png",
       "releases/94e1ad43082f251ddc7a1156e3b4b7a6b32c13871c6533959d258c01fa3ec61b/assets/_fingerprinted/f7ec3fdb8583fa8eb8c4c4e293cdc3aff8618f4699468ef4afd1a459136c7037.png",
+      "releases/94e9b17c1f459a5d3842d0bba78f158f91604851c7a337c3e4288370b140308d/assets/_fonts/pcconfig-remote-computer-mcp-f77aad480ae3.woff2",
       "releases/94f8994b4c70c34359a37b6f51ed2556335ea16107a4caf08fc4d7e93c4d9e41/_living/_textures/1e1328996781e176910058dfe0abbc6224a9ec25c9a1e7b15b3799565e5439ed.webp",
       "releases/9513fa8d9fa813dcff695cbf7a03191bc0c5d2316d68eb8048ddfae7d7e3f27c/assets/_fingerprinted/afc720ed3a38f7330903729636b99827541f8613835272e9cb22166dbd55718a.png",
       "releases/951a0d54f28405b8a8e37aac212f7d9d0eb714c91d9f51b972dfbd3b7b3677fe/_typeset/runtime/motion-7c504015dfe82c030078.js",
@@ -67539,6 +67792,7 @@
       "releases/9e05d3b3486c24747d66f3f1e02bf666d0aedde84fc4a96c514de1898e11b82d/assets/_fingerprinted/3bc7ab81fe67babd0f71db9d6da0e720473458604b0ffe325e38006d94879cd9.png",
       "releases/9e2c4a38f6967da7704311f3d1a76c01546d732de325cad6c2cf4ad1b14bccd3/assets/_fingerprinted/7b00eb4b96c27664772d883f37a3bdb2deb007d6e4484e7808a1b286e25c1da1.png",
       "releases/9e4b33ed491b4d7a836ffec41fd3ff7f706af68b271f32f903d06e3d969b106d/_living/personal-formal-documents/bird-first-only.5a3ac2f79fb2/m0.31fa7d92f5.webp",
+      "releases/9e5bacb86ffd40f627e97ddf9548fa21d489b7ca15a69f7d6967110b03fb0cd2/assets/_fonts/pcconfig-memory-diagnostics-715d9704705a.woff2",
       "releases/9e6b5ecdb7835dfa10f9382e53effc0365e6271d01e4c6ad9b50f922a630609c/projects/wechatdirect/assets/hero-af25047d999386d0-mask.png",
       "releases/9e828fb4bf884a5c1a876cb822766bf6ee9232c5fcad2fb928ebd44db99a4e28/assets/_fingerprinted/cf1ac649cd52bae7e42f6f1c6490e519d6fda1ce801651fd02cf89093c28f45a.png",
       "releases/9e857a19bd9f53bac8c84c12445938be25c2c92d1735f3bdd5b383042c9a2710/assets/_fingerprinted/8b0c9c3ce897916373b7b305f78964b1af2e9efa51834c6f42cf822e04061926.png",
@@ -67635,7 +67889,6 @@
       "releases/a3ab83a7f234794cc82f70da3d833a49f2172944583f013ba6689248c62afb57/_shared/label-f8d7d5c654a4.avif",
       "releases/a3b51c9b2ff76e9c76b46928b824bd939d6e5e94f67f768f63f458d37678bede/assets/_fingerprinted/f12ce386cffa21ef65a6127dfea79c182cc811877b800a4a53c7f8329b37456e.png",
       "releases/a3b8a0a4a9312a7c8481ca4a96df6a13e1a9cc7f21beaf0e6010e7b2092ce12c/_shared/nav-b0cc204ea4e3.webp",
-      "releases/a3ce68f12782ee7a9a5f7d4c75221d73e9fe7e690a89d27f2961ed6aeba017e9/assets/_fonts/pcconfig-recovery-backup-b976c06e5247.woff2",
       "releases/a3e317e24ac224dddb68e5207d6059c44ff631cac6dfd393919b0502e92715f5/_typeset/runtime/live-sans-part-42b-74f10aeba4540292ceff.woff2",
       "releases/a3f6b794e90cb995689cab194dc08450c8159179b8afc57d615b0f66c265415e/skills/personal-media/assets/hero-3a7f608bdab259e8.mp4",
       "releases/a3f8b4c1a4d2a2c99b56fc2265b48ab7027a871c56dde2c63e66021cc1675fc7/_typeset/meshclip-kit/bf7a94107c4f1d0ea8d8-meshclip-kit-01-h.webp",
@@ -67692,9 +67945,9 @@
       "releases/a7172b1bb248b1f3a6a43b3fd2d38a93465e83b8081fe2d65b65b4ca57cee7e9/_typeset/rule-engineering-delivery/3670cab9846fb7289de3-rule-engineering-delivery-01-v.webp",
       "releases/a739033ec3073d80c9870ff8b968b06e31c47d9dcd91dc1f5f19491476d89a77/assets/_fingerprinted/221ee5da99dd4bcd2d636a62584d34405663986eebdce306093f0944b39360be.png",
       "releases/a769914fd760ca78336373199013bd9e18c3c36381e3462f53a1a8421d044828/_shared/source-frame-h.webp",
-      "releases/a76db8ccc5c90c04e65b3f81282f3f285a8642519b57c8b4c3a1c80d86c98278/search-projects.js",
       "releases/a77040e6981f1ebc4bddc7dfb4981fa63a7f1bccd6c06ed0329a38a063774405/_shared/nav-74d04bc95950.avif",
       "releases/a7781525b9e2f229b6ed784b6db1219dd77929c537cea4324f15d0fb1b3f510f/_typeset/runtime/live-sans-part-df-f27cf60e9598c70c9f62.woff2",
+      "releases/a78637caad52d2dd362a1cd32046047fa0489b5fae705db6e2bbb8ac727f25d8/assets/_fonts/agents-context-evidence-56b60386ebe6.woff2",
       "releases/a78d4656b6bfa26ea14bd04e9db7b05b5e0b4f09f016748b47199d74a7e57bbd/assets/_fingerprinted/aa7ca77e39a224702caac9e8912ad621cf1733790b43cd4fd81f6fcd73340882.png",
       "releases/a7b2c7974ca62d67054d76926a5de74235299a186ce2ef2a71d8b3361137ff56/_shared/leaf-3.webp",
       "releases/a7bf9e8246f513d899d6d69d76b5ad77e3a881520f7b791051bb207bc29faeea/_shared/nav-ec96df61bb-ed40e87cf03a.webp",
@@ -67855,6 +68108,7 @@
       "releases/afbb4a9a8814e9e5a01f96d1947e9d18a58bca377baf27783b7b2a56871ebddf/_shared/nav-6c8f61c25046.webp",
       "releases/afd4343b6f74d67183410f806e406db76e4d2f0de0765ae19f65ec44db6ebf99/_shared/nav-bdeaa8d446-99ce1c44fd2c.webp",
       "releases/aff2132429a4e0a57c558fed7c9cc19fd9da0451109a220bab01ced0180dfb1a/_shared/nav-unify-standard/nav-unify-label-04-8ac383a674.webp",
+      "releases/aff8720d6159c01f9a5b56f6e6eae276c59292cb07378cec7cb445eb51af36b5/assets/_fonts/agents-skills-plugins-938b0a978c74.woff2",
       "releases/b0077f33336bfcff73dbb43362a5cb5b81af92348cea983aa5b9160df3f0b67e/_typeset/skill-vault-workflow/56d4c31b14646072585f-skill-vault-workflow-01-h.png",
       "releases/b024be6573bc3e26a6a4d3f6da88d4ca11e5e2987e4c0a9882f6fb43de4306c1/_shared/nav-99aea2f913-11337d658ed0.webp",
       "releases/b0290a82e29f84ec2d8b220cf83989898bcc2163fc69954a686aa6ea02eb68a6/_shared/home-comic/a554b08e4d2a2e262568/assets/v-a-title-chars-3.png",
@@ -67988,6 +68242,7 @@
       "releases/b83e7fcc3ea3706d6ef3db5d1c77cae061e09c43ecc613b247be7d7b3f0e5429/_typeset/devconfig-backup/86caa49e2993461ab101-devconfig-backup-01-h.webp",
       "releases/b846a40a3eefa771cfc69204e9776b89863be0e4388982337a961a87869d7457/_shared/nav-b84e0bc14839.webp",
       "releases/b848afbffd5fd2ef3d54c351cc4004a108692745691c5bf9f0da28a89428c833/assets/_fingerprinted/d1c35bf5f908b94455d70bcd6f97110d9f101c758ac11b4bdf60e3f1d1d2940f.png",
+      "releases/b85fc55e64579325da184fdd47bfaa9e685231ca0a454d0258e31aa0d8b964e2/assets/_fonts/agents-authorization-owner-c254940206c2.woff2",
       "releases/b87d7f812307f47f65c2e982bfb202bf6e5aeccaf89c378d8a41a4248778eb1d/assets/_fingerprinted/bb4b0621fe58795226bd4d3d954bb08cc4dbd3d47fc22a598bbbac6e84f01988.png",
       "releases/b87dfafecf8e98384019468e9a1d6309f52031903dcb8e0c23edb04a7a0ba344/_shared/nav-unify-standard/nav-unify-label-63-0ceab1e2ae.webp",
       "releases/b8890658964f0026a71c7ddc78bb80ed8df6792a313415f24ab9f5a81d62bf48/_shared/home-comic/a554b08e4d2a2e262568/assets/v-a-title-chars-9.png",
@@ -68058,7 +68313,6 @@
       "releases/bbe12f822e39cde806de5304b562ab06e6af183f2993f39ac81918f9f86ef3bb/_shared/nav-fbcb5d6d6e0c.avif",
       "releases/bbeeae4b8ebe3c4fafbf755da862537aeeb289ed04344d1892f1a445dd2816fc/assets/_fingerprinted/9b8478b7f663559fbab87cb2dc68101ff9638c5e05538cd38a24c5bd22100796.png",
       "releases/bc079aa12b74e7ef76a69512d8f9bf181f99373c17806facea37935753a4d5c0/_shared/nav-7a7e13ca96-8a3fe0fc28d8.avif",
-      "releases/bc14897ccfbd5c117a6d5641d3e7443a0b4f2c3216c595e70d2660b55f8b3255/assets/_fonts/pcconfig-40825eae9fdb.woff2",
       "releases/bc27cfeda845eb2de8a92238f6ee20b191142e402c72a1c3bd19b1b99ca3feb2/_typeset/wechatdirect/60a26511f8fe176e7ecb-wechatdirect-01-v.png",
       "releases/bc42eeb4218ecf602b848f4d5c363d2532ecdb39989a40e88e87b81d01b21836/assets/_fingerprinted/31f39addcb5b95b699f9dd57d1a835e6baa1a0abe604d869e3fab45f0ba7943f.png",
       "releases/bc46add08622dc59717413340be54b919aadb947999548decb6f4ac550725cab/assets/_fingerprinted/9833f20f9217d1451fe0b0d9398104a815e8b42764c47014016b81dc29333368.png",
@@ -68204,7 +68458,6 @@
       "releases/c3ce87f6773a5155e50f2e97c4c0708d1cb6c2aa265bb78fd561f1ef422f770e/_shared/label-99aea2f9131a.webp",
       "releases/c3d0817acdf10082d3c3c1c5e1d94498872199d22cff74a26a86b80a6c046bc4/_living/skill-md-to-pdf/bird-source.c36d4f4c34a7/config.json",
       "releases/c3d935ca52cda7bde8ef7e781be8fab43f28d514bf1bd14cb6937fa064d499cc/_shared/nav-a6a91aec3d-4e640809e694.avif",
-      "releases/c3dec3778517dffd11e69e9f06ec98aab5633904409748fbd1c039a2656f7a12/assets/_fingerprinted/3e0a09d53efb1f05f024af8b6cc159336370626c813b7239515c1c0e0ef9a32a.png",
       "releases/c3f82b22c3055747837a9c3a248e2838e3d79e8c5e479da3da2739eb77c9b95f/_typeset/runtime/live-sans-part-a4-e693f1852b643a118298.woff2",
       "releases/c402015a70463a68130867e3026e3a66a1a177e40514323a2192b067bebb291a/assets/_fingerprinted/a17733ae031a32e99492ccd65da9b09418d912d572b6663f79b80a8a15b40607.png",
       "releases/c407740e0ba0b50b2b2edf83b63fa4f7227583a0b27f616a399098d249a86055/_shared/nav-81c30b16b8-6ccd585c3a64.webp",
@@ -68290,7 +68543,6 @@
       "releases/c81af7155ba6bccdba5ee60055ccdb2eef8e056b315fd1e5ae2f6945fc948acc/_shared/bar-skill-h-912355d1114f.webp",
       "releases/c81b316dd801187cd4ec242a1ab14311e4ed85720c79df44372df79541ebd19e/assets/_fingerprinted/c88aa19deb5d2b0d5d74a1e7b5fd5cb57d8601d97b1b87014f1e742c829ecb4d.png",
       "releases/c83c6548c0b691a3e9c6e20a67f5e7279e5cfb29c880f944be97a329fb8f6252/assets/_fingerprinted/6d1e06c155e623fdf4ced3b56fb9569896cceaa29190c7bf6fc3712cf34e1cd1.png",
-      "releases/c83ec3c391b759c698d8bb5a9d4b4d196575fe3a4fda3d24239b7549c1c91a68/assets/_fonts/agents-protected-policy-63837878dc0b.woff2",
       "releases/c84a7ed6de668b798cb6687b6f6083f8ee9cf655fca6157fed3705dc130ec498/assets/_fingerprinted/86e8394910ce6d8cf53a91b17644551a64dc44c8220b6eca4d2958a1801e716a.png",
       "releases/c85c9603bb858d6b8e1c91bbf7432e032e3c1737c63131a5c02122f10cf59e26/assets/_fingerprinted/649e25efdd50e58d531d348614f81c4d396b75a8b9d4e0f37788184ba4e359ec.png",
       "releases/c8696a56ede40e834622e9d0e199b8ba790f70c9303bb6e7efc393265e6ae24b/assets/_fingerprinted/dd0c571cb6a24a92e44ee8d6c64266fce15ec197a3e84502ccfc185e6a74dcfc.png",
@@ -68488,7 +68740,6 @@
       "releases/d2e7a4fa10166d534ee2425aea1f989458ddcb5f742f065d5e7c713bf6cf98f8/assets/_fingerprinted/e1afeb0741e51e0ae9cfe8d0b0cdcf730bce4027c1f7cbb4e3d656e3095ad409.png",
       "releases/d3100cd20a66da2d55b3782802f64b444862e9524b9b33bd3c9b602bcb9a183e/assets/_fingerprinted/4a63e2744b92573bc72e9269c10395c520262646d5871d211a634dba063bde0e.png",
       "releases/d320abfd8f74c8fc82179a69f09b97d2123682adf646b024c9c23d0dda1b7d48/assets/_fingerprinted/b186bb24eef6cac2d549deaeced178417e179f19a92cb68f85becbb5f59c3efb.png",
-      "releases/d32974ece4883cf656129bb5500dfeb65be667c6feb3b857ad159a973136e772/assets/_fonts/agents-working-tree-hot-mirror-80870977e691.woff2",
       "releases/d32f97a6f70bf4bfe496266266c2dded4386c9fc663cbe294f331b22c10c27e9/_shared/home-comic/295cd8bc1e8a248d5bbb/assets/h-a-title-chars-2.png",
       "releases/d332da40842605d30ca35c3f91be1addcdfe0d0b29255b0f3bfff53bb7aea577/_living/computer-access/bird-first-only.48411392826b/m1.fe0edb5a66.webp",
       "releases/d33c6db72bf2df3f1efbe82bc0cf0aae4b9217f12f523f354162d0fa91d44c15/assets/_fingerprinted/8d5cf593094697bd2d35227971c9f061d46788d15b0f355bdd65a6c6ac8f32ea.png",
@@ -68615,6 +68866,7 @@
       "releases/daf3b6f623ec6f43cefec4f6fa34715accdfbc10371da0f7c6d158962346c283/_runtime/a6cc6fd23260282bd584/live-sans-page-a6cc6fd23260282bd584.woff2",
       "releases/dafba5b29308a5511c457a6a4c905f8061fb8ab256c88a9629b63b27ca0a815e/assets/_fingerprinted/00d4a9f298cf25e14a6c206ddaad341f729ee98f1403b331c40e86ba71438c59.png",
       "releases/dafcd5a7c5ecb0e98bdfdcc52b02ed37e9ff972fdeb64ac3b89d31687612a5de/assets/_fingerprinted/36d40b898bbff6101559d7b620b6d503fa2a787dbda02d9f3561db82e09df672.png",
+      "releases/db0e9de0a69580ec9e13d8722e9cd30a66d5a2659fcbac3f6c61481b85d45b3c/search-index.js",
       "releases/db1e511fa7b0918f8973f00ffd474ce9a822f00bfba7977fed44fca6edbf2f9c/assets/_fingerprinted/6e929edf956111ef8ae5ce8f7954043ad7398f20e45e09ccce5cb9ecd38a085d.png",
       "releases/db2030269c3124f9aa2ffcf335fad6dff481073e6bbee8127c728b241155bb87/_typeset/runtime/live-sans-part-57-cb26748a2ba04283602e.woff2",
       "releases/db381d8f40791ae962facf7564840dc7577f5ad8923f317c34fe002857b13b79/assets/_fingerprinted/15c8f97c699af6e0f33196fdd89066ffdcfefaefda78cddcf2e19939730107dd.webp",
@@ -68682,6 +68934,7 @@
       "releases/de5fe509d73ec17baa2c3b5180cf150b81bd424538412e886faf1ffe2911f75b/assets/_fingerprinted/ab23b97a336917ee019a42ef6999a86d304da6ba0d43b16598cb5249a09848ac.png",
       "releases/de64a87e350f260a795c9a425e2330a3e28c6e9e99874ff47b7aabf8b5148b0f/_shared/nav-e7b1605b49-09c40337a650.avif",
       "releases/de64f0c88e6901450595f18ae698cbc881261ba6c4b64da8f6935f9771a2a3ab/_runtime/367b767828afda487848/live-sans-page-367b767828afda487848.woff2",
+      "releases/de68d5caa504890606927eb9788a5c9b1031f35bdef5a6b2b684622a5fc5ba4e/assets/_fonts/agents-rules-contracts-9dfb5a00b2ee.woff2",
       "releases/de71c6fa06288a8d75091c8d464bec4f17871383e8e1901f23b8851bde76c307/_typeset/rules-home/75eb02dd2991748e388d-rules-home-01-v.png",
       "releases/de7511400ab99aea1c20116713757b3a86a656cc5deb0f2ef42ceec8313952ac/assets/_fingerprinted/648d425c80394c882c4f0d6bcdb1ebac0284e3e26144f82c13f2f9cad62b667a.png",
       "releases/de7c3b1fe6291478a1662ebc3d5a7a8f5462d42e799e6a0ba51c54189284aeec/assets/_fingerprinted/d2e4c70ecb430e719cbb90667b9cc0920c668ab503ec15b96d2e4be0acc9154f.png",
@@ -68870,7 +69123,6 @@
       "releases/e9bfbcd0aefec1b5e85b016acb1753a2b7d3b24cb13e979524703e73ca270aec/_shared/label-aa8446366b2c.avif",
       "releases/e9ce4a3827fea7e75e39243ae06c3dd4c804653fc9d4be48e43110b3636623b8/_typeset/runtime/live-sans-part-59d-b2cdd9094b2dab63f6b0.woff2",
       "releases/e9dad666cf2ea0c929476ea40bb0d9a71fca4045ab8def74b16a75d1c1e082dd/_living/skill-pdf-render-safe/bird-first-only.fcd507590afd/config.json",
-      "releases/e9db51794d283b35c591c26d515b30b442240096c99298725ced6beedf1d9c6a/assets/_fonts/agents-capability-routing-5fe8aa295c02.woff2",
       "releases/e9ecde1c300a0bad68cea8061871fce58c560ad27251d49aea6ce5d8b657235f/_shared/nav-7c69cd876f1c.webp",
       "releases/ea2031488fba32594063fc5073e4d28ca98134c9c8304cdd5e4a284ae5deff69/assets/_fingerprinted/c2c9edb6c47b22e0a24e38458bb3d2fc9134f5c020ac65fdc3fa5ebba098fcd6.png",
       "releases/ea255cef8c9e42f7e3a5dc39253c370da24f4760d9164f5747ef65945c987389/_typeset/rule-privacy-data/a24d6f45561757555b66-rule-privacy-data-01-v.png",
@@ -68991,7 +69243,6 @@
       "releases/f0b7b8aac853df52fe5f16b8ec6386f9828d1e74124b697a5ae30847034c7dba/_shared/nav-cfd12e1e0ea5.webp",
       "releases/f0b86341e229d5e012fe986c5b3881d0ff586bcb90cc310c88688ac994a19c3d/assets/_fingerprinted/50d45568850fb10631a3459798a37f013ede16c1de746dbc01d784f8ba555b92.png",
       "releases/f0c68437348f8b2b58b7a886c18ae35169b3bc0c5f36c1b1168a94137d4eaee2/_typeset/rule-codex-adapter/235cea457435705f3066-rule-codex-adapter-01-v.png",
-      "releases/f0d5d827f567aa1b3e18644144de8311fd12f0f5b72adb88c4022423b608b9d1/assets/_fonts/pcconfig-owner-takeover-347fd4eab949.woff2",
       "releases/f0daf567f18cd1cd994a1350c5b9ea481383ed7f0a30492ed03b98793769bd8a/projects/personal-media/assets/hero-ac3e8f3893a033b9-mask.png",
       "releases/f0df334681d6b73ca3b3f598db8745db51a13d1d763a619758731db4ab08cca5/_typeset/runtime/live-sans-part-568-8c671d00ea632fe996fd.woff2",
       "releases/f0e1e0c9e6cc6364a2f14d9ec64107b3e0bc3423975d2b7e86193252a324d9d8/_shared/home-living/assets/plate-h-white-bio-white-gear-57be1bc7bcaf.webp",
@@ -69120,7 +69371,6 @@
       "releases/f84bcbc4e460132812c4f17cdfb6c9e68aae4b6bb5cc7452d01f060257d3b0ff/assets/_fingerprinted/3b288e0879d8fc1dc30d80151c14797db104c126aca76f65da4f815458340b58.png",
       "releases/f86935201dcee9586942d04657662d44a34e614cd0902c6e8ff190a4840252dc/_typeset/skill-local-secret-broker/a5fa9ab389190efcf2ee-skill-local-secret-broker-01-v.webp",
       "releases/f86efb6e4a1ed38aa106836e26dd5cb29aeff982c8d72ad6bfe616b8f251b40a/_shared/label-967cdf93a037.avif",
-      "releases/f895003dcac5e6f9824a7329d1d33a27452306ba869f2989875d1ede0f9818f1/assets/_fingerprinted/f5abf16594ab04959c5db550ea13be8497df346b1bb3d72bf1d4a3491b4d2f9d.png",
       "releases/f8a7f892630e388fc500c14dadcfce5699a776315775426e882de131a7911314/assets/_fingerprinted/2f4f92edf4540c73466397c182503a8954787a6fd79968ced95de16f484dcb2d.png",
       "releases/f8c619d4f64a0d15851ed129d4ced4c9d7accb7ab1375508c2555d4228c38947/assets/_fingerprinted/0265bef3f9e43be1dba19a77de7574bce45a18faa42666797ceabdc0806bf861.png",
       "releases/f8d2783314d6e3acc24c335898ca4eac410a1b086cb6b65a40faefbedc3bfdee/_typeset/computer-access/f7f4ca763a1e2ba1e14d-computer-access-04-h.png",
