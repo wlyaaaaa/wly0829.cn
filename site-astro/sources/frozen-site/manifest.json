@@ -1486,11 +1486,6 @@
       "bytes": 37091,
       "source_path": "site-astro/sources/frozen-site/assets/_album/routes-ffe910e1de77db43a678.json"
     },
-    "_astro/typeset-motion.IllL0OXg.js": {
-      "sha256": "8a8d8f4fd908801717a346d387cac5271e173260c025421a7d3a1db714edbbf9",
-      "bytes": 10728,
-      "source_path": "site-astro/src/scripts/typeset-motion.js"
-    },
     "_astro/_..CpcWxtX4.css": {
       "sha256": "cffca0cadcf876f1fd55825824740b06033a8b929f11ee15ffce9e30d1ba7bce",
       "bytes": 12955,
@@ -19316,7 +19311,10 @@
       "source_path": "public/media/vault-tool/synthetic-roundtrip.json",
       "bytes": 4231,
       "sha256": "4add06a29a8b12f68a9f41783bb859a4463c546bc014ec3eaf69940800211c36"
-    }
+    },
+    "_living/timeaudit/bird-perch.63b06bbc2127/config.json": {"sha256":"63b06bbc2127d0c8df6b98db849f2cb1e5d15b6fa41fb034ac978dfe92264fb8","bytes":16117,"source_path":"site-astro/sources/project-bird-perches/timeaudit.json"},
+    "_living/video-scaffold/bird-perch.ba7c1fa9e3b6/config.json": {"sha256":"ba7c1fa9e3b65aee2871ff8a65789842679e794087d20f1c6dadf86a414993ff","bytes":13942,"source_path":"site-astro/sources/project-bird-perches/video-scaffold.json"},
+    "_living/pcconfig/bird-perch.0b5098ed5b16/config.json": {"sha256":"0b5098ed5b1617a7c3fc11544a5a0efdb8dc05c43decdcec1ea7ebeebd29d837","bytes":21665,"source_path":"site-astro/sources/project-bird-perches/pcconfig.json"}
   },
   "inherited_assets": {
     "2h-20261007-bird-atlas/404/assets/b2-live-596a4d1cf321.css": "404/assets/b2-live-596a4d1cf321.css",
@@ -55309,6 +55307,7 @@
     "_shared/home-app-92ff384787b4b26d0794.js",
     "_home-cockpit/cockpit-offline.css",
     "_home-cockpit/cockpit-offline.js",
-    "_astro/toc-consistency.BlshGbYK.js"
+    "_astro/toc-consistency.BlshGbYK.js",
+    "_astro/typeset-motion.IllL0OXg.js"
   ]
 }

@@ -102,7 +102,7 @@ const tail = rt ? withoutTocRuntime(rt.tail).replace(`/_living/_engine/${livingE
       ))}
     </div></div></nav>
   )}
-  <main id="content" class="paper ts-page">
+  <main id="content" class="paper ts-page" data-entry-motion={['how', 'skills-home'].includes(page) ? 'cards' : undefined}>
     <script is:inline>(()=>{const m=document.currentScript.parentElement;const z=()=>{const w=m.clientWidth;if(!w)return;m.style.setProperty('--tz-h',String(w/1672));m.style.setProperty('--tz-v',String(w/941));m.style.setProperty('--tz-card',String((innerWidth<768?w:(w-16)/2)/1672));};z();new ResizeObserver(z).observe(m);
 const fit=()=>{for(const c of m.querySelectorAll('.ts-canvas')){const o=c.parentElement,h=c.offsetHeight;if(h&&h>parseFloat(o.style.getPropertyValue('--ch')))o.style.setProperty('--ch',h+'px');}};document.fonts.ready.then(fit);addEventListener('load',fit);document.addEventListener('site-live-layout',fit);
 const activate=e=>{if(!(e.target instanceof Element))return;const t=e.target.closest('.ts-canvas [data-href]:not(a):not([data-hot="live"]),.rule-original-prose a[data-href]:not([href])');if(!t)return;

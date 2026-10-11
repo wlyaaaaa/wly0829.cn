@@ -84,8 +84,14 @@ def sync_search(root, previous, converted, pin, changed_routes):
     for rel in ('search-index.js', 'search-projects.js', 'search-project-localocr.js'):
         obj = previous['oss']['objects'][rel]; old = root/rel
         if not old.is_file(): seed_file(rel, old)
-        rows = nav.search_records(old.read_text('utf8')); kept = [row for row in rows if row['href'].split('#')[0] not in changed_routes]
+        rows = nav.search_records(old.read_text('utf8')); kept = []
         added = [row for row in generated if (row['type'] == '项目内容') == (rel != 'search-index.js') and (rel != 'search-project-localocr.js' or row['projectSlug'] == 'localocr')]
+        for row in rows:
+            if row['href'].split('#')[0] not in changed_routes:
+                kept.append(row)
+            else:
+                match = next((i for i, value in enumerate(added) if (value['type'], value['href']) == (row['type'], row['href'])), None)
+                if match is not None: kept.append(added.pop(match))
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False).replace('<', '\\u003c') + ';\n').encode())
         replacements[obj['url']] = '/' + rel
