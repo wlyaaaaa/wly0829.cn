@@ -5,12 +5,13 @@ import homeCta from '../public/_home-cockpit/home-cta.css?raw';
 import albumRuntime from '../public/_album/astro-runtime.json';
 import motionRuntime from '../public/_living/quality-runtime/manifest.json';
 import typesetStyles from './styles/typeset-page.css?raw';
+import accessFixes from './styles/access-fixes.css?raw';
 
 // 保留候选站完整文档；不经过内容页的屏幕清单或动效坐标转换。
 export function retainedPage(page: 'home' | 'computer-access') {
   const activate = (document: string) => document.replace('</head>', '<script src="/_live/site-live-runtime.js" defer></script></head>')
     .replace(/<script\b[^>]*\bdata-src="[^"]*b2-(?:typeset|live)-[^"/]+\.js"[^>]*>/g, tag => tag.replace(/\sdata-album-runtime\b/g, '').replace('data-src=', 'src='));
-  if (page === 'computer-access') return activate(access).replace('</head>', '<link rel="stylesheet" href="/_interactions/anchor-offset.css"></head>')
+  if (page === 'computer-access') return activate(access).replace('</head>', `<link rel="stylesheet" href="/_interactions/anchor-offset.css"><style data-access-fixes>${accessFixes}</style></head>`)
     .replace('</body>', '<script src="/_interactions/anchor-offset.js" defer></script></body>');
   let html = page === 'home' ? home : access;
   for (const [from, to] of Object.entries(motionRuntime.urls)) html = html.replaceAll(from, to as string);

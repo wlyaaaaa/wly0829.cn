@@ -22,6 +22,14 @@ export function when(v, now = new Date()) {
   return `${Number(m)}月${Number(dd)}日 ${hm(d)}`;
 }
 
+// 截止时间一律带日期：“10月12日 13:37”（安全和授权一栏用，北京时间）
+export function dateHm(v) {
+  const d = parse(v);
+  if (!d) return '';
+  const [m, dd] = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, month: 'numeric', day: 'numeric' }).formatToParts(d).filter((x) => x.type !== 'literal').map((x) => x.value);
+  return `${Number(m)}月${Number(dd)}日 ${hm(d)}`;
+}
+
 export const isToday = (v, now = new Date()) => { const d = parse(v); return !!d && day(d) === day(now); };
 
 // 灯色：ok 绿、attention 黄、red 红；没读到、正在读、正常关着都是灰
