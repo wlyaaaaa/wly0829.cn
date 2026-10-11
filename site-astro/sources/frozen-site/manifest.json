@@ -430,7 +430,13 @@
     "/projects/personal-media/local-ingest/",
     "/projects/personal-media/phone-preservation/",
     "/projects/personal-media/phone-recovery/",
-    "/projects/personal-media/search-browse/"
+    "/projects/personal-media/search-browse/",
+    "/projects/learning/authoritative-research/",
+    "/projects/learning/dialogue-revision/",
+    "/projects/learning/human-control-simple/",
+    "/projects/learning/plain-language/",
+    "/projects/learning/questions-validation/",
+    "/projects/learning/route-checkpoint/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
