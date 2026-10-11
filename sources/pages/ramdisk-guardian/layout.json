@@ -311,18 +311,14 @@
       {
         "type": "points_card",
         "whole_block": true,
-        "text_ref": "触发盘里缓存不超过8GiB，同时有下面任何一种证据：",
-        "row": "gates",
-        "width": "35%"
+        "text_ref": "触发盘里缓存不超过8GiB，同时有下面任何一种证据："
       },
       {
         "type": "flow",
-        "columns": 1,
-        "direction": "vertical",
+        "columns": 4,
+        "direction": "horizontal",
         "connector": "arrow",
         "illustration": "above_card",
-        "row": "gates",
-        "width": "40%",
         "text_ref": "第一关确认是持续的连续3次读数（每5秒一次，前后至少跨10秒）都这样才算；两次读数隔超过30秒就重新数。",
         "icons": [
           "_library/icons/秒表.png",
@@ -333,9 +329,7 @@
       },
       {
         "type": "points_card",
-        "columns": 1,
-        "row": "gates",
-        "width": "25%",
+        "columns": 2,
         "text_ref": "动手用Primo的命令把这块盘清空重建→回读卷标→补文件夹、说明和就绪标记→把空盘存回镜像→再读一次内存"
       },
       {
@@ -343,7 +337,7 @@
         "text_ref": "前三关是9月18日加的，第四关的“按盘号认准”是9月8日加的；这以后还没遇到过要重建的时候，所以在全部功"
       }
     ],
-    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版：左上标题。左边约 35% 宽一张“触发”卡片（画一根被压扁的内存条和一个指针偏红的小仪表）。中间约 40% 宽是自上而下的四道“关”：四扇依次排开的小木门，每扇门上一个编号圆牌，门旁粗体关名加一两行小字，门与门之间绿色箭头。右边约 25% 宽：上面“动手”卡片（一把扫帚扫出绿色光点，光点流回一根内存条），下面“出错”卡片（一个小红叉）。最下面一条横跨整屏的浅灰细卡片放最后一段说明。",
+    "notes": "横版：标题；全宽触发说明；四道关按第一关至第四关从左到右横排，图标在各关卡上方，绿色箭头依次连接；动手和出错两张卡并排；全宽说明。保持全部原文和四个图标，避免短说明与竖向四道关同排形成大块栏底空白。",
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ramdisk-guardian\\img\\ramdisk-guardian-05-h.png",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\ramdisk-guardian\\img\\ramdisk-guardian-05-h.png"
