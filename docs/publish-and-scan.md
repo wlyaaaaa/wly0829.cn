@@ -31,6 +31,30 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 成品仓库包含全部 Pages 文件、资源清单和成品身份，部署工作流只保留在 `main`，源码工作树不切分支。关闭 Git 换行转换后逐文件核暂存 blob 原始字节；普通 push 不强推。`--source-commit <40位源码SHA>` 可说明成品对应的源码，优先使用成品已有构建回执；缺失写 `Unknown`，不把当前源码 HEAD 冒充构建证据。
 
+## EdgeOne live 函数单独发布
+
+`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。修改 `edge/edgeone/edge-functions/[[path]].js` 后，需要单独发布这个函数包；前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。
+
+北京时间 2026 年 10 月 12 日的已核实配置与结果：
+
+- 现有项目名 `wly-edgeone-trial-20261006`，项目 ID `makers-lrgrecs7uvjl`；生产域名为 `live.wly0829.cn` 和 `eo-test.wly0829.cn`。
+- 项目采用直接上传，尚未关联 Git。框架、根目录、输出目录、编译命令与安装命令均为空或未设置；控制台 Node.js 版本为 `22.11.0`。
+- 从远端 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录打包，ZIP 根下只有 `edge-functions/[[path]].js`。该纯函数包无需补 `index.html`、`package.json` 或 `edgeone.json`，已在现有项目实际部署成功。
+- 成功部署 ID `dpyqa3wa7o0h`，部署时间为北京时间 2026 年 10 月 12 日 02:42:38；公网 `https://live.wly0829.cn/computer-access/state?view=cockpit` 已返回 `pcconfig.cockpit-view.v1`。响应大小随当前数据变化，不用固定字节数判定是否成功。
+
+当前可执行的发布步骤：先 fetch 远端 main，在 E 盘任务专用目录准备 ZIP，然后在上述现有项目的“新建部署”中上传为生产部署，不改域名或 DNS。打包命令在网站仓库工作树执行：
+
+```powershell
+git fetch origin main
+git archive --format=zip --output="E:/Cache/Codex/Temp/<任务目录>/edgeone-live-release.zip" origin/main:edge/edgeone
+```
+
+ZIP 根必须直接包含 `edge-functions`，不能多套一层 `edge/edgeone`。记录本次远端提交与部署 ID；平台显示成功后，再对公网主入口执行现行 live 验收，确认精简视图和实际转发行为。发布失败保留原部署并报告失败；只有平台成功记录还不足以代替公网回读。
+
+**自动部署当前尚未启用，也尚未完成无人值守部署实测。** 现有控制台出现 Git 关联入口，但[官方直接上传说明](https://pages.edgeone.ai/document/direct-upload)仍写直接上传项目不能切换为 Git 集成；必须以这个现有项目真正关联、部署成功及公网回读为准，不能据入口存在就宣称已支持。若现有项目实际支持关联，配置目标是仓库 `wlyaaaaa/wly0829.cn`、生产分支 `main`、根目录 `edge/edgeone`，开启自动部署；发布范围仅为函数目录，不接入网站全站构建。完成后，还应通过一次不操作浏览器的 main 推送验证自动发布。
+
+若 Git 关联无法完成，备选是[官方 EdgeOne CLI](https://pages.edgeone.ai/document/edgeone-cli)部署到同一现有项目。官方 API Token 是账号级凭据，不能描述为仅限单个项目；令牌只存密码中心，由正式程序供给入口送入部署进程，不写入仓库、普通配置、日志或文档。目前尚未交付该供给脚本或完成 CLI 实测，因此不能把这条备选当作现成的一条命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
+
 ## 扫描做什么
 
 `changed` 优先读取 `.build-receipt.json` 的 `rebuilt_pages`；没有回执时，比较当前页面 SHA256 与同一输出目录里上一份扫描记录。第一次没有记录时扫描所有页面。检查未完成的页面不会记成已完成，因此下次仍会选中。`--out <目录>` 可保存独立的一次验收，默认写到 dist 同级 `scan-glance`。
