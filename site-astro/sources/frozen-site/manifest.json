@@ -459,7 +459,13 @@
     "/projects/daily-preferences/mobile-context-delivery/",
     "/projects/daily-preferences/personal-understanding/",
     "/projects/daily-preferences/recommendation-choice/",
-    "/projects/daily-preferences/source-coverage/"
+    "/projects/daily-preferences/source-coverage/",
+    "/projects/localocr/document-structure/",
+    "/projects/localocr/input-routing/",
+    "/projects/localocr/installation-recovery/",
+    "/projects/localocr/jobs-cache/",
+    "/projects/localocr/results-evidence/",
+    "/projects/localocr/runtime-resources/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

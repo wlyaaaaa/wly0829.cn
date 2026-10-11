@@ -33,11 +33,11 @@
         "illustration": "top_inside",
         "icons": "auto",
         "expected_cards": 4,
-        "text_ref": "16,074次识别，共14,977份材料"
+        "text_ref": "16,074次识别，共14,976份材料"
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年10月10日05:17（北京时间"
+        "text_ref": "截至2026年10月11日14:00（北京时间"
       },
       {
         "type": "action_button",
@@ -77,11 +77,11 @@
         "illustration": "top_inside",
         "icons": "auto",
         "expected_cards": 4,
-        "text_ref": "16,074次识别，共14,977份材料"
+        "text_ref": "16,074次识别，共14,976份材料"
       },
       {
         "type": "prose",
-        "text_ref": "截至2026年10月10日05:17（北京时间"
+        "text_ref": "截至2026年10月11日14:00（北京时间"
       },
       {
         "type": "action_button",
@@ -681,11 +681,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "此刻服务没在监听"
+        "text_ref": "10 月 11 日 13:33 服务没在监听"
       },
       {
         "type": "prose",
-        "text_ref": "代码：6,929行程序（Python、PowerShel"
+        "text_ref": "代码：6,903行程序（Python、PowerShel"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：横版：左上标题。左边约 40% 宽一幅水彩示意图：一个 Windows 窗口里套着一个小企鹅图标的 Linux 盒子（WSL2），盒子里一个小服务器图标，下面一块显卡，显卡旁一个戴帽子的“调度员”小人，手里三张号牌：“文字识别”“语音转写”（两张并排都亮）、“本地大模型”（单独、灰着）。右边约 60% 宽五张横向小卡片上下排，每张粗体一句加小字。最下面一行灰色小字。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\n2026-10-04 大空白专查（AI实施；本人本轮明确授权重排）：主图与前两条说明组成30/70上栏，其余三条整宽三列，五条原文和五幅图按原序保留。 仅更改单页排版规格，不改定稿字句和素材文件。\n插画实际复验：target_height与target_width按素材完整自然比例成对设置，不把单独max-height压成扁图；原图字节不变。"
@@ -729,11 +729,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "此刻服务没在监听"
+        "text_ref": "10 月 11 日 13:33 服务没在监听"
       },
       {
         "type": "prose",
-        "text_ref": "代码：6,929行程序（Python、PowerShel"
+        "text_ref": "代码：6,903行程序（Python、PowerShel"
       }
     ],
     "notes": "本轮仅用已有文字材料核对；未查看图片。构图依据：竖版：标题；示意图占满宽；五张卡片一行一张；灰色小字在最下面。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
