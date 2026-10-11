@@ -1,6 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readdir, readFile, stat } from "node:fs/promises";
+import { mkdir, readdir, readFile, rename, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -9,6 +9,7 @@ const projectRoot = path.resolve(scriptDirectory, "..");
 const distArgument = process.argv.indexOf("--dist");
 if (distArgument >= 0 && !process.argv[distArgument + 1]) throw new Error("--dist requires a directory");
 const distRoot = distArgument >= 0 ? path.resolve(process.argv[distArgument + 1]) : path.join(projectRoot, "dist");
+const forceFull = !process.argv.includes("--incremental") || process.argv.includes("--full") || process.env.SITE_PUBLIC_FULL === "1";
 const secretPatterns = [
   ["OpenAI-style key", /\bsk-[A-Za-z0-9_-]{20,}/],
   ["GitHub token", /gh[pousr]_[A-Za-z0-9]{20,}/],
@@ -78,7 +79,7 @@ if (distFiles.includes(manifestPath)) {
           "s=importlib.util.spec_from_file_location('public_finalized',sys.argv[1]); o=importlib.util.module_from_spec(s); s.loader.exec_module(o)",
           "d=pathlib.Path(sys.argv[2]); m=o.read(d/o.MANIFEST)",
           "assert m.get('finalized_dist'), 'Run finalize-dist before the public gate'",
-          "o.finalize_dist(d)"
+          `o.finalize_dist(d, full=${forceFull ? "True" : "False"})`
         ].join("\n"), path.join(scriptDirectory, "prepare-oss-release.py"), distRoot
       ], { cwd: projectRoot, windowsHide: true, stdio: "pipe" });
       remoteJavaScriptCount = Object.keys(manifest.oss.objects).filter(relative =>
@@ -100,6 +101,25 @@ if (distFiles.length && !distJavaScriptFiles.length && !remoteJavaScriptCount) {
 }
 
 const files = [...new Set([...sourceFiles, ...distFiles])];
+const cachePath = path.join(projectRoot, "site-astro/.cache/public-content.json");
+let cache = {};
+try { cache = JSON.parse(await readFile(cachePath, "utf8")) || {}; } catch (error) {
+  if (error?.code !== "ENOENT" && !(error instanceof SyntaxError)) throw error;
+}
+// A passed byte scan is reusable only under the same checker and rule sources.
+const policyFiles = files.filter(file => {
+  const relative = path.relative(projectRoot, file).replaceAll("\\", "/");
+  return relative.startsWith("sources/rules/") || ["AGENTS.md", "config/assembled-rules-pin.json",
+    "scripts/verify-public-content.mjs", "scripts/prepare-oss-release.py", "scripts/astro_rules.py"].includes(relative);
+});
+const policyDigest = createHash("sha256");
+for (const file of policyFiles.sort()) policyDigest.update(file).update("\0").update(await readFile(file));
+const policy = policyDigest.digest("hex"), full = forceFull || cache.policy !== policy;
+const accepted = {}, scanned = new Set();
+async function stamp(file) {
+  const value = await stat(file, { bigint: true });
+  return [value.size, value.mtimeNs, value.ctimeNs].map(String).join(":");
+}
 
 function inspectBytes(bytes, relative) {
   const latinText = bytes.toString("latin1");
@@ -115,14 +135,30 @@ function inspectBytes(bytes, relative) {
   }
 }
 for (const file of files) {
-  inspectBytes(await readFile(file), path.relative(projectRoot, file).replaceAll("\\", "/"));
+  const before = await stamp(file), previous = cache.files?.[file];
+  if (!full && previous?.stamp === before && /^[a-f0-9]{64}$/.test(previous.sha256 || "")) {
+    accepted[file] = previous; continue;
+  }
+  const bytes = await readFile(file);
+  inspectBytes(bytes, path.relative(projectRoot, file).replaceAll("\\", "/"));
+  scanned.add(file);
+  if (await stamp(file) !== before) throw new Error(`File changed during public scan: ${file}`);
+  accepted[file] = { stamp: before, sha256: createHash("sha256").update(bytes).digest("hex") };
+}
+if (!findings.length) {
+  await mkdir(path.dirname(cachePath), { recursive: true });
+  const temporary = `${cachePath}.${process.pid}.tmp`;
+  await writeFile(temporary, JSON.stringify({ policy, files: accepted }));
+  await rename(temporary, cachePath);
 }
 
 const report = {
   schema: "wly.public-content-gate.v1",
   status: findings.length ? "block" : "pass",
-  source_scanned_file_count: sourceFiles.length,
-  dist_scanned_file_count: distFiles.length,
+  scan_mode: full ? "full" : "incremental",
+  source_scanned_file_count: sourceFiles.filter(file => scanned.has(file)).length,
+  source_total_file_count: sourceFiles.length,
+  dist_scanned_file_count: distFiles.filter(file => scanned.has(file)).length,
   dist_total_file_count: distFiles.length,
   production_html_count: distHtmlFiles.length,
   production_javascript_count: distJavaScriptFiles.length,
@@ -133,7 +169,8 @@ const report = {
   production_remote_content_evidence_reused_count: remoteEvidenceCount,
   inherited_remote_content: { measurement: "not_rechecked", reason: "Local finalized inventory is verified; absent inherited OSS bodies are not re-fetched by this gate" },
   ui_gate: process.env.GITHUB_ACTIONS === "true" && hasOssManifest && distRoot === path.join(projectRoot, "dist") ? { status: "warning", measurement: "not_performed", reason: "UI measurement lacks local OSS asset bodies in this CI checkout; this is not a pass" } : null,
-  scanned_file_count: files.length + remoteArtifactCount,
+  scanned_file_count: scanned.size + remoteArtifactCount,
+  verified_cache_used_count: files.length - scanned.size,
   finding_count: findings.length,
   findings
 };

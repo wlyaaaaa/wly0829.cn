@@ -97,4 +97,16 @@ class MarkdownSyncTests(unittest.TestCase):
         self.assertEqual(self.converter.OUT_PUBLIC, str(self.site / 'public'))
         self.runner.assert_not_called()
 
+    def test_unchanged_manual_body_skips_conversion_but_inputs_invalidate(self):
+        self.md.write_text(self.md.read_text('utf8') + '\nManual body.', encoding='utf8')
+        records = self.sync(self.previous)
+        with patch.object(build, 'converted_markdown_matches', wraps=build.converted_markdown_matches) as check:
+            records = self.sync(records); check.assert_not_called()
+            (self.source.parent / 'layout.json').write_text('[]', encoding='utf8')
+            records = self.sync(records); self.assertEqual(check.call_count, 1)
+            script = self.site / 'tools/convert_page.py'; script.parent.mkdir(parents=True)
+            script.write_text('# converter changed', encoding='utf8')
+            self.sync(records); self.assertEqual(check.call_count, 2)
+        self.assertIn('Manual body.', self.md.read_text('utf8'))
+
 if __name__ == '__main__': unittest.main()

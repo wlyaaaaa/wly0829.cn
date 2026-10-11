@@ -84,6 +84,11 @@ class OssReleaseTests(unittest.TestCase):
         text=b'const atlas={image:"bird-atlas.webp"}; img.src=base+atlas.image;'
         current=oss.Rewriter({owner:{},'_living/_engine/bird.fixture/bird-atlas.webp':{}},'https://example.oss.invalid','releases/one','https://wly0829.cn',version=6)
         self.assertEqual(current.rewrite(text,owner),text)
+        cache = oss.FinalizeCache(self.source, False, {}); atlas = '_living/_engine/bird.fixture/bird-atlas.webp'
+        current.asset_keys = {rel:'releases/new/'+rel for rel in (owner, atlas)}; current.retained = {rel:{'url':current.base+'/releases/old/'+rel} for rel in (owner, atlas)}
+        self.assertEqual(cache.rewrite(current, text, owner), text)
+        current.retained.pop(owner)
+        self.assertEqual(cache.rewrite(current, text, owner), current.rewrite(text, owner))
 
     def test_living_config_attribute_migrates_with_connect_csp_and_keeps_old_replay(self):
         config='_living/cockpit/bird-source.fixture/config.json'
@@ -477,6 +482,51 @@ class OssReleaseTests(unittest.TestCase):
                 self.assertEqual(plan['home_entry_overlay'],proof)
                 self.assertEqual(oss.verify_local(output)['rewriter_version'],version)
         self.assertEqual((self.source/'index.html').read_bytes(),home)
+
+
+    def test_finalize_incremental_matches_full_and_rejects_changed_final_bytes(self):
+        self.addCleanup(oss.FinalizeCache(self.source, False, {}).path.unlink, missing_ok=True)
+        raw = {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()}
+        oss.finalize_dist(self.source); first = [(self.source/name).read_bytes() for name in (oss.MANIFEST, 'release-identity.json')]
+        for rel, payload in raw.items(): (self.source/rel).write_bytes(payload)
+        full = {}; oss.finalize_dist(self.source, full=True, timings=full)
+        expected = [(self.source/name).read_bytes() for name in (oss.MANIFEST, 'release-identity.json')]
+        self.assertEqual(first, expected)
+        expected_files = oss.inventory(self.source)
+        for rel, payload in raw.items(): (self.source/rel).write_bytes(payload)
+        incremental = {}; oss.finalize_dist(self.source, timings=incremental)
+        self.assertEqual(expected, [(self.source/name).read_bytes() for name in (oss.MANIFEST, 'release-identity.json')])
+        self.assertEqual(expected_files, oss.inventory(self.source))
+        self.assertGreater(incremental['replayed_rewrites'], 0)
+        for stage in ('hash', 'inventory', 'copy', 'home', 'rewrite', 'verify', 'manifest', 'cache', 'total'):
+            self.assertIn(stage, incremental)
+        cached = {}; oss.finalize_dist(self.source, timings=cached)
+        self.assertEqual(cached['hashed_files'], 0)
+        p = self.source/'assets/main.js'; before = p.stat()
+        p.write_bytes(p.read_bytes().replace(b'const', b'let  ', 1))
+        os.utime(p, ns=(before.st_atime_ns, before.st_mtime_ns))
+        with self.assertRaisesRegex(ValueError, 'Finalized dist bytes changed'):
+            oss.finalize_dist(self.source)
+
+    def test_finalize_resource_change_invalidates_rewrites_and_corrupt_cache_falls_back(self):
+        cache = oss.FinalizeCache(self.source, False, {}).path; self.addCleanup(cache.unlink, missing_ok=True)
+        raw = {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()}
+        warm = {}; oss.finalize_dist(self.source, timings=warm)
+        for rel, payload in raw.items(): (self.source/rel).write_bytes(payload)
+        (self.source/'assets/extra.css').write_bytes(b'body{color:blue}')
+        source = oss.read(self.source/oss.MANIFEST)
+        source['files'] = {k:v for k,v in oss.inventory(self.source).items() if k != oss.MANIFEST}
+        oss.write(self.source/oss.MANIFEST, source)
+        changed = {p.relative_to(self.source): p.read_bytes() for p in self.source.rglob('*') if p.is_file()}
+        timing = {}; oss.finalize_dist(self.source, timings=timing)
+        expected = [(self.source/name).read_bytes() for name in (oss.MANIFEST, 'release-identity.json')]
+        self.assertGreater(timing['rewritten_files'], 0)
+        self.assertLess(timing['rewritten_files'], warm['rewritten_files'])
+        for rel, payload in changed.items(): (self.source/rel).write_bytes(payload)
+        oss.finalize_dist(self.source, full=True)
+        self.assertEqual(expected, [(self.source/name).read_bytes() for name in (oss.MANIFEST, 'release-identity.json')])
+        cache.write_text('broken', encoding='utf8')
+        oss.finalize_dist(self.source)
 
 
 if __name__ == '__main__':

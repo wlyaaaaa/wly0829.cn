@@ -46,6 +46,85 @@ BLOCK = re.compile(r'<(?P<tag>script|style)\b[^>]*>(?P<body>.*?)</(?P=tag)\s*>',
 WORD = re.compile(r'[$\w]+')
 CSS_URL = re.compile(r'url\(\s*(?P<q>["\']?)(?P<value>[^)"\']+)(?P=q)\s*\)', re.I)
 OSS_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+_FINALIZE_CACHE = None
+
+
+def measured(name, operation):
+    started = time.perf_counter()
+    try: return operation()
+    finally:
+        if _FINALIZE_CACHE is not None: _FINALIZE_CACHE.timings[name] = _FINALIZE_CACHE.timings.get(name, 0) + time.perf_counter() - started
+
+
+class FinalizeCache:
+    """Local acceleration only; cache state never enters a release identity."""
+    def __init__(self, dist, full, timings):
+        self.dist = dist; self.path = ROOT/'site-astro/.cache'/('finalize-'+hashlib.sha256(str(dist).encode()).hexdigest()[:16]+'.json')
+        self.identity = [str(dist), digest(__file__), digest(Path(__file__).with_name('prepare-home-entry-links.py'))]
+        try: previous = read(self.path) if not full else {}
+        except (OSError, ValueError): previous = {}
+        if not isinstance(previous, dict) or previous.get('identity') != self.identity: previous = {}
+        self.hashes = previous.get('hashes', {}); self.rewrites = previous.get('rewrites', {})
+        if not isinstance(self.hashes, dict) or not isinstance(self.rewrites, dict): self.hashes = {}; self.rewrites = {}
+        self.kept = {}; self.contracts = {}; self.timings = timings; self.full = full; self.hashed = self.reused = self.rewritten = self.replayed = 0
+
+    @staticmethod
+    def signature(path):
+        row = Path(path).stat(); signature = [row.st_size, row.st_mtime_ns, row.st_ctime_ns, row.st_dev, row.st_ino]
+        if os.name == 'nt':
+            import ctypes, msvcrt
+            with Path(path).open('rb') as stream:
+                data = (ctypes.c_longlong * 5)()
+                if not ctypes.windll.kernel32.GetFileInformationByHandleEx(ctypes.c_void_p(msvcrt.get_osfhandle(stream.fileno())), 0, ctypes.byref(data), ctypes.sizeof(data)): return None
+                signature.append(data[3])  # NTFS ChangeTime; Windows st_ctime is creation time.
+        return signature
+
+    def digest(self, path):
+        key = str(Path(path).resolve()); signature = self.signature(path); row = self.hashes.get(key, {})
+        if signature is not None and isinstance(row, dict) and row.get('signature') == signature and re.fullmatch('[a-f0-9]{64}', str(row.get('sha256', ''))):
+            self.reused += 1; return row['sha256']
+        with Path(path).open('rb') as stream: value = hashlib.file_digest(stream, 'sha256').hexdigest()
+        if self.signature(path) != signature: raise ValueError('File changed while hashing: ' + key)
+        self.hashes[key] = {'signature': signature, 'sha256': value}; self.hashed += 1
+        return value
+
+    def rewrite(self, rewriter, data, owner):
+        if rewriter not in self.contracts:
+            self.contracts[rewriter] = hashlib.sha256(json.dumps(sorted(rewriter.files)).encode()).hexdigest()
+        def contract(row):
+            return [rewriter.base, rewriter.origin, rewriter.version, self.contracts[rewriter], [owner in getattr(rewriter, 'retained', {}), rewriter.target(owner), bool(rewriter.asset_keys)] if owner in rewriter.assets else None,
+                    {rel: [rewriter.target(rel), rewriter.files.get(rel), rel in getattr(rewriter, 'retained', {})] for rel in row['refs']},
+                    {rel: [rewriter.files.get(rel), bool(rewriter.source_root and (rewriter.source_root/rel).is_file())] for rel in row['inputs']},
+                    {url: rewriter.previous_urls.get(url) for url in row['lookups']}]
+        key = hashlib.sha256(owner.encode() + b'\0' + data).hexdigest(); row = None if self.full else self.rewrites.get(key)
+        try:
+            if row is not None:
+                result = base64.b64decode(row['data'], validate=True)
+                if (hashlib.sha256(result).hexdigest() != row['sha256'] or any(not isinstance(row[name], list) for name in ('refs', 'absolute', 'missing', 'inputs', 'lookups')) or row['contract'] != contract(row)
+                        or row['changes'] is not None and not isinstance(row['changes'], list)): row = None
+        except (KeyError, ValueError, TypeError): row = None
+        if row is None:
+            prior = rewriter.absolute_references; rewriter.absolute_references = set(); missing = len(rewriter.missing)
+            rewriter._cache_inputs = set(); rewriter._cache_previous = set()
+            result = rewriter.rewrite(data, owner)
+            row = {'data': base64.b64encode(result).decode(), 'sha256': hashlib.sha256(result).hexdigest(), 'changes': rewriter.changes.get(owner),
+                   'refs': sorted(rewriter.references.get(owner, ())), 'absolute': sorted(rewriter.absolute_references),
+                   'missing': rewriter.missing[missing:], 'inputs': sorted(rewriter._cache_inputs), 'lookups': sorted(rewriter._cache_previous)}
+            row['contract'] = contract(row)
+            rewriter.absolute_references.update(prior); self.rewritten += 1
+        else:
+            if row['changes']: rewriter.changes[owner] = row['changes']
+            if row['refs']: rewriter.references.setdefault(owner, set()).update(row['refs'])
+            rewriter.absolute_references.update(row['absolute']); rewriter.missing.extend(row['missing']); self.replayed += 1
+        self.kept[key] = row; self.rewrites[key] = row
+        return result
+
+    def save(self):
+        inventory(self.dist)
+        rows = {key: value for key, value in self.hashes.items() if Path(key).is_relative_to(self.dist) and Path(key).is_file()}
+        self.path.parent.mkdir(parents=True, exist_ok=True); write(self.path, {'identity': self.identity, 'hashes': rows, 'rewrites': self.kept or self.rewrites})
+        self.timings.update(hashed_files=self.hashed, reused_hashes=self.reused,
+                            rewritten_files=self.rewritten, replayed_rewrites=self.replayed)
 
 
 class HtmlTags(HTMLParser):
@@ -164,17 +243,21 @@ def write(path, value):
 
 
 def digest(path):
+    if _FINALIZE_CACHE is not None: return measured('hash', lambda: _FINALIZE_CACHE.digest(path))
     with Path(path).open('rb') as f:
         return hashlib.file_digest(f, 'sha256').hexdigest()
 
 
 def inventory(root):
+    started = time.perf_counter()
     values = {}
     for p in sorted(Path(root).rglob('*')):
         if p.is_symlink():
             raise ValueError('Release symlink: ' + str(p))
         if p.is_file() and p.relative_to(root).as_posix() not in ('release-identity.json', '.build-receipt.json'):
             values[p.relative_to(root).as_posix()] = {'bytes': p.stat().st_size, 'sha256': digest(p)}
+    if _FINALIZE_CACHE is not None:
+        _FINALIZE_CACHE.timings['inventory'] = _FINALIZE_CACHE.timings.get('inventory', 0) + time.perf_counter() - started
     return values
 
 
@@ -412,6 +495,7 @@ class Rewriter:
         pending = list(dependencies); seen = set(); kinds = set()
         while pending:
             rel, kind = pending.pop(); kinds.add(kind)
+            if hasattr(self, '_cache_inputs'): self._cache_inputs.add(rel)
             if rel in seen: continue
             seen.add(rel)
             if self.source_root and Path(rel).suffix in TEXT_ASSETS and (self.source_root/rel).is_file():
@@ -449,6 +533,7 @@ class Rewriter:
         if parts.scheme or parts.netloc:
             if (parts.scheme+'://'+parts.netloc).rstrip('/') == self.base and parts.path.strip('/'):
                 previous_url = unquote(urlunsplit((parts.scheme, parts.netloc, parts.path, '', '')))
+                if hasattr(self, '_cache_previous'): self._cache_previous.add(previous_url)
                 previous_rel = self.previous_urls.get(previous_url)
                 if previous_rel in self.assets:
                     return previous_rel, parts
@@ -740,7 +825,7 @@ def validate_retained_text(rewriter, source, inherited):
 
 
 def copy_release_asset(source, destination):
-    return shutil.copy2(source, destination)
+    return measured('copy', lambda: shutil.copy2(source, destination))
 
 
 def inherited_assets(manifest):
@@ -807,8 +892,8 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if offline:
         rewriter.absolute_references.clear()
     output.mkdir(parents=True)
-    home_bytes,home_proof=current_home_links(source,version=rewriter_version)
-    objects, github = {}, {}
+    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=rewriter_version))
+    objects, github, virtual = {}, {}, {}
     for rel in actual:
         if rel in inherited: continue
         host = rel.endswith('.html') or rel in HOST_CONTROLS
@@ -818,10 +903,17 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
             continue
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            destination.write_bytes(rewriter.rewrite(payload, rel))
+            result = measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, payload, rel)
+                              if _FINALIZE_CACHE is not None else rewriter.rewrite(payload, rel))
+            if (_FINALIZE_CACHE is not None and not _FINALIZE_CACHE.full and result == payload
+                    and (rel != 'index.html' or payload == (source/rel).read_bytes())): virtual[rel] = source/rel
+            else: destination.write_bytes(result)
+        elif _FINALIZE_CACHE is not None and not _FINALIZE_CACHE.full:
+            virtual[rel] = source/rel
         else:
             copy_release_asset(source / rel, destination)
-        value = {'bytes': destination.stat().st_size, 'sha256': digest(destination)}
+        actual_path = virtual.get(rel, destination)
+        value = {'bytes': actual_path.stat().st_size, 'sha256': digest(actual_path)}
         if host:
             github[rel] = value
         else:
@@ -874,11 +966,22 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
         plan.update(previous_content=previous['oss'].get('content_verification', {}),previous_host_files=previous['files'])
     if home_proof:plan['home_entry_overlay']=home_proof
     write(output / PLAN, plan)
-    verify_local(output)
+    measured('verify', lambda: verify_local(output, virtual))
     return plan
 
 
-def finalize_dist(dist):
+def finalize_dist(dist, full=False, timings=None):
+    global _FINALIZE_CACHE
+    started = time.perf_counter(); timings = {} if timings is None else timings
+    for name in ('hash', 'inventory', 'copy', 'home', 'rewrite', 'verify', 'manifest', 'cache'): timings.setdefault(name, 0)
+    cache = FinalizeCache(Path(dist).resolve(), full, timings); _FINALIZE_CACHE = cache
+    try:
+        final = _finalize_dist(dist); measured('cache', cache.save); return final
+    finally:
+        _FINALIZE_CACHE = None; timings['total'] = time.perf_counter() - started
+
+
+def _finalize_dist(dist):
     """Finalize build bytes offline; publishing and repeat runs never rewrite them."""
     dist = Path(dist).resolve(); source = read(dist/MANIFEST)
     if source.get('finalized_dist'):
@@ -894,9 +997,9 @@ def finalize_dist(dist):
         plan = prepare(dist, 'https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com', prefix, prepared, offline=True)
         final = read(prepared/'github'/MANIFEST); final['finalized_dist'] = True
         final['oss'].update(retained_objects=plan['retained_objects'], reference_keys=plan['reference_keys'])
-        write(prepared/'github'/MANIFEST, final)
-        write(prepared/'github'/'release-identity.json', {'release_id': final['release_id'],
-              'manifest_sha256': digest(prepared/'github'/MANIFEST), 'source_commit': final.get('source_commit', 'Unknown')})
+        measured('manifest', lambda: write(prepared/'github'/MANIFEST, final))
+        measured('manifest', lambda: write(prepared/'github'/'release-identity.json', {'release_id': final['release_id'],
+              'manifest_sha256': digest(prepared/'github'/MANIFEST), 'source_commit': final.get('source_commit', 'Unknown')}))
         for kind in ('github', 'oss'):
             for path in (prepared/kind).rglob('*'):
                 if path.is_file() and path.relative_to(prepared/kind).as_posix() != MANIFEST: path.replace(dist/path.relative_to(prepared/kind))
@@ -911,7 +1014,7 @@ def content_type(rel):
             '.avif': 'image/avif'}.get(Path(rel).suffix, mimetypes.guess_type(rel)[0] or 'application/octet-stream')
 
 
-def verify_local(output):
+def verify_local(output, virtual=None):
     output = Path(output).resolve()
     plan = read(output / PLAN)
     if plan['schema'] != 'wly.oss-release-plan.v1':
@@ -922,10 +1025,12 @@ def verify_local(output):
     inherited, _ = inherited_assets(source_manifest)
     if {**inventory(source), **{rel: row['source'] for rel, row in inherited.items()}} != plan['source_files']:
         raise ValueError('Source changed since preparation')
-    if inventory(output/'github') != plan['github_files']:
+    virtual = virtual or {}
+    shared = {rel: {'bytes': path.stat().st_size, 'sha256': digest(path)} for rel, path in virtual.items()}
+    if {**inventory(output/'github'), **{rel: row for rel, row in shared.items() if rel in plan['github_files']}} != plan['github_files']:
         raise ValueError('Prepared GitHub inventory/bytes changed')
     expected = {k: {'bytes': v['bytes'], 'sha256': v['sha256']} for k, v in plan['objects'].items() if k not in inherited}
-    if inventory(output/'oss') != expected:
+    if {**inventory(output/'oss'), **{rel: row for rel, row in shared.items() if rel not in plan['github_files']}} != expected:
         raise ValueError('Prepared OSS inventory/bytes changed')
     rewriter = Rewriter(plan['source_files'], plan['asset_base_url'], plan['prefix'], plan['html_origin'],version=plan.get('rewriter_version',1),source_root=source)
     rewriter.retained = plan.get('retained_addresses', {rel: plan['objects'][rel] for rel in plan.get('retained_objects', {})})
@@ -939,7 +1044,7 @@ def verify_local(output):
             raise ValueError('Offline dependency keys are not reproducible')
         rewriter.asset_keys = plan['asset_keys']
         rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear(); rewriter.absolute_references.clear()
-    home_bytes,home_proof=current_home_links(source,version=plan.get('rewriter_version',1))
+    home_bytes,home_proof=measured('home', lambda: current_home_links(source,version=plan.get('rewriter_version',1)))
     if (home_proof!=plan.get('home_entry_overlay')
             and (plan.get('home_entry_overlay') is not None or home_bytes!=(source/'index.html').read_bytes())):
         raise ValueError('Home entry restoration evidence is not reproducible')
@@ -949,10 +1054,11 @@ def verify_local(output):
             continue
         if rel == MANIFEST:
             continue
-        target = output / ('github' if rel in plan['github_files'] else 'oss') / rel
+        target = virtual.get(rel, output / ('github' if rel in plan['github_files'] else 'oss') / rel)
         if rel.endswith('.html') or Path(rel).suffix in TEXT_ASSETS:
             payload=home_bytes if rel=='index.html' else (source/rel).read_bytes()
-            expected_bytes = rewriter.rewrite(payload, rel)
+            expected_bytes = measured('rewrite', lambda: _FINALIZE_CACHE.rewrite(rewriter, payload, rel)
+                                      if _FINALIZE_CACHE is not None else rewriter.rewrite(payload, rel))
             if target.read_bytes() != expected_bytes:
                 raise ValueError('Changes outside deterministic URL rewrite: ' + rel)
         elif digest(source/rel) != digest(target):
@@ -1073,7 +1179,7 @@ def verify_remote(output, workers=4, timeout=60, retry_failed=False, confirmed=F
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
-    p = commands.add_parser('finalize-dist'); p.add_argument('--dist', required=True)
+    p = commands.add_parser('finalize-dist'); p.add_argument('--dist', required=True); p.add_argument('--full', action='store_true')
     p = commands.add_parser('prepare')
     p.add_argument('--source', required=True)
     p.add_argument('--asset-base-url', required=True)
@@ -1089,7 +1195,8 @@ def main():
         p.add_argument('--confirm-download-over-5gb',action='store_true')
     args = parser.parse_args()
     if args.command == 'finalize-dist':
-        print(json.dumps({'status': 'finalized', 'release_id': finalize_dist(args.dist)['release_id']}))
+        timings = {}; final = finalize_dist(args.dist, full=args.full, timings=timings)
+        print(json.dumps({'status': 'finalized', 'release_id': final['release_id'], 'timings': timings}))
     elif args.command == 'prepare':
         plan = prepare(args.source, args.asset_base_url, args.prefix, args.output, args.html_origin, args.test_loopback,args.rewriter_version,args.previous_manifest)
         print(json.dumps({'status': 'prepared', 'summary': plan['summary'], 'release_id': plan['release_id']}, ensure_ascii=False))

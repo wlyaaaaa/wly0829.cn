@@ -200,13 +200,26 @@ def converted_markdown_matches(converter, name, md):
 def sync_markdown(previous):
     sys.path.insert(0, str(SITE / 'tools'))
     converter = load('build_converter', 'site-astro/tools/convert_page.py')
+    converter_fp = fingerprint([SITE / 'tools/convert_page.py', SITE / 'tools/render_blocks.py',
+        ROOT / 'src/typeset', ROOT / 'sources/assets', ROOT / 'sources/rules',
+        SITE / 'src/chrome/toc-labels.json', ROOT / 'scripts/astro_rules.py',
+        ROOT / 'config/model-roster.json', ROOT / 'scripts/how-demo-data.json'])
+    converter_fp += json.dumps({k: v for k, v in os.environ.items() if k.startswith('CONVERT_')}, sort_keys=True)
+    demo = Path(os.environ['CONVERT_STATUS_LINE_DEMO']) if os.environ.get('CONVERT_STATUS_LINE_DEMO') else None
+    converter_fp += proof(demo)['sha256'] if demo and demo.is_file() else 'missing-demo'
     records, pending = {}, []
     for name in converter.all_pages():
         md = SITE / 'src/content/pages' / (name + '.md')
-        source_fp = fingerprint([ROOT / 'sources/pages' / name])
+        author = ROOT / 'sources/pages' / name
+        refs = {ref.split('.')[0] for p in author.glob('*.json') for ref in re.findall(r'\{\{([^{}]+)\}\}', p.read_text('utf8'))}
+        dependencies = [ROOT / 'sources/pages' / ref for ref in refs if ref not in {'scale', 'roster', 'stories', 'rules'}]
+        if 'scale' in refs: dependencies.append(ROOT / 'sources/pages')
+        if 'group_counts' in refs: dependencies.append(ROOT / 'sources/pages/projects-home')
+        source_fp = fingerprint([author, *dependencies]) + converter_fp
         old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
         direct = bool(current and (old.get('direct') or (old.get('md_sha256') and current != old['md_sha256'])))
-        generated = direct and converted_markdown_matches(converter, name, md)
+        unchanged = old.get('fingerprint') == source_fp and old.get('md_sha256') == current
+        generated = direct and not unchanged and converted_markdown_matches(converter, name, md)
         if generated: direct = False
         if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct and not generated): pending.append(name)
         elif direct:
@@ -218,6 +231,8 @@ def sync_markdown(previous):
 
 def build(pages=None):
     started = time.monotonic(); previous_stage = started; steps = []
+    source_clean = not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=all'], cwd=ROOT)
+    source_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() if source_clean else 'Unknown'
     def stage(name):
         nonlocal previous_stage
         now = time.monotonic(); seconds = round(now - previous_stage, 3); previous_stage = now
@@ -342,14 +357,14 @@ def build(pages=None):
     run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist), cwd=ROOT)
     guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
     stage('finalize')
-    run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), cwd=ROOT)
+    run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), '--incremental', cwd=ROOT)
     stage('public')
     files = [{'path': p.relative_to(dist).as_posix(), **proof(p)} for p in sorted(dist.rglob('*'))
         if p.is_file() and p.name != '.build-receipt.json']
     after = {file_route(row['path']): {key: row[key] for key in ('bytes', 'sha256')} for row in files if row['path'].endswith('.html')}
     rebuilt = changed | {route for route in after if before.get(route) != after[route]}
     stage('inventory')
-    receipt = {'schema': 'wly.site-build-receipt.v1', 'status': 'built',
+    receipt = {'schema': 'wly.site-build-receipt.v1', 'status': 'built', 'source_commit': source_commit,
         'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
         'seconds': round(time.monotonic() - started, 3), 'steps': steps, 'rebuilt_pages': sorted(rebuilt),
         'html_files': len(after), 'files': files, 'output': str(dist)}
