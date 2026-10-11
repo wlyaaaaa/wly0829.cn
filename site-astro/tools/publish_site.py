@@ -183,23 +183,49 @@ def publish(args):
         owned = claim['status'] == 'acquired'
         step('pin', lambda: retention.pin(preparation))
 
+        def renew_lock():
+            claim = json.loads(command('pwsh', '-NoProfile', '-File', LOCK, '-Mode', 'Acquire',
+                            '-Name', 'wly0829-publication', '-Holder', args.lock_holder,
+                            '-Minutes', '30', '-Reason', 'Incremental website publication', '-Json'))
+            if claim.get('status') not in ('acquired', 'renewed'):
+                raise ValueError('Cannot renew publication lock')
+
+        def upload_one(item):
+            rel, row = item
+            try:  # 续传：对象已在且大小、MD5 一致就不重传；不在或不一致都重新上传
+                head(item, args.dist)
+                return rel, row, False
+            except Exception:
+                pass
+            command(CLI, 'ossutil', 'cp', args.dist/rel,
+                    'oss://'+retention.BUCKET+'/'+row['key'], '--profile', 'website-images',
+                    '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com',
+                    '--force', '--no-progress', '--loglevel', 'off', '--acl', 'default',
+                    '--content-type', row['content_type'], '--bigfile-threshold', '5G',
+                    '--cache-control', 'public,max-age=31536000,immutable')
+            return rel, row, True
+
         def upload():
-            for rel, row in assets.items():
-                command(CLI, 'ossutil', 'cp', args.dist/rel,
-                        'oss://'+retention.BUCKET+'/'+row['key'], '--profile', 'website-images',
-                        '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com',
-                        '--force', '--no-progress', '--loglevel', 'off', '--acl', 'default',
-                        '--content-type', row['content_type'], '--bigfile-threshold', '5G',
-                        '--cache-control', 'public,max-age=31536000,immutable')
-                receipt['uploaded_files'] += 1
-                receipt['uploaded_bytes'] += row['bytes']
+            receipt['upload_workers'] = args.upload_workers
+            receipt['reused_existing_files'] = 0
+            with ThreadPoolExecutor(max_workers=args.upload_workers) as pool:
+                for done, (rel, row, sent) in enumerate(pool.map(upload_one, assets.items()), 1):
+                    if sent:
+                        receipt['uploaded_files'] += 1
+                        receipt['uploaded_bytes'] += row['bytes']
+                    else:
+                        receipt['reused_existing_files'] += 1
+                    if done % 500 == 0:
+                        renew_lock()
 
         step('upload_assets', upload)
+        renew_lock()
         def verify_heads():
             with ThreadPoolExecutor(max_workers=8) as pool:
                 for rel, proof in pool.map(lambda item: head(item, args.dist), assets.items()):
                     receipt['head'][rel] = proof
         step('head_uploaded', verify_heads)
+        renew_lock()
         manifest = dict(source)
         manifest['oss']['verification'] = {'schema': 'wly.oss-incremental-verification.v1',
             'release_id': plan['release_id'], 'complete': True, 'verified_at_beijing': oss.stamp(),
@@ -249,6 +275,7 @@ if __name__ == '__main__':
     parser.add_argument('--output', type=Path)
     parser.add_argument('--source-commit')
     parser.add_argument('--pages-timeout', type=int, default=600)
+    parser.add_argument('--upload-workers', type=int, default=12, help='parallel OSS uploads; existing identical objects are skipped')
     parser.add_argument('--lock-holder', default='codex:publish:'+ROOT.parent.name)
     options = parser.parse_args()
     result = publish(options)
