@@ -39,7 +39,7 @@
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
@@ -96,8 +96,8 @@
  },
  "source": {
   "page": "sources/pages/skill-vault-workflow/page.json",
-  "sha256": "e6717cf7208026e96d873ac57dc7161d9f443271103152a5437967f5d4d69bf0",
-  "converted_at_beijing": "2026-10-11T14:34:38+08:00"
+  "sha256": "8ad3c93d1906c5bdc95c96e6a603ebcd131f5c01ebf8573a4cb16db42be067bf",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -148,7 +148,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "balanced-heading"
     },
     {
@@ -210,7 +210,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "illustration",

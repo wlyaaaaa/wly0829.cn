@@ -39,7 +39,7 @@
    "facts": [
     "近 7 天 AI 用了 8 次"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": true,
@@ -121,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-localocr/page.json",
-  "sha256": "f35722ca7d03be1d1f84346efba48c4ad965e06c360c5253e3b3ca0fcba52cb3",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "301d399a6a50e4c35f3ea2abd095b7d8eb062d0db8421fa0364eb11f899982ee",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -173,7 +173,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -322,7 +322,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

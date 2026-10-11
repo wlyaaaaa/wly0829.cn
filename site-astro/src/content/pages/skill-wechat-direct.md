@@ -39,7 +39,7 @@
    "facts": [
     "近 7 天 AI 用了 7 次"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
@@ -106,8 +106,8 @@
  },
  "source": {
   "page": "sources/pages/skill-wechat-direct/page.json",
-  "sha256": "2c5876f37bf2a61ec67303b2bb6e6566d7b53d7948c784f343eecc620c181d0e",
-  "converted_at_beijing": "2026-10-11T14:02:06+08:00"
+  "sha256": "497d6ff510d2dc753e82b73bb69c4dfe8eefccc548625f33b23adb6173eef8e0",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -157,7 +157,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -220,7 +220,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

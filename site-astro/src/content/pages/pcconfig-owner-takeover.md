@@ -27,14 +27,14 @@
   "parent": "pcconfig",
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
-   "source": "按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 11 日 16:34 核对接管程序源码与安装一致，本次未打开窗口或办理验证。"
+   "as_of": "2026-10-12",
+   "source": "按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。"
   }
  },
  "source": {
   "page": "sources/pages/pcconfig-owner-takeover/page.json",
-  "sha256": "2eaf512436119a1bf6cab43c55089a6f651091a8ad8907e06669eeb8a2620401",
-  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
+  "sha256": "f718e058d8d6a0199ed93b9f7dc48e8fba2ea3ff9e7a4da7699bd59ae62ae9f1",
+  "converted_at_beijing": "2026-10-12T05:03:46+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 11 日 16:34 核对接管程序源码与安装一致，本次未打开窗口或办理验证。",
+     "static_note": "截至 10 月 12 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。",
      "row": "top"
     },
     {
@@ -126,7 +126,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 11 日 16:34 核对接管程序源码与安装一致，本次未打开窗口或办理验证。"
+     "static_note": "截至 10 月 12 日 · 按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 12 日 04:33 核对接管程序与现役清单一致（安装批次 365），本次未打开窗口或办理验证。"
     },
     {
      "type": "action_button",
@@ -626,7 +626,7 @@ PCConfig · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-接管入口、运行时和窗口三个程序与源码、现役清单一致（安装批次 365，10 月 11 日 16:34 核对）；支持 Codex 与 Claude 两个桌面宿主，全局接管可与资料期一次验证组合办理。
+接管入口、运行时和窗口三个程序与源码、现役清单一致（10 月 12 日 04:33 核对，现役安装批次 365；10 月 11 日 16:34 那次核对的是这一批装上之前的 364）。这只证明文件一致，不证明这次办过本人验证或接管；支持 Codex 与 Claude 两个桌面宿主，全局接管可与资料期一次验证组合办理。
 
 ## 关键规则与设计选择
 

@@ -49,7 +49,7 @@
     "at": "2026-10-06 05:52"
    },
    "facts": [],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）核对修复和关闭流程；没有实际修复或关闭客户端"
   },
   "public": true,
@@ -260,7 +260,7 @@
      "id": "n-layers",
      "text": "8 层",
      "meaning": "打开就查的层数：本机代理进程、网卡、默认路由、Windows 手动代理、终端代理变量、Git、WinHTTP、Docker",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "ProxyClean.Common.psm1 $availability 8 个键现查",
      "screens": [
       "proxyclean-01",
@@ -273,7 +273,7 @@
      "id": "n-tests",
      "text": "测试定义 317 个（只计数）",
      "meaning": "仓库全部 Pester 测试用例数（只做发现、不运行统计）；9 月 25 日那版 277 项在 PS 7 和 5.1 各跑一遍全过，新增 40 项后的整套本轮没重跑",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "Invoke-Pester -Configuration (Run.SkipRun=true, Run.Path=tests) 现算：HEAD 8915589 为 317，f26ded7 为 277（同法复核原数）",
      "screens": [
       "proxyclean-01",
@@ -285,7 +285,7 @@
      "id": "n-bg-tasks",
      "text": "0 个",
      "meaning": "本项目的计划任务、服务、开机自启",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "本机计划任务动作、服务、开机启动项里都没有 ProxyClean（10 月 11 日现查）",
      "screens": [
       "proxyclean-01"
@@ -295,7 +295,7 @@
      "id": "n-home-buttons",
      "text": "2 个",
      "meaning": "首页操作按钮",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "ControlCenter.xaml 首页两颗主按钮现查",
      "screens": [
       "proxyclean-01"
@@ -305,7 +305,7 @@
      "id": "n-code",
      "text": "约 2,500.0 行程序、2,300.0 行测试",
      "meaning": "git 跟踪的 ps1/psm1/xaml/vbs（去掉 tests、旧版入口、fallback）2,471 行非空行；tests/ 12 个文件 2,334 行非空行",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git ls-files + PowerShell Measure-Object -Line 现算（HEAD 8915589）",
      "screens": [
       "proxyclean-05"
@@ -475,8 +475,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean/page.json",
-  "sha256": "724c1438475500351c12c99e7e80031560e0acda2a8e1569e7e1dd36f1be4759",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "70170e6820d50c3c50219ba58d3e4b397c3501e3cb7a9f41496d08d05136c493",
+  "converted_at_beijing": "2026-10-12T05:03:48+08:00"
  }
 }
 ---
@@ -531,7 +531,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）核对修复和关闭流程；没有实际修复或关闭客户端",
+     "static_note": "截至 10 月 12 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）核对修复和关闭流程；没有实际修复或关闭客户端",
      "row": "hero"
     },
     {
@@ -580,7 +580,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）核对修复和关闭流程；没有实际修复或关闭客户端"
+     "static_note": "截至 10 月 12 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）核对修复和关闭流程；没有实际修复或关闭客户端"
     },
     {
      "type": "stat_card",

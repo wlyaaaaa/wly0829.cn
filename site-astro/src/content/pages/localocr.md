@@ -53,7 +53,7 @@
    "facts": [
     "近 7 天 AI 点名用了 8 次"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "识别服务日志；AI 使用记录"
   },
   "public": true,
@@ -378,7 +378,7 @@
      "id": "n-jobs",
      "text": "16,075 次识别",
      "meaning": "7 月 8 日–10 月 11 日 14:00 的识别次数；共 14,976 份材料、16,157 页。任务登记里完成的识别，去掉项目自带样例、冒烟测试和 8 月 18 日开发时的空白测试图；材料按原件指纹去重；页数累加；命中缓存不新增记录",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "E:\\Projects\\Tools\\LocalOCR\\_server\\jobs\\*.json 只读字段现算（口径同 9 月 28 日，复算 9 月 28 日 20:26 得 684/555/706 与旧稿一致）；9 月 28 日后新增多来自网站截图检查和图片压缩试验；10 月 11 日北京 16:10 复核：最后一条完成记录仍是 10 月 9 日 10:24，之后没有新识别，各数不变",
      "screens": [
       "localocr-01"
@@ -388,7 +388,7 @@
      "id": "n-auto",
      "text": "60%；自动选模型的 639 次里 383 次快模型就够，256 次换了强模型；其余 15,435 次直接指定模型",
      "meaning": "route.requested_engine=auto 的完成记录里是否升级（截至 10 月 11 日 14:00）；9 月 29 日一批临时图片的升级占 9 月 28 日后升级的大部分",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "同上，按 route.requested_engine 和 result.model_id",
      "screens": [
       "localocr-01",
@@ -410,7 +410,7 @@
      "id": "n-models",
      "text": "18 个本地模型，共 3.9 GiB",
      "meaning": "WSL /root/.paddlex/official_models 目录数和 du 总大小",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "wsl du -sb /root/.paddlex/official_models（10 月 11 日复核：18 个、3.9 GiB）",
      "screens": [
       "localocr-01",
@@ -421,7 +421,7 @@
      "id": "n-tests",
      "text": "181 项测试无失败（16 项按条件跳过）；9 个合成样例；9 月 24 日验收",
      "meaning": "现役版本验收回执：181 项单元测试，165 项通过、16 项按条件跳过、0 项失败，9 个合成样例覆盖三条路线全过",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "/root/localocr-runtimes/current 仍指向 9 月 24 日验收的版本（10 月 10 日复核）；tests 下 def test_ 仍是 181 个",
      "screens": [
       "localocr-01",
@@ -632,8 +632,8 @@
  },
  "source": {
   "page": "sources/pages/localocr/page.json",
-  "sha256": "b7f03976e075e72450f21010b9cf931f1e36ba4aa7c61408820330a8d311f056",
-  "converted_at_beijing": "2026-10-12T02:58:19+08:00"
+  "sha256": "ecb45b1abe7bedc922f6bfa4628abdc5e728282b3a88a14844291c67e70f8669",
+  "converted_at_beijing": "2026-10-12T05:03:45+08:00"
  }
 }
 ---
@@ -692,7 +692,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 识别服务日志；AI 使用记录",
+     "static_note": "截至 10 月 12 日 · 识别服务日志；AI 使用记录",
      "row": "hero"
     },
     {
@@ -749,7 +749,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 识别服务日志；AI 使用记录"
+     "static_note": "截至 10 月 12 日 · 识别服务日志；AI 使用记录"
     },
     {
      "type": "stat_card",

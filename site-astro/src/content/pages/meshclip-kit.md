@@ -279,7 +279,7 @@
      "id": "n-interval",
      "text": "每 60 秒 / 每 2 分钟",
      "meaning": "看门狗检查间隔 / 计划任务检查看门狗的间隔",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "watch-kdeconnect.ps1:6；MeshClip.Common.psm1:13（PT2M）",
      "screens": [
       "meshclip-kit-01",
@@ -293,7 +293,7 @@
      "id": "n-checks",
      "text": "22 项；21 项通过、没有失败；1 项“不知道”（读不到 KDE Connect 命令行的状态）",
      "meaning": "主机 10 月 11 日 13:33 的自检项数和结果；现在有没有已配对、连得上的设备不给数，整体只能算“说不准”，不算坏了",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "北京时间 10 月 11 日 13:33 doctor.ps1 -Summary（meshclip.health.v1）：21 PASS、1 UNKNOWN（KDE Connect CLI status could not be read），0 FAIL、0 WARN，整体 unknown，business_acceptance=not_tested；9 月 29 日 03:42 那次是 21 PASS、1 WARN（配对要人确认）",
      "screens": [
       "meshclip-kit-01",
@@ -513,8 +513,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "e6b2f8d459a97189cdaa7ac5ea7abc48db5838db0f789db56ffa1faf2a66a455",
-  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
+  "sha256": "b74f5675ccea14375773e82cbb8ac20fce4bf193ac593b03d81e58023ed1d424",
+  "converted_at_beijing": "2026-10-12T05:03:45+08:00"
  }
 }
 ---
@@ -598,7 +598,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月11"
+     "text_ref": "截至10月1"
     },
     {
      "type": "feature_card",
@@ -684,7 +684,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月11"
+     "text_ref": "截至10月1"
     },
     {
      "type": "feature_card",
@@ -852,7 +852,7 @@
 
 介绍：主机（台式机）和副机（笔记本）不在同一个网络，也能共用剪贴板：在一台复制文字，到另一台直接粘贴；文件也能互相发。干活的是两个现成的开源软件——Tailscale 把两台连进同一张私有网络，KDE Connect 同步剪贴板、传文件；这个项目是一套脚本，负责把它们装好、只对那一台放行、断了自己拉起来。
 
-数字卡片（截至 10 月 11 日）：
+数字卡片（截至 10 月 12 日）：
 1. **2 台**｜主机和副机，互为唯一的对端
 2. **2 条**｜每台电脑上的放行规则：只认那一台，只开 KDE Connect 的端口
 3. **每 60 秒**｜主机上的看门狗查一次 KDE Connect 在不在，不在就拉起来

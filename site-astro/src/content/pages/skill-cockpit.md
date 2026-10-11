@@ -37,7 +37,7 @@
     "at": "2026-10-10 20:04"
    },
    "facts": [],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "fcc70258cdeca94615f6aabbdfbb6500c56a8ae1f0f781ca3567b0669b475c89",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "6d94e2a53aab378e397dfb18c0b910ec76747f4b44b27f759293040c66aa8dcb",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -171,7 +171,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -234,7 +234,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

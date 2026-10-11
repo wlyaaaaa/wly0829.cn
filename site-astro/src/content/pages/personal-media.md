@@ -498,7 +498,7 @@
      "id": "n-catalog",
      "text": "4366 件 · 近 99.0 GB",
      "meaning": "目录库 media 表条数（图片 3486、视频 118、音频 762），大小按每件原件路径取文件大小相加＝98.63 GB（十进制），4366 件全部在位",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "personal_media.py status / status --technical：PASS、catalog_rows=4366（北京 10 月 11 日 16:31—16:36 只读）；只读 SQL 按 media_type 分组，逐件 os.stat 求和 98,630,211,493 字节",
      "screens": [
       "personal-media-01"
@@ -508,7 +508,7 @@
      "id": "n-phone-picks",
      "text": "2377 件",
      "meaning": "要放回手机的精选包件数（45.42 GB）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "personal_media.py recovery-status：selected=2377、bytes=45,421,635,927、PASS_SELECTED_PLAN_CONSISTENT（北京 10 月 11 日 16:31—16:36 只读）",
      "screens": [
       "personal-media-01"
@@ -593,7 +593,7 @@
      "id": "n-code-lines",
      "text": "16,433 行",
      "meaning": "Python 正式代码行数（不含 test_*.py，6 个文件，wc -l）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git ls-files '*.py' 排除 test_ 后 splitlines 只读统计，提交 b5f84ef",
      "screens": [
       "personal-media-09"
@@ -603,7 +603,7 @@
      "id": "n-tests",
      "text": "测试定义 453 个（只计数）",
      "meaning": "按 10 月 10 日的源码版本、10 月 11 日静态清点，不是这次跑过的通过数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git ls-files test_*.py 后静态统计 def test_，提交 b5f84ef；本轮未运行测试",
      "screens": [
       "personal-media-09"
@@ -878,8 +878,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "4029e14cfaff1831b64c3d5fb1b3c6b9f433e5ea6003c0d62e829470b81e722a",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "6a92d060b5c8c3a6ac09664ebd12c1fdc93970d8a80fb533a9f2854e4db63155",
+  "converted_at_beijing": "2026-10-12T05:03:48+08:00"
  }
 }
 ---

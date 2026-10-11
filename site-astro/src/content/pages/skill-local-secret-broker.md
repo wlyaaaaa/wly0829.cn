@@ -39,7 +39,7 @@
    "facts": [
     "近 7 天 AI 用了 161 次"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
@@ -118,8 +118,8 @@
  },
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
-  "sha256": "daf427bb05381895e71d7b65f91c2ab5a392740ce759dcf1e21bb8defdcb2cbf",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "200fbc4df71d099ea564b9aa6fe15e9e0726f24dd3efd6e5cf873b413399e0b0",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -170,7 +170,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -237,7 +237,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

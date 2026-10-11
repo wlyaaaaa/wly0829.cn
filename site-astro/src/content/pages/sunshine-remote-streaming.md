@@ -317,7 +317,7 @@
      "id": "n-switches",
      "text": "31 份配置备份",
      "meaning": "每次改 Sunshine 要抓哪块屏都先留一份，自动换屏、我手动改、改坏换回都会留（8 月 12 日起）；份数不等于成功换屏的次数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "C:\\Program Files\\Sunshine\\config 下 sunshine.conf.capture-*.bak 计数；截止 10 月 11 日 14:00 前",
      "screens": [
       "sunshine-remote-streaming-01",
@@ -328,7 +328,7 @@
      "id": "n-public-ports",
      "text": "0 个 Sunshine 端口经 Tailscale 的公开功能（Funnel）放到互联网上",
      "meaning": "Tailscale Funnel 里指向 Sunshine 端口的公网入口个数；只覆盖 Funnel 这条路，不代表主机公网 IPv6 上查过",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "截止前最近一次（10 月 10 日）每日体检；Exposure.SunshinePublicPorts；只覆盖 Funnel 这条路",
      "screens": [
       "sunshine-remote-streaming-01"
@@ -338,7 +338,7 @@
      "id": "n-test-groups",
      "text": "6 组源码测试",
      "meaning": "6 组源码测试；最近有回执的是 9 月 18 日六组全部通过",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "9 月 18 日原始回执；“10 月 10 日重跑全部通过”没找到原始记录，本轮没有重跑",
      "screens": [
       "sunshine-remote-streaming-01",
@@ -359,7 +359,7 @@
      "id": "n-test-lines",
      "text": "1,962 行测试",
      "meaning": "测试不含空行，分 6 组",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "按 10 月 6 日最后一次提交统计，不含空行；本轮没有重跑",
      "screens": [
       "sunshine-remote-streaming-05"
@@ -369,7 +369,7 @@
      "id": "n-code-lines",
      "text": "5,657 行程序",
      "meaning": "PowerShell，含内嵌 C# 和小启动脚本；不含空行；按 10 月 6 日最后一次提交统计",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "提交 ec5b2b0；按 10 月 6 日最后一次提交统计，不含空行",
      "screens": [
       "sunshine-remote-streaming-05"
@@ -379,7 +379,7 @@
      "id": "n-commits",
      "text": "38 次提交",
      "meaning": "6 月 26 日至 10 月 6 日（北京时间）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git -C E:\\Projects\\Tools\\sunshine-remote-streaming rev-list --count HEAD；提交 ec5b2b0；北京时间 2026-10-11 13:32 只读统计",
      "screens": [
       "sunshine-remote-streaming-05"
@@ -570,8 +570,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
-  "sha256": "e965124b8a2decc9c23ce432ecc7d117d6bdd18e6c0b4579173b3678a8a000ab",
-  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
+  "sha256": "15348864b2ebc54a71292fa1c7749a0ed6cb0ee2e1247d4b90579a0b23dcde9e",
+  "converted_at_beijing": "2026-10-12T05:03:51+08:00"
  }
 }
 ---

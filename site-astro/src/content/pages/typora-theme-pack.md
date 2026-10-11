@@ -49,7 +49,7 @@
     "at": "2026-09-29 01:36"
    },
    "facts": [],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "项目修改记录"
   },
   "public": true,
@@ -246,7 +246,7 @@
      "id": "n-theme-count",
      "text": "1 套",
      "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 11 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
      "screens": [
       "typora-theme-pack-01"
@@ -256,7 +256,7 @@
      "id": "n-styles",
      "text": "3 种",
      "meaning": "PDF 样式：original、personal、company",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
      "screens": [
       "typora-theme-pack-01",
@@ -291,7 +291,7 @@
      "id": "n-commits",
      "text": "6 次",
      "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 11 日现查）",
      "screens": [
       "typora-theme-pack-01",
@@ -323,7 +323,7 @@
      "id": "n-code-lines",
      "text": "720、469、1023、43、13、438 行",
      "meaning": "编辑主题 CSS、PDF 样式 CSS、Python 工具、JS、PowerShell、测试的行数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "wc -l themes/ export-profiles/ tools/ tests/（HEAD f30ac9c，10 月 11 日复核未变）",
      "screens": [
       "typora-theme-pack-05"
@@ -455,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "46fe7870f91aa59439b4c006c8d9472fa3d7dd729c2622ad574bf7248d1b1c61",
-  "converted_at_beijing": "2026-10-11T19:07:29+08:00"
+  "sha256": "ec578c875ce4f1b6dac1c714f3a488bae59334df31b13d4e275f0097739e3581",
+  "converted_at_beijing": "2026-10-12T05:03:51+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目修改记录",
+     "static_note": "截至 10 月 12 日 · 项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -566,6 +566,11 @@
      "icons": "auto",
      "row": "media-stats",
      "width": "40%"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至2026",
+     "align": "right"
     },
     {
      "type": "prose",
@@ -610,7 +615,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目修改记录"
+     "static_note": "截至 10 月 12 日 · 项目修改记录"
     },
     {
      "type": "stat_card",
@@ -619,6 +624,11 @@
      "columns_v": 2,
      "variant": "para_fields",
      "icons": "auto"
+    },
+    {
+     "type": "prose",
+     "text_ref": "截至2026",
+     "align": "right"
     },
     {
      "type": "prose",
@@ -752,6 +762,8 @@
 3 种｜PDF 样式：原版、个人、公司，同一份文稿选一种导一份
 21 项｜自动测试；GitHub 每次推送自动跑，最近一次 9 月 29 日 21 项全过
 6 次｜提交；最近一次在 9 月 29 日，修好个人版表头和导出菜单
+
+截至 2026 年 10 月 11 日（北京时间）
 
 〔在整套系统里的位置 → 怎么协作〕　〔GitHub〕　〔复制 AI 续作说明〕
 

@@ -302,7 +302,7 @@
      "id": "n-config-files",
      "text": "6,270 个文件",
      "meaning": "北京 10 月 10 日 12:12 完成的开发配置包里的文件数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "out\\latest.zip.receipt.json file_count（devconfig-20261009-231229-9de61253.zip）",
      "screens": [
       "devconfig-backup-01"
@@ -342,7 +342,7 @@
      "id": "n-sources",
      "text": "70 个来源",
      "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出和对话历史段）：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 1 项；9 月 29 日为 66 个，10 月 7 日 2cc7be0 加 FlyingBird 4 项",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 2cc7be0：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppDataRoamingFiles 16＋AppDataRoamingDirs 11＋AppDataLocalDirs 5＋AppDataLocalFiles 1＋ExtraDirs 1）；同法数 9d35282 得 66，与旧稿一致",
      "screens": [
       "devconfig-backup-01",
@@ -355,7 +355,7 @@
      "id": "n-wechat-files",
      "text": "148,592 个文件 · 42.8 GiB",
      "meaning": "北京 10 月 11 日 11:01 完成的那份微信备份（45,972,129,496 字节）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json file_count、bytes",
      "screens": [
       "devconfig-backup-01"
@@ -377,7 +377,7 @@
      "id": "n-tasks",
      "text": "4 个自动任务",
      "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "Get-ScheduledTask（10 月 11 日 13:33–13:41 只读核对：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
      "screens": [
       "devconfig-backup-01"
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "46cd4de4fa4250661180715d71afdeff2af2051af74a578cba4b64433c3d906b",
-  "converted_at_beijing": "2026-10-12T02:58:17+08:00"
+  "sha256": "2ba8751609c5a3c970790556c6ec424f8284ae83aa08b03e672f1cfbc03c8938",
+  "converted_at_beijing": "2026-10-12T05:03:44+08:00"
  }
 }
 ---
@@ -743,7 +743,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月11日"
+     "text_ref": "截至10月12日"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
@@ -834,7 +834,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月11日"
+     "text_ref": "截至10月12日"
     },
     {
      "type": "action_button",
@@ -989,7 +989,7 @@
 
 10 月 11 日这一次：12:05 的配置采集没成功（Codex 的一个状态数据库没能在限定时间里做出一致的副本），没出新包，上一个好包（10 月 10 日那个）原样留着；13:00 上云照常成功，但传上去的就是这个 10 月 10 日的旧包，不是今天的新配置。微信当天 11:02 照常存进了 G。
 
-截至 10 月 11 日
+截至 10 月 12 日
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 

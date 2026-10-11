@@ -420,7 +420,7 @@
      "id": "n-canvas",
      "text": "3840×2160 · 60 帧",
      "meaning": "成片画布和帧率（默认配置）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "config.py 第 34–36 行（9 月 26 日后 config.py 未改）",
      "screens": [
       "video-scaffold-01"
@@ -430,7 +430,7 @@
      "id": "n-animations",
      "text": "39 种动画",
      "meaning": "场景模板支持的动画写法种数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "cc41e514 的 templates/scene_base.html 动画 switch case 去重计数：39 种",
      "screens": [
       "video-scaffold-01",
@@ -453,7 +453,7 @@
      "id": "n-tests",
      "text": "216 个",
      "meaning": "测试定义（只计数，这次没有运行）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "cc41e514 的 tests/ 下 def test_ 计数：216",
      "screens": [
       "video-scaffold-01",
@@ -464,7 +464,7 @@
      "id": "n-lines",
      "text": "15331 行",
      "meaning": "Git 里不在 tests/ 下的 57 个 .py 文件总行数（含空行注释），截止 cc41e514",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "cc41e514 的非 tests/ .py 逐文件行数，14:00 前截点",
      "screens": [
       "video-scaffold-06"
@@ -474,7 +474,7 @@
      "id": "n-commits",
      "text": "113 次",
      "meaning": "截止 cc41e514 的全部提交数，6 月 26 日–10 月 11 日 13:57（北京时间）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "git rev-list --count cc41e514，14:00 前截点",
      "screens": [
       "video-scaffold-06"
@@ -518,7 +518,7 @@
      "id": "n-features",
      "text": "32 项",
      "meaning": "全部功能条数（28 现役＋4 停用）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "本页 registry.features 条数",
      "screens": [
       "video-scaffold-08"
@@ -674,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
-  "sha256": "5301c6da1fef8c8c4e0d5aae15c5d59ad2e150418194ecdc4f5df7bb9928f3c5",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "sha256": "495ff82afd8047c256de09f918353542b4dc6f89fd5965e17097b34da1a84f9c",
+  "converted_at_beijing": "2026-10-12T05:03:52+08:00"
  }
 }
 ---

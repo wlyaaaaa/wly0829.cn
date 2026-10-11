@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "791d8363007243d3607f1eb646d5e5ec8f0035a86462aa156cb51bda55e9d336",
-  "converted_at_beijing": "2026-10-11T16:25:26+08:00"
+  "sha256": "8d14d53e1bc1a7ddd02ec35589d0c178d719cab0bd0545d4180acc7fb9506bd5",
+  "converted_at_beijing": "2026-10-12T05:03:45+08:00"
  }
 }
 ---
@@ -571,7 +571,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "649万秒",
+     "text_ref": "654.0万秒",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -626,7 +626,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
 
-**649 万秒**　硬件记录（截至 10 月 11 日）
+**654.0 万秒**　硬件记录（截至 10 月 12 日）
 
 ::screen{#github-profile-06 section="projects"}
 
@@ -729,7 +729,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 10 月 11 日）
+**21 条**　模型路线（截至 10 月 12 日）
 
 ::screen{#github-profile-07 section="projects"}
 

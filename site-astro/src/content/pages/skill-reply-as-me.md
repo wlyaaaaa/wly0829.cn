@@ -39,7 +39,7 @@
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
@@ -103,8 +103,8 @@
  },
  "source": {
   "page": "sources/pages/skill-reply-as-me/page.json",
-  "sha256": "0f8c7bdee3034212e3b5ca2dfc61cb9154d4f523dba9fec0d75d51c6802717c3",
-  "converted_at_beijing": "2026-10-11T13:40:16+08:00"
+  "sha256": "fc13a48f90b2464595d203323532c9449e7e039ea1d42309494a62eabfc720b8",
+  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
  }
 }
 ---
@@ -200,7 +200,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -327,7 +327,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
+     "static_note": "截至 10 月 12 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

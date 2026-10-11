@@ -46,7 +46,7 @@
    "facts": [
     "近 7 天改进了 8 次"
    ],
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "AI 使用记录；项目修改记录"
   },
   "public": false,
@@ -271,7 +271,7 @@
      "id": "n-lines",
      "text": "1,839 行",
      "meaning": "src/legal_filing_kit/formal_documents.py 的行数（不含空行，含注释；含空行共 2,013 行），不限定文书种类",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "PowerShell Get-Content | Measure-Object -Line，提交 ae11211",
      "screens": [
       "personal-formal-documents-06",
@@ -282,7 +282,7 @@
      "id": "n-audit-lines",
      "text": "1,426 行",
      "meaning": "共用检查模块 audit.py 的行数（不含空行）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "同上",
      "screens": [
       "personal-formal-documents-06"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "750dfbf43e6f81d99b1fc68b96313861f2d8b0ba4d0a177821a7d78c94beaa55",
-  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
+  "sha256": "3521f85f9b25f67b0bf599ecaa0a1b0f03d658d1ff500d5b5d06ef819de28288",
+  "converted_at_beijing": "2026-10-12T05:03:47+08:00"
  }
 }
 ---
@@ -483,7 +483,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录；项目修改记录",
+     "static_note": "截至 10 月 12 日 · AI 使用记录；项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -557,7 +557,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · AI 使用记录；项目修改记录"
+     "static_note": "截至 10 月 12 日 · AI 使用记录；项目修改记录"
     },
     {
      "type": "stat_card",

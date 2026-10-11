@@ -530,7 +530,7 @@
      "id": "n-tools",
      "text": "23 个",
      "meaning": "每台电脑开放的工具数（上游 20 + 自加 3）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:124,228；副机工具目录实测",
      "screens": [
       "remote-control-01",
@@ -840,8 +840,8 @@
  },
  "source": {
   "page": "sources/pages/remote-control/page.json",
-  "sha256": "d5529b997b0b967bff175b920c51f714d81d6dd02582df1313f32f7112f563d8",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "f547c2294770dcf7c550c6ebd65c48f91b721ef8b67594fce48d7a1ea3fec90b",
+  "converted_at_beijing": "2026-10-12T05:03:49+08:00"
  }
 }
 ---

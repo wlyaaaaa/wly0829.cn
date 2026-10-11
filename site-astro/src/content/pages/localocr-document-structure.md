@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/localocr-document-structure/page.json",
-  "sha256": "cbda8577d39e44b5a8772f24b3d21ce70ce3e5f0470b241d09d57871e0c92b78",
-  "converted_at_beijing": "2026-10-11T18:50:43+08:00"
+  "sha256": "e8f3a97609478c1deaea3e6bda8457ffdeb5cca2bf1674a098c92e0ed90ee558",
+  "converted_at_beijing": "2026-10-12T05:03:45+08:00"
  }
 }
 ---
@@ -901,7 +901,7 @@ LocalOCR · 功能说明
 
 ## 如何验证
 
-- 源码与配置已核对表格、公式、印章、区域开启而图表关闭的实际状态；截至 10 月 11 日，三个默认模型配置和这些开关都没有变化。
+- 源码与配置已核对表格、公式、印章、区域开启而图表关闭的实际状态；截至 10 月 12 日，三个默认模型配置和这些开关都没有变化。
 
 - test_structure.py 与相关输出测试验证字段、文字行和坐标保留，不代表真实模型对任意文档准确。
 

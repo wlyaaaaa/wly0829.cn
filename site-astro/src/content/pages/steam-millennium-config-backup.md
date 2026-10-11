@@ -329,7 +329,7 @@
      "id": "n-size",
      "text": "52.0 KB",
      "meaning": "一份备份 20 个文件的字节数之和 53,573 B",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "snapshot-manifest.json files[].bytes 求和",
      "screens": [
       "steam-millennium-config-backup-01"
@@ -350,7 +350,7 @@
      "id": "n-plugins",
      "text": "5 个插件 · 2 套主题",
      "meaning": "清单里记着的插件和主题数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "仓库 plugins/、themes/ 子目录计数",
      "screens": [
       "steam-millennium-config-backup-01",
@@ -440,7 +440,7 @@
      "id": "n-code",
      "text": "Python 核心 1,212 行＋读文件告警模块 74 行；4 个 PowerShell 入口共 339 行；VBS 2 个",
      "meaning": "Python 核心和读文件告警模块都只用标准库；4 个 PowerShell 入口共 339 行；隐藏启动用的 VBS 2 个",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "源码只读计行（1721b8a9）：tools/millennium_backup.py 1,212、tools/backup_file_warnings.py 74；4 个 PowerShell 入口共 339 行；隐藏启动用的 VBS 2 个",
      "screens": [
       "steam-millennium-config-backup-05"
@@ -450,7 +450,7 @@
      "id": "n-tests",
      "text": "测试定义 63 个（只计数）",
      "meaning": "主测试 55 个、读文件告警 8 个，这次没有重跑；最近一次有回执的实跑是 9 月 18 日：已发布的洁净源码 55 项 Python 测试和 11 项 Windows 检查全部通过",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "tests/test_backup.py 55 个 test_ 定义、tests/test_file_warnings.py 8 个，只计数；runtime/acceptance-latest.json 的 9 月 18 日已发布洁净源码实跑回执：python_cases=55、windows_checks=11、status=passed",
      "screens": [
       "steam-millennium-config-backup-05",
@@ -606,8 +606,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
-  "sha256": "807237da84e677b743c43b455779c5203ff82c6a81e36b5b82cabedcb5b3863a",
-  "converted_at_beijing": "2026-10-12T02:58:25+08:00"
+  "sha256": "61257647128007e7b1e32e9b2064aace2a258ca2aba6b690bd489469701cb4c0",
+  "converted_at_beijing": "2026-10-12T05:03:51+08:00"
  }
 }
 ---

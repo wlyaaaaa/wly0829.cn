@@ -212,7 +212,7 @@
      "id": "n-registered",
      "text": "165 份",
      "meaning": "精确登记的原件定位，全部核对过 SHA-256",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "materials.py status（北京 10 月 11 日 16:35 只读）：materials=165、exact_registered_locator_rows=165",
      "screens": [
       "personal-materials-01",
@@ -226,7 +226,7 @@
      "id": "n-sources",
      "text": "58 个来源",
      "meaning": "58 个来源：35 个文件夹、5 份文件名清单、13 个交接文件夹、5 个单独登记的文件",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "materials.py status（北京 10 月 11 日 16:35）：sources=58；只读 SQL 按 source_kind：文件夹 35、文件名清单 5、交接 13、单文件 5",
      "screens": [
       "personal-materials-01",
@@ -279,7 +279,7 @@
      "id": "n-sync-runs",
      "text": "43 次，全部成功",
      "meaning": "每日维护里 materials_sync_current 这一步的次数：9 月 5 日–10 月 10 日日志共 42 次 complete、exit_code=0，其中 34 次在北京 17:10，另有 8 次其他时间运行",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "PCConfig hot-backup personal-replica-*.log 的 materials_sync_current 状态行聚合，北京 10 月 11 日只读核对",
      "screens": [
       "personal-materials-01"
@@ -289,7 +289,7 @@
      "id": "n-filenames",
      "text": "15,099 条",
      "meaning": "微信收到的文件和下载文件夹的文件名清单条目",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "只读 SQL count(filename_entries)=15,105（北京 10 月 11 日 16:04）",
      "screens": [
       "personal-materials-03",
@@ -331,7 +331,7 @@
      "id": "n-code-lines",
      "text": "4,242 行",
      "meaning": "materials.py 行数",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "提交 17efb2e 的 materials.py 只读行数统计",
      "screens": [
       "personal-materials-06"
@@ -341,7 +341,7 @@
      "id": "n-tests",
      "text": "测试定义 110 个（只计数）",
      "meaning": "70 个测试函数展开参数后；10 月 11 日静态数，本次没有运行；9 月 28 日有一次 106 项全部通过的旧记录",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "提交 17efb2e 的测试定义只核对了数量，没有重跑",
      "screens": [
       "personal-materials-06"
@@ -534,14 +534,14 @@
   },
   "status_line": {
    "state": "常用",
-   "as_of": "2026-10-11",
+   "as_of": "2026-10-12",
    "source": "10 月 11 日 23:52 计数入口正常返回 58 个来源、165 份登记、4 条关系、44 份文字；文件名清单条数为同晚 23:50 只读计数；源码按 10 月 7 日版本，本次没有跑测试、没有打开原件"
   }
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "bf3e723c23025372fc03e6593b9cd93622b8af06d10b6b43a8572d7df8f68049",
-  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
+  "sha256": "b8590394a17a8673b0fed3ba79f4a4350d4bc972cf2216b309c3ef0c7f563812",
+  "converted_at_beijing": "2026-10-12T05:03:47+08:00"
  }
 }
 ---
@@ -888,7 +888,7 @@
 |---|---|---|---|
 | 精确登记的原件，登记时每份都核对过内容指纹 | 登记过的文件夹、单个文件和文件名清单 | 微信收到的文件和下载文件夹的文件名，每天更新 | 9 月 5 日起每天 17:10 的同步；其中手动补跑 8 次是 10 月 10 日数的，之后未重新核对 |
 
-登记数量是 10 月 11 日 23:52 计数入口正常返回的值（当天上午这个入口报过一次错，之后没再出现，原因还没查）；同步次数截至 10 月 11 日 17:10 那一次
+登记数量是 10 月 11 日 23:52 计数入口正常返回的值（当天上午这个入口报过一次错，之后没再出现，原因还没查）；同步次数截至 10 月 12 日 17:10 那一次
 
 **现在**　每天 17:10 同步
 

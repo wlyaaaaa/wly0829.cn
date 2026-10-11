@@ -552,7 +552,7 @@
      "id": "n-cards",
      "text": "78 张",
      "meaning": "现行认识卡（preference_snapshots status=current，78 个键）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "只读查询 preferences.sqlite3",
      "screens": [
       "daily-preferences-01",
@@ -563,7 +563,7 @@
      "id": "n-statements",
      "text": "423 条",
      "meaning": "记下的本人原话（current 134、historical 289）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "preference_statements 计数",
      "screens": [
       "daily-preferences-01",
@@ -574,7 +574,7 @@
      "id": "n-records",
      "text": "52.0 万条 / 519,707 条",
      "meaning": "现行原始记录（records is_current=1），非现行 73,921，总版本 593,628",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "records 计数",
      "screens": [
       "daily-preferences-01",
@@ -586,7 +586,7 @@
      "id": "n-sources",
      "text": "33 类",
      "meaning": "有现行记录的逻辑来源数（登记 34 类，另明确排除 5 类）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "records join source_instances 按 logical_source 分组",
      "screens": [
       "daily-preferences-01",
@@ -599,7 +599,7 @@
      "id": "n-stale",
      "text": "301 个",
      "meaning": "因来源变化（250）或本人原话变化（51）失效、退出当前结果的卡版本",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "preference_snapshots status=stale 按 invalidation_reason 分组",
      "screens": [
       "daily-preferences-01"
@@ -609,7 +609,7 @@
      "id": "n-stale-statement",
      "text": "51 个",
      "meaning": "因本人原话变化或被更正而失效的卡版本",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "原话变化 37＋引用原话更正 13＋引用原话变化 1",
      "screens": [
       "daily-preferences-11"
@@ -619,7 +619,7 @@
      "id": "n-card-versions",
      "text": "1,011 个",
      "meaning": "非现行卡版本（historical 710＋stale 301）",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "preference_snapshots 计数",
      "screens": [
       "daily-preferences-07"
@@ -629,7 +629,7 @@
      "id": "n-evidence",
      "text": "支持 48,405 条、语境 14,645 条、反例 282 条",
      "meaning": "所有卡版本的关系计数（记录 36,348/10,776/282＋原话 12,057/3,869/0），不是独立证据数或当前卡专属数量",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "snapshot_evidence、snapshot_statement_evidence 按角色计数",
      "screens": [
       "daily-preferences-07"
@@ -659,7 +659,7 @@
      "id": "n-frozen",
      "text": "43 个",
      "meaning": "引用快照目录的冻结副本文件，只数文件，未逐个校验",
-     "as_of": "2026-10-11",
+     "as_of": "2026-10-12",
      "source": "E:\\PersonalData\\日常偏好\\引用快照 文件数",
      "screens": [
       "daily-preferences-10"
@@ -667,20 +667,20 @@
     },
     {
      "id": "n-code",
-     "text": "26,306 行",
+     "text": "26,315 行",
      "meaning": "Python 23,822 行（36 文件）＋mjs 2,484 行（7 文件），不含测试和额外 js",
-     "as_of": "2026-10-11",
-     "source": "提交 b334b3aa 静态计行",
+     "as_of": "2026-10-12",
+     "source": "见来源记录 daily-preferences-n-code-0，观察于 2026-10-12T04:36:08+08:00",
      "screens": [
       "daily-preferences-10"
      ]
     },
     {
      "id": "n-tests",
-     "text": "测试定义 769 个（只计数）",
+     "text": "测试定义 770 个（只计数）",
      "meaning": "Python 718＋Node 57；10 月 11 日没有重跑",
-     "as_of": "2026-10-11",
-     "source": "提交 b334b3aa 测试定义计数；历史实跑保留原日期",
+     "as_of": "2026-10-12",
+     "source": "见来源记录 daily-preferences-n-tests-0，观察于 2026-10-12T04:36:08+08:00",
      "screens": [
       "daily-preferences-10"
      ]
@@ -934,8 +934,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "760ba1f62c7e8a148764f9fee18171ee83ed7599d5fdeac44588bbc8516de2fc",
-  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
+  "sha256": "d8643f9b0101a7bcffb1531e9b5382ab26b0e2b4b4eb44ed94407b67215df1b4",
+  "converted_at_beijing": "2026-10-12T05:03:43+08:00"
  }
 }
 ---
@@ -3895,8 +3895,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
 - **近况会自己标过期（9 月 27 日做好，还没在真实使用里验过）。** 每次“要更新了”整段重写近况卡，旧版留历史；窗口结束超过 7 天、或之后又有新记录，程序就标过期，AI 读到时先说“这是到某日为止的近况”，只补读之后那几天。睡眠、步数（由个人健康项目的只读工具提供，不存进本库）、亮屏、定位在这里只当作息的线索，不当健康结论。
 
 **43 个**｜冻结的引用副本文件（只数了文件，没逐个校验）
-**26,306 行**｜Python 和 JavaScript 正式代码（43 个文件）
-**769 个**｜测试定义（只计数，10 月 11 日没有重跑）
+**26,315 行**｜Python 和 JavaScript 正式代码（43 个文件）
+**770 个**｜测试定义（只计数，10 月 11 日没有重跑）
 **205 次**｜提交（8 月 31 日–10 月 8 日）
 
 ::screen{#daily-preferences-11 section="highlights"}

@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/pcconfig-drift-acceptance/page.json",
-  "sha256": "b08d2845bb06fb7d80a1019376cb67dfba440d7c43a75d706dddecd864200a91",
-  "converted_at_beijing": "2026-10-11T19:04:24+08:00"
+  "sha256": "0ca1bf1713a779d092a36c7d85995f481e13b4ff3060d34d2f37e8bfa3719cfe",
+  "converted_at_beijing": "2026-10-12T05:03:46+08:00"
  }
 }
 ---
@@ -636,7 +636,7 @@ PCConfig · 功能说明
 
 3. 只检查核心恢复时，用恢复模块的 Inspect 只读检查，直接读恢复登记和任务定义，不经过任何区域选择器。
 
-4. 当前登记的 209 个测试只说明定义数量，本次没有运行，不当作通过数。
+4. 当前登记的 210 个测试（10 月 12 日 04:32 计数）只说明定义数量，本次没有运行，不当作通过数。
 
 ::screen{#pcconfig-drift-acceptance-06 section="tech"}
 
