@@ -59,7 +59,7 @@ function todoHead(ov, off, at) {
   const sub = !Number.isFinite(n) ? (Number.isFinite(at) ? `电脑那边没读到（上次 ${hm(at)}）` : '还没读到') : n === 0 ? '现在没有要你做的事' : urgent == null ? '去驾驶舱看是哪几件' : urgent ? `其中 ${urgent} 件急` : '都不急';
   const color = !Number.isFinite(n) ? 'gray' : urgent ? 'red' : n ? 'yellow' : 'green';
   const score = !off && Number.isFinite(ov?.score) ? `电脑健康 ${Math.round(ov.score)}/100 · ${hm(at)} 读到` : '';
-  return `<div class="ov-head ov-todo is-${color}"><div class="ov-todo-n"><b>${Number.isFinite(n) ? n : '—'}</b><span>件<br>你待办</span></div>`
+  return `<div class="ov-head ov-todo is-${color}"><div class="ov-todo-n">${Number.isFinite(n) ? `<b>${n}</b><span>件<br>你待办</span>` : '<span>你待办</span>'}</div>`
     + `<div class="ov-verdict"><p class="ov-word">${esc(sub)}</p>${score ? `<p class="ov-asof">${esc(score)}</p>` : ''}</div></div>`;
 }
 
