@@ -25,7 +25,8 @@ class CompleteBuildTests(unittest.TestCase):
                 self.assertFalse(any(prefix in raw for prefix in prefixes), str(path))
 
     def test_complete_artifact_has_no_build_machine_paths_in_attributes_or_urls(self):
-        # 只拦属性值（name="…"）和地址里的盘符绝对路径（构建机路径外泄）；正文和代码示例里介绍系统的文字不在此列。
+        # 只拦属性值（name="…"）和地址里的盘符绝对路径；正文和代码示例里介绍系统的文字不在此列。
+        # 理由是维护：这类值是构建时的临时文件夹，换个文件夹构建，带它的页面都会被算作改动，按需更新白传、改动清单失真。
         pattern = re.compile(rb"(?:[A-Za-z0-9_-]=[\x22']|url\(\s*[\x22']?|[\x22'](?:src|href|srcset|url)[\x22']\s*:\s*[\x22'])(?:[A-Za-z]:(?:\\{1,2}|/)[A-Za-z0-9_.$]|file:///)")
         hits = []
         for path in (ROOT / 'dist').rglob('*'):
