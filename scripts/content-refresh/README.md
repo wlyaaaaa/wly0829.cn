@@ -37,6 +37,11 @@ SQLite 以 URI `mode=ro` 打开，只接受一条 select 和单行单列结果�
 仍须通过 field/page_pattern 绑定实际日期。只有所有被注明数字均取得同口径新值时，
 截至日期才更新为这些数字最早的观察日期；任何 Unknown 都保留旧日期。
 盘点输出 `qualifies_suggestion` 供 GPT 核对，建议本身不算登记。
+日期句说明“库最近一次写入”“上次使用”、资料覆盖时间等事件口径时，
+不能拿本轮读数时间替换：结果标 `manual_review`、旧值保留，
+`number-edits.json.manual_reviews` 列“需人工核对”和 `date_candidate`。
+候选值只表示本轮观察日期；GPT/内容 Owner 核对真实事件来源和含义后再处理，
+Opus 负责需要改写的说明，`apply_edits.py` 不应用这些日期候选。
 
 非历史、非 `status_line.state` 的人工记录必须同时有 `manual_reason` 和非空
 `manual_route`。理由仅限 `needs_admin_rescan`、`ui_only`、`external_account`、
@@ -69,6 +74,9 @@ python scripts/content-refresh/apply_edits.py E:\Cache\content-refresh\本次更
 默认刷新和 `--inventory` 都写 `dated-inventory.json`、`fact-tasks.md`；清点模式只写这两份。`--root` 默认仍是脚本所在的当前仓库根，可显式选择含 `sources/pages` 的另一快照。遍历全部 `sources/pages/*/page.json`，保留每处“截至”的字段和字符范围，清点 `status_line.as_of/last/state/facts`、首屏数字卡和来源注。首屏卡片复用现有正文解析器，`source_note` 读取相邻 `layout.json` 的对应原文，不执行转换或排版。
 
 每项有页、屏、`field`、字符范围、行号、原文、原日期、来源记录 id、能否自动重取。`surface=visible` 表示展示文字；`author` 是构图和内部笔记；`reference` 是数字登记等参考副本。原文件“截至”总数由 `coverage.cutoff_occurrences/cutoff_surfaces` 分开报告，不能把构图、笔记、登记副本都算成展示事实；后两类不生成新的取数任务，私人来源登记位置待复核项例外。未登记展示项标“待登记·人工取数”。
+
+“截至”的原始词汇命中与实际日期项分开统计。只有紧随其后的日期写法才生成 `as_of`：
+“说明截至哪天”是功能用语，不向后找另一句的日期；中文、ISO、日期范围及明确相对日期继续清点。
 
 来源匹配必须同时对上页、屏和实际字段/唯一捕获范围，或所属 `page_number` 的完整原话；一个孤立数字、同屏另一项已有来源、匹配多处的泛化表达或过期登记都不算绑定。`automatic=true` 还要求已登记的只读来源、非历史/冻结且统计口径已核实，它只说明具备自动重取办法，清点模式从不执行。来源注引用只差数字时按转换器的归一方式找到当前段落，仍无法定位时明确交人工复核。来源项目按已有路径身份归组，同一项目仅大小写或连字符不同的名字统一到现有项目页标识，每组最多 25 项；缺来源先核对页面所属项目的领域入口。历史/冻结项留在清单，`requires_refresh=false`，不自动激活。
 
