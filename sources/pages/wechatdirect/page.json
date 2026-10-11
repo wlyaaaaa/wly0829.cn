@@ -844,7 +844,7 @@
         "id": "n-kdf",
         "text": "4096 字节、256000 轮",
         "meaning": "数据库页大小和 PBKDF2 轮数（代码常量）",
-        "as_of": "2026-09-28",
+        "as_of": "2026-10-11",
         "source": "wechat_source.py:35-37",
         "screens": [
           "wechatdirect-04"

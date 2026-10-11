@@ -110,7 +110,7 @@
       "id": "work-delivery-package-sources-06",
       "section": "tech",
       "title": "技术实现与依据（二）",
-      "text": "## 技术实现与依据（二）\n\n- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。\n\n- Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。\n\n- SourceSnapshot 保存 source key、名称、provider label、版本、字节数、SHA-256 和 supersedes。\n\n- 文本支持 UTF-8（带不带 BOM 都可以）、GB18030 和带 BOM 的 UTF-16；不带 BOM 的 UTF-16 不保证能认。CSV 后续由证据层计算行列。\n\n- 标准 OOXML 输出使用 YYYY-MM-DD 与中国企业常用角色/章节语义，兼顾 WPS 与 Microsoft Office。",
+      "text": "## 技术实现与依据（二）\n\n- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15.0 秒时间门，超时不会回滚已经提交的事务。\n\n- Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。\n\n- SourceSnapshot 保存 source key、名称、provider label、版本、字节数、SHA-256 和 supersedes。\n\n- 文本支持 UTF-8（带不带 BOM 都可以）、GB18030 和带 BOM 的 UTF-16；不带 BOM 的 UTF-16 不保证能认。CSV 后续由证据层计算行列。\n\n- 标准 OOXML 输出使用 YYYY-MM-DD 与中国企业常用角色/章节语义，兼顾 WPS 与 Microsoft Office。",
       "links": [],
       "anchors": [],
       "live": null,
