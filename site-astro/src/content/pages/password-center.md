@@ -735,19 +735,19 @@
     },
     {
      "id": "n-code",
-     "text": "约 10.2 万行",
+     "text": "约 11.1 万行",
      "meaning": "PasswordCenter 仓库自有代码行数（.py/.ps1/.psm1/.mjs/.cs，排除随带第三方库）",
-     "as_of": "2026-09-28",
-     "source": "git ls-files 于 d167b07 逐文件数行：Python 78887、PowerShell 22135、JS 775、C# 158，合计 101955",
+     "as_of": "2026-10-11",
+     "source": "git ls-files 于 968b981 逐文件数行：Python 87398、PowerShell 23146、JS 808、C# 164，合计 111516",
      "screens": [
       "password-center-08"
      ]
     },
     {
      "id": "n-tests",
-     "text": "134 项",
+     "text": "137 项",
      "meaning": "tests/test-registry.json 里登记的测试条数，已知失败 0",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "test-registry.json、known-failures.json",
      "screens": [
       "password-center-08"
@@ -755,10 +755,10 @@
     },
     {
      "id": "n-commits",
-     "text": "389 次",
+     "text": "413 次",
      "meaning": "main 分支提交数（含从 PCConfig 过滤迁来的历史）",
-     "as_of": "2026-09-28",
-     "source": "git rev-list --count HEAD（d167b07）",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD（968b981）",
      "screens": [
       "password-center-08",
       "password-center-17"
@@ -1066,8 +1066,8 @@
  },
  "source": {
   "page": "sources/pages/password-center/page.json",
-  "sha256": "0e90c5fcf8aa14ee49c8270b62b2542700b4f00ec73e89cc810230b384706e30",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "1542c3f0e275f86d80b0594f7ffe6ef03a9dbde6399c5dcc9306128b64788184",
+  "converted_at_beijing": "2026-10-11T13:41:21+08:00"
  }
 }
 ---
@@ -3470,7 +3470,7 @@
 **用了什么**
 - 密码库是 KeePass 的 KDBX 格式（用 pykeepass 4.2.0 读写），密码、API 密钥、银行卡、笔记、BitLocker 都在这一个文件里；银行卡的卡号、有效期、安全码作为一整条一起存。
 - 程序用 Python 3.14 和 PowerShell 7 写，窗口是 WinForms；手机 App 用 Kotlin，读写同一个 KDBX；手机端源码 9 月 29 日放进同一个私有仓库的 android 文件夹，和电脑端一起管版本，之前没有版本记录。
-- 约 10.2 万行自有代码（Python 7.9 万行、PowerShell 2.2 万行），134 项登记测试，7 月 26 日起 389 次提交。
+- 约 11.1 万行自有代码（Python 8.7 万行、PowerShell 2.3 万行），137 项登记测试，7 月 26 日起 413 次提交。
 
 **和电脑配置库怎么分工**
 - 密码中心管产品：密码、验证方式、手机协议、加密文件格式、恢复副本格式。

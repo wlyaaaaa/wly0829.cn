@@ -550,19 +550,19 @@
     },
     {
      "id": "n-code-lines",
-     "text": "24838 行",
+     "text": "25225 行",
      "meaning": "正式代码物理行数（不含测试）",
-     "as_of": "2026-09-28",
-     "source": "git ls-files 逐文件计行：src 21656、runtime 718、scripts py 457、ps1 1977、vbs 30",
+     "as_of": "2026-10-11",
+     "source": "git ls-files 逐文件计行：src 21679、runtime 718、scripts py 782、ps1 2016、vbs 30",
      "screens": [
       "chinese-asr-10"
      ]
     },
     {
      "id": "n-tests",
-     "text": "526 个",
+     "text": "544 个",
      "meaning": "自动测试用例个数（只计数未运行）",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "unittest discover tests 的 countTestCases()",
      "screens": [
       "chinese-asr-10"
@@ -570,10 +570,10 @@
     },
     {
      "id": "n-commits",
-     "text": "93 次",
+     "text": "101 次",
      "meaning": "仓库提交次数",
-     "as_of": "2026-09-28",
-     "source": "git rev-list --count HEAD（8ba0d62）",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD（1bd5a04）",
      "screens": [
       "chinese-asr-10"
      ]
@@ -787,8 +787,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
-  "sha256": "21527d45e4e9a36fc097e85bb4cb4ecbbb956552c8e00d3e692f19421b4fd962",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "c8c52100dfd63b2508b2ff7caf60d73560151bc199d1a242a6a4449481643937",
+  "converted_at_beijing": "2026-10-11T13:37:32+08:00"
  }
 }
 ---
@@ -3135,7 +3135,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
      ],
      "row": "design",
      "width": "32%",
-     "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
+     "text_ref": "25225行代码（Python23179行、PowerShell2016行、VBS30行）544个自动测"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。横版画面：左上标题。左边约三分之二宽，六张横向小卡片两列三行，每张左边一个小水彩图标（两只耳朵中间一个不投票的叉、一叠纸加封条、一把小锁挂在模型盒上、一架天平、一只手指着一个文件、一个关着的小开关），右边粗体一句加一两行小字。右边约三分之一宽，竖着三张大数字卡（大号绿色数字，下面一行小字）。",
@@ -3166,7 +3166,7 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
       "_library/hires-icons/打勾清单.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
-     "text_ref": "24838行代码（Python22831行、PowerShell1977行、VBS30行）526个自动测"
+     "text_ref": "25225行代码（Python23179行、PowerShell2016行、VBS30行）544个自动测"
     }
    ],
    "notes": "依据派单的统一标准和库存 source_layout 文字；未读取图像。横竖各按本屏描述编排。竖版：标题；六张卡片一行一张；三张大数字卡改成一行三张小卡放在最后。 2026-10-03 页修复05：按对应观感审查调整列数、留白与插画；定稿文字原样保留，逐条处理见同页 .fix.md。",
@@ -3339,9 +3339,9 @@ AI 排查听写时分开看三样：听写状态、技术日志、显卡排队�
 **只处理点名的那一段。**｜问一段录音就只转这一段，不去扫整个录音库；公开短样例只用来查能不能跑，私人录音不拿来当测试集。
 **基础转写不靠大模型猜。**｜可以接本机大模型看疑点，但默认关：没有它也得稳定跑完；打开了也只读疑点证据，不改原始结果。
 
-**24838 行**｜代码（Python 22831 行、PowerShell 1977 行、VBS 30 行）
-**526 个**｜自动测试
-**93 次**｜提交（7 月 7 日–9 月 28 日）
+**25225 行**｜代码（Python 23179 行、PowerShell 2016 行、VBS 30 行）
+**544 个**｜自动测试
+**101 次**｜提交（7 月 7 日–10 月 11 日）
 
 ::screen{#chinese-asr-11 section="highlights"}
 

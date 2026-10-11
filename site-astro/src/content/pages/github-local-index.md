@@ -520,20 +520,20 @@
     },
     {
      "id": "n-code",
-     "text": "工具 7,515 行；测试 10 个脚本 3,932 行",
+     "text": "工具 7,354 行；测试 10 个脚本 3,817 行",
      "meaning": "git ls-files 下 tools/、tests/ 逐个 wc -l",
-     "as_of": "2026-09-28",
-     "source": "提交 56ceea7",
+     "as_of": "2026-10-11",
+     "source": "提交 e792eda",
      "screens": [
       "github-local-index-05"
      ]
     },
     {
      "id": "n-commits",
-     "text": "455 次提交（7 月 5 日–9 月 28 日）",
+     "text": "458 次提交（7 月 5 日–10 月 7 日）",
      "meaning": "git log 计数，时间换算成北京",
-     "as_of": "2026-09-28",
-     "source": "提交 56ceea7",
+     "as_of": "2026-10-11",
+     "source": "提交 e792eda",
      "screens": [
       "github-local-index-05"
      ]
@@ -775,8 +775,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "01b3019a0d5d0af69c092c44281c35aeac3f4d899e866b1197ef07e4b950baa0",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "e2744a4e048b2bbe8055d38c2c6248fac76cdabf8892bf63bdfc5da986e459ef",
+  "converted_at_beijing": "2026-10-11T13:41:20+08:00"
  }
 }
 ---
@@ -865,7 +865,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月10日。本机工作目录"
+     "text_ref": "截至10月11日。本机工作目录"
     },
     {
      "type": "action_button",
@@ -931,7 +931,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月10日。本机工作目录"
+     "text_ref": "截至10月11日。本机工作目录"
     },
     {
      "type": "prose",
@@ -1089,7 +1089,7 @@ GitHub 项目总索引
 **11 个**｜冻结的项目：只核对身份和位置，不查改动、不修
 **398 次**｜AI 用它查一个仓库的身份和同步（9 月 16 日–10 月 9 日）
 
-截至 10 月 10 日。本机工作目录按总表最近一次刷新（9 月 28 日 01:40）是 75 个，其中 30 个是 AI 同时干活时开的临时目录。
+截至 10 月 11 日。本机工作目录按总表最近一次刷新（9 月 28 日 01:40）是 75 个，其中 30 个是 AI 同时干活时开的临时目录。
 
 现在　基座体检　各项目和 GitHub 同步没有　〔现在正不正常 → 驾驶舱〕
 
@@ -1834,7 +1834,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     },
     {
      "type": "content_card",
-     "text_ref": "规模工具7,515行，PowerShell7为主，算",
+     "text_ref": "规模工具7,354行，PowerShell7为主，算",
      "columns": 1,
      "columns_v": 1,
      "illustration": "none"
@@ -1912,7 +1912,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     },
     {
      "type": "content_card",
-     "text_ref": "规模工具7,515行，PowerShell7为主，算",
+     "text_ref": "规模工具7,354行，PowerShell7为主，算",
      "columns": 1,
      "columns_v": 1,
      "illustration": "none"
@@ -2105,7 +2105,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
 
 新仓库默认放 V:\Personal\Projects，临时工作目录放 V:\Personal\Worktrees；Z 盘是内存缓存盘，不放仓库。
 
-**规模**　工具 7,515 行，PowerShell 7 为主，算数字的一段用 Python；测试 10 个脚本 3,932 行，用临时建的真 Git 仓库和模拟的 GitHub 跑；455 次提交（7 月 5 日–9 月 28 日）；不用数据库。
+**规模**　工具 7,354 行，PowerShell 7 为主，算数字的一段用 Python；测试 10 个脚本 3,817 行，用临时建的真 Git 仓库和模拟的 GitHub 跑；458 次提交（7 月 5 日–10 月 7 日）；不用数据库。
 
 ::screen{#github-local-index-06 section="tech"}
 

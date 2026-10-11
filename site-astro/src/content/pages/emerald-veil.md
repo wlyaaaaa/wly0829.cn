@@ -439,10 +439,10 @@
     },
     {
      "id": "n-cs-lines",
-     "text": "C# 3,266 行",
-     "meaning": "受版本控制的 src 下 C#（App 2,764＋Core 502），不含测试",
-     "as_of": "2026-09-28",
-     "source": "git ls-files 逐个数行，提交 168c200",
+     "text": "C# 3,293 行",
+     "meaning": "受版本控制的 src 下 C#（App 2,777＋Core 516），不含测试",
+     "as_of": "2026-10-11",
+     "source": "git ls-files 逐个数行，提交 861a2d2",
      "screens": [
       "emerald-veil-06"
      ]
@@ -459,9 +459,9 @@
     },
     {
      "id": "n-tests",
-     "text": "67 个自动测试",
-     "meaning": "测试方法数（Fact 61、Theory 6）",
-     "as_of": "2026-09-28",
+     "text": "68 个自动测试",
+     "meaning": "测试方法数（Fact 62、Theory 6）",
+     "as_of": "2026-10-11",
      "source": "tests/EmeraldVeil.Core.Tests/*.cs 计 [Fact]/[Theory]",
      "screens": [
       "emerald-veil-06"
@@ -469,10 +469,10 @@
     },
     {
      "id": "n-commits",
-     "text": "45 次提交",
-     "meaning": "8 月 11 日–9 月 29 日（北京）全部提交",
-     "as_of": "2026-09-29",
-     "source": "git rev-list --count HEAD（f46e59b）",
+     "text": "46 次提交",
+     "meaning": "8 月 11 日–10 月 8 日（北京）全部提交",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD（861a2d2）",
      "screens": [
       "emerald-veil-06"
      ]
@@ -634,8 +634,8 @@
  },
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
-  "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T13:23:33+08:00"
+  "sha256": "5066ebda4865d19492a5c4d421a62873b5c7c0599c20ec21c7a75675bf83e2ae",
+  "converted_at_beijing": "2026-10-11T13:41:19+08:00"
  }
 }
 ---
@@ -2026,7 +2026,7 @@
      "columns": 1,
      "row": "details",
      "width": "50%",
-     "text_ref": "规模（9月29日数）：C#3,266行·PowerShell1,556行·67个自动"
+     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2085,7 +2085,7 @@
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "text_ref": "规模（9月29日数）：C#3,266行·PowerShell1,556行·67个自动"
+     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2234,7 +2234,7 @@
 
 **壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。
 
-**规模**（9 月 29 日数）：C# 3,266 行 · PowerShell 1,556 行 · 67 个自动测试 · 45 次提交（8 月 11 日–9 月 29 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
+**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 68 个自动测试 · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
 
 ::screen{#emerald-veil-07 section="tech"}
 

@@ -258,7 +258,7 @@
       "title": "它是怎么搭的",
       "scene": "左上标题。上半部分一张从左到右的流程图：最左边竖着四个小入口卡片（开始菜单窗口、AI 调用的命令、手机 App、网页授权页），四条细线汇到中间一个大节点“Secret Broker”（画成一位戴绿帽子的门卫站在门口），门卫右边分出三条绿色箭头到三个节点（一本加锁的账本“KDBX 密码库”、一叠用丝带捆起来的文件夹“文件加密”、一只沙漏“资料解锁期和无限制授权”），三条再汇到最右边一个节点“恢复副本”（一朵云和两块硬盘）。下半部分左右两张卡片：左“用了什么”，右“和电脑配置库怎么分工”。",
       "portrait": "竖版：流程图改成从上到下；四个入口排成两行两个；下面两张卡片上下排。",
-      "text": "它是怎么搭的\n\n入口：开始菜单里的窗口｜AI 调用的命令｜手机 App｜网页授权页\n→ **Secret Broker**（守门的程序：核对是谁、要什么、有没有授权；不对就停，不猜）\n→ KDBX 密码库｜文件加密｜资料解锁期和无限制授权的状态\n→ 恢复副本：私人 GitHub、G 盘、H 盘\n\n**用了什么**\n- 密码库是 KeePass 的 KDBX 格式（用 pykeepass 4.2.0 读写），密码、API 密钥、银行卡、笔记、BitLocker 都在这一个文件里；银行卡的卡号、有效期、安全码作为一整条一起存。\n- 程序用 Python 3.14 和 PowerShell 7 写，窗口是 WinForms；手机 App 用 Kotlin，读写同一个 KDBX；手机端源码 9 月 29 日放进同一个私有仓库的 android 文件夹，和电脑端一起管版本，之前没有版本记录。\n- 约 10.2 万行自有代码（Python 7.9 万行、PowerShell 2.2 万行），134 项登记测试，7 月 26 日起 389 次提交。\n\n**和电脑配置库怎么分工**\n- 密码中心管产品：密码、验证方式、手机协议、加密文件格式、恢复副本格式。\n- 〔电脑配置与恢复〕管“装到这台电脑上”：装进受保护的 C:\\ProgramData\\PCConfig\\AuthorityHost、核对每个文件的哈希、每天的计划任务、复制到 G 和 H。",
+      "text": "它是怎么搭的\n\n入口：开始菜单里的窗口｜AI 调用的命令｜手机 App｜网页授权页\n→ **Secret Broker**（守门的程序：核对是谁、要什么、有没有授权；不对就停，不猜）\n→ KDBX 密码库｜文件加密｜资料解锁期和无限制授权的状态\n→ 恢复副本：私人 GitHub、G 盘、H 盘\n\n**用了什么**\n- 密码库是 KeePass 的 KDBX 格式（用 pykeepass 4.2.0 读写），密码、API 密钥、银行卡、笔记、BitLocker 都在这一个文件里；银行卡的卡号、有效期、安全码作为一整条一起存。\n- 程序用 Python 3.14 和 PowerShell 7 写，窗口是 WinForms；手机 App 用 Kotlin，读写同一个 KDBX；手机端源码 9 月 29 日放进同一个私有仓库的 android 文件夹，和电脑端一起管版本，之前没有版本记录。\n- 约 11.1 万行自有代码（Python 8.7 万行、PowerShell 2.3 万行），137 项登记测试，7 月 26 日起 413 次提交。\n\n**和电脑配置库怎么分工**\n- 密码中心管产品：密码、验证方式、手机协议、加密文件格式、恢复副本格式。\n- 〔电脑配置与恢复〕管“装到这台电脑上”：装进受保护的 C:\\ProgramData\\PCConfig\\AuthorityHost、核对每个文件的哈希、每天的计划任务、复制到 G 和 H。",
       "links": [
         {
           "text": "电脑配置与恢复",
@@ -1395,19 +1395,19 @@
       },
       {
         "id": "n-code",
-        "text": "约 10.2 万行",
+        "text": "约 11.1 万行",
         "meaning": "PasswordCenter 仓库自有代码行数（.py/.ps1/.psm1/.mjs/.cs，排除随带第三方库）",
-        "as_of": "2026-09-28",
-        "source": "git ls-files 于 d167b07 逐文件数行：Python 78887、PowerShell 22135、JS 775、C# 158，合计 101955",
+        "as_of": "2026-10-11",
+        "source": "git ls-files 于 968b981 逐文件数行：Python 87398、PowerShell 23146、JS 808、C# 164，合计 111516",
         "screens": [
           "password-center-08"
         ]
       },
       {
         "id": "n-tests",
-        "text": "134 项",
+        "text": "137 项",
         "meaning": "tests/test-registry.json 里登记的测试条数，已知失败 0",
-        "as_of": "2026-09-28",
+        "as_of": "2026-10-11",
         "source": "test-registry.json、known-failures.json",
         "screens": [
           "password-center-08"
@@ -1415,10 +1415,10 @@
       },
       {
         "id": "n-commits",
-        "text": "389 次",
+        "text": "413 次",
         "meaning": "main 分支提交数（含从 PCConfig 过滤迁来的历史）",
-        "as_of": "2026-09-28",
-        "source": "git rev-list --count HEAD（d167b07）",
+        "as_of": "2026-10-11",
+        "source": "git rev-list --count HEAD（968b981）",
         "screens": [
           "password-center-08",
           "password-center-17"

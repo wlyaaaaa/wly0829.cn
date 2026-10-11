@@ -42,8 +42,8 @@
   "repo_url": "https://github.com/wlyaaaaa/devconfig-backup",
   "capability": "管好这台电脑：备份、恢复和自动任务",
   "based_on": {
-   "commit": "5be7957eb00d2371bd95b2ce2d5215aae4d18ace",
-   "commit_time": "2026-09-26T10:24:14-05:00"
+   "commit": "52d33563e44e2dbc419dc90a6aed9161d470d1ea",
+   "commit_time": "2026-10-11T08:26:11+08:00"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风，从开头这屏的插画出发：侧透机箱里伸出的两条细绿线上，淡绿色光点缓缓流动；一叠齿轮、终端、编辑器小图标组成的文件夹卡片一张张落进打开的纸箱，箱盖合上时一个绿色对勾印章轻轻盖下；旁边相机的快门闪一下，把绿色微信聊天气泡定格成一叠照片卡片；两样东西顺着绿线流进写着 G 的固态硬盘，硬盘指示灯随之一闪；一缕光点从硬盘飘向右上角的白云，云里一个绿色循环箭头慢慢转一圈；四周水彩叶子轻轻摆动。镜头不动，除硬盘上的 G 外不出现任何文字，最后一帧回到第一帧。",
   "registry": {
@@ -162,7 +162,7 @@
      "name": "AI 工具配置和记忆",
      "what": "Codex 的配置和记忆（84 个记忆文件，含之前被全局 extensions 排除挡掉的 45 个扩展笔记）、Antigravity 的设置（antigravity_state.pbtxt、~/.gemini/config 下 projects 和 plugins）、OpenCode 的设置（补回 1 个被 plugins 排除挡掉的插件文件、桌面版设置）只由这里备；.openclaw 移出，旧包按轮换过期；9/29 凌晨（73556a9）home/.codex、.codex/memories/extensions、.claude、.gemini、antigravity_state.pbtxt、.config/opencode 登记为必需来源，Antigravity 命令行版 conversations、implicit、annotations、brain、knowledge 等排除，设置、MCP 连接和登录文件照带；9d35282 按本人 9/29 决定排除 Codex thread-backups、attachments、generated_images、visualizations、dictation-history；新包 9/29 12:05 跑完才算落实",
      "how": "自动：随 DevConfigBackup-Local；Codex Memory Backup、Gemini Memory Backup 已禁用",
-     "status": "待验收",
+     "status": "在用",
      "screen": "devconfig-backup-08",
      "source": "提交 bd651fa（北京 9/28 23:23）；owner-decisions.md“网站：AI 备份只留该留的”；E:\\PCConfig\\registries\\pending_acceptance.json devconfig-ai-scope-first-package（9/29 12:05 之后核）；Get-ScheduledTask 两个记忆任务 Disabled"
     },
@@ -290,20 +290,20 @@
      "id": "f-self-tests",
      "group": "g-status",
      "name": "自检脚本",
-     "what": "18 个 tests\\Assert-*.ps1，专属临时目录；Assert-NoBackupArtifacts 防止备份和密钥进仓库",
+     "what": "24 个 tests\\Assert-*.ps1，专属临时目录；Assert-NoBackupArtifacts 防止备份和密钥进仓库",
      "how": "改代码后 AI 跑受影响的那几个",
      "status": "在用",
      "screen": "devconfig-backup-09",
-     "source": "tests\\ 18 个；AGENTS.md:15；提交 f16860f 新增 Assert-LockedSourceResilience"
+     "source": "tests\\ 24 个；AGENTS.md:15；提交 f16860f 新增 Assert-LockedSourceResilience"
     }
    ],
    "numbers": [
     {
      "id": "n-config-files",
-     "text": "6,266 个文件",
-     "meaning": "北京 10 月 9 日 12:07 完成的开发配置包里的文件数",
-     "as_of": "2026-10-09",
-     "source": "out\\latest.zip.receipt.json file_count（devconfig-20261008-230721-2f23e2bc.zip）",
+     "text": "6,270 个文件",
+     "meaning": "北京 10 月 10 日 12:12 完成的开发配置包里的文件数",
+     "as_of": "2026-10-10",
+     "source": "out\\latest.zip.receipt.json file_count（devconfig-20261009-231229-9de61253.zip）",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -321,8 +321,8 @@
     {
      "id": "n-config-size",
      "text": "压缩后 286 MiB · 压缩前 0.88 GiB",
-     "meaning": "同一个包：299,545,722 字节；清单 bytes 941,389,373",
-     "as_of": "2026-10-09",
+     "meaning": "同一个包：299,791,772 字节；清单 bytes 942,360,581",
+     "as_of": "2026-10-10",
      "source": "latest.zip.receipt.json package_bytes；latest.zip.manifest.json bytes",
      "screens": [
       "devconfig-backup-01"
@@ -353,9 +353,9 @@
     },
     {
      "id": "n-wechat-files",
-     "text": "148,470 个文件 · 42.8 GiB",
-     "meaning": "北京 10 月 9 日 10:11 完成的那份微信备份（45,947,989,585 字节）",
-     "as_of": "2026-10-09",
+     "text": "148,592 个文件 · 42.8 GiB",
+     "meaning": "北京 10 月 11 日 11:01 完成的那份微信备份（45,972,129,496 字节）",
+     "as_of": "2026-10-11",
      "source": "G:\\80_Backup\\ControlPlane\\wechat-hot-last.json file_count、bytes",
      "screens": [
       "devconfig-backup-01"
@@ -428,9 +428,9 @@
     },
     {
      "id": "n-code",
-     "text": "45 个文件、约 4,400 行 · 19 个自检脚本 · 68 次提交",
-     "meaning": "受 Git 管的文件和行数（4,382 行）、tests 下脚本数、提交数",
-     "as_of": "2026-09-28",
+     "text": "50 个文件、约 6,000 行 · 24 个自检脚本 · 79 次提交",
+     "meaning": "受 Git 管的文件和行数（5,997 行）、tests 下脚本数、提交数",
+     "as_of": "2026-10-11",
      "source": "git ls-files、git log",
      "screens": [
       "devconfig-backup-05",
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "a4de92c64240c16e3bf3b9be4d26bd00fda000e871e97668b491ca814ea085e4",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "51a98802ee3ee693c86b85cbfc1677759ef60c72fadeda1c0c697eccd500df17",
+  "converted_at_beijing": "2026-10-11T13:40:56+08:00"
  }
 }
 ---
@@ -743,7 +743,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月10"
+     "text_ref": "截至10月1"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n标题与入口按钮应横版同一行；现有 row 只能把多个独立块纵向并入同一栏，不能把标题旁按钮排到同一基线。\n定稿 **现在** 一行解析成 card；core.live_strip 只消费 now，会丢按钮。本规格先以 prose 保留该行全部文字，并用 config、wechat 两个无字 live_box 表达实时空位；原要求的‘左标签、中间两框、右按钮’一条横排与竖版‘标签、框、框、按钮’需支持 card 型实时条后接入。\n日期小字要求右对齐，prose 的 align 字段目前未消费。GitHub 按钮前品牌小标、插画中允许的 G 字和指定品牌只能按素材核对，不能据候选顺序认定已完成。\n资产清单的 illustration 仅 0 项，文字盘点需要 1 个插画位；缺 1 个候选位，且已有候选未做图像语义验收。\n资产清单的 icon 仅 1 项，文字盘点预算 4 个图标位；差 3 个候选位（预算为盘点估计，不作已核实语义结论）。 本轮主程序已支持**现在**解析为now，本轮改接live_strip并去掉临时两个独立live_box，避免重复实时空位。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。",
@@ -834,7 +834,7 @@
     {
      "type": "prose",
      "align": "right",
-     "text_ref": "截至10月10"
+     "text_ref": "截至10月1"
     },
     {
      "type": "action_button",
@@ -983,11 +983,11 @@
 重装系统或电脑坏了，最难重建的是各种开发软件和 AI 工具的设置，还有微信里的聊天记录。它每天把这两样复制出来、逐个文件核对，存到机箱里的 G 盘；配置每天、微信每周再传到 Google 云盘；外接盘那一份由电脑配置与恢复同步。全程是脚本，不用 AI 模型。
 
 - **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
-- **148,470 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G
-- **6,266 个文件**　最新一个开发配置包，压缩后 286 MiB
+- **148,592 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G
+- **6,270 个文件**　最新一个开发配置包，压缩后 286 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
 
-截至 10 月 10 日
+截至 10 月 11 日
 
 **现在**　〔现在正不正常 → 驾驶舱〕
 
@@ -2710,7 +2710,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 **回执**　每次运行写一份：每一步成没成、跳过了哪些文件、出错的是哪个（只写路径，不写内容）。
 
-**规模**　45 个受 Git 管的文件、约 4,400 行，其中 19 个是自检脚本；68 次提交。
+**规模**　50 个受 Git 管的文件、约 6,000 行，其中 24 个是自检脚本；79 次提交。
 
 ::screen{#devconfig-backup-06 section="tech"}
 
@@ -3424,7 +3424,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
      "columns": 3,
      "portrait_columns": 1,
      "illustration": "left_inside",
-     "text_ref": "1按清单收集配置66个来源：用户目录19个文件夹、17个单文件，AppData2",
+     "text_ref": "1按清单收集配置70个来源：用户目录19个文件夹、17个单文件，AppData3",
      "item_spans": {
       "10": 3
      },
@@ -3513,7 +3513,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
      "columns": 3,
      "portrait_columns": 1,
      "illustration": "left_inside",
-     "text_ref": "1按清单收集配置66个来源：用户目录19个文件夹、17个单文件，AppData2"
+     "text_ref": "1按清单收集配置70个来源：用户目录19个文件夹、17个单文件，AppData3"
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n定稿本屏是 10 个功能条目（编号 1–10），scene 末句仍写‘9 张’；按定稿完整保留十项，不删第 10 项。\nfeature_status._status 不能识别正文尾部 〈状态〉，本屏十张卡状态均未识别；源图要求仅状态圆点，当前必须保留原状态文字以守逐字关。需要由主工程明确状态文本计入 G1 的圆点接口。\n组名横条要求左侧语义小图和下方浅绿细线，现 chapter_title 的 small 字段未消费且没有组头图标接口。\n清单未登记这些完整原文的逐字一致毛笔标题图：全部功能（23项）、开发配置备份；现 core 会用字体兜底，不能称标题素材通过。\ncore.chapter_title 未消费 size 档位，规格虽准确标中/小号，实际标题大小须接口补齐后核对。\n资产清单的 icon 仅 2 项，文字盘点预算 10 个图标位；差 8 个候选位（预算为盘点估计，不作已核实语义结论）。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
@@ -3729,7 +3729,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 ● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
 
 **开发配置备份**
-1. **按清单收集配置**　66 个来源：用户目录 19 个文件夹、17 个单文件，AppData 29 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”，不算失败，必需的 AI 配置目录缺了明确报缺口　〈在用〉
+1. **按清单收集配置**　70 个来源：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 软件设置；去掉缓存、插件、日志、对话历史和登录凭据文件；本机没装的记为“没装”，不算失败，必需的 AI 配置目录缺了明确报缺口　〈在用〉
 2. **系统设置和换机清单**　顺带导出环境变量、系统 PATH、hosts、Wi-Fi 配置、Xshell 会话、按名字挑出的 16 个计划任务的定义（其中 8 个停用），以及已装软件表、winget 和 Scoop 清单、VS Code 和 Cursor 扩展、JetBrains 插件　〈在用〉
 3. **可选来源的单个文件可跳过**　可选来源的单文件被占用，试 3 次后跳过；拒绝访问直接跳过，都写进回执，不报“完整”；必需来源读不了或有其他读取错误，就整次失败　〈待验收〉
 4. **打包后三道核对**　7-Zip 自检、包里每个文件和清单逐项对上、算整包 SHA-256；有一道不过就不发布，上一个好包原样留着　〈在用〉
@@ -4289,7 +4289,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 20. **回执**　每次运行写一份：成功、失败、跳过了哪些、出错的是哪个文件（只写路径）；驾驶舱和电脑配置与恢复都读它　〈在用〉
 21. **状态面板**　双击打开一个窗口，每分钟刷新：本机、G、微信各自最近一次成功，各任务上次结果和下次时间　〈说不准〉
 22. **一键注册自动任务**　一次注册 4 个任务，逐个回读核对，有一个失败就全部退回原样　〈说不准〉
-23. **自检脚本**　19 个自检脚本，都用专属临时目录；含公开仓库防泄漏检查：备份包、密钥文件、日志不能进仓库　〈在用〉
+23. **自检脚本**　24 个自检脚本，都用专属临时目录；含公开仓库防泄漏检查：备份包、密钥文件、日志不能进仓库　〈在用〉
 
 ::screen{#devconfig-backup-10 section="history"}
 

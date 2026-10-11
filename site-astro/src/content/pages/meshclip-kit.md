@@ -513,8 +513,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "33bc59575239882b74ba5810b3b9414de3431d4ec3849524f0e79da7589b25f9",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "2175638fec1a91e60c9f4916d199d59e7e7869e3a0e8095a6b462d1bb7525efa",
+  "converted_at_beijing": "2026-10-11T13:37:53+08:00"
  }
 }
 ---
@@ -1814,7 +1814,7 @@
 
 | 环节 | 用的什么 | 细节 |
 |---|---|---|
-| 连通 | Tailscale（主机装的 1.102.2） | 能直连就直连，连不上走 Tailscale 的中转；一路加密 |
+| 连通 | Tailscale（主机装的 1.104.1） | 能直连就直连，连不上走 Tailscale 的中转；一路加密 |
 | 同步和传文件 | KDE Connect（主机装的 26.04.2） | 开源的跨设备工具；两台配对后才交换数据，用配对时互换的证书加密 |
 | 放行 | Windows 防火墙 | 每台两条入站规则，TCP、UDP 各一条，端口 1714–1764；只认对面的 Tailscale 地址、Tailscale 网卡和 KDE Connect 的后台程序 |
 | 主机自动恢复 | PowerShell 7 看门狗、计划任务 | 都用我自己的账号、普通权限；副机没有看门狗和计划任务 |

@@ -502,10 +502,10 @@
    "numbers": [
     {
      "id": "n-switches",
-     "text": "160 次",
+     "text": "166 次",
      "meaning": "规则指针从第一次发布（E81）到现在的切换次数，发布和回退都算",
-     "as_of": "2026-10-10",
-     "source": "活动规则入口 Inspect：current-rules.json pointer_revision=160（北京时间 10 月 10 日 05:0x 读）",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：current-rules.json pointer_revision=166（北京时间 10 月 11 日 13:33 读）",
      "screens": [
       "agents-01"
      ]
@@ -557,8 +557,8 @@
     {
      "id": "n-rule-files",
      "text": "14 个文件（11 份规则、2 份入口、1 张目录）",
-     "meaning": "E190 这一版登记的文件：约法和导航 1 份＋专题 10 份、Codex 和 Claude 入口模板、rules-catalog.json；核验逐个比对",
-     "as_of": "2026-09-29",
+     "meaning": "E257 这一版登记的文件：约法和导航 1 份＋专题 10 份、Codex 和 Claude 入口模板、rules-catalog.json；核验逐个比对",
+     "as_of": "2026-10-11",
      "source": "Inspect 的 verified_current.files 共 14 项；Verify-Release 673、696-706 行",
      "screens": [
       "agents-01",
@@ -567,19 +567,19 @@
     },
     {
      "id": "n-rule-chars",
-     "text": "约 4.2 万字",
-     "meaning": "11 个规则文件去掉空白的字符数 42,261",
-     "as_of": "2026-09-28",
-     "source": "本次读文件计数",
+     "text": "约 7.2 万字",
+     "meaning": "11 个规则文件去掉空白的字符数 72,373",
+     "as_of": "2026-10-11",
+     "source": "活动 E257 的 11 个规则文件去空白现数；Inspect 绑定提交 79fae9f4947dab9e84b89732a730d62e85eb9d5c",
      "screens": [
       "agents-10"
      ]
     },
     {
      "id": "n-catalog",
-     "text": "32 条",
-     "meaning": "规则目录表登记的规则文件：本仓库 11、电脑配置与恢复 11、GitHub 项目总索引 6、密码中心 4",
-     "as_of": "2026-09-28",
+     "text": "33 条",
+     "meaning": "规则目录表登记的规则文件：本仓库 11、电脑配置与恢复 11、GitHub 项目总索引 6、密码中心 5",
+     "as_of": "2026-10-11",
      "source": "config\\control-plane-contract-catalog.json 按 owner 分组",
      "screens": [
       "agents-05",
@@ -598,9 +598,9 @@
     },
     {
      "id": "n-tests",
-     "text": "55 项",
-     "meaning": "tests\\test-registry.json 登记的测试（本地 51、跨仓库 4）",
-     "as_of": "2026-09-28",
+     "text": "84 项",
+     "meaning": "tests\\test-registry.json 登记的测试（本地 79、跨仓库 5）",
+     "as_of": "2026-10-11",
      "source": "E:\\.agents\\tests\\test-registry.json",
      "screens": [
       "agents-05",
@@ -941,8 +941,8 @@
  },
  "source": {
   "page": "sources/pages/agents/page.json",
-  "sha256": "ac8a56aec57cff79788da5cf277a28798239c50b5954cb0f36a92b5b0443eae6",
-  "converted_at_beijing": "2026-10-10T21:55:00+08:00"
+  "sha256": "88356d6e331bc49fd500a3662578d62ba0cf8b47cf0e8303d88da64637ede3ba",
+  "converted_at_beijing": "2026-10-11T13:39:12+08:00"
  }
 }
 ---
@@ -1045,7 +1045,7 @@
       "proto:a01-ic3",
       "proto:a01-ic4"
      ],
-     "text_ref": "160次"
+     "text_ref": "166次"
     }
    ],
    "notes": "首屏：标题和介绍在左、插画在右；四张数字卡；现在横条。示范规格（主工程师写）"
@@ -1079,7 +1079,7 @@
       "proto:a01-ic3",
       "proto:a01-ic4"
      ],
-     "text_ref": "160次"
+     "text_ref": "166次"
     },
     {
      "type": "illustration",
@@ -1207,12 +1207,12 @@
 
 〔在整套系统里的位置 → 怎么协作〕　〔我的AI实践〕　〔复制 AI 续作说明〕
 
-- **160 次**　8 月 30 日起，规则发布和回退一共切换了这么多次；现在生效的是 E253（10 月 10 日 20:55 起）
+- **166 次**　8 月 30 日起，规则发布和回退一共切换了这么多次；现在生效的是 E253（10 月 10 日 20:55 起）
 - **0.6 秒**　AI 开工前核验一次：这一版的 14 个文件（11 份规则、2 份入口、1 张目录）逐个比对内容指纹，改一个字就对不上
 - **6,407 次**　9 月 15 日–10 月 8 日 AI 调用这个入口的次数，核验、发布、回退都算在内（Claude 的记录 9 月 24 日才开始）
 - **1 份**　技能源码只有一份，Claude 和 Codex 从同一个目录找到这 27 个技能
 
-数字截至 10 月 10 日
+数字截至 10 月 11 日
 
 现在　〔现在正不正常 → 驾驶舱〕
 
@@ -3346,7 +3346,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "约 5.8 万字",
+     "text_ref": "约7.2万字",
      "columns": 3,
      "columns_v": 1,
      "illustration": "top_inside",
@@ -3382,7 +3382,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "约 5.8 万字",
+     "text_ref": "约7.2万字",
      "columns": 1,
      "columns_v": 1,
      "illustration": "top_inside",
@@ -3548,9 +3548,9 @@
 4. **测试查结构，不锁字句**　规则测试查真实字段、来源、同一版的文件集合、引用和回退，不逐字锁句子、文件数或编号：规则改写一句话，不用跟着改一堆测试。
 5. **规则只写现在怎么做**　为什么这么定、以前怎么定，放在 Git 历史和决定记录里，规则正文不写：AI 读得快，也不会被旧做法带偏（〔约法 L30〕）。
 
-- **约 5.8 万字**　生效的 11 个规则文件（不算空白）
+- **约 7.2 万字**　生效的 11 个规则文件（不算空白）
 - **30 条**　约法，我逐条审定
-- **61 项**　登记的自动测试，改哪块跑哪块
+- **84 项**　登记的自动测试，改哪块跑哪块
 
 ::screen{#agents-11 section="highlights"}
 
