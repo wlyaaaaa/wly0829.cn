@@ -19,6 +19,63 @@ HTML='''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name
 <img id="terminal" src="/fixture/terminal.svg" width="120" height="80"><div style="height:18000px"></div><img id="lazy" src="/fixture/lazy.svg" width="120" height="80" loading="lazy"></body></html>'''.encode()
 
 class SourceTests(unittest.TestCase):
+    def test_policy_pruning_only_changes_url_arrays_and_handles_json_escapes(self):
+        policy={'origins':['https://assets.example'], 'scripts':['/normal.js','/search-index.js','https://assets.example/releases/v/search-project-abc.js?x=1'],
+                'data':['/_album/routes-abc.json','/normal.json'], 'stylesheets':['/normal.css'], 'extra':{'literal':'quoted "]},scripts:[" text'}}
+        tail=';const untouched={scripts:["/search-index.js"],data:["/_album/routes-abc.json"]};'
+        for compact in (False,True):
+            value=json.dumps(policy,separators=(',',':')).replace('/',r'\/')
+            if compact:value=re.sub(r'"(origins|scripts|data|stylesheets|extra)":',r'\1:',value)
+            raw='(()=>{const p='+value+tail+'})();'
+            pruned=prep.prune_content_retry_policy(raw,['/normal.js'])
+            expected={**policy,'scripts':[], 'data':['/normal.json']}
+            for key in ('scripts','data'):
+                source=json.dumps(policy[key],separators=(',',':')).replace('/',r'\/')
+                target=json.dumps(expected[key],separators=(',',':'))
+                raw=raw.replace(source,target,1)
+            self.assertEqual(pruned,raw)
+            self.assertEqual(prep.prune_content_retry_policy(pruned,['/normal.js']),pruned)
+            subprocess.run(['node','--check','-'],input=pruned,text=True,capture_output=True,check=True,encoding='utf8')
+
+    def test_frozen_retry_policies_support_raw_and_minified_objects(self):
+        paths=sorted((ROOT/'site-astro/sources/frozen-site/assets').rglob('resource-retry-*.js'))
+        self.assertTrue(paths)
+        for path in paths:
+            with self.subTest(path=path):
+                text=prep.prune_content_retry_policy(path.read_text('utf8'))
+                self.assertNotRegex(text,r'search-(?:index|projects|project-[^/"\\]*)\.js|_album/routes-[^/"\\]+\.json')
+                self.assertEqual(prep.prune_content_retry_policy(text),text)
+                subprocess.run(['node','--check','-'],input=text,text=True,capture_output=True,check=True,encoding='utf8')
+
+    def test_generated_policy_excludes_content_indexes_but_keeps_normal_resources(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)/'raw';fixture_source(root)
+            extras={'search-index.js':b'window.index=[];', 'search-projects.js':b'window.project=[];',
+                    'search-project-fixture.js':b'window.fixture=[];', '_album/routes-abc.json':b'{}'}
+            for rel,body in extras.items():
+                path=root/rel;path.parent.mkdir(exist_ok=True);path.write_bytes(body)
+            files=prep.inventory(root);manifest={'schema':'wly.hybrid-release.v1','files':files,
+                'oss':{'objects':{rel:{'url':'https://assets.example/releases/v/'+rel} for rel in extras}}}
+            manifest['release_id']=prep.identity(files,manifest)
+            (root/'release-manifest.json').write_text(json.dumps(manifest),encoding='utf8')
+            policy,observed=prep.policy_and_observation(root,files)
+            self.assertIn('/fixture/static.js',policy['scripts']);self.assertIn('/fixture/data.json',policy['data'])
+            self.assertTrue(all(not prep.content_derived_retry_url(url) for key in ('scripts','data') for url in policy[key]))
+            self.assertEqual(observed['public_static_json_files'],policy['data'])
+
+    def test_prepare_uses_installed_minifier_and_omits_content_indexes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=Path(temporary)/'raw';fixture_source(root)
+            (root/'search-index.js').write_bytes(b'window.index=[];')
+            files=prep.inventory(root);manifest={'schema':'wly.hybrid-release.v1','files':files};manifest['release_id']=prep.identity(files,manifest)
+            (root/'release-manifest.json').write_text(json.dumps(manifest),encoding='utf8')
+            output=Path(temporary)/'prepared';result=prep.prepare(root,output,Path(temporary)/'prepared.json')
+            runtime=(output/result['runtime']).read_text('utf8')
+            self.assertNotIn('__RESOURCE_RETRY_POLICY__',runtime)
+            self.assertNotIn('search-index.js',runtime)
+            self.assertEqual(prep.prune_content_retry_policy(runtime),runtime)
+            subprocess.run(['node','--check','-'],input=runtime,text=True,capture_output=True,check=True,encoding='utf8')
+
     def test_album_replay_replaces_previous_metadata_without_rewriting_data(self):
         inject = __import__('runpy').run_path(str(ROOT/'scripts/prepare-page-flip.py'))['inject_runtime']
         original = '<head><meta charset="utf-8"><script id="album-page">{"old":true}</script><link id="album-route-index" href="/old.json"></head><script id="page-data">{"example":"album-page"}</script>'

@@ -113,6 +113,29 @@ def copy_changed(source, target):
     target.parent.mkdir(parents=True, exist_ok=True); shutil.copyfile(source, target)
     return True
 
+def html_references(path):
+    return {value for value in re.findall(r'''\b(?:src|href|data-src)=["']([^"']+)["']''', Path(path).read_text('utf8'))
+            if re.search(r'\.(?:js|mjs|css|json|png|jpe?g|webp|avif|svg|gif|woff2?|ttf|mp4)(?:[?#]|$)', value)}
+
+def guard_unchanged_html(dist, entries, previous_pages, published, previous_refs):
+    changed = []
+    for route, row in entries.items():
+        rel = route_file(route); accepted = published.get('files', {}).get(rel)
+        if previous_pages.get(route) != row['fingerprint'] or not accepted: continue
+        path = dist / rel
+        if proof(path)['sha256'] == accepted['sha256']: continue
+        refs = html_references(path)
+        differences = refs ^ previous_refs[route] if route in previous_refs else set()
+        # A saved SHA cannot reconstruct old HTML. Only name an observed
+        # reference difference; never invent the cause of a body-only change.
+        details = (', '.join(sorted(differences)) if differences else
+                   '本地引用未变；需核对已发布正文或内联内容' if route in previous_refs else '没有旧 HTML；已发布 SHA 无法还原差异引用')
+        print('连带变化：' + route + '，原因资源：' + details, flush=True)
+        changed.append(route)
+    if '/' in changed and os.environ.get('SITE_ALLOW_HOME_BYTES') != '1':
+        raise ValueError('首页字节连带变化；一次性重试脚本迁移须设置 SITE_ALLOW_HOME_BYTES=1')
+    return changed
+
 def markdown_frontmatter(path):
     match = re.match(r'^---\n(.*?)\n---\n', path.read_text('utf8'), re.S)
     if not match: raise ValueError('Missing JSON frontmatter: ' + str(path))
@@ -176,6 +199,7 @@ def build(pages=None):
     if pages and not complete: raise ValueError('--pages requires a complete dist; first run npm run build')
     requested = {normalize_route(value) for value in pages.split(',')} if pages else None
     before = {file_route(p.relative_to(dist).as_posix()): proof(p) for p in dist.rglob('*.html')}
+    before_refs = {file_route(p.relative_to(dist).as_posix()): html_references(p) for p in dist.rglob('*.html')}
     sources = sync_markdown(old.get('json_sources', {})); stage('source')
     preparation = [SNAPSHOT / 'manifest.json', SITE / 'sources/retained-home-cockpit',
         SITE / 'sources/vendor-deps', SITE / 'public/_home-cockpit', SITE / 'src/chrome/runtime',
@@ -281,6 +305,7 @@ def build(pages=None):
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
     stage('finish')
     run(sys.executable, str(ROOT / 'scripts/prepare-oss-release.py'), 'finalize-dist', '--dist', str(dist), cwd=ROOT)
+    guard_unchanged_html(dist, entries, old.get('pages', {}), runtime.published_manifest(), before_refs)
     stage('finalize')
     run('node', str(ROOT / 'scripts/verify-public-content.mjs'), '--dist', str(dist), cwd=ROOT)
     stage('public')

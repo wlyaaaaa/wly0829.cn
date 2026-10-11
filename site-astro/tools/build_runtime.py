@@ -22,6 +22,7 @@ def load(name, filename):
 nav = load('build_navigation', 'scripts/repair-release-navigation.py')
 transport = load('build_transport', 'scripts/same-origin-runtime.py')
 retention = load('build_retention', 'scripts/oss-retention.py')
+retry = load('build_retry', 'scripts/prepare-resource-retry.py')
 def read(path): return json.loads(Path(path).read_text('utf8'))
 
 def published_manifest():
@@ -34,7 +35,8 @@ def previous_resources(prior, published):
         print('上一版清单：无已发布记录，资源地址可能全部换新', flush=True)
         return local, 'dist' if local else 'none', prior.get('release_id')
     accepted = published['oss']
-    return {**accepted, 'objects': {**local.get('objects', {}), **accepted['objects']}}, 'published', published['release_id']
+    return {**accepted, 'objects': {**local.get('objects', {}), **accepted['objects']},
+            'local_objects': local.get('objects', {}) if local.get('asset_base_url') == accepted.get('asset_base_url') else {}}, 'published', published['release_id']
 def file_route(rel): return '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
 def copy(source, target):
     raw = Path(source).read_bytes(); target = Path(target); target.parent.mkdir(parents=True, exist_ok=True)
@@ -190,10 +192,8 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     scripts = {transport.PREFIX.sub('/', match) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
     for path in dist.rglob('resource-retry-*.js'):
-        text = path.read_text('utf8')
-        for url in unused:
-            text = re.sub(r'\\?"' + re.escape(url) + r'\\?",?', '', text)
-        path.write_bytes(text.encode('utf8'))
+        copy_bytes = retry.prune_content_retry_policy(path.read_text('utf8'), unused).encode('utf8')
+        if path.read_bytes() != copy_bytes: path.write_bytes(copy_bytes)
     for url in unused: (dist / url.lstrip('/')).unlink()
     album = album_index(dist, snapshot, changed_routes)
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
