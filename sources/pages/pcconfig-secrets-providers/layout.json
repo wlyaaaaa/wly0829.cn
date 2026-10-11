@@ -1,0 +1,935 @@
+[
+  {
+    "screen": "pcconfig-secrets-providers-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Password Center（密码中心）与固定 Google 服务入口",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按用途找到正确账号，让点名的程序或网页在受保护入口使用它；AI 不需要看到密码明文。邮件和云盘写入另查实际远端结果，私人资料期限不由连接状态代替。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "row": "top",
+        "width": "42%",
+        "align": "center",
+        "index": 0
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Password Center（密码中心）与固定 Google 服务入口",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕"
+      },
+      {
+        "type": "prose",
+        "text_ref": "按用途找到正确账号，让点名的程序或网页在受保护入口使用它；AI 不需要看到密码明文。邮件和云盘写入另查实际远端结果，私人资料期限不由连接状态代替。"
+      },
+      {
+        "type": "illustration",
+        "align": "center",
+        "index": 0
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中点名要查的凭据用途或固定 Google 动作；需要明文时由现有受保护界面处理。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先找正确来源**　AI 只列安全的名称、用途与冲突，避免把同名账号或旧导入误认成当前值。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中点名要查的凭据用途或固定 Google 动作；需要明文时由现有受保护界面处理。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先找正确来源**　AI 只列安全的名称、用途与冲突，避免把同名账号或旧导入误认成当前值。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 日常在同一窗口按账号密码、API密钥、银行卡、笔记、BitLocker找条目，查看、编辑和删除仍办理唯一目标。剪贴板按完整相同内容分组，保留真实复制次数、类型和日期筛选；日期弹层点框外或Esc直接关闭，不应用未确认选择。顶部两项授权各自计时、各自锁定或结束，也可显式选择一次验证同时办理。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 日常在同一窗口按账号密码、API密钥、银行卡、笔记、BitLocker找条目，查看、编辑和删除仍办理唯一目标。剪贴板按完整相同内容分组，保留真实复制次数、类型和日期筛选；日期弹层点框外或Esc直接关闭，不应用未确认选择。顶部两项授权各自计时、各自锁定或结束，也可显式选择一次验证同时办理。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 浏览器密码以本人明确选定的 Chrome 完整 CSV（逗号分隔导出文件）为来源，按网址与用户名保留唯一登录记录；明确全量替换时只替换 Browser Imports，其他类别保留。加密写入、回读和备份成功后才清理一次性明文文件。旧 Google 增量仅是兼容入口，不宣称浏览器密码实时双向同步。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 浏览器密码以本人明确选定的 Chrome 完整 CSV（逗号分隔导出文件）为来源，按网址与用户名保留唯一登录记录；明确全量替换时只替换 Browser Imports，其他类别保留。加密写入、回读和备份成功后才清理一次性明文文件。旧 Google 增量仅是兼容入口，不宣称浏览器密码实时双向同步。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. Photos使用独立google-photos.primary绑定及自己的OAuth（账号授权协议），Workspace已登录不能证明Photos已授权。它只读取/整理本应用创建的媒体与相册，不承诺全账号相册访问，没有删除媒体、删除相册、分享或原生归档入口。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. Photos使用独立google-photos.primary绑定及自己的OAuth（账号授权协议），Workspace已登录不能证明Photos已授权。它只读取/整理本应用创建的媒体与相册，不承诺全账号相册访问，没有删除媒体、删除相册、分享或原生归档入口。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 网站账号进入 ；API 与项目凭据仍由原 Owner 保存并通过稳定 SecretRef 使用。source_id（稳定来源标识）关联来源 Owner、写能力、去重键、冲突策略与回滚边界；Windows/浏览器受保护来源仍归各自 Provider，不因 Discover 得到候选就变成可写来源。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 网站账号进入 ；API 与项目凭据仍由原 Owner 保存并通过稳定 SecretRef 使用。source_id（稳定来源标识）关联来源 Owner、写能力、去重键、冲突策略与回滚边界；Windows/浏览器受保护来源仍归各自 Provider，不因 Discover 得到候选就变成可写来源。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Reveal 只允许用户明确点名的单个字段或一张原子银行卡记录，经唯一命中、受信设备、健康运行时和所需权限校验后在受控本地窗口显示；逐字段复制禁用剪贴板历史/云同步。每次实际写入从原授权期限内重新计时 1800 秒，普通关窗不提前清除，失效仍撤销本次复制；旧清理任务不得清除后来的同值复制。秘密不得进入模型、聊天、stdout、JSON、日志或普通文件；BitLocker 批量恢复查看仍是独立边界。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Reveal 只允许用户明确点名的单个字段或一张原子银行卡记录，经唯一命中、受信设备、健康运行时和所需权限校验后在受控本地窗口显示；逐字段复制禁用剪贴板历史/云同步。每次实际写入从原授权期限内重新计时 1800 秒，普通关窗不提前清除，失效仍撤销本次复制；旧清理任务不得清除后来的同值复制。秘密不得进入模型、聊天、stdout、JSON、日志或普通文件；BitLocker 批量恢复查看仍是独立边界。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Provider当前暴露Gmail（邮件）、Drive（云盘）与Google Tasks（任务）的closed action allowlist（固定操作清单），没有通用URL、HTTP method（请求方法）、body或账号透传；发送、删除、上传、分享与任务变更分别核对确切授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Provider当前暴露Gmail（邮件）、Drive（云盘）与Google Tasks（任务）的closed action allowlist（固定操作清单），没有通用URL、HTTP method（请求方法）、body或账号透传；发送、删除、上传、分享与任务变更分别核对确切授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- DriveShare 只面向精确用户邮箱与 reader/commenter/writer（读取/评论/编辑）角色，返回 permission id 并通过 DriveListPermissions 回读；DriveUnshare 再按该 id 撤销。没有 anyone/public（任何人/公开）分享、所有权转移或任意权限载荷。邮件收件人、对象 id、标签、路径与日程范围都由各自类型化参数校验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- DriveShare 只面向精确用户邮箱与 reader/commenter/writer（读取/评论/编辑）角色，返回 permission id 并通过 DriveListPermissions 回读；DriveUnshare 再按该 id 撤销。没有 anyone/public（任何人/公开）分享、所有权转移或任意权限载荷。邮件收件人、对象 id、标签、路径与日程范围都由各自类型化参数校验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 每个写动作的 -DryRun 都只校验本地参数，不读取 DPAPI、不刷新 token、不联系 Google；实际写超时或上游结果歧义统一 effect_unknown，不能自动重放。OAuth（账号授权协议）令牌读取的瞬时传输失败单独分类，不等同账号失效；不能据此自动换账号或重放效果未知的业务写入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 每个写动作的 -DryRun 都只校验本地参数，不读取 DPAPI、不刷新 token、不联系 Google；实际写超时或上游结果歧义统一 effect_unknown，不能自动重放。OAuth（账号授权协议）令牌读取的瞬时传输失败单独分类，不等同账号失效；不能据此自动换账号或重放效果未知的业务写入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（九）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "3. 用固定 SecretRef、网页目标或 binding 定位精确 Owner 和动作",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（九）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "3. 用固定 SecretRef、网页目标或 binding 定位精确 Owner 和动作",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-16",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不在仓库、模型上下文、stdout、JSON、日志或普通剪贴板保存秘密；单项本地 Reveal 的受控复制从每次实际写入起计 1800 秒，普通关窗不提前清除，授权失效仍撤销",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-16",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不在仓库、模型上下文、stdout、JSON、日志或普通剪贴板保存秘密；单项本地 Reveal 的受控复制从每次实际写入起计 1800 秒，普通关窗不提前清除，授权失效仍撤销",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-17",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **Secret Broker（本机受保护凭据中介） 状态无法验证**：冻结秘密使用，返回 failed/partial 或精确 unavailable；不从旧回执或 Registry（登记清单） 推断可用。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-17",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **Secret Broker（本机受保护凭据中介） 状态无法验证**：冻结秘密使用，返回 failed/partial 或精确 unavailable；不从旧回执或 Registry（登记清单） 推断可用。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-18",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **PRIVATE（私有） Git 恢复集分叉、hash（内容指纹）/epoch 不符或新设备绑定失败**：停止恢复并保留可回滚前像；不借缺失的 G 拼装半份恢复集、不恢复旧私钥，也不调用退役规则发布器补授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-18",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **PRIVATE（私有） Git 恢复集分叉、hash（内容指纹）/epoch 不符或新设备绑定失败**：停止恢复并保留可回滚前像；不借缺失的 G 拼装半份恢复集、不恢复旧私钥，也不调用退役规则发布器补授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-19",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- SecretRef、运行时和安全边界 Registry（登记清单）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-19",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- SecretRef、运行时和安全边界 Registry（登记清单）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-20",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 固定账号 Provider、OAuth（账号授权协议） 和类型化动作合同",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-20",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 固定账号 Provider、OAuth（账号授权协议） 和类型化动作合同",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-21",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 十个只读 stdio MCP 工具的固定入口",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-21",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 十个只读 stdio MCP 工具的固定入口",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-22",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-09 21:54 UTC当前独立安装为15/15 current（当前状态）、manifest_anchor_matches=true、plaintext_returned=false；Invoke-SecretBroker.ps1源/安装SHA-256同为953ae830bade54ddc8a81639c12180f95465c8fe65643f22fc1597e713bc7e2e，包含遮盖复制实现。本轮只读，没有使用真实密码、因子或剪贴板；隔离UI/复制测试与用户在具体远控通道的实际确认仍分别记录。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-secrets-providers-22",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-09 21:54 UTC当前独立安装为15/15 current（当前状态）、manifest_anchor_matches=true、plaintext_returned=false；Invoke-SecretBroker.ps1源/安装SHA-256同为953ae830bade54ddc8a81639c12180f95465c8fe65643f22fc1597e713bc7e2e，包含遮盖复制实现。本轮只读，没有使用真实密码、因子或剪贴板；隔离UI/复制测试与用户在具体远控通道的实际确认仍分别记录。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "localocr-input-routing",
+  "kind": "project",
+  "title": "从指定原件到合适的本地识别方式",
+  "url": "/projects/localocr/input-routing/",
+  "parent": "localocr",
+  "status_line": {
+    "state": "常用",
+    "as_of": "Unknown",
+    "source": "父项目作者页 /projects/localocr/ 的 status；技术证据为冻结页 2026-09-18 21:26 原快照，待按现状重取",
+    "last": {
+      "label": "原页核对",
+      "at": "2026-09-18 21:26"
+    }
+  },
+  "screens": [
+    {
+      "id": "localocr-input-routing-01",
+      "section": "top",
+      "title": "从指定原件到合适的本地识别方式",
+      "text": "# 从指定原件到合适的本地识别方式\n\n〔回到项目 → 本地文字识别〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nLocalOCR · 功能说明\n\n我不需要每次从模型名开始选择。先指定原件和想拿到的结果，普通图片、扫描 PDF 与文件夹就能进入相应本机路线；明确要求具体模型时保留我的选择，处理过程会说明实际使用了什么。\n\n**当前情况：**已有图片、扫描PDF和文件夹的本地识别入口；会按要求说明实际路线，具体文字仍以本次原件核对。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 本地文字识别",
+          "href": "/projects/localocr/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/LocalOCR"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/localocr/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。\n\n## 举个实际例子\n\n我可以说：“把这份多栏 PDF 的文字读出来并保留版面，文件留在本机。”系统会固定这一个输入并选择合适路线；如果给的是文件夹，也只处理本次明确要求的范围。\n\n## 最后我会得到什么\n\n返回对应文件的结果路径、实际引擎与模型、选择原因，以及是否发生增强。遇到不支持的文件、模型冲突、活跃任务或服务身份不符，会说明原因，不交回来自另一条未知路线的结果。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。 举个实际例子"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。 举个实际例子"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n输入范围与路线明确，按请求执行并返回实际模型和输出。\n\n## 发现问题时\n\n自动提字不足时可以本地增强；增强失败保留首轮初步证据，但不标完成。\n\n## 入口不可用或证据不足时\n\n原件不可读、模型冲突或服务不是 LocalOCR 时停止相应请求，不抢端口、不换云服务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在本机已接入 LocalOCR 的 AI 对话中指定原件，或用“日常本机入口” ocr_smart.ps1 传入明确路径。\n\n## 需要准备什么\n\n- 图片、扫描 PDF 或目录\n\n- 递归范围\n\n- 想要文字、复杂版面还是指定模型\n\n## 从开始到拿到结果\n\n1. **检查原件与可读内容**　系统核对文件类型、页数和实际内容；已有文字层先直接取用，扫描图才进入识别。\n\n2. **选择本地路线**　AI 核对实际文件与已登记模型，普通页面先轻量提字，复杂或显式结构需求按对应路线处理。\n\n3. **拿到可追溯结果**　交回实际用过的模型、文字及输出位置；文件不支持或本地模型不可用时说明原因，不暗中上传或全库扫描。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n三条路线与统一执行已实现\n\n## 关键规则与设计选择\n\n1. 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。\n\n2. 复杂程度取实际页内容与识别证据，不由文件名判断；只增强问题页，不把整份文档重跑重模型。\n\n3. 显式模型优先；结构解析需要单独选择，不是自动增强的第三级。\n\n4. 文件名或目录含中文、空格时仍用同一拖拽入口；它需要PowerShell 7.3+，旧Windows PowerShell 5.1不属于该入口的支持环境。入口传参已通过隔离检查，文字能否读全、读准仍需核对实际结果。\n\n## 当前怎样实现\n\n- router.py 枚举支持的图片和 PDF；是否递归由 recursive 参数决定，不默认扩大目录范围。\n\n- Smart Router v5 预路由让 auto 先 OCR（光学字符识别）；difficulty.py 结合逐页空结果、低置信度及表格/公式内容信号，service.py 只增强对应问题页。\n\n- 同一任务保留增强前文字与几何；显式模型不参加自动替换，Structure（结构化版面） 不是自动流程的隐含第三层。\n\n- model_registry.py 解析 profile（具体模型配置），核对引擎匹配；显式模型不被自动选择覆盖。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现 关键规则与设计选择 1 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。 2 复杂程度取实际页内容与识别证据，不由文件"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现 关键规则与设计选择 1 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。 2 复杂程度取实际页内容与识别证据，不由文件"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- start.bat使用pwsh，start.ps1声明PowerShell 7.3+；路径回调将Windows盘符转换为/mnt/<盘符>，Git固定start.bat为CRLF，避免中文批处理被异常解析。其后的localocr.cli继续共用OCRService、增强与输出合同，模型路线没有改变。\n\n- ocr_smart.ps1 预览路线并验证服务健康，以 active_jobs 作为忙碌依据；缺字段为 readiness_unknown，不能当空闲。\n\n## 执行流程\n\n1. 固定本次文件、目录递归范围与希望得到的结果。\n\n2. 优先检查原生可读内容；需要图片文字证据时进入 LocalOCR。\n\n3. 核对路径、类型、明确引擎与模型配置。\n\n4. 普通提字或复杂文档路线执行，必要时根据首轮结果增强。\n\n5. 交回实际路线与文件，不把预检建议当最终模型身份。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| auto（自动选择） | 按当前可解释规则选 ocr（光学字符识别） 或 vl；不是无条件选择最重模型，也不包含 structure（结构化版面）。 |\n| explicit model（明确模型） | 用户明确指定某个配置时按它执行；冲突要说明，不能静默改写。 |\n| route（实际识别路线） | 记录最终引擎、原因、信号与增强过程，方便解释与复核。 |\n\n## 专业定义\n\n明确读哪个文件、要文字还是结构；普通内容先提字，不够再本地增强。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止范围不明的批处理、轻重模型误用、显式选择被改写，以及客户端调用脚本与真实服务行为不一致。\n\n## 边界\n\n- 支持的是明确文件和目录，不是私人库后台扫描。\n\n- 仅需场景描述时由原生视觉处理；全本地要求下不向外部视觉服务发送像素。\n\n- 普通 OCR（光学字符识别）、VL 和 Structure（结构化版面） 的适用范围不能互相冒充。\n\n## 失败与恢复\n\n- **输入不支持或不可读**：返回明确的输入或读取错误，不制造空白成功结果。\n\n- **显式引擎与模型不匹配**：拒绝该组合，让调用方修正配置；不私自换模型。\n\n- **本地增强失败**：保留首轮 partial（初步结果）与失败原因，整体仍为失败，不能写入成功缓存。\n\n- **端口是另一个服务**：报告 non-LocalOCR service，停止提交；不把 18666 当自动后备。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-input-routing-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 支持类型与输入枚举\n\n- 自动与显式路线\n\n- 困难度依据\n\n- 实际增强与统一执行\n\n- Windows 有界入口与服务识别\n\n## 如何验证\n\n- 2026-09-07，376a777的24项Windows调用回归通过，4.210秒；另经真实start.bat、pwsh与已确认wsl.exe替身验证中文空格路径完整传递，0.458秒。检查在模型执行前结束，没有重验OCR（光学字符识别）效果或服务在线。原CLI（命令行工具）/API共用、显式选择和增强合同继续保留。\n\n- 模型注册、分流与调用脚本行为有独立单元测试；当前机器测试与运行证据见总览技术层。\n\n- 9 月 17 日禁用缓存的九例质量回执包含 auto_table，实际表格关键单元格通过；这个合成案例不证明任意版面都能正确选路。\n\n## 与其他模块的关系\n\n这个模块决定如何进入任务；表格与版面模块解释结构需求，结果与复核模块解释如何读返回值，任务与运行模块处理复用和故障。",
+      "links": [
+        {
+          "text": "下一个模块 表格与版面",
+          "href": "/projects/localocr/document-structure/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
