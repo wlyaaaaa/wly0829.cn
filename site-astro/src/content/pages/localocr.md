@@ -633,7 +633,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "b7f03976e075e72450f21010b9cf931f1e36ba4aa7c61408820330a8d311f056",
-  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:19+08:00"
  }
 }
 ---
@@ -2532,7 +2532,7 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     },
     {
      "type": "content_card",
-     "columns": 3,
+     "columns": 2,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
@@ -2540,7 +2540,8 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png",
       "_library/fix-round-2/icon-clean-6c55fc8beed8ccfd6516.png"
      ],
-     "text_ref": "一块显卡"
+     "text_ref": "一块显卡",
+     "last_full_width": true
     },
     {
      "type": "prose",

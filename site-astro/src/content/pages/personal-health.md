@@ -546,7 +546,7 @@
  "source": {
   "page": "sources/pages/personal-health/page.json",
   "sha256": "a3d4943473dc5e4fbe68d0396f665cab040351a11fa5d638159d6d49cfc4e358",
-  "converted_at_beijing": "2026-10-11T19:07:13+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:21+08:00"
  }
 }
 ---
@@ -850,7 +850,7 @@
     },
     {
      "type": "content_card",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 2,
      "illustration": "left_inside",
      "connector": "none",
@@ -1336,12 +1336,13 @@
     },
     {
      "type": "flow",
-     "columns": 6,
+     "columns": 1,
      "columns_v": 1,
      "illustration": "top_inside",
      "connector": "arrow",
      "icons": "auto",
-     "text_ref": "一句话"
+     "text_ref": "一句话",
+     "direction": "vertical"
     },
     {
      "type": "content_card",

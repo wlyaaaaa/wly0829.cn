@@ -803,7 +803,7 @@
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
   "sha256": "6ffd18c20a988f1ef84fbe4e4c1ec26421364d18a4fe9e2290b72b7200389b53",
-  "converted_at_beijing": "2026-10-12T00:29:44+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:15+08:00"
  }
 }
 ---
@@ -2592,7 +2592,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
     },
     {
      "type": "flow",
-     "columns": 5,
+     "columns": 4,
      "direction": "horizontal",
      "illustration": "above_card",
      "icons": "auto",

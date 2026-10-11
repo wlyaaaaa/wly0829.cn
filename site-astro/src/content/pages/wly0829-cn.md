@@ -726,7 +726,7 @@
  "source": {
   "page": "sources/pages/wly0829-cn/page.json",
   "sha256": "bea7ab287e6df11f5ae304333aab352cabf65db62dbb44b599ab0e27dcbb6640",
-  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:28+08:00"
  }
 }
 ---
@@ -1736,7 +1736,7 @@
     {
      "type": "content_card",
      "text_ref": "按需更新",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [

@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "cae2741c12801f5d708fd6834c60aa3241c9a28de079b862c58390afe752b806",
-  "converted_at_beijing": "2026-10-12T00:29:44+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:14+08:00"
  }
 }
 ---
@@ -3078,7 +3078,7 @@
     {
      "type": "content_card",
      "text_ref": "决定原话",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [

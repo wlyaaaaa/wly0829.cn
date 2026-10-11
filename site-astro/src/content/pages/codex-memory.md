@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "6ea9b83b0d50c12d832adb366bc7ddbf7b4d25e46b7aea50f50df519f80fc786",
-  "converted_at_beijing": "2026-10-12T00:29:44+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:16+08:00"
  }
 }
 ---
@@ -1658,7 +1658,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     },
     {
      "type": "content_card",
-     "columns": 4,
+     "columns": 3,
      "columns_v": 2,
      "illustration": "top_inside",
      "icons": [
@@ -1667,7 +1667,8 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",
       "_library/hires-icons-r2/版本循环文件.png"
      ],
-     "text_ref": "多大10,491个文件，39.2GB几点每天12:15，Codex开着也照常存到哪G盘；14:30"
+     "text_ref": "多大10,491个文件，39.2GB几点每天12:15，Codex开着也照常存到哪G盘；14:30",
+     "last_full_width": true
     },
     {
      "type": "prose",
@@ -1699,7 +1700,7 @@ G 是机箱里的备份固态，H 是外接的备份固态，都用 BitLocker（
     {
      "type": "content_card",
      "columns": 2,
-     "columns_v": 2,
+     "columns_v": 1,
      "illustration": "top_inside",
      "icons": [
       "_library/fix-round-2/icon-clean-f2b865944254996a0705.png",

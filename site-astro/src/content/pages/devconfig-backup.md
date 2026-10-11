@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "46cd4de4fa4250661180715d71afdeff2af2051af74a578cba4b64433c3d906b",
-  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:17+08:00"
  }
 }
 ---
@@ -2232,8 +2232,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     },
     {
      "type": "flow",
-     "columns": 5,
-     "direction": "horizontal",
+     "columns": 1,
+     "direction": "vertical",
      "connector": "arrow",
      "illustration": "left_inside",
      "icons": "auto",
@@ -2256,11 +2256,12 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
     },
     {
      "type": "content_card",
-     "columns": 3,
+     "columns": 2,
      "columns_v": 1,
      "illustration": "top_inside",
      "icons": "auto",
-     "text_ref": "用到的工具PowerShell7（没有就退回5.1）、7-Zip、rclone（"
+     "text_ref": "用到的工具PowerShell7（没有就退回5.1）、7-Zip、rclone（",
+     "last_full_width": true
     }
    ],
    "notes": "本轮仅读取定稿、文字盘点和组件字段，不读图片、不出图。构图依据以 source_layout 的完整 scene/portrait 为准，组件顺序列表仅供交叉核对。定稿文字和编号完整保留；未支持的源构图要求如下，不能据规格保存成功宣称视觉验收通过。\n源横版开发配置流水线要求八个细节点、微信六个细节点，定稿实际是五步/四步两个不可分 steps 节点；现有 flow 每个 step 只成一个节点，本规格保留五步/四步全部原文并记录八/六节点要求，尚无步骤内部拆成子节点的接口。\n工具小卡中多个品牌小标与回执/代码纸分别需要语义图标组，自动候选列表不能证明这些对象已正确。\n清单未登记这些完整原文的逐字一致毛笔标题图：它是怎么搭的；现 core 会用字体兜底，不能称标题素材通过。\n资产清单的 icon 仅 4 项，文字盘点预算 17 个图标位；差 13 个候选位（预算为盘点估计，不作已核实语义结论）。",

@@ -607,7 +607,7 @@
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
   "sha256": "807237da84e677b743c43b455779c5203ff82c6a81e36b5b82cabedcb5b3863a",
-  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
+  "converted_at_beijing": "2026-10-12T02:58:25+08:00"
  }
 }
 ---
@@ -1725,7 +1725,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "type": "flow",
      "align": "left",
      "size": "medium",
-     "columns": 2,
+     "columns": 1,
      "illustration": "above_card",
      "connector": "ribbon",
      "text_ref": "先装软件",
@@ -1748,7 +1748,7 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
       4
      ],
      "page_break_after_item": null,
-     "direction": "horizontal",
+     "direction": "vertical",
      "open_nodes": true
     },
     {
@@ -2009,15 +2009,15 @@ Steam 和 Millennium 本体、插件程序、主题的图片和字体；各插�
      "type": "flow",
      "align": "left",
      "size": "medium",
-     "columns": 3,
+     "columns": 1,
      "illustration": "left_inside",
      "connector": "arrow",
      "text_ref": "找到目录",
-     "direction": "horizontal",
+     "direction": "vertical",
      "icons": "auto",
      "page_break_after_item": null,
      "last_item_illustration": "left_inside",
-     "row_order": "1-2-3 / 4-5-6"
+     "row_order": "1 / 2 / 3 / 4 / 5 / 6"
     },
     {
      "type": "section_heading",
