@@ -813,6 +813,7 @@ personal AI collaboration workspace; public presentation is secondary.
 
 ## Verification and publication
 
+- 按需更新执行清单见 [docs/ondemand-update.md](docs/ondemand-update.md)；常驻工作树与回退操作见 [docs/maintenance.md](docs/maintenance.md)，发布和回读契约见 [docs/publish-and-scan.md](docs/publish-and-scan.md)。
 - Preserve the existing React, Vite and GitHub Pages route-generation chain.
 - Verify build, direct routes, custom 404, keyboard navigation, desktop/mobile
   overflow and browser console before normal-pushing `main`.

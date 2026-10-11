@@ -38,7 +38,7 @@ class RefreshTests(unittest.TestCase):
             self.assertEqual(self.run_collect()["status"], "unavailable")
             read.assert_not_called()
     def test_private_and_historical_never_read_sources(self):
-        for flag, expected in (("private", "needs_personal_data"), ("historical", "historical"), ("frozen", "historical")):
+        for flag, expected in (("private", "domain_fact_task"), ("historical", "historical"), ("frozen", "historical")):
             self.record[flag] = True
             with patch.object(refresh, "bounded") as read:
                 self.assertEqual(self.run_collect()["status"], expected)
