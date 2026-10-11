@@ -38,6 +38,21 @@ def read_json(path):
     return json.loads(read_text(path))
 
 
+def publication_baseline(root, fallback):
+    try:
+        common = bounded(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"], 5, cwd=root).strip()
+        record = read_json(Path(common) / "wly-oss/published.json")
+        source = record.get("source_commit") or record.get("manifest", {}).get("source_commit")
+        if (record.get("schema") != "wly.site-publication.v1" or record.get("status") not in {None, "published"}
+                or not record.get("deployment") or not record.get("verified_at_beijing") or not record.get("readback")
+                or not all(v.get("status") == "pass" for v in record["readback"].values())
+                or not isinstance(source, str) or not re.fullmatch(r"[a-f0-9]{40}", source)):
+            raise ValueError("成功记录缺少有效源码提交或部署回读证据")
+        return dict(baseline=source, baseline_evidence="published.json 成功发布的 source_commit")
+    except (OSError, ValueError, TypeError, AttributeError, RuntimeError, TimeoutError, subprocess.SubprocessError) as exc:
+        return dict(baseline=fallback, baseline_evidence=f"Unknown；沿用登记基线：{exc}")
+
+
 def pages(root):
     return [bound_json(p, read=read_text, root=root) for p in sorted((root / "sources/pages").glob("*/page.json"))]
 
@@ -422,7 +437,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
     automatic = [r for r in rows if r.get("automatic") and not r.get("qualifies") and r["status"] != "historical" and r.get("manual_reason") != "source_broken"]
     return {"schema": "content-refresh.result.v1", "observed_at": datetime.now(BEIJING).isoformat(timespec="seconds"),
-            "baseline": registry.get("baseline"), "pages_checked": audit["pages_checked"],
+            "baseline": registry.get("baseline"), "baseline_evidence": registry.get("baseline_evidence", "Unknown；登记基线"), "pages_checked": audit["pages_checked"],
             "numbers_checked": len(rows), "rows": rows, "findings": audit["findings"],
             "retrieval_seconds": round(time.monotonic() - started, 3), "workers": max(8, workers),
             "automatic_total": len(automatic), "automatic_obtained": sum(r["status"] in {"changed", "unchanged"} for r in automatic),
@@ -482,7 +497,7 @@ def report_content(result, task):
                 [{"type": "markdown", "text": task}], "open": False}]
     return {"title": "个人总看板 · 按需更新结果", "generator": "内容重取程序", "purpose":
             "把页面数字与登记来源对照，指出这次需要更新的句子。", "conclusion":
-            [f"内容基线 {result['baseline']}；检查于 {result['observed_at']}（北京时间）；{len(changed)} 个同口径真变化，{len(pending)} 个口径待核。",
+            [f"内容基线 {result['baseline']}（{result.get('baseline_evidence', 'Unknown')}）；检查于 {result['observed_at']}（北京时间）；{len(changed)} 个同口径真变化，{len(pending)} 个口径待核。",
              "本次完成的是只读检查，页面内容尚未修改或发布。已登记只读入口仅取计数和状态；人工口径与取不到的新数保留原日期。"], "blocks": blocks}
 
 
@@ -548,6 +563,7 @@ def main():
     (output / "tmp").mkdir(exist_ok=True)
     for key in ("TEMP", "TMP", "TMPDIR"):
         os.environ[key] = str((output / "tmp").resolve())
+    registry = dict(registry, **publication_baseline(args.root, registry.get("baseline")))
     command_deadline = command_started + args.total_seconds
     stamps = set(inventory.get("review_stamp_record_ids", []))
     registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
