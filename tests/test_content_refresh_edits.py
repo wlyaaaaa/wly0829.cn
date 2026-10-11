@@ -76,6 +76,23 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(payload["edits"], [])
         self.assertIn("唯一", payload["skipped"][0]["reason"])
 
+    def test_event_cutoffs_require_manual_review_but_numbers_still_update(self):
+        for meaning in ("库最近一次写入", "上次使用", "最后一次运行", "账本覆盖到此日"):
+            self.page["screens"][0]["text"] = "\n".join(self.labels) + f"\n截至 10 月 9 日（{meaning}）"
+            self.save()
+            payload = self.build()
+            self.assertEqual(len(payload["manual_reviews"]), 1)
+            self.assertEqual(payload["manual_reviews"][0]["status"], "需人工核对")
+            self.assertFalse(any(e["field"] == "screens[0].text" for e in payload["edits"]))
+            apply_edits(self.root, payload)
+            self.assertIn("截至 10 月 9 日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
+        for text in ("本轮观察截至 10 月 9 日；上次使用 10 月 7 日",
+                     "上次使用 10 月 7 日！本轮观察截至 10 月 9 日。",
+                     "- 上次使用 10 月 7 日\n- 本轮观察截至 10 月 9 日"):
+            self.page["screens"][0]["text"] = "\n".join(self.labels) + "\n" + text
+            self.save()
+            self.assertFalse(self.build()["manual_reviews"])
+
     def test_changed_field_is_reported_and_exact_ranges_do_not_search_another_number(self):
         payload = self.build()
         self.page["screens"][0]["text"] = self.page["screens"][0]["text"].replace("10 月 9", "10 月 8")

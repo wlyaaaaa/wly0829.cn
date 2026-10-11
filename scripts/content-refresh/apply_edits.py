@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 NUMBER = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日")
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
+EVENT_DATE = re.compile(r"(?:最近(?:一次)?|最后(?:一次)?|上(?:一)?次)\s*(?:写入|使用|运行|同步|采集|访问|更新)|(?:数据|记录|账本)\s*(?:记到|覆盖到)|数据水位")
 BEIJING = timezone(timedelta(hours=8))
 
 
@@ -90,9 +91,37 @@ def locate(text, row, number=False):
     return 0, len(text)
 
 
+def qualified_date_review(page, row):
+    """日期所说的事件时间不能被计数的本轮观察日期替换。"""
+    field = row.get("field") or row.get("page_field") or ""
+    if field.startswith("status_line.last"):
+        return "需人工核对：上次使用或运行的事件时间，不能替换为本轮观察日期"
+    try:
+        if field:
+            parent, key = field_at(page, field)
+            text = parent[key]
+        else:
+            text = next(s.get("text", "") for s in page["screens"] if s["id"] == row["screen"])
+        start, end = locate(text, row)
+    except (KeyError, ValueError, IndexError, StopIteration, re.error):
+        return "需人工核对：日期上下文未能定位，保留旧日期"
+    # 只看日期所在句，避免别的句子提到“上次使用”就误拦本轮观察日期。
+    marks = ("\n", "。", "；", ";", "！", "!", "？", "?")
+    a = max(text.rfind(mark, 0, start) for mark in marks) + 1
+    ends = [text.find(mark, end) for mark in marks]
+    b = min((i for i in ends if i >= 0), default=len(text))
+    if EVENT_DATE.search(text[a:b]):
+        return "需人工核对：日期句说明最近写入、上次使用或资料覆盖时间，不能替换为本轮观察日期"
+    return None
+
+
 def build_number_edits(root, result):
-    root, pages, edits, skipped = Path(root), {}, {}, []
+    root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
     for row in result["rows"]:
+        if row.get("manual_review_reason"):
+            manual_reviews.append({k: row.get(k) for k in ("page", "field", "old_value", "date_candidate", "source_observed_at")} |
+                                  {"record_id": row["id"], "status": "需人工核对", "reason": row["manual_review_reason"]})
+            continue
         if (row.get("status") not in {"changed", "unchanged"} or row.get("scope_status") != "verified"
                 or not row.get("source_observed_at") or row.get("historical") or row.get("frozen")
                 or row.get("dynamic")
@@ -103,6 +132,11 @@ def build_number_edits(root, result):
             if slug not in pages:
                 pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
             page = pages[slug]
+            review = qualified_date_review(page, row) if row.get("qualifies") else None
+            if review:
+                manual_reviews.append(dict(page=slug, record_id=rid, field=row.get("field"), old_value=row["old_value"],
+                    date_candidate=row["new_value"], source_observed_at=row["source_observed_at"], status="需人工核对", reason=review))
+                continue
             numbers = page.get("registry", {}).get("numbers", [])
             nid = row.get("page_number") or row.get("registry_number")
             ni = next((i for i, n in enumerate(numbers) if n.get("id") == nid), None)
@@ -168,7 +202,7 @@ def build_number_edits(root, result):
             for edit in group:
                 edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
             valid.extend(group)
-    return dict(schema="content-refresh.number-edits.v1", edits=valid, skipped=skipped)
+    return dict(schema="content-refresh.number-edits.v1", edits=valid, skipped=skipped, manual_reviews=manual_reviews)
 
 
 def apply_edits(root, payload, only=None):
