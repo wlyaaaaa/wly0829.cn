@@ -126,7 +126,7 @@
       "measurement_scope": "本工作树 sources/pages/*/page.json，kind=skill；不以安装数或去向页替代。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "同一个目录找到这 ([\\d,]+) 个技能",
+      "page_pattern": "这 ([\\d,]+) 个个人技能",
       "observed_at": "2026-10-11T17:54:12+08:00"
     },
     {
@@ -288,7 +288,7 @@
       ],
       "registry_number": "n-decisions",
       "original_value_index": 0,
-      "page_pattern": "截至 \\d+ 月 \\d+ 日 ([\\d,]+) 节，约",
+      "page_pattern": "截至 \\d+ 月 \\d+ 日 \\d+:\\d+ 共 ([\\d,]+) 节，约",
       "field": "screens[8].text",
       "measurement_scope": "E:/.agents/docs/owner-decisions/????-??.md经order.json原序重建，只统计^## 二级标题，不把索引页或归档再加进来。",
       "scope_status": "verified",
@@ -629,7 +629,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
       "refreshed_value": 28,
       "affected_screens": [
@@ -640,7 +640,8 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 课\\*\\*",
       "scope_status": "verified",
-      "measurement_scope": "当前学习进度.json的lessons数组长度；只输出总数，不输出课程条目、学习结果或进度。"
+      "measurement_scope": "当前学习进度.json的lessons数组长度；只输出总数，不输出课程条目、学习结果或进度。",
+      "known_gap": "当前已核对页面不再展示该旧聚合数字；本条留存上次页面的有日期观察；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "learning-n-lectures-0",
@@ -660,7 +661,7 @@
       },
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
       "refreshed_value": 28,
       "affected_screens": [
@@ -669,7 +670,8 @@
       "field": "screens[0].text",
       "page_pattern": "\\*\\*([\\d,]+) 篇讲义\\*\\*",
       "scope_status": "verified",
-      "measurement_scope": "讲义目录第07至34篇：按编号去重数json或md现行文件，json和md同编号只算一篇，不计html生成副本和素材。"
+      "measurement_scope": "讲义目录第07至34篇：按编号去重数json或md现行文件，json和md同编号只算一篇，不计html生成副本和素材。",
+      "known_gap": "当前已核对页面不再展示该旧聚合数字；本条留存上次页面的有日期观察；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "learning-n-exercises-0",
@@ -1131,7 +1133,9 @@
       "value_index": 0,
       "affected_screens": [
         "rules-home-01"
-      ]
+      ],
+      "manual_reason": "judgment",
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
     },
     {
       "id": "rules-home-n-groups-0",
@@ -1155,7 +1159,9 @@
       "value_index": 0,
       "affected_screens": [
         "rules-home-01"
-      ]
+      ],
+      "manual_reason": "judgment",
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
     },
     {
       "id": "rules-home-n-topics-0",
@@ -1180,7 +1186,9 @@
       "affected_screens": [
         "rules-home-01",
         "rules-home-02"
-      ]
+      ],
+      "manual_reason": "judgment",
+      "manual_route": "先运行正式 E 活动规则 Inspect，只有通过才读取回执指定的同版 AGENTS.md 和 rules-catalog.json；按约法 L 标题数、约法三级分组标题数、除 agents_root_rules 外的 primary 主题清单逐项核对，排除兼容别名和入口模板。无法核验活动版时保留原日期并回报 Unknown，不读候选源码代替。"
     },
     {
       "id": "proxyclean-n-layers-0",
@@ -1556,7 +1564,7 @@
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "([\\d,]+(?:\\.\\d+)?)\\ 项｜自动测试全过（本机重跑",
+      "page_pattern": "([\\d,]+) 项｜自动测试；GitHub",
       "manual_reason": "judgment",
       "manual_route": "在隔离临时目录按项目 AGENTS.md 重跑 unittest 并审阅通过/跳过结果；21 项是实际全过结果，不能只数测试定义。",
       "measurement_scope": "实际自动测试通过项数，须审阅运行结果。",
@@ -1880,7 +1888,7 @@
       ],
       "registry_number": "n-canvas",
       "original_value_index": 2,
-      "page_pattern": "\\ ([\\d,]+(?:\\.\\d+)?)\\ 帧\\*\\*｜成片画面，显卡\\ AV",
+      "page_pattern": "· ([\\d,]+(?:\\.\\d+)?) 帧\\*\\*｜分镜路线的成片画面",
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -1974,7 +1982,7 @@
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 个\\*\\*｜自动测试",
+      "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*｜测试定义（只计数",
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -2006,7 +2014,7 @@
       ],
       "registry_number": "n-lines",
       "original_value_index": 0,
-      "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ 行\\*\\*｜Python\\ 正式代码，不算测试（含\\ ",
+      "page_pattern": "- \\*\\*([\\d,]+) 行\\*\\*｜Python 正式代码，",
       "measurement_scope": "读取 origin/main 固定提交的 git archive 内存快照；config 仅AST字面值，动画仅 scene_base.html case 唯一名称，tests/ 下 def test 定义数（不执行、不声称通过），非tests/ Python按LF行数；提交含合并提交。",
       "scope_status": "verified",
       "field": "screens[5].text"
@@ -2016,7 +2024,7 @@
       "page": "video-scaffold",
       "screen": "video-scaffold-06",
       "label": "正式Python代码文件数",
-      "current_value": "Unknown",
+      "current_value": 57,
       "as_of": "2026-10-10",
       "category": "文件个数",
       "source_location": "E:\\Projects\\Archives\\video-scaffold",
@@ -2036,13 +2044,14 @@
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 45,
-      "page_pattern": "Python 正式代码（([\\d,]+)\\s*个文件",
+      "page_pattern": "Python 正式代码，([\\d,]+) 个文件",
       "previous_value": 33,
       "page_match": "missing",
-      "known_gap": "f283技术含义确认45文件，但可见正文已删独立文件个数；页面值Unknown，不能用来源45冒充页面数字。",
+      "known_gap": "旧f283正文曾无独立文件数；当前第6屏明确57个同口径Python正式代码文件，旧Unknown已由当前真实展示解除，未执行本轮新增源采集。",
       "measurement_scope": "仅Git跟踪文件；include=[\"**/*.py\"]；exclude=[\"tests/**\"]。只数选中真实文件，不把目录/JSON条目/连接当文件数。含webfilm11文件2471LF与原线34文件6492LF，排整个tests连同fixture/helper，总45文件8963LF。",
-      "scope_status": "pending",
-      "scope_reason": "新页没有可靠数字定位，当前值Unknown，来源可算不能冒充页面数。"
+      "scope_status": "verified",
+      "scope_reason": "新页没有可靠数字定位，当前值Unknown，来源可算不能冒充页面数。",
+      "field": "screens[5].text"
     },
     {
       "id": "video-scaffold-n-commits-0",
@@ -2533,7 +2542,7 @@
       ],
       "registry_number": "n-used",
       "original_value_index": 0,
-      "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ GiB\\*\\*　Z\\ 盘现在只用这么多，基本是\\ Chrome",
+      "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　Z 盘只用了这么多，",
       "measurement_scope": "指定JSON逐键/数组索引取[\"Metrics\", \"UsedGB\"]；字段原始单值。保留1位小数，五入。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -2644,7 +2653,7 @@
           "image_bytes"
         ],
         "scale": 9.313225746154785e-10,
-        "digits": 1
+        "digits": 2
       },
       "automatic": true,
       "private": false,
@@ -2656,10 +2665,10 @@
       ],
       "registry_number": "n-image-now",
       "original_value_index": 0,
-      "page_pattern": "10 月 10 日是 ([\\d,.]+) GiB",
+      "page_pattern": "Z\\.vdf，约 ([\\d,.]+) GiB",
       "field": "screens[3].text",
       "scope_status": "verified",
-      "measurement_scope": "E:/RamdiskImage/Z.vdf stat文件长度/2^30，1位小数；不加载镜像。",
+      "measurement_scope": "E:/RamdiskImage/Z.vdf stat文件长度/2^30，2位小数（匹配当前0.68GiB展示）；不加载镜像。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
     },
     {
@@ -2756,7 +2765,7 @@
       ],
       "registry_number": "n-test-lines",
       "original_value_index": 0,
-      "page_pattern": "\\ 项\\*\\*｜测试：([\\d,]+(?:\\.\\d+)?)\\ 组\\ ",
+      "page_pattern": "测试定义（只计数）：([\\d,]+) 组",
       "measurement_scope": "仅Git跟踪文件；include=[\"tests/*.ps1\"]；exclude=[]。只数选中真实文件，不把目录/JSON条目/连接当文件数。",
       "scope_status": "verified",
       "field": "screens[5].text"
@@ -3170,7 +3179,7 @@
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "Python 测试 ([\\d,]+) 项",
+      "page_pattern": "源码里现有 ([\\d,]+) 个 Python 测试定义",
       "measurement_scope": "两个精确测试文件中的test函数定义数量，不执行测试、不把数量当重跑通过。",
       "scope_status": "verified",
       "field": "screens[4].text"
@@ -3344,7 +3353,7 @@
         "sunshine-remote-streaming-06"
       ],
       "registry_number": "n-switches",
-      "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜换屏和手动改配置共计：",
+      "page_pattern": "\\*\\*([\\d,]+) 份\\*\\*｜配置备份：",
       "measurement_scope": "当前存在的真实文件；include=[\"sunshine.conf.capture-*.bak\"]；exclude=[]。只数选中真实文件，不把目录/JSON条目/连接当文件数。",
       "scope_status": "verified",
       "field": "screens[0].text",
@@ -3410,7 +3419,7 @@
         "sunshine-remote-streaming-05"
       ],
       "registry_number": "n-test-groups",
-      "page_pattern": "\\*\\*([\\d,]+) 组\\*\\*｜源码测试，",
+      "page_pattern": "\\*\\*([\\d,]+) 组\\*\\*｜源码测试；",
       "measurement_scope": "仅Git跟踪文件；include=[\"tests/Test-Sunshine*.ps1\"]；exclude=[]。只数选中真实文件，不把目录/JSON条目/连接当文件数。",
       "scope_status": "verified",
       "field": "screens[0].text",
@@ -3887,7 +3896,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 1,
       "affected_screens": [
@@ -3897,10 +3906,9 @@
       ],
       "registry_number": "n-checks",
       "original_value_index": 2,
-      "page_pattern": "、([\\d,]+) 项提醒",
       "measurement_scope": "doctor本次WARN数量，非列表序号；参考数字完整字段有明确1项提醒。",
       "scope_status": "verified",
-      "field": "registry.numbers[3].text"
+      "known_gap": "完整首屏及自检章节当前为21通过、0失败、1不知道；旧1项提醒已无当前展示，不能把不知道改作提醒；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "pcconfig-n-tasks-0",
@@ -4249,7 +4257,7 @@
       ],
       "registry_number": "n-image-chain",
       "original_value_index": 0,
-      "page_pattern": "\\-\\ \\*\\*([\\d,]+(?:\\.\\d+)?)\\ GiB\\*\\*　每天\\ ",
+      "page_pattern": "- \\*\\*([\\d,.]+) GiB\\*\\*　加密系统镜像，",
       "measurement_scope": "指定JSON逐键/数组索引取[\"chain_bytes\"]；字段原始单值。原值乘9.313225746154785e-10换算页面单位。保留0位小数，五入。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -4305,7 +4313,7 @@
       "scope_status": "verified",
       "scope_evidence": "git show 28f393b2:registries/pending_acceptance.json 后取 items 数组长度",
       "field": "screens[10].text",
-      "page_pattern": "10 月 11 日共 ([\\d,]+) 项，含已验过的"
+      "page_pattern": "10 月 11 日 \\d+:\\d+ 共 ([\\d,]+) 项，含已验过的"
     },
     {
       "id": "pcconfig-n-disks-0",
@@ -4363,7 +4371,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": null,
       "affected_screens": [
@@ -4371,11 +4379,10 @@
         "pcconfig-05",
         "pcconfig-10"
       ],
-      "field": "screens[5].text",
-      "page_pattern": "\\*\\*C 盘\\*\\* [\\d,]+ GiB，已用 ([\\d,]+) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "known_gap": "完整硬盘表把C已用488GiB明确限定为9月28日读数，且注明之后未重新核对；当前卷实时读取不能替代该历史截面，旧登记原值与该正文不同也不擅自覆盖；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "pcconfig-n-disks-2",
@@ -4433,7 +4440,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": null,
       "affected_screens": [
@@ -4441,11 +4448,10 @@
         "pcconfig-05",
         "pcconfig-10"
       ],
-      "field": "screens[5].text",
-      "page_pattern": "\\*\\*E 盘\\*\\* [\\d,]+ GiB，已用 ([\\d,]+) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "known_gap": "完整硬盘表把E已用1491GiB明确限定为9月28日读数，且注明之后未重新核对；当前卷实时读取不能替代该历史截面，旧登记原值与该正文不同也不擅自覆盖；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "pcconfig-n-disks-4",
@@ -4538,7 +4544,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": null,
       "affected_screens": [
@@ -4546,11 +4552,10 @@
         "pcconfig-05",
         "pcconfig-10"
       ],
-      "field": "screens[5].text",
-      "page_pattern": "\\*\\*G 盘\\*\\* [\\d,]+ GiB，已用 ([\\d,]+) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "known_gap": "完整硬盘表把G已用916GiB明确限定为9月28日读数，且注明之后未重新核对；当前卷实时读取不能替代该历史截面，旧登记原值与该正文不同也不擅自覆盖；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "pcconfig-n-disks-7",
@@ -4608,7 +4613,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": null,
       "affected_screens": [
@@ -4616,11 +4621,10 @@
         "pcconfig-05",
         "pcconfig-10"
       ],
-      "field": "screens[6].text",
-      "page_pattern": "\\d+ 月 \\d+ 日 \\d\\d:\\d\\d 读到已用 ([\\d,]+) GiB",
       "scope_status": "verified",
       "measurement_scope": "Get-Volume同批Size或Size-SizeRemaining/2^30，整数GiB；不可读即Unknown，不用目录大小替代。",
-      "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
+      "scope_evidence": "本轮读取来源与源码；见pc-findings.md",
+      "known_gap": "完整硬盘表把H已用1418GiB明确限定为9月28日读数，且注明之后未重新核对；当前卷实时读取不能替代该历史截面，旧登记原值与该正文不同也不擅自覆盖；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "pcconfig-n-disks-9",
@@ -4884,7 +4888,7 @@
         "pcconfig-13"
       ],
       "registry_number": "n-tests",
-      "page_pattern": "([\\d,]+) 项登记测试",
+      "page_pattern": "测试定义 ([\\d,]+) 个（只计数）",
       "known_gap": "f283正文196项、旧数字登记仍178；按正文196绑定，原定义复算证据另列scope_evidence。",
       "measurement_scope": "指定JSON逐键/数组索引取[\"tests\"]；全部数组元素个数，无状态过滤。已从提交e2f19d4e复算tests数组长度=196，包括全部登记状态，不计excluded或maintenance。",
       "scope_status": "verified",
@@ -4917,7 +4921,7 @@
         "pcconfig-13"
       ],
       "field": "screens[11].text",
-      "page_pattern": "项登记测试，分 ([\\d,]+) 组",
+      "page_pattern": "个（只计数），分 ([\\d,]+) 组",
       "scope_status": "verified",
       "measurement_scope": "tests/test-registry.json tests全部条目按subsystem去重；登记组数，不是执行/通过组数。",
       "scope_evidence": "本轮读取来源与源码；见pc-findings.md"
@@ -5287,7 +5291,9 @@
       "value_index": 2,
       "affected_screens": [
         "localocr-01"
-      ]
+      ],
+      "manual_reason": "judgment",
+      "manual_route": "由 LocalOCR 源项目按原完成态、样例/冒烟/空白排除集合只读 jobs 元数据，核对 result.pages 的页数聚合与原指纹去重口径；旧 c/ocr_count.py 未找回时先找回原程序和原过滤集合，不用文件数或原件数替代页数。无法复现则保留16157和原日期，具名回报完成结果页数 Unknown，不读识别正文。"
     },
     {
       "id": "localocr-n-auto-0",
@@ -5403,7 +5409,7 @@
       },
       "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 256,
       "page_number": "n-auto",
@@ -5411,7 +5417,8 @@
       "affected_screens": [
         "localocr-01",
         "localocr-08"
-      ]
+      ],
+      "known_gap": "当前已核对页面不再展示该旧聚合数字；本条留存上次页面的有日期观察；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "localocr-n-auto-4",
@@ -5428,7 +5435,7 @@
       },
       "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": null,
       "page_number": "n-auto",
@@ -5436,7 +5443,8 @@
       "affected_screens": [
         "localocr-01",
         "localocr-08"
-      ]
+      ],
+      "known_gap": "当前已核对页面不再展示该旧聚合数字；本条留存上次页面的有日期观察；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "localocr-n-models-0",
@@ -7113,7 +7121,7 @@
         "timeaudit-06"
       ],
       "registry_number": "n-clip",
-      "page_pattern": "到 10 月 9 日累计 ([\\d,.]+) 次。",
+      "page_pattern": "到 \\d+ 月 \\d+ 日累计 ([\\d,.]+) 次。",
       "field": "screens[5].text",
       "measurement_scope": "当前events全表精确行数，与原备份回执event_count同表口径；包括原有各事件种类；仅mode=ro计数。",
       "scope_status": "verified"
@@ -7202,7 +7210,7 @@
         "timeaudit-13"
       ],
       "registry_number": "n-activity",
-      "page_pattern": "\\| 每 3 秒一次的逐程序明细 \\| 约 ([\\d,.]+) 亿条",
+      "page_pattern": "\\| 每 3 秒一次的逐程序明细 \\| ([\\d,.]+) 亿条",
       "field": "screens[10].text",
       "measurement_scope": "fact_process_activity分区树叶分区pg_class.reltuples非负值合计/1亿，两位；统计估算，非精确count。",
       "scope_status": "verified"
@@ -7431,7 +7439,7 @@
         "timeaudit-11"
       ],
       "registry_number": "n-code",
-      "page_pattern": "\\*\\*([\\d,.]+) 个\\*\\*｜测试函数（源码里数的 def test_",
+      "page_pattern": "\\*\\*([\\d,.]+) 个\\*\\*｜测试定义（只计数：源码里数的 def test_",
       "field": "screens[11].text",
       "measurement_scope": "跟踪.py中def test_字面出现次数，含方法；静态定义数，非测试发现/执行/通过数。",
       "scope_status": "verified"
@@ -8018,7 +8026,7 @@
       },
       "automatic": false,
       "private": true,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 116,
       "affected_screens": [
@@ -8029,7 +8037,8 @@
       "page_pattern": "\\-\\ 健康现状（CURRENT\\.md，([\\d,]+(?:\\.\\d+)?)\\ 行",
       "field": "screens[3].text",
       "manual_reason": "judgment",
-      "manual_route": "GPT请求Health Owner在独立已授权的健康业务范围审阅并提供仅含统计的回执：完整覆盖天数、完成采集次数、去重更新日数或当前摘要行数。网页任务不得读取manifest/brief/CURRENT，现没有可直接调用的公开安全聚合入口，保留旧值旧日期；收到经领域审阅的计数回执后登记只读entry，不把当前缺入口描述成健康采集停写。"
+      "manual_route": "GPT请求Health Owner在独立已授权的健康业务范围审阅并提供仅含统计的回执：完整覆盖天数、完成采集次数、去重更新日数或当前摘要行数。网页任务不得读取manifest/brief/CURRENT，现没有可直接调用的公开安全聚合入口，保留旧值旧日期；收到经领域审阅的计数回执后登记只读entry，不把当前缺入口描述成健康采集停写。",
+      "known_gap": "当前已核对页面不再展示该旧聚合数字；本条留存上次页面的有日期观察；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "personal-health-n-current-1",
@@ -8047,7 +8056,7 @@
       },
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 73,
       "affected_screens": [
@@ -8055,10 +8064,9 @@
       ],
       "registry_number": "n-current",
       "original_value_index": 1,
-      "page_pattern": "\\ 日一共改过\\ ([\\d,]+(?:\\.\\d+)?)\\ 次）和来源清单（SOURCES\\.md）：私有\\ GitH",
-      "field": "screens[3].text",
       "scope_status": "verified",
-      "measurement_scope": "HEAD可达提交中触及CURRENT.md的提交数；仅Git元数据计数，不读取摘要正文。"
+      "measurement_scope": "HEAD可达提交中触及CURRENT.md的提交数；仅Git元数据计数，不读取摘要正文。",
+      "known_gap": "完整第4屏只说明CURRENT/SOURCES的存放位置，已撤掉摘要修改73次这个聚合；其他章节未展示该计数；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "personal-health-n-code-0",
@@ -8269,7 +8277,7 @@
       ],
       "registry_number": "n-stale",
       "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+) 次\\*\\*｜旧认识因来源或原话变了而退场复核",
+      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜旧卡版本因来源或原话变了而退场复核",
       "measurement_scope": "当前库中状态为 stale 的认识卡版本数，代表因来源或原话变化退场的版本，不读取正文",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -8327,7 +8335,7 @@
       ],
       "registry_number": "n-card-versions",
       "original_value_index": 0,
-      "page_pattern": "历史版本 ([\\d,]+) 个",
+      "page_pattern": "另有 ([\\d,]+) 个旧版本（不是现行卡）",
       "measurement_scope": "认识卡非现行历史版本数，历史 historical 加失效 stale，不把78个现行版本计入",
       "scope_status": "verified",
       "field": "screens[6].text"
@@ -8535,7 +8543,7 @@
       ],
       "registry_number": "n-frozen",
       "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+) 份\\*\\*｜冻结的引用副本",
+      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜冻结的引用副本文件",
       "measurement_scope": "引用快照目录下递归全部文件数，只列文件，不读取文件正文",
       "scope_status": "verified",
       "field": "screens[9].text"
@@ -8605,7 +8613,7 @@
         "daily-preferences-10"
       ],
       "registry_number": "n-tests",
-      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜自动测试",
+      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜测试定义（只计数",
       "measurement_scope": "静态测试定义数：测试目录中行首Python def test_ 方法718个和Node test(定义51个，总769；只数定义，不代表执行通过",
       "scope_status": "verified",
       "field": "screens[9].text"
@@ -8656,13 +8664,14 @@
       "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 19851,
-      "page_number": "n-images-sorted",
       "value_index": 0,
       "affected_screens": [
         "personal-media-01",
         "personal-media-10",
         "personal-media-14"
-      ]
+      ],
+      "field": "screens[0].text",
+      "page_pattern": "整理前 ([\\d,]+) 张"
     },
     {
       "id": "personal-media-n-images-sorted-1",
@@ -8895,7 +8904,7 @@
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+(?:\\.\\d+)?)\\ 个\\*\\*　自动测试",
+      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*　写好的自动测试",
       "field": "screens[8].text",
       "scope_status": "verified",
       "measurement_scope": "按当前页面registry n-tests意义：Git跟踪的13个根目录test_*.py，静态def test_函数计数；不声称测试通过数或pytest collect数量。"
@@ -9197,7 +9206,7 @@
       ],
       "registry_number": "n-tests",
       "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜自动测试",
+      "page_pattern": "\\*\\*([\\d,]+) 个\\*\\*｜测试用例定义",
       "field": "screens[5].text",
       "scope_status": "verified",
       "measurement_scope": "pytest --collect-only 收集展开参数化后的测试条目数；禁用外部插件自动加载与cacheprovider，Python -B，不执行测试。本轮110；AST test_定义只有70，不能替代此口径。"
@@ -9216,7 +9225,7 @@
       },
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
       "refreshed_value": 39,
       "affected_screens": [
@@ -10884,7 +10893,7 @@
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\sources\\pages\\daily-preferences\\page.json",
       "refreshed_value": 1534,
-      "page_pattern": "招行信用卡 ([\\d,]+)",
+      "page_pattern": "信用卡账单 ([\\d,]+)",
       "measurement_scope": "records 现行版本 is_current=1 按逻辑来源 credit_card_statements 聚合行数，不按source实例数、导入次数或条目内容统计",
       "scope_status": "verified",
       "field": "screens[7].text"
@@ -11374,7 +11383,7 @@
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "Git跟踪tests/*.py内行首def test_定义数量；只数定义，不代表本次运行通过",
-      "page_pattern": "；([\\d,]+) 个自动测试",
+      "page_pattern": "；测试定义 ([\\d,]+) 个（只计数）",
       "retrieve": {
         "kind": "regex_count",
         "path": "V:/Personal/Projects/personal-expression",
@@ -11419,7 +11428,7 @@
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
       "measurement_scope": "kind=skill、name=daily-preferences；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
@@ -11429,7 +11438,8 @@
         "operation": "count_7d",
         "timeout": 30
       },
-      "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次"
+      "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
+      "known_gap": "旧滚动7天技能使用口径已撤出当前状态条；当前11次属于10月5日至9日的已采集固定时期；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "daily-preferences-status-as-of",
@@ -11445,10 +11455,11 @@
       "historical": false,
       "field": "status_line.as_of",
       "scope_status": "verified",
-      "measurement_scope": "只注明同一状态条的最后使用时间和近7天次数；一项Unknown就保留旧截至",
+      "measurement_scope": "注明同一状态条最后使用与两个固定已采时期调用数；不把10月5–9日采集水位换成本轮观察时刻，任一Unknown保留日期。",
       "qualifies": [
         "daily-preferences-status-last",
-        "daily-preferences-status-facts-0"
+        "int3-daily-preferences-skill-fixed-window",
+        "int3-daily-preferences-command-fixed-window"
       ]
     },
     {
@@ -11486,7 +11497,7 @@
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
       "automatic": true,
       "private": true,
-      "historical": false,
+      "historical": true,
       "field": "status_line.facts[0]",
       "scope_status": "verified",
       "measurement_scope": "kind=skill、name=explain-to-me；从观察时刻往前7天的已记录调用次数，不与命令行次数相加；完整采集水位见同目录state-codex/state-claude；调用记录不证明实际业务效果，未采集日期不等于未使用",
@@ -11496,7 +11507,8 @@
         "operation": "count_7d",
         "timeout": 30
       },
-      "page_pattern": "近 7 天 AI 用“讲给我听”([\\d,]+) 次"
+      "page_pattern": "近 7 天 AI 用“讲给我听”([\\d,]+) 次",
+      "known_gap": "旧滚动7天讲解技能口径已撤出当前状态条；当前10次属于10月4日14:00以来的已采集固定时期；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "personal-expression-status-as-of",
@@ -11512,10 +11524,11 @@
       "historical": false,
       "field": "status_line.as_of",
       "scope_status": "verified",
-      "measurement_scope": "只注明同一状态条的最后使用时间和近7天次数；一项Unknown就保留旧截至",
+      "measurement_scope": "同条最后使用与10月4日14:00以来已采截至10月9日的两技能计数；不与旧滚动7天混算，任一Unknown保留日期。",
       "qualifies": [
         "personal-expression-status-last",
-        "personal-expression-status-facts-0"
+        "int3-personal-expression-explain-fixed-window",
+        "int3-personal-expression-reply-fixed-window"
       ]
     },
     {
@@ -11916,12 +11929,13 @@
       "id": "timeaudit-cutoff-main",
       "label": "首屏硬件、生命周期、主看板数字截至日期",
       "current_value": "10 月 10 日",
-      "page_pattern": "^截至 ([^（\\n]+)（复制次数截至",
+      "page_pattern": "^截至 (\\d+ 月 \\d+ 日)$",
       "qualifies": [
         "timeaudit-n-hw-samples-0",
         "timeaudit-n-lifecycle-0",
         "timeaudit-n-panels-0",
-        "timeaudit-n-panels-1"
+        "timeaudit-n-panels-1",
+        "timeaudit-n-clip-first-screen"
       ],
       "page": "timeaudit",
       "screen": "timeaudit-01",
@@ -11953,11 +11967,12 @@
       "source_location": "E:/Cache/Claude/Temp/6428793e/wt-B2/sources/pages/timeaudit/page.json screens[0].text；由qualifies注明数字的重取结果衍生",
       "automatic": true,
       "private": false,
-      "historical": false,
+      "historical": true,
       "scope_status": "verified",
       "measurement_scope": "仅当qualifies所列全部同口径数字取得新值，取最早观察日期；任何Unknown保留原日期。",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/gpt-children/20261011-174134-web-bind-B2-f81fad6f/round-01/evidence/timeaudit-findings.md",
-      "refreshed_value": null
+      "refreshed_value": null,
+      "known_gap": "旧首屏单列复制日期已合并为本屏共同截止；原10月9日日期作为旧页面观察保留；保留原观察值、原日期及原取数口径，不以当前现场数覆盖。"
     },
     {
       "id": "pc-panel-hub-refresh-seconds",
@@ -12088,7 +12103,7 @@
       "measurement_scope": "只说明qualifies数字；任一Unknown保留旧日期。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日)；",
+      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+)；",
       "qualifies": [
         "pcconfig-n-image-chain-0",
         "pcconfig-text-0-163"
@@ -12113,7 +12128,7 @@
       "measurement_scope": "只说明qualifies数字；任一Unknown保留旧日期。",
       "scope_status": "verified",
       "field": "screens[12].text",
-      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日)）",
+      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+) 前最后一次提交",
       "qualifies": [
         "pcconfig-n-commits-0"
       ]
@@ -12572,7 +12587,7 @@
       "private": false,
       "historical": false,
       "field": "screens[4].text",
-      "page_pattern": "日：([\\d,]+) 个文件、",
+      "page_pattern": "日 \\d+:\\d+：([\\d,]+) 个文件、",
       "measurement_scope": "文件/行数取当前Git跟踪且文件存在的全部类型（含测试、文档、配置，不含未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00",
@@ -12627,7 +12642,7 @@
       "private": false,
       "historical": false,
       "field": "screens[4].text",
-      "page_pattern": "）· ([\\d,]+) 项登记测试",
+      "page_pattern": "）· 测试定义 ([\\d,]+) 项（只计数）",
       "measurement_scope": "文件/行数取当前Git跟踪且文件存在的全部类型（含测试、文档、配置，不含未跟踪releases）；逐行包括空行、末尾无LF残行。测试数仅test-registry.json数组长度，不是通过数；提交数为main可达提交，不是分支或最近一个月。",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00",
@@ -12732,7 +12747,7 @@
         "agents-volume-commits"
       ],
       "field": "screens[4].text",
-      "page_pattern": "\\*\\*体量\\*\\*　截至 (\\d+ 月 \\d+ 日)",
+      "page_pattern": "\\*\\*体量\\*\\*　截至 (\\d+ 月 \\d+ 日 \\d+:\\d+)",
       "measurement_scope": "qualifies关联数字的最早成功观察日期；任一Unknown或历史未重取则保留旧日期",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00"
@@ -12754,7 +12769,7 @@
         "agents-n-decisions-1"
       ],
       "field": "screens[8].text",
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日) [\\d,]+ 节，约",
+      "page_pattern": "截至 (\\d+ 月 \\d+ 日 \\d+:\\d+) 共 [\\d,]+ 节，约",
       "measurement_scope": "qualifies关联数字的最早成功观察日期；任一Unknown或历史未重取则保留旧日期",
       "scope_status": "verified",
       "observed_at": "2026-10-11T17:54:12+08:00"
@@ -12935,9 +12950,7 @@
       "scope_status": "verified",
       "measurement_scope": "只由关联实际数字全部取得同口径新值时，取最早观察日期；其中任一Unknown就保留旧日期。历史试恢复、退役、清理和旧定时观察不混入现行截至日期。",
       "field": "screens[0].text",
-      "page_pattern": "^截至 ([0-9]+ 月 [0-9]+ 日)$",
-      "start": 631,
-      "end": 640
+      "page_pattern": "^截至 ([0-9]+ 月 [0-9]+ 日 \\d+:\\d+)$"
     },
     {
       "id": "codex-memory-as-of-screen02",
@@ -12981,9 +12994,7 @@
       "scope_status": "verified",
       "measurement_scope": "只由关联实际数字全部取得同口径新值时，取最早观察日期；其中任一Unknown就保留旧日期。历史试恢复、退役、清理和旧定时观察不混入现行截至日期。",
       "field": "screens[3].text",
-      "page_pattern": "^截至 ([0-9]+ 月 [0-9]+ 日)$",
-      "start": 411,
-      "end": 420
+      "page_pattern": "^截至 ([0-9]+ 月 [0-9]+ 日 \\d+:\\d+)$"
     },
     {
       "id": "skill-cockpit-status-last",
@@ -13476,7 +13487,7 @@
       "automatic": true,
       "private": false,
       "historical": false,
-      "page_pattern": "下载用掉的（截至\\s*(\\d+\\s*月\\s*\\d+\\s*日)）",
+      "page_pattern": "下载用掉的（截至\\s*(\\d+\\s*月\\s*\\d+\\s*日 \\d+:\\d+)；",
       "field": "screens[11].text",
       "qualifies": [
         "how-this-site-month-cost"
@@ -13789,8 +13800,8 @@
       "field": "screens[0].text",
       "page_pattern": "数字截至 (\\d+ 月 \\d+ 日)",
       "qualifies": [
-        "learning-n-lessons-0",
-        "learning-n-lectures-0",
+        "int3-learning-file-types",
+        "int3-learning-local-forwarder",
         "learning-n-exercises-0"
       ],
       "label": "现行路线、讲义和练习数量截至日期",
@@ -13855,7 +13866,7 @@
       "page": "personal-media",
       "screen": "personal-media-01",
       "field": "screens[0].text",
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日)。",
+      "page_pattern": "截至 (\\d+ 月 \\d+ 日 \\d+:\\d+—\\d+:\\d+)（只读核对；",
       "label": "现行媒体总量与手机精选计划截至日期",
       "current_value": "10 月 9 日",
       "as_of": "2026-10-09",
@@ -13974,13 +13985,11 @@
       "id": "personal-formal-documents-firstscreen-asof",
       "page": "personal-formal-documents",
       "screen": "personal-formal-documents-01",
-      "field": "screens[0].text",
       "label": "personal-formal-documents-firstscreen-asof",
       "source_location": "同页被注明记录 personal-formal-documents-card-types, personal-formal-documents-card-states, personal-formal-documents-card-content-sources, personal-formal-documents-n-tests-0",
       "as_of": "2026-10-10",
-      "historical": false,
+      "historical": true,
       "private": false,
-      "page_pattern": "截至 (\\d+ 月 \\d+ 日)：",
       "qualifies": [
         "personal-formal-documents-card-types",
         "personal-formal-documents-card-states",
@@ -13990,7 +13999,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "仅注明所列记录的实际观察日期；任何关联项Unknown保留旧日期。",
-      "category": "日期联动"
+      "category": "日期联动",
+      "known_gap": "旧首屏数量观察保留；当前“截至...做好了/待验收”是整页事实核对戳，已撤下实际展示绑定，不能用新数量来源伪造日期联动。"
     },
     {
       "id": "personal-health-card-types",
@@ -14067,11 +14077,10 @@
       "id": "personal-health-last-run",
       "page": "personal-health",
       "screen": "personal-health-01",
-      "field": "status_line.last.at",
       "label": "personal-health-last-run",
       "source_location": "E:/Data/PCConfig/HealthRefresh/latest.json 与 Windows任务 PersonalHealth Weekly Refresh",
       "as_of": "2026-10-10",
-      "historical": false,
+      "historical": true,
       "private": false,
       "retrieve": {
         "kind": "entry",
@@ -14083,17 +14092,17 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "真实PersonalHealth Weekly Refresh计划Interval=P7D，已完成运行聚合回执的北京时间分钟与结果；不把调用记录冒充采集成功。",
-      "category": "来源登记"
+      "category": "来源登记",
+      "known_gap": "当前status_line完整对象只有state/as_of/source，不再有last或facts；原typed字段与其滚动统计已撤出展示，旧观察留存，未读健康业务文件；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "personal-health-weekly-result",
       "page": "personal-health",
       "screen": "personal-health-01",
-      "field": "status_line.facts[0]",
       "label": "personal-health-weekly-result",
       "source_location": "E:/Data/PCConfig/HealthRefresh/latest.json 与 Windows任务 PersonalHealth Weekly Refresh",
       "as_of": "2026-10-10",
-      "historical": false,
+      "historical": true,
       "private": false,
       "retrieve": {
         "kind": "entry",
@@ -14105,7 +14114,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "真实PersonalHealth Weekly Refresh计划Interval=P7D，已完成运行聚合回执的北京时间分钟与结果；不把调用记录冒充采集成功。",
-      "category": "来源登记"
+      "category": "来源登记",
+      "known_gap": "当前status_line完整对象只有state/as_of/source，不再有last或facts；原typed字段与其滚动统计已撤出展示，旧观察留存，未读健康业务文件；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "personal-materials-sync-as-of",
@@ -14492,13 +14502,11 @@
       "id": "personal-health-ai-usage-7d",
       "page": "personal-health",
       "screen": "personal-health-01",
-      "field": "status_line.facts[1]",
       "label": "personal-health-ai-usage-7d",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "as_of": "2026-10-10",
-      "historical": false,
+      "historical": true,
       "private": false,
-      "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
         "kind": "usage_ledger",
         "key": "google_health_refresh.py",
@@ -14510,17 +14518,17 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "原10月3–9日窗口8次已由账本command/name=google_health_refresh.py复现；现取观察时刻前7天同名刷新命令调用次数，不把命令调用等同成功刷新。",
-      "category": "来源登记"
+      "category": "来源登记",
+      "known_gap": "当前status_line完整对象只有state/as_of/source，不再有last或facts；原typed字段与其滚动统计已撤出展示，旧观察留存，未读健康业务文件；原登记值、原as_of、原统计口径保留，不以读取失败为由退休，不重新读取源内容。"
     },
     {
       "id": "personal-health-status-asof",
       "page": "personal-health",
       "screen": "personal-health-01",
-      "field": "status_line.as_of",
       "label": "personal-health-status-asof",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "as_of": "2026-10-10",
-      "historical": false,
+      "historical": true,
       "private": false,
       "qualifies": [
         "personal-health-last-run",
@@ -14530,7 +14538,8 @@
       "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "由明确被注明记录的最早观察日期推进；任何关联项Unknown保留旧日期。",
-      "category": "日期联动"
+      "category": "日期联动",
+      "known_gap": "旧状态条last/facts及其数字日期关联已撤出当前展示；原观察、原qualifies和原日期保留历史。当前as_of只表示10月11日只读查看、旧使用次数未重新核对，交review_stamp分类，不关联其他测试或设备数量。"
     },
     {
       "id": "personal-formal-documents-last-use",
@@ -15373,7 +15382,7 @@
       "category": "项目修改记录",
       "field": "status_line.facts[0]",
       "private": false,
-      "historical": false,
+      "historical": true,
       "automatic": true,
       "source_location": "E:/Projects/Archives/video-scaffold",
       "scope_status": "verified",
@@ -15387,7 +15396,8 @@
         ],
         "timeout": 20
       },
-      "page_field": "status_line.facts[0]"
+      "page_field": "status_line.facts[0]",
+      "known_gap": "原记录是读取当下前7天的滚动提交数；当前状态条改为14:00截止窗口69次，新id保存新口径。"
     },
     {
       "id": "video-scaffold-status-as-of",
@@ -15406,7 +15416,7 @@
       "measurement_scope": "本页同屏数字观察时间的最早日期；任一Unknown保留旧截至",
       "qualifies": [
         "video-scaffold-status-last",
-        "video-scaffold-status-changes-7d"
+        "int3-video-scaffold-commits-fixed-window"
       ],
       "page_field": "status_line.as_of"
     },
@@ -15548,7 +15558,7 @@
         "kind": "entry",
         "entry": "vault-key-ciphertext-revisions"
       },
-      "page_pattern": "^3\\.\\s+(\\d+) 版｜密文在私人 Key 仓库里存过"
+      "page_pattern": "^3\\.\\s+(\\d+) 版｜私人密文仓库里，密文文件有"
     },
     {
       "id": "vault-tool-tests-passed",
@@ -15561,7 +15571,7 @@
       "source_location": "E:/Projects/Tools/vault-tool；页面现有依据 py -3 -m pytest -q（2026-09-28 28.10 秒）；本轮没有发现可直接只读重取的结构化测试结果。",
       "automatic": false,
       "private": false,
-      "historical": false,
+      "historical": true,
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "页面数字指实际通过的自动测试结果，另有子用例；需要本轮真实运行和结果口径核对，本轮只读登记不执行写临时文件的测试入口。",
@@ -15569,7 +15579,7 @@
         "kind": "manual",
         "instructions": "需真实测试结果并人工核对，不能用 test_ 定义数冒充通过数。"
       },
-      "page_pattern": "^4\\.\\s+(\\d+) 个｜自动测试",
+      "page_pattern": "9 月 28 日实跑的 ([\\d,]+) 个 28 秒全部通过",
       "manual_reason": "judgment",
       "manual_route": "GPT 按 E:/Projects/Tools/vault-tool/AGENTS.md 的虚构凭据/隔离临时文件规则，在独立任务临时目录运行项目 pytest 验收并留存机器可读结果，人工核对实际 passed/failed/skipped 与口径。不要把宿主管理报告目录当 tmpdir，不接触真实 vault.enc、密码或 keyfile，不用代码定义数替代已通过测试数。"
     },
@@ -30778,6 +30788,855 @@
       "scope_status": "verified",
       "measurement_scope": "固定 materials_sync_current 成功终态日志最近一条的真实时间，返回北京时间ISO日期时间；不是页面事实核对戳、文件mtime或本轮读取时间。原页采用中文月日/分钟格式，改数单若不支持该格式则交Opus改写日期，不在绑定任务改正文。",
       "report_ref": "E:\\Cache\\Codex\\Temp\\web-bind-B9-20261011\\personal-notes.md"
+    },
+    {
+      "id": "int3-learning-file-types",
+      "page": "learning",
+      "screen": "learning-01",
+      "field": "screens[0].text",
+      "label": "交接文件类别数",
+      "current_value": 7,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "V:/Personal/Projects/career-development 当前规则和接手文件契约",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 career-development 当前规则、接手入口及课程文件目录，逐项对上路线、大纲、讲义、练习、讲义索引、当前状态、学习进度七类；这是文件职责类别数，不是递归文件数量，不读学习结果或私人成绩。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "当前7份说的是七类交接文件职责，不与旧28课或28篇讲义复用同一个id。",
+      "page_pattern": "\\*\\*([\\d,]+) 份文件\\*\\*",
+      "manual_reason": "judgment",
+      "manual_route": "只读 career-development 当前规则、接手入口及课程文件目录，逐项对上路线、大纲、讲义、练习、讲义索引、当前状态、学习进度七类；这是文件职责类别数，不是递归文件数量，不读学习结果或私人成绩。"
+    },
+    {
+      "id": "int3-learning-local-forwarder",
+      "page": "learning",
+      "screen": "learning-01",
+      "field": "screens[0].text",
+      "label": "课程本机转发口数量",
+      "current_value": 1,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "V:/Personal/Projects/career-development 课上真调云端模型契约",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 career-development 当前课程转发口调用说明及127.0.0.1:18765配置，核对一个课程云端转发入口；不启动、不调云端、不读取凭据，配置入口不冒充运行在线。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "课程现有一个本机云端转发入口；不与模型个数或监听测试混算。",
+      "page_pattern": "\\*\\*([\\d,]+) 个本机转发口\\*\\*",
+      "manual_reason": "judgment",
+      "manual_route": "只读 career-development 当前课程转发口调用说明及127.0.0.1:18765配置，核对一个课程云端转发入口；不启动、不调云端、不读取凭据，配置入口不冒充运行在线。"
+    },
+    {
+      "id": "int3-daily-preferences-skill-fixed-window",
+      "page": "daily-preferences",
+      "screen": "daily-preferences-01",
+      "field": "status_line.facts[0]",
+      "label": "已补采固定时期调用次数",
+      "current_value": 11,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
+      "page_pattern": "技能调用已记 ([\\d,]+) 次",
+      "manual_reason": "judgment",
+      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=daily-preferences；2026-10-05起至已采2026-10-09北京日的固定范围。"
+    },
+    {
+      "id": "int3-daily-preferences-command-fixed-window",
+      "page": "daily-preferences",
+      "screen": "daily-preferences-01",
+      "field": "status_line.facts[1]",
+      "label": "已补采固定时期调用次数",
+      "current_value": 346,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围；与旧滚动7天不同，新id保留当前口径。",
+      "page_pattern": "命令行调用另记 ([\\d,]+) 次",
+      "manual_reason": "judgment",
+      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=command且个人理解库正式CLI；2026-10-05起至已采2026-10-09北京日的固定范围。"
+    },
+    {
+      "id": "int3-personal-expression-explain-fixed-window",
+      "page": "personal-expression",
+      "screen": "personal-expression-01",
+      "field": "status_line.facts[0]",
+      "label": "已补采固定时期调用次数",
+      "current_value": 10,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
+      "page_pattern": "“讲给我听”技能已记 ([\\d,]+) 次",
+      "manual_reason": "judgment",
+      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=explain-to-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
+    },
+    {
+      "id": "int3-personal-expression-reply-fixed-window",
+      "page": "personal-expression",
+      "screen": "personal-expression-01",
+      "field": "status_line.facts[1]",
+      "label": "已补采固定时期调用次数",
+      "current_value": 0,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 和 state-codex.json/state-claude.json",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09；与旧滚动7天不同，新id保留当前口径。",
+      "page_pattern": "“替我拟消息”技能已记 ([\\d,]+) 次",
+      "manual_reason": "judgment",
+      "manual_route": "只读正式AI使用账本元数据，固定筛kind和name；按当前页面注明的开始时刻及已补采结束边界筛ts聚合，逐个宿主核对水位，不使用滚动7天，不把未补采期算零，不输出原记录、cwd或提示正文。 本条kind=skill,name=reply-as-me；2026-10-04T14:00+08:00以来，已采至2026-10-09。"
+    },
+    {
+      "id": "int3-ramdisk-cadence-asof",
+      "page": "ramdisk-guardian",
+      "screen": "ramdisk-guardian-04",
+      "field": "screens[3].text",
+      "label": "同句数据截至日期",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "由同句具名来源记录注明当前数据观察边界",
+      "qualifies": [
+        "ramdisk-guardian-runs-tech",
+        "ramdisk-guardian-gap-count",
+        "ramdisk-guardian-gap-minutes"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明同句巡查轮数、超过15.5分钟的间隔处数和最长间隔，不关联源码体量或别屏现役健康。",
+      "page_pattern": "算，截至 (\\d+ 月 \\d+ 日 \\d+:\\d+) 的"
+    },
+    {
+      "id": "int3-vault-test-definitions",
+      "page": "vault-tool",
+      "screen": "vault-tool-01",
+      "field": "screens[0].text",
+      "page_pattern": "^4\\.\\s+([\\d,]+) 个｜测试定义（只计数",
+      "label": "当前测试函数定义数",
+      "current_value": 145,
+      "as_of": "2026-10-11",
+      "category": "只读源码计数",
+      "source_location": "E:/Projects/Tools/vault-tool Git跟踪的根目录五个test*.py",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/vault-tool",
+        "include": [
+          "test*.py"
+        ],
+        "tracked": true,
+        "pattern": "^\\s*(?:async\\s+)?def test_\\w+\\s*\\(",
+        "flags": "m"
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只数Git跟踪根目录五个test*.py中test_函数定义，107+7+19+1+11=145；不计参数子用例，不运行测试，不把定义数当通过数。"
+    },
+    {
+      "id": "int3-vault-test-definitions-tech",
+      "page": "vault-tool",
+      "screen": "vault-tool-06",
+      "field": "screens[5].text",
+      "page_pattern": "^([\\d,]+) 个｜测试定义（只计数",
+      "label": "当前测试函数定义数",
+      "current_value": 145,
+      "as_of": "2026-10-11",
+      "category": "只读源码计数",
+      "source_location": "E:/Projects/Tools/vault-tool Git跟踪的根目录五个test*.py",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/vault-tool",
+        "include": [
+          "test*.py"
+        ],
+        "tracked": true,
+        "pattern": "^\\s*(?:async\\s+)?def test_\\w+\\s*\\(",
+        "flags": "m"
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只数Git跟踪根目录五个test*.py中test_函数定义，107+7+19+1+11=145；不计参数子用例，不运行测试，不把定义数当通过数。",
+      "affected_screens": [
+        "vault-tool-06"
+      ]
+    },
+    {
+      "id": "int3-vault-test-definitions-asof",
+      "page": "vault-tool",
+      "screen": "vault-tool-01",
+      "field": "screens[0].text",
+      "page_pattern": "测试定义（只计数，截至 (\\d+ 月 \\d+ 日)，",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-vault-test-definitions"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同句当前定义数145，9月28日144个通过数保持独立历史。"
+    },
+    {
+      "id": "int3-vault-test-definitions-tech-asof",
+      "page": "vault-tool",
+      "screen": "vault-tool-06",
+      "field": "screens[5].text",
+      "page_pattern": "测试定义（只计数，截至 (\\d+ 月 \\d+ 日)，",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-vault-test-definitions-tech"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同句当前定义数145，9月28日通过数及40子用例保持独立历史。"
+    },
+    {
+      "id": "int3-ramdisk-test-definitions",
+      "page": "ramdisk-guardian",
+      "screen": "ramdisk-guardian-01",
+      "field": "screens[0].text",
+      "page_pattern": "- \\*\\*([\\d,]+) 个\\*\\*　隔离测试定义",
+      "label": "隔离测试定义数量",
+      "current_value": 124,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 E:/Projects/Tools/RamdiskGuardian/tests 九个Git跟踪PS1，按各脚本Check/Assert封装与同一行多个调用、循环参数的声明用例核对124；简单行首Check只得65，不能用它替代124；由RamdiskGuardian源Owner给出一致的静态计数回执，缺回执则保留原数并具名Unknown。本任务不跑源测试。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 E:/Projects/Tools/RamdiskGuardian/tests 九个Git跟踪PS1，按各脚本Check/Assert封装与同一行多个调用、循环参数的声明用例核对124；简单行首Check只得65，不能用它替代124；由RamdiskGuardian源Owner给出一致的静态计数回执，缺回执则保留原数并具名Unknown。本任务不跑源测试。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "当前124是源码声明的隔离测试用例数量；它不是10月10日实际通过数，缺统一静态计数器所以人工核对。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 E:/Projects/Tools/RamdiskGuardian/tests 九个Git跟踪PS1，按各脚本Check/Assert封装与同一行多个调用、循环参数的声明用例核对124；简单行首Check只得65，不能用它替代124；由RamdiskGuardian源Owner给出一致的静态计数回执，缺回执则保留原数并具名Unknown。本任务不跑源测试。"
+    },
+    {
+      "id": "int3-formal-test-case-definitions",
+      "page": "personal-formal-documents",
+      "screen": "personal-formal-documents-01",
+      "field": "screens[0].text",
+      "page_pattern": "\\*\\*([\\d,]+) 个测试\\*\\*｜只用虚构内容；",
+      "label": "虚构文书测试用例数量",
+      "current_value": 39,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 E:/Projects/Tools/personal-formal-documents/tests/test_formal_documents.py 及相关固定参数表，核对参数展开后39个正式文书测试用例；当前函数定义28个，不能直接用28替代39，也不把源码数量当本轮通过结果。源Owner无法给一致静态用例表时保留39及原日期并具名Unknown；本任务不执行pytest或生成文书。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 E:/Projects/Tools/personal-formal-documents/tests/test_formal_documents.py 及相关固定参数表，核对参数展开后39个正式文书测试用例；当前函数定义28个，不能直接用28替代39，也不把源码数量当本轮通过结果。源Owner无法给一致静态用例表时保留39及原日期并具名Unknown；本任务不执行pytest或生成文书。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "当前39是带参数的虚构文书测试用例数量，旧实跑通过事实保留历史，尚无已登记的精确只读参数展开计数器。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 E:/Projects/Tools/personal-formal-documents/tests/test_formal_documents.py 及相关固定参数表，核对参数展开后39个正式文书测试用例；当前函数定义28个，不能直接用28替代39，也不把源码数量当本轮通过结果。源Owner无法给一致静态用例表时保留39及原日期并具名Unknown；本任务不执行pytest或生成文书。"
+    },
+    {
+      "id": "int3-codex-memory-g-comparison-files",
+      "page": "codex-memory",
+      "screen": "codex-memory-04",
+      "label": "第4屏当前对话恢复点文件数",
+      "current_value": 10491,
+      "as_of": "2026-10-11",
+      "category": "JSON 字段",
+      "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /file_count",
+      "retrieve": {
+        "kind": "json",
+        "path": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json",
+        "pointer": [
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "refreshed_value": 10491,
+      "affected_screens": [
+        "codex-memory-04"
+      ],
+      "registry_number": "n-conv-size",
+      "original_value_index": 1,
+      "page_pattern": "G 是当天 [\\d:]+ 存好的那份（([\\d,]+) 个文件",
+      "field": "screens[3].text",
+      "scope_status": "verified",
+      "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
+      "observed_at": "2026-10-11T17:59:16+08:00",
+      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+    },
+    {
+      "id": "int3-codex-memory-g-comparison-gb",
+      "page": "codex-memory",
+      "screen": "codex-memory-04",
+      "label": "第4屏当前对话恢复点大小（GB）",
+      "current_value": 39.2,
+      "as_of": "2026-10-11",
+      "category": "JSON 字段",
+      "source_location": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json /total_size_bytes",
+      "retrieve": {
+        "kind": "json",
+        "path": "C:\\Users\\10979\\AppData\\Local\\CodexConversationBackup\\hot-last.json",
+        "pointer": [
+          "total_size_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-yi\\content-refresh-yi.md",
+      "refreshed_value": 39.2,
+      "affected_screens": [
+        "codex-memory-04"
+      ],
+      "registry_number": "n-conv-size",
+      "original_value_index": 0,
+      "page_pattern": "G 是当天 [\\d:]+ 存好的那份（[\\d,]+ 个文件、([\\d.]+) GB",
+      "field": "screens[3].text",
+      "scope_status": "verified",
+      "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
+      "observed_at": "2026-10-11T17:59:16+08:00",
+      "source_observed_at": "2026-10-11T04:55:31.1854772+00:00"
+    },
+    {
+      "id": "int3-codex-memory-h-comparison-files",
+      "page": "codex-memory",
+      "screen": "codex-memory-04",
+      "label": "H当前生产回执文件数",
+      "current_value": 9815,
+      "as_of": "2026-10-11",
+      "field": "screens[3].text",
+      "page_pattern": "H 还是 \\d+ 月 \\d+ 日那份（([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false,
+      "affected_screens": [
+        "codex-memory-04"
+      ]
+    },
+    {
+      "id": "int3-codex-memory-h-comparison-gb",
+      "page": "codex-memory",
+      "screen": "codex-memory-04",
+      "label": "H当前生产回执总量GB",
+      "current_value": 35.1,
+      "as_of": "2026-10-11",
+      "field": "screens[3].text",
+      "page_pattern": "H 还是 \\d+ 月 \\d+ 日那份（[\\d,]+ 个文件、([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "total_size_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false,
+      "affected_screens": [
+        "codex-memory-04"
+      ]
+    },
+    {
+      "id": "int3-codex-memory-current-comparison-asof",
+      "page": "codex-memory",
+      "screen": "codex-memory-04",
+      "field": "screens[3].text",
+      "page_pattern": "跟上 G。截至 (\\d+ 月 \\d+ 日 \\d+:\\d+)，",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-codex-memory-g-comparison-files",
+        "int3-codex-memory-g-comparison-gb",
+        "int3-codex-memory-h-comparison-files",
+        "int3-codex-memory-h-comparison-gb"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "仅注明同句G/H当前恢复点文件数和GB对比；发布与完成事件时间仍从相同回执另行核对，不以观察日期改写事件时间。"
+    },
+    {
+      "id": "int3-codex-memory-g-no-file-warnings",
+      "page": "codex-memory",
+      "screen": "codex-memory-06",
+      "field": "screens[5].text",
+      "page_pattern": "G 上当天那份(没有被挡的文件)",
+      "label": "G当前恢复点无文件警告",
+      "current_value": "没有被挡的文件",
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条把file_warnings空人工核对为正文“没有被挡的文件”；当前重取器没有数值0到这句话的展示转换。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条把file_warnings空人工核对为正文“没有被挡的文件”；当前重取器没有数值0到这句话的展示转换。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "同句G恢复点无警告状态，字符展示需要人工关联，不能拿源文件总数证明。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条把file_warnings空人工核对为正文“没有被挡的文件”；当前重取器没有数值0到这句话的展示转换。"
+    },
+    {
+      "id": "int3-codex-memory-h-full-coverage",
+      "page": "codex-memory",
+      "screen": "codex-memory-06",
+      "field": "screens[5].text",
+      "page_pattern": "H 上 \\d+ 月 \\d+ 日那份(也是完整的)",
+      "label": "H当前恢复点完整覆盖",
+      "current_value": "也是完整的",
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "同句H实际点的完整覆盖状态，由point/回读/覆盖/警告共同证明，不以G当前点替代H。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 本条人工核对为正文“也是完整的”；当前重取器没有多条件布尔值到这句话的展示转换。"
+    },
+    {
+      "id": "int3-codex-memory-warning-status-asof",
+      "page": "codex-memory",
+      "screen": "codex-memory-06",
+      "field": "screens[5].text",
+      "page_pattern": "起；截至 (\\d+ 月 \\d+ 日 \\d+:\\d+)，",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-codex-memory-g-no-file-warnings",
+        "int3-codex-memory-h-full-coverage"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同句当前G无警告及H完整覆盖两个状态，不把原10月1日功能事件日期更新为今日。"
+    },
+    {
+      "id": "int3-codex-memory-current-points-state",
+      "page": "codex-memory",
+      "screen": "codex-memory-07",
+      "field": "screens[6].text",
+      "page_pattern": "(G current=[^\\n]+?)。G、H 不同日",
+      "label": "G/H当前点的完整技术快照",
+      "current_value": "G current=20261011T043524Z-0dc21e1e（12:55:31 发布，警告 0）；H current=20261010T041724Z-1a59672a（10 月 10 日 15:11:25 发布、15:23:30 冷备完成，readback_verified=true、verification_scope=all_manifest_files、覆盖 100%）",
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "这组可见技术快照属于同一次G/H点核对；覆盖日期关联这组真实来源，不挂仅有总件数的无关记录。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 G:/80_Backup/ControlPlane/AIMemory/CodexConversations/current.json与receipts/hot-last.json、H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/current.json与receipts/cold-last.json；先核对point_id/current、complete、readback_verified、verification_scope=all_manifest_files、file_warnings空及partial_coverage=false。只返回公开安全点身份、数量、状态与事件时间，不读对话正文，不触发备份。 对上正文两current id、完成/发布时间、G警告0、H readback_verified=true、all_manifest_files与覆盖100%；现有b7入口只返回计数字段，不含这整组状态，因此须人工逐项核对，缺一项回报Unknown保留14:00旧观察。"
+    },
+    {
+      "id": "int3-codex-memory-current-points-asof",
+      "page": "codex-memory",
+      "screen": "codex-memory-07",
+      "field": "screens[6].text",
+      "page_pattern": "发布完整点。截至 (\\d+ 月 \\d+ 日 \\d+:\\d+)：",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-codex-memory-current-points-state"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只注明同句G/H当前点身份、警告、回读覆盖与各事件时间的技术快照，事件时间由各自原回执核对。"
+    },
+    {
+      "id": "int3-localocr-objective-summary",
+      "page": "localocr",
+      "screen": "localocr-09",
+      "field": "screens[9].text",
+      "page_pattern": "14:00，(16,074 次完成的识别[^\\n]+?)；验收里的",
+      "label": "同过滤集合的识别结论统计",
+      "current_value": "16,074 次完成的识别里有 15,665 次带了这个结论：15,196 次“有字”，466 次“说不准”，3 次“没字”；另外 409 次早期识别还没有这一项。这是按识别次数算的，不是按材料：三类分别涉及 14,261、446、1 份材料，同一份材料识别几次可能落进不同的类，所以三个数不能相加，也加不出 14,976 份材料。3 次“没字”是 9 月 29 日晚上对同一份材料的三次请求，是机器给的结论，没有人看图确认过",
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "由 LocalOCR Owner只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据及result.objective_analysis，先恢复原16074完成态排除集合（项目样例/冒烟/开发空白），再按objective_analysis的has_text/indeterminate/no_text等原字段核对结论记录数、三类次数、早期缺字段次数和按原件source_sha256去重的三类材料数；不读识别正文、不把材料数与请求数相加、不用16075或16073冒充原16074。无法复现一致过滤集合时保留原数字和原日期，具名回报Unknown。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "由 LocalOCR Owner只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据及result.objective_analysis，先恢复原16074完成态排除集合（项目样例/冒烟/开发空白），再按objective_analysis的has_text/indeterminate/no_text等原字段核对结论记录数、三类次数、早期缺字段次数和按原件source_sha256去重的三类材料数；不读识别正文、不把材料数与请求数相加、不用16075或16073冒充原16074。无法复现一致过滤集合时保留原数字和原日期，具名回报Unknown。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "当前同句十个关联聚合值须按同一完成态过滤与原指纹口径核对；现有localocr-jobs-summary没有这些结论字段，不能挂快模型比例凑关联。",
+      "manual_reason": "judgment",
+      "manual_route": "由 LocalOCR Owner只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据及result.objective_analysis，先恢复原16074完成态排除集合（项目样例/冒烟/开发空白），再按objective_analysis的has_text/indeterminate/no_text等原字段核对结论记录数、三类次数、早期缺字段次数和按原件source_sha256去重的三类材料数；不读识别正文、不把材料数与请求数相加、不用16075或16073冒充原16074。无法复现一致过滤集合时保留原数字和原日期，具名回报Unknown。"
+    },
+    {
+      "id": "int3-localocr-objective-summary-asof",
+      "page": "localocr",
+      "screen": "localocr-09",
+      "field": "screens[9].text",
+      "page_pattern": "证据｜截至 (\\d+ 月 \\d+ 日 \\d+:\\d+)，",
+      "label": "同句真实数据截止",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "int3-localocr-objective-summary"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "结论统计截止仅关联同句完整统计组；过滤口径未找回则本条manual Unknown，保留原14:00。"
+    },
+    {
+      "id": "int3-projects-home-visible-asof",
+      "page": "projects-home",
+      "screen": "projects-home-01",
+      "field": "screens[0].text",
+      "page_pattern": "截至北京时间 (\\d{4}-\\d{2}-\\d{2} \\d+:\\d+)",
+      "label": "同句真实数据截止",
+      "current_value": "2026-10-11 16:26",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "所列具名来源的同句数据观察边界",
+      "qualifies": [
+        "projects-home-n-projects-0",
+        "projects-home-n-common-0",
+        "projects-home-n-occasional-0",
+        "projects-home-n-frozen-0",
+        "projects-home-n-public-0",
+        "projects-home-n-private-0",
+        "projects-home-n-in-use-0",
+        "projects-home-n-features-0"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "可见截止说明同屏项目、可见性和功能总规模，复用已核实页面计数来源，不把表头纯标签当数字。"
+    },
+    {
+      "id": "int3-agents-inspect-calls-historical-window",
+      "page": "agents",
+      "screen": "agents-01",
+      "field": "screens[0].text",
+      "page_pattern": "^- \\*\\*([\\d,]+) 次\\*\\*　9 月 15 日–10 月 9 日 AI 调用这个入口",
+      "label": "9月15日至10月9日规则入口调用次数",
+      "current_value": 6740,
+      "as_of": "2026-10-09",
+      "category": "人工",
+      "source_location": "只核对正式 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 中北京时间[2026-09-15T00:00+08:00,2026-10-10T00:00+08:00)的kind=command,name=Invoke-EAgentRulesRelease.ps1元数据行；发布、回退、核验不分开，Claude记录9月24日才开始。当前这句是已给定范围的历史观察，不随今日总量增长重取。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只核对正式 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 中北京时间[2026-09-15T00:00+08:00,2026-10-10T00:00+08:00)的kind=command,name=Invoke-EAgentRulesRelease.ps1元数据行；发布、回退、核验不分开，Claude记录9月24日才开始。当前这句是已给定范围的历史观察，不随今日总量增长重取。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": true,
+      "scope_status": "verified",
+      "measurement_scope": "保留6740与9月15日至10月9日完整固定范围，不冒充旧6407的同口径新值。",
+      "manual_reason": "judgment",
+      "manual_route": "只核对正式 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 中北京时间[2026-09-15T00:00+08:00,2026-10-10T00:00+08:00)的kind=command,name=Invoke-EAgentRulesRelease.ps1元数据行；发布、回退、核验不分开，Claude记录9月24日才开始。当前这句是已给定范围的历史观察，不随今日总量增长重取。"
+    },
+    {
+      "id": "int3-video-scaffold-commits-fixed-window",
+      "page": "video-scaffold",
+      "screen": "video-scaffold-01",
+      "field": "status_line.facts[0]",
+      "page_pattern": "截止前 7 天 ([\\d,]+) 次提交",
+      "label": "14:00截止前七天提交数",
+      "current_value": 69,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读 E:/Projects/Archives/video-scaffold 的已核对截点 cc41e514，按提交时间北京时间[2026-10-04T14:00+08:00,2026-10-11T14:00+08:00)数全部可达提交，含合并；不能用读取当下的滚动7天替代，不把提交个数称为改进项数。现有published-metrics入口按datetime.now滚动窗口，不能用于这条固定截止记录，故需GPT人工读取该明确Git窗口核对。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 E:/Projects/Archives/video-scaffold 的已核对截点 cc41e514，按提交时间北京时间[2026-10-04T14:00+08:00,2026-10-11T14:00+08:00)数全部可达提交，含合并；不能用读取当下的滚动7天替代，不把提交个数称为改进项数。现有published-metrics入口按datetime.now滚动窗口，不能用于这条固定截止记录，故需GPT人工读取该明确Git窗口核对。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "69是固定截点前七天的提交次数；已有自动入口只有读取当下的滚动七天，口径不同。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 E:/Projects/Archives/video-scaffold 的已核对截点 cc41e514，按提交时间北京时间[2026-10-04T14:00+08:00,2026-10-11T14:00+08:00)数全部可达提交，含合并；不能用读取当下的滚动7天替代，不把提交个数称为改进项数。现有published-metrics入口按datetime.now滚动窗口，不能用于这条固定截止记录，故需GPT人工读取该明确Git窗口核对。"
+    },
+    {
+      "id": "int3-media-configured-copy-topology-detail",
+      "page": "personal-media",
+      "screen": "personal-media-01",
+      "field": "screens[0].text",
+      "page_pattern": "(原件一份，两块备份硬盘各一份，Google 云端再一份)",
+      "label": "原件与两份硬盘备份和云端的架构",
+      "current_value": "原件一份，两块备份硬盘各一份，Google 云端再一份",
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "只读核对 E:/PCConfig/registries/core_recovery.json backup_sets[id=personal_media] 的G_path/H_path、媒体源项目三个canonical root与cloud-status只读计划；原件E一份、G/H各一份、Google云端一份是配置架构，不是本轮全部字节已核对的运行结果。现有topology入口只返回总落点中文“三”，不能拿三替代此句“一/两/一”的分项说明。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读核对 E:/PCConfig/registries/core_recovery.json backup_sets[id=personal_media] 的G_path/H_path、媒体源项目三个canonical root与cloud-status只读计划；原件E一份、G/H各一份、Google云端一份是配置架构，不是本轮全部字节已核对的运行结果。现有topology入口只返回总落点中文“三”，不能拿三替代此句“一/两/一”的分项说明。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "独立说明原件、G/H备份及Google云端各自角色；没有对应整句的自动展示转换，所以人工核对配置架构。",
+      "manual_reason": "judgment",
+      "manual_route": "只读核对 E:/PCConfig/registries/core_recovery.json backup_sets[id=personal_media] 的G_path/H_path、媒体源项目三个canonical root与cloud-status只读计划；原件E一份、G/H各一份、Google云端一份是配置架构，不是本轮全部字节已核对的运行结果。现有topology入口只返回总落点中文“三”，不能拿三替代此句“一/两/一”的分项说明。"
+    },
+    {
+      "id": "int3-media-phone-writeback-20261007",
+      "page": "personal-media",
+      "screen": "personal-media-01",
+      "field": "screens[0].text",
+      "page_pattern": "10 月 7 日最近一次放回手机就是这 ([\\d,]+) 件",
+      "label": "10月7日手机实际放回件数",
+      "current_value": 2377,
+      "as_of": "2026-10-07",
+      "category": "人工",
+      "source_location": "只核对 personal-media 正式运行归档中2026-10-07对应的phone-recovery-writeback.json及逐件验证终态，verified_items=2377才支持本历史事件；当前phone-recovery-plan.ndjson只是电脑计划，不能替代实际手机成功回执。未找回回执时保留10月7日旧观察并由源Owner具名回报Unknown，不触发手机同步。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只核对 personal-media 正式运行归档中2026-10-07对应的phone-recovery-writeback.json及逐件验证终态，verified_items=2377才支持本历史事件；当前phone-recovery-plan.ndjson只是电脑计划，不能替代实际手机成功回执。未找回回执时保留10月7日旧观察并由源Owner具名回报Unknown，不触发手机同步。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": true,
+      "scope_status": "verified",
+      "measurement_scope": "10月7日实际手机放回结果是独立历史事件，不能以今日计划行数更新，也不改9月26日2376历史事件。",
+      "manual_reason": "judgment",
+      "manual_route": "只核对 personal-media 正式运行归档中2026-10-07对应的phone-recovery-writeback.json及逐件验证终态，verified_items=2377才支持本历史事件；当前phone-recovery-plan.ndjson只是电脑计划，不能替代实际手机成功回执。未找回回执时保留10月7日旧观察并由源Owner具名回报Unknown，不触发手机同步。"
+    },
+    {
+      "id": "int3-materials-manual-sync-runs",
+      "page": "personal-materials",
+      "screen": "personal-materials-01",
+      "field": "screens[0].text",
+      "page_pattern": "含手动补跑 ([\\d,]+) 次",
+      "label": "手动补跑同步次数",
+      "current_value": 8,
+      "as_of": "2026-10-10",
+      "category": "人工",
+      "source_location": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "8是截至10月10日的手动补跑子集，不与42全部成功同步轮数复用同一个id。",
+      "manual_reason": "judgment",
+      "manual_route": "只读 %LOCALAPPDATA%/PCConfig/logs/hot-backup/personal-replica-*.log 与同轮回执；在2026-09-05至2026-10-10既定范围内逐轮对照触发原因/任务或手动调用元数据，只有能证明手动补跑且materials_sync_current complete/exit_code=0的轮次才计入8。现有log_window总成功行数无法区分手动与计划，缺触发标记则交personal-materials/PCConfig源Owner复核，不以42总轮数或日期差替代、不触发备份。"
+    },
+    {
+      "id": "int3-materials-relations",
+      "page": "personal-materials",
+      "screen": "personal-materials-06",
+      "label": "原件原生关系条数",
+      "current_value": 4,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "personal-materials 正式只读 materials.py status 输出 /relations",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "materials-status",
+        "pointer": [
+          "relations"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "affected_screens": [
+        "personal-materials-06"
+      ],
+      "page_pattern": "([\\d,]+) 条原件之间的关系",
+      "field": "screens[5].text",
+      "scope_status": "verified",
+      "measurement_scope": "同一次 materials.py status 只读SELECT返回的relations精确计数；只读聚合不打开原件正文，不以filename_entries数量替代。"
+    },
+    {
+      "id": "int3-materials-search-texts",
+      "page": "personal-materials",
+      "screen": "personal-materials-06",
+      "label": "有可搜文字的登记原件数",
+      "current_value": 44,
+      "as_of": "2026-10-11",
+      "category": "人工",
+      "source_location": "personal-materials 正式只读 materials.py status 输出 /search_texts",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "materials-status",
+        "pointer": [
+          "search_texts"
+        ],
+        "timeout": 20
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "affected_screens": [
+        "personal-materials-06"
+      ],
+      "page_pattern": "([\\d,]+) 份有可搜的文字",
+      "field": "screens[5].text",
+      "scope_status": "verified",
+      "measurement_scope": "同一次 materials.py status 只读SELECT返回的search_texts精确计数；只读聚合不打开原件正文，不以filename_entries数量替代。"
+    },
+    {
+      "id": "int3-pcconfig-status-asof",
+      "page": "pcconfig",
+      "screen": "pcconfig-01",
+      "field": "status_line.as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "label": "状态条具名数据核对日期",
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "同状态条source说明的实际同页计数来源",
+      "qualifies": [
+        "pcconfig-n-image-chain-0",
+        "pcconfig-text-0-163"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "同首屏已定位的镜像链与备份层数核对边界；镜像10月10日完成和任务10月7日登记保留各自事件日期，不由状态条观察日期改写。"
+    },
+    {
+      "id": "int3-materials-status-asof",
+      "page": "personal-materials",
+      "screen": "personal-materials-01",
+      "field": "status_line.as_of",
+      "page_pattern": "^(\\d{4}-\\d{2}-\\d{2})$",
+      "label": "状态条具名数据核对日期",
+      "current_value": "2026-10-11",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "同状态条source说明的实际同页计数来源",
+      "qualifies": [
+        "personal-materials-n-sources-0",
+        "personal-materials-n-registered-0",
+        "int3-materials-relations",
+        "int3-materials-search-texts"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "只关联source明确于16:35同次status取得的58来源、165原件、4关系、44可搜文字；不混16:04文件名清单或10月10日同步统计。"
     }
   ]
 }
