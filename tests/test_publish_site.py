@@ -32,7 +32,7 @@ class PublishTests(unittest.TestCase):
     def test_pages_reports_a_dispatch_command_timeout(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=publisher.subprocess.TimeoutExpired('gh', 1)) as commands, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
             with self.assertRaises(publisher.subprocess.TimeoutExpired): publisher.pages('a'*40, 1)
-        self.assertEqual((commands.call_count, [c.args[0] for c in sleeps.call_args_list]), (4, [1, 2, 4]))
+        self.assertEqual((commands.call_count, [c.args[0] for c in sleeps.call_args_list]), (9, [0.5, 1, 2, 2, 2, 2, 2, 2]))
     def test_connection_errors_retry_three_times_but_content_and_http_errors_do_not(self):
         reset = publisher.subprocess.CalledProcessError(128, 'git', '', 'schannel: failed to receive handshake, SSL/TLS connection failed')
         with unittest.mock.patch.object(publisher, 'command', side_effect=[reset, reset, 'ok']) as commands, unittest.mock.patch.object(publisher.time, 'sleep'):
@@ -71,7 +71,7 @@ class PublishTests(unittest.TestCase):
                 {path.relative_to(root).as_posix(): publisher.oss.digest(path) for path in root.rglob('*') if path.is_file()}})
             options = types.SimpleNamespace(output=Path(temporary)/'run', dist=root, scan_result=scan, previous_manifest=None, source_commit=None, dry_run=True)
             real = publisher.command
-            with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), unittest.mock.patch.object(publisher, 'command', side_effect=lambda *args: '' if 'ls-remote' in args else real(*args)) as commands:
+            with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), unittest.mock.patch.object(publisher, 'command', side_effect=lambda *args, **kwargs: '' if 'ls-remote' in args else real(*args)) as commands:
                 receipt = publisher.publish(options)
             self.assertEqual((receipt['status'], receipt['site_dist']['parent'], receipt['uploaded_files']), ('dry_run', [], 0))
             self.assertFalse(any('push' in call.args or publisher.CLI in call.args or 'gh' in call.args for call in commands.call_args_list))

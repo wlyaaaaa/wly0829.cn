@@ -33,7 +33,9 @@ def command(*args, timeout=None):
         raise subprocess.CalledProcessError(done.returncode, done.args, done.stdout, done.stderr)
     return done.stdout.strip()
 
-RETRY_DELAYS = (1, 2, 4)  # 连接层错误最多重试 3 次；内容核对不一致、HTTP 状态和其他错误一律不重试
+RETRY_DELAYS = (0.5, 1, 2, 2, 2, 2, 2, 2)  # 连接层错误最多重试 8 次；内容核对不一致、HTTP 状态和其他错误一律不重试
+HEAD_TIMEOUT, PAGE_TIMEOUT, GH_TIMEOUT, GIT_TIMEOUT, PUSH_TIMEOUT = 8, 15, 60, 120, 600
+GIT_NET = ('-c', 'http.lowSpeedLimit=1000', '-c', 'http.lowSpeedTime=30')
 CONNECTION_MARKERS = ('schannel', 'ssl', 'tls', 'handshake', 'eof', 'connection reset', 'connection was reset',
                       'connection was aborted', 'connection refused', 'timed out', 'timeout', 'could not resolve',
                       'failed to connect', 'remote end hung up', 'unexpected disconnect', 'error connecting to')
@@ -61,6 +63,8 @@ def net(*args, timeout=None):
     run = (lambda: command(*args)) if timeout is None else (lambda: command(*args, timeout=timeout))
     return retrying(run, connection_level)
 
+retention.command = lambda *args: net(*args, timeout=GH_TIMEOUT)  # 读上一版清单的 gh 调用：有超时、按连接层错误重试
+
 def delta(current, previous):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
     return {rel: row for rel, row in current.items()
@@ -74,7 +78,7 @@ def head(item, root):
     request = Request(row['url'], method='HEAD', headers={
         'Origin': ORIGIN, 'Referer': ORIGIN+'/', 'Accept-Encoding': 'identity'})
     def fetch():
-        with urlopen(request, timeout=30) as response:
+        with urlopen(request, timeout=HEAD_TIMEOUT) as response:
             return response.status, dict(response.headers.items())
     status, headers = retrying(fetch, connection_level)
     passed = status == 200 and int(headers.get('Content-Length', -1)) == row['bytes']
@@ -91,7 +95,7 @@ def get_page(item):
     request = Request(ORIGIN+oss.quote(route, safe='/')+'?publish='+row['sha256'][:16],
                       headers={'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'})
     def fetch():
-        with urlopen(request, timeout=30) as response:
+        with urlopen(request, timeout=PAGE_TIMEOUT) as response:
             return response.status, hashlib.file_digest(response, 'sha256').hexdigest()
     status, digest = retrying(fetch, connection_level)
     if status != 200 or digest != row['sha256']:
@@ -102,14 +106,14 @@ def pages(commit, timeout):
     deadline = time.monotonic()+timeout
     repository = REPO.removeprefix('repos/')
     dispatched = net('gh', 'workflow', 'run', 'pages.yml', '--repo', repository,
-                         '--ref', 'main', '-f', 'sha='+commit, timeout=timeout)
+                         '--ref', 'main', '-f', 'sha='+commit, timeout=min(GH_TIMEOUT, timeout))
     match = oss.re.fullmatch(r'https://github.com/'+oss.re.escape(repository)+r'/actions/runs/([0-9]+)', dispatched)
     if not match:
         raise ValueError('Pages dispatch returned no run id; deployment is unconfirmed for '+commit)
     run_id = int(match[1])
     while time.monotonic() < deadline:
         run = json.loads(net('gh', 'run', 'view', str(run_id), '--repo', repository,
-                                 '--json', 'status,conclusion', timeout=deadline-time.monotonic()))
+                                 '--json', 'status,conclusion', timeout=max(1, min(GH_TIMEOUT, deadline-time.monotonic()))))
         if run['status'] == 'completed':
             if run['conclusion'] != 'success':
                 raise ValueError('Pages run '+str(run_id)+' failed: '+str(run['conclusion']))
@@ -128,9 +132,9 @@ def artifact_commit(dist, plan, output, source_commit):
     git('config', 'user.name', 'Site publisher')
     git('config', 'user.email', 'site-publisher@users.noreply.github.com')
     git('remote', 'add', 'origin', 'https://github.com/wlyaaaaa/wly0829.cn.git')
-    remote = net('git', '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist')
+    remote = net('git', *GIT_NET, '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist', timeout=GIT_TIMEOUT)
     if remote:
-        net('git', '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist')
+        net('git', *GIT_NET, '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist', timeout=GIT_TIMEOUT)
         git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
     for rel in git('ls-files').splitlines():
         if rel not in {*plan['github_files'], 'release-identity.json'}:
@@ -180,7 +184,7 @@ def publish(args):
         if changed or (not args.dry_run and scan.get('failures') != []):
             raise ValueError('Dist differs from successful scan: '+(', '.join(changed) if changed else 'scan has failures'))
         previous = step('previous_manifest', lambda: oss.verify_manifest(oss.read(args.previous_manifest))
-                        if args.previous_manifest else retention.predecessor())
+                        if args.previous_manifest else retrying(retention.predecessor, connection_level))
         build = oss.read(args.dist/'.build-receipt.json') if (args.dist/'.build-receipt.json').is_file() else {}
         source_commit = args.source_commit or build.get('source_commit') or source.get('source_commit') or 'Unknown'
         if source_commit != 'Unknown' and not oss.re.fullmatch('[a-f0-9]{40}', source_commit):
@@ -230,24 +234,24 @@ def publish(args):
 
         def upload_one(item):
             rel, row = item
-            try:  # 续传：对象已在且大小、MD5 一致就不重传；不在或不一致都重新上传
-                head(item, args.dist)
-                return rel, row, False
+            try:  # 续传：对象已在且大小、MD5 一致就不重传，这次检查即为它的回读证明；不在或不一致都重新上传
+                return rel, row, False, head(item, args.dist)[1]
             except Exception:
                 pass
-            command(CLI, 'ossutil', 'cp', args.dist/rel,
+            net(CLI, 'ossutil', 'cp', args.dist/rel,
                     'oss://'+retention.BUCKET+'/'+row['key'], '--profile', 'website-images',
                     '--region', 'cn-shanghai', '--endpoint', 'oss-cn-shanghai.aliyuncs.com',
                     '--force', '--no-progress', '--loglevel', 'off', '--acl', 'default',
                     '--content-type', row['content_type'], '--bigfile-threshold', '5G',
-                    '--cache-control', 'public,max-age=31536000,immutable')
-            return rel, row, True
+                    '--cache-control', 'public,max-age=31536000,immutable', timeout=300)
+            return rel, row, True, head(item, args.dist)[1]  # 新传的对象传完立即单独回读
 
         def upload():
             receipt['upload_workers'] = args.upload_workers
             receipt['reused_existing_files'] = 0
             with ThreadPoolExecutor(max_workers=args.upload_workers) as pool:
-                for done, (rel, row, sent) in enumerate(pool.map(upload_one, assets.items()), 1):
+                for done, (rel, row, sent, proof) in enumerate(pool.map(upload_one, assets.items()), 1):
+                    receipt['head'][rel] = proof
                     if sent:
                         receipt['uploaded_files'] += 1
                         receipt['uploaded_bytes'] += row['bytes']
@@ -258,10 +262,14 @@ def publish(args):
 
         step('upload_assets', upload)
         renew_lock()
-        def verify_heads():
-            with ThreadPoolExecutor(max_workers=4) as pool:
-                for rel, proof in pool.map(lambda item: head(item, args.dist), assets.items()):
+        def verify_heads():  # 两遍合一：只补查还没有回读证明的对象；推 site-dist 前每个对象都必须有通过的证明
+            missing = {rel: row for rel, row in assets.items() if receipt['head'].get(rel, {}).get('status') != 'pass'}
+            with ThreadPoolExecutor(max_workers=args.upload_workers) as pool:
+                for rel, proof in pool.map(lambda item: head(item, args.dist), missing.items()):
                     receipt['head'][rel] = proof
+            unproven = [rel for rel in assets if receipt['head'].get(rel, {}).get('status') != 'pass']
+            if unproven:
+                raise ValueError('Objects lack a passing readback: '+', '.join(unproven[:20]))
         step('head_uploaded', verify_heads)
         renew_lock()
         manifest = dict(source)
@@ -273,8 +281,8 @@ def publish(args):
         receipt['site_dist'] = step('local_site_dist_commit', lambda:
                 artifact_commit(args.dist, plan, output, source_commit))
         receipt['commit'] = receipt['site_dist']['commit']
-        step('push_site_dist', lambda: net('git', '-C', receipt['site_dist']['root'],
-                                              'push', 'origin', 'HEAD:refs/heads/site-dist'))
+        step('push_site_dist', lambda: net('git', *GIT_NET, '-C', receipt['site_dist']['root'],
+                                              'push', 'origin', 'HEAD:refs/heads/site-dist', timeout=PUSH_TIMEOUT))
         receipt['uploaded_files'] += len(receipt['site_dist']['changed_files'])
         receipt['uploaded_bytes'] += sum((Path(receipt['site_dist']['root'])/rel).stat().st_size
                                          for rel in receipt['site_dist']['changed_files']
