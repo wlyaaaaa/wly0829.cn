@@ -1,0 +1,211 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "daily-preferences-personal-understanding",
+  "kind": "project",
+  "title": "先形成能帮助判断的认识，再按需要回到详卡和原文",
+  "url": "/projects/daily-preferences/personal-understanding/",
+  "parent": "daily-preferences",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "来源仓库 b334b3aa（v0.18.1，北京 10/8 00:23）与 10/11 16:33–16:41 只读聚合；没有重新阅读或评价全部认识，历史测试保留原日期"
+  },
+  "screens": [
+    {
+      "id": "daily-preferences-personal-understanding-01",
+      "section": "top",
+      "title": "先形成能帮助判断的认识，再按需要回到详卡和原文",
+      "text": "# 先形成能帮助判断的认识，再按需要回到详卡和原文\n\n〔回到项目 → 个人理解库〕　〔复制 AI 续作说明〕\n\n个人理解库 · 功能说明\n\n在不同问题里持续使用同一份可修正的本人理解，同时保留各领域自己的专业判断和事实。\n\n**当前情况：**已有共用背景、完整说明、冻结引用和可靠回写功能；10 月 11 日只读数到 78 张现行认识卡，这只是数量，没有重新阅读或评价全部认识，也不代表我已经认可。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/daily-preferences/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n引用长消息一次不等于读懂所有主题，原文找到了也未必形成可用判断。卡片数量、覆盖比例和检索非空都可能掩盖重要经历、反例或真实取舍仍未被用上。\n\n## 举个实际例子\n\n我说“结合你了解的我，帮我判断这次沟通怎么处理”。个人资料已经解锁时，AI 先用相关完整认识给出有依据、可纠正的判断，必要时才回到原文；新结果若改变共同理解，就由这次任务合并回写。我不用另去维护几份档案，也不要求每个普通判断都另找完成凭证。\n\n## 最后我会得到什么\n\n得到与这次问题相关的经历、取舍、理由和可改变结论的反例。需要时能继续看到完整经历或原话：被引用的那一版原文已经冻结保存，原文件后来改了，旧引用照样能打开当时那一版，只会提示“有新材料”；要改用新版本时才重新引用并复核相关卡。领域真正采用后的结果另行核对。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 引用长消息一次不等于读懂所有主题，原文找到了也未必形成可用判断。卡片数量、覆盖比例和检索非空都可能掩盖重要经历、反例或真实取舍仍未被用上。 举个实际例子 我说“结合你了解的我，帮我判断这次沟通"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 引用长消息一次不等于读懂所有主题，原文找到了也未必形成可用判断。卡片数量、覆盖比例和检索非空都可能掩盖重要经历、反例或真实取舍仍未被用上。 举个实际例子 我说“结合你了解的我，帮我判断这次沟通"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以用于当前帮助\n\n核心理解能直接说明典型经历、价值取舍、当前影响和重要反例；需要时能回到同源完整卡与依据。\n\n## 需要分辨\n\n片段未覆盖长消息的其他主题、作者或派生边界不清、专业领域尚未实际采用时，保留具体缺口并只补相关证据。\n\n## 当前不可用\n\n个人资料锁着时，先由主对话请我验证解锁，不拿旧背景凑、不给降级回答；已经解锁、只是某份原件或领域入口读不到时，说清是哪一份缺了，再用仍然有效的依据判断。未命中不表示没有经历或我删除了材料。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说“结合你对我的了解”提出当前沟通或取舍问题。\n\n## 需要准备什么\n\n- 当前要沟通或取舍的问题\n\n- 现有认识尚不知道的新事实（如有）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先读有关的现行认识，需要时才打开详卡或原文，区分经历、解释、推断和未知；能从材料推出来的标成推测，只有我能补、又会改变判断的歧义才合并起来问我。\n\n2. **交付与接续**　交回有依据且可纠正的建议；新共同认识由眼前任务回写，专业结果仍归对应领域。认识有实质变化时，AI 主动讲清改了什么，请我抽查；我没回复不算认可。每月第一次相关的长谈里，顺手总结这个月认识的实质变化，不另建定时任务，也不逐卡找我审批。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nv0.18.1 / schema（数据结构）6 保留索引、详卡、角色引用、冻结引用和可靠回写。2026-10-11 16:33 只读聚合：现行认识卡 78 张；另有 1,011 个非现行卡版本（historical 710、stale 301），它们不是当前卡。9 月 8 日的 48 张卡只是当时的历史聚合。本次只数了数量，没有读取私人卡片内容，也没有评价理解质量。\n\n## 关键规则与设计选择\n\n1. 本人基本情况、经历、生活重点、通用价值和偏好在这里维护；工作业务、健康专业结论和其他领域的对象/动态状态留在各领域。\n\n2. summary 先讲核心认识，detail 保留完整经历与推理，evidence 提供校准；核心默认内容约 100K 是上界取舍，不是阅读上限、目标填充量或自动计数门。\n\n3. 已有可靠理解足够就直接交流；模型按问题和后果决定索引、完整卡、原文或领域入口，不用字数或关键词机械分流。\n\n4. 材料留存不是随机抽样：记录多、语气激烈或只见一方表达不能证明现实冲突单向发生；缺少留痕也不准补造经过或动机。\n\n5. 事实、本人此时的解释与模型最倾向的推断分开；敢给有依据的日常评价，同时说明足以推翻判断的反例，不把人写成固定标签。\n\n6. 表达时间、所述时期、当时选择与后来反省分开；“开始”“不再”等变化判断需要前后证据。角色与岗位责任会改变行为含义时，概括和详述都保留，不把正常履职直接解释成私人善意。\n\n7. 事件有记录不等于它是当前人生主线；模型误读造成的重复纠错不是本人持续执着。被明确推翻的解释退出当前判断，不换同义词继续沿用。\n\n8. 阅读、整合、领域接收和回答实际取用是四项不同结果。独立验收只给自然问题与正常能力环境，不预告预期事实或固定答案。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 v0.18.0 / schema（数据结构） 6 保留索引、详卡、角色引用和可靠回写；来源更正已经修订受影响认识。9月8日48张卡仅是历史聚合，本页未读取私人卡片或重算"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 v0.18.0 / schema（数据结构） 6 保留索引、详卡、角色引用和可靠回写；来源更正已经修订受影响认识。9月8日48张卡仅是历史聚合，本页未读取私人卡片或重算"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n9. 对本人的认识、理解和价值判断要给本人抽查，AI 不自己验收自己。先查材料，能有据推测的标推测；只有本人能补、又影响判断的歧义由主对话合并询问。实质更新主动讲认识变化，未回复不算认可；每月首次相关长谈顺手总结当月实质变化，不建定时任务、不逐卡审批。\n\n## 当前怎样实现\n\n- preference_snapshots 增加 title、detail_text、aliases_json；CURRENT（当前状态） 与 PROFILE 从同一数据库生成，索引模式保留摘要和有限预览，--key 精确返回一张或多张完整卡。指定键的读取只验证所选卡及其引用，不再为了这一张卡先检查无关全部当前卡；原完整读取保持兼容。\n\n- profile --key <卡片键> --reader --json 完整返回选中卡的摘要与详述，证据角色和记录编号保留，重复引用只在顶层展开一次；需要原件时继续用 original。它不是摘要截断，也不把引用去重当作读过全文。\n\n- profile/evidence 的 source_materials 返回尚未进入卡片或长消息其他主题的原文候选，保留作者、派生类别、日期、命中字段、片段范围和原文编号。普通 evidence 不把未整合引用直接当成偏好。\n\n- facts 按 source-id、provider、logical-source 三种不同范围过滤；规范值来自 status，非法值显式报错，合法零命中不证明全库不存在。\n\n- reviewed_citations 增量接入已核微信消息、保留 ASR（自动语音识别） 片段和附件的最小引用。原生身份与原表达时间固定，独立转写使用独立来源流，不把导入时间当说话时间。\n\n- 冻结引用（citation_snapshots.py，2026-09-26 起）：领域里的原文件会持续变化，被引用的那一版按 SHA-256 存一份冻结副本。活文件变了只列“有新材料”，冻结副本完整时旧引用继续有效；确要引用新版本，才按新哈希导入并复核引用它的卡。ASR 转写等独立结果变化，仍按它真实的来源版本处理，不和领域活文件更新混成一条强制失效规则。2026-10-11 16:41 只数了冻结目录：43 个文件，其中 42 个是标准哈希文件名；没有校验这些副本的字节，不算完整性通过。\n\n- original 分开 verified_owner_original、verified_derived_result 与 verified_attachment_artifact；后两种只证明结果或附件身份，不证明逐字准确、说话人身份或附件正文已读。附件引用的 read_path 指向冻结副本，live_file_updated 只提示活文件变过。ASR（自动语音识别） 引用只读已有结果，不启动识别。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- snapshot 与 snapshot-batch 以 supports / contradicts / context 绑定记录和明示，引用历史原话时显式保留语境。证据编号或角色变化必须提交复核后的详述，不静默带回旧理由。\n\n- 原件归位或精确去重后，repair-artifact-locators --manifest <JSON> --json 先预检，--apply 才事务更新同字节定位与可证明的来源根；逐项核对大小和 SHA-256，不重新导入记录，不改原文、认知卡或历史观察。reviewed_citations 的定位参与证据版本，仍走引用更新与卡片复核。\n\n- 领域经稳定入口正常读写，不维护内部表、不复制父库程序或整库材料。--privacy-level none 只给技术 status，不打开业务库；业务读取（profile/evidence/facts/original、缓存或索引）必须声明 screen 或 factor，并复用全机共用的个人资料解锁期，已安装 PCConfig 核对后才返回。screen/factor 是旧分类，现行新代码统一用 factor；它们不是三个可读私人资料的等级。修改程序/规则/接口才进入源码施工。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-08",
+      "section": "tech",
+      "title": "技术实现与依据（四）",
+      "text": "## 技术实现与依据（四）\n\n## 执行流程\n\n1. 先满足当前资料保护，再恢复问题与相关本人理解\n\n2. 已有依据足够时直接判断和交流\n\n3. 需要时从索引选完整卡或原文\n\n4. 区分事实、解释、推断与未知\n\n5. 保留重要经历、取舍、结果与反例\n\n6. 领域完成自己的专业结果\n\n7. 产生新共同认识的领域任务在阶段交付前可靠回写并回读\n\n8. 用自然问题检查实际取用",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-09",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Source material（原文候选） | 用于定位可能未整合的内容，命中与已有引用都不等于完整阅读或事实认证。 |\n| Evidence role（证据角色） | supports 支持、contradicts 反例、context 语境；程序核对引用，模型判断含义。 |\n| Shared background（共用本人背景） | 各领域按需使用同一份当前本人理解，不共享它们的专业数据库或行动状态。 |\n| Citation snapshot（冻结引用） | 被引用那一版原文的哈希副本；原文件以后再变，旧引用仍指向当时读到的字节。 |\n\n## 专业定义\n\n默认结果是经历的意义、核心取舍和对眼前决定的帮助；有问题再展开依据，不让人先看一份处理流水。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-10",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决重复解释本人背景、各领域现行档案漂移、只积累证据却没有理解、摘要抹掉反例和检索计数冒充实际帮助。\n\n## 边界\n\n- 不复制原始聊天、完整媒体、病历、账本或领域计划到公开页面。\n\n- 不靠全库 100%、逐卡确认或问卷把交流推迟。\n\n- 不把模拟、包装、转贴或旧 AI 建议自动当成本人经历。\n\n- 既有历史原件与正式成果保留，更正主要影响后续使用。\n\n- 未来领域首次实际需要时再落实，不因产品关系图提前建空项目。\n\n## 失败与恢复\n\n- **索引有命中但重要主题未被回答**：沿相关完整原文与上下文补读，修正认识和取用，不让用户重述已存在材料。\n\n- **被引用的领域原文件后来改了**：冻结副本完整时旧引用继续有效，只提示有新材料；确要采用新版本，才按新哈希重新引用并复核相关卡，不把旧片段带到新结果。ASR 等独立派生结果变化，按它的真实来源版本复核。\n\n- **冻结副本哈希不符或丢失**：只接受与旧引用哈希完全相同的活文件或 Git 历史字节来修补；找不回就报 unrecoverable，不拿相近内容顶替。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-11",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **我删除了所属领域、案件或原件**：负责删除的任务同时退掉相关引用副本并复核引用卡，不借副本让已退出的原件复活。\n\n- **个人资料锁着，或某份原件读不到**：锁着时先由主对话请我验证，不用旧私人背景或云端绕行，不给降级回答；已解锁而单个原件不可用时，说明这一份缺口，按仍有效的证据判断。\n\n- **专业内容只停在交接意向**：回到独立领域的正常入口，核对实际接收结果；未闭合就明确保留缺口。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-12",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **DOMAIN_CONTRACT.md**：理解、证据取舍、冻结引用、领域职责、本人抽查与可靠回写\n\n- **daily_preferences.py / schema.sql**：认知卡、索引、原文候选、引用角色和版本\n\n- **source_snapshots.py**：已核引文接入与稳定原生身份\n\n- **citation_snapshots.py**：被引用版本的哈希冻结、修补与 unrecoverable 判定\n\n- **tests/test_personal_background.py / test_profile_index.py / test_reviewed_citations.py / test_source_materials.py**：本人背景、索引、引文与原文召回合成回归\n\n## 如何验证\n\n- 2026-09-07 基线套件为 185 项 Python 与 7 项 Node 通过（有历史回执）；同批记载的 14 个子测试本次没找到独立回执，之后未重新核对。9 月 8 日 08:16 批次在 7e5fe1b 重验精确读取、手机导出及 Steam 相关范围。\n\n- 2026-09-08 08:16 只读聚合为 73 来源、48 当前卡、quick_check=ok 和外键 0；15:31 来源数量已更新为 104，没有读私人卡片。这些是当天的数据库状态，本次没有重建，也没有重跑 quick_check 和外键检查。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-personal-understanding-13",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 2026-10-11 只读核对（来源 b334b3aa，v0.18.1）：现行认识卡 78 张、非现行卡版本 1,011；本人原话 423 条（current 134）；冻结引用目录 43 个文件。源码里静态数到 775 个测试定义（Python 718、Node 57），这是定义数不是通过数，本次没有跑测试。\n\n- 真实理解质量必须另以自然问题确认典型经历、评价、限制与当前帮助，并由我抽查；计数、有效引用或一次只读取用都不能冒充这一项完成。\n\n## 与其他模块的关系\n\n本模块形成默认可使用的认识；下面的表达、来源、取证、原件和推荐模块继续提供版本与依据。",
+      "links": [
+        {
+          "text": "下一个模块 表达、历史与可靠纠正",
+          "href": "/projects/daily-preferences/current-corrections/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -56,7 +56,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至",
+        "text_ref": "**78 张**｜现在生效的认识卡",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -130,7 +130,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至",
+        "text_ref": "**78 张**｜现在生效的认识卡",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -961,7 +961,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "明确不接",
+        "text_ref": "明确不接 5 类",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -1007,7 +1007,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "明确不接",
+        "text_ref": "明确不接 5 类",
         "align": "left",
         "size": "small",
         "columns": 1,
@@ -1157,7 +1157,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "43份冻",
+        "text_ref": "43 个",
         "align": "left",
         "size": "medium",
         "columns": 4,
@@ -1204,7 +1204,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "43份冻",
+        "text_ref": "43 个",
         "align": "left",
         "size": "medium",
         "columns": 2,

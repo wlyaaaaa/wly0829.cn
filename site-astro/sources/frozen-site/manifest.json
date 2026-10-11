@@ -452,7 +452,14 @@
     "/projects/chinese-asr/models-modes/",
     "/projects/chinese-asr/runtime-privacy/",
     "/projects/chinese-asr/speaker-attribution/",
-    "/projects/chinese-asr/task-routing/"
+    "/projects/chinese-asr/task-routing/",
+    "/projects/daily-preferences/current-corrections/",
+    "/projects/daily-preferences/evidence-query/",
+    "/projects/daily-preferences/fact-verification/",
+    "/projects/daily-preferences/mobile-context-delivery/",
+    "/projects/daily-preferences/personal-understanding/",
+    "/projects/daily-preferences/recommendation-choice/",
+    "/projects/daily-preferences/source-coverage/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
