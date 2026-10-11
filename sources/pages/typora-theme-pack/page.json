@@ -13,7 +13,7 @@
       "at": "2026-09-29 01:36"
     },
     "facts": [],
-    "as_of": "2026-10-11",
+    "as_of": "2026-10-12",
     "source": "项目修改记录"
   },
   "public": true,
@@ -553,7 +553,7 @@
         "id": "n-theme-count",
         "text": "1 套",
         "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 11 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
         "screens": [
           "typora-theme-pack-01"
@@ -563,7 +563,7 @@
         "id": "n-styles",
         "text": "3 种",
         "meaning": "PDF 样式：original、personal、company",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
         "screens": [
           "typora-theme-pack-01",
@@ -598,7 +598,7 @@
         "id": "n-commits",
         "text": "6 次",
         "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 11 日现查）",
         "screens": [
           "typora-theme-pack-01",
@@ -630,7 +630,7 @@
         "id": "n-code-lines",
         "text": "720、469、1023、43、13、438 行",
         "meaning": "编辑主题 CSS、PDF 样式 CSS、Python 工具、JS、PowerShell、测试的行数",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "wc -l themes/ export-profiles/ tools/ tests/（HEAD f30ac9c，10 月 11 日复核未变）",
         "screens": [
           "typora-theme-pack-05"

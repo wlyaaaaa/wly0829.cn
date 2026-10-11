@@ -765,7 +765,7 @@
         "id": "n-conv-size",
         "text": "39.2 GB · 10,491 个文件",
         "meaning": "最新一份 Codex 完整对话恢复点的大小和文件数（北京 10/11 12:55 那份）",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "hot-last.json：total_size_bytes 39,234,419,908、file_count 10,491",
         "screens": [
           "codex-memory-01",
@@ -825,7 +825,7 @@
         "id": "n-reuse",
         "text": "复用 19.8 GB · 新写 19.5 GB",
         "meaning": "10/11 那份对话恢复点里复用和新写的字节",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "hot-last.json reused_object_bytes 19,774,169,002、new_object_bytes 19,460,250,906",
         "screens": [
           "codex-memory-08"

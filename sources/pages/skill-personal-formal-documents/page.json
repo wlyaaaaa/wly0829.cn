@@ -15,7 +15,7 @@
     "facts": [
       "近 7 天 AI 用了 1 次"
     ],
-    "as_of": "2026-10-11",
+    "as_of": "2026-10-12",
     "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": null,
@@ -171,5 +171,7 @@
       "第 3 屏规矩里“不另写一套生成程序，也不建一个集中的个人资料库”来自 SKILL.md 第 8 行，对外读者可能觉得是施工细节；保留是因为它说明了这个技能“只用一套程序”的边界，可删。"
     ]
   },
-  "old_urls": ["/skills/document-materials/"]
+  "old_urls": [
+    "/skills/document-materials/"
+  ]
 }

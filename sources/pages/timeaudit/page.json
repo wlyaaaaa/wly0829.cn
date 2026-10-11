@@ -1045,7 +1045,7 @@
         "id": "n-backup",
         "text": "约 4.7 GiB 一份，留 14 天，现有 12 份",
         "meaning": "每日数据库备份",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "timeaudit_health.py completed_archives=12、daily_backup_status=complete、size_mib 4808.33；最新 time_audit_20261011_040756_473912.dump 为 5,041,899,358 字节；backup_db.ps1 RetentionDays=14；北京时间 2026-10-11 13:29–13:33 只读回读",
         "screens": [
           "timeaudit-10"
@@ -1065,7 +1065,7 @@
         "id": "n-code",
         "text": "约 2.4 万行、332 个测试定义（只计数）、234 次提交（其中 47 次看板自动快照）",
         "meaning": "代码行数、测试函数数（静态声明数，不是通过数）、提交数",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "提交 a5a5ad9：git ls-files wc -l 合计 22,511（Python 20,084＋pyw 757、PowerShell 804、AHK 472、SQL 227、bat 105、VBS 62）；所有 .py 里 def test_ 303 个（同一数法 fc4882d 是 306，原稿的 300 复现不了）；git rev-list --count 210。2026-10-11 刷新于 c5ca4ee：已跟踪代码 23,566 行（GPT 计数）；所有 .py 中 def test_ 共 332 个（行首顶层 87 个）；rev-list --count 234；标题含 chore(grafana): 自动备份仪表盘快照 的提交 47 次",
         "screens": [
           "timeaudit-11"
@@ -1075,7 +1075,7 @@
         "id": "n-overhead",
         "text": "0.18 个核、61 MiB",
         "meaning": "采集主程序自身平均 CPU（1=一个逻辑核）和最大工作集",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "诊断摘要 observer_cost，2026-10-10 02:17–05:17（北京时间）",
         "screens": [
           "timeaudit-11"

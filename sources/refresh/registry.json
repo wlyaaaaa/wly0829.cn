@@ -1080,7 +1080,7 @@
       "measurement_scope": "TimeAudit fact_system_hardware全部精确count(*)，一行一秒/10000四舍五入万秒；事务只读、20秒statement timeout，不用估算替代。",
       "scope_status": "verified",
       "field": "screens[4].text",
-      "page_pattern": "\\*\\*([\\d,]+) 万秒\\*\\*"
+      "page_pattern": "\\*\\*([\\d,.]+) 万秒\\*\\*"
     },
     {
       "id": "github-profile-n-routes-0",

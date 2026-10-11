@@ -522,32 +522,32 @@
           "id": "f-grafana-entry",
           "text": "监控入口"
         },
-      {
-        "id": "g-retired",
-        "text": "已停用",
-        "locator_instances": {
-          "h": {
-            "input_sha256": "90941d1a176e4c47a26d1a01fe80ce9f9623b45146432f887ef923f4ccc81186",
-            "instances": [
-              {
-                "context_text": "已停用",
-                "context_rect": [
-                  51,
-                  567,
-                  172,
-                  619
-                ],
-                "expected_rect": [
-                  51,
-                  567,
-                  172,
-                  619
-                ]
-              }
-            ]
+        {
+          "id": "g-retired",
+          "text": "已停用",
+          "locator_instances": {
+            "h": {
+              "input_sha256": "90941d1a176e4c47a26d1a01fe80ce9f9623b45146432f887ef923f4ccc81186",
+              "instances": [
+                {
+                  "context_text": "已停用",
+                  "context_rect": [
+                    51,
+                    567,
+                    172,
+                    619
+                  ],
+                  "expected_rect": [
+                    51,
+                    567,
+                    172,
+                    619
+                  ]
+                }
+              ]
+            }
           }
-        }
-      },
+        },
         {
           "id": "f-codex-remote",
           "text": "Codex 远程公网入口"
@@ -1069,7 +1069,7 @@
         "id": "n-tools",
         "text": "23 个",
         "meaning": "每台电脑开放的工具数（上游 20 + 自加 3）",
-        "as_of": "2026-10-11",
+        "as_of": "2026-10-12",
         "source": "E:\\PCConfig\\tools\\remote-computer-mcp\\README.md:124,228；副机工具目录实测",
         "screens": [
           "remote-control-01",
