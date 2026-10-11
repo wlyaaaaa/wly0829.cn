@@ -576,6 +576,14 @@ def make_layout(page, report, templates, icons, mapped):
                     block["text_ref"] = re.sub(r"^#{1,6}\s+", "", ref)
                 if block["type"] == "illustration" and not refs["illustration"]:
                     continue
+                if family == "top" and block["type"] == "chapter_title":
+                    title = refs["title"]
+                    # 长句按原有标点拆主副标题，避免插画移到标题旁时被长标题挤出画布。
+                    cuts = [m.end() for m in re.finditer("[，；：]", title)
+                            if 6 <= m.end() <= len(title) - 6]
+                    if len(title) > 18 and cuts:
+                        cut = min(cuts, key=lambda n: abs(n - len(title) / 2))
+                        block["subtitle_from"] = title[cut:]
                 if isinstance(block.get("header_icon"), list):
                     block["header_icon"] = [x for x in block["header_icon"][:len(cards)] if x]
                 if family in ("usage_cards", "outcome_cards") and orientation == "h" and block["type"] == "source_text_card":
