@@ -34,18 +34,18 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-07 22:56"
+    "at": "2026-10-09 22:55"
    },
    "facts": [
-    "近 7 天 AI 用了 9 次"
+    "近 7 天 AI 用了 10 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
    "commit_time": "2026-09-28T19:28:54+08:00",
-   "file": "E:\\.agents\\skills\\mojibake-doctor\\SKILL.md、scripts\\mojibake_core.py（788 行）、scripts\\mojibake_doctor.py（302 行）"
+   "file": "E:\\.agents\\skills\\mojibake-doctor\\SKILL.md、scripts\\mojibake_core.py（786 行）、scripts\\mojibake_doctor.py（302 行）"
   },
   "video_prompt": "",
   "registry": {
@@ -166,7 +166,7 @@
      "how": "自动",
      "status": "说不准",
      "screen": "skill-mojibake-doctor-04",
-     "source": "mojibake_core.py encode_for_target；SKILL.md 最后一段；诊断时调用（mojibake_core.py 393 行），跟诊断一样分不出是否用过"
+     "source": "mojibake_core.py encode_for_target；SKILL.md 最后一段；诊断时调用（mojibake_core.py 391 行），跟诊断一样分不出是否用过"
     },
     {
      "id": "f-backup-root",
@@ -176,7 +176,7 @@
      "how": "自动",
      "status": "没用过",
      "screen": "skill-mojibake-doctor-04",
-     "source": "mojibake_core.py _default_transaction_root；CODEX_HOME=E:\\Data\\AppData\\Codex；只在真修时用到（mojibake_core.py 440 行），默认备份目录不存在"
+     "source": "mojibake_core.py _default_transaction_root；CODEX_HOME=E:\\Data\\AppData\\Codex；只在真修时用到（mojibake_core.py 438 行），默认备份目录不存在"
     }
    ],
    "numbers": [
@@ -240,8 +240,8 @@
  },
  "source": {
   "page": "sources/pages/skill-mojibake-doctor/page.json",
-  "sha256": "b33f94b4f2e00a1fd109455175ed9954865a5a57990bb3cda6e6a682a91450da",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "27c687d686c21926fc65490e2e026799843c2a854d24b228b7d0059b41501fe4",
+  "converted_at_beijing": "2026-10-11T13:39:56+08:00"
  }
 }
 ---
@@ -279,15 +279,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 7 日 22:56",
+       "text": "常用 · 上次使用 10 月 9 日 22:55",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 9 次",
+       "text": "近 7 天 AI 用了 10 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -348,15 +348,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 7 日 22:56",
+       "text": "常用 · 上次使用 10 月 9 日 22:55",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 9 次",
+       "text": "近 7 天 AI 用了 10 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "illustration",

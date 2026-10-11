@@ -34,13 +34,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 23:49"
+    "at": "2026-10-09 22:13"
    },
    "facts": [
-    "近 7 天 AI 用了 311 次"
+    "近 7 天 AI 用了 342 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "8244785b97b2e5cecdb62e2a0d933467e57eb66b",
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-project-entry-gate/page.json",
-  "sha256": "a2a6abb28d0f45343f81e0e67816d1da8fc2a91bb37ca12b5c19ef449f9b4cc5",
-  "converted_at_beijing": "2026-10-10T09:06:30+08:00"
+  "sha256": "8bcaacca436498a7ec6cf469f5032cd75e8fe50b57b15fa9ba430fd8596cb29d",
+  "converted_at_beijing": "2026-10-11T13:40:12+08:00"
  }
 }
 ---
@@ -188,15 +188,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:49",
+       "text": "常用 · 上次使用 10 月 9 日 22:13",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 311 次",
+       "text": "近 7 天 AI 用了 342 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -254,15 +254,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:49",
+       "text": "常用 · 上次使用 10 月 9 日 22:13",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 311 次",
+       "text": "近 7 天 AI 用了 342 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

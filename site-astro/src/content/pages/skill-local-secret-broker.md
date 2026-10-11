@@ -34,13 +34,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 23:45"
+    "at": "2026-10-09 22:27"
    },
    "facts": [
-    "近 7 天 AI 用了 68 次"
+    "近 7 天 AI 用了 99 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -118,8 +118,8 @@
  },
  "source": {
   "page": "sources/pages/skill-local-secret-broker/page.json",
-  "sha256": "4831d7dcecc58921103291843c7d252ba90b71eb8dcf74fc168cd3d3a6cb1a27",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "855db57ac46f550d15b600beb9e6990879c41545813e479d4ce000ed5cd08b89",
+  "converted_at_beijing": "2026-10-11T13:36:49+08:00"
  }
 }
 ---
@@ -162,15 +162,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "text": "常用 · 上次使用 10 月 9 日 22:27",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 68 次",
+       "text": "近 7 天 AI 用了 99 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -229,15 +229,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:45",
+       "text": "常用 · 上次使用 10 月 9 日 22:27",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 68 次",
+       "text": "近 7 天 AI 用了 99 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

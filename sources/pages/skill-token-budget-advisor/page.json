@@ -11,7 +11,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "file": "退役提交 .agents 2ed452e（9 月 25 日）：本人 9 月 26 日（北京时间）定 token-budget-advisor 不用，连同测试退役"
+    "file": "退役提交 .agents 2ed452e（9 月 26 日）：本人 9 月 26 日（北京时间）定 token-budget-advisor 不用，连同测试退役"
   },
   "video_prompt": "",
   "screens": [
@@ -21,7 +21,7 @@
       "title": "去向",
       "scene": "",
       "portrait": "",
-      "text": "额度估算\n\n已退役：这个技能 9 月 25 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。",
+      "text": "额度估算\n\n已退役：这个技能 9 月 26 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。",
       "links": [
         {
           "text": "技能首页",

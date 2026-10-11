@@ -34,20 +34,20 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 23:43"
+    "at": "2026-10-09 13:02"
    },
    "facts": [],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "commit": "e692a58",
-   "commit_time": "2026-10-08T19:05:29-05:00",
-   "file": "E:\\.agents\\skills\\cockpit\\SKILL.md（3,364 字节，10 月 10 日读）；网站 sources/pages/cockpit/page.json 的栏目名和链接",
-   "rules_release": "E251"
+   "commit": "e692a58e450b3482f11300e4ebd0542aa0d3e0c3",
+   "commit_time": "2026-10-09T08:07:40+08:00",
+   "file": "E:\\.agents\\skills\\cockpit\\SKILL.md（3,364 字节，10 月 11 日读）；网站 sources/pages/cockpit/page.json 的栏目名和链接",
+   "rules_release": "E257"
   },
   "video_prompt": "",
   "registry": {
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "1ef57e853fdc8c306d28abe1065e5f3211fb288406365e921d292b870a98297a",
+  "converted_at_beijing": "2026-10-11T13:36:33+08:00"
  }
 }
 ---
@@ -167,11 +167,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "text": "常用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -230,11 +230,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "text": "常用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

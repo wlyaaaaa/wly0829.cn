@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-29 01:21"
+    "at": "2026-10-09 10:15"
    },
    "facts": [
-    "近 7 天没用过"
+    "近 7 天 AI 用了 1 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -75,7 +75,7 @@
      "how": "“每页都看看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "render_pdf_safe.py 第 215–241 行；9 月会话记录至少 15 次"
+     "source": "render_pdf_safe.py 第 177–221 行；9 月会话记录至少 15 次"
     },
     {
      "id": "f-contact",
@@ -85,7 +85,7 @@
      "how": "自动带上",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "make_contact_sheet 第 262–292 行；9 月的真实检查几乎都带总览"
+     "source": "make_contact_sheet 第 224–255 行；9 月的真实检查几乎都带总览"
     },
     {
      "id": "f-select-pages",
@@ -95,7 +95,7 @@
      "how": "“第 3 页和最后一页放大看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "parse_page_selection 第 168–191 行；9 月有 3 次只转了 1–3 页"
+     "source": "parse_page_selection 第 130–153 行；9 月有 3 次只转了 1–3 页"
     },
     {
      "id": "f-dpi",
@@ -105,7 +105,7 @@
      "how": "“这页放大到 240 看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 587 行；9 月用过 100、110、115、150"
+     "source": "第 594 行；9 月用过 100、110、115、150"
     },
     {
      "id": "f-snapshot",
@@ -115,7 +115,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "render_pdf 第 421–438、489–494 行"
+     "source": "render_pdf 第 429–438、490–495 行"
     },
     {
      "id": "f-generation",
@@ -125,7 +125,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 446–499、541–549 行"
+     "source": "第 447–500、542–556 行"
     },
     {
      "id": "f-report",
@@ -135,7 +135,7 @@
      "how": "AI 按报告里的路径开图",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 501–537 行，schema md-pdf-toolkit.pdf-render-safe.v3"
+     "source": "第 502–537 行，schema md-pdf-toolkit.pdf-render-safe.v3"
     },
     {
      "id": "f-prune",
@@ -145,7 +145,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "prune_generations 第 377–396 行；delete_generation 第 352–366 行"
+     "source": "prune_generations 第 379–398 行；delete_generation 第 354–368 行"
     },
     {
      "id": "f-keep-stale",
@@ -155,7 +155,7 @@
      "how": "“旧的都留着”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "--keep-stale 第 602–608 行；9 月 26–27 日 7 次里 5 次用了"
+     "source": "--keep-stale 第 608–615 行；9 月 26–27 日 7 次里 5 次用了"
     },
     {
      "id": "f-lock",
@@ -165,7 +165,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "prefix_lock 第 295–336 行"
+     "source": "prefix_lock 第 259–299 行"
     },
     {
      "id": "f-real-poppler",
@@ -175,7 +175,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "find_pdftoppm 第 54–83 行；本机用 Codex 自带运行环境里的 Poppler 26.07.0"
+     "source": "find_pdftoppm 第 39–45 行；本机用 Codex 自带运行环境里的 Poppler 26.07.0"
     },
     {
      "id": "f-timeout",
@@ -185,7 +185,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 194–212、597–600 行"
+     "source": "第 156–174、603–607 行"
     }
    ],
    "numbers": [
@@ -271,14 +271,14 @@
      "with": "localocr",
      "direction": "分工",
      "flow": "本技能只出图；图里的字要逐字读出来时交给本地文字识别",
-     "source": "SKILL.md 第 35 行（渲染不证明语义完整）"
+     "source": "SKILL.md 第 37 行（渲染不证明语义完整）"
     },
     {
      "id": "r-codex-runtime",
      "with": "外部软件 Codex 桌面版",
      "direction": "拿来",
      "flow": "pdftoppm.exe 从 Codex 自带运行环境的 native\\poppler 目录找（PATH 上没有）",
-     "source": "find_pdftoppm 第 54–83 行；报告 renderer 字段"
+     "source": "find_pdftoppm 第 39–45 行；报告 renderer 字段"
     }
    ],
    "highlights": [],
@@ -315,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "699d46612ea53e70681fbdfca5f721eb154544c877d65f068dddd0958f86f49c",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "5cb51e1b42df414b2ffc7abccd736b770b1650ae4814f5a0acfa10ca124d6b76",
+  "converted_at_beijing": "2026-10-11T13:39:59+08:00"
  }
 }
 ---
@@ -359,15 +359,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -438,15 +438,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

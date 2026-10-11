@@ -37,10 +37,10 @@
     "at": "2026-10-02 15:23"
    },
    "facts": [
-    "近 7 天 AI 用了 3 次"
+    "近 7 天 AI 用了 0 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -281,8 +281,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cloud-asset-channel/page.json",
-  "sha256": "b97d6fbac272b1fcf21918ed2cd987952bee0ee3685f39efe66ad4c83447c0eb",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "cef4f435271f2bd43e70fcf7e93029e45c3220b5adb68c1aa504a62c66a7c628",
+  "converted_at_beijing": "2026-10-11T13:36:30+08:00"
  }
 }
 ---
@@ -336,11 +336,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 3 次",
+       "text": "近 7 天 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -413,11 +413,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 3 次",
+       "text": "近 7 天 AI 用了 0 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

@@ -18,7 +18,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "file": "退役提交 .agents 2ed452e（9 月 25 日）：本人 9 月 26 日（北京时间）定 token-budget-advisor 不用，连同测试退役"
+   "file": "退役提交 .agents 2ed452e（9 月 26 日）：本人 9 月 26 日（北京时间）定 token-budget-advisor 不用，连同测试退役"
   },
   "video_prompt": "",
   "registry": {
@@ -42,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/skill-token-budget-advisor/page.json",
-  "sha256": "ead561d8943c43186166317ec3f6c5fa1e11741ad00e248297844457f920851c",
-  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
+  "sha256": "e746eeff39769b484072354f97ff7e8ae861ff10bb0cd35a6d0fc6030e573403",
+  "converted_at_beijing": "2026-10-11T13:37:21+08:00"
  }
 }
 ---
@@ -123,4 +123,4 @@
 
 额度估算
 
-已退役：这个技能 9 月 25 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。
+已退役：这个技能 9 月 26 日因为不用而撤下，没有接替它的技能。现在在用的技能见〔技能首页〕。

@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天 AI 用了 4 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -58,21 +58,21 @@
      "with": "personal-media",
      "direction": "拿来",
      "flow": "查的是照片视频录音管理的媒体记录（SQLite + FTS5），原件位置以记录里的原件路径为准",
-     "source": "E:\\.agents\\skills\\personal-media\\SKILL.md 第 8 行"
+     "source": "E:\\.agents\\skills\\personal-media\\SKILL.md 第 10 行"
     },
     {
      "id": "r-asr",
      "with": "chinese-asr",
      "direction": "拿来",
      "flow": "找录音里的某句话时读中文语音转写已有的带时间结果；没有时经同意用本机 Paraformer 补这一段",
-     "source": "SKILL.md 的 Locate a recording passage 节"
+     "source": "SKILL.md 的 Recording passage 节"
     },
     {
      "id": "r-person-self",
      "with": "media-person-self",
      "direction": "交出",
      "flow": "选定的照片或录音要判断有没有本人时，交给“照片录音里有没有我”",
-     "source": "SKILL.md 的 Identity and content follow-up 节"
+     "source": "SKILL.md 的 Follow-up and scope 节"
     },
     {
      "id": "r-materials",
@@ -86,7 +86,7 @@
      "with": "report-page",
      "direction": "拿来",
      "flow": "要本人定去留时，用审批页（汇报网页技能画）摆出实物",
-     "source": "SKILL.md 的 When the owner must decide keep or exit 节"
+     "source": "SKILL.md 的 Keep or exit review 节"
     }
    ],
    "mentions": [
@@ -128,8 +128,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
-  "sha256": "5b21dde262b4c29e3a93077e0ffccc5acd365f0fa3d50237bb335314d89726d5",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "53062bba769f72e547cf80420d309de6586ba0b4c6a0c22becfa21fb60449941",
+  "converted_at_beijing": "2026-10-11T13:40:10+08:00"
  }
 }
 ---
@@ -175,7 +175,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -256,7 +256,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

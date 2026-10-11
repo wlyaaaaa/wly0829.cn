@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -100,8 +100,8 @@
  },
  "source": {
   "page": "sources/pages/skill-media-person-self/page.json",
-  "sha256": "de7a644ef36cf6abe865be5534528667aa7a2ac738484cc2ae99897abff5ef01",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "e271f35b6bcc9a032952571e6e8b331e2e61505fe59381cc272c9eb0f5d6c450",
+  "converted_at_beijing": "2026-10-11T13:36:59+08:00"
  }
 }
 ---
@@ -147,7 +147,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -207,7 +207,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天 AI 用了 3 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -145,8 +145,8 @@
  },
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
-  "sha256": "314b330bbe7b499851d2a97c170d933d91b099b1c68118dc2f9dce216c0e7b17",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "0093e1e281f2d902e34331778d84f18afed9a8af71807f116fe1d7af00c296ec",
+  "converted_at_beijing": "2026-10-11T13:36:46+08:00"
  }
 }
 ---
@@ -208,7 +208,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -288,7 +288,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

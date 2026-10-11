@@ -38,13 +38,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 22:58"
+    "at": "2026-10-09 00:44"
    },
    "facts": [
-    "近 7 天 AI 用了 53 次"
+    "近 7 天 AI 用了 46 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "538dcecf234364b92cd8180d160dcd08a4495edbf347cc354cb2c925608bf8c6",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "264870cf454c46d443c9df9cdcb52dd73a818986fc1d7776d3d4e54b2b797a58",
+  "converted_at_beijing": "2026-10-11T13:40:19+08:00"
  }
 }
 ---
@@ -565,38 +565,40 @@
      "size": "large",
      "text_ref": "汇报网页",
      "row": "intro",
-     "width": "68%"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "intro",
-     "width": "32%",
-     "row_fit_illustration": false
+     "width": "52%"
     },
     {
      "type": "live_strip",
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "text": "常用 · 上次使用 10 月 9 日 00:44",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 53 次",
+       "text": "近 7 天 AI 用了 46 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "row": "intro"
     },
     {
      "type": "prose",
-     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页"
+     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页",
+     "row": "intro"
     },
     {
      "type": "points_card",
      "whole_block": true,
-     "text_ref": "它做什么"
+     "text_ref": "它做什么",
+     "row": "intro"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "intro",
+     "width": "48%"
     },
     {
      "type": "dialogue",
@@ -612,11 +614,13 @@
       "left",
       "left"
      ],
-     "text_ref": "怎么跟AI说"
+     "text_ref": "怎么跟AI说",
+     "row": "intro"
     },
     {
      "type": "notice",
-     "text_ref": "不用点名：要展开说明的汇报"
+     "text_ref": "不用点名：要展开说明的汇报",
+     "row": "intro"
     },
     {
      "type": "stat_card",
@@ -643,15 +647,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "text": "常用 · 上次使用 10 月 9 日 00:44",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 53 次",
+       "text": "近 7 天 AI 用了 46 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",
@@ -1326,17 +1330,21 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "type": "table",
      "row_icons": "auto",
      "text_ref": "要说的内容用哪种两三个关键数字大数字卡几样东西比多少横条，或柱状图（可几组并排）随时间涨跌折线图",
-     "row_fit_illustration": false
+     "row": "charts",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "feature_card",
      "columns": 1,
      "icons": "none",
-     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
+     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的",
+     "row": "charts"
     },
     {
      "type": "prose",
-     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝"
+     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝",
+     "row": "charts"
     },
     {
      "type": "screenshot",
@@ -1344,13 +1352,13 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
       0
      ],
      "ratio": "1280:2100",
-     "row": "chart-demo",
-     "width": "48%",
-     "row_align": "center"
+     "row": "charts",
+     "width": "40%"
     },
     {
      "type": "prose",
-     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据"
+     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据",
+     "row": "charts"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。"

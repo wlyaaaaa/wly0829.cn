@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-authorization-file-broker/page.json",
-  "sha256": "c7f54e315bc71195db63e7b77650f5d4b8049ea94d5d25501990c6280cf278f5",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "732bcf1cd83556400c5b9963f1fe1104c11adb0536d50ad153b25cddade850b1",
+  "converted_at_beijing": "2026-10-11T13:36:19+08:00"
  }
 }
 ---
@@ -153,7 +153,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -215,7 +215,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

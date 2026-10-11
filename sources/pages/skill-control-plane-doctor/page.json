@@ -11,7 +11,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "file": "退役提交 .agents 8244785（10 月 1 日）：技能源码删除，体检脚本 tools/Invoke-ControlPlaneDoctor.ps1 保留在基座里"
+    "file": "退役提交 .agents 8244785（10 月 2 日）：技能源码删除，体检脚本 tools/Invoke-ControlPlaneDoctor.ps1 保留在基座里"
   },
   "video_prompt": "",
   "screens": [
@@ -21,7 +21,7 @@
       "title": "去向",
       "scene": "",
       "portrait": "",
-      "text": "技能与基座体检\n\n这个技能 10 月 1 日退役了。查技能装好没有、几个基座有没有走样，现在由〔AI 规则与技能基座〕里的只读检查命令来做。",
+      "text": "技能与基座体检\n\n这个技能 10 月 2 日退役了。查技能装好没有、几个基座有没有走样，现在由〔AI 规则与技能基座〕里的只读检查命令来做。",
       "links": [
         {
           "text": "AI 规则与技能基座",

@@ -18,7 +18,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "file": "退役提交 .agents 4348776（9 月 25 日）：本人决定取消每周网站任务和这个技能，网站按需经网站项目更新"
+   "file": "退役提交 .agents 4348776（9 月 26 日）：本人决定取消每周网站任务和这个技能，网站按需经网站项目更新"
   },
   "video_prompt": "",
   "registry": {
@@ -42,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-panel-refresh/page.json",
-  "sha256": "9998335f89f0623dc5d887be3fc1bfcafd30dd0dcb3f7200c188f119d36a7cc0",
-  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
+  "sha256": "d94bc86541e8927e5f4c0338fa1097e93fb5be372ab689fa860c8cb97809c2bb",
+  "converted_at_beijing": "2026-10-11T13:37:18+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这个技能9月25日退",
+     "text_ref": "这个技能9月26日退",
      "row": "go"
     },
     {
@@ -112,7 +112,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这个技能9月25日退"
+     "text_ref": "这个技能9月26日退"
     }
    ]
   }
@@ -123,4 +123,4 @@
 
 网站自动刷新
 
-这个技能 9 月 25 日退役了。网站不再定时自动刷新，我说一声或项目真有变化时才更新，做法见〔个人网站〕。
+这个技能 9 月 26 日退役了。网站不再定时自动刷新，我说一声或项目真有变化时才更新，做法见〔个人网站〕。

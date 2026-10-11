@@ -37,10 +37,10 @@
     "at": "2026-10-07 08:15"
    },
    "facts": [
-    "近 7 天 AI 用了 3 次"
+    "近 7 天 AI 用了 2 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "98829877960b32e0f62685a859f449d9308edec3",
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "1c191eb99a9a5ddd4665428c5af57d01601684bf0c2d31dc6fda9e83d66fa77a",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "951294fb292f04d1f92fde6db4f785f0d282345dd4ceac2e56926ef276ad3f80",
+  "converted_at_beijing": "2026-10-11T13:36:26+08:00"
  }
 }
 ---
@@ -146,11 +146,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 3 次",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -246,11 +246,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 3 次",
+       "text": "近 7 天 AI 用了 2 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
