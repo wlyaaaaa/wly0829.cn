@@ -80,6 +80,8 @@ def record_errors(record, entries, ids):
             refs = record["qualifies"]
             if not isinstance(refs, list) or not refs or not all(isinstance(v, str) and v in ids and v != record["id"] for v in refs):
                 raise ValueError("qualifies 必须指向存在的其他记录 id")
+            if record.get("date_semantics") == "coverage_end":
+                validate_method(record.get("retrieve", {}), entries)
         else:
             validate_method(record.get("retrieve", {}), entries)
             if record.get("retrieve", {}).get("kind") == "manual" and not (record.get("historical") or record.get("frozen") or record.get("field") == "status_line.state"):

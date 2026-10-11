@@ -47,7 +47,7 @@ class StrictTests(unittest.TestCase):
                 self.assertEqual(len(dates), int("别的数字截至" in text))
 
     def test_actual_cutoff_spellings_and_explicit_surfaces_remain(self):
-        spellings = ["2026 年 10 月 11 日", "2026-10-11", "2026/10/11", "10月1日至10月11日",
+        spellings = ["2026 年 10 月 11 日", "2026-10-11", "2026/10/11", "10/11", "10/11 13:59", "10月1日至10月11日",
                      "2026-10-01—2026-10-11", "10月1—11日", "二〇二六年十月十一日", "10月底",
                      "2026年99月32日", "10月11日13:33", "{{projects-home.based_on.as_of}}"]
         for value in spellings:
@@ -55,7 +55,7 @@ class StrictTests(unittest.TestCase):
                 self.page["screens"][0]["text"] = "截至北京时间 " + value
                 self.write_page()
                 dates = [i for i in build_inventory(self.root, [])["items"] if i["kind"] == "as_of"]
-                self.assertEqual([i["original_date"] for i in dates], [value.removesuffix("13:33")])
+                self.assertEqual([i["original_date"] for i in dates], [value.removesuffix("13:33").removesuffix(" 13:59")])
         self.page["screens"][0].update(text="说明截至哪天", source_note="来源截至2026-10-11")
         self.page["status_line"].update(as_of="2026-10-11", last={"at": "2026-10-10"})
         self.write_page()
@@ -74,7 +74,8 @@ class StrictTests(unittest.TestCase):
         inventory, findings = self.check([self.number, self.cutoff])
         self.assertEqual(findings, [])
         self.assertEqual((inventory["coverage"]["required_items"], inventory["coverage"]["automatic_ratio"]), (2, 1.0))
-        cases = [("核对" + self.text.splitlines()[-1], None, [dict(self.cutoff, qualifies=None, retrieve={"kind": "manual"})], True), (self.text.splitlines()[-1], "owner", [], True), ("材料数量：165\n\n数量截至2026-10-01", "owner", [], False),
+        stamp_text = "项目事实核对截至 2026 年 10 月 1 日"
+        cases = [(stamp_text, None, [dict(self.cutoff, qualifies=None, retrieve={"kind": "manual"})], True), (stamp_text, "owner", [], True), ("材料数量：165\n\n数量截至2026-10-01", "owner", [], False),
                  (self.text, "owner", [], False), ("核对" + self.text.splitlines()[-1], "owner", [dict({k: v for k, v in self.number.items() if k != "current_value"}, screen="demo-02", field="screens[1].text"), self.cutoff], False), ("核对" + self.text.splitlines()[-1], "owner", [dict(self.cutoff, qualifies=["missing"])], False)]
         for text, parent, records, stamp in cases:
             self.page.update(parent=parent, screens=[{"id": "demo-01", "text": text}, {"id": "demo-02", "text": "**3 件**"}])
@@ -83,6 +84,76 @@ class StrictTests(unittest.TestCase):
             self.assertEqual((len(inventory["review_stamps"]), bool(findings)), (int(stamp), not stamp and (not records or any("missing" in r.get("qualifies", []) for r in records))))
             self.assertEqual(("## 核对戳" in fact_tasks(inventory), [s["source_kind"] for s in inventory["review_stamps"]]), (stamp, ["as_of"] if stamp else []))
             self.assertEqual((next(i["requires_refresh"] for i in inventory["items"] if i["kind"] in {"as_of", "review_stamp"}), inventory["coverage"]["required_items"] == 0), (not stamp, stamp))
+
+    def test_review_scope_is_sentence_or_status_entry(self):
+        self.page["parent"] = "owner"
+        for text in ("**3 件**｜材料。源码事实核对截至 2026 年 10 月 1 日。",
+                     "事实核对截至 2026 年 10 月 1 日，示例2.4秒未重跑。",
+                     "源码事实核对截至 2026 年 10 月 1 日。另有 **3 件**｜材料",
+                     "源码事实核对截至 2026 年 10 月 1 日，示例2.4秒未重跑，另有 **3 件**｜材料",
+                     "**3 件**｜材料\n\n项目现状截至 2026 年 10 月 1 日，只读核对。",
+                     "截至 2026 年 10 月 1 日：做好了，还没找到真实用过的记录，功能标待验收。"):
+            self.page["parent"] = None if "做好了" in text else "owner"
+            self.page["screens"][0]["text"] = text
+            self.write_page()
+            inventory, findings = self.check([self.number])
+            self.assertEqual(findings, [])
+            self.assertEqual(len(inventory["review_stamps"]), 1)
+            self.assertEqual(inventory["review_stamps"][0]["qualifies_suggestion"], [])
+        self.page["status_line"].update(as_of="2026-10-01", last={"label": "快照核对", "at": "2026-10-01"})
+        self.page["parent"] = "owner"
+        self.write_page()
+        inventory, findings = self.check([self.number])
+        self.assertEqual(findings, [])
+        self.assertEqual({s["source_kind"] for s in inventory["review_stamps"]}, {"as_of", "status_line.as_of", "status_line.last"})
+        self.assertEqual(inventory["coverage"]["required_items"], 0)
+        dated = dict(self.cutoff, field="status_line.as_of", page_pattern=None)
+        self.assertTrue(any(i["kind"] == "status_line.as_of" for i in self.check([self.number, dated])[0]["items"]))
+
+    def test_overview_read_check_preserves_older_data_boundary(self):
+        self.page["status_line"].update(as_of="2026-10-11", source="10月11日只读查看；旧10月3–9日调用数之后未重新核对")
+        self.write_page()
+        inventory, findings = self.check([self.number, self.cutoff])
+        self.assertEqual(findings, [])
+        self.assertEqual([s["source_kind"] for s in inventory["review_stamps"]], ["status_line.as_of"])
+
+    def test_direct_event_date_and_query_period(self):
+        direct = dict(self.cutoff, qualifies=None, current_value="2026 年 10 月 1 日")
+        for text, accepted in (("这是读取截至 2026 年 10 月 1 日已入库的原件。", True),
+                               ("AI 使用记录（截至 2026 年 10 月 1 日已采到的部分）：共3次。", True),
+                               ("数字截至 2026 年 10 月 1 日。", False),
+                               ("数字截至 2026 年 10 月 1 日，最近一次使用是9月27日。", False),
+                               ("数量是3件，截至 2026 年 10 月 1 日。", False)):
+            self.page["screens"][0]["text"] = text
+            self.write_page()
+            inventory, findings = self.check([direct])
+            self.assertEqual(bool(findings), not accepted)
+            self.assertEqual(len(inventory["review_stamps"]), 0)
+            self.assertEqual(inventory["coverage"]["automatic_items"], int(accepted))
+            if accepted:
+                self.assertTrue(self.check([dict(direct, scope_status="pending")])[1])
+        self.page["screens"][0]["text"] = "默认补最近7天加今天截至现在（今天标未完结），不混次数。"
+        self.write_page()
+        self.assertEqual(self.check([])[0]["coverage"]["required_items"], 0)
+
+    def test_authored_binding_matches_rendered_numbers(self):
+        project = self.root / "project"
+        pages = project / "sources/pages"
+        (pages / "demo").mkdir(parents=True)
+        (project / "scripts").mkdir()
+        (project / "scripts/how-demo-data.json").write_text('{"count":3}', encoding="utf-8")
+        self.page["screens"][0]["text"] = self.text.replace("3 件", "{{stories.count}} 件")
+        (pages / "demo/page.json").write_text(json.dumps(self.page, ensure_ascii=False), encoding="utf-8")
+        inventory = build_inventory(pages, [self.number, self.cutoff])
+        self.assertEqual(strict_findings(inventory, [self.number, self.cutoff]), [])
+        self.assertIn("count", inventory["located_record_ids"])
+
+    def test_metric_table_skips_labels_and_keeps_numeric_row(self):
+        self.page["screens"][0]["text"] = "| 材料 | 副本 |\n|---|---|\n| **3 件** | **三块硬盘** |"
+        self.write_page()
+        (self.root / "demo/layout.json").write_text(json.dumps([{"screen": "demo-01", "blocks": [{"type": "stat_card", "text_ref": "材料副本"}]}]), encoding="utf-8")
+        cards = [i["excerpt"].strip() for i in build_inventory(self.root, [])["items"] if i["kind"] == "first_screen_card"]
+        self.assertEqual(cards, ["**3 件**", "**三块硬盘**"])
 
     def test_exact_historical_binding_exempts_only_its_display(self):
         for flag in ("historical", "frozen"):

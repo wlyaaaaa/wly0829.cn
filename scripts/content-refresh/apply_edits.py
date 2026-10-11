@@ -132,7 +132,7 @@ def build_number_edits(root, result):
             if slug not in pages:
                 pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
             page = pages[slug]
-            review = qualified_date_review(page, row) if row.get("qualifies") else None
+            review = qualified_date_review(page, row) if row.get("qualifies") and row.get("date_semantics") != "coverage_end" else None
             if review:
                 manual_reviews.append(dict(page=slug, record_id=rid, field=row.get("field"), old_value=row["old_value"],
                     date_candidate=row["new_value"], source_observed_at=row["source_observed_at"], status="需人工核对", reason=review))

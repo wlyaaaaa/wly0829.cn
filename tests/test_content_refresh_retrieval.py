@@ -150,6 +150,32 @@ class RetrievalTests(unittest.TestCase):
             self.assertIsNone(result["rows"][1]["new_value"])
             self.assertEqual(result["rows"][0]["new_value"], 4)
 
+    def test_coverage_end_uses_source_day_and_unknown_preserves_old_day(self):
+        path = self.root / "sources/pages/demo/page.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps({"page": "demo", "screens": [{"id": "demo-01",
+            "text": "24 天；截至 2026-10-01（记录覆盖到此日）"}]}), encoding="utf-8")
+        number = {"id": "count", "page": "demo", "screen": "demo-01", "label": "日检天数",
+                  "automatic": True, "scope_status": "verified", "source_location": "合成日检日志",
+                  "page_pattern": r"(24) 天", "retrieve": {"kind": "entry", "entry": "daily", "pointer": ["days"]}}
+        cutoff = dict(number, id="date", field="screens[0].text", page_pattern=r"截至 (2026-10-01)",
+                      qualifies=["count"], date_semantics="coverage_end",
+                      retrieve={"kind": "entry", "entry": "daily", "pointer": ["last_day"]})
+        with patch.object(refresh, "bounded", return_value='[24,"2026-10-08"]') as run:
+            result = refresh.collect(self.root, {"records": [number, cutoff]}, entries={"daily": self.entry})
+        run.assert_called_once()
+        self.assertEqual(result["rows"][1]["new_value"], "2026-10-08")
+        from apply_edits import build_number_edits
+        edits = build_number_edits(self.root, result)
+        self.assertEqual(edits["manual_reviews"], [])
+        self.assertEqual(edits["edits"][0]["new_value"], "2026-10-08")
+        for values in ('[24,{"error":"日志无覆盖"}]', '[{"error":"Unknown"},"2026-10-08"]', '[24,"bad-date"]'):
+            with patch.object(refresh, "bounded", return_value=values):
+                row = refresh.collect(self.root, {"records": [number, cutoff]}, entries={"daily": self.entry})["rows"][1]
+            self.assertIsNone(row["new_value"])
+            self.assertEqual(row["status"], "unavailable")
+            self.assertEqual(row["old_value"], "2026-10-01")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,14 +8,15 @@ import sys
 
 from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, validate_entries, LEDGER
-from apply_edits import qualified_date_review
+from apply_edits import EVENT_DATE
 
 BEIJING = timezone(timedelta(hours=8))
 COUNT_CONTENT = re.compile(r"\d[\d,.]*(?:\s*/\s*\d[\d,.]*)?\s*(?:个|项|件|次|条|份|组|页|行|人|台|块|张|种|套|屏|层|路|节|秒|分钟|字节|[KMGT]i?B|%)|(?:数量|计数|总数|条目|[一-龥A-Za-z_]{1,24}数)\s*[:：｜|]\s*[*` ]*\d[\d,.]*")
 # 识别紧接“截至”的日期写法，不向后搜索数量、版本或另一句中的日期。
 DATE_NUMBER = r"[\d〇零一二三四五六七八九十两]+"
 DATE_CN = rf"(?:{DATE_NUMBER}\s*年\s*)?{DATE_NUMBER}\s*月\s*{DATE_NUMBER}\s*日?"
-DATE_POINT = rf"(?:{DATE_CN}|\d{{4}}[-/]\d{{1,2}}[-/]\d{{1,2}})"
+DATE_SHORT = r"(?:1[0-2]|0?[1-9])/(?:3[01]|[12]\d|0?[1-9])(?=[ \t,，。：；;）)]|(?:[ T]?\d{1,2}:\d{2})|$)"
+DATE_POINT = rf"(?:{DATE_CN}|\d{{4}}[-/]\d{{1,2}}[-/]\d{{1,2}}|{DATE_SHORT})"
 DATE_RANGE = rf"{DATE_POINT}(?:[ \t]*[–—~～至到-][ \t]*(?:{DATE_POINT}|{DATE_NUMBER}\s*日?))?"
 CUTOFF_DATE = re.compile(rf"[ \t:：（(*`【\[]*(?:北京时间[ \t]*)?(?P<date>{DATE_RANGE}|"
                          rf"{DATE_NUMBER}\s*月(?:底|初|末|[上下中]旬)|今天|今日|昨天|昨日|前天|昨晚|今早|"
@@ -24,6 +25,7 @@ CUTOFF_DATE = re.compile(rf"[ \t:：（(*`【\[]*(?:北京时间[ \t]*)?(?P<date
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/typeset"))
 from engine import parse as parser
 from engine.layout import assign_by_spec
+from engine.content import bound_json
 
 
 def current_prefix(ref, candidates):
@@ -114,7 +116,9 @@ def build_inventory(pages_root, records, entries=None):
     for record in records:
         by_page[record["page"]].append(record)
     for path in paths:
-        page = json.loads(path.read_text(encoding="utf-8-sig"))
+        page = (bound_json(path, lambda p: p.read_text(encoding="utf-8-sig"), root=path.parents[3])
+                if path.parent.parent.name == "pages" and path.parents[2].name == "sources"
+                else json.loads(path.read_text(encoding="utf-8-sig")))
         slug = page.get("page", path.parent.name)
         if page.get("kind") in {"project", "frozen"}:
             source_aliases[re.sub(r"[-_.]", "", slug).lower()] = slug
@@ -157,12 +161,25 @@ def build_inventory(pages_root, records, entries=None):
                         private=any(r.get("private") for r in active),
                         requires_refresh=surface == "visible" and not historical)
             if kind in {"as_of", "status_line.as_of"}:
-                context = screen.get("text", "").splitlines()
-                context = context[max(0, item["line"] - 7):item["line"] + 6] if kind == "as_of" else context
-                if kind == "status_line.as_of":
-                    context += [str(f) for f in page.get("status_line", {}).get("facts", [])]
-                item.update(count_context=bool(COUNT_CONTENT.search("\n".join(context))),
-                            event_date=bool(qualified_date_review(page, item)))
+                marks = ("\n", "。", "；", ";", "！", "!", "？", "?")
+                a = max(text.rfind(mark, 0, start) for mark in marks) + 1
+                stops = [text.find(mark, end) for mark in marks]
+                b = min((i for i in stops if i >= 0), default=len(text))
+                context = text[a:b]
+                local = dict(item, start=a, end=b, excerpt=context)
+                numeric_cutoff = bool(re.search(r"(?:数字|数量|计数|统计|总数)\s*截至", context))
+                direct = [r for r in active if r["id"] in valid_ids and r.get("automatic")
+                          and r.get("scope_status") == "verified" and not r.get("qualifies")
+                          and re.fullmatch(DATE_POINT, str(r.get("current_value", "")))
+                          and (r.get("page_pattern") or "start" in r or kind == "status_line.as_of")]
+                event = bool(EVENT_DATE.search(context) or re.search(r"读取截至.*已入库|截至.*已采到的部分", context))
+                direct = [r for r in direct if (event and not numeric_cutoff)
+                          or r.get("date_semantics") in {"coverage_end", "event_date", "event_time"}]
+                item.update(count_context=bool(COUNT_CONTENT.search(context)), event_date=event,
+                            date_context=context, numeric_cutoff=numeric_cutoff,
+                            status_review=kind == "status_line.as_of" and "只读查看" in hint and "未重新核对" in hint,
+                            local_record_ids=[r["id"] for r in by_page[slug] if matches(r, local, page, text)],
+                            direct_date=bool(direct), direct_date_record_ids=[r["id"] for r in direct])
             if item["requires_refresh"]:
                 matched_private.update(r["id"] for r in active if r.get("private"))
             items.append(item)
@@ -184,6 +201,8 @@ def build_inventory(pages_root, records, entries=None):
                 dated = CUTOFF_DATE.match(text, occurrence.end())
                 if not dated:
                     continue
+                if re.search(r"(?:今天|今日)截至(?:现在|目前)[（(](?:今天|今日)标未完结", text[max(0, occurrence.start() - 2):dated.end("date") + 12]):
+                    continue
                 add("as_of", field, text, occurrence.start(),
                     dated.end("date"), surface=surface, original_date=dated["date"])
             if leaf == "source_note":
@@ -201,6 +220,7 @@ def build_inventory(pages_root, records, entries=None):
                         str(value["at"]) if field.endswith(".at") else
                         json.dumps(value, ensure_ascii=False) if isinstance(value, dict) else str(value),
                         original_date=value.get("at") if isinstance(value, dict) else status.get("as_of"))
+                    items[-1]["snapshot_review"] = name == "last" and isinstance(value, dict) and value.get("label") == "快照核对"
             for index, fact in enumerate(status.get("facts", [])):
                 add("status_line.facts", f"status_line.facts[{index}]", str(fact), original_date=status.get("as_of"))
         layout_path = path.with_name("layout.json")
@@ -242,10 +262,9 @@ def build_inventory(pages_root, records, entries=None):
                 if start >= 0:
                     cursor = end
                     if node["type"] == "table" and selected:
-                        if line != node["src"][0]:
-                            continue
                         for cell in re.finditer(r"[^|]+", text[start:end]):
-                            if cell[0].strip():
+                            if (COUNT_CONTENT.search(cell[0]) or re.fullmatch(r"[*` ]*[\d〇零一二三四五六七八九十两][\d,.〇零一二三四五六七八九十两]*[*` ]*", cell[0])
+                                    or re.search(r"[〇零一二三四五六七八九十两]+\s*(?:个|项|件|次|条|份|组|页|行|人|台|块|张|种|套|屏|层|路|节|秒|分钟)", cell[0])):
                                 add("first_screen_card", "screens[0].text", text, start + cell.start(), start + cell.end(), original_date=card_date)
                     elif (node["type"] == "stats" or re.match(r"\s*\d[^｜|]{0,35}[｜|]", line)
                             or re.match(r"\s*\d+\.\s+\*\*\d", line)
@@ -285,6 +304,8 @@ def build_inventory(pages_root, records, entries=None):
                         or type(r.get("current_value")) in {int, float} or re.fullmatch(r"[\d,.]+", str(r.get("current_value", ""))))}
     for item in items:
         item["source_projects"] = sorted({source_aliases.get(re.sub(r"[-_.]", "", name).lower(), name) for name in item["source_projects"]})
+        if item.get("snapshot_review") and not item["historical"]:
+            item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False)
         if item["kind"] in {"as_of", "status_line.as_of"} and not item["historical"]:
             cards = [i for i in items if i["page"] == item["page"] and i["screen"] == item["screen"]
                      and i["kind"] == "first_screen_card" and not i["historical"]]
@@ -294,12 +315,16 @@ def build_inventory(pages_root, records, entries=None):
                 if len(expanded) == len(nearby):
                     break
                 nearby = expanded
-            item["qualifies_suggestion"] = sorted({rid for i in nearby for rid in i["active_record_ids"]})
+            item["qualifies_suggestion"] = sorted({rid for i in nearby for rid in i["active_record_ids"]
+                if item["numeric_cutoff"] or rid in item["local_record_ids"]})
             qualified = any(r.get("qualifies") for r in by_page[item["page"]] if r["id"] in item["record_ids"])
-            numeric = any(r["id"] in numeric_ids and item["screen"] in {r["screen"], *r.get("affected_screens", [])} for r in by_page[item["page"]])
-            if (item["surface"] == "visible" and not qualified and not numeric and not nearby and not item["count_context"]
-                    and not item["event_date"] and (re.search(r"核对|事实截至", item["excerpt"]) or item["parent"])):
-                item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False)
+            numeric = bool(numeric_ids.intersection(item["local_record_ids"]))
+            module_stamp = item["kind"] == "status_line.as_of" and bool(item["parent"])
+            explicit_review = bool(re.search(r"事实核对截至|(?:源码|项目|整页)核对截至|快照核对[：:\s]*截至|(?:项目|源码)(?:现状|事实)截至.*核对", item["date_context"]))
+            if (item["surface"] == "visible" and not qualified and not item["direct_date"]
+                    and (module_stamp or item["status_review"] or explicit_review or (not numeric and not item["count_context"] and not item["numeric_cutoff"] and not item["event_date"]
+                         and (re.search(r"核对|事实截至|做好了.*待验收", item["date_context"]) or item["parent"])))):
+                item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False, qualifies_suggestion=[])
     stamps = [i for i in items if i.get("review_stamp")]
     stamp_ids = {rid for i in stamps for rid in i["record_ids"]} - numeric_ids - {
         rid for i in items if i["requires_refresh"] and not i["historical"] for rid in i["record_ids"]}
@@ -348,7 +373,8 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
             continue
         active = [by_id[rid] for rid in item.get("active_record_ids", []) if rid in by_id]
         dated = item["kind"] in {"as_of", "status_line.as_of"}
-        modes = [mode(r, item) for r in active if not dated or r.get("qualifies")]
+        modes = [mode(r, item) for r in active if not dated or r.get("qualifies")
+                 or r["id"] in item.get("direct_date_record_ids", [])]
         if not any(modes):
             reason = ("展示位置未定位" if item["kind"] == "source_record" else
                       "截至日期缺有效 qualifies" if dated else "缺有效自动记录或合规 manual")

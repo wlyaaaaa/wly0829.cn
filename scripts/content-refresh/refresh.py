@@ -17,6 +17,7 @@ import time
 sys.dont_write_bytecode = True
 from checks import audit_pages
 from inventory import build_inventory, write_inventory, strict_findings
+from engine.content import bound_json
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
 from apply_edits import qualified_date_review
 
@@ -38,7 +39,7 @@ def read_json(path):
 
 
 def pages(root):
-    return [read_json(p) for p in sorted((root / "sources/pages").glob("*/page.json"))]
+    return [bound_json(p, read=read_text, root=root) for p in sorted((root / "sources/pages").glob("*/page.json"))]
 
 
 def bounded(argv, seconds, cwd=None):
@@ -343,7 +344,7 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                 or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}
                 or screen.get("section") in {"history", "evolution", "timeline"}):
             row.update(status="historical", reason="历史事实或冻结项目，本轮不重取")
-        elif record.get("qualifies"):
+        elif record.get("qualifies") and record.get("date_semantics") != "coverage_end":
             row["reason"] = "等待被注明数字的观察日期"
         elif record["id"] in invalid:
             row["reason"] = invalid[record["id"]]
@@ -398,14 +399,24 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
         if row.get("qualifies") and row["status"] != "historical":
             qualified = [by_id.get(ref, {}) for ref in row["qualifies"]]
             if row["id"] in invalid or row.get("page_error") or not all(r.get("status") in {"changed", "unchanged"} and r.get("source_observed_at") and r.get("page") == row["page"] and not r.get("qualifies") for r in qualified):
-                row["reason"] = "被注明数字含 Unknown 或日期定位无效，保留旧截至日期"
+                row.update(new_value=None, status="unavailable", reason="被注明数字含 Unknown 或日期定位无效，保留旧截至日期")
             else:
-                value = min(timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
-                review = qualified_date_review(catalog[row["page"]], row)
+                coverage_end = row.get("date_semantics") == "coverage_end"
+                if coverage_end:
+                    try:
+                        if row["status"] not in {"changed", "unchanged"}:
+                            raise ValueError("来源未返回覆盖末日")
+                        value = date.fromisoformat(str(row["new_value"])).isoformat()
+                    except ValueError:
+                        row.update(new_value=None, status="unavailable", reason="覆盖末日来源 Unknown 或日期无效，保留旧截至日期")
+                        continue
+                else:
+                    value = min(timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
+                review = None if coverage_end else qualified_date_review(catalog[row["page"]], row)
                 row.update(new_value=None if review else value, date_candidate=value, manual_review_reason=review,
                            source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
                            status="manual_review" if review else "unchanged" if row["old_value"] == value else "changed",
-                           reason=review or "被注明数字最早观察日期")
+                           reason=review or ("登记来源的真实覆盖末日" if coverage_end else "被注明数字最早观察日期"))
     audit = audit_pages(root / "sources/pages", today, registry.get("retired_names", []))
     for finding in audit["findings"]:
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
