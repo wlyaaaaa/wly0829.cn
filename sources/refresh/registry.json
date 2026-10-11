@@ -12117,7 +12117,7 @@
       "current_value": "10 月 11 日",
       "as_of": "2026-10-11",
       "category": "只读取数",
-      "source_location": "见retrieve与pc-findings.md",
+      "source_location": "E:/PCConfig git rev-list --count HEAD；本轮 pcconfig.md 第3.2条记录10月12日04:32:34/04:32:40取数及04:34:54—04:35独立只读复核，HEAD=8ca212bb9a306bed6f256c64276c16584f42a847",
       "automatic": true,
       "private": false,
       "historical": false,
@@ -12128,7 +12128,7 @@
       "measurement_scope": "只说明qualifies数字；任一Unknown保留旧日期。",
       "scope_status": "verified",
       "field": "screens[12].text",
-      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+) 前最后一次提交",
+      "page_pattern": "\\*\\*[\\d,]+ 次\\*\\*　提交（7 月 9 日起，含合并，截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+)）",
       "qualifies": [
         "pcconfig-n-commits-0"
       ]
@@ -13599,7 +13599,7 @@
       "current_value": 45,
       "as_of": "2026-10-11",
       "category": "某个 JSON 字段",
-      "source_location": "本仓库当前页面与登记只读来源",
+      "source_location": "E:/Cache/Claude/Temp/6428793e/deltas/ondemand-speed-ruling.md 第1、3节及 docs/ondemand-update.md 第41行和日常耗时表；本轮 wly0829-cn.md 第4条04:32读取裁定、04:34核对文档",
       "retrieve": {
         "kind": "manual",
         "instructions": "这是约定目标，不是实测。由Claude核对当前裁定和本人要求后交Opus改整段目标与边界。"
@@ -13607,10 +13607,10 @@
       "automatic": false,
       "private": false,
       "historical": false,
-      "page_pattern": "\\*\\*([\\d.]+)\\s*分钟\\*\\*｜一处",
+      "page_pattern": "\\*\\*([\\d.]+)\\s*分钟\\*\\*｜日常更新从提出到公网核对完的目标；只改数字 60 分钟，全部更新 4 小时",
       "field": "screens[0].text",
       "scope_status": "verified",
-      "measurement_scope": "页面当前AI目标45分钟（大批3小时）；本轮新裁定日常90分钟与这一口径非完全相同。",
+      "measurement_scope": "当前AI技术裁定的日常更新目标，起点为提出请求、终点为公网回读；仅数字变化目标60分钟，全部更新或新增项目目标4小时。与旧小改定稿至上线45分钟不是同一口径，目标不代表实测达标。",
       "manual_reason": "judgment",
       "manual_route": "Claude按ondemand-speed-ruling.md及本人17:14—17:17原话核对当前目标，由Opus同步首屏、how-this-site目标和日常/全部更新范围；GPT不能只把45替成90宣称口径一致。"
     },
@@ -20216,8 +20216,8 @@
       "automatic": true,
       "private": false,
       "historical": false,
-      "page_pattern": "截至 (10/11 13:59) 共",
-      "measurement_scope": "紧邻860节的真实数据观察时间，只关联原话节数；不是整模块核对戳。捕获完整时刻，格式候选若不能机械表达交事实/稿件审核，原文不改。",
+      "page_pattern": "截至 ([\\d]+ 月 [\\d]+ 日 \\d+:\\d+) 共 [\\d,]+ 节",
+      "measurement_scope": "紧邻决定原话节数的真实数据观察时间，只关联原话节数；不是整模块核对戳。本轮 agents.md 第3条记录正式agents-decision-volumes-stats于10月12日04:34左右取得907节，_verify节数一致且读取前后order字节不变。捕获完整时刻，原文不改。",
       "scope_status": "verified"
     },
     {
@@ -31841,6 +31841,30 @@
       "manual_reason": "judgment",
       "manual_route": "读取本轮宿主技能发现路径和对应 SKILL.md，核对插件身份与实际 bundle 版本；版本观察日与当前调用次数分开，变化交语义写稿者更新，不从目录修改时间猜发布日期。",
       "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。"
+    },
+    {
+      "id": "rh2-pcconfig-overview-latest-backup-receipts",
+      "page": "pcconfig",
+      "screen": "pcconfig-01",
+      "field": "screens[0].text",
+      "label": "最近镜像、外接盘备份完成事件及告警判读",
+      "current_value": "镜像 10 月 11 日 14:01 做完；同步到外接盘 10 月 11 日 18:39 做完，但带告警：AI 使用账本这轮没补采上、开发配置日备上次报错，另有几个文件中途消失或被杀毒软件移走。",
+      "as_of": "2026-10-12",
+      "category": "生产回执综合判读",
+      "source_location": "E:/Cache/PCConfig/SystemImage/last-run.json native.completed_utc/status/backup_completed/native_exit_code；C:/Users/10979/AppData/Local/PCConfig/core-recovery/cold-last.json 与 H:/90_人工保留区/RecoveryKit/CORE_RECOVERY/cold-last.json 的 completed_utc/status/cold_result/results/warnings/file_warnings；本轮 pcconfig.md 第2.1—2.3条04:31—04:36:53只读核对",
+      "retrieve": {
+        "kind": "manual",
+        "instructions": "分别核对系统镜像和外接盘生产回执的完成时间与状态，再判读告警原因；只读回执，不补跑备份，不把完成或文件复制成功推定为账本补采成功。"
+      },
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "page_pattern": "\\*\\*最近一次\\*\\*　(镜像 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完；同步到外接盘 [\\d]+ 月 [\\d]+ 日 \\d+:\\d+ 做完，但带告警：[^\\n]+)",
+      "manual_reason": "judgment",
+      "manual_route": "GPT只读两类具名生产回执及必要上游任务结果，按北京时间分别核对完成事件；区分AI使用账本补采失败、开发配置日备报错和文件告警的实际原因，交Claude/Opus核对整句语义。不从回执观察时刻改写备份完成时刻，不以成功的独立账本倒推自然备份中的补采成功。",
+      "measurement_scope": "首屏最近一次整句的综合判读；本轮镜像完成于10月11日14:01:50，冷备完成于10月11日18:39:26且complete_with_warnings。生产回执已核对，未重散列全部载荷、未补跑备份、未验证整机还原。",
+      "scope_status": "verified",
+      "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal2/pcconfig.md"
     }
   ]
 }

@@ -122,7 +122,7 @@
       "id": "pcconfig-machine-facts-07",
       "section": "tech",
       "title": "技术实现与依据（三）",
-      "text": "## 技术实现与依据（三）\n\n## 当前怎样实现\n\n- 49 份 Registry 分别保存机器、盘符、目录、路径负责方、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。\n\n- 目录 Registry 和路径负责方 Registry 各登记 57 项；projects.json 登记 19 个项目（这是项目登记，不是依赖汇总）；恢复锚点 21 个。旧的项目路径依赖汇总及其生成器已退役，现在按明确的键或锚点查询影响。\n\n- 项目配置快照 165 个键，顶层快照总代次 142（各键自己的代次不同）；更新请求绑定 Registry 期望哈希、单一项目、唯一键集和项目负责方验证。\n\n- generated_publication_pipelines 只保留仍有执行者的用途链：inventory、task scan 和恢复重建；已退役的依赖审计流水线不再存在，也不从旧报告恢复。\n\n- 端口 Provider 同时读取 IPv4/IPv6 动态范围、排除段、监听和登记冲突，可用、被挡、未知使用不同退出码。\n\n- 现场硬件读数（10 月 11 日 16:34）：主板 Gigabyte X870E AORUS PRO ICE，BIOS F4b（发布日期北京时间 2025-02-21）；CPU AMD Ryzen 9 9950X3D，16 核 32 线程；内存两条 Asgard VAM5UH64C32BG-DVALWA，各 32 GiB，6200 MT/s。这次读到两条的槽位标识都显示 DIMM 1，不能据此独立确认物理槽位，9 月 11 日快照记的是 P0 CHANNEL A/B。\n\n- 现场显卡与系统（10 月 11 日 16:34）：NVIDIA GeForce RTX 5090 D，显存 32607 MiB，驱动 617.14（Windows 驱动 32.0.16.1714），VBIOS 98.02.31.40.2c；Windows 版本 10.0.26300（build 26300）。这次没读到版本名，不从 build 号推造；9 月 11 日快照记的是 25H2、10.0.26200、驱动 616.64。\n\n- 显示适配器这次读到五条：Virtual Display Driver 11.30.4.434、GameViewer 15.6.5.199、NVIDIA、AMD 集显 32.0.21045.5002、LIANLI 副屏 16.14.0.914；9 月 11 日的 OrayIddDriver 这次没读到，原因未查。五条显示记录不等于五块可算模型的显卡。",
+      "text": "## 技术实现与依据（三）\n\n## 当前怎样实现\n\n- 49 份 Registry 分别保存机器、盘符、目录、路径负责方、项目配置键、运行时和恢复关系；每类都有数据结构和校验器。\n\n- 目录 Registry 和路径负责方 Registry 各登记 57 项；projects.json 登记 19 个项目（这是项目登记，不是依赖汇总）；恢复锚点 21 个。旧的项目路径依赖汇总及其生成器已退役，现在按明确的键或锚点查询影响。\n\n- 项目配置快照 165 个键，顶层快照总代次 142（各键自己的代次不同）；更新请求绑定 Registry 期望哈希、单一项目、唯一键集和项目负责方验证。\n\n- generated_publication_pipelines 只保留仍有执行者的用途链：inventory、task scan 和恢复重建；已退役的依赖审计流水线不再存在，也不从旧报告恢复。\n\n- 端口 Provider 同时读取 IPv4/IPv6 动态范围、排除段、监听和登记冲突，可用、被挡、未知使用不同退出码。\n\n- 现场硬件读数（10 月 11 日 16:34，10 月 12 日 04:36 再读相同）：主板 Gigabyte X870E AORUS PRO ICE，BIOS F4b（发布日期北京时间 2025-02-21）；CPU AMD Ryzen 9 9950X3D，16 核 32 线程；内存两条 Asgard VAM5UH64C32BG-DVALWA，各 32 GiB，6200 MT/s。10 月 11 日读到两条的槽位标识都显示 DIMM 1，不能据此独立确认物理槽位，9 月 11 日快照记的是 P0 CHANNEL A/B。\n\n- 现场显卡与系统：NVIDIA GeForce RTX 5090 D，显存 32607 MiB，驱动 617.14（Windows 驱动 32.0.16.1714），VBIOS 98.02.31.40.2c（10 月 11 日 16:34 读取，10 月 12 日 04:36 再读相同）。Windows：10 月 12 日 04:40 补读到版本 26H2、build 26300.9550，系统名称为 Microsoft Windows 11 专业工作站版；注册表里的兼容字段 ProductName 仍显示 Windows 10 Pro for Workstations，两处来源说法不同，以系统名称为准并保留这处差异。10 月 11 日那次只读到 10.0.26300、没读到版本名；9 月 11 日快照记的是 25H2、10.0.26200、驱动 616.64。\n\n- 显示适配器这次读到五条：Virtual Display Driver 11.30.4.434、GameViewer 15.6.5.199、NVIDIA、AMD 集显 32.0.21045.5002、LIANLI 副屏 16.14.0.914；9 月 11 日的 OrayIddDriver 这次没读到，原因未查。五条显示记录不等于五块可算模型的显卡。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -134,7 +134,7 @@
       "id": "pcconfig-machine-facts-08",
       "section": "tech",
       "title": "技术实现与依据（四）",
-      "text": "## 技术实现与依据（四）\n\n- 运行时：10 月 11 日 16:34 现场核到 PowerShell 7.6.4、Windows PowerShell 5.1.26100.9549。9 月 11 日基线里的 Docker CLI 29.7.2、.NET SDK 10.0.303、Git 2.55.0、Go 1.26.5、Node.js 26.4.0、Ollama 0.33.1、Python 3.14.7、WSL 2.6.3.0 之后未用同一口径重新核对；需要精确版本时由对应软件的状态入口回读。\n\n- 退役前做法（历史）：曾由稳定机器 Provider 采集硬件与关键运行时、用规范哈希和 previous 链发布版本化稳定投影（最后一版 v9，9 月 11 日 06:46 观察），并由每周治理任务消费 TimeAudit 异常摘要决定是否重查；开发存储健康器曾单独判断 V/Z。这些程序和测试已删除。",
+      "text": "## 技术实现与依据（四）\n\n- 运行时：10 月 11 日 16:34 现场核到 PowerShell 7.6.4、Windows PowerShell 5.1.26100.9549，10 月 12 日复核相同。9 月 11 日基线里的 Docker CLI 29.7.2、.NET SDK 10.0.303、Git 2.55.0、Go 1.26.5、Node.js 26.4.0、Ollama 0.33.1、Python 3.14.7、WSL 2.6.3.0 之后未用同一口径重新核对；需要精确版本时由对应软件的状态入口回读。\n\n- 退役前做法（历史）：曾由稳定机器 Provider 采集硬件与关键运行时、用规范哈希和 previous 链发布版本化稳定投影（最后一版 v9，9 月 11 日 06:46 观察），并由每周治理任务消费 TimeAudit 异常摘要决定是否重查；开发存储健康器曾单独判断 V/Z。这些程序和测试已删除。",
       "links": [],
       "anchors": [],
       "live": null,
@@ -223,7 +223,7 @@
       "id": "pcconfig-machine-facts-15",
       "section": "tech",
       "title": "依据与来源（二）",
-      "text": "## 依据与来源（二）\n\n- query_project_impact.mjs 精确影响查询\n\n- 固定端口实时门禁\n\n- E/V/Z 放置和恢复关系\n\n## 如何验证\n\n- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：49 份 Registry、165 个配置键、快照总代次 142、项目登记 19、目录与路径各 57、恢复锚点 21\n\n- 10 月 11 日 16:34 Get-RuntimeInventory.ps1 及限定字段的系统、显卡、卷读取，结果见上文；没有读硬件序列号、凭据或私人内容\n\n- 2026-09-28 03:59（北京时间）提交 348632a2 删除开发存储健康器、稳定投影发布与读取入口、TimeAudit 增量消费者及测试；10 月 11 日核对这些文件都不存在\n\n- validate_project_config_keys.mjs 和端口门禁测试定义仍在；本次没有运行\n\n- 历史（之后未重新核对）：2026-08-29 开发存储健康检查 5 项通过；9 月 11 日发布 v9 稳定投影",
+      "text": "## 依据与来源（二）\n\n- query_project_impact.mjs 精确影响查询\n\n- 固定端口实时门禁\n\n- E/V/Z 放置和恢复关系\n\n## 如何验证\n\n- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：49 份 Registry、165 个配置键、快照总代次 142、项目登记 19、目录与路径各 57、恢复锚点 21；10 月 12 日本轮复核，上述数字和 94 个环境变量、62 条 PATH 均相同\n\n- 10 月 11 日 16:34 Get-RuntimeInventory.ps1 及限定字段的系统、显卡、卷读取，结果见上文；没有读硬件序列号、凭据或私人内容\n\n- 10 月 12 日 04:36 限定字段再读主板、BIOS、CPU、内存和显卡，结果与 10 月 11 日相同；04:40 补读注册表 Windows 版本字段（DisplayVersion、CurrentBuild、UBR）和系统名称；没有读硬件序列号或环境变量值\n\n- 2026-09-28 03:59（北京时间）提交 348632a2 删除开发存储健康器、稳定投影发布与读取入口、TimeAudit 增量消费者及测试；10 月 11 日核对这些文件都不存在\n\n- validate_project_config_keys.mjs 和端口门禁测试定义仍在；本次没有运行\n\n- 历史（之后未重新核对）：2026-08-29 开发存储健康检查 5 项通过；9 月 11 日发布 v9 稳定投影",
       "links": [
         {
           "text": "下一个模块 内存故障取证",
