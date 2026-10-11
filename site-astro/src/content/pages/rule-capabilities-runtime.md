@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E258",
-   "commit": "5892e5bbaf0da52aedc49f24427710eac3bfd133",
-   "ruleset_sha256": "7e0bae30083b4835a961149047e6c159529240896c4fdc55511bc6d6eaefb2d7",
-   "activated_at": "2026-10-12T02:18:26.216182+08:00",
+   "release": "E259",
+   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
+   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
+   "activated_at": "2026-10-12T05:01:29.265252+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498"
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "5ff9dfa64256a664cfbc198d3d21e4b89b3583bd32c53f1421f5e7dbf6c22cbf",
-  "converted_at_beijing": "2026-10-12T05:03:49+08:00"
+  "sha256": "3dd24d8f6d77c11f9fa7b99d9a60f60d1fc6da27bf6454a509ee0e95981180a1",
+  "converted_at_beijing": "2026-10-12T05:45:49+08:00"
  }
 }
 ---
@@ -2908,7 +2908,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E258",
+   "release": "E259",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
    "from": null,
@@ -2941,7 +2941,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版"
+     "text_ref": "原文·E259版"
     },
     {
      "type": "chapter_title",
@@ -2982,7 +2982,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版"
+     "text_ref": "原文·E259版"
     },
     {
      "type": "chapter_title",
@@ -3075,7 +3075,7 @@
 }
 ```
 
-原文 · E258 版
+原文 · E259 版
 
 # 能力与运行方式
 
@@ -3103,7 +3103,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E258",
+   "release": "E259",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
    "from": "## 常用入口",
@@ -3131,7 +3131,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3159,7 +3159,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3205,7 +3205,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 常用入口
 
@@ -3251,7 +3251,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E258",
+   "release": "E259",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
    "from": "## 浏览器",
@@ -3284,7 +3284,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3310,7 +3310,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3384,7 +3384,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 浏览器
 
@@ -3406,7 +3406,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E258",
+   "release": "E259",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
    "from": "## 汇报、网站和自动运行的东西",
@@ -3434,7 +3434,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3454,7 +3454,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3524,7 +3524,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3551,7 +3551,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E258",
+   "release": "E259",
    "sha256": "165c36170a30e477a3cb8d05bb65f5f9af21aacebe6f682f693777f6246b3957",
    "public_sha256": "23fc576e11716b8bae5f99edd32bf78eeb7bfd3f84a6eff7d73d6d03215e8498",
    "from": "## 安装位置、配置和本机约定",
@@ -3584,7 +3584,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3604,7 +3604,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E258版·续"
+     "text_ref": "原文·E259版·续"
     },
     {
      "type": "source_text_card",
@@ -3650,7 +3650,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 安装位置、配置和本机约定
 

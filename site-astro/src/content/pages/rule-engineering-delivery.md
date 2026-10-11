@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E258",
-   "commit": "5892e5bbaf0da52aedc49f24427710eac3bfd133",
-   "ruleset_sha256": "7e0bae30083b4835a961149047e6c159529240896c4fdc55511bc6d6eaefb2d7",
-   "activated_at": "2026-10-12T02:18:26.216182+08:00",
+   "release": "E259",
+   "commit": "2d764224dfda1d65ee065ce4d1f590c598b19850",
+   "ruleset_sha256": "eefcc585ae714fd4ecdf99c64c750ad47d4ddd35a80fe05de2e7203cba01291f",
+   "activated_at": "2026-10-12T05:01:29.265252+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
-   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
-   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3"
+   "sha256": "95fa76591e1a46ffd03ec471438362e695f8fda4322b11d5015483182312ea31",
+   "public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：弯弯小路上，一支小箭从画面外飞来轻轻插进草靶的靶心；小木桌上的放大镜慢慢移过那张纸，纸上的绿勾随之亮一下；几张揉皱的纸和两片落叶打着旋落进浅绿色小回收桶；小路尽头几根细枝条缓缓长长、汇进粗树干，树干顶上的小云轻轻起伏，GitHub 章鱼猫标志保持不动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块小木牌上的字保持不动、不变形。",
   "registry": {
@@ -259,8 +259,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "6bb59cc73d3ad2ffad638267277f3d2d249ecb215b88f8290aed4dacf67295f7",
-  "converted_at_beijing": "2026-10-12T05:03:49+08:00"
+  "sha256": "d5eb4242858c6ebf2f4052bd234e0e65d9989925e448057ce1501299149d251b",
+  "converted_at_beijing": "2026-10-12T05:45:50+08:00"
  }
 }
 ---
@@ -1831,9 +1831,9 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E258",
-   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
-   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+   "release": "E259",
+   "sha256": "95fa76591e1a46ffd03ec471438362e695f8fda4322b11d5015483182312ea31",
+   "public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
    "from": null,
    "to": "## 验证",
    "start": 0,
@@ -1860,7 +1860,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+  "source_public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-06"
  },
  "layout": {
@@ -1868,7 +1868,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版，一字不改",
+     "text_ref": "原文·E259版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1908,7 +1908,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版，一字不改",
+     "text_ref": "原文·E259版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2029,7 +2029,7 @@
 }
 ```
 
-原文 · E258 版，一字不改
+原文 · E259 版，一字不改
 
 # 工程与交付
 
@@ -2114,9 +2114,9 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E258",
-   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
-   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+   "release": "E259",
+   "sha256": "95fa76591e1a46ffd03ec471438362e695f8fda4322b11d5015483182312ea31",
+   "public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
    "from": "## 验证",
    "to": "## 下载、临时文件和清理",
    "start": 6645,
@@ -2143,7 +2143,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-07",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+  "source_public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-07"
  },
  "layout": {
@@ -2151,7 +2151,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2198,7 +2198,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2290,7 +2290,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 验证
 
@@ -2322,13 +2322,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E258",
-   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
-   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+   "release": "E259",
+   "sha256": "95fa76591e1a46ffd03ec471438362e695f8fda4322b11d5015483182312ea31",
+   "public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
    "from": "## 下载、临时文件和清理",
    "to": "## Git 收尾",
    "start": 8743,
-   "end": 9634,
+   "end": 9928,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2347,7 +2347,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-08",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+  "source_public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-08"
  },
  "layout": {
@@ -2355,7 +2355,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2396,7 +2396,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2476,7 +2476,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2485,6 +2485,7 @@ owner: `E:\.agents`
 - **落盘前定好去处。** 下载和任务临时内容按下面的技术默认落盘；工具或项目确实需要工作区时用它的任务工作目录。交付目录只放本人真要取用的结果。工具不能指定位置时，记住实际落点，一样收尾。
 - **整理默认是移动。** 只有本人原件、还有别处在用或确实需要备份时才复制保留源文件。先复制再删源时，确认目标完整可用、引用已更新，再处理源副本。
 - **用完就清理**（约法 L13）。本任务产生的文件、下载和临时文件用完可以直接删除，确认退役的东西也可以直接删除。回收站是可选做法：选用时运行 `pwsh -NoProfile -File E:\.agents\tools\Move-TaskItemToRecycleBin.ps1 -LiteralPath <精确绝对路径> -AllowedRoot <本任务落点> -Json`，并确认回执里原路径和回收站里的实体都对得上。回收站放不下或工具拒绝时，可以直接删除已确认属于本任务、可清理的文件。
+- **清理受阻继续找办法。** 已获本人授权、已确认可清理的对象，一条删除命令被审批拒绝时，查实际限制并继续找受支持的清理方式；删除仍受阻时，改用受支持的正式回收工具按精确路径移入回收站，并核对原路径和回收实体。拒绝原因不明时，不自行认定只是命令写法受限；动作本身被明确禁止时，不换工具、shell 或封装绕过，也不关闭安全审查。确无受支持的方式时，保留并说明具体残留和原因（出处：决定月卷“清理审批受阻仍寻找其他方式，删除受阻时回收”（`../owner-decisions/2026-10.md#cleanup-rejection-alternative-20261012`））。
 - **只留有用的。** 保留要有具体用途且确实需要本机副本：本人待取的交付物、项目运行和维护资产、必要的恢复材料。“以后可能有用”不算。暂时要留的，在任务状态里写明路径、理由和什么时候清。
 - **不动不属于本任务的东西。** 本人原件、其他任务的文件、归属不明的、正在用的、必要的恢复材料都不动；不按年龄、文件名或目录整库清空。文件被占用时，确认属于本任务且没有本人未保存的内容，就自己解除占用后清理；查不清归属或是否有未保存内容，就保留并说明。挡住清理的是处理掉也不丢东西的残留时（例如别的任务留下、目录已经不在的工作副本登记，见[分工与并行施工](/rules/execution-coordination/#多个任务同时改东西)），直接处理，不请本人决定，也不在汇报里提（出处：决定文档“无损残留直接清、不汇报”）。其他清理受阻要说清残留、原因和下一步，不谎称清完，也不留给本人手动收拾。
 
@@ -2498,13 +2499,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E258",
-   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
-   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+   "release": "E259",
+   "sha256": "95fa76591e1a46ffd03ec471438362e695f8fda4322b11d5015483182312ea31",
+   "public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
    "from": "## Git 收尾",
    "to": null,
-   "start": 9634,
-   "end": 10888,
+   "start": 9928,
+   "end": 11182,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -2531,7 +2532,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-09",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
+  "source_public_sha256": "4d39811797f2d1876416287e2885c8f5aff63fc3bb13bf71afc47e3fd83630d2",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-09"
  },
  "layout": {
@@ -2539,7 +2540,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2583,7 +2584,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E258版·续",
+     "text_ref": "原文·E259版·续",
      "align": "left",
      "size": "small"
     },
@@ -2675,7 +2676,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E258 版 · 续
+原文 · E259 版 · 续
 
 ## Git 收尾
 
