@@ -1,0 +1,199 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "timeaudit-usage-energy",
+  "kind": "project",
+  "title": "屏幕使用、专注上下文与能耗成本",
+  "url": "/projects/timeaudit/usage-energy/",
+  "parent": "timeaudit",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，未读个人时间线和电量值"
+  },
+  "screens": [
+    {
+      "id": "timeaudit-usage-energy-01",
+      "section": "top",
+      "title": "屏幕使用、专注上下文与能耗成本",
+      "text": "# 屏幕使用、专注上下文与能耗成本\n\n〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTimeAudit · 功能说明\n\n我能查看活跃、暂离、睡眠、专注和场景能耗结构；具体应用、标题和时长可在有价值时直接展示，不按字段类别一刀切隐藏。现在还有一份“今日用电”回执：看门狗最多每 10 分钟算一次今天和昨天的 CPU 与显卡用电，驾驶舱直接读它。\n\n**当前情况：**时间与能耗看板在用，10 月 11 日起较重的能耗统计图改成点开才计算；这次没有读取个人时间线或电量值，费用仍是估算。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 电脑使用与性能记录",
+          "href": "/projects/timeaudit/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/TimeAudit"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/timeaudit/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n区间只按开始时间求和会漏算跨窗睡眠或重复 idle，甚至出现过去一小时开机 1.5 小时；估算也可能被误当账单。\n\n## 举个实际例子\n\n我问“从周一到周三，电脑到底记录了哪些时间，哪几段是空白？”我给出准确起止时间后，只读摘要会按完整范围及北京时间逐日列出前台和活动记录、睡眠等状态与缺口；需要电费时再看看板估算。空白不被猜成没开机，前台时间不被猜成本人一直在做事。\n\n## 最后我会得到什么\n\n得到所选时段按来源区分的覆盖、空档、状态和应用时间线索，也可在看板看用电与费用估算，在驾驶舱看今天的 CPU 和显卡用电。未覆盖不是设备闲置证明，估算不是账单。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 区间只按开始时间求和会漏算跨窗睡眠或重复 idle，甚至出现过去一小时开机 1.5 小时；估算也可能被误当账单。 举个实际例子 我问“从周一到周三，电脑到底记录了哪些时间，哪几段是空白？”我给"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 区间只按开始时间求和会漏算跨窗睡眠或重复 idle，甚至出现过去一小时开机 1.5 小时；估算也可能被误当账单。 举个实际例子 我问“从周一到周三，电脑到底记录了哪些时间，哪几段是空白？”我给"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n有记录的部分先去重叠并按本地日期裁剪，分别显示前台与 AHK 来源覆盖；有可用功率记录才估算耗电。\n\n## 发现问题时\n\n离开记录重叠或功率缺失时把空白和估算限制写清。\n\n## 入口不可用或证据不足时\n\n个人资料权限或来源读不到时只返回相应错误，不推断作息、具体应用或费用。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在 TimeAudit 的屏幕使用看板选日期或时间段看时间；用电和电费在功耗看板，“累计能耗、电费与碳排放”和“应用能耗、每日趋势与峰谷分析”两组点“展开”才计算。要完整时段的活动证据，可请有当前个人资料权限的 AI 使用 TimeAudit 的只读活动摘要入口，明确给出起止时间。\n\n## 需要准备什么\n\n- 想看的日期与准确起止时间\n\n- 关注记录覆盖、应用时间、离开、睡眠还是电费估算\n\n- 是否需要完整时段及北京时间逐日摘要\n\n## 从开始到拿到结果\n\n1. **只计算落在所选日期里的时间**　系统把跨过午夜的睡眠和离开时段裁到查询范围内，避免“今天用电脑超过一天”。\n\n2. **汇总重叠记录**　系统合并重复离开区间，计算屏幕使用结构与估算能耗。\n\n3. **看懂数字**　看板交回活跃时长和估算；只读摘要另列完整时段、逐日覆盖与缺口。前台时间不等于本人在场或工作成果，电费和碳排不是账单。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n看板与只读完整时段摘要在用；今日用电回执 2026-10-11 07:57 合入；本轮未读取个人时间线或电量值\n\n## 关键规则与设计选择\n\n1. 先裁剪查询窗，再合并重叠区间。\n\n2. 睡眠、息屏、暂离从活跃中扣除。\n\n3. 时间复盘不生成公开个人画像。\n\n4. 电费与电源轨是估算；今日用电和电费只算 CPU 与显卡，功耗图里的“整机功耗”另加外围估值，两者口径不同。\n\n## 当前怎样实现\n\n- AHK 写前台和系统状态区间，ingester 幂等入库。\n\n- Grafana 用区间交叠、裁剪和 gaps-and-islands（区间并集）。10 月 11 日起功耗看板“当前功耗与电源状态”常显，“累计能耗、电费与碳排放”（3 图）和“应用能耗、每日趋势与峰谷分析”（4 图）默认折叠、展开才查询；屏幕使用时间看板没有折叠组。\n\n- 数据库锁定 Asia/Shanghai 本地日界。\n\n- 用电按功率点采样积分，采样间隔 60 秒以上的不累计。今日累计电量和电费只算 CPU 封装加显卡板功率；功耗曲线的“整机功耗”另加外围 30W 和 CPU/GPU 功率的 12%，再估电源效率。峰电价默认 8—22 点 0.58 元/度、谷电 0.27 元/度，是可改参数，不是实际账单。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 大盘有历史图证；只读完整时段摘要已进入正式源码，本轮未读取生产个人时间线或能耗值 关键规则与设计选择 1 先裁剪查询窗，再合并重叠区间。 2 睡眠、息屏、暂离从活跃中扣"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 大盘有历史图证；只读完整时段摘要已进入正式源码，本轮未读取生产个人时间线或能耗值 关键规则与设计选择 1 先裁剪查询窗，再合并重叠区间。 2 睡眠、息屏、暂离从活跃中扣"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 今日用电回执：既有看门狗最多每 600 秒用现有数据库容器只读查询一次，按北京时间切今天和昨天，原子写 `log/power-today.json`（timeaudit.power-today.v1）；驾驶舱读回执，不必每次显示都去查库。回执失败不影响看门狗的恢复结果，也不另起采集进程。\n\n- 写失败不推进已提交水位，保留有界待写队列；达到上限时详细事件变为明确未知区间，不推断应用使用。ahk_health.json 分别记录待写、失败、溢出和分段数；正常活动约 30 秒或转换时封段，突然断电仍可能丢失当前未封段。\n\n- 活动区间统一 UTC 且状态串行；空闲切换不能倒退已分配区间。物理空闲 60 秒算离开，系统声音播放时豁免；时钟跳变/延迟记 System_CollectionGap，只有 Windows 挂起事件证明 sleep。AHK 用 UTF8 不可变 CSV 段：临时写入、flush、原子 rename 到 buffer.csv.ahk.*.processing，现有 ingester 只在数据库事务提交后移除，内容去重保护重放。\n\n- personal_activity_reader.py --summary 返回 timeaudit.personal-activity-summary.v1：只读现有前台和 AHK 区间，按完整查询窗及 Asia/Shanghai 日界分别求记录并集、空档、状态和每来源应用排名；开放会话不外推，已知自动化仅标注提供的时间，不给本人在场或效率分数。旧 read_activity 细目入口继续存在。\n\n- 这个摘要需要当前个人资料权限才能读，没有自动接到 timeaudit-diagnostics 诊断技能里。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 记录并入库状态区间。\n\n2. 筛选与窗口交叠的区间。\n\n3. 裁剪、合并并计算使用结构。\n\n4. 积分功率并应用峰谷模型；看门狗另按北京时间写今日用电回执。\n\n5. 原始全库不镜像进网页；具体标题和个人统计只有在具备产品价值、逐值没有 L3+ 或凭据证据时才公开，否则留在本机。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| gaps-and-islands（区间并集） | 合并重叠/相接时间片后再求总时长。 |\n| focus block（专注块） | 连续停留同一上下文达到阈值的行为线索。 |\n| energy integration（能量积分） | 把功率按持续时间累计为 kWh。 |\n\n## 专业定义\n\n按正确区间口径汇总前台、暂离、息屏、睡眠、切换、功率和峰谷电价；另有只读完整时段及逐日活动摘要，把记录空档也交出来。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n## 边界\n\n- 前台焦点不等于工作成果。\n\n- 窗口标题与使用统计可按实际价值公开；只有具体内容真实包含个人敏感正文或凭据时才隐藏对应值。\n\n- 能耗/电费/碳排含估算；今日用电回执是 CPU 与显卡的估算，不是墙插整机电量或电费账单。\n\n## 失败与恢复\n\n| 情况 | 怎么处理 |\n|---|---|\n| 区间跨查询边界 | 只算窗口内交叠部分。 |\n| idle 区间重叠 | 先做区间并集。 |\n| AHK / ingester heartbeat 陈旧 | 标记近期可能延迟，先查管线。 |\n| 今日用电回执没更新 | 只是显示支路失败，不代表采集或恢复失败；不用旧回执冒充当前电量。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 前台/睡眠区间\n\n- 区间入库\n\n- 使用时间大盘 JSON\n\n- 功耗大盘 JSON\n\n- active/idle/display-off/lock/sleep 区间并集与未覆盖时间聚合\n\n- 完整时段与北京时间逐日个人活动只读摘要，保留来源覆盖、空档和权限边界\n\n- 时间/功耗面板说明\n\n- 今日用电回执（telemetry_watchdog.ps1 写出的 log/power-today.json）",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "timeaudit-usage-energy-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- screen-time-focus、power-cost 等授权截图展示真实界面（截图保留原日期，10 月 11 日改成按需展开前拍摄）。\n\n- 9 月 8 日独立摘要窗口 (2026-09-08T08:35:40Z, 08:38:40Z] 返回 active=0、idle=180 秒、recorded coverage=180 秒、uncovered=0、cross-state overlap=0；只说明这三分钟的记录，不推断用户意图或长期习惯。\n\n- 2026-10-11 16:33 只读汇总截止前 13:00—14:00：状态区间记录覆盖 3600 秒、跨状态重叠 0，但其中有 95 秒明确的采集空档；不推断本人在场、睡眠或工作成果。\n\n- 本轮未重新查询完整个人时长或能耗明细；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行，也没有把摘要写成已被 timeaudit-diagnostics 自动调用。\n\n## 与其他模块的关系\n\n从采集取得区间/功率，借硬件解释能耗；用电回执由可靠性模块的看门狗写出；公开边界由项目总览约束。",
+      "links": [
+        {
+          "text": "上一个模块 进程与取证",
+          "href": "/projects/timeaudit/process-forensics/"
+        },
+        {
+          "text": "下一个模块 自愈与正确性",
+          "href": "/projects/timeaudit/runtime-reliability/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ],
+  "based_on": {
+    "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
+    "commit_time": "2026-10-11T12:44:01+08:00"
+  }
+}

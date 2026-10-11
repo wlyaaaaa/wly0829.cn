@@ -220,7 +220,7 @@ export const timeAuditProject = {
     { name: "Grafana 13.0.2", responsibility: "提供 6 张盘、78 个面板。", implementation: "固定 datasource UID（数据源标识）和 JSON 恢复合同。" },
     { name: "Watchdog（看门狗）", responsibility: "恢复 main.py、LibreHardwareMonitor、AHK 和入库器的 native（本机代码）崩溃、假活或端点停滞。", implementation: "每分钟按精确身份、heartbeat（心跳）与端点健康串行检查；LHM 只通过独立任务恢复，hardware worker 不再拥有进程控制。" },
     { name: "backup / restore", responsibility: "备份数据库、Grafana 状态和 dashboard JSON。", implementation: "来源分叉或恢复标识不合格时失败关闭。" },
-    { name: "PCConfig anomaly digest（机器配置异常摘要）", responsibility: "向 PCConfig 提供有界增量异常计数与是否建议重查稳定投影。", implementation: "窗口最长 168 小时，只返回覆盖、阈值、计数与建议；字段省略是接口范围，不是公开禁令。" },
+    { name: "anomaly digest（异常摘要，已退役）", responsibility: "以前给电脑配置项目的有界聚合接口，说明窗口覆盖、异常种类和是否建议重查稳定配置；9 月 29 日已删除，现在由健康状态和历史 summary 代替。", implementation: "异常摘要链（`pcconfig_anomaly_digest.py`、对应合同与测试）已在提交 a5a5ad9（2026-09-29 01:22）删除，只作历史记录；源码仓库里的 `DIAGNOSTICS_OPERATIONS.md` 仍留着这条链的旧说明，以实际删除的代码为准。" },
     { name: "diagnostic summary provider（历史诊断摘要接口）", responsibility: "为 timeaudit-diagnostics Skill 汇总硬件、有效游戏帧、电脑状态、覆盖空档和阈值信号。", implementation: "`--hours 1-168` 或精确 UTC 窗口执行一次 aggregate-only 查询；schema、owner、coverage 与因果限制失败关闭。" },
     { name: "Windows 剪贴板历史 sidecar", responsibility: "保存新发生的文本、网址与普通文件路径复制，提供本机全文搜索、再次复制、只读增量出口与独立恢复。", implementation: "WM_CLIPBOARDUPDATE + SQLite WAL/FTS5；三项普通用户任务与 G 盘 nearline backup（近线备份）由 PCConfig 管理，不依赖 PostgreSQL/Grafana。" }
   ],
@@ -384,8 +384,7 @@ export const timeAuditProject = {
     { name: "打开大盘", command: "http://localhost:43000", purpose: "从时间范围进入 6 张诊断盘。" },
     { name: "启动主链", command: "schtasks /run /tn TimeAudit_AutoStart", purpose: "通过交互式提权任务拉起 AHK、Docker 与主引擎。" },
     { name: "查看 Watchdog（看门狗）", command: "Get-ScheduledTaskInfo TimeAudit_Watchdog", purpose: "确认外部恢复任务最近结果，不读遥测正文载荷。" },
-    { name: "源码回归", command: "$env:PYTHONPATH='.venv\\Lib\\site-packages'; C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B -m pytest -q", purpose: "让本机 pytest runner 优先使用项目 `.venv` 生产依赖，验证运行、入库、仪表盘、备份、FPS 与原生隔离；pytest 不进入生产依赖。" },
-    { name: "公开安全聚合", command: "python E:\\Projects\\Tools\\TimeAudit\\pcconfig_anomaly_digest.py --after-utc <UTC> --until-utc <UTC>", purpose: "只返回异常计数、覆盖和建议。" },
+    { name: "源码回归", command: "$env:PYTHONPATH='.venv\\Lib\\site-packages'; C:\\Users\\<用户名>\\AppData\\Local\\Programs\\Python\\Python311\\python.exe -B -m pytest -q", purpose: "让本机 pytest runner 优先使用项目 `.venv` 生产依赖，验证运行、入库、仪表盘、备份、FPS 与原生隔离；pytest 不进入生产依赖。" },
     { name: "快速历史诊断", command: "python -B E:\\Projects\\Tools\\TimeAudit\\timeaudit_diagnostic_summary.py --hours <1-168>", purpose: "一次查询返回覆盖、硬件、有效游戏帧、状态时长、信号与解释限制，供 timeaudit-diagnostics Skill 使用。" },
     { name: "完整时段个人活动摘要", command: "python -B E:\\Projects\\Tools\\TimeAudit\\personal_activity_reader.py --after <含时区起点> --until <含时区终点> --summary", purpose: "经现有个人资料权限读取完整时间窗和北京时间逐日来源覆盖、空档及状态；含私人活动结果只在获准本地会话消费，不把记录等同本人在场。" },
     { name: "打开剪贴板历史", command: "开始菜单：TimeAudit 剪贴板历史", purpose: "在只读桌面查看器中搜索、筛选、预览和再次复制，不经浏览器或固定端口。" },
@@ -504,9 +503,9 @@ export const timeAuditModules = [
     title: "硬件真值、FPS 回放与前台性能诊断",
     searchAliases: ["游戏卡顿先看摘要还是Grafana", "过去一小时温度磁盘有没有异常", "没有游戏帧是不是采集坏了", "1% Low为什么突然掉", "帧时尖刺和后台压力怎么对齐", "PCConfig为什么要求重新检查稳定配置", "TimeAudit异常摘要会不会直接改电脑配置"],
     searchProjection: {
-      intents: ["复盘一次卡顿或掉帧", "查看温度功耗和磁盘压力", "判断没有游戏帧是否正常", "向PCConfig提供有界异常摘要", "从摘要进入具体时间线深挖"],
+      intents: ["复盘一次卡顿或掉帧", "查看温度功耗和磁盘压力", "判断没有游戏帧是否正常", "原先给电脑配置项目的“异常摘要”接口在 9 月 28 日失去使用方、9 月 29 日删除代码、合同和测试", "从摘要进入具体时间线深挖"],
       entities: ["timeaudit-diagnostics", "Grafana", "FPS / 1% Low", "frametime", "RTSSSharedMemoryV2", "PresentMon", "gated_idle", "waiting_frames", "fps_capture_status", "timeaudit.pcconfig-anomaly-digest.v1", "(after, until]", "projection_recheck_recommended"],
-      relations: ["有界 summary 先确认覆盖和方向", "Grafana 再对齐帧时硬件前台与后台", "RTSS共享内存优先且映射不可用才启动PresentMon", "帧源按前台最近前台桌面渲染器与唯一新鲜候选选择", "gated_idle与有负载无帧的waiting_frames分开", "PCConfig只消费聚合异常与重查建议", "异常摘要不进入稳定配置也不证明配置变化", "no_game_frames只说明摘要没有可分析帧"],
+      relations: ["有界 summary 先确认覆盖和方向", "Grafana 再对齐帧时硬件前台与后台", "RTSS共享内存优先且映射不可用才启动PresentMon", "帧源按前台最近前台桌面渲染器与唯一新鲜候选选择", "gated_idle与有负载无帧的waiting_frames分开", "电脑配置项目读同一份健康状态和历史 summary，自己决定是否重查现场。", "入口已删除，按退役处理；改用健康检查和历史 summary，不恢复旧链。", "no_game_frames只说明摘要没有可分析帧"],
       failureRecovery: ["新鲜且明确gated_idle时正常等待", "waiting_frames或缺采集状态时不冒充健康idle", "探针掉线只留对应字段空值", "混入旧帧时拒绝性能结论", "摘要覆盖 stale 时先补现场证据", "Docker或PostgreSQL不可用时返回有界unavailable且不重启服务"]
     },
     teaser: "硬件真值与 RTSS 优先帧链对齐到同一时间轴；PresentMon 仅作后备，并明确区分正常等待、启动中、有负载无帧与采集故障。",
@@ -542,8 +541,8 @@ export const timeAuditModules = [
       "8 月 31 日的运行回读证明当时 hardware_worker blob 与 001cee0 一致，main.py 在该文件落盘后启动；现场 1 个 LHM 活实例与 3 个零线程残影被正确区分。该历史证据不替代9月8日e5459ce的进程换代与新窗口验收。",
       "activity_worker 用 NVIDIA vendor id 锁独显 LUID。",
       "Grafana 对齐 FPS、帧时、瓶颈与前台焦点。",
-      "pcconfig_anomaly_digest.py 通过现有 audit-postgres 容器的本地 PostgreSQL socket 对 fact_system_hardware 做索引聚合，窗口固定为 `(after_utc, until_utc]` 且最长 168 小时。",
-      "timeaudit.pcconfig-anomaly-digest.v1 返回 Owner/Profile、next cursor、coverage、聚合异常与 `projection_recheck_recommended`；成功的空窗口也可推进，缺 Docker/PostgreSQL 或非法输出则有界 unavailable。",
+      "异常摘要链（`pcconfig_anomaly_digest.py`、对应合同与测试）已在提交 a5a5ad9（2026-09-29 01:22）删除，只作历史记录；源码仓库里的 `DIAGNOSTICS_OPERATIONS.md` 仍留着这条链的旧说明，以实际删除的代码为准。",
+      "异常摘要链（`pcconfig_anomaly_digest.py`、对应合同与测试）已在提交 a5a5ad9（2026-09-29 01:22）删除，只作历史记录；源码仓库里的 `DIAGNOSTICS_OPERATIONS.md` 仍留着这条链的旧说明，以实际删除的代码为准。",
       "数据库会话锁定 Asia/Shanghai 本地日界。",
       "CPU封装温度/功率与GPU hotspot只接受真实新鲜传感器或NULL，不以ACPI区域、负载公式、显存温度或核心偏移代替。RTSS current_fps是最近帧倒数，窗口均值另存；历史无来源RTSS行走明确兼容路线，合理极低帧不直接丢弃。缺磁盘/换页/频率计数留NULL，真实0仍保留。",
     ],
@@ -563,7 +562,7 @@ export const timeAuditModules = [
       { term: "frametime（帧时）", explanation: "渲染一帧的毫秒数；尖刺会影响手感。" },
       { term: "RTSS（RivaTuner Statistics Server 帧率工具）", explanation: "TimeAudit 当前首选的只读共享内存帧源；选中桌面渲染器时，其 FPS 不自动等于游戏性能。" },
       { term: "LUID（图形设备标识）", explanation: "Windows 本机设备身份，用来锁目标独显。" },
-      { term: "anomaly digest（异常摘要）", explanation: "给 PCConfig 的有界聚合接口：说明窗口覆盖、异常种类和是否建议重查稳定机器事实，不提供原始时序，也不签发配置变化结论。" }
+      { term: "anomaly digest（异常摘要）", explanation: "以前给电脑配置项目的有界聚合接口，说明窗口覆盖、异常种类和是否建议重查稳定配置；9 月 29 日已删除，现在由健康状态和历史 summary 代替。" }
     ],
     boundaries: [
       "阈值按当前个人工作站调校，不是通用标准。",
@@ -605,11 +604,11 @@ export const timeAuditModules = [
       "001cee0 的 182 项 + 11 个子测试完整回归通过；LHM/Watchdog 定向断言另为 10/10。",
       "8月31日现场健康21/21：当时的单一LHM、18085、GPU电压与120/120条GPU/Vcore真值通过，不等于本批重验全链。",
       "8月31日3660样本与9月8日修复后三分钟180样本、133正帧全拒绝均保留原日期。2026-09-14另读一小时：3599硬件样本，2369有效帧、1229拒绝正帧；帧源与拒绝原因分项未返回，不能声称真实游戏或确定故障。",
-      "test_pcconfig_anomaly_digest.py 覆盖窗口、聚合规则、privacy flags（载荷省略标记）与 unavailable；本页本轮没有把该单测冒充 PCConfig consumer 或 live projection E2E。",
+      "给 PCConfig 的异常摘要 Provider（已于 2026-09-29 删除，仅作历史）",
       "Grafana 容器运行，授权截图显示真实界面。",
       "本轮未结束 LHM 或阻断 18085，不能把健康现场冒充恢复故障注入；也未启动游戏，FPS E2E 未形成。"
     ],
-    relation: "读取采集时间轴并与进程资源对齐；timeaudit-diagnostics 先消费它的有界诊断聚合，必要时再进入 Grafana 深读；PCConfig 只消费另一份零原始载荷的 anomaly digest，并独立决定是否重查稳定事实。可靠性模块防止探针或 Provider 失败扩散。",
+    relation: "读取采集时间轴并与进程资源对齐；timeaudit-diagnostics 先读它的有界诊断聚合，必要时再进 Grafana 深读；电脑配置项目读同一份健康状态和历史 summary，自己决定是否重查现场。可靠性模块防止探针失败扩散。",
     readerStatus: "坏的显卡读数已在一次实际更新后被拒收，新硬件样本有效；游戏帧率仍未通过实际游戏验收。"
   },
   {

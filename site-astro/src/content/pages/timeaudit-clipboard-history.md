@@ -1,0 +1,1194 @@
+---
+{
+ "title": "Windows 剪贴板历史、再次复制与增量出口",
+ "kind": "project",
+ "url": "/projects/timeaudit/clipboard-history/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "timeaudit-clipboard-history",
+  "kind": "project",
+  "title": "Windows 剪贴板历史、再次复制与增量出口",
+  "url": "/projects/timeaudit/clipboard-history/",
+  "parent": "timeaudit",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，记录数和备份状态 16:34—16:36 只读重取（只数条数，不读内容）"
+  },
+  "based_on": {
+   "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
+   "commit_time": "2026-10-11T12:44:01+08:00"
+  }
+ },
+ "source": {
+  "page": "sources/pages/timeaudit-clipboard-history/page.json",
+  "sha256": "7cee0adc26df058237a7e2eaf49077e0ca23387bd2a1abd8c6565e7d7a2f080e",
+  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+ }
+}
+---
+
+::screen{#timeaudit-clipboard-history-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-01",
+  "section": "top",
+  "title": "Windows 剪贴板历史、再次复制与增量出口",
+  "links": [
+   {
+    "text": "回到项目 → 电脑使用与性能记录",
+    "href": "/projects/timeaudit/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/TimeAudit"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/timeaudit/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "Windows 剪贴板历史、再次复制与增量出口",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，记录数和备份状态 16:34—16:36 只读重取（只数条数，不读内容）",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "当段落、网址或文件路径被下一次复制覆盖，我可以在本机按关键词、日期和类型找回；完全相同的内容合在一组并显示真正复制次数，再看完整内容或再次复制。私人历史不进浏览器或主遥测数据库。日常入口现在是开始菜单里的“TimeAudit 剪贴板历史”，它打开的是密码中心桌面版的剪贴板页。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "Windows 剪贴板历史、再次复制与增量出口",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，记录数和备份状态 16:34—16:36 只读重取（只数条数，不读内容）"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "当段落、网址或文件路径被下一次复制覆盖，我可以在本机按关键词、日期和类型找回；完全相同的内容合在一组并显示真正复制次数，再看完整内容或再次复制。私人历史不进浏览器或主遥测数据库。日常入口现在是开始菜单里的“TimeAudit 剪贴板历史”，它打开的是密码中心桌面版的剪贴板页。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/illustrations/modules/timeaudit-clipboard-history-v01.png",
+   "key": "main-timeaudit",
+   "source_phrase": "右上一幅水彩插画：一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录）。",
+   "sha256": "b8e027e821299994c4f38714176e34fa3c4dbe04b759c0cc35e80c5d602d51dc",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# Windows 剪贴板历史、再次复制与增量出口
+
+〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+TimeAudit · 功能说明
+
+当段落、网址或文件路径被下一次复制覆盖，我可以在本机按关键词、日期和类型找回；完全相同的内容合在一组并显示真正复制次数，再看完整内容或再次复制。私人历史不进浏览器或主遥测数据库。日常入口现在是开始菜单里的“TimeAudit 剪贴板历史”，它打开的是密码中心桌面版的剪贴板页。
+
+**当前情况：**16:34 本机库里共有 11,363 条复制事件；每天 18:25 的近线备份最近一次（10 月 10 日）完整通过。这次没有打开界面、试再次复制或试恢复。
+
+项目源码：公开仓库
+
+::screen{#timeaudit-clipboard-history-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Windows 当前剪贴板只保留最新内容，临时资料很容易被覆盖；只存去重文本又会丢掉“复制了几次、何时复制、是否来自历史恢复”的真实事件。 举个实际例子 我复制过同一个链接好几次，现在又被别的"
+   },
+   {
+    "id": "module-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Windows 当前剪贴板只保留最新内容，临时资料很容易被覆盖；只存去重文本又会丢掉“复制了几次、何时复制、是否来自历史恢复”的真实事件。 举个实际例子 我复制过同一个链接好几次，现在又被别的"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+Windows 当前剪贴板只保留最新内容，临时资料很容易被覆盖；只存去重文本又会丢掉“复制了几次、何时复制、是否来自历史恢复”的真实事件。
+
+## 举个实际例子
+
+我复制过同一个链接好几次，现在又被别的内容盖掉了。在本机剪贴板页筛选日期或链接，查看这一组的复制次数和最近时间，确认完整内容后点“再次复制”。新复制等原采集器记录后才会更新次数，不由界面先加一。
+
+## 最后我会得到什么
+
+本机筛选后按完全相同内容显示分组、准确总数和复制次数；预览正确内容后可再次复制，也能暂停或继续记录。允许的消费者仍按独立游标取得原始新事件。
+
+::screen{#timeaudit-clipboard-history-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+## 正常时
+
+查看器按筛选条件找到本机已保存内容，重复复制次数来自真实事件，再次复制后由采集器记录新时间。
+
+## 发现问题时
+
+来源不允许记录、内容过大或剪贴板暂时被占用时留下不含正文的缺口，不编造丢失内容。
+
+## 入口不可用或证据不足时
+
+记录停止、数据库损坏或搜索不可用时明确报告，保留已有历史，不用低效的全库翻找冒充恢复。
+
+::screen{#timeaudit-clipboard-history-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "从开始菜单打开“TimeAudit 剪贴板历史”（实际进入本机密码中心桌面版的剪贴板页），按记得的词、日期或类型查找；旧的独立查看器 viewer.pyw 还在源码里，但安装程序已不再打开或依赖它，不推荐当日常起点。确认正确内容后再选“再次复制”。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **找回被覆盖的内容**　按关键词、日期或类型筛选本机已记录的复制，再把完全相同的内容放在一组；同一次复制的重复观察不增加次数。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "从开始菜单打开“TimeAudit 剪贴板历史”（实际进入本机密码中心桌面版的剪贴板页），按记得的词、日期或类型查找；旧的独立查看器 viewer.pyw 还在源码里，但安装程序已不再打开或依赖它，不推荐当日常起点。确认正确内容后再选“再次复制”。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **找回被覆盖的内容**　按关键词、日期或类型筛选本机已记录的复制，再把完全相同的内容放在一组；同一次复制的重复观察不增加次数。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+从开始菜单打开“TimeAudit 剪贴板历史”（实际进入本机密码中心桌面版的剪贴板页），按记得的词、日期或类型查找；旧的独立查看器 viewer.pyw 还在源码里，但安装程序已不再打开或依赖它，不推荐当日常起点。确认正确内容后再选“再次复制”。
+
+## 需要准备什么
+
+- 记得的文字片段、日期或内容类型
+
+- 要看相同内容被复制几次，还是要把它重新放入剪贴板
+
+## 从开始到拿到结果
+
+1. **找回被覆盖的内容**　按关键词、日期或类型筛选本机已记录的复制，再把完全相同的内容放在一组；同一次复制的重复观察不增加次数。
+
+2. **确认后再次复制**　选择正确记录并点击“再次复制”，内容回到 Windows 剪贴板，找回动作也另记一条事件。
+
+3. **核对范围**　只说明本机实际观察到的复制；空白、跳过或采集间隙单独显示，复制事实不代表执行或同意。
+
+::screen{#timeaudit-clipboard-history-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9 月 24 日正式源码已有分组/类型筛选，PCConfig 安装版综合窗口显示 50 条；8 月 31 日事件/索引计数只作历史，本轮未刷新当前总数或近线恢复 关键规"
+   },
+   {
+    "id": "module-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9 月 24 日正式源码已有分组/类型筛选，PCConfig 安装版综合窗口显示 50 条；8 月 31 日事件/索引计数只作历史，本轮未刷新当前总数或近线恢复 关键规"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 每次复制都是独立事件；相同内容只复用 blobs 正文对象，绝不合并 events 事实。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 每次复制都是独立事件；相同内容只复用 blobs 正文对象，绝不合并 events 事实。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+正式入口归密码中心剪贴板页；2026-10-11 16:34 本机库 11,363 条事件、4,270 个正文对象、6,384 条索引；10 月 10 日 18:25 近线备份完整通过；本轮未试恢复
+
+## 关键规则与设计选择
+
+1. 每次复制都是独立事件；相同内容只复用 blobs 正文对象，绝不合并 events 事实。
+
+2. 展示时才按完全相同正文分组，空格不同仍是不同内容；复制次数排除同一来源实例、开机、会话、剪贴板序列里的重复观察。筛选先于分组与分页；疑似密钥只按特征提示，不能保证识别全部秘密。
+
+3. 启动、解锁、恢复和暂停结束只建立新的 clipboard sequence baseline（剪贴板序列基线），不导入此前当前内容。
+
+4. 只接收 Unicode 文本、HTTP(S) URL 和普通文件路径列表；图片、二进制、虚拟文件、私有格式与超限内容不保存正文。
+
+5. 查看界面、增量出口和备份各有只读/恢复边界；下游 checkpoint（续作检查点）只有在下游 writer（写入方）成功后才能推进。
+
+6. 公开页只展示 schema（数据结构）、组件、任务、路径类别、状态和计数；原始正文、内容 hash（内容指纹）、私密窗口与凭据始终不公开。
+
+## 当前怎样实现
+
+- collector.pyw 创建隐藏 Win32 消息窗口，以 AddClipboardFormatListener / WM_CLIPBOARDUPDATE 事件驱动采集，不轮询、不装键盘 hook（钩子）、DLL、驱动或 Session 0 服务。
+
+- 读取时遵守 Windows 来源格式：ExcludeClipboardContentFromMonitorProcessing 或 CanIncludeInClipboardHistory=0 会阻止本地保存；CanUploadToCloudClipboard=0 只禁止云剪贴板，不阻止本机历史。
+
+::screen{#timeaudit-clipboard-history-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- SQLite schema（数据结构）v1 包含 meta、blobs、events、content_fts 与 adapter_events_v1；WAL + synchronous=FULL，events/blobs 由 trigger（触发器）保持 append-only（只追加）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- SQLite schema（数据结构）v1 包含 meta、blobs、events、content_fts 与 adapter_events_v1；WAL + synchronous=FULL，events/blobs 由 trigger（触发器）保持 append-only（只追加）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+- SQLite schema（数据结构）v1 包含 meta、blobs、events、content_fts 与 adapter_events_v1；WAL + synchronous=FULL，events/blobs 由 trigger（触发器）保持 append-only（只追加）。
+
+- 同一内容 SHA-256 映射到一个 blob；每次复制仍生成独立 event_id。再次复制写 versioned restore marker（版本化恢复标记），只有 marker 与原事件正文一致才记录 lineage。
+
+- 日常查看由密码中心桌面版的剪贴板页承担（开始菜单快捷方式带 `--clipboard` 参数打开），读取密码中心正式的资料状态，到期清屏，后台记录不受影响；PCConfig 截止前的安装器已不再打开或要求旧 viewer.pyw。viewer.pyw 仍可用 mode=ro 与 query_only=ON 在 Tkinter 窗口查询，FTS5 缺失时明确失败。
+
+- ReadOnlyClipboardStore.search_grouped 先在全历史按词、日期、payload 类型和内容类型筛选，再按 blob_id 分组分页；同 sequence 的重复观察只算一次，真正再次复制另计。model.py 的 link/secret_like 是格式线索，独立采集器和 append-only events 不改变。
+
+- adapter_stdio.py 提供 timeaudit.clipboard-export.request.v1 / response.v1 的 JSON/stdio 只读接口；checkpoint（续作检查点）是 `(observed_at_utc,event_id)`，没有 HTTP API、浏览器依赖或固定端口。密码中心的只读界面不是这个增量出口的消费者。
+
+- backup.py 使用 SQLite Online Backup（在线一致备份），保存大小、计数、integrity 与 SHA-256 清单；恢复前验证副本，只写入空目标目录。10 月 1 日起加了窄范围文件告警：杀毒软件隔离或移除了本次精确路径、或已枚举的控制文件消失时，可带告警保留此前的备份，但会标明这次新数据没有拷入；源目录或目标目录不见仍算失败。
+
+## 执行流程
+
+1. 启动 collector 后先记录 baseline，不读取启动前已在剪贴板中的内容。
+
+2. 新复制触发 WM_CLIPBOARDUPDATE；读取 source policy（来源策略）与受支持格式，失败则写无正文 skip/gap。
+
+::screen{#timeaudit-clipboard-history-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "3. 为每次观察写 events，并按内容 SHA-256 复用 blobs；content_fts 同步保存可搜索索引。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "3. 为每次观察写 events，并按内容 SHA-256 复用 blobs；content_fts 同步保存可搜索索引。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+3. 为每次观察写 events，并按内容 SHA-256 复用 blobs；content_fts 同步保存可搜索索引。
+
+4. 用户在密码中心剪贴板页搜索、筛选和预览；点击再次复制时写原事件 id 与本次 request id marker。
+
+5. 获准消费者用版本化 JSON/stdio 读取有序事件，成功提交后在自己的 owner 边界保存下一 checkpoint（续作检查点）；sidecar（侧车文件）不接受消费确认或删除。
+
+6. 每天北京时间 18:25 的 nearline backup（近线备份）用 SQLite Online Backup 写 G 盘；恢复先校验清单与数据库，再读回空目录，正式替换需单独停止 collector/watchdog 并保留 pre-image（替换前副本）。
+
+::screen{#timeaudit-clipboard-history-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-08",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+| --- | --- |
+| WM_CLIPBOARDUPDATE | Windows 在剪贴板发生变化时发出的消息；事件驱动，不是轮询或键盘监听。 |
+| WAL（预写日志） | SQLite 让持续写入与只读查询并行的日志模式；恢复不能靠在线手工复制 WAL/SHM。 |
+| FTS5（全文搜索索引） | 为关键词检索建立的 SQLite 虚拟表；缺失就停止查看，不长期扫描正文表。 |
+| lineage（恢复来源链） | `restored_from_event_id` 与 `restore_request_id` 把再次复制连接回原事件。 |
+| checkpoint（增量游标） | 最后成功提交的观察时间与事件 id；重复读取同一 event_id 必须由下游幂等处理。 |
+
+## 专业定义
+
+在当前 Windows 会话记录新复制；本机按词、日期与类型找回，相同内容分组显示实际复制次数，确认后可再次复制。增量出口和近线恢复仍独立。
+
+::screen{#timeaudit-clipboard-history-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-09",
+  "section": "tech",
+  "title": "出问题时（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- sidecar（侧车文件）与 PostgreSQL/Grafana 主链完全独立；主链健康不能证明剪贴板健康，反之亦然。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- sidecar（侧车文件）与 PostgreSQL/Grafana 主链完全独立；主链健康不能证明剪贴板健康，反之亦然。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（一）
+
+## 边界
+
+- sidecar（侧车文件）与 PostgreSQL/Grafana 主链完全独立；主链健康不能证明剪贴板健康，反之亦然。
+
+- 复制事实只证明本机观察到一次复制，不证明阅读、收件、同意、执行、归属或用户意图。
+
+- 活动私密库在 E 盘持久数据层，G 盘只是近线恢复副本且不是查询依赖；网页、Git、日志和浏览器不接触原始正文、hash（内容指纹）、FTS 或凭据。
+
+- 当前合同只覆盖 Windows 电脑；手机来源是另一 source instance（来源实例），不能在 collector 内猜测合并。
+
+- clipboard_sequence 只在同一 Windows clipboard station（剪贴板站）相邻事实中解释，不能当作跨启动、会话或设备的全局顺序。
+
+- 增量合同存在不等于下游消费者已上线；现在实际有没有程序在用这个增量出口、用了多少次，没有核对。
+
+- 版本化恢复标记只连接再次复制与原事件，不表示另一个中央系统是当前产品或消费者。
+
+## 失败与恢复
+
+| 情况 | 怎么处理 |
+|---|---|
+| 来源明确禁止、格式不支持、内容超限或剪贴板暂时锁定 | 保存无 payload 的 skip/gap 原因；不把缺失内容猜回数据库。 |
+
+::screen{#timeaudit-clipboard-history-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-10",
+  "section": "tech",
+  "title": "出问题时（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（二）
+
+| 情况 | 怎么处理 |
+|---|---|
+| heartbeat 超过 30 秒或 collector 退出 | TimeAudit_ClipboardWatchdog 每分钟通过隐藏启动器检查并恢复；不启动第二个长期 collector。 |
+| schema（数据结构）版本不支持或 FTS5 缺失 | 查看界面/adapter（执行适配器）失败关闭，不回退为长期全表扫描。 |
+| 备份 hash（内容指纹）、大小、计数或 integrity 不一致 | 拒绝恢复；非空目标也拒绝覆盖，活动库原样保留。普通 I/O 错误仍算备份失败，只有杀毒隔离等窄情况可带告警保留旧备份。 |
+| marker 缺失、无效或正文不匹配 | 新观察按普通 copy 保存，不靠时间窗口或 hash（内容指纹）猜 lineage。 |
+
+::screen{#timeaudit-clipboard-history-11 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-11",
+  "section": "tech",
+  "title": "依据与来源（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- Win32 消息采集、baseline、边界与 heartbeat",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- Win32 消息采集、baseline、边界与 heartbeat",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（一）
+
+## 真实入口
+
+- Win32 消息采集、baseline、边界与 heartbeat
+
+- SQLite schema（数据结构）、WAL、FTS5、只读查询与增量投影
+
+- 链接与疑似密钥内容类型提示，不保证识别全部凭据
+
+- 本机搜索、预览、暂停与再次复制
+
+- 版本化 JSON/stdio 只读增量出口
+
+- 在线一致备份、校验与空目录恢复
+
+- 任务、ACL、心跳、schema（数据结构）、计数与无正文 adapter（执行适配器）验收
+
+- 机器路径类别、三任务、近线备份与恢复顺序
+
+::screen{#timeaudit-clipboard-history-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-clipboard-history-12",
+  "section": "tech",
+  "title": "依据与来源（二）",
+  "links": [
+   {
+    "text": "上一个模块 自愈与正确性",
+    "href": "/projects/timeaudit/runtime-reliability/"
+   },
+   {
+    "text": "下一个模块 安装与恢复",
+    "href": "/projects/timeaudit/backup-recovery/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 模型、存储、查看、lineage、adapter（执行适配器）与备份回归",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 模型、存储、查看、lineage、adapter（执行适配器）与备份回归",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（二）
+
+- 模型、存储、查看、lineage、adapter（执行适配器）与备份回归
+
+## 如何验证
+
+- Source（源码）：已发布 001cee0 包含完整 clipboard_history 实现与合同；当前源码 c5ca4eeb 里 test_clipboard_history.py 有 19 个测试函数、test_personal_access.py 有 11 个，这次没有运行。
+
+- Tests（测试）：8 月 31 日使用 Python 3.11 `-B -m unittest -v test_clipboard_history.py`，11 项全部通过，用时 0.806 秒；单元测试包含 SQLite Online Backup 到空目录的合成读回。
+
+- Runtime（运行，历史）：8 月 31 日 PCConfig 无正文验证 status=passed；当时 5234 events / 2312 blobs / 3406 FTS rows。
+
+- Runtime（运行，2026-10-11 16:34 只读计数）：schema v1，11,363 条 events、4,270 个 blobs、6,384 条 FTS 索引；这只数了条数，不是 FTS 完整性验收。16:36 另查了一次：现库里事件时间早于今天 14:00 的有 11,356 条、引用 4,269 个不同正文对象——这是 16:36 时还留在库里的数，不是 14:00 当时的总数（没有 14:00 快照，之后有没有删除也没核对）。
+
+- Backup（备份）：最近一次近线备份 2026-10-10 18:25:05 完整通过，integrity=ok，当时 11,259 events / 4,237 blobs / 6,340 FTS，没有文件告警；下一次在 10 月 11 日 18:25，没有为刷新网页补跑。
+
+- Contract（合同）：adapter（执行适配器）返回 timeaudit.clipboard-export.response.v1、source profile `src.timeaudit.windows_clipboard`、1 个事件且 payload_absent=true；这验证接口形状，不验证实际下游消费。
+
+- Gap（缺口）：这次没有运行会写入合成内容的 smoke_test.py，没有把最新 G 盘副本恢复到空目录，没有打开界面或试再次复制，也没有验收实际下游 writer；不能声称真机 lineage 或端到端灾难恢复已经完成。
+
+## 与其他模块的关系
+
+这是与 PostgreSQL/Grafana 主时间线并列的独立产品轴；PCConfig 拥有机器路径、ACL、三任务、快捷方式、看门狗与近线恢复，密码中心提供日常查看界面，TimeAudit 拥有采集语义、SQLite schema（数据结构）与增量合同。它不依赖其他模块，但可把获准的版本化事件交给独立消费者。
