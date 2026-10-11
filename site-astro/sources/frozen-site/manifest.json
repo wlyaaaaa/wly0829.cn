@@ -1547,8 +1547,8 @@
       "source_path": "site-astro/public/_interactions/anchor-offset.js"
     },
     "_interactions/how-map.js": {
-      "sha256": "a104bb8dac15dfb6543cb2b33d81cac7d28fe4d864da6d87e7b12d19f8d82d5d",
-      "bytes": 6161,
+      "sha256": "532b36b23c8ed636647198f95870fd77e7feb79fc674cf8e2cfed72258177e2f",
+      "bytes": 9739,
       "source_path": "site-astro/public/_interactions/how-map.js"
     },
     "_living/live-dom.js": {

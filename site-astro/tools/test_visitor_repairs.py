@@ -32,16 +32,22 @@ with sync_playwright() as p:
     go('/how/#map'); clear_anchor('map')
     node=page.locator('#how-02 '+orient+' [data-how-node="agents"]')
     if width==390: node.locator('a').tap()
-    else: node.hover()
+    else: node.locator('a').click()
     page.wait_for_timeout(250)
-    assert page.locator('#how-02').get_attribute('data-how-map-focus')=='agents'
+    # 点一项只选中不跳页：被点的那项实心标出，有往来的标“给它/它给”，底部卡片写明从谁拿、交给谁并带进页面的按钮
+    assert '/how/' in page.url and page.locator('#how-02').get_attribute('data-how-map-focus')=='agents'
+    assert page.locator('#how-02 '+orient+' .how-map-current').count()==1
     assert page.locator('#how-02 '+orient+' .how-map-dim').count()>0
     assert page.locator('#how-02 '+orient+' .how-map-related').count()>1
-    assert page.locator('.how-map-relation').count()>0; shot('I07-map')
+    assert page.locator('#how-02 '+orient+' .how-map-related .how-map-tag').first.inner_text() in ('给它','它给','互相给')
+    card=page.locator('.how-map-card'); assert card.is_visible() and page.locator('.how-map-relation').count()>0
+    assert card.locator('a.how-map-go').get_attribute('href')=='/projects/agents/'; shot('I07-map')
+    page.keyboard.press('Escape'); assert card.is_hidden()
     if width==390:
-     assert '/how/' in page.url; node.locator('a').tap(); page.wait_for_url('**/projects/agents/')
+     node.locator('a').tap(); node.locator('a').tap(); page.wait_for_url('**/projects/agents/')
     else:
-     node.locator('a').focus(); assert page.locator('#how-02').get_attribute('data-how-map-focus')=='agents'
+     node.locator('a').focus(); page.keyboard.press('Tab'); page.keyboard.press('Shift+Tab')
+     assert page.locator('#how-02').get_attribute('data-how-map-focus')=='agents'
     go('/skills/report-page/')
     first=page.locator(orient+' .slot-shot-frame[data-href]').first
     href=first.get_attribute('data-href'); assert href.startswith('/assets/')

@@ -125,7 +125,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "电脑上把鼠标移到一个项目上"
+        "text_ref": "这台电脑上有 30 个项目分工干活"
       },
       {
         "type": "illustration",
@@ -136,14 +136,14 @@
       },
       {
         "type": "directory_tile",
-        "text_ref": "中间",
+        "text_ref": "中间 · 我、手机和两家 AI",
         "variant": "grouped_list",
         "columns": 3,
         "portrait_columns": 1
       },
       {
         "type": "directory_tile",
-        "text_ref": "电脑日常",
+        "text_ref": "电脑日常 · 让这台电脑顺手",
         "variant": "grouped_list",
         "columns": 2,
         "portrait_columns": 1
@@ -155,11 +155,11 @@
       },
       {
         "type": "notice",
-        "text_ref": "不在图上的",
+        "text_ref": "没列在这里的",
         "align": "left"
       }
     ],
-    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。"
+    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
   },
   {
     "screen": "how-02",
@@ -180,7 +180,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "电脑上把鼠标移到一个项目上"
+        "text_ref": "这台电脑上有 30 个项目分工干活"
       },
       {
         "type": "illustration",
@@ -191,7 +191,7 @@
       },
       {
         "type": "directory_tile",
-        "text_ref": "中间",
+        "text_ref": "中间 · 我、手机和两家 AI",
         "variant": "grouped_list",
         "columns": 1,
         "portrait_columns": 1
@@ -203,11 +203,11 @@
       },
       {
         "type": "notice",
-        "text_ref": "不在图上的",
+        "text_ref": "没列在这里的",
         "align": "left"
       }
     ],
-    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。"
+    "notes": "Claude 本轮裁定：how02 改为现有无字群岛插画加程序分组清单，不再要求49个地图净面或逐牌几何。11个原区名作标题、38条作清单项，原字及定稿顺序保留。横版图上、三列分组清单下；竖版图上、单列分组清单下。复用how01/05现有ready《系统群岛》，不改素材就绪状态。AI技术补充：沿用旧data-map-region/sign编号身份，运行时改读清单实测框，详情见requests/main/main-closer5-how02-grouped-runtime.md。\n2026-10-11 Opus 重做：组名带一句说明，导语改成讲清这一屏是什么、点一下会出什么；点选后的关系卡由 how-map.js 画。"
   },
   {
     "screen": "how-05",
