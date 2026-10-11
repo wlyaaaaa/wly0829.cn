@@ -424,7 +424,13 @@
     "/projects/personal-materials/bounded-discovery/",
     "/projects/personal-materials/exact-intake/",
     "/projects/personal-materials/registered-lookup/",
-    "/projects/personal-materials/verified-open/"
+    "/projects/personal-materials/verified-open/",
+    "/projects/personal-media/classification/",
+    "/projects/personal-media/cloud-candidates/",
+    "/projects/personal-media/local-ingest/",
+    "/projects/personal-media/phone-preservation/",
+    "/projects/personal-media/phone-recovery/",
+    "/projects/personal-media/search-browse/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
