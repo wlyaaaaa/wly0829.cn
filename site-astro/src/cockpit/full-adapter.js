@@ -29,7 +29,7 @@ const notice = (r) => {
     where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null,
     ...Object.fromEntries(PASS.filter((k) => r[k] != null).map((k) => [k, r[k]])) };
 };
-const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason'];
+const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
 const LABELS = { 'cpu-gpu': 'CPU 和显卡', 'memory-network': '内存和网络' };
 
 export function fromFull(full) {

@@ -192,7 +192,7 @@ export function needYou(v, ctx) {
       + (items.length > 1 ? `<p class="cp-all"><button type="button" class="cp-btn" data-copy-ai-all>全部 ${items.length} 项一起复制给 AI</button></p>` : '')
     : `<p class="cp-empty">${dot(v.ok ? 'ok' : 'unavailable')}${v.ok ? '现在没有要你动手的事。' : notRead(v.served_at, ctx.now)}</p>`;
   // 等条件：分“你有空时可以做”和“AI 等条件”；事在前、什么时候做在后；后端没给是谁的事就合在一起
-  const fmt = (x) => `<li><span>${esc(clean(x.title) || x.project)}</span><small>${x.reason ? `为什么暂缓：${esc(x.reason)} · ` : ''}什么时候：${esc(x.done_when || '你方便时')}</small></li>`;
+  const fmt = (x) => `<li><span>${esc(clean(x.title) || x.project)}</span><small>${(x.deferred_reason || x.reason) ? `为什么暂缓：${esc(x.deferred_reason || x.reason)} · ` : ''}什么时候：${esc(x.done_when || '你方便时')}</small></li>`;
   const mine = v.deferred.filter((x) => x.action_owner === 'user'), theirs = v.deferred.filter((x) => x.action_owner && x.action_owner !== 'user');
   const known = mine.length + theirs.length === v.deferred.length;
   const wait = !v.deferred.length ? '' : known
