@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const source=readFileSync(new URL('../site-astro/tools/scan_glance_dom.js',import.meta.url),'utf8');
-const block=source.slice(source.indexOf("  for (const row of body.querySelectorAll('.row'))"),source.indexOf('  const dateSeen'));
+const block=source.slice(source.indexOf("  for (const row of body.querySelectorAll('.row'))"),source.indexOf('  // 比较横排文字卡'));
 function measure(display,flexDirection) {
   const col={getBoundingClientRect:()=>({left:0,right:400,width:400,top:0,bottom:800}),contains:()=>true};
   const row={children:[col],getBoundingClientRect:()=>({left:0,right:400,width:400,top:0,bottom:800,height:800}),closest:()=>null,contains:()=>true};

@@ -56,6 +56,34 @@ window.scanGlance = config => {
     for(const e of [...row.children].filter(e=>!state(e).skip&&!state(e).why.length&&e.getBoundingClientRect().width>0)) { const c=e.getBoundingClientRect(); let bottom=b.top;
       for(const r of painted) if(e.contains(r.e) || (scope.contains(r.e) && !row.contains(r.e))) for(const z of r.rs) if((z.left+z.right)/2>=c.left && (z.left+z.right)/2<=c.right && z.bottom>b.top && z.top<b.bottom) bottom=Math.max(bottom,Math.min(b.bottom,z.bottom));
       const height=b.bottom-bottom; if(height>t.row_blank_px && height>b.height*t.row_blank_fraction) blank.push(pack(e,'','栏底空白同时超过像素与行高比例阈值',{rowSelector:sel(row),gapHeight:height,rowHeight:b.height,fraction:height/b.height},{left:c.left,top:bottom,width:c.width,height})); } }
+  // 比较横排文字卡的真实内容，不把拉齐后的卡框高度算作内容。
+  const imbalance = [], imbalanceSeen = new Set(), content = [...texts, ...media.filter(r => r.e.matches('img,svg,canvas,video'))];
+  for (const row of body.querySelectorAll(q.imbalance_rows)) {
+    if (!visible(row) || row.matches('.feature-masonry-grid') || (css(row).display === 'flex' && css(row).flexDirection.startsWith('column'))) continue;
+    const bands = [];
+    for (const e of row.children) {
+      if (!visible(e) || !texts.some(r => e.contains(r.e))) continue;
+      const b = e.getBoundingClientRect(), boxes = content.filter(r => e.contains(r.e)).flatMap(r => r.rs.map(z => paint(z, r.e)).filter(Boolean));
+      if (!boxes.length) continue;
+      const bottom = Math.max(...boxes.map(z => z.bottom)), height = bottom - b.top;
+      if (height <= 0) continue;
+      const item = { e, b, height, bottom }, band = bands.find(g => g.some(a =>
+        Math.min(a.b.bottom, b.bottom) > Math.max(a.b.top, b.top) &&
+        Math.min(a.b.right, b.right) <= Math.max(a.b.left, b.left) + t.clip_px));
+      if (band) band.push(item); else bands.push([item]);
+    }
+    for (const band of bands) {
+      if (band.length < 2) continue;
+      band.sort((a, b) => b.height - a.height);
+      const [high, next] = band, ratio = high.height / next.height, difference = high.height - next.height;
+      if (ratio <= t.imbalance_ratio || difference <= t.imbalance_px || imbalanceSeen.has(high.e)) continue;
+      imbalanceSeen.add(high.e);
+      imbalance.push(pack(high.e, high.e.textContent, '横排卡片最高内容与次高内容同时超过比例和像素差阈值',
+        { rowSelector: sel(row), contentHeight: high.height, nextContentHeight: next.height, ratio, difference,
+          peers: band.map(a => ({ selector: sel(a.e), contentHeight: a.height, contentBottom: a.bottom + scrollY, frameRect: rect(a.b) })) },
+        { left: high.b.left, top: high.b.top, width: high.b.width, height: high.height }));
+    }
+  }
   const dateSeen = new Set(), datePattern = /(?:19|20)\d{2}(?:[年./-]\d{1,2})?(?:[月./-]\d{1,2}日?)?|\d{1,2}月\d{1,2}日|\d{1,2}:\d{2}/u;
   for (const [e, pieces] of groups) { const text = norm(pieces.join(' ')), rx = /最新|截至|更新时间|数据时间|今日|当前/gu; let match;
     while ((match = rx.exec(text))) { const context = text.slice(Math.max(0, match.index - 70), match.index + 110); if (!datePattern.test(context) || dateSeen.has(context)) continue; dateSeen.add(context); dates.push(pack(e, context, '原文包含时点词及邻近日期，需按文章语义核对')); } }
@@ -85,6 +113,6 @@ window.scanGlance = config => {
     } finally { for(const [e,style] of disabledPaint)style===null?e.removeAttribute('style'):e.setAttribute('style',style); } } }
   scrollTo({top:origin.y,left:origin.x,behavior:'instant'});
   const classify=(category,rows)=>rows.map(r=>({category,...r}));
-  return {title:document.title,height:Math.max(body.scrollHeight,document.documentElement.scrollHeight),links,failures:[...classify('blank',blank),...classify('overlap',overlaps),...classify('clipped',clipped),...classify('image',images),...classify('blocked',blocked)],hints:[...classify('hidden',hidden),...classify('placeholder',placeholders),...classify('duplicate_heading',duplicateHeadings),...classify('duplicate_card',duplicateCards),...classify('duplicate_image',duplicateImages),...classify('overflow',overflowElements),...classify('date',dates)]};
+  return {title:document.title,height:Math.max(body.scrollHeight,document.documentElement.scrollHeight),links,failures:[...classify('blank',blank),...classify('imbalance',imbalance),...classify('overlap',overlaps),...classify('clipped',clipped),...classify('image',images),...classify('blocked',blocked)],hints:[...classify('hidden',hidden),...classify('placeholder',placeholders),...classify('duplicate_heading',duplicateHeadings),...classify('duplicate_card',duplicateCards),...classify('duplicate_image',duplicateImages),...classify('overflow',overflowElements),...classify('date',dates)]};
 };
 void 0;
