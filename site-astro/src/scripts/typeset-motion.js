@@ -11,6 +11,7 @@
   const arrows = '.sequence-arrow,.arrow,.flow-arrow,[data-comp=arrow],.ds-source-arrow-glyph,.ds-judgement-arrow-symbol';
   const cards = '.card,.ct-card';
   const gridCards = '.ts-card-grid > .ts-screen';
+  const partEntry = root.dataset.entryMotion === 'cards', partGroups = new WeakMap();
   const cardEligible = el => !el.parentElement?.closest(cards);
   const reduced = matchMedia('(prefers-reduced-motion:reduce)');
   const visible = el => { const r = el.getBoundingClientRect(); return r.width > 1 && r.height > 1 && r.bottom > 0 && r.top < innerHeight; };
@@ -29,8 +30,30 @@
     const e = document.createElement('span'); e.className = 'sample-overlay ' + cls;
     e.setAttribute('aria-hidden', 'true'); e.dataset.tsMotionOverlay = ''; position(host, rect, e); host.append(e); return e;
   }
-  function enterCard(el, group) { played.add(el);
-    animate(el,el,[{opacity:0,translate:'0 80px'},{opacity:1,translate:'0 0'}],{duration:duration('cards'),delay:Math.max(0,group.indexOf(el))*60,easing:'ease-out',fill:'backwards'}); }
+  function enterCard(el, group, art = null) { played.add(el);
+    const options={duration:duration('cards'),delay:Math.max(0,group.indexOf(el))*60,easing:'ease-out',fill:'backwards'};
+    animate(el,el,[{opacity:0,translate:'0 80px'},{opacity:1,translate:'0 0'}],options);
+    // 环境插画在画布外；和画布里的原图同一时刻、同一屏幕距离移动。
+    if (art) { const host=el.closest('.ts-canvas'), scale=host.getBoundingClientRect().width/host.offsetWidth;
+      animate(el,art,[{opacity:0,translate:`0 ${80*scale}px`},{opacity:1,translate:'0 0'}],options); }
+  }
+  function enterParts(host) {
+    if (!partEntry || !moving() || host.closest(gridCards)) return;
+    const sec=host.closest('.ts-screen');
+    if (!sec || sec.classList.contains('ts-entering') || sec.dataset.seen) return;
+    let group=partGroups.get(host);
+    if (!group) {
+      // 只选真正的正文组件；含卡片的容器由原有卡片进场负责，避免父子叠播。
+      group=[...host.querySelectorAll('[data-comp],.hub-stat-extra')].filter(el=>!el.closest(cards)&&!el.querySelector(cards));
+      group=group.filter(el=>!group.some(parent=>parent!==el&&parent.contains(el)));
+      partGroups.set(host,group);
+    }
+    const visibleGroup=group.filter(visible);
+    for (const el of visibleGroup) if (!played.has(el)) {
+      const art=el.matches('[data-comp=illustration]')&&el.querySelector('[data-ts-art]')?host.parentElement.querySelector(':scope > .ts-art'):null;
+      enterCard(el,visibleGroup,art);
+    }
+  }
   function enter(el) {
     if (!moving() || !visible(el) || played.has(el)) return;
     if (el.matches(gridCards)) { enterCard(el,[...el.parentElement.children].filter(visible)); return; }
@@ -93,6 +116,7 @@
     requestAnimationFrame(()=>{ queued=false; for (const host of active) {
       const gridCard=host.closest(gridCards); if(gridCard)enter(gridCard);
       decorate(host); enter(host); for (const el of host.querySelectorAll(numbers+','+cards)) enter(el);
+      enterParts(host);
       const sec=host.closest('.ts-screen'), r=sec.getBoundingClientRect(), limit=innerWidth<600?5:12.5;
       sec.style.setProperty('--sample-y',moving()?Math.max(-limit,Math.min(limit,(r.top-innerHeight*.45)*.035))+'px':'0px');
     }});
@@ -100,7 +124,8 @@
   const observer=new IntersectionObserver(entries=>{for (const row of entries) {
     const host=row.target; if (row.isIntersecting) active.add(host); else { active.delete(host); clear(host); }
   } refresh();});
-  document.fonts.ready.then(()=>root.querySelectorAll('.ts-canvas').forEach(el=>observer.observe(el)));
+  const observe=()=>root.querySelectorAll('.ts-canvas').forEach(el=>observer.observe(el));
+  if (partEntry) observe(); else document.fonts.ready.then(observe);
   addEventListener('scroll',refresh,{passive:true}); addEventListener('resize',refresh); addEventListener('pageshow',refresh);
   function sync() { if (!moving()) { for (const a of animations.keys()) a.cancel(); for (const el of root.querySelectorAll('.sample-updated')) el.classList.remove('sample-updated'); for (const host of active) if (host.classList.contains('sample-seam')) { played.delete(host); host.classList.remove('sample-seam'); } } refresh(); }
   document.addEventListener('site-motion',sync); document.addEventListener('visibilitychange',sync); reduced.addEventListener('change',sync);
