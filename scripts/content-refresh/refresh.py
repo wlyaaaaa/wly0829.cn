@@ -13,6 +13,7 @@ import time
 
 sys.dont_write_bytecode = True
 from checks import audit_pages
+from inventory import build_inventory, write_inventory
 
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
@@ -192,10 +193,13 @@ def collect(root, registry, total_seconds=120, item_seconds=6, today=None):
         except (KeyError, ValueError, StopIteration, IndexError) as exc:
             row["page_error"] = str(exc) or "页面或数字登记不存在"
             row["page_date"] = record.get("as_of")
-        if record.get("historical") or record.get("frozen"):
+        screen = next((s for s in page.get("screens", []) if s["id"] == record["screen"]), {})
+        if (record.get("historical") or record.get("frozen") or page.get("kind") == "frozen"
+                or page.get("status") in {"frozen", "冻结", "已冻结", "historical", "历史"}
+                or screen.get("section") in {"history", "evolution", "timeline"}):
             row.update(status="historical", reason="历史事实或冻结项目，本轮不重取")
         elif record.get("private"):
-            row.update(status="needs_personal_data", reason="需本人资料：仅登记个数来源，本轮未读取")
+            row.update(status="domain_fact_task", reason="领域入口事实任务：按 source_location 核对；程序未读取来源")
         elif not record.get("automatic"):
             row["reason"] = record["retrieve"].get("instructions", "人工口径，未取得新值")
         elif record.get("scope_status") != "verified":
@@ -242,7 +246,7 @@ def task_text(result, registry):
               "历史演进数字不动；检查命中是待复核线索，必要的技术事实移到技术依据层。", ""]
     for title, selected in (
         ("已重取且变化", [r for r in result["rows"] if r["status"] == "changed"]),
-        ("未取得新值", [r for r in result["rows"] if r["status"] in ("unavailable", "needs_personal_data")]),
+        ("未取得新值（含领域入口事实任务）", [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]),
         ("口径待核，不计入变化", [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]),
         ("超过七天仍待处理", [r for r in result["rows"] if r["overdue"]])):
         lines += [f"## {title}", ""]
@@ -260,7 +264,7 @@ def task_text(result, registry):
 
 def report_content(result, task):
     changed = [r for r in result["rows"] if r["status"] == "changed"]
-    missing = [r for r in result["rows"] if r["status"] in ("unavailable", "needs_personal_data")]
+    missing = [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]
     overdue = [r for r in result["rows"] if r["overdue"]]
     pending = [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]
     blocks = [{"type": "metrics", "items": [{"value": v, "label": k} for k, v in (
@@ -295,6 +299,7 @@ def main():
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--registry", type=Path)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--inventory", action="store_true", help="只清点带日期/现状的作者输入，输出分组事实任务；不重取或生成网页")
     parser.add_argument("--total-seconds", type=float, default=120)
     parser.add_argument("--item-seconds", type=float, default=6)
     parser.add_argument("--retrieve", help=argparse.SUPPRESS)
@@ -311,12 +316,17 @@ def main():
     registry = read_json(args.registry or args.root / "sources/refresh/registry.json")
     if registry.get("schema") != "content-refresh.sources.v1" or not registry.get("records"):
         parser.error("来源表格式不符或没有登记数字")
-    result = collect(args.root, registry, args.total_seconds, args.item_seconds)
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
+    inventory = build_inventory(args.root / "sources/pages", registry["records"])
+    write_inventory(output, inventory)
+    if args.inventory:
+        print(json.dumps({"status": "inventoried", "output": str(output), "coverage": inventory["coverage"]}, ensure_ascii=False))
+        return 0
     (output / "tmp").mkdir(exist_ok=True)
     for key in ("TEMP", "TMP", "TMPDIR"):
         os.environ[key] = str((output / "tmp").resolve())
+    result = collect(args.root, registry, args.total_seconds, args.item_seconds)
     task = task_text(result, registry)
     (output / "opus-task.md").write_text(task, encoding="utf-8")
     (output / "result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

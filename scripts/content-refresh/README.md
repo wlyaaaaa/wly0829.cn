@@ -1,9 +1,11 @@
 # 按需更新程序
 
-本人提出更新总看板时，AI 手动运行一次。程序读取来源表，取回能自动统计的数字，与当前 `sources/pages` 对照；生成一张结果网页和给 Opus 的任务单。本人只看网页，JSON 和 Markdown 是 AI 接续用的中间文件。本程序没有定时任务，不修改页面，不接进构建或发布，不在构建时读取本机。
+本人提出更新总看板时，AI 手动运行一次。程序读取来源表，取回能自动统计的数字，与当前 `sources/pages` 对照；生成一张结果网页、原有内容任务单，以及逐项清单和给 GPT 的分组事实任务单。本人只看网页，JSON 和 Markdown 是 AI 接续用的中间文件。本程序没有定时任务，不修改页面，不接进构建或发布，不在构建时读取本机。
 
 ```powershell
 python scripts/content-refresh/refresh.py --output E:\Cache\content-refresh\本次更新
+# 只清点当前工作树；不重取来源、不联网、不生成或打开 HTML。
+python scripts/content-refresh/refresh.py --inventory --output E:\Cache\content-refresh\本次清点
 ```
 
 默认总重取时限 120 秒、每个来源 6 秒，可用 `--total-seconds`、`--item-seconds` 调整。来源读取在独立隐藏进程中运行，超时停止该读取及其子进程，再处理下一条；总时限耗尽后剩余来源标为未取得新值。页面检查和网页生成另算时间，网页生成最多 180 秒。相同重取办法只读一次，复用于多个页面。只读另一份内容快照时，用 `--root <含 sources/pages 的快照根目录> --registry <本程序来源表绝对路径>`；无需切换或修改样板。
@@ -12,7 +14,15 @@ python scripts/content-refresh/refresh.py --output E:\Cache\content-refresh\本�
 
 来源表在 `sources/refresh/registry.json`。`current_value` 是登记时页面值，`refreshed_value` 是上一轮清单值，两者均不是新验证。每次运行通过 `page_number` 或 `page_pattern` 从当前页重读旧值，定位失败就报未取得新值，不用登记值冒充。自动数字使用 `page_number` 时，还核对该值确实出现在所属正文中；正文已变而登记未同步时要求重绑，不能把过期登记报成页面现值。这个核对只能发现值已消失的失配，无法代替 Opus 判断同屏多个同值数字的语义。`affected_screens` 保留同口径的其他位置，Opus 更新时需一起核对并同步 `registry.numbers`。首页的动态占位符从本仓库页面登记统计，不改回写死数字。
 
-`private=true` 的条目始终只登记去哪取个数，本程序不读取它。AI 需要这些数字时交回已授权的领域入口办理；本轮标“需本人资料”。`historical=true` 或 `frozen=true` 不重取，历史演进数字保持当时的事实。无法保持原统计口径的发现命令、端到端结果、人工审阅计数也标人工，不把代码行数、测试定义数当作测试通过结果。
+`private=true` 的条目本程序不读取，状态为 `domain_fact_task`，进入 `fact-tasks.md`：事实子代理按 `source_location` 找所属领域入口取数，公开内容按活动公开分级原文和页面规则办理。未绑定当前展示位置的私人登记另列“展示位置待复核”，不能冒充已定位或已自动取数。`historical=true` 或 `frozen=true` 不重取，历史演进数字保持当时的事实。无法保持原统计口径的发现命令、端到端结果、人工审阅计数也标人工，不把代码行数、测试定义数当作测试通过结果。
+
+## 逐项清单与事实分工
+
+默认刷新和 `--inventory` 都写 `dated-inventory.json`、`fact-tasks.md`；清点模式只写这两份。`--root` 默认仍是脚本所在的当前仓库根，可显式选择含 `sources/pages` 的另一快照。遍历全部 `sources/pages/*/page.json`，保留每处“截至”的字段和字符范围，清点 `status_line.as_of/last/state/facts`、首屏数字卡和来源注。首屏卡片复用现有正文解析器，`source_note` 读取相邻 `layout.json` 的对应原文，不执行转换或排版。
+
+每项有页、屏、`field`、字符范围、行号、原文、原日期、来源记录 id、能否自动重取。`surface=visible` 表示展示文字；`author` 是构图和内部笔记；`reference` 是数字登记等参考副本。原文件“截至”总数由 `coverage.cutoff_occurrences/cutoff_surfaces` 分开报告，不能把构图、笔记、登记副本都算成展示事实；后两类不生成新的取数任务，私人来源登记位置待复核项例外。未登记展示项标“待登记·人工取数”。
+
+来源匹配必须同时对上页、屏和实际字段/唯一捕获范围，或所属 `page_number` 的完整原话；一个孤立数字、同屏另一项已有来源、匹配多处的泛化表达或过期登记都不算绑定。`automatic=true` 还要求公开来源、非历史/冻结且统计口径已核实，它只说明具备自动重取办法，清点模式从不执行。来源注引用只差数字时按转换器的归一方式找到当前段落，仍无法定位时明确交人工复核。来源项目按已有路径身份归组，同一项目仅大小写或连字符不同的名字统一到现有项目页标识，每组最多 25 项；缺来源先核对页面所属项目的领域入口。历史/冻结项留在清单，`requires_refresh=false`，不自动激活。
 
 重取器只支持固定的只读办法：Git 提交数；文件或行数（可限定 Git 跟踪文件、递归包含和排除模式；`nonempty` 排除空白行，`empty_only` 只排空字符串行、保留纯空白行，`newline_only` 复现 `wc -l`）；JSON 标量或数组长度；活动规则正式 Inspect 结果；正则出现次数；本仓库页面数、功能数、首页组成员数。每条自动来源写明 `measurement_scope` 和 `scope_status`，仅 `verified` 才执行、比较；缺失或 `pending` 标“口径待核”，不算变化。范围、单位、是否含测试或网页成片、约数不同都不能用 offset 凑。文本按 UTF-8 或明确 UTF-16/32 标记读取；未匹配代码文件报取不到。`scale`、`round_to`、`digits` 用于复现原单位和近似数。没有任意 shell 命令字段；实测使用现有 Python 3.14。
 
