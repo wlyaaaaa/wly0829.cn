@@ -34,6 +34,34 @@ class StrictTests(unittest.TestCase):
         inventory = build_inventory(self.root, records, entries)
         return inventory, strict_findings(inventory, records, entries)
 
+    def test_cutoff_is_nearby_date_not_function_quantity_version_or_path(self):
+        samples = ["回答时说明截至哪天，只补读之后的记录。另有记录在2026年10月11日。",
+                   "说明截至哪天\n\n别的数字截至2026-10-11", "截至7/8组任务", "截至版本v1.2.3", "截至1.2.3",
+                   "截至E:/2026/10/11/logs", "截至2026/10/11/logs"]
+        for text in samples:
+            with self.subTest(text=text):
+                self.page["screens"][0]["text"] = text
+                self.write_page()
+                dates = [i for i in build_inventory(self.root, [])["items"] if i["kind"] == "as_of"]
+                self.assertEqual(len(dates), int("别的数字截至" in text))
+
+    def test_actual_cutoff_spellings_and_explicit_surfaces_remain(self):
+        spellings = ["2026 年 10 月 11 日", "2026-10-11", "2026/10/11", "10月1日至10月11日",
+                     "2026-10-01—2026-10-11", "10月1—11日", "二〇二六年十月十一日", "10月底",
+                     "2026年99月32日", "10月11日13:33", "{{projects-home.based_on.as_of}}"]
+        for value in spellings:
+            with self.subTest(value=value):
+                self.page["screens"][0]["text"] = "截至北京时间 " + value
+                self.write_page()
+                dates = [i for i in build_inventory(self.root, [])["items"] if i["kind"] == "as_of"]
+                self.assertEqual([i["original_date"] for i in dates], [value.removesuffix("13:33")])
+        self.page["screens"][0].update(text="说明截至哪天", source_note="来源截至2026-10-11")
+        self.page["status_line"].update(as_of="2026-10-11", last={"at": "2026-10-10"})
+        self.write_page()
+        inventory = build_inventory(self.root, [])
+        self.assertEqual({i["kind"] for i in inventory["items"]},
+                         {"as_of", "source_note", "status_line.as_of", "status_line.last", "status_line.state"})
+
     def test_suggestion_does_not_register_cutoff_and_reports_original(self):
         inventory, findings = self.check([self.number])
         self.assertEqual(len(findings), 1)
