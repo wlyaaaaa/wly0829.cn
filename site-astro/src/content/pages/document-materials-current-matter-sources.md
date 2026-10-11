@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-current-matter-sources/page.json",
   "sha256": "b41a530780f2d660122a65e7e53661b40c4a33ec610a0e809d87e99cbe29c5d9",
-  "converted_at_beijing": "2026-10-11T19:07:10+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

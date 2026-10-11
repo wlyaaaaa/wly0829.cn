@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/document-materials-signature-delivery-version/page.json",
   "sha256": "99678c72761bce97da11f1c3c2b7036547a2dc62fd2211d78f04a85617b2578e",
-  "converted_at_beijing": "2026-10-11T19:07:10+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

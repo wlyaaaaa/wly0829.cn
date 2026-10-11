@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-dialogue-revision/page.json",
   "sha256": "bd1d23a687497bf8218702225918577fb7fbcdffd38addda53ae0944264d28bc",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -433,7 +433,8 @@ AI 只重复原答案、静默改口、一被质疑就附和，或把异议记�
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

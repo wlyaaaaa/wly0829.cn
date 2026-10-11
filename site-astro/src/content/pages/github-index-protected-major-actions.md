@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/github-index-protected-major-actions/page.json",
   "sha256": "5a3bc161bc68228729f364c360fb8c4a5d1a3103944a8ba4391359719d450914",
-  "converted_at_beijing": "2026-10-11T19:07:10+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@ GitHub 总索引 · 功能说明
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

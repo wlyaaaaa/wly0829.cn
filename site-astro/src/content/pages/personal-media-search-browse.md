@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-media-search-browse/page.json",
   "sha256": "221fd13f911cff93f87c2f12c48cfec19ef54d19e2275da00c0b2a6423ecde15",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

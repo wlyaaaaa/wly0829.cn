@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-authoritative-research/page.json",
   "sha256": "7f43a5bd0d8ac7c5d51c93a654e51a72f347c69725f5b0bc21a1d2d05ec7edad",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -341,7 +341,8 @@ AI 协作学习 · 功能说明
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-media-cloud-candidates/page.json",
   "sha256": "d6b4493558612bf393716e217df05629de8247d66479e0e64f5d336396856e3f",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

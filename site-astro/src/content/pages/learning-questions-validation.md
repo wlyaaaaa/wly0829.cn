@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-questions-validation/page.json",
   "sha256": "c7f4b07aad4bf9438be0e1dfa000e9cebe28140d7ee3817ffe779f1087560408",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -433,7 +433,8 @@ AI 协作学习 · 功能说明
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

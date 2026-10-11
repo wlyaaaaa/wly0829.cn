@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/work-delivery-evidence-quality/page.json",
   "sha256": "c10485b03909fe9c27201e0672460376afcbb8b5b0a643f7ca35ada1fa1082cc",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@ AI把准备写进交付物的金额、日期、范围和负责人逐项对回选
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

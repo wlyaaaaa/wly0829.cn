@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-materials-verified-open/page.json",
   "sha256": "ce16e84ae0b276874afb0ec3024ebcabbe5361a7134498d0c6b4ebc15ad4242d",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

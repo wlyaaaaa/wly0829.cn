@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/wechat-direct-account-source-identity/page.json",
   "sha256": "30910c3a8fd8e03a740acb09486b71ffeb470f0221ed49bbae923f1543647f00",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -435,7 +435,8 @@ WeChatDirect · 功能说明
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

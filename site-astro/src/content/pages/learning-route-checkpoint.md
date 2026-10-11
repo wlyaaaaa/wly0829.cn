@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-route-checkpoint/page.json",
   "sha256": "b3618896848107ab9a03c6117cb0512491ab357c90449f9311bc590cd7c9af87",
-  "converted_at_beijing": "2026-10-11T19:07:11+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
  }
 }
 ---
@@ -433,7 +433,8 @@ AI 先根据目标和材料准备一份完整、可修改的阶段大纲，说�
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/personal-media-phone-recovery/page.json",
   "sha256": "c71510b0bc20bb0221061b8080e567d80430737a42c7041a7550c4beddf805cc",
-  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -431,7 +431,8 @@ G 盘、计划或选定原件不可用时停止恢复同步，保留已有恢复
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",

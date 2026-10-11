@@ -41,7 +41,7 @@
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
   "sha256": "4f789515856e65c4b61ba6cf690c2441f4fd58a23b8adf5d2bb69d7632200a53",
-  "converted_at_beijing": "2026-10-11T19:47:52+08:00"
+  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
  }
 }
 ---
@@ -442,7 +442,8 @@
      "text_ref": "需要准备什么",
      "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+     "width": "40%"
     },
     {
      "type": "section_heading",
