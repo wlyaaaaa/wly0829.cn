@@ -172,6 +172,37 @@ class RetentionTests(unittest.TestCase):
              patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)):
             self.assertEqual(retention.predecessor(), {'release_id': 'actual-old-ref'})
 
+    def test_finalized_hybrid_without_named_ref_uses_exact_frozen_predecessor_and_known_rollback(self):
+        current = {'schema': 'wly.hybrid-release.v1', 'finalized_dist': True, 'release_id': 'current',
+                   'files': {}, 'routes': {}, 'baseline_production_commit': 'a'*40,
+                   'previous_oss_source': 'published', 'previous_release_id': 'previous',
+                   'oss': {'schema': 'wly.oss-assets.v1', 'asset_base_url': retention.BASE,
+                           'objects': {'x': {'key': self.keep}}, 'reference_keys': [self.pending]}}
+        snapshot = self.preparation/'previous-publication.json'
+        retention.write(snapshot, {'schema': 'wly.hybrid-release.v1', 'release_id': 'previous',
+            'oss': {'asset_base_url': retention.BASE, 'objects': {'x': {'key': self.obsolete, **self.fingerprint}}}})
+        plan = {'previous_publication_sha256': retention.digest(snapshot)}
+        inventory = self.shared/'rollback-retention.json'
+        retention.write(inventory, {'schema': 'wly.oss-rollback-retention.v1', 'bucket': retention.BUCKET, 'records': {}})
+        self.args.rollback = None; self.args.dry_run = True
+        with patch.object(retention, 'shared', return_value=self.shared), patch.object(retention, 'manifest', return_value=current), \
+             patch.object(retention, 'predecessor', return_value=current), \
+             patch.object(retention, 'plan_pin', return_value=(self.shared/'pins/own.json', {}, plan)), \
+             patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)), \
+             patch.object(retention, 'exact_versions', return_value={}) as listings, \
+             patch.object(retention, 'command', return_value='live refs/heads/site-dist') as commands:
+            baseline = retention.digest(inventory)
+            self.assertEqual(retention.collect(self.args), 0)
+            self.assertEqual(listings.call_args.args[2], []); self.assertEqual(commands.call_count, 1)
+            self.assertEqual(retention.digest(inventory), baseline)
+            retention.write(inventory, {'schema': 'unknown', 'bucket': retention.BUCKET, 'records': {}})
+            with self.assertRaisesRegex(ValueError, 'Unknown rollback'): retention.collect(self.args)
+            retention.write(inventory, {'schema': 'wly.oss-rollback-retention.v1', 'bucket': retention.BUCKET, 'records': {}})
+            snapshot.write_text('{}')
+            with self.assertRaisesRegex(ValueError, 'snapshot changed'): retention.collect(self.args)
+            current['schema'] = 'unknown'
+            with self.assertRaisesRegex(ValueError, 'Only the finalized hybrid'): retention.collect(self.args)
+
     def test_retire_exact_pin_after_preparation_disappeared(self):
         pin_id = 'a'*64; pin_path = self.shared/'pins'/(pin_id+'.json')
         retention.write(pin_path, {'plan_sha256': 'original', 'plan': str(self.root/'missing/oss-plan.json')})
