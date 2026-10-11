@@ -10,6 +10,11 @@
 .cp-page img { max-width: 100%; height: auto; }
 .cp-page a { color: var(--cp-title); }
 .cp-section { padding: 28px 0 8px; border-top: 1px solid #edf5ef; scroll-margin-top: 120px; }
+/* 从其他页跳进来的落点：留出页头和目录条的高度 */
+.cp-anchor { display: block; height: 0; overflow: hidden; scroll-margin-top: 130px; }
+.cp-anchors { height: 0; }
+#grafana, #remote, .cp-proj[id], .cp-chips li[id] { scroll-margin-top: 130px; }
+.cp-proj:target, .cp-chips li:target, #remote:target { outline: 3px solid #9ddcae; outline-offset: 2px; }
 .cp-section:first-child { border-top: 0; }
 .cp-head { display: flex; align-items: flex-end; gap: 18px; flex-wrap: wrap; margin-bottom: 14px; }
 .cp-head h2 { margin: 0; line-height: 0; }

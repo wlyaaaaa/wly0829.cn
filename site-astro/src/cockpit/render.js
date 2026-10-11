@@ -5,6 +5,7 @@ import { hm, when, light, splitChecked, dedupeCards, isToday } from './model.js'
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
 const src = (ctx, name) => ctx?.img?.[name] || '/assets/cockpit/' + name;
+const anchor = (id) => `<span class="cp-anchor" id="${esc(id)}"></span>`;
 const dot = (state) => `<span class="cp-dot is-${light(state)}" aria-hidden="true"></span>`;
 const notRead = (at, now) => `还没读到${at ? `（上次 ${esc(when(at, now))}）` : ''}`;
 const copyBtn = (id, label = '复制给 AI') => (id ? `<button type="button" class="cp-btn" data-copy-ai="${esc(id)}">${label}</button>` : '');
@@ -52,7 +53,7 @@ export function needYou(v, ctx) {
   const wait = v.deferred.length
     ? `<h3 class="cp-sub">等条件到了再做（${v.deferred.length} 项）</h3><ul class="cp-list cp-wait">${v.deferred.map((x) => `<li><b>${esc(x.done_when || '你方便时')}</b><span>${esc(splitChecked(x.title).title)}</span></li>`).join('')}</ul>`
     : '';
-  return body + ai + wait;
+  return anchor('pending') + body + ai + wait;
 }
 
 // 电脑：读数卡 + 两张 Grafana 曲线卡 + 远程和网络
@@ -65,30 +66,39 @@ export function computer(v, ctx) {
   // Grafana 后台登录：根地址来自接口，后面拼 login；接口没给地址就不出这张卡
   const login = g.url ? `<a class="cp-card cp-chart cp-login" href="${esc(new URL('login', g.url).href)}" target="_blank" rel="noopener"><h3><span class="cp-login-icon" aria-hidden="true"></span>Grafana 后台登录 →</h3><p>登录后看全部图表、改面板（新标签页）。</p></a>` : '';
   const cards = dedupeCards(v.sections.computer).map((c) => card(c, ctx.now)).join('');
-  const remote = dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now);
-  return `<div class="cp-grid">${cards}${remote}</div><div class="cp-grid cp-charts">${graf}${login}</div>`;
+  const remote = (dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now)).replace('<article ', '<article id="remote" ');
+  return `<div class="cp-grid">${cards}${remote}</div><div id="grafana" class="cp-grid cp-charts">${graf}${login}</div>`;
 }
 
 export function backup(v, ctx) {
   const cards = dedupeCards(v.sections.backup_cloud).map((c) => card(c, ctx.now)).join('');
-  return `<div class="cp-grid">${cards || card({ title: '备份', state: 'unavailable', text: '' }, ctx.now)}</div>`;
+  return anchor('backups') + `<div class="cp-grid">${cards || card({ title: '备份', state: 'unavailable', text: '' }, ctx.now)}</div>`;
 }
 
 // 项目：在用的每个一张小卡；冻结的只列名字
+// 其他页面“看驾驶舱”的链接落点：/cockpit/#<项目名>，项目名取项目页地址里的那一段；旧链接里的别名也认
+const slugOf = (url) => (/^\/projects\/([^/]+)\/$/.exec(url || '') || [])[1] || '';
+const ALIAS = { 'github-index': ['github-local-index'] };
+const idsOf = (slug) => (slug ? [slug, ...(ALIAS[slug] || [])] : []);
 export function projects(v, ctx) {
   const items = v.projects.items;
-  if (!items.length) return `<p class="cp-empty">${dot('unavailable')}${notRead(v.projects.observed_at, ctx.now)}</p>`;
+  if (!items.length) return `<div class="cp-anchors">${[...new Set(Object.values(ctx.projectUrls || {}).map(slugOf).flatMap(idsOf))].filter(Boolean).map(anchor).join('')}</div><p class="cp-empty">${dot('unavailable')}${notRead(v.projects.observed_at, ctx.now)}</p>`;
   const live = items.filter((p) => p.mode !== 'frozen_static'), frozen = items.filter((p) => p.mode === 'frozen_static');
   const stateOf = (p) => (p.waiting_user > 0 ? 'red' : ['ok', 'not_applicable'].includes(p.run_health) && p.overview === 'ok' ? 'ok' : ['error', 'failed', 'red'].includes(p.run_health) || ['error', 'red'].includes(p.overview) ? 'red' : ['warn', 'attention'].includes(p.run_health) || ['warn', 'attention'].includes(p.overview) ? 'attention' : ['ok', 'not_applicable'].includes(p.run_health) || p.overview === 'ok' ? 'ok' : 'unavailable');
   const name = (p) => (ctx.projectUrls?.[p.name] ? `<a href="${esc(ctx.projectUrls[p.name])}">${esc(p.name)}</a>` : esc(p.name));
   const card1 = (p, s) => {
     const wait = [p.waiting_user ? `等你 ${p.waiting_user} 件` : '', p.waiting_ai ? `等 AI ${p.waiting_ai} 件` : '', p.on_hold ? `暂缓 ${p.on_hold} 件` : ''].filter(Boolean).join(' · ');
-    return `<article class="cp-proj is-${light(s)}"><h3>${dot(s)}${name(p)}</h3>${p.health_reason ? `<p>${esc(p.health_reason)}</p>` : ''}${wait ? `<p class="cp-meta">${esc(wait)}</p>` : ''}</article>`;
+    const [id, ...more] = idsOf(slugOf(ctx.projectUrls?.[p.name]));
+    return `<article class="cp-proj is-${light(s)}"${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}<h3>${dot(s)}${name(p)}</h3>${p.health_reason ? `<p>${esc(p.health_reason)}</p>` : ''}${wait ? `<p class="cp-meta">${esc(wait)}</p>` : ''}</article>`;
   };
   const busy = live.filter((p) => stateOf(p) !== 'ok' || p.waiting_user > 0), calm = live.filter((p) => !busy.includes(p));
   const cards = busy.map((p) => card1(p, stateOf(p))).join('');
-  const chips = calm.map((p) => `<li>${dot('ok')}${name(p)}</li>`).join('');
-  return (cards ? `<div class="cp-grid cp-grid-proj">${cards}</div>` : '')
+  const chips = calm.map((p) => { const [id, ...more] = idsOf(slugOf(ctx.projectUrls?.[p.name])); return `<li${id ? ` id="${esc(id)}"` : ''}>${more.map(anchor).join('')}${dot('ok')}${name(p)}</li>`; }).join('');
+  // 驾驶舱里没有的项目（冻结的、接口没给的），锚点落在项目区开头
+  const shown = new Set(live.flatMap((p) => idsOf(slugOf(ctx.projectUrls?.[p.name]))));
+  const rest = [...new Set(Object.values(ctx.projectUrls || {}).map(slugOf).flatMap(idsOf))].filter((id) => id && !shown.has(id));
+  return `<div class="cp-anchors">${rest.map(anchor).join('')}</div>`
+    + (cards ? `<div class="cp-grid cp-grid-proj">${cards}</div>` : '')
     + (chips ? `<h3 class="cp-sub">正常运行的 ${calm.length} 个</h3><ul class="cp-chips">${chips}</ul>` : '')
     + (frozen.length ? `<p class="cp-line cp-frozen">${dot('unavailable')}冻结的 ${frozen.length} 个（AI 不再维护）：${frozen.map(name).join('、')}</p>` : '');
 }
