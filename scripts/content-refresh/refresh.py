@@ -18,6 +18,7 @@ sys.dont_write_bytecode = True
 from checks import audit_pages
 from inventory import build_inventory, write_inventory, strict_findings
 from validation import LEDGER, validate_entries, validate_method, registry_errors, positive
+from apply_edits import qualified_date_review
 
 ROOT = Path(__file__).resolve().parents[2]
 BEIJING = timezone(timedelta(hours=8))
@@ -287,7 +288,10 @@ def page_value(record, page, root):
             raise ValueError("展示字段须定位字符串或标量")
         text = str(text)
         if "start" in record:
-            text = text[record["start"]:record["end"]]
+            start, end = record["start"], record["end"]
+            if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text):
+                raise ValueError("页面字符范围无效，保留旧日期/数值")
+            text = text[start:end]
             return text, observed
         if not record.get("page_pattern") and not record.get("page_number"):
             return text, observed
@@ -397,8 +401,11 @@ def collect(root, registry, total_seconds=300, item_seconds=6, today=None, entri
                 row["reason"] = "被注明数字含 Unknown 或日期定位无效，保留旧截至日期"
             else:
                 value = min(timestamp(r["source_observed_at"]).date().isoformat() for r in qualified)
-                row.update(new_value=value, source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
-                           status="unchanged" if row["old_value"] == value else "changed", reason="被注明数字最早观察日期")
+                review = qualified_date_review(catalog[row["page"]], row)
+                row.update(new_value=None if review else value, date_candidate=value, manual_review_reason=review,
+                           source_observed_at=min(r["source_observed_at"] for r in qualified), scope_status="verified",
+                           status="manual_review" if review else "unchanged" if row["old_value"] == value else "changed",
+                           reason=review or "被注明数字最早观察日期")
     audit = audit_pages(root / "sources/pages", today, registry.get("retired_names", []))
     for finding in audit["findings"]:
         finding["page_title"] = catalog.get(finding["page"].split("/")[0], {}).get("title", finding["page"])
@@ -418,6 +425,7 @@ def task_text(result, registry):
               "只改变化的句子及受影响的同页解释，并同步数字登记；成功重取的过期数字更新日期。取不到时保留原日期并移出首屏。",
               "历史演进数字不动；检查命中是待复核线索，必要的技术事实移到技术依据层。", ""]
     for title, selected in (
+        ("日期口径需人工核对（不自动替换）", [r for r in result["rows"] if r["status"] == "manual_review"]),
         ("已重取且变化", [r for r in result["rows"] if r["status"] == "changed"]),
         ("未取得新值（含领域入口事实任务）", [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]),
         ("口径待核，不计入变化", [r for r in result["rows"] if r.get("automatic") and r.get("scope_status") != "verified"]),
@@ -443,7 +451,7 @@ def report_content(result, task):
     blocks = [{"type": "metrics", "items": [{"value": v, "label": k} for k, v in (
         ("检查页面", result["pages_checked"]), ("登记数字", result["numbers_checked"]),
         ("重取后变化", len(changed)), ("未取得新值", len(missing)), ("写法命中", len(result["findings"])))]}]
-    for title, selected in (("同口径的真变化", changed), ("口径待核，不计入变化", pending), ("取不到哪些", missing), ("超过七天待处理", overdue)):
+    for title, selected in (("同口径的真变化", changed), ("日期口径需人工核对，不自动替换", [r for r in result["rows"] if r["status"] == "manual_review"]), ("口径待核，不计入变化", pending), ("取不到哪些", missing), ("超过七天待处理", overdue)):
         blocks += [{"type": "heading", "text": title}, {"type": "table", "columns":
             ["页 / 段", "数字含义", "页面旧数", "重取新数", "原日期", "来源与说明"], "rows":
             [[r["page_title"] + " / " + r["screen_title"] + "（" + r["screen"] + "）", r["label"], str(r["old_value"]) if r["old_value"] is not None else "未绑定正文数字",
