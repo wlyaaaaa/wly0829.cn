@@ -381,7 +381,7 @@
 #computer-access-01.o3-ready a.hotspot[href="/mcp/"] { grid-column: 11 / 13; grid-row: 3; }
 #computer-access-01.o3-ready :is([data-b2-action="refresh"], a.hotspot[href="/cockpit/#pc"], a.hotspot[href="/mcp/"]) { width: auto !important; height: 52px !important; }
 /* 三张卡：底板 + 标题说明 + 运行件状态卡 + 按钮 */
-#computer-access-01 .o3-card { grid-row: 4 / 7; align-self: stretch; border: 1.5px solid #cfe9d8; border-radius: 18px;
+#computer-access-01 .o3-card { grid-row: 4 / 8; align-self: stretch; border: 1.5px solid #cfe9d8; border-radius: 18px;
   background: linear-gradient(170deg, #f6fcf8 0%, #fff 60%); box-shadow: 0 6px 18px rgba(20, 110, 60, .06); margin-top: 18px; }
 #computer-access-01 .o3-head { grid-row: 4; display: grid; grid-template-columns: 64px 1fr; column-gap: 14px; align-items: center; padding: 40px 22px 0; }
 #computer-access-01 .o3-icon { width: 64px; height: 64px; }
@@ -398,8 +398,11 @@
 #computer-access-01.o3-ready :is([data-b2-action="choose-personal_data"], [data-b2-action="lock-personal-data"]) { grid-column: 1 / 5; }
 #computer-access-01.o3-ready :is([data-b2-action="choose-unrestricted"], [data-b2-action="lock-unrestricted"]) { grid-column: 5 / 9; }
 #computer-access-01.o3-ready [data-b2-action="lock-windows"] { grid-column: 9 / 13; }
-#computer-access-01.o3-ready :is([data-b2-action^="choose-"], [data-b2-action^="lock-"]) { grid-row: 6; justify-self: start; margin: 4px 0 22px 22px; height: 48px !important; width: auto !important; min-width: 96px; padding: 0 22px; }
+#computer-access-01.o3-ready :is([data-b2-action^="choose-"], [data-b2-action^="lock-"]) { grid-row: 6; justify-self: start; margin: 4px 0 0 22px; height: 48px !important; width: auto !important; min-width: 96px; padding: 0 22px; }
 #computer-access-01.o3-ready :is([data-b2-action="lock-personal-data"], [data-b2-action="lock-unrestricted"]) { margin-left: 134px; }
+#computer-access-01 .o3-why { grid-row: 7; margin: 10px 22px 20px; min-height: 1.6em; font-size: 14px; line-height: 1.6; color: #8a6a1c; }
+#computer-access-01 .o3-why:not(:empty)::before { content: "●"; margin-right: 6px; color: #e0a400; font-size: 10px; vertical-align: 2px; }
+#computer-access-01 .o3-why:empty { min-height: 0; margin-top: 0; margin-bottom: 18px; }
 /* 按钮外观统一（原来是整屏图里画的） */
 #computer-access-01.o3-ready :is(button.b2-image-action, a.hotspot[href="/cockpit/#pc"], a.hotspot[href="/mcp/"]) {
   display: flex !important; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; cursor: pointer;
@@ -413,7 +416,7 @@
 #computer-access-01.o3-ready button.b2-image-action:disabled { background: #f1f4f2 !important; color: #8fa498 !important; border-color: #d3dfd7 !important; box-shadow: none; cursor: not-allowed; }
 #computer-access-01 a.hotspot[href="/cockpit/#pc"]::after { content: "看驾驶舱"; }
 #computer-access-01 a.hotspot[href="/mcp/"]::after { content: "连接电脑"; }
-#computer-access-01 .o3-legend { grid-column: 1 / 13; grid-row: 7; display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 10px 0 0; padding: 12px 18px;
+#computer-access-01 .o3-legend { grid-column: 1 / 13; grid-row: 8; display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 10px 0 0; padding: 12px 18px;
   border-radius: 12px; background: #f4fbf6; color: #2e4675; font-size: 15px; list-style: none; }
 #computer-access-01 .o3-legend li { display: inline-flex; align-items: center; gap: 8px; }
 #computer-access-01 .o3-legend i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; box-sizing: border-box; }
@@ -435,15 +438,18 @@
   #computer-access-01.o3-ready :is([data-b2-action="refresh"], a.hotspot[href="/cockpit/#pc"], a.hotspot[href="/mcp/"]) { height: 48px !important; font-size: 16px !important; }
   #computer-access-01 :is(.o3-c1, .o3-c2, .o3-c3),
   #computer-access-01.o3-ready :is([data-b2-slot="ca-personal-data"], [data-b2-slot="ca-unrestricted"], [data-b2-slot="ca-windows"], [data-b2-action^="choose-"], [data-b2-action^="lock-"]) { grid-column: 1 / 4; }
-  #computer-access-01 .o3-c1:not(.o3-head) { grid-row: 6 / 9; } #computer-access-01 .o3-c2:not(.o3-head) { grid-row: 9 / 12; } #computer-access-01 .o3-c3:not(.o3-head) { grid-row: 12 / 15; }
-  #computer-access-01 .o3-head.o3-h1 { grid-row: 6; } #computer-access-01 .o3-head.o3-h2 { grid-row: 9; } #computer-access-01 .o3-head.o3-h3 { grid-row: 12; }
+  #computer-access-01 .o3-c1:not(.o3-head, .o3-why) { grid-row: 6 / 10; } #computer-access-01 .o3-c2:not(.o3-head, .o3-why) { grid-row: 10 / 14; } #computer-access-01 .o3-c3:not(.o3-head, .o3-why) { grid-row: 14 / 18; }
+  #computer-access-01 .o3-head.o3-h1 { grid-row: 6; } #computer-access-01 .o3-head.o3-h2 { grid-row: 10; } #computer-access-01 .o3-head.o3-h3 { grid-row: 14; }
+  #computer-access-01 .o3-why.o3-c1 { grid-row: 9; } #computer-access-01 .o3-why.o3-c2 { grid-row: 13; } #computer-access-01 .o3-why.o3-c3 { grid-row: 17; }
+  #computer-access-01 .o3-why { margin: 8px 18px 18px; }
+  #computer-access-01 .o3-why:empty { margin: 0 0 14px; }
   #computer-access-01.o3-ready [data-b2-slot="ca-personal-data"] { grid-row: 7; }
-  #computer-access-01.o3-ready [data-b2-slot="ca-unrestricted"] { grid-row: 10; }
-  #computer-access-01.o3-ready [data-b2-slot="ca-windows"] { grid-row: 13; }
+  #computer-access-01.o3-ready [data-b2-slot="ca-unrestricted"] { grid-row: 11; }
+  #computer-access-01.o3-ready [data-b2-slot="ca-windows"] { grid-row: 15; }
   #computer-access-01.o3-ready :is([data-b2-action="choose-personal_data"], [data-b2-action="lock-personal-data"]) { grid-row: 8; }
-  #computer-access-01.o3-ready :is([data-b2-action="choose-unrestricted"], [data-b2-action="lock-unrestricted"]) { grid-row: 11; }
-  #computer-access-01.o3-ready [data-b2-action="lock-windows"] { grid-row: 14; }
-  #computer-access-01 .o3-legend { grid-column: 1 / 4; grid-row: 15; gap: 6px 16px; font-size: 14px; }
+  #computer-access-01.o3-ready :is([data-b2-action="choose-unrestricted"], [data-b2-action="lock-unrestricted"]) { grid-row: 12; }
+  #computer-access-01.o3-ready [data-b2-action="lock-windows"] { grid-row: 16; }
+  #computer-access-01 .o3-legend { grid-column: 1 / 4; grid-row: 18; gap: 6px 16px; font-size: 14px; }
   #computer-access-01 .o3-head { padding: 30px 18px 0; grid-template-columns: 52px 1fr; }
   #computer-access-01 .o3-icon { width: 52px; height: 52px; }
   #computer-access-01 .o3-head h2 { font-size: 21px; }
@@ -638,11 +644,47 @@ Windows
       crop(h.querySelector('.o3-icon'), ...box);
       nodes.push(h);
     }
+    for (const [card] of cards) nodes.push(Object.assign(make('p', 'o3-why ' + card), { role: 'status' }));
     nodes.push(make('ul', 'o3-legend', '<li><i style="background:#1f9d55"></i>绿：开着</li><li><i style="background:#9aa5a0"></i>灰：锁着、关着</li><li><i style="background:#e0a400"></i>黄：正在变</li><li><i style="background:#d64040"></i>红：出错</li><li><i style="border:2px solid #9aa5a0"></i>空心灰圈：读不到</li>'));
     screen.prepend(...nodes);
     screen.classList.add('o3-ready');
   }
-  const start = () => { if (screen.querySelector('[data-b2-action="refresh"]') && screen.querySelector('[data-b2-slot="ca-windows"]')) build(); };
-  new MutationObserver(start).observe(screen, { childList: true, subtree: true });
+  // 按钮变灰时写明原因：只读运行件已经显示的状态，不改按钮的启用条件和请求。
+  // 原有 title 第一次存进 data-base-title，恢复时用它。
+  const groups = { 'o3-c1': ['choose-personal_data', 'lock-personal-data'], 'o3-c2': ['choose-unrestricted', 'lock-unrestricted'], 'o3-c3': ['lock-windows'] };
+  const slotText = slot => screen.querySelector('[data-b2-slot="' + slot + '"] .live-status-state')?.textContent || '';
+  function reasonFor(action, offline, last) {
+    if (offline) return '读不到电脑，暂时不能办理' + (last ? '（上次读到 ' + last + '）' : '');
+    if (action === 'lock-personal-data' && /锁着|已锁/.test(slotText('ca-personal-data'))) return '个人资料现在就锁着，不用再锁';
+    if (action === 'lock-unrestricted' && /关着|未开/.test(slotText('ca-unrestricted'))) return '无限制授权现在关着，没有可结束的';
+    if (action === 'lock-windows' && /已锁屏/.test(slotText('ca-windows'))) return 'Windows 现在已经锁屏';
+    return '';
+  }
+  let pending = false;
+  function explain() {
+    pending = false;
+    if (!screen.classList.contains('o3-ready')) return;
+    const offline = document.body.dataset.b2StatusPhase === 'error';
+    const last = ((screen.querySelector('[data-b2-slot="ca-connection"]')?.textContent || '').match(/上次[^0-9]*(\d{1,2}:\d{2})/) || [])[1] || '';
+    for (const [card, actions] of Object.entries(groups)) {
+      const lines = [];
+      for (const action of actions) {
+        const b = screen.querySelector('button[data-b2-action="' + action + '"]');
+        if (!b) continue;
+        if (!Object.hasOwn(b.dataset, 'baseTitle')) b.dataset.baseTitle = b.getAttribute('title') || '';
+        const reason = b.disabled ? reasonFor(action, offline, last) : '';
+        const title = reason ? (b.dataset.baseTitle ? b.dataset.baseTitle + '：' : '') + reason : b.dataset.baseTitle;
+        if (b.getAttribute('title') !== title) b.setAttribute('title', title);
+        if (reason && !lines.includes(reason)) lines.push(reason);
+      }
+      const why = screen.querySelector('.o3-why.' + card);
+      const text = lines.join('；');
+      if (why && why.textContent !== text) why.textContent = text;
+    }
+  }
+  const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(explain); } };
+  const start = () => { if (screen.querySelector('[data-b2-action="refresh"]') && screen.querySelector('[data-b2-slot="ca-windows"]')) build(); schedule(); };
+  new MutationObserver(start).observe(screen, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'], characterData: true });
+  new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['data-b2-status-phase'] });
   start();
 })();</script></body></html>
