@@ -3,6 +3,47 @@ from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
 class PublishTests(unittest.TestCase):
+    def test_post_acceptance_retirement_binds_head_proofs_and_keeps_publication_fact_on_error(self):
+        for fail_page, fail_cleanup in ((False, False), (False, True), (True, False)):
+            with self.subTest(fail_page=fail_page, fail_cleanup=fail_cleanup), tempfile.TemporaryDirectory() as temporary:
+                folder = Path(temporary); root = folder/'dist'; root.mkdir()
+                for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'a.js'):
+                    target = root/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(b'fixture')
+                publisher.oss.write(root/'release-manifest.json', {'release_id': 'fixture', 'rollback_ref': 'old', 'files': publisher.oss.inventory(root)})
+                source = publisher.oss.finalize_dist(root)
+                scan = folder/'scan.json'
+                publisher.oss.write(scan, {'failures': [], 'dist_files_sha256':
+                    {path.relative_to(root).as_posix(): publisher.oss.digest(path) for path in root.rglob('*') if path.is_file()}})
+                options = types.SimpleNamespace(output=folder/'run', dist=root, scan_result=scan, previous_manifest=None,
+                    source_commit=None, dry_run=False, upload_only=False, lock_holder='fixture', upload_workers=1, pages_timeout=1)
+                shared = folder/'shared'
+                def proof(item, dist):
+                    rel, row = item
+                    return rel, {'status': 'pass', 'http': 200, 'bytes': row['bytes'], 'sha256': row['sha256'], 'headers': {'ETag': '"'+'a'*32+'"'}}
+                def collect(args):
+                    self.assertTrue((shared/'published.json').exists())
+                    registered = publisher.retention.read(shared/'managed.json')['objects']
+                    self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
+                    if fail_cleanup: raise OSError('cloud delete failed')
+                    publisher.retention.write(args.report, {'status': 'complete', 'deleted_objects': 0, 'deleted_bytes': 0})
+                    return 0
+                with unittest.mock.patch.object(publisher.retention, 'predecessor', return_value=None), \
+                     unittest.mock.patch.object(publisher.retention, 'shared', return_value=shared), \
+                     unittest.mock.patch.object(publisher.retention, 'collect', side_effect=collect) as cleanup, \
+                     unittest.mock.patch.object(publisher, 'head', side_effect=proof), \
+                     unittest.mock.patch.object(publisher, 'command', return_value='{"status":"acquired"}'), \
+                     unittest.mock.patch.object(publisher, 'artifact_commit', return_value={'root': str(root), 'commit': 'a'*40, 'changed_files': []}), \
+                     unittest.mock.patch.object(publisher, 'pages', return_value=42), \
+                     unittest.mock.patch.object(publisher, 'get_page', side_effect=ValueError('GET mismatch') if fail_page else lambda item: (item[0], {'status': 'pass', 'sha256': item[1]['sha256']})):
+                    if fail_page:
+                        with self.assertRaisesRegex(ValueError, 'GET mismatch'): publisher.publish(options)
+                        cleanup.assert_not_called(); self.assertFalse((shared/'published.json').exists())
+                    else:
+                        result = publisher.publish(options)
+                        self.assertEqual(result['status'], 'published_with_retention_incomplete' if fail_cleanup else 'published')
+                        self.assertEqual(result['publication_status'], 'published')
+                        cleanup.assert_called_once()
+                        if fail_cleanup: self.assertIn('cloud delete failed', result['oss_retention']['reason'])
     def test_pages_dispatches_main_and_waits_for_returned_run_id(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=[
                 'https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42',
