@@ -1,0 +1,233 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig-owner-takeover",
+  "kind": "project",
+  "title": "本人主动接管：填一次时长，按原截止办理",
+  "url": "/projects/pcconfig/owner-takeover/",
+  "parent": "pcconfig",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 PasswordCenter 968b9816 与 PCConfig 431ad1c1；Codex 与 Claude 桌面都可发起，默认时长读当前设置，10 月 11 日 16:34 核对接管程序源码与安装一致，本次未打开窗口或办理验证。"
+  },
+  "screens": [
+    {
+      "id": "pcconfig-owner-takeover-01",
+      "section": "top",
+      "title": "本人主动接管：填一次时长，按原截止办理",
+      "text": "# 本人主动接管：填一次时长，按原截止办理\n\n〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕\n\nPCConfig · 功能说明\n\n我想在明确的一段时间内亲自决定后续操作，而不是被自己以前写下的规则反复挡住。这个入口让我选择范围、填写时长并完成一次本人验证；之后 AI 仍要讲清风险、保留原件和协调其他工作，但不再把额外模型批准当成第二道门。\n\n**当前情况：**Codex 和 Claude 桌面版都能打开这个接管窗口；默认时长读当前设置，也可以在一次验证里同时开接管和资料期。授权成立不等于后续业务已经办完。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pcconfig/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n直接说“无限授权”不能证明实际权限成立；反过来，已经明确请求本人验证，也不该先要求一份还没有的授权。独立入口解决这个循环，同时避免一次许可在重连或换模型后偷偷变成永久。\n\n## 举个实际例子\n\n“给当前对话开两小时本人授权，我自己验证；别扩到其他对话。”打开窗口后我只需核对范围、填写时长和验证。系统再读回同一请求的真实结果，两小时到了或我撤销后停止使用，不重开窗口续期。\n\n## 最后我会得到什么\n\n拿到是否已生效、作用范围和准确截止；取消、失败、过期和撤销分别说明。对话或后代做出的文件/命令结果还要各自回读，授权成立不是业务已经完成。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n本人验证实际成功，范围和原期限匹配，才消费本次限时授权。\n\n## 发现问题时\n\n取消终止本次申请，不撤回别的有效授权；效果未知先查询原请求，不自动再次弹窗。\n\n## 入口不可用或证据不足时\n\n缺本人验证条件、实际工具或对应会话时说明具体缺口，不借另一机器或对话身份。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在当前 Codex 或 Claude 桌面对话里直接说“我要给这个任务两小时无限制授权”，或说明你需要的时长。AI 打开现有接管窗口，你在窗口里填写时长并亲自验证；不用自己运行命令。验证后仍在原任务继续，并沿用原来的到期时间。\n\n## 需要准备什么\n\n- 本次接管要做的事\n\n- 0.5～72 小时内的具体时长（不填就用当前默认）\n\n- 现有已登记验证方式\n\n## 从开始到拿到结果\n\n1. **窗口显示这次授权的边界**　本人可见的窗口显示范围、时长和预计截止；默认只管当前对话，扩大到本机全部对话必须由我主动选择，不会扩到别的电脑；AI 不代填或续期。\n\n2. **验证后按原截止使用**　通过现有方式确认后，宿主消费真实范围和固定截止，不因换会话或重开程序重新计时。\n\n3. **到期或取消分别处理**　任务报告已完成动作；到期停止相应权限，取消未完成的一次验证不会抹去其他仍有效的授权或资料期。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n接管入口、运行时和窗口三个程序与源码、现役清单一致（安装批次 364，10 月 11 日 16:34 核对）；支持 Codex 与 Claude 两个桌面宿主，全局接管可与资料期一次验证组合办理。\n\n## 关键规则与设计选择\n\n1. 本人主动入口不用先派指定模型审批；四类本人验证任选已有可用方式。\n\n2. 默认当前对话，扩大为本机全部对话需要明确选择；时间由本人填写，范围 0.5—72 小时可带小数；不填时读当前默认设置，出厂值是 8 小时。已颁发的期不因默认改变而变。\n\n3. 在本人定的范围和时间里，本人的明确指令优先于 AI 自己的全局规则、项目限制、模型路由和额外 AI 审批；真实工具能力、本人验证、密码学、期限和执行结果不能伪造。旧设备保护已经退役，不是接管后还要走的门。\n\n4. 同一授权保持原截止，不滑动续期；成功换发新的全局授权会结束旧的全局授权，但新请求取消或失败不影响旧授权；当前对话授权不会被改成全局。主动续期要新的真实本人请求。\n\n5. 无限制授权和共享资料期是两份独立的东西，一份不自动建立或延长另一份；只有我明确要两项时，全局接管才可以在同一窗口一次验证同时办理。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- 正式入口 Invoke-OwnerTakeover.ps1 支持两个宿主：HostHarness 为 codex 或 claude-code，HostTaskId 来自真实宿主；窗口和管理员能力都不算本人验证。\n\n- 正式窗口使用共享时长控件，显示规范化分钟与预计截止；默认值从同一份时长设置读取，单次改动与默认分开。\n\n- 组合办理：OpenGlobal 加 GrantPersonalAccess，在一个现有窗口、一次本人验证里建立全局无限制授权与共享资料期两份状态；普通当前对话接管不带这项组合。回执分别报告两份截止和成功、部分成功、未知或未完成；只成功一份时不另开第二次验证，也不说成全部成功。\n\n- 本人操作结束后以同一请求查询 Status；响应丢失先查原请求，不重复弹窗。\n\n- 原授权及截止由接管运行时和密码中心保存，必要的本地子进程和 MCP 维护链消费同一份截止；会话错配、过期、撤销或已有终态在产生效果前拒绝。\n\n- 故障语义：固定的全局互斥锁防止两个接管窗口同时办理，新建时只允许登记用户、SYSTEM 和管理员访问；已有锁对象不在线改权限、也不换锁名绕过。异常时保留出错阶段和系统错误码，拒绝访问不说成超时；技术核对失败只暂停操作，不撤销仍有效的授权，也不重新颁发。人取消只结束本次。\n\n- 临时接管不降低协作质量：AI 仍独立判断方案、说明真正风险和正在工作的其他任务，我了解后明确继续就执行，并做好保全、恢复和实际验收。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 本人明确申请限时授权（需要时同时申请资料期）。\n\n2. 用现有 Open 或 OpenGlobal 进入独立窗口，不先要求另一个 AI 审批。\n\n3. 本人填写有限时长和范围并完成一次已登记验证。\n\n4. 查询同一请求 Status，核对真实范围、原截止和每一份的终态。\n\n5. 授权内继续工作并回读效果；到期、撤销或取消按各自语义收口。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-08",
+      "section": "tech",
+      "title": "名词和入口（一）",
+      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 宿主 | 实际发起接管的桌面应用：Codex 桌面版或 Claude 桌面版；任务编号由宿主提供，不是让我核对的一串号。 |\n| 原截止 | 本次真实验证后颁发的期限；续聊、后代和重新连接不延长。 |\n| 组合办理 | 全局接管与共享资料期在同一窗口、一次验证里分别建立，结果分开报告。 |\n| Open / OpenGlobal / Status | 打开当前对话接管、打开全局接管、读取本次结果；读状态不会重新验证。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-09",
+      "section": "tech",
+      "title": "名词和入口（二）",
+      "text": "## 名词和入口（二）\n\n## 专业定义\n\n需要暂时让自己的明确指令优先时，直接用现有窗口验证；不是请另一个 AI 批准，也不是永久授权。默认时长按当前设置，不是固定值。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-10",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n避免本人主动授权被循环审批，同时防止会话串线、隐式扩范围、悄悄续期和重复验证造成错误权限。\n\n## 边界\n\n- 网页把我明确选择的授权、时长与验证码直接交给主机正式入口办理；状态读取不会延长授权，截图或历史成功结果也不会恢复已失效的权限\n\n- 没有永久授权或按消息滑动续期；合法范围 0.5～72 小时，扩大到全局须本人主动选择，不扩到别的电脑\n\n- 不伪造平台能力、会话绑定、验证、密码学或外部执行事实\n\n- 已有无限制授权不自动打开个人资料，已有资料期也不建立或延长无限制授权",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-11",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n## 失败与恢复\n\n- **本人取消或请求超时**：只终止本次未完成请求，不自动换因子重开；其他有效授权继续到原截止。\n\n- **会话或原截止不匹配**：停止消费此授权，不换编号或继承另一对话。\n\n- **调用回执丢失**：先读同一请求状态和已产生效果，不盲重复验证或操作。\n\n- **组合办理只成功一份**：如实报告哪份成功、各自截止，不另开第二次验证。\n\n- **互斥锁拒绝访问或核对失败**：报告具体阶段和错误码，暂停操作，不撤销仍有效的授权。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-12",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 正式 Open/OpenGlobal/Status 入口与宿主绑定（Invoke-OwnerTakeover.ps1）\n\n- 接管运行时与独立窗口（owner_takeover_runtime.py、owner_takeover_window.py）\n\n- 共享时长设置（personal_access_duration.py）\n\n- 电脑 MCP 侧的接管消费（tools/remote-computer-mcp/owner_takeover.py）\n\n- 活动规则“用户授权”专题中的无限制授权语义",
+      "links": [
+        {
+          "text": "上一个模块 手机与双机维护",
+          "href": "/projects/pcconfig/remote-computer-mcp/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-13",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- 10 月 11 日 16:34 只读：接管入口、运行时、窗口三个程序与源码、现役清单哈希一致，安装批次 364。原有期限没有因读取而改变\n\n- 本次没有打开窗口、办理本人因子或验收真人接管；当前是否有接管正在生效、四类因子当下是否可用、续期和取消的端到端都未调用\n\n- 历史（之后未重新核对）：2026-09-19 正式 Open、本人通行密钥和期限传递的验收；当时安装 32/32 文件一致；2026-09-24 手机网页单项延长、主动锁定和组合办理通过",
+      "links": [
+        {
+          "text": "上一个模块 手机与双机维护",
+          "href": "/projects/pcconfig/remote-computer-mcp/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-owner-takeover-14",
+      "section": "tech",
+      "title": "依据与来源（三）",
+      "text": "## 依据与来源（三）\n\n## 与其他模块的关系\n\n本模块拥有本人主动限时授权的用法与运行证据；.agents 解释授权语义，秘密与服务入口负责凭据和共享资料期，本人验证模块说明重大动作怎样请我验证。旧设备保护已退役，不再和接管并列。",
+      "links": [
+        {
+          "text": "上一个模块 手机与双机维护",
+          "href": "/projects/pcconfig/remote-computer-mcp/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,293 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig-recovery-backup",
+  "kind": "project",
+  "title": "换机、重装、备份与恢复",
+  "url": "/projects/pcconfig/recovery-backup/",
+  "parent": "pcconfig",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 PCConfig 431ad1c1 恢复登记、10 月 10 日 H 冷备回执与镜像回执；空盘整机还原本人决定不演练，新机正常启动与应用数据可见仍未验收。"
+  },
+  "screens": [
+    {
+      "id": "pcconfig-recovery-backup-01",
+      "section": "top",
+      "title": "换机、重装、备份与恢复",
+      "text": "# 换机、重装、备份与恢复\n\n〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕\n\nPCConfig · 功能说明\n\n先确认可用的文件、配置和系统镜像，再决定怎样恢复。G/H 两份资料副本能校验完整性；系统镜像由 Veeam 每天加密做全量和增量，并已整链发布到 H、生成过恢复 ISO。Windows 起来后，用普通 Codex 桌面客户端按恢复指南接续。无论同机重装、换机、系统盘故障还是只有 PE，先认清机器和磁盘，不格式化唯一副本。整机还原、自然启动及应用内数据是否可见仍是不同的验收，不能用镜像能打开代替。\n\n**当前情况：**文件、配置和系统镜像都有经过核对的备份；最近一次完整 H 冷备在 10 月 10 日 17:35 完成，但带 4 条告警。空盘整机还原和物理 ISO 启动没有验过，本人决定不做空盘演练。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pcconfig/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n有系统安装盘、能进入恢复界面，或看到备份目录，都不等于旧电脑能原样回来。磁盘、驱动、个人文件、登录和应用状态要按顺序确认；慌乱中直接清盘反而可能毁掉唯一材料。\n\n## 举个实际例子\n\n“系统盘可能要换。先列出哪份资料已经保住，系统镜像最近一次是什么时候，Windows 装好后怎么重新进入 AI。”我会得到分层清单：可用的文件副本和最近完成时间、镜像链和恢复 ISO 的状态、普通 Codex 桌面加恢复指南的接续步骤，以及需要重新登录或验证的地方；本次不格式化、不运行还原。\n\n## 最后我会得到什么\n\n知道能恢复到哪一步、该用哪份材料、还缺什么。文件恢复、系统镜像、AI 入口和应用实际可用各给结论，告警和未验收项不会被“昨晚备份完成”盖住。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n先认准物理磁盘和备份，再逐层安装、回填、登录；最终用正常启动和应用里真实可见的旧数据确认。\n\n## 发现问题时\n\n某一层失败就停在那一层，保留旧盘与已验证副本，不靠后续步骤掩盖缺口。\n\n## 入口不可用或证据不足时\n\n只有启动 U 盘，或备份盘未接上、未解锁、账号不可用时，先做安全的只读识别，不格式化或猜盘符。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入 PCConfig 的 AI 对话中说明是同机重装、换机还是故障恢复，先要求恢复清单；实际磁盘操作另按现场核对。\n\n## 需要准备什么\n\n- 旧机与新机状况\n\n- 可用备份盘、启动介质和账号\n\n- 希望保留的项目与数据\n\n## 从开始到拿到结果\n\n1. **先识别还能用的设备和副本**　系统只读核对实际物理盘、能打开的备份和登录条件，旧盘符与文件夹名字不能当作恢复成功。\n\n2. **列出恢复顺序**　把系统安装、驱动、已保存代码、未提交文件、个人设置和登录方式分开，说明每一步缺什么。\n\n3. **按层恢复并实测**　实际执行需确认目标和回退；交回应用能否启动、旧数据是否可用及最后备份后的缺口，不能凭 ISO 或目录存在宣称完成。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nH 冷备 19 类，10 月 10 日 17:35 完成（complete，4 条聚合告警、5 条文件告警）；系统镜像最近一次截止前观察为 10 月 10 日 13:45 完成、430.983 GiB；空盘整机还原未验，本人决定不演练。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 关键规则与设计选择\n\n1. 同机重装：若主板与 BIOS 没有重置或升级，不为重装 Windows 额外刷写 BIOS；先保护现有数据盘，再按旧机器基线重认盘符和配置。\n\n2. 换机或换主板：旧板的超频、固件包和驱动不能直接套到新板；目标机按自己的型号、PCB 版本和兼容清单重建。\n\n3. 系统盘故障：先只读确认物理盘、分区、BitLocker 和可用副本；不因 Windows 起不来就先 clean、format、改分区或修 BCD。\n\n4. 只有 PE：F 只提供 UEFI/WEPE 启动与救急导航，不是完整数据包；能进 PE 不能升级成“可恢复”。\n\n5. GitHub 与官方网络只能重建已发布源码和软件；未推送改动、私人文件、聊天、密码和登录态必须来自其他已核验来源。三个核心仓库的未推送提交、索引、工作区和未跟踪文件现已由 Veeam 镜像范围保全，需要时从镜像提取到新的隔离目录，当数据检查，不执行旧代码、不覆盖活跃工作。\n\n6. G 是在线热备，H 是冷备。H 平时在场，每天 14:30 和登录时运行；仍须本人解锁、核对 USB 身份、非系统盘、BitLocker 和至少 100 GiB 余量。\n\n7. 重装后要恢复已选桌面和锁屏图片，从 Emerald Veil 现有项目入口重新应用并验证；图片设置通过不等于新机锁屏实看已验收。\n\n8. 普通资料和媒体从已核验的原生 G/H 副本选择性恢复；密码中心的正式恢复集和本人验证走它自己的入口。旧 P0—P7 恢复载体已于 9 月 25—26 日退役，不再是恢复分支；整个媒体库也不是密码域。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n9. 同一文件在 G 有多个硬链接入口时，H 只独立复制一份字节，再在 H 内共享；冷备先复制并核验新增和变化，再删除 H 中已退出的旧副本，不盲镜像整盘。\n\n10. 删除传播：G 跟随 E 当前内容；照片、视频、音乐、个人资料四类删除后在备份里留 30 天后悔期，与凭据有效集分开管理。\n\n11. 实际完成必须经过自然启动、应用打开、账号与数据可见、必要业务动作，以及恢复后重新建立备份；复制、哈希或任务就绪都只是中间证据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-08",
+      "section": "tech",
+      "title": "技术实现与依据（四）",
+      "text": "## 技术实现与依据（四）\n\n## 当前怎样实现\n\n- 入口按四种事故分流：同机重装、换机、系统盘故障、仅 PE；来源分工固定：F 启动救急，G 在线热备，H 冷备，Git 只重建正常仓库，Veeam 镜像负责整盘。\n\n- 恢复材料登记 19 项、恢复锚点 21 个、C 盘用户配置 27 项、项目登记 19 个（项目登记不是依赖关系数量），目录和路径各 57 项。\n\n- 系统镜像：Veeam 加密全量与增量，原生健康检查，整链发布到 H，恢复 ISO 已真实生成；9 月 22 日副机凭密码中心取回镜像密码、实际打开 H 上的镜像链并提取两份技术文件核对一致。截止前最近一次观察：10 月 10 日 13:45 完成，430.983 GiB；还原测试和物理空间回收都标为未验证。\n\n- 新机首启：镜像还原后先断网并拔下数据盘和备份盘，第一次进入 Windows 先停掉会删除或清理的自动任务，再联网接盘；个人目录联接按原迁移日志逐根离线回滚，不直接回放旧配置；备份权限取回走原恢复入口，日志缺失或身份不符就保留现场。\n\n- AI 接续：普通 Codex 桌面客户端加 START_RECOVERY 恢复指南，不再设专用 Codex。核心恢复上下文 v4 共 7 个文件（清单、指南、观察、闭合清单、Veeam 校验脚本与模块、备份权限取回说明），仍能读取旧的 v2 四文件和 v3 六文件。\n\n- 冷备 19 类：在原有资料基础上新增系统镜像、G 上独有的项目和软件、AI 使用账本等，模型权重已退出；密码中心恢复集由它自己的入口一起交付，所以回执里有 20 个结果（19 类加密码中心恢复集），不是 20 类普通备份。\n\n- 10 月 10 日 17:35 完成的 H 回执（元数据核对，没有重新全量散列）：微信 148590/148590；个人资料 286283/286283；照片 3507、视频 120、音乐 763、媒体 12170、辅助 5158，共 21718；文档 138137 源/138136 核验，下载 11584/11582；只在 G 的项目 55686、软件 88879；RecoveryKit 2064。告警涉及 DevConfig 源文件在复制中消失，以及文档和下载里经确认被杀毒软件移除的文件。\n\n- 计划任务重建清单 9 阶段 127 项：必须重建 38、可选 7、软件自带安装 46、等本人决定 36；启动维护快照 24 项（9 月 30 日 22:47）。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-09",
+      "section": "tech",
+      "title": "技术实现与依据（五）",
+      "text": "## 技术实现与依据（五）\n\n- 清理器的恢复顺序：回收站清理（重建序 500，SYSTEM 运行）先恢复并核对运行身份，AI 缓存清扫（501）再恢复。\n\n- 退役前做法（历史）：曾计划由专用 FastRecovery 命令行（Codex CLI 0.154.0）和 G/H 引导包接续，P0—P7 载体承担受保护数据恢复；这两条路线都已不再使用。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-10",
+      "section": "tech",
+      "title": "技术实现与依据（六）",
+      "text": "## 技术实现与依据（六）\n\n## 执行流程\n\n1. 先回答是哪一种场景，记录现存机器、网络、可读磁盘、F/G/H 和 GitHub 权限。\n\n2. 在任何写入前只读识别物理盘和卷，建立本次盘符映射，不沿用旧字母猜测。\n\n3. 若涉及 BIOS 重置、升级或换板，先确认主板与 PCB 版本、当前 BIOS 和供电；同板未变则保持现状。\n\n4. 验证 UEFI 启动链、WEPE/WinPE、Windows ISO 或 Veeam 恢复 ISO 和目标盘；未作决定前不 clean、不 format、不重分区、不改 BCD。\n\n5. 还原镜像或安装 Windows 后先断网拔盘，首次进入先停有删除或清理效果的自动任务，再装关键驱动、联网接盘。\n\n6. 用普通 Codex 桌面客户端打开 START_RECOVERY，取得 GitHub 访问权，clone PCConfig、.agents 和 GitHub 总索引。\n\n7. 按现场路径核对稳定盘位、21 个锚点和项目登记；先复制、验证目标、改引用，再决定旧路径是否退役。\n\n8. 从官方来源安装当前兼容的运行时和软件，按真实路径重建环境变量与 PATH。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-11",
+      "section": "tech",
+      "title": "技术实现与依据（七）",
+      "text": "## 技术实现与依据（七）\n\n9. 从 27 项 C 用户配置清单中按负责方选择恢复；登录态、秘密和聊天数据库不作为普通配置整包导入。\n\n10. 核对 9 阶段 127 项重建计划和实际任务定义，先恢复回收站清理再恢复 AI 缓存清扫；不从旧 XML 复活退役任务。\n\n11. 重新登录 GitHub、Codex 和必要应用；普通资料和媒体从原生副本选择恢复，密码中心恢复集走其正式入口。\n\n12. 自然启动 Windows 与关键应用，核对项目、账号、文档、微信或应用数据可见；需登录、未知与失败项分别保留。\n\n13. 在新系统重建 G 热备和 H 冷备并核对回执，使下一次恢复不依赖旧机器快照。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-12",
+      "section": "tech",
+      "title": "名词和入口（一）",
+      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| BIOS/UEFI（主板固件设置） | Windows 启动前的主板设置层；文字基线帮助人工恢复核心项，但不自动刷写。 |\n| WEPE/WinPE（Windows 预安装环境） | 系统无法登录时用于识盘、联网、安装或修复的轻量环境；能启动不等于内部盘和网络都可用。 |\n| CoreRecovery（核心恢复） | 重装或换机后的恢复范围、来源、任务和冷热备关系的观察入口；不是磁盘镜像，不读私人正文。 |\n| Hot / Cold（热备 / 冷备） | G 上持续可访问的副本 / H 上的独立副本；冷备只消费已验证的热备，不反向改写 G。 |\n| Veeam 镜像链 | 加密的全量加增量系统镜像；能打开并提取文件，不等于空盘整机还原已验收。 |\n| Closure（闭合清单） | 把文件名、结构、长度和 SHA-256 绑在一起，避免当前指针指向不完整的一组文件。 |\n| Selective restore（选择性恢复） | 备份可以宽，恢复只取经过负责方、新硬件兼容和新系统验证的必要对象。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-13",
+      "section": "tech",
+      "title": "名词和入口（二）",
+      "text": "## 名词和入口（二）\n\n## 专业定义\n\n从主板设置、启动介质和认盘开始，一步步接回项目、账号、开机任务与应用数据；备份只是原料，电脑真正能用才算验收。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-14",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n恢复说明如果只是一组名词和入口，人在慌乱中仍不知道“我是哪种情况、下一步做什么、做到哪才算好”。这里把场景分流、来源选择、破坏性动作禁区、依赖顺序、证据等级和最后的可见验收串成一条连续旅程。\n\n## 边界\n\n- 不自动刷写 BIOS；只读识盘完成前不 clean、format、改分区或 BCD，旧盘符不等于设备身份\n\n- F 启动 U 盘不等于 G/H 数据备份，Windows ISO、WEPE 启动和应用数据恢复是三层证据\n\n- 不递归复制整个 AppData，不把浏览器登录态或原始聊天数据库写入仓库\n\n- 冷备不使用 /MIR 或裸盘镜像；源离线、锁定或读不完整不等于空源\n\n- 备份存在、任务退出码 0、文件复制或哈希通过都不单独证明应用恢复\n\n- 不把“有完整镜像”“H 昨晚 complete”说成全链今天全正常\n\n- 不给专用恢复 CLI 的安装步骤，不调用已退役的 P0—P7 载体",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-15",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n## 失败与恢复\n\n- **PE 能启动但看不到内部盘或网络**：不格式化 U 盘或内盘；先补存储和网络驱动，仍不可见就停止该来源的恢复。\n\n- **旧盘符与新机器不一致**：按物理盘、卷、容量和恢复锚点重建映射，再更新消费者；不创建同名空盘掩盖缺失。\n\n- **镜像还原后首次启动**：先断网拔盘、停清理任务，再接盘；缺迁移日志或身份不符就保留现场。\n\n- **H 锁定、缺失或卷身份不符**：冷备跳过或失败，不写介质，也不自动解锁。\n\n- **冷备中来源文件变化或被移除**：该文件记告警，保留 H 原目标，待来源稳定后重跑；不称本轮零告警。\n\n- **复制中断或校验失败**：保留逐项结果和旧的当前状态，不切消费者，不清旧路径。\n\n- **应用数据已复制但客户端不可见**：恢复未完成，回到应用负责方做原生打开、账号和数据验证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-16",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 核心恢复登记 registries/core_recovery.json 与合同 docs/contracts/pcconfig.core-recovery.md\n\n- 恢复指南 docs/recovery/START_RECOVERY.md 与运行时恢复顺序 runtime_restore_order.md\n\n- 系统镜像说明 tools/system-image/README.md（Veeam 现役路线、恢复 ISO、介质证据）\n\n- 冷备唯一维护入口 Invoke-CoreRecoveryMaintenance.ps1（Inspect/Hot/Cold）\n\n- 计划任务重建清单 scheduled_tasks_rebuild.json 与 9 阶段说明\n\n- 19 项恢复材料、21 个恢复锚点、27 项 C 用户配置\n\n- 密码中心恢复集的独立冷备入口，不由通用复制器接管",
+      "links": [
+        {
+          "text": "上一个模块 漂移与验收",
+          "href": "/projects/pcconfig/drift-acceptance/"
+        },
+        {
+          "text": "下一个模块 副驾驶笔记本",
+          "href": "/projects/pcconfig/secondary-laptop/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-17",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：恢复材料 19、锚点 21、C 用户配置 27、项目登记 19；重建清单 127 项按 38/7/46/36 分类\n\n- 10 月 11 日 16:35—16:37 只读镜像与介质回执：截止前已观测的最近镜像为 10 月 10 日 13:45 完成、430.983 GiB；G/H 核心恢复上下文均为 7 个文件；H 冷备回执 10 月 10 日 17:35 complete，19 类加密码中心恢复集共 20 个结果，4 条聚合告警、5 条文件告警。没有重跑备份、重算全部哈希或做还原\n\n- 历史（之后未重新核对）：9 月 22 日副机打开 H 上的 Veeam 镜像链并提取两份技术文件核对一致；9 月 18 日 16 组冷备与 DevConfig 隔离还原通过；三基座导出核验 8381 个文件\n\n- 仍未验收：空盘整机还原、真实物理 PE 或 ISO 启动、新机正常启动、所有应用登录与数据可见、当前全部载荷哈希重算",
+      "links": [
+        {
+          "text": "上一个模块 漂移与验收",
+          "href": "/projects/pcconfig/drift-acceptance/"
+        },
+        {
+          "text": "下一个模块 副驾驶笔记本",
+          "href": "/projects/pcconfig/secondary-laptop/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-recovery-backup-18",
+      "section": "tech",
+      "title": "依据与来源（三）",
+      "text": "## 依据与来源（三）\n\n## 与其他模块的关系\n\n本模块是 PCConfig 从机器断点回到可用电脑的完整旅程：机器事实模块提供主板、磁盘、盘符、锚点和项目路径；运行与启动模块提供软件、任务和自然启动链；秘密与服务入口负责重新登录、密码中心恢复集；授权文件负责点名文件的加密包。BIOS/UEFI 归这条恢复旅程，不另拆模块。",
+      "links": [
+        {
+          "text": "上一个模块 漂移与验收",
+          "href": "/projects/pcconfig/drift-acceptance/"
+        },
+        {
+          "text": "下一个模块 副驾驶笔记本",
+          "href": "/projects/pcconfig/secondary-laptop/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

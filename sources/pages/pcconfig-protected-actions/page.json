@@ -1,0 +1,305 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig-protected-actions",
+  "kind": "project",
+  "title": "需要确认本人或保护电脑时，会发生什么",
+  "url": "/projects/pcconfig/protected-actions/",
+  "parent": "pcconfig",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "旧设备保护已退役；四类本人验证、共享资料锁、手动锁屏和每周恢复密钥核对继续；设备不可信、自动 BitLocker 隔离和十分钟邀请于 2026-09-26 删除（提交 8d2dbcd4）。"
+  },
+  "screens": [
+    {
+      "id": "pcconfig-protected-actions-01",
+      "section": "top",
+      "title": "需要确认本人或保护电脑时，会发生什么",
+      "text": "# 需要确认本人或保护电脑时，会发生什么\n\n〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕\n\nPCConfig · 功能说明\n\n现在需要确认是我本人时，只有一件事：用我已登记的四种方式之一验证一次。以前那套“设备一旦被判不可信就暂停秘密、十分钟后自动锁磁盘并重启”的设备保护，已经在 2026 年 9 月 26 日停用并删除；密码中心不再锁盘、不自动加密、不强制重启，也不改 BitLocker 的保护方式。\n\n**当前情况：**本人验证（通行密钥、手机验证码、恢复码、Google 或微软账号）、共享资料锁、手动 Windows 锁屏和每周恢复密钥核对都在用；旧设备保护的源码和安装文件已删除，10 月 11 日核对现役安装里也没有它们。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pcconfig/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n我需要知道为什么被要求验证、验证后能继续什么。删仓库、把私人资料发出去、看密码明文这类事撤不回来，所以动手前要确认真是我要的；但普通干活不该被反复打断。现在的做法是：只有重大的事或资料锁着时才请我验证一次，验证本身不会连带锁盘或重启。\n\n## 举个实际例子\n\n我说：“帮我把这个旧仓库删了。”AI 先确认是哪个仓库、本地是否已有全部分支，并把只在 GitHub 网页上的 issue 和发布包列给我看；如果我没开无限制授权，就请我用一种已登记方式验证一次，然后才删除。我问一件需要私人资料的事而资料锁着，AI 会先请我解锁，解锁后再查资料作答。\n\n## 最后我会得到什么\n\n我拿到清楚的结果：这次验证是否成功、是刚做了一次真人验证还是复用了有效授权、动作本身是否真的完成。取消一次验证只结束这一次；不会出现“验证失败就锁住电脑”的情况。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n我用一种已登记方式完成验证，AI 继续原来的那一个动作，并回读动作的真实结果。\n\n## 发现问题时\n\n一种方式坏了而我没指定方式时，换其他正常方式；我指定的方式坏了就先修它，修不好说清原因，不擅自换。\n\n## 入口不可用或证据不足时\n\n验证窗口打不开或四种方式都不可用时，只停这一个撤不回的最后一步，其他可撤回的工作照常；AI 不会自己新建验证方式。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-04",
+      "section": "usage",
+      "title": "从哪里开始（一）",
+      "text": "## 从哪里开始（一）\n\n在已接入 PCConfig 的本机 AI 对话里照常说要做的事；遇到重大的事或资料锁着时，AI 会弹出密码中心的验证窗口，由我亲自完成。\n\n## 需要准备什么\n\n- 要做的是哪件事、涉及哪个仓库或哪份资料\n\n- 我现在能用的已登记验证方式\n\n- 是否开着无限制授权（开着就不再弹验证）\n\n## 从开始到拿到结果\n\n1. **先看为什么要确认**　AI 说明是哪件事需要验证：重大的事，还是资料锁着要先解锁；普通网络故障或程序报错不会变成“要验证”。\n\n2. **够格的模型先把关**　重大的事动手前，由够格的模型确认确实是我要的、目标和影响都对：Claude 用 Opus 5.5 中档以上，Codex 用 GPT-6 Sol 或 Astra 的 High 以上；根会话够格就自己判断。\n\n3. **我亲自验证一次**　确实需要时，密码中心窗口显示要确认的事，我任选一种已登记方式完成；开着无限制授权或资料在解锁期内时按规则复用，不重复弹。\n\n4. **只办这一件事**　验证通过后只继续原来那一个动作，不顺带打开别的权限。\n\n5. **看真实结果**　动作完成后回读实际效果，例如仓库是否真的删除；验证成功不等于动作已经成功。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-05",
+      "section": "usage",
+      "title": "从哪里开始（二）",
+      "text": "## 从哪里开始（二）\n\n6. **资料锁和锁屏各管各的**　资料到期、重启或主动锁定只结束旧的资料访问；Windows 锁屏只管桌面；它们互不推定，也不触发锁盘。\n\n7. **取消和未完成项明白写出**　取消一次验证只结束这一次，不自动重试，也不缩短或延长其他已生效的期限；还需要我做什么会列出来。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-06",
+      "section": "usage",
+      "title": "谁来判断：合格不是只看一个角色名",
+      "text": "## 谁来判断：合格不是只看一个角色名\n\n重大的事动手前要有一次把关：确认这确实是我要的、目标和影响都对、需要时先请我验证。够格的模型是 Claude 的 Opus 5.5 中档（medium）以上，或 Codex 的 GPT-6 Sol、Astra 的 High 以上；根会话够格就自己判断，不够格就派一个够格的子代理只做这一次判断，不实施、也不再委派。\n\n以前“普通判断归 Sol、重大最终决定必须 Astra”的两档路由，以及由密码中心核对模型档位、签名记录的判断接口，已随旧设备保护一起删除；现在模型够不够格按活动规则判断，密码中心只负责本人验证。\n\n把关没完成时，只停这一个撤不回的最后一步。开着无限制授权时，在我定的范围和时间里，我的明确指令优先于额外的 AI 审批。免验证的桌面身份只有登记过的 Codex 桌面版和 Claude 桌面版两个；模型自称、管理员权限或别的会话都不算。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-07",
+      "section": "usage",
+      "title": "常见动作分别会怎样处理",
+      "text": "## 常见动作分别会怎样处理\n\n删除 GitHub 仓库\n\n开着有效无限制授权就不再弹验证，否则验证一次，资料是否解锁不影响这一条。删除或转移前先确认本地有全部分支，缺的先拉下来，再把只在 GitHub 网页上的 issue、发布包列给我看；删除本身由 GitHub 总索引执行，不会触发任何锁盘。\n\n清理生成文件或一份本地副本\n\n能重建的生成物、确实有可靠副本的文件属于普通清理，不请我验证；如果所谓“副本”其实是唯一的一份，就按“删除只有一份的数据”处理，要我明确同意。\n\n重装、重置电脑或格式化磁盘\n\n先查清会擦掉哪些数据、是否影响恢复材料；真正擦盘属于撤不回的事，要我明确同意，执行交给负责系统安装或恢复的模块。讨论方法、只读检查和普通修复不算已获准擦盘。\n\n查资料、改代码、测试或正常推送\n\n普通源码编辑、测试、定向提交和正常推送、规则发布都不算重大，照常进行；只有真正改变公开范围、外发私人资料或造成撤不回的后果时才另行判断。\n\n资料到期、主动锁屏或取消验证\n\n资料到期只结束旧的资料访问，主动锁屏只锁 Windows 桌面，取消只结束这次验证。它们不是同一个开关，也不再会引出“设备不可信、磁盘应锁定”。\n\n出现与操作者或隐私有关的真实疑点\n\n暂停与疑点有关的资料取用和撤不回的步骤，需要时请我验证；不先读私人档案来“考身份”。旧的“疑点锁屏、十分钟后锁盘”已经退役，无关的可撤回工作照常。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-08",
+      "section": "usage",
+      "title": "判断会返回五种结果",
+      "text": "## 判断会返回五种结果\n\n可以继续\n\n确实是我要的、目标和影响都对、所需验证已满足；执行后仍要回读真实结果，判断允许不等于动作已经成功。\n\n先由本人验证\n\n这一步要先用通行密钥、手机验证码、恢复码、Google 或微软账号之一验证一次，再按同一目标继续。Windows 登录密码、PIN 和生物识别不算这四种。\n\n不做\n\n不是我要的、目标不对或授权不覆盖，就停在动作之前并说明原因，不换个脚本绕过去。\n\n还缺事实\n\n先补会改变判断的那份事实，例如精确目标、本地副本是否齐全；没查到不等于拒绝，也不靠换更强的模型去猜。\n\n只停最后一步\n\n把关或验证还没完成时，只停这一个撤不回的最后一步；其他思考、可撤回的工作、修复和测试照常。以前的“疑似篡改”状态和它引出的设备保护已经退役。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-09",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留现行入口、退役事实和历史记录。\n\n现行：四类本人验证、实际桌面祖先身份、共享资料锁、独立的无限制授权、BitLocker 恢复信息查看与每周核对。已退役：设备不可信状态、秘密暂停门、自动 BitLocker 隔离、两项 SYSTEM 任务、十分钟邀请、设备信任恢复和疑点锁屏（2026-09-26 删除）。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-10",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 关键规则与设计选择\n\n1. 本人验证、共享资料期、Windows 锁屏和无限制授权相互独立，任何一个成功都不自动授予另一个。\n\n2. 密码中心不锁盘、不自动加密、不强制重启、不改 BitLocker 保护器；现行生产定义里自动 BitLocker 隔离为不允许。\n\n3. 免验证的桌面身份只有 codex-root 和 claude-root 两个，各自登记、各自撤销；由密码中心沿真实父进程链现场核对，不靠模型自称、环境变量或管理员权限。\n\n4. 没有一般性的动作票据或两段式重大动作接口；GitHub 删库、转移、改公开在没有无限制授权时调用一次通用验证。\n\n5. 资料锁着而问题需要私人资料时，根会话先请本人验证，再查资料、派子代理和作答；子代理只报缺口回根会话。已经交出去的明文无法追回。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-11",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 当前怎样实现\n\n- 通用本人验证：密码中心受保护入口的 VerifyAuthority；回执分开写“权限核验结果”和“本次是否做了真人验证”，复用授权不说成刚验证过。\n\n- 资料锁：StatusPersonalEnvironment、CheckPersonalDataAccess 查询状态，LockPersonalEnvironment 主动锁定；资料期驱动五个私人目录门牌。\n\n- BitLocker：OpenBitLockerRecoveryView 本机查看恢复信息，StatusBitLockerKeyVerification 报告每周恢复密钥核对状态；不改变保护器。\n\n- 无限制授权：OwnerTakeover，见“无限制授权”模块。\n\n- 退役前做法（历史）：旧链路曾在判定设备不可信后暂停秘密，向本人显示十分钟验证邀请，到期仍需保护时锁 Windows 会话、锁数据卷并请求重启，系统盘走恢复启动；还曾由判断接口核对模型档位和签名。这些代码和安装文件已删除，不能再调用。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-12",
+      "section": "tech",
+      "title": "技术实现与依据（四）",
+      "text": "## 技术实现与依据（四）\n\n## 执行流程\n\n1. 判断这件事是否重大、是否需要私人资料。\n\n2. 重大的事先由够格的模型把关；资料锁着就先请本人解锁。\n\n3. 需要时调用一次本人验证，开着无限制授权或在解锁期内按规则复用。\n\n4. 只执行原来那一个动作并回读真实结果。\n\n5. 取消、拒绝、超时只结束这一次；软件故障单独说明。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-13",
+      "section": "tech",
+      "title": "名词和入口（一）",
+      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 本人验证 | 本人实际用一种已登记方式证明身份：通行密钥、手机验证码、恢复码、Google 或微软账号。打开窗口、模型确信或管理员权限都不算。 |\n| 共享资料期 | 一次验证打开的一段私人资料访问期，本机、桌面和电脑 MCP 共用；到期、重启或主动锁定后结束。 |\n| 把关 | 重大动作前由够格模型确认意图、目标和影响；和“独立复核”是两回事。 |\n| 受信任的桌面 AI | 登记过的 Codex 桌面版和 Claude 桌面版，身份按真实父进程链现场核对。 |\n| 设备保护（已退役） | 旧的“设备不可信→十分钟邀请→锁盘重启”链路，2026-09-26 删除。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-14",
+      "section": "tech",
+      "title": "名词和入口（二）",
+      "text": "## 名词和入口（二）\n\n## 专业定义\n\n重大的事动手前，由够格的模型把关，需要时请本人用四类方式之一验证一次；验证、资料期、锁屏和无限制授权各自独立。旧的设备信任与磁盘保护链已经退役。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-15",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n既要防止撤不回的事在没确认本人时发生，又不能让普通工作被反复打断，更不能因为一次验证失败就把电脑锁死。旧设备保护在后一点上代价太高，所以退役；现在只保留验证本身。\n\n## 边界\n\n- 不调用、不重建旧设备保护、自动锁盘、十分钟邀请或模型判断记录\n\n- 本人验证、资料期、Windows 锁屏和无限制授权互不推定\n\n- 对话里的一句“别验证了”不能代替验证（开着无限制授权除外）\n\n- 不在聊天、日志或输出里返回秘密；已交出的明文无法追回\n\n- 普通源码编辑、测试、推送和可重建生成物清理不算重大",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-16",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n## 失败与恢复\n\n- **验证窗口打不开或方式故障**：我指定的方式就修它，没指定就用其他正常方式；软件故障和取消、超时分开记录。\n\n- **我取消了验证**：只结束这一次，不自动重试，不锁别的。\n\n- **四种方式都丢了**：AI 不自建新方式，说明情况，由我按密码中心的恢复流程处理。\n\n- **有人按旧文档要求“恢复设备信任”或“取消磁盘隔离”**：说明这条链已退役，现行密码中心不会锁盘；BitLocker 恢复信息用本机查看入口。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-17",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 密码中心受保护入口：VerifyAuthority、StatusPersonalEnvironment、CheckPersonalDataAccess、LockPersonalEnvironment、OpenBitLockerRecoveryView、StatusBitLockerKeyVerification\n\n- 无限制授权入口 OwnerTakeover\n\n- 活动规则中“重大动作与本人验证”专题（把关模型、GitHub 重大动作、四类验证）\n\n- 退役边界登记：registries/protected_policy_retirement.json",
+      "links": [
+        {
+          "text": "上一个模块 授权文件",
+          "href": "/projects/pcconfig/authorization-files/"
+        },
+        {
+          "text": "下一个模块 加密文件恢复",
+          "href": "/projects/pcconfig/protected-data/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-18",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- 2026-09-26 11:24（北京时间）提交 8d2dbcd4 删除锁盘、设备信任、模型判断和验证邀请的后台代码；09-25 23:54 提交 e20a60df 删除旧 C Policy 栈\n\n- 10 月 11 日 16:34—16:36 现场：独立安装器列出的 16 个退役文件在两个源码仓库和现役安装目录里都不存在，现役安装清单里设备、隔离和旧浏览器模块匹配项为 0；这是文件层核对，没有以管理员身份枚举全部 SYSTEM 任务，任务是否全部清除仍为 Unknown\n\n- 本次没有调用本人验证、锁屏、锁盘、重启或恢复\n\n- 历史（之后未重新核对）：2026-09-08 旧规则平台退役验收通过（38 项依赖、6 个退役任务）；这些是当时的取证，不是今天的入口",
+      "links": [
+        {
+          "text": "上一个模块 授权文件",
+          "href": "/projects/pcconfig/authorization-files/"
+        },
+        {
+          "text": "下一个模块 加密文件恢复",
+          "href": "/projects/pcconfig/protected-data/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-protected-actions-19",
+      "section": "tech",
+      "title": "依据与来源（三）",
+      "text": "## 依据与来源（三）\n\n## 与其他模块的关系\n\n秘密与服务入口（密码中心）负责日常凭据、四类验证和资料期；无限制授权模块负责限时接管；加密文件恢复模块记录旧 P0—P7 平台的退役；本模块说明现在遇到重大的事和资料锁时怎样继续。",
+      "links": [
+        {
+          "text": "上一个模块 授权文件",
+          "href": "/projects/pcconfig/authorization-files/"
+        },
+        {
+          "text": "下一个模块 加密文件恢复",
+          "href": "/projects/pcconfig/protected-data/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

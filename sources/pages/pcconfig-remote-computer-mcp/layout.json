@@ -1,0 +1,683 @@
+[
+  {
+    "screen": "pcconfig-remote-computer-mcp-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "电脑 MCP：手机操作、双机维护与登录前恢复",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "在当前确实接入电脑工具的对话里，AI 可以读取选定电脑的文件、运行已获准的检查或操作可用桌面。连接、桌面登录和私人资料许可分别成立；登录前只做当时可用的有限维护。同一个服务还给网站看板提供电脑状态、今日动态和一个 0—100 的总体分。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "电脑 MCP：手机操作、双机维护与登录前恢复",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "在当前确实接入电脑工具的对话里，AI 可以读取选定电脑的文件、运行已获准的检查或操作可用桌面。连接、桌面登录和私人资料许可分别成立；登录前只做当时可用的有限维护。同一个服务还给网站看板提供电脑状态、今日动态和一个 0—100 的总体分。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在实际支持并已连接“让 AI 操作电脑”的电脑 MCP 客户端中，说明要操作主机还是副驾驶笔记本；手机原生 ChatGPT 应用的这类连接尚无可用证据。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先确认这条连接真正能做什么**　系统查看当前客户端是否已连到指定电脑，并是否真的提供本次所需的读取、脚本或桌面工具。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在实际支持并已连接“让 AI 操作电脑”的电脑 MCP 客户端中，说明要操作主机还是副驾驶笔记本；手机原生 ChatGPT 应用的这类连接尚无可用证据。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先确认这条连接真正能做什么**　系统查看当前客户端是否已连到指定电脑，并是否真的提供本次所需的读取、脚本或桌面工具。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”：输入本人验证码后，单独或显式组合办理个人资料与无限制授权；两项分别显示结果。电脑关机或服务异常时页面继续可见，单次 502 不被误判为关机。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 手机浏览器可直接打开本站“授权与状态”：输入本人验证码后，单独或显式组合办理个人资料与无限制授权；两项分别显示结果。电脑关机或服务异常时页面继续可见，单次 502 不被误判为关机。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时，通过现有配置调用助手复用官方 app-server：默认保温一小时，复用已查到的工具目录；工具已提交而结果丢失时保留未知、不重放。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 当前会话没列出已配置的 MCP 工具时，通过现有配置调用助手复用官方 app-server：默认保温一小时，复用已查到的工具目录；工具已提交而结果丢失时保留未知、不重放。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 机器登记在 registries/remote_computer_mcp.json：主服务 127.0.0.1:18793，副机 18794，主机私网中转 18796；主公网入口 https://mcp.wly0829.cn/mcp（Cloudflare 固定隧道），备用入口经副机公网转到主机。维护两路按编号查询、不重放。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 机器登记在 registries/remote_computer_mcp.json：主服务 127.0.0.1:18793，副机 18794，主机私网中转 18796；主公网入口 https://mcp.wly0829.cn/mcp（Cloudflare 固定隧道），备用入口经副机公网转到主机。维护两路按编号查询、不重放。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 维护命令超时 1—3600 秒、单次等待 0—30 秒，两路各自排队；每路输出上限 65536 字符。共享监督器每 10 秒检查，连续 3 次失败才重启前端；超时或断连不重放用户动作。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 维护命令超时 1—3600 秒、单次等待 0—30 秒，两路各自排队；每路输出上限 65536 字符。共享监督器每 10 秒检查，连续 3 次失败才重启前端；超时或断连不重放用户动作。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 在实际支持自定义 MCP 的账号界面连接固定服务器并独立完成授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 在实际支持自定义 MCP 的账号界面连接固定服务器并独立完成授权。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 官方帮助（9 月 18 日读取，之后未重新核对）把通用自定义接入列为仅网页可用，手机原生入口未列支持；连接成功、选到某模型或套餐标签都不能单独证明开放脚本、桌面或写入",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 官方帮助（9 月 18 日读取，之后未重新核对）把通用自定义接入列为仅网页可用，手机原生入口未列支持；连接成功、选到某模型或套餐标签都不能单独证明开放脚本、桌面或写入",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **服务不健康或 Tailscale 映射缺失**：先按活动配置检查系统服务、交互工作进程、维护任务、回环端口与授权，再增量恢复映射；禁止重置整个 Funnel。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **服务不健康或 Tailscale 映射缺失**：先按活动配置检查系统服务、交互工作进程、维护任务、回环端口与授权，再增量恢复映射；禁止重置整个 Funnel。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 机器路径、端口、固定入口、授权客户端与凭据来源登记（registries/remote_computer_mcp*.json，不含凭据值）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 机器路径、端口、固定入口、授权客户端与凭据来源登记（registries/remote_computer_mcp*.json，不含凭据值）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 已装依赖版本逐项与源码一致",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 已装依赖版本逐项与源码一致",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-16",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-remote-computer-mcp-16",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  }
+]

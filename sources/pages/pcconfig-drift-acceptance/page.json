@@ -1,0 +1,224 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig-drift-acceptance",
+  "kind": "project",
+  "title": "机器事实漂移、证据状态与分区验收",
+  "url": "/projects/pcconfig/drift-acceptance/",
+  "parent": "pcconfig",
+  "status_line": {
+    "state": "已退役",
+    "as_of": "2026-10-11",
+    "source": "统一漂移检查与分区验收器已于 2026-09-28 随综合自查删除（PCConfig 提交 348632a2）；现在按问题分别读恢复、运行时、任务和配置各自的入口。"
+  },
+  "screens": [
+    {
+      "id": "pcconfig-drift-acceptance-01",
+      "section": "top",
+      "title": "机器事实漂移、证据状态与分区验收",
+      "text": "# 机器事实漂移、证据状态与分区验收\n\n〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕\n\nPCConfig · 功能说明\n\n这项功能已经退役。以前我想知道“PCConfig 健不健康”“任务数为什么对不上”时，会让一个统一的漂移检查器和分区验收器跑一遍；2026 年 9 月 28 日，这套检查器连同综合自查一起删除了。现在想查哪一类机器事实，就直接读负责那一类的入口，结果仍然把“确实不一致”“暂时看不全”和“只需提醒”分开说。\n\n**当前情况：**统一漂移检查、分区验收清单和开发存储健康器都已删除，不再有“跑一遍全机验收”的入口；只检查核心恢复时，改用恢复模块自己的只读检查。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pcconfig/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n它原来解决的问题还在：登记可能过时，现场读取也可能因为权限、设备离线或读取器失败而不完整。不同的是，现在不再用一个总检查器替所有模块下结论，而是各模块用自己的只读入口回答自己的问题，避免为一个小疑问全机扫描，也避免一个“总绿灯”遮住具体缺口。\n\n## 举个实际例子\n\n我说“只看一下核心恢复还行不行”。AI 不再去找旧的验收器，而是直接调用恢复模块的只读检查。我问的是任务数对不上，它就去读计划任务的现场和登记；问运行时版本，就读运行时的现场读取器。\n\n## 最后我会得到什么\n\n我得到的仍是一张能行动的结论：哪些和登记一致、哪些不符、哪些看不全，以及该由哪个模块修。区别是这张结论来自负责那一块的入口，不再有跨模块的“全机通过”。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n负责模块的只读入口给出完整结果，只对这次真正读到的范围说一致。\n\n## 发现问题时\n\n指出具体差异、影响和负责修的模块；修好后用同一个入口再读一次。\n\n## 入口不可用或证据不足时\n\n权限不足、设备离线或读取超时标成“无法确认”，不算通过；也不会为了出一个总结论去重建已经退役的自查。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入 PCConfig 的 AI 对话里直接说想核对哪一类机器事实，例如“核心恢复”“计划任务”“运行时版本”；需要修复时另说明目标。\n\n## 需要准备什么\n\n- 想核对的那一类，例如恢复、任务或运行时\n\n- 当前机器\n\n- 是否只读\n\n## 从开始到拿到结果\n\n1. **找到负责的入口**　AI 先判断这次决定依赖哪一类事实，直接用那一类自己的只读检查，不再走统一验收器。\n\n2. **分开结论与证据**　读登记、现场可见范围和检查结果，分清差异、证据不足和这次没查的部分。\n\n3. **交回下一步**　具体差异交负责模块修；看不全时说明缺什么，不把未知写成故障或通过。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留退役事实、现在的替代入口和历史记录。\n\n已退役：统一漂移检查器、分区验收器、验收清单、开发存储健康器及其测试于 2026-09-28 03:59（北京时间）在 PCConfig 提交 348632a2 中删除；10 月 11 日逐项核对均已不存在。\n\n## 关键规则与设计选择\n\n1. 退役后不提供“全机验收”命令，也不为网站或排障重建旧自查；需要机器事实时，读负责那一类的原生来源。\n\n2. “处置级别”和“证据结论”分开读、看不全不算通过、任务定义和任务运行结果分开——这些原则仍由各模块自己的读取器遵守，但它们不能反过来证明旧检查器还在。\n\n3. 只检查核心恢复时，用恢复模块的 Inspect 只读检查，直接读恢复登记和任务定义，不经过任何区域选择器。\n\n4. 当前登记的 209 个测试只说明定义数量，本次没有运行，不当作通过数。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- 核心恢复：Invoke-CoreRecoveryMaintenance.ps1 -Mode Inspect -Json。\n\n- 运行时：由运行时只读读取器回读各组件版本（见“运行与启动”“机器事实”模块）。\n\n- 计划任务、路径和端口：分别读任务现场与登记、路径与项目配置合同，按明确的键查询影响范围。\n\n- 退役前做法（历史）：曾由 Test-PCConfigDrift.ps1 输出带稳定检查名、双状态（处置级别＋证据结论）和有界证据的漂移摘要，由 Invoke-PCConfigAcceptance.ps1 按区域与检查名的精确交集运行验收清单；这些程序和清单已删除，不再运行。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 先写清这次决定依赖哪一类机器事实。\n\n2. 直接调用那一类的只读入口；没有入口的类别如实说“没有现成检查”，不拼一个总检查。\n\n3. 分开读结论和证据范围；看不全的保持“无法确认”。\n\n4. 差异交负责模块修，修好后用同一入口复查。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-08",
+      "section": "tech",
+      "title": "名词和入口（一）",
+      "text": "## 名词和入口（一）\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Drift（漂移） | 登记或合同与当前现场不一致；可能是真故障，也可能只是快照还没刷新。 |\n| 处置级别与证据结论 | 前者说该继续、关注还是停下，后者说证据是否成立；未验证永远不算通过。这两条轴现在由各模块的读取器分别给出。 |\n| 退役 | 程序、清单、合同和测试已经从源码删除，不再运行，也不作为当前入口。 |\n| ready_with_warnings | 恢复模块只读检查的结论之一：恢复链可用，但有需要关注的告警。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-09",
+      "section": "tech",
+      "title": "名词和入口（二）",
+      "text": "## 名词和入口（二）\n\n## 专业定义\n\n原来回答“账本和电脑现场对不对得上、证据够不够、该找谁修”的统一检查层已经退役；同一个问题现在由各模块用自己的只读入口分别回答。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-10",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n旧式总检查容易把命令成功当全机通过、把权限不足当对象不存在，或者每次都跑全套。退役后，这些风险由“各模块只回答自己那一块”来避免。\n\n## 边界\n\n- 不重建统一漂移检查、验收清单或综合自查，也不从旧报告恢复已删除的流水线\n\n- 不把某一模块的通过推成全机健康\n\n- 不把权限不足、超时或设备离线写成通过或不存在\n\n- 不把旧回执里的 PASS 当成今天的结论",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-11",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n## 失败与恢复\n\n- **有人或旧文档要求运行旧检查器**：说明它已于 9 月 28 日删除，改用对应模块的只读入口。\n\n- **某一类没有现成检查**：如实说明缺口，只读原生来源回答当前问题，不为此新建总检查。\n\n- **恢复检查返回 ready_with_warnings**：按告警逐类交恢复模块处理，不把“可用”说成“全部正常”。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-12",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 恢复模块的 Inspect 只读检查（核心恢复）\n\n- 运行时只读读取器（运行时版本）\n\n- 计划任务现场与登记、路径与项目配置合同（任务、路径、端口）\n\n- 综合自查退役说明（docs/recovery/selfcheck-retirement.md）\n\n## 如何验证\n\n- 2026-09-28 03:59（北京时间）PCConfig 提交 348632a2 删除了漂移检查器、验收器、验收清单、开发存储健康器和对应测试；10 月 11 日 16:31—16:34 逐项核对均不存在\n\n- 历史（之后未重新核对）：2026-09-10 06:12 管理员完整现场 7 项通过、1 项阻断，94 个任务对 94 条登记、定义差异 0；2026-09-01 01:49 漂移摘要 6 通过、1 关注，87 条登记对 84 个可见任务属于看不全而非丢失；这些都是退役前旧检查器的记录，不代表今天",
+      "links": [
+        {
+          "text": "上一个模块 运行与启动",
+          "href": "/projects/pcconfig/runtime-startup/"
+        },
+        {
+          "text": "下一个模块 换机与恢复",
+          "href": "/projects/pcconfig/recovery-backup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-drift-acceptance-13",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 与其他模块的关系\n\n机器事实、运行与启动、换机与恢复等模块各自提供只读入口和证据；本模块现在只记录统一检查层已经退役以及该去哪里查，不再汇总或替它们下结论。",
+      "links": [
+        {
+          "text": "上一个模块 运行与启动",
+          "href": "/projects/pcconfig/runtime-startup/"
+        },
+        {
+          "text": "下一个模块 换机与恢复",
+          "href": "/projects/pcconfig/recovery-backup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

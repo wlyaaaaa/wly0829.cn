@@ -1,0 +1,603 @@
+[
+  {
+    "screen": "pcconfig-owner-takeover-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本人主动接管：填一次时长，按原截止办理",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "我想在明确的一段时间内亲自决定后续操作，而不是被自己以前写下的规则反复挡住。这个入口让我选择范围、填写时长并完成一次本人验证；之后 AI 仍要讲清风险、保留原件和协调其他工作，但不再把额外模型批准当成第二道门。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本人主动接管：填一次时长，按原截止办理",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "我想在明确的一段时间内亲自决定后续操作，而不是被自己以前写下的规则反复挡住。这个入口让我选择范围、填写时长并完成一次本人验证；之后 AI 仍要讲清风险、保留原件和协调其他工作，但不再把额外模型批准当成第二道门。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在当前 Codex 或 Claude 桌面对话里直接说“我要给这个任务两小时无限制授权”，或说明你需要的时长。AI 打开现有接管窗口，你在窗口里填写时长并亲自验证；不用自己运行命令。验证后仍在原任务继续，并沿用原来的到期时间。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **窗口显示这次授权的边界**　本人可见的窗口显示范围、时长和预计截止；默认只管当前对话，扩大到本机全部对话必须由我主动选择，不会扩到别的电脑；AI 不代填或续期。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在当前 Codex 或 Claude 桌面对话里直接说“我要给这个任务两小时无限制授权”，或说明你需要的时长。AI 打开现有接管窗口，你在窗口里填写时长并亲自验证；不用自己运行命令。验证后仍在原任务继续，并沿用原来的到期时间。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **窗口显示这次授权的边界**　本人可见的窗口显示范围、时长和预计截止；默认只管当前对话，扩大到本机全部对话必须由我主动选择，不会扩到别的电脑；AI 不代填或续期。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 本人主动入口不用先派指定模型审批；四类本人验证任选已有可用方式。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 本人主动入口不用先派指定模型审批；四类本人验证任选已有可用方式。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 正式入口 Invoke-OwnerTakeover.ps1 支持两个宿主：HostHarness 为 codex 或 claude-code，HostTaskId 来自真实宿主；窗口和管理员能力都不算本人验证。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 正式入口 Invoke-OwnerTakeover.ps1 支持两个宿主：HostHarness 为 codex 或 claude-code，HostTaskId 来自真实宿主；窗口和管理员能力都不算本人验证。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 本人明确申请限时授权（需要时同时申请资料期）。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 本人明确申请限时授权（需要时同时申请资料期）。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 网页把我明确选择的授权、时长与验证码直接交给主机正式入口办理；状态读取不会延长授权，截图或历史成功结果也不会恢复已失效的权限",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 网页把我明确选择的授权、时长与验证码直接交给主机正式入口办理；状态读取不会延长授权，截图或历史成功结果也不会恢复已失效的权限",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **本人取消或请求超时**：只终止本次未完成请求，不自动换因子重开；其他有效授权继续到原截止。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **本人取消或请求超时**：只终止本次未完成请求，不自动换因子重开；其他有效授权继续到原截止。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 正式 Open/OpenGlobal/Status 入口与宿主绑定（Invoke-OwnerTakeover.ps1）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 正式 Open/OpenGlobal/Status 入口与宿主绑定（Invoke-OwnerTakeover.ps1）",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:34 只读：接管入口、运行时、窗口三个程序与源码、现役清单哈希一致，安装批次 364。原有期限没有因读取而改变",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:34 只读：接管入口、运行时、窗口三个程序与源码、现役清单哈希一致，安装批次 364。原有期限没有因读取而改变",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-owner-takeover-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  }
+]

@@ -1,0 +1,621 @@
+[
+  {
+    "screen": "pcconfig-protected-data-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "加密文件应用升级或损坏后，怎样保住文件",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "这页原来介绍的“旧版加密文件应用升级保护＋完整加密文件库”平台（内部编号 P0—P7）已经在 2026 年 9 月 25 日停用并删除，不再是一个等着修好再装的产品。现在要加密并找回我点名的文件，用“授权文件”；密码和设备恢复用密码中心的恢复集；整机和普通文件备份在“换机与恢复”模块。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "加密文件应用升级或损坏后，怎样保住文件",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "这页原来介绍的“旧版加密文件应用升级保护＋完整加密文件库”平台（内部编号 P0—P7）已经在 2026 年 9 月 25 日停用并删除，不再是一个等着修好再装的产品。现在要加密并找回我点名的文件，用“授权文件”；密码和设备恢复用密码中心的恢复集；整机和普通文件备份在“换机与恢复”模块。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中直接说要加密或找回哪些文件、在哪台电脑上；AI 会转到授权文件、密码中心或换机与恢复模块，不再进入旧平台。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先分清是哪一类文件**　点名的私人文件走授权文件；账号密码和 BitLocker 恢复信息走密码中心；整盘和普通文件夹走换机与恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中直接说要加密或找回哪些文件、在哪台电脑上；AI 会转到授权文件、密码中心或换机与恢复模块，不再进入旧平台。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先分清是哪一类文件**　点名的私人文件走授权文件；账号密码和 BitLocker 恢复信息走密码中心；整盘和普通文件夹走换机与恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留退役事实、现役替代和退役前的历史。"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留退役事实、现役替代和退役前的历史。"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 旧平台不是一个可以继续排查安装错误的产品；不再运行它的状态检查、漂移测试或检查器，也不把旧的“安装清单不匹配”当成待修问题。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 旧平台不是一个可以继续排查安装错误的产品；不再运行它的状态检查、漂移测试或检查器，也不把旧的“安装清单不匹配”当成待修问题。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 选定文件加密与恢复：授权文件（PCAF），产品和代码属于密码中心项目，PCConfig 只管安装和机器备份；见“授权文件”模块。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 选定文件加密与恢复：授权文件（PCAF），产品和代码属于密码中心项目，PCConfig 只管安装和机器备份；见“授权文件”模块。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 先判断要处理的是选定文件、密码与设备恢复，还是整机与普通文件。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 先判断要处理的是选定文件、密码与设备恢复，还是整机与普通文件。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不启动、不修复、不重装旧 P0—P7 平台，也不运行它的状态检查或测试",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不启动、不修复、不重装旧 P0—P7 平台，也不运行它的状态检查或测试",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **旧文档或旧 AI 说明要求检查旧平台**：说明它已于 9 月 25 日退役，改走对应现役产品。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **旧文档或旧 AI 说明要求检查旧平台**：说明它已于 9 月 25 日退役，改走对应现役产品。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 授权文件（PCAF）：密码中心正式受保护入口中的加密、核对、解密、查看、编辑五项操作",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 授权文件（PCAF）：密码中心正式受保护入口中的加密、核对、解密、查看、编辑五项操作",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-25 20:53（北京时间）提交 d266224f 删除旧 P0—P7/CoreGoal 的合同、登记和源码；09-25 23:54 提交 e20a60df 删除旧 C Policy 栈；09-26 01:47 提交 f5aa5c22 退役 RegisteredCarrier、保留恢复集",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-25 20:53（北京时间）提交 d266224f 删除旧 P0—P7/CoreGoal 的合同、登记和源码；09-25 23:54 提交 e20a60df 删除旧 C Policy 栈；09-26 01:47 提交 f5aa5c22 退役 RegisteredCarrier、保留恢复集",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-protected-data-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  }
+]

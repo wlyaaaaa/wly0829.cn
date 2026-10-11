@@ -1,0 +1,233 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pcconfig-memory-diagnostics",
+  "kind": "project",
+  "title": "内存耗尽与突然卡住时，留下可追查的记录",
+  "url": "/projects/pcconfig/memory-diagnostics/",
+  "parent": "pcconfig",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 PCConfig 431ad1c1 源码与说明；自然开机与硬断电尾段仍未实测。"
+  },
+  "screens": [
+    {
+      "id": "pcconfig-memory-diagnostics-01",
+      "section": "top",
+      "title": "内存耗尽与突然卡住时，留下可追查的记录",
+      "text": "# 内存耗尽与突然卡住时，留下可追查的记录\n\n〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕\n\nPCConfig · 功能说明\n\n电脑突然卡住甚至只能断电时，事后再打开任务管理器往往已经看不到当时是谁占用了内存。这项能力让 Windows 自己记录系统内存、内核池和进程私有内存的变化，故障后按时间与当时 PID 追查。它独立于 Codex、TimeAudit、Docker 和网络，既不会杀进程，也不会为了取证重启电脑。\n\n**当前情况：**突然断电前最后一段和自然开机接续尚未实测。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 电脑配置与恢复",
+          "href": "/projects/pcconfig/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pcconfig/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n系统提交量耗尽可能来自某个应用、内核池或其他来源；一个进程此刻占用最多，不能证明它造成了之前的卡死。只扩大分页文件只能增加余量，持续保留故障前后的数字，才能区分真正增长的来源。\n\n## 举个实际例子\n\n“刚才电脑突然卡住，重开后又正常了。看看卡住前是谁的内存在涨，先别结束程序。”系统先对齐发生时间，读取上一会话留下的尾段、邻近内存记录和Windows事件，比较进程私有字节、系统提交量与内核池变化；日志缺失时说清缺口，不把当前排行榜当根因。\n\n## 最后我会得到什么\n\n给我故障前后能读到的内存变化、当时相关程序和仍缺的时段。它帮助缩小原因，不会自行结束程序；突然断电前尚未写下的最后一小段可能找不回来。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n故障时段确有记录时，比较当时程序和整机内存的变化，只对证据支持的原因下结论。\n\n## 发现问题时\n\n日志损坏或某类内存突然增长时，说明具体疑点与接下来的检查，不靠重启掩盖。\n\n## 入口不可用或证据不足时\n\n没有当时记录或断电尾段丢失时直接说明，保留现有材料，不猜哪个程序造成卡顿。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n电脑卡住后，在已接入 PCConfig 的 AI 对话中提供发生时间，要求读取“内存卡顿诊断”；这是只读分析入口。\n\n## 需要准备什么\n\n- 卡顿或断电的大致时间\n\n- 是否已重启\n\n- 希望排查的程序线索\n\n## 从开始到拿到结果\n\n1. **圈定故障时间**　先把现象和重启时间对齐，避免拿现在的进程榜解释过去。\n\n2. **读当时记录**　读取上一会话尾段、内存计数和 Windows 事件，比较进程与系统内存变化。\n\n3. **交回可能原因**　列出有证据的增长线索和缺口；未保存的断电尾段不能补猜，也不会自动结束进程。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n自然开机与硬断电尾部仍未验。\n\n## 关键规则与设计选择\n\n1. 系统提交量、内核池和进程私有内存共同判断；最高占用不等于内存泄漏。\n\n2. 采样在 Windows 原生性能收集器中持续进行，短脚本只做开机接续和分段后的限额清理。\n\n3. 记录是有界故障证据，不是全机活动库；不读取命令行、窗口标题、聊天或文件正文。\n\n4. PerfMon 停止当前记录；要重启后仍停用，使用 Stop 或同时禁用对应任务。\n\n5. 4320 段是数量上限，不是保证保留三天；硬断电可能损坏当前段或丢失未落盘尾部。\n\n6. 读取有预算：最多看 60 个候选段，超出预算或段数上限就返回“部分”结果；“摘要读取失败”（还不知道是否落在窗口内）和“窗口样本读取失败”（已确认落在窗口内后失败）分开报告，不混成窗口损坏。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- tools/Invoke-MemoryFreezeDiagnostics.ps1 管理安装、启动、停止、状态和卸载；唯一原生收集器为 PCConfig-MemoryDiagnostics，根目录任务为 PCConfig Memory Diagnostics。\n\n- Windows 性能日志每 5 秒记录系统提交量、提交上限、可用内存、分页池与非分页池、换页速率、分页文件使用率，以及各进程的私有字节、工作集和 PID。\n\n- 每 60 秒或 16 MiB 封存一段，递增序号避免覆盖；同一 SYSTEM 任务在开机延迟 30 秒和分段关闭时运行维护脚本，不要求用户登录。\n\n- 循环区按最旧优先清理，上限 1 GiB 或 4320 段；从停止状态启动前，另存上一会话最新 15 段、最多 64 MiB，只留最近三个会话。\n\n- 日常读取用 Get-MemoryFreezeEvidence.ps1 -Minutes 15 -Json：在原生 Windows PowerShell 里先聚合再以 JSON 返回；只看覆盖范围时用 CoverageOnly。以前 Import-Counter 对有效文件报错，已查明是兼容调用把嵌套样本转成字符串所致，不是日志坏了；relog 只留给明确需要原过程的本地取证。\n\n- 活跃段、无效计数器、滚动覆盖和旧会话尾段分开处理；活跃段明确排除并写明原因。\n\n- Get-ComputerStutterDiagnostic.ps1 把 TimeAudit 有界摘要、原生内存记录和 Windows 事件按同一时间窗交回，保留每条来源的覆盖和未知；它只证明该时段可读，不证明某个程序造成了问题。\n\n- Stop 先禁用维护任务再停止收集器，并保留日志；完成回调不会复活已停止的收集器。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 记录异常及断电时刻，统一按同一时区对齐。\n\n2. 只读确认采样状态与保存位置。\n\n3. 选上一会话尾段和故障邻近的已关闭段。\n\n4. 用 Get-MemoryFreezeEvidence 读取必要计数器，并结合 Windows 事件。\n\n5. 按当时 PID 比较私有内存、系统提交与内核池趋势。\n\n6. 交回原因排序、覆盖缺口与有依据的下一步。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| System commit（系统提交量） | Windows已承诺提供后备存储的内存总量；应与提交上限和各来源趋势一起看。 |\n| Kernel pool（内核池） | 内核和驱动使用的内存，分别查看分页池与非分页池，不能全部归因给应用。 |\n| BLG（Windows二进制性能日志） | 保存计数器随时间变化的原生文件；文件存在不等于数值与故障时段可读。 |\n\n## 专业定义\n\n即使AI、数据库或网络不可用，Windows仍按固定间隔留下内存与进程证据；恢复后按故障时间查，而不是只看当前任务管理器。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n故障发生后现场容易消失；把记录放进依赖数据库、网络或 AI 的链条，还可能与业务一起停止。因此 Windows 原生收集器保留必要数字，AI 在故障发生后才读取和判断。\n\n## 边界\n\n- 不依赖 Codex、TimeAudit、Docker 或网络，不读取私人正文\n\n- 不杀进程、不重启电脑、不重置显示；记录不会自动修复内存泄漏\n\n- 硬断电的活跃段和未落盘尾部可能损坏或丢失；不承诺保住最后一秒\n\n- 停止与卸载保留日志\n\n- PID 与时间共同归因，进程实例后缀可能复用\n\n- 某一次短采样的可用内存或提交量只是当时读数，不用来改容量或回写基线",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n## 失败与恢复\n\n- **原生安装或配置回读失败**：按安装前像恢复原任务和收集器；回滚失败单独报告。\n\n- **收集器手动停止后收到分段完成事件**：保持停止；只有明确 Start 或仍启用的下一次开机任务才接续。\n\n- **维护失败或任务结果非零**：保留最近错误与实际状态；没有错误文件不能反推没有丢样。\n\n- **读取超出预算或段数上限**：返回部分结果并说明截断，不把截断说成完整覆盖。\n\n- **非分页池突增而应用占用不解释系统提交**：转向内核池与驱动取证。\n\n- **硬断电后最后日志不可读**：使用已关闭分段和保存的会话尾段，明确缺失范围。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-11",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 用途、数据类别、停止语义、限额、断电边界和恢复流程（docs/recovery/memory-freeze-diagnostics.md）\n\n- 配置、安装回滚、状态和启停入口（Invoke-MemoryFreezeDiagnostics.ps1）\n\n- 有界读取入口 Get-MemoryFreezeEvidence.ps1\n\n- 卡顿联合诊断 Get-ComputerStutterDiagnostic.ps1",
+      "links": [
+        {
+          "text": "上一个模块 机器事实",
+          "href": "/projects/pcconfig/machine-facts/"
+        },
+        {
+          "text": "下一个模块 运行与启动",
+          "href": "/projects/pcconfig/runtime-startup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-12",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- 本次没有结束进程、重启、断电或做启停测试\n\n- 历史（之后未重新核对）：2026-09-14 10:55 只读状态显示已安装、运行、自动接续启用、最近维护结果 0\n\n- 仍未验收：自然物理开机的完整接续、硬断电最后一段、新 Stop 不复活和再次 Start 保留尾段的端到端",
+      "links": [
+        {
+          "text": "上一个模块 机器事实",
+          "href": "/projects/pcconfig/machine-facts/"
+        },
+        {
+          "text": "下一个模块 运行与启动",
+          "href": "/projects/pcconfig/runtime-startup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pcconfig-memory-diagnostics-13",
+      "section": "tech",
+      "title": "依据与来源（三）",
+      "text": "## 依据与来源（三）\n\n## 与其他模块的关系\n\n机器事实模块负责硬件与配置导航；本模块拥有内存故障时序、采样生命周期及故障后读回。TimeAudit 提供更广的历史信号，电脑 MCP 的长期资源信号提供看板趋势；它们不替代本模块独立的原生记录。",
+      "links": [
+        {
+          "text": "上一个模块 机器事实",
+          "href": "/projects/pcconfig/machine-facts/"
+        },
+        {
+          "text": "下一个模块 运行与启动",
+          "href": "/projects/pcconfig/runtime-startup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

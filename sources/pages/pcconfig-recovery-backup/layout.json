@@ -1,0 +1,747 @@
+[
+  {
+    "screen": "pcconfig-recovery-backup-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "换机、重装、备份与恢复",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "先确认可用的文件、配置和系统镜像，再决定怎样恢复。G/H 两份资料副本能校验完整性；系统镜像由 Veeam 每天加密做全量和增量，并已整链发布到 H、生成过恢复 ISO。Windows 起来后，用普通 Codex 桌面客户端按恢复指南接续。无论同机重装、换机、系统盘故障还是只有 PE，先认清机器和磁盘，不格式化唯一副本。整机还原、自然启动及应用内数据是否可见仍是不同的验收，不能用镜像能打开代替。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "换机、重装、备份与恢复",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "先确认可用的文件、配置和系统镜像，再决定怎样恢复。G/H 两份资料副本能校验完整性；系统镜像由 Veeam 每天加密做全量和增量，并已整链发布到 H、生成过恢复 ISO。Windows 起来后，用普通 Codex 桌面客户端按恢复指南接续。无论同机重装、换机、系统盘故障还是只有 PE，先认清机器和磁盘，不格式化唯一副本。整机还原、自然启动及应用内数据是否可见仍是不同的验收，不能用镜像能打开代替。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中说明是同机重装、换机还是故障恢复，先要求恢复清单；实际磁盘操作另按现场核对。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先识别还能用的设备和副本**　系统只读核对实际物理盘、能打开的备份和登录条件，旧盘符与文件夹名字不能当作恢复成功。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中说明是同机重装、换机还是故障恢复，先要求恢复清单；实际磁盘操作另按现场核对。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先识别还能用的设备和副本**　系统只读核对实际物理盘、能打开的备份和登录条件，旧盘符与文件夹名字不能当作恢复成功。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 同机重装：若主板与 BIOS 没有重置或升级，不为重装 Windows 额外刷写 BIOS；先保护现有数据盘，再按旧机器基线重认盘符和配置。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 同机重装：若主板与 BIOS 没有重置或升级，不为重装 Windows 额外刷写 BIOS；先保护现有数据盘，再按旧机器基线重认盘符和配置。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 同一文件在 G 有多个硬链接入口时，H 只独立复制一份字节，再在 H 内共享；冷备先复制并核验新增和变化，再删除 H 中已退出的旧副本，不盲镜像整盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 同一文件在 G 有多个硬链接入口时，H 只独立复制一份字节，再在 H 内共享；冷备先复制并核验新增和变化，再删除 H 中已退出的旧副本，不盲镜像整盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 入口按四种事故分流：同机重装、换机、系统盘故障、仅 PE；来源分工固定：F 启动救急，G 在线热备，H 冷备，Git 只重建正常仓库，Veeam 镜像负责整盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 入口按四种事故分流：同机重装、换机、系统盘故障、仅 PE；来源分工固定：F 启动救急，G 在线热备，H 冷备，Git 只重建正常仓库，Veeam 镜像负责整盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 清理器的恢复顺序：回收站清理（重建序 500，SYSTEM 运行）先恢复并核对运行身份，AI 缓存清扫（501）再恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 清理器的恢复顺序：回收站清理（重建序 500，SYSTEM 运行）先恢复并核对运行身份，AI 缓存清扫（501）再恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 先回答是哪一种场景，记录现存机器、网络、可读磁盘、F/G/H 和 GitHub 权限。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 先回答是哪一种场景，记录现存机器、网络、可读磁盘、F/G/H 和 GitHub 权限。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 从 27 项 C 用户配置清单中按负责方选择恢复；登录态、秘密和聊天数据库不作为普通配置整包导入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. 从 27 项 C 用户配置清单中按负责方选择恢复；登录态、秘密和聊天数据库不作为普通配置整包导入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不自动刷写 BIOS；只读识盘完成前不 clean、format、改分区或 BCD，旧盘符不等于设备身份",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不自动刷写 BIOS；只读识盘完成前不 clean、format、改分区或 BCD，旧盘符不等于设备身份",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **PE 能启动但看不到内部盘或网络**：不格式化 U 盘或内盘；先补存储和网络驱动，仍不可见就停止该来源的恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **PE 能启动但看不到内部盘或网络**：不格式化 U 盘或内盘；先补存储和网络驱动，仍不可见就停止该来源的恢复。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-16",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 核心恢复登记 registries/core_recovery.json 与合同 docs/contracts/pcconfig.core-recovery.md",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-16",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 核心恢复登记 registries/core_recovery.json 与合同 docs/contracts/pcconfig.core-recovery.md",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-17",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：恢复材料 19、锚点 21、C 用户配置 27、项目登记 19；重建清单 127 项按 38/7/46/36 分类",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-17",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：恢复材料 19、锚点 21、C 用户配置 27、项目登记 19；重建清单 127 项按 38/7/46/36 分类",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-18",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-recovery-backup-18",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  }
+]

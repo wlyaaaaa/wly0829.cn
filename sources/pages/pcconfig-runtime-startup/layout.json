@@ -1,0 +1,839 @@
+[
+  {
+    "screen": "pcconfig-runtime-startup-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "运行时、受管软件、启动项与计划任务",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "软件装上只是第一步；这里还看它能否启动、上次任务有没有完成、断电或重装后按什么顺序接回。远控、微信和消息服务各自报告真实可用性。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "运行时、受管软件、启动项与计划任务",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 电脑配置与恢复〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "软件装上只是第一步；这里还看它能否启动、上次任务有没有完成、断电或重装后按什么顺序接回。远控、微信和消息服务各自报告真实可用性。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中点名软件、启动项或计划任务及当前电脑。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **区分启动发生在哪一段**　系统查看问题出在开机服务、登录后任务还是手动打开的程序，不用“任务就绪”概括三种情况。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接入 PCConfig 的 AI 对话中点名软件、启动项或计划任务及当前电脑。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **区分启动发生在哪一段**　系统查看问题出在开机服务、登录后任务还是手动打开的程序，不用“任务就绪”概括三种情况。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 运行时当前值只信 Get-RuntimeInventory；冻结的 Registry 只用于对比。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 运行时当前值只信 Get-RuntimeInventory；冻结的 Registry 只用于对比。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. LocalGpuBroker（本地 GPU 调度器）统一拥有客户端 32100 与内部 Ollama 后端 32101；OCR（文字识别）与 ASR（语音识别）可各持一份租约并行，两份同类任务仍互斥，Ollama 会话与任一外部租约也互斥。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. LocalGpuBroker（本地 GPU 调度器）统一拥有客户端 32100 与内部 Ollama 后端 32101；OCR（文字识别）与 ASR（语音识别）可各持一份租约并行，两份同类任务仍互斥，Ollama 会话与任一外部租约也互斥。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. Xiaomi Share 在 MiService 正常时只补一个签名有效的交互界面；10 月 11 日修正了厂商服务自动恢复期间的瞬时失败（提交 9181327e），服务恢复中不再误报。多个界面或身份不符就停止；界面活着不证明手机文件已经传完。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. Xiaomi Share 在 MiService 正常时只补一个签名有效的交互界面；10 月 11 日修正了厂商服务自动恢复期间的瞬时失败（提交 9181327e），服务恢复中不再误报。多个界面或身份不符就停止；界面活着不证明手机文件已经传完。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 运行时 Provider 返回 Windows、PowerShell 7 和 Windows PowerShell 的路径、版本、架构与编码事实。10 月 11 日 16:34 现场：PowerShell 7.6.4，Windows PowerShell 5.1.26100.9549。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- WeChat AutoStart 以交互用户、受限权限在登录后延迟 30 秒启动官方客户端，补到两个顶层实例后连续稳定 15 秒才算完成。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- WeChat AutoStart 以交互用户、受限权限在登录后延迟 30 秒启动官方客户端，补到两个顶层实例后连续稳定 15 秒才算完成。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 用别名或任务名定位受管条目和业务负责方。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 用别名或任务名定位受管条目和业务负责方。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "8. 恢复微信官方客户端和 Invoke-WeChatDualLaunch.ps1 后，按双开安装器回读任务与快捷方式；账号由本人重新确认。冻结的 WeFlow 不重建。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "8. 恢复微信官方客户端和 Invoke-WeChatDualLaunch.ps1 后，按双开安装器回读任务与快捷方式；账号由本人重新确认。冻结的 WeFlow 不重建。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 环境变量、任务动作和日志按实际值判断：普通名称、路径、状态可以公开；只省略确含私人正文或可复用凭据的值",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 环境变量、任务动作和日志按实际值判断：普通名称、路径、状态可以公开；只省略确含私人正文或可复用凭据的值",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **完整权限现场与 Registry 不同**：保留精确差异并标明观察时间；不把历史任务快照冒充当前闭合。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **完整权限现场与 Registry 不同**：保留精确差异并标明观察时间；不把历史任务快照冒充当前闭合。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-16",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：返回需要完整权限、任务存在性为空；只读升级核验，不据此重装或停服务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-16",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **ToDesk SYSTEM 任务普通权限不可见**：返回需要完整权限、任务存在性为空；只读升级核验，不据此重装或停服务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-17",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 运行时只读读取器 Get-RuntimeInventory",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-17",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 运行时只读读取器 Get-RuntimeInventory",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-18",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 主工作站登录前远控、SYSTEM 看门狗与 ToDesk 安装/只读验证/移除入口",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-18",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 主工作站登录前远控、SYSTEM 看门狗与 ToDesk 安装/只读验证/移除入口",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-19",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：环境变量 94、PATH 62、受管组件 11、启动快照 24、任务快照 127、用途目录 145",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-19",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 10 月 11 日 16:32—16:39 对截止提交 431ad1c1 只数登记：环境变量 94、PATH 62、受管组件 11、启动快照 24、任务快照 127、用途目录 145",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-20",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-runtime-startup-20",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  }
+]
