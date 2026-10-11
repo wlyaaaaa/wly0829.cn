@@ -660,6 +660,23 @@ personal AI collaboration workspace; public presentation is secondary.
   automatic weekly review or source-event refresh. If AI notices stale website
   content while doing other work, it mentions that fact in its report to the
   owner without handing off or creating a website task.
+- An owner-requested website refresh treats personal data as unlocked by
+  default, regardless of the current personal-data lock state (owner,
+  2026-10-11 15:48). It reads the private aggregate counts and product states
+  the pages display through their bounded Owner entrypoints without asking for
+  verification. This changes only access timing for this refresh; what may be
+  published still follows the public-content gate and the active global
+  classification, and it does not extend to other tasks.
+- During an owner-requested refresh, every dated figure the pages display
+  ("截至……", "数字截至……", counts, sizes, states) is re-read from its current
+  Owner source, including when the change came from a feature change rather
+  than a commit. A figure that cannot be re-read stays with its old date and an
+  explicit Unknown (owner, 2026-10-11 15:47).
+- A frozen generator page that the current refresh would otherwise leave
+  materially stale is rebuilt as a current typeset page in the same refresh,
+  at the same quality bar as other pages; frozen pages untouched by the
+  refresh stay frozen until a later refresh reaches them (owner, 2026-10-11
+  03:19, 15:40 and 15:42).
 - An owner-requested refresh closes Project, Rules and Skills pages through their own
   Owners first, then derives whether System still tells the truth. Git history,
   diffs and changed paths identify candidates only. When roles, use, boundaries,
