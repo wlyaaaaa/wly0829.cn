@@ -542,7 +542,8 @@
 #computer-access-03 .o3-box { grid-column: 9 / 13; padding: 16px 18px; border: 1.5px solid #cfe9d8; border-radius: 14px; background: #f6fcf8; color: #2e4675; font-size: 15px; line-height: 1.7; }
 #computer-access-03 .o3-box h3 { display: block; margin: 0 0 6px; font-size: 18px; line-height: 1.4; color: #0a7232; }
 #computer-access-03 .o3-box p { margin: 0; }
-#computer-access-03 .o3-b1 { grid-row: 3; } #computer-access-03 .o3-b2 { grid-row: 4 / 6; padding-bottom: 124px; }
+#computer-access-03 .o3-b1 { grid-row: 3; } #computer-access-03 .o3-b2 { grid-row: 4 / 6; padding-bottom: 124px; align-self: stretch; }
+#computer-access-03.o3-ready .screen-equivalent-text { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap; }
 #computer-access-03.o3-ready button.b2-image-action { grid-column: 9 / 13; grid-row: 5; align-self: end; justify-self: start; margin: 0 0 18px 18px; width: auto !important; height: 40px !important; padding: 0 14px;
   display: flex !important; align-items: center; border: 2px solid #1f8a4c !important; border-radius: 10px !important; background: #fff !important; color: #13753a !important;
   font: 700 15px/1.2 "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif !important; white-space: nowrap; }
@@ -871,7 +872,9 @@ Windows
       make('div', 'o3-box o3-b2', '<h3>操作结果</h3><p>锁定、结束、锁屏都记在操作结果里，可以查询结果；在网站上办的，也能在主机查询此请求。</p>'));
     screen.classList.add('o3-ready');
   }
-  const start = () => { if (screen.querySelectorAll('button.b2-image-action').length >= 3) build(); };
+  // 只在宽屏横向改成表格；手机竖版原图本来完整，保持原样
+  const wide = window.matchMedia('(orientation: landscape) and (min-width: 981px)');
+  const start = () => { if (wide.matches && screen.querySelectorAll('button.b2-image-action').length >= 3) build(); };
   new MutationObserver(start).observe(screen, { childList: true, subtree: true });
   start();
 })();</script></body></html>
