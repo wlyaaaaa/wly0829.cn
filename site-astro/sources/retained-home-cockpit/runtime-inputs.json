@@ -799,9 +799,9 @@
       "sha256": "48770fe6a295700b29eba893947fe1f8f6fe974674b914cce7323f0468cb993e",
       "bytes": 67988
     },
-    "_home-cockpit/home-firstpaint-454be55be41cb476b9da.js": {
-      "sha256": "454be55be41cb476b9da6fcb652dadfba5b179be65cbe9d65a1a66b5dd8e6245",
-      "bytes": 72613
+    "_home-cockpit/home-firstpaint-14de1de98f876a60fcca.js": {
+      "sha256": "14de1de98f876a60fcca25f279aee48c4a1fef8fe986f52019e26176eec34e53",
+      "bytes": 75596
     }
   },
   "replacements": {
