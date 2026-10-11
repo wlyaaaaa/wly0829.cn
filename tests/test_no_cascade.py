@@ -17,6 +17,29 @@ retry = load('cascade_retry', 'scripts/prepare-resource-retry.py')
 build_runtime = load('cascade_runtime', 'site-astro/tools/build_runtime.py')
 
 class NoCascadeTests(unittest.TestCase):
+    def test_search_loads_both_tables_before_the_existing_client(self):
+        body = '<head><script>window.note="search-index.js"</script></head>\r\n<script src="/search-projects.js"></script><script type="module" data-src="/client.js"></script>'
+        result = build_runtime.search_index_entry(body, {})
+        self.assertIn('\r\n<script src="/search-index.js"></script><script src="/search-projects.js">', result)
+        self.assertEqual(build_runtime.search_index_entry(result, {}), result)
+        url = 'https://example.oss.invalid/releases/one/search-index.js'
+        absolute = result.replace('src="/search-index.js"', 'src="'+url+'?v=1#same"')
+        self.assertEqual(build_runtime.search_index_entry(absolute, {}, {'oss': {'objects': {'search-index.js': {'url': url}}}}), absolute)
+        alias = result.replace('/search-index.js', '/_runtime/old/search-index.js')
+        self.assertEqual(build_runtime.search_index_entry(alias, {}), result)
+        with self.assertRaisesRegex(ValueError, '项目索引入口'):
+            build_runtime.search_index_entry('<script>window.note="search-projects.js"</script>', {})
+
+    def test_cold_frozen_search_only_adds_the_declared_index_entry(self):
+        snapshot = build_runtime.read(ROOT/'site-astro/sources/frozen-site/manifest.json')
+        body = (ROOT/'site-astro/sources/frozen-site/pages/search/index.html').read_bytes().decode('utf8')
+        before = build_runtime.transport.localize(body, snapshot)
+        after = build_runtime.search_index_entry(before, snapshot)
+        addition = '<script src="/search-index.js"></script>'
+        self.assertEqual(after.count(addition), 1)
+        self.assertEqual(after.replace(addition, '', 1), before)
+        self.assertEqual(build_runtime.search_index_entry(after, snapshot), after)
+
     def test_body_and_search_change_leave_home_and_other_page_identical(self):
         with tempfile.TemporaryDirectory() as temp:
             manifests, outputs = [], []

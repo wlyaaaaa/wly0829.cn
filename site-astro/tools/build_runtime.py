@@ -9,6 +9,7 @@ import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from types import SimpleNamespace
+from urllib.parse import unquote, urljoin, urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,6 +24,7 @@ nav = load('build_navigation', 'scripts/repair-release-navigation.py')
 transport = load('build_transport', 'scripts/same-origin-runtime.py')
 retention = load('build_retention', 'scripts/oss-retention.py')
 retry = load('build_retry', 'scripts/prepare-resource-retry.py')
+oss = load('build_oss', 'scripts/prepare-oss-release.py')
 def read(path): return json.loads(Path(path).read_text('utf8'))
 
 def published_manifest():
@@ -73,6 +75,27 @@ def retired_project_routes(dist, previous):
             target = dist/nav.route_file(old); target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>'+html.escape(item['title'])+'</title></head><body><main><p>'+html.escape(item['title'])+'旧页面已撤下。<a href="'+html.escape(destination, quote=True)+'">查看现有项目</a></p></main></body></html>', encoding='utf8')
 
+def search_index_entry(body, snapshot, prior=None):
+    """The existing client reads both tables once; load globals before it."""
+    urls = dict(snapshot.get('runtime_urls', {}))
+    for rel, row in (prior or {}).get('oss', {}).get('objects', {}).items(): urls[row['url']] = rel
+    urls = {unquote(url.split('?', 1)[0].split('#', 1)[0]): rel for url, rel in urls.items()}
+    def resource(value):
+        absolute = urlsplit(urljoin('https://wly0829.cn/search/', value))
+        normalized = unquote(urlunsplit((absolute.scheme, absolute.netloc, absolute.path, '', '')))
+        return absolute.path.lstrip('/') if absolute.netloc in {'wly0829.cn', 'www.wly0829.cn'} else urls.get(normalized, '')
+    scripts = [(attrs, raw, offset, resource(attrs.get('src', ''))) for tag, attrs, raw, offset in oss.HtmlTags(body).tags
+               if tag == 'script' and attrs.get('src')]
+    existing = [(raw, offset, rel) for _, raw, offset, rel in scripts if rel == 'search-index.js' or rel.endswith('/search-index.js')]
+    if existing:
+        if len(existing) != 1: raise ValueError('搜索页有重复的全站索引入口')
+        raw, offset, rel = existing[0]
+        if rel == 'search-index.js': return body
+        return body[:offset] + '<script src="/search-index.js">' + body[offset + len(raw):]
+    anchor = next((offset for _, _, offset, rel in scripts if rel == 'search-projects.js' or rel.endswith('/search-projects.js')), None)
+    if anchor is None: raise ValueError('搜索页没有可定位的项目索引入口')
+    return body[:anchor] + '<script src="/search-index.js"></script>' + body[anchor:]
+
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
     targets = {nav.route_file(route): nav.PageFacts((root / nav.route_file(route)).read_text('utf8'), root) for route in changed_routes}
@@ -112,7 +135,10 @@ def sync_search(root, previous, converted, pin, changed_routes):
         replacements[obj['url']] = '/' + rel
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.
-    search_html = (root/'search/index.html').read_text('utf8')
+    search_path = root/'search/index.html'
+    search_html = search_index_entry(search_path.read_bytes().decode('utf8'), read(SITE / 'sources/frozen-site/manifest.json'),
+                                     read(root/'release-manifest.json') if (root/'release-manifest.json').is_file() else {})
+    search_path.write_bytes(search_html.encode('utf8'))
     for rel, obj in previous['oss']['objects'].items():
         if not rel.startswith('assets/') or not rel.endswith('.js') or obj['url'] not in search_html: continue
         target = root/rel; target.parent.mkdir(parents=True, exist_ok=True)

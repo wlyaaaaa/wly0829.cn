@@ -300,7 +300,9 @@ def build(pages=None):
         runtime.finish(dist, snapshot, pin, converted, changed_routes={r for r in changed if entries[r]['kind'] != 'frozen'})
     for relative, expected in snapshot['pages'].items():
         if entries[file_route(relative)]['kind'] != 'frozen' or (finalized_before and file_route(relative) not in changed): continue
-        if (dist / relative).read_bytes() != runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot).encode('utf8'):
+        expected_body = runtime.transport.localize((SNAPSHOT / 'pages' / relative).read_bytes().decode('utf8'), snapshot)
+        if relative == 'search/index.html': expected_body = runtime.search_index_entry(expected_body, snapshot)
+        if (dist / relative).read_bytes() != expected_body.encode('utf8'):
             raise ValueError('Frozen HTML changed beyond resource addresses: ' + relative)
     if not all((dist / route_file(route)).is_file() for route in snapshot['routes']): raise ValueError('Complete build lost a required route')
     stage('finish')
