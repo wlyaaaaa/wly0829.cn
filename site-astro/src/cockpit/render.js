@@ -215,7 +215,7 @@ function activityBlock(v, ctx) {
   const y = a.yesterday;
   const yline = y && Number.isFinite(y.tasks_run) && (early(ctx) || a.timeline.length < 3) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共跑了 ${num(y.tasks_run)} 个任务、${num(y.tasks_failed)} 个出错，完成 ${num(y.backups_done)} 项备份</p>` : '';
   // 今天出过错的任务点名（和自动任务清单“今天出过错的”同一份 today_activity.errors）
-  const names = a.errors.length ? `<p class="cp-cap cp-errnames">出过错的：${a.errors.map((e) => `${esc(e.name || '没写名字的任务')}（${esc(hm(e.at))}${e.owner === 'other' ? '，别的软件自带' : ''}）`).join('、')}；现在好没好看上面自动任务清单“今天出过错的”。</p>` : '';
+  const names = a.errors.length ? `<p class="cp-cap cp-errnames">出过错的：${a.errors.map((e) => `${esc(e.name || '没写名字的任务')}（${esc(hm(e.at))}${e.owner === 'other' ? '，别的软件自带' : ''}）`).join('、')}；后来恢复没有，看上面自动任务清单里的“今天出过错的”。</p>` : '';
   const items = mergeAcceptance(a.timeline).map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
   return `<article class="cp-feature cp-activity"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${names}${yline}`
     + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
