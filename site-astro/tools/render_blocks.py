@@ -28,6 +28,7 @@ REPO = os.path.dirname(SITE)
 PROTO = os.path.join(REPO, "src", "typeset")
 sys.path.insert(0, PROTO)
 from engine import assets as A  # noqa: E402
+from engine import layout as L  # noqa: E402
 from engine.layout import build_html, WIDTH  # noqa: E402
 from engine.parse import original_markdown  # noqa: E402
 from engine.registry import load as load_registry  # noqa: E402
@@ -311,6 +312,83 @@ def library_fingerprint():
     return h.hexdigest()[:16]
 
 
+def image_slot_error(page, screen, block, needed, supplied):
+    raise ValueError(f"{page} 屏 {screen}：{block} 需要 {needed} 个图位，只配了 {supplied} 个"
+                     "（asset-map.jsonl 补行，或把段落移出卡片）")
+
+
+def checked_html(name, page, screen, orient, registry, css_files, spec=None, check_only=False):
+    """用实际组件领图与输出计数；两个入口共享校验，不另猜卡片/分组边界。"""
+    class SlotCtx(L.Ctx):
+        def render(self, block):
+            previous = getattr(self, "slot_block", None)
+            self.slot_block = block
+            try:
+                body = super().render(block)
+                sp = block.get("spec", {})
+                mode = (sp.get("illustration_v") if orient == "v" else None) or sp.get("illustration")
+                if block["type"] == "content_card" and mode != "none" and (
+                        sp.get("illustration_source") in ("illustration", "illustrations") or sp.get("art_role") == "illustration"):
+                    needed = body.count('<div class="card side')
+                    start = sp.get("art_index", sp.get("illustration_index", 0)) if not sp.get("illustration_source") else sp.get("illustration_index", 0)
+                    supplied = max(0, len(self.illustrations()) - int(start or 0))
+                    if needed > supplied:
+                        image_slot_error(name, screen["id"], "content_card", needed, supplied)
+                if block["type"] == "feature_card":
+                    if isinstance(sp.get("icons"), list) and sp.get("illustration") != "none":
+                        needed = len(re.findall(r'<article\b[^>]*class="feature-item\b', body))
+                        if needed > len(sp["icons"]):
+                            image_slot_error(name, screen["id"], "feature_card", needed, len(sp["icons"]))
+                    if isinstance(sp.get("group_heading_icons"), list) and (
+                            sp.get("group_heading_variant") == "icon_underline" or sp.get("group_heading") == "icon_underline"):
+                        needed = body.count('class="feature-group feature-group-heading')
+                        if needed > len(sp["group_heading_icons"]):
+                            image_slot_error(name, screen["id"], "feature_card 分组标题", needed, len(sp["group_heading_icons"]))
+                return body
+            finally:
+                self.slot_block = previous
+
+        def take_icons(self, needed, spec=None):
+            block = self.slot_block
+            sp = spec if spec is not None else block.get("spec", {})
+            explicit = sp.get("icons")
+            supplied = len(explicit) if isinstance(explicit, list) else max(0, len(self.icons()) - self._icon_i)
+            # 未要求配图且没有素材的自动块保持引擎的无图排法。
+            required = isinstance(explicit, list) or explicit == "auto" or supplied > 0
+            if required and needed > supplied:
+                image_slot_error(name, screen["id"], block["type"], needed, supplied)
+            return super().take_icons(needed, spec)
+
+    prior_ctx, prior_title = L.Ctx, A.title_ready
+    L.Ctx = SlotCtx
+    if check_only:
+        A.title_ready = lambda path: path  # 只读检查不生成标题裁片缓存。
+    try:
+        return build_html(page, screen, orient, registry, css_files, spec)
+    finally:
+        L.Ctx, A.title_ready = prior_ctx, prior_title
+
+
+def check_screen_images(name, page, screen, meta):
+    prior = A._manifest
+    rows = [{**r, "path": os.path.join(A.ASSET_ROOT, r["asset"]), "_lib": True}
+            for r in meta.get("images", [])]
+    A._manifest = {screen["id"]: [r for r in rows if r.get("via") != "brand"],
+                   "_brand/" + screen["id"]: [r for r in rows if r.get("via") == "brand"]}
+    if not hasattr(check_screen_images, "registry"):
+        check_screen_images.registry = load_registry()[0]
+    try:
+        for orient in ("h", "v"):
+            lay = meta.get("layout", {})
+            sp = lay.get(orient)
+            if orient == "v" and (sp or {}).get("portrait_required") is not True and (
+                    screen.get("shape") == "card" or any((x or {}).get("portrait_required") is False for x in lay.values())):
+                continue
+            checked_html(name, page, screen, orient, check_screen_images.registry, [], sp, check_only=True)
+    finally:
+        A._manifest = prior
+
+
 def prepare_page(name, reg, css_files, libfp):
     """在本进程里排出这一页每屏两份的 HTML 文件（交给浏览器排版），返回待排清单。"""
     fm, screens = parse_md(os.path.join(MD_DIR, name + ".md"))
@@ -351,7 +429,7 @@ def prepare_page(name, reg, css_files, libfp):
                     continue
             art_version = "-mock-art-v1" if any(b.get("type") == "document_mock" for b in (sp or {}).get("blocks", [])) else ""
             key = hashlib.sha256(json.dumps([libfp + art_version, meta, text, o], ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:20]
-            doc, info = build_html(page, s, o, reg, css_files, sp)
+            doc, info = checked_html(name, page, s, o, reg, css_files, sp)
             hp = os.path.join(WORK, name, f"{s['id']}-{o}.html")
             with open(hp, "w", encoding="utf-8", newline="\n" if original_markdown(s) else None) as f:
                 f.write(doc)
