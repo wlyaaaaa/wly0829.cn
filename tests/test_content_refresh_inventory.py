@@ -48,7 +48,7 @@ class InventoryTests(unittest.TestCase):
              "source_location": "另一口径", "retrieve": {"kind": "manual"}},
             {"id": "private", "page": "demo", "screen": "demo-01", "label": "私人源统计",
              "page_pattern": r"\*\*(5) 次\*\* 私人源统计", "automatic": True, "private": True,
-             "scope_status": "verified", "source_location": "V:/Personal/Projects/personal-media/只读入口",
+             "scope_status": "pending", "source_location": "V:/Personal/Projects/personal-media/只读入口",
              "retrieve": {"kind": "json", "path": "必须不读.json"}},
             {"id": "frozen-private", "page": "frozen", "screen": "frozen-01", "label": "旧统计",
              "private": True, "source_location": "旧项目", "retrieve": {"kind": "manual"}}]

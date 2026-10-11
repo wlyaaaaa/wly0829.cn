@@ -1,0 +1,31 @@
+{
+  "materials-status": {
+    "argv": ["C:/Users/10979/AppData/Local/Programs/Python/Python314/python.exe", "-B", "-X", "utf8", "V:/Personal/Projects/personal-materials/materials.py", "--database", "E:/PersonalData/材料库/materials.sqlite3", "status"],
+    "cwd": "V:/Personal/Projects/personal-materials",
+    "read_only": true,
+    "owner_project": "personal-materials",
+    "output": "json",
+    "timeout": 20,
+    "verification": "materials.py:654,661-670 只读连接，3714-3735 仅SELECT计数；2026-10-11 核实并实跑，只输出计数和状态"
+  },
+  "e-rules-inspect": {
+    "argv": ["pwsh", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", "E:/.agents/tools/Invoke-EAgentRulesRelease.ps1", "-Mode", "Inspect", "-Brief"],
+    "cwd": "E:/.agents",
+    "read_only": true,
+    "owner_project": "agents",
+    "output": "json",
+    "timeout": 30,
+    "verification": "正式活动规则核验入口，Inspect -Brief 只读；2026-10-11 本轮实跑 pass/e_rules_active_verified"
+  },
+  "__usage_ledger__": {
+    "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+    "format": "jsonl",
+    "key_field": "name",
+    "time_field": "ts",
+    "filter": {"kind": "skill"},
+    "read_only": true,
+    "owner_project": "codex-memory",
+    "timeout": 30,
+    "verification": "ai_usage_ledger.py:27-28,244-258,325-333；只读文件，不运行emit；写入恢复与完整性另由源项目核实，不用mtime冒充使用时间"
+  }
+}
