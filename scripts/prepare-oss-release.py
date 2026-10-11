@@ -733,7 +733,10 @@ def validate_retained_text(rewriter, source, inherited):
         changed = [rel for rel, obj in rewriter.retained.items() if rel not in inherited and Path(rel).suffix in TEXT_ASSETS
             and hashlib.sha256(rewriter.rewrite((source/rel).read_bytes(), rel)).hexdigest() != obj['sha256']]
         if not changed: break
-        for rel in changed: del rewriter.retained[rel]
+        for rel in changed:
+            rejected = rewriter.retained.pop(rel)
+            fallback = getattr(rewriter, 'local_retained_candidates', {}).pop(rel, None)
+            if fallback and fallback != rejected: rewriter.retained[rel] = fallback
 
 
 def copy_release_asset(source, destination):
@@ -783,16 +786,21 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
     if offline:
         previous_oss = source_manifest.get('previous_oss', {})
         if previous_oss.get('asset_base_url') == base:
+            local = previous_oss.get('local_objects', {})
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
-                previous_oss['objects'].items(), key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+                [*local.items(), *previous_oss['objects'].items()], key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+            rewriter.local_retained_candidates = {rel: row for rel, row in local.items()
+                if rel in rewriter.assets and (row['sha256'] == actual[rel]['sha256'] or row.get('source') == actual[rel])}
+            rewriter.retained.update(rewriter.local_retained_candidates)
             rewriter.retained.update({rel: row for rel, row in previous_oss['objects'].items()
-                                     if rel in rewriter.assets and row['sha256'] == actual[rel]['sha256']})
+                                     if rel in rewriter.assets and (row['sha256'] == actual[rel]['sha256']
+                                         or row.get('source') == actual[rel])})
         rewriter.retained.update(inherited)
         while True:
-            retained_before = set(rewriter.retained)
+            retained_before = dict(rewriter.retained)
             rewriter.asset_keys = offline_asset_keys(rewriter, source, inherited)
             validate_retained_text(rewriter, source, inherited)
-            if retained_before == set(rewriter.retained):
+            if retained_before == rewriter.retained:
                 break
     validate_retained_text(rewriter, source, inherited)
     rewriter.changes.clear(); rewriter.references.clear(); rewriter.missing.clear()
@@ -925,7 +933,8 @@ def verify_local(output):
         previous_oss = source_manifest.get('previous_oss', {})
         if previous_oss.get('asset_base_url') == rewriter.base:
             rewriter.previous_urls = {unquote(row['url']): rel for rel, row in sorted(
-                previous_oss['objects'].items(), key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
+                [*previous_oss.get('local_objects', {}).items(), *previous_oss['objects'].items()],
+                key=lambda item: item[0] not in inherited) if rel in rewriter.assets}
         if offline_asset_keys(rewriter, source, inherited) != plan['asset_keys']:
             raise ValueError('Offline dependency keys are not reproducible')
         rewriter.asset_keys = plan['asset_keys']

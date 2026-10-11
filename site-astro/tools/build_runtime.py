@@ -9,6 +9,7 @@ import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from types import SimpleNamespace
+from urllib.parse import unquote, urljoin, urlsplit, urlunsplit
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,7 +22,23 @@ def load(name, filename):
     value = importlib.util.module_from_spec(spec); spec.loader.exec_module(value); return value
 nav = load('build_navigation', 'scripts/repair-release-navigation.py')
 transport = load('build_transport', 'scripts/same-origin-runtime.py')
+retention = load('build_retention', 'scripts/oss-retention.py')
+retry = load('build_retry', 'scripts/prepare-resource-retry.py')
+oss = load('build_oss', 'scripts/prepare-oss-release.py')
 def read(path): return json.loads(Path(path).read_text('utf8'))
+
+def published_manifest():
+    path = retention.shared() / 'published.json'
+    return retention.read(path)['manifest'] if path.is_file() else {}
+
+def previous_resources(prior, published):
+    local = prior.get('oss', prior.get('previous_oss', {}))
+    if not published:
+        print('上一版清单：无已发布记录，资源地址可能全部换新', flush=True)
+        return local, 'dist' if local else 'none', prior.get('release_id')
+    accepted = published['oss']
+    return {**accepted, 'objects': {**local.get('objects', {}), **accepted['objects']},
+            'local_objects': local.get('objects', {}) if local.get('asset_base_url') == accepted.get('asset_base_url') else {}}, 'published', published['release_id']
 def file_route(rel): return '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
 def copy(source, target):
     raw = Path(source).read_bytes(); target = Path(target); target.parent.mkdir(parents=True, exist_ok=True)
@@ -57,6 +74,29 @@ def retired_project_routes(dist, previous):
         for old in routes:
             target = dist/nav.route_file(old); target.parent.mkdir(parents=True, exist_ok=True)
             target.write_text('<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="robots" content="noindex"><title>'+html.escape(item['title'])+'</title></head><body><main><p>'+html.escape(item['title'])+'旧页面已撤下。<a href="'+html.escape(destination, quote=True)+'">查看现有项目</a></p></main></body></html>', encoding='utf8')
+
+def search_index_entry(body, snapshot, prior=None):
+    """The existing client reads both tables once; load globals before it."""
+    urls = dict(snapshot.get('runtime_urls', {}))
+    for rel, row in (prior or {}).get('oss', {}).get('objects', {}).items(): urls[row['url']] = rel
+    urls = {unquote(url.split('?', 1)[0].split('#', 1)[0]): rel for url, rel in urls.items()}
+    aliases = {rel.lstrip('/') for rel in urls.values() if re.fullmatch(r'/?_runtime/[^/]+/search-(?:index|projects)\.js', rel)}
+    def is_index(rel, name): return rel == name or rel in aliases and rel.rsplit('/', 1)[-1] == name
+    def resource(value):
+        absolute = urlsplit(urljoin('https://wly0829.cn/search/', value))
+        normalized = unquote(urlunsplit((absolute.scheme, absolute.netloc, absolute.path, '', '')))
+        return absolute.path.lstrip('/') if absolute.netloc in {'wly0829.cn', 'www.wly0829.cn'} else urls.get(normalized, '')
+    scripts = [(attrs, raw, offset, resource(attrs.get('src', ''))) for tag, attrs, raw, offset in oss.HtmlTags(body).tags
+               if tag == 'script' and attrs.get('src')]
+    existing = [(raw, offset, rel) for _, raw, offset, rel in scripts if is_index(rel, 'search-index.js')]
+    if existing:
+        if len(existing) != 1: raise ValueError('搜索页有重复的全站索引入口')
+        raw, offset, rel = existing[0]
+        if rel == 'search-index.js': return body
+        return body[:offset] + '<script src="/search-index.js">' + body[offset + len(raw):]
+    anchor = next((offset for _, _, offset, rel in scripts if is_index(rel, 'search-projects.js')), None)
+    if anchor is None: raise ValueError('搜索页没有可定位的项目索引入口')
+    return body[:anchor] + '<script src="/search-index.js"></script>' + body[anchor:]
 
 def sync_search(root, previous, converted, pin, changed_routes):
     replacements = {}; generated = []
@@ -97,7 +137,10 @@ def sync_search(root, previous, converted, pin, changed_routes):
         replacements[obj['url']] = '/' + rel
     # The global search client has literal index URLs; keep its code intact and
     # change only those existing resource literals, then retain its new hash.
-    search_html = (root/'search/index.html').read_text('utf8')
+    search_path = root/'search/index.html'
+    search_html = search_index_entry(search_path.read_bytes().decode('utf8'), read(SITE / 'sources/frozen-site/manifest.json'),
+                                     read(root/'release-manifest.json') if (root/'release-manifest.json').is_file() else {})
+    search_path.write_bytes(search_html.encode('utf8'))
     for rel, obj in previous['oss']['objects'].items():
         if not rel.startswith('assets/') or not rel.endswith('.js') or obj['url'] not in search_html: continue
         target = root/rel; target.parent.mkdir(parents=True, exist_ok=True)
@@ -177,10 +220,8 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
     scripts = {transport.PREFIX.sub('/', match) for page in dist.rglob('*.html') for match in re.findall(r'<script\b[^>]*\b(?:data-)?src="([^"]+)"', page.read_text('utf8'))}
     unused = ['/' + path.relative_to(dist).as_posix() for path in (dist / '_typeset/runtime').glob('b2-typeset-*.js') if '/' + path.relative_to(dist).as_posix() not in scripts]
     for path in dist.rglob('resource-retry-*.js'):
-        text = path.read_text('utf8')
-        for url in unused:
-            text = re.sub(r'\\?"' + re.escape(url) + r'\\?",?', '', text)
-        path.write_bytes(text.encode('utf8'))
+        copy_bytes = retry.prune_content_retry_policy(path.read_text('utf8'), unused).encode('utf8')
+        if path.read_bytes() != copy_bytes: path.write_bytes(copy_bytes)
     for url in unused: (dist / url.lstrip('/')).unlink()
     album = album_index(dist, snapshot, changed_routes)
     if (dist / '404/index.html').exists(): copy(dist / '404/index.html', dist / '404.html')
@@ -197,7 +238,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted},
         'astro': {'converted_routes': sorted(converted), 'retained_sample': {'source': 'site-astro/sources/retained-home-cockpit'},
                   'selected_pages': sorted(p.stem for p in (SITE / 'src/content/pages').glob('*.md')), 'html_files': len(routes)}}
-    manifest['previous_oss'] = prior.get('oss', prior.get('previous_oss', {}))
+    manifest['previous_oss'], manifest['previous_oss_source'], manifest['previous_release_id'] = previous_resources(prior, published_manifest())
     manifest.pop('finalized_dist', None)
     (dist / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return {'routes': routes, 'release_id': manifest['release_id'], 'album': album}

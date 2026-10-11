@@ -1,15 +1,11 @@
 """Prepare resource recovery for the next release, preserving all original bytes."""
 from __future__ import annotations
-import importlib.util
 import argparse
 from datetime import datetime,timedelta,timezone
-import hashlib,html,json,re,shutil
+import hashlib,html,json,re,subprocess
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urljoin,urlsplit
-spec = importlib.util.spec_from_file_location('release_asset_builder', Path(__file__).with_name('build-assembled-site.py'))
-builder = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(builder)
 try:
     from release_delta import inventory, source_path, write_changes
 except ModuleNotFoundError:
@@ -21,6 +17,53 @@ INITIAL_ATTRIBUTE=b' data-resource-retry-initial="1"'
 STYLESHEET_ATTRIBUTE=b' data-resource-retry-stylesheet="1"'
 INITIAL_CAPTURE='\n<script data-resource-retry-capture="next-2e">(()=>{const marked=e=>e.isTrusted&&(e.target instanceof HTMLImageElement||(e.target instanceof HTMLScriptElement&&e.target.hasAttribute("data-resource-retry-initial"))||(e.target instanceof HTMLLinkElement&&e.target.rel.toLowerCase().split(/\\s+/).includes("stylesheet")&&e.target.hasAttribute("data-resource-retry-stylesheet")));document.addEventListener("error",e=>{if(marked(e))e.target.setAttribute("data-resource-retry-failed","1")},true);document.addEventListener("load",e=>{if(marked(e))e.target.removeAttribute("data-resource-retry-failed")},true)})();</script>\n'
 INITIAL_CAPTURE=INITIAL_CAPTURE.replace('</script>',(HERE/'image-loading-runtime.js').read_text('utf8').replace('</script','<\\/script')+'</script>')
+
+def content_derived_retry_url(value):
+    """These indexes depend on authored page content, not shared startup code."""
+    return bool(re.search(r'(?:^|/)search-(?:index|projects|project-[^/]*)\.js$|(?:^|/)_album/routes-[^/]+\.json$', urlsplit(value).path))
+
+def prune_content_retry_policy(text, excluded_urls=()):
+    """Prune only policy arrays; retain all other generated runtime bytes."""
+    match = re.search(r'\b(?:const|let|var)\s+[$\w]+\s*=\s*(?P<object>\{)\s*(?:"origins"|origins)\s*:', text)
+    if not match: raise ValueError('Resource retry policy object not found')
+    decoder = json.JSONDecoder(); position = match.start('object') + 1; edits = []; keys = set()
+    excluded = {urlsplit(value).path for value in excluded_urls}
+    while True:
+        position = re.compile(r'\s*').match(text, position).end()
+        if text[position] == '"': key, position = decoder.raw_decode(text, position)
+        else:
+            key_match = re.compile(r'[$\w]+').match(text, position)
+            if not key_match: raise ValueError('Invalid resource retry policy key')
+            key = key_match[0]; position = key_match.end()
+        position = re.compile(r'\s*').match(text, position).end()
+        if text[position] != ':': raise ValueError('Invalid resource retry policy separator')
+        start = re.compile(r'\s*').match(text, position + 1).end()
+        value, position = decoder.raw_decode(text, start); keys.add(key)
+        if key in ('scripts', 'data'):
+            if not isinstance(value, list) or any(not isinstance(url, str) for url in value):
+                raise ValueError('Resource retry policy URLs must be a string array')
+            kept = [url for url in value if not content_derived_retry_url(url) and urlsplit(url).path not in excluded]
+            if kept != value: edits.append((start, position, json.dumps(kept, ensure_ascii=False, separators=(',', ':'))))
+        position = re.compile(r'\s*').match(text, position).end()
+        if text[position] == '}': break
+        if text[position] != ',': raise ValueError('Invalid resource retry policy object')
+        position += 1
+    if not {'origins', 'scripts', 'data'} <= keys: raise ValueError('Incomplete resource retry policy object')
+    for start, end, replacement in reversed(edits): text = text[:start] + replacement + text[end:]
+    return text
+
+def minify_runtime(text):
+    module = HERE.parent / 'site-astro/node_modules/rolldown/dist/utils-index.mjs'
+    program = '''import {pathToFileURL} from 'node:url';
+const {transformSync,minifySync}=await import(pathToFileURL(process.argv[1]).href);
+let input='';process.stdin.setEncoding('utf8');for await (const chunk of process.stdin) input+=chunk;
+const transformed=transformSync('runtime.js',input,{lang:'js',target:'es2019'});
+if(transformed.errors.length) throw Error(JSON.stringify(transformed.errors));
+const result=minifySync('runtime.js',transformed.code,{compress:{target:'es2019'}});
+if(result.errors.length) throw Error(JSON.stringify(result.errors));
+process.stdout.write(result.code);'''
+    return subprocess.run(['node', '--input-type=module', '-e', program, str(module)], input=text,
+                          text=True, encoding='utf8', capture_output=True, check=True).stdout.encode('utf8')
 
 def mark_initial_stylesheets(raw,rel,policy):
     allowed={urljoin('https://wly0829.cn/',value) for value in policy['stylesheets']};marked=[]
@@ -97,6 +140,7 @@ def policy_and_observation(baseline,files,asset_base_url=None):
         if u.path.endswith('.js'):policy['scripts'].append(url)
         elif u.path.endswith('.css'):policy['stylesheets'].append(url)
         elif u.path.endswith('.json')and'/api/'not in u.path:policy['data'].append(url)
+    for key in ('scripts','data'):policy[key]=[url for url in policy[key] if not content_derived_retry_url(url)]
     policy['origins']=sorted(origins)
     return policy,{'html_resources':pages,'js_loading_sites':dynamic,'public_static_json_files':policy['data'],'public_static_scripts':len(policy['scripts']),'public_static_stylesheets':policy['stylesheets']}
 def baseline_manifest_objects(root):return json.loads((root/'release-manifest.json').read_text('utf8')).get('oss',{}).get('objects',{}).values()
@@ -156,8 +200,10 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
     policy,observed=policy_and_observation(baseline,before,asset_base_url)
     raw_runtime=(HERE/'resource-retry-runtime.js').read_text('utf8')
     if raw_runtime.count('__RESOURCE_RETRY_POLICY__')!=1:raise ValueError('Runtime policy marker differs')
-    from build_bird_guide import minify
-    runtime=minify(raw_runtime.replace('__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':'))),'js','es2019')
+    # Keep the bound strategy as JSON even when the minifier emits template strings.
+    runtime=minify_runtime(raw_runtime)
+    if runtime.count(b'__RESOURCE_RETRY_POLICY__')!=1:raise ValueError('Minified runtime policy marker differs')
+    runtime=runtime.replace(b'__RESOURCE_RETRY_POLICY__',json.dumps(policy,ensure_ascii=False,separators=(',',':')).encode('utf8'))
     runtime_rel='_shared/resource-retry-'+hashlib.sha256(runtime).hexdigest()[:20]+'.js'
     addition='\n<script defer '+MARKER+' src="/'+runtime_rel+'"></script>\n'
     selected=set(pages or observed['html_resources']);changes={};initial_scripts={};initial_stylesheets={}
@@ -175,7 +221,7 @@ def prepare(baseline,output,report,pages=None,asset_base_url=None,previous_manif
         # The early inline observer only marks genuine element load errors.
         # Original script order and existing handlers remain in place.
         changes[rel]=marked.replace(b'</head>',addition.encode()+b'</head>',1)
-    after=write_changes(baseline, output, {**changes, runtime_rel: runtime}, copy_asset=builder.copy_release_asset)
+    after=write_changes(baseline, output, {**changes, runtime_rel: runtime})
     assert all(after[rel]==entry for rel,entry in before.items()if rel not in changes)
     assert all(restore_previous_recovery(raw.replace(addition.encode(),b'',1).replace(INITIAL_CAPTURE.encode(),b'',1).replace(INITIAL_ATTRIBUTE,b'').replace(STYLESHEET_ATTRIBUTE,b''),previous_restore.get(rel,[]))==source_path(baseline,rel).read_bytes()for rel,raw in changes.items())
     rid=identity(after,manifest);old_rid=manifest['release_id']
@@ -203,7 +249,7 @@ def rollback(baseline,output,report):
             restored=restored.replace(capture,b'',1).replace(info['initial_script_attribute'].encode(),b'')
             if info.get('initial_stylesheet_attribute'):restored=restored.replace(info['initial_stylesheet_attribute'].encode(),b'')
         bodies[rel]=restore_previous_recovery(restored,info.get('previous_html_restore',{}).get(rel,[]))
-    after=write_changes(baseline, output, bodies, copy_asset=builder.copy_release_asset);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
+    after=write_changes(baseline, output, bodies);rid=identity(after,manifest);manifest.update(files=after,release_id=rid)
     (output/'release-manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     result={'status':'prepared_static_rollback','release_id':rid,'output':str(output),'unused_runtime_retained':True,'published':False};Path(report).write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf8');return result
 def main():
