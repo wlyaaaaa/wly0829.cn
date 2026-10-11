@@ -34,10 +34,10 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-07 09:14"
+    "at": "2026-10-10 08:49"
    },
    "facts": [
-    "近 7 天 AI 用了 11 次"
+    "近 7 天 AI 用了 12 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -166,8 +166,8 @@
  },
  "source": {
   "page": "sources/pages/skill-daily-preferences/page.json",
-  "sha256": "67182de68547a0b82cd689f3df61513bd6cbbc88dc3b4295e55a14793008209a",
-  "converted_at_beijing": "2026-10-11T14:01:28+08:00"
+  "sha256": "32d47601971f1d72a70022df37c96c5938a730d302f3d2baf74607df7ca6db5c",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -210,11 +210,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "text": "常用 · 上次使用 10 月 10 日 08:49",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 11 次",
+       "text": "近 7 天 AI 用了 12 次",
        "state": "fact"
       }
      ],
@@ -280,11 +280,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 7 日 09:14",
+       "text": "常用 · 上次使用 10 月 10 日 08:49",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 11 次",
+       "text": "近 7 天 AI 用了 12 次",
        "state": "fact"
       }
      ],

@@ -34,10 +34,10 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-07 08:15"
+    "at": "2026-10-10 21:51"
    },
    "facts": [
-    "近 7 天 AI 用了 2 次"
+    "近 7 天 AI 用了 9 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -98,8 +98,8 @@
  },
  "source": {
   "page": "sources/pages/skill-chinese-asr/page.json",
-  "sha256": "eca6bf8762010fbfd4f855bfa6dfcc0199383aad0b89f201b4931afb5c9a483d",
-  "converted_at_beijing": "2026-10-11T14:13:58+08:00"
+  "sha256": "1d9e50b751ee4105dd2afdcc25201d332148e6737d4ed8aafedae746752531c2",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -142,11 +142,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 7 日 08:15",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 2 次",
+       "text": "近 7 天 AI 用了 9 次",
        "state": "fact"
       }
      ],
@@ -242,11 +242,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 7 日 08:15",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 2 次",
+       "text": "近 7 天 AI 用了 9 次",
        "state": "fact"
       }
      ],

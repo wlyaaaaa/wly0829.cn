@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup-tiered-distribution/page.json",
-  "sha256": "f6a25bf9a2a129e060e411ffbe735cce2502c43ebfd5dada465390e30401c7ec",
-  "converted_at_beijing": "2026-10-11T19:07:10+08:00"
+  "sha256": "635bc572c153b200ebb95d7b99f3b4effb185c5c2ee9187086337bdf57090f48",
+  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
  }
 }
 ---
@@ -1037,7 +1037,7 @@ DevConfig Backup · 功能说明
 
 - 9 月 18 日来源回归与收尾证据包含 H 职责隔离和分层发布验证；网页本轮不重跑这些源码脚本。
 
-- 北京时间 10 月 11 日 13:33 的零写入状态：当天 12:06—12:25 的配置采集失败（读取 home/.codex/state_5.sqlite 数据库副本超时），没有发布新包。本地/G 同为 devconfig-20261009-231229-9de61253.zip，299,791,772 字节（约 286 MiB），回执记 6,270 个文件、原始 942,360,581 字节（约 0.88 GiB），整包 SHA-256=de16cef7554bc0b62d9911b2c0599f6ae71f02f4691dd63576f999531b18da75，带 1 条 source_disappeared（文件在扫描后消失）警告，是一份 Codex 临时执行记录。这些是生产者已验的回执，状态入口没有重新解包或重哈希。9 月 18 日旧包 devconfig-20260917-223044-15f482e1.zip、2,918,700,657 字节与 SHA-256=23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c 仅是旧时点证据。
+- 北京时间 10 月 11 日 13:33 的零写入状态：当天 12:06—12:25 的配置采集失败（读取 home/.codex/state_5.sqlite 数据库副本超时），没有发布新包。本地/G 同为 devconfig-20261009-231229-9de61253.zip，299,791,772 字节（约 286.0 MiB），回执记 6,270 个文件、原始 942,360,581 字节（约 0.88 GiB），整包 SHA-256=de16cef7554bc0b62d9911b2c0599f6ae71f02f4691dd63576f999531b18da75，带 1 条 source_disappeared（文件在扫描后消失）警告，是一份 Codex 临时执行记录。这些是生产者已验的回执，状态入口没有重新解包或重哈希。9 月 18 日旧包 devconfig-20260917-223044-15f482e1.zip、2,918,700,657 字节与 SHA-256=23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c 仅是旧时点证据。
 
 ::screen{#devconfig-backup-tiered-distribution-11 section="tech"}
 

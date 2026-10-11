@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager-native-desktop-integration/page.json",
-  "sha256": "022c5d6aab54af2c6d12b79f0d1e1b1948fa8881a6b6745eda12fb7836691fb7",
-  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+  "sha256": "9dd82c48860630b0d95d85e3e3da36f768d75ad55800988b8f0547f6c0c477be",
+  "converted_at_beijing": "2026-10-12T00:29:44+08:00"
  }
 }
 ---
@@ -582,7 +582,7 @@ AI CLI Profile Manager · 功能说明
 
 - 官方debug models与实际模型目录一起提供完整指令、上下文、工具和模型身份；CODEX_CLI_PATH使用PCConfig登记的内容寻址发行，而不是另造聊天执行器。
 
-- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。当前登记 24 个版本，启用的是 10 月 3 日登记的 b47fea3ce81f7a67，桥里的原生 Codex 引擎为 0.162.0-alpha.17.2（npm 上的 Codex CLI 另为 0.160.0）。旧 562b29bf4a6ac0af、3b7600a 只属各自历史。
+- 桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。当前登记 36 个版本，启用的是 10 月 3 日登记的 b47fea3ce81f7a67，桥里的原生 Codex 引擎为 0.162.0-alpha.17.2（npm 上的 Codex CLI 另为 0.160.0）。旧 562b29bf4a6ac0af、3b7600a 只属各自历史。
 
 - 四种本地模型共用既有Broker（显卡协调器）与256K配置；GLM、Qwen、DeepSeek仍保留不同Provider/协议身份。旧配置不会悄悄指向另一模型，跨Provider创建新任务。10 月 2 日起，非 OpenAI 的受管模型会关闭厂商不支持的 token-budget 和 history-notes 功能，保留所选模型原来在 90% 时压缩的设置。
 

@@ -34,7 +34,7 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-07 13:06"
+    "at": "2026-10-10 01:32"
    },
    "facts": [
     "近 7 天 AI 用了 3 次"
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "2f6b9ca71028d02561e4f8ce19b6954ec36646a0a8fdbccc6851ad2711de785e",
-  "converted_at_beijing": "2026-10-11T14:02:08+08:00"
+  "sha256": "3d0f299885ed4794520c25345b52c77ac78344ffbf3c8d427c1ca0f2faa4cb46",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -141,7 +141,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "text": "偶尔用 · 上次使用 10 月 10 日 01:32",
        "state": "ok"
       },
       {
@@ -232,7 +232,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 7 日 13:06",
+       "text": "偶尔用 · 上次使用 10 月 10 日 01:32",
        "state": "ok"
       },
       {

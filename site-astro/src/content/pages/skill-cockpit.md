@@ -34,7 +34,7 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 13:02"
+    "at": "2026-10-10 20:04"
    },
    "facts": [],
    "as_of": "2026-10-11",
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "80ace368ae6d14d1b157030da391d51b9e2cd35cca5719f8c9401c431174bb97",
-  "converted_at_beijing": "2026-10-11T19:48:47+08:00"
+  "sha256": "fcc70258cdeca94615f6aabbdfbb6500c56a8ae1f0f781ca3567b0669b475c89",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -167,7 +167,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 13:02",
+       "text": "常用 · 上次使用 10 月 10 日 20:04",
        "state": "ok"
       }
      ],
@@ -230,7 +230,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 13:02",
+       "text": "常用 · 上次使用 10 月 10 日 20:04",
        "state": "ok"
       }
      ],

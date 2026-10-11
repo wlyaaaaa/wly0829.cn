@@ -34,10 +34,10 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 22:46"
+    "at": "2026-10-10 12:34"
    },
    "facts": [
-    "近 7 天 AI 用了 60 次"
+    "近 7 天 AI 用了 122 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -101,8 +101,8 @@
  },
  "source": {
   "page": "sources/pages/skill-timeaudit-diagnostics/page.json",
-  "sha256": "757a740a78f235a0347e810ac52ec1e169e818690d1aeac1b3b3b3ee246aa89e",
-  "converted_at_beijing": "2026-10-11T13:40:25+08:00"
+  "sha256": "3290e9844b8f1650844fa971d91e2281ebbd917140de70d44e58ee308655e858",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---
@@ -147,11 +147,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 22:46",
+       "text": "常用 · 上次使用 10 月 10 日 12:34",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 60 次",
+       "text": "近 7 天 AI 用了 122 次",
        "state": "fact"
       }
      ],
@@ -218,11 +218,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 22:46",
+       "text": "常用 · 上次使用 10 月 10 日 12:34",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 60 次",
+       "text": "近 7 天 AI 用了 122 次",
        "state": "fact"
       }
      ],

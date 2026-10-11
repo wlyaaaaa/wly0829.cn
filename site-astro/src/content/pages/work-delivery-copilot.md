@@ -45,10 +45,10 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-29 01:09"
+    "at": "2026-10-10 21:51"
    },
    "facts": [],
-   "as_of": "2026-10-10",
+   "as_of": "2026-10-11",
    "source": "AI 使用记录"
   },
   "public": false,
@@ -372,8 +372,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
-  "sha256": "d41cfc48dd914cea3f7a2f45cfb1a1744863074b7116f2b851f560fdb807f7e5",
-  "converted_at_beijing": "2026-10-11T19:07:14+08:00"
+  "sha256": "f44e5a4552071adacb30d8cb5f5ab0f317c0ad39cfa71fc0a553e39c85614a7b",
+  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
  }
 }
 ---
@@ -460,11 +460,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录",
+     "static_note": "截至 10 月 11 日 · AI 使用记录",
      "row": "hero"
     },
     {
@@ -520,11 +520,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录"
+     "static_note": "截至 10 月 11 日 · AI 使用记录"
     },
     {
      "type": "stat_card",

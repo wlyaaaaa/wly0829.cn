@@ -279,7 +279,7 @@
      "id": "n-interval",
      "text": "每 60 秒 / 每 2 分钟",
      "meaning": "看门狗检查间隔 / 计划任务检查看门狗的间隔",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "watch-kdeconnect.ps1:6；MeshClip.Common.psm1:13（PT2M）",
      "screens": [
       "meshclip-kit-01",
@@ -513,8 +513,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "e9caf781a986867f7ee2f66eed787c118598f4ffceec704847631d84ffcaf6a7",
-  "converted_at_beijing": "2026-10-11T18:56:45+08:00"
+  "sha256": "e6b2f8d459a97189cdaa7ac5ea7abc48db5838db0f789db56ffa1faf2a66a455",
+  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
  }
 }
 ---

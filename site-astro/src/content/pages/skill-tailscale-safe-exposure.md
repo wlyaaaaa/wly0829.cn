@@ -37,7 +37,7 @@
     "at": "2026-10-08 15:03"
    },
    "facts": [
-    "近 7 天 AI 用了 7 次"
+    "近 7 天 AI 用了 6 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -121,8 +121,8 @@
  },
  "source": {
   "page": "sources/pages/skill-tailscale-safe-exposure/page.json",
-  "sha256": "77e91b74a8052c179e4e408ca8d9467a05a1c2f5e7f422e18b249fa599df29e7",
-  "converted_at_beijing": "2026-10-11T13:40:22+08:00"
+  "sha256": "98cc04caba90c3e210c8487f03933e7b3f5c163f666f282059aec83a5d8743d2",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---
@@ -164,7 +164,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 6 次",
        "state": "fact"
       }
      ],
@@ -221,7 +221,7 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 6 次",
        "state": "fact"
       }
      ],

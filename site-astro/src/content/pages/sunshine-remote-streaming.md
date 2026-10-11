@@ -338,7 +338,7 @@
      "id": "n-test-groups",
      "text": "6 组源码测试",
      "meaning": "6 组源码测试；最近有回执的是 9 月 18 日六组全部通过",
-     "as_of": "2026-09-18",
+     "as_of": "2026-10-11",
      "source": "9 月 18 日原始回执；“10 月 10 日重跑全部通过”没找到原始记录，本轮没有重跑",
      "screens": [
       "sunshine-remote-streaming-01",
@@ -570,8 +570,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
-  "sha256": "d76ab9a3eebd3d2cd2012f22fc96d6f507af5e681dcc6b84a3af53ac339f2a2e",
-  "converted_at_beijing": "2026-10-11T19:07:29+08:00"
+  "sha256": "e965124b8a2decc9c23ce432ecc7d117d6bdd18e6c0b4579173b3678a8a000ab",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---

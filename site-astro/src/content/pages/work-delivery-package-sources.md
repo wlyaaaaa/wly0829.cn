@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-package-sources/page.json",
-  "sha256": "731849f9d2e23481aa217556e0a48352bba64000728fb5cd595de3d761faf00e",
-  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
+  "sha256": "264e41908d093a1eeefab0a63417dac8569343b9360d9342e9b9d9ae593e3d53",
+  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
  }
 }
 ---
@@ -690,7 +690,7 @@
 
 ## 技术实现与依据（二）
 
-- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。
+- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15.0 秒时间门，超时不会回滚已经提交的事务。
 
 - Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。
 

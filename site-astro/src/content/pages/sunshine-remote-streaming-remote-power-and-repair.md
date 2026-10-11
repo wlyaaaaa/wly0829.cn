@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming-remote-power-and-repair/page.json",
-  "sha256": "a5c6a5febbcd698b8d2a87340ab5fc1affe409adb2173cd25ab60b155ffca8cc",
-  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+  "sha256": "0073f4ead05d3debc460f1dccaa42bde50fca49635da47fd4321f2e84e426038",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---
@@ -392,7 +392,7 @@ Sunshine 远程串流 · 功能说明
 
 ## 正常时
 
-10 月 11 日 13:33 两项服务在运行、截至 10 月 10 日每日检查天天通过；本人报告过远程开机可用，但 AI 没有取得一次从断电到手机看到画面的完整记录。
+10 月 11 日 13:33 两项服务在运行、截至 10 月 11 日每日检查天天通过；本人报告过远程开机可用，但 AI 没有取得一次从断电到手机看到画面的完整记录。
 
 ## 发现问题时
 
@@ -624,7 +624,7 @@ Sunshine 远程串流 · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-10 月 11 日 13:33：SunshineService 与 Tailscale 运行、自动启动；每日检查截至 10 月 10 日共 23 天通过（只查主机）；没有新的修复回执，即没有新的实际修复记录。本人报告远程开机可用；AI 未做 BIOS、WoL 与断电冷开机试验
+10 月 11 日 13:33：SunshineService 与 Tailscale 运行、自动启动；每日检查截至 10 月 11 日共 24 天通过（只查主机）；没有新的修复回执，即没有新的实际修复记录。本人报告远程开机可用；AI 未做 BIOS、WoL 与断电冷开机试验
 
 ## 关键规则与设计选择
 

@@ -34,10 +34,10 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 13:02"
+    "at": "2026-10-10 12:33"
    },
    "facts": [
-    "近 7 天 AI 用了 13 次"
+    "近 7 天 AI 用了 11 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -113,8 +113,8 @@
  },
  "source": {
   "page": "sources/pages/skill-explain-to-me/page.json",
-  "sha256": "1b1d4c964c7c65f8ef1691c3882f0e81b707cc7edb434c5fd80db90106cce41e",
-  "converted_at_beijing": "2026-10-11T14:03:11+08:00"
+  "sha256": "1cb007132066355444fcbaa64b82bd5586ef18972695c71bae330af191cfbf47",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -157,11 +157,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 13:02",
+       "text": "常用 · 上次使用 10 月 10 日 12:33",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 13 次",
+       "text": "近 7 天 AI 用了 11 次",
        "state": "fact"
       }
      ],
@@ -258,11 +258,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 9 日 13:02",
+       "text": "常用 · 上次使用 10 月 10 日 12:33",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 13 次",
+       "text": "近 7 天 AI 用了 11 次",
        "state": "fact"
       }
      ],

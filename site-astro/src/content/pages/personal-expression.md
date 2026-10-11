@@ -42,7 +42,7 @@
    "state": "在用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 13:02"
+    "at": "2026-10-10 12:33"
    },
    "facts": [
     "“讲给我听”技能已记 10 次",
@@ -570,8 +570,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "c3821fa9c4538ea185b934e04a5ed2198a9a9101349af9174fe0fbbddd78457d",
-  "converted_at_beijing": "2026-10-11T18:55:48+08:00"
+  "sha256": "0af72d0592871c924c07a2e89d0d40b4a03ed99d6923856fe106fcaa3adc9c76",
+  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
  }
 }
 ---
@@ -618,7 +618,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次使用 10 月 9 日 13:02",
+       "text": "在用 · 上次使用 10 月 10 日 12:33",
        "state": "ok"
       },
       {
@@ -681,7 +681,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次使用 10 月 9 日 13:02",
+       "text": "在用 · 上次使用 10 月 10 日 12:33",
        "state": "ok"
       },
       {

@@ -41,7 +41,7 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-28 21:18"
+    "at": "2026-10-09 10:12"
    },
    "facts": [
     "近 7 天改进了 8 次"
@@ -423,8 +423,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "926b28baf867ddae699bab6fd123649389aefa74a8f41d08854a32d463e00849",
-  "converted_at_beijing": "2026-10-11T19:07:13+08:00"
+  "sha256": "750dfbf43e6f81d99b1fc68b96313861f2d8b0ba4d0a177821a7d78c94beaa55",
+  "converted_at_beijing": "2026-10-12T00:29:46+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:12",
        "state": "ok"
       },
       {
@@ -549,7 +549,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:12",
        "state": "ok"
       },
       {

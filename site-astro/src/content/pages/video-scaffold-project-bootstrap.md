@@ -28,7 +28,7 @@
   "status_line": {
    "state": "偶尔用",
    "as_of": "2026-10-11",
-   "source": "内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未重新出片"
+   "source": "内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片"
   },
   "based_on": {
    "commit": "cc41e514b2886fff8e04b1883562d25bd59089ef",
@@ -37,8 +37,8 @@
  },
  "source": {
   "page": "sources/pages/video-scaffold-project-bootstrap/page.json",
-  "sha256": "6f392a2575373c75bd2ebf47edda34e305565e2bb46654cd21ee4e4d9de0fba2",
-  "converted_at_beijing": "2026-10-11T19:04:27+08:00"
+  "sha256": "53c2c70b5751d2677f7f7ad7ece0a91fb0015267c46882b4f4c3c2ea8ec4d269",
+  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
  }
 }
 ---
@@ -92,7 +92,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未重新出片",
+     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片",
      "row": "top"
     },
     {
@@ -134,7 +134,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 内容按北京时间 14:00 前最后一次提交 cc41e514（13:57）核对，未重新出片"
+     "static_note": "截至 10 月 11 日 · 内容按北京时间 15:09 最后一次提交 c4eec887 核对，未重新出片"
     },
     {
      "type": "action_button",
@@ -965,9 +965,9 @@ video-scaffold · 功能说明
 
 - 2026-09-03 历史源仓库 33/33、新初始化工程 33/33，之后未重新运行。
 
-- 2026-09-18 21:02 静态 doctor 10 项通过、1 项未验证；没有运行 doctor-local 或 doctor-live。
+- 2026-10-11 23:56 重新运行静态 doctor：10 项通过、1 项未验证（与 9 月 18 日相同）；没有运行 doctor-local 或 doctor-live。
 
-- 截止前最近一次 GitHub 自动测试是 2026-10-10 20:18—20:20 针对较早提交 b279784 的运行：Ubuntu 单测失败、Windows 单测取消、Linux 整链短片成功，原因未查明；它不代表 cc41e514 的结果。cc41e514 源码里有 216 个测试定义，这次没有运行。
+- 最近一次 GitHub 自动测试是 2026-10-11 15:15—15:17 针对当前提交 c4eec887 的运行：Ubuntu 单测有 6 处因找不到 FFmpeg 出错，Windows 单测取消，Linux 整链短片成功；整体结果是失败，不能说全部通过。
 
 ## 与其他模块的关系
 

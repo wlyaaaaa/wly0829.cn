@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian-installation-and-application-recovery/page.json",
-  "sha256": "fd11095bb028253ad2c413189f37429f23da70af839536a2b5aad8f2ef859153",
-  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+  "sha256": "d6f60b34de1eb1daa6906b11f4a1b66a09656dfdcdc7452c3efaa07353ed966d",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -579,7 +579,7 @@ Primo 未安装、盘没挂上或没有管理员 PowerShell 7 时不能完成部
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-现存静态配置：任务启用、交互用户、Highest，登录触发加独立 15 分钟周期，经 run_hidden.vbs 调 PowerShell 7；Chrome Default 三类缓存为指向 Z 的连接；快速启动关闭；镜像文件 0.68 GiB、最后写入 10 月 1 日。Primo 运行设置因需管理员未读到
+现存静态配置：任务启用、交互用户、Highest，登录触发加独立 15.0 分钟周期，经 run_hidden.vbs 调 PowerShell 7；Chrome Default 三类缓存为指向 Z 的连接；快速启动关闭；镜像文件 0.68 GiB、最后写入 10 月 1 日。Primo 运行设置因需管理员未读到
 
 ## 关键规则与设计选择
 

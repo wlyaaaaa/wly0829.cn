@@ -34,7 +34,7 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-29 01:09"
+    "at": "2026-10-10 21:51"
    },
    "facts": [
     "近 7 天没用过"
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
-  "sha256": "222246be50e5807ec2a1fbda694e59bdb5336f921c33de91ae2540f38d77985d",
-  "converted_at_beijing": "2026-10-11T13:40:32+08:00"
+  "sha256": "0ad6f63741cb1989aa9a212764c02214014066d3e4468800a3bf513e699835f1",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---
@@ -232,7 +232,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       },
       {
@@ -321,7 +321,7 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:09",
+       "text": "偶尔用 · 上次使用 10 月 10 日 21:51",
        "state": "ok"
       },
       {

@@ -327,9 +327,9 @@
     },
     {
      "id": "n-size",
-     "text": "52 KB",
+     "text": "52.0 KB",
      "meaning": "一份备份 20 个文件的字节数之和 53,573 B",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "snapshot-manifest.json files[].bytes 求和",
      "screens": [
       "steam-millennium-config-backup-01"
@@ -350,7 +350,7 @@
      "id": "n-plugins",
      "text": "5 个插件 · 2 套主题",
      "meaning": "清单里记着的插件和主题数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "仓库 plugins/、themes/ 子目录计数",
      "screens": [
       "steam-millennium-config-backup-01",
@@ -606,8 +606,8 @@
  },
  "source": {
   "page": "sources/pages/steam-millennium-config-backup/page.json",
-  "sha256": "395522655165803c79f44ba1a2a9479bd2f6ce080996224f1674b0591a7e07b3",
-  "converted_at_beijing": "2026-10-11T18:56:46+08:00"
+  "sha256": "807237da84e677b743c43b455779c5203ff82c6a81e36b5b82cabedcb5b3863a",
+  "converted_at_beijing": "2026-10-12T00:29:48+08:00"
  }
 }
 ---
@@ -1003,7 +1003,7 @@
 
 截图说明：Adwaita 主题作者随主题附带的官方样张（浅色）。我用的就是这套主题，但强调色和配色是自己调的绿；图里的游戏列表是作者的示例，不是我的。
 
-20 个文件｜一份备份：能装回的设置，加上插件和主题清单，一共 52 KB
+20 个文件｜一份备份：能装回的设置，加上插件和主题清单，一共 52.0 KB
 3 处｜E 盘项目文件夹、G 盘、外接 H 盘各存一份，逐个文件比对指纹，三处现在一字不差
 5 个插件｜连同 2 套主题记进清单：名字、版本、从哪下的；平时开着其中 3 个
 每周一 10:30｜自动存一次（北京时间）；最近一次是 10 月 5 日，全部文件核对通过

@@ -34,10 +34,10 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-09 11:27"
+    "at": "2026-10-10 16:07"
    },
    "facts": [
-    "近 7 天 AI 用了 7 次"
+    "近 7 天 AI 用了 10 次"
    ],
    "as_of": "2026-10-11",
    "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
@@ -123,8 +123,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
-  "sha256": "92732b09b91918795fb16580c9f2023ab3a2123bb1cb8eadd38380932ea2bc1f",
-  "converted_at_beijing": "2026-10-11T13:40:07+08:00"
+  "sha256": "26178b2f84e7a07beb488135ff05558a81e2a8d29e7e74a7bf3be3da600daa12",
+  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
  }
 }
 ---
@@ -167,11 +167,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 9 日 11:27",
+       "text": "偶尔用 · 上次使用 10 月 10 日 16:07",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 10 次",
        "state": "fact"
       }
      ],
@@ -251,11 +251,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 9 日 11:27",
+       "text": "偶尔用 · 上次使用 10 月 10 日 16:07",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 7 次",
+       "text": "近 7 天 AI 用了 10 次",
        "state": "fact"
       }
      ],

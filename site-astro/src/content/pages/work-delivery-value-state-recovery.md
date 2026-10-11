@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-value-state-recovery/page.json",
-  "sha256": "b940ce7471542705e781ef55ffaea04045d6b714be80d37d5ee38e9f67993274",
-  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
+  "sha256": "25a17e7955ecef1fa4b8c9aa78cd35d69a60575e2bfb54e47071e841d2a21aae",
+  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
  }
 }
 ---
@@ -696,7 +696,7 @@
 
 - 没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。
 
-- run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15 秒抛 MechanicalStageTimeoutError，CLI（命令行工具） 非零退出，不补做事务或文件回滚。
+- run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15.0 秒抛 MechanicalStageTimeoutError，CLI（命令行工具） 非零退出，不补做事务或文件回滚。
 
 - ArtifactBuild 保存 current（当前状态）/stale、semantic hash（内容指纹）、fact revision 与 output directory。
 
@@ -1069,7 +1069,7 @@
 
 - **Office builder 生成阶段失败**：清理本轮 staging，不晋升这次暂存文件；已生成核心文件和原包状态保留。若失败已在替换阶段，另核对可能存在的部分成品。
 
-- **确定性 batch 超过 15 秒**：时间门失败并非整次未写入：状态提交后可能只有包和事实，core 后已有核心文件，Office 后可能已有所请求成品。先核对原稳定 ID、构建和文件，再从已发生状态继续。
+- **确定性 batch 超过 15.0 秒**：时间门失败并非整次未写入：状态提交后可能只有包和事实，core 后已有核心文件，Office 后可能已有所请求成品。先核对原稳定 ID、构建和文件，再从已发生状态继续。
 
 - **首轮、变更轮或累计人工时间不达标**：验收失败；减少步骤、退回确定性窄工作流或只保留真实稳定复用的单一产物。
 

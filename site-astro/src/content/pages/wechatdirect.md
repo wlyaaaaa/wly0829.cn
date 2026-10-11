@@ -485,7 +485,7 @@
      "id": "n-kdf",
      "text": "4096 字节、256000 轮",
      "meaning": "数据库页大小和 PBKDF2 轮数（代码常量）",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "wechat_source.py:35-37",
      "screens": [
       "wechatdirect-04"
@@ -680,8 +680,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "959022b35d14c65dbaee173218e41b906341b305e5b14c8311e177ca9b0f50b5",
-  "converted_at_beijing": "2026-10-11T19:07:13+08:00"
+  "sha256": "e132974202018b4f13bb00ae80460d740820a02c3471d7e07ec9e1c3e1010419",
+  "converted_at_beijing": "2026-10-12T00:29:49+08:00"
  }
 }
 ---

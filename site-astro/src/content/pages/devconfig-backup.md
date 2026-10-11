@@ -302,7 +302,7 @@
      "id": "n-config-files",
      "text": "6,270 个文件",
      "meaning": "北京 10 月 10 日 12:12 完成的开发配置包里的文件数",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "out\\latest.zip.receipt.json file_count（devconfig-20261009-231229-9de61253.zip）",
      "screens": [
       "devconfig-backup-01"
@@ -342,7 +342,7 @@
      "id": "n-sources",
      "text": "70 个来源",
      "meaning": "sources.psd1 里的文件和文件夹来源（不含系统导出和对话历史段）：用户目录 19 个文件夹、17 个单文件，AppData 33 项，Scoop 1 项；9 月 29 日为 66 个，10 月 7 日 2cc7be0 加 FlyingBird 4 项",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "Import-PowerShellDataFile sources.psd1 各段计数（HEAD 2cc7be0：HomeDirs 14＋HomePreciseDirs 5＋HomeFiles 9＋HomePreciseFiles 8＋AppDataRoamingFiles 16＋AppDataRoamingDirs 11＋AppDataLocalDirs 5＋AppDataLocalFiles 1＋ExtraDirs 1）；同法数 9d35282 得 66，与旧稿一致",
      "screens": [
       "devconfig-backup-01",
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "051cb56823c3f75a97d74ee99749a2c30952f6c89a64672a0445fe1065601bf8",
-  "converted_at_beijing": "2026-10-11T19:47:51+08:00"
+  "sha256": "46cd4de4fa4250661180715d71afdeff2af2051af74a578cba4b64433c3d906b",
+  "converted_at_beijing": "2026-10-12T00:29:45+08:00"
  }
 }
 ---
@@ -984,7 +984,7 @@
 
 - **70 个来源**　开发配置清单；Codex 的配置和记忆、Antigravity 和 OpenCode 的设置只有它在备
 - **148,592 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G
-- **6,270 个文件**　最新一个开发配置包，压缩后 286 MiB
+- **6,270 个文件**　最新一个开发配置包，压缩后 286.0 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
 
 10 月 11 日这一次：12:05 的配置采集没成功（Codex 的一个状态数据库没能在限定时间里做出一致的副本），没出新包，上一个好包（10 月 10 日那个）原样留着；13:00 上云照常成功，但传上去的就是这个 10 月 10 日的旧包，不是今天的新配置。微信当天 11:02 照常存进了 G。
