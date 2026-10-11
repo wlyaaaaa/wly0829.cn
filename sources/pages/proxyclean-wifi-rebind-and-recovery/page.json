@@ -1,0 +1,195 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "proxyclean-wifi-rebind-and-recovery",
+  "kind": "project",
+  "title": "WiFi连不上时，先查清楚，再恢复指定网卡",
+  "url": "/projects/proxyclean/wifi-rebind-and-recovery/",
+  "parent": "proxyclean",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐段核对，含义无变化；没有操作真实网卡"
+  },
+  "screens": [
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-01",
+      "section": "top",
+      "title": "WiFi连不上时，先查清楚，再恢复指定网卡",
+      "text": "# WiFi连不上时，先查清楚，再恢复指定网卡\n\n〔回到项目 → 代理上网修复〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nProxyClean · 功能说明\n\n先判断故障在代理、DNS还是网卡，再决定是否刷新或禁用重启那块网卡。即使断线或没有IPv4，也可以指定目标；诊断默认只返回结果，需要保存时才生成脱敏新文件。\n\n**当前情况：**已发布实现提供只读诊断、DNS/DHCP刷新和网卡重启；断线或没有IPv4也能明确选网卡。诊断不改网络设置，但默认会做一次普通网页检查（会联网），加 SkipConnectivityChecks 或预演时不做。本页未执行真实重置或连通性探针，实际恢复效果仍要当次确认。\n\n项目快照核对于北京时间 2026-10-11（以当天 14:00 前的源码为准，最后一次提交在 10 月 6 日 05:52）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 代理上网修复",
+          "href": "/projects/proxyclean/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ProxyClean"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/proxyclean/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n网络重置本身会中断连接，不能把所有失败都变成重启网卡。先核对网卡、地址类型和当前远程依赖，再选择必要动作，失败要尽力恢复已禁用网卡并说清未完成项。\n\n## 举个实际例子\n\n“WiFi断了，先看这块网卡哪里不对，别自动改其他网络。”AI先指定并检查目标；需要重置时说明会暂时断开这条连接，在同一Windows用户的管理员窗口选择刷新或重启网卡。默认直接交回结果；我确实需要保存时才指定一份新日志。\n\n## 最后我会得到什么\n\n得到指定网卡处理前后的状态、这次动作是否完成以及单独的连通性检查。没有要求保存就不生成桌面文件；指定日志时写一份脱敏新文件，已有文件不覆盖。重新获得地址、能访问测试站点和所有应用可用分别说明。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 网络重置本身会中断连接，不能把所有失败都变成重启网卡。先核对网卡、地址类型和当前远程依赖，再选择必要动作，失败要尽力恢复已禁用网卡并说清未完成项。 ## 举个实际例子 “WiFi断"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 网络重置本身会中断连接，不能把所有失败都变成重启网卡。先核对网卡、地址类型和当前远程依赖，再选择必要动作，失败要尽力恢复已禁用网卡并说清未完成项。 ## 举个实际例子 “WiFi断"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 网络重置本身会中断连接，不能把所有失败都变成重启网卡。先核对网卡、地址类型和当前远程依赖，再选择必要动作，失败要尽力恢复已禁用网卡并说清未完成项。 ## 举个实际例子 “WiFi断"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n只读诊断返回当前网卡与代理状态；实际重置后再看网卡是否启用、有没有地址，并另看连接测试。需要日志且明确指定新路径时才保存。\n\n## 发现问题时\n\n两种重置都需要同一用户的管理员窗口。SoftReset遇静态IPv4配置就保留原样并停止；网卡身份变化或重置失败时不继续扩大动作，禁用过的网卡会尝试重新启用。\n\n## 入口不可用或证据不足时\n\n多张候选未能唯一选定、目标不是物理网卡、权限或回读失败时，只说明该步未完成。断线或没有IPv4本身不排除目标；不偷偷改用另一张网卡。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在 ProxyClean 的“维护工具”窗口选定网卡，先查看，再明确点刷新或重启；首页普通修复不会自动操作网卡。\n\n## 需要准备什么\n\n- 要检查的 WiFi 网卡（只有一块时可让工具识别）\n\n- 只看状态、刷新还是重启\n\n- 是否需要保存诊断日志\n\n## 从开始到拿到结果\n\n1. **先找准要检查的网卡**　只有一块可辨认的物理 WiFi 时可直接选；多块就请本人点名。即使已断线也能检查，正在用它远程连接时先说明可能中断。\n\n2. **只读看当前问题**　先查地址、域名解析和代理状态；查看不会自动重启网卡。\n\n3. **明确选一种恢复动作**　需要时选择温和刷新或禁用后重启指定网卡；两种都可能短暂断线，静态地址不走自动续租。\n\n4. **回读是否真的恢复**　检查网卡是否重新启用、有没有地址以及基础连接结果；仍失败就交回具体缺口，不改别的网卡。\n\n5. **日志单独决定**　结果默认直接显示；本人确实要留一份时才保存脱敏报告。保存失败不等于网络动作没发生，不为补日志再重置。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n诊断、软刷新和网卡重置入口保留；本站未操作本人当前 WiFi 网卡\n\n## 关键规则与设计选择\n\n1. Diagnose只读；SoftReset与AdapterReset是分别明确选择的动作，不按失败自动升级。\n\n2. 默认不写日志。只有显式LogPath且确认创建时才写脱敏摘要，拒绝覆盖既有文件；WhatIf（只读预演）不写日志。\n\n3. 未指定别名时从物理无线特征选唯一候选；明确InterfaceAlias时从物理网卡按名称选择，不要求Up或已有IPv4。\n\n4. 两种reset拒绝SYSTEM，并在真实修改前要求同一Windows用户提升权限。SoftReset只接受DHCP Enabled的IPv4接口，静态配置保留。\n\n5. 选定后再次核对接口索引；SoftReset按/flushdns、/release、finally /renew执行。AdapterReset仅在禁用成功后于finally尝试启用。\n\n6. 网卡Up且有IPv4时为adapter_ready，否则needs_attention；连接探针另报，SkipConnectivityChecks或WhatIf（只读预演）为not_tested。\n\n## 当前怎样实现\n\n- WifiRebind.ps1参数为Mode=Diagnose/SoftReset/AdapterReset、InterfaceAlias、WaitSeconds(0–120)、SkipConnectivityChecks、Json及LogPath；默认Diagnose。\n\n- Get-PCWifiAdapter枚举物理网卡，默认按NdisPhysicalMedium或名称/描述识别无线；别名显式选择不依赖在线或地址。Get-PCWifiSnapshot只输出地址数、DHCP与观察状态，不暴露实际地址。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 诊断、软刷新和网卡重置入口保留；本站未操作本人当前 WiFi 网卡 ## 关键规则与设计选择 1. Diagnose只读；SoftReset与Adapter"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 诊断、软刷新和网卡重置入口保留；本站未操作本人当前 WiFi 网卡 ## 关键规则与设计选择 1. Diagnose只读；SoftReset与Adapter"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 诊断、软刷新和网卡重置入口保留；本站未操作本人当前 WiFi 网卡 ## 关键规则与设计选择 1. Diagnose只读；SoftReset与Adapter"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- Invoke-PCWifiReset先拒绝SYSTEM，复核接口索引，ShouldProcess确认后检查管理员。SoftReset在任何刷新前拒绝非DHCP接口，release失败也进入renew。\n\n- AdapterReset在Disable-NetAdapter成功后，finally中尝试Enable-NetAdapter；未完成就抛出错误，不推断网卡已恢复。\n\n- 主脚本失败返回status=failed与通用恢复提示、退出码1；needs_attention使用退出码2。不是旧实现的权限3/禁用4/启用5分类。\n\n- 仅显式LogPath且非WhatIf（只读预演）时在动作之后创建JSON摘要，已存在文件拒绝覆盖。日志失败可能发生在网络动作之后，不构成网络回滚。\n\n## 执行流程\n\n1. 解析模式和明确网卡；Get-PCWifiAdapter不把断线/缺IPv4当作排除条件。\n\n2. 记录处理前Get-PCWifiSnapshot；Diagnose不修改配置。\n\n3. 需重置时复核同一网卡身份、同用户非SYSTEM与管理员条件，并按ShouldProcess执行。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n4. SoftReset确认DHCP后刷新DNS、释放并在finally续租；AdapterReset禁用成功后在finally启用。\n\n5. WaitSeconds后回读网卡；可选连接探针独立返回，不由adapter_ready推出公网恢复。\n\n6. 只有LogPath显式选择才创建脱敏新日志；失败保留实际动作状态，不自动重复重置。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Tiered Recovery（分级恢复） | 由只读诊断到 DNS/DHCP 刷新，再到网卡禁用/重新启用；每个等级都是独立显式选择，不是脚本自动升级。 |\n| 可选诊断日志 | 只在显式LogPath下创建的脱敏新摘要，默认不落盘；它与网卡动作是否发生是两件事。 |\n\n## 专业定义\n\n先只读诊断，再按明确网卡恢复；默认不留日志，重置可能中断连接",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n防止物理网卡假死或 DHCP 租约过期时误判为代理故障，提供开箱即用的结构化排错依据。\n\n## 边界\n\n- 默认诊断不改设置；两种reset均可能中断选定连接，必须明确选择。\n\n- SYSTEM不是此入口的运行身份；实际重置要求同一Windows用户管理员，静态IPv4不进入SoftReset。\n\n- 显式物理网卡选择允许断线和无IPv4；默认自动选择仍必须唯一，不能猜目标。\n\n- 网络重置不属于代理设置Undo，重新启用也不能保证公网、DNS或全部应用恢复。\n\n- SkipConnectivityChecks不做DNS/HTTP探测；日志不是默认结果，也不能作为再次重置的理由。\n\n## 失败与恢复\n\n- **未获得同用户管理员权限，或以SYSTEM运行重置**：在修改前停止并返回失败；Diagnose仍是独立只读入口，不将SoftReset当作无权限例外。\n\n- **没有唯一物理目标**：请明确InterfaceAlias并重新核对；断线或地址缺失不作为自行换网卡的理由。\n\n- **SoftReset目标使用静态IPv4**：保留静态配置，不释放地址或把它改成DHCP。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **网卡禁用后重新启用失败**：报告未恢复，按Windows网络设置或同一明确网卡的启用入口接续；不以脚本结束冒充网络恢复。\n\n- **DHCP释放失败或操作后仍无地址**：释放失败仍尝试续租；回读后保持failed或needs_attention，连接探针结果另报，不自动改代理或删路由。\n\n- **日志路径已存在或保存失败**：不覆盖旧文件；网络动作可能已发生，先回读实际状态，不为日志重置第二次。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "proxyclean-wifi-rebind-and-recovery-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `WifiRebind.ps1`WiFi 修复与诊断报告主脚本\n\n- `Test-WifiRebind.ps1`自动化测试套件，验证参数与报告生成\n\n## 如何验证\n\n- 2026-09-18 网站只读检查过当时的 WifiRebind.ps1 与 ProxyClean.Network.ps1；2026-09-22 更新的是已发布图形入口语义；2026-10-11 按当天 14:00 前的源码逐段再核对，行为没有变化。本页仍未操作真实 WiFi 网卡。\n\n- 历史记录（不描述现行实现保证）：Test-WifiRebind.ps1 在 Windows PowerShell 5.1 与 PowerShell 7 通过，检查语法、模式、关键命令、退出码和日志路径；旧批处理接线现留在旧版入口。\n\n- 历史记录（不描述现行实现保证）：测试没有执行 Diagnose、SoftReset、AdapterReset、DHCP 续租或真实网卡禁用/启用；这些保持未做 E2E（端到端验证）。\n\n## 与其他模块的关系\n\n代理残留清理之外的独立 WiFi 入口，用于区分配置故障和无线网卡/DHCP/DNS 问题。",
+      "links": [
+        {
+          "text": "上一个模块 关闭代理",
+          "href": "/projects/proxyclean/targeted-port-shutdown/"
+        },
+        {
+          "text": "下一个模块 IPv6 查看与切换",
+          "href": "/projects/proxyclean/ipv6-routing-control/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

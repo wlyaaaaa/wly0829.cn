@@ -1,0 +1,1043 @@
+---
+{
+ "title": "代理退出后，只修理失效设置",
+ "kind": "project",
+ "url": "/projects/proxyclean/dead-port-and-route-cleanup/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "proxyclean-dead-port-and-route-cleanup",
+  "kind": "project",
+  "title": "代理退出后，只修理失效设置",
+  "url": "/projects/proxyclean/dead-port-and-route-cleanup/",
+  "parent": "proxyclean",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有对当前网络执行修复"
+  }
+ },
+ "source": {
+  "page": "sources/pages/proxyclean-dead-port-and-route-cleanup/page.json",
+  "sha256": "0cca62db49ceb2276bbe63e2ddda8b831e6ac90312e33d10406fcfd308b1ea09",
+  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+ }
+}
+---
+
+::screen{#proxyclean-dead-port-and-route-cleanup-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-01",
+  "section": "top",
+  "title": "代理退出后，只修理失效设置",
+  "links": [
+   {
+    "text": "回到项目 → 代理上网修复",
+    "href": "/projects/proxyclean/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/ProxyClean"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/proxyclean/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "代理退出后，只修理失效设置",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有对当前网络执行修复",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 代理上网修复〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "代理异常退出后，不必先重启电脑：脚本会把死本地端口和不能继续工作的配置指出来，只在实际条件满足时执行相应清理。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "代理退出后，只修理失效设置",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 按北京时间 10 月 11 日 14:00 前的 ProxyClean 源码（最后提交 10 月 6 日 05:52）逐项核对；没有对当前网络执行修复"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 代理上网修复〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "代理异常退出后，不必先重启电脑：脚本会把死本地端口和不能继续工作的配置指出来，只在实际条件满足时执行相应清理。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/module-illustrations/proxyclean/dead-port-and-route-cleanup-v01.png",
+   "key": "main-proxyclean",
+   "source_phrase": "右上一幅水彩插画：一台笔记本电脑，屏幕上是白底绿字的小窗口（只画色块，不画字）；电脑背后伸出四五根细线，接到一块插线板上：两根线是鲜绿色、插在亮着小绿灯的插孔里（还在工作的代理），另外两根是灰色虚线、插在已经熄灭的空插孔里（代理已经退出、设置还指着它）；一只绿色的小剪刀只剪那两根灰色虚线，绿色的线不碰。",
+   "sha256": "69a5b6555a95fe318ed21b45d6023b89ccef8878fdd041f989acd3f1c1e427fd",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 代理退出后，只修理失效设置
+
+〔回到项目 → 代理上网修复〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+ProxyClean · 功能说明
+
+代理异常退出后，不必先重启电脑：脚本会把死本地端口和不能继续工作的配置指出来，只在实际条件满足时执行相应清理。
+
+**当前情况：**已发布图形入口提供检查、中文修复预览、确认后修改与基础网页检查。仍工作的代理会保留；本轮只核对了源码、现有说明和一次本机只读状态，没有查看截图，也没有对当前网络执行修复或删路由。
+
+项目快照核对于北京时间 2026-10-11（以当天 14:00 前的源码为准，最后一次提交在 10 月 6 日 05:52）；具体测试保留各自日期，页面不实时探测运行状态。
+
+项目源码：公开仓库
+
+::screen{#proxyclean-dead-port-and-route-cleanup-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "## 这项功能怎样使用 ### 为什么需要它 系统代理、环境变量、Git 与路由表各自保存状态。只修其中一处可能仍然断网；盲目删默认路由又可能雪上加霜。因此主入口先判断活监听与 TUN，再对每类配置分别决定保留、清理或拒绝动作。 ### 举"
+   },
+   {
+    "id": "module-product",
+    "text": "## 这项功能怎样使用 ### 为什么需要它 系统代理、环境变量、Git 与路由表各自保存状态。只修其中一处可能仍然断网；盲目删默认路由又可能雪上加霜。因此主入口先判断活监听与 TUN，再对每类配置分别决定保留、清理或拒绝动作。 ### 举"
+   },
+   {
+    "id": "module-product-title",
+    "text": "## 这项功能怎样使用 ### 为什么需要它 系统代理、环境变量、Git 与路由表各自保存状态。只修其中一处可能仍然断网；盲目删默认路由又可能雪上加霜。因此主入口先判断活监听与 TUN，再对每类配置分别决定保留、清理或拒绝动作。 ### 举"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+### 为什么需要它
+
+系统代理、环境变量、Git 与路由表各自保存状态。只修其中一处可能仍然断网；盲目删默认路由又可能雪上加霜。因此主入口先判断活监听与 TUN，再对每类配置分别决定保留、清理或拒绝动作。
+
+### 举个实际例子
+
+“代理退了，网页还报连接旧代理失败。”我在首页点检查并修复，先看到失效设置的中文预览；确认后才关闭指向死端口的系统代理并清理相关用户/Git 设置。界面分别显示配置回读与基础网页检查结果（不走显式代理，用 IPv4 依次请求百度和微软的连通性测试页）；旧终端可能要重开。
+
+### 最后我会得到什么
+
+窗口逐项告诉我哪些失效代理设置已清、哪些仍在工作的设置被保留、旧网络路线是否因为缺少安全退路而没有动，以及基础网页是否打开。任一测试页正常返回就算打开；全部因为域名解析失败才报“域名解析失败”，其他情况报“未确认能上网”。这一项通过不代表海外网站或 AI 服务可用，也不证明绕开了 TUN。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+### 正常时
+
+确认失效的本机设置已清，仍在工作的代理保持原样；设置与网页测试分别报告，旧终端可能要重开。
+
+### 发现问题时
+
+找不到可靠的物理上网路线时，所有默认路线都保持原样；其他可安全处理的设置仍按预览逐项说明。
+
+### 入口不可用或证据不足时
+
+需要删除系统路线却没有管理员权限时停止这一步，明确提示如何在同一用户的管理员窗口继续。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "双击根目录“00-打开 ProxyClean.vbs”，在首页点“检查并修复上网问题”，读中文预览后才点“开始修复”。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **先检查**　窗口读取系统代理、端口和路由；仍活着的代理路径会保留。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "双击根目录“00-打开 ProxyClean.vbs”，在首页点“检查并修复上网问题”，读中文预览后才点“开始修复”。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **先检查**　窗口读取系统代理、端口和路由；仍活着的代理路径会保留。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+双击根目录“00-打开 ProxyClean.vbs”，在首页点“检查并修复上网问题”，读中文预览后才点“开始修复”。
+
+### 需要准备什么
+
+- 网页或命令行出现的故障
+
+- 是否还需要正在运行的代理
+
+- 预览后是否同意执行
+
+### 从开始到拿到结果
+
+1. **先检查**　窗口读取系统代理、端口和路由；仍活着的代理路径会保留。
+
+2. **预览后修复**　只对预览中符合失效条件的配置保存原值并修改；没有可修项时不强行清理。
+
+3. **回读并试网页**　回读实际设置并做基础网页检查（百度、微软测试页）；想逐站点看海外、AI 和 IPv6，另到维护工具点“检查联网情况”。失败或其他应用仍断网时看明确未处理范围，必要时用撤销恢复本轮可逆设置。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 物理默认路由保护已修复；隔离回归通过，真实网络未改动 ## 关键规则与设计选择 1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动Win"
+   },
+   {
+    "id": "module-technical",
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 物理默认路由保护已修复；隔离回归通过，真实网络未改动 ## 关键规则与设计选择 1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动Win"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 物理默认路由保护已修复；隔离回归通过，真实网络未改动 ## 关键规则与设计选择 1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动Win"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动WinINET、用户代理变量、来源明确的通用全局Git代理和满足物理回退条件的IPv4残留路由。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动WinINET、用户代理变量、来源明确的通用全局Git代理和满足物理回退条件的IPv4残留路由。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+物理默认路由保护已修复；隔离回归通过，真实网络未改动
+
+## 关键规则与设计选择
+
+1. 不写入新的代理端点。默认只清失效本地项，Direct也仅处理手动WinINET、用户代理变量、来源明确的通用全局Git代理和满足物理回退条件的IPv4残留路由。
+
+2. 删除候选默认路由前必须至少看到一条 HardwareInterface=true、Up、NextHop 非零且非 fake-ip 的物理默认路由；否则本轮不删除任何路由。
+
+3. 系统代理仅在指向的本地端口已死或显式传 -Direct 时才关闭；活代理只在默认模式交由客户端维护。
+
+4. PInvoke（平台调用）广播 WM_SETTINGCHANGE（超时 200ms）与 InternetSetOption 负责通知配置变化；已经运行的进程仍可能需要重开才能取得新的用户环境变量。
+
+## 当前怎样实现
+
+- ProxyClean.Notifications 组件声明 SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 'Environment', timeout（等待超时）=200ms)。
+
+- 同一组件声明 InternetSetOption(SETTINGS_CHANGED 39, REFRESH 37)。
+
+- Get-PCListenerState 通过 Get-NetTCPConnection -State Listen 严格检验回环与通配地址监听状态。
+
+- Test-PCPhysicalRoute 检查网卡 Status 为 Up 且 NextHop 非 0.0.0.0 且非 198.18/198.19 fake-ip 网段。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- Test-LocalProxyDead 解析代理端点，仅在全部端点为本地回环且无活跃监听时才断定为死代理。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- Test-LocalProxyDead 解析代理端点，仅在全部端点为本地回环且无活跃监听时才断定为死代理。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+- Test-LocalProxyDead 解析代理端点，仅在全部端点为本地回环且无活跃监听时才断定为死代理。
+
+- Test-PCPhysicalRoute 在删除前与删除后共同检查 HardwareInterface=true；信息未知不充当物理路由证据。
+
+- ProxyClean.Operations.ps1 在效果前把原值和步骤存进当前用户 DPAPI（Windows 自带的按账户加密）保护的 last-operation.dpapi，用主文件与 .previous 两个位置轮流保存：保留最近一份有效记录，把新记录写进另一份，强制落盘并读回核对后才算保存成功，所以不会覆盖唯一的恢复文件；旧版单文件记录也能读，兼容 EFS 加密目录。临写比较原值，写后回读，失败逆序恢复。外来修改保留为 recovery_required 并阻止新配置写入；只处理当前轮可撤销对象，文件不是跨设备恢复包。
+
+## 执行流程
+
+1. 读取 WinINET 注册表与 Get-NetAdapter，检测系统代理发布端口与处于 Up 状态的 fake-ip TUN 路由。
+
+2. 依据现场判定目标：默认模式若有 WinINET 活端口或活动 TUN 就保留活路径，仅清死项；两者同时存在只告警。传 -Direct 则清空列出的代理设置，但仍不结束客户端进程或切 TUN。
+
+3. 执行默认路由条件扫描：备用候选少于 1 条就跳过全部删除；否则处理已消失/Down 网卡路由与直连目标下的 fake-ip 默认路由。
+
+4. 逐项审计用户环境变量与 Git 代理，判定为本地死端口则清空为直连，调用 User32 广播变更。
+
+5. 审计 WinINET 系统代理：若开着却指向死端口，则将 ProxyEnable 置 0 关停恢复直连。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "6. 仅在命令行显式 -FlushDns 或维护窗口明确选择时刷新 DNS；普通修复不会自动执行。配置变更仍通知 WinINET。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "6. 仅在命令行显式 -FlushDns 或维护窗口明确选择时刷新 DNS；普通修复不会自动执行。配置变更仍通知 WinINET。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+6. 仅在命令行显式 -FlushDns 或维护窗口明确选择时刷新 DNS；普通修复不会自动执行。配置变更仍通知 WinINET。
+
+7. GUI 已确认修复后回读配置，再做基础网页检查：不走显式代理，用 IPv4 依次请求百度和微软连通性测试页，任一 2xx 即算可访问。逐站点（国内、海外、AI，分 IPv4/IPv6）检查和公网出口比较各按维护入口另行选择，网页成功不证明所有应用直连。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-08",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+| --- | --- |
+| Orphan Route Precondition（孤儿路由前置条件） | 在删除候选默认路由前，源码要求至少存在一条 HardwareInterface=true、Up、NextHop 非零且非 fake-ip 的物理默认路由；它明确要求 Windows 标记为物理接口，仍不等于主动测得网关或公网可达。 |
+| Direct Mode（强制直连模式） | 显式 -Direct 会关闭 WinINET、清空列出的用户代理变量并 unset Git 代理，即使值仍活跃或指向远程；它不结束客户端进程或切 TUN。 |
+| Loopback Dead Discrimination（本地死端口鉴别） | 严格区分 127.0.0.1 本地回环与远程代理服务器，只清已死的本地端口，避免误伤正常的远程代理配置。 |
+
+## 专业定义
+
+区分本地死端口、活代理与远程配置；PInvoke（平台调用）负责通知，清理后分别回读路由和连通性
+
+::screen{#proxyclean-dead-port-and-route-cleanup-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-09",
+  "section": "tech",
+  "title": "出问题时",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **现场没有符合条件的备用默认路由**：脚本打印黄色警告并跳过全部路由删除，提示先确认 WLAN 或以太网；其余代理配置清理仍按各自条件继续。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **现场没有符合条件的备用默认路由**：脚本打印黄色警告并跳过全部路由删除，提示先确认 WLAN 或以太网；其余代理配置清理仍按各自条件继续。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时
+
+解决什么
+
+防止代理崩溃后因残留系统代理和孤儿 fake-ip 路由导致全机断网，防止网络修复工具误删物理路由引发二次灾难。
+
+## 边界
+
+- 若当前没有符合源码谓词的备用默认路由，无论是否指定 -Direct，本轮都不删除任何路由条目。
+
+- Direct不是所有应用直连保证：PAC、WinHTTP、机器变量、URL专属/含糊Git配置、Docker与其他应用不隐式修改；混合映射中的其他端点保留。
+
+- NO_PROXY 环境变量包含用户白名单配置，脚本绝对不碰、不清空。
+
+- 普通用户权限下无法修改系统内核路由表，必须提升为管理员才能执行路由删除动作。
+
+## 失败与恢复
+
+- **现场没有符合条件的备用默认路由**：脚本打印黄色警告并跳过全部路由删除，提示先确认 WLAN 或以太网；其余代理配置清理仍按各自条件继续。
+
+- **系统代理指向的端口正在正常监听**：脚本认定为活动代理，不关闭系统代理，仅提示交由客户端维护，保持现场不动。
+
+- **默认模式下 Git 代理同时包含有效远程代理与本地死端口**：默认保留无法安全定位的配置，Direct也不越过Git来源边界；先明确可写的通用全局配置，不删除含糊或URL专属项。
+
+- **WinINET 活端口与活动 fake-ip TUN 同时存在**：默认模式只告警多路径，不替用户选择或关闭客户端；用户先决定保留哪一条，或明确选择 -Direct。
+
+::screen{#proxyclean-dead-port-and-route-cleanup-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "proxyclean-dead-port-and-route-cleanup-10",
+  "section": "tech",
+  "title": "依据与来源",
+  "links": [
+   {
+    "text": "下一个模块 动态状态",
+    "href": "/projects/proxyclean/dynamic-proxy-status/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **ProxyClean.ps1**：命令行清理入口，预览、修复、撤销都调用与图形首页相同的共享流程（ProxyClean.Common.psm1、ProxyClean.Operations.ps1 等），实现死端口鉴别、候选孤儿默认路由条件处理与系统广播",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **ProxyClean.ps1**：命令行清理入口，预览、修复、撤销都调用与图形首页相同的共享流程（ProxyClean.Common.psm1、ProxyClean.Operations.ps1 等），实现死端口鉴别、候选孤儿默认路由条件处理与系统广播",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源
+
+## 真实入口
+
+- **ProxyClean.ps1**：命令行清理入口，预览、修复、撤销都调用与图形首页相同的共享流程（ProxyClean.Common.psm1、ProxyClean.Operations.ps1 等），实现死端口鉴别、候选孤儿默认路由条件处理与系统广播
+
+- **ProxyClean.test.ps1**：测试执行入口，先检查全部脚本能否解析，再运行 tests/ 下 12 个测试文件
+
+## 如何验证
+
+- 早先单文件测试验证过本地/远程/混合代理解析、活/死本地端口、隔离 Git 配置和只读状态 JSON；现在测试拆到 tests/ 下 12 个文件，共展开 317 个用例（北京时间 10 月 11 日只静态数出，没有运行），全套运行结果未知。
+
+- 2026-09-24 当时的变更记录载明 12 项新增注册表回归及整仓 193 项通过（该记录文件 9 月 26 日已从仓库删除，可在 Git 历史查到）；9 月 25 日版本 277 项在两版 PowerShell 通过也是历史记录；9 月 22 日隔离客户端流程验证保留原日期。这些都未在本人当前网络关闭代理，也不证明公网或所有应用恢复。
+
+- 源 857b110 的新增回归包含 9 个判定场景与 3 个实际清理条件分支：只有虚拟备用时零删除、活动 TUN 保留、Direct 模式下符合条件的孤儿清理。旧实现先失败，新实现双 PowerShell 通过。
+
+## 与其他模块的关系
+
+首页“检查并修复上网问题”的配置修复核心，也是命令行默认清理与显式直连的技术依据；普通修复不自动刷新 DNS。

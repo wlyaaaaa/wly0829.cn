@@ -479,7 +479,13 @@
     "/projects/meshclip-kit/exact-peer-firewall-hardening/",
     "/projects/meshclip-kit/kde-connect-pairing-sync/",
     "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
-    "/projects/meshclip-kit/tailscale-peer-reachability/"
+    "/projects/meshclip-kit/tailscale-peer-reachability/",
+    "/projects/proxyclean/dead-port-and-route-cleanup/",
+    "/projects/proxyclean/dynamic-proxy-status/",
+    "/projects/proxyclean/ipv6-routing-control/",
+    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
+    "/projects/proxyclean/targeted-port-shutdown/",
+    "/projects/proxyclean/wifi-rebind-and-recovery/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
