@@ -1,0 +1,211 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "work-delivery-value-state-recovery",
+  "kind": "project",
+  "title": "分别报告功能、质量、安装、合成验收、真实价值和数据库恢复",
+  "url": "/projects/work-delivery/value-state-recovery/",
+  "parent": "work-delivery-copilot",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，数据库和备份位置于 10 月 11 日 16:32—16:35 只读查看；测试与合成验收保留 9 月 1 日、9 月 28 日原日期，本轮未重跑。"
+  },
+  "screens": [
+    {
+      "id": "work-delivery-value-state-recovery-01",
+      "section": "top",
+      "title": "分别报告功能、质量、安装、合成验收、真实价值和数据库恢复",
+      "text": "# 分别报告功能、质量、安装、合成验收、真实价值和数据库恢复\n\n〔回到项目 → 工作支持与交付〕　〔复制 AI 续作说明〕\n\n工作支持与交付 · 功能说明\n\n看清这套交付工具目前实际证明了什么：能否生成并检查文件，是否在真实工作中省时，出了错能从哪里继续，数据库丢失后还能否恢复。每一层有各自证据，不因为一次测试通过就说全部可用。\n\n**当前情况：**合成资料已走通文件生成与检查（最近的完整记录在 9 月 1 日和 9 月 28 日）；到 10 月 11 日仍没有证明真实工作省时，真实交付包数据库丢失后的恢复也未闭合。\n\n源码事实核对截至 2026-10-11 14:00（北京时间）；历史测试保留各自日期；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 工作支持与交付",
+          "href": "/projects/work-delivery-copilot/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/work-delivery-copilot/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n文件生成得快，不代表包括 AI 分析在内的整件工作更快；保存过程的状态库，也不代表它丢失后就能恢复。两层都要如实核验。\n\n## 举个实际例子\n\n我可以问：“这套工具现在只是测试通过，还是已经在真实工作里证明省时间？上次生成超时后要不要重来？”当前证据只证明合成材料能生成，尚未用真实工作比较时间；超时后先核对已经写出的文件和原包，再决定从哪里继续。数据库丢失也不能靠 Git 猜回真实交付包。\n\n## 最后我会得到什么\n\n得到最近可靠的来源与交付版本、失败发生在哪一步、已经留下哪些文件，以及下一步怎样继续。合成材料已验文件生成；真实工作是否省时、交付包数据库丢失后的恢复仍缺证明。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以正式构建\n\n本轮需要的文件与当前事实一致且各自检查完成时，只报告已证实的层级，并给出文件和可继续的位置。\n\n## 需要确认\n\n事实未确认、资料过期或制作失败时，说明停在哪一步。超时和逐份写入失败可能已经留下部分新状态或文件，要先查实际结果再接续。真实省时价值仍需与直接做法比较。\n\n## 当前不可用\n\n保存交付包事实的数据库丢失且没有备份时，明确这份真实工作包不能恢复；旧文档或源码不能反推出完整状态。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n问这套交付现在能否使用、节省了什么，或数据库丢失后怎样恢复。\n\n## 需要准备什么\n\n- 要评估的交付事项或具体问题\n\n## 从开始到拿到结果\n\n1. **看这轮实际完成到哪一步**　分别核对来源与事实、文件生成、文件检查和真实工作使用证据。\n\n2. **失败先找已有结果**　超时或中断后先读回交付包和已写文件，再从可靠位置继续；没有数据库备份时如实说明恢复缺口。\n\n3. **交回分层结论**　逐层说明能否生成、能否复核、是否在真实工作中省时及能否恢复；一层通过不替其他层作保证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n2026-09-01：37/37、Ruff、隔离 wheel、两套合成 Office E2E（端到端验证） 通过；2026-10-11 核对时有 45 项测试定义，本轮未重跑；真实工作价值和恢复闭环仍为 baseline_required / not_run\n\n## 关键规则与设计选择\n\n1. 37/37 测试与 Ruff 在 2026-09-01 基线通过；2026-09-28 另有一次记录为 44 项中 39 项通过、5 项跳过（引自当时的调查记录，原始回执没有重新取回）。2026-10-11 读源码时共有 45 项测试定义，本轮没有运行测试，也没有重新验证 Ruff、隔离 wheel 或 Office 全链。\n\n2. 隔离 wheel 在 2026-09-01 脱离源码目录完成安装闭包。\n\n3. 两套合成 Office E2E（端到端验证） 证明三类文件、重导入、几何与公式检查：项目保留的 2026-09-01 01:32 验收报告记为功能通过、整体 baseline_required、仅合成；一套 9 条事实中 2 条受来源变化影响，另一套 10 条中 2 条受影响，两套各 12 项检查、Office 均通过。\n\n4. 2026-09-01 的实现盲自然路由 E2E（端到端验证） 在无 Skill、工具和内部路线提示时自主选择 work-delivery，覆盖 3/3 指定来源，确认 27 条事实和 39 条追溯。\n\n5. 5 条待确认中的 4 条阻断正式交付，quality 保持 draft，只生成 PRD.md、manifest.json、traceability.csv，Office builder 为 0；这证明路由和质量门，不是正式 Office E2E（端到端验证）。\n\n6. 约 12 分 12 秒可见墙钟包含 AI 分析与人工式判断，0.043 秒成功 batch 核心只表示确定性写入；两者都不能替代同模型同质量直接基线。\n\n7. 首次建立交付包时，用户只做三类动作：明确选择资料、处理冲突/待确认、确认生成；不得重复录入已有事实。\n\n8. 同模型、同 Token 量与同质量下，初次构建总墙钟不得超过直接基线的 1.25 倍；完成第一次来源变化时累计人工时间不得高于直接基线，变更轮墙钟目标不超过直接重做的 0.75 倍（2026-10-11 读源码，门槛未变）。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n9. 如果直接文件能力同样能处理变化和一致性，就只保留窄工作流；受控 Agent 不优于确定性流程就保留确定性流程；真实工作只稳定复用一种产物就收窄到该产物。\n\n10. 没有同模型同质量直接基线，时间状态必须 baseline_required。\n\n11. 9月1日验收未覆盖真实工作、真实来源变化、导出备份、数据库恢复或跨机器迁移；到 2026-10-11 也没有取得这些方面的新验收，但这不代表这些现实对象全局不存在。\n\n## 当前怎样实现\n\n- acceptance.py 分开 functional、complexity、timing 和 per-scenario checks。\n\n- 没有合法 direct baseline 时 timing 返回 baseline_required，程序仍以可区分状态退出。\n\n- run_batch 从请求预校验开始计时，在 SQLite 状态事务提交后、core 构建后和 Office 构建后分别调用 _enforce_mechanical_budget；超过 15 秒抛 MechanicalStageTimeoutError，CLI（命令行工具） 非零退出，不补做事务或文件回滚。\n\n- ArtifactBuild 保存 current（当前状态）/stale、semantic hash（内容指纹）、fact revision 与 output directory。\n\n- verify 只读比较当前 SQLite 与 persisted manifest（清单），不检查每种 Office 成品的全部像素或语义。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- builder 生成阶段使用 staging，正式文件逐个替换；跨文件中断恢复仍依赖原包和实际文件核对。\n\n- 当前没有 export/backup/restore command、后台镜像或跨机器迁移。2026-09-29 起默认库固定放在本机个人资料目录里，这个目录整体每天 17:10 自动同步到备份盘（10 月 11 日查看：10 月 10 日那次运行成功、备份回执完整）；但同日只读核对时，默认位置和备份里都没有这个数据库文件，整体备份成功不等于工作交付库已有副本，也没做过恢复演练。用户可以显式把库放到别处，项目没有全局登记，所以真实交付包总数仍未知。\n\n## 执行流程\n\n1. 读取current（当前状态） package\n\n2. 检查facts与quality",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-08",
+      "section": "tech",
+      "title": "技术实现与依据（四）",
+      "text": "## 技术实现与依据（四）\n\n3. verify current（当前状态） build\n\n4. 生成请求artifacts\n\n5. 分别记录test/install/E2E\n\n6. 核对首轮1.25倍/变更轮0.75倍/累计人工时间\n\n7. 判断继续窄工作流、确定性流程或单产物路线\n\n8. 报告real work状态\n\n9. 交回恢复点或不可恢复结论",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-09",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| baseline_required（需要基线） | 功能可用，但缺少可比的直接处理对照；不能计算或宣称相对时间收益。 |\n| Recovery point（恢复点） | 最近可读来源快照、事实修订、current（当前状态） build 与持久化 manifest（清单）；数据库仍须存在。 |\n| Synthetic E2E（合成端到端） | 完全虚构来源走完整产品链；证明流程和成品，不证明真实业务采用。 |\n| Implementation-blind routing（实现盲路由） | 评测只给自然工作意图和正常能力信息，不透露 Skill、工具、项目路径或预期路线；同时检查是否自主选对入口和用户可见结果。 |\n| Time-value gate（时间价值门） | 用同模型同质量直接处理基线比较首轮总墙钟、变更轮总墙钟和累计人工时间；不达标就收窄产品。 |\n\n## 专业定义\n\n一盏总绿灯会误导：0.2.0 的功能、质量、安装和合成输出已通过，但真实工作、真实变更、时间基线与数据库恢复仍未完成。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-10",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决把源码、测试、安装、合成输出、真实价值和恢复能力互相冒充的问题。\n\n## 边界\n\n- 测试不替代真实工作\n\n- 机械时间不包含AI分析\n\n- 当前盲路由 draft 不冒充正式Office E2E（端到端验证）\n\n- 没有合法direct baseline不计算相对收益\n\n- 任一正式时间硬门失败就收窄而非放行\n\n- Git不备份SQLite运行数据，整体资料备份也未证明含有这个库\n\n- 没有导出恢复或跨机器迁移\n\n## 失败与恢复\n\n- **质量门未 ready**：保留待确认 PRD、来源和事实，列出阻断，不生成正式 Office。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-11",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **Office builder 生成阶段失败**：清理本轮 staging，不晋升这次暂存文件；已生成核心文件和原包状态保留。若失败已在替换阶段，另核对可能存在的部分成品。\n\n- **确定性 batch 超过 15 秒**：时间门失败并非整次未写入：状态提交后可能只有包和事实，core 后已有核心文件，Office 后可能已有所请求成品。先核对原稳定 ID、构建和文件，再从已发生状态继续。\n\n- **首轮、变更轮或累计人工时间不达标**：验收失败；减少步骤、退回确定性窄工作流或只保留真实稳定复用的单一产物。\n\n- **SQLite 数据库丢失**：明确真实 package、来源快照、决定历史和 build 记录当前无法从 Git 恢复；个人资料目录的每日备份没有证明含有这个库，也没有做过恢复演练，不能当成已有恢复办法。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-12",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- `PRIVATE source · acceptance.py`功能、复杂度、时间和合成场景分层\n\n- `PRIVATE source · batch.py / artifacts.py`15秒检查的真实时点、已提交状态与逐文件替换边界\n\n- `PRIVATE tests · 45 definitions`源码、CLI（命令行工具）、正式入口、wheel与失败恢复（2026-10-11 计数，本轮未运行）\n\n- `PRIVATE README · current acceptance`0.2.0 当前证据、历史路由和未完成项\n\n## 如何验证\n\n- 2026-09-01 时 37 项测试全部通过，Ruff 通过；2026-09-28 记录为 44 项中 39 项通过、5 项跳过；之后没有重跑。\n\n- 隔离 wheel 完成两个合成 acceptance 与三类 Office 构建（2026-09-01）。\n\n- 两套合成场景分别完成来源变化影响（2026-09-01 报告：9 条中 2 条、10 条中 2 条受影响）。\n\n- 2026-09-01 的实现盲自然路由证明 route_selected_without_hint、3/3 来源边界、draft 质量门、builder=0、current（当前状态） verify 与旧 build stale。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-value-state-recovery-13",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 时间在无 direct baseline 时保持 baseline_required。\n\n- 真实工作、真实来源变化和数据库恢复到 2026-10-11 仍为 not_run。\n\n## 与其他模块的关系\n\n这是当前产品证据的终点：交回真实完成层、缺口、恢复点和下一决定，不把未验证层冒充成已完成。",
+      "links": [
+        {
+          "text": "上一个模块 来源变化与下一版",
+          "href": "/projects/work-delivery/source-change-next-version/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

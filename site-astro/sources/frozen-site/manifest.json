@@ -461,7 +461,13 @@
     "/projects/wechat-direct/named-chat-archive/",
     "/projects/wechat-direct/preservation-verification/",
     "/projects/wechat-direct/reply-media-relations/",
-    "/projects/wechat-direct/"
+    "/projects/wechat-direct/",
+    "/projects/work-delivery/consistent-deliverables/",
+    "/projects/work-delivery/evidence-quality/",
+    "/projects/work-delivery/package-sources/",
+    "/projects/work-delivery/source-change-next-version/",
+    "/projects/work-delivery/value-state-recovery/",
+    "/projects/work-delivery/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
