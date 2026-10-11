@@ -14,8 +14,8 @@
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3"
     },
     "cockpit/index.html": {
-      "bytes": 323067,
-      "sha256": "50742a7198979b26d55e269ea1be1be7c33b9e0233e528a78871035414ae3340"
+      "bytes": 321282,
+      "sha256": "9210727f03491d723314123e278f31dada4023e148f6e32f325decdfe66f5814"
     },
     "cockpit/stutter/index.html": {
       "bytes": 10623,
@@ -31,19 +31,19 @@
     },
     "how/index.html": {
       "bytes": 566211,
-      "sha256": "323957ea54490075c86f0d01736bbfb490c56912846985217ff1edf1abb21944"
+      "sha256": "f7ac6ccb406f977b2c7129c4b39f20653419d256b4a1afeb7e2ce23e32d5dae5"
     },
     "how-this-site/index.html": {
       "bytes": 326507,
-      "sha256": "5d69395956a4e4d976a58263ace3fc44d5e277874f3464427395ba16da368c3f"
+      "sha256": "f64222f3cc1e8376c1e09ebbbc5ac17666f75abb9a8868b7d1a5fe922a150483"
     },
     "index.html": {
       "bytes": 394596,
-      "sha256": "55d39f782cdfa66905c4bb28193716a6e9e79cb6bba6839305d1ac3c98bc4982"
+      "sha256": "061c5618327cb09f42cb78224fa6f42732ef1098103c7f1a185a3693f66d21b9"
     },
     "mcp/index.html": {
       "bytes": 258014,
-      "sha256": "1db52b2f8ce64ebe95a9f08956c30067968f846d4c2d701ca0cfc4a7771cb7bc"
+      "sha256": "3752e32ffff736d53540abea8bf1998c3c6056eb95d37578c986110a1751ba51"
     },
     "projects/agents/authorization-owner/index.html": {
       "bytes": 176294,
@@ -59,7 +59,7 @@
     },
     "projects/agents/index.html": {
       "bytes": 635234,
-      "sha256": "e4164fd653a907ad225f3d4370534b8d4a5c697cc262a8d80a7eee1e84439c2c"
+      "sha256": "325fc95e3bd05e560e2a6505fa2df9ad927953b8c58dc58a3add35f279e706b7"
     },
     "projects/agents/protected-policy/index.html": {
       "bytes": 171029,
@@ -91,7 +91,7 @@
     },
     "projects/ai-cli-profile-manager/index.html": {
       "bytes": 599660,
-      "sha256": "a69f6244e5527876c2905af94afdac2797459472c17ee68d426dee3f663d526e"
+      "sha256": "1f3aed8f411113132edb54b67a3109e7eaa3849a2c37920e7240fcee52024eb9"
     },
     "projects/ai-cli-profile-manager/install-recovery/index.html": {
       "bytes": 144595,
@@ -219,7 +219,7 @@
     },
     "projects/codex-memory/index.html": {
       "bytes": 424411,
-      "sha256": "d11bc2b66900be88eabb0b5fa561e26bb068e3c077531df2b2ee391057c427a5"
+      "sha256": "8234996f4b41fc048a32d648ff2f767262a8f4d291e63724c3aec2aeaf18a444"
     },
     "projects/codex-memory/isolated-disaster-recovery/index.html": {
       "bytes": 144904,
@@ -239,7 +239,7 @@
     },
     "projects/codex-remote/index.html": {
       "bytes": 348099,
-      "sha256": "9b8661fd5602bca6ef43ba38dbbe22e1f960bb23a68ee861647d74d7f17e5277"
+      "sha256": "3286072c4d9711fca01e25c2568a55f47c1c7ee5a7f652fc8a6418b174a85706"
     },
     "projects/codex-remote/installation-update-rollback/index.html": {
       "bytes": 126068,
@@ -287,7 +287,7 @@
     },
     "projects/daily-preferences/index.html": {
       "bytes": 540387,
-      "sha256": "83e7a21282e4ba7249b10a6c38f8065823042461056935e7cfba88170214d0f0"
+      "sha256": "cd2aac07417e2075721321b8b064fd68f56f5419955c24d339baad73405262fe"
     },
     "projects/daily-preferences/mobile-context-delivery/index.html": {
       "bytes": 167064,
@@ -307,7 +307,7 @@
     },
     "projects/devconfig-backup/index.html": {
       "bytes": 415018,
-      "sha256": "374ff3ddda2718adbb3f392966cd47a9cac076901a3a6e1dac088f95dc874ea5"
+      "sha256": "c28571124b1b8428a70cf6fc39c16ec4460832e52101c1666b937853e93a59d8"
     },
     "projects/devconfig-backup/recovery-and-tasks/index.html": {
       "bytes": 183782,
@@ -403,7 +403,7 @@
     },
     "projects/index.html": {
       "bytes": 434576,
-      "sha256": "e6c630a466273f8deaa740009443c18664e6d881b1bc6bc22dbc60e10e3b8c61"
+      "sha256": "71a65ff43a7fcd883a2b43ee463464c34f22d9e4fa18b5e7022f1226637d139e"
     },
     "projects/learning/authoritative-research/index.html": {
       "bytes": 124607,
@@ -419,7 +419,7 @@
     },
     "projects/learning/index.html": {
       "bytes": 373338,
-      "sha256": "279c181b1100f59643a3a70fb569476257e37961c0ea7ebfcb63f5818900486d"
+      "sha256": "23456a356fe7ce48e4e04245363453907d12be687fbe7b0cc74f552f13336a78"
     },
     "projects/learning/plain-language/index.html": {
       "bytes": 126507,
@@ -471,7 +471,7 @@
     },
     "projects/localocr/index.html": {
       "bytes": 432118,
-      "sha256": "94b8e57190d85b40b219b46b7f74f7057cac449d239dfe561c2d5b8163e6e62e"
+      "sha256": "64b487d1396e10dc4c72fc8a99631a090c043db2ec27285ae8af38fc070ddbcd"
     },
     "projects/localocr/input-routing/index.html": {
       "bytes": 151444,
@@ -563,7 +563,7 @@
     },
     "projects/pc-panel-hub/index.html": {
       "bytes": 572010,
-      "sha256": "66d1b09d2b32f8cae28b12c19c223284a901718227de0bcaaf329d384b9fa06f"
+      "sha256": "609702651227a1aac1753af065b848ad5e4af76ece580155f8c64b4a61c61623"
     },
     "projects/pc-panel-hub/installation-binding-migration/index.html": {
       "bytes": 201524,
@@ -583,7 +583,7 @@
     },
     "projects/pcconfig/authorization-files/index.html": {
       "bytes": 171965,
-      "sha256": "bfccc736691fbaaafc791b1638b1344e75bb01f53e28fcf16fcaa47f2ebcdafa"
+      "sha256": "3ac3db190072dae28aa41e26ca02a073985cff0d1858317cae6f05a7b775572b"
     },
     "projects/pcconfig/drift-acceptance/index.html": {
       "bytes": 146184,
@@ -591,7 +591,7 @@
     },
     "projects/pcconfig/index.html": {
       "bytes": 934301,
-      "sha256": "6618486fec083e54a2905cdbd884438688e4cdcb4ce1f180e01a8a882a676c6c"
+      "sha256": "4df0bd506e2cd9423d2c7aa76682b47ea886a9b7ba72dbdb2489bebf3f6eba94"
     },
     "projects/pcconfig/machine-facts/index.html": {
       "bytes": 177105,
@@ -631,15 +631,15 @@
     },
     "projects/pcconfig/secrets-providers/index.html": {
       "bytes": 203391,
-      "sha256": "8ad1cab62a0371a6964cb27ea8cab74e18a8f594a9b31963f0be63c8b58ff351"
+      "sha256": "f2f19a4d075d7a1c2a6225b713168880a0458fab7e0d5dee32017b92b193fe51"
     },
     "projects/personal-expression/corpus-extension-and-private-recovery/index.html": {
       "bytes": 152068,
       "sha256": "96de02474e53e5854cd14d4703efbdc3550515a6201df4488e58cff9c853f26c"
     },
     "projects/personal-expression/explain-to-me/index.html": {
-      "bytes": 125627,
-      "sha256": "b1b6a58be2a9ff0ad222923d609c46cf5ab105227a8db0519365e18ee691f411"
+      "bytes": 125625,
+      "sha256": "49a02dcdbd4459dc6963d45925980aabfce14126e0fd1686210b50586dacab5a"
     },
     "projects/personal-expression/feedback-consolidation-and-lessons-sync/index.html": {
       "bytes": 159020,
@@ -650,12 +650,12 @@
       "sha256": "0f59124786e3f53639eb2b8ee171bdd4cea3322601ae0ad3a94ecde85242b74c"
     },
     "projects/personal-expression/reply-as-me/index.html": {
-      "bytes": 155590,
-      "sha256": "8148a6131a13b45dc1ff5b8a482cd341c81ad558d6938c78b1d5688b808e923a"
+      "bytes": 155588,
+      "sha256": "806de646a13bf80e8e4fa41c9f9094bbf69a92bf9fdc1157e51f3d48e2fff53e"
     },
     "projects/personal-formal-documents/index.html": {
       "bytes": 371452,
-      "sha256": "a02dd4f3ce1a7878e3209de97b6be8b6fd2009a0cb934ec572be588948fdd421"
+      "sha256": "4d08f145816924c00b597b9ffb78557de7618659c36e22f88124547715671860"
     },
     "projects/personal-health/current-evidence-route/index.html": {
       "bytes": 123446,
@@ -671,7 +671,7 @@
     },
     "projects/personal-health/index.html": {
       "bytes": 353296,
-      "sha256": "cdcd46949eb74c48dae25772aeff310372a736ef1c5befe945f7b1edafe2ef16"
+      "sha256": "4000958a4db46c2689911fb21eb2b6f9fc3c9bd692b05d44ad8a742f61c6952d"
     },
     "projects/personal-health/offline-decision-brief/index.html": {
       "bytes": 175307,
@@ -691,11 +691,11 @@
     },
     "projects/personal-materials/exact-intake/index.html": {
       "bytes": 207305,
-      "sha256": "766fd2feba333983c74f10c3ae2b9f5425f87a00051c437c9b98cb7f592d557e"
+      "sha256": "90ede9183083fa4792631f1932aae3699a3ca590c442af2bd7bff3804922cd70"
     },
     "projects/personal-materials/index.html": {
       "bytes": 396994,
-      "sha256": "686082cf11ce80705d863757ac092c557d2a2d007be518527d16ff0818376f76"
+      "sha256": "1f24fa414cab487fdf1399d0b2a9d1d565b5bd167767975490978ea36a614304"
     },
     "projects/personal-materials/registered-lookup/index.html": {
       "bytes": 171216,
@@ -715,7 +715,7 @@
     },
     "projects/personal-media/index.html": {
       "bytes": 539974,
-      "sha256": "997cabc6122265b41bda9e66084db4a2a1f31bd59042412493c910899d9529b7"
+      "sha256": "c6dbae8e8c9a160d8a4fcb0c28cffc0b9ab1ed953424faaa1856394d0783bd27"
     },
     "projects/personal-media/local-ingest/index.html": {
       "bytes": 161873,
@@ -743,7 +743,7 @@
     },
     "projects/proxyclean/index.html": {
       "bytes": 344130,
-      "sha256": "4e171c0eada1024c0c86cc14233f7d4ad7feff0ef608cff82396f3614e0c8415"
+      "sha256": "9090af1b3b5cd95a2b47182ef1f6bc880390ad41d99a9d070269c9df67484fec"
     },
     "projects/proxyclean/ipv6-routing-control/index.html": {
       "bytes": 165213,
@@ -767,11 +767,11 @@
     },
     "projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/index.html": {
       "bytes": 146203,
-      "sha256": "0f32c4b3d61f406af62de3ae78e61a21d47dfbadc9003f0262662d5f67b7a317"
+      "sha256": "91c45977c7ebc13375ecc4489a29344780a100c1bdc4a7edfee541d93566c945"
     },
     "projects/ramdisk-guardian/index.html": {
-      "bytes": 419092,
-      "sha256": "4b6a0417addd043770bf40c523f4cd9987ab16bfc44be3d50a42f5d6a3c9e12c"
+      "bytes": 419088,
+      "sha256": "38d4b9fd6e1c12b8f4c8911b9e46f6501fbb9604307f34eb643f8b55f05786dd"
     },
     "projects/ramdisk-guardian/installation-and-application-recovery/index.html": {
       "bytes": 162677,
@@ -786,8 +786,8 @@
       "sha256": "c48489e91f84606387a78c4da2103924dad2eb53dda3ec67077dbf1e21ff1a1f"
     },
     "projects/remote-control/index.html": {
-      "bytes": 464717,
-      "sha256": "2a397d1826700ffd322bdd080ff641492a5a7766990b071275340e350aad026c"
+      "bytes": 464923,
+      "sha256": "82f9b35d5f41cf2e0be9a82e5364721bdce40666b3e6c87a6aee8c3efa50c64c"
     },
     "projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/index.html": {
       "bytes": 143369,
@@ -795,7 +795,7 @@
     },
     "projects/steam-millennium-config-backup/index.html": {
       "bytes": 405481,
-      "sha256": "3f6617935f01f87bd881aea47777f19b226ee9d1d03896eb4eb6f7fabe122016"
+      "sha256": "66f849b52d7d597c12c9535fb60a670e1ba2b5fd3be4a539bdd8286c7a81b906"
     },
     "projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/index.html": {
       "bytes": 145176,
@@ -851,7 +851,7 @@
     },
     "projects/timeaudit/index.html": {
       "bytes": 635114,
-      "sha256": "b7459659d49538f875c1a7446438c9a981764ecccb7eef04305824c1572d988d"
+      "sha256": "3939a0aef0c295c1d749973d69c569879dcc53b1afd6cd3d8c5b2ed0b941f503"
     },
     "projects/timeaudit/process-forensics/index.html": {
       "bytes": 147832,
@@ -871,7 +871,7 @@
     },
     "projects/typora-theme-pack/index.html": {
       "bytes": 372684,
-      "sha256": "13a97db06b42ed3fdc441cb89af6372216387f4f88abeb2a1b42bce674c61c2e"
+      "sha256": "15c31bc255622770f94a0ef92aa521704687f36ca4ccdee898717ce405e68e6d"
     },
     "projects/typora-theme-pack/multi-scenario-export-profiles/index.html": {
       "bytes": 137426,
@@ -995,7 +995,7 @@
     },
     "projects/wechat-history-ai-bridge/index.html": {
       "bytes": 258571,
-      "sha256": "5feff465e7a018895dbf55c7b513e0d9fb7fcf8e731b81362897a7daad130217"
+      "sha256": "03cdcf9993cfbc34e611eeabb52bcd9bbabb3d0cacea07fe2a0f04434ef63915"
     },
     "projects/wechat-history-ai-bridge/metadata-first-probe-and-boundary-verification/index.html": {
       "bytes": 95848,
@@ -1015,7 +1015,7 @@
     },
     "projects/wly0829-cn/index.html": {
       "bytes": 500422,
-      "sha256": "3c3f473e7439ea799e9f095e9e751d03709b658d2d7616ac4c3ffd9da8b3109c"
+      "sha256": "0473d35d1ccd429374f5280d04b2c4b89d1169a2558c72b81d9d039023de5bf7"
     },
     "projects/work-delivery/consistent-deliverables/index.html": {
       "bytes": 157633,
@@ -1043,7 +1043,7 @@
     },
     "projects/work-delivery-copilot/index.html": {
       "bytes": 400005,
-      "sha256": "d9ce1a1ef3a5cdde549f249dbc80610ba8b227ec387f1df8fa900fbb069b48fb"
+      "sha256": "bbfc6fd2c7656909b3b89978bb90ee8b9b81824595f7248b02251f8b4a90468e"
     },
     "rescue/index.html": {
       "bytes": 282998,
@@ -1055,55 +1055,55 @@
     },
     "rules/authorization/index.html": {
       "bytes": 212385,
-      "sha256": "01ab14e8afa989d061b0acd4dc91620d51d7b8cbd0d62048a5332794bde35726"
+      "sha256": "563787b83fcda5306d20fb296a6c2a665f25bcc5ee42ded139344b42cbef61d2"
     },
     "rules/capabilities-runtime/index.html": {
       "bytes": 332249,
-      "sha256": "95aea3294cb96296eec9bd8bfe3760550136c917497e900e9b2f4e62cf9398d6"
+      "sha256": "b2ece58baf0e8d1b854af8c9039463806d6afa287c3fdfb5e7e5650e913825e4"
     },
     "rules/charter/index.html": {
       "bytes": 167215,
-      "sha256": "82d360f0466273996cbb21a3da0e50e510f9dbd0416fbf8c55ecb04725a2005b"
+      "sha256": "d005b5d3c63e96f031d91da2c57cbeba46f749719e2ab2c4b4c49ad80fdecd45"
     },
     "rules/claude-adapter/index.html": {
       "bytes": 381677,
-      "sha256": "3b776694c95ba8ef43961f0b9df2251f7829bb056611699b03bdc555412a756f"
+      "sha256": "a77dc5add47d9bd6d952dcf22ff3d397ad8f93ef02981a760d7ef3262381bdd9"
     },
     "rules/codex-adapter/index.html": {
       "bytes": 205860,
-      "sha256": "a9fd968bdcdf69ffb0c47b7a041a89991605e703b2a31b17255e34f168cf739e"
+      "sha256": "629f9bc38dd9e61690d0c2970cfb88b77f9fa70a507716839530be0fefc7f654"
     },
     "rules/context-sources/index.html": {
       "bytes": 282361,
-      "sha256": "b1cdc28831c8683bce1d56da7e1c795b2b9e4895b30407426d2c777617c2041a"
+      "sha256": "40d3b0c4dfad0c1b42aa01df09479fa383c83d9bef2b58473c28a62bd66511b8"
     },
     "rules/engineering-delivery/index.html": {
       "bytes": 280613,
-      "sha256": "e9c0affc05b0626355458532530b61ae8e1ff366f772dff48809936699090a83"
+      "sha256": "56e15afa70c5885795728596cbe8babeb1427992d8e167c5cc71004ebfd87921"
     },
     "rules/execution-coordination/index.html": {
       "bytes": 267194,
-      "sha256": "e07f05ae9e18cc3c6ad77c382eca4bdfedb9ce2b89075689d45b6f920d7e4242"
+      "sha256": "a524f439e620e43ca4e8b0fa26cd459d75ba620fd62331548229cdf9c1bb23f5"
     },
     "rules/index.html": {
       "bytes": 193334,
-      "sha256": "8dce31c688ba45b2a6c0283c6241957451189a51be49a1cba17c4124def4fa16"
+      "sha256": "2d48c754b69089424e795568f7f94a89177054a2d8aaa013291001fe46f3194e"
     },
     "rules/privacy-data/index.html": {
       "bytes": 285394,
-      "sha256": "4e1190b2f0bd34ffa4d7e558a93f17c1dcfe19ac609c08301e6b92ba7fee3282"
+      "sha256": "e9bc128df74df097d90c9099593216ea3174ab5b14b60e0a1e2ad8c97cd27384"
     },
     "rules/protected-actions/index.html": {
       "bytes": 257944,
-      "sha256": "0845aa528f3c08899c4432f79a3ed25b4d9ae9c31058e6d240834cf8d4f25c05"
+      "sha256": "d97f99aaf3cc7dc273bd42abb30035a963ebbd83c8097a369379eb2ad8c7556e"
     },
     "rules/rule-release/index.html": {
       "bytes": 205938,
-      "sha256": "8abce7afd4d17deaa2428793adf872c04e416158d40ba2ddfa3c02390c873a95"
+      "sha256": "517c691192ac7e3e405bf1613b46d039494481804cfdde2b7d19656fa3867bee"
     },
     "search/index.html": {
       "bytes": 62098,
-      "sha256": "979d88152b3ac74f017e71d65f3780799ffb596c760edb75707fe8e660cccf2c"
+      "sha256": "9858b88275cc5e37a194269079386a1a9e047c17e1b450169934ad54cde569a9"
     },
     "sitemap.xml": {
       "bytes": 22972,
@@ -1115,11 +1115,11 @@
     },
     "skills/browser-control-continuity/index.html": {
       "bytes": 246917,
-      "sha256": "f33b1d62f5f5b4182cc638ce9a45072eee789973bebf3aaaaba4ac2f0e7d3344"
+      "sha256": "ac298ea1b19068562d9bcda4e1b8a7e57390d97f7c920cb64a4756616745b5d5"
     },
     "skills/chinese-asr/index.html": {
       "bytes": 204342,
-      "sha256": "848a3709672dc8de5e64bc3aa6f0610bd6331336f1acd6868bd85fb69b3358eb"
+      "sha256": "bcaa472aae67c1e73a89971eab19e5c64dd8e9aff7f92d833346df87ee41eb12"
     },
     "skills/cloud-asset-channel/index.html": {
       "bytes": 183299,
@@ -1163,7 +1163,7 @@
     },
     "skills/learning/index.html": {
       "bytes": 188726,
-      "sha256": "3dd5b2c247bed5833f5b80bf0dffdb5268d7ae8b5fb2db5541f249c36753c703"
+      "sha256": "1d47e540b65b567c33fb9c2b25b97d5ee0e798b463ab144c4c1a1170f7d75840"
     },
     "skills/llm-backend-toolkit/index.html": {
       "bytes": 45827,
@@ -1203,11 +1203,11 @@
     },
     "skills/personal-formal-documents/index.html": {
       "bytes": 177417,
-      "sha256": "dcbf4f5721cd6bcaedf3966a5b1a0d42b2c1deed8e5b0fb8284bd5c4433876c8"
+      "sha256": "67e51c3d7ce24fbb28a63b46851d65d50b69667d6fc16e5cd083194d60a559ad"
     },
     "skills/personal-health/index.html": {
       "bytes": 195690,
-      "sha256": "efe72054142393da8b1948cc73347e612a0b08ff3a5e0b4e7f07cc9a41deff11"
+      "sha256": "bb42368d967bef54713bb211404a60ad57a9e7b484608e2a63a2a0f5267e2dbe"
     },
     "skills/personal-materials/index.html": {
       "bytes": 186499,
@@ -1227,11 +1227,11 @@
     },
     "skills/reply-as-me/index.html": {
       "bytes": 158126,
-      "sha256": "4e8f278a85a8dd707800eb7e9a788f7bc09ff386dc0b0deb6aa255c3e4284523"
+      "sha256": "17a61ee490cbe7c4e37bcab708b8c73853b9d40faf658ccfad869f28e7c07105"
     },
     "skills/report-page/index.html": {
       "bytes": 305669,
-      "sha256": "1306408232f871fc008376263fe5f26847a0c46c9b10cc8f4134b44c9bf64efe"
+      "sha256": "1f01d6925f46e5d812656513ffc9e2ebc4f41eb5330e27646e86198ceb6d3ef6"
     },
     "skills/tailscale-safe-exposure/index.html": {
       "bytes": 214090,
@@ -1255,7 +1255,7 @@
     },
     "skills/work-delivery/index.html": {
       "bytes": 188598,
-      "sha256": "b27d3e494e5731a9ceeb6547808c614e833b6917dbf6196b960cbe3a8b12d938"
+      "sha256": "a2a22cc6eb88c0e1b886a34b146ff3bbf8fb5c314663d1ea344e6b0a0de613f3"
     },
     "system/index.html": {
       "bytes": 632,
@@ -1576,7 +1576,7 @@
     "/skills/work-delivery/",
     "/system/"
   ],
-  "release_id": "d5f75933949bb5d4e994602569e46c86102711d385f6ca94cbfc3e7857c42502",
+  "release_id": "c438b00a9f84e2dd95879e19350cdbb77477a0eef4ac71c3b003a64651c230da",
   "baseline_production_commit": "2872547b5925b782419ec7bf5cb0f162c1b53c3e",
   "rules_pin": {
     "schema": "wly.astro-rules-pin.v1",
@@ -3756,34 +3756,34 @@
     "/computer-access/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
-      "producer": "astro"
-    },
-    "/404.html": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
-      "producer": "astro"
-    },
-    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
-      "producer": "astro"
-    },
     "/cockpit/stutter/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/": {
+    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+    "/projects/llm-backend-toolkit/read-only-model-observer-gui/": {
       "producer": "astro"
     },
     "/projects/llm-backend-toolkit/versioned-backend-registry-routing/": {
       "producer": "astro"
     },
-    "/projects/llm-backend-toolkit/capability-probes-and-benchmarks/": {
+    "/projects/llm-backend-toolkit/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/data-factory-agent-execution/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/asynchronous-jobs-and-spool-integrity/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/multimodal-pipeline-and-specialist-routing/": {
+      "producer": "astro"
+    },
+    "/projects/llm-backend-toolkit/context-sources-and-portable-continuation/": {
+      "producer": "astro"
+    },
+    "/404.html": {
       "producer": "astro"
     }
   },
@@ -4338,12 +4338,12 @@
     "html_files": 312
   },
   "previous_oss_source": "published",
-  "previous_release_id": "c08addca1e0323a4ce84a63e0467ad8feb3498f569087150d41de1b4e658483e",
+  "previous_release_id": "d5f75933949bb5d4e994602569e46c86102711d385f6ca94cbfc3e7857c42502",
   "oss": {
     "schema": "wly.oss-assets.v1",
     "asset_base_url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com",
-    "prefix": "releases/0fb4238bcefef3c3e03e7b39aba3fb3e385ca18615cd00874a20f4cdacc9d546",
-    "source_release_id": "97b809e2dfe897050c241f9f305b7411cb22df05e7ea15401e6ca5970e888f5d",
+    "prefix": "releases/62c8d25536c4db8c7d40246e0fdb38983b40bdca92357e0e5e457d24b8a8f314",
+    "source_release_id": "02d6d408dd5943dac370d26b9998c65b2fa34e722d844f833f71eceffc7aeba5",
     "objects": {
       "_album/album-1a72f07ce279b5d3fdf8.css": {
         "bytes": 4721,
@@ -4849,6 +4849,30 @@
         },
         "byte_preserved": true
       },
+      "_astro/index.astro_astro_type_script_index_0_lang.CTWM3Xxk.js": {
+        "bytes": 48820,
+        "sha256": "2bd7f01b73d9582c28ded023b825cb5260900617daf5e2ee6b6ae99508ad0293",
+        "key": "releases/e4fbb343c66f4ca1f5bbd0a328c1fe26ae1cd1a8d75992d41bc734ca0500e98d/_astro/index.astro_astro_type_script_index_0_lang.CTWM3Xxk.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e4fbb343c66f4ca1f5bbd0a328c1fe26ae1cd1a8d75992d41bc734ca0500e98d/_astro/index.astro_astro_type_script_index_0_lang.CTWM3Xxk.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 48820,
+          "sha256": "2bd7f01b73d9582c28ded023b825cb5260900617daf5e2ee6b6ae99508ad0293"
+        },
+        "byte_preserved": true
+      },
+      "_astro/index.astro_astro_type_script_index_0_lang.CXt9SXeN.js": {
+        "bytes": 48876,
+        "sha256": "d4340bbc45b41ae1a6c5bef79abae25fc1575a72b2911ebd2604c66bed73043a",
+        "key": "releases/165f5ff28c7f01debdc629b50e70c2d177d50a31a29f6184f3b3e19791e15233/_astro/index.astro_astro_type_script_index_0_lang.CXt9SXeN.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/165f5ff28c7f01debdc629b50e70c2d177d50a31a29f6184f3b3e19791e15233/_astro/index.astro_astro_type_script_index_0_lang.CXt9SXeN.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 48876,
+          "sha256": "d4340bbc45b41ae1a6c5bef79abae25fc1575a72b2911ebd2604c66bed73043a"
+        },
+        "byte_preserved": true
+      },
       "_astro/index.astro_astro_type_script_index_0_lang.ZEaooG7N.js": {
         "bytes": 29594,
         "sha256": "8f30110a7c557e49fe4eafe9647f9d29becb4d037836956768ddc7bd6c9a4ba6",
@@ -4894,6 +4918,18 @@
         "source": {
           "bytes": 19637,
           "sha256": "89949bac7cee5783c3ab5d663f8128865d31adb00b3886ce78d446268828a54c"
+        },
+        "byte_preserved": true
+      },
+      "_astro/index.ESGAkXBm.css": {
+        "bytes": 21003,
+        "sha256": "57372f9e6221fd0944f1f1cb3659aa95fe12b57ec83611a8d3bc2868bee136b9",
+        "key": "releases/ac3e8d8af9c556064a31bc0b9c27a9d740e90b012ac34ba679edee814c628583/_astro/index.ESGAkXBm.css",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/ac3e8d8af9c556064a31bc0b9c27a9d740e90b012ac34ba679edee814c628583/_astro/index.ESGAkXBm.css",
+        "content_type": "text/css",
+        "source": {
+          "bytes": 21003,
+          "sha256": "57372f9e6221fd0944f1f1cb3659aa95fe12b57ec83611a8d3bc2868bee136b9"
         },
         "byte_preserved": true
       },
@@ -5002,6 +5038,18 @@
         "source": {
           "bytes": 48430,
           "sha256": "a1b5f5657e0f8321df4555ee8cb6e1d28b2e02c73cd388a92523eaeb75eab12c"
+        },
+        "byte_preserved": true
+      },
+      "_astro/today-river.DwQrh1hR.js": {
+        "bytes": 49016,
+        "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378",
+        "key": "releases/d7aceec275a43eea5a3f67217c7d328918a2102a895eb4d2e308adbe36f86294/_astro/today-river.DwQrh1hR.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/d7aceec275a43eea5a3f67217c7d328918a2102a895eb4d2e308adbe36f86294/_astro/today-river.DwQrh1hR.js",
+        "content_type": "application/javascript",
+        "source": {
+          "bytes": 49016,
+          "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378"
         },
         "byte_preserved": true
       },
@@ -11042,14 +11090,14 @@
         "byte_preserved": false
       },
       "_living/timeaudit/astro/shared-config.json": {
-        "bytes": 18484,
-        "sha256": "903f98ce1dd71c6f1c912d34ea86f8044c0585a828c4360949d88ac0c493b132",
-        "key": "releases/de357bfe2d07dfe2b1925311f0538772f6873a9062dfabce5fc00b14c41d4c11/_living/timeaudit/astro/shared-config.json",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/de357bfe2d07dfe2b1925311f0538772f6873a9062dfabce5fc00b14c41d4c11/_living/timeaudit/astro/shared-config.json",
+        "bytes": 18497,
+        "sha256": "370daeb200fe6d598b84f7b17cf712bc4b8f5f4c0efb0b4399be7c0744325a6d",
+        "key": "releases/e53b1a8d6cd4aa228b0e826f644a44f3fcbdd0fb5aaa4b5f65114272ed07c068/_living/timeaudit/astro/shared-config.json",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e53b1a8d6cd4aa228b0e826f644a44f3fcbdd0fb5aaa4b5f65114272ed07c068/_living/timeaudit/astro/shared-config.json",
         "content_type": "application/json",
         "source": {
-          "bytes": 17936,
-          "sha256": "4b4fcab944735bcf22088b6fccbb2c29087cd41ecb8d2c662e81c3f396378cc6"
+          "bytes": 17949,
+          "sha256": "f8ae2a90a9b43aa1b9b2345ce3e26b132b58cc43213cd3aede1e2c00fd2c737c"
         },
         "byte_preserved": false
       },
@@ -24507,25 +24555,25 @@
       },
       "_shared/resource-retry-82ad6b7628c29f5d06da.js": {
         "bytes": 68675,
-        "sha256": "5ba150a81a61ff5c59f2114863d42ef13a7c36f95de6c490d7cd475731adf492",
-        "key": "releases/7be2de2ec01e17e8a010db8dcc3a32d6528391b0d2374f7c3197dcf0a5033a8b/_shared/resource-retry-82ad6b7628c29f5d06da.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/7be2de2ec01e17e8a010db8dcc3a32d6528391b0d2374f7c3197dcf0a5033a8b/_shared/resource-retry-82ad6b7628c29f5d06da.js",
+        "sha256": "4557007101c9786627b69276e716099b777d434b6cc6a0a89f0ea390884a9fdb",
+        "key": "releases/15933f33965b21e8fc4b99e79a65a7e1b44d9638f9f94e05c047bf3b6933ece9/_shared/resource-retry-82ad6b7628c29f5d06da.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/15933f33965b21e8fc4b99e79a65a7e1b44d9638f9f94e05c047bf3b6933ece9/_shared/resource-retry-82ad6b7628c29f5d06da.js",
         "content_type": "application/javascript",
         "source": {
           "bytes": 68675,
-          "sha256": "7ade5828fd6b065b7b3b17cb5676b6948a338599812facb5b585416e7d23140d"
+          "sha256": "5ba150a81a61ff5c59f2114863d42ef13a7c36f95de6c490d7cd475731adf492"
         },
         "byte_preserved": false
       },
       "_shared/resource-retry-8979d157b795746597ac.js": {
         "bytes": 68538,
-        "sha256": "f15688f8dcdd4d6954b33c6473df2239335542f7fa32ea65628d51cedb46fdcf",
-        "key": "releases/6312f93a410a849ae5f911bf28a383446cc8e2d58bf258954c619d53b9007e91/_shared/resource-retry-8979d157b795746597ac.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/6312f93a410a849ae5f911bf28a383446cc8e2d58bf258954c619d53b9007e91/_shared/resource-retry-8979d157b795746597ac.js",
+        "sha256": "b7c1789f8edd310f65e85c0d10ed38cefe7383058cda508b87456b88d6d736e6",
+        "key": "releases/00d78526e32e54f8020b6aa1a4793fdb51bf09a5dc9c4cb9196f86be65e82044/_shared/resource-retry-8979d157b795746597ac.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/00d78526e32e54f8020b6aa1a4793fdb51bf09a5dc9c4cb9196f86be65e82044/_shared/resource-retry-8979d157b795746597ac.js",
         "content_type": "application/javascript",
         "source": {
           "bytes": 68538,
-          "sha256": "2b3eb1b919d9fa6b888b2c23ef9586f3cb24f5c1c0b084f07a322b2f0d440461"
+          "sha256": "f15688f8dcdd4d6954b33c6473df2239335542f7fa32ea65628d51cedb46fdcf"
         },
         "byte_preserved": false
       },
@@ -63638,14 +63686,14 @@
         "byte_preserved": true
       },
       "cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js": {
-        "bytes": 48430,
-        "sha256": "a1b5f5657e0f8321df4555ee8cb6e1d28b2e02c73cd388a92523eaeb75eab12c",
-        "key": "releases/accbb6375735f77d937d40303ec99b16b5d758b542823eb15b3bee49f7700bb8/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/accbb6375735f77d937d40303ec99b16b5d758b542823eb15b3bee49f7700bb8/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
+        "bytes": 49016,
+        "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378",
+        "key": "releases/249f7d76158c6608985bcbc43d54b557ccd76c80fdc5eddeceb5e0728b135e64/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/249f7d76158c6608985bcbc43d54b557ccd76c80fdc5eddeceb5e0728b135e64/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 48430,
-          "sha256": "a1b5f5657e0f8321df4555ee8cb6e1d28b2e02c73cd388a92523eaeb75eab12c"
+          "bytes": 49016,
+          "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378"
         },
         "byte_preserved": true
       },
@@ -64694,38 +64742,38 @@
         "byte_preserved": true
       },
       "search-index.js": {
-        "bytes": 1518622,
-        "sha256": "8c80e9587b71782bf1039afe7d27207370b05f26a8e2bcd1011a061018735acf",
-        "key": "releases/409bc0bc2eec7907e940a290286bdccddff23da8b4dd1226d6d958f3e6130655/search-index.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/409bc0bc2eec7907e940a290286bdccddff23da8b4dd1226d6d958f3e6130655/search-index.js",
+        "bytes": 1518623,
+        "sha256": "74aceafd682a6aea031bc8afbd242e636f3f6ae63c09ff2f748ee35363a29253",
+        "key": "releases/e0e74606bbca0ecb90f96d55589432adb940f3a0bf7ee7a2191f8a98b559a406/search-index.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/e0e74606bbca0ecb90f96d55589432adb940f3a0bf7ee7a2191f8a98b559a406/search-index.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 1518622,
-          "sha256": "8c80e9587b71782bf1039afe7d27207370b05f26a8e2bcd1011a061018735acf"
+          "bytes": 1518623,
+          "sha256": "74aceafd682a6aea031bc8afbd242e636f3f6ae63c09ff2f748ee35363a29253"
         },
         "byte_preserved": true
       },
       "search-project-localocr.js": {
         "bytes": 134947,
-        "sha256": "3bf666f809b61fa9ff8424eff65319b4843e374f021ce874d12a6c034d3a3d1c",
-        "key": "releases/a20a3dbcf8b1db44127e034eb77df7bd2b303f0d626d59d10d4c3d41f2c873a3/search-project-localocr.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/a20a3dbcf8b1db44127e034eb77df7bd2b303f0d626d59d10d4c3d41f2c873a3/search-project-localocr.js",
+        "sha256": "fc388cee2f68011c73c0db25fc82d56602dec61a044b89739bb6aeddc4a93117",
+        "key": "releases/8a7e2ca58b66c1052a6db40a80877b7191534b885dc3c1f1a81a935f848d4e76/search-project-localocr.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/8a7e2ca58b66c1052a6db40a80877b7191534b885dc3c1f1a81a935f848d4e76/search-project-localocr.js",
         "content_type": "application/javascript",
         "source": {
           "bytes": 134947,
-          "sha256": "3bf666f809b61fa9ff8424eff65319b4843e374f021ce874d12a6c034d3a3d1c"
+          "sha256": "fc388cee2f68011c73c0db25fc82d56602dec61a044b89739bb6aeddc4a93117"
         },
         "byte_preserved": true
       },
       "search-projects.js": {
-        "bytes": 4675271,
-        "sha256": "1ac3fd3bea9a3d3f83e00b985238e5d2d4589ccd8a21da4af480be23750c1d6a",
-        "key": "releases/c08903f5631b947669904ae27cf9ae4b3e97f760fd2162b09bd35d373b8b15d1/search-projects.js",
-        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/c08903f5631b947669904ae27cf9ae4b3e97f760fd2162b09bd35d373b8b15d1/search-projects.js",
+        "bytes": 4675267,
+        "sha256": "556de3518f5c339527a959587bc2cb1314c663bfbce759d618caebcec5802b8b",
+        "key": "releases/dffd18acce668f6c9a8730e4bf17ad940d6c88a397bfa4616d4aaed9fb7a6d54/search-projects.js",
+        "url": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/dffd18acce668f6c9a8730e4bf17ad940d6c88a397bfa4616d4aaed9fb7a6d54/search-projects.js",
         "content_type": "application/javascript",
         "source": {
-          "bytes": 4675271,
-          "sha256": "1ac3fd3bea9a3d3f83e00b985238e5d2d4589ccd8a21da4af480be23750c1d6a"
+          "bytes": 4675267,
+          "sha256": "556de3518f5c339527a959587bc2cb1314c663bfbce759d618caebcec5802b8b"
         },
         "byte_preserved": true
       },
@@ -65664,6 +65712,7 @@
       "releases/158053bd60046dc27eeb1c1cbb66c080551d72905662aa1ecc992b69a0fd78de/assets/_fingerprinted/2b8e3375f5859d4e452d7882e2c22940914e21980bd333b200c4b0f2872327aa.png",
       "releases/1585bfcbd7d5b47371cf8248a794d80dd0e3eb873099d6d22c1453a8afbf2ceb/_shared/nav-4ca9db9602-be53ba03e634.webp",
       "releases/158b945c62bc0dece29196ae18f558b9833bb368a11b21fef9c2eb2517275ec2/assets/_fingerprinted/e69d2febfcaf7eb75330eec8be0f5166de6d56595d3cac37bbc4a6a1d7511fe1.png",
+      "releases/15933f33965b21e8fc4b99e79a65a7e1b44d9638f9f94e05c047bf3b6933ece9/_shared/resource-retry-82ad6b7628c29f5d06da.js",
       "releases/159882c635bc7d35834ca25bea5065a3bd06a7e86ce1893c433dc28140b15c2f/assets/_fonts/daily-preferences-recommendation-choice-510e03be39c0.woff2",
       "releases/15aeadbc1125f1e48241f5c22fbb083246858a7633ced89fa97e575958686799/_living/rule-execution-coordination/bird-first-only.80f03508062a/m0.453288919a.webp",
       "releases/15bfe96779ad9ee7c4e57cc9dd4270027a7bd941b17087ee0b32ad6fd3d4314b/assets/_fingerprinted/62d00ee49de254a6130983a86e608921d4ec46a527845fe30b4a0b94ef3b155c.png",
@@ -65673,6 +65722,7 @@
       "releases/15f55870f8d419f9cd9b10475db59d7235da71d3971eb1523a470dee7efb5bd5/_living/skill-media-person-self/bird-first-only.2b42e682b90d/config.json",
       "releases/161e6e7fd85204854c3020ae414a11808d640e169253834f09a657d12fc666f0/_typeset/skill-pdf-render-safe/9a6d16fde159640db432-skill-pdf-render-safe-01-v.png",
       "releases/16340c99264e433efa89a514aedf989600c3ca0dd1c50e466a0c7ac2601114b6/_living/_engine/living.211dfd0c4c.css",
+      "releases/165f5ff28c7f01debdc629b50e70c2d177d50a31a29f6184f3b3e19791e15233/_astro/index.astro_astro_type_script_index_0_lang.CXt9SXeN.js",
       "releases/16631bb5b6b372a506fcaa505f5eb8b5a874d8e43516642383e634e55eab895c/_shared/nav-915c18abd5-79bc194bbcc1.webp",
       "releases/166aa5bcc5c963fbcfa7e48285a7af51212abae225aaa60cd67fd9d22d17e5d4/skills/reply-as-me/assets/hero-a58cef6fdf7a4867.mp4",
       "releases/169cf84179f56de1dc92742513069a3ff1328d07bebbd92e600ff7d1890a8ba8/_runtime/e2e248f56e8817a27122/b2-typeset-3cf4ec77b7edee5fe6c7.js",
@@ -65894,6 +65944,7 @@
       "releases/244cc06c32e0e765b0cf84d2e1b79ff41fa73798a422de12b74c16578e60b173/_living/codex-local-remote/bird-source.7a72713f65c6/config.json",
       "releases/245792220b71675e2fa6fec475e17042322c29ee5a906a20bcb9c8cac72bb504/_typeset/runtime/app-6d7a817d7b317cd927b8.js",
       "releases/245b25309324fcbd561d154cc18e4772863ec1c475a1d2bcc19be4ab65f9bcce/_typeset/runtime/live-sans-part-8a-cf49ef3b2dd1739d5fe0.woff2",
+      "releases/249f7d76158c6608985bcbc43d54b557ccd76c80fdc5eddeceb5e0728b135e64/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
       "releases/24a4fd926174d3b847e7332613b8822f3c99984ec371591d1fde84718c3b47b7/_living/chinese-asr/bird-first-only.38f79f37b22f/config.json",
       "releases/24a8a6073a1e6094e0899d0952dd27f6765a902c5bfa87e4abba8637a17d7b82/_typeset/runtime/live-sans-page-d7f116bfaa2031eecaa4.woff2",
       "releases/24b443ab647eb050d811c9c3af99af9b242e1f93d728a3c5af810a693a7ec8e7/_shared/nav-96c690fb8465.avif",
@@ -66378,7 +66429,6 @@
       "releases/4054a88d5ba0bbecc872fcabe966b37b57588f46be7facee4c1298b4f426c3b8/_typeset/password-center/26908dc996408c456c72-password-center-01-h.png",
       "releases/4062d6b4cc64851ef0dcaa9f6de467e28e91c10a19865582f9061703e567aa1d/assets/_fingerprinted/9f9f98f90381fb9a94a526840b187baa31d3447fe1a3af864d7956803cb3e889.png",
       "releases/406d347b69cd061de078fd947898f0830ece06471bd69aaea8cc68500d61c40e/_shared/home-comic/a554b08e4d2a2e262568/assets/h-a-title-chars-2.png",
-      "releases/409bc0bc2eec7907e940a290286bdccddff23da8b4dd1226d6d958f3e6130655/search-index.js",
       "releases/409dd0d0c3e1775e8a9fafeb7a6ef48f8a4598f8b7ea7444b49c7c0b932ae9e1/assets/_fingerprinted/5a60eed940039ce64479bbe0ad1291324001b4413255407b65200a400029d588.png",
       "releases/40b4e18e252ec15465cc20aff0b6ffb735cd797516b3478a48c84daca801af9f/assets/_fingerprinted/b4ea48ec38f9492dbb7667192475e08ab9d3fcf576a70d49f6eee2b90e9238b5.png",
       "releases/40ba42a5a1bbf4ace785f68038d73f7d4341bbce442eaaa306f774c8fc240dec/_typeset/runtime/live-ui-page-0a7bc70104f88648ab22.css",
@@ -67297,7 +67347,6 @@
       "releases/747c45cce37599cf32e1d41e8d23c42c55d7de60da2bd8f3a3826048ce6d987f/_shared/nav-6622024dba-d314c24a06ee.webp",
       "releases/74a786e77f10c81e3e1d8e43e78e43952bbc1b754fb912c7898e9b0c6cfa6d3b/assets/_fingerprinted/63667482b91528da8a3ad904f8718cf6247795c5e74585ae3b6dd4922488dcc1.png",
       "releases/74aaef71bdf19eb866096b53ea180917ff052893dc658f65bb76476825f1782d/_typeset/skill-file-intake-router/c8772a17399a4547ff0c-skill-file-intake-router-01-v.png",
-      "releases/74dd5f3a3f117716d39fdc65542816edfd5258dbe479869a28dec73327ff69f3/_astro/index.MKC2Widw.css",
       "releases/74ee52f15e835d2824833684e81664ecc79b4b2d15727ffb30ea24a273ccc866/assets/_fingerprinted/625aecfc24eb57ddfe71705b63ae96f4af6c6f0eb98f30ae2d5b75e728fe1fd3.png",
       "releases/74f6f675b26101c1345c9c4c72dabd458957fc6889c9c9327d7595200cb1ac6c/assets/_fonts/work-delivery-value-state-recovery-f13e2cfff2d5.woff2",
       "releases/7502e909696fbf3acb27f3603b970edb3fb0896ae66c5623c1aa0d9cbc19fe6c/_living/localocr/bird-source.bac3d2c09b95/config.json",
@@ -67427,7 +67476,6 @@
       "releases/7bbd04e11308226c197b3ab3bbcb88d8b495d8077af1a37bee5af0fda93cf10f/assets/_fonts/skill-learning-e43daa0c439d.woff2",
       "releases/7bc6c9b24200d3b7275fce0f111030d997ae3719fab03926f607317b2bcc69ff/_shared/nav-unify-standard/nav-unify-label-70-c081eedc98.webp",
       "releases/7bcd790576c0cb20714bdffb77ff54e76db70b53514024ee0aeceeb2fb76901a/assets/_fonts/learning-human-control-simple-e1f80ee27c73.woff2",
-      "releases/7be2de2ec01e17e8a010db8dcc3a32d6528391b0d2374f7c3197dcf0a5033a8b/_shared/resource-retry-82ad6b7628c29f5d06da.js",
       "releases/7bf5efea0183fc21040cddf4e3f3a700eb82020b01dccc2de625893aa47b67b4/projects/ai-cli-profile-manager/assets/hero-cce2a1faafc04606.mp4",
       "releases/7bf88a0a3a4fccfeb6ca438431aa00b89a152dde91947f9676ddac0b4b818bcf/_typeset/runtime/live-sans-part-5-8292067049cd98452371.woff2",
       "releases/7c02be1b2e8f0dc7596942a326eca010898aeff410225f3598cb644e311bb563/assets/_fingerprinted/4433f444a4fb520885b72d1f50f6d11c9277fe96bcf0aa576c12e708ebc6e70d.png",
@@ -68160,7 +68208,6 @@
       "releases/a5c63b232eea0133a391e8e3e9122cfdddd3ce7bd481bc6b6dccbc5319da9b2e/_typeset/runtime/live-sans-part-111-a0cf854c600a58f5f8a5.woff2",
       "releases/a5c9bce86b56d3c5f012e6d6227dccdd1d7282a553dad29b15ba17e33fba2f66/assets/home-01-h-1920-e0eb3ea434d7.avif",
       "releases/a5e097d6a2ac6d8b1af4a9bd58a7fab0105dc24560ae0e83704d412aca4d8622/_living/rule-context-sources/bird-first-only.707db1e45082/m1.52874f98b9.webp",
-      "releases/a5e320e1f0e630080ddcf10eff01eea859148c712cb90dd514880c3677bf331a/_astro/today-river.DNAGKo16.js",
       "releases/a5f6cbd69f73c0e85d71ed321db098439f75b7933ad00d22550fdae29312e640/_typeset/runtime/motion-164230516a98bd86eb2b.js",
       "releases/a6049937f5f628fe2bf8c03ac73c6eb11e9c1e12779fbf438fff7e31aed7abba/_living/personal-expression/bird-source.8a2d7698fde0/config.json",
       "releases/a622fd2e63b63f08a61477e9c442988337004863ff89da8d40157c430af41136/_typeset/runtime/live-sans-part-52-17f44260981213f74730.woff2",
@@ -68272,6 +68319,7 @@
       "releases/ac0775cff8198b81753f13d242895dd2bfc568e0586a832f0fb754c801947efa/_typeset/runtime/live-sans-part-50d-d608789c14ea9b0f1852.woff2",
       "releases/ac077e45cf7be8750a10a8896e5f6bd39debfa964edaeb06144aa4ab72457a5d/assets/_fingerprinted/5152f91b5db6428f177c3a190b881b2b632e16c719b1e92f6b1db412f1028adc.webp",
       "releases/ac36fff77df1dcc93a84991983ba0a877457f5513c9f92624da96aa6a9f33712/_shared/nav-d44b78dbb8-1f928f3d8be7.webp",
+      "releases/ac3e8d8af9c556064a31bc0b9c27a9d740e90b012ac34ba679edee814c628583/_astro/index.ESGAkXBm.css",
       "releases/ac41d3e4fd5f52d7cfd39893a6f5f6872456048ac3d0e53f4b93c7208c205cb3/_typeset/runtime/live-sans-part-13a-38f56f17468a9b4b9b00.woff2",
       "releases/ac797327e8718919f60aeb17f43a8d80f4f587b00a364b4a1efa7f96033486d5/_living/_textures/e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b.png",
       "releases/ac7a3ec3cfa382d0bda9b5499b381f140e6f4ddfeef05f0583217b9c0264675a/assets/_fingerprinted/8528763966e0f997d219b905624240b5a220f98a641bc836b648ef4609960837.png",
@@ -68281,7 +68329,6 @@
       "releases/acaf1a86c679d1aa8766017866ea2bd4f6ae7fe3dc7de1bd0197495ddf7b59db/assets/_fonts/rule-claude-adapter-b3174abf3beb.woff2",
       "releases/acba1b1bd40e88b6beebbc6d7b65bcca1d59a05ad5b830c1aea399bd704f1589/_shared/nav-e3040dfd6b-9b53016f5fab.avif",
       "releases/acc87911f8bb12bef8bab01109bbabe4b50cbadc18de8544b8b90631bb434c60/assets/_fingerprinted/4efb691c4acee75f1102bffb14d87f50e8975eea509921c9e67327e7266ea597.png",
-      "releases/accbb6375735f77d937d40303ec99b16b5d758b542823eb15b3bee49f7700bb8/cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js",
       "releases/acdfbb99b432ffc4e289d50a287db246ff221393976d8036649ad23350a23bf5/assets/_fingerprinted/440c90890c26f7ccf14495134e6673bfb06abf380b69de93c2258d258ed52439.jpg",
       "releases/ace13fd19641b48d0c346857ab298a1e8491fb15a41cb2d669ea11a63a9c3959/_shared/nav-81c30b16b8-925d42b36a48.webp",
       "releases/ace529bea8e32a4d59b84187bf3211db7af11bd6465fc1fc0f6396da9890791f/assets/_fingerprinted/9d58c187298803d6244adf2cd7fbd5d1e4314871cefbef154edd149b602fd4b2.png",
@@ -68643,7 +68690,6 @@
       "releases/c064a33efb5a2b1b71d6d0d1126d7224dc317f56833c210d2d840dbb5796d0ea/assets/_fingerprinted/097e0304d288ed51790a51354fd96d4350cbd37b1ff112d8a34f19c169df7e84.png",
       "releases/c0751f0f6421bbf3d394df2e9a84994ce57c23ee49dcba1a808dae4142f9a4ee/assets/_fingerprinted/ef47a3cf99d9f2b5722ca90b6e552dfb13184daed7f3e6c565d6d023e4b82ded.png",
       "releases/c083af6373fa201947b86c647b759061defdf2ff8b8d6487a4f56bdb70186b2a/assets/_fonts/steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-c2b0f99c5625.woff2",
-      "releases/c08903f5631b947669904ae27cf9ae4b3e97f760fd2162b09bd35d373b8b15d1/search-projects.js",
       "releases/c09610df4084678e9ba7f267fa5e5093c9109e306f5ed3ab53a067d4263d2cc0/_shared/nav-a7004192c7-2aad9745de2f.webp",
       "releases/c0a94e69ccc7a09ff7a0ef9caaab54ef6299961e79c0d8b9b111b2b46ce40ec6/_living/skill-personal-health/bird-first-only.d0e29b696dd1/config.json",
       "releases/c0c8988f5384af2ebf460114a4fd42a0db0355cfb58dfc6ac6ce5c5b015e9d7d/_typeset/rule-capabilities-runtime/1a4e6e66a60e6bc0f81f-rule-capabilities-runtime-01-h.webp",
@@ -69052,6 +69098,7 @@
       "releases/d7461e4a2cc19c63543c7d26a952b4e1289b9170b733056bcb86dca838a1eab8/_shared/nav-47c38255d539.avif",
       "releases/d7470ea27c3823259c4aaab1746d85c6e1b6dec5e5bde5ef03a7db97119f1668/_home-cockpit/home-firstpaint-0b782a9294e7c3dd8279.js",
       "releases/d75042b2852a0c82bf3001e148de835cde9c440b772d6d7711228d63d066ece3/_album/album-1fb87d5943a5939a1f8d.css",
+      "releases/d7aceec275a43eea5a3f67217c7d328918a2102a895eb4d2e308adbe36f86294/_astro/today-river.DwQrh1hR.js",
       "releases/d7c002edfd272dd1974cb938498b755bd33548d7e362ac30b895ee94a0893f0f/_living/agents/bird-first-only.c24a7eb3e7ec/m1.b308d465dd.webp",
       "releases/d7c169c559f92c3388e6723b4c9fea03e78b46d746bf2091d95108a319f990dd/assets/_fonts/pcconfig-drift-acceptance-7d56e1275cc2.woff2",
       "releases/d7f609f32ec3736b1c02cbaf0a573e44c84c02a1e24b9e25c3b69a08d2593de2/assets/_fingerprinted/c8bf03d5870fce5d0cdf6ba11d2096641fc39457dccd4d7590ef7b9189ce7de7.png",
@@ -69112,7 +69159,6 @@
       "releases/db747d950ee48ca63722eccde06022f4142be8c51786c697a95ea59106686dbf/assets/_fingerprinted/2e81f3228c4ffed7b8da3d9a01c0dd6b86f3f21d09e45b7bff0185c17484f6e9.json",
       "releases/db7a94b3ed3f8f541ae210c2f79607797c6efae3ee514758758467225b15e977/assets/_fingerprinted/f3b11125d4efa4d8cbe9fe7a6fcebc7c92e48cb5d669cd838d66bac9a9f2710d.png",
       "releases/db7ae8dab8989f41085a390d922fc1cde52c6baed611abddce1358fbd93c7fb0/assets/_fingerprinted/67729f2c37fd664db57fcc2cd9f94ab15eec6a54f7ed3c06ebf59b8cc2229570.png",
-      "releases/db900c7932762cf8d80e8668584d093cf010a89c42641d1b2982205ed03743b4/_astro/index.astro_astro_type_script_index_0_lang.CMsjgyR0.js",
       "releases/dba16853a0a95cdfca7ed712b675f4f8bb4ce119a296bd5afa1a830292a6e28a/_typeset/runtime/live-sans-part-101-34594a5e4ed755ac05fe.woff2",
       "releases/dbc5beda56684b597110c765db89dd57b693124adb56e7e08480332f3fda4b07/assets/_fingerprinted/13b3430ca31ef3d6a2d9827636d3f21d3fb1a7dbc85076f120b2f26b060d669b.png",
       "releases/dbd0324442f2555ae2e6ee1b434fbb87fe7e9721195efb8411012a4b25fe28c9/_shared/nav-3aedbba755a3.avif",
@@ -69197,6 +69243,7 @@
       "releases/dfd0e7d5ff80c12f7ef2fb1444ac033c9953f4bb75bcfa935886e29ce8c05244/_typeset/learning/558843d71b683b78f3bf-learning-01-h.webp",
       "releases/dfed01f74e61c3c6a0354f0d1b2251b8d09ca05efa370b526944119acb65d5b8/_living/_textures/3ace15369efe9c793b2eb90832416b86dc2dc9dd0ede1fdf8b487f18389f1e29.webp",
       "releases/dff53f77c862577fdb8dfe9bc1624823eb7397b7d136a4568658b6336f5ded88/assets/_fingerprinted/d1e0b29c2fb0970610bb3dcaf9798829826894ab6fa4b0d7a54df42a33909668.png",
+      "releases/dffd18acce668f6c9a8730e4bf17ad940d6c88a397bfa4616d4aaed9fb7a6d54/search-projects.js",
       "releases/e011830c2e4b89ee847e2442270cc760e7bd8af346dca644c64f74665c823f47/assets/_fingerprinted/5c1b6996a77ea975edb5b57d423c448d97a6e75ef96ef0809798ad8b5c06ed23.png",
       "releases/e01e9bbdab1a68151e28be71858fda84c252c300976e410b10d72b8a31125831/assets/_fingerprinted/f8cad8fb5d4940ecf9c9f91852c4ccdcef4aa29f1925fcab59e0bf58453dc728.png",
       "releases/e0350cd1844a5d823454cb4963b2e01cd2b440bf103b44f8a0f58bba44dd1996/_typeset/codex-local-remote/e0f37c48cbf5ba1579cd-codex-local-remote-01-v.webp",
@@ -69212,6 +69259,7 @@
       "releases/e0c038f010ee03cc23cb1a4e684dbac7b6639a836e65488f5df24dc0c3a9bdb0/_shared/leaf-8.webp",
       "releases/e0c4f1342bf189de70ee07f3ca3e431ff7c8b167e5ccb8d7f6708a859450cf6f/_typeset/runtime/app-17fb264ac190451a427e.js",
       "releases/e0c98de1787b70c9f3998228daf760ae28be07331c1e1bfc80c1b219a59ee831/assets/_fingerprinted/1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6.png",
+      "releases/e0e74606bbca0ecb90f96d55589432adb940f3a0bf7ee7a2191f8a98b559a406/search-index.js",
       "releases/e0e86dc46cd7c67ba729003e6819bdab98240f590e11bbd070df19fd5d6a8db3/assets/_fingerprinted/2a9a78ace526d596055592b01563e9b553280806d92aee3bf4d3d878740484a4.png",
       "releases/e104ad3b0673077c3d60149963eac96aee70a5c802a4043c6e0288a420db2580/_shared/nav-unify-standard/nav-unify-label-09-c0df0de3fe.webp",
       "releases/e107a518141d0630e933c2d511c9a091d73b84b3640c3b453b9d963828ee54cd/_typeset/runtime/live-sans-part-ac-b596c4dc698874637969.woff2",
