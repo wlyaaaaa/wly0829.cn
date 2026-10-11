@@ -41,7 +41,7 @@ globalThis.TypesetApply = () => {
         if(match[0].length===1)continue;
         fragment.append(text.data.slice(end,match.index));
         // 长路径的驼峰目录标识符按完整英文词分界；名字/普通正文仍为整词单元。
-        const parts=inPath && canvas.measureText(match[0]).width>available
+        const parts=/^[a-fA-F0-9]{32,}$/.test(match[0]) && canvas.measureText(match[0]).width>available ? match[0].match(/.{1,8}/g) : inPath && canvas.measureText(match[0]).width>available
           ? match[0].split(/(?<=[a-z0-9])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])/) : [match[0]];
         parts.forEach((word,i)=>{
           if(i)fragment.append(document.createElement('wbr'));
@@ -529,10 +529,58 @@ globalThis.TypesetApply = () => {
       }
       if (!down.length) continue;cols.forEach(c=>{c.classList.remove('col');Object.assign(c.style,{display:'flex',flexDirection:'column',gap:'12px',width:'100%',alignSelf:'start'});c.querySelectorAll('.card.frame').forEach(f=>f.style.width='100%');});Object.assign(row.style,{display:'flex',flexDirection:'column',alignItems:'stretch'});row.append(...down);row.dataset.typesetFit='stacked';receipt.balance.push({kind:'stack_media_row',source_row:sourceRow,columns:identities,media_items:down.length});
     } }
+  function contentHeight(element) {
+    const bottoms=[],hidden=e=>e.closest('script,style,noscript') || getComputedStyle(e).display==='none' || /hidden|collapse/.test(getComputedStyle(e).visibility);
+    const walker=document.createTreeWalker(element,NodeFilter.SHOW_TEXT);
+    for(let node=walker.nextNode();node;node=walker.nextNode()) {
+      if (!node.nodeValue.trim() || hidden(node.parentElement) || node.parentElement.closest('[aria-hidden="true"],[role="presentation"],[role="none"]')) continue;
+      const range=document.createRange();range.selectNodeContents(node);
+      for(const box of range.getClientRects()) if(box.width>0 && box.height>0) bottoms.push(box.bottom);
+    }
+    for(const media of element.querySelectorAll('img,svg,canvas,video')) {
+      const box=media.getBoundingClientRect();if(!hidden(media) && box.width>0 && box.height>0) bottoms.push(box.bottom);
+    }
+    return bottoms.length?Math.max(...bottoms)-element.getBoundingClientRect().top:0;
+  }
+  function stackTextRows() {
+    if (!document.body.classList.contains('o-h')) return;
+    const excluded='[data-comp="illustration"],[data-comp="screenshot"],[data-comp="numbered_screenshot"],[data-comp="chapter_title"],.title-wrap,.feature-masonry-grid,[data-flow="masonry"],[data-flow="column"],[data-flow="independent_columns"]:not(.ct-cols-1)';
+    for (const row of root.querySelectorAll('.row')) {
+      const cols=[...row.children].filter(c=>c.matches('.col'));
+      if (cols.length<2 || row.matches('.fit-ill') || row.closest('.c-diagram') || row.querySelector(excluded)) continue;
+      const boxes=cols.map(c=>c.getBoundingClientRect()).sort((a,b)=>a.left-b.left);
+      if (boxes.some((b,i)=>b.width<=0 || b.height<=0 || i>0 &&
+          (b.left<boxes[i-1].right-1 || Math.min(b.bottom,boxes[i-1].bottom)<=Math.max(b.top,boxes[i-1].top)+1))) continue;
+      const heights=cols.map(contentHeight);
+      const ranked=[...heights].sort((a,b)=>b-a);
+      if (ranked[0]<=1.8*ranked[1] || ranked[0]-ranked[1]<=200) continue;
+      Object.assign(row.style,{display:'flex',flexDirection:'column',alignItems:'stretch'});
+      cols.forEach(c=>Object.assign(c.style,{width:'100%',alignSelf:'start',justifyContent:'flex-start'}));
+      row.dataset.typesetFit='stacked-text';receipt.balance.push({kind:'stack_text_row',before:heights.map(Math.round)});
+    }
+  }
+  function stackFeatureGroups() {
+    if (!document.body.classList.contains('o-h')) return;
+    for (const grid of root.querySelectorAll('.feature-group-grid,.ct-points_card,.ct-quote,.grid.sides')) {
+      const cards=[...grid.children];
+      if (grid.matches('.feature-masonry-grid,[data-flow="column"],[data-tail-grid]') || getComputedStyle(grid).display!=='grid' ||
+          cards.length<2 || cards.some(c=>!c.matches('.feature-item,.card'))) continue;
+      const bands=[];
+      for (const card of cards) {const box=card.getBoundingClientRect();if (!box.width || !box.height) continue;
+        let band=bands.find(b=>b.items.some(it=>Math.min(it.box.bottom,box.bottom)>Math.max(it.box.top,box.top) && Math.min(it.box.right,box.right)<=Math.max(it.box.left,box.left)+1));if (!band) bands.push(band={items:[]});band.items.push({card,box});}
+      const hit=bands.some(band=>{const items=band.items.sort((a,b)=>a.box.left-b.box.left);
+        if (items.length<2 || items.some((it,i)=>i>0 && it.box.left<items[i-1].box.right-1)) return false;
+        const heights=items.map(({card})=>contentHeight(card)).sort((a,b)=>b-a);
+        return heights[0]>1.8*heights[1] && heights[0]-heights[1]>200;});
+      if (!hit) continue;
+      grid.style.gridTemplateColumns='minmax(0,1fr)';cards.forEach(c=>Object.assign(c.style,{gridColumn:'1 / -1',gridRow:'auto'}));
+      grid.dataset.typesetFit='stacked-features';receipt.balance.push({kind:'stack_feature_group',items:cards.length});
+    }
+  }
   receipt.balance=[];
   compactPage();keepLatinWords();fitStatValues();balanceRows();fitIllustrationRows();fitHeadRow();applyLabels();
   receipt.extra_labels=globalThis.TypesetApplyResidual({rerunMain:false});
-  applyText();fillShortColumns();stackMediaRows();
+  applyText();fillShortColumns();stackMediaRows();stackTextRows();stackFeatureGroups();
   C.collectTextBlocks(root);
   receipt.after=C.check({root});
   globalThis.TypesetApplyReceipt=receipt;

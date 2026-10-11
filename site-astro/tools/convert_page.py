@@ -757,6 +757,9 @@ def convert(page, check_only=False):
     # 和现在出图时一样在这一步冻结进内容文件；数据变了重新转换这一页即可
     sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
     from engine.content import bound_json
+    from engine.card_rows import fit_card_rows
+    from engine.layout import assign_by_spec
+    from engine.parse import parse, original_markdown
     from render_blocks import check_screen_images
     data = bound_json(src, read=lambda p: Path(p).read_text("utf-8-sig"))
     specs = {}
@@ -803,6 +806,8 @@ def convert(page, check_only=False):
             if not did_status:   # 首屏已按 K1-A 排好（扫过 0 处），不再动
                 LONE[page] = LONE.get(page, 0) + pair_lone_illustrations(hsp["blocks"], block_text_len(s, hsp["blocks"])[0])
                 FITTED_ALL[page] = FITTED_ALL.get(page, 0) + fit_rows(hsp["blocks"], TEXTISH_ALL)
+        if hsp and hsp.get("blocks"):
+            fit_card_rows(data, "h", assign_by_spec(parse(s.get("text", ""), markdown_links=original_markdown(s)), hsp["blocks"], []))
         text = gallery_title(meta, s.get("text", ""))
         check_screen_images(page, data, {**s, "text": text}, meta)
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'

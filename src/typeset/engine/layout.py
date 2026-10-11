@@ -12,6 +12,7 @@ from .inline import make_inline
 from .parse import canon, node_text, parse, normalize, original_markdown
 from . import registry as _registry
 from .content import bound_json
+from .card_rows import fit_card_rows
 
 PROTO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPEC_DIR = os.path.join(os.path.dirname(os.path.dirname(PROTO)), "sources", "pages")
@@ -408,6 +409,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
         blocks = auto_blocks(nodes, screen, orient)
         source = "auto"
     blocks = apply_mock_attachments(blocks, ctx)
+    fit_card_rows(page, orient, blocks)
     parts, row, row_name = [], [], None   # parts: [(frame, html)]
 
     def fr(b):

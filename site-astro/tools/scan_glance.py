@@ -1,4 +1,4 @@
-"""稳定画面扫描；来源、只读预览规则和用法见 docs/publish-and-scan.md。"""
+"""稳定画面扫描，包含横排卡片内容失衡；只读预览规则和用法见 docs/publish-and-scan.md。"""
 import argparse, functools, hashlib, http.server, importlib.util, json, os, subprocess, sys, tempfile, threading, time, urllib.error, urllib.request
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
@@ -183,6 +183,7 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items):
                 try:
                     page.goto(base + quote(route, safe="/"), wait_until="load", timeout=30000)
                     if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("路由跳到了已排除的首页")
+                    page.evaluate("document.querySelectorAll('img[loading=lazy],img[data-ts-src]').forEach(i => {if(i.getClientRects().length && getComputedStyle(i).visibility !== 'hidden'){if(!i.getAttribute('src') && i.dataset.tsSrc)i.src=i.dataset.tsSrc;i.loading='eager';}})")
                     tick("load"); settle(page, activity, pending); tick("initial_settle")
                     y = 0; steps = 0
                     while y < page.evaluate("document.documentElement.scrollHeight") and steps < 1500:

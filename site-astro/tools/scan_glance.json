@@ -2,12 +2,14 @@
   "home_locked": true,
   "thresholds": {
     "row_blank_px": 200, "row_blank_fraction": 0.2, "screen_blank_viewport_fraction": 0.4,
+    "imbalance_ratio": 1.8, "imbalance_px": 200,
     "overlap_px": 4, "glyph_overlap_px": 2, "clip_px": 1, "clip_tolerance_px": 4, "image_frame_px": 40, "opaque_alpha": 0.95,
     "text_rect_px": 0.5, "excerpt_chars": 180, "duplicate_card_chars": 25,
     "duplicate_image_width": 250, "duplicate_image_height": 150, "probe_band_fraction": 0.5, "probe_margin_fraction": 0.25
   },
   "selectors": {
     "overlap_allow": ".ts-art", "cards": ".card,.ts-card,.table-card,.sequence-card",
+    "imbalance_rows": ".row,.steps,.sequence-row,.sides,.ct-quote,.ct-source_text_card,.ct-points_card,.ct-list-cards,.ct-dialogue-items,.feature-group-grid,.c-hub-entry-cards",
     "clip_bounds": ".ts-o,.card,.ts-card,.c-slot-live-frame", "image_frames": "figure:has(img,svg,canvas,video),.ill:has(img,svg,canvas,video),.slot-shot-frame,.image-frame,[data-image-frame]",
     "loading": ".image-loading-wrap,.image-placeholder,.skeleton,[aria-busy=\"true\"]",
     "disabled_reason_pattern": "不可用|不能|未启用|未配置|未连接|请先|需要|锁定|等待|正在|disabled|unavailable"
