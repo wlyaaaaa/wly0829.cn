@@ -234,7 +234,7 @@ export const wechatDirectProject = {
     { name: "accounts.json", responsibility: "保存 primary / secondary 两个隔离槽位的本机来源入口与身份承诺。", implementation: "不保存微信密钥明文；真实文件留在本机并限制 ACL，示例只提供占位结构。" },
     { name: "联系人导出", responsibility: "保存一个对象的可搜索全档、AI 小上下文、结构记录、当前可打开媒体、清单、状态和运行回执。", implementation: "messages.jsonl 是合并事实层；context.md 面向人；ai-context.md 最多 80 条和 128 KiB；当前可打开的语音按 SHA-256 去重复用，其他媒体保留关系与缺口。" },
     { name: "朋友圈导出", responsibility: "保存一个明确账号当前本机可见的朋友圈缓存快照。", implementation: "重复刷新会加入、更新或删除与当前缓存不再一致的条目；状态始终写明 current_local_cache_only。" },
-    { name: "WeChatDirect-private-archive（公开前历史档案）", responsibility: "只保存公开版本形成前的历史与迁移依据；该 PRIVATE 仓库已经归档。", implementation: "它不生产当前读取、具名归档、增量或恢复行为，也不再是现役消费者或独立项目卡。现在这些能力只由 PUBLIC WeChatDirect 负责。" },
+    { name: "WeChatDirect-private-archive（公开前历史档案）", responsibility: "只保存公开版本形成前的历史与迁移依据。", implementation: "现在的读取、归档和恢复都由公开的 WeChatDirect 负责。" },
     { name: "测试与公开命令合同", responsibility: "验证来源读取、CLI、公开 Doctor/验真、增量、回复、媒体、账号隔离和恢复边界。", implementation: "14个测试模块；9月7日全套137项/32子测试，9月9日定向45项/6子测试；它们使用合成数据，不包含真实聊天正文。" }
   ],
   usageExamples: [

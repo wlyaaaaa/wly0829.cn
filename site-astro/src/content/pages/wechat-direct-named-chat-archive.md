@@ -1,0 +1,1186 @@
+---
+{
+ "title": "一个联系人或群的首次全量与自动增量归档",
+ "kind": "project",
+ "url": "/projects/wechat-direct/named-chat-archive/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "wechat-direct-named-chat-archive",
+  "kind": "project",
+  "title": "一个联系人或群的首次全量与自动增量归档",
+  "url": "/projects/wechat-direct/named-chat-archive/",
+  "parent": "wechatdirect",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；现有档案的份数和计数于 10 月 11 日 16:32 重新清点，没有读正文，也没有运行真实同步或测试"
+  }
+ },
+ "source": {
+  "page": "sources/pages/wechat-direct-named-chat-archive/page.json",
+  "sha256": "ecd190af3129f64fa821aab595c44fd54a969e1d4f55377cd9179a5696b2a1f0",
+  "converted_at_beijing": "2026-10-11T19:07:12+08:00"
+ }
+}
+---
+
+::screen{#wechat-direct-named-chat-archive-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-01",
+  "section": "top",
+  "title": "一个联系人或群的首次全量与自动增量归档",
+  "links": [
+   {
+    "text": "回到项目 → 微信聊天读取",
+    "href": "/projects/wechatdirect/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/WeChatDirect"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/wechatdirect/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个联系人或群的首次全量与自动增量归档",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；现有档案的份数和计数于 10 月 11 日 16:32 重新清点，没有读正文，也没有运行真实同步或测试",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "WeChatDirect · 功能说明",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "一个联系人或群的首次全量与自动增量归档",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；现有档案的份数和计数于 10 月 11 日 16:32 重新清点，没有读正文，也没有运行真实同步或测试"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "WeChatDirect · 功能说明"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/module-illustrations/wechat-direct/named-chat-archive-v01.png",
+   "key": "main-wechatdirect",
+   "source_phrase": "右上一幅水彩插画：一台电脑屏幕上并排两个聊天窗口，窗口顶上的小名牌分别写“主号”“副号”；一只放大镜照着其中一小段聊天气泡，一条细绿线从一句回复连到它引用的原句；屏幕旁一个数据库圆柱，上面贴一把小锁（表示只读）；再旁边一个文件夹，封面写“档案”。",
+   "sha256": "10ca5d6b8d55f5617f8b46d8d54f044f90a4df8a31ec2d87b1d4a992e3a3aa87",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 一个联系人或群的首次全量与自动增量归档
+
+〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+WeChatDirect · 功能说明
+
+长期合作对象的聊天可以持续更新，而不需要每次全量导出、复制旧媒体或把完整历史交给 AI。
+
+**当前情况：**同一句“再保存一次”现在分成几种情况：没有变化就原地核对后只记一笔；有新内容走普通更新；要翻旧账时由我明确要求整段重新核对；只想补附件时单独补本机能打开的附件。本页未读档案正文，完整历史仍限本机实际可见范围。
+
+具体测试保留各自日期，页面不实时探测运行状态。
+
+项目源码：公开仓库
+
+::screen{#wechat-direct-named-chat-archive-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "这项功能怎样使用"
+   },
+   {
+    "id": "module-product",
+    "text": "这项功能怎样使用"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+只保存一次会漏掉后续内容；每次全量重做又慢、重复且容易在中断时留下半成品。真正可用的归档需要知道自己处理到哪里、来源是否变化、哪些是新增或更新，以及怎样验证提交完成。
+
+## 举个实际例子
+
+我说“把这个供应商群持续保存下来”。第一次会保存当前设备能看到的完整本地历史；下周再说同一句，档案只补上次之后的新消息和最近这段时间里改过的内容，旧内容不会整包重抄。如果是很早的旧消息后来被改了，或者我后来才在微信里点开下载了一个旧附件，普通更新不保证碰得到：要我明确说“把这个群从头重新核对一遍”，或者“只补缺的附件”。
+
+## 最后我会得到什么
+
+得到这个具名联系人或群在当前电脑能看到的消息、可读档案、附件与更新状态。写入中断时旧完整档案仍在。缺的附件只有在我后来把它下载到这台电脑之后才能补；读不到就继续标为缺口，不保证追得回来。微信远端从未取得的内容不会因此出现。
+
+::screen{#wechat-direct-named-chat-archive-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "可直接使用",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "可直接使用",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+## 可直接使用
+
+有变化就合并新内容；没有变化也先核对旧档案、附件和清单仍是一套，确认后在原目录只更新运行记录，不重新复制整个档案。
+
+## 需要确认
+
+旧消息后来修改、无时间记录或附件后来才下载到本机时，普通更新覆盖不到；需要对这个对象明确“整段重新核对”，或者单独“补本机附件”。
+
+## 当前不可用
+
+目录已有未知内容、账号不符、来源变化、旧档案自己核对不过，或档案文件正被别的程序占用时停下，不覆盖原档硬修；占用的情况关掉占用程序后原样重试即可。
+
+::screen{#wechat-direct-named-chat-archive-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **系统核对并处理**　首次保存该对象本机可读历史；之后每次先核对旧档案，再从上次位置接着合并新增和最近改动；整段重核和只补附件要单独说明。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **系统核对并处理**　首次保存该对象本机可读历史；之后每次先核对旧档案，再从上次位置接着合并新增和最近改动；整段重核和只补附件要单独说明。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+明确要求长期保存一个具名联系人或群的微信历史。
+
+## 需要准备什么
+
+- 明确账号和一个联系人或群
+
+- 希望保存当前可见历史、更新既有归档、整段重新核对，还是只补附件
+
+## 从开始到拿到结果
+
+1. **系统核对并处理**　首次保存该对象本机可读历史；之后每次先核对旧档案，再从上次位置接着合并新增和最近改动；整段重核和只补附件要单独说明。
+
+2. **交付与接续**　交回全文、可用附件、更新状态与缺口；来源不变时原地核对、只记一笔，不整包重抄；中断先恢复原来的那次写入。
+
+::screen{#wechat-direct-named-chat-archive-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "技术实现与依据（一）"
+   },
+   {
+    "id": "module-technical",
+    "text": "技术实现与依据（一）"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 第一次归档必须覆盖该对象全部本地可见历史，不允许用时间参数伪造完整档案。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 第一次归档必须覆盖该对象全部本地可见历史，不允许用时间参数伪造完整档案。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+当前源码 v0.2.3（最后提交 2026-10-07）为首次全量、增量、无变化快速路径、显式重核、文件占用和提交顺序定义了回归测试（全项目共 224 个测试函数），本轮没有运行；本页未读取真实档案正文
+
+## 关键规则与设计选择
+
+1. 第一次归档必须覆盖该对象全部本地可见历史，不允许用时间参数伪造完整档案。
+
+2. 后续重复命令就是自动增量，不需要 watcher 或计划任务。
+
+3. 单消息来源优先使用 sortSeq 游标；多来源退回时间重叠并明确无时间记录边界。普通增量只覆盖游标之后或重叠窗口内的变化，不会自动重核更早被修改的消息或早期才下载到本机的附件。
+
+4. AI 只默认读取最近最多 80 条、128 KiB，完整档案仍可按需搜索。
+
+5. 当前可打开的语音按内容哈希复用。缺失附件只有在本人后来于微信中把它下载到本机、且当前可读时才可能补齐；补历史附件用 repair-media，补旧消息变化用 --full-reconcile。2026-10-11 16:32 重新清点时，现有 4 份具名聊天归档合计记录 2,329 次附件缺口。
+
+6. full reconcile 会更新或补充同身份记录，但不会把来源里后来消失的旧归档记录自动删除；它和普通增量一样必须先完整核对旧档，旧档损坏就拒绝更新，不拿旧记录自带的哈希重新认证被改过的正文。
+
+7. 已知目录替换中断先recover-export只读检查，明确rollback或complete；未知旧锁和外来内容不自动接管。verify-export只验证包，repair-media只补具名本地媒体，不证明微信远端全历史完整。
+
+## 当前怎样实现
+
+- state.json 固定 wechat-direct-contact-sync.v1、账号身份承诺、联系人原生身份、游标、水位、来源指纹和消息数量。
+
+::screen{#wechat-direct-named-chat-archive-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- messages.jsonl 用 server id；没有 server id 时用本地 id、时间、sortSeq 与发送者计算稳定合并键。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- messages.jsonl 用 server id；没有 server id 时用本地 id、时间、sortSeq 与发送者计算稳定合并键。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+- messages.jsonl 用 server id；没有 server id 时用本地 id、时间、sortSeq 与发送者计算稳定合并键。
+
+- 默认 overlapSeconds=86400，允许 0 到 31 天；单分片且目录不变时使用 sortSeqReplayFloor。
+
+- 旧说话人语义的完成态档案在下次对同一对象运行 sync-contact 时，先验原档，再以 sender_identity_reconcile 重核当前本机可见历史；其他聊天不扫描、不改写。源中已不存在的旧消息保留正文与原证据，显示身份未重核并计数。2026-10-11 16:32 清点时，4 份档案中 1 份已记录当前发送者解释版本，3 份没有；它们要等下次被点名同步时才会重核。
+
+- 来源指纹未变时先再取一次指纹确认稳定，重验 manifest（清单） 自哈希及其与 state 的账号、身份承诺、联系人、来源指纹和数量绑定；messages.jsonl 核对 SHA-256 与记录数，context.md 和 ai-context.md 分别核对完整 SHA-256 与字节数。全部一致才在原目录返回 sourceMetadataFastPath/noChange 并只更新 last-run，不复制、不重新发布整包。
+
+- sync-contact、sync-moments、repair-media 只在有变化时暂存并验证完整候选，通过同级.wechat-transaction记录准备、前像和替换状态；两次目录rename有独立中断状态。事务外层的并发变化检查用文件大小、修改时间和文件系统变更时间，不再为签名把整棵目录读两遍，这不替代内部的清单、全文、记录与媒体核对。复制、校验、改名或清理遇到文件被占用统一返回 archive_output_in_use。recover-export只读检查后按明确动作complete/rollback，已提交状态不能再回滚，身份或外来修改冲突保留。
+
+- 正常写入由同级事务记录加操作系统租约阻止两个写者同时更新同一输出目录；旧版留下的 .sync.lock 仍按未知旧锁拦截，当前不会自动判断或清除。
+
+- 快速返回已经包含导出全文与结构记录的完整哈希核对，不只是看文件存在或数量；独立 verify-export 另核整个导出的路径、媒体与派生关系，不应把两者的覆盖范围混为一谈。
+
+## 执行流程
+
+1. 首次解析账号与对象，拒绝带 since / until 的伪完整导出。
+
+::screen{#wechat-direct-named-chat-archive-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "2. 取得输出目录的写入租约，先核对旧档案，再计算与该对象相关的来源指纹。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "2. 取得输出目录的写入租约，先核对旧档案，再计算与该对象相关的来源指纹。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+2. 取得输出目录的写入租约，先核对旧档案，再计算与该对象相关的来源指纹。
+
+3. 选择 full、incremental 或 explicit full_reconcile 模式。
+
+4. 无变化候选先复核来源指纹、清单/状态绑定及已导出全文和记录；通过则在原目录只更新 last-run，不重扫源库消息，也不复制整包。
+
+5. 有变化时在暂存副本中抓取候选，按稳定消息键合并现有 JSONL。
+
+6. 复制本次新增、更新或需重试且在本机可打开的精确媒体，已存在哈希文件先验真再复用；普通增量和 noChange 都核对已声明媒体及 WAV 的哈希与大小。
+
+7. 生成完整 context.md 与有界 ai-context.md。
+
+8. 先写 manifest（清单），再写 state 和 last-run，校验后两次改名发布并保留前一版与事务记录，最后释放租约。
+
+::screen{#wechat-direct-named-chat-archive-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-08",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+| --- | --- |
+| First full snapshot（首次完整快照） | 第一次保存该对象当前设备可见的全部本地历史；它仍不等于微信远端全历史。 |
+| sortSeq cursor（排序游标） | 单一消息来源下按 WeChat 排序序号继续，能包含没有 createTime 的新增消息。 |
+| Overlap window（重叠窗口） | 从上次最后时间向前回看一段，默认 1 天，用于吸收迟到或变化记录；更早的变化要靠显式重核。 |
+| Source metadata fast path（来源元数据快速路径） | 相关源文件指纹重复核对未变时，不重新扫描源库消息；先重验本地导出全文、结构记录、清单与状态绑定，全部一致后在原目录确认无变化并只更新回执，不复制整包。 |
+
+## 专业定义
+
+sync-contact 第一次保存该对象当前设备可见的完整本地历史；以后重复同一命令，没有变化就原地核对，有变化就按游标或重叠窗口合并增量。旧历史变化用 --full-reconcile 显式重核，只补现有归档的本机附件用 repair-media；两者都先核对旧档案。
+
+::screen{#wechat-direct-named-chat-archive-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-09",
+  "section": "tech",
+  "title": "出问题时（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 权限只覆盖用户点名的一个联系人或群，不扩到全账号。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 权限只覆盖用户点名的一个联系人或群，不扩到全账号。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（一）
+
+解决什么
+
+避免更新半途毁掉原档案、为了补几条语音重扫全部历史，以及把已生成包误称为资料齐全；冲突保留原状态和明确恢复入口。
+
+## 边界
+
+- 权限只覆盖用户点名的一个联系人或群，不扩到全账号。
+
+- 首次本地完整不代表远端完整，也不补设备上已经不存在的历史。
+
+- 普通增量不能保证抓到没有时间的旧记录、更早被修改的消息或后来才下载的历史附件；旧消息变化用 full reconcile，只补附件用 repair-media。
+
+- 有具名媒体修复和导出事务恢复，但没有把档案导入回微信的restore/import，也不自动删除未知.sync.lock或接管无依据旧目录。
+
+- 归档目录留在本机，不进入公开网站或 Git。
+
+## 失败与恢复
+
+- **首次输出目录已有未知内容**：返回 sync_output_not_initialized，不覆盖用户文件。
+
+- **账号、联系人或状态身份不一致**：返回 sync_identity_mismatch，保留原档案并要求使用原对象或新目录。
+
+- **同一目录已有运行锁**：返回 sync_already_running_or_stale_lock；先确认旧进程与锁状态，不并发写。
+
+::screen{#wechat-direct-named-chat-archive-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-10",
+  "section": "tech",
+  "title": "出问题时（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **来源在读取期间发生变化**：返回 source_changed_during_sync_retry，不提交新 state；下次从旧完整状态重试。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **来源在读取期间发生变化**：返回 source_changed_during_sync_retry，不提交新 state；下次从旧完整状态重试。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（二）
+
+- **来源在读取期间发生变化**：返回 source_changed_during_sync_retry，不提交新 state；下次从旧完整状态重试。
+
+- **来源没变，但本地导出文本、记录或清单绑定漂移**：按实际位置返回 sync_context_sha256_mismatch、sync_ai_context_sha256_mismatch、sync_records_sha256_mismatch 或 sync_manifest_state_mismatch 等精确错误；不返回 noChange，也不默默覆盖不同字节。旧档损坏时用一个新的空目录重新导出，不覆盖损坏的档案。
+
+- **需要覆盖旧历史变化**：用户显式使用 --full-reconcile，先核对旧档，再重新核对该对象全部本地可见历史。
+
+- **档案文件被其他程序占用**：复制、校验、改名或清理时统一返回 archive_output_in_use；关掉占用程序后对原输出重试。若新版本已发布、只是清理受阻，先运行 recover-export complete；保留前一版和事务记录，不掩盖更早的错误。
+
+- **首次同步中断**：能找到同级事务记录的，先用 recover-export 检查后 complete 或 rollback；没有事务依据、只有半成品文件而没有 state 的旧目录仍返回 sync_output_not_initialized，需要人工核对或移走后重建，不自动接管。
+
+- **.sync.lock 来自已退出进程**：当前仍按锁冲突停止；不能无条件删除，也没有自动陈旧锁修复。
+
+::screen{#wechat-direct-named-chat-archive-11 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-11",
+  "section": "tech",
+  "title": "依据与来源（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- `README.md · sync-contact`首次全量、自动增量、AI 小上下文与 full reconcile 使用边界。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- `README.md · sync-contact`首次全量、自动增量、AI 小上下文与 full reconcile 使用边界。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（一）
+
+## 真实入口
+
+- `README.md · sync-contact`首次全量、自动增量、AI 小上下文与 full reconcile 使用边界。
+
+- `wechat_cli.py · command_sync_contact`游标、重叠、合并、媒体、manifest（清单）/state 提交和回执实现。
+
+- `wechat_source.py · contact_source_fingerprint`与单对象相关的无正文来源变化指纹。
+
+- `tests/test_wechat_cli.py · contact sync`首次、增量、游标、原子提交和来源变化回归。
+
+## 如何验证
+
+- test_contact_sync_is_full_then_bounded_incremental_ai_context 验证首次完整与 AI 小窗口。
+
+- test_contact_sync_changed_source_replays_indexed_cursor_and_merges 验证来源变化后的游标合并。
+
+- test_manifest_is_published_before_state_commit_marker 验证提交顺序。
+
+- test_contact_sync_does_not_commit_when_source_changes_during_read 验证漂移失败关闭。
+
+::screen{#wechat-direct-named-chat-archive-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "wechat-direct-named-chat-archive-12",
+  "section": "tech",
+  "title": "依据与来源（二）",
+  "links": [
+   {
+    "text": "上一个模块 聊天上下文",
+    "href": "/projects/wechat-direct/bounded-chat-context/"
+   },
+   {
+    "text": "下一个模块 回复、媒体与阅读包",
+    "href": "/projects/wechat-direct/reply-media-relations/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- test_contact_fast_path_rejects_hash_size_count_and_state_drift 覆盖无变化候选的清单自哈希、全文字节、记录数与状态绑定漂移；CLI（命令行工具） 回归另验证 context、ai-context 和 JSONL 内容变化不能返回 noChange。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- test_contact_fast_path_rejects_hash_size_count_and_state_drift 覆盖无变化候选的清单自哈希、全文字节、记录数与状态绑定漂移；CLI（命令行工具） 回归另验证 context、ai-context 和 JSONL 内容变化不能返回 noChange。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（二）
+
+- test_contact_fast_path_rejects_hash_size_count_and_state_drift 覆盖无变化候选的清单自哈希、全文字节、记录数与状态绑定漂移；CLI（命令行工具） 回归另验证 context、ai-context 和 JSONL 内容变化不能返回 noChange。
+
+- 当前 0.2.3 源码定义了目录替换中断、完成/回滚、文件占用、旧档损坏拒绝更新、媒体修复和冲突回归（tests/test_completion_reliability.py 等），本轮只清点了定义、没有运行；本网页未强杀真实归档、重读聊天或演练真实断电。
+
+## 与其他模块的关系
+
+同一账号与对象贯穿上下文、归档与媒体；本模块拥有增量续作、显式重核、定向本地补媒体与已知事务恢复，原微信数据库始终只读。

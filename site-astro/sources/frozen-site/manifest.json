@@ -454,7 +454,14 @@
     "/projects/github-index/publication-gate/",
     "/projects/github-index/repository-ledger/",
     "/projects/github-index/snapshot-recovery/",
-    "/projects/github-index/worktree-sync/"
+    "/projects/github-index/worktree-sync/",
+    "/projects/wechat-direct/account-source-identity/",
+    "/projects/wechat-direct/bounded-chat-context/",
+    "/projects/wechat-direct/moments-local-cache/",
+    "/projects/wechat-direct/named-chat-archive/",
+    "/projects/wechat-direct/preservation-verification/",
+    "/projects/wechat-direct/reply-media-relations/",
+    "/projects/wechat-direct/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
