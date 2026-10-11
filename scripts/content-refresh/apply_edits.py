@@ -95,6 +95,7 @@ def build_number_edits(root, result):
     for row in result["rows"]:
         if (row.get("status") not in {"changed", "unchanged"} or row.get("scope_status") != "verified"
                 or not row.get("source_observed_at") or row.get("historical") or row.get("frozen")
+                or row.get("dynamic")
                 or row.get("old_value") is None or row.get("new_value") is None):
             continue
         slug, rid = row["page"], row["id"]
@@ -103,7 +104,7 @@ def build_number_edits(root, result):
                 pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
             page = pages[slug]
             numbers = page.get("registry", {}).get("numbers", [])
-            nid = row.get("page_number", row.get("registry_number"))
+            nid = row.get("page_number") or row.get("registry_number")
             ni = next((i for i, n in enumerate(numbers) if n.get("id") == nid), None)
             si = next((i for i, s in enumerate(page.get("screens", [])) if s["id"] == row.get("screen")), None)
             field = row.get("field", row.get("page_field")) or (

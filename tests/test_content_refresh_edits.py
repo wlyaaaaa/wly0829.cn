@@ -66,6 +66,8 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(self.path.read_bytes(), first)
 
     def test_unavailable_pending_and_ambiguous_locations_never_generate_guessed_edits(self):
+        dynamic = build_number_edits(self.root, {"rows": [dict(self.rows[0], dynamic=True)]})
+        self.assertEqual((dynamic["edits"], dynamic["skipped"]), ([], []))
         self.rows = self.rows[:3]
         self.rows[0]["status"] = "unavailable"
         self.rows[1]["scope_status"] = "pending"
