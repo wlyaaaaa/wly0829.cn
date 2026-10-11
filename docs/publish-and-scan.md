@@ -33,28 +33,42 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## EdgeOne live 函数单独发布
 
-`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。修改 `edge/edgeone/edge-functions/[[path]].js` 后，需要发布这个函数包；前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。当前旧的成功部署仍提供精简视图；Git 关联已保存，但第一次 Git 部署失败，无人值守方案尚待集成和实测。
+`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。这条无人值守路线已于北京时间 2026 年 10 月 12 日完成实测。
 
 北京时间 2026 年 10 月 12 日的已核实配置与结果：
 
 - 现有项目名 `wly-edgeone-trial-20261006`，项目 ID `makers-lrgrecs7uvjl`；生产域名为 `live.wly0829.cn` 和 `eo-test.wly0829.cn`。
-- 现有项目已关联 `wlyaaaaa/wly0829.cn`；GitHub App 已安装并仅选这个仓库。生产分支仍为 `main`，生产自动部署默认开启，预览自动部署关闭。框架 `Other`、根目录 `edge/edgeone`、输出目录 `.`、编译命令 `true`、安装命令 `true`；两条 `true` 是 Bash 空操作，不运行网站全站构建。控制台 Node.js 版本仍为 `22.11.0`。
-- 首次 Git 生产部署 `dpvondepzdi5` 在克隆阶段失败：已接收 `2.23 GiB`，随后出现 3926 条 `unable to write file` 和 `checkout failed`，尚未进入安装或构建。平台笼统概括为 Git 403，准确原因 `Unknown`，不能把这个概括直接当作仓库权限失败的证据。
-- 旧的手动上传成功部署 `dpyqa3wa7o0h` 仍在提供服务。它于北京时间 2026 年 10 月 12 日 02:42:38 部署远端 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录；ZIP 根下只有 `edge-functions/[[path]].js`，无需补 `index.html`、`package.json` 或 `edgeone.json`。公网 `https://live.wly0829.cn/computer-access/state?view=cockpit` 已返回 `pcconfig.cockpit-view.v1`。响应大小随当前数据变化，不用固定字节数判定是否成功。
+- 现有项目已关联 `wlyaaaaa/wly0829.cn`；GitHub App 已安装并仅选这个仓库。生产分支为 `edgeone-live`，生产自动部署默认开启，预览自动部署关闭。框架 `Other`、根目录 `.`、输出目录 `.`、编译命令 `true`、安装命令 `true`；两条 `true` 是 Bash 空操作，不运行网站全站构建，平台仍正常编译边缘函数。控制台 Node.js 版本仍为 `22.11.0`。域名、DNS 和证书未改。
+- `.github/workflows/edgeone-live.yml` 已集成到 main 提交 `c3684acb2f909f93bf8955062fd953abc6c78384`。main 推送触发的 GitHub 运行 `38169676317` 于 03:50:06 创建并成功，生成首个部署分支提交 `9a30c350a8ef7be3485d687d4ea71857a6b10155`，父提交为空；根文件树为 `09cdec8fceee988f4ee256efe615c5c223ae8744`，只有 `edge-functions`。
+- 首个小分支 Git 生产部署 `dpiskwlq1jrc` 于 03:54:37 发起、03:55:08 成功，克隆耗时 1345 毫秒，函数编译成功。03:55:53 的 `-RequireMainCompact` 验收通过，主入口返回 `pcconfig.cockpit-view.v1`，本次响应为 158942 字节。
+- 无人值守实测由命令行触发 GitHub 运行 `38170111261`，事件为 `workflow_dispatch`，源码仍为上述 main 提交；03:56:26～03:56:36 运行成功。它生成提交 `82b496dd9a2d79f3e8a33c46d22f909acf4538f3`，唯一父提交为 `9a30c350a8ef7be3485d687d4ea71857a6b10155`，文件树不变。EdgeOne 自动产生生产部署 `dpcl7w6tn1js`，03:56:37 发起并成功，构建耗时 17 秒、克隆耗时 1745 毫秒；03:58:38 的 `-RequireMainCompact` 验收通过，响应为 158933 字节。本次仅通过浏览器只读观察记录，没有点击部署，也未创建腾讯云令牌或新增密码中心凭据。
 
-已准备的无人值守方案在 `.github/workflows/edgeone-live.yml`，**尚未集成到 main 或完成自动部署实测**。它使用 GitHub 工作流自带的仓库写入权限，通过 Git API 将当前 main 的 `edge/edgeone` 文件树直接复用为同仓库 `edgeone-live` 分支的根文件树；不 checkout 全仓库，不需要腾讯云令牌。首个提交没有父提交，后续提交只接续该部署分支自身历史，普通快进更新，不把 main 的全站历史带入部署分支。
+工作流使用 GitHub 自带的仓库写入权限，通过 Git API 将当前 main 的 `edge/edgeone` 文件树直接复用为同仓库 `edgeone-live` 分支的根文件树；不 checkout 全仓库，不需要腾讯云令牌。首个提交没有父提交，后续提交只接续该部署分支自身历史，普通快进更新，不把 main 的全站历史带入部署分支。main 始终是函数源码的编辑入口，`edgeone-live` 是工作流生成的部署结果，不在上面手工维护另一份源码。
 
-每次 main 推送都会运行该工作流，但函数文件树相同时不生成新提交，也不触发部署分支更新；这项过滤在 GitHub 工作流中完成，不是已经核实的 EdgeOne 路径过滤。手动运行并传 `redeploy=true` 时，同一函数树也会生成新部署提交。集成后的命令为：
+每次 main 推送都会运行该工作流，但函数文件树相同时不生成新提交，也不触发部署分支更新；这项过滤在 GitHub 工作流中完成，不是 EdgeOne 路径过滤。日常部署只需把函数改动推送到 main；需要强制重部署时执行：
 
 ```powershell
 gh workflow run edgeone-live.yml --repo wlyaaaaa/wly0829.cn --ref main -f redeploy=true
 ```
 
-接线顺序是：先把工作流集成到 main，由它实际创建 `edgeone-live`；确认该分支存在及函数文件树正确后，才将同一 EdgeOne 项目的生产分支改为 `edgeone-live`、根目录改为 `.`，保持已有域名和其他构建设置。当前部署分支尚不存在，因此线上生产分支仍为 `main`。分支切换及第一次成功部署完成后，还需实测一次不操作浏览器的工作流运行，并确认 EdgeOne 自动触发、部署成功及公网回读通过，才能宣布“以后无需登录即可部署”。
+`redeploy=true` 即使函数文件树不变，也会创建新的部署提交，触发 EdgeOne 自动发布。工作流每次读取当前 main，排队的旧事件不会把部署分支退回旧源码。上述命令沿用已配置的 GitHub CLI 身份，不调用浏览器登录。
 
-每次发布保留 main 源码提交、函数文件树 SHA、部署分支提交、工作流结果与 EdgeOne 部署 ID；平台显示成功后，再对公网主入口执行现行 live 验收，确认精简视图和实际转发行为。失败不能计作发布成功，也不能用旧成功部署的响应冒充本次 Git 部署验收。当前命名阻塞为 `dpvondepzdi5` 的克隆阶段失败，替代分支路线尚未解除这一实测缺口。
+每次发布保留 main 源码提交、函数文件树 SHA、部署分支提交、工作流结果与 EdgeOne 部署 ID；平台显示成功后，再对 `https://live.wly0829.cn/computer-access/state?view=cockpit` 执行现行 live 验收，确认 `pcconfig.cockpit-view.v1` 精简视图和实际转发行为。响应大小随当前数据变化，不用固定字节数判定成功。工作流成功只说明部署分支已更新，不能代替 EdgeOne 成功记录及公网回读；失败也不能用旧成功部署的响应冒充本次发布通过。
 
-生产自动部署复选框由平台默认开启且不可操作，不能写成可自行关闭的停用开关。控制台可以选择 Git 分支发起新部署，但当前 main 克隆失败仍未解决；解除 Git 关联后能否恢复上传或 CLI 路线未验证，状态为 `Unknown`，历史 ZIP 成功记录仅是恢复依据。现有项目已实际完成 Git 关联，因此[官方直接上传说明](https://pages.edgeone.ai/document/direct-upload)中“不能切换 Git”的旧说法不再代表这个项目的当前设置；也不能据此保证所有旧项目均支持迁移。[官方 CLI 文档](https://pages.edgeone.ai/document/edgeone-cli)将本地部署到现有项目限定为直接上传类型，不能把它写作当前 Git 项目的现成恢复命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
+暂停自动入口使用 GitHub 工作流的[停用命令](https://cli.github.com/manual/gh_workflow_disable)，恢复使用[启用命令](https://cli.github.com/manual/gh_workflow_enable)；本次未执行这两个操作：
+
+```powershell
+# 暂停：停止 main 推送后生成新的 EdgeOne 部署提交。
+gh workflow disable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
+# 恢复：启用后，执行上面的 redeploy 命令发布当前 main。
+gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
+```
+
+停用工作流不会撤回线上部署或关闭 live 服务，期间 main 的函数改动不会自动上线；恢复后显式重部署当前 main，避免遗漏停用期间的改动。EdgeOne 的生产自动部署复选框由平台默认开启且不可操作，因此停止入口在 GitHub 工作流一侧。
+
+保留的历史边界：直接把生产分支设为 main、根目录设为 `edge/edgeone` 时，首次 Git 部署 `dpvondepzdi5` 已接收 `2.23 GiB`，随后出现 3926 条 `unable to write file` 和 `checkout failed`，未进入安装或构建。平台笼统概括为 Git 403，准确原因 `Unknown`；不能把它报告为权限原因。当前小分支路线已完成成功部署，不再依赖这条失败路线。
+
+此前手动上传部署 `dpyqa3wa7o0h` 于 02:42:38 成功，来源为 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录，ZIP 根下只有 `edge-functions/[[path]].js`，未添加 `index.html`、`package.json` 或 `edgeone.json`。这条记录保留为历史恢复证据；解除 Git 关联后能否恢复上传或 CLI 路线仍为 `Unknown`，不将旧上传办法当作当前 Git 项目的现成恢复命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
 
 ## 扫描做什么
 
@@ -63,6 +77,14 @@ gh workflow run edgeone-live.yml --repo wlyaaaaa/wly0829.cn --ref main -f redepl
 扫描器沿用 `rescue-sweep.py` 和 `rescue-sweep-dom.js` 的文字范围、可见性、滚动、哈希和截图方法。四个独立无头 Chrome 并行检查 1920×1080、3840×2160，设备像素比为 1。它启动任务自己的本机静态服务，按最终清单把尚未上传的新 OSS 地址映射到 dist 中的确切资源字节；旧继承资源和实时只读数据继续以公网一致的 Origin/Referer 请求，写请求不转发。预览仅在内存里把 URL 换成本机代理地址，磁盘成品不变。临时浏览器配置位于任务输出目录，用完释放，不读取本人的 Chrome 登录资料。
 
 每页先等 load、字体及当前图片，网络静默一秒；从顶部滚到页底触发懒加载，等待图片和网络稳定，再回到顶部检查。超时或检查器异常是 `scan_error`，不会得到通过结论。不录屏、不判断动效或打开过程；这些仍由本人验收。
+
+本机预览用 HTTP/1.1 保持连接，减少每张资源另建本机连接的开销；滚完后把整页可显示、已有 `src` 的图片设为 eager 并等待完成，再执行整页坏图检查，避免只等当前视口却检查整页。隐藏图片和页面左右范围之外的图片不被强制加载；缺少地址、真实坏图和仍残留的加载占位继续报错。浏览器关闭页面或取消请求导致的断开单独记入 `proxy_disconnects`，记录资源、断开位置和 Windows 错误码，不输出服务线程异常栈，也不把已经成功送出的响应算成上游失败。
+
+扫描依赖 Playwright、Pillow 和 urllib3。转发 GET/HEAD 使用 urllib3 连接池，每个上游最多同时使用 4 条连接，取连接最多等 8 秒；每次连接超时 3 秒、读取超时 5 秒、总超时配置 8 秒。建连和完整正文读取的传输异常最多重试两次，浏览器只接收最终结果；真实 HTTP 错误和内容哈希错误不重试成成功。已映射的本地 OSS 对象继续优先读取成品原字节，并核清单 SHA256。
+
+仅不可变的 OSS `releases/` GET 对象可缓存；按对象地址、清单内容 SHA256（如有）及 Range 分键，回读核 SHA256，损坏则重新取数，完整对象另核清单哈希。不同地址不借用同一哈希的缓存，以免盖住错地址的真实 404。缓存放在扫描输出的 `oss-cache`，复用同一输出目录可复用缓存；若输出在 dist 或源码仓库内，缓存改放系统临时目录的 `wly-scan-glance`，不进入成品或仓库。缓存和元数据先写临时文件再原子替换，实时接口不缓存。扫描结果的 `proxy_stats` 与 `proxy_requests` 保留本地取数、缓存命中、上游请求、重试和最终错误证据。
+
+图片、关联空图框或加载占位未完成时，只在其每个相关图片都有明确传输失败证据时改记 `transport`。转发重试耗尽与浏览器限定网络错误沿用一次整页重扫，保留首轮 `attempts`；整页混有真失败就不自动重扫。404、哈希不符、HTTP 200 但无法解码的坏图、缺地址或没有对应请求证据的空框仍是真失败，不能因为另一张图超时就通过。
 
 六类失败是大块空白、文字压叠、文字被裁、空图框、请求或站内链接与锚点错误、可见按钮或链接点不动。屏幕像素阈值与叠放白名单集中在 `scan_glance.json`。栏底空白仍须超过 200 像素；用本人截图校准后，行高比例从 25% 调为 20%，使“手机上也能用”屏实际 218.8 像素、20.54% 的空白被检出，屏内竖带仍须超过视口高度 40%。原普查另外七类保留为提示：屏外或透明文字、占位词与坏字、重复标题、重复卡片、重复大图、横向越界、日期说法。
 
