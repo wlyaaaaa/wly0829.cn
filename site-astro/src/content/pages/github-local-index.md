@@ -776,7 +776,7 @@
  "source": {
   "page": "sources/pages/github-local-index/page.json",
   "sha256": "2f9595ff87efe1923f47e3d4e0176277a74c1053ff0594c0894018c86d664b94",
-  "converted_at_beijing": "2026-10-11T13:59:14+08:00"
+  "converted_at_beijing": "2026-10-11T15:13:59+08:00"
  }
 }
 ---
@@ -1381,6 +1381,10 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "现在多出2个仓库还没进看板"
     }
    ],
    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
@@ -1438,6 +1442,10 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
       "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
       "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ]
+    },
+    {
+     "type": "prose",
+     "text_ref": "现在多出2个仓库还没进看板"
     }
    ],
    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",

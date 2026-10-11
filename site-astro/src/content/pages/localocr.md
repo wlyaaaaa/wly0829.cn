@@ -633,7 +633,7 @@
  "source": {
   "page": "sources/pages/localocr/page.json",
   "sha256": "2b57fdec7c708dca6f76a9d8255aad1ef8dd719b565670c4e59adcab4dea392b",
-  "converted_at_beijing": "2026-10-11T14:01:00+08:00"
+  "converted_at_beijing": "2026-10-11T15:13:59+08:00"
  }
 }
 ---
@@ -2544,6 +2544,10 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
     },
     {
      "type": "prose",
+     "text_ref": "此刻服务没在监听"
+    },
+    {
+     "type": "prose",
      "text_ref": "代码：6,903行程序（Python、PowerShel"
     }
    ],
@@ -2578,6 +2582,10 @@ AI 自己也能看图，说个大意没问题；可要一字不差抄下扫描�
      "row": "runtime",
      "width": "60%",
      "text_ref": "为什么在Linux里跑这台电脑是RTX5090D（新一代"
+    },
+    {
+     "type": "prose",
+     "text_ref": "此刻服务没在监听"
     },
     {
      "type": "prose",

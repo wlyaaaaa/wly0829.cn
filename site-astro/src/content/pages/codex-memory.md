@@ -594,7 +594,7 @@
  "source": {
   "page": "sources/pages/codex-memory/page.json",
   "sha256": "b1a39b0568a9035f9d33b8ce756d4a4846ea311a5784ef24aacd73a22db2cc65",
-  "converted_at_beijing": "2026-10-11T13:59:59+08:00"
+  "converted_at_beijing": "2026-10-11T15:13:58+08:00"
  }
 }
 ---
@@ -2167,6 +2167,10 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
      "width": "40%"
     },
     {
+     "type": "prose",
+     "text_ref": "杀毒软件挡住了个别文件"
+    },
+    {
      "type": "notice",
      "text_ref": "怎么知道出事：驾驶舱上，最近一次没成功就亮黄灯，36小时都没成功就亮红灯；电脑配置与恢复每天14"
     }
@@ -2199,6 +2203,10 @@ AI 看回执、只读核对最新那份，只报数量和结果，不读对话�
       "_library/icons/门.png"
      ],
      "text_ref": "G盘没接、锁着或不是那块盘先认盘：盘名、盘的身份编号、BitLocker已加密且已解锁，有一样不"
+    },
+    {
+     "type": "prose",
+     "text_ref": "杀毒软件挡住了个别文件"
     },
     {
      "type": "notice",

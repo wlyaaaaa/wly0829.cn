@@ -875,6 +875,10 @@
         ]
       },
       {
+        "type": "prose",
+        "text_ref": "两个30天不是一回事"
+      },
+      {
         "type": "notice",
         "text_ref": "它和理解库"
       }
