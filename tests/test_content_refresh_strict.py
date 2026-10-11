@@ -21,7 +21,7 @@ class StrictTests(unittest.TestCase):
         self.write_page()
         self.number = {"id": "count", "page": "demo", "screen": "demo-01", "label": "材料数",
                        "field": "screens[0].text", "page_pattern": r"\*\*(3) 件",
-                       "source_location": "合成测试", "automatic": True, "scope_status": "verified",
+                       "source_location": "合成测试", "current_value": 3, "automatic": True, "scope_status": "verified",
                        "retrieve": {"kind": "json", "path": "fixture.json", "pointer": ["count"]}}
         self.cutoff = dict(self.number, id="date", page_pattern=r"截至 (2026 年 10 月 1 日)",
                            qualifies=["count"])
@@ -74,6 +74,15 @@ class StrictTests(unittest.TestCase):
         inventory, findings = self.check([self.number, self.cutoff])
         self.assertEqual(findings, [])
         self.assertEqual((inventory["coverage"]["required_items"], inventory["coverage"]["automatic_ratio"]), (2, 1.0))
+        cases = [("核对" + self.text.splitlines()[-1], None, [dict(self.cutoff, qualifies=None, retrieve={"kind": "manual"})], True), (self.text.splitlines()[-1], "owner", [], True), ("材料数量：165\n\n数量截至2026-10-01", "owner", [], False),
+                 (self.text, "owner", [], False), ("核对" + self.text.splitlines()[-1], "owner", [dict({k: v for k, v in self.number.items() if k != "current_value"}, screen="demo-02", field="screens[1].text"), self.cutoff], False), ("核对" + self.text.splitlines()[-1], "owner", [dict(self.cutoff, qualifies=["missing"])], False)]
+        for text, parent, records, stamp in cases:
+            self.page.update(parent=parent, screens=[{"id": "demo-01", "text": text}, {"id": "demo-02", "text": "**3 件**"}])
+            self.write_page()
+            inventory, findings = self.check(records)
+            self.assertEqual((len(inventory["review_stamps"]), bool(findings)), (int(stamp), not stamp and (not records or any("missing" in r.get("qualifies", []) for r in records))))
+            self.assertEqual(("## 核对戳" in fact_tasks(inventory), [s["source_kind"] for s in inventory["review_stamps"]]), (stamp, ["as_of"] if stamp else []))
+            self.assertEqual((next(i["requires_refresh"] for i in inventory["items"] if i["kind"] in {"as_of", "review_stamp"}), inventory["coverage"]["required_items"] == 0), (not stamp, stamp))
 
     def test_exact_historical_binding_exempts_only_its_display(self):
         for flag in ("historical", "frozen"):
