@@ -471,7 +471,11 @@
     "/projects/devconfig-backup/recovery-and-tasks/",
     "/projects/devconfig-backup/source-catalog/",
     "/projects/devconfig-backup/tiered-distribution/",
-    "/projects/devconfig-backup/wechat-native-backup/"
+    "/projects/devconfig-backup/wechat-native-backup/",
+    "/projects/emerald-veil/native-bubbles-idle-overlay/",
+    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
+    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
+    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

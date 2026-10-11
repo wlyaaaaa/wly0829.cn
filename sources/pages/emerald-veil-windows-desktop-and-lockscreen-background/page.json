@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "emerald-veil-windows-desktop-and-lockscreen-background",
+  "kind": "project",
+  "title": "桌面与锁屏图片恢复",
+  "url": "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
+  "parent": "emerald-veil",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:32–13:33 的只读 Verify（接口报错，未完成）；雨林黑猫壁纸、原图留底、手机壁纸留底在用，只检查不改说不准，换机装回待验收",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-01",
+      "section": "top",
+      "title": "桌面与锁屏图片恢复",
+      "text": "# 桌面与锁屏图片恢复\n\n〔回到项目 → 屏保与壁纸〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nEmerald Veil · 功能说明\n\n图片和恢复入口放在一起，新电脑不必重新找图、猜颜色参数或依赖原来的用户名与盘符。\n\n当前情况：北京时间 10 月 11 日的只读检查在读取各屏图片时被 Windows 接口报错打断，桌面和锁屏现在是否都用着选定图片暂未确认；锁屏实际裁剪、显示效果与新电脑恢复仍需对应画面确认。\n\n项目快照核对于 2026-10-11（北京时间）：运行结果来自 13:32–13:38 的只读检查，源码版本核对于 13:42；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 屏保与壁纸",
+          "href": "/projects/emerald-veil/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/emerald-veil"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/emerald-veil/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n只把图片路径指向开发或临时目录，后续搬家容易失效；桌面和锁屏又是两处独立设置。脚本保存已选图、明确分别设置与核对结果，避免看到一处正确就以为两处都好了。\n\n## 举个实际例子\n\n“把已选好的图设为这台电脑的桌面和锁屏背景，保留现在的设置方便恢复。”工具先保存原设置，处理本人选定的目标，再核对 Windows 是否接受；最后还要看实际桌面和锁屏的裁剪效果，不能只凭设置写入成功就说画面已经合适。\n\n## 最后我会得到什么\n\n分别告诉你桌面和锁屏是否已使用选定图片，哪一处仍有差异或报错。原设置记录保留，必要时可恢复；实际锁屏的裁剪与观感仍要打开画面检查。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只把图片路径指向开发或临时目录，后续搬家容易失效；桌面和锁屏又是两处独立设置。脚本保存已选图、明确分别设置与核对结果，避免看到一处正确就以为两处都好了。 ## 举个实际例子 “把已"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只把图片路径指向开发或临时目录，后续搬家容易失效；桌面和锁屏又是两处独立设置。脚本保存已选图、明确分别设置与核对结果，避免看到一处正确就以为两处都好了。 ## 举个实际例子 “把已"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只把图片路径指向开发或临时目录，后续搬家容易失效；桌面和锁屏又是两处独立设置。脚本保存已选图、明确分别设置与核对结果，避免看到一处正确就以为两处都好了。 ## 举个实际例子 “把已"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常工作\n\n各屏幕和锁屏都已引用正确图片时，重复操作不会再改一次。\n\n## 发现问题\n\nWindows个性化设置或其他软件改变了图片、显示模式时，检查会指出差异；本人选择恢复后再重新设置。\n\n## 暂不可用\n\n图片缺失、内容不符或Windows接口不可用时保留错误与原设置，不生成替代图，也不锁定电脑。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n先按选图清单确认图片，运行 scripts/Set-WindowsBackground.ps1 -Action Verify 查看现状；要应用时显式使用 -Action Apply。\n\n## 需要准备什么\n\n- 想使用项目里的哪张图片\n\n- 只检查还是应用到桌面或锁屏\n\n- 需要时是否恢复原图\n\n## 从开始到拿到结果\n\n1. **先确认选定图片和现状**　工具核对图片有没有变化，并分别查看当前桌面与锁屏；只检查时不改设置。\n\n2. **明确应用才修改**　先留下原设置，再把图片放在持久位置，只更新有差异的桌面或锁屏。\n\n3. **回看两处画面**　分别核对结果；想换回原图时按保存记录在 Windows 设置中选择。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日读回核对未完成（接口报错），当前状态未确认\n\n### 关键规则与设计选择\n\n1. 只恢复图片无需安装泡泡或.NET SDK，64位Windows自带PowerShell即可。\n\n2. 恢复新机器使用项目原图；原电脑的before-first-apply记录只用于撤回原电脑，不是新机器的设置来源。\n\n3. 脚本不会在后台争抢。以后主动打开Wallpaper Engine的覆盖系统壁纸/锁屏选项可能再改原生图片，需要时按需重跑。\n\n## 当前怎样实现\n\n- 读取assets/windows-background.json核对PNG的SHA-256；PowerShell 7或32位宿主转到64位Windows PowerShell，使用系统现成WinRT投影。\n\n- 桌面统一通过IDesktopWallpaper设置和读取共同底图，清除每屏旧图并核对当前及Windows记忆中的离线显示器；逐屏设置后再次设共同路径，避免单屏覆盖清空共同引用。不再把冗余SystemParametersInfoW设置作为前置条件。desktop.monitors逐项报告连接状态、图片引用与matches；锁屏使用Windows.System.UserProfile.LockScreen.SetImageFileAsync。它不更改显示器连接、编号或排列。\n\n- 三个每用户选择器BackgroundType、RotatingLockScreenEnabled、SlideshowEnabled都明确设为DWORD 0，以采用固定图片。\n\n- 首次应用前保存原桌面图（可读取时）、每屏选图、原锁屏图与选择器状态；已有记录仅补入尚未采集的每屏设置，不覆盖原恢复信息。临时写入再移动前像文件，图片引用必须在持久目录且源哈希匹配。\n\n- 锁屏图像检查宽高比（允许相差0.01）后缩为128×72比较RGB均值，容差为3；9 月记录的实际平均误差为0，10 月 11 日没有取得完整读回，当前值未确认。只有确有漂移才用带哈希前缀和新GUID的文件名重设，避开缓存旧图。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日读回核对未完成（接口报错），当前状态未确认 ### 关键规则与设计选择 1. 只恢复图片无需安装泡泡或.NET SDK，64位Window"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日读回核对未完成（接口报错），当前状态未确认 ### 关键规则与设计选择 1. 只恢复图片无需安装泡泡或.NET SDK，64位Window"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日读回核对未完成（接口报错），当前状态未确认 ### 关键规则与设计选择 1. 只恢复图片无需安装泡泡或.NET SDK，64位Window"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 执行流程\n\n1. 读取选图与清单，先验证原图哈希。\n\n2. 读取两处图片、固定模式及锁屏解码画面。\n\n3. Apply（应用图片）且有漂移时保存原始记录，补正确模式，复制并校验新持久副本。\n\n4. 分别修改需要变化的桌面或锁屏，再完整回读；Verify只执行读取。\n\n5. 打印结果和changedSurfaces；不符合返回1，系统错误直接报告。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 雨林黑猫 · 更绿版 | 已选用的3840×2160电脑底图，由1672×941生成原图放大；是sRGB SDR，不宣称恢复了未知细节、HDR或10位输出。 |\n| 持久图片副本 | Windows显示文件复制到用户图片目录的EmeraldVeil子目录；前像与原图备份仍在%LOCALAPPDATA%\\EmeraldVeil\\windows-background。Windows引用持久图片而非项目目录。 |\n| 解码后比较 | Windows可能重新编码锁屏缓存，脚本比较画面而非只比缓存文件字节，避免编码变化被误判为换图。 |\n\n## 专业定义\n\n恢复雨林黑猫4K底图，各显示器和锁屏逐项核对，并保留原有图片记录；仓库另外逐字节存着一份手机壁纸，换手机时直接取回。\n\n解决什么\n\n接口设置可能只成功一部分；脚本不是桌面与锁屏的原子事务。出现系统错误应按具体失败位置核对，保留已保存的原图记录后再处理。10 月 11 日那次只读检查就停在读取各屏图片这一步，暂时分不清是脚本问题还是当时的显示环境。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n接口设置可能只成功一部分；脚本不是桌面与锁屏的原子事务。出现系统错误应按具体失败位置核对，保留已保存的原图记录后再处理。\n\n## 边界\n\n- 仅需保留脚本、选图清单、PNG三个文件即可进行静态恢复；不依赖原机路径或Wallpaper Engine。\n\n- 不更改Wallpaper Engine，不启停泡泡，不锁定电脑，也不增加自启、服务或任务。\n\n- 原状态记录不是自动Restore命令；原壁纸与锁屏通过Windows设置按记录选回。\n\n## 失败与恢复\n\n- **图像、固定模式或持久引用发生漂移**：Verify返回drift/1，不自动改图；Apply（应用图片）会按需要重设对应表面。\n\n- **锁屏缓存只是重新编码**：通过解码画面容差比较判断，不因为缓存字节不同直接判失败。\n\n- **磁盘写入或系统API失败**：报出实际错误；已成功的选择器或桌面修改可能保留，不能称整次自动回滚。原图记录仍用于核对和手动恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-windows-desktop-and-lockscreen-background-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `docs/windows-background.md`恢复、换机、原图和现有应用边界。\n\n- `scripts/Set-WindowsBackground.ps1`真实设置与只读回读实现。\n\n- `assets/windows-background.json / assets/verdant-rain-4k.png`选图、参数与完整静帧。\n\n## 如何验证\n\n- 北京时间10月11日13:32–13:33的只读Verify在读取各屏图片（MonitorPaths）时返回COM E_FAIL（Windows接口报错），没有拿到完整的桌面和锁屏结果，当前状态未确认。9 月那版页面记录的Verify为verified、desktop/lockScreen均true、锁屏平均像素差0，只代表当时。\n\n- 图片文件本身按源码主线 861a2d2 里的受管文件核对：电脑底图PNG 3840×2160、17,141,593字节、SHA-256 FA8D1FDC7799D537864D2784B5718E8BA15B77775D246C019179084B0F0239E7；手机壁纸备份 assets/mobile-wallpaper/emerald-elf-1440x3200.png 为1440×3200 sRGB PNG、12,114,553字节、SHA-256 F87BDB1CFF2F8885FC80EF02A0EDFF0EFF2C18E76A63AF63EDCA1E1D60C42EED，按约定不转格式、不重新编码。文件对得上不代表屏幕上正在用它，手机上现在用的是哪张也没有核对。\n\n- 跨机操作与真实锁屏目视需分别做，本轮未重做；不能用接口结果推定观感完全一致。\n\n## 与其他模块的关系\n\n只管理Windows原生静态图片。Wallpaper Engine可继续显示自己的动画，泡泡专属背景不从此入口加载。",
+      "links": [
+        {
+          "text": "下一个模块 空闲泡泡",
+          "href": "/projects/emerald-veil/native-bubbles-idle-overlay/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
