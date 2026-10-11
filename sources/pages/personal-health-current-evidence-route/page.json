@@ -1,0 +1,151 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-health-current-evidence-route",
+  "kind": "project",
+  "title": "平时提问，先用已经整理好的当前信息",
+  "url": "/projects/personal-health/current-evidence-route/",
+  "parent": "personal-health",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "项目规则与 personal-health 技能 10 月 11 日只读核对，源码最后变更 10 月 7 日；网页未读取任何健康正文"
+  },
+  "screens": [
+    {
+      "id": "personal-health-current-evidence-route-01",
+      "section": "top",
+      "title": "平时提问，先用已经整理好的当前信息",
+      "text": "# 平时提问，先用已经整理好的当前信息\n\n〔回到项目 → 个人健康〕　〔复制 AI 续作说明〕\n\n个人健康证据与安全决策 · 功能说明\n\n不用每次健康提问都重新扫描报告、历史项目和材料库，也不会让旧资料因为数量多就抢答当前问题。\n\n**当前情况：**这条回答路线在用：先完整读一遍整理好的当前依据，够用就直接给判断和一个省事的下一步，确实缺关键证据才回到一份原件（10 月 11 日核对规则和技能）。本页没有读取任何个人健康内容，不能代替一次实际健康咨询。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人健康",
+          "href": "/projects/personal-health/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-health/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n原始报告、本人陈述、医生结论和模型解释有不同证据强度。若每次都把它们重新混在一起，旧报告可能被当成现在，模型建议也可能被误写成报告结论。\n\n## 举个实际例子\n\n我问“现有材料够不够判断这件事？”AI 先把整理好的当前依据完整读一遍，够用就直接回答；只有出现新报告、事实纠正、来源打架，或确实少了一项会改变答案的证据，才去打开那一份最相关的原件。\n\n## 最后我会得到什么\n\n先得到判断和一个负担小的下一步；已经知道的事不再重复问我，只有缺的那件事真会改变结论时才问一个最小的问题。我的一般背景在会影响答案时从个人理解库取；有依据的新认识写回那里并回读确认，不整份复制病历或设备数据。缺少当前证据时明确保留未知。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n直接描述当前健康问题，先用已整理的当前依据回答。\n\n## 需要准备什么\n\n- 当前健康问题\n\n- 新的本人描述或更正（如有）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先完整读一遍整理好的当前依据，够用就直接答；只有缺少会改变判断的细节，才回到一份报告或某日设备字段核对。\n\n2. **交付与接续**　交回判断、依据、未知和一个下一步；旧材料多不代表比当前更可信，来源冲突先标明。资料锁着时只说明这次没能结合个人资料，不拿旧摘要凑。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对**　项目规则与 personal-health 技能仍固定这条路线；源码最后变更 10 月 7 日。网页未读取任何当前依据正文或个人事实。\n\n## 关键规则与设计选择\n\n1. 普通健康问题完整读一次整理好的当前依据，够用就直接回答，不再翻来源清单、原件、旧项目或记忆。\n\n2. 报告实测、医生或报告结论、本人陈述、模型解释与未知分开。\n\n3. 旧报告不能回答现在怎样，未测也不等于阴性。\n\n4. 来源维护只打开会改变答案的最小原件和字段；原件位置失效时才借个人材料查找。\n\n5. 处理后局部更新，不复制报告正文或另建事件库；一般背景和纠正走个人理解库，写回后回读。\n\n## 当前怎样实现\n\n- personal-health 技能把普通回答、来源维护和注册设备刷新分成独立触发。\n\n- CURRENT.md 作为整理好的当前依据，普通回答完整读取它，够用就不再打开 SOURCES.md。\n\n- 只有新报告、纠正、来源冲突、完整性存疑或答案关键的来源缺口才进入维护。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- Health Owner（健康资料责任方）只修改 CURRENT.md 中受影响段落和对应来源记录。\n\n- 原始报告留在健康原件目录，不复制进 Git 或网页。\n\n## 执行流程\n\n1. 明确当前健康问题和是否存在急症红旗。\n\n2. 完整读取当前依据。\n\n3. 区分已测事实、结论、本人陈述、解释与未知。\n\n4. 够用就给判断和一个下一步；会改变结论的事实缺了才问一个最小问题。\n\n5. 必要时只读最小来源并解决冲突。\n\n6. 局部更新受影响事实，后续直接复用处理结果。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 现行健康底色 | 处理过、可直接用于普通回答的当前事实集合，不是原始资料库。 |\n| 来源维护触发 | 新报告、纠正、冲突、审计、完整性问题或答案关键缺口。 |\n| 明确未知 | 当前没有足够事实；不会被旧报告、空记录或模型猜测填满。 |\n| 最小原件读取 | 只打开会改变当前答案的那份来源、页面和字段。 |\n\n## 专业定义\n\n同一份资料只处理一次；只有新报告、事实纠正、来源冲突或会改变答案的缺口，才重新打开最小相关来源。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决每次提问都翻全量原件、旧证据覆盖当前状态、证据类型互相冒充、重复追问已知事实和健康资料越积越重。\n\n## 边界\n\n- 网页不读取或公开 CURRENT.md、SOURCES.md 与任何健康原件正文。\n\n- 普通回答不使用 Codex 记忆、旧健康项目或中央知识库。\n\n- 高风险问题核验当前权威医学指导，但不自动诊断或处方。\n\n- 具体健康事实未知时保持未知，不用旧报告补猜；资料锁着时停止依赖个人资料的回答，不降级凑答。\n\n## 失败与恢复\n\n- **当前依据缺少答案关键事实**：只问一个低负担、高价值问题，或进入最小来源复核。\n\n- **新旧来源冲突**：分开记录时间、来源和结论，解决后只更新受影响段落。\n\n- **原件路径失效**：仅此时使用个人材料定位入口找回并核对，不扫描中央库。\n\n- **旧报告无法证明当前状态**：保留 Unknown（未验证），不把历史值外推到现在。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-current-evidence-route-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `AGENTS.md`普通回答、来源维护、高风险问题和低打扰原则的项目合同\n\n- 个人健康问题和维护触发的唯一能力入口\n\n- `CURRENT.md`处理后的现行健康底色；公开页只引用角色，不读取内容\n\n- `SOURCES.md`来源定位与已处理范围；公开页不复制其路径、哈希或健康事实\n\n## 如何验证\n\n- 项目 AGENTS 和 personal-health Skill 同时要求普通回答只读现行底色\n\n- Source audit 本轮未读取 CURRENT.md、原始健康报告或 Codex 记忆\n\n- 网页内容测试阻断任何健康数值、诊断、药物、个体建议和凭据进入 PUBLIC（公开）\n\n## 与其他模块的关系\n\n它定义整个项目从哪里开始；设备刷新和离线摘要只有产生新的合格证据后，才可能回到这条现行底色路线。",
+      "links": [
+        {
+          "text": "下一个模块 主动更新设备",
+          "href": "/projects/personal-health/protected-foreground-refresh/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

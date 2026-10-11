@@ -1,0 +1,215 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-health-offline-decision-brief",
+  "kind": "project",
+  "title": "先检查数据是否完整，再只取与问题有关的部分",
+  "url": "/projects/personal-health/offline-decision-brief/",
+  "parent": "personal-health",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码最后变更 10 月 7 日，10 月 11 日只读核对；真实采集链已有完成记录，本次未打开任何简报健康内容"
+  },
+  "screens": [
+    {
+      "id": "personal-health-offline-decision-brief-01",
+      "section": "top",
+      "title": "先检查数据是否完整，再只取与问题有关的部分",
+      "text": "# 先检查数据是否完整，再只取与问题有关的部分\n\n〔回到项目 → 个人健康〕　〔复制 AI 续作说明〕\n\n个人健康证据与安全决策 · 功能说明\n\n保全数据与采用数据是两件事。这次只联网补了新日期，也能继续比较已经保存的完整历史，长期趋势不会缩成最近一次下载。默认摘要比较最近14/28/90天；我指定完整中国日起止范围时，就离线统计这一段并判断其覆盖和质量。只查某一天是否保存记录，也可沿相应原件窄查，不必重新同步全部设备数据。\n\n**当前情况：**这条离线核对和简报链已经在真实数据上跑过：每次成功的刷新都要先做完离线核对和简报才算完成，已有 13 份完成的采集清单，最近一次 10 月 7 日。本页没有打开任何简报的健康内容，也不知道健康项目实际采用了哪份结果。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人健康",
+          "href": "/projects/personal-health/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-health/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n设备 API 能读的字段很多。若把高频心率、位置、营养目录、空日志和估算噪声全部常驻，不仅扩大私人数据面，也会让低质量信号压过真正相关证据。\n\n## 举个实际例子\n\n我问“上周三的步数有没有保存？不用重新同步。”系统只在已经完成的那份导出里查这一天，告诉我找到几条、覆盖到什么时间；没找到只代表这份记录里没有，不能顺手说成那天一步都没走。\n\n## 最后我会得到什么\n\n得到所选日期里睡眠、步数、活动或已记录运动的变化、覆盖和缺口，知道每项记录目前能不能用于眼前问题。只问某一天时只读那天已保存的字段；查到记录不等于能作医学判断。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可用于当前判断\n\n所选日期和字段的来源、完整性与质量都过关时，才交健康项目负责人用于当前问题；单日查询只说明这一天保存了什么。\n\n## 需要复核\n\n重叠、缺页或覆盖不足会明确列出。某日没查到记录不等于真实数值为零，也不重新下载整段历史。\n\n## 本轮不可用\n\n选中的导出或文件无法核对时，先停在证据层，不根据残缺摘要解释身体状况。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n问近两周变化，或明确指定已采集的完整中国日期范围。\n\n## 需要准备什么\n\n- 要比较的睡眠、步数或活动等问题\n\n- 想看的日期范围（如指定）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先离线核对原始页与覆盖，再按所选范围汇总相关字段；指定长范围就按该范围自身的质量判断。\n\n2. **交付与接续**　交回变化、缺记录和可用性；保存了数据不等于这一字段足以支持健康结论。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对**　采集结果和简报仍不走网络和凭据；新版加入：核对回执可合法重签后完整重验、迁到别的磁盘不误判为数据被改、读取预算按每份采集分别计算、库存计数注明只覆盖本次网络窗口、完整日期上界按采集开始那天算。算法版本由 7 升到 9，简报格式仍是 v4，离线验真格式仍是 v3。9 月 14 日全套 140 项离线合成测试通过是当时的历史记录；本次没有运行测试，也没有读个人健康数值。\n\n## 关键规则与设计选择\n\n1. 默认判断范围只有睡眠、步数、活动分钟和已记录运动事件。\n\n2. 默认最近 14 天至少 80% 日期有可解释记录是数据覆盖门，不是健康目标；运动事件是否可用也按最近 14 天自己的质量判断，历史上的坏记录不会永久挡住今天；全历史问题仍单独保留。指定日期使用 requested_period 自己的覆盖与 decision_ready。\n\n3. 用户指定范围时使用 brief --start / --through，含首尾且只接受已采集的完整中国日；完整日的上界按采集开始那天算，续跑拖过午夜也不扩大。\n\n4. 质量按字段、日期和可回答的量分别判断；坏记录日期明确就只影响该日，日期不明才保守影响整页对应日期。\n\n5. 已处理成功且时长／区间可信的主睡眠加小睡双标签记录归入 multiple_roles，时长只计一次，不参与主睡眠起止推断；不重复计算、不擅自归类。\n\n6. 比较窗口为 14、28、90 天，并保留长期 90 天块与时间边界。\n\n7. inventory_only 只读清单里的库存，不读取原始内容；计数注明 record_count_scope=this_capture_network_window_only，只代表本次网络窗口，这个窗口里没记录不等于历史上从没记录。\n\n8. 具体日期仍未回答时，用精确清单、一个 --field 与日期离线窄查；不扫描目录、不重新下载。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n9. 日期有两种角色：统计归属按北京时间——睡眠按醒来日，带明确时区的运动按开始日，日步数允许恰好到次日 00:00 的整日区间；历史分段归属按数据提供方给的日历结束日。没有时区的值不猜。\n\n10. query/summary 的默认和硬上限均为 100 页、32 MiB、10,000 条，可按问题缩小，不能靠调大越过上限；这与简报的预算是两套不同限制。\n\n## 当前怎样实现\n\n- capture --latest 读取最多 16 KiB 的固定指针，要求同一采集目录下的规范清单、验证回执与简报，并核对格式、complete 状态和文件 SHA-256；缺失或越界返回 latest_capture_*，不扫描替代目录。验证回执被合法重签时，在同一份清单上完整重验通过才接受，并标出 verification_receipt_reissued=true，不是跳过核验。\n\n- 原件状态承诺升到第 2 版，绑定相对路径、大小和修改时间；旧第 1 版仍兼容。整份采集拷到别的磁盘，不会因为磁盘编号变了被误判成数据变了。简报仍按 SHA-256 绑定，不偷偷改固定指针。\n\n- google_health_capture.py 只读固定成功交接，验证精确清单路径、状态与 SHA-256。\n\n- google_health_brief.py 只选择 DECISION_CONTEXT_FIELDS；256 页、64 MiB、50 万条记录的预算按每份不可变采集分别计算，不让多年增量历史共用一份终身额度，总用量仍汇总列出。\n\n- _verified_history_segments 核对扁平历史段、对应清单哈希和既有验真回执；build_health_brief 从各有效分段选四类低噪声判断字段，按分段边界裁剪日期，排除已由新采集替代的旧当天。query_manifest 同样把字段与日期路由到对应原件。\n\n- 数值和事件字段分别处理真实零、重复、歧义、格式错误、无记录和来源缺失。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- 简报输出 decision_context 与 inventory_only 两个不混用区域，并显式写出 completed_history_counted（旧完整历史是否计入）。\n\n- resource_usage 明确 api_access=false、credential_access=false、full_raw_payloads_scanned=false。\n\n- google_health_import.py 的 query_manifest 按字段与日期相交范围选择页面，核对每页字节与 SHA-256，再按字段专用日期解析记录并去重；清单元数据字节与原始页预算分开计数。\n\n- --query-manifest 返回 records 及 summary；--summary-manifest 调用同一查询但不带记录。summary 包含记录数、无日期资源数、重复数、页数和天数，不计算数值总和与最值。\n\n- 查询结果单列清单指纹、页数、读取字节、记录数、重复数、缺口、是否截断和用时；api_elapsed_seconds 恒为 0，不代表在线账号或设备当前可用。\n\n## 执行流程\n\n1. 读取有界成功交接并解析精确清单。\n\n2. 验证 complete 状态与清单指纹。\n\n3. 生成或加载离线验证回执；回执被重签时完整重验。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-08",
+      "section": "tech",
+      "title": "技术实现与依据（四）",
+      "text": "## 技术实现与依据（四）\n\n4. 核对当前清单与扁平历史分段；从各有效日期段只选择四类判断字段页面，排除已由新采集替代的旧当天。\n\n5. 计算字段质量、近期窗口和不可用原因。\n\n6. 生成判断区、仅库存区和下游使用规则。\n\n7. 本地清单、验证回执与简报闭合并保存后消费交接指针；健康项目随后审阅最小结果并决定是否局部采用。\n\n8. 另有未回答的具体日期问题时，复用已完成的精确清单，以一个字段和日期执行查询或摘要；交回记录与缺口，不启动新的采集。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-09",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| decision_ready（可用于当前判断） | 字段证据质量足以支持一个明确问题，不代表身体正常或临床结论。 |\n| inventory_only（仅清单） | 只知道资料类型存在，不读取正文、不进入判断。 |\n| Coverage gate（覆盖门） | 检查近期可解释日期占比；80% 是数据完整性要求，不是医学阈值。 |\n| Downstream contract（下游使用合同） | 只有相关字段自身 ready、来源 ready 且会改变判断时才能被 Health Owner（健康资料责任源） 采用。 |\n\n## 专业定义\n\n设备能提供很多数据，但当前判断只采用来源清楚、质量足够、确实相关的最小部分；其余只记录存在或暂时不用。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-10",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决“API 能读就全部进模型”、高频／高隐私字段常驻、空日志被解释、摘要读取全库、局部网络计数被当成完整历史、迁盘被当成内容损坏，以及技术覆盖率冒充医学标准。\n\n## 边界\n\n- 不读取高频心率原始数据、GPS/TCX、营养参考和其他仅库存字段的正文。\n\n- 没有记录不证明没有运动、症状或疾病；本次网络窗口没记录也不代表历史为空。\n\n- 80% 覆盖不表示健康，也不是目标分数。\n\n- 简报输出不包含授权文件、令牌、客户端或实时网络状态。\n\n- 普通查询通过不是 decision_ready，也不自动更新 CURRENT.md；字段质量、来源与现实相关性仍由健康项目审阅判断。\n\n## 失败与恢复\n\n- **混合第一方来源无法证明设备家族**：四类默认字段全部 provenance_blocked，只保留库存。\n\n- **选中原始页哈希或分页链变化**：验证过期，简报在读取健康解释前失败；仅是合法重签的回执则完整重验后才接受。\n\n- **字段为空、缺失或格式错误**：列入 blocked_fields，不把缺失转成零或正常。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-11",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **简报选择页／字节／记录预算超限**：返回 health_brief_budget_exceeded，不扩大读取范围。\n\n- **某日查询达到页数、字节或记录上限**：保留已读结果并返回 partial、truncated=true 与对应的预算缺口；缩小字段或日期后再查，不隐去截断。\n\n- **某日查询页面缺失、哈希漂移或记录日期不明**：返回 partial，并分别记录 page_unreadable、manifest_page_hash_mismatch 或 record_date_unavailable；未覆盖日期仍列为缺口，不补猜数值。\n\n- **查询字段不在清单、日期范围非法或预算参数非法**：分别返回 query_field_not_in_manifest、invalid_query_date_range 或 query_budget_invalid；不回退到全字段或在线查询。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-12",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- google_health_capture.py　有界成功交接、离线验证、回执重签重验、简报保存与指针清理\n\n- google_health_brief.py　字段解析、窗口、质量门、仅库存区、库存计数范围和下游规则\n\n- google_health_history.py　扁平历史段身份、连续日期、完整日上界与清单哈希核对\n\n- tests/test_google_health_incremental.py　跨采集历史、旧未完整日替代与离线无重计合成验证\n\n- google_health_import.py · query_manifest / summarize_manifest　精确字段日期查询、独立读取预算、记录／摘要／缺口与零 API 耗时\n\n- tests/test_google_health_capture.py　离线无凭据／网络、错误交接和安全重试回归（现有 7 个测试函数）\n\n- tests/test_google_health_brief.py　来源、哈希、覆盖、字段三态、仅库存区与命令行回归（现有 42 个测试函数）\n\n- tests/test_google_health_import.py · offline query tests　按日期过滤、跨午夜睡眠、重复记录、缺页和预算截断的合成用例",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-offline-decision-brief-13",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n## 如何验证\n\n- capture 测试证明入口没有授权、客户端或联网路线，失败保留成功指针供离线重试。\n\n- brief 测试覆盖混合来源、真实零、空字段、哈希漂移、分页链、覆盖和仅库存区。\n\n- 全项目现有 192 个测试函数、参数展开 213 个用例（10 月 11 日静态计数，本次没有运行）；9 月 14 日 140 项通过是历史记录。\n\n- 本次没有读取任何真实健康数值，也没有生成个人趋势。\n\n## 与其他模块的关系\n\n它消费原始保全模块的完成证据，向证据三态和健康审阅模块提供字段级可用／不可用结果。",
+      "links": [
+        {
+          "text": "上一个模块 中断后继续",
+          "href": "/projects/personal-health/raw-preservation-resume/"
+        },
+        {
+          "text": "下一个模块 证据三态",
+          "href": "/projects/personal-health/evidence-three-state/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

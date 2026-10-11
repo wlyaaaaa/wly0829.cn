@@ -436,7 +436,13 @@
     "/projects/learning/human-control-simple/",
     "/projects/learning/plain-language/",
     "/projects/learning/questions-validation/",
-    "/projects/learning/route-checkpoint/"
+    "/projects/learning/route-checkpoint/",
+    "/projects/personal-health/current-evidence-route/",
+    "/projects/personal-health/evidence-three-state/",
+    "/projects/personal-health/health-owner-boundary/",
+    "/projects/personal-health/offline-decision-brief/",
+    "/projects/personal-health/protected-foreground-refresh/",
+    "/projects/personal-health/raw-preservation-resume/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

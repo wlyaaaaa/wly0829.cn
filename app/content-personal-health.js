@@ -326,7 +326,7 @@ export const personalHealthModules = [
     usageInputs: ["本人明确的这次设备刷新请求", "想看的日期范围（如不同于默认）"],
     productFlow: [{"title": "系统核对并处理", "detail": "只在本次前台通过受保护凭据入口取回 Google Health 数据，凭据不落在普通文件或命令行。"}, {"title": "交付与接续", "detail": "交回本次导出、缺页和后续离线验真状态；连接或授权失败就停，不暗中设后台同步。"}],
     shortTitle: "主动更新设备",
-    title: "只有我明确要求时，才更新一次设备数据",
+    title: "我开口时更新一次，另外每 7 天自动更新一次设备数据",
     searchAliases: ["我想主动更新一次设备数据", "Fitbit一次授权", "健康设备不后台同步", "账号授权失败会不会换账号", "刷新超时会不会留下后台进程", "OAuth不生成token文件"],
     searchProjection: {
       intents: ["本人明确发起一次穿戴设备刷新", "首次完成只读 OAuth 并安全保存长期凭据", "先消费已有离线结果再决定是否访问 provider", "刷新失败时停止而不换账号或后台重试"],
