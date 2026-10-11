@@ -74,7 +74,7 @@ function sort(snap) {
   return { snap, A, now, today, dayStart, tasks, past, future, guards, idle: by('idle'), off: by('off'), fog: by('fog'),
            alerts: tasks.filter(t => t.alert).sort((a, b) => rank(a) - rank(b)), stale: !!snap.reason || ['unknown', 'unavailable', 'stale'].includes(A.state) };
 }
-const whenText = (M, ms) => { if (!(ms > 0)) return ''; const d = dkey(ms) - M.today, b = bj(ms); return (d === 0 ? '今天 ' : d === -1 ? '昨天 ' : d === 1 ? '明天 ' : `${b.getUTCMonth() + 1} 月 ${b.getUTCDate()} 日 `) + hm(ms); };
+const whenText = (M, ms) => { if (!(ms > 0)) return ''; const d = dkey(ms) - M.today, b = bj(ms); return (d === 0 ? '今天 ' : `${b.getUTCMonth() + 1} 月 ${b.getUTCDate()} 日 `) + hm(ms); };
 const STATE = { ok: '正常', bad: '出错了', warn: '要留意', gray: '还不知道' };
 const frequency = (t, once = false) => {
   const s = t.every < 1 ? `每 ${Math.round(t.every * 60)} 秒` : t.every === 1 ? '每分钟' : t.every <= 30 ? `每 ${t.every} 分钟` : '常驻';
@@ -245,17 +245,31 @@ function texts(ranToday, nShore) {
     .map(([c, s]) => `<span><i style="--c:${c}"></i>${s}</span>`).join('') + '<span>没升旗的船：还没到点</span><span>灯：常驻和高频任务（一直开着，或每半小时内就跑一次）</span><span>岸上的船：今天没有安排或已停用</span><span>雾里的船：这次没读到结果</span>';
   const log = $('#log'); log.innerHTML = '<h4>任务清单<small>点一行，看它在做什么、上次和下次、有没有出错、怎么停、停了影响什么</small></h4>';
   const C = { ok: 'var(--ok)', warn: 'var(--warn)', bad: 'var(--bad)', gray: 'var(--gray)' };
-  const group = (key, title, say, list, open, timeOf, colorOf, head) => { if (!list.length) return;
+  // 别的软件自带的任务（Office、浏览器更新这类）折成一行；用途目录没标“你的”就不折
+  const anyMine = M.tasks.some(t => t.raw.plain?.mine === true), other = x => anyMine && (x.t || x).raw?.plain?.mine !== true;
+  const group = (key, title, say, list, open, timeOf, colorOf, head, fold, nameOf = t => t.name) => { if (!list.length) return;
     const d = mk('details', 'group', log); d.id = 'g-' + key; d.open = open;
     d.innerHTML = `<summary><span class="dot" style="--c:${head}"></span>${title}<span class="n">${list.length}</span><span class="say">${say}</span></summary><div class="rows"></div>`;
-    list.forEach(x => { const t = x.t || x, r = mk('details', 'row', d.lastChild);
-      r.innerHTML = `<summary><span class="dot" style="--c:${colorOf(x)}"></span><span class="t">${esc(timeOf(x) || '—')}</span><span class="nm">${esc(t.name)}</span></summary>`;
-      r.addEventListener('toggle', () => { if (r.open && !r.querySelector('.six')) r.insertAdjacentHTML('beforeend', six(M, t).replace(/<h4>.*?<\/h4>/, '')); mark(r.open ? t : null); }); });
+    const folded = fold ? list.filter(fold) : [], bad = folded.filter(x => (x.t || x).alert).length;
+    const box = folded.length ? mk('details', 'row fold', null, `<summary><span class="dot" style="--c:#c3ccc8"></span><span class="t">${folded.length} 个</span><span class="nm">别的软件自带的，${bad ? `其中 ${bad} 个要看` : '都正常'}（点开看）</span></summary><div class="rows"></div>`) : null;
+    list.forEach(x => { const t = x.t || x, inBox = box && folded.includes(x), r = mk(t.raw ? 'details' : 'div', 'row', inBox ? box.lastChild : d.lastChild);
+      r.innerHTML = `<summary><span class="dot" style="--c:${colorOf(x)}"></span><span class="t">${esc(timeOf(x) || '—')}</span><span class="nm">${esc(nameOf(x))}</span></summary>`;
+      if (t.raw) r.addEventListener('toggle', () => { if (r.open && !r.querySelector('.six')) r.insertAdjacentHTML('beforeend', six(M, t).replace(/<h4>.*?<\/h4>/, '')); mark(r.open ? t : null); }); });
+    if (box) d.lastChild.appendChild(box);
   };
-  const day = ms => !(ms > 0) ? '' : dkey(ms) === M.today ? hm(ms) : dkey(ms) === M.today - 1 ? '昨天' : `${bj(ms).getUTCMonth() + 1}月${bj(ms).getUTCDate()}日`;
-  group('alert', '出错的、要留意的', '先看这里', M.alerts, true, t => day(t.last), t => C[t.flag], C.bad);
-  group('past', M.stale ? '当时已跑完的' : '今天跑完的', '浮标左边升了旗的船', M.past.filter(p => p.t.ran).sort((a, b) => b.at - a.at), true, p => hm(p.at), p => C[p.t.flag], C.ok);
-  group('future', M.stale ? '当时还没到点的' : '今天还要跑的', '浮标右边还没升旗的船，按出发时间排', M.future, true, p => hm(p.at), () => '#9fd8b3', '#9fd8b3');
+  // 今天出过错的：和上面总览“今天的任务 N 个出错”同一份清单，一行写“几点出错 → 现在怎样”
+  const byId = new Map(M.tasks.map(t => [t.raw.id, t]));
+  const errs = (Array.isArray(M.snap.today_errors) ? M.snap.today_errors : []).map(e => ({ e, t: byId.get(e.task_id), name: e.name || '没写名字的任务' }));
+  const latest = t => ({ ok: '最近一次正常', bad: '最近一次出错', warn: '最近一次要留意', gray: '最近一次结果还不知道' })[t.flag];
+  const after = x => { const t = x.t, at = parse(x.e.at); if (!t) return '没在任务清单里找到它'; return t.flag === 'ok' && t.last > at ? `${hm(t.last)} 又跑了一次，正常` : latest(t); };
+  group('errtoday', '今天出过错的', '和最上面“今天的任务出错”是同一份；出错后又跑成功的写在后面', errs, true, x => parse(x.e.at) > 0 ? hm(parse(x.e.at)) : '', x => x.t?.flag === 'bad' ? C.bad : C.warn, C.bad, null, x => `${(x.t || x).name}${x.e.owner === 'other' ? '（别的软件自带）' : ''} · ${after(x)}`);
+  // 这周反复出错：后端给每个任务近 7 天失败次数 failures_7d；没给这个字段就不出这一组
+  const repeat = M.tasks.filter(t => Number.isFinite(t.raw.failures_7d) && t.raw.failures_7d >= 3).sort((a, b) => b.raw.failures_7d - a.raw.failures_7d);
+  group('repeat', '这周反复出错', '近 7 天出错 3 次以上；今天好了也列在这里', repeat, true, t => `${t.raw.failures_7d} 次`, t => C[t.flag === 'ok' ? 'warn' : t.flag], C.warn, null, t => `${t.name} · ${latest(t)}`);
+  const day = ms => !(ms > 0) ? '' : dkey(ms) === M.today ? hm(ms) : `${bj(ms).getUTCMonth() + 1}月${bj(ms).getUTCDate()}日`;
+  group('alert', '现在出错的、要留意的', '按最近一次运行的结果', M.alerts, true, t => day(t.last), t => C[t.flag], C.bad);
+  group('past', M.stale ? '当时已跑完的' : '今天跑完的', '浮标左边升了旗的船', M.past.filter(p => p.t.ran).sort((a, b) => b.at - a.at), true, p => hm(p.at), p => C[p.t.flag], C.ok, other);
+  group('future', M.stale ? '当时还没到点的' : '今天还要跑的', '浮标右边还没升旗的船，按出发时间排', M.future, true, p => hm(p.at), () => '#9fd8b3', '#9fd8b3', other);
   group('guard', '常驻和高频任务', '岸边的灯：一直开着，或每半小时内就跑一次', M.guards, false, t => t.every <= 30 ? frequency(t) : t.raw.state === 'running' ? '在运行' : '常驻', t => t.alert ? C[t.flag] : '#ffcb52', '#ffcb52');
   group('idle', '今天没有安排的', '岸上的船，今天不跑', M.idle, false, t => day(t.last), () => '#7cc79b', '#7cc79b');
   group('off', '停用的、从没跑过的', '拉到岸上的船', M.off, false, t => t.off ? '停用' : '没跑过', () => C.gray, C.gray);
