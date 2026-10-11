@@ -7,7 +7,9 @@ const COLOR = { ok: 'green', watch: 'yellow', act: 'red', unknown: 'gray' };
 const WORD = { ok: '正常', watch: '留意', act: '要处理', unknown: '读不到' };
 const LEVEL_WORD = { ok: '稳', watch: '留意', act: '要你处理' };
 // 首页小屏放哪 3 块：要你做、电脑、备份——一眼回答“要不要我动手、电脑好不好、东西保住没有”
-export const SMALL_SIGNALS = ['todo', 'computer', 'backup'];
+// 首页小屏的主角是“你待办 N 件”（拍板 1）；下面 3 块：电脑、备份、今天的任务。分数降成一行小字
+export const SMALL_SIGNALS = ['computer', 'backup', 'today_tasks'];
+const STATUS = { ok: '正常', watch: '留意', act: '有预警' };
 const ORDER = ['todo', 'ai_followup', 'computer', 'backup', 'today_tasks', 'security'];
 const LABEL = { todo: '要你做', ai_followup: 'AI 在跟', computer: '电脑', backup: '备份', today_tasks: '今天的任务', security: '安全和授权' };
 
@@ -49,6 +51,18 @@ function signal(s, off) {
     + `<span class="ov-sig-word"><i class="ov-lamp" aria-hidden="true"></i>${esc(word)}${!off && s?.detail ? `<em class="ov-sig-detail">${esc(s.detail)}</em>` : ''}</span></li>`;
 }
 
+// 小屏头部：你待办 N 件（件数用后端 owner_count，没有就用“要你做”信号的数）+ 急不急 + 电脑健康分小字
+function todoHead(ov, off, at) {
+  const todo = (ov?.signals || []).find((x) => x?.id === 'todo') || {};
+  const n = off ? NaN : Number.isFinite(ov?.owner_count) ? ov.owner_count : Number(todo.value);
+  const urgent = Number.isFinite(ov?.owner_urgent) ? ov.owner_urgent : null;
+  const sub = !Number.isFinite(n) ? (Number.isFinite(at) ? `电脑那边没读到（上次 ${hm(at)}）` : '还没读到') : n === 0 ? '现在没有要你做的事' : urgent == null ? '去驾驶舱看是哪几件' : urgent ? `其中 ${urgent} 件急` : '都不急';
+  const color = !Number.isFinite(n) ? 'gray' : urgent ? 'red' : n ? 'yellow' : 'green';
+  const score = !off && Number.isFinite(ov?.score) ? `电脑健康 ${Math.round(ov.score)}/100 · ${hm(at)} 读到` : '';
+  return `<div class="ov-head ov-todo is-${color}"><div class="ov-todo-n"><b>${Number.isFinite(n) ? n : '—'}</b><span>件<br>你待办</span></div>`
+    + `<div class="ov-verdict"><p class="ov-word">${esc(sub)}</p>${score ? `<p class="ov-asof">${esc(score)}</p>` : ''}</div></div>`;
+}
+
 // 返回整块 HTML（外框始终同一结构）
 export function html(ov, { size = 'big', now = Date.now() } = {}) {
   const off = stale(ov, now);
@@ -57,7 +71,10 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
   const color = COLOR[level] || 'gray';
   const word = off ? '读不到' : (ov.word || LEVEL_WORD[level] || '读不到');
   const ids = size === 'big' ? ORDER : SMALL_SIGNALS;
-  const sigs = ids.map((id) => signal({ id, ...((ov?.signals || []).find((x) => x?.id === id) || {}) }, off)).join('');
+  const find = (id) => (ov?.signals || []).find((x) => x?.id === id) || {};
+  // 小屏：电脑那块写“正常 / 有预警”而不是“在线”；不正常的块写“交给 AI”，不写没有主语的“要处理”
+  const small = (s) => (s.id === 'computer' ? { ...s, value: STATUS[s.level] || s.value, unit: '' } : s);
+  const sigs = ids.map((id) => { const s = { id, ...find(id) }; return signal(size === 'big' ? s : { ...small(s), word: s.level && s.level !== 'ok' ? '交给 AI' : s.word }, off); }).join('');
   const reasons = !off && Array.isArray(ov.reasons) ? ov.reasons : [];
   const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
   const rules = !off && Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
@@ -68,7 +85,7 @@ export function html(ov, { size = 'big', now = Date.now() } = {}) {
       + (rules.length ? `<details class="ov-more"><summary>分数怎么算</summary><ul class="ov-rules">${rules.map(line).join('')}</ul></details>` : '');
   const asof = Number.isFinite(at) ? `<p class="ov-asof">${off ? `（上次 ${hm(at)}）` : hm(at) + ' 读到（北京时间）'}</p>` : '';
   return `<div class="ov ov-${size} is-${color}" role="group" aria-label="电脑总览：${esc(word)}${!off && Number.isFinite(ov?.score) ? `，${Math.round(ov.score)} 分` : ''}">`
-    + `<div class="ov-head">${ring(off ? NaN : ov.score, color, size)}<div class="ov-verdict"><p class="ov-word">${esc(word)}</p>${size === 'big' || off ? asof : ''}${why}</div></div>`
+    + (size === 'big' ? `<div class="ov-head">${ring(off ? NaN : ov.score, color, size)}<div class="ov-verdict"><p class="ov-word">${esc(word)}</p>${asof}${why}</div></div>` : todoHead(ov, off, at))
     + `<ul class="ov-sigs">${sigs}</ul></div>`;
 }
 

@@ -23,13 +23,70 @@
 #need-you .cp-head h2 img { height: 44px; }
 .cp-sub { font-size: 18px; color: var(--cp-title); margin: 22px 0 10px; }
 
-/* 第一屏：左边标题和结论，右边插画，下面一排数字小卡和安全授权 */
-.cp-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 8px 28px; align-items: start; padding-top: 18px; }
+/* 第一屏（场景 1）：左边标题和“你现在 N 件事”，右边插画；下面一行三格（电脑 / 自动任务 / 备份），再下面分数小字和安全授权。
+   总览块用 display: contents，让三行直接排进第一屏的网格；浏览器换字时外框不变 */
+.cp-hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "title art" "you art" "tri tri" "score score" "sec sec"; gap: 12px 28px; align-items: start; padding-top: 14px; }
+.cp-hero-copy { grid-area: title; }
 .cp-hero h1 { margin: 0; line-height: 0; }
-.cp-hero h1 img { height: 96px; width: auto; }
-.cp-hero-art { width: 100%; align-self: center; }
-.cp-lead { margin: 14px 0 4px; }
-.cp-overview { grid-column: 1 / -1; margin-top: 4px; }
+.cp-hero h1 img { height: 76px; width: auto; }
+.cp-h1-text { display: none; }
+.cp-hero-art { grid-area: art; width: 100%; align-self: center; max-height: 330px; object-fit: contain; }
+.cp-lead { margin: 8px 0 0; color: var(--cp-soft); font-size: 15px; }
+.cp-overview { display: contents; }
+.cp-security-wrap { grid-area: sec; }
+
+/* ① 你现在 N 件事 */
+.cp-you { grid-area: you; padding: 18px 22px 14px; border: 1px solid var(--cp-line); border-radius: 18px; background: linear-gradient(160deg, #f4fbf6 0%, #fff 70%); box-shadow: 0 6px 22px rgba(21, 68, 35, .07); min-width: 0; }
+.cp-you.is-urgent { border-color: #efc3bd; background: linear-gradient(160deg, #fff4f1 0%, #fff 70%); }
+.cp-you p { margin: 0; }
+.cp-you-k { font-size: 15px; font-weight: 700; color: var(--cp-soft); letter-spacing: .08em; }
+.cp-you-n { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; font-size: 30px; font-weight: 800; line-height: 1.2; color: var(--cp-ink); }
+.cp-you-n b { font-size: 64px; line-height: 1; color: var(--cp-title); font-variant-numeric: tabular-nums; }
+.cp-you.is-urgent .cp-you-n b { color: var(--cp-red); }
+.cp-you.is-none .cp-you-n, .cp-you.is-off .cp-you-n { font-size: 24px; align-items: center; }
+.cp-you-tag { align-self: center; font-size: 15px; font-weight: 700; padding: 3px 12px; border-radius: 999px; background: #e9f6ee; color: var(--cp-title); }
+.cp-you-tag.is-urgent { background: #fbe4df; color: var(--cp-red); }
+.cp-you-list { list-style: none; margin: 10px 0 6px; padding: 0; display: grid; gap: 2px; }
+.cp-you-list a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; color: var(--cp-ink) !important; text-decoration: none; }
+.cp-you-list a:hover { background: #f1faf4; }
+.cp-you-title { font-size: 17px; font-weight: 700; line-height: 1.4; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.cp-you-chips { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 3px; }
+.cp-you-chips:empty { display: none; }
+.cp-you-sub { font-size: 14px; color: var(--cp-soft); }
+.cp-you-sub a { font-weight: 700; }
+.cp-chip { display: inline-block; font-size: 12.5px; line-height: 1.5; padding: 0 9px; border-radius: 999px; border: 1px solid var(--cp-line); background: #fff; color: var(--cp-soft); white-space: nowrap; }
+.cp-chip.is-urgent { border-color: #efc3bd; background: #fff4f1; color: var(--cp-red); font-weight: 700; }
+.cp-chip.is-phone { border-color: #bfe8cc; color: var(--cp-title); }
+
+/* ② 三格：状态 + 谁在办 + 一句原因 */
+.cp-tri { grid-area: tri; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.cp-tri-cell a { display: grid; align-content: start; gap: 2px; height: 100%; box-sizing: border-box; padding: 12px 16px; border: 1px solid var(--cp-line); border-left-width: 5px; border-radius: 14px; background: #fff; color: var(--cp-ink) !important; text-decoration: none; }
+.cp-tri-cell a:hover { background: #f6fcf8; }
+.cp-tri-cell.is-green a { border-left-color: var(--cp-green); }
+.cp-tri-cell.is-yellow a { border-left-color: var(--cp-yellow); background: #fffdf6; }
+.cp-tri-cell.is-red a { border-left-color: var(--cp-red); background: #fffaf8; }
+.cp-tri-cell.is-gray a { border-left-color: var(--cp-gray); }
+.cp-tri-label { font-size: 13px; color: var(--cp-soft); }
+.cp-tri-status { font-size: 20px; line-height: 1.3; }
+.cp-tri-who { font-size: 14px; font-weight: 600; color: var(--cp-title); }
+.cp-tri-who i { font-style: normal; color: var(--cp-gray); }
+.cp-tri-cell.is-gray .cp-tri-who { color: var(--cp-soft); }
+.cp-tri-why { font-size: 13px; color: var(--cp-soft); overflow-wrap: anywhere; }
+
+/* ③ 分数小字，点开看扣分 */
+.cp-score { grid-area: score; margin: 0; font-size: 13.5px; color: var(--cp-soft); }
+.cp-score summary { display: inline-flex; flex-wrap: wrap; gap: 4px 14px; cursor: pointer; list-style: none; }
+.cp-score summary::-webkit-details-marker { display: none; }
+.cp-score summary b { color: var(--cp-ink); font-variant-numeric: tabular-nums; }
+.cp-score-why { color: var(--cp-title); }
+.cp-score-why::after { content: " ▸"; }
+.cp-score[open] .cp-score-why::after { content: " ▾"; }
+.cp-score-body { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 24px; margin-top: 8px; padding: 12px 16px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; }
+.cp-score-body h4 { margin: 0 0 4px; font-size: 13px; color: var(--cp-title); }
+.cp-score-body ul { margin: 0; padding-left: 1.1em; }
+.cp-score-body b { color: var(--cp-red); }
+.cp-score-rules { grid-column: 1 / -1; }
+.cp-score-note { grid-column: 1 / -1; margin: 0; }
 .cp-head .cp-lamp { align-self: center; margin-bottom: 4px; }
 .cp-date { align-self: center; margin-bottom: 4px; font-size: 18px; font-weight: 800; color: var(--cp-title); }
 .cp-security-wrap { grid-column: 1 / -1; display: flex; align-items: center; gap: 18px; margin-top: 14px; padding: 10px 16px; border: 1px solid var(--cp-line); border-radius: 14px; background: #fff; }
@@ -129,8 +186,7 @@
 .cp-list li { padding: 6px 0; border-bottom: 1px dashed #e1efe5; overflow-wrap: anywhere; }
 .cp-list li:last-child { border-bottom: 0; }
 .cp-todos { display: grid; gap: 12px; }
-.cp-wait li { display: grid; grid-template-columns: minmax(10em, 26em) minmax(0, 1fr); gap: 16px; }
-.cp-wait b { color: var(--cp-title); }
+.cp-wait li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(12em, 24em); gap: 4px 16px; align-items: baseline; }
 .cp-chips { list-style: none; margin: 4px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px 14px; }
 .cp-chips li { padding: 6px 12px; border: 1px solid var(--cp-line); border-radius: 999px; background: var(--cp-card); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cp-chips a { color: var(--cp-ink); text-decoration: none; }
@@ -144,17 +200,36 @@
 .cp-river { margin-top: 12px; min-height: calc(min(100%, 1392px) / 1.722); }
 
 @media (max-width: 1100px) {
+  .cp-hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+  .cp-tri-status { font-size: 18px; }
   .cp-security-wrap { flex-direction: column; align-items: stretch; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 767.98px) {
   .cp-page { padding: 4px 14px 32px; font-size: 15px; }
-  .cp-hero { grid-template-columns: 1fr; }
-  /* 手机上总览屏紧跟标题，插画放到它后面 */
-  .cp-overview { order: 1; }
-  .cp-hero-art { order: 2; }
-  .cp-security-wrap { order: 3; }
-  .cp-hero h1 img { height: 72px; }
+  /* 手机第一屏只放三行：书法标题换成文字，插画和说明收起，“你现在 N 件”和三格状态都在第一屏 */
+  .cp-hero { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "you" "tri" "score" "sec"; gap: 10px; padding-top: 6px; }
+  .cp-hero-art, .cp-lead, .cp-hero h1 img { display: none; }
+  .cp-hero h1 { line-height: 1.3; }
+  .cp-h1-text { display: inline; font-size: 22px; font-weight: 800; color: var(--cp-title); letter-spacing: .12em; }
+  .cp-you { padding: 12px 14px 10px; border-radius: 14px; }
+  .cp-you-n { font-size: 22px; }
+  .cp-you-n b { font-size: 46px; }
+  .cp-you-list { margin: 6px 0 4px; }
+  .cp-you-list a { padding: 4px 6px; margin: 0 -6px; }
+  .cp-you-title { font-size: 15.5px; -webkit-line-clamp: 1; }
+  .cp-tri { gap: 6px; }
+  .cp-tri-cell a { padding: 8px 8px 8px 9px; border-left-width: 4px; border-radius: 10px; gap: 1px; }
+  .cp-tri-label { font-size: 12px; }
+  .cp-tri-status { font-size: 14.5px; }
+  .cp-tri-status .cp-dot { display: none; }
+  .cp-tri-who { font-size: 12px; line-height: 1.35; }
+  .cp-tri-who span { display: block; }
+  .cp-tri-who i { display: none; }
+  .cp-tri-why { display: none; }
+  .cp-ask { padding: 14px; }
+  .cp-ask-head h3 { font-size: 16.5px; }
+  .cp-wait li { grid-template-columns: 1fr; gap: 2px; }
   .cp-security { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
   .cp-features { grid-template-columns: 1fr; }
   .cp-big b { font-size: 44px; }
@@ -163,6 +238,45 @@
   .cp-security-title img { height: 38px; }
   .cp-grid > * { flex-basis: 100%; }
   .cp-head h2 img { height: 48px; }
-  .cp-wait li { grid-template-columns: 1fr; gap: 2px; }
   .cp-river { min-height: 0; }
 }
+
+/* “要我处理的事”卡片（场景 2、5）：标题一句话，正文、步骤或选项，小字放登记时间和路径；按钮只复制文字 */
+.cp-ask { padding: 16px 20px; border: 1px solid #ecdcae; border-radius: 16px; background: #fffdf6; min-width: 0; scroll-margin-top: 130px; }
+.cp-ask.is-urgent { border-color: #efc3bd; background: #fffaf8; }
+.cp-ask:target { outline: 3px solid #9ddcae; outline-offset: 2px; }
+.cp-ask-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; }
+.cp-ask-head h3 { margin: 0; font-size: 18px; line-height: 1.45; color: var(--cp-ink); }
+.cp-chips-row { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.cp-ask-body { margin: 8px 0 0; overflow-wrap: anywhere; }
+.cp-steps { margin: 8px 0 0; padding-left: 1.6em; display: grid; gap: 4px; }
+.cp-steps li { overflow-wrap: anywhere; }
+.cp-opts { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.cp-btn.cp-opt { padding: 7px 16px; font-size: 15px; border-color: #9ddcae; }
+.cp-btn.cp-opt b { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px; border-radius: 50%; background: var(--cp-green); color: #fff; font-size: 13px; }
+.cp-hint { margin: 6px 0 0; font-size: 13px; color: var(--cp-soft); }
+.cp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 6px 18px; margin: 10px 0 0; }
+.cp-facts dt { font-size: 12.5px; color: var(--cp-soft); }
+.cp-facts dd { margin: 0; }
+.cp-ask .cp-meta { margin: 10px 0 0; }
+.cp-path { margin: 2px 0 0; font-size: 12px; color: #8a9790; overflow-wrap: anywhere; }
+.cp-ask .cp-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.cp-btn-quiet { color: var(--cp-soft); border-color: #dfe8e2; }
+
+/* 交给 AI 的事（场景 4） */
+.cp-ai { margin-top: 22px; }
+.cp-ai .cp-sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.cp-ai-parts { font-size: 14px; font-weight: 600; color: var(--cp-soft); }
+.cp-ai-cap { margin: 0 0 4px; font-size: 14px; font-weight: 700; color: #9a7409; }
+.cp-ailist { list-style: none; margin: 6px 0; padding: 0; }
+.cp-ailist li { display: grid; gap: 1px; padding: 7px 0; border-bottom: 1px dashed #e1efe5; overflow-wrap: anywhere; }
+.cp-ailist li:last-child { border-bottom: 0; }
+.cp-ailist small { font-size: 12.5px; color: var(--cp-soft); }
+.cp-ailist.is-stuck li { padding: 8px 12px; border: 1px solid #ecdcae; border-radius: 10px; background: #fffdf6; margin-bottom: 6px; }
+.cp-ailist.is-stuck small { color: #9a7409; }
+.cp-aiwork { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 10px 0 0; padding: 10px 14px; border-radius: 12px; background: #f4fbf6; font-size: 14px; }
+.cp-aiwork b { color: var(--cp-title); }
+.cp-aiwork ul { list-style: none; margin: 0; padding: 0; display: contents; }
+.cp-aiwork li + li::before { content: "· "; color: var(--cp-gray); }
+.cp-aiwork small { color: var(--cp-soft); font-size: 12.5px; }
+.cp-wait small { color: var(--cp-soft); font-size: 13.5px; }

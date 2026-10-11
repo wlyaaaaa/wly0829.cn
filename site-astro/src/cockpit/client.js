@@ -71,10 +71,12 @@ window.CockpitData = { refresh, get view() { return view; } };
 // 复制给 AI：只给条目 id，让 AI 去本机接口读那一条的 ai_hint，不内嵌日志
 const prompt = (ids) => ids.map((id) => `驾驶舱条目 ${id}`).join('；') + '：请读本机状态接口（/computer-access/api/status 全量）里这些 id 的条目和 ai_hint，处理后核实，按规矩关闭。';
 document.addEventListener('click', async (e) => {
-  const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all]') : null;
+  const b = e.target instanceof Element ? e.target.closest('[data-copy-ai],[data-copy-ai-all],[data-copy-text]') : null;
   if (!b) return;
+  // “复制我的选择 / 复制我的回答 / 这件不做了”：只把按钮上写好的一段话放进剪贴板，不发任何请求
   const ids = b.hasAttribute('data-copy-ai-all') ? view.need_you.map((x) => x.copy_ai_id || x.id) : [b.dataset.copyAi];
-  try { await navigator.clipboard.writeText(prompt(ids)); b.dataset.done = '已复制'; } catch { b.dataset.done = '复制不了，请手动选中'; }
+  const text = b.hasAttribute('data-copy-text') ? b.dataset.copyText : prompt(ids);
+  try { await navigator.clipboard.writeText(text); b.dataset.done = '已复制，贴给 AI'; } catch { b.dataset.done = '复制不了，请手动选中'; }
   setTimeout(() => delete b.dataset.done, 2500);
 });
 

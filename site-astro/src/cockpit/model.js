@@ -77,6 +77,8 @@ export function normalize(raw) {
     projects: { state: st(projects.state), observed_at: projects.observed_at || null, items: list(projects.items) },
     source_gaps: list(v.source_gaps),
     owner_corrections: obj(v.owner_corrections),
+    // AI 现在在替你做什么（每个项目在跑的自动任务、留下没合并的分支）和每周体检的下次时间；没给就是空
+    ai_work: { state: st(obj(v.ai_work).state), observed_at: obj(v.ai_work).observed_at || null, items: list(obj(v.ai_work).items) }, governance: obj(v.governance),
     // 电脑后台今天做的事、今天的用电和开机（PCConfig 给；读不到时块照样在）
     today_activity: (() => { const a = obj(v.today_activity); return { state: st(a.state), observed_at: a.observed_at || null, summary: obj(a.summary), timeline: list(a.timeline), yesterday: a.yesterday && typeof a.yesterday === 'object' ? a.yesterday : null }; })(),
     power_today: (() => { const p = obj(v.power_today); return { state: st(p.state), observed_at: p.observed_at || null, uptime_hours: Number.isFinite(p.uptime_hours) ? p.uptime_hours : null, energy_kwh: Number.isFinite(p.energy_kwh) ? p.energy_kwh : null, peak_watts: Number.isFinite(p.peak_watts) ? p.peak_watts : null, source: typeof p.source === 'string' ? p.source : '', source_note: typeof p.source_note === 'string' ? p.source_note : '', yesterday: p.yesterday && typeof p.yesterday === 'object' ? p.yesterday : null }; })(),
