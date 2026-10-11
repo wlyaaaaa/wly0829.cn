@@ -448,7 +448,13 @@
     "/projects/document-materials/page-audit-release/",
     "/projects/document-materials/reality-readback-recovery/",
     "/projects/document-materials/signature-delivery-version/",
-    "/projects/document-materials/"
+    "/projects/document-materials/",
+    "/projects/github-index/project-admission/",
+    "/projects/github-index/protected-major-actions/",
+    "/projects/github-index/publication-gate/",
+    "/projects/github-index/repository-ledger/",
+    "/projects/github-index/snapshot-recovery/",
+    "/projects/github-index/worktree-sync/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

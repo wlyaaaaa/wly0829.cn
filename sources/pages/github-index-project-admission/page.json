@@ -1,0 +1,203 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "github-index-project-admission",
+  "kind": "project",
+  "title": "单仓库 Admission（入场检查）与精确目标判断",
+  "url": "/projects/github-index/project-admission/",
+  "parent": "github-local-index",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）现行准入合同，以及 10 月 11 日 16:34 对总索引自身的只读元数据检查。"
+  },
+  "screens": [
+    {
+      "id": "github-index-project-admission-01",
+      "section": "top",
+      "title": "单仓库 Admission（入场检查）与精确目标判断",
+      "text": "# 单仓库 Admission（入场检查）与精确目标判断\n\n〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕\n\nGitHub 总索引 · 功能说明\n\n在真正改文件或推送前确认“我站在正确的仓库、正确的工作树和正确的远端前”，并把继续、警告和阻断原因说清。\n\n**当前情况：**已有核对仓库、目录、远端与分支的检查入口；10 月 11 日 16:34 用它只读核对总索引自己：私有仓库、默认分支 main，本地领先远端 2 个提交，结论是“警告”。实时信息读取失败会保留未知，检查通过本身不授予发布权限。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → GitHub 项目总索引",
+          "href": "/projects/github-index/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/github-index/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n目录名、旧文档和缓存路径都可能过期；多工作树仓库里，另一个临时目录的未提交修改或无上游状态，也可能被误算到当前目标。这个入口既核实真实仓库身份，也能只判断点名的工作树，同时把其他工作树作为证据保留下来。\n\n## 举个实际例子\n\n比如我问：“总索引这个仓库现在是什么身份，公开还是私有？只看，别拉取。”系统会现场对照 Git 共享目录、origin 与 GitHub 上的仓库身份，告诉我目标确实是总索引自己的仓库，现在是私有、默认分支 main。GitHub 信息是刚读的，但远端分支位置用的是本机缓存，所以它只说“本地领先 2 个提交，推送前要先拉取再核对”，不说已经同步。目录名即使相同，只要 origin 对不上，就只做定位排查，绝不继续写。\n\n## 最后我会得到什么\n\n得到这次要改的真实仓库和远端、正在使用的目录是否有别人修改、分支是否落后，以及能否安全开始。它只帮我认准目标，不自动给出提交或发布许可。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n项目目录和远端身份都确认后，说明这次没有仓库层阻碍；实际修改仍按本轮授权。\n\n## 发现问题时\n\n有并发修改、分支落后或目标不对时指出应先处理的文件与分支。\n\n## 入口不可用或证据不足时\n\n远端暂时读不到时可继续安全的本地工作，推送和发布结论须等真实远端证据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在 AI 项目对话中点名一个仓库，要求“先检查能否在这里改或发布”；需要最新远端引用时再明确提出。\n\n## 需要准备什么\n\n- 目标仓库或工作树\n\n- 要改动或发布的分支\n\n- 是否需要刷新远端引用\n\n## 从开始到拿到结果\n\n1. **核对正在使用的工作目录**　AI 检查指定仓库这份目录的修改、关联分支和目标远端，避免把其他目录的状态混进来。\n\n2. **做入场检查**　读取未提交改动、上游和已知远端；只有需要真实领先落后时才刷新引用。\n\n3. **说明可做范围**　交回当前阻碍和下一步；只是只读元数据的结果不能证明远端已经同步。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n项目入场事实入口可用；实时元数据、远端引用和精确目标的回归为 8 月 29 日历史结果，之后未重新运行\n\n## 关键规则与设计选择\n\n1. 普通已知仓库的可逆小改可只用 git status（Git 状态命令）；Admission（仓库准入检查） 不是固定打卡。\n\n2. 准备创建但远端还不存在时，不拿要求远端已存在的普通 Admission（仓库准入检查） 伪造 identity；先通过重大动作入口建一个空仓库（私有的直接建，公开的要按重大动作验证和首次公开授权），再回来做 live Admission（仓库准入检查）。\n\n3. 只需要 GitHub 可见性时用 LiveMetadata：它会联网读取 GitHub 现场元数据，但不会执行 git fetch，也不会刷新远端跟踪引用。\n\n4. 需要真实 ahead/behind（领先/落后提交数） 时用 RefreshRefs；准备发布判断时用 ForPublication 同时要求两类 live 证据。\n\n5. TargetWorktree/TargetRef 只改变顶层 transport 判断，其他工作树仍保留在 evidence 中。\n\n6. decision=block 关闭依赖不足证据的写入和直接 transport，但不关闭只读诊断。\n\n7. Git命令失败、超时或无法完整读回时是证据未知，不是自动证明remote（远端仓库）或身份冲突。普通dirty只说明未提交内容，不能代替Execution Owner（施工责任）的活动施工登记。\n\n## 当前怎样实现\n\n- 入口先规范化 owner/name；显式 RepoPath 或 TargetWorktree 可直接作为定位提示，不需要先被导航收录，但最终必须回读 remote.origin.url 与 git-common-dir。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 无显式路径时读取统一受控导航 `config/repository-paths.json`；候选 identity 不符时丢弃，并返回 remote_mismatch 或 bootstrap_required。\n\n- visibility（公开或私有属性） 只接受 PUBLIC（公开）、PRIVATE（私有）、INTERNAL；非法值或 unknown（未验证） 都进入 blocking reasons。\n\n- LiveMetadata 调用 GitHub metadata（元数据） 且 never fetch；RefreshRefs 才执行 `git fetch --prune origin`；ForPublication 同时要求两者成功。记录里的 fetch_attempts 为 0、1 或 2：只有退出码 128 且是 SSL_read/TLS connect 的意外 EOF 时，用相同参数重试一次；其他失败不重试，也不改代理、TLS 或凭据，从不重试 push。\n\n- 顶层 evidence_source、freshness（证据新鲜度） 与 live_checked 明示 local_git、github_metadata、remote_refs 的来源；异常记录保留类别和 exit code，并可附一段诊断：优先取 stderr，没有再取 stdout，最多 3 条非空信息、512 个字符；疑似凭据或含异常控制字符时省略诊断正文。\n\n- New-ProjectAdmissionRecord 让正常和异常路径保持同一 schema（数据结构），不因 internal_error 丢字段。\n\n- Get-ProjectPrivateCompanion.ps1按已确认repo与RepoPath读取现有私有配套登记，区分mapped、unregistered、registered_unmapped和conflict；只返回匹配路径/链接/恢复关系元数据，不扫描其他项目、不读正文、不创建文件或网络请求，也不改变普通准入结论。进入项目或公开前按需读取已找到的最近规则，私有配套仍由原Owner管理。\n\n## 执行流程\n\n1. 规范化预期 repo identity 和可选 target\n\n2. 解析候选路径并回读 `.git` origin/common-dir",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n3. 枚举全部 worktree（Git 工作树） 并读取 branch（分支）、HEAD、upstream（上游分支）、dirty 和 sync\n\n4. 按调用模式读取 live GitHub metadata（元数据） 和/或刷新 refs\n\n5. 计算默认分支整合、branch（分支） inventory 与治理 registry（登记清单） 命中\n\n6. 限定 decision worktree（Git 工作树），生成 reasons、decision 和 push guidance\n\n7. 调用者结合项目规则、候选内容和授权决定下一步",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| evidence_source（证据来源） | 分别标出 local Git、GitHub metadata（元数据） 和 remote（远端仓库） refs 是 live、cached 还是 unavailable。 |\n| freshness（综合新鲜度） | 三类来源全 live 才是 live；只现场读取一部分为 mixed；都未刷新为 cached。 |\n| decision（入场结论） | proceed、warn 或 block，描述事实充分程度和本地风险，不等于授权。 |\n| push_decision（传输建议） | 根据 dirty、behind、diverged（本地与远端双向分叉）、upstream（上游分支） 和 remote（远端仓库） mode 给出 transport readiness。 |\n| target scope（目标范围） | 精确到一个 worktree（Git 工作树）、branch（分支） ref 或 40 位 commit；目标冲突或多义时失败关闭。 |\n\n## 专业定义\n\n当路径、远端、公开属性或同步状态会改变做法时，先给这个项目做一次精确现场体检。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n单仓库判断同时依赖本地 `.git`、GitHub metadata（元数据） 和 remote-tracking refs。把它们混成一个 `fetch=true` 黑盒会让调用者不知道什么是现场、什么是缓存；只聚合所有工作树又会让无关临时目录阻断精确目标。\n\n## 边界\n\n- V1 不输出 publication_decision，也不扫描实际候选内容\n\n- push_decision=proceed 不授予 edit、commit、push 或公开发布权限\n\n- 不靠项目名称硬编码治理例外；只读精确 artifact/retention registry（登记清单）\n\n- 无 target 时保留全 worktree（Git 工作树） 聚合兼容语义\n\n- 异常诊断有上限（3 条、512 字符），疑似秘密值或异常控制字符时不回显正文，只保留稳定错误类别和 exit code\n\n## 失败与恢复\n\n- **repo、路径或 origin identity 无法唯一确定**：decision=block；读取 `.git`、remote（远端仓库） 和 Owner 证据继续定位。\n\n- **LiveMetadata 或 RefreshRefs 失败**：加入 live_evidence_unavailable，ForPublication 保持 block，不把缓存冒充现场；读失败只算未知，不猜成身份冲突，更不去改远端补救。\n\n- **target worktree（Git 工作树）/ref 不存在、冲突或不可用**：返回精确 target reason，不退回任意工作树。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **PUBLIC（公开） 工作树命中敏感路径**：block 并给出 resolve_public_exposure；pure delete 和安全 rename 按实际目标判断。\n\n- **任一可达 worktree（Git 工作树） 检查失败**：worktree_inspection_error 失败关闭；其他只读诊断仍可继续。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-11",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- CLI（命令行工具）、模式参数、统一导航与有上限的诊断输出\n\n- Admission（仓库准入检查） record、worktree（Git 工作树）、branch（分支）、target 与 push guidance 核心\n\n- v1 schema（数据结构）、新鲜度、target 与失败语义\n\n- 真实 Git fixture 和失败关闭回归\n\n- 精确配套发现、读失败与实际身份冲突分层；Get-ProjectPrivateCompanion.ps1为现行入口\n\n## 如何验证\n\n- 2026-08-29 完整运行 Test-ProjectAdmission.ps1，exit 0，并以 `All project admission tests passed.` 收口；这是历史源码回归，不冒充本次现场。10 月 11 日只静态核对了当前测试定义，没有重新运行。\n\n- 2026-08-31 对总索引直接运行 ForPublication：当时为 PUBLIC（公开）/main、freshness（证据新鲜度）=live、clean、0/0、decision=proceed，这是旧日期历史。2026-10-11 16:34 只读运行 LiveMetadata：PRIVATE（私有）/main、freshness=mixed、fetch_attempts=0、remote_refs=cached、live_checked=false、decision=warn、push_strategy=fetch_recheck；唯一 main 工作树 dirty 0、ahead 2、behind 0。这次只读元数据，不能算发布前现场检查通过；另用 ls-remote 现场确认远端 main 仍等于缓存值。\n\n- 测试覆盖正常/异常记录同 shape、visibility（公开或私有属性） 闭集、LiveMetadata never fetch、RefreshRefs、ForPublication 和兼容 Fetch。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-project-admission-12",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 真实 fixture 覆盖 primary、linked、detached（分离提交状态）、prunable、no-upstream、ahead、behind、diverged（本地与远端双向分叉） 和 inspection failure。\n\n- target fixture 验证无关工作树不会污染顶层判断，但仍完整出现在 worktrees evidence。\n\n## 与其他模块的关系\n\n它是总账落到单个项目的现场入口；Worktree（Git 工作树） Sync 解释它怎样判断分支完成，Publication Gate 再解释为什么 transport 仍不等于公开。",
+      "links": [
+        {
+          "text": "上一个模块 仓库总账",
+          "href": "/projects/github-index/repository-ledger/"
+        },
+        {
+          "text": "下一个模块 工作树同步",
+          "href": "/projects/github-index/worktree-sync/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

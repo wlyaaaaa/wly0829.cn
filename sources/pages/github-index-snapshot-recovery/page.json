@@ -1,0 +1,199 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "github-index-snapshot-recovery",
+  "kind": "project",
+  "title": "Refresh（刷新）、看板与导航写入和中断恢复",
+  "url": "/projects/github-index/snapshot-recovery/",
+  "parent": "github-local-index",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）与 git.refresh-consistency 合同；八文档公开代际已于 9 月 26 日（提交 bfa2e7f）退役，现在是私有单页看板加统一导航逐个文件替换。"
+  },
+  "screens": [
+    {
+      "id": "github-index-snapshot-recovery-01",
+      "section": "top",
+      "title": "Refresh（刷新）、看板与导航写入和中断恢复",
+      "text": "# Refresh（刷新）、看板与导航写入和中断恢复\n\n〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕\n\nGitHub 总索引 · 功能说明\n\n完整更新总索引的私有看板和统一导航：两份文件逐个用写好的完整内容替换，中途失败会如实说哪一份已换、哪一份没换；需要旧版时从 Git 历史恢复。\n\n**当前情况：**原来“八份公开文档组成一代、全部核对齐才切换当前指针”的做法已于 9 月 26 日退役；现在只生成一页私有看板和一份导航，不是跨文件的整体切换。10 月 11 日没有重新运行一致性检查，两份文件此刻是否一致未重新核对。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → GitHub 项目总索引",
+          "href": "/projects/github-index/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/github-index/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n仓库集合变了，看板和导航都得跟上；但两份文件不是一次整体切换，中断时可能一份新一份旧。所以每份文件都先写好完整内容再替换，失败时说清停在哪一层，旧版本从 Git 历史找回。\n\n## 举个实际例子\n\n我说：“新增仓库后完整更新索引。”系统先读完 GitHub 和本机现场，再先写导航、后写看板，最后推进身份基线。如果看板写入失败，它会告诉我：导航已经是新的，看板还是旧的，基线没有推进，而不是说“整体回滚了”。\n\n## 最后我会得到什么\n\n成功时得到更新后的私有看板、统一导航和推进后的身份基线；失败时知道哪一层已完成、哪一层没完成，以及旧版本该从哪个 Git 提交找回。不把一次中断说成“自动回滚成功”，也不把来历不明的文件拼进来。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n两份文件都写完并回读、基线推进成功，才算这次刷新完成。\n\n## 发现问题时\n\n某份文件写入失败就直接报错，并分别报告导航、看板、基线三层各自的结果。\n\n## 入口不可用或证据不足时\n\n现有文件和 Git 历史都读不到时先说明缺口，不拼接来历不明的文件。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入 GitHub 总索引的 AI 对话中说“新增仓库后刷新索引”或要求检查现有索引是否完整。\n\n## 需要准备什么\n\n- 已确认的仓库及远端身份\n\n- 希望刷新或恢复的索引范围\n\n## 从开始到拿到结果\n\n1. **先核对现有版本**　AI 读取现有看板、导航和身份基线，确认是否只需查差异。\n\n2. **生成并验新版本**　确有变化时先取完全部观察，再先写导航、后写看板；每份都先写完整临时内容，再原子替换。\n\n3. **报告分层结果**　分别交回导航、看板和私有基线的状态；任何一层失败都单独说明，旧版本从 Git 历史恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n八文档公开代际已于 9 月 26 日退役（提交 bfa2e7f），9 月 8 日的完整性验收只作退役代际的历史；10 月 11 日 16:32 身份状态为基线 45／现场 47、差异 2、问题 0，不代表两份生成物已重新核对一致\n\n## 关键规则与设计选择\n\n1. 只有仓库 identity、visibility（公开或私有属性）、remote（远端仓库）、clone、默认分支或长期治理等 Owner 事实变化才重建。\n\n2. 普通业务 commit、格式、时间戳或没有改变用户判断的 drift 不触发连锁 refresh。\n\n3. 两份生成物一致只证明看板和导航互相对得上，不证明动态事实仍最新。\n\n4. 正常full refresh自动推进已有有效v3基线；零写status、Fast和CheckOnly都不因此变成基线写入口，首次bootstrap/repair仍须显式处理。\n\n5. 导航和看板逐个文件替换，不是跨文件事务：可能一份已换、另一份失败，必须报告哪一层实际完成。\n\n6. **暂存代际已退役。**`.incoming` 暂存、全局互斥和过期暂存清理随八文档代际一起删除；现在没有需要回收的暂存代际。\n\n## 当前怎样实现\n\n- 完整刷新先检查Owner基线：invalid在任何写入前拒绝；missing允许写看板和导航，但后续baseline阶段只返回skipped/owner_baseline_missing_requires_explicit_bootstrap，不伪造首次历史。\n\n- **八文档公开代际已退役（2026-09-26）。**原来写入同卷 `<id>.incoming`、校验 hash（内容指纹）/bytes/provenance（来源说明）、固定八份投影、current-generation.json 原子切指针并保留 current+previous；这些文件和代码已从当前受控树删除，不再是现行命令、验证入口或恢复点。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 现在只生成两份文件：私有单页看板 `00_总览/当前同步看板.md`（展开全部登记仓库和本地路径）和统一导航 `config/repository-paths.json`。\n\n- 写入方式：先取完全部观察，再对每份文件写临时完整文本后移动替换；导航自身仍验证 schema（数据结构）、仓库集合并回读，但没有跨文档的 manifest（清单）/hash 闭包。\n\n- 看板和导航写完后，同一full refresh调用Invoke-RefreshGitOwnerBaselineAdvance：重新读取Owner inventory，事实完整且无issue才自动advance，回读domain=current（当前状态）、delta=0、issue=0。导航、看板和基线各自写入，不是一次跨层事务。\n\n- 一致性检查 Test-GitHubLocalIndexConsistency.ps1 只比较 2 份生成物：在 system temp 生成对照，通常清理到回收站；`-ReceiptPath` 可明确写私有回执；默认不 stage、commit 或 push。\n\n- `Refresh -CheckOnly` 关闭刷新日志、不改看板和导航，但会生成并清理临时对照，和真正零写的 compact status 不同。合同里仍有 hidden 兼容回执的说明，本轮没有核验这条宿主调用。\n\n- full refresh（完整刷新）复用共享 Admission（仓库准入检查） 的 fetch：仅退出128且命中 SSL_read/TLS connect 的 unexpected eof 时以同一参数重试一次，最多两次；其他失败不自动重试，失败保留 fetch_failed。固定提交快照只刷新 metadata（元数据），不声称普通工作树已同步。\n\n## 执行流程\n\n1. 读取并验证现有 v3 基线；invalid 在任何写入前停止\n\n2. 获取 GitHub inventory、统一导航和已声明 clone 的现场事实",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n3. 取完全部观察后再开始写文件\n\n4. 写统一导航：临时完整文本→原子替换，验证 schema（数据结构） 和集合并回读\n\n5. 写单页看板：临时完整文本→原子替换\n\n6. 任一文件写入失败直接报错，说明哪一份已换、哪一份没换\n\n7. 原来的“发布兼容投影”“切 current 指针并清理旧代际”两步已随代际退役；需要旧版本时从 Git 历史恢复\n\n8. 重新读取Owner inventory，自动推进已有有效v3基线，再回读current（当前状态）、delta=0、issue=0；无变化返回current（当前状态），有变化返回advanced，缺失返回skipped\n\n9. 一致性检查发现 drift 时只报告；是否 refresh 由 Owner 事实变化决定",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| immutable generation（不可变代际，已退役） | 旧做法：一代内容和清单固定，下一次变化建新 id；2026-09-26 起不再使用。 |\n| current pointer（当前指针，已退役） | 旧的 current-generation.json；已删除，现在没有“切指针”这一步。 |\n| generated files（生成物） | 现在只有两份：单页看板和统一导航；都是派生快照，authoritative=false。 |\n| stable / volatile drift（稳定 / 易变漂移） | 身份、visibility（公开或私有属性） 等稳定事实影响一致性；dirty、ahead/behind（领先/落后提交数） 等易变状态可报告但不默认否决。 |\n| recovery material（恢复材料） | Git 历史里的旧看板/导航、checkpoint（续作检查点） refs 和 unreachable objects 等可能保存中断前唯一内容，未证明前不清理。 |\n\n## 专业定义\n\n总账有实质变化时，先取完现场，再逐个文件写入导航和看板；中途失败如实报告哪一层完成，旧版本从 Git 历史恢复，不说成整体回滚。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n看板既要易读，又不能把 generated Markdown 升级成动态权威。一次 refresh 会读 GitHub、扫描已声明 clone、写导航和看板，再推进基线；这几步不是一个整体事务，中断、网络失败时必须说清每一层到了哪里。\n\n## 边界\n\n- 单页看板和统一导航标注 authoritative=false\n\n- Fast 兼容模式和 CheckOnly 会生成临时对照或写私有状态，不等于 zero-write Owner status\n\n- refresh 或 consistency PASS 都不证明 publication 完成\n\n- 不引入数据库；未来 cache 必须可删除、可重建且不能替代 Git/GitHub/registry\n\n- 不创建 watcher、后台自动 refresh、自动 commit 或自动 push\n\n## 失败与恢复\n\n- **导航或看板写入失败**：直接报错，说明哪一份已换、哪一份没换；需要旧版时从 Git 历史恢复，不拼接。\n\n- **导航 schema（数据结构）、仓库集合或回读校验失败**：停止，不把它当作当前导航使用。\n\n- **fetch 在适用的一次重试后仍失败，或错误不适合重试**：保留 fetch_failed、实际次数与有界诊断；不把旧 refs 冒充 live，不自动 push。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **一致性检查发现两份生成物不一致**：只报告漂移文件；是否刷新由 Owner 事实变化决定。\n\n- **Owner baseline与现场不同**：零写status报告review_needed；正常完整refresh会自动收敛有效基线。若基线阶段失败，保留真实已写的看板/导航与实际基线，明确未收口层，不假称整体回滚或成功。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-11",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 单页看板和统一导航的写入（Update-GitHubIndex.ps1）\n\n- Git/GitHub 事实到看板的生成器\n\n- 两份生成物的只读一致性比较（Test-GitHubLocalIndexConsistency.ps1）\n\n- owner status、refresh、consistency 与恢复边界（git.refresh-consistency 合同）\n\n- 已退役、只作历史：mutex、incoming、代际发布、指针切换和保留策略（2026-09-26 删除）\n\n## 如何验证\n\n- current-generation.json 当时声明 schema（数据结构） v1、manifest（清单） SHA-256、八份 documents、current（当前状态）+previous 和 pointer-after-readback；该文件已删除，这是退役代际的历史。\n\n- 单元测试曾注入 projection 中途失败，验证旧 pointer 保持有效；这属于退役代际的历史测试，不证明现在的两文件写入。\n\n- 2026-10-11 只读核对当前源码（提交 e792eda）与 git.refresh-consistency 合同：顺序为导航→看板→基线推进，invalid 基线在写入前拒绝。本次没有执行刷新、迁移或测试。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-snapshot-recovery-12",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 旧测试曾拒绝越界 projection、额外文件、unknown（未验证）/case-variant schema（数据结构） 字段和 reparse-point 父目录；这些检查随代际一起退役。\n\n- 2026-09-08T08:11:28Z 直接回读代际 284f02f94edf4c5584c4f51f680d4f7a：manifest（清单） hash、8份文档和兼容投影全部一致，总计25235字节；这是已退役代际的历史验收，没有换日期重验。\n\n- 2026-10-11 16:32 身份状态：基线 45、现场 47、delta 2、issue 0、attention 1、review_needed；身份状态不证明两份生成物现场一致，也不证明正常推送已完成。\n\n- 现行两文件一致性检查本轮没有运行（Unknown）；本机现存的一致性回执是 7 月、8 月和 9 月 5 日的旧记录，不套用到现在。\n\n## 与其他模块的关系\n\n它把总账和诊断保存成可重建快照，但不替 Admission（仓库准入检查） 判断单仓库现场，也不替 Publication Gate 批准外部发布。",
+      "links": [
+        {
+          "text": "上一个模块 重大变更保护",
+          "href": "/projects/github-index/protected-major-actions/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
