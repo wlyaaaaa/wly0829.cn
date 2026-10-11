@@ -105,12 +105,16 @@ def is_live(url):
     return parts.hostname in ("mcp.wly0829.cn", "live.wly0829.cn") or parts.path.startswith(("/__status", "/__proxy/mcp/", "/__proxy/live/"))
 def finding(category, message, selector="html", rect=None):
     return {"category": category, "message": message, "selector": selector, "rect": rect}
-def settle(page, activity, pending, all_images=False):
-    page.evaluate("""async all => {
-      const images = [...document.images].filter(i => i.getAttribute('src') && (all || i.loading !== 'lazy' || i.getBoundingClientRect().top < innerHeight));
+def settle(page, activity, pending):
+    page.evaluate("""async () => {
+      const images = [...document.images].filter(i => {
+        const r = i.getBoundingClientRect();
+        return i.getAttribute('src') && i.getClientRects().length > 0 && r.width > 0 && r.height > 0
+          && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+      });
       const ready = Promise.all([document.fonts.ready, ...images.map(i => i.complete ? null : new Promise(r => {i.addEventListener('load',r,{once:true});i.addEventListener('error',r,{once:true});}))]);
       await Promise.race([ready,new Promise((_, reject)=>setTimeout(()=>reject(new Error('字体或图片未完成')),20000))]);
-    }""", all_images)
+    }""")
     deadline = time.monotonic() + 30
     while pending or time.monotonic() - activity[0] < 1:
         if time.monotonic() > deadline: raise TimeoutError("网络未静默 1 秒")
@@ -155,7 +159,7 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items):
                     page.evaluate("(y)=>window.scrollTo({top:y,left:0,behavior:'instant'})", y)
                     page.wait_for_timeout(50); y += max(500, int(height * .8)); steps += 1
                 if steps == 1500: raise RuntimeError("滚动未覆盖整页")
-                settle(page, activity, pending, True)
+                settle(page, activity, pending)
                 page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending)
                 page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
                 row["failures"].extend(dom["failures"]); row["hints"].extend(dom["hints"])
