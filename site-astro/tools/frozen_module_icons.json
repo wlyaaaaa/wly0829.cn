@@ -1,0 +1,16 @@
+{
+  "schema": "frozen-module-icons.v1",
+  "icons": {
+    "why": {"key": "灯泡", "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png", "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165"},
+    "example": {"key": "双气泡", "asset": "_library/icons/双气泡.png", "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433"},
+    "result": {"key": "纸箱对勾", "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png", "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5"},
+    "normal": {"key": "绿色测试通过", "asset": "_library/hires-icons/试管对勾.png", "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1"},
+    "problem": {"key": "报警灯", "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png", "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be"},
+    "unavailable": {"key": "断开插头", "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png", "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3"},
+    "inputs": {"key": "工具箱", "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png", "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57"},
+    "steps": {"key": "上升台阶", "asset": "_library/icons/scene-r3-exact-three-stairs.png", "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2"},
+    "rules": {"key": "打勾清单", "asset": "_library/hires-icons/打勾清单.png", "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7"},
+    "failure": {"key": "扳手", "asset": "_library/hires-icons-r2/扳手.png", "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28"},
+    "sources": {"key": "数据库", "asset": "_library/hires-icons/数据库.png", "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2"}
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "frozen-module-layout.v1",
+  "card_layout": "two_columns_last_full",
+  "card_candidates": {
+    "two_columns_last_full": {"columns": 2, "last_full_width": true},
+    "three_columns": {"columns": 3, "last_full_width": false}
+  },
+  "templates": {
+    "top": {
+      "h": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "large", "row": "top", "width": "58%", "row_fit_illustration": true},
+        {"type": "action_button", "text_ref": "{{buttons}}", "row": "top"},
+        {"type": "prose", "text_ref": "{{lead}}", "row": "top"},
+        {"type": "prose", "text_ref": "{{intro}}", "row": "top"},
+        {"type": "illustration", "asset": "{{illustration}}", "row": "top", "width": "42%", "align": "center"}
+      ]},
+      "v": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "large"},
+        {"type": "action_button", "text_ref": "{{buttons}}"},
+        {"type": "prose", "text_ref": "{{lead}}"},
+        {"type": "prose", "text_ref": "{{intro}}"},
+        {"type": "illustration", "asset": "{{illustration}}", "align": "center"}
+      ]}
+    },
+    "usage_cards": {
+      "h": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "source_text_card", "text_ref": "{{cards}}", "columns": 2, "last_full_width": true, "icon_position": "header_left", "header_icon": ["{{icon_1}}", "{{icon_2}}", "{{icon_3}}"]}
+      ]},
+      "v": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "source_text_card", "text_ref": "{{cards}}", "columns": 1, "icon_position": "header_left", "header_icon": ["{{icon_1}}", "{{icon_2}}", "{{icon_3}}"]}
+      ]}
+    },
+    "outcome_cards": {
+      "h": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "source_text_card", "text_ref": "{{cards}}", "columns": 2, "last_full_width": true, "icon_position": "header_left", "header_icon": ["{{icon_1}}", "{{icon_2}}", "{{icon_3}}"]}
+      ]},
+      "v": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "source_text_card", "text_ref": "{{cards}}", "columns": 1, "icon_position": "header_left", "header_icon": ["{{icon_1}}", "{{icon_2}}", "{{icon_3}}"]}
+      ]}
+    },
+    "start": {
+      "h": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "prose", "text_ref": "{{intro}}", "row": "start", "width": "40%"},
+        {"type": "source_text_card", "text_ref": "{{inputs}}", "row": "start", "icon_position": "header_left", "header_icon": "{{icon_inputs}}"},
+        {"type": "section_heading", "text_ref": "{{steps}}", "row": "start", "width": "60%", "heading_icon": "{{icon_steps}}"},
+        {"type": "numbered_steps", "text_ref": "{{step_list}}", "row": "start", "columns": 1, "icons": "none", "illustration": "none", "connector": "none"}
+      ]},
+      "v": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "prose", "text_ref": "{{intro}}"},
+        {"type": "source_text_card", "text_ref": "{{inputs}}", "icon_position": "header_left", "header_icon": "{{icon_inputs}}"},
+        {"type": "section_heading", "text_ref": "{{steps}}", "heading_icon": "{{icon_steps}}"},
+        {"type": "numbered_steps", "text_ref": "{{step_list}}", "columns": 1, "icons": "none", "illustration": "none", "connector": "none"}
+      ]}
+    },
+    "technical": {
+      "h": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_rules}}"},
+        {"type": "prose", "text_ref": "{{intro}}"},
+        {"type": "numbered_steps", "text_ref": "{{rules}}", "columns": 1, "icons": "none", "illustration": "none", "connector": "none"}
+      ]},
+      "v": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_rules}}"},
+        {"type": "prose", "text_ref": "{{intro}}"},
+        {"type": "numbered_steps", "text_ref": "{{rules}}", "columns": 1, "icons": "none", "illustration": "none", "connector": "none"}
+      ]}
+    },
+    "definitions": {
+      "h": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "table", "text_ref": "{{table}}"}
+      ]},
+      "v": {"blocks": [
+        {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "medium"},
+        {"type": "table", "text_ref": "{{table}}"}
+      ]}
+    },
+    "failure": {
+      "h": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_failure}}"},
+        {"type": "prose", "text_ref": "{{callout}}"},
+        {"type": "bullet_list", "text_ref": "{{failures}}", "columns": 1, "icons": "none", "illustration": "none"}
+      ]},
+      "v": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_failure}}"},
+        {"type": "prose", "text_ref": "{{callout}}"},
+        {"type": "bullet_list", "text_ref": "{{failures}}", "columns": 1, "icons": "none", "illustration": "none"}
+      ]}
+    },
+    "sources": {
+      "h": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_sources}}"},
+        {"type": "bullet_list", "text_ref": "{{sources}}", "columns": 1, "icons": "none", "illustration": "none"}
+      ]},
+      "v": {"blocks": [
+        {"type": "section_heading", "text_ref": "{{title}}", "size": "large", "heading_icon": "{{icon_sources}}"},
+        {"type": "bullet_list", "text_ref": "{{sources}}", "columns": 1, "icons": "none", "illustration": "none"}
+      ]}
+    }
+  }
+}
