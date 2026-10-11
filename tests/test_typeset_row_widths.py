@@ -52,6 +52,14 @@ class RowWidthTests(unittest.TestCase):
             b["row_v"] = True
         self.assertEqual(len(self.render(screen, blocks, "v").select(".row > .col")), 2)
 
+    def test_explicit_vertical_alignment_survives_in_html_without_default(self):
+        for value in ("start", "center", "end", None):
+            screen, blocks = self.fixture()
+            blocks[0]["row_valign"] = value
+            row = self.render(screen, blocks).select_one(".row")
+            self.assertEqual(row.get("data-row-valign"), value)
+            self.assertEqual("mid" in row.get("class", []), value == "center")
+
     def test_conversion_preserves_short_layout_and_stacks_long_or_narrow_text(self):
         for body, steps, width, stacked in (("资料" * 30, "步骤" * 50, None, False),
                                             ("资料" * 400, "步骤" * 500, None, True),

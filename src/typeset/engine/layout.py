@@ -460,6 +460,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
                 if b["spec"].get(k) not in (None, "", False):
                     sp0.setdefault(k, b["spec"][k])
         rcls = (" eqh" if sp0.get("row_equal_height") else "") + (" mid" if sp0.get("row_valign") == "center" else "")
+        valign = f' data-row-valign="{sp0["row_valign"]}"' if sp0.get("row_valign") in ("start", "center", "end") else ""
         fit_disabled = orient == "h" and any(b["spec"].get("row_fit_illustration") is False for b, _ in row)
         if sp0.get("row_fit_illustration") is True and not fit_disabled:
             rcls += " fit-ill"
@@ -474,7 +475,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
             w = row[0][0]["spec"].get("width")
             single = inline_rows(row)
             if w or rst:  # 同 row 只有一块：照 width 占宽、靠左（不补空占位）；row_align 可居中/靠右
-                parts.append((frame, f'<div class="row1" style="{f"width:{E(str(w))};" if w else ""}{rst}">{single}</div>'))
+                parts.append((frame, f'<div class="row1"{valign} style="{f"width:{E(str(w))};" if w else ""}{rst}">{single}</div>'))
             else:
                 parts.append((frame, single))
         else:
@@ -495,7 +496,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
             # 百分比按比例换成 fr，免得加上栏间距后溢出
             tmpl = " ".join(pct(w) for w in row_widths([w for w, _ in cols]))
             inner = inline_rows if frame else wrap_frames
-            parts.append((frame, f'<div class="row{rcls}" style="grid-template-columns:{tmpl};{rst}">' +
+            parts.append((frame, f'<div class="row{rcls}"{valign} style="grid-template-columns:{tmpl};{rst}">' +
                           "".join('<div class="col"' + (f' style="--row-card-column:{i + 1}"' if sp0.get("row_card_notes") is True else "") + f'>{inner(it)}</div>' for i, (_, it) in enumerate(cols)) + "</div>"))
         row, row_name = [], None
 
