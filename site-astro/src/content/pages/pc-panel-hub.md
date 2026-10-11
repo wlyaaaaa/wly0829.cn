@@ -1307,13 +1307,12 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "type": "chapter_title",
      "align": "left",
      "size": "medium",
-     "row": "detail",
-     "width": "78%",
+     "row": "heading",
      "text_ref": "机箱屏：一整条电脑状态"
     },
     {
      "type": "prose",
-     "row": "detail",
+     "row": "heading",
      "text_ref": "一块 8.8"
     },
     {
@@ -1322,20 +1321,9 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "illustration": "left_inside",
      "connector": "none",
      "row": "detail",
+     "width": "78%",
      "text_ref": "1 时钟和天气",
      "item_layout": "left_inside"
-    },
-    {
-     "type": "content_card",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "left_inside",
-     "connector": "none",
-     "row": "detail",
-     "text_ref": "数据从哪来",
-     "icons": [
-      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
-     ]
     },
     {
      "type": "numbered_screenshot",
@@ -1351,6 +1339,18 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "type": "prose",
      "row": "detail",
      "text_ref": "8 月 30 日发给机箱屏"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "connector": "none",
+     "row": "source",
+     "text_ref": "数据从哪来",
+     "icons": [
+      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
+     ]
     }
    ],
    "notes": "横版左侧九条编号细卡及数据来源卡，截图整屏右侧竖长1:4，各条右端虚线箭头指截图；竖版截图在导语后，九条单列，来源卡和图注在原v2末尾；截图内部留空。原图小标题用中号，保留角色。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。；main-closer：审查第4条的首个合法备选：九项图在左文字在右、压矮单列；九引线用480x1920源renderer实坐标，静态截图仍是合法空槽，原图/源字不改。",
