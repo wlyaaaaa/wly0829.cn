@@ -6,10 +6,19 @@ from pathlib import Path
 import re
 import sys
 
-from checks import DATE, HISTORY, WORDS
+from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, validate_entries, LEDGER
 
 BEIJING = timezone(timedelta(hours=8))
+# 识别紧接“截至”的日期写法，不向后搜索数量、版本或另一句中的日期。
+DATE_NUMBER = r"[\d〇零一二三四五六七八九十两]+"
+DATE_CN = rf"(?:{DATE_NUMBER}\s*年\s*)?{DATE_NUMBER}\s*月\s*{DATE_NUMBER}\s*日?"
+DATE_POINT = rf"(?:{DATE_CN}|\d{{4}}[-/]\d{{1,2}}[-/]\d{{1,2}})"
+DATE_RANGE = rf"{DATE_POINT}(?:[ \t]*[–—~～至到-][ \t]*(?:{DATE_POINT}|{DATE_NUMBER}\s*日?))?"
+CUTOFF_DATE = re.compile(rf"[ \t:：（(*`【\[]*(?:北京时间[ \t]*)?(?P<date>{DATE_RANGE}|"
+                         rf"{DATE_NUMBER}\s*月(?:底|初|末|[上下中]旬)|今天|今日|昨天|昨日|前天|昨晚|今早|"
+                         rf"现在|目前|本周|上周|本月|上月|\{{\{{[^{{}}\n]*\bas_of\b[^{{}}\n]*\}}\}})"
+                         rf"(?:[ T]?\d{{1,2}}:\d{{2}}(?::\d{{2}})?)?(?![\d〇零一二三四五六七八九十两年月日./\\])")
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "src/typeset"))
 from engine import parse as parser
 from engine.layout import assign_by_spec
@@ -131,6 +140,9 @@ def build_inventory(pages_root, records, entries=None):
                         original_date=original_date, historical=historical, page_number=number.get("id") if number else None)
             bound = [r for r in by_page[slug] if matches(r, item, page, text)]
             active = [r for r in bound if not r.get("historical") and not r.get("frozen")]
+            if bound and not active:
+                historical = True
+                item["historical"] = True
             sources = active or bound
             hint = page.get("status_line", {}).get("source", "") if field.startswith("status_line.") else ""
             automatic = (surface == "visible" and not historical and bool(active)
@@ -159,10 +171,11 @@ def build_inventory(pages_root, records, entries=None):
             for occurrence in re.finditer("截至", text):
                 cutoff_pages.add(slug)
                 cutoff_surfaces[surface] += 1
-                dated = DATE.search(text, occurrence.end())
+                dated = CUTOFF_DATE.match(text, occurrence.end())
+                if not dated:
+                    continue
                 add("as_of", field, text, occurrence.start(),
-                    dated.end() if dated and "\n" not in text[occurrence.end():dated.start()] else occurrence.end(), surface=surface,
-                    original_date=dated[0] if dated and "\n" not in text[occurrence.end():dated.start()] else None)
+                    dated.end("date"), surface=surface, original_date=dated["date"])
             if leaf == "source_note":
                 add("source_note", field, text, surface=surface)
         status = page.get("status_line")
@@ -189,8 +202,9 @@ def build_inventory(pages_root, records, entries=None):
                 if block.get("variant") == "source_note" and key not in source_notes:
                     source_notes.append(key)
         text = first.get("text", "")
-        dated = re.search(r"截至[^\n]*", text)
-        card_date = DATE.search(dated[0])[0] if dated and DATE.search(dated[0]) else (status or {}).get("as_of")
+        dated = next((found for word in re.finditer("截至", text)
+                      if (found := CUTOFF_DATE.match(text, word.end()))), None)
+        card_date = dated["date"] if dated else (status or {}).get("as_of")
         line_spans, offset = [], 0
         for line in text.splitlines(keepends=True):
             line_spans.append((offset, offset + len(line.rstrip("\r\n")), parser.canon(parser.normalize(line.rstrip("\r\n")))))

@@ -125,6 +125,31 @@ class RetrievalTests(unittest.TestCase):
         self.assertIsNone(result["rows"][-1]["new_value"])
         self.assertEqual(result["rows"][-1]["page_date"], "2026-10-01")
 
+    def test_qualified_event_date_marks_manual_number_edit_instead_of_today(self):
+        path = self.root / "sources/pages/demo/page.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps({"page": "demo", "screens": [{"id": "demo-01", "text": "3 件；截至 2026-10-01（库最近一次写入）"}]}), encoding="utf-8")
+        number = {"id": "count", "page": "demo", "screen": "demo-01", "label": "计数", "automatic": True,
+                  "scope_status": "verified", "as_of": "2026-10-01", "source_location": "合成测试",
+                  "page_pattern": r"(3) 件", "retrieve": {"kind": "json", "path": "count.json"}}
+        date = dict(number, id="date", field="screens[0].text", page_pattern=r"截至 (2026-10-01)", qualifies=["count"])
+        with patch.object(refresh, "bounded", return_value="[4]"):
+            result = refresh.collect(self.root, {"records": [number, date]})
+        self.assertEqual(result["rows"][1]["status"], "manual_review")
+        self.assertIsNone(result["rows"][1]["new_value"])
+        from apply_edits import build_number_edits
+        edits = build_number_edits(self.root, result)
+        self.assertEqual(len(edits["manual_reviews"]), 1)
+        self.assertEqual(edits["manual_reviews"][0]["old_value"], "2026-10-01")
+        self.assertEqual(len(edits["edits"]), 1)
+        with patch.object(refresh, "bounded", return_value="[4]"):
+            result = refresh.collect(self.root, {"records": [number, dict(date, field=None)]})
+            self.assertEqual(result["rows"][1]["status"], "manual_review")
+            invalid = dict(date, start=path.read_text("utf-8").find("2026-10-01"), end=999)
+            result = refresh.collect(self.root, {"records": [number, invalid]})
+            self.assertIsNone(result["rows"][1]["new_value"])
+            self.assertEqual(result["rows"][0]["new_value"], 4)
+
 
 if __name__ == "__main__":
     unittest.main()
