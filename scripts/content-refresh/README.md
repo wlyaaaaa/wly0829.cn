@@ -1,5 +1,48 @@
 # 按需更新程序
 
+## S1 常设格式（2026-10-11 定稿）
+
+保留 `registry.json` 的 `content-refresh.sources.v1` 和原有记录字段。新增字段均放在
+`records[]` 的同一条记录：`field` 是 JSON 字段路径（如 `screens[0].text`、
+`status_line.facts[0]`、`status_line.last.at`），`start/end` 可限定字符串字符范围。
+`page_pattern` 必须只有一个匹配，用捕获组 1 指定旧值；`page_number` 继续兼容。
+来源记录的 `automatic=true`、`scope_status=verified` 和 `measurement_scope` 表明同口径
+已核实；新办法不能省掉这一步。`private=true` 是数据类别，登记过的只读计数/状态
+入口仍可自动取数，不许可输出私人条目正文。
+
+新增只读办法：
+
+```json
+{"kind":"entry","entry":"materials-status","pointer":["materials"],"timeout":20}
+{"kind":"sqlite_ro","path":"E:/PersonalData/材料库/materials.sqlite3","sql":"select count(*) from filename_entries"}
+{"kind":"log_window","path":"%LOCALAPPDATA%/PCConfig/logs/hot-backup","include":["personal-replica-*.log"],"pattern":"materials_sync_current.*complete","days":null,"operation":"count"}
+{"kind":"usage_ledger","key":"personal-materials","operation":"count_7d"}
+```
+
+`entries.json` 是入口名到配置的白名单对象。普通入口配置为
+`{"argv":["python","E:/已核实的入口.py","status"],"cwd":"E:/入口所在目录","read_only":true,"owner_project":"personal-materials","output":"json"}`。
+登记人先从源代码核实只读；argv 数组直接执行，不经 shell，也不接受记录内的任意命令。
+可在入口或 retrieve 内写正数 `timeout`；同一入口一次刷新只调用一次，所有 pointer 共用结果。
+SQLite 以 URI `mode=ro` 打开，只接受一条 select 和单行单列结果。
+`log_window.days=null` 数全量匹配行；正数则按日志行 ISO 时间戳取最近窗口，
+`operation=last_time` 返回最后匹配时间。没有可解析时间时不能凭文件修改时间冒充。
+
+账本只登记一次，保留键 `__usage_ledger__`：
+`{"path":"E:/已核实账本.jsonl","format":"jsonl","key_field":"key","time_field":"used_at","read_only":true,"owner_project":"agents"}`。
+也支持 `format=json` 的数组，或用 `pointer` 指定数组；字段支持点分路径。
+每行是一次使用；`count_7d` 数当前观察时刻前七天内相同 key 的行，
+`last_time` 返回相同 key 的最后时间。账本停写另标 source_broken，不能把统计结果当仍在写。
+
+截至日期记录使用 `qualifies:["数字记录id",...]`，不用独立 retrieve，
+仍须通过 field/page_pattern 绑定实际日期。只有所有被注明数字均取得同口径新值时，
+截至日期才更新为这些数字最早的观察日期；任何 Unknown 都保留旧日期。
+盘点输出 `qualifies_suggestion` 供 GPT 核对，建议本身不算登记。
+
+非历史、非 `status_line.state` 的人工记录必须同时有 `manual_reason` 和非空
+`manual_route`。理由仅限 `needs_admin_rescan`、`ui_only`、`external_account`、
+`judgment`、`source_broken`；最后一种的 route 写来源修复去向，其余写 GPT 去哪里怎么取。
+历史与状态判断保留原来的例外。严格门会逐项报告旧清单缺失，不把旧格式自动伪造成合规。
+
 本人提出更新总看板时，AI 手动运行一次。程序读取来源表，取回能自动统计的数字，与当前 `sources/pages` 对照；生成一张结果网页、原有内容任务单，以及逐项清单和给 GPT 的分组事实任务单。本人只看网页，JSON 和 Markdown 是 AI 接续用的中间文件。本程序没有定时任务，不修改页面，不接进构建或发布，不在构建时读取本机。
 
 ```powershell
