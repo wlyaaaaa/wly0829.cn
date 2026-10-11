@@ -1,0 +1,1238 @@
+---
+{
+ "title": "对电脑说话，直接把文字输入当前应用",
+ "kind": "project",
+ "url": "/projects/chinese-asr/desktop-dictation/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "chinese-asr-desktop-dictation",
+  "kind": "project",
+  "title": "对电脑说话，直接把文字输入当前应用",
+  "url": "/projects/chinese-asr/desktop-dictation/",
+  "parent": "chinese-asr",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。"
+  }
+ },
+ "source": {
+  "page": "sources/pages/chinese-asr-desktop-dictation/page.json",
+  "sha256": "ca9bbf920feaee2fc3fcf30ecb24787433e5b634f0af32f82bf0c79ef54ed243",
+  "converted_at_beijing": "2026-10-11T18:50:42+08:00"
+ }
+}
+---
+
+::screen{#chinese-asr-desktop-dictation-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-01",
+  "section": "top",
+  "title": "对电脑说话，直接把文字输入当前应用",
+  "links": [
+   {
+    "text": "回到项目 → 中文语音转写",
+    "href": "/projects/chinese-asr/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/ChineseASR"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/chinese-asr/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "对电脑说话，直接把文字输入当前应用",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "用一个小面板控制开始、暂停和取消，说出的话变成我此刻所在输入框里的文字；中途换了窗口，后面的字就跟着去新位置。单 Qwen 识别，不等待文件复核的第二套模型。",
+     "row": "top"
+    },
+    {
+     "type": "prose",
+     "text_ref": "**当前情况：**听写已安装并在运行（10 月 11 日核对：登录任务运行中，快捷键和开始菜单入口都在），文字跟随当前输入位置的修复已在 10 月 2 日加入；个人麦克风、口音和文字上屏体验没有重新测试。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "对电脑说话，直接把文字输入当前应用",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · ChineseASR 公开仓库 main（1bd5a04，北京 10 月 11 日 00:52）按当天 14:00 前状态只读核对，听写运行状态取 10 月 11 日 13:38 记录；历史测试保留各自日期。"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "用一个小面板控制开始、暂停和取消，说出的话变成我此刻所在输入框里的文字；中途换了窗口，后面的字就跟着去新位置。单 Qwen 识别，不等待文件复核的第二套模型。"
+    },
+    {
+     "type": "prose",
+     "text_ref": "**当前情况：**听写已安装并在运行（10 月 11 日核对：登录任务运行中，快捷键和开始菜单入口都在），文字跟随当前输入位置的修复已在 10 月 2 日加入；个人麦克风、口音和文字上屏体验没有重新测试。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/illustrations/modules/chinese-asr/desktop-dictation/desktop-dictation-v01.png",
+   "key": "main-chinese-asr",
+   "source_phrase": "右上一幅水彩插画：一只夹在衣领上的小麦克风，声波一圈圈荡开，化成一行行浅灰短线落到一张纸上，纸上有两处淡黄色的小标记（纸上只画短线和黄标记，不画任何字）；纸旁一块显卡侧面亮着绿光；右下角浮着一个白底绿色的小胶囊（听写小窗：一个绿色麦克风图标、一个小下拉箭头、一个小叉，麦克风右上角一颗绿色小圆点）。",
+   "sha256": "7c0c546e55c2e9ccd5b0ba73396cb1b0c017f42ddbbe3d822afa95df6477f5eb",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 对电脑说话，直接把文字输入当前应用
+
+〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+ChineseASR · 功能说明
+
+用一个小面板控制开始、暂停和取消，说出的话变成我此刻所在输入框里的文字；中途换了窗口，后面的字就跟着去新位置。单 Qwen 识别，不等待文件复核的第二套模型。
+
+**当前情况：**听写已安装并在运行（10 月 11 日核对：登录任务运行中，快捷键和开始菜单入口都在），文字跟随当前输入位置的修复已在 10 月 2 日加入；个人麦克风、口音和文字上屏体验没有重新测试。
+
+项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。
+
+项目源码：公开仓库
+
+::screen{#chinese-asr-desktop-dictation-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 说话打字最怕三件事：换了个窗口，后面的字却还往旧窗口塞，或者干脆停住；麦克风被悄悄换掉；点了收起却仍在录音。这个入口把显示、采音、识别和输入落点分开：字永远打进我当下所在的位置，我"
+   },
+   {
+    "id": "module-product",
+    "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 说话打字最怕三件事：换了个窗口，后面的字却还往旧窗口塞，或者干脆停住；麦克风被悄悄换掉；点了收起却仍在录音。这个入口把显示、采音、识别和输入落点分开：字永远打进我当下所在的位置，我"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+说话打字最怕三件事：换了个窗口，后面的字却还往旧窗口塞，或者干脆停住；麦克风被悄悄换掉；点了收起却仍在录音。这个入口把显示、采音、识别和输入落点分开：字永远打进我当下所在的位置，我能随时暂停和取消；它不为追求顺口而自动润色或回车发送。
+
+## 举个实际例子
+
+“这段邮件我想口述，识别好先放进编辑框，不要发送。”我在编辑框里按 Win+H 开始说，文字一段段打进去；说到一半切去聊天窗口回了一句，接下来的字就打进聊天框，不会把我拽回邮件窗口。全部说完我自己检查，再决定发送。
+
+## 最后我会得到什么
+
+得到打进当前输入位置的文字和面板状态；最近一段完整文字留在内存里，随时可以复制。取消只丢弃尚未输入的片段，不能撤销已经输入的字。
+
+## 正常时
+
+录音按钮变绿表示正在采音；每段识别完，先重新看一眼我现在所在的窗口和输入框，再把整句打进去。切换应用或输入框不会暂停录音、不收起小窗，也不报错。我控制下一段、暂停和最后发送。
+
+## 发现问题时
+
+一时没有能打字的地方（焦点落在小窗自己身上，或快捷键还没松开）时，小窗显示中性的“等待输入位置”：点回输入框就接着打，这段文字留在内存里可以从菜单复制，恢复后只打新出来的字，不把旧的再打一遍。真的发送失败才报红“文字输入失败”，下一段照样重试；管理员权限的窗口可能拒收，从托盘复制取回。Esc 取消未输入内容，已输入部分继续留在应用里。
+
+## 入口不可用或证据不足时
+
+指定麦克风缺席、采音丢帧、模型或GPU资源不可用时显示具体问题，不改用另一麦克风或云端，不把空识别和坏声音送进输入框。
+
+::screen{#chinese-asr-desktop-dictation-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+## 正常时
+
+录音按钮变绿表示正在采音；有效语句识别完成、原焦点仍合适时输入整句文字。本人控制下一段、暂停和最后发送。
+
+## 发现问题时
+
+焦点变化或管理员窗口拒绝输入时停止自动输入，保留托盘复制入口；Esc取消未输入内容，已输入部分继续留在应用里。
+
+## 入口不可用或证据不足时
+
+指定麦克风缺席、采音丢帧、模型或GPU资源不可用时显示具体问题，不改用另一麦克风或云端，不把空识别和坏声音送进输入框。
+
+::screen{#chinese-asr-desktop-dictation-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "点好要输入的文本框，用 Win+H 唤起听写小窗。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **系统核对并处理**　小窗收这一句，停顿后由本地单模型识别；输入前重新读取我此刻所在的窗口和焦点，打进那里；暂时没有输入位置就等待，最近文本留着供主动复制。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "点好要输入的文本框，用 Win+H 唤起听写小窗。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **系统核对并处理**　小窗收这一句，停顿后由本地单模型识别；输入前重新读取我此刻所在的窗口和焦点，打进那里；暂时没有输入位置就等待，最近文本留着供主动复制。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+点好要输入的文本框，用 Win+H 唤起听写小窗。
+
+## 需要准备什么
+
+- 当前可编辑位置
+
+- 要口述的句子
+
+## 从开始到拿到结果
+
+1. **系统核对并处理**　小窗收这一句，停顿后由本地单模型识别；输入前重新读取我此刻所在的窗口和焦点，打进那里；暂时没有输入位置就等待，最近文本留着供主动复制。
+
+2. **交付与接续**　得到输入框里的文字，不自动发送；取消只丢尚未输入的片段，已输入内容不会撤销。模型偶尔吐出的繁体字只换成简体字形，不改用词（这项 10 月 11 日的改动要等听写下次重启才用上）。
+
+::screen{#chinese-asr-desktop-dictation-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日核对登录任务运行中、入口匹配；按当前位置输入与繁简只换字形已在源码，只做过后台程序检查，个人麦克风与上屏体验未重验 ## 关键规则与设计选"
+   },
+   {
+    "id": "module-technical",
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日核对登录任务运行中、入口匹配；按当前位置输入与繁简只换字形已在源码，只做过后台程序检查，个人麦克风与上屏体验未重验 ## 关键规则与设计选"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 开始菜单“中文听写”通知同一个托盘进程，已有实例时不会再开一份。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 开始菜单“中文听写”通知同一个托盘进程，已有实例时不会再开一份。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+10 月 11 日核对登录任务运行中、入口匹配；按当前位置输入与繁简只换字形已在源码，只做过后台程序检查，个人麦克风与上屏体验未重验
+
+## 关键规则与设计选择
+
+1. 开始菜单“中文听写”通知同一个托盘进程，已有实例时不会再开一份。
+
+2. 麦克风按钮只切录音与暂停；×隐藏并暂停、继续完成尾句；托盘退出才真正结束程序。
+
+3. 录音和最近文本只留内存，主动复制才写剪贴板；需要持久文件、逐段审计或恢复历史时使用文件转写路线。
+
+4. 登录预载模型不自动开麦；暂停保留内存模型但释放显存及租约，再次唤起仍须等待实际资源就绪。
+
+5. 单个Qwen3-ASR-1.7B用于听写，不改变文件quick/strict的模型选择，不承诺逐字流式或固定端到端延迟。
+
+6. 模型准备、GPU被合法文件任务占用和指定麦克风断开分别显示；等待保留内存音频，可Esc取消，不能为掩盖争用抢租约或偷偷切换设备。
+
+## 当前怎样实现
+
+- 桌面入口 scripts/dictation.ps1 维护独立托盘进程，不进入文件 Smart API 的 job（任务记录） 队列；dictation.py 组织采音、分句、推理与取消，dictation_audio.py 处理输入设备，dictation_windows.py 维护 Win+H/Esc 和文字注入。开始菜单中文听写.lnk经Start-Dictation.vbs隐藏调用Start；已运行时用同会话Start事件通知原窗口执行快捷键同一动作，未运行时由现有任务启动并最多等待30秒，不另建实例。
+
+- configs/dictation.yaml：16 kHz、silence_ms=600、min_speech_ms=240、max_chunk_sec=20；默认指定 DJI Mic Mini，input_device: null 才跟随 Windows 默认输入。hotwords 当前为空，避免不清晰声音触发术语复读；轻量 WebRTC VAD（语音活动检测）保留语句前后缓冲，无有效语音或空识别时不输入。
+
+::screen{#chinese-asr-desktop-dictation-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- dictation_windows.py 的 insert_text 先等快捷键修饰键松开（最多 0.5 秒），再在每段写入时独立重读当前外部前台窗口和焦点，用 SendInput 输入，不复用旧窗口、也不把它拉到前台。没有外部输入目标、焦点在自己窗口或修饰键未松开时返回 TEMPORARILY_UNAVAILABLE，dictation.py 显示中性“等待输入位置”，恢复后只输入新结果、不重放没送出的旧片段；SendInput 实际失败才显示红色“文字输入失败”，下一段仍重新尝试（实现 16fef59、规则与验收边界 9def713，北京 10 月 2 日）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- dictation_windows.py 的 insert_text 先等快捷键修饰键松开（最多 0.5 秒），再在每段写入时独立重读当前外部前台窗口和焦点，用 SendInput 输入，不复用旧窗口、也不把它拉到前台。没有外部输入目标、焦点在自己窗口或修饰键未松开时返回 TEMPORARILY_UNAVAILABLE，dictation.py 显示中性“等待输入位置”，恢复后只输入新结果、不重放没送出的旧片段；SendInput 实际失败才显示红色“文字输入失败”，下一段仍重新尝试（实现 16fef59、规则与验收边界 9def713，北京 10 月 2 日）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+- dictation_windows.py 的 insert_text 先等快捷键修饰键松开（最多 0.5 秒），再在每段写入时独立重读当前外部前台窗口和焦点，用 SendInput 输入，不复用旧窗口、也不把它拉到前台。没有外部输入目标、焦点在自己窗口或修饰键未松开时返回 TEMPORARILY_UNAVAILABLE，dictation.py 显示中性“等待输入位置”，恢复后只输入新结果、不重放没送出的旧片段；SendInput 实际失败才显示红色“文字输入失败”，下一段仍重新尝试（实现 16fef59、规则与验收边界 9def713，北京 10 月 2 日）。
+
+- 当前面板为 200×75 实际像素；优先 MTT1337 VDD，缺席时用 PHLC34B 物理主屏，只保留一份面板并在显示变化时重定位，可自由拖动。旧图层素材自身的 160×60 不代表实际窗口大小。
+
+- 设备菜单随 DPI 缩放，主面板按实际像素固定；选定麦克风下次录音重新枚举，缺设备不改用另一麦克风。本机 preferences.json 保存选择，不修改 Windows 默认设备。若同一设备不接受16kHz，尝试它报告的原生采样率；按实际采样率分句，再用resample_poly把完整语句转成模型要求的16kHz。采音丢帧或采样率未准备好时取消尚未输入内容，不把坏声音当成功。
+
+- 听写直接使用Qwen3-ASR-1.7B，不做双模型等待或LLM润色；输出经 text_normalizer 用 OpenCC t2s 只把繁体字形换成简体（“軟體”→“软体”，不换成“软件”），10 月 11 日 00:52 提交 1bd5a04 起生效，正在运行的听写进程启动更早，重启后才会用上。模型预载内存，录音推理时通过LocalGpuBroker（本地 GPU 调度器）申请ASR（自动语音识别）租约，暂停将模型放回内存并释放显存。
+
+- 音频和最近文本不保存为历史；outputs/dictation/runtime.log仅记录错误、耗时和字数，preferences.json只保存本机麦克风选择。scripts/dictation.ps1的Install安装依赖、创建ChineseASR Dictation登录任务并启动；Status只读状态，Start/Stop控制现有进程，Uninstall移除登录自启但保留项目和模型。
+
+- dictation_worker.py 把原生模型调用放入常驻受监督子进程，匿名管道传内存音频；加载180秒、操作60秒、预热40秒、停车20秒。启动最多恢复一次，未返回的一句确认进程已退出后最多重试一次；预热超时重载但不重复预热，反复失败转为可操作错误。
+
+## 执行流程
+
+1. 本人点好输入框，从快捷键或开始菜单唤起同一听写进程。
+
+2. 重新枚举指定麦克风；设备支持时以16kHz采音，否则使用同设备原生采样率，再把整句转为16kHz。
+
+::screen{#chinese-asr-desktop-dictation-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "3. 在当前选定的一个屏上显示 200×75 面板；采音留内存，VAD（语音活动检测） 判断有效语句，不重复开两套控制窗。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "3. 在当前选定的一个屏上显示 200×75 面板；采音留内存，VAD（语音活动检测） 判断有效语句，不重复开两套控制窗。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+3. 在当前选定的一个屏上显示 200×75 面板；采音留内存，VAD（语音活动检测） 判断有效语句，不重复开两套控制窗。
+
+4. 约600ms停顿、20秒上限或手动暂停后，以单个Qwen模型识别整句。
+
+5. 输入前检查取消状态，并重新读取当前前台窗口和焦点：有外部输入位置就打进去；暂时没有就显示“等待输入位置”，最近完整文本留在内存供复制，恢复后只输入新结果；真正发送失败才报红，下一段再试。
+
+6. 暂停或隐藏后停录并处理允许的尾句，释放显存；退出结束程序并交还快捷键，下一次重新开始。
+
+::screen{#chinese-asr-desktop-dictation-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-08",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+| --- | --- |
+| VAD（语音活动检测） | 判断这一段是否含有效语音，保留句内及前后缓冲；无语音或空识别不会输入文字。 |
+| 原生采样率 | 麦克风实际支持的采音频率；同设备不接受16kHz时先按支持值录制，再转换完整语句。 |
+| 单面板的显示选择 | MTT1337 已接入时优先显示，否则回到 PHLC34B 物理主屏；这是同一次听写的唯一控制窗，不是双屏并行录音。 |
+| 最近完整文本 | 只为本次主动复制保留在内存中的识别结果，不是跨退出保存的聊天或录音档案。 |
+
+## 专业定义
+
+停顿后把整句文字打进我此刻所在的输入位置；面板只显示一份，模型卡住有期限和恢复；暂时没有输入点时等待而不乱打，真正发送失败才报错，取消不把迟到文字塞进任何地方。
+
+解决什么
+
+防止永久停在准备中、模型调用拖住界面、换了窗口后文字还往旧窗口塞或把旧窗口抢回前台、把“暂时没地方打字”误报成故障、缺设备误录别的麦克风，以及收起后无意继续录音。
+
+::screen{#chinese-asr-desktop-dictation-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-09",
+  "section": "tech",
+  "title": "出问题时（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "失败与恢复",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "失败与恢复",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（一）
+
+解决什么
+
+防止永久停在准备中、模型调用拖住界面、迟到文字进入错误焦点、缺设备误录别的麦克风，以及收起后无意继续录音。
+
+## 边界
+
+- 默认指定DJI Mic Mini，input_device=null才跟随Windows默认输入；没有设备时不静默换麦。
+
+- 尚无逐字流式输出，不做自动润色、双模型复核或自动发送。
+
+- ×隐藏并暂停与退出程序不同；Esc不撤销已经送进应用的文字。
+
+- 两个显示器按硬件型号而非DISPLAY编号选择，未接入目标不显示；这不改变显示拓扑。
+
+- 9月9日DJI端点被枚举到不等于已经开麦、验证个人口音或测得按键到上屏延迟。
+
+## 失败与恢复
+
+- **暂时没有输入位置（焦点落在小窗自己身上，或快捷键还没松开）**：显示中性的“等待输入位置”，不停录、不报红；点回输入框后只输入新结果，没送出的那段从托盘或小箭头菜单复制取回。
+
+- **文字真实发送失败，或管理员权限窗口拒收**：报红“文字输入失败”，下一段照常重试；通过托盘主动复制最近文本，再由本人选择粘贴位置。
+
+- **听写按 Esc 或退出**：取消尚未输入部分并停麦克风，已输入文字保留；退出交还系统 Win+H。
+
+::screen{#chinese-asr-desktop-dictation-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-10",
+  "section": "tech",
+  "title": "出问题时（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **指定麦克风未连接**：提示连接指定设备，不切换到其他麦克风；检查配置或连接后再开始。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **指定麦克风未连接**：提示连接指定设备，不切换到其他麦克风；检查配置或连接后再开始。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（二）
+
+- **指定麦克风未连接**：提示连接指定设备，不切换到其他麦克风；检查配置或连接后再开始。
+
+- **同一麦克风不接受16kHz**：尝试该设备报告的原生采样率，再转换整句；采音丢帧或采样率未准备好时取消未输入内容。
+
+- **模型或GPU租约不可用**：保留明确错误和当前控制入口，不绕过显卡协调器、换模型或上传云端。
+
+- **屏幕接回、断开或分辨率改变**：按硬件型号重新定位目标小窗，同一次录音与选择继续共享；未接入的目标不显示。
+
+- **真正退出或程序中断**：结束本次内存会话；沿Start或开始菜单重开，旧录音和文字没有可恢复的文件任务记录。
+
+::screen{#chinese-asr-desktop-dictation-11 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-11",
+  "section": "tech",
+  "title": "依据与来源（一）",
+  "links": [
+   {
+    "text": "下一个模块 入口与任务",
+    "href": "/projects/chinese-asr/task-routing/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 听写安装、自启动与停启状态",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 听写安装、自启动与停启状态",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（一）
+
+## 真实入口
+
+- 听写安装、自启动与停启状态
+
+- 采音分句、推理、“等待输入位置”提示与取消
+
+- Windows 快捷键、托盘与按当前焦点注入文字
+
+- 独立听写模型、指定设备、分句与单面板显示优先级
+
+- 设备枚举、采音、原生采样率与重采样
+
+- 有效语音检测与缓冲
+
+- 输入位置跟随、单面板重定位与控制回归
+
+## 如何验证
+
+- 现行公开 main=1bd5a048747392afa1eeec050a46a6146b803595（北京 10 月 11 日 00:52 提交，本地与远端一致），本页技术事实于 10 月 11 日据此只读核对；9 月 9 日记录的 12eb64e93586b8fce8a4d2b9750c4d097b78ae5a 只作历史基线。新增网页模块不代表新增源码能力。
+
+::screen{#chinese-asr-desktop-dictation-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "chinese-asr-desktop-dictation-12",
+  "section": "tech",
+  "title": "依据与来源（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 2026-10-11 13:38 记录：ChineseASR Dictation 已安装且在运行，快捷键与开始菜单入口归属匹配；这次运行从 10 月 10 日 11:06 开始（任务结果码 267009 表示仍在运行，不是启动失败）。它晚于 10 月 2 日的输入位置修复，早于 10 月 11 日的繁简改动；没有重启，也没有核对内存里已加载的版本。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 2026-10-11 13:38 记录：ChineseASR Dictation 已安装且在运行，快捷键与开始菜单入口归属匹配；这次运行从 10 月 10 日 11:06 开始（任务结果码 267009 表示仍在运行，不是启动失败）。它晚于 10 月 2 日的输入位置修复，早于 10 月 11 日的繁简改动；没有重启，也没有核对内存里已加载的版本。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（二）
+
+- 2026-10-11 13:38 记录：ChineseASR Dictation 已安装且在运行，快捷键与开始菜单入口归属匹配；这次运行从 10 月 10 日 11:06 开始（任务结果码 267009 表示仍在运行，不是启动失败）。它晚于 10 月 2 日的输入位置修复，早于 10 月 11 日的繁简改动；没有重启，也没有核对内存里已加载的版本。
+
+- 历史测试保留原日期：2026-09-09 三个听写测试模块 45 项通过、1.225 秒；9月7日71通过/1跳过、9月5日完整376项；9 月 17 日用公开音频验过单模型听写识别（不往桌面注入文字）。繁简改动新增 4 个测试定义，本轮没有执行。以上不叠加为新全套。
+
+- 输入位置修复按项目规则只做后台程序检查，不操作本人鼠标键盘、不另安排本人测试。个人口音、DJI 麦克风采音、真实快捷键、200×75 实际桌面位置、切换窗口后的上屏与管理员窗口输入，本轮均未重验；任务在运行和来源测试不替代使用结果。
+
+## 与其他模块的关系
+
+桌面听写负责实时采音和应用输入；文件入口与任务模块负责已有录音、持久任务和文件结果。二者复用已有模型适配器与GPU协调，但输入、输出和恢复生命周期分别验收。

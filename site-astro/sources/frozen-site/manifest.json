@@ -443,7 +443,16 @@
     "/projects/ai-cli-profile-manager/native-desktop-integration/",
     "/projects/ai-cli-profile-manager/profiles-launch/",
     "/projects/ai-cli-profile-manager/recoverable-runs/",
-    "/projects/ai-cli-profile-manager/secrets-isolation/"
+    "/projects/ai-cli-profile-manager/secrets-isolation/",
+    "/projects/chinese-asr/audit-evidence/",
+    "/projects/chinese-asr/desktop-dictation/",
+    "/projects/chinese-asr/installation-recovery/",
+    "/projects/chinese-asr/known-text-alignment/",
+    "/projects/chinese-asr/long-batch/",
+    "/projects/chinese-asr/models-modes/",
+    "/projects/chinese-asr/runtime-privacy/",
+    "/projects/chinese-asr/speaker-attribution/",
+    "/projects/chinese-asr/task-routing/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

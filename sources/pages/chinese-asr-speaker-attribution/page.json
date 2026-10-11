@@ -1,0 +1,183 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "chinese-asr-speaker-attribution",
+  "kind": "project",
+  "title": "区分不同声音，并允许以后纠正归属",
+  "url": "/projects/chinese-asr/speaker-attribution/",
+  "parent": "chinese-asr",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "ChineseASR 公开仓库 main（1bd5a04）的说话人分段、本人声音线索规则与配置，于 10 月 11 日按 14:00 前状态只读核对；未读取私人声纹档案或录音。"
+  },
+  "screens": [
+    {
+      "id": "chinese-asr-speaker-attribution-01",
+      "section": "top",
+      "title": "区分不同声音，并允许以后纠正归属",
+      "text": "# 区分不同声音，并允许以后纠正归属\n\n〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nChineseASR · 功能说明\n\n把不同声音的发言按时间组织，帮助阅读多人讨论；匿名分组与本人明确确认的归属分开，错误归属可撤回。\n\n**当前情况：**已有匿名声音分组和可撤回归属线索；当前证据仍是推断，不能证明说话人的真实身份。\n\n项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 中文语音转写",
+          "href": "/projects/chinese-asr/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ChineseASR"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/chinese-asr/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n不同声音的分组不能告诉人名；同一个人换麦克风或环境，声音特征也会变。要把匿名发言、声音线索和现实归属分开。\n\n## 举个实际例子\n\n“把会议按不同发言人分段，先叫说话人1、2，不要猜你不知道的名字。”系统给匿名声音分组和相应文字，后续明确修正只影响已指定的归属。如果我确知是两个人打电话，可以直接告诉它“两个人”，它就按两组来分；不说就自动判断分几组。\n\n## 最后我会得到什么\n\n得到分段时间线、匿名声音组和有来源的归属记录；不是自动识别人名或证明身份。告诉它的人数只决定分几组，也可能把一个人拆开或把两个人并在一起，不代表认出了谁。\n\n## 正常时\n\n能确定声音片段和可靠上下文时，交回带理由、允许纠正的暂定归属；匿名分组仍保留。要判断哪几句是我说的、而现有的“我的声音参考”还没确认过时，会在那次需要时请我听一下参考样本确认；平时不主动打扰。\n\n## 发现问题时\n\n声音线索和聊天语境不一致时说明各自依据，不能只靠一个相似分数猜姓名。\n\n## 入口不可用或证据不足时\n\n时间段或来源证据不能对应原音时只保留匿名组，无法确定的人保持未知。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 不同声音的分组不能告诉人名；同一个人换麦克风或环境，声音特征也会变。要把匿名发言、声音线索和现实归属分开。 ## 举个实际例子 “把会议按不同发言人分段，先叫说话人1、2，不要猜你"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 不同声音的分组不能告诉人名；同一个人换麦克风或环境，声音特征也会变。要把匿名发言、声音线索和现实归属分开。 ## 举个实际例子 “把会议按不同发言人分段，先叫说话人1、2，不要猜你"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n能确定声音片段和可靠上下文时，交回带理由、允许纠正的暂定归属；匿名分组仍保留。\n\n## 发现问题时\n\n声音线索和聊天语境不一致时说明各自依据，不能只靠一个相似分数猜姓名。\n\n## 入口不可用或证据不足时\n\n时间段或来源证据不能对应原音时只保留匿名组，无法确定的人保持未知。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n多人录音要求区分发言段；标本人时再明确提出。\n\n## 需要准备什么\n\n- 要区分发言人的录音（确知几个人时可一并说明，不是必填）\n\n- 是否还要判断其中有无本人（如需要）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先把不同声音按时间组成匿名组，真实身份另取证；相似声音不等于本人已确认。\n\n2. **交付与接续**　交回分组与不确定性；证据不足保持匿名，后来纠正可撤回归属。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n说话人投影与 2–3 来源本人档案单测通过；它仍是推断线索，不是身份认证\n\n## 关键规则与设计选择\n\n1. Speaker 编号永远不是人物姓名。\n\n2. 同原件 enrollment 不参与对外自证。\n\n3. 本人 profile 只允许一个当前版本，替换后旧证据失效。\n\n4. 单声道混音使用更宽风险带。\n\n5. 有具体理由且彼此一致的上下文可暂时压过相反声学线索，必须同时保留反对依据并说明原因，结论仍为 inferred。\n\n6. 无法消解的冲突、零长度时间或缺少时间戳时保持 unknown（未验证）；不能把所有声学冲突一律写成不可归属。\n\n## 当前怎样实现\n\n- Paraformer 可输出逐句时间和 CAM++ 匿名聚类。单文件 transcribe 在调用方确知人数时可显式传 --preset-spk-num N，结果记录分组方式是 automatic 还是 preset；省略则自动聚类。这个参数只在 Paraformer 单文件路径接受，其他引擎和 quick/strict/batch 路径不接受也不传递。\n\n- Paraformer 固定 `iic/speech_paraformer-large-vad-punc_asr_nat-zh-cn-16k-common-vocab8404-pytorch@v2.0.4`；按需 person:self speaker verification 固定 CAM++ model revision v1.0.0、文件 campplus_cn_common.bin、阈值 0.31。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 说话人投影与 2–3 来源本人档案单测通过；它仍是推断线索，不是身份认证 ## 关键规则与设计选择 1. Speaker 编号永远不是人物姓名。 2. 同原"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 说话人投影与 2–3 来源本人档案单测通过；它仍是推断线索，不是身份认证 ## 关键规则与设计选择 1. Speaker 编号永远不是人物姓名。 2. 同原"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- speaker_evidence.py 建立唯一、私有、可替换的 person:self profile，并区分 enrollment 与 held-out。\n\n- 多参考模式只接受 2–3 个不同来源，生成有界质心而不是无限画像库。\n\n- speaker_attribution.py 组合声学、声道、联系人、角色和句义依据；方向一致可给 inferred，方向冲突时仅在 contextual roles 唯一且有具体理由时采用上下文，否则 unknown（未验证）。一般歧义带 ±0.02，单声道混音放宽到 ±0.04。\n\n- profile 指纹进入证据；删除或替换后旧声学证据不再参与归属。\n\n## 执行流程\n\n1. 取得带时间位置的匿名说话人片段。\n\n2. 按需加载当前 person:self profile，不扫描媒体库。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n3. 判断当前片段是否与 enrollment 同源。\n\n4. 计算声学分数和歧义带。\n\n5. 合并调用方提供的声道、联系人、对话角色和句义依据。\n\n6. 记录支持、反对与未知。\n\n7. 输出可解释的 inferred 或 unknown（未验证）；使用声纹证据时另绑定当前 profile 指纹。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| diarization | 把声音聚成匿名说话人；它回答“声音是否像不同人”，不回答姓名。 |\n| person:self | 本机唯一、可替换的本人声纹线索档案。 |\n| held-out | 来自另一原件的留出样本，用于避免同源自证。 |\n| ambiguity band（歧义带） | 阈值附近不稳定的分数范围，落入时不做确定归属。 |\n\n## 专业定义\n\n先把不同声音匿名分开，再结合声道、声纹、联系人和上下文做有理由、可撤销的本人推断；证据打架时就保留未知。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决匿名聚类被误当身份、拿同一录音建立和验证声纹、profile 撤销后旧结论继续有效、单声道边界分数强行归属，以及不同证据冲突却没有解释的问题。\n\n## 边界\n\n- 只处理具名录音任务，不扫描整个个人媒体库。\n\n- 声纹向量和私人上下文永不进入公开仓库或网页。\n\n- 归属是可撤销推断，不是生物识别认证；预设人数也只控制分几组，不认证任何人的身份。\n\n- 不能识别其他未知人物，也不建设中央人脸/声纹服务。\n\n## 失败与恢复\n\n- **只有 Speaker 编号**：保持匿名，不映射真实姓名。\n\n- **profile 已撤销或指纹变化**：旧声学证据失效，其他独立上下文证据单独保留。\n\n- **单声道混音分数接近阈值**：该分数进入更宽歧义带，不单独支持归属；仍可使用其他具体、有效的上下文，全部依据不足时才 unknown（未验证）。\n\n- **声学与具体上下文冲突**：同时记录两侧证据；只有上下文本身具体且一致时才说明为何暂时压过声学，并标为可撤销 inferred，否则 unknown（未验证）。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-speaker-attribution-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- person:self profile、留出证据和撤销\n\n- 上下文与声学证据组合投影\n\n- profile、同源、留出和撤销回归\n\n- 双声道、单声道、时间线和冲突回归\n\n## 如何验证\n\n- speaker evidence 与 attribution 回归包含在2026-08-31 的 345 项全量通过结果中；之后各次全量运行保留各自日期，不合并成新的全量通过。\n\n- configs/models.yaml 静态回读（2026-10-11）确认 Paraformer revision=v2.0.4、CAM++ speaker verification revision=v1.0.0、threshold=0.31；本轮未加载真实私人 profile，也未把阈值冒充身份认证。\n\n- fixtures 覆盖双声道、单声道 unknown（未验证）、无时间戳、零长度时间和冲突证据；另有具体对话理由覆盖弱声纹反证、单声道歧义分数仍可由上下文判断，以及上下文本身冲突必须 unknown（未验证） 的用例。\n\n- 本次没有读取任何私人声纹档案或录音，也没有执行人物身份判断。现有本人声音参考仍是推断、可替换，没有经本人听参考样本确认；按现行规则，下次确实需要判断本人声音时再安排本人确认，代码单测不能代替这一步。\n\n## 与其他模块的关系\n\n本模块消费模型或 Paraformer 的时间线和审计结果；它只增加可解释人物线索，不能提高原转写文本本身的准确性。",
+      "links": [
+        {
+          "text": "上一个模块 疑点与回听",
+          "href": "/projects/chinese-asr/audit-evidence/"
+        },
+        {
+          "text": "下一个模块 运行与边界",
+          "href": "/projects/chinese-asr/runtime-privacy/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
