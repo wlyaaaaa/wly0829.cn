@@ -1,112 +1,58 @@
-"""Selected home/cockpit inputs rebuild without ignored local artifacts."""
+"""首页、授权页的冻结字节和登记一致（首页锁定的护栏）。
+
+原测试依赖已在 G1 统一构建里删除的 site-astro/tools/retain_home_cockpit.py。现在保留页直接由
+site-astro/src/retained-page.ts 从 sources/retained-home-cockpit/ 读取，这里不再跑恢复脚本，只核对：
+冻结页面和登记的 sha256/字节一致；登记的随附运行件、授权页运行件和模型字节一致；依赖清单每一条都能
+在仓库里找到且字节一致；旧驾驶舱已退役（新驾驶舱是 Astro 原生页）。任何一字节改动都会让测试失败。
+"""
 import hashlib
 import json
-import os
 from pathlib import Path
-import shutil
-import subprocess
-import sys
-import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'site-astro'
+SNAPSHOT = ROOT / 'site-astro/sources/retained-home-cockpit'
+PIN = json.loads((SNAPSHOT / 'manifest.json').read_text('utf8'))
+RETIRED = set(json.loads((ROOT / 'site-astro/sources/frozen-site/manifest.json').read_text('utf8')).get('retired_runtime_assets', []))
+
+
+def proof(path):
+    raw = path.read_bytes()
+    return {'sha256': hashlib.sha256(raw).hexdigest(), 'bytes': len(raw)}
 
 
 class FrozenHomeTests(unittest.TestCase):
-    def setUp(self):
-        self.workspace = tempfile.TemporaryDirectory(prefix='home-frozen-', dir=os.environ['TEMP'])
-        self.addCleanup(self.workspace.cleanup)
-        self.site = Path(self.workspace.name) / 'site-astro'
-        self.snapshot = self.site / 'sources/retained-home-cockpit'
-        shutil.copytree(SOURCE / 'sources/retained-home-cockpit', self.snapshot)
-        (self.site / 'tools').mkdir()
-        for name in ('home_firstpaint.py', 'retain_home_cockpit.py'):
-            shutil.copyfile(SOURCE / 'tools' / name, self.site / 'tools' / name)
-        self.pin = json.loads((self.snapshot / 'manifest.json').read_text('utf8'))
-        for relative, row in self.pin['bundled'].items():
-            if row['source'].startswith('../../public/'):
-                target = self.site / 'public' / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(SOURCE / 'public' / relative, target)
-        self.engine_relative = next(relative for relative in self.pin['bundled'] if 'home-firstpaint-' in relative)
-        self.engine = self.site / 'public' / self.engine_relative
+    def test_frozen_pages_match_pins(self):
+        for page in ('home', 'computer-access'):
+            self.assertEqual(proof(SNAPSHOT / (page + '.html')), PIN['pages'][page], page)
 
-    def run_restore(self):
-        return subprocess.run([sys.executable, str(self.site / 'tools/retain_home_cockpit.py')],
-            cwd=self.site, text=True, encoding='utf8', capture_output=True)
+    def test_old_cockpit_stays_retired(self):
+        self.assertFalse((SNAPSHOT / 'cockpit.html').exists())
+        self.assertTrue((ROOT / 'site-astro/src/pages/cockpit/index.astro').is_file())
+        self.assertNotIn("retainedPage('cockpit')", (ROOT / 'site-astro/src/pages/cockpit/index.astro').read_text('utf8'))
 
-    def test_clean_versioned_inputs_restore_exact_selected_pages_and_engine(self):
-        self.assertFalse((self.site / 'src/chrome/retained').exists())
-        self.assertFalse(self.engine.exists())
-        result = self.run_restore()
-        self.assertEqual(result.returncode, 0, result.stderr)
-        for page in self.pin['pages']:
-            actual = (self.site / 'src/chrome/retained' / (page + '.html')).read_bytes()
-            self.assertEqual(actual, (self.snapshot / (page + '.html')).read_bytes())
-            self.assertEqual(hashlib.sha256(actual).hexdigest(), self.pin['pages'][page]['sha256'])
-        row = self.pin['bundled'][self.engine_relative]
-        self.assertEqual(self.engine.read_bytes(), (self.snapshot / row['source']).read_bytes())
-        self.assertEqual(hashlib.sha256(self.engine.read_bytes()).hexdigest(), row['sha256'])
-        self.assertEqual((self.site / 'src/chrome/retained/manifest.json').read_bytes(), (self.snapshot / 'manifest.json').read_bytes())
-        # 没有复制全部素材；入口恢复只生成有版本来源的运行件。
-        self.assertFalse((self.site / 'public/_shared').exists())
+    def test_bundled_runtime_files_match_pins(self):
+        checked = 0
+        for relative, row in PIN['bundled'].items():
+            source = (SNAPSHOT / row['source']).resolve()
+            if relative in RETIRED: continue  # 已退役运行件（构建会拦住任何页面再引用它们），不再核对源文件
+            self.assertEqual(proof(source), {'sha256': row['sha256'], 'bytes': row['bytes']}, relative); checked += 1
+        self.assertGreater(checked, 0)
 
-    def test_ignored_published_engine_cannot_replace_missing_versioned_source(self):
-        row = self.pin['bundled'][self.engine_relative]
-        self.engine.parent.mkdir(parents=True, exist_ok=True)
-        self.engine.write_bytes((self.snapshot / row['source']).read_bytes())
-        (self.snapshot / row['source']).unlink()
-        result = self.run_restore()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('home-firstpaint-', result.stderr)
-        self.assertFalse((self.site / 'src/chrome/retained').exists())
+    def test_authorization_runtime_and_model_match_pins(self):
+        access = PIN['computer_access']
+        for key, sha in (('runtime', 'sha256'), ('model', 'model_sha256')):
+            row = PIN['bundled'][access[key]]
+            self.assertEqual(proof((SNAPSHOT / row['source']).resolve())['sha256'], access[sha], access[key])
 
-    def test_same_size_changed_versioned_engine_is_rejected(self):
-        source = self.snapshot / self.pin['bundled'][self.engine_relative]['source']
-        raw = source.read_bytes(); source.write_bytes(raw[:-1] + (b' ' if raw[-1:] != b' ' else b'\n'))
-        result = self.run_restore()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('首帧脚本字节不同', result.stderr)
-
-    def test_postpatch_pages_and_old_inputs_are_distinct_and_bound(self):
-        for page in ('home', 'cockpit'):
-            self.assertNotEqual(self.pin['pages'][page], self.pin['inputs'][page])
-        source = self.snapshot / 'home.html'; raw = source.read_bytes()
-        source.write_bytes(raw[:-1] + (b' ' if raw[-1:] != b' ' else b'\n'))
-        result = self.run_restore()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('冻结页面的字节不同', result.stderr)
-
-    def test_authorization_selected_repairs_reject_same_size_source_change(self):
-        original = (self.snapshot / 'computer-access.html').read_bytes()
-        self.assertEqual(hashlib.sha256(original).hexdigest(), self.pin['pages']['computer-access']['sha256'])
-        source = self.snapshot / 'computer-access.html'
-        source.write_bytes(original[:-1] + (b' ' if original[-1:] != b' ' else b'\n'))
-        result = self.run_restore()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('冻结页面的字节不同：computer-access', result.stderr)
-
-    def test_authorization_model_rejects_same_size_source_change(self):
-        relative = self.pin['computer_access']['model']
-        source = self.snapshot / self.pin['bundled'][relative]['source']
-        raw = source.read_bytes(); source.write_bytes(raw[:-1] + (b' ' if raw[-1:] != b' ' else b'\n'))
-        result = self.run_restore()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn('冻结页面辅助文件的字节不同：' + relative, result.stderr)
-
-    def test_routes_finalizer_preserves_authorization_and_updates_owned_page(self):
-        original = (self.snapshot / 'computer-access.html').read_bytes()
-        dist = self.site / 'dist'; access = dist / 'computer-access/index.html'
-        access.parent.mkdir(parents=True); access.write_bytes(original)
-        owned = dist / 'index.html'
-        owned.write_text('<script id="album-page">{"images":[]}</script><link href="/_album/routes-0123456789abcdef0123.json"><link href="https://old.example/releases/old/_album/routes-0123456789abcdef0123.json">', encoding='utf8')
-        result = subprocess.run([sys.executable, str(self.site / 'tools/retain_home_cockpit.py'), '--finalize'], cwd=self.site, text=True, encoding='utf8', capture_output=True)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(access.read_bytes(), original)
-        self.assertNotIn('routes-0123456789abcdef0123.json', owned.read_text('utf8'))
-        self.assertNotIn('https://old.example/releases/old/', owned.read_text('utf8'))
-        self.assertEqual(owned.read_text('utf8').count(json.loads(result.stdout)['resource']), 2)
+    def test_dependency_ledger_sources_exist_and_match(self):
+        ledger = json.loads((SNAPSHOT / 'dependencies.json').read_text('utf8'))
+        bad = []
+        for relative, row in ledger.items():
+            if 'source_path' not in row: continue
+            source = ROOT / row['source_path']
+            if not source.is_file() or proof(source) != {'sha256': row['sha256'], 'bytes': row['bytes']}: bad.append(relative)
+        self.assertEqual(bad, [])
 
 
 if __name__ == '__main__':
