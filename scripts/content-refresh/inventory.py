@@ -8,8 +8,10 @@ import sys
 
 from checks import HISTORY, WORDS
 from validation import record_errors, registry_errors, validate_entries, LEDGER
+from apply_edits import qualified_date_review
 
 BEIJING = timezone(timedelta(hours=8))
+COUNT_CONTENT = re.compile(r"\d[\d,.]*(?:\s*/\s*\d[\d,.]*)?\s*(?:个|项|件|次|条|份|组|页|行|人|台|块|张|种|套|屏|层|路|节|秒|分钟|字节|[KMGT]i?B|%)|(?:数量|计数|总数|条目|[一-龥A-Za-z_]{1,24}数)\s*[:：｜|]\s*[*` ]*\d[\d,.]*")
 # 识别紧接“截至”的日期写法，不向后搜索数量、版本或另一句中的日期。
 DATE_NUMBER = r"[\d〇零一二三四五六七八九十两]+"
 DATE_CN = rf"(?:{DATE_NUMBER}\s*年\s*)?{DATE_NUMBER}\s*月\s*{DATE_NUMBER}\s*日?"
@@ -137,7 +139,8 @@ def build_inventory(pages_root, records, entries=None):
             item = dict(id=f"item-{len(items) + 1}", page=slug, screen=screen.get("id", ""),
                         kind=kind, surface=surface, field=field, start=start, end=end,
                         line=text.count("\n", 0, start) + 1, excerpt=excerpt,
-                        original_date=original_date, historical=historical, page_number=number.get("id") if number else None)
+                        original_date=original_date, historical=historical, page_number=number.get("id") if number else None,
+                        parent=page.get("parent"))
             bound = [r for r in by_page[slug] if matches(r, item, page, text)]
             active = [r for r in bound if not r.get("historical") and not r.get("frozen")]
             if bound and not active:
@@ -153,6 +156,13 @@ def build_inventory(pages_root, records, entries=None):
                         source_locations=sorted({r["source_location"] for r in sources}) or ([hint] if hint else []),
                         private=any(r.get("private") for r in active),
                         requires_refresh=surface == "visible" and not historical)
+            if kind in {"as_of", "status_line.as_of"}:
+                context = screen.get("text", "").splitlines()
+                context = context[max(0, item["line"] - 7):item["line"] + 6] if kind == "as_of" else context
+                if kind == "status_line.as_of":
+                    context += [str(f) for f in page.get("status_line", {}).get("facts", [])]
+                item.update(count_context=bool(COUNT_CONTENT.search("\n".join(context))),
+                            event_date=bool(qualified_date_review(page, item)))
             if item["requires_refresh"]:
                 matched_private.update(r["id"] for r in active if r.get("private"))
             items.append(item)
@@ -266,6 +276,13 @@ def build_inventory(pages_root, records, entries=None):
                 registered=True, registration_status="已登记·展示位置待复核", automatic=False, private=True,
                 historical=False, requires_refresh=True, source_projects=[source_project(record)],
                 source_locations=[record["source_location"]]))
+    card_ids = {rid for i in items if i["kind"] == "first_screen_card" for rid in i["active_record_ids"]}
+    date_only_ids = {rid for i in items if i["kind"] in {"as_of", "status_line.as_of"}
+                     for rid in i["active_record_ids"]} - card_ids
+    numeric_ids = {r["id"] for r in records if r["id"] in located_records and not r.get("qualifies")
+                   and r["id"] not in date_only_ids
+                   and (r["id"] in card_ids or r.get("retrieve", {}).get("operation") in {"length", "count_7d"}
+                        or type(r.get("current_value")) in {int, float} or re.fullmatch(r"[\d,.]+", str(r.get("current_value", ""))))}
     for item in items:
         item["source_projects"] = sorted({source_aliases.get(re.sub(r"[-_.]", "", name).lower(), name) for name in item["source_projects"]})
         if item["kind"] in {"as_of", "status_line.as_of"} and not item["historical"]:
@@ -278,7 +295,16 @@ def build_inventory(pages_root, records, entries=None):
                     break
                 nearby = expanded
             item["qualifies_suggestion"] = sorted({rid for i in nearby for rid in i["active_record_ids"]})
+            qualified = any(r.get("qualifies") for r in by_page[item["page"]] if r["id"] in item["record_ids"])
+            numeric = any(r["id"] in numeric_ids and item["screen"] in {r["screen"], *r.get("affected_screens", [])} for r in by_page[item["page"]])
+            if (item["surface"] == "visible" and not qualified and not numeric and not nearby and not item["count_context"]
+                    and not item["event_date"] and (re.search(r"核对|事实截至", item["excerpt"]) or item["parent"])):
+                item.update(source_kind=item["kind"], kind="review_stamp", review_stamp=True, requires_refresh=False, automatic=False)
+    stamps = [i for i in items if i.get("review_stamp")]
+    stamp_ids = {rid for i in stamps for rid in i["record_ids"]} - numeric_ids - {
+        rid for i in items if i["requires_refresh"] and not i["historical"] for rid in i["record_ids"]}
     return dict(schema="content-refresh.inventory.v1", observed_at=datetime.now(BEIJING).isoformat(timespec="seconds"),
+                review_stamps=stamps, review_stamp_record_ids=sorted(stamp_ids),
                 located_record_ids=sorted(located_records),
                 historical_record_ids=sorted(r["id"] for r in records if r.get("historical") or r.get("frozen")
                                              or (r["page"], r["screen"]) in historical_pairs),
@@ -335,7 +361,7 @@ def strict_findings(inventory, records, entries=None, invalid_record_ids=()):
     historical = set(inventory.get("historical_record_ids", [])) - located
     for error in registry_errors(records, entries):
         rid = error["record_id"]
-        if rid in reported or rid in historical:
+        if rid in reported or rid in historical or rid in inventory.get("review_stamp_record_ids", []):
             continue
         record = by_id.get(rid, {})
         findings.append(dict(page=record.get("page", ""), screen=record.get("screen", ""),
@@ -365,6 +391,12 @@ def fact_tasks(inventory, group_size=25):
              "清点程序没有重取来源。每组交一个事实子代理；只读取登记的领域入口，公开口径按活动公开分级原文和页面规则。",
              "每项交回来源、观察时间、同口径新值或具名 Unknown；取不到保留原日期。历史/冻结项不自动激活。",
              "author/reference 的截至命中用于覆盖核对，不冒充新展示事实；私人来源登记的位置待复核项另列。", ""]
+    if inventory.get("review_stamps"):
+        lines += ["## 核对戳（事实组更新，不机械取数）", "", "核对本页事实后更新日期；没有实际核对或证据不可用时保留原日期。", ""]
+        for stamp in inventory["review_stamps"]:
+            lines.append(f"- {stamp['page']} / {stamp['screen']} / {stamp['field']}:{stamp.get('line', 1)}｜"
+                         f"{stamp['excerpt']}｜原日期 {stamp['original_date'] or 'Unknown'}｜人工核对，不要求自动数字来源")
+        lines.append("")
     for project, items in sorted(groups.items()):
         for offset in range(0, len(items), group_size):
             chunk = items[offset:offset + group_size]
