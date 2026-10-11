@@ -10,7 +10,8 @@
         "size": "large",
         "row": "top",
         "width": "58%",
-        "row_fit_illustration": true
+        "row_fit_illustration": true,
+        "subtitle_from": "不先遍历文件目录"
       },
       {
         "type": "action_button",
@@ -39,7 +40,8 @@
         "type": "chapter_title",
         "text_ref": "先查已登记的非媒体原件，不先遍历文件目录",
         "align": "left",
-        "size": "large"
+        "size": "large",
+        "subtitle_from": "不先遍历文件目录"
       },
       {
         "type": "action_button",
