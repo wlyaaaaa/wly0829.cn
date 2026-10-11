@@ -565,7 +565,14 @@
      "size": "large",
      "text_ref": "汇报网页",
      "row": "intro",
-     "width": "52%"
+     "width": "68%"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "intro",
+     "width": "32%",
+     "row_fit_illustration": false
     },
     {
      "type": "live_strip",
@@ -580,25 +587,16 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
-     "row": "intro"
+     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
     },
     {
      "type": "prose",
-     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页",
-     "row": "intro"
+     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页"
     },
     {
      "type": "points_card",
      "whole_block": true,
-     "text_ref": "它做什么",
-     "row": "intro"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "intro",
-     "width": "48%"
+     "text_ref": "它做什么"
     },
     {
      "type": "dialogue",
@@ -614,13 +612,11 @@
       "left",
       "left"
      ],
-     "text_ref": "怎么跟AI说",
-     "row": "intro"
+     "text_ref": "怎么跟AI说"
     },
     {
      "type": "notice",
-     "text_ref": "不用点名：要展开说明的汇报",
-     "row": "intro"
+     "text_ref": "不用点名：要展开说明的汇报"
     },
     {
      "type": "stat_card",
@@ -1330,21 +1326,17 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "type": "table",
      "row_icons": "auto",
      "text_ref": "要说的内容用哪种两三个关键数字大数字卡几样东西比多少横条，或柱状图（可几组并排）随时间涨跌折线图",
-     "row": "charts",
-     "width": "60%",
-     "row_fit_illustration": true
+     "row_fit_illustration": false
     },
     {
      "type": "feature_card",
      "columns": 1,
      "icons": "none",
-     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的",
-     "row": "charts"
+     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
     },
     {
      "type": "prose",
-     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝",
-     "row": "charts"
+     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝"
     },
     {
      "type": "screenshot",
@@ -1352,13 +1344,13 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
       0
      ],
      "ratio": "1280:2100",
-     "row": "charts",
-     "width": "40%"
+     "row": "chart-demo",
+     "width": "48%",
+     "row_align": "center"
     },
     {
      "type": "prose",
-     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据",
-     "row": "charts"
+     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。"
