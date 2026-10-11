@@ -171,11 +171,11 @@
      "id": "f-real-poppler",
      "group": "g-guard",
      "name": "只用真的渲染程序",
-     "what": "只认 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装",
+     "what": "只认电脑配置里登记的那个 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装；登记缺了或失效就报错，先修登记",
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "find_pdftoppm 第 39–45 行；本机用 Codex 自带运行环境里的 Poppler 26.07.0"
+     "source": "find_pdftoppm 第 39–45 行、runtime_registry.py；PCConfig registries\\md_pdf_toolkit.json 的 pdftoppm_executable = E:\\Tools\\MD-PDF-Runtime\\poppler\\Library\\bin\\pdftoppm.exe（Poppler 26.07.0 独立副本）；登记缺失或失效先修登记"
     },
     {
      "id": "f-timeout",
@@ -275,10 +275,10 @@
     },
     {
      "id": "r-codex-runtime",
-     "with": "外部软件 Codex 桌面版",
+     "with": "PCConfig 登记的 MD-PDF 独立运行环境（E:\\Tools\\MD-PDF-Runtime）",
      "direction": "拿来",
-     "flow": "pdftoppm.exe 从 Codex 自带运行环境的 native\\poppler 目录找（PATH 上没有）",
-     "source": "find_pdftoppm 第 39–45 行；报告 renderer 字段"
+     "flow": "经工具包启动器 Invoke-MdPdfToolkit.ps1 用登记的宿主 Python 运行；pdftoppm.exe 取自 registries\\md_pdf_toolkit.json 的 pdftoppm_executable（Poppler 26.07.0，同一登记另记 Node 26.4.0、Playwright 1.62.1 供文稿转 PDF 用），不再用 Codex 桌面版自带的 native\\poppler，也不看 PATH；登记缺失或失效时报错，先修登记",
+     "source": "SKILL.md 第 8–10 行；find_pdftoppm 第 39–45 行；runtime_registry.py；Invoke-MdPdfToolkit.ps1 第 11–23 行；PCConfig registries\\md_pdf_toolkit.json；报告 renderer 字段"
     }
    ],
    "highlights": [],
@@ -315,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "5cb51e1b42df414b2ffc7abccd736b770b1650ae4814f5a0acfa10ca124d6b76",
-  "converted_at_beijing": "2026-10-11T13:39:59+08:00"
+  "sha256": "57619365d460b8cc33b6f9ded2b938d416c59c4792609dda59d23f5a2ebb2fbc",
+  "converted_at_beijing": "2026-10-11T13:58:33+08:00"
  }
 }
 ---
@@ -1606,10 +1606,12 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
 
 **不出乱子**
 10. 同一组图同时只一个在画｜同一个文件夹、同一个前缀，第二个任务直接报错，不混在一起｜在用
-11. 只用真的渲染程序｜只认 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装｜在用
+11. 只用真的渲染程序｜只认电脑配置里登记的那个 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装；登记缺了或失效就报错，先修登记｜在用
 12. 有时限｜每次 pdftoppm 最多 120 秒（1–600 可调）｜在用
 
 PDF 能打开、页数对，也可能有字被裁掉、表格挤出页边、某页空白、颜色淡得看不清——光看命令说“成功”发现不了。这个技能让 AI 先把 PDF 复制一份，再用 Poppler 的 pdftoppm 把每页转成 PNG，外加一张所有页的缩略总览；AI 先看总览找节奏，再把可疑的几页放大重转一遍细看。每次的图单独放一版，全部画完才更新报告，中途出错也不会弄乱上一次的结果。
+
+渲染器从哪来：AI 通过工具包启动器 Invoke-MdPdfToolkit.ps1 调用，Python 用 PCConfig 登记的宿主 Python（host_python.json），pdftoppm 取自 PCConfig 登记 registries\md_pdf_toolkit.json 的 pdftoppm_executable：E:\Tools\MD-PDF-Runtime\poppler\Library\bin\pdftoppm.exe，一套独立复制的 Poppler 26.07.0（连同它的支持库；同一份登记还给文稿转 PDF 记了 Node 26.4.0、Playwright 1.62.1）。它不再从 Codex 桌面版自带的 native\poppler 里找，也不看 PATH。登记缺失、指向的文件不存在或不是 .exe 本体时直接报错、不渲染，先修登记（核对命令 Get-MdPdfToolkitRuntime.ps1 -Json）再跑。
 
 ::screen{#skill-pdf-render-safe-05 section="limits"}
 

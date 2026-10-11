@@ -42,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-panel-refresh/page.json",
-  "sha256": "d94bc86541e8927e5f4c0338fa1097e93fb5be372ab689fa860c8cb97809c2bb",
-  "converted_at_beijing": "2026-10-11T13:37:18+08:00"
+  "sha256": "60f20c2d96658962782b1be89e4c2b366d9cacbe84e4a904eeaafd33daeff737",
+  "converted_at_beijing": "2026-10-11T13:55:25+08:00"
  }
 }
 ---
@@ -123,4 +123,4 @@
 
 网站自动刷新
 
-这个技能 9 月 26 日退役了。网站不再定时自动刷新，我说一声或项目真有变化时才更新，做法见〔个人网站〕。
+这个技能 9 月 26 日退役了。网站不再定时自动刷新，只在我说“更新网站”时更新一次；项目有了变化也不会自己去改网站，留到我下次要更新时一起收。做法见〔个人网站〕。

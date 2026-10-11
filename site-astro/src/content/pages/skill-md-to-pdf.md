@@ -48,7 +48,16 @@
   "based_on": {
    "file": "E:\\.agents\\plugins\\md-pdf-toolkit\\skills\\md-to-pdf\\SKILL.md",
    "rules_release": "E187",
-   "plugin_commit": "af000245235b7ebfd170d78b36036d882e4999ad"
+   "plugin_commit": "af000245235b7ebfd170d78b36036d882e4999ad",
+   "skill_commit": "58789c6dee12333225dced7367c6ce971d847e34",
+   "skill_commit_time": "2026-09-29T01:36:54+08:00",
+   "runtime_registry": {
+    "file": "E:\\PCConfig\\registries\\md_pdf_toolkit.json",
+    "commit": "121716834be5ae55d51282d433fe7b07bb430e41",
+    "commit_time": "2026-09-29T01:42:23+08:00",
+    "checked_beijing": "2026-10-11",
+    "scope": "只补运行环境一处：核对登记内容和三个登记路径存在，没有跑版本命令和转换；其余正文仍是 af000245 时的核对，不算本轮全页重核"
+   }
   },
   "video_prompt": "5 秒无缝循环，白底水彩：一张写着 # 号的 Markdown 纸滑进一台小打印机，打印机侧面的 Edge 标志轻轻闪一下，右边吐出一张 A4 纸；纸在一枚放大镜下停一下，边上亮起绿色对勾，然后落到一叠纸上；打印机下面压着的旧纸始终不动。镜头不动，没有文字。",
   "registry": {
@@ -391,8 +400,8 @@
  },
  "source": {
   "page": "sources/pages/skill-md-to-pdf/page.json",
-  "sha256": "5922a77c6c2104fb257c1888d0c6bb443735411604a5c956cc7175858ff0b0c7",
-  "converted_at_beijing": "2026-10-11T13:36:54+08:00"
+  "sha256": "5c3e6a1f2fd9ccd6e78f4846e25b102e74d485bca5a7338f844973a526677ec2",
+  "converted_at_beijing": "2026-10-11T13:59:52+08:00"
  }
 }
 ---
@@ -2053,7 +2062,7 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
 1. 单篇转换｜一份 .md 转成一份 PDF，中文文件名、中文内容都行｜在用
 2. 一个文件夹一起转｜文件夹里每份 .md 各出一份同名 PDF，最后报几份成功；只能用中性或老绿色样式｜说不准
 3. 用登记好的 Python 跑｜不管命令行里碰巧是哪个 python，都用电脑配置里登记的那一个｜在用
-4. 打印工具按登记找｜Node 和 Playwright 装在 E:\Tools\MD-PDF-Runtime，位置记在电脑配置里；登记或文件缺了就说缺哪一项，不去 Codex 的缓存里找｜待验收
+4. 打印工具按登记找｜Node 26.4.0 和 Playwright 1.62.1 单独装在 E:\Tools\MD-PDF-Runtime（node\node.exe、node\node_modules），位置和版本记在电脑配置的 md_pdf_toolkit.json 登记里；登记或文件缺了就说缺哪一项，不去 Codex 的缓存里找｜待验收
 
 **样式**
 5. 默认中性样式｜黑字灰线、A4、表格行不拆页｜在用
@@ -2076,6 +2085,8 @@ AI：“没通过：实际 1 页，要求 2 页。上一份 1 页的 PDF 原样�
 18. 回执｜每次成功打印一份 JSON：原文和 PDF 的指纹、页数、样式、打印方式、资源文件夹｜在用
 
 AI 写的说明、讲义、报告大多是 Markdown。这个技能告诉 AI 怎么把它转成 PDF：用这台电脑登记好的 Python，由 Playwright 驱动本机 Edge 按 A4 打印（Playwright 和 Node 单独装在 E:\Tools\MD-PDF-Runtime，也按电脑配置里的登记找，不再借 Codex 自带的运行环境）；打完先查——PDF 读得开、页数对、要求的字都在、原文和样式文件没被改——全过才替换旧文件，任何一样不过，旧 PDF 原样留着。转换成功不等于排版没问题，要看排版再交给PDF 逐页检查。
+
+运行环境（电脑配置 registries\md_pdf_toolkit.json 登记，9 月 29 日起）：Node 26.4.0（E:\Tools\MD-PDF-Runtime\node\node.exe，从已装的 Node 单独复制一份）、Playwright 1.62.1（npm 包，E:\Tools\MD-PDF-Runtime\node\node_modules）、Poppler 26.07.0（E:\Tools\MD-PDF-Runtime\poppler\Library\bin\pdftoppm.exe，给同一插件里的 PDF 逐页检查出图用，这个技能本身不调用）。登记自带核对命令 tools/Get-MdPdfToolkitRuntime.ps1 -Json。10 月 11 日只核对了登记内容和这三个路径存在，没有跑版本命令，也没有重新转换；上面“在用”“待验收”仍按 9 月的回执。
 
 ::screen{#skill-md-to-pdf-05 section="limits"}
 

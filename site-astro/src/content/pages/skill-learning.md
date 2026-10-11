@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天 AI 用了 3 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "ad3980780006354b3637de3734aa7c0be2673ac2",
@@ -94,8 +94,8 @@
  },
  "source": {
   "page": "sources/pages/skill-learning/page.json",
-  "sha256": "e80934a65546deab41414444c8ef6c5366ab230c28ef66f7dbb1799b4dd4ab15",
-  "converted_at_beijing": "2026-10-10T08:46:17+08:00"
+  "sha256": "2f6b9ca71028d02561e4f8ce19b6954ec36646a0a8fdbccc6851ad2711de785e",
+  "converted_at_beijing": "2026-10-11T14:02:08+08:00"
  }
 }
 ---
@@ -149,7 +149,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -240,7 +240,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
