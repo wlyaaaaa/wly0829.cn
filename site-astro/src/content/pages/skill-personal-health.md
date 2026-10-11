@@ -37,10 +37,10 @@
     "at": "2026-10-07 17:18"
    },
    "facts": [
-    "近 7 天 AI 用了 8 次"
+    "近 7 天 AI 用了 5 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -60,21 +60,21 @@
      "with": "personal-health",
      "direction": "拿来",
      "flow": "技能按情况读健康项目的 CURRENT.md、AGENTS.md、SOURCES.md、设备约定，运行项目的更新入口",
-     "source": "E:\\.agents\\skills\\personal-health\\SKILL.md 第 8–20 行"
+     "source": "E:\\.agents\\skills\\personal-health\\SKILL.md 第 10–22 行"
     },
     {
      "id": "r-daily-preferences",
      "with": "daily-preferences",
      "direction": "拿来",
      "flow": "本人背景会改变回答时，按父库约定取相关内容；有依据的新本人信息回写",
-     "source": "SKILL.md 第 12 行"
+     "source": "SKILL.md 第 14 行"
     },
     {
      "id": "r-personal-expression",
      "with": "personal-expression",
      "direction": "拿来",
      "flow": "讲给本人听时照 explain-to-me.md：清楚判断加一个小步骤",
-     "source": "SKILL.md 第 8 行"
+     "source": "SKILL.md 第 10 行"
     }
    ],
    "mentions": [
@@ -100,7 +100,7 @@
     "SKILL.md 里的各条能力（问答、纠错、设备更新、高风险核验）是项目功能，家在项目页全部功能，这里只链过去；第 3 屏只写技能自己的“什么时候读什么”。"
    ],
    "dropped": [
-    "SKILL.md 第 8 行关于状态很差时的默认讲法属于私人内容，不上网站。",
+    "SKILL.md 第 10 行关于状态很差时的默认讲法属于私人内容，不上网站。",
     "sha256:649a7b71dcde0da36d73fbe5e198d9dc42e911f774a36d5a0f770b3b3daa9bf7"
    ],
    "unsure": [
@@ -111,8 +111,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-health/page.json",
-  "sha256": "a3de3e277c2f7efbd1fc95bfac2c6c6f55dbc9c9ff6b07a638192046a6fa2c45",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "0c2f5c87d71ee8c028771988a5c9d3fcf556ea93a7120a8688e7ce4cc81bca6b",
+  "converted_at_beijing": "2026-10-11T13:40:04+08:00"
  }
 }
 ---
@@ -162,11 +162,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 8 次",
+       "text": "近 7 天 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -234,11 +234,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 8 次",
+       "text": "近 7 天 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

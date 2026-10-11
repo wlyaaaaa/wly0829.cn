@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天没用过"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": null,
   "repo_url": null,
@@ -144,8 +144,8 @@
  },
  "source": {
   "page": "sources/pages/skill-work-delivery/page.json",
-  "sha256": "b24f8fd3ad3a1806b42585714b96859b92b91b22d3cf051e7ba73ed77eb2f5ea",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "222246be50e5807ec2a1fbda694e59bdb5336f921c33de91ae2540f38d77985d",
+  "converted_at_beijing": "2026-10-11T13:40:32+08:00"
  }
 }
 ---
@@ -240,7 +240,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -329,7 +329,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

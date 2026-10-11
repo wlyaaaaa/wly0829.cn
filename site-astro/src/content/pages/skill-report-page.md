@@ -38,13 +38,13 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 22:58"
+    "at": "2026-10-09 00:44"
    },
    "facts": [
-    "近 7 天 AI 用了 53 次"
+    "近 7 天 AI 用了 46 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "based_on": {
    "commit": "6dd21f643bef0efb33263afe9e9527bf4362879d",
@@ -108,21 +108,21 @@
      "id": "f-open",
      "group": "g-make",
      "name": "用 Chrome 打开",
-     "what": "通过自检后用 Chrome 打开页面；子代理加 -NoOpen 只交链接",
+     "what": "通过自检后用 Chrome 打开页面；有待选卡片时同时登记驾驶舱“需要你”；子代理加 -NoOpen 只交链接，不打开也不登记",
      "how": "自动",
      "status": "在用",
      "screen": "skill-report-page-06",
-     "source": "New-ReportPage.ps1 Open-InChrome"
+     "source": "New-ReportPage.ps1 Open-InChrome；Register-ReportOwnerItem（第 139–151、230 行）调用 E:\\PCConfig\\tools\\Set-OwnerItem.ps1 -Mode Add，-NoOpen 或无卡片时跳过，-Topic/-Supersedes 维持同事项关系"
     },
     {
      "id": "f-cleanup",
      "group": "g-make",
      "name": "旧页面进回收站",
-     "what": "每次在汇报目录生成新页面，14 天前的页面连附件放进回收站",
+     "what": "每次在汇报目录生成新页面，14 天前的页面连附件放进回收站；过期临时页 AI 也可直接删",
      "how": "自动；-KeepDays 0 关闭",
-     "status": "没用过",
+     "status": "说不准",
      "screen": "skill-report-page-06",
-     "source": "ReportPage.psm1 Invoke-ReportCleanup；汇报目录最早的页面是 9 月 26 日 03:40，还没有满 14 天的，清理从没真的放进过东西"
+     "source": "ReportPage.psm1 Invoke-ReportCleanup；SKILL.md“回执与保存”；10 月 10 日 05:2x 汇报目录最早的页面是 9 月 26 日 03:40，此后才陆续满 14 天；没有查到实际清理回执"
     },
     {
      "id": "f-screenshot",
@@ -348,11 +348,11 @@
      "id": "f-reply-handling",
      "group": "g-writing",
      "name": "收到答复怎么办",
-     "what": "以说明为准、追问逐条答、看不懂的下一轮讲清",
+     "what": "以说明为准、追问逐条答、看不懂的下一轮讲清；处理完答复关闭驾驶舱对应条目",
      "how": "自动",
      "status": "在用",
      "screen": "skill-report-page-07",
-     "source": "SKILL.md 收到答复后"
+     "source": "SKILL.md 收到答复后；“回执与保存”：Set-OwnerItem.ps1 -Mode Close -Result passed"
     },
     {
      "id": "f-rules",
@@ -389,7 +389,7 @@
     {
      "id": "n-pages",
      "text": "151 份",
-     "meaning": "E:\\Documents\\AI汇报 里现存的 .html 汇报页；文件名日期 9 月 26 日 03:40 至 28 日 18:55（北京）；58 个不同标题（同一标题重做的算一个）",
+     "meaning": "E:\\Documents\\AI汇报 里现存的 .html 汇报页，都是最近两周生成的；141 个不同标题（同一标题重做的算一个）",
      "as_of": "2026-10-10",
      "source": "E:\\Documents\\AI汇报 列目录计数 *.html，北京时间 10 月 10 日 05:2x；只读文件名；脚本默认把 14 天前的页放进回收站，所以最早一份是 9 月 26 日",
      "screens": [
@@ -399,7 +399,7 @@
     {
      "id": "n-cards",
      "text": "527 张",
-     "meaning": "58 个标题各取文件名最新的一份，其中 50 份带决策卡，fieldset.card 共 387 张；不去重是 57 份、509 张",
+     "meaning": "141 个标题各取文件名最新的一版，数到决策卡共 527 张，其中 102 份带决策卡",
      "as_of": "2026-10-10",
      "source": "按文件名去掉时间前缀后去重（141 个标题），各取最新一版数 data-q 卡片标记，102 份有卡；10 月 10 日 05:2x",
      "screens": [
@@ -409,7 +409,7 @@
     {
      "id": "n-runs",
      "text": "322 次",
-     "meaning": "生成命令 New-ReportPage.ps1 的调用次数：Claude 87（9 月 26 日 03:31–28 日 09:58）、Codex 42（9 月 26 日 17:18–27 日 18:17）；和同屏 65 份（算到 28 日 18:55）时间范围不同，图上写明",
+     "meaning": "生成命令 New-ReportPage.ps1 的调用次数：Claude 228、Codex 94（9 月 26 日 03:31–10 月 8 日 23:01，北京）；和同屏 151 份（10 月 10 日现存）时间范围不同，图上写明",
      "as_of": "2026-10-08",
      "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl，name=New-ReportPage.ps1 计数（Claude 228、Codex 94）；9 月 26 日 03:31 到 10 月 8 日 23:01（北京）",
      "screens": [
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "538dcecf234364b92cd8180d160dcd08a4495edbf347cc354cb2c925608bf8c6",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "488a7352c9250063d2b7a7a4f1dfecf6bae3fc9c232e7d469bebc31de7cb88e0",
+  "converted_at_beijing": "2026-10-11T14:13:31+08:00"
  }
 }
 ---
@@ -565,38 +565,40 @@
      "size": "large",
      "text_ref": "汇报网页",
      "row": "intro",
-     "width": "68%"
-    },
-    {
-     "type": "illustration",
-     "illustration": "outside",
-     "row": "intro",
-     "width": "32%",
-     "row_fit_illustration": false
+     "width": "52%"
     },
     {
      "type": "live_strip",
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "text": "常用 · 上次使用 10 月 9 日 00:44",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 53 次",
+       "text": "近 7 天 AI 用了 46 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
+     "row": "intro"
     },
     {
      "type": "prose",
-     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页"
+     "text_ref": "技能名report-page·约法L26说的那种白底绿色汇报网页",
+     "row": "intro"
     },
     {
      "type": "points_card",
      "whole_block": true,
-     "text_ref": "它做什么"
+     "text_ref": "它做什么",
+     "row": "intro"
+    },
+    {
+     "type": "illustration",
+     "illustration": "outside",
+     "row": "intro",
+     "width": "48%"
     },
     {
      "type": "dialogue",
@@ -612,11 +614,13 @@
       "left",
       "left"
      ],
-     "text_ref": "怎么跟AI说"
+     "text_ref": "怎么跟AI说",
+     "row": "intro"
     },
     {
      "type": "notice",
-     "text_ref": "不用点名：要展开说明的汇报"
+     "text_ref": "不用点名：要展开说明的汇报",
+     "row": "intro"
     },
     {
      "type": "stat_card",
@@ -643,15 +647,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 22:58",
+       "text": "常用 · 上次使用 10 月 9 日 00:44",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 53 次",
+       "text": "近 7 天 AI 用了 46 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",
@@ -1326,17 +1330,21 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "type": "table",
      "row_icons": "auto",
      "text_ref": "要说的内容用哪种两三个关键数字大数字卡几样东西比多少横条，或柱状图（可几组并排）随时间涨跌折线图",
-     "row_fit_illustration": false
+     "row": "charts",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "feature_card",
      "columns": 1,
      "icons": "none",
-     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
+     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的",
+     "row": "charts"
     },
     {
      "type": "prose",
-     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝"
+     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝",
+     "row": "charts"
     },
     {
      "type": "screenshot",
@@ -1344,13 +1352,13 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
       0
      ],
      "ratio": "1280:2100",
-     "row": "chart-demo",
-     "width": "48%",
-     "row_align": "center"
+     "row": "charts",
+     "width": "40%"
     },
     {
      "type": "prose",
-     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据"
+     "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据",
+     "row": "charts"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。"
@@ -2072,6 +2080,10 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
     {
      "type": "prose",
      "text_ref": "实测（9月28日）：演示页生成加6次浏览器自检1分46秒；再存2张整页截图，共3分54秒"
+    },
+    {
+     "type": "prose",
+     "text_ref": "登记和附件（现行代码，10月10日起；本轮没有另做实测）"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。原箭头组名拆为五个流程节点，无新增文字；七功能仍一条一行。；page-fixer-09（按审页意见）：生成/自检/打开/清理图标分别映射"
@@ -2126,6 +2138,10 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
     {
      "type": "prose",
      "text_ref": "实测（9月28日）：演示页生成加6次浏览器自检1分46秒；再存2张整页截图，共3分54秒"
+    },
+    {
+     "type": "prose",
+     "text_ref": "登记和附件（现行代码，10月10日起；本轮没有另做实测）"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。原箭头组名拆为五个流程节点，无新增文字；七功能仍一条一行。；page-fixer-09（按审页意见）：生成/自检/打开/清理图标分别映射"
@@ -2235,8 +2251,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 
 - **写内容文件一条命令生成**：AI 只写文字和数字，转义、版式、配色、画图都由命令做（在用）
 - **生成前自检**：先放在临时位置，用 Chrome 真正打开检查，不过关就不放进 E:\Documents\AI汇报（在用）
-- **用 Chrome 打开**：通过了才按北京时间命名放进汇报目录，用 Chrome 打开；子代理不打开，只交链接（在用）
-- **旧页面进回收站**：下次生成新页面时，顺带把 14 天前的旧页面连附件放进回收站，能还原（没用过：技能 9 月 26 日才建，还没有满 14 天的页面）
+- **用 Chrome 打开**：通过了才按北京时间命名放进汇报目录，用 Chrome 打开；页面里有要我定的卡片时，同时在驾驶舱“需要你”里登一条“等你选”，关掉网页也不会漏；子代理不打开、不登记，只交链接（在用）
+- **旧页面进回收站**：下次生成新页面时，顺带把 14 天前的旧页面连附件放进回收站，能还原；过期的临时页 AI 也可以直接删（说不准：最早的页面 9 月 26 日才生成，10 月 10 日前后才陆续满 14 天，还没查到真的清理过的记录）
 - **整页截图**：按几种宽度存整页截图，给 AI 自己看版面；这一页的截图就是这样来的（在用）
 - **给其他项目用**：照片视频录音管理的批量审批页就是用它生成的，答复再交回那个项目写回；别的项目照接入说明写内容文件，也可以放到指定位置、不自动打开（在用）
 - **手写整页**：特殊版式时复制模板手写，再自检打开（说不准）
@@ -2250,6 +2266,8 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
 - 找不到浏览器时不报“自检通过”
 
 实测（9 月 28 日）：演示页生成加 6 次浏览器自检 1 分 46 秒；再存 2 张整页截图，共 3 分 54 秒
+
+登记和附件（现行代码，10 月 10 日起；本轮没有另做实测）：页面有待选卡片且没加 -NoOpen 时，New-ReportPage.ps1 生成完调用 E:\PCConfig\tools\Set-OwnerItem.ps1 -Mode Add 登记驾驶舱条目，条目 id 由页面路径的 SHA-256 前 24 位算出，-Topic、-Supersedes 把同一件事的前后轮次连起来；登记失败只报警告，页面照常生成。加 -NoOpen 的既不打开也不登记。非私人的 copy 附件按文件内容的 SHA-256 命名，同一个文件只放一份、重复引用复用它；附件先放好，最后才换上 HTML。
 
 ::screen{#skill-report-page-07 section="abilities"}
 
@@ -2528,7 +2546,7 @@ AI 写这种页的规矩
 - 纯技术取舍 AI 自己定，不做成卡片；我看不见的变化不写进汇报
 - 卡片编号跨轮不重复；提上一轮时写“第一轮 A3（总索引改私有）”这样带人话的说法
 
-**收到答复怎么办**（在用）　有说明的以说明为准，说明里的追问逐条答；看不懂、矛盾或明显误选的，做下一轮页面讲清，不替我改选择。
+**收到答复怎么办**（在用）　有说明的以说明为准，说明里的追问逐条答；看不懂、矛盾或明显误选的，做下一轮页面讲清，不替我改选择。AI 读完答复、照着处理好以后，把驾驶舱“需要你”里这页对应的那一条关掉，记成已处理；不是存下决定就算完。
 
 **子代理不做页面**（在用）　派出去的子代理默认写成文字交回给派它的会话；要不要给我做页面由主对话定。页面做完，回复里仍用几句话说结论、附上页面链接，关掉页面也能从对话里找回。
 

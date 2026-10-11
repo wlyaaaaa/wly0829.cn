@@ -39,8 +39,8 @@
    "facts": [
     "近 7 天 AI 用了 4 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -58,21 +58,21 @@
      "with": "personal-media",
      "direction": "拿来",
      "flow": "查的是照片视频录音管理的媒体记录（SQLite + FTS5），原件位置以记录里的原件路径为准",
-     "source": "E:\\.agents\\skills\\personal-media\\SKILL.md 第 8 行"
+     "source": "E:\\.agents\\skills\\personal-media\\SKILL.md 第 10 行"
     },
     {
      "id": "r-asr",
      "with": "chinese-asr",
      "direction": "拿来",
      "flow": "找录音里的某句话时读中文语音转写已有的带时间结果；没有时经同意用本机 Paraformer 补这一段",
-     "source": "SKILL.md 的 Locate a recording passage 节"
+     "source": "SKILL.md 的 Recording passage 节"
     },
     {
      "id": "r-person-self",
      "with": "media-person-self",
      "direction": "交出",
      "flow": "选定的照片或录音要判断有没有本人时，交给“照片录音里有没有我”",
-     "source": "SKILL.md 的 Identity and content follow-up 节"
+     "source": "SKILL.md 的 Follow-up and scope 节"
     },
     {
      "id": "r-materials",
@@ -85,8 +85,8 @@
      "id": "r-report-page",
      "with": "report-page",
      "direction": "拿来",
-     "flow": "要本人定去留时，用审批页（汇报网页技能画）摆出实物",
-     "source": "SKILL.md 的 When the owner must decide keep or exit 节"
+     "flow": "要本人定去留时，review-page 经汇报网页技能出审批页摆出真实原件；答复经 owner-decide 先 dry-run 再 --execute，保留进 catalog，退出进 retract-applied",
+     "source": "SKILL.md 的 Keep or exit review 节"
     }
    ],
    "mentions": [
@@ -128,8 +128,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-media/page.json",
-  "sha256": "5b21dde262b4c29e3a93077e0ffccc5acd365f0fa3d50237bb335314d89726d5",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "105063f9a9e675e0b69f907836edb0c719deb79f740f3d7cdd84e4ccedd90b6d",
+  "converted_at_beijing": "2026-10-11T14:07:24+08:00"
  }
 }
 ---
@@ -175,7 +175,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -256,7 +256,7 @@
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
@@ -871,6 +871,30 @@
      "columns": 2,
      "columns_v": 2,
      "variant": "table"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "要我定去留时",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "手机里一批照片视频",
+     "columns": 2,
+     "columns_v": 1,
+     "illustration": "none",
+     "icons": "none"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "临时浏览文件夹",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "说“放进一个文件夹给我翻翻”"
     }
    ],
    "notes": "横版左63%上方章节标题和带链接说明，下面浅绿外框内组名和2列表格4行；右37%独立漏斗插画，整幅与左文字+表对齐。竖图章节标题居中，说明为左头像右气泡，组名在下；四张行卡纵排，每卡左边你说的/例句+图，中间箭头，右边它查的/机器人+条件，两个字段保留左右关系；漏斗插画在四卡下方。table只分真实table节点；重复表头需data-echo，不能自行加冒号。漏斗采用无字气泡，不额外重复原图上4句文字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮按审查第2项：横版左栏75%右图25%；table 不另加 width，保留同 row 无 width 合入左栏的真实父布局，避免创建第三栏。；blank-audit末组实际看图修复：仅本横屏按原图自然比例限装饰图、独立原文纵链自然高度/整宽长卡；每句定稿与素材保留，竖版不改。",
@@ -923,6 +947,30 @@
      "connector": "arrow",
      "illustration": "left_inside",
      "icons": "auto"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "要我定去留时",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "手机里一批照片视频",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "none",
+     "icons": "none"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "临时浏览文件夹",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "说“放进一个文件夹给我翻翻”"
     }
    ],
    "notes": "横版左63%上方章节标题和带链接说明，下面浅绿外框内组名和2列表格4行；右37%独立漏斗插画，整幅与左文字+表对齐。竖图章节标题居中，说明为左头像右气泡，组名在下；四张行卡纵排，每卡左边你说的/例句+图，中间箭头，右边它查的/机器人+条件，两个字段保留左右关系；漏斗插画在四卡下方。table只分真实table节点；重复表头需data-echo，不能自行加冒号。漏斗采用无字气泡，不额外重复原图上4句文字。 新外观（对话气泡、条目小卡、未批准的底色、复合卡内图文）均需组件样张确认；普通卡面和字体沿用已批准样板。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；2026-10-03 本轮按审查第2项：竖版漏斗插画移到章节标题后整宽独立展示；后续说明、组名、四行表格保持原序，图不嵌入表格。",
@@ -1009,6 +1057,19 @@
 | “写着‘毕业典礼’的” | 画面里认出的字、描述、录音转成的文字，只挑 1–4 个关键词 |
 | “上个月”“只要视频” | 日期范围、照片或视频或录音，你说了才加 |
 | “那句话在第几分钟” | 先选定那段录音，再读它已有的带时间的转写 |
+
+**要我定去留时**
+
+1. 手机里一批照片视频、拿不准该不该留的，AI 用照片视频录音管理现有的流程出一张汇报网页：每张卡片上面就是真实原件（完整的图、能播的视频），下面是“保留 / 退出”两个选项和 AI 的建议。别的照片视频录音要我定去留，页面也直接摆出原件，不只给一段文字让我选。
+2. 我在网页里点选、需要时写几句说明，把网页生成的答复粘回对话。
+3. AI 先把答复存下来，照着演练一遍，看清会发生什么；没问题再真正执行。
+4. 我选保留的，记进媒体目录，以后的撤回不会再动它；选退出的，交给照片视频录音管理的撤回流程。这个技能自己不删原件。
+
+**临时浏览文件夹**
+
+说“放进一个文件夹给我翻翻”，它在同一块盘上建一个这次任务专用的临时文件夹，用硬链接放进去，不复制原件。看完以后，AI 先核对：这个文件夹确实是这次任务建的、里面只有它放进去的东西、每一个都对得上原件；核对过就直接删掉这些临时副本，连同记录清单和空文件夹一起清掉。原件和文件夹外的其他文件一律不动。
+
+技术上：去留页由 review-page --review <review.json> 写好内容后调 New-ReportPage.ps1 -ContentPath 生成、自检并用 Chrome 打开；答复存成文件后跑 owner-decide --review <review.json> --reply <文件>，先演练（dry-run），再加 --execute；保留的进 catalog、跳过后续撤回，退出的进 retract-applied。临时文件夹在 E:\Media\_manifests\personal-media-current\browse 下，按 manifest 核对归属、目录只含自有内容、硬链接与原件身份（原件已退役时对记录的哈希）；常规收尾入口是 clean --folder。
 
 ::screen{#skill-personal-media-04 section="limits"}
 
@@ -1641,10 +1702,12 @@
 - 结果数正好等于要的张数时，说“至少这么多”，不说“全部”。
 - 找不到时说明用了哪些条件、是不是日期不确定、私密的或地点没登记挡住了，不去扫整块硬盘。
 - 私密的默认不出现；你说“包括私密的”，或 AI 更新对你的理解、私密的会改变结论时才带上，只拿出需要的那几件。
+- 要我定去留时，出一张摆着真实原件的确认网页；按我的答复先演练、再执行，保留的记进目录，退出的交给撤回流程。
+- 给我翻看的临时文件夹，核对确实只有这次任务放进去的副本后直接删掉，清单和空文件夹一起清。
 
 **它不管的**
 
-- 不改、不删、不上传，也不连手机：整理和删除归〔照片视频录音管理〕。
+- 不改原件、不删原件、不上传，也不连手机：整理和删除归〔照片视频录音管理〕；去留确认里选退出的，也是交给它的撤回流程。
 - 不按人找：照片里有没有我，用〔照片录音里有没有我〕。
 - 不找文档、合同这类非媒体文件：归〔找文件原件〕。
 - 录音没有带时间的转写时，只说缺什么；你同意了，才在本机补这一段的时间，不上传录音。

@@ -18,7 +18,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "file": "退役提交 .agents 4b00ca1（10 月 1 日）：技能源码删除，同一提交改写了 localocr 的说明"
+   "file": "退役提交 .agents 4b00ca1（10 月 2 日）：技能源码删除，同一提交改写了 localocr 的说明"
   },
   "video_prompt": "",
   "registry": {
@@ -42,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/skill-file-intake-router/page.json",
-  "sha256": "b8217fa31fd3e06ad69556ccb29a4802957619f662b794fcf5372f340c239c58",
-  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
+  "sha256": "6ed88c752c5dcbfd553c6dd8e91d08b5e3e220d878a194c6226c4526e8c44fd3",
+  "converted_at_beijing": "2026-10-11T13:37:38+08:00"
  }
 }
 ---
@@ -84,7 +84,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这个技能10月1日退",
+     "text_ref": "这个技能10月2日退",
      "row": "go"
     },
     {
@@ -112,7 +112,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "这个技能10月1日退"
+     "text_ref": "这个技能10月2日退"
     }
    ]
   }
@@ -123,4 +123,4 @@
 
 一堆文件一起看
 
-这个技能 10 月 1 日退役了。一堆混在一起的文件，现在 AI 直接按类型分着读；扫描件和图片里的字交给〔本地文字识别〕。
+这个技能 10 月 2 日退役了。一堆混在一起的文件，现在 AI 直接按类型分着读；扫描件和图片里的字交给〔本地文字识别〕。

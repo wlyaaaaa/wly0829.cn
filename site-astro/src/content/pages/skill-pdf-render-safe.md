@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-29 01:21"
+    "at": "2026-10-09 10:15"
    },
    "facts": [
-    "近 7 天没用过"
+    "近 7 天 AI 用了 1 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -75,7 +75,7 @@
      "how": "“每页都看看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "render_pdf_safe.py 第 215–241 行；9 月会话记录至少 15 次"
+     "source": "render_pdf_safe.py 第 177–221 行；9 月会话记录至少 15 次"
     },
     {
      "id": "f-contact",
@@ -85,7 +85,7 @@
      "how": "自动带上",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "make_contact_sheet 第 262–292 行；9 月的真实检查几乎都带总览"
+     "source": "make_contact_sheet 第 224–255 行；9 月的真实检查几乎都带总览"
     },
     {
      "id": "f-select-pages",
@@ -95,7 +95,7 @@
      "how": "“第 3 页和最后一页放大看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "parse_page_selection 第 168–191 行；9 月有 3 次只转了 1–3 页"
+     "source": "parse_page_selection 第 130–153 行；9 月有 3 次只转了 1–3 页"
     },
     {
      "id": "f-dpi",
@@ -105,7 +105,7 @@
      "how": "“这页放大到 240 看”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 587 行；9 月用过 100、110、115、150"
+     "source": "第 594 行；9 月用过 100、110、115、150"
     },
     {
      "id": "f-snapshot",
@@ -115,7 +115,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "render_pdf 第 421–438、489–494 行"
+     "source": "render_pdf 第 429–438、490–495 行"
     },
     {
      "id": "f-generation",
@@ -125,7 +125,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 446–499、541–549 行"
+     "source": "第 447–500、542–556 行"
     },
     {
      "id": "f-report",
@@ -135,7 +135,7 @@
      "how": "AI 按报告里的路径开图",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 501–537 行，schema md-pdf-toolkit.pdf-render-safe.v3"
+     "source": "第 502–537 行，schema md-pdf-toolkit.pdf-render-safe.v3"
     },
     {
      "id": "f-prune",
@@ -145,7 +145,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "prune_generations 第 377–396 行；delete_generation 第 352–366 行"
+     "source": "prune_generations 第 379–398 行；delete_generation 第 354–368 行"
     },
     {
      "id": "f-keep-stale",
@@ -155,7 +155,7 @@
      "how": "“旧的都留着”",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "--keep-stale 第 602–608 行；9 月 26–27 日 7 次里 5 次用了"
+     "source": "--keep-stale 第 608–615 行；9 月 26–27 日 7 次里 5 次用了"
     },
     {
      "id": "f-lock",
@@ -165,17 +165,17 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "prefix_lock 第 295–336 行"
+     "source": "prefix_lock 第 259–299 行"
     },
     {
      "id": "f-real-poppler",
      "group": "g-guard",
      "name": "只用真的渲染程序",
-     "what": "只认 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装",
+     "what": "只认电脑配置里登记的那个 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装；登记缺了或失效就报错，先修登记",
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "find_pdftoppm 第 54–83 行；本机用 Codex 自带运行环境里的 Poppler 26.07.0"
+     "source": "find_pdftoppm 第 39–45 行、runtime_registry.py；PCConfig registries\\md_pdf_toolkit.json 的 pdftoppm_executable = E:\\Tools\\MD-PDF-Runtime\\poppler\\Library\\bin\\pdftoppm.exe（Poppler 26.07.0 独立副本）；登记缺失或失效先修登记"
     },
     {
      "id": "f-timeout",
@@ -185,7 +185,7 @@
      "how": "自动",
      "status": "在用",
      "screen": "skill-pdf-render-safe-04",
-     "source": "第 194–212、597–600 行"
+     "source": "第 156–174、603–607 行"
     }
    ],
    "numbers": [
@@ -271,14 +271,14 @@
      "with": "localocr",
      "direction": "分工",
      "flow": "本技能只出图；图里的字要逐字读出来时交给本地文字识别",
-     "source": "SKILL.md 第 35 行（渲染不证明语义完整）"
+     "source": "SKILL.md 第 37 行（渲染不证明语义完整）"
     },
     {
      "id": "r-codex-runtime",
-     "with": "外部软件 Codex 桌面版",
+     "with": "PCConfig 登记的 MD-PDF 独立运行环境（E:\\Tools\\MD-PDF-Runtime）",
      "direction": "拿来",
-     "flow": "pdftoppm.exe 从 Codex 自带运行环境的 native\\poppler 目录找（PATH 上没有）",
-     "source": "find_pdftoppm 第 54–83 行；报告 renderer 字段"
+     "flow": "经工具包启动器 Invoke-MdPdfToolkit.ps1 用登记的宿主 Python 运行；pdftoppm.exe 取自 registries\\md_pdf_toolkit.json 的 pdftoppm_executable（Poppler 26.07.0，同一登记另记 Node 26.4.0、Playwright 1.62.1 供文稿转 PDF 用），不再用 Codex 桌面版自带的 native\\poppler，也不看 PATH；登记缺失或失效时报错，先修登记",
+     "source": "SKILL.md 第 8–10 行；find_pdftoppm 第 39–45 行；runtime_registry.py；Invoke-MdPdfToolkit.ps1 第 11–23 行；PCConfig registries\\md_pdf_toolkit.json；报告 renderer 字段"
     }
    ],
    "highlights": [],
@@ -315,8 +315,8 @@
  },
  "source": {
   "page": "sources/pages/skill-pdf-render-safe/page.json",
-  "sha256": "699d46612ea53e70681fbdfca5f721eb154544c877d65f068dddd0958f86f49c",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "57619365d460b8cc33b6f9ded2b938d416c59c4792609dda59d23f5a2ebb2fbc",
+  "converted_at_beijing": "2026-10-11T14:13:32+08:00"
  }
 }
 ---
@@ -359,15 +359,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "intro"
     },
     {
@@ -438,15 +438,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 29 日 01:21",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:15",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
@@ -1269,6 +1269,10 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
      "connector": "none",
      "icons": "none",
      "last_row": "fill"
+    },
+    {
+     "type": "prose",
+     "text_ref": "渲染器从哪来：AI通过工具包启动器Invoke-MdPdfToolkit.ps1调用"
     }
    ],
    "notes": "横版实际原图三组是单排4/5/3列，不按scene泛称三列套版。标题左47%，图例和说明同卡置右53%；每组组名左对齐压在外框上沿，下方全组一排。竖版01张含总标题、图例说明、看页面1–4；批准v2接不弄乱5–9、不出乱子10–12，无重复总标题图例。所有图标卡内左侧；功能名称中档粗绿；状态圆点与状态词在每卡右上；没有流程连接。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
@@ -1348,6 +1352,10 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
      "connector": "none",
      "icons": "none",
      "last_row": "fill"
+    },
+    {
+     "type": "prose",
+     "text_ref": "渲染器从哪来：AI通过工具包启动器Invoke-MdPdfToolkit.ps1调用"
     }
    ],
    "notes": "横版实际原图三组是单排4/5/3列，不按scene泛称三列套版。标题左47%，图例和说明同卡置右53%；每组组名左对齐压在外框上沿，下方全组一排。竖版01张含总标题、图例说明、看页面1–4；批准v2接不弄乱5–9、不出乱子10–12，无重复总标题图例。所有图标卡内左侧；功能名称中档粗绿；状态圆点与状态词在每卡右上；没有流程连接。；本轮仅文字续审：五句逐段拆泡、横2列竖1列，竖版我在右AI在左、来源句在截图前，功能卡横3列竖1列；数字段 stat_card 支持待组件核验。；page-fixer-02 按本轮审页意见调整，文字顺序保留定稿。",
@@ -1606,10 +1614,12 @@ AI：“2 页都完整，没有裁切和重叠。有一处和预期不一样：�
 
 **不出乱子**
 10. 同一组图同时只一个在画｜同一个文件夹、同一个前缀，第二个任务直接报错，不混在一起｜在用
-11. 只用真的渲染程序｜只认 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装｜在用
+11. 只用真的渲染程序｜只认电脑配置里登记的那个 pdftoppm.exe 本体，拒绝 .bat、.cmd、.ps1 包装；登记缺了或失效就报错，先修登记｜在用
 12. 有时限｜每次 pdftoppm 最多 120 秒（1–600 可调）｜在用
 
 PDF 能打开、页数对，也可能有字被裁掉、表格挤出页边、某页空白、颜色淡得看不清——光看命令说“成功”发现不了。这个技能让 AI 先把 PDF 复制一份，再用 Poppler 的 pdftoppm 把每页转成 PNG，外加一张所有页的缩略总览；AI 先看总览找节奏，再把可疑的几页放大重转一遍细看。每次的图单独放一版，全部画完才更新报告，中途出错也不会弄乱上一次的结果。
+
+渲染器从哪来：AI 通过工具包启动器 Invoke-MdPdfToolkit.ps1 调用，Python 用 PCConfig 登记的宿主 Python（host_python.json），pdftoppm 取自 PCConfig 登记 registries\md_pdf_toolkit.json 的 pdftoppm_executable：E:\Tools\MD-PDF-Runtime\poppler\Library\bin\pdftoppm.exe，一套独立复制的 Poppler 26.07.0（连同它的支持库；同一份登记还给文稿转 PDF 记了 Node 26.4.0、Playwright 1.62.1）。它不再从 Codex 桌面版自带的 native\poppler 里找，也不看 PATH。登记缺失、指向的文件不存在或不是 .exe 本体时直接报错、不渲染，先修登记（核对命令 Get-MdPdfToolkitRuntime.ps1 -Json）再跑。
 
 ::screen{#skill-pdf-render-safe-05 section="limits"}
 

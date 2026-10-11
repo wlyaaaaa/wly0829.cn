@@ -18,7 +18,7 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "file": "退役提交 .agents def50d2（9 月 27 日）“退役旧 AI 分工门禁与施工登记”；现行分工规则在 E251 agents.execution-coordination.md"
+   "file": "退役提交 .agents def50d2（9 月 27 日）“退役旧 AI 分工门禁与施工登记”；现行分工规则在 E257 agents.execution-coordination.md"
   },
   "video_prompt": "",
   "registry": {
@@ -42,8 +42,8 @@
  },
  "source": {
   "page": "sources/pages/skill-native-economy-routing/page.json",
-  "sha256": "c013717a64357f5fe09dbf6887911304fad8135d6b9687f3719d6272be4bbcda",
-  "converted_at_beijing": "2026-10-10T08:18:10+08:00"
+  "sha256": "8d357a2a94968ca643183904979db1054b91b4e33748d95ae56c81694e120e3f",
+  "converted_at_beijing": "2026-10-11T13:37:01+08:00"
  }
 }
 ---

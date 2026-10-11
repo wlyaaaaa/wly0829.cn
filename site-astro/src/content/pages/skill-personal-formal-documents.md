@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-09-28 21:18"
+    "at": "2026-10-09 10:12"
    },
    "facts": [
-    "近 7 天没用过"
+    "近 7 天 AI 用了 1 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": null,
   "repo_url": null,
@@ -105,8 +105,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-formal-documents/page.json",
-  "sha256": "72b95fd2dc5ba32ecf04edefd75385c0d62262bd63d9bae52887362a0c65af66",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "30db49bbcd3064f33c95083ae96fe342ee04e818519b4b1230a4d12798447147",
+  "converted_at_beijing": "2026-10-11T13:40:02+08:00"
  }
 }
 ---
@@ -152,15 +152,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:12",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -247,15 +247,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 9 月 28 日 21:18",
+       "text": "偶尔用 · 上次使用 10 月 9 日 10:12",
        "state": "ok"
       },
       {
-       "text": "近 7 天没用过",
+       "text": "近 7 天 AI 用了 1 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

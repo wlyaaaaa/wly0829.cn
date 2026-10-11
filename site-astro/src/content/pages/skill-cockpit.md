@@ -34,20 +34,20 @@
    "state": "常用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 23:43"
+    "at": "2026-10-09 13:02"
    },
    "facts": [],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "commit": "e692a58",
-   "commit_time": "2026-10-08T19:05:29-05:00",
-   "file": "E:\\.agents\\skills\\cockpit\\SKILL.md（3,364 字节，10 月 10 日读）；网站 sources/pages/cockpit/page.json 的栏目名和链接",
-   "rules_release": "E251"
+   "commit": "e692a58e450b3482f11300e4ebd0542aa0d3e0c3",
+   "commit_time": "2026-10-09T08:07:40+08:00",
+   "file": "E:\\.agents\\skills\\cockpit\\SKILL.md（3,364 字节，10 月 11 日读）；网站 sources/pages/cockpit/page.json 的栏目名和链接",
+   "rules_release": "E257"
   },
   "video_prompt": "",
   "registry": {
@@ -122,8 +122,8 @@
  },
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
-  "sha256": "eafeb9bb85f1f3d3468b19fb4579906473d2127b3657182f7c0f0e6352445526",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "80ace368ae6d14d1b157030da391d51b9e2cd35cca5719f8c9401c431174bb97",
+  "converted_at_beijing": "2026-10-11T14:03:09+08:00"
  }
 }
 ---
@@ -167,11 +167,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "text": "常用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -230,11 +230,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 上次使用 10 月 8 日 23:43",
+       "text": "常用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",
@@ -810,6 +810,7 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
 - 要我做、要我选、容易漏看的事，登记成一条：写清人话、谁处理、什么时候、做到什么算完。这条只有 AI 核实后能关，网页上没有删除按钮。
 - 出错的条目，给我一句看着舒服的人话；给 AI 的细节（任务名、错误原文、日志在哪）只放在电脑本机，公开的网页上不显示。
 - “复制给 AI”分三级：每一条、每一块、整页；复制出来的提示词只指向本机里的条目编号，不贴日志原文。
+- 修由 AI 做（技能里写的要求）：每周的基座治理读驾驶舱背后的接口，一条一条处理，修好的那条变绿；驾驶舱上“AI 会在每周基座治理里处理（下次……）”那句话就是指它。现在的情况（10 月 11 日核对）：每周体检的 Codex 自动任务已经设好，10 月 5 日第一次跑完并留了回执，下一次是 10 月 12 日；但这件事本身还在待验收，“逐条处理、修好变绿”还没有哪次运行被验收过，不算已经做到的能力。
 
 ::screen{#skill-cockpit-04 section="limits"}
 

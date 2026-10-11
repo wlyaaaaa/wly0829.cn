@@ -4,7 +4,7 @@
   "kind": "skills-home",
   "title": "技能",
   "url": "/skills/",
-  "tagline": "AI 碰到某类事时照着办的说明书，一共 26 个。",
+  "tagline": "AI 碰到某类事时照着办的说明书，一共 27 个。",
   "status": "",
   "public": false,
   "repo_url": null,
@@ -376,7 +376,7 @@
         },
         {
           "text": "属于：GitHub 项目总索引",
-          "href": "/projects/github-local-index/"
+          "href": "/projects/github-index/"
         }
       ],
       "anchors": [
@@ -890,7 +890,7 @@
         "text": "改项目前先核对"
       },
       {
-        "target": "/projects/github-local-index/",
+        "target": "/projects/github-index/",
         "screen": "skills-home-04",
         "text": "属于：GitHub 项目总索引"
       },

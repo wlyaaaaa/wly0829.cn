@@ -34,13 +34,13 @@
    "state": "偶尔用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 14:43"
+    "at": "2026-10-09 11:27"
    },
    "facts": [
-    "近 7 天 AI 用了 5 次"
+    "近 7 天 AI 用了 7 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用小记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -60,28 +60,28 @@
      "with": "personal-materials",
      "direction": "拿来",
      "flow": "技能调用个人材料查找的 materials.py（find、discover、inspect、locate-content、open 等），查的是它的登记和文件名清单",
-     "source": "E:\\.agents\\skills\\personal-materials\\SKILL.md 第 25–35 行"
+     "source": "E:\\.agents\\skills\\personal-materials\\SKILL.md 第 15–29 行"
     },
     {
      "id": "r-media",
      "with": "personal-media",
      "direction": "分工",
      "flow": "照片、视频、录音都走找照片和录音，这个技能从不定位或打开媒体",
-     "source": "SKILL.md 第 13、39 行"
+     "source": "SKILL.md 第 10、31 行"
     },
     {
      "id": "r-localocr",
      "with": "localocr",
      "direction": "交出",
      "flow": "选中的 PDF 没有文字层时，只把这一份交给本地文字识别，结果对回原 PDF 页码和当前指纹",
-     "source": "SKILL.md 第 23 行"
+     "source": "SKILL.md 第 25 行"
     },
     {
      "id": "r-agents",
      "with": "agents",
      "direction": "拿来",
      "flow": "规则规定：只有原件位置不明、要跨位置找或定位失效时才用这个技能；知道位置直接读",
-     "source": "E187 agents.capabilities-runtime.md 第 20 行；SKILL.md 第 12–14 行"
+     "source": "E257 agents.capabilities-runtime.md 第 27 行；SKILL.md 第 10 行"
     }
    ],
    "mentions": [
@@ -123,8 +123,8 @@
  },
  "source": {
   "page": "sources/pages/skill-personal-materials/page.json",
-  "sha256": "da3da8b564da7ab9767dfa7735b69ef3a942d6fc5739bdba7566813c57bdd01d",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "92732b09b91918795fb16580c9f2023ab3a2123bb1cb8eadd38380932ea2bc1f",
+  "converted_at_beijing": "2026-10-11T13:40:07+08:00"
  }
 }
 ---
@@ -167,15 +167,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 8 日 14:43",
+       "text": "偶尔用 · 上次使用 10 月 9 日 11:27",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 5 次",
+       "text": "近 7 天 AI 用了 7 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -251,15 +251,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "偶尔用 · 上次使用 10 月 8 日 14:43",
+       "text": "偶尔用 · 上次使用 10 月 9 日 11:27",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 5 次",
+       "text": "近 7 天 AI 用了 7 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用小记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "prose",

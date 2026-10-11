@@ -3,7 +3,7 @@
  "title": "技能",
  "kind": "skills-home",
  "url": "/skills/",
- "tagline": "AI 碰到某类事时照着办的说明书，一共 26 个。",
+ "tagline": "AI 碰到某类事时照着办的说明书，一共 27 个。",
  "toc": [
   {
    "id": "top",
@@ -28,7 +28,7 @@
   "kind": "skills-home",
   "title": "技能",
   "url": "/skills/",
-  "tagline": "AI 碰到某类事时照着办的说明书，一共 26 个。",
+  "tagline": "AI 碰到某类事时照着办的说明书，一共 27 个。",
   "status": "",
   "public": false,
   "repo_url": null,
@@ -541,7 +541,7 @@
      "text": "改项目前先核对"
     },
     {
-     "target": "/projects/github-local-index/",
+     "target": "/projects/github-index/",
      "screen": "skills-home-04",
      "text": "属于：GitHub 项目总索引"
     },
@@ -585,8 +585,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "e4b1c92495508210cd51cca357e1ffdc32eff038d495454170f34b7de6a80059",
-  "converted_at_beijing": "2026-10-10T10:58:17+08:00"
+  "sha256": "1ba020e1c5007d749c9fff5ba710b64a872780a5f123f59a8b73d421f0a83630",
+  "converted_at_beijing": "2026-10-11T13:46:01+08:00"
  }
 }
 ---
@@ -1844,7 +1844,7 @@
    },
    {
     "text": "属于：GitHub 项目总索引",
-    "href": "/projects/github-local-index/"
+    "href": "/projects/github-index/"
    }
   ],
   "anchors": [
