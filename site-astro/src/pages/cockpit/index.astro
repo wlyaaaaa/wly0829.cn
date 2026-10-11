@@ -50,11 +50,28 @@ const toc = [
 ];
 // 总览屏共用脚本（public/_overview/，首页小屏也用它）：构建时直接按文件导入，画首帧
 const ov = await import(/* @vite-ignore */ new URL('public/_overview/overview-screen.js', pathToFileURL(process.cwd() + '/')).href);
+// 目录条标签图：全站脚本会把有导航标签图的项（“开头”“项目”）换成图，但量尺寸要靠 #toc-label-data；
+// 驾驶舱没有这份数据时这两项被换成宽 0 的空图。这里用和其他页同一个来源（各页运行件里的 toc-label-data，加页面数据里的 nav_labels）
+// 给驾驶舱的标签补上这份数据；哪个标签找不到图就不写进去，那一项保留原文字。
+const runtimeFiles = import.meta.glob('../../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
+const labelData: Record<string, any> = {};
+for (const rt of Object.values(runtimeFiles)) {
+  for (const part of [...(rt?.head || []), rt?.tail || '']) {
+    const m = typeof part === 'string' && part.match(/<script[^>]*id="toc-label-data"[^>]*>(.*?)<\/script>/s);
+    if (m) try { Object.assign(labelData, JSON.parse(m[1])); } catch { /* 坏数据跳过 */ }
+  }
+}
+const cockpitRuntime = runtimeFiles['../../chrome/runtime/cockpit.json'];
+const navLabels = (() => { const m = cockpitRuntime?.tail?.match(/<script id="page-data" type="application\/json">(.*?)<\/script>/s); try { return m ? JSON.parse(m[1]).shared?.nav_labels || {} : {}; } catch { return {}; } })();
+const tocLabels = Object.fromEntries(toc.map((t) => [t.label, labelData[t.label] || navLabels[t.label]]).filter(([, v]) => v && v.src && v.size));
+
 const html = page(view, { now: new Date(), offline: false, projectUrls, img, ov });
 const safe = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
 const boot = safe({ endpoints: ENDPOINTS, local: ['/__status?view=cockpit'], snapshot, projectUrls, img });
 ---
 <Site title="驾驶舱" kind="cockpit" url="/cockpit/" page="cockpit" toc={toc}>
+  <script is:inline type="application/json" id="toc-label-data" set:html={safe(tocLabels)}></script>
+  <script is:inline>/* 主导航标出当前页是驾驶舱（下划线），和发布时导航修复的写法一致 */document.querySelectorAll('a[href="/cockpit/"]').forEach((a)=>{if(a.closest('header,#menu,footer,.primary-nav'))a.setAttribute('aria-current','page');});</script>
   <link rel="stylesheet" href={riverCss} />
   <link rel="stylesheet" href="/_overview/overview-screen.css" />
   <div class="cp-page"><Fragment set:html={html} /></div>
