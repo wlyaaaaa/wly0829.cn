@@ -288,7 +288,10 @@ def page_value(record, page, root):
             raise ValueError("展示字段须定位字符串或标量")
         text = str(text)
         if "start" in record:
-            text = text[record["start"]:record["end"]]
+            start, end = record["start"], record["end"]
+            if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(text):
+                raise ValueError("页面字符范围无效，保留旧日期/数值")
+            text = text[start:end]
             return text, observed
         if not record.get("page_pattern") and not record.get("page_number"):
             return text, observed

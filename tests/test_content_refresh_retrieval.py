@@ -142,6 +142,13 @@ class RetrievalTests(unittest.TestCase):
         self.assertEqual(len(edits["manual_reviews"]), 1)
         self.assertEqual(edits["manual_reviews"][0]["old_value"], "2026-10-01")
         self.assertEqual(len(edits["edits"]), 1)
+        with patch.object(refresh, "bounded", return_value="[4]"):
+            result = refresh.collect(self.root, {"records": [number, dict(date, field=None)]})
+            self.assertEqual(result["rows"][1]["status"], "manual_review")
+            invalid = dict(date, start=path.read_text("utf-8").find("2026-10-01"), end=999)
+            result = refresh.collect(self.root, {"records": [number, invalid]})
+            self.assertIsNone(result["rows"][1]["new_value"])
+            self.assertEqual(result["rows"][0]["new_value"], 4)
 
 
 if __name__ == "__main__":

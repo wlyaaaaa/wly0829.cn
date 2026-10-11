@@ -93,19 +93,22 @@ def locate(text, row, number=False):
 
 def qualified_date_review(page, row):
     """日期所说的事件时间不能被计数的本轮观察日期替换。"""
-    field = row.get("field", row.get("page_field", ""))
+    field = row.get("field") or row.get("page_field") or ""
     if field.startswith("status_line.last"):
         return "需人工核对：上次使用或运行的事件时间，不能替换为本轮观察日期"
-    if field:
-        parent, key = field_at(page, field)
-        text = parent[key]
-    else:
-        text = next(s.get("text", "") for s in page["screens"] if s["id"] == row["screen"])
-    start, end = locate(text, row)
+    try:
+        if field:
+            parent, key = field_at(page, field)
+            text = parent[key]
+        else:
+            text = next(s.get("text", "") for s in page["screens"] if s["id"] == row["screen"])
+        start, end = locate(text, row)
+    except (KeyError, ValueError, IndexError, StopIteration, re.error):
+        return "需人工核对：日期上下文未能定位，保留旧日期"
     # 只看日期所在句，避免别的句子提到“上次使用”就误拦本轮观察日期。
-    a = max(text.rfind(mark, 0, start) for mark in ("\n\n", "。", "；", ";"))
-    a = 0 if a < 0 else a + (2 if text[a:a + 2] == "\n\n" else 1)
-    ends = [text.find(mark, end) for mark in ("\n\n", "。", "；", ";")]
+    marks = ("\n", "。", "；", ";", "！", "!", "？", "?")
+    a = max(text.rfind(mark, 0, start) for mark in marks) + 1
+    ends = [text.find(mark, end) for mark in marks]
     b = min((i for i in ends if i >= 0), default=len(text))
     if EVENT_DATE.search(text[a:b]):
         return "需人工核对：日期句说明最近写入、上次使用或资料覆盖时间，不能替换为本轮观察日期"

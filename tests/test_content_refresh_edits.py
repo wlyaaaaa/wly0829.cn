@@ -86,9 +86,12 @@ class NumberEditsTests(unittest.TestCase):
             self.assertFalse(any(e["field"] == "screens[0].text" for e in payload["edits"]))
             apply_edits(self.root, payload)
             self.assertIn("截至 10 月 9 日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
-        self.page["screens"][0]["text"] = "\n".join(self.labels) + "\n本轮观察截至 10 月 9 日；上次使用 10 月 7 日"
-        self.save()
-        self.assertFalse(self.build()["manual_reviews"])
+        for text in ("本轮观察截至 10 月 9 日；上次使用 10 月 7 日",
+                     "上次使用 10 月 7 日！本轮观察截至 10 月 9 日。",
+                     "- 上次使用 10 月 7 日\n- 本轮观察截至 10 月 9 日"):
+            self.page["screens"][0]["text"] = "\n".join(self.labels) + "\n" + text
+            self.save()
+            self.assertFalse(self.build()["manual_reviews"])
 
     def test_changed_field_is_reported_and_exact_ranges_do_not_search_another_number(self):
         payload = self.build()
