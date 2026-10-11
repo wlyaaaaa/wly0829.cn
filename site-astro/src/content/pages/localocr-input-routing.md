@@ -27,18 +27,14 @@
   "parent": "localocr",
   "status_line": {
    "state": "常用",
-   "as_of": "Unknown",
-   "source": "父项目作者页 /projects/localocr/ 的 status；技术证据为冻结页 2026-09-18 21:26 原快照，待按现状重取",
-   "last": {
-    "label": "原页核对",
-    "at": "2026-09-18 21:26"
-   }
+   "as_of": "2026-10-11",
+   "source": "LocalOCR 源码（截止前最后提交 50af3fa）、现役 9 月 24 日快照及其验收回执、外层 AI 技能说明，于 2026-10-11 16:30–16:48（北京时间）只读核对"
   }
  },
  "source": {
   "page": "sources/pages/localocr-input-routing/page.json",
-  "sha256": "0007a4def4a4b7f0f95675d7108098c3d4eb747859d666f60557815414a7838f",
-  "converted_at_beijing": "2026-10-11T19:07:38+08:00"
+  "sha256": "cf3a99d404453fe37ff87e58946aa52f1d477c988330dd52c705ee2088396188",
+  "converted_at_beijing": "2026-10-11T19:33:45+08:00"
  }
 }
 ---
@@ -88,10 +84,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 原页核对 2026 年 9 月 18 日 21:26",
+       "text": "常用",
        "state": "ok"
       }
      ],
+     "static_note": "截至 10 月 11 日 · LocalOCR 源码（截止前最后提交 50af3fa）、现役 9 月 24 日快照及其验收回执、外层 AI 技能说明，于 2026-10-11 16:30–16:48（北京时间）只读核对",
      "row": "top"
     },
     {
@@ -105,6 +102,11 @@
     {
      "type": "prose",
      "text_ref": "我不需要每次从模型名开始选择。先指定原件和想拿到的结果，普通图片、扫描 PDF 与文件夹就能进入相应本机路线；明确要求具体模型时保留我的选择，处理过程会说明实际使用了什么。",
+     "row": "top"
+    },
+    {
+     "type": "prose",
+     "text_ref": "**当前情况：**已有图片、扫描 PDF 和文件夹的本地识别入口；9 月 24 日起现役版本换了更稳的 Windows 路径传递，并拒收别的网站借浏览器发来的请求。会按要求说明实际路线，具体文字仍以本次原件核对。",
      "row": "top"
     },
     {
@@ -129,10 +131,11 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "常用 · 原页核对 2026 年 9 月 18 日 21:26",
+       "text": "常用",
        "state": "ok"
       }
-     ]
+     ],
+     "static_note": "截至 10 月 11 日 · LocalOCR 源码（截止前最后提交 50af3fa）、现役 9 月 24 日快照及其验收回执、外层 AI 技能说明，于 2026-10-11 16:30–16:48（北京时间）只读核对"
     },
     {
      "type": "action_button",
@@ -146,6 +149,10 @@
      "text_ref": "我不需要每次从模型名开始选择。先指定原件和想拿到的结果，普通图片、扫描 PDF 与文件夹就能进入相应本机路线；明确要求具体模型时保留我的选择，处理过程会说明实际使用了什么。"
     },
     {
+     "type": "prose",
+     "text_ref": "**当前情况：**已有图片、扫描 PDF 和文件夹的本地识别入口；9 月 24 日起现役版本换了更稳的 Windows 路径传递，并拒收别的网站借浏览器发来的请求。会按要求说明实际路线，具体文字仍以本次原件核对。"
+    },
+    {
      "type": "illustration",
      "index": 0,
      "align": "center"
@@ -157,10 +164,10 @@
   {
    "role": "illustration",
    "slot_ordinal": 1,
-   "asset": "_library/illustrations/main-localocr.png",
+   "asset": "_library/illustrations/modules/localocr/input-routing/input-routing-v01.png",
    "key": "main-localocr",
    "source_phrase": "右上一幅水彩插画：一台侧透机箱，显卡亮着绿光，显卡上方飘出三张纸（一张手机截图、一张扫描讲义、一张带表格的单据），纸上的字化成一行行绿色小方框飞进一个放大镜；放大镜旁边三个小标签“有字”“没字”“说不准”。",
-   "sha256": "1d48c252c6be5bb8840517879a4404ec6e9509777347fafc98f5db475fb9cbb6",
+   "sha256": "bf26bccbec1d4cfc7185c8655626de1662670fcca9f8cb4affee8e7dc414a424",
    "status": "ready"
   }
  ]
@@ -175,13 +182,11 @@ LocalOCR · 功能说明
 
 我不需要每次从模型名开始选择。先指定原件和想拿到的结果，普通图片、扫描 PDF 与文件夹就能进入相应本机路线；明确要求具体模型时保留我的选择，处理过程会说明实际使用了什么。
 
-**当前情况：**已有图片、扫描PDF和文件夹的本地识别入口；会按要求说明实际路线，具体文字仍以本次原件核对。
+**当前情况：**已有图片、扫描 PDF 和文件夹的本地识别入口；9 月 24 日起现役版本换了更稳的 Windows 路径传递，并拒收别的网站借浏览器发来的请求。会按要求说明实际路线，具体文字仍以本次原件核对。
 
-具体测试保留各自日期，页面不实时探测运行状态。
+项目现状截至 2026-10-11 14:00（北京时间），于同日 16:30–16:48 只读核对；具体测试保留各自日期，页面不实时探测运行状态。
 
-项目源码
-
-公开仓库
+项目源码：公开仓库
 
 ::screen{#localocr-input-routing-02 section="usage"}
 
@@ -195,11 +200,11 @@ LocalOCR · 功能说明
   "anchors": [
    {
     "id": "project-reading-panel-product",
-    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。 举个实际例子"
+    "text": "## 这项功能怎样使用 用途与实际影响 ### 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。"
    },
    {
     "id": "module-product",
-    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。 举个实际例子"
+    "text": "## 这项功能怎样使用 用途与实际影响 ### 为什么需要它 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。"
    },
    {
     "id": "module-product-title",
@@ -283,6 +288,33 @@ LocalOCR · 功能说明
    "source_phrase": "冻结页迁移固定图标：result",
    "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
    "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 4,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 6,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
   }
  ]
 }
@@ -292,17 +324,29 @@ LocalOCR · 功能说明
 
 用途与实际影响
 
-## 为什么需要它
+### 为什么需要它
 
 一律使用重模型会增加等待，一律使用普通提字又可能丢掉复杂页面结构。这个入口把输入范围、结果要求和模型选择分开，并让模型不足时的增强有迹可查，而不是用“智能识别”掩盖真实判断方式。
 
-## 举个实际例子
+### 举个实际例子
 
-我可以说：“把这份多栏 PDF 的文字读出来并保留版面，文件留在本机。”系统会固定这一个输入并选择合适路线；如果给的是文件夹，也只处理本次明确要求的范围。
+我可以说：“把这份扫描版多栏 PDF 的文字读出来并保留版面，文件留在本机。”系统会固定这一个输入并选择合适路线；如果给的是文件夹，也只处理本次明确要求的范围。要是这份 PDF 本来就是电子版、能直接选中文字，AI 会先直接读它自带的文字，不必交给 LocalOCR。
 
-## 最后我会得到什么
+### 最后我会得到什么
 
 返回对应文件的结果路径、实际引擎与模型、选择原因，以及是否发生增强。遇到不支持的文件、模型冲突、活跃任务或服务身份不符，会说明原因，不交回来自另一条未知路线的结果。
+
+### 正常时
+
+输入范围与路线明确，按请求执行并返回实际模型和输出。
+
+### 发现问题时
+
+自动提字不足时可以本地增强；增强失败保留首轮初步证据，但不标完成。
+
+### 入口不可用或证据不足时
+
+原件不可读、模型冲突或服务不是 LocalOCR 时停止相应请求，不抢端口、不换云服务；别的网页想借浏览器调用本机服务，或请求格式不对，服务直接拒收。
 
 ::screen{#localocr-input-routing-03 section="usage"}
 
@@ -456,7 +500,7 @@ LocalOCR · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **检查原件与可读内容**　系统核对文件类型、页数和实际内容；已有文字层先直接取用，扫描图才进入识别。",
+     "text_ref": "1. **检查原件与可读内容**　AI 先核对文件类型、页数和实际内容：电子版 PDF、Office 文件本身带文字，由 AI 直接读取；扫描件和图片才交给 LocalOCR。交给 LocalOCR 的 PDF 一律逐页转成图片再识别，它自己不会去取文字层。",
      "row": "start",
      "columns": 1,
      "icons": "none",
@@ -490,7 +534,7 @@ LocalOCR · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **检查原件与可读内容**　系统核对文件类型、页数和实际内容；已有文字层先直接取用，扫描图才进入识别。",
+     "text_ref": "1. **检查原件与可读内容**　AI 先核对文件类型、页数和实际内容：电子版 PDF、Office 文件本身带文字，由 AI 直接读取；扫描件和图片才交给 LocalOCR。交给 LocalOCR 的 PDF 一律逐页转成图片再识别，它自己不会去取文字层。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -526,17 +570,17 @@ LocalOCR · 功能说明
 
 在本机已接入 LocalOCR 的 AI 对话中指定原件，或用“日常本机入口” ocr_smart.ps1 传入明确路径。
 
-## 需要准备什么
+### 需要准备什么
 
 - 图片、扫描 PDF 或目录
 
-- 递归范围
+- 递归范围（要不要连子文件夹一起读）
 
 - 想要文字、复杂版面还是指定模型
 
-## 从开始到拿到结果
+### 从开始到拿到结果
 
-1. **检查原件与可读内容**　系统核对文件类型、页数和实际内容；已有文字层先直接取用，扫描图才进入识别。
+1. **检查原件与可读内容**　AI 先核对文件类型、页数和实际内容：电子版 PDF、Office 文件本身带文字，由 AI 直接读取；扫描件和图片才交给 LocalOCR。交给 LocalOCR 的 PDF 一律逐页转成图片再识别，它自己不会去取文字层。
 
 2. **选择本地路线**　AI 核对实际文件与已登记模型，普通页面先轻量提字，复杂或显式结构需求按对应路线处理。
 
@@ -554,11 +598,11 @@ LocalOCR · 功能说明
   "anchors": [
    {
     "id": "project-reading-panel-technical",
-    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现 关键规则与设计选择 1 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。 2 复杂程度取实际页内容与识别证据，不由文件"
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现；9 月 24 日起现役版本补上路径传递与请求检查 ### 关键规则与设计选择 1. 普通看图不强制 OCR（光学字符识别）；数字文"
    },
    {
     "id": "module-technical",
-    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现 关键规则与设计选择 1 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。 2 复杂程度取实际页内容与识别证据，不由文件"
+    "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三条路线与统一执行已实现；9 月 24 日起现役版本补上路径传递与请求检查 ### 关键规则与设计选择 1. 普通看图不强制 OCR（光学字符识别）；数字文"
    },
    {
     "id": "module-technical-title",
@@ -580,12 +624,8 @@ LocalOCR · 功能说明
      "heading_icon": "_library/hires-icons/打勾清单.png"
     },
     {
-     "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
-    },
-    {
      "type": "numbered_steps",
-     "text_ref": "1. 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。",
+     "text_ref": "1. 普通看图不强制 OCR（光学字符识别）；数字文档有文字层时由外层 AI 优先原生读取。这一步不在 LocalOCR 里，交给 LocalOCR 的 PDF 总是逐页渲染成图片后识别。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -602,12 +642,8 @@ LocalOCR · 功能说明
      "heading_icon": "_library/hires-icons/打勾清单.png"
     },
     {
-     "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
-    },
-    {
      "type": "numbered_steps",
-     "text_ref": "1. 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。",
+     "text_ref": "1. 普通看图不强制 OCR（光学字符识别）；数字文档有文字层时由外层 AI 优先原生读取。这一步不在 LocalOCR 里，交给 LocalOCR 的 PDF 总是逐页渲染成图片后识别。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -634,25 +670,25 @@ LocalOCR · 功能说明
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-三条路线与统一执行已实现
+三条路线与统一执行已实现；9 月 24 日起现役版本补上路径传递与请求检查
 
-## 关键规则与设计选择
+### 关键规则与设计选择
 
-1. 普通看图不强制 OCR（光学字符识别），数字文档有文字层时优先原生读取。
+1. 普通看图不强制 OCR（光学字符识别）；数字文档有文字层时由外层 AI 优先原生读取。这一步不在 LocalOCR 里，交给 LocalOCR 的 PDF 总是逐页渲染成图片后识别。
 
 2. 复杂程度取实际页内容与识别证据，不由文件名判断；只增强问题页，不把整份文档重跑重模型。
 
 3. 显式模型优先；结构解析需要单独选择，不是自动增强的第三级。
 
-4. 文件名或目录含中文、空格时仍用同一拖拽入口；它需要PowerShell 7.3+，旧Windows PowerShell 5.1不属于该入口的支持环境。入口传参已通过隔离检查，文字能否读全、读准仍需核对实际结果。
+4. 文件名或目录含中文、空格时仍用同一拖拽入口；它需要 PowerShell 7.3+，旧 Windows PowerShell 5.1 不属于该入口的支持环境。9 月 24 日起，路径交给所选 Ubuntu 自己换算，参数逐个原样传进 WSL（Windows 的 Linux 子系统），不再拼成一整条命令；文字能否读全、读准仍需核对实际结果。
 
 ## 当前怎样实现
 
 - router.py 枚举支持的图片和 PDF；是否递归由 recursive 参数决定，不默认扩大目录范围。
 
-- Smart Router v5 预路由让 auto 先 OCR（光学字符识别）；difficulty.py 结合逐页空结果、低置信度及表格/公式内容信号，service.py 只增强对应问题页。
+- Smart Router v5 预先选路，让 auto 先走 OCR（光学字符识别）；difficulty.py 结合逐页空结果、低置信度及表格/公式内容信号，service.py 只增强对应问题页。
 
-- 同一任务保留增强前文字与几何；显式模型不参加自动替换，Structure（结构化版面） 不是自动流程的隐含第三层。
+- 同一任务保留增强前文字与几何；显式模型不参加自动替换，Structure（结构化版面）不是自动流程的隐含第三层。
 
 - model_registry.py 解析 profile（具体模型配置），核对引擎匹配；显式模型不被自动选择覆盖。
 
@@ -682,7 +718,7 @@ LocalOCR · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- start.bat使用pwsh，start.ps1声明PowerShell 7.3+；路径回调将Windows盘符转换为/mnt/<盘符>，Git固定start.bat为CRLF，避免中文批处理被异常解析。其后的localocr.cli继续共用OCRService、增强与输出合同，模型路线没有改变。",
+     "text_ref": "- start.bat 使用 pwsh，start.ps1 声明 PowerShell 7.3+，Git 固定 start.bat 为 CRLF，避免中文批处理被异常解析。9 月 24 日（提交 cd2e1b9）起，scripts/windows_paths.ps1 用所选 Ubuntu 发行版的 `wslpath -a -u` 换算路径，非默认挂载位置也能认；start、start_server、stop_server 都从脚本自身所在目录（$PSScriptRoot）找项目，不再写死项目位置；输入参数作为独立参数传给 WSL，不拼 `bash -c` 字符串。其后的 localocr.cli 继续共用 OCRService、增强与输出合同，模型路线没有改变。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -700,7 +736,7 @@ LocalOCR · 功能说明
     },
     {
      "type": "numbered_steps",
-     "text_ref": "- start.bat使用pwsh，start.ps1声明PowerShell 7.3+；路径回调将Windows盘符转换为/mnt/<盘符>，Git固定start.bat为CRLF，避免中文批处理被异常解析。其后的localocr.cli继续共用OCRService、增强与输出合同，模型路线没有改变。",
+     "text_ref": "- start.bat 使用 pwsh，start.ps1 声明 PowerShell 7.3+，Git 固定 start.bat 为 CRLF，避免中文批处理被异常解析。9 月 24 日（提交 cd2e1b9）起，scripts/windows_paths.ps1 用所选 Ubuntu 发行版的 `wslpath -a -u` 换算路径，非默认挂载位置也能认；start、start_server、stop_server 都从脚本自身所在目录（$PSScriptRoot）找项目，不再写死项目位置；输入参数作为独立参数传给 WSL，不拼 `bash -c` 字符串。其后的 localocr.cli 继续共用 OCRService、增强与输出合同，模型路线没有改变。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -715,15 +751,15 @@ LocalOCR · 功能说明
 
 ## 技术实现与依据（二）
 
-- start.bat使用pwsh，start.ps1声明PowerShell 7.3+；路径回调将Windows盘符转换为/mnt/<盘符>，Git固定start.bat为CRLF，避免中文批处理被异常解析。其后的localocr.cli继续共用OCRService、增强与输出合同，模型路线没有改变。
+- start.bat 使用 pwsh，start.ps1 声明 PowerShell 7.3+，Git 固定 start.bat 为 CRLF，避免中文批处理被异常解析。9 月 24 日（提交 cd2e1b9）起，scripts/windows_paths.ps1 用所选 Ubuntu 发行版的 `wslpath -a -u` 换算路径，非默认挂载位置也能认；start、start_server、stop_server 都从脚本自身所在目录（$PSScriptRoot）找项目，不再写死项目位置；输入参数作为独立参数传给 WSL，不拼 `bash -c` 字符串。其后的 localocr.cli 继续共用 OCRService、增强与输出合同，模型路线没有改变。
 
-- ocr_smart.ps1 预览路线并验证服务健康，以 active_jobs 作为忙碌依据；缺字段为 readiness_unknown，不能当空闲。
+- ocr_smart.ps1 预览路线并验证服务健康，以 active_jobs 作为忙碌依据；缺字段为 readiness_unknown，不能当空闲。服务端 server.py 从 9 月 24 日起逐个检查请求：Host 只认 localhost 或 127.0.0.1；带 Origin（浏览器标明的来源网站）的请求必须同源，否则返回 403，上传和取消也一样；/ocr/path 只收 JSON，/ocr/file 只收表单上传，格式不对返回 415。命令行等原生客户端不带 Origin，照常可用。
 
 ## 执行流程
 
 1. 固定本次文件、目录递归范围与希望得到的结果。
 
-2. 优先检查原生可读内容；需要图片文字证据时进入 LocalOCR。
+2. 外层 AI 先检查原生可读内容，电子版文字直接读；需要图片文字证据时才交给 LocalOCR。
 
 3. 核对路径、类型、明确引擎与模型配置。
 
@@ -819,12 +855,8 @@ LocalOCR · 功能说明
      "heading_icon": "_library/hires-icons-r2/扳手.png"
     },
     {
-     "type": "prose",
-     "text_ref": "解决什么"
-    },
-    {
      "type": "bullet_list",
-     "text_ref": "- **输入不支持或不可读**：返回明确的输入或读取错误，不制造空白成功结果。",
+     "text_ref": "失败与恢复",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -840,12 +872,8 @@ LocalOCR · 功能说明
      "heading_icon": "_library/hires-icons-r2/扳手.png"
     },
     {
-     "type": "prose",
-     "text_ref": "解决什么"
-    },
-    {
      "type": "bullet_list",
-     "text_ref": "- **输入不支持或不可读**：返回明确的输入或读取错误，不制造空白成功结果。",
+     "text_ref": "失败与恢复",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -977,11 +1005,11 @@ LocalOCR · 功能说明
 
 ## 如何验证
 
-- 2026-09-07，376a777的24项Windows调用回归通过，4.210秒；另经真实start.bat、pwsh与已确认wsl.exe替身验证中文空格路径完整传递，0.458秒。检查在模型执行前结束，没有重验OCR（光学字符识别）效果或服务在线。原CLI（命令行工具）/API共用、显式选择和增强合同继续保留。
+- 2026-09-07，376a777 的 24 项 Windows 调用回归通过，4.210 秒；另经真实 start.bat、pwsh 与已确认 wsl.exe 替身验证中文空格路径完整传递，0.458 秒。这两个耗时是当时发表的记录，运行回执原件之后没有再找到；24 项测试定义和对应提交仍可核对。检查在模型执行前结束，没有重验 OCR（光学字符识别）效果或服务在线。
 
-- 模型注册、分流与调用脚本行为有独立单元测试；当前机器测试与运行证据见总览技术层。
+- 模型注册、分流与调用脚本行为有独立单元测试。现役 9 月 24 日快照的验收回执记录 181 项单元测试 165 项通过、16 项按条件跳过、0 项失败；9 月 24 日加入的路径与请求检查已在现役快照里（对应文件与开发源码一致），但现役没有新的 Windows 端到端演练回执。
 
-- 9 月 17 日禁用缓存的九例质量回执包含 auto_table，实际表格关键单元格通过；这个合成案例不证明任意版面都能正确选路。
+- 9 月 17 日禁用缓存的九例质量回执包含 auto_table，实际表格关键单元格通过。9 月 24 日现役验收的同名案例里，auto_table 确实由快模型升级到强模型 VL，起因是检测到表格线：快读 9 个文字块的平均把握分高达 0.999949，照样升级，最终满足门槛。真实使用中，9 月 26 日一份 16 页扫描 PDF 只把第 15 页交给强模型重读（表格信号，平均把握分 0.997081）。这些案例不证明任意版面都能正确选路。
 
 ## 与其他模块的关系
 

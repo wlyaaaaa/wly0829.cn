@@ -1,0 +1,191 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-expression-feedback-consolidation-and-lessons-sync",
+  "kind": "project",
+  "title": "反馈怎样留到下次",
+  "url": "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
+  "parent": "personal-expression",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "来源仓库 3b12a803（北京 10/6 05:52）的反馈流程；9/29、10/3 有真实指南入库，6 项虚构回归保留 9/22 原日期"
+  },
+  "screens": [
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-01",
+      "section": "top",
+      "title": "反馈怎样留到下次",
+      "text": "# 反馈怎样留到下次\n\n〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕\n\n个人表达与沟通支持 · 功能说明\n\n让明确而有价值的表达纠正能够在以后读取资料时用上，减少反复解释同一问题。\n\n**当前情况：**已有先改当前结果、再保留有价值教训的流程；我在任何项目里提的表达反馈，都由当场的 AI 存进表达库，AI 还会定期回扫最近的对话补漏。后续任务是否真的采用仍需真实使用验证。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人表达",
+          "href": "/projects/personal-expression/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-expression/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n只改当次回复会丢失教训；把每次评价都追加成规则，又容易把一个场景的偏好误当成所有情况的要求。需要留下具体问题和适用范围，而不是积累越来越长的禁词清单。好几个项目都能改同一个表达库，也要防止一处的新内容把别处刚记下的覆盖掉。\n\n## 举个实际例子\n\n“这句话在当前语境不合适，改回我刚才说的意思。”不管我在哪个项目里说，当场的 AI 都先调整眼前稿件；若这条反馈对以后有用，就记录实际语境、本人指出的问题、当前改法和适用范围。若新句子是 AI 的建议，会保留这个区别，不将它冒充本人定稿；被我评价过的 AI 稿另存为对照。\n\n## 最后我会得到什么\n\n当前问题得到处理，有价值的教训进入对应指南；只有来源可靠、值得参考的本人文字或本人修订才补入样本。更新后校验并重读，确认下一次普通读取确实能带出变化。我不用管表达库是否完整，也不用逐条审维护细节；日常用法变了才告诉我。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 只改当次回复会丢失教训；把每次评价都追加成规则，又容易把一个场景的偏好误当成所有情况的要求。需要留下具体问题和适用范围，而不是积累越来越长的禁词清单。 举个实际例子 “这句话在当前语境不合适，"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 只改当次回复会丢失教训；把每次评价都追加成规则，又容易把一个场景的偏好误当成所有情况的要求。需要留下具体问题和适用范围，而不是积累越来越长的禁词清单。 举个实际例子 “这句话在当前语境不合适，"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常完成时\n\n先交付改好的当前内容，再说明实际合入了哪项有价值教训；校验和受影响方向回读完成。\n\n## 发现问题时\n\n本人评价、本人给出的改法和 AI 未获认可的建议分清；没有新价值就不加记录。新反馈和旧教训冲突时，看实际场景收窄范围或补例外，真正更正才改旧结论。\n\n## 资料不可用时\n\n三种结果分开说：资料锁着或不可写，就是没有保存；只在当前对话里记住了，不算长期资料已更新；已经写回并重读到变化，才算存好。本人明确只讨论时也不保存。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n指出这次解释或草稿哪里不好，并希望下次避免同类问题；在哪个项目里说都可以。\n\n## 需要准备什么\n\n- 这次解释或草稿的具体问题\n\n- 教训只适用于某个场景时的说明\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先改当前答复，再判断这条教训是否稳定有用；有价值时按原句小范围合入对应指南，只补不减，再校验读取。\n\n2. **交付与接续**　交回当前修订及实际保存结果；未保存或只在本轮改好时不声称长期已学会。之后的个人增量里，AI 回扫最近几天我的真实输入补漏，并逐项复核这段时间表达库的全部改动。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n流程与读取接口已具备，跨任务执行随真实使用验收。现役资料是四份：说明指南、拟稿指南、本人样本、AI 稿对照。截至来源 3b12a803，私有快照目录 data-backup 被 51 次提交改动过（仓库共 66 次提交）；9 月 29 日和 10 月 3 日都有真实的指南新增入库。有提交只说明保存流程产生了结果，不证明后续 AI 都主动用上、大合并流程已执行过或效果获本人认可。\n\n## 关键规则与设计选择\n\n1. 说明反馈进入 explain-to-me.md，代拟反馈进入 reply-guide.md，样本只收有来源的表达参考；被本人评价过的 AI 稿进入 reply-contrasts.jsonl，保留草稿、评价、反馈、教训和出处，与本人原话和本人修订分开，发出去了也不自动变成本人样本。\n\n2. 同类教训合并，保留足够语境与适用范围，不把一个例子推成永久全场景偏好。\n\n3. 标签格式检查和实际作者判断分开：程序无法识别一条被错误标成 self_message 的 AI 文字。样本和对照都必须写接收对象和关系，不知道就写 unknown，不猜。\n\n4. 更新后在当前任务重新读取受影响资料，并在正常私有 Git 收口时同步备份。\n\n5. 任何项目遇到表达反馈都当场改。小改先查同类、按原句小范围修改，只补不减，保留原话、来源、语境和范围；真正的新反馈更正了旧做法，才改旧结论并补来源。多条重排不在当场做，避免把别的对话刚写入的内容整份覆盖或把旧限定改弱。\n\n6. 回扫：做个人增量时，AI 读最近几天的真人输入（包括在 Claude 里中途说的话），排除子代理提示和 AI 转发、粘贴的内容，找出表达反馈，核对是否已经收进来，没收的合并并重读。不建后台或队列。\n\n7. 增量复核：个人增量时逐项看上次以来 data-backup 的全部提交，两个方向一起查原意有没有变、方向放错、重复，或者混进了对人物的评价。\n\n8. 大合并：先出方案，交独立审查逐条核对；写回前核对原件哈希，如果期间有新内容先并进来，再写回、校验、重读、快照、提交。本人不用逐条对照。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 流程与读取接口已具备，跨任务执行随真实使用验收 关键规则与设计选择 1 说明反馈进入 explain-to-me.md，代拟反馈进入 reply-guide.md，样本"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 流程与读取接口已具备，跨任务执行随真实使用验收 关键规则与设计选择 1 说明反馈进入 explain-to-me.md，代拟反馈进入 reply-guide.md，样本"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 当前怎样实现\n\n- 反馈处理是 AGENTS.md、docs/feedback-workflow.md 和两项技能交给当前 AI 的工作流程；expression.py 没有写入或反馈同步命令，没有后台、队列。\n\n- read_samples 校验对象、唯一 id、作者与状态允许值、必要字段及非空文字列表；不核验事实归属或反馈含义。现役样本 45 条全部是 self_message/reference。\n\n- read_contrasts 校验 AI 稿对照的格式：评价只能是认可、勉强接受或否定，否定必须有原因；对照走单独结构，不借 author/status 混进本人样本。\n\n- available_samples 排除 AI 草稿，即便其 status 为 reference 也不进入正式参考；新建议不能仅靠改标签变成本人原话。\n\n- compare_with_backup 让 validate 把现役文件和最近已提交的快照按文本对比，列出有差异的文件、不见了的带引号原话和记录 ID；它只比文本，不判断语义。\n\n## 执行流程\n\n1. 先按反馈改当前回答或草稿\n\n2. 区分所属方向、本人原话、本人修订、AI 建议与被评价的 AI 稿",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n3. 先查同类，按原句小范围把有价值教训合入现行说明，只补不减\n\n4. 必要时增补有来源的本人文字或修订\n\n5. 校验并重读受影响方向，再同步既有私有备份\n\n6. 个人增量时回扫最近几天的真人输入，补收漏掉的反馈\n\n7. 逐项复核上次以来的全部快照提交；需要重排或大合并时先出方案、交独立审查，写回前核对原件哈希",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 作者与状态 | author 记录本人原话、本人修订或 AI 草稿；status 记录参考、待定或退出参考。两类字段服务不同判断。 |\n| 就地合并 | 修改现行相关说明、补充例外和范围；不为每次反馈新增一篇日志。 |\n| 只补不减 | 当场的小改只增加或收窄，不删别处已有的内容、不改弱旧限定；真要更正旧结论要有新反馈作依据。 |\n| 回扫 | 个人增量时回看最近几天的真人输入，找出当时没收进来的表达反馈并补收。 |\n| 下一次能读到 | 文件已经编辑、校验且重新读取到变化；这仍不等于未来每个 AI 都会主动执行。 |\n\n## 专业定义\n\n保留反馈语境、合并同类教训，分清本人原话、本人修订、AI 建议和被评价的 AI 稿；任何项目都能当场改，靠只补不减和事后复核防止互相覆盖。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n新旧反馈可能分别适用于不同情况。优先明确场景或例外；真正更正时才修改现行结论，历史由已有 Git 版本保留。几个项目同时在改时，靠只补不减、快照对比和逐项复核防止一处覆盖另一处。\n\n## 边界\n\n- 不要求每次交流标注或审批，不为数量凑记录。\n\n- 不能可靠归属的文字不伪装成本人原话，AI 草稿被发送也不自动改变作者。\n\n- 不建立反馈数据库、监听服务、队列或表达评分体系；回扫由做个人增量的 AI 完成。\n\n## 失败与恢复\n\n- **重复 id、非法作者或错误消息容器**：读取器拒绝该资料；CLI（命令行工具） 返回 unavailable，由当前维护者修正真实格式问题，不靠模型猜着修。\n\n- **语义与已有教训冲突**：比较实际场景和来源，收窄范围、补例外或据真正更正更新结论；较大的调整走大合并的独立核对。\n\n- **别的对话刚写入的内容可能被覆盖**：validate 和最近快照对比，列出不一致；当场只做小范围增补，重排等到有独立审查的大合并。\n\n- **大合并期间原件变了**：写回前核对原件哈希，不一致就先把新内容并进来，再写回、校验、重读、提交。\n\n- **本次更新未写入或缓存仍是旧内容**：明确未保存或重新读受影响文件，不能声称新教训已经带出。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **AGENTS.md**：反馈处理的现有责任与顺序、多个项目都在改时的规则、个人增量回扫。\n\n- **docs/feedback-workflow.md**：回扫、增量复核与大合并的步骤。\n\n- **expression.py / read_samples / read_contrasts**：本人样本与 AI 稿对照的格式验证能力及局限。\n\n- **expression.py / compare_with_backup**：现役文件和最近已提交快照的文本对比；不判断语义。\n\n- **tests/test_expression.py**：作者标签、重复标识、错误形状和对照格式回归。\n\n## 如何验证\n\n- 6 项虚构回归包含错误记录对象与错误 messages 容器；格式错误不会被标为 valid，非对象记录按 unavailable 收束。这是 2026-09-22 14:51 快照（293a273）时的测试；现在测试文件有 24 个测试定义。没有取到当时的运行输出，本次也没有运行，不写成今天通过。\n\n- 首次回扫在 2026-09-26 做过：发现 9 月 15 日到 25 日约 35 起表达反馈里只收进了 2 起；这是当时的结果，本次没有重新统计。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-feedback-consolidation-and-lessons-sync-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 原冻结页那次任务没有读取或写入私人反馈，这句保留为当时回执。\n\n- 后续任务主动执行、大合并新流程实际跑通、长期稳定使用和本人认可分别等待真实结果，不用模拟试写证明。\n\n## 与其他模块的关系\n\n更新责任由处理真实事项的 AI 承担，本人不需要回到本项目另说保存；读取器不会监听其他对话或代替语义判断。",
+      "links": [
+        {
+          "text": "上一个模块 替本人拟消息",
+          "href": "/projects/personal-expression/reply-as-me/"
+        },
+        {
+          "text": "下一个模块 语料与恢复",
+          "href": "/projects/personal-expression/corpus-extension-and-private-recovery/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

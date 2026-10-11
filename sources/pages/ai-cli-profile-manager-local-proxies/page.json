@@ -1,0 +1,159 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "ai-cli-profile-manager-local-proxies",
+  "kind": "project",
+  "title": "本地模型各自验明身份，不组成自动备用链",
+  "url": "/projects/ai-cli-profile-manager/local-proxies/",
+  "parent": "ai-cli-profile-manager",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "父项目总览状态“常用”；本地模型部分按 10 月 11 日 14:00 前的源码（10 月 8 日提交）和当天只读 Ollama 查询核对，两个 ChatGPT→Claude 代理 9 月 29 日退役、Toolkit 接线 9 月 28 日退役，未发生成请求"
+  },
+  "screens": [
+    {
+      "id": "ai-cli-profile-manager-local-proxies-01",
+      "section": "top",
+      "title": "本地模型各自验明身份，不组成自动备用链",
+      "text": "# 本地模型各自验明身份，不组成自动备用链\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n本地27B、35B及两种去限制版都有明确入口，不把“本地模型”混成一件事。它们通过既有显卡协调器工作；任何一个失败都不会自动改投另一个模型，更不会改走付费云端。原来并列在这里的两个 ChatGPT 到 Claude 代理已于 9 月 29 日退役。\n\n**当前情况：**4 个受管本地模型仍在，Codex 桌面版、OpenCode 和 Ollama 由一份统一配置同步；两个代理和 Toolkit 接线都已退役，相关入口已删除。配置写好、模型已下载，不等于这次真的跑通，真实调用要另看日期。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → AI 工具配置管理",
+          "href": "/projects/ai-cli-profile-manager/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/ai-cli-profile-manager/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n“本地”不等于一定在线，“已下载”也不等于模型和显卡此刻都就绪。自动把失败请求送到另一条路线还会改变费用、隐私和结果身份。\n\n## 举个实际例子\n\n我可以说：“这次只用普通本地27B，不换去限制版，也不传云端。先看当前模型与显卡是否就绪；不可用就告诉我原因。”我得到对应入口的状态，而不是把通用Ollama端口离线误报成全部本地模型都不能用。\n\n## 最后我会得到什么\n\n分别知道选中的本地模型是否已安装、受管服务是否在本机运行、显卡是否正被别的任务占着；只有这一条身份成立才尝试真实调用。\n\n## 正常时\n\n选中服务和真实模型身份都对应时，标这条路线可进一步使用。\n\n## 发现问题时\n\n模型没开或显卡忙时只说明这一条的限制；显卡被听写或文字识别占着时，请求最多排队等 90 秒并提示正在等。\n\n## 入口不可用或证据不足时\n\n模型身份对不上、服务不在本机地址或程序不明时拒绝，不结束未知程序，也不换另一个模型顶上。\n\n## 结果怎么看\n\n## 正常时\n\n选中服务和真实模型身份都对应时，标这条路线可进一步使用。\n\n## 发现问题时\n\n模型没开、显卡忙或代理旧了时只说明这一条的限制。\n\n## 入口不可用或证据不足时\n\n程序不明、监听跑到非本机地址或端口已被别人占用时拒绝，不结束未知程序。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 “本地”不等于一定在线，“已下载”也不等于模型和显卡此刻都就绪。自动把失败请求送到另一条路线还会改变费用、隐私和结果身份。 ## 举个实际例子 我可以说：“这次只用普通本地27B，"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 “本地”不等于一定在线，“已下载”也不等于模型和显卡此刻都就绪。自动把失败请求送到另一条路线还会改变费用、隐私和结果身份。 ## 举个实际例子 我可以说：“这次只用普通本地27B，"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在 aicli profile show/native 选择点名的本地模型，先用 Doctor 核对当前安装和服务。\n\n## 需要准备什么\n\n- 明确的本地模型 Profile\n\n- 本地显卡状态\n\n- 是否只允许本地数据\n\n## 从开始到拿到结果\n\n1. **核对选中入口而不自动换路**　系统确认这次用的是哪一个本地模型，检查它的服务身份和本机地址，不把失败送往另一家。\n\n2. **核对服务身份**　检查模型标签是否真的装了、受管服务是否只在本机回环地址上监听、显卡此刻是否可用。\n\n3. **按选定路线运行**　交回模型结果或精确不可用原因；本地入口失败不会自行切到付费或其他数据去向。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n受管四模型与桌面入口已建立；两个 ChatGPT→Claude 代理 9 月 29 日退役，Toolkit 接线 9 月 28 日退役；通用 11434 端点另看日期\n\n## 关键规则与设计选择\n\n1. Qwen Code 与 OpenCode 当前主要是本地 machine-only 路线。\n\n2. 已退役：ccp 和 cliproxy 两个第三方代理原本让 Claude Code 借 ChatGPT 登录使用，9 月 29 日连同路线、下载批准清单、端口分配、登录与停止入口和相关测试一起删除，现在没有替代的 ChatGPT 接入；Claude Code 可用官方、本机 Qwen 和自定义端点。删除源码不等于旧的本机登录文件已清理或远端授权已撤销，这两件事没有核实。\n\n3. 已退役：本地模型配置原来还同步给 Toolkit，9 月 28 日删除了这条同步和跨仓库检查；现在统一配置只同步给 AICLI 自己、Codex 桌面版、OpenCode 和 Ollama。\n\n## 当前怎样实现\n\n- LocalGpuBrokerSession 消费既有 broker（调度服务） 的 lease/capability，证明请求命中 exact 本地模型；它不拥有 GPU 调度服务，受管端点 127.0.0.1:32100 和 GPU 服务归电脑配置（PCConfig）管理。\n\n- OpenCode 使用一次性 pure 配置，主入口和 27B 兼容入口都保留 262144 context/input、32768 输出、reserve 20000、最近 16384 与 4 轮的边界。\n\n- data/local-model-set.json 拥有四个受管 Profile，客户端映射现在只剩 OpenCode；当前模型标签为 qwen3.8-27b:256k、qwen3.6-35b:256k、qwen3.6-35b-abliterated:256k、qwen3.8-27b-abliterated:256k。设置先预览、明确应用后同步 AICLI、Codex 桌面版、OpenCode 和 Ollama，不创建另一份模型目录。\n\n- 普通27B和去限制27B、普通35B采用num_batch=128；35B去限制版保留512。num_ctx=262144，draft_num_predict=0避免已复现的草稿预测崩溃，不替换原始模型权重。普通27B的256K镜像manifest（清单） SHA-256为8040835723046ec2631b64b960d44414636ea5147942a7d68eaaa7ccdb492e20，Q4_K_M，temperature=1、top_p=.95、top_k=20、min_p=0、presence_penalty=0、repeat_penalty=1。输出上限有两层：AICLI 配置里普通 35B 声明 8192、其余三个声明 32768；Ollama 的 35B 标签参数另写 num_predict=32768。实际由哪一层截断没有测过。\n\n- 听写或文字识别占着显卡时，本地模型请求最多排队 90 秒并提示在等，不直接报错；但“听写与 AICLI 并发交接显卡”在电脑配置的待验收清单里仍是暂缓状态，还不能说真实并发交接已验收。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 受管四模型与桌面入口已建立；两个 ChatGPT→Claude 代理 9 月 29 日退役，Toolkit 接线 9 月 28 日退役；通用 11434 端"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 受管四模型与桌面入口已建立；两个 ChatGPT→Claude 代理 9 月 29 日退役，Toolkit 接线 9 月 28 日退役；通用 11434 端"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 两个代理退役后，原来的批准版本清单（ccp 0.1.15、cliproxy 7.2.72）、首选端口 43197/43198 与 43192–43209 候选池、ProxyService 和 PortAllocator 都已删除，只作为历史技术记录，不再是现役配置。\n\n## 执行流程\n\n1. 选择一个本地模型。\n\n2. 核对模型标签已安装、与受管集合一致。\n\n3. 确认受管端点只在本机回环地址监听。\n\n4. 显卡被占时排队等待，最多 90 秒并提示。\n\n5. 启动并核对实际模型身份与响应。\n\n6. 结束时只清理自己启动的进程；改模型设置时先预览，再明确应用和同步。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| loopback（本机回环） | 只允许本机访问的 127.0.0.1 地址；0.0.0.0、局域网与公网监听都不接受。 |\n| LocalGpuBroker（本地显卡协调器） | 外部既有运行时，负责本地模型端点与资源租约；AICLI 只作为消费者。 |\n| 受管模型集合 | data/local-model-set.json 里登记的 4 个本地模型及各客户端的对应关系；增删换型都改这一份，再同步出去，不另建模型目录。 |\n\n## 专业定义\n\n每个本地模型都是一条可选路线；任何一个离线都不会让 aicli 偷偷换到另一个。\n\n解决什么\n\n防止把“模型已下载”或旧的检查结果当成现在能用，防止本地失败时悄悄改走付费云端，也防止 AICLI 为抢资源结束别人的服务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止把安装文件、端口或旧 OAuth（账号授权协议） 当成当前可用，也防止 AICLI 为抢端口结束别人的服务。\n\n## 边界\n\n- 10 月 11 日的整理不启动 Ollama 或 GPU 模型，也不发生成请求。\n\n- 不自动拉取新模型或新版 Ollama，不因上游出现新标签就扩大受管集合。\n\n- 两个已退役代理留下的本机登录文件与远端授权要各自在本机和账号那边确认，退役本身不代表已经清理或撤销。\n\n## 失败与恢复\n\n- **默认 Ollama 11434 不可达**：当前公共默认路线有限制；不改投 32100 或云端，除非用户选择对应 exact Profile。这是 9 月 14 日的观察，不作为今天全部本地模型离线的结论。\n\n- **显卡正被听写或文字识别占用**：请求最多等 90 秒并提示在等；仍不可用就说明原因，不改投云端或别的模型。\n\n- **路线要的模型标签本机没装**：例如通用模板要的 qwen3:8b、qwen3-coder:30b 当前都没装，这些路线标为用不了，不拿已装的受管模型顶替。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-local-proxies-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/LocalGpuBrokerSession.ps1`：本地模型身份与租约消费\n\n- `data/local-model-set.json`：四个受管模型与客户端映射\n\n- `scripts/Sync-LocalModelConfiguration.ps1`：先预览、再应用的统一同步\n\n- `docs/user/本地模型统一配置.md`：本地模型参数、同步与历史实测记录\n\n## 如何验证\n\n- 9 月 29 日删除两个代理后的全量离线测试为 470/470、0 失败、0 跳过，本地模型集合、同步和受管身份都在其中；10 月 11 日未重跑。\n\n- 9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。\n\n- 9 月 16 日旧环境实测 35B 由每秒 62–69 个 token 提到 170–171 个，按当天记录保留，没有重跑性能。\n\n## 与其他模块的关系\n\n本模块提供可选运行目标；引擎模块定义 Profile，验证模块决定该目标在当前是否真正可用。",
+      "links": [
+        {
+          "text": "上一个模块 可恢复机器运行",
+          "href": "/projects/ai-cli-profile-manager/recoverable-runs/"
+        },
+        {
+          "text": "下一个模块 安装、退役与恢复",
+          "href": "/projects/ai-cli-profile-manager/install-recovery/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

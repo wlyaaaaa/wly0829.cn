@@ -1,0 +1,183 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "ai-cli-profile-manager-recoverable-runs",
+  "kind": "project",
+  "title": "中断后只有同一个 Codex 任务身份还能证明，任务才会继续",
+  "url": "/projects/ai-cli-profile-manager/recoverable-runs/",
+  "parent": "ai-cli-profile-manager",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、恢复记录的只读计数和版本查询核对，未新建运行"
+  },
+  "screens": [
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-01",
+      "section": "top",
+      "title": "中断后只有同一个 Codex 任务身份还能证明，任务才会继续",
+      "text": "# 中断后只有同一个 Codex 任务身份还能证明，任务才会继续\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n后台文件任务留下编号和进度；中断后先找原会话和已发生动作，只有同一身份仍可证才接着做，不能复制摘要新开任务冒充恢复。\n\n**当前情况：**已有查询、中止和接续同一个Codex任务的机制；只有任务和模型身份仍一致才继续，取消受理不等于已完全停止。真实恢复只在 8 月 15 日的故障注入试验里发生过，日常使用中还没见到新的恢复记录。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → AI 工具配置管理",
+          "href": "/projects/ai-cli-profile-manager/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/ai-cli-profile-manager/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n长任务中断后重新开一个对话可能重复改文件或执行命令。只有找回原任务身份和真实进度，才能知道是接着做，还是必须明说重新开始。\n\n## 举个实际例子\n\n“刚才那项长任务中断了，先查它做到了哪里，别重新交一遍。”用原任务记录核对进度和结果；能接续才继续，目标、模型或输入改变时明确说明，不用旧结果冒充本次任务。\n\n## 最后我会得到什么\n\n拿到原任务编号、已公开的进度和完成或停止状态。取消请求被收到还不等于进程和显卡已释放，须看真实清理结果。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 长任务中断后重新开一个对话可能重复改文件或执行命令。只有找回原任务身份和真实进度，才能知道是接着做，还是必须明说重新开始。 ## 举个实际例子 “刚才那项长任务中断了，先查它做到了"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 长任务中断后重新开一个对话可能重复改文件或执行命令。只有找回原任务身份和真实进度，才能知道是接着做，还是必须明说重新开始。 ## 举个实际例子 “刚才那项长任务中断了，先查它做到了"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n原任务身份和工作条件一致、继续与清理都核对后报告完成。\n\n## 发现问题时\n\n额度或暂时故障时保留原任务，符合条件才有界续作，不重复已发生的动作。\n\n## 入口不可用或证据不足时\n\n身份变化、记录损坏、本人取消或清理无法确认时停下，不把新任务说成旧任务恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n用 aicli run start 发起程序化任务并保存 run id；中断后先用同一 run 记录检查能否恢复。\n\n## 需要准备什么\n\n- 原 run id\n\n- 原项目、模型和输入\n\n- 中断原因\n\n## 从开始到拿到结果\n\n1. **建立可追踪运行**　从标准输入交任务，后台控制器记录身份与公开进度。\n\n2. **中断先判原任务**　检查额度、暂时故障、输入和进程状态，只有同一线程身份仍成立才接续。\n\n3. **报告终态**　交回结果与进程清理证据；身份变化或硬失败时明确停止，不新开任务冒充断点恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nCodex 可恢复控制面、权限回读与故障回归已实现\n\n## 关键规则与设计选择\n\n1. 所有 Codex machine run 固定 danger-full-access + approvalPolicy=never，不是只读沙箱。\n\n2. 非 Codex run 只是一性执行：默认 read-only，可选 workspace-write，不支持后台 exact resume。\n\n3. 受管 public_web_search 默认启用；--no-web-search 只关闭搜索，不改变完全访问。\n\n## 当前怎样实现\n\n- RecoveryService 为每个 run 保存 stateHash、前向 journal、不可变 attempt 事件与回执；正文不持久化。\n\n- CodexAppServerBridge 使用 thread/start、turn/start 与 thread/resume，逐条绑定 thread/turn/item 生命周期。子进程环境按白名单重建，不继承完整父环境或 Key；10 月 8 日起保留 HTTP_PROXY、HTTPS_PROXY、NO_PROXY 和 CLAUDE_CODE_PROXY_RESOLVES_HOSTS 四个变量，让后台任务沿用电脑已有的网络代理设置（与已退役的 ChatGPT 代理无关）。\n\n- CommandRouter 硬限制 timeout（等待超时）、steps、tool calls、output chars 与最多三次 resume，并让 background 只用于 Codex start/resume。\n\n- PublicWebSearch 只访问固定 HTTPS Bing RSS，拒绝重定向、Cookie、任意 URL/Header/Key；公开事件不含 query/result。\n\n- 桥接器结束时必须确认 app-server 与后代进程树清理，失败不会被成功正文覆盖。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 Codex 可恢复控制面、权限回读与故障回归已实现 ## 关键规则与设计选择 1. 所有 Codex machine run 固定 danger-full-"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 Codex 可恢复控制面、权限回读与故障回归已实现 ## 关键规则与设计选择 1. 所有 Codex machine run 固定 danger-full-"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- run --control-file <绝对路径>在模型执行前产生aicli.run-control.v1，绑定确切run/profile/model/workspace；不接受已有文件覆盖、未知重解析点或非Codex入口。上层用同一已验证AICLI入口发送run abort，不从文件读取任意命令。\n\n- Windows Job Object（进程树约束）和Broker（调度服务）租约共同证明取消完成。模型身份产生前的取消保留not_observed_cancelled与null身份；它可以证明清理，但不能通过模型验收或作为已认证会话恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 任务正文从 stdin 进入。\n\n2. 创建持久 run 与独占 CODEX_HOME。\n\n3. 后台控制器返回 run id。\n\n4. 观察公开进度、工具、搜索与上下文事件。\n\n5. 中断时分类额度、瞬态或硬失败。\n\n6. 符合条件时 thread/resume；否则停止。\n\n7. 终态写回执并确认进程树清理。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| thread/session（线程/会话身份） | app-server 返回的原生对话执行身份；resume 必须仍是同一个。 |\n| hard budget（硬执行上限） | 达到墙钟、行动步数、工具次数或输出上限会实际终止进程树，不只是提示。 |\n| event projection（公开事件投影） | 只保留可给观察器看的进度、工具类别、上下文和终态；隐藏推理与工具载荷丢弃。 |\n\n## 专业定义\n\n恢复的是原任务身份对应的执行，不是把旧摘要重新发给一个新对话。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止中断后重复执行、身份悄悄变化、预算只写在文档里或隐藏思考被当成公共进度。\n\n## 边界\n\n- 恢复账本不是通用聊天历史。\n\n- AICLI 不判断低级模型是否胜任，也不自动换到更强模型。\n\n- 旧版本文件任务、当前零写入诊断和桌面后台子会话是不同证据。缺少当前程序化运行身份或清理证明时明确Unknown（未验证），不用另一条路线的成功补齐。\n\n## 失败与恢复\n\n- **控制器或 app-server 中断**：等待 writer 关闭并对账；只有明确瞬态且身份闭合才最多恢复三次。\n\n- **恢复返回新 thread 或权限变化**：resumeSupported=false，要求新工作区全量重跑。\n\n- **事件写入失败但模型已完成**：标记观察层 degraded，不自动重跑造成重复副作用。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-recoverable-runs-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/RecoveryService.ps1`：run 状态、分段证据与恢复\n\n- `src/AiCliProfileManager/Support/CodexAppServerBridge.ps1`：app-server 协议、身份、预算与事件\n\n- `src/AiCliProfileManager/Support/PublicWebSearch.ps1`：固定公共搜索工具\n\n- `docs/user/MACHINE-RUN.md`：用户可读机器运行合同\n\n## 如何验证\n\n- 恢复、事件生命周期、权限、预算、用量和清理在 9 月 3 日的 385 项回归中有覆盖；最近一次全量离线测试为 9 月 29 日 470/470，10 月 11 日没有重新测试。\n\n- 历史 0.3.12 Qwen3.8-27B Agent Live 在 8 月 15 日证明过正常文件任务；10 月 11 日只查了版本：npm 上的 Codex CLI 为 0.160.0，桌面版正在用的原生引擎为 0.162.0-alpha.17.2，都不等于当前可恢复运行已经实测。\n\n- 恢复记录共 89 份，其中 62 份是测试工作区；真正续接过的两份都创建于 8 月 15 日故障注入试验，一份完成、一份按规则停下。9 月 28 日四条云端路线的小任务都正常完成、没有续接，日常中断后的新恢复记录还没见到；10 月 11 日没有新建模型运行。\n\n## 与其他模块的关系\n\n本模块承载程序化 Codex 任务；Doctor/Agent 验收消费它，本地模型模块提供部分运行目标。",
+      "links": [
+        {
+          "text": "上一个模块 检查与实测",
+          "href": "/projects/ai-cli-profile-manager/doctor-validation/"
+        },
+        {
+          "text": "下一个模块 本地模型",
+          "href": "/projects/ai-cli-profile-manager/local-proxies/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

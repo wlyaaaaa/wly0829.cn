@@ -1,0 +1,179 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "daily-preferences-current-corrections",
+  "kind": "project",
+  "title": "保留原话的时间和语义，不让旧任务覆盖新的更正",
+  "url": "/projects/daily-preferences/current-corrections/",
+  "parent": "daily-preferences",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "来源仓库 b334b3aa（北京 10/8 00:23）与 10/11 16:33 只读聚合；本次没有写入，历史测试保留原日期"
+  },
+  "screens": [
+    {
+      "id": "daily-preferences-current-corrections-01",
+      "section": "top",
+      "title": "保留原话的时间和语义，不让旧任务覆盖新的更正",
+      "text": "# 保留原话的时间和语义，不让旧任务覆盖新的更正\n\n〔回到项目 → 个人理解库〕　〔复制 AI 续作说明〕\n\n个人理解库 · 功能说明\n\n保持连续又可纠正的理解，让不同领域的重试与并发更新不会默默制造重复事实或覆盖较新的本人表达。\n\n**当前情况：**已有保存原话变化、保留旧版本和拒绝并发覆盖的功能；程序写入成功仍不等于理解已经准确。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/daily-preferences/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n最新表达可能只是补充或临时安排，历史表达也可能仍支持长期理解；同时，旧任务拿着旧卡回写会把后来的更正覆盖。存储时间线和认知取舍必须分开。\n\n## 举个实际例子\n\n我说“这次为了赶时间先这样，平时还是按原来的”。AI 把它记为有语境的临时取舍，不改成永久偏好；另一个旧任务稍后回写时发现现行版本变了，会先重读再合并。\n\n## 最后我会得到什么\n\n得到保留原时间、来源和变化类别的表达，以及共同更新的摘要、详述与证据；重试、无变化和冲突有不同结果，历史原话仍可回查。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 最新表达可能只是补充或临时安排，历史表达也可能仍支持长期理解；同时，旧任务拿着旧卡回写会把后来的更正覆盖。存储时间线和认知取舍必须分开。 举个实际例子 我说“这次为了赶时间先这样，平时还是按原"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 最新表达可能只是补充或临时安排，历史表达也可能仍支持长期理解；同时，旧任务拿着旧卡回写会把后来的更正覆盖。存储时间线和认知取舍必须分开。 举个实际例子 我说“这次为了赶时间先这样，平时还是按原"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以用于当前帮助\n\n新的本人表达与现行版本核对后保存并读回；同一次重复提交不制造两份新认识，没有语义变化也如实说明。\n\n## 需要分辨\n\n同一请求出现不同内容，或旧任务想覆盖后来更正时先停下、重读现行说法，再判断怎样合并。\n\n## 当前不可用\n\n写入或显示用文件刷新失败时先查记录是否已保存，不凭一次报错盲重写。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n直接说明一个新想法、更正或“这次例外，平时仍按旧习惯”。\n\n## 需要准备什么\n\n- 这次新的本人原话或更正\n\n- 它针对哪项现行理解（若不明显）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　分清永久变化和一次性取舍，核对现行版本后合并；并发旧任务发现冲突须重读。\n\n2. **交付与接续**　交回真正保存并读回的表达；失败或无变化分别说明，旧原话仍可追溯。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\nschema（数据结构）6 已实现四类表达变化、证据角色与投递版本检查。2026-10-11 16:33 只读聚合：本人原话共 423 条，其中 134 条 current（当前状态）、289 条 historical；这是存储状态的计数，不是事实真伪，也不是今天新说了多少话，不公开具体原话。9 月 24 日那次的 72 条 current、67 条 historical 只属于当时的聚合。本次只读核对来源与计数，没有调用任何写入口。\n\n## 关键规则与设计选择\n\n1. current（当前状态）/historical/withdrawn 是存储状态，不是事实真伪或证据权重。\n\n2. supplement 默认保留未撤回旧内容；temporary 使用真实适用范围，不凭空给偏好设过期日。\n\n3. correction/withdrawal 必须用 related-statement-id 指向同键旧表达；未来生效的更正按时间生效。\n\n4. 同键当前明示必须被考虑和引用，但可作反例或语境；不再一律阻断有依据的模型认识。\n\n5. 历史原话可支持明确限定过去的认识；已纠正错误不再支持现行事实，仍可解释认识变化。\n\n6. 程序让卡片 stale 只要求复核，不能代替模型判断旧认识已经被推翻。\n\n## 当前怎样实现\n\n- preference_statements 保存 transition_kind、related_statement_id、原生生效时间、来源与投递身份；按同键时间线维护 current（当前状态） 与历史。\n\n- writeback_deliveries 以 delivery_id 固定 operation、caller_project、origin_ref、payload SHA-256 与已返回结果；同一重试复用结果，不再次插入或令旧卡失效。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 schema（数据结构） 6 已实现四类表达变化、证据角色与投递版本检查；聚合 72 条 current（当前状态）、67 条 historical，不公开具体原话 关"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 schema（数据结构） 6 已实现四类表达变化、证据角色与投递版本检查；聚合 72 条 current（当前状态）、67 条 historical，不公开具体原话 关"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- expected-current-id 对 record 使用 statement_id、对 snapshot 使用 snapshot_id；尚无该键须在真实读取后声明 none/null，不混用编号。\n\n- snapshot_evidence 与 snapshot_statement_evidence 保存 supports/contradicts/context；改编号或角色须显式提交经复核 detail。\n\n- snapshot-batch 一次绑定各卡 expected_current_ids，保持同一投递的稳定身份；旧数组输入保留兼容。\n\n- 用户原话进入 record，模型理解进入 snapshot；程序不把助手总结改成用户明示，也不为凑一种证据类型造假记录。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 读取相关当前表达或卡\n\n2. 按原话区分四种变化\n\n3. 保留原时间与出处\n\n4. 固定投递身份和现行版本\n\n5. 验证引用及证据角色\n\n6. 提交相关表达/认知\n\n7. 更新同源视图并回读\n\n8. 用当前问题检查是否正确使用",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Idempotent（幂等） | 相同投递已经处理，不插入第二份，也不再次让卡失效；后来再次真实表达属于另一个事件。 |\n| Current conflict（现行版本冲突） | 读取后已经出现新的版本，必须先理解新内容再决定如何合并。 |\n| Statement transition（表达变化） | 补充、临时、更正与撤回是不同语义，由 AI 按本人原话判断。 |\n\n## 专业定义\n\n我可以补充一件旧事、临时改变选择或明确撤回旧话；系统保留这些差别，不用一条新记录把旧认识全部推翻。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决补充被当作撤回、临时选择变永久、历史原话失去语境、投递重复和旧版本静默覆盖。\n\n## 边界\n\n- 不从订单或助手文本自动写成本人明示。\n\n- 不同 key 的真实语义仍由 AI 判断，不靠键名机械合并。\n\n- 不删除原件或历史成果，不把同一事实跨平台复述算成独立证据。\n\n- 没有独立 history/undo 浏览命令不等于没有原话关系、撤回语义或版本保留。\n\n## 失败与恢复\n\n- **相同 delivery-id 使用不同载荷**：返回 delivery_conflict，找回原请求，不换一个新编号掩盖冲突。\n\n- **expected-current-id 与当前不同**：返回 current_conflict，重读最新表达或卡，AI 判断合并或重建。\n\n- **证据或角色改变却没有复核详述**：拒绝沿用旧解释；补齐本次准确的摘要、详述和证据后再提交。\n\n- **数据库提交后视图刷新失败**：数据库已保存和显示文件已写好是两个不同状态。先查现存记录与投递结果；用同一投递身份再次可靠提交，只会恢复同源视图，不会多出一条事件。两个显示文件不是一次原子替换，可能一个新一个旧，不能盲目再次 record。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-current-corrections-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- **DOMAIN_CONTRACT.md**：四种变化、证据取舍、可靠投递和并发冲突\n\n- **daily_preferences.py / schema.sql**：表达、认知、角色和 writeback_deliveries 实现\n\n- **tests/test_writeback.py / test_personal_background.py**：幂等、冲突、历史语境和认知更新回归\n\n## 如何验证\n\n- 当前合成回归包含投递重试、不同载荷冲突、旧版本拒绝、明确撤回/更正、历史明示和证据角色。\n\n- 2026-09-07 基线有 185 项 Python 通过（有历史回执）；同批记载的 14 个子测试，本次没找到独立的历史回执，之后未重新核对。那一批没有向个人数据库 record、snapshot 或 ingest。\n\n- 2026-10-11 只读核对（来源 b334b3aa）：正常写入口仍有 idempotent、delivery_conflict、current_conflict 三种结果，入口文件、schema 与可靠投递都没有退役；本次没有调用写入口，也没有跑测试，不把这次核对当成新的写入验收。\n\n## 与其他模块的关系\n\n它保证认识可以可靠演化；是否认同一种解释仍取决于真实语境与证据，程序状态不会替本人做决定。",
+      "links": [
+        {
+          "text": "上一个模块 本人理解与领域取用",
+          "href": "/projects/daily-preferences/personal-understanding/"
+        },
+        {
+          "text": "下一个模块 来源与按需增量",
+          "href": "/projects/daily-preferences/source-coverage/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,581 @@
+[
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "同一个模型名不够，线路、版本和有效档位也必须一致",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "官方、本地与第三方模型各自对应明确版本、服务和费用线路；用一个名字不能替代这次真实身份。长任务的续作要求会写进启动计划，实际是否遵守仍需任务验收。",
+        "row": "top"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**现有 21 个公开配置档（共 23 份配置清单，其中 2 份是不公开的内部模板），覆盖 5 种原版工具，可区分服务、模型和运行方式；配置存在不代表每条云端或本地路线都已实测。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "同一个模型名不够，线路、版本和有效档位也必须一致",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "官方、本地与第三方模型各自对应明确版本、服务和费用线路；用一个名字不能替代这次真实身份。长任务的续作要求会写进启动计划，实际是否遵守仍需任务验收。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**现有 21 个公开配置档（共 23 份配置清单，其中 2 份是不公开的内部模板），覆盖 5 种原版工具，可区分服务、模型和运行方式；配置存在不代表每条云端或本地路线都已实测。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在 aicli profile list/show 中选择明确 Profile；同一家想换型号时，另存一个自定义配置档并核对它的服务地域、协议和档位，钥匙沿用这家原来那把。启动时在参数里直接加 --model 目前仍会被拒绝。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **核对模型背后的服务**　系统检查具体版本、收费线路和请求目的地；只知道模型简称还不能确定这次在用谁。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在 aicli profile list/show 中选择明确 Profile；同一家想换型号时，另存一个自定义配置档并核对它的服务地域、协议和档位，钥匙沿用这家原来那把。启动时在参数里直接加 --model 目前仍会被拒绝。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **核对模型背后的服务**　系统检查具体版本、收费线路和请求目的地；只知道模型简称还不能确定这次在用谁。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. Codex、Claude Code、Open Interpreter 的协议和权限不同，不能只换模型名。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. Codex、Claude Code、Open Interpreter 的协议和权限不同，不能只换模型名。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- preCompactionCheckpoint要求目标和验收、约束/授权/owner、规则与关键文件、changed-files-and-dirty-ownership、决定及理由、tests-and-live-gaps、阻塞风险和下一步写到existing-project-state。postCompactionRead重读AGENTS.md或CLAUDE.md、已有状态、git status（Git 状态命令）和git diff；summaryIsHint=true、restoreFromSource=true、secondFactSource=false。摘要只提供找回原件的线索，不另建状态库。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- preCompactionCheckpoint要求目标和验收、约束/授权/owner、规则与关键文件、changed-files-and-dirty-ownership、决定及理由、tests-and-live-gaps、阻塞风险和下一步写到existing-project-state。postCompactionRead重读AGENTS.md或CLAUDE.md、已有状态、git status（Git 状态命令）和git diff；summaryIsHint=true、restoreFromSource=true、secondFactSource=false。摘要只提供找回原件的线索，不另建状态库。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- codex-glm-5-3-flash｜glm-5.3-flash，同一中国区套餐与Responses端点，max，支持图像。9 月 18 日它作为桌面父任务，与同一个 Luna High 后台子会话完成了 3 轮真实往返；这只证明那一种用法，不外推为所有 CLI（命令行工具）任务通过。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- codex-glm-5-3-flash｜glm-5.3-flash，同一中国区套餐与Responses端点，max，支持图像。9 月 18 日它作为桌面父任务，与同一个 Luna High 后台子会话完成了 3 轮真实往返；这只证明那一种用法，不外推为所有 CLI（命令行工具）任务通过。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- codex-spark-xhigh｜gpt-5.3-codex-spark，官方登录、xhigh，不支持图像。历史专项文件任务2/9与步骤硬停按原条件保留，不作为默认或自动推荐；未重验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- codex-spark-xhigh｜gpt-5.3-codex-spark，官方登录、xhigh，不支持图像。历史专项文件任务2/9与步骤硬停按原条件保留，不作为默认或自动推荐；未重验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- opencode-ollama-main｜OpenCode、qwen3.8-27b:256k、受管Broker（代理服务）；machine-only，262144上下文、32768输出。配置同步不等于当前路线已经完成真实任务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- opencode-ollama-main｜OpenCode、qwen3.8-27b:256k、受管Broker（代理服务）；machine-only，262144上下文、32768输出。配置同步不等于当前路线已经完成真实任务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **旧 Qwen3.7 或 fallback（后备路线） 参数**：命中退役门并停止，不重路由到 06-08 或 Qwen3.8。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **旧 Qwen3.7 或 fallback（后备路线） 参数**：命中退役门并停止，不重路由到 06-08 或 Qwen3.8。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- `src/AiCliProfileManager/Private/ContextManagement.ps1`：第三方连续性计划、压缩前后项目状态与Claude窗口边界",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- `src/AiCliProfileManager/Private/ContextManagement.ps1`：第三方连续性计划、压缩前后项目状态与Claude窗口边界",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 29 日退役两个代理后的全量离线测试为 470/470，覆盖 exact Qwen/DeepSeek、本地模型、hidden 模板与模型覆盖拒绝；10 月 11 日未重跑。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-engines-providers-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 29 日退役两个代理后的全量离线测试为 470/470，覆盖 exact Qwen/DeepSeek、本地模型、hidden 模板与模型覆盖拒绝；10 月 11 日未重跑。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

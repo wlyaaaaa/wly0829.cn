@@ -15,19 +15,22 @@
       {
         "type": "action_button",
         "text_ref": "〔回到项目 → AI 规则与技能基座〕　〔复制 AI 续作说明〕",
-        "row": "top"
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
-        "text_ref": "我只说要完成什么，AI 在获准范围内选工具、安排可独立验收的协作，并在长任务里守住原目标；生成文件也由它归位，不把清理留给我。",
+        "text_ref": "我只说要完成什么，AI 在获准范围内选工具、决定要不要派子代理、派给谁，并在长任务里守住原目标；生成的文件也由它归位，不把清理留给我。",
         "row": "top"
       },
       {
         "type": "illustration",
+        "index": 0,
         "row": "top",
         "width": "42%",
-        "align": "center",
-        "index": 0
+        "align": "center"
       }
     ]
   },
@@ -43,16 +46,19 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → AI 规则与技能基座〕　〔复制 AI 续作说明〕"
+        "text_ref": "〔回到项目 → AI 规则与技能基座〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
-        "text_ref": "我只说要完成什么，AI 在获准范围内选工具、安排可独立验收的协作，并在长任务里守住原目标；生成文件也由它归位，不把清理留给我。"
+        "text_ref": "我只说要完成什么，AI 在获准范围内选工具、决定要不要派子代理、派给谁，并在长任务里守住原目标；生成的文件也由它归位，不把清理留给我。"
       },
       {
         "type": "illustration",
-        "align": "center",
-        "index": 0
+        "index": 0,
+        "align": "center"
       }
     ]
   },
@@ -162,7 +168,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在同一 AI 工作对话中说出目标与允许的工具或模型限制；实际工具由当前宿主可用能力决定。",
+        "text_ref": "在同一 AI 工作对话中说出目标，以及型号、厂商、档位或预算上的限制；实际能用什么由当前宿主决定。",
         "row": "start",
         "width": "40%"
       },
@@ -182,7 +188,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先核对真正要交付的结果**　AI 把用户要求和自己临时提出的做法分开，保留必须完成的功能与验收。",
+        "text_ref": "1. **先核对真正要交付的结果**　主持把我的要求和自己临时想到的做法分开，保留必须完成的功能与验收。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -203,7 +209,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "在同一 AI 工作对话中说出目标与允许的工具或模型限制；实际工具由当前宿主可用能力决定。"
+        "text_ref": "在同一 AI 工作对话中说出目标，以及型号、厂商、档位或预算上的限制；实际能用什么由当前宿主决定。"
       },
       {
         "type": "source_text_card",
@@ -218,7 +224,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **先核对真正要交付的结果**　AI 把用户要求和自己临时提出的做法分开，保留必须完成的功能与验收。",
+        "text_ref": "1. **先核对真正要交付的结果**　主持把我的要求和自己临时想到的做法分开，保留必须完成的功能与验收。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -242,7 +248,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 简单问题可以直接完成；稳定窄能力存在时优先走对应 Skill（能力入口）或 Owner（责任源）入口。",
+        "text_ref": "1. **主持想和把关，活派出去做。** 主持管战略、头脑风暴、抽查、质量把关和最终以人的角度看成品；具体活派子代理做，哪怕自己做也很快。只有整段活一两步就完的小事顺手做。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -266,7 +272,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. 简单问题可以直接完成；稳定窄能力存在时优先走对应 Skill（能力入口）或 Owner（责任源）入口。",
+        "text_ref": "1. **主持想和把关，活派出去做。** 主持管战略、头脑风暴、抽查、质量把关和最终以人的角度看成品；具体活派子代理做，哪怕自己做也很快。只有整段活一两步就完的小事顺手做。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -286,7 +292,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. 所有项目、root、后代、新对话和压缩续作都区分用户目标/更正与可换方案；计划、代码、测试、草稿和审查不产生新需求。现行工程与交付规则明确：从用户的具体做法还原真实目标、必要约束和成功结果，比较实际效果与总成本后自主选方法，不受现有代码、计划或沉没成本锁定，也不为理论最优无限寻优。",
+        "text_ref": "9. **清理新口径。** 本任务产生、下载或确认退役的东西可以直接删除，也可以进回收站；回收不下的本任务文件也可直接删。只保护本人原件、别人的任务、归属不明和在用的内容；交付成功不冒充清理成功。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -306,7 +312,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "9. 所有项目、root、后代、新对话和压缩续作都区分用户目标/更正与可换方案；计划、代码、测试、草稿和审查不产生新需求。现行工程与交付规则明确：从用户的具体做法还原真实目标、必要约束和成功结果，比较实际效果与总成本后自主选方法，不受现有代码、计划或沉没成本锁定，也不为理论最优无限寻优。",
+        "text_ref": "9. **清理新口径。** 本任务产生、下载或确认退役的东西可以直接删除，也可以进回收站；回收不下的本任务文件也可直接删。只保护本人原件、别人的任务、归属不明和在用的内容；交付成功不冒充清理成功。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -326,7 +332,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- quality_first_model_routing_v1 允许在本人已授权且宿主真实支持的候选内，按质量与完成任务总成本选择型号和思考投入；必要时可高于根或父。旧模型基值加法、根/父组合分数和同型号不得升档不再作为现行准入，用户明确的型号、厂商、预算与思考限制继续传给后代。",
+        "text_ref": "3. 判断成品类型和总量，决定自己做还是派、派几个、派给谁、什么档位。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -346,7 +352,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "- quality_first_model_routing_v1 允许在本人已授权且宿主真实支持的候选内，按质量与完成任务总成本选择型号和思考投入；必要时可高于根或父。旧模型基值加法、根/父组合分数和同型号不得升档不再作为现行准入，用户明确的型号、厂商、预算与思考限制继续传给后代。",
+        "text_ref": "3. 判断成品类型和总量，决定自己做还是派、派几个、派给谁、什么档位。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -356,206 +362,6 @@
   },
   {
     "screen": "agents-capability-routing-08",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（四）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- 同 task 的续写日志可能在原 UUID 后附第二 UUID。现行 runtime（运行环境） 按准确 session_id/turn_id 在规范会话根定位对应 turn_context（回合上下文），核对会话身份；旧 locator（原件定位记录） 缺本回合时转到匹配续写文件，不按文件时间或历史模型推断当前身份。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-08",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（四）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- 同 task 的续写日志可能在原 UUID 后附第二 UUID。现行 runtime（运行环境） 按准确 session_id/turn_id 在规范会话根定位对应 turn_context（回合上下文），核对会话身份；旧 locator（原件定位记录） 缺本回合时转到匹配续写文件，不按文件时间或历史模型推断当前身份。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-09",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（五）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- cross_owner_dependency_budget 先用最小因果证据区分 A 自身问题和依赖 B 缺陷；确有影响时沿已有授权修复 B 的精确范围或正式交接。A 局部成功不取消 B 义务，未修原因、影响和接手状态必须向本人披露，不接管无关业务。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-09",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（五）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- cross_owner_dependency_budget 先用最小因果证据区分 A 自身问题和依赖 B 缺陷；确有影响时沿已有授权修复 B 的精确范围或正式交接。A 局部成功不取消 B 义务，未修原因、影响和接手状态必须向本人披露，不接管无关业务。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-10",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（六）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- product_requirement_complexity_authority 与 user_intent_over_implementation 把用户结果和可换方案分开；模型自造的企业治理、安全/恢复目标、理论风险和未来需求不属于用户要求。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-10",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（六）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "- product_requirement_complexity_authority 与 user_intent_over_implementation 把用户结果和可换方案分开；模型自造的企业治理、安全/恢复目标、理论风险和未来需求不属于用户要求。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-11",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（七）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "4. AI 评估独立可验性、质量、墙钟、写入冲突、资源和 slots，自主决定 0–10、家族、effort（思考等级） 与 scope",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-11",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（七）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "4. AI 评估独立可验性、质量、墙钟、写入冲突、资源和 slots，自主决定 0–10、家族、effort（思考等级） 与 scope",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-12",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（八）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "12. 最后分别验证能力可用、route_selected_without_hint、用户可见结果与剩余 Unknown（未验证）；定向测试单列，短时通过不外推长期稳定，目标完成即结束",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-12",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "技术实现与依据（八）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "numbered_steps",
-        "text_ref": "12. 最后分别验证能力可用、route_selected_without_hint、用户可见结果与剩余 Unknown（未验证）；定向测试单列，短时通过不外推长期稳定，目标完成即结束",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none",
-        "connector": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-13",
     "orientation": "h",
     "blocks": [
       {
@@ -571,7 +377,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-13",
+    "screen": "agents-capability-routing-08",
     "orientation": "v",
     "blocks": [
       {
@@ -587,7 +393,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-14",
+    "screen": "agents-capability-routing-09",
     "orientation": "h",
     "blocks": [
       {
@@ -603,7 +409,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-14",
+    "screen": "agents-capability-routing-09",
     "orientation": "v",
     "blocks": [
       {
@@ -619,7 +425,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-15",
+    "screen": "agents-capability-routing-10",
     "orientation": "h",
     "blocks": [
       {
@@ -630,11 +436,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "解决什么"
+        "text_ref": "工具、技能、插件和型号很多，难的不只是选哪个，还要防两种错：借“反膨胀”删掉真实需求，或把产品复杂当成可以无限加技术层的理由；同时不让主持陷在具体活里失去把关。"
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 能力发现不会扩大用户授权",
+        "text_ref": "- 能力发现不扩大用户授权；子代理的范围和授权只能比父代理窄。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -642,7 +448,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-15",
+    "screen": "agents-capability-routing-10",
     "orientation": "v",
     "blocks": [
       {
@@ -653,11 +459,11 @@
       },
       {
         "type": "prose",
-        "text_ref": "解决什么"
+        "text_ref": "工具、技能、插件和型号很多，难的不只是选哪个，还要防两种错：借“反膨胀”删掉真实需求，或把产品复杂当成可以无限加技术层的理由；同时不让主持陷在具体活里失去把关。"
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 能力发现不会扩大用户授权",
+        "text_ref": "- 能力发现不扩大用户授权；子代理的范围和授权只能比父代理窄。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -665,7 +471,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-16",
+    "screen": "agents-capability-routing-11",
     "orientation": "h",
     "blocks": [
       {
@@ -676,7 +482,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **任务文件清理失败或仍被使用**：不把主产物成功当作清理完成；保留在用和必要恢复材料，继续处理可处置项。命令层启动前明确拒绝才用同目标回收站后备，真实残留给出路径、理由与下一条件。",
+        "text_ref": "- **子代理中断：** 先核对它的真实状态；同一子任务且事实仍准确就在原线程续作，否则先停止或交接再新开，部分结果不冒充完成。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -684,7 +490,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-16",
+    "screen": "agents-capability-routing-11",
     "orientation": "v",
     "blocks": [
       {
@@ -695,7 +501,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **任务文件清理失败或仍被使用**：不把主产物成功当作清理完成；保留在用和必要恢复材料，继续处理可处置项。命令层启动前明确拒绝才用同目标回收站后备，真实残留给出路径、理由与下一条件。",
+        "text_ref": "- **子代理中断：** 先核对它的真实状态；同一子任务且事实仍准确就在原线程续作，否则先停止或交接再新开，部分结果不冒充完成。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -703,45 +509,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-17",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "出问题时（三）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons-r2/扳手.png"
-      },
-      {
-        "type": "bullet_list",
-        "text_ref": "- **旧 root 没有 Hook（钩子），且同一任务中不存在用户对 model/effort（思考等级） 的明确自然语言确认**：不建立对话绑定、不猜身份；主任务继续，只有委派不可用。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-17",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "出问题时（三）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons-r2/扳手.png"
-      },
-      {
-        "type": "bullet_list",
-        "text_ref": "- **旧 root 没有 Hook（钩子），且同一任务中不存在用户对 model/effort（思考等级） 的明确自然语言确认**：不建立对话绑定、不猜身份；主任务继续，只有委派不可用。",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-18",
+    "screen": "agents-capability-routing-12",
     "orientation": "h",
     "blocks": [
       {
@@ -752,7 +520,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 活动能力与运行方式专题",
+        "text_ref": "- 活动分工与并行施工专题（execution-coordination）",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -760,7 +528,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-18",
+    "screen": "agents-capability-routing-12",
     "orientation": "v",
     "blocks": [
       {
@@ -771,7 +539,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 活动能力与运行方式专题",
+        "text_ref": "- 活动分工与并行施工专题（execution-coordination）",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -779,7 +547,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-19",
+    "screen": "agents-capability-routing-13",
     "orientation": "h",
     "blocks": [
       {
@@ -790,7 +558,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 官方更新稳定主体、版本路径非准入和能力局部降级回归",
+        "text_ref": "- 使用账本（覆盖到 10/9 23:59，本轮聚合）：GPT 包装器调用 3,148 次（Codex 534、Claude 2,614），fast 71 次；这是命令调用次数，不是成功任务数。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -798,7 +566,7 @@
     ]
   },
   {
-    "screen": "agents-capability-routing-19",
+    "screen": "agents-capability-routing-13",
     "orientation": "v",
     "blocks": [
       {
@@ -809,45 +577,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- 官方更新稳定主体、版本路径非准入和能力局部降级回归",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-20",
-    "orientation": "h",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "依据与来源（三）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/数据库.png"
-      },
-      {
-        "type": "bullet_list",
-        "text_ref": "- natural-intent blind routing E2E（端到端验证） 必须同时证明 AI 自己选择了正确路线和用户可见结果正确；只命中工具或只得到答案都不完整",
-        "columns": 1,
-        "icons": "none",
-        "illustration": "none"
-      }
-    ]
-  },
-  {
-    "screen": "agents-capability-routing-20",
-    "orientation": "v",
-    "blocks": [
-      {
-        "type": "section_heading",
-        "text_ref": "依据与来源（三）",
-        "size": "large",
-        "heading_icon": "_library/hires-icons/数据库.png"
-      },
-      {
-        "type": "bullet_list",
-        "text_ref": "- natural-intent blind routing E2E（端到端验证） 必须同时证明 AI 自己选择了正确路线和用户可见结果正确；只命中工具或只得到答案都不完整",
+        "text_ref": "- 使用账本（覆盖到 10/9 23:59，本轮聚合）：GPT 包装器调用 3,148 次（Codex 534、Claude 2,614），fast 71 次；这是命令调用次数，不是成功任务数。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

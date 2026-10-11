@@ -24,7 +24,8 @@
         "type": "illustration",
         "illustration": "outside",
         "row": "hero",
-        "width": "43%"
+        "width": "43%",
+        "text_ref": ""
       },
       {
         "type": "quote",
@@ -40,7 +41,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "按 9 月 15–27 日的旧使用记录"
+        "text_ref": "AI 使用记录（记到 10 月 9 日，10 日、11 日还没补采）：“讲给我听”技能累计 34 次调用（Codex 23、Claude 11），10 月 4 "
       },
       {
         "type": "action_button",
@@ -75,7 +76,8 @@
       },
       {
         "type": "illustration",
-        "illustration": "outside"
+        "illustration": "outside",
+        "text_ref": ""
       },
       {
         "type": "quote",
@@ -91,7 +93,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "按 9 月 15–27 日的旧使用记录"
+        "text_ref": "AI 使用记录（记到 10 月 9 日，10 日、11 日还没补采）：“讲给我听”技能累计 34 次调用（Codex 23、Claude 11），10 月 4 "
       },
       {
         "type": "action_button",
@@ -220,7 +222,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "50条真实案例：每条写着日期、出自哪次对话、我当时怎么说、以后怎么做（9月8–28日）。每条原则",
+        "text_ref": "**55 条真实案例**：每条写着日期、出自哪次对话、我当时怎么说、以后怎么做（9 月 8 日—10 月 3 日；9 月 28 日时是 50 条）。每条原则都追",
         "row": "tail",
         "width": "50%"
       },
@@ -274,7 +276,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "50条真实案例：每条写着日期、出自哪次对话、我当时怎么说、以后怎么做（9月8–28日）。每条原则"
+        "text_ref": "**55 条真实案例**：每条写着日期、出自哪次对话、我当时怎么说、以后怎么做（9 月 8 日—10 月 3 日；9 月 28 日时是 50 条）。每条原则都追"
       },
       {
         "type": "notice",
@@ -631,7 +633,7 @@
       {
         "type": "table",
         "portrait_mode": "rows",
-        "text_ref": "文件放什么explain-to-me.md讲解手册：11条原则、6条读懂我的话、50条案例rep",
+        "text_ref": "**四份资料**",
         "row": "data"
       },
       {
@@ -695,7 +697,7 @@
       {
         "type": "table",
         "portrait_mode": "rows",
-        "text_ref": "文件放什么explain-to-me.md讲解手册：11条原则、6条读懂我的话、50条案例rep"
+        "text_ref": "**四份资料**"
       },
       {
         "type": "points_card",
@@ -1014,7 +1016,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "截至10月6日：66次修改"
+        "text_ref": "截至 10 月 11 日 14:00：66 次修改（最近一次在 10 月 6 日）"
       }
     ],
     "composition_basis": {
@@ -1050,7 +1052,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "截至10月6日：66次修改"
+        "text_ref": "截至 10 月 11 日 14:00：66 次修改（最近一次在 10 月 6 日）"
       }
     ],
     "composition_basis": {

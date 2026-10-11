@@ -1,0 +1,1133 @@
+[
+  {
+    "screen": "daily-preferences-source-coverage-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "读完选定的新材料，再更新对我的理解",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 个人理解库〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "这次需要更新哪些材料确定后，AI从实际读到的位置继续，说明认识补充了什么、改了什么，或者为什么无需修改。以后能找到当时的原话和依据，不会把“已经下载”当成“已经理解”。",
+        "row": "top"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**已发布流程支持选定来源的按需取得、实际阅读、认识回写和微信阅读位置。10 月 11 日只读状态：登记 160 个来源实例、34 类来源，其中 33 类有现行记录；待补来源 0 类，另有 5 类按我的选择明确排除。手机使用现在来自 Collector 采集器，旧 AppUsage 导出已退役。本页没有读取私人消息或新导出，不能据此说全部来源今天已全面更新。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "读完选定的新材料，再更新对我的理解",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 个人理解库〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "这次需要更新哪些材料确定后，AI从实际读到的位置继续，说明认识补充了什么、改了什么，或者为什么无需修改。以后能找到当时的原话和依据，不会把“已经下载”当成“已经理解”。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**已发布流程支持选定来源的按需取得、实际阅读、认识回写和微信阅读位置。10 月 11 日只读状态：登记 160 个来源实例、34 类来源，其中 33 类有现行记录；待补来源 0 类，另有 5 类按我的选择明确排除。手机使用现在来自 Collector 采集器，旧 AppUsage 导出已退役。本页没有读取私人消息或新导出，不能据此说全部来源今天已全面更新。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "完成或无新记录",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "完成或无新记录",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "可以说“结合最近的材料更新理解”；其他确有来源更新触发的任务也沿同一入口继续。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先确定这次为什么需要新材料**　普通问题先使用已有认识。确有更新触发时，固定本次账号、会话、日期与来源；要求全面更新才逐项检查适用来源与实际截止，不把所有更新都等同于浏览行为采集。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "可以说“结合最近的材料更新理解”；其他确有来源更新触发的任务也沿同一入口继续。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先确定这次为什么需要新材料**　普通问题先使用已有认识。确有更新触发时，固定本次账号、会话、日期与来源；要求全面更新才逐项检查适用来源与实际截止，不把所有更新都等同于浏览行为采集。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "7. **需要行为资料时，再走对应分支**　这次问题确需新浏览、游戏或B站行为，才刷新Chrome、Steam和当前登录的B站；普通活动事实可直接读取已存材料。人工导出有新包才归档、导入、阅读整合，没有新包保留旧截止。最终逐来源交代取得、读过、改过和仍缺什么。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "7. **需要行为资料时，再走对应分支**　这次问题确需新浏览、游戏或B站行为，才刷新Chrome、Steam和当前登录的B站；普通活动事实可直接读取已存材料。人工导出有新包才归档、导入、阅读整合，没有新包保留旧截止。最终逐来源交代取得、读过、改过和仍缺什么。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 2026-09-09 11:40:09（北京时间）回读 107 个来源实例：12 acquired_verified、95 snapshot_only；覆盖本人表达、订单/支付、AI 对话、已核引用、Steam、哔哩哔哩、浏览、Google Play、航空和铁路等 16 类逻辑来源。这是当时的历史观察。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 2026-09-09 11:40:09（北京时间）回读 107 个来源实例：12 acquired_verified、95 snapshot_only；覆盖本人表达、订单/支付、AI 对话、已核引用、Steam、哔哩哔哩、浏览、Google Play、航空和铁路等 16 类逻辑来源。这是当时的历史观察。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. Chrome 历史与书签从可发现 profile 直接采集；打开中的 History 会连同 WAL/SHM 做临时只读快照，Chrome 不需要退出。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "9. Chrome 历史与书签从可发现 profile 直接采集；打开中的 History 会连同 WAL/SHM 做临时只读快照，Chrome 不需要退出。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. 来源说明文件 README 与 CURRENT_ACCEPTANCE 里仍留着“银行、拼多多、菜鸟是当前缺口”的旧文字，和代码/status 不一致，属于来源说明内部没同步；以代码和 status 为准，旧日期的验收记录照常保留。待补为 0 也不证明所有账号、历史或附件都完整。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "17. 来源说明文件 README 与 CURRENT_ACCEPTANCE 里仍留着“银行、拼多多、菜鸟是当前缺口”的旧文字，和代码/status 不一致，属于来源说明内部没同步；以代码和 status 为准，旧日期的验收记录照常保留。待补为 0 也不证明所有账号、历史或附件都完整。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "25. Gmail 当时处理批次：4051封旧MBOX与424封live减28重叠，共4447个逻辑邮件；旧130条空正文补齐，重要内容已按价值审阅，其余按类别留回查。Tasks那次新包9条更新、0新逻辑任务、gaps为空。2026-10-11 本库现有 4,759 条现行 Gmail 邮件记录、12 条 Tasks 现行记录；有这么多条不证明全邮箱、全附件已取得或已读，完成/删除标签也不证明现实事项均已办成。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "25. Gmail 当时处理批次：4051封旧MBOX与424封live减28重叠，共4447个逻辑邮件；旧130条空正文补齐，重要内容已按价值审阅，其余按类别留回查。Tasks那次新包9条更新、0新逻辑任务、gaps为空。2026-10-11 本库现有 4,759 条现行 Gmail 邮件记录、12 条 Tasks 现行记录；有这么多条不证明全邮箱、全附件已取得或已读，完成/删除标签也不证明现实事项均已办成。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "33. Didi 目录只选网约车订单 TXT；淘宝、支付、信用卡、ChatGPT/Gemini、Takeout、航旅纵横 XLS 与 12306 OCR（光学字符识别） JSONL 都保留精确输入合同，扩展名不匹配时拒绝。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "33. Didi 目录只选网约车订单 TXT；淘宝、支付、信用卡、ChatGPT/Gemini、Takeout、航旅纵横 XLS 与 12306 OCR（光学字符识别） JSONL 都保留精确输入合同，扩展名不匹配时拒绝。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- status --account 指定账号，查看某一会话时同时传 --contact；status --summary 只看各账号数量。collect --self-only 筛选本人发言与未定发送者；complete --reader-scope / --quote-gap-note 保留实际范围与未取得引用，不放宽分页、正文或发送者检查。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- status --account 指定账号，查看某一会话时同时传 --contact；status --summary 只看各账号数量。collect --self-only 筛选本人发言与未定发送者；complete --reader-scope / --quote-gap-note 保留实际范围与未取得引用，不放宽分页、正文或发送者检查。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- PROFILE_EXTENSIONS 明确允许的扩展名与 .blob 容器；read_text 只走 UTF-8-sig→UTF-16→GB18030，最后才以 replacement fallback（替换字符回退）保留可读片段。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- PROFILE_EXTENSIONS 明确允许的扩展名与 .blob 容器；read_text 只走 UTF-8-sig→UTF-16→GB18030，最后才以 replacement fallback（替换字符回退）保留可读片段。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- ingest 外层结果有 completed/no_change/partial/failed 四态；单文件 import_runs 另用 success/no_change/partial/failed，不应把来源 acquired_verified、单文件 success 与整次 completed 混写。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- ingest 外层结果有 completed/no_change/partial/failed 四态；单文件 import_runs 另用 success/no_change/partial/failed，不应把来源 acquired_verified、单文件 success 与整次 completed 混写。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-14",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（九）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "5. 对照changed_records、待复核旧卡及原引用，按reviewed_citations/snapshot显式修订并回读，或形成有理由的no_change。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-14",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（九）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "5. 对照changed_records、待复核旧卡及原引用，按reviewed_citations/snapshot显式修订并回读，或形成有理由的no_change。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-15",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-15",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（一）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-16",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-16",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口（二）",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-17",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不后台启动新的全来源同步；普通问答不擅自刷新或导入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-17",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 不后台启动新的全来源同步；普通问答不擅自刷新或导入。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-18",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 窄索引清洗不是全局匿名化。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-18",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 窄索引清洗不是全局匿名化。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-19",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **source_id 换 provider 或 logical source**：返回 source identity conflict，保留原身份。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-19",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **source_id 换 provider 或 logical source**：返回 source identity conflict，保留原身份。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-20",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **数据库提交后 CURRENT（当前状态） 缓存写入失败**：记录、覆盖和失效推定可能已经更新；先只读核对该来源本次 import 与数据库，不将异常当成未导入后盲目重试。ingest 结果现在带 views_refreshed 等字段，但视图抛异常时仍不能把整次操作当成未提交；这条失败路径没有生产验收。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-20",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **数据库提交后 CURRENT（当前状态） 缓存写入失败**：记录、覆盖和失效推定可能已经更新；先只读核对该来源本次 import 与数据库，不将异常当成未导入后盲目重试。ingest 结果现在带 views_refreshed 等字段，但视图抛异常时仍不能把整次操作当成未提交；这条失败路径没有生产验收。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-21",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **daily_preferences.py**：实现 profile、ingest、status、conversation-on-demand refresh、来源身份、排除来源与回滚。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-21",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **daily_preferences.py**：实现 profile、ingest、status、conversation-on-demand refresh、来源身份、排除来源与回滚。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-22",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **connected_source_refresh.py / source_snapshot_state.py / mobile_sources.py**：按点名来源连接、保留不可变原件与当前集合边界；手机未知格式和时间单位保留partial。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-22",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **connected_source_refresh.py / source_snapshot_state.py / mobile_sources.py**：按点名来源连接、保留不可变原件与当前集合边界；手机未知格式和时间单位保留partial。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-23",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-10-11 16:32–16:45 只读 status 与聚合（来源 b334b3aa）：160 个来源实例、34 类登记、33 类有现行记录、待补 0、排除 5；source_review 待整合 0、按范围处理过 195、排除 102。本次没有为网页采集Chrome/Steam/B站、读取微信正文、操作手机、下载 Collector 原件或推进阅读位置。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-23",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-10-11 16:32–16:45 只读 status 与聚合（来源 b334b3aa）：160 个来源实例、34 类登记、33 类有现行记录、待补 0、排除 5；source_review 待整合 0、按范围处理过 195、排除 102。本次没有为网页采集Chrome/Steam/B站、读取微信正文、操作手机、下载 Collector 原件或推进阅读位置。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-24",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-24",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-25",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-25",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（五）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-26",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-26",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（六）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-27",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-24 本页当时只读 status 得到 147 个来源实例与 3 项当时缺口；这是历史观察。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-27",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（七）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 2026-09-24 本页当时只读 status 得到 147 个来源实例与 3 项当时缺口；这是历史观察。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-28",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 同一 Takeout ZIP 分别登记为 Chrome 与 Google Play 来源，制品哈希相同但 occurrence 独立。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "daily-preferences-source-coverage-28",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（八）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 同一 Takeout ZIP 分别登记为 Chrome 与 Google Play 来源，制品哈希相同但 occurrence 独立。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

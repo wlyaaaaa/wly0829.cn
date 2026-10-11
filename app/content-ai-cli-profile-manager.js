@@ -1,23 +1,23 @@
 import { createProjectSnapshot } from "./project-snapshot.js";
 
 const aiCliProfileManagerSnapshot = createProjectSnapshot({
-  observedAt: "2026-09-24T04:59:33Z",
-  label: "0.3.18 已正式发行并安装；真实桌面主进程已加载新版桥，新父工具与模型任务仍另验",
-  boundary: "9月24日读回 PUBLIC main=bbaaa9d、源码/已装模块 0.3.18，零写入诊断显示桌面启用 562b29bf4a6ac0af；现场进程链已看到真实 ChatGPT.exe→同版 Bridge→codex.exe。0.3.18 发行时 555 项 Pester 全过；新父会话工具定义、实际模型响应和全部 Profile Live 仍分别判断。本网页未发付费调用，也不重启 Gemini 冻结路线。",
+  observedAt: "2026-10-11T08:34:57Z",
+  label: "9 月 15 日本地桌面实际任务已验收；10 月 11 日核对现用桥 b47fea3ce81f7a67 七个文件全部一致",
+  boundary: "内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。10 月 11 日零写入诊断：模块 0.3.19、桌面已启用、桥 b47fea3ce81f7a67、安装状态 verified，七个文件的大小和 SHA-256 与登记全部一致；诊断自己的“进程已加载”和端到端两项仍未验证。最近一次全量离线测试为 9 月 29 日 470/470，10 月 11 日未重跑。",
   metrics: [
-    { label: "当前源码版本", value: "0.3.18" },
-    { label: "公开 Profile", value: "23 个 · 5 类引擎" },
+    { label: "当前源码版本", value: "0.3.19" },
+    { label: "公开 Profile", value: "21 个 · 5 类引擎" },
     { label: "桌面专项合同回归", value: "46项" },
     { label: "项目模块", value: "9 个" }
   ],
   facts: [
     { label: "它真正解决的事", value: "用一个 aicli 入口保存、检查并启动五类原生 AI 命令行，也让已安装的官方 Codex 桌面使用明确选择的本地模型和第三方服务。终端、原生桌面、工具和历史仍由原产品承担；它不另造聊天软件。" },
     { label: "普通输入与结果", value: "我给出项目目录和模型配置；可得到原生 CLI、新的桌面任务、可查询的程序化运行，或同一父任务下的 OpenAI 子会话。静态诊断只说明条件与缺项，实际完成必须另有模型、工具、产物与清理证据。" },
-    { label: "当前来源", value: "2026-09-24T04:49Z 本地 main、origin/main 和 live ls-remote 同为 PUBLIC bbaaa9da5afb2afc4c3b54765a528691c82f09e6，工作树 clean。该来源包含 0.3.18 发行、Sol/Astra 双档、官方模型目录连续性及首次 Luna 许可诊断；模块、桌面桥启用、进程加载和真实模型调用分别核验。", hero: false },
-    { label: "源码与 Release", value: "源码 aicli version 实读 0.3.18，CurrentUser 模块目录 E:\\Documents\\PowerShell\\Modules\\AiCliProfileManager\\0.3.18 存在；Owner §28 记载正式 Release、安装和发行时 555/555 Pester。旧 0.3.17 与 v0.3.12 只按当时日期保留，不表示今天的安装或 Live。", hero: false },
+    { label: "当前来源", value: "本次采用的截至14:00源码快照：E:\\Projects\\Tools\\ai-cli-profile-manager，HEAD 6e689efe9a063192700ea79b92361338f4dabbe5，提交北京时间 2026-10-08 09:55:07；main、跟踪文件干净、本地已取回 origin/main +0/-0；该快照提交在14:00之前。这不是本轮fetch后的远端主分支证明。", hero: false },
+    { label: "源码与 Release", value: "源码与模块 0.3.19；GitHub 最新正式 Release 为 v0.3.18、北京时间 9 月 22 日 15:28:07、target_commitish=7705b1ec9e6794d23fad0e756772724cbb029dd7、draft=false/prerelease=false。源码与模块0.3.19尚无对应正式最新Release。9 月 29 日退役两个代理后的全量离线测试为 470/470、0 失败、0 跳过，10 月 11 日没有重跑。", hero: false },
     { label: "保留日期的 CLI 环境观察", value: "2026-09-14T04:20:45Z的Doctor（静态体检）看到Windows 11 10.0.26200 x64、PowerShell 7.6.4，实际选择desktop-codex 0.154.0-alpha.6.2、Claude Code 2.1.270、Rust Open Interpreter 0.0.40及Ollama可执行文件；这些依赖身份不证明各Profile的真实调用通过。", hero: false },
-    { label: "公开入口与配置观察日期", value: "当前已发布 data/providers 有25份模板，其中2份 hidden（内部模板），23份公开，覆盖5类引擎；它们不是23份当前 Live（真实调用）合格证。旧19个已配置、2个未配置属于9月3日观察，本次不把那个数量继续当成本机现场。", hero: false },
-    { label: "Doctor 与安装边界", value: "9月18日13:41Z 的 0.3.17 diagnose 和 3b7600a 七文件读回是历史。0.3.18 Release 与模块安装由 Owner §28 验收；2026-09-24T04:59Z 零写入 diagnose 显示 productVersion=0.3.18、桌面配置 enabled 且目标 562b29bf4a6ac0af，但 installation_state=registry_not_supplied、running_process_loaded=unknown。另以 Windows 进程只读回读确认真实 ChatGPT.exe 主进程的 Bridge 可执行路径已是 562b29bf4a6ac0af，进程路径不能证明新父工具或模型 Live。", hero: false },
+    { label: "公开入口与配置观察日期", value: "23 份 Manifest、21 条可见路线、5 种引擎；隐藏的 codex-custom-responses/codex-ollama 仍 2 份。25/23 只作 9 月 18 日历史数量，不能作当前数。当前21路线全量Live Unknown。", hero: false },
+    { label: "Doctor 与安装边界", value: "10 月 11 日零写入诊断：模块 0.3.19、桌面已启用、桥 b47fea3ce81f7a67、安装状态 verified，七个文件的大小和 SHA-256 与登记全部一致；诊断自己的“进程已加载”和端到端两项仍未验证。", hero: false },
     { label: "9月3日源码测试", value: "当日最终 PUBLIC main 完整 Pester 为 385/385，耗时 146.232 秒；scripts/Test-Release.ps1 离线发行检查 exit 0，耗时 6.606 秒。它们覆盖命令、Profile、秘密、适配器、Doctor、Live/Agent 验收、恢复、代理、安装与文档合同，但不发真实付费请求。", hero: false },
     { label: "已解决的安装连接缺陷与历史验收", value: "9月3日开始施工时，已安装 0.3.12 的 73 个模块文件只有 72 个与 main 相同，缺少 255c300 的损坏 Profile 拒绝修复；首次 -Force 安装又被 .codex 兼容 Junction（目录连接）误拦。88f72e6 让退役预检优先真实 CODEX_HOME，旧单跳 state 别名只作严格等价比对；实际重装成功，9月14日04:20Z再次比较模块与data载荷仍为73/73；9月3日损坏JSON 与非对象 JSON 的 show/list 都以 exit 4 拒绝。", hero: false },
     { label: "精确路线而非模型大杂烩", value: "当前云端包括 Qwen3.7 06-08、Qwen3.8 Max 0902、GLM-5.3/Flash 中国区编码套餐，以及 DeepSeek 官方 deepseek-flash；V4 Pro 保留独立 CLI Profile。本地统一目录是27B、35B及各自去限制版四种256K模型，不以老别名或自动回退改变选择。", hero: false },
@@ -25,11 +25,11 @@ const aiCliProfileManagerSnapshot = createProjectSnapshot({
     { label: "已经完成的桌面协作与未扩大范围", value: "Owner 于9月18日验收 GLM 与 DeepSeek 父任务分别调用 Luna High 的后台子会话：每条链都在同一子 thread/session（线程/会话）完成3轮、提问回复和最终汇总。一次错误 reply_to 被准确拒绝后改为普通续问完成；不宣称零错误、所有子模型、长期压力测试或原生子代理卡片已经验收。", hero: false },
     {
       "label": "后继桌面发行与当前运行边界",
-      "value": "内容寻址桌面桥 562b29bf4a6ac0af 已沿受保护登记、安装与启用目标交付；Sol High 常规/Astra High 重大后果专用判断与普通子会话分开。Owner §25.10 另记录首次 Luna 许可诊断修复、344 项聚焦回归和既有 Luna Low 子会话 task_complete。04:59Z 只读进程链确认真实 ChatGPT.exe 主进程正通过 562b29bf4a6ac0af Bridge 启动 codex.exe；这比旧交付时的未切换状态更新，但新父会话工具及新的厂商 Live 未测。0.3.18 发行时完整 Pester 555/555，旧 6 项失败仅是更早阶段。",
+      "value": "9 月 15 日本地桌面实际任务已验收；10 月 11 日核对现用桥 b47fea3ce81f7a67 七个文件全部一致。10 月 11 日零写入诊断：模块 0.3.19、桌面已启用、桥 b47fea3ce81f7a67、安装状态 verified，七个文件的大小和 SHA-256 与登记全部一致；诊断自己的“进程已加载”和端到端两项仍未验证。",
       "hero": false
     },
   ],
-  gaps: ["网页没有发起新付费调用；两条已接受的桌面父子链路、既有 Luna Low 完成记录与9月15日本地桌面任务，不证明23个Profile全部当前可用。","源码、0.3.18模块、桌面桥登记/启用、真实 GUI 进程路径和实际任务分别核验；当前 Bridge 可执行路径已是 562b29bf4a6ac0af，但本轮未读新父工具 schema 或新的 Provider Live。","通用Claude/OI模板的127.0.0.1:11434与受管本地模型32100不是同一入口；前者离线及两个可选代理未运行是9月14日观察，本页没有重新登录OAuth、启动代理或生成模型结果。","Gemini consumer→Codex 路线按来源 Owner 冻结；保留文件和历史实验不能当成可用 Profile 或重启许可。","代理只执行现有批准清单中的制品；本轮没有调查、批准或下载上游新版本。删除本地OAuth材料仍不等于账号侧撤销授权。","旧codex-deepseek、claude-deepseek和oi-deepseek入口已退出当前模板；DeepSeek Flash使用官方稳定ID deepseek-flash，不能把旧V4 Flash回执换名继承。"]
+  gaps: ["网页没有发起新付费调用；两条已接受的桌面父子链路、既有 Luna Low 完成记录与9月15日本地桌面任务，不证明21个Profile全部当前可用。","七文件一致不证明正在运行的进程已切换，也不证明全部工具、视觉输入或长任务压力场景通过。","通用Claude/OI模板的127.0.0.1:11434与受管本地模型32100不是同一入口；前者离线及两个可选代理未运行是9月14日观察，本页没有重新登录OAuth、启动代理或生成模型结果。","Gemini consumer→Codex 路线按来源 Owner 冻结；保留文件和历史实验不能当成可用 Profile 或重启许可。","代理只执行现有批准清单中的制品；本轮没有调查、批准或下载上游新版本。删除本地OAuth材料仍不等于账号侧撤销授权。","旧codex-deepseek、claude-deepseek和oi-deepseek入口已退出当前模板；DeepSeek Flash使用官方稳定ID deepseek-flash，不能把旧V4 Flash回执换名继承。"]
 });
 
 export const aiCliProfileManagerProject = {
@@ -311,7 +311,7 @@ export const aiCliProfileManagerProject = {
     }
   ],
   evidenceLayers: [
-    { layer: "Source（源码）", proves: "PUBLIC main bbaaa9d 包含 0.3.18 CLI、原生桌面、后台子会话、双档判断与许可诊断；Gemini consumer 接入保持冻结。", doesNotProve: "本机已安装相同字节、当前 CLI 协议仍兼容、模型能调用或网页已发布。" },
+    { layer: "Source（源码）", proves: "本次采用的截至14:00源码快照为 6e689efe9a063192700ea79b92361338f4dabbe5，源码与模块 0.3.19；Gemini 路线和专属实现已于 9 月 27 日删除，Toolkit 接线 9 月 28 日退役。", doesNotProve: "本机已安装相同字节、当前 CLI 协议仍兼容、模型能调用或网页已发布。" },
     { layer: "Tests（自动回归）", proves: "9月3日最终main的385项Pester和离线发行检查通过，包括损坏 Profile 拒绝、恢复协议、秘密脱敏、Junction 兼容与发行命令面。", doesNotProve: "真实账号、Provider、OAuth、GPU 模型或长期进程当前可用。" },
     { layer: "Install（安装态）", proves: "只有原子安装后逐文件回读与固定 aicli 入口测试，才能证明这台机器实际运行的是最终源码。", doesNotProve: "某个云端模型、代理或本地服务已经 Live 通过。" },
     { layer: "Doctor 与 Runtime（运行条件）", proves: "当前 Windows、PowerShell、CLI 版本、父环境、代理状态和 Ollama 端点能被真实读取。", doesNotProve: "Doctor 不发模型请求；依赖存在也不等于一个 Agent 任务完成。" },
@@ -659,48 +659,30 @@ export const aiCliProfileManagerModules = [
     readerStatus: "已有查询、中止和接续同一个Codex任务的机制；只有任务和模型身份仍一致才继续，取消受理不等于已完全停止。"
   },
   {
-    slug: "local-proxies", shortTitle: "本地模型与双代理", title: "本地模型和两个代理各自验明身份，不组成自动备用链",
-    usageEntry: "在 aicli profile show/native 选择点名的本地模型或代理，先用 Doctor 核对当前安装和服务。",
-    usageInputs: ["明确的模型或代理 Profile", "本地显卡或登录状态", "是否只允许本地数据"],
-    productFlow: [
-      {
-        "title": "核对选中入口而不自动换路",
-        "detail": "系统辨认这次是本地模型还是指定代理，检查其服务身份、端口与登录，不把失败送往另一家。"
-      },
-      {
-        "title": "核对服务身份",
-        "detail": "检查真实安装、回环地址、端口、进程及必要上游登录。"
-      },
-      {
-        "title": "按选定路线运行",
-        "detail": "交回模型结果或精确不可用原因；本地入口失败不会自行切到付费或其他数据去向。"
-      }
-    ],
-    searchAliases: ["本地Ollama", "LocalGpuBroker", "Qwen Code machine run", "OpenCode本地模型", "claude-code-proxy", "CLIProxyAPI", "代理端口",
-  "模型代理安装、运行与自动备用切换"],
-    searchProjection: { intents: ["运行本地AI模型", "检查本地端点", "使用ChatGPT到Claude代理", "查看代理是否可更新"], entities: ["Ollama", "LocalGpuBroker", "qwen-main-v1", "ccp", "cliproxy", "43197", "43198"], relations: ["本地Profile绑定loopback", "代理独立登录运行", "新artifact先批准"], failureRecovery: ["端口占用换候选不杀进程", "非loopback停止", "身份不符不终止", "本地OAuth不等于远端撤销"] },
-    teaser: "这些是可选路线；任何一个离线都不会让 aicli 偷偷换到另一个。",
-    status: "受管四模型与桌面入口已建立；可选代理和通用11434另看日期", statusTone: "mixed",
-    value: "本地27B、35B及两种去限制版都有明确入口，不把“本地模型”混成一件事。它们通过既有显卡协调器工作；两个ChatGPT到Claude代理仍是单独选择，任何路线失败都不会自动改投另一个模型或账号。",
-    why: "“本地”不等于一定在线，“已安装”也不等于 OAuth 和模型链路已通。自动把失败请求送到另一条路线还会改变费用、隐私和结果身份。",
+    slug: "local-proxies", shortTitle: "本地模型", title: "本地模型各自验明身份，不组成自动备用链",
+    usageEntry: "在 aicli profile show/native 选择点名的本地模型，先用 Doctor 核对当前安装和服务。",
+    usageInputs: ["明确的本地模型 Profile","本地显卡状态","是否只允许本地数据"],
+    productFlow: [{"title":"核对选中入口而不自动换路","detail":"系统确认这次用的是哪一个本地模型，检查它的服务身份和本机地址，不把失败送往另一家。"},{"title":"核对服务身份","detail":"检查模型标签是否真的装了、受管服务是否只在本机回环地址上监听、显卡此刻是否可用。"},{"title":"按选定路线运行","detail":"交回模型结果或精确不可用原因；本地入口失败不会自行切到付费或其他数据去向。"}],
+    searchAliases: ["本地Ollama","LocalGpuBroker","Qwen Code machine run","OpenCode本地模型"],
+    searchProjection: {"intents":["运行本地AI模型","检查本地端点"],"entities":["Ollama","LocalGpuBroker","qwen3.8-27b:256k","qwen3.6-35b:256k","qwen3.6-35b-abliterated:256k","qwen3.8-27b-abliterated:256k"],"relations":["本地Profile绑定loopback","受管模型集合"],"failureRecovery":["当前公共默认路线有限制；不改投 32100 或云端，除非用户选择对应 exact Profile。这是 9 月 14 日的观察，不作为今天全部本地模型离线的结论。","请求最多等 90 秒并提示在等；仍不可用就说明原因，不改投云端或别的模型。","例如通用模板要的 qwen3:8b、qwen3-coder:30b 当前都没装，这些路线标为用不了，不拿已装的受管模型顶替。"]},
+    teaser: "每个本地模型都是一条可选路线；任何一个离线都不会让 aicli 偷偷换到另一个。",
+    status: "受管四模型与桌面入口已建立；两个 ChatGPT→Claude 代理 9 月 29 日退役，Toolkit 接线 9 月 28 日退役；通用 11434 端点另看日期",
+    value: "本地27B、35B及两种去限制版都有明确入口，不把“本地模型”混成一件事。它们通过既有显卡协调器工作；任何一个失败都不会自动改投另一个模型，更不会改走付费云端。原来并列在这里的两个 ChatGPT 到 Claude 代理已于 9 月 29 日退役。",
+    why: "“本地”不等于一定在线，“已下载”也不等于模型和显卡此刻都就绪。自动把失败请求送到另一条路线还会改变费用、隐私和结果身份。",
     example: "我可以说：“这次只用普通本地27B，不换去限制版，也不传云端。先看当前模型与显卡是否就绪；不可用就告诉我原因。”我得到对应入口的状态，而不是把通用Ollama端口离线误报成全部本地模型都不能用。",
-    result: "分别知道选中的本地模型或代理是否已安装、是否真在运行、监听的是不是本机地址；只有这一条身份成立才尝试真实调用。",
-    readerStates: {
-      "pass": "选中服务和真实模型身份都对应时，标这条路线可进一步使用。",
-      "problem": "模型没开、显卡忙或代理旧了时只说明这一条的限制。",
-      "unavailable": "程序不明、监听跑到非本机地址或端口已被别人占用时拒绝，不结束未知程序。"
-    },
-    decisionImpact: ["Qwen Code 与 OpenCode 当前主要是本地 machine-only 路线。", "ccp 和 cliproxy 是第三方可选通道，不是 OpenAI/Anthropic 官方功能，也不互相故障转移。", "当前源只批准 ccp 0.1.15、cliproxy 7.2.72；上游更高标签尚未进入可执行清单。"],
-    problem: "防止把安装文件、端口或旧 OAuth 当成当前可用，也防止 AICLI 为抢端口结束别人的服务。",
-    implementation: ["LocalGpuBrokerSession 消费既有 broker 的 lease/capability，证明请求命中 exact 本地模型；它不拥有 GPU 调度服务。","OpenCode 使用一次性 pure 配置并保留 256K context/input、输出、reserve 与最近轮次边界。","PortAllocator 在 43192–43209 中排除动态/保留范围、listener 与 bind 失败；ccp/cliproxy 首选 43197/43198。","ProxyService 只执行命中固定 SHA-256 或可信签名的 Windows 制品，并在停止前重验进程身份。","data/local-model-set.json拥有四个受管Profile与OpenCode、Toolkit映射；当前模型标签为qwen3.8-27b:256k、qwen3.6-35b:256k、qwen3.6-35b-abliterated:256k、qwen3.8-27b-abliterated:256k。设置先预览、明确应用后同步既有消费者，不创建另一份模型目录。","普通27B和去限制27B、普通35B采用num_batch=128；35B去限制版保留512。draft_num_predict=0避免已复现的草稿预测崩溃，不替换原始模型权重。普通27B的256K镜像manifest SHA-256为8040835723046ec2631b64b960d44414636ea5147942a7d68eaaa7ccdb492e20，Q4_K_M，输出32768，temperature=1、top_p=.95、top_k=20、min_p=0、presence_penalty=0、repeat_penalty=1。"],
-    flow: ["选择本地模型或一个代理。", "检查批准制品与当前安装。", "安全分配 loopback 端口。", "必要时由用户完成上游登录。", "启动并核对进程、listener 与健康响应。", "停止或本地清理前再次验明身份。"],
-    concepts: [{ term: "loopback（本机回环）", explanation: "只允许本机访问的 127.0.0.1 地址；0.0.0.0、局域网与公网监听都不接受。" }, { term: "LocalGpuBroker（本地显卡协调器）", explanation: "外部既有运行时，负责本地模型端点与资源租约；AICLI 只作为消费者。" }, { term: "approved artifact（已批准制品）", explanation: "版本、资产名和 SHA-256 已写入发行清单的代理包；上游新标签不自动获得执行资格。" }],
-    boundaries: ["本轮不启动 Ollama、GPU 模型或代理。", "不下载或执行上游最新标签。", "logout --purge-local-auth 只处理本地目录，远程授权需在账号侧确认。"],
-    failures: [{ condition: "默认 Ollama 11434 不可达", response: "当前公共默认路线有限制；不改投 32100 或云端，除非用户选择对应 exact Profile。" }, { condition: "端口被未知进程占用", response: "换受控候选，绝不结束未知占用者或改系统端口范围。" }, { condition: "代理版本未批准", response: "update-check 只给来源和批准状态，不执行新版。" }],
-    sources: [{ path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\LocalGpuBrokerSession.ps1", role: "本地模型身份与租约消费" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\ProxyService.ps1", role: "代理安装、启动、登录、退出和身份" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\ports\\managed-proxy-ports.json", role: "候选端口与验证日期" }, { path: "E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\proxy-artifacts\\approved-windows-artifacts.json", role: "可执行代理版本与摘要" }],
-    verification: ["代理端口、制品、路径逃逸、监听和 PID 复用均有离线回归。", "2026-09-14T04:20:45Z的Doctor仍读到两个代理已安装未运行、Ollama默认端点不可达。", "GitHub 最新标签只用于指出清单差距，没有下载、执行或标成已批准。"],
+    result: "分别知道选中的本地模型是否已安装、受管服务是否在本机运行、显卡是否正被别的任务占着；只有这一条身份成立才尝试真实调用。",
+    readerStates: {"pass":"选中服务和真实模型身份都对应时，标这条路线可进一步使用。","problem":"模型没开或显卡忙时只说明这一条的限制；显卡被听写或文字识别占着时，请求最多排队等 90 秒并提示正在等。","unavailable":"模型身份对不上、服务不在本机地址或程序不明时拒绝，不结束未知程序，也不换另一个模型顶上。"},
+    decisionImpact: ["Qwen Code 与 OpenCode 当前主要是本地 machine-only 路线。","已退役：ccp 和 cliproxy 两个第三方代理原本让 Claude Code 借 ChatGPT 登录使用，9 月 29 日连同路线、下载批准清单、端口分配、登录与停止入口和相关测试一起删除，现在没有替代的 ChatGPT 接入；Claude Code 可用官方、本机 Qwen 和自定义端点。删除源码不等于旧的本机登录文件已清理或远端授权已撤销，这两件事没有核实。","已退役：本地模型配置原来还同步给 Toolkit，9 月 28 日删除了这条同步和跨仓库检查；现在统一配置只同步给 AICLI 自己、Codex 桌面版、OpenCode 和 Ollama。"],
+    problem: "防止把“模型已下载”或旧的检查结果当成现在能用，防止本地失败时悄悄改走付费云端，也防止 AICLI 为抢资源结束别人的服务。",
+    implementation: ["LocalGpuBrokerSession 消费既有 broker（调度服务） 的 lease/capability，证明请求命中 exact 本地模型；它不拥有 GPU 调度服务，受管端点 127.0.0.1:32100 和 GPU 服务归电脑配置（PCConfig）管理。","OpenCode 使用一次性 pure 配置，主入口和 27B 兼容入口都保留 262144 context/input、32768 输出、reserve 20000、最近 16384 与 4 轮的边界。","data/local-model-set.json 拥有四个受管 Profile，客户端映射现在只剩 OpenCode；当前模型标签为 qwen3.8-27b:256k、qwen3.6-35b:256k、qwen3.6-35b-abliterated:256k、qwen3.8-27b-abliterated:256k。设置先预览、明确应用后同步 AICLI、Codex 桌面版、OpenCode 和 Ollama，不创建另一份模型目录。","普通27B和去限制27B、普通35B采用num_batch=128；35B去限制版保留512。num_ctx=262144，draft_num_predict=0避免已复现的草稿预测崩溃，不替换原始模型权重。普通27B的256K镜像manifest（清单） SHA-256为8040835723046ec2631b64b960d44414636ea5147942a7d68eaaa7ccdb492e20，Q4_K_M，temperature=1、top_p=.95、top_k=20、min_p=0、presence_penalty=0、repeat_penalty=1。输出上限有两层：AICLI 配置里普通 35B 声明 8192、其余三个声明 32768；Ollama 的 35B 标签参数另写 num_predict=32768。实际由哪一层截断没有测过。","听写或文字识别占着显卡时，本地模型请求最多排队 90 秒并提示在等，不直接报错；但“听写与 AICLI 并发交接显卡”在电脑配置的待验收清单里仍是暂缓状态，还不能说真实并发交接已验收。","两个代理退役后，原来的批准版本清单（ccp 0.1.15、cliproxy 7.2.72）、首选端口 43197/43198 与 43192–43209 候选池、ProxyService 和 PortAllocator 都已删除，只作为历史技术记录，不再是现役配置。"],
+    flow: ["选择一个本地模型。","核对模型标签已安装、与受管集合一致。","确认受管端点只在本机回环地址监听。","显卡被占时排队等待，最多 90 秒并提示。","启动并核对实际模型身份与响应。","结束时只清理自己启动的进程；改模型设置时先预览，再明确应用和同步。"],
+    concepts: [{"term":"loopback（本机回环）","explanation":"只允许本机访问的 127.0.0.1 地址；0.0.0.0、局域网与公网监听都不接受。"},{"term":"LocalGpuBroker（本地显卡协调器）","explanation":"外部既有运行时，负责本地模型端点与资源租约；AICLI 只作为消费者。"},{"term":"受管模型集合","explanation":"data/local-model-set.json 里登记的 4 个本地模型及各客户端的对应关系；增删换型都改这一份，再同步出去，不另建模型目录。"}],
+    boundaries: ["10 月 11 日的整理不启动 Ollama 或 GPU 模型，也不发生成请求。","不自动拉取新模型或新版 Ollama，不因上游出现新标签就扩大受管集合。","两个已退役代理留下的本机登录文件与远端授权要各自在本机和账号那边确认，退役本身不代表已经清理或撤销。"],
+    failures: [{"condition":"默认 Ollama 11434 不可达","response":"当前公共默认路线有限制；不改投 32100 或云端，除非用户选择对应 exact Profile。这是 9 月 14 日的观察，不作为今天全部本地模型离线的结论。"},{"condition":"显卡正被听写或文字识别占用","response":"请求最多等 90 秒并提示在等；仍不可用就说明原因，不改投云端或别的模型。"},{"condition":"路线要的模型标签本机没装","response":"例如通用模板要的 qwen3:8b、qwen3-coder:30b 当前都没装，这些路线标为用不了，不拿已装的受管模型顶替。"}],
+    sources: [{"path":"E:\\Projects\\Tools\\ai-cli-profile-manager\\src\\AiCliProfileManager\\Private\\LocalGpuBrokerSession.ps1","role":"本地模型身份与租约消费"},{"path":"E:\\Projects\\Tools\\ai-cli-profile-manager\\data\\local-model-set.json","role":"四个受管模型与客户端映射"},{"path":"E:\\Projects\\Tools\\ai-cli-profile-manager\\scripts\\Sync-LocalModelConfiguration.ps1","role":"先预览、再应用的统一同步"},{"path":"E:\\Projects\\Tools\\ai-cli-profile-manager\\docs\\user\\本地模型统一配置.md","role":"本地模型参数、同步与历史实测记录"}],
+    verification: ["9 月 29 日删除两个代理后的全量离线测试为 470/470、0 失败、0 跳过，本地模型集合、同步和受管身份都在其中；10 月 11 日未重跑。","9 月 14 日的 Doctor 读到 Ollama 默认端点不可达，保留为当天记录；10 月 11 日只读查询 Ollama 为 0.35.0，4 个受管标签都在，没有发生成请求，也没有调用 GPU。","9 月 16 日旧环境实测 35B 由每秒 62–69 个 token 提到 170–171 个，按当天记录保留，没有重跑性能。"],
     relation: "本模块提供可选运行目标；引擎模块定义 Profile，验证模块决定该目标在当前是否真正可用。",
-    readerStatus: "已有四个本地模型及桌面入口的登记；可选代理是否正在运行、是否已登录仍按各自日期和实际状态判断。"
+    readerStatus: "4 个受管本地模型仍在，Codex 桌面版、OpenCode 和 Ollama 由一份统一配置同步；两个代理和 Toolkit 接线都已退役，相关入口已删除。配置写好、模型已下载，不等于这次真的跑通，真实调用要另看日期。",
   },
   {
     slug: "install-recovery", shortTitle: "安装、退役与恢复", title: "安装可回退，卸载也必须说清保留什么、删除什么",
@@ -714,7 +696,7 @@ export const aiCliProfileManagerModules = [
     searchAliases: ["安装aicli", "同版本Force修复", "更新后还是旧模块", "Qwen3.7退役隔离", "卸载保留Profile", "purge user data", "中文手册"],
     searchProjection: { intents: ["安装或修复aicli", "按原渠道更新CLI", "隔离旧Profile", "卸载并选择是否保留数据"], entities: ["Install.ps1", "CurrentUser", "retirement", "quarantine", "uninstall", "purge-user-data", "中文手册"], relations: ["候选验证后原子切换", "旧对象移入可恢复隔离", "普通卸载保留数据"], failureRecovery: ["同版本无Force拒绝", "未知旧对象先停", "安装失败恢复旧版", "远程OAuth另行撤销"] },
     teaser: "模块、用户数据、上游 CLI 与远程授权各有自己的生命周期。",
-    status: "0.3.18 正式安装有 Owner 回读；新版桌面桥已见真实 GUI 进程路径，模型任务仍另验", statusTone: "mixed",
+    status: "本机装的是 0.3.19，GitHub 上最新的正式发行仍是 9 月 22 日的 0.3.18；Codex 桌面版用的是另行登记的桥接发行 b47fea3ce81f7a67。升级、旧版回退与真实模型运行分别验收，不由安装成功包办。", statusTone: "mixed",
     value: "安装和升级先在旁边验新版本，失败保留旧版；卸载时明确哪些个人配置与本机密钥保留，远端登录授权另行处理。",
     why: "直接覆盖旧安装可能留下半套文件；卸载时一句“完成”也可能让人误以为所有模型、账号授权和个人配置都没了。安装先验候选，卸载明确保留范围。",
     example: "我可以说：“把 main 的最后修复装上；若遇到未知旧文件就先停。以后普通卸载保留我的 Profile 和密文，只有我明确彻底清理时才删本工具数据。”我会得到安装、保留内容和可回退位置的明确结果。",
@@ -724,9 +706,9 @@ export const aiCliProfileManagerModules = [
       "problem": "旧模块还在使用或上游变更时提示关闭旧窗口、更新对应部件或暂用旧版。",
       "unavailable": "未知旧文件、候选不完整或安装目录被占时不做半套替换，保留原安装。"
     },
-    decisionImpact: ["源码版本、发布包、当前用户模块和桌面内容寻址发行是不同对象；模块升级不会自动重建或切换正在工作的桌面发行。", "旧 Qwen3.7 可验证对象移入 quarantine（可恢复隔离区），SecretRef 和 Key 不参与迁移。", "普通卸载保留 Profile、DPAPI 密文和代理数据；--purge-user-data 才删除本工具数据，仍不代表远程 OAuth 撤销。"],
+    decisionImpact: ["源码版本、发布包、当前用户模块和桌面内容寻址发行是不同对象；模块升级不会自动重建或切换正在工作的桌面发行。", "旧 Qwen3.7 可验证对象移入 quarantine（可恢复隔离区），SecretRef 和 Key 不参与迁移。", "普通卸载保留 Profile 和 DPAPI 密文，也不动密码中心里的厂商钥匙；--purge-user-data 才删除本工具数据，仍不代表远程 OAuth（账号授权协议） 撤销。两个已退役代理留下的旧资料不再由卸载程序当作现役功能管理。"],
     problem: "防止升级造成半套模块、退役误删用户配置，以及卸载把多个独立生命周期说成一个动作。",
-    implementation: ["Install.ps1 从当前 PSModulePath 选择 CurrentUser 模块根，在临时候选中导入验证，再对同一父目录执行原子重命名。","Invoke-AiCliRetirementMigration.ps1 只移动 marker、路径、内容 hash 与 state 都闭合的退役 Qwen3.7 对象，未知项在写前阻断。","UpdateService 识别实际启动入口和安装渠道；只读检查与指引不静默升级上游。","Uninstall.ps1 停止己方已验证代理并移除模块、shim、PATH 与受管 Profile 块；用户数据和上游产品默认保留。","《AI CLI Profile Manager 使用手册》拥有产品安装、Profile、Doctor/Live、代理、更新、卸载与排障；《Codex、Claude Code 与 Open Interpreter CLI 中文手册》拥有上游会话内模型、effort、权限、上下文、恢复和命令差异。","两本 PDF 是同版本 Markdown 的打印制品；只有源 hash、文本抽取和逐页视觉复核闭合时才 current，但它们仍不证明安装或 Live。","0.3.18 已由原安装器交付；DryRun/WhatIf在任何写入前返回，未知参数拒绝。Toolkit按已声明的诊断/控制能力使用入口，不因一般模块更新强迫升级桌面。桌面启用、停用和设置同步使用各自显式入口。"],
+    implementation: ["Install.ps1 从当前 PSModulePath 选择 CurrentUser 模块根，在临时候选中导入验证，再对同一父目录执行原子重命名。", "Invoke-AiCliRetirementMigration.ps1 只移动 marker、路径、内容 hash（内容指纹） 与 state 都闭合的退役 Qwen3.7 对象，未知项在写前阻断。", "UpdateService 识别实际启动入口和安装渠道；只读检查与指引不静默升级上游。", "Uninstall.ps1 移除模块、shim（受保护入口垫片）、PATH 与受管 Profile 块；用户数据和上游产品默认保留。两个代理 9 月 29 日退役后，它只在模块已不可用、却发现旧代理状态文件时拒绝盲删，这是遗留的安全收口，不是代理管理入口。", "《AI CLI（命令行工具） Profile Manager 使用手册》讲产品安装、Profile、Doctor/Live、更新、卸载与排障；《Codex、Claude Code 与 Open Interpreter CLI（命令行工具） 中文手册》讲上游会话内模型、effort（思考等级）、权限、上下文、恢复和命令差异。当前部分用户手册段落仍写着旧的“configure 询问 Key”和 Toolkit 同步，以当前实现为准。", "两本 PDF 是同版本 Markdown 的打印制品；只有源 hash（内容指纹）、文本抽取和逐页视觉复核闭合时才 current（当前状态），但它们仍不证明安装或 Live。10 月 11 日没有重新渲染或逐页核对，是否与当前 Markdown 完全一致未验证。", "0.3.18 已由原安装器交付并在 GitHub 正式发行；当前源码和本机模块为 0.3.19，还没有对应的正式发行。比对过的模块清单、ChildProcess.ps1 和 VendorCredential.ps1 与源码相同，但模块里的 ResolveDesktopEngine.ps1 仍是 9 月 23 日的旧副本，源码和现役桌面桥里的是更新版，所以不能说模块整包与源码逐字一致；真实桌面走的是桥里的新版。DryRun/WhatIf（只读预演）在任何写入前返回，未知参数拒绝；原来的 Toolkit 接线 9 月 28 日已退役。桌面启用、停用和设置同步使用各自显式入口。"],
     flow: ["从可信源码或已核对 Release 包启动安装。", "只读预检退役对象和安装目录。", "构建并导入临时候选。", "原子移动旧版与候选，失败则恢复。", "新开 PowerShell 并回读 aicli version/list/show/doctor/native/eject。", "退出时选择普通卸载或显式 purge，并另外处理远程授权。"],
     concepts: [{ term: "CurrentUser（当前用户范围）", explanation: "模块只安装给当前 Windows 用户，不要求系统级管理员安装。" }, { term: "quarantine（可恢复隔离区）", explanation: "把身份已闭合的退役文件移出活动位置并保留前像，而不是直接删除。" }, { term: "atomic switch（原子切换）", explanation: "候选完整验证后用同父目录重命名替换，避免复制中途留下半套文件。" }],
     boundaries: ["本轮不创建新的 GitHub Release。", "不静默升级 Codex、Claude、Ollama、Open Interpreter 或代理。", "文档与 PDF 是用户入口，不是当前安装、运行或 Live 的替代证据。"],
@@ -787,21 +769,9 @@ export const aiCliProfileManagerModules = [
       "problem": "旧任务属于另一模型服务时保留原历史，换服务开新任务。",
       "unavailable": "模型入口或安装身份无法确认时停相应接入，原有官方入口仍可用。"
     },
-    "decisionImpact": [
-      "同Provider内的模型切换与跨Provider新建任务不同；旧会话不会被批量换模型。",
-      "官方桌面、命令行、Toolkit各有自己的配置与验收，不能用其中一条成功替代另外两条。",
-      "已安装七文件、进程实际加载和用户看到的真实任务分别核对；本轮不重启现有桌面。"
-    ],
+    "decisionImpact": ["同Provider内的模型切换与跨Provider新建任务不同；旧会话不会被批量换模型。", "官方桌面和命令行各有自己的配置与验收，不能用其中一条成功替代另一条；原来的第三条 Toolkit 接线已于 9 月 28 日退役。", "已安装七文件、进程实际加载和用户看到的真实任务分别核对；核对时不重启现有桌面。"],
     "problem": "防止假菜单、上下文或工具被裁剪、旧会话身份被替换，以及软件升级后只因版本号不同就误判整条路线不可用。",
-    "implementation": [
-      "scripts/Set-CodexDesktopLocalModels.ps1管理既有桌面接入；GetDesktopModelPlan.ps1提供模型与配置计划，GetDesktopProviderToken.ps1按需供给目标凭据，ResolveDesktopEngine.ps1选择可信官方引擎。凭据值不进入网页或命令参数。",
-      "官方debug models与实际模型目录一起提供完整指令、上下文、工具和模型身份；CODEX_CLI_PATH使用PCConfig登记的内容寻址发行，而不是另造聊天执行器。",
-      "桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成；来源 Owner 已登记/安装 562b29bf4a6ac0af，本轮真实 ChatGPT.exe→Bridge→codex.exe 进程路径也指向该发行。旧3b7600a验收仅属9月18日历史。",
-      "四种本地模型共用既有Broker（显卡协调器）与256K配置；GLM、Qwen、DeepSeek仍保留不同Provider/协议身份。旧配置不会悄悄指向另一模型，跨Provider创建新任务。",
-      "支持可信官方AppX引擎和官方签名自更新缓存，通过约束路径、签名及实际接口判断；新版本不是永久拒绝名单，也不自动表示兼容。启用/停用比较己方配置前后像，不覆盖别人后改的环境。",
-      "第三方公开commentary（工作说明）以同一模型的公开摘要呈现，GLM/DeepSeek的最终答复保持原意；隐藏推理不进入公开投影，也不增加另一个模型翻译器。实时与历史用稳定事件身份对应。",
-      "专用保护判断线程使用官方持久threadSource及既有隐藏集合分类，不混入普通顶层任务列表；保留判断证据。标记不是原生子代理血缘、最高权限主体或批准凭证，普通Astra顶层任务仍可见。",
-    ],
+    "implementation": ["scripts/Set-CodexDesktopLocalModels.ps1管理既有桌面接入；GetDesktopModelPlan.ps1提供模型与配置计划，GetDesktopProviderToken.ps1按需从密码中心供给三家厂商的钥匙，ResolveDesktopEngine.ps1选择可信官方引擎。凭据值不进入网页或命令参数。", "官方debug models与实际模型目录一起提供完整指令、上下文、工具和模型身份；CODEX_CLI_PATH使用PCConfig登记的内容寻址发行，而不是另造聊天执行器。", "桌面发行由GetDesktopModelPlan.ps1、GetDesktopProviderToken.ps1、ResolveDesktopEngine.ps1及bridge目录内AiCli.CodexDesktopBridge.deps.json、AiCli.CodexDesktopBridge.dll、AiCli.CodexDesktopBridge.exe、AiCli.CodexDesktopBridge.runtimeconfig.json七文件组成。当前登记 24 个版本，启用的是 10 月 3 日登记的 b47fea3ce81f7a67，桥里的原生 Codex 引擎为 0.162.0-alpha.17.2（npm 上的 Codex CLI 另为 0.160.0）。旧 562b29bf4a6ac0af、3b7600a 只属各自历史。", "四种本地模型共用既有Broker（显卡协调器）与256K配置；GLM、Qwen、DeepSeek仍保留不同Provider/协议身份。旧配置不会悄悄指向另一模型，跨Provider创建新任务。10 月 2 日起，非 OpenAI 的受管模型会关闭厂商不支持的 token-budget 和 history-notes 功能，保留所选模型原来在 90% 时压缩的设置。", "支持可信官方AppX引擎和官方签名自更新缓存，通过约束路径、签名及实际接口判断；新版本不是永久拒绝名单，也不自动表示兼容。10 月 3 日修复：缓存目录是目录联接点时，先找到真实目录再建立和核对暂存引擎，避免“目录看似建好、实际没建”导致“无法加载组织设置”。启用/停用比较己方配置前后像，不覆盖别人后改的环境。", "第三方公开commentary（工作说明）以同一模型的公开摘要呈现，GLM/DeepSeek的最终答复保持原意；隐藏推理不进入公开投影，也不增加另一个模型翻译器。实时与历史用稳定事件身份对应。DeepSeek 在桌面版里真实显示思考摘要还没有验收。", "专用保护判断线程使用官方持久threadSource及既有隐藏集合分类，不混入普通顶层任务列表；保留判断证据。标记不是原生子代理血缘、最高权限主体或批准凭证，普通Astra顶层任务仍可见。"],
     "flow": [
       "选择原本的官方桌面与已登记模型",
       "比较并预览接入配置，确需时显式启用",

@@ -1,0 +1,195 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "chinese-asr-task-routing",
+  "kind": "project",
+  "title": "录音文件入口与可恢复任务",
+  "url": "/projects/chinese-asr/task-routing/",
+  "parent": "chinese-asr",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "ChineseASR 公开仓库 main（1bd5a04）的本地任务服务与入口脚本，于 10 月 11 日按 14:00 前状态只读核对；服务健康取 10 月 11 日 13:33 记录，历史测试保留各自日期。"
+  },
+  "screens": [
+    {
+      "id": "chinese-asr-task-routing-01",
+      "section": "top",
+      "title": "录音文件入口与可恢复任务",
+      "text": "# 录音文件入口与可恢复任务\n\n〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nChineseASR · 功能说明\n\n已有短语音、长录音或文件夹先返回稳定任务身份，后续按同一项查进度、恢复或取消，不因等待超时另开重复任务。本地转完若发现疑点，还会留下一笔“等 AI 接手云复核”的标记，本地稿照样先交。桌面听写有独立的小窗和输入流程，不进入这里的文件任务队列。\n\n**当前情况：**已有录音任务提交、进度查询、取消与结果复用功能；任务历史写不进去时会先停收新任务，而不是假装成功。能否成功转写仍要看这份录音和本次实际结果。\n\n项目技术事实核对于 2026-10-11（北京时间），采用当天 14:00 前的源码状态；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 中文语音转写",
+          "href": "/projects/chinese-asr/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ChineseASR"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/chinese-asr/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n录音处理可能需要几分钟；如果一次等待结束就重交同一文件，会有两份任务抢资源、覆盖结果。项目先保存这次任务，再让人按原任务查进度。结果文件写出来了，也不代表这次任务记录已经安全存下，两件事要分开看。\n\n## 举个实际例子\n\n比如我问“服务重启后，这段录音会不会自己重新跑？”系统会明确告诉我：原来排队或运行中的任务会留下“服务已重启”的失败终态，不会在后台偷偷复活。我确认需要继续后再显式重试，新任务仍按同一音频内容与请求指纹找到稳定输出目录，并复用长音频里已经验证有效的分段。\n\n## 最后我会得到什么\n\n得到这段录音当前在等、在跑、已完成还是失败，以及已经生成的文件和继续入口。服务重启不会偷偷重跑；本次等待超时也不代表底层任务已结束。本地标出疑点的文件另有云复核状态：已复核、等 AI 接手，或者没排上及原因。\n\n## 正常时\n\n录音和服务可用时返回一个可继续查询的任务，完成后交回正文及对应证据；有疑点时另留“等 AI 接手”的云复核提示。\n\n## 发现问题时\n\n等待结束时先查原任务；任务本身失败则保留真实错误和已完成部分。任务历史写不进去时，服务先拒收新任务、健康检查标成降级，直到写入恢复；模型跑完但终态存不下，不报告成功（结果文件可能已经在）。\n\n## 入口不可用或证据不足时\n\n音频、服务或指定模型无法启动时说明原因，不生成假任务，也不暗换另一模型。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 录音处理可能需要几分钟；如果一次等待结束就重交同一文件，会有两份任务抢资源、覆盖结果。项目先保存这次任务，再让人按原任务查进度。结果文件写出来了，也不代表这次任务记录已经安全存下，"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 录音处理可能需要几分钟；如果一次等待结束就重交同一文件，会有两份任务抢资源、覆盖结果。项目先保存这次任务，再让人按原任务查进度。结果文件写出来了，也不代表这次任务记录已经安全存下，"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n录音和服务可用时返回一个可继续查询的任务，完成后交回正文及对应证据。\n\n## 发现问题时\n\n等待结束时先查原任务；任务本身失败则保留真实错误和已完成部分。\n\n## 入口不可用或证据不足时\n\n音频、服务或指定模型无法启动时说明原因，不生成假任务，也不暗换另一模型。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n把已有录音文件交给 ChineseASR，并按同一任务查看进度。\n\n## 需要准备什么\n\n- 要转写的音频或文件夹\n\n- 快看或重要复核等用途\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　核对音频与请求，同一任务复用身份；短音频等待结果，长音频复用已验片段。\n\n2. **交付与接续**　交回状态和输出位置；本次等待结束不等于任务超时，服务重启后的失败须明确重试。本地成功不等于疑难云复核已完成，交接提示写不出时本地稿照样保留。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n文件 Smart API（智能任务接口）、任务生命周期和缓存完整性保留既有证据；已补任务历史写入失败时停收、本机请求检查和疑难云交接；真实转写仍按具体输入验收\n\n## 关键规则与设计选择\n\n1. 先查询任务状态，再决定等待、恢复或重新提交。\n\n2. request fingerprint（请求指纹）包含音频内容 SHA-256 与请求语义；只改修改时间不改变它，内容改变即使大小和时间相同也会改变它。\n\n3. 相同输入和请求复用验证过的结果；输入内容、模型或请求身份改变时必须新建任务。\n\n4. 客户端 Timeout（等待超时）与服务端失败分开表达；本地任务成功与疑难云复核完成也分开表达。\n\n5. terminal（终态）任务写入持久历史，最多保留 200 条终态加活动/排队任务，裁剪不删转写输出；历史写不进去时拒收新任务。重启时未完成记录被标成 interrupted / service_restarted，不自动重新排队。\n\n6. long-strict 失败或取消后的显式重试产生新 job（任务记录） id，但复用同一稳定输出目录，让 manifest（清单） 验证后只补缺失分段。\n\n7. 取消、期限和租约丢失会回收完整子进程树。\n\n8. 外部观察只返回有界状态，不公开私人正文或内部目录扫描结果。\n\n## 当前怎样实现\n\n",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 文件 Smart API（智能任务接口）、任务生命周期和缓存完整性保留既有证据；已补任务历史写入失败时停收、本机请求检查和疑难云交接；真实转写仍按具体输入验"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 文件 Smart API（智能任务接口）、任务生命周期和缓存完整性保留既有证据；已补任务历史写入失败时停收、本机请求检查和疑难云交接；真实转写仍按具体输入验"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- scripts/asr-smart.ps1 负责本地入口、轻量健康检查、提交和有界等待，并把云复核状态投影给调用方。\n\n- src/zh_asr/service.py 维护 job（任务记录） 状态、队列、期限、状态查询与 observer projection；serve 只允许 127.0.0.1，HTTP Host 必须是本机，带 Origin 时必须同源，提交任务必须是 application/json。\n\n- job（任务记录） key 绑定音频绝对路径、内容 SHA-256、模式、已解析引擎、模型配置、设备、切片参数和调用方绑定，缓存命中前验证关键制品。\n\n- jobs.json 持久化有界任务历史（最多 200 条终态加活动/排队任务）；服务启动时保留已完成终态，把遗留 queued / running 记录转换为明确的 service_restarted 失败。历史写入失败时 /health 的 persistence.status=degraded、ready=false，拒收新任务直到后续写入恢复；模型命令完成但终态不能落盘时不报告 job 成功（9 月 24 日修复，666d06d）。\n\n- long-strict 输出目录由稳定 request fingerprint 派生；失败或取消后的显式重试不会换目录，旧 manifest（清单） 和收据仍须重新验证。\n\n- process_control.py 维护子进程树和终止边界，避免只结束父进程留下 GPU worker。\n\n- 状态投影不反射调用方任意标识，也不暴露提示、音频或转写正文。\n\n- 任务成功且有疑难证据时，service.py 写 cloud.review.json（pending_ai_session 和 next_command），由 AI 接手跑自动云复核，本地服务自己不上传。提示准备或写入失败时 cloud_review 记为 failed/cloud_review_not_scheduled，主本地结果照常保留；即使提示文件写不出，这条失败也随 jobs.json 保存、重启后可查；之后恢复的有效提示文件胜过旧失败记录，新旧按文件身份判断而不是只看时间（1014970、024a212、73fdfda）。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 规范并验证输入路径，计算输入身份和请求语义。\n\n2. 检查服务健康和当前活跃任务，不以进程名代替 job（任务记录） 状态。\n\n3. 计算 job（任务记录） key；命中已验证完成结果时返回 cache hit。\n\n4. 未命中则先把新 job（任务记录） 写入持久任务历史（写不进就拒收），再启动对应 CLI（命令行工具） 子进程。\n\n5. 调用方在 WaitSec 内轮询，超时只返回 job（任务记录） 身份。\n\n6. 服务持续监管期限、取消和子进程退出。\n\n7. 完成后校验输出并把 succeeded、failed、canceled 或 blocked 原子写入历史，写不进不报成功；有疑难证据时另写云复核交接提示，写不出也只把云复核记为失败，本地结果照常保留。\n\n8. 若服务重启，回读终态供查询；遗留未完成记录只标 interrupted，不恢复执行，长音频必须由调用方显式重试后在稳定目录内续跑。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Smart API | 把预检、任务提交、短等待和状态观察组合成一个稳定入口。 |\n| job key | 绑定输入与请求语义的幂等键，防止同一重任务重复运行。 |\n| request fingerprint（请求指纹） | 由音频内容 SHA-256、模型与请求参数等组成；不是只看文件大小或修改时间。 |\n| terminal history（终态历史） | 把 succeeded、failed、canceled、blocked 等任务保存到 jobs.json 供重启后查询（最多 200 条终态加活动任务），但不把旧队列重新执行。 |\n| stable recovery directory（稳定恢复目录） | long-strict 按请求指纹固定的输出目录；显式重试可验证并复用其中已完成分段。 |\n| observer projection | 只返回上层决策所需状态，不暴露私人正文和内部实现细节。 |\n| lease（租约） | 证明当前 worker 仍拥有任务的短时状态；丢失后不能继续写结果。 |\n\n## 专业定义\n\n已有录音把提交、查进度、取消、超时和服务重启后的续作收进同一任务入口，避免因为等得久就把一段大录音重复跑好几份；任务记录存不下时宁可停收，也不报假成功。\n\n解决什么\n\n解决重模型任务阻塞调用方、重复提交、任务身份丢失、缓存错配、调用端超时被误判为服务端失败、结果文件已在但任务记录没存下却报成功、可选的云复核交接失败连带丢掉本地稿，以及后台进程失联后无法恢复的问题。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决重模型任务阻塞调用方、重复提交、任务身份丢失、缓存错配、调用端超时被误判为服务端失败，以及后台进程失联后无法恢复的问题。\n\n## 边界\n\n- 只监听 127.0.0.1；Host 必须是本机，带 Origin 时必须同源，提交任务必须是 application/json。这些只是本机防误用条件，不是带认证的远程服务。\n\n- cache hit 只复用相同输入与请求的已验证制品。\n\n- 调用端超时不自动复制任务。\n\n- 状态接口不返回私人转写正文或声纹数据；本地服务自己从不上传，云复核只留交接提示给 AI。\n\n## 失败与恢复\n\n- **客户端等待超时**：返回 job（任务记录） id 和查询入口；先读任务状态，不立即重发。\n\n- **服务在 queued 或 running 时重启**：持久记录转成 service_restarted 终态并注明自动重跑关闭；用户或调用方核对后才显式提交新的 job（任务记录）。\n\n- **long-strict 失败或取消后重试**：创建新 job（任务记录） id，但复用同一 request fingerprint 对应的稳定输出目录；manifest（清单） 与收据验证通过的分段才跳过。\n\n- **缓存文件缺失或指纹不一致**：缓存失效并重新执行，不返回部分旧结果。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **worker 超期、取消或租约丢失**：结束任务进程树并记录终态，保留可安全恢复的任务证据。\n\n- **服务端口被其他程序占用**：明确报告身份冲突，不结束未知进程也不抢端口。\n\n- **任务历史写不进去**：健康检查标成 degraded、ready=false，拒收新任务；已跑完但终态存不下的任务不报成功，结果文件可能已经在，写入恢复后再继续。\n\n- **云复核交接提示写不出**：本地结果照常交付，云复核记为 failed/cloud_review_not_scheduled 并随任务历史保存；之后补上有效提示即以新提示为准。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "chinese-asr-task-routing-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 日常智能提交、短等待、状态与云复核状态入口\n\n- 异步 job（任务记录）、状态、期限、缓存、历史写入状态和 observer projection\n\n- 子进程树生命周期与终止\n\n- 服务、缓存、状态、本机请求检查和失败路径回归\n\n## 如何验证\n\n- 2026-08-31 的全量 345 项单元测试通过，其中 service、process control、observer projection 和 scripts 均进入回归；之后另有 9 月 17 日运行 482 项（1 跳过）、9 月 24 日运行 495 项（1 跳过）、9 月 29 日运行 531 项（20 跳过）的具名历史记录，各自保留日期。\n\n- service 回归明确覆盖终态 jobs.json 持久化、遗留未完成任务转 service_restarted 且不自动重跑、long-strict 失败/取消后复用稳定目录，以及同大小同修改时间但内容不同仍产生不同 fingerprint；历史写入失败停收与本机请求检查另有 test_service.py、test_service_http_guard.py 的测试定义（本轮只读，未执行）。\n\n- 2026-10-11 13:33 记录本机服务健康检查为 ok，当时没有记下历史写入状态字段，截至 14:00 没有它是否就绪的记录。\n\n- 本次未运行真实 strict smoke，因此模块保持 mixed，不把单测冒充 E2E（端到端验证）。\n\n## 与其他模块的关系\n\n本模块决定任务是否被正确创建和监管；模型与模式模块决定跑什么，长音频模块决定怎样分段，审计模块决定怎样解释结果。",
+      "links": [
+        {
+          "text": "上一个模块 说话打字",
+          "href": "/projects/chinese-asr/desktop-dictation/"
+        },
+        {
+          "text": "下一个模块 模型与用途",
+          "href": "/projects/chinese-asr/models-modes/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

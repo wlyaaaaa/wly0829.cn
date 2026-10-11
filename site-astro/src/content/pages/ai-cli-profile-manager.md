@@ -100,7 +100,7 @@
      "id": "f-start",
      "group": "g-launch",
      "name": "指定路线启动",
-     "what": "一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置会被拒绝",
+     "what": "一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置和换型号参数会被拒绝",
      "how": "“用本机 Qwen3.8 27B 开 Codex 做这个项目”",
      "status": "在用",
      "screen": "ai-cli-profile-manager-14",
@@ -120,7 +120,7 @@
      "id": "f-model-switch",
      "group": "g-launch",
      "name": "同一家换型号",
-     "what": "启动时临时指定型号，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小",
+     "what": "另存一个自定义配置档，指定新型号；钥匙不用重录，没见过的型号不沿用旧的上下文大小。启动时直接加 --model 或 -m 换型号目前仍会被拦下，三家云端厂商的路线都这样",
      "how": "“用 GLM 的新型号开一个，钥匙还用原来那把”",
      "status": "待验收",
      "screen": "ai-cli-profile-manager-14",
@@ -190,7 +190,7 @@
      "id": "f-reasoning-display",
      "group": "g-desktop",
      "name": "思考过程照样显示",
-     "what": "GLM 的原始推理显示成桌面版的思考摘要，翻历史也在；DeepSeek 的推理摘要过了协议测试，在桌面版里真实显示还待验收",
+     "what": "GLM 返回的原始思考内容显示在桌面版的思考摘要里，翻历史也保留；DeepSeek 的推理摘要过了协议测试，在桌面版里真实显示还待验收",
      "how": "不用做什么",
      "status": "在用",
      "screen": "ai-cli-profile-manager-14",
@@ -204,7 +204,7 @@
      "how": "“把桌面桥换到新版本，旧的留着”",
      "status": "在用",
      "screen": "ai-cli-profile-manager-14",
-     "source": "维护契约:31；desktop\\state.json（启用 248d891，保留 562b29bf 等候选）；提交 d58b1e6、a2dacbd"
+     "source": "维护契约:31；desktop\\state.json（启用 b47fea3ce81f7a67，10 月 3 日登记）；PCConfig registries/aicli_desktop_bridge.json 当前 24 个登记，七文件大小和 SHA 全部匹配"
     },
     {
      "id": "f-openai-child",
@@ -220,7 +220,7 @@
      "id": "f-protected-judgment",
      "group": "g-helpers",
      "name": "Sol／Astra 专用判断",
-     "what": "重大动作前的判断：常规的交 GPT-6 Sol High，后果重大或有实质疑点的升到 Astra High；只判断，不动手",
+     "what": "专用入口源码仍固定旧 GPT-6 Sol high 做常规判断，后果重大或有实质疑点升 GPT-6 Astra high；只判断，不动手。型号待同步，通用现役选型见〔型号与派法〕",
      "how": "由别家模型按规则自己发起",
      "status": "待验收",
      "screen": "ai-cli-profile-manager-14",
@@ -254,7 +254,7 @@
      "how": "“刚才那个后台任务断了，接着原来那个做，别重开”",
      "status": "待验收",
      "screen": "ai-cli-profile-manager-15",
-     "source": "MACHINE-RUN.md:54-56；8 月 15 日恢复实测通过；所有运行记录 resume.count 为 0"
+     "source": "MACHINE-RUN.md:54-56；8 月 15 日恢复实测通过；resume.count>0 的两份均创建于 8 月 15 日，分别 completed 和 failed_closed，属于历史恢复试验"
     },
     {
      "id": "f-budget",
@@ -400,7 +400,7 @@
      "id": "f-openclaw-import",
      "group": "g-keys",
      "name": "从 OpenClaw 导入",
-     "what": "把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览",
+     "what": "把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览；只是整理旧环境用的，新配置直接用密码中心里的厂商钥匙",
      "how": "运行 Import-FromOpenClaw.ps1",
      "status": "说不准",
      "screen": "ai-cli-profile-manager-16",
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "573e44e8939e8b22754afecd505a09b4c5326a127f3ae060dc6b557aa2cef549",
-  "converted_at_beijing": "2026-10-11T16:07:04+08:00"
+  "sha256": "a09894ddc91431d42aedd59cff85b93da4c2dc2e97620c40b607b2a3eeb187a9",
+  "converted_at_beijing": "2026-10-11T18:50:41+08:00"
  }
 }
 ---
@@ -3310,7 +3310,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
 **GPT 帮手能接着聊**
 别家模型主持的任务可以在后台请 GPT 帮手；帮手中途能报进度、提问题，做完一轮还能接着追问同一个帮手，不用我来回搬消息。
-现在：9 月 18–23 日只做过 6 次测试。
+现在：9 月 18 日在桌面版里验收过两条：GLM-5.3 Flash 和 DeepSeek Flash 各当主持，和同一个 GPT 帮手来回三轮；日常任务里还没用上，其他模型组合也还没验过。
 
 ::screen{#ai-cli-profile-manager-13 section="highlights"}
 
@@ -4134,9 +4134,9 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 
 **启动和路线**
 1. 选单启动｜敲 aicli 不带参数，列出这次能开的路线，最近用过的排第一，选编号就开
-2. 指定路线启动｜一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置会被拒绝
+2. 指定路线启动｜一条命令直接指定路线和项目目录；给原版工具的参数照样能带上，和路线冲突的服务、登录设置和换型号参数会被拒绝
 3. 路线管理｜列出、查看（脱敏显示端点、模型、数据去向）、配置、设默认、删除自己的配置档
-4. 同一家换型号｜启动时临时指定型号，或另存一个自定义配置档；钥匙不用重录，没见过的型号不沿用旧的上下文大小
+4. 同一家换型号｜另存一个自定义配置档，指定新型号；钥匙不用重录，没见过的型号不沿用旧的上下文大小。启动时直接加 --model 或 -m 换型号目前仍会被拦下，三家云端厂商的路线都这样
 5. 启动前预览｜不启动，只脱敏显示这次会用哪个程序、哪些参数、环境加减了什么、请求发到哪
 6. 导出配方｜导出一份不含钥匙和登录的独立配置，不用这个工具也能照着启动
 7. 首次设置向导｜检查系统、原版工具和 Ollama，引导配第一条路线
@@ -5114,7 +5114,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 29. 按厂商取钥匙｜Qwen、GLM、DeepSeek 各一把放在密码中心，用的那一刻才交给这一个程序；配了引用不算钥匙能用
 30. 其他路线的本机加密｜自定义端点这类路线的钥匙用 Windows 按当前用户加密保存，只交给目标程序
 31. ChatGPT 双转接｜经两个第三方转接程序让 Claude Code 用 ChatGPT 订阅，装上后从没完成登录。9 月 29 日退役（本人定的）：现在没有要接 ChatGPT 的需要，将来要接也不参考这份代码；路线和代码已删
-32. 从 OpenClaw 导入｜把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览
+32. 从 OpenClaw 导入｜把 OpenClaw 里存过的 DeepSeek 配置导进来，默认只预览；只是整理旧环境用的，新配置直接用密码中心里的厂商钥匙
 
 **长对话**
 33. 压缩前先记下｜别家模型上下文用到 90% 自动压缩；压缩前把目标和改动写进项目，压缩后重读规则和改动；没见过的模型不猜窗口

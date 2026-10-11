@@ -1,0 +1,199 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "daily-preferences-mobile-context-delivery",
+  "kind": "project",
+  "title": "手机与云端直接使用同一原库，独立文件按需导出",
+  "url": "/projects/daily-preferences/mobile-context-delivery/",
+  "parent": "daily-preferences",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "来源仓库 b334b3aa（北京 10/8 00:23）规则、合同与 Skill 一致；本次没有新的手机/云端会话、导出或回写实测，6 项导出测试保留 9/9 原日期"
+  },
+  "screens": [
+    {
+      "id": "daily-preferences-mobile-context-delivery-01",
+      "section": "top",
+      "title": "手机与云端直接使用同一原库，独立文件按需导出",
+      "text": "# 手机与云端直接使用同一原库，独立文件按需导出\n\n〔回到项目 → 个人理解库〕　〔复制 AI 续作说明〕\n\n个人理解库 · 功能说明\n\n在手机或云端继续使用同一份现行理解，保留重要经历、当前更正和限制；新认识也回到原库，不让旧文件变成另一份当前档案。\n\n**当前情况：**手机经电脑连接共用原库的入口已确认；实际读取、回写和失败恢复仍按这次结果核对，不维护第二份当前档案。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人理解库",
+          "href": "/projects/daily-preferences/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/daily-preferences/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n定期搬一份背景文件到手机，改口后容易留下两套互相矛盾的“现在”。已接通电脑时直接取同一份理解，离线交接才需要完整导出。\n\n## 举个实际例子\n\n我在手机上的 ChatGPT 说：“结合你对我的了解帮我判断；我刚说的新想法也记回去。”AI 通过电脑 MCP 读取相关背景，再沿原库入口保存值得保留的原话或认识并回读。如果命令失败，就说明停在哪一步、哪些已经完成，从已有结果继续。\n\n## 最后我会得到什么\n\n得到与电脑同源的回答、依据和准确的回写结果；专业事实与当前行动仍由相应领域负责。若我明确需要离线材料或转交给未接入 MCP 的 AI，再得到《当前上下文.md》和《个人理解详述.md》两份完整文件。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 定期搬一份背景文件到手机，改口后容易留下两套互相矛盾的“现在”。已接通电脑时直接取同一份理解，离线交接才需要完整导出。 举个实际例子 我在手机上的 ChatGPT 说：“结合你对我的了解帮我判"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 定期搬一份背景文件到手机，改口后容易留下两套互相矛盾的“现在”。已接通电脑时直接取同一份理解，离线交接才需要完整导出。 举个实际例子 我在手机上的 ChatGPT 说：“结合你对我的了解帮我判"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以用于当前帮助\n\n手机或云端 AI 通过同一电脑来源取得相关背景，可靠的新认识保存并读回；普通提问不用先导出所有材料。\n\n## 需要分辨\n\n旧理解或人物时期说错时回到拥有该认识的原卡修正，不在手机另写一份当前结论。\n\n## 当前不可用\n\n连接或命令真实失败时说明已完成与失败位置，沿同一目标接续，不重做已完成步骤。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在手机或云端 AI 中照常提问，需要时说把新认识记回原库。\n\n## 需要准备什么\n\n- 当前问题\n\n- 值得保存的本人新原话或认识（如有）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　通过同一电脑端原库取相关背景，核对后回写并读回；只有明确需要离线交接时才导出完整文件。\n\n2. **交付与接续**　交回回答、依据与准确保存状态；连接或写入失败从已完成结果续作，不维护另一份现行档案。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n本人已确认电脑 MCP 接通；同库入口与按需导出合同已发布，旧云文件停止日常维护\n\n## 关键规则与设计选择\n\n1. 当前背景以原库正常入口为准；两份旧 Google Drive 文件只是注明日期的历史快照，不随每次交流、回写或增量重新生成、上传和回读。\n\n2. 手机与电脑复用相同读取、回写和来源增量；现有约定与专业领域分工不因换一个界面改变，不新建手机双向同步。\n\n3. 文件生成时间不代表所有经历或想法发生的时间；旧计划、假设和原材料中的操作安排不自动变成当前行动指令。\n\n## 当前怎样实现\n\n- 手机或云端 AI 经已接通的电脑 MCP 在电脑上运行 daily-preferences.ps1，按问题选择 profile/evidence/facts/original；重要新原话与认识沿 record/snapshot/snapshot-batch 正常回写并回读，不直接改内部表或生成视图。\n\n- 手机与本机继续使用同一理解库和领域合同，不建立第二套画像或手机快照。独立MCP须先连接认证，再消费同一共享资料期；锁定时不借旧上下文或云端绕行。当前规则改变与旧Skill/运行链是否已迁移分层核对。\n\n- tools/export_mobile_context.py 使用 Python 标准库，通过当前解释器子进程调用 daily_preferences.py profile --json；不直接读取内部表，不联网，也不加载分词器。\n\n- build_documents 先拒绝空 cards 和重复 preference_key，再按本人背景、价值取舍与日常认识组织全部卡；主文件保留 value_text，详述保留 detail_text 或原摘要及 scope_text。\n\n- 合并 statement_evidence 与兼容 statement_ids 的已覆盖编号；未覆盖 current_statements 的原话、语境和资料库时间完整进入主文件，不把存储时间当作思想最早出现时间。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 本人已确认电脑 MCP 接通；同库入口与按需导出合同已发布，旧云文件停止日常维护 关键规则与设计选择 1 当前背景以原库正常入口为准；两份旧 Google Drive "
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 本人已确认电脑 MCP 接通；同库入口与按需导出合同已发布，旧云文件停止日常维护 关键规则与设计选择 1 当前背景以原库正常入口为准；两份旧 Google Drive "
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- portable_text 去除手机不能使用的本机链接目标与路径前缀，保留文件名、人物、日期、金额和正常网页链接；仍有电脑专属路径时拒绝交付，不能为长度截断有效内容。\n\n- 两份 Markdown 使用 UTF-8 无 BOM；本地 manifest.json 的 schema（数据结构） 为 daily-preferences.mobile-export.v1，记录 generated_at、card_count、current_statement_count、未覆盖明示编号、源 snapshot_id 和每文件 bytes/characters/SHA-256。生成器的 token_estimate 为 null，不自动下载分词器。\n\n- 导出仅在本次确需独立文件时执行；只有用户当前还需要云文件，才经 google-workspace-direct 的现有提供方更新或新建所需目标并回读。不得自动恢复已归档的两个文件或日常上传流程。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- 原库读取、认知写回、独立文件生成和外部更新分别记录实际结果；本地文件写入和可选云端更新不是跨文件/跨平台原子事务。失败时先核对已完成阶段，再继续缺失步骤，不盲目重复写入。\n\n## 执行流程\n\n1. 手机或云端提出当前问题\n\n2. 经电脑 MCP 读取现有入口和相关背景\n\n3. AI 阅读并判断\n\n4. 有据新内容按正常接口回写并回读\n\n5. 真实失败从已完成结果接续\n\n6. 确需独立文件时才完整导出\n\n7. 确需云文件时再更新并核对实际目标",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 电脑 MCP | 手机或云端 AI 在电脑上执行既有能力的通道；本项目复用原库和命令，不另建云端数据库。 |\n| same-source export（同源导出） | 确需独立文件时，两份阅读文件由同一次现行 profile 结果生成，不在另一处手工维护本人认识。 |\n| manifest（生成清单） | 记录本次源版本和输出字节，便于核对交付；它本身不是云端更新或实际使用的证明。 |\n| readback（回读） | 原库回写后核对实际版本与内容；确有云文件更新时再核对外部目标。命令返回、文件生成和实际采用不是同一个证据。 |\n\n## 专业定义\n\n手机上的 ChatGPT 通过电脑 MCP 使用原库，按当前问题取背景，也把有价值的新认识记回去；不必先搬运文件。离线或转交时才完整导出。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决手机背景滞后、两地档案漂移和每次交流后重复交付文件，同时保留离线与转交的真实需求。\n\n## 边界\n\n- 不公开或在网页刷新中读取手机背景正文、原话及云文件 ID。\n\n- 不建立手机接入层、后台同步或独立手机画像。\n\n- 导出当前阅读内容不等于导出全部原件、数据库或历史。\n\n- 本人已确认电脑 MCP 接通；普通命令先实际执行，不因手机、云端或缺少逐平台验收预判不可用。本页未执行新的手机会话，也不把合成测试当作真实设备结果。\n\n- 电脑连接不可用时直连步骤如实失败；确需离线或转交时使用独立导出，不把历史云文件称为当前理解。\n\n- 阅读、整合和实际帮助仍分别判断，运行命令不替代必要理解。\n\n## 失败与恢复\n\n- **电脑 MCP 连接或原库命令真实失败**：说明精确失败步骤、已完成内容和必要报错；可修则继续，需电脑端接续时从同一目标和现有结果恢复，不重开项目或重做已完成工作。\n\n- **没有当前卡或卡键重复**：在写文件前失败，不以空内容覆盖既有可用交付。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **文件仍引用手机无法打开的电脑路径**：生成失败，核对引用转换并保留必要语义，不让用户自行猜路径。\n\n- **本次明确需要的云文件更新或正文回读失败**：报告精确完成阶段，核对同一目标的实际内容，不声称已更新或无变化，也不自动重启旧文件维护。\n\n- **阅读后发现概括缺少会改变判断的语境**：修正拥有该认识的源卡并回读；只有当前确需导出时才重新生成，不手改第二份档案。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-11",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **DOMAIN_CONTRACT.md：云 MCP 直连与按需导出**：拥有同库使用、真实失败接续、历史文件退出现行与可选导出合同。\n\n- **daily-preferences.ps1 / daily_preferences.py**：电脑与云端共同使用的读取、回写、版本检查和来源增量入口。\n\n- **tools/export_mobile_context.py**：完整生成、可移植引用、未覆盖明示与输出清单。\n\n- **tests/test_mobile_context_export.py**：六项完全虚构回归，不接触私人资料或云端。\n\n- **AGENTS.md / daily-preferences Skill**：当前用户确认的电脑 MCP 使用方式与正常能力发现约定。\n\n## 如何验证\n\n- 2026-09-09 在 3bd9c8e 源码运行 6 项虚构导出测试通过，覆盖全部卡与完整详述、未覆盖明示及时间语境、普通事实和网页链接保真、UTF-8 与清单哈希、空库与重复键失败。\n\n- 2026-10-11 核对来源 b334b3aa：AGENTS、DOMAIN_CONTRACT 与 Skill 仍一致写明本人确认接通电脑 MCP、复用同库入口，以及两份旧 Drive 文件停止日常维护；导出器源码仍有上面这些行为，这期间没有相关产品更新。\n\n- 历史源任务曾完成同源文件生成和云端正文回读；该结果只属于当时文件，不作为当前理解版本或新手机会话的证明。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "daily-preferences-mobile-context-delivery-12",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 本页没有重新读取私人导出正文、连接手机、执行导出或云端读写，测试 0；10 月 11 日只执行了电脑上的只读入口，不证明新的手机会话。实际任务仍按真正命令、必要阅读与回写结果验收，不增逐平台准入门。\n\n## 与其他模块的关系\n\n本模块消费本人理解和现行更正的同源结果；来源、引用、专业判断与可靠回写仍由前述模块和各领域负责。",
+      "links": [
+        {
+          "text": "上一个模块 推荐菜单与选择权",
+          "href": "/projects/daily-preferences/recommendation-choice/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

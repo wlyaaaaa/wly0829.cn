@@ -1,0 +1,158 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory-isolated-disaster-recovery",
+  "kind": "project",
+  "title": "Codex先恢复到空目录，再验证应用可用",
+  "url": "/projects/codex-memory/isolated-disaster-recovery/",
+  "parent": "codex-memory",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 2026-10-11 14:00（北京时间）的 AI 备份源码（63df06c）、计划任务现场与 PCConfig 恢复规则核对，实际读取于 16:30–16:37；本轮没有执行恢复"
+  },
+  "screens": [
+    {
+      "id": "codex-memory-isolated-disaster-recovery-01",
+      "section": "top",
+      "title": "Codex先恢复到空目录，再验证应用可用",
+      "text": "# Codex先恢复到空目录，再验证应用可用\n\n〔回到项目 → AI 备份〕　〔复制 AI 续作说明〕\n\n找回旧 Codex 对话时，先核对一份恢复点，复制到空目录，原来正在用的程序不被覆盖。恢复前先说清选到的是哪一盘、哪一天、完整的还是只含部分文件；文件可读、登录和新任务可继续，分别验收。\n\n**当前情况：**截至 2026-10-11 14:00，选 G 盘能得到当天 12:55 的样子，选 H 盘得到 10/10 那份（H 每天 14:30 才跟进，可能早一天）。笔记本曾在 9 月 10 日的隔离副本里列出任务并读回旧对话；新机登录和新一轮工作没有新验证。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → AI 备份",
+          "href": "/projects/codex-memory/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场；而且 G、H 两盘可能不是同一天，个别点还可能只含部分文件，先说清范围才不会把“部分”当“全部”。\n\n## 举个实际例子\n\n“从 G 盘最近一份对话备份恢复到空目录，先让我确认旧任务能不能找回来。”AI 先说明这份是 10/11 12:55 的、文件是否齐全，再核对恢复点，在隔离目录恢复并列出任务、读回对话；原来正在用的目录不动。\n\n## 最后我会得到什么\n\n我先得到一个在空目录里可核对的旧对话副本，并知道它来自哪一盘、哪一天、覆盖了多少文件。能列出旧任务仍不等于应用已经登录，或新电脑可以继续那项工作。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场并明确恢复结果。 举个实际例子 “从最近一份完整对话备份恢复到空目录，先让我确认旧任务能不能找回来。”AI核对恢复点和"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 直接恢复到正在变化的应用目录，会覆盖新文件或混合版本。先还原副本能保留现场并明确恢复结果。 举个实际例子 “从最近一份完整对话备份恢复到空目录，先让我确认旧任务能不能找回来。”AI核对恢复点和"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n恢复点核对通过，空目录里的文件逐项核对后，报告文件层完成并写明来源和日期；应用能否用再另试。\n\n## 发现问题时\n\n目标恰是正在用的 Codex 目录时拒绝覆盖，改选独立空目录。选到的是只含部分文件的健康子集时，只恢复它实际保存的文件，并写明遗漏数和覆盖率，不说成全部恢复。\n\n## 入口不可用或证据不足时\n\n恢复点损坏或缺文件、目标已有文件或是链接到受保护位置时，停下并指出原因。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入的 AI 对话中指定从 G（Hot）还是 H（Cold）恢复、哪个恢复点（或最新）和一个全新空目录，要求先恢复副本并查看旧任务。\n\n## 需要准备什么\n\n- 选哪一盘、哪个恢复点（两盘的“最新”可能不是同一天）\n\n- 空恢复目录\n\n- 要核查的旧对话或设置\n\n## 从开始到拿到结果\n\n1. **先验材料再选空目录**　确认恢复点、日期和覆盖范围，目标是空目录，避免把旧材料盖到现役 Codex 上。\n\n2. **只还原隔离副本**　按原相对路径恢复并核对文件；健康子集只写它实际保存的条目。\n\n3. **再验应用能力**　从副本查旧任务，并另行核对登录、配置和新任务能否运行；文件可读不等于应用已全部恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n截至 2026-10-11 14:00：G 当前 10/11 12:55 点（10,491 个文件），H 当前 10/10 点（9,815 个文件）。会话任务 10/11 12:15:01 自然运行、结果 0；9 月 10 日次机隔离恢复是历史记录，本轮没有执行恢复。\n\n## 关键规则与设计选择\n\n1. Restore 要求 `-Execute`、显式选择 `PayloadStore Hot|Cold`、恢复点（指定 PointId 或 latest）和 DestinationRoot。\n\n2. 拒绝当前活动根及子目录、Hot/Cold/State 根及子目录；已有目录须为空且不是链接。\n\n3. 先核对恢复点，再写目标文件，写后回读；未完成的目标不算恢复成功。\n\n4. 健康子集是范围明确的有效点：只恢复清单里实际健康的条目，返回 `file_warnings`、`partial_coverage`、`verification_scope`、源/遗漏文件数和覆盖率；零个健康文件时明确写 0。\n\n5. 桌面现役只有会话任务，北京每天 12:15；原来 11:05/13:05 的轻量配置任务已于 2026-09-28 23:26 退役。次机由 PCConfig 复用 `CodexRecovery-SecondaryLaptop` 每天 09:00/21:00 隐藏检查，对话最短间隔 12 小时，USB 每次检查都重试，不在备份引擎另建服务。\n\n## 当前怎样实现\n\n- 选定恢复点后先校验点与对象，验证后重读清单防止中途变化；不要求旧主机身份，但实际介质路径和目录隔离要现场确认。\n\n- 按清单恢复原始相对路径和内容并校验；进度写本地 restore-progress.json，返回 `includes_configuration` 说明这个点是否含次机的私有配置。配置文件存在不等于登录或能续作。\n\n- 计划任务现场：`CodexConversationBackup-Hot-Daily` 就绪、启用、最高权限，触发器写成 `23:15-05:00`，即北京 12:15；自检默认规格写的是 21:15，所以报 `needs_repair / matches_spec=false`。任务确实每天 12:15 在跑，误报尚未修复。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月10日次机隔离副本可列任务并读12轮；未启动新回合，9月12日只读旧回执 关键规则与设计选择 1 Restore 要求 -Execute 与显式 Destinati"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月10日次机隔离副本可列任务并读12轮；未启动新回合，9月12日只读旧回执 关键规则与设计选择 1 Restore 要求 -Execute 与显式 Destinati"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 任务结果 0 对应会话流水线；10/11 两路使用记录都失败（原因未知），不能被这个 0 盖掉。\n\n## 执行流程\n\n1. 提供盘、恢复点、空目标和 `-Execute`。\n\n2. 检查活动根、备份根、状态根边界和目录形态。\n\n3. 核对清单、闭包和引用对象，确认是完整点还是健康子集。\n\n4. 按相对路径创建文件并回读校验。\n\n5. 返回文件恢复结果和覆盖范围；应用启用、登录和服务配置另行验证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| DestinationRoot（恢复目标目录） | 本次还原文件的专用空位置，不能与活动运行根或备份/状态目录混用。 |\n| WScript Silent Launcher（WScript 静默启动器） | VBS 用窗口样式 0 启动后台 PowerShell，保留既有任务调度，无需另建守护服务。 |\n\n## 专业定义\n\n保留现在的 Codex，先检查历史文件副本",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止历史文件直接覆盖当前运行目录，防止与备份池和状态目录混写，也防止把部分范围的恢复说成全部恢复。\n\n## 边界\n\n- Restore 只重建选中点纳入的文件；桌面点不含全部配置，次机配置档可含选定私有配置。不安装程序、不注册服务、不设全局变量、不恢复登录、不自动启动 Codex；安全云投影也不能原样替代 config.toml。\n\n- 次机 9 月 10 日旧记录显示隔离副本可列出 139 项任务、读选定任务 12 轮，没有复制凭据或开新回合；这份原回执本轮无法重新取得，之后未重新核对。新机登录、新回合续作仍未验证。\n\n## 失败与恢复\n\n| 情况 | 怎么办 |\n| --- | --- |\n| 目标是活动 CODEX_HOME 或其子目录 | live_codex_home_restore_forbidden，停止恢复。 |\n| 目标不为空或是链接 | restore_destination_not_empty 或 restore_destination_reparse_forbidden，停止写入。 |\n| 恢复点损坏或普通缺文件 | 恢复失败，不报成功。 |\n| 选到健康子集 | 只恢复实际保存的条目，写明遗漏数和覆盖率。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-isolated-disaster-recovery-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools\\Invoke-CodexConversationBackup.ps1\n\n隔离恢复模式、范围回报与安全门禁实现\n\ntools\\Install-CodexConversationBackupTask.ps1\n\nWindows 计划任务静默注册与自检（当前自检有时区规格误报）\n\ntools\\test-codex-conversation-task.ps1\n\n任务调度与权限等级测试\n\n## 如何验证\n\n- G/H 恢复点为 14:00 前的生产回执。\n\n- 历史：三个合成点的文件恢复与哈希验证曾通过，不代表生产对象或新机应用恢复；9 月 10 日次机隔离恢复见上。以上之后未重新核对。\n\n## 与其他模块的关系\n\n把选定会话点重建为可检查的文件副本，不自动切换或启动恢复后的 Codex。恢复点从哪来、是否完整，见会话热备和去重冷备两页。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

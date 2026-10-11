@@ -1,0 +1,170 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory-vss-conversation-hot-backup",
+  "kind": "project",
+  "title": "Codex运行期会话快照与 G 热备",
+  "url": "/projects/codex-memory/vss-conversation-hot-backup/",
+  "parent": "codex-memory",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 2026-10-11 14:00（北京时间）的 AI 备份源码（63df06c）、G/H 恢复点回执与计划任务现场核对，实际读取于 16:30–16:37；未重新哈希全部对象，也未做新机应用恢复"
+  },
+  "screens": [
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-01",
+      "section": "top",
+      "title": "Codex运行期会话快照与 G 热备",
+      "text": "# Codex运行期会话快照与 G 热备\n\n〔回到项目 → AI 备份〕　〔复制 AI 续作说明〕\n\nCodex 照常用着，每天中午的任务从同一个时间点留下选定的对话、附件和状态文件；新恢复点里实际用到的文件都核对过，才把它标成当前。之后的新对话等下一次。\n\n**当前情况：**每天北京时间 12:15 自动运行。截至 2026-10-11 14:00，G 盘当前恢复点是当天 12:55 完成的那份，10,491 个文件、39.2 GB；H 盘是前一天 10/10 的那份，9,815 个文件、35.1 GB。当天两路使用记录的采集都失败了（原因未知），但对话备份本身成功。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → AI 备份",
+          "href": "/projects/codex-memory/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\nCodex 正在用的时候，对话文件和数据库一直在变，一个个直接复制可能前后对不上。每天中午的任务先从同一时间点取一份磁盘视图，再从里面读所选文件并核对；它只能恢复到那一刻。\n\n## 举个实际例子\n\n我照常写代码。12:15 任务启动，先记一下 Codex 和 Claude 的使用记录，再在 E 盘取时间点快照，把当时的会话文件存到 G 盘。2026-10-11 这次，12:55 G 盘新点完成；之后的新对话要等明天。\n\n## 最后我会得到什么\n\n我得到一个带时间和文件清单的 Codex 会话恢复点。它不保证故障前最后一秒；个别文件被杀毒软件挡住时，新点里那几个文件可能沿用上一次的版本，回执会标明哪些不是这次新拍的。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Codex 正在使用时，对话文件和数据库会变化，逐个直接复制可能前后不一致。夜间任务从同一时间点读取所选文件，再核对完整性；它仍只能恢复到那一刻。 举个实际例子 我继续写代码，夜间备份取得当时"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Codex 正在使用时，对话文件和数据库会变化，逐个直接复制可能前后不一致。夜间任务从同一时间点读取所选文件，再核对完整性；它仍只能恢复到那一刻。 举个实际例子 我继续写代码，夜间备份取得当时"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n同一时间点选出的文件在 G 盘核对完，才发布新恢复点。10/11 这次警告为 0，旧点按规则清掉 1 个、释放 15.1 GB。\n\n## 发现问题时\n\n个别文件读不到（源已消失或被杀毒软件拦截）时记为单文件警告：上一点有可核对的旧版本就沿用并标明来源，旧点暂不清理，下次再试。权限不足、已有一次在跑、上次卷影没清干净，都会停下并说明。\n\n## 入口不可用或证据不足时\n\nG 盘不在或未解锁，这次热备不进行，旧点原样保留；但使用记录照样先采，不受 G 盘影响。任务结果 0 只说明对话备份流程走完，不代表两路使用记录都成功。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n平时不用管，每天北京时间 12:15 自动运行。需要手动检查或补一次时，在已接入的 AI 对话中提出；真正执行要用项目登记的管理员备份入口。\n\n## 需要准备什么\n\n- 目标 Codex 会话来源\n\n- G 盘是否可用\n\n- 需要的新点时间\n\n## 从开始到拿到结果\n\n1. **先记使用记录、再看条件**　先采 Codex、Claude 两路使用记录（失败不挡后面），再检查现有点、G 盘和权限；普通状态查询不新建快照。\n\n2. **取得同一时间点文件**　从 E 卷快照读取纳入的会话、附件和状态文件，写对象和清单。\n\n3. **只发布核对过的点**　新点里实际用到的文件全部校验后才更新 G 当前指针；有单文件警告时标明沿用的旧条目，快照之后的新对话等下次。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n截至 2026-10-11 14:00：G 当前点 `20261011T043524Z-0dc21e1e`，12:55:31 完成，10,491 个文件、39,234,419,908 字节（39.2 GB），其中复用 19.8 GB、新写 19.5 GB，回读已核对、警告 0；H 当前为 10/10 那份，9,815 个文件、35.1 GB。以上是生产回执，本轮没有重新哈希对象，也没有做新机应用恢复。\n\n## 关键规则与设计选择\n\n1. 捕获方式是 vss_crash_consistent（时间点磁盘视图），不能说成数据库事务和应用全部正常。\n\n2. 覆盖 sessions、archived_sessions、thread-backups、attachments、dictation-history、状态数据库（含被选中的 WAL/SHM）、history.jsonl、session_index.jsonl、生成图像、visualizations 和自动化状态，并明确包括从 Claude 导入的会话（claude-cowork-transcript-imports、external_agent_session_imports.json）。\n\n3. 排除诊断日志库、临时缓存、插件、worktrees 和 auth，不为日志变大扩大备份范围。\n\n4. 单文件警告（10/1 起）：源文件已消失或 Windows 错误 225/226（杀毒拦截）记为精确警告；上一点有条目且旧对象长度和 SHA-256 回读通过才沿用，保留原时间并带 `retained_from_point`，不说成这次新拍的；有警告时 `hot_retention_status=deferred_file_warnings`，不删旧点。\n\n5. 桌面 G 是登记、已解锁的完整 BitLocker 加密卷；次机按自己的介质身份和路径隔离运行，介质不符或目录重叠就停止。\n\n## 当前怎样实现\n\n- 计划任务 `CodexConversationBackup-Hot-Daily` 每天北京 12:15 启动（隐藏窗口、最高权限、最长 6 小时）；10/11 12:15:01 启动，结果 0。\n\n- 启动后先顺序采集 Codex、Claude 两路使用记录，再认 G 盘；10/11 Codex 12:25:12 失败、Claude 12:35:13 失败，只有 `RuntimeException` 而无具体原因，成功覆盖到 10/9；失败不推进水位，下次正常运行会自动补采。\n\n- 用全局互斥锁防止两次同时跑，已有运行返回 `conversation_backup_already_running`；上次卷影记录没清掉返回 `vss_previous_cleanup_requires_exact_review`；本次卷影用完即释放。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月24日 G 当前 1,983 文件，H 仍是9月23日 1,928 文件；指针与清单可读，完整对象及新机应用恢复未在本轮重验 关键规则与设计选择 1 捕获语义明确为"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月24日 G 当前 1,983 文件，H 仍是9月23日 1,928 文件；指针与清单可读，完整对象及新机应用恢复未在本轮重验 关键规则与设计选择 1 捕获语义明确为"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 以 8 MB 缓冲区处理文件；所有引用对象验证通过才写入当前指针。\n\n- 进度只记阶段、文件数、字节数、速度和预计时间；出现警告时回执另记相对路径和原因（`payload_names_emitted=true`），10/11 为 false。\n\n## 执行流程\n\n1. 12:15 任务启动，先采两路使用记录（各自失败不挡后面）。\n\n2. 检查登记的 G 介质，在 E 卷创建并核对卷影快照。\n\n3. 枚举白名单内的会话、附件和状态文件，计算内容哈希。\n\n4. 写入新对象、清单和闭包，回读核对；有单文件警告时按规则沿用旧条目并标明。\n\n5. 发布当前点后释放卷影；失败不把新点提前标成完成。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| VSS Crash-Consistent Snapshot（卷影崩溃一致性快照） | 时间点磁盘视图，不是应用一致性承诺；恢复后的数据库和应用仍需验证。 |\n| Hot backup（运行期热备） | 应用保持运行时采集副本；会消耗 I/O 和空间，不等于前台性能完全不受影响。 |\n\n## 专业定义\n\n继续使用 Codex，也能形成明确时间的会话备份点",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-08",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n减少活动数据复制时点不一致和文件占用造成的失败，个别文件读不到时也能留下一个可核对、说清范围的恢复点。\n\n## 边界\n\n- 需要管理员和 `-Execute`；普通检查结果不代表已经新建了快照。\n\n- 排除 auth、缓存、插件、worktrees、链接和诊断日志库；纳入范围之外不声称全盘备份。\n\n- SQLite 数据库及选中的 WAL/SHM 按同一时间点当文件保存；恢复只核对文件哈希，不修数据库，也不证明事务全部提交。\n\n- 沿用的旧条目只代表上一点的版本，不说成这次新拍的内容。\n\n## 失败与恢复\n\n| 情况 | 怎么办 |\n| --- | --- |\n| 缺执行参数或管理员身份 | 返回 execute_required 或管理员要求，停止相应动作。 |\n| G 介质不符合要求 | 停止这次热备，保留已有恢复点；使用记录照常先采。 |\n| 已有一次热备在运行 | 返回 conversation_backup_already_running，不重复跑。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-09",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n| 情况 | 怎么办 |\n| --- | --- |\n| 上次卷影记录未清理 | 返回 vss_previous_cleanup_requires_exact_review，先精确核对再继续。 |\n| 个别文件读不到 | 记为单文件警告，按规则沿用旧条目或缺项，旧点暂不清理，下次再试。 |\n| 使用记录采集失败 | 不挡对话备份，水位不推进，下次正常运行自动补采。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-vss-conversation-hot-backup-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools\\Invoke-CodexConversationBackup.ps1\n\n卷影抓取、单文件警告处理与会话灾备核心实现\n\ntools\\codex_conversation_hot_hidden.vbs\n\n计划任务用的静默启动包装器\n\ntools\\test-codex-conversation-backup.ps1\n\n合成点去重、校验和隔离恢复测试；不测生产卷影性能\n\n## 如何验证\n\n- 当前（2026-10-11 14:00 截止）：见上方 G/H 两份恢复点；任务现场与使用记录状态读取于 16:31–16:32。\n\n- 14:00 之后的观察：H 盘在 15:18 跟进到同一 10/11 点、15:33 冷备完成，这不属于本次截止快照。\n\n- 历史：2026-09-12 13:41（北京时间）G/H 曾同为 `20260912T041508Z-8cec9794`，7,167 个文件、49,655,464,859 字节；9 月 9 日 G 旧点 7,016 个文件且当时 H 不可用；9 月 7 日三个人工点、9 月 8 日任务规格、9 月 12 日次机 323 个文件的回执都是旧证据。这些之后未重新核对，不当作今天的验证。\n\n## 与其他模块的关系\n\n负责原始对话、附件、生成图像和应用状态。桌面上原来的轻量配置备份已于 9 月 28 日停用，配置、记忆和技能改由开发配置备份负责；次机的独立安全云和私有对话层继续保留。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

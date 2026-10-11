@@ -1,0 +1,588 @@
+[
+  {
+    "screen": "chinese-asr-runtime-privacy-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本地运行、GPU 协调、专业云入口与公开边界",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "普通清楚的录音和桌面听写一律留在本机。本地转写标出疑点的文件，在云端免费期内由处理它的 AI 接手，送阿里云再听一遍，云端稿和本地稿并排放、本地稿不动；免费期外，或想不经本地转写直接把整段送上云，仍要我明确点头。每一次有没有离开本机、为什么停，我都能看清。",
+        "row": "top"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**已有本地运行、显卡协调、免费期内的疑难自动云复核和点名上云入口；两款云模型的免费期配置到北京时间 2026-12-21 00:00（日期是我记下的，没在阿里云控制台核对）。本轮未运行模型、未上传录音。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "本地运行、GPU 协调、专业云入口与公开边界",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 中文语音转写〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "普通清楚的录音和桌面听写一律留在本机。本地转写标出疑点的文件，在云端免费期内由处理它的 AI 接手，送阿里云再听一遍，云端稿和本地稿并排放、本地稿不动；免费期外，或想不经本地转写直接把整段送上云，仍要我明确点头。每一次有没有离开本机、为什么停，我都能看清。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**已有本地运行、显卡协调、免费期内的疑难自动云复核和点名上云入口；两款云模型的免费期配置到北京时间 2026-12-21 00:00（日期是我记下的，没在阿里云控制台核对）。本轮未运行模型、未上传录音。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "正常时",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "普通录音照常交给本地处理；疑难文件在免费期内由 AI 自动复核；免费期外或想整段直接上云时，逐次明确这一次的上传。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **系统核对并处理**　日常录音在本地受管运行；本地标出疑点后只记“等 AI 接手”，由 AI 在免费期内补跑云复核；录音更长不会自动触发上传，每次云请求单独记录。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "普通录音照常交给本地处理；疑难文件在免费期内由 AI 自动复核；免费期外或想整段直接上云时，逐次明确这一次的上传。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **系统核对并处理**　日常录音在本地受管运行；本地标出疑点后只记“等 AI 接手”，由 AI 在免费期内补跑云复核；录音更长不会自动触发上传，每次云请求单独记录。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 普通清楚录音、批量和长音频默认不上传，桌面听写永不上传；只有本地标出 needs_review、引擎分歧、[疑似]、provisional 或 Important 的文件，才在免费期内、未暂停时进入自动复核。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 普通清楚录音、批量和长音频默认不上传，桌面听写永不上传；只有本地标出 needs_review、引擎分歧、[疑似]、provisional 或 Important 的文件，才在免费期内、未暂停时进入自动复核。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 默认 pipeline 和 Smart API 使用本机模型与本机回环服务（127.0.0.1:18666）；本地服务对疑难文件只写 pending_ai_session 和下一步命令，不后台取密、不自行上传。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 默认 pipeline 和 Smart API 使用本机模型与本机回环服务（127.0.0.1:18666）；本地服务对疑难文件只写 pending_ai_session 和下一步命令，不后台取密、不自行上传。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 自动停止与恢复（cloud_review.py、scripts/cloud-review-state.py）：免费期过期不自动上传并写原因；额度耗尽、欠费、余额不足、无权限、模型下线等持久停用；网络、超时、限流、5xx 只影响本次。可用 pause --reason 手动暂停，只有本人要求 resume 才解除；更换模型、新免费期或新额度周期只解除供应商停用，不解除手动暂停，点名上云不受暂停影响。阿里云“免费额度用完即停”开关没开、本地也不计用量，余额为零时仍可能后付费欠费。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 自动停止与恢复（cloud_review.py、scripts/cloud-review-state.py）：免费期过期不自动上传并写原因；额度耗尽、欠费、余额不足、无权限、模型下线等持久停用；网络、超时、限流、5xx 只影响本次。可用 pause --reason 手动暂停，只有本人要求 resume 才解除；更换模型、新免费期或新额度周期只解除供应商停用，不解除手动暂停，点名上云不受暂停影响。阿里云“免费额度用完即停”开关没开、本地也不计用量，余额为零时仍可能后付费欠费。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "6. 项目只准备请求，经 SecretRefRequestPath 交密码中心发送；密钥不经过 ASR 进程。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（四）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "6. 项目只准备请求，经 SecretRefRequestPath 交密码中心发送；密钥不经过 ASR 进程。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-11",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **同类 GPU 租约占用或 Ollama 活跃请求/会话冲突**：受影响任务保持 blocked 或等待；OCR（光学字符识别） 与 ASR（自动语音识别） 的允许共存不被当成冲突，也不绕过租约。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-11",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **同类 GPU 租约占用或 Ollama 活跃请求/会话冲突**：受影响任务保持 blocked 或等待；OCR（光学字符识别） 与 ASR（自动语音识别） 的允许共存不被当成冲突，也不绕过租约。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-12",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- GPU 租约与服务协调",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-12",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- GPU 租约与服务协调",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-13",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 17 日来源回归运行 482 项（0 失败、0 错误，1 项可选公开 VAD 样例缺失而跳过），真实监督进程异常退出后 worker 与租约约 1.39 秒回收；PCConfig 64 项 Broker（代理服务） 与 63 项配置恢复测试分别通过。未把静态壁纸配置审计称为逐帧连续播放证明。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "chinese-asr-runtime-privacy-13",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 17 日来源回归运行 482 项（0 失败、0 错误，1 项可选公开 VAD 样例缺失而跳过），真实监督进程异常退出后 worker 与租约约 1.39 秒回收；PCConfig 64 项 Broker（代理服务） 与 63 项配置恢复测试分别通过。未把静态壁纸配置审计称为逐帧连续播放证明。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

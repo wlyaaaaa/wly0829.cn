@@ -1,0 +1,159 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "ai-cli-profile-manager-doctor-validation",
+  "kind": "project",
+  "title": "先查静态条件，再明确决定要不要花额度做真实测试",
+  "url": "/projects/ai-cli-profile-manager/doctor-validation/",
+  "parent": "ai-cli-profile-manager",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "父项目总览状态“常用”；事实按 10 月 11 日 14:00 前的源码（10 月 8 日提交）、当天一次零写入诊断和历史验收记录核对，未跑新的体检全集或真实测试"
+  },
+  "screens": [
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-01",
+      "section": "top",
+      "title": "先查静态条件，再明确决定要不要花额度做真实测试",
+      "text": "# 先查静态条件，再明确决定要不要花额度做真实测试\n\n〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nAI CLI Profile Manager · 功能说明\n\n先用不发模型请求的体检找出配置或登录缺项；确需证明模型会回答、会用工具或能改文件时，再明确运行对应真实测试。\n\n**当前情况：**可以先不花模型额度检查入口和缺项；三家厂商的钥匙体检只能证明“引用已配置”，钥匙本身是否有效要靠真实请求。真实文本、工具或文件任务测试需明确选择，并保留各自证据日期。\n\n内容按 2026-10-11 14:00（北京时间）前的改动整理，源码对应 10 月 8 日 09:55 的提交；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → AI 工具配置管理",
+          "href": "/projects/ai-cli-profile-manager/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/ai-cli-profile-manager"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/ai-cli-profile-manager/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n程序能打开，不等于这次选中的模型真能回答或使用工具；每次排查都先发付费请求又浪费额度。先免费查设置，只有问题确实需要时才做真实调用。\n\n## 举个实际例子\n\n我可以说：“检查 codex-qwen3-8-max-paygo 现在缺什么；不要先扣费。静态条件都对以后，再由我决定是否做真实文本或任务测试。”我会先得到具体缺项和证据日期。\n\n## 最后我会得到什么\n\n先得到免费静态体检的缺项与下一步；明确选择真实测试后，才看到该模型是否回答、能否用工具或完成一个小文件任务。每一层都有自己的结果。\n\n## 结果怎么看\n\n## 正常时\n\n本次选择的程序、模型、输出和清理都实际通过，才报告这一层可用。\n\n## 发现问题时\n\n静态设置齐全但尚未真实调用，或旧结果过期时写成待验证，不涂绿。\n\n## 入口不可用或证据不足时\n\n目标程序报错、模型身份不符或工具越界时停这条路线并给出原因。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 程序能打开，不等于这次选中的模型真能回答或使用工具；每次排查都先发付费请求又浪费额度。先免费查设置，只有问题确实需要时才做真实调用。 ## 举个实际例子 我可以说：“检查 code"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 程序能打开，不等于这次选中的模型真能回答或使用工具；每次排查都先发付费请求又浪费额度。先免费查设置，只有问题确实需要时才做真实调用。 ## 举个实际例子 我可以说：“检查 code"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在本机运行 aicli doctor 检查指定 Profile；只有明确要做真实调用时才选择对应 Live 测试。\n\n## 需要准备什么\n\n- 待查 Profile\n\n- 是否允许文本、工具或智能体实际测试\n\n- 费用和工具副作用边界\n\n## 从开始到拿到结果\n\n1. **先免费查条件**　静态体检（Doctor）核对程序、模型配置、凭据引用与本地服务，给出具体缺项。三家厂商显示“可用但有限制：引用已配置，密钥未验证”，不会因为引用配好就涂绿。\n\n2. **决定是否真实试用**　按需要选择文本、工具或智能体测试，先看可能的额度与动作影响。\n\n3. **核对所选一条**　核对实际模型、输出、工具与清理；静态通过不能证明连通，一条 Profile 成功也不覆盖其他账号。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n零写入诊断已实现；10 月 11 日只读诊断读到模块 0.3.19 与桌面桥 b47fea3ce81f7a67，真实任务与各日期测试分别保留\n\n## 关键规则与设计选择\n\n1. all 只运行 text+tool，不会暗中启动更长的 agent。\n\n2. agent 只支持 Codex，且 Codex harness 是完全访问；明确授权后才能运行。\n\n3. 旧回执只证明对应模型、配置和执行协议。新版本先按声明接口和实际身份检查受影响范围，不单凭版本号要求全量重验或宣称兼容。\n\n## 当前怎样实现\n\n- DoctorService 读取平台、CLI（命令行工具）、Profile、凭据引用、配置层和本地服务，不自行发模型请求；9 月 29 日两个代理退役后已不再检查代理。三家厂商的引用只算“已配置”，钥匙值的有效性单独记为未验证。\n\n- LiveTestService 在随机临时目录调用真实目标 CLI（命令行工具），并绑定 Profile 指纹与实际版本。\n\n- 文本层要求最终正文严格等于 PONG；首个非预期工具事件使 Codex 文本测试失败。\n\n- AgentAcceptance 构造确定性文件任务，独立计算排序、去重、频次、总和与 SHA-256，不接受模型自述。\n\n- diagnose --json输出aicli.runtime-diagnostics.v1，可用--bridge-registry指定既有PCConfig登记；不初始化状态、读密钥或发网络/模型请求。有效源、安装载荷和能力声明分别报告，不能用SYSTEM空目录推断登录用户未配置。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 零写入诊断已实现；10 月 11 日只读诊断读到模块 0.3.19 与桌面桥 b47fea3ce81f7a67，真实任务与各日期测试分别保留 ## 关键规则"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 零写入诊断已实现；10 月 11 日只读诊断读到模块 0.3.19 与桌面桥 b47fea3ce81f7a67，真实任务与各日期测试分别保留 ## 关键规则"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 执行流程\n\n1. 运行 Doctor。\n\n2. 按 check ID 修静态问题。\n\n3. 阅读 Provider、数据去向与额度提示。\n\n4. 明确选择 text、tool、agent 或 all。\n\n5. 在临时目录运行目标 CLI（命令行工具）。\n\n6. 核对实际身份、输出、工具、清理和回执。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| PONG（严格文本回执） | 最小连通测试要求的唯一最终正文；提示回显或多余文字不能刷绿。 |\n| nonce tool（一次性随机工具） | 工具层唯一暴露的单用途验证入口，不接受任意命令或路径。 |\n| verifier（独立验证器） | 不相信模型的“完成了”，直接按 fixture 计算预期文件结果。 |\n\n## 专业定义\n\n“代码有这条路”和“今天真的能完成任务”必须分开。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止静态配置、历史回执和当前真实能力被压成一个模糊绿色状态。\n\n## 边界\n\n- Doctor 不证明模型连通，也不证明厂商钥匙有效。\n\n- 单个 Profile 的 Live 不代表其他模型或账号。\n\n- 网页只引用注明日期的测试、真实桌面验收和只读诊断；10 月 11 日没有重新发起全部 CLI（命令行工具）体检或付费 Live。\n\n## 失败与恢复\n\n- **工具无法证明与私人配置隔离**：跳过 tool 并降为有限制，不冒充完整工具能力。\n\n- **版本或 Profile 指纹变化**：按实际身份和受影响的接口分层检查；旧回执留作历史，不能当成新的 Live，也不只因版本号变了就要求 21 条路线全部付费重测。\n\n- **临时目录或进程树未确认清理**：保留原失败和残留定位，不标成功。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ai-cli-profile-manager-doctor-validation-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `src/AiCliProfileManager/Private/DoctorService.ps1`：静态检查与状态闭集\n\n- `src/AiCliProfileManager/Private/LiveTestService.ps1`：文本与工具 Live\n\n- `src/AiCliProfileManager/Private/AgentAcceptance.ps1`：确定性 Agent fixture 与 verifier\n\n## 如何验证\n\n- 9 月 3 日 385/385、9 月 17 日 442 项、0.3.18 正式发行时完整 Pester 555/555 都是历史；最近一次全量离线测试为 9 月 29 日 470/470、桌面桥传输 11/11。10 月 11 日没有跑 Pester 或 Live，也不给当前 Codex CLI 0.160.0 或桌面引擎 0.162.0-alpha.17.2 写能力通过。\n\n- 10 月 11 日零写入诊断：模块 0.3.19，桌面桥 b47fea3ce81f7a67 已登记并启用、安装状态 verified，七个文件的类型、大小和 SHA-256 全部一致；诊断自己的“正在运行的进程已加载”和端到端两项仍未验证。\n\n- 9 月 18 日的真实双厂商验收是 GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成 3 轮往返；旁边的合成协议检查不调用真实模型，不能当作厂商端到端证据。新父工具和新模型 Live 未执行。\n\n## 与其他模块的关系\n\n本模块判断证据到了哪一层；引擎模块提供被测 Profile，可恢复运行模块承载 Codex agent 路径。",
+      "links": [
+        {
+          "text": "上一个模块 秘密与隔离",
+          "href": "/projects/ai-cli-profile-manager/secrets-isolation/"
+        },
+        {
+          "text": "下一个模块 可恢复机器运行",
+          "href": "/projects/ai-cli-profile-manager/recoverable-runs/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

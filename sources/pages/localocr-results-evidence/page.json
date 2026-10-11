@@ -1,0 +1,191 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "localocr-results-evidence",
+  "kind": "project",
+  "title": "拿到文字后，怎样知道读全了、读对了没有",
+  "url": "/projects/localocr/results-evidence/",
+  "parent": "localocr",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "LocalOCR 源码（截止前最后提交 50af3fa）、现役 9 月 24 日验收回执与任务登记字段计数，于 2026-10-11 16:30–16:48（北京时间）只读核对"
+  },
+  "screens": [
+    {
+      "id": "localocr-results-evidence-01",
+      "section": "top",
+      "title": "拿到文字后，怎样知道读全了、读对了没有",
+      "text": "# 拿到文字后，怎样知道读全了、读对了没有\n\n〔回到项目 → 本地文字识别〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nLocalOCR · 功能说明\n\n我既需要复制出来的文字，也需要知道它来自哪一页、哪里可能漏了、什么还不能判断。这个结果层把可读内容与检查依据一起交回来，使一份空白文件或看似很高的分数不会替我作错误结论。\n\n**当前情况：**已有文字、结构、位置和质量说明的结果文件。实际使用里“说不准”和“无字”两类结论都已出现，截至 10 月 11 日 14:00 分别为 466 条和 3 条记录；空白或高分仍不能直接证明读全、读对。\n\n项目现状截至 2026-10-11 14:00（北京时间），于同日 16:30–16:48 只读核对；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 本地文字识别",
+          "href": "/projects/localocr/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/LocalOCR"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/localocr/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n模型可能没读出浅色小字，也可能只处理了部分页面；若最后只显示“成功”或“没有文字”，我会误用结果。这里先分清执行、覆盖、质量和文字检测，再说明各自证据，保留具体字符的复核责任。\n\n## 举个实际例子\n\n我可以说：“识别分数很高，但这个型号最后一位我还是看不清。”系统会指出对应页面和区域，让我回到原图复核；若需要更正，会把更正单独记录，不改写原始识别结果。\n\n## 最后我会得到什么\n\n可以选便于复制的纯文字、便于看表格的排版文件，或带页码位置的结构化文件；另有说明告诉我是否读全、哪里不确定。关键字仍须对照原图。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 模型可能没读出浅色小字，也可能只处理了部分页面；若最后只显示“成功”或“没有文字”，我会误用结果。这里先分清执行、覆盖、质量和文字检测，再说明各自证据，保留具体字符的复核责任。 #"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 模型可能没读出浅色小字，也可能只处理了部分页面；若最后只显示“成功”或“没有文字”，我会误用结果。这里先分清执行、覆盖、质量和文字检测，再说明各自证据，保留具体字符的复核责任。 #"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n内容、位置和质量说明都可读取，正式文件与输入身份一致。\n\n## 发现问题时\n\n低置信度、部分覆盖或关键字分歧如实保留；摘要帮助定位，不能抹掉原始错误。\n\n## 入口不可用或证据不足时\n\n缺少有效结果文件或证据绑定时不能宣称已验证；普通空结果保持无法判断。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n拿到 LocalOCR 结果后，在同一 AI 任务中说出要核对的字段、页码或疑问。\n\n## 需要准备什么\n\n- 这次结果文件或任务标识\n\n- 原图与关键字段\n\n## 从开始到拿到结果\n\n1. **先读结果状态**　分别看执行完成、覆盖页数、识别质量和空结果依据。\n\n2. **对照原图定位**　按页和区域核对姓名、数字或浅色小字；必要更正独立记录。\n\n3. **留下已确认与仍不确定的字**　交回原始识别、对照原图后的更正和未确认项；文件完整性检查或高分都不能代替关键字符复核。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n输出与客观状态合同已实现；实际记录中有字、说不准、无字三类结论都已出现\n\n### 关键规则与设计选择\n\n1. 先看 display_summary（人话状态摘要），再读正文、坐标与客观文件。截至 10 月 11 日 14:00，有 15,545 条完成记录带这句摘要；它只是把已有客观字段翻成人话，不是另一个独立结论。\n\n2. ok=true、空 TXT、空 blocks 或 cache_hit 都不能单独证明原图无字。\n\n3. 原生视觉的场景解释和 OCR（光学字符识别）的精确文字证据独立保留，冲突时回查原图。\n\n## 当前怎样实现\n\n- outputs.py 输出按页 TXT、保留结构的 Markdown、含位置/顺序/类型的 JSON；display_summary 是对既有客观字段的确定性投影，不修改结论。\n\n- objective_result.py 分开 execution.status、coverage.status、quality.status、objective_outcome 与 failure；文字检测结论只在 text_detected、no_text_detected、indeterminate 中选择。\n\n- 生产者可以在独立检测证据成立时形成 no_text_detected；未保存时 evidence.verification_status 仍为 not_persisted。调用方只有在 completed、complete、sufficient、verified 及实际非空负向证据文件的字节和身份复验全部成立后，才采纳为已验证的持久结论或正式缓存；当前内置检测证据主要限于近乎均匀图片。\n\n- 客观文件使用 media.objective-result.v1，复核 schema（数据结构）、size_bytes、SHA-256、原件、请求、模型、配置与所有正式输出绑定；旧式缺文件结果不能补猜成已验证。\n\n- 输入快照、独立页/帧计数和实际运行身份约束结果提交；每页原子检查点只作部分证据。完整覆盖、无排除范围与独立负向证据全部成立才支持无字结论，图像均匀提示本身不够。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 输出与客观状态合同已实现；实际记录中有字、说不准、无字三类结论都已出现 ### 关键规则与设计选择 1. 先看 display_summary（人话状态摘要"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 输出与客观状态合同已实现；实际记录中有字、说不准、无字三类结论都已出现 ### 关键规则与设计选择 1. 先看 display_summary（人话状态摘要"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 若独立视觉复核更正某个关键区域，更正单列绑定原始 source hash（原件指纹）和 rect（区域），不得覆盖 OCR（光学字符识别） 原始文件或冒充引擎自动结果。\n\n## 执行流程\n\n1. 先读摘要：执行到哪、覆盖怎样、是否低置信或增强。\n\n2. 选择 TXT/Markdown/JSON 中适合下一步的文件。\n\n3. 用页码与区域找到关键字，并核对同一原图。\n\n4. 遇到空结果，检查独立负向证据，而不是只看文字长度。\n\n5. 把确认、更正与未知分开，保留原始识别和实际输出路径。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| coverage（处理覆盖） | 本次实际页/帧是否全部处理，不是正文逐字完整。9 月 3 日采购表 1/1 页 complete 仍漏标题；9 月 17 日两页 VL 完整覆盖仍有“请/清”错字；9 月 24 日现役验收的两页 VL 案例同样 complete，字符错误率仍是 1.33%。 |\n| quality（结果质量） | 依据当前证据判断是否足以解释结果；不能简单当作逐字准确率。结构块未提供可用置信度时可以保持 unknown（未验证），即使原始文字行有高分。 |\n| indeterminate（无法确定） | 当前证据不能支持确定结论；失败、部分处理或普通空结果都不能伪装成无字。截至 10 月 11 日 14:00，有 466 条完成记录落在这一类。 |\n\n## 专业定义\n\n先看人话状态，再看正文和原图；空文本、低分与处理失败不是同一回事。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止空结果被误报为无字、执行完成被误报为正确，以及手工更正覆盖了原始识别证据。\n\n## 边界\n\n- 内容正确性与字节完整性不同；哈希通过不证明文字或原件事实正确。\n\n- 原始文字、结构化文件与另行复核更正保持独立。\n\n- 识别到印章或姓名不证明真实性或人物身份。\n\n## 失败与恢复\n\n- **空 TXT 或空 blocks**：检查执行、覆盖、质量和独立证据；条件不全就保持 indeterminate。\n\n- **模型平均分高但关键字有疑问**：回原图核对精确区域，不让平均值覆盖细小错误。\n\n- **客观文件缺失、哈希或身份不一致**：拒绝正式复用或无字结论，保留错误与原件定位。\n\n- **原件在处理过程中变化**：不提交旧结果；固定最终原件后再决定是否重新处理。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-09",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 内容文件与人话摘要\n\n- 客观结果与负向证据\n\n- 输入快照与提交检查\n\n- 空结果、质量与证据回归\n\n- 〔下载 sample-table-actual.md〕下载 2026 年 9 月 3 日真实 Markdown 原文件（UTF-8），保留表格与合计而未补写标题；这是历史可复核产物，不是当前版本复跑。\n\n- 〔sample-table-actual.json〕9 月 3 日实际 JSON 原样副本，可核对 P0、被排除的标题及质量未知和页覆盖；与后来合成测试分开。\n\n## 如何验证\n\n- 源码审查确认人话摘要不改写客观结论，空结果条件与普通错误分开。\n\n- 合成单元测试覆盖负向证据、损坏、缺失、低置信度和实际字节绑定；9 月 24 日现役验收的 9 个合成质量案例全部满足各自门槛。这些都不能替代原图人工复核。",
+      "links": [
+        {
+          "text": "下载 sample-table-actual.md",
+          "href": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/localocr/sample-table-actual.md"
+        },
+        {
+          "text": "sample-table-actual.json",
+          "href": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com/releases/2h-20261007-bird-atlas/media/localocr/sample-table-actual.json"
+        },
+        {
+          "text": "上一个模块 表格与版面",
+          "href": "/projects/localocr/document-structure/"
+        },
+        {
+          "text": "下一个模块 任务与复用",
+          "href": "/projects/localocr/jobs-cache/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "localocr-results-evidence-10",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 截至 2026-10-11 14:00，16,074 条完成任务里有 15,665 条保存了文字检测结论：有字 15,196、说不准 466、无字 3，另有 409 条早期记录没有这个字段。完成任务数已排除项目样例和冒烟测试，但包含网站截图检查、图片压缩试验这类批量任务。这些是结果记录条数，不是原件数：三类分别涉及 14,261、446、1 份原件，同一原件的不同请求可能落在不同类别，不能相加。3 条“无字”是 9 月 29 日 20:12 到 20:21 对同一份原件的三次请求，只是机器登记的结论，没有人看图确认过。项目总览此前写的“274 份真实结果都是有字”只代表 9 月 28 日当时的统计，不是现在的情况。重要数字和小字仍须由真实样本逐区复看，没有复看的部分不能声称已经确认。\n\n## 与其他模块的关系\n\n这个模块解释结果能信到哪；任务复用模块据同一合同检查缓存，下游材料与文档工具只消费明确有效的内容。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
