@@ -1,0 +1,921 @@
+---
+{
+ "title": "等盘出现，再补缓存目录和说明",
+ "kind": "project",
+ "url": "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing",
+  "kind": "project",
+  "title": "等盘出现，再补缓存目录和说明",
+  "url": "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
+  "parent": "ramdisk-guardian",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "源码按 10 月 6 日最后一次提交（核心业务 9 月 29 日，均早于 10 月 11 日 14:00 截止）核对；说明文件指纹按仓库和盘上现存文件比对；测试本轮没有运行"
+  }
+ },
+ "source": {
+  "page": "sources/pages/ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing/page.json",
+  "sha256": "1375792f97538f972fd5b3b1243d9c32777ec270b2ce0c04d975646a69aeee42",
+  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+ }
+}
+---
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-01",
+  "section": "top",
+  "title": "等盘出现，再补缓存目录和说明",
+  "links": [
+   {
+    "text": "回到项目 → 内存盘守护",
+    "href": "/projects/ramdisk-guardian/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/RamdiskGuardian"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/ramdisk-guardian/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "等盘出现，再补缓存目录和说明",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（核心业务 9 月 29 日，均早于 10 月 11 日 14:00 截止）核对；说明文件指纹按仓库和盘上现存文件比对；测试本轮没有运行",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "减少重启、掉盘恢复或缓存盘初始化后，需要手工补目录的工作。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "等盘出现，再补缓存目录和说明",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（核心业务 9 月 29 日，均早于 10 月 11 日 14:00 截止）核对；说明文件指纹按仓库和盘上现存文件比对；测试本轮没有运行"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "减少重启、掉盘恢复或缓存盘初始化后，需要手工补目录的工作。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/illustrations/modules/ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-v01.png",
+   "key": "main-ramdisk-guardian",
+   "source_phrase": "右上一幅水彩插画：一根绿色内存条被画成一块小硬盘的样子，盘面写着“Z”，盘里飘着几片半透明的浏览器小图标（像落叶一样轻）；旁边一位小小的园丁拿着水壶和一把小扫帚照看它，园丁脚边一个小闹钟指着一刻钟；内存条下方一条细细的绿色光带流回主板，表示腾回来的内存。",
+   "sha256": "7d19a74fc6a0236a572e8f7c849ea776f4d7bc99dd98919b28fb38759da182ce",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 等盘出现，再补缓存目录和说明
+
+〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+RamdiskGuardian · 功能说明
+
+减少重启、掉盘恢复或缓存盘初始化后，需要手工补目录的工作。
+
+**当前情况：**盘上的使用说明和仓库里的规范说明指纹一致；截止前最后一轮巡查（10 月 11 日 13:46）看到 Z 盘在、只用了 0.5 GiB，没有盘或目录错误。守护器动手前不光看盘符和卷标，还要认准这块盘在 Primo 里的唯一编号；盘没有出现时它不能代替驱动创建或挂载。
+
+具体测试保留各自日期，页面不实时探测运行状态。
+
+项目源码：公开仓库
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 计划任务开始时Primo卷可能还没出现。直接写盘会失败；只按Z这个字母操作也可能碰到意外占用。守护器先等待，再要求RAMDISK卷标。 举个实际例子 “Z盘回来了，但原来的缓存文件夹没了。”下"
+   },
+   {
+    "id": "module-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 计划任务开始时Primo卷可能还没出现。直接写盘会失败；只按Z这个字母操作也可能碰到意外占用。守护器先等待，再要求RAMDISK卷标。 举个实际例子 “Z盘回来了，但原来的缓存文件夹没了。”下"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+计划任务开始时 Primo 卷可能还没出现。直接写盘会失败；只按 Z 这个字母操作也可能碰到意外占用。守护器先等待，再认准卷标和这块盘的真实身份，确认是那块内存盘才动手。
+
+## 举个实际例子
+
+“Z盘回来了，但原来的缓存文件夹没了。”下一轮守护会检查盘、补齐缺失目录，把仓库说明放回根目录，并回头核对说明内容和标记确实写对了。旧缓存内容由 Chrome 等应用自己生成。
+
+## 最后我会得到什么
+
+内存盘出现后补齐基础目录和使用说明；旧缓存仍由应用重建，目录存在不等于应用已经恢复。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-outcome_cards-01 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-outcome_cards-01",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 结果怎么看
+
+## 正常工作
+
+盘已出现且身份符合预期，基础目录和说明就绪。
+
+## 发现问题
+
+说明缺失或被改动时只同步项目说明；盘身份不符先停。
+
+## 暂不可用
+
+等不到盘时报告未到达，守护器不会替驱动凭空创建它。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-03",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "任务部署后会自动巡检；看到盘或目录问题时，在已接通这台电脑的 AI 对话中说“检查 Z 盘有没有到达并补齐缓存目录”。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **等盘真正出现**　一轮最多等待 150 秒；卷标要对，还要从 Primo 确认这块盘只有一个实际编号、同一块盘上没有别的卷，才继续。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "任务部署后会自动巡检；看到盘或目录问题时，在已接通这台电脑的 AI 对话中说“检查 Z 盘有没有到达并补齐缓存目录”。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **等盘真正出现**　一轮最多等待 150 秒；卷标要对，还要从 Primo 确认这块盘只有一个实际编号、同一块盘上没有别的卷，才继续。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+任务部署后会自动巡检；看到盘或目录问题时，在已接通这台电脑的 AI 对话中说“检查 Z 盘有没有到达并补齐缓存目录”。
+
+## 需要准备什么
+
+- 要检查哪台电脑的内存盘
+
+- 看到的缺目录或盘未出现问题
+
+## 从开始到拿到结果
+
+1. **等盘真正出现**　一轮最多等待 150 秒；卷标要对，还要从 Primo 确认这块盘只有一个实际编号、同一块盘上没有别的卷，才继续。
+
+2. **补缺失骨架**　建立基础目录、同步说明并写就绪标记，每一步都回头核对：目录真的存在、没被意外重定向，说明哈希一致，标记存在且隐藏。
+
+3. **读回状态**　目录存在不等于镜像或自然重启已验收；关键写入失败记为 ERROR 并返回非零，在 STATUS 与日志中说明。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-04 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-04",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 目录与说明已回读 关键规则与设计选择 1 默认Z，ramdrive.txt可保存一个自定义英文字母；部署回到Z时清掉旧覆盖。 2 每3秒等一次，上限150秒，不无限等待"
+   },
+   {
+    "id": "module-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 目录与说明已回读 关键规则与设计选择 1 默认Z，ramdrive.txt可保存一个自定义英文字母；部署回到Z时清掉旧覆盖。 2 每3秒等一次，上限150秒，不无限等待"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 默认Z，ramdrive.txt可保存一个自定义英文字母；部署回到Z时清掉旧覆盖。目前没有自定义覆盖文件。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 默认Z，ramdrive.txt可保存一个自定义英文字母；部署回到Z时清掉旧覆盖。目前没有自定义覆盖文件。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+仓库规范说明与 Z 盘根目录说明的 SHA256 一致；截止前最后一轮巡查（10 月 11 日 13:46）Z 盘在、未报盘或目录错误
+
+## 关键规则与设计选择
+
+1. 默认Z，ramdrive.txt可保存一个自定义英文字母；部署回到Z时清掉旧覆盖。目前没有自定义覆盖文件。
+
+2. 每3秒等一次，上限150秒，不无限等待；身份查询出错或读到空身份最多重试 3 次、每次隔 500 毫秒，读到错误卷标直接拒绝，不靠重试接受错盘。
+
+3. 只补约定目录和说明，不恢复旧缓存数据。
+
+## 当前怎样实现
+
+- Read-RamdiskVolume 同时要求非空卷标和 UniqueId，以 OrdinalIgnoreCase 比较 RAMDISK，并从 Primo 确认目标盘唯一编号、同盘没有其他卷，全部在目录写入之前。
+
+- 12个目录为Caches、Caches/Personal、Caches/Work、三个Chrome目录、360zip_temp、WeFlow、Scratch、Scratch/Personal、Scratch/Work和TEMP。
+
+- 每个目录建完必须真实存在，且不允许意外的 reparse（重定向链接）；不是 New-Item 不报错就算完成。
+
+- 仓库里必须正好有一个规范说明源 Z_*.md，SHA-256不同或目标缺失时复制到盘根，复制后再核一次哈希；随后写隐藏的 .ramdisk_ready，关键写入失败退出 ERROR/1。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-05",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- 当前说明 SHA256 为 A6681D3555795B13598A449FF5DFE2D17C281D8686B8FC9CF748A74DF782CF21，仓库源文件与盘上副本一致（9 月 18 日旧版说明的指纹是 8557ED61…6CADC9）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- 当前说明 SHA256 为 A6681D3555795B13598A449FF5DFE2D17C281D8686B8FC9CF748A74DF782CF21，仓库源文件与盘上副本一致（9 月 18 日旧版说明的指纹是 8557ED61…6CADC9）。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+- 当前说明 SHA256 为 A6681D3555795B13598A449FF5DFE2D17C281D8686B8FC9CF748A74DF782CF21，仓库源文件与盘上副本一致（9 月 18 日旧版说明的指纹是 8557ED61…6CADC9）。
+
+## 执行流程
+
+1. 解析默认或自定义单字母盘符。
+
+2. 等待到达，核对 RAMDISK 卷标、卷唯一编号和 Primo 盘编号。
+
+3. 补缺失目录并逐个回读，比对并同步根说明后再核哈希，写就绪标记。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-definitions-01 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-definitions-01",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+|---|---|
+| 目录骨架 | 应用预期的空文件夹结构，丢失后可以重新建立。 |
+| 卷标 | 卷的名称RAMDISK，是一个防误操作检查，不是密码学设备身份证明。 |
+| 卷唯一编号 | Windows 给每个卷的 UniqueId，加上 Primo 里这块盘的实际编号；两者都对得上，才确认眼前的 Z 就是那块内存盘。 |
+
+## 专业定义
+
+等待最多150秒，核对卷标、卷唯一编号和 Primo 盘编号，再补12个明确目录并回读。
+
+解决什么
+
+盘符缺失超过等待时间、配置不是单字母、卷标不符、身份读不全或同盘有多个卷时，当前脚本记录ERROR，不继续操作该盘。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-06",
+  "section": "tech",
+  "title": "出问题时",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 不因为看到标记就证明Primo镜像或自然重启恢复成功。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 不因为看到标记就证明Primo镜像或自然重启恢复成功。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时
+
+解决什么
+
+盘符缺失超过等待时间、配置不是单字母或卷标不符时，当前脚本记录ERROR，不继续操作该盘。
+
+## 边界
+
+- 不因为看到标记就证明Primo镜像或自然重启恢复成功。
+
+- 不删除其他缓存，不确认活动进程是否重新打开文件句柄。
+
+## 失败与恢复
+
+- **盘没有出现或卷标不符**：查看ERROR细节并核对实际Primo配置；不直接把盘符异常推断成硬件损坏。
+
+- **源说明丢失**：记录ERROR，恢复仓库中的规范说明后再运行；不能从旧缓存猜一份新规范。
+
+::screen{#ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "ramdisk-guardian-drive-arrival-sensing-and-skeleton-healing-07",
+  "section": "tech",
+  "title": "依据与来源",
+  "links": [
+   {
+    "text": "上一个模块 缓存准入与边界",
+    "href": "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/"
+   },
+   {
+    "text": "下一个模块 健康与静默提醒",
+    "href": "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- `zguardian.ps1`等待、盘符检查、目录和说明同步。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- `zguardian.ps1`等待、盘符检查、目录和说明同步。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源
+
+## 真实入口
+
+- `zguardian.ps1`等待、盘符检查、目录和说明同步。
+
+- `deploy.ps1`自定义盘符规范化与覆盖清理。
+
+- `Z_使用说明.md`实际同步的内容。
+
+## 如何验证
+
+- 静态检查脚本里有 15 条具名断言，检查配置和卷标先于目录写入；这是源码里的数量，本轮没有运行。
+
+- 9 月 18 日那轮在现有任务自然执行后，根说明哈希已跟随源更新，隔离恢复场景检查过目录、说明字节和标记存在。
+
+- 零写入体检入口只查 5 个登记的必要路径，不逐个验 12 个目录的内容；本轮没有跑静态测试或隔离恢复。
+
+## 与其他模块的关系
+
+为资源巡检和驱动恢复提供基础目录；驱动和应用各自的恢复仍需单独检查。

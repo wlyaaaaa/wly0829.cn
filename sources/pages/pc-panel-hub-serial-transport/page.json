@@ -1,0 +1,183 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pc-panel-hub-serial-transport",
+  "kind": "project",
+  "title": "唯一串口写入者、1 Hz 混合刷新与全帧恢复",
+  "url": "/projects/pc-panel-hub/serial-transport/",
+  "parent": "pc-panel-hub",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）核对；发送记录和实体屏确认保留各自历史日期，之后未重新核对"
+  },
+  "screens": [
+    {
+      "id": "pc-panel-hub-serial-transport-01",
+      "section": "top",
+      "title": "唯一串口写入者、1 Hz 混合刷新与全帧恢复",
+      "text": "# 唯一串口写入者、1 Hz 混合刷新与全帧恢复\n\n〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nPC Panel Hub · 功能说明\n\n机箱屏先收到完整画面，之后每秒更新变化；若设备漏掉一轮，就重新发送整张纠偏。主机发送记录与实体画面是否动起来分别核对。\n\n**当前情况：**最近一段有日期的主机记录是 9 月 27 日 21:27 到 28 日 21:22 连续发了 85,063 帧、0 次失败；这只是电脑这边的发送记录，不等于每一帧都显示到了实体屏。本人确认实体屏正常和异常退出自动接回的证据仍是 9 月 7 日。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双屏信息中心",
+          "href": "/projects/pc-panel-hub/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pc-panel-hub/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n只整张刷新会太慢，只发变化部分又可能在漏了一帧后越错越多。系统先给机箱屏发完整画面，再持续更新变化，必要时重新发整张纠偏。\n\n## 举个实际例子\n\n机箱屏像是冻住了，系统会先确认旧写入者已经退出，再用一张完整画面重新打底，之后恢复每秒更新。最后仍以实体屏上的时钟重新跳动为准，而不是看到电脑“发送成功”就宣布修好。\n\n## 最后我会得到什么\n\n机箱屏应恢复约每秒更新，并定期整张校正；主机记录能说明发送到哪一步，但最终仍须看实体时钟和像素真的变化。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 只整张刷新会太慢，只发变化部分又可能在漏了一帧后越错越多。系统先给机箱屏发完整画面，再持续更新变化，必要时重新发整张纠偏。 举个实际例子 机箱屏像是冻住了，系统会先确认旧写入者已经退出，再用一"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 只整张刷新会太慢，只发变化部分又可能在漏了一帧后越错越多。系统先给机箱屏发完整画面，再持续更新变化，必要时重新发整张纠偏。 举个实际例子 机箱屏像是冻住了，系统会先确认旧写入者已经退出，再用一"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n唯一发送程序接上正确设备并维持刷新时，主机侧状态通过；实体结果还要现场观察。\n\n## 发现问题时\n\n发送太慢或失败时退出这一发送程序；看门狗先确认旧程序真的退出，再重新建立完整画面。\n\n## 入口不可用或证据不足时\n\n旧发送者没退出或设备身份不唯一时不启动第二个程序抢屏；旧程序 30 秒内没停干净，就推迟重建、看门狗继续守着，下一轮再试。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n机箱屏冻结时，在已接入项目的本机 AI 对话中点名这块实体屏并描述最后一次变化。\n\n## 需要准备什么\n\n- 实际串口设备\n\n- 冻结时间与现有写入进程\n\n## 从开始到拿到结果\n\n1. **先找到真正连着机箱屏的端口**　系统确认设备身份与旧发送程序是否退出，不沿用旧电脑的端口编号。\n\n2. **重新建立画面**　发送完整基线，再每秒更新变化部分，定期补全帧避免漏帧长期冻结。\n\n3. **看真实屏幕**　交回时钟是否重新跳动；主机发送成功没有设备确认时保留未知，由看门狗按实际故障恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n9 月 27 日 21:27 至 28 日 21:22 一次会话 85,063 帧、失败 0；更早的 9 月 9 日 11:38（北京时间）曾 14,487/14,487 帧、失败 0。本人实体屏确认及异常退出自动接回保留 9 月 7 日实测日期\n\n## 关键规则与设计选择\n\n1. command 200 是保守已验证全帧路径；command 204 始终标为设备特定候选：它来自厂商程序里的导出，没有设备确认回执，也不是可以复用的公开协议。\n\n2. 安装默认保持 1 Hz，不把降到 3 秒当通用稳定性修复；计划任务参数里虽然还写着 3000 毫秒，混合模式实际强制每秒一帧。\n\n3. 增量 900 ms、全帧 10 秒上限，首次发送失败即退出。\n\n4. heartbeat 必须包含 send_attempted 和恢复基线，不能只报进程 alive。\n\n## 当前怎样实现\n\n- 启动执行 vendor-shaped priming、亮度恢复和两帧 command 200。\n\n- 稳态每秒发送 command 204 差分。\n\n- warmup 60/120/180 帧与长期 900 帧重建 serial session 并补全帧。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月9日03:38Z继续约1 Hz发送，14,487/14,487帧、失败0；本人实体屏确认及异常退出自动接回保留9月7日实测日期 关键规则与设计选择 1 comman"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月9日03:38Z继续约1 Hz发送，14,487/14,487帧、失败0；本人实体屏确认及异常退出自动接回保留9月7日实测日期 关键规则与设计选择 1 comman"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 看门狗校验 mode、period、send_ms、last_full_frame 和 failed。\n\n## 执行流程\n\n1. 确认唯一 COM 设备和旧 owner 已退出。\n\n2. 打开串口并发送完整基线。\n\n3. 每秒发送有界差分。\n\n4. 到恢复边界时重开会话并补全帧。\n\n5. 失败退出，由长期看门狗恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| baseline（完整基线） | 设备可据此得到完整画面的 command 200 帧。 |\n| delta（差分） | 只发送变化区域的 command 204 数据，主机更快但无设备 ACK。 |\n| serial session（串口会话） | 一次独占打开与写入周期；重开可清除部分驱动/设备停滞。 |\n\n## 专业定义\n\n以 command 200 建完整画面基线、command 204 做有界增量，并用唯一写入者、发送上限、定期重开会话和 heartbeat 限制静默冻结。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决全帧太慢、增量静默冻结、串口双写、驱动停滞、假心跳和恢复基线长期不到达。\n\n## 边界\n\n- 端口按“命令行显式指定 → 配置文件 → 兼容默认 COM7”的顺序取；COM7 是这台电脑配置里的端口，换机后必须重验身份，不是可泛化的设备事实。\n\n- 主机写成功不是 device ACK（设备确认）；每 900 帧补一次整帧只说明主机会定期尝试纠偏，不能保证实体屏最长只会停 15 分钟。\n\n- Alt helper 仅保留隔离测试，不进入当前日常链路。\n\n## 失败与恢复\n\n- **旧 stream 未释放 COM**　启动失败关闭，不抢占或创建第二个 writer。\n\n- **单次 send 超时或失败**　worker 退出；看门狗先证明旧发送者已退出再重建。停止超过 30 秒就推迟，看门狗保持运行，下一轮重新确认后再建，不出现第二个串口写入者。\n\n- **heartbeat 新鲜但基线逾期**　判为不健康，不接受假活。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-09",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- command 200/204、deadline、heartbeat\n\n- 已验证 command 200/123 编码边界\n\n- 协议观察与证据边界\n\n- 节拍与恢复基线合同\n\n- 唯一 writer、heartbeat 和超时回归\n\n## 如何验证\n\n- 9 月 27 日 21:27 至 28 日 21:22 主机记录一次会话 85,063 帧、failed=0；原始心跳已被后续写入覆盖，这次没有重新读到，保留为历史记录。\n\n- 2026-09-07T23:24:15Z（北京时间 9 月 8 日 07:24）heartbeat 为 285/285、failed=0、period=1010 ms、send_ms=22、last_full_frame=180；晚于异常退出恢复时第 5 帧，发送继续推进。8 月 31 日 2748/2748 保留为历史。\n\n- 9月7日 StreamCadence 与 RuntimeReliability 通过；生产链实测软件启动 31.06 秒恢复，强制结束看门狗后 63.33 秒由原 VBS 接回并确认旧 sender 退出。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-serial-transport-sources-02",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 套件的 TestVideoStream 当时因已有生产流而跳过，本轮没有运行；来源工程另行完成精确设备下的真实恢复，本人随后确认实体屏正常刷新。command 204 仍没有设备逐像素 ACK。\n\n## 与其他模块的关系\n\n安装与换机模块先确认当前串口和本地 runtime（运行环境）；本模块接收 renderer 位图，失败由电源与恢复模块处理，实体结果进入分层验收。",
+      "links": [
+        {
+          "text": "上一个模块 机箱屏渲染",
+          "href": "/projects/pc-panel-hub/case-panel-rendering/"
+        },
+        {
+          "text": "下一个模块 2288×1048 OLED 的六类信息、事件寿命与快捷键",
+          "href": "/projects/pc-panel-hub/hs2-overlay/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

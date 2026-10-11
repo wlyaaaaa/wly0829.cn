@@ -1,0 +1,203 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "vault-tool-ai-local-interface",
+  "kind": "project",
+  "title": "只查状态不打开内容，要读写就明确进入本地操作",
+  "url": "/projects/vault-tool/ai-local-interface/",
+  "parent": "vault-tool",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码按北京时间 14:00 前最后提交 b884ab61（10 月 1 日，版本 2.3.1）与技能 10 月 2 日版本核对；最近一次 AI 技能记录是 9 月 29 日，账本只统计到 10 月 10 日零点；只记技能名、不记结果，不能当使用证明",
+    "last": {
+      "label": "最近 AI 技能记录",
+      "at": "2026-09-29 01:11"
+    }
+  },
+  "screens": [
+    {
+      "id": "vault-tool-ai-local-interface-01",
+      "section": "top",
+      "title": "只查状态不打开内容，要读写就明确进入本地操作",
+      "text": "# 只查状态不打开内容，要读写就明确进入本地操作\n\n〔回到项目 → 本地加密库〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nvault-tool · 功能说明\n\n我可以让 AI 只检查格式、环境和下一步，而不让它看到原文。真正需要查看或改一段文本时，进入明确的本地图形流程，由我输入密码、选择密钥文件并确认保存；AI 得到的是实际做了什么、没做什么的状态。\n\n**当前情况：**只查状态与本地查看编辑已有隔离验证；密码由本人本地输入，真实私人库与桌面操作本轮未验收。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 本地加密库",
+          "href": "/projects/vault-tool/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/vault-tool"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/vault-tool/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n一个命令叫“只提示”不代表它真的只提示，一个 JSON 的 ok=true 也不代表库健康。若检查、解密、编辑和上传混在同一标签里，人和调用程序都会判断错下一步。入口需要按真实效果说明，而不是靠名字制造放心感。\n\n## 举个实际例子\n\n我可以分别说“只检查库有没有损坏，别打开内容”，或“我要在本地看并修改这份说明，密码我输入，其他文件别动”。前一种只走元数据；后一种要明确进入查看／编辑，并保留未编辑成员、密钥文件和原参数。\n\n## 最后我会得到什么\n\n只读路线交回结构、环境和建议；本地路线按实际动作报告取消、查看或保存，不把原文和密码发给 AI。若编辑无法保留原库内容就停止；写后自检与恢复都失败时，明确说明目标可能已经变化，并交回实际加密恢复副本。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一个命令叫“只提示”不代表它真的只提示，一个 JSON 的 ok=true 也不代表库健康。若检查、解密、编辑和上传混在同一标签里，人和调用程序都会判断错下一步。入口需要按真实效果说明，而不是"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 一个命令叫“只提示”不代表它真的只提示，一个 JSON 的 ok=true 也不代表库健康。若检查、解密、编辑和上传混在同一标签里，人和调用程序都会判断错下一步。入口需要按真实效果说明，而不是"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n只读请求只检查元数据；本地读写按实际效果报告，保存只改变选定支持文本并核对原成员。\n\n## 发现问题时\n\n损坏、缺依赖、不支持或超容量先停止；若写后回退也失败，保持失败终态和加密恢复副本，不再允许继续保存。\n\n## 入口不可用或证据不足时\n\n本地依赖缺失、本人取消、必要密钥文件未选或正确凭据未成立时停止对应操作，不换路径猜测解锁。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接通的 AI 对话中调用 vault-workflow，明确说“只检查”“只给建议”“本地查看”或“本地编辑”，并指定精确库；查看/编辑需本人操作本地窗口。\n\n## 需要准备什么\n\n- 精确库与这次只查、查看或编辑的选择\n\n- 要查看或修改的文本成员\n\n- 实际解锁时本人在本地输入凭据\n\n## 从开始到拿到结果\n\n1. **先选效果**　只读检查和建议不弹解锁框；查看或编辑才进入本机界面。\n\n2. **只处理所选内容**　本人在本地解锁，只读取或修改可保真的明确文本成员；格式或容量无法保留时停止。\n\n3. **核对动作状态**　AI 得到取消、查看、保存和自检状态，不取得原文或密码；失败不能写成已经保存。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n元数据、本地读写与失败状态有 9 月 3 日隔离验证；2026-10-11 重读源码和技能，行为未变，本次未运行\n\n## 关键规则与设计选择\n\n1. info、doctor、assess、plan 的文本与 JSON 都只读；--vault-file 绑定精确目标。清理、解密、编辑与发布必须走各自明确操作，输出格式不改变副作用。\n\n2. ok 表达检查调用是否完成时，不等于库可以解密；具体风险和 decision 仍要看。\n\n3. 保留另一未知层可能限制编辑容量；容量不足不是让工具悄悄扔掉那一层的理由。\n\n## 当前怎样实现\n\n- _inspect_vault_structure 有界读取魔数、长度、参数和尺寸，并跳过密文区；它不调用密码派生或解密。collect_vault_info、collect_doctor_info、collect_vault_assessment、collect_vault_plan 构成直接 JSON 接口。\n\n- info/doctor/assess/plan 的文本和 JSON 路径均不初始化普通日志、不清旧 decrypted/、不列私人文件名、不取密码或解密；--vault-file 只评估指定目标，不存在或损坏时不回退到工具目录的默认库文件。\n\n- assess 给出风险和建议，plan 再给 decision；损坏格式或结构须进入 manual_review（需本人核对），不能因 source/ 存在就推荐加密覆盖。检查调用成功不等于库健康。\n\n- Invoke-VaultWorkflow.ps1 是脚本适配入口，不是 HTTP API。调用方检查 ok、self_check 和明确的原文／解密效果字段；适配脚本退出 0 可能只是成功交回一份失败结果。\n\n- 现行技能将 PromptOnly（仅本地提示）、LocalView（本地查看）和 LocalEdit（本地编辑）分开：提示只采集并丢弃输入；查看和编辑必须给精确的库文件，不再自动寻找私人密文仓库、旧的固定默认库目录或当前目录（旧默认目录已停用，也不回退）；核心命令行仍默认用工具目录的库文件。必要密钥文件先选再解密，Required（要求密钥文件）拒绝原本只有密码的库。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 元数据、本地读写与失败状态已隔离验证 关键规则与设计选择 1 info、doctor、assess、plan的文本与JSON都只读；--vault-file绑定精确目标"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 元数据、本地读写与失败状态已隔离验证 关键规则与设计选择 1 info、doctor、assess、plan的文本与JSON都只读；--vault-file绑定精确目标"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 编辑须保留原 tar 成员、路径、类型、必要属性及未编辑二进制，严格处理受支持 UTF-8 文本；不能把整库替换解码后拼接，再只写一个 README.md。\n\n- 保存维持原凭据与 KDF，保护未解锁槽位；压缩后的新归档超过原槽容量时拒绝且不替换原库。本地窗口的文本预算 64 MiB、归档成员最多 10,000 个、声明解压总量最多 4 GiB，都在展开成员和显示前检查。写前解密自检、暂存字节回读、原子替换与最终文件自检分别成立；若最终自检与回退都失败，保留加密恢复副本并锁定失败状态，不能再保存或被无变化操作洗成成功。\n\n- GUI 的密码框 IME（输入法上下文）处理、复制后 15 秒及关闭清理属于本地实现，只清自己最新复制的内容，不承诺 Python/Tk 的所有内存副本都清零。密码、密钥文件与原文不进返回给 AI 的 JSON；result、saved、save_attempted、self_check 等字段按真实动作报告，取消和未保存关闭不是保存成功。\n\n- credential-plan 只解释下一步和明确支持原地处理的范围（原槽改密、共享密钥文件变化、迁移和重建）；recovery-check --self-test 只用一次虚构的内存内容往返，不能认证真实库。命令行、本地窗口和技能共用归档、槽位、事务与资源预算原语；VerifyPassword 只是一次本地检查，不颁发可复用会话。\n\n## 执行流程\n\n1. 先分清仅检查、仅提示、本地查看还是本地编辑。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n2. 只读路线读取结构和环境，给出风险与建议但不执行。\n\n3. 本地路线明确目标，由本人先提供需要的密码和密钥文件。\n\n4. 只查看支持文本，或只修改本人选定的支持成员；不能保留的格式／容量停止。\n\n5. 按真实效果返回取消、解锁、查看、保存与自检状态，不返回原文或凭据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| decision（下一步建议） | 根据已读取元数据形成的建议，不是动作授权，也不是已经执行的结果。 |\n| PromptOnly（仅本地密码提示） | 提示动作需要与实际查看、解密和保存分开，不能仅靠旧模式名判断效果。 |\n| member fidelity（成员保真） | 不改的文件和必要属性保留，只改变本次选中的受支持内容，不要求新密文与旧密文字节相同。 |\n\n## 专业定义\n\nAI 可以检查和解释；密码输入、内容查看与保存分别是明确的本地动作。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止状态命名掩盖真实副作用，以及本地文本保存丢失未编辑成员、凭据或其他层。\n\n## 边界\n\n- 库元数据通过--vault-file选择精确文件；VaultRoot仍表示工具目录，不把工具位置当另一份库。恢复自测只用虚构口令和内存内容，不认证真实密码。\n\n- GUI 替身与真实加密回归不能冒充本人已在真实桌面输入密码并完成验收。\n\n- Skill、独立 vault-tool 与密码中心各有来源和作用域；修网页不授权读取真实库或改全局规则。\n\n- 不因旧接口名字含 prompt 就藏掉现有读写功能，也不为修复增加服务、密钥托管或通用文档编辑器。\n\n## 失败与恢复\n\n- **结构损坏但 source/ 有文件**：返回损坏与需核对，不推荐直接加密来替换未知原库。\n\n- **需要密钥文件却尚未选定**：在实际解密前完成所需选择，取消则明确取消；不能先用空 keyfile 失败后永远回不到选择步骤。\n\n- **文本、格式或容量不能保真保存**：拒绝保存并保留原密文；明确是支持范围或容量问题，不输出已编辑成功。\n\n- **返回 JSON 标明失败或效果未知**：调用方检查结构化状态，不用进程退出 0 或绿色文案替代。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 严格元数据、风险、计划与实际命令分流\n\n- 模式分发、字段验证与结果适配\n\n- 本人本地输入、文本查看／编辑与结果状态\n\n- 调用方应读取的效果与失败字段\n\n- GUI 实现范围与不能冒充的身份／系统证据\n\n## 如何验证\n\n- 来源独立审查从现行代码重建了本地 GUI 这条轴，修复后产品与技术说明均保留。\n\n- 2026-09-03：41 项隔离回归、独立虚构多成员／双槽／密钥文件／KDF 复验通过；回退失败后无变化及修改重试都不再发生写入。当前 test_vault_local_ui.py 仍是 41 个测试定义，另有 final_audit 24 个、operations 10 个、protect_remote_readme 5 个，这次都没有运行，不能合起来说同一次全部通过。\n\n- 损坏库有／无 source 均选择 manual_review，实际 info --json 仍可退出 0 但库 ok=false；这是查询与库状态的区别。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "vault-tool-ai-local-interface-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- AI 技能账本里 vault-workflow 共 7 条记录，最近一条 2026-09-29 01:11；账本只统计到 10 月 10 日零点，而且只记技能名，不记模式和结果。本地窗口的查看和编辑也不写终端日志，所以现有记录说明不了最近有没有在本地查看或编辑过。\n\n- 本轮没有真实桌面密码输入、本人私人库或系统剪贴板验收，也没有调用 LocalEdit 预演；测试与真人使用不互相替代。\n\n## 与其他模块的关系\n\n这里解释人与 AI 怎样进入产品；密码与格式、文件查看和库维护解释具体内容行为；私人远端动作由密文备份模块单列。",
+      "links": [
+        {
+          "text": "上一个模块 图片载体",
+          "href": "/projects/vault-tool/image-carrier/"
+        },
+        {
+          "text": "下一个模块 密文备份",
+          "href": "/projects/vault-tool/private-backup/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ],
+  "based_on": {
+    "commit": "b884ab61b8a9b62fd1412c493bff0c34a82afc06",
+    "commit_time": "2026-10-01T18:22:19+08:00"
+  }
+}

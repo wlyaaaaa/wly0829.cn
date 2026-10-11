@@ -35,7 +35,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月10日",
+        "text_ref": "截至10月11日14:00",
         "align": "right"
       },
       {
@@ -122,7 +122,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "截至10月10日",
+        "text_ref": "截至10月11日14:00",
         "align": "right"
       },
       {
@@ -634,7 +634,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "9月27日那次同步到外接盘，逐个核对一致：个人资料2"
+        "text_ref": "10月10日17:35那次同步到外接盘完成：个人资料286283"
       }
     ],
     "source_images": [
@@ -687,7 +687,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "9月27日那次同步到外接盘，逐个核对一致：个人资料2"
+        "text_ref": "10月10日17:35那次同步到外接盘完成：个人资料286283"
       }
     ],
     "source_images": [
@@ -1518,7 +1518,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1登记机器的事实只记一处：45个登记文件，记着盘、端",
+        "text_ref": "1登记机器的事实只记一处：49个登记文件，记着盘、端",
         "columns": 5,
         "direction": "horizontal",
         "connector": "arrow",
@@ -1571,7 +1571,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1登记机器的事实只记一处：45个登记文件，记着盘、端",
+        "text_ref": "1登记机器的事实只记一处：49个登记文件，记着盘、端",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
@@ -1624,7 +1624,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "110620行代码（PowerShell、Pytho",
+        "text_ref": "136309行代码（PowerShell、Pytho",
         "columns": 3,
         "columns_v": 1,
         "icons": [
@@ -1681,7 +1681,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "110620行代码（PowerShell、Pytho",
+        "text_ref": "136309行代码（PowerShell、Pytho",
         "columns": 1,
         "columns_v": 1,
         "icons": [
@@ -2626,7 +2626,13 @@
         "illustration": "left_inside",
         "icons": "auto",
         "group_heading": "brush",
-        "item_spans": {"11": 3, "16": 3, "67": 3, "66": 2, "71": 3},
+        "item_spans": {
+          "11": 3,
+          "16": 3,
+          "67": 3,
+          "66": 2,
+          "71": 3
+        },
         "status_text": "dot_only"
       }
     ],
@@ -2973,6 +2979,195 @@
     },
     "pending_requirements": []
   },
-  {"screen": "pcconfig-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。", "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["1806:1213", "1806:1213", "979:602", "1806:1213", "2297:1244", "994:669", "964:605", "868:1244", "1920:2100"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}, {"index": 7, "node_indices": [7]}, {"index": 8, "node_indices": [8]}]}]},
-  {"screen": "pcconfig-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。", "indices": [0, 1, 2, 3, 4, 5, 6, 7, 8], "columns": 3, "columns_v": 1, "ratios": ["1806:1213", "1806:1213", "979:602", "1806:1213", "2297:1244", "994:669", "964:605", "868:1244", "1920:2100"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}, {"index": 4, "node_indices": [4]}, {"index": 5, "node_indices": [5]}, {"index": 6, "node_indices": [6]}, {"index": 7, "node_indices": [7]}, {"index": 8, "node_indices": [8]}]}]}
+  {
+    "screen": "pcconfig-gallery",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "equal_row_height": true,
+        "ratios": [
+          "1806:1213",
+          "1806:1213",
+          "979:602",
+          "1806:1213",
+          "2297:1244",
+          "994:669",
+          "964:605",
+          "868:1244",
+          "1920:2100"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          },
+          {
+            "index": 4,
+            "node_indices": [
+              4
+            ]
+          },
+          {
+            "index": 5,
+            "node_indices": [
+              5
+            ]
+          },
+          {
+            "index": 6,
+            "node_indices": [
+              6
+            ]
+          },
+          {
+            "index": 7,
+            "node_indices": [
+              7
+            ]
+          },
+          {
+            "index": 8,
+            "node_indices": [
+              8
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pcconfig-gallery",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "密码中心按类型筛选条目，顶部个人资料与无限制授权分别显示状态和剩余时间；列表没有展开秘密值。",
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "1806:1213",
+          "1806:1213",
+          "979:602",
+          "1806:1213",
+          "2297:1244",
+          "994:669",
+          "964:605",
+          "868:1244",
+          "1920:2100"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          },
+          {
+            "index": 4,
+            "node_indices": [
+              4
+            ]
+          },
+          {
+            "index": 5,
+            "node_indices": [
+              5
+            ]
+          },
+          {
+            "index": 6,
+            "node_indices": [
+              6
+            ]
+          },
+          {
+            "index": 7,
+            "node_indices": [
+              7
+            ]
+          },
+          {
+            "index": 8,
+            "node_indices": [
+              8
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]

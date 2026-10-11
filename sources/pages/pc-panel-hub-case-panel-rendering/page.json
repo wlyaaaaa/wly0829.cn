@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pc-panel-hub-case-panel-rendering",
+  "kind": "project",
+  "title": "480×1920 机箱屏的信息密度与流畅渲染",
+  "url": "/projects/pc-panel-hub/case-panel-rendering/",
+  "parent": "pc-panel-hub",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对；渲染测试和实体屏确认保留 9 月 7 日，本轮没有重跑、没有看实体屏"
+  },
+  "screens": [
+    {
+      "id": "pc-panel-hub-case-panel-rendering-01",
+      "section": "top",
+      "title": "480×1920 机箱屏的信息密度与流畅渲染",
+      "text": "# 480×1920 机箱屏的信息密度与流畅渲染\n\n〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nPC Panel Hub · 功能说明\n\n我不用在主屏打开监控窗口，抬眼就能看到时间天气、CPU、显卡、帧数、内存、网络、磁盘和最占资源的程序。\n\n**当前情况：**本人 9 月 7 日确认过机箱屏正常刷新，之后未重新核对实体屏；画廊仍是标注日期的软件预览与历史画面，不能证明此刻实体屏状态。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双屏信息中心",
+          "href": "/projects/pc-panel-hub/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pc-panel-hub/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n机箱竖屏很窄，却要从上到下排下九段信息：时钟天气、采集状态和前台程序、CPU、显卡、帧数（平均、1% 低帧、帧时间）、内存显存和内存条温度、网速和网络质量、最多 4 块磁盘、CPU 和内存各占前 3 的程序。长磁盘名或空闲状态容易挤乱排版；电脑上的预览生成太慢也不该拖住实体刷新。\n\n## 举个实际例子\n\n磁盘名字长得快能写一行诗、游戏又没启动时，机箱屏仍会把名称、容量和“正在等待帧”排清楚，不让文字互相打架；电脑上的预览偶尔失败，实体屏照样继续刷新。\n\n## 最后我会得到什么\n\n机箱竖屏上的九段信息、长磁盘名和没有游戏帧的提示都能清楚排开，时钟按北京时间走；电脑上另存一张软件预览图供排查，默认约 45 秒一张，不拖慢实体屏。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 机箱竖屏很窄，长磁盘名或空闲状态容易挤乱排版；电脑上的预览生成太慢也不该拖住实体刷新。画面首先要让我抬眼看清关键数字和缺失原因。 举个实际例子 磁盘名字长得快能写一行诗、游戏又没启动时，机箱屏"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 机箱竖屏很窄，长磁盘名或空闲状态容易挤乱排版；电脑上的预览生成太慢也不该拖住实体刷新。画面首先要让我抬眼看清关键数字和缺失原因。 举个实际例子 磁盘名字长得快能写一行诗、游戏又没启动时，机箱屏"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-outcome_cards-01",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n取得当前状态后生成画面并发送，实体是否真更新再看实屏。\n\n## 发现问题时\n\n新数据慢或缺字段时显示资料变旧，不让整屏冻结。\n\n## 入口不可用或证据不足时\n\n画面生成失败时停止这次发送，不能拿旧程序的图冒充新画面。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n直接看 480×1920 机箱竖屏；布局或预览异常时在项目 AI 对话中说明哪块信息看不清。\n\n## 需要准备什么\n\n- 实际屏幕照片或具体区域描述\n\n- 长名称、无游戏帧等现场情况\n\n## 从开始到拿到结果\n\n1. **取得本次快照**　渲染器读取有来源和时效标记的数据。\n\n2. **排成可读画面**　按竖屏尺寸安排硬件、网络和磁盘等信息，长名称与等待帧状态保持可读。\n\n3. **看实体更新**　软件图可辅助定位，预览失败不阻断实体发送；旧快照继续显示时须看见它已变陈旧。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n源码按 10 月 6 日最后一次提交核对；9 月 7 日渲染、HTTP 与预览回归通过，本人确认 TURZX 实体屏正常刷新，这两项本轮没有重做；画廊仍是各自标注日期的预览与历史发送帧\n\n## 关键规则与设计选择\n\n1. 时钟直接在 renderer 里生成，不依赖慢快照：先取协调世界时，再换成中国标准时间（北京时间）；找不到这个时区就按 UTC+8，不按电脑本机所在时区直接显示。\n\n2. 完整 HTTP body 有墙钟 deadline 和 4 MiB 上限。\n\n3. PNG 预览在低优先级 single-flight（单飞）线程生成，默认约 45 秒尝试一次，可丢弃但不阻塞发送。\n\n4. 长进程、磁盘和状态有有界布局，不通过缩成不可读小字解决。\n\n## 当前怎样实现\n\n- C# / GDI+ 在固定 480×1920 画布上绘制九段卡片；数据来源分别是硬件传感器（LibreHardwareMonitor、NVIDIA 驱动）、Windows、TimeAudit 的帧数和 Open-Meteo 天气。\n\n- 指标请求和渲染循环各有 deadline；当前从本机 127.0.0.1:18766 取快照，取不到新的就用最近好快照。用了缓存只说明画面还连续，不等于每一项传感器都新鲜。\n\n- renderer 线程与串口 sender 线程使用 AboveNormal / Highest，但绝不使用 Realtime。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日渲染、HTTP与预览回归通过，本人确认TURZX实体屏正常刷新；画廊仍是各自标注日期的预览与历史发送帧 关键规则与设计选择 1 时钟直接在 renderer 内"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日渲染、HTTP与预览回归通过，本人确认TURZX实体屏正常刷新；画廊仍是各自标注日期的预览与历史发送帧 关键规则与设计选择 1 时钟直接在 renderer 内"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 诊断预览写在 out/stream/stream-last.png，是软件画出来的图，不是拍的实体屏。测试 fixture 生成可重复 PNG，供视觉比较和网站画廊。\n\n## 执行流程\n\n1. 请求本地 snapshot。\n\n2. 验证 body 大小、时效和状态。\n\n3. 在固定画布布局每一块信息。\n\n4. 生成位图并交给 transport。\n\n5. 发送后异步排队诊断 preview。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| GDI+（Windows 2D 绘图） | 项目用来绘制固定像素位图的本地图形接口。 |\n| wall-clock deadline（墙钟截止） | 覆盖 headers 和完整 body 的真实最长等待，而不是只等一个回调。 |\n| single-flight（单飞） | 同类慢任务未完成时不再排第二份，避免队列堆积。 |\n\n## 专业定义\n\n把可信 snapshot（快照）排成适合竖屏远读的时钟、CPU/GPU、FPS、内存、网络、磁盘和进程卡片，并让慢 HTTP 或 PNG 预览不阻塞真实发送。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决窄屏信息层级、长名称溢出、慢 HTTP body、预览编码阻塞和空值误显示。\n\n## 边界\n\n- 软件 PNG 只证明 renderer 输出，不证明实体屏颜色、刷新或连接。\n\n- 最后好快照可保证画面连续，但必须同时显示新鲜度下降。\n\n- 设计 SVG 和 fixture 不是当前机器遥测。\n\n## 失败与恢复\n\n- **HTTP body 中途停滞**：caller deadline 到期后使用缓存，不等 timer callback。\n\n- **预览文件被锁或编码慢**：丢弃本轮 preview，不影响串口发送。\n\n- **字段为空或名称过长**：显示状态或有界换行，不清零或溢出卡片。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-case-panel-rendering-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 位图布局、deadline 与异步预览\n\n- 快照读取、渲染循环与发送编排\n\n- 固定 fixture 渲染回归\n\n- HTTP 完整 body 与缓存回归\n\n- 当前布局参考\n\n## 如何验证\n\n- 9月7日历史 TestRenderer 与 TestHttpPipeline 通过并生成 480×1920 PNG；本轮没有生成 fixture，也没有重跑这两项。\n\n- 当时 preview 文件约 80 KiB，测试输出可重复读取；这是那次软件输出的事实，不是这次对现存文件的验收。\n\n- 9月7日本人确认 TURZX 实体屏正常刷新；本轮没有逐像素拍摄或独立仪表对照，也没有做新的视觉验收，不把可见刷新扩大为所有数据准确。\n\n## 与其他模块的关系\n\n消费指标模块的快照，把位图交给串口传输；画廊展示其软件输出。",
+      "links": [
+        {
+          "text": "上一个模块 指标与可信度",
+          "href": "/projects/pc-panel-hub/telemetry-trust/"
+        },
+        {
+          "text": "下一个模块 串口与刷新",
+          "href": "/projects/pc-panel-hub/serial-transport/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -25,6 +25,11 @@
         "text_ref": "把定好的文案和素材交给 AI"
       },
       {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "数字按北京时间 10 月 11 日 14:00 前最后一次提交 cc41e514 算"
+      },
+      {
         "type": "illustration",
         "row": "hero",
         "width": "52%",
@@ -45,11 +50,6 @@
           1,
           3
         ]
-      },
-      {
-        "type": "prose",
-        "align": "left",
-        "text_ref": "数字截至10月10"
       },
       {
         "type": "prose",
@@ -89,6 +89,11 @@
         "text_ref": "把定好的文案和素材交给 AI"
       },
       {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "数字按北京时间 10 月 11 日 14:00 前最后一次提交 cc41e514 算"
+      },
+      {
         "type": "illustration",
         "align": "center",
         "illustration": "outside",
@@ -109,11 +114,6 @@
           1,
           1
         ]
-      },
-      {
-        "type": "prose",
-        "align": "left",
-        "text_ref": "数字截至10月10"
       },
       {
         "type": "prose",
@@ -143,11 +143,6 @@
         "text_ref": "做一期视频，怎么走一遍"
       },
       {
-        "type": "prose",
-        "align": "left",
-        "text_ref": "一段旁白配一个画面"
-      },
-      {
         "type": "flow",
         "columns": 1,
         "direction": "vertical",
@@ -155,8 +150,8 @@
         "illustration": "left_inside",
         "connector": "ribbon",
         "highlight": [
-          6,
-          8
+          5,
+          7
         ],
         "icons": "auto",
         "text_ref": "我 定题、写好旁白"
@@ -186,9 +181,14 @@
           "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
         ],
         "row": "balanced-preview"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "讲解视频默认走图文页"
       }
     ],
-    "notes": "实图左栏八步沿弯曲胶片带竖排，圆形编号、角色小徽章紧贴左侧，每步右端还各有小图；第6、8步浅黄，手掌角色保留。右栏顶部5:4纯白截图槽、外部图注、下方四句便签；无大插画。caption在定稿最后，放回右栏截图下是空间重排。现flow可做竖向ribbon及highlight，但角色徽章、右端小图和双徽章需在组件样张核对，不能用默认上图下文替代。整屏标题依统一标准居中。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
+    "notes": "实图左栏七步沿弯曲胶片带竖排，圆形编号、角色小徽章紧贴左侧，每步右端还各有小图；第5、7步浅黄，手掌角色保留。右栏顶部5:4纯白截图槽、外部图注、下方四句便签；无大插画。caption在定稿最后，放回右栏截图下是空间重排。现flow可做竖向ribbon及highlight，但角色徽章、右端小图和双徽章需在组件样张核对，不能用默认上图下文替代。整屏标题依统一标准居中。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
     "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
   },
   {
@@ -201,11 +201,6 @@
         "align": "center",
         "size": "large",
         "text_ref": "做一期视频，怎么走一遍"
-      },
-      {
-        "type": "prose",
-        "align": "left",
-        "text_ref": "一段旁白配一个画面"
       },
       {
         "type": "screenshot",
@@ -221,8 +216,8 @@
         "illustration": "left_inside",
         "connector": "ribbon",
         "highlight": [
-          6,
-          8
+          5,
+          7
         ],
         "icons": "auto",
         "text_ref": "我 定题、写好旁白"
@@ -241,9 +236,14 @@
         "type": "prose",
         "align": "left",
         "text_ref": "有声预览的真实截图"
+      },
+      {
+        "type": "prose",
+        "align": "left",
+        "text_ref": "讲解视频默认走图文页"
       }
     ],
-    "notes": "原竖版顺序v→v2：v为标题、解释、整宽空白截图、步骤1–6；v2为步骤7、8、四句便签、最下整宽caption卡。实图caption并未紧贴截图，和portrait描述冲突，此规格按实图留在最后；须保留唯一完整caption。第6、8步黄色，步骤7、8的原续图去掉右端插画、用大编号和大角色名，角色语义不丢。按完整步骤拆张，不截卡。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
+    "notes": "原竖版顺序v→v2：v为标题、解释、整宽空白截图、步骤1–5；v2为步骤6、7、四句便签、最下整宽caption卡。实图caption并未紧贴截图，和portrait描述冲突，此规格按实图留在最后；须保留唯一完整caption。第5、7步黄色，步骤6、7的原续图去掉右端插画、用大编号和大角色名，角色语义不丢。按完整步骤拆张，不截卡。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-v.png",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\video-scaffold\\img\\video-scaffold-02-v2.png"
@@ -579,6 +579,17 @@
         "text_ref": "每一帧按时间算出来。"
       },
       {
+        "type": "notice",
+        "align": "left",
+        "illustration": "left_inside",
+        "tone": "yellow",
+        "text_ref": "**这几招：自测里跑通过；本期图文页影片用到了哪几招，这次没有逐项核对**",
+        "icons": [
+          "_library/icons/文件齿轮.png"
+        ],
+        "columns": 2
+      },
+      {
         "type": "stat_card",
         "row": "design",
         "width": "33%",
@@ -586,18 +597,7 @@
         "align": "left",
         "illustration": "top_inside",
         "icons": "auto",
-        "text_ref": "8963行"
-      },
-      {
-        "type": "notice",
-        "align": "left",
-        "illustration": "left_inside",
-        "tone": "yellow",
-        "text_ref": "这几招：自测里跑通了",
-        "icons": [
-          "_library/icons/文件齿轮.png"
-        ],
-        "columns": 2
+        "text_ref": "15321 行"
       }
     ],
     "notes": "实图六原则卡两列三行，卡内左图右文，右栏三数字卡竖排，数字在左、插画在右，与普通上图数字卡有差异。下方一张全宽浅黄卡内四条实际按左右两列两行：左上改一场、左下章节少而短、右上动画开头结尾、右下踩点写错；保留定稿顺序语义和唯一原文，不把视觉列读序当改文依据。右上黄色状态点为装饰，不新增状态词。现numbered_steps不完整支持left_inside、stat_card没有右图模式、notice不读取columns且黄底仍回退绿底；需组件样张接入这三处。；page-fixer-09（按审页意见）：提示正文用现已支持columns兑现两列",
@@ -625,20 +625,20 @@
         "text_ref": "每一帧按时间算出来。"
       },
       {
+        "type": "notice",
+        "align": "left",
+        "illustration": "none",
+        "tone": "yellow",
+        "text_ref": "**这几招：自测里跑通过；本期图文页影片用到了哪几招，这次没有逐项核对**"
+      },
+      {
         "type": "stat_card",
         "columns": 1,
         "columns_v": 1,
         "align": "left",
         "illustration": "none",
         "icons": "none",
-        "text_ref": "8963行"
-      },
-      {
-        "type": "notice",
-        "align": "left",
-        "illustration": "none",
-        "tone": "yellow",
-        "text_ref": "这几招：自测里跑通了"
+        "text_ref": "15321 行"
       }
     ],
     "notes": "原竖版v→v2：v是标题和原则1–5（卡内左图右文）；v2原则6是无图整宽卡，然后6419与91两卡一排，37单卡下一排满宽，再是浅黄长卡四条逐行、无图。这与portrait三张数字并排一行有冲突，按实图2＋1满宽。同一steps节点内第6项图标应省，不能全组六图机械套；同一stats节点最后卡跨两列需接入，现columns_v=2只会最后卡半宽。定稿黄色长卡标题完整保留，源图标题措辞与定稿略异以定稿为准。；page-fixer-09（按审页意见）：单张提示移除无效外卡列数字段；手机数字卡每行一张",
@@ -770,7 +770,7 @@
         "width": "34%",
         "align": "left",
         "size": "large",
-        "text_ref": "全部功能（26项）"
+        "text_ref": "全部功能（32 项）"
       },
       {
         "type": "status_legend",
@@ -842,7 +842,7 @@
         "type": "chapter_title",
         "align": "center",
         "size": "large",
-        "text_ref": "全部功能（26项）"
+        "text_ref": "全部功能（32 项）"
       },
       {
         "type": "status_legend",
@@ -952,6 +952,43 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
+        "text_ref": "默认路线：图文页"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/09-时钟-clean.png",
+          "_library/icons/小放映机.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-839512a73462b1c73a7b.png"
+        ],
+        "text_ref": "图文页开工"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "另一条线：网页成片"
+      },
+      {
+        "type": "feature_card",
+        "columns": 3,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/小放映机.png"
+        ],
+        "text_ref": "网页成片"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
         "text_ref": "已停用"
       },
       {
@@ -1008,6 +1045,43 @@
         "type": "section_heading",
         "align": "left",
         "size": "medium",
+        "text_ref": "默认路线：图文页"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/文件夹.png",
+          "_library/hires-icons/打勾清单.png",
+          "_library/hires-icons/09-时钟-clean.png",
+          "_library/icons/小放映机.png",
+          "_library/round3/clean-assets/png/12-文件核验-clean.png",
+          "_library/fix-round-2/icon-clean-839512a73462b1c73a7b.png"
+        ],
+        "text_ref": "图文页开工"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
+        "text_ref": "另一条线：网页成片"
+      },
+      {
+        "type": "feature_card",
+        "columns": 1,
+        "align": "left",
+        "illustration": "left_inside",
+        "icons": [
+          "_library/icons/小放映机.png"
+        ],
+        "text_ref": "网页成片"
+      },
+      {
+        "type": "section_heading",
+        "align": "left",
+        "size": "medium",
         "text_ref": "已停用"
       },
       {
@@ -1050,6 +1124,22 @@
         "connector_style": "thin_line"
       },
       {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "10 月 11 日（截至 14:00 前最后一次提交 cc41e514，13:57）"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "图文页成了讲解视频的默认开工方式"
+      },
+      {
+        "type": "prose",
+        "text_ref": "审定不等于发布"
+      },
+      {
         "type": "illustration",
         "align": "center",
         "illustration": "top_inside",
@@ -1081,6 +1171,22 @@
         "icons": "auto",
         "text_ref": "6 月 26 日",
         "connector_style": "thin_line"
+      },
+      {
+        "type": "section_heading",
+        "size": "medium",
+        "text_ref": "10 月 11 日（截至 14:00 前最后一次提交 cc41e514，13:57）"
+      },
+      {
+        "type": "bullet_list",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "text_ref": "图文页成了讲解视频的默认开工方式"
+      },
+      {
+        "type": "prose",
+        "text_ref": "审定不等于发布"
       },
       {
         "type": "illustration",

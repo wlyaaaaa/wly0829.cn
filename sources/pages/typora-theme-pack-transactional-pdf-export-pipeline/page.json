@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "typora-theme-pack-transactional-pdf-export-pipeline",
+  "kind": "project",
+  "title": "转换器与 PDF 交付",
+  "url": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
+  "parent": "typora-theme-pack",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未运行测试或导出"
+  },
+  "screens": [
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-01",
+      "section": "top",
+      "title": "转换器与 PDF 交付",
+      "text": "# 转换器与 PDF 交付\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n把模式和正文交给明确选好的外部转换器，检查这次是否真的成功。现在除了命令行，Typora 的“原版 / 公司 / 个人”三项导出菜单也走这条管道。\n\n**当前情况：**失败保留旧文件、坏 PDF 拒收这些保护在源码里，9 月 29 日 GitHub 自动测试 21 项通过；三项菜单已经配好，但还没在 Typora 里实际点过。新的导出仍核对实际文件，不能借旧 PDF 报成功。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Typora 薄荷主题",
+          "href": "/projects/typora-theme-pack/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/typora-theme-pack"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/typora-theme-pack/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n有些转换器没有生成文件却返回成功；只检查目标是否存在，就可能把上一次 PDF 冒充本次成果。\n\n## 举个实际例子\n\n原来已有一份 PDF，这次转换器报错。脚本只清本次暂存文件，旧 PDF 保留，并返回真实错误。\n\n## 最后我会得到什么\n\n获得本次生成且可解析的 PDF，或者具体失败原因；不靠旧文件大小判成功。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 有些转换器没有生成文件却返回成功；只检查目标是否存在，就可能把上一次 PDF 冒充本次成果。 举个实际例子 原来已有一份 PDF，这次转换器报错。脚本只清本次暂存文件，旧 PDF 保留，并返回"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 有些转换器没有生成文件却返回成功；只检查目标是否存在，就可能把上一次 PDF 冒充本次成果。 举个实际例子 原来已有一份 PDF，这次转换器报错。脚本只清本次暂存文件，旧 PDF 保留，并返回"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n新 PDF 真实生成、能打开且有页面，原文没有被改动后，才替换目标文件。\n\n## 发现问题时\n\n转换失败或新文件无效时保留旧 PDF，并报告这次没有交付。\n\n## 入口不可用或证据不足时\n\n转换器、输入文件或输出位置不可用时，在替换前停止。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n先运行 `python tools/configure_converter.py --converter <converter.py>` 记录兼容转换器，或本次在 export_pdf.py 指定 --converter；再选 Markdown、模式与输出。想从 Typora 菜单导出，运行一次 `configure_typora_menu.py` 写好三项菜单，之后在“文件 → 导出”里选。\n\n## 需要准备什么\n\n- 要导出的 Markdown\n\n- 选定的版式与 PDF 目标\n\n- 如尚未配置，指定已有兼容转换器\n\n## 从开始到拿到结果\n\n1. **准备输入与转换器**　核对原文、输出位置和转换器可运行。\n\n2. **先生成暂存结果**　工具调用转换器后检查原文摘要未变、PDF 可解析且有页。\n\n3. **确认再替换**　仅合格暂存结果替换目标文件；失败留下原文和旧交付物并说明原因。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n源码 21 个测试定义，2026-09-29 01:51 GitHub 自动测试 21 项通过；菜单配置已核对，实际点击待验收；本次未运行\n\n## 关键规则与设计选择\n\n1. --converter > MD_PDF_TOOLKIT_CONVERTER > 本机 JSON；不猜默认打印器，三处都没有就直接报错。\n\n2. 输出必须为 .pdf，不能等于源 Markdown 或转换器；输入须存在且为 .md，输出父目录必须存在。\n\n3. 暂存文件名短且位于目标同目录，避免跨卷原子移动和长文件名问题。\n\n## 当前怎样实现\n\n- configure_converter.py 原子保存 typora-theme-pack.local.v1；相对路径按配置目录解析。本机配置指向一个已存在的 Markdown 转 PDF 转换脚本，配置里不含任何凭据。\n\n- configure_typora_menu.py 只更新 Typora 的三个自定义导出槽，先备份原配置再原子替换，菜单名为原版/公司/个人；三项都调用 typora_export_launcher.ps1，启动器每次从 PCConfig 登记读取 Python，再把输入和模式交给导出脚本。不传固定输出路径，默认存在文稿旁并带对应后缀。\n\n- export_pdf.py 生成 profile CSS 临时文件，调用 sys.executable + converter，带 --input、--output、--css-file、--document-style-policy、--require-style 和可选 --expected-pages。精确页数由兼容转换器验证；主题包自己的底线是至少一页。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 回归与本机三模式导出通过 关键规则与设计选择 1 --converter > MD_PDF_TOOLKIT_CONVERTER > 本机 JSON；不猜默认打印器。 2"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 回归与本机三模式导出通过 关键规则与设计选择 1 --converter > MD_PDF_TOOLKIT_CONVERTER > 本机 JSON；不猜默认打印器。 2"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 在外部执行前后核对源 SHA-256；成功后由 pypdf.PdfReader 解析实际暂存 PDF（`.typora-export-*.staged.pdf`），至少一页才 os.replace。\n\n- finally 尝试清理本次 CSS 与暂存文件，清理错误不覆盖原失败结果。\n\n## 执行流程\n\n1. 校验输入输出与配置\n\n2. 计算源摘要并预约暂存 PDF\n\n3. 调用外部转换器\n\n4. 核对源摘要和 PDF 页数\n\n5. 替换目标并清理本次临时文件",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 本次暂存 | 使用新路径，旧目标不能充当新输出证据。 |\n| 摘要检查 | 发现原文发生变化，不能保证外部程序从未写过它。 |\n\n## 专业定义\n\n新 PDF 检查通过，才替换上一次成果",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n源摘要变化时拒绝成功，但这是检测而不是对外部程序的写入隔离。\n\n## 边界\n\n- 包不实现底层 PDF 排版；兼容引擎由用户既有配置提供。\n\n- 不会自动恢复被其他程序修改的源文档。\n\n## 失败与恢复\n\n- **无输出、损坏 PDF、0 页或非零退出**：保留旧目标并报告失败。\n\n- **源摘要变化**：拒绝交付，不把变动文件对应的 PDF 写成已验证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-transactional-pdf-export-pipeline-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 交付和校验\n\n- 本机配置\n\n- 失败路径与原件保全\n\n## 如何验证\n\n- 源码里有 21 个测试定义，覆盖旧 PDF 保留、无输出、损坏、0 页、非零退出和原子替换；最近能直接回读的是 2026-09-29 01:51 GitHub 自动测试，21 项全部通过。早先 20 项通过是 cf6d710 阶段的结果。这次没有运行测试。\n\n- 仓库现存三份样张各 2 页、都能解析，只证明已有文件；这次没有新生成 PDF。\n\n- 三项菜单都已改为调用启动器，配置核对无误；但没有在 Typora 里实际点过，菜单导出成功与否待验收。\n\n## 与其他模块的关系\n\n连接选中的样式和外部引擎，负责这一份输出的交付判断；Typora 菜单只是这条管道的另一个启动方式。",
+      "links": [
+        {
+          "text": "上一个模块 导出版式",
+          "href": "/projects/typora-theme-pack/multi-scenario-export-profiles/"
+        },
+        {
+          "text": "下一个模块 安装与恢复",
+          "href": "/projects/typora-theme-pack/theme-installation-and-lifecycle/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ],
+  "based_on": {
+    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
+    "commit_time": "2026-09-28T12:36:45-05:00"
+  }
+}

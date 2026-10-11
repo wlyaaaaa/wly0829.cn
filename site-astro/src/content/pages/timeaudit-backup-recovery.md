@@ -1,0 +1,1334 @@
+---
+{
+ "title": "安装、换机与数据恢复",
+ "kind": "project",
+ "url": "/projects/timeaudit/backup-recovery/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "timeaudit-backup-recovery",
+  "kind": "project",
+  "title": "安装、换机与数据恢复",
+  "url": "/projects/timeaudit/backup-recovery/",
+  "parent": "timeaudit",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，备份任务和成品 16:32—16:35 只读重取，未从最新备份试恢复"
+  },
+  "based_on": {
+   "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
+   "commit_time": "2026-10-11T12:44:01+08:00"
+  }
+ },
+ "source": {
+  "page": "sources/pages/timeaudit-backup-recovery/page.json",
+  "sha256": "ddd075cc548a2b6137562d0aaa0c8296278dbdfeeaf7f06a833a68f920baf613",
+  "converted_at_beijing": "2026-10-11T19:04:26+08:00"
+ }
+}
+---
+
+::screen{#timeaudit-backup-recovery-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-01",
+  "section": "top",
+  "title": "安装、换机与数据恢复",
+  "links": [
+   {
+    "text": "回到项目 → 电脑使用与性能记录",
+    "href": "/projects/timeaudit/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/TimeAudit"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/timeaudit/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "安装、换机与数据恢复",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，备份任务和成品 16:32—16:35 只读重取，未从最新备份试恢复",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "新电脑从零安装、带回旧历史和灾后恢复分别选择材料；最后应在浏览器看到旧时间线与新记录继续写入，而不是只看见数据库文件。每天北京时间 11:40 自动备份数据库和看板，每次都留一份运行回执，分别写清本地快照和云端同步成没成功。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "安装、换机与数据恢复",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，备份任务和成品 16:32—16:35 只读重取，未从最新备份试恢复"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "新电脑从零安装、带回旧历史和灾后恢复分别选择材料；最后应在浏览器看到旧时间线与新记录继续写入，而不是只看见数据库文件。每天北京时间 11:40 自动备份数据库和看板，每次都留一份运行回执，分别写清本地快照和云端同步成没成功。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/illustrations/modules/timeaudit-backup-recovery-v01.png",
+   "key": "main-timeaudit",
+   "source_phrase": "右上一幅水彩插画：一台机箱侧透的台式电脑，旁边一卷从机箱里缓缓吐出的长纸带，纸带上画着起伏的绿色曲线和一排小刻度（像心电图，纸带上不画字）；纸带旁边一只放大镜停在曲线的一个尖峰上；机箱脚边一张小便签被一枚回形针夹着，便签上只画几道浅灰短线（代表剪贴板记录）。",
+   "sha256": "19477928afadce6d01b7e6a83a31da31cc850290efdbe5494b74a0f6a3ccc2df",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 安装、换机与数据恢复
+
+〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+TimeAudit · 功能说明
+
+新电脑从零安装、带回旧历史和灾后恢复分别选择材料；最后应在浏览器看到旧时间线与新记录继续写入，而不是只看见数据库文件。每天北京时间 11:40 自动备份数据库和看板，每次都留一份运行回执，分别写清本地快照和云端同步成没成功。
+
+**当前情况：**10 月 11 日的每日备份 11:40 开始、12:44 完成，本地和云端都成功，现有 12 份完整的数据库备份，最新一份约 4.7 GiB；但还没有用这份真实备份试过整库恢复，不能承诺故障前记录全部找回。
+
+项目源码：公开仓库
+
+::screen{#timeaudit-backup-recovery-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 新电脑从零安装和带回旧历史是两件事。只复制项目文件夹会混进旧机器的运行状态；真正恢复须先验历史备份，再确认数据库、浏览器大盘和自动记录重新连上。 举个实际例子 我说“把旧电脑上的 TimeAu"
+   },
+   {
+    "id": "module-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 新电脑从零安装和带回旧历史是两件事。只复制项目文件夹会混进旧机器的运行状态；真正恢复须先验历史备份，再确认数据库、浏览器大盘和自动记录重新连上。 举个实际例子 我说“把旧电脑上的 TimeAu"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+新电脑从零安装和带回旧历史是两件事。只复制项目文件夹会混进旧机器的运行状态；真正恢复须先验历史备份，再确认数据库、浏览器大盘和自动记录重新连上。
+
+## 举个实际例子
+
+我说“把旧电脑上的 TimeAudit 连历史一起搬到新机”。恢复完成后，我应该能在浏览器里打开原来的大盘、查到备份里的旧时间线，同时看到新电脑的记录继续往前走；若备份之后到故障之前有一段拿不回来，它会单独列出，而不是承诺历史零丢失。
+
+## 最后我会得到什么
+
+恢复后应能在浏览器大盘看到备份里的旧时间线，也看见新电脑继续产生记录。若只装好了程序、旧备份读不出或故障前最后一段没备到，会逐项列出，不承诺零丢失。
+
+::screen{#timeaudit-backup-recovery-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+## 正常时
+
+所选备份、运行环境、旧历史和新采集都逐层读回时，才说明对应部分恢复。
+
+## 发现问题时
+
+数据库备份读不出、大盘打不开或新记录不前进时停在那一层并保留旧备份。
+
+## 入口不可用或证据不足时
+
+备份盘、数据库或登录条件缺失时只建立可安全准备的部分，明确旧历史目前无法找回。
+
+::screen{#timeaudit-backup-recovery-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "在已接入 TimeAudit 的 AI 对话中明确说全新安装或带历史换机，并给出可靠备份；Grafana 页面只负责查看结果。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **核对最后真正可读的备份**　系统确认历史数据库备份和大盘配置分别存在且能读取，并列出备份之后可能丢失的时段。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "在已接入 TimeAudit 的 AI 对话中明确说全新安装或带历史换机，并给出可靠备份；Grafana 页面只负责查看结果。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **核对最后真正可读的备份**　系统确认历史数据库备份和大盘配置分别存在且能读取，并列出备份之后可能丢失的时段。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+在已接入 TimeAudit 的 AI 对话中明确说全新安装或带历史换机，并给出可靠备份；Grafana 页面只负责查看结果。
+
+## 需要准备什么
+
+- 新旧机器与目标时间线
+
+- 最后可靠数据库和 Grafana 备份
+
+- 可用软件与凭据
+
+## 从开始到拿到结果
+
+1. **核对最后真正可读的备份**　系统确认历史数据库备份和大盘配置分别存在且能读取，并列出备份之后可能丢失的时段。
+
+2. **建立并导入**　安装所需运行环境，空库建表或将已验 dump 恢复到干净库，再恢复大盘。
+
+3. **逐层验收**　核对采集心跳、真实入库和浏览器中的旧新记录；缺备份或大盘打不开就指出停点，不说零丢失。
+
+::screen{#timeaudit-backup-recovery-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 8 月 31 日基线记录每日备份结果 0、备份/恢复定向测试通过；本次未刷新任务结果或从最新 dump 做隔离整库恢复 关键规则与设计选择 1 全新安装、带历史换机、灾"
+   },
+   {
+    "id": "module-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 8 月 31 日基线记录每日备份结果 0、备份/恢复定向测试通过；本次未刷新任务结果或从最新 dump 做隔离整库恢复 关键规则与设计选择 1 全新安装、带历史换机、灾"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+
+2026-10-11 每日备份 11:40:18 开始、12:44:13 完成，本地/云端均成功、结果 0；现有 12 份完整 dump；最新真实 dump 尚未做隔离整库恢复
+
+## 关键规则与设计选择
+
+1. 全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。
+
+2. 取得现行项目源码后运行 `setup_runtime.ps1` 重建 `.venv`；不复制旧 `.venv`、整个项目运行树或未干净关闭的数据卷。
+
+3. 先建立 WSL2、Docker Desktop、项目 `.venv` 与 PostgreSQL / ingester / Grafana 三容器。
+
+4. 全新空库执行 `schema.sql`；带历史换机或灾后恢复使用校验过的 dump restore。两条只选一条，避免先建再清或把空库当历史。
+
+5. 数据库 dump 优先于运行中 `postgres_data` 目录复制；Grafana 先确认固定 PostgreSQL datasource，再恢复 dashboard JSON 或完整状态。
+
+6. 恢复 `TimeAudit_AutoStart`、每分钟 `TimeAudit_Watchdog` 与 `TimeAudit_DailyBackup` 后，依次验 heartbeat、真实入库、有界聚合和浏览器看板。
+
+7. 二进制库保存完整 Grafana 状态，JSON 提供版本化 dashboard 恢复；只接受精确 `.json`，不导入 `.json.bak`；9 月 29 日起按解析后的内容比对，排版不同、内容相同不算冲突。
+
+8. 任务结果 0、备份存在和源码测试都不替代最新 dump 的隔离整库恢复；历史缺口必须按最后备份时间保留。
+
+::screen{#timeaudit-backup-recovery-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- setup_runtime.ps1 从 Python 3.11 基座创建项目 `.venv`（当前 3.11.9）、安装 requirements 并运行 pip check；启动器和看门狗使用其中的 pythonw。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- setup_runtime.ps1 从 Python 3.11 基座创建项目 `.venv`（当前 3.11.9）、安装 requirements 并运行 pip check；启动器和看门狗使用其中的 pythonw。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+## 当前怎样实现
+
+- setup_runtime.ps1 从 Python 3.11 基座创建项目 `.venv`（当前 3.11.9）、安装 requirements 并运行 pip check；启动器和看门狗使用其中的 pythonw。
+
+- docker-compose.yml 拉起 PostgreSQL 15、audit-ingester 和 Grafana 13.0.2，与现场一致；schema（数据结构）/main 管周/月分区和预热。硬件、前台会话、生命周期、AHK 等记录默认保留 1200 天；逐程序明细只留 60 天，删除前先按小时和日汇总，汇总长期保留。汇总时同一采样时刻按应用合计不同 PID，核对样本数与源行数，遇到锁冲突整周回滚、不跳过；后台维护每 12 小时一次，不阻塞每秒采样。
+
+- backup_db 用 pg_dump；backup_grafana 用一致快照导出 JSON。当前备份 6 张主看板（共 80 图）加 3 张网站公开状态小看板，共 9 份配置。
+
+- restore_grafana 只接受合同通过的 JSON，并支持 dry-run。
+
+- PCConfig 重建 AutoStart 与每分钟看门狗；DailyBackup 每天北京时间 11:40 组合备份，默认保留 14 天、且至少保留 3 份完整可验证的备份，所以不是固定 14 份（现在是 12 份；10 月 1 日和 10 月 8 日没有成品，原因沿用当时的核查，这次没有重查）。
+
+- 组合备份分数据库和看板两步各自尝试，任一步普通失败整次就算失败；`log/backup-last-run.json` 开跑时写“运行中”，结束时分别写本地快照和云端同步的状态，云端失败不冒充本地失败。已有备份在进行、或上次导出事务没收尾时，不启动第二条重叠导出。杀毒软件隔离或移除了本次精确路径这类窄情况，可带文件告警保留此前可恢复的快照，并写明新数据是否拷入。
+
+- README 记录当前 `.venv`、每 1 分钟看门狗与运行链；`快速部署.md` 仍写着整树复制、零丢失、每 5 分钟看门狗和“78 图”，是待修订的旧说明，现场是 80 图。
+
+- timeaudit_backup.py restore-check 使用已安装固定镜像、无网络/无公开端口、只读归档挂载与独立数据库，绝不导入 audit-postgres。原容器完成记录可跨客户端断线保留；restore-status 查看同次进度，finish-restore 核对退出码、可读表、所有权标签后记录结果并清理本次容器/匿名卷。running/starting 不算 PASS，未知资源不盲重建或删除。
+
+::screen{#timeaudit-backup-recovery-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- backup_db.ps1 以合格 Python 导出到唯一 .partial，flush 后确认 PostgreSQL custom 格式、列归档并算 SHA-256，再发布 .dump 及原子 .dump.json。失败不替换成功档案，无法证明可清理的旧原件保留。健康检查只看清单形状、长度与新鲜度，不重哈希全部载荷。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- backup_db.ps1 以合格 Python 导出到唯一 .partial，flush 后确认 PostgreSQL custom 格式、列归档并算 SHA-256，再发布 .dump 及原子 .dump.json。失败不替换成功档案，无法证明可清理的旧原件保留。健康检查只看清单形状、长度与新鲜度，不重哈希全部载荷。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+- backup_db.ps1 以合格 Python 导出到唯一 .partial，flush 后确认 PostgreSQL custom 格式、列归档并算 SHA-256，再发布 .dump 及原子 .dump.json。失败不替换成功档案，无法证明可清理的旧原件保留。健康检查只看清单形状、长度与新鲜度，不重哈希全部载荷。
+
+## 执行流程
+
+1. 先选场景：全新安装没有历史、换机需要带历史，或灾后 / 重装 / 硬盘更换从备份恢复；记录最后可靠备份与预期历史缺口。
+
+2. 安装或确认 WSL2 与 Docker Desktop，取得现行项目源码，运行 `pwsh -File .\setup_runtime.ps1` 重建项目 `.venv`。
+
+3. 准备凭据后以 compose 拉起 PostgreSQL、audit-ingester、Grafana 三容器，并确认容器身份与 health；`start_all --no-recreate` 不会自动套用 compose 配置变更。
+
+4. 数据库二选一：全新空库执行 `schema.sql`；带历史或灾后候选先校验 dump，再恢复到干净目标库，不额外走空库建表路线。
+
+5. 确认 Grafana 固定 PostgreSQL datasource，再用合同通过的 JSON 或完整 Grafana 备份恢复 dashboard，并在浏览器打开 `http://localhost:43000`。
+
+6. 重建并回读 `TimeAudit_AutoStart`、`TimeAudit_Watchdog`、`TimeAudit_DailyBackup`，再手动触发一次受控启动或备份检查。
+
+::screen{#timeaudit-backup-recovery-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-08",
+  "section": "tech",
+  "title": "技术实现与依据（四）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "7. 按三条 heartbeat 推进、真实入库、`timeaudit_diagnostic_summary.py` 聚合覆盖、浏览器六张主看板可读的顺序验收。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "7. 按三条 heartbeat 推进、真实入库、`timeaudit_diagnostic_summary.py` 聚合覆盖、浏览器六张主看板可读的顺序验收。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（四）
+
+7. 按三条 heartbeat 推进、真实入库、`timeaudit_diagnostic_summary.py` 聚合覆盖、浏览器六张主看板可读的顺序验收。
+
+8. 最后列出备份后到故障时刻的历史缺口、不可恢复项和未执行的演练；目前仍未从最新 dump 做隔离整库恢复。
+
+::screen{#timeaudit-backup-recovery-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-09",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+| --- | --- |
+| dump（逻辑备份） | 由 PostgreSQL 生成、可校验恢复的文件。 |
+| fresh install（全新安装） | 没有历史库的场景；在三容器就绪后用 `schema.sql` 创建空表结构。 |
+| history restore（历史恢复） | 换机或灾后把校验过的 dump 恢复到干净目标库；dump 自带结构，不与空库建表步骤叠加。 |
+| runtime rebuild（运行环境重建） | 从现行源码和 requirements 运行 `setup_runtime.ps1` 创建项目 `.venv`，不复制旧机器的虚拟环境。 |
+| acceptance chain（验收链） | 从任务、heartbeat、真实入库、聚合摘要到浏览器大盘逐层回读；上一层成功不替代下一层。 |
+| consistent snapshot（一致快照） | 同一事务视图读取 Grafana SQLite。 |
+| dry-run（预检） | 只发现和验证，不修改运行实例。 |
+
+## 专业定义
+
+把全新安装、带历史换机、系统重装 / 硬盘更换三种场景拆开：先重建 WSL（Windows 的 Linux 子系统）、Docker、项目 .venv 和三容器，再在空库建表或 dump 恢复中二选一，接回 Grafana、三项计划任务并做真实数据链验收。
+
+::screen{#timeaudit-backup-recovery-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-10",
+  "section": "tech",
+  "title": "出问题时（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 数据库和二进制备份不进入 PUBLIC（公开）Git。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 数据库和二进制备份不进入 PUBLIC（公开）Git。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（一）
+
+## 边界
+
+- 数据库和二进制备份不进入 PUBLIC（公开）Git。
+
+- Git JSON 不等于完整数据库或用户状态。
+
+- `快速部署.md` 当前“复制整个项目树”“历史零丢失”、看门狗每 5 分钟和 78 图属于已识别漂移；现行事实以 README、setup_runtime.ps1 与每分钟看门狗定义为准。
+
+- 恢复最多到最后一份可靠备份；故障前尚未备份的区间必须列为历史缺口。
+
+- 无恢复回读不能称灾难恢复完成；9 月 17 日的恢复检查通过只针对一个 2317 字节、3 张表的合成归档，不能代替最新 4.7 GiB 真实备份的隔离整库恢复。
+
+## 失败与恢复
+
+| 情况 | 怎么处理 |
+|---|---|
+| 全新安装误走 dump 恢复或历史恢复先建空表 | 停止并重新确认场景；在 `schema.sql` 建表与 dump restore 中只选正确的一条。 |
+| 旧文档要求复制整个项目树或旧 `.venv` | 只迁移现行源码与经选择的备份，在目标机运行 `setup_runtime.ps1` 重建环境；运行卷不作为默认迁移手段。 |
+| JSON 有人工脏改 | 内容真不一致时失败关闭，不覆盖或夹带；只是排版不同不算冲突。 |
+
+::screen{#timeaudit-backup-recovery-11 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-11",
+  "section": "tech",
+  "title": "出问题时（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（二）
+
+| 情况 | 怎么处理 |
+|---|---|
+| 退役 UID / matcher 缺失 | 合同失败，不能恢复。 |
+| 任务显示成功但 heartbeat、入库或看板不通 | 只把任务层标为通过，继续定位受影响层；不宣布系统恢复。 |
+| 远端领先或分叉 | 不 push、不 force-push，保留本地备份。 |
+| 数据库或看板备份有一步失败 | 整次记为失败，回执分别写本地与云端状态；只有杀毒隔离等窄情况带告警保留此前快照。 |
+
+::screen{#timeaudit-backup-recovery-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-12",
+  "section": "tech",
+  "title": "依据与来源（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 表、分区与索引",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 表、分区与索引",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（一）
+
+## 真实入口
+
+- 表、分区与索引
+
+- 数据库、ingester 与 Grafana
+
+- 项目 .venv 创建、依赖安装和冲突检查
+
+- 现行每分钟 Watchdog、.venv 与运行验收事实
+
+- 组合备份
+
+- 数据库 dump
+
+- Grafana 导出与同步
+
+- 验证与恢复
+
+::screen{#timeaudit-backup-recovery-13 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-13",
+  "section": "tech",
+  "title": "依据与来源（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 三场景旧入口；含已识别的整树复制、零丢失与五分钟 Watchdog 漂移",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 三场景旧入口；含已识别的整树复制、零丢失与五分钟 Watchdog 漂移",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（二）
+
+- 三场景旧入口；含已识别的整树复制、零丢失与五分钟 Watchdog 漂移
+
+- 备份回归
+
+- 恢复回归
+
+- 分区查询审计
+
+- 质量来源、活动持久化、共享健康、数据库备份与独立恢复的当前合同
+
+## 如何验证
+
+- 2026-10-11 只读：DailyBackup 任务最近一次 11:40:01 开始、结果 0，下次 10 月 12 日 11:40；运行回执 11:40:18 开始、12:44:13 完成，本地快照和云端同步都成功。
+
+- 最新数据库 dump 约 4.7 GiB（5,041,899,358 字节），12:43 写完；完成的 dump 共 12 份，覆盖 9 月 28 日到 10 月 11 日（缺 10 月 1 日和 8 日）。
+
+- 9 月 17 日 20:13 的恢复检查通过，对象是 2317 字节、3 张表的合成归档；8 月 31 日回读的 DailyBackup 结果 0 保留原日期。
+
+::screen{#timeaudit-backup-recovery-14 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "timeaudit-backup-recovery-14",
+  "section": "tech",
+  "title": "依据与来源（三）",
+  "links": [
+   {
+    "text": "上一个模块 剪贴板历史",
+    "href": "/projects/timeaudit/clipboard-history/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 备份、恢复与看板合同纳入定向测试并通过（历史）；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 备份、恢复与看板合同纳入定向测试并通过（历史）；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（三）
+
+- 备份、恢复与看板合同纳入定向测试并通过（历史）；当前源码有 332 个以 test_ 开头的测试函数，这次没有运行。
+
+- README 与 setup_runtime.ps1 当前证明运行环境应在目标机重建、看门狗为每分钟检查；它们不证明某次换机已经完成。当前数据库约 63.6 GiB（统计估算，精确总行数这次没有数）。
+
+- 未从最新 dump 做隔离 pg_restore，也未完整走三场景任一真实换机旅程，恢复 E2E（端到端验证）仍缺。
+
+## 与其他模块的关系
+
+先重建采集模块的运行与存储底座，再恢复硬件、进程、时间和可视化所需历史；可靠性模块接回 AutoStart / 看门狗，最终由 heartbeat、入库、聚合和浏览器看板共同验收。

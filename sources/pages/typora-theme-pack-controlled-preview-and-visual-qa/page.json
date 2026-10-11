@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "typora-theme-pack-controlled-preview-and-visual-qa",
+  "kind": "project",
+  "title": "预览与实际页面检查",
+  "url": "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
+  "parent": "typora-theme-pack",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未渲染、未看图"
+  },
+  "screens": [
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-01",
+      "section": "top",
+      "title": "预览与实际页面检查",
+      "text": "# 预览与实际页面检查\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n修改样式后能直接对比结果，避免只看 CSS 断言就说页面正确。\n\n**当前情况：**通用样例的实际 PDF 页面在 9 月 8 日（各 1 页的短样例）和 9 月 28 日（各 2 页）检查过；9 月 29 日修了表头后，新样张还没有重新看图。新文档与原生编辑器的显示仍要分别验收。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Typora 薄荷主题",
+          "href": "/projects/typora-theme-pack/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/typora-theme-pack"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/typora-theme-pack/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n同一份 CSS 在模拟软件外壳、实际 PDF 和 Typora 原生窗口中的表现可能不同；截图必须说明它能证明哪一层。\n\n## 举个实际例子\n\n调整标题间距后，把三个导出版本排出来看。页面上标明这是实际 PDF 渲染；软件外壳样张则保留浏览器概念预览标识。\n\n## 最后我会得到什么\n\n获得公开通用样例的 PNG 与联系表，辅助检查代码、表格、对比度和分页。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 同一份 CSS 在模拟软件外壳、实际 PDF 和 Typora 原生窗口中的表现可能不同；截图必须说明它能证明哪一层。 举个实际例子 调整标题间距后，把三个导出版本排出来看。页面上标明这是实际"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 同一份 CSS 在模拟软件外壳、实际 PDF 和 Typora 原生窗口中的表现可能不同；截图必须说明它能证明哪一层。 举个实际例子 调整标题间距后，把三个导出版本排出来看。页面上标明这是实际"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n当前样例的 PDF 或图片能逐页打开，版式和文字已实际看过。\n\n## 发现问题时\n\n发现裁切、错行或样式不一致时修对应版式，再看同类文档。\n\n## 入口不可用或证据不足时\n\n缺浏览器或渲染环境时只能保留源码检查，不能声称完成视觉验收。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n使用项目预览脚本和公开通用样例生成当前样式图片，再打开整页 PDF/图片检查文字、分页和层级。\n\n## 需要准备什么\n\n- 要检查的版式或导出结果\n\n- 可用于预览的样文\n\n## 从开始到拿到结果\n\n1. **用固定样例生成**　避免拿私人正文做公开截图，记录所用主题和模式。\n\n2. **看完整页面**　逐页检查表格、代码、字体、留白和截断，并提取文字确认正文没丢。\n\n3. **留下可追溯对比**　保存带来源的预览图；概念图不能当 Typora 实际窗口验收。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n实际 PDF 页面检查是 9 月 8 日、9 月 28 日的历史结果；9 月 29 日表头修复后的样张本次只解析、未看图\n\n## 关键规则与设计选择\n\n1. 概念软件窗口、CSS 回归、安装摘要、实际 PDF 和 Typora 原生观察分开。\n\n2. 公开样例不包含真实私人文档。\n\n3. 一页或两页的实际 PDF 验收不推广成所有长文都无须检查。\n\n## 当前怎样实现\n\n- render_previews.py 将 Markdown 与 profile CSS 组合成 HTML；软件外壳明确标“浏览器概念预览”，代码块检查图标“Typora 1.14 CodeMirror DOM”。\n\n- render_html_png_playwright.js 为 Node/Playwright 辅助，失败或没有这个运行时就直接用无界面 Edge 截图；缺浏览器才停相应预览层，可选助手缺依赖不等于主题失效。Pillow 生成多样式联系表，qa 为可重建中间产物。\n\n- 现存 8 张 PNG：三种版式各 1 张（1240×1680）、版式联系表（2070×978）、软件概念图和它的同名副本（各 1500×1000）、代码块检查图（1240×920）、一张 Typora 原生实拍（1938×1950，8 月 2 日）。9 月 29 日的提交替换了公司版、个人版和联系表三张图，Git 能证明图换了，不能证明整套预览脚本完整重跑过。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 实际 PDF 页面已检查 关键规则与设计选择 1 概念软件窗口、CSS 回归、安装摘要、实际 PDF 和 Typora 原生观察分开。 2 公开样例不包含真实私人文档。"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 实际 PDF 页面已检查 关键规则与设计选择 1 概念软件窗口、CSS 回归、安装摘要、实际 PDF 和 Typora 原生观察分开。 2 公开样例不包含真实私人文档。"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 画廊里的 PDF 页面图是从实际 PDF 渲染出来的（9 月 8 日那批用 Poppler），和程序自带的概念软件图不是同一证据层。项目总览现在用的个人版截图是 9 月 28 日表头修复前的样子，继续用时要标原日期和“修复前”，不能当修复后的效果。\n\n## 执行流程\n\n1. 选择公开通用样例\n\n2. 生成或导出当前结果\n\n3. 渲染完整页面\n\n4. 查看版式与提取文字\n\n5. 保存带来源的对比图",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 联系表 | 把多张页面缩略图放在一起比较，不是文档正式页面。 |\n\n## 专业定义\n\n看排版，同时说清它是在浏览器还是编辑器里生成的",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n可选预览器缺依赖不影响已安装 CSS；不能把缺少某个开发环境写成主题本身失效。\n\n## 边界\n\n- 预览脚本按当前 Windows 字体/浏览器配置工作。\n\n- 软件概念图不冒充原生进程截图。\n\n## 失败与恢复\n\n- **缺浏览器或辅助依赖**：报告这一层无法生成，保留其他独立证据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-controlled-preview-and-visual-qa-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 预览流程\n\n- 浏览器辅助\n\n- 公开样例\n\n- 历史可视化成果\n\n## 如何验证\n\n- 2026-09-08 07:42：三种实际 PDF 各 1 页（较短的旧样例），渲染后逐张查看，未见裁切与重叠。\n\n- 2026-09-28：更完整的公开样例三种各 2 页，渲染报告还在；当时个人版表头发灰，9 月 29 日已在源码修复。\n\n- 2026-10-11 16:32 只读解析仓库现存三份样张（9 月 29 日 01:32 生成）：各 2 页、可打开；这次没有渲染或看图，不能凭生成时间说修复后的视觉已经验收。\n\n## 与其他模块的关系\n\n检验最终排版，不能替代内容、安装和原生应用各自验收。",
+      "links": [
+        {
+          "text": "上一个模块 安装与恢复",
+          "href": "/projects/typora-theme-pack/theme-installation-and-lifecycle/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ],
+  "based_on": {
+    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
+    "commit_time": "2026-09-28T12:36:45-05:00"
+  }
+}

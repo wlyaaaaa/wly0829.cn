@@ -594,7 +594,7 @@
       {
         "type": "prose",
         "row": "highlight",
-        "text_ref": "私人 Key 仓库的说明文件"
+        "text_ref": "私人密文仓库的说明文件在 GitHub 上是明文"
       },
       {
         "type": "illustration",
@@ -613,6 +613,10 @@
     ],
     "blocks": [
       {
+        "type": "prose",
+        "text_ref": "私人密文仓库的说明文件在 GitHub 上是明文"
+      },
+      {
         "type": "illustration"
       },
       {
@@ -620,10 +624,6 @@
         "align": "center",
         "size": "large",
         "text_ref": "亮点：AI 帮我改了私人仓库"
-      },
-      {
-        "type": "prose",
-        "text_ref": "私人 Key 仓库的说明文件"
       }
     ],
     "notes": "主插画置整屏最上，毛笔大标题在插画下两行，正文接在标题下；原图无卡边框。章节标题整宽居中；图中文字按 G7 去除。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
@@ -795,7 +795,7 @@
         "item_spans": {
           "23": 2
         },
-        "text_ref": "16不开库看结构不用密码看格式、参数、要不要密钥文件、结"
+        "text_ref": "16. 不开库看结构｜不用密码看格式、参数、要不要密钥文件、结构坏没坏｜在用"
       },
       {
         "type": "section_heading",
@@ -808,7 +808,7 @@
         "columns": 3,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "24密文传到Key把vault.enc原样传到私人Key"
+        "text_ref": "24. 密文传到私人仓库｜把 vault.enc 原样传到私人密文仓库，读回比对字节｜在用"
       }
     ],
     "notes": "续屏没有全部功能章节标题、没有图例。检查维护八卡 3+3+2 排列，其中最后一张 23 横跨后两列、22 占第一列；下面备份组三卡一行。组名毛笔中档在组上方；图标卡内左，状态右上。item_spans=23:2 需要组件扩展，不能假称 columns=3 已完全表达。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；功能组名的毛笔要求现直接交给已有chapter_title组件（小/中档、左对齐），不继续在feature_card内部以普通h3冒充；没有逐字图时由质量关列title未完成。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"
@@ -833,7 +833,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "16不开库看结构不用密码看格式、参数、要不要密钥文件、结",
+        "text_ref": "16. 不开库看结构｜不用密码看格式、参数、要不要密钥文件、结构坏没坏｜在用",
         "columns_v": 1
       },
       {
@@ -847,7 +847,7 @@
         "columns": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "24密文传到Key把vault.enc原样传到私人Key",
+        "text_ref": "24. 密文传到私人仓库｜把 vault.enc 原样传到私人密文仓库，读回比对字节｜在用",
         "columns_v": 1
       }
     ],
@@ -903,7 +903,7 @@
       {
         "type": "notice",
         "align": "center",
-        "text_ref": "截至 9 月 29 日"
+        "text_ref": "截至 10 月 11 日共 23 次提交。"
       }
     ],
     "notes": "左侧竖向时间线九节点，细绿实线/空心圆在卡片左外，卡内图标在左、日期粗体。右侧主插画在卡片外，从单层信封发展成锁信封再到锁云，绿色箭头连接，底下提交数浅条；章节标题只占左栏，靠左。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。\n2026-10-06 Astra复核退回：恢复原双栏，仅拆出末节点为整行；前段保持双栏，末图标明确使用本屏原序列的最后一个。"
@@ -938,7 +938,7 @@
       {
         "type": "notice",
         "align": "center",
-        "text_ref": "截至 9 月 29 日"
+        "text_ref": "截至 10 月 11 日共 23 次提交。"
       }
     ],
     "notes": "以实际原图为准：前四时间节点后，主插画横向一行位于第 4（7月23–27）和第 5（8月31–9月3）之间；续图再五节点和提交数浅条。portrait 所写插画最后与原图冲突。本屏 bullets 为单一节点，现 text_ref 不能切到第5条，需 timeline 组件按 illustration_after_item=4 插入资产；未支持前不能声称构图还原。时间线细绿线在卡片左外，卡内左图右文，标题原图小左档。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。；2026-10-03 页修复08：按当轮审查调整规格；具体差异及未处理依赖见本页.fix.md，旧notes不是本轮验收记录。"

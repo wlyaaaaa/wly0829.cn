@@ -1,0 +1,1676 @@
+---
+{
+ "title": "启动、睡眠、关机、显示拓扑与有界自愈",
+ "kind": "project",
+ "url": "/projects/pc-panel-hub/power-recovery/",
+ "tagline": "",
+ "toc": [
+  {
+   "id": "top",
+   "label": "开头"
+  },
+  {
+   "id": "usage",
+   "label": "怎么用"
+  },
+  {
+   "id": "tech",
+   "label": "技术"
+  }
+ ],
+ "page": {
+  "schema": "site-b1.page.v1",
+  "page": "pc-panel-hub-power-recovery",
+  "kind": "project",
+  "title": "启动、睡眠、关机、显示拓扑与有界自愈",
+  "url": "/projects/pc-panel-hub/power-recovery/",
+  "parent": "pc-panel-hub",
+  "status_line": {
+   "state": "常用",
+   "as_of": "2026-10-11",
+   "source": "源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对：桌面保护改成跟着看门狗全程运行的 250 毫秒子循环，壁纸只发“继续播放”；10 月 11 日 03:09 生产日志里有一次浮层越界自动重新激活请求；睡眠、断电和壁纸实屏仍待验"
+  }
+ },
+ "source": {
+  "page": "sources/pages/pc-panel-hub-power-recovery/page.json",
+  "sha256": "3be5bf5941ab8d67fa03d92500a603134588c67e82b50ca020784989ef203aee",
+  "converted_at_beijing": "2026-10-11T19:04:25+08:00"
+ }
+}
+---
+
+::screen{#pc-panel-hub-power-recovery-01 section="top"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-01",
+  "section": "top",
+  "title": "启动、睡眠、关机、显示拓扑与有界自愈",
+  "links": [
+   {
+    "text": "回到项目 → 双屏信息中心",
+    "href": "/projects/pc-panel-hub/"
+   },
+   {
+    "text": "GitHub",
+    "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+   },
+   {
+    "text": "复制 AI 续作说明",
+    "href": "/projects/pc-panel-hub/#ai-brief"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "启动、睡眠、关机、显示拓扑与有界自愈",
+     "align": "left",
+     "size": "large",
+     "row": "top",
+     "width": "58%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对：桌面保护改成跟着看门狗全程运行的 250 毫秒子循环，壁纸只发“继续播放”；10 月 11 日 03:09 生产日志里有一次浮层越界自动重新激活请求；睡眠、断电和壁纸实屏仍待验",
+     "row": "top"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "登录、睡眠或屏幕断接后，只恢复受影响的机箱屏、浮层、窗口或壁纸。普通窗口回主屏、壁纸是否重动和水冷屏实体画面仍分别确认，不靠不断重启整机碰运气。",
+     "row": "top"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "row": "top",
+     "width": "42%",
+     "align": "center"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "启动、睡眠、关机、显示拓扑与有界自愈",
+     "align": "left",
+     "size": "large"
+    },
+    {
+     "type": "live_strip",
+     "frame_mode": "plain",
+     "static_items": [
+      {
+       "text": "常用",
+       "state": "ok"
+      }
+     ],
+     "static_note": "截至 10 月 11 日 · 源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对：桌面保护改成跟着看门狗全程运行的 250 毫秒子循环，壁纸只发“继续播放”；10 月 11 日 03:09 生产日志里有一次浮层越界自动重新激活请求；睡眠、断电和壁纸实屏仍待验"
+    },
+    {
+     "type": "action_button",
+     "text_ref": "〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
+    },
+    {
+     "type": "prose",
+     "text_ref": "登录、睡眠或屏幕断接后，只恢复受影响的机箱屏、浮层、窗口或壁纸。普通窗口回主屏、壁纸是否重动和水冷屏实体画面仍分别确认，不靠不断重启整机碰运气。"
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "align": "center"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "illustration",
+   "slot_ordinal": 1,
+   "asset": "_library/illustrations/modules/pc-panel-hub-power-recovery-v01.png",
+   "key": "main-pc-panel-hub",
+   "source_phrase": "右上一幅水彩插画：一台侧透机箱，机箱内侧竖着一条细长的小屏（上面只画浅绿色的小卡片和一条小折线，不画字），机箱顶部水冷头上一块弯弯的曲面屏（上面只画一个大号时钟形状和两三张半透明小卡片的轮廓，不画字）；机箱旁一部手机，手机和曲面屏之间一条虚线小箭头。",
+   "sha256": "b771b4a644c3f89ef3b662551f437c60ae3cc79eb2ed60953f0c63b4d5da0381",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+# 启动、睡眠、关机、显示拓扑与有界自愈
+
+〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕
+
+PC Panel Hub · 功能说明
+
+登录、睡眠或屏幕断接后，只恢复受影响的机箱屏、浮层、窗口或壁纸。普通窗口回主屏、壁纸是否重动和水冷屏实体画面仍分别确认，不靠不断重启整机碰运气。
+
+**当前情况：**看门狗异常退出后接回机箱屏有 9 月 7 日实测，明确停止也不会反弹。桌面保护现在由跟着看门狗全程运行的子循环负责，壁纸只请求“继续播放”；10 月 11 日凌晨生产日志记下过一次浮层越界后的自动重新激活请求。壁纸是否真的动了、睡眠和断电恢复都还没实测。
+
+具体测试保留各自日期，页面不实时探测运行状态。
+
+项目源码：公开仓库
+
+::screen{#pc-panel-hub-power-recovery-02 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-02",
+  "section": "usage",
+  "title": "这项功能怎样使用",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 睡眠或远程屏幕断接后，屏幕可能黑掉、壁纸停动，任务列表却显示程序还在。恢复前先确认主屏和两块副屏现在究竟是哪一个，避免一遍遍重启或把窗口搬错。 举个实际例子 远程虚拟屏断开再回来，水冷屏卡片仍"
+   },
+   {
+    "id": "module-product",
+    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 睡眠或远程屏幕断接后，屏幕可能黑掉、壁纸停动，任务列表却显示程序还在。恢复前先确认主屏和两块副屏现在究竟是哪一个，避免一遍遍重启或把窗口搬错。 举个实际例子 远程虚拟屏断开再回来，水冷屏卡片仍"
+   },
+   {
+    "id": "module-product-title",
+    "text": "这项功能怎样使用"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "这项功能怎样使用",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "为什么需要它",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/round3/clean-assets/png/05-灯泡-clean.png",
+      "_library/icons/双气泡.png",
+      "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/round3/clean-assets/png/05-灯泡-clean.png",
+   "key": "灯泡",
+   "source_phrase": "冻结页迁移固定图标：why",
+   "sha256": "1b747452a1b8f0ee4b37b0f84b8c0108ef6554cd2fee1c989cb72e0409cc2165",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/双气泡.png",
+   "key": "双气泡",
+   "source_phrase": "冻结页迁移固定图标：example",
+   "sha256": "5f731d436981307abb0cf9d0e4327d2902a8f816dce649fa2f079ca9107b7433",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "key": "纸箱对勾",
+   "source_phrase": "冻结页迁移固定图标：result",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 这项功能怎样使用
+
+用途与实际影响
+
+## 为什么需要它
+
+睡眠或远程屏幕断接后，屏幕可能黑掉、壁纸停动，普通窗口跑进小屏，曲面屏上的浮层还可能挪位只露半截，任务列表却显示程序还在。恢复前先确认主屏和两块副屏现在究竟是哪一个，避免一遍遍重启或把窗口搬错。
+
+## 举个实际例子
+
+远程虚拟屏断开再回来，水冷屏卡片仍在，背景却不动了。系统发现壁纸程序还开着，等 2 秒后只请它“继续播放”，不先停、不换场景；最多试 3 次，还不行就停手。浮层如果被挤出曲面屏，只把浮层重新激活一次，不动别的屏。
+
+## 最后我会得到什么
+
+已实测的机箱屏异常退出后可由同一入口重新接回，人工停止不会自行反弹。壁纸、浮层和普通窗口的保护一直在后台跑；现在只报告是否符合条件、是否发出请求，不把“已请求”写成壁纸真的动了。
+
+::screen{#pc-panel-hub-power-recovery-03 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-03",
+  "section": "usage",
+  "title": "结果怎么看",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 3,
+     "last_full_width": false,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "结果怎么看",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "正常时",
+     "columns": 1,
+     "icon_position": "header_left",
+     "header_icon": [
+      "_library/hires-icons/试管对勾.png",
+      "_library/round3/clean-assets/png/31-报警灯-clean.png",
+      "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+     ]
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/试管对勾.png",
+   "key": "绿色测试通过",
+   "source_phrase": "冻结页迁移固定图标：normal",
+   "sha256": "006d19b6c111eb426183a27eeba8b211df84035835b69f400e3dfad58d99e4a1",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/round3/clean-assets/png/31-报警灯-clean.png",
+   "key": "报警灯",
+   "source_phrase": "冻结页迁移固定图标：problem",
+   "sha256": "a7ac06abb238393f741ac172f2b0996e7cbb4a33a27953f53eb6776d5f8875be",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 3,
+   "asset": "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png",
+   "key": "断开插头",
+   "source_phrase": "冻结页迁移固定图标：unavailable",
+   "sha256": "974fc896ff7e0b11f54d9ca28e622f41657acecd7eb02100cfa42c945052a1f3",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 结果怎么看
+
+## 正常时
+
+壁纸程序本来就开着、事件稳定后，只请求一次“继续播放”，成功分派后同一事件不再重发；是否真的恢复以实体画面为准。
+
+## 发现问题时
+
+一次请求失败就隔 10 秒、20 秒再试，同一事件最多 3 次，之后不再尝试，不循环闪屏。
+
+## 入口不可用或证据不足时
+
+壁纸程序没开、开了不止一个或屏幕身份分不清时不控制壁纸，也不替我启动它；静态背景保留，可能需要本人用原软件恢复。
+
+::screen{#pc-panel-hub-power-recovery-04 section="usage"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-04",
+  "section": "usage",
+  "title": "从哪里开始",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "双副屏在登录、睡眠唤醒或远程显示器断接后出问题时，在已接入项目的本机 AI 对话中说明事件和哪块屏异常。",
+     "row": "start",
+     "width": "40%"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "row": "start",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "row": "start",
+     "width": "60%",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **定位本次变化**　看门狗核对唯一进程、设备模式、主屏和 HS2 身份；桌面保护子循环每 250 毫秒看一次当前显示拓扑和壁纸程序。",
+     "row": "start",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "从哪里开始",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "prose",
+     "text_ref": "双副屏在登录、睡眠唤醒或远程显示器断接后出问题时，在已接入项目的本机 AI 对话中说明事件和哪块屏异常。"
+    },
+    {
+     "type": "source_text_card",
+     "text_ref": "需要准备什么",
+     "icon_position": "header_left",
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+    },
+    {
+     "type": "section_heading",
+     "text_ref": "从开始到拿到结果",
+     "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. **定位本次变化**　看门狗核对唯一进程、设备模式、主屏和 HS2 身份；桌面保护子循环每 250 毫秒看一次当前显示拓扑和壁纸程序。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
+   "key": "工具箱",
+   "source_phrase": "冻结页迁移固定图标：inputs",
+   "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 2,
+   "asset": "_library/icons/scene-r3-exact-three-stairs.png",
+   "key": "上升台阶",
+   "source_phrase": "冻结页迁移固定图标：steps",
+   "sha256": "b2d695badac77b03b32249a3a6f83eaf9888916136a8657c0f6845b726f4f5a2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 从哪里开始
+
+双副屏在登录、睡眠唤醒或远程显示器断接后出问题时，在已接入项目的本机 AI 对话中说明事件和哪块屏异常。
+
+## 需要准备什么
+
+- 异常发生的电源或显示事件
+
+- 主屏、HS2 和虚拟屏现状
+
+- 目前壁纸和浮层表现
+
+## 从开始到拿到结果
+
+1. **定位本次变化**　看门狗核对唯一进程、设备模式、主屏和 HS2 身份；桌面保护子循环每 250 毫秒看一次当前显示拓扑和壁纸程序。
+
+2. **只恢复匹配组件**　旧串口写入者退出后恢复机箱屏；浮层跑出曲面屏只重新激活浮层；壁纸程序还开着时只请求它继续播放。
+
+3. **以实体画面收口**　确认壁纸真的继续动、浮层仍在正确屏；命令已分派但肉眼未证时保留未验状态，不循环改显示设置。
+
+::screen{#pc-panel-hub-power-recovery-05 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-05",
+  "section": "tech",
+  "title": "技术实现与依据（一）",
+  "links": [],
+  "anchors": [
+   {
+    "id": "project-reading-panel-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日同VBS异常退出接回与明确停止已实测，本人确认TURZX正常刷新；睡眠、断电、HS2和壁纸拓扑恢复仍分别待验 关键规则与设计选择 1 只有一个长期 watchd"
+   },
+   {
+    "id": "module-technical",
+    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日同VBS异常退出接回与明确停止已实测，本人确认TURZX正常刷新；睡眠、断电、HS2和壁纸拓扑恢复仍分别待验 关键规则与设计选择 1 只有一个长期 watchd"
+   },
+   {
+    "id": "module-technical-title",
+    "text": "技术实现与依据"
+   }
+  ],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "源码按10月6日最后一次提交核对：生产看门狗以不设时限、每250毫秒的方式启动桌"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 只有一个长期 watchdog 处理 resume；旧事件任务保持禁用，旧的唤醒后重启脚本 9 月 29 日已删除。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "源码按10月6日最后一次提交核对：生产看门狗以不设时限、每250毫秒的方式启动桌"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "1. 只有一个长期 watchdog 处理 resume；旧事件任务保持禁用，旧的唤醒后重启脚本 9 月 29 日已删除。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/打勾清单.png",
+   "key": "打勾清单",
+   "source_phrase": "冻结页迁移固定图标：rules",
+   "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 技术实现与依据（一）
+
+这里保留实现、关键条件、精确入口、历史记录和验证结果。
+源码按 10 月 6 日最后一次提交核对：生产看门狗以不设时限、每 250 毫秒的方式启动桌面保护子循环，壁纸只发 play；10 月 11 日 03:09 生产日志有一次浮层越界自动重新激活请求。9 月 7 日同一 VBS 异常退出接回与明确停止已实测，本人确认 TURZX 正常刷新；睡眠、断电、HS2 实屏和壁纸实际恢复仍分别待验
+
+## 关键规则与设计选择
+
+1. 只有一个长期 watchdog 处理 resume；旧事件任务保持禁用，旧的唤醒后重启脚本 9 月 29 日已删除。
+
+2. 同一隐藏 VBS 同步等待 watchdog；非 0 退出等待 30 秒再启动，0 退出结束。StopSideScreenStack -IncludeWatchdog 同时停止精确 VBS，人工停止不会触发自动接回；不增加任务、服务或并行看门狗。
+
+3. 普通窗口保护和完整浮层启动是两道门：前者在识别到 2288×1048 目标后即可执行，不等控制器、浮层进程或完整显示路径验证；后者仍要求 Secondary 模式与保存绑定连续两次健康，不能把已搬回窗口当成 HS2 Active。
+
+4. 桌面保护子循环跟着父 watchdog 全程运行（生产环境不设时限，每 250 毫秒一轮），绑定父进程号和创建时间，并用一把单实例锁防止出现第二个；子循环提前退出，watchdog 会重新拉起它。它负责三件事：普通窗口离开 HS2 回安全屏、留在虚拟屏上的窗口回物理主屏、请求已经开着的 Wallpaper Engine 继续播放；永不搬动 HS2 浮层、Wallpaper Engine 或桌面外壳。脚本自带的 180 秒只是单独测试时的默认值。
+
+5. 已有 Secondary 绝不先降级，native 每 epoch 只尝试一次提升。
+
+6. Secondary 提升失败只收起旧浮层并等待显示链恢复，保留当前或请求的 Secondary 模式；不发送 SetSecondaryScreen(false) 降回原生，也不重置本周期已经用过的一次尝试。
+
+7. 三次连续失败后 30 秒熔断，先证明旧 stream 释放 COM。
+
+8. 可见浮层被最小化、归属不对或四条边没有全落在目标屏内，就判为漂移，请求停掉并重新激活原浮层；只重绑浮层，不改显示拓扑、不重启机箱屏。
+
+::screen{#pc-panel-hub-power-recovery-06 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-06",
+  "section": "tech",
+  "title": "技术实现与依据（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "9. 壁纸只发“继续播放”（play），不再先停（stop）再播；不启动没开的壁纸程序、不换场景、不写配置，同一事件里不反复压过我手动的暂停。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "9. 壁纸只发“继续播放”（play），不再先停（stop）再播；不启动没开的壁纸程序、不换场景、不写配置，同一事件里不反复压过我手动的暂停。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（二）
+
+9. 壁纸只发“继续播放”（play），不再先停（stop）再播；不启动没开的壁纸程序、不换场景、不写配置，同一事件里不反复压过我手动的暂停。
+
+10. 正常路径（子循环）的资格：同一登录会话里唯一一个已在运行的 wallpaper32 或 wallpaper64，活动显示器不为空，事件已稳定；它记住同一个存活进程（进程号加创建时间），不把短命的命令行调用当成壁纸程序重启。
+
+11. 壁纸程序换了进程或显示拓扑变了算新事件：等 2 秒，最多试 3 次，失败后隔 10 秒、20 秒有界退避，第三次后同一事件不再尝试；分派成功后同一事件不重发。
+
+12. 只有子循环不在时，主 watchdog 才走后备路径：每 15 秒探测、新指纹稳定 30 秒、两次尝试间隔 900 秒，同样只发 play；子循环在场时主循环立即返回。后备路径另有更严的门：至少两块活动屏、唯一可用主屏与唯一非主 2288×1048 HS2，核对 MONITOR\TUR0000 身份及 HS2 Secondary + 8091/AD23/MI_00/LED 绑定，MTT1337 只有参与活动桌面时才要求唯一且 Root\MttVDD 后端健康；并且只认当前会话 wallpaper64 同目录的唯一 wallpaper32，且要有 explorer。
+
+13. 绑定 LIAN LI 设备出现 Code 10 时立即失败关闭，只给出关机后检查 USB 排针、线缆和辅助供电的行动提示；不重启 Hub、不移除设备、不扫描 PnP。
+
+14. A108 或端点缺失进入物理恢复：断电后只用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，随附一分二 Hub 不承载 LCD；供电不足再接 SATA。
+
+15. 改变接线后，唯一 8091 + port 2 controller + port 3 LED 拓扑必须连续两次健康才允许换绑。
+
+16. 本模块从已经建立的本机安装态开始；clean clone、厂商文件、private（私有） config、首次双屏绑定和启动任务安装属于独立安装与换机模块。
+
+::screen{#pc-panel-hub-power-recovery-07 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-07",
+  "section": "tech",
+  "title": "技术实现与依据（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "17. 普通恢复不重启 Hub、不删设备、不做 PnP scan，也不改物理主屏、远程虚拟屏、分辨率、刷新率、HDR、缩放或捕获目标；硬件动作只有显式执行的 repair-hs2 -Apply。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "17. 普通恢复不重启 Hub、不删设备、不做 PnP scan，也不改物理主屏、远程虚拟屏、分辨率、刷新率、HDR、缩放或捕获目标；硬件动作只有显式执行的 repair-hs2 -Apply。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（三）
+
+17. 普通恢复不重启 Hub、不删设备、不做 PnP scan，也不改物理主屏、远程虚拟屏、分辨率、刷新率、HDR、缩放或捕获目标；硬件动作只有显式执行的 repair-hs2 -Apply。
+
+18. 主机控制命令已分派、进程在线和实体画面真的动了，三件事分别下结论。
+
+## 当前怎样实现
+
+- 计划任务由既有 wscript 无窗口父适配器启动长期 PowerShell watchdog。StartSideScreenWatchdog-Hidden.vbs 使用 shell.Run(command, 0, True) 同步等待，非 0 退出经 WScript.Sleep 30000 后再启动、0 退出结束；替代 watchdog 仍先走原有旧 sender 退出与独占串口检查。
+
+- StopSideScreenStack.ps1 对 metrics agent 停止错误如实传播，并等待目标 PID 退出与配置里的 127.0.0.1:18766 可独占绑定；30 秒内没停干净就推迟重建，原 watchdog 继续运行，不静默报告完成。
+
+- StopSideScreenStack.ps1 带 -IncludeWatchdog 时也结束精确的本项目隐藏 VBS 入口，避免人工停止在 30 秒后被接回；普通退出保持最终结束，不把任务计划程序的 RestartOnFailure 当作唯一兜底。
+
+- Windows 事件若把 RTSSHooks64.dll 标为原生崩溃模块，由 PCConfig 维护 powershell.exe 单个 RTSS Profile：[Hooking] EnableHooking=0，并通过官方 SDK 回读 AppDetectionLevel=0。此设置不更改游戏/壁纸配置，也不保证已经驻留的 DLL 立刻卸载。
+
+- StartSideScreenWatchdog 在 Set-ActiveDisplayState 的阻塞恢复前启动 `Invoke-HS2StartupWindowGuard.ps1`，生产传 DurationSeconds=0（不设时限）、PollMilliseconds=250，Lifetime=parent-process；子循环持有 Local\TURZX.DesktopContinuity 单实例锁，绑定父 PID 与创建时间，输出有界 hs2-startup-window-guard.json。
+
+- `Get-HS2ExclusiveWindowGuardPlan` 不要求已有浮层 PID：优先已知目标，再按 2288×1048 几何优先选择非主屏；安全落点优先已知安全屏/主屏，再取其他屏最大工作区，无可用落点才最小化。窗口按可见性、cloaked（隐藏合成状态）、有效尺寸和排除进程过滤，无激活迁移；普通窗口的可见边界即使只部分跨入 HS2 也移回。
+
+::screen{#pc-panel-hub-power-recovery-08 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-08",
+  "section": "tech",
+  "title": "技术实现与依据（四）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- Get-VddWindowReturnPlan 以 EnumDisplayDevices 报告的 MONITOR\\PHLC34B 与 MONITOR\\MTT1337 绑定当前活动输出，不持久依赖 DISPLAY 编号或 Windows 主屏标志。任一目标缺失、歧义或重合就返回具名状态、零动作。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- Get-VddWindowReturnPlan 以 EnumDisplayDevices 报告的 MONITOR\\PHLC34B 与 MONITOR\\MTT1337 绑定当前活动输出，不持久依赖 DISPLAY 编号或 Windows 主屏标志。任一目标缺失、歧义或重合就返回具名状态、零动作。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（四）
+
+- Get-VddWindowReturnPlan 以 EnumDisplayDevices 报告的 MONITOR\PHLC34B 与 MONITOR\MTT1337 绑定当前活动输出，不持久依赖 DISPLAY 编号或 Windows 主屏标志。任一目标缺失、歧义或重合就返回具名状态、零动作。
+
+- 窗口坐标使用 Per-Monitor V2（逐显示器 DPI 感知）；未最小化时优先 DWM 扩展可见边界，避免隐形边框触发误搬。整个窗口归 VDD 时映射回主屏；仍归主屏但可见框与 VDD 相交时，只做包含所需的位移和限宽高。最小化窗口使用保存位置。
+
+- WindowsDisplayWindowPolicy.ps1 除显示器身份外，还检查可见浮层四条边是否完全在目标屏内；最小化、归属错误、坐标越界判为 drifted，请求 Stop-HS2OverlayForRebind 并激活原安装包。隐藏、cloaked 和宽高不超过 32 像素的辅助窗口不参加漂移判断。
+
+- 壁纸正常路径在子循环里：每 250 毫秒读活动拓扑和当前会话唯一的 wallpaper32 或 wallpaper64，缓存同一存活进程；遇到新进程或新拓扑等 2 秒，用该客户端的真实路径发 -control play，最多 3 次，失败按 10 秒、20 秒退避，成功后同一事件停发。
+
+- 主循环 Invoke-WallpaperEngineDisplayRecovery 第一行检测到子循环在场就直接返回。子循环不可用时，Get-WallpaperEngineRebindDecision 维护 baseline、pending fingerprint、pendingSince 与 lastRebind，区分 WaitForTopology、Baseline、Healthy、Stabilizing、WaitForHealth、Cooldown 和 Rebind，由 wallpaper64 解析同目录 wallpaper32 并要求 explorer，同样只发 play。函数签名里还留着 1500 毫秒停播间隔参数，但 play-only 已不使用。
+
+- 沿用普通窗口排除：HS2 浮层、Wallpaper Engine、Shell、Bubbles、Emerald 背景、blackout、instrument overlay、隐藏或 cloaked 窗口等不参与。真实 MoveWindowPlacement 结果分别收为 AppliedActions 和 FailedActions。
+
+- WMI 电源订阅统一处理 suspend/resume，与 live process/COM owner 合并。
+
+- HS2 模式按 actual enumerated state（实际已枚举状态）保留，绑定必须连续两次健康；实际 native 稳定 30 秒后至多尝试一次提升。
+
+::screen{#pc-panel-hub-power-recovery-09 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-09",
+  "section": "tech",
+  "title": "技术实现与依据（五）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（五）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- TURZX suspend 停 stream 并用 command 123 亮度 0；恢复先还亮度再启动。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（五）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "- TURZX suspend 停 stream 并用 command 123 亮度 0；恢复先还亮度再启动。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（五）
+
+- TURZX suspend 停 stream 并用 command 123 亮度 0；恢复先还亮度再启动。
+
+- WindowsDisplayWindowPolicy.ps1 通过 EnumDisplayMonitors/GetMonitorInfo 只读捕获活动屏 DeviceName、IsPrimary 和几何；Get-WallpaperEngineTopologyFingerprint 只保留前两项并排序，避免 HDR 或布局细节造成误触发。
+
+- HS2ActiveRecoveryPolicy.ps1 仅在 MTT 参与活动桌面时用窄 PnP 查询核对唯一 DISPLAY\MTT1337\* 和 ROOT\DISPLAY\* 后端，并逐项读取 IsPresent、ProblemCode 与 HardwareIds=Root\MttVDD；HS2 桌面身份和既有 USB 绑定分别核验。
+
+- 指标端点归属与旧进程退出分别核对，不用进程名称或端口存在冒充健康；重复流退出或心跳停滞进入 30 秒有界冷却，先证明旧 COM 占用已释放；重启失败作为回执留在长驻 Owner 中，不让异常直接把任务退成 Ready。
+
+## 执行流程
+
+1. 登录后由原隐藏 VBS 启动唯一 watchdog，并同步等待它的退出结果；异常退出等 30 秒后进入同一启动流程，正常退出结束。
+
+2. 在控制器恢复可能阻塞前启动全程运行的 250 毫秒桌面保护子循环并立即检查一次；即使浮层还不存在也能处理误入小屏的普通应用。
+
+3. 检查当前控制器模式、设备绑定和旧 owner。
+
+4. 已有 Secondary 原位验证；实际 native 稳定 30 秒后至多提升一次。完整模式/绑定双样本通过才启动浮层，失败则保留模式、停止旧浮层并等待，不主动降级。
+
+::screen{#pc-panel-hub-power-recovery-10 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-10",
+  "section": "tech",
+  "title": "技术实现与依据（六）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（六）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "5. 子循环每轮核对普通窗口、留在虚拟屏上的窗口和浮层四边；浮层漂移就请求重新激活原浮层。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（六）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "5. 子循环每轮核对普通窗口、留在虚拟屏上的窗口和浮层四边；浮层漂移就请求重新激活原浮层。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（六）
+
+5. 子循环每轮核对普通窗口、留在虚拟屏上的窗口和浮层四边；浮层漂移就请求重新激活原浮层。
+
+6. 子循环发现壁纸进程或显示拓扑变了，等 2 秒后向唯一正在运行的壁纸客户端发 play；最多 3 次、有界退避，成功后同一事件不再发。
+
+7. 子循环不在时，主循环每 15 秒只读捕获显示身份，新指纹稳定 30 秒、显示健康门通过、距上次满 900 秒，才经 explorer 下的 wallpaper32 发 play。
+
+8. 分派成功后等待用户看到原动态壁纸在 HS2 浮层下恢复；主机状态只记为命令已分派，不冒充像素恢复。
+
+9. 若 A108 或显示端点缺失，停止软件恢复并正常关机、断开整机电源。
+
+10. 把 OLED USB 主线直连主板 USB 2.0 9-pin 排针或官方 EDGE HUB；不用随附一分二 Hub 承载 LCD，供电不足时接 SATA。
+
+::screen{#pc-panel-hub-power-recovery-11 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-11",
+  "section": "tech",
+  "title": "技术实现与依据（七）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（七）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "11. 重新上电后核对唯一 8091、port 2 controller 和 port 3 LED，连续两次健康才更新绑定。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "技术实现与依据（七）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/打勾清单.png"
+    },
+    {
+     "type": "numbered_steps",
+     "text_ref": "11. 重新上电后核对唯一 8091、port 2 controller 和 port 3 LED，连续两次健康才更新绑定。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none",
+     "connector": "none"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 技术实现与依据（七）
+
+11. 重新上电后核对唯一 8091、port 2 controller 和 port 3 LED，连续两次健康才更新绑定。
+
+12. 按实际状态启动两块屏。
+
+13. 持续检查 heartbeat、进程和电源事件。
+
+14. 故障时先证明旧发送者退出再精确恢复；停止超时就推迟，watchdog 留守。
+
+15. 睡眠/关机按各屏合同收口。
+
+::screen{#pc-panel-hub-power-recovery-12 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-12",
+  "section": "tech",
+  "title": "名词和入口",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "chapter_title",
+     "text_ref": "名词和入口",
+     "align": "left",
+     "size": "medium"
+    },
+    {
+     "type": "table",
+     "text_ref": "名词"
+    }
+   ]
+  }
+ },
+ "images": []
+}
+```
+
+## 名词和入口
+
+## 本模块用到的名词
+
+| 名词 | 意思 |
+|---|---|
+| epoch（一次启动/恢复周期） | 每次正常启动或 resume 的一次机会；失败不会在同一周期无限重试模式。 |
+| preserve-current-mode（保留当前模式） | 先接受固件和 Windows 已成功枚举的模式，再决定是否需要切换。 |
+| RunLevel Highest（最高用户运行级别） | 交互用户任务的提升级别，不是 SYSTEM，也不扩大设备授权；壁纸控制仍以当前用户的壁纸客户端发出。 |
+| 桌面保护子循环 | 看门狗带着的一个小循环，每 250 毫秒检查窗口、浮层所在的屏和壁纸程序；跟着看门狗生、跟着看门狗停，同时只能有一个。 |
+| topology baseline（拓扑基线） | 第一次完整健康观察得到的活动设备名 + 主屏归属；建立基线本身不触发 Wallpaper Engine。 |
+| stability window（稳定窗口） | 后备路径用：新指纹必须连续保持 30 秒，任何再次变化会重新计时。正常子循环只等 2 秒。 |
+| cooldown（冷却） | 后备路径用：每次真实分派后留 900 秒节流。正常子循环改为同一事件最多 3 次、有界退避。 |
+
+## 专业定义
+
+由一个长期 watchdog（看门狗）协调两块屏：保留已成功枚举的模式、证明旧 owner 退出、限制 Secondary 尝试；它带着一个全程运行的 250 毫秒桌面保护子循环，负责普通窗口回位、浮层越界重新激活，以及在壁纸程序仍在运行时有界地请求它继续播放。子循环不在时，主循环按更严的显示健康门走后备路径。
+
+解决什么
+
+解决双恢复 Owner、显示模式抖动、串口竞争、任务假成功退出、睡眠后窗口乱跑、浮层挪位、拓扑变化后动态壁纸停住、只看进程的假健康，以及过度 USB/PnP 修复。
+
+::screen{#pc-panel-hub-power-recovery-13 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-13",
+  "section": "tech",
+  "title": "出问题时（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 修复入口会真实影响副屏，必须先核对精确目标；网站刷新只读。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "prose",
+     "text_ref": "解决什么"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 修复入口会真实影响副屏，必须先核对精确目标；网站刷新只读。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（一）
+
+解决什么
+
+解决双恢复 Owner、显示模式抖动、串口竞争、任务假成功退出、睡眠后窗口乱跑、拓扑变化后 Wallpaper Engine 仍绑定旧渲染面、只看进程的假健康，以及过度 USB/PnP 修复。
+
+## 边界
+
+- 修复入口会真实影响副屏，必须先核对精确目标；网站刷新只读。
+
+- 壁纸恢复只请求已在运行的 Wallpaper Engine 继续播放：不切换 Windows 显示拓扑、不改主屏、不改分辨率/刷新率/HDR/缩放/捕获目标，不打开 Wallpaper GUI、不写场景或配置、不启动没开的壁纸程序，也不创建服务、计划任务或高权限常驻渲染器。
+
+- 正常路径的资格是“同一会话里唯一一个正在运行的壁纸客户端”；后备路径另要求完整显示健康门和 explorer。后备的更严条件不是全系统的实时门槛，窗口回位和完整 HS2 启动门也各管各的。
+
+- play 的“已分派”只证明命令被接受，不证明 Wallpaper Engine 完成渲染，更不证明 HS2 实体像素已经运动。保护记录里的累计次数是分派或搬移动作数，不是成功恢复的次数。
+
+- 现在不再发 stop，旧版“先停成功、后播失败”的半失败情形已不存在；产品仍以不改配置、Windows 静态背景和 Wallpaper Engine 自身用户控制保持可恢复。
+
+- 内部 USB 排针不得带电插拔。
+
+- 随附一分二 Hub 不支持 LCD；只能使用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，供电不足时才补 SATA。
+
+- 接线改变后的单次枚举不够；唯一 8091、port 2 controller、port 3 LED 拓扑必须连续两次健康才换绑。
+
+::screen{#pc-panel-hub-power-recovery-14 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-14",
+  "section": "tech",
+  "title": "出问题时（二）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 机箱屏睡眠/关机/断电验收在电脑配置（PCConfig）里仍登记为待验，最后核对是 10 月 10 日 20:11，本人说以后再验、没有截止日；看门狗的自动接回记录不能拿来关闭它。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 机箱屏睡眠/关机/断电验收在电脑配置（PCConfig）里仍登记为待验，最后核对是 10 月 10 日 20:11，本人说以后再验、没有截止日；看门狗的自动接回记录不能拿来关闭它。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（二）
+
+- 机箱屏睡眠/关机/断电验收在电脑配置（PCConfig）里仍登记为待验，最后核对是 10 月 10 日 20:11，本人说以后再验、没有截止日；看门狗的自动接回记录不能拿来关闭它。
+
+- 这里处理已安装机器的运行期端点消失和接线修正，不代替 clean clone、换机或系统重装验收。
+
+- 服务/进程回读不等于实体显示恢复。
+
+## 失败与恢复
+
+- **普通窗口进入已识别的 HS2，但完整控制器或浮层尚未就绪**　子循环先把普通应用无激活地搬回安全屏；无其他落点时最小化。浮层、Wallpaper 和桌面外壳排除，完整 HS2 验证仍独立等待。
+
+- **桌面保护子循环提前退出或父 watchdog 已退出**　提前退出留明确错误证据，原 watchdog 重新拉起子循环；父退出时子循环结束，单实例锁保证不遗留第二个控制者。
+
+- **浮层被最小化、归属错误或四边越出目标屏**　请求停掉并重新激活原浮层，不改拓扑、不重启机箱屏。10 月 11 日 03:09:56 生产日志记下漂移，03:09:57 发出请求，新浮层进程 03:09:58 启动；实体最终位置没有单独核对。
+
+- **HDR、分辨率、坐标或 DXGI 波动没有改变活动显示器身份/主屏归属**　指纹保持相同，不算新事件；不触发 Wallpaper Engine，避免普通画质变化造成闪屏。
+
+- **活动屏少于两块、主屏或 TUR0000 目标不唯一、参与桌面的 MTT1337/Root\MttVDD 不健康、HS2 Secondary/绑定不健康**　这是后备路径的门：进入 WaitForTopology 或 WaitForHealth，不分派；健康恢复且指纹稳定后再评估。
+
+::screen{#pc-panel-hub-power-recovery-15 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-15",
+  "section": "tech",
+  "title": "出问题时（三）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **当前会话没有正在运行的壁纸客户端，或不止一个**　不发命令、不猜安装路径、不跨会话控制，也不替我启动壁纸程序；静态背景保留。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（三）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **当前会话没有正在运行的壁纸客户端，或不止一个**　不发命令、不猜安装路径、不跨会话控制，也不替我启动壁纸程序；静态背景保留。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（三）
+
+- **当前会话没有正在运行的壁纸客户端，或不止一个**　不发命令、不猜安装路径、不跨会话控制，也不替我启动壁纸程序；静态背景保留。
+
+- **play 分派失败**　按 10 秒、20 秒退避再试，同一事件最多 3 次，之后停止；后备路径失败则进入 900 秒冷却。原壁纸配置不变；若背景未恢复，由 Wallpaper Engine 自身用户控制恢复。
+
+- **绑定的 LIAN LI Hub、显示、MI_00 或 LED 出现 Code 10**　同一签名只提示一次并立即失败关闭；要求关机后检查 HS2 USB 排针、线缆和辅助供电，不自动重启 Hub、移除设备或扫描 PnP。
+
+- **A108 Boot ROM 或显示端点缺失**　停止软件尝试，只读等待；需要恢复时先关机断电，再按主板 USB 2.0 9-pin 直连或官方 EDGE HUB 的物理旅程处理，绝不带电拔插。
+
+- **随附一分二 Hub 上看不到 LCD**　不继续重试该 Hub；它不支持 LCD。改用主板 USB 2.0 9-pin 直连或官方 EDGE HUB，若供电不足再接 SATA。
+
+- **改线后出现多个 8091 或端口角色不一致**　保持旧绑定失效，不启动浮层；只在唯一 8091、port 2 controller、port 3 LED 连续两次健康后重新绑定。
+
+- **Secondary 提升失败**　停止旧浮层、保留当前或请求的 Secondary 模式并等待自然显示链恢复；不发送原生模式命令，本 epoch 不再尝试提升。
+
+- **watchdog 子进程反复失败或停旧程序超时**　保留长期循环，先证明旧发送者退出；30 秒内停不干净就推迟，下一轮再证明后才启动一次新 stack。
+
+::screen{#pc-panel-hub-power-recovery-16 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-16",
+  "section": "tech",
+  "title": "出问题时（四）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **watchdog 自身非 0 退出或原生崩溃**　原隐藏 VBS 等 30 秒再启动替代 watchdog；后者先确认旧 sender 退出，不依赖任务计划程序单独恢复，也不并发创建第二个写入者。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "出问题时（四）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons-r2/扳手.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- **watchdog 自身非 0 退出或原生崩溃**　原隐藏 VBS 等 30 秒再启动替代 watchdog；后者先确认旧 sender 退出，不依赖任务计划程序单独恢复，也不并发创建第二个写入者。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons-r2/扳手.png",
+   "key": "扳手",
+   "source_phrase": "冻结页迁移固定图标：failure",
+   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 出问题时（四）
+
+- **watchdog 自身非 0 退出或原生崩溃**　原隐藏 VBS 等 30 秒再启动替代 watchdog；后者先确认旧 sender 退出，不依赖任务计划程序单独恢复，也不并发创建第二个写入者。
+
+- **本人明确停止整条链或 watchdog 正常退出**　IncludeWatchdog 连同精确 VBS 一起停止；0 退出让 VBS 结束，不把人工停止解释为需要自动接回。
+
+::screen{#pc-panel-hub-power-recovery-17 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-17",
+  "section": "tech",
+  "title": "依据与来源（一）",
+  "links": [],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 10 月 11 日 03:09:56 生产日志记下浮层漂移，03:09:57 发出停止并重新激活请求，03:09:58 新的浮层进程启动；这说明自动请求实际跑过，浮层最终在实体屏上的位置没有单独核对。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（一）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    },
+    {
+     "type": "bullet_list",
+     "text_ref": "- 10 月 11 日 03:09:56 生产日志记下浮层漂移，03:09:57 发出停止并重新激活请求，03:09:58 新的浮层进程启动；这说明自动请求实际跑过，浮层最终在实体屏上的位置没有单独核对。",
+     "columns": 1,
+     "icons": "none",
+     "illustration": "none"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（一）
+
+## 真实入口
+
+隐藏启动、同步等待退出、异常退出30秒后接回与正常退出结束
+
+IncludeWatchdog显式停止时同时结束精确隐藏入口
+
+真实VBS退出、恢复与停止行为的无硬件回归
+
+长期进程、电源 Owner、子循环在场检测与后备壁纸恢复状态
+
+全程运行的 250 ms 桌面保护子循环（Invoke-HS2StartupWindowGuard.ps1）：父进程绑定、单实例锁、窗口回位与壁纸 play-only
+
+拓扑指纹、MTT/HS2 健康门、后备 30 秒稳定与 900 秒冷却、Code 10 失败关闭
+
+EnumDisplayMonitors 活动屏/主屏快照、浮层四边越界判断，以及浮层、Wallpaper Engine 和桌面外壳窗口排除
+
+HDR-only、主屏/HS2路径与参与桌面的MTT健康、稳定/冷却、控制分派和停止结果回归
+
+冻结面板有界修复
+
+启动任务安装与旧任务禁用
+
+原壁纸恢复、Code 10、设备操作禁区与实体边界
+
+模式、电源、拓扑与恢复合同
+
+恢复与假活回归
+
+## 如何验证
+
+- 10 月 11 日 03:09:56 生产日志记下浮层漂移，03:09:57 发出停止并重新激活请求，03:09:58 新的浮层进程启动；这说明自动请求实际跑过，浮层最终在实体屏上的位置没有单独核对。
+
+- Source：9月7日 a4d8e22219f304ec7d4540f4e7612510cc70bf8e 的 HEAD、origin/main 与实时远端一致，源码工作树干净；修补 VBS 异常退出接回和 IncludeWatchdog 停止边界，原有窗口保护、模式保留与独占串口合同不变。
+
+- Tests：a4d8e22 的 test.ps1 -SkipStreamWhenRunning 通过，指标 87、天气 8，PowerWatchdog、刷新默认值、可靠性、节拍、4 个真实 VBS 无硬件行为及公开 ZIP 通过；只跳过会占用生产串口的 TestVideoStream。本轮没有重跑。
+
+- Installation / Runtime（运行环境）：9 月 7 日既有任务已重新启动；显式停止 34.69 秒未反弹，软件启动 31.06 秒恢复，强制结束 watchdog 后 63.33 秒由原 VBS 自动接回，旧 sender 退出。RTSS 单应用配置经官方 SDK 回读 AppDetectionLevel=0，未另建任务或服务。
+
+- Runtime（运行环境）：没有制造显示器拔插、主屏切换、MTT 重枚举、Code 10 或控制客户端缺失；没有观察 Wallpaper Engine 实际渲染恢复。
+
+- 接线选择、Hub 能力、SATA 供电与 8091 端口拓扑来自当前项目源码和启动合同；它们是可执行恢复说明，不是本轮物理观察结果。
+
+- Physical：9月7日本人确认 TURZX 实体小屏正常刷新；脚本先前 physical_pixels_verified=false 与后续本人观察分开保留。HS2 正式安装位置 9 月 28 日本人粗看正常；本轮睡眠、关机、断电、壁纸实际恢复和 HS2 实屏未验收。
+
+- ac770044 相关纯软件回归拒绝不完整窗口捕获与未知执行；本网页只消费已发布实现，不把单元结果、心跳或命令 204 写入当实体像素验证。
+
+::screen{#pc-panel-hub-power-recovery-18 section="tech"}
+
+```typeset
+{
+ "screen": {
+  "id": "pc-panel-hub-power-recovery-18",
+  "section": "tech",
+  "title": "依据与来源（二）",
+  "links": [
+   {
+    "text": "上一个模块 安装、绑定与换机",
+    "href": "/projects/pc-panel-hub/installation-binding-migration/"
+   }
+  ],
+  "anchors": [],
+  "live": null,
+  "screenshots": [],
+  "chain": null,
+  "reuse": null
+ },
+ "layout": {
+  "h": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    }
+   ]
+  },
+  "v": {
+   "blocks": [
+    {
+     "type": "section_heading",
+     "text_ref": "依据与来源（二）",
+     "size": "large",
+     "heading_icon": "_library/hires-icons/数据库.png"
+    }
+   ]
+  }
+ },
+ "images": [
+  {
+   "role": "icon",
+   "slot_ordinal": 1,
+   "asset": "_library/hires-icons/数据库.png",
+   "key": "数据库",
+   "source_phrase": "冻结页迁移固定图标：sources",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
+   "status": "ready"
+  }
+ ]
+}
+```
+
+## 依据与来源（二）
+
+## 与其他模块的关系
+
+接收安装与换机模块已经验证的本机配置和双屏绑定，监管运行期机箱屏传输、HS2 显示状态、浮层位置，以及对已在运行的 Wallpaper Engine 发出的继续播放请求；它不拥有 clean clone、首次安装、壁纸资产或场景设置，总览中的分层证据决定源码、测试、安装、运行事实能否升级为实体结论。
