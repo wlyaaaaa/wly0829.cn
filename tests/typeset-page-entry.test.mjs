@@ -55,3 +55,14 @@ test('motion cancellation removes running effects without writing hidden fallbac
   f.events[signal]();assert.ok(f.calls.every(c=>c.a.cancelled));assert.equal(f.title.style.opacity,undefined);assert.equal(f.art.style.opacity,undefined);
  }
 });
+test('the number overlay selects only the digit range and leaves the small unit untouched',()=>{
+ const number={nodeValue:'151',parentElement:{style:{fontSize:'64px',lineHeight:'80px'}}},unit={nodeValue:'份',parentElement:{style:{fontSize:'24px',lineHeight:'34.8px'}}};
+ const bounds=[],rect={left:10,top:10,width:110,height:76},helper=source.slice(source.indexOf('  function numberFragment'),source.indexOf('  function enterCard'));
+ const env={getComputedStyle:n=>n.style,NodeFilter:{SHOW_TEXT:4},document:{createTreeWalker:r=>{let i=0;return {nextNode:()=>r[i++]};},
+  createRange:()=>({setStart:(...args)=>bounds.push(args),setEnd:(...args)=>bounds.push(args),getBoundingClientRect:()=>rect})}};
+ vm.runInNewContext(helper+'this.fragment=numberFragment;',env);
+ const part=env.fragment([number,unit],{numeric:'151'});
+ assert.equal(part.text,'151');assert.equal(part.rect,rect);assert.equal(part.style.fontSize,'64px');assert.deepEqual(bounds,[[number,0],[number,3]]);
+ assert.equal(unit.nodeValue,'份');assert.equal(unit.parentElement.style.fontSize,'24px');assert.equal(unit.parentElement.style.lineHeight,'34.8px');
+ assert.equal(env.fragment([unit],{numeric:'151'}),null);
+});

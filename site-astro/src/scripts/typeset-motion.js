@@ -30,6 +30,13 @@
     const e = document.createElement('span'); e.className = 'sample-overlay ' + cls;
     e.setAttribute('aria-hidden', 'true'); e.dataset.tsMotionOverlay = ''; position(host, rect, e); host.append(e); return e;
   }
+  function numberFragment(el, token) {
+    const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let node;
+    while ((node=walker.nextNode())) { const start=node.nodeValue.indexOf(token.numeric); if(start<0)continue;
+      const range=document.createRange(); range.setStart(node,start); range.setEnd(node,start+token.numeric.length);
+      return {rect:range.getBoundingClientRect(),style:getComputedStyle(node.parentElement),text:token.numeric}; }
+    return null;
+  }
   function enterCard(el, group, art = null) { played.add(el);
     const options={duration:duration('cards'),delay:Math.max(0,group.indexOf(el))*60,easing:'ease-out',fill:'backwards'};
     animate(el,el,[{opacity:0,translate:'0 80px'},{opacity:1,translate:'0 0'}],options);
@@ -60,13 +67,16 @@
     const host = el.closest(cards) || el.closest('.ts-canvas'); if (!host) return;
     if (el.matches(cards) && (!cardEligible(el)||el.closest(gridCards))) return;
     if (el.matches(numbers)) {
+      if (document.fonts.status !== 'loaded') return;
       const text = el.textContent.trim(), token = tokenFor(text);
       if (!token || el.querySelector(numbers)) return;
+      const fragment=numberFragment(el,token); if (!fragment) return;
       played.add(el);
-      const e = overlay(host, el.getBoundingClientRect(), 'number-roll'), track = document.createElement('span');
-      track.className = 'number-track'; const decimals = (token.numeric.split('.')[1] || '').length;
-      for (let i=0;i<=20;i++) { const row=document.createElement('span'); row.textContent=textFor({text,...token},+(token.value*(1-(1-i/20)**3)).toFixed(decimals),i===20); track.append(row); }
-      const style=getComputedStyle(el); for (const key of ['fontSize','fontFamily','fontWeight','color','textAlign']) e.style[key]=style[key];
+      // 只覆盖真实数字文本框；单位留在原 DOM，字号、行高和位置不进入数带。
+      const e = overlay(host, fragment.rect, 'number-roll'), track = document.createElement('span');
+      track.className = 'number-track'; track.style.width='100%'; const decimals = (token.numeric.split('.')[1] || '').length;
+      for (let i=0;i<=20;i++) { const row=document.createElement('span'); row.textContent=textFor({text:fragment.text,...token},+(token.value*(1-(1-i/20)**3)).toFixed(decimals),i===20); track.append(row); }
+      for (const key of ['fontSize','fontFamily','fontWeight','fontStyle','fontStretch','fontVariantNumeric','letterSpacing','color']) e.style[key]=fragment.style[key];
       e.append(track); animate(el, track, [{transform:'translateY(0)'},{transform:'translateY(-95.238095%)'}], {duration:duration('numbers'),easing:'steps(20,end)',fill:'forwards'},()=>e.remove());
     } else if (el.matches(cards)) {
       const group=[...el.parentElement.querySelectorAll(cards)].filter(x=>visible(x)&&cardEligible(x));
@@ -125,7 +135,7 @@
     const host=row.target; if (row.isIntersecting) active.add(host); else { active.delete(host); clear(host); }
   } refresh();});
   const observe=()=>root.querySelectorAll('.ts-canvas').forEach(el=>observer.observe(el));
-  if (partEntry) observe(); else document.fonts.ready.then(observe);
+  if (partEntry) { observe(); document.fonts.ready.then(refresh); } else document.fonts.ready.then(observe);
   addEventListener('scroll',refresh,{passive:true}); addEventListener('resize',refresh); addEventListener('pageshow',refresh);
   function sync() { if (!moving()) { for (const a of animations.keys()) a.cancel(); for (const el of root.querySelectorAll('.sample-updated')) el.classList.remove('sample-updated'); for (const host of active) if (host.classList.contains('sample-seam')) { played.delete(host); host.classList.remove('sample-seam'); } } refresh(); }
   document.addEventListener('site-motion',sync); document.addEventListener('visibilitychange',sync); reduced.addEventListener('change',sync);
