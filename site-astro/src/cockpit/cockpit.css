@@ -199,6 +199,20 @@
 /* 今天的河：先按河图比例留好位置，河脚本画进来时不推挤下面 */
 .cp-river { margin-top: 12px; min-height: calc(min(100%, 1392px) / 1.722); }
 
+/* W3：手机宽度下河清单的分组标题和折叠行。
+   分组标题第一行“圆点 组名 数字 展开”，组名整段不折，“展开”不拆；说明挪到第二行占满宽度。
+   清单列最小 310px 在手机上比卡片还宽，折叠行会出框，改成不超过卡片宽。桌面不变。
+   选择器比 today-river.css 多一个 details，不依赖两份样式的加载先后。 */
+@media (max-width: 640px) {
+  #today-river details.group > summary { flex-wrap: wrap; row-gap: 2px; white-space: nowrap; }
+  #today-river details.group > summary::after { white-space: nowrap; flex: none; }
+  #today-river details.group > summary .n { flex: none; }
+  #today-river details.group > summary .say { order: 9; flex: 1 0 100%; min-width: 0; white-space: normal; overflow-wrap: anywhere; padding-left: 21px; line-height: 1.5; }
+  #today-river details.group > .rows { grid-template-columns: minmax(0, 1fr); }
+  #today-river details.row > summary, #today-river div.row > summary { min-width: 0; }
+  #today-river details.row > summary .nm, #today-river div.row > summary .nm { min-width: 0; overflow-wrap: anywhere; }
+}
+
 @media (max-width: 1100px) {
   .cp-hero { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
   .cp-tri-status { font-size: 18px; }
