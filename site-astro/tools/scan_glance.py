@@ -1,5 +1,5 @@
 """稳定画面扫描；来源、只读预览规则和用法见 docs/publish-and-scan.md。"""
-import argparse, functools, hashlib, http.server, json, os, subprocess, sys, tempfile, threading, time, urllib.error, urllib.request
+import argparse, functools, hashlib, http.server, importlib.util, json, os, subprocess, sys, tempfile, threading, time, urllib.error, urllib.request
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
@@ -8,6 +8,7 @@ from urllib.parse import quote, unquote, urlsplit
 HERE = Path(__file__).resolve().parent
 UPSTREAMS = {"mcp": "https://mcp.wly0829.cn", "live": "https://live.wly0829.cn", "oss": "https://wly0829-img-media-shanghai.oss-cn-shanghai.aliyuncs.com"}
 VIEWPORTS = ((1920, 1080), (3840, 2160))
+RETRY_NETWORK_ERRORS = ("ERR_NO_BUFFER_SPACE", "ERR_ABORTED", "ERR_CONNECTION_RESET")
 def read_json(path): return json.loads(Path(path).read_text(encoding="utf-8-sig"))
 def file_inventory(root):
     hashes = {}
@@ -17,18 +18,45 @@ def file_inventory(root):
 def route_name(path):
     value = "/" + str(path).replace("\\", "/").lstrip("/")
     return value[:-10] if value.endswith("index.html") else value
+def published_manifest():
+    spec = importlib.util.spec_from_file_location("glance_retention", HERE.parents[1] / "scripts/oss-retention.py")
+    retention = importlib.util.module_from_spec(spec); spec.loader.exec_module(retention)
+    path = retention.shared() / "published.json"
+    return read_json(path)["manifest"] if path.is_file() else None
+
 def select_pages(dist, mode, hashes, previous, locked=False):
+    if mode == "published-diff":
+        published = published_manifest()
+        if published is None:
+            print("扫描范围：无已发布记录，回退 changed", flush=True); mode = "changed"
+        else:
+            previous = {route_name(rel): row["sha256"] for rel, row in published["files"].items() if rel.endswith(".html")}
+            mode = "changed"
     if mode == "all": selected = list(hashes)
-    elif mode == "changed":
-        receipt = dist / ".build-receipt.json"
-        if receipt.exists():
-            data = read_json(receipt)
-            selected = [route_name(x) for x in data["rebuilt_pages"]]
-        else: selected = [r for r, h in hashes.items() if previous.get(r) != h]
+    elif mode == "changed": selected = [r for r, h in hashes.items() if previous.get(r) != h]
     else: selected = [route_name(x.strip()) for x in mode.split(",") if x.strip()]
     missing = set(selected) - hashes.keys()
     if missing: raise ValueError(f"成品缺少页面：{sorted(missing)}")
     return sorted(set(selected) - ({"/"} if locked else set()))
+
+def successful_routes(selected, rows, unchanged=True):
+    expected = {f"{w}x{h}" for w, h in VIEWPORTS}
+    return {r for r in selected if unchanged
+            and {row["viewport"] for row in rows if row["page"] == r} == expected
+            and all(not row["failures"] for row in rows if row["page"] == r)}
+
+def scan_baseline(result):
+    inputs = result.get("input_html_sha256", result.get("html_sha256", {}))
+    previous = {r: h for r, h in inputs.items() if result.get("html_sha256", {}).get(r) == h}
+    selected = set(result.get("selected_routes", []))
+    complete = successful_routes(selected, result.get("pages", []), result.get("dist_files_unchanged", True))
+    failed = {item.get("page") for item in result.get("failures", [])}
+    return {r: h for r, h in previous.items() if (r not in selected or r in complete) and r not in failed}
+
+def retryable_transport(row):
+    failures = row["failures"]
+    return bool(failures) and all(item.get("category") == "transport" for item in failures) and any(
+        code in item.get("message", "") for item in failures for code in RETRY_NETWORK_ERRORS)
 class Preview(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *args): pass
     def upstream(self, url, headers, head):
@@ -129,73 +157,80 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items):
         browser.set_default_timeout(30000)
         browser.route("**/*", lambda route: route.continue_() if route.request.method in ("GET", "HEAD", "OPTIONS") else route.abort())
         for route, width, height in jobs:
-            page = browser.new_page(); page.set_viewport_size({"width": width, "height": height})
-            row = {"page": route, "viewport": f"{width}x{height}", "failures": [], "hints": [], "live_unavailable": [], "seconds": {}}
-            mark = [time.monotonic()]
-            def tick(label):
-                now = time.monotonic(); row["seconds"][label] = round(now - mark[0], 3); mark[0] = now
-            activity = [time.monotonic()]; pending = set()
-            def request(req): pending.add(req); activity[0] = time.monotonic()
-            def finished(req): pending.discard(req); activity[0] = time.monotonic()
-            def response(res):
-                if res.status >= 400:
-                    error = res.headers.get("x-glance-proxy-error")
-                    dest = row["live_unavailable"] if is_live(res.url) else row["failures"]
-                    item = finding("读不到" if is_live(res.url) else "transport" if error else "404", f"{res.status} {res.url}")
-                    item.update(exception_type=error, response_kind="proxy_transport" if error else "http")
-                    dest.append(item)
-            def failed(req):
-                finished(req)
-                dest = row["live_unavailable"] if is_live(req.url) else row["failures"]
-                dest.append(finding("读不到" if is_live(req.url) else "transport", f"{req.failure} {req.url}"))
-            page.on("request", request); page.on("requestfinished", finished); page.on("requestfailed", failed); page.on("response", response)
-            stem = hashlib.sha256(route.encode()).hexdigest()[:12] + f"--{width}"
-            try:
-                page.goto(base + quote(route, safe="/"), wait_until="load", timeout=30000)
-                if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("路由跳到了已排除的首页")
-                tick("load"); settle(page, activity, pending); tick("initial_settle")
-                y = 0; steps = 0
-                while y < page.evaluate("document.documentElement.scrollHeight") and steps < 1500:
-                    page.evaluate("(y)=>window.scrollTo({top:y,left:0,behavior:'instant'})", y)
-                    page.wait_for_timeout(50); y += max(500, int(height * .8)); steps += 1
-                if steps == 1500: raise RuntimeError("滚动未覆盖整页")
-                settle(page, activity, pending)
-                page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending)
-                page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
-                row["failures"].extend(dom["failures"]); row["hints"].extend(dom["hints"])
-                for item in link_items:
-                    if route_name(item["page"]) == route:
-                        selector = "a[href=" + json.dumps(item["href"]) + "]"
-                        rect = page.locator(selector).first.bounding_box() if page.locator(selector).count() else None
-                        row["failures"].append(finding("404", item["problem"], selector, rect))
-            except Exception as error: row["failures"].append(finding("scan_error", str(error)))
-            try:
-                if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("首页已排除，不自动截图")
-                shot = args.out / "screenshots" / (stem + ".png")
-                page.screenshot(path=str(shot), full_page=True, timeout=30000); row["screenshot"] = str(shot)
-                tick("scroll_settle_dom_fullshot")
-                with Image.open(shot) as full:
-                    for n, item in enumerate(row["failures"]):
-                        r = item.get("rect") or {"x": 0, "y": 0, "width": width, "height": height}
-                        x = max(0, min(r["x"] - 24, full.width - 1)); y = max(0, min(r["y"] - 24, full.height - 1))
-                        w = min(r["width"] + 48, width, full.width - x); h = min(r["height"] + 48, height, full.height - y)
-                        path = args.out / "screenshots" / f"{stem}--fail-{n:04}.png"
-                        full.crop((int(x), int(y), int(x + w), int(y + h))).save(path); item["screenshot"] = str(path)
-            except Exception as error: row["failures"].append(finding("scan_error", f"截图失败：{error}"))
-            page.close(); results.append(row)
+            attempts = []
+            for attempt in range(2):
+                page = browser.new_page(); page.set_viewport_size({"width": width, "height": height})
+                row = {"page": route, "viewport": f"{width}x{height}", "failures": [], "hints": [], "live_unavailable": [], "seconds": {}}
+                mark = [time.monotonic()]
+                def tick(label):
+                    now = time.monotonic(); row["seconds"][label] = round(now - mark[0], 3); mark[0] = now
+                activity = [time.monotonic()]; pending = set()
+                def request(req): pending.add(req); activity[0] = time.monotonic()
+                def finished(req): pending.discard(req); activity[0] = time.monotonic()
+                def response(res):
+                    if res.status >= 400:
+                        error = res.headers.get("x-glance-proxy-error")
+                        dest = row["live_unavailable"] if is_live(res.url) else row["failures"]
+                        item = finding("读不到" if is_live(res.url) else "transport" if error else "404", f"{res.status} {res.url}")
+                        item.update(exception_type=error, response_kind="proxy_transport" if error else "http")
+                        dest.append(item)
+                def failed(req):
+                    finished(req)
+                    dest = row["live_unavailable"] if is_live(req.url) else row["failures"]
+                    dest.append(finding("读不到" if is_live(req.url) else "transport", f"{req.failure} {req.url}"))
+                page.on("request", request); page.on("requestfinished", finished); page.on("requestfailed", failed); page.on("response", response)
+                stem = hashlib.sha256(route.encode()).hexdigest()[:12] + f"--{width}" + ("--retry" if attempt else "")
+                try:
+                    page.goto(base + quote(route, safe="/"), wait_until="load", timeout=30000)
+                    if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("路由跳到了已排除的首页")
+                    tick("load"); settle(page, activity, pending); tick("initial_settle")
+                    y = 0; steps = 0
+                    while y < page.evaluate("document.documentElement.scrollHeight") and steps < 1500:
+                        page.evaluate("(y)=>window.scrollTo({top:y,left:0,behavior:'instant'})", y)
+                        page.wait_for_timeout(50); y += max(500, int(height * .8)); steps += 1
+                    if steps == 1500: raise RuntimeError("滚动未覆盖整页")
+                    settle(page, activity, pending)
+                    page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending)
+                    page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
+                    row["failures"].extend(dom["failures"]); row["hints"].extend(dom["hints"])
+                    for item in link_items:
+                        if route_name(item["page"]) == route:
+                            selector = "a[href=" + json.dumps(item["href"]) + "]"
+                            rect = page.locator(selector).first.bounding_box() if page.locator(selector).count() else None
+                            row["failures"].append(finding("404", item["problem"], selector, rect))
+                except Exception as error:
+                    category = "transport" if "load" not in row["seconds"] and any(code in str(error) for code in RETRY_NETWORK_ERRORS) else "scan_error"
+                    row["failures"].append(finding(category, str(error)))
+                try:
+                    if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("首页已排除，不自动截图")
+                    shot = args.out / "screenshots" / (stem + ".png")
+                    page.screenshot(path=str(shot), full_page=True, timeout=30000); row["screenshot"] = str(shot)
+                    tick("scroll_settle_dom_fullshot")
+                    with Image.open(shot) as full:
+                        for n, item in enumerate(row["failures"]):
+                            r = item.get("rect") or {"x": 0, "y": 0, "width": width, "height": height}
+                            x = max(0, min(r["x"] - 24, full.width - 1)); y = max(0, min(r["y"] - 24, full.height - 1))
+                            w = min(r["width"] + 48, width, full.width - x); h = min(r["height"] + 48, height, full.height - y)
+                            path = args.out / "screenshots" / f"{stem}--fail-{n:04}.png"
+                            full.crop((int(x), int(y), int(x + w), int(y + h))).save(path); item["screenshot"] = str(path)
+                except Exception as error: row["failures"].append(finding("scan_error", f"截图失败：{error}"))
+                page.close(); attempts.append(row)
+                if attempt or not retryable_transport(row): break
+            if len(attempts) > 1: row = dict(row, attempts=attempts)
+            results.append(row)
             print(json.dumps({"page": route, "viewport": row["viewport"], "failures": len(row["failures"]), "hints": len(row["hints"])}, ensure_ascii=False), flush=True)
         browser.close()
     return results
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--dist", required=True, type=Path); parser.add_argument("--pages", default="changed")
+    parser.add_argument("--dist", required=True, type=Path); parser.add_argument("--pages", default="published-diff")
     parser.add_argument("--out", type=Path); parser.add_argument("--config", type=Path, default=HERE / "scan_glance.json")
     parser.add_argument("--chrome", default=r"C:\Program Files\Google\Chrome\Application\chrome.exe"); parser.add_argument("--port", type=int, default=0)
     args = parser.parse_args(); args.dist = args.dist.resolve(); args.out = (args.out or args.dist.parent / "scan-glance").resolve()
     if not args.dist.is_dir(): parser.error("dist 不存在")
     args.out.mkdir(parents=True, exist_ok=True); (args.out / "screenshots").mkdir(exist_ok=True)
     started = time.monotonic(); config = read_json(args.config); result_path = args.out / "scan-result.json"
-    previous = read_json(result_path).get("html_sha256", {}) if result_path.exists() else {}
+    previous = scan_baseline(read_json(result_path)) if result_path.exists() else {}
     dist_files = file_inventory(args.dist)
     hashes = {route_name(rel): digest for rel, digest in dist_files.items() if rel.endswith(".html")}
     selected = select_pages(args.dist, args.pages, hashes, previous, config.get("home_locked", True))
@@ -229,14 +264,13 @@ def main():
     failures = offline + [item for row in rows for item in row["failures"]]
     unchanged = dist_files == file_inventory(args.dist)
     if not unchanged: failures.append(dict(finding("scan_error", "扫描期间 dist 文件增删或字节变化"), page="offline", viewport="offline"))
-    complete = {r for r in selected if all(not any(f["category"] == "scan_error" for f in row["failures"])
-                                          for row in rows if row["page"] == r)}
+    complete = successful_routes(selected, rows, unchanged)
     result = {"observed_at_beijing": datetime.now(timezone(timedelta(hours=8))).isoformat(),
               "seconds": round(time.monotonic() - started, 3), "pages": rows, "selected_routes": selected,
               "failures": failures, "counts": dict(Counter(item["category"] for item in failures)),
               "hints": [item for row in rows for item in row["hints"]],
               "live_unavailable": [item for row in rows for item in row["live_unavailable"]],
-              "html_sha256": previous | {r: hashes[r] for r in complete}, "input_html_sha256": hashes,
+              "html_sha256": {r: h for r, h in previous.items() if r in hashes and r not in selected} | {r: hashes[r] for r in complete}, "input_html_sha256": hashes,
               "dist_files_sha256": dist_files, "dist_files_unchanged": unchanged,
               "home_locked": config.get("home_locked", True), "browser": args.chrome}
     result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
