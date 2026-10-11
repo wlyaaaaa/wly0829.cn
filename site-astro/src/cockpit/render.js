@@ -180,7 +180,7 @@ export function needYou(v, ctx) {
   const known = mine.length + theirs.length === v.deferred.length;
   const wait = !v.deferred.length ? '' : known
     ? (mine.length ? `<h3 class="cp-sub">你有空时可以做（${mine.length} 件，不急）</h3><ul class="cp-list cp-wait">${mine.map(fmt).join('')}</ul>` : '')
-      + (theirs.length ? `<details class="cp-more"><summary>AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
+      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
     : `<h3 class="cp-sub">等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
   return anchor('pending') + body + aiBlock(v, ctx) + wait;
 }
