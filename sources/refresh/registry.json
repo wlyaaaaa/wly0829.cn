@@ -74,8 +74,8 @@
       "page": "skills-home",
       "screen": "skills-home-01",
       "label": "技能详情页数（按页面类型现数）",
-      "current_value": 27,
-      "as_of": "2026-10-10",
+      "current_value": 29,
+      "as_of": "2026-10-12",
       "category": "文件个数",
       "source_location": "本仓库 sources/pages/*/page.json 的 kind=skill；不含去向页",
       "retrieve": {
@@ -88,7 +88,7 @@
       "private": false,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
-      "refreshed_value": 27,
+      "refreshed_value": 29,
       "affected_screens": [
         "skills-home-01"
       ],
@@ -98,7 +98,7 @@
       "measurement_scope": "本工作树 sources/pages/*/page.json，kind=skill；不以安装数或去向页替代。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "observed_at": "2026-10-11T17:54:12+08:00"
+      "observed_at": "2026-10-12T02:19:41+08:00"
     },
     {
       "id": "agents-n-skills-0",
@@ -12678,7 +12678,7 @@
       "screen": "skills-home-01",
       "label": "技能用途分组数",
       "current_value": 7,
-      "as_of": "2026-10-10",
+      "as_of": "2026-10-12",
       "category": "某个 JSON 字段",
       "source_location": "当前本页registry.groups数组长度；不是成员数，不使用旧生成脚本。",
       "retrieve": {
@@ -12697,7 +12697,7 @@
       "page_pattern": "按用途分 ([\\d,]+) 组",
       "measurement_scope": "当前本页registry.groups数组长度；不是成员数，不使用旧生成脚本。",
       "scope_status": "verified",
-      "observed_at": "2026-10-11T17:54:12+08:00",
+      "observed_at": "2026-10-12T02:19:41+08:00",
       "refreshed_value": 7
     },
     {
@@ -12779,8 +12779,8 @@
       "page": "skills-home",
       "screen": "skills-home-01",
       "label": "注明相邻数字的截至日期",
-      "current_value": "10 月 10 日",
-      "as_of": "2026-10-10",
+      "current_value": "10 月 12 日",
+      "as_of": "2026-10-12",
       "category": "截至日期",
       "source_location": "qualifies关联数字的最早成功观察日期；任一Unknown或历史未重取则保留旧日期",
       "automatic": true,
@@ -12794,7 +12794,7 @@
       "page_pattern": "个技能\\*\\*　截至 (\\d+ 月 \\d+ 日)",
       "measurement_scope": "qualifies关联数字的最早成功观察日期；任一Unknown或历史未重取则保留旧日期",
       "scope_status": "verified",
-      "observed_at": "2026-10-11T17:54:12+08:00"
+      "observed_at": "2026-10-12T02:19:41+08:00"
     },
     {
       "id": "codex-memory-n-conv-size-screen04",
@@ -31639,6 +31639,208 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "只关联source明确于16:35同次status取得的58来源、165原件、4关系、44可搜文字；不混16:04文件名清单或10月10日同步统计。"
+    },
+    {
+      "page": "skill-documents",
+      "screen": "skill-documents-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-documents-new-20261012-last-use",
+      "label": "上次记录到技能调用",
+      "current_value": "2026-09-17 01:51",
+      "category": "技能使用记录",
+      "field": "status_line.last.at",
+      "private": true,
+      "automatic": true,
+      "retrieve": {
+        "kind": "usage_ledger",
+        "key": "documents",
+        "operation": "last_time"
+      },
+      "measurement_scope": "kind=skill，name 精确匹配 documents；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+    },
+    {
+      "page": "skill-documents",
+      "screen": "skill-documents-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-documents-new-20261012-uses-7d",
+      "label": "近 7 天已记录技能调用次数",
+      "current_value": 0,
+      "category": "技能使用记录",
+      "field": "status_line.facts[0]",
+      "private": true,
+      "automatic": true,
+      "page_pattern": "^(近 7 天没有记录)$",
+      "retrieve": {
+        "kind": "usage_ledger",
+        "key": "documents",
+        "operation": "count_7d"
+      },
+      "measurement_scope": "kind=skill，name 精确匹配 documents；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+    },
+    {
+      "page": "skill-documents",
+      "screen": "skill-documents-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-documents-new-20261012-status-as-of",
+      "label": "状态行的使用记录快照日期",
+      "current_value": "2026-10-11",
+      "category": "截至日期",
+      "field": "status_line.as_of",
+      "private": true,
+      "automatic": true,
+      "qualifies": [
+        "skill-documents-new-20261012-last-use",
+        "skill-documents-new-20261012-uses-7d"
+      ],
+      "measurement_scope": "同页 last-use、uses-7d 均成功后，读两路 last_completed 的较早排他边界日期；不把读取旧账本的观察日当成补采完成日。本稿 source 明确记到 2026-10-11 零点，后续刷新需同步该 source 的统计窗口。",
+      "date_semantics": "coverage_end",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "skills-new-usage-ledger-complete-until",
+        "pointer": [
+          "complete_until_date"
+        ]
+      }
+    },
+    {
+      "page": "skill-documents",
+      "screen": "skill-documents-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "本轮宿主实际提供的 OpenAI 文件插件 documents 26.1009.11318；原稿版本观察日 2026-10-10",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-documents-new-20261012-plugin-snapshot",
+      "label": "已接入插件及版本观察说明",
+      "current_value": "Codex 自带插件，10 月 10 日的版本",
+      "category": "人工",
+      "field": "status_line.facts[1]",
+      "private": false,
+      "automatic": false,
+      "retrieve": {
+        "kind": "manual",
+        "reason": "插件来历和版本观察口径需要语义核对"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "读取本轮宿主技能发现路径和对应 SKILL.md，核对插件身份与实际 bundle 版本；版本观察日与当前调用次数分开，变化交语义写稿者更新，不从目录修改时间猜发布日期。",
+      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。"
+    },
+    {
+      "page": "skill-pdf",
+      "screen": "skill-pdf-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-pdf-new-20261012-last-use",
+      "label": "上次记录到技能调用",
+      "current_value": "2026-10-09 12:57",
+      "category": "技能使用记录",
+      "field": "status_line.last.at",
+      "private": true,
+      "automatic": true,
+      "retrieve": {
+        "kind": "usage_ledger",
+        "key": "pdf",
+        "operation": "last_time"
+      },
+      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+    },
+    {
+      "page": "skill-pdf",
+      "screen": "skill-pdf-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-pdf-new-20261012-uses-7d",
+      "label": "近 7 天已记录技能调用次数",
+      "current_value": 9,
+      "category": "技能使用记录",
+      "field": "status_line.facts[0]",
+      "private": true,
+      "automatic": true,
+      "page_pattern": "^近 7 天 AI 用了 (\\d+) 次$",
+      "retrieve": {
+        "kind": "usage_ledger",
+        "key": "pdf",
+        "operation": "count_7d"
+      },
+      "measurement_scope": "kind=skill，name 精确匹配 pdf；每行一次调用，last_time 取最大 ts，count_7d 按观察时刻前 7×24 小时的已记录调用。本稿快照明确 2026-10-04 23:52 至 2026-10-11 00:00；本轮复核固定窗口与滚动窗口结果一致。两路 last_completed 均为 2026-10-11T00:00:00+08:00，之后未补采；调用不证明完成。"
+    },
+    {
+      "page": "skill-pdf",
+      "screen": "skill-pdf-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；state-codex.json、state-claude.json",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-pdf-new-20261012-status-as-of",
+      "label": "状态行的使用记录快照日期",
+      "current_value": "2026-10-11",
+      "category": "截至日期",
+      "field": "status_line.as_of",
+      "private": true,
+      "automatic": true,
+      "qualifies": [
+        "skill-pdf-new-20261012-last-use",
+        "skill-pdf-new-20261012-uses-7d"
+      ],
+      "measurement_scope": "同页 last-use、uses-7d 均成功后，读两路 last_completed 的较早排他边界日期；不把读取旧账本的观察日当成补采完成日。本稿 source 明确记到 2026-10-11 零点，后续刷新需同步该 source 的统计窗口。",
+      "date_semantics": "coverage_end",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "skills-new-usage-ledger-complete-until",
+        "pointer": [
+          "complete_until_date"
+        ]
+      }
+    },
+    {
+      "page": "skill-pdf",
+      "screen": "skill-pdf-01",
+      "as_of": "2026-10-11",
+      "historical": false,
+      "source_location": "本轮宿主实际提供的 OpenAI 文件插件 pdf 26.1009.11318；原稿版本观察日 2026-10-10",
+      "scope_status": "verified",
+      "observed_at": "2026-10-12T02:18:41+08:00",
+      "report_ref": "Opus 两页新版定稿；2026-10-12 本轮只读聚合回读",
+      "id": "skill-pdf-new-20261012-plugin-snapshot",
+      "label": "已接入插件及版本观察说明",
+      "current_value": "Codex 自带插件，10 月 10 日的版本",
+      "category": "人工",
+      "field": "status_line.facts[1]",
+      "private": false,
+      "automatic": false,
+      "retrieve": {
+        "kind": "manual",
+        "reason": "插件来历和版本观察口径需要语义核对"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "读取本轮宿主技能发现路径和对应 SKILL.md，核对插件身份与实际 bundle 版本；版本观察日与当前调用次数分开，变化交语义写稿者更新，不从目录修改时间猜发布日期。",
+      "measurement_scope": "原稿写明的插件版本观察；本轮发现路径实际为 26.1009.11318，未运行文档/PDF业务验收，不代表全部功能已验证。"
     }
   ]
 }

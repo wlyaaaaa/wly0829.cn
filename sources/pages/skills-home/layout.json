@@ -57,7 +57,7 @@
         "connector": "none",
         "row": "summary",
         "width": "48%",
-        "text_ref": "27 个技能",
+        "text_ref": "29 个技能",
         "row_equal_height": true
       },
       {
@@ -135,7 +135,7 @@
           "_library/hires-icons/打勾清单.png"
         ],
         "connector": "none",
-        "text_ref": "27 个技能"
+        "text_ref": "29 个技能"
       },
       {
         "type": "content_card",
@@ -204,7 +204,9 @@
           "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "修乱码": "_library/icons/梳理乱线.png",
           "文稿转 PDF": "_library/icons/文稿堆.png",
-          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "Word 文档": "_library/icons/白纸.png",
+          "PDF 读写和表单": "_library/icons/打勾清单.png"
         }
       },
       {
@@ -234,18 +236,20 @@
           "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "修乱码": "_library/icons/梳理乱线.png",
           "文稿转 PDF": "_library/icons/文稿堆.png",
-          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "Word 文档": "_library/icons/白纸.png",
+          "PDF 读写和表单": "_library/icons/打勾清单.png"
         }
       },
       {
         "type": "directory_tile",
-        "columns": 2,
+        "columns": 4,
         "align": "left",
         "size": "medium",
         "illustration": "left_inside",
         "icons": "auto",
         "connector": "none",
-        "text_ref": "〔文稿转 PDF〕",
+        "text_ref": "〔Word 文档〕",
         "icon_map": {
           "找照片和录音": "_library/icons/波形照片.png",
           "找文件原件": "_library/icons/文稿堆.png",
@@ -255,7 +259,9 @@
           "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "修乱码": "_library/icons/梳理乱线.png",
           "文稿转 PDF": "_library/icons/文稿堆.png",
-          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "Word 文档": "_library/icons/白纸.png",
+          "PDF 读写和表单": "_library/icons/打勾清单.png"
         }
       }
     ],
@@ -294,7 +300,9 @@
           "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "修乱码": "_library/icons/梳理乱线.png",
           "文稿转 PDF": "_library/icons/文稿堆.png",
-          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "Word 文档": "_library/icons/白纸.png",
+          "PDF 读写和表单": "_library/icons/打勾清单.png"
         }
       },
       {
@@ -326,7 +334,9 @@
           "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
           "修乱码": "_library/icons/梳理乱线.png",
           "文稿转 PDF": "_library/icons/文稿堆.png",
-          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+          "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+          "Word 文档": "_library/icons/白纸.png",
+          "PDF 读写和表单": "_library/icons/打勾清单.png"
         }
       }
     ],
@@ -501,7 +511,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -531,7 +542,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -561,7 +573,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -600,7 +613,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -632,7 +646,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }
@@ -664,7 +679,8 @@
           "网页上的事接着办": "_library/fix-round-2/icon-clean-e48568e98f22e6cdf98d.png",
           "邮件、云盘和待办": "_library/fix-round-2/icon-clean-a86c56270f7fd4b82920.png",
           "远程只让自己连": "_library/round3/clean-assets/png/08-盾牌-clean.png",
-          "查电脑卡顿": "_library/icons/秒表.png", "看驾驶舱": "_library/icons/显示器.png",
+          "查电脑卡顿": "_library/icons/秒表.png",
+          "看驾驶舱": "_library/icons/显示器.png",
           "省流量的云端素材": "_library/icons/云图片.png",
           "改项目前先核对": "_library/icons/GitHub标志.png"
         }

@@ -878,7 +878,7 @@ def prepare(source, base, prefix, output, origin='https://wly0829.cn', allow_tes
                 if rel in rewriter.assets and (row['sha256'] == actual[rel]['sha256'] or row.get('source') == actual[rel])}
             rewriter.retained.update(rewriter.local_retained_candidates)
             rewriter.retained.update({rel: row for rel, row in previous_oss['objects'].items()
-                                     if rel in rewriter.assets and (row['sha256'] == actual[rel]['sha256']
+                                     if rel in rewriter.assets and (Path(rel).suffix in TEXT_ASSETS or row['sha256'] == actual[rel]['sha256']
                                          or row.get('source') == actual[rel])})
         rewriter.retained.update(inherited)
         while True:
