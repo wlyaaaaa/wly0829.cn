@@ -509,15 +509,17 @@ def main():
     except ValueError as exc:
         parser.error(str(exc))
     registry = read_json(args.registry or args.root / "sources/refresh/registry.json")
-    if registry.get("schema") != "content-refresh.sources.v1" or not registry.get("records"):
-        parser.error("来源表格式不符或没有登记数字")
+    if registry.get("schema") != "content-refresh.sources.v1" or not isinstance(registry.get("records"), list):
+        parser.error("来源表格式不符，records 必须是数组")
     output = args.output or Path("E:/Cache/content-refresh") / datetime.now(BEIJING).strftime("%Y%m%d-%H%M%S-%f")
     output.mkdir(parents=True, exist_ok=True)
     inventory = build_inventory(args.root / "sources/pages", registry["records"], entries)
     only = set(args.only.split(",")) if args.only else None
     if only:
         inventory["items"] = [i for i in inventory["items"] if i["page"] in only]
+        inventory["review_stamps"] = [i for i in inventory.get("review_stamps", []) if i["page"] in only]
         registry = dict(registry, records=[r for r in registry["records"] if r["page"] in only])
+        inventory["review_stamp_record_ids"] = sorted(set(inventory.get("review_stamp_record_ids", [])) & {r["id"] for r in registry["records"]})
     findings = strict_findings(inventory, registry["records"], entries) if args.strict else []
     inventory["strict_findings"] = findings
     write_inventory(output, inventory)
@@ -536,6 +538,8 @@ def main():
     for key in ("TEMP", "TMP", "TMPDIR"):
         os.environ[key] = str((output / "tmp").resolve())
     command_deadline = command_started + args.total_seconds
+    stamps = set(inventory.get("review_stamp_record_ids", []))
+    registry = dict(registry, records=[r for r in registry["records"] if r["id"] not in stamps])
     result = collect(args.root, registry, max(0, command_deadline - time.monotonic() - 5), args.item_seconds, entries=entries, workers=args.workers, entries_path=entries_path)
     from apply_edits import build_number_edits
     (output / "number-edits.json").write_text(json.dumps(build_number_edits(args.root, result), ensure_ascii=False, indent=2), encoding="utf-8")
