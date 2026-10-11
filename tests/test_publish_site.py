@@ -30,8 +30,31 @@ class PublishTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'no run id'): publisher.pages('a'*40, 60)
                 self.assertEqual(commands.call_count, 1)
     def test_pages_reports_a_dispatch_command_timeout(self):
-        with unittest.mock.patch.object(publisher, 'command', side_effect=publisher.subprocess.TimeoutExpired('gh', 1)):
+        with unittest.mock.patch.object(publisher, 'command', side_effect=publisher.subprocess.TimeoutExpired('gh', 1)) as commands, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
             with self.assertRaises(publisher.subprocess.TimeoutExpired): publisher.pages('a'*40, 1)
+        self.assertEqual((commands.call_count, [c.args[0] for c in sleeps.call_args_list]), (4, [1, 2, 4]))
+    def test_connection_errors_retry_three_times_but_content_and_http_errors_do_not(self):
+        reset = publisher.subprocess.CalledProcessError(128, 'git', '', 'schannel: failed to receive handshake, SSL/TLS connection failed')
+        with unittest.mock.patch.object(publisher, 'command', side_effect=[reset, reset, 'ok']) as commands, unittest.mock.patch.object(publisher.time, 'sleep'):
+            self.assertEqual(publisher.net('git', 'push'), 'ok'); self.assertEqual(commands.call_count, 3)
+        rejected = publisher.subprocess.CalledProcessError(1, 'git', '', '! [rejected] non-fast-forward')
+        with unittest.mock.patch.object(publisher, 'command', side_effect=rejected) as commands, unittest.mock.patch.object(publisher.time, 'sleep'):
+            with self.assertRaises(publisher.subprocess.CalledProcessError): publisher.net('git', 'push')
+            self.assertEqual(commands.call_count, 1)
+        eof = publisher.URLError('[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol')
+        with unittest.mock.patch.object(publisher.time, 'sleep'):
+            with self.assertRaises(publisher.URLError): publisher.retrying(unittest.mock.Mock(side_effect=eof), publisher.connection_level)
+            missing = unittest.mock.Mock(side_effect=publisher.HTTPError('u', 404, 'nf', {}, None))
+            with self.assertRaises(publisher.HTTPError): publisher.retrying(missing, publisher.connection_level)
+            self.assertEqual(missing.call_count, 1)
+        with tempfile.TemporaryDirectory() as folder, unittest.mock.patch.object(publisher.time, 'sleep'):
+            (Path(folder)/'a.css').write_bytes(b'x')
+            response = unittest.mock.MagicMock(status=200); response.headers.items.return_value = [('Content-Length', '2'), ('ETag', '"00"')]
+            response.__enter__.return_value = response
+            opener = unittest.mock.Mock(return_value=response)
+            with unittest.mock.patch.object(publisher, 'urlopen', opener):
+                with self.assertRaises(ValueError): publisher.head(('a.css', {'url': 'https://example.invalid/a.css', 'bytes': 1, 'sha256': '0'}), Path(folder))
+            self.assertEqual(opener.call_count, 1)
     def test_one_html_zero_resources_and_same_hash_new_key(self):
         old = {'a.js': {'key': 'releases/old/a.js', 'sha256': 'a'}, 'index.html': {'sha256': 'b'}}
         self.assertEqual(set(publisher.delta({'old/a.js': old['a.js'], 'index.html': {'sha256': 'c'}}, old)), {'index.html'})

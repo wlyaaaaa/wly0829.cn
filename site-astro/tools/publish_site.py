@@ -9,6 +9,7 @@ import subprocess
 import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,7 +27,39 @@ def load(name):
 oss, retention = load('prepare-oss-release'), load('oss-retention')
 
 def command(*args, timeout=None):
-    return subprocess.check_output([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0)).strip()
+    done = subprocess.run([str(x) for x in args], cwd=ROOT, text=True, encoding='utf8', timeout=timeout,
+                          capture_output=True, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+    if done.returncode:
+        raise subprocess.CalledProcessError(done.returncode, done.args, done.stdout, done.stderr)
+    return done.stdout.strip()
+
+RETRY_DELAYS = (1, 2, 4)  # 连接层错误最多重试 3 次；内容核对不一致、HTTP 状态和其他错误一律不重试
+CONNECTION_MARKERS = ('schannel', 'ssl', 'tls', 'handshake', 'eof', 'connection reset', 'connection was reset',
+                      'connection was aborted', 'connection refused', 'timed out', 'timeout', 'could not resolve',
+                      'failed to connect', 'remote end hung up', 'unexpected disconnect', 'error connecting to')
+
+def retrying(function, connection_error):
+    for delay in (*RETRY_DELAYS, None):
+        try:
+            return function()
+        except Exception as error:
+            if delay is None or not connection_error(error):
+                raise
+            time.sleep(delay)
+
+def connection_level(error):
+    if isinstance(error, HTTPError):
+        return False
+    if isinstance(error, (URLError, ConnectionError, TimeoutError, subprocess.TimeoutExpired)):
+        return True
+    if isinstance(error, subprocess.CalledProcessError):
+        text = ((error.stderr or '')+(error.output or '')).lower()
+        return any(marker in text for marker in CONNECTION_MARKERS)
+    return False
+
+def net(*args, timeout=None):
+    run = (lambda: command(*args)) if timeout is None else (lambda: command(*args, timeout=timeout))
+    return retrying(run, connection_level)
 
 def delta(current, previous):
     previous = {**{row.get('key', rel): row for rel, row in previous.items()}, **previous}
@@ -40,37 +73,42 @@ def head(item, root):
         md5 = hashlib.file_digest(stream, 'md5').hexdigest()
     request = Request(row['url'], method='HEAD', headers={
         'Origin': ORIGIN, 'Referer': ORIGIN+'/', 'Accept-Encoding': 'identity'})
-    with urlopen(request, timeout=30) as response:
-        passed = response.status == 200 and int(response.headers.get('Content-Length', -1)) == row['bytes']
-        passed &= (response.headers.get('ETag', '').strip('"').lower() == md5 or
-                   response.headers.get('Content-MD5') == base64.b64encode(bytes.fromhex(md5)).decode())
-        if not passed:
-            raise ValueError('Uploaded object HEAD differs: '+rel)
+    def fetch():
+        with urlopen(request, timeout=30) as response:
+            return response.status, dict(response.headers.items())
+    status, headers = retrying(fetch, connection_level)
+    passed = status == 200 and int(headers.get('Content-Length', -1)) == row['bytes']
+    passed &= (headers.get('ETag', '').strip('"').lower() == md5 or
+               headers.get('Content-MD5') == base64.b64encode(bytes.fromhex(md5)).decode())
+    if not passed:
+        raise ValueError('Uploaded object HEAD differs: '+rel)
     return rel, {'status': 'pass', 'http': 200, 'bytes': row['bytes'],
-                 'sha256': row['sha256'], 'local_md5': md5, 'headers': dict(response.headers.items())}
+                 'sha256': row['sha256'], 'local_md5': md5, 'headers': headers}
 
 def get_page(item):
     rel, row = item
     route = '/'+rel[:-10] if rel.endswith('index.html') else '/'+rel
     request = Request(ORIGIN+oss.quote(route, safe='/')+'?publish='+row['sha256'][:16],
                       headers={'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'})
-    with urlopen(request, timeout=30) as response:
-        digest = hashlib.file_digest(response, 'sha256').hexdigest()
-        if response.status != 200 or digest != row['sha256']:
-            raise ValueError('Public HTML GET differs: '+rel)
+    def fetch():
+        with urlopen(request, timeout=30) as response:
+            return response.status, hashlib.file_digest(response, 'sha256').hexdigest()
+    status, digest = retrying(fetch, connection_level)
+    if status != 200 or digest != row['sha256']:
+        raise ValueError('Public HTML GET differs: '+rel)
     return rel, {'status': 'pass', 'http': 200, 'sha256': digest}
 
 def pages(commit, timeout):
     deadline = time.monotonic()+timeout
     repository = REPO.removeprefix('repos/')
-    dispatched = command('gh', 'workflow', 'run', 'pages.yml', '--repo', repository,
+    dispatched = net('gh', 'workflow', 'run', 'pages.yml', '--repo', repository,
                          '--ref', 'main', '-f', 'sha='+commit, timeout=timeout)
     match = oss.re.fullmatch(r'https://github.com/'+oss.re.escape(repository)+r'/actions/runs/([0-9]+)', dispatched)
     if not match:
         raise ValueError('Pages dispatch returned no run id; deployment is unconfirmed for '+commit)
     run_id = int(match[1])
     while time.monotonic() < deadline:
-        run = json.loads(command('gh', 'run', 'view', str(run_id), '--repo', repository,
+        run = json.loads(net('gh', 'run', 'view', str(run_id), '--repo', repository,
                                  '--json', 'status,conclusion', timeout=deadline-time.monotonic()))
         if run['status'] == 'completed':
             if run['conclusion'] != 'success':
@@ -90,9 +128,9 @@ def artifact_commit(dist, plan, output, source_commit):
     git('config', 'user.name', 'Site publisher')
     git('config', 'user.email', 'site-publisher@users.noreply.github.com')
     git('remote', 'add', 'origin', 'https://github.com/wlyaaaaa/wly0829.cn.git')
-    remote = git('ls-remote', 'origin', 'refs/heads/site-dist')
+    remote = net('git', '-C', destination, 'ls-remote', 'origin', 'refs/heads/site-dist')
     if remote:
-        git('fetch', '--depth=1', 'origin', 'site-dist')
+        net('git', '-C', destination, 'fetch', '--depth=1', 'origin', 'site-dist')
         git('checkout', '-B', 'site-dist', 'FETCH_HEAD')
     for rel in git('ls-files').splitlines():
         if rel not in {*plan['github_files'], 'release-identity.json'}:
@@ -221,7 +259,7 @@ def publish(args):
         step('upload_assets', upload)
         renew_lock()
         def verify_heads():
-            with ThreadPoolExecutor(max_workers=8) as pool:
+            with ThreadPoolExecutor(max_workers=4) as pool:
                 for rel, proof in pool.map(lambda item: head(item, args.dist), assets.items()):
                     receipt['head'][rel] = proof
         step('head_uploaded', verify_heads)
@@ -235,7 +273,7 @@ def publish(args):
         receipt['site_dist'] = step('local_site_dist_commit', lambda:
                 artifact_commit(args.dist, plan, output, source_commit))
         receipt['commit'] = receipt['site_dist']['commit']
-        step('push_site_dist', lambda: command('git', '-C', receipt['site_dist']['root'],
+        step('push_site_dist', lambda: net('git', '-C', receipt['site_dist']['root'],
                                               'push', 'origin', 'HEAD:refs/heads/site-dist'))
         receipt['uploaded_files'] += len(receipt['site_dist']['changed_files'])
         receipt['uploaded_bytes'] += sum((Path(receipt['site_dist']['root'])/rel).stat().st_size
