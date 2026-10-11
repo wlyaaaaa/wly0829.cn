@@ -46,7 +46,7 @@ function signal(s, off) {
   const has = s?.value != null && s.value !== '';
   return `<li class="ov-sig is-${color}${off && has ? ' is-old' : ''}" data-signal="${esc(s?.id)}">${icon(s?.id)}<span class="ov-sig-label">${esc(s?.label || LABEL[s?.id] || '')}</span>`
     + `<span class="ov-sig-value">${has ? esc(s.value) : '—'}${has && s.unit ? `<small>${esc(s.unit)}</small>` : ''}</span>`
-    + `<span class="ov-sig-word"><i class="ov-lamp" aria-hidden="true"></i>${esc(word)}</span></li>`;
+    + `<span class="ov-sig-word"><i class="ov-lamp" aria-hidden="true"></i>${esc(word)}${!off && s?.detail ? `<em class="ov-sig-detail">${esc(s.detail)}</em>` : ''}</span></li>`;
 }
 
 // 返回整块 HTML（外框始终同一结构）

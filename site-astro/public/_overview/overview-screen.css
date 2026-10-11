@@ -38,6 +38,7 @@
 .ov-sig-value small { font-weight: 600; margin-left: 2px; color: var(--ov-soft); }
 .ov-sig.is-old .ov-sig-value { color: var(--ov-gray); }
 .ov-sig-word { display: inline-flex; align-items: center; gap: 6px; color: var(--ov-c); font-weight: 700; }
+.ov-sig-detail { font-style: normal; font-weight: 400; color: var(--ov-soft); margin-left: 4px; }
 .ov-lamp { display: inline-block; flex: none; border-radius: 50%; background: var(--ov-c); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ov-c) 22%, transparent); }
 
 /* 大号：驾驶舱第一屏 */
