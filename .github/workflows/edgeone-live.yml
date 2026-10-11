@@ -1,0 +1,83 @@
+name: EdgeOne live functions
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      redeploy:
+        description: Redeploy even when the function tree is unchanged
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: edgeone-live
+  cancel-in-progress: false
+
+jobs:
+  publish-function-tree:
+    if: github.ref == 'refs/heads/main' && github.repository == 'wlyaaaaa/wly0829.cn'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      source_sha: ${{ steps.publish.outputs.source_sha }}
+      function_tree_sha: ${{ steps.publish.outputs.function_tree_sha }}
+      deployment_commit: ${{ steps.publish.outputs.deployment_commit }}
+    steps:
+      - name: Update the isolated EdgeOne deployment branch
+        id: publish
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const owner = 'wlyaaaaa';
+            const repo = 'wly0829.cn';
+            const branch = 'edgeone-live';
+            const api = github.rest.git;
+            // Read current main so a queued older event cannot restore an old tree.
+            const source = await api.getRef({ owner, repo, ref: 'heads/main' });
+            const sourceSha = source.data.object.sha;
+            const sourceCommit = await api.getCommit({ owner, repo, commit_sha: sourceSha });
+            let treeSha = sourceCommit.data.tree.sha;
+            for (const path of ['edge', 'edgeone']) {
+              const tree = await api.getTree({ owner, repo, tree_sha: treeSha });
+              if (tree.data.truncated) throw new Error(`Incomplete tree while locating ${path}`);
+              const entry = tree.data.tree.find(item => item.path === path && item.type === 'tree');
+              if (!entry) throw new Error(`Missing directory ${path} in main ${sourceSha}`);
+              treeSha = entry.sha;
+            }
+            core.setOutput('source_sha', sourceSha);
+            core.setOutput('function_tree_sha', treeSha);
+            let previousSha;
+            try {
+              const previous = await api.getRef({ owner, repo, ref: `heads/${branch}` });
+              previousSha = previous.data.object.sha;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+            const redeploy = context.eventName === 'workflow_dispatch' &&
+              [true, 'true'].includes(context.payload.inputs?.redeploy);
+            if (previousSha && !redeploy) {
+              const previous = await api.getCommit({ owner, repo, commit_sha: previousSha });
+              if (previous.data.tree.sha === treeSha) {
+                core.setOutput('deployment_commit', previousSha);
+                core.info(`Function tree unchanged; keeping ${branch} at ${previousSha}`);
+                return;
+              }
+            }
+            const deployment = await api.createCommit({
+              owner, repo,
+              message: `Deploy EdgeOne functions from main ${sourceSha}`,
+              tree: treeSha,
+              parents: previousSha ? [previousSha] : [],
+            });
+            const sha = deployment.data.sha;
+            if (previousSha) {
+              await api.updateRef({ owner, repo, ref: `heads/${branch}`, sha, force: false });
+            } else {
+              await api.createRef({ owner, repo, ref: `refs/heads/${branch}`, sha });
+            }
+            core.setOutput('deployment_commit', sha);
+            core.info(`Published main ${sourceSha} tree ${treeSha} to ${branch} ${sha}`);
