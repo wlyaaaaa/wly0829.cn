@@ -2,7 +2,7 @@
   "home_locked": true,
   "thresholds": {
     "row_blank_px": 200, "row_blank_fraction": 0.2, "screen_blank_viewport_fraction": 0.4,
-    "overlap_px": 4, "clip_px": 1, "clip_tolerance_px": 4, "image_frame_px": 40, "opaque_alpha": 0.95,
+    "overlap_px": 4, "glyph_overlap_px": 2, "clip_px": 1, "clip_tolerance_px": 4, "image_frame_px": 40, "opaque_alpha": 0.95,
     "text_rect_px": 0.5, "excerpt_chars": 180, "duplicate_card_chars": 25,
     "duplicate_image_width": 250, "duplicate_image_height": 150, "probe_band_fraction": 0.5, "probe_margin_fraction": 0.25
   },

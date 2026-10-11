@@ -23,13 +23,14 @@ window.scanGlance = config => {
   while ((node = walker.nextNode())) { const e = node.parentElement, text = norm(node.nodeValue); if (!e || !/[\p{L}\p{N}\uFFFD]|\{\{/u.test(text) || e.closest('svg,[aria-hidden="true"],[role="presentation"],[role="none"],.sr-only,.visually-hidden,.visuallyhidden,.screen-reader-only,.screen-reader-text,.sr_only,.visually-hidden-focusable:not(:focus-within)') || state(e).skip) continue;
     const range = document.createRange(); range.selectNodeContents(node); const rs = [...range.getClientRects()].filter(r => r.width > t.text_rect_px && r.height > t.text_rect_px); if (!rs.length) continue;
     const why = [...state(e).why]; if (/rgba\([^)]*,\s*0\)/u.test(css(e).color) && !parseFloat(css(e).webkitTextStrokeWidth)) why.push('文字颜色完全透明'); if (rs.every(r => r.right <= 0 || r.left >= vw)) why.push('全部文字位于页面左右范围之外'); records.push({ e, node, text, rs, r: range.getBoundingClientRect(), block: owner(e), why }); }
-  // 裁切按实际字形判断：先用文字行框找候选，再逐字用 Range 取字框，按 canvas 字形度量缩到墨迹范围复核。
+  // 裁切和重叠都按实际字形判断：先用文字行框找候选，再逐字用 Range 取字框，按 canvas 字形度量缩到墨迹范围复核。
   const ink = document.createElement('canvas').getContext('2d'), inkCache = new WeakMap();
   const glyphs = r => { if (inkCache.has(r.node)) return inkCache.get(r.node); const s = css(r.e), text = r.node.nodeValue, range = document.createRange(), out = []; ink.font = `${s.fontStyle} ${s.fontWeight} ${s.fontSize} ${s.fontFamily}`;
     for (let i = 0; i < text.length;) { const ch = String.fromCodePoint(text.codePointAt(i)); if (/\S/u.test(ch)) { range.setStart(r.node, i); range.setEnd(r.node, i + ch.length); const m = ink.measureText(ch), fa = m.fontBoundingBoxAscent, fd = m.fontBoundingBoxDescent;
       for (const z of range.getClientRects()) { if (z.width <= 0 || z.height <= 0) continue; const ky = fa + fd > 0 ? z.height / (fa + fd) : 1, kx = m.width > 0 ? z.width / m.width : 1;
         out.push({ left: z.left - m.actualBoundingBoxLeft * kx, right: z.left + m.actualBoundingBoxRight * kx, top: z.top + (fa - m.actualBoundingBoxAscent) * ky, bottom: z.top + (fa + m.actualBoundingBoxDescent) * ky }); } } i += ch.length; }
     inkCache.set(r.node, out); return out; };
+  const inkPaint = r => glyphs(r).map(p => paint(p, r.e)).filter(Boolean), inkOverlap = (a, b) => inkPaint(a).some(p => inkPaint(b).some(q => Math.min(p.right, q.right) - Math.max(p.left, q.left) > t.glyph_overlap_px && Math.min(p.bottom, q.bottom) - Math.max(p.top, q.top) > t.glyph_overlap_px));
   const texts = records.filter(r => !r.why.length), hiddenSeen = new Set(), clippedSeen = new Set(), textMap = new Map(), groups = new Map();
   const exposed = new Set(texts.filter(r => r.rs.some(q => { const p = paint(q, r.e); return p && p.right > 0 && p.left < vw; })));
   for (const r of records) if (r.why.length && !hiddenSeen.has(r.e)) { hiddenSeen.add(r.e); hidden.push(pack(r.e, r.text, r.why.join('; '), {}, r.r)); }
@@ -44,7 +45,7 @@ window.scanGlance = config => {
   const flat = [...exposed].flatMap(r => r.rs.map(q => paint(q, r.e)).filter(Boolean).map(q => ({ ...r, q }))).sort((a, b) => a.q.top - b.q.top), overlapSeen = new Set();
   for (let i = 0; i < flat.length; i++) for (let j = i + 1; j < flat.length && flat[j].q.top < flat[i].q.bottom - t.overlap_px; j++) { const a = flat[i], b = flat[j];
     if (a.e === b.e || a.block === b.block || a.e.contains(b.e) || b.e.contains(a.e) || allow(a.e) || allow(b.e)) continue; const width = Math.min(a.q.right, b.q.right) - Math.max(a.q.left, b.q.left), height = Math.min(a.q.bottom, b.q.bottom) - Math.max(a.q.top, b.q.top);
-    if (width <= t.overlap_px || height <= t.overlap_px) continue; const key = [sel(a.e), sel(b.e)].sort().join('|'); if (overlapSeen.has(key)) continue; overlapSeen.add(key); overlaps.push(pack(a.e, a.text, '两个文字块相交超过阈值', { otherSelector: sel(b.e), otherText: b.text.slice(0, t.excerpt_chars), otherRect: rect(b.q), intersection: { width, height } }, a.q)); }
+    if (width <= t.overlap_px || height <= t.overlap_px || !inkOverlap(a, b)) continue; const key = [sel(a.e), sel(b.e)].sort().join('|'); if (overlapSeen.has(key)) continue; overlapSeen.add(key); overlaps.push(pack(a.e, a.text, '两段文字的实际字形相交', { otherSelector: sel(b.e), otherText: b.text.slice(0, t.excerpt_chars), otherRect: rect(b.q), intersection: { width, height } }, a.q)); }
   const media = [...body.querySelectorAll('img,svg,canvas,video,' + q.cards)].filter(visible).map(e => ({ e, rs: [e.getBoundingClientRect()] })), painted = [...texts, ...media].map(r => ({ e: r.e, rs: r.rs.map(z => paint(z, r.e)).filter(Boolean) }));
   for (const e of body.querySelectorAll('section.ts-screen')) { if (!visible(e)) continue; const b = e.getBoundingClientRect(), occupied = [];
     for (const r of painted) if (e.contains(r.e)) for (const z of r.rs) { const top = Math.max(b.top, z.top), bottom = Math.min(b.bottom, z.bottom); if (bottom > top && z.right > Math.max(0, b.left) && z.left < Math.min(vw, b.right)) occupied.push([top, bottom]); }
