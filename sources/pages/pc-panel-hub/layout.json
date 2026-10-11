@@ -366,7 +366,7 @@
         "columns": 3,
         "illustration": "left_inside",
         "card_count": 3,
-        "text_ref": "38,754 行"
+        "text_ref": "38,788行代码（C#、PowerShell、Python）146个C#单元测"
       }
     ],
     "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。；main-closer：看门狗两细线连接两条实际DOM流程，唯一原组名确定目标，不猜底图部位。",
@@ -952,7 +952,7 @@
         "columns_v": 1,
         "illustration": "top_inside",
         "card_count": 3,
-        "text_ref": "38,754 行"
+        "text_ref": "38,788行代码（C#、PowerShell、Python）146个C#单元测"
       }
     ],
     "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
@@ -1221,8 +1221,194 @@
     "notes": "横版左64%竖向11日期卡时间线，右36%大插画从厂商小窗长出两屏手机并被剪刀修剪；竖版实际演进题在顶部左、缩小插画在右同排，下方全宽日期卡纵排；v2接后5项，不重复题和插画。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
-  {"screen": "pc-panel-hub-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "当前 Renderer 代码使用公开安全 fixture（固定演示数据）直接生成的 480×1920 确定性输出：CPU、GPU、FPS、内存、网络、磁盘和进程层级都来自现役版式，不再使用旧 SVG 设计稿冒充实际渲染结果。", "indices": [0, 1, 2, 3], "columns": 2, "columns_v": 1, "equal_row_height": true, "ratios": ["480:1920", "2288:1048", "2288:1048", "2288:1048"], "caption_mode": "full_width", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}]}]},
-  {"screen": "pc-panel-hub-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "当前 Renderer 代码使用公开安全 fixture（固定演示数据）直接生成的 480×1920 确定性输出：CPU、GPU、FPS、内存、网络、磁盘和进程层级都来自现役版式，不再使用旧 SVG 设计稿冒充实际渲染结果。", "indices": [0, 1, 2, 3], "columns": 3, "columns_v": 1, "ratios": ["480:1920", "2288:1048", "2288:1048", "2288:1048"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}, {"index": 3, "node_indices": [3]}]}]},
-  {"screen": "pc-panel-hub-gallery-history", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "480×1920 密集面板的软件设计预览：CPU、GPU、FPS、内存、物理网络、磁盘、进程与健康状态同时可读；全部名称和数值都是公开安全模拟值，不是实体屏截图。", "indices": [0, 1], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["480:1920", "480:1920"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}]}]},
-  {"screen": "pc-panel-hub-gallery-history", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "480×1920 密集面板的软件设计预览：CPU、GPU、FPS、内存、物理网络、磁盘、进程与健康状态同时可读；全部名称和数值都是公开安全模拟值，不是实体屏截图。", "indices": [0, 1], "columns": 3, "columns_v": 1, "ratios": ["480:1920", "480:1920"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}]}]}
+  {
+    "screen": "pc-panel-hub-gallery",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "用现在的画图程序和公开的固定演示数据直接生成的 480×1920 画面：CPU、显卡、帧率、内存、网络、硬盘和应用排行都是现役版式；数字是演示用的，不是这台电脑的读数。",
+        "indices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "columns": 2,
+        "columns_v": 1,
+        "equal_row_height": true,
+        "ratios": [
+          "480:1920",
+          "2288:1048",
+          "2288:1048",
+          "2288:1048"
+        ],
+        "caption_mode": "full_width",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pc-panel-hub-gallery",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "用现在的画图程序和公开的固定演示数据直接生成的 480×1920 画面：CPU、显卡、帧率、内存、网络、硬盘和应用排行都是现役版式；数字是演示用的，不是这台电脑的读数。",
+        "indices": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "480:1920",
+          "2288:1048",
+          "2288:1048",
+          "2288:1048"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          },
+          {
+            "index": 3,
+            "node_indices": [
+              3
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pc-panel-hub-gallery-history",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "480×1920 密集面板的软件设计预览：CPU、GPU、FPS、内存、物理网络、磁盘、进程与健康状态同时可读；全部名称和数值都是公开安全模拟值，不是实体屏截图。",
+        "indices": [
+          0,
+          1
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "equal_row_height": true,
+        "ratios": [
+          "480:1920",
+          "480:1920"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "pc-panel-hub-gallery-history",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "480×1920 密集面板的软件设计预览：CPU、GPU、FPS、内存、物理网络、磁盘、进程与健康状态同时可读；全部名称和数值都是公开安全模拟值，不是实体屏截图。",
+        "indices": [
+          0,
+          1
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "480:1920",
+          "480:1920"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]

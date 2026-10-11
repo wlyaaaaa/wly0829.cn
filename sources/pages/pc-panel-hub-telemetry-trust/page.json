@@ -1,0 +1,167 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "pc-panel-hub-telemetry-trust",
+  "kind": "project",
+  "title": "一秒指标、物理来源与可信度边界",
+  "url": "/projects/pc-panel-hub/telemetry-trust/",
+  "parent": "pc-panel-hub",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 6 日最后一次提交（早于 10 月 11 日 14:00 截止）重新核对，端口按配置文件和电脑配置（PCConfig）截止前登记；可信度分数和测试保留各自历史日期，本轮没有重跑"
+  },
+  "screens": [
+    {
+      "id": "pc-panel-hub-telemetry-trust-01",
+      "section": "top",
+      "title": "一秒指标、物理来源与可信度边界",
+      "text": "# 一秒指标、物理来源与可信度边界\n\n〔回到项目 → 双屏信息中心〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nPC Panel Hub · 功能说明\n\n屏幕上的每个数字不仅要“能取到”，还要知道它来自哪里、多久前更新、是不是估算或空闲状态。\n\n**当前情况：**指标读取、逐项可信度打分和异常处理都在用；单个传感器陈旧时只让那一项退回最近可信值，其余照常显示。最近一次有日期的可信度记录是 9 月 28 日 86/100，之后未重新核对。实际数字仍由各传感器提供，没有逐项对照外部仪表。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双屏信息中心",
+          "href": "/projects/pc-panel-hub/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/PC-Panel-Hub"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/pc-panel-hub/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n虚拟网卡叠加、CPU 口径混用、探针陈旧、无游戏帧被写成 0 FPS，都会让漂亮面板给出错误判断。\n\n## 举个实际例子\n\n我问“开着 Tailscale 和虚拟机时，这个网速数字还准吗？”系统只认唯一的物理公网出口；如果分不清，就直接显示网络数据不可用，绝不会把几张虚拟网卡相加成一个离谱数字。\n\n## 最后我会得到什么\n\n机箱屏每秒更新主要状态，较慢的程序排行另更新；每个值都知道来自哪里、多久前取得。没有可靠来源时显示等待或不可用，而不是一个看似正常的零。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 虚拟网卡叠加、CPU 口径混用、探针陈旧、无游戏帧被写成 0 FPS，都会让漂亮面板给出错误判断。 举个实际例子 我问“开着 Tailscale 和虚拟机时，这个网速数字还准吗？”系统只认唯一"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 虚拟网卡叠加、CPU 口径混用、探针陈旧、无游戏帧被写成 0 FPS，都会让漂亮面板给出错误判断。 举个实际例子 我问“开着 Tailscale 和虚拟机时，这个网速数字还准吗？”系统只认唯一"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-outcome_cards-01",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n来源明确且新鲜时显示实际值。\n\n## 发现问题时\n\n一个来源过期或明显错误时只让该项失效，其他可信数值继续显示。\n\n## 入口不可用或证据不足时\n\n真实物理网口或传感器分不清时留空，不把虚拟设备数值相加。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n平时直接看机箱屏；读数疑似不对时，在已接入项目的本机 AI 对话中说出指标和当时的程序。\n\n## 需要准备什么\n\n- 疑问指标与时间\n\n- 物理网卡、游戏或虚拟设备情况\n\n## 从开始到拿到结果\n\n1. **追溯这个读数的来源**　系统核对当时的物理网卡、游戏或桌面帧来源，以及读数有没有过期。\n\n2. **查值从哪来**　系统核对物理网口、TimeAudit 帧源及各探针的新鲜度。\n\n3. **显示可信状态**　交回真实值或不可用原因；分不清来源时留空，不相加虚拟网卡或把桌面帧当游戏成绩。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n源码按 10 月 6 日最后一次提交核对；可信度最近有日期的记录是 9 月 28 日 86/100，之后未重新核对。9 月 7 日 87 项指标回归为历史结果，本轮没有重跑；实时采集值仍由各来源负责，未逐项对照外部仪表\n\n## 关键规则与设计选择\n\n1. CPU 占用率优先取 PDH % Processor Utility（处理器效用率），取不到再依次退到 Windows 系统时间接口和 psutil；项目架构文档已经写成同样顺序，旧文档里 Processor Time 的漂移已修掉。\n\n2. 物理公网只统计明确出口，虚拟接口不重复计数。\n\n3. 进程排行从 1 秒主循环分离，避免重扫描拖慢屏幕。\n\n4. 新鲜且明确 gated_idle 才是正常等待；starting 是启动中，waiting_frames 是有渲染但无匹配帧，缺状态、陈旧和来源错误不能混成空闲。\n\n## 当前怎样实现\n\n- metrics_agent.py 通过只在本机可访问的 loopback HTTP 提供有界 snapshot（快照）。源码默认端口是 18765，这台电脑的配置和电脑配置（PCConfig）登记用的是 18766；配置里的地址和实际监听必须一致，不拿旧端口反过来盖掉配置。\n\n- top_processes_helper.py 每 3 秒独立采样并写有界 JSON。各项各有自己的节拍：主快照目标每 1 秒一份，TimeAudit 缓存 0.75 秒，帧数样本 10 秒，进程排行最多容忍 10 秒，天气缓存 10 分钟；不是每个数字都每秒重新采一次。\n\n- 物理网络按接口身份筛选，TUN、虚拟化和小型虚拟盘按合同排除。除了机箱屏，同一份网络和 DPC 采样还经一个很窄的公共出口给出延迟、抖动、丢包、尝试成功数、统计窗口和观察时间，以及 DPC 占用（% DPC Time，系统处理硬件中断的时间占比，不是卡顿原因或驱动延迟值）；不返回网卡名、探测地址、进程、前台程序和原始错误。\n\n- TimeAudit 只提供可选 FPS 事实，本项目经 PostgreSQL 的 `fact_system_hardware` 读取数值、`fps_capture_status` 与 `fps_capture_detail`，不直接连接或启停 RTSS，也不复制长期数据库。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日87项指标回归和依赖检查通过；实时采集值仍由各来源负责，未逐项对照外部仪表 关键规则与设计选择 1 当前源码优先使用 PDH % Processor Utili"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月7日87项指标回归和依赖检查通过；实时采集值仍由各来源负责，未逐项对照外部仪表 关键规则与设计选择 1 当前源码优先使用 PDH % Processor Utili"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- `metrics_agent.py` 把 gated_idle 映射为 idle、starting 映射为 connecting、waiting_frames 映射为 error，并另行核对数据库样本年龄。帧从哪个程序取、RTSS 和 PresentMon 谁优先，是 TimeAudit 自己的事；这次没有重读它的选择算法，以 TimeAudit 页面为准。\n\n## 执行流程\n\n1. 发现并读取各数据源。\n\n2. 按来源口径归一化和过滤。\n\n3. 计算新鲜度、状态与 trust。\n\n4. 返回 snapshot；慢排行异步更新。\n\n5. 渲染层只消费已标注结果。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| PDH（Windows 性能计数器） | 当前代码从这里优先取得 % Processor Utility（处理器效用率），并保留来源与失败状态。 |\n| physical egress（物理公网出口） | 真实承载上网流量的物理接口，不含隧道或虚拟交换接口。 |\n| fresh / stale（新鲜 / 陈旧） | 值是否在允许时间内更新；陈旧值可显示但不能冒充当前。 |\n\n## 专业定义\n\n把硬件、物理公网、磁盘、天气、FPS、前台和进程排行汇成带新鲜度与 trust（可信度）的本地快照，来源不确定时失败关闭。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决来源混加、不同口径同名、慢采集阻塞主循环、无值清零和陈旧值冒充实时。\n\n## 边界\n\n- 天气、网络质量和功耗可能包含外部来源或估算。\n\n- FPS 来自 TimeAudit 的 RTSS 优先 / PresentMon 后备链；本项目只读其 PostgreSQL 结果，不拥有帧源、RTSS 运行或历史。允许桌面渲染帧时，正 FPS 不自动代表游戏成绩。\n\n- 进程名和技术指标可公开；具体通知正文和凭据值不进入快照页面。\n\n## 失败与恢复\n\n- **物理公网出口歧义**：失败关闭，不叠加多个候选。\n\n- **TimeAudit 样本新鲜且明确为 gated_idle**：显示正常等待游戏帧，不用 0 FPS 冒充已取得帧。\n\n- **TimeAudit 返回 waiting_frames、source_unavailable、error、缺采集状态或样本过旧**：显示相应采集异常、来源不足或陈旧；不因为数值为 0 就判健康，不由副屏另启帧源。\n\n- **慢来源超过 deadline**：使用最后一份好快照并降低 trust，主渲染不等待。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "pc-panel-hub-telemetry-trust-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n主 snapshot 与来源可信度\n\n3 秒进程排行\n\n指标口径、并发快照锁与失败回归（现定义 95 个测试方法；旧页写的“84 项”是 8 月 31 日那次验收的数）\n\n数据来源与节拍合同\n\n## 如何验证\n\n- 9月7日完整软件回归中，test_metrics_agent.py 运行 87 项并通过；8 月 31 日 84 项为更早的历史验收。现在这份测试文件定义了 95 个测试方法，另有端点恢复 3 个、天气 7 个；这些是源码里的数量，本轮没有运行，不能写成“今天 95 项通过”。\n\n- check-runtime 曾确认 Python 3.11 与 TimeAudit 读取依赖就绪（旧页记录，之后未重新核对）；这只说明依赖在，不代表数据库采样每一项都准。\n\n- 没有逐项对照实体传感器或外部仪表，真实值准确度仍按来源解释；可信度 100 分也只表示来源齐、状态对，不等于仪表校准过。\n\n## 与其他模块的关系\n\n安装与换机模块提供当前机私有来源配置；本模块为机箱屏渲染提供当前值，并经窄公共出口给出网络质量和 DPC 占用；TimeAudit 继续拥有长期历史。水冷屏（HS2）原来读这里的硬件告警，9 月 27 日告警功能删除后已不再读本模块，它的网络提醒直接读 Windows。",
+      "links": [
+        {
+          "text": "下一个模块 机箱屏渲染",
+          "href": "/projects/pc-panel-hub/case-panel-rendering/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
