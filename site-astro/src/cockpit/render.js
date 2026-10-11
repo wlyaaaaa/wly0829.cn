@@ -163,7 +163,8 @@ function activityBlock(v, ctx) {
     a = { ...a, observed_at: v.automation.observed_at || a.observed_at, timeline: v.today.items.map((x) => ({ at: x.at, kind: EVENT_KIND[x.type] || '', text: (EVENT[x.type] || (() => '电脑上记了一件事'))(x), level: x.type === 'freeze_captured' ? 'watch' : 'ok' })) };
   }
   const num = (x) => (Number.isFinite(x) ? x : '—');
-  const line = `今天跑了 ${num(s.tasks_run)} 个任务、${num(s.tasks_failed)} 个出错${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}${Number.isFinite(s.images_done) && s.images_done ? `、${s.images_done} 次系统镜像` : ''}`;
+  const errs = todayErrors(v);
+  const line = `今天跑了 ${num(s.tasks_run)} 个任务、${errs ? `${errs.owner + errs.other} 个出错（${errorsText(errs)}）` : `${num(s.tasks_failed)} 个出错`}${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}${Number.isFinite(s.images_done) && s.images_done ? `、${s.images_done} 次系统镜像` : ''}`;
   const y = a.yesterday;
   const yline = y && Number.isFinite(y.tasks_run) && (early(ctx) || a.timeline.length < 3) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共跑了 ${num(y.tasks_run)} 个任务、${num(y.tasks_failed)} 个出错，完成 ${num(y.backups_done)} 项备份</p>` : '';
   const items = a.timeline.map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
@@ -198,8 +199,18 @@ export function todayBlock(v, ctx) {
     + gaps;
 }
 
+// 今天出错数：后端 today_activity.summary.errors = {owner, other} 一份清单，总览和今天的动态都读它；字段缺失时返回 null，按原来的方式显示
+export const todayErrors = (v) => { const e = v.today_activity?.summary?.errors; return e && Number.isFinite(e.owner) && Number.isFinite(e.other) ? { owner: e.owner, other: e.other } : null; };
+const errorsText = (e) => `本人 ${e.owner}、别的软件 ${e.other}`;
 // 总览屏和分区灯由共用脚本 /_overview/overview-screen.js 画（ctx.ov 传进来：构建时 import，浏览器里是 window.OverviewScreen）
-const overview = (v, ctx) => ctx.ov ? ctx.ov.html(v.overview, { size: 'big', now: ctx.now.getTime() }) : '';
+const overview = (v, ctx) => {
+  if (!ctx.ov) return '';
+  const e = todayErrors(v);
+  const ov = e && v.overview && Array.isArray(v.overview.signals)
+    ? { ...v.overview, signals: v.overview.signals.map((s) => (s?.id === 'today_tasks' ? { ...s, value: e.owner + e.other, detail: errorsText(e) } : s)) }
+    : v.overview;
+  return ctx.ov.html(ov, { size: 'big', now: ctx.now.getTime() });
+};
 const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
 // 今天几号（北京时间，跨过零点浏览器里会自动换）
