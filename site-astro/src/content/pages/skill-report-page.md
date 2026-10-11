@@ -529,7 +529,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "488a7352c9250063d2b7a7a4f1dfecf6bae3fc9c232e7d469bebc31de7cb88e0",
-  "converted_at_beijing": "2026-10-11T15:00:30+08:00"
+  "converted_at_beijing": "2026-10-11T15:42:12+08:00"
  }
 }
 ---
@@ -1335,18 +1335,6 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "row_fit_illustration": true
     },
     {
-     "type": "feature_card",
-     "columns": 1,
-     "icons": "none",
-     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的",
-     "row": "charts"
-    },
-    {
-     "type": "prose",
-     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝",
-     "row": "charts"
-    },
-    {
      "type": "screenshot",
      "indices": [
       0
@@ -1359,9 +1347,19 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "type": "prose",
      "text_ref": "演示页截图（图）：折线图、柱状图、进度条组、树状层级，图里是示意数据",
      "row": "charts"
+    },
+    {
+     "type": "feature_card",
+     "columns": 1,
+     "icons": "none",
+     "text_ref": "该用哪种图：照上表挑，一共32种组件（在用）长文字排版：小标题、要点、编号、引用、重点标记排好的"
+    },
+    {
+     "type": "prose",
+     "text_ref": "状态：绿圆点＝在用（记录或现存页面里用过）灰圆点＝没用过（会留下痕迹的，一次也没找到）浅灰圆点＝"
     }
    ],
-   "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。\n10 月 11 日空白修：表格一栏和截图一栏标 row_fit_illustration，截图按文字栏高度定大小，不留栏底空白。"
+   "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。\n10 月 11 日空白修：表格一栏和截图一栏标 row_fit_illustration，截图按文字栏高度定大小，不留栏底空白。\n10 月 11 日二次空白修：表格和功能卡、状态说明叠在一栏比竖长截图高太多，排版退成上下叠放仍留大空；改为表格一栏（60%）和截图连图注一栏（40%）并排，功能卡和状态说明移到这一行下面占整行。"
   },
   "v": {
    "blocks": [

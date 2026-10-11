@@ -880,7 +880,7 @@
  "source": {
   "page": "sources/pages/personal-media/page.json",
   "sha256": "a7461ceb44a9489419095631383f3ef970db253430415c6d120858a309f75445",
-  "converted_at_beijing": "2026-10-11T15:14:00+08:00"
+  "converted_at_beijing": "2026-10-11T15:50:45+08:00"
  }
 }
 ---
@@ -2844,22 +2844,30 @@
      "columns": 2,
      "columns_v": 1,
      "illustration": "left_inside",
+     "icons": "auto"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "两个 30 天不是一回事",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
      "icons": "auto",
-     "row": "reasons",
-     "width": "68%"
+     "row": "reasons-tail",
+     "width": "50%"
     },
     {
      "type": "stat_card",
      "text_ref": "16,433",
-     "columns": 1,
+     "columns": 3,
+     "row": "reasons-tail",
+     "width": "50%",
      "columns_v": 1,
      "icons": [
       "_library/hires-icons/代码窗口.png",
       "_library/hires-icons/打勾清单.png",
       "_library/fix-round-2/icon-clean-587ab2de075ca5525b26.png"
      ],
-     "row": "reasons",
-     "width": "32%",
      "portrait_columns": 1
     },
     {
@@ -2874,7 +2882,7 @@
     "icons": 6
    },
    "pending_requirements": [],
-   "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：手机版三个数字卡改为单列，避免数字在窄列内拆开；横版原列数保留。"
+   "notes": "构图依据 typeset-inventory 本屏记录及 source_path 定稿的 scene/portrait；定稿原字不改。整屏章节标题按 STANDARDS 追加要求居中，分栏内标题保持定稿位置。未支持字段只保存要求，不宣称渲染已完成。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：手机版三个数字卡改为单列，避免数字在窄列内拆开；横版原列数保留。\n10 月 11 日空白修：七张原则卡（2 列）和三张数字卡（1 列）并排时数字栏底下空约 330 像素；改为原则卡占整行 2 列，第七张原则卡（两个 30 天）单独拆出，和三张数字卡（3 列）并排成下一行，免得 2 列网格最后一格空着。"
   },
   "v": {
    "blocks": [

@@ -826,14 +826,10 @@
         "type": "chapter_title",
         "size": "large",
         "align": "left",
-        "text_ref": "时间花在哪",
-        "row": "balanced-heading",
-        "width": "88%"
+        "text_ref": "时间花在哪"
       },
       {
-        "type": "illustration",
-        "row": "balanced-heading",
-        "width": "12%"
+        "type": "illustration"
       },
       {
         "type": "content_card",

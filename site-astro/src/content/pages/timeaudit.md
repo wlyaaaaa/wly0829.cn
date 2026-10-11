@@ -712,7 +712,7 @@
  "source": {
   "page": "sources/pages/timeaudit/page.json",
   "sha256": "e9573911fd67c55780758bb64c8ae0094ac5fb918ce27a654ac2f8d6fc0ba1c9",
-  "converted_at_beijing": "2026-10-11T14:30:41+08:00"
+  "converted_at_beijing": "2026-10-11T15:51:26+08:00"
  }
 }
 ---
@@ -2418,15 +2418,7 @@
      "type": "chapter_title",
      "size": "large",
      "align": "left",
-     "text_ref": "时间花在哪",
-     "row": "balanced-heading",
-     "width": "88%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "balanced-heading",
-     "width": "12%"
+     "text_ref": "时间花在哪"
     },
     {
      "type": "content_card",
@@ -2436,7 +2428,15 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
      ],
-     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
+     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电",
+     "row": "lone-ill-1",
+     "width": "60%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "row": "lone-ill-1",
+     "width": "40%"
     },
     {
      "type": "content_card",

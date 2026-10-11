@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/video-scaffold/page.json",
   "sha256": "92a2d887ef7f74e8ee49b062bd4af0e682a347a98b40a3c0f8b37ff87c8e4f79",
-  "converted_at_beijing": "2026-10-11T14:31:21+08:00"
+  "converted_at_beijing": "2026-10-11T15:46:19+08:00"
  }
 }
 ---
@@ -1351,20 +1351,6 @@
      "text_ref": "成片"
     },
     {
-     "type": "screenshot",
-     "row": "delivery",
-     "columns": 1,
-     "align": "center",
-     "ratio": "16:9",
-     "max_width": 550
-    },
-    {
-     "type": "prose",
-     "row": "delivery",
-     "align": "left",
-     "text_ref": "示例封面：自测"
-    },
-    {
      "type": "section_heading",
      "row": "delivery",
      "width": "48%",
@@ -1387,6 +1373,20 @@
      "text_ref": "没有自动提醒。"
     },
     {
+     "type": "screenshot",
+     "row": "delivery",
+     "columns": 1,
+     "align": "center",
+     "ratio": "16:9",
+     "max_width": 550
+    },
+    {
+     "type": "prose",
+     "row": "delivery",
+     "align": "left",
+     "text_ref": "示例封面：自测"
+    },
+    {
      "type": "notice",
      "align": "left",
      "illustration": "left_inside",
@@ -1397,7 +1397,7 @@
      ]
     }
    ],
-   "notes": "实图标题右方有独立卡外插画（显示器、封面、字幕、清单），不能漏掉；主体两栏各有浅绿外框。左栏五项是紧凑图标行，同属一栏容器，不宜套五张大卡；截图占实际左栏近全宽、caption在下，和scene约2/3宽有差异，按实图。右栏四个横向小卡、图标在卡内左侧。底部现在能不能用是全宽说明卡，含日期和完整环境段落，不是实时槽。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px",
+   "notes": "实图标题右方有独立卡外插画（显示器、封面、字幕、清单），不能漏掉；主体两栏各有浅绿外框。左栏五项是紧凑图标行，同属一栏容器，不宜套五张大卡；截图占实际左栏近全宽、caption在下，和scene约2/3宽有差异，按实图。右栏四个横向小卡、图标在卡内左侧。底部现在能不能用是全宽说明卡，含日期和完整环境段落，不是实时槽。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px；10 月 11 日空白修：示例封面截图连图注从左栏挪到右栏“出了事怎么办”卡片下面，左栏五张卡、右栏四张卡加截图两栏等高，不再因左栏过长退成上下叠放。",
    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
   },
   "v": {
