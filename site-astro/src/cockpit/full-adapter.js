@@ -69,6 +69,8 @@ export function fromFull(full) {
     owner_corrections: obj(cp.owner_corrections),
     ai_work: obj(f.ai_work), governance: obj(cp.governance),
     today_activity: obj(f.today_activity), power_today: obj(f.power_today),
+    pc_health: (({ state, reason_code, metrics, changes_24h, observed_at_unix }) => ({ state, reason_code, metrics, changes_24h, observed_at: iso(observed_at_unix) }))(obj(obj(obj(f.hardware).health).pc_health)),
+    laptop: obj(rows(f.remote_network).find((r) => r.id === 'secondary_laptop')),
     changes: (() => { const c = obj(f.changes), t = obj(c.today), w = rows(f.weekly);
       return { state: stateOf(c.state), observed_at: c.observed_at, today: { commits: t.commits, repos_changed: t.repos_changed, latest_at: t.latest_at },
         window_days: c.window_days || 7, commits_7d: c.commits, repos_changed_7d: c.repos_changed, daily: Array.isArray(c.daily) ? c.daily : [],

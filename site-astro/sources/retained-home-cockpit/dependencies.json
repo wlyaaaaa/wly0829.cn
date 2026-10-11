@@ -8480,8 +8480,8 @@
     "source_path": "scripts/today-river-assets2/river.webp"
   },
   "cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js": {
-    "bytes": 46048,
-    "sha256": "d6e2d14e41fb5adb5c58c7ff3621b1b58676ce2701ee859560dfbaa87c40f8e0",
+    "bytes": 48430,
+    "sha256": "a1b5f5657e0f8321df4555ee8cb6e1d28b2e02c73cd388a92523eaeb75eab12c",
     "source_path": "scripts/today-river.js"
   },
   "cockpit/assets/today-river-f36ca903ec4e711209dc.css": {

@@ -280,3 +280,13 @@
 .cp-aiwork li + li::before { content: "· "; color: var(--cp-gray); }
 .cp-aiwork small { color: var(--cp-soft); font-size: 12.5px; }
 .cp-wait small { color: var(--cp-soft); font-size: 13.5px; }
+
+/* W2：电脑卡的原因和之前定过的办法、远程卡里的笔记本、今天出过错的点名、河清单里折起来的别的软件任务 */
+.cp-card .cp-reason { padding: 8px 10px; border-left: 3px solid var(--cp-yellow); border-radius: 0 8px 8px 0; background: #fffaf0; font-size: 14.5px; }
+.cp-card .cp-plan { font-size: 13px; color: var(--cp-soft); }
+.cp-card .cp-laptop { font-size: 14px; }
+.cp-errnames { color: var(--cp-ink); }
+#today-river .row.fold { grid-column: 1 / -1; }
+#today-river .row.fold > summary .nm { color: var(--cp-soft); }
+#today-river .row.fold[open] { background: #fbfdfc; }
+#today-river div.row > summary { cursor: default; }

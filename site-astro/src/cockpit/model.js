@@ -12,14 +12,19 @@ export function hm(v) {
   return d ? new Intl.DateTimeFormat('zh-CN', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(d) : '';
 }
 
-// 今天只写时:分；昨天写“昨天 时:分”；更早写“10月9日 时:分”
+// 今天只写时:分；不是今天的一律写“10月9日 时:分”（不用“昨天”：截图、缓存过了零点就会说错）
 export function when(v, now = new Date()) {
   const d = parse(v);
   if (!d) return '';
-  if (day(d) === day(now)) return hm(d);
-  if (day(d) === day(new Date(now.getTime() - 864e5))) return '昨天 ' + hm(d);
-  const [m, dd] = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, month: 'numeric', day: 'numeric' }).formatToParts(d).filter((x) => x.type !== 'literal').map((x) => x.value);
-  return `${Number(m)}月${Number(dd)}日 ${hm(d)}`;
+  return day(d) === day(now) ? hm(d) : dateHm(v);
+}
+
+// 离现在多久：“15 分钟前”“28 小时前”“3 天前”（48 小时以内按小时）
+export function ago(v, now = new Date()) {
+  const d = parse(v);
+  if (!d) return '';
+  const min = Math.max(0, (now.getTime() - d.getTime()) / 6e4);
+  return min < 1 ? '刚刚' : min < 60 ? `${Math.round(min)} 分钟前` : min < 2880 ? `${Math.round(min / 60)} 小时前` : `${Math.floor(min / 1440)} 天前`;
 }
 
 // 截止时间一律带日期：“10月12日 13:37”（安全和授权一栏用，北京时间）
@@ -80,7 +85,9 @@ export function normalize(raw) {
     // AI 现在在替你做什么（每个项目在跑的自动任务、留下没合并的分支）和每周体检的下次时间；没给就是空
     ai_work: { state: st(obj(v.ai_work).state), observed_at: obj(v.ai_work).observed_at || null, items: list(obj(v.ai_work).items) }, governance: obj(v.governance),
     // 电脑后台今天做的事、今天的用电和开机（PCConfig 给；读不到时块照样在）
-    today_activity: (() => { const a = obj(v.today_activity); return { state: st(a.state), observed_at: a.observed_at || null, summary: obj(a.summary), timeline: list(a.timeline), yesterday: a.yesterday && typeof a.yesterday === 'object' ? a.yesterday : null }; })(),
+    today_activity: (() => { const a = obj(v.today_activity); return { state: st(a.state), observed_at: a.observed_at || null, summary: obj(a.summary), timeline: list(a.timeline), errors: list(a.errors), yesterday: a.yesterday && typeof a.yesterday === 'object' ? a.yesterday : null }; })(),
+    // 电脑健康的原因（hardware.health.pc_health）和副机在不在线（remote_network）：精简视图暂时没带，没有就不显示这两句
+    pc_health: obj(v.pc_health), laptop: obj(v.laptop),
     power_today: (() => { const p = obj(v.power_today); return { state: st(p.state), observed_at: p.observed_at || null, uptime_hours: Number.isFinite(p.uptime_hours) ? p.uptime_hours : null, energy_kwh: Number.isFinite(p.energy_kwh) ? p.energy_kwh : null, peak_watts: Number.isFinite(p.peak_watts) ? p.peak_watts : null, source: typeof p.source === 'string' ? p.source : '', source_note: typeof p.source_note === 'string' ? p.source_note : '', yesterday: p.yesterday && typeof p.yesterday === 'object' ? p.yesterday : null }; })(),
     // 今天代码变化（大数字 + 近 7 天）；字段由 PCConfig 精简视图 changes 给
     changes: (() => { const c = obj(v.changes), t = obj(c.today); return { state: st(c.state), observed_at: c.observed_at || null,
@@ -105,7 +112,7 @@ export function riverSnapshot(v) {
     const p = obj(t.panel);
     const raw = {
       id: t.id, group: t.group, state: t.state, enabled: t.enabled, last_run_at: t.last_run_at, next_run_at: t.next_run_at,
-      runs_today: t.runs_today, schedule_zh: t.schedule || '', heartbeat_at: t.heartbeat_at || null,
+      runs_today: t.runs_today, schedule_zh: t.schedule || '', heartbeat_at: t.heartbeat_at || null, failures_7d: Number.isFinite(t.failures_7d) ? t.failures_7d : undefined,
       public_message: t.public_message || undefined, notice_kind: t.notice_kind || undefined,
       plain: { name: t.name, what: t.what || '', stop: t.stop || '', impact: t.impact || '', status_note: t.note || '', mine: t.mine === true },
     };
@@ -113,7 +120,8 @@ export function riverSnapshot(v) {
     return raw;
   });
   const state = a.state === 'reading' ? 'unknown' : a.state === 'unavailable' && !items.length ? 'unavailable' : 'ok';
-  return { captured_at: v.served_at, automation: { state, observed_at: a.observed_at, groups: a.groups, items } };
+  // today_errors：今天出过错的任务，和总览“今天的任务 N 个出错”同一份清单（today_activity.errors）
+  return { captured_at: v.served_at, automation: { state, observed_at: a.observed_at, groups: a.groups, items }, today_errors: v.today_activity.errors };
 }
 
 // 精简视图里看“点刷新之后新数据到了没有”：三个采集器都在点击之后完成过一次

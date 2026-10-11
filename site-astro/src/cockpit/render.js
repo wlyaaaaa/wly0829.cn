@@ -1,6 +1,6 @@
 // 驾驶舱各块的 HTML。构建时用最近一份快照画出首帧，浏览器拿到新数据后用同一组函数原地换掉每块里面的内容。
 // 每块外框（[data-cp] 所在的元素）始终在，数据没到只换字，不出空框、不换版式。
-import { hm, dateHm, when, light, splitChecked, dedupeCards, isToday } from './model.js';
+import { hm, dateHm, when, ago, light, splitChecked, dedupeCards, isToday } from './model.js';
 
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // 图片地址由页面传入（构建时 Vite 给的带指纹地址）；没传时按素材原名
@@ -13,7 +13,8 @@ const copyBtn = (id, label = '复制给 AI') => (id ? `<button type="button" cla
 // 一张事实卡：标题、一句话、判断标准、读到的时间；没读到时写清上次读到是几点
 export function card(c, now) {
   const missing = c.state === 'unavailable' || c.state === 'reading';
-  const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后没读到）</span>` : '') : notRead(c.observed_at, now);
+  const gap = ago(c.observed_at, now).replace(/^刚刚$/, '').replace(/前$/, '');
+  const text = c.text ? esc(c.text) + (missing && c.observed_at ? `<span class="cp-stale">（这是 ${esc(when(c.observed_at, now))} 读到的，之后${gap ? ' ' + esc(gap) : ''}没读到新的）</span>` : '') : notRead(c.observed_at, now);
   const time = !missing && c.observed_at ? `<p class="cp-time">${esc(when(c.observed_at, now))} 读到</p>` : '';
   return `<article class="cp-card is-${light(c.state)}"><h3>${dot(c.state)}${esc(c.title)}</h3><p>${text}</p>`
     + (c.criteria_text ? `<p class="cp-criteria">判断标准：${esc(c.criteria_text)}</p>` : '')
@@ -94,7 +95,7 @@ export function ownerNow(v, now) {
   const urgent = Number.isFinite(ov.owner_urgent) ? ov.owner_urgent : items.filter((i) => i.r.urgent).length;
   return { n, urgent, items, all };
 }
-const ago = (v, now) => { const t = Date.parse(v || ''); if (!Number.isFinite(t)) return ''; const h = Math.floor((now.getTime() - t) / 36e5); return h < 1 ? '1 小时内核对过' : h < 48 ? `${h} 小时前核对` : `${Math.floor(h / 24)} 天前核对`; };
+const checkedAgo = (v, now) => { const t = Date.parse(v || ''); if (!Number.isFinite(t)) return ''; const h = Math.floor((now.getTime() - t) / 36e5); return h < 1 ? '1 小时内核对过' : h < 48 ? `${h} 小时前核对` : `${Math.floor(h / 24)} 天前核对`; };
 // 只把一段话复制到剪贴板，不发任何请求
 const copyText = (text, label, cls = '') => `<button type="button" class="cp-btn${cls}" data-copy-text="${esc(text)}">${label}</button>`;
 const todoId = (x) => 'todo-' + String(x.id || '').replace(/[^\w-]/g, '');
@@ -111,7 +112,7 @@ function askCard(x, r, ctx) {
   const opts = r.options.length
     ? `<div class="cp-opts" role="group" aria-label="选一个，点了就复制你的选择">${r.options.map((o) => copyText(`我选 ${o.key}：${o.text}${ref}`, `<b>${esc(o.key)}</b>${esc(o.text)}`, ' cp-opt')).join('')}</div><p class="cp-hint">点一个选项就复制“我选 …”，贴到和 AI 的对话里发出去。</p>`
     : '';
-  const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过 ${x.asked_count} 次` : '', x.last_checked_at ? ago(x.last_checked_at, ctx.now) : '还没核对过', x.project ? '项目：' + x.project : ''].filter(Boolean);
+  const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过 ${x.asked_count} 次` : '', x.last_checked_at ? checkedAgo(x.last_checked_at, ctx.now) : '还没核对过', x.project ? '项目：' + x.project : ''].filter(Boolean);
   return `<article class="cp-ask${r.urgent ? ' is-urgent' : ''}" id="${esc(todoId(x))}">`
     + `<header class="cp-ask-head"><h3>${dot(r.urgent ? 'red' : 'attention')}<span>${esc(r.head)}</span></h3><span class="cp-chips-row">${chips(r)}</span></header>`
     + (r.body ? `<p class="cp-ask-body">${esc(r.body)}</p>` : '') + steps + opts
@@ -142,7 +143,7 @@ function aiBlock(v, ctx) {
   const parts = [count('stuck') && `卡住 ${count('stuck')}`, count('running') && `在办 ${count('running')}`, count('queued') && `排队 ${count('queued')}`, count('none') && `还没人接 ${count('none')}`, count('wait') && `等 AI 处理 ${count('wait')}`].filter(Boolean);
   const g = v.governance || {};
   const next = g.next_run_at ? `下次每周体检 ${dateHm(g.next_run_at)}${g.consumer_state === 'not_confirmed' ? '，还没确认它会接手这些事' : ''}` : '';
-  const line = (r) => `<li class="is-${r.state}"><span>${esc(r.title)}</span><small>${[r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? ago(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · ')}</small></li>`;
+  const line = (r) => `<li class="is-${r.state}"><span>${esc(r.title)}</span><small>${[r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? checkedAgo(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · ')}</small></li>`;
   const stuck = rows.filter((r) => r.state === 'stuck'), rest = rows.filter((r) => r.state !== 'stuck');
   return `<div class="cp-ai" id="ai"><h3 class="cp-sub">交给 AI 的事：${rows.length} 件<span class="cp-ai-parts">${parts.join(' · ')}</span></h3>`
     + (stuck.length ? `<p class="cp-ai-cap">${dot('attention')}卡住了（超过 AI 自己写的检查点）</p><ul class="cp-ailist is-stuck">${stuck.map(line).join('')}</ul>` : '')
@@ -194,15 +195,39 @@ export function computer(v, ctx) {
     : `<article class="cp-card is-gray"><h3>${dot('unavailable')}24 小时曲线</h3><p>图表网页现在打不开${g.checked_at ? `（上次检查 ${esc(when(g.checked_at, ctx.now))}）` : ''}。</p></article>`;
   // Grafana 后台登录：根地址来自接口，后面拼 login；接口没给地址就不出这张卡
   const login = g.url ? `<a class="cp-card cp-chart cp-login" href="${esc(new URL('login', g.url).href)}" target="_blank" rel="noopener"><h3><span class="cp-login-icon" aria-hidden="true"></span>Grafana 后台登录 →</h3><p>登录后看全部图表、改面板（新标签页）。</p></a>` : '';
-  const cards = dedupeCards(v.sections.computer).map((c) => card(c, ctx.now)).join('');
-  const remote = (dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now)).replace('<article ', '<article id="remote" ');
+  const cards = dedupeCards(v.sections.computer).map((c) => (c.id === 'computer_health' ? card(c, ctx.now).replace('</p>', '</p>' + pcReason(v)) : card(c, ctx.now))).join('');
+  // 副机（笔记本）在不在线，接在远程连接卡里（remote_network.secondary_laptop；没读到就不写这一行）
+  const lap = LAPTOP[v.laptop.state];
+  const remote = (dedupeCards(v.sections.remote).map((c) => card(c, ctx.now)).join('') || card({ title: '远程连接', state: 'unavailable', text: '' }, ctx.now)).replace('<article ', '<article id="remote" ')
+    .replace(/<\/p>/, (m) => m + (lap ? `<p class="cp-laptop">${dot(lap[1])}笔记本（副机）：${lap[0]}</p>` : ''));
   return `<div class="cp-grid">${cards}${remote}</div><div id="grafana" class="cp-grid cp-charts">${graf}${login}</div>`;
+}
+const LAPTOP = { online: ['在线', 'ok'], offline: ['离线（要用它时得先开机连网）', 'attention'] };
+
+// 电脑有预警时说清原因：哪一项涨得最多、现在多少；“AI 核对、你不用关软件”是后端 pc-health 待办的原话。
+// 再列出之前定过、和电脑卡有关的暂缓办法（你有空时）。原因字段没到就什么都不加。
+const PC_METRIC = { nonpaged_pool_bytes: '非分页池（系统内核自己占的内存）', paged_pool_bytes: '分页池（系统内核占的内存）', committed_bytes: '已提交内存', handle_count: '句柄数' };
+const gb = (b) => `${Math.round(b / 2 ** 30 * 10) / 10} GB`;
+function pcReason(v) {
+  const h = v.pc_health;
+  if (!['warn', 'error'].includes(h.state)) return '';
+  const m = h.metrics || {}, d = h.changes_24h || {};
+  const top = Object.keys(PC_METRIC).filter((k) => Number.isFinite(m[k]) && d[k] > 0 && m[k] > d[k]).sort((a, b) => d[b] / (m[b] - d[b]) - d[a] / (m[a] - d[a]))[0];
+  const what = String(h.reason_code || '').startsWith('resource_growth') ? '系统资源一直在涨' : '系统资源超过了警戒线';
+  const fmt = (k, n) => (k === 'handle_count' ? `${Math.round(n / 1e4) / 10} 万个` : gb(n));
+  const detail = top ? `：${PC_METRIC[top]}现在 ${fmt(top, m[top])}，24 小时涨了 ${fmt(top, d[top])}` : '';
+  const plan = v.deferred.filter((x) => /卡住|卡死|超频|BIOS/.test(x.title || '')).map((x) => splitChecked(x.title).title);
+  return `<p class="cp-reason">原因：${what}${esc(detail)}。卡顿原因还没查明，由 AI 按现有办法核对，你不用自己关软件。</p>`
+    + (plan.length ? `<p class="cp-plan">之前定过的办法（你有空时）：${plan.map(esc).join('；')}</p>` : '');
 }
 
 export function backup(v, ctx) {
-  const cards = dedupeCards(v.sections.backup_cloud).map((c) => card(c, ctx.now)).join('');
+  const cards = dedupeCards(v.sections.backup_cloud).map((c) => card(c.id === 'drive_upload' ? { ...c, text: knownFirst(c.text) } : c, ctx.now)).join('');
   return anchor('backups') + `<div class="cp-grid">${cards || card({ title: '备份', state: 'unavailable', text: '' }, ctx.now)}</div>`;
 }
+
+// 先说读到了什么，再说哪点还不知道：句子以“……还不知道。”开头时挪到最后（Google Drive 上传卡）
+const knownFirst = (t) => { const m = /^([^。：]*：)?([^。]*不知道)。(.+)$/.exec(t || ''); return m ? `${m[1] || ''}${m[3]}${m[2]}。` : t; };
 
 // 项目：在用的每个一张小卡；冻结的只列名字
 // 其他页面“看驾驶舱”的链接落点：/cockpit/#<项目名>，项目名取项目页地址里的那一段；旧链接里的别名也认
@@ -213,7 +238,8 @@ export function projects(v, ctx) {
   const items = v.projects.items;
   if (!items.length) return `<div class="cp-anchors">${[...new Set(Object.values(ctx.projectUrls || {}).map(slugOf).flatMap(idsOf))].filter(Boolean).map(anchor).join('')}</div><p class="cp-empty">${dot('unavailable')}${notRead(v.projects.observed_at, ctx.now)}</p>`;
   const live = items.filter((p) => p.mode !== 'frozen_static'), frozen = items.filter((p) => p.mode === 'frozen_static');
-  const stateOf = (p) => (p.waiting_user > 0 ? 'red' : ['ok', 'not_applicable'].includes(p.run_health) && p.overview === 'ok' ? 'ok' : ['error', 'failed', 'red'].includes(p.run_health) || ['error', 'red'].includes(p.overview) ? 'red' : ['warn', 'attention'].includes(p.run_health) || ['warn', 'attention'].includes(p.overview) ? 'attention' : ['ok', 'not_applicable'].includes(p.run_health) || p.overview === 'ok' ? 'ok' : 'unavailable');
+  // 红只给“等你动手”的（契约：本人必须动手才红）；任务没跑成、AI 还要查的是黄
+  const stateOf = (p) => (p.waiting_user > 0 ? 'red' : ['ok', 'not_applicable'].includes(p.run_health) && p.overview === 'ok' ? 'ok' : ['error', 'failed', 'red', 'warn', 'attention'].includes(p.run_health) || ['error', 'red', 'run_failed', 'warn', 'attention'].includes(p.overview) ? 'attention' : ['ok', 'not_applicable'].includes(p.run_health) || p.overview === 'ok' ? 'ok' : 'unavailable');
   const name = (p) => (ctx.projectUrls?.[p.name] ? `<a href="${esc(ctx.projectUrls[p.name])}">${esc(p.name)}</a>` : esc(p.name));
   const card1 = (p, s) => {
     const wait = [p.waiting_user ? `等你 ${p.waiting_user} 件` : '', p.waiting_ai ? `等 AI ${p.waiting_ai} 件` : '', p.on_hold ? `暂缓 ${p.on_hold} 件` : ''].filter(Boolean).join(' · ');
@@ -294,6 +320,17 @@ function wordsCard(v, ctx) {
 // 电脑后台今天做的事：一行总数 + 按北京时间的时间线（备份、系统镜像、出错、重启、卡住、验收）
 const KIND = { backup: '备份', image: '系统镜像', failed: '出错', restart: '重启', freeze: '卡住', acceptance: '验收' };
 const EVENT_KIND = { acceptance_reviewed: 'acceptance', freeze_captured: 'freeze' };
+// 一天里很多次“验收核对了 1 项，通过 0 项”合成一行，放在最后一次的位置；出错、重启、卡住这些照原样一条一条列
+function mergeAcceptance(list) {
+  const acc = list.filter((x) => x.kind === 'acceptance');
+  if (acc.length < 2) return list;
+  const nums = acc.map((x) => /(\d+)\s*项.*?通过\s*(\d+)\s*项/.exec(x.text || ''));
+  const sum = (i) => nums.reduce((n, m) => n + Number(m[i]), 0);
+  const tail = nums.every(Boolean) ? `，一共核对 ${sum(1)} 项次、${sum(2)} 项通过（通过的会关掉，其余 AI 接着跟）` : '';
+  const last = acc[acc.length - 1];
+  const one = { ...last, text: `AI 今天核对登记事项 ${acc.length} 次${tail}（${hm(acc[0].at)} 起）`, level: acc.some((x) => x.level === 'act') ? 'act' : acc.some((x) => x.level === 'watch') ? 'watch' : last.level };
+  return list.filter((x) => x.kind !== 'acceptance' || x === last).map((x) => (x === last ? one : x));
+}
 function activityBlock(v, ctx) {
   let a = v.today_activity, s = a.summary;
   if (!a.timeline.length && !Number.isFinite(s.tasks_run)) {
@@ -303,11 +340,13 @@ function activityBlock(v, ctx) {
   }
   const num = (x) => (Number.isFinite(x) ? x : '—');
   const errs = todayErrors(v);
-  const line = `今天跑了 ${num(s.tasks_run)} 个任务、${errs ? `${errs.owner + errs.other} 个出错（${errorsText(errs)}）` : `${num(s.tasks_failed)} 个出错`}${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}${Number.isFinite(s.images_done) && s.images_done ? `、${s.images_done} 次系统镜像` : ''}`;
+  const line = `今天跑了 ${num(s.tasks_run)} 个任务、${errs ? `${errs.owner + errs.other} 个出过错${errs.owner + errs.other ? `（你的任务 ${errs.owner} 个、别的软件自带的 ${errs.other} 个）` : ''}` :`${num(s.tasks_failed)} 个出错`}${Number.isFinite(s.backups_done) ? `，完成 ${s.backups_done} 项备份` : ''}${Number.isFinite(s.images_done) && s.images_done ? `、${s.images_done} 次系统镜像` : ''}`;
   const y = a.yesterday;
   const yline = y && Number.isFinite(y.tasks_run) && (early(ctx) || a.timeline.length < 3) ? `<p class="cp-cap cp-yesterday">昨天（${esc(monthDay(y.date))}）共跑了 ${num(y.tasks_run)} 个任务、${num(y.tasks_failed)} 个出错，完成 ${num(y.backups_done)} 项备份</p>` : '';
-  const items = a.timeline.map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
-  return `<article class="cp-feature cp-activity"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${yline}`
+  // 今天出过错的任务点名（和自动任务清单“今天出过错的”同一份 today_activity.errors）
+  const names = a.errors.length ? `<p class="cp-cap cp-errnames">出过错的：${a.errors.map((e) => `${esc(e.name || '没写名字的任务')}（${esc(hm(e.at))}${e.owner === 'other' ? '，别的软件自带' : ''}）`).join('、')}；后来恢复没有，看上面自动任务清单里的“今天出过错的”。</p>` : '';
+  const items = mergeAcceptance(a.timeline).map((x) => `<li class="is-${light(x.level === 'act' ? 'red' : x.level === 'watch' ? 'attention' : x.level === 'ok' ? 'ok' : 'unavailable')}"><time>${esc(hm(x.at))}</time><i class="cp-tl-dot" aria-hidden="true"></i><span class="cp-tl-kind">${esc(KIND[x.kind] || '其他')}</span><span>${esc(x.text)}</span></li>`).join('');
+  return `<article class="cp-feature cp-activity"><h3>电脑后台今天做的事</h3><p class="cp-big-line">${esc(line)}</p>${names}${yline}`
     + (items ? `<ol class="cp-timeline">${items}</ol>` : `<p class="cp-line">${dot('ok')}今天还没有备份、出错、重启这类事。</p>`)
     + (a.observed_at ? `<p class="cp-time">${esc(when(a.observed_at, ctx.now))} 读到</p>` : '') + `</article>`;
 }
