@@ -3,7 +3,7 @@
  "title": "技能",
  "kind": "skills-home",
  "url": "/skills/",
- "tagline": "AI 碰到某类事时照着办的说明书，一共 27 个。",
+ "tagline": "AI 碰到某类事时照着办的说明书，一共 29 个。",
  "toc": [
   {
    "id": "top",
@@ -28,7 +28,7 @@
   "kind": "skills-home",
   "title": "技能",
   "url": "/skills/",
-  "tagline": "AI 碰到某类事时照着办的说明书，一共 27 个。",
+  "tagline": "AI 碰到某类事时照着办的说明书，一共 29 个。",
   "status": "",
   "public": false,
   "repo_url": null,
@@ -61,7 +61,9 @@
     "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-timeaudit-diagnostics\\page.json",
     "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-project-entry-gate\\page.json",
     "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
-    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-cloud-asset-channel\\page.json"
+    "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\skill-cloud-asset-channel\\page.json",
+    "sources/pages/skill-documents/page.json",
+    "sources/pages/skill-pdf/page.json"
    ],
    "project_titles_from": [
     "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\agents\\page.json",
@@ -103,12 +105,14 @@
     {
      "id": "g-read",
      "name": "读懂录音、图片和文档",
-     "line": "把录音、图片和乱码变成能核对的文字，也把文稿做成查过的 PDF。",
+     "line": "把录音、图片和乱码变成能核对的文字，也把 Word 和 PDF 做成查过的文件。",
      "screen": "skills-home-02",
      "members": [
       "/skills/chinese-asr/",
       "/skills/localocr/",
       "/skills/mojibake-doctor/",
+      "/skills/documents/",
+      "/skills/pdf/",
       "/skills/md-to-pdf/",
       "/skills/pdf-render-safe/"
      ]
@@ -176,10 +180,10 @@
    "numbers": [
     {
      "id": "n-skills",
-     "text": "27 个技能",
+     "text": "29 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-11",
-     "source": "网站技能子页 kind=skill 共 27 个：原 26 个加新增 skill-cockpit；control-plane-doctor、file-intake-router 两页改成去向页不计入。与本机 personal-skill-supply.json 29 个 install=true 减去不上网站的 2 个一致",
+     "as_of": "2026-10-12",
+     "source": "本仓库 sources/pages/*/page.json 的 kind=skill 实取 29 个；含新增 Word 文档和 PDF 读写和表单，两页为 Codex 自带插件；去向页不计入。与受管共享技能安装数分开。",
      "screens": [
       "skills-home-01"
      ]
@@ -401,6 +405,16 @@
      "text": "修乱码"
     },
     {
+     "target": "/skills/documents/",
+     "screen": "skills-home-02",
+     "text": "Word 文档"
+    },
+    {
+     "target": "/skills/pdf/",
+     "screen": "skills-home-02",
+     "text": "PDF 读写和表单"
+    },
+    {
      "target": "/skills/md-to-pdf/",
      "screen": "skills-home-02",
      "text": "文稿转 PDF"
@@ -585,8 +599,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "dbfef99ae17a625458a040ba8ef90fcc7bda424fd8386cb2c40637cbc54ad0a1",
-  "converted_at_beijing": "2026-10-11T16:11:44+08:00"
+  "sha256": "476f84226b80e02ef60dbd021613587f40af34932a24b9ccdce7c2df46bf8d08",
+  "converted_at_beijing": "2026-10-12T03:13:07+08:00"
  }
 }
 ---
@@ -670,7 +684,7 @@
      "connector": "none",
      "row": "summary",
      "width": "48%",
-     "text_ref": "27 个技能",
+     "text_ref": "29 个技能",
      "row_equal_height": true
     },
     {
@@ -745,7 +759,7 @@
       "_library/hires-icons/打勾清单.png"
      ],
      "connector": "none",
-     "text_ref": "27 个技能"
+     "text_ref": "29 个技能"
     },
     {
      "type": "content_card",
@@ -884,7 +898,7 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**27 个技能**　截至 10 月 11 日，按用途分 7 组。
+**29 个技能**　截至 10 月 12 日，按用途分 7 组。
 
 卡片右下角带“属于：项目名”的 18 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 
@@ -898,7 +912,7 @@
   "id": "skills-home-02",
   "section": "find",
   "title": "找资料和读懂文件",
-  "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“找照片、文件和聊天”4 张（一行排开）；“读懂录音、图片和文档”5 张（排成两行，上面 4 张、下面 1 张靠左）。全页统一：每排 4 张，卡片同宽同高；一组超过 4 张就换行，最后一排靠左、不拉宽；不满 4 张的组也靠左、和别组的卡同宽。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：找照片和录音：一叠照片旁边一小段录音波形；找文件原件：一个文件夹里抽出一页纸；照片录音里有没有我：一张照片上用绿圈圈出一个人的剪影（不画五官）；看微信聊天：微信的绿色双气泡标志；中文语音转写技能：一支麦克风和几道声波；本地文字识别：放大镜压在几行浅绿横线上（横线代表文字，不画可读的字）；修乱码：一团乱线被梳子理成整齐的横线；文稿转 PDF：一张散开的纸变成一本装订好的小册子；PDF 逐页检查：一排小页面缩略图，其中一页被放大镜放大。组与组之间用很淡的水彩绿色笔刷线分隔。",
+  "scene": "横版 16:9，同一风格。右上角一小簇水彩绿叶作点缀，不另写标题。从上到下分成几条横带，每条是一组：横带顶上一行是组名（粗体深绿，比正文大一号）后面隔一个空格跟灰绿色小字的一句组说明（组名不单独占一列）；这一行下面是这组的卡片：“找照片、文件和聊天”4 张（一行排开）；“读懂录音、图片和文档”7 张（录音、文字识别和乱码三张一排；Word 文档、PDF 读写和表单、文稿转 PDF、PDF 逐页检查四张另排一行）。各排卡片同宽同高。每张卡白底、细浅绿描边、圆角、同一行等宽等高：卡左上角一个小水彩图标（不带字），图标右边是技能名，画成链接样式（粗体绿色字、细下划线、末尾小 ↗），名字下面一两行深蓝灰常规字写一句话；是项目入口的卡，右下角加一个浅绿底圆角小标签〔属于：项目名〕，画成可点的样子（深绿字、末尾小 ↗）；不是入口的卡右下角空着。各卡的图标：找照片和录音：一叠照片旁边一小段录音波形；找文件原件：一个文件夹里抽出一页纸；照片录音里有没有我：一张照片上用绿圈圈出一个人的剪影（不画五官）；看微信聊天：微信的绿色双气泡标志；中文语音转写技能：一支麦克风和几道声波；本地文字识别：放大镜压在几行浅绿横线上（横线代表文字，不画可读的字）；修乱码：一团乱线被梳子理成整齐的横线；Word 文档：一张折角的文稿纸，角上落着一片嫩绿叶子；PDF 读写和表单：一张纸上一个打着绿勾的小方框；文稿转 PDF：一张散开的纸变成一本装订好的小册子；PDF 逐页检查：一排小页面缩略图，其中一页被放大镜放大。组与组之间用很淡的水彩绿色笔刷线分隔。",
   "portrait": "竖版 9:16，字完全一样：各组从上往下排，每组先是组名，组说明换到组名下一行；下面卡片一行一张、占满宽度，图标在卡片左边，技能名和一句话在右边，“属于”小标签在一句话下面靠右。",
   "links": [
    {
@@ -950,6 +964,14 @@
     "href": "/skills/mojibake-doctor/"
    },
    {
+    "text": "Word 文档",
+    "href": "/skills/documents/"
+   },
+   {
+    "text": "PDF 读写和表单",
+    "href": "/skills/pdf/"
+   },
+   {
     "text": "文稿转 PDF",
     "href": "/skills/md-to-pdf/"
    },
@@ -996,6 +1018,14 @@
     "text": "修乱码"
    },
    {
+    "id": "skill-documents",
+    "text": "Word 文档"
+   },
+   {
+    "id": "skill-pdf",
+    "text": "PDF 读写和表单"
+   },
+   {
     "id": "skill-md-to-pdf",
     "text": "文稿转 PDF"
    },
@@ -1039,7 +1069,9 @@
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
-      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "Word 文档": "_library/icons/白纸.png",
+      "PDF 读写和表单": "_library/icons/打勾清单.png"
      }
     },
     {
@@ -1069,18 +1101,20 @@
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
-      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "Word 文档": "_library/icons/白纸.png",
+      "PDF 读写和表单": "_library/icons/打勾清单.png"
      }
     },
     {
      "type": "directory_tile",
-     "columns": 2,
+     "columns": 4,
      "align": "left",
      "size": "medium",
      "illustration": "left_inside",
      "icons": "auto",
      "connector": "none",
-     "text_ref": "〔文稿转 PDF〕",
+     "text_ref": "〔Word 文档〕",
      "icon_map": {
       "找照片和录音": "_library/icons/波形照片.png",
       "找文件原件": "_library/icons/文稿堆.png",
@@ -1090,7 +1124,9 @@
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
-      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "Word 文档": "_library/icons/白纸.png",
+      "PDF 读写和表单": "_library/icons/打勾清单.png"
      }
     }
    ],
@@ -1126,7 +1162,9 @@
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
-      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "Word 文档": "_library/icons/白纸.png",
+      "PDF 读写和表单": "_library/icons/打勾清单.png"
      }
     },
     {
@@ -1158,7 +1196,9 @@
       "本地文字识别": "_library/round3/clean-assets/png/03-放大镜-clean.png",
       "修乱码": "_library/icons/梳理乱线.png",
       "文稿转 PDF": "_library/icons/文稿堆.png",
-      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png"
+      "PDF 逐页检查": "_library/round3/clean-assets/png/03-放大镜-clean.png",
+      "Word 文档": "_library/icons/白纸.png",
+      "PDF 读写和表单": "_library/icons/打勾清单.png"
      }
     }
    ],
@@ -1302,6 +1342,38 @@
    "status": "ready"
   },
   {
+   "role": "icon",
+   "slot_ordinal": 10,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/白纸.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "Word 文档",
+   "source_phrase": "Word 文档",
+   "sha256": "e010ca7001948622ae4e18db3eea512568d933314d2ef2a8d4249bdb31d7d41e",
+   "status": "ready",
+   "verified_no_text": true
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 11,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/打勾清单.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "PDF 读写和表单",
+   "source_phrase": "PDF 读写和表单",
+   "sha256": "76c489ef0fbf542a8a18aad443119b8d5ea87b6727997a714f92d626040ad491",
+   "status": "ready",
+   "verified_no_text": true
+  },
+  {
    "role": "title",
    "slot_ordinal": 1,
    "orientations": [
@@ -1346,11 +1418,13 @@
 - 〔照片录音里有没有我〕看指定的照片或录音里有没有我，不认别人。
 - 〔看微信聊天〕问微信里的事，AI 只读点名的那一段。　〔属于：微信聊天读取〕
 
-**读懂录音、图片和文档**　把录音、图片和乱码变成能核对的文字，也把文稿做成查过的 PDF。
+**读懂录音、图片和文档**　把录音、图片和乱码变成能核对的文字，也把 Word 和 PDF 做成查过的文件。
 
 - 〔中文语音转写技能〕跟 AI 说一句，录音就变成能核对的文字。　〔属于：中文语音转写〕
 - 〔本地文字识别〕要逐字准确、成批或只在本机时，交给本地识字。　〔属于：本地文字识别〕
 - 〔修乱码〕查清中文乱码怎么来的，能严格倒回才修。
+- 〔Word 文档〕做能接着改的 Word，每一页都看过再交。
+- 〔PDF 读写和表单〕读、做、填 PDF，值存住了、每页看过才交。
 - 〔文稿转 PDF〕把 Markdown 转成能打印的 PDF，查过再交。
 - 〔PDF 逐页检查〕把 PDF 摊成一页页的图，让 AI 真的看一遍。
 

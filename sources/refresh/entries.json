@@ -1629,5 +1629,20 @@
     "output": "json",
     "timeout": 20,
     "source_evidence": "标准库ast/json/Path.read_text；不import或调用work_delivery。tests五个TestCase内test方法定义45；test_core.py:100–118 cases列表/subTest为14/5/9；batch schema:26–27 sources min/max2/5；batch.py:19 budget15；acceptance.py:362 limits1.25/1/0.75。仅源码合同与定义，不证明测试/速度/真实工作/数据库恢复通过。"
+  },
+  "skills-new-usage-ledger-complete-until": {
+    "argv": [
+      "E:/Scoop/apps/jq/current/jq.exe",
+      "-s",
+      "if length==2 and all(.[]; .bootstrap_complete==true and (.last_completed|type)==\"string\" and (.last_completed|endswith(\"T00:00:00+08:00\"))) then ([.[].last_completed]|min|.[0:10]|strptime(\"%Y-%m-%d\")|strftime(\"%Y-%m-%d\")) as $day | {complete_until_date:$day} else error(\"invalid_completed_window\") end",
+      "E:/Data/PCConfig/AiUsageLedger/state-codex.json",
+      "E:/Data/PCConfig/AiUsageLedger/state-claude.json"
+    ],
+    "cwd": "E:/Projects/Backups/codex-memory",
+    "read_only": true,
+    "owner_project": "codex-memory",
+    "output": "json",
+    "timeout": 10,
+    "verification": "复用现有 b7-usage-ledger-complete-day 的 jq 只读两份 state 输入。要求两路 bootstrap_complete=true、午夜北京时区 last_completed，取较早的排他边界日期，不减一天；输出仅 complete_until_date。原稿截至 10 月 11 日、source 说明记到当天零点，不能用本轮读旧账本的观察日期推进。无写入、网络或业务模块执行。"
   }
 }

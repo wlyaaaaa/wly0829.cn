@@ -1,0 +1,699 @@
+[
+  {
+    "screen": "skill-documents-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Word 文档",
+        "align": "left",
+        "size": "large",
+        "row": "hero",
+        "width": "60%"
+      },
+      {
+        "type": "prose",
+        "text_ref": "做能接着改的 Word：样式、表格、批注都留着，每一页都看过再交。",
+        "size": "large",
+        "bold": true,
+        "row": "hero"
+      },
+      {
+        "type": "prose",
+        "text_ref": "Word 文件能打开、文字抽得出来，页面上照样可能表格断成两半、字体换了、页眉错",
+        "row": "hero"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "row": "hero",
+        "width": "40%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "可以这样说：",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“照这份参考写一份 Word 说明，以后我还要改。”",
+        "split_paras": true,
+        "columns": 2,
+        "sides": [
+          "left",
+          "left",
+          "left",
+          "left",
+          "left"
+        ],
+        "tail": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "只想把 Markdown 转成 PDF",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "首屏文字与完整插画并排；手机使用整宽图文、单列对话。单个提示条使用本屏图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "示例：",
+        "tone": "gray",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "split_paras": true,
+        "columns": 1,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "tail": true,
+        "row": "example",
+        "width": "64%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "row": "example",
+        "width": "36%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "背后发生了什么",
+        "columns": 1,
+        "inner_columns": 2,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "对话保留原顺序和示例声明；完整插画独立放置；背后步骤在桌面两列、手机整宽。示例提示使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么做到的",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "先看原来的样子",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ],
+        "row": "method",
+        "width": "58%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "row": "method",
+        "width": "42%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每改一批，全部页看一遍",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "principles",
+        "width": "33.333333333333336%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "批注和修订另外查",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "principles",
+        "width": "33.333333333333336%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "没给样子时的默认",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "principles",
+        "width": "33.333333333333336%"
+      }
+    ],
+    "notes": "第一项做法与插画并排，另外三项使用完整卡片；手机各块整宽，插画保留 4:3。第一项做法使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事（21 项）",
+        "align": "left",
+        "size": "large",
+        "row": "features-head",
+        "width": "68%"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "columns": 6,
+        "portrait_columns": 3,
+        "row": "features-head"
+      },
+      {
+        "type": "prose",
+        "text_ref": "说不准＝",
+        "row": "features-head"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "row": "features-head",
+        "width": "32%"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "写和改",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1. 新建 Word｜开头讲清主题、用途和读者要做什么，不编事实｜说不准",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "审阅和版本",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "6. 真批注｜加在 Word 的批注栏里，指向具体的字句｜说不准",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "目录和结构",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9. 目录、编号、脚注｜按标题层级维护，正文改了跟着对上｜说不准",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "表单和转交",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "14. 可填写的字段｜做成 Word 真能填的空，纯文字字段最稳｜说不准",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "交之前查",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "19. 逐页看图｜每批重要修改后全部页转成图，最后一轮每页都看｜说不准",
+        "columns": 3,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "notice",
+        "text_ref": "几项有现成的限制：",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "按稿件组序和功能编号排；桌面三列、手机一列，保持完整字号和正文。图例说明与工具箱插画并排；屏末完整限制/环境说明使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "left",
+        "size": "large",
+        "row": "boundary-head",
+        "width": "60%"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "row": "boundary-head",
+        "width": "40%"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "交给它",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "row": "division",
+        "width": "38%"
+      },
+      {
+        "type": "table",
+        "text_ref": "不交给它，找谁",
+        "columns": 2,
+        "heading_size": "medium",
+        "illustration": "none",
+        "icons": "none",
+        "row": "division",
+        "width": "62%"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "它不做",
+        "columns": 1,
+        "inner_columns": 2,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它是 Codex 自带的",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "交给它与分工表桌面双栏，手机整宽；限制与插件来源完整保留。来源提示使用图标槽 1，指路牌插画独立显示。"
+  },
+  {
+    "screen": "skill-documents-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "Word 文档",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "prose",
+        "text_ref": "做能接着改的 Word：样式、表格、批注都留着，每一页都看过再交。",
+        "size": "large",
+        "bold": true
+      },
+      {
+        "type": "prose",
+        "text_ref": "Word 文件能打开、文字抽得出来，页面上照样可能表格断成两半、字体换了、页眉错"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "banner"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "可以这样说：",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "“照这份参考写一份 Word 说明，以后我还要改。”",
+        "split_paras": true,
+        "columns": 1,
+        "sides": [
+          "left",
+          "left",
+          "left",
+          "left",
+          "left"
+        ],
+        "tail": true
+      },
+      {
+        "type": "notice",
+        "text_ref": "只想把 Markdown 转成 PDF",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "首屏文字与完整插画并排；手机使用整宽图文、单列对话。单个提示条使用本屏图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "一个完整例子",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "示例：",
+        "tone": "gray",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      },
+      {
+        "type": "dialogue",
+        "text_ref": "我：",
+        "split_paras": true,
+        "columns": 1,
+        "sides": [
+          "right",
+          "left"
+        ],
+        "tail": true
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "banner"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "背后发生了什么",
+        "columns": 1,
+        "inner_columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "对话保留原顺序和示例声明；完整插画独立放置；背后步骤在桌面两列、手机整宽。示例提示使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "怎么做到的",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "notice",
+        "text_ref": "先看原来的样子",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "banner"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "每改一批，全部页看一遍",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "批注和修订另外查",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "没给样子时的默认",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      }
+    ],
+    "notes": "第一项做法与插画并排，另外三项使用完整卡片；手机各块整宽，插画保留 4:3。第一项做法使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "能做的事（21 项）",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "status_legend",
+        "text_ref": "图例：",
+        "columns": 6,
+        "portrait_columns": 3
+      },
+      {
+        "type": "prose",
+        "text_ref": "说不准＝"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "banner"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "写和改",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "1. 新建 Word｜开头讲清主题、用途和读者要做什么，不编事实｜说不准",
+        "columns": 1,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "审阅和版本",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "6. 真批注｜加在 Word 的批注栏里，指向具体的字句｜说不准",
+        "columns": 1,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "目录和结构",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "9. 目录、编号、脚注｜按标题层级维护，正文改了跟着对上｜说不准",
+        "columns": 1,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "表单和转交",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "14. 可填写的字段｜做成 Word 真能填的空，纯文字字段最稳｜说不准",
+        "columns": 1,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "交之前查",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "feature_card",
+        "text_ref": "19. 逐页看图｜每批重要修改后全部页转成图，最后一轮每页都看｜说不准",
+        "columns": 1,
+        "columns_v": 1,
+        "portrait_columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "connector": "none",
+        "last_row": "fill"
+      },
+      {
+        "type": "notice",
+        "text_ref": "几项有现成的限制：",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "按稿件组序和功能编号排；桌面三列、手机一列，保持完整字号和正文。图例说明与工具箱插画并排；屏末完整限制/环境说明使用图标槽 1。"
+  },
+  {
+    "screen": "skill-documents-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "边界",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center",
+        "size": "banner"
+      },
+      {
+        "type": "content_card",
+        "text_ref": "交给它",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "table",
+        "text_ref": "不交给它，找谁",
+        "columns": 1,
+        "heading_size": "medium",
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "它不做",
+        "columns": 1,
+        "inner_columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
+      },
+      {
+        "type": "notice",
+        "text_ref": "它是 Codex 自带的",
+        "tone": "green",
+        "illustration": "left_inside",
+        "icon_indices": [
+          1
+        ]
+      }
+    ],
+    "notes": "交给它与分工表桌面双栏，手机整宽；限制与插件来源完整保留。来源提示使用图标槽 1，指路牌插画独立显示。"
+  }
+]
