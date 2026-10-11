@@ -283,6 +283,10 @@ def convert_html(html, route, parent, retired_routes=None):
     repo = hero.select_one(".project-hero-repository-link")
     if repo:
         links.append({"text": "GitHub", "href": repo["href"]})
+        repo_label = visible(repo.get_text(" ", strip=True))
+        groups[0] = [b for b in groups[0] if not (visible(b["text"]) == repo_label
+            and any(r["href"] == repo["href"] for r in b.get("links", [])))]
+        report["repository_entry"] = {"source_label": repo_label, "label": "GitHub", "href": repo["href"], "moved": True}
     links.append({"text": "复制 AI 续作说明", "href": parent["url"] + "#ai-brief"})
     report["continuation_entry"] = parent["url"] + "#ai-brief"
     groups[0].insert(1, dict(text="　".join("〔" + r["text"] + "〕" for r in links), kind="prose", pos=-1, links=links, anchors=[], token="buttons"))

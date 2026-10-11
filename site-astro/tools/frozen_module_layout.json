@@ -9,14 +9,14 @@
     "top": {
       "h": {"blocks": [
         {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "large", "row": "top", "width": "58%", "row_fit_illustration": true},
-        {"type": "action_button", "text_ref": "{{buttons}}", "row": "top"},
+        {"type": "action_button", "text_ref": "{{buttons}}", "row": "top", "brand_icons": {"GitHub": "_library/icons/GitHub标志.png"}},
         {"type": "prose", "text_ref": "{{lead}}", "row": "top"},
         {"type": "prose", "text_ref": "{{intro}}", "row": "top"},
         {"type": "illustration", "index": 0, "row": "top", "width": "42%", "align": "center"}
       ]},
       "v": {"blocks": [
         {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "large"},
-        {"type": "action_button", "text_ref": "{{buttons}}"},
+        {"type": "action_button", "text_ref": "{{buttons}}", "brand_icons": {"GitHub": "_library/icons/GitHub标志.png"}},
         {"type": "prose", "text_ref": "{{lead}}"},
         {"type": "prose", "text_ref": "{{intro}}"},
         {"type": "illustration", "index": 0, "align": "center"}

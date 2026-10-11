@@ -15,7 +15,10 @@
       {
         "type": "action_button",
         "text_ref": "〔回到项目 → 本地文字识别〕　〔GitHub〕　〔复制 AI 续作说明〕",
-        "row": "top"
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
@@ -24,10 +27,10 @@
       },
       {
         "type": "illustration",
+        "index": 0,
         "row": "top",
         "width": "42%",
-        "align": "center",
-        "index": 0
+        "align": "center"
       }
     ]
   },
@@ -43,7 +46,10 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 本地文字识别〕　〔GitHub〕　〔复制 AI 续作说明〕"
+        "text_ref": "〔回到项目 → 本地文字识别〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
@@ -51,8 +57,8 @@
       },
       {
         "type": "illustration",
-        "align": "center",
-        "index": 0
+        "index": 0,
+        "align": "center"
       }
     ]
   },
