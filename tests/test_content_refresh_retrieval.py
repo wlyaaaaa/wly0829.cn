@@ -6,7 +6,6 @@ import sqlite3
 import sys
 import tempfile
 import threading
-import time
 import unittest
 from unittest.mock import patch
 
@@ -100,12 +99,13 @@ class RetrievalTests(unittest.TestCase):
         records = [dict(base, id=str(i), retrieve={"kind": "json", "path": str(i)}) for i in range(8)]
         date = dict(base, id="date", field="screens[0].text", page_pattern=r"截至 (2026-10-01)", qualifies=["0", "1"])
         lock, active, peak = threading.Lock(), 0, 0
+        barrier = threading.Barrier(8)
         def read(argv, seconds):
             nonlocal active, peak
             with lock:
                 active += 1
                 peak = max(peak, active)
-            time.sleep(.04)
+            barrier.wait(timeout=10)
             with lock:
                 active -= 1
             return "[3]"
