@@ -9,7 +9,10 @@ window.scanGlance = config => {
     const value = parts.join(' > '); selectors.set(e, value); return value; };
   const rect = r => ({ x: Math.round((r.left + scrollX) * 10) / 10, y: Math.round((r.top + scrollY) * 10) / 10, width: Math.round(r.width * 10) / 10, height: Math.round(r.height * 10) / 10 });
   const pack = (e, text, why, extra = {}, r = e.getBoundingClientRect()) => ({ selector: sel(e), text: norm(text).slice(0, t.excerpt_chars), rect: rect(r), message: why, ...extra });
-  const state = e => { if (states.has(e)) return states.get(e); const closed=e.closest('details:not([open])'); let skip = !!e.closest('script,style,noscript,template') || !!(closed&&!e.closest('summary')), why = [], alpha = 1;
+  // 收起的 details 里，只有它自己的 summary 会画出来；嵌套 details 的 summary 也算被收起。浏览器能判时再用 checkVisibility 复核（display:contents 没有盒子，取最近有盒子的祖先）。
+  const folded = e => { for (let d = e.closest('details:not([open])'); d; d = d.parentElement && d.parentElement.closest('details:not([open])')) { const own = [...d.children].find(c => c.tagName === 'SUMMARY'); if (!own || !own.contains(e)) return true; }
+    let a = e; while (a && css(a).display === 'contents') a = a.parentElement; return !!a && typeof a.checkVisibility === 'function' && !a.checkVisibility({ contentVisibilityAuto: true }); };
+  const state = e => { if (states.has(e)) return states.get(e); let skip = !!e.closest('script,style,noscript,template') || folded(e), why = [], alpha = 1;
     for (let a = e; a; a = a.parentElement) { const s = css(a), r = a.getBoundingClientRect(); if (s.display === 'none' || (r.width <= t.clip_px && r.height <= t.clip_px && /absolute|fixed/u.test(s.position) && /hidden|clip/u.test(s.overflow))) skip = true; alpha *= Number(s.opacity); if (Number(s.opacity) === 0) why.push('opacity=0: ' + sel(a)); if (/hidden|collapse/u.test(s.visibility)) why.push('visibility=' + s.visibility); }
     const value = { skip, why, alpha }; states.set(e, value); return value; };
   const visible = e => { const s = state(e), r = e.getBoundingClientRect(); return !s.skip && !s.why.length && r.width > 0 && r.height > 0 && r.right > 0 && r.left < vw && !!paint(r, e); };
