@@ -75,6 +75,30 @@ class ScanGlanceTests(unittest.TestCase):
                 self.assertEqual([f["selector"] for f in measure()], ["#masonry-long"])
             finally:
                 browser.close()
+    def test_closed_details_rows_skipped_but_visible_overlap_and_clip_reported(self):
+        from playwright.sync_api import sync_playwright
+        # 驾驶舱任务清单的形状：收起的分组里嵌套 details 的 summary 行，排版位置落在下一组标题上，但画面上没画出来。
+        fixture = '<style>body{margin:0;font:16px/20px sans-serif}details{display:block}.group{height:24px}'             '.box{width:60px;height:20px;overflow:hidden;white-space:nowrap;margin-top:80px}</style><main>'             '<details class="group" id="g-guard"><summary>守护</summary><div><details><summary><span>卡死自动留现场</span></summary>'             '<p>说明</p></details></div></details><details class="group" id="g-idle"><summary>今天没有安排的</summary></details>'             '<div class="box" id="cut">这一行文字很长一定会被容器裁掉</div></main>'
+        config = scan.read_json(ROOT / "site-astro/tools/scan_glance.json")
+        with tempfile.TemporaryDirectory() as temp, sync_playwright() as pw:
+            browser = pw.chromium.launch_persistent_context(temp,
+                executable_path=r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                headless=True, viewport={"width": 800, "height": 600})
+            try:
+                page = browser.new_page()
+                def found(prepare=""):
+                    page.set_content(fixture); page.evaluate(prepare or "0")
+                    page.evaluate((ROOT / "site-astro/tools/scan_glance_dom.js").read_text("utf8"))
+                    return sorted((f["category"], f["selector"]) for f in page.evaluate("c => scanGlance(c)", config)["failures"]
+                        if f["category"] in ("overlap", "clipped"))
+                cut = ("clipped", "#cut")
+                self.assertEqual(found(), [cut])
+                self.assertEqual(found("delete Element.prototype.checkVisibility"), [cut])  # 没有 checkVisibility 时按 details 结构判断。
+                opened = found("document.querySelectorAll('details').forEach(d => d.open = true)")
+                self.assertIn(cut, opened)
+                self.assertTrue(any(c == "overlap" and s.startswith("#g-guard") for c, s in opened), opened)
+            finally:
+                browser.close()
     def test_settle_ignores_hidden_lazy_images_and_reports_visible_broken_image(self):
         from playwright.sync_api import sync_playwright
         with tempfile.TemporaryDirectory() as temp, sync_playwright() as pw:
