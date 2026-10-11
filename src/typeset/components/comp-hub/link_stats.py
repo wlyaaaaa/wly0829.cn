@@ -436,12 +436,14 @@ def _field(node, spec, has_stats):
         fields = []
         for item in items:
             lead, body = item.get("lead"), item.get("text", "")
+            # stat_card 已指定字段构图；强调名＋说明不必以数字起头，也不重写名里的数字。
+            emphasized_field = kind == "bullets" and bool(lead and body.strip())
             cols = item.get("cols")
             if not lead and cols:
                 lead, body = cols[0], "　".join(cols[1:])
             elif not lead and "｜" in body:
                 lead, body = body.split("｜", 1)
-            if not lead or not _numeric(lead):
+            if not lead or not (_numeric(lead) or emphasized_field):
                 return None
             # 原编号是真字，只出现一次，独立小字角色，不拼成“12台”。
             fields.append((lead, body, str(item["n"]) if kind == "steps" else None))

@@ -394,14 +394,15 @@ globalThis.TypesetApply = () => {
   }
   function fillShortColumns() {
     // 短栏按内容高：插画可在原栏宽内等比放大，其余整栏居中，不撑高卡片或拉散气泡。
-    // 标题行不动；图文行的文字仍顶对齐。只调整行内构图，不增加行高。
+    // 标题行不动；短文字栏也按实测余高居中，作者明确的纵向对齐优先。只调整行内构图，不增加行高。
     const SL=60;
     const contentH=c=>{const kids=[...c.children].filter(k=>getComputedStyle(k).display!=='none');
       return kids.length?Math.max(...kids.map(k=>k.getBoundingClientRect().bottom))-c.getBoundingClientRect().top:0;};
     for (const row of root.querySelectorAll('.row')) {
       const cols=[...row.children].filter(c=>c.matches('.col'));
       const horizontal=document.body.classList.contains('o-h');
-      if (horizontal) cols.filter(c=>!mediaColumn(c)).forEach(c=>{c.style.alignSelf='start';c.style.justifyContent='flex-start';});
+      const authored=row.dataset.rowValign || (row.matches('.mid')?'center':'');
+      if (horizontal && authored) {row.style.alignItems=authored;cols.forEach(c=>{c.style.alignSelf=authored;c.style.justifyContent='flex-start';});}
       if (row.matches('[data-inline-row]') || !horizontal && row.querySelector('[data-status-line]')) continue;
       if (cols.length<2) continue;
       const fit=row.matches('.fit-ill'),H=Math.max(...cols.map(contentH));
@@ -420,7 +421,7 @@ globalThis.TypesetApply = () => {
             d=H-contentH(c);how.push('ill');
           }
         }
-        if (d>SL && (horizontal ? mediaColumn(c) : (!fit || ill))) {c.style.alignSelf='center';c.style.justifyContent='flex-start';how.push('center');}
+        if (d>SL && !authored && (horizontal || !fit || ill)) {c.style.alignSelf='center';c.style.justifyContent='flex-start';how.push('center');}
         if (how.length) receipt.balance.push({kind:'fill_short_column',gap:Math.round(H-contentH(c)),how:how.join('+')});
       }
     }
@@ -516,6 +517,8 @@ globalThis.TypesetApply = () => {
     const selector='[data-comp="illustration"],[data-comp="screenshot"],[data-comp="numbered_screenshot"]',physical=c=>[...c.children].filter(k=>!k.matches('script,style,noscript') && getComputedStyle(k).display!=='none' && !(k.matches('.deco,[aria-hidden="true"]') && /absolute|fixed/.test(getComputedStyle(k).position))).flatMap(k=>getComputedStyle(k).display==='contents'?physical(k):[k]);
     for (const [sourceRow,row] of [...root.querySelectorAll('.row')].entries()) {
       row.dataset.typesetSourceRow=sourceRow;const cols=[...row.children].filter(c=>c.matches('.col'));if (cols.length<2 || !row.querySelector(selector)) continue;
+      // 单插画与文字的横排由 fitMediaRow 调宽和等比缩放；留白不能再把已选构图拆成上下排。
+      if (row.matches('.fit-ill') && cols.some(c=>mediaColumn(c) && c.querySelector('[data-comp="illustration"]'))) continue;
       const rb=row.getBoundingClientRect(),gaps=cols.map(c=>rb.bottom-Math.max(rb.top,...physical(c).map(k=>k.getBoundingClientRect().bottom)));if (!gaps.some(g=>g>140)) continue;const identities=cols.map((c,i)=>({index:i,components:columnParts(c).map(k=>k.dataset.comp||k.className),bottom_blank:gaps[i]})),down=[];
       for (const col of cols) for (const block of columnParts(col).filter(k=>k.matches(selector))) {
         const b=block.getBoundingClientRect(),group=document.createElement('div'),captions=[];for (let n=block.nextElementSibling;n?.matches('[data-comp="prose"]');n=n.nextElementSibling) captions.push(n);

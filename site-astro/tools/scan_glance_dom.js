@@ -52,6 +52,7 @@ window.scanGlance = config => {
     occupied.sort((a, c) => a[0] - c[0]); let end = b.top; const gap = to => { const height = to - end; if (height > innerHeight * t.screen_blank_viewport_fraction) blank.push(pack(e, (textMap.get(e) || []).join(' '), '屏内连续竖向空带超过视口高度阈值', { gapHeight: Math.round(height), viewportFraction:height/innerHeight }, { left: b.left, top: end, width: b.width, height })); };
     for (const interval of occupied) { gap(interval[0]); end = Math.max(end, interval[1]); } gap(b.bottom); }
   for (const row of body.querySelectorAll('.row')) { if (!visible(row)) continue; const b=row.getBoundingClientRect(), scope=row.closest('.ts-o') || row;
+    if (css(row).display === 'flex' && css(row).flexDirection === 'column') continue; // 顺序堆叠没有横向短栏；屏级空带仍照常测量。
     for(const e of [...row.children].filter(e=>!state(e).skip&&!state(e).why.length&&e.getBoundingClientRect().width>0)) { const c=e.getBoundingClientRect(); let bottom=b.top;
       for(const r of painted) if(e.contains(r.e) || (scope.contains(r.e) && !row.contains(r.e))) for(const z of r.rs) if((z.left+z.right)/2>=c.left && (z.left+z.right)/2<=c.right && z.bottom>b.top && z.top<b.bottom) bottom=Math.max(bottom,Math.min(b.bottom,z.bottom));
       const height=b.bottom-bottom; if(height>t.row_blank_px && height>b.height*t.row_blank_fraction) blank.push(pack(e,'','栏底空白同时超过像素与行高比例阈值',{rowSelector:sel(row),gapHeight:height,rowHeight:b.height,fraction:height/b.height},{left:c.left,top:bottom,width:c.width,height})); } }
