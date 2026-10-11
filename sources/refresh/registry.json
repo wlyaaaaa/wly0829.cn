@@ -2631,7 +2631,7 @@
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-bing\\content-refresh-bing.md",
       "refreshed_value": 15,
-      "page_pattern": "一个每 ([\\d]+) 分钟跑一轮",
+      "page_pattern": "一个每 ([\\d]+(?:\\.\\d+)?) 分钟跑一轮",
       "field": "screens[0].text",
       "scope_status": "verified",
       "measurement_scope": "真实启用重复触发器间隔秒/60；需同时核对Reasons不含guardian-periodic-trigger-missing，默认值不冒充有效周期。",
@@ -2918,7 +2918,7 @@
       ],
       "registry_number": "n-size",
       "original_value_index": 0,
-      "page_pattern": "一共 ([\\d,]+) KB",
+      "page_pattern": "一共 ([\\d,]+(?:\\.\\d+)?) KB",
       "measurement_scope": "manifest.files[].bytes求和，/1024 四舍五入到整数 KB。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -8369,7 +8369,7 @@
       ],
       "registry_number": "n-records",
       "original_value_index": 0,
-      "page_pattern": "\\*\\*([\\d,]+) 万条\\*\\*｜原始记录",
+      "page_pattern": "\\*\\*([\\d,]+(?:\\.\\d+)?) 万条\\*\\*｜原始记录",
       "measurement_scope": "原始记录的现行版本行数；以万条为单位四舍五入到整数，不含73,921个旧版本",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -12003,7 +12003,7 @@
       "measurement_scope": "生产screen.dataRefreshMs=1000ms/1000；TestRefreshDefaults与Hybrid刷新源码交叉核对，非像素实测。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "\\*\\*([\\d]+) 秒一刷"
+      "page_pattern": "\\*\\*([\\d]+(?:\\.\\d+)?) 秒一刷"
     },
     {
       "id": "pc-panel-hub-frames-20260927",
@@ -12188,7 +12188,7 @@
       "affected_screens": [
         "ramdisk-guardian-01"
       ],
-      "page_pattern": "有 ([\\d]+) 处间隔超过",
+      "page_pattern": "有 ([\\d]+(?:\\.\\d+)?) 处间隔超过",
       "measurement_scope": "guardian.log.1后接guardian.log实际guardian run标记，逐邻时间差；>15.5分钟计间隔，最长分钟按原页面整数分钟口径取整，不去重、不外推轮换历史；小时为近似整数。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -12219,7 +12219,7 @@
       "affected_screens": [
         "ramdisk-guardian-01"
       ],
-      "page_pattern": "最长约 ([\\d]+) 小时",
+      "page_pattern": "最长约 ([\\d]+(?:\\.\\d+)?) 小时",
       "measurement_scope": "guardian.log.1后接guardian.log实际guardian run标记，逐邻时间差；>15.5分钟计间隔，最长分钟按原页面整数分钟口径取整，不去重、不外推轮换历史；小时为近似整数。",
       "scope_status": "verified",
       "field": "screens[0].text"
@@ -12250,7 +12250,7 @@
       "affected_screens": [
         "ramdisk-guardian-04"
       ],
-      "page_pattern": "处超过 15\\.5 分钟，最长 ([\\d,]+) 分钟",
+      "page_pattern": "处超过 15\\.5 分钟，最长 ([\\d,]+(?:\\.\\d+)?) 分钟",
       "measurement_scope": "guardian.log.1后接guardian.log实际guardian run标记，逐邻时间差；>15.5分钟计间隔，最长分钟按原页面整数分钟口径取整，不去重、不外推轮换历史；小时为近似整数。",
       "scope_status": "verified",
       "field": "screens[3].text"
@@ -12281,7 +12281,7 @@
       "affected_screens": [
         "ramdisk-guardian-04"
       ],
-      "page_pattern": "([\\d,]+) 轮里有",
+      "page_pattern": "的 ([\\d,]+(?:\\.\\d+)?) 轮里有",
       "measurement_scope": "guardian.log.1后接guardian.log实际guardian run标记，逐邻时间差；>15.5分钟计间隔，最长分钟按原页面整数分钟口径取整，不去重、不外推轮换历史；小时为近似整数。",
       "scope_status": "verified",
       "field": "screens[3].text"
@@ -17945,7 +17945,7 @@
       "current_value": "100",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "覆盖 (\\d+)%",
+      "page_pattern": "覆盖 (\\d+(?:\\.\\d+)?)%",
       "retrieve": {
         "kind": "json",
         "path": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json",
@@ -19123,14 +19123,15 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
-      "page_pattern": "AI 使用记录（截至 (10 月 9 日)",
+      "page_pattern": "AI 使用记录（截至 (\\d+ 月 \\d+ 日)已采到的部分）",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-usage-ledger-complete-day",
         "pointer": [
           "complete_through_day"
         ]
-      }
+      },
+      "date_semantics": "coverage_end"
     },
     {
       "id": "b7-personal-expression-reply-as-me-usage-collected-through",
@@ -19147,14 +19148,15 @@
       "historical": false,
       "scope_status": "verified",
       "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
-      "page_pattern": "AI 使用记录（截至 (10 月 9 日)",
+      "page_pattern": "AI 使用记录（截至 (\\d+ 月 \\d+ 日)已采到的部分）",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-usage-ledger-complete-day",
         "pointer": [
           "complete_through_day"
         ]
-      }
+      },
+      "date_semantics": "coverage_end"
     },
     {
       "id": "b7-localocr-jobs-cache-027",
@@ -20360,7 +20362,7 @@
       "private": false,
       "historical": false,
       "field": "screens[8].text",
-      "page_pattern": "最长约 ([\\d,]+) 小时",
+      "page_pattern": "最长约 ([\\d,]+(?:\\.\\d+)?) 小时",
       "retrieve": {
         "kind": "entry",
         "entry": "ramdisk-log-cadence",
@@ -31520,7 +31522,7 @@
       "page": "personal-materials",
       "screen": "personal-materials-01",
       "field": "screens[0].text",
-      "page_pattern": "含手动补跑 ([\\d,]+) 次",
+      "page_pattern": "手动补跑 ([\\d,]+) 次",
       "label": "手动补跑同步次数",
       "current_value": 8,
       "as_of": "2026-10-10",

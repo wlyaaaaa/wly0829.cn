@@ -190,6 +190,8 @@ Claude 收到本人要求的出处、`scope.md`、日期清单、各项取数证
 
 P0-4、P0-5 合入并验收后，使用下面的完善版入口：
 
+有稿时先跑 `apply_rewrites.py` 合稿，紧接着跑 `refresh.py --inventory --strict`，缺口当场补绑后才构建。
+
 ```powershell
 # 有 Opus 稿时先机械合入；纯改数、没有稿目录时跳过这一条。
 python -B -X utf8 scripts/content-refresh/apply_rewrites.py <本次任务目录/写稿>
