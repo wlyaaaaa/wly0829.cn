@@ -1261,6 +1261,11 @@
     }
   },
   "assets": {
+    "_living/how/hero-bird/config.json": {
+      "sha256": "efc0567515587278b19a0b32bd2986ff83bb18d6487d12d9cfb8a2566c995df2",
+      "bytes": 716,
+      "source_path": "sources/assets/how/how-01-bird-config.json"
+    },
     "CNAME": {
       "sha256": "df478787a83412e9211fa82a88dfd43016943ec03010b87e22f731af45da2cc3",
       "bytes": 12,
