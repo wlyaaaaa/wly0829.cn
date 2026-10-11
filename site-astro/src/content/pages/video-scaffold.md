@@ -1336,21 +1336,8 @@
       "_library/icons/文件写作.png",
       "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
      ],
-     "text_ref": "成片"
-    },
-    {
-     "type": "screenshot",
-     "row": "delivery",
-     "columns": 1,
-     "align": "center",
-     "ratio": "16:9",
-     "max_width": 550
-    },
-    {
-     "type": "prose",
-     "row": "delivery",
-     "align": "left",
-     "text_ref": "示例封面：自测"
+     "text_ref": "成片",
+     "icon_size": 96
     },
     {
      "type": "section_heading",
@@ -1372,7 +1359,20 @@
       "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
       "_library/fix-round-2/icon-clean-584a7a3acf82a1db78d6.png"
      ],
-     "text_ref": "没有自动提醒。"
+     "text_ref": "没有自动提醒。",
+     "icon_size": 96
+    },
+    {
+     "type": "screenshot",
+     "columns": 1,
+     "align": "center",
+     "ratio": "16:9",
+     "max_width": 550
+    },
+    {
+     "type": "prose",
+     "align": "left",
+     "text_ref": "示例封面：自测"
     },
     {
      "type": "notice",
@@ -1385,7 +1385,7 @@
      ]
     }
    ],
-   "notes": "实图标题右方有独立卡外插画（显示器、封面、字幕、清单），不能漏掉；主体两栏各有浅绿外框。左栏五项是紧凑图标行，同属一栏容器，不宜套五张大卡；截图占实际左栏近全宽、caption在下，和scene约2/3宽有差异，按实图。右栏四个横向小卡、图标在卡内左侧。底部现在能不能用是全宽说明卡，含日期和完整环境段落，不是实时槽。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px",
+   "notes": "实图标题右方有独立卡外插画（显示器、封面、字幕、清单），不能漏掉；主体两栏各有浅绿外框。左栏五项是紧凑图标行，同属一栏容器，不宜套五张大卡；截图占实际左栏近全宽、caption在下，和scene约2/3宽有差异，按实图。右栏四个横向小卡、图标在卡内左侧。底部现在能不能用是全宽说明卡，含日期和完整环境段落，不是实时槽。；page-fixer-09（按审页意见）：移除未生效小号字字段，沿用共享正文；单张提示移除无效外卡列数字段；标题全宽居中、移除重复大插画，交付图标明确；截图百分比上限转550源px；2026-10-11 本页留白修正：交付与故障处理保持两栏，小图标统一96源px；封面与原图注单列在两栏之后，不参与两栏高度。全部原文与原图保留。",
    "verification_notes": "本轮仅按库存与定稿文字核对；旧 notes 保留作为上轮构图证据，其中关于组件未实现的说法须以本轮 agent-report.md 和当前接口为准。未看图，不声称视觉验收完成。"
   },
   "v": {
