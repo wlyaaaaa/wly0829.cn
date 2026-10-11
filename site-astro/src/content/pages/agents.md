@@ -942,7 +942,7 @@
  "source": {
   "page": "sources/pages/agents/page.json",
   "sha256": "cb243546378ed348ec576f90b14b6c491aeeeb21d2a2488acfb63e4b8bd29d52",
-  "converted_at_beijing": "2026-10-11T15:13:58+08:00"
+  "converted_at_beijing": "2026-10-11T17:22:18+08:00"
  }
 }
 ---
@@ -1921,6 +1921,21 @@
   {
    "role": "icon",
    "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/文件齿轮.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "文件齿轮",
+   "source_phrase": "9 月 26 日　按我逐条审定的约法 L1–L30 整篇重写规则（E180 生效）；开始记我的决定原话；可派模型清单；Claude 能派 GPT；短锁；技能安装器从 1,615 行瘦到 199 行",
+   "sha256": "59705876c0c4dd805e6f4b02660eedad339740924895bba94a1681ce822f725f",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
    "orientations": [
     "h",
     "v"

@@ -611,7 +611,7 @@
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
   "sha256": "c1fa2abb67f495d93b54e4837f0bdeff4b9a5e2397b5d83d95f7e26c7c404ecd",
-  "converted_at_beijing": "2026-10-11T14:04:23+08:00"
+  "converted_at_beijing": "2026-10-11T17:22:18+08:00"
  }
 }
 ---
@@ -2964,6 +2964,36 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
    "key": "剪刀",
    "source_phrase": "剪刀",
    "sha256": "18efcc5f95ce2b5b8c0939799620a9389dcc063c3e42dff881d10ecacb9d5682",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 7,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/round3/clean-assets/png/16-纸箱对勾-clean.png",
+   "fallback": false,
+   "semantic_status": "text_inferred_object_unverified",
+   "key": "纸箱对勾",
+   "source_phrase": "按清单找来源　66 个来源写在一个清单文件里，改备份范围只改它",
+   "sha256": "fe49f8097865f43368bd63749719f34865ace303c8e15ce1807066c9f9a8c9f5",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 8,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/hires-icons/数据库.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "数据库",
+   "source_phrase": "裂开的数据库圆柱",
+   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
    "status": "ready"
   },
   {

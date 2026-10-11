@@ -1067,7 +1067,7 @@
  "source": {
   "page": "sources/pages/password-center/page.json",
   "sha256": "e6183d34a6554d38824dcbc62dba524dfdc7a427b7522c6cf764f96010820283",
-  "converted_at_beijing": "2026-10-11T14:07:41+08:00"
+  "converted_at_beijing": "2026-10-11T17:22:18+08:00"
  }
 }
 ---
@@ -1545,6 +1545,21 @@
     "h",
     "v"
    ],
+   "asset": "_library/icons/门.png",
+   "fallback": false,
+   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "key": "门",
+   "source_phrase": "一个没关的相机快门",
+   "sha256": "3ab9f96b6f336d0805dc4e100796be10bcdeb8ab52f29e58c48a682f23de2674",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 5,
+   "orientations": [
+    "h",
+    "v"
+   ],
    "asset": "_library/hires-icons/01-绿叶装饰-clean.png",
    "fallback": true,
    "semantic_status": "unresolved_semantics_fallback",
@@ -1555,7 +1570,7 @@
   },
   {
    "role": "icon",
-   "slot_ordinal": 5,
+   "slot_ordinal": 6,
    "orientations": [
     "h",
     "v"

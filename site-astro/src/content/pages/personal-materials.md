@@ -536,7 +536,7 @@
  "source": {
   "page": "sources/pages/personal-materials/page.json",
   "sha256": "7cb8c7f3564eb0e22c32fa0badb2a6ea558965126c2d9ff404f94a495dff97bf",
-  "converted_at_beijing": "2026-10-11T15:45:32+08:00"
+  "converted_at_beijing": "2026-10-11T17:22:18+08:00"
  }
 }
 ---
@@ -3361,6 +3361,21 @@ PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 1
    "key": "文稿堆",
    "source_phrase": "撤掉失效的来源｜整个文件夹已经不存在、也不再指向任何原件时，才撤掉这条来源登记｜在用",
    "sha256": "5808bd7916a1bd66cbb7f3409c6d74d59c6e88c005601e5db73ac8fd6215322a",
+   "status": "ready"
+  },
+  {
+   "role": "icon",
+   "slot_ordinal": 14,
+   "orientations": [
+    "h",
+    "v"
+   ],
+   "asset": "_library/icons/禁止文件.png",
+   "fallback": false,
+   "semantic_status": "scene_explicit_primary_object",
+   "key": "禁止文件",
+   "source_phrase": "一张被涂改过的纸和一个红叉",
+   "sha256": "416e742e6b404499ba1014eaab7d17a21ab518cd3139112dadfb009f47a3ed3e",
    "status": "ready"
   },
   {
