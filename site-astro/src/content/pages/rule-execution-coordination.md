@@ -206,7 +206,7 @@
  "source": {
   "page": "sources/pages/rule-execution-coordination/page.json",
   "sha256": "f479d2e9b00e258437f3845e8104d2e23ff73ffd062a5a063c4202ff599d935a",
-  "converted_at_beijing": "2026-10-11T15:00:29+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:03+08:00"
  }
 }
 ---
@@ -1490,20 +1490,14 @@ Claude 和 GPT 在整套系统里的搭配：〔在整套系统里的分工 → 
      "whole_block": true,
      "split_cards": false,
      "columns": 1,
-     "text_ref": "分工与并行施工",
-     "row": "original",
-     "width": "50%",
-     "row_equal_height": true
+     "text_ref": "分工与并行施工"
     },
     {
      "type": "source_text_card",
      "whole_block": true,
      "split_cards": false,
      "columns": 1,
-     "text_ref": "一次交代清楚",
-     "row": "original",
-     "width": "50%",
-     "row_equal_height": true
+     "text_ref": "一次交代清楚"
     }
    ],
    "notes": "本轮只用文字材料；仅按定稿已有标题出字。构图依据：横版 16:9，照约法原文样张的版式画：`E:\\Cache\\Claude\\Temp\\4bd59299\\design\\v4\\tests\\rules-text-a.png`。左上角一行小号深绿字“原文 · E214 版，一字不改”，下面是正文。正文放在两张并排的大圆角卡片里（白底、浅绿细边），从左卡往右卡接着排。Markdown 的画法：“#”开头的行是页名，“##”开头的行是节标题，画成深绿粗体、井号不画；“1.”到“8.”的编号照画；**…** 是粗体，星号不画；`…` 里的路径和命令用等宽字体、浅绿底小框，反引号不画；〔〕里的字画成绿色下划线加小箭头的链接样式，〔〕不画。原文一字不改，标点照抄，不加任何没给的字。左卡放从“# 分工与并行施工”到第 5 条结束；右卡放第 6 条、第 7 条、第 8 条和“根会话负责战略……”那一段。；去除与组件固定竖单列相同的columns_v=1及已由highlight/真实节点数量/完整保字实现的冗余旧字段；实际要求不取消。；E214 对齐：使用真实 source_text_card，按完整编号条目分卡；供网站提取 ct-source-body，保留原顺序与原文链接。；E215新增Luna生图low例外后，原文两栏等高，避免增加同排底边高差；原文和分栏边界不改。"

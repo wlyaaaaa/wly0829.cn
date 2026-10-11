@@ -34,7 +34,7 @@
  "source": {
   "page": "sources/pages/learning-questions-validation/page.json",
   "sha256": "c7f4b07aad4bf9438be0e1dfa000e9cebe28140d7ee3817ffe779f1087560408",
-  "converted_at_beijing": "2026-10-11T21:05:00+08:00"
+  "converted_at_beijing": "2026-10-11T21:28:59+08:00"
  }
 }
 ---
@@ -431,22 +431,17 @@ AI 协作学习 · 功能说明
     {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
-     "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-     "width": "40%"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
     },
     {
      "type": "section_heading",
      "text_ref": "从开始到拿到结果",
-     "row": "start",
-     "width": "60%",
      "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
     },
     {
      "type": "numbered_steps",
      "text_ref": "1. **先讲足必要前提**　初学或关键背景缺失时，先用完整样例解释，不让人猜没教过的事实；正式课每节讲完，移开讲义用自己的话答一个问题。",
-     "row": "start",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

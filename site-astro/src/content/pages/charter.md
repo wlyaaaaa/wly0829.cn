@@ -166,7 +166,7 @@
  "source": {
   "page": "sources/pages/charter/page.json",
   "sha256": "a0f1d0e4ef1d16c4624311053cbe2dcc1536a2b8255e5b2efd381b1aef5a26b2",
-  "converted_at_beijing": "2026-10-11T13:32:03+08:00"
+  "converted_at_beijing": "2026-10-11T21:28:57+08:00"
  }
 }
 ---
@@ -784,8 +784,6 @@
      "size": "medium",
      "card_header": "pale_green_band",
      "header_navigation": "inline_right",
-     "row": "body",
-     "width": "36%",
      "text_ref": "三、怎样做事",
      "illustration_asset": "charter/charter-03-illustration-01.png"
     },
@@ -799,8 +797,6 @@
      "size": "medium",
      "card_header": "pale_green_band",
      "header_navigation": "inline_right",
-     "row": "body",
-     "width": "64%",
      "text_ref": "四、我的授权与安全",
      "inner_columns": 2,
      "inner_split_ref": "L17 重大的事",

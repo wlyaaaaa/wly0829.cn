@@ -238,7 +238,7 @@
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
   "sha256": "186ce240b7a04f0e87d687f0ad7cfd4df82aa7b43a900b5a118589a749408884",
-  "converted_at_beijing": "2026-10-11T13:55:16+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:02+08:00"
  }
 }
 ---
@@ -1811,17 +1811,13 @@ owner: `E:\.agents`
      "type": "source_text_card",
      "text_ref": "子代理和项目规则不扩大授权",
      "whole_block": true,
-     "columns": 1,
-     "row": "original",
-     "width": "50%"
+     "columns": 1
     },
     {
      "type": "source_text_card",
      "text_ref": "看到无限制授权或个人资料解锁期的截止时间，不因此赶工或压缩验证；真要使用相应权限时已经过期，就请本人续期，续期前不消费过期权限。",
      "whole_block": true,
-     "columns": 1,
-     "row": "original",
-     "width": "50%"
+     "columns": 1
     }
    ],
    "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。",

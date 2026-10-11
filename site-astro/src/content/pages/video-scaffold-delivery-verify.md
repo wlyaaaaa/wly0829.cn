@@ -38,7 +38,7 @@
  "source": {
   "page": "sources/pages/video-scaffold-delivery-verify/page.json",
   "sha256": "0778e3a487c4fc5a2e4113d72f6b5486a91174f452bf3c8bc93a8b6c2e1ac8f3",
-  "converted_at_beijing": "2026-10-11T19:04:27+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:05+08:00"
  }
 }
 ---
@@ -434,28 +434,22 @@ video-scaffold · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "分镜路线：出片后按需运行 merge、cover、chapters、subtitles，最后 verify 和 manifest（清单）。图文页：`pages render` 直接给可播放副本，多段用 `python -m pipeline.pages assemble <拼接表.json> --plan` 先看计划，去掉 `--plan` 实际拼片。独立网页作品用 webfilm 的 review、compose、cover、package。最后都要实际观看。",
-     "row": "start",
-     "width": "40%"
+     "text_ref": "分镜路线：出片后按需运行 merge、cover、chapters、subtitles，最后 verify 和 manifest（清单）。图文页：`pages render` 直接给可播放副本，多段用 `python -m pipeline.pages assemble <拼接表.json> --plan` 先看计划，去掉 `--plan` 实际拼片。独立网页作品用 webfilm 的 review、compose、cover、package。最后都要实际观看。"
     },
     {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
-     "row": "start",
      "icon_position": "header_left",
      "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
     },
     {
      "type": "section_heading",
      "text_ref": "从开始到拿到结果",
-     "row": "start",
-     "width": "60%",
      "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
     },
     {
      "type": "numbered_steps",
      "text_ref": "1. **收齐交付物**　合成画面、旁白、封面和从开头开始的章节；图文页多段先装配成整片，需要时再做字幕与背景音乐。",
-     "row": "start",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

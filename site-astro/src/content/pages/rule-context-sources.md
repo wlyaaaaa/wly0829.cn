@@ -411,7 +411,7 @@
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
   "sha256": "dd6de823d7f65313a9d38316766b4321b3aa119a2320cadeec607aa043295cba",
-  "converted_at_beijing": "2026-10-11T13:55:19+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:03+08:00"
  }
 }
 ---
@@ -2868,9 +2868,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
      "whole_block": true,
      "columns": 1,
      "illustration": "none",
-     "icons": "none",
-     "row": "source",
-     "width": "50%"
+     "icons": "none"
     },
     {
      "type": "source_text_card",
@@ -2878,9 +2876,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
      "whole_block": true,
      "columns": 1,
      "illustration": "none",
-     "icons": "none",
-     "row": "source",
-     "width": "50%"
+     "icons": "none"
     }
    ],
    "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。；续屏版本标签明确 E214，标签不属于规则正文。",

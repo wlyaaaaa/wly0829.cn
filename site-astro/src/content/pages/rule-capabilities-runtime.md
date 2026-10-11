@@ -397,7 +397,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "d32ff3bcc6a3c0acf0b3c04498243c0a64f3cc0e83c02004bf64642fb8625c65",
-  "converted_at_beijing": "2026-10-11T15:00:28+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:02+08:00"
  }
 }
 ---
@@ -3437,15 +3437,11 @@ owner: `E:\.agents`
     },
     {
      "type": "source_text_card",
-     "row": "source",
-     "width": "50%",
      "illustration": "none",
      "text_ref": "汇报、网站和自动运行的东西"
     },
     {
      "type": "source_text_card",
-     "row": "source",
-     "width": "50%",
      "illustration": "none",
      "text_ref": "软件更新和兼容"
     }

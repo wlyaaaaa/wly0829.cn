@@ -41,7 +41,7 @@
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
   "sha256": "4f789515856e65c4b61ba6cf690c2441f4fd58a23b8adf5d2bb69d7632200a53",
-  "converted_at_beijing": "2026-10-11T21:05:01+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:01+08:00"
  }
 }
 ---
@@ -440,22 +440,17 @@
     {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
-     "row": "start",
      "icon_position": "header_left",
-     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png",
-     "width": "40%"
+     "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
     },
     {
      "type": "section_heading",
      "text_ref": "从开始到拿到结果",
-     "row": "start",
-     "width": "60%",
      "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
     },
     {
      "type": "numbered_steps",
      "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
-     "row": "start",
      "columns": 1,
      "icons": "none",
      "illustration": "none",

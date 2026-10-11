@@ -255,7 +255,7 @@
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
   "sha256": "a378c4f2f565712b27c4b7e2974abff779567f950ade6112ee0db47306c4c415",
-  "converted_at_beijing": "2026-10-11T19:07:43+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:03+08:00"
  }
 }
 ---
@@ -2948,16 +2948,12 @@ owner: `E:\.agents`
      "type": "source_text_card",
      "whole_block": true,
      "columns": 1,
-     "row": "original",
-     "width": "50%",
      "text_ref": "GitHub 重大动作"
     },
     {
      "type": "source_text_card",
      "whole_block": true,
      "columns": 1,
-     "row": "original",
-     "width": "50%",
      "text_ref": "本人验证方式"
     }
    ],

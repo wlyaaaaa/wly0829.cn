@@ -42,7 +42,7 @@
  "source": {
   "page": "sources/pages/vault-tool-view-extract/page.json",
   "sha256": "e3d0e7821c5374b84df138b57d084568aabc2252ce262bc8edd8e3f90c98d703",
-  "converted_at_beijing": "2026-10-11T19:04:27+08:00"
+  "converted_at_beijing": "2026-10-11T21:29:05+08:00"
  }
 }
 ---
@@ -438,28 +438,22 @@ vault-tool · 功能说明
     },
     {
      "type": "prose",
-     "text_ref": "要搜索、按名称提取：在本机终端运行 vault-tool 打开库，普通关键字按文件名搜、`/关键字`按内容搜，`:copy 名字`复制第一个匹配的文本，选 [2] 后输入关键字只提取匹配的文件。只想看某一项：在已接通 vault-workflow 的 AI 对话中用 LocalView，本人仅在本地窗口解锁，从成员列表里选择显示或复制。AI 技能的 DecryptExport 会把本次打开的内容全部导出到指定目录，目前不能只导出某个成员。",
-     "row": "start",
-     "width": "40%"
+     "text_ref": "要搜索、按名称提取：在本机终端运行 vault-tool 打开库，普通关键字按文件名搜、`/关键字`按内容搜，`:copy 名字`复制第一个匹配的文本，选 [2] 后输入关键字只提取匹配的文件。只想看某一项：在已接通 vault-workflow 的 AI 对话中用 LocalView，本人仅在本地窗口解锁，从成员列表里选择显示或复制。AI 技能的 DecryptExport 会把本次打开的内容全部导出到指定目录，目前不能只导出某个成员。"
     },
     {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
-     "row": "start",
      "icon_position": "header_left",
      "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
     },
     {
      "type": "section_heading",
      "text_ref": "从开始到拿到结果",
-     "row": "start",
-     "width": "60%",
      "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
     },
     {
      "type": "numbered_steps",
      "text_ref": "1. **只打开所需范围**　本人本地解锁后，在终端按名称或内容找目标，或在 LocalView 列表里选，不一次性导出整库。",
-     "row": "start",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
