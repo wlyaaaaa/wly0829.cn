@@ -1,4 +1,7 @@
 import html, importlib.util, json, subprocess, sys, tempfile, unittest
+import contextlib, hashlib, http.server, io, socket, struct, threading, time, urllib.error, urllib.request
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
@@ -80,15 +83,23 @@ class ScanGlanceTests(unittest.TestCase):
                 headless=True, viewport={"width": 800, "height": 600})
             try:
                 page = browser.new_page()
+                from PIL import Image
+                png = io.BytesIO(); Image.new("RGB", (1, 1)).save(png, format="PNG")
+                page.route("https://example.invalid/deferred.png", lambda route: route.fulfill(body=png.getvalue(), content_type="image/png"))
                 page.set_content("""<main>
                     <div hidden><img id="hidden" loading="lazy" src="https://example.invalid/hidden.png"></div>
                     <details><summary>Closed</summary><img id="closed" loading="lazy" src="https://example.invalid/closed.png"></details>
                     <img id="zero" loading="lazy" style="width:0;height:0" src="https://example.invalid/zero.png">
                     <img id="offscreen" loading="lazy" style="position:absolute;left:2000px" src="https://example.invalid/offscreen.png">
+                    <img id="deferred" loading="lazy" width="20" height="20" style="position:absolute;top:10000px" src="https://example.invalid/deferred.png">
                     <img id="broken" width="120" height="100" src="data:image/png;base64,broken">
                     </main>""")
                 self.assertFalse(page.eval_on_selector("#hidden", "i => i.complete"))
                 scan.settle(page, [0], set())
+                self.assertFalse(page.eval_on_selector("#deferred", "i => i.complete"))
+                scan.settle(page, [0], set(), all_images=True)
+                self.assertEqual(page.eval_on_selector("#deferred", "i => [i.loading, i.complete, i.naturalWidth]"), ["eager", True, 1])
+                self.assertEqual(page.eval_on_selector("#hidden", "i => i.loading"), "lazy")
                 page.evaluate((ROOT / "site-astro/tools/scan_glance_dom.js").read_text("utf8"))
                 result = page.evaluate("config => window.scanGlance(config)",
                     scan.read_json(ROOT / "site-astro/tools/scan_glance.json"))
@@ -178,3 +189,136 @@ class ScanGlanceTests(unittest.TestCase):
             subprocess.run([sys.executable, "-B", str(ROOT / "site-astro/tools/link_check.py"),
                 str(result), "--dist", str(dist), "--skip", ""], check=True, capture_output=True)
             self.assertEqual([item["href"] for item in json.loads(result.read_text("utf8"))["items"]], ["#missing"])
+
+class ScanProxyTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix="scan-proxy-test-", dir=r"E:\Cache\Claude\Temp")
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name); self.counts = Counter(); self.ports = set(); self.active = self.peak = 0
+        self.dist = self.root / "dist"; self.dist.mkdir()
+        self.lock = threading.Lock(); self.body = b"complete-object-bytes"; owner = self
+        class Upstream(http.server.BaseHTTPRequestHandler):
+            protocol_version = "HTTP/1.1"
+            def log_message(self, *args): pass
+            def do_GET(self):
+                with owner.lock:
+                    owner.counts[self.path] += 1; attempt = owner.counts[self.path]; owner.ports.add(self.client_address[1])
+                    owner.active += 1; owner.peak = max(owner.peak, owner.active)
+                try:
+                    if "always-disconnect" in self.path or ("disconnect" in self.path and attempt == 1):
+                        self.close_connection = True; self.connection.shutdown(socket.SHUT_RDWR); self.connection.close(); return
+                    if "slow" in self.path and ("once" not in self.path or attempt == 1): time.sleep(.08)
+                    status = 404 if "missing" in self.path else 200
+                    body = b"not-found" if status == 404 else owner.body
+                    if "large" in self.path: body = b"x" * (4 * 1024 * 1024)
+                    self.send_response(status); self.send_header("Content-Type", "image/png")
+                    self.send_header("Content-Length", str(len(body))); self.end_headers()
+                    if "truncate" in self.path and attempt == 1:
+                        self.wfile.write(body[:3]); self.wfile.flush()
+                        self.close_connection = True; self.connection.shutdown(socket.SHUT_RDWR); self.connection.close(); return
+                    self.wfile.write(body)
+                except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError): self.close_connection = True
+                finally:
+                    with owner.lock: owner.active -= 1
+        self.upstream = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Upstream)
+        threading.Thread(target=self.upstream.serve_forever, kwargs={"poll_interval": .01}, daemon=True).start()
+        self.addCleanup(self.stop, self.upstream)
+        self.host = f"http://127.0.0.1:{self.upstream.server_port}"
+        patcher = mock.patch.dict(scan.UPSTREAMS, oss=self.host); patcher.start(); self.addCleanup(patcher.stop)
+    @staticmethod
+    def stop(server):
+        server.shutdown(); server.server_close()
+        if hasattr(server, "upstream_pool"): server.upstream_pool.clear()
+    def proxy(self, manifest=None):
+        server = scan.make_server(self.dist, self.root / "scan", manifest=manifest)
+        threading.Thread(target=server.serve_forever, kwargs={"poll_interval": .01}, daemon=True).start()
+        self.addCleanup(self.stop, server)
+        return server
+    @staticmethod
+    def path(name): return "/releases/test/assets/_fingerprinted/" + name + ".png"
+    def fetch(self, server, name):
+        try: response = urllib.request.urlopen(server.base + "/__proxy/oss" + self.path(name), timeout=5)
+        except urllib.error.HTTPError as error: response = error
+        with response: return response.status, response.read()
+    def test_upstream_disconnect_and_truncated_body_retry_transparently(self):
+        server = self.proxy()
+        for name in ("disconnect", "truncate"):
+            with self.subTest(name=name):
+                self.assertEqual(self.fetch(server, name), (200, self.body))
+                self.assertEqual(self.counts[self.path(name)], 2)
+                self.assertEqual(server.proxy_results[self.host + self.path(name)]["status"], 200)
+    def test_real_404_is_not_retried_or_cached_as_success(self):
+        server = self.proxy()
+        self.assertEqual(self.fetch(server, "missing"), (404, b"not-found"))
+        self.assertEqual(self.counts[self.path("missing")], 1)
+        record = server.proxy_results[self.host + self.path("missing")]
+        self.assertEqual((record["kind"], record["status"]), ("http", 404))
+    def test_slow_upstream_retries_and_exhausted_timeout_stays_transport(self):
+        timeout = scan.urllib3.Timeout
+        with mock.patch.object(scan.urllib3, "Timeout", side_effect=lambda **kw: timeout(connect=.1, read=.02, total=.2)):
+            server = self.proxy()
+            self.assertEqual(self.fetch(server, "slow-once"), (200, self.body))
+            self.assertEqual(self.counts[self.path("slow-once")], 2)
+            self.assertEqual(self.fetch(server, "slow-always")[0], 502)
+        self.assertEqual(self.counts[self.path("slow-always")], 3)
+        self.assertEqual(server.proxy_results[self.host + self.path("slow-always")]["kind"], "transport")
+    def test_manifest_hash_and_cross_server_cache_reuse(self):
+        url = self.host + self.path("object")
+        manifest = {"oss": {"objects": {"missing-local.png": {"url": url, "sha256": hashlib.sha256(self.body).hexdigest()}}}}
+        first = self.proxy(manifest); self.assertEqual(self.fetch(first, "object"), (200, self.body))
+        second = self.proxy(manifest); self.assertEqual(self.fetch(second, "object"), (200, self.body))
+        self.assertEqual(self.counts[self.path("object")], 1)
+        next(p for p in first.oss_cache.iterdir() if not p.suffix).write_bytes(b"corrupt-cache")
+        self.assertEqual(self.fetch(second, "object"), (200, self.body))
+        self.assertEqual(self.counts[self.path("object")], 2)
+        missing = {"oss": {"objects": {"missing-local.png": {"url": self.host + self.path("missing"), "sha256": hashlib.sha256(self.body).hexdigest()}}}}
+        missing_server = self.proxy(missing)
+        self.assertEqual(self.fetch(missing_server, "missing"), (404, b"not-found"))
+        self.assertEqual(self.counts[self.path("missing")], 1)
+        manifest["oss"]["objects"]["missing-local.png"]["sha256"] = "0" * 64
+        bad = self.proxy(manifest); status, _ = self.fetch(bad, "object")
+        self.assertEqual(status, 502); self.assertEqual(bad.proxy_results[url]["kind"], "object_error")
+    def test_exhausted_disconnect_is_transport_and_only_it_changes_image_category(self):
+        server = self.proxy(); self.assertEqual(self.fetch(server, "always-disconnect")[0], 502)
+        url = self.host + self.path("always-disconnect")
+        self.assertEqual(server.proxy_results[url]["kind"], "transport")
+        items = [scan.finding("image", "image not loaded") | {"currentSrc": u, "src": u}
+                 for u in (server.base + "/__proxy/oss" + self.path("always-disconnect"), "http://wrong/image.png", "")]
+        result = scan.classify_images(items, server.proxy_results)
+        self.assertEqual([item["category"] for item in result], ["transport", "image", "image"])
+        self.assertTrue(scan.retryable_transport({"failures": result[:1]}))
+        self.assertFalse(scan.retryable_transport({"failures": result}))
+        fallback = scan.finding("image", "src only") | {"currentSrc": "", "src": items[0]["src"]}
+        self.assertEqual(scan.classify_images([fallback], server.proxy_results)[0]["category"], "transport")
+        other = self.host + self.path("other")
+        for kind, status, address in (("transport", 502, other), ("http", 200, other), ("http", 404, other), ("transport", 502, "")):
+            frame = scan.finding("image", "image frame") | {"imageSources": [items[0]["src"], address]}
+            records = server.proxy_results | {other: {"kind": kind, "status": status}}
+            failures = scan.classify_images([frame], records)
+            retry = kind == "transport" and bool(address)
+            self.assertEqual(failures[0]["category"], "transport" if retry else "image")
+            self.assertEqual(scan.retryable_transport({"failures": failures}), retry)
+        for kind, status in (("http", 404), ("object_error", 502), ("http", 200)):
+            image = scan.finding("image", "bad image") | {"currentSrc": url, "src": url}
+            self.assertEqual(scan.classify_images([image], {url: {"kind": kind, "status": status}})[0]["category"], "image")
+    def test_upstream_concurrency_is_bounded_and_connections_reused(self):
+        server = self.proxy()
+        with ThreadPoolExecutor(max_workers=12) as pool:
+            results = list(pool.map(lambda n: self.fetch(server, "slow-" + str(n)), range(12)))
+        self.assertEqual(results, [(200, self.body)] * 12)
+        self.assertLessEqual(self.peak, 4); self.assertGreater(self.peak, 1)
+        self.assertLessEqual(len(self.ports), 4)
+    def test_client_disconnect_does_not_emit_server_traceback(self):
+        server = self.proxy(); output = io.StringIO()
+        with contextlib.redirect_stderr(output):
+            client = socket.create_connection(("127.0.0.1", server.server_port))
+            client.sendall(("GET /__proxy/oss" + self.path("large") + " HTTP/1.1\r\nHost: local\r\n\r\n").encode())
+            deadline = time.monotonic() + 5
+            while not self.counts[self.path("large")] and time.monotonic() < deadline: time.sleep(.01)
+            client.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("HH", 1, 0)); client.close()
+            deadline = time.monotonic() + 5
+            while self.host + self.path("large") not in server.proxy_results and time.monotonic() < deadline: time.sleep(.01)
+            while not server.proxy_stats["client_disconnects"] and time.monotonic() < deadline: time.sleep(.01)
+        self.assertIn(self.host + self.path("large"), server.proxy_results)
+        self.assertEqual(server.proxy_stats["client_disconnects"], 1)
+        self.assertNotIn("Traceback", output.getvalue())

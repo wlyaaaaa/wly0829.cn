@@ -1,5 +1,6 @@
 """稳定画面扫描，包含横排卡片内容失衡；只读预览规则和用法见 docs/publish-and-scan.md。"""
-import argparse, functools, hashlib, http.server, importlib.util, json, os, subprocess, sys, tempfile, threading, time, urllib.error, urllib.request
+import argparse, functools, hashlib, http.server, importlib.util, json, os, subprocess, sys, tempfile, threading, time
+import urllib3
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone, timedelta
@@ -56,38 +57,94 @@ def scan_baseline(result):
 def retryable_transport(row):
     failures = row["failures"]
     return bool(failures) and all(item.get("category") == "transport" for item in failures) and any(
-        code in item.get("message", "") for item in failures for code in RETRY_NETWORK_ERRORS)
+        item.get("response_kind") == "proxy_transport" or any(code in item.get("message", "") for code in RETRY_NETWORK_ERRORS) for item in failures)
+
+def original_url(url):
+    parts = urlsplit(url)
+    for key, host in UPSTREAMS.items():
+        prefix = "/__proxy/" + key + "/"
+        if parts.path.startswith(prefix): return host + parts.path[len(prefix) - 1:] + ("?" + parts.query if parts.query else "")
+    return url
+
+def classify_images(items, proxy_results):
+    for item in items:
+        if item.get("category") != "image": continue
+        urls = item.get("imageSources") or [item.get("currentSrc") or item.get("src") or ""]
+        evidence = [proxy_results.get(original_url(url), {}) for url in urls]
+        if all(url and result.get("kind") == "transport" for url, result in zip(urls, evidence)):
+            item.update(category="transport", response_kind="proxy_transport", proxy=evidence)
+    return items
+
+def make_server(dist, out, port=0, manifest=None):
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), functools.partial(Preview, directory=str(dist)))
+    server.daemon_threads = True
+    cache = Path(out).resolve() / "oss-cache"
+    if any(cache.is_relative_to(root.resolve()) for root in (Path(dist), HERE.parents[1])):
+        cache = Path(tempfile.gettempdir()) / "wly-scan-glance" / hashlib.sha256(str(Path(dist).resolve()).encode()).hexdigest()
+    server.oss_cache = cache; server.oss_cache.mkdir(parents=True, exist_ok=True)
+    server.oss_locks = {}; server.proxy_results = {}; server.proxy_stats = Counter(); server.proxy_disconnects = []
+    server.upstream_pool = urllib3.PoolManager(maxsize=4, block=True)
+    objects = (manifest or {}).get("oss", {}).get("objects", {})
+    server.local_objects = {row["url"]: Path(dist) / rel for rel, row in objects.items() if (Path(dist) / rel).is_file()}
+    server.object_hashes = {row["url"]: row["sha256"] for row in objects.values() if row.get("sha256")}
+    server.base = f"http://127.0.0.1:{server.server_port}"
+    return server
+
 class Preview(http.server.SimpleHTTPRequestHandler):
+    protocol_version = "HTTP/1.1"
     def log_message(self, *args): pass
+    def handle(self):
+        try: super().handle()
+        except (BrokenPipeError, ConnectionResetError, ConnectionAbortedError) as error:
+            self.server.proxy_stats["client_disconnects"] += 1
+            self.server.proxy_disconnects.append({"url": getattr(self, "path", ""), "error": type(error).__name__,
+                "stage": "idle_read" if getattr(self, "reply_complete", False) else "response_write", "winerror": getattr(error, "winerror", None)})
+            self.close_connection = True
     def upstream(self, url, headers, head):
-        objects = getattr(self.server, "local_objects", {}); local = objects.get(url) or objects.get(url.split("?", 1)[0])  # OSS 静态对象忽略查询串（页面重试会加 ?__wly_resource_retry=）
+        canonical = url.split("?", 1)[0]
+        objects = self.server.local_objects; local = objects.get(url) or objects.get(canonical)
+        expected = self.server.object_hashes.get(url) or self.server.object_hashes.get(canonical)
         if local and local.is_file():
-            return 200, {"Content-Type": self.guess_type(str(local)), "X-Glance-Local-Object": "1"}, local.read_bytes()
-        cacheable = not head and url.startswith(UPSTREAMS["oss"] + "/")
-        key = hashlib.sha256((url + "\n" + headers.get("Range", "")).encode()).hexdigest() if cacheable else None
+            self.server.proxy_stats["local_objects"] += 1
+            raw = local.read_bytes()
+            if expected and hashlib.sha256(raw).hexdigest() != expected:
+                return 502, {"X-Glance-Object-Error": "sha256_mismatch"}, b""
+            return 200, {"Content-Type": self.guess_type(str(local)), "X-Glance-Local-Object": "1"}, raw
+        cacheable = not head and canonical.startswith(UPSTREAMS["oss"] + "/releases/")
+        key = hashlib.sha256((canonical + "\n" + (expected or "") + "\n" + headers.get("Range", "")).encode()).hexdigest() if cacheable else None
         lock = self.server.oss_locks.setdefault(key, threading.Lock()) if key else threading.Lock()
         with lock:
             file = self.server.oss_cache / key if key else None
             meta = file.with_suffix(".json") if file else None
             if meta and meta.is_file():
-                saved = read_json(meta); return saved["status"], saved["headers"], file.read_bytes()
-            for attempt in range(3):  # 本机直连 OSS 偶发约 19 秒连接停滞；只重试传输异常，HTTP 状态照实返回
                 try:
-                    response = urllib.request.urlopen(urllib.request.Request(url, method="HEAD" if head else "GET", headers=headers), timeout=8); break
-                except urllib.error.HTTPError as error: response = error; break
-                except Exception as error:
-                    if attempt == 2: return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
-            with response:
-                try: raw = response.read()
-                except Exception as error: return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
-                info = {k: response.headers[k] for k in ("Content-Type", "Content-Length", "Content-Range", "Accept-Ranges") if k in response.headers}
-                info["X-Glance-Upstream-Status"] = str(response.code)
-                if file and response.code in (200, 206):
-                    file.write_bytes(raw)
-                    meta.write_text(json.dumps({"url": url, "range": headers.get("Range", ""), "status": response.code,
-                        "headers": info, "sha256": hashlib.sha256(raw).hexdigest(),
-                        "observed_at_beijing": datetime.now(timezone(timedelta(hours=8))).isoformat()}), encoding="utf-8")
-                return response.code, info, raw
+                    saved = read_json(meta); raw = file.read_bytes(); digest = hashlib.sha256(raw).hexdigest()
+                    if digest == saved["sha256"] and (not expected or headers.get("Range") or digest == expected):
+                        self.server.proxy_stats["cache_hits"] += 1
+                        return saved["status"], saved["headers"], raw
+                except (OSError, ValueError, KeyError): pass
+            started = time.monotonic()
+            try:
+                response = self.server.upstream_pool.request("HEAD" if head else "GET", url, headers=headers,
+                    timeout=urllib3.Timeout(connect=3, read=5, total=8), pool_timeout=8, preload_content=True,
+                    retries=urllib3.Retry(total=2, connect=2, read=2, status=0, redirect=0, other=2), redirect=False)
+                raw = response.data
+            except urllib3.exceptions.HTTPError as error:
+                self.server.proxy_stats["upstream_transport"] += 1
+                return 502, {"Content-Type": "text/plain", "X-Glance-Proxy-Error": type(error).__name__}, b""
+            self.server.proxy_stats["upstream_requests"] += 1
+            self.server.proxy_stats["upstream_retries"] += len(response.retries.history)
+            info = {k: response.headers[k] for k in ("Content-Type", "Content-Length", "Content-Range", "Accept-Ranges") if k in response.headers}
+            info["X-Glance-Upstream-Status"] = str(response.status)
+            info["X-Glance-Upstream-Seconds"] = str(round(time.monotonic() - started, 3))
+            digest = hashlib.sha256(raw).hexdigest()
+            if not head and response.status == 200 and expected and digest != expected:
+                return 502, {"X-Glance-Object-Error": "sha256_mismatch"}, b""
+            if file and response.status in (200, 206):
+                staged = file.with_suffix(f".{time.time_ns()}.tmp"); staged.write_bytes(raw); staged.replace(file)
+                staged = meta.with_suffix(f".{time.time_ns()}.tmp")
+                staged.write_text(json.dumps({"status": response.status, "headers": info, "sha256": digest}), encoding="utf-8"); staged.replace(meta)
+            return response.status, info, raw
     def rewrite(self, body, ctype):
         if any(t in ctype for t in ("text/", "javascript", "json", "svg")):
             text = body.decode("utf-8", "surrogateescape")
@@ -107,6 +164,7 @@ class Preview(http.server.SimpleHTTPRequestHandler):
     def refuse(self): self.send_error(405, "Read-only preview: GET/HEAD only")
     do_POST = do_PUT = do_PATCH = do_DELETE = refuse
     def do_GET(self):
+        self.reply_complete = False
         head = self.command == "HEAD"; upstream = None
         if self.path.startswith("/__status"): upstream = UPSTREAMS["mcp"] + "/computer-access/api/status" + self.path[len("/__status"):]
         for key, host in UPSTREAMS.items():
@@ -116,6 +174,7 @@ class Preview(http.server.SimpleHTTPRequestHandler):
             headers = {"Origin": "https://wly0829.cn", "Referer": "https://wly0829.cn/", "User-Agent": "wly-local-preview", "Accept": self.headers.get("Accept", "*/*")}
             if self.headers.get("Range"): headers["Range"] = self.headers["Range"]
             status, info, raw = self.upstream(upstream, headers, head)
+            self.server.proxy_results[upstream] = {"status": status, "kind": "transport" if info.get("X-Glance-Proxy-Error") else "object_error" if info.get("X-Glance-Object-Error") else "http", "error": info.get("X-Glance-Proxy-Error") or info.get("X-Glance-Object-Error")}
             ctype = info.get("Content-Type", "application/octet-stream"); body = self.rewrite(raw, ctype)
             length = int(info.get("Content-Length", 0)) if head and not info.get("X-Glance-Local-Object") else len(body)
             extra = {key: value for key, value in info.items() if key not in ("Content-Type", "Content-Length")}
@@ -127,27 +186,29 @@ class Preview(http.server.SimpleHTTPRequestHandler):
             ctype = self.guess_type(str(target)); body = self.rewrite(target.read_bytes(), ctype)
             self.headers_out(200, ctype, len(body))
         if not head: self.wfile.write(body)
+        self.reply_complete = True
     do_HEAD = do_GET
 def is_live(url):
     parts = urlsplit(url)
     return parts.hostname in ("mcp.wly0829.cn", "live.wly0829.cn") or parts.path.startswith(("/__status", "/__proxy/mcp/", "/__proxy/live/"))
 def finding(category, message, selector="html", rect=None):
     return {"category": category, "message": message, "selector": selector, "rect": rect}
-def settle(page, activity, pending):
-    page.evaluate("""async () => {
+def settle(page, activity, pending, all_images=False):
+    page.evaluate("""async (allImages) => {
       const images = [...document.images].filter(i => {
         const r = i.getBoundingClientRect();
         return i.getAttribute('src') && i.getClientRects().length > 0 && r.width > 0 && r.height > 0
-          && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
+          && (allImages || r.bottom > 0 && r.top < innerHeight) && r.right > 0 && r.left < innerWidth;
       });
+      if (allImages) for (const i of images) i.loading = 'eager';
       const ready = Promise.all([document.fonts.ready, ...images.map(i => i.complete ? null : new Promise(r => {i.addEventListener('load',r,{once:true});i.addEventListener('error',r,{once:true});}))]);
       await Promise.race([ready,new Promise((_, reject)=>setTimeout(()=>reject(new Error('字体或图片未完成')),20000))]);
-    }""")
+    }""", all_images)
     deadline = time.monotonic() + 30
     while pending or time.monotonic() - activity[0] < 1:
         if time.monotonic() > deadline: raise TimeoutError("网络未静默 1 秒")
         page.wait_for_timeout(100)
-def scan_worker(worker, jobs, args, base, scratch, config, link_items):
+def scan_worker(worker, jobs, args, base, scratch, config, link_items, proxy_results=None):
     from playwright.sync_api import sync_playwright
     from PIL import Image
     Image.MAX_IMAGE_PIXELS = None
@@ -164,20 +225,25 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items):
                 mark = [time.monotonic()]
                 def tick(label):
                     now = time.monotonic(); row["seconds"][label] = round(now - mark[0], 3); mark[0] = now
-                activity = [time.monotonic()]; pending = set()
+                activity = [time.monotonic()]; pending = set(); resource_errors = {}
                 def request(req): pending.add(req); activity[0] = time.monotonic()
                 def finished(req): pending.discard(req); activity[0] = time.monotonic()
                 def response(res):
+                    error = res.headers.get("x-glance-proxy-error")
+                    object_error = res.headers.get("x-glance-object-error")
+                    resource_errors[original_url(res.url)] = {"kind": "transport" if error else "object_error" if object_error else "http", "status": res.status}
                     if res.status >= 400:
-                        error = res.headers.get("x-glance-proxy-error")
                         dest = row["live_unavailable"] if is_live(res.url) else row["failures"]
-                        item = finding("读不到" if is_live(res.url) else "transport" if error else "404", f"{res.status} {res.url}")
-                        item.update(exception_type=error, response_kind="proxy_transport" if error else "http")
+                        item = finding("读不到" if is_live(res.url) else "transport" if error else "image" if object_error else "404", f"{res.status} {res.url}")
+                        item.update(exception_type=error or object_error, response_kind="proxy_transport" if error else "http")
                         dest.append(item)
                 def failed(req):
                     finished(req)
                     dest = row["live_unavailable"] if is_live(req.url) else row["failures"]
                     dest.append(finding("读不到" if is_live(req.url) else "transport", f"{req.failure} {req.url}"))
+                    url = original_url(req.url)
+                    if resource_errors.get(url, {}).get("status", 0) < 400:
+                        resource_errors[url] = {"kind": "transport" if any(code in (req.failure or "") for code in RETRY_NETWORK_ERRORS) else "request_error", "error": req.failure}
                 page.on("request", request); page.on("requestfinished", finished); page.on("requestfailed", failed); page.on("response", response)
                 stem = hashlib.sha256(route.encode()).hexdigest()[:12] + f"--{width}" + ("--retry" if attempt else "")
                 try:
@@ -190,17 +256,17 @@ def scan_worker(worker, jobs, args, base, scratch, config, link_items):
                         page.evaluate("(y)=>window.scrollTo({top:y,left:0,behavior:'instant'})", y)
                         page.wait_for_timeout(50); y += max(500, int(height * .8)); steps += 1
                     if steps == 1500: raise RuntimeError("滚动未覆盖整页")
-                    settle(page, activity, pending)
-                    page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending)
+                    settle(page, activity, pending, all_images=True)
+                    page.evaluate("window.scrollTo({top:0,left:0,behavior:'instant'})"); settle(page, activity, pending, all_images=True)
                     page.evaluate(script + "\n;void 0;"); dom = page.evaluate("(config)=>window.scanGlance(config)", config)
-                    row["failures"].extend(dom["failures"]); row["hints"].extend(dom["hints"])
+                    row["failures"].extend(classify_images(dom["failures"], (proxy_results or {}) | resource_errors)); row["hints"].extend(dom["hints"])
                     for item in link_items:
                         if route_name(item["page"]) == route:
                             selector = "a[href=" + json.dumps(item["href"]) + "]"
                             rect = page.locator(selector).first.bounding_box() if page.locator(selector).count() else None
                             row["failures"].append(finding("404", item["problem"], selector, rect))
                 except Exception as error:
-                    category = "transport" if "load" not in row["seconds"] and any(code in str(error) for code in RETRY_NETWORK_ERRORS) else "scan_error"
+                    category = "transport" if ("load" not in row["seconds"] and any(code in str(error) for code in RETRY_NETWORK_ERRORS)) or retryable_transport(row) and any(t in str(error) for t in ("图片未完成", "网络未静默")) else "scan_error"
                     row["failures"].append(finding(category, str(error)))
                 try:
                     if config.get("home_locked", True) and urlsplit(page.url).path in ("/", "/index.html"): raise RuntimeError("首页已排除，不自动截图")
@@ -243,22 +309,19 @@ def main():
     with tempfile.TemporaryDirectory(prefix="runtime-", dir=args.out) as temp:
         scratch = Path(temp); os.environ.update(TEMP=str(scratch), TMP=str(scratch), TMPDIR=str(scratch))
         http.server.ThreadingHTTPServer.request_queue_size = 256
-        server = http.server.ThreadingHTTPServer(("127.0.0.1", args.port), functools.partial(Preview, directory=str(args.dist)))
-        server.oss_cache = args.out / ("oss-cache-" + str(time.time_ns())); server.oss_cache.mkdir()
-        server.oss_locks = {}
         manifest = read_json(args.dist / "release-manifest.json") if "release-manifest.json" in dist_files else {}
-        server.local_objects = {row["url"]: args.dist / rel for rel, row in manifest.get("oss", {}).get("objects", {}).items() if (args.dist / rel).is_file()}
-        server.base = f"http://127.0.0.1:{server.server_port}"; threading.Thread(target=server.serve_forever, daemon=True).start()
+        server = make_server(args.dist, args.out, args.port, manifest)
+        threading.Thread(target=server.serve_forever, daemon=True).start()
         try:
             jobs = [(route, w, h) for route in selected for w, h in VIEWPORTS]
             with ThreadPoolExecutor(max_workers=4) as pool:
-                futures = [pool.submit(scan_worker, i, jobs[i::4], args, server.base, scratch, config, links) for i in range(4) if jobs[i::4]]
+                futures = [pool.submit(scan_worker, i, jobs[i::4], args, server.base, scratch, config, links, server.proxy_results) for i in range(4) if jobs[i::4]]
                 for i, future in enumerate(futures):
                     try: rows.extend(future.result())
                     except Exception as error:
                         rows.extend({"page": r, "viewport": f"{w}x{h}", "hints": [], "live_unavailable": [],
                                      "failures": [finding("scan_error", str(error))]} for r, w, h in jobs[i::4])
-        finally: server.shutdown(); server.server_close()
+        finally: server.shutdown(); server.server_close(); server.upstream_pool.clear()
     for row in rows:
         for kind in ("failures", "hints", "live_unavailable"):
             for item in row[kind]: item.update(page=row["page"], viewport=row["viewport"])
@@ -273,7 +336,8 @@ def main():
               "live_unavailable": [item for row in rows for item in row["live_unavailable"]],
               "html_sha256": {r: h for r, h in previous.items() if r in hashes and r not in selected} | {r: hashes[r] for r in complete}, "input_html_sha256": hashes,
               "dist_files_sha256": dist_files, "dist_files_unchanged": unchanged,
-              "home_locked": config.get("home_locked", True), "browser": args.chrome}
+              "home_locked": config.get("home_locked", True), "browser": args.chrome,
+              "proxy_stats": dict(server.proxy_stats), "proxy_requests": server.proxy_results, "proxy_disconnects": server.proxy_disconnects}
     result_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps({"seconds": result["seconds"], "scanned": len(rows), "counts": result["counts"], "result": str(result_path)}, ensure_ascii=False))
     return int(bool(failures))
