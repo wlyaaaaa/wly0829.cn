@@ -1237,14 +1237,21 @@
         "type": "chapter_title",
         "text_ref": "日常的小守护",
         "align": "center",
-        "size": "large"
+        "size": "large",
+        "row": "daily-heading",
+        "width": "76%",
+        "row_valign": "center",
+        "row_fit_illustration": false
       },
       {
         "type": "illustration",
         "index": 0,
-        "size": "banner",
+        "size": "small",
         "align": "center",
-        "target_width": 326
+        "target_width": 220,
+        "target_height": 182,
+        "row": "daily-heading",
+        "width": "24%"
       },
       {
         "type": "points_card",
@@ -1255,9 +1262,7 @@
         "icon_position": "header_left",
         "header_icon": [
           "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
-        ],
-        "row": "daily",
-        "width": "50%"
+        ]
       },
       {
         "type": "points_card",
@@ -1265,9 +1270,7 @@
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",
-        "icon_position": "header_left",
-        "row": "daily",
-        "width": "50%"
+        "icon_position": "header_left"
       }
     ],
     "source_images": [

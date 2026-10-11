@@ -1587,7 +1587,7 @@
  "source": {
   "page": "sources/pages/pcconfig/page.json",
   "sha256": "b7e77d75b72be5d66b6ce05fd7e0b957e012f9bfcb0783c2c629532315a9a141",
-  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
+  "converted_at_beijing": "2026-10-11T10:13:40+08:00"
  }
 }
 ---
@@ -4052,7 +4052,20 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "type": "chapter_title",
      "text_ref": "日常的小守护",
      "align": "center",
-     "size": "large"
+     "size": "large",
+     "row": "daily-heading",
+     "width": "76%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "index": 0,
+     "size": "small",
+     "align": "center",
+     "target_width": 220,
+     "target_height": 182,
+     "row": "daily-heading",
+     "width": "24%"
     },
     {
      "type": "points_card",
@@ -4063,9 +4076,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "icon_position": "header_left",
      "header_icon": [
       "_library/hires-icons-r2/icon-clean-64b110e28ee97a9a2746.png"
-     ],
-     "row": "daily",
-     "width": "50%"
+     ]
     },
     {
      "type": "points_card",
@@ -4073,15 +4084,7 @@ BitLocker 恢复密钥都登记在〔密码中心〕里
      "whole_block": true,
      "columns": 1,
      "illustration": "left_inside",
-     "icon_position": "header_left",
-     "row": "daily",
-     "width": "50%"
-    },
-    {
-     "type": "illustration",
-     "index": 0,
-     "row": "daily",
-     "width": "30%"
+     "icon_position": "header_left"
     }
    ],
    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。",
