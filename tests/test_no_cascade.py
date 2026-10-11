@@ -26,7 +26,10 @@ class NoCascadeTests(unittest.TestCase):
         absolute = result.replace('src="/search-index.js"', 'src="'+url+'?v=1#same"')
         self.assertEqual(build_runtime.search_index_entry(absolute, {}, {'oss': {'objects': {'search-index.js': {'url': url}}}}), absolute)
         alias = result.replace('/search-index.js', '/_runtime/old/search-index.js')
-        self.assertEqual(build_runtime.search_index_entry(alias, {}), result)
+        registered = {'runtime_urls': {'https://example.invalid/old': '_runtime/old/search-index.js'}}
+        self.assertEqual(build_runtime.search_index_entry(alias, registered), result)
+        unrelated = '<script src="/examples/search-index.js" data-example="keep"></script>'
+        self.assertIn(unrelated, build_runtime.search_index_entry(unrelated + body, {}))
         with self.assertRaisesRegex(ValueError, '项目索引入口'):
             build_runtime.search_index_entry('<script>window.note="search-projects.js"</script>', {})
 

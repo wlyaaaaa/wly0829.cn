@@ -80,19 +80,21 @@ def search_index_entry(body, snapshot, prior=None):
     urls = dict(snapshot.get('runtime_urls', {}))
     for rel, row in (prior or {}).get('oss', {}).get('objects', {}).items(): urls[row['url']] = rel
     urls = {unquote(url.split('?', 1)[0].split('#', 1)[0]): rel for url, rel in urls.items()}
+    aliases = {rel.lstrip('/') for rel in urls.values() if re.fullmatch(r'/?_runtime/[^/]+/search-(?:index|projects)\.js', rel)}
+    def is_index(rel, name): return rel == name or rel in aliases and rel.rsplit('/', 1)[-1] == name
     def resource(value):
         absolute = urlsplit(urljoin('https://wly0829.cn/search/', value))
         normalized = unquote(urlunsplit((absolute.scheme, absolute.netloc, absolute.path, '', '')))
         return absolute.path.lstrip('/') if absolute.netloc in {'wly0829.cn', 'www.wly0829.cn'} else urls.get(normalized, '')
     scripts = [(attrs, raw, offset, resource(attrs.get('src', ''))) for tag, attrs, raw, offset in oss.HtmlTags(body).tags
                if tag == 'script' and attrs.get('src')]
-    existing = [(raw, offset, rel) for _, raw, offset, rel in scripts if rel == 'search-index.js' or rel.endswith('/search-index.js')]
+    existing = [(raw, offset, rel) for _, raw, offset, rel in scripts if is_index(rel, 'search-index.js')]
     if existing:
         if len(existing) != 1: raise ValueError('搜索页有重复的全站索引入口')
         raw, offset, rel = existing[0]
         if rel == 'search-index.js': return body
         return body[:offset] + '<script src="/search-index.js">' + body[offset + len(raw):]
-    anchor = next((offset for _, _, offset, rel in scripts if rel == 'search-projects.js' or rel.endswith('/search-projects.js')), None)
+    anchor = next((offset for _, _, offset, rel in scripts if is_index(rel, 'search-projects.js')), None)
     if anchor is None: raise ValueError('搜索页没有可定位的项目索引入口')
     return body[:anchor] + '<script src="/search-index.js"></script>' + body[anchor:]
 
