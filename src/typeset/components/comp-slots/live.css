@@ -128,3 +128,6 @@
 .c-slot-live[data-orient="v"] .c-slot-live-maintenance-group { align-items: stretch; flex-direction: column; width: 100%; }
 .c-slot-live[data-orient="v"] .c-slot-live-maintenance-frame { flex: none; max-width: 100%; }
 .c-slot-embed.c-slot-embed-v .c-slot-embed-frame { aspect-ratio: 4 / 3; }
+/* 现场状态文字可能比排版快照长：框随内容换行、自动加高，不截断；各框原有 min-height（快照尺寸）仍是下限 */
+.c-slot-live .c-slot-live-frame[data-hot="live"] { height: auto; }
+.c-slot-live .c-slot-live-frame[data-hot="live"] .live-text { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
