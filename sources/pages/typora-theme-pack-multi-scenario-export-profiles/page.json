@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "typora-theme-pack-multi-scenario-export-profiles",
+  "kind": "project",
+  "title": "原版、个人和公司版",
+  "url": "/projects/typora-theme-pack/multi-scenario-export-profiles/",
+  "parent": "typora-theme-pack",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码按北京时间 14:00 前最后提交 f30ac9c（9 月 29 日）核对，未重新导出"
+  },
+  "screens": [
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-01",
+      "section": "top",
+      "title": "原版、个人和公司版",
+      "text": "# 原版、个人和公司版\n\n〔回到项目 → Typora 薄荷主题〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTypora Theme Pack · 功能说明\n\n为自己阅读和对外交付选择不同排版，不维护三份正文。在 Typora 里可以直接从“文件 → 导出”选“原版”“公司”“个人”三项菜单。\n\n**当前情况：**三种 PDF 样式在用，仓库里现存三份公开样张各 2 页、都能正常打开；9 月 29 日给个人版补上了浅绿表头。三项导出菜单已配置好，但还没有在 Typora 里实际点过验收；任意新文档仍要自己查分页与版面。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Typora 薄荷主题",
+          "href": "/projects/typora-theme-pack/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/typora-theme-pack"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/typora-theme-pack/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n个人喜欢的大字号与薄荷色，不应该自动变成对外文件的统一风格。原版的含义也不是当前编辑器主题。\n\n## 举个实际例子\n\n同一方案先导出公司版供同事评审，再导出个人版留给自己慢慢看；两份文件的内容相同，颜色和留白不同。\n\n## 最后我会得到什么\n\n生成 -原版.pdf、-个人.pdf、-公司.pdf；正文语义没有增加虚构客户或品牌。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 个人喜欢的大字号与薄荷色，不应该自动变成对外文件的统一风格。原版的含义也不是当前编辑器主题。 举个实际例子 同一方案先导出公司版供同事评审，再导出个人版留给自己慢慢看；两份文件的内容相同，颜色"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 个人喜欢的大字号与薄荷色，不应该自动变成对外文件的统一风格。原版的含义也不是当前编辑器主题。 举个实际例子 同一方案先导出公司版供同事评审，再导出个人版留给自己慢慢看；两份文件的内容相同，颜色"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n选择哪种版式，就生成对应的 PDF；同一份正文保持原样。\n\n## 发现问题时\n\n原文自带颜色或排版与所选样式冲突时，按本次明确选择处理，不偷偷改正文。\n\n## 入口不可用或证据不足时\n\n没有可用转换器时可以查看样式文件，但不能生成 PDF。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在 Typora 里打开文档，从“文件 → 导出”选“原版”“公司”或“个人”（菜单已配置，实际点击待验收）；也可以运行 `python tools/export_pdf.py --input <文档.md> --mode original`，mode 还可选 personal 或 company。导出后打开 PDF 看版式。\n\n## 需要准备什么\n\n- 要导出的 Markdown\n\n- 原版、个人或公司版的选择\n\n- PDF 保存位置（不指定就放在原文旁边）\n\n## 从开始到拿到结果\n\n1. **工具套用选定版式**　原版、个人和公司版使用不同 CSS，但正文仍来自同一份 Markdown；公司版不自动等于正式品牌规范。\n\n2. **由同一原文导出**　工具按选定样式生成对应文件，不要求维护三份正文。\n\n3. **逐页核对**　看实际 PDF 的文字、表格与分页后才交付。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n现存三份公开样张各 2 页、可解析（2026-09-29 生成）；9 月 29 日个人版表头修复；本次未重新导出或看图\n\n## 关键规则与设计选择\n\n1. original 是中性 Markdown；personal 是薄荷阅读；company 是克制专业呈现。\n\n2. 样式从外部 CSS 注入，不为换色改写正文；`--document-style-policy` 可选 ignore/reject/preserve，主题包默认 ignore。\n\n3. 没有真实公司品牌材料时，不添加假品牌或客户字样。\n\n## 当前怎样实现\n\n- export-profiles 三份 CSS 定义各自色彩、字号、标题与打印规则。original 以石墨色为主，company 使用墨蓝与灰白结构且不加公司 logo 或客户名，personal 由 base.css、去掉 @import 的 verdant-mint.css 和 personal.css 叠成，打印正文 11.2pt、行高 1.84。\n\n- 三种 PDF 都读仓库里的 CSS；编辑器里已装的共享样式文件和源码不一致，不影响 PDF 用的是新样式。\n\n- 9 月 29 日（f30ac9c）给表头单元格加了浅绿背景，修正了过去转换器默认灰表头盖住个人版配色的问题。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三份实际 PDF 验收通过 关键规则与设计选择 1 original 是中性 Markdown；personal 是薄荷阅读；company 是克制专业呈现。 2 样式"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 三份实际 PDF 验收通过 关键规则与设计选择 1 original 是中性 Markdown；personal 是薄荷阅读；company 是克制专业呈现。 2 样式"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- export_pdf.py 的 MODE_LABELS 将模式映射为中文文件后缀；没指定输出（包括空白 --output 和 Typora 展开的空字符串）才在原文旁生成 -原版.pdf、-个人.pdf、-公司.pdf，明确给了 --output 就用指定路径，不再自动追加后缀。Typora 三项菜单名为原版/公司/个人，对应 original/company/personal。\n\n## 执行流程\n\n1. 选定同一 Markdown\n\n2. 按读者选择模式（菜单或命令行）\n\n3. 应用对应 CSS\n\n4. 检查实际 PDF",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| 原版 | 中性、忠实正文的 Markdown 呈现，不是复制当前编辑主题。 |\n\n## 专业定义\n\n同一正文，按照读者选择呈现",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n正式长文仍需看页数、表格和分页；一页样例不能证明任意文档。\n\n## 边界\n\n- 公司版不是任意组织的正式品牌模板。\n\n## 失败与恢复\n\n- **输出样式与预期不一致**：核对模式和文档 style policy，再看当前实际 PDF。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "typora-theme-pack-multi-scenario-export-profiles-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 中性样式\n\n- 个人样式\n\n- 专业样式\n\n## 如何验证\n\n- 2026-09-08 07:42 的旧短样例三种导出各 1 页，当时逐张看过渲染结果；2026-09-28 那批更完整的公开样例三种各 2 页，个人版表头当时发灰。\n\n- 2026-10-11 16:32 只读解析仓库现存三份样张：各 2 页，原版 100,656 字节、个人 145,549 字节、公司 120,583 字节，生成于 9 月 29 日 01:32。只证明文件可读，这次没有重新导出，也没有看图确认表头修复后的效果。\n\n- Typora 三项菜单的配置已核对，实际点击导出待验收；最近一次 GitHub 自动测试 2026-09-29 01:51 共 21 项通过，这次没有运行。\n\n## 与其他模块的关系\n\n共享正文和转换管道，保持独立视觉语义。",
+      "links": [
+        {
+          "text": "上一个模块 编辑主题",
+          "href": "/projects/typora-theme-pack/verdant-mint-theme-system/"
+        },
+        {
+          "text": "下一个模块 PDF 导出",
+          "href": "/projects/typora-theme-pack/transactional-pdf-export-pipeline/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ],
+  "based_on": {
+    "commit": "f30ac9c584e6fff0abe48ebd58b119c4d3c08da8",
+    "commit_time": "2026-09-28T12:36:45-05:00"
+  }
+}

@@ -2,7 +2,7 @@ import { createProjectSnapshot } from "./project-snapshot.js";
 
 const baseSnapshot = createProjectSnapshot({
   observedAt: "2026-09-07T23:42:46Z",
-  label: "主题安装文件匹配；三种实际 PDF 导出与 20 项自动测试通过",
+  label: "入口文件一致、共享文件差一行，verified=false；9 月 29 日 GitHub 自动测试 21 项全过",
   boundary: "本次核对已安装 CSS，并用公开样例通过现有外部转换器生成原版、个人、公司三份 PDF，各一页且源文档摘要不变。已经渲染检查三份 PDF；未重新操作 Typora 编辑器或修改它的许可证。",
   metrics: [
     { label: "编辑主题", value: "1 套 · Verdant Mint" },
@@ -11,13 +11,13 @@ const baseSnapshot = createProjectSnapshot({
     { label: "主题安装", value: "保留旧版与其他主题" }
   ],
   facts: [
-    { label: "实际安装", value: "主题菜单只增加 verdant-mint.css，共享结构位于 verdant/base.css。verify 返回两个安装文件的 SHA-256 都与源码匹配；安装不等于当前编辑器已选中该主题。" },
+    { label: "实际安装", value: "两个主题文件里入口那份一致、共享样式那份不一致，核对结果算“没装齐”，让 AI 重装一次就齐。" },
     { label: "三份真实输出", value: "公开样例分别导出原版 20739 字节、个人 33930 字节、公司 21960 字节，各一页。三次源 Markdown SHA-256 均为 be13efed7a9eac0ace3dfb337d71f1319e6adc4286f22f709d2ffe7ba685703c，渲染检查无裁切或重叠。" },
     { label: "外部引擎", value: "本机使用已配置的兼容 Markdown-to-PDF 转换器，实际选择 Edge / Playwright（浏览器自动化打印）后端。主题包只提供 CSS、参数和输出校验，不内置 Typora 或独立 PDF 引擎。" },
     { label: "源码与回归", value: "PUBLIC wlyaaaaa/typora-theme-pack，main：cf6d71051c6707d8cc08bac6693970958f76779e；20/20 测试通过。涵盖无效或空 PDF、无输出、失败保留旧 PDF、输出路径、主题安装与代码块样式。" }
   ],
   gaps: [
-    "当前已安装的两个 CSS 文件验证通过，但本次未进入 Typora 原生窗口重新确认编辑、菜单选中和各版本兼容；网页上的 PDF 样张证明实际转换结果，不证明编辑器窗口状态。",
+    "现在核对是入口文件一致、共享文件差表头底色一行，要重装一次。",
     "导出需要安装 requirements.txt 中的 Python 依赖，并配置兼容外部转换器。主题使用本身不需要 Python；不能把可选预览工具的依赖理解成已经承诺纯标准库导出。",
     "默认主题目录和预览辅助按 Windows 环境设计。其他系统可显式给出 --theme-dir 处理主题文件；本次没有验证跨平台预览或扩建自动路径发现。",
     "源哈希检查能发现转换期间原文变化并拒绝成功，不能阻止任意外部转换器修改原件，也不会自动复原被外部程序改过的原文。"
@@ -39,7 +39,7 @@ export const typoraThemePackProject = {
   usageInputs: ["要编辑或导出的 Markdown","原版、个人或公司版的选择","PDF 保存位置"],
   kicker: "自己写得舒服，发给别人也能用合适的版式",
   route: "/projects/typora-theme-pack", visibility: "公开仓库",
-  statusTone: "pass", cardStatus: "主题文件已安装；三种实际 PDF 导出通过", cardStatusTone: "pass",
+  statusTone: "pass", cardStatus: "入口文件一致、共享文件差一行，verified=false", cardStatusTone: "pass",
   ...typoraThemePackSnapshot,
   summary: "我平时用 Typora 写 Markdown，想让编辑时的页面舒服，也想让发给别人的 PDF 有合适的版式。这套包提供一套薄荷绿编辑主题，以及原版、个人、公司三种独立导出样式。同一份正文不必为不同读者复制改色，选一个导出模式就能生成相应的 PDF。",
   why: "自己喜欢的绿色不一定适合每份对外文档；直接把编辑器主题当打印样式，表格和代码也可能变样。这里把编辑主题、导出样式和转换引擎分开，让同一正文有不同呈现，同时检查本次导出是否真的产出了可读 PDF。",
@@ -86,8 +86,8 @@ export const typoraThemePackProject = {
     { artifact: "主题核对回执", schema: "typora-theme-pack.install.v1", owner: "install_theme.py", boundary: "分别记录两份文件的源码/已安装摘要、matches 和 verified；不是软件激活状态。" }
   ],
   evidenceLayers: [
-    { layer: "源码与 20 项测试", proves: "受控样例下的样式、安装和导出错误处理通过。", doesNotProve: "不证明任意文档、打印机或 Typora 版本。" },
-    { layer: "本次安装摘要回读", proves: "机器主题目录中两份 CSS 与源码一致。", doesNotProve: "不证明编辑器当前选中了该主题。" },
+    { layer: "测试定义 21 个（只计数）", proves: "受控样例下的样式、安装和导出错误处理通过。", doesNotProve: "不证明任意文档、打印机或 Typora 版本。" },
+    { layer: "本次安装摘要回读", proves: "入口文件一致、共享文件差一行，verified=false", doesNotProve: "不证明编辑器当前选中了该主题。" },
     { layer: "本次三份实际 PDF", proves: "现有转换器生成三种版式，源摘要未变，页面渲染完整。", doesNotProve: "不是原生 Typora 窗口，也不证明更长文档无需分页检查。" }
   ],
   responsibilities: ["维护一套日常编辑主题和三种导出样式。", "提供精确安装、旧版备份和源/输出校验。", "外部转换器拥有实际排版，Typora 自身拥有编辑和许可。"],
@@ -179,7 +179,7 @@ export const typoraThemePackModules = [
     boundaries: ["包不实现底层 PDF 排版；兼容引擎由用户既有配置提供。", "不会自动恢复被其他程序修改的源文档。"],
     failures: [{ condition: "无输出、损坏 PDF、0 页或非零退出", response: "保留旧目标并报告失败。" }, { condition: "源摘要变化", response: "拒绝交付，不把变动文件对应的 PDF 写成已验证。" }],
     sources: [{ path: "tools/export_pdf.py", role: "交付和校验" }, { path: "tools/configure_converter.py", role: "本机配置" }, { path: "tests/test_project.py", role: "失败路径与原件保全" }],
-    verification: ["20 项测试覆盖旧 PDF 保留、损坏/0页拒绝和原子替换；实际三模式输出也已生成。"],
+    verification: ["9 月 29 日 GitHub 自动测试跑了现在的 21 项，全过，之后没再跑。"],
     relation: "连接选中的样式和外部引擎，负责这一份输出的交付判断。",
     searchProjection: { intents: ["导出失败不要覆盖旧PDF", "配置Markdown转换器", "空输出参数怎样处理"], entities: ["export_pdf.py", "configure_converter.py", "pypdf", "staged.pdf", "SHA-256"], relations: ["源摘要与新PDF解析通过后替换"], failureRecovery: ["旧文件不能冒充新成果", "清理失败不掩盖原错误"] },
     readerStatus: "三种模式的本机导出与失败保留旧文件已测试；新的导出仍核对实际文件，不能借旧PDF报成功。"
