@@ -129,6 +129,7 @@ def retained_inputs(name, snapshot):
     if name != 'home': refs.update({'/_interactions/anchor-offset.css', '/_interactions/anchor-offset.js'})
     paths = [html, SITE / 'src/retained-page.ts',
         SITE / 'src/pages' / ('index.astro' if name == 'home' else name + '/index.astro')]
+    if name == 'computer-access': paths.append(SITE / 'src/styles/access-fixes.css')  # retained-page.ts 内联它
     if name != 'computer-access':
         paths += [SITE / 'src/styles/typeset-page.css', SITE / 'public/_album/astro-runtime.json',
             SITE / 'public/_living/quality-runtime/manifest.json']

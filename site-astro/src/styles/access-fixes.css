@@ -25,21 +25,27 @@ html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-ac
   border: 2px solid #7fae90;
   background: #fff;
 }
-html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"],
-html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"] {
+/* 选中填色要压过页面内联 <style data-o3-refactor> 里带 id 的
+   “#computer-access-02.o3-ready button.b2-image-action:is([data-selected="true"], [aria-pressed="true"])”（浅绿 #dff4e6 !important），
+   所以同样以 #computer-access-02.o3-ready 起头；只在可点时填绿，不可点时保持原样。 */
+#computer-access-02.o3-ready button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]:not(:disabled),
+#computer-access-02.o3-ready button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]:not(:disabled) {
   background: #1f8a4c !important;
   color: #fff !important;
   border-color: #1f8a4c !important;
+  box-shadow: none !important;
 }
 html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]::before,
 html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]::before {
   border-color: #fff;
   background: radial-gradient(circle, #1f8a4c 0 3px, #fff 3.5px);
 }
-html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]) > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"] {
+#computer-access-02.o3-ready:has(button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]) button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]:not(:disabled) {
   background: #fbfefc !important;
-  color: #2f5b40 !important;
-  border-color: #9cc7ab !important;
+  color: #13753a !important;
+  border-color: #1f8a4c !important;
+  box-shadow: none !important;
+  outline: none !important; /* 运行件 .b2-image-action[data-selected=true] 的选中外框 */
 }
 html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]) > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]::before {
   border-color: #7fae90;
