@@ -273,7 +273,7 @@
  "source": {
   "page": "sources/pages/how-this-site/page.json",
   "sha256": "3a3c9ef87c359e0b237b546f0ca3c81cde56732b8745492e356a6454e08074ee",
-  "converted_at_beijing": "2026-10-11T04:00:43+08:00"
+  "converted_at_beijing": "2026-10-11T10:15:36+08:00"
  }
 }
 ---
@@ -2421,23 +2421,33 @@
      "panel_asset_sha256": "5170487289e90cefcdedb2387d320da6613f00412a5bab89d2a249083982e94d",
      "connector": "arrow",
      "row": "incident-lead",
-     "width": "30%",
+     "width": "18%",
      "target_height": 350,
-     "panel_renderer": "image"
+     "panel_renderer": "svg"
     },
     {
      "type": "content_card",
      "text_ref": "流量暴涨",
-     "columns": 2,
+     "columns": 1,
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": [
-      "_library/icons/云图片.png",
-      "_library/illustrations/账本.png"
+      "_library/icons/云图片.png"
      ],
      "equal_height": false,
      "row": "incident-lead",
-     "width": "68%"
+     "width": "80%"
+    },
+    {
+     "type": "content_card",
+     "text_ref": "余额用完",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "icons": [
+      "_library/illustrations/账本.png"
+     ],
+     "equal_height": false
     },
     {
      "type": "content_card",
