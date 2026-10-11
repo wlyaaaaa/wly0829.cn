@@ -315,7 +315,7 @@ def publish(args):
             step('retention_proofs', lambda: retention.write(output/'remote-verification.json', verification))
             step('retention_inventory', lambda: retention.pin(preparation))
             code = step('oss_retirement', lambda: retention.collect(SimpleNamespace(
-                preparation=preparation, commit=receipt['commit'], rollback=manifest['rollback_ref'],
+                preparation=preparation, commit=receipt['commit'], rollback=manifest.get('rollback_ref'),
                 cli=CLI, profile='website-images', lock_holder=args.lock_holder, report=report,
                 dry_run=False, max_keys=getattr(args, 'retention_max_keys', 1000))))
             receipt['oss_retention'] = retention.read(report)

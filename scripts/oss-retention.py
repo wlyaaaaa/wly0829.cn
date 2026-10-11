@@ -217,14 +217,25 @@ def collect_verified(args):
     current = manifest(args.commit)
     if command('git', 'ls-remote', 'origin', 'refs/heads/site-dist').split()[0] != args.commit:
         raise ValueError('Production site-dist changed; collection is incomplete')
-    if current['rollback_ref'] != args.rollback or current['oss']['asset_base_url'] != BASE:
+    if current['oss']['asset_base_url'] != BASE:
         raise ValueError('Publication or rollback identity does not match the existing target')
+    if 'rollback_ref' in current:
+        if current['rollback_ref'] != args.rollback:
+            raise ValueError('The explicit rollback identity does not match the publication')
+    elif (current.get('schema') != 'wly.hybrid-release.v1' or current.get('finalized_dist') is not True
+          or args.rollback is not None):
+        raise ValueError('Only the finalized hybrid contract may omit a named rollback reference')
     public = predecessor()
     if not public or public.get('release_id') != current.get('release_id'):
         raise ValueError('Current public production does not match the selected site-dist release')
     keep = {row['key'] for row in current['oss']['objects'].values()}
     keep.update(current['oss'].get('reference_keys', []))
     own, own_value, plan = plan_pin(args.preparation)
+    if 'rollback_ref' not in current:
+        snapshot_sha = plan.get('previous_publication_sha256', '')
+        if (len(snapshot_sha) != 64 or any(char not in '0123456789abcdef' for char in snapshot_sha)
+                or not (shared()/'rollback-retention.json').is_file()):
+            raise ValueError('Finalized publication requires its frozen predecessor fingerprint and rollback inventory')
     rollback = rollback_keep(args.preparation, plan, args.commit, persist=not dry_run)
     keep.update(rollback)
     retired, pending = None, []

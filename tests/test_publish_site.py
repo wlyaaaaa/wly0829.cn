@@ -9,7 +9,7 @@ class PublishTests(unittest.TestCase):
                 folder = Path(temporary); root = folder/'dist'; root.mkdir()
                 for rel in ('index.html', 'cockpit/index.html', 'computer-access/index.html', 'a.js'):
                     target = root/rel; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes(b'fixture')
-                publisher.oss.write(root/'release-manifest.json', {'release_id': 'fixture', 'rollback_ref': 'old', 'files': publisher.oss.inventory(root)})
+                publisher.oss.write(root/'release-manifest.json', {'schema': 'wly.hybrid-release.v1', 'release_id': 'fixture', 'files': publisher.oss.inventory(root)})
                 source = publisher.oss.finalize_dist(root)
                 scan = folder/'scan.json'
                 publisher.oss.write(scan, {'failures': [], 'dist_files_sha256':
@@ -21,6 +21,7 @@ class PublishTests(unittest.TestCase):
                     rel, row = item
                     return rel, {'status': 'pass', 'http': 200, 'bytes': row['bytes'], 'sha256': row['sha256'], 'headers': {'ETag': '"'+'a'*32+'"'}}
                 def collect(args):
+                    self.assertIsNone(args.rollback)
                     self.assertTrue((shared/'published.json').exists())
                     registered = publisher.retention.read(shared/'managed.json')['objects']
                     self.assertTrue(all(row['etag'] == 'a'*32 for row in registered.values()))
