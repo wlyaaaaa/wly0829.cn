@@ -7,8 +7,8 @@
   "parent": "timeaudit",
   "status_line": {
     "state": "常用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，备份任务和成品 16:32—16:35 只读重取，未从最新备份试恢复"
+    "as_of": "2026-10-12",
+    "source": "源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；备份任务和成品 10 月 12 日 05:39—05:40 只读回读（只看元数据），备份执行仍是 10 月 11 日那次，未从最新备份试恢复"
   },
   "screens": [
     {
@@ -89,7 +89,7 @@
       "id": "timeaudit-backup-recovery-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n2026-10-11 每日备份 11:40:18 开始、12:44:13 完成，本地/云端均成功、结果 0；现有 12 份完整 dump；最新真实 dump 尚未做隔离整库恢复\n\n## 关键规则与设计选择\n\n1. 全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。\n\n2. 取得现行项目源码后运行 `setup_runtime.ps1` 重建 `.venv`；不复制旧 `.venv`、整个项目运行树或未干净关闭的数据卷。\n\n3. 先建立 WSL2、Docker Desktop、项目 `.venv` 与 PostgreSQL / ingester / Grafana 三容器。\n\n4. 全新空库执行 `schema.sql`；带历史换机或灾后恢复使用校验过的 dump restore。两条只选一条，避免先建再清或把空库当历史。\n\n5. 数据库 dump 优先于运行中 `postgres_data` 目录复制；Grafana 先确认固定 PostgreSQL datasource，再恢复 dashboard JSON 或完整状态。\n\n6. 恢复 `TimeAudit_AutoStart`、每分钟 `TimeAudit_Watchdog` 与 `TimeAudit_DailyBackup` 后，依次验 heartbeat、真实入库、有界聚合和浏览器看板。\n\n7. 二进制库保存完整 Grafana 状态，JSON 提供版本化 dashboard 恢复；只接受精确 `.json`，不导入 `.json.bak`；9 月 29 日起按解析后的内容比对，排版不同、内容相同不算冲突。\n\n8. 任务结果 0、备份存在和源码测试都不替代最新 dump 的隔离整库恢复；历史缺口必须按最后备份时间保留。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n2026-10-11 每日备份 11:40:18 开始、12:44:13 完成，本地/云端均成功、结果 0；10 月 12 日 05:40 回读，之后没有新一次执行，下一次排在 10 月 12 日 11:40；现有 12 份完整 dump 和 12 份清单（只看元数据，没有重算指纹）；最新真实 dump 尚未做隔离整库恢复\n\n## 关键规则与设计选择\n\n1. 全新安装、带历史换机、灾后 / 重装 / 硬盘更换先选场景，不把三套动作混成一张清单。\n\n2. 取得现行项目源码后运行 `setup_runtime.ps1` 重建 `.venv`；不复制旧 `.venv`、整个项目运行树或未干净关闭的数据卷。\n\n3. 先建立 WSL2、Docker Desktop、项目 `.venv` 与 PostgreSQL / ingester / Grafana 三容器。\n\n4. 全新空库执行 `schema.sql`；带历史换机或灾后恢复使用校验过的 dump restore。两条只选一条，避免先建再清或把空库当历史。\n\n5. 数据库 dump 优先于运行中 `postgres_data` 目录复制；Grafana 先确认固定 PostgreSQL datasource，再恢复 dashboard JSON 或完整状态。\n\n6. 恢复 `TimeAudit_AutoStart`、每分钟 `TimeAudit_Watchdog` 与 `TimeAudit_DailyBackup` 后，依次验 heartbeat、真实入库、有界聚合和浏览器看板。\n\n7. 二进制库保存完整 Grafana 状态，JSON 提供版本化 dashboard 恢复；只接受精确 `.json`，不导入 `.json.bak`；9 月 29 日起按解析后的内容比对，排版不同、内容相同不算冲突。\n\n8. 任务结果 0、备份存在和源码测试都不替代最新 dump 的隔离整库恢复；历史缺口必须按最后备份时间保留。",
       "links": [],
       "anchors": [
         {

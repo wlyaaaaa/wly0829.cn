@@ -7,15 +7,15 @@
   "parent": "timeaudit",
   "status_line": {
     "state": "常用",
-    "as_of": "2026-10-11",
-    "source": "源码按北京时间 14:00 前提交 c5ca4eeb（12:44）核对，记录数 10 月 11 日 23:52 只读重取、备份回执 23:55 回读（只数条数，不读内容）"
+    "as_of": "2026-10-12",
+    "source": "源码仍是 10 月 11 日 12:44 的提交 c5ca4eeb（10 月 12 日 05:39 复核）；记录数 10 月 12 日 05:37 只读重取，备份回执 05:40 回读（只数条数，不读内容）"
   },
   "screens": [
     {
       "id": "timeaudit-clipboard-history-01",
       "section": "top",
       "title": "Windows 剪贴板历史、再次复制与增量出口",
-      "text": "# Windows 剪贴板历史、再次复制与增量出口\n\n〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTimeAudit · 功能说明\n\n当段落、网址或文件路径被下一次复制覆盖，我可以在本机按关键词、日期和类型找回；完全相同的内容合在一组并显示真正复制次数，再看完整内容或再次复制。私人历史不进浏览器或主遥测数据库。日常入口现在是开始菜单里的“TimeAudit 剪贴板历史”，它打开的是密码中心桌面版的剪贴板页。\n\n**当前情况：**10 月 11 日 23:52 本机库里共有 11,376 条复制事件；每天 18:25 的近线备份最近一次（10 月 11 日）完整通过。这次没有打开界面、试再次复制或试恢复。\n\n项目源码：公开仓库",
+      "text": "# Windows 剪贴板历史、再次复制与增量出口\n\n〔回到项目 → 电脑使用与性能记录〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nTimeAudit · 功能说明\n\n当段落、网址或文件路径被下一次复制覆盖，我可以在本机按关键词、日期和类型找回；完全相同的内容合在一组并显示真正复制次数，再看完整内容或再次复制。私人历史不进浏览器或主遥测数据库。日常入口现在是开始菜单里的“TimeAudit 剪贴板历史”，它打开的是密码中心桌面版的剪贴板页。\n\n**当前情况：**10 月 12 日 05:37 本机库里共有 11,382 条复制事件；每天 18:25 的近线备份最近一次（10 月 11 日 18:25）完整通过，下一次排在 10 月 12 日 18:25。这次没有打开界面、试再次复制或试恢复。\n\n项目源码：公开仓库",
       "links": [
         {
           "text": "回到项目 → 电脑使用与性能记录",
@@ -89,7 +89,7 @@
       "id": "timeaudit-clipboard-history-05",
       "section": "tech",
       "title": "技术实现与依据（一）",
-      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n正式入口归密码中心剪贴板页；2026-10-11 23:52 本机库 11,376 条事件、4,274 个正文对象、6,393 条索引；10 月 11 日 18:25 近线备份完整通过；本轮未试恢复\n\n## 关键规则与设计选择\n\n1. 每次复制都是独立事件；相同内容只复用 blobs 正文对象，绝不合并 events 事实。\n\n2. 展示时才按完全相同正文分组，空格不同仍是不同内容；复制次数排除同一来源实例、开机、会话、剪贴板序列里的重复观察。筛选先于分组与分页；疑似密钥只按特征提示，不能保证识别全部秘密。\n\n3. 启动、解锁、恢复和暂停结束只建立新的 clipboard sequence baseline（剪贴板序列基线），不导入此前当前内容。\n\n4. 只接收 Unicode 文本、HTTP(S) URL 和普通文件路径列表；图片、二进制、虚拟文件、私有格式与超限内容不保存正文。\n\n5. 查看界面、增量出口和备份各有只读/恢复边界；下游 checkpoint（续作检查点）只有在下游 writer（写入方）成功后才能推进。\n\n6. 公开页只展示 schema（数据结构）、组件、任务、路径类别、状态和计数；原始正文、内容 hash（内容指纹）、私密窗口与凭据始终不公开。\n\n## 当前怎样实现\n\n- collector.pyw 创建隐藏 Win32 消息窗口，以 AddClipboardFormatListener / WM_CLIPBOARDUPDATE 事件驱动采集，不轮询、不装键盘 hook（钩子）、DLL、驱动或 Session 0 服务。\n\n- 读取时遵守 Windows 来源格式：ExcludeClipboardContentFromMonitorProcessing 或 CanIncludeInClipboardHistory=0 会阻止本地保存；CanUploadToCloudClipboard=0 只禁止云剪贴板，不阻止本机历史。",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n正式入口归密码中心剪贴板页；2026-10-12 05:37 本机库 11,382 条事件、4,277 个正文对象、6,397 条索引；10 月 11 日 18:25 近线备份完整通过（10 月 12 日 05:40 回读，还没有更新的一次）；本轮未试恢复\n\n## 关键规则与设计选择\n\n1. 每次复制都是独立事件；相同内容只复用 blobs 正文对象，绝不合并 events 事实。\n\n2. 展示时才按完全相同正文分组，空格不同仍是不同内容；复制次数排除同一来源实例、开机、会话、剪贴板序列里的重复观察。筛选先于分组与分页；疑似密钥只按特征提示，不能保证识别全部秘密。\n\n3. 启动、解锁、恢复和暂停结束只建立新的 clipboard sequence baseline（剪贴板序列基线），不导入此前当前内容。\n\n4. 只接收 Unicode 文本、HTTP(S) URL 和普通文件路径列表；图片、二进制、虚拟文件、私有格式与超限内容不保存正文。\n\n5. 查看界面、增量出口和备份各有只读/恢复边界；下游 checkpoint（续作检查点）只有在下游 writer（写入方）成功后才能推进。\n\n6. 公开页只展示 schema（数据结构）、组件、任务、路径类别、状态和计数；原始正文、内容 hash（内容指纹）、私密窗口与凭据始终不公开。\n\n## 当前怎样实现\n\n- collector.pyw 创建隐藏 Win32 消息窗口，以 AddClipboardFormatListener / WM_CLIPBOARDUPDATE 事件驱动采集，不轮询、不装键盘 hook（钩子）、DLL、驱动或 Session 0 服务。\n\n- 读取时遵守 Windows 来源格式：ExcludeClipboardContentFromMonitorProcessing 或 CanIncludeInClipboardHistory=0 会阻止本地保存；CanUploadToCloudClipboard=0 只禁止云剪贴板，不阻止本机历史。",
       "links": [],
       "anchors": [
         {
@@ -186,7 +186,7 @@
       "id": "timeaudit-clipboard-history-12",
       "section": "tech",
       "title": "依据与来源（二）",
-      "text": "## 依据与来源（二）\n\n- 模型、存储、查看、lineage、adapter（执行适配器）与备份回归\n\n## 如何验证\n\n- Source（源码）：已发布 001cee0 包含完整 clipboard_history 实现与合同；当前源码 c5ca4eeb 里 test_clipboard_history.py 有 19 个测试函数、test_personal_access.py 有 11 个，这次没有运行。\n\n- Tests（测试）：8 月 31 日使用 Python 3.11 `-B -m unittest -v test_clipboard_history.py`，11 项全部通过，用时 0.806 秒；单元测试包含 SQLite Online Backup 到空目录的合成读回。\n\n- Runtime（运行，历史）：8 月 31 日 PCConfig 无正文验证 status=passed；当时 5234 events / 2312 blobs / 3406 FTS rows。\n\n- Runtime（运行，2026-10-11 23:52 只读计数）：schema v1，11,376 条 events、4,274 个 blobs、6,393 条 FTS 索引；这只数了条数，不是 FTS 完整性验收。同日 16:36 曾另查过一次：现库里事件时间早于今天 14:00 的有 11,356 条、引用 4,269 个不同正文对象——这是 16:36 时还留在库里的数，不是 14:00 当时的总数（没有 14:00 快照，之后有没有删除也没核对）。\n\n- Backup（备份）：最近一次近线备份 2026-10-11 18:25:37 完整通过，integrity=ok，当时 11,373 events / 4,274 blobs / 6,393 FTS，没有文件告警；这次只读了备份回执里的状态和条数，没有重新校验或恢复这份副本。\n\n- Contract（合同）：adapter（执行适配器）返回 timeaudit.clipboard-export.response.v1、source profile `src.timeaudit.windows_clipboard`、1 个事件且 payload_absent=true；这验证接口形状，不验证实际下游消费。\n\n- Gap（缺口）：这次没有运行会写入合成内容的 smoke_test.py，没有把最新 G 盘副本恢复到空目录，没有打开界面或试再次复制，也没有验收实际下游 writer；不能声称真机 lineage 或端到端灾难恢复已经完成。\n\n## 与其他模块的关系\n\n这是与 PostgreSQL/Grafana 主时间线并列的独立产品轴；PCConfig 拥有机器路径、ACL、三任务、快捷方式、看门狗与近线恢复，密码中心提供日常查看界面，TimeAudit 拥有采集语义、SQLite schema（数据结构）与增量合同。它不依赖其他模块，但可把获准的版本化事件交给独立消费者。",
+      "text": "## 依据与来源（二）\n\n- 模型、存储、查看、lineage、adapter（执行适配器）与备份回归\n\n## 如何验证\n\n- Source（源码）：已发布 001cee0 包含完整 clipboard_history 实现与合同；当前源码 c5ca4eeb 里 test_clipboard_history.py 有 19 个测试函数、test_personal_access.py 有 11 个，这次没有运行。\n\n- Tests（测试）：8 月 31 日使用 Python 3.11 `-B -m unittest -v test_clipboard_history.py`，11 项全部通过，用时 0.806 秒；单元测试包含 SQLite Online Backup 到空目录的合成读回。\n\n- Runtime（运行，历史）：8 月 31 日 PCConfig 无正文验证 status=passed；当时 5234 events / 2312 blobs / 3406 FTS rows。\n\n- Runtime（运行，2026-10-12 05:37 只读计数）：schema v1，11,382 条 events、4,277 个 blobs、6,397 条 FTS 索引，采集器状态 running、未暂停；这只数了条数，不是 FTS 完整性验收。10 月 11 日 23:52 那次是 11,376 / 4,274 / 6,393。同日 16:36 曾另查过一次：现库里事件时间早于 10 月 11 日 14:00 的有 11,356 条、引用 4,269 个不同正文对象——这是 16:36 时还留在库里的数，不是 14:00 当时的总数（没有 14:00 快照，之后有没有删除也没核对）。\n\n- Backup（备份）：最近一次近线备份 2026-10-11 18:25:37 完整通过，integrity=ok，当时 11,373 events / 4,274 blobs / 6,393 FTS，没有文件告警；10 月 12 日 05:40 回读，之后还没有新一次备份，下一次排在 10 月 12 日 18:25，任务就绪、没有漏跑。这次只读了备份回执里的状态和条数，没有重新校验或恢复这份副本；G 盘只留一份最新副本。\n\n- Contract（合同）：adapter（执行适配器）返回 timeaudit.clipboard-export.response.v1、source profile `src.timeaudit.windows_clipboard`、1 个事件且 payload_absent=true；这验证接口形状，不验证实际下游消费。\n\n- Gap（缺口）：这次没有运行会写入合成内容的 smoke_test.py，没有把最新 G 盘副本恢复到空目录，没有打开界面或试再次复制，也没有验收实际下游 writer；不能声称真机 lineage 或端到端灾难恢复已经完成。\n\n## 与其他模块的关系\n\n这是与 PostgreSQL/Grafana 主时间线并列的独立产品轴；PCConfig 拥有机器路径、ACL、三任务、快捷方式、看门狗与近线恢复，密码中心提供日常查看界面，TimeAudit 拥有采集语义、SQLite schema（数据结构）与增量合同。它不依赖其他模块，但可把获准的版本化事件交给独立消费者。",
       "links": [
         {
           "text": "上一个模块 自愈与正确性",

@@ -6963,7 +6963,7 @@
         "timeaudit-10"
       ],
       "registry_number": "n-hw-samples",
-      "page_pattern": "\\*\\*([\\d,.]+) 万秒\\*\\*｜每秒一条的硬件记录（",
+      "page_pattern": "\\*\\*([\\d,.]+) 万条\\*\\*｜每秒一条的硬件记录（",
       "field": "screens[0].text",
       "measurement_scope": "public.fact_system_hardware 全留存行精确count(*)；除1万整数；超时未知，reltuples不替代。",
       "scope_status": "verified"
@@ -7121,7 +7121,7 @@
         "timeaudit-06"
       ],
       "registry_number": "n-clip",
-      "page_pattern": "到 \\d+ 月 \\d+ 日累计 ([\\d,.]+) 次。",
+      "page_pattern": "到 \\d+ 月 \\d+ 日 [\\d:]+ 累计 ([\\d,.]+) 次。",
       "field": "screens[5].text",
       "measurement_scope": "当前events全表精确行数，与原备份回执event_count同表口径；包括原有各事件种类；仅mode=ro计数。",
       "scope_status": "verified"
@@ -7367,7 +7367,7 @@
         "timeaudit-10"
       ],
       "registry_number": "n-backup",
-      "page_pattern": "现在有 ([\\d,.]+) 份；",
+      "page_pattern": "再看：还是 ([\\d,.]+) 份；",
       "field": "screens[10].text",
       "measurement_scope": "G:/80_Backup/TimeAudit/postgresql下time_audit_*.dump份数，不计partial，未逐档复核。",
       "scope_status": "verified"
@@ -7534,7 +7534,7 @@
         "timeaudit-11"
       ],
       "registry_number": "n-overhead",
-      "page_pattern": "内存最多 ([\\d,.]+) MiB（10 月 10 日 02:17–05:17）",
+      "page_pattern": "内存最多 ([\\d,.]+) MiB（10 月 10 日 02:17–05:17 这段",
       "field": "screens[11].text",
       "measurement_scope": "同固定三小时窗口主程序工作集峰MiB整数；非全栈/长期峰值。",
       "scope_status": "verified"
@@ -17969,7 +17969,7 @@
       "current_value": "10,491",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "page_pattern": "G、H 当前[^\\n]*?各 ([\\d,]+) 个文件",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -18345,8 +18345,6 @@
       "current_value": "2026-10-11 14:00",
       "as_of": "2026-10-11",
       "field": "screens[4].text",
-      "start": 47,
-      "end": 63,
       "qualifies": [
         "b7-codex-memory-isolated-disaster-recovery-g-file-count",
         "b7-codex-memory-isolated-disaster-recovery-h-file-count",
@@ -18360,7 +18358,8 @@
       "private": false,
       "historical": false,
       "date_precision": "datetime",
-      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。",
+      "page_pattern": "截至 (\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2})："
     },
     {
       "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-110",
@@ -31120,7 +31119,7 @@
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 1,
-      "page_pattern": "G 是当天 [\\d:]+ 存好的那份（([\\d,]+) 个文件",
+      "page_pattern": "各 ([\\d,]+) 个文件、[\\d.]+ GB",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点成功收录的逻辑文件数；与同point manifest.file_count及files数组长度核对，不用当前源目录文件数代替。",
@@ -31155,7 +31154,7 @@
       ],
       "registry_number": "n-conv-size",
       "original_value_index": 0,
-      "page_pattern": "G 是当天 [\\d:]+ 存好的那份（[\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "各 [\\d,]+ 个文件、([\\d.]+) GB",
       "field": "screens[3].text",
       "scope_status": "verified",
       "measurement_scope": "最新已完成热备恢复点清单所列逻辑文件length总和；十进制GB=字节/10^9，四舍五入到1位；不是源目录当前大小或去重对象库占盘量。",
@@ -31170,7 +31169,7 @@
       "current_value": 9815,
       "as_of": "2026-10-11",
       "field": "screens[3].text",
-      "page_pattern": "H 还是 \\d+ 月 \\d+ 日那份（([\\d,]+) 个文件",
+      "page_pattern": "各 ([\\d,]+) 个文件、[\\d.]+ GB",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31199,7 +31198,7 @@
       "current_value": 35.1,
       "as_of": "2026-10-11",
       "field": "screens[3].text",
-      "page_pattern": "H 还是 \\d+ 月 \\d+ 日那份（[\\d,]+ 个文件、([\\d.]+) GB",
+      "page_pattern": "各 [\\d,]+ 个文件、([\\d.]+) GB",
       "retrieve": {
         "kind": "entry",
         "entry": "b7-ai-backup-task-archive-status",
@@ -31865,6 +31864,53 @@
       "measurement_scope": "首屏最近一次整句的综合判读；本轮镜像完成于10月11日14:01:50，冷备完成于10月11日18:39:26且complete_with_warnings。生产回执已核对，未重散列全部载荷、未补跑备份、未验证整机还原。",
       "scope_status": "verified",
       "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal2/pcconfig.md"
+    },
+    {
+      "id": "int3-devconfig-backup-current-status-review",
+      "page": "devconfig-backup",
+      "screen": "devconfig-backup-05",
+      "field": "screens[4].text",
+      "page_pattern": "配置：10 月 11 日本地 [\\d:–]+ (失败)，failure=backup_sqlite_capture_failed",
+      "label": "本轮只读核对的配置、微信与外接盘当前回执状态",
+      "current_value": "失败",
+      "as_of": "2026-10-12",
+      "category": "人工状态核对",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "automatic": false,
+      "manual_reason": "judgment",
+      "manual_route": "按 E:/Cache/Claude/Temp/6428793e/deltas/rehearsal3/devconfig-backup.md 第3、4、8项重读 devconfig-backup/state/devconfig-local-last.json、devconfig-drive-last.json、wechat-drive-success.json、out/latest.zip.receipt.json、G:/80_Backup/ControlPlane/wechat-hot-last.json 及 C:/Users/10979/AppData/Local/PCConfig/core-recovery/hot-last.json、cold-last.json；人工区分配置失败、G成功、旧云盘回执及H带警告完成，不重跑任务、不联网确认云端。",
+      "source_location": "E:/Projects/Backups/devconfig-backup/state、out/latest.zip.receipt.json；G:/80_Backup/ControlPlane/wechat-hot-last.json；C:/Users/10979/AppData/Local/PCConfig/core-recovery/hot-last.json、cold-last.json",
+      "source_project": "devconfig-backup",
+      "scope_status": "verified",
+      "measurement_scope": "10月12日05:40只读回读现存任务回执；旧成功包和云盘回执保留原生成日；本轮未执行任务或恢复，未联网确认云端。",
+      "report_ref": "E:/Cache/Claude/Temp/6428793e/deltas/rehearsal3/devconfig-backup.md",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "int3-devconfig-backup-current-status-as-of",
+      "page": "devconfig-backup",
+      "screen": "devconfig-backup-05",
+      "field": "screens[4].text",
+      "page_pattern": "\\*\\*截至 (\\d+ 月 \\d+ 日 \\d{2}:\\d{2}) 的状态\\*\\*",
+      "label": "当前任务回执状态的人工观察截至日期",
+      "current_value": "10 月 12 日 05:40",
+      "as_of": "2026-10-12",
+      "qualifies": [
+        "int3-devconfig-backup-current-status-review"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "category": "数字观察日期",
+      "scope_status": "verified",
+      "source_location": "本轮事实单 E:/Cache/Claude/Temp/6428793e/deltas/rehearsal3/devconfig-backup.md 第3、4、8项；qualifies=current-status-review",
+      "source_project": "devconfig-backup",
+      "measurement_scope": "仅指本轮只读回读观察时点，不改变旧备份生成时刻；云端未联网重查的缺口保留。",
+      "date_precision": "datetime",
+      "date_review_route": "人工重读对应回执和事实单后才更新完整日期时刻。"
     }
   ]
 }
