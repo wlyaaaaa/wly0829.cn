@@ -17,7 +17,7 @@ const vaultToolSnapshot = createProjectSnapshot({
     { label: "本机工具", value: "vault-tool 把本人选定的文件打包成 vault.enc；加密与解密在本机执行，网站不收文件、不接密码、不提供在线加解密。" },
     { label: "人工与 AI 分工", value: "本人只在本地输入密码、选择密钥文件和确认具体操作；AI 可以检查不含原文的状态、准备命令和核对结果，不能把计划建议当作解密或改写授权。" },
     { label: "取回内容", value: "支持内存文本查看、按名称或内容搜索、文本复制和按名称选择性提取；图片、PDF、二进制和较大文本需要对应外部程序，取出后是否落盘必须说清。" },
-    { label: "当前来源", value: "公开工具仓库 wlyaaaaa/vault-tool，维护目录 E:\\Projects\\Tools\\vault-tool；正式版本2.3.1，来源提交57ad50b87e0c38dce7c16b96068c0f5d88d75e3c。它与私人Key密文仓库分开，源码更新不表示用户的真实密文已经迁移。", hero: false },
+    { label: "当前来源", value: "公开工具仓库 wlyaaaaa/vault-tool，维护目录 E:\\Projects\\Tools\\vault-tool；正式版本2.3.1，来源提交57ad50b87e0c38dce7c16b96068c0f5d88d75e3c。它与私人密文仓库密文仓库分开，源码更新不表示用户的真实密文已经迁移。", hero: false },
     { label: "容器与算法", value: "VAULT03 使用 tar+gzip 整体打包、AES-256-GCM 认证加密、scrypt 或可选 Argon2id 密码派生；可绑定密钥文件。Windows 调用系统 bcrypt.dll，Linux/macOS 依赖 cryptography；Argon2id 还需 argon2-cffi。", hero: false },
     { label: "参数与容量", value: "交互加密的 KDF（密码派生函数）校准目标约 0.6 秒；scrypt N 上限 2^20，Argon2id 校准内存上限 1 GiB；解密参数检查的内存上限为 4 GiB。容器按可见层长度分桶，普通小库至少 65,536 字节。目标耗时不是实测承诺。", hero: false },
     { label: "旧格式", value: "VAULT02 为 scrypt+AES-GCM；VAULT01 为 PBKDF2-SHA256 与 AES-CBC。兼容读取不等于具有相同认证性质；升级会重新打包为 VAULT03，不是仅改文件头。", hero: false },
@@ -26,7 +26,7 @@ const vaultToolSnapshot = createProjectSnapshot({
     { label: "首次测试的副作用与修复", value: "起始 96 项基线的旧剪贴板测试曾尝试系统写入并安排清空，是否成功未记录；没有读取剪贴板内容。现已改成平台调用替身与事件观察，最终 106 项回归不触碰系统剪贴板，不把首次基线改写成从未发生该尝试。", hero: false },
     { label: "实际虚构样例", value: "中文说明 61 B、CSV 清单 47 B、二进制附件 2,057 B，合计 2,165 B；实际生成 65,536 B 的 VAULT03。无 KDF/AES 替身的 Windows CNG 验证覆盖正常往返、错误口令与改动密文拒绝、同名新版优先、内存查看、选择性提取、改密、V2 迁移、双密码、图片载体和原 KDF 参数保留，整组内部 23.994 秒、外层 24.374 秒。", hero: false },
     { label: "Skill 修复与独立复验", value: "vault-workflow 来源为 PRIVATE .agents main=e67cca11d9ae8ba1bd70e9be34ea16a95e2505f7，远端回读一致；41/41 隔离回归通过，20.551 秒。独立 Terra 用自行构造的虚构库复验并通过 41 项；独立 Sol 对回退失败连续操作的 8 项复验通过，1.166 秒。它们不是本人真实桌面输入验收。", hero: false },
-    { label: "安装与远端证据", value: "本机 canonical junction（唯一源码目录链接）指向 E:\\.agents\\skills\\vault-workflow，来源、安装和供应事务检查通过；从安装入口执行 LocalEdit -WhatIf 实际返回 planned，解密／显示／保存标志均为 false。源发布脚本的九类模拟 GitHub 测试通过；本轮未向私人 Key 上传或读取正文，真实私人备份及恢复未验。", hero: false },
+    { label: "安装与远端证据", value: "本机 canonical junction（唯一源码目录链接）指向 E:\\.agents\\skills\\vault-workflow，来源、安装和供应事务检查通过；从安装入口执行 LocalEdit -WhatIf 实际返回 planned，解密／显示／保存标志均为 false。源发布脚本的九类模拟 GitHub 测试通过；本轮未向私人密文仓库 上传或读取正文，真实私人备份及恢复未验。", hero: false },
     { label: "样例文件与字节", value: "notes/中文说明.txt：61 B，SHA-256=60df61fa07fab74aa9e53bf851ce32250a435d5b8b21e17d5cb0acbde1cbea88；data/ledger.csv：47 B，SHA-256=5c96114cd7d5d4a5868a3522ab92bdd539ad3693efb582ca15f5767a2f524e3e；attachments/sample.bin：2,057 B，SHA-256=cfed09439eec9c3e3eca6388d4de24d7ffe1c54b22f1da1c349498def0ccd7c3。原始验证JSON为4,231 B，SHA-256=4add06a29a8b12f68a9f41783bb859a4463c546bc014ec3eaf69940800211c36。", hero: false },
     { label: "测试参数与旧格式证据", value: "参数保留回归特意用非默认、很小的虚构测试参数：scrypt=(1,2,1,1)，Argon2id=(2,1,8192,1)，不是给真实资料的配置建议。V2/V3以真实算法往返；V1的新目标选择使用结构有效V1与受控旧明文模拟，不能称本轮完成独立真实V1恢复演练。", hero: false }
   ],
@@ -54,7 +54,7 @@ export const vaultToolProject = {
   cardStatusTone: "pass",
   ...vaultToolSnapshot,
   searchAliases: ["vault-tool", "本地文件加密", "加密保险库", "文件加密后怎么取回来", "密文备份", "密码保护文件夹", "第13项目"],
-  repositoryNote: "vault-tool 是本机文件加密工具，源码公开；Key 是另一个只存密文的私人备份目标，不能把二者混成一个项目。当前网页解释产品、普通操作和最后一次核对的证据，不接收访客文件、密码、密钥文件或解密请求。",
+  repositoryNote: "vault-tool 是本机文件加密工具，源码公开；私人密文仓库是另一个只存密文的私人备份目标，不能把二者混成一个项目。当前网页解释产品、普通操作和最后一次核对的证据，不接收访客文件、密码、密钥文件或解密请求。",
   summary: "把明确选中的文件和文件夹装进一份加密文件，需要时由我在本机输入密码，查看文字、寻找文件或只取出要用的附件。新建和追加默认保留原件；改密码只改当前打开的一层，另一层保持原样。容量不够或需要更换密钥文件时，先生成可验证的新副本，不拿唯一旧库试错。AI 可以检查状态和准备操作，不代管密码，也不能找回遗失的解锁条件。",
   why: "普通文件夹适合直接工作，却不适合作为随手复制到备份盘或远端的私密内容包。这个工具把可携带的密文、本人控制的解锁方式和按需取回放在一起；同时把合并还是替换、是否留下明文、旧库能否恢复讲清，避免“加了一个文件却丢了旧内容”或“上传成功就以为已经能恢复”。",
   plainExample: "我可以向 AI 说：“把这三个文件加进原来的加密库，库里其他内容不要丢；密码我在本机输入。”AI 会先确认这是追加而不是整库替换，再打开本地入口。完成后我会得到经过自检的新密文和旧库保留情况；网页不会接收文件或密码。",
@@ -106,7 +106,7 @@ export const vaultToolProject = {
     { name: "本机交互与维护", responsibility: "让查看、复制、提取、改密、迁移和清理具有可解释的结果与取消路径。", implementation: "_menu_loop、decrypt_mode、_view_in_memory、_extract_to_folder、migrate_mode、change_password_mode、clean_backups_mode。" },
     { name: "只读元数据接口", responsibility: "不解密地检查结构和环境，并返回建议及未确认项。", implementation: "_inspect_vault_structure、collect_vault_info、collect_doctor_info、collect_vault_assessment、collect_vault_plan；info/doctor/assess/plan --json。" },
     { name: "本地密码与文本界面", responsibility: "将人输入、解锁、查看、编辑和结果状态留在明确本地流程中。", implementation: "现行 vault-workflow/scripts/vault_auth_helper.py 与 Invoke-VaultWorkflow.ps1；由 .agents 的 Skill 来源维护，不是 vault-tool 的网络服务。" },
-    { name: "密文发布和远端材料保护", responsibility: "向现场确认的私人目标写入密文、核对字节，并独立处理明确请求的远端 README 保护。", implementation: "Publish-KeyVaultToGitHub.ps1；vault-workflow 的 VerifyRemote、PublishVault 和 protect_remote_readme.py，不克隆整个 Key 作为执行前提。" }
+    { name: "密文发布和远端材料保护", responsibility: "向现场确认的私人目标写入密文、核对字节，并独立处理明确请求的远端 README 保护。", implementation: "<备份脚本>；vault-workflow 的 VerifyRemote、PublishVault 和 protect_remote_readme.py，不克隆整个 私人密文仓库作为执行前提。" }
   ],
   usageExamples: [
     { moduleSlug: "private-backup", ask: "备份到我指定的私人仓库，并确认远端保存的是同一份密文。", effect: "先确认目标私有、文件与路径，再写入并从默认分支读取对应密文字节；没有实际远端回读就不能称备份已闭合。" },
@@ -117,7 +117,7 @@ export const vaultToolProject = {
     { moduleSlug: "dual-password", ask: "我明确需要两个密码分别打开两套不同的内容。", effect: "准备真实与诱饵材料，分别验证两个密码，容量不足时拒绝；不把双层实现说成现实环境下必然无法识别。" },
     { moduleSlug: "image-carrier", ask: "把这份密文放进图片文件，之后还能原样取出来吗？", effect: "追加密文而非改像素；提取后比较密文字节，提醒图片重编码可能移除尾部，不能只验证封面还能打开。" },
     { moduleSlug: "ai-local-interface", ask: "只检查这份加密库的结构和环境，别打开内容。", effect: "对我指定的那份库读取结构、参数和恢复环境，不弹密码框、不解密、不清理旧文件；文本或JSON都只读。结构通过仍不证明密码正确或内容已经恢复。" },
-    { moduleSlug: "private-backup", ask: "Key里的恢复材料，怎样和最高权限体系一起保管？", effect: "Key使用VAULT03和独立密码保护；最高权限体系与Vault分别保管一部分恢复材料。取回时分别满足各自解锁条件，单靠其中一边不等于掌握完整恢复材料，两边互不替代。这个分开保管安排属于独立密码库，不并入AI工作区备份。" },
+    { moduleSlug: "private-backup", ask: "私人密文仓库里的恢复材料，怎样和最高权限体系一起保管？", effect: "私人密文仓库使用VAULT03和独立密码保护；最高权限体系与Vault分别保管一部分恢复材料。取回时分别满足各自解锁条件，单靠其中一边不等于掌握完整恢复材料，两边互不替代。这个分开保管安排属于独立密码库，不并入AI工作区备份。" },
     {
       "moduleSlug": "maintenance-recovery",
       "ask": "这份库快放不下了，换一份更大的，但旧库先别动。",
@@ -144,7 +144,7 @@ export const vaultToolProject = {
     { name: "明确本地查看", command: "E:\\.agents\\skills\\vault-workflow\\scripts\\Invoke-VaultWorkflow.ps1 -Mode LocalView -VaultFile '<明确密文路径>' -Json", purpose: "不自动寻找其他库；由本人输入密码和必要密钥文件，原文只在本地窗口显示，查看不保存。" },
     { name: "本地编辑预演", command: "E:\\.agents\\skills\\vault-workflow\\scripts\\Invoke-VaultWorkflow.ps1 -Mode LocalEdit -VaultFile '<明确密文路径>' -Json -WhatIf", purpose: "预演不弹界面、不解密也不保存；真正编辑需明确去掉WhatIf并由本人本地操作，只支持原槽容量内的可保真文本。" },
     { name: "图片载体", command: "python vault_tool.py hide --cover <明确图片> --out <载体路径>", purpose: "使用已有 vault.enc 作为载荷；再用 unhide --in <载体路径> --out <密文路径> 取回，验的是密文而不只是图片外观。" },
-    { name: "私人密文备份预演", command: "Invoke-VaultWorkflow.ps1 -Mode PublishVault -Profile Key -Repo wlyaaaaa/Key -VaultFile <明确密文> -Json -WhatIf", purpose: "先做已有目标和制品检查，不上传；真实发布仍需精确请求并检查回读，不能把预演当作已有备份。" },
+    { name: "私人密文备份预演", command: "Invoke-VaultWorkflow.ps1 -Mode PublishVault -Profile <已选定配置> -Repo <私人密文仓库> -VaultFile <明确密文> -Json -WhatIf", purpose: "先做已有目标和制品检查，不上传；真实发布仍需精确请求并检查回读，不能把预演当作已有备份。" },
     {
       "name": "恢复环境虚构自测",
       "command": "python vault_tool.py recovery-check --vault-file <明确库> --self-test --json",
@@ -201,7 +201,7 @@ export const vaultToolModules = [
     productFlow: [{"title":"先核对输入和库结构","detail":"工具检查选定原件、目标库格式和追加或替换的影响；旧成员的同名关系要在本地解锁后才能确认。"},{"title":"本地解锁并装入","detail":"本人只在本机提供凭据，工具打开相应层并处理同名文件，再把明确新文件合并加密；其他打不开的层保持原密文。"},{"title":"核对再交付","detail":"读回新容器中的预期文件并报告成功或失败；原件默认仍在原处，清理要另行明确。"}],
     shortTitle: "文件入库", title: "把明确文件装进库，先分清追加与替换",
     searchAliases: ["文件怎么加密", "文件夹加密", "加密库添加文件", "新文件覆盖旧内容", "加一个文件别丢原来的", "source暂存目录"],
-    searchProjection: { intents: ["加密选定文件", "向旧库添加文件", "区分追加与替换"], entities: ["source", "vault.enc", "add_files_mode", "encrypt", "Start-KeyVaultEncrypt.ps1"], relations: ["菜单先合并旧库", "直接加密只处理source", "原路径与暂存副本不同"], failureRecovery: ["同名冲突明确处理", "取消不当成功", "自检失败保原文", "未解锁槽位保留原密文字节"] },
+    searchProjection: { intents: ["加密选定文件", "向旧库添加文件", "区分追加与替换"], entities: ["source", "vault.enc", "add_files_mode", "encrypt", "<本地加密入口>"], relations: ["菜单先合并旧库", "直接加密只处理source", "原路径与暂存副本不同"], failureRecovery: ["同名冲突明确处理", "取消不当成功", "自检失败保原文", "未解锁槽位保留原密文字节"] },
     teaser: "保存哪几个文件、旧库是否合并、同名以谁为准，都在加密前说明。",
     status: "打包、合并与同名新版优先已验证", statusTone: "pass",
     value: "我把一组明确文件交给工具，它把相对目录与内容放进同一个加密库。已有库时可以继续添加，但必须走清楚的合并流程；我能知道是补进新文件，还是用这一批内容替换整库。",
@@ -215,7 +215,7 @@ export const vaultToolModules = [
       "BASE 取 vault_tool.py 所在目录；普通入口使用其 source/、vault.enc 与日志路径，不是随当前终端工作目录任意变化。",
       "对source/建立稳定清单，检查原路径、链接/重解析点、对象身份、大小与修改时间，确认读取中没有变化；_make_tar按相对路径打包，gzip头时间固定为0，tar仍保留必要成员属性。",
       "add_files_mode在内存中展开当前密码对应层，与明确新输入合并，不将旧库内容先写进source/；未解锁槽位保持原密文字节。直接encrypt仍处理source/，二者不能互换。",
-      "encrypt_mode 直接处理当前 source/，已有库先询问覆盖。Start-KeyVaultEncrypt.ps1 先复制 AddPath，再调用 encrypt；不调用菜单的旧库合并步骤。",
+      "encrypt_mode 直接处理当前 source/，已有库先询问覆盖。<本地加密入口> 先复制 AddPath，再调用 encrypt；不调用菜单的旧库合并步骤。",
       "候选密文先在内存中验证，再写同目录临时密文并刷新落盘，读回重新验证；提交前核对原目标未变，提交后再校验。覆盖既有库时保留不会覆盖旧备份的独立恢复副本，失败与回滚分别报告。",
       "默认保留source/和原路径文件。只有--cleanup-source才清理本次快照；Windows在同一个独占句柄里比较文件身份与SHA-256并执行逻辑删除。无法取得这一保护的平台保留原件，不退回存在竞态的覆写删除。"
     ],
@@ -223,7 +223,7 @@ export const vaultToolModules = [
     concepts: [{ term: "source（明文暂存目录）", explanation: "入库前打包的工作目录，不能因为名字像来源就默认它是永不删除的原件库。" }, { term: "merge（合并）", explanation: "把旧库本次打开的成员与新文件放在一起；不是恢复另一未打开层，也不是自动版本管理。" }, { term: "round trip（加密再解密往返）", explanation: "对同一份明确输入比较取回内容，用于证明这一次容器处理与预期一致。" }],
     boundaries: ["任意文件类型可以作为字节入库，不代表任意文件都能在内存文本界面直接阅读。", "没有后台目录监听、全盘扫描或自动上传。", "合并的旧库内容只在内存处理；新输入的source/仍是明文且默认保留。内存合并不等于整个程序或操作系统没有其他内存副本。"],
     failures: [{ condition: "准备区已有同名新版", response: "按明确的新旧优先顺序保留预期版本，并用实际内容回归；不能只验证成员数量。" }, { condition: "取消、没有输入或新库自检失败", response: "返回未完成或失败，保留尚未成功提交时需要的原文与原库，不输出完成证据。" }, { condition: "旧库可能含另一密码对应的层", response: "菜单追加和VAULT03槽位改密保留未解锁槽位的密文字节，不声称已经打开它。共享密钥文件、容量或格式需要变化时生成新副本，不能静默覆盖未知层。" }],
-    sources: [{ path: `${sourceRoot}\\vault_tool.py`, role: "文件枚举、相对路径打包、加密与引导式添加" }, { path: `${sourceRoot}\\scripts\\Start-KeyVaultEncrypt.ps1`, role: "本地终端与 AddPath 到直接 encrypt 的真实路线" }, { path: `${sourceRoot}\\test_vault_tool.py`, role: "虚构文件往返、追加与同名内容回归" } , { path: "synthetic-roundtrip.json", href: "/media/vault-tool/synthetic-roundtrip.json", role: "本轮虚构文件实际算法验证原始JSON；含很小的测试参数，不能作为真实资料配置建议", download: "synthetic-roundtrip.json" }],
+    sources: [{ path: `${sourceRoot}\\vault_tool.py`, role: "文件枚举、相对路径打包、加密与引导式添加" }, { path: `${sourceRoot}\\scripts\\<本地加密入口>`, role: "本地终端与 AddPath 到直接 encrypt 的真实路线" }, { path: `${sourceRoot}\\test_vault_tool.py`, role: "虚构文件往返、追加与同名内容回归" } , { path: "synthetic-roundtrip.json", href: "/media/vault-tool/synthetic-roundtrip.json", role: "本轮虚构文件实际算法验证原始JSON；含很小的测试参数，不能作为真实资料配置建议", download: "synthetic-roundtrip.json" }],
     verification: ["来源独立审查分别读取了加密、合并和启动脚本，没有把三个入口混成一条。", "本轮虚构三文件已经实际加密并取回；同名内容曾复现旧版覆盖新版，修复和后续回归结果见当前快照。", "没有对本人真实 source/、vault.enc 或私人文件执行这些操作。"],
     relation: "这里决定什么进入库；密码与格式模块解释怎样打开，查看与提取模块解释怎样使用，库维护模块解释后续重建及旧库。",
     readerStatus: "文件打包、追加及同名新版保留已有验证；原件默认保留，真实私人库本轮没有处理。"
@@ -328,7 +328,7 @@ export const vaultToolModules = [
     concepts: [{ term: "migration（格式迁移）", explanation: "先解读旧格式，再重新生成当前格式的密文；不是直接给旧文件换一个扩展名。" }, { term: "rollback copy（回退副本）", explanation: "操作失败时用于恢复旧状态的具体文件；必须说明它何时产生、何时仍在、何时会被删除。" }, { term: "unlocked layer（本次打开的内容层）", explanation: "当前凭据实际解出的那份内容，不自动等同双密码容器的全部内容。" }],
     boundaries: ["恢复不是找回遗失密码，也不是把损坏的唯一密文自动修成原文。", "不能为方便改密而静默改变原本声明的凭据、格式或层次范围。", "没有实际私人备份或换机演练时，源码与样例只证明实现和所测试流程。"],
     failures: [{ condition: "旧密码或密钥文件不匹配", response: "停止维护，不生成替代空库，也不把旧库删掉后让本人再试。" }, { condition: "新库自检或提交失败", response: "保留或恢复原库，明确是否产生临时文件，失败不能被命令行退出 0 隐藏。" }, { condition: "无法保留其他内容层", response: "明确本操作的维护范围并保持可恢复原件；本地编辑入口无法保真时直接拒绝，不伪称双层完整。" }],
-    sources: [{ path: `${sourceRoot}\\vault_tool.py`, role: "migrate_mode、change_password_mode、clean_backups_mode 与备份寿命" }, { path: `${sourceRoot}\\test_vault_tool.py`, role: "改密、旧库迁移、备份与错误分支回归" }, { path: `${sourceRoot}\\docs\\key-repository-workflow.md`, role: "与私人远端密文备份区分的人工恢复流程" }],
+    sources: [{ path: `${sourceRoot}\\vault_tool.py`, role: "migrate_mode、change_password_mode、clean_backups_mode 与备份寿命" }, { path: `${sourceRoot}\\test_vault_tool.py`, role: "改密、旧库迁移、备份与错误分支回归" }, { path: `${sourceRoot}\\docs\\<私人备份说明>`, role: "与私人远端密文备份区分的人工恢复流程" }],
     verification: ["真实虚构探针已验证旧密码拒绝、新密码往返，以及 V2→V3 内容相同并留下 .bak。", "9月3日pwbak样例只证明当时实现；2.3.1新增槽位保全、新副本重建和不覆盖旧备份的隔离回归。网页不将历史算法样例改写为本次真实私人库维护。", "本轮没有清理用户任何真实备份或真实维护另一密码层。"],
     relation: "日常内容追加在文件入库模块；双密码容器独立说明两层；远端密文保存与逐字节读回在密文备份模块。",
     readerStatus: "已有只改已打开内容层、生成新副本及失败回退的维护功能；真实私人资料恢复仍需独立验证。"
@@ -387,7 +387,7 @@ export const vaultToolModules = [
     implementation: [
       "hide_in_image 顺序写入封面原字节、密文、8 字节长度和尾标 VLTSTEG1；不解密密文、不修改像素或加入新的密码派生。",
       "extract_from_image 从文件末尾检查标记和长度，再截取对应载荷；标记错误或长度范围不成立时拒绝。",
-      "CLI hide 使用当前工具的 vault.enc；--cover 选封面，--out 指定载体。unhide 的默认输出为 vault.recovered.enc，避免默认覆盖原维护库。",
+      "命令行 hide 默认用工具目录的默认库文件，--cover 选封面，--out 指定载体；unhide 默认输出为 vault.recovered.enc。两者都先检查输出目标，已有文件直接拒绝，不再询问是否覆盖；先写同目录私有候选、完整读回字节，再以不覆盖方式提交，失败清理候选。保护靠这一步，而不是靠默认文件名。",
       "扩展名、查看器能显示和实际图片格式有效是不同问题；实现没有对所有图片软件、社交平台或重编码器做兼容保证。",
       "应对提取结果检查尺寸和 SHA-256，必要时再由本人用正确凭据实际打开；两步分别证明密文保全和内容可恢复。"
     ],
@@ -422,7 +422,7 @@ export const vaultToolModules = [
       "info/doctor/assess/plan的文本和JSON路径均不初始化普通日志、不清旧decrypted/、不列私人文件名、不取密码或解密；--vault-file只评估指定目标，不存在或损坏时不回退默认vault.enc。",
       "assess 给出风险和建议，plan 再给 decision；损坏格式或结构须进入 manual_review（需本人核对），不能因 source/ 存在就推荐加密覆盖。检查调用成功不等于库健康。",
       "Invoke-VaultWorkflow.ps1 是脚本适配入口，不是 HTTP API。调用方检查 ok、self_check 和明确的原文／解密效果字段；适配脚本退出 0 可能只是成功交回一份失败结果。",
-      "现行 Skill 将 PromptOnly（仅本地提示）、LocalView（本地查看）和 LocalEdit（本地编辑）分开：提示只采集并丢弃输入；查看和编辑必须给精确 VaultFile，不再自动寻找 Key、旧 E:\\Vault 或当前目录。必要密钥文件先选再解密，Required（要求密钥文件）拒绝原本只有密码的库。",
+      "现行 Skill 将 PromptOnly（仅本地提示）、LocalView（本地查看）和 LocalEdit（本地编辑）分开：提示只采集并丢弃输入；查看和编辑必须给精确 VaultFile，不再自动寻找私人密文仓库、旧 E:\\Vault 或当前目录。必要密钥文件先选再解密，Required（要求密钥文件）拒绝原本只有密码的库。",
       "编辑须保留原 tar 成员、路径、类型、必要属性及未编辑二进制，严格处理受支持 UTF-8 文本；不能把整库替换解码后拼接，再只写一个 README.md。",
       "保存维持原凭据与 KDF，保护未解锁槽位；压缩后的新归档超过原槽容量时拒绝且不替换原库。写前解密自检、暂存字节回读、原子替换与最终文件自检分别成立；不重复对同一暂存候选做昂贵派生。若最终自检与回退都失败，保留加密恢复副本并锁定失败状态，不能再保存或被无变化操作洗成成功。",
       "GUI 的密码框 IME（输入法上下文）处理、复制后 15 秒及关闭清理属于本地实现。密码、密钥文件与原文不进返回给 AI 的 JSON；result、saved、save_attempted、self_check 等字段按真实动作报告，取消和未保存关闭不是保存成功。",
@@ -439,12 +439,12 @@ export const vaultToolModules = [
   },
   {
     slug: "private-backup",
-    usageEntry: "在已接通本机 vault-workflow 的 AI 对话中明确要求“把这份密文备份到已核准的私人 Key”，或单独要求保护 README；两件事分别确认。",
+    usageEntry: "在已接通本机 vault-workflow 的 AI 对话中明确要求“把这份密文备份到已核准的私人密文仓库”，或单独要求保护 README；两件事分别确认。",
     usageInputs: ["要备份的密文或要保护的 README","已核准的私人目标和路径","本次只做哪一种动作"],
     productFlow: [{"title":"确认目标与动作","detail":"现场核对仓库私有状态、默认分支、路径及本次究竟上传密文还是处理 README。"},{"title":"写入并远端读回","detail":"按明确选择执行，然后从默认分支核对对应密文字节和分支；效果不明时停在未知。"},{"title":"分开报告恢复条件","detail":"字节一致只证明密文备份；真正取回内容还要密码、密钥文件和实际恢复演练。"}],
     shortTitle: "密文备份", title: "远端保存同一份密文，和真正能恢复分开验",
-    searchAliases: ["密文备份", "Key私人仓库", "加密库上传失败", "备份是否真的成功", "远端回读", "ProtectRemoteReadme", "README保护"],
-    searchProjection: { intents: ["保存私人密文副本", "确认远端内容一致", "预演备份", "保护指定远端说明"], entities: ["Key", "PublishVault", "VerifyRemote", "ProtectRemoteReadme", "WhatIf", "GitHub Contents API", "SHA-256"], relations: ["PUBLIC工具不同于PRIVATE密文目标", "上传和回读分开", "README保护不改历史", "字节一致不等于解密恢复"], failureRecovery: ["非PRIVATE拒绝", "PUT失败不报成功", "回读错字节停止", "预演不上传", "并发更新不强推"] },
+    searchAliases: ["密文备份", "私人密文仓库", "加密库上传失败", "备份是否真的成功", "远端回读", "ProtectRemoteReadme", "README保护"],
+    searchProjection: { intents: ["保存私人密文副本", "确认远端内容一致", "预演备份", "保护指定远端说明"], entities: ["私人密文仓库", "PublishVault", "VerifyRemote", "ProtectRemoteReadme", "WhatIf", "GitHub Contents API", "SHA-256"], relations: ["PUBLIC工具不同于PRIVATE密文目标", "上传和回读分开", "README保护不改历史", "字节一致不等于解密恢复"], failureRecovery: ["非PRIVATE拒绝", "PUT失败不报成功", "回读错字节停止", "预演不上传", "并发更新不强推"] },
     teaser: "先确认私人目标，再上传和逐字节回读；密文还在，不代表解锁条件一定齐全。",
     status: "上传与回读接口已验证；未操作私人远端", statusTone: "mixed",
     value: "我可以把一份明确密文保存在自己的私人仓库，并让工具确认远端保存的正是那份字节。真正恢复时再用原密码、密钥文件和兼容环境打开；这两层分别给出结论，不用一次上传提示包办所有证明。",
@@ -452,13 +452,13 @@ export const vaultToolModules = [
     example: "普通备份：“把这份明确的 vault.enc 备份到我指定的私人路径，再读回来确认大小和哈希。”独立的正文保护：“我明确要把当前远端 README 的内容转成密文，先预演，密码我在本机确认。”后一句不是前一句默认附带的动作。",
     result: "普通上传与README保护都分别报告实际写入和远端回读。README保护还核对当前说明及密文字节，响应丢失时只回读原操作；仍不能确定就保留效果未知。字节一致不证明密码可恢复，也不表示旧历史已清除或既有保险库已合并。",
     readerStates: {"pass":"普通备份必须从私人目标读回同一份密文；单独保护远端说明时，也要核对当前说明与新密文。两者都不代表已经凭密码恢复原文。","problem":"目标或远端内容在操作中改变、写入结果不明或读回不符时，分别说清是否已经写入，不给笼统成功提示。","unavailable":"私人目标、权限或本人本地确认不成立时停止写入；预演和只读检查仍不算发布。"},
-    decisionImpact: ["公开的是 vault-tool 工具仓库；Key 是独立私人密文目标，没有公开正文入口。", "WhatIf 只预演，不上传；VerifyRemote 的树检查只证明路径存在。", "README 保护改变当前版本而不重写历史，也不自动合并已有 vault。"],
+    decisionImpact: ["公开的是 vault-tool 工具仓库；私人密文仓库是独立私人密文目标，没有公开正文入口。", "WhatIf 只预演，不上传；VerifyRemote 的树检查只证明路径存在。", "README 保护改变当前版本而不重写历史，也不自动合并已有 vault。"],
     problem: "防止路径存在、脚本退出码、上传提示和真正可恢复混为同一个成功状态。",
     implementation: [
-      "Publish-KeyVaultToGitHub.ps1 通过现有 gh（GitHub 命令行工具）使用 Contents API；先解析实际仓库私有状态与默认分支，检查明确输入、非空字节和许可扩展名。扩展名许可不是加密真实性证明。",
+      "<备份脚本> 通过现有 gh（GitHub 命令行工具）使用 Contents API；先解析实际仓库私有状态与默认分支，检查明确输入、非空字节和许可扩展名。扩展名许可不是加密真实性证明。",
       "更新已有路径需带当前文件 SHA；只有真实不存在才按创建处理，权限或网络错误不能静默当成没有文件。PUT 的退出码和返回结构必须被核对，失败不能继续输出 Uploaded。",
       "实际成功还需从默认分支读取目标 blob（Git 文件内容对象）身份，再读取 base64 编码字节，与本次上传同一缓冲区的长度和 SHA-256 比较；提交存在与当前分支路径一致分别核对。",
-      "远端响应和临时请求文件包含的是密文；对调用方只返回目标、提交和指纹等元数据，不打印密文大正文，不克隆 Key，也不建立计划任务。",
+      "远端响应和临时请求文件包含的是密文；对调用方只返回目标、提交和指纹等元数据，不打印密文大正文，不克隆私人密文仓库，也不建立计划任务。",
       "VerifyRemote的树路径检查仍只证明路径存在，safe_readme_present不是正文安全证明。ProtectRemoteReadme另按完整字节核验受管占位说明，不接受仅含marker；existing_stub_verified不表示检验过已有密文或密码。",
       "ProtectRemoteReadme 是独立精确动作：WhatIf 不读正文、不取密码、不写远端；真实执行由本地辅助进程读取固定 source_head_sha 的 README，要求两次本地密码一致，打包单个 README 并自检。",
       "正文保护写入前重新核对PRIVATE、固定source_head_sha的完整树和目标。截断树不能证明文件不存在；已有vault/vault.enc而README仍为普通正文时拒绝覆盖密文。非强制提交后回读分支头、README与密文并比较SHA-256；响应丢失只核对原结果，不盲重放，无法确定时effect为null。正常换行Base64及固定blob读取均受支持。",
@@ -466,11 +466,11 @@ export const vaultToolModules = [
     ],
     flow: ["明确普通密文备份，或另行明确远端README保护；不自动合并两种意图。", "现场解析目标、私有状态、默认分支和精确路径，必要时先预演。", "普通备份上传明确密文，再从默认分支读取blob字节和指纹。", "README保护在本地确认后处理固定来源，自检候选，非强制写入后回读README、密文和分支；已经保护、实际写入和效果未知分别报告。", "分别交回写入、字节核对与仍未进行的密码恢复，不把三层合称都已验收。"],
     concepts: [{ term: "PRIVATE（私有仓库）", explanation: "本次远端访问范围，必须由真实目标元数据确认；它不是来自文件名或 README 的自称。" }, { term: "WhatIf（只预演）", explanation: "检查并说明计划动作，不上传、不替换远端正文，也不能作为已有备份证据。" }, { term: "read-back（从目标重新读取）", explanation: "写入后重新取实际保存的内容并核对，区别于只相信发送请求前的本地字节。" }, { term: "safe_readme_present（README 路径存在字段）", explanation: "现有名字容易误解；它只检查树路径，不证明正文安全或已经被替换。" }],
-    boundaries: ["本轮网站建设不授权向私人 Key 写入虚构样例，所有发布接口测试均与真实远端隔离。", "密文读回可证明字节一致，不能确认遗失的密码或密钥文件，也不能替代真实恢复演练。", "不创建定时备份服务、公开分享链接、第二个远端或全历史改写流程。", "不能用一个 README 保护结果推断整个仓库及全部历史都没有原文。"],
+    boundaries: ["本轮网站建设不授权向私人密文仓库 写入虚构样例，所有发布接口测试均与真实远端隔离。", "密文读回可证明字节一致，不能确认遗失的密码或密钥文件，也不能替代真实恢复演练。", "不创建定时备份服务、公开分享链接、第二个远端或全历史改写流程。", "不能用一个 README 保护结果推断整个仓库及全部历史都没有原文。"],
     failures: [{ condition: "目标不是现场确认的私有仓库", response: "拒绝密文发布；不会为了完成脚本而改变仓库可见性。" }, { condition: "读取旧路径或 PUT 失败", response: "保留明确错误，停止后续成功标记；非 404 错误不被当成新文件。" }, { condition: "远端回读失败或字节不同", response: "说明可能已写入但尚未完成验证，不把失败自动重试成多次未知提交。" }, { condition: "正文保护被取消或远端版本变化", response: "取消就不写，版本冲突不强推；固定来源与尚未执行的动作分别保留。" }],
-    sources: [{ path: `${sourceRoot}\\scripts\\Publish-KeyVaultToGitHub.ps1`, role: "私人密文上传与目标字节核对" }, { path: `${sourceRoot}\\docs\\key-repository-workflow.md`, role: "人工准备、密文与恢复条件" }, { path: `${skillRoot}\\scripts\\Invoke-VaultWorkflow.ps1`, role: "VerifyRemote、PublishVault、预演与结果适配" }, { path: `${skillRoot}\\scripts\\protect_remote_readme.py`, role: "固定远端版本、两次本地确认与单提交正文保护" }, { path: `${skillRoot}\\references\\json-contract.md`, role: "发布、读取与真实效果字段" }, { path: "GitHub REST API：文件内容与 blob", href: "https://docs.github.com/en/rest/git/blobs#get-a-blob", role: "GitHub 官方文件对象读取合同；base64 字节与接口容量边界" }],
-    verification: ["来源发布脚本已通过九类隔离mock gh（模拟GitHub命令）验证：PUT失败、非404错误、404创建、正常回读、回读失败、字节不符、预演、非私人目标和扩展名拒绝。", "源库自身已normal-push并从真实main读回，但这不是向私人Key上传的结果。", "真实私人密文发布、密码恢复和换机恢复未在本轮执行。"],
-    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责。实际使用例子是PRIVATE（私有）Key：用户明确采用VAULT03与独立密码，并让最高权限体系和Vault分别保管一部分恢复材料。分别解锁、互不替代，单边不能代表完整材料；两处保管的材料分别满足各自取回条件；本轮未读取真实密文、密码或恢复码，也未试解密，实际恢复仍需独立验证。它与AI工作区中的配置和记忆备份分别使用。",
+    sources: [{ path: `${sourceRoot}\\scripts\\<备份脚本>`, role: "私人密文上传与目标字节核对" }, { path: `${sourceRoot}\\docs\\<私人备份说明>`, role: "人工准备、密文与恢复条件" }, { path: `${skillRoot}\\scripts\\Invoke-VaultWorkflow.ps1`, role: "VerifyRemote、PublishVault、预演与结果适配" }, { path: `${skillRoot}\\scripts\\protect_remote_readme.py`, role: "固定远端版本、两次本地确认与单提交正文保护" }, { path: `${skillRoot}\\references\\json-contract.md`, role: "发布、读取与真实效果字段" }, { path: "GitHub REST API：文件内容与 blob", href: "https://docs.github.com/en/rest/git/blobs#get-a-blob", role: "GitHub 官方文件对象读取合同；base64 字节与接口容量边界" }],
+    verification: ["来源发布脚本已通过九类隔离mock gh（模拟GitHub命令）验证：PUT失败、非404错误、404创建、正常回读、回读失败、字节不符、预演、非私人目标和扩展名拒绝。", "源库自身已normal-push并从真实main读回，但这不是向私人密文仓库上传的结果。", "真实私人密文发布、密码恢复和换机恢复未在本轮执行。"],
+    relation: "本模块保存密文与解释远端材料保护；具体加密、密码和本机取回仍由前面的模块负责。实际使用例子是私人密文仓库：用户明确采用VAULT03与独立密码，并让最高权限体系和Vault分别保管一部分恢复材料。分别解锁、互不替代，单边不能代表完整材料；两处保管的材料分别满足各自取回条件；本轮未读取真实密文、密码或恢复码，也未试解密，实际恢复仍需独立验证。它与AI工作区中的配置和记忆备份分别使用。",
     readerStatus: "密文上传与远端字节核对接口已有验证；本轮未操作私人远端，真正解密恢复仍要另验。"
   }
 ];
