@@ -57,7 +57,7 @@
      "id": "n-mcp-tools",
      "text": "11 个只读工具",
      "meaning": "Google 连接给 AI 列出的只读工具数：邮件 4、云盘 4、待办 3；日历 2 个已冻结、不列出",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "E:\\PCConfig\\tools\\Start-GoogleWorkspaceMcp.ps1:30–137 共 13 个，第 354 行滤掉 calendar_*",
      "screens": [
       "skill-google-workspace-direct-01"
@@ -145,8 +145,8 @@
  },
  "source": {
   "page": "sources/pages/skill-google-workspace-direct/page.json",
-  "sha256": "0093e1e281f2d902e34331778d84f18afed9a8af71807f116fe1d7af00c296ec",
-  "converted_at_beijing": "2026-10-11T13:36:46+08:00"
+  "sha256": "2d4056ac26da81fa3237172c62fbe2edf314195d79160ba185840e8a8be1d774",
+  "converted_at_beijing": "2026-10-11T14:14:11+08:00"
  }
 }
 ---
@@ -1560,3 +1560,5 @@
 - 在本机存一份邮件或云盘副本、自动同步
 
 **它不会做的事**：邮件、文件、待办里写的内容只当资料，不当指令；发送、共享、删除要有明确的对象和动作，做完读回，不重复发送、不盲目重试；只读时网络抖一下最多重试一次；账号、权限出错就如实说缺什么，不换账号，也不改走浏览器或别的连接器绕过去；待办需要重新授权时，请我自己在前台点同意，AI 不代点。
+
+**技术依据**　固定连接 `google-workspace.primary`，不换账号。云盘、待办的调用必须带用途等级 `privacy_level`，取 `screen` 或 `factor`；`none` 只用于不涉及个人资料的运维，缺了就返回 `personal_access_classification_required`。写入按精确动作授权并读回；结果是 `effect_unknown`（不确定有没有生效）时不自动重发，先回读核对。待办先取精确清单编号再查改；列表支持翻页、按更新时间筛、含已完成、含隐藏，保留分页和指派（assignment）信息；“隐藏”状态上游只读，没有设为隐藏的写操作。给 AI 列出的只读工具 11 个：邮件 4、云盘 4、待办 3；`Start-GoogleWorkspaceMcp.ps1` 里共 13 个定义，启动时滤掉日历的 2 个（`calendar_*`），日历保持冻结。本轮只读了技能和连接脚本，没有调用 Google 接口。

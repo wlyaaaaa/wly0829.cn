@@ -23,9 +23,12 @@
  "capability": "",
  "based_on": {
   "file": "E:\\.agents\\skills\\cloud-asset-channel\\SKILL.md",
-  "draft_worktree": "E:\\Cache\\Claude\\Temp\\4bd59299\\gpt-children\\20261002-081250-cloud-channel-base-2-490dd9ab\\worktree",
-  "draft_commit": "b6cf92ec3321f41dc9377ba3614e02312d0a2a46（另有未提交改动：SKILL.md、reader 说明、能力与运行方式）",
-  "rules_release": "E208（待发布；发布后补提交号和生效时间）"
+  "source_commit": "548d313a527d5c7894f342b58d7ffe51c1c23d2d（北京时间 2026-10-02 16:15:46；此后 SKILL.md 未再改）",
+  "source_bytes": 3972,
+  "source_sha256": "a43811731fb53d0536d3ea1ca32fb426f865aa3488c7543727cebb083b8a9141",
+  "enabled_in_release": "E209（提交 548d313“E209：启用旧版云端命令读者并保留审图对照门槛”；本机已不留 E209 发布目录，以提交记录为据）",
+  "rules_release": "现行活动规则 E257（北京时间 2026-10-11 14:11 核验通过）",
+  "checked_scope": "北京时间 2026-10-11 只核对技术层：读者状态（旧版 GPT-5.6 Sol 命令读者接通、正式审图未过校准关闭、GPT-6.1 Sol 待升级）、20 张校准门槛、2 倍/2.5 倍、10GB 九成提醒、不设过期，对照现行 SKILL.md 与 E257《能力与运行方式》“云端素材通道”；未按 E257 逐项重核全页"
  },
  "video_prompt": "5–8 秒无缝循环，以开头一屏右边的水彩插画为第一帧，镜头不动：桌上笔记本电脑往上飘出一张小画稿，沿一根细细的绿线升进一朵绿色水彩云，只飘一次；云里胸前黑色花结徽章的小机器人举起放大镜，在画稿上从左到右移一格；云下慢慢飘回一个小信封，轻轻落在电脑旁边；桌边绿植的叶子随风轻摇。全程不出现任何文字，不添加新东西。",
  "screens": [
@@ -141,7 +144,7 @@
     "how": "AI 调 Invoke-CloudAssetChannel.ps1 -Mode Ensure",
     "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“上传、取网址和核对”；round-01\\ensure.json、byte-comparison.json（逐字节一致）"
+    "source": "SKILL.md“主路”；round-01\\ensure.json、byte-comparison.json（逐字节一致）"
    },
    {
     "id": "f-dedup",
@@ -181,17 +184,17 @@
     "how": "自动",
     "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“提醒和记账”末段"
+    "source": "SKILL.md“出错怎么办”"
    },
    {
     "id": "f-cloud-reader",
     "group": "g-readers",
     "name": "云里的 AI",
-    "what": "按网址在云里读；正式云端审图只用新版 Codex Cloud 的 GPT-6.1 Sol",
-    "how": "收件箱 Invoke-CloudAssetInbox.ps1 Register/Collect/Cleanup",
-    "status": "待实施",
+    "what": "旧版 Codex Cloud 的 GPT-5.6 Sol（以回执自报为准）按命令在云里读，结论一次写回收件箱；正式审图须先有 20 张对照通过的登记，当前关闭；新版 GPT-6.1 Sol 命令读者待升级",
+    "how": "Invoke-CodexCloudReader.ps1 Submit/Collect/Cleanup",
+    "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“接入已验证的读者”：新版具体接线由后续版本补齐"
+    "source": "SKILL.md“主路”（548d313，E209 起）；E257 agents.capabilities-runtime.md“云端素材通道”"
    },
    {
     "id": "f-codex-local",
@@ -221,7 +224,7 @@
     "how": "自动",
     "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“保留和清理”"
+    "source": "E257 agents.capabilities-runtime.md“云端素材通道”（不设时间过期）"
    },
    {
     "id": "f-cleanup",
@@ -241,7 +244,7 @@
     "how": "AI 调 -Mode Usage、RecordTransfer、RecordNetwork",
     "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“提醒和记账”；round-01\\usage-body.json 出过 2.5 倍提醒"
+    "source": "SKILL.md“流量标尺和收尾”；round-01\\usage-body.json 出过 2.5 倍提醒"
    },
    {
     "id": "f-list",
@@ -261,7 +264,7 @@
     "how": "自动，写在 warnings 里",
     "status": "待验收",
     "screen": "skill-cloud-asset-channel-03",
-    "source": "SKILL.md“提醒和记账”"
+    "source": "SKILL.md“流量标尺和收尾”"
    }
   ],
   "numbers": [
@@ -270,7 +273,7 @@
     "text": "免费 10GB 的九成",
     "meaning": "R2 每月免费存储额度；工具在登记总量到 90% 时提醒",
     "as_of": "2026-10-02",
-    "source": "SKILL.md“提醒和记账”；owner-choices.md 07:15 Cloudflare 官方价目",
+    "source": "SKILL.md“流量标尺和收尾”；owner-choices.md 07:15 Cloudflare 官方价目",
     "screens": [
      "skill-cloud-asset-channel-03"
     ]
@@ -280,7 +283,7 @@
     "text": "2 倍 / 2.5 倍",
     "meaning": "任务传输字节与所用内容版本大小之和的比：目标与提醒线",
     "as_of": "2026-10-02",
-    "source": "SKILL.md“提醒和记账”",
+    "source": "SKILL.md“流量标尺和收尾”",
     "screens": [
      "skill-cloud-asset-channel-03"
     ]
@@ -292,14 +295,14 @@
     "with": "rule:capabilities-runtime",
     "direction": "被引用",
     "flow": "规则“云端素材通道”一节规定何时走、规矩和标尺，具体命令见本技能",
-    "source": "E208 草稿 agents.capabilities-runtime.md"
+    "source": "E257 agents.capabilities-runtime.md“云端素材通道”"
    },
    {
     "id": "r-r2",
     "with": "外部:Cloudflare R2",
     "direction": "交出",
     "flow": "文件经 Wrangler 网页授权上传桶 wly-ai-assets，公开前缀 https://ai.wly0829.cn/",
-    "source": "SKILL.md“入口”；cloud\\r2-setup.md"
+    "source": "E257 agents.capabilities-runtime.md“云端素材通道”；cloud\\r2-setup.md"
    },
    {
     "id": "r-codex-cloud",
@@ -329,7 +332,7 @@
   "dropped": [
    "命令行参数、登记表路径、Wrangler 命令配置、重试次数、收件箱令牌和 HTTP 状态码：是给 AI 的操作说明，读者不关心；机制写到“云里取图、切块看、结论写回收件箱”为止。",
    "“接上读者时改哪里”（Invoke-ClaudeGptChild.ps1、app-server 输入组装）：开发接线说明，不上网站。",
-   "旧版云端读图的实测和自报型号：规则已定不用旧版，网站只写正式路线和现在的做法。"
+   "旧版命令读者的逐次实测：E209 起已启用旧版 Codex Cloud 命令读者，网站只写它已接通（自报 GPT-5.6 Sol）、正式审图未过校准，不写逐次实测记录。"
   ],
   "unsure": [
    "第 1 屏五句“可以这样说”是替本人口吻写的示例说法；实际多数时候由 AI 自己判断走不走这条通道（本人 10 月 2 日 07:36“你自己把握，我不管了”）。",
