@@ -2418,15 +2418,7 @@
      "type": "chapter_title",
      "size": "large",
      "align": "left",
-     "text_ref": "时间花在哪",
-     "row": "balanced-heading",
-     "width": "88%",
-     "row_fit_illustration": true
-    },
-    {
-     "type": "illustration",
-     "row": "balanced-heading",
-     "width": "12%"
+     "text_ref": "时间花在哪"
     },
     {
      "type": "content_card",
@@ -2436,7 +2428,15 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
      ],
-     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
+     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电",
+     "row": "screen-time-reading",
+     "width": "75%",
+     "row_fit_illustration": false
+    },
+    {
+     "type": "illustration",
+     "row": "screen-time-reading",
+     "width": "25%"
     },
     {
      "type": "content_card",
