@@ -260,7 +260,7 @@
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
   "sha256": "4f2fb867f8ba977ac44246751acaf5a803762609af5c25918d3e4093a488a928",
-  "converted_at_beijing": "2026-10-11T14:01:10+08:00"
+  "converted_at_beijing": "2026-10-11T15:00:29+08:00"
  }
 }
 ---
@@ -1632,9 +1632,7 @@
      "whole_block": true,
      "columns": 1,
      "illustration": "left_inside",
-     "icon_position": "header_left",
-     "row": "points",
-     "width": "58%"
+     "icon_position": "header_left"
     },
     {
      "type": "points_card",
@@ -1642,12 +1640,10 @@
      "whole_block": true,
      "columns": 1,
      "illustration": "left_inside",
-     "icon_position": "header_left",
-     "row": "points",
-     "width": "42%"
+     "icon_position": "header_left"
     }
    ],
-   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+   "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n10 月 11 日空白修：两张卡高度差两倍多，改为上下各占整宽，不再并排。",
    "aspect": "16:9",
    "layout_requirements": {
     "source_layout": {

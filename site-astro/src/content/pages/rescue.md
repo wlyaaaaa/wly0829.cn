@@ -247,7 +247,7 @@
  "source": {
   "page": "sources/pages/rescue/page.json",
   "sha256": "70a0f1e89b9cd23930e49a88a808bd03bae8e47dd0b5e2cad329e75d89db802b",
-  "converted_at_beijing": "2026-10-11T13:58:12+08:00"
+  "converted_at_beijing": "2026-10-11T15:00:31+08:00"
  }
 }
 ---
@@ -1685,8 +1685,6 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
      "header_icon": [
       1
      ],
-     "row": "recovery-notes",
-     "width": "50%",
      "icon_position": "header_left"
     },
     {
@@ -1699,12 +1697,10 @@ pwsh -NoProfile -ExecutionPolicy Bypass -File .\scripts\repair-panel.ps1
      "header_icon": [
       2
      ],
-     "row": "recovery-notes",
-     "icon_position": "header_left",
-     "width": "50%"
+     "icon_position": "header_left"
     }
    ],
-   "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n最终复核：主办理卡整宽在前，两张补充说明下方均分一排，避免一列1卡另一列2卡被首卡等高撑空。原三图标/三卡原字保留。"
+   "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 小图标限卡头，不使用大插画；手机能力标签只画形状、不增加字。按钮/卡头图标/症状标签如组件未承接，列为未完成，不把数字质量通过当构图完成。 本方向未登记原图路径，沿用清单文字构图；待审页员核对。\n2026-10-04 空白专查追加：已登记spec-locks；仅用现役字段重排本屏，定稿原字和原图不改。\n最终复核：主办理卡整宽在前，两张补充说明下方均分一排，避免一列1卡另一列2卡被首卡等高撑空。原三图标/三卡原字保留。\n10 月 11 日空白修：“要准备”加长后两张补充说明高度差一倍多，改为上下各占整宽。"
   },
   "v": {
    "blocks": [

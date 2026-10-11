@@ -397,7 +397,7 @@
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
   "sha256": "d32ff3bcc6a3c0acf0b3c04498243c0a64f3cc0e83c02004bf64642fb8625c65",
-  "converted_at_beijing": "2026-10-11T14:01:17+08:00"
+  "converted_at_beijing": "2026-10-11T15:00:28+08:00"
  }
 }
 ---
@@ -1796,15 +1796,6 @@
      "illustration_description": "原规格插画位置：left_inside"
     },
     {
-     "type": "notice",
-     "row": "points",
-     "icons": [
-      "_library/icons/手机电脑连接.png"
-     ],
-     "illustration": "left_inside",
-     "text_ref": "取码工具现在的样子"
-    },
-    {
      "type": "points_card",
      "row": "points",
      "width": "33%",
@@ -1816,9 +1807,18 @@
       "_library/icons/打勾清单.png"
      ],
      "illustration_description": "原规格插画位置：left_inside"
+    },
+    {
+     "type": "notice",
+     "row": "points",
+     "icons": [
+      "_library/icons/手机电脑连接.png"
+     ],
+     "illustration": "left_inside",
+     "text_ref": "取码工具现在的样子"
     }
    ],
-   "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图三等宽卡、中卡下面附取码说明；竖图取码框在v2最上，然后预览卡。定稿text含字面反斜杠n，本轮主程序已统一解析与G1基准；定稿未修改，四个text_ref均已恢复匹配。",
+   "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。横图三等宽卡、中卡下面附取码说明；竖图取码框在v2最上，然后预览卡。定稿text含字面反斜杠n，本轮主程序已统一解析与G1基准；定稿未修改，四个text_ref均已恢复匹配。\n10 月 11 日空白修：中卡加长后右卡底空，取码说明改附在右卡“预览本地网页”下面，三栏近等高。",
    "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   "v": {
@@ -2093,13 +2093,16 @@
      "header_icon": [
       "rule-capabilities-runtime/rule-capabilities-runtime-07-icon-02.png"
      ],
-     "illustration_description": "原规格插画位置：left_inside"
+     "illustration_description": "原规格插画位置：left_inside",
+     "row": "lone-ill-4",
+     "width": "60%",
+     "row_fit_illustration": true
     },
     {
      "type": "illustration",
      "illustration": "outside",
-     "target_width": 520,
-     "align": "center"
+     "row": "lone-ill-4",
+     "width": "40%"
     },
     {
      "type": "notice",

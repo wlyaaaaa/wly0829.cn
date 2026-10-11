@@ -529,7 +529,7 @@
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
   "sha256": "488a7352c9250063d2b7a7a4f1dfecf6bae3fc9c232e7d469bebc31de7cb88e0",
-  "converted_at_beijing": "2026-10-11T14:13:31+08:00"
+  "converted_at_beijing": "2026-10-11T15:00:30+08:00"
  }
 }
 ---
@@ -1361,7 +1361,7 @@ V21 第 1 批就给第 2 批留锚点：内容和页面都留：同意
      "row": "charts"
     }
    ],
-   "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。"
+   "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。竖版保留表格原范围，功能/图例独立一张，截图/图注独立一张；不重复标题。\n10 月 11 日空白修：表格一栏和截图一栏标 row_fit_illustration，截图按文字栏高度定大小，不留栏底空白。"
   },
   "v": {
    "blocks": [

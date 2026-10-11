@@ -706,9 +706,7 @@
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",
-        "icon_position": "header_left",
-        "row": "points",
-        "width": "58%"
+        "icon_position": "header_left"
       },
       {
         "type": "points_card",
@@ -716,16 +714,14 @@
         "whole_block": true,
         "columns": 1,
         "illustration": "left_inside",
-        "icon_position": "header_left",
-        "row": "points",
-        "width": "42%"
+        "icon_position": "header_left"
       }
     ],
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-engineering-delivery\\img\\rule-engineering-delivery-02-h.png"
     ],
     "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-engineering-delivery\\img\\rule-engineering-delivery-02-h.png",
-    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。",
+    "notes": "文字构图依据：screens.jsonl source_layout 与定稿 scene/portrait；本轮未看图。新补规格，组件新外观待样张。\n10 月 11 日空白修：两张卡高度差两倍多，改为上下各占整宽，不再并排。",
     "aspect": "16:9",
     "layout_requirements": {
       "source_layout": {
