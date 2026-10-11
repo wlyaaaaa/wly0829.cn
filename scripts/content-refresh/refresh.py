@@ -469,7 +469,7 @@ def task_text(result, registry):
     return "\n".join(lines)
 
 
-def report_content(result, task):
+def report_content(result, task, task_path):
     changed = [r for r in result["rows"] if r["status"] == "changed"]
     missing = [r for r in result["rows"] if r["status"] in ("unavailable", "domain_fact_task")]
     overdue = [r for r in result["rows"] if r["overdue"]]
@@ -493,8 +493,13 @@ def report_content(result, task):
     if gaps:
         blocks += [{"type": "heading", "text": "来源口径与基线缺口"}, {"type": "points", "items":
                     [r["page_title"] + " / " + r["label"] + "：" + r["known_gap"] for r in gaps]}]
+    task_block = {"type": "markdown", "text": task}
+    if len(task.encode("utf-8")) > 256 * 1024:
+        blocks = blocks[:1]
+        task_block = {"type": "file", "src": str(task_path.resolve()), "title": "完整更新任务单",
+                      "note": "完整详情已保存到本次输出目录；正文超过网页内嵌上限，可复制路径读取。"}
     blocks += [{"type": "details", "summary": "给 AI 的完整更新任务单", "blocks":
-                [{"type": "markdown", "text": task}], "open": False}]
+                [task_block], "open": False}]
     return {"title": "个人总看板 · 按需更新结果", "generator": "内容重取程序", "purpose":
             "把页面数字与登记来源对照，指出这次需要更新的句子。", "conclusion":
             [f"内容基线 {result['baseline']}（{result.get('baseline_evidence', 'Unknown')}）；检查于 {result['observed_at']}（北京时间）；{len(changed)} 个同口径真变化，{len(pending)} 个口径待核。",
@@ -578,7 +583,7 @@ def main():
                           "automatic_success_ratio": result["automatic_success_ratio"]}, ensure_ascii=False))
         return 0
     content = output / "report-content.json"
-    content.write_text(json.dumps(report_content(result, task), ensure_ascii=False), encoding="utf-8")
+    content.write_text(json.dumps(report_content(result, task, output / "opus-task.md"), ensure_ascii=False), encoding="utf-8")
     html = output / "result.html"
     try:
         report_seconds = min(180, command_deadline - time.monotonic() - 10)

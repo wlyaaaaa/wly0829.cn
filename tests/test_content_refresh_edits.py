@@ -19,9 +19,9 @@ class NumberEditsTests(unittest.TestCase):
         self.path.parent.mkdir(parents=True)
         # dated-refresh.md 的 165 / 58 / 15105 / 4 / 44 固定样本。
         self.values = [165, 58, 15105, 4, 44]
-        self.labels = ["165 份", "58 个来源", "15,105 条文件名", "4 条关系", "44 份可搜文字"]
+        self.labels = ["165 份材料", "58 个来源", "15,105 条文件名", "4 条关系", "44 份可搜文字"]
         self.page = {"page": "personal-materials", "screens": [{"id": "top", "text":
-            "\n".join(self.labels) + "\n截至 10 月 9 日"}], "registry": {"numbers": [
+            "，".join(self.labels) + "，截至 10 月 9 日"}], "registry": {"numbers": [
                 {"id": f"n-{i}", "text": text, "as_of": "2026-10-09", "screens": ["top"]}
                 for i, text in enumerate(self.labels)]}}
         self.save()
@@ -59,7 +59,7 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(apply_edits(self.root, payload)["applied"], 16)
         page = json.loads(self.path.read_text(encoding="utf-8"))
         self.assertEqual([n["text"] for n in page["registry"]["numbers"]],
-                         ["166 份", "59 个来源", "15,106 条文件名", "104 条关系", "4 份可搜文字"])
+                         ["166 份材料", "59 个来源", "15,106 条文件名", "104 条关系", "4 份可搜文字"])
         self.assertIn("15,106 条文件名", page["screens"][0]["text"])
         first = self.path.read_bytes()
         self.assertEqual(apply_edits(self.root, payload)["applied"], 0)
@@ -71,7 +71,7 @@ class NumberEditsTests(unittest.TestCase):
         self.save(); payload = self.build()
         apply_edits(self.root, payload)
         number = json.loads(self.path.read_text("utf-8"))["registry"]["numbers"][0]
-        self.assertEqual((number["text"], number["source"]), ("166 份", "见来源记录 r-0，观察于 2026-10-11T16:03:00+08:00"))
+        self.assertEqual((number["text"], number["source"]), ("166 份材料", "见来源记录 r-0，观察于 2026-10-11T16:03:00+08:00"))
         first = self.path.read_bytes(); apply_edits(self.root, payload)
         self.assertEqual(self.path.read_bytes(), first)
         self.page["registry"]["numbers"][0]["text"] = "999 份"; self.save()
@@ -89,20 +89,20 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(payload["edits"], [])
         self.assertIn("唯一", payload["skipped"][0]["reason"])
 
-    def test_event_cutoffs_require_manual_review_but_numbers_still_update(self):
+    def test_event_cutoffs_require_manual_review_and_numbers_keep_their_date(self):
         for meaning in ("库最近一次写入", "上次使用", "最后一次运行", "账本覆盖到此日"):
-            self.page["screens"][0]["text"] = "\n".join(self.labels) + f"\n截至 10 月 9 日（{meaning}）"
+            self.page["screens"][0]["text"] = "，".join(self.labels) + f"，截至 10 月 9 日（{meaning}）"
             self.save()
             payload = self.build()
             self.assertEqual(len(payload["manual_reviews"]), 1)
             self.assertEqual(payload["manual_reviews"][0]["status"], "需人工核对")
-            self.assertFalse(any(e["field"] == "screens[0].text" for e in payload["edits"]))
+            self.assertFalse(payload["edits"])
             apply_edits(self.root, payload)
             self.assertIn("截至 10 月 9 日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
         for text in ("本轮观察截至 10 月 9 日；上次使用 10 月 7 日",
                      "上次使用 10 月 7 日！本轮观察截至 10 月 9 日。",
                      "- 上次使用 10 月 7 日\n- 本轮观察截至 10 月 9 日"):
-            self.page["screens"][0]["text"] = "\n".join(self.labels) + "\n" + text
+            self.page["screens"][0]["text"] = "，".join(self.labels) + "\n" + text
             self.save()
             self.assertFalse(self.build()["manual_reviews"])
 
@@ -111,15 +111,101 @@ class NumberEditsTests(unittest.TestCase):
         self.page["screens"][0]["text"] = self.page["screens"][0]["text"].replace("10 月 9", "10 月 8")
         self.save()
         report = apply_edits(self.root, payload)
-        self.assertEqual(len(report["skipped"]), 1)
+        self.assertEqual(len(report["skipped"]), len(payload["edits"]))
         row = dict(self.rows[0], field="screens[0].text", start=0, end=3, old_value=165, new_value=166)
         row.pop("page_number")
+        row["text"] = "165 份材料"
         payload = build_number_edits(self.root, {"rows": [row]})
         self.page["screens"][0]["text"] = "999 份\n165 份"
         self.save()
         before = self.path.read_bytes()
-        self.assertEqual(len(apply_edits(self.root, payload)["skipped"]), 1)
+        self.assertEqual(len(apply_edits(self.root, payload)["skipped"]), len(payload["edits"]))
         self.assertEqual(self.path.read_bytes(), before)
+
+    def one(self, text, anchor, old, new, **extra):
+        self.page["screens"][0]["text"] = text
+        self.page["registry"]["numbers"] = [dict(id="n-0", text=anchor, as_of="2026-10-09", screens=["top"])]
+        self.save()
+        start = text.index(str(old))
+        row = dict(self.rows[0], field="screens[0].text", start=start, end=start + len(str(old)), old_value=old, new_value=new, status="changed")
+        row.update(extra)
+        return build_number_edits(self.root, {"rows": [row]})
+
+    def test_whole_number_boundaries_reject_fragments_and_bad_grouping(self):
+        for text, old in [("1040 行", "04"), ("286.0 GiB", "286"), ("6,2 条", "6,2"),
+                          ("942,360,5 条", "942,360,5"), ("执 6,2 条", "执 6,2"), ("始 942,360,5 条", "始 942,360,5")]:
+            with self.subTest(text=text):
+                payload = self.one(text + "（10月9日）", text, old, 104)
+                self.assertFalse(payload["edits"])
+                self.assertEqual(payload["skipped"][0]["reason"], "old_value_not_whole_number")
+        payload = self.one("文件:04 行（2026年10月9日）", "文件:04 行", "04", 5)
+        self.assertFalse(payload["skipped"])
+        self.assertTrue(payload["edits"])
+
+    def test_complete_scope_anchor_is_required_even_when_numbers_equal(self):
+        for text, anchor, old, new, extra in [
+                ("这27个个人技能", "27 个", 27, 29, {}),
+                ("35个项目", "35 个", 35, 205, {}),
+                ("1.78亿条精确逐程序明细", "1.78亿条精确逐程序明细", "1.78", "1.72", {"measurement_scope": "统计估算，非精确count"}),
+                ("27个个人技能", "27", 27, 27, {}),
+                ("备份286 GiB", "286 GiB", 286, 287, {}),
+                ("165份材料", "165份材料", 165, 166, {"requires_semantic_refresh": True})]:
+            payload = self.one(text + "（10月9日）", anchor, old, new, **extra)
+            self.assertFalse(payload["edits"])
+            self.assertEqual(payload["skipped"][0]["reason"], "scope_mismatch_or_unverified")
+
+    def test_observation_dates_keep_style_and_beijing_time(self):
+        for stamp, expected in [("截至10月9日 14:00", "截至10月11日 16:03"),
+                ("（10月9日）", "（10月11日）"), ("截至 2026-10-09", "截至 2026-10-11")]:
+            payload = self.one("167 次调用，" + stamp, "167 次调用", 167, 168)
+            self.assertFalse(payload["skipped"])
+            self.assertFalse(apply_edits(self.root, payload)["skipped"])
+            self.assertIn("168 次调用，" + expected, json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
+        payload = self.one("167 次调用（10月9日）", "167 次调用", 167, 168, source_observed_at="2026-10-11T23:03:00+00:00")
+        apply_edits(self.root, payload)
+        self.assertIn("10月12日", json.loads(self.path.read_text("utf-8"))["screens"][0]["text"])
+
+    def test_missing_ambiguous_and_event_dates_keep_numbers(self):
+        for suffix in ("", "（10月9日）和（10月10日）", "，截至10月9日（最后一次运行）", "（成功3次），首次上线10月9日"):
+            payload = self.one("167 次调用" + suffix, "167 次调用", 167, 168)
+            self.assertFalse(payload["edits"])
+            self.assertEqual(payload["skipped"][0]["reason"], "as_of_link_required")
+        payload = self.one("167 次调用。\n截至10月9日", "167 次调用", 167, 168)
+        self.assertFalse(payload["skipped"])
+
+    def test_number_date_batch_is_atomic_for_drift_and_illegal_payload(self):
+        for mode in ("body", "registry", "illegal"):
+            payload = self.one("167 次调用，截至10月9日 14:00", "167 次调用", 167, 168)
+            if mode == "illegal":
+                payload["edits"][-1]["new_value"] = "非法内容"
+            else:
+                self.page["registry"]["numbers"][0]["as_of"] = "2026-10-08" if mode == "registry" else "2026-10-09"
+                if mode == "body":
+                    self.page["screens"][0]["text"] += "！"
+                self.save()
+            before = self.path.read_bytes()
+            report = apply_edits(self.root, payload)
+            self.assertTrue(report["skipped"])
+            self.assertEqual(report["applied"], 0)
+            self.assertEqual(self.path.read_bytes(), before)
+
+    def test_failed_number_does_not_advance_shared_cutoff_and_crlf_survives(self):
+        self.rows[0]["requires_semantic_refresh"] = True
+        blocked = self.build()
+        self.assertFalse(blocked["edits"])
+        self.assertEqual({r["record_id"] for r in blocked["skipped"]}, {r["id"] for r in self.rows})
+        self.rows[0].pop("requires_semantic_refresh")
+        self.path.write_bytes(self.path.read_bytes().replace(b"\n", b"\r\n"))
+        payload = self.build()
+        self.assertFalse(apply_edits(self.root, payload)["skipped"])
+        self.assertNotIn(b"\n", self.path.read_bytes().replace(b"\r\n", b""))
+
+    def test_unknown_registered_cutoff_cannot_be_bypassed_by_visible_date(self):
+        self.rows[0].update(new_value=166, status="changed")
+        self.rows[-1].update(new_value=None, status="unavailable")
+        payload = self.build()
+        self.assertFalse(payload["edits"])
+        self.assertEqual(payload["skipped"][0]["reason"], "as_of_link_required")
 
     def test_cli_only_filter_and_repeated_execution(self):
         payload = self.root / "number-edits.json"

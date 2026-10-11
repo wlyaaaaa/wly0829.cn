@@ -141,7 +141,7 @@ class RetrievalTests(unittest.TestCase):
         edits = build_number_edits(self.root, result)
         self.assertEqual(len(edits["manual_reviews"]), 1)
         self.assertEqual(edits["manual_reviews"][0]["old_value"], "2026-10-01")
-        self.assertEqual(len(edits["edits"]), 1)
+        self.assertEqual(edits["edits"], [])
         with patch.object(refresh, "bounded", return_value="[4]"):
             result = refresh.collect(self.root, {"records": [number, dict(date, field=None)]})
             self.assertEqual(result["rows"][1]["status"], "manual_review")
@@ -165,13 +165,21 @@ class RetrievalTests(unittest.TestCase):
             result = refresh.collect(self.root, {"records": [number, cutoff]}, entries={"daily": self.entry})
         run.assert_called_once()
         self.assertEqual(result["rows"][1]["new_value"], "2026-10-08")
-        from apply_edits import build_number_edits
+        from apply_edits import apply_edits, build_number_edits
         edits = build_number_edits(self.root, result)
         self.assertEqual(edits["manual_reviews"], [])
         self.assertEqual(edits["edits"][0]["new_value"], "2026-10-08")
+        self.assertEqual(len(edits["edits"]), 1)
+        self.assertFalse(apply_edits(self.root, edits)["skipped"])
+        self.assertIn("24 天；截至 2026-10-08", path.read_text("utf-8"))
+        path.write_text(path.read_text("utf-8").replace("2026-10-08", "2026-10-01"), encoding="utf-8")
+        result["rows"][0]["new_value"] = 25
+        self.assertEqual(build_number_edits(self.root, result)["edits"], [])
         for values in ('[24,{"error":"日志无覆盖"}]', '[{"error":"Unknown"},"2026-10-08"]', '[24,"bad-date"]'):
             with patch.object(refresh, "bounded", return_value=values):
-                row = refresh.collect(self.root, {"records": [number, cutoff]}, entries={"daily": self.entry})["rows"][1]
+                unavailable = refresh.collect(self.root, {"records": [number, cutoff]}, entries={"daily": self.entry})
+                row = unavailable["rows"][1]
+            self.assertEqual(build_number_edits(self.root, unavailable)["edits"], [])
             self.assertIsNone(row["new_value"])
             self.assertEqual(row["status"], "unavailable")
             self.assertEqual(row["old_value"], "2026-10-01")
