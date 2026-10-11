@@ -456,6 +456,73 @@
   #computer-access-01.o3-ready :is([data-b2-slot="ca-personal-data"], [data-b2-slot="ca-unrestricted"], [data-b2-slot="ca-windows"]) { margin: 4px 18px 0; }
   #computer-access-01.o3-ready :is([data-b2-action^="choose-"], [data-b2-action^="lock-"]) { margin-left: 18px; }
   #computer-access-01.o3-ready :is([data-b2-action="lock-personal-data"], [data-b2-action="lock-unrestricted"]) { margin-left: 130px; }
+}
+/* ---- 第二屏：办理区 ---- */
+#computer-access-02.o3-ready { display: grid !important; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 18px; row-gap: 10px;
+  padding: 34px 40px 34px !important; height: auto !important; aspect-ratio: auto !important; align-items: center; }
+#computer-access-02.o3-ready :is(.typeset-part, .typeset-live-flow, .typeset-live-flow-tile, .typeset-live-flow-layer, .typeset-live-flow-region, .typeset-live-flow-cards) { display: contents !important; }
+#computer-access-02.o3-ready :is(.typeset-live-flow-image, .overlays, .living-layer, a.hotspot) { display: none !important; }
+#computer-access-02.o3-ready img:not(.b2-slot img) { display: none !important; }
+#computer-access-02.o3-ready .b2-native { position: relative !important; left: auto !important; top: auto !important; inset: auto !important; transform: none !important; }
+#computer-access-02 .o3-title2 { grid-column: 1 / 13; grid-row: 1; justify-self: center; width: min(100%, 560px); aspect-ratio: 820 / 120; mix-blend-mode: multiply; background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 3%, #000 97%, transparent 100%); margin-bottom: 8px; }
+#computer-access-02 .o3-step { grid-column: 1 / 9; display: flex; gap: 12px; align-items: baseline; margin: 14px 0 2px; color: #2e4675; font-size: 17px; line-height: 1.7; }
+#computer-access-02 .o3-step b { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #187a3d; color: #fff; display: inline-grid; place-items: center; font-size: 16px; transform: translateY(-2px); }
+#computer-access-02 .o3-note { grid-column: 1 / 9; margin: 0 0 0 42px; color: #5b6f86; font-size: 14.5px; line-height: 1.7; }
+#computer-access-02 .o3-s1 { grid-row: 2; } #computer-access-02 .o3-s2 { grid-row: 3; } #computer-access-02 .o3-n2 { grid-row: 5; }
+#computer-access-02 .o3-s3 { grid-row: 6; } #computer-access-02 .o3-n3 { grid-row: 8; } #computer-access-02 .o3-s4 { grid-row: 10; }
+#computer-access-02.o3-ready button.b2-image-action {
+  display: flex !important; align-items: center; justify-content: center; box-sizing: border-box; white-space: nowrap; cursor: pointer; width: auto !important; height: 42px !important;
+  padding: 0 16px; border: 2px solid #1f8a4c !important; border-radius: 999px !important; background: #fbfefc !important; color: #13753a !important;
+  font: 700 16px/1.2 "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif !important; text-decoration: none !important; justify-self: start; }
+#computer-access-02.o3-ready button.b2-image-action:is([data-selected="true"], [aria-pressed="true"]) { background: #dff4e6 !important; box-shadow: inset 0 0 0 2px #1f8a4c; }
+#computer-access-02.o3-ready button.b2-image-action:hover:not(:disabled) { background: #e9f8ef !important; }
+#computer-access-02.o3-ready button.b2-image-action[data-b2-action="submit"] { border-radius: 12px !important; background: #187a3d !important; color: #fff !important; border-color: #187a3d !important; height: 50px !important; padding: 0 26px; }
+#computer-access-02.o3-ready button.b2-image-action[data-b2-action="submit"]:disabled { background: #f1f4f2 !important; color: #8fa498 !important; border-color: #d3dfd7 !important; cursor: not-allowed; }
+#computer-access-02.o3-ready button[data-b2-action="purpose-personal_data"] { grid-column: 1 / 3; grid-row: 4; margin-left: 42px; }
+#computer-access-02.o3-ready button[data-b2-action="purpose-unrestricted"] { grid-column: 3 / 6; grid-row: 4; margin-left: 30px; }
+#computer-access-02.o3-ready button[data-b2-action="combined"] { grid-column: 5 / 8; grid-row: 4; margin-left: 60px; }
+#computer-access-02.o3-ready button[data-b2-action="hours-0.5"] { grid-column: 1 / 2; grid-row: 7; margin-left: 42px; }
+#computer-access-02.o3-ready button[data-b2-action="hours-2"] { grid-column: 2 / 3; grid-row: 7; margin-left: 30px; }
+#computer-access-02.o3-ready button[data-b2-action="hours-8"] { grid-column: 3 / 4; grid-row: 7; margin-left: 30px; }
+#computer-access-02.o3-ready button[data-b2-action="hours-24"] { grid-column: 4 / 5; grid-row: 7; margin-left: 30px; }
+#computer-access-02.o3-ready [data-b2-slot="ca-form-hours"] { grid-column: 5 / 7; grid-row: 7; margin-left: 42px; }
+#computer-access-02.o3-ready button[data-b2-action="save-default"] { grid-column: 1 / 7; grid-row: 9; margin-left: 42px; border-radius: 10px !important; font-weight: 500 !important; }
+#computer-access-02.o3-ready button[data-b2-action="save-default"]::before { content: ""; width: 16px; height: 16px; margin-right: 8px; border: 2px solid #1f8a4c; border-radius: 4px; background: #fff; }
+#computer-access-02.o3-ready button[data-b2-action="save-default"][data-selected="true"]::before { background: #187a3d; box-shadow: inset 0 0 0 3px #fff; }
+#computer-access-02.o3-ready [data-b2-slot="ca-form-code"] { grid-column: 1 / 4; grid-row: 11; margin-left: 42px; }
+#computer-access-02.o3-ready button[data-b2-action="submit"] { grid-column: 4 / 8; grid-row: 11; margin-left: 42px; }
+#computer-access-02.o3-ready input.b2-slot { width: auto !important; height: 46px !important; box-sizing: border-box; padding: 0 14px; border: 2px solid #b9dcc6; border-radius: 10px; background: #fff; font-size: 18px !important; color: #1d3b2a; letter-spacing: .08em; }
+#computer-access-02.o3-ready input.b2-slot:focus { outline: none; border-color: #1f8a4c; box-shadow: 0 0 0 3px #cdeed8; }
+#computer-access-02 .o3-why2 { grid-column: 1 / 9; grid-row: 12; margin: 4px 0 0 42px; font-size: 14px; color: #8a6a1c; min-height: 1.4em; }
+#computer-access-02 .o3-why2:not(:empty)::before { content: "●"; margin-right: 6px; color: #e0a400; font-size: 10px; vertical-align: 2px; }
+#computer-access-02.o3-ready [data-b2-slot="ca-form"] { grid-column: 9 / 13; grid-row: 2 / 7; align-self: start; width: auto !important; margin-top: 14px; }
+#computer-access-02 .o3-tips { grid-column: 9 / 13; grid-row: 7 / 13; align-self: start; margin: 0; padding: 18px 20px; border-radius: 16px; border: 1.5px solid #cfe9d8; background: #f6fcf8; color: #2e4675; }
+#computer-access-02 .o3-tips h3 { display: block; position: static; margin: 0 0 10px; font-size: 18px; line-height: 1.4; color: #0a7232; }
+#computer-access-02 .o3-tips ul { margin: 0; padding-left: 1.2em; }
+#computer-access-02 .o3-tips li { margin: 6px 0; font-size: 14.5px; line-height: 1.7; }
+@media (orientation: portrait), (max-width: 980px) {
+  #computer-access-02.o3-ready { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 8px; padding: 22px 16px !important; }
+  #computer-access-02 .o3-title2 { grid-column: 1 / 5; }
+  #computer-access-02 :is(.o3-step, .o3-note, .o3-why2) { grid-column: 1 / 5; }
+  #computer-access-02 :is(.o3-note, .o3-why2) { margin-left: 0; }
+  #computer-access-02.o3-ready :is(button.b2-image-action, input.b2-slot) { margin-left: 0 !important; }
+  #computer-access-02.o3-ready button[data-b2-action="purpose-personal_data"] { grid-column: 1 / 3; grid-row: 4; }
+  #computer-access-02.o3-ready button[data-b2-action="purpose-unrestricted"] { grid-column: 3 / 5; grid-row: 4; }
+  #computer-access-02.o3-ready button[data-b2-action="combined"] { grid-column: 1 / 3; grid-row: 5; }
+  #computer-access-02 .o3-n2 { grid-row: 6; } #computer-access-02 .o3-s3 { grid-row: 7; }
+  #computer-access-02.o3-ready button.b2-image-action:is([data-b2-action="hours-0.5"], [data-b2-action="hours-2"], [data-b2-action="hours-8"], [data-b2-action="hours-24"]) { grid-row: 8; padding: 0 6px; font-size: 15px !important; justify-self: stretch; }
+  #computer-access-02.o3-ready [data-b2-action="hours-0.5"] { grid-column: 1; } #computer-access-02.o3-ready [data-b2-action="hours-2"] { grid-column: 2; }
+  #computer-access-02.o3-ready [data-b2-action="hours-8"] { grid-column: 3; } #computer-access-02.o3-ready [data-b2-action="hours-24"] { grid-column: 4; }
+  #computer-access-02.o3-ready [data-b2-slot="ca-form-hours"] { grid-column: 1 / 3; grid-row: 9; }
+  #computer-access-02 .o3-n3 { grid-row: 10; }
+  #computer-access-02.o3-ready button[data-b2-action="save-default"] { grid-column: 1 / 5; grid-row: 11; }
+  #computer-access-02 .o3-s4 { grid-row: 12; }
+  #computer-access-02.o3-ready [data-b2-slot="ca-form-code"] { grid-column: 1 / 5; grid-row: 13; }
+  #computer-access-02.o3-ready button[data-b2-action="submit"] { grid-column: 1 / 5; grid-row: 14; justify-self: stretch; }
+  #computer-access-02 .o3-why2 { grid-row: 15; }
+  #computer-access-02.o3-ready [data-b2-slot="ca-form"] { grid-column: 1 / 5; grid-row: 16; }
+  #computer-access-02 .o3-tips { grid-column: 1 / 5; grid-row: 17; }
 }</style></head><body data-page-kind="computer-access"><a class="skip" href="#content">跳到正文</a><div class="scenery" aria-hidden="true"><div class="left-side"><i class="wash"></i></div><div class="right-side"><i class="wash"></i></div></div><header id="site-header"><div class="bar-inner"><div class="header-art" data-component="header"></div><div class="desktop-masthead"><a class="masthead-brand" href="https://github.com/wlyaaaaa"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/header-signature.avif"><img src="/_shared/header-signature.webp" alt="吴乐阳"></picture></a><nav class="primary-nav" aria-label="主导航"><a class="nav-link" href="/"><span class="nav-label" data-indicator="image-label" data-label-text="首页" data-ink-left="0.11475409836065574" data-ink-right="0.8743169398907104" style="--ink-left:11.4754098%;--ink-right:12.5683060%;--ink-bottom:80.6722689%;--label-scale:1.7000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-203c08e0d4-6291ce838be9.avif"><img class="image-label" width="183" height="119" src="/_shared/nav-203c08e0d4-6291ce838be9.webp" alt="首页"></picture></span></a><a class="nav-link" href="/how/"><span class="nav-label" data-indicator="image-label" data-label-text="怎么协作" data-ink-left="0.05901639344262295" data-ink-right="0.9442622950819672" style="--ink-left:5.9016393%;--ink-right:5.5737705%;--ink-bottom:83.9622642%;--label-scale:1.5362319"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-f8d7d5c654-5c53ad3d0d82.avif"><img class="image-label" width="305" height="106" src="/_shared/nav-f8d7d5c654-5c53ad3d0d82.webp" alt="怎么协作"></picture></span></a><a class="nav-link" href="/cockpit/"><span class="nav-label" data-indicator="image-label" data-label-text="驾驶舱" data-ink-left="0.08032128514056225" data-ink-right="0.9236947791164659" style="--ink-left:8.0321285%;--ink-right:7.6305221%;--ink-bottom:83.0357143%;--label-scale:1.6000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-81c30b16b8-60204edbd057.avif"><img class="image-label" width="249" height="112" src="/_shared/nav-81c30b16b8-60204edbd057.webp" alt="驾驶舱"></picture></span></a><a class="nav-link" href="/projects/"><span class="nav-label" data-indicator="image-label" data-label-text="项目" data-ink-left="0.12777777777777777" data-ink-right="0.8833333333333333" style="--ink-left:12.7777778%;--ink-right:11.6666667%;--ink-bottom:80.7017544%;--label-scale:1.7272727"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-79f326be44-c2ca011205a5.avif"><img class="image-label" width="180" height="114" src="/_shared/nav-79f326be44-c2ca011205a5.webp" alt="项目"></picture></span></a><a class="nav-link" href="/skills/"><span class="nav-label" data-indicator="image-label" data-label-text="技能" data-ink-left="0.11764705882352941" data-ink-right="0.8877005347593583" style="--ink-left:11.7647059%;--ink-right:11.2299465%;--ink-bottom:80.6722689%;--label-scale:1.7000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-99aea2f913-51e26db6204e.avif"><img class="image-label" width="187" height="119" src="/_shared/nav-99aea2f913-51e26db6204e.webp" alt="技能"></picture></span></a><a class="nav-link" href="/rules/"><span class="nav-label" data-indicator="image-label" data-label-text="规则" data-ink-left="0.12903225806451613" data-ink-right="0.8870967741935484" style="--ink-left:12.9032258%;--ink-right:11.2903226%;--ink-bottom:82.2033898%;--label-scale:1.6857143"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-1123245d1b-91c95cafad7e.avif"><img class="image-label" width="186" height="118" src="/_shared/nav-1123245d1b-91c95cafad7e.webp" alt="规则"></picture></span></a></nav><nav class="masthead-actions"><a class="nav-link" href="/mcp/"><span class="nav-label" data-indicator="image-label" data-label-text="连接电脑" data-ink-left="0.059748427672955975" data-ink-right="0.9433962264150944" style="--ink-left:5.9748428%;--ink-right:5.6603774%;--ink-bottom:83.4862385%;--label-scale:1.5571429"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-aa8446366b-e4723ddb0b9d.avif"><img class="image-label" width="318" height="109" src="/_shared/nav-aa8446366b-e4723ddb0b9d.webp" alt="连接电脑"></picture></span></a><a class="nav-link" href="/computer-access/" aria-current="page"><span class="nav-label" data-indicator="image-label" data-label-text="授权与状态" data-ink-left="0.046753246753246755" data-ink-right="0.961038961038961" style="--ink-left:4.6753247%;--ink-right:3.8961039%;--ink-bottom:84.6153846%;--label-scale:1.5072464"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-0571025156-8b357e19539a.avif"><img class="image-label" width="385" height="104" src="/_shared/nav-0571025156-8b357e19539a.webp" alt="授权与状态"></picture></span></a></nav></div><div class="portrait-nav"><a class="compact-brand" href="https://github.com/wlyaaaaa"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/header-signature.avif"><img src="/_shared/header-signature.webp" alt="吴乐阳"></picture></a><button id="open-menu" aria-label="打开全站菜单"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/menu-icon.avif"><img src="/_shared/menu-icon.webp" alt=""></picture></button></div></div></header><dialog id="menu"><button class="close-menu" aria-label="关闭菜单">关闭</button><div data-component="menu"></div><nav><a class="nav-link" href="/"><span class="nav-label" data-indicator="image-label" data-label-text="首页" data-ink-left="0.11475409836065574" data-ink-right="0.8743169398907104" style="--ink-left:11.4754098%;--ink-right:12.5683060%;--ink-bottom:80.6722689%;--label-scale:1.7000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-203c08e0d4-6291ce838be9.avif"><img class="image-label" width="183" height="119" src="/_shared/nav-203c08e0d4-6291ce838be9.webp" alt="首页"></picture></span></a><a class="nav-link" href="/how/"><span class="nav-label" data-indicator="image-label" data-label-text="怎么协作" data-ink-left="0.05901639344262295" data-ink-right="0.9442622950819672" style="--ink-left:5.9016393%;--ink-right:5.5737705%;--ink-bottom:83.9622642%;--label-scale:1.5362319"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-f8d7d5c654-5c53ad3d0d82.avif"><img class="image-label" width="305" height="106" src="/_shared/nav-f8d7d5c654-5c53ad3d0d82.webp" alt="怎么协作"></picture></span></a><a class="nav-link" href="/cockpit/"><span class="nav-label" data-indicator="image-label" data-label-text="驾驶舱" data-ink-left="0.08032128514056225" data-ink-right="0.9236947791164659" style="--ink-left:8.0321285%;--ink-right:7.6305221%;--ink-bottom:83.0357143%;--label-scale:1.6000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-81c30b16b8-60204edbd057.avif"><img class="image-label" width="249" height="112" src="/_shared/nav-81c30b16b8-60204edbd057.webp" alt="驾驶舱"></picture></span></a><a class="nav-link" href="/projects/"><span class="nav-label" data-indicator="image-label" data-label-text="项目" data-ink-left="0.12777777777777777" data-ink-right="0.8833333333333333" style="--ink-left:12.7777778%;--ink-right:11.6666667%;--ink-bottom:80.7017544%;--label-scale:1.7272727"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-79f326be44-c2ca011205a5.avif"><img class="image-label" width="180" height="114" src="/_shared/nav-79f326be44-c2ca011205a5.webp" alt="项目"></picture></span></a><a class="nav-link" href="/skills/"><span class="nav-label" data-indicator="image-label" data-label-text="技能" data-ink-left="0.11764705882352941" data-ink-right="0.8877005347593583" style="--ink-left:11.7647059%;--ink-right:11.2299465%;--ink-bottom:80.6722689%;--label-scale:1.7000000"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-99aea2f913-51e26db6204e.avif"><img class="image-label" width="187" height="119" src="/_shared/nav-99aea2f913-51e26db6204e.webp" alt="技能"></picture></span></a><a class="nav-link" href="/rules/"><span class="nav-label" data-indicator="image-label" data-label-text="规则" data-ink-left="0.12903225806451613" data-ink-right="0.8870967741935484" style="--ink-left:12.9032258%;--ink-right:11.2903226%;--ink-bottom:82.2033898%;--label-scale:1.6857143"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-1123245d1b-91c95cafad7e.avif"><img class="image-label" width="186" height="118" src="/_shared/nav-1123245d1b-91c95cafad7e.webp" alt="规则"></picture></span></a><a class="nav-link" href="/mcp/"><span class="nav-label" data-indicator="image-label" data-label-text="连接电脑" data-ink-left="0.059748427672955975" data-ink-right="0.9433962264150944" style="--ink-left:5.9748428%;--ink-right:5.6603774%;--ink-bottom:83.4862385%;--label-scale:1.5571429"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-aa8446366b-e4723ddb0b9d.avif"><img class="image-label" width="318" height="109" src="/_shared/nav-aa8446366b-e4723ddb0b9d.webp" alt="连接电脑"></picture></span></a><a class="nav-link" href="/computer-access/" aria-current="page"><span class="nav-label" data-indicator="image-label" data-label-text="授权与状态" data-ink-left="0.046753246753246755" data-ink-right="0.961038961038961" style="--ink-left:4.6753247%;--ink-right:3.8961039%;--ink-bottom:84.6153846%;--label-scale:1.5072464"><picture class="asset-picture"><source type="image/avif" srcset="/_shared/nav-0571025156-8b357e19539a.avif"><img class="image-label" width="385" height="104" src="/_shared/nav-0571025156-8b357e19539a.webp" alt="授权与状态"></picture></span></a></nav></dialog><nav data-toc-consistency="uniform-v1" class="toc" aria-label="本页目录"><div class="bar-inner"><div class="toc-inner toc-text"><a class="nav-link" href="#top" data-section="top" data-label-h="开头" data-label-v="开头"><span class="nav-label" data-indicator="image-label" data-label-text="开头" style="--toc-bitmap-height:30.08955223880597px;--toc-bitmap-left:-6.17910447761194px;--toc-bitmap-top:-6.7164179104477615px;--toc-label-width:36.26865671641791px"><picture class="asset-picture"><img class="image-label" src="/_shared/nav-unify-standard/nav-unify-label-42-7371cd297c.webp" alt="开头"></picture></span></a><a class="nav-link" href="#apply" data-section="apply" data-label-h="办理：验证一次，开一段时间" data-label-v="办理：验证一次，开一段时间"><span class="nav-label" data-indicator="image-label" data-label-text="办理：验证一次，开一段时间" style="--toc-bitmap-height:20.0px;--toc-bitmap-left:-1.0px;--toc-bitmap-top:-1.0px;--toc-label-width:188.24999999999997px"><picture class="asset-picture"><img class="image-label" src="/_shared/nav-unify-standard/nav-unify-label-31-866ded5a80.webp" alt="办理：验证一次，开一段时间"></picture></span></a><a class="nav-link" href="#results" data-section="results" data-label-h="办完怎么看结果" data-label-v="办完怎么看结果"><span class="nav-label" data-indicator="image-label" data-label-text="办完怎么看结果" style="--toc-bitmap-height:20.0px;--toc-bitmap-left:-0.9999999999999999px;--toc-bitmap-top:-1.0px;--toc-label-width:125.25px"><picture class="asset-picture"><img class="image-label" src="/_shared/nav-unify-standard/nav-unify-label-30-6fc0d849ca.webp" alt="办完怎么看结果"></picture></span></a><a class="nav-link" href="#how" data-section="how" data-label-h="连不上时，和这一页怎么工作" data-label-v="连不上时，和这一页怎么工作"><span class="nav-label" data-indicator="image-label" data-label-text="连不上时，和这一页怎么工作" style="--toc-bitmap-height:20.0px;--toc-bitmap-left:-1.0px;--toc-bitmap-top:-1.0px;--toc-label-width:202.0px"><picture class="asset-picture"><img class="image-label" src="/_shared/nav-unify-standard/nav-unify-label-74-cc4284472c.webp" alt="连不上时，和这一页怎么工作"></picture></span></a></div></div></nav><main id="content" class="paper"><script data-image-loading>(() => {
  'use strict';
  const main=document.querySelector('main');if(!main)return;
@@ -615,7 +682,7 @@ Windows
   const screen = document.getElementById('computer-access-01');
   if (!screen) return;
   const source = (document.getElementById('album-page')?.textContent || '') + (document.getElementById('page-data')?.textContent || '');
-  const art = (source.match(/[^"\s]*computer-access-01-h\.png/) || [])[0];
+  const art = (source.match(/[^"\s]*\/[^"\s\/]*computer-access-01-h\.png/) || [])[0];
   // 从首屏原图（1672×1045）按比例裁出标题、插画和三个图标
   const crop = (el, x, y, w, h) => {
     if (!art) return el;
@@ -686,5 +753,55 @@ Windows
   const start = () => { if (screen.querySelector('[data-b2-action="refresh"]') && screen.querySelector('[data-b2-slot="ca-windows"]')) build(); schedule(); };
   new MutationObserver(start).observe(screen, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'], characterData: true });
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['data-b2-status-phase'] });
+  start();
+})();
+// O3 2026-10-11：办理区（第二屏）改为真实排版；输入框和按钮仍是运行件原来的元素，只由样式摆位。
+(() => {
+  const screen = document.getElementById('computer-access-02');
+  if (!screen) return;
+  const source = (document.getElementById('album-page')?.textContent || '') + (document.getElementById('page-data')?.textContent || '');
+  const art = (source.match(/[^"\s]*\/[^"\s\/]*computer-access-02-h\.png/) || [])[0];
+  const make = (tag, cls, html) => { const el = document.createElement(tag); el.className = cls; if (html) el.innerHTML = html; el.dataset.o3 = ''; return el; };
+  function build() {
+    if (screen.querySelector('[data-o3]')) return;
+    const title = make('div', 'o3-title2');
+    title.setAttribute('role', 'img'); title.setAttribute('aria-label', '办理：验证一次，开一段时间。');
+    if (art) {
+      const W = 1672, H = 1177, x = 430, y = 20, w = 820, h = 120;
+      title.style.backgroundImage = 'url("' + art + '")';
+      title.style.backgroundSize = (W / w * 100) + '% ' + (H / h * 100) + '%';
+      title.style.backgroundPosition = (x / (W - w) * 100) + '% ' + (y / (H - h) * 100) + '%';
+    }
+    const why = make('p', 'o3-why2'); why.setAttribute('role', 'status');
+    screen.prepend(title,
+      make('p', 'o3-step o3-s1', '<b>1</b><span>在上面的卡片里点“解锁”“开启”或“延长”，这一块就打开。</span>'),
+      make('p', 'o3-step o3-s2', '<b>2</b><span>选这次办哪一项：</span>'),
+      make('p', 'o3-note o3-n2', '两项一起办就点“同时办理”：验证一次，两项分别办、分别计时。'),
+      make('p', 'o3-step o3-s3', '<b>3</b><span>填时长，0.5 到 72 小时都行，或直接点常用时长：</span>'),
+      make('p', 'o3-note o3-n3', '还有效的，在原截止时间上加；没开或已经到期的，从这次办成时起算。办完总共剩余不能超过 72 小时。'),
+      make('p', 'o3-step o3-s4', '<b>4</b><span>打开手机上的验证器，输入 6 位动态码（开头的 0 也要输），再点验证：</span>'),
+      why,
+      make('div', 'o3-tips', '<h3>三件要知道的事</h3><ul><li>验证码直接交给这台电脑核对，不经过网站的服务器。</li><li>切到验证器 App 再回来，不会取消这次办理。</li><li>输错太多次会冷却：页面写清几点以后能再试，已经开着的授权不受影响；冷却完要我自己重新输、点提交，不会自动重试。</li></ul>'));
+    screen.classList.add('o3-ready');
+  }
+  // 验证按钮变灰时写明原因（只读页面已显示的状态，不改启用条件）
+  let pending = false;
+  function explain() {
+    pending = false;
+    const b = screen.querySelector('button[data-b2-action="submit"]'), why = screen.querySelector('.o3-why2');
+    if (!b || !why) return;
+    if (!Object.hasOwn(b.dataset, 'baseTitle')) b.dataset.baseTitle = b.getAttribute('title') || '';
+    const offline = document.body.dataset.b2StatusPhase === 'error';
+    const code = screen.querySelector('[data-b2-slot="ca-form-code"]')?.value || '';
+    const reason = !b.disabled ? '' : offline ? '读不到电脑，暂时不能办理' : !/^\d{6}$/.test(code) ? '先输入 6 位动态验证码' : '';
+    const title = reason ? (b.dataset.baseTitle ? b.dataset.baseTitle + '：' : '') + reason : b.dataset.baseTitle;
+    if (b.getAttribute('title') !== title) b.setAttribute('title', title);
+    if (why.textContent !== reason) why.textContent = reason;
+  }
+  const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(explain); } };
+  const start = () => { if (screen.querySelector('[data-b2-action="submit"]') && screen.querySelector('[data-b2-slot="ca-form-code"]')) build(); schedule(); };
+  new MutationObserver(start).observe(screen, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
+  new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['data-b2-status-phase'] });
+  screen.addEventListener('input', schedule);
   start();
 })();</script></body></html>
