@@ -11,8 +11,8 @@ import sys
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
-NUMBER = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
-CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日")
+NUMBER = re.compile(r"-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?")
+CHINESE_DATE = re.compile(r"(?:(\d{4})\s*年\s*)?(\d{1,2})\s*月\s*(\d{1,2})\s*日(?:\s+(\d{1,2}):(\d{2})(:\d{2})?)?")
 DATETIME = re.compile(r"\d{4}-\d{2}-\d{2}([ T])\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?")
 EVENT_DATE = re.compile(r"(?:最近(?:一次)?|最后(?:一次)?|上(?:一)?次)\s*(?:写入|使用|运行|同步|采集|访问|更新)|(?:数据|记录|账本)\s*(?:记到|覆盖到)|数据水位")
 BEIJING = timezone(timedelta(hours=8))
@@ -49,17 +49,30 @@ def formatted(old, value):
             text += "." + f"{new.microsecond:06d}"[:len(stamp[3]) - 1]
         return text + (stamp[4] or "")
     chinese = CHINESE_DATE.fullmatch(old)
+    if chinese and chinese[4]:
+        incoming = CHINESE_DATE.fullmatch(str(value))
+        new = (datetime(int(incoming[1] or chinese[1] or 2000), int(incoming[2]), int(incoming[3]),
+                        int(incoming[4]), int(incoming[5]), int((incoming[6] or ":0")[1:]))
+               if incoming else datetime.fromisoformat(str(value)))
+        new = (new.replace(tzinfo=BEIJING) if new.tzinfo is None else new).astimezone(BEIJING)
+        values = iter(([new.year] if chinese[1] else []) + [new.month, new.day, new.hour, new.minute] + ([new.second] if chinese[6] else []))
+        return re.sub(r"\d+", lambda m: str(next(values)).zfill(len(m[0])), old)
     if chinese or re.fullmatch(r"\d{4}-\d{2}-\d{2}", old):
         incoming = CHINESE_DATE.fullmatch(str(value))
         new = date(int(incoming[1] or (chinese[1] if chinese else None) or 2000),
                    int(incoming[2]), int(incoming[3])) if incoming else date.fromisoformat(str(value)[:10])
+        if DATETIME.fullmatch(str(value)):
+            observed = datetime.fromisoformat(str(value))
+            new = (observed.replace(tzinfo=BEIJING) if observed.tzinfo is None else observed).astimezone(BEIJING).date()
         if not chinese:
             return new.isoformat()
         values = iter(([new.year] if chinese[1] else []) + [new.month, new.day])
         return re.sub(r"\d+", lambda m: str(next(values)).zfill(len(m[0]))
                       if m[0].startswith("0") else str(next(values)), old)
     if not NUMBER.fullmatch(old):
-        raise ValueError("定位片段不是独立数字或日期")
+        raise ValueError("old_value_not_whole_number")
+    if isinstance(value, str) and not NUMBER.fullmatch(value):
+        raise ValueError("新值不是完整数字")
     number = Decimal(str(value).replace(",", ""))
     if not number.is_finite():
         raise ValueError("新值不是有限数字")
@@ -91,6 +104,60 @@ def locate(text, row, number=False):
     return 0, len(text)
 
 
+def whole_number(text, start, end):
+    fragment = text[start:end]
+    if re.fullmatch(r"-?[\d,.]+", fragment) and (not NUMBER.fullmatch(fragment)
+            or re.search(r"\d[.,]?$", text[:start]) or re.match(r"(?:\d|[.,]\d)", text[end:])):
+        raise ValueError("old_value_not_whole_number")
+
+
+def body_link(page, row, field, start, end, number, rows):
+    parent, key = field_at(page, field)
+    text = parent[key]
+    anchors = ([number] if number else page.get("registry", {}).get("numbers", [])) + [row]
+    proven = False
+    for anchor in anchors:
+        phrase = anchor.get("text", "")
+        if re.fullmatch(r"(?:个|份|次|条|页|行|项|组|种|千|万|亿|秒|分钟|小时|天|[KMGTPE]?i?B)*", re.sub(r"[\d\W_]+", "", phrase), re.I):
+            continue
+        if any(m.start() <= start < end <= m.end() for m in re.finditer(re.escape(phrase), text)):
+            scope = row.get("measurement_scope", "")
+            if re.search(r"估算|估计|estimate", scope) and re.search(r"精确|逐条", text + anchor.get("meaning", "")):
+                continue
+            proven = True
+    if not proven:
+        raise ValueError("scope_mismatch_or_unverified")
+    sentences = list(re.finditer(r"[^\n。；;！!？?]+", text))
+    own = next(i for i, m in enumerate(sentences) if m.start() <= start < m.end())
+    spans = [sentences[own]]
+    for i in (own - 1, own + 1):
+        if 0 <= i < len(sentences) and re.match(r"\s*[-*#]*\s*(?:本轮|数字|数据|统计)?(?:观察)?(?:截至|截止|观察于|采样于)", sentences[i][0]):
+            spans.append(sentences[i])
+    qualified = set()
+    for date_row in rows:
+        if row["id"] in date_row.get("qualifies", []) and date_row.get("field", date_row.get("page_field")) == field:
+            if date_row.get("new_value") is None:
+                raise ValueError("as_of_link_required")
+            a, b = locate(text, date_row)
+            qualified.add((a, b))
+            spans.extend(m for m in sentences if m.start() <= a < b <= m.end())
+    candidates = {}
+    pattern = re.compile(DATETIME.pattern + "|" + CHINESE_DATE.pattern + r"|\d{4}-\d{2}-\d{2}")
+    for sentence in spans:
+        if EVENT_DATE.search(sentence[0]):
+            continue
+        for stamp in pattern.finditer(sentence[0]):
+            a, b = sentence.start() + stamp.start(), sentence.start() + stamp.end()
+            prefix, suffix = sentence[0][:stamp.start()], sentence[0][stamp.end():]
+            safe = re.search(r"(?:截至|截止|观察于|采样于|观察时间|核对时间|统计时间)\s*(?:北京时间\s*)?$", prefix)
+            bracketed = re.search(r"[（(]\s*(?:北京时间\s*)?$", prefix) and re.match(r"\s*[）)]", suffix)
+            if safe or bracketed or any(a <= x < y <= b for x, y in qualified):
+                candidates[(a, b)] = stamp[0]
+    if len(candidates) != 1:
+        raise ValueError("as_of_link_required")
+    return next(iter(candidates))
+
+
 def qualified_date_review(page, row):
     """日期所说的事件时间不能被计数的本轮观察日期替换。"""
     field = row.get("field") or row.get("page_field") or ""
@@ -117,7 +184,8 @@ def qualified_date_review(page, row):
 
 def build_number_edits(root, result):
     root, pages, edits, skipped, manual_reviews = Path(root), {}, {}, [], []
-    for row in result["rows"]:
+    accepted = set()
+    for row in sorted(result["rows"], key=lambda r: bool(r.get("qualifies"))):
         if row.get("manual_review_reason"):
             manual_reviews.append({k: row.get(k) for k in ("page", "field", "old_value", "date_candidate", "source_observed_at")} |
                                   {"record_id": row["id"], "status": "需人工核对", "reason": row["manual_review_reason"]})
@@ -132,11 +200,15 @@ def build_number_edits(root, result):
             if slug not in pages:
                 pages[slug] = json.loads((root / "sources/pages" / slug / "page.json").read_text(encoding="utf-8-sig"))
             page = pages[slug]
+            if row.get("requires_semantic_refresh"):
+                raise ValueError("scope_mismatch_or_unverified")
             review = qualified_date_review(page, row) if row.get("qualifies") and row.get("date_semantics") != "coverage_end" else None
             if review:
                 manual_reviews.append(dict(page=slug, record_id=rid, field=row.get("field"), old_value=row["old_value"],
                     date_candidate=row["new_value"], source_observed_at=row["source_observed_at"], status="需人工核对", reason=review))
                 continue
+            if row.get("qualifies") and not set(row["qualifies"]) <= accepted:
+                raise ValueError("as_of_link_required")
             numbers = page.get("registry", {}).get("numbers", [])
             nid = row.get("page_number") or row.get("registry_number")
             ni = next((i for i, n in enumerate(numbers) if n.get("id") == nid), None)
@@ -145,8 +217,19 @@ def build_number_edits(root, result):
                 f"screens[{si}].text" if row.get("page_pattern") and si is not None else f"registry.numbers[{ni}].text")
             parent, key = field_at(page, field)
             start, end = locate(parent[key], row, field.startswith("registry.numbers["))
+            whole_number(parent[key], start, end)
+            if NUMBER.fullmatch(str(row["new_value"])) and not NUMBER.fullmatch(str(row["old_value"])):
+                raise ValueError("old_value_not_whole_number")
             if not same_value(parent[key][start:end], row["old_value"]):
                 raise ValueError("原位置的值与重取旧值不一致")
+            if same_value(str(row["old_value"]), row["new_value"]) and any(
+                    r.get("date_semantics") == "coverage_end" and rid in r.get("qualifies", []) for r in result["rows"]):
+                accepted.add(rid)
+                continue
+            if row.get("qualifies"):
+                for stamp in CHINESE_DATE.finditer(parent[key]):
+                    if stamp.start() == start and end <= stamp.end():
+                        end = stamp.end()
 
             pending = []
             def add(target, a, b, value):
@@ -157,7 +240,11 @@ def build_number_edits(root, result):
                     pending.append(dict(page=slug, file=f"sources/pages/{slug}/page.json", field=target,
                         start=a, end=b, old_value=old, new_value=new,
                         observed_at=row["source_observed_at"], record_id=rid))
-            add(field, start, end, row["new_value"])
+            number = numbers[ni] if ni is not None else None
+            if field.startswith("screens[") and NUMBER.fullmatch(parent[key][start:end]):
+                da, db = body_link(page, row, field, start, end, number, result["rows"])
+                add(field, da, db, row["source_observed_at"])
+            add(field, start, end, row["source_observed_at"] if CHINESE_DATE.fullmatch(parent[key][start:end]) and CHINESE_DATE.fullmatch(parent[key][start:end])[4] else row["new_value"])
             if ni is not None and not row.get("qualifies"):
                 number = numbers[ni]
                 nf = f"registry.numbers[{ni}].text"
@@ -175,7 +262,12 @@ def build_number_edits(root, result):
                     text = screen.get("text", "")
                     hits = list(re.finditer(r"(?<![\d.,])" + re.escape(number["text"]), text))
                     if not NUMBER.fullmatch(number["text"]) and len(hits) == 1:
-                        add(f"screens[{index}].text", hits[0].start() + a, hits[0].start() + b, row["new_value"])
+                        target = f"screens[{index}].text"
+                        start, end = hits[0].start() + a, hits[0].start() + b
+                        whole_number(text, start, end)
+                        da, db = body_link(page, row, target, start, end, number, result["rows"])
+                        add(target, start, end, row["new_value"])
+                        add(target, da, db, row["source_observed_at"])
             for edit in pending:
                 location = (slug, edit["field"], edit["start"], edit["end"])
                 if location in edits and edits[location]["new_value"] != edit["new_value"]:
@@ -183,17 +275,20 @@ def build_number_edits(root, result):
             for edit in pending:
                 location = (slug, edit["field"], edit["start"], edit["end"])
                 edits[location] = edit
+            accepted.add(rid)
         except (OSError, KeyError, ValueError, IndexError, InvalidOperation, re.error) as exc:
             skipped.append(dict(page=slug, record_id=rid, reason=str(exc)))
     grouped = defaultdict(list)
     for edit in edits.values():
         grouped[(edit["page"], edit["field"])].append(edit)
+    conflicted = set()
     valid = []
     for (slug, field), group in grouped.items():
         parent, key = field_at(pages[slug], field)
         before, after, limit = parent[key], parent[key], len(parent[key])
         for edit in sorted(group, key=lambda e: e["start"], reverse=True):
             if edit["end"] > limit:
+                conflicted.add(slug)
                 skipped.append(dict(page=slug, record_id=edit["record_id"], reason="字符范围互相重叠"))
                 break
             after = after[:edit["start"]] + edit["new_value"] + after[edit["end"]:]
@@ -202,7 +297,11 @@ def build_number_edits(root, result):
             for edit in group:
                 edit.update(field_before_sha256=digest(before), field_after_sha256=digest(after))
             valid.extend(group)
-    return dict(schema="content-refresh.number-edits.v1", edits=valid, skipped=skipped, manual_reviews=manual_reviews)
+    conflicted.update(r["page"] for r in skipped)
+    blocked = {(e["page"], e["record_id"]) for e in valid if e["page"] in conflicted}
+    blocked -= {(r["page"], r["record_id"]) for r in skipped}
+    skipped.extend(dict(page=p, record_id=rid, reason="as_of_link_required") for p, rid in sorted(blocked))
+    return dict(schema="content-refresh.number-edits.v1", edits=[e for e in valid if e["page"] not in conflicted], skipped=skipped, manual_reviews=manual_reviews)
 
 
 def apply_edits(root, payload, only=None):
@@ -220,27 +319,21 @@ def apply_edits(root, payload, only=None):
                 raise ValueError("目标必须是指定页面的 page.json")
             path = root / filename
             raw = path.read_text(encoding="utf-8-sig")
-            page, fields, changed, file_applied = json.loads(raw), defaultdict(list), False, 0
+            page, fields, changed, file_applied, file_already = json.loads(raw), defaultdict(list), False, 0, 0
             for edit in edits:
                 fields[edit["field"]].append(edit)
             for field, group in fields.items():
-                try:
-                    parent, key = field_at(page, field)
-                except (KeyError, ValueError, IndexError, TypeError) as exc:
-                    report["skipped"].extend(dict(edit, reason=str(exc)) for edit in group)
-                    continue
+                parent, key = field_at(page, field)
                 original = parent[key]
                 ordered = sorted(group, key=lambda e: e["start"])
                 hashes = {(e.get("field_before_sha256"), e.get("field_after_sha256")) for e in group}
                 if len(hashes) != 1 or any(a["end"] > b["start"] for a, b in zip(ordered, ordered[1:])):
-                    report["skipped"].extend(dict(edit, reason="同字段改数单冲突") for edit in group)
-                    continue
+                    raise ValueError("同字段改数单冲突")
                 if group[0].get("field_after_sha256") == digest(original):
-                    report["already_applied"] += len(group)
+                    file_already += len(group)
                     continue
                 if group[0].get("field_before_sha256") not in {None, digest(original)}:
-                    report["skipped"].extend(dict(edit, reason="字段已变化，原字符范围需重取") for edit in group)
-                    continue
+                    raise ValueError("字段已变化，原字符范围需重取")
                 limit = len(original)
                 for edit in sorted(group, key=lambda e: e["start"], reverse=True):
                     a, b, old, new = edit["start"], edit["end"], edit["old_value"], edit["new_value"]
@@ -249,12 +342,13 @@ def apply_edits(root, payload, only=None):
                     except (ValueError, InvalidOperation, TypeError):
                         scalars = False
                     if not scalars:
-                        report["skipped"].append(dict(edit, reason="改数单只能替换数字或日期"))
+                        raise ValueError("改数单只能替换数字或日期")
                     elif not 0 <= a < b <= limit or original[a:b] != old:
-                        report["skipped"].append(dict(edit, reason="旧值不在原位置"))
+                        raise ValueError("旧值不在原位置")
                     elif old == new:
-                        report["already_applied"] += 1
+                        file_already += 1
                     else:
+                        whole_number(original, a, b)
                         parent[key] = parent[key][:a] + new + parent[key][b:]
                         number = re.fullmatch(r"registry\.numbers\[(\d+)\]\.text", field)
                         if number and edit.get("record_id") and edit.get("observed_at"):
@@ -263,6 +357,9 @@ def apply_edits(root, payload, only=None):
                         file_applied += 1
                         changed = True
                     limit = a
+                if group[0].get("field_after_sha256") not in {None, digest(parent[key])}:
+                    raise ValueError("字段新哈希与替换结果不一致")
+            report["already_applied"] += file_already
             if changed:
                 rendered = json.dumps(page, ensure_ascii=False, indent=2) + "\n"
                 path.write_text(rendered, encoding="utf-8", newline="\r\n" if "\r\n" in path.read_bytes().decode("utf-8-sig") else "\n")

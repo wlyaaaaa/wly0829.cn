@@ -125,6 +125,8 @@ npm run refresh:ai -- --project <Registry中的项目id>
 
 来源坏了时按真实责任修复来源，页面只写已证实的结果和缺口。例如 AI 使用账本停写，先交拥有写入链的项目修复；修好并回读前，相关页面保留旧日期与 Unknown。不能为了赶这轮进度伪造新统计。
 
+改数单跳过原因中，`old_value_not_whole_number` 表示旧值截断了完整数字，`scope_mismatch_or_unverified` 表示登记与正文口径不同或无法核实，`as_of_link_required` 表示找不到可安全联动的观察时间；这些项保留旧数和旧日期，交事实组核对，数字与观察时间的配对编辑须一起成功才应用。
+
 ## 4 改内容与迁移冻结页
 
 常规编辑在仓库根的 `sources/pages/<页id>/page.json` 中进行，构图在相邻 `layout.json`，配图在 `sources/assets/_library/asset-map.jsonl`。不直接把成品 HTML 当作者源；若已有直接编辑的 Markdown，先按 [Astro 说明](../site-astro/README.md#内容文件怎么写) 统一作者输入，再恢复转换。将变化合进现有解释，没变的内容保持原样，不加更新日志或重复卡片，不用更短、更旧的稿子覆盖更完整的有效内容。

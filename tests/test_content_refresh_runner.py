@@ -78,6 +78,36 @@ class RefreshTests(unittest.TestCase):
         self.assertEqual(refresh.retrieve(method, self.root), 1)
         (self.root / "count.json").write_text('{"count": 25}', encoding="utf-8")
         self.assertEqual(refresh.retrieve(self.record["retrieve"], self.root), 25)
+    def test_report_large_utf8_details_use_complete_task_file_and_keep_failures(self):
+        registry = self.root / "sources/refresh/registry.json"
+        registry.parent.mkdir(parents=True)
+        registry.write_text(json.dumps({"schema": "content-refresh.sources.v1", "records": []}), encoding="utf-8")
+        result = {"rows": [], "findings": [], "baseline": "test", "observed_at": "2026-10-12T06:00:00+08:00",
+                  "pages_checked": 1, "numbers_checked": 0, "retrieval_seconds": 0, "automatic_success_ratio": None}
+        for task in ("证" * (256 * 1024 // 3), "证" * (256 * 1024 // 3 + 1)):
+            for passed in (True, False):
+                with self.subTest(bytes=len(task.encode("utf-8")), passed=passed):
+                    output = self.root / "output"
+                    def render(argv, seconds):
+                        self.assertIn("-NoOpen", argv)
+                        content = json.loads((output / "report-content.json").read_text(encoding="utf-8"))
+                        self.assertEqual(len(content["blocks"]) == 2, len(task.encode("utf-8")) > 256 * 1024)
+                        detail = content["blocks"][-1]["blocks"][0]
+                        self.assertEqual((output / "opus-task.md").read_text(encoding="utf-8"), task)
+                        if len(task.encode("utf-8")) > 256 * 1024:
+                            self.assertEqual(detail["type"], "file")
+                            self.assertEqual(Path(detail["src"]), (output / "opus-task.md").resolve())
+                        else:
+                            self.assertEqual(detail, {"type": "markdown", "text": task})
+                        html = output / "result.html"
+                        html.write_text("verified fixture", encoding="utf-8")
+                        return json.dumps({"status": "created", "path": str(html), "opened": False, "checks": {"passed": passed}})
+                    with patch.object(sys, "argv", ["refresh", "--root", str(self.root), "--output", str(output)]), \
+                            patch.object(refresh, "collect", return_value=result), \
+                            patch.object(refresh, "publication_baseline", return_value={"baseline": "test"}), \
+                            patch.object(refresh, "task_text", return_value=task), patch.object(refresh, "bounded", side_effect=render), \
+                            patch.dict(refresh.os.environ), patch("builtins.print"):
+                        self.assertEqual(refresh.main(), 0 if passed else 1)
     @unittest.skipUnless(refresh.os.name == "nt", "Windows 子进程清理")
     def test_failed_tree_stop_is_bounded_and_not_reported_as_verified(self):
         process = Mock(); process.poll.return_value = None
