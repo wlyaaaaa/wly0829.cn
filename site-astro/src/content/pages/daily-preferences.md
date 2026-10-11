@@ -667,20 +667,20 @@
     },
     {
      "id": "n-code",
-     "text": "26,315 行",
+     "text": "26,306 行",
      "meaning": "Python 23,822 行（36 文件）＋mjs 2,484 行（7 文件），不含测试和额外 js",
-     "as_of": "2026-10-12",
-     "source": "见来源记录 daily-preferences-n-code-0，观察于 2026-10-12T04:36:08+08:00",
+     "as_of": "2026-10-11",
+     "source": "见来源记录 daily-preferences-n-code-0，观察于 2026-10-11",
      "screens": [
       "daily-preferences-10"
      ]
     },
     {
      "id": "n-tests",
-     "text": "测试定义 770 个（只计数）",
+     "text": "测试定义 775 个（只计数）",
      "meaning": "Python 718＋Node 57；10 月 11 日没有重跑",
-     "as_of": "2026-10-12",
-     "source": "见来源记录 daily-preferences-n-tests-0，观察于 2026-10-12T04:36:08+08:00",
+     "as_of": "2026-10-11",
+     "source": "见来源记录 daily-preferences-n-tests-0，观察于 2026-10-11",
      "screens": [
       "daily-preferences-10"
      ]
@@ -934,8 +934,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "d8643f9b0101a7bcffb1531e9b5382ab26b0e2b4b4eb44ed94407b67215df1b4",
-  "converted_at_beijing": "2026-10-12T05:03:43+08:00"
+  "sha256": "1769b0d6b6c8b029902c53e6c2e7c264b45d2c8e971bb50fe10a4c61c71c38ff",
+  "converted_at_beijing": "2026-10-12T06:47:11+08:00"
  }
 }
 ---
@@ -3895,8 +3895,8 @@ Python 标准库为主（信用卡 PDF 用 pypdf），网页采集用 JavaScript
 - **近况会自己标过期（9 月 27 日做好，还没在真实使用里验过）。** 每次“要更新了”整段重写近况卡，旧版留历史；窗口结束超过 7 天、或之后又有新记录，程序就标过期，AI 读到时先说“这是到某日为止的近况”，只补读之后那几天。睡眠、步数（由个人健康项目的只读工具提供，不存进本库）、亮屏、定位在这里只当作息的线索，不当健康结论。
 
 **43 个**｜冻结的引用副本文件（只数了文件，没逐个校验）
-**26,315 行**｜Python 和 JavaScript 正式代码（43 个文件）
-**770 个**｜测试定义（只计数，10 月 11 日没有重跑）
+**26,306 行**｜Python 和 JavaScript 正式代码（43 个文件）
+**775 个**｜测试定义（只计数，10 月 11 日没有重跑）
 **205 次**｜提交（8 月 31 日–10 月 8 日）
 
 ::screen{#daily-preferences-11 section="highlights"}
