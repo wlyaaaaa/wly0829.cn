@@ -49,8 +49,10 @@ const screen = (s: any) => {
       + (s.v ? `<div class="ts-o ts-v" style="--ch:${s.v.height}px">${canvas('v', s.v)}</div>` : ''))
   + `</section>`;
 };
+// data-title-src/box 只给排版期检查用，值是构建机上的绝对路径；写进页面前去掉，成品不带本机路径
+const dropBuildAttrs = (html: string) => html.replace(/\sdata-title-(?:src|box)="[^"]*"/g, '');
 const canvas = (o: string, x: any) =>
-  `<div class="ts-canvas o-${o} ts-shape-${x.shape || ''}" style="min-height:${x.height}px;${x.style || ''}">${x.html}</div>${x.overlay || ''}`;
+  `<div class="ts-canvas o-${o} ts-shape-${x.shape || ''}" style="min-height:${x.height}px;${x.style || ''}">${dropBuildAttrs(x.html)}</div>${dropBuildAttrs(x.overlay || '')}`;
 // 和现在网站一样：连续的独立卡（shape=card）放进两列卡片网格（手机一列）；别的屏（例如分类标题条）把网格断开、占满整行
 const parts: string[] = [];
 let grid: string[] = [];
