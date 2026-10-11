@@ -247,7 +247,7 @@ function texts(ranToday, nShore) {
   const C = { ok: 'var(--ok)', warn: 'var(--warn)', bad: 'var(--bad)', gray: 'var(--gray)' };
   // 别的软件自带的任务（Office、浏览器更新这类）折成一行；用途目录没标“你的”就不折
   const anyMine = M.tasks.some(t => t.raw.plain?.mine === true), other = x => anyMine && (x.t || x).raw?.plain?.mine !== true;
-  const group = (key, title, say, list, open, timeOf, colorOf, head, fold, nameOf = t => t.name) => { if (!list.length) return;
+  const group = (key, title, say, list, open, timeOf, colorOf, head, fold, nameOf = x => (x.t || x).name) => { if (!list.length) return;
     const d = mk('details', 'group', log); d.id = 'g-' + key; d.open = open;
     d.innerHTML = `<summary><span class="dot" style="--c:${head}"></span>${title}<span class="n">${list.length}</span><span class="say">${say}</span></summary><div class="rows"></div>`;
     const folded = fold ? list.filter(fold) : [], bad = folded.filter(x => (x.t || x).alert).length;
