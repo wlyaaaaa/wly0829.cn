@@ -1,6 +1,6 @@
 {
   "schema": "frozen-module-layout.v1",
-  "card_layout": "two_columns_last_full",
+  "card_layout": "three_columns",
   "card_candidates": {
     "two_columns_last_full": {"columns": 2, "last_full_width": true},
     "three_columns": {"columns": 3, "last_full_width": false}
