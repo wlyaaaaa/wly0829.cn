@@ -33,27 +33,42 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## EdgeOne live 函数单独发布
 
-`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。修改 `edge/edgeone/edge-functions/[[path]].js` 后，需要单独发布这个函数包；前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。
+`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。以后把 `edge/edgeone/edge-functions/[[path]].js` 的改动推送到 main，GitHub 工作流会更新函数专用部署分支，EdgeOne 自动发布；需要重发同一版时，也可以用下面的一条命令完成，无需再登录腾讯云。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。这条无人值守路线已于北京时间 2026 年 10 月 12 日完成实测。
 
 北京时间 2026 年 10 月 12 日的已核实配置与结果：
 
 - 现有项目名 `wly-edgeone-trial-20261006`，项目 ID `makers-lrgrecs7uvjl`；生产域名为 `live.wly0829.cn` 和 `eo-test.wly0829.cn`。
-- 项目采用直接上传，尚未关联 Git。框架、根目录、输出目录、编译命令与安装命令均为空或未设置；控制台 Node.js 版本为 `22.11.0`。
-- 从远端 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录打包，ZIP 根下只有 `edge-functions/[[path]].js`。该纯函数包无需补 `index.html`、`package.json` 或 `edgeone.json`，已在现有项目实际部署成功。
-- 成功部署 ID `dpyqa3wa7o0h`，部署时间为北京时间 2026 年 10 月 12 日 02:42:38；公网 `https://live.wly0829.cn/computer-access/state?view=cockpit` 已返回 `pcconfig.cockpit-view.v1`。响应大小随当前数据变化，不用固定字节数判定是否成功。
+- 现有项目已关联 `wlyaaaaa/wly0829.cn`；GitHub App 已安装并仅选这个仓库。生产分支为 `edgeone-live`，生产自动部署默认开启，预览自动部署关闭。框架 `Other`、根目录 `.`、输出目录 `.`、编译命令 `true`、安装命令 `true`；两条 `true` 是 Bash 空操作，不运行网站全站构建，平台仍正常编译边缘函数。控制台 Node.js 版本仍为 `22.11.0`。域名、DNS 和证书未改。
+- `.github/workflows/edgeone-live.yml` 已集成到 main 提交 `c3684acb2f909f93bf8955062fd953abc6c78384`。main 推送触发的 GitHub 运行 `38169676317` 于 03:50:06 创建并成功，生成首个部署分支提交 `9a30c350a8ef7be3485d687d4ea71857a6b10155`，父提交为空；根文件树为 `09cdec8fceee988f4ee256efe615c5c223ae8744`，只有 `edge-functions`。
+- 首个小分支 Git 生产部署 `dpiskwlq1jrc` 于 03:54:37 发起、03:55:08 成功，克隆耗时 1345 毫秒，函数编译成功。03:55:53 的 `-RequireMainCompact` 验收通过，主入口返回 `pcconfig.cockpit-view.v1`，本次响应为 158942 字节。
+- 无人值守实测由命令行触发 GitHub 运行 `38170111261`，事件为 `workflow_dispatch`，源码仍为上述 main 提交；03:56:26～03:56:36 运行成功。它生成提交 `82b496dd9a2d79f3e8a33c46d22f909acf4538f3`，唯一父提交为 `9a30c350a8ef7be3485d687d4ea71857a6b10155`，文件树不变。EdgeOne 自动产生生产部署 `dpcl7w6tn1js`，03:56:37 发起并成功，构建耗时 17 秒、克隆耗时 1745 毫秒；03:58:38 的 `-RequireMainCompact` 验收通过，响应为 158933 字节。本次仅通过浏览器只读观察记录，没有点击部署，也未创建腾讯云令牌或新增密码中心凭据。
 
-当前可执行的发布步骤：先 fetch 远端 main，在 E 盘任务专用目录准备 ZIP，然后在上述现有项目的“新建部署”中上传为生产部署，不改域名或 DNS。打包命令在网站仓库工作树执行：
+工作流使用 GitHub 自带的仓库写入权限，通过 Git API 将当前 main 的 `edge/edgeone` 文件树直接复用为同仓库 `edgeone-live` 分支的根文件树；不 checkout 全仓库，不需要腾讯云令牌。首个提交没有父提交，后续提交只接续该部署分支自身历史，普通快进更新，不把 main 的全站历史带入部署分支。main 始终是函数源码的编辑入口，`edgeone-live` 是工作流生成的部署结果，不在上面手工维护另一份源码。
+
+每次 main 推送都会运行该工作流，但函数文件树相同时不生成新提交，也不触发部署分支更新；这项过滤在 GitHub 工作流中完成，不是 EdgeOne 路径过滤。日常部署只需把函数改动推送到 main；需要强制重部署时执行：
 
 ```powershell
-git fetch origin main
-git archive --format=zip --output="E:/Cache/Codex/Temp/<任务目录>/edgeone-live-release.zip" origin/main:edge/edgeone
+gh workflow run edgeone-live.yml --repo wlyaaaaa/wly0829.cn --ref main -f redeploy=true
 ```
 
-ZIP 根必须直接包含 `edge-functions`，不能多套一层 `edge/edgeone`。记录本次远端提交与部署 ID；平台显示成功后，再对公网主入口执行现行 live 验收，确认精简视图和实际转发行为。发布失败保留原部署并报告失败；只有平台成功记录还不足以代替公网回读。
+`redeploy=true` 即使函数文件树不变，也会创建新的部署提交，触发 EdgeOne 自动发布。工作流每次读取当前 main，排队的旧事件不会把部署分支退回旧源码。上述命令沿用已配置的 GitHub CLI 身份，不调用浏览器登录。
 
-**自动部署当前尚未启用，也尚未完成无人值守部署实测。** 现有控制台出现 Git 关联入口，但[官方直接上传说明](https://pages.edgeone.ai/document/direct-upload)仍写直接上传项目不能切换为 Git 集成；必须以这个现有项目真正关联、部署成功及公网回读为准，不能据入口存在就宣称已支持。若现有项目实际支持关联，配置目标是仓库 `wlyaaaaa/wly0829.cn`、生产分支 `main`、根目录 `edge/edgeone`，开启自动部署；发布范围仅为函数目录，不接入网站全站构建。完成后，还应通过一次不操作浏览器的 main 推送验证自动发布。
+每次发布保留 main 源码提交、函数文件树 SHA、部署分支提交、工作流结果与 EdgeOne 部署 ID；平台显示成功后，再对 `https://live.wly0829.cn/computer-access/state?view=cockpit` 执行现行 live 验收，确认 `pcconfig.cockpit-view.v1` 精简视图和实际转发行为。响应大小随当前数据变化，不用固定字节数判定成功。工作流成功只说明部署分支已更新，不能代替 EdgeOne 成功记录及公网回读；失败也不能用旧成功部署的响应冒充本次发布通过。
 
-若 Git 关联无法完成，备选是[官方 EdgeOne CLI](https://pages.edgeone.ai/document/edgeone-cli)部署到同一现有项目。官方 API Token 是账号级凭据，不能描述为仅限单个项目；令牌只存密码中心，由正式程序供给入口送入部署进程，不写入仓库、普通配置、日志或文档。目前尚未交付该供给脚本或完成 CLI 实测，因此不能把这条备选当作现成的一条命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
+暂停自动入口使用 GitHub 工作流的[停用命令](https://cli.github.com/manual/gh_workflow_disable)，恢复使用[启用命令](https://cli.github.com/manual/gh_workflow_enable)；本次未执行这两个操作：
+
+```powershell
+# 暂停：停止 main 推送后生成新的 EdgeOne 部署提交。
+gh workflow disable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
+# 恢复：启用后，执行上面的 redeploy 命令发布当前 main。
+gh workflow enable edgeone-live.yml --repo wlyaaaaa/wly0829.cn
+```
+
+停用工作流不会撤回线上部署或关闭 live 服务，期间 main 的函数改动不会自动上线；恢复后显式重部署当前 main，避免遗漏停用期间的改动。EdgeOne 的生产自动部署复选框由平台默认开启且不可操作，因此停止入口在 GitHub 工作流一侧。
+
+保留的历史边界：直接把生产分支设为 main、根目录设为 `edge/edgeone` 时，首次 Git 部署 `dpvondepzdi5` 已接收 `2.23 GiB`，随后出现 3926 条 `unable to write file` 和 `checkout failed`，未进入安装或构建。平台笼统概括为 Git 403，准确原因 `Unknown`；不能把它报告为权限原因。当前小分支路线已完成成功部署，不再依赖这条失败路线。
+
+此前手动上传部署 `dpyqa3wa7o0h` 于 02:42:38 成功，来源为 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录，ZIP 根下只有 `edge-functions/[[path]].js`，未添加 `index.html`、`package.json` 或 `edgeone.json`。这条记录保留为历史恢复证据；解除 Git 关联后能否恢复上传或 CLI 路线仍为 `Unknown`，不将旧上传办法当作当前 Git 项目的现成恢复命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
 
 ## 扫描做什么
 
