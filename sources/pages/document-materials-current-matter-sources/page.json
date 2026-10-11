@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "document-materials-current-matter-sources",
+  "kind": "project",
+  "title": "先固定当前事项、必要原件、事实与真正未知",
+  "url": "/projects/document-materials/current-matter-sources/",
+  "parent": "personal-formal-documents",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有制作真实材料、没有跑测试"
+  },
+  "screens": [
+    {
+      "id": "document-materials-current-matter-sources-01",
+      "section": "top",
+      "title": "先固定当前事项、必要原件、事实与真正未知",
+      "text": "# 先固定当前事项、必要原件、事实与真正未知\n\n〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕\n\n文书和材料制作 · 功能说明\n\n在写第一句话前先确定这次真正要解决什么、哪些原件会改变判断、哪些内容仍未知，避免旧草稿和别的事项混入。\n\n**当前情况：**固定当前事项和输入的功能在用；现在输入文件按原样字节封存，制作过程中输入内容被改动就整轮停下（10 月 11 日核对源码）。每条事实是否有依据、整篇是否准确仍需实际审阅。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-formal-documents/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n同一事项可能跨多个版本和附件；金额、日期、接收对象或本人决定只要有一项错，后面的版式再漂亮也没有用。制作途中输入被悄悄改了，成品和存档也会对不上。\n\n## 举个实际例子\n\n我可以说：“购买记录和旧草稿写的日期不一样，先把冲突标出来，别急着成稿。”系统会把两个日期及各自来源并排交回；确认前不替我选一个。做协议时，它还会先核对至少有两方、我的名字只对上其中一方。\n\n## 最后我会得到什么\n\n得到一份输入和制作计划：目标、参与方、接收对象、事实、请求、附件、签名要求、未知和下一步彼此分开。哪些会写进对外正文、哪些只是内部记录（比如事项编号、递送渠道）也分得清。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以继续制作\n\n目标、接收对象、必要原件和输入字段一致，可冻结本次制作计划。\n\n## 需要修正\n\n原件冲突、事实缺来源、日期金额不清、协议各方对不上或需要本人决定时，保留现有材料并列出唯一问题，不开始正式构建。\n\n## 当前不可用\n\n当前事项或关键原件不可读时只暂停对应步骤，不扫描其他目录或从旧对话补猜；制作中输入被改动就整轮停下，不出正式成品。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说明当前要解决的事项，并点名必要原件。\n\n## 需要准备什么\n\n- 事项目标和接收对象\n\n- 本次必要的新文件或事实（如有）\n\n- 确有期限时的截止要求\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　只把会改变本次判断的材料固定下来，核对日期、金额与各方说法；协议核对各方和本人身份；旧草稿和别的事项不自动混入。\n\n2. **交付与接续**　交回制作依据及需要本人决定的空白；原件或事实不足时先列缺口，不用模板猜。输入在制作中变了，就停下来按新内容重新做。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对源码**　版本仍是 2.0.1；输入改为“按解析值生成、按原字节封存、两者语义必须一致”。逐条事实来源和整篇语义审阅仍需额外核对。本次没有运行测试，没有读取任何真实事项。\n\n## 关键规则与设计选择\n\n1. 单文件编辑、原件查找和工作交付在入口处直接分流。\n\n2. 用已解析的请求生成成品，同时把请求文件的原字节复制进存档；复制件重新解析后必须和生成用的值语义一致，不一致就拒绝本轮、删掉临时目录、不出正式成品。只改了格式或空白、语义相同的不会因此失败。\n\n3. 对外正文按文书用途选字段；事项编号、目的、递送渠道和渠道参考号只留在计划、输入存档和清单里，不进正文，但仍随输入存档的哈希绑定。\n\n4. 协议至少两方，签署人姓名只能对上其中一方；标为“本人”的参与方名字必须等于签署人。不补地址或联系方式。\n\n5. 整包输入被固定不等于每条事实来源机械闭合；source_note 缺失时继续显示缺口。可选的“依据”只放已核过的法律或合同原文，给了才写，不自动查证每一句。\n\n## 当前怎样实现\n\n- 严格请求结构（v2）约束事项类型、唯一 ID、日期、参与方、收件方、渠道、事实、请求、附件和签名字段；成品与材料包结构是 v3。\n\n- 日期按真实日历检查，不存在的日子拒绝；需要的日期时间格式校验依赖缺失时直接报错，不退化成不检查。\n\n- 普通文件与附件都显式传入；重复 ID、缺失附件、末端是链接的文件失败关闭。相对路径的附件和签名配置按请求文件所在目录解释，不是一律拒绝；材料包内部成员必须落在包内，跑到包外才拒绝。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 附件在复制后重新核对来源 SHA-256 与内容 SHA-256。\n\n- 当前 source_note 可选，自动化没有逐事实来源强门；生成器只消费明确请求，自己不识别自然语言里的冲突，这部分靠 AI 实际核对。\n\n## 执行流程\n\n1. 判断入口\n\n2. 读取当前事项\n\n3. 只打开必要原件\n\n4. 列出事实、来源说明、未知和决定\n\n5. 核对接收对象、各方、附件与签名要求\n\n6. 输出计划或明确阻断",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Current matter（当前事项） | 一个目标下当前有效的原件、状态、决定、未知、期限和恢复点，不是全局个人资料。 |\n| Input snapshot（输入快照） | 请求文件的原样字节副本；它的语义必须和实际用于生成的值一致，哈希、大小与制作清单绑定。 |\n| source_note（来源说明） | 某条事实的简短依据说明；当前可选，因此不能据此宣称每条事实都已逐一溯源。 |\n| 正文字段／内部记录 | 正文字段按文书用途写进成品；事项编号、渠道等只留在计划和存档里。 |\n\n## 专业定义\n\n当前事项先回答为什么做、给谁、何时、已有哪一版和缺什么；生成器只接收显式输入和普通文件，不扫描私人目录。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-08",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决错事项、错版本、来源冲突、字段漂移、制作途中输入被改，以及把推测或未决定内容写成事实。\n\n## 边界\n\n- 不读取真实私人目录作为默认上下文\n\n- 不把旧草稿或缓存当当前事实\n\n- 不替用户完成仍需本人决定的内容\n\n- 不把输入哈希冒充逐事实来源闭合\n\n- 项目规定要逐级检查路径里有没有链接或联接，但通用制作入口目前只检查文件本身是不是链接；这是规定和实现之间的已知缺口，没有测试证明已覆盖。\n\n## 失败与恢复\n\n- **原件或当前事项冲突**：停止正式构建，列出冲突字段与各自来源，等待明确选择。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-09",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **附件缺失、是链接或哈希变化**：拒绝接入当前构建；保留原件和上次核对版本。\n\n- **请求文件在解析后被改动**：复制存档时发现语义不一致就拒绝本轮、清掉临时目录；改动后的内容只能重新做一次新构建。\n\n- **协议各方或本人身份对不上**：在制作前拒绝，列出哪一方不符。\n\n- **只需要找原件或改单文件**：绕过本项目，进入对应的最短能力。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-current-matter-sources-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal-document-input schema　严格输入字段、类型、签名要求和可选依据\n\n- PRIVATE source · formal_documents.py　输入原字节存档与语义比对、附件、相对路径解释、协议各方核对\n\n- PRIVATE tests · test_formal_documents.py　输出字段漂移和四类材料回归（28 个测试函数，展开 39 个用例，10 月 11 日静态计数）\n\n## 如何验证\n\n- 五类输出字段修改并重算摘要后均被 verify 拒绝。\n\n- 旧的“解析后改动请求”测试挂在已经不用的写入路径上，现在不会触发改动，不能当成新拒绝策略已经测过的证据；新策略目前只有实现，实际执行验证未知。\n\n- 重复 ID、缺失附件和末端链接失败关闭；相对路径按请求所在目录解释。\n\n- 真实事项和逐事实来源的端到端验证本次没有运行。\n\n## 与其他模块的关系\n\n本模块提供计划的可信输入；下一模块只消费这份输入，不重新扫描或猜事实。",
+      "links": [
+        {
+          "text": "下一个模块 DOCX 与 PDF",
+          "href": "/projects/document-materials/editable-docx-pdf/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "document-materials-signature-delivery-version",
+  "kind": "project",
+  "title": "把本人签名、无需签名和可递送版本准确分开",
+  "url": "/projects/document-materials/signature-delivery-version/",
+  "parent": "personal-formal-documents",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有真实签名或递送"
+  },
+  "screens": [
+    {
+      "id": "document-materials-signature-delivery-version-01",
+      "section": "top",
+      "title": "把本人签名、无需签名和可递送版本准确分开",
+      "text": "# 把本人签名、无需签名和可递送版本准确分开\n\n〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕\n\n文书和材料制作 · 功能说明\n\n用户能知道当前版本到底是已生成、本人已签还是已经锁定可递送，而不会把一张签名图误写成外部结果。协议里每一方都有自己的签字位置，只在本人那一方放本人的签名。\n\n**当前情况：**签署人核对、签名资产封存和协议每方独立签署位都在用（10 月 11 日核对源码）；PDF 中的签名是否清晰、位置正确仍需看真实页面，图片数量不够证明。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-formal-documents/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n签署人、签名资产、日期和最终 PDF 只要错一项，就可能用错版本；反过来，不需要签名的材料也不能伪造“本人已签”状态。协议有好几方，签名放错一方或替对方签都不行。\n\n## 举个实际例子\n\n我可以问：“这份协议需要我签名吗，现在能不能发？”系统会先核对接收要求和实际页面：每一方都有签字和日期位置，只有我这一方放我的签名和日期，对方处留空；无需签名的材料在内容与版面通过后可进入待递送，需要签名的还要确认签名属于本人、位置正确且清楚可见。\n\n## 最后我会得到什么\n\n知道这份本地文件是刚生成、无需签、待本人签、已签还是已锁定可递送；这些状态都不等于实际送出，也不代表对方已签、合同已生效或已履约。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以继续制作\n\n不需签名的版本，或确需签名且已核对本人签名与页面的版本，完成其他检查后才标为可递送。\n\n## 需要修正\n\n签名人、图片来源或最终可见性对不上时保留待核，不用图片存在代替已签。\n\n## 当前不可用\n\n必要签名材料或页面检查不可用时暂停签名与可递送步骤，不造占位签名。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说明这份文件需不需要本人签名，并问现在能否递送。\n\n## 需要准备什么\n\n- 这份文件需不需要本人签名\n\n- 准备采用的递送方式（若已决定）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　分开无需签、待本人签、已签和锁定可递送的版本，不用一张签名图替代实际步骤。\n\n2. **交付与接续**　交回当前精确状态及下一步；未签或版本已改时不沿用旧的可递送结论。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对源码**　已能核对签署人、签名资产来源与 DOCX 同图哈希，协议每方各有独立签署位；PDF 仍只有图像对象数量检查，签名最终可见性仍需逐页核对。本次没有运行测试或真实签名。\n\n## 关键规则与设计选择\n\n1. signature.required=false 保持“已生成”，不伪造“本人已签”；通过其他检查后仍可进入可递送。\n\n2. required=true 必须签名配置里的姓名与请求的签署人完全一致，并封存配置和签名图快照。\n\n3. 协议至少两方，签署人只对上其中一方；每方都有签字（盖章）和日期位置，只嵌入本人一方的签名和文书日期，其他方留空。本人不需要签名时，各方空签署位照样保留——这是协议本身的签署位，不是伪造的占位签名。\n\n4. DOCX 要求找到精确签名图 SHA-256；PDF 当前仅要求至少有 1 个图像对象，没有把该对象与签名资产、最终位置或可见性绑定。\n\n5. 本地签名不证明对方签名、递送、收到或处理；外部递送仍需明确对象、版本、渠道和动作授权。\n\n## 当前怎样实现\n\n- 签名配置与图片必须是普通可读文件，签名图按配置所在目录解析。\n\n- 构建封存签名配置与签名图，并重算快照大小和 SHA-256；这种内容摘要不是密码学签名。\n\n- 通用输入结构没有手印字段，不能据此说通用协议支持手印。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- DOCX 对内嵌媒体做完整 SHA-256 匹配；PDF 只合计每页图像数，要求至少 1，不检查它是否就是签名或是否实际可见。\n\n- 备用 PDF 按签名原图宽高比放置、过宽等比缩小，每方签署块不跨页拆开；这是实现，不是看过所有真实签署页的证据。\n\n- 渲染页的墨迹覆盖和边缘暗度检查不识别签名位置、遮挡或可读性。\n\n- 构建状态为“已生成”或“本人已签”；材料包只把递送状态改为“已具备递送条件”，并固定“未递送”。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 读取签名要求\n\n2. 核对签名配置与签署人；协议核对各方与本人一方\n\n3. 验证签名图片\n\n4. 生成 DOCX/PDF，协议写出每方签署位\n\n5. 匹配 DOCX 签名图并统计 PDF 图像对象\n\n6. 封存签名快照\n\n7. 完成当前机械逐页审计\n\n8. 形成可递送材料包并说明签名可见性证据边界",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| produced（已生成） | 文书已生成和核对，但没有声明本人签名已固定。 |\n| signed（本人已签） | 本地成品包含核对过的本人签名资产；不表示其他人签名或外部动作。 |\n| ready_for_delivery（可递送） | 确切版本、接收对象、渠道、附件和指纹已锁定，delivered仍为false。 |\n| Signature asset（签名资产） | 受profile管理并以SHA-256绑定的签名图片；不是证书签名或可信时间戳。 |\n\n## 专业定义\n\n签名是一个独立制作步骤：需要时核对规范 profile 和图片 hash（内容指纹），不需要时明确保持 produced（已生成）；两种情况都要经过完整审计才能进入 ready_for_delivery（已具备递送条件）。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决错签、漏签、签到对方位置、占位签名、无需签名却标已签和把可递送误报成已发送。\n\n## 边界\n\n- 不生成占位签名；协议的空签署位不是占位签名\n\n- PDF 图像对象计数不证明签名身份、位置或最终可见性\n\n- 不把图片哈希称为密码学签名\n\n- 不把本人签名称为对方签回\n\n- 不把可递送称为已递送\n\n- 不自动执行外部动作\n\n## 失败与恢复\n\n- **签名配置姓名与请求不一致**：构建前失败，不选择其他签名图片。\n\n- **协议方数不足或本人对上不止一方**：构建前失败。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **签名图片不可读或越出配置目录**：停止签名步骤，保留请求和旧版本。\n\n- **DOCX 没有匹配签名图，或 PDF 图像对象为 0**：当前机械检查失败，不形成材料包；PDF 对象数大于 0 也不能反向证明签名可见。\n\n- **PDF 有图片但签名位置或可见性尚未核实**：保留渲染页供核对，明确签名视觉证据仍未闭合；现行命令行没有专门识别这一缺口的自动检查。\n\n- **无需签名**：明确保持“已生成”；单方文书不加签名线，协议保留各方空签署位；通过审计后仍可进入可递送，但不写“已签”。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-11",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- PRIVATE source · formal_documents.py　签名配置、签名图封存、协议各方签署位与状态\n\n- PRIVATE source · signature helpers　签名图片嵌入和规范路径\n\n- PRIVATE tests · signature/readback　签署人、图片哈希、协议签署位、已生成／已签／可递送回归\n\n## 如何验证\n\n- 签署人不匹配和直接注入图片路径均失败。\n\n- 签名配置和签名图快照被纳入 v3 闭包。\n\n- 合成签名测试核对 DOCX 签名图已验证与 PDF 图像数至少 1；这只证明当前机械条件，不证明 PDF 签名像素、身份或位置正确。\n\n- 无需签名的单方文书保持“已生成”且不含签名线；无需签名的协议保留各方空签署位。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-signature-delivery-version-12",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 渲染器不可用的回归保持不可递送且不生成材料包。\n\n- 测试文件现有 28 个函数、39 个用例（10 月 11 日静态计数，本次没有运行）；真实签名和外部递送端到端验证本次没有运行。\n\n## 与其他模块的关系\n\n本模块只负责本地签名和递送版本；递送之后的现实状态必须进入下一模块回读。",
+      "links": [
+        {
+          "text": "上一个模块 逐页验收与材料包",
+          "href": "/projects/document-materials/page-audit-release/"
+        },
+        {
+          "text": "下一个模块 现实回读与恢复",
+          "href": "/projects/document-materials/reality-readback-recovery/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

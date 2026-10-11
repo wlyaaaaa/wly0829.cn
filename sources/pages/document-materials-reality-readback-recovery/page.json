@@ -1,0 +1,187 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "document-materials-reality-readback-recovery",
+  "kind": "project",
+  "title": "递送、收件、处理和对方签回分别回读，中断从核对版本继续",
+  "url": "/projects/document-materials/reality-readback-recovery/",
+  "parent": "personal-formal-documents",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对，现实状态语义未变；真实外部处理数量本次未读"
+  },
+  "screens": [
+    {
+      "id": "document-materials-reality-readback-recovery-01",
+      "section": "top",
+      "title": "递送、收件、处理和对方签回分别回读，中断从核对版本继续",
+      "text": "# 递送、收件、处理和对方签回分别回读，中断从核对版本继续\n\n〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕\n\n文书和材料制作 · 功能说明\n\n用户不会因为文件已经做好就重复递送，也不会把一张回执或对方签回扩大成所有事情已经完成。\n\n**当前情况：**已生成、已签与可递送有本地工具支持；是否真正送达、被接收、处理或签回仍由对应现实记录确认（10 月 11 日核对，含义未变）。现有真实事项的数量和外部状态本次没有读取，仍未知。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-formal-documents/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n外部动作可能失败、延迟或只有部分回读；中断后若只看生成日志，很容易再次制作或再次发送同一版本。\n\n## 举个实际例子\n\n我可以问：“材料已经发出，对方到底是收到了、处理了，还是已经签回？”系统会分别核对发送记录、收件确认、处理结果和签回文件，只报告证据真正支持的那一步。\n\n## 最后我会得到什么\n\n交回送出、对方收到、实际处理和签回各自有无证据，以及当前版本、下一步和从哪里恢复。现有材料包可以复制到空位置再核对，但不会自行备份或替人递送。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以继续制作\n\n每一步现实状态都有对应版本的真实记录，材料包本身也可独立核对，才从已确认位置继续。\n\n## 需要修正\n\n只有发送但未确认收件，或回执与版本不符时保留已证实的一层，其余未知，不重复动作。\n\n## 当前不可用\n\n外部渠道、事项记录或完整包不可用时只停受影响步骤，不从制作日志猜对方已经收到。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n文件送出后，提供真实回执并问对方是否收到或处理。\n\n## 需要准备什么\n\n- 本次递送版本\n\n- 发送、收件、处理或签回证据\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　逐层核对现实动作与对应文件版本，中断先查已有回执和最近释放的包。\n\n2. **交付与接续**　分别报告递送、收件、处理、对方签回；一个回执不能推成全部完成，也不盲目重复递送。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对源码**　六个阶段和对方签回仍分别表达；自动工具只负责本地前三步，后三步与签回由唯一事项记录和现实证据推进。本次没有运行测试或任何外部动作。\n\n## 关键规则与设计选择\n\n1. produced（已生成）只表示生成；signed（本人已签）只表示本人签名；ready_for_delivery（已具备递送条件）只表示版本锁定。\n\n2. delivered（已递送）必须有动作记录，received（已收件）必须有接收确认，handled（已处理）必须有实质结果来源。\n\n3. counterparty_signed_returned（对方签回）保存完整签回文件、来源、时间、大小和 SHA-256，是独立事件，不自动推出付款、履约或处理。\n\n4. 当前通用命令行不实现后三阶段或签回，网页把它们标为现实规则而非已运行自动化；程序日志不是现实状态的来源。\n\n5. v3 普通复制 + 复验可恢复，但没有自动备份或断点续传镜像；不从其他支线已有的镜像工具推定本路线也支持。\n\n6. 外部递送、付款、撤回或联系必须有精确授权；结果不确定时先回读。\n\n## 当前怎样实现\n\n- 事项记录按 produced → signed → ready_for_delivery → delivered → received → handled 分层。\n\n- 对方签回记录完整文件、来源、时间、大小和 SHA-256，不进入自动状态推进。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- v3 材料包的精确集合在普通复制到空目录后由 formal-verify 重算。\n\n- v2 材料包返回旧版范围和限制，有限通过也不报“已具备递送条件”，不修改原件和历史包；v3 材料包不能改标 v2 绕过闭包检查。\n\n- 通用命令行没有后台监听、状态抓取或自动外部动作。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 从可递送材料包开始\n\n2. 经精确授权执行递送\n\n3. 保存动作记录\n\n4. 等待接收确认\n\n5. 记录处理来源\n\n6. 对方签回另存\n\n7. 复制或中断后先复验\n\n8. 从最近核对状态继续",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| delivered（已递送） | 有证据证明确切版本的递送动作发生；不表示对方收到。 |\n| received（已收件） | 对方或平台确认收到；不表示审阅、同意或处理。 |\n| handled（已处理） | 实质处理结果有来源支持；不推出未记录的额外结论。 |\n| Recovery point（恢复点） | 最近一次通过验证的build/release和当前现实状态；中断后从这里继续。 |\n\n## 专业定义\n\n本地管线到 ready_for_delivery（已具备递送条件）即停止；delivered（已递送）、received（已收件）、handled（已处理）和 counterparty_signed_returned（对方签回）由当前事项与现实记录拥有。v3 release 可以复制到空目录复验，但没有自动备份或续传服务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决生成日志冒充现实、状态跨级、对方签回混同、重复递送和换目录后无法继续。\n\n## 边界\n\n- 现实状态不由本地日志自动晋级\n\n- 对方签回不等于事项解决\n\n- 普通复制恢复不等于自动备份\n\n- 不重复未知结果的外部动作\n\n- 真实个人回执不进入网页\n\n## 失败与恢复\n\n- **只有可递送，没有递送记录**：保持可递送和“未递送”；等待授权或现实回读。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **已递送但无接收确认**：只记录已递送，已收件保持 Unknown（未验证）。\n\n- **复制后缺文件、额外文件或哈希变化**：复验失败，保留源和副本，补齐后重新核对。\n\n- **旧 v2 材料包**：有限验证通过也不报可递送，明确缺少的闭包。\n\n- **外部结果不确定**：先查当前记录，不自动重放递送、付款、撤回或联系；失败和收件未知分别报告。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-reality-readback-recovery-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE product contract · formal matters　六阶段与对方签回的现实语义\n\n- PRIVATE source · formal_documents.py　已生成／已签／可递送、v3 复制复验和 v2 限制\n\n- PRIVATE tests · restore/legacy　空目录复验、精确集合和 v2 兼容回归\n\n## 如何验证\n\n- v3 材料包复制到空目录且原构建删除后复验通过；缺文件和额外文件均失败（历史虚构回执，本次未重跑）。\n\n- v2 历史材料包通过有限验证并返回非自包含限制，不报可递送。\n\n- 真实递送、收件、处理、签回和断点续传的端到端验证本次没有运行，也没有做任何外部动作。\n\n## 与其他模块的关系\n\n这是本地制作与现实工作的分界线；项目到这里交回确切状态和下一步，不替外部对象行动。",
+      "links": [
+        {
+          "text": "上一个模块 签名与递送版本",
+          "href": "/projects/document-materials/signature-delivery-version/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "document-materials-editable-docx-pdf",
+  "kind": "project",
+  "title": "从同一规范内容生成可编辑 DOCX、PDF 与附件",
+  "url": "/projects/document-materials/editable-docx-pdf/",
+  "parent": "personal-formal-documents",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有制作、打印或安装验证"
+  },
+  "screens": [
+    {
+      "id": "document-materials-editable-docx-pdf-01",
+      "section": "top",
+      "title": "从同一规范内容生成可编辑 DOCX、PDF 与附件",
+      "text": "# 从同一规范内容生成可编辑 DOCX、PDF 与附件\n\n〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕\n\n文书和材料制作 · 功能说明\n\n同一份确认内容得到可编辑DOCX、固定版PDF和按序附件，电子版与打印版不各自手改内容。电子版按用途选彩色或黑白，需要快速查找的仍要有清楚的层级和导航；确有打印用途时按打印要求检查，不强制每次交付两版。\n\n**当前情况：**同源 DOCX/PDF 生成在用，协议和单方文书按各自用途编排正文，协议每方各有签字和日期位置（10 月 11 日核对源码）。四类材料的虚构样张验收是历史记录；真实个人材料本次没有制作。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-formal-documents/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n分别修改 Word 和 PDF 最容易让日期、请求、附件编号和签名块漂移；覆盖旧输出又会失去可恢复版本。协议和单方声明的结构也不一样，套一个模板会写乱。\n\n## 举个实际例子\n\n我可以说：“把核对后的退款申请做成可编辑版和打印版，两个版本内容必须一致。”系统会从同一份确认内容生成 DOCX 和 PDF；若本机缺少正常导出条件，会说明改用了什么方式以及仍需复核什么。做协议时，每一方都有自己的签字和日期位置，只在我这一方放我的签名。\n\n## 最后我会得到什么\n\n得到这次确认内容的可编辑 Word、同内容 PDF 和按序附件，知道使用了哪条导出路线。协议按“合同当事人、订立背景、约定条款”组织，单方文书按“致收件方、出具人与相关方、事实、声明事项”组织。新版本不覆盖旧文件；导出失败时保留已经核对的输入和旧版。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n要求同一份内容同时得到可编辑 Word 和对应 PDF。\n\n## 需要准备什么\n\n- 这次已确认的内容或要改的段落\n\n- 要附上的材料（如有）\n\n- 主要用于屏幕阅读还是打印\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　从同一规范内容生成两种格式，电子版核对层级与导航，确有打印需求再检查纸面效果。\n\n2. **交付与接续**　交回可编辑 DOCX、固定版 PDF 与附件；导出或字体有问题时保留原内容，重新核对页面。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对源码**　版本 2.0.1；源输入结构仍覆盖四类文书，输出仍是 DOCX、PDF、附件包三种。四类材料和隔离安装后的虚构样张完成同源生成与复验，是 9 月初的历史记录；本次没有运行任何制作、Word 导出或安装验证。\n\n## 关键规则与设计选择\n\n1. 四类材料的输入定义都在；网站总览重点讲合同协议和通知声明两类，不代表另外两类被删掉。\n\n2. 内部角色代码、事项编号、目的、渠道和参考号不进入对外正文；文档属性里的主题已清空，类别写人话类型。\n\n3. 2.0.1 安装包包含唯一 Word 导出资源；兼容构建与新入口共用同一实现。\n\n4. Word 首选路线和备用 PDF 路线在清单中分开，不能互相冒充。\n\n5. 请求默认按电子版处理，明确标为打印才按打印验证；同一内容源，不强制两套版式。\n\n## 当前怎样实现\n\n- A4 DOCX：四边 25 mm、页脚 12 mm 带页码，正文宋体 12 pt、1.5 倍行距，标题黑体 18 pt、小标题 13 pt。\n\n- 协议和单方文书按各自用途组织正文；可选的“依据”和附件随输入出现。\n\n- 协议每方都有独立的签字（盖章）和日期位置：需要本人签名时只在本人一方嵌入签名和日期，其他方留空；不需要签名时各方签署位都留空，状态仍是“已生成”。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- Word 导出资源随安装包提供，以无窗口方式运行、180 秒超时。Word 不可用时用本地备用引擎生成 PDF，并在清单写明原因；备用引擎必须有可嵌入的中文 TrueType 字体，缺字体直接失败，不交缺字成品，因此备用 PDF 不保证也是宋体加黑体的组合。\n\n- 备用 PDF 按签名原图宽高比放置，过宽就等比缩小，每方签署块不跨页拆开；这是实现，不说明签名视觉已人工看过。\n\n- DOCX 与 PDF 重新提取正文，逐项核对输出字段；旧版式的已存档成品按旧字段读回，不重写。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-06",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- 构建和材料包都在临时目录完成后原子替换上线；同名拒绝，失败清理临时目录。附件按输入顺序编号复制，中文名片段最长 80 字，复制后哈希不符即失败。\n\n## 执行流程\n\n1. 验证计划\n\n2. 创建唯一构建临时目录\n\n3. 存档输入原字节与附件\n\n4. 按文书用途生成 DOCX\n\n5. 导出 PDF 或明确使用备用引擎\n\n6. 重读字段、各方签署位与签名\n\n7. 写构建清单并原子上线",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| DOCX | 可继续编辑、修订和批注的 Word 文档；结构正确仍须逐页检查。 |\n| PDF | 固定版面输出；它来自同一内容源，不是另手工维护的一份正文。 |\n| Build ID（构建标识） | 一次不可覆盖制作的稳定名字；同名存在就拒绝覆盖。 |\n| Fallback（备用引擎） | Word 不可用时使用的本地 PDF 路线，需要可嵌入的中文字体；清单会保留引擎和警告。 |\n| 签署位 | 协议里每一方的签字（盖章）和日期位置；只在本人一方嵌入本人签名。 |\n\n## 专业定义\n\n计划只定义制作路线；构建才生成 A4 DOCX、PDF、附件和清单，正文按文书用途编排。Word 是首选导出器，备用引擎会在清单中明确记录。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-08",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决电子／打印版本分叉、内部代码泄露、旧输出覆盖、协议签署位混乱、备用路线缺中文字体和安装后静默缺资源。\n\n## 边界\n\n- 只生成明确请求的当前事项\n\n- 不把能打开写成内容正确\n\n- 不覆盖既有构建或材料包\n\n- 备用引擎不冒充 Word 输出\n\n- 不自动执行外部递送\n\n## 失败与恢复\n\n- **同名构建或材料包已存在**：拒绝覆盖；使用新构建标识或继续核对既有版本。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-09",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **Word 导出不可用**：明确记录警告并尝试本地备用引擎；没有可嵌入中文字体或备用也失败则停止。\n\n- **DOCX/PDF 缺输出字段或签署位**：正文读回失败，不形成“已具备递送条件”的材料包。\n\n- **附件复制哈希不同**：删除本轮临时目录，原件与旧构建保持不变。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-editable-docx-pdf-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal_documents.py　按用途编排的 DOCX/PDF、各方签署位、附件、导出与不可覆盖构建\n\n- PRIVATE source · packaged Word exporter　安装包内 Word 固定版导出\n\n- PRIVATE tests · four-type build/verify　四类材料、Word/备用引擎、协议签署位与隔离安装回归（28 个测试函数、39 个用例，10 月 11 日静态计数）\n\n## 如何验证\n\n- 四类通用材料的合成构建与复验、隔离安装包两个入口用 Microsoft Word + Poppler 的运行，都是 9 月初的历史记录。\n\n- DOCX 不含内部角色代码、事项编号或原始渠道值。\n\n- 本次没有运行测试，也没有确认当前 Word、字体和 Poppler 安装可用。\n\n- 真实个人正文和真实打印验收本次没有运行。\n\n## 与其他模块的关系\n\n本模块形成“已生成”或“本人已签”的构建；逐页审计和自包含材料包由下一模块决定是否可进入“已具备递送条件”。",
+      "links": [
+        {
+          "text": "上一个模块 事项与原件",
+          "href": "/projects/document-materials/current-matter-sources/"
+        },
+        {
+          "text": "下一个模块 逐页验收与材料包",
+          "href": "/projects/document-materials/page-audit-release/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

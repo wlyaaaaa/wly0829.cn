@@ -442,7 +442,13 @@
     "/projects/personal-health/health-owner-boundary/",
     "/projects/personal-health/offline-decision-brief/",
     "/projects/personal-health/protected-foreground-refresh/",
-    "/projects/personal-health/raw-preservation-resume/"
+    "/projects/personal-health/raw-preservation-resume/",
+    "/projects/document-materials/current-matter-sources/",
+    "/projects/document-materials/editable-docx-pdf/",
+    "/projects/document-materials/page-audit-release/",
+    "/projects/document-materials/reality-readback-recovery/",
+    "/projects/document-materials/signature-delivery-version/",
+    "/projects/document-materials/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
