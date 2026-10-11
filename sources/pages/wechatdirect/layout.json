@@ -395,7 +395,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1认准账号主号、副号各记一个账号编号的SHA-256指纹，每次读之前先核对，对不上就停，不会读错号2复制快照把要用的数据库复制到临时文件夹再",
+        "text_ref": "认准账号",
         "columns": 4,
         "direction": "horizontal",
         "connector": "arrow",
@@ -441,7 +441,7 @@
       },
       {
         "type": "flow",
-        "text_ref": "1认准账号主号、副号各记一个账号编号的SHA-256指纹，每次读之前先核对，对不上就停，不会读错号2复制快照把要用的数据库复制到临时文件夹再",
+        "text_ref": "认准账号",
         "columns": 1,
         "direction": "vertical",
         "connector": "arrow",
@@ -511,7 +511,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "再跑一次：先核对已有文件的指纹都对得上。微信库没变，只看一眼元数据就结束；有新消息就从上次的位置接着读，多个分库时往回重叠1天防漏，去掉重复",
+        "text_ref": "再跑一次",
         "columns": 1,
         "columns_v": 1,
         "row": "archive",
@@ -520,7 +520,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "换新版本：在旁边的临时文件夹里建好、核对完才换上。换的时候要改两次目录名，万一正好卡在中间断电，旧版本还在，恢复命令能撤回或完成。",
+        "text_ref": "换新版本",
         "columns": 1,
         "columns_v": 1,
         "row": "archive",
@@ -528,7 +528,7 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "给AI的只挑一小段：平时只给ai-context.md；更早的事先在整份档案里搜到，再读附近几条。",
+        "text_ref": "给AI的只挑一小段",
         "columns": 1,
         "columns_v": 1,
         "row": "archive",
@@ -586,21 +586,21 @@
       },
       {
         "type": "source_text_card",
-        "text_ref": "再跑一次：先核对已有文件的指纹都对得上。微信库没变，只看一眼元数据就结束；有新消息就从上次的位置接着读，多个分库时往回重叠1天防漏，去掉重复",
+        "text_ref": "再跑一次",
         "columns": 1,
         "columns_v": 1,
         "whole_block": true
       },
       {
         "type": "source_text_card",
-        "text_ref": "换新版本：在旁边的临时文件夹里建好、核对完才换上。换的时候要改两次目录名，万一正好卡在中间断电，旧版本还在，恢复命令能撤回或完成。",
+        "text_ref": "换新版本",
         "columns": 1,
         "columns_v": 1,
         "whole_block": true
       },
       {
         "type": "source_text_card",
-        "text_ref": "给AI的只挑一小段：平时只给ai-context.md；更早的事先在整份档案里搜到，再读附近几条。",
+        "text_ref": "给AI的只挑一小段",
         "columns": 1,
         "columns_v": 1,
         "whole_block": true
@@ -889,7 +889,7 @@
       },
       {
         "type": "feature_card",
-        "text_ref": "7分清主号副号每次绑定一个号，同名联系人不跨号串；没说哪个号又两边都有，就列候选在用8看哪些聊天有新消息列出某个时间之后有变化的会话，两个号",
+        "text_ref": "分清主号副号",
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",
@@ -966,7 +966,7 @@
       },
       {
         "type": "feature_card",
-        "text_ref": "7分清主号副号每次绑定一个号，同名联系人不跨号串；没说哪个号又两边都有，就列候选在用8看哪些聊天有新消息列出某个时间之后有变化的会话，两个号",
+        "text_ref": "分清主号副号",
         "columns": 3,
         "columns_v": 1,
         "illustration": "left_inside",

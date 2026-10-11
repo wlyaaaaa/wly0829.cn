@@ -37,7 +37,7 @@
         "columns": 4,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "28 课"
+        "text_ref": "7 份文件"
       },
       {
         "type": "prose",
@@ -46,9 +46,8 @@
         "text_ref": "数字截至"
       },
       {
-        "type": "live_strip",
-        "text_ref": "现在",
-        "frame_mode": "plain"
+        "type": "action_button",
+        "text_ref": "看电脑和项目状态 → 驾驶舱"
       },
       {
         "type": "action_button",
@@ -96,7 +95,7 @@
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto",
-        "text_ref": "28 课",
+        "text_ref": "7 份文件",
         "portrait_columns": 1
       },
       {
@@ -106,9 +105,8 @@
         "text_ref": "数字截至"
       },
       {
-        "type": "live_strip",
-        "text_ref": "现在",
-        "frame_mode": "plain"
+        "type": "action_button",
+        "text_ref": "看电脑和项目状态 → 驾驶舱"
       },
       {
         "type": "action_button",
@@ -139,7 +137,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "每天约"
+        "text_ref": "每天一课"
       },
       {
         "type": "timeline",
@@ -196,7 +194,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "每天约"
+        "text_ref": "每天一课"
       },
       {
         "type": "timeline",
@@ -225,7 +223,7 @@
         "text_ref": "不另外去听课"
       }
     ],
-    "notes": "采用已通过 learning-02-v 替换图并合看 v2。第1张标题/导语及前4步，图在卡左；续图顶部是课末大插画，再第5步、Java、每周抽问和说明。五节点必须连续，不能把课末藏掉或复印标题。细绿纵线，无箭头。原 v2 的旧导语不取用，文字一律定稿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：居中章节标题统一声明medium；现标题图不消费此档位，需按实际DOM另记未完成。",
+    "notes": "采用已通过 learning-02-v 替换图并合看 v2。第1张标题/导语及前4步，图在卡左；续图顶部是课末大插画，再第5步、Java、开头抽问和说明。五节点必须连续，不能把课末藏掉或复印标题。细绿纵线，无箭头。原 v2 的旧导语不取用，文字一律定稿。\n本轮复用前任看图后写出的文字构图证据，按screens.jsonl及定稿文字核对；本轮未查看图片。前任构图与scene不同处保留已有原图结论。扩展字段需逐项核对实际生效，缺素材/兜底/未实现构图不以程序pass冒充完成。\n本轮回读组件现已支持connector=line，采用细纵线与节点；此前不支持line的备注已过时。\n本轮 page-fixer-06-a（按 _qa/review 审查意见，AI 补充）：居中章节标题统一声明medium；现标题图不消费此档位，需按实际DOM另记未完成。",
     "composition_basis": {
       "inventory": "typeset-inventory/screens.jsonl",
       "mode": "text-only",
@@ -251,7 +249,7 @@
       {
         "type": "prose",
         "row": "hero",
-        "text_ref": "第一课讲"
+        "text_ref": "一课怎么讲"
       },
       {
         "type": "illustration",
@@ -266,15 +264,15 @@
         "text_ref": "问法"
       },
       {
-        "type": "bullet_list",
+        "type": "content_card",
         "columns": 1,
-        "text_ref": "学完要能讲清"
+        "text_ref": "每课开头写明"
       },
       {
         "type": "content_card",
         "columns": 1,
         "illustration": "bottom_inside",
-        "text_ref": "先从调接口"
+        "text_ref": "讲机制时先落到能动手的一层"
       },
       {
         "type": "prose",
@@ -306,7 +304,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "第一课讲"
+        "text_ref": "一课怎么讲"
       },
       {
         "type": "illustration",
@@ -322,13 +320,13 @@
         "text_ref": "问法"
       },
       {
-        "type": "bullet_list",
+        "type": "content_card",
         "columns": 1,
-        "text_ref": "学完要能讲清"
+        "text_ref": "每课开头写明"
       },
       {
         "type": "prose",
-        "text_ref": "先从调接口"
+        "text_ref": "讲机制时先落到能动手的一层"
       },
       {
         "type": "prose",

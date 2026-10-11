@@ -1,5 +1,8 @@
 {
-  "reading_order": ["emerald-veil-01", "emerald-veil-04"],
+  "reading_order": [
+    "emerald-veil-01",
+    "emerald-veil-04"
+  ],
   "schema": "site-b1.page.v1",
   "page": "emerald-veil",
   "kind": "project",
@@ -11,8 +14,8 @@
   "repo_url": "https://github.com/wlyaaaaa/emerald-veil",
   "capability": "闲时护屏、统一壁纸",
   "based_on": {
-    "commit": "f46e59b0454f58f51d9a63a48387db4be07ded5d",
-    "commit_time": "2026-09-29T02:31:12+08:00"
+    "commit": "861a2d23479b9e88a2c272c942fc8c21bdd3f326",
+    "commit_time": "2026-10-08T23:50:18+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：书桌上的大显示器里，青绿色雨林的雨丝轻轻斜落，右上角探头的黑猫眨一下眼；十来个彩色半透明的玻璃泡泡在屏幕里慢慢飘、轻轻相碰又弹开，泡泡边缘的彩虹光泽随转动流动；桌上的沙漏细沙缓缓流下；快到结尾时鼠标轻轻一动，泡泡一下子淡出，雨林壁纸留在屏上，随后泡泡又一个个浮现，回到第一帧；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，无缝循环。",
   "screens": [
@@ -138,7 +141,7 @@
       "title": "它是怎么搭的",
       "scene": "横版画面：左上标题。上面约 60% 高一张从左到右的流程图，六个圆角节点卡片（小水彩图标依次：一扇开着的窗户、一只眼睛、一只沙漏、一幅铺开的画、一串彩色泡泡、一只挥动的手），绿色箭头依次连起来，每个节点下面两三行小字。流程图下面左右两张卡片：左“壁纸工具”，右“规模”。",
       "portrait": "竖版：标题；流程图改成从上到下六个节点，箭头向下；两张卡片上下各一张。",
-      "text": "它是怎么搭的\n\n1. **登录就启动**｜Windows 开机项直接打开一个常驻程序：C# 写的，.NET 10，打包成一个约 173 MB 的单文件；托盘里一个绿图标。没有服务，也没有计划任务。\n2. **盯着有没有人**｜每 50 毫秒读一次 Windows 记的“最后一次输入时间”；键盘鼠标钩子只在内存里判断假动作，不记内容。\n3. **满 6 分钟**｜按硬件身份挑出主屏；主屏关着、盖着黑幕，就不放。\n4. **先铺底图**｜把虚拟屏上 Wallpaper Engine 选的那张铺到主屏，没有就用 Windows 壁纸；这一层鼠标点得穿。\n5. **放泡泡**｜启动 C:\\Windows\\System32\\Bubbles.scr /s，按物理像素摆到主屏最上层、不抢焦点。泡泡启动时对底图拍一次快照，所以泡泡底下是静止的一帧，不是还在动的动态壁纸。\n6. **一动就收**｜先撤底图，再关泡泡。泡泡进程挂在“程序一关就跟着关”的 Windows 作业对象里，常驻程序退出或崩溃都不会留下泡泡。\n\n**壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。\n\n**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 68 个自动测试 · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。\n\n**生命周期回执**（10 月 8 日 861a2d2 起）：只有一份 %LOCALAPPDATA%\\EmeraldVeil\\last-result.json，格式 emerald-veil.result.v1，字段 state（success／stopped／failed）、result、reason_zh、observed_at（北京时间）、process_id；先写 .tmp 再整份替换，写失败不影响常驻程序。启动写“屏保常驻程序已启动”，正常退出写“屏保常驻程序已退出”，未处理异常和 --status 证实常驻程序不在时写 failed。强制终止、断电写不了，只能靠之后的 live status 发现；已经接住的画面错误照旧在 --status 里看。代码：src/EmeraldVeil.Core/ResidentResult.cs、src/EmeraldVeil.App/App.xaml.cs；说明：docs/product-design.md“Source install and removal”。\n\n**这次网页核对的现状**（10 月 11 日 13:32–13:37，只读）：安装 Verify 返回 0.1.39.0、常驻程序 healthy、已开启、快捷键可用；原生泡泡 Verify 返回已开启、360 秒、Windows 自动屏保关、不锁屏、Radius 1130000000；本机回执为 success（10 月 10 日 11:11 启动）。壁纸脚本 Set-WindowsBackground.ps1 -Action Verify 这次在读各屏路径（MonitorPaths）时返回 COM E_FAIL，没能逐屏回读桌面和锁屏，所以这次壁纸和锁屏的在用状态是 Unknown，说不清是脚本问题还是这次的显示环境；之前的选图和装好的记录不因此作废。这次没有触发泡泡、快捷键或锁屏，没看真实画面；装着的程序和源码目录里旧 publish 产物字节不同、没有重新构建，源码和安装版是否一致这次没验。",
+      "text": "它是怎么搭的\n\n1. **登录就启动**｜Windows 开机项直接打开一个常驻程序：C# 写的，.NET 10，打包成一个约 173 MB 的单文件；托盘里一个绿图标。没有服务，也没有计划任务。\n2. **盯着有没有人**｜每 50 毫秒读一次 Windows 记的“最后一次输入时间”；键盘鼠标钩子只在内存里判断假动作，不记内容。\n3. **满 6 分钟**｜按硬件身份挑出主屏；主屏关着、盖着黑幕，就不放。\n4. **先铺底图**｜把虚拟屏上 Wallpaper Engine 选的那张铺到主屏，没有就用 Windows 壁纸；这一层鼠标点得穿。\n5. **放泡泡**｜启动 C:\\Windows\\System32\\Bubbles.scr /s，按物理像素摆到主屏最上层、不抢焦点。泡泡启动时对底图拍一次快照，所以泡泡底下是静止的一帧，不是还在动的动态壁纸。\n6. **一动就收**｜先撤底图，再关泡泡。泡泡进程挂在“程序一关就跟着关”的 Windows 作业对象里，常驻程序退出或崩溃都不会留下泡泡。\n\n**壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。\n\n**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 测试定义 68 个（只计数） · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。\n\n**生命周期回执**（10 月 8 日 861a2d2 起）：只有一份 %LOCALAPPDATA%\\EmeraldVeil\\last-result.json，格式 emerald-veil.result.v1，字段 state（success／stopped／failed）、result、reason_zh、observed_at（北京时间）、process_id；先写 .tmp 再整份替换，写失败不影响常驻程序。启动写“屏保常驻程序已启动”，正常退出写“屏保常驻程序已退出”，未处理异常和 --status 证实常驻程序不在时写 failed。强制终止、断电写不了，只能靠之后的 live status 发现；已经接住的画面错误照旧在 --status 里看。代码：src/EmeraldVeil.Core/ResidentResult.cs、src/EmeraldVeil.App/App.xaml.cs；说明：docs/product-design.md“Source install and removal”。\n\n**这次网页核对的现状**（10 月 11 日 13:32–13:37，只读）：安装 Verify 返回 0.1.39.0、常驻程序 healthy、已开启、快捷键可用；原生泡泡 Verify 返回已开启、360 秒、Windows 自动屏保关、不锁屏、Radius 1130000000；本机回执为 success（10 月 10 日 11:11 启动）。壁纸脚本 Set-WindowsBackground.ps1 -Action Verify 这次在读各屏路径（MonitorPaths）时返回 COM E_FAIL，没能逐屏回读桌面和锁屏，所以这次壁纸和锁屏的在用状态是 Unknown，说不清是脚本问题还是这次的显示环境；之前的选图和装好的记录不因此作废。这次没有触发泡泡、快捷键或锁屏，没看真实画面；装着的程序和源码目录里旧 publish 产物字节不同、没有重新构建，源码和安装版是否一致这次没验。",
       "links": [],
       "anchors": [],
       "live": [],
@@ -718,7 +721,7 @@
         "text": "约 173 MB",
         "meaning": "安装的单文件常驻程序大小（173,053,596 字节）",
         "as_of": "2026-09-28",
-        "source": "Get-Item C:\\Users\\10979\\AppData\\Local\\Programs\\EmeraldVeil\\EmeraldVeil.exe",
+        "source": "Get-Item C:\\Users\\<用户名>\\AppData\\Local\\Programs\\EmeraldVeil\\EmeraldVeil.exe",
         "screens": [
           "emerald-veil-06"
         ]
@@ -745,8 +748,8 @@
       },
       {
         "id": "n-tests",
-        "text": "68 个自动测试",
-        "meaning": "测试方法数（Fact 62、Theory 6）",
+        "text": "测试定义 68 个（只计数）",
+        "meaning": "测试方法定义数（Fact 62、Theory 6）；这次没有重跑",
         "as_of": "2026-10-11",
         "source": "tests/EmeraldVeil.Core.Tests/*.cs 计 [Fact]/[Theory]",
         "screens": [
@@ -767,8 +770,8 @@
         "id": "n-version",
         "text": "0.1.39 版",
         "meaning": "本机安装的版本",
-        "as_of": "2026-09-28",
-        "source": "EmeraldVeil.exe ProductVersion；csproj Version",
+        "as_of": "2026-10-11",
+        "source": "10 月 11 日 13:33 Install Verify 返回 installed_version=0.1.39.0；源码 csproj Version",
         "screens": [
           "emerald-veil-06"
         ]
@@ -777,8 +780,8 @@
         "id": "n-ci",
         "text": "最近 5 次都通过",
         "meaning": "GitHub Actions 最近 5 次构建测试结果",
-        "as_of": "2026-09-28",
-        "source": "gh run list -R wlyaaaaa/emerald-veil -L 5",
+        "as_of": "2026-10-11",
+        "source": "10 月 11 日 13:34 只读 gh run list -R wlyaaaaa/emerald-veil -L 5：最近 5 次均 completed/success；没有新跑 CI",
         "screens": [
           "emerald-veil-06"
         ]

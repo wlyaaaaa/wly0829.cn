@@ -16,19 +16,22 @@
       {
         "type": "action_button",
         "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕",
-        "row": "top"
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
-        "text_ref": "绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。",
+        "text_ref": "个人材料查找 · 功能说明",
         "row": "top"
       },
       {
         "type": "illustration",
+        "index": 0,
         "row": "top",
         "width": "42%",
-        "align": "center",
-        "index": 0
+        "align": "center"
       }
     ]
   },
@@ -45,16 +48,19 @@
       },
       {
         "type": "action_button",
-        "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕"
+        "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
       },
       {
         "type": "prose",
-        "text_ref": "绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。"
+        "text_ref": "个人材料查找 · 功能说明"
       },
       {
         "type": "illustration",
-        "align": "center",
-        "index": 0
+        "index": 0,
+        "align": "center"
       }
     ]
   },
@@ -161,12 +167,6 @@
         "text_ref": "从哪里开始",
         "align": "left",
         "size": "medium"
-      },
-      {
-        "type": "prose",
-        "text_ref": "用自然话描述那份非媒体材料，先查已登记来源。",
-        "row": "start",
-        "width": "40%"
       },
       {
         "type": "source_text_card",
@@ -184,7 +184,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
+        "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
         "row": "start",
         "columns": 1,
         "icons": "none",
@@ -204,10 +204,6 @@
         "size": "medium"
       },
       {
-        "type": "prose",
-        "text_ref": "用自然话描述那份非媒体材料，先查已登记来源。"
-      },
-      {
         "type": "source_text_card",
         "text_ref": "需要准备什么",
         "icon_position": "header_left",
@@ -220,7 +216,7 @@
       },
       {
         "type": "numbered_steps",
-        "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
+        "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
         "columns": 1,
         "icons": "none",
         "illustration": "none",
@@ -237,10 +233,6 @@
         "text_ref": "技术实现与依据（一）",
         "size": "large",
         "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
       },
       {
         "type": "numbered_steps",
@@ -261,10 +253,6 @@
         "text_ref": "技术实现与依据（一）",
         "size": "large",
         "heading_icon": "_library/hires-icons/打勾清单.png"
-      },
-      {
-        "type": "prose",
-        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
       },
       {
         "type": "numbered_steps",
@@ -399,12 +387,8 @@
         "heading_icon": "_library/hires-icons-r2/扳手.png"
       },
       {
-        "type": "prose",
-        "text_ref": "解决什么"
-      },
-      {
         "type": "bullet_list",
-        "text_ref": "- **零命中**：返回 not_found、登记搜索阶段、实际材料数量、来源样本、未搜索来源与缺口；只说明本轮登记索引没有合适候选。",
+        "text_ref": "- 已有可靠路径直接打开，不先经过登记查找。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -422,12 +406,8 @@
         "heading_icon": "_library/hires-icons-r2/扳手.png"
       },
       {
-        "type": "prose",
-        "text_ref": "解决什么"
-      },
-      {
         "type": "bullet_list",
-        "text_ref": "- **零命中**：返回 not_found、登记搜索阶段、实际材料数量、来源样本、未搜索来源与缺口；只说明本轮登记索引没有合适候选。",
+        "text_ref": "- 已有可靠路径直接打开，不先经过登记查找。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -446,7 +426,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。",
+        "text_ref": "- **门牌关着、错配或未登记**：返回对应门牌缺口，不猜替代位置，也不当成原件已删。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -465,7 +445,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。",
+        "text_ref": "- **门牌关着、错配或未登记**：返回对应门牌缺口，不猜替代位置，也不当成原件已删。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -484,7 +464,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先和零命中范围。",
+        "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先、门牌和零命中范围。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"
@@ -503,7 +483,7 @@
       },
       {
         "type": "bullet_list",
-        "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先和零命中范围。",
+        "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先、门牌和零命中范围。",
         "columns": 1,
         "icons": "none",
         "illustration": "none"

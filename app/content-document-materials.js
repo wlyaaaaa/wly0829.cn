@@ -188,19 +188,7 @@ const documentMaterialsProject = {
       "detail": "完整包能带到另一处重新验真；目前没有后台备份或可续传镜像，不把复制成功写成灾备完成。"
     }
   ],
-  gallery: [
-    {
-      src: "/media/document-materials/fictional-after-sales-page.webp",
-      alt: "完全虚构的售后处理与退款申请单页生成演示",
-      caption: "完全虚构，仅作生成与排版演示：2.0.1 通过 Microsoft Word 生成同源 DOCX/PDF，并由 Poppler 渲染后完成 1/1 页彩色与灰度检查。",
-      evidenceLevel: "E1",
-      evidenceLabel: "公开合成演示",
-      proves: "证明当前通用管线曾真实生成可读的一页正式材料，页码、正文和页面边缘验收通过。",
-      doesNotProve: "不证明任何真实个人事项、真实签名、全部材料类型、外部递送或处理结果。",
-      observedAt: "2026-09-01",
-      sourceCommit: "3ab7fb45718a98bd8e0ae1e0dee14b5c31cf22bc"
-    }
-  ],
+  gallery: [],
   responsibilities: [
     "从这次事项与必要原件形成可执行的文书制作方案。",
     "从同一份确认内容生成可编辑 Word、对应 PDF 与附件包。",

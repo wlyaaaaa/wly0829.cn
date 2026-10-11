@@ -4,6 +4,9 @@
  "kind": "project",
  "url": "/projects/personal-formal-documents/",
  "tagline": "把合同、协议、通知做成能核对、能签的正式文件。",
+ "old_urls": [
+  "/projects/document-materials/"
+ ],
  "toc": [
   {
    "id": "top",
@@ -24,10 +27,6 @@
   {
    "id": "history",
    "label": "演进"
-  },
-  {
-   "id": "gallery",
-   "label": "画廊"
   }
  ],
  "page": {
@@ -55,7 +54,7 @@
   "capability": "写能签字、能核对的正式文书",
   "based_on": {
    "commit": "ae11211d9f31a8e73be2419b309dfb4de562c2ee",
-   "commit_time": "2026-10-08T23:53:02-05:00"
+   "commit_time": "2026-10-09T12:53:02+08:00"
   },
   "video_prompt": "5–8 秒循环，白底水彩风格，从开头这屏的插画出发：书桌上一份两页的协议，纸页轻轻翻过，每翻一页，页角亮起一个绿色小勾；翻到最后一页，左边签字栏里一笔绿色签名慢慢写出来，右边签字栏始终是空横线；接着纸页合拢，滑进旁边的牛皮纸文件夹，绿色封条贴上，小锁轻轻闪一下；然后画面回到开头。画面里不出现任何可读的文字。",
   "registry": {
@@ -257,10 +256,10 @@
     },
     {
      "id": "n-tests",
-     "text": "39 个测试",
-     "meaning": "tests/test_formal_documents.py 收集到的测试数，全部通过；不限定文书种类（Word 集成测试默认不跑，不在其中）",
+     "text": "测试定义 39 个（只计数）",
+     "meaning": "28 个测试函数展开后；只用虚构内容，10 月 11 日核对了数量，这次没有重跑",
      "as_of": "2026-10-11",
-     "source": "10 月 11 日北京时间 16:06 在提交 ae11211 现跑 python -m pytest -q -p no:cacheprovider tests/test_formal_documents.py：39 passed in 51.66s",
+     "source": "提交 ae11211 的 tests/test_formal_documents.py 测试定义只核对了数量，没有重跑",
      "screens": [
       "personal-formal-documents-01",
       "personal-formal-documents-06",
@@ -417,12 +416,15 @@
     "第 6 屏“宋体正文、黑体标题”取自 formal_documents.py 第 422–513 行的字体设置；走 ReportLab 备用时用的是 simsun.ttc 或 PFD_CJK_FONT 指定的字体，标题字体可能不同。",
     "“39 个测试”是 test_formal_documents.py 这一个文件收集到的数（文件里 def test_ 有 28 个，另有参数化展开）；没算共用检查模块的测试。"
    ]
-  }
+  },
+  "old_urls": [
+   "/projects/document-materials/"
+  ]
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "d39f83333eaae6fdea2fa9379f043f2e0a3b2fb03208da83ba7dea8a7be88bd2",
-  "converted_at_beijing": "2026-10-11T16:09:38+08:00"
+  "sha256": "926b28baf867ddae699bab6fd123649389aefa74a8f41d08854a32d463e00849",
+  "converted_at_beijing": "2026-10-11T19:07:13+08:00"
  }
 }
 ---
@@ -711,9 +713,9 @@
 **2 种文书**｜合同协议（两方以上签），通知声明（我一方出具）
 **6 级状态**｜做好、签好、可交出、已交出、已收到、已办理，每级要凭据
 **1 份内容**｜同时出 Word 和 PDF，生成后逐字读回核对
-**39 个测试**｜只用虚构内容，10 月 11 日现跑全部通过
+**39 个测试**｜只用虚构内容；10 月 11 日核对了数量，这次没有重跑
 
-截至 10 月 11 日：做好了，还没在真实的合同或通知上用过，所以下面的功能都标“待验收”。
+截至 10 月 11 日：做好了，还没找到在真实的合同或通知上用过的记录，所以下面的功能都标“待验收”。
 
 〔在整套系统里的位置 → 怎么协作〕　〔怎么跟 AI 说 → 技能页〕　〔复制 AI 续作说明〕
 
@@ -1135,7 +1137,7 @@
 | | 电子版（默认） | 打印版（我说“要打印”才出） |
 |---|---|---|
 | 用途 | 在屏幕上看、发邮件 | 打出来给人签 |
-| 颜色 | 标题和小节带颜色，方便在屏幕上看；不按打印的灰度要求验收 | 每页再转成灰度图查一遍，黑白打印也清楚 |
+| 颜色 | 按用途选彩色或黑白；要在屏幕上快速找到重点的，标题层级和重点提示照样分清；不按打印的灰度要求验收 | 每页再转成灰度图查一遍，黑白打印也清楚 |
 | 签名 | 印上我的签名图和日期 | 同样印好签名和真实日期，我打印后自己按手印；有明确规定要别的签法时照规定 |
 
 ::screen{#personal-formal-documents-04 section="usage"}
@@ -2191,7 +2193,7 @@ Python 写成：主程序 1,839 行（不算空行），另用共用的检查模
 - **私事不进 GitHub。** 仓库只放代码、模板、格式定义和虚构测试，保持私有；原件、签名和生成的文件都在本机加密盘里。
 
 **1,839 行**｜主程序（不算空行）
-**39 个**｜自动测试，10 月 11 日现跑全部通过
+**39 个**｜自动测试用例（28 个测试函数展开后），10 月 11 日核对了数量，这次没有重跑
 **120 dpi**｜逐页检查时每页转图的精度
 
 我的姓名、住址这类基本情况从〔个人理解库〕取，找不到的原件交给〔个人材料查找〕；和别的项目怎么配合，见〔怎么协作〕。
@@ -2990,130 +2992,8 @@ Word 不在也能出 PDF｜Word 打不开或超时，换 ReportLab 排版，同�
 - **7 月 20 日**　最早一版：正式文书的生成和版面检查工具。
 - **8 月 31 日**　扩成“个人正式文书”：合同和通知有了自己的格式，和三步命令：先查计划、生成、核对。
 - **9 月 1 日**　材料包改成自带全部证明，拷走也能单独核对。
-- **9 月 24 日**　修好生成和资料锁接入上的几处毛病。
+- **9 月 24 日**　请求文件原样封存，生成中途被改就停下；修好字体和资料锁接入上的几处毛病。
 - **9 月 27 日**　协议按用途排版：当事人、订立背景、约定条款；每个签约方各有签字位，只签我这一方；事项编号这类内部登记从正文拿掉。
-- **9 月 28 日**　现跑 39 个自动测试，全部通过；还没在真实的合同或通知上用过，第一次真用时一起验收，过了就把功能改成“在用”。
+- **10 月 2 日**　电子版按用途选彩色或黑白，只有打印版把灰度检查当作完成的条件。
 
-::screen{#personal-formal-documents-gallery section="gallery"}
-
-```typeset
-{
- "screen": {
-  "id": "personal-formal-documents-gallery",
-  "section": "gallery",
-  "title": "画廊",
-  "scene": "普通小节标题与一行用法说明；真实截图原图按三列排列，各自图注在下，不画插画、不缩减内容。",
-  "portrait": "小节标题与说明在上；全部原图改为单列，图注紧跟对应原图。",
-  "links": [],
-  "anchors": [],
-  "live": [],
-  "screenshots": [
-   {
-    "file": "public/media/document-materials/fictional-after-sales-page.webp",
-    "caption": "示例，内容完全虚构：同一份内容出了 Word 和 PDF 两份文件；这一页转成图片后，彩色和黑白都检查过。",
-    "where": "画廊：完整原图，点击放大",
-    "preserve_original": true
-   }
-  ],
-  "chain": "",
-  "reuse": ""
- },
- "layout": {
-  "h": {
-   "blocks": [
-    {
-     "text_ref": "画廊",
-     "type": "chapter_title",
-     "align": "center",
-     "size": "medium"
-    },
-    {
-     "type": "screenshot",
-     "text_ref": "示例，内容完全虚构：同一份内容出了Word和PDF两份文件",
-     "indices": [
-      0
-     ],
-     "columns": 3,
-     "columns_v": 1,
-     "equal_row_height": true,
-     "ratios": [
-      "992:1404"
-     ],
-     "caption_mode": "source_order",
-     "slot_groups": [
-      {
-       "index": 0,
-       "node_indices": [
-        0
-       ]
-      }
-     ]
-    }
-   ]
-  },
-  "v": {
-   "blocks": [
-    {
-     "text_ref": "画廊",
-     "type": "chapter_title",
-     "align": "center",
-     "size": "medium"
-    },
-    {
-     "type": "screenshot",
-     "text_ref": "示例，内容完全虚构：同一份内容出了Word和PDF两份文件",
-     "indices": [
-      0
-     ],
-     "columns": 3,
-     "columns_v": 1,
-     "ratios": [
-      "992:1404"
-     ],
-     "caption_mode": "source_order",
-     "slot_groups": [
-      {
-       "index": 0,
-       "node_indices": [
-        0
-       ]
-      }
-     ]
-    }
-   ]
-  }
- },
- "images": [
-  {
-   "role": "title",
-   "slot_ordinal": 1,
-   "orientations": [
-    "h",
-    "v"
-   ],
-   "asset": "personal-media/personal-media-04-title-01.png",
-   "source_image": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\personal-media\\img\\personal-media-04-h.png",
-   "fallback": false,
-   "title_exact_match": true,
-   "text_verified": true,
-   "key": "title-6f966a995ad3884757df",
-   "title_text": "画廊",
-   "sha256": "684661ca34ff0c625b805441d00e0e5836abb3717728e32fde7a67139c618a97",
-   "status": "ready",
-   "source_box": [
-    47,
-    0,
-    352,
-    185
-   ],
-   "g4_target_reference_available": true
-  }
- ]
-}
-```
-
-# 画廊
-
-点击图片，可以查看完整原图。
-
-示例，内容完全虚构：同一份内容出了 Word 和 PDF 两份文件；这一页转成图片后，彩色和黑白都检查过。
+还没找到在真实的合同或通知上用过的记录；第一次真用时一起验收，过了就把功能改成“在用”。

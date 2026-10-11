@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking",
+  "kind": "project",
+  "title": "主题选项、配色与版本差异",
+  "url": "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
+  "parent": "steam-millennium-config-backup",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11 13:32"
+    }
+  },
+  "screens": [
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-01",
+      "section": "top",
+      "title": "主题选项、配色与版本差异",
+      "text": "# 主题选项、配色与版本差异\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n保存两套主题的选项定义、来源提交与自己的颜色选择，减少换机后重新调校。\n\n当前情况：两套主题的选项和配色都有记录，已提交的版本、本机保存的这份和电脑上装着的主题现在是同一版（Adwaita 4.4、Zehn 2026.9.7）；恢复时要分清的是“现在这份”和“想找回的某个历史快照”，最后仍要在 Steam 里看实际效果。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Steam 外观备份",
+          "href": "/projects/steam-millennium-config-backup/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/steam-millennium-config-backup"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/steam-millennium-config-backup/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n### 为什么需要它\n\n圆角、字体、标题栏和配色很难只凭记忆复现。主题更新又可能增删选项，所以需要同时知道“我选了什么”和“这些选项属于哪一版主题”。\n\n### 举个实际例子\n\n“我以前把 Zehn 主题调成浅色和圆角，想找回当时的选择。”先选那份旧快照，再看它记的主题版本和电脑上现在装的是否一致；旧配置不能直接当作新版本的真实外观。\n\n### 最后我会得到什么\n\n可以读回自己的选项和 RGB 配色，再对照主题版本恢复；最终仍需在当前 Steam 中检查效果。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 圆角、字体、标题栏和配色很难只凭记忆复现。主题更新又可能增删选项，所以需要同时知道“我选了什么”和“这些选项属于哪一版主题”。 ### 举个实际例子 “我以前把 Zehn 主题调成浅色和圆角，想"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 圆角、字体、标题栏和配色很难只凭记忆复现。主题更新又可能增删选项，所以需要同时知道“我选了什么”和“这些选项属于哪一版主题”。 ### 举个实际例子 “我以前把 Zehn 主题调成浅色和圆角，想"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 圆角、字体、标题栏和配色很难只凭记忆复现。主题更新又可能增删选项，所以需要同时知道“我选了什么”和“这些选项属于哪一版主题”。 ### 举个实际例子 “我以前把 Zehn 主题调成浅色和圆角，想"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n### 可以怎么用\n\n能从选定快照读回主题选项与颜色，并在当前 Steam 里看到对应效果。\n\n### 需要处理什么\n\n要恢复的历史快照和电脑上现装的主题版本不同时，先决定用哪一版的主题，再回填选项。\n\n### 什么时候不可用\n\n主题程序、图片或字体缺失时，只有配置文字仍不能重建完整外观。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n从项目快照选择目标主题配置，先确认目标机器已安装对应主题资源，再按恢复计划合并选项和配色。\n\n### 需要准备什么\n\n- 想恢复的主题外观与日期\n\n- 目标电脑已装或希望重装的主题\n\n### 从开始到拿到结果\n\n1. **确定基线**　分清现在这份（已提交、本机保存和已安装三者一致）和想找回的历史快照，选要恢复的那一份。\n\n2. **核对主题版本**　先装可用资源，再把对应选项和配色合并回填，不盲迁移未知键。\n\n3. **实际看外观**　在 Steam 核对主题、颜色和滚动条；版本差异或缺资源时保留明确缺口。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n选中 Adwaita；两套主题的已提交、本机保存与已安装版本已一致\n\n### 关键规则与设计选择\n\n1. 选择值和主题定义分别保留，不把“已有 JSON”当作所有版本都支持这些键。\n\n2. 只保存名单内的定义文件，主题 CSS、图片和字体仍要从主题程序取得。\n\n3. 三处版本已对齐：Adwaita 4.4、Zehn 2026.9.7 的已提交文件、本机保存的这份和已安装定义一致；本机唯一未提交的是快照清单里的代号和时间这些记录信息，主题文件本身没有差异。\n\n## 当前怎样实现\n\n- Adwaita-for-Steam 来自 tkashkin/Adwaita-for-Steam；版本 4.4，metadata（元数据）提交 1e92107a51f6ed53c59c38646444c9eb3a52b030。已提交、本机保存与已安装定义都是这一版（9 月 18 日写入仓库）。\n\n- Zehn 来自 yurisuika/Zehn；版本 2026.9.7，metadata（元数据）提交 68719556122c06fdaaa14358012a697577042d17，三处一致。9 月 19 日核对时曾是“已提交 2026.7.24、本地 2026.8.29、已安装 2026.9.7”三个版本并存，这是当时的历史。\n\n- Adwaita 子目录保存 metadata.json、skin.json、theme.json；Zehn 保存 metadata.json、skin.json、options.json、waifus.json。\n\n- Adwaita 保存 17 个条件选择与 48 个颜色变量，包括 System 配色方案、Adwaita 字体、圆角与方形游戏图标选择；如 --adw-accent-bg-rgb=39, 168, 100。Zehn 保存 25 个条件选择与 14 个颜色变量，包括 Embed Size=640、Avatar Frame=no 等选项与各状态颜色。\n\n## 执行流程\n\n1. 复制每套主题允许的定义与元数据文件。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 选中 Adwaita；两套主题的已提交、本机保存与已安装版本已一致 ### 关键规则与设计选择 1. 选择值和主题定义分别保留，不把“已有 JSON”当作所"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 选中 Adwaita；两套主题的已提交、本机保存与已安装版本已一致 ### 关键规则与设计选择 1. 选择值和主题定义分别保留，不把“已有 JSON”当作所"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 选中 Adwaita；两套主题的已提交、本机保存与已安装版本已一致 ### 关键规则与设计选择 1. 选择值和主题定义分别保留，不把“已有 JSON”当作所"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n2. 与核心 config.json 中该主题的 conditions、themeColors 一起保存。\n\n3. 恢复时先核对安装版本、资源和选项对应关系，再把支持的主题选择、条件和配色逐层合并（递归合并：只改快照里有的项，目标里多出来的项留着）回填，然后在 Steam 查看实际外观。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| conditions | config.json 中每套主题已经选择的开关或枚举值。 |\n| themeColors | 保存 RGB 三元组配色，供对应主题引用；这是选择值，不是独立调色程序。 |\n| skin.json / theme.json | 主题选项、补丁目标和资源路径定义，引用的实际 CSS 等资源未随快照打包。 |\n\n## 专业定义\n\nAdwaita 和 Zehn 的选项、颜色与来源提交都留下；当前已提交、本机保存与已安装三处一致，历史快照各自带着当时的版本。\n\n解决什么\n\n只有配色值没有主题资源无法呈现界面；复制旧版本定义到新程序，也可能引用已经变化的选项或资源。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n只有配色值没有主题资源无法呈现界面；复制旧版本定义到新程序，也可能引用已经变化的选项或资源。\n\n## 边界\n\n- 恢复会合并 config.json 里受支持的主题选择、条件和配色，但不会写回主题的安装定义、程序和图片字体等资源，不自动调整废弃键，也不保证上游忽略未知选项时一定不出错。\n\n- 本机仓库唯一未提交的是快照清单（代号、创建时间和工具版本这些记录），20 个受保存文件与已提交版本一致；这不是另建的版本管理或主题自动迁移系统。\n\n## 失败与恢复\n\n- **主题新版本删改了旧选项或资源路径**：按对应主题实际版本重新核对；无法从本项目证明自动兼容，不保证复制后原样还原。\n\n- **主题外观不符合预期**：核对 activeTheme、conditions、themeColors 以及实际安装资源，必要时恢复目标机已保留配置。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-theme-options-palette-and-dual-baseline-tracking-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `themes/Adwaita-for-Steam/`主题定义、元数据及已提交/本地版本。\n\n- `themes/Zehn/`皮肤定义、选项、元数据与本地版本。\n\n- `config/config.json`实际选中的主题、条件和 RGB 颜色。\n\n## 如何验证\n\n- 原有测试证明主题元数据会复制，主题图片资源不复制。\n\n- 只读比对确认两套主题的已提交文件、本机保存的这份与安装定义的 JSON 值一致（Adwaita 4.4、Zehn 2026.9.7）；这是文件内容核对，不是 Steam 界面效果验收。9 月 19 日看到的 Zehn 版本差异是历史观察。\n\n## 与其他模块的关系\n\n与核心设置一起还原外观；插件清单是另外一类扩展，二者都依赖真实程序资源。",
+      "links": [
+        {
+          "text": "上一个模块 插件清单",
+          "href": "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/"
+        },
+        {
+          "text": "下一个模块 自动采集与恢复",
+          "href": "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

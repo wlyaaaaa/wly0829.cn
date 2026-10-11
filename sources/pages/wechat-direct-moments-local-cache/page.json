@@ -1,0 +1,159 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "wechat-direct-moments-local-cache",
+  "kind": "project",
+  "title": "明确账号下的当前本机朋友圈缓存",
+  "url": "/projects/wechat-direct/moments-local-cache/",
+  "parent": "wechatdirect",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；账号配置于 10 月 11 日 16:33 重新检查，本轮没有读取真实朋友圈缓存"
+  },
+  "screens": [
+    {
+      "id": "wechat-direct-moments-local-cache-01",
+      "section": "top",
+      "title": "明确账号下的当前本机朋友圈缓存",
+      "text": "# 明确账号下的当前本机朋友圈缓存\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n可以把当前电脑已经看见的朋友圈内容有界交给当前工作，同时不会把主号、副号或远端完整性混在一起。\n\n**当前情况：**已有按明确账号读取本机朋友圈缓存的功能；本轮未读真实正文，本机无缓存不代表对方没有发布。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 微信聊天读取",
+          "href": "/projects/wechatdirect/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/WeChatDirect"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/wechatdirect/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n朋友圈不是普通聊天目录：账号自己的身份可能不在会话列表，当前缓存里的发布者也可能没有聊天会话。若只查 session 或默认 auto，容易漏人、串号并把缓存未命中误写成没有内容。\n\n## 举个实际例子\n\n我说“看看副号里小王最近发的朋友圈”。工具只看副号在这台电脑上已经缓存的内容；能找到人但没有正文时，它会提示我回到副号手动打开小王主页后再试，不把“本机没缓存”说成“他什么都没发”。\n\n## 最后我会得到什么\n\n得到这个明确账号在当前电脑已缓存的朋友圈内容、实际可见时间和缺口。没有本机缓存时会提示在同一账号手动打开目标后再试，不说对方没有发布。\n\n## 结果怎么看\n\n## 可直接使用\n\n账号和发布者能唯一对应、电脑里确实有相关缓存时，交回实际可见部分。\n\n## 需要确认\n\n发布者重名、媒体未缓存或本机缓存变化时保留候选和缺口。\n\n## 当前不可用\n\n本机尚无这名发布者的缓存时说明如何手动取得，不自动打开主页或联网补历史。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n明确账号和联系人，请查看电脑当前已经缓存的朋友圈。\n\n## 需要准备什么\n\n- primary 或 secondary 账号\n\n- 联系人和所需范围\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　只读本机当前缓存并说明覆盖；没缓存时可在同一账号手动打开目标后再试。\n\n2. **交付与接续**　交回实际可见内容与缺口；不称远端全部历史已取得，也不混主副号。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n显式账号、自身身份、缓存发布者、未命中下一步和快照替换均有合成回归（当前源码 v0.2.3 共定义 224 个测试函数，本轮没有运行）；未读取真实朋友圈正文\n\n## 关键规则与设计选择\n\n1. 朋友圈命令必须显式指定 primary 或 secondary，命令本身不会默认读两个号。我自然地问、没说哪个号时，是 AI 分别发出主号、副号两次明确请求，并标注各自结果；指定的号没配置就报错，不拿另一个号代读。\n\n2. self 使用来源账号作者身份承诺，不从昵称或头像推断；朋友圈作者只严格去掉末尾“_加四位十六进制”的存储后缀，计算承诺和实际读取共用同一条规则。\n\n3. 发布者目录组合联系人、未登记联系人和当前缓存，不建立持久人物索引。\n\n4. sync-moments 保存当前缓存快照，缓存已淘汰条目会从新快照移除。\n\n5. target_not_in_current_local_cache 只触发一次同账号手动打开后重试。\n\n## 当前怎样实现\n\n- _resolve_moments_subject 强制显式账号，并组合 source-proven self、完整联系人目录和当前缓存发布者。\n\n- list_moments 对指定人会扫描完整当前缓存后再应用 limit，避免目标在后部时被错误截断。\n\n- moments 返回 target_cached / target_not_in_current_local_cache / account_cache_read。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- sync-moments 用当前集合与旧 JSONL 比较 new / updated / removed，有变化才输出完整替换快照；文件占用和中断与联系人档案使用同一套明确错误和恢复入口。默认输出目录把本人、全缓存和指定联系人分开，联系人目录名按规范化后的请求哈希生成，避免名字转换后撞名。\n\n- 来源指纹只覆盖 sns.db 与 contact.db 元数据；无变化时在原目录核对后只更新回执，不复制、不重新发布整包。\n\n## 执行流程\n\n1. 要求明确账号和 self / contact 选择。\n\n2. 从账号身份、联系人目录和当前缓存解析唯一发布者。\n\n3. 在请求窗口内扫描本机 sns 缓存。\n\n4. 投影发布者标签、文字、媒体和 gaps。\n\n5. 一次读取返回有界 JSON；同步则与旧快照比较变化。\n\n6. 写出 current_local_cache_only 状态、清单和最近回执。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Explicit account（显式账号） | 朋友圈不接受 auto；每份结果必须明确属于主号或副号。 |\n| targetCacheStatus | 目标已缓存、目标不在当前缓存，或正在读取账号整体缓存。 |\n| Current cache replacement（当前缓存替换） | 刷新后档案准确代表当前可见集合；被缓存淘汰的旧条目不继续冒充可见。 |\n| Source-proven self | 从配置绑定的账号原生身份推导本人朋友圈作者，不从显示名称猜。 |\n\n## 专业定义\n\nmoments 与 sync-moments 只读取明确账号当前设备可见的 sns 缓存；缓存未命中不是空主页，刷新也不保留已淘汰条目。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决朋友圈作者目录不完整、主副号串用、缓存未命中冒充空内容和旧缓存条目长期残留。\n\n## 边界\n\n- 只读取当前设备缓存，不访问远端朋友圈主页或补历史。\n\n- 不自动切号、点击、点赞、评论或输入。\n\n- 联系人/群会话不是完整朋友圈作者目录。\n\n- 真实朋友圈正文、发布者和媒体不进入网站。\n\n## 失败与恢复\n\n- **没有明确账号或用了 auto**：命令返回 moments_explicit_account_required；自然语言请求由 AI 分别对主号、副号各发一次明确请求。指定的号没有配置时返回 wechat_account_not_configured，不借另一个号。\n\n- **同名发布者**：返回 contact_ambiguous 候选，不按第一项选择。\n\n- **目标不在当前缓存**：提示在同一账号手动打开该目标朋友圈后重试，不宣称为空。\n\n- **刷新期间缓存变化**：返回 source_changed_during_sync_retry，不提交新的 state。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-moments-local-cache-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `README.md · moments / sync-moments`当前缓存、显式账号与手动补缓存边界。\n\n- `wechat_cli.py · _resolve_moments_subject`self、联系人和缓存发布者的唯一解析。\n\n- `wechat_cli.py · command_sync_moments`当前集合替换、增删改和导出清单。\n\n- `tests/test_wechat_cli.py · moments`身份、缓存未命中、跨账号和淘汰回归。\n\n## 如何验证\n\n- test_moments_self_uses_source_account_identity 验证本人身份来自来源账号。\n\n- test_moments_self_cache_miss_requests_same_account_profile_open 验证缓存未命中下一步。\n\n- test_moments_rejects_implicit_cross_account_selection 验证不跨账号猜。\n\n- test_moments_sync_replaces_items_evicted_from_current_cache 验证快照替换。\n\n## 与其他模块的关系\n\n朋友圈与聊天共享账号身份和媒体读取，但拥有独立的缓存范围、对象解析与同步状态，不能用聊天档案替代。",
+      "links": [
+        {
+          "text": "上一个模块 回复、媒体与阅读包",
+          "href": "/projects/wechat-direct/reply-media-relations/"
+        },
+        {
+          "text": "下一个模块 账号与只读源",
+          "href": "/projects/wechat-direct/account-source-identity/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

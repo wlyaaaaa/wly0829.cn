@@ -1,0 +1,191 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "document-materials-page-audit-release",
+  "kind": "project",
+  "title": "按阅读或打印用途逐页检查，再冻结自包含材料包",
+  "url": "/projects/document-materials/page-audit-release/",
+  "parent": "personal-formal-documents",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "源码按 10 月 11 日 14:00 前的版本（最后变更 10 月 9 日），当日 16:35 只读核对；本次没有重做样张或运行审计"
+  },
+  "screens": [
+    {
+      "id": "document-materials-page-audit-release-01",
+      "section": "top",
+      "title": "按阅读或打印用途逐页检查，再冻结自包含材料包",
+      "text": "# 按阅读或打印用途逐页检查，再冻结自包含材料包\n\n〔回到项目 → 个人正式文书〕　〔复制 AI 续作说明〕\n\n文书和材料制作 · 功能说明\n\n材料包离开原构建目录仍能证明自己带齐了什么、每页长什么样和有没有被换掉。先分清这份材料是在屏幕上读，还是要打印：电子版彩色或黑白按用途选，需要快速查找的检查层级、定位与字号；打印版才把灰度可读性作为完成条件。原始证据不为配色改动。\n\n**当前情况：**每种用途都会生成彩色页和灰度页并记录在案，只有打印版要求灰度检查通过（10 月 11 日核对源码）。材料包复制到空目录后仍能核对完整性；内容与真实页面也要逐页检查，不能只凭文件清单完整。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人正式文书",
+          "href": "/projects/personal-formal-documents/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-formal-documents/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n只有 DOCX/PDF 文件不够：输入、附件、逐页证据和签名来源缺一项，换机或复制后就无法解释成品怎样产生。\n\n## 举个实际例子\n\n我可以说：“逐页检查这份材料，彩色和黑白打印都不能裁字；再复制到一个空目录确认附件没有漏。”我会拿到逐页检查结果、发现的问题，以及复制后仍能独立核对的完整材料包。\n\n## 最后我会得到什么\n\n得到逐页检查结果和一份可带走的完整材料包：文书、附件、必要签名与核对清单都能再次验真。任何页面或附件不合格时只保留待修改版本。\n\n## 结果怎么看\n\n## 可以继续制作\n\n正文、页面和附件都核对后，材料包复制到别处仍能重新验证，才称本地可递送。\n\n## 需要修正\n\n页码、裁切、灰度、签名或文件集合有问题时指出具体页与材料，保留待修改版本。\n\n## 当前不可用\n\n页面无法渲染时不把结构检查当成肉眼检查通过。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以继续制作\n\n正文、页面和附件都核对后，材料包复制到别处仍能重新验证，才称本地可递送。\n\n## 需要修正\n\n页码、裁切、签名、文件集合有问题，或打印版灰度不合格时，指出具体页与材料，保留待修改版本。\n\n## 当前不可用\n\n页面无法渲染时不把结构检查当成肉眼检查通过，也不形成材料包。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n材料做好后，要求逐页核对并冻结可带走的包。\n\n## 需要准备什么\n\n- 要核对的这份构建或材料包\n\n- 屏幕阅读或打印的实际用途\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　逐页查看内容、页码、可读性、签名和每个文件；机械检查齐全后冻结自包含版本。\n\n2. **交付与接续**　交回已验包和清单；页面或附件不合格就保留旧版与具体失败位置，不冒充可递送。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对源码**　材料包复制到空目录后仍能完整核对；缺文件、多文件、路径越界或内容变化都会明确失败。电子版配色按 10 月 2 日的现行规则按用途选彩色或黑白；9 月 18 日“非打印必须彩色”的旧规则已被修正。本次只读代码和测试定义，没有运行。\n\n## 关键规则与设计选择\n\n1. 每页彩色与灰度图都是清单可追溯的制品，不是临时截图；生成了灰度图不等于所有用途都以灰度通过验收。\n\n2. 可见页码逐页匹配“第 n 页”；空白和边缘裁切用墨迹／边缘启发式检查（墨迹覆盖至少 0.08%、边缘暗度低于 0.18，默认 120 DPI，可设 72—600）。\n\n3. 墨迹和边缘通过不证明签名身份、位置、对比度或未被遮挡；实际渲染页是进一步视觉核对的输入。\n\n4. 自动化仍不能证明整篇语气和事实主线已由 AI 或人工审阅。\n\n5. 历史 v2 材料包继续可读，但明确返回 legacy_v2_non_self_contained 和限制，即使验证通过也不报“已具备递送条件”。\n\n6. 复制到空目录后完整复验不等于已有自动备份或断点续传。\n\n## 当前怎样实现\n\n- DOCX/PDF 结构审计与全部输出字段读回先运行；读回按同一文字出现的次数统计，协议每方的签字位和日期位少一个也会报错。这仍不是逐字等价或整篇语义审阅。\n\n- 现有 v3 管线由 Poppler 按 DPI 渲染每页彩色 PNG，再生成 L 模式灰度页；所有灰度页都要求哈希、尺寸一致且为 L 模式，彩色页都重新审计，只有打印版额外要求灰度审计通过。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 逐页记录大小、SHA-256、墨迹覆盖、边缘暗度和可见页码。\n\n- v3 材料包按构建清单复制完整闭包（输入原字节、DOCX/PDF、附件、结构与页面审计、逐页图、所需签名快照和构建清单）并拒绝额外文件。\n\n- formal-verify 在材料包根重跑嵌入的构建验证和当前结构／页面检查。\n\n- v2/v3 共享兼容结构；v2 只按历史实际携带内容通过并返回限制。把 v3 材料包改标成 v2 而内含构建仍是 v3，会被明确拒绝，不能借改版本名绕过闭包检查。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 重读 DOCX/PDF 正文和各方签署位\n\n2. 检查结构和页码\n\n3. 渲染全部彩色页\n\n4. 生成灰度页；打印用途再检查灰度可读性\n\n5. 写审计与每页哈希\n\n6. 复制完整闭包到材料包\n\n7. 核对精确文件集合\n\n8. 空目录复制后独立复验",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Closure（闭包） | 独立解释和验证成品所需的输入、输出、附件、审计、页面和签名快照完整集合。 |\n| Exact set（精确集合） | 材料包只允许清单列出的文件；缺文件和额外文件都会让验证失败。 |\n| Grayscale artifact（灰度页制品） | 由每张彩色渲染页转换的 L 模式页面；所有用途都会生成，只有打印版要求它通过可读性检查。 |\n| legacy_v2_non_self_contained | 历史 v2 仍可验证其真实携带内容，但没有 v3 输入、审计、灰度页和签名闭包，也不会报可递送。 |\n\n## 专业定义\n\n“已具备递送条件”不由一个布尔值决定：正文、结构、页码、彩色页面、打印用途的灰度页面、签名快照、附件与精确文件集合全部可重新核对，才形成 v3 材料包。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决“能打开就算完成”、递送包缺输入／审计、复制后无法复验、旧格式被新工具无版本破坏，以及用改版本号绕过检查。\n\n## 边界\n\n- 墨迹／边缘不是整篇语义审阅或签名可见性证明\n\n- 渲染成功不证明签名正确且清楚可见\n\n- 电子版彩色或黑白按用途选，打印版另按灰度验收；同源不等于同版式，不强制两版，原件及已签署历史不改\n\n- 清单摘要不是数字签名\n\n- 普通复制恢复不等于可续传镜像\n\n- v2 限制不会被静默升级\n\n## 失败与恢复\n\n- **页面渲染器不可用**：页面审计标为 unavailable，只保留构建，不形成材料包。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **页码或页面边缘失败，或打印版灰度失败**：记录精确页码和失败项，修复后重新完整构建；电子版不因灰度这一项被挡住。\n\n- **材料包缺文件或有额外文件**：formal-verify 失败，既有源和另一份副本不被删除。\n\n- **v2 历史材料包**：核对其 DOCX/PDF、附件、状态和摘要，并返回缺少自包含闭包的明确限制，不报可递送。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "document-materials-page-audit-release-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- PRIVATE source · formal_documents.py　内容读回、逐页审计、闭包复制、按用途的灰度完成门和 v2/v3 验证\n\n- PRIVATE source · audit.py　结构、页面、墨迹和边缘检查\n\n- PRIVATE tests · self-contained release　空目录恢复、缺／多文件、版本降级拒绝和旧版兼容回归\n\n## 如何验证\n\n- v3 材料包在原构建删除后从空目录副本复验通过；删除输入或新增意外文件均失败（历史虚构回执，本次未重跑）。\n\n- 无可见页码 PDF 被拒绝；灰度页必须为 L 模式，打印版再要求灰度审计通过。\n\n- 旧 v2 材料包通过有限验证且返回明确限制，不报可递送。\n\n- 人工整篇语义审阅回执仍是缺口。\n\n- 9 月 18 日规则把屏幕彩色、打印灰度分开，是当时的历史来源；10 月 2 日起电子版配色按用途选。本次没有生成个案材料、读取原件或重跑历史样张。\n\n## 与其他模块的关系\n\n通过本模块才产生“已具备递送条件”的候选；是否签名以及本地状态由下一模块说明。",
+      "links": [
+        {
+          "text": "上一个模块 DOCX 与 PDF",
+          "href": "/projects/document-materials/editable-docx-pdf/"
+        },
+        {
+          "text": "下一个模块 签名与递送版本",
+          "href": "/projects/document-materials/signature-delivery-version/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

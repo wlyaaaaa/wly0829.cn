@@ -46,8 +46,8 @@
   "repo_url": "https://github.com/wlyaaaaa/emerald-veil",
   "capability": "闲时护屏、统一壁纸",
   "based_on": {
-   "commit": "f46e59b0454f58f51d9a63a48387db4be07ded5d",
-   "commit_time": "2026-09-29T02:31:12+08:00"
+   "commit": "861a2d23479b9e88a2c272c942fc8c21bdd3f326",
+   "commit_time": "2026-10-08T23:50:18+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：书桌上的大显示器里，青绿色雨林的雨丝轻轻斜落，右上角探头的黑猫眨一下眼；十来个彩色半透明的玻璃泡泡在屏幕里慢慢飘、轻轻相碰又弹开，泡泡边缘的彩虹光泽随转动流动；桌上的沙漏细沙缓缓流下；快到结尾时鼠标轻轻一动，泡泡一下子淡出，雨林壁纸留在屏上，随后泡泡又一个个浮现，回到第一帧；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，无缝循环。",
   "registry": {
@@ -432,7 +432,7 @@
      "text": "约 173 MB",
      "meaning": "安装的单文件常驻程序大小（173,053,596 字节）",
      "as_of": "2026-09-28",
-     "source": "Get-Item C:\\Users\\10979\\AppData\\Local\\Programs\\EmeraldVeil\\EmeraldVeil.exe",
+     "source": "Get-Item C:\\Users\\<用户名>\\AppData\\Local\\Programs\\EmeraldVeil\\EmeraldVeil.exe",
      "screens": [
       "emerald-veil-06"
      ]
@@ -459,8 +459,8 @@
     },
     {
      "id": "n-tests",
-     "text": "68 个自动测试",
-     "meaning": "测试方法数（Fact 62、Theory 6）",
+     "text": "测试定义 68 个（只计数）",
+     "meaning": "测试方法定义数（Fact 62、Theory 6）；这次没有重跑",
      "as_of": "2026-10-11",
      "source": "tests/EmeraldVeil.Core.Tests/*.cs 计 [Fact]/[Theory]",
      "screens": [
@@ -481,8 +481,8 @@
      "id": "n-version",
      "text": "0.1.39 版",
      "meaning": "本机安装的版本",
-     "as_of": "2026-09-28",
-     "source": "EmeraldVeil.exe ProductVersion；csproj Version",
+     "as_of": "2026-10-11",
+     "source": "10 月 11 日 13:33 Install Verify 返回 installed_version=0.1.39.0；源码 csproj Version",
      "screens": [
       "emerald-veil-06"
      ]
@@ -491,8 +491,8 @@
      "id": "n-ci",
      "text": "最近 5 次都通过",
      "meaning": "GitHub Actions 最近 5 次构建测试结果",
-     "as_of": "2026-09-28",
-     "source": "gh run list -R wlyaaaaa/emerald-veil -L 5",
+     "as_of": "2026-10-11",
+     "source": "10 月 11 日 13:34 只读 gh run list -R wlyaaaaa/emerald-veil -L 5：最近 5 次均 completed/success；没有新跑 CI",
      "screens": [
       "emerald-veil-06"
      ]
@@ -634,8 +634,8 @@
  },
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
-  "sha256": "14c232b912e878deeb56666a52d875d3496a8f98e8d76a4c0756dfebd07f8de7",
-  "converted_at_beijing": "2026-10-11T15:45:31+08:00"
+  "sha256": "c6b5b2794ef5be0ed09328d97c4c743b01a7466e64d89a4ed8a1de2dfb167470",
+  "converted_at_beijing": "2026-10-11T18:56:44+08:00"
  }
 }
 ---
@@ -2024,7 +2024,7 @@
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
+     "text_ref": "规模"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2083,7 +2083,7 @@
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
+     "text_ref": "规模"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2232,7 +2232,7 @@
 
 **壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。
 
-**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 68 个自动测试 · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
+**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 测试定义 68 个（只计数） · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
 
 **生命周期回执**（10 月 8 日 861a2d2 起）：只有一份 %LOCALAPPDATA%\EmeraldVeil\last-result.json，格式 emerald-veil.result.v1，字段 state（success／stopped／failed）、result、reason_zh、observed_at（北京时间）、process_id；先写 .tmp 再整份替换，写失败不影响常驻程序。启动写“屏保常驻程序已启动”，正常退出写“屏保常驻程序已退出”，未处理异常和 --status 证实常驻程序不在时写 failed。强制终止、断电写不了，只能靠之后的 live status 发现；已经接住的画面错误照旧在 --status 里看。代码：src/EmeraldVeil.Core/ResidentResult.cs、src/EmeraldVeil.App/App.xaml.cs；说明：docs/product-design.md“Source install and removal”。
 

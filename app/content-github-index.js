@@ -908,7 +908,7 @@ export const githubIndexModules = [
       { title: "报告分层结果", detail: "交回新索引和私有基线的各自状态；中断前未切换则继续使用旧完整版本，切换后基线失败也分别说明。" },
     ],
     shortTitle: "快照与恢复",
-    title: "Refresh（刷新）、原子 Generation（索引代际）与中断恢复",
+    title: "Refresh（刷新）、看板与导航写入和中断恢复",
     searchAliases: ["索引中断怎么恢复", "刷新到一半能不能继续", "current generation是什么", "为什么保留previous generation", "投影和pointer不一致怎么办"],
     searchProjection: {
       intents: ["从一次中断的索引刷新恢复", "验证 current generation 是否完整", "区分投影过期与 Owner 事实漂移", "在切 pointer 前核对全部文档"],

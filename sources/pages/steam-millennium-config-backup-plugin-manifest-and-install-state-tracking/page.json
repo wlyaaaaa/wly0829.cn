@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking",
+  "kind": "project",
+  "title": "插件清单、版本与启用选择",
+  "url": "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
+  "parent": "steam-millennium-config-backup",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11 13:32"
+    }
+  },
+  "screens": [
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-01",
+      "section": "top",
+      "title": "插件清单、版本与启用选择",
+      "text": "# 插件清单、版本与启用选择\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n留下插件名称、用途、版本、上游提交和启用名单，帮助重新安装与排查版本差异。\n\n当前情况：快照保留5款插件清单及其中3款启用选择；插件程序和私有设置不由这份清单恢复。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Steam 外观备份",
+          "href": "/projects/steam-millennium-config-backup/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/steam-millennium-config-backup"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/steam-millennium-config-backup/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n换电脑后容易只记得“装过一个封面插件”，却不记得名称和版本。清单能补上这部分记忆，但不能代替插件程序和插件自己保存的数据。\n\n## 举个实际例子\n\n“我之前装了哪些 Steam 插件？”清单能找出 Extendium、Size on Disk 和 Easy SteamGrid 等名称；配置也表明其中哪些被启用。按清单重新安装后，进入插件设置确认还缺什么。\n\n## 最后我会得到什么\n\n得到可核对的重装线索和启用选择；不会把一份 plugin.json 误当成已经装好的插件。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 换电脑后容易只记得“装过一个封面插件”，却不记得名称和版本。清单能补上这部分记忆，但不能代替插件程序和插件自己保存的数据。 ## 举个实际例子 “我之前装了哪些 Steam 插件？"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 换电脑后容易只记得“装过一个封面插件”，却不记得名称和版本。清单能补上这部分记忆，但不能代替插件程序和插件自己保存的数据。 ## 举个实际例子 “我之前装了哪些 Steam 插件？"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 换电脑后容易只记得“装过一个封面插件”，却不记得名称和版本。清单能补上这部分记忆，但不能代替插件程序和插件自己保存的数据。 ## 举个实际例子 “我之前装了哪些 Steam 插件？"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以怎么用\n\n能查到上次保存的插件名称、版本线索和启用选择，作为重新安装的依据。\n\n## 需要处理什么\n\n清单与当前安装版本不一致时逐个核对，不能由旧记录推断插件今天可运行。\n\n## 什么时候不可用\n\n插件程序无法取得或在当前 Steam 不能加载时，清单无法替它运行。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n查看项目快照中的插件清单来重建安装选择；插件本体需要从对应来源另行安装，再在 Steam 中核对。\n\n## 需要准备什么\n\n- 想恢复哪些插件或启用选择\n\n- 目标电脑上哪些插件需要重新安装\n\n## 从开始到拿到结果\n\n1. **记录有哪些插件**　采集各插件允许的清单和存在时的安装记录，启用选择在核心配置中另存。\n\n2. **恢复时找本体**　先安装对应插件，再用快照线索核对版本和启用项。\n\n3. **确认缺口**　插件私有配置、源码和可执行依赖未在快照中，缺失时不能称完整恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n5 款清单；配置启用 3 款\n\n## 关键规则与设计选择\n\n1. 只保存 plugin.json、metadata.json 和存在时的 install-state.json，不把私有 config.json 混进插件清单。\n\n2. 把启用选择与实际加载分开；本轮没有调用插件功能。\n\n3. 旧元数据是重装参考，恢复到不同版本时先核对实际安装，避免写成不实状态。\n\n## 当前怎样实现\n\n- Extendium 2.0.4：为 Steam 提供 Chrome 扩展支持；backendType=lua，include=fake-header-extension；快照提交 3f9ffb0cd9ada58a7de7f71b3ed8d094ca7130f6。\n\n- Size on Disk 1.1.0：显示游戏磁盘占用；useBackend=false；快照提交 8ebb14647f6a3be231069d11bd8e7002383df45b。\n\n- Easy SteamGrid 4.1.0：SteamGridDB 封面集成；backendType=lua；快照提交 44860b53bedb672675a55981863890d9be86025a。\n\n- HLTB for Steam 2.1.0：显示 How Long To Beat 通关时长；backendType=lua；已提交文件、当前快照和安装元数据的提交都是 7decc0a06bb26b365a779c9d1a85195834c940e1（9 月 19 日核对时快照还记着旧提交 49d59edf7475ceef42734627687bdb71d7d08709，现已对齐）。\n\n- Taskbar Download progress 2.3.0：Windows 任务栏下载进度；backendType=lua；快照提交 56678fd10dba9826d34fcf8e6630fe1c099360e1。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 5 款清单；配置启用 3 款 ## 关键规则与设计选择 1. 只保存 plugin.json、metadata.json 和存在时的 install-sta"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 5 款清单；配置启用 3 款 ## 关键规则与设计选择 1. 只保存 plugin.json、metadata.json 和存在时的 install-sta"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 5 款清单；配置启用 3 款 ## 关键规则与设计选择 1. 只保存 plugin.json、metadata.json 和存在时的 install-sta"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- plugins.enabledPlugins=size-on-disk、steam-easygrid、extendium；只有 Extendium 另有 install-state.json，记录 lastChecked、installAttempted=false、installFailed=false，不表示本轮安装成功。\n\n## 执行流程\n\n1. 遍历实际 plugins 子目录，逐个寻找三个允许的文件名。\n\n2. 保存描述、元数据和存在时的安装记录，核心 config.json 单独保存启用名单。\n\n3. 重装时用这些线索找对应程序，再核对版本和插件私有设置。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| plugin.json | 插件名称、用途、版本及后端类型等描述，不是插件可执行代码。 |\n| metadata.json / install-state.json | 来源提交等元数据和安装过程记录；install-state.json 并非每个插件都有。 |\n\n## 专业定义\n\n5 款插件的用途、版本和提交都有记录，私有设置仍需另外恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n清单版本、实际程序版本和启用配置可能不同；复制旧 metadata（元数据） 不能把新程序变回旧程序。\n\n## 边界\n\n- 快照没有插件源码、可执行依赖、缓存或各插件的私有配置。\n\n- 描述中的插件用途不证明本轮已经运行该功能，安装元数据也不证明始终可下载同一版本。\n\n## 失败与恢复\n\n- **恢复后插件没有运行**：先看程序是否存在、版本是否相容，再核对启用名单与插件自己的错误；不能靠复制清单解决所有加载问题。\n\n- **需要的私人设置不在备份中**：从另外实际保留的来源恢复，或在插件中重新设置。本项目不能凭空重建它们。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-plugin-manifest-and-install-state-tracking-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `plugins/*/plugin.json / plugins/*/metadata.json`5 款插件真实版本、用途、提交及元数据。\n\n- `plugins/extendium/install-state.json`唯一保存的插件安装过程记录。\n\n- `config/config.json`plugins.enabledPlugins 的实际选择。\n\n## 如何验证\n\n- 原有测试证明插件描述会复制，缓存和插件源码被排除。\n\n- 当前快照与安装目录的插件描述内容一致，HLTB 元数据也已对齐（以前看到的差异是 9 月 19 日的历史）；这是文件内容核对，没有执行插件加载验收。\n\n## 与其他模块的关系\n\n依赖 Millennium 加载；本项目只保留重装和比较需要的清单，不接管插件自身功能。",
+      "links": [
+        {
+          "text": "上一个模块 核心设置与样式",
+          "href": "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/"
+        },
+        {
+          "text": "下一个模块 主题选项与配色",
+          "href": "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

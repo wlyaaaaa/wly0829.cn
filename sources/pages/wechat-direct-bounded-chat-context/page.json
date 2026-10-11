@@ -1,0 +1,191 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "wechat-direct-bounded-chat-context",
+  "kind": "project",
+  "title": "只读一个明确对象的最小有用聊天上下文",
+  "url": "/projects/wechat-direct/bounded-chat-context/",
+  "parent": "wechatdirect",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；无正文环境体检于 10 月 11 日 16:32—16:33 重新检查，真实具名会话没有读取"
+  },
+  "screens": [
+    {
+      "id": "wechat-direct-bounded-chat-context-01",
+      "section": "top",
+      "title": "只读一个明确对象的最小有用聊天上下文",
+      "text": "# 只读一个明确对象的最小有用聊天上下文\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n问一句微信事实时，不需要先导出整个账号。要补最近变化，可以先按明确账号与时间列出当前会话候选，再选要读的联系人或群；时间未知和扫描后又变化的会话也会保留，不把漏项说成无变化。要先找自己在大群说过什么，可筛本人及归属未定的发言，继续带着同一筛选翻页；需要别人的回应时再围绕命中补读。最终得到带账号、对象、时间、引用与附件关系的上下文，账号不明确或来源不可读就保留缺口。\n\n**当前情况：**已有指定账号和对象的聊天读取、变化发现与引用处理；本轮未读取真实会话，实际缺口由所选窗口返回。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 微信聊天读取",
+          "href": "/projects/wechatdirect/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/WeChatDirect"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/wechatdirect/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n一条消息的含义可能取决于谁发的、回复哪条、附件是什么，以及当前窗口是不是完整历史。只按关键词抄一句，容易把群成员、本人、系统消息和引用目标混在一起。\n\n## 举个实际例子\n\n我问“项目群里最后是谁同意周五交付？”工具只翻这个群里够回答问题的一段，把说话人、时间和那句回复指向的原消息一起给我；主号、副号里都有同名群时，它先列候选，绝不蒙一个。\n\n## 最后我会得到什么\n\n交回这次确实读到的一小段聊天：账号、联系人或群、时间范围、说话人、原回复和附件可用性。若只有小窗口或有遗漏，会说明实际范围，不能当整段历史。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可直接使用\n\n账号和对象唯一，窗口可读，影响问题的发送者、引用和媒体关系都已返回。\n\n## 需要确认\n\n对象重名、引用目标在窗口外、群成员标签不全或媒体打不开时，保留候选和缺口，并只扩大必要范围。\n\n## 当前不可用\n\n账号配置、身份承诺、本地消息库、时间索引或输出边界不成立时停止，不换来源补猜。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说明账号、联系人或群，以及要问的那段微信事实。\n\n## 需要准备什么\n\n- 微信账号和要看的联系人或群\n\n- 时间、关键词或本人参与线索（如有）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　先从会话变化或本人参与定位小范围，再读足够前后文和原回复，不导出整个账号。\n\n2. **交付与接续**　交回说话人、时间、回复及媒体缺口；对象不唯一或范围不足时停下补线索，不猜是谁。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n9月9日来源投影、上下文与候选发现45项及6子测试通过（之后未重新运行）；当前源码 v0.2.3 共定义 224 个测试函数，本轮没有运行；2026-10-11 无正文环境体检成功；真实具名会话未读取\n\n## 关键规则与设计选择\n\n1. coverage.hasMore 与 continuation 决定是否还需续查；游标固定账号、聊天、时间范围和搜索条件，每次调用仍是独立本地快照，不宣称历史跨页永不变化。\n\n2. not_found_in_page 不等于请求窗口未命中；末页 not_found_in_remaining_window 只说明剩余范围，存在正文解码缺口时不能说从未说过。\n\n3. coverage.returnedAllScanned 明确展示是否包含所有扫描消息；关键词附近的小窗口不是完整历史，continuation.purpose 分开继续找命中与普通翻页。\n\n4. 聊天默认从最小窗口开始，不先创建全量档案。\n\n5. auto 只有唯一匹配时才选择账号；多匹配必须由用户决定。\n\n6. 返回窗口的 self=0 只表示这段没有观察到本人消息，不代表全历史没有。\n\n7. 空窗口仍说明当前会话是否存在更早或更新的本地可见消息。\n\n8. 私聊与群聊引用目标均可按原生server id精确回查；源中缺失或无法读取时仍保留缺口，不保证全部回复都能补回。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n9. 只有会改变答案的媒体才需要进一步打开或转写。\n\n## 当前怎样实现\n\n- changes固定discovery.requestedWindow.untilS；按明确primary/secondary/both独立读取当前SessionTable（只查已配置的槽位），保留隐藏会话、时间未知项和observed_after_until候选。completeScope只覆盖当前表，historicalChangeDetection明确不检测已消失会话、旧消息补入/撤回、正文或标签修订。\n\n- --self-only在fetch_messages解码前按当前分片发送者方向筛self/unknown（未验证），selectionScope与coverage.senderScope均为self_messages_and_unresolved_senders。v2游标绑定selfOnly，续查不能改变筛选；v1普通游标继续兼容。引用目标按原生ID补取，不把筛选结果当作全群上下文。\n\n- _resolve_contact 只在已配置的一个或两个槽位中按当前联系人目录解析唯一对象，contact_ambiguous 返回公开安全候选；显式指定了未配置的账号时返回 wechat_account_not_configured，不拿另一个账号代读。\n\n- _context_result 校验扫描与返回上限，按 since / until / lookback / around / contains 形成有界窗口。\n\n- _sender_receipt 保留 self、other、system、unknown（未验证） 与群成员标签；文件传输助手只加标签，不改写原生角色。\n\n- 返回 scannedSenderRoleCounts、returnedSenderRoleCounts、selfObservation、availableHistoryHint 与 gaps。\n\n- Canonical JSON（规范 JSON）计算 manifestSha256。输出超过本次字节预算时先减少消息页数，单条长文本改为分段续读；只有极端元数据仍超预算才返回 context_metadata_too_large_use_export_context，并指向新目录阅读包这条路。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- context --byte-limit限制32–512KiB终端JSON，普通continuation负责其余消息；segmentedFields仅是长字段预览，message-part绑定同一显式账号/对象、偏移和whole-text hash（内容指纹）续读。source_changed要求重新context，不能跨版本拼接；便携export-context仍保存选定全文，终端预算不截断阅读包里的文件。\n\n## 执行流程\n\n1. 读取已配置账号槽位的公开安全配置结构。\n\n2. 解析唯一联系人或群，失败时返回未命中或候选。\n\n3. 按请求时间与上限读取一个本地快照；--around 优先取最靠近锚点的消息，再按时间排序，续查上界固定但每页快照独立。\n\n4. 围绕关键词或时间锚点选择最多 80 条。\n\n5. 补全发送者、回复目标和媒体缺口。\n\n6. 写出带实际范围与哈希的 JSON，不修改任何源数据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Bounded context（有界上下文） | 账号、对象、时间和返回数量都明确的一小段消息，不代表远端或本地全历史。 |\n| Sender role（发送者角色） | self、other、system 或 unknown（未验证）；群聊还单独解析成员标签。 |\n| availableHistoryHint | 窗口为空时说明当前本机是否仍知道更早、更晚或不可读消息存在。 |\n| manifestSha256 | 对本次规范结果计算的整体内容指纹，用于确认回执没有静默变化。 |\n\n## 专业定义\n\n先用changes发现当前变化候选，再对明确对象读取有界上下文；可以先筛本人参与，缺少他人回应时再补读。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决错账号、错对象、截断上下文、发送者混淆、小窗口冒充全历史和附件关系丢失。\n\n## 边界\n\n- 最多扫描 500 条、返回 80 条，默认回看 7 天。\n\n- 不自动把窗口扩大到整个联系人、群或账号。\n\n- 当前设备本地可见范围不等于微信远端全历史。\n\n- changes完整不等于历史变化完整；self-only完整不等于全群上下文完整；精确引用回查仍受本机可读范围约束。\n\n- 不把真实联系人、聊天正文或媒体复制到网页。\n\n## 失败与恢复\n\n- **多个账号或对象精确匹配**：返回 contact_ambiguous 候选，等待用户选定，不取第一项。\n\n- **关键词或时间锚点未命中**：返回明确锚点缺口；只在用户需要时调整窗口。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **回复目标或媒体不在当前可见范围**：保留 quote_target_missing / media_not_openable 等 gaps，不伪造正文。\n\n- **输出太大或消息库缺索引**：两件事分开处理。输出太大时先缩页、长文本分段续读，仍不够就改用 export-context 生成阅读包；缺索引才需要缩小范围或修复源级索引后重试。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-bounded-chat-context-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `README.md · context`自然语言用途、命令示例与小窗口边界。\n\n- `wechat_cli.py · _resolve_contact / _context_result`唯一对象解析、窗口选择、发送者、回复和结果合同。\n\n- `wechat_source.py · fetch_messages`分片消息读取、内容投影、索引与媒体关系。\n\n- `tests/test_wechat_cli.py`对象歧义、窗口角色、引用目标、媒体缺口和空窗口回归。\n\n## 如何验证\n\n- test_exact_contact_ambiguity_never_picks_first 验证多匹配不猜。\n\n- test_context_keeps_native_ids_quote_target_and_media_gap 验证消息、引用和媒体缺口。\n\n- test_empty_context_reports_that_older_local_history_exists 验证空窗口不冒充全历史为空。\n\n- 真实可用性仍需用户点名对象后的 context E2E（端到端验证），本次网页刷新未执行。\n\n## 与其他模块的关系\n\n这是一次性问题的默认入口；需要长期保存时进入“具名增量归档”，需要打开附件时进入“回复与媒体关系”。",
+      "links": [
+        {
+          "text": "下一个模块 具名增量归档",
+          "href": "/projects/wechat-direct/named-chat-archive/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

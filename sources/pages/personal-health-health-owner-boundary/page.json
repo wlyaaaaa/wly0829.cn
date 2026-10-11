@@ -1,0 +1,187 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-health-health-owner-boundary",
+  "kind": "project",
+  "title": "AI整理和核对，人做知情选择；谁都不是自动正确",
+  "url": "/projects/personal-health/health-owner-boundary/",
+  "parent": "personal-health",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "项目规则、设备流程与采集代码 10 月 11 日只读核对，源码最后变更 10 月 7 日；未读取任何健康正文，实际采用了哪些结果不知道"
+  },
+  "screens": [
+    {
+      "id": "personal-health-health-owner-boundary-01",
+      "section": "top",
+      "title": "AI整理和核对，人做知情选择；谁都不是自动正确",
+      "text": "# AI整理和核对，人做知情选择；谁都不是自动正确\n\n〔回到项目 → 个人健康〕　〔复制 AI 续作说明〕\n\n个人健康证据与安全决策 · 功能说明\n\n让专业能力、证据和用户自主同时存在：既不让 AI 冒充医生，也不把医生、机构或设备写成无需说明依据的终局权威。\n\n**当前情况：**设备数据现在每 7 天自动采集一次，但采集脚本从不自己改当前健康认知：结果先由健康项目的 AI 审阅，合格且和现实相关的才局部采用；真实的医疗方案仍由我在医生参与下作知情选择。哪些结果已经被采用，本页没有读健康内容，不知道。紧急情况仍回到现实医疗。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人健康",
+          "href": "/projects/personal-health/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-health/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n医生有 AI 没有的问诊、查体、诊断和处方能力，但也可能受信息不足、时间、机构流程、资源、经验偏差或利益关系影响；AI同样会遗漏、误读和过度自信。重大决定需要校准信任，而不是更换一个盲从对象。\n\n## 举个实际例子\n\n医生建议一项长期、昂贵又很难撤回的治疗，我却没听懂为什么非做不可。AI 不会抢着判医生错，更不会叫我擅自停药；它会把现有依据、没讲清的前提、其他合理选择和复查条件列出来，帮助我向原医生追问，必要时准备独立专科第二意见。\n\n## 最后我会得到什么\n\n得到一条可追责的决定边界：报告和设备提供有限证据；医生提供临床能力并解释依据；AI交叉核对、暴露未知和保护选择空间；非紧急且本人有决定能力时，由本人作最终知情选择。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可用于当前判断\n\n事实、选项、主要收益和风险、替代方案与停止条件已说清，本人理解后可以作选择；医生和 AI 都保留可被质疑和纠正的责任。\n\n## 需要复核\n\n意见冲突、依据不清、决定重大或可能存在利益关系时，要求解释并取得适当的独立复核，不靠身份和投票决定。\n\n## 本轮不可用\n\n急症不等待完整资料或第二意见；缺少查体、诊断或可靠来源时，AI明确不能判断并把用户带回现实医疗。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n给出健康疑问或选项，请 AI 帮忙核对依据与真实取舍。\n\n## 需要准备什么\n\n- 本人当前目标与现实限制\n\n- 尚未记录而会改变判断的症状或专业意见（如有）\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　AI整理相互支持或冲突的证据，比较收益、风险、负担和退出条件；红旗情形明确提示及时求助。\n\n2. **交付与接续**　交回可复查的选择依据和不确定性；不把 AI、设备或医生写成无需解释的终局权威。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n**10 月 11 日核对**　单次采集仍返回“需要健康审阅”“未更新当前依据”“未新建后台任务”三个固定字段；另有 PCConfig 登记的每 7 天刷新任务，它只做采集、核对和简报，同样不写当前依据。“需要健康审阅”是固定规矩，不代表这份结果现在还没处理；某份结果是否已被采用，以当前依据和来源记录为准，本次没有读取，所以是未知。\n\n## 关键规则与设计选择\n\n1. 高风险和不可逆决定需要更高证据门、合理替代与明确停止或复查条件。\n\n2. 利益关系要被说明和纳入判断，但不能据此预设恶意或否定专业能力。\n\n3. 第二意见是适当专科对同一原始资料的独立复核，不是再问一次 AI，也不是多数投票。\n\n4. AI 与医生冲突时说明冲突来自哪些事实、适用范围或假设，不擅自改药。\n\n5. 报告实测、医生解释、本人陈述、AI 分析与明确未知保持分层。\n\n6. 采集链（含每 7 天的定时任务）只交结果、不改当前健康认知；健康项目的 AI 审阅决定是否局部采用，不给我增加每周逐份手工审阅的事；真实医疗选择仍是我的。\n\n## 当前怎样实现\n\n- 采集结果把“需要健康审阅”“当前依据是否更新”“这次是否新建后台工作”写成机器可验字段；后者只说明这次调用，不说明整个项目没有定时任务。\n\n- 每 7 天的刷新任务由 PCConfig 登记，跑完写独立回执，不写当前依据。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 简报的下游规则要求字段自身可用、来源说明可用、与问题相关并有现实影响，才可能进入当前依据。\n\n- Health Owner（健康资料责任方）由健康项目的 AI 承担审阅：看简报、结合当前事实，只局部更新 CURRENT.md，并保留来源类型、时间和不确定性。\n\n- 高风险或治疗判断结合当前个人事实并查询当前权威医疗指导。\n\n- 项目明确不建设疾病本体、诊断引擎、总分、持续同步、后台监测、数据库、RAG、服务或队列。\n\n- 网站对这一页不做自动更新：它是我点名才更新的说明页，不监听健康数据，也不因源码、测试或技能变化自动建网站任务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 接收字段级可用／不可用结果（来自我当场的刷新或每 7 天的定时任务）。\n\n2. 确认当前健康问题和急症红旗。\n\n3. 判断来源、时间、相关性与现实影响。\n\n4. 必要时核验当前权威医学指导。\n\n5. 决定不更新、提出一个最小问题或局部更新当前依据。\n\n6. 保留收益、风险、替代方案和停止／复查条件。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Health Owner（健康资料责任方） | 决定个人健康事实怎样被处理和局部更新的审阅环节，由健康项目的 AI 承担；它不是自动写入，也不是要我逐份手工审阅。真实医疗方案仍由我作知情选择。 |\n| Clinical boundary（临床边界） | AI 和设备不能替代查体、诊断或处方；医生意见也不能替代用户的知情选择。 |\n| Red flag（紧急红旗） | 可能需要及时现实医疗处理的危险信号；不等待设备采集或评分。 |\n| Second opinion（第二意见） | 由另一位合适专科医生独立审阅同一原始资料；可以确认、质疑或提出其他选择。 |\n| Low-burden action（低负担行动） | 在医学上安全时，优先选择能明显改变判断、又可暂停和复查的最小下一步。 |\n\n## 专业定义\n\n医生提供临床能力，AI 帮助核对证据和保护选择空间，报告与设备提供有限观察；任何一方都应允许质疑、解释和复核。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决设备数据自动写入个人事实、模型建议冒充医生结论、“需要审阅”被误当成我的待办、健康项目演变成监控／评分系统，以及公开页泄露个人健康载荷。\n\n## 边界\n\n- 不公开 CURRENT.md、报告、诊断、检查结果、药物、过敏、个人指标或个体建议。\n\n- 不把设备来源写成唯一具体设备证明，也不声称当前在线。\n\n- 不使用健康数据截图、模拟指标图、风险评分或装饰性医疗图表。\n\n- 来源项目 PRIVATE（私有），不提供猜测或不可访问的 GitHub 按钮。\n\n## 失败与恢复\n\n- **自动链尝试写 CURRENT.md**：阻断并交健康审阅；采集和定时任务的 current_updated 必须保持 false。\n\n- **设备摘要被解释为诊断或处方**：退回证据层，明确它只说明字段能否用于当前问题。\n\n- **高风险红旗存在**：停止低价值设备刷新，按当前权威指导升级现实医疗。\n\n- **公开候选含个人健康载荷或凭据**：公开检查阻断具体值；保留公开安全的产品身份、边界和技术事实。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- AGENTS.md　Health Owner、高风险指导、低打扰与不建设边界\n\n- google_health_capture.py　health_owner_review_required / current_updated / background_work_created 机器约定\n\n- google_health_brief.py　下游规则、相关性、不可用字段与解释限制\n\n- tests/test_google_health_capture.py　离线结果、失败重试和不自动更新回归（现有 7 个测试函数）\n\n- 共同决策把最佳证据、临床经验与患者目标、价值和处境放在同一选择中\n\n- 健康 AI 应保护人的自主、安全、可解释性与问责，不把医疗决定转交给机器\n\n- 医疗利益冲突应避免、披露和管理，并说明合理替代、无行动选项及第二意见权利\n\n- 知情同意应覆盖诊断、干预目的、所有选项的收益与风险，包括暂不治疗",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-health-health-owner-boundary-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 第二意见由另一位医生审阅资料，可确认、质疑或提供其他治疗选择\n\n（以上五条外部医学伦理依据沿用 9 月 14 日的引用，之后未重新核对。）\n\n## 如何验证\n\n- 采集成功的约定明确：需要健康审阅、current_updated=false、这次 background_work_created=false。\n\n- 项目规则机械禁止诊断引擎、评分、持续同步、后台监测、数据库、服务与队列。\n\n- 全项目现有 192 个测试函数、参数展开 213 个用例（10 月 11 日静态计数，本次没有运行）。\n\n- 网页公开检查与内容测试要求个人健康值、报告、用药、诊断、个体建议和凭据都不出现；这次换版后的页面是否通过，以发版检查为准。\n\n## 与其他模块的关系\n\n它是证据路线的最后责任边界，也决定按需或每周刷新、原始保全、离线摘要和三态结果是否真的进入当前健康依据。",
+      "links": [
+        {
+          "text": "上一个模块 证据三态",
+          "href": "/projects/personal-health/evidence-three-state/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

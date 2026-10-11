@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "steam-millennium-config-backup-allowlist-config-and-style-snapshot",
+  "kind": "project",
+  "title": "核心设置与自己的样式",
+  "url": "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
+  "parent": "steam-millennium-config-backup",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11 13:32"
+    }
+  },
+  "screens": [
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-01",
+      "section": "top",
+      "title": "核心设置与自己的样式",
+      "text": "# 核心设置与自己的样式\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n保存 Millennium 的核心设置与 quick.css，让重装或误改后能按记录恢复自己的选择。\n\n当前情况：核心设置和自定义样式已采集；本轮没有回填并查看Steam实际界面。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Steam 外观备份",
+          "href": "/projects/steam-millennium-config-backup/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/steam-millennium-config-backup"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/steam-millennium-config-backup/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n颜色和滚动条只是看得见的一部分，更新通道、注入开关、插件启用名单也会影响客户端行为。一起保存，恢复时才不只找回一张相似的皮肤。\n\n## 举个实际例子\n\n“我想恢复 Steam 之前的绿色和细滚动条。”先装好 Millennium，再合并回填 config/config.json 与 config/quick.css；打开 Steam 检查颜色和滚动区域，不能只看文件在不在。\n\n## 最后我会得到什么\n\n拿到原来的参数和 CSS 文件；对应版本可用且注入正常时，用它们恢复设置，再从界面确认。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 颜色和滚动条只是看得见的一部分，更新通道、注入开关、插件启用名单也会影响客户端行为。一起保存，恢复时才不只找回一张相似的皮肤。 ## 举个实际例子 “我想恢复 Steam 之前的绿"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 颜色和滚动条只是看得见的一部分，更新通道、注入开关、插件启用名单也会影响客户端行为。一起保存，恢复时才不只找回一张相似的皮肤。 ## 举个实际例子 “我想恢复 Steam 之前的绿"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 颜色和滚动条只是看得见的一部分，更新通道、注入开关、插件启用名单也会影响客户端行为。一起保存，恢复时才不只找回一张相似的皮肤。 ## 举个实际例子 “我想恢复 Steam 之前的绿"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以怎么用\n\n选定的核心设置和自己的样式在快照里能核对，恢复时只回填受支持部分。\n\n## 需要处理什么\n\n版本变了先核对当前配置选择；样式没生效再看程序和主题是否正确加载。\n\n## 什么时候不可用\n\n没有 Millennium 或所需主题资源时，单复制配置不能让界面恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n日常请 AI 运行 tools/Invoke-MillenniumBackup.ps1 -Mode Status -Json 或看驾驶舱，就能知道现有周任务和最近一份快照；若要手动留一份，用 -Mode Snapshot，恢复先看 RestorePlan。开始菜单里的“备份状态”入口已在 9 月 26 日撤下，原来的状态窗口脚本仍可直接运行。\n\n### 需要准备什么\n\n- 这次要采集还是恢复\n\n- 要恢复的版本（不确定可先看列表）\n\n### 从开始到拿到结果\n\n1. **只取支持文件**　从真实安装中找核心配置和自己的样式，按白名单复制。\n\n2. **核对快照**　候选文件通过类型和内容检查后更新备份，未变就不造新代。\n\n3. **恢复后看 Steam**　按选定版本合并回填配置，再检查界面；账号、游戏和存档不在这份快照里。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n配置已采集；本轮未做界面恢复\n\n## 关键规则与设计选择\n\n1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制整份配置。\n\n2. 保留核心选择和轻量 CSS，程序、缓存与账号状态不随配置走。\n\n3. quick.css 是样式定义；不存在“所有 Steam 窗口已验证生效”的推断。\n\n## 当前怎样实现\n\n- general.accentColor=#00ff00，millenniumUpdateChannel=stable；更新检查和 injectCSS/injectJavascript 开启，onMillenniumUpdate=2。三项通知开关均开启，network.proxy、proxyUsername、proxyPassword 均为空；不从数值枚举推断未验证的更新行为。\n\n- plugins.enabledPlugins 保存 3 个插件名；themes.activeTheme、conditions、themeColors 分别保存当前主题、选项和颜色。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 配置已采集；本轮未做界面恢复 ## 关键规则与设计选择 1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 配置已采集；本轮未做界面恢复 ## 关键规则与设计选择 1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 配置已采集；本轮未做界面恢复 ## 关键规则与设计选择 1. 核心JSON按受支持字段生成公开投影，恢复时只合并这些字段，保留目标网络和未知字段；不盲目复制"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- millennium_backup.py严格解析并选择支持字段，quick.css规范UTF-8换行并检查已知风险；未知键只报告名称。新格式与旧无清单快照不同，AdoptExisting也不能绕过内容或哈希检查。\n\n## 执行流程\n\n1. 在实际 Millennium 目录找到核心配置与 quick.css。\n\n2. 与其余白名单文件一起复制到暂存区并检查。\n\n3. 更新备份 config 目录；恢复时则合并回填所选版本的文件，最后在 Steam 检查效果。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| CSS / JavaScript 注入 | Millennium 把样式或脚本加载到 Steam 页面；开关配置与页面实际执行是两层证据。 |\n| quick.css | 个人全局样式文件，本快照保留滚动条 4px、半透明滑块和透明轨道规则。 |\n\n## 专业定义\n\n核心开关和全局 quick.css 都保留，文件复制与实际效果分开验证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n只重装主题不能恢复全部个人选择，直接覆盖不兼容的新配置也可能让设置失效。\n\n## 边界\n\n- 有受支持字段的类型与内容检查，不是通用配置迁移器；不转换未知键，不保证全部CSS在所有Steam窗口生效。\n\n- 不覆盖 Steam 原生账号登录、游戏库或存档恢复。\n\n## 失败与恢复\n\n- **配置里存在非空代理用户名或密码**：代理账号和未知字段不进入公开投影；支持字段中出现已知凭据模式仍拒绝，省略范围与实际值风险分别复核。\n\n- **回填后样式或选项没有按预期出现**：检查 Millennium、主题版本与注入配置；按需要撤回目标机保留的配置，不宣称清空 quick.css 必然修复所有窗口问题。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-allowlist-config-and-style-snapshot-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\nconfig/config.json\n真实参数与选择。\n\nconfig/quick.css\n实际滚动条样式定义。\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n复制范围、类型与内容检查、代际和受控恢复的实际逻辑；原 tools/snapshot-millennium-config.ps1 现在只是转交给它的兼容入口。\n\n## 如何验证\n\n- 原有测试的 copies config.json 与 copies quick.css 通过（9 月 8 日的历史测试）。\n\n- 9月8日核心文件经隔离采集及回填后与来源SHA-256相同；该历史测试不等于本次真实界面验收。\n\n## 与其他模块的关系\n\n核心配置中的插件名单和主题选择连接后两类快照；采集与恢复流程负责搬运这些文件。",
+      "links": [
+        {
+          "text": "下一个模块 插件清单",
+          "href": "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

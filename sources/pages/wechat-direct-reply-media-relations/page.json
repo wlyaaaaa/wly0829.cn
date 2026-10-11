@@ -1,0 +1,183 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "wechat-direct-reply-media-relations",
+  "kind": "project",
+  "title": "按消息顺序交付原回复、可读媒体和可继续阅读的包",
+  "url": "/projects/wechat-direct/reply-media-relations/",
+  "parent": "wechatdirect",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "来源代码核对到 10 月 7 日最后一次提交（v0.2.3）；本轮没有打开真实媒体、访问表情 CDN 或运行测试"
+  },
+  "screens": [
+    {
+      "id": "wechat-direct-reply-media-relations-01",
+      "section": "top",
+      "title": "按消息顺序交付原回复、可读媒体和可继续阅读的包",
+      "text": "# 按消息顺序交付原回复、可读媒体和可继续阅读的包\n\n〔回到项目 → 微信聊天读取〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nWeChatDirect · 功能说明\n\n消费项目看到的是同一顺序的聊天和真正能查看的附件，不用从文件名、占位文字或一堆无关系文件猜意思。\n\n**当前情况：**已有交付有序聊天、回复和可读附件的功能；本轮没有重新打开真实媒体或补取远端附件。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码\n\n公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 微信聊天读取",
+          "href": "/projects/wechatdirect/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/WeChatDirect"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/wechatdirect/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n文件去重不应抹掉表情在对话里出现多次的语境，找到本地路径也不意味着图片可解码。来源、出现位置、实际字节和质量必须分别保留。\n\n## 举个实际例子\n\n我说“把这段讨论和其中的图片交给另一个项目继续看”。它给出有序消息页、原回复和能打开的图片或表情；读不到的附件明说原因，有下一页就沿原查询继续，而不是替我猜图里写了什么。\n\n## 最后我会得到什么\n\n交回按消息顺序阅读的聊天和实际能打开的图片、语音或文件；每个附件都能回到原消息。打不开或不知来源的项目保留缺口，不拿文件名猜内容。\n\n## 结果怎么看\n\n## 可直接使用\n\n消息与附件的实际内容核对后，一起交给需要继续工作的项目。\n\n## 需要确认\n\n某条回复或附件缺失时，交回仍可读的部分、缺口和下一页位置，不冒充全历史。\n\n## 当前不可用\n\n来源或附件身份不能核对时只停这部分，不拼造地址或泄露解密材料。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n问一句“可以”回复了谁，或某个语音和文件属于哪条消息。\n\n## 需要准备什么\n\n- 选定会话\n\n- 想核对的回复原话或附件线索\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　按真实消息顺序连接引用目标、发送者与附件；打不开的媒体保留位置和失败说明，不从邻近文件猜。\n\n2. **交付与接续**　交回可继续阅读的小窗口或档案包；回复目标不明时保留未知。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n当前源码 v0.2.3（最后提交 2026-10-07）已核对，共定义 224 个测试函数，本轮没有运行；137项/32子测试保留9月7日证据（之后未重新运行）。本轮没有打开真实微信媒体、访问 CDN 或重做归档\n\n## 关键规则与设计选择\n\n1. context 只查本机；显式 export-context / media-open 才可物化同条表情自带的原生 CDN，--local-only 可禁止。sync-contact 与 preserve 不自动向远端补表情。\n\n2. 图片按消息 MD5 与 hardlink.db 精确定位；V1/V2 DAT 使用身份一致的既有保护配置在进程内解码，密钥不进入包、终端或 Git。\n\n3. 表情保留 PNG/GIF 等真实格式和每次出现。WXGF 依赖现有 ffmpeg/ffprobe，只在分区与帧数可证明时转成 PNG 或保持动作的 GIF。\n\n4. VoiceInfo 保留 SILK，按需派生 WAV；对非语音消息要 --voice-wav 会在取任何媒体之前就拒绝。解码超时、解释器不可用或生成的 WAV 不合格时，只把这一条记为缺口，原 SILK 和其余消息照常可用，不判整包失败。通话事件仍只是状态。视频和文件仅在原生 MD5 索引找到实际本机文件时交付。\n\n5. openable=null、materializable=true 表示找到候选但尚未证明可读；实际成功才能升级。requiresNetwork 说明是否需要原生远端物化。\n\n6. 转账正文按原生结算子类型投影，红包单独识别；程序解释消息格式，不代替支付平台的现实结算核对。\n\n## 当前怎样实现\n\n- wechat_source.py 负责原生引用、分片 Name2Id、消息类型投影和账号绑定 locator（原件定位记录）；长 serverId/nativeId 始终以字符串返回。@openim 文字与非文字方向优先取当前分片的本人原生身份。\n\n- wechat_media.py 沿消息原生索引定位与物化；wechat_image.py 校验 DAT 解码和图片，wechat_wxgf.py 验证封装分区、视频流与帧数，不猜完整动画。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 表情远端只使用同条消息已有地址，并核对原生 MD5、声明大小和图片解码；失败保留原 gap，不搜索替代图片。\n\n- export-context 使用与 context 相同的范围、锚点和游标，将实际媒体写入新目录，重复字节可复用，每次消息位置不去重。生成的阅读包可以用同一个 verify-export 离线核对清单、声明文件以及账号、消息、媒体和派生关系。\n\n- wechat_render.py 可选生成引用同一媒体的 HTML；AI 默认读取 JSON/Markdown 与媒体文件，不需要浏览器、服务或源数据库 locator（原件定位记录）。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-06",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- repair-media只对一个明确账号/contact/output归档补本地媒体或派生WAV，--message-id/--kind进一步收窄，并复用已核对过的 SILK/WAV；不重扫聊天、不请求CDN，不改原增量游标。只有附件后来下载到本机、当前可读才补得上。单语音派生失败单独记录，不抹掉已可用消息与其他附件。\n\n## 执行流程\n\n1. 固定账号、对象和查询窗口\n\n2. 按原生消息顺序读取正文与引用\n\n3. 验证每条媒体的原生来源\n\n4. 按请求进行本地或原生表情物化\n\n5. 核对实际格式、字节与质量\n\n6. 生成新阅读包并保留逐项缺口\n\n7. 有后续内容时沿原游标继续",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Materialization（物化） | 从已绑定原生来源取得实际可读文件；找到路径只是候选，不能先宣布打开成功。 |\n| Occurrence（出现位置） | 同一张图或表情在不同消息中各有语境，字节可以复用，位置和关系不能被去重抹掉。 |\n| WXGF | 微信图像封装；复杂分区或透明度关系未证明时保持缺口，不把首帧冒充完整动图。 |\n\n## 专业定义\n\n一条消息的意思常在它引用的文字和附件里。现在可把有序消息、真实可读媒体及缺口交给 AI；HTML 只是可选查看方式。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-08",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决引用失联、媒体占位冒充已读、动图丢动作、发送方向错误和跨项目交付只剩 HTML 的问题。\n\n## 边界\n\n- 媒体含义必须实际阅读后由消费项目与 AI 判断。\n\n- 不扫描模糊文件名、不搜索或拼造媒体地址。\n\n- 阅读包不携带源数据库 locator（原件定位记录）、私有 URL 或解密参数。\n\n- 输出与同名 .incomplete 必须不存在；已有内容不自动接管或覆盖。单个媒体文件用排他方式发布，写入时目标突然出现也不覆盖；已有的 WAV 派生文件不覆写，失败时只清掉本轮新生成的文件。\n\n- 转写、说话人归属和媒体库入库均属于另外明确的任务。\n\n## 失败与恢复\n\n- **原生 MD5、大小或实际格式不匹配**：拒绝该媒体并保留原消息和 gap；不以相邻文件或网络搜索替换。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-09",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **WXGF 多分区或透明度关系不能证明**：返回不可解缺口，不静默裁成一帧。\n\n- **只找到缩略图**：按 thumbnail 质量交付，不标成 original。\n\n- **阅读包只有部分内容可读**：返回 partial、每项失败和 continuation；失败回执的 retryable / nextAction 不扩大账号、聊天或写入范围。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "wechat-direct-reply-media-relations-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `wechat_source.py`原生消息、引用、身份、转账与红包投影\n\n- `wechat_media.py / wechat_image.py / wechat_wxgf.py`原生定位、DAT与WXGF物化和字节验证\n\n- `wechat_render.py / wechat_cli.py`阅读包、可选HTML与范围化CLI（命令行工具）\n\n- `tests/test_reading_package.py / test_context_paging.py / test_sender_identity.py`有序交付、分页和分片身份回归\n\n## 如何验证\n\n- 9月7日合成套件137项与32个子测试通过，覆盖图片、动画、原生媒体、阅读包、分页、发送方向及归档完整性；之后未重新运行。当前源码另有排他发布与语音派生失败的回归定义（tests/test_archive_reliability.py、test_completion_reliability.py），本轮没有运行。\n\n- 没有读取真实微信正文或媒体，没有访问表情 CDN，没有执行个人归档或媒体库入库。\n\n## 与其他模块的关系\n\n聊天上下文确定最小范围；本模块交付其中真正可读的消息、引用和媒体，阅读包可用 verify-export 单独验真。长期归档及独立保全继续使用各自的状态与验真合同。",
+      "links": [
+        {
+          "text": "上一个模块 具名增量归档",
+          "href": "/projects/wechat-direct/named-chat-archive/"
+        },
+        {
+          "text": "下一个模块 朋友圈缓存",
+          "href": "/projects/wechat-direct/moments-local-cache/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

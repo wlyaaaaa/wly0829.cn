@@ -1,0 +1,439 @@
+[
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每周采集、可见管理与可回滚恢复",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "平时让原任务每周留存配置，需要时请 AI 查状态或看驾驶舱，就能知道最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "每周采集、可见管理与可回滚恢复",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "平时让原任务每周留存配置，需要时请 AI 查状态或看驾驶舱，就能知道最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "可以怎么用",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "可以怎么用",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/hires-icons/试管对勾.png",
+          "_library/round3/clean-assets/png/31-报警灯-clean.png",
+          "_library/hires-icons-r2/icon-clean-d819641dd52018c42577.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "日常让 AI 运行 tools/Invoke-MillenniumBackup.ps1 -Mode Status -Json 查状态，或直接看驾驶舱；要马上存一份用 -Mode Snapshot，自查周任务用 tools/Manage-MillenniumTask.ps1 -Mode Inspect -Json。恢复先用 -Mode RestorePlan 选版本。开始菜单里的“备份状态”入口已在 9 月 26 日撤下，原来的状态窗口脚本仍可以直接运行。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先看快照真的留到了哪里**　周任务或手动采集分别报告本地结果与独立副本；提交到版本库和冷备是另外的证据。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "日常让 AI 运行 tools/Invoke-MillenniumBackup.ps1 -Mode Status -Json 查状态，或直接看驾驶舱；要马上存一份用 -Mode Snapshot，自查周任务用 tools/Manage-MillenniumTask.ps1 -Mode Inspect -Json。恢复先用 -Mode RestorePlan 选版本。开始菜单里的“备份状态”入口已在 9 月 26 日撤下，原来的状态窗口脚本仍可以直接运行。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **先看快照真的留到了哪里**　周任务或手动采集分别报告本地结果与独立副本；提交到版本库和冷备是另外的证据。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 复用 Windows 任务计划与小 VBS，不增加常驻备份服务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 复用 Windows 任务计划与小 VBS，不增加常驻备份服务。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- RestorePlan只读验证备份和目标；Restore要求ExpectedPlan，合并支持配置并保留网络/未知字段，资源或版本不匹配停止。真实安装目标需Steam已退出，不自动结束进程、下载或运行插件。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- RestorePlan只读验证备份和目标；Restore要求ExpectedPlan，合并支持配置并保留网络/未知字段，资源或版本不匹配停止。真实安装目标需Steam已退出，不自动结束进程、下载或运行插件。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **源与目标重叠或不同的手工改动仍未处理**：保留源与目标，处理精确冲突；当前入口不提供脏目标绕过。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- **源与目标重叠或不同的手工改动仍未处理**：保留源与目标，处理精确冲突；当前入口不提供脏目标绕过。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

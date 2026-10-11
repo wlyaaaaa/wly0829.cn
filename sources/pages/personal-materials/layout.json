@@ -48,7 +48,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "165份58个来源15,105条42次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
+        "text_ref": "165 份",
         "variant": "number_header_table",
         "columns": 4,
         "columns_v": 2,
@@ -63,7 +63,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记数量截至10月11日；同步次数截至10月10日",
+        "text_ref": "登记数量是 10 月 11 日 16:35 计数入口正常返回的值",
         "align": "right"
       },
       {
@@ -139,7 +139,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "165份58个来源15,105条42次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
+        "text_ref": "165 份",
         "variant": "number_header_table",
         "columns": 1,
         "columns_v": 1,
@@ -154,7 +154,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记数量截至10月11日；同步次数截至10月10日",
+        "text_ref": "登记数量是 10 月 11 日 16:35 计数入口正常返回的值",
         "align": "right"
       },
       {
@@ -726,7 +726,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
+        "text_ref": "4,242 行",
         "columns": 3,
         "columns_v": 3,
         "icons": "none"
@@ -795,7 +795,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "4,242行Python，就一个文件110个自动测试（10月10日数）0字节复制的原件",
+        "text_ref": "4,242 行",
         "columns": 1,
         "columns_v": 1,
         "icons": "none"
@@ -870,7 +870,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
+        "text_ref": "上面四个文件数是 9 月 28 日 20:55 数的"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：分段带按现有 funnel 分两列两排，扩大末格可用宽度；单独的其余用时现找是原定稿段落，完整保留。第5项的两图均已使用现有 stacked，图例数值和说明分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -935,7 +935,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "上面的文件总数是9月28日20:55数的，那次用时6秒。10月10日再数，20秒上限内没数完，所以总数仍用9"
+        "text_ref": "上面四个文件数是 9 月 28 日 20:55 数的"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第4项：采用现有 stack 纵排等宽四段，保留所有源字和原独立说明段。第5项的两图使用现有 stacked；图例分行及尾点观感仍见 requests/comp-diagram/page-fixer-05-personal-materials-qa.md。",
@@ -1428,12 +1428,13 @@
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/icons/文稿堆.png",
-          "_library/icons/文稿堆.png"
+          "_library/icons/文稿堆.png",
+          "_library/icons/文件夹.png"
         ]
       },
       {
         "type": "prose",
-        "text_ref": "8月25日–9月27日，一共21次提交。"
+        "text_ref": "8 月 25 日–10 月 7 日，一共 23 次提交。"
       }
     ],
     "notes": "依据 typeset-out/_qa/review/personal-materials.md 的本页审查修复；定稿节点完整分配，正文不缩字。第1项：九节点时间线 columns=1、direction=vertical，完整日期和说明纵排。原标题及原图取色坐标保持。",
@@ -1484,12 +1485,13 @@
           "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
           "_library/fix-round-2/icon-clean-ac8457a4d0eb95d6af6d.png",
           "_library/icons/文稿堆.png",
-          "_library/icons/文稿堆.png"
+          "_library/icons/文稿堆.png",
+          "_library/icons/文件夹.png"
         ]
       },
       {
         "type": "prose",
-        "text_ref": "8月25日–9月27日，一共21次提交。"
+        "text_ref": "8 月 25 日–10 月 7 日，一共 23 次提交。"
       }
     ],
     "notes": "以 screens.jsonl 的 source_layout、定稿 scene/portrait 为文字构图依据；未看图。定稿节点完整分配，正文不缩字。 该章节标题显式复用旧manifest逐字一致裁切及其原图坐标，按G4实际取色，不拿共享标题缺坐标冒充通过。",

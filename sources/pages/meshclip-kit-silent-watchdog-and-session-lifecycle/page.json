@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "meshclip-kit-silent-watchdog-and-session-lifecycle",
+  "kind": "project",
+  "title": "可见暂停、会话守护与故障恢复",
+  "url": "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
+  "parent": "meshclip-kit",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-01",
+      "section": "top",
+      "title": "可见暂停、会话守护与故障恢复",
+      "text": "# 可见暂停、会话守护与故障恢复\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n常开的主机上，托盘意外退出时自动尝试拉起，控制中心同时告诉我最近心跳、下一次检查和正在等什么。暂时不想自动重开时可以暂停，而不用关闭现有KDE连接或Tailscale。副机是按需打开的，我退出 KDE 就是不用了，不会被拉起来；真正传输仍由两端应用完成。\n\n当前情况：10 月 11 日 13:33 主机的登录启动、监督任务、单个看门狗和新鲜心跳检查通过；副机按需使用，本来就不装这条守护链。暂停只影响后续自动拉起，现有连接与实际传输仍分别判断。\n\n项目快照核对于 2026-10-11（北京时间），运行情况依据当天 13:33 的主机自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双机剪贴板",
+          "href": "/projects/meshclip-kit/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/meshclip-kit"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/meshclip-kit/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n### 为什么需要它\n\n常开的主机上托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置；副机按需打开，不需要这套守护。\n\n### 举个实际例子\n\n“今天先别自动重开KDE，连接还在就继续用。”打开控制中心暂停到手动恢复；这只改变下一次守护检查的拉起意图，关闭窗口不会结束既有守护。\n\n### 最后我会得到什么\n\n控制中心显示最近检查、下一次检查及暂停状态；托盘意外退出时会尝试恢复，并明确显示已恢复或启动失败。持续故障仍要按原因处理。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 常开的主机上托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置；副机按需打开，不需要这套守护。 ### 举个实际例子 “今天先别自动重开KDE，"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 常开的主机上托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置；副机按需打开，不需要这套守护。 ### 举个实际例子 “今天先别自动重开KDE，"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 常开的主机上托盘退出后需要恢复，但守护程序自己也可能退出。现有双层机制分别检查两类进程，不接管其他网络或应用配置；副机按需打开，不需要这套守护。 ### 举个实际例子 “今天先别自动重开KDE，"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n### 正常时\n\n主机上当前用户已登录，守护程序与原有任务运行，最近检查有效；副机没开 KDE、没有守护也是正常状态。这只证明托盘恢复链，不证明文件传输。\n\n### 发现问题时\n\n托盘刚退出而下一轮尚未执行时，控制中心显示等待；若已暂停，就按本人选择保持不自动拉起。\n\n### 入口不可用或证据不足时\n\n电脑尚未进入本人的 Windows 桌面会话时，这条守护链不会在登录前运行。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在主机上日常双击“MeshClip控制中心.vbs”看心跳、下一检查、暂停和恢复；需要分层排障再运行 scripts/doctor.ps1 -Peer。副机要同步时手动打开 KDE，用完退出即可。\n\n### 需要准备什么\n\n- 要看的是常开主机还是按需副机（副机本来就没有守护）\n\n- 是否暂停自动重开及暂停多久\n\n- 有故障时的大致发生时间\n\n### 从开始到拿到结果\n\n1. **随登录启动**　主机上，现有入口在当前会话启动一次看门狗，重复实例会退出；副机按需部署，不随登录启动。\n\n2. **控制中心看状态**　打开“MeshClip控制中心.vbs”看最近心跳、下次检查和待恢复事项；可暂停一小时或直到手动恢复，现有 KDE 连接仍在。\n\n3. **失踪时尝试恢复**　未暂停时它按周期检查托盘，缺失才尝试启动并记录是否真的出现。\n\n4. **问题交回**　doctor 区分网络、配对、任务和进程状态，也认得副机的按需模式：副机 KDE 关着、没有启动入口、旧心跳过期都不算故障，反而在副机上出现看门狗或不该有的启动入口会报 FAIL。睡眠、未登录或反复崩溃不能被看门狗当作已修复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日 13:33 主机登录启动、普通权限任务、单进程和新鲜心跳通过；副机按需，不在此列\n\n### 关键规则与设计选择\n\n1. 只处理当前会话托盘缺失，不改Tailscale、防火墙、配对、插件和剪贴板。\n\n2. 既有VBS启动器负责隐藏控制台；普通权限任务不因故障升为Highest。\n\n3. 同会话互斥锁避免多实例。监督任务换新实例时新旧会短暂重叠，9 月 29 日起诊断会忽略刚启动不到 5 秒的那个，避免误报多实例；两个都已运行超过 5 秒仍报歧义。\n\n4. 已安装且未变更的启动/任务由项目管理；持续应用失败应查应用，不缩短间隔无限重启。\n\n## 当前怎样实现\n\n- watch-kdeconnect.ps1 依托 Mutex 与 60 秒循环实现托盘指示器单实例守护。\n\n- watch-kdeconnect-hidden.vbs 调用 WScript.Shell Run(command, 0, False) 彻底隐窗。\n\n- New-MeshClipWatchdogTask 注册有限权限、PT2M 重复周期的计划任务守护者。\n\n- scripts/control-center.ps1显示守护意图、最近心跳、下次预计检查和待恢复记录；暂停一小时、暂停直到恢复和Resume共用当前用户状态，下一轮观察生效。原有低权限Task Scheduler监督器不新增副本，已经运行的旧PowerShell进程需下次启动才加载新函数。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机登录启动、普通权限任务、单进程和新鲜心跳通过；副机按需，不在此列 ### 关键规则与设计选择 1. 只处理当前会话托盘缺"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机登录启动、普通权限任务、单进程和新鲜心跳通过；副机按需，不在此列 ### 关键规则与设计选择 1. 只处理当前会话托盘缺"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机登录启动、普通权限任务、单进程和新鲜心跳通过；副机按需，不在此列 ### 关键规则与设计选择 1. 只处理当前会话托盘缺"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 执行流程\n\n1. 主机上用户登录后由既有快捷方式或任务隐藏启动看门狗；副机按需模式没有这一步。\n\n2. 获取Local\\MeshClipKit-KdeConnect-Watchdog互斥锁，未获得则退出。\n\n3. 首次等待15秒；逐次检查当前SessionId的托盘进程。\n\n4. 缺失时尝试启动，5秒后记录Restarted或StartFailed；下一轮默认等60秒。\n\n5. 每2分钟原任务独立检查守护启动链，不唤醒睡眠电脑。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| SessionId（会话标识） | Windows 系统分配给当前登录交互式桌面的唯一会话编号，确保看门狗仅管理本桌面的托盘程序。 |\n| 双层自愈体系 | 看门狗守护托盘程序（分钟级），计划任务守护看门狗自身（两分钟级）的层级容错架构。 |\n\n## 专业定义\n\nVBS 无窗后台巡检与 Task Scheduler 双层自愈",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n睡眠或尚未登录时没有可用用户会话；持续应用启动失败记录StartFailed。锁屏但仍登录不等于注销。\n\n## 边界\n\n- 仅在当前用户已登录的会话中运行；锁屏后会话可能仍存在，睡眠时不唤醒。\n\n- 不提供登录前剪贴板或文件接收，也不自动修复持续应用崩溃。\n\n## 失败与恢复\n\n- **可信托盘无法启动**：写StartFailed，doctor据进程和心跳报告失败。\n\n- **看门狗退出**：原有任务在后续触发时尝试恢复，调度不是120秒硬保证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-silent-watchdog-and-session-lifecycle-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\watch-kdeconnect.ps1`看门狗轮询与自愈主逻辑\n\n- `scripts\\watch-kdeconnect-hidden.vbs`无窗口隐藏唤起包装器\n\n- `tests\\RepositorySafety.Tests.ps1`看门狗生命周期与零越权安全测试\n\n## 如何验证\n\n- 当前测试源码覆盖计划任务有限权限契约、单实例互斥锁、新旧实例交接不误报与 WhatIf（只读预演）零写副作用；这次没有重新运行测试。\n\n- 10 月 11 日 13:33 主机 doctor 的 KDE watchdog login startup、supervisor 与 runtime（运行环境）三行当次全 PASS。更早一次：9 月 27 日 21:24 主机强制重启，21:26 登录后看门狗把 KDE 拉起，9 月 28 日 21:45 仍在运行（按当时进程启动时间和心跳记录）。完整的双机自然重启验收还没有记录。\n\n## 与其他模块的关系\n\n维护登录后桌面的应用启动链；数据能否流转仍取决于网络、KDE配对和实际接收。",
+      "links": [
+        {
+          "text": "上一个模块 设备配对与文件传输",
+          "href": "/projects/meshclip-kit/kde-connect-pairing-sync/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

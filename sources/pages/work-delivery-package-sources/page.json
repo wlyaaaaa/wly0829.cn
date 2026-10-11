@@ -1,0 +1,187 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "work-delivery-package-sources",
+  "kind": "project",
+  "title": "先判断是否值得建包，再冻结本人明确选择的来源",
+  "url": "/projects/work-delivery/package-sources/",
+  "parent": "work-delivery-copilot",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "工作交付源码（main 7a8d0e5，9 月 29 日起固定数据库默认位置）按 10 月 11 日 14:00 前现状重新核对；本轮没有运行建包命令或测试。"
+  },
+  "screens": [
+    {
+      "id": "work-delivery-package-sources-01",
+      "section": "top",
+      "title": "先判断是否值得建包，再冻结本人明确选择的来源",
+      "text": "# 先判断是否值得建包，再冻结本人明确选择的来源\n\n〔回到项目 → 工作支持与交付〕　〔复制 AI 续作说明〕\n\n工作支持与交付 · 功能说明\n\n同一件工作要反复使用几份会变化的资料时，先由我明确选定2至5份文件及目标，并保存它们本轮的版本。以后补充判断或修改交付物，都能回到这一组来源。\n\n**当前情况：**已有把选定的2至5份资料建成持续交付包的功能；保存它们的本地数据库从 9 月 29 日起固定在同一个默认位置，不再跟着当时所在的文件夹走。当前输入主要是本地文字和表格文本，不自动读取未选文件。\n\n源码事实核对截至 2026-10-11 14:00（北京时间）；历史测试保留各自日期；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 工作支持与交付",
+          "href": "/projects/work-delivery-copilot/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/work-delivery-copilot/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n每次重新建一套或顺手读同目录其他文件，会让事实和旧成品的版本分叉，也可能把无关资料带入结果。\n\n## 举个实际例子\n\n我可以说：“只用这份立项说明、评审纪要和执行计划建交付包，同目录其他文件不要读。”项目会固定这三份来源，并先交回覆盖范围和冲突。\n\n## 最后我会得到什么\n\n得到这件工作明确选定的资料版本和可继续的交付包；这一步还不是读完材料、确认事实或生成正式文件。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以正式构建\n\n目标和选定的2至5份文件都清楚且可读时，保存这一件工作的来源版本和初始判断，再告知下一步。保存来源不等于已经生成文件。\n\n## 需要确认\n\n文件数量、内容或标识不合要求时，在加入新事实前指出具体问题；同一工作已有交付包就从原包继续。\n\n## 当前不可用\n\n无法读文件或保存状态时保留原件。若超时发生在保存之后，先查看原包实际是否已建立，再继续后续步骤，避免重复新建。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说清这件工作要交付什么，并点名持续使用的几份资料。\n\n## 需要准备什么\n\n- 稳定的事项目标\n\n- 本人选定的 2 至 5 份来源\n\n- 本轮真正需要的格式\n\n## 从开始到拿到结果\n\n1. **先判断是否真的需要包**　AI 判断这件事是否依赖多份会变化的资料；一次性工作直接交付，确需建包才进入版本保存。\n\n2. **保存本轮版本**　只保存选中的文件与来源关系，不顺带读取同目录资料；告诉我哪些已保存、哪些仍要分析。\n\n3. **交回可接续的包**　说明本轮冻结了哪些版本、接下来要核对哪些事实。来源数量或身份不合要求时不留下半成品，改正选择后再开始。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n0.2.0 已提供稳定 batch 新建、逐步 CLI（命令行工具）、不可变来源版本与未选文件隔离；数据库默认位置自 2026-09-29 起固定；输入类型仍以本地文本、Markdown 和 CSV 为主\n\n## 关键规则与设计选择\n\n1. 一次性单文件、普通文本 PRD、学习和私人正式材料绕过。\n\n2. 来源必须是本人本次明确选择的 2–5 份文件。\n\n3. 同一 package ID 第二次 batch 是明确错误。\n\n4. 已有包用 update-source、impact、review、build、verify 和 artifacts 继续。\n\n5. 默认简体中文、Asia/Shanghai、YYYY-MM-DD 与人民币 CNY；中国企业角色和 PRD 章节结构是当前产品合同，不是调用方随意显示文本。\n\n6. 正式输出使用标准 OOXML，兼顾 WPS 与 Microsoft Office；核心不保存个人/公司配置分支。\n\n7. DOCX/PDF、邮件和在线文档当前先经对应能力读取或导出。\n\n## 当前怎样实现\n\n- work-delivery.batch.v1 在写库前校验 package、sources、facts 和 build；预校验不通过时连数据库都不创建。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- run_batch 的 store._transaction 一起提交新包、来源、事实和审阅，事务里出错整体回滚；提交之后才检查第一次 15 秒时间门，超时不会回滚已经提交的事务。\n\n- Package 保存标题、目标、locale、timezone、currency 和 fact revision；默认值为 zh-CN、Asia/Shanghai 与 CNY。\n\n- SourceSnapshot 保存 source key、名称、provider label、版本、字节数、SHA-256 和 supersedes。\n\n- 文本支持 UTF-8（带不带 BOM 都可以）、GB18030 和带 BOM 的 UTF-16；不带 BOM 的 UTF-16 不保证能认。CSV 后续由证据层计算行列。\n\n- 标准 OOXML 输出使用 YYYY-MM-DD 与中国企业常用角色/章节语义，兼顾 WPS 与 Microsoft Office。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n- 单个 SQLite 是唯一状态库，没有 watcher、后台同步或第二数据库。命令行和 batch 入口的默认库固定在本机个人资料目录下的 WorkDelivery\\work-delivery.sqlite3，不随当前文件夹或 request.json 所在目录移动；要换位置，只能用绝对路径的 WORK_DELIVERY_DATABASE 环境变量或显式 --database，之后的命令必须指向同一个库。内部存储类自带的旧相对默认值（.work-delivery\\work-delivery.sqlite3）不是给人用的入口位置。\n\n## 执行流程\n\n1. 判断持续来源关系\n\n2. 选择2–5份资料\n\n3. 给稳定package ID\n\n4. 校验完整batch\n\n5. 创建package\n\n6. 冻结来源字节与hash（内容指纹）\n\n7. 返回当前包和下一步",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Package ID（交付包标识） | 一个持续工作事项的稳定非空身份；不是每次运行重新生成的临时编号。 |\n| SourceSnapshot（来源快照） | 一份已选资料在某次导入时的不可变版本；新版本通过 supersedes 关系接续。 |\n| Provider label（来源标签） | 说明文件怎样进入；当前只是惰性追溯标签，不是账号连接器。 |\n| China defaults（中国工作默认值） | 简体中文、Asia/Shanghai、YYYY-MM-DD、人民币 CNY、中国企业角色和完整 PRD 章节结构；它们影响事实解释与成品，而不是装饰性格式。 |\n\n## 专业定义\n\n交付包不是一个文件夹：它只在持续来源关系成立时出现，并只保存本人本次明确选择的 2–5 份资料。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-09",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n解决随机重建、来源范围失控、未选文件混入、数据库随所在文件夹漂移和一个事项出现两套状态的问题。\n\n## 边界\n\n- 只读本人明确选择的资料\n\n- 不扫描目录或账号\n\n- 不做任意Office输入解析\n\n- 不建立多人协作或云租户\n\n- 一次性文件不建包\n\n## 失败与恢复\n\n- **Package ID 已存在**：任何新事实写入前拒绝，使用原 package 的更新入口。\n\n- **来源少于 2 或多于 5**：schema（数据结构） 预校验失败，在建库之前就拒绝，不留下数据库或半成品。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-10",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **来源在读取中变化**：导入失败；重新选择当前文件，不把两个版本拼成一个快照。\n\n- **新包事务提交后的时间检查失败**：返回时间失败，但该稳定 ID、来源和事实可能已经保存；同一 ID 不能再走一次新建（batch），先核对原包，再从 update-source 等更新入口接续。这和预校验失败不同，不能说成“任何失败都不留状态”。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-package-sources-11",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `PRIVATE product contract · user path`进入条件、2–5份来源和绕过边界\n\n- `PRIVATE source · batch.py`batch schema（数据结构）、预校验、稳定ID、事务内新建与固定默认库位置\n\n- `PRIVATE source · store.py`Package与SourceSnapshot持久化、文本编码识别\n\n## 如何验证\n\n- 重复 ID 在新增事实前拒绝。\n\n- 未选文件不被枚举或读取。\n\n- 中文文件名与 GB18030、带 BOM 的 UTF-16 来源可追溯（测试定义于 2026-10-11 读源码确认，本轮未重跑）。\n\n- schema（数据结构）/example 与 live parser 一致。\n\n- 任意 Office、邮件和在线来源仍为当前 gap。\n\n## 与其他模块的关系\n\n本模块形成稳定 package 和来源版本；证据、事实和正式质量由下一模块拥有。",
+      "links": [
+        {
+          "text": "下一个模块 证据与质量门",
+          "href": "/projects/work-delivery/evidence-quality/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

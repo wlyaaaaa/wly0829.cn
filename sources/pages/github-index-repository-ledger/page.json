@@ -1,0 +1,187 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "github-index-repository-ledger",
+  "kind": "project",
+  "title": "仓库身份总账与 Owner（责任源）状态",
+  "url": "/projects/github-index/repository-ledger/",
+  "parent": "github-local-index",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "GitHub 总索引源码（提交 e792eda，10 月 7 日）和 10 月 11 日 13:32 记录、16:32 复核的零写身份状态；推送里程碑和旧项目来源分页已退役。"
+  },
+  "screens": [
+    {
+      "id": "github-index-repository-ledger-01",
+      "section": "top",
+      "title": "仓库身份总账与 Owner（责任源）状态",
+      "text": "# 仓库身份总账与 Owner（责任源）状态\n\n〔回到项目 → GitHub 项目总索引〕　〔复制 AI 续作说明〕\n\nGitHub 总索引 · 功能说明\n\n把散落在不同磁盘、公开与私有仓库中的身份事实收成一张可审计的总账：程序读一份受控导航，我看一页私有看板；对外展示时按事实有没有用、具体值有没有风险决定放明细还是放计数，不因“私有”标签整类隐藏。\n\n**当前情况：**10 月 11 日 13:32 记录、16:32 复核：GitHub 上共 47 个仓库（21 公开、26 私有），比 9 月 28 日保存的 45 个身份基线多出 2 个，状态是“待复核”，问题 0 个。这不证明 47 个仓库都有本地副本，也不证明每个分支已同步、每个项目能运行。\n\n项目事实核对截至 2026-10-11 14:00（北京时间）；14:00 后的现场读数单独注明时间；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → GitHub 项目总索引",
+          "href": "/projects/github-index/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/github-index/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n仓库会新建、改名、改公开属性，我看的总表也只是一页派生快照，可能落后于真实远端。完整登记和当前仓库状态分开查，才能知道这次到底对齐了多少、哪些只是旧提示。\n\n## 举个实际例子\n\n我问：“现在项目仓库都对上了吗？先检查，别重复刷新。”系统比较保存的身份基线和 GitHub 现场；一致就只说一致。像现在这样多出 2 个仓库，它会说“待复核”，等我确认要完整刷新时才去更新登记。\n\n## 最后我会得到什么\n\n得到仓库总数、公开和私有各多少、和基线差了几个、哪些仍需复查；这一轮登记核对一致，也不等于每个项目本身都能运行。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入 GitHub 总索引的 AI 对话中说出项目名，要求确认“这是哪个仓库、谁负责”。\n\n## 需要准备什么\n\n- 项目名或本地路径\n\n- 预期的远端和可见性\n\n## 从开始到拿到结果\n\n1. **定位唯一仓库**　AI 从总账找到本地路径、远端身份和默认分支，不靠相似目录名猜。\n\n2. **核对责任和现场**　比较登记与真实 Git/GitHub 状态，并分清项目业务负责人。\n\n3. **交回导航结论**　给出可继续使用的仓库身份；不一致或远端不可见时标出具体冲突，不把旧索引说成实时事实。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日 16:32：现场 47 个（21 公开／26 私有），身份基线 45 个；新增差异 2、问题 0、关注 1，状态 review_needed（待复核）；关注记录与当前问题分开\n\n## 关键规则与设计选择\n\n1. identity baseline（身份基线） 与现场一致且无 issue 时，仓库总账可视为 current（当前状态）。\n\n2. 普通零写status发现新增、删除、visibility（公开或私有属性）或默认分支差异时返回review_needed，不自行改基线；正常完整refresh会在同一命令内自动推进已有有效v3基线并回读。\n\n3. -MigrateBaseline只保留显式首次bootstrap/repair用途；有效基线的普通增量不再要求额外迁移。缺失previous的历史不能被伪造补齐。\n\n4. 总索引自身 origin identity 不符时先 blocked，且不读取 baseline、registry（登记清单）、GitHub 或本地 root。\n\n5. GitHub CLI（命令行工具） 或远端元数据执行失败属于 execution error，不伪造 domain conclusion（领域结论）。\n\n6. **推送里程碑记录已退役（2026-09-26）。**原来少量发布节点会由 Add-PushRecord 写成记录，状态里最多读 50 条；现在脚本、测试、合同和旧记录文件都已删除，Owner 状态不再输出 milestone_records。提交和推送的事实直接以 Git 和 GitHub 现场为准。\n\n7. 我看的看板现在是一页私有 Markdown，展开全部登记仓库和本地路径。对外公开时仍按具体值判断：只省略经实际审查属于 L3+ 的具体值、可复用凭据和不影响判断的噪声，不因 PUBLIC（公开）/PRIVATE（私有） 标签整类隐藏。\n\n## 当前怎样实现\n\n- **旧的项目来源分页查询已退役（2026-09-26）。**Get-ProjectCognitionSource.ps1 及其测试已删除；现在总表和 Owner 状态用 `gh repo list --limit 200` 读取仓库名、visibility（公开或私有属性）和默认分支，不再承诺整套稳定 node id（稳定节点编号）记录。单仓库重大动作另读 id/node_id，不算恢复旧功能。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 统一受控导航 `config/repository-paths.json`（schema `github-local-index.repository-registry.v1`）保存仓库到本机副本的候选路径，9 月 28 日保存时为 45 项（21 公开／24 私有）；用前仍回读真实 `.git` origin，一致才算这个仓库的本机副本。\n\n- owner-baseline-store.v3 把完整 identity snapshot 与 nullable（可为空） local-root snapshot 分开；current（当前状态）、previous、hash（内容指纹） 和 receipt（执行回执） 原子读写。当前基线保存于 9 月 28 日 01:41，上一版为 9 月 27 日 20:50，history_gap=false。\n\n- Refresh-GitHubLocalIndex.ps1先验证既有v3基线是否为missing或current（当前状态）；invalid在任何写入前拒绝。正常full refresh取完全部观察后，先写统一导航和单页看板（逐个文件替换），再调用Invoke-RefreshGitOwnerBaselineAdvance推进基线；推进时重新读一次Owner inventory，并在推进前、迁移和回读之间复用它。这三步不是一个跨文件的整体事务。\n\n- 零delta返回owner_baseline.status=current（当前状态）；完整有效的真实delta触发原子advance，必须execution_status=completed、domain_status=current（当前状态）、history_gap=false，再回读delta=0、issue=0才返回advanced。基线missing只返回skipped/owner_baseline_missing_requires_explicit_bootstrap，不静默建立首次历史。\n\n- Get-GitOwnerStatus.ps1 只比较稳定 Owner 事实，排除工作树 dirty、ahead/behind（领先/落后提交数）、观察时间、索引 HEAD 和任务状态等高频噪声。\n\n- governance registry（登记清单） 只输出规范化有效性和 fingerprint，不把内部条目内容放进 compact status。\n\n- 单页看板 `00_总览/当前同步看板.md` 和统一导航都标 authoritative=false：它们是派生快照，Git 和 GitHub 现场才是权威。\n\n- 旧的八文档公开代际和 current-generation 指针也在 9 月 26 日退役，详见“快照与恢复”模块；现在没有“当前公开代际”这一层。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-06",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 核验 GitHub 总索引仓库自身 origin 与预期 identity\n\n2. 读取并验证 current（当前状态）/previous Owner baseline 和治理 registry（登记清单）\n\n3. 用 gh 读取 GitHub 全部仓库身份（一次最多 200 个），必要时关联 origin 已验证的本机副本\n\n4. 规范化并比较 baseline 与 observed fact set\n\n5. 返回 domain_status、delta/issue 计数、history 和 fingerprint\n\n6. 若请求正常完整刷新且已有有效v3基线，先写统一导航和单页看板，再自动advance/read-back（正式回读）；只有缺失或修复才显式使用-MigrateBaseline\n\n7. 分别报告导航、看板、基线三层各自是否完成；原来的“确认里程碑后写推送记录”这一步已随里程碑功能退役",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Owner baseline（责任源基线） | 完整仓库 identity 的受管 current（当前状态）/previous 快照；不是 PUBLIC（公开） 子集，也不是一次 live 自比。 |\n| domain_status（领域状态） | 事实是 current（当前状态）、review_needed、blocked 还是 unknown（未验证）；与 Provider 是否成功执行分开。 |\n| history_gap（历史缺口） | 第一次迁移没有可信 previous 全量基线；即使 current（当前状态） 内容有效，也不能伪装成连续历史。当前为 false。 |\n| clone occurrence（clone 出现记录） | 统一导航给出候选路径后，实际 `.git` origin 与 repo identity 一致的本机副本关联。 |\n| semantic fingerprint（语义指纹） | 对稳定事实规范化后计算的 SHA-256；字段顺序、观察时间和工作树噪声不会改变它。 |\n| Milestone record（里程碑记录，已退役） | 原来外层确认的少量 Git 发布节点；2026-09-26 随推送记录功能一起删除，现在的状态输出不再包含它。 |\n\n## 专业定义\n\n把仓库身份、公开属性和本地副本放进同一张账；当前基线 45 个、现场 47 个，零写查询只报告变化，完整刷新才推进基线。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-08",
+      "section": "tech",
+      "title": "出问题时（一）",
+      "text": "## 出问题时（一）\n\n解决什么\n\n人类需要可读总账，机器需要结构化完整身份。若把派生看板当完整权威，新仓库会被漏掉；若把本机目录当仓库身份，旧 clone、重命名和 origin 错配会制造假事实。\n\n## 边界\n\n- compact Owner status 不返回私有 local root、branch（分支）、worktree（Git 工作树）、dirty 或 task 状态\n\n- 不扫描未声明的磁盘根；新 root 由显式 refresh 发现\n\n- 单页看板和导航是派生快照（authoritative=false），不是完整 owner baseline\n\n- 普通status保持zero_write=true、fetch_performed=false；full refresh是独立写操作，会自动收敛已有有效基线，-MigrateBaseline仅为显式bootstrap/repair兼容入口\n\n- 推送里程碑记录已退役，状态输出里没有发布事件流，也不再补写\n\n## 失败与恢复\n\n- **总索引自身 origin 缺失或不匹配**：返回 completed/blocked 与有界 issue，阻止所有不可信下游读取。\n\n- **v3 baseline 缺失、无效或第一次 history gap**：返回 unknown（未验证）；不回退到看板 Markdown 或伪造 previous。\n\n- **现场身份集合与基线不同**：零写status返回review_needed和delta；用户发起正常完整刷新时，事实完整且已有有效基线就自动推进并回读，不再要求另跑迁移。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-09",
+      "section": "tech",
+      "title": "出问题时（二）",
+      "text": "## 出问题时（二）\n\n- **完整刷新时基线缺失、无效或推进回读失败**：缺失时baseline推进标skipped并要求显式bootstrap；无效时在任何写入前停止。若导航和看板已写成而随后基线推进失败，分别保留实际状态、报告未收口阶段，不谎称整体回滚。\n\n- **registry（登记清单） schema（数据结构）、重复 ref 或 retention 条目无效**：Owner current（当前状态） 失败关闭，只公开稳定问题代码。\n\n- **GitHub CLI（命令行工具） 不可用、非零退出或 JSON 无效**：返回 execution_status=error、domain_status=unknown（未验证），供调用者决定重试。\n\n- **刷新时某个文件写入失败**：直接报错，并说清导航和看板哪一份已换、哪一份没换；不说成整体回滚。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- 零写 compact Owner Provider（Owner 现场提供器）\n\n- 正常完整刷新中的有效基线自动advance与前后回读；仅缺失/修复走显式迁移\n\n- status零写、full refresh自动基线收敛与bootstrap/repair边界\n\n- 用 gh 读取的仓库集合与有界 compare\n\n- 统一导航 `config/repository-paths.json` 与 Owner baseline store v3\n\n- 专门 Owner、冻结历史和必要保留的 schema（数据结构） 来源；页面不展开条目\n\n- 单页私有看板 `00_总览/当前同步看板.md`（派生快照）\n\n- 两份生成物（看板和导航）的一致性检查 Test-GitHubLocalIndexConsistency.ps1",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "github-index-repository-ledger-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 已退役、只作历史：ProjectCognitionSource、Add-PushRecord 及其测试（2026-09-26 删除）\n\n## 如何验证\n\n- 2026-08-29 的 Test-GitOwnerStatus.ps1 历史回归通过：identity gate、zero write、全量 PUBLIC（公开）/PRIVATE（私有） 基线、history、registry（登记清单）、远端失败和无路径泄露。\n\n- 2026-08-29 的 Test-ProjectCognitionSource.ps1 历史回归通过；这项分页功能已于 2026-09-26 退役，这条只作历史记录，不证明现在的覆盖。\n\n- 2026-09-08T08:08:28.3009473Z 直接运行 Get-GitOwnerStatus：completed/current（当前状态）、zero_write=true、fetch_performed=false、baseline=48、observed=48、delta=0、issue=0。这是当时的历史结果。\n\n- 2026-09-08T08:08:24Z 的 ProjectCognitionSource（已退役）记录：48个仓库，25 PUBLIC（公开）/23 PRIVATE（私有）、44个本地副本、4个仅远端。这是退役机制的历史证据，不是当前数字。\n\n- 2026-10-11 16:32 只读运行 Get-GitOwnerStatus：completed/review_needed、zero_write=true、fetch_performed=false、baseline=45、observed=47、delta=2、issue=0、attention=1；13:32 的记录与此相同。\n\n- 2026-10-11 只读核对当前源码（提交 e792eda，10 月 7 日）：完整刷新顺序为导航→看板→基线推进。本次没有执行有写入的完整刷新，也没有运行测试；现在 47 个仓库各有几个本地副本没有重新核对（Unknown），已登记的 45 个路径不等于 47 个全覆盖。\n\n- 当前 tests 目录是 9 个受控脚本文件（8 个 PowerShell、1 个 Python，共 3,817 行），这是文件数，不是用例数，也不是本次通过数。\n\n## 与其他模块的关系\n\n它回答整个仓库集合是否可信和是否需要复核；单仓库 Admission（仓库准入检查） 再回答某个精确目录、工作树和分支现在能否安全继续。",
+      "links": [
+        {
+          "text": "下一个模块 项目入场",
+          "href": "/projects/github-index/project-admission/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

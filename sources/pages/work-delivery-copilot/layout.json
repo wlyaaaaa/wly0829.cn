@@ -441,13 +441,17 @@
       },
       {
         "type": "content_card",
-        "text_ref": "什么算“还有效”|现在做不到的",
+        "text_ref": "什么算“还有效”|旧文件什么时候过期|现在做不到的",
         "columns": 1,
         "illustration": "left_inside",
-        "icons": "auto"
+        "icons": [
+          "_library/icons/scene-r3-work-validity-pin.png",
+          "_library/icons/scene-r3-work-validity-pin.png",
+          "_library/icons/scene-r3-work-limitation-ruler.png"
+        ]
       }
     ],
-    "notes": "左54%为标题/说明/两列表格四行/收尾，右46%为卡外纸张插画和两张左图右文小卡。表格前两行黄点、第三行绿点、第四行文件夹；状态只给点。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
+    "notes": "左54%为标题/说明/两列表格四行/收尾，右46%为卡外纸张插画和三张左图右文小卡。表格前两行黄点、第三行绿点、第四行文件夹；状态只给点。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。"
   },
   {
     "screen": "work-delivery-copilot-04",
@@ -496,7 +500,7 @@
       },
       {
         "type": "content_card",
-        "text_ref": "什么算“还有效”|现在做不到的",
+        "text_ref": "什么算“还有效”|旧文件什么时候过期|现在做不到的",
         "columns_v": 1,
         "illustration": "none",
         "icons": "none"
@@ -1165,6 +1169,99 @@
     ],
     "notes": "单长图，八日期节点沿左竖线，图标在每节点左侧；末尾整宽书桌/公文包插画，标题中档，按标准居中。；独立插画的卡外位置及先后顺序由blocks/row实现，冗余placement/illustration:outside说明移除；构图意图保留在原notes。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。\nQA12第二轮：日期与原冒号使用现有text_layout:inline同排；film用现有highlight:[2]试排，保持全部原字，不新造组件外观。"
   },
-  {"screen": "work-delivery-copilot-gallery", "orientation": "h", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "equal_row_height": true, "ratios": ["1547:2002", "1600:900", "2028:531"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]},
-  {"screen": "work-delivery-copilot-gallery", "orientation": "v", "blocks": [{"type": "section_heading", "text_ref": "画廊"}, {"type": "screenshot", "text_ref": "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。", "indices": [0, 1, 2], "columns": 3, "columns_v": 1, "ratios": ["1547:2002", "1600:900", "2028:531"], "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}, {"index": 1, "node_indices": [1]}, {"index": 2, "node_indices": [2]}]}]}
+  {
+    "screen": "work-delivery-copilot-gallery",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。",
+        "indices": [
+          0,
+          1,
+          2
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "equal_row_height": true,
+        "ratios": [
+          "1547:2002",
+          "1600:900",
+          "2028:531"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "work-delivery-copilot-gallery",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "画廊"
+      },
+      {
+        "type": "screenshot",
+        "text_ref": "完全虚构的 PRD 代表页：同一个 build 显示目标、范围、验收、事实状态和来源定位。",
+        "indices": [
+          0,
+          1,
+          2
+        ],
+        "columns": 3,
+        "columns_v": 1,
+        "ratios": [
+          "1547:2002",
+          "1600:900",
+          "2028:531"
+        ],
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          },
+          {
+            "index": 1,
+            "node_indices": [
+              1
+            ]
+          },
+          {
+            "index": 2,
+            "node_indices": [
+              2
+            ]
+          }
+        ]
+      }
+    ]
+  }
 ]

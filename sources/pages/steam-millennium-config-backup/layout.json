@@ -1539,15 +1539,16 @@
           "_library/hires-icons-r2/版本循环文件.png",
           "_library/fix-round-2/icon-clean-b7d80255ba1c0ec4e1b6.png",
           "_library/icons/日历时钟.png",
-          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png"
+          "_library/hires-icons-r2/icon-clean-73c422e226c420c598eb.png",
+          "_library/icons/文件齿轮.png"
         ],
-        "item_count": 9,
+        "item_count": 10,
         "stagger": true,
         "emphasis_item": 6,
         "emphasis_badge": "2.0",
         "row_counts": [
           5,
-          4
+          5
         ]
       },
       {
@@ -1563,7 +1564,7 @@
         ]
       }
     ],
-    "notes": "实查10-h。九旗一行上下错落，日期旗文字上、插画在旗脚外，下方连续绿丝带；9月18日大旗突出2.0；底部满宽现在细卡，左边纸张对勾小图，右端叶子。章节独占整屏按追加要求居中。当前parser将九个日期识别成一个完整stats节点，timeline可接整节点；below_card、错落旗、变宽重点旗/2.0徽章均无现有精确支持。2.0是9月18日正文已有片段，徽章不得重复生成可计文字。旗式时间线是新样式，待样张。；QA04：按审查将九列改为两排5+4，不缩字号、不改原文。"
+    "notes": "实查10-h。十旗一行上下错落，日期旗文字上、插画在旗脚外，下方连续绿丝带；9月18日大旗突出2.0；底部满宽现在细卡，左边纸张对勾小图，右端叶子。章节独占整屏按追加要求居中。当前parser将十个日期识别成一个完整stats节点，timeline可接整节点；below_card、错落旗、变宽重点旗/2.0徽章均无现有精确支持。2.0是9月18日正文已有片段，徽章不得重复生成可计文字。旗式时间线是新样式，待样张。；QA04：按审查将十列改为两排5+5，不缩字号、不改原文。"
   },
   {
     "screen": "steam-millennium-config-backup-10",
@@ -1589,8 +1590,9 @@
         "text_ref": "6 月 20 日",
         "direction": "vertical",
         "icons": "none",
-        "item_count": 9,
+        "item_count": 10,
         "item_variants": [
+          "flags_connected",
           "flags_connected",
           "flags_connected",
           "flags_connected",
@@ -1602,6 +1604,7 @@
           "flags_connected"
         ],
         "item_connectors": [
+          "ribbon",
           "ribbon",
           "ribbon",
           "ribbon",
@@ -1627,7 +1630,7 @@
         "date_flag": true
       }
     ],
-    "notes": "实查10-v/v2。首张电脑/日历/闹钟插画在章标题之前，下面前5日期单列旗卡，左外有竖丝带圆节点；续张剩4日期每卡日期竖旗在左、说明右，无外连线；最后现在也用左旗卡样式。分张边界9月18日前，不能重复标题或日期。当前parser将九个日期合并成完整stats节点，必须只以6月20日定位整个节点；不能拿9月18日另定位stats内项。每项变体/连接/分张字段表达目标，当前组件未执行，待样张；只有无字插画可复用。；QA04：按审查移除标题前错放的独立电脑/游戏机插画块。；main-closer3：按wave2b复查要求，九日期全部统一flags_connected/ribbon，仍由同一组件实例在第5项后切片，原字与编号不变。",
+    "notes": "实查10-v/v2。首张电脑/日历/闹钟插画在章标题之前，下面前5日期单列旗卡，左外有竖丝带圆节点；续张剩5日期每卡日期竖旗在左、说明右，无外连线；最后现在也用左旗卡样式。分张边界9月18日前，不能重复标题或日期。当前parser将十个日期合并成完整stats节点，必须只以6月20日定位整个节点；不能拿9月18日另定位stats内项。每项变体/连接/分张字段表达目标，当前组件未执行，待样张；只有无字插画可复用。；QA04：按审查移除标题前错放的独立电脑/游戏机插画块。；main-closer3：按wave2b复查要求，十日期全部统一flags_connected/ribbon，仍由同一组件实例在第5项后切片，原字与编号不变。",
     "source_images": [
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-v.png",
       "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\steam-millennium-config-backup\\img\\steam-millennium-config-backup-10-v2.png"

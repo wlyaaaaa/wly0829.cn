@@ -1,0 +1,183 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "emerald-veil-reversibility-preimage-and-remote-compatibility",
+  "kind": "project",
+  "title": "状态、立即启动、停用与原设置恢复",
+  "url": "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
+  "parent": "emerald-veil",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码主线 861a2d2（北京时间 10 月 8 日 23:50）与北京时间 10 月 11 日 13:33–13:36 的只读安装检查和常驻结果读取；开启、登录自启、设置自修在用，查看状态、紧急停用、撤回原设置、卸载说不准",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-01",
+      "section": "top",
+      "title": "状态、立即启动、停用与原设置恢复",
+      "text": "# 状态、立即启动、停用与原设置恢复\n\n〔回到项目 → 屏保与壁纸〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nEmerald Veil · 功能说明\n\n出现干扰时能先停下来，不必先成功还原所有细节；以后不需要时能分清恢复设置、卸载程序和换回原图。\n\n当前情况：已有安装、立即启动、停用和恢复原设置的入口，常驻程序启动和退出时会留下一条中文结果；原图、屏保参数与程序卸载仍各自处理。\n\n项目快照核对于 2026-10-11（北京时间）：运行结果来自 13:32–13:38 的只读检查，源码版本核对于 13:42；具体测试和事件保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 屏保与壁纸",
+          "href": "/projects/emerald-veil/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/emerald-veil"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/emerald-veil/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n### 为什么需要它\n\n暂停不是卸载，恢复原状态也不是恢复Windows默认值。把这些动作混成“一键无损回滚”会让用户不知道到底改回了什么；原始状态必须在首次修改前保存，重复操作也不能覆盖它。\n\n### 举个实际例子\n\n“今天不要自动出泡泡，但先保留恢复办法。”用正式Disable关闭功能；需要时Enable再开启。要撤回旧屏保参数用Restore，要移除程序用Remove，静态图片仍按自己的原记录处理。\n\n### 最后我会得到什么\n\n留下清楚的原状态与操作结果；常驻程序最近一次是启动成功、正常退出还是失败，也有一条中文结果可查。泡泡不主动锁屏，因此不会要求用户为退出它再输密码；这不代替Windows锁定，也不证明每个远程客户端都已经测试。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 暂停不是卸载，恢复原状态也不是恢复Windows默认值。把这些动作混成“一键无损回滚”会让用户不知道到底改回了什么；原始状态必须在首次修改前保存，重复操作也不能覆盖它。 ### 举个实际例子 “"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 暂停不是卸载，恢复原状态也不是恢复Windows默认值。把这些动作混成“一键无损回滚”会让用户不知道到底改回了什么；原始状态必须在首次修改前保存，重复操作也不能覆盖它。 ### 举个实际例子 “"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 暂停不是卸载，恢复原状态也不是恢复Windows默认值。把这些动作混成“一键无损回滚”会让用户不知道到底改回了什么；原始状态必须在首次修改前保存，重复操作也不能覆盖它。 ### 举个实际例子 “"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n### 正常工作\n\n安装、启用、立即启动、停用和恢复各有对应结果；真实画面与远程兼容仍另看。\n\n### 发现问题\n\n设置与预期不符时先指出差异；程序不见了可以先看最近一条常驻结果再决定怎么恢复。即使其他参数漂移，仍可先停用自动泡泡。\n\n### 暂不可用\n\n没有首次启用前的记录就不能猜旧设置来恢复；安装文件缺失、目标冲突或安装命令跑在会连带杀掉子进程的环境里，也会停止。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n用 scripts/Install-EmeraldVeil.ps1 -Action Install/Verify/Remove 管安装，用 scripts/Set-NativeBubbles.ps1 -Action Enable/Verify/Disable/Restore 管策略；托盘可立即启动或预览。\n\n### 需要准备什么\n\n- 这次是安装、启用、停用、恢复还是卸载\n\n- 如有远程显示问题，描述设备和看到的现象\n\n### 从开始到拿到结果\n\n1. **先看当前状态**　首次启用时留下原屏保设置；以后再启用只校验，必要时把旧格式的记录升级到新格式，但不替换已经记下的原值。\n\n2. **分别看配置、常驻结果和真实画面**　文件装好、程序在跑、最近一条常驻结果和人眼看见泡泡是不同结果，远程屏幕还需实际连接验。\n\n3. **按本人目的撤回**　可以只停自动泡泡、还原原屏保参数或卸载程序；原桌面与锁屏图片按另一份记录恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n北京时间 10 月 11 日只读检查：安装 0.1.39.0，常驻健康，最近结果为启动成功\n\n### 关键规则与设计选择\n\n1. 托盘查看目标、空闲与错误，立即启动或双击等同Ctrl+Win+E；preview最多15秒，真正屏保直到活动或禁用。常驻程序的生命周期另写一条最新结果文件，只记启动成功、正常退出或失败。不提供单独会话暂停和托盘退出驻留，以免留下没有Owner（拥有者）的快捷键。\n\n2. Windows可能在登录或驱动重置后重新打开自己的屏保触发。程序启用且运行时会在启动和每30秒检查并修正运行时的六分钟、非锁屏、关闭自动触发策略，避免Windows另起一套屏保；程序退出后这项维护也停止。\n\n3. Enable首次记录runtime（运行环境）和相关注册表值的存在性、类型和值，经临时文件整体替换落盘；重复Enable会校验，遇到旧格式记录只补上新受管字段当时的旧值并留一份升级前原文件，从不替换已经记下的原值。\n\n4. Disable关闭泡泡和自动触发，不还原Radius或旧超时；Restore才按前像恢复，Remove另行删除已装程序与启动项。\n\n5. 远程兼容靠不主动切换到安全桌面、输入穿透、不抢焦点；实际连接与画面仍由客户端验收，不按软件名称声称全兼容。\n\n## 当前怎样实现\n\n- Install默认读取artifacts/publish/win-x64/EmeraldVeil.exe，复制到%LOCALAPPDATA%\\Programs\\EmeraldVeil，再设置唯一Emerald Veil Native Bubbles Run值；源码构建目标net10.0-windows。替换前拒绝在“关闭即杀子进程”的宿主作业里运行，否则常驻程序会随安装命令结束被杀；只有本次真的替换过、原来又有文件时才允许用.previous回退，替换前失败不会拿无关的旧.previous覆盖现有安装。\n\n- Set-NativeBubbles现在保存v4前像，Restore接受v1/v2/v3/v4：v2加入enabled，v3加入ShowBubbles，v4加入MaterialGlass。升级只补首次受管字段当时的旧值（v1没有的enabled记为原本不存在），保留一份.before-v4原文件，再经临时文件替换。\n\n- Enable配置360秒、非安全退出、Windows自动触发关闭与项目enabled，并维护原生玻璃泡泡：ShowBubbles=1、MaterialGlass=1、Radius=1130000000（都是DWORD），前两项在显示前按需修正。它核对已有Run项，不负责安装该项；先安装再启用。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 北京时间 10 月 11 日只读检查：安装 0.1.39.0，常驻健康，最近结果为启动成功 ### 关键规则与设计选择 1. 托盘查看目标、空闲与错误，立即"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 北京时间 10 月 11 日只读检查：安装 0.1.39.0，常驻健康，最近结果为启动成功 ### 关键规则与设计选择 1. 托盘查看目标、空闲与错误，立即"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 北京时间 10 月 11 日只读检查：安装 0.1.39.0，常驻健康，最近结果为启动成功 ### 关键规则与设计选择 1. 托盘查看目标、空闲与错误，立即"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 登录启动时若项目启用，常驻程序检查保存的REG_SZ超时360及运行active/timeout/secure，每30秒按需修正。仅当active=false时接受运行timeout（等待超时）=0，项目自己的六分钟计时不变；Verify分别输出timeout_seconds、runtime_timeout_seconds与runtime_timeout_effective，不把运行0误报成保存设置错误。\n\n- Disable先清除enabled并维持active=false，再停止系统路径的原生泡泡进程，收口失败也不会把开关改回开着；Restore停止泡泡后按前像回填相关状态，缺少、损坏或不认识的格式直接报错，并在操作失败时尝试恢复本次操作前状态。\n\n- 不安装通用键盘记录器；输入分类只保留有限内存状态，点击穿透和不激活让普通输入继续送往当前应用。\n\n- 常驻结果写在 %LOCALAPPDATA%\\EmeraldVeil\\last-result.json（格式 emerald-veil.result.v1，字段 schema/state/result/reason_zh/observed_at/process_id），启动成功、正常退出、未处理异常时各写一条，先写临时文件再整体替换，只留最新一条，写失败不影响常驻；强制结束或断电来不及写。--status不启动缺失屏保，但发现没在运行时会补写一条失败结果再返回not-running；已捕获的显示错误在--status的presentation.lastFailure里。驻留者向Windows注册Application Restart，只登记同一个程序，不新增任务、服务或第二守护。\n\n## 执行流程\n\n1. 从源码使用.NET 10 SDK构建单文件制品，再Install安装程序与直接Run项。\n\n2. Enable先保存并验证第一次原状态（旧格式按需升级），再配置本项目泡泡策略。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n3. 需要时分别用配置Verify、安装Verify、进程观察、最近一条常驻结果和实际画面判断，不能相互替代。\n\n4. 停用用Disable，按首次原值撤回用Restore；需要卸载再Remove，不以删除进程代替产品状态。\n\n5. 不再需要程序时Remove；旧桌面和锁屏按另一份图片记录在Windows设置中选回。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Preimage（变更前状态） | 第一次Enable前保存的相关配置；记录精确存在性、类型、值和运行时，不是整机镜像。现在新写的是 v4 格式，Restore 接受 v1 到 v4。 |\n| WinExe（无控制台应用） | 直接登录启动一个本用户图形程序，无需PowerShell常驻包装、服务或计划任务。 |\n| 当前交互桌面 | 用户现在操作的桌面，泡泡保持在这里；不会自行进入Windows锁屏或凭据输入桌面。 |\n\n## 专业定义\n\n安装、配置、应急停止和恢复原设置分别处理；远程输入按相同桌面规则工作。\n\n解决什么\n\n安装验证不会证明自启已经执行。过去程序为何停掉无从查起，现在常驻程序会留下最近一条中文结果，但它只说明生命周期，不是画面验收，也不会主动提醒；9 月 8 日那次停止的原因仍不清楚，这次没有做安装、启用或恢复。缺少或损坏原状态记录时，仍不能猜出第一次启用前的旧配置。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n安装验证不会证明自启已经执行，也不能猜出程序为何退出；本轮已恢复现有常驻与360秒配置。缺少或损坏原状态记录时，仍不能猜出第一次启用前的旧配置。\n\n## 边界\n\n- 本用户安装不需管理员；从源码构建泡泡程序需要.NET 10 SDK，静态图片恢复不需要它。\n\n- 源仓库不存机器前像、个人日志或微软系统组件；卸载不意味着删除所有恢复记录。\n\n- 原生泡泡不是安全锁屏；需要锁定电脑时仍由用户和Windows正常处理。\n\n## 失败与恢复\n\n- **原状态缺失、损坏或schema（数据结构）不支持**：Restore直接报错，无法替用户猜旧设置；Disable不依赖完整前像，可用于先关闭自动泡泡。\n\n- **程序制品缺失、目标冲突或安装环境会连带杀掉子进程**：安装器在替换前停下并报出具体原因，避免覆盖不属于该安装的文件；不伪造安装完成，也不用无关的旧备份回退。\n\n- **启用标志和Run值存在，但程序未运行**：分开报告安装、配置和运行证据，先看最近一条常驻结果里的中文原因再恢复；不能由注册表正常推定六分钟空闲功能正在工作。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "emerald-veil-reversibility-preimage-and-remote-compatibility-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\nscripts/Install-EmeraldVeil.ps1\nInstall / Verify / Remove、实际制品路径和替换回退条件。\n\nscripts/Set-NativeBubbles.ps1\nEnable / Verify / Disable / Restore及v1–v4前像。\n\nsrc/EmeraldVeil.App/App.xaml.cs / ResidentResult.cs / NativeBubblesSettings.cs / TrayIconHost.cs\n登录策略修正、常驻结果文件、托盘控制和30秒运行时维护。\n\ndocs/product-design.md\n原状态、远程输入、实机验收边界。\n\n## 如何验证\n\n- 北京时间10月11日13:33只读安装检查：版本0.1.39.0，常驻健康、开关打开、快捷键可用，唯一交互常驻；配置为360秒、非安全退出、Windows自动触发关闭。13:36:45读到的最近常驻结果是“屏保常驻程序已启动”（启动成功），记录时间为北京时间10月10日11:11:45，进程号62712。版本、注册表、进程和真实画面仍分开看，源码与安装程序是否完全一致没有证实。\n\n- 9月8日曾把注册表超时从600修正为360、重新启动常驻程序，首次前像哈希未改变；当时核对的是0.1.27，相关文件大小、哈希和编译标识只属于那次历史。\n\n- 这次没有执行安装、Enable、Disable、Restore、Remove、锁屏或真实远端验证；最近一条“启动成功”不能当成画面验收，也不说明以后不会退出。\n\n## 与其他模块的关系\n\n安装器负责程序和Run值，配置脚本负责屏保参数和前像，桌面/锁屏脚本负责图片；这些路径互相不能冒充。",
+      "links": [
+        {
+          "text": "上一个模块 壁纸与黑罩共存",
+          "href": "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "work-delivery-evidence-quality",
+  "kind": "project",
+  "title": "把事实、假设、冲突和未知分开，再由 SQLite 计算能否正式构建",
+  "url": "/projects/work-delivery/evidence-quality/",
+  "parent": "work-delivery-copilot",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "工作交付源码（main 7a8d0e5）按 10 月 11 日 14:00 前现状重新核对，当前 45 项测试定义本轮未运行；已有通过记录保留 9 月 1 日、9 月 28 日原日期。"
+  },
+  "screens": [
+    {
+      "id": "work-delivery-evidence-quality-01",
+      "section": "top",
+      "title": "把事实、假设、冲突和未知分开，再由 SQLite 计算能否正式构建",
+      "text": "# 把事实、假设、冲突和未知分开，再由 SQLite 计算能否正式构建\n\n〔回到项目 → 工作支持与交付〕　〔复制 AI 续作说明〕\n\n工作支持与交付 · 功能说明\n\nAI把准备写进交付物的金额、日期、范围和负责人逐项对回选定原文，再分清已确认事实、假设、互相冲突的说法和仍未知的事。我能看到哪些问题还需决定，避免把猜测写成正式结论。\n\n**当前情况：**已有核对金额日期、引用、冲突与审阅的功能，可区分草稿和正式构建；审阅记录仍缺少操作者身份字段（10 月 11 日读源码再次确认）。\n\n源码事实核对截至 2026-10-11 14:00（北京时间）；历史测试保留各自日期；页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 工作支持与交付",
+          "href": "/projects/work-delivery-copilot/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/work-delivery-copilot/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n日期或金额只要和原文对不上，就可能让几份文件一起引用一个错误值。项目必须自行核对事实和未决冲突，而不是接受外部写入的“已通过”。\n\n## 举个实际例子\n\n我可以问：“这条预算和日期能写进正式文件吗？请指出它们分别来自哪里，冲突先别替我决定。”项目会把金额、日期和表格位置对应回原文；关键冲突没解决时只交草稿。\n\n## 最后我会得到什么\n\n得到每条结论的来源位置、确认理由、冲突与缺项，以及这一轮只能交草稿还是可以生成正式文件的判断。决定由这件工作的负责人作出，工具不会因为外部文件自称通过就接受。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product",
+          "text": "这项功能怎样使用"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 可以正式构建\n\n重要结论都能回到当前资料，目标、范围、异常处理和验收写清楚，关键冲突也已解决时，才说明可以制作正式文件。\n\n## 需要确认\n\n依据缺失、重要结论待确认、资料已换版或说法冲突时，交回草稿和具体待决定项。\n\n## 当前不可用\n\n当前资料或已保存的事实不可读时，保留原文件并暂停正式制作；外部写一张‘已通过’清单不能替代核对。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n让 AI 先核对材料里的日期、范围、金额和负责人再成稿。\n\n## 需要准备什么\n\n- 这次要形成的工作判断或文件\n\n- 只有实际冲突需要本人取舍时才给明确选择\n\n## 从开始到拿到结果\n\n1. **把候选结论对回原文**　AI列出金额、日期、范围等结论，并指出每一项来自选定文件的哪里。\n\n2. **处理冲突再决定能否正式制作**　负责人确认重要事实与取舍；缺依据或冲突未解时只交草稿和待决定项。\n\n3. **交回能采用的口径**　已确认事实进入同一版交付依据；原话对不上或关键问题未决时明确停在草稿，不制造正式 Office 文件。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\ntyped money/date/datetime、CSV 行列、追加审阅理由与 canonical quality gate 已实现；审阅事件仍不记录 actor\n\n## 关键规则与设计选择\n\n1. money/date/datetime 保存规范类型和 value_data，不只保存显示文字。\n\n2. 文本证据保存偏移、行列和原文；CSV 定位精确到行列。\n\n3. 确认、驳回、退回和 source-rebound 追加 FactReviewEvent；source-rebound 只在原文唯一且结构锚点（同一事项的位置标记）一致时发生，事件理由也写明这个条件。\n\n4. 每个真实状态变化要求非空 reason，并保留 evidence before/after。\n\n5. 当前事件 schema（数据结构） 没有 actor，不能称为完整多人审计。\n\n6. AI 分析在项目外；核心只接收明确登记的事实、证据与决定。\n\n7. 正式入口从 SQLite 重建 manifest（清单） v2，调用方不能自报 ready；核对通过后直接交出这次核对过的原始字节，后面的生成用的是这份字节的暂存副本，不会再去读可能已被换掉的磁盘文件。\n\n## 当前怎样实现\n\n- EvidenceSpan 由系统验证 quote 与来源字节一致，并计算 locator（原件定位记录）。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据（一）"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- FactValueType 支持 text、money、date、datetime；结构化字段严格校验。\n\n- FactReviewEvent 保存 action、previous/current（当前状态） status、stale、revision、reason 和 evidence IDs。\n\n- DeliveryCompiler 计算 missing goal/sections、unconfirmed、stale、evidence 和 conflicts。\n\n- expected_manifest 从 current（当前状态） build、package、facts 与 evidence 重建，verify_persisted_manifest 逐字段比较持久化文件，并返回这次读到的原始字节（2026-09-24 起）；怎样用这份字节生成文件由“六个正式文件”模块说明。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n## 执行流程\n\n1. 登记候选事实\n\n2. 绑定证据原文\n\n3. 规范化类型值\n\n4. 确认/驳回/保留假设\n\n5. 追加理由与前后证据\n\n6. 计算质量缺口\n\n7. 生成draft或ready\n\n8. 正式入口再次重建manifest（清单）",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Typed fact（结构化事实） | 金额、日期和带时区时间分别保存机器可比较字段与人类显示值。 |\n| FactReviewEvent（事实审阅事件） | 一次状态或证据变化的追加记录；当前包含理由但不包含操作人。 |\n| Canonical manifest（规范清单） | 公开入口从 SQLite 重建的唯一正式事实投影，不能由调用方手写替代。 |\n\n## 专业定义\n\n正式文件之前先过事实门：证据定位、结构化值、确认理由、关键冲突、范围、异常和验收都要能从当前状态解释。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n解决无来源结论、金额日期口径漂移、审阅历史被覆盖和 quality 状态可伪造的问题。\n\n## 边界\n\n- 没有 actor 字段\n\n- 责任角色仍是原文/文本值\n\n- AI 判断不在核心内\n\n- 没有字段级权限或多人审批\n\n- 质量门不证明真实业务采用\n\n## 失败与恢复\n\n- **Quote 不在来源或偏移不匹配**：登记前失败，不保存伪造 EvidenceSpan。\n\n- **关键事实冲突或缺必填章节**：quality 保持 draft，列出字段和证据，不启动正式 Office。\n\n- **调用方修改 ready manifest（清单）**：SQLite 重建结果不一致，verify 和 artifacts 明确拒绝。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "work-delivery-evidence-quality-10",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `PRIVATE source · models.py`结构化事实、build与review event值对象\n\n- `PRIVATE source · store.py`证据、事实、追加审阅和冲突查询\n\n- `PRIVATE source · compiler.py`质量门与canonical manifest（清单）\n\n## 如何验证\n\n- 手写 ready、goal/fact/evidence/hash 漂移均拒绝。\n\n- money/date/datetime 与 CSV 行列有回归测试；已有通过记录保留原日期（2026-09-01 全部 37 项通过；2026-09-28 记录为 44 项中 39 项通过、5 项跳过）。2026-10-11 核对时共有 45 项测试定义，本轮没有重跑。\n\n- 审阅事件追加且保留前后证据。\n\n- 关键冲突只生成标记草稿。\n\n- actor 缺口由数据类与表结构确认，2026-10-11 读源码时仍然没有这个字段。\n\n## 与其他模块的关系\n\n本模块决定当前 build 是否可信；通过后，下一模块才能从同一规范清单生成正式文件。",
+      "links": [
+        {
+          "text": "上一个模块 交付包与来源",
+          "href": "/projects/work-delivery/package-sources/"
+        },
+        {
+          "text": "下一个模块 同版多种交付物",
+          "href": "/projects/work-delivery/consistent-deliverables/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

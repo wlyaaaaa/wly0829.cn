@@ -27,11 +27,8 @@
   "parent": "personal-materials",
   "status_line": {
    "state": "在用",
-   "facts": [
-    "登记原件 165 份（10 月 9 日数）"
-   ],
    "as_of": "2026-10-11",
-   "source": "项目源码与说明；10 月 11 日计数入口报错，当前数未知"
+   "source": "10 月 11 日 16:35 计数入口正常返回（58 个来源、165 份登记、4 条关系、44 份有文字）；源码按 10 月 7 日版本，本次没有跑测试、没有打开原件"
   },
   "status": "在用",
   "based_on": {
@@ -43,8 +40,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials-registered-lookup/page.json",
-  "sha256": "faa6df4ee84f2263a41a3d32f915bb3b94b9c10cc05d2cfbc12121f8ef196d58",
-  "converted_at_beijing": "2026-10-11T19:07:40+08:00"
+  "sha256": "4f789515856e65c4b61ba6cf690c2441f4fd58a23b8adf5d2bb69d7632200a53",
+  "converted_at_beijing": "2026-10-11T19:47:52+08:00"
  }
 }
 ---
@@ -93,31 +90,30 @@
       {
        "text": "在用",
        "state": "ok"
-      },
-      {
-       "text": "登记原件 165 份（10 月 9 日数）",
-       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目源码与说明；10 月 11 日计数入口报错，当前数未知",
+     "static_note": "截至 10 月 11 日 · 10 月 11 日 16:35 计数入口正常返回（58 个来源、165 份登记、4 条关系、44 份有文字）；源码按 10 月 7 日版本，本次没有跑测试、没有打开原件",
      "row": "top"
     },
     {
      "type": "action_button",
      "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕",
-     "row": "top"
+     "row": "top",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
     },
     {
      "type": "prose",
-     "text_ref": "绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。",
+     "text_ref": "个人材料查找 · 功能说明",
      "row": "top"
     },
     {
      "type": "illustration",
+     "index": 0,
      "row": "top",
      "width": "42%",
-     "align": "center",
-     "index": 0
+     "align": "center"
     }
    ]
   },
@@ -137,26 +133,25 @@
       {
        "text": "在用",
        "state": "ok"
-      },
-      {
-       "text": "登记原件 165 份（10 月 9 日数）",
-       "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 11 日 · 项目源码与说明；10 月 11 日计数入口报错，当前数未知"
+     "static_note": "截至 10 月 11 日 · 10 月 11 日 16:35 计数入口正常返回（58 个来源、165 份登记、4 条关系、44 份有文字）；源码按 10 月 7 日版本，本次没有跑测试、没有打开原件"
     },
     {
      "type": "action_button",
-     "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕"
+     "text_ref": "〔回到项目 → 个人材料查找〕　〔复制 AI 续作说明〕",
+     "brand_icons": {
+      "GitHub": "_library/icons/GitHub标志.png"
+     }
     },
     {
      "type": "prose",
-     "text_ref": "绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。"
+     "text_ref": "个人材料查找 · 功能说明"
     },
     {
      "type": "illustration",
-     "align": "center",
-     "index": 0
+     "index": 0,
+     "align": "center"
     }
    ]
   }
@@ -165,10 +160,10 @@
   {
    "role": "illustration",
    "slot_ordinal": 1,
-   "asset": "_library/round3/clean-assets/png/40-main-personal-materials-clean.png",
+   "asset": "_library/module-illustrations/personal-materials/registered-lookup-v01.png",
    "key": "main-personal-materials",
    "source_phrase": "右上一幅水彩插画：一个半开的木制文件柜抽屉，几页纸从里面微微探出；一只放大镜照在其中一页上，放大镜里那一行被绿色荧光笔划亮；这页纸右边一条绿色细虚线连到一个挂在纸角的小标签，标签上只画一个绿色对勾。",
-   "sha256": "2d93d1dbb7e27d2bfe7edfb1fddc0ce968d1aa0b0d2abf80d5e29944ef796814",
+   "sha256": "9bff548d3181037e481f7d61147aab370d9744836c8b837dd708832a7c9ca466",
    "status": "ready"
   }
  ]
@@ -183,15 +178,11 @@
 
 绝大多数已接入材料不需要扫描目录：先从小索引拿到可区分候选，再决定是否验真打开。
 
-**当前情况：**10 月 11 日再查计数时入口报错，当前数还不知道。登记状态不代表本轮逐件重新验证过原件。
+**当前情况：**登记了 165 份原件，来自 58 个来源，其中 44 份有可搜的文字（10 月 11 日 16:35 计数）。上午那次计数入口报错，下午没有再出现，原因还没查清。登记状态不代表本轮逐件重新验证过原件。
 
 具体测试保留各自日期，页面不实时探测运行状态。
 
-项目源码
-
-私有仓库
-
-源码未公开；用法与技术说明可在下面阅读。
+项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。
 
 ::screen{#personal-materials-registered-lookup-02 section="usage"}
 
@@ -205,11 +196,11 @@
   "anchors": [
    {
     "id": "project-reading-panel-product",
-    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 同一材料可能有草稿、签字版、交付版、回执或完全相同的副本。只按文件名排序会把版本混在一起；直接公开路径又会在尚未选择时暴露不必要的私人位置。登记查找先把候选缩小，并保留来源原生差异。 举个实际"
+    "text": "这项功能怎样使用"
    },
    {
     "id": "module-product",
-    "text": "用途与实际影响 这项功能怎样使用 为什么需要它 同一材料可能有草稿、签字版、交付版、回执或完全相同的副本。只按文件名排序会把版本混在一起；直接公开路径又会在尚未选择时暴露不必要的私人位置。登记查找先把候选缩小，并保留来源原生差异。 举个实际"
+    "text": "这项功能怎样使用"
    },
    {
     "id": "module-product-title",
@@ -420,7 +411,7 @@
 
 索引不能安全读取时停止查找，不从陌生数据库猜答案。
 
-**现在的局限**　165 份登记里只有 44 份有可搜的文字（10 月 9 日），其余只能靠标题、来源和版本对上；10 月 11 日查计数时入口报错，当前登记数还不知道。
+**现在的局限**　165 份登记里只有 44 份有可搜的文字（18 份是原件自带的完整文字，26 份是提取出的部分文字），其余 121 份只能靠标题、来源和版本对上（10 月 11 日数）。
 
 ::screen{#personal-materials-registered-lookup-04 section="usage"}
 
@@ -447,12 +438,6 @@
      "size": "medium"
     },
     {
-     "type": "prose",
-     "text_ref": "用自然话描述那份非媒体材料，先查已登记来源。",
-     "row": "start",
-     "width": "40%"
-    },
-    {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
      "row": "start",
@@ -468,7 +453,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
+     "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
      "row": "start",
      "columns": 1,
      "icons": "none",
@@ -486,10 +471,6 @@
      "size": "medium"
     },
     {
-     "type": "prose",
-     "text_ref": "用自然话描述那份非媒体材料，先查已登记来源。"
-    },
-    {
      "type": "source_text_card",
      "text_ref": "需要准备什么",
      "icon_position": "header_left",
@@ -502,7 +483,7 @@
     },
     {
      "type": "numbered_steps",
-     "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
+     "text_ref": "1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -546,36 +527,13 @@
 
 ## 从开始到拿到结果
 
-1. **系统核对并处理**　从登记记录和绑定文字里挑少量能区分版本、来源与状态的候选；候选不等于当前原件已验真。
+1. **系统核对并处理**　从登记记录和绑定文字里挑少量（通常 4 个以内）能区分版本、来源与状态的候选；候选不等于当前原件已验真。
 
 2. **交付与接续**　交回候选和实际搜索范围；零命中说明登记范围，选中后再进入验真。
 
-::screen{#personal-materials-registered-lookup-13 section="usage"}
-
-```typeset
-{
- "screen": {
-  "id": "personal-materials-registered-lookup-13",
-  "section": "usage",
-  "title": "为什么这样做",
-  "links": [],
-  "anchors": [],
-  "live": null,
-  "screenshots": [],
-  "chain": null,
-  "reuse": null,
-  "shape": "source_text"
- },
- "layout": {},
- "images": []
-}
-```
-
-# 为什么这样做
-
 **有路径不等于读得到**　放在加密文件夹里的原件，登记的是“门牌”入口。门牌关着或指向不对，就说明卡在门牌，不当成文件没了。
 
-**登记错了可以只撤一份**　不想再找到某一份时，只撤这一条登记，原件和来源都不动：先预演看清撤的是哪份、写明原因，确认后才真撤。这项刚做好，还在等真实使用验收。
+**登记错了可以只撤一份**　不想再找到某一份时，只撤这一条登记，原件和来源都不动：先预演看清撤的是哪份、写明原因，确认后才真撤。这项已经做好，还在等真实使用验收。
 
 **删了的不挡路**　我已经删掉的文件，查找时直接跳过、接着找真的还在的，不占候选名额；登记里那一条留到每天 17:10 的维护再去掉，查找本身从不改登记。
 
@@ -591,11 +549,11 @@
   "anchors": [
    {
     "id": "project-reading-panel-technical",
-    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 status 当前有 154 条精确定位记录，stored open_state（保存的打开状态）均为 verified；这不是本次154份原件已逐项核验。44份材料有"
+    "text": "技术实现与依据（一）"
    },
    {
     "id": "module-technical",
-    "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 status 当前有 154 条精确定位记录，stored open_state（保存的打开状态）均为 verified；这不是本次154份原件已逐项核验。44份材料有"
+    "text": "技术实现与依据（一）"
    },
    {
     "id": "module-technical-title",
@@ -617,10 +575,6 @@
      "heading_icon": "_library/hires-icons/打勾清单.png"
     },
     {
-     "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
-    },
-    {
      "type": "numbered_steps",
      "text_ref": "1. 用户不用先回忆绝对路径或内部材料 ID，只需描述目标。",
      "columns": 1,
@@ -637,10 +591,6 @@
      "text_ref": "技术实现与依据（一）",
      "size": "large",
      "heading_icon": "_library/hires-icons/打勾清单.png"
-    },
-    {
-     "type": "prose",
-     "text_ref": "这里保留实现、关键条件、精确入口、历史记录和验证结果。"
     },
     {
      "type": "numbered_steps",
@@ -671,9 +621,9 @@
 
 这里保留实现、关键条件、精确入口、历史记录和验证结果。
 
-**10 月 11 日的计数失败**　用只返回计数的 status 入口查，返回 materials_database_not_initialized，原因还没查清；本页的 165 份、58 个来源、44 份有文字都是 10 月 9 日的数。
+**10 月 11 日 16:35 计数**　只返回计数的 status 入口正常：58 个来源、165 条精确登记、4 条关系、44 份绑定文字；保存的打开状态 165 条都是 verified，这只是已保存的状态，不是本次逐件重算或打开过。上午同一入口曾返回 materials_database_not_initialized，下午未复现，原因没有调查。
 
-**2026 年 9 月 18 日 21:19 原快照（历史证据）**　status 当时有 154 条精确定位记录，stored open_state（保存的打开状态）均为 verified；这不是本次154份原件已逐项核验。44份材料有来源自带绑定文字，其余110份没有。登记查找把 verified_locator、unverified_source_evidence 与 known_locator_gap 三阶段分开；版本区分、路径隐藏、零命中范围、媒体过滤与可信文件管理器退役保留 2026-09-07 基线 66 项合成回归与 Ruff 通过；不覆盖后来新增的 lookup-content，本轮未重跑 的历史证据。
+**历史测试记录**　2026-09-07 有 66 项合成回归与 Ruff 通过，9 月 28 日有 106 项通过，都是当时的回执，不覆盖后来新增的门牌和撤登记。当前测试文件有 70 个测试函数、参数展开 110 个用例（10 月 11 日静态计数，本次没有运行）。
 
 ## 关键规则与设计选择
 
@@ -681,13 +631,13 @@
 
 2. 登记候选与发现候选分开：已有定位优先，不为每次查询遍历文件系统。
 
-3. 查找阶段本身表达证据强度：verified、未验证来源证据（来源/材料元数据、search_text 或绑定文字）和已知定位缺口不会混在同一个“已找到”标签里。
+3. 查找阶段本身表达证据强度：verified、未验证来源证据（来源／材料元数据、search_text 或绑定文字）和已知定位缺口不会混在同一个“已找到”标签里。
 
 4. 完全相同字节、逻辑版本和来源原生关系分别表达，不把“相似”写成“同一份”。
 
 5. 零命中自动携带已搜索与未搜索范围，不能被解释成其他设备或位置不存在。
 
-6. 来源根可访问而已登记原件不存在时，查询只读跳过该 occurrence（出现记录），不把它作为 known_locator_gap 恢复候选；现有日常维护调用 sync-current，在事务重检后才退出该记录及级联文字/关系。
+6. 来源根可访问而已登记原件确切不存在时，查询只读跳过该 occurrence（出现记录），不把它作为 known_locator_gap 恢复候选；现有日常维护调用 sync-current，在事务重检后才退出该记录及级联文字／关系。
 
 ## 当前怎样实现
 
@@ -756,11 +706,11 @@
 
 - 没有 verified 匹配时才查 open_state=unverified 的来源名、标题、原生 ID、版本字段、材料 search_text 与 material_text，并标为 unverified_source_evidence；即使没有 material_text，来源原生元数据仍可形成未验证候选。
 
-- material_text 只接收 native、ocr（光学字符识别） 或 extracted 三类可重建文字；它们可以帮助召回，但不能替代当前原件验真。
+- material_text 只接收 native、ocr（光学字符识别）或 extracted 三类可重建文字；目前 18 份 native 完整文字、26 份 extracted 部分文字，没有 ocr。它们可以帮助召回，但不能替代当前原件验真。
 
 - 查询文本去除常见请求词，并结合完整短语、拉丁词和中文二元片段计算有界匹配分。
 
-- find 命令默认返回 5 个、允许 1–10 个；个人 Skill 为减少选择成本固定请求最多 4 个。
+- find 命令默认返回 5 个、允许 1–10 个；个人技能为减少选择成本固定请求最多 4 个。
 
 - 候选卡提供来源、标题、容器、逻辑与版本身份、时间、指纹、大小、状态、精确重复次数和原生关系，但不包含 locator（原件定位记录）。不读原件正文（original_body_text_read=false）。
 
@@ -771,12 +721,6 @@
 1. 确认请求属于非媒体原件且没有可靠 locator（原件定位记录）；否则直接分流或绕过。
 
 2. 把用户原话规范为搜索签名，不要求用户翻译成内部字段。
-
-**门牌**　位置存门牌入口路径；按门牌表最长前缀配对并核对门牌开着、指向一致，不符返回 folder_door_closed_or_mismatched / folder_door_not_registered。旧记录读出时才换成门牌，不批量改写。
-
-**只读**　find、status、inventory 都不写库、不触发每天的同步；撤一份登记是单独的 unregister 命令，默认只预演，同样参数加 --apply 才真撤，只删这一条和它的可重建文字、关系。
-
-**配对不用模型**　中文按相邻两个字切片：三个字以内要整段出现；更长的至少对上 2 片且找到六成，或对上 3 片且找到三成五。再按分数、来源时间和材料身份排序。命令默认 5 个、可设 1–10 个，技能固定要最多 4 个。
 
 ::screen{#personal-materials-registered-lookup-07 section="tech"}
 
@@ -843,6 +787,12 @@
 
 5. 返回候选、查找阶段、搜索范围与零命中说明；不在这一步打开原件。
 
+**门牌**　位置存门牌入口路径；按门牌表最长前缀配对并核对门牌开着、是真目录联接、指向一致，不符返回 folder_door_closed_or_mismatched / folder_door_not_registered，门牌表本身无效返回 folder_door_registry_invalid。旧记录读出时才换成门牌，不批量改写。
+
+**只读**　find、status、inventory 都不写库、不触发每天的同步；撤一份登记是单独的 unregister 命令，默认只预演，同样参数加 --apply 才真撤，只删这一条和它的可重建文字、关系。
+
+**配对不用模型**　中文按相邻两个字切片：三个字以内要整段出现；更长的至少对上 2 片且找到六成，或对上 3 片且找到三成五。再按分数、来源时间和材料身份排序。
+
 ::screen{#personal-materials-registered-lookup-08 section="tech"}
 
 ```typeset
@@ -898,12 +848,13 @@
 
 | 名词 | 意思 |
 | --- | --- |
-| Registered index（登记索引） | 只包含明确接入的来源和非媒体原件定位，不是整盘文件清单。 |
+| Registered index（登记索引） | 只包含明确接入的来源和非媒体原件定位，不是整盘文件清单；现在 58 个来源、165 份登记。 |
 | Logical family（逻辑版本族） | 同一现实材料的多个来源原生版本；它与相同字节副本不是同一概念。 |
 | Exact duplicate（精确重复） | 只有完整 SHA-256 相同才成立；标题相同或迁移回执不能证明。 |
 | Hash-bound text（哈希绑定文字） | OCR（光学字符识别）、提取或原生文字与一份精确原件身份绑定；只帮助召回，引用仍回到原件。 |
 | Search scope（搜索范围） | 本次实际查询的登记材料与来源，以及未查询部分；零命中必须与它一起解释。 |
 | Lookup stage（查找阶段） | verified_locator 只含 verified；unverified_source_evidence 只含 unverified 的来源元数据或绑定文字证据；known_locator_gap 只保留 hash_mismatch、not_openable 等仍可复核问题，本人已删的 missing occurrence 已先退出。 |
+| 门牌 | 加密文件夹的登记入口；门牌开着、指向一致才读，关着或错配只说明访问受阻，不说明原件被删。 |
 
 ## 专业定义
 
@@ -934,12 +885,8 @@
      "heading_icon": "_library/hires-icons-r2/扳手.png"
     },
     {
-     "type": "prose",
-     "text_ref": "解决什么"
-    },
-    {
      "type": "bullet_list",
-     "text_ref": "- **零命中**：返回 not_found、登记搜索阶段、实际材料数量、来源样本、未搜索来源与缺口；只说明本轮登记索引没有合适候选。",
+     "text_ref": "- 已有可靠路径直接打开，不先经过登记查找。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -955,12 +902,8 @@
      "heading_icon": "_library/hires-icons-r2/扳手.png"
     },
     {
-     "type": "prose",
-     "text_ref": "解决什么"
-    },
-    {
      "type": "bullet_list",
-     "text_ref": "- **零命中**：返回 not_found、登记搜索阶段、实际材料数量、来源样本、未搜索来源与缺口；只说明本轮登记索引没有合适候选。",
+     "text_ref": "- 已有可靠路径直接打开，不先经过登记查找。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -998,7 +941,7 @@
 
 - 绑定文字不拥有高于原件的证据地位，也不进入人物、事件或领域判断。
 
-- 来源覆盖是 complete、partial 或 unknown（未验证） 的登记声明，不等于整台电脑。
+- 来源覆盖是 complete、partial 或 unknown（未验证）的登记声明，不等于整台电脑；目前 4 个来源声明完整、54 个部分。
 
 ## 失败与恢复
 
@@ -1034,7 +977,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。",
+     "text_ref": "- **门牌关着、错配或未登记**：返回对应门牌缺口，不猜替代位置，也不当成原件已删。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1051,7 +994,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。",
+     "text_ref": "- **门牌关着、错配或未登记**：返回对应门牌缺口，不猜替代位置，也不当成原件已删。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1059,36 +1002,19 @@
    ]
   }
  },
- "images": [
-  {
-   "role": "icon",
-   "slot_ordinal": 1,
-   "asset": "_library/hires-icons-r2/扳手.png",
-   "key": "扳手",
-   "source_phrase": "冻结页迁移固定图标：failure",
-   "sha256": "c7bce5595c6ff1262404f84f83793a1e1cda2660078c4ef0eacf676774f9aa28",
-   "status": "ready"
-  },
-  {
-   "role": "icon",
-   "slot_ordinal": 1,
-   "asset": "_library/hires-icons/数据库.png",
-   "key": "数据库",
-   "source_phrase": "冻结页迁移固定图标：sources",
-   "sha256": "865053c5fd589bd10fb3c83b7ce3d3750c44d8737ad5dc796e24176a5c33b2b2",
-   "status": "ready"
-  }
- ]
+ "images": []
 }
 ```
 
 ## 出问题时（二）
 
-- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有计划维护调用 sync-current 后再移除该 occurrence 与级联文字/关系，保留来源及其他副本。
+- **门牌关着、错配或未登记**：返回对应门牌缺口，不猜替代位置，也不当成原件已删。
+
+- **本人已从可信文件管理器删除登记原件**：查询跳过缺失项并继续找有效候选，不删除索引或原件；现有每日 17:10 维护调用 sync-current 后再移除该 occurrence 与级联文字／关系，保留来源及其他副本。根不可读、其他读取错误或文件还在但内容变了，都不算删除。
 
 - **只有仍可核对的定位缺口命中**：hash_mismatch、not_openable 等返回 known_locator_gap 和原 open_state，不能称 verified_locator。
 
-- **数据库身份不符**：拒绝连接，不初始化或覆盖外部字节；由项目入口恢复正确的最小 SQLite。
+- **数据库身份不符或未初始化**：拒绝连接，不初始化或覆盖外部字节；由项目入口恢复正确的最小 SQLite。
 
 ::screen{#personal-materials-registered-lookup-11 section="tech"}
 
@@ -1116,7 +1042,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先和零命中范围。",
+     "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先、门牌和零命中范围。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1133,7 +1059,7 @@
     },
     {
      "type": "bullet_list",
-     "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先和零命中范围。",
+     "text_ref": "- `README.md`定义普通请求、候选路径隐藏、find 优先、门牌和零命中范围。",
      "columns": 1,
      "icons": "none",
      "illustration": "none"
@@ -1159,13 +1085,13 @@
 
 ## 真实入口
 
-- `README.md`定义普通请求、候选路径隐藏、find 优先和零命中范围。
+- `README.md`定义普通请求、候选路径隐藏、find 优先、门牌和零命中范围。
 
-- `materials.py`实现 query signature、匹配评分、候选卡、来源范围和 find 命令。
+- `materials.py`实现查询签名、匹配评分、候选卡、来源范围和 find 命令（共 4,242 行）。
 
-- `schema.sql`定义来源、材料、原生关系、绑定文字和可打开状态。
+- `schema.sql`定义来源、材料、原生关系、绑定文字、文件名清单和可打开状态。
 
-- `tests/test_materials.py`覆盖自然查询、版本区分、路径隐藏、零命中与媒体历史行过滤。
+- `tests/test_materials.py`覆盖自然查询、版本区分、路径隐藏、零命中、媒体历史行过滤、门牌和撤登记（70 个测试函数、110 个用例定义，10 月 11 日静态计数）。
 
 ## 如何验证
 
@@ -1251,18 +1177,10 @@
 
 - 验证媒体历史行既不能成为来源，也不能通过 find 返回或打开。
 
-- 隔离回归覆盖查询/状态/检查不改库，缺失项不占 limit，verified 全失效后正确回退，单文件来源删除可同步，以及维护仅级联移除失效项的独有关系/文字。
+- 隔离回归覆盖查询／状态／检查不改库，缺失项不占 limit，verified 全失效后正确回退，单文件来源删除可同步，以及维护仅级联移除失效项的独有关系／文字。
 
-- 真实产品验收必须从自然请求开始，并最终选中、重新验真、打开一份真实原件；单元测试不能替代。
+- 真实产品验收必须从自然请求开始，并最终选中、重新验真、打开一份真实原件；单元测试不能替代，本次也没有做这样的验收。
 
 ## 与其他模块的关系
 
-这是主入口。候选清楚时进入“验真再打开”；没有合适登记候选且位置真正未知时才进入“有界发现”。“精确接入”持续为本模块提供小而可信的来源与版本事实。
-
-| 文件 | 管什么 |
-|---|---|
-| materials.py | 查询签名、配对打分、候选卡、搜索范围和 find 命令（共 4,242 行） |
-| schema.sql | 来源、原件、关系、可搜文字和打开状态 |
-| tests/test_materials.py | 自然说法、版本区分、不给路径、零命中范围、媒体过滤；110 个自动测试（10 月 10 日数） |
-
-单元测试用虚构的临时材料；真正的验收要从一句平常话开始，最后选中、核对并打开一份真实原件，测试代替不了。项目源码：私有仓库，提交 17efb2e（10 月 6 日）。
+这是主入口。候选清楚时进入“验真与内容定位”；没有合适登记候选且位置真正未知时才进入“有界发现”。“精确接入”持续为本模块提供小而可信的来源与版本事实。项目源码：私有仓库，提交 17efb2e（10 月 7 日）。
