@@ -113,14 +113,14 @@
       {
         "type": "flow",
         "row": "body",
-        "width": "65%",
+        "width": "56%",
         "columns": 1,
         "columns_v": 1,
         "illustration": "left_inside",
         "connector": "ribbon",
         "flow_direction": "vertical",
         "items_layout": {
-          "count": 6,
+          "count": 4,
           "card": "horizontal",
           "icon_side": "left",
           "path": "curved",
@@ -128,12 +128,26 @@
         },
         "text_ref": "1先看现场",
         "direction": "vertical",
-        "text_layout": "inline"
+        "text_layout": "inline",
+        "icons": [0, 1, 2, 3]
+      },
+      {
+        "type": "flow",
+        "row": "body",
+        "width": "44%",
+        "columns": 1,
+        "illustration": "left_inside",
+        "connector": "ribbon",
+        "path": "curved",
+        "number_position": "left_outside",
+        "text_ref": "5提交前后都核对：",
+        "direction": "vertical",
+        "text_layout": "inline",
+        "icons": [4, 5]
       },
       {
         "type": "document_mock",
         "row": "body",
-        "width": "33%",
         "illustration": "top_inside",
         "paper": "receipt",
         "render_text": true,
