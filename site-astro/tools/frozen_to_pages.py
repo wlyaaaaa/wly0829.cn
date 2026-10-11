@@ -447,6 +447,8 @@ def convert_html(html, route, parent, retired_routes=None):
         technical_evidence_as_of=snapshot_as_of, evidence_field="module-technical .status-pill")
     page = dict(schema="site-b1.page.v1", page=pid, kind="project", title=title, url=route, parent=parent["page"],
                 status_line=dict(state=state, as_of=as_of, source=source), screens=screens)
+    if snapshot_as_of != "Unknown":
+        page["status_line"]["last"] = {"label": "原页核对", "at": snapshot_as_of}
     reconstructed = "\n".join(s["text"] for s in screens) + "\n" + "\n".join(r["text"] for r in end_links)
     reconstructed += "\n" + state + "\n" + as_of
     ratio = retention_ratio(original, reconstructed)
