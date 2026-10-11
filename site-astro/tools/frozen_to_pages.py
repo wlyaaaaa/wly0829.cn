@@ -1,4 +1,10 @@
-"""机械迁移选定的冻结模块页；正文、链接和素材来源均从已有输入取得。"""
+"""机械迁移选定的冻结模块页；正文、链接和素材来源均从已有输入取得。
+
+用法：--routes 路由清单 --report 报告目录 [--dry-run] [--force]。
+后续专图原位替换 asset-map 的该页首屏 illustration 行（asset 和 sha256），
+再运行 convert_page.py 该页及构建；不要追加第二条同槽 ready 行。
+换图不需要 --force；该选项会从冻结源重写正文，覆盖已更新的事实。
+"""
 import argparse
 from collections import Counter
 import copy
@@ -476,6 +482,9 @@ def asset_rows(path):
 def asset_mapping(page, report, parent, rows, icons, root):
     ready = [r for r in rows if r.get("status") == "ready" and r.get("role") == "illustration"]
     dedicated = [r for r in ready if r.get("page") == page["page"]]
+    hero = [r for r in dedicated if r.get("screen_id") == page["page"] + "-01"]
+    if len({(r["asset"], r["sha256"]) for r in hero}) > 1:
+        raise ValueError("首屏插画映射不唯一；请原位替换该页已有 illustration 行，不追加同槽：" + page["page"])
     dedicated.sort(key=lambda r: r.get("screen_id") != page["page"] + "-01")
     candidates = dedicated + [r for r in ready if r.get("page") == parent["page"] and r.get("screen_id") == parent["page"] + "-01"]
     if not candidates:

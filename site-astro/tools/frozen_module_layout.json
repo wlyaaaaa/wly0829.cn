@@ -12,14 +12,14 @@
         {"type": "action_button", "text_ref": "{{buttons}}", "row": "top"},
         {"type": "prose", "text_ref": "{{lead}}", "row": "top"},
         {"type": "prose", "text_ref": "{{intro}}", "row": "top"},
-        {"type": "illustration", "asset": "{{illustration}}", "row": "top", "width": "42%", "align": "center"}
+        {"type": "illustration", "index": 0, "row": "top", "width": "42%", "align": "center"}
       ]},
       "v": {"blocks": [
         {"type": "chapter_title", "text_ref": "{{title}}", "align": "left", "size": "large"},
         {"type": "action_button", "text_ref": "{{buttons}}"},
         {"type": "prose", "text_ref": "{{lead}}"},
         {"type": "prose", "text_ref": "{{intro}}"},
-        {"type": "illustration", "asset": "{{illustration}}", "align": "center"}
+        {"type": "illustration", "index": 0, "align": "center"}
       ]}
     },
     "usage_cards": {

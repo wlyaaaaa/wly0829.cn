@@ -24,10 +24,10 @@
       },
       {
         "type": "illustration",
-        "asset": "_library/illustrations/main-localocr.png",
         "row": "top",
         "width": "42%",
-        "align": "center"
+        "align": "center",
+        "index": 0
       }
     ]
   },
@@ -51,8 +51,8 @@
       },
       {
         "type": "illustration",
-        "asset": "_library/illustrations/main-localocr.png",
-        "align": "center"
+        "align": "center",
+        "index": 0
       }
     ]
   },

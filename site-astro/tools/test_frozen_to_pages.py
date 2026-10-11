@@ -61,32 +61,26 @@ class FrozenMigrationTests(unittest.TestCase):
         row = self.illustration("localocr", "localocr-01", "parent.png")
         self.original_map = b"\r\n" + json.dumps(row, ensure_ascii=False, indent=None).encode() + b"\r\n\r\n"
         self.map.write_bytes(self.original_map)
-
     def json_file(self, relative, data):
         path = self.root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
         return path
-
     def asset(self, relative, raw=b"test-only-image"):
         path = self.root / "sources/assets" / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(raw)
         return hashlib.sha256(raw).hexdigest()
-
     def illustration(self, page, screen, name):
         asset = "_library/" + name
         return {"page": page, "screen_id": screen, "role": "illustration", "slot_ordinal": 1,
-                "key": name, "asset": asset, "sha256": self.asset(asset), "status": "ready"}
-
+                "key": name, "asset": asset, "sha256": self.asset(asset, name.encode()), "status": "ready"}
     def run_routes(self, **kwargs):
         return convert.convert_routes([ROUTE], self.report, root=self.root, **kwargs)
-
     def assert_clean_failure(self, result):
         self.assertTrue(result["errors"])
         self.assertFalse(self.target.exists())
         self.assertEqual(self.original_map, self.map.read_bytes())
-
     def test_real_short_long_and_agents_preserve_visible_content(self):
         for route in (ROUTE, "/projects/pcconfig/secrets-providers/", "/projects/agents/capability-routing/"):
             with self.subTest(route=route):
@@ -115,7 +109,6 @@ class FrozenMigrationTests(unittest.TestCase):
                 self.assertEqual(sum(bool(b.get("card")) for s in report["screens"] for b in s["blocks"]), 6)
                 if "pcconfig" in route:
                     self.assertGreater(len(page["screens"]), 8)
-
     def test_each_required_class_missing_or_duplicate_is_rejected(self):
         for cls in REQUIRED:
             with self.subTest(cls=cls):
@@ -128,7 +121,6 @@ class FrozenMigrationTests(unittest.TestCase):
         soup.find("main").append(soup.new_tag("div", attrs={"class": "source-list"}))
         with self.assertRaises(ValueError):
             convert.convert_html(str(soup), ROUTE, PARENT)
-
     def test_unknown_section_and_inner_link_are_preserved_and_reported(self):
         soup = BeautifulSoup(fixture(), "html.parser")
         extra = BeautifulSoup('<section class="future-section"><h3>新增段落甲</h3><p>独有内容乙 <a href="/projects/old/#proof">原始链接丙</a>，pass|warn|block。</p></section>', "html.parser")
@@ -142,7 +134,6 @@ class FrozenMigrationTests(unittest.TestCase):
         self.assertTrue(any(w.get("preserved") and "future-section" in w.get("html", "") for w in report["warnings"]))
         self.assertIn({"text": "原始链接丙", "href": "/projects/current/#proof"}, [l for s in page["screens"] for l in s["links"]])
         self.assertIn({"text": "独立源码依据", "href": "https://example.com/independent-source"}, [l for s in page["screens"] for l in s["links"]])
-
     def test_hidden_and_continuation_content_is_discarded(self):
         soup = BeautifulSoup(fixture(), "html.parser")
         for cls in ("visually-hidden", "continuation-brief", "project-navigation"):
@@ -153,7 +144,6 @@ class FrozenMigrationTests(unittest.TestCase):
         self.assertRegex(page["status_line"]["as_of"], r"^2026-\d{2}-\d{2}")
         different = {**PARENT, "status_line": {"state": "未知", "as_of": "1900-01-01"}}
         self.assertEqual(convert.convert_html(fixture(), ROUTE, different)[0]["status_line"]["as_of"], "Unknown")
-
     def test_retention_gate_and_new_repeated_text_cannot_mask_loss(self):
         self.assertAlmostEqual(convert.retention_ratio("甲" * 97 + "乙" * 3, "甲" * 97), .97)
         self.assertLess(convert.retention_ratio("甲" * 97 + "乙" * 3, "甲" * 200), 1)
@@ -162,7 +152,6 @@ class FrozenMigrationTests(unittest.TestCase):
                 convert.convert_html(fixture(), ROUTE, PARENT)
         with patch.object(convert, "retention_ratio", return_value=.97):
             self.assertEqual(convert.convert_html(fixture(), ROUTE, PARENT)[1]["retention_ratio"], .97)
-
     def test_split_keeps_order_item_limit_and_avoids_tiny_tail(self):
         blocks = [{"kind": "list_item", "text": f"{n}. " + "正文" * 70} for n in range(18)]
         chunks = convert.split_blocks(blocks)
@@ -173,7 +162,6 @@ class FrozenMigrationTests(unittest.TestCase):
         parts = convert.split_blocks(tail)
         self.assertEqual([b for c in parts for b in c], tail)
         self.assertGreaterEqual(sum(len(b["text"]) for b in parts[-1]), 120)
-
     def test_definition_table_splits_and_keeps_links_and_rows(self):
         soup = BeautifulSoup(fixture(), "html.parser")
         dl = soup.select_one(".definition-list")
@@ -186,11 +174,9 @@ class FrozenMigrationTests(unittest.TestCase):
         for n in range(18):
             self.assertEqual(page_text(page).count(f"| 术语{n} |"), 1)
             self.assertIn({"text": f"依据{n}", "href": f"https://example.com/{n}"}, [l for s in tables for l in s["links"]])
-
     def test_ordered_product_steps_keep_heading_boundary(self):
         page, _ = convert.convert_html(fixture(), ROUTE, PARENT)
         self.assertRegex(page_text(page), r"1\.\s+\*\*检查原件与可读内容\*\*\s+系统核对")
-
     def test_convert_skip_force_and_append_only_mapping(self):
         frozen_before = self.frozen.read_bytes()
         result = self.run_routes()
@@ -212,14 +198,12 @@ class FrozenMigrationTests(unittest.TestCase):
         self.assertEqual(json.loads((self.root / "site-astro/sources/frozen-site/manifest.json").read_text()), {"sentinel": "immutable snapshot"})
         layouts = json.loads((self.target / "layout.json").read_text("utf-8"))
         self.assertEqual({(l["screen"], l["orientation"]) for l in layouts}, {(s["id"], o) for s in json.loads((self.target / "page.json").read_text("utf-8"))["screens"] for o in ("h", "v")})
-
     def test_dry_run_writes_only_report(self):
         result = self.run_routes(dry_run=True)
         self.assertFalse(result["errors"])
         self.assertFalse(self.target.exists())
         self.assertEqual(self.original_map, self.map.read_bytes())
         self.assertTrue((self.report / "convert-report.json").is_file())
-
     def test_nonstandard_outcome_titles_still_get_three_fixed_icons(self):
         soup = BeautifulSoup(fixture(), "html.parser")
         titles = ("有清晰登记候选时", "零命中或版本仍歧义时", "登记索引不可读取时")
@@ -233,7 +217,6 @@ class FrozenMigrationTests(unittest.TestCase):
         self.assertEqual([b.get("icon_category") for b in cards], ["normal", "problem", "unavailable"])
         for screen in (s for s in page["screens"] if s["family"] == "outcome_cards"):
             self.assertEqual(sum(r["role"] == "icon" and r["screen_id"] == screen["id"] for r in page["asset_rows"]), sum(bool(b.get("card")) for b in screen["blocks"]))
-
     def test_parent_is_found_by_url_with_alias_and_unrelated_pages(self):
         self.json_file("sources/pages/404/page.json", {"page": "404"})
         self.json_file("sources/pages/profile/page.json", {"page": "profile"})
@@ -252,7 +235,6 @@ class FrozenMigrationTests(unittest.TestCase):
         page = json.loads((self.root / "sources/pages/codex-remote-input-routing/page.json").read_text("utf-8"))
         self.assertEqual(page["parent"], parent["page"])
         self.assertIn(parent["url"], [l["href"] for s in page["screens"] for l in s["links"]])
-
     def test_conflicts_rejected_even_with_force(self):
         for relative, page in ((PID, {"page": PID, "url": "/projects/other/item/"}), ("different-id", {"page": "different-id", "url": ROUTE})):
             with self.subTest(relative=relative):
@@ -264,7 +246,6 @@ class FrozenMigrationTests(unittest.TestCase):
                 self.assertEqual(self.map.read_bytes(), self.original_map)
                 path.unlink()
                 path.parent.rmdir()
-
     def test_invalid_html_or_asset_hash_leaves_no_partial_output(self):
         for damage in ("html", "asset"):
             with self.subTest(damage=damage):
@@ -274,17 +255,37 @@ class FrozenMigrationTests(unittest.TestCase):
                     self.frozen.write_text(fixture(), encoding="utf-8")
                     (self.root / "sources/assets/_library/parent.png").write_bytes(b"changed")
                 self.assert_clean_failure(self.run_routes())
-
-    def test_dedicated_illustration_wins_without_copying_asset(self):
+    def test_dedicated_illustration_switches_via_registry_without_changing_facts(self):
         dedicated = self.illustration(PID, PID + "-01", "dedicated.png")
         self.map.write_bytes(self.original_map + json.dumps(dedicated).encode())
-        initial_assets = {p.relative_to(self.root): p.read_bytes() for p in (self.root / "sources/assets").rglob("*") if p.is_file() and p != self.map}
         result = self.run_routes()
         self.assertFalse(result["errors"])
         mapped = [r for r in result["pages"][0]["asset_rows"] if r["role"] == "illustration"]
         self.assertEqual([r["asset"] for r in mapped], [dedicated["asset"]])
-        self.assertEqual(initial_assets, {p.relative_to(self.root): p.read_bytes() for p in (self.root / "sources/assets").rglob("*") if p.is_file() and p != self.map})
-
+        layouts = json.loads((self.target / "layout.json").read_text("utf-8"))
+        illustrations = [b for layout in layouts for b in layout["blocks"] if b["type"] == "illustration"]
+        self.assertTrue(illustrations and all(b.get("index") == 0 and "asset" not in b for b in illustrations))
+        authored = json.loads((self.target / "page.json").read_text("utf-8"))
+        authored["screens"][0]["text"] += "\n\n已经更新的事实哨兵。"
+        path = self.json_file("sources/pages/" + PID + "/page.json", authored)
+        authored_before = path.read_bytes()
+        sys.path.insert(0, str(REPO / "src/typeset"))
+        import convert_page as native
+        output = self.root / "native" / (PID + ".md")
+        with patch.multiple(native, REPO=str(self.root), ASSETS=str(self.root / "sources/assets"), OUT_MD=str(output.parent), OUT_PUBLIC=str(self.root / "native-public"), _lib=None):
+            native.convert(PID)
+            self.assertIn(dedicated["asset"], output.read_text("utf-8"))
+            replacement = self.illustration(PID, PID + "-01", "replacement.png")
+            rows = convert.asset_rows(self.map)
+            for row in rows:
+                if row.get("screen_id") == PID + "-01" and row.get("role") == "illustration":
+                    row.update(asset=replacement["asset"], sha256=replacement["sha256"])
+            self.map.write_text("\n".join(json.dumps(r, ensure_ascii=False) for r in rows) + "\n", encoding="utf-8")
+            native._lib = None
+            native.convert(PID)
+            self.assertTrue(all(value in output.read_text("utf-8") for value in (replacement["asset"], replacement["sha256"])))
+            self.assertNotIn(dedicated["asset"], output.read_text("utf-8"))
+        self.assertEqual(path.read_bytes(), authored_before)
     def test_cli_duplicate_or_bad_route_fails(self):
         routes = self.root / "selected-routes.txt"
         env = {**os.environ, **{k: str(self.root) for k in ("TEMP", "TMP", "TMPDIR")}}
@@ -294,7 +295,6 @@ class FrozenMigrationTests(unittest.TestCase):
             self.assertNotEqual(proc.returncode, 0, proc.stdout.decode(errors="replace"))
             self.assertFalse(self.target.exists())
             self.assertEqual(self.map.read_bytes(), self.original_map)
-
 
 if __name__ == "__main__":
     unittest.main()
