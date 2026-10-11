@@ -414,6 +414,9 @@
 #computer-access-01.o3-ready button.b2-image-action[data-b2-action^="choose-"]:hover:not(:disabled) { background: #0f6a31 !important; }
 #computer-access-01.o3-ready :is(button.b2-image-action, a.hotspot):focus-visible { outline: 3px solid #8fd3a8 !important; outline-offset: 2px; }
 #computer-access-01.o3-ready button.b2-image-action:disabled { background: #f1f4f2 !important; color: #8fa498 !important; border-color: #d3dfd7 !important; box-shadow: none; cursor: not-allowed; }
+/* 已开着时按钮显示“延长”（只换显示的字） */
+#computer-access-01.o3-ready button.b2-image-action[data-o3-label] { font-size: 0 !important; letter-spacing: 0; }
+#computer-access-01.o3-ready button.b2-image-action[data-o3-label]::after { content: attr(data-o3-label); font-size: 18px; letter-spacing: .04em; }
 #computer-access-01 a.hotspot[href="/cockpit/#pc"]::after { content: "看驾驶舱"; }
 #computer-access-01 a.hotspot[href="/mcp/"]::after { content: "连接电脑"; }
 #computer-access-01 .o3-legend { grid-column: 1 / 13; grid-row: 8; display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 10px 0 0; padding: 12px 18px;
@@ -773,8 +776,16 @@ Windows
         const b = screen.querySelector('button[data-b2-action="' + action + '"]');
         if (!b) continue;
         if (!Object.hasOwn(b.dataset, 'baseTitle')) b.dataset.baseTitle = b.getAttribute('title') || '';
+        if (!Object.hasOwn(b.dataset, 'baseAria')) b.dataset.baseAria = b.getAttribute('aria-label') || '';
+        // 已开着（还有剩余时间）时，“解锁”“开启”这颗按钮实际是延长：只换显示的字，按钮动作不变
+        const opener = { 'choose-personal_data': ['解锁', 'ca-personal-data'], 'choose-unrestricted': ['开启', 'ca-unrestricted'] }[action];
+        const extend = !!opener && !offline && b.textContent.trim() === opener[0] && /开着|还剩/.test(slotText(opener[1]));
+        if (extend) { if (b.dataset.o3Label !== '延长') b.dataset.o3Label = '延长'; } else if (b.dataset.o3Label) delete b.dataset.o3Label;
+        const aria = extend ? '延长' : b.dataset.baseAria;
+        if (aria && b.getAttribute('aria-label') !== aria) b.setAttribute('aria-label', aria);
+        const base = extend ? '延长' : b.dataset.baseTitle;
         const reason = b.disabled ? reasonFor(action, offline, last) : '';
-        const title = reason ? (b.dataset.baseTitle ? b.dataset.baseTitle + '：' : '') + reason : b.dataset.baseTitle;
+        const title = reason ? (base ? base + '：' : '') + reason : base;
         if (b.getAttribute('title') !== title) b.setAttribute('title', title);
         if (reason && !lines.includes(reason)) lines.push(reason);
       }
@@ -785,7 +796,7 @@ Windows
   }
   const schedule = () => { if (!pending) { pending = true; requestAnimationFrame(explain); } };
   const start = () => { if (screen.querySelector('[data-b2-action="refresh"]') && screen.querySelector('[data-b2-slot="ca-windows"]')) build(); schedule(); };
-  new MutationObserver(start).observe(screen, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'], characterData: true });
+  new MutationObserver(start).observe(screen, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled', 'aria-label'], characterData: true });
   new MutationObserver(schedule).observe(document.body, { attributes: true, attributeFilter: ['data-b2-status-phase'] });
   start();
 })();
