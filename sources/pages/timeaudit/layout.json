@@ -1384,7 +1384,7 @@
         "connector": "none",
         "row": "storage",
         "illustration": "none",
-        "text_ref": "表里的数分两次观察"
+        "text_ref": "表里的条数都是"
       },
       {
         "type": "illustration",
@@ -1483,7 +1483,7 @@
         "align": "left",
         "connector": "none",
         "illustration": "none",
-        "text_ref": "表里的数分两次观察"
+        "text_ref": "表里的条数都是"
       },
       {
         "type": "bullet_list",

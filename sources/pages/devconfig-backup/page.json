@@ -636,8 +636,8 @@
         "id": "n-tasks",
         "text": "4 个自动任务",
         "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-        "as_of": "2026-10-10",
-        "source": "Get-ScheduledTask（10 月 10 日只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
+        "as_of": "2026-10-11",
+        "source": "Get-ScheduledTask（10 月 11 日 16:06 只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
         "screens": [
           "devconfig-backup-01"
         ]

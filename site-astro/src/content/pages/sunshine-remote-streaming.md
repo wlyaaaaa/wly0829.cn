@@ -98,7 +98,7 @@
      "how": "打通是 6 月一次性的网络设置；要确认走没走直连，连着时让 AI 查线路",
      "status": "说不准",
      "screen": "sunshine-remote-streaming-08",
-     "source": "提交 35f6a9c README §1–3；9 月 28 日主机以太网有 4 个公网 IPv6；verify-lite.log 没有一次指定手机的线路记录"
+     "source": "提交 35f6a9c README §1–3；10 月 11 日主机以太网有 4 个公网 IPv6；verify-lite.log 没有一次指定手机的线路记录"
     },
     {
      "id": "f-codec",
@@ -138,7 +138,7 @@
      "how": "守护自动做；要停跟 AI 说",
      "status": "待验收",
      "screen": "sunshine-remote-streaming-08",
-     "source": "Invoke-SunshineCaptureFailover.ps1:6–9,260–623；Sunshine 配置目录 28 份 capture-*.bak（8 月 12 日—9 月 3 日 27 份，9 月 29 日 01:27 1 份）；AGENTS.md:8 要求本人连一次断一次才算验收，没有记录"
+     "source": "Invoke-SunshineCaptureFailover.ps1:6–9,260–623；Sunshine 配置目录 31 份 capture-*.bak（8 月 12 日—9 月 3 日 27 份，9 月 29 日 01:27 1 份，10 月 8 日 12:58 1 份，10 月 10 日 01:15 2 份；10 月 11 日 16:08 只读计数）；AGENTS.md:8 要求本人连一次断一次才算验收，没有记录"
     },
     {
      "id": "f-window-move",
@@ -306,7 +306,7 @@
      "id": "n-tasks",
      "text": "2 个自动任务",
      "meaning": "本项目在 Windows 计划任务里的任务：串流画面切换、远程串流体检",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "Get-ScheduledTask 现查；PCConfig registries/task_purpose_catalog.json 两条 group=remote",
      "screens": [
       "sunshine-remote-streaming-01",
@@ -315,9 +315,9 @@
     },
     {
      "id": "n-switches",
-     "text": "28 次自动换画面",
-     "meaning": "守护改写 Sunshine 抓屏目标的次数（每次留一份 sunshine.conf.capture-*.bak）：8 月 12 日至 9 月 3 日 27 次，9 月 29 日 01:27 1 次（新安全闸生效后）",
-     "as_of": "2026-09-29",
+     "text": "31 次自动换画面",
+     "meaning": "守护改写 Sunshine 抓屏目标的次数（每次留一份 sunshine.conf.capture-*.bak）：8 月 12 日至 9 月 3 日 27 次，9 月 29 日 01:27 1 次（新安全闸生效后），10 月 8 日 12:58 1 次，10 月 10 日 01:15 2 次",
+     "as_of": "2026-10-11",
      "source": "C:\\Program Files\\Sunshine\\config 下 capture-*.bak 计数，文件名时间换成北京时间",
      "screens": [
       "sunshine-remote-streaming-01",
@@ -328,8 +328,8 @@
      "id": "n-public-ports",
      "text": "0 个 Sunshine 端口经 Tailscale 的公开功能（Funnel）放到互联网上",
      "meaning": "Tailscale Funnel 里指向 Sunshine 端口的公网入口个数；只覆盖 Funnel 这条路，不代表主机公网 IPv6 上查过",
-     "as_of": "2026-09-28",
-     "source": "runtime/network-health.json（9 月 28 日 14:30 体检）Exposure.SunshinePublicPorts",
+     "as_of": "2026-10-11",
+     "source": "runtime/network-health.json（10 月 11 日 14:30 体检）Exposure.SunshinePublicPorts",
      "screens": [
       "sunshine-remote-streaming-01"
      ]
@@ -389,7 +389,7 @@
      "id": "n-clients",
      "text": "记着 4 个配对客户端",
      "meaning": "Sunshine 的已配对设备记录数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "sunshine_state.json named_devices 计数（名字不上网站）",
      "screens": [
       "sunshine-remote-streaming-04"
@@ -399,7 +399,7 @@
      "id": "n-ipv6",
      "text": "4 个公网 IPv6",
      "meaning": "主机“以太网”网卡上的公网 IPv6 地址个数",
-     "as_of": "2026-09-28",
+     "as_of": "2026-10-11",
      "source": "Get-NetIPAddress，只数不记",
      "screens": [
       "sunshine-remote-streaming-06"
@@ -407,20 +407,20 @@
     },
     {
      "id": "n-false-reports",
-     "text": "14 份 / 18 份",
-     "meaning": "9 月 18 日安全闸数出的“显卡故障报告”14 份；截至 9 月 28 日 21:11，9 月 27 日 21:24 开机以来被新规则略过的同类报告 18 份（这个数会随时间增长，审稿人 21:50 重跑是 20）",
-     "as_of": "2026-09-28",
-     "source": "E:\\PCConfig\\reports\\streaming_maintenance_latest.json；9 月 28 日 Get-SunshineHealth.ps1 Gpu.IgnoredWerReportCount",
+     "text": "14 份 / 40 份",
+     "meaning": "9 月 18 日安全闸数出的“显卡故障报告”14 份；截至 10 月 11 日 16:06，10 月 10 日 11:05 开机以来被新规则略过的同类报告 40 份（这个数会随时间增长，每次开机重新计）",
+     "as_of": "2026-10-11",
+     "source": "E:\\PCConfig\\reports\\streaming_maintenance_latest.json；10 月 11 日 16:06 Get-SunshineHealth.ps1 -Json Gpu.IgnoredWerReportCount",
      "screens": [
       "sunshine-remote-streaming-07"
      ]
     },
     {
      "id": "n-daily-pass",
-     "text": "9 月 18 日—10 月 10 日天天通过",
-     "meaning": "每日定时体检 23 次都是 pass",
+     "text": "9 月 18 日—10 月 11 日天天通过",
+     "meaning": "每日定时体检 24 次都是 pass",
      "as_of": "2026-10-11",
-     "source": "runtime/verify-lite.log finish 行，只读统计；最新一条为北京时间 2026-10-10 14:30:03，覆盖 host-only",
+     "source": "runtime/verify-lite.log finish 行，只读统计；最新一条为北京时间 2026-10-11 14:30:08，覆盖 host-only",
      "screens": [
       "sunshine-remote-streaming-09"
      ]
@@ -575,8 +575,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
-  "sha256": "844f9578bb53edb7ae07c85c1067aaad1d4fa19701011eb623e39c8447e57875",
-  "converted_at_beijing": "2026-10-11T14:29:50+08:00"
+  "sha256": "61fa3380a5f030ccc5c05a968970935ba1c4732119e4611736a578374324fbdd",
+  "converted_at_beijing": "2026-10-11T16:08:39+08:00"
  }
 }
 ---
@@ -694,7 +694,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "medium",
-     "text_ref": "截至10月10"
+     "text_ref": "截至10月11"
     },
     {
      "type": "feature_card",
@@ -799,7 +799,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "medium",
-     "text_ref": "截至10月10"
+     "text_ref": "截至10月11"
     },
     {
      "type": "feature_card",
@@ -942,7 +942,7 @@
 
 介绍：人不在家里那台主机前，也能用笔记本或手机看到它的桌面、直接操作。主机上的 Sunshine（开源的串流服务端）用显卡把画面编码发出去，笔记本和手机上的 Moonlight（开源的串流客户端）接收，路走 Tailscale（只连自己设备的私人网络）。主屏关着时，电脑会换去抓一块虚拟的备用屏，让串流照样有画面——这一套还在等我实际连一次核对。10 月 11 日 14:28 主机体检报的是“阻塞”：配置要抓的那块屏现在不在线或认不唯一，守护在等串流空闲再处理；服务在跑、主机上还看得到串流的 UDP 端点，都不等于这会儿串流画面是好的。
 
-数字卡片（截至 10 月 10 日）：
+数字卡片（截至 10 月 11 日）：
 1. **2 个**｜自动任务：画面切换每 3 秒看一次，体检每天 14:30
 2. **31 次**｜换屏和手动改配置共计：主屏不在换到备用屏、回来再换回，也含我手动改的（8 月 12 日起）
 3. **0 个**｜Sunshine 端口经 Tailscale 的公开功能（Funnel）放到互联网上，每天体检都查
@@ -2667,7 +2667,7 @@
 
 2. **三层地址转换下，给手机打通 IPv6 这条路**　● 说不准
 家里是移动宽带：运营商、光猫、路由器三层地址转换，没有公网 IPv4，手机在外面用流量时两边打不通，只能绕 Tailscale 在东京、香港的中转服务器，又卡又容易断。6 月 26 日的做法：光猫改成 IPv4、IPv6 双栈并重启重新拨号，主机重新打开网卡的 IPv6，两边都拿到公网 IPv6，Tailscale 就能直接连上，占带宽的画面在国内网里走。打通后又踩一坑：Tailscale 改走 IPv6 去连它在国外的登录服务器，被挡，掉了登录；当时给它单独配了代理，8 月 6 日改成跟着系统当前的网络走。家里上行约 32 Mbps，当时定下在外面用 1080p 或 1440p、60 帧、18–20 Mbps、AV1、固定码率。
-现在：9 月 28 日主机有 4 个公网 IPv6；手机实际走不走直连，没有查过的记录。
+现在：10 月 11 日主机有 4 个公网 IPv6；手机实际走不走直连，没有查过的记录。
 
 ::screen{#sunshine-remote-streaming-07 section="highlights"}
 
@@ -3944,7 +3944,7 @@
 16. 守护自己拉起｜我登录后启动，每 10 秒写一次心跳；挂了 1 分钟后自己重开，同一时间只跑一份｜在用
 
 **体检和修复**
-17. 每天体检｜14:30 查 Tailscale 在线、无人值守、编码能力、Funnel 有没有公开 Sunshine；9 月 18 日—10 月 10 日天天通过｜在用
+17. 每天体检｜14:30 查 Tailscale 在线、无人值守、编码能力、Funnel 有没有公开 Sunshine；9 月 18 日—10 月 11 日天天通过｜在用
 18. 主机端体检｜只读：两个服务、配置、安全闸、有没有人连着、守护心跳、现在抓主屏还是备用屏｜在用
 19. 查线路｜指定手机后 ping 5 次，看走直连、Tailscale 公共中转还是自己设备中转，报延迟｜说不准
 20. 串流修复｜服务改回自动、开无人值守、清写死的代理、开网卡 IPv6；默认只出计划，改前存原样，失败倒着退回｜说不准

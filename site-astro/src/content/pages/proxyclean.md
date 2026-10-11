@@ -49,7 +49,7 @@
     "at": "2026-10-06 05:52"
    },
    "facts": [],
-   "as_of": "2026-10-10",
+   "as_of": "2026-10-11",
    "source": "项目修改记录"
   },
   "public": true,
@@ -260,7 +260,7 @@
      "id": "n-layers",
      "text": "8 层",
      "meaning": "打开就查的层数：本机代理进程、网卡、默认路由、Windows 手动代理、终端代理变量、Git、WinHTTP、Docker",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "ProxyClean.Common.psm1 $availability 8 个键现查",
      "screens": [
       "proxyclean-01",
@@ -273,7 +273,7 @@
      "id": "n-tests",
      "text": "317 项",
      "meaning": "仓库全部 Pester 测试用例数（只做发现、不运行统计）；9 月 25 日那版 277 项在 PS 7 和 5.1 各跑一遍全过，新增 40 项后的整套本轮没重跑",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "Invoke-Pester -Configuration (Run.SkipRun=true, Run.Path=tests) 现算：HEAD 8915589 为 317，f26ded7 为 277（同法复核原数）",
      "screens": [
       "proxyclean-01",
@@ -285,8 +285,8 @@
      "id": "n-bg-tasks",
      "text": "0 个",
      "meaning": "本项目的计划任务、服务、开机自启",
-     "as_of": "2026-10-10",
-     "source": "本机计划任务动作里没有 ProxyClean（10 月 10 日现查）",
+     "as_of": "2026-10-11",
+     "source": "本机计划任务动作、服务、开机启动项里都没有 ProxyClean（10 月 11 日现查）",
      "screens": [
       "proxyclean-01"
      ]
@@ -295,7 +295,7 @@
      "id": "n-home-buttons",
      "text": "2 个",
      "meaning": "首页操作按钮",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "ControlCenter.xaml 首页两颗主按钮现查",
      "screens": [
       "proxyclean-01"
@@ -305,7 +305,7 @@
      "id": "n-code",
      "text": "约 2,500 行程序、2,300 行测试",
      "meaning": "git 跟踪的 ps1/psm1/xaml/vbs（去掉 tests、旧版入口、fallback）2,471 行非空行；tests/ 12 个文件 2,334 行非空行",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "git ls-files + PowerShell Measure-Object -Line 现算（HEAD 8915589）",
      "screens": [
       "proxyclean-05"
@@ -315,7 +315,7 @@
      "id": "n-legacy",
      "text": "11 个",
      "meaning": "旧版入口文件夹里的旧快捷方式",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "git ls-files 旧版入口/ 共 11 个",
      "screens": [
       "proxyclean-06",
@@ -337,7 +337,7 @@
      "id": "n-commits",
      "text": "37 次",
      "meaning": "仓库全部提交，6 月 24 日–10 月 6 日（北京时间）",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "git rev-list --count HEAD（HEAD 8915589，北京 10/6 05:52）",
      "screens": [
       "proxyclean-09"
@@ -347,7 +347,7 @@
      "id": "n-wait",
      "text": "4 秒",
      "meaning": "关闭代理时等正常退出的时间，超时才结束残留进程",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "ProxyClean.Clients.ps1 WaitSeconds=4 现查",
      "screens": [
       "proxyclean-03",
@@ -475,8 +475,8 @@
  },
  "source": {
   "page": "sources/pages/proxyclean/page.json",
-  "sha256": "dd0f2468d7bebd3767a73ebe15a7085cbb6d9b80f6db18afb5934504ce89516e",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "5cbac0b550ed375e226997cad9d7b613647d617be25b895965ca1dfec345e557",
+  "converted_at_beijing": "2026-10-11T16:10:03+08:00"
  }
 }
 ---
@@ -531,7 +531,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 项目修改记录",
+     "static_note": "截至 10 月 11 日 · 项目修改记录",
      "row": "hero"
     },
     {
@@ -580,7 +580,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 项目修改记录"
+     "static_note": "截至 10 月 11 日 · 项目修改记录"
     },
     {
      "type": "stat_card",

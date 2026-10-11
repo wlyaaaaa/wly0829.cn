@@ -212,8 +212,8 @@
      "id": "n-registered",
      "text": "165 份",
      "meaning": "精确登记的原件定位，全部核对过 SHA-256",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字（截至 10 月 9 日）",
+     "as_of": "2026-10-11",
+     "source": "materials.py status（北京 10 月 11 日 16:03 只读）：materials=165、exact_registered_locator_rows=165",
      "screens": [
       "personal-materials-01",
       "personal-materials-05",
@@ -226,8 +226,8 @@
      "id": "n-sources",
      "text": "58 个来源",
      "meaning": "已登记来源：文件夹 35、文件名清单 5、交接文件夹 8、单个文件 5",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字",
+     "as_of": "2026-10-11",
+     "source": "materials.py status（北京 10 月 11 日 16:03）：sources=58；只读 SQL 按 source_kind：文件夹 35、文件名清单 5、交接 13、单文件 5",
      "screens": [
       "personal-materials-01",
       "personal-materials-06",
@@ -289,8 +289,8 @@
      "id": "n-filenames",
      "text": "15,105 条",
      "meaning": "微信收到的文件和下载文件夹的文件名清单条目",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字",
+     "as_of": "2026-10-11",
+     "source": "只读 SQL count(filename_entries)=15,105（北京 10 月 11 日 16:04）",
      "screens": [
       "personal-materials-03",
       "personal-materials-06"
@@ -300,8 +300,8 @@
      "id": "n-texts",
      "text": "44 份",
      "meaning": "有可搜文字的登记原件：文件自带完整文字 18、提取的部分文字 26",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL group by text_kind",
+     "as_of": "2026-10-11",
+     "source": "materials.py status search_texts=44；只读 SQL text_kind：native 18、extracted 26（北京 10 月 11 日 16:04）",
      "screens": [
       "personal-materials-06",
       "personal-materials-07"
@@ -311,8 +311,8 @@
      "id": "n-relations",
      "text": "4 条",
      "meaning": "原件之间的原生关系",
-     "as_of": "2026-09-28",
-     "source": "status relations=4",
+     "as_of": "2026-10-11",
+     "source": "materials.py status relations=4（北京 10 月 11 日 16:03）",
      "screens": [
       "personal-materials-06"
      ]
@@ -321,8 +321,8 @@
      "id": "n-size",
      "text": "1.2 GB",
      "meaning": "164 份登记原件字节合计 1,218,134,136",
-     "as_of": "2026-09-28",
-     "source": "只读 SQL sum(byte_size)",
+     "as_of": "2026-10-11",
+     "source": "只读 SQL sum(materials.byte_size)=1,218,137,706 字节（北京 10 月 11 日 16:04）",
      "screens": [
       "personal-materials-07"
      ]
@@ -535,8 +535,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "7cb8c7f3564eb0e22c32fa0badb2a6ea558965126c2d9ff404f94a495dff97bf",
-  "converted_at_beijing": "2026-10-11T14:29:25+08:00"
+  "sha256": "30eae3920536941e1755dfa0ade6de59ee08600006a6fff5a444bafd70e5af41",
+  "converted_at_beijing": "2026-10-11T16:06:23+08:00"
  }
 }
 ---
@@ -645,7 +645,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "登记数量截至10月9日（10月11日再查，计数入口报错，当前数不知道）；同步次数截至10月10日",
+     "text_ref": "登记数量截至10月11日；同步次数截至10月10日",
      "align": "right"
     },
     {
@@ -733,7 +733,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "登记数量截至10月9日（10月11日再查，计数入口报错，当前数不知道）；同步次数截至10月10日",
+     "text_ref": "登记数量截至10月11日；同步次数截至10月10日",
      "align": "right"
     },
     {
@@ -883,7 +883,7 @@
 |---|---|---|---|
 | 精确登记的原件，每份都核对过内容指纹 | 登记过的文件夹、单个文件和文件名清单 | 微信收到的文件和下载文件夹的文件名，每天更新 | 9 月 5 日起每天 17:10 的同步，含手动补跑 8 次 |
 
-登记数量截至 10 月 9 日（10 月 11 日再查，计数入口报错，当前数不知道）；同步次数截至 10 月 10 日
+登记数量截至 10 月 11 日；同步次数截至 10 月 10 日
 
 **现在**　每天 17:10 同步
 
@@ -2207,7 +2207,7 @@
 SHA-256 相同才算一模一样的副本；名字像、日期近都不算。
 
 **存位置、指纹和可搜文字**
-一个 SQLite 数据库，五张表：来源、原件、原件之间的关系（比如哪份属于哪个文件包）、可搜的文字（能删了重建）、文件名清单。10 月 9 日：58 个来源，165 份原件，15,105 条文件名。10 月 11 日再用只返计数的 status 入口查，返回“材料库未初始化”（materials_database_not_initialized），原因还没查清，当前规模不知道，上面仍是 10 月 9 日的数。不复制原件，不存人物、事件、重要程度。
+一个 SQLite 数据库，五张表：来源、原件、原件之间的关系（比如哪份属于哪个文件包）、可搜的文字（能删了重建）、文件名清单。10 月 11 日：58 个来源，165 份原件，15,105 条文件名。不复制原件，不存人物、事件、重要程度。
 
 **位置存门牌，旧记录只读兼容**
 原件位置和来源根目录存的是门牌入口路径；门牌改造之前登记的旧位置，读出来时才换成门牌，不批量改写旧记录。普通路径原样保存。
@@ -2407,13 +2407,13 @@ PDF 用 pypdf 读文字层，Word 用 python-docx 读正文段落和表格，TXT
 
 其余用时现找
 
-**58 个来源是什么**（10 月 9 日）
+**58 个来源是什么**（10 月 11 日）
 - 35 个文件夹：没登记的文件按文件名现找
 - 5 份文件名清单：微信收到的文件（主号、副号，新旧两版客户端）和下载文件夹，每天更新
 - 13 个交接文件夹：别的项目把原件精确交进来的地方
 - 5 个单独登记的文件
 
-**165 份登记原件，共 1.2 GB**（10 月 9 日）
+**165 份登记原件，共 1.2 GB**（10 月 11 日）
 PDF 74 · 网页 20 · Markdown 17 · Word 18 · 表格 11 · JSON 9 · 其他 16
 其中 44 份有可搜的文字：18 份是文件自带的完整文字，26 份是提取出的部分文字。
 

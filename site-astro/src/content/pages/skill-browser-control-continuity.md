@@ -59,10 +59,10 @@
    "numbers": [
     {
      "id": "n-cache-files",
-     "text": "383 个文件 · 与官方安装包一致 · 缺 0",
-     "meaning": "Codex 浏览器插件当前版本 26.924.22138 缓存里逐个与官方安装包比对的文件数和缺失数",
-     "as_of": "2026-09-28",
-     "source": "Invoke-BrowserControlContinuity.ps1 -Mode Inspect -Json，observed_utc 2026-09-28T12:36:07Z，closure.current_version_cache.checked_file_count / missing_file_count",
+     "text": "384 个文件 · 与官方安装包一致 · 缺 0",
+     "meaning": "Codex 浏览器插件当前版本 26.1007.21434 缓存里逐个与官方安装包比对的文件数和缺失数",
+     "as_of": "2026-10-11",
+     "source": "Invoke-BrowserControlContinuity.ps1 -Mode Inspect -Json，observed_utc 2026-10-11T08:06:41Z（北京 10 月 11 日 16:06），closure.current_version_cache.checked_file_count / missing_file_count",
      "screens": [
       "skill-browser-control-continuity-03"
      ]
@@ -168,8 +168,8 @@
  },
  "source": {
   "page": "sources/pages/skill-browser-control-continuity/page.json",
-  "sha256": "9abf8d16c4cc2cc1fd98378037cf44e7bf9aa6b02fc8ca4f67191cf4192b266e",
-  "converted_at_beijing": "2026-10-11T13:59:40+08:00"
+  "sha256": "f9c02dde215a9dec9f10a1efd567cc8d18e7ada031840469b5d5ce01eadba216",
+  "converted_at_beijing": "2026-10-11T16:08:27+08:00"
  }
 }
 ---
@@ -946,9 +946,9 @@
 - **结果和还剩什么**：这个重装做法在隔离的测试安装里验证过。真机上完整安装撑过了重启，但当时浏览器策略加载和桌面版的连接仍然失败，技能自己记作“部分恢复，不算彻底治好”（9 月 28 日的记录）。
 
 **账本上的字**
-浏览器插件 26.924.22138
-383 个文件 · 与官方安装包一致 · 缺 0
-9 月 28 日 20:36 只读检查
+浏览器插件 26.1007.21434
+384 个文件 · 与官方安装包一致 · 缺 0
+10 月 11 日 16:06 只读检查
 
 **学到的**：修之前先找断在哪一层——调用写错、本机组件缺、插件没初始化、只有一个标签页失控，还是网站本身——一次只改一处，改完重试原来失败的那一步。
 

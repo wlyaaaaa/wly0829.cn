@@ -377,8 +377,8 @@
      "id": "n-tasks",
      "text": "4 个自动任务",
      "meaning": "启用中的计划任务；另有 1 个补传监控停着",
-     "as_of": "2026-10-10",
-     "source": "Get-ScheduledTask（10 月 10 日只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
+     "as_of": "2026-10-11",
+     "source": "Get-ScheduledTask（10 月 11 日 16:06 只读复核：DevConfigBackup-Local、DevConfigBackup-Drive-Daily、WeChatBackup-Hot-Daily、WeChatBackup-Drive-Weekly 启用，WeChatDrive-Monitor-Hourly 停用）",
      "screens": [
       "devconfig-backup-01"
      ]
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "c1fa2abb67f495d93b54e4837f0bdeff4b9a5e2397b5d83d95f7e26c7c404ecd",
-  "converted_at_beijing": "2026-10-11T14:04:23+08:00"
+  "sha256": "bf54140d295949ac1b68e0eb83b5d2db0fd39f0c9eaacb45687d1d18636832b3",
+  "converted_at_beijing": "2026-10-11T16:07:38+08:00"
  }
 }
 ---

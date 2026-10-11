@@ -42,13 +42,13 @@
    "state": "在用",
    "last": {
     "label": "上次使用",
-    "at": "2026-10-08 22:26"
+    "at": "2026-10-09 13:02"
    },
    "facts": [
-    "近 7 天 AI 用“讲给我听”16 次"
+    "近 7 天 AI 用“讲给我听”13 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -569,8 +569,8 @@
  },
  "source": {
   "page": "sources/pages/personal-expression/page.json",
-  "sha256": "af948b3968b24725b0752333add2edeb5093cd14047fd199c1e753660bc39f89",
-  "converted_at_beijing": "2026-10-11T13:35:23+08:00"
+  "sha256": "152861acb661efa8dad68edca378be5635825af5a81a328bb18c15fecc12f7fc",
+  "converted_at_beijing": "2026-10-11T16:08:48+08:00"
  }
 }
 ---
@@ -617,15 +617,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次使用 10 月 8 日 22:26",
+       "text": "在用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用“讲给我听”16 次",
+       "text": "近 7 天 AI 用“讲给我听”13 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -675,15 +675,15 @@
      "frame_mode": "plain",
      "static_items": [
       {
-       "text": "在用 · 上次使用 10 月 8 日 22:26",
+       "text": "在用 · 上次使用 10 月 9 日 13:02",
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用“讲给我听”16 次",
+       "text": "近 7 天 AI 用“讲给我听”13 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",

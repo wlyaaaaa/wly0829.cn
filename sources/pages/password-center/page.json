@@ -1428,8 +1428,8 @@
         "id": "n-sets-g",
         "text": "61 份",
         "meaning": "G 上的恢复副本份数，时间 9/16 12:15–9/28 07:20（北京时间）",
-        "as_of": "2026-10-10",
-        "source": "G:\\80_Backup\\PCConfig\\SecretBroker\\RecoverySets\\sets 目录计数（10 月 10 日 05:3x 北京时间读）；最早 9 月 16 日、最新 9 月 28 日 07:20，之后没有新副本",
+        "as_of": "2026-10-11",
+        "source": "G:\\80_Backup\\PCConfig\\SecretBroker\\RecoverySets\\sets 目录计数（10 月 11 日 16:07 北京时间读）；最早 9 月 16 日、最新 9 月 28 日 07:20，之后没有新副本",
         "screens": [
           "password-center-10"
         ]
@@ -1438,8 +1438,8 @@
         "id": "n-sets-h",
         "text": "61 份",
         "meaning": "H 上的恢复副本份数，最新一份与 G 相同：9/28 07:20（北京时间）",
-        "as_of": "2026-10-10",
-        "source": "H:\\90_人工保留区\\PasswordCenter\\RecoverySets\\sets 目录计数（10 月 10 日读）；最近一次写入 9 月 30 日 22:51（北京）",
+        "as_of": "2026-10-11",
+        "source": "H:\\90_人工保留区\\PasswordCenter\\RecoverySets\\sets 目录计数（10 月 11 日 16:07 读）；最近一次写入 9 月 30 日 22:51（北京）",
         "screens": [
           "password-center-10"
         ]
@@ -1448,8 +1448,8 @@
         "id": "n-package",
         "text": "2218 个文件",
         "meaning": "G 上现役程序包（manifest 06a37382…）的文件数",
-        "as_of": "2026-10-10",
-        "source": "G:\\PasswordCenter\\06a37382…\\ 递归计数（10 月 10 日），仍是最新的程序包目录",
+        "as_of": "2026-10-11",
+        "source": "G:\\PasswordCenter\\06a37382…\\ 递归计数（10 月 11 日 16:06），仍是最新的程序包目录",
         "screens": [
           "password-center-10"
         ]

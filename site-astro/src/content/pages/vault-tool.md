@@ -366,8 +366,8 @@
      "id": "n-key-versions",
      "text": "4 版",
      "meaning": "私人 Key 仓库里 vault/vault.enc 真正变化的次数（7/7–7/27）；另有两次提交没改任何文件",
-     "as_of": "2026-09-28",
-     "source": "git -C V:\\Personal\\Projects\\Key log -- vault/vault.enc",
+     "as_of": "2026-10-11",
+     "source": "git -C V:\\Personal\\Projects\\Key log -- vault/vault.enc；10 月 11 日 gh api repos/wlyaaaaa/Key/commits 复核，7/27 之后没有新提交",
      "screens": [
       "vault-tool-01"
      ]
@@ -376,8 +376,8 @@
      "id": "n-last-upload",
      "text": "7 月 27 日",
      "meaning": "最近一次往 Key 仓库上传（北京时间 04:06 起三次，最后 23:16）",
-     "as_of": "2026-09-28",
-     "source": "Key 仓库 git log，换算北京时间",
+     "as_of": "2026-10-11",
+     "source": "Key 仓库 git log，换算北京时间；10 月 11 日 gh api 复核，最新提交仍是 7/27 23:16",
      "screens": [
       "vault-tool-01",
       "vault-tool-11"
@@ -385,10 +385,10 @@
     },
     {
      "id": "n-tests",
-     "text": "144 个",
-     "meaning": "vault-tool 仓库的 pytest 测试函数（另有 40 个子用例），9/28 实跑 28.10 秒全过",
-     "as_of": "2026-09-28",
-     "source": "py -3 -m pytest -q（E:\\Projects\\Tools\\vault-tool）",
+     "text": "145 个",
+     "meaning": "vault-tool 仓库的 pytest 测试函数；9/28 实跑 144 个（另有 40 个子用例）28.10 秒全过，9/29 提交 015fb14 新加 1 个，之后没重跑",
+     "as_of": "2026-10-11",
+     "source": "HEAD b884ab6 各 test_*.py 的 def test_ 计数 145（10 月 11 日 16:08 北京读，526e891 时为 144）；9/28 实跑 py -3 -m pytest -q（E:\\Projects\\Tools\\vault-tool）",
      "screens": [
       "vault-tool-01",
       "vault-tool-06"
@@ -398,8 +398,8 @@
      "id": "n-lines",
      "text": "3595 行",
      "meaning": "vault_tool.py 一个文件的行数",
-     "as_of": "2026-09-28",
-     "source": "wc -l vault_tool.py（提交 526e891）",
+     "as_of": "2026-10-11",
+     "source": "wc -l vault_tool.py（10 月 11 日于 HEAD b884ab6 复核仍 3595 行，__version__ 2.3.1）",
      "screens": [
       "vault-tool-04",
       "vault-tool-06"
@@ -602,8 +602,8 @@
  },
  "source": {
   "page": "sources/pages/vault-tool/page.json",
-  "sha256": "15c502dfef55c7b5fe86f02ddf2a6d7655b9db19fac5e4feb4257673b519d7f7",
-  "converted_at_beijing": "2026-10-11T13:35:08+08:00"
+  "sha256": "afdcd9689d130007651738ad93b14ab865e447f0adfeca1c6d3d1439518bca3c",
+  "converted_at_beijing": "2026-10-11T16:10:58+08:00"
  }
 }
 ---
@@ -863,7 +863,7 @@
 1. 0 个｜默认 scrypt 下，Windows 上要另装的第三方库：加密直接用系统自带的接口
 2. 2 套｜一个库里最多放两套内容，各用各的密码。被逼交密码时可以只交出一套，从文件上看不出还有另一套
 3. 4 版｜密文在私人 Key 仓库里存过 4 版（7 月 7–27 日），最近一次上传 7 月 27 日
-4. 144 个｜自动测试，9 月 28 日 28 秒全部通过
+4. 145 个｜自动测试（截至 10 月 11 日）；9 月 28 日跑的 144 个 28 秒全部通过，9 月 29 日新加的 1 个这次没重跑
 
 偶尔用：只修报错，不加功能，见〔约法 L25〕。
 它和〔密码中心〕是两套互不相通的加密；没说用哪套时，“帮我加密这个文件”默认走密码中心，两套怎么选看密码中心页的对比表。
@@ -2072,7 +2072,7 @@ AI 经〔加密库操作技能〕调用：不需要密码的检查它自己跑�
 6. **明文尽量不落盘。**　查看只在内存里，内存页尽量锁住，不让系统换到页面文件；要落盘的导出只写到指定的文件夹。
 
 3595 行｜vault_tool.py 一个文件（2.3.1 版）
-144 个｜自动测试，另有 40 个子用例，9 月 28 日全部通过
+145 个｜自动测试（截至 10 月 11 日）；9 月 28 日跑的 144 个和另外 40 个子用例全部通过，9 月 29 日新加 1 个
 23 次｜提交（6 月 23 日起）
 
 ::screen{#vault-tool-07 section="tech"}
