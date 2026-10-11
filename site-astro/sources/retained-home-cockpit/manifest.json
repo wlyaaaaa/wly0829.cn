@@ -17,7 +17,7 @@
   },
   "pages": {
     "home": {
-      "sha256": "93b82249baafbf8386be7a3c2916e43864b3de73d8e17b431cf58166c99e0302",
+      "sha256": "f6b8683078b4ad2453ee3efacfbab02017be59dac75b380e4bb7d00ae6d740b0",
       "bytes": 248726
     },
     "cockpit": {
@@ -120,10 +120,10 @@
       "sha256": "67a6ffcb373105b3b0682497d81378dfc54d1edc6fb460fdd4db880e3a9059b7",
       "bytes": 127856
     },
-    "_home-cockpit/home-firstpaint-14de1de98f876a60fcca.js": {
-      "source": "home-firstpaint-14de1de98f876a60fcca.js",
-      "sha256": "14de1de98f876a60fcca25f279aee48c4a1fef8fe986f52019e26176eec34e53",
-      "bytes": 75596
+    "_home-cockpit/home-firstpaint-0b782a9294e7c3dd8279.js": {
+      "source": "home-firstpaint-0b782a9294e7c3dd8279.js",
+      "sha256": "0b782a9294e7c3dd82799f0c9a7bd48c170de393dbf92afc70727f83c866f171",
+      "bytes": 75869
     }
   },
   "files": {
@@ -5727,13 +5727,13 @@
       "sha256": "bfc5ea2af98f89d40e7aaa51267fda21633fcec362eecbd0723da462bc1afa42",
       "bytes": 134169
     },
-    "_home-cockpit/home-firstpaint-14de1de98f876a60fcca.js": {
-      "sha256": "14de1de98f876a60fcca25f279aee48c4a1fef8fe986f52019e26176eec34e53",
-      "bytes": 75596
+    "_home-cockpit/home-firstpaint-0b782a9294e7c3dd8279.js": {
+      "sha256": "0b782a9294e7c3dd82799f0c9a7bd48c170de393dbf92afc70727f83c866f171",
+      "bytes": 75869
     }
   },
   "count": 1401,
-  "bytes": 88214246,
+  "bytes": 88214519,
   "home_white_gear": {
     "inputs": [
       {
