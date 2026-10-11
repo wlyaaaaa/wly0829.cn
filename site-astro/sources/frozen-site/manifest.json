@@ -420,7 +420,14 @@
     "/skills/personal-formal-documents/",
     "/projects/sunshine-remote-streaming/",
     "/skills/timeaudit-diagnostics/",
-    "/skills/pdf-render-safe/"
+    "/skills/pdf-render-safe/",
+    "/projects/agents/authorization-owner/",
+    "/projects/agents/capability-routing/",
+    "/projects/agents/context-evidence/",
+    "/projects/agents/protected-policy/",
+    "/projects/agents/rules-contracts/",
+    "/projects/agents/skills-plugins/",
+    "/projects/agents/working-tree-hot-mirror/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
