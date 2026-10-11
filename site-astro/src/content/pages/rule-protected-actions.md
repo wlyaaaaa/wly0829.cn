@@ -1755,8 +1755,7 @@
     {
      "type": "illustration",
      "index": 0,
-     "row": "judgement",
-     "width": "30%"
+     "size": "banner"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
