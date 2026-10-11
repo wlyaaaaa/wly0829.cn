@@ -65,6 +65,19 @@ class NumberEditsTests(unittest.TestCase):
         self.assertEqual(apply_edits(self.root, payload)["applied"], 0)
         self.assertEqual(self.path.read_bytes(), first)
 
+    def test_successful_number_updates_source_and_skipped_number_does_not(self):
+        self.rows = [dict(self.rows[0], new_value=166, status="changed")]
+        self.page["registry"]["numbers"][0]["source"] = "旧测量：10 月 9 日 165 份"
+        self.save(); payload = self.build()
+        apply_edits(self.root, payload)
+        number = json.loads(self.path.read_text("utf-8"))["registry"]["numbers"][0]
+        self.assertEqual((number["text"], number["source"]), ("166 份", "见来源记录 r-0，观察于 2026-10-11T16:03:00+08:00"))
+        first = self.path.read_bytes(); apply_edits(self.root, payload)
+        self.assertEqual(self.path.read_bytes(), first)
+        self.page["registry"]["numbers"][0]["text"] = "999 份"; self.save()
+        self.assertTrue(apply_edits(self.root, payload)["skipped"])
+        self.assertEqual(json.loads(self.path.read_text("utf-8"))["registry"]["numbers"][0]["source"], "旧测量：10 月 9 日 165 份")
+
     def test_unavailable_pending_and_ambiguous_locations_never_generate_guessed_edits(self):
         dynamic = build_number_edits(self.root, {"rows": [dict(self.rows[0], dynamic=True)]})
         self.assertEqual((dynamic["edits"], dynamic["skipped"]), ([], []))

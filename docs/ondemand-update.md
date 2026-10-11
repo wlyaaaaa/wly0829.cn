@@ -139,6 +139,8 @@ python -B -X utf8 scripts/content-refresh/apply_edits.py <改数单.json> --only
 
 应用前核旧值仍在原位，不符就跳过并报告；重复运行不产生第二次差异。工具不写叙述，不判断产品含义是否改变。GPT 对照事实判断改数后是否还影响用途、能力、边界或状态，受影响的解释交 Opus 改写，纯数据变化不让 Opus 重新调查事实。
 
+Opus 每页交一份 UTF-8 Markdown 稿，第一行是 `# <页id>`；只列本次需要改的段落。`## 屏：<屏id>` 下放该屏完整 `text`，包括原有 Markdown 标题；`## status_line` 下放 JSON 对象，仅合入列出的字段；`## old_urls` 下放 JSON 字符串数组，与已有路由去重合并。JSON 可用 `json` 代码块包裹，未改的段落省略。GPT 用 `apply_rewrites.py <稿目录>` 机械合稿，不再逐屏手工搬运。工具先校验整批稿、目标页、屏 id 和 JSON；任一不符，整批不写并非零退出。合稿保留未列字段与 LF/CRLF，重复运行不产生差异；`--root <仓库根>` 用于隔离验证。
+
 功能变化时一起核对用法、例子、结果、边界、搜索摘录和演进，不能只改数字卡。标题改了要人工对照页内目录条；P1-3 完成并验收后才由相应程序保证一致。
 
 ### 冻结页使用同一个转换工具
@@ -189,6 +191,8 @@ Claude 收到本人要求的出处、`scope.md`、日期清单、各项取数证
 P0-4、P0-5 合入并验收后，使用下面的完善版入口：
 
 ```powershell
+# 有 Opus 稿时先机械合入；纯改数、没有稿目录时跳过这一条。
+python -B -X utf8 scripts/content-refresh/apply_rewrites.py <本次任务目录/写稿>
 python -B -X utf8 scripts/content-refresh/refresh.py --inventory --strict --output <本次任务目录/最终盘点>
 python -B -X utf8 -m unittest discover -s tests -p "test_content_refresh_*.py"
 python -B -X utf8 -m unittest tests.test_refresh_registry_complete

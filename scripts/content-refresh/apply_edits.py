@@ -256,6 +256,10 @@ def apply_edits(root, payload, only=None):
                         report["already_applied"] += 1
                     else:
                         parent[key] = parent[key][:a] + new + parent[key][b:]
+                        number = re.fullmatch(r"registry\.numbers\[(\d+)\]\.text", field)
+                        if number and edit.get("record_id") and edit.get("observed_at"):
+                            page["registry"]["numbers"][int(number[1])]["source"] = (
+                                f"见来源记录 {edit['record_id']}，观察于 {edit['observed_at']}")
                         file_applied += 1
                         changed = True
                     limit = a

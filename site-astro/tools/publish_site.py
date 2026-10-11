@@ -301,6 +301,7 @@ def publish(args):
         step('get_key_and_changed_pages', verify_pages)
         step('successful_manifest_last', lambda: retention.write(retention.shared()/'published.json', {
             'schema': 'wly.site-publication.v1', 'commit': receipt['commit'], 'deployment': receipt['deployment'],
+            'source_commit': source_commit,
             'manifest': manifest, 'readback': receipt['get'], 'verified_at_beijing': oss.stamp()}))
         receipt['status'] = 'published'
         return receipt

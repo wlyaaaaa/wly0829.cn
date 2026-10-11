@@ -26,6 +26,21 @@ class RefreshTests(unittest.TestCase):
 
     def run_collect(self, **kwargs):
         return refresh.collect(self.root, {"records": [self.record]}, today=date(2026, 10, 10), **kwargs)["rows"][0]
+    def test_baseline_uses_successful_source_commit_and_never_site_dist_or_unknown(self):
+        path = self.root / "wly-oss/published.json"; path.parent.mkdir()
+        source, site_dist = "a" * 40, "b" * 40
+        accepted = {"schema": "wly.site-publication.v1", "commit": site_dist, "source_commit": source,
+            "deployment": 123, "verified_at_beijing": "2026-10-11T16:03:00+08:00", "readback": {"index.html": {"status": "pass"}}}
+        with patch.object(refresh, "bounded", return_value=str(self.root)):
+            for value in (accepted, {**accepted, "source_commit": None, "manifest": {"source_commit": source}}):
+                path.write_text(json.dumps(value), encoding="utf-8")
+                self.assertEqual(refresh.publication_baseline(self.root, "old")["baseline"], source)
+            for value in ({**accepted, "status": "failed"}, {**accepted, "source_commit": "Unknown"},
+                    {**accepted, "source_commit": None}, {**accepted, "readback": {"index.html": {"status": "failed"}}}, None, "bad-json"):
+                if value is None: path.unlink()
+                else: path.write_text(value if isinstance(value, str) else json.dumps(value), encoding="utf-8")
+                result = refresh.publication_baseline(self.root, "old")
+                self.assertEqual(result["baseline"], "old"); self.assertIn("Unknown", result["baseline_evidence"])
     def test_actual_page_number_and_overdue_not_registration_fallback(self):
         with patch.object(refresh, "bounded", return_value="[2021]"):
             row = self.run_collect()
