@@ -408,10 +408,10 @@
     },
     {
      "id": "n-runs",
-     "text": "322 次",
-     "meaning": "生成命令 New-ReportPage.ps1 的调用次数：Claude 228、Codex 94（9 月 26 日 03:31–10 月 8 日 23:01，北京）；和同屏 151 份（10 月 10 日现存）时间范围不同，图上写明",
-     "as_of": "2026-10-08",
-     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl，name=New-ReportPage.ps1 计数（Claude 228、Codex 94）；9 月 26 日 03:31 到 10 月 8 日 23:01（北京）",
+     "text": "334 次",
+     "meaning": "生成命令 New-ReportPage.ps1 的调用次数：Claude 234、Codex 100（9 月 26 日 03:31–10 月 9 日 23:49，北京）；和同屏 151 份（10 月 10 日现存）时间范围不同，图上写明",
+     "as_of": "2026-10-11",
+     "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl，name=New-ReportPage.ps1 计数（Claude 234、Codex 100）；9 月 26 日 03:31 到 10 月 9 日 23:49（北京），北京时间 10 月 11 日 16:10 读；记录记到 10 月 9 日",
      "screens": [
       "skill-report-page-01"
      ]
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "488a7352c9250063d2b7a7a4f1dfecf6bae3fc9c232e7d469bebc31de7cb88e0",
-  "converted_at_beijing": "2026-10-11T15:42:12+08:00"
+  "sha256": "37746c3861f6d2d88b3216ca7b8501a4aa3bff6efc77207ad140339467714a3d",
+  "converted_at_beijing": "2026-10-11T16:11:43+08:00"
  }
 }
 ---
@@ -762,9 +762,9 @@ AI 只写内容文件（文字和数字），版式、配色、图表和检查�
 141 个标题各取最新一版，其中 102 份带决策卡
 截至 10 月 10 日
 
-**322 次**
-Claude 228 次、Codex 94 次运行生成命令
-9 月 26 日 03:31–10 月 8 日 23:01（使用小记录记到 10 月 8 日）
+**334 次**
+Claude 234 次、Codex 100 次运行生成命令
+9 月 26 日 03:31–10 月 9 日 23:49（使用小记录记到 10 月 9 日）
 
 **怎么跟 AI 说**
 “这个说来话长，做成网页给我看。”

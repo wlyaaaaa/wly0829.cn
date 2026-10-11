@@ -266,8 +266,8 @@
      "id": "n-rules",
      "text": "2 条",
      "meaning": "每台电脑上项目建的放行规则（TCP、UDP 各一条）",
-     "as_of": "2026-09-28",
-     "source": "Get-NetFirewallRule -Group 'MeshClip Kit'，两台各 2 条",
+     "as_of": "2026-10-11",
+     "source": "Get-NetFirewallRule -Group 'MeshClip Kit'，两台各 2 条（北京 10/11 16:09 两台现查）",
      "screens": [
       "meshclip-kit-01",
       "meshclip-kit-04",
@@ -305,8 +305,8 @@
      "id": "n-broad",
      "text": "2 条",
      "meaning": "主机上停用的放得太宽的 KDE Connect 旧入站规则",
-     "as_of": "2026-09-28",
-     "source": "%LOCALAPPDATA%\\MeshClipKit\\user-state.json 的 disabledBroadFirewallRules 条数",
+     "as_of": "2026-10-11",
+     "source": "%LOCALAPPDATA%\\MeshClipKit\\user-state.json 的 disabledBroadFirewallRules 条数（北京 10/11 16:09 现查）",
      "screens": [
       "meshclip-kit-06"
      ]
@@ -513,8 +513,8 @@
  },
  "source": {
   "page": "sources/pages/meshclip-kit/page.json",
-  "sha256": "fd40e7bc928b586d4aba2c58104a79cdacd1cda8511b1f8a19056260c2dd3513",
-  "converted_at_beijing": "2026-10-11T14:03:31+08:00"
+  "sha256": "a526422a7cc056adceede064803ebfff590b0e79ddb0ea69a528ff3469248e9e",
+  "converted_at_beijing": "2026-10-11T16:10:02+08:00"
  }
 }
 ---

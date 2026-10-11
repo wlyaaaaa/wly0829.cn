@@ -497,9 +497,9 @@
     {
      "id": "n-catalog",
      "text": "4366 件 · 近 99 GB",
-     "meaning": "目录库 media 表条数（图片 3485、视频 118、音频 760），大小按每件原件路径取文件大小相加＝98.63 GB（十进制）",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字（截至 10 月 9 日）",
+     "meaning": "目录库 media 表条数（图片 3486、视频 118、音频 762），大小按每件原件路径取文件大小相加＝98.63 GB（十进制），4366 件全部在位",
+     "as_of": "2026-10-11",
+     "source": "personal_media.py status / status --technical：PASS、catalog_rows=4366（北京 10 月 11 日 16:07 只读）；只读 SQL 按 media_type 分组，逐件 os.stat 求和 98,630,211,493 字节",
      "screens": [
       "personal-media-01"
      ]
@@ -508,8 +508,8 @@
      "id": "n-phone-picks",
      "text": "2377 件",
      "meaning": "要放回手机的精选包件数（45.42 GB）",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字",
+     "as_of": "2026-10-11",
+     "source": "personal_media.py recovery-status：selected=2377、bytes=45,421,635,927、PASS_SELECTED_PLAN_CONSISTENT（北京 10 月 11 日 16:10 只读）",
      "screens": [
       "personal-media-01"
      ]
@@ -879,8 +879,8 @@
  },
  "source": {
   "page": "sources/pages/personal-media/page.json",
-  "sha256": "a7461ceb44a9489419095631383f3ef970db253430415c6d120858a309f75445",
-  "converted_at_beijing": "2026-10-11T15:50:45+08:00"
+  "sha256": "0584f36f18ad29d7e23ae0cfa361d0367a2b48d281810e17a674c751dd81fd31",
+  "converted_at_beijing": "2026-10-11T16:11:15+08:00"
  }
 }
 ---
@@ -953,7 +953,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月9",
+     "text_ref": "截至10月11",
      "align": "right"
     },
     {
@@ -1026,7 +1026,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月9",
+     "text_ref": "截至10月11",
      "align": "right"
     },
     {
@@ -1181,7 +1181,7 @@
 |---|---|---|---|
 | 9 月一次整理后剩下的图片（整理前 19851 张） | 现在登记的照片、视频、录音 | 原件一份，两块备份硬盘各一份，Google 云端再一份 | 选进精选、要放回手机的照片视频 |
 
-截至 10 月 9 日。10 月 11 日查只看结构和总数的技术状态，入口返回不可用，件数和容量没有重新核对，上面仍是旧数
+截至 10 月 11 日
 
 **现在**　每天 17:10 维护　云端维护
 

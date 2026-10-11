@@ -46,10 +46,10 @@
    },
    "facts": [
     "每周自动刷新一次，上次成功",
-    "近 7 天 AI 用了 8 次"
+    "近 7 天 AI 用了 5 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "每周自动刷新；AI 使用记录"
+   "as_of": "2026-10-11",
+   "source": "每周自动刷新；AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -235,8 +235,8 @@
      "id": "n-device",
      "text": "1 台",
      "meaning": "登记的穿戴设备数：Google Fitbit Air，数据族 google-wearables",
-     "as_of": "2026-09-28",
-     "source": "最新采集 manifest capture.device_label（20260925T215340Z-62563599）",
+     "as_of": "2026-10-11",
+     "source": "最新采集 manifest capture.device_label（20261007T102417Z-3542e3fd）",
      "screens": [
       "personal-health-01"
      ]
@@ -245,8 +245,8 @@
      "id": "n-types",
      "text": "21 类",
      "meaning": "每次更新采的设备数据类别",
-     "as_of": "2026-09-28",
-     "source": "最新 manifest field_count=21；原件目录 21 个类别文件夹",
+     "as_of": "2026-10-11",
+     "source": "最新 manifest field_count=21（20261007T102417Z-3542e3fd，10 月 11 日读）",
      "screens": [
       "personal-health-01",
       "personal-health-02",
@@ -256,20 +256,20 @@
     },
     {
      "id": "n-days",
-     "text": "52 天",
-     "meaning": "已采下的完整中国日范围：8 月 5 日（账号起点）到 9 月 25 日；是日期范围，不是每天都有记录",
-     "as_of": "2026-09-28",
-     "source": "最新 manifest history.account_start_date=2026-08-05、started_utc=2026-09-25T21:53Z（北京 9 月 26 日，不算完整日）；27+25",
+     "text": "63 天",
+     "meaning": "已采下的完整中国日范围：8 月 5 日（账号起点）到 10 月 6 日；是日期范围，不是每天都有记录",
+     "as_of": "2026-10-11",
+     "source": "最新 manifest history.account_start_date=2026-08-05、started_utc=2026-10-07T10:24Z（北京 10 月 7 日 18:24，不算完整日）；google_health_freshness.py last_complete_china_date=2026-10-06；27+30+6",
      "screens": [
       "personal-health-01"
      ]
     },
     {
      "id": "n-captures",
-     "text": "9 次",
+     "text": "13 次",
      "meaning": "status=complete 的采集次数（另有 3 次 8 月 26 日的旧全量面停在 running）",
-     "as_of": "2026-09-28",
-     "source": "E:\\PersonalData\\来源原件\\健康\\fitbit-google-health\\*\\manifest.json 共 12 个",
+     "as_of": "2026-10-11",
+     "source": "E:\\PersonalData\\来源原件\\健康\\fitbit-google-health\\*\\manifest.json 共 16 个，只读 status 字段",
      "screens": [
       "personal-health-01"
      ]
@@ -380,10 +380,10 @@
     },
     {
      "id": "n-current",
-     "text": "111 行，改过 40 次",
-     "meaning": "CURRENT.md 行数（含空行，wc -l）和改动提交数（只数，不读）",
-     "as_of": "2026-09-28",
-     "source": "wc -l CURRENT.md（不含空行 83）；git log -- CURRENT.md",
+     "text": "116 行，改过 73 次",
+     "meaning": "CURRENT.md 行数（含空行）和改动提交数（只数，不读）",
+     "as_of": "2026-10-11",
+     "source": "提交 848501a：CURRENT.md 行数；git rev-list --count HEAD -- CURRENT.md",
      "screens": [
       "personal-health-04"
      ]
@@ -400,10 +400,10 @@
     },
     {
      "id": "n-tests",
-     "text": "197 个",
-     "meaning": "自动测试数（全部通过，另 57 个子测试）",
-     "as_of": "2026-09-28",
-     "source": "py -3 -m pytest -q 现跑",
+     "text": "213 个",
+     "meaning": "自动测试数（全部通过，另 70 个子测试）",
+     "as_of": "2026-10-11",
+     "source": "10 月 11 日北京时间 16:06 在提交 848501a 现跑 py -3 -m pytest -q：213 passed, 70 subtests passed in 70.22s",
      "screens": [
       "personal-health-05"
      ]
@@ -563,8 +563,8 @@
  },
  "source": {
   "page": "sources/pages/personal-health/page.json",
-  "sha256": "734592d9d432f354b82bedf0c4d089f74080eae0919c0c96e663550ba219488e",
-  "converted_at_beijing": "2026-10-11T14:28:10+08:00"
+  "sha256": "c09d34e64bf3e82234e3d0b3d2179627d408b41b1f58bfb0612949c8f687642d",
+  "converted_at_beijing": "2026-10-11T16:09:15+08:00"
  }
 }
 ---
@@ -577,7 +577,7 @@
   "id": "personal-health-01",
   "section": "top",
   "title": "开头",
-  "scene": "横版：左上大标题，下面一段介绍（约四行）。右上一幅水彩插画：一只手腕戴着纤细的黑色穿戴设备，设备屏幕微微发绿光；手腕旁边一部手机，一条绿色细虚线从设备连到手机、再连到一本翻开的小册子；小册子封面写“健康现状”四个字；小册子旁边一只放大镜照着一张报告纸，报告纸上只画灰色横线，不画任何数字、表格或图表。中间一排四张等宽数字卡，每张左上角一个小水彩图标（依次是：手腕上的设备、一叠分成几格的卡片、一本日历、一个带对勾的循环箭头），上面大号绿色粗体数字，下面一两行小字。数字卡下面右对齐一行灰色小字“截至 10 月 10 日”。最下面左对齐一个白底细浅绿描边的圆角按钮，绿色字。这个项目只有一个每 7 天的手环刷新任务，首屏不画“现在”横条。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
+  "scene": "横版：左上大标题，下面一段介绍（约四行）。右上一幅水彩插画：一只手腕戴着纤细的黑色穿戴设备，设备屏幕微微发绿光；手腕旁边一部手机，一条绿色细虚线从设备连到手机、再连到一本翻开的小册子；小册子封面写“健康现状”四个字；小册子旁边一只放大镜照着一张报告纸，报告纸上只画灰色横线，不画任何数字、表格或图表。中间一排四张等宽数字卡，每张左上角一个小水彩图标（依次是：手腕上的设备、一叠分成几格的卡片、一本日历、一个带对勾的循环箭头），上面大号绿色粗体数字，下面一两行小字。数字卡下面右对齐一行灰色小字“截至 10 月 11 日”。最下面左对齐一个白底细浅绿描边的圆角按钮，绿色字。这个项目只有一个每 7 天的手环刷新任务，首屏不画“现在”横条。风格照标杆页（白底、纯绿主色、水彩插画、圆角卡片、细浅绿描边），大标题用毛笔艺术字加绿色笔刷线。 首屏那一排按钮末尾多一个同样样式的按钮〔复制 AI 续作说明〕（链接样式，和旁边的按钮一样大小）。",
   "portrait": "竖版 9:16：标题和介绍在上；插画缩到整宽放在介绍下面；四张数字卡两行两列；“截至”一行和按钮在最下面。字和横版完全一样。 那一排按钮里同样有〔复制 AI 续作说明〕。",
   "links": [
    {
@@ -619,11 +619,11 @@
        "state": "fact"
       },
       {
-       "text": "近 7 天 AI 用了 8 次",
+       "text": "近 7 天 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 每周自动刷新；AI 使用记录",
+     "static_note": "截至 10 月 11 日 · 每周自动刷新；AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "首屏"
     },
     {
@@ -676,11 +676,11 @@
        "state": "fact"
       },
       {
-       "text": "近 7 天 AI 用了 8 次",
+       "text": "近 7 天 AI 用了 5 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 每周自动刷新；AI 使用记录"
+     "static_note": "截至 10 月 11 日 · 每周自动刷新；AI 使用小记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",
@@ -1611,7 +1611,7 @@
 6. **AI 审阅**｜AI 看简报，只把够格、和现实有关的结论写进健康现状；程序自己从不改现状
 
 **东西放在哪**
-- 健康现状（CURRENT.md，116 行；到 10 月 10 日一共改过 73 次）和来源清单（SOURCES.md）：私有 GitHub 仓库
+- 健康现状（CURRENT.md，116 行；到 10 月 11 日一共改过 73 次）和来源清单（SOURCES.md）：私有 GitHub 仓库
 - 原始报告和设备原件：E:\PersonalData\来源原件\健康，不进 Git；每天 17:10 随个人资料备份到 G 盘，再同步到外接的 H 盘
 
 **采哪 21 类**

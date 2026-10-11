@@ -45,10 +45,10 @@
     "at": "2026-10-07 09:21"
    },
    "facts": [
-    "近 7 天 AI 用了 12 次"
+    "近 7 天 AI 用了 7 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": true,
   "repo_url": "https://github.com/wlyaaaaa/WeChatDirect",
@@ -350,8 +350,8 @@
      "id": "n-archives",
      "text": "4 份",
      "meaning": "导出根里完成态的联系人或群档案个数（manifest.json 个数）",
-     "as_of": "2026-10-10",
-     "source": "E:\\PersonalData\\微信项目\\exports 下 manifest.json 个数（10 月 10 日只数文件和数字字段复核，仍是 4 个）",
+     "as_of": "2026-10-11",
+     "source": "E:\\PersonalData\\微信项目\\exports 下 manifest.json 个数（10 月 11 日只数文件和数字字段复核，仍是 4 个）",
      "screens": [
       "wechatdirect-01",
       "wechatdirect-02",
@@ -362,8 +362,8 @@
      "id": "n-archive-messages",
      "text": "7934 条消息",
      "meaning": "4 份档案 manifest.messageCount 之和",
-     "as_of": "2026-10-10",
-     "source": "4 份档案 manifest.messageCount 之和（10 月 10 日复核仍为 7934；脚本只读数字字段）",
+     "as_of": "2026-10-11",
+     "source": "4 份档案 manifest.messageCount 之和（10 月 11 日复核仍为 7934；脚本只读数字字段）",
      "screens": [
       "wechatdirect-01"
      ]
@@ -372,7 +372,7 @@
      "id": "n-reading-runs",
      "text": "888 段、11541 条消息、7 次",
      "meaning": "个人理解库经微信聊天读取读过的聊天窗口数（window.json 个数）和消息条数（page-*.json 的 messages 之和），按 E:\\PersonalData\\日常偏好\\微信阅读 下有窗口的 7 个批次（9 月 8 日 675、9 月 12 日 32＋12、9 月 15 日 14、9 月 18 日 58、9 月 27 日 48、10 月 6 日 49）；不含 9 月 26 日群聊认知审计（那次没存窗口文件）",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "只数文件和字段、不读正文的脚本现算；去掉 10 月 6 日批次复算得 839 段、10561 条，与旧稿一致",
      "screens": [
       "wechatdirect-01"
@@ -392,7 +392,7 @@
      "id": "n-tests",
      "text": "224 个",
      "meaning": "tests 下 def test 的个数（按文件统计，未执行）；同法数 9 月 28 日的 80d2d1c 得 220，与旧稿 countTestCases 一致",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "git grep \"def test\" HEAD -- tests（HEAD 57a764d）",
      "screens": [
       "wechatdirect-01"
@@ -402,7 +402,7 @@
      "id": "n-lines",
      "text": "11189 行",
      "meaning": "9 个运行模块的行数，含空行注释，不含测试",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "9 个运行模块逐个数行相加（HEAD 57a764d）；同法数 80d2d1c 得 11158，与旧稿一致",
      "screens": [
       "wechatdirect-01"
@@ -422,7 +422,7 @@
      "id": "n-commits",
      "text": "37 次",
      "meaning": "公开仓库提交数，第一个 8 月 30 日",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "git rev-list --count HEAD（57a764d，与 origin/main 一致）；旧稿 31 次口径未能复现（同法数 9 月 28 日的 80d2d1c 为 32）",
      "screens": [
       "wechatdirect-06"
@@ -674,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "67030b47ca87f53eaf90c60691a89de4aaead2ccaf54f8ce13bfcae9bc3a0c52",
-  "converted_at_beijing": "2026-10-11T14:27:23+08:00"
+  "sha256": "3665db8d51e87c75e563cb879f7092a194bb0b3463f03f47d29bdb22b4832dba",
+  "converted_at_beijing": "2026-10-11T16:07:06+08:00"
  }
 }
 ---
@@ -738,11 +738,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 12 次",
+       "text": "近 7 天 AI 用了 7 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -757,7 +757,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "4份聊天档案，共7934条消息（截至10月10日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
+     "text_ref": "4份聊天档案，共7934条消息（截至10月11日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
      "columns": 4,
      "columns_v": 2,
      "icons": "auto"
@@ -809,15 +809,15 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 12 次",
+       "text": "近 7 天 AI 用了 7 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",
-     "text_ref": "4份聊天档案，共7934条消息（截至10月10日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
+     "text_ref": "4份聊天档案，共7934条消息（截至10月11日）888段聊天替理解库读过，共11541条消息（9月8日起）45次打开微信数据库，一次都没写",
      "columns": 4,
      "columns_v": 2,
      "icons": "auto"
@@ -966,7 +966,7 @@
 
 比如我说“微信有新消息，把近况更新一下”：AI 先列出两个号最近有新消息的聊天，一个个读完（人多的群只读我自己的发言），把能看出我最近在做什么的整理成摘要交给个人理解库；推送、客服这类没内容的，直接标成读过。
 
-- **4 份**｜聊天档案，共 7934 条消息（截至 10 月 10 日）
+- **4 份**｜聊天档案，共 7934 条消息（截至 10 月 11 日）
 - **888 段**｜聊天替理解库读过，共 11541 条消息（9 月 8 日起）
 - **45 次**｜打开微信数据库，一次都没写：9 月 18 日实测只读不写
 - **224 个**｜自动测试，11189 行 Python

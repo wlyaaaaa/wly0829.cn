@@ -49,7 +49,7 @@
     "at": "2026-09-29 01:36"
    },
    "facts": [],
-   "as_of": "2026-10-10",
+   "as_of": "2026-10-11",
    "source": "项目修改记录"
   },
   "public": true,
@@ -88,7 +88,7 @@
      "how": "在 Typora 主题菜单选 Verdant Mint",
      "status": "在用",
      "screen": "typora-theme-pack-09",
-     "source": "themes/verdant-mint.css、themes/verdant/base.css；%APPDATA%\\Typora\\profile.data 里 theme=verdant-mint.css（9 月 27 日 15:19 最后写入）"
+     "source": "themes/verdant-mint.css、themes/verdant/base.css；%APPDATA%\\Typora\\profile.data 里 theme=verdant-mint.css（10 月 2 日 14:23 最后写入）"
     },
     {
      "id": "f-install",
@@ -238,7 +238,7 @@
      "how": "改代码后自动",
      "status": "在用",
      "screen": "typora-theme-pack-09",
-     "source": "tests/test_project.py；.github/workflows/test.yml；9 月 29 日本机重跑 21 项全过"
+     "source": "tests/test_project.py；.github/workflows/test.yml；10 月 11 日本机重跑 21 项全过"
     }
    ],
    "numbers": [
@@ -246,8 +246,8 @@
      "id": "n-theme-count",
      "text": "1 套",
      "meaning": "编辑主题数（Typora 菜单里新增的只有 Verdant Mint）",
-     "as_of": "2026-10-10",
-     "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 10 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
+     "as_of": "2026-10-11",
+     "source": "themes/ 目录；profile.data theme=verdant-mint.css（10 月 11 日现查）；已装 verdant-mint.css 与仓库一致，verdant/base.css 少 f30ac9c 加的表头底色一行",
      "screens": [
       "typora-theme-pack-01"
      ]
@@ -256,7 +256,7 @@
      "id": "n-styles",
      "text": "3 种",
      "meaning": "PDF 样式：original、personal、company",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "export_pdf.py MODES；export-profiles/ 三个 CSS",
      "screens": [
       "typora-theme-pack-01",
@@ -277,8 +277,8 @@
      "id": "n-tests",
      "text": "21 项",
      "meaning": "tests/test_project.py 的测试数，全部通过",
-     "as_of": "2026-10-10",
-     "source": "10 月 10 日在临时副本（git archive HEAD f30ac9c）跑 python -m pytest tests：21 passed；def test_ 计数 21",
+     "as_of": "2026-10-11",
+     "source": "10 月 11 日 16:06（北京）在仓库工作区（HEAD f30ac9c，无未提交改动）跑 python -B -m pytest -q：21 passed in 2.01s；def test_ 计数 21",
      "screens": [
       "typora-theme-pack-01",
       "typora-theme-pack-05",
@@ -291,8 +291,8 @@
      "id": "n-commits",
      "text": "6 次",
      "meaning": "仓库全部提交数，首次 71b2e24（8 月 12 日 07:04），最后 f30ac9c（9 月 29 日 01:36）",
-     "as_of": "2026-10-10",
-     "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 10 日现查）",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD=6，HEAD 仍是 f30ac9c（10 月 11 日现查）",
      "screens": [
       "typora-theme-pack-01",
       "typora-theme-pack-10"
@@ -323,8 +323,8 @@
      "id": "n-code-lines",
      "text": "720、469、1023、43、13、438 行",
      "meaning": "编辑主题 CSS、PDF 样式 CSS、Python 工具、JS、PowerShell、测试的行数",
-     "as_of": "2026-10-10",
-     "source": "wc -l themes/ export-profiles/ tools/ tests/（HEAD f30ac9c，10 月 10 日复核未变）",
+     "as_of": "2026-10-11",
+     "source": "wc -l themes/ export-profiles/ tools/ tests/（HEAD f30ac9c，10 月 11 日复核未变）",
      "screens": [
       "typora-theme-pack-05"
      ]
@@ -343,7 +343,7 @@
      "id": "n-features",
      "text": "16 项",
      "meaning": "本页 registry.features 条数",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "本文件",
      "screens": [
       "typora-theme-pack-09"
@@ -455,8 +455,8 @@
  },
  "source": {
   "page": "sources/pages/typora-theme-pack/page.json",
-  "sha256": "e30ee35d3b9cb035dc4ce469fc60643793fb3e72f0dd944b23a1f73a17e608e5",
-  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
+  "sha256": "ef427cc6e977e8e23b5db52d66674e3f587dc2e53435e4389195e47ab55aef32",
+  "converted_at_beijing": "2026-10-11T16:10:59+08:00"
  }
 }
 ---
@@ -540,7 +540,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 项目修改记录",
+     "static_note": "截至 10 月 11 日 · 项目修改记录",
      "row": "k1a-head",
      "width": "minmax(0,1fr)"
     },
@@ -610,7 +610,7 @@
        "state": "ok"
       }
      ],
-     "static_note": "截至 10 月 10 日 · 项目修改记录"
+     "static_note": "截至 10 月 11 日 · 项目修改记录"
     },
     {
      "type": "stat_card",

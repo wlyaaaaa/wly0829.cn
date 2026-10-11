@@ -178,7 +178,7 @@
      "id": "n-skills",
      "text": "27 个技能",
      "meaning": "网站上有技能页的技能数",
-     "as_of": "2026-10-10",
+     "as_of": "2026-10-11",
      "source": "网站技能子页 kind=skill 共 27 个：原 26 个加新增 skill-cockpit；control-plane-doctor、file-intake-router 两页改成去向页不计入。与本机 personal-skill-supply.json 29 个 install=true 减去不上网站的 2 个一致",
      "screens": [
       "skills-home-01"
@@ -585,8 +585,8 @@
  },
  "source": {
   "page": "sources/pages/skills-home/page.json",
-  "sha256": "1ba020e1c5007d749c9fff5ba710b64a872780a5f123f59a8b73d421f0a83630",
-  "converted_at_beijing": "2026-10-11T13:46:01+08:00"
+  "sha256": "dbfef99ae17a625458a040ba8ef90fcc7bda424fd8386cb2c40637cbc54ad0a1",
+  "converted_at_beijing": "2026-10-11T16:11:44+08:00"
  }
 }
 ---
@@ -884,7 +884,7 @@
 
 **怎么用**：直接跟 AI 说要办的事，AI 自己挑用哪个技能，不用记名字。
 
-**27 个技能**　截至 10 月 10 日，按用途分 7 组。
+**27 个技能**　截至 10 月 11 日，按用途分 7 组。
 
 卡片右下角带“属于：项目名”的 18 个，是某个项目的入口：它能做的事全列在那个项目页，技能页只讲怎么跟 AI 说、例子和边界。
 

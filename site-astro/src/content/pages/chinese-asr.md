@@ -458,10 +458,10 @@
    "numbers": [
     {
      "id": "n-transcribed",
-     "text": "434 段",
-     "meaning": "8 月 18 日–10 月 7 日转成文字的不同录音，按原音 SHA-256 去重，去掉测试和验收目录；下限",
-     "as_of": "2026-10-10",
-     "source": "E:\\Projects\\Tools\\ChineseASR\\outputs\\**\\*objective-result.json 的 audio.raw_sha256 去重（不含 a4-demo、acceptance、quality-acceptance 目录；448 个文件→434 段；按同口径重算 9 月 28 日前为 375 段）",
+     "text": "435 段",
+     "meaning": "8 月 18 日–10 月 10 日转成文字的不同录音，按原音 SHA-256 去重，去掉测试和验收目录；下限",
+     "as_of": "2026-10-11",
+     "source": "E:\\Projects\\Tools\\ChineseASR\\outputs 下 *objective-result.json 的 audio.raw_sha256 去重（不含 a4-demo、acceptance、quality-acceptance 目录；449 个文件→435 段；最晚一份结果文件写入于北京 10 月 10 日 17:34；北京 10 月 11 日 16:12 只读复核，与 GPT 15:55 结果一致；按同口径重算 9 月 28 日前为 375 段）",
      "screens": [
       "chinese-asr-01"
      ]
@@ -501,8 +501,8 @@
      "id": "n-cloud-ok",
      "text": "54 次",
      "meaning": "全部云端调用里成功的次数（68 次尝试，51 段不同录音；含点名上云、质量复核和 9 月 26 日前的 3.0 旧模型）",
-     "as_of": "2026-10-10",
-     "source": "outputs/cloud-jobs/*.result.json status=succeeded 54、failed 14；最晚一次北京时间 9 月 27 日 01:11，之后没有新的云端复核",
+     "as_of": "2026-10-11",
+     "source": "outputs/cloud-jobs/*.result.json status=succeeded 54、failed 14；最晚一次北京时间 9 月 27 日 01:11，之后没有新的云端复核（北京 10 月 11 日 16:12 只读复核，结果文件仍为 68 份）",
      "screens": [
       "chinese-asr-01",
       "chinese-asr-06"
@@ -787,8 +787,8 @@
  },
  "source": {
   "page": "sources/pages/chinese-asr/page.json",
-  "sha256": "b0d54df2fd61be9b03c6a4ddf6e1c2ed032f009b6f62c8a67a4b0b46941fce30",
-  "converted_at_beijing": "2026-10-11T13:59:07+08:00"
+  "sha256": "f0381bbea31daae9a8c3f2a71356cd5a47c58023c6978d377819e9c569ce9b91",
+  "converted_at_beijing": "2026-10-11T16:11:14+08:00"
  }
 }
 ---
@@ -875,7 +875,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "434段8月18日–10月7日"
+     "text_ref": "435段8月18日–10月10日"
     },
     {
      "type": "action_button",
@@ -910,7 +910,7 @@
      "columns": 4,
      "columns_v": 2,
      "icons": "auto",
-     "text_ref": "434段8月18日–10月7日"
+     "text_ref": "435段8月18日–10月10日"
     },
     {
      "type": "prose",
@@ -1040,10 +1040,10 @@
 
 在自己电脑上把中文录音转成文字，还会指出哪里可能错：默认每段录音让两个不同的模型各听一遍（Qwen3-ASR-1.7B 主听、SenseVoiceSmall 对照），对不上的地方标出时间点。重要录音可以点名走高质量路线，另给回听网页。按 Win+H 也能口述，把文字打进当前输入框。各种录音走哪条路见〔选哪条路〕。
 
-**434 段**｜8 月 18 日–10 月 7 日转成文字的不同录音（至少）
+**435 段**｜8 月 18 日–10 月 10 日转成文字的不同录音（至少）
 **0.45 秒**｜听写识别一段的中位用时（9 月 6 日–10 月 4 日，共 445 段）
 **9 个模型**｜都在本机跑，共 28.5 GiB
-**54 次**｜云端复核成功（8 月 1 日起，含点名上云；截至 10 月 10 日）
+**54 次**｜云端复核成功（8 月 1 日起，含点名上云；截至 10 月 11 日）
 
 现在　听写　云端复核　〔现在正不正常 → 驾驶舱〕
 

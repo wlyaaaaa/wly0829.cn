@@ -960,7 +960,7 @@
         "id": "n-refresh",
         "text": "1 秒一刷",
         "meaning": "机箱屏的刷新周期（混合模式 period_ms=1000）",
-        "as_of": "2026-09-28",
+        "as_of": "2026-10-11",
         "source": "out\\stream\\stream-heartbeat.json period_ms；config.json dataRefreshMs",
         "screens": [
           "pc-panel-hub-01"
@@ -992,7 +992,7 @@
         "id": "n-tasks",
         "text": "1 个自动任务",
         "meaning": "本项目注册的计划任务数（\\TURZX SideScreen）",
-        "as_of": "2026-09-28",
+        "as_of": "2026-10-11",
         "source": "Get-ScheduledTask 过滤 TURZX/HS2/Panel",
         "screens": [
           "pc-panel-hub-01"

@@ -416,8 +416,8 @@
      "id": "n-repos",
      "text": "47 个｜21 个公开、26 个私有",
      "meaning": "GitHub 账号下登记的全部仓库",
-     "as_of": "2026-10-10",
-     "source": "gh repo list wlyaaaaa --limit 200（10 月 10 日只读查询：PUBLIC 21、PRIVATE 26）；总表最近一次刷新仍是 9 月 28 日 01:40 的 45 个",
+     "as_of": "2026-10-11",
+     "source": "gh repo list wlyaaaaa --limit 200（10 月 11 日 16:05 只读复查：PUBLIC 21、PRIVATE 26，与 10 月 10 日相同）；总表最近一次刷新仍是 9 月 28 日 01:40 的 45 个",
      "screens": [
       "github-local-index-01",
       "github-local-index-03",
@@ -439,8 +439,8 @@
      "id": "n-frozen",
      "text": "11 个",
      "meaning": "活动规则冻结名单里的仓库，都在 GitHub 上",
-     "as_of": "2026-10-10",
-     "source": "E251 agents.context-sources.md 冻结名单 11 个，逐个对 gh repo list 都在",
+     "as_of": "2026-10-11",
+     "source": "E257 agents.context-sources.md 冻结名单 11 个，10 月 11 日 16:06 逐个对 gh repo list 都在",
      "screens": [
       "github-local-index-01",
       "github-local-index-08"
@@ -775,8 +775,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "2f9595ff87efe1923f47e3d4e0176277a74c1053ff0594c0894018c86d664b94",
-  "converted_at_beijing": "2026-10-11T15:13:59+08:00"
+  "sha256": "9cdfe4a9f462004c2a7f95fb2f2bc4e6d2c1e8e12f0da6b117443e949ba25b7e",
+  "converted_at_beijing": "2026-10-11T16:07:37+08:00"
  }
 }
 ---

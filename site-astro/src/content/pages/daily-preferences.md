@@ -45,10 +45,10 @@
     "at": "2026-10-07 09:14"
    },
    "facts": [
-    "近 7 天 AI 用了 16 次"
+    "近 7 天 AI 用了 11 次"
    ],
-   "as_of": "2026-10-10",
-   "source": "AI 使用记录（记到 10 月 8 日）"
+   "as_of": "2026-10-11",
+   "source": "AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
   },
   "public": false,
   "repo_url": null,
@@ -932,8 +932,8 @@
  },
  "source": {
   "page": "sources/pages/daily-preferences/page.json",
-  "sha256": "b158980e8dc03978002e38f563d2668b27704f696406ecc49d2d90ea52023fee",
-  "converted_at_beijing": "2026-10-11T14:05:10+08:00"
+  "sha256": "70ade79e548677c9735555876430bb7e3b1bc562553381721daafaa6ee1e957e",
+  "converted_at_beijing": "2026-10-11T16:08:48+08:00"
  }
 }
 ---
@@ -987,11 +987,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 16 次",
+       "text": "近 7 天 AI 用了 11 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）",
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）",
      "row": "hero"
     },
     {
@@ -1075,11 +1075,11 @@
        "state": "ok"
       },
       {
-       "text": "近 7 天 AI 用了 16 次",
+       "text": "近 7 天 AI 用了 11 次",
        "state": "fact"
       }
      ],
-     "static_note": "截至 10 月 10 日 · AI 使用记录（记到 10 月 8 日）"
+     "static_note": "截至 10 月 11 日 · AI 使用记录（10 月 3–9 日，记到 10 月 9 日）"
     },
     {
      "type": "stat_card",

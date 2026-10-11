@@ -36,10 +36,10 @@
    "numbers": [
     {
      "id": "n-asr-recordings",
-     "text": "434+ 段",
-     "meaning": "8 月 18 日–10 月 7 日转成文字的不同录音（至少）",
-     "as_of": "2026-10-10",
-     "source": "chinese-asr 页第 1 屏",
+     "text": "435+ 段",
+     "meaning": "8 月 18 日起转成文字的不同录音（至少）；10 月 11 日只读聚合 449 个 objective 文件、按 SHA 去重得 435 段",
+     "as_of": "2026-10-11T15:55:09+08:00",
+     "source": "ChineseASR objective 输出的 SHA 聚合；chinese-asr 页当前只读计数",
      "screens": [
       "github-profile-03"
      ]
@@ -47,19 +47,19 @@
     {
      "id": "n-ocr-runs",
      "text": "16,074 次 · 16,157 页",
-     "meaning": "真实识别次数和页数（7 月 8 日–10 月 10 日 05:17）",
-     "as_of": "2026-10-10",
-     "source": "localocr 页第 1 屏和登记 n-jobs",
+     "meaning": "真实识别次数和页数（7 月 8 日–10 月 11 日 16:10）",
+     "as_of": "2026-10-11",
+     "source": "localocr 页第 1 屏和登记 n-jobs（10 月 11 日本轮重取，数未变）",
      "screens": [
       "github-profile-04"
      ]
     },
     {
      "id": "n-timeaudit-seconds",
-     "text": "637 万秒",
-     "meaning": "每秒一条的硬件记录，6 月 16 日起",
-     "as_of": "2026-10-10",
-     "source": "timeaudit 页第 1 屏",
+     "text": "649 万秒",
+     "meaning": "每秒一条的硬件记录，6 月 16 日起；只读精确 COUNT 6,494,020 条（10 月 11 日 16:12）",
+     "as_of": "2026-10-11T16:12:19+08:00",
+     "source": "TimeAudit 本机库 public.fact_system_hardware 只读事务下 SELECT COUNT(*)（db_config.local_dsn）",
      "screens": [
       "github-profile-05"
      ]
@@ -68,8 +68,8 @@
      "id": "n-routes",
      "text": "21 条",
      "meaning": "5 种原版工具配云端和本机模型，其中 2 条这台电脑眼下用不上",
-     "as_of": "2026-10-10",
-     "source": "ai-cli-profile-manager 页第 1 屏（截至 10 月 10 日仍是 21 条）",
+     "as_of": "2026-10-11T15:55:09+08:00",
+     "source": "ai-cli-profile-manager 当前菜单/路线只读聚合：21 条路线；10 月 11 日 15:55",
      "screens": [
       "github-profile-06"
      ]
@@ -86,10 +86,10 @@
     },
     {
      "id": "n-animations",
-     "text": "32 种",
+     "text": "39 种",
      "meaning": "video-scaffold 的场景动画种类",
-     "as_of": "2026-09-28",
-     "source": "video-scaffold 页第 1 屏；E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\pipe\\p2\\facts-home.md 1.3 第 7 条",
+     "as_of": "2026-10-11",
+     "source": "video-scaffold 页登记 n-animations（10 月 11 日：templates/scene_base.html 动画 case 去重，已推送主线 c4eec88 为 39 种）",
      "screens": [
       "github-profile-08"
      ]
@@ -115,8 +115,8 @@
  },
  "source": {
   "page": "sources/pages/github-profile/page.json",
-  "sha256": "a6d7e685e74b2cff0566a21c32600445e129adc00397827dbee707c7319a8fbd",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "sha256": "791d8363007243d3607f1eb646d5e5ec8f0035a86462aa156cb51bda55e9d336",
+  "converted_at_beijing": "2026-10-11T16:25:26+08:00"
  }
 }
 ---
@@ -365,7 +365,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "434+段",
+     "text_ref": "435+段",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -420,7 +420,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机把录音转成逐句可核对的文字；按 Win+H 说话直接打字。
 
-**434+ 段**　录音已转写（截至 10 月 10 日）
+**435+ 段**　录音已转写（截至 10 月 11 日）
 
 ::screen{#github-profile-04 section="projects"}
 
@@ -523,7 +523,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 在本机显卡上把图片、扫描件里的字读准，没把握的地方标出来。
 
-**16,074 次**　识别 16,157 页（截至 10 月 10 日）
+**16,074 次**　识别 16,157 页（截至 10 月 11 日）
 
 ::screen{#github-profile-05 section="projects"}
 
@@ -571,7 +571,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
     },
     {
      "type": "feature_card",
-     "text_ref": "637万秒",
+     "text_ref": "649万秒",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -626,7 +626,7 @@ Java 出身，现在的乐趣是让 AI 替我把电脑和日常打理好。
 
 每秒记下硬件、程序和窗口，事后查为什么卡、时间花在哪。
 
-**637 万秒**　硬件记录（截至 10 月 10 日）
+**649 万秒**　硬件记录（截至 10 月 11 日）
 
 ::screen{#github-profile-06 section="projects"}
 
@@ -729,7 +729,7 @@ AI 工具配置管理
 
 选好模型，打开原版 Codex、Claude Code；请求发到哪家，启动前写清。
 
-**21 条**　模型路线（截至 10 月 10 日）
+**21 条**　模型路线（截至 10 月 11 日）
 
 ::screen{#github-profile-07 section="projects"}
 
@@ -880,7 +880,7 @@ AI 工具配置管理
     },
     {
      "type": "feature_card",
-     "text_ref": "32种",
+     "text_ref": "39种",
      "columns": 1,
      "icons": "none",
      "illustration": "none",
@@ -935,7 +935,7 @@ AI 工具配置管理
 
 把文案和素材做成 4K 视频，动画踩着旁白出现，配好封面和字幕。
 
-**32 种**　动画，成片 3840×2160、60 帧
+**39 种**　动画，成片 3840×2160、60 帧
 
 ::screen{#github-profile-09 section="projects"}
 
