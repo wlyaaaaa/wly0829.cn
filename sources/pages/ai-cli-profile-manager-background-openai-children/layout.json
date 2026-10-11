@@ -1,0 +1,463 @@
+[
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "父任务继续做事，同一个子会话可以回答、追问和回来汇报",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "我可以让正在工作的GLM或DeepSeek任务请一个已允许的OpenAI模型复核，父任务不必一直等着。子会话能继续报告进度，也能带着一个明确问题回来；父任务回答后，还是原来的子会话接着做，之前的上下文不必从头复述。",
+        "row": "top"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**9 月 18 日已实际验收两条链：GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成往返；GLM-5.3 等其他组合仍需自己的证据，不因创建成功就称工作完成。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "父任务继续做事，同一个子会话可以回答、追问和回来汇报",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → AI 工具配置管理〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "我可以让正在工作的GLM或DeepSeek任务请一个已允许的OpenAI模型复核，父任务不必一直等着。子会话能继续报告进度，也能带着一个明确问题回来；父任务回答后，还是原来的子会话接着做，之前的上下文不必从头复述。"
+      },
+      {
+        "type": "prose",
+        "text_ref": "**当前情况：**9 月 18 日已实际验收两条链：GLM-5.3 Flash 和 DeepSeek Flash 各作父任务，与同一个 Luna High 子会话完成往返；GLM-5.3 等其他组合仍需自己的证据，不因创建成功就称工作完成。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在官方 Codex 桌面当前父任务中，明确一个有界子任务及允许的 OpenAI 模型和思考档；父任务通过已接入入口协作。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **确认子任务真的获准且能独立完成**　父任务核对本次可用的模型和范围，再把可单独验收的部分交给真实子会话。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在官方 Codex 桌面当前父任务中，明确一个有界子任务及允许的 OpenAI 模型和思考档；父任务通过已接入入口协作。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **确认子任务真的获准且能独立完成**　父任务核对本次可用的模型和范围，再把可单独验收的部分交给真实子会话。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 后台协作使用官方OpenAI线程；它不是独立顶层任务、普通本地模型调用或伪造的原生子代理。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 后台协作使用官方OpenAI线程；它不是独立顶层任务、普通本地模型调用或伪造的原生子代理。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 父任务运行中时排队，空闲时用官方thread/inject_items与实际turn身份接续。机器投递保持不可信消息属性，不能假冒本人新授权；投递结果不确定时先按原身份核对，不盲目重发副作用。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 父任务运行中时排队，空闲时用官方thread/inject_items与实际turn身份接续。机器投递保持不可信消息属性，不能假冒本人新授权；投递结果不确定时先按原身份核对，不盲目重发副作用。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- 受保护判断专用角色在源码里仍写死为 gpt-6-sol/high 常规与 gpt-6-astra/high 重大后果两档，均只接受agent_type/model/reasoning_effort/task_name/message五字段；wait_ms、thread_id、reply_to、fork_turns连null也不可传。我的 AI 规则后来已调整选型，但这里的代码尚未跟着改，属于待同步的差异。Sol 遇升级条件交回原父，角色名不授予模型身份、principal（受验证的执行主体） 或实施授权。错误参数与身份分别返回可纠正代码及五字段说明，不回显私密请求、不创建子会话；旧父会话可在同一会话消费错误后纠正，不降级普通角色绕过保护。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "失败与恢复",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- `docs/maintainer/项目设计与实施归档.md`9月18日GLM与DeepSeek两条实际桌面验收及最终接受",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- `docs/maintainer/项目设计与实施归档.md`9月18日GLM与DeepSeek两条实际桌面验收及最终接受",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-10",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ai-cli-profile-manager-background-openai-children-10",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 6ef0e67dbff75135 的错误→纠错→五字段协议回归属旧阶段；当前模块 0.3.19、桌面桥 b47fea3ce81f7a67 已登记。协议合成响应不是真实厂商 E2E（端到端验证），新父工具 schema（数据结构） 和新分支厂商调用仍另验。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]

@@ -274,7 +274,16 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则",
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          }
+        ],
         "indices": [
           0
         ],
@@ -311,7 +320,16 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日：在桌面版里选本机Qwen3.827B，按规则",
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          }
+        ],
         "indices": [
           0
         ],
@@ -407,7 +425,16 @@
       },
       {
         "type": "screenshot",
-        "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路", "caption_mode": "source_order", "slot_groups": [{"index": 0, "node_indices": [0]}],
+        "text_ref": "9月15日的终端列表：选了本机Qwen3.827B这条路",
+        "caption_mode": "source_order",
+        "slot_groups": [
+          {
+            "index": 0,
+            "node_indices": [
+              0
+            ]
+          }
+        ],
         "indices": [
           0
         ],

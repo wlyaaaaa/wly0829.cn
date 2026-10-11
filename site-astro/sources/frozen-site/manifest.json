@@ -434,7 +434,16 @@
     "/projects/codex-memory/gemini-workspace-memory/",
     "/projects/codex-memory/isolated-disaster-recovery/",
     "/projects/codex-memory/openclaw-workspace-recovery/",
-    "/projects/codex-memory/vss-conversation-hot-backup/"
+    "/projects/codex-memory/vss-conversation-hot-backup/",
+    "/projects/ai-cli-profile-manager/background-openai-children/",
+    "/projects/ai-cli-profile-manager/doctor-validation/",
+    "/projects/ai-cli-profile-manager/engines-providers/",
+    "/projects/ai-cli-profile-manager/install-recovery/",
+    "/projects/ai-cli-profile-manager/local-proxies/",
+    "/projects/ai-cli-profile-manager/native-desktop-integration/",
+    "/projects/ai-cli-profile-manager/profiles-launch/",
+    "/projects/ai-cli-profile-manager/recoverable-runs/",
+    "/projects/ai-cli-profile-manager/secrets-isolation/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
