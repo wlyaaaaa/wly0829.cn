@@ -1,57 +1,323 @@
 {
   "schema": "wly.site-build-receipt.v1",
   "status": "built",
-  "source_commit": "420801d14e64960ec561f0f4d3f983c86e52b453",
-  "prepared_at_beijing": "2026-10-12T03:59:17.733272+08:00",
-  "seconds": 107.621,
+  "source_commit": "19f5bab7b26ade821283db83ffd62f26bbd82437",
+  "prepared_at_beijing": "2026-10-12T04:18:45.367203+08:00",
+  "seconds": 295.772,
   "steps": [
     {
       "name": "source",
-      "seconds": 4.191
+      "seconds": 13.663
     },
     {
       "name": "fingerprint",
-      "seconds": 0.881
+      "seconds": 1.075
     },
     {
       "name": "prepare",
-      "seconds": 0.29
+      "seconds": 21.374
     },
     {
       "name": "native_inputs",
-      "seconds": 0.0
+      "seconds": 6.06
     },
     {
       "name": "blocks",
-      "seconds": 2.14
+      "seconds": 68.535
     },
     {
       "name": "astro",
-      "seconds": 6.415
+      "seconds": 17.477
     },
     {
       "name": "assets",
-      "seconds": 3.528
+      "seconds": 11.87
     },
     {
       "name": "finish",
-      "seconds": 4.416
+      "seconds": 17.042
     },
     {
       "name": "finalize",
-      "seconds": 75.634
+      "seconds": 108.899
     },
     {
       "name": "public",
-      "seconds": 9.369
+      "seconds": 29.065
     },
     {
       "name": "inventory",
-      "seconds": 0.757
+      "seconds": 0.712
     }
   ],
   "rebuilt_pages": [
-    "/cockpit/"
+    "/404/",
+    "/github-profile/",
+    "/how-this-site/",
+    "/how/",
+    "/mcp/",
+    "/projects/",
+    "/projects/agents/",
+    "/projects/agents/authorization-owner/",
+    "/projects/agents/capability-routing/",
+    "/projects/agents/context-evidence/",
+    "/projects/agents/protected-policy/",
+    "/projects/agents/rules-contracts/",
+    "/projects/agents/skills-plugins/",
+    "/projects/agents/working-tree-hot-mirror/",
+    "/projects/ai-cli-profile-manager/",
+    "/projects/ai-cli-profile-manager/background-openai-children/",
+    "/projects/ai-cli-profile-manager/doctor-validation/",
+    "/projects/ai-cli-profile-manager/engines-providers/",
+    "/projects/ai-cli-profile-manager/install-recovery/",
+    "/projects/ai-cli-profile-manager/local-proxies/",
+    "/projects/ai-cli-profile-manager/native-desktop-integration/",
+    "/projects/ai-cli-profile-manager/profiles-launch/",
+    "/projects/ai-cli-profile-manager/recoverable-runs/",
+    "/projects/ai-cli-profile-manager/secrets-isolation/",
+    "/projects/chinese-asr/",
+    "/projects/chinese-asr/audit-evidence/",
+    "/projects/chinese-asr/desktop-dictation/",
+    "/projects/chinese-asr/installation-recovery/",
+    "/projects/chinese-asr/known-text-alignment/",
+    "/projects/chinese-asr/long-batch/",
+    "/projects/chinese-asr/models-modes/",
+    "/projects/chinese-asr/runtime-privacy/",
+    "/projects/chinese-asr/speaker-attribution/",
+    "/projects/chinese-asr/task-routing/",
+    "/projects/codex-agent-model-benchmark/",
+    "/projects/codex-local-remote/",
+    "/projects/codex-memory/",
+    "/projects/codex-memory/claude-project-memory/",
+    "/projects/codex-memory/config-memory-whitelist-sync/",
+    "/projects/codex-memory/content-addressed-storage-cold-sync/",
+    "/projects/codex-memory/gemini-workspace-memory/",
+    "/projects/codex-memory/isolated-disaster-recovery/",
+    "/projects/codex-memory/openclaw-workspace-recovery/",
+    "/projects/codex-memory/vss-conversation-hot-backup/",
+    "/projects/codex-remote/",
+    "/projects/daily-preferences/",
+    "/projects/daily-preferences/current-corrections/",
+    "/projects/daily-preferences/evidence-query/",
+    "/projects/daily-preferences/fact-verification/",
+    "/projects/daily-preferences/mobile-context-delivery/",
+    "/projects/daily-preferences/personal-understanding/",
+    "/projects/daily-preferences/recommendation-choice/",
+    "/projects/daily-preferences/source-coverage/",
+    "/projects/devconfig-backup/",
+    "/projects/devconfig-backup/recovery-and-tasks/",
+    "/projects/devconfig-backup/source-catalog/",
+    "/projects/devconfig-backup/tiered-distribution/",
+    "/projects/devconfig-backup/wechat-native-backup/",
+    "/projects/document-materials/",
+    "/projects/document-materials/current-matter-sources/",
+    "/projects/document-materials/editable-docx-pdf/",
+    "/projects/document-materials/page-audit-release/",
+    "/projects/document-materials/reality-readback-recovery/",
+    "/projects/document-materials/signature-delivery-version/",
+    "/projects/emerald-veil/",
+    "/projects/emerald-veil/native-bubbles-idle-overlay/",
+    "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
+    "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
+    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
+    "/projects/github-index/",
+    "/projects/github-index/project-admission/",
+    "/projects/github-index/protected-major-actions/",
+    "/projects/github-index/publication-gate/",
+    "/projects/github-index/repository-ledger/",
+    "/projects/github-index/snapshot-recovery/",
+    "/projects/github-index/worktree-sync/",
+    "/projects/github-local-index/",
+    "/projects/learning/",
+    "/projects/learning/authoritative-research/",
+    "/projects/learning/dialogue-revision/",
+    "/projects/learning/human-control-simple/",
+    "/projects/learning/plain-language/",
+    "/projects/learning/questions-validation/",
+    "/projects/learning/route-checkpoint/",
+    "/projects/localocr/",
+    "/projects/localocr/document-structure/",
+    "/projects/localocr/input-routing/",
+    "/projects/localocr/installation-recovery/",
+    "/projects/localocr/jobs-cache/",
+    "/projects/localocr/results-evidence/",
+    "/projects/localocr/runtime-resources/",
+    "/projects/meshclip-kit/",
+    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
+    "/projects/meshclip-kit/kde-connect-pairing-sync/",
+    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
+    "/projects/meshclip-kit/tailscale-peer-reachability/",
+    "/projects/openclaw/",
+    "/projects/password-center/",
+    "/projects/pc-panel-hub/",
+    "/projects/pc-panel-hub/case-panel-rendering/",
+    "/projects/pc-panel-hub/hs2-overlay/",
+    "/projects/pc-panel-hub/installation-binding-migration/",
+    "/projects/pc-panel-hub/power-recovery/",
+    "/projects/pc-panel-hub/serial-transport/",
+    "/projects/pc-panel-hub/telemetry-trust/",
+    "/projects/pcconfig/",
+    "/projects/pcconfig/authorization-files/",
+    "/projects/pcconfig/drift-acceptance/",
+    "/projects/pcconfig/machine-facts/",
+    "/projects/pcconfig/memory-diagnostics/",
+    "/projects/pcconfig/owner-takeover/",
+    "/projects/pcconfig/protected-actions/",
+    "/projects/pcconfig/protected-data/",
+    "/projects/pcconfig/recovery-backup/",
+    "/projects/pcconfig/remote-computer-mcp/",
+    "/projects/pcconfig/runtime-startup/",
+    "/projects/pcconfig/secondary-laptop/",
+    "/projects/pcconfig/secrets-providers/",
+    "/projects/personal-expression/",
+    "/projects/personal-expression/corpus-extension-and-private-recovery/",
+    "/projects/personal-expression/explain-to-me/",
+    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
+    "/projects/personal-expression/reply-as-me/",
+    "/projects/personal-formal-documents/",
+    "/projects/personal-health/",
+    "/projects/personal-health/current-evidence-route/",
+    "/projects/personal-health/evidence-three-state/",
+    "/projects/personal-health/health-owner-boundary/",
+    "/projects/personal-health/offline-decision-brief/",
+    "/projects/personal-health/protected-foreground-refresh/",
+    "/projects/personal-health/raw-preservation-resume/",
+    "/projects/personal-materials/",
+    "/projects/personal-materials/bounded-discovery/",
+    "/projects/personal-materials/exact-intake/",
+    "/projects/personal-materials/registered-lookup/",
+    "/projects/personal-materials/verified-open/",
+    "/projects/personal-media/",
+    "/projects/personal-media/classification/",
+    "/projects/personal-media/cloud-candidates/",
+    "/projects/personal-media/local-ingest/",
+    "/projects/personal-media/phone-preservation/",
+    "/projects/personal-media/phone-recovery/",
+    "/projects/personal-media/search-browse/",
+    "/projects/proxyclean/",
+    "/projects/proxyclean/dead-port-and-route-cleanup/",
+    "/projects/proxyclean/dynamic-proxy-status/",
+    "/projects/proxyclean/ipv6-routing-control/",
+    "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
+    "/projects/proxyclean/targeted-port-shutdown/",
+    "/projects/proxyclean/wifi-rebind-and-recovery/",
+    "/projects/ramdisk-guardian/",
+    "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/",
+    "/projects/ramdisk-guardian/host-memory-telemetry-and-silent-monitoring/",
+    "/projects/ramdisk-guardian/installation-and-application-recovery/",
+    "/projects/ramdisk-guardian/unaccounted-watchdog-and-driver-auto-release/",
+    "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
+    "/projects/remote-control/",
+    "/projects/steam-millennium-config-backup/",
+    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
+    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
+    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
+    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/",
+    "/projects/sunshine-remote-streaming/",
+    "/projects/sunshine-remote-streaming/bitrate-codec-strategy/",
+    "/projects/sunshine-remote-streaming/capture-failover/",
+    "/projects/sunshine-remote-streaming/remote-power-and-repair/",
+    "/projects/sunshine-remote-streaming/transport-ipv6-direct/",
+    "/projects/sunshine-remote-streaming/vdd-display-settings/",
+    "/projects/timeaudit/",
+    "/projects/timeaudit/backup-recovery/",
+    "/projects/timeaudit/clipboard-history/",
+    "/projects/timeaudit/collection-pipeline/",
+    "/projects/timeaudit/hardware-performance/",
+    "/projects/timeaudit/process-forensics/",
+    "/projects/timeaudit/runtime-reliability/",
+    "/projects/timeaudit/usage-energy/",
+    "/projects/typora-theme-pack/",
+    "/projects/typora-theme-pack/controlled-preview-and-visual-qa/",
+    "/projects/typora-theme-pack/multi-scenario-export-profiles/",
+    "/projects/typora-theme-pack/theme-installation-and-lifecycle/",
+    "/projects/typora-theme-pack/transactional-pdf-export-pipeline/",
+    "/projects/typora-theme-pack/verdant-mint-theme-system/",
+    "/projects/vault-tool/",
+    "/projects/vault-tool/ai-local-interface/",
+    "/projects/vault-tool/dual-password/",
+    "/projects/vault-tool/files-encryption/",
+    "/projects/vault-tool/image-carrier/",
+    "/projects/vault-tool/maintenance-recovery/",
+    "/projects/vault-tool/passwords-formats/",
+    "/projects/vault-tool/private-backup/",
+    "/projects/vault-tool/view-extract/",
+    "/projects/video-scaffold/",
+    "/projects/video-scaffold/delivery-verify/",
+    "/projects/video-scaffold/deterministic-render/",
+    "/projects/video-scaffold/preflight-preview/",
+    "/projects/video-scaffold/project-bootstrap/",
+    "/projects/video-scaffold/recovery-reuse/",
+    "/projects/video-scaffold/scene-authoring/",
+    "/projects/video-scaffold/voice-timing/",
+    "/projects/wechat-direct/",
+    "/projects/wechat-direct/account-source-identity/",
+    "/projects/wechat-direct/bounded-chat-context/",
+    "/projects/wechat-direct/moments-local-cache/",
+    "/projects/wechat-direct/named-chat-archive/",
+    "/projects/wechat-direct/preservation-verification/",
+    "/projects/wechat-direct/reply-media-relations/",
+    "/projects/wechat-history-ai-bridge/",
+    "/projects/wechatdirect/",
+    "/projects/wly0829-cn/",
+    "/projects/work-delivery-copilot/",
+    "/projects/work-delivery/",
+    "/projects/work-delivery/consistent-deliverables/",
+    "/projects/work-delivery/evidence-quality/",
+    "/projects/work-delivery/package-sources/",
+    "/projects/work-delivery/source-change-next-version/",
+    "/projects/work-delivery/value-state-recovery/",
+    "/rescue/",
+    "/rules/",
+    "/rules/authorization/",
+    "/rules/capabilities-runtime/",
+    "/rules/charter/",
+    "/rules/claude-adapter/",
+    "/rules/codex-adapter/",
+    "/rules/context-sources/",
+    "/rules/engineering-delivery/",
+    "/rules/execution-coordination/",
+    "/rules/privacy-data/",
+    "/rules/protected-actions/",
+    "/rules/rule-release/",
+    "/search/",
+    "/skills/",
+    "/skills/authorization-file-broker/",
+    "/skills/browser-control-continuity/",
+    "/skills/chinese-asr/",
+    "/skills/cloud-asset-channel/",
+    "/skills/cockpit/",
+    "/skills/control-plane-doctor/",
+    "/skills/daily-preferences/",
+    "/skills/document-materials/",
+    "/skills/documents/",
+    "/skills/explain-to-me/",
+    "/skills/file-intake-router/",
+    "/skills/google-workspace-direct/",
+    "/skills/learning/",
+    "/skills/llm-backend-toolkit/",
+    "/skills/local-secret-broker/",
+    "/skills/localocr/",
+    "/skills/md-to-pdf/",
+    "/skills/media-person-self/",
+    "/skills/mojibake-doctor/",
+    "/skills/native-economy-routing/",
+    "/skills/pdf-render-safe/",
+    "/skills/pdf/",
+    "/skills/personal-formal-documents/",
+    "/skills/personal-health/",
+    "/skills/personal-materials/",
+    "/skills/personal-media/",
+    "/skills/personal-panel-refresh/",
+    "/skills/project-entry-gate/",
+    "/skills/reply-as-me/",
+    "/skills/report-page/",
+    "/skills/tailscale-safe-exposure/",
+    "/skills/timeaudit-diagnostics/",
+    "/skills/token-budget-advisor/",
+    "/skills/vault-workflow/",
+    "/skills/wechat-direct/",
+    "/skills/work-delivery/"
   ],
   "html_files": 312,
   "files": [
@@ -13496,6 +13762,11 @@
       "sha256": "044ac12950d6e8e0fb28b053a0a4e4f91e7f708ba34ad677be1b8ef7127f7d02"
     },
     {
+      "path": "assets/_fingerprinted/0453858457028fd3bbd5564e5051a101705b0ad4fde99c591a3ac467ca0667f5.png",
+      "bytes": 50724,
+      "sha256": "0453858457028fd3bbd5564e5051a101705b0ad4fde99c591a3ac467ca0667f5"
+    },
+    {
       "path": "assets/_fingerprinted/045956969e5df21a0b204dbbf5f8b8ee9606a94d2b3c9702ba24e90ede88fc1e.png",
       "bytes": 305611,
       "sha256": "045956969e5df21a0b204dbbf5f8b8ee9606a94d2b3c9702ba24e90ede88fc1e"
@@ -13929,6 +14200,11 @@
       "path": "assets/_fingerprinted/10749647d8fda19df5273f6c6486b2c73544ab8df912911153f074aaf621bba6.webp",
       "bytes": 1122356,
       "sha256": "10749647d8fda19df5273f6c6486b2c73544ab8df912911153f074aaf621bba6"
+    },
+    {
+      "path": "assets/_fingerprinted/1092b9de5b3c760cfbe21b825215c21982284e2b65c1014a892567e6590d4e32.png",
+      "bytes": 34585,
+      "sha256": "1092b9de5b3c760cfbe21b825215c21982284e2b65c1014a892567e6590d4e32"
     },
     {
       "path": "assets/_fingerprinted/10a3ada2127b5ec1912e3c479cf920888f6b0887a9b459aa91547c95e2865083.png",
@@ -14834,6 +15110,11 @@
       "path": "assets/_fingerprinted/2bb5e6e3ac668f37a5d6ab9fcca1d50700949ac369f6e51e2bf855c3c62d0189.png",
       "bytes": 80383,
       "sha256": "2bb5e6e3ac668f37a5d6ab9fcca1d50700949ac369f6e51e2bf855c3c62d0189"
+    },
+    {
+      "path": "assets/_fingerprinted/2bb86fca72396bd25cf2d6ae320e72f9528fa95522810e7f9ec275f7214b14e0.png",
+      "bytes": 65759,
+      "sha256": "2bb86fca72396bd25cf2d6ae320e72f9528fa95522810e7f9ec275f7214b14e0"
     },
     {
       "path": "assets/_fingerprinted/2c072718ead34d626da7ba9521cccb30a9195e0dc9014a67564be43fa2836e7f.png",
@@ -15766,6 +16047,11 @@
       "sha256": "4488f7f5b0ef44891c2dc96035f4213db18c8026329811b84d2ccf1858dd6bec"
     },
     {
+      "path": "assets/_fingerprinted/448b4c7a67cccf9e27e77a937c2ed23ee366686409c3c4649af5199022a81073.png",
+      "bytes": 2917591,
+      "sha256": "448b4c7a67cccf9e27e77a937c2ed23ee366686409c3c4649af5199022a81073"
+    },
+    {
       "path": "assets/_fingerprinted/44b31c673e934e2e73f706d3de1786eb7d25f9819a03f4cd4be818f7529f1a49.png",
       "bytes": 1057967,
       "sha256": "44b31c673e934e2e73f706d3de1786eb7d25f9819a03f4cd4be818f7529f1a49"
@@ -16066,6 +16352,11 @@
       "sha256": "4bf35d888c40a4d81300fb9e491442940ca6f9083197afd83364acfd0159d6ed"
     },
     {
+      "path": "assets/_fingerprinted/4bf86bc6d0a447801dd2540276d1ed5cf76bf0829cfb82ab29bd77fa1d8e81a8.png",
+      "bytes": 2068013,
+      "sha256": "4bf86bc6d0a447801dd2540276d1ed5cf76bf0829cfb82ab29bd77fa1d8e81a8"
+    },
+    {
       "path": "assets/_fingerprinted/4c42bcecdbe42d29e4ac55143b3c2bbe648a10ef92823a2de7ed09e68911a57b.png",
       "bytes": 92846,
       "sha256": "4c42bcecdbe42d29e4ac55143b3c2bbe648a10ef92823a2de7ed09e68911a57b"
@@ -16109,6 +16400,11 @@
       "path": "assets/_fingerprinted/4e75e4e3f72dd6d55a103260ba22a76619641226f1fe6f9d4d65d54574419a8e.json",
       "bytes": 9430,
       "sha256": "f71ab3211c22c43da032c7ba08e73d78ef1e516c43abb572a656219157b193d6"
+    },
+    {
+      "path": "assets/_fingerprinted/4e93b7d0e034fcf128b1173c7639318d2ec55417f007ea6d1e3fddc65884532e.png",
+      "bytes": 56988,
+      "sha256": "4e93b7d0e034fcf128b1173c7639318d2ec55417f007ea6d1e3fddc65884532e"
     },
     {
       "path": "assets/_fingerprinted/4e9df474b7033f1aa503a2da5b6763c3e639e90b0b40100c96e6be9204ed4c0d.png",
@@ -16229,6 +16525,11 @@
       "path": "assets/_fingerprinted/5187367cdae82af4878198c4078fc7ffa08fa0f9d9ca16baf20e1466de32223a.png",
       "bytes": 323360,
       "sha256": "5187367cdae82af4878198c4078fc7ffa08fa0f9d9ca16baf20e1466de32223a"
+    },
+    {
+      "path": "assets/_fingerprinted/51a35c2b68725f54e9a3f9a8a6de49397e8b31b41339b3b83708310377a03c2b.png",
+      "bytes": 102913,
+      "sha256": "51a35c2b68725f54e9a3f9a8a6de49397e8b31b41339b3b83708310377a03c2b"
     },
     {
       "path": "assets/_fingerprinted/51a4a608267e0aea3e4da153b7bededc8385e8dd97990cf2c0d93ffe56f1f0a2.png",
@@ -16369,6 +16670,11 @@
       "path": "assets/_fingerprinted/55aaabf752a19a11ed297abeedf5863b96a2cda04d9f7ecb99e88a3b7a4380d4.png",
       "bytes": 110065,
       "sha256": "55aaabf752a19a11ed297abeedf5863b96a2cda04d9f7ecb99e88a3b7a4380d4"
+    },
+    {
+      "path": "assets/_fingerprinted/55c2e22fb435b5915da02f4aeaa42e4af5469450b4d687ba738be24fe1db32c1.png",
+      "bytes": 19005,
+      "sha256": "55c2e22fb435b5915da02f4aeaa42e4af5469450b4d687ba738be24fe1db32c1"
     },
     {
       "path": "assets/_fingerprinted/55d32f5accb3b0f3b0581ada87254e747e7beb55266ea7bf9a9d9e4ff5c886ff.png",
@@ -16609,6 +16915,11 @@
       "path": "assets/_fingerprinted/5cabce2402845f2bf706486471085e1ea7eb36fccab3d00fade342e99ab9681c.png",
       "bytes": 375173,
       "sha256": "5cabce2402845f2bf706486471085e1ea7eb36fccab3d00fade342e99ab9681c"
+    },
+    {
+      "path": "assets/_fingerprinted/5cdea3f114a6b5ef6de0a5ad4f313deac4c21b7297175d70b433a40901dd4794.png",
+      "bytes": 2061691,
+      "sha256": "5cdea3f114a6b5ef6de0a5ad4f313deac4c21b7297175d70b433a40901dd4794"
     },
     {
       "path": "assets/_fingerprinted/5d52388f9cc83422a1f4ae5c9766ef7d3654091d91f93e1dfd17302e9a585d73.webp",
@@ -16911,6 +17222,11 @@
       "sha256": "667c9a99170e7af82ce15d8b16fda8e23101f66a67db0ee85e1362b727a733fc"
     },
     {
+      "path": "assets/_fingerprinted/669be05f701e650e40ac1cb7099ce57e99caf4187f29ccbde775d071f1eb7cca.png",
+      "bytes": 55286,
+      "sha256": "669be05f701e650e40ac1cb7099ce57e99caf4187f29ccbde775d071f1eb7cca"
+    },
+    {
       "path": "assets/_fingerprinted/66a0049cc39a2d4a330bda717f2aa9e8f836dc7a96de04e6b532fa99ec35947f.json",
       "bytes": 5267,
       "sha256": "f67aa5a49cd0b35f91a121241cbeef50d6351f87ad259e094b3a5bee9082c43a"
@@ -16919,6 +17235,11 @@
       "path": "assets/_fingerprinted/66a045cda44509486960406eb99ebc319ecbdb04a3f7f693cb3fc177d9971e11.png",
       "bytes": 370624,
       "sha256": "66a045cda44509486960406eb99ebc319ecbdb04a3f7f693cb3fc177d9971e11"
+    },
+    {
+      "path": "assets/_fingerprinted/66de2125050629c4441cbf2e72f0d2c785039afec0101948b6bcbc2d2f904eb3.png",
+      "bytes": 49518,
+      "sha256": "66de2125050629c4441cbf2e72f0d2c785039afec0101948b6bcbc2d2f904eb3"
     },
     {
       "path": "assets/_fingerprinted/66ef383d691eb37a1968b64c04fb3e550520e3a9254b876129fb93e81730aacb.png",
@@ -17011,6 +17332,11 @@
       "sha256": "6a04a76ba647760bd360d417fa53d0df61ccbb296b9d1cfc947d54ee5a080b57"
     },
     {
+      "path": "assets/_fingerprinted/6a384af1ebd1243b25b11f7e658fb86849a1531b289c8a505e38d31b6e1fae76.png",
+      "bytes": 56506,
+      "sha256": "6a384af1ebd1243b25b11f7e658fb86849a1531b289c8a505e38d31b6e1fae76"
+    },
+    {
       "path": "assets/_fingerprinted/6a48fc6217972ce59602e8fc1e8a472e2fe23526c007b4277088e49956d7f244.png",
       "bytes": 278629,
       "sha256": "6a48fc6217972ce59602e8fc1e8a472e2fe23526c007b4277088e49956d7f244"
@@ -17059,6 +17385,11 @@
       "path": "assets/_fingerprinted/6b6cab1520c14a74758790be11a499ddddb767e59b8a0c0d2308efb0c35d9a5b.png",
       "bytes": 220651,
       "sha256": "6b6cab1520c14a74758790be11a499ddddb767e59b8a0c0d2308efb0c35d9a5b"
+    },
+    {
+      "path": "assets/_fingerprinted/6b8879e24a034f595ffb30542414b0fb906a92fad82f526d626181da9a462516.png",
+      "bytes": 1637882,
+      "sha256": "6b8879e24a034f595ffb30542414b0fb906a92fad82f526d626181da9a462516"
     },
     {
       "path": "assets/_fingerprinted/6bac7b22198bde4efcd17cbfe99469e2cb8ba4e9291af5be311263d814ba47fc.png",
@@ -17196,6 +17527,11 @@
       "sha256": "6f7b36f67e7a930e8d519f2608be50be42ea865455c699d0168ba12d0839d9c7"
     },
     {
+      "path": "assets/_fingerprinted/6fc895abc0f157feefc3e943736ef56f7e85d92b3c6058f46fa9c815d5e22854.png",
+      "bytes": 65508,
+      "sha256": "6fc895abc0f157feefc3e943736ef56f7e85d92b3c6058f46fa9c815d5e22854"
+    },
+    {
       "path": "assets/_fingerprinted/6fcadbb606242c83dee5b746dd437449f1cfc6cfd599ea63288000064a800189.png",
       "bytes": 72135,
       "sha256": "6fcadbb606242c83dee5b746dd437449f1cfc6cfd599ea63288000064a800189"
@@ -17319,6 +17655,11 @@
       "path": "assets/_fingerprinted/72b30f412e7549ca6b8372cf1fd5631af4192d36bc6d1d36fed9e685cd417242.png",
       "bytes": 121055,
       "sha256": "72b30f412e7549ca6b8372cf1fd5631af4192d36bc6d1d36fed9e685cd417242"
+    },
+    {
+      "path": "assets/_fingerprinted/72d3703e13eee7cc7c6e6b8189457a3b50ae7475666f52662f0f0072228820cd.png",
+      "bytes": 1435196,
+      "sha256": "72d3703e13eee7cc7c6e6b8189457a3b50ae7475666f52662f0f0072228820cd"
     },
     {
       "path": "assets/_fingerprinted/7325b9e57f098033488a800564b47516c17219cfb93bea119c8ecc8da5ec690e.png",
@@ -18271,6 +18612,11 @@
       "sha256": "8de10ccf5db7a61ca06adfd5e2dd98b7d53c0e2ed1602d101c8eba2d8f194760"
     },
     {
+      "path": "assets/_fingerprinted/8dfe93a10b0dc51adaf513dd43744038dcf87da2a83acc33724bf7b69caccbcc.png",
+      "bytes": 2056606,
+      "sha256": "8dfe93a10b0dc51adaf513dd43744038dcf87da2a83acc33724bf7b69caccbcc"
+    },
+    {
       "path": "assets/_fingerprinted/8e0234fd96575982b9fd390796cdbfb281c7ce189f72908aa5f056ee68caea55.png",
       "bytes": 284478,
       "sha256": "8e0234fd96575982b9fd390796cdbfb281c7ce189f72908aa5f056ee68caea55"
@@ -18446,6 +18792,11 @@
       "sha256": "9276a0589d5f72b2d7dbe21b126929ffba161c288ecc3f1bdbe8d30796a54ae0"
     },
     {
+      "path": "assets/_fingerprinted/92794254164af3bfb2606b096ab3eaed6ff3da19cdfd433386ed0b4d614d23a1.png",
+      "bytes": 1667605,
+      "sha256": "92794254164af3bfb2606b096ab3eaed6ff3da19cdfd433386ed0b4d614d23a1"
+    },
+    {
       "path": "assets/_fingerprinted/92f5a00e81d0ccb9ad639057731b3c87048d60d68e919cadf4209a2718515d3b.png",
       "bytes": 344225,
       "sha256": "92f5a00e81d0ccb9ad639057731b3c87048d60d68e919cadf4209a2718515d3b"
@@ -18579,6 +18930,11 @@
       "path": "assets/_fingerprinted/97e49260bdba7b32685914eababa94e681077f570c540ac138df0f5077eef96f.png",
       "bytes": 76733,
       "sha256": "97e49260bdba7b32685914eababa94e681077f570c540ac138df0f5077eef96f"
+    },
+    {
+      "path": "assets/_fingerprinted/9833f20f9217d1451fe0b0d9398104a815e8b42764c47014016b81dc29333368.png",
+      "bytes": 44649,
+      "sha256": "9833f20f9217d1451fe0b0d9398104a815e8b42764c47014016b81dc29333368"
     },
     {
       "path": "assets/_fingerprinted/985bc45308e1196457435a952b375a28b351bf65c565cb75cf805e34cb6e8213.png",
@@ -20311,6 +20667,11 @@
       "sha256": "c8558a3277d8a71be39bdb26483382fb3977b23d6976ba3e6527eede2126f8b4"
     },
     {
+      "path": "assets/_fingerprinted/c85c6eeceeacc595a3158071fa86f331c9b6da7eb173ea792173a4ce179d429e.png",
+      "bytes": 1414115,
+      "sha256": "c85c6eeceeacc595a3158071fa86f331c9b6da7eb173ea792173a4ce179d429e"
+    },
+    {
       "path": "assets/_fingerprinted/c888a5bc37e0960fe8bc024f2beeb712c10eb8b39eeaf25406199aaeb4593751.png",
       "bytes": 67795,
       "sha256": "c888a5bc37e0960fe8bc024f2beeb712c10eb8b39eeaf25406199aaeb4593751"
@@ -20871,6 +21232,11 @@
       "sha256": "d75a79383ad825781d240fe933ca3737abc592d3e7ace0499e4a5e001c9d4e35"
     },
     {
+      "path": "assets/_fingerprinted/d75ac1b584d8572d68bd1b1feaf436af6bfdac5f09c6df1420333771d2302039.png",
+      "bytes": 63415,
+      "sha256": "d75ac1b584d8572d68bd1b1feaf436af6bfdac5f09c6df1420333771d2302039"
+    },
+    {
       "path": "assets/_fingerprinted/d760d2cfffb4254872b8408ba18598d8a97255d177d6627f531daed92fe76198.png",
       "bytes": 65325,
       "sha256": "d760d2cfffb4254872b8408ba18598d8a97255d177d6627f531daed92fe76198"
@@ -20901,6 +21267,11 @@
       "sha256": "d89c1245db92689bb2434a1df06370f5d5be25d91d4b365386c89d70a8242314"
     },
     {
+      "path": "assets/_fingerprinted/d8b4e8715a8d1a916658ca900fd21d91ee4f1624bb6a7d1187de445bded9bde0.png",
+      "bytes": 89707,
+      "sha256": "d8b4e8715a8d1a916658ca900fd21d91ee4f1624bb6a7d1187de445bded9bde0"
+    },
+    {
       "path": "assets/_fingerprinted/d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7.png",
       "bytes": 1682203,
       "sha256": "d8caa3a377838d7bb36bf12ab3d81365013fb4d3908627fe49c96e40b92a27b7"
@@ -20921,6 +21292,11 @@
       "sha256": "d93ac99facfe5fcfb2a6342934f0181c28f9f36bbba232c52fd97434c3f42fe9"
     },
     {
+      "path": "assets/_fingerprinted/d95d5b253d77e4ee59a8799f61bd2cc446e711fa85534253587f53084ecd2356.png",
+      "bytes": 1825061,
+      "sha256": "d95d5b253d77e4ee59a8799f61bd2cc446e711fa85534253587f53084ecd2356"
+    },
+    {
       "path": "assets/_fingerprinted/d9780b813b03a93d0461eeb322092b9f7afeaad9d362c9b9163f5aaa881fa355.png",
       "bytes": 253022,
       "sha256": "d9780b813b03a93d0461eeb322092b9f7afeaad9d362c9b9163f5aaa881fa355"
@@ -20939,6 +21315,11 @@
       "path": "assets/_fingerprinted/d9b784d2c408aacb1990c8fbd86a2206c2b6f06e94f232b67993ef73876a255a.png",
       "bytes": 88546,
       "sha256": "d9b784d2c408aacb1990c8fbd86a2206c2b6f06e94f232b67993ef73876a255a"
+    },
+    {
+      "path": "assets/_fingerprinted/d9bc31e4df6a7580621e4dbf4473a8fb1323810a948be1b351c917f55e56dec3.png",
+      "bytes": 2011692,
+      "sha256": "d9bc31e4df6a7580621e4dbf4473a8fb1323810a948be1b351c917f55e56dec3"
     },
     {
       "path": "assets/_fingerprinted/d9c32721eea109cb5f298bd7517eb9a74ad94b16b1167ad2a4e7f39bf4f3527f.png",
@@ -21059,6 +21440,11 @@
       "path": "assets/_fingerprinted/dd5edf7b9984e271a1241436e0530a2907cc18e3ccd30607230bf29655f1ceb0.png",
       "bytes": 45566,
       "sha256": "dd5edf7b9984e271a1241436e0530a2907cc18e3ccd30607230bf29655f1ceb0"
+    },
+    {
+      "path": "assets/_fingerprinted/ddc9e101bc030387ac6b494a3095f7af1c977ca22a8f76c6a5cd1dc484ce7fc3.png",
+      "bytes": 1190819,
+      "sha256": "ddc9e101bc030387ac6b494a3095f7af1c977ca22a8f76c6a5cd1dc484ce7fc3"
     },
     {
       "path": "assets/_fingerprinted/de0d4a362c06bcff0f0d42a5bd2cb73f1b82ad450a4893de13013b4ebc06e1b5.json",
@@ -21196,6 +21582,11 @@
       "sha256": "e059124923bd6a0b5699affb2267e0733cb94f3c194c92ab5762bedb221827b5"
     },
     {
+      "path": "assets/_fingerprinted/e0af31b093df5c73a3e68c09a421e1b8ded0d5d4d1e2c034c1a0587c50f6916f.png",
+      "bytes": 1183840,
+      "sha256": "e0af31b093df5c73a3e68c09a421e1b8ded0d5d4d1e2c034c1a0587c50f6916f"
+    },
+    {
       "path": "assets/_fingerprinted/e0b0ba31c87ff16ef16e47f7b1b58a4554d9ecebe59e17cdd8e01b5923a3fdd7.png",
       "bytes": 1697863,
       "sha256": "e0b0ba31c87ff16ef16e47f7b1b58a4554d9ecebe59e17cdd8e01b5923a3fdd7"
@@ -21319,6 +21710,11 @@
       "path": "assets/_fingerprinted/e420552f0e60f79fbeca755b7dcba7cad77d699ead2199597ab596e704b714c6.png",
       "bytes": 240921,
       "sha256": "e420552f0e60f79fbeca755b7dcba7cad77d699ead2199597ab596e704b714c6"
+    },
+    {
+      "path": "assets/_fingerprinted/e428be3eb3e36fff094d921347a6be90747b01bfd550218524c196d01c303c5d.png",
+      "bytes": 43094,
+      "sha256": "e428be3eb3e36fff094d921347a6be90747b01bfd550218524c196d01c303c5d"
     },
     {
       "path": "assets/_fingerprinted/e477f3f17372c135b9bca30a59493a580698c6c7595b0666a541732e2c0a927f.png",
@@ -21464,6 +21860,11 @@
       "path": "assets/_fingerprinted/ea3b2253569bb9a3bd695c81c3a6f2b48a385841de17eb66b14a8b92042d9f1f.json",
       "bytes": 11328,
       "sha256": "ceab5f8588706af894dad927716e2346e1f7755f354835f0482f1d7cd454a3d5"
+    },
+    {
+      "path": "assets/_fingerprinted/ea62c12f0d27819eb6229fa6d30a54f8ee91fd71656abc2960277db1e2232cd9.png",
+      "bytes": 1807268,
+      "sha256": "ea62c12f0d27819eb6229fa6d30a54f8ee91fd71656abc2960277db1e2232cd9"
     },
     {
       "path": "assets/_fingerprinted/eaec202faa47cebc15e0b952d347c345cba97b75360f811ec07fa326350842bc.png",
@@ -21649,6 +22050,11 @@
       "path": "assets/_fingerprinted/ef47a3cf99d9f2b5722ca90b6e552dfb13184daed7f3e6c565d6d023e4b82ded.png",
       "bytes": 1507418,
       "sha256": "ef47a3cf99d9f2b5722ca90b6e552dfb13184daed7f3e6c565d6d023e4b82ded"
+    },
+    {
+      "path": "assets/_fingerprinted/ef4cc3517a63e6c3dc11a6b3e873723a0fa82f43136b2a62847e315bb73a7ddb.png",
+      "bytes": 39779,
+      "sha256": "ef4cc3517a63e6c3dc11a6b3e873723a0fa82f43136b2a62847e315bb73a7ddb"
     },
     {
       "path": "assets/_fingerprinted/ef6f9637d6fc3120502f2c2f3245d50bfb7ad3fda54db56afbca5c4d24d30322.png",
@@ -22154,6 +22560,11 @@
       "path": "assets/_fingerprinted/fd4f5100be21c07252fc2f34b288729fc0c0b93dba1efba1b62d55b48e6ea65d.png",
       "bytes": 2216940,
       "sha256": "fd4f5100be21c07252fc2f34b288729fc0c0b93dba1efba1b62d55b48e6ea65d"
+    },
+    {
+      "path": "assets/_fingerprinted/fe35ff51e7100c1b7d16b54c8db9625ba7727286f113784621fcbf08e574bd1b.png",
+      "bytes": 2262640,
+      "sha256": "fe35ff51e7100c1b7d16b54c8db9625ba7727286f113784621fcbf08e574bd1b"
     },
     {
       "path": "assets/_fingerprinted/fe3b44c69ff4b7bcde96e4d4c2cbcc12dc7a7e7c4bf9ff24067cd348ed0b8c25.png",
@@ -23386,6 +23797,11 @@
       "sha256": "57b4e381e7ba63abd2c3c532a940d43296c1f68a56c5946a3b315a905dd0cf2e"
     },
     {
+      "path": "assets/_fonts/skill-documents-35281b2e0159.woff2",
+      "bytes": 147256,
+      "sha256": "0531b91d1d73a519e0e4496c2d48d8f0c342057b781fa545fd65b0a82223f806"
+    },
+    {
       "path": "assets/_fonts/skill-explain-to-me-3d2cd1c518df.woff2",
       "bytes": 132736,
       "sha256": "66f2f1698627794ac56c82daaf56702cbe4422c1ce674cdef0986358aba2c87d"
@@ -23479,6 +23895,11 @@
       "path": "assets/_fonts/skill-native-economy-routing-4917b1691650.woff2",
       "bytes": 56276,
       "sha256": "8a788ed30497908497c83311aa5dbe2697775655a4b01945369321653bff1d76"
+    },
+    {
+      "path": "assets/_fonts/skill-pdf-b5bf52dbfe96.woff2",
+      "bytes": 130680,
+      "sha256": "dc3e18c29a5f42646a89454ce7436bfba3ef1e5e36572b8707bf6869a2992d93"
     },
     {
       "path": "assets/_fonts/skill-pdf-render-safe-7f6596d49df5.woff2",
@@ -23634,6 +24055,11 @@
       "path": "assets/_fonts/skills-home-643aa097d631.woff2",
       "bytes": 131100,
       "sha256": "2619ac0d300a0e852ade3710c21526cb03eaf360bc3ea396abff65dbabe6a9b2"
+    },
+    {
+      "path": "assets/_fonts/skills-home-c02b33c11d65.woff2",
+      "bytes": 132104,
+      "sha256": "e3c0af357fcb023d800821563b7f98334ea98372c72e81496d5bd290fb6fc4bb"
     },
     {
       "path": "assets/_fonts/steam-millennium-config-backup-06630e387bf7.woff2",
@@ -26053,12 +26479,12 @@
     {
       "path": "release-identity.json",
       "bytes": 211,
-      "sha256": "1f5bfc419d1121e748173f178180bde18041c9a5a9335a5287718ced1d3c06b4"
+      "sha256": "0cb15383a3295a938ae296eca8414a53f9b114af435f9e0c4a57a925fb163e7a"
     },
     {
       "path": "release-manifest.json",
-      "bytes": 4927876,
-      "sha256": "186c43206c282f8302f70761aa80703c6d5659e624c49c6297097b1f444e8757"
+      "bytes": 4960968,
+      "sha256": "9e4aeb83429f2a4c9c96bc5c393bc4b4b5d45a9f28af0c11619ee47defd17372"
     },
     {
       "path": "rescue/index.html",
@@ -26223,12 +26649,12 @@
     {
       "path": "search/index.html",
       "bytes": 62098,
-      "sha256": "1feb82ce784d92243815226191ca2ef681a5089cc72645b18d22af19bdb0363b"
+      "sha256": "61b6eeffed3c81b2c7c21cd684f47cb90d6ea5284202ee48cf380e6e0fb7390a"
     },
     {
       "path": "search-index.js",
-      "bytes": 1490859,
-      "sha256": "4c19d3cf72b0d863220583a637c82f284c809eb4f0b3e662f429da7af13763b9"
+      "bytes": 1513510,
+      "sha256": "3cd4955fa301535fadb2ddfaa916a06ef7a6ae911686cb76531e8f656c46e9a3"
     },
     {
       "path": "search-project-localocr.js",
@@ -26327,8 +26753,8 @@
     },
     {
       "path": "skills/documents/index.html",
-      "bytes": 88067,
-      "sha256": "66af524a8f364b3dd82aa0346f56aad4afa78761e6e9dac87668196ce760ea25"
+      "bytes": 140823,
+      "sha256": "038e68a0d6d441267016e9239929f1ae9128a8237f51bac9a1c554e519363af1"
     },
     {
       "path": "skills/explain-to-me/assets/hero-7a2e54fa1b39c21a-mask.png",
@@ -26367,8 +26793,8 @@
     },
     {
       "path": "skills/index.html",
-      "bytes": 248086,
-      "sha256": "e48397295b20146528a58ab4f1c59c8c4075504716c232a2d7022e0401ce7ace"
+      "bytes": 253642,
+      "sha256": "bfe0824942f47f25e1ad5bfc0fac03b9850fcc804a2f4058a852c133898eb0bb"
     },
     {
       "path": "skills/learning/assets/hero-11bd1a88127ff482-mask.png",
@@ -26462,8 +26888,8 @@
     },
     {
       "path": "skills/pdf/index.html",
-      "bytes": 75312,
-      "sha256": "8a2f45beccab9e6ab1e718702bb55f561c0071c9e415633033bab9541637793d"
+      "bytes": 134800,
+      "sha256": "d4d050260adc06060e33ab89d36b1d9b479cad2829ebd557c8a2a62eabc71179"
     },
     {
       "path": "skills/pdf-render-safe/index.html",
@@ -26663,5 +27089,5 @@
   ],
   "output": "E:\\Cache\\wly-site-build\\wt\\dist",
   "previous_oss_source": "published",
-  "previous_release_id": "912f787878a37fbe743be55d976cfcfe3f9a4bc3feb626bd5b84a2ddc872247d"
+  "previous_release_id": "6a9387ade2b01f2748fbf41658f5ac59c3044d62cbed3f99849afd66c4fa468a"
 }
