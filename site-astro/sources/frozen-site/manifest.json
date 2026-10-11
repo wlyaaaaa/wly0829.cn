@@ -4968,8 +4968,7 @@
     },
     "_typeset/rule-sources/02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd.md": {
       "sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
-      "bytes": 15057,
-      "source_path": "sources/rules/docs/contracts/agents.context-sources.md"
+      "bytes": 15057
     },
     "_typeset/rule-sources/0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5.md": {
       "sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
@@ -4988,33 +4987,27 @@
     },
     "_typeset/rule-sources/41b06a9471d073433bbb3d4ae69d7c49bee4916d662a1e39b684a8de67bc0cbc.md": {
       "sha256": "41b06a9471d073433bbb3d4ae69d7c49bee4916d662a1e39b684a8de67bc0cbc",
-      "bytes": 27461,
-      "source_path": "sources/rules/docs/contracts/agents.execution-coordination.md"
+      "bytes": 27461
     },
     "_typeset/rule-sources/9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e.md": {
       "sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e",
-      "bytes": 2597,
-      "source_path": "site-astro/public/rule-sources/templates/claude-home/CLAUDE.md"
+      "bytes": 2597
     },
     "_typeset/rule-sources/a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378.md": {
       "sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
-      "bytes": 28969,
-      "source_path": "sources/rules/docs/contracts/agents.engineering-delivery.md"
+      "bytes": 28969
     },
     "_typeset/rule-sources/bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9.md": {
       "sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9",
-      "bytes": 2323,
-      "source_path": "sources/rules/templates/codex-home/AGENTS.md"
+      "bytes": 2323
     },
     "_typeset/rule-sources/c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9.md": {
       "sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
-      "bytes": 11166,
-      "source_path": "sources/rules/docs/contracts/agents.codex-adapter.md"
+      "bytes": 11166
     },
     "_typeset/rule-sources/ca02d981a6bcd82fb7998f46bb8b64ea2d2bd8539b022f92a9e1b14412bab031.md": {
       "sha256": "ca02d981a6bcd82fb7998f46bb8b64ea2d2bd8539b022f92a9e1b14412bab031",
-      "bytes": 29215,
-      "source_path": "sources/rules/docs/contracts/agents.claude-adapter.md"
+      "bytes": 29215
     },
     "_typeset/rule-sources/d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997.md": {
       "sha256": "d958c8ba632bbfd8d471ca50a682ca10cb42d8e32f60ae23cff1704e4b0e8997",
@@ -11918,13 +11911,11 @@
     },
     "rule-sources/templates/claude-home/CLAUDE.md": {
       "sha256": "9014705114ed3822c125cdaf584cadf6a4f6844db071c3ffed82c938d267867e",
-      "bytes": 2597,
-      "source_path": "site-astro/public/rule-sources/templates/claude-home/CLAUDE.md"
+      "bytes": 2597
     },
     "rule-sources/templates/codex-home/AGENTS.md": {
       "sha256": "bf6920249c0e626da9dc8e9eeace05893b348b192a02f24b29fb76827ddd24c9",
-      "bytes": 2323,
-      "source_path": "sources/rules/templates/codex-home/AGENTS.md"
+      "bytes": 2323
     },
     "projects/work-delivery-copilot/assets/hero-eed7e145673e8f8c-mask.png": {
       "sha256": "ba1f9ebc52b8159d96547ce78d865002e512ef6a52a598fa9daecc0a49e32775",
