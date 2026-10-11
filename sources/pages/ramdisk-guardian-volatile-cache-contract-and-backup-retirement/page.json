@@ -1,0 +1,167 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement",
+  "kind": "project",
+  "title": "缓存放在哪里，哪些东西不能进Z",
+  "url": "/projects/ramdisk-guardian/volatile-cache-contract-and-backup-retirement/",
+  "parent": "ramdisk-guardian",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "缓存边界按现行源码和电脑配置（PCConfig）截止前的存放策略核对（均早于 10 月 11 日 14:00）；盘占用取截止前最后一轮巡查，提速仍未实测"
+  },
+  "screens": [
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-01",
+      "section": "top",
+      "title": "缓存放在哪里，哪些东西不能进Z",
+      "text": "# 缓存放在哪里，哪些东西不能进Z\n\n〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nRamdiskGuardian · 功能说明\n\n避免为了读写速度，把唯一资料的生存时间绑在内存盘上。\n\n**当前情况：**当前只允许有界、可重建缓存使用内存盘；截止前最后一轮巡查（10 月 11 日 13:46）12 GiB 的盘只用了 0.5 GiB，基本是 Chrome 的三类缓存。它没有替唯一文件备份或自动识别误放资料的功能，用它到底快了多少也一直没实测。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 内存盘守护",
+          "href": "/projects/ramdisk-guardian/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/RamdiskGuardian"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/ramdisk-guardian/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n历史镜像备份曾在空源时覆盖目标；继续给RAM Disk补备份并不能消除它承担唯一数据的风险。当前做法直接让正式文件退出Z，只保留丢后可重建的内容。\n\n## 举个实际例子\n\n“我要跑一个临时测试，能用Z吗？”如果输入和代码已在E或V，Z里只是可再生成且有上限的中间输出，可以评估；如果它会成为唯一一份未提交代码，就留在持久磁盘。\n\n## 最后我会得到什么\n\n得到一块容量受限、只放可重建缓存的内存盘；每个应用仍负责清自己的旧缓存。它不再承担正式文件的备份来源。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 历史镜像备份曾在空源时覆盖目标；继续给RAM Disk补备份并不能消除它承担唯一数据的风险。当前做法直接让正式文件退出Z，只保留丢后可重建的内容。 举个实际例子 “我要跑一个临时测试，能用Z吗"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 历史镜像备份曾在空源时覆盖目标；继续给RAM Disk补备份并不能消除它承担唯一数据的风险。当前做法直接让正式文件退出Z，只保留丢后可重建的内容。 举个实际例子 “我要跑一个临时测试，能用Z吗"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-outcome_cards-01",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常工作\n\n选中的内容能完整重建、体积有界，并有真实使用收益，才适合迁入。\n\n## 发现问题\n\n缓存过多时提醒对应应用清理自己的过期内容，不由守护器盲删。\n\n## 暂不可用\n\n资料丢了不能重建，或内存盘没有实测收益，就继续放在持久磁盘。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在为应用配置缓存目录时，先读项目 Z_使用说明，只把可再生缓存指向 Z 盘；正式文件留持久磁盘。\n\n## 需要准备什么\n\n- 要接入的应用\n\n- 确认可丢且能重建的缓存\n\n- 正式文件要保留在哪里\n\n## 从开始到拿到结果\n\n1. **核对应用的数据去向**　AI 或维护入口对照应用设置，确认选中的缓存能重建；任何唯一正文仍留在持久磁盘。\n\n2. **只迁指定缓存**　按应用自己的设置把可丢内容指到 Z，不把盘镜像当备份。\n\n3. **按应用核对恢复**　重启或清空后检查应用能重建；重建会影响当时正在使用缓存的程序。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n当前使用约定；截止前最后一轮巡查 Z 已用 0.5 GiB、空闲 11.5 GiB；驱动实际分配和提速仍为空值\n\n## 关键规则与设计选择\n\n1. E保留既有项目和恢复锚点；新个人项目默认放 V:\\Personal\\Projects，而不是把现有项目强制全迁到V；新 worktree 按 V 下的 Personal/Work 分；任何正式 Git 仓库或 worktree 都不放 Z。\n\n2. 不放正式Git仓库、唯一资料、数据库、模型和凭据；不迁系统全局TEMP/TMP、Docker/WSL（Windows 的 Linux 子系统）或无界包缓存。\n\n3. Personal/Work仅是组织分区，共享内存盘不产生账号或数据隔离。\n\n## 当前怎样实现\n\n- 源目录数组只包含Caches、Scratch、TEMP及既有子目录，不包含退役的projects/docs/others。\n\n- README（现在只留简短入口）与Z_使用说明.md解释准入；静态测试防止旧robocopy和Z_Drive_Backup逻辑重回现役。\n\n- 不实现内容分类器或全盘清空计划，8GiB是告警/恢复条件的一部分，不是自动逐文件配额；自动重建现在要看到和这块盘对得上的内存证据，低内存单独不会清盘，详见驱动恢复模块。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 当前使用约定 关键规则与设计选择 1 E保留既有项目和恢复锚点；新个人项目默认，而不是把现有项目强制全迁到V。 2 不放正式Git仓库、唯一资料、数据库、模型和凭据；不"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 当前使用约定 关键规则与设计选择 1 E保留既有项目和恢复锚点；新个人项目默认，而不是把现有项目强制全迁到V。 2 不放正式Git仓库、唯一资料、数据库、模型和凭据；不"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 效率查询入口 Get-RamdiskEfficiency.ps1 -Json 把逻辑容量、已用、镜像逻辑/实际分配与DriverAllocatedBytes分开；可选的 -IncludePrimo 只读 Primo 列表和设置，需要管理员。无法取得可靠驱动计数时为null，SpeedupPercent没有同条件计时则为空（未实测），不从镜像大小推内存或编造性能倍数。\n\n## 执行流程\n\n1. 确定正式输入与可再生成输出分别在哪里。\n\n2. 检查体积上限、失效恢复方式和实际I/O收益。\n\n3. 只让选中的输出使用Z；生产者结束时清理自己的失效内容。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| cache-only（仅缓存） | 丢失可以接受，而且应用能重新生成。不是把文件改名叫缓存就满足条件。 |\n| 缓存生产者 | 实际创建缓存的应用或工具；由它判断哪些代已过期，任务成功、失败或接管时完成清理。 |\n\n## 专业定义\n\n先判断值得加速的对象，再给缓存设置体积和生命周期边界。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n这些规则不会自动阻止文件写入。误放进去的唯一资料仍可能在驱动重建时丢失，所以不能把使用约定写成自动数据保护能力。\n\n## 边界\n\n- Primo可能保存镜像，但任何Z内容都不能因此成为唯一可靠副本。\n\n- 缓存重建可能影响正在使用缓存的应用，不能承诺无感。\n\n## 失败与恢复\n\n- **发现Z里放了唯一文件**：在任何重置前转存并验证持久副本；守护器没有文件版本恢复能力。\n\n- **长期超过8GiB软上限**：检查各生产者自己的有效缓存和清理规则，不按目录外观盲目整盘删除。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "ramdisk-guardian-volatile-cache-contract-and-backup-retirement-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n盘根使用约定（Z_使用说明.md）。\n\n角色与历史退役背景：当前 README 只保留短入口，缓存原件误删的历史在 git 提交 5f8cf40，旧备份通道 7 月 21 日退役的证据在 ecd7111。\n\n机器级E/V/Z放置策略。\n\n## 如何验证\n\n- 只读核对当前代码：没有 robocopy、Z_Drive_Backup 或旧 projects/docs/others 通道；静态检查仍定义 15 条断言，本轮没有运行（旧页“本轮静态检查通过”是 9 月 18 日那次）。\n\n- 效率查询把容量、卷已用、镜像长度、SSD 实际分配和驱动分配分开，互相不能顶替；驱动实际分配仍为 null，提速没做同条件测试，镜像小也不证明内存已等量释放或业务变快。Primo 部分要管理员才能读。\n\n- 未全盘审查缓存内容，因此不宣称所有使用者都始终遵守准入。\n\n## 与其他模块的关系\n\n这条边界使后续缓存盘恢复可接受，但它本身不是自动拦截或备份系统。",
+      "links": [
+        {
+          "text": "下一个模块 目录与说明恢复",
+          "href": "/projects/ramdisk-guardian/drive-arrival-sensing-and-skeleton-healing/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -1,0 +1,456 @@
+[
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-01",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "缓存删了却没还内存，按条件尝试重建",
+        "align": "left",
+        "size": "large",
+        "row": "top",
+        "width": "58%",
+        "row_fit_illustration": true
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "row": "top",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "缓存删了，电脑内存却仍很紧张时，守护器要先看到和这块盘对得上的证据、确认趋势持续、没有已登记的使用者在用，再决定是否尝试重建。",
+        "row": "top"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "row": "top",
+        "width": "42%",
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-01",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "缓存删了却没还内存，按条件尝试重建",
+        "align": "left",
+        "size": "large"
+      },
+      {
+        "type": "action_button",
+        "text_ref": "〔回到项目 → 内存盘守护〕　〔GitHub〕　〔复制 AI 续作说明〕",
+        "brand_icons": {
+          "GitHub": "_library/icons/GitHub标志.png"
+        }
+      },
+      {
+        "type": "prose",
+        "text_ref": "缓存删了，电脑内存却仍很紧张时，守护器要先看到和这块盘对得上的证据、确认趋势持续、没有已登记的使用者在用，再决定是否尝试重建。"
+      },
+      {
+        "type": "illustration",
+        "index": 0,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-02",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 3,
+        "last_full_width": false,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-02",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "这项功能怎样使用",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "为什么需要它",
+        "columns": 1,
+        "icon_position": "header_left",
+        "header_icon": [
+          "_library/round3/clean-assets/png/05-灯泡-clean.png",
+          "_library/icons/双气泡.png",
+          "_library/round3/clean-assets/png/16-纸箱对勾-clean.png"
+        ]
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "结果怎么看",
+        "align": "left",
+        "size": "medium"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-04",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接通这台电脑的 AI 对话中说“缓存删了但内存没回来，查守护器为什么没有重建”；AI 读本轮条件和恢复状态，自动重建仍只在原任务满足全部门槛时发生。",
+        "row": "start",
+        "width": "40%"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "row": "start",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "row": "start",
+        "width": "60%",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **守护器确认证据**　本轮至少 10 秒内连采 3 次并核对 Z 占用；靠“相关增长”触发的，还要相隔至少 5 分钟的两次观察都支持（默认 15 分钟一轮，通常等到下一轮）。条件不足就只记录。",
+        "row": "start",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-04",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "从哪里开始",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "prose",
+        "text_ref": "在已接通这台电脑的 AI 对话中说“缓存删了但内存没回来，查守护器为什么没有重建”；AI 读本轮条件和恢复状态，自动重建仍只在原任务满足全部门槛时发生。"
+      },
+      {
+        "type": "source_text_card",
+        "text_ref": "需要准备什么",
+        "icon_position": "header_left",
+        "header_icon": "_library/hires-icons/icon-clean-0432a3e02a060c22b01c.png"
+      },
+      {
+        "type": "section_heading",
+        "text_ref": "从开始到拿到结果",
+        "heading_icon": "_library/icons/scene-r3-exact-three-stairs.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. **守护器确认证据**　本轮至少 10 秒内连采 3 次并核对 Z 占用；靠“相关增长”触发的，还要相隔至少 5 分钟的两次观察都支持（默认 15 分钟一轮，通常等到下一轮）。条件不足就只记录。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-05",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现行判断9月29日起生效，源码最后提交10月6日。截止前最后一轮10月11日13"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 共同前提是盘已用≤8GiB，然后三条路任一成立才是重建候选：①原始不可归属残差≥8GiB；②相关增长≥8GiB；③可用内存<5GiB 且相关增长≥4GiB。可用内存低单独不动盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-05",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（一）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "现行判断9月29日起生效，源码最后提交10月6日。截止前最后一轮10月11日13"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "1. 共同前提是盘已用≤8GiB，然后三条路任一成立才是重建候选：①原始不可归属残差≥8GiB；②相关增长≥8GiB；③可用内存<5GiB 且相关增长≥4GiB。可用内存低单独不动盘。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-06",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Resolve-PrimoDiskIndex从rxprd ls的编号行和卷列表解析配置盘符；要求唯一且同盘没有其他卷，初始化前再复核一次身份。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-06",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（二）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "- Resolve-PrimoDiskIndex从rxprd ls的编号行和卷列表解析配置盘符；要求唯一且同盘没有其他卷，初始化前再复核一次身份。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-technical-03",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "3. 查已登记使用者和登记状态、本人暂停及当前冷却期；任一条件阻断就保持原状并记原因。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-technical-03",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "技术实现与依据（三）",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/打勾清单.png"
+      },
+      {
+        "type": "numbered_steps",
+        "text_ref": "3. 查已登记使用者和登记状态、本人暂停及当前冷却期；任一条件阻断就保持原状并记原因。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none",
+        "connector": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-07",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-07",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "chapter_title",
+        "text_ref": "名词和入口",
+        "align": "left",
+        "size": "medium"
+      },
+      {
+        "type": "table",
+        "text_ref": "名词"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-08",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 现行门槛下还没有执行过真实init/save；隔离测试和历史回放不能冒充实盘恢复或自然重启。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-08",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "出问题时",
+        "size": "large",
+        "heading_icon": "_library/hires-icons-r2/扳手.png"
+      },
+      {
+        "type": "prose",
+        "text_ref": "解决什么"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 现行门槛下还没有执行过真实init/save；隔离测试和历史回放不能冒充实盘恢复或自然重启。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-09",
+    "orientation": "h",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 旧源码的初始化失败夹具返回0且报告完成，故障已复现。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  },
+  {
+    "screen": "ramdisk-guardian-unaccounted-watchdog-and-driver-auto-release-09",
+    "orientation": "v",
+    "blocks": [
+      {
+        "type": "section_heading",
+        "text_ref": "依据与来源",
+        "size": "large",
+        "heading_icon": "_library/hires-icons/数据库.png"
+      },
+      {
+        "type": "bullet_list",
+        "text_ref": "- 旧源码的初始化失败夹具返回0且报告完成，故障已复现。",
+        "columns": 1,
+        "icons": "none",
+        "illustration": "none"
+      }
+    ]
+  }
+]
