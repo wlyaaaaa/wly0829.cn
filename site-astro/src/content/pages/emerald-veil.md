@@ -439,10 +439,10 @@
     },
     {
      "id": "n-cs-lines",
-     "text": "C# 3,266 行",
-     "meaning": "受版本控制的 src 下 C#（App 2,764＋Core 502），不含测试",
-     "as_of": "2026-09-28",
-     "source": "git ls-files 逐个数行，提交 168c200",
+     "text": "C# 3,293 行",
+     "meaning": "受版本控制的 src 下 C#（App 2,777＋Core 516），不含测试",
+     "as_of": "2026-10-11",
+     "source": "git ls-files 逐个数行，提交 861a2d2",
      "screens": [
       "emerald-veil-06"
      ]
@@ -459,9 +459,9 @@
     },
     {
      "id": "n-tests",
-     "text": "67 个自动测试",
-     "meaning": "测试方法数（Fact 61、Theory 6）",
-     "as_of": "2026-09-28",
+     "text": "68 个自动测试",
+     "meaning": "测试方法数（Fact 62、Theory 6）",
+     "as_of": "2026-10-11",
      "source": "tests/EmeraldVeil.Core.Tests/*.cs 计 [Fact]/[Theory]",
      "screens": [
       "emerald-veil-06"
@@ -469,10 +469,10 @@
     },
     {
      "id": "n-commits",
-     "text": "45 次提交",
-     "meaning": "8 月 11 日–9 月 29 日（北京）全部提交",
-     "as_of": "2026-09-29",
-     "source": "git rev-list --count HEAD（f46e59b）",
+     "text": "46 次提交",
+     "meaning": "8 月 11 日–10 月 8 日（北京）全部提交",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD（861a2d2）",
      "screens": [
       "emerald-veil-06"
      ]
@@ -634,8 +634,8 @@
  },
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
-  "sha256": "ae0c19ac5717355f3247982250089f2fae385ace434a55695141a3c0568f8ecc",
-  "converted_at_beijing": "2026-10-10T13:23:33+08:00"
+  "sha256": "14c232b912e878deeb56666a52d875d3496a8f98e8d76a4c0756dfebd07f8de7",
+  "converted_at_beijing": "2026-10-11T13:59:12+08:00"
  }
 }
 ---
@@ -1970,6 +1970,8 @@
 
 **坏了不会主动提醒**：托盘菜单“查看状态与显示范围”里能看到开没开、目标屏、已经闲了几秒、最近一次失败。
 
+**常驻程序最后一次怎么了，留一张小回执**：它启动成功、正常退出、碰到没接住的错误挂掉，或者查状态时发现它根本不在，都会用一句中文记进本机的一个小文件，只留最新一条。跟 AI 说“检查一下屏保”时，AI 能从这里先看出是没启动、启动失败还是已经退了。这张回执只说明常驻程序在不在，不说明泡泡真在屏上画对了，也不会弹出来提醒你；被强行结束或突然断电时来不及写，要等下一次查状态发现“程序不在”才知道。
+
 ::screen{#emerald-veil-06 section="tech"}
 
 ```typeset
@@ -2026,7 +2028,7 @@
      "columns": 1,
      "row": "details",
      "width": "50%",
-     "text_ref": "规模（9月29日数）：C#3,266行·PowerShell1,556行·67个自动"
+     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2085,7 +2087,7 @@
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "text_ref": "规模（9月29日数）：C#3,266行·PowerShell1,556行·67个自动"
+     "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\emerald-veil\\page.json",
@@ -2234,7 +2236,11 @@
 
 **壁纸工具**：一个 PowerShell 脚本，用 Windows 的桌面壁纸接口（IDesktopWallpaper）和锁屏接口设置，再逐块屏回读；不装开机项、服务或定时任务。
 
-**规模**（9 月 29 日数）：C# 3,266 行 · PowerShell 1,556 行 · 67 个自动测试 · 45 次提交（8 月 11 日–9 月 29 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
+**规模**（10 月 11 日数）：C# 3,293 行 · PowerShell 1,556 行 · 68 个自动测试 · 46 次提交（8 月 11 日–10 月 8 日）· 现在装的是 0.1.39 版，从源码装，不发安装包。每次推送到 GitHub 自动构建、跑测试，最近 5 次都通过。
+
+**生命周期回执**（10 月 8 日 861a2d2 起）：只有一份 %LOCALAPPDATA%\EmeraldVeil\last-result.json，格式 emerald-veil.result.v1，字段 state（success／stopped／failed）、result、reason_zh、observed_at（北京时间）、process_id；先写 .tmp 再整份替换，写失败不影响常驻程序。启动写“屏保常驻程序已启动”，正常退出写“屏保常驻程序已退出”，未处理异常和 --status 证实常驻程序不在时写 failed。强制终止、断电写不了，只能靠之后的 live status 发现；已经接住的画面错误照旧在 --status 里看。代码：src/EmeraldVeil.Core/ResidentResult.cs、src/EmeraldVeil.App/App.xaml.cs；说明：docs/product-design.md“Source install and removal”。
+
+**这次网页核对的现状**（10 月 11 日 13:32–13:37，只读）：安装 Verify 返回 0.1.39.0、常驻程序 healthy、已开启、快捷键可用；原生泡泡 Verify 返回已开启、360 秒、Windows 自动屏保关、不锁屏、Radius 1130000000；本机回执为 success（10 月 10 日 11:11 启动）。壁纸脚本 Set-WindowsBackground.ps1 -Action Verify 这次在读各屏路径（MonitorPaths）时返回 COM E_FAIL，没能逐屏回读桌面和锁屏，所以这次壁纸和锁屏的在用状态是 Unknown，说不清是脚本问题还是这次的显示环境；之前的选图和装好的记录不因此作废。这次没有触发泡泡、快捷键或锁屏，没看真实画面；装着的程序和源码目录里旧 publish 产物字节不同、没有重新构建，源码和安装版是否一致这次没验。
 
 ::screen{#emerald-veil-07 section="tech"}
 
@@ -3153,7 +3159,7 @@
 9. 开启｜AI 装好并开启，顺手存下原来的屏保设置｜在用
 10. 登录自启｜托盘里可勾选；崩溃或卡死后，Windows 会提示重新打开，我点确认才开｜在用
 11. 设置自修｜每 30 秒查 Windows 屏保设置，只把偏掉的改回｜在用
-12. 查看状态｜托盘里看开没开、目标屏、闲了几秒、最近一次失败｜说不准
+12. 查看状态｜托盘里看开没开、目标屏、闲了几秒、最近一次失败；常驻程序启动、退出、出错另记一张回执｜说不准
 13. 紧急停用｜先挡住下一次启动，再收画面；开关不会自己弹回｜说不准
 14. 撤回原设置｜把屏保相关设置恢复到第一次开启前｜说不准
 15. 卸载｜删掉程序和开机项｜说不准

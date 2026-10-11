@@ -520,20 +520,20 @@
     },
     {
      "id": "n-code",
-     "text": "工具 7,515 行；测试 10 个脚本 3,932 行",
+     "text": "工具 7,354 行；测试 10 个脚本 3,817 行",
      "meaning": "git ls-files 下 tools/、tests/ 逐个 wc -l",
-     "as_of": "2026-09-28",
-     "source": "提交 56ceea7",
+     "as_of": "2026-10-11",
+     "source": "提交 e792eda",
      "screens": [
       "github-local-index-05"
      ]
     },
     {
      "id": "n-commits",
-     "text": "455 次提交（7 月 5 日–9 月 28 日）",
+     "text": "458 次提交（7 月 5 日–10 月 7 日）",
      "meaning": "git log 计数，时间换算成北京",
-     "as_of": "2026-09-28",
-     "source": "提交 56ceea7",
+     "as_of": "2026-10-11",
+     "source": "提交 e792eda",
      "screens": [
       "github-local-index-05"
      ]
@@ -775,8 +775,8 @@
  },
  "source": {
   "page": "sources/pages/github-local-index/page.json",
-  "sha256": "01b3019a0d5d0af69c092c44281c35aeac3f4d899e866b1197ef07e4b950baa0",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "2f9595ff87efe1923f47e3d4e0176277a74c1053ff0594c0894018c86d664b94",
+  "converted_at_beijing": "2026-10-11T13:59:14+08:00"
  }
 }
 ---
@@ -865,7 +865,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月10日。本机工作目录"
+     "text_ref": "截至10月11日。本机工作目录"
     },
     {
      "type": "action_button",
@@ -931,7 +931,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月10日。本机工作目录"
+     "text_ref": "截至10月11日。本机工作目录"
     },
     {
      "type": "prose",
@@ -1089,7 +1089,7 @@ GitHub 项目总索引
 **11 个**｜冻结的项目：只核对身份和位置，不查改动、不修
 **398 次**｜AI 用它查一个仓库的身份和同步（9 月 16 日–10 月 9 日）
 
-截至 10 月 10 日。本机工作目录按总表最近一次刷新（9 月 28 日 01:40）是 75 个，其中 30 个是 AI 同时干活时开的临时目录。
+截至 10 月 11 日。本机工作目录按总表最近一次刷新（9 月 28 日 01:40）是 75 个，其中 30 个是 AI 同时干活时开的临时目录。它保存的仓库基线和导航还停在 45 个，现场多出的 2 个还没登记、等复核；总索引自己最近 2 个改动只在本机提交了，还没推上 GitHub。
 
 现在　基座体检　各项目和 GitHub 同步没有　〔现在正不正常 → 驾驶舱〕
 
@@ -1558,6 +1558,9 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
 **有 36 个仓库这次没联网核对**
 那次刷新时，这些仓库的远端状态用的是本机上次拉下来的记录（缓存），没有现场问 GitHub。旧一点不算出错；真要推送或删东西，再现场查一次。
 
+**现在多出 2 个仓库还没进看板**
+10 月 11 日 13:32 问它的状态摘要（只读、没联网拉取、不写任何文件）：GitHub 上现场 47 个仓库，看板和导航存的还是上面那一版的 45 个，差的 2 个标成“要复核”，没发现别的问题。它只报告差异，不自己补登记；要等下一次完整刷新总表才会补上。在那之前，按导航查不到这 2 个仓库，要现场问 GitHub、回读 .git。
+
 ::screen{#github-local-index-04 section="usage"}
 
 ```typeset
@@ -1834,7 +1837,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     },
     {
      "type": "content_card",
-     "text_ref": "规模工具7,515行，PowerShell7为主，算",
+     "text_ref": "规模工具7,354行，PowerShell7为主，算",
      "columns": 1,
      "columns_v": 1,
      "illustration": "none"
@@ -1912,7 +1915,7 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
     },
     {
      "type": "content_card",
-     "text_ref": "规模工具7,515行，PowerShell7为主，算",
+     "text_ref": "规模工具7,354行，PowerShell7为主，算",
      "columns": 1,
      "columns_v": 1,
      "illustration": "none"
@@ -2105,7 +2108,11 @@ AI 收尾时把这个仓库的所有工作目录和分支一起查：有没有�
 
 新仓库默认放 V:\Personal\Projects，临时工作目录放 V:\Personal\Worktrees；Z 盘是内存缓存盘，不放仓库。
 
-**规模**　工具 7,515 行，PowerShell 7 为主，算数字的一段用 Python；测试 10 个脚本 3,932 行，用临时建的真 Git 仓库和模拟的 GitHub 跑；455 次提交（7 月 5 日–9 月 28 日）；不用数据库。
+**规模**　工具 7,354 行，PowerShell 7 为主，算数字的一段用 Python；测试 10 个脚本 3,817 行，用临时建的真 Git 仓库和模拟的 GitHub 跑；本机 main 458 次提交（7 月 5 日–10 月 7 日），GitHub 上的主线是 456 次（到 9 月 29 日）；不用数据库。
+
+**本机领先 GitHub 2 个提交**（10 月 11 日 13:42 核对）：本机 HEAD e792eda，GitHub 主线 e2ccb37，工作目录干净。多出的是 10 月 7 日的两次整理：0fd8602 对齐基座统一搜索忽略清单、e792eda 同步 Git 元数据和归档目录搜索边界。照它自己“进了 GitHub 主线才算交付”的规矩，这两次还不算交付；工作目录干净只说明没有没提交的改动，不说明已经同步。上面的工具和测试行数两边一样（变化在 9 月 29 日已经推上去），只有提交数不同。这次没有替它推送。
+
+**状态摘要的原话**（Get-GitOwnerStatus.ps1 -Json，10 月 11 日 13:32:47）：github-local-index.owner-status.v1，execution_status=completed，domain_status=review_needed，zero_write=true，fetch_performed=false；baseline_repositories=45，observed_repositories=47，delta_count=2，issue_count=0，attention_count=1。导航 config/repository-paths.json 仍 45 项，observed_at 为北京时间 9 月 28 日 01:40:56。
 
 ::screen{#github-local-index-06 section="tech"}
 
@@ -2931,7 +2938,7 @@ GitHub 偶尔连不上，Git 命令偶尔失败。要是把“读失败”当成
 ● 在用　● 待验收　○ 待实施　● 没用过　● 说不准　✕ 已停用
 
 **找到和认准仓库**
-1. 找仓库在哪｜说项目名，AI 查到它的 GitHub 仓库和本机文件夹；45 个都登记着｜在用
+1. 找仓库在哪｜说项目名，AI 查到它的 GitHub 仓库和本机文件夹；9 月 28 日那一版 45 个都登记着，现场新增的 2 个还没登记｜在用
 2. 认准是哪个仓库｜回读文件夹里的 .git，确认连着的仓库和登记一致，不凭目录名猜｜在用
 3. 查公开还是私有｜总表记着上次看到的；要准，就联网问 GitHub 当下的｜在用
 4. 标出冻结的项目｜名单从生效的规则读；冻结的只核对身份和位置｜在用
