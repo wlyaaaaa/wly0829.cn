@@ -1,0 +1,151 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "personal-expression-explain-to-me",
+  "kind": "project",
+  "title": "向本人讲明白",
+  "url": "/projects/personal-expression/explain-to-me/",
+  "parent": "personal-expression",
+  "status_line": {
+    "state": "在用",
+    "as_of": "2026-10-11",
+    "source": "来源仓库 3b12a803（北京 10/6 05:52，66 次提交）；9/22 14:51 快照的历史测试保留原日期"
+  },
+  "screens": [
+    {
+      "id": "personal-expression-explain-to-me-01",
+      "section": "top",
+      "title": "向本人讲明白",
+      "text": "# 向本人讲明白\n\n〔回到项目 → 个人表达〕　〔复制 AI 续作说明〕\n\n个人表达与沟通支持 · 功能说明\n\n让本人能够理解当前结论为什么成立、会影响什么，以及接下来能怎么做。\n\n**当前情况：**已有解释与读取反馈的入口；是否真正讲懂，仍由眼前问题和本人的实际回应检验。\n\n具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → 个人表达",
+          "href": "/projects/personal-expression/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/personal-expression/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n重复术语或缩短几句话，未必补得上真正缺失的背景。本人说没听懂时，AI 要回到那件具体事情，找出人物、事实或判断哪里没有说明白。\n\n## 举个实际例子\n\n“这个功能为什么失败，我没听懂，结合刚才的操作讲清楚。”当前 AI 复用已有证据和说明反馈，重讲失败发生在哪一步、有什么影响和实际处理办法；最终是否讲懂，以本人的实际回应判断。\n\n## 最后我会得到什么\n\n得到一段围绕原问题的清楚说明。若发现新的有效讲解教训，当前 AI 在本次任务里合入说明指南；没有固定字数、段落顺序或必须举例的模板。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 重复术语或缩短几句话，未必补得上真正缺失的背景。本人说没听懂时，AI 要回到那件具体事情，找出人物、事实或判断哪里没有说明白。 举个实际例子 “这个功能为什么失败，我没听懂，结合刚才的操作讲清"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 重复术语或缩短几句话，未必补得上真正缺失的背景。本人说没听懂时，AI 要回到那件具体事情，找出人物、事实或判断哪里没有说明白。 举个实际例子 “这个功能为什么失败，我没听懂，结合刚才的操作讲清"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常完成时\n\n说明围绕真实问题展开，本人能据此理解和行动；有新反馈时完成相应资料更新。\n\n## 发现问题时\n\n本人仍没听懂时，回到未说明白的事实、背景或判断继续讲，不把一次成功解释推成永久模板。\n\n## 资料不可用时\n\n两种情况分开：个人资料锁着时，读取程序在读任何私人内容前就停下；我问的是自己的事，就先由主对话请我验证解锁，不拿“眼前事实”凑一个降级的个性化说明，纯技术问题照常讲。资料已解锁、只是说明指南文件丢了或读不到时，明确本次没用上已保存的反馈，再依据眼前事实组织解释。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n说这段解释太绕，请结合眼前事情讲清楚。\n\n## 需要准备什么\n\n- 这次没听懂的具体位置或问题\n\n## 从开始到拿到结果\n\n1. **系统核对并处理**　当前 AI 读取说明方向的反馈，回到事实、理由、影响和可执行下一步重讲。\n\n2. **交付与接续**　交回可追问的说明；讲法仍不通时按具体反馈继续改，不用删掉必要专业条件。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n入口已具备，理解效果随真实问题验收。2026-10-11 16:33 只读统计：说明指南现有 11 条讲解原则、6 条读懂原话的规则、55 个案例（日期从 9 月 8 日到 10 月 3 日；9 月 28 日的快照是 50 个）。这是资料规模，不是固定模板，也不证明讲解效果；案例原文不上网页。\n\n## 关键规则与设计选择\n\n1. 向本人说明使用讲解反馈，不从本人聊天口吻推断其理解偏好。\n\n2. 文书正文遵循文书规范；向本人解释文书时才使用这一方向。\n\n3. 同任务已读且上下文足够时复用；资料更新后重新读一次受影响方向。\n\n## 当前怎样实现\n\n- explain-to-me 技能把当前任务交到项目的说明方向。\n\n- read_direction(root, 'explain') 只读 explain-to-me.md，返回 direction=ai_to_user 与 guidance，不打开 reply-samples.jsonl，也没有 examples。\n\n- 读取前先经已安装的个人资料检查（personal_data_access.py 的 factor 检查）：资料锁着时返回 blocked，在读私人内容前停止；指南文件缺失或不可读另返回 unavailable，两种结果不混用。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 入口已具备，理解效果随真实问题验收 关键规则与设计选择 1 向本人说明使用讲解反馈，不从本人聊天口吻推断其理解偏好。 2 文书正文遵循文书规范；向本人解释文书时才使用这"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 入口已具备，理解效果随真实问题验收 关键规则与设计选择 1 向本人说明使用讲解反馈，不从本人聊天口吻推断其理解偏好。 2 文书正文遵循文书规范；向本人解释文书时才使用这"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 程序不生成解释也不改指南；表达组织和有价值反馈合并由当前 AI 执行。\n\n## 执行流程\n\n1. 确认当前任务是在向本人说明\n\n2. 复用当前事实与已经读取的指南，缺少时读取 explain\n\n3. 围绕原问题组织解释，必要时补具体背景\n\n4. 有价值反馈合入 explain-to-me.md，校验并重读",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n专业事实不足时先由当前任务补证据；重要信息不清才问具体问题，不让本人选择抽象的讲解套路。\n\n## 边界\n\n- 不加载聊天样本来模仿本人说话。\n\n- 不接管本人背景库、专业事实或领域策略。\n\n- 本轮没有用虚构场景试写来宣称本人已理解。\n\n## 失败与恢复\n\n- **解释仍然难懂**：重新说明原问题中缺失的关系或背景；确实影响结果的不确定再问清。\n\n- **个人资料锁着**：读取器返回 blocked，在读私人内容前停止；本人自己的问题先由主对话请本人验证解锁再讲，不给降级的个性化说明。纯技术问题可以继续不依赖私人资料的处理。\n\n- **指南缺失或不可读**：CLI（命令行工具） 返回 unavailable 与错误，当前 AI 明确哪些历史反馈没读到，再按眼前事实讲。\n\n- **指南被清空**：validate 可发现 empty guidance；单独 explain 只负责读文件，对空内容本身不报错，不会自动执行完整校验。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "personal-expression-explain-to-me-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- **expression.py / read_direction**：说明分支的实际读文件行为与资料锁检查。\n\n- **explain-to-me/SKILL.md**：说明方向的既有技能职责。\n\n- **AGENTS.md**：说明反馈的来源与更新约定。\n\n## 如何验证\n\n- 本机虚构测试删除样本文件后，说明命令仍能读到虚构指南；输出没有 examples。这条用例在 9 月 22 日 14:51 快照时已有，现在仍在 24 个测试定义里；本次只数定义，没有运行。\n\n- AI 使用记录（截至 10 月 9 日已采到的部分）：explain-to-me 技能共 34 次调用记录（Codex 23、Claude 11），10 月 4 日 14:00 以来已记录 10 次，最近一次 10 月 9 日 13:02；10 月 10、11 日还没补采。旧页 9 月 27 日记的 33 次是另一种统计口径，两者不能直接比。调用记录不代表讲懂了。\n\n- 没有开展真实理解效果验收；实际使用由处理真人问题的 AI 检查是否讲清楚，不新建模拟表达评分。\n\n## 与其他模块的关系\n\n说明资料由本项目维护；本人背景仍由理解库拥有，专业事实和当前知识状态仍由相应领域负责。",
+      "links": [
+        {
+          "text": "下一个模块 替本人拟消息",
+          "href": "/projects/personal-expression/reply-as-me/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

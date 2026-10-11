@@ -465,7 +465,11 @@
     "/projects/localocr/installation-recovery/",
     "/projects/localocr/jobs-cache/",
     "/projects/localocr/results-evidence/",
-    "/projects/localocr/runtime-resources/"
+    "/projects/localocr/runtime-resources/",
+    "/projects/personal-expression/corpus-extension-and-private-recovery/",
+    "/projects/personal-expression/explain-to-me/",
+    "/projects/personal-expression/feedback-consolidation-and-lessons-sync/",
+    "/projects/personal-expression/reply-as-me/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
