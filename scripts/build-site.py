@@ -293,6 +293,8 @@ def build(pages=None):
         'prepared_at_beijing': datetime.now(timezone(timedelta(hours=8))).isoformat(),
         'seconds': round(time.monotonic() - started, 3), 'steps': steps, 'rebuilt_pages': sorted(rebuilt),
         'html_files': len(after), 'files': files, 'output': str(dist)}
+    manifest = read(dist / 'release-manifest.json')
+    receipt.update({key: manifest.get(key) for key in ('previous_oss_source', 'previous_release_id')})
     write(dist / '.build-receipt.json', receipt)
     write(state_path, {'prepared': prepared_fp, 'pin': pin, 'json_sources': sources, 'asset_sources': asset_sources,
         'pages': {**old.get('pages', {}), **{route: entries[route]['fingerprint'] for route in changed}},

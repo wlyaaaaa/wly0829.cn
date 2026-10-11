@@ -21,7 +21,20 @@ def load(name, filename):
     value = importlib.util.module_from_spec(spec); spec.loader.exec_module(value); return value
 nav = load('build_navigation', 'scripts/repair-release-navigation.py')
 transport = load('build_transport', 'scripts/same-origin-runtime.py')
+retention = load('build_retention', 'scripts/oss-retention.py')
 def read(path): return json.loads(Path(path).read_text('utf8'))
+
+def published_manifest():
+    path = retention.shared() / 'published.json'
+    return retention.read(path)['manifest'] if path.is_file() else {}
+
+def previous_resources(prior, published):
+    local = prior.get('oss', prior.get('previous_oss', {}))
+    if not published:
+        print('上一版清单：无已发布记录，资源地址可能全部换新', flush=True)
+        return local, 'dist' if local else 'none', prior.get('release_id')
+    accepted = published['oss']
+    return {**accepted, 'objects': {**local.get('objects', {}), **accepted['objects']}}, 'published', published['release_id']
 def file_route(rel): return '/' if rel == 'index.html' else '/' + rel[:-10] if rel.endswith('/index.html') else '/' + rel
 def copy(source, target):
     raw = Path(source).read_bytes(); target = Path(target); target.parent.mkdir(parents=True, exist_ok=True)
@@ -197,7 +210,7 @@ def finish(dist, snapshot, pin, converted, changed_routes=None):
         'accepted_pages': {**{file_route(rel): {'producer': 'frozen'} for rel in snapshot['pages']}, **converted},
         'astro': {'converted_routes': sorted(converted), 'retained_sample': {'source': 'site-astro/sources/retained-home-cockpit'},
                   'selected_pages': sorted(p.stem for p in (SITE / 'src/content/pages').glob('*.md')), 'html_files': len(routes)}}
-    manifest['previous_oss'] = prior.get('oss', prior.get('previous_oss', {}))
+    manifest['previous_oss'], manifest['previous_oss_source'], manifest['previous_release_id'] = previous_resources(prior, published_manifest())
     manifest.pop('finalized_dist', None)
     (dist / 'release-manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
     return {'routes': routes, 'release_id': manifest['release_id'], 'album': album}
