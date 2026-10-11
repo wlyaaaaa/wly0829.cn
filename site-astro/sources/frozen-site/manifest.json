@@ -467,7 +467,11 @@
     "/projects/work-delivery/package-sources/",
     "/projects/work-delivery/source-change-next-version/",
     "/projects/work-delivery/value-state-recovery/",
-    "/projects/work-delivery/"
+    "/projects/work-delivery/",
+    "/projects/devconfig-backup/recovery-and-tasks/",
+    "/projects/devconfig-backup/source-catalog/",
+    "/projects/devconfig-backup/tiered-distribution/",
+    "/projects/devconfig-backup/wechat-native-backup/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

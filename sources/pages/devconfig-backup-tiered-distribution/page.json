@@ -1,0 +1,195 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "devconfig-backup-tiered-distribution",
+  "kind": "project",
+  "title": "本地和 G 盘先落稳，Drive 失败不拖垮热备",
+  "url": "/projects/devconfig-backup/tiered-distribution/",
+  "parent": "devconfig-backup",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "DevConfig Backup 公开仓库 52d3356（北京时间 10 月 11 日 08:26 提交）的源码，加上北京时间 10 月 11 日 13:33 只读回读的状态、回执和计划任务",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11 13:33"
+    }
+  },
+  "screens": [
+    {
+      "id": "devconfig-backup-tiered-distribution-01",
+      "section": "top",
+      "title": "本地和 G 盘先落稳，Drive 失败不拖垮热备",
+      "text": "# 本地和 G 盘先落稳，Drive 失败不拖垮热备\n\n〔回到项目 → 开发配置备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nDevConfig Backup · 功能说明\n\n本机、G 盘、云端和 H 盘各有自己的成功日期。断网不抹掉本地已验副本，G 盘或冷盘暂不可用也会单独报告，不用一个绿色任务状态概括全部。\n\n当前情况：10 月 11 日中午的配置采集因一个数据库副本超时失败，没有出新包，本地和 G 盘仍是 10 月 10 日那一代；当天 13:00 上云“成功”传的也是这份旧包。微信 G 盘副本 10 月 11 日新完成，微信云端最近成功是 10 月 5 日。H 冷盘不在本项目的状态里，上次核对到的是 9 月 23 日完成点，之后未重新核对。恢复前按介质核对日期。\n\n项目快照核对于 2026-10-11 13:33（北京时间）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 开发配置备份",
+          "href": "/projects/devconfig-backup/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/devconfig-backup"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/devconfig-backup/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n### 为什么需要它\n\n电脑本地、G 盘、Google Drive 和 H 盘各防一种故障。一次任务显示成功，不能替四处副本都作证；只有完整配置包和清单核对后才更新当前版本。上云任务成功也可能只是把上一次的旧包再确认一遍。\n\n### 举个实际例子\n\n我问：“昨晚备份好了吗，哪一份现在能带去新电脑？”状态分别列出本地包、G 盘、云端的最后成功日期和最近一次尝试；比如 10 月 11 日就会看到“今天采集失败、本地和 G 仍是 10 月 10 日的包、云端刚确认过这份旧包”。微信文件另看自己的副本，H 盘要另看 PCConfig 的冷备记录。\n\n### 最后我会得到什么\n\n拿到每处副本最近的完整版本、日期、最近一次尝试和缺口。较新的本地或 G 盘备份不会让云端或 H 盘自动变成同一版本；包里如果登记了个别文件的警告，那几个文件不在这一代的完整性承诺里。恢复时按实际介质选择。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ### 为什么需要它 电脑本地、G 盘、Google Drive 和 H 盘各防一种故障。一次任务显示成功，不能替四处副本都作证；只有完整配置包和清单核对后才更新当前版本。上云任务成功也可能只是把上一"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ### 为什么需要它 电脑本地、G 盘、Google Drive 和 H 盘各防一种故障。一次任务显示成功，不能替四处副本都作证；只有完整配置包和清单核对后才更新当前版本。上云任务成功也可能只是把上一"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ### 为什么需要它 电脑本地、G 盘、Google Drive 和 H 盘各防一种故障。一次任务显示成功，不能替四处副本都作证；只有完整配置包和清单核对后才更新当前版本。上云任务成功也可能只是把上一"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n### 正常时\n\n配置包和随附清单完整后，本机、G 盘及云端各自核对并标自己的日期；没有警告时按保留份数清理旧日期包。\n\n### 发现问题时\n\n采集失败时不发布新包，旧成功包原样留着；云端网络中断时保留已完成的本地副本，说明云端稍后仍需重试。包里有文件警告时，暂停清理对应位置的旧日期包。\n\n### 入口不可用或证据不足时\n\n云端目标身份不明或 H 盘未解锁时停对应复制，不自动改投另一账号或假报完成。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在本机运行 Backup-Status.ps1 或在已接入的 AI 对话中问“昨晚每一层备份到哪一步”。这个状态入口只看本机、G 盘和本机记录的云端结果，不含 H 盘。\n\n### 需要准备什么\n\n- 想看的日期或备份代\n\n- 本地、G、Drive、H 的实际可用性\n\n### 从开始到拿到结果\n\n1. **看清哪份副本真的完整**　状态入口分别展示本机、G 盘、微信 G 盘副本、云端和最近一次尝试，不把一层的成功借给另一层；H 盘的同代证明要另读 PCConfig 冷备回执。\n\n2. **核对完整版本**　本地先采集和验证整包，再复制并验 G；云端后来复制已完成的一代，采集失败那天云端确认的仍是上一代。\n\n3. **选真正能恢复的一份**　交回每处副本的完整性、文件警告和缺口；云端故障不抹掉已验本地副本，旧云记录也不算本轮成功。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n本地/G 配置包仍是 10 月 10 日成功代（10 月 11 日采集失败）；配置云端 10 月 11 日 13:02 确认的是这份旧包，云上现存对象未联网重读；H 冷备不在本项目状态里\n\n### 关键规则与设计选择\n\n1. 日期包及其附属清单作为一个成功代保留；current.json 是完整采集与验证的指针，latest.zip 只是兼容别名，不可凭修改时间挑包。当前成功代是 devconfig-20261009-231229-9de61253.zip（包名里的时间是电脑本地时区，即北京时间 10 月 10 日 12:12 生成）。\n\n2. 作为本机可访问的日常在线热备（每天北京时间 12:05，加上登录后 20 分钟各跑一次），该层不依赖公网；配置上云在每天 13:00。\n\n3. 配置包按完整代发布，不做 zip 内部差量；先发布日期文件与校验依据，再更新兼容别名和 current（当前状态）。文件集合或完整性不符时拒绝把候选冒充成功代；采集失败时本地、G 和云端都继续保留旧成功代。\n\n4. 云端复用必须针对同一完整成功代与登记目标逐项核对，不能只信本机旧 state/latest.sha256 或最近任务结果。上传后偶尔读不到云端对象信息时，单个对象最多重读 3 轮、每轮间隔 2 秒，每轮仍要真实成功，再严格比大小和 MD5。\n\n5. 日期包、兼容别名、附属清单和 current（当前状态）指针都需匹配本地成功代；一个 zip 的大小/MD5 相同不足以单独说明完整恢复集已发布。\n\n6. 本仓库的任务不写 H；PCConfig 的冷备日任务每天机会式检查（另有 14:15 热维护、14:30 冷同步，都归 PCConfig）。H 人工解锁后，还需 Hot context 不超过 48 小时、DevConfig/微信各不超过 36 小时、G/H 介质身份正确、H 剩余空间高于 100 GiB 并取得写锁。\n\n7. 条件通过后 PCConfig 冷备跟随 G 当前有效保留集：先复制并核对新增变化，再清理 H 中已退出的旧副本。源根离线或读不完整不按空源删除，不自动重锁 H。DevConfig 默认本地留 7 份、G 留 7 份、云端留 3 份日期包；包里有文件警告（file_warnings）时暂停清理旧包，没有警告后恢复原规则。所以 10 月 11 日 13:33 本地和 G 各有 8 个日期包，这不是改成了留 8 份，云端也不保证恰好 3 份。\n\n## 当前怎样实现\n\n- G 短暂缺席沿用有界等待；独立候选、全部附属文件与成功回执验真前不替换当前指针或淘汰旧代，持续缺席保留上次成功并明确本次失败。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 本地/G 配置包仍是 10 月 10 日成功代（10 月 11 日采集失败）；配置云端 10 月 11 日 13:02 确认的是这份旧包，云上现存对象未联网"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 本地/G 配置包仍是 10 月 10 日成功代（10 月 11 日采集失败）；配置云端 10 月 11 日 13:02 确认的是这份旧包，云上现存对象未联网"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 本地/G 配置包仍是 10 月 10 日成功代（10 月 11 日采集失败）；配置云端 10 月 11 日 13:02 确认的是这份旧包，云上现存对象未联网"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- Backup-DevConfig.ps1 通过 -Tier 参数支持 Local, Hot, Drive 组合，入口自动进行字符串切割与逗号兼容归一化。\n\n- Initialize-BackupNetwork.ps1 自动从 Windows 系统代理读取当前已启用的代理配置，为后台无窗任务提供网络连通性。\n\n- Resolve-ConfiguredRcloneRemote 从 state\\rclone-remote-binding.json 读取用户选定的远端别名，文件损坏或不可读时直接 fail-closed（失败关闭）。\n\n- tests/Assert-HDriveSafety.ps1 检查本仓库脚本没有 H 目标、拒绝已退役的 Usb 参数：这部分是字符串与正则合同；任务设置部分（重试、需要网络、限时）用 PowerShell AST（语法树解析）检查四个设置命令。这是脚本定义，本轮没有运行它。\n\n## 执行流程\n\n1. 计划任务（每天 12:05 和登录后 20 分钟）或手动触发 Backup-DevConfig.ps1 -Tier Local,Hot。\n\n2. 独立 staging（临时工作区）经完整采集与 7z 测试后，生成日期包、SHA-256、成功回执、逐文件清单与包内 manifest（清单）；任何一步失败都不出新包。\n\n3. 把成功代复制到 G 并核对，最后原子发布 current.json；之后才按保留策略清理旧成功日期代，包里有文件警告时这一步暂停。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-07",
+      "section": "tech",
+      "title": "技术实现与依据（三）",
+      "text": "## 技术实现与依据（三）\n\n4. 每天 13:00 的 Drive 任务锁定已完成的本地代，核对登记目标、完整状态与全部代文件；当天采集失败时，锁定的就是上一个成功代。\n\n5. 先上传并验真日期包及其附属文件，再发布 latest 兼容别名与 current（当前状态）；最后才写云端成功状态。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-08",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Tiered Storage（分层存储） | 把同一恢复材料按本地包、G 盘在线热备、Google Drive 和 PCConfig 人工冷备分层，每层独立给出结果。 |\n| Checksum Verification（校验和核验） | 比对源与目标端的内容哈希，不依赖可能产生时钟漂移的文件修改时间。 |\n| Cold Backup Window（冷备窗口） | H 平时不可用；用户人工解锁后，PCConfig 日任务才有机会在新鲜度、介质、容量和写锁门通过时复制。任务不会自动解锁或重锁 H。 |\n\n## 专业定义\n\n先生成完整成功代，再分层发布；每层携带校验依据，失败不会把旧成功副本改成半成品。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-09",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止网络离线或海外云盘受阻导致本地热备无法完成，同时防止冷备介质暴露在日常自动化写入中导致损坏。\n\n## 边界\n\n- DevConfig 仓库的日常脚本与四个任务不直接写 H；H 冷备由 PCConfig 的独立日任务在人工打开的介质窗口机会式执行。\n\n- Google Drive 同步必须严格读取绑定的合法远端别名，禁止静默切换至未授权云盘。\n\n- 未通过大小与 MD5 双重校验的云端对象绝不标记为同步成功；读对象信息的有限重试只是补偶发失败，不跳过哈希、身份或代文件匹配，也不等于云端永不失败。\n\n## 失败与恢复\n\n- **Google Drive 远端 binding 文件损坏或格式错误**：Resolve-ConfiguredRcloneRemote 立即失败关闭，拒绝回退至第一个可用远端，防止数据错传。\n\n- **定时上传时网络中断、系统代理或远端预检不可用**：脚本写入本地日志并向 Task Scheduler 返回非零退出码，按任务策略重试（最多 3 次，间隔 15 分钟）；已完成的本地/G 热备不回滚。\n\n- **上传后日期包或 latest.zip 的大小/MD5 不匹配**：读对象信息最多重试 3 轮后仍不符，本轮 Drive 标记失败并保留本地包，记录失败阶段、对象类型和原因（不输出远端账号），下次继续核对或上传；不能写成云端已完成。\n\n- **PCConfig 冷备日任务运行时 H 没有解锁或不可见**：PCConfig 写出 status=skipped 与 H_unavailable；不写 G、不写云、不自动重锁 H，也不把本轮算成完成冷备。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-10",
+      "section": "tech",
+      "title": "依据与来源（一）",
+      "text": "## 依据与来源（一）\n\n## 真实入口\n\n- **Backup-DevConfig.ps1**：分层备份主调度脚本，处理打包、本地保留、G 盘文件复制与 Drive 同步\n\n- **Initialize-BackupNetwork.ps1**：代理环境继承与 rclone 远端 binding 安全解析\n\n- **Backup-Status.ps1**：本机、G 盘、微信 G 盘副本、云端记录、最近尝试和计划任务的状态汇总；默认不联网、零写入，不含 H 盘\n\n- **tests/Assert-HDriveSafety.ps1**：本仓库 H 目标与退役 Usb 参数的字符串合同检查，加上任务设置的语法树检查\n\n- **PCConfig 的 Invoke-CoreRecoveryMaintenance.ps1**：H 冷备的实际负责方：机会式日任务、新鲜度/介质/容量/写锁门与验真后的有效保留集源跟随\n\n- **Backup.Common.ps1**：稳定采集、完整集合、原子回执、受管资源锁和成功代核验\n\n## 如何验证\n\n- 9 月 18 日来源回归与收尾证据包含 H 职责隔离和分层发布验证；网页本轮不重跑这些源码脚本。\n\n- 北京时间 10 月 11 日 13:33 的零写入状态：当天 12:06—12:25 的配置采集失败（读取 home/.codex/state_5.sqlite 数据库副本超时），没有发布新包。本地/G 同为 devconfig-20261009-231229-9de61253.zip，299,791,772 字节（约 286 MiB），回执记 6,270 个文件、原始 942,360,581 字节（约 0.88 GiB），整包 SHA-256=de16cef7554bc0b62d9911b2c0599f6ae71f02f4691dd63576f999531b18da75，带 1 条 source_disappeared（文件在扫描后消失）警告，是一份 Codex 临时执行记录。这些是生产者已验的回执，状态入口没有重新解包或重哈希。9 月 18 日旧包 devconfig-20260917-223044-15f482e1.zip、2,918,700,657 字节与 SHA-256=23175b58deb25089f07637380a99f449ead3f699cffcb83deb1bbae9255cc42c 仅是旧时点证据。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "devconfig-backup-tiered-distribution-11",
+      "section": "tech",
+      "title": "依据与来源（二）",
+      "text": "## 依据与来源（二）\n\n- 配置 Drive 任务 10 月 11 日 13:00—13:02 完成，本机记录写明是确认已有的 10 月 10 日包，不是新包上云；本轮没有联网重读云端，云上现存对象和包数之后未重新核对。PCConfig 的 docs/recovery/devconfig-backup-delivery-2026-09-18.md 记录的是 9 月 18 日配置包云端同代对象回读，属历史。\n\n- 本项目状态入口不返回 H。上次核对到的 H 是 9 月 23 日 cold-last 为 18 集合 complete、devconfig/wechat 两集合 complete，之后未重新核对；同份 9 月 18 日来源验收记录 16 个冷备集合、H 配置包哈希与 G/H 微信完整核对，不同集合的全量、路径/大小与抽样证据分别成立，不能互相替代。\n\n## 与其他模块的关系\n\n这是整套灾备的介质层：先把能离线完成的本地与 G 盘副本落稳，再单独尝试云端；H 盘冷备不归这个仓库直接写。",
+      "links": [
+        {
+          "text": "下一个模块 配置精选与避坑",
+          "href": "/projects/devconfig-backup/source-catalog/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
