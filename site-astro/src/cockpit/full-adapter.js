@@ -36,7 +36,7 @@ export function fromFull(full) {
       mine: p.mine === true, last_run_at: r.last_run_at, next_run_at: r.next_run_at, runs_today: r.runs_today === true, schedule: text(r.schedule_zh || p.schedule_zh),
       note: text(p.status_note), what: text(p.what), stop: text(p.stop), impact: text(p.impact), heartbeat_at: o.heartbeat_at || r.heartbeat_at || null,
       panel: { is_panel: 'panel' in rel || o.kind === 'panel_heartbeat', execution_failed: o.execution_failed === true, related_state: rel.panel || o.state || null },
-      public_message: text(r.public_message), notice_kind: text(r.notice_kind) };
+      public_message: text(r.public_message), notice_kind: text(r.notice_kind), failures_7d: Number.isFinite(r.failures_7d) ? r.failures_7d : undefined };
   });
   const sections = { computer: [], remote: [], backup_cloud: [], today: [] };
   for (const r of Array.isArray(cp.cards) ? cp.cards : []) if (r && typeof r === 'object') (sections[text(r.section) || 'other'] ||= []).push(card(r));
@@ -63,6 +63,8 @@ export function fromFull(full) {
     source_gaps: (Array.isArray(cp.source_gaps) ? cp.source_gaps : []).map((r) => ({ source_id: text(r.source_id), title: text(r.title), since: r.since, observed_at: r.observed_at })),
     owner_corrections: obj(cp.owner_corrections),
     today_activity: obj(f.today_activity), power_today: obj(f.power_today),
+    pc_health: (({ state, reason_code, metrics, changes_24h, observed_at_unix }) => ({ state, reason_code, metrics, changes_24h, observed_at: iso(observed_at_unix) }))(obj(obj(obj(f.hardware).health).pc_health)),
+    laptop: obj(rows(f.remote_network).find((r) => r.id === 'secondary_laptop')),
     changes: (() => { const c = obj(f.changes), t = obj(c.today), w = rows(f.weekly);
       return { state: stateOf(c.state), observed_at: c.observed_at, today: { commits: t.commits, repos_changed: t.repos_changed, latest_at: t.latest_at },
         window_days: c.window_days || 7, commits_7d: c.commits, repos_changed_7d: c.repos_changed, daily: Array.isArray(c.daily) ? c.daily : [],
