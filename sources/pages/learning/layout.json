@@ -163,7 +163,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "right_inside",
-        "text_ref": "每周抽问",
+        "text_ref": "开头抽问",
         "row": "balanced-notes",
         "width": "50%"
       },
@@ -218,7 +218,7 @@
         "type": "content_card",
         "columns": 1,
         "illustration": "left_inside",
-        "text_ref": "每周抽问"
+        "text_ref": "开头抽问"
       },
       {
         "type": "notice",

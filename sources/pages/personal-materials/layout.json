@@ -63,7 +63,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记数量截至10月9日；同步次数截至10月10日",
+        "text_ref": "登记数量截至10月9日（10月11日再查，计数入口报错，当前数不知道）；同步次数截至10月10日",
         "align": "right"
       },
       {
@@ -154,7 +154,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记数量截至10月9日；同步次数截至10月10日",
+        "text_ref": "登记数量截至10月9日（10月11日再查，计数入口报错，当前数不知道）；同步次数截至10月10日",
         "align": "right"
       },
       {
@@ -1220,7 +1220,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（13项）",
+        "text_ref": "全部功能（14项）",
         "align": "center",
         "size": "large"
       },
@@ -1314,7 +1314,7 @@
     "blocks": [
       {
         "type": "chapter_title",
-        "text_ref": "全部功能（13项）",
+        "text_ref": "全部功能（14项）",
         "align": "center",
         "size": "large"
       },
