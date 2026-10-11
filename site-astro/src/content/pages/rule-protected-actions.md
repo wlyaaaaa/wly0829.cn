@@ -255,7 +255,7 @@
  "source": {
   "page": "sources/pages/rule-protected-actions/page.json",
   "sha256": "a378c4f2f565712b27c4b7e2974abff779567f950ade6112ee0db47306c4c415",
-  "converted_at_beijing": "2026-10-11T14:01:13+08:00"
+  "converted_at_beijing": "2026-10-11T19:07:43+08:00"
  }
 }
 ---
@@ -1755,7 +1755,8 @@
     {
      "type": "illustration",
      "index": 0,
-     "size": "banner"
+     "row": "judgement",
+     "width": "30%"
     }
    ],
    "source_path": "E:\\Cache\\Claude\\Temp\\4bd59299\\b1\\rule-protected-actions\\page.json",
