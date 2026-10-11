@@ -427,7 +427,14 @@
     "/projects/agents/protected-policy/",
     "/projects/agents/rules-contracts/",
     "/projects/agents/skills-plugins/",
-    "/projects/agents/working-tree-hot-mirror/"
+    "/projects/agents/working-tree-hot-mirror/",
+    "/projects/codex-memory/claude-project-memory/",
+    "/projects/codex-memory/config-memory-whitelist-sync/",
+    "/projects/codex-memory/content-addressed-storage-cold-sync/",
+    "/projects/codex-memory/gemini-workspace-memory/",
+    "/projects/codex-memory/isolated-disaster-recovery/",
+    "/projects/codex-memory/openclaw-workspace-recovery/",
+    "/projects/codex-memory/vss-conversation-hot-backup/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

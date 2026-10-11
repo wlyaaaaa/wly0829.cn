@@ -1,0 +1,158 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory-content-addressed-storage-cold-sync",
+  "kind": "project",
+  "title": "Codex会话内容去重、点校验与 H 冷备",
+  "url": "/projects/codex-memory/content-addressed-storage-cold-sync/",
+  "parent": "codex-memory",
+  "status_line": {
+    "state": "常用",
+    "as_of": "2026-10-11",
+    "source": "按 2026-10-11 14:00（北京时间）的 AI 备份源码（63df06c）与 G/H 恢复点回执核对，实际读取于 16:30–16:37；新增故障路径的测试只读定义、本轮未执行"
+  },
+  "screens": [
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-01",
+      "section": "top",
+      "title": "Codex会话内容去重、点校验与 H 冷备",
+      "text": "# Codex会话内容去重、点校验与 H 冷备\n\n〔回到项目 → AI 备份〕　〔复制 AI 续作说明〕\n\n相同内容只存一份，每个历史点保留自己的文件清单；H 盘每天另行跟进并独立校验，避免复制了指针却没有完整对象。个别文件被挡住时，H 宁可先保留旧的完整点，也不拿缺文件的点冒充完整。\n\n**当前情况：**截至 2026-10-11 14:00，G 盘是当天 12:55 的点（10,491 个文件、39.2 GB），H 盘是前一天 10/10 的点（9,815 个文件、35.1 GB）。H 每天 14:30 才由既有任务跟进，所以 G、H 不同日是正常的，14:00 时还没到同步窗口，不算迟到或失败。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → AI 备份",
+          "href": "/projects/codex-memory/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n同一个附件没必要在每份会话备份里重存；但变动的数据库仍会占新空间。冷盘上的点要自己通过核对，才算一份独立副本；只拿到一部分文件时，也得把范围说清楚。\n\n## 举个实际例子\n\n两份对话都用过同一张图片，G 盘只存一份。10/11 这次 G 新写 19.5 GB、复用 19.8 GB。H 盘下午 14:30 再跟进；如果有个文件被杀毒软件挡住，H 先保留原来的完整点，等文件能读了再换新点。\n\n## 最后我会得到什么\n\n我知道 G 盘和 H 盘各自有哪一份点、哪天的、覆盖了多少文件。H 真实核对通过才称冷副本可用；如果只能保存一部分，回执会写明保存了多少、漏了多少、覆盖率多少。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 相同附件没必要在每一份会话备份里重存；但变动的数据库仍会占新空间。冷盘上的点只有文件齐全且自己通过核对，才算一份独立副本。 举个实际例子 两份对话都用过同一张图片，G 盘可共用那张图片的保存文"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 相同附件没必要在每一份会话备份里重存；但变动的数据库仍会占新空间。冷盘上的点只有文件齐全且自己通过核对，才算一份独立副本。 举个实际例子 两份对话都用过同一张图片，G 盘可共用那张图片的保存文"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n这一点用到的文件齐全，H 再独立核对完成，各自标成功；H 比 G 晚一天属于正常节奏。\n\n## 发现问题时\n\n普通缺失、哈希损坏或清单错误仍按失败处理。个别文件被杀毒拦截时，新点在 H 暂缓，H 保留旧完整点；连一个可读的完整点都没有时，才另存一份标明范围的“健康子集”。\n\n## 入口不可用或证据不足时\n\nH 没接上就跳过并记 H_unavailable，不影响已核对的 G 点；接上盘也不会立刻触发同步，要等每天的既有任务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入的 AI 对话中查询某个 Codex 会话点是否已到 G 或 H；H 冷备由 PCConfig 的既有任务每天 14:30 处理。\n\n## 需要准备什么\n\n- 要找的点位或日期\n\n- G 与 H 介质状态\n\n## 从开始到拿到结果\n\n1. **先查 G 盘这份点是否完整**　核对这一点用到的每个文件和清单；相同内容共用一份，变动的数据库要新副本。\n\n2. **H 可用时再跟进**　每天 14:30 的冷任务复制所需对象，H 端校验完整才发布 H 指针；遇到单文件警告则保留旧完整点。\n\n3. **说明真正完成到哪**　H 未接时明确跳过；只保存了部分范围就写明覆盖率，指针更新但清理没做完也只报告已完成的阶段。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n截至 2026-10-11 14:00：G 当前 10/11 12:55 点，10,491 个文件、39,234,419,908 字节，复用 19.8 GB、新写 19.5 GB（两个数各自四舍五入，相加 39.3 GB 与总量差 0.1 GB 是舍入）；H 当前 10/10 点，9,815 个文件、35.1 GB，10/10 15:23:30 冷备完成、全清单核对、覆盖 100%。\n\n## 关键规则与设计选择\n\n1. 去重粒度是完整文件；相同字节复用，变化后的大数据库会占新空间。\n\n2. 点清单发布后正常备份不再就地修改；哈希用来发现差异，不是对所有损坏的免疫保证。\n\n3. 无警告时 G 保留当前和上一点；H 核对完 G 的有效保留集合、发布自己的指针、清掉 H 独有的旧点和对象并回读，才写 `cold_retention_status=complete`。\n\n4. 单文件警告时：被挡的点在 H 暂缓（`current_point_deferred=true`），H 不做跟随删除（`cold_retention_status=deferred_file_warnings`），旧完整点先保留；文件恢复后发布完整点，再按原规则清理。\n\n5. 没有任何可读完整点时，才按已核对的 G 清单在 H 另建“健康子集”：写 `partial_coverage=true`、`verification_scope=selected_files_excluding_file_warnings`、源/已存/遗漏文件数和覆盖率；不改 G 原点，不读活动目录，不拿缺对象的旧清单当完整。\n\n6. H 不可用就跳过；接盘本身不新增即时触发。\n\n## 当前怎样实现\n\n- 对象路径为 `objects\\sha256\\<前两位>\\<完整 64 位 SHA-256>`，文件名是完整哈希。\n\n- 点校验核对数据结构、清单和闭包哈希、文件数和字节数，以及每个引用对象。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月14日回读桌面G/H同点、两点保留与H随G收敛完成回执；9月7日合成测试保留原日期 关键规则与设计选择 1 去重粒度是完整文件；相同字节复用，变化后的大数据库会占新"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9月14日回读桌面G/H同点、两点保留与H随G收敛完成回执；9月7日合成测试保留原日期 关键规则与设计选择 1 去重粒度是完整文件；相同字节复用，变化后的大数据库会占新"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- Validate 只查选定的 Hot 或 Cold 点，不是全盘检查；`-ReadOnly` 不写进度，都不改对象；结果另带 partial、校验范围、覆盖率和单文件警告。`pass` 只代表所选清单范围。\n\n- FinalizeCold/SyncCold 核对 G 当前及有效点，复制缺的对象并独立核对 H；警告回执分开写实际 H 点和请求的 G 点。\n\n## 执行流程\n\n1. 按完整文件内容算 SHA-256。\n\n2. 同哈希对象已存在且有效就复用，否则写新对象并回读。\n\n3. 生成这一点的清单和闭包，引用对象完整才更新 G 当前指针。\n\n4. PCConfig 冷任务每天 14:30 在 H 可用时增量复制，不直接复制 G 指针。\n\n5. H 点核对通过才发布 H 指针，再清理 H 独有点并回读；有单文件警告则保留旧完整点或另建标明范围的健康子集，中途失败只报告实际完成的阶段。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Content-Addressed Storage（内容寻址存储） | 一种数据存储模式，文件的存储路径直接由其内容的哈希值决定，内容变则路径变，内容同则天然去重。 |\n| Bit Rot Defense（静默位翻转防御） | 长期冷备介质可能因磁性或电荷衰减导致个别位翻转，通过强制性的 SHA-256 闭包校验和可以在恢复前及时发现数据损坏。 |\n\n## 专业定义\n\n相同对象复用；H 没连接就明确冷备未完成",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n减少重复文件占用，避免不完整的对象集被当成可用备份点，也避免一个被挡住的文件拖垮整条冷备。\n\n## 边界\n\n- 无警告时固定保留两点；有警告时为了保住完整旧点，可能暂时多于两点，不能说任何情况下都恰好两点。\n\n- 健康子集的“完成”只代表它写明的那部分范围；零个健康文件时也明确写 0。\n\n- 指针已更新本身不证明后续清理完成。\n\n## 失败与恢复\n\n| 情况 | 怎么办 |\n| --- | --- |\n| H 不可用 | 冷任务记录 H_unavailable 并跳过；只读检查不代替任务回执。 |\n| 点或对象哈希不符、普通缺失 | 返回 point_closure_invalid、content_object_invalid 等错误，不发布成功指针。 |\n| 个别文件被杀毒拦截 | 新点在 H 暂缓，保留旧完整点；没有完整点时另建健康子集并写明覆盖率。 |\n| 文件恢复可读 | 下次发布完整点，回到全清单核对，并按原规则清理派生点。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-content-addressed-storage-cold-sync-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools\\Invoke-CodexConversationBackup.ps1\n\n内容寻址对象写入、闭包校验、冷备与单文件警告逻辑\n\nCONVERSATION_BACKUP.md\n\n对话冷热备架构、存储规范和“单文件告警与可恢复点”说明\n\ntools\\test-codex-conversation-backup.ps1\n\n对象去重、清单原子切换与校验测试\n\n## 如何验证\n\n- 当前（2026-10-11 14:00 截止）：见上方 G/H 两份点；均为生产者回执，本轮没有做全对象核对或执行冷同步。\n\n- 新增故障路径（10/1 起）有专用合成测试：`test-conversation-file-warnings.ps1`、`test-conversation-cold-file-warnings.ps1`、`test-conversation-cold-partial-point.ps1`；本轮只看定义、没有执行。\n\n- 历史：9 月 7 日三个人工点去重与恢复测试通过；2026-09-12 13:41（北京时间）G/H 同为 `20260912T041508Z-8cec9794`，7,167 个文件、49,655,464,859 字节，H 冷备 13:22:41 完成；9 月 14 日桌面 G/H 同点、两点保留收敛。这些都是历史，之后未重新核对。\n\n## 与其他模块的关系\n\n负责会话点的存储与核对；PCConfig 负责跨盘调度。次机配置档另有明确的有界清理。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

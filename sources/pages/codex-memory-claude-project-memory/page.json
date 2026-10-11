@@ -1,0 +1,158 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory-claude-project-memory",
+  "kind": "project",
+  "title": "Claude项目记忆按项目保存与恢复",
+  "url": "/projects/codex-memory/claude-project-memory/",
+  "parent": "codex-memory",
+  "status_line": {
+    "state": "已退役",
+    "as_of": "2026-10-11",
+    "source": "按 2026-10-11 14:00（北京时间）的 AI 备份源码与 PCConfig 任务登记核对；旧材料存在性与记忆开关为 16:35–16:37 只读观察"
+  },
+  "screens": [
+    {
+      "id": "codex-memory-claude-project-memory-01",
+      "section": "top",
+      "title": "Claude项目记忆按项目保存与恢复",
+      "text": "# Claude项目记忆按项目保存与恢复\n\n〔回到项目 → AI 备份〕　〔复制 AI 续作说明〕\n\n这项专门备份已经退役。它曾按项目保存 Claude 的长期说明和记忆，换电脑时放回对应项目；2026-09-28 23:10（北京时间）起不再生成新的记忆副本。旧副本还在，需要时仍可按项目手工找回某个版本。\n\n**当前情况：**专门的记忆备份任务已停用（未删除，换机也不重建），Claude 的自动记忆开关本身也是关着的。Claude 的配置现在由开发配置备份每天带上；Claude 的使用记录改由 Codex 每日对话备份入口一起采集。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → AI 备份",
+          "href": "/projects/codex-memory/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\nClaude 的项目笔记和完整聊天不是一回事。以前单独备份它，是为了换机后能找回各项目的长期说明。现在 Claude 自动记忆已关闭，配置交给开发配置备份，这条专门备份就停了；留下的旧副本仍是找回旧版本的唯一来源。\n\n## 举个实际例子\n\n我说“把这个项目 9 月份的 Claude 记忆找回来”。AI 会去旧副本里按项目找到对应的 memory 目录，挑一个版本，先保留目标位置现有的文件，再手工放回。它会先说明：这是 9 月 28 日以前的旧材料，不是现在还在更新的备份。\n\n## 最后我会得到什么\n\n我会得到那个项目的一份旧记忆版本，以及它保存于哪一天。附件要从本机或 G 盘的旧副本找（私有云只存了文字笔记）；登录、聊天和项目源码不在这里。现在的 Claude 能否加载它，要放回后实际确认。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Claude 的项目笔记和完整聊天不同。电脑本地可保存整个项目记忆目录，私有云只保文字笔记；只看云端会漏掉其他附件。 举个实际例子 我说“把这个项目之前的Claude记忆找回来”。先定位备份中"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 Claude 的项目笔记和完整聊天不同。电脑本地可保存整个项目记忆目录，私有云只保文字笔记；只看云端会漏掉其他附件。 举个实际例子 我说“把这个项目之前的Claude记忆找回来”。先定位备份中"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n旧副本里确实有这个项目的记忆、并能说出保存日期，就可以按版本手工找回；但不会再有比 2026-09-28 更新的版本。\n\n## 发现问题时\n\n如果有人以为它还在每天备份，AI 会说明它已在 9 月 28 日退役；要找最新的 Claude 配置，去开发配置备份。\n\n## 入口不可用或证据不足时\n\n旧副本里没有这个项目，或私有目标读不到，就直接说缺少，不建空目录冒充找回，也不重新启用已停的任务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入的 AI 对话中点名 Claude 项目，说明要找哪一份旧记忆。要的是现在的 Claude 配置，就改问开发配置备份。\n\n## 需要准备什么\n\n- 具体项目\n\n- 想要的大致日期（旧副本最晚到 2026-09-28）\n\n- 是否需要非 Markdown 附件\n\n## 从开始到拿到结果\n\n1. **按项目找到对应记忆**　在旧副本里定位这一个项目的 memory 目录，不混入其他项目。\n\n2. **依介质选材料**　本机和 G 盘旧副本含完整目录；私有云仓库只有文字笔记，要附件仍看本机或 G 盘。\n\n3. **手工放回并确认**　先保留目标现有文件再放回，确认当前 Claude 实际读到；聊天和登录不从这里恢复。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留退役事实、旧材料现状和旧实现的历史说明。\n\n已退役：`Claude Memory Backup` 任务 2026-09-28 23:10（北京时间）停用，当前为 Disabled；Claude 设置 `autoMemoryEnabled=false`（16:37 观察）。旧材料：G、H 两盘的 current 都指向 2026-09-28 10:36:52 保存点，21 个文件、35,680 字节，各有 5 个快照目录（16:35 只读元数据观察，未重新逐文件校验）。\n\n## 关键规则与设计选择\n\n1. 不再生成新的项目记忆副本；任务停用但不删除，换机不重建，重新启用须本人另提。\n\n2. 当前 Claude 配置由开发配置备份每天带上；Claude 使用记录由 Codex 每日 12:15 的对话备份入口采集（先 Codex 后 Claude，两路各自失败都不挡对话备份）。\n\n3. 旧副本照旧可用：本机和 G 盘是完整 memory 目录，私有云只有 Markdown，两者不假装一样完整。\n\n4. 没有专用自动还原器；恢复前确认新旧项目路径对应，先留目标副本，再放回并让 Claude 实际读取。\n\n## 当前怎样实现\n\n现在没有在运行的记忆备份。以下是旧实现的历史说明：\n\n- 旧脚本 `backup-memory.ps1` 枚举各项目下的 memory 目录，本机按时间戳保留项目层级，轮换上限 30 份；G 盘逐文件 SHA-256 回读，内容相同可复用旧点。\n\n- 私有云按项目只同步 `*.md`；这一步会重新读源，不是直接拿 G 盘快照。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 共享任务最近返回0；G与私有Git元数据已读，新机应用恢复未验 关键规则与设计选择 1 本地/G递归复制memory目录；云端只同步*.md，两者不假装同样完整。 2 "
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 共享任务最近返回0；G与私有Git元数据已读，新机应用恢复未验 关键规则与设计选择 1 本地/G递归复制memory目录；云端只同步*.md，两者不假装同样完整。 2 "
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 历史接法：起初放在共享的 OpenClaw 备份任务里先跑；2026-09-25 迁到独立的 Claude 备份任务，9 月 26 日有了独立程序；9 月 28 日这条独立任务也退役。\n\n## 执行流程\n\n1. 在旧副本中按项目找到 memory 目录并选版本。\n\n2. 先保留目标现有文件，再手工放回选定版本。\n\n3. 确认当前 Claude 实际加载；聊天、登录、源码另找各自来源。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| project/memory（项目记忆层级） | 每个项目保留自己的 memory 目录，不让几个同名 MEMORY.md 互相覆盖。 |\n| 旧材料档案 | 9 月 28 日以前留下的记忆副本，可以按版本找回，但不会再更新。 |\n\n## 专业定义\n\n旧副本按项目保存各自的 memory；本机/G 盘与私有云的文件范围不同。新的 Claude 配置走开发配置备份，不在这里。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止把已停的记忆备份当成还在更新，防止项目之间的记忆重名覆盖，也防止把私有云里只有文字的副本说成完整副本。\n\n## 边界\n\n- 不是 Claude 完整环境、登录、项目代码或聊天的备份。\n\n- 本机/G 盘旧副本可能含非 Markdown 文件，私有云没有；按实际介质选材料。\n\n- 不承诺现在的 Claude 一定能加载旧格式记忆。\n\n- 本轮没有打开任何记忆正文，也没有在新电脑上做恢复。\n\n## 失败与恢复\n\n| 情况 | 怎么办 |\n| --- | --- |\n| 旧副本里没有这个项目 | 说明缺少，不建空目录冒充找回。 |\n| 私有云读不到 | 改看本机或 G 盘旧副本；本机副本仍可用。 |\n| 今天 Claude 使用记录采集失败 | 这已不属于本模块；它由 Codex 每日入口负责。10/11 12:35 那次失败、原因未知，成功覆盖到 10/9，下次正常运行会自动补采。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-claude-project-memory-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 旧材料：本机时间戳副本、G/H 盘快照、私有 Git 仓库（按登记留档）\n\n- 当前 Claude 配置：开发配置备份\n\n- 当前 Claude 使用记录：Codex 每日对话备份入口\n\n## 如何验证\n\n- 退役：PCConfig 任务登记与任务现场，`Claude Memory Backup` 为 Disabled（16:31 观察）。\n\n- 旧材料：16:35 只读 G/H 元数据，见上方 21 个文件、35,680 字节的 9/28 保存点。\n\n- 历史：2026-09-10 06:07（北京时间）共享任务曾为就绪、结果 0；06:08 读到 G 盘旧点 36 个文件、76,727 字节。这是 9 月共享调度时期的记录，之后未重新核对；私有 Git 远端当时为 `1fcc03d…`，本轮没有重新查远端。\n\n## 与其他模块的关系\n\n旧接法曾和 OpenClaw 备份共用一个任务，现在两者都已停用。Claude 配置归开发配置备份，Claude 使用记录归会话热备入口；旧记忆副本仍写在自己的快照和私有 Git 里，不混入 OpenClaw 材料。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

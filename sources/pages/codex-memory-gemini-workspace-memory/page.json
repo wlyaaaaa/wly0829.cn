@@ -1,0 +1,158 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "codex-memory-gemini-workspace-memory",
+  "kind": "project",
+  "title": "Gemini配置、项目清单与可读工作成果",
+  "url": "/projects/codex-memory/gemini-workspace-memory/",
+  "parent": "codex-memory",
+  "status_line": {
+    "state": "已退役",
+    "as_of": "2026-10-11",
+    "source": "按 2026-10-11 14:00（北京时间）的 PCConfig 任务登记与开发配置备份范围核对；旧材料目录为 16:35 只读元数据观察"
+  },
+  "screens": [
+    {
+      "id": "codex-memory-gemini-workspace-memory-01",
+      "section": "top",
+      "title": "Gemini配置、项目清单与可读工作成果",
+      "text": "# Gemini配置、项目清单与可读工作成果\n\n〔回到项目 → AI 备份〕　〔复制 AI 续作说明〕\n\n这项专门备份已经退役。它曾保存 Gemini 和 Antigravity 的项目清单、设置与可读工作笔记；2026-09-28 23:26（北京时间）起不再生成新副本。旧副本留档可查；Antigravity 的设置现在由开发配置备份带上，但它的工作笔记和对话不再随之保存。\n\n**当前情况：**备份任务已停用（未删除，换机也不重建）。Gemini 命令行早在 9 月 17 日就已卸载，这个任务名下实际备份的是 Antigravity 桌面端和命令行的设置、状态和工作笔记。旧副本还在，但最新一份是否完整没能确认。\n\n项目源码：私有仓库，源码未公开；用法与技术说明可在下面阅读。",
+      "links": [
+        {
+          "text": "回到项目 → AI 备份",
+          "href": "/projects/codex-memory/"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/codex-memory/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n可读的工作成果和原始会话不是一类材料。以前单独备份它，是为了换机时能找回项目说明和笔记。现在这条线已停，只剩旧副本可查；要找的是 Antigravity 的设置，现在去开发配置备份。\n\n## 举个实际例子\n\n我说“把 Antigravity 里 9 月份那个项目的笔记找回来”。AI 会先说明这是 9 月 28 日以前的旧副本，再在本机/G 盘快照或私有 Git 里挑一个版本，按原目录关系手工放回，并核对应用能不能看到。设置类内容会改去开发配置备份找。\n\n## 最后我会得到什么\n\n我会得到一份旧的项目清单、设置或可读笔记，以及它的大致日期；原始聊天、媒体和登录不在里面。旧副本最新一份的完整性没有确认，AI 会把这一点一起告诉我。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 可读成果与原始会话不是同一类材料。把配置、笔记和工作输出保存为小文件，便于检查版本与选择性恢复；把全部应用目录当成已备份，会误以为登录和会话也能回来。 举个实际例子 我说“把Gemini和An"
+        },
+        {
+          "id": "module-product",
+          "text": "用途与实际影响 这项功能怎样使用 为什么需要它 可读成果与原始会话不是同一类材料。把配置、笔记和工作输出保存为小文件，便于检查版本与选择性恢复；把全部应用目录当成已备份，会误以为登录和会话也能回来。 举个实际例子 我说“把Gemini和An"
+        },
+        {
+          "id": "module-product-title",
+          "text": "这项功能怎样使用"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n旧副本里有要找的文件、能说清是哪一版，就可以手工找回；不会再有 9 月 28 日以后的新版本。\n\n## 发现问题时\n\n最新那批旧目录缺少当时的保存回执，AI 会说明“这一份是否完整不确定”，必要时改用更早、有记录的版本；不按目录名当完成时间。\n\n## 入口不可用或证据不足时\n\n旧副本或私有仓库读不到就停在这里说明缺口，不猜另一个账号，也不重新启用已停的任务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在已接入的 AI 对话中说明要找回 Antigravity 或旧 Gemini 的哪份项目说明、笔记，并指定目标机器。要的是现在的设置，改问开发配置备份。\n\n## 需要准备什么\n\n- 应用和项目\n\n- 想要的大致日期（旧副本最晚到 2026-09-28）\n\n- 新机器目标目录\n\n## 从开始到拿到结果\n\n1. **选旧材料**　在旧副本里按项目找文件，说明聊天和媒体不在范围、最新一份完整性不确定。\n\n2. **先放副本**　挑一个版本，先保留新机现有文件，再按相对目录放回。\n\n3. **确认能接着用**　核对项目引用、应用加载和登录；只有可读文件时不承诺整段会话回来。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留退役事实、旧材料现状和旧实现的历史说明。\n\n已退役：原名 `Gemini Memory Backup` 的任务 2026-09-28 23:26（北京时间）停用，当前为 Disabled。旧材料：G、H 两盘各有 30 个旧快照目录，较新的目录名为 20260928-001005；但两盘根部都没有 current.json，这个目录里也没有快照回执，所以最新有效保存点、文件数和字节数都不确定（16:35 只读元数据观察，不代表原文件丢失）。\n\n## 关键规则与设计选择\n\n1. 不再生成新副本；任务停用不删除，换机不重建，重新启用须本人另提。\n\n2. 开发配置备份从 2026-09-29 起照常带上 Antigravity 设置、桌面状态、项目和插件登记，但明确排除命令行的 conversations、implicit、annotations、brain、knowledge 及相应历史库。所以“当前工作成果也随配置恢复”不成立。\n\n3. 旧副本照旧可用：本机和 G 盘各轮换上限 30 份，私有 Git 有提交历史。\n\n4. 没有专用自动还原器；先保留目标文件，再按相对路径放回，之后重核安装、项目路径、登录和应用结果。\n\n## 当前怎样实现\n\n现在没有在运行的 Gemini/Antigravity 专门备份。以下是旧实现的历史说明：\n\n- 旧脚本 `backup-gemini-memory.ps1` 按登记路径选文件；2026-09-18 的 db51ae7 版本加入了命令行的 settings.json、annotations/*.pbtxt，以及桌面端和命令行 brain 下的 Markdown 与 metadata.json。\n\n- 原始会话、数据库、日志、媒体和带 token、secret、auth 等字样的文件名一律排除；这是有界的选择规则，不是任意敏感内容识别器。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 现役脚本、最近任务0和G元数据已读；本轮未做新机恢复 关键规则与设计选择 1 只选当前脚本实现的路径与扩展名，不从“工作区备份”推断全量聊天。 2 本地与G各保留30份"
+        },
+        {
+          "id": "module-technical",
+          "text": "技术实现与依据 这里保留实现、关键条件、精确入口、历史记录和验证结果。 现役脚本、最近任务0和G元数据已读；本轮未做新机恢复 关键规则与设计选择 1 只选当前脚本实现的路径与扩展名，不从“工作区备份”推断全量聊天。 2 本地与G各保留30份"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "技术实现与依据"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- 先存本机时间戳快照，再逐文件核对 G 盘；云阶段会重新读源，所以几层副本不是同一时刻的原子快照。\n\n## 执行流程\n\n1. 在旧副本中选定版本，说明完整性是否有记录。\n\n2. 先保留目标现有文件，再按相对路径放回。\n\n3. 重核项目引用、应用加载和登录；原始会话和媒体不在范围。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Antigravity brain（工作成果目录） | 旧备份只收其中的 Markdown 和 metadata.json 等可读成果；现在开发配置备份已不再保存这个目录。 |\n| MANIFEST（文件清单） | 旧副本里列出所选文件和总字节的清单；它和 G 盘逐文件校验、Git 记录各自证明不同的层。 |\n\n## 专业定义\n\n旧副本保留了 Gemini 与 Antigravity 中可放回的配置和可读成果，截止 2026-09-28；当前只有设置类内容由开发配置备份继续保存。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n防止把已停的备份当成还在更新，防止把目录名当成完成时间，也防止用文件副本冒充完整会话或登录恢复。\n\n## 边界\n\n- 不读也不公开真实正文、账号和令牌。\n\n- 不重新运行旧任务，不调用已卸载的 Gemini 命令行。\n\n- 旧副本几层之间不是同一时刻的快照。\n\n- 新机登录、完整聊天恢复和应用兼容都没有验收。\n\n## 失败与恢复\n\n| 情况 | 怎么办 |\n| --- | --- |\n| 最新旧目录缺回执 | 说明完整性不确定，可改用更早有记录的版本。 |\n| 私有 Git 读不到 | 改看本机或 G 盘旧副本，不强推、不换账号。 |\n| 要找的是现在的 Antigravity 设置 | 去开发配置备份，不在这里找。 |",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "codex-memory-gemini-workspace-memory-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- 旧材料：本机快照、G/H 盘快照、私有 Git 仓库（按登记留档）\n\n- 旧技术入口（只供查阅，不再运行）：`tools/private-backup-settings.ps1`、`g-hot-snapshot.ps1`、`git-cloud-sync.ps1`、`tools/test-gemini-memory-backup.ps1`\n\n- 当前 Antigravity 设置：开发配置备份\n\n## 如何验证\n\n- 退役：PCConfig 任务现场 `Gemini Memory Backup` 为 Disabled（16:31 观察）；开发配置备份的排除范围按其 2026-10-11 08:26 的源码读取。\n\n- 旧材料：16:35 只读 G/H 目录数和元数据，见上方说明。\n\n- 历史：2026-09-09 13:10（北京时间）任务曾结果 0，2026-09-10 06:08 读到 G 盘旧点 127 个文件、181,152 字节；私有 Git 当时为 `e3413ca…`。9 月 18 日只读过新增命令行范围的定义，没有为新增文件做过备份验证。以上都是历史，之后未重新核对。\n\n## 与其他模块的关系\n\n这是 Gemini/Antigravity 旧副本的找回边界；与 Codex 会话库、Claude 旧记忆和 OpenClaw 旧材料分开保存。当前设置类内容归开发配置备份。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
