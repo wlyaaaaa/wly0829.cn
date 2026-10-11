@@ -160,11 +160,11 @@
      "id": "f-ai-tool-scope",
      "group": "g-config",
      "name": "AI 工具配置和记忆",
-     "what": "Codex 的配置和记忆（84 个记忆文件，含之前被全局 extensions 排除挡掉的 45 个扩展笔记）、Antigravity 的设置（antigravity_state.pbtxt、~/.gemini/config 下 projects 和 plugins）、OpenCode 的设置（补回 1 个被 plugins 排除挡掉的插件文件、桌面版设置）只由这里备；.openclaw 移出，旧包按轮换过期；9/29 凌晨（73556a9）home/.codex、.codex/memories/extensions、.claude、.gemini、antigravity_state.pbtxt、.config/opencode 登记为必需来源，Antigravity 命令行版 conversations、implicit、annotations、brain、knowledge 等排除，设置、MCP 连接和登录文件照带；9d35282 按本人 9/29 决定排除 Codex thread-backups、attachments、generated_images、visualizations、dictation-history；新包 9/29 12:05 跑完才算落实",
+     "what": "Codex 的配置和记忆（84 个记忆文件，含之前被全局 extensions 排除挡掉的 45 个扩展笔记）、Antigravity 的设置（antigravity_state.pbtxt、~/.gemini/config 下 projects 和 plugins）、OpenCode 的设置（补回 1 个被 plugins 排除挡掉的插件文件、桌面版设置）只由这里备；.openclaw 移出，旧包按轮换过期；9/29 凌晨（73556a9）home/.codex、.codex/memories/extensions、.claude、.gemini、antigravity_state.pbtxt、.config/opencode 登记为必需来源，Antigravity 命令行版 conversations、implicit、annotations、brain、knowledge 等排除，设置、MCP 连接和登录文件照带；9d35282 按本人 9/29 决定排除 Codex thread-backups、attachments、generated_images、visualizations、dictation-history；10/3 修复后的新包已核对通过（PCConfig 待验收项 passed，北京 10/3 20:07），该带的配置与记忆已带上，对话与附件已排除",
      "how": "自动：随 DevConfigBackup-Local；Codex Memory Backup、Gemini Memory Backup 已禁用",
      "status": "在用",
      "screen": "devconfig-backup-08",
-     "source": "提交 bd651fa（北京 9/28 23:23）；owner-decisions.md“网站：AI 备份只留该留的”；E:\\PCConfig\\registries\\pending_acceptance.json devconfig-ai-scope-first-package（9/29 12:05 之后核）；Get-ScheduledTask 两个记忆任务 Disabled"
+     "source": "提交 bd651fa（北京 9/28 23:23）；owner-decisions.md“网站：AI 备份只留该留的”；E:\\PCConfig\\registries\\pending_acceptance.json devconfig-ai-scope-first-package（北京 10/3 20:07 passed，真实修复验证 19:51:16）；Get-ScheduledTask 两个记忆任务 Disabled"
     },
     {
      "id": "f-wechat-hot",
@@ -610,8 +610,8 @@
  },
  "source": {
   "page": "sources/pages/devconfig-backup/page.json",
-  "sha256": "51a98802ee3ee693c86b85cbfc1677759ef60c72fadeda1c0c697eccd500df17",
-  "converted_at_beijing": "2026-10-11T13:40:56+08:00"
+  "sha256": "c1fa2abb67f495d93b54e4837f0bdeff4b9a5e2397b5d83d95f7e26c7c404ecd",
+  "converted_at_beijing": "2026-10-11T14:04:23+08:00"
  }
 }
 ---
@@ -986,6 +986,8 @@
 - **148,592 个文件**　微信原始文件 42.8 GiB，每天拍快照复制一份到 G
 - **6,270 个文件**　最新一个开发配置包，压缩后 286 MiB
 - **4 个自动任务**　配置每天存 G、每天上云；微信每天存 G、每周上云
+
+10 月 11 日这一次：12:05 的配置采集没成功（Codex 的一个状态数据库没能在限定时间里做出一致的副本），没出新包，上一个好包（10 月 10 日那个）原样留着；13:00 上云照常成功，但传上去的就是这个 10 月 10 日的旧包，不是今天的新配置。微信当天 11:02 照常存进了 G。
 
 截至 10 月 11 日
 
@@ -2157,6 +2159,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 驾驶舱会变色；也可以双击仓库里的 Open-BackupStatus.vbs 打开状态面板，或直接问 AI “开发配置备份怎么了”。失败的那次不会覆盖上一个成功的版本，回执里写着停在哪一步、哪个文件出错。
 
+例子：10 月 11 日 12:05 那次，卡在 Codex 的一个状态数据库（home/.codex/state_5.sqlite）。这类正在被写的数据库不直接拷，要先做一份一致的副本，每次限 20 秒，超时会重试；这次还是没做成，整次记为失败，没打新包，“当前包”还指着 10 月 10 日那个。13:00 的上云任务照常跑，回执写的是“沿用已核对过的旧包，上云完成”。所以这天要分开看：配置采集失败了，云盘上那份旧的好包是完好的，只是不含 10 月 10 日之后的改动。
+
 ## 还没真做过的
 
 配置包 9 月 18 日真解开核对过一次（8,640 个文件）。微信放回原处、从云端取回都还没真做过；我决定不专门演练恢复。
@@ -2695,7 +2699,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 
 ## 开发配置
 1. **按清单找来源**　70 个来源写在一个清单文件里，改备份范围只改它
-2. **逐个复制**　普通文件复制到临时区并核对 SHA-256；选定的活动 SQLite 数据库先做一致副本，再核对完整性
+2. **逐个复制**　普通文件复制到临时区并核对 SHA-256；选定的活动 SQLite 数据库先做一致副本，再核对完整性：现在登记的是 home/.codex/*.sqlite 和 FlyingBird 的 database.sqlite；用 Python 标准库开只读事务、走 SQLite 在线备份（online backup）复制，已提交的 WAL 内容也带上，做成功后才排除它旁边的侧文件；完整性检查限 15 秒，宿主等 20 秒没结束就终止自己启动的进程，忙或超时最多试 3 次；还不行就整次失败、保留旧包，不退回直接复制原文件（10 月 3 日起，DevConfig.Sources.ps1、DevConfig.Sqlite.py、docs/recovery.md）。最新成功包里 5 个 SQLite 快照的 integrity_check 都是 ok
 3. **再扫一遍**　复制完再看一遍来源：文件名单变了，重新收集整份，最多 3 轮；持续变化才失败；已复制的文件后来又改了，只记个数（9 月 28 日是 0）。所以它是逐个文件核对过的，不是同一瞬间的快照
 4. **打包、三道核对**　7-Zip 打成 zip；7-Zip 自检；包里每个文件和清单逐项对上；算整包 SHA-256
 5. **发布**　本机→G→云盘，每处复制完都比对哈希，最后才把“当前是哪个包”指过去
@@ -2706,11 +2710,13 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 3. **整份核对、换上**　每个文件的 SHA-256 都对上才换上，上一份留着
 4. **每周一上云**　先查回执，再用 rclone 传，传完两遍比对
 
-**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（要管理员权限，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口。
+**用到的工具**　PowerShell 7（没有就退回 5.1）、7-Zip、rclone（接 Google 云盘，限速每秒 4 MB，走电脑当前的代理）、Windows 卷影快照（要管理员权限，只有微信那个任务用最高权限）、计划任务配隐藏启动器，不弹黑窗口；Python（只用标准库，给活动 SQLite 做一致副本）。
 
 **回执**　每次运行写一份：每一步成没成、跳过了哪些文件、出错的是哪个（只写路径，不写内容）。
 
 **规模**　50 个受 Git 管的文件、约 6,000 行，其中 24 个是自检脚本；79 次提交。
+
+**10 月 11 日的状态**（13:33 只读查看，没重跑）　配置：本地 12:06–12:25 失败，failure=backup_sqlite_capture_failed、TimeoutException、阶段 source_capture、文件 home/.codex/state_5.sqlite（DevConfig.Sources.ps1 第 87 行），没发布新包；当前包仍是 devconfig-20261009-231229-9de61253.zip（北京 10 月 10 日 12:12 完成，6,270 个文件）。上云 13:00–13:02 package=verified_existing、drive=complete，传的是这个旧包，回执带 1 个 source_disappeared 警告。微信：G 热备 11:01:58 完成，148,592 个文件、45,972,129,496 字节；云盘最近一次成功是 10 月 5 日（147,560 个文件），本轮没联网重查，不能说云盘和今天的 G 一致。今天 14:15、14:30 的外接盘维护和同步还没到，不算失败。
 
 ::screen{#devconfig-backup-06 section="tech"}
 
@@ -2989,6 +2995,8 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 - **云盘账号写死，不自动换。**　选定的云盘账号记在一个小文件里；它丢了或坏了就报错。早期版本找不到就退回“第一个能用的账号”，有几个账号时可能传错地方。
 - **不直接写外接盘，也不在 E 盘再存一份微信。**　外接盘由电脑配置与恢复统一同步和核对，不让两个程序同时写一块盘；E 盘放的是原件，同一块盘上的副本会跟原件一起坏。
 - **单文件异常分开记，来源根读不了就停。**　可选文件被占用或拒绝访问，跳过并标明不完整；被防病毒软件拦截、或扫描后已消失的单文件只记警告，其余继续。来源根不可读、写盘失败或核对不一致，整次失败。
+- **有单文件警告时先不删旧包。**　被警告的那个文件不算进这一包的完整性承诺，旧包也先不按“留最近 7 份”清理，免得把还完整的旧副本删掉；恢复时先看清这一包覆盖到哪。默认留 7 份，10 月 11 日看本机和 G 各有 8 个带日期的包，不能把“7”当成现存数（Backup.Common.ps1 发布函数按 file_warnings 决定清不清理）。
+- **活动数据库做不出一致副本就整次失败。**　不退回直接复制原文件：边写边拷的数据库可能根本打不开，宁可保留昨天的好包，也不把坏的当新的发布。
 
 ::screen{#devconfig-backup-07 section="highlights"}
 
@@ -3734,7 +3742,7 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 3. **可选来源的单个文件可跳过**　可选来源的单文件被占用，试 3 次后跳过；拒绝访问直接跳过，都写进回执，不报“完整”；必需来源读不了或有其他读取错误，就整次失败　〈待验收〉
 4. **打包后三道核对**　7-Zip 自检、包里每个文件和清单逐项对上、算整包 SHA-256；有一道不过就不发布，上一个好包原样留着　〈在用〉
 5. **内容没变不重打包**　和上一个包的内容指纹一样，就直接用上一个，也不重复上传云盘　〈说不准〉
-6. **每天存到 G 盘**　每天 12:05 和开机登录后 20 分钟，本机和 G 各存一份，各留最近 7 份　〈在用〉
+6. **每天存到 G 盘**　每天 12:05 和开机登录后 20 分钟，本机和 G 各存一份，各留最近 7 份；有单文件警告时暂缓清理，10 月 11 日两处各有 8 个　〈在用〉
 7. **每天传 Google 云盘**　13:00 有网才跑，限速每秒 4 MB；传完和本机逐个比对，云端留最近 3 份　〈在用〉
 8. **先预演再备份**　只列出这次会备份哪些、比上次多了几个、改了几个、少了几个，一个字节都不写　〈说不准〉
 9. **连对话历史一起备**　打开一个开关，把默认排除的各 AI 工具对话历史也打进包；自动任务不开　〈说不准〉
@@ -4504,3 +4512,5 @@ E:\Documents\xwechat_files 整个原样复制：数据库连同它的 WAL、SHM 
 - **9 月 26 日**　单个被占用的文件只跳过；微信上云改传 G 上核对过的那一份；E 盘旧微信副本清掉；Codex 对话历史移出配置包
 - **9 月 28 日**　微信新办法第一次上云，146,300 个文件比对一致；当晚定下 AI 工具只备 Codex 的配置和记忆、Antigravity 和 OpenCode 的设置，统一由这里备，补回漏掉的 Codex 记忆扩展笔记，OpenClaw 移出
 - **9 月 29 日**　AI 工具的配置目录登记为必需，缺了报缺口；Antigravity 命令行版的对话、标注、知识不再带；按我的决定，Codex 对话也不随配置包上云盘
+- **10 月 1–3 日**　被杀毒软件拦下或扫描后消失的单个文件改成“完成但带警告”，有警告时先不删旧包；复制途中配置清单变了就有限次整轮重采；正在被写的 SQLite 数据库改成先做一致副本再打包，做不出来就保留旧包
+- **10 月 7 日**　加上 FlyingBird 的四项配置，来源从 66 个变成 70 个

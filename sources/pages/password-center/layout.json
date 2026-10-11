@@ -579,6 +579,14 @@
         ],
         "text_ref": "实测过",
         "width": "100%"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "width": "100%",
+        "text_ref": "查密码和整套恢复是两回事"
       }
     ],
     "notes": "左66%标题+六卡2列3行，卡左内小图和圆编号、右标题正文；右34%一竖长实测卡，上标题正文、下笔记本连外盘大插画。无丝带无箭头；bottom_inside非现core支持字段，不能改为卡顶。",
@@ -615,6 +623,14 @@
           "_library/icons/手机电脑连接.png"
         ],
         "text_ref": "实测过"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "查密码和整套恢复是两回事"
       }
     ],
     "notes": "满宽居中标题；六卡各一行左图右文；末实测扁卡左标题正文/右较小笔记本插画，不采用独立大插画。无连接。",
@@ -811,6 +827,14 @@
         "illustration": "left_inside",
         "icons": "auto",
         "text_ref": "和电脑配置库怎么分工"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "illustration": "none",
+        "icons": "none",
+        "width": "100%",
+        "text_ref": "私人文件夹门牌"
       }
     ],
     "notes": "整宽居中章标题；上半四级左到右分支汇合拓扑，不简化四个整段卡：4入口→守门→3业务节点→恢复副本，三支保留。原图节点上的文字均从定稿入口及箭头段拆出，不再加“SecretBroker”等别字。下两等宽浅卡左图右清单。",
@@ -926,6 +950,14 @@
         "illustration": "none",
         "icons": "none",
         "text_ref": "和电脑配置库怎么分工"
+      },
+      {
+        "type": "content_card",
+        "columns": 1,
+        "columns_v": 1,
+        "illustration": "none",
+        "icons": "none",
+        "text_ref": "私人文件夹门牌"
       }
     ],
     "notes": "首张2×2入口、守门、三业务一排、恢复副本、用了什么整宽卡；第二张顶笔记本/硬盘卡外插画，下分工整宽卡。分工前插画不能取拓扑节点小图替代，需独立无字素材。",
@@ -1280,7 +1312,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "截至10月10"
+        "text_ref": "截至10月11"
       }
     ],
     "notes": "左35%标题介绍与备份清单，中31%卡外恢复纸箱，右34%三个目的地卡竖排，箭头由纸箱分出；下两横卡一排左图右文；最底整宽数字说明窄条。目的地名和程序名只可定稿词回显，禁止重复伪字。 qa-11 接入组件回复：topology.text_layout:inline 已登记并消费，原卡名、冒号、正文同段，保持共享 name/body 字号。 qa-11 新同段接口真实浏览器产生 dg-name/dg-body 的 G3 重叠失败，已撤回本轮新增 inline 字段；前导冒号仍待组件修正，不回退已修图宽和明确绕线。",
@@ -1333,7 +1365,7 @@
       },
       {
         "type": "notice",
-        "text_ref": "截至10月10"
+        "text_ref": "截至10月11"
       }
     ],
     "notes": "以批准10-v+现v2：第一张顶大恢复说明外卡（左标题正文、右纸箱），然后GitHub/G/H三卡一列右插画；第四条G/H程序包说明并入H卡内，不另造第四目的地卡。v2两大卡上下，顶标题正文、下大插画，底数字条。不得在资料中已有普通H盘字样上新增状态字。",
@@ -1364,13 +1396,13 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记了 7 个"
+        "text_ref": "登记了 5 个"
       },
       {
         "type": "comparison",
         "columns": 2,
         "illustration": "left_inside",
-        "text_ref": "3 个走传话程序",
+        "text_ref": "4 个由密码中心替程序调用厂商",
         "columns_v": 1,
         "image_mode": "group",
         "groups": [
@@ -1389,7 +1421,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "另有"
+        "text_ref": "另一条路"
       },
       {
         "type": "content_card",
@@ -1437,14 +1469,14 @@
       },
       {
         "type": "prose",
-        "text_ref": "登记了 7 个"
+        "text_ref": "登记了 5 个"
       },
       {
         "type": "comparison",
         "columns": 2,
         "columns_v": 1,
         "illustration": "left_inside",
-        "text_ref": "3 个走传话程序",
+        "text_ref": "4 个由密码中心替程序调用厂商",
         "image_mode": "group",
         "groups": [
           {
@@ -1462,7 +1494,7 @@
       },
       {
         "type": "prose",
-        "text_ref": "另有"
+        "text_ref": "另一条路"
       },
       {
         "type": "content_card",
