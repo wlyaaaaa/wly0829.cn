@@ -2,6 +2,7 @@
 
 用法：python tools/convert_page.py <页名> [<页名> ...]      （在 site-astro 目录下运行）
       python tools/convert_page.py --all                    （sources/pages 下全部有 page.json 的页）
+      python tools/convert_page.py --check-all              （只校验全部页，不写文件）
 
 第四轮做法（照现在的页面逐段对齐）：
 - 现在网站每一屏的整屏图，就是共用区块库（src/typeset/components，HTML + CSS）在固定画布上排好再截的图。
@@ -67,7 +68,7 @@ def copy_public_source(source, target, expected_sha):
             raise ValueError("规则公共源复制后的 SHA256 不同：" + str(target))
 
 
-def rule_gate(screen, page=None):
+def rule_gate(screen, page=None, check_only=False):
     if not screen.get("source"):
         return
     root, pin = rule_snapshot()
@@ -89,7 +90,7 @@ def rule_gate(screen, page=None):
     screen["source_logical_id"] = key
     screen["source_public_sha256"] = row["public_source_sha256"]
     screen["source_rule_part"] = part
-    for template in pin["documents"].values():
+    for template in (() if check_only else pin["documents"].values()):
         if template["relative_path"].startswith("templates/"):
             source_path = root / template["relative_path"]
             for rel in (template["src"].lstrip("/"), "rule-sources/" + template["relative_path"]):
@@ -713,13 +714,14 @@ def redirect_layout(s, title):
     return {"h": {"blocks": h}, "v": {"blocks": v}}
 
 
-def convert(page):
+def convert(page, check_only=False):
     src = os.path.join(REPO, "sources", "pages", page, "page.json")
     raw = open(src, "rb").read()
     # 页里引用的数字和链接（{{scale.total}}、{{group_counts.…}}、{{stories.…links}} 等）用区块库同一个 bound_json 算好，
     # 和现在出图时一样在这一步冻结进内容文件；数据变了重新转换这一页即可
     sys.path.insert(0, os.path.join(REPO, "src", "typeset"))
     from engine.content import bound_json
+    from render_blocks import check_screen_images
     data = bound_json(src, read=lambda p: Path(p).read_text("utf-8-sig"))
     specs = {}
     lay_p = os.path.join(REPO, "sources", "pages", page, "layout.json")
@@ -740,7 +742,7 @@ def convert(page):
             print(f"  {s['id']}: 源文字里的换行写成了字面的 \\n，已还原（源文件也该改）")
             s["text"] = t.replace("\\n", "\n")
         swap = rule_release_text(page, s, data["screens"])
-        rule_gate(s, page)
+        rule_gate(s, page, check_only)
         bad = [x for x in (s.get("links") or []) if not isinstance(x, dict)]
         if bad:  # 链接字段不是链接列表（例如模板占位符没展开、被拆成单字）：按没有链接处理，提示出来
             print(f"  {s['id']}: links 不是链接列表（{''.join(map(str, bad))[:60]}），按没有链接处理")
@@ -764,10 +766,13 @@ def convert(page):
                 LONE[page] = LONE.get(page, 0) + pair_lone_illustrations(hsp["blocks"], block_text_len(s, hsp["blocks"])[0])
                 FITTED_ALL[page] = FITTED_ALL.get(page, 0) + fit_rows(hsp["blocks"], TEXTISH_ALL)
         text = gallery_title(meta, s.get("text", ""))
+        check_screen_images(page, data, {**s, "text": text}, meta)
         parts.append(f'::screen{{#{s["id"]} section="{s.get("section", "")}"}}\n\n```typeset\n'
                      + json.dumps(meta, ensure_ascii=False, indent=1) + "\n```\n\n" + text.rstrip("\n") + "\n")
         if s.get("section") and s["section"] not in [x[0] for x in sections] and not redirect:   # 去向页只有一屏，不出目录条
             sections.append((s["section"], s.get("title", "")))
+    if check_only:
+        return len(parts)
     labels = {}
     if os.path.exists(TOC_LABELS):
         labels = {t["id"]: t for t in json.load(open(TOC_LABELS, encoding="utf-8")).get(page, [])}
@@ -815,17 +820,22 @@ if __name__ == "__main__":
         i = names.index("--rules-release")
         RULES_RELEASE = names[i + 1]
         del names[i:i + 2]
-    if names == ["--all"]:
+    check_only = "--check-all" in names
+    if check_only:
+        sys.dont_write_bytecode = True
+        if names != ["--check-all"]:
+            raise SystemExit("--check-all 只校验全部页，可搭配 --rules-release，不能搭配页名或 --all")
+    if names in (["--all"], ["--check-all"]):
         names = all_pages()
     failed = []
     for n in names:
         try:
-            k = convert(n)
+            k = convert(n, check_only=check_only)
         except SystemExit:
             raise
         except Exception as e:  # 批量时一页失败不拦其它页，最后列出来
-            failed.append((n, repr(e)[:200])); print(n, "转换失败", repr(e)[:200]); continue
-        print(n, "转换完成", k, "屏")
+            failed.append((n, str(e))); print(n, "校验失败" if check_only else "转换失败", str(e)); continue
+        print(n, "校验完成" if check_only else "转换完成", k, "屏")
     for g in GATE_LOG:
         print("  规则同版公共绑定：", json.dumps(g, ensure_ascii=False))
     if STATUS_REPORT:
