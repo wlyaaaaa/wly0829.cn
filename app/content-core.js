@@ -606,7 +606,7 @@ export const modules = [
       }
     ],
     shortTitle: "规则与合同",
-    title: "这次该听哪条规则，事实该去哪里查",
+    title: "规则、合同与事实 Owner（事实责任源）",
     teaser: "先弄清这次该听谁的、现场事实该去哪里查；遇到冲突就指出责任来源，不把几份旧材料硬拼成答案。",
     status: "已落地并处于活动规则中",
     statusTone: "pass",

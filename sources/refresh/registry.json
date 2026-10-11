@@ -526,10 +526,12 @@
       "category": "日志",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "regex_count",
+        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")[^\\n]+$",
+        "flags": "m"
       },
-      "automatic": false,
+      "automatic": true,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -545,14 +547,7 @@
       "field": "screens[0].text",
       "start": 366,
       "end": 369,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
-      "prospective_retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")[^\\n]+$",
-        "flags": "m"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-report-page-text-0-15",
@@ -564,10 +559,12 @@
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "regex_count",
+        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"claude\")[^\\n]+$",
+        "flags": "m"
       },
-      "automatic": false,
+      "automatic": true,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -579,16 +576,9 @@
       "affected_screens": [
         "skill-report-page-01"
       ],
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
       "scope_status": "verified",
       "measurement_scope": "账本全量、kind=command 且 name=New-ReportPage.ps1 的使用事件条数，ai=claude；是命令调用次数，不是成功生成份数，也不是 kind=skill 的读取次数。",
-      "prospective_retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"claude\")[^\\n]+$",
-        "flags": "m"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-report-page-text-0-16",
@@ -600,10 +590,12 @@
       "category": "人工",
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "regex_count",
+        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"codex\")[^\\n]+$",
+        "flags": "m"
       },
-      "automatic": false,
+      "automatic": true,
       "private": true,
       "historical": false,
       "report_ref": "E:\\Cache\\Claude\\Temp\\4bd59299\\content-jia\\content-refresh-jia.md",
@@ -615,16 +607,9 @@
       "affected_screens": [
         "skill-report-page-01"
       ],
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
       "scope_status": "verified",
       "measurement_scope": "账本全量、kind=command 且 name=New-ReportPage.ps1 的使用事件条数，ai=codex；是命令调用次数，不是成功生成份数，也不是 kind=skill 的读取次数。",
-      "prospective_retrieve": {
-        "kind": "regex_count",
-        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-        "pattern": "^(?=[^\\n]*\"kind\"\\s*:\\s*\"command\")(?=[^\\n]*\"name\"\\s*:\\s*\"New-ReportPage\\.ps1\")(?=[^\\n]*\"ai\"\\s*:\\s*\"codex\")[^\\n]+$",
-        "flags": "m"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "learning-n-lessons-0",
@@ -6318,7 +6303,7 @@
       "current_value": 35,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6338,7 +6323,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.total\\}\\})"
+      "page_pattern": "(?m)^\\| \\*\\*([\\d,]+) 个\\*\\* \\|"
     },
     {
       "id": "projects-home-n-common-0",
@@ -6348,7 +6333,7 @@
       "current_value": 23,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6369,7 +6354,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.common\\}\\})"
+      "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
     },
     {
       "id": "projects-home-n-occasional-0",
@@ -6379,7 +6364,7 @@
       "current_value": 8,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6400,7 +6385,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.occasional\\}\\})"
+      "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
     },
     {
       "id": "projects-home-n-frozen-0",
@@ -6410,7 +6395,7 @@
       "current_value": 4,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6430,7 +6415,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.frozen\\}\\})"
+      "page_pattern": "(?m)^\\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*[\\d,]+ 个\\*\\* \\| \\*\\*([\\d,]+) 个\\*\\* \\|"
     },
     {
       "id": "projects-home-n-public-0",
@@ -6440,7 +6425,7 @@
       "current_value": 20,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6461,7 +6446,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.public\\}\\})"
+      "page_pattern": "公开 \\*\\*([\\d,]+) 个\\*\\*"
     },
     {
       "id": "projects-home-n-private-0",
@@ -6471,7 +6456,7 @@
       "current_value": 15,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6492,7 +6477,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project', 'frozen']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.private\\}\\})"
+      "page_pattern": "私有 \\*\\*([\\d,]+) 个\\*\\*"
     },
     {
       "id": "projects-home-n-in-use-0",
@@ -6502,7 +6487,7 @@
       "current_value": 31,
       "as_of": "2026-10-10",
       "category": "文件个数",
-      "source_location": "本仓库sources/pages/*/page.json；网页使用{{scale.*}}占位符",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "page_count",
         "kinds": [
@@ -6521,7 +6506,7 @@
       "measurement_scope": "给定网页根sources/pages全部page.json，按kind=['project']和status/public明示过滤计页数；退役去向页不算skill，不用安装数代替。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.in_use\\}\\})"
+      "page_pattern": "\\*\\*([\\d,]+) 个在用的项目"
     },
     {
       "id": "projects-home-n-features-0",
@@ -6531,7 +6516,7 @@
       "current_value": 974,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "各project/frozen页面registry.features",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "feature_count"
       },
@@ -6547,7 +6532,7 @@
       "measurement_scope": "给定网页根project/frozen页registry.features条目含所有状态；不含技能/规则页。",
       "scope_status": "verified",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{scale\\.features\\}\\})"
+      "page_pattern": "功能 \\*\\*([\\d,]+) 条\\*\\*"
     },
     {
       "id": "projects-home-n-group-sizes-0",
@@ -6557,7 +6542,7 @@
       "current_value": 3,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6576,7 +6561,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-rules\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 守规矩、用对工具〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-1",
@@ -6586,7 +6571,7 @@
       "current_value": 2,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6605,7 +6590,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-secrets\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 管好秘密〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-2",
@@ -6615,7 +6600,7 @@
       "current_value": 4,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6634,7 +6619,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-backup\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 管好备份和恢复〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-3",
@@ -6644,7 +6629,7 @@
       "current_value": 6,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6663,7 +6648,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-upkeep\\}\\})"
+      "page_pattern": "〔让电脑顺手、状态看得见〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-4",
@@ -6673,7 +6658,7 @@
       "current_value": 3,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6692,7 +6677,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-remote\\}\\})"
+      "page_pattern": "〔人不在电脑前也能办事〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-5",
@@ -6702,7 +6687,7 @@
       "current_value": 3,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6721,7 +6706,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-me\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 懂我〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-6",
@@ -6731,7 +6716,7 @@
       "current_value": 5,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6750,7 +6735,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-materials\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 读懂我的材料〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-7",
@@ -6760,7 +6745,7 @@
       "current_value": 5,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6779,7 +6764,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-make\\}\\})"
+      "page_pattern": "〔让\\ AI\\ 帮我写和做〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-n-group-sizes-8",
@@ -6789,7 +6774,7 @@
       "current_value": 4,
       "as_of": "2026-10-10",
       "category": "某个 JSON 字段",
-      "source_location": "projects-home registry.groups[].cards；members两个旧址由另一任务修正",
+      "source_location": "本仓库按bound_json展开的projects-home首屏；来源为页面kind/status/public/功能登记，分组members与实际可见cards已逐组核对",
       "retrieve": {
         "kind": "group_count",
         "page": "projects-home",
@@ -6808,7 +6793,7 @@
       "scope_status": "verified",
       "known_gap": "renderer按cards计、group_count按members计；本次逐组映射和数量一致，后续改变card可见性时须同时复核这一登记口径。",
       "field": "screens[0].text",
-      "page_pattern": "(\\{\\{group_counts\\.g\\-frozen\\}\\})"
+      "page_pattern": "〔冻结（AI\\ 不再维护）〕([\\d,]+) 个项目"
     },
     {
       "id": "projects-home-text-0",
@@ -12878,25 +12863,27 @@
       "category": "人工",
       "source_location": "E:\\PCConfig\\registries\\core_recovery.json /backup_media G/H；G/H的BitLocker现场状态",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "登记G/H两位置和目录已确认；普通用户现场BitLocker读取拒绝访问，不能把登记位置数独立当成两块现场加密盘。"
+        "kind": "entry",
+        "entry": "codex-memory-encrypted-snapshots",
+        "pointer": [
+          "count"
+        ]
       },
-      "automatic": false,
+      "automatic": true,
       "private": false,
       "historical": false,
       "refreshed_value": null,
-      "manual_reason": "needs_admin_rescan",
-      "manual_route": "由PCConfig现有已授权管理员或SYSTEM只读检查路径，读取Get-BitLockerVolume -MountPoint G:,H:（或manage-bde -status）的卷身份、FullyEncrypted、Protection On、Unlocked、100%，与core_recovery.json登记身份核对；只报盘数量/状态，不输出恢复密钥。不要触发热备、冷备、卷影或加密修改来补取数。",
-      "scope_status": "pending",
+      "scope_status": "verified",
       "scope_reason": "本轮两种只读BitLocker命令均权限拒绝；G热备成功可证明G当次核验，H冷备回执单独不足以证明必经PCConfig外层加密核验。",
-      "measurement_scope": "两块指定G/H备份物理盘均加密；不是backup_sets总数或单纯登记角色数。",
+      "measurement_scope": "G/H最新有效执行快照均FullyEncrypted/On；G默认Hot完成回执证明必经加密guard成功（12:55），H明确状态字段（18:35）。只读两回执，不冒充本轮现场。",
       "affected_screens": [
         "codex-memory-01"
       ],
       "field": "screens[0].text",
       "page_pattern": "^- \\*\\*([\\d,]+) 块加密盘\\*\\*",
       "start": 346,
-      "end": 347
+      "end": 347,
+      "known_gap": "本轮实时CIM读取仍Unknown；来源为有日期的有效缓存执行证据。"
     },
     {
       "id": "codex-memory-n-system-image-retention-days-0",
@@ -13014,21 +13001,19 @@
       ],
       "page_field": "status_line.last",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "usage_ledger",
+        "key": "cockpit",
+        "operation": "last_time",
+        "filter": {
+          "kind": "skill"
+        }
       },
-      "automatic": false,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
+      "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill 且 name=cockpit 的最大 ts；北京时间；只读时间，不输出使用条目。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "prospective_retrieve": {
-        "kind": "usage_ledger",
-        "key": "cockpit",
-        "operation": "last_time"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-cockpit-status-as-of",
@@ -13069,21 +13054,19 @@
       ],
       "page_field": "status_line.last",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "usage_ledger",
+        "key": "project-entry-gate",
+        "operation": "last_time",
+        "filter": {
+          "kind": "skill"
+        }
       },
-      "automatic": false,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
+      "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill 且 name=project-entry-gate 的最大 ts；北京时间；只读时间，不输出使用条目。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "prospective_retrieve": {
-        "kind": "usage_ledger",
-        "key": "project-entry-gate",
-        "operation": "last_time"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-project-entry-gate-status-count-7d",
@@ -13101,21 +13084,19 @@
       "end": 15,
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "entry",
+        "entry": "usage-skill-current-7d",
+        "pointer": [
+          "project_entry_gate_count_7d"
+        ],
+        "timeout": 210
       },
-      "automatic": false,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
+      "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "观察时刻向前7天的 kind=skill、name=project-entry-gate 事件条数；按带时区 ts 比较，不用日志修改时间充当事件时间。",
+      "measurement_scope": "滚动当前时刻前7天：完整日账本+今日当前源日志，按稳定id去重；两端scan零坏行，stdout仅计数，不改自然日统计口径。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "prospective_retrieve": {
-        "kind": "usage_ledger",
-        "key": "project-entry-gate",
-        "operation": "count_7d"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-project-entry-gate-status-as-of",
@@ -13157,21 +13138,19 @@
       ],
       "page_field": "status_line.last",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "usage_ledger",
+        "key": "report-page",
+        "operation": "last_time",
+        "filter": {
+          "kind": "skill"
+        }
       },
-      "automatic": false,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
+      "automatic": true,
       "scope_status": "verified",
       "measurement_scope": "kind=skill 且 name=report-page 的最大 ts；北京时间；只读时间，不输出使用条目。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "prospective_retrieve": {
-        "kind": "usage_ledger",
-        "key": "report-page",
-        "operation": "last_time"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-report-page-status-count-7d",
@@ -13189,21 +13168,19 @@
       "end": 14,
       "page_pattern": "近 7 天 AI 用了 ([\\d,]+) 次",
       "retrieve": {
-        "kind": "manual",
-        "instructions": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。"
+        "kind": "entry",
+        "entry": "usage-skill-current-7d",
+        "pointer": [
+          "report_page_count_7d"
+        ],
+        "timeout": 210
       },
-      "automatic": false,
-      "manual_reason": "source_broken",
-      "manual_route": "交回已分派的 S5「AI 使用记录停写」源头修复任务（PCConfig / AiUsageLedger）；核实 Codex 与 Claude 对话备份的采集/追加回执，修复后确认 10 月 11 日及以后的新事件已进入 usage-events.jsonl，再启用 prospective_retrieve。停写期间该展示项为 Unknown，保留最后被说明的旧日期，不运行备份补跑。",
+      "automatic": true,
       "scope_status": "verified",
-      "measurement_scope": "观察时刻向前7天的 kind=skill、name=report-page 事件条数；按带时区 ts 比较，不用日志修改时间充当事件时间。",
+      "measurement_scope": "滚动当前时刻前7天：完整日账本+今日当前源日志，按稳定id去重；两端scan零坏行，stdout仅计数，不改自然日统计口径。",
       "refreshed_value": null,
       "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
-      "prospective_retrieve": {
-        "kind": "usage_ledger",
-        "key": "report-page",
-        "operation": "count_7d"
-      }
+      "known_gap": "账本正常按完整自然日结算；last/累计是最新已完成快照，非当日直播。滚动7天两项另补今日源日志；覆盖证据见round02 ledger-evidence。"
     },
     {
       "id": "skill-report-page-status-as-of",

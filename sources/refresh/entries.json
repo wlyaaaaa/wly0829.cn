@@ -1179,5 +1179,40 @@
     "output": "json",
     "timeout": 35,
     "source_evidence": "固定 argv 全文已检查；Python 仅 pathlib/read_text/read_bytes/json/hashlib/regex/计数，不创建文件，不导入有副作用的产品入口；PowerShell 仅明确的 Get/只读自检调用；输出只有聚合数值和状态。"
+  },
+  "usage-skill-current-7d": {
+    "argv": [
+      "C:\\Users\\10979\\AppData\\Local\\Programs\\Python\\Python314\\python.exe",
+      "-I",
+      "-S",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import sys,json,datetime\nfrom pathlib import Path\nfrom concurrent.futures import ThreadPoolExecutor\nsys.path.insert(0,'E:/Projects/Backups/codex-memory/tools');import ai_usage_ledger as mod\nnow=datetime.datetime.now(mod.BJ)\ncutoff=now-datetime.timedelta(days=7)\nmidnight=now.replace(hour=0,minute=0,second=0,microsecond=0)\nledger=Path('E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl')\nstates=[json.loads(ledger.with_name('state-'+ai+'.json').read_text(encoding='utf-8')) for ai in ('codex','claude')]\nassert all(s.get('bootstrap_complete') is True and mod.timestamp(s.get('last_completed'))==midnight for s in states),'ledger_watermark_not_today_midnight'\nnames={'project-entry-gate','report-page'}\nselected={row['id']:row['name'] for row in (json.loads(line) for line in ledger.open(encoding='utf-8-sig'))\n          if row.get('kind')=='skill' and row.get('name') in names\n          and cutoff<=mod.timestamp(row['ts'])<now}\ndef scan_current(pair):\n    events,stats=mod.scan(pair[0],Path(pair[1]),midnight,now)\n    if stats.get('invalid_lines',0): raise RuntimeError('current_source_partial')\n    return [(e['id'],e['name']) for e in events if e['kind']=='skill' and e['name'] in names]\npairs=[('codex','E:/Data/AppData/Codex'),('claude','C:/Users/10979/.claude')]\nwith ThreadPoolExecutor(max_workers=2) as pool:\n    for part in pool.map(scan_current,pairs):\n        selected.update(part)\nprint(json.dumps({'project_entry_gate_count_7d':sum(v=='project-entry-gate' for v in selected.values()),'report_page_count_7d':sum(v=='report-page' for v in selected.values())}))"
+    ],
+    "cwd": "E:/Projects/Backups/codex-memory/tools",
+    "read_only": true,
+    "owner_project": "pcconfig",
+    "output": "json",
+    "timeout": 210
+  },
+  "codex-memory-encrypted-snapshots": {
+    "argv": [
+      "python",
+      "-I",
+      "-S",
+      "-B",
+      "-X",
+      "utf8",
+      "-c",
+      "import json;from pathlib import Path\nG=json.loads(Path('G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json').read_text(encoding='utf-8-sig'));H=json.loads(Path('E:/Data/PCConfig/SecretBroker/h-cold-backup-receipt.json').read_text(encoding='utf-8-sig'));b=H['H_bitlocker'];assert G['status']=='complete' and 'includes_configuration' not in G and G['capture_semantics']=='vss_crash_consistent' and H['status']=='complete' and b['volume_status']=='FullyEncrypted' and b['protection_status']=='On' and b['encryption_percentage']==100,'encrypted_snapshot_unavailable'\nprint(json.dumps({'count':2,'G_snapshot_at':G.get('completed_at_utc',G.get('completed_utc')),'H_snapshot_at':H['completed_utc']}))"
+    ],
+    "cwd": "E:/Projects/Backups/codex-memory/tools",
+    "read_only": true,
+    "owner_project": "codex-memory",
+    "output": "json",
+    "timeout": 20,
+    "verification": "G默认Hot必经Assert-GMedia 1195-1201/1346后才publish 1369及complete 1110-1125；实际无ConfigPath，回执当前指针/closure一致；H回执明确状态。缓存快照，非本轮现场，详见round02 bitlocker-evidence。"
   }
 }

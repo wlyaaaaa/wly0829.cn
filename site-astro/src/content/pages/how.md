@@ -1851,7 +1851,7 @@
  "source": {
   "page": "sources/pages/how/page.json",
   "sha256": "c716a0dfa500bf33b9fa361abbf520cb24f4c9597d5feaf8e416b5d9f92c36ee",
-  "converted_at_beijing": "2026-10-11T14:24:40+08:00"
+  "converted_at_beijing": "2026-10-11T19:48:42+08:00"
  }
 }
 ---
@@ -3352,14 +3352,12 @@
     "h",
     "v"
    ],
-   "asset": "_library/titles/title-6b7b7d19f18c14eedead.png",
-   "fallback": false,
-   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "asset": "_library/rules-e216/how-05-title-e216.png",
    "title_exact_match": true,
    "text_verified": true,
-   "key": "title-6b7b7d19f18c14eedead",
-   "title_text": "派谁：每个型号干什么（截至 10 月 1 日）",
-   "sha256": "908322e129fbde2e5060fc420b9e49a59cec2873c9faf8452b7bd14d53bfd71e",
+   "key": "rules-e216-how-05-title",
+   "title_text": "派谁：每个型号干什么（现行分工）",
+   "sha256": "80a0c0498a9592b6f1d5c76d79d6d7e4230d4ee94bf7ef8fb2050c0fc2eb55f2",
    "status": "ready",
    "g4_target_reference_available": false
   }

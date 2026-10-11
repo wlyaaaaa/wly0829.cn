@@ -123,7 +123,7 @@
  "source": {
   "page": "sources/pages/skill-cockpit/page.json",
   "sha256": "80ace368ae6d14d1b157030da391d51b9e2cd35cca5719f8c9401c431174bb97",
-  "converted_at_beijing": "2026-10-11T14:03:09+08:00"
+  "converted_at_beijing": "2026-10-11T19:48:47+08:00"
  }
 }
 ---
@@ -280,17 +280,13 @@
     "h",
     "v"
    ],
-   "asset": "_library/illustrations/ill-53b8c5c622e8b9.png",
+   "asset": "_library/illustrations/skill-cockpit-dashboard.png",
    "fallback": false,
-   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "semantic_status": "explicit_owner_selected_asset",
    "key": "skill-cockpit-01-illustration-01",
-   "source_phrase": "驾驶舱页的主插画（书桌上的侧透机箱和屏幕）；画面描述里的仪表盘小插画素材库没有，用它代替",
-   "sha256": "e52c137b4f836117794a4e0c7a70c0b611a90903b20f6d726c46e751f896316b",
-   "status": "ready",
-   "original_elements": [
-    "一个对话气泡连着一卷心电图纸带，纸带上一个小尖峰被放大镜照着（不画字"
-   ],
-   "hidden": false
+   "source_phrase": "总灯与红黄绿指示、贴入新便签",
+   "sha256": "3058a090d21aee5edea850a68754a5f878bca91e474c9eda0f9ef890984f3bde",
+   "status": "ready"
   },
   {
    "role": "illustration",
@@ -723,12 +719,12 @@ AI：“已经在这次改动里登记好了。驾驶舱的自动任务里多了
     "h",
     "v"
    ],
-   "asset": "_library/icons/盖章信封.png",
+   "asset": "_library/icons/火箭问号.png",
    "fallback": false,
-   "semantic_status": "automatically_accepted_per_b2bc0efe",
+   "semantic_status": "explicit_owner_selected_asset",
    "key": "skill-cockpit-03-icon-05",
-   "source_phrase": "一封盖章的回执：上没上线看发布回执",
-   "sha256": "c25af41c74b87e219af8f15222cc6a6e41cde94711fe541ec2851d222fc9d9cf",
+   "source_phrase": "火箭打了问号",
+   "sha256": "ca398b39da7e61a76a4e47a112604038277f7bc375d382f82dae5649472cf200",
    "status": "ready"
   },
   {
