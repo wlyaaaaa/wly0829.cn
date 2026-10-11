@@ -732,7 +732,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "3,700 行|44 个|14 次",
+        "text_ref": "3,714 行|45 个|14 次",
         "columns": 3,
         "illustration": "right_inside",
         "icons": "auto"
@@ -769,7 +769,7 @@
       },
       {
         "type": "stat_card",
-        "text_ref": "3,700 行|44 个|14 次",
+        "text_ref": "3,714 行|45 个|14 次",
         "columns_v": 1,
         "illustration": "left_inside",
         "icons": "auto"
