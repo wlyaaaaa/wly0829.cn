@@ -388,9 +388,9 @@
    "numbers": [
     {
      "id": "n-pages",
-     "text": "140 份",
+     "text": "151 份",
      "meaning": "E:\\Documents\\AI汇报 里现存的 .html 汇报页，都是最近两周生成的；141 个不同标题（同一标题重做的算一个）",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-10",
      "source": "E:\\Documents\\AI汇报 列目录计数 *.html，北京时间 10 月 10 日 05:2x；只读文件名；脚本默认把 14 天前的页放进回收站，所以最早一份是 9 月 26 日",
      "screens": [
       "skill-report-page-01"
@@ -398,9 +398,9 @@
     },
     {
      "id": "n-cards",
-     "text": "374 张",
+     "text": "527 张",
      "meaning": "141 个标题各取文件名最新的一版，数到决策卡共 527 张，其中 102 份带决策卡",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-10",
      "source": "按文件名去掉时间前缀后去重（141 个标题），各取最新一版数 data-q 卡片标记，102 份有卡；10 月 10 日 05:2x",
      "screens": [
       "skill-report-page-01"
@@ -408,7 +408,7 @@
     },
     {
      "id": "n-runs",
-     "text": "353 次",
+     "text": "334 次",
      "meaning": "生成命令 New-ReportPage.ps1 的调用次数：Claude 234、Codex 100（9 月 26 日 03:31–10 月 9 日 23:49，北京）；和同屏 151 份（10 月 10 日现存）时间范围不同，图上写明",
      "as_of": "2026-10-11",
      "source": "E:\\Data\\PCConfig\\AiUsageLedger\\usage-events.jsonl，name=New-ReportPage.ps1 计数（Claude 234、Codex 100）；9 月 26 日 03:31 到 10 月 9 日 23:49（北京），北京时间 10 月 11 日 16:10 读；记录记到 10 月 9 日",
@@ -528,8 +528,8 @@
  },
  "source": {
   "page": "sources/pages/skill-report-page/page.json",
-  "sha256": "c0c29ab54c65d012a54e707f98025f82bccd53dc3dbd0bef98561bab5f2bd3d3",
-  "converted_at_beijing": "2026-10-12T05:03:50+08:00"
+  "sha256": "2ae517cd40e0ed8714b2120a527b2edbe1026b7a436e215be7264b829410c134",
+  "converted_at_beijing": "2026-10-12T06:47:12+08:00"
  }
 }
 ---
@@ -629,7 +629,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "140份"
+     "text_ref": "151份"
     }
    ],
    "notes": "按清点 source_layout 与定稿 scene/portrait 的文字构图补齐；本轮未看图。三数字来自三个原 group，需数字样式而非普通组标题；八气泡包括原粘回答复括注，正文不添加词。；page-fixer-09（按审页意见）：三个数字组改用stat_card，原字与数字字号保留；八气泡横版两列，收紧两栏高差"
@@ -664,7 +664,7 @@
      "illustration": "none",
      "icons": "none",
      "number_style": "stat",
-     "text_ref": "140份"
+     "text_ref": "151份"
     },
     {
      "type": "prose",
@@ -754,16 +754,16 @@
 
 AI 只写内容文件（文字和数字），版式、配色、图表和检查都交给一条命令；页面只存在我电脑上，不发到网上。
 
-**140 份**
-现存的汇报页，都是最近两周生成的（130 个不同标题）
-截至 10 月 12 日
+**151 份**
+现存的汇报页，都是最近两周生成的（141 个不同标题）
+截至 10 月 10 日
 
-**374 张**
-130 个标题各取最新一版，其中 91 份带决策卡
-截至 10 月 12 日
+**527 张**
+141 个标题各取最新一版，其中 102 份带决策卡
+截至 10 月 10 日
 
-**353 次**
-Claude 249 次、Codex 1040 次运行生成命令
+**334 次**
+Claude 234 次、Codex 100 次运行生成命令
 9 月 26 日 03:31–10 月 9 日 23:49（使用小记录记到 10 月 9 日）
 
 **怎么跟 AI 说**

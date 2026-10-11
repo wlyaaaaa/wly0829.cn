@@ -33,8 +33,8 @@
  },
  "source": {
   "page": "sources/pages/ramdisk-guardian-host-memory-telemetry-and-silent-monitoring/page.json",
-  "sha256": "194e34c0ba9b7602432ce5de56d07e0fdc10114ad082569b35cef16ad6aaf2a5",
-  "converted_at_beijing": "2026-10-12T00:29:47+08:00"
+  "sha256": "099f78900427ed111ed8d35ab57c0772be723eb8aeeafd6507d9945abde93264",
+  "converted_at_beijing": "2026-10-12T06:47:11+08:00"
  }
 }
 ---
@@ -918,7 +918,7 @@ RamdiskGuardian · 功能说明
 
 - 9月14日04:03Z（北京时间 12:03）自然任务返回0，STATUS另行回读为OK；9月8日03:37Z曾返回0但STATUS为WARN，任务结果与健康状态分别判断。
 
-- 只读统计现存日志：截至 10 月 11 日 14:00 共 7,484 轮巡查，健康结果 OK 6,370、WARN 1,112、ERROR 1；相邻巡查间隔超过 15.5 分钟的有 59 段，最长约 29.0 小时，原因没有逐段查。
+- 只读统计现存日志：截至 10 月 11 日 14:00 共 7,444 轮巡查，健康结果 OK 6,351、WARN 1,091、ERROR 1；相邻巡查间隔超过 15.5 分钟的有 59 段，最长约 29.0 小时，原因没有逐段查。
 
 ## 与其他模块的关系
 

@@ -503,9 +503,9 @@
     },
     {
      "id": "n-desktop-tasks",
-     "text": "129 个任务",
+     "text": "131 个任务",
      "meaning": "9 月 16 日–10 月 11 日 Codex 桌面版里用现役接入模型开的任务（含原生子代理会话），删掉的对话不算，是下限；9 月 29 日以后为 0",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-11",
      "source": "E:\\Data\\AppData\\Codex\\sessions 与 archived_sessions 每个 .jsonl 首行 session_meta：originator=Codex Desktop 且 model_provider 为 aicli_glm_5_3_flash 61、aicli_glm_5_3 32、aicli_deepseek_flash 18、aicli_qwen38_max_paygo 14、aicli_desktop_local 6（另有已退役 aicli_google_antigravity 8 不计）；10 月 11 日 16:0x 重扫，数量未变，最后一个在 9 月 28 日 07:27",
      "screens": [
       "ai-cli-profile-manager-01",
@@ -524,9 +524,9 @@
     },
     {
      "id": "n-code",
-     "text": "40,092 行代码",
+     "text": "39,957 行代码",
      "meaning": "Git 跟踪的 PowerShell、C#、Python、JS 共 125 个文件的非空行；不含文档、JSON 数据和 PDF",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-11",
      "source": "git ls-files '*.ps1' '*.psm1' '*.psd1' '*.cs' '*.py' '*.js' 逐个数非空行（同法在 7a2e38d 复核得 42,072，与原数一致）；HEAD 6e689ef",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -534,9 +534,9 @@
     },
     {
      "id": "n-test-lines",
-     "text": "测试 16,314 行",
+     "text": "测试 16,252 行",
      "meaning": "tests/ 下代码文件的非空行",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-11",
      "source": "同上，筛 tests/*",
      "screens": [
       "ai-cli-profile-manager-01"
@@ -554,9 +554,9 @@
     },
     {
      "id": "n-bridge-builds",
-     "text": "36 个版本",
+     "text": "35 个版本",
      "meaning": "9 月 15 日–10 月 3 日构建过的桌面桥版本（按内容命名的目录）",
-     "as_of": "2026-10-12",
+     "as_of": "2026-10-11",
      "source": "%LOCALAPPDATA%\\AiCliProfileManager\\desktop\\releases 下的目录数；PCConfig registries\\aicli_desktop_bridge.json 登记了其中 22 个",
      "screens": [
       "ai-cli-profile-manager-09"
@@ -802,8 +802,8 @@
  },
  "source": {
   "page": "sources/pages/ai-cli-profile-manager/page.json",
-  "sha256": "86d42e3127527663af4beb16f25f0b2a88cb3090b178a9597b1e3c67637cdddd",
-  "converted_at_beijing": "2026-10-12T05:03:42+08:00"
+  "sha256": "9ed614664fa58d69c00607e353fed111adb0107b0efa95e01f5aa89f62ef9d3d",
+  "converted_at_beijing": "2026-10-12T06:47:11+08:00"
  }
 }
 ---
@@ -1036,10 +1036,10 @@ AI 工具配置管理
 
 Codex 默认只接 OpenAI，Claude Code 默认只接 Anthropic。它让 Codex 换用智谱 GLM、DeepSeek、阿里云千问和本机显卡上跑的 Qwen，Claude Code、OpenCode 这些也能接本机 Qwen：界面、历史和工具都还是原版的。每一种“工具＋模型＋服务”的组合叫一条路线；用哪条路线、请求发到哪家，启动前就写清楚；选的模型出错就报错，不悄悄换一个顶上。终端里敲 aicli 用，在 Codex 桌面版里直接出现在模型菜单。
 
-**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 12 日）
+**21 条路线**｜5 种原版工具配云端和本机模型；其中 2 条连的本机模型没装，眼下用不上（截至 10 月 11 日）
 **8 个模型**｜加进 Codex 桌面版菜单：本机 4 个、云端 4 个
-**129 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
-**40,092 行代码**｜其中测试 16,314 行
+**131 个任务**｜9 月 16 日以来在桌面版里用这些模型开的（至少）
+**39,957 行代码**｜其中测试 16,252 行
 
 现在　升级观察（Codex 里按需启动的自动任务，平时停着）　本机模型服务　〔现在正不正常 → 驾驶舱〕
 
@@ -2738,7 +2738,7 @@ Qwen Code 和 OpenCode 的 3 条路线只给程序调用，不开交互窗口。
 4. **原版工具**｜Codex、Claude Code、Qwen Code、OpenCode、Open Interpreter
 5. **回读核对**｜后台运行时核对实际模型、服务、权限，对不上就停
 
-**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15 日到 10 月 3 日一共构建过 36 个版本。
+**桌面桥**：用 .NET 10 写的 C# 小程序，夹在 Codex 桌面版和它的引擎之间，按 JSON-RPC（程序之间一问一答的消息格式）原样转发，不认识的消息也透传。它只在两处动手：引擎启动前把“官方最新型号＋本机和云端模型”合成一份完整菜单；给别家模型的任务加上请 GPT 帮手的工具。每个新版本要先在〔电脑配置与恢复〕登记全部 7 个文件的指纹才能启用；9 月 15 日到 10 月 3 日一共构建过 35 个版本。
 
 ::screen{#ai-cli-profile-manager-10 section="tech"}
 
