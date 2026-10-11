@@ -13,7 +13,7 @@ def bound_json(path, read=None, root=None):
     root = Path(root) if root is not None else Path(__file__).resolve().parents[3]
     names = {ref.split('.')[0] for ref in re.findall(r'\{\{([^{}]+)\}\}', text)}
     pages = {p.parent.name: json.loads(read(p)) for p in sorted((root/'sources/pages').glob('*/page.json')) if 'scale' in names or p.parent.name in names}
-    projects = [p for p in pages.values() if p.get('kind') in ('project', 'frozen')]
+    projects = [p for p in pages.values() if p.get('kind') in ('project', 'frozen') and 'parent' not in p]
     scale = {key: sum(p.get('status') == value for p in projects) for key, value in [('common', '常用'), ('occasional', '偶尔用'), ('frozen', '冻结')]}
     scale.update(total=len(projects), in_use=scale['common']+scale['occasional'], public=sum(p['public'] for p in projects), private=sum(not p['public'] for p in projects), features=sum(len(p['registry']['features']) for p in projects), retired_features=sum(len(p['registry']['features']) for p in projects if p['kind']=='frozen'))
     values = {**pages, 'scale': scale, 'roster': json.loads(read(root/'config/model-roster.json')) if 'roster' in names else {}, 'stories': json.loads(read(root/'scripts/how-demo-data.json')) if 'stories' in names else {}}

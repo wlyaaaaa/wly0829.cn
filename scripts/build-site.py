@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -168,16 +169,47 @@ def retained_inputs(name, snapshot):
         elif (SITE / 'public' / relative).is_file(): paths.append(SITE / 'public' / relative)
     return paths
 
+def converted_markdown_matches(converter, name, md):
+    try:
+        source = markdown_frontmatter(md).get('source', {})
+    except (ValueError, TypeError, AttributeError):
+        return False
+    author = ROOT / 'sources/pages' / name / 'page.json'
+    if not isinstance(source, dict) or source.get('page') != f'sources/pages/{name}/page.json' or source.get('sha256') != proof(author)['sha256']:
+        return False
+    # The source SHA alone also survives manual body edits. Compare the actual
+    # converter output, including layout, while keeping all writes isolated.
+    with tempfile.TemporaryDirectory(prefix='wly-md-check-') as output:
+        original = converter.OUT_MD, converter.OUT_PUBLIC
+        try:
+            converter.OUT_MD, converter.OUT_PUBLIC = output, str(Path(output) / 'public')
+            converter.convert(name)
+            expected = (Path(output) / (name + '.md')).read_text('utf8')
+        except Exception as error:
+            print(name + ': 无法核对转换来源，保留 Markdown：' + str(error)[:200], flush=True)
+            return False
+        finally:
+            converter.OUT_MD, converter.OUT_PUBLIC = original
+    actual_head, actual_body = md.read_text('utf8').split('\n---\n', 1)
+    expected_head, expected_body = expected.split('\n---\n', 1)
+    actual_meta, expected_meta = json.loads(actual_head[4:]), json.loads(expected_head[4:])
+    for meta in (actual_meta, expected_meta): meta['source'].pop('converted_at_beijing', None)
+    return actual_meta == expected_meta and actual_body == expected_body
+
+
 def sync_markdown(previous):
+    sys.path.insert(0, str(SITE / 'tools'))
     converter = load('build_converter', 'site-astro/tools/convert_page.py')
     records, pending = {}, []
     for name in converter.all_pages():
         md = SITE / 'src/content/pages' / (name + '.md')
         source_fp = fingerprint([ROOT / 'sources/pages' / name])
         old = previous.get(name, {}); current = proof(md)['sha256'] if md.is_file() else None
-        direct = bool(old.get('direct') or (old.get('md_sha256') and current != old['md_sha256']))
-        if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct): pending.append(name)
-        elif old and old.get('fingerprint') != source_fp and direct:
+        direct = bool(current and (old.get('direct') or (old.get('md_sha256') and current != old['md_sha256'])))
+        generated = direct and converted_markdown_matches(converter, name, md)
+        if generated: direct = False
+        if not md.is_file() or (old and old.get('fingerprint') != source_fp and not direct and not generated): pending.append(name)
+        elif direct:
             print(name + ': 保留直接编辑的 Markdown，不覆盖为 JSON 转换结果', flush=True)
         records[name] = {'fingerprint': source_fp, 'direct': direct}
     if pending: run(sys.executable, 'tools/convert_page.py', *pending)
