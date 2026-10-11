@@ -32,7 +32,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <�
 
 当前基线的 `changed` 优先读取本代 `.build-receipt.json` 的重建页；没有回执时比较已有扫描记录与页面哈希。连续多次构建不能只用最后一份重建页当作本次全部变化，应明确列出相对上一成功发布的累计变化路由。P0-5 的 `published-diff` 在其他分支施工，合入并验收后才按 [按需更新清单](ondemand-update.md#6-校验构建和扫描) 启用。全站扫描用 `--pages all`，指定路由用逗号分隔的 `--pages /route-a/,/route-b/`；首页锁定时仍跳过 `/`。扫描覆盖大块空白、压叠、裁字、空图框、404 和点不动，结果及稳定后的截图留在扫描目录。动效由本人看，AI 不录屏或判断开场与动效。
 
-正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。发布不回收线上对象。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
+正式发布沿用本机已配置的阿里云 CLI、OSS profile 和 `wly0829-publication` 短锁；不新增登录或凭据。发布器只上传变化资源和文档，先资源、后 HTML、最后成功记录；先以 HEAD 核资源大小和 MD5，再 GET 关键页和本次变化页核正文哈希。`--upload-only` 只上传并回读资源，不推 `site-dist`、不切换公网、不写成功指针。正式部署和公网回读全部通过后，才更新 Git 共享目录的 `wly-oss/published.json`。验收成功后的 OSS 退役与独立回执按[按需更新清单](ondemand-update.md#7-先上传资源再正式发布)和[发布与扫描](publish-and-scan.md)执行。`publish-receipt.json` 区分本地计划、上传、Pages 和公网回读，不能把 dry-run 或资源上传写成已经上线。
 
 ## 独立阅读与几何检查
 

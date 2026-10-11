@@ -232,7 +232,9 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <sc
 
 `--upload-only` 在 OSS 上传新增或变化资源，并以 HEAD 核大小与 MD5；回执 `status=uploaded_only`。它不推 `site-dist`、不触发 Pages、不写 `published.json`。正式发布先完成资源证明，再正常推送 `site-dist`，从 `main` 触发 `pages.yml` 并传成品 `sha`，按返回网址取得该次 run id、等待成功，再 GET 首页、驾驶舱、`/computer-access/` 和全部变化 HTML，核 HTTP 200 与 SHA256。超时或失败保留回执，不写成功。
 
-资源、部署和公网回读全部通过后，发布器才更新 `<git-common-dir>/wly-oss/published.json`，并令 `publish-receipt.json` 的 `status=published`。下一轮以这份成功记录作增量基线。发布不回收或删除线上对象。回退入口见 [网站维护](maintenance.md#成品部署与回退)，仍从 `main` 触发并传旧 `site-dist` 的 `sha`。
+资源、部署和公网回读全部通过后，发布器才更新 `<git-common-dir>/wly-oss/published.json`。下一轮以这份成功记录作增量基线。随后在同一发布锁下完成 OSS 退役：退休本轮已验收施工清单，保留现役及其实际引用、有效回滚和其他施工清单，对无保留引用的受管旧对象保存新鲜预演、精确核对全部版本、大小和 ETag，再用既有 API 删除并回读。缺证明或未知对象、仍在施工的清单保留并如实说明；不靠年龄撤销、不整桶普扫。具体规则、每轮精确核对上限及回执见 [发布与扫描](publish-and-scan.md)。
+
+必须同时核发布和清理结果：两者完成时 `publish-receipt.json` 的 `status=published`；网页已经上线但退役有残留或失败时为 `published_with_retention_incomplete`，保留 `publication_status=published`、独立 `oss-retention.json` 原因和真实删除量，命令退出 1。预演、资源上传、发布失败或未通过验收均不触发退役。剩余施工清单与对象数在收尾报告中列出，不能凭发布成功或退出 0 宣称 OSS 清理已完成。回退入口见 [网站维护](maintenance.md#成品部署与回退)，仍从 `main` 触发并传旧 `site-dist` 的 `sha`。
 
 ## 8 核对应关系后再宣称完成
 
@@ -245,6 +247,7 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist dist --scan-result <sc
 | 部署的是本次成品 | 发布回执 `site_dist.commit`／`commit` 与工作流输入 `sha` 相符，并核该次 Pages 运行；手动运行的工作流 HEAD 可能是 `main` SHA，本身不能证明成品身份 |
 | 公网读到的是部署成品 | `release-identity.json`、资源清单、关键页及变化页 GET 字节与扫描后的成品对应，OSS 资源回读通过 |
 | 成功基线已推进 | `published.json` 的成品提交、部署标识、manifest 和 readback 对应本次正式发布；上传或 dry-run 不满足 |
+| OSS 退役已处理 | `oss-retention.json` 的精确候选、保留施工清单、删除后回读及实际删除量；任何 deferred、失败或预算残留均如实报告 |
 
 若构建来源缺失，当前发布器允许写 `Unknown`，或通过 `--source-commit <40位SHA>` 提供明确来源；只有真实核过作者输入才可使用该参数，不是把当前 HEAD 补进空格。Unknown 可以如实交付为缺口，不能支撑“源码、成品、公网完整对应”的完成声明。
 
