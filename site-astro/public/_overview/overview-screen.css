@@ -82,6 +82,12 @@
 .ov-small .ov-sig-value small { font-size: 18px; }
 .ov-small .ov-sig-word { font-size: 18px; }
 .ov-small .ov-lamp { width: 12px; height: 12px; }
+.ov-small .ov-todo { justify-content: flex-start; gap: 30px; padding-left: 8px; }
+.ov-todo-n { display: flex; align-items: center; gap: 12px; color: var(--ov-c); }
+.ov-todo-n b { font-size: 96px; line-height: .9; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ov-todo-n span { font-size: 28px; font-weight: 800; line-height: 1.15; color: var(--ov-ink); }
+.ov-small .ov-todo .ov-word { font-size: 36px; color: var(--ov-c); }
+.ov-small .ov-todo.is-yellow .ov-word { color: #9a7409; }
 
 /* 分区标题旁的灯 */
 .ov-sec { --ov-c: #a9b3ae; display: inline-flex; align-items: center; gap: 7px; padding: 3px 12px; border-radius: 999px; border: 1px solid #d8e7dd; background: #fff; font-size: 14px; font-weight: 700; color: var(--ov-c); white-space: nowrap; }

@@ -23,8 +23,13 @@ const card = (r) => {
 };
 const notice = (r) => {
   const a = obj(r.action);
-  return { id: text(r.id), title: text(r.title), project: text(r.project), next_step: text(r.user_action || a.label), done_when: text(a.due_text || r.when), severity: text(r.severity) || 'grey', state: text(r.state), message: text(r.public_message || r.what_happened), at: r.at_beijing, copy_ai_id: text(r.id) };
+  return { id: text(r.id), title: text(r.title), project: text(r.project), next_step: text(r.user_action || a.label), done_when: text(a.due_text || r.when), severity: text(r.severity) || 'grey', state: text(r.state), message: text(r.public_message || r.what_happened), at: r.at_beijing, copy_ai_id: text(r.id),
+    // 首屏和“需要你”卡片要的字段：后端有就带上（P2 的按需问字段还没上线时都是空，页面按旧字段显示）
+    action_owner: text(r.action_owner), last_checked_at: r.last_checked_at || obj(r.ai_hint).last_checked_at || null, due_at: a.due_at || null,
+    where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null,
+    ...Object.fromEntries(PASS.filter((k) => r[k] != null).map((k) => [k, r[k]])) };
 };
+const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text'];
 const LABELS = { 'cpu-gpu': 'CPU 和显卡', 'memory-network': '内存和网络' };
 
 export function fromFull(full) {
@@ -34,7 +39,7 @@ export function fromFull(full) {
     const p = obj(r.plain), o = obj(r.outcomes), rel = obj(r.related_status);
     return { id: text(r.id), name: text(p.name || r.project), group: text(r.group), state: text(r.state) || 'unknown', enabled: typeof r.enabled === 'boolean' ? r.enabled : null,
       mine: p.mine === true, last_run_at: r.last_run_at, next_run_at: r.next_run_at, runs_today: r.runs_today === true, schedule: text(r.schedule_zh || p.schedule_zh),
-      note: text(p.status_note), what: text(p.what), stop: text(p.stop), impact: text(p.impact), heartbeat_at: o.heartbeat_at || r.heartbeat_at || null,
+      note: text(p.status_note), what: text(p.what), stop: text(p.stop), impact: text(p.impact), heartbeat_at: o.heartbeat_at || r.heartbeat_at || null, failures_7d: Number.isFinite(r.failures_7d) ? r.failures_7d : null,
       panel: { is_panel: 'panel' in rel || o.kind === 'panel_heartbeat', execution_failed: o.execution_failed === true, related_state: rel.panel || o.state || null },
       public_message: text(r.public_message), notice_kind: text(r.notice_kind) };
   });
@@ -62,6 +67,7 @@ export function fromFull(full) {
     projects: { state: blockState(f.projects), observed_at: obj(f.projects).observed_at, items: rows(f.projects).map((r) => ({ id: text(r.id), name: text(r.project), mode: text(r.mode), phase: r.phase, run_health: r.run_health, overview: r.overview, waiting_user: r.waiting_user_count, waiting_ai: r.waiting_ai_count, on_hold: r.on_hold_count, health_reason: text(r.health_reason), last_commit_at: r.last_commit_at, commits_7d: r.commits_7d })) },
     source_gaps: (Array.isArray(cp.source_gaps) ? cp.source_gaps : []).map((r) => ({ source_id: text(r.source_id), title: text(r.title), since: r.since, observed_at: r.observed_at })),
     owner_corrections: obj(cp.owner_corrections),
+    ai_work: obj(f.ai_work), governance: obj(cp.governance),
     today_activity: obj(f.today_activity), power_today: obj(f.power_today),
     changes: (() => { const c = obj(f.changes), t = obj(c.today), w = rows(f.weekly);
       return { state: stateOf(c.state), observed_at: c.observed_at, today: { commits: t.commits, repos_changed: t.repos_changed, latest_at: t.latest_at },

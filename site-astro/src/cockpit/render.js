@@ -20,7 +20,7 @@ export function card(c, now) {
     + time + (['red', 'attention'].includes(c.state) ? `<div class="cp-actions">${copyBtn(c.copy_ai_id)}</div>` : '') + `</article>`;
 }
 
-// 安全和授权：只显示，点了去授权页对应卡片办理（锚点和 O3 对齐）
+// 安全和授权：只显示，点了去授权页对应卡片办理（锚点和 O3 对齐）；数据来源和判定不变，首屏只放这一处
 export function security(v, ctx) {
   const s = v.security, pd = s.personal_data.state, un = s.unrestricted.state, win = s.windows.state;
   const off = ctx.offline || !v.ok;
@@ -28,32 +28,161 @@ export function security(v, ctx) {
     ['cockpit-07-icon-01.png', '个人资料', pd === 'unlocked' ? ['已解锁', s.personal_data.expires_at ? '到 ' + dateHm(s.personal_data.expires_at) : '', 'ok'] : pd === 'locked' ? ['锁着', '要用时再解锁', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#personal-data'],
     ['cockpit-07-icon-02.png', '无限制授权', un === 'active' ? ['开着', s.unrestricted.expires_at ? '到 ' + dateHm(s.unrestricted.expires_at) : '', 'attention'] : un === 'inactive' ? ['正常关着', '', 'gray'] : ['没读到', '', 'gray'], '/computer-access/#unrestricted'],
     ['cockpit-07-icon-03.png', 'Windows', win === 'locked' ? ['已锁屏', '', 'ok'] : win === 'unlocked' ? ['未锁屏', '', 'ok'] : ['没读到', '', 'gray'], '/computer-access/#windows'],
-    ['', '电脑', off ? ['读不到', s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) : '', 'gray'] : ['在线', s.computer.uptime_hours != null ? `开机 ${s.computer.uptime_hours} 小时` : '', 'ok'], '/computer-access/'],
+    // 这里只说“连不连得上”；电脑好不好看上面“电脑”那一格
+    ['', '能不能连上电脑', off ? ['连不上', s.observed_at ? '上次 ' + when(s.observed_at, ctx.now) : '', 'gray'] : ['能', s.computer.uptime_hours != null ? `开机 ${s.computer.uptime_hours} 小时` : '', 'ok'], '/computer-access/'],
   ];
   return rows.map(([icon, label, [word, sub, state], href]) => `<a class="cp-sec-item" href="${href}">`
     + (icon ? `<img src="${src(ctx, icon)}" alt="" width="58" height="35" loading="eager">` : `<span class="cp-sec-pc" aria-hidden="true"></span>`)
     + `<span class="cp-sec-label">${label}</span><span class="cp-sec-word">${dot(state)}${esc(word)}</span><span class="cp-sec-sub">${esc(sub)}</span><span class="cp-sec-go">${href === '/computer-access/' ? '看连接状态 →' : '去授权页办理 →'}</span></a>`).join('');
 }
 
-// 要我处理的事 + AI 在核对 + 按条件再办
-export function needYou(v, ctx) {
-  const cards = v.need_you.map((x) => {
-    const { title, checked } = splitChecked(x.title);
-    const step = splitChecked(x.next_step).title;
-    return `<article class="cp-card cp-todo is-red"><h3>${dot('red')}${esc(title)}</h3>`
-      + (step && step !== title ? `<p>${esc(step)}</p>` : '')
-      + `<p class="cp-meta">${[x.project, x.done_when ? '完成条件：' + x.done_when : '', x.last_checked_at ? '最后核对 ' + when(x.last_checked_at, ctx.now) : checked].filter(Boolean).map(esc).join(' · ')}</p>`
-      + `<div class="cp-actions">${copyBtn(x.copy_ai_id)}</div></article>`;
-  }).join('');
-  const body = cards ? `<div class="cp-todos">${cards}</div>` + (v.need_you.length > 1 ? `<p class="cp-all"><button type="button" class="cp-btn" data-copy-ai-all>全部 ${v.need_you.length} 项一起复制给 AI</button></p>` : '')
-    : `<p class="cp-empty">${dot(v.ok ? 'ok' : 'unavailable')}${v.ok ? '现在没有要你动手的事。' : notRead(v.served_at, ctx.now)}</p>`;
-  const ai = v.ai_following.length
-    ? `<details class="cp-more" id="ai"><summary>AI 在核对 ${v.ai_following.length} 项，你暂时不用管（点开看是哪些）</summary><ul class="cp-list">${v.ai_following.map((x) => `<li>${esc(splitChecked(x.title).title)}${x.project ? `<span class="cp-meta"> · ${esc(x.project)}</span>` : ''}</li>`).join('')}</ul></details>`
-    : `<p class="cp-line" id="ai">${dot('ok')}AI 这边没有要核对的。</p>`;
-  const wait = v.deferred.length
-    ? `<h3 class="cp-sub">等条件到了再做（${v.deferred.length} 项）</h3><ul class="cp-list cp-wait">${v.deferred.map((x) => `<li><b>${esc(x.done_when || '你方便时')}</b><span>${esc(splitChecked(x.title).title)}</span></li>`).join('')}</ul>`
+// ---- “要你做的事”怎么读：后端按需问字段（P2）有就用；没有就从现有标题里拆，拆不出就照原句显示 ----
+const CIRCLED = /[①②③④⑤⑥⑦⑧⑨]/;
+const BJ = (s) => { const m = /(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(s || ''); return m ? Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:00+08:00`) : NaN; };
+const clean = (t) => String(t || '').replace(/\s*做完点“复制给 AI”说一声。?/g, '').replace(/\s*(最后核对：[^。]*。?|尚未核对。?)/g, '').trim();
+export function readTodo(x, now) {
+  let t = clean(x.title || x.next_step);
+  let path = '';
+  t = t.replace(/\s*汇报在电脑上：[^（]*（路径\s*([^）]+)）。?/, (_, p) => { path = p.trim(); return ''; }).replace(/\s*（路径\s*([^）]+)）/, (_, p) => { path ||= p.trim(); return ''; }).trim();
+  let minutes = Number.isFinite(x.minutes) ? `约 ${x.minutes} 分钟` : '';
+  t = t.replace(/（约\s*(\d+|几)\s*分钟）/, (_, n) => { minutes ||= n === '几' ? '几分钟' : `约 ${n} 分钟`; return ''; });
+  let label = '';
+  t = t.replace(/^(等你选|等你定|请你定|要你定)[：:]\s*/, (_, l) => { label = l; return ''; });
+  let head = typeof x.headline === 'string' && x.headline ? x.headline : '', rest = t;
+  if (!head) {
+    const m = /^(.{4,46}?)[：；]/.exec(t) || /^(.{4,60}?)。/.exec(t);
+    if (m) { head = m[1]; rest = t.slice(m[0].length); } else { head = t; rest = ''; }
+  }
+  rest = rest.replace(/^[，。；\s]+/, '');
+  let steps = Array.isArray(x.steps) ? x.steps.filter((s) => typeof s === 'string' && s) : [];
+  let options = Array.isArray(x.options) ? x.options.map((o, i) => (typeof o === 'string' ? { key: String.fromCharCode(65 + i), text: o.replace(/^[A-Z][\s.、：:]+/, '') } : o && typeof o === 'object' ? { key: o.key || String.fromCharCode(65 + i), text: o.text || o.label || '' } : null)).filter((o) => o && o.text) : [];
+  if (!steps.length && CIRCLED.test(rest)) {
+    const parts = rest.split(CIRCLED);
+    rest = parts.shift().replace(/[：:，\s]+$/, '');
+    steps = parts.map((p) => p.replace(/^[\s：:]+|[；。，\s]+$/g, '')).filter(Boolean);
+    // 最后一条后面常跟着一句总的话（“都推荐……”），拆出来放回正文
+    const tail = steps.length ? /^(.*?[。；])\s*([^。；]*(推荐|按|随时)[^]*)$/.exec(steps[steps.length - 1]) : null;
+    if (tail) { steps[steps.length - 1] = tail[1].replace(/[；。]$/, ''); rest = (rest ? rest + '。' : '') + tail[2]; }
+  }
+  // “等你选：甲、乙、丙，请……”：顿号列出的就是选项
+  if (!options.length && label === '等你选') {
+    const m = /^([^，。]{2,80}?)[，。]\s*(.*)$/.exec(rest);
+    if (m && m[1].includes('、')) { options = m[1].split('、').map((s, i) => ({ key: String.fromCharCode(65 + i), text: s.trim() })); rest = m[2]; }
+  }
+  rest = rest.replace(/[，；\s]+$/g, '');
+  // 后端给了一句话标题和步骤或选项，就不再显示从旧标题里拆出来的正文
+  if (x.headline && (steps.length || options.length || x.why_you)) rest = '';
+  const raw = String(x.title || '') + String(x.next_step || '');
+  const where = x.where === 'phone' || x.where === 'pc' ? x.where : /在电脑上|在笔记本|[A-Z]:\\/.test(raw) ? 'pc' : '';
+  const dueAt = Date.parse(x.due_at || '') || BJ(x.done_when);
+  const dueText = Number.isFinite(dueAt) ? dateHm(new Date(dueAt).toISOString()) : (x.done_when && !/^\s*本人方便时\s*$/.test(x.done_when) ? x.done_when : '');
+  const left = Number.isFinite(dueAt) ? dueAt - now.getTime() : NaN;
+  const urgent = typeof x.urgent === 'boolean' ? x.urgent : Number.isFinite(left) && left < 864e5;
+  return { head: label && !x.headline ? `${label}：${head}` : head, body: rest, steps, options, minutes, path, where, dueText, hasDue: Number.isFinite(dueAt), overdue: left < 0, urgent };
+}
+const chips = (r) => [r.dueText ? `<span class="cp-chip${r.urgent ? ' is-urgent' : ''}">${r.overdue ? '已过期限 ' + esc(r.dueText) : esc(r.dueText) + (r.hasDue ? ' 前' : '')}</span>` : '',
+  r.minutes ? `<span class="cp-chip">${esc(r.minutes)}</span>` : '',
+  r.where === 'phone' ? '<span class="cp-chip is-phone">手机能办</span>' : r.where === 'pc' ? '<span class="cp-chip is-pc">要在电脑上办</span>' : ''].join('');
+// “你现在 N 件”：件数优先用后端 overview.owner_count / owner_urgent（P1），没有就数“要你做的事”清单
+export function ownerNow(v, now) {
+  const ov = v.overview || {};
+  // 后端给了 ask_kind 时，只把“要你动手 / 要你拍板”算进来；急不急也以后端为准
+  const all = v.need_you.map((x) => ({ x, r: readTodo(x, now) }));
+  const items = all.some((i) => i.x.ask_kind) ? all.filter((i) => !i.x.ask_kind || ['do', 'decide'].includes(i.x.ask_kind)) : all;
+  if (Number.isFinite(ov.owner_urgent)) items.forEach((i) => { i.r.urgent = i.x.urgent === true; });
+  const n = Number.isFinite(ov.owner_count) ? ov.owner_count : items.length;
+  const urgent = Number.isFinite(ov.owner_urgent) ? ov.owner_urgent : items.filter((i) => i.r.urgent).length;
+  return { n, urgent, items, all };
+}
+const ago = (v, now) => { const t = Date.parse(v || ''); if (!Number.isFinite(t)) return ''; const h = Math.floor((now.getTime() - t) / 36e5); return h < 1 ? '1 小时内核对过' : h < 48 ? `${h} 小时前核对` : `${Math.floor(h / 24)} 天前核对`; };
+// 只把一段话复制到剪贴板，不发任何请求
+const copyText = (text, label, cls = '') => `<button type="button" class="cp-btn${cls}" data-copy-text="${esc(text)}">${label}</button>`;
+const todoId = (x) => 'todo-' + String(x.id || '').replace(/[^\w-]/g, '');
+
+function askCard(x, r, ctx) {
+  const id = x.copy_ai_id || x.id;
+  const ref = `（驾驶舱条目 ${id}「${r.head}」）`;
+  const facts = [
+    x.why_you ? ['为什么要你', x.why_you] : null,
+    x.consequence ? ['不办会怎样', x.consequence] : null,
+    x.done_when_text ? ['怎么算办完', x.done_when_text] : null,
+  ].filter(Boolean);
+  const steps = r.steps.length ? `<ol class="cp-steps">${r.steps.map((s) => `<li>${esc(s)}</li>`).join('')}</ol>` : '';
+  const opts = r.options.length
+    ? `<div class="cp-opts" role="group" aria-label="选一个，点了就复制你的选择">${r.options.map((o) => copyText(`我选 ${o.key}：${o.text}${ref}`, `<b>${esc(o.key)}</b>${esc(o.text)}`, ' cp-opt')).join('')}</div><p class="cp-hint">点一个选项就复制“我选 …”，贴到和 AI 的对话里发出去。</p>`
     : '';
-  return anchor('pending') + body + ai + wait;
+  const meta = [x.at ? '登记于 ' + when(x.at, ctx.now) : '', Number.isFinite(x.asked_count) ? `问过 ${x.asked_count} 次` : '', x.last_checked_at ? ago(x.last_checked_at, ctx.now) : '还没核对过', x.project ? '项目：' + x.project : ''].filter(Boolean);
+  return `<article class="cp-ask${r.urgent ? ' is-urgent' : ''}" id="${esc(todoId(x))}">`
+    + `<header class="cp-ask-head"><h3>${dot(r.urgent ? 'red' : 'attention')}<span>${esc(r.head)}</span></h3><span class="cp-chips-row">${chips(r)}</span></header>`
+    + (r.body ? `<p class="cp-ask-body">${esc(r.body)}</p>` : '') + steps + opts
+    + (facts.length ? `<dl class="cp-facts">${facts.map(([k, val]) => `<div><dt>${k}</dt><dd>${esc(val)}</dd></div>`).join('')}</dl>` : '')
+    + `<p class="cp-meta">${meta.map(esc).join(' · ')}</p>`
+    + (r.path ? `<p class="cp-path">电脑上的文件：${esc(r.path)}</p>` : '')
+    + `<div class="cp-actions">${r.options.length ? '' : copyText(`关于${ref}，我的回答是：`, '复制我的回答')}${copyText(`${ref}这件不做了，请转暂缓或取消，按规矩关闭并记一笔。`, '这件不做了', ' cp-btn-quiet')}${copyBtn(id)}</div></article>`;
+}
+
+// 交给 AI 的事：卡住的先列（P2 给 stuck/handler；没给时只认“检查点已过”这一条硬事实），其余收起来
+function aiBlock(v, ctx) {
+  const now = ctx.now;
+  const rows = v.ai_following.map((x) => {
+    const title = clean(x.title);
+    const bare = !title || title === x.project;
+    const cp = /检查点\s*(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2})/.exec(x.title || '');
+    const cpAt = cp ? BJ(cp[1]) : NaN;
+    const passed = Number.isFinite(cpAt) && cpAt < now.getTime();
+    const h = x.handler && typeof x.handler === 'object' ? x.handler : null;
+    const stuck = x.stuck === true || h?.stuck === true || passed;
+    const why = x.stuck_reason || (passed ? `检查点 ${dateHm(new Date(cpAt).toISOString())} 已过 ${Math.max(1, Math.round((now.getTime() - cpAt) / 36e5))} 小时，没收到进度` : '');
+    const state = stuck ? 'stuck' : h?.kind === 'running' ? 'running' : h?.kind === 'queued' ? 'queued' : h?.kind === 'none' ? 'none' : 'wait';
+    const shown = bare ? `${x.project || '没写项目'}：这条缺一句说明` : passed ? title.replace(/[；;]\s*下一个检查点[^；;]*$/, '') : title;
+    return { x, title: shown, why, state, h };
+  });
+  if (!rows.length) return `<p class="cp-line" id="ai">${dot('ok')}现在没有交给 AI 的事。</p>`;
+  const count = (s) => rows.filter((r) => r.state === s).length;
+  const parts = [count('stuck') && `卡住 ${count('stuck')}`, count('running') && `在办 ${count('running')}`, count('queued') && `排队 ${count('queued')}`, count('none') && `还没人接 ${count('none')}`, count('wait') && `等 AI 处理 ${count('wait')}`].filter(Boolean);
+  const g = v.governance || {};
+  const next = g.next_run_at ? `下次每周体检 ${dateHm(g.next_run_at)}${g.consumer_state === 'not_confirmed' ? '，还没确认它会接手这些事' : ''}` : '';
+  const line = (r) => `<li class="is-${r.state}"><span>${esc(r.title)}</span><small>${[r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? ago(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · ')}</small></li>`;
+  const stuck = rows.filter((r) => r.state === 'stuck'), rest = rows.filter((r) => r.state !== 'stuck');
+  return `<div class="cp-ai" id="ai"><h3 class="cp-sub">交给 AI 的事：${rows.length} 件<span class="cp-ai-parts">${parts.join(' · ')}</span></h3>`
+    + (stuck.length ? `<p class="cp-ai-cap">${dot('attention')}卡住了（超过 AI 自己写的检查点）</p><ul class="cp-ailist is-stuck">${stuck.map(line).join('')}</ul>` : '')
+    + aiWork(v, ctx)
+    + (rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件，你不用动手${next ? `（${esc(next)}）` : ''}</summary><ul class="cp-ailist">${rest.map(line).join('')}</ul></details>` : '')
+    + `</div>`;
+}
+// AI 现在在做（ai_work）：在跑的自动任务、留下没合并的分支；后端没给这块就不出
+function aiWork(v, ctx) {
+  const items = v.ai_work?.items || [];
+  if (!items.length) return '';
+  const run = items.filter((p) => Number(p.running_automations) > 0), tasks = items.filter((p) => Number(p.running_tasks) > 0);
+  const branches = items.filter((p) => Number(p.unmerged_branches) > 0), nb = branches.reduce((n, p) => n + Number(p.unmerged_branches), 0);
+  const names = (list, k) => list.map((p) => `${p.project}${Number(p[k]) > 1 ? ` ${p[k]} 个` : ''}`).join('、');
+  const bits = [
+    tasks.length ? `AI 在干活：${names(tasks, 'running_tasks')}` : items.every((p) => p.running_tasks == null) ? '' : '现在没有 AI 对话在干活',
+    run.length ? `在跑的自动任务：${names(run, 'running_automations')}` : '现在没有自动任务在跑',
+    nb ? `留下没收尾的分支：${branches.length} 个项目共 ${nb} 个，AI 会合并或清掉` : '',
+  ].filter(Boolean);
+  return `<div class="cp-aiwork"><b>AI 现在在做</b><ul>${bits.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>${v.ai_work.observed_at ? `<small>${esc(when(v.ai_work.observed_at, ctx.now))} 读到</small>` : ''}</div>`;
+}
+
+// 要我处理的事 + 交给 AI 的事 + 等条件到了再做
+export function needYou(v, ctx) {
+  const { all: items } = ownerNow(v, ctx.now);
+  const decide = items.filter((i) => i.x.ask_kind === 'decide'), act = items.filter((i) => i.x.ask_kind !== 'decide');
+  const group = (list, title) => (list.length ? (title ? `<h3 class="cp-sub">${title}</h3>` : '') + `<div class="cp-todos">${list.map((i) => askCard(i.x, i.r, ctx)).join('')}</div>` : '');
+  const body = items.length
+    ? group(act, decide.length ? '要你动手' : '') + group(decide, '要你拍板（规则或做法）')
+      + (items.length > 1 ? `<p class="cp-all"><button type="button" class="cp-btn" data-copy-ai-all>全部 ${items.length} 项一起复制给 AI</button></p>` : '')
+    : `<p class="cp-empty">${dot(v.ok ? 'ok' : 'unavailable')}${v.ok ? '现在没有要你动手的事。' : notRead(v.served_at, ctx.now)}</p>`;
+  // 等条件：分“你有空时可以做”和“AI 等条件”；事在前、什么时候做在后；后端没给是谁的事就合在一起
+  const fmt = (x) => `<li><span>${esc(clean(x.title) || x.project)}</span><small>什么时候：${esc(x.done_when || '你方便时')}</small></li>`;
+  const mine = v.deferred.filter((x) => x.action_owner === 'user'), theirs = v.deferred.filter((x) => x.action_owner && x.action_owner !== 'user');
+  const known = mine.length + theirs.length === v.deferred.length;
+  const wait = !v.deferred.length ? '' : known
+    ? (mine.length ? `<h3 class="cp-sub">你有空时可以做（${mine.length} 件，不急）</h3><ul class="cp-list cp-wait">${mine.map(fmt).join('')}</ul>` : '')
+      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
+    : `<h3 class="cp-sub">等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
+  return anchor('pending') + body + aiBlock(v, ctx) + wait;
 }
 
 // 电脑：读数卡 + 两张 Grafana 曲线卡 + 远程和网络
@@ -212,14 +341,75 @@ export function todayBlock(v, ctx) {
 // 今天出错数：后端 today_activity.summary.errors = {owner, other} 一份清单，总览和今天的动态都读它；字段缺失时返回 null，按原来的方式显示
 export const todayErrors = (v) => { const e = v.today_activity?.summary?.errors; return e && Number.isFinite(e.owner) && Number.isFinite(e.other) ? { owner: e.owner, other: e.other } : null; };
 const errorsText = (e) => `本人 ${e.owner}、别的软件 ${e.other}`;
-// 总览屏和分区灯由共用脚本 /_overview/overview-screen.js 画（ctx.ov 传进来：构建时 import，浏览器里是 window.OverviewScreen）
+// 首屏三行（场景 1）：① 你现在 N 件事（急/不急）② 电脑 / 自动任务 / 备份 各写状态和谁在办 ③ 电脑健康分小字 + 为什么
+// 分数、各格的灯都由后端 overview 给（O6），这里只挑字、不算分；overview 过期时三格灰掉并写上次时间
+const sigOf = (ov, id) => (Array.isArray(ov?.signals) ? ov.signals.find((s) => s?.id === id) : null) || {};
+const LV = { ok: 'ok', watch: 'attention', act: 'red' };
+const whyOf = (ov, sec) => (Array.isArray(ov?.reasons) ? ov.reasons.filter((r) => r?.section === sec).map((r) => r.text).filter(Boolean) : []);
+function tri(v, ctx, off) {
+  const ov = v.overview;
+  const cell = (id, label, level, status, who, why) => {
+    const st = off ? 'unavailable' : LV[level] || 'unavailable';
+    return `<li class="cp-tri-cell is-${light(st)}" data-signal="${id}"><a href="#${id === 'tasks' ? 'tasks' : id === 'backup' ? 'backups' : 'computer'}">`
+      + `<span class="cp-tri-label">${label}</span><b class="cp-tri-status">${dot(st)}${esc(off ? '读不到' : status)}</b>`
+      + `<span class="cp-tri-who">${off ? esc(ov?.as_of ? `上次 ${hm(ov.as_of)} 读到` : '还没读到') : who.split(' · ').map((w) => `<span>${esc(w)}</span>`).join('<i aria-hidden="true"> · </i>')}</span>`
+      + (why && !off ? `<span class="cp-tri-why">${esc(why)}</span>` : '') + `</a></li>`;
+  };
+  const handled = (s, fallback) => (s?.handler_text ? s.handler_text : fallback);
+  // 电脑
+  const pc = sigOf(ov, 'computer'), pcWhy = whyOf(ov, 'computer');
+  const pcCard = (v.sections.computer.find((c) => c.id === 'computer_health') || {}).text || '';
+  const pcStatus = pc.level === 'ok' ? '正常' : pc.level === 'act' || pc.level === 'watch' ? (pcWhy.some((t) => /资源/.test(t)) || !pcWhy.length ? '资源有预警' : pcWhy[0]) : '读不到';
+  const pcWho = pc.level === 'ok' ? '你不用管' : handled(pc, '不用你动手 · 交给 AI 盯着');
+  // 自动任务：今天出错数和“今天的动态”同一份（today_activity.summary.errors）
+  const tk = sigOf(ov, 'today_tasks'), errs = todayErrors(v), sum = v.today_activity?.summary || {};
+  const nErr = errs ? errs.owner + errs.other : Number.isFinite(tk.value) ? tk.value : null;
+  const repeat = v.automation.items.filter((t) => Number(t.failures_7d) >= 5).sort((a, b) => b.failures_7d - a.failures_7d);
+  const tkStatus = nErr == null ? (tk.word || '读不到') : nErr === 0 ? (repeat.length ? '今天正常，这周反复出错' : '今天都正常') : `今天出错 ${nErr} 个`;
+  const tkWhy = [Number.isFinite(sum.tasks_run) ? `今天跑了 ${sum.tasks_run} 个${errs ? `，出错 ${nErr} 个（${errorsText(errs)}）` : ''}` : '', repeat.length ? `这周反复出错：${repeat.slice(0, 2).map((t) => `${t.name} ${t.failures_7d} 次`).join('、')}` : ''].filter(Boolean).join('；');
+  const tkWho = nErr ? handled(tk, '不用你动手 · 交给 AI') : '电脑自己按时跑';
+  // 备份
+  const bk = sigOf(ov, 'backup'), bkWhy = whyOf(ov, 'backup_cloud');
+  const bkStatus = bk.level === 'ok' ? '都按时备份了' : bkWhy[0] || (Number.isFinite(bk.value) && bk.value ? `${bk.value} 项要留意` : bk.word || '读不到');
+  const bkWho = bk.level === 'ok' ? '你不用管' : handled(bk, '不用你动手 · 交给 AI');
+  const bkMore = bkWhy.length > 1 ? `另有 ${bkWhy.length - 1} 项：${bkWhy.slice(1).join('、')}` : Number.isFinite(bk.value) && bk.level !== 'ok' ? `共 ${bk.value} 项不正常` : '';
+  return `<ul class="cp-tri">`
+    + cell('computer', '电脑', pc.level, pcStatus, pcWho, pcCard.replace(/^电脑读数：/, '现在 '))
+    + cell('tasks', '自动任务', tk.level, tkStatus, tkWho, tkWhy)
+    + cell('backup', '备份', bk.level, bkStatus, bkWho, bkMore)
+    + `</ul>`;
+}
+// 扣分按“你的 / AI 的 / 电脑和任务的”分组；规则原样列出
+const GROUP = { need_you: '你的事', ai_following: '交给 AI 的事' };
+function score(v, ctx, off) {
+  const ov = v.overview;
+  const at = ov?.as_of ? hm(ov.as_of) : '';
+  if (off || !Number.isFinite(ov?.score)) return `<p class="cp-score is-off">电脑健康分：读不到${at ? `（上次 ${at}）` : ''}</p>`;
+  const reasons = Array.isArray(ov.reasons) ? ov.reasons : [];
+  const groups = {};
+  for (const r of reasons) (groups[GROUP[r.section] || '电脑和自动任务'] ||= []).push(r);
+  const line = (r) => `<li>${esc(r.text)}${Number.isFinite(r.delta) && r.delta ? ` <b>${r.delta > 0 ? '+' : '−'}${Math.abs(r.delta)}</b>` : ''}</li>`;
+  const rules = Array.isArray(ov.rules) ? ov.rules.map((r) => (typeof r === 'string' ? { text: r } : r)) : [];
+  return `<details class="cp-score" id="score"><summary><span>电脑健康 <b>${Math.round(ov.score)}</b>/100</span><span>${at} 读到</span><span class="cp-score-why">为什么是 ${Math.round(ov.score)} 分</span></summary>`
+    + `<div class="cp-score-body">${reasons.length ? Object.entries(groups).map(([k, list]) => `<div><h4>${k}</h4><ul>${list.map(line).join('')}</ul></div>`).join('') : '<p>没有扣分的地方。</p>'}`
+    + (rules.length ? `<div class="cp-score-rules"><h4>分数怎么算</h4><ul>${rules.map((r) => `<li>${esc(r.text)}</li>`).join('')}</ul></div>` : '')
+    + `<p class="cp-score-note">这个分数主要看电脑和 AI 的活，不等于你要做几件事；你要做的看上面第一行。</p></div></details>`;
+}
 const overview = (v, ctx) => {
   if (!ctx.ov) return '';
-  const e = todayErrors(v);
-  const ov = e && v.overview && Array.isArray(v.overview.signals)
-    ? { ...v.overview, signals: v.overview.signals.map((s) => (s?.id === 'today_tasks' ? { ...s, value: e.owner + e.other, detail: errorsText(e) } : s)) }
-    : v.overview;
-  return ctx.ov.html(ov, { size: 'big', now: ctx.now.getTime() });
+  const off = ctx.ov.stale(v.overview, ctx.now.getTime());
+  const { n, urgent, items } = ownerNow(v, ctx.now);
+  const read = v.ok && !ctx.offline;
+  const tag = !n ? '' : urgent ? `<span class="cp-you-tag is-urgent">${urgent === n ? (n === 1 ? '急' : '都急') : `${urgent} 件急`}</span>` : '<span class="cp-you-tag">都不急</span>';
+  const list = items.slice(0, 3).map(({ x, r }) => `<li><a href="#${esc(todoId(x))}">${dot(r.urgent ? 'red' : 'attention')}<span class="cp-you-title">${esc(r.head)}</span><span class="cp-you-chips">${chips(r)}</span></a></li>`).join('');
+  const you = !read && !v.need_you.length
+    ? `<div class="cp-you is-off"><p class="cp-you-k">你现在</p><p class="cp-you-n">要你做的事还没读到</p><p class="cp-you-sub">${notRead(v.served_at, ctx.now)}</p></div>`
+    : !n
+      ? `<div class="cp-you is-none"><p class="cp-you-k">你现在</p><p class="cp-you-n">${dot('ok')}没有要你做的事</p><p class="cp-you-sub">下面三格是电脑自己的情况。</p></div>`
+      : `<div class="cp-you${urgent ? ' is-urgent' : ''}"><p class="cp-you-k">你现在</p><p class="cp-you-n"><b>${n}</b> 件事${tag}</p>`
+        + `<ol class="cp-you-list">${list}</ol>`
+        + `<p class="cp-you-sub">${items.length > 3 ? `还有 ${items.length - 3} 件 · ` : ''}<a href="#need-you">去处理 ↓</a>${!read && v.served_at ? ` · 这是 ${esc(when(v.served_at, ctx.now))} 读到的` : ''}</p></div>`;
+  return you + tri(v, ctx, off) + score(v, ctx, off);
 };
 const LAMPS = { 'need-you': 'need_you', tasks: 'automation', computer: 'computer', backup: 'backup_cloud', projects: 'projects', today: 'today' };
 const lampOf = (key) => (v, ctx) => ctx.ov ? ctx.ov.lamp(v.overview?.sections?.[key], ctx.ov.stale(v.overview, ctx.now.getTime())) : '';
@@ -234,8 +424,8 @@ export function page(v, ctx) {
   const sec = (id, title, w, h, sub, body) => `<section class="cp-section" id="${id}"><div class="cp-head"><h2><img src="${src(ctx, title[0])}" alt="${title[1]}" width="${w}" height="${h}" loading="eager"></h2><span class="cp-lamp" data-cp="lamp-${id}">${REGIONS['lamp-' + id](v, ctx)}</span>${id === 'today' ? `<span class="cp-date" data-cp="today-date">${todayDate(v, ctx)}</span>` : ''}<p>${sub}</p></div>${body}</section>`;
   return `<section class="cp-section cp-hero" id="top">
   <div class="cp-hero-copy">
-    <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"></h1>
-    <p class="cp-lead">这台电脑现在好不好、要我做什么，一页看完。每分钟从电脑读一次，时间都是北京时间；右下角 ↻ 立刻重读。</p>
+    <h1><img src="${src(ctx, 'cockpit-01-title-01.png')}" alt="驾驶舱" width="483" height="198" loading="eager"><span class="cp-h1-text" aria-hidden="true">驾驶舱</span></h1>
+    <p class="cp-lead">先看你现在要做几件事，再看电脑、自动任务、备份谁在办。每分钟从电脑读一次，时间都是北京时间；右下角 ↻ 立刻重读。</p>
   </div>
   <img class="cp-hero-art" src="${src(ctx, 'cockpit-01-illustration-01.png')}" alt="" width="866" height="326" loading="eager">
   <div class="cp-overview" data-cp="overview">${overview(v, ctx)}</div>
