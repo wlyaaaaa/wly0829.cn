@@ -1,0 +1,175 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "meshclip-kit-exact-peer-firewall-hardening",
+  "kind": "project",
+  "title": "精确对端防火墙与宽泛规则防御",
+  "url": "/projects/meshclip-kit/exact-peer-firewall-hardening/",
+  "parent": "meshclip-kit",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-01",
+      "section": "top",
+      "title": "精确对端防火墙与宽泛规则防御",
+      "text": "# 精确对端防火墙与宽泛规则防御\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n能够说清本项目开放给谁、通过哪个接口和程序，并可逆撤销自己的配置。\n\n当前情况：10 月 11 日 13:33 主机上两条项目规则合规，也没发现别的生效 KDE 入站放行；这是主机一端的检查，两端配对和实际传输仍需自己的结果。\n\n项目快照核对于 2026-10-11（北京时间），运行情况依据当天 13:33 的主机自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双机剪贴板",
+          "href": "/projects/meshclip-kit/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/meshclip-kit"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/meshclip-kit/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n只添加两条窄规则仍可能被旧宽规则抵消，所以必须同时核对现有KDE规则。变更保留原状态，以便撤销项目时恢复。\n\n## 举个实际例子\n\n“我只想让这两台电脑互传，别向别的设备开放。”AI先列出这次连接实际需要的规则和允许设备，展示调整范围；按授权处理后分别检查允许的电脑和其他设备，配对与真实传输另行确认。\n\n## 最后我会得到什么\n\nKDE流量的项目规则明确限定批准对端；本机其他应用与整个Windows防火墙不属于该结论。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只添加两条窄规则仍可能被旧宽规则抵消，所以必须同时核对现有KDE规则。变更保留原状态，以便撤销项目时恢复。 ## 举个实际例子 “我只想让这两台电脑互传，别向别的设备开放。”AI先"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只添加两条窄规则仍可能被旧宽规则抵消，所以必须同时核对现有KDE规则。变更保留原状态，以便撤销项目时恢复。 ## 举个实际例子 “我只想让这两台电脑互传，别向别的设备开放。”AI先"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 只添加两条窄规则仍可能被旧宽规则抵消，所以必须同时核对现有KDE规则。变更保留原状态，以便撤销项目时恢复。 ## 举个实际例子 “我只想让这两台电脑互传，别向别的设备开放。”AI先"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n只允许已批准的电脑进入 KDE Connect 所需范围，原有宽泛规则也已核对。\n\n## 发现问题时\n\n发现其他宽泛规则时先停止，展示将禁用哪些规则并等待本人明确选择。\n\n## 入口不可用或证据不足时\n\n修改需要管理员权限；只读检查若无法看全规则，就报告未知，不把缺证据当安全通过。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n在两台电脑分别运行 scripts/configure-peer.ps1 -Peer 指定已核实的对端；遇到宽泛旧规则先用 -WhatIf 预览，再明确允许禁用。\n\n## 需要准备什么\n\n- 批准互连的对端电脑\n\n- 发现宽泛旧规则时是否接受预览后的定向禁用\n\n## 从开始到拿到结果\n\n1. **检查已有规则**　逐端核对对端地址、程序及现有入站规则；冲突先停止。\n\n2. **只加精确通路**　明确同意后禁用相关宽泛规则并写入限定端口、协议、程序和接口的新规则。\n\n3. **回读或回滚**　两端分别回读规则；失败尝试恢复本轮改动，doctor 报告未完成事务。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日 13:33 主机精确入站与非项目规则检查通过；副机规则这次没查\n\n### 关键规则与设计选择\n\n1. 规则同时约束协议、端口、程序、接口与单对端地址，不把0.0.0.0监听地址等同于防火墙远程放行范围。\n\n2. 宽泛非项目规则只在显式选项下禁用，不删除，保留恢复记录。\n\n3. 卸载核对资源是否仍由本项目拥有且未变化，变化资源保留并报告。\n\n## 当前怎样实现\n\n- Get-MeshClipKdeFirewallAudit读取指向可信kdeconnectd.exe的入站规则和过滤条件。\n\n- Disable-MeshClipBroadKdeFirewallRules禁用明确冲突规则并记录。\n\n- New-MeshClipFirewallRules创建TCP/UDP两条精确过滤规则；事务失败按记录回滚。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机精确入站与非项目规则检查通过；副机规则这次没查 ### 关键规则与设计选择 1. 规则同时约束协议、端口、程序、接口与单"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机精确入站与非项目规则检查通过；副机规则这次没查 ### 关键规则与设计选择 1. 规则同时约束协议、端口、程序、接口与单"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机精确入站与非项目规则检查通过；副机规则这次没查 ### 关键规则与设计选择 1. 规则同时约束协议、端口、程序、接口与单"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- scripts/MeshClip.Transaction.ps1在集成效果前持久记录带类型恢复步骤；失败和硬中断保留待恢复。recover.ps1默认只预览，Apply反向核对实际资源再恢复；外来改动不覆盖，未完成记录不能被新安装/configure覆写。软件包与KDE配对身份不在该集成事务范围。\n\n## 执行流程\n\n1. 解析批准对端和可信daemon路径，读取当前规则。\n\n2. 发现冲突时停止；显式选项下先预览，再执行可逆禁用。\n\n3. 保存本机状态并添加精确TCP/UDP规则。\n\n4. 回读规则；失败按原记录回滚，未完成事务由doctor报告。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| fail-closed（失败阻断） | 当安全检测发现异常或潜在漏洞时，系统默认选择关闭或拒绝执行，而非冒险放行。 |\n| 端口收敛 | 将开放监听的服务端口通过防火墙策略收缩到最小必需网络接口与最小授信客户端 IP 集合。 |\n\n## 专业定义\n\n将 KDE 入站限定到选定对端，冲突规则可逆处理",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n若缺少 Windows 管理员提权，无法写入防火墙规则；若用户未明确授权加固且存在宽泛规则，脚本安全拒绝推进。\n\n## 边界\n\n- 只处理本项目KDE规则与明确识别的冲突规则，不代替全机网络策略。\n\n- 卸载不自动删除第三方程序，已变化资源不强行覆盖。\n\n## 失败与恢复\n\n- **存在不限来源、或地址/端口/接口过滤不精确的非项目 KDE 入站放行**：脚本立即 fail-closed 终止，提示使用 -DisableBroadKdeFirewallRules 参数进行受控加固；哪怕看起来很窄，只要还生效就挡住最终验收。\n\n- **运行缺乏管理员权限**：Test-MeshClipAdministrator 检查失败并抛出提权提示，不破坏性部分写入。\n\n- **安装或配置中断、回滚未完成**：保留原操作记录，先只读恢复预览；按记录处理仍匹配的资源，外来修改继续待协调，不删除标记伪造通过。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-exact-peer-firewall-hardening-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\configure-peer.ps1`防火墙加固与规则创建入口\n\n- `scripts\\uninstall.ps1`规则清理与历史宽泛规则可逆恢复\n\n- `tests\\MeshClip.Common.Tests.ps1`防火墙过滤契约等价性测试\n\n## 如何验证\n\n- 当前测试源码覆盖防火墙规则名哈希确定性、精准过滤契约与多余地址排除断言；这次没有重新运行测试。\n\n- 10 月 11 日 13:33 主机 doctor 只读检查：Exact-peer firewall 为 PASS，Unmanaged KDE firewall 为 PASS；不代表副机规则或真实传输也已核过。\n\n## 与其他模块的关系\n\n让KDE网络访问范围与批准对端一致，配对仍由KDE及用户负责。",
+      "links": [
+        {
+          "text": "上一个模块 跨网组网与对端发现",
+          "href": "/projects/meshclip-kit/tailscale-peer-reachability/"
+        },
+        {
+          "text": "下一个模块 设备配对与文件传输",
+          "href": "/projects/meshclip-kit/kde-connect-pairing-sync/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

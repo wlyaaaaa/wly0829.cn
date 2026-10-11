@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "meshclip-kit-tailscale-peer-reachability",
+  "kind": "project",
+  "title": "Tailscale 专用组网与端点精准解析",
+  "url": "/projects/meshclip-kit/tailscale-peer-reachability/",
+  "parent": "meshclip-kit",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码核至 9 月 29 日提交 61fa792e，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-01",
+      "section": "top",
+      "title": "Tailscale 专用组网与端点精准解析",
+      "text": "# Tailscale 专用组网与端点精准解析\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n通常不需要手工路由器端口映射，通过现有 Tailscale 网络连接批准对端，避免另建中继服务。\n\n当前情况：10 月 11 日 13:33 主机这一端的网络检查通过，那次 ping 到了批准的对端电脑；这只证明能联系到那台电脑，不证明两台已配对，也不证明剪贴板或文件已经传到。\n\n项目快照核对于 2026-10-11（北京时间），运行情况依据当天 13:33 的主机自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双机剪贴板",
+          "href": "/projects/meshclip-kit/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/meshclip-kit"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/meshclip-kit/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n用途与实际影响\n\n## 为什么需要它\n\n跨子网时 KDE 广播发现可能找不到另一台电脑。明确对端地址能让 KDE 主动探测；组网故障和应用配对仍要分开判断。\n\n## 举个实际例子\n\n“帮我确认这两台已登记的电脑能不能联系到，先不要传文件。”AI核对选中的两台设备和它们的连接地址，再检查指定连接；交回哪一端可达、哪一段失败和依据。能联系到电脑还不代表剪贴板或文件传输已成功。\n\n## 最后我会得到什么\n\n得到准确对端地址及连通性诊断，供后续配置使用；ping成功不是剪贴板和文件验收。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 跨子网时 KDE 广播发现可能找不到另一台电脑。明确对端地址能让 KDE 主动探测；组网故障和应用配对仍要分开判断。 ## 举个实际例子 “帮我确认这两台已登记的电脑能不能联系到，"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 跨子网时 KDE 广播发现可能找不到另一台电脑。明确对端地址能让 KDE 主动探测；组网故障和应用配对仍要分开判断。 ## 举个实际例子 “帮我确认这两台已登记的电脑能不能联系到，"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 用途与实际影响 ## 为什么需要它 跨子网时 KDE 广播发现可能找不到另一台电脑。明确对端地址能让 KDE 主动探测；组网故障和应用配对仍要分开判断。 ## 举个实际例子 “帮我确认这两台已登记的电脑能不能联系到，"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n## 正常时\n\n两台指定电脑都已加入同一 Tailscale 网络并在线，诊断确认能找到对方；文件传输和 KDE 配对仍另验。\n\n## 发现问题时\n\n有多台可能的电脑却没指定目标，或对端离线时停止自动选择，请本人确认要连哪台。\n\n## 入口不可用或证据不足时\n\nTailscale 未运行或本人尚未通过官方网页登录时，先完成这一步，不尝试绕过身份。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n两台电脑开始的方式不一样。常开的主机运行 scripts/install-windows.ps1 做完整部署；按需打开的副机先用 scripts/recover.ps1 -AsJson 查有没有上次没收完尾的改动，再用 scripts/deploy-on-demand.ps1 按核准的提交号（Git 里标记某个版本的 40 位编号）部署，先加 -WhatIf（只预览、不真改）看一遍。两端都经官方浏览器登录 Tailscale，再各自运行 scripts/configure-peer.ps1 -Peer 指定准确对端，用 scripts/doctor.ps1 查可达性。\n\n### 需要准备什么\n\n- 要互连的两台 Windows 电脑：一台常开的主机，一台按需打开的副机\n\n- 本人通过官方浏览器完成 Tailnet 登录\n\n### 从开始到拿到结果\n\n1. **两端上线**　主机核对 Tailscale 服务、本机在线和无人值守设置。副机按需部署时保留已有配对和精确放行，不装看门狗、不自动启动 KDE；发现旧看门狗或被外部改过的设置就先停下。脚本都不会替人登录。\n\n2. **选准对端**　两端各自输入准确设备名并检查它在线，避免把相似设备当目标；副机要和主机同步时，再手动打开 KDE。\n\n3. **单独测网络**　doctor 只做 1 次、最多等 5 秒的 ping，结果只有“通了”或“没通／超时”两种，不告诉你这次走的是直连还是中继；网络通过仍要另做 KDE 配对。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 11 日 13:33 主机网络层检查通过；同一次 KDE 应用状态读不出，另算\n\n### 关键规则与设计选择\n\n1. 同一Tailnet中的批准设备才进入配置流程；直连失败可用Tailscale中继，不承诺零公共中继。\n\n2. 自动选择只有一个在线Windows对端时成立；显式名称必须精确匹配。\n\n3. 使用官方浏览器登录，不传递脚本内登录密钥；诊断里的对端地址只露出第一段，其余打码。\n\n## 当前怎样实现\n\n- Get-MeshClipTailscaleStatus 安全解析 tailscale status --json 输出。\n\n- Resolve-MeshClipApprovedWindowsPeer 校验对端状态、系统类型与唯一性。\n\n- ConvertTo-MeshClipRedactedAddress 给地址打码：IPv4 只留第一段、后面写成 x.x.x，IPv6 只留第一段，无效地址整段隐藏；这是固定截断，不是哈希（把内容换算成一串摘要码）。\n\n## 执行流程\n\n1. 检查服务自动运行、BackendState=Running、本机在线。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机网络层检查通过；同一次 KDE 应用状态读不出，另算 ### 关键规则与设计选择 1. 同一Tailnet中的批准设备才"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机网络层检查通过；同一次 KDE 应用状态读不出，另算 ### 关键规则与设计选择 1. 同一Tailnet中的批准设备才"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 11 日 13:33 主机网络层检查通过；同一次 KDE 应用状态读不出，另算 ### 关键规则与设计选择 1. 同一Tailnet中的批准设备才"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n2. 检查ForceDaemon与shields-up；不自行改动不符合条件的现状。\n\n3. 解析明确对端，确认在线且为Windows。\n\n4. doctor执行一次有界tailscale ping（1 次、5 秒超时），只报通或不通，不回传直连还是中继；结果独立于KDE配对。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Tailnet（Tailscale 虚拟网络） | Tailscale 账户下的所有授权设备组成的专属点对点加密网状网络。 |\n| Run Unattended（无人值守） | Tailscale 无人值守服务模式，无需用户手动打开客户端界面即可在后台自启保持在线。 |\n\n## 专业定义\n\n跨网络加密隧道与单对端安全发现",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n若 Tailscale 未登录、处于 Shields Up 模式，或存在多个同名/离线设备导致无法安全辨别目标，脚本拒绝盲目猜测并终止执行。\n\n## 边界\n\n- 仅负责底层 Tailnet 隧道的打通与对端 IP 的精准析取，不负责上层 KDE Connect 的配对确认。\n\n- 严格仅支持经过官方浏览器认证的个人 Tailnet，绝不在脚本中传递明文 auth-key。\n\n## 失败与恢复\n\n- **对端设备关机或离线**：Resolve-MeshClipApprovedWindowsPeer 抛出错误拒绝继续，提示开启对端电脑。\n\n- **Tailscale 开启了 shields-up**：doctor 诊断标记 FAIL 并提示关闭入站拦截以允许 KDE Connect 流量进入。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-tailscale-peer-reachability-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\MeshClip.Common.psm1`Tailscale 状态与对端解析核心逻辑\n\n- `scripts\\configure-peer.ps1`对端配置入口脚本\n\n- `tests\\MeshClip.Common.Tests.ps1`地址脱敏与对端解析单元测试\n\n## 如何验证\n\n- 当前测试源码覆盖精确名称匹配、离线/非 Windows 拒绝、多对端歧义与地址打码；这次没有重新运行测试，9 月 8 日那次 66 项历史回归保留原日期。\n\n- 10 月 11 日 13:33 主机自检：Tailscale 1.104.1 服务自动运行、本机在线、无人值守开启、入站拦截（shields-up）关闭、唯一批准对端和 ping 当次通过；同一次读不出 KDE 应用状态（记为未知），不能据此说两台已配对或能传。\n\n## 与其他模块的关系\n\n为KDE对端配置提供明确的网络地址和可达证据，不替代应用层确认。",
+      "links": [
+        {
+          "text": "下一个模块 对端防火墙收敛",
+          "href": "/projects/meshclip-kit/exact-peer-firewall-hardening/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

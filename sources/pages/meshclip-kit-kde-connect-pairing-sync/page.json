@@ -1,0 +1,163 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "meshclip-kit-kde-connect-pairing-sync",
+  "kind": "project",
+  "title": "KDE Connect 授信配对与文本文件流转",
+  "url": "/projects/meshclip-kit/kde-connect-pairing-sync/",
+  "parent": "meshclip-kit",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源码核至 9 月 29 日提交 61fa792e，双向文字实测取 9 月 29 日 01:25 记录，运行情况取北京时间 10 月 11 日 13:33 的一次主机自检",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11"
+    }
+  },
+  "screens": [
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-01",
+      "section": "top",
+      "title": "KDE Connect 授信配对与文本文件流转",
+      "text": "# KDE Connect 授信配对与文本文件流转\n\n〔回到项目 → 双机剪贴板〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nMeshClip Kit · 功能说明\n\n说明谁来配对、谁来传输、谁来核验，避免把安装完成当成文件已经送达。\n\n当前情况：9 月 29 日 01:25 两个方向的文字复制粘贴已有真实实测记录；文件互传和完整双机验收还没有记录。10 月 11 日 13:33 主机的 KDE 安装、托盘和对端地址配置检查通过，但那次读不出 KDE 的设备状态，所以现在有没有已配对、可连上的设备不给数。\n\n项目快照核对于 2026-10-11（北京时间），运行情况依据当天 13:33 的主机自检；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → 双机剪贴板",
+          "href": "/projects/meshclip-kit/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/meshclip-kit"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/meshclip-kit/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n### 为什么需要它\n\n网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。\n\n### 举个实际例子\n\n“把这份测试文件发到另一台电脑。”两端先亲自确认 KDE 配对；接收完成后分别比较文件内容是否一致。两台互相复制文字在 9 月 29 日实测过，文件互传至今还没有实测记录。\n\n### 最后我会得到什么\n\n两端配置和人工配对完成后可使用KDE的在线文字与文件通道；每次重要传输的结果需要真实接收证据。\n\n## 结果怎么看\n\n### 正常时\n\n两端已配对且在线，文字在另一台能粘贴，文件确实收到；重要文件再核对内容一致。\n\n### 发现问题时\n\n看到设备却无法传输时，分别检查配对、插件、对端在线和当前连接。\n\n### 入口不可用或证据不足时\n\n任一端未登录、离线或没配对时，不能按正常流程共享。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。 ### 举个实际例子 “把这份测试文件发到另一台电脑。”两端先亲自确认 KDE 配对；"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。 ### 举个实际例子 “把这份测试文件发到另一台电脑。”两端先亲自确认 KDE 配对；"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 网络在线、设备可见、人工配对、插件启用和实际收到内容是不同条件。明确区分后，才能知道复制没到时该查哪一步。 ### 举个实际例子 “把这份测试文件发到另一台电脑。”两端先亲自确认 KDE 配对；"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-03",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n先完成两端 Tailscale 与精确防火墙配置，再在两台 KDE Connect 界面核对设备并手工接受配对。\n\n### 需要准备什么\n\n- 要配对的两台电脑\n\n- 两端分别确认配对\n\n- 用于试传的生成样本（验收脚本造的虚构文字和文件，不用真实密码）\n\n### 从开始到拿到结果\n\n1. **发现并配对**　两端配置准确对端后，在 KDE 界面核对身份并分别确认信任。\n\n2. **选择传输内容**　用生成的非秘密文字试剪贴板，文件单独发送。两台都是我的可信电脑，“连同密码一起同步”（Including passwords）开着也可以，项目不再要求关掉。\n\n3. **核对接收**　重要文件在两端比对哈希；中断的大文件须重新完整发送，不能称自动续传。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-04",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n9 月 29 日双向文字实测通过；10 月 11 日 13:33 主机 KDE 配置通过，设备状态读不出，文件互传未实测\n\n### 关键规则与设计选择\n\n1. 脚本不静默同意配对，双方核对设备身份后确认。\n\n2. 可信设备之间同步密码是允许的：9 月 29 日起项目撤销了“必须关闭 Including passwords”的要求，doctor 也删掉了那条固定提醒；验收只用生成样本，报告里不出现真实密码。\n\n3. 纯文本在线尽力而为，不解决离线补发、同时复制排序和图像剪贴板。\n\n4. 1GB是文档测试目标（1024 MiB），不能推出协议最大文件限制，也还没有实测过。\n\n## 当前怎样实现\n\n- Write-MeshClipKdeConfigChange保留编码/注释，变更前备份，异常可回滚。\n\n- Repair-MeshClipLegacyDuplicateGeneralLines只接受已知旧版重复形态，其余歧义拒绝。\n\n- 文件发送属于KDE原生能力；Get-MeshClipFileHashSafe用于项目内部资源比对，传输验收依文档在两端人工运行Get-FileHash。\n\n- acceptance.ps1 为每个方向各生成 100 条不重复的非秘密标记；文件默认只生成 1 MiB，加 -SizesMiB 1,100,1024 才生成 1 MiB、100 MiB、1024 MiB 三种。RecordClipboard 只收和生成标记对得上的观察，没给延迟就记为空；VerifyFile 核对另一路径上的接收副本，只证明长度和 SHA-256 一致。配对、重启恢复和不回环这三项要真实观察后用 RecordCheck 记下；Summary 不自动签发业务 PASS。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9 月 29 日双向文字实测通过；10 月 11 日 13:33 主机 KDE 配置通过，设备状态读不出，文件互传未实测 ### 关键规则与设计选择 1. "
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9 月 29 日双向文字实测通过；10 月 11 日 13:33 主机 KDE 配置通过，设备状态读不出，文件互传未实测 ### 关键规则与设计选择 1. "
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 9 月 29 日双向文字实测通过；10 月 11 日 13:33 主机 KDE 配置通过，设备状态读不出，文件互传未实测 ### 关键规则与设计选择 1. "
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-05",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n## 执行流程\n\n1. 两端分别写customDevices并检查精确入站。\n\n2. 用户核对设备身份并确认KDE配对。\n\n3. 先用生成的非秘密测试文字试剪贴板；密码同步开关按本人习惯，不要求关闭。\n\n4. 重要文件接收后，两端另算SHA-256核对；本项目没有自动劫持发送路径。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-06",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| customDevices | KDE Connect 的静态对端 IP 清单配置项，用于在无法使用 UDP 广播时主动探测目标。 |\n| 在线尽力而为（Best-effort） | 在两端均在线时以最优路径及时交付数据，但不保证离线持久化存储或严格时序编排。 |\n\n## 专业定义\n\n双向人工配对核验与尽力而为传输边界",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-07",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n设备可ping通但未配对时仍不能正常传输；中断后要重新发送，不承诺断点续传。\n\n## 边界\n\n- 剪贴板纯文本流转不接管图像或格式化富文本（图像作为文件传输）。\n\n- 大文件传输不包含断点续传能力，网络中断必须重新完整发送。\n\n- 测试辅助只生成虚构内容，不读剪贴板历史；清理只删除本次生成且未变化的文件。文件互传、每方向 100 条连续标记、延迟和完整双机重启还没有实测记录，不把指南存在写成完成。\n\n## 失败与恢复\n\n- **设备在线但配对待核对**：doctor保留人工确认提示，不自动替用户接受配对。\n\n- **读不出 KDE 设备状态**：doctor 记为未知（Unknown），设备数留空，不当成零台设备，也不当成对端已关机；要确认就去两端 KDE 界面看。\n\n- **文件传输中断**：重新发送，并在接收完成后比较哈希。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "meshclip-kit-kde-connect-pairing-sync-08",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\n- `scripts\\MeshClip.Common.psm1`customDevices 读写、配置备份与修复\n\n- `docs\\PRODUCT.md`一致性定义与成功准则规范\n\n- `tests\\MeshClip.Common.Tests.ps1`配置读写与多行 UTF-8 保持测试\n\n## 如何验证\n\n- 9 月 8 日那次 66 项历史回归含配置保留、旧版修复和 14 个设备计数情形；这 14 个是用模拟的 KDE 命令输出跑出来的，不是 14 次双机实测。当前源码有 85 个测试定义（参数化展开约 96 个用例），这次没有重新运行。\n\n- 9 月 29 日 01:25 两个方向的普通文字复制粘贴有真实实测记录（来自当时的修复记录，之后没有再测）。9 月 14 日只读设备汇总已知 1 台、可用 1 台（Known=1、Available=1），9 月 8 日一次 --refresh 后可用数为 0，都只是当时的历史；10 月 11 日 13:33 读 KDE 设备状态失败，记为未知，不给当前计数。\n\n## 与其他模块的关系\n\n这一层才是用户真正复制和发送的位置，结果不能由底层网络或脚本测试代替。",
+      "links": [
+        {
+          "text": "上一个模块 对端防火墙收敛",
+          "href": "/projects/meshclip-kit/exact-peer-firewall-hardening/"
+        },
+        {
+          "text": "下一个模块 守护与暂停",
+          "href": "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}

@@ -475,7 +475,11 @@
     "/projects/emerald-veil/native-bubbles-idle-overlay/",
     "/projects/emerald-veil/reversibility-preimage-and-remote-compatibility/",
     "/projects/emerald-veil/wallpaper-engine-coexistence-and-rain-experiment/",
-    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/"
+    "/projects/emerald-veil/windows-desktop-and-lockscreen-background/",
+    "/projects/meshclip-kit/exact-peer-firewall-hardening/",
+    "/projects/meshclip-kit/kde-connect-pairing-sync/",
+    "/projects/meshclip-kit/silent-watchdog-and-session-lifecycle/",
+    "/projects/meshclip-kit/tailscale-peer-reachability/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {
