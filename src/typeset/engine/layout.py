@@ -385,6 +385,18 @@ def check_fields(b, ctx):
         ctx.incomplete(f"{fam}.{t} 不认规格字段 {k}={str(val)[:20]}，这项构图没执行", "composition")
 
 
+def row_widths(widths):
+    """缺省栏平分明确百分比剩下的宽度；不改变既有栏分组或 CSS 宽度。"""
+    missing = sum(not w for w in widths)
+    explicit = [w for w in widths if w]
+    if missing and explicit and all(re.fullmatch(r"\d+(?:\.\d+)?%", str(w)) for w in explicit):
+        remaining = 100 - sum(float(str(w)[:-1]) for w in explicit)
+        # 已超配的比例仍保留相对关系，缺省栏至少取一份正常栏宽，不能退成 1:100。
+        share = remaining / missing if remaining > 0 else 100 / len(widths)
+        return [w or f"{share:g}%" for w in widths]
+    return widths
+
+
 def build_html(page, screen, orient, registry, css_files, spec=None):
     notes, incomplete = [], []
     nodes = parse(screen["text"], markdown_links=original_markdown(screen))
@@ -413,7 +425,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
             while name and j < len(items) and items[j][0]["spec"].get("inline_row") == name:
                 j += 1
             if name and j - k > 1:
-                tmpl = " ".join(pct(b["spec"].get("inline_width")) for b, _ in items[k:j])
+                tmpl = " ".join(pct(w) for w in row_widths([b["spec"].get("inline_width") for b, _ in items[k:j]]))
                 out.append(f'<div class="row mid" data-inline-row="{E(str(name))}" style="grid-template-columns:{tmpl}">' +
                            "".join(f'<div class="col">{h}</div>' for _, h in items[k:j]) + "</div>")
             else:
@@ -481,7 +493,7 @@ def build_html(page, screen, orient, registry, css_files, spec=None):
                     not media[i] and any(b["nodes"] for b, _ in it) for i, (_, it) in enumerate(cols)):
                 rcls += " fit-ill"
             # 百分比按比例换成 fr，免得加上栏间距后溢出
-            tmpl = " ".join(pct(w) for w, _ in cols)
+            tmpl = " ".join(pct(w) for w in row_widths([w for w, _ in cols]))
             inner = inline_rows if frame else wrap_frames
             parts.append((frame, f'<div class="row{rcls}" style="grid-template-columns:{tmpl};{rst}">' +
                           "".join('<div class="col"' + (f' style="--row-card-column:{i + 1}"' if sp0.get("row_card_notes") is True else "") + f'>{inner(it)}</div>' for i, (_, it) in enumerate(cols)) + "</div>"))

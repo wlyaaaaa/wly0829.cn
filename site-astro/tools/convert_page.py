@@ -306,6 +306,42 @@ def block_text_len(s, bl):
     return {id(b): sum(len(node_text(n)) for n in g["nodes"]) for b, g in zip(bl, got)}, {id(b): g["nodes"] for b, g in zip(bl, got)}
 
 
+def fit_text_rows(blocks, lens):
+    """横版的输入卡和步骤按真实正文量选并排/上下；不改原文或同栏后续块归属。"""
+    from engine.layout import row_widths
+    i = 0
+    while i < len(blocks):
+        name = blocks[i].get("row")
+        if not name:
+            i += 1
+            continue
+        j = i + 1
+        while j < len(blocks) and blocks[j].get("row") == name:
+            j += 1
+        cols = []
+        for b in blocks[i:j]:
+            if b.get("width") or not cols:
+                cols.append([b])
+            else:
+                cols[-1].append(b)
+        widths = row_widths([c[0].get("width") for c in cols])
+        for c, width in zip(cols, widths):
+            if width and not c[0].get("width"):
+                c[0]["width"] = width
+        if (len(cols) > 1 and any(b.get("type") == "source_text_card" for b in blocks[i:j])
+                and all(b.get("type") in TEXTISH_ALL for b in blocks[i:j])
+                and all(re.fullmatch(r"\d+(?:\.\d+)?%", str(w)) for w in widths)):
+            sizes = [sum(lens.get(id(b), 0) for b in c) for c in cols]
+            shares = [float(w[:-1]) for w in widths]
+            loads = [n / max(w, 1) for n, w in zip(sizes, shares)]
+            narrow = any(w < 30 and n > 160 for w, n in zip(shares, sizes))
+            if narrow or max(sizes) > 600 or (max(sizes) > 240 and max(loads) > 2.5 * max(1, min(loads))):
+                for b in blocks[i:j]:
+                    for key in ("row", "width", "row_fit_illustration", "row_equal_height"):
+                        b.pop(key, None)
+        i = j
+
+
 def plain_ill(b):
     return b.get("type") == "illustration" and not b.get("panels") and "gallery_assets" not in b
 
@@ -760,6 +796,8 @@ def convert(page, check_only=False):
             did_status = status_first(page, meta, s, data.get("status_line") or STATUS_DEMO.get(page))
         first = False
         hsp = (meta.get("layout") or {}).get("h")
+        if hsp and hsp.get("blocks") and not did_status and not redirect:
+            fit_text_rows(hsp["blocks"], block_text_len(s, hsp["blocks"])[0])
         if hsp and hsp.get("blocks") and not redirect and not os.environ.get("CONVERT_NO_FILL_ROWS"):
             # 非首屏也不留空（主持 10 月 10 日 10:36）：单独一幅没铺满的插画和旁边的文字排成一行；“文字 + 图”行图按文字高度定大小
             if not did_status:   # 首屏已按 K1-A 排好（扫过 0 处），不再动
