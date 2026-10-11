@@ -10,10 +10,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-    "release": "E253",
-    "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-    "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-    "activated_at": "2026-10-10T20:55:22.214802+08:00",
+    "release": "E257",
+    "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+    "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+    "activated_at": "2026-10-11T13:02:36.773840+08:00",
     "file": "sources/rules/release.json"
   },
   "video_prompt": "5–8 秒循环：从开头这屏的水彩书架出发，上层那本深绿精装书的丝带书签被微风轻轻吹动，下层 10 本薄册子从左到右依次微微亮起一层浅绿光再暗下去，几片水彩绿叶从画面上方缓缓飘落；画面里不出现任何字，镜头不动。",
@@ -312,10 +312,10 @@
       },
       {
         "id": "n-release",
-        "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+        "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
         "meaning": "网站这一版依据的规则版本和生效时间；规则发新版时要改，和约法页、各专题页的 n-release 一起改",
-        "as_of": "2026-10-09",
-        "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
+        "as_of": "2026-10-11",
+        "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
         "screens": [
           "rules-home-01"
         ]

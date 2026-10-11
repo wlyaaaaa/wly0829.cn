@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.authorization.md",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
    "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b"
@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "原文屏里留作快照的文字依据的规则版本（拼页时原文按当时生效的版本现读，版本由拼页程序标出）",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
      "screens": [
       "rule-authorization-05"
      ]
@@ -237,8 +237,8 @@
  },
  "source": {
   "page": "sources/pages/rule-authorization/page.json",
-  "sha256": "02969d3ba3f56ec8cda87199c5de3d5d2d03216a808a6ef3b6383438f31eb104",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "8fdc3f55fc9d47670996ebf9d76f7d4105b62720f35e351b958951a288fe4378",
+  "converted_at_beijing": "2026-10-11T13:33:09+08:00"
  }
 }
 ---
@@ -1553,7 +1553,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
    "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
    "from": null,
@@ -1590,7 +1590,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1625,7 +1625,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1719,7 +1719,7 @@
 }
 ```
 
-原文 · E253 版，一字不改
+原文 · E257 版，一字不改
 
 # 用户授权
 
@@ -1760,7 +1760,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
    "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
    "from": "## 子代理和项目规则不扩大授权",
@@ -1805,7 +1805,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -1842,7 +1842,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -1919,7 +1919,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 子代理和项目规则不扩大授权
 
@@ -1949,7 +1949,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.authorization.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "ebed9a644059b0d9a4f8048cad689d58d6faf389432033d4c62178a578d83ba6",
    "public_sha256": "34677402eafe495440db5f727e207ecbab3128720b5c8bcd8fa00766d47ab69b",
    "from": "## 受信任的 AI",
@@ -1982,7 +1982,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2019,7 +2019,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2072,7 +2072,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 受信任的 AI
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.context-sources.md",
-   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
-   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd"
+   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
+   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：林间小路上几片叶子缓缓飘落；三座小木屋的窗子依次亮起暖光又暗下；路口三叉指路牌的三只箭头轮流微微发亮；路边贴着雪花封条的小木箱上，霜花轻轻闪一下；摊开的厚书被风翻过两页，绿色书签始终夹在原处、尾巴轻轻摆动；背景淡水彩纸纹缓慢流动。全程不出现任何新文字，小牌子上的字保持不动、不变形。",
   "registry": {
@@ -47,10 +47,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "本页人话要点对齐的规则版本和它开始生效的时间；原文区的版本标注由拼页程序按拼页时生效的版本生成",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=b772d5b815798d470ae07d954569c53e5d95f9bd7e0623224066a59d55da5f4b",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
      "screens": [
       "rule-context-sources-08"
      ]
@@ -109,9 +109,9 @@
     {
      "id": "n-weekly",
      "text": "北京时间每周一 13:00",
-     "meaning": "现在排着的每周基座体检的时间和次数",
-     "as_of": "2026-09-28",
-     "source": "E:\\Data\\AppData\\Codex\\automations\\github\\automation.toml：rrule=WEEKLY;BYDAY=MO;BYHOUR=5（UTC）;DTSTART=20261005T050000Z;COUNT=4，model=gpt-6-astra，reasoning_effort=max，status=ACTIVE",
+     "meaning": "现在排着的每周基座体检的时间",
+     "as_of": "2026-10-11",
+     "source": "E:\\Data\\AppData\\Codex\\automations\\github\\automation.toml：rrule=RRULE:FREQ=WEEKLY;BYDAY=MO;BYHOUR=5;BYMINUTE=0;BYSECOND=0;DTSTART=20261005T050000Z（无 COUNT），model=gpt-6.1-sol，reasoning_effort=ultra，status=ACTIVE；北京时间 2026-10-11 13:35:19 核指纹 SHA256=e991091ccbed1d7098176e85638f194276ced5ddb8e52860164336dc3141c417；运行件非 Git，登记来源 PCConfig HEAD=2b74c12183b3bdb202b30e1d3ede0e93ff848dee；任务 name/prompt 仍保留四周稳定期与 Astra 文句，和实际字段存在冲突，未当成本次运行验收",
      "screens": [
       "rule-context-sources-07"
      ]
@@ -410,8 +410,8 @@
  },
  "source": {
   "page": "sources/pages/rule-context-sources/page.json",
-  "sha256": "b38287b9785f8872e3966b3f99bc1c8fb7a048e63874c75ddbbaefef38612a1b",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "c8c3c9c514a482ac52ccf0351f191ffbc4634af50db92da38aabcc0a9b7965d6",
+  "converted_at_beijing": "2026-10-11T13:39:14+08:00"
  }
 }
 ---
@@ -702,7 +702,7 @@
 **先认几个词**
 - **三个基座**：整套系统最底下的三个仓库：〔AI 规则与技能基座〕（E:\.agents）、〔GitHub 项目总索引〕（E:\GitHub总索引）、〔电脑配置与恢复〕（E:\PCConfig）。
 - **冻结**：本人定了 AI 不主动看、不维护的项目；三档维护里叫“存档”。
-- **决定文档**：E:\.agents\docs\owner-decisions.md，书名《本人的决定原话》，本人对 AI、项目和电脑的现行决定原话存在这里；被取代或已办完的整节原样移进归档（同仓库的 docs/archive/），默认搜索不命中，只供审查。
+- **决定文档**：E:\.agents\docs\owner-decisions\YYYY-MM.md，书名《本人的决定原话》，本人对 AI、项目和电脑的现行决定原话存在这里；被取代或已办完的整节原样移进归档（同仓库的 docs/archive/），默认搜索不命中，只供审查。
 - **副本**：同一段规则、事实或原话，在另一个文件里又抄了一遍。
 - **接续点**：长任务做到一个自然段落时留下的状态，写清在哪、做到哪、还差什么；原文叫 checkpoint。
 - **记忆区**：Codex 和 Claude 各自自动记笔记的地方，现在两边都已关闭。
@@ -2396,7 +2396,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 
 ### 每周一次查漏
 - 三基座治理先过四周稳定期：北京时间 10 月 5、12、19、26 日各跑一次，第 4 次交本人评审；之后转为常驻的每周治理，本人评审时还可以再改。
-- 每次用 GPT-6 Astra 模型、最高思考档（max），顺带：把两边记忆区又冒出来的内容挪进共享文件；补上本周本人纠正和新规矩还没落地的；把又抄了原话、或还在引用已被取代的决定编号的现行文档，改成现在的做法加出处编号；再扫一遍三个基座和各日用项目（冻结的不扫）里跨文件重复的段落，收成一处；长期文档里写死、已经或快要过时的数，也改成指向能查到它的地方。
+- 每次用 GPT-6.1 Sol 模型、思考档（ultra），顺带：把两边记忆区又冒出来的内容挪进共享文件；补上本周本人纠正和新规矩还没落地的；把又抄了原话、或还在引用已被取代的决定编号的现行文档，改成现在的做法加出处编号；再扫一遍三个基座和各日用项目（冻结的不扫）里跨文件重复的段落，收成一处；长期文档里写死、已经或快要过时的数，也改成指向能查到它的地方。
 - 取用私人内容仍按当时的个人资料状态；合并同类时保留原话语境，不把 AI 的猜测写成本人的决定。
 - 网站不另设每周复核；网站那个暂停着的手动更新入口，只在本人启动时才跑，不算在定时更新。
 - 例：排着的是 Codex 的自动任务〔每周基座体检〕，每次在北京时间周一 13:00 跑。
@@ -2411,9 +2411,9 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E253",
-   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
-   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+   "release": "E257",
+   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
+   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
    "from": null,
    "to": "## 三档维护",
    "start": 0,
@@ -2431,7 +2431,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-08",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
   "source_rule_part": "rule-context-sources/rule-context-sources-08"
  },
  "layout": {
@@ -2439,7 +2439,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2473,7 +2473,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2551,7 +2551,7 @@ E:\.agents　E:\GitHub总索引　E:\PCConfig　冻结　接续点
 }
 ```
 
-原文 · E253 版，一字不改
+原文 · E257 版，一字不改
 
 # 事实来源与任务上下文
 
@@ -2602,13 +2602,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E253",
-   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
-   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+   "release": "E257",
+   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
+   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
    "from": "## 三档维护",
    "to": "### 一样东西只存一处",
    "start": 1597,
-   "end": 4062,
+   "end": 4051,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2622,7 +2622,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-09",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
   "source_rule_part": "rule-context-sources/rule-context-sources-09"
  },
  "layout": {
@@ -2630,7 +2630,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2661,7 +2661,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2728,7 +2728,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 三档维护
 
@@ -2760,7 +2760,7 @@ README 只给 AI 和维护使用，简短列出现行入口，不再另写一份
 
 Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务做增量复核；正常工作不等它。根会话持续维护并在压缩前更新项目已有的短任务状态；没有现成入口时用本任务 `work/task-state.md`，保留当前目标、要求出处、已完成与未结事项、下一步和证据位置，不再复制整段历史。当前用 Sol ultra，资料定位优先脚本；不让 Luna 的初筛成为跳过最终复核的唯一依据。（出处：决定文档“压缩后增量复核与汇报提问”）
 
-纯技术工作不依赖资料解锁（约法 L18）。根会话按每条真实新消息判断范围；能确认整个现有会话均为技术内容时，随首个正常工具调用用技术范围登记（`../operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，压缩前确认登记仍覆盖最新消息。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
+纯技术工作不依赖资料解锁（约法 L18）。资料锁着或未知、又到了压缩预警时，根会话若已确认整个现有会话确为纯技术，可用技术范围登记（`../operations/context-hooks.md#锁定时的技术复核`）记录当前原话边界及确为技术资料的证据位置，命令见该运维文档。登记由 AI 做，不请本人另行批准；新增或改写的真人消息不继承旧判断。旧历史混有私人内容或范围不明时不登记整段技术，仍走原资料入口，不先读私人历史来补这个判断。该登记不解锁资料、不放行私人库；未读取的部分继续列为未覆盖。
 
 - 每个新压缩边界只排一次，同根会话最多一批在跑；普通新消息不新开复核，子代理的压缩不递归派发。未覆盖部分保留，不把重复恢复当成新一批。
 - 对照本批全部新增用户原话，查交接或待办漏记的小要求，并对照仍有效的旧未结要求；检查事实出处、实际完成证据、擅改决定及压缩接续。按[原话分类表](/rules/engineering-delivery/#本人的话怎么分类怎么对待ai-写的稿子可以改)核对，分类分歧只把禁令边界上的作为提醒交回，不阻塞工作；审查意见不产生用户决定。
@@ -2780,13 +2780,13 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.context-sources.md",
-   "release": "E253",
-   "sha256": "7db0772a902272bb799dd8e8a82d7faacacaddba0de53763f2b3c19ac0649993",
-   "public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+   "release": "E257",
+   "sha256": "c6dd00ecb9cba5da30911d74f0cc72ee651435dc1307a3bcbdf9b3d1e8679d30",
+   "public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
    "from": "### 一样东西只存一处",
    "to": null,
-   "start": 4062,
-   "end": 6412,
+   "start": 4051,
+   "end": 6253,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2817,7 +2817,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
   "reuse": "",
   "source_excerpt_id": "rule-context-sources/rule-context-sources-10",
   "source_logical_id": "context_sources_contract",
-  "source_public_sha256": "02e9e7034b0b72c25554aea080480b718ae6f433d9316546d08df22c9abc29dd",
+  "source_public_sha256": "9a41b24a4f69f30687d9c26edc0157e154c37d09a90ce50ca77a435eed5c894e",
   "source_rule_part": "rule-context-sources/rule-context-sources-10"
  },
  "layout": {
@@ -2825,7 +2825,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2855,7 +2855,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2873,7 +2873,7 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ### 一样东西只存一处
 
@@ -2897,4 +2897,4 @@ Claude、Codex 根会话压缩后，复用现有原话存档和 GPT 后台任务
 | 本人的决定原话 | 决定月卷 `docs/owner-decisions/YYYY-MM.md`（索引 `docs/owner-decisions.md`）；别处写现行做法加出处编号。 |
 | 拿不准放哪里 | 先写进现有共享文档的待办，发布规则时归位。 |
 
-三基座治理按决定 ZS35 先过四周稳定期：北京时间 2026 年 10 月 5、12、19、26 日各跑一次，第四次交本人评审；之后转为常驻每周治理（本人 10 月 8 日 23:37：大概率常驻，绝对不可能就四周），本人评审时可再改。任务用 Astra 最高档，顺带检查两边的记忆区和这周的对话记录：记忆区又有内容时，挪进对应共享文件；本周本人纠正和新规矩还没落到共享文件的，补上；现行文档又抄了原话、或还在引用已被取代的决定编号的，改成现行做法加出处编号；再用 [Find-DuplicateContent.ps1](/source-tools/Find-DuplicateContent.ps1) 扫一遍三个基座和各日用项目（冻结的不扫）里跨文件重复的段落，新冒出来的副本按上一节收成一处；长期文档里写死、已经或很快会过时的数，也按上一节改成指向。仍按现行个人资料状态取用私人内容，合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核；暂停的手动入口仅在本人启动时运行，不算正在定时更新（出处：决定文档“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。
+三基座周治理长期每周运行，做什么以自动任务定义为准；现役定义为 Codex 自动化 `github` 的 `E:\Data\AppData\Codex\automations\github\automation.toml`，定位见 `E:\PCConfig\registries\task_purpose_catalog.json`（出处：决定月卷 `docs/owner-decisions/2026-10.md`“驾驶舱与每周治理”“本轮基座完善范围”）。仍按现行个人资料状态取用私人内容，合并同类并保留原话语境，不把 AI 的猜测写成本人决定。网站不单设每周复核；暂停的手动入口仅在本人启动时运行，不算正在定时更新（出处：决定文档“网站：设计稿逐项审定、单层分工、留锚点、不重复介绍”）。

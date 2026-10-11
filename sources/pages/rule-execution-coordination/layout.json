@@ -576,7 +576,7 @@
         "whole_block": true,
         "split_cards": false,
         "columns": 1,
-        "text_ref": "Claude主持、和GPT协作时",
+        "text_ref": "改动与花费成比例",
         "body_columns": 1
       },
       {
@@ -657,7 +657,7 @@
         "whole_block": true,
         "split_cards": false,
         "columns": 1,
-        "text_ref": "Claude主持、和GPT协作时"
+        "text_ref": "改动与花费成比例"
       },
       {
         "type": "source_text_card",

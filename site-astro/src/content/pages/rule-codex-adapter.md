@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.codex-adapter.md",
-   "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
-   "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9"
+   "sha256": "32386c32c9374a6c25bb73847baa74bbebada9d6c1f001c448143edd8e86e2f4",
+   "public_sha256": "4395146f38fc1f0ff656976118c828ddd6830c1303d2a0f2798229b1141749a6"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：笔记本电脑屏幕上的终端光标轻轻闪烁；上方写着“Hook”的小铃铛轻轻摇一下，垂着的两张小纸条（锁、钥匙图标）随之晃动；左边“AGENTS.md”木牌指向远处厚书的细绿箭头上，一个小光点从木牌流向书本；右边两个小 AI 助手举着的牌子微微上下晃；右下“codex-root”工牌后的细绿线从下往上依次点亮几个小方块，最后亮到电脑；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块牌子上的字保持不动、不变形。",
   "registry": {
@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "原文屏里留作快照的文字依据的规则版本（拼页时原文按当时生效的版本现读，版本由拼页程序标出）",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=32386c32c9374a6c25bb73847baa74bbebada9d6c1f001c448143edd8e86e2f4",
      "screens": [
       "rule-codex-adapter-05"
      ]
@@ -221,8 +221,8 @@
  },
  "source": {
   "page": "sources/pages/rule-codex-adapter/page.json",
-  "sha256": "39c7e846c572fdd8eb26f92f0042d706d3968bb21b869ae7bae249721e98e22a",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "b33509994d32f82eb17c0b7daebacdf0e9edff44bc5c5c2a6d991f3923c24458",
+  "converted_at_beijing": "2026-10-11T13:33:09+08:00"
  }
 }
 ---
@@ -1222,13 +1222,13 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E253",
-   "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
-   "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
+   "release": "E257",
+   "sha256": "32386c32c9374a6c25bb73847baa74bbebada9d6c1f001c448143edd8e86e2f4",
+   "public_sha256": "4395146f38fc1f0ff656976118c828ddd6830c1303d2a0f2798229b1141749a6",
    "from": null,
    "to": "## 派子代理：Codex 的不同处",
    "start": 0,
-   "end": 1311,
+   "end": 1336,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1251,7 +1251,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-05",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
+  "source_public_sha256": "4395146f38fc1f0ff656976118c828ddd6830c1303d2a0f2798229b1141749a6",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-05"
  },
  "layout": {
@@ -1261,7 +1261,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1286,7 +1286,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -1377,7 +1377,7 @@ Codex 在整套系统里干什么、和 Claude 怎么分工：〔在整套系统
 }
 ```
 
-原文 · E253 版，一字不改
+原文 · E257 版，一字不改
 
 # Codex 适配
 
@@ -1389,7 +1389,7 @@ owner: `E:\.agents`
 
 Codex home 里的 `AGENTS.md` 只是入口，规则从核验过的活动版本读。真实的新消息和自动续作、上下文压缩、工具消息分开看；Hook 会把个人资料状态带进来，Hook 缺失或投递不明时，资料状态按不明处理，并先用 `StatusPersonalEnvironment` 重读。锁着或不明时不取用私人资料；根会话问到本人自己的事，第一步先请本人验证解锁，通过后再查资料、派子代理和作答，不给降级回答；纯技术工作照常。调用 MCP 不改变本机 Codex 原来的任务入口。新消息、Hook、子代理的真实身份和执行结果从本机现役入口核实，不从标题、模型自述或别的宿主遗留的环境借身份。
 
-SessionStart 的 compact/resume 与派活、提问前的 PreToolUse 使用共同决定投影；原生子代理压缩跳过 SessionStart 的接续按[长任务接续](/rules/context-sources/#长任务接续)读原任务状态。
+SessionStart 的 startup/compact/resume 从原话分类生成现行禁令和授权短表，与派活、提问前的 PreToolUse 使用共同决定投影；原生子代理压缩跳过 SessionStart 的接续按[长任务接续](/rules/context-sources/#长任务接续)读原任务状态。
 
 根会话压缩后的只读复核按[共用复核规则](/rules/context-sources/#压缩后的后台复核)执行。此项已授权自动任务使用共用 GPT 后台包装器，并保留真实 Codex 父会话号；不受普通派发的“原生满槽才转包装器”条件限制，不扩大其他任务的调用范围。程序换窗是否触发与原生压缩分开核验，具体入口见运维说明（`../operations/context-hooks.md`）。
 
@@ -1409,13 +1409,13 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.codex-adapter.md",
-   "release": "E253",
-   "sha256": "87fa675d0dd2bd5b1dc8ac152e524f659f4aa6b0fc00c8eebd2076fe014a70f7",
-   "public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
+   "release": "E257",
+   "sha256": "32386c32c9374a6c25bb73847baa74bbebada9d6c1f001c448143edd8e86e2f4",
+   "public_sha256": "4395146f38fc1f0ff656976118c828ddd6830c1303d2a0f2798229b1141749a6",
    "from": "## 派子代理：Codex 的不同处",
    "to": null,
-   "start": 1311,
-   "end": 5284,
+   "start": 1336,
+   "end": 5003,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -1442,7 +1442,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
   "reuse": "",
   "source_excerpt_id": "rule-codex-adapter/rule-codex-adapter-06",
   "source_logical_id": "codex_adapter_contract",
-  "source_public_sha256": "c8ec4bebb7ab4ab8056ea9977ef540255b00161a783c67718d9aa02e21cef2d9",
+  "source_public_sha256": "4395146f38fc1f0ff656976118c828ddd6830c1303d2a0f2798229b1141749a6",
   "source_rule_part": "rule-codex-adapter/rule-codex-adapter-06"
  },
  "layout": {
@@ -1452,7 +1452,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -1479,7 +1479,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -1597,7 +1597,7 @@ Codex 自动记忆的关闭配置是 `memories=false`、`generate_memories=false
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 派子代理：Codex 的不同处
 
@@ -1628,13 +1628,13 @@ $child = 'E:\.agents\tools\Invoke-ClaudeGptChild.ps1'
 
 ## 新消息里的状态
 
-Hook 在真实新消息和子代理启动时，读取当前个人资料状态与本人接管状态，并告知宿主可核实的本会话型号和思考档位；本轮读不到的写未知，子代理启动时档位写未知，不借父会话的记录。锁着、未知或 Hook 出错时，根会话收到先请本人验证解锁、通过后再查资料、派活和完整作答的提醒；子代理收到实际缺口交回根会话的角色提示，两者都不给降级回答，纯技术工作继续。根会话状态未知时先用 `StatusPersonalEnvironment` 重读。本人接管只使用正式入口回读的授权和原截止。Hook 不替模型选型号、思考档位或决定要不要委派，也不另设派发许可登记，不按关键词自动弹验证窗口。
+Hook 在每条真实新消息和子代理启动时带来共享个人资料状态、本人接管状态及可核实的本会话型号和思考档位；读不到的写未知，子代理启动时档位写未知，不借父会话的记录。根会话状态未知时先用 `StatusPersonalEnvironment` 重读；需要资料而状态锁着、未知或 Hook 出错时，先请本人验证解锁，通过后再查资料、派活和完整作答，纯技术工作继续。资料需求判断和验证只由根会话做；子代理仅读取被拦、途中缺资料或到期时单列“需要本人资料：<缺什么、为什么>”交回，由根会话读完整报告处理，不重新判断要不要解锁、不自行验证、不凑事实、不降级回答。
 
-原生子代理由真实子会话元信息和 SubagentStart 识别，包装器角色由实际进程标记识别。资料需求判断和验证只由根会话做；子代理不重新判断要不要解锁，仅读取被拦、途中缺资料或到期时汇报单行“需要本人资料：……”交回，根会话人工读报告处理，不提取机器标记。
+Stop 按本轮真实 Report 回执核对明确目标集合；本轮业务被拦而未实际发起解锁，或 Report 验收不全时可能拦截。根会话按原因先验证解锁并重试被拦命令或按缺口重派、补做，或补齐验收；拦截后宿主让模型继续，同轮第二次只提示、不再拦。
 
-受管 Stop 从本轮真实 Report 回执核对明确目标集合，复用与 Claude 同一份版本、验收和缺口检查；有限读取本会话末尾最多 2 MiB/4096 行，核同轮真实用户边界后只识别真正业务回执：指定 schema 或业务检查动作、顶层 blocked 和保护原因码。只读状态回读、子代理汇报、源码和搜索样例不算；本轮未实际发起解锁时直接拦，不再查状态。已实际发起解锁按既有条件放行；普通技术任务无被拦业务回执时直接放行，不按“通用回答”等措辞猜资料需求或绕过业务保护。Codex 不按模型自白或子报告措辞拦截，不把读技能 SKILL.md 当作加载，也不维护仅为这些信号存在的 Stop 状态缓存；资料顺序由每轮提示、业务回执和根会话验收落实。
+程序细节、部署和维护见状态钩子说明（`../operations/context-hooks.md#个人资料先解锁与结束兜底`），验证等待见[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)。
 
-只对根会话给验证指令；子代理不发起验证，按角色交回。拦截后宿主让模型继续，同轮第二次只提示，不再拦；Stop 45 秒。读取、解析或本轮边界核验失败时放行受影响检查，并留固定诊断码，输出不含对话、思考或子报告。部署和维护见状态钩子说明（`../operations/context-hooks.md`），验证等待见[个人资料锁与解锁](/rules/privacy-data/#个人资料的锁和解锁)。
+Stop 复用与 Claude 同一份版本、验收和缺口检查；本轮边界核验失败时放行受影响检查，并留固定诊断码。资料顺序由每轮提示、业务回执和根会话验收落实。Hook 不替模型选型号、思考档位或决定要不要委派，也不另设派发许可登记，不按关键词自动弹验证窗口。
 
 ## 官方升级
 

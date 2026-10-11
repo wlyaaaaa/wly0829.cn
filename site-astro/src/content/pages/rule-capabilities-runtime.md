@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.capabilities-runtime.md",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b"
@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "原文屏里留作快照的文字依据的规则版本（拼页时原文按当时生效的版本现读，版本由拼页程序标出）",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=3e12c042e5203819a13738136c9f402a3913c6400d4332e0ec75038c6c8cf85f",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
      "screens": [
       "rule-capabilities-runtime-11"
      ]
@@ -57,8 +57,8 @@
      "id": "n-toolbox",
      "text": "登记 12 项——3 个独立小工具……1 个操作步骤……8 个指向现有项目或技能的入口",
      "meaning": "本机轻量工具清单 catalog.json 的 tools 数组条数，按 kind 分：standalone_tool 3、procedure 1、managed_pointer 8",
-     "as_of": "2026-09-27",
-     "source": "E:\\Tools\\LocalToolbox\\catalog.json，updated_utc=2026-09-27T07:18:35Z（北京时间 9 月 27 日 15:18）；脚本读 tools[] 逐项数 kind",
+     "as_of": "2026-10-11",
+     "source": "E:\\Tools\\LocalToolbox\\catalog.json，updated_utc=2026-09-29T07:46:00Z（北京时间 9 月 29 日 15:46）；北京时间 2026-10-11 13:32:54 只读数 tools[] 逐项 kind，共 12 项：standalone_tool 3、procedure 1、managed_pointer 8；SHA256=39e83e31dc8f951bce93d449ad684b187e248cba8cb016e9ee48d08c8452fec9（非 Git 文件）",
      "screens": [
       "rule-capabilities-runtime-04"
      ]
@@ -85,10 +85,10 @@
     },
     {
      "id": "n-task-registry",
-     "text": "139 项（Windows 计划任务 125 项，另有云端、Codex、笔记本和 GitHub 上的 14 项），其中 74 项是本人或 AI 为本人配的",
-     "meaning": "电脑配置任务用途登记 entries 条数；按 source 分 windows 125、cloud 5、codex 4、laptop 2、github 2、电脑 MCP 服务内 1；plain.mine=true 的 74 项",
-     "as_of": "2026-09-28",
-     "source": "E:\\PCConfig\\registries\\task_purpose_catalog.json（最后提交 9b0853a8，北京时间 9 月 28 日 15:02）；脚本现数",
+     "text": "145 项（Windows 计划任务 127 项，另有本机其他自动运行项、云端、Codex、笔记本、GitHub 和电脑 MCP 服务内的 18 项），其中 85 项是本人或 AI 为本人配的",
+     "meaning": "电脑配置任务用途登记 entries 条数；按 source 分 windows 127、local 5、cloud 5、codex 3、laptop 2、github 2、电脑 MCP 服务内 1；plain.mine=true 的 85 项",
+     "as_of": "2026-10-11",
+     "source": "E:\\PCConfig\\registries\\task_purpose_catalog.json，来源 HEAD=2b74c12183b3bdb202b30e1d3ede0e93ff848dee；北京时间 2026-10-11 13:32:54–13:33:45 只读数 entries[]，13:35:19 核指纹 SHA256=fc04099945f0dbf881f48775d44160489d163d1b25379dc6192cc47941dba9b2；登记条目数，不是正在运行数",
      "screens": [
       "rule-capabilities-runtime-07"
      ]
@@ -169,7 +169,7 @@
      "id": "r-automation-cockpit",
      "with": "pcconfig",
      "direction": "交给",
-     "flow": "自动运行的东西要在看板上看得见：PCConfig 的任务用途登记 registries\\task_purpose_catalog.json（139 项，每项有名字、做什么、怎么停、停了影响什么）加实时读的上次/下次/结果，由看板接口合同 docs\\runtime\\dashboard-api-contract.md 交给网站驾驶舱。",
+     "flow": "自动运行的东西要在看板上看得见：PCConfig 的任务用途登记 registries\\task_purpose_catalog.json（145 项，每项有名字、做什么、怎么停、停了影响什么）加实时读的上次/下次/结果，由看板接口合同 docs\\runtime\\dashboard-api-contract.md 交给网站驾驶舱。",
      "source": "原文第 35 行；task_purpose_catalog.json 的 entry_contract 和 entries[].plain；dashboard-api-contract.md 第 29、87、101 行"
     },
     {
@@ -396,8 +396,8 @@
  },
  "source": {
   "page": "sources/pages/rule-capabilities-runtime/page.json",
-  "sha256": "138c56b5bfeb89e75711f43d3ad0de5df3ceb4b0275184751929e60fb6f7f0c1",
-  "converted_at_beijing": "2026-10-11T07:32:24+08:00"
+  "sha256": "12250021a5ced68189d2a4d33deb6e3bf07e5a3e12fee54b44fa457cd87119d2",
+  "converted_at_beijing": "2026-10-11T13:39:14+08:00"
  }
 }
 ---
@@ -1316,7 +1316,7 @@
 - 按用途找，用同一目录下的 Find-LocalTool.ps1。
 - 工具列表、型号和校验值（哈希）只记在那一份清单里。
 
-**清单现在写的（9 月 27 日版）**：登记 12 项——3 个独立小工具（例如图片超分与精确尺寸输出、Windows 卡顿轨迹分析器）、1 个操作步骤（Codex 快捷方式打不开时怎么打开）、8 个指向现有项目或技能的入口（例如按需短信验证码、中文乱码诊断与修复）。
+**清单现在写的（9 月 29 日版）**：登记 12 项——3 个独立小工具（例如图片超分与精确尺寸输出、Windows 卡顿轨迹分析器）、1 个操作步骤（Codex 快捷方式打不开时怎么打开）、8 个指向现有项目或技能的入口（例如按需短信验证码、中文乱码诊断与修复）。
 
 ### 生成图片和设计画面
 - 图片默认用 Codex 自带生图。任何 Codex 对话都能直接调用；Claude 写好提示交 Luna 生图、落盘用 low，不派 Astra。质量看生图模型和提示；收费 API 回退需本人明确要。
@@ -2329,7 +2329,7 @@
 - 看板怎么显示另外建设，不为此在本机另开窗口。
 - 后台命令不弹黑窗口。
 
-**现在的登记（9 月 28 日）**：电脑配置的任务用途登记有 139 项（Windows 计划任务 125 项，另有云端、Codex、笔记本和 GitHub 上的 14 项），其中 74 项是本人或 AI 为本人配的；每项都写了叫什么、做什么、怎么停、停了影响什么；上次、下次运行时间和结果从实时来源读，不存进登记。
+**现在的登记（10 月 11 日核对）**：电脑配置的任务用途登记有 145 项（Windows 计划任务 127 项，另有本机其他自动运行项、云端、Codex、笔记本、GitHub 和电脑 MCP 服务内的 18 项），其中 85 项是本人或 AI 为本人配的；每项都写了叫什么、做什么、怎么停、停了影响什么；上次、下次运行时间和结果从实时来源读，不存进登记。
 
 ### 要本人做或选的事不会漏
 - 要本人做、要本人选、或者本人可能漏看的事，根会话在回复本人的同时，顺手登记进〔驾驶舱〕的“需要你”（〔约法 L28〕），不靠本人自己记。
@@ -2904,7 +2904,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
    "from": null,
@@ -2937,7 +2937,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版"
+     "text_ref": "原文·E257版"
     },
     {
      "type": "chapter_title",
@@ -2978,7 +2978,7 @@
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版"
+     "text_ref": "原文·E257版"
     },
     {
      "type": "chapter_title",
@@ -3071,7 +3071,7 @@
 }
 ```
 
-原文 · E253 版
+原文 · E257 版
 
 # 能力与运行方式
 
@@ -3099,7 +3099,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
    "from": "## 常用入口",
@@ -3127,7 +3127,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3155,7 +3155,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3201,7 +3201,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 常用入口
 
@@ -3246,7 +3246,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
    "from": "## 浏览器",
@@ -3279,7 +3279,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3305,7 +3305,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3379,7 +3379,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 浏览器
 
@@ -3401,7 +3401,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
    "from": "## 汇报、网站和自动运行的东西",
@@ -3429,7 +3429,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3453,7 +3453,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3523,7 +3523,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 汇报、网站和自动运行的东西
 
@@ -3550,7 +3550,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.capabilities-runtime.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "a7bed9982d0a81db70c0c68afd6f68e4118e407595b07cae9e63bae3239bf356",
    "public_sha256": "f456bebd457bd95a31536b2e2252d7e87bf9517baa2d590a58f4c18e68c1922b",
    "from": "## 安装位置、配置和本机约定",
@@ -3583,7 +3583,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3603,7 +3603,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "prose",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3649,7 +3649,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 安装位置、配置和本机约定
 

@@ -30,10 +30,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.privacy-data.md",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
    "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5"
@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "本页人话要点对齐的规则版本和它开始生效的时间；原文区的版本标注由拼页程序按拼页时生效的版本生成",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
      "screens": [
       "rule-privacy-data-07"
      ]
@@ -291,8 +291,8 @@
  },
  "source": {
   "page": "sources/pages/rule-privacy-data/page.json",
-  "sha256": "2e95b69945d233614dccf81c19739298374ba59d9e95b529245e59e87ddfdb33",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "09f0aeb55f12da23bce9fd93f4465e400be860c81fe06154d1ac154b34bf093f",
+  "converted_at_beijing": "2026-10-11T13:33:10+08:00"
  }
 }
 ---
@@ -2713,7 +2713,7 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
    "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
    "from": null,
@@ -2756,7 +2756,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2790,7 +2790,7 @@
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版，一字不改"
+     "text_ref": "原文·E257版，一字不改"
     },
     {
      "type": "source_text_card",
@@ -2872,7 +2872,7 @@
 }
 ```
 
-原文 · E253 版，一字不改
+原文 · E257 版，一字不改
 
 # 个人资料与数据处理
 
@@ -2900,7 +2900,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
    "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
    "from": "- **入口。**",
@@ -2930,7 +2930,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -2964,7 +2964,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3022,7 +3022,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 - **入口。** 查状态、业务检查和锁定分别是密码中心的 `StatusPersonalEnvironment`、`CheckPersonalDataAccess`、`LockPersonalEnvironment`，经已安装的 `C:\ProgramData\PCConfig\AuthorityHost\tools\Invoke-SecretBroker.ps1` 调用。状态未知时先用 `StatusPersonalEnvironment` 重读。`VerifyPersonalEnvironment` 在已有资料期内复用原截止；需要验证时不传 `-AuthorityFactor`，由本人选四选一验证。命令同步等验证终态，窗口首次可见起最长等 5 分钟；模型用宿主后台命令运行，外层超时至少 360 秒，等终态后回读状态，不能把命令启动当验证成功。取消、拒绝和超时按上面的取消规则处理。本人明确要解锁或续期时用 `EnrollPersonalPrivacyWaiver`，用法见 `local-secret-broker` 技能。资料检查直接读共享状态，不需要对话号、消息号或宿主对话记录；只读检查也不消费无限制授权。本人说“锁定个人资料”“冻结个人资料”就走锁定；“冻结项目”“冻结设计”不是资料操作。Hook、技能和电脑 MCP 只读这份状态，不另建权限记录。
 
@@ -3043,7 +3043,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
    "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
    "from": "## 公开个人数据分级表",
@@ -3078,7 +3078,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3135,7 +3135,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3205,7 +3205,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 公开个人数据分级表
 
@@ -3231,7 +3231,7 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.privacy-data.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "5ae76cc061bae9b3fcc92b5fe0c446f978ac4d5db68d286684841fa3986e37db",
    "public_sha256": "0703c6df83175b150417115b761d9874963802679c331d4c7e58f114a01ae9b5",
    "from": "## 私人仓库收口",
@@ -3261,7 +3261,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3305,7 +3305,7 @@ owner: `E:\.agents`
      "type": "section_heading",
      "align": "left",
      "size": "small",
-     "text_ref": "原文·E253版·续"
+     "text_ref": "原文·E257版·续"
     },
     {
      "type": "source_text_card",
@@ -3387,7 +3387,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 私人仓库收口
 

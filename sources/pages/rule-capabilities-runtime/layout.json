@@ -18,18 +18,6 @@
         "text_ref": "AI 拿什么来做事"
       },
       {
-        "type": "glossary",
-        "columns": 1,
-        "illustration": "none",
-        "text_ref": "先认几个词",
-        "width": "100%"
-      },
-      {
-        "type": "action_button",
-        "columns": 6,
-        "text_ref": "跳到："
-      },
-      {
         "text_ref": "工具清单",
         "type": "document_mock",
         "variant": "window",
@@ -71,14 +59,28 @@
             "position_index": 2
           }
         ],
-        "layout": "illustration_labels"
+        "layout": "illustration_labels",
+        "row": "intro",
+        "width": "48%"
+      },
+      {
+        "type": "glossary",
+        "columns": 1,
+        "illustration": "none",
+        "text_ref": "先认几个词",
+        "width": "100%"
+      },
+      {
+        "type": "action_button",
+        "columns": 6,
+        "text_ref": "跳到："
       },
       {
         "type": "notice",
         "text_ref": "自动运行的东西现在跑得怎么样"
       }
     ],
-    "notes": "2026-10-03 14:04:34 page-fixer-01 当前构图，以当前blocks为准：依据审查及压小图复核消除空白/窄表/插画变形，所有原字、原热区和未解决组件要求保留；历史构图意图已随本轮旧规格副本留作临时回退，不把旧notes当现状。\nmain-closer 2026-10-03T20:29:23+08:00：保全部图内原标签，以现有document_mock绑定唯一完整底图和final-label-geometry实测安全框；取消前置重复主体图，图解改整宽以满足长路径/小牌字高。SHA 5af082e77c0d9b5c1a4b69d95baec439c520a44db7d968a80d23cd1eab836314。此为AI排版补充，列new-looks待验收。",
+    "notes": "首屏标题与介绍占左侧 52%，完整工具板插画占右侧 48%，术语表与跳转入口随后整宽排列；三个原图内标签保留原绑定，动画沿用本页配置并跟随当前插画框定位。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   {
@@ -623,8 +625,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "33%",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "汇报网页",
@@ -636,7 +636,6 @@
       },
       {
         "type": "notice",
-        "row": "points",
         "illustration": "left_inside",
         "text_ref": "现在的做法",
         "icons": [
@@ -645,8 +644,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "33%",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "网站怎么更新",
@@ -658,12 +655,12 @@
       },
       {
         "type": "illustration",
-        "row": "points",
-        "illustration": "outside"
+        "illustration": "outside",
+        "target_width": 520,
+        "align": "center"
       },
       {
         "type": "notice",
-        "row": "points",
         "illustration": "left_inside",
         "text_ref": "现在的登记",
         "icons": [
@@ -672,8 +669,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
-        "width": "34%",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "自动运行的东西要看得见",
@@ -685,7 +680,6 @@
       },
       {
         "type": "points_card",
-        "row": "points",
         "icons": "auto",
         "illustration": "left_inside",
         "text_ref": "要本人做或选的事不会漏",
@@ -695,7 +689,7 @@
         ]
       }
     ],
-    "notes": "整屏宽章节标题居中；卡头粗体深绿，卡内绿圆点正文；卡间无箭头、无丝带。原横图三列，中间短卡下方有卡外笔记本插画；左右说明框均嵌在所属大卡底部。原竖图前两卡插画在卡内右侧；两说明框在所属大卡下方但卡内。\nE230 新增第四张卡接在右列“现在的登记”小框之后，沿用同一行组且不另开列。",
+    "notes": "横版按自然阅读顺序整宽排列各卡与说明框，插画居中等比显示；不再沿用已实际堆叠的三栏行组。全部原文、链接与原图保留。",
     "verification_basis": "2026-10-03 文字核对：screens.jsonl、定稿scene/portrait及上一批规格；本轮未查看原图。"
   },
   {

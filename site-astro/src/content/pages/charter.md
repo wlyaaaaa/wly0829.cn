@@ -38,10 +38,10 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/AGENTS.md",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d"
@@ -83,10 +83,10 @@
     },
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "网站这一版依据的规则版本和生效时间；规则发新版时要改",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=d9d4cb9fab5cb45530d785e27a3abe19a158b5d43a105912d72be728c127c3c3",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
      "screens": [
       "charter-01"
      ]
@@ -165,8 +165,8 @@
  },
  "source": {
   "page": "sources/pages/charter/page.json",
-  "sha256": "a308c95c99b7b4b1154fd0d7082bec2c44213e524bc7989243320b2e5ec52c41",
-  "converted_at_beijing": "2026-10-10T21:24:38+08:00"
+  "sha256": "a0f1d0e4ef1d16c4624311053cbe2dcc1536a2b8255e5b2efd381b1aef5a26b2",
+  "converted_at_beijing": "2026-10-11T13:32:03+08:00"
  }
 }
 ---
@@ -475,7 +475,7 @@
 - 〔九、汇报、网站和我的电脑〕 L26–L29
 - 〔十、关于规则本身〕 L30
 
-当前生效版本 E253（北京时间 10 月 10 日 20:55 起）。按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
+当前生效版本 E257（北京时间 10 月 11 日 13:02 起）。按 L26，简单的完成回执和短状态直接在对话里说，不专门做网页，也不为做网页把一句话扩成汇报；我明确要网页时照做。AI 每次开工或接着做之前，先核对现在生效的是哪一版，只读这一版；草稿和旧版不算数。〔规则怎么发布和核对 → AI 规则与技能基座〕
 
 ::screen{#charter-02 section="talk"}
 
@@ -487,7 +487,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": null,
@@ -655,7 +655,7 @@
 }
 ```
 
-约法 · L1–L10 · E253
+约法 · L1–L10 · E257
 
 # 我的 AI 约法与工作约定
 
@@ -695,7 +695,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 三、怎样做事",
@@ -890,7 +890,7 @@
 }
 ```
 
-约法 · L11–L17 · E253
+约法 · L11–L17 · E257
 
 ### 三、怎样做事
 
@@ -915,7 +915,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 五、我的个人资料",
@@ -1139,7 +1139,7 @@
 }
 ```
 
-约法 · L18–L23 · E253
+约法 · L18–L23 · E257
 
 ### 五、我的个人资料
 
@@ -1171,7 +1171,7 @@
   "shape": "source_text",
   "source": {
    "file": "AGENTS.md",
-   "release": "E253",
+   "release": "E257",
    "sha256": "464ce2b55766fc2f3b3821546cf2305705c5fba62482a5871081e1b6242629ed",
    "public_sha256": "efb4035c2a808ad0295a520319b84502a94248caad943e8e287f10a704bae44d",
    "from": "### 八、项目与维护",
@@ -1380,7 +1380,7 @@
 }
 ```
 
-约法 · L24–L30 · E253
+约法 · L24–L30 · E257
 
 ### 八、项目与维护
 

@@ -30,13 +30,13 @@
   "repo_url": null,
   "capability": "",
   "based_on": {
-   "release": "E253",
-   "commit": "a1184893bb094af12d6c59c76382baac5c80a9c3",
-   "ruleset_sha256": "0df882e7e17266667fc62a519c6948cfbc0771d315cc49f09828990c9e0f7b45",
-   "activated_at": "2026-10-10T20:55:22.214802+08:00",
+   "release": "E257",
+   "commit": "79fae9f4947dab9e84b89732a730d62e85eb9d5c",
+   "ruleset_sha256": "2f9e8910f686f3df33284067bc29493f567a008c296aec532defc1a64b7d355d",
+   "activated_at": "2026-10-11T13:02:36.773840+08:00",
    "file": "sources/rules/docs/contracts/agents.engineering-delivery.md",
-   "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
-   "public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378"
+   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
+   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3"
   },
   "video_prompt": "5–8 秒循环，从开头一屏的水彩插画出发：弯弯小路上，一支小箭从画面外飞来轻轻插进草靶的靶心；小木桌上的放大镜慢慢移过那张纸，纸上的绿勾随之亮一下；几张揉皱的纸和两片落叶打着旋落进浅绿色小回收桶；小路尽头几根细枝条缓缓长长、汇进粗树干，树干顶上的小云轻轻起伏，GitHub 章鱼猫标志保持不动；背景淡水彩纸纹上几片叶子缓慢飘落。全程不出现任何新文字，四块小木牌上的字保持不动、不变形。",
   "registry": {
@@ -45,10 +45,10 @@
    "numbers": [
     {
      "id": "n-release",
-     "text": "E230（北京时间 10 月 9 日 09:12 起生效）",
+     "text": "E257（北京时间 10 月 11 日 13:02 起生效）",
      "meaning": "原文屏里留作快照的文字依据的规则版本（拼页时原文按当时生效的版本现读，版本由拼页程序标出）",
-     "as_of": "2026-10-09",
-     "source": "活动规则入口 Inspect：release_id=E230，activated_at_utc=2026-10-09T01:12:52.0976458+00:00；原文 sha256=052a2dbbb2d00efacd5615080f17945cb73a42d0d00f0ac575655ce60f5f7ca2",
+     "as_of": "2026-10-11",
+     "source": "活动规则入口 Inspect：release_id=E257，activated_at_utc=2026-10-11T05:02:36.7738409+00:00；原文 sha256=dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
      "screens": [
       "rule-engineering-delivery-06"
      ]
@@ -102,7 +102,7 @@
      "with": "agents",
      "direction": "引用",
      "flow": "原文说明基座的只读体检脚本（tools/Invoke-ControlPlaneDoctor.ps1）按需检查，不是每个任务的后台关卡。",
-     "source": "E207 原文第 40 行（原文屏仍是 E187 快照，那里第 29 行还是旧技能名）"
+     "source": "E257 原文第 86 行（原文屏已对齐 E257）"
     }
    ],
    "highlights": [],
@@ -259,8 +259,8 @@
  },
  "source": {
   "page": "sources/pages/rule-engineering-delivery/page.json",
-  "sha256": "86f06b18939b0dc0d5f5218907c60f6c09b779c2e869a16b825ad513b1649c95",
-  "converted_at_beijing": "2026-10-10T21:24:39+08:00"
+  "sha256": "cc318151f139f52622d68cb1b299bb88f6cf7209228e2b513f2c52c0e23fd81d",
+  "converted_at_beijing": "2026-10-11T13:38:20+08:00"
  }
 }
 ---
@@ -1824,13 +1824,13 @@
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E253",
-   "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
-   "public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+   "release": "E257",
+   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
+   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
    "from": null,
    "to": "## 验证",
    "start": 0,
-   "end": 6636,
+   "end": 6645,
    "approved_omissions": []
   },
   "title": "原文（一）",
@@ -1853,7 +1853,7 @@
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-06",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-06"
  },
  "layout": {
@@ -1861,7 +1861,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版，一字不改",
+     "text_ref": "原文·E257版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -1901,7 +1901,7 @@
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版，一字不改",
+     "text_ref": "原文·E257版，一字不改",
      "align": "left",
      "size": "small"
     },
@@ -2022,7 +2022,7 @@
 }
 ```
 
-原文 · E253 版，一字不改
+原文 · E257 版，一字不改
 
 # 工程与交付
 
@@ -2050,7 +2050,7 @@ owner: `E:\.agents`
 
 | 类别 | 定义与判断 | AI 怎么对待、搜索与注入 |
 |---|---|---|
-| **禁令** | 本人不许 AI 做具体、能核对的动作、做法或取舍，或叫停正在做、马上要做的事；必须同时满足下述“内容”和“信号”两条。 | 照办，范围按原话最窄理解，不能自行改或绕开。觉得不对，根会话先用一两句话问本人哪里不对、建议改成什么，同时推进其他工作；子代理不直接问本人、不偏离，做完其余部分，交回时单列哪条想偏离、为什么。本人同意后记纠正和取代，后一句可收窄或取代。只认分类行标签，排最前，显示“禁令｜偏离前先问本人”，不受相对门槛限制，派活注入最多 2 条；本次的注明“限〈日期〉那次任务，别的任务不适用”，随取代、归档收走；至某日期的到期不再注入。 |
+| **禁令** | 本人不许 AI 做具体、能核对的动作、做法或取舍，或叫停正在做、马上要做的事；必须同时满足下述“内容”和“信号”两条。 | 照办，范围按原话最窄理解，不能自行改或绕开。觉得不对，根会话先用一两句话问本人哪里不对、建议改成什么，同时推进其他工作；子代理不直接问本人、不偏离，做完其余部分，交回时单列哪条想偏离、为什么。本人同意后记纠正和取代，后一句可收窄或取代。只认分类行标签，禁令排最前，但要范围相符、过相关门槛才注入，显示“禁令｜偏离前先问本人”，派活注入最多 2 条；本次的注明“限〈日期〉那次任务，别的任务不适用”，随取代、归档收走；至某日期的到期不再注入。 |
 | **纠正** | 本人指出 AI 说错、答偏、做错、理解错或违反要求，也包括本人改分类。只判说 AI 错了的那句，同消息中指向以后做法的分句另判；先摆事实再追问 AI 数字、方案的，拆成事实和纠正。 | 先复述本人问题再答（L2），改掉错误并查同类；旧记录标取代，不再取回。本人自己的意思以本人为准，外部事实可核实后拿证据讲（L7）；显示标签，沿用现有分数。 |
 | **要求** | 本人要的结果、程度、时间、受众，或用“必须／一定要”点名的做法。否定说法讲结果也算；问题报告、为省成本的本次安排记要求〔本次〕。“必须”不使它变成禁令，也不妨碍质疑；“可以 X”不是要求。 | 默认照做，在禁令以外分量最高。判断为伪需求或不是最优解，事实或直觉都可以不照做、换做法，不用先问，但当场按下述“没照做”写法单列，不悄悄交打折扣的版本。本人听过理由仍坚持，加“坚持”；显示标签，本次范围显示“限本次”。 |
 | **授权** | 本人放宽权限：动作授权、决策委托、免除、给自己的资料定公开级别。回答 AI 请示的“嗯／对／可以／我同意”记授权并加“选项”，写回答对象；“继续”授权按当前计划接着做，计划细节仍是 AI 稿。附带条件是授权边界，用强信号词也不另判禁令。 | 范围内直接做，不反复要授权，也可少用或不用；动作授权按最窄理解，L15、L17 按各自专题。决策委托由 AI 拿主意，按 L9 单列“AI 建议”。越过边界或延长时效要先取得新授权；显示范围、时效、边界。 |
@@ -2107,13 +2107,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E253",
-   "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
-   "public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+   "release": "E257",
+   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
+   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
    "from": "## 验证",
    "to": "## 下载、临时文件和清理",
-   "start": 6636,
-   "end": 8734,
+   "start": 6645,
+   "end": 8743,
    "approved_omissions": []
   },
   "title": "原文（二）",
@@ -2136,7 +2136,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-07",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-07"
  },
  "layout": {
@@ -2144,7 +2144,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2191,7 +2191,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2283,7 +2283,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 验证
 
@@ -2315,13 +2315,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E253",
-   "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
-   "public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+   "release": "E257",
+   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
+   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
    "from": "## 下载、临时文件和清理",
    "to": "## Git 收尾",
-   "start": 8734,
-   "end": 9625,
+   "start": 8743,
+   "end": 9634,
    "approved_omissions": []
   },
   "title": "原文（三）",
@@ -2340,7 +2340,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-08",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-08"
  },
  "layout": {
@@ -2348,7 +2348,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2389,7 +2389,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2469,7 +2469,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## 下载、临时文件和清理
 
@@ -2491,13 +2491,13 @@ owner: `E:\.agents`
   "shape": "source_text",
   "source": {
    "file": "docs/contracts/agents.engineering-delivery.md",
-   "release": "E253",
-   "sha256": "64fe4df20941badb3e72acee2f054283c08a19adb1a698eb7a5a9b9ea2a8bdac",
-   "public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+   "release": "E257",
+   "sha256": "dc41377a585e6133f3389154ecf5f97c4ba6e19205492eb20bfca7fdf446993d",
+   "public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
    "from": "## Git 收尾",
    "to": null,
-   "start": 9625,
-   "end": 10879,
+   "start": 9634,
+   "end": 10888,
    "approved_omissions": []
   },
   "title": "原文（四）",
@@ -2524,7 +2524,7 @@ owner: `E:\.agents`
   "reuse": "",
   "source_excerpt_id": "rule-engineering-delivery/rule-engineering-delivery-09",
   "source_logical_id": "engineering_delivery_contract",
-  "source_public_sha256": "a391ea7a7c8c24455dbc6d830207059feed908868d01cc0d92911fb9451e1378",
+  "source_public_sha256": "2ff9394b0398538da96dcf1c664630aea441d042d410e37d475968e472c1c5f3",
   "source_rule_part": "rule-engineering-delivery/rule-engineering-delivery-09"
  },
  "layout": {
@@ -2532,7 +2532,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2576,7 +2576,7 @@ owner: `E:\.agents`
    "blocks": [
     {
      "type": "section_heading",
-     "text_ref": "原文·E253版·续",
+     "text_ref": "原文·E257版·续",
      "align": "left",
      "size": "small"
     },
@@ -2668,7 +2668,7 @@ owner: `E:\.agents`
 }
 ```
 
-原文 · E253 版 · 续
+原文 · E257 版 · 续
 
 ## Git 收尾
 
