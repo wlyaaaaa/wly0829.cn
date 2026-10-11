@@ -1,0 +1,9 @@
+{
+  "schema": "living-art/1",
+  "page": "how",
+  "art": "how",
+  "speed_reference": 2.5,
+  "paper": [254, 254, 254],
+  "h": {"image": {"size": [1536, 1024]}, "box": [0, 0, 1, 1], "source_sha256": "dc38a8f11e534da259e3c6f2c81638d07471d02f92e93e7ca07b68dcd280459b", "masks": [], "effects": [], "bird": {"perches": [{"x": 0.94, "y": 0.20, "facing": "left", "span": 0}], "size": 0.065, "minSize": 22, "from": "right"}},
+  "v": {"image": {"size": [1536, 1024]}, "box": [0, 0, 1, 1], "source_sha256": "dc38a8f11e534da259e3c6f2c81638d07471d02f92e93e7ca07b68dcd280459b", "masks": [], "effects": [], "bird": {"perches": [{"x": 0.94, "y": 0.20, "facing": "left", "span": 0}], "size": 0.065, "minSize": 22, "from": "right"}}
+}

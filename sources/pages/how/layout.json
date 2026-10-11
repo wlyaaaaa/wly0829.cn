@@ -1895,7 +1895,7 @@
         "variant": "lead_value",
         "icons": "none",
         "width": "42%",
-        "row": "practice-main"
+        "row": "practice-summary"
       },
       {
         "type": "bullet_list",
@@ -1907,7 +1907,8 @@
           "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
           "_library/icons/手机电脑连接.png"
         ],
-        "row": "practice-main"
+        "width": "58%",
+        "row": "practice-summary"
       },
       {
         "type": "screenshot",
@@ -1915,8 +1916,12 @@
         "columns": 3,
         "columns_v": 2,
         "caption": "after",
-        "width": "58%",
-        "row": "practice-main",
+        "width": "100%",
+        "row": "practice-shots",
+        "row_items": [
+          3,
+          3
+        ],
         "ratios": [
           "1007:1489",
           "1440:878",

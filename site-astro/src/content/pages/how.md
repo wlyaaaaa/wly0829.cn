@@ -1850,8 +1850,8 @@
  },
  "source": {
   "page": "sources/pages/how/page.json",
-  "sha256": "d1a1eb9335cfcf9db88f339af6b4da77260947c8e37124437dbdaf44acd0ad01",
-  "converted_at_beijing": "2026-10-11T05:19:07+08:00"
+  "sha256": "025bec07d57f9fb82e021b1940339e3175f0e83dbb1a0c9cbe4759d6afbd109a",
+  "converted_at_beijing": "2026-10-11T10:11:55+08:00"
  }
 }
 ---
@@ -6681,7 +6681,7 @@
   "id": "how-16",
   "section": "practice",
   "title": "我的 AI 实践",
-  "scene": "横版画面：保留“我的AI实践”标题。左边约42%宽：醒目的大数字“3,118.5 亿 Token”（粗体绿色、全屏最大字号），下面说明截止日期与累计显示值依据，列出Codex、Claude分项；再往下保留三条工具、国产模型与手机长活的说明、原图标和链接，以及统计范围短注。右边约58%宽：六个带细浅绿边框的真实截图位，排成3列×2行，同排按各原图比例等高，完整缩放，不裁切、不拉伸；六图下面写截图说明。",
+  "scene": "横版画面：保留“我的AI实践”标题。上方分两栏，左栏约42%宽放醒目的大数字“3,118.5 亿 Token”（粗体绿色、全屏最大字号），下面说明截止日期与累计显示值依据，列出Codex、Claude分项；右栏约58%宽保留三条工具、国产模型与手机长活的说明、原图标和链接，以及统计范围短注。下方整宽放六个带细浅绿边框的真实截图位，排成3列×2行，同排按各原图比例等高，完整缩放，不裁切、不拉伸；六图下面写截图说明。",
   "portrait": "竖版：标题在上，大数字、截止日期、累计显示值依据和Codex、Claude分项紧跟着，保留三条使用说明、图标、原链接及统计范围短注；六个真实截图位放在下面，排成2列×3行，同排按各原图比例等高，完整缩放，不裁切、不拉伸；截图说明在最下面。",
   "links": [
    {
@@ -6745,8 +6745,7 @@
      "variant": "lead_value",
      "icons": "none",
      "width": "42%",
-     "row": "practice-main",
-     "row_fit_illustration": true
+     "row": "practice-summary"
     },
     {
      "type": "bullet_list",
@@ -6758,7 +6757,8 @@
       "_library/fix-round-2/icon-clean-484477a360da2bd4680d.png",
       "_library/icons/手机电脑连接.png"
      ],
-     "row": "practice-main"
+     "width": "58%",
+     "row": "practice-summary"
     },
     {
      "type": "screenshot",
@@ -6766,8 +6766,12 @@
      "columns": 3,
      "columns_v": 2,
      "caption": "after",
-     "width": "58%",
-     "row": "practice-main",
+     "width": "100%",
+     "row": "practice-shots",
+     "row_items": [
+      3,
+      3
+     ],
      "ratios": [
       "1007:1489",
       "1440:878",
