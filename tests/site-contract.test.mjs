@@ -4004,20 +4004,26 @@ test("current E identity, shared privacy, recoverable cleanup and bounded websit
 
 });
 
-test("publication cannot upload before snapshot binding, production build, public gate and route tests", async () => {
+test("publication deploys only a validated site-dist commit from main after the local build and public gate", async () => {
   const packageJson = JSON.parse(await readFile(path.join(projectRoot, "package.json"), "utf8"));
   const workflow = await readFile(path.join(projectRoot, ".github", "workflows", "pages.yml"), "utf8");
   const verifier = await readFile(path.join(projectRoot, "scripts", "verify-public-content.mjs"), "utf8");
   const refresher = await readFile(path.join(projectRoot, "scripts", "refresh-panel-snapshot.mjs"), "utf8");
   const snapshotVerifier = await readFile(path.join(projectRoot, "scripts", "verify-panel-snapshot.mjs"), "utf8");
-  assert.match(packageJson.scripts.build, /build:site/);
-  assert.match(packageJson.scripts.build, /verify:snapshot/);
-  assert.match(packageJson.scripts.build, /verify:public/);
-  assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("run: npm run test:built"));
-  assert.ok(workflow.indexOf("run: npm run test:built") < workflow.indexOf("actions/upload-pages-artifact"));
-  assert.ok(workflow.lastIndexOf("run: npm run verify:public") > workflow.indexOf("run: npm run test:built"));
-  assert.ok(workflow.lastIndexOf("run: npm run verify:public") < workflow.indexOf("actions\/upload-pages-artifact"));
-  assert.ok(workflow.indexOf("run: npm run build") < workflow.indexOf("actions\/upload-pages-artifact"));
+  // 构建、公开内容闸门在本机一条命令完成（build-site.py 内调用 verify-public-content）；
+  // Pages 只由 main 手动触发，部署一个已校验、属于 site-dist 的提交，不在 CI 里重新构建。
+  const builder = await readFile(path.join(projectRoot, "scripts", "build-site.py"), "utf8");
+  assert.match(packageJson.scripts.build, /scripts\/build-site\.py/);
+  assert.match(builder, /verify-public-content\.mjs/);
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.doesNotMatch(workflow, /^\s*(push|pull_request|schedule):/m);
+  assert.match(workflow, /github\.ref == 'refs\/heads\/main'/);
+  assert.doesNotMatch(workflow, /run: npm (run build|ci)/);
+  const upload = workflow.indexOf("actions/upload-pages-artifact");
+  assert.ok(upload > 0);
+  for (const guard of ["^[0-9a-fA-F]{40}$", "git merge-base --is-ancestor \"$DEPLOY_SHA\" origin/site-dist", "git checkout --detach \"$DEPLOY_SHA\""]) {
+    assert.ok(workflow.indexOf(guard) > 0 && workflow.indexOf(guard) < upload, guard);
+  }
   assert.match(verifier, /production_artifact_missing/);
   assert.match(verifier, /production_html_missing/);
   assert.match(verifier, /production_javascript_missing/);
