@@ -138,18 +138,34 @@ function aiBlock(v, ctx) {
     const shown = bare ? `${x.project || '没写项目'}：这条缺一句说明` : passed ? title.replace(/[；;]\s*下一个检查点[^；;]*$/, '') : title;
     return { x, title: shown, why, state, h };
   });
-  if (!rows.length) return `<p class="cp-line" id="ai">${dot('ok')}现在没有交给 AI 的事。</p>`;
+  if (!rows.length) return `<p class="cp-line" id="ai">${dot('ok')}现在没有交给 AI 的事。</p>` + govRun(v, ctx);
   const count = (s) => rows.filter((r) => r.state === s).length;
   const parts = [count('stuck') && `卡住 ${count('stuck')}`, count('running') && `在办 ${count('running')}`, count('queued') && `排队 ${count('queued')}`, count('none') && `还没人接 ${count('none')}`, count('wait') && `等 AI 处理 ${count('wait')}`].filter(Boolean);
   const g = v.governance || {};
   const next = g.next_run_at ? `下次每周体检 ${dateHm(g.next_run_at)}${g.consumer_state === 'not_confirmed' ? '，还没确认它会接手这些事' : ''}` : '';
   const line = (r) => `<li class="is-${r.state}"><span>${esc(r.title)}</span><small>${[r.why, r.h?.task ? `由“${r.h.task}”在办` : '', r.h?.next_run_at ? '下次 ' + dateHm(r.h.next_run_at) : '', r.x.last_checked_at ? checkedAgo(r.x.last_checked_at, now) : '还没核对过'].filter(Boolean).map(esc).join(' · ')}</small></li>`;
   const stuck = rows.filter((r) => r.state === 'stuck'), rest = rows.filter((r) => r.state !== 'stuck');
-  return `<div class="cp-ai" id="ai"><h3 class="cp-sub">交给 AI 的事：${rows.length} 件<span class="cp-ai-parts">${parts.join(' · ')}</span></h3>`
+  return `<div class="cp-ai" id="ai"><h3 class="cp-sub">交给 AI 的事：${rows.length} 件<span class="cp-ai-parts">${parts.join(' · ')}</span></h3>` + govRun(v, ctx)
     + (stuck.length ? `<p class="cp-ai-cap">${dot('attention')}卡住了（超过 AI 自己写的检查点）</p><ul class="cp-ailist is-stuck">${stuck.map(line).join('')}</ul>` : '')
     + aiWork(v, ctx)
     + (rest.length ? `<details class="cp-more" id="ai-rest"><summary>其余 ${rest.length} 件，你不用动手${next ? `（${esc(next)}）` : ''}</summary><ul class="cp-ailist">${rest.map(line).join('')}</ul></details>` : '')
     + `</div>`;
+}
+// 每周 AI 体检这一轮做了什么（后端 governance.last_run，字段见 G3）；没给 counts 就不出，退回原来的显示
+const nOf = (x) => (Number.isInteger(x) && x >= 0 ? x : null);
+function govRun(v, ctx) {
+  const g = v.governance || {}, r = g.last_run && typeof g.last_run === 'object' ? g.last_run : null, c = r?.counts && typeof r.counts === 'object' ? r.counts : null;
+  if (!c) return '';
+  const list = (k) => (Array.isArray(r[k]) ? r[k].filter((x) => x && typeof x === 'object' && x.title) : []);
+  const acts = list('actions').slice(0, 3), closed = list('auto_closed'), deferred = list('newly_deferred');
+  const nums = [['修好', c.fixed], ['关掉', c.closed], ['转暂缓', c.deferred], ['还在跟', c.following], ['要你', c.need_you]].filter(([, n]) => nOf(n) != null);
+  const need = nOf(c.need_you), at = r.started_at || r.ended_at, next = r.next_run_at || g.next_run_at;
+  const head = `这周 AI 体检${at ? `（${dateHm(at)}）` : ''}：` + (nums.length ? nums.map(([k, n]) => `${k} ${n}`).join('、') + ' 件' + (need ? '（在上面）' : '') : esc(r.summary || '跑完了'));
+  const ask = `驾驶舱每周 AI 体检${at ? `（${dateHm(at)} 那一轮）` : ''}：请读本机状态接口（/computer-access/api/status 全量）里的 governance.last_run 和这一轮的体检回执，告诉我修好、关掉、转暂缓、还在跟的各是哪几件。`;
+  const sub = (key, label, items, note) => (items.length ? `<details class="cp-more cp-gov-more" id="${key}"><summary>${label} ${items.length} 件</summary><ul class="cp-ailist">${items.map((x) => `<li><span>${esc(x.title)}</span>${x[note] ? `<small>${esc(x[note])}</small>` : ''}</li>`).join('')}</ul></details>` : '');
+  return `<div class="cp-gov"><p class="cp-gov-line">${dot(need ? 'attention' : 'ok')}<span class="cp-gov-text">${head}${next ? ` · 下次 ${esc(dateHm(next))}` : ''}</span>${copyText(ask, '复制给 AI 问详情', ' cp-btn-quiet')}</p>`
+    + (acts.length ? `<ul class="cp-gov-acts">${acts.map((x) => `<li><span>${esc(x.title)}</span>${copyBtn(x.copy_ai_id)}</li>`).join('')}</ul>` : '')
+    + sub('gov-closed', '本周自动关掉', closed, 'evidence') + sub('gov-deferred', '本周新转暂缓', deferred, 'reason') + `</div>`;
 }
 // AI 现在在做（ai_work）：在跑的自动任务、留下没合并的分支；后端没给这块就不出
 function aiWork(v, ctx) {
@@ -176,13 +192,13 @@ export function needYou(v, ctx) {
       + (items.length > 1 ? `<p class="cp-all"><button type="button" class="cp-btn" data-copy-ai-all>全部 ${items.length} 项一起复制给 AI</button></p>` : '')
     : `<p class="cp-empty">${dot(v.ok ? 'ok' : 'unavailable')}${v.ok ? '现在没有要你动手的事。' : notRead(v.served_at, ctx.now)}</p>`;
   // 等条件：分“你有空时可以做”和“AI 等条件”；事在前、什么时候做在后；后端没给是谁的事就合在一起
-  const fmt = (x) => `<li><span>${esc(clean(x.title) || x.project)}</span><small>什么时候：${esc(x.done_when || '你方便时')}</small></li>`;
+  const fmt = (x) => `<li><span>${esc(clean(x.title) || x.project)}</span><small>${x.reason ? `为什么暂缓：${esc(x.reason)} · ` : ''}什么时候：${esc(x.done_when || '你方便时')}</small></li>`;
   const mine = v.deferred.filter((x) => x.action_owner === 'user'), theirs = v.deferred.filter((x) => x.action_owner && x.action_owner !== 'user');
   const known = mine.length + theirs.length === v.deferred.length;
   const wait = !v.deferred.length ? '' : known
-    ? (mine.length ? `<h3 class="cp-sub">你有空时可以做（${mine.length} 件，不急）</h3><ul class="cp-list cp-wait">${mine.map(fmt).join('')}</ul>` : '')
-      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
-    : `<h3 class="cp-sub">等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
+    ? (mine.length ? `<h3 class="cp-sub">暂缓 · 你有空时可以做（${mine.length} 件，不急）</h3><ul class="cp-list cp-wait">${mine.map(fmt).join('')}</ul>` : '')
+      + (theirs.length ? `<details class="cp-more" id="ai-wait"><summary>暂缓 · AI 等条件到了再做（${theirs.length} 件，你不用管）</summary><ul class="cp-list cp-wait">${theirs.map(fmt).join('')}</ul></details>` : '')
+    : `<h3 class="cp-sub">暂缓 · 等条件到了再做（${v.deferred.length} 件）</h3><ul class="cp-list cp-wait">${v.deferred.map(fmt).join('')}</ul>`;
   return anchor('pending') + body + aiBlock(v, ctx) + wait;
 }
 

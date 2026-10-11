@@ -53,6 +53,8 @@ function sort(snap) {
     const panelUnknown = panel && !executionFailed && (['unknown', 'stale'].includes(raw.related_status?.panel) || ['unknown', 'stale', 'failed'].includes(raw.state) || ['unknown', 'stale'].includes(raw.outcomes?.state));
     if (panel) raw = {...raw, last_run_at:null, state:executionFailed ? 'failed' : panelUnknown ? 'unknown' : raw.state};
     if (panelUnknown) raw = {...raw, notice_kind:'unknown', public_message:raw.notice_kind === 'unknown' ? raw.public_message : undefined};
+    // 按需任务没人启动：不是“没读到结果”，是暂停着（灰色，算在岸上）
+    if (!panel && raw.state === 'unknown' && raw.enabled !== true && raw.enabled !== false && !raw.last_run_at && /按需/.test(raw.schedule_zh || '')) raw = {...raw, state:'paused'};
     const t = { raw, i, name: raw.plain?.name || '没写名字的任务', group: groups[raw.group] || '', last: parse(raw.last_run_at), next: parse(raw.next_run_at), every: every(raw) };
     const pulse = parse(raw.outcomes?.heartbeat_at || raw.heartbeat_at); t.panel = panel; t.panelUnknown = panelUnknown; t.pulse = pulse <= now ? pulse : NaN;
     t.note = panelUnknown ? '' : raw.status_note || raw.plain?.status_note || raw.reason || '';
@@ -63,7 +65,7 @@ function sort(snap) {
     t.guard = !t.off && !['unknown', 'never'].includes(raw.state) && (raw.state === 'running' || t.every <= 30 || /常驻/.test(raw.schedule_zh || ''));
     t.ran = !t.off && !t.guard && t.last <= now && dkey(t.last) === today;
     t.coming = !t.off && !t.guard && dkey(t.next) === today && (t.next > now || !(t.last >= t.next));
-    t.home = t.off ? 'off' : t.guard ? 'guard' : (t.ran || t.coming || t.alert) ? 'trip' : raw.state === 'unknown' ? 'fog' : (raw.state === 'never' && !(t.next > now)) ? 'off' : 'idle';
+    t.home = t.off ? 'off' : t.guard ? 'guard' : (t.ran || t.coming || t.alert) ? 'trip' : raw.state === 'unknown' ? 'fog' : (raw.state === 'paused' || (raw.state === 'never' && !(t.next > now))) ? 'off' : 'idle';
     return t;
   });
   const rank = t => t.flag === 'bad' ? 0 : t.flag === 'warn' ? 1 : 2;
@@ -87,6 +89,7 @@ function stateOf(t) {
   if (t.flag === 'bad' || t.flag === 'warn') return [t.flag, STATE[t.flag]];
   if (t.raw.state === 'running') return ['ok', '正在运行'];
   if (t.raw.state === 'never') return ['gray', '还没跑过'];
+  if (t.raw.state === 'paused') return ['gray', '按需，暂停中'];
   if (t.raw.state === 'unknown') return ['gray', '没读到结果'];
   return ['ok', '上次运行正常'];
 }
@@ -96,10 +99,10 @@ const v = x => x ? esc(x) : '<span class="none">还没写</span>';
 function six(M, t) {
   const [cls, word] = stateOf(t), r = t.raw;
   const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') :
-    r.state === 'unknown' ? '不知道，这次没读到它的运行结果' : r.state === 'never' ? '还没跑过，谈不上出错' : r.state === 'running' ? '没有，正在运行' : '没有，上次运行正常';
+    r.state === 'unknown' ? '不知道，这次没读到它的运行结果' : r.state === 'paused' ? '按需运行，现在暂停着，不算出错' : r.state === 'never' ? '还没跑过，谈不上出错' : r.state === 'running' ? '没有，正在运行' : '没有，上次运行正常';
   const next = t.off ? '已停用，不会自动跑' : t.next > M.now ? whenText(M, t.next) + (r.schedule_zh ? `（${r.schedule_zh}）` : '') : r.schedule_zh || '';
   return `<h4>${esc(t.name)}<span class="state ${cls}">${word}</span><small>${esc(t.group)}</small></h4><div class="six">
-    <div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : '没读到') + '</span>'}</div>
+    <div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : r.state === 'paused' ? '还没启动过' : '没读到') + '</span>'}</div>
     <div><b>下次什么时候跑</b>${next ? esc(next) : '<span class="none">没读到</span>'}</div><div><b>有没有出错</b>${esc(err)}</div>
     <div><b>怎么停</b>${v(r.plain?.stop)}</div><div><b>停了影响什么</b>${v(r.plain?.impact)}</div></div>`;
 }
@@ -144,7 +147,7 @@ function build(snap) {
   const ashore = [...M.idle, ...M.off], pool = [];
   for (let k = 0; k < SHORE.length; k++) { const t = (k % 2 ? M.off : M.idle)[k >> 1]; if (t) pool.push(t); }
   for (const t of ashore) { if (pool.length >= SHORE.length) break; if (!pool.includes(t)) pool.push(t); }
-  pool.forEach((t, k) => { const p = SHORE[k], o = boat({ t, x: p[0], y: p[1], w: 3.9, rot: p[2], sprite: spriteOf(t), cls: 'ashore' + (t.home === 'off' ? ' off' : ''), tip: t.home === 'off' ? '在岸上：停用，或者从没跑过' : '在岸上：今天没有安排' });
+  pool.forEach((t, k) => { const p = SHORE[k], o = boat({ t, x: p[0], y: p[1], w: 3.9, rot: p[2], sprite: spriteOf(t), cls: 'ashore' + (t.home === 'off' ? ' off' : ''), tip: t.home === 'off' ? '在岸上：停用、按需暂停，或者从没跑过' : '在岸上：今天没有安排' });
     acts.push(tb => o.el.classList.toggle('in', tb >= I.fleet + .2 * k)); });
 
   // 跑完的：最近几条留在河面上，更早的靠到左上的码头
@@ -272,7 +275,7 @@ function texts(ranToday, nShore) {
   group('future', M.stale ? '当时还没到点的' : '今天还要跑的', '浮标右边还没升旗的船，按出发时间排', M.future, true, p => hm(p.at), () => '#9fd8b3', '#9fd8b3', other);
   group('guard', '常驻和高频任务', '岸边的灯：一直开着，或每半小时内就跑一次', M.guards, false, t => t.every <= 30 ? frequency(t) : t.raw.state === 'running' ? '在运行' : '常驻', t => t.alert ? C[t.flag] : '#ffcb52', '#ffcb52');
   group('idle', '今天没有安排的', '岸上的船，今天不跑', M.idle, false, t => day(t.last), () => '#7cc79b', '#7cc79b');
-  group('off', '停用的、从没跑过的', '拉到岸上的船', M.off, false, t => t.off ? '停用' : '没跑过', () => C.gray, C.gray);
+  group('off', '停用的、按需暂停的、从没跑过的', '拉到岸上的船', M.off, false, t => t.off ? '停用' : t.raw.state === 'paused' ? '按需，暂停中' : '没跑过', () => C.gray, C.gray);
   group('fog', '没读到结果的', '雾里的船：这次没读到运行结果，好坏还不知道', M.fog, false, () => '', () => '#c9d3de', '#c9d3de');
 }
 function mark(t, occurrence = null) { host.querySelectorAll('#layer .on').forEach(e => e.classList.remove('on')); if (t) (els.get(t.i) || []).forEach((e, i) => { if (occurrence == null || i === occurrence) e.classList.add('on'); }); }
