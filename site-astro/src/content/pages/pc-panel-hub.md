@@ -798,7 +798,7 @@
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
   "sha256": "0e9dd3ab7324d6cb58a350cc6e00b77250d02acf135ada93ece41e9e631aa335",
-  "converted_at_beijing": "2026-10-11T14:32:21+08:00"
+  "converted_at_beijing": "2026-10-11T15:45:33+08:00"
  }
 }
 ---
@@ -1307,13 +1307,10 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "type": "chapter_title",
      "align": "left",
      "size": "medium",
-     "row": "detail",
-     "width": "78%",
      "text_ref": "机箱屏：一整条电脑状态"
     },
     {
      "type": "prose",
-     "row": "detail",
      "text_ref": "一块 8.8"
     },
     {
@@ -1322,6 +1319,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "illustration": "left_inside",
      "connector": "none",
      "row": "detail",
+     "width": "76%",
      "text_ref": "1 时钟和天气",
      "item_layout": "left_inside"
     },
@@ -1340,7 +1338,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
     {
      "type": "numbered_screenshot",
      "row": "detail",
-     "width": "22%",
+     "width": "24%",
      "ratio": "1:4",
      "indices": [
       0

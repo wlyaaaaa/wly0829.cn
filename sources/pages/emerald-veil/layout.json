@@ -767,16 +767,12 @@
         "type": "points_card",
         "whole_block": true,
         "columns": 1,
-        "row": "details",
-        "width": "50%",
         "text_ref": "壁纸工具：一个PowerShell脚本，用Windows的桌面壁纸接口（IDeskt"
       },
       {
         "type": "points_card",
         "whole_block": true,
         "columns": 1,
-        "row": "details",
-        "width": "50%",
         "text_ref": "规模（9月29日数）：C#3,266行·PowerShell1,556行·67个自动"
       }
     ],

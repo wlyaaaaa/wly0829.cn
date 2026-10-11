@@ -635,7 +635,7 @@
  "source": {
   "page": "sources/pages/emerald-veil/page.json",
   "sha256": "14c232b912e878deeb56666a52d875d3496a8f98e8d76a4c0756dfebd07f8de7",
-  "converted_at_beijing": "2026-10-11T13:59:12+08:00"
+  "converted_at_beijing": "2026-10-11T15:45:31+08:00"
  }
 }
 ---
@@ -2018,16 +2018,12 @@
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "row": "details",
-     "width": "50%",
      "text_ref": "壁纸工具：一个PowerShell脚本，用Windows的桌面壁纸接口（IDeskt"
     },
     {
      "type": "points_card",
      "whole_block": true,
      "columns": 1,
-     "row": "details",
-     "width": "50%",
      "text_ref": "规模（10月11日数）：C#3,293行·PowerShell1,556行·68个自动"
     }
    ],

@@ -107,13 +107,10 @@
         "type": "chapter_title",
         "align": "left",
         "size": "medium",
-        "row": "detail",
-        "width": "78%",
         "text_ref": "机箱屏：一整条电脑状态"
       },
       {
         "type": "prose",
-        "row": "detail",
         "text_ref": "一块 8.8"
       },
       {
@@ -122,6 +119,7 @@
         "illustration": "left_inside",
         "connector": "none",
         "row": "detail",
+        "width": "76%",
         "text_ref": "1 时钟和天气",
         "item_layout": "left_inside"
       },
@@ -140,7 +138,7 @@
       {
         "type": "numbered_screenshot",
         "row": "detail",
-        "width": "22%",
+        "width": "24%",
         "ratio": "1:4",
         "indices": [
           0
