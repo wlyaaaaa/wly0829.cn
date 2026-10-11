@@ -140,6 +140,9 @@ def build_inventory(pages_root, records, entries=None):
                         original_date=original_date, historical=historical, page_number=number.get("id") if number else None)
             bound = [r for r in by_page[slug] if matches(r, item, page, text)]
             active = [r for r in bound if not r.get("historical") and not r.get("frozen")]
+            if bound and not active:
+                historical = True
+                item["historical"] = True
             sources = active or bound
             hint = page.get("status_line", {}).get("source", "") if field.startswith("status_line.") else ""
             automatic = (surface == "visible" and not historical and bool(active)

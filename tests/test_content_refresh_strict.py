@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts/content-refresh"))
 from inventory import build_inventory, strict_findings, fact_tasks
@@ -74,9 +75,25 @@ class StrictTests(unittest.TestCase):
         self.assertEqual(findings, [])
         self.assertEqual((inventory["coverage"]["required_items"], inventory["coverage"]["automatic_ratio"]), (2, 1.0))
 
-    def test_historical_record_cannot_exempt_current_display(self):
-        _, findings = self.check([dict(self.number, historical=True), self.cutoff])
-        self.assertEqual(len(findings), 2)
+    def test_exact_historical_binding_exempts_only_its_display(self):
+        for flag in ("historical", "frozen"):
+            historical, dated = dict(self.number, **{flag: True}), dict(self.cutoff, **{flag: True})
+            inventory, findings = self.check([historical, dated])
+            self.assertEqual(findings, [])
+            self.assertEqual(inventory["coverage"]["required_items"], 0)
+            evidence = [i for i in inventory["items"] if i["kind"] != "status_line.state"]
+            self.assertTrue(all(i["historical"] and not i["requires_refresh"] for i in evidence))
+            self.assertNotIn("**3 件**", fact_tasks(inventory))
+            with patch("refresh.bounded") as command:
+                from refresh import collect
+                rows = collect(self.root, {"records": [historical, dated]}, entries={})["rows"]
+                command.assert_not_called()
+                self.assertTrue(all(r["status"] == "historical" for r in rows))
+        inventory, findings = self.check([dict(historical, page_pattern=r"不存在的 (9) 件"), dated])
+        self.assertEqual((len(findings), inventory["coverage"]["required_items"]), (1, 1))
+        current = dict(self.number, id="current", scope_status="pending")
+        inventory, findings = self.check([historical, current, dated])
+        self.assertEqual((len(findings), inventory["coverage"]["required_items"]), (1, 1))
         self.page["screens"][0]["section"] = "history"
         self.write_page()
         self.assertEqual(self.check([])[1], [])
