@@ -1,0 +1,56 @@
+/* 授权页外观修正（只改外观，不动办理逻辑）。由 retained-page.ts 内联进 /computer-access/。 */
+
+/* 第 2 步“选这次办哪一项”：三项是单选——左侧圆点，选中实心绿底，同一时刻只亮一个。
+   “同时办理”选中时，前两项一律显示未选（办理时按两项一起办）。 */
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"],
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  background: #fbfefc !important;
+  color: #2f5b40 !important;
+  border-color: #9cc7ab !important;
+  box-shadow: none !important;
+}
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"]::before,
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"]::before {
+  content: "";
+  flex: none;
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #7fae90;
+  background: #fff;
+}
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"],
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"] {
+  background: #1f8a4c !important;
+  color: #fff !important;
+  border-color: #1f8a4c !important;
+}
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]::before,
+html body .typeset-live-flow-layer > button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]::before {
+  border-color: #fff;
+  background: radial-gradient(circle, #1f8a4c 0 3px, #fff 3.5px);
+}
+html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]) > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"] {
+  background: #fbfefc !important;
+  color: #2f5b40 !important;
+  border-color: #9cc7ab !important;
+}
+html body .typeset-live-flow-layer:has(> button.b2-native.b2-image-action[data-b2-action="combined"][data-selected="true"]) > button.b2-native.b2-image-action[data-b2-action^="purpose-"][data-selected="true"]::before {
+  border-color: #7fae90;
+  background: #fff;
+}
+
+/* “办理结果”框：原来只占网格一列，窄成竖条；改成跨整行，卡片限宽，每条结果一行显示。 */
+.typeset-live-flow-region:has([data-b2-slot="ca-results"]) {
+  grid-column: 1 / -1 !important;
+  background: transparent !important;
+}
+.typeset-live-flow-region:has([data-b2-slot="ca-results"]) .typeset-live-flow-cards {
+  max-width: 760px;
+}
