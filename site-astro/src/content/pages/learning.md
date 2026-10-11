@@ -42,8 +42,8 @@
   "repo_url": null,
   "capability": "当老师带我系统地学",
   "based_on": {
-   "commit": "3ee9d6a6bc18e34e9b75a7ef834e99cec59ea3dc",
-   "commit_time": "2026-09-28T04:54:22+08:00"
+   "commit": "e6008f2ff0a9feccc7063d2b4807944e4d42cef1",
+   "commit_time": "2026-10-07T00:32:11-05:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：书桌上摊开的绿色讲义被一阵微风轻轻翻过一页，页面上只有浅灰短线；笔记本屏幕上的两个对话气泡一前一后轻轻闪一下；窗外小山上 28 块小石板铺成的小路，第一块石板淡淡亮起绿色又慢慢暗下去，路边六面小三角旗随风轻摆；背景水彩微微流动，偶尔一片小叶子飘过书桌。画面里除了旗面上的 A、B、C、D、M、P 不出现任何文字，最后一帧回到第一帧，无缝循环。",
   "registry": {
@@ -544,8 +544,8 @@
  },
  "source": {
   "page": "sources/pages/learning/page.json",
-  "sha256": "e34c22939d152680d729fe42729f96c59055c80e639999fbb03df1e48387103e",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "baade4180e2d2f25802c0cda8cd0223574ba1ad58db26ba12016e79b72a57a1b",
+  "converted_at_beijing": "2026-10-11T13:35:57+08:00"
  }
 }
 ---

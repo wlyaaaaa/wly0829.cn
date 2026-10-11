@@ -46,8 +46,8 @@
   "repo_url": "https://github.com/wlyaaaaa/TimeAudit",
   "capability": "记得电脑发生过什么",
   "based_on": {
-   "commit": "a5a5ad901048631807a3638267295e4ae70ad214",
-   "commit_time": "2026-09-29T01:22:17+08:00"
+   "commit": "c5ca4eeb9574e72baa0dc22eb317687f7322185c",
+   "commit_time": "2026-10-11T12:44:01+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：机箱侧透里的风扇慢慢转，机箱吐出的心电图纸带缓缓向外移动，纸带上的绿色曲线平稳起伏，偶尔冒出一个小尖峰，放大镜随之轻轻挪过去停在尖峰上；机箱脚边夹着回形针的便签轻轻翻起一角又落下；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，最后一帧回到第一帧，无缝循环。",
   "registry": {
@@ -494,10 +494,10 @@
     },
     {
      "id": "n-backup",
-     "text": "约 3.8 GiB 一份，留 14 天，现有 12 份",
+     "text": "约 4.7 GiB 一份，留 14 天，现有 12 份",
      "meaning": "每日数据库备份",
-     "as_of": "2026-09-28",
-     "source": "log/backup.log 4,086,354,245 字节；health completed_archives=12；backup_db.ps1 RetentionDays=14",
+     "as_of": "2026-10-11",
+     "source": "timeaudit_health.py completed_archives=12、daily_backup_status=complete；最新 time_audit_20261011_040756_473912.dump 为 5,041,899,358 字节；backup_db.ps1 RetentionDays=14；北京时间 2026-10-11 13:29–13:33 只读回读",
      "screens": [
       "timeaudit-10"
      ]
@@ -711,8 +711,8 @@
  },
  "source": {
   "page": "sources/pages/timeaudit/page.json",
-  "sha256": "2b4c4b00412d1efe5357808693446009789840884be1ff48f84beea58fbe6cdf",
-  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
+  "sha256": "31ca453592d1f32dac980ce6e7105fba416c2c386a94ee67dbd6787dd053b791",
+  "converted_at_beijing": "2026-10-11T14:14:43+08:00"
  }
 }
 ---
@@ -2418,7 +2418,15 @@
      "type": "chapter_title",
      "size": "large",
      "align": "left",
-     "text_ref": "时间花在哪"
+     "text_ref": "时间花在哪",
+     "row": "balanced-heading",
+     "width": "88%",
+     "row_fit_illustration": true
+    },
+    {
+     "type": "illustration",
+     "row": "balanced-heading",
+     "width": "12%"
     },
     {
      "type": "content_card",
@@ -2428,15 +2436,7 @@
      "icons": [
       "_library/fix-round-2/icon-clean-ec6f32b73f88d6c9e058.png"
      ],
-     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电",
-     "row": "screen-time-reading",
-     "width": "75%",
-     "row_fit_illustration": false
-    },
-    {
-     "type": "illustration",
-     "row": "screen-time-reading",
-     "width": "25%"
+     "text_ref": "看图：“屏幕使用时间”看板，每天开机多久（去掉睡眠）、人在电"
     },
     {
      "type": "content_card",
@@ -3937,8 +3937,8 @@
 数字截至 10 月 10 日；大小按 1024 进位（GiB）；带“约”的条数是数据库自己的统计估算，其余是逐条数出来的。1200 天约 3 年 3 个月。
 
 **备份**
-- 每天 11:40 把整个数据库压缩备份到 G 盘的备份文件夹，最近一份约 4.5 GiB，留 14 天。
-- 10 月 10 日数过：现在有 13 份；10 月 1 日和 8 日这两天没有备份——8 日那次备份时电脑意外重启，没备成；1 日的日志已被覆盖，原因查不到。
+- 每天 11:40 把整个数据库压缩备份到 G 盘的备份文件夹，最近一份约 4.7 GiB，留 14 天。
+- 10 月 11 日数过：现在有 12 份；10 月 1 日和 8 日这两天没有备份——8 日那次备份时电脑意外重启，没备成；1 日的日志已被覆盖，原因查不到。
 - 先写成“半成品”文件，校验能读、记下 SHA-256 指纹后才改名成正式备份；写到一半断电，不会把坏的当成好的。
 - 旧备份要删，至少留 3 份校验过的。
 

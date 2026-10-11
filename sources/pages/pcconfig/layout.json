@@ -299,7 +299,7 @@
       },
       {
         "type": "timeline",
-        "text_ref": "00:10",
+        "text_ref": "每小时 10 分",
         "direction": "horizontal",
         "columns": 5,
         "connector": "ribbon",
@@ -384,7 +384,7 @@
       },
       {
         "type": "timeline",
-        "text_ref": "00:10",
+        "text_ref": "每小时 10 分",
         "direction": "vertical",
         "columns": 1,
         "connector": "ribbon",

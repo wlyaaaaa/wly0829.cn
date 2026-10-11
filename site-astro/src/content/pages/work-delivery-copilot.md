@@ -52,8 +52,8 @@
   "repo_url": null,
   "capability": "做有出处、跟得上资料变化的工作文件",
   "based_on": {
-   "commit": "b14c54570f3efcd5ba490977defa6cff2bc032c6",
-   "commit_time": "2026-09-26T17:13:08+08:00"
+   "commit": "7a8d0e5038a1da2f3e84e480a575ed937589255d",
+   "commit_time": "2026-09-29T01:16:50+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的水彩插画出发：桌上三张资料纸上的绿色荧光笔划线轻轻发亮，三根细绿丝线从划线处缓缓流向右边的三份成品（装订文档、小演示屏、跟踪表），丝线上有小光点来回流动；表格那张资料一角被风掀起，露出下面的新版本，其中一根丝线由绿慢慢变成浅黄并轻轻松开，其余丝线保持绿色、继续流动；几片水彩绿叶缓缓飘落。全程不出现文字。",
   "registry": {
@@ -203,10 +203,10 @@
     },
     {
      "id": "n-tests",
-     "text": "44 个",
-     "meaning": "自动测试（test 方法数）；9 月 28 日 39 过 5 跳过",
-     "as_of": "2026-09-28",
-     "source": "py -3 -m unittest discover -s tests：Ran 44 tests OK (skipped=5)",
+     "text": "45 个",
+     "meaning": "自动测试（test 方法数，本次未执行）；9 月 28 日 44 个中 39 过 5 跳过",
+     "as_of": "2026-10-11",
+     "source": "tests 下 test_* 定义只读静态计数（HEAD 7a8d0e5，2026-10-11 13:33 北京时间）；历史回执：Ran 44 tests OK (skipped=5)",
      "screens": [
       "work-delivery-copilot-05",
       "work-delivery-copilot-07"
@@ -224,10 +224,10 @@
     },
     {
      "id": "n-lines",
-     "text": "3,700 行",
+     "text": "3,714 行",
      "meaning": "src/work_delivery 8 个 .py 的非空行；另有 artifact_builders 3 个文件 1,451 非空行",
-     "as_of": "2026-09-28",
-     "source": "按提交 b14c545 现算",
+     "as_of": "2026-10-11",
+     "source": "按提交 7a8d0e5 只读统计 8 个 Python 文件非空行（2026-10-11 13:33 北京时间）",
      "screens": [
       "work-delivery-copilot-07"
      ]
@@ -366,8 +366,8 @@
  },
  "source": {
   "page": "sources/pages/work-delivery-copilot/page.json",
-  "sha256": "819b3d95b053db85534eed73ba752a3f2f13b2ceb1b1b8ed5f5efd8ec5018782",
-  "converted_at_beijing": "2026-10-10T11:55:35+08:00"
+  "sha256": "a69baceb6751f9ab7824245666c0b5f7abca0d001a92a2d4ff44ac429dfbd9ba",
+  "converted_at_beijing": "2026-10-11T13:36:09+08:00"
  }
 }
 ---
@@ -2266,7 +2266,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "3,700 行|44 个|14 次",
+     "text_ref": "3,714 行|45 个|14 次",
      "columns": 3,
      "illustration": "right_inside",
      "icons": "auto"
@@ -2296,7 +2296,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "3,700 行|44 个|14 次",
+     "text_ref": "3,714 行|45 个|14 次",
      "columns_v": 1,
      "illustration": "left_inside",
      "icons": "auto"
@@ -2456,8 +2456,8 @@
 5. **一版一个目录。**｜新一版事实只能写进新目录，不会盖掉旧版；同一版重出，三个文本文件一字不差。
 6. **小而少。**｜一个进程、一个数据库、一个入口；不加向量库、队列、后台服务和连接器。等真用起来，按实际遇到的问题再加。
 
-- **3,700 行**｜Python 正式代码（8 个文件，不算空行），另有三个文件生成器 1,451 行
-- **44 个**｜自动测试
+- **3,714 行**｜Python 正式代码（8 个文件，不算空行），另有三个文件生成器 1,451 行
+- **45 个**｜自动测试
 - **14 次**｜提交（8 月 31 日–9 月 29 日）
 
 ::screen{#work-delivery-copilot-08 section="tech"}

@@ -42,8 +42,8 @@
   "repo_url": null,
   "capability": "找回文档原件并翻到那一页",
   "based_on": {
-   "commit": "ed2fd32c5e796c7f6e69645f88728e82f139f9f4",
-   "commit_time": "2026-09-27T07:24:42-05:00"
+   "commit": "17efb2e02b775b924e7272b06dbb46475f04b0e2",
+   "commit_time": "2026-10-06T13:07:15-05:00"
   },
   "video_prompt": "6 秒无缝循环，白底水彩风，从开头这屏右上的插画出发：半开的木制文件柜抽屉里，几页纸轻轻上下浮动；放大镜沿着一页纸慢慢移动，停在一行字上时那一行被绿色荧光笔划亮，亮光轻轻闪一下；一条绿色细虚线从这页纸延伸到纸角的小标签，标签上的绿色对勾淡入；角落的盆栽叶子随风轻摆。镜头不动，没有文字，最后一帧回到第一帧。",
   "registry": {
@@ -267,10 +267,10 @@
     },
     {
      "id": "n-sync-runs",
-     "text": "41 次，全部成功",
-     "meaning": "每日维护里 materials_sync_current 这一步的次数：9 月 5–28 日每天 17:10 共 24 次，另有手动补跑 7 次（北京 9 月 7、9 日各 1 次，13 日 4 次，14 日 1 次）",
-     "as_of": "2026-10-09",
-     "source": "同页第 1 屏现行数字",
+     "text": "42 次，全部成功",
+     "meaning": "每日维护里 materials_sync_current 这一步的次数：9 月 5 日–10 月 10 日日志共 42 次 complete、exit_code=0，其中 34 次在北京 17:10，另有 8 次其他时间运行",
+     "as_of": "2026-10-10",
+     "source": "PCConfig hot-backup personal-replica-*.log 的 materials_sync_current 状态行聚合，北京 10 月 11 日只读核对",
      "screens": [
       "personal-materials-01"
      ]
@@ -319,10 +319,10 @@
     },
     {
      "id": "n-code-lines",
-     "text": "4,192 行",
+     "text": "4,242 行",
      "meaning": "materials.py 行数",
-     "as_of": "2026-09-28",
-     "source": "提交 ed2fd32 的 materials.py",
+     "as_of": "2026-10-11",
+     "source": "提交 17efb2e 的 materials.py 只读行数统计",
      "screens": [
       "personal-materials-06"
      ]
@@ -349,10 +349,10 @@
     },
     {
      "id": "n-commits",
-     "text": "21 次提交",
-     "meaning": "仓库全部提交，北京时间 8 月 25 日–9 月 27 日",
-     "as_of": "2026-09-28",
-     "source": "git log --oneline",
+     "text": "23 次提交",
+     "meaning": "仓库全部提交，北京时间 8 月 25 日–10 月 7 日",
+     "as_of": "2026-10-11",
+     "source": "git rev-list --count HEAD，提交 17efb2e",
      "screens": [
       "personal-materials-11"
      ]
@@ -525,8 +525,8 @@
  },
  "source": {
   "page": "sources/pages/personal-materials/page.json",
-  "sha256": "f4ccda04c156f606fa89eb1a457b156e51f0470ee64ee7532d809b2474c0b9e3",
-  "converted_at_beijing": "2026-10-10T11:55:33+08:00"
+  "sha256": "c6743e8ea98f79f5af381480290a39be03ad066bc24e963ad0e0684784b9708b",
+  "converted_at_beijing": "2026-10-11T13:37:09+08:00"
  }
 }
 ---
@@ -620,7 +620,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
+     "text_ref": "165份58个来源15,105条42次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
      "variant": "number_header_table",
      "columns": 4,
      "columns_v": 2,
@@ -635,7 +635,7 @@
     },
     {
      "type": "prose",
-     "text_ref": "截至10月9日",
+     "text_ref": "登记数量截至10月9日；同步次数截至10月10日",
      "align": "right"
     },
     {
@@ -687,7 +687,7 @@
     },
     {
      "type": "stat_card",
-     "text_ref": "165份58个来源15,105条41次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
+     "text_ref": "165份58个来源15,105条42次，全部成功精确登记的原件，每份都核对过内容指纹登记过的文件夹、单个文件和文件名清单微信收到的文件和下载",
      "variant": "number_header_table",
      "columns": 1,
      "columns_v": 1,
@@ -699,11 +699,6 @@
       "_library/icons/文稿堆.png",
       "_library/fix-round-2/icon-clean-6eb649eb04de5b696e76.png"
      ]
-    },
-    {
-     "type": "prose",
-     "text_ref": "截至10月9日",
-     "align": "right"
     },
     {
      "type": "illustration"
@@ -725,6 +720,11 @@
      "columns_v": 1,
      "illustration": "none",
      "whole_block": true
+    },
+    {
+     "type": "prose",
+     "text_ref": "登记数量截至10月9日；同步次数截至10月10日",
+     "align": "right"
     },
     {
      "type": "action_button",
@@ -869,11 +869,11 @@
 
 **真实的一次**　9 月 25 日，我让 AI 把一批谷歌云盘上传时留在电脑上、只剩一份的文件拿给我看，材料库里已有的直接删。它给这 46 个文件（约 1 GB）逐个算内容指纹，跟材料库和〔照片视频录音管理〕的记录比：一个都不重复，于是全部拿给我看；我看完，让它删了。
 
-| **165 份** | **58 个来源** | **15,105 条** | **41 次，全部成功** |
+| **165 份** | **58 个来源** | **15,105 条** | **42 次，全部成功** |
 |---|---|---|---|
 | 精确登记的原件，每份都核对过内容指纹 | 登记过的文件夹、单个文件和文件名清单 | 微信收到的文件和下载文件夹的文件名，每天更新 | 9 月 5 日起每天 17:10 的同步，含手动补跑 8 次 |
 
-截至 10 月 9 日
+登记数量截至 10 月 9 日；同步次数截至 10 月 10 日
 
 **现在**　每天 17:10 同步
 

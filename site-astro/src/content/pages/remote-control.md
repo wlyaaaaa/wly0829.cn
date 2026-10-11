@@ -42,8 +42,8 @@
   "repo_url": "https://github.com/wlyaaaaa/wly0829.cn",
   "capability": "在我的真电脑上动手",
   "based_on": {
-   "commit": "6ba9bfc0be0974ede3995e5d9f297906b5728991",
-   "commit_time": "2026-09-28T15:56:44+08:00"
+   "commit": "431ad1c1f2a71f8677bfb9d433c85491e8e8c091",
+   "commit_time": "2026-10-11T13:58:23+08:00"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风格，从开头这屏的插画出发：手机屏幕上一个对话气泡冒出来，化成一颗绿色光点，沿丝带飞进 Cloudflare 云朵，再顺着隧道落进台式机；台式机屏幕上一个文件夹打开、一页纸被改了一行、出现一个绿色对勾；同时笔记本和台式机之间的虚线上，一把小扳手来回滑动一次；最后光点带着对勾飞回手机，气泡变成“已完成”的样子。背景叶子缓慢飘落，其余画面静止。",
   "registry": {
@@ -840,8 +840,8 @@
  },
  "source": {
   "page": "sources/pages/remote-control/page.json",
-  "sha256": "fc4f4b235b6bc56a0045859537081660322efab0f5d215cc1c123c5d76078e7c",
-  "converted_at_beijing": "2026-10-10T11:55:34+08:00"
+  "sha256": "e36132510879f295be641451a4c29ddbdb0c08250a3a15770f55232b4689650a",
+  "converted_at_beijing": "2026-10-11T14:16:46+08:00"
  }
 }
 ---

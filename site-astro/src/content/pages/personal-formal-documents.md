@@ -54,8 +54,8 @@
   "repo_url": null,
   "capability": "写能签字、能核对的正式文书",
   "based_on": {
-   "commit": "b477b377096aaa4404f875a8c74a8b9b5accf493",
-   "commit_time": "2026-09-27T23:38:10+08:00"
+   "commit": "ae11211d9f31a8e73be2419b309dfb4de562c2ee",
+   "commit_time": "2026-10-08T23:53:02-05:00"
   },
   "video_prompt": "5–8 秒循环，白底水彩风格，从开头这屏的插画出发：书桌上一份两页的协议，纸页轻轻翻过，每翻一页，页角亮起一个绿色小勾；翻到最后一页，左边签字栏里一笔绿色签名慢慢写出来，右边签字栏始终是空横线；接着纸页合拢，滑进旁边的牛皮纸文件夹，绿色封条贴上，小锁轻轻闪一下；然后画面回到开头。画面里不出现任何可读的文字。",
   "registry": {
@@ -421,8 +421,8 @@
  },
  "source": {
   "page": "sources/pages/personal-formal-documents/page.json",
-  "sha256": "e293d7ce50c6cdb2700d41e17fdfe71f3f38a77ef7e2f2008a21b7a11af93425",
-  "converted_at_beijing": "2026-10-10T10:58:16+08:00"
+  "sha256": "4ac6fc466819b2412a2a7236f3cd9febfb59e6f9d5b8bf05e396d80b79c556fd",
+  "converted_at_beijing": "2026-10-11T13:35:54+08:00"
  }
 }
 ---

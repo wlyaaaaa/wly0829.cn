@@ -42,8 +42,8 @@
   "repo_url": null,
   "capability": "远程看和操作电脑画面",
   "based_on": {
-   "commit": "bcfa359ebb9812bc478a9bc3e12a21a88a6d9fa1",
-   "commit_time": "2026-09-29T01:20:21+08:00"
+   "commit": "ec5b2b0acc563209c578afd2bd8d5ebd47114188",
+   "commit_time": "2026-10-06T05:52:26+08:00"
   },
   "video_prompt": "5–8 秒无缝循环，白底水彩风格，从开头这屏的插画出发：办公桌上的笔记本屏幕亮起家里的桌面，一颗绿色光点沿 Tailscale 丝带飞向小房子里的台式机，再带着一小块画面飞回笔记本；接着台式机前的大显示器慢慢暗下去，旁边虚线描边的备用屏亮起，两三个小窗口沿弧线从暗屏飘到备用屏；片刻后大显示器重新亮起，窗口又飘回原位，备用屏淡下去。背景叶子缓慢飘落，其余画面静止。",
   "registry": {
@@ -377,10 +377,10 @@
     },
     {
      "id": "n-commits",
-     "text": "35 次提交",
-     "meaning": "6 月 26 日至 9 月 29 日（北京时间）",
-     "as_of": "2026-09-29",
-     "source": "git rev-list --count HEAD",
+     "text": "38 次提交",
+     "meaning": "6 月 26 日至 10 月 6 日（北京时间）",
+     "as_of": "2026-10-11",
+     "source": "git -C E:\\Projects\\Tools\\sunshine-remote-streaming rev-list --count HEAD；提交 ec5b2b0；北京时间 2026-10-11 13:32 只读统计",
      "screens": [
       "sunshine-remote-streaming-05"
      ]
@@ -417,10 +417,10 @@
     },
     {
      "id": "n-daily-pass",
-     "text": "9 月 18—28 日天天通过",
-     "meaning": "每日定时体检 11 次都是 pass",
-     "as_of": "2026-09-28",
-     "source": "runtime/verify-lite.log finish 行（本地时间换成北京时间）",
+     "text": "9 月 18 日—10 月 10 日天天通过",
+     "meaning": "每日定时体检 23 次都是 pass",
+     "as_of": "2026-10-11",
+     "source": "runtime/verify-lite.log finish 行，只读统计；最新一条为北京时间 2026-10-10 14:30:03，覆盖 host-only",
      "screens": [
       "sunshine-remote-streaming-09"
      ]
@@ -575,8 +575,8 @@
  },
  "source": {
   "page": "sources/pages/sunshine-remote-streaming/page.json",
-  "sha256": "eaabd0bf1018079a412baaa60bcc3d0fb8515a600b78f17ba8cadb9b1bce90e9",
-  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
+  "sha256": "2a7518d0144dd0897bb62d2f3251cf3891218817ee1bb44d23cc9bf3bad24cee",
+  "converted_at_beijing": "2026-10-11T13:39:26+08:00"
  }
 }
 ---
@@ -3944,7 +3944,7 @@
 16. 守护自己拉起｜我登录后启动，每 10 秒写一次心跳；挂了 1 分钟后自己重开，同一时间只跑一份｜在用
 
 **体检和修复**
-17. 每天体检｜14:30 查 Tailscale 在线、无人值守、编码能力、Funnel 有没有公开 Sunshine；9 月 18 日—10 月 9 日天天通过｜在用
+17. 每天体检｜14:30 查 Tailscale 在线、无人值守、编码能力、Funnel 有没有公开 Sunshine；9 月 18 日—10 月 10 日天天通过｜在用
 18. 主机端体检｜只读：两个服务、配置、安全闸、有没有人连着、守护心跳、现在抓主屏还是备用屏｜在用
 19. 查线路｜指定手机后 ping 5 次，看走直连、Tailscale 公共中转还是自己设备中转，报延迟｜说不准
 20. 串流修复｜服务改回自动、开无人值守、清写死的代理、开网卡 IPv6；默认只出计划，改前存原样，失败倒着退回｜说不准

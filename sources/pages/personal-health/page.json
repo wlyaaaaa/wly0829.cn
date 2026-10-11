@@ -23,8 +23,8 @@
   "repo_url": null,
   "capability": "结合我的身体情况答健康问题",
   "based_on": {
-    "commit": "efd92031e4c304becf2f32b11d7684c4a0e96b61",
-    "commit_time": "2026-09-27T07:24:36-05:00"
+    "commit": "848501a2c4934e2bd9c578878b1d098d34417444",
+    "commit_time": "2026-10-07T05:31:23-05:00"
   },
   "video_prompt": "开头短视频提示词：6 秒无缝循环，白底水彩画风，纯绿主色，照开头这屏的插画出发。手腕上纤细的穿戴设备屏幕轻轻亮起一圈绿光；几片细小的绿色叶子从设备飘出，沿一条绿色细虚线经过手机，落进旁边翻开的小册子；小册子的一页缓缓翻过，页面上只有灰色横线；一只放大镜在报告纸上轻轻移动，纸上一行被绿色淡淡划亮后褪去，回到起始画面。不出现任何文字、数字、图表或人脸，镜头固定，动作轻柔。",
   "screens": [
@@ -635,10 +635,10 @@
       },
       {
         "id": "n-code",
-        "text": "8454 行",
-        "meaning": "7 个 google_health_*.py 行数之和，含空行（wc -l）；不含空行 7851",
-        "as_of": "2026-09-28",
-        "source": "wc -l google_health_*.py 现算",
+        "text": "8591 行",
+        "meaning": "7 个 google_health_*.py 行数之和，含空行（splitlines）；不含空行 7976",
+        "as_of": "2026-10-11",
+        "source": "提交 848501a 的 7 个 google_health_*.py 只读行数统计",
         "screens": [
           "personal-health-05"
         ]
@@ -655,9 +655,9 @@
       },
       {
         "id": "n-commits",
-        "text": "68 次",
-        "meaning": "仓库提交数，北京 8 月 25 日到 9 月 27 日",
-        "as_of": "2026-09-28",
+        "text": "111 次",
+        "meaning": "仓库提交数，北京 8 月 25 日到 10 月 7 日",
+        "as_of": "2026-10-11",
         "source": "git rev-list --count HEAD",
         "screens": [
           "personal-health-05"

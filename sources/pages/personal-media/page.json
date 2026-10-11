@@ -11,8 +11,8 @@
   "repo_url": null,
   "capability": "管照片、视频、录音原件",
   "based_on": {
-    "commit": "7cb814c831c377a1f339912a21b35b11fa6ed93c",
-    "commit_time": "2026-09-28T01:13:17-05:00"
+    "commit": "b5f84ef0bcead2a7f9e912dbd9bd8e28d087eddd",
+    "commit_time": "2026-10-09T12:39:06-05:00"
   },
   "video_prompt": "6 秒无缝循环，白底水彩风，从开头这屏右上的插画出发：左边手机屏幕上的几张照片轻轻飘起，沿一条绿色虚线弧飞进右边叠放的三块黑色硬盘，硬盘前面的绿色指示灯依次亮一下；硬盘上方的云朵里绿色向上箭头缓缓上下浮动；旁边录音笔屏幕上的绿色声波轻轻起伏；盆栽叶子随微风轻摆。镜头不动，没有文字，最后一帧回到第一帧。",
   "screens": [
@@ -1105,20 +1105,20 @@
       },
       {
         "id": "n-code-lines",
-        "text": "16439 行",
+        "text": "16433 行",
         "meaning": "Python 正式代码行数（不含 test_*.py，6 个文件，wc -l）",
-        "as_of": "2026-09-28",
-        "source": "git ls-files '*.py' 排除 test_ 后 wc -l，提交 7cb814c",
+        "as_of": "2026-10-11",
+        "source": "git ls-files '*.py' 排除 test_ 后 splitlines 只读统计，提交 b5f84ef",
         "screens": [
           "personal-media-09"
         ]
       },
       {
         "id": "n-tests",
-        "text": "455 个",
+        "text": "453 个",
         "meaning": "自动测试函数个数（test_*.py 里 def test_ 的个数）",
-        "as_of": "2026-09-28",
-        "source": "git grep -c 'def test_'，提交 7cb814c（c92dcaa 时为 443）",
+        "as_of": "2026-10-11",
+        "source": "git ls-files test_*.py 后静态统计 def test_，提交 b5f84ef；本轮未运行测试",
         "screens": [
           "personal-media-09"
         ]

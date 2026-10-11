@@ -50,8 +50,8 @@
   "repo_url": "https://github.com/wlyaaaaa/PC-Panel-Hub",
   "capability": "把电脑和手机的状态摆在眼前",
   "based_on": {
-   "commit": "4cb2cb77f2dd9c00941242ae782b0632ae723029",
-   "commit_time": "2026-09-29T01:17:58+08:00"
+   "commit": "784fe7fb72aa7518ba3545b6491fbcb2bd508489",
+   "commit_time": "2026-10-06T05:52:17+08:00"
   },
   "video_prompt": "5–8 秒循环，从开头这屏的插画出发，镜头不动：机箱侧面那条竖长小屏上的浅绿小卡片轻轻闪一下，一条小折线从左向右慢慢爬动，像每秒刷新；水冷头上的曲面屏里，大号时钟的最后一位数字翻页一次；随后一张半透明水晶小卡片从曲面屏右侧轻轻滑入、停两秒、再淡出；旁边手机屏幕亮一下，一条虚线小光点沿着箭头从手机流向曲面屏；显卡侧面的绿光像呼吸一样明暗；背景水彩微微流动，偶尔一片小叶子飘过。画面里不出现任何文字，最后一帧回到第一帧，无缝循环。",
   "registry": {
@@ -548,10 +548,10 @@
     },
     {
      "id": "n-code",
-     "text": "38,754 行",
+     "text": "38,788 行",
      "meaning": "Git 跟踪的 C#、PowerShell、Python 代码非空行数",
-     "as_of": "2026-09-29",
-     "source": "提交 4cb2cb7 git ls-tree 逐个数非空行：C# 17,834 + PowerShell 14,745 + Python 6,175",
+     "as_of": "2026-10-11",
+     "source": "提交 784fe7f git ls-files 逐个数非空行：C# 17,834 + PowerShell 14,779 + Python 6,175；北京时间 2026-10-11 13:34 只读统计",
      "screens": [
       "pc-panel-hub-07"
      ]
@@ -568,10 +568,10 @@
     },
     {
      "id": "n-commits",
-     "text": "91 次提交",
-     "meaning": "7 月 5 日–9 月 29 日（北京时间）的提交数",
-     "as_of": "2026-09-29",
-     "source": "git log 计数",
+     "text": "93 次提交",
+     "meaning": "7 月 5 日–10 月 6 日（北京时间）的提交数",
+     "as_of": "2026-10-11",
+     "source": "git -C E:\\Projects\\Tools\\TURZX-SideScreen rev-list --count HEAD；提交 784fe7f；北京时间 2026-10-11 13:32 只读统计",
      "screens": [
       "pc-panel-hub-07"
      ]
@@ -797,8 +797,8 @@
  },
  "source": {
   "page": "sources/pages/pc-panel-hub/page.json",
-  "sha256": "3039fab2d629c2160da99bf04bca941313358519ace0ce7726ae3d500fba9671",
-  "converted_at_beijing": "2026-10-10T13:23:34+08:00"
+  "sha256": "289f9ee96c903d01b16b4bf49b9cab34514ad6731f532e290bb7112af98b8d8d",
+  "converted_at_beijing": "2026-10-11T13:39:23+08:00"
  }
 }
 ---
@@ -1307,12 +1307,13 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "type": "chapter_title",
      "align": "left",
      "size": "medium",
-     "row": "heading",
+     "row": "detail",
+     "width": "78%",
      "text_ref": "机箱屏：一整条电脑状态"
     },
     {
      "type": "prose",
-     "row": "heading",
+     "row": "detail",
      "text_ref": "一块 8.8"
     },
     {
@@ -1321,9 +1322,20 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "illustration": "left_inside",
      "connector": "none",
      "row": "detail",
-     "width": "78%",
      "text_ref": "1 时钟和天气",
      "item_layout": "left_inside"
+    },
+    {
+     "type": "content_card",
+     "columns": 1,
+     "columns_v": 1,
+     "illustration": "left_inside",
+     "connector": "none",
+     "row": "detail",
+     "text_ref": "数据从哪来",
+     "icons": [
+      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
+     ]
     },
     {
      "type": "numbered_screenshot",
@@ -1339,18 +1351,6 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "type": "prose",
      "row": "detail",
      "text_ref": "8 月 30 日发给机箱屏"
-    },
-    {
-     "type": "content_card",
-     "columns": 1,
-     "columns_v": 1,
-     "illustration": "left_inside",
-     "connector": "none",
-     "row": "source",
-     "text_ref": "数据从哪来",
-     "icons": [
-      "_library/fix-round-2/icon-clean-a9b00cda4f2ae87d4b1f.png"
-     ]
     }
    ],
    "notes": "横版左侧九条编号细卡及数据来源卡，截图整屏右侧竖长1:4，各条右端虚线箭头指截图；竖版截图在导语后，九条单列，来源卡和图注在原v2末尾；截图内部留空。原图小标题用中号，保留角色。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。；main-closer：审查第4条的首个合法备选：九项图在左文字在右、压矮单列；九引线用480x1920源renderer实坐标，静态截图仍是合法空槽，原图/源字不改。",
@@ -2346,7 +2346,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "columns": 3,
      "illustration": "left_inside",
      "card_count": 3,
-     "text_ref": "38,754 行"
+     "text_ref": "38,788行"
     }
    ],
    "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。；main-closer：看门狗两细线连接两条实际DOM流程，唯一原组名确定目标，不猜底图部位。",
@@ -2402,7 +2402,7 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
      "columns_v": 1,
      "illustration": "top_inside",
      "card_count": 3,
-     "text_ref": "38,754 行"
+     "text_ref": "38,788行"
     }
    ],
    "notes": "横版看门狗竖卡在左，两根细箭头连接右侧上下两条流程（5站、4站），底部三数字卡；竖版看门狗在顶，两流程依次纵向箭头，末尾原v2实际一排三张数字卡，按图保留；不按描述改成单张一行。；已逐屏查看横图及全部竖版续图，文字用 page.json。\nQA12 2026-10-03T13:33:49+08:00：按本页审查意见调整构图；本轮构图字段取代此前与之冲突的旧排法说明，素材/组件缺口见本页 .fix.md。",
@@ -2583,9 +2583,9 @@ Win+F2：曲面屏时钟显示或隐藏，重启后记得。
 3. 浮层（WinUI 3）｜透明、不抢焦点、鼠标能穿过去的窗口，只认 2288×1048 的那块屏
 4. 曲面屏｜由 LIAN LI 的 L-Connect 服务切成 Windows 副屏
 
-**38,754 行**｜代码（C#、PowerShell、Python）
+**38,788 行**｜代码（C#、PowerShell、Python）
 **146 个**｜C# 单元测试，另有 21 个测试脚本
-**91 次**｜提交（7 月 5 日–9 月 29 日）
+**93 次**｜提交（7 月 5 日–10 月 6 日）
 
 ::screen{#pc-panel-hub-08 section="tech"}
 

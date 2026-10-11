@@ -54,8 +54,8 @@
   "repo_url": "https://github.com/wlyaaaaa/WeChatDirect",
   "capability": "读懂微信聊天",
   "based_on": {
-   "commit": "40d9b8cfea4f16ba49c205284975371f174f0ade",
-   "commit_time": "2026-09-26T17:10:16+08:00"
+   "commit": "57a764dacf79967e222076599d94ef3895f51797",
+   "commit_time": "2026-10-07T23:39:47+08:00"
   },
   "video_prompt": "5–8 秒循环。画面从开头这屏的水彩插画出发：屏幕上两个聊天窗口里的绿白气泡缓缓往上滚；一只放大镜从右往左慢慢滑过，停在一段气泡上时，一条细绿线从一句回复连到它引用的原句，亮一下又淡去；数据库圆柱上的小锁轻轻闪一下；一张新纸片飘进旁边的“档案”文件夹。白底、纯绿主色、水彩质感，镜头不动，不出现任何文字和微信标志。",
   "registry": {
@@ -674,8 +674,8 @@
  },
  "source": {
   "page": "sources/pages/wechatdirect/page.json",
-  "sha256": "c934160b1251cf9fd2c43e0fc359598ea04e387590ffdb2e443c332e4e0bcc8b",
-  "converted_at_beijing": "2026-10-10T11:55:35+08:00"
+  "sha256": "838896520d1253a4d1cfe39eb318e096318f93eb2c46ad033e2b8da19650b18f",
+  "converted_at_beijing": "2026-10-11T13:35:30+08:00"
  }
 }
 ---
