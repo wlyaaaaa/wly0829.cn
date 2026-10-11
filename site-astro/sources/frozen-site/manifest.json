@@ -485,7 +485,11 @@
     "/projects/proxyclean/ipv6-routing-control/",
     "/projects/proxyclean/one-click-and-troubleshooting-boundaries/",
     "/projects/proxyclean/targeted-port-shutdown/",
-    "/projects/proxyclean/wifi-rebind-and-recovery/"
+    "/projects/proxyclean/wifi-rebind-and-recovery/",
+    "/projects/steam-millennium-config-backup/allowlist-config-and-style-snapshot/",
+    "/projects/steam-millennium-config-backup/plugin-manifest-and-install-state-tracking/",
+    "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
+    "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/"
   ],
   "pages": {
     "projects/agents/authorization-owner/index.html": {

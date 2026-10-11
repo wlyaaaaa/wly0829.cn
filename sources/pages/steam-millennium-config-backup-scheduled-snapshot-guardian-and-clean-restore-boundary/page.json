@@ -1,0 +1,171 @@
+{
+  "schema": "site-b1.page.v1",
+  "page": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary",
+  "kind": "project",
+  "title": "每周采集、可见管理与可回滚恢复",
+  "url": "/projects/steam-millennium-config-backup/scheduled-snapshot-guardian-and-clean-restore-boundary/",
+  "parent": "steam-millennium-config-backup",
+  "status_line": {
+    "state": "偶尔用",
+    "as_of": "2026-10-11",
+    "source": "源仓库 10 月 1 日的最新提交，加上北京时间 10 月 11 日 13:32 的只读状态核对",
+    "last": {
+      "label": "快照核对",
+      "at": "2026-10-11 13:32"
+    }
+  },
+  "screens": [
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-01",
+      "section": "top",
+      "title": "每周采集、可见管理与可回滚恢复",
+      "text": "# 每周采集、可见管理与可回滚恢复\n\n〔回到项目 → Steam 外观备份〕　〔GitHub〕　〔复制 AI 续作说明〕\n\nSteam Millennium 配置备份 · 功能说明\n\n平时让原任务每周留存配置，需要时请 AI 查状态或看驾驶舱，就能知道最近成功、独立副本和下一次检查。出问题先看恢复计划，确认后仅回填支持的设置；冲突不覆盖，中断可以按原记录处理。\n\n当前情况：最近一次成功是北京时间 10 月 5 日 10:30（内容没变，只重新核验），下一次计划在 10 月 12 日 10:30；已有恢复计划、回滚和中断处理。文件完成不代表 Steam 界面已经恢复。\n\n项目快照核对于 2026-10-11 13:32（北京时间，只读核对）；具体测试保留各自日期，页面不实时探测运行状态。\n\n项目源码：公开仓库",
+      "links": [
+        {
+          "text": "回到项目 → Steam 外观备份",
+          "href": "/projects/steam-millennium-config-backup/"
+        },
+        {
+          "text": "GitHub",
+          "href": "https://github.com/wlyaaaaa/steam-millennium-config-backup"
+        },
+        {
+          "text": "复制 AI 续作说明",
+          "href": "/projects/steam-millennium-config-backup/#ai-brief"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-02",
+      "section": "usage",
+      "title": "这项功能怎样使用",
+      "text": "## 这项功能怎样使用\n\n### 为什么需要它\n\n手工记着备份容易遗漏；采集也不能把正在修改的文件冲掉，更不能误把“有快照”当作已重装好全部程序。\n\n### 举个实际例子\n\n“恢复上一份Steam配置前，先告诉我会改什么；不合适还能撤回。”先取得只读计划，核对程序版本与资源，确认并退出Steam后再回填；完成后得到回滚编号，打开Steam检查实际效果。\n\n### 最后我会得到什么\n\n状态查询分别给出本地快照、最近尝试与成功、独立副本和任务状态，也会列出这次有没有个别文件被杀毒软件拦下。恢复只回填支持的配置，程序、主题资源和最终 Steam 界面仍要另验。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 手工记着备份容易遗漏；采集也不能把正在修改的文件冲掉，更不能误把“有快照”当作已重装好全部程序。 ### 举个实际例子 “恢复上一份Steam配置前，先告诉我会改什么；不合适还能撤回。”先取得只"
+        },
+        {
+          "id": "module-product",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 手工记着备份容易遗漏；采集也不能把正在修改的文件冲掉，更不能误把“有快照”当作已重装好全部程序。 ### 举个实际例子 “恢复上一份Steam配置前，先告诉我会改什么；不合适还能撤回。”先取得只"
+        },
+        {
+          "id": "module-product-title",
+          "text": "## 这项功能怎样使用 ### 为什么需要它 手工记着备份容易遗漏；采集也不能把正在修改的文件冲掉，更不能误把“有快照”当作已重装好全部程序。 ### 举个实际例子 “恢复上一份Steam配置前，先告诉我会改什么；不合适还能撤回。”先取得只"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-03",
+      "section": "usage",
+      "title": "结果怎么看",
+      "text": "## 结果怎么看\n\n### 可以怎么用\n\n快照文件与清单一致；恢复按已确认的计划完成并保留撤回依据，随后在 Steam 看实际效果。\n\n### 需要处理什么\n\n采集未完成、来源目录不全或有人改过目标时停止覆盖，保留文件和记录供恢复；只有个别文件读取时被杀毒软件拦下或移走，才按严格条件沿用上一份或跳过，并在结果里点名。\n\n### 什么时候不可用\n\n找不到当前安装、用户未登录或缺程序资源时，这次采集或界面恢复不能完成；旧快照仍保留。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-04",
+      "section": "usage",
+      "title": "从哪里开始",
+      "text": "## 从哪里开始\n\n日常让 AI 运行 tools/Invoke-MillenniumBackup.ps1 -Mode Status -Json 查状态，或直接看驾驶舱；要马上存一份用 -Mode Snapshot，自查周任务用 tools/Manage-MillenniumTask.ps1 -Mode Inspect -Json。恢复先用 -Mode RestorePlan 选版本。开始菜单里的“备份状态”入口已在 9 月 26 日撤下，原来的状态窗口脚本仍可以直接运行。\n\n### 需要准备什么\n\n- 这次要查状态、立即采集还是恢复\n\n- 恢复时想选哪天的版本\n\n- 是否已退出 Steam\n\n### 从开始到拿到结果\n\n1. **先看快照真的留到了哪里**　周任务或手动采集分别报告本地结果与独立副本；提交到版本库和冷备是另外的证据。\n\n2. **恢复前看清范围**　选确实存在的日期和版本，预览要改的设置，并确认所需插件或主题已安装。\n\n3. **合并后在 Steam 里看**　保留撤回依据，只回填支持的配置，再打开 Steam 核对外观和插件；工具不替人安装程序。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-05",
+      "section": "tech",
+      "title": "技术实现与依据（一）",
+      "text": "## 技术实现与依据（一）\n\n这里保留实现、关键条件、精确入口、历史记录和验证结果。\n\n10 月 5 日任务成功、三处副本同代核验通过；恢复命令已实现，真实 Steam 效果另验\n\n### 关键规则与设计选择\n\n1. 复用 Windows 任务计划与小 VBS，不增加常驻备份服务。\n\n2. 没有七天节流和脏目标绕过；无变化仍验证，默认保留4份已验证代际。\n\n3. 恢复是单独的RestorePlan/Restore/Rollback流程，不能反向运行采集脚本；中断用原事务Recover。\n\n4. 恢复按现有分步规程进行，用户可选择具体快照，并核对新装程序是否与旧配置对应。\n\n## 当前怎样实现\n\n- PowerShell7.2+调用Python3.11+核心，显式来源或注册表/常见目录定位；只有机器名与实际仓库均匹配才消费PCConfig机器绑定，拒绝在该绑定下替换采集源。\n\n- 目标与上一份已生成清单比较；手动、定时及其他进程受同一固定目标锁保护。未知文件、真实快照修改或Git读取失败停止覆盖，源或目标/运行根重叠、链接路径拒绝。\n\n- 来源根目录和三个必需目录要可读，启用的插件和当前主题要存在，前后两遍读取一致才生成候选；普通读不全仍整次失败。唯一例外是读文件时遇到杀毒软件拦截或移除（Windows 错误 225/226）：必需文件（config.json、各插件 plugin.json、各主题 skin.json）只有上一份已核验快照里有同一路径时才沿用旧内容，否则整次失败；其他可选文件有旧版就留旧版，没有就这次不收，都写进告警名单。之后照旧先保存前像和计划，再逐文件写入，清单最后提交与回读。\n\n- 现役任务固定在每周一北京时间 10:30（UTC 02:30），本机换时区或重装也不改这个时刻；Interactive/Limited、错过补跑、3次15分钟重试、10分钟上限和IgnoreNew 不变；隐藏VBS调用PowerShell7，启停只管理该任务未来触发。",
+      "links": [],
+      "anchors": [
+        {
+          "id": "project-reading-panel-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 5 日任务成功、三处副本同代核验通过；恢复命令已实现，真实 Steam 效果另验 ### 关键规则与设计选择 1. 复用 Windows 任务计划"
+        },
+        {
+          "id": "module-technical",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 5 日任务成功、三处副本同代核验通过；恢复命令已实现，真实 Steam 效果另验 ### 关键规则与设计选择 1. 复用 Windows 任务计划"
+        },
+        {
+          "id": "module-technical-title",
+          "text": "## 技术实现与依据（一） 这里保留实现、关键条件、精确入口、历史记录和验证结果。 10 月 5 日任务成功、三处副本同代核验通过；恢复命令已实现，真实 Steam 效果另验 ### 关键规则与设计选择 1. 复用 Windows 任务计划"
+        }
+      ],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-06",
+      "section": "tech",
+      "title": "技术实现与依据（二）",
+      "text": "## 技术实现与依据（二）\n\n- RestorePlan只读验证备份和目标；Restore要求ExpectedPlan，合并支持配置并保留网络/未知字段，资源或版本不匹配停止。真实安装目标需Steam已退出，不自动结束进程、下载或运行插件。\n\n- 恢复结果带rollback_id，Rollback只撤回仍匹配本轮postimage的修改。恢复历史默认保留4条已完成、回滚或中止记录，未完成记录不自动清掉。\n\n- G副本先核验PCConfig卷身份和路径，再复制当前及保留历史并验证；复制后缺文件不会被猜成杀毒软件删除，必须有这次、同一路径、确实隔离或移除的记录才算。当前内容没能完整复制时，只保留可恢复的现场并标“需要重试”。G失败仍保留本地但自动任务非零。H沿用PCConfig冷备，本项目不新增H任务、不主动解锁。\n\n## 执行流程\n\n1. 原周任务或明确人工Snapshot进入实际来源与机器绑定。\n\n2. 检查源稳定性、目标清单、固定锁和是否有未完成事务；个别文件被杀毒软件拦下时按上面的严格条件处理并记下。\n\n3. 生成并验证候选，逐文件写入、最后发布清单；无变化不增加代际。\n\n4. 独立验证G副本并分别报告最近尝试与最近成功；Git发布与H冷备另行执行。\n\n5. 恢复先只读计划，核对版本和资源；明确执行后保留回滚点，最后在Steam内验证。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-07",
+      "section": "tech",
+      "title": "名词和入口",
+      "text": "## 名词和入口\n\n## 本模块用到的名词\n\n| 名词 | 意思 |\n| --- | --- |\n| Verified generation（已验证代际） | 一组文件及对应完整性清单，验证后才成为当前；无变化不创建重复代。 |\n| Interactive Logon（交互登录） | 现役任务依赖该用户已经登录；不是保证无人登录时运行的服务。 |\n| staging（暂存区） | 先保存待发布文件和原值，再逐文件提交、最后发布清单；可恢复中断但不是全文件系统原子切换。 |\n\n## 专业定义\n\n无变化不重复留代，恢复先预检、保留原值；任务与G/H各自报告",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-08",
+      "section": "tech",
+      "title": "出问题时",
+      "text": "## 出问题时\n\n解决什么\n\n任务存在不代表采集成功，本地采集不等于 GitHub 已更新，文件复制也不等于恢复完成。\n\n## 边界\n\n- 不自动Git提交或推送，采集、G副本、H和实际应用分层判断；结果写“完成”时要连同“是否复制了当前数据”和“核验范围”一起看，有告警时“完成”不等于读到并复制了全部最新文件。\n\n- 有持久前像的多文件事务不等于任意断电和硬件损坏均已验证；不抹去外部修改或未知旧记录。\n\n- 受控恢复只回填支持的配置，不安装插件、不启停Steam、不覆盖主题程序和私有数据。\n\n## 失败与恢复\n\n- **源与目标重叠或不同的手工改动仍未处理**：保留源与目标，处理精确冲突；当前入口不提供脏目标绕过。\n\n- **本次内容没有变化**：验证现有清单和文件后保持，不新建重复代；仍分开检查G副本与任务状态。\n\n- **写入中断或恢复版本不匹配**：同一事务检查后Recover，恢复版本/资源不匹配则停止回填；已提交恢复若清理失败保持真实提交结果，不回滚掉已成功内容。",
+      "links": [],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    },
+    {
+      "id": "steam-millennium-config-backup-scheduled-snapshot-guardian-and-clean-restore-boundary-09",
+      "section": "tech",
+      "title": "依据与来源",
+      "text": "## 依据与来源\n\n## 真实入口\n\ntools/Invoke-MillenniumBackup.ps1 / tools/millennium_backup.py\n真实采集、状态、恢复与失败处理；杀毒拦截告警的判定在 tools/backup_file_warnings.py。原 tools/snapshot-millennium-config.ps1 保留为兼容转交。\n\ntools/Manage-MillenniumTask.ps1\n安装、自查周任务及任务参数；原 register 脚本保留为兼容转交。\n\ntools/snapshot-millennium-config-hidden.vbs\n隐藏调用与退出码传递。\n\nruntime/snapshot-state.json / README.md / tests/\n现行清单、绑定成功状态、操作指南与隔离回归；9月8日19项仅是历史。\n\n## 如何验证\n\n- 9 月 8 日原有 19 项断言全部通过；重试参数的两项检查属于源码断言，不是实际失败重试演练。9 月 18 日已发布的洁净源码实跑 55 项 Python 测试和 11 项 Windows 检查全部通过；现在源码里共有 63 个测试定义，本轮没有重跑。\n\n- 2026-10-11 13:32 只读状态：健康、零写入，当前代号 20260928T023001Z（9 月 28 日创建）共 20 个文件、无变化；E/G/H 三处回读同代通过，G 保留 3 代，没有告警；任务就绪、上次结果 0，最近成功 10 月 5 日 10:30。没有再次触发真实采集。\n\n- 9月8日20文件隔离采集与回填字节一致，19 JSON解析成功，3个虚构已安装资源/私有设置保留；本次未做真实Steam恢复。\n\n## 与其他模块的关系\n\n负责前三类配置的定期留存和恢复操作；Steam、Millennium 及插件主题各自负责实际运行。",
+      "links": [
+        {
+          "text": "上一个模块 主题选项与配色",
+          "href": "/projects/steam-millennium-config-backup/theme-options-palette-and-dual-baseline-tracking/"
+        }
+      ],
+      "anchors": [],
+      "live": null,
+      "screenshots": [],
+      "chain": null,
+      "reuse": null
+    }
+  ]
+}
