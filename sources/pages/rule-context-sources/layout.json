@@ -563,6 +563,17 @@
         "row": "bottomcards",
         "width": "50%",
         "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "压缩后的后台复核：防止长任务漏掉要求",
+        "columns": 1,
+        "inner_columns": 2,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none",
+        "row": "reviewcard",
+        "width": "100%"
       }
     ],
     "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。",
@@ -630,6 +641,14 @@
           3
         ],
         "icon_position": "header_left"
+      },
+      {
+        "type": "points_card",
+        "text_ref": "压缩后的后台复核：防止长任务漏掉要求",
+        "columns": 1,
+        "whole_block": true,
+        "illustration": "none",
+        "icons": "none"
       }
     ],
     "notes": "构图依据：typeset-inventory/screens.jsonl 的 source_layout 与本屏定稿 scene/portrait；未查看图片。 卡头图标及插画内五块文字牌的位置需组件/素材承接；原文屏为正文卡，不把卡内节标题误作毛笔标题。"

@@ -1062,7 +1062,7 @@
     "blocks": [
       {
         "type": "points_card",
-        "text_ref": "改了MCP之后怎么验收",
+        "text_ref": "改了MCP、Hook或技能之后怎么验收",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
@@ -1138,7 +1138,7 @@
     "blocks": [
       {
         "type": "points_card",
-        "text_ref": "改了MCP之后怎么验收",
+        "text_ref": "改了MCP、Hook或技能之后怎么验收",
         "columns": 1,
         "whole_block": true,
         "illustration": "left_inside",
