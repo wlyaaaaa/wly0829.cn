@@ -33,27 +33,28 @@ python -B -X utf8 site-astro/tools/publish_site.py --dist <dist> --scan-result <
 
 ## EdgeOne live 函数单独发布
 
-`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。修改 `edge/edgeone/edge-functions/[[path]].js` 后，需要单独发布这个函数包；前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。
+`live.wly0829.cn` 的实时状态转发由腾讯云 EdgeOne Pages（现称 Makers）项目承载。修改 `edge/edgeone/edge-functions/[[path]].js` 后，需要发布这个函数包；前面的 `publish_site.py` 只更新 OSS 与 GitHub Pages，不会更新 EdgeOne 函数。普通请求是“把最新 main 的 live 转发函数上线”，完成后应从公网主入口读到实际的新行为。当前旧的成功部署仍提供精简视图；Git 关联已保存，但第一次 Git 部署失败，无人值守方案尚待集成和实测。
 
 北京时间 2026 年 10 月 12 日的已核实配置与结果：
 
 - 现有项目名 `wly-edgeone-trial-20261006`，项目 ID `makers-lrgrecs7uvjl`；生产域名为 `live.wly0829.cn` 和 `eo-test.wly0829.cn`。
-- 项目采用直接上传，尚未关联 Git。框架、根目录、输出目录、编译命令与安装命令均为空或未设置；控制台 Node.js 版本为 `22.11.0`。
-- 从远端 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录打包，ZIP 根下只有 `edge-functions/[[path]].js`。该纯函数包无需补 `index.html`、`package.json` 或 `edgeone.json`，已在现有项目实际部署成功。
-- 成功部署 ID `dpyqa3wa7o0h`，部署时间为北京时间 2026 年 10 月 12 日 02:42:38；公网 `https://live.wly0829.cn/computer-access/state?view=cockpit` 已返回 `pcconfig.cockpit-view.v1`。响应大小随当前数据变化，不用固定字节数判定是否成功。
+- 现有项目已关联 `wlyaaaaa/wly0829.cn`；GitHub App 已安装并仅选这个仓库。生产分支仍为 `main`，生产自动部署默认开启，预览自动部署关闭。框架 `Other`、根目录 `edge/edgeone`、输出目录 `.`、编译命令 `true`、安装命令 `true`；两条 `true` 是 Bash 空操作，不运行网站全站构建。控制台 Node.js 版本仍为 `22.11.0`。
+- 首次 Git 生产部署 `dpvondepzdi5` 在克隆阶段失败：已接收 `2.23 GiB`，随后出现 3926 条 `unable to write file` 和 `checkout failed`，尚未进入安装或构建。平台笼统概括为 Git 403，准确原因 `Unknown`，不能把这个概括直接当作仓库权限失败的证据。
+- 旧的手动上传成功部署 `dpyqa3wa7o0h` 仍在提供服务。它于北京时间 2026 年 10 月 12 日 02:42:38 部署远端 main 提交 `0cbee36164ff5dbc98bf4eb60bedfeb0b44c49ec` 的 `edge/edgeone` 子目录；ZIP 根下只有 `edge-functions/[[path]].js`，无需补 `index.html`、`package.json` 或 `edgeone.json`。公网 `https://live.wly0829.cn/computer-access/state?view=cockpit` 已返回 `pcconfig.cockpit-view.v1`。响应大小随当前数据变化，不用固定字节数判定是否成功。
 
-当前可执行的发布步骤：先 fetch 远端 main，在 E 盘任务专用目录准备 ZIP，然后在上述现有项目的“新建部署”中上传为生产部署，不改域名或 DNS。打包命令在网站仓库工作树执行：
+已准备的无人值守方案在 `.github/workflows/edgeone-live.yml`，**尚未集成到 main 或完成自动部署实测**。它使用 GitHub 工作流自带的仓库写入权限，通过 Git API 将当前 main 的 `edge/edgeone` 文件树直接复用为同仓库 `edgeone-live` 分支的根文件树；不 checkout 全仓库，不需要腾讯云令牌。首个提交没有父提交，后续提交只接续该部署分支自身历史，普通快进更新，不把 main 的全站历史带入部署分支。
+
+每次 main 推送都会运行该工作流，但函数文件树相同时不生成新提交，也不触发部署分支更新；这项过滤在 GitHub 工作流中完成，不是已经核实的 EdgeOne 路径过滤。手动运行并传 `redeploy=true` 时，同一函数树也会生成新部署提交。集成后的命令为：
 
 ```powershell
-git fetch origin main
-git archive --format=zip --output="E:/Cache/Codex/Temp/<任务目录>/edgeone-live-release.zip" origin/main:edge/edgeone
+gh workflow run edgeone-live.yml --repo wlyaaaaa/wly0829.cn --ref main -f redeploy=true
 ```
 
-ZIP 根必须直接包含 `edge-functions`，不能多套一层 `edge/edgeone`。记录本次远端提交与部署 ID；平台显示成功后，再对公网主入口执行现行 live 验收，确认精简视图和实际转发行为。发布失败保留原部署并报告失败；只有平台成功记录还不足以代替公网回读。
+接线顺序是：先把工作流集成到 main，由它实际创建 `edgeone-live`；确认该分支存在及函数文件树正确后，才将同一 EdgeOne 项目的生产分支改为 `edgeone-live`、根目录改为 `.`，保持已有域名和其他构建设置。当前部署分支尚不存在，因此线上生产分支仍为 `main`。分支切换及第一次成功部署完成后，还需实测一次不操作浏览器的工作流运行，并确认 EdgeOne 自动触发、部署成功及公网回读通过，才能宣布“以后无需登录即可部署”。
 
-**自动部署当前尚未启用，也尚未完成无人值守部署实测。** 现有控制台出现 Git 关联入口，但[官方直接上传说明](https://pages.edgeone.ai/document/direct-upload)仍写直接上传项目不能切换为 Git 集成；必须以这个现有项目真正关联、部署成功及公网回读为准，不能据入口存在就宣称已支持。若现有项目实际支持关联，配置目标是仓库 `wlyaaaaa/wly0829.cn`、生产分支 `main`、根目录 `edge/edgeone`，开启自动部署；发布范围仅为函数目录，不接入网站全站构建。完成后，还应通过一次不操作浏览器的 main 推送验证自动发布。
+每次发布保留 main 源码提交、函数文件树 SHA、部署分支提交、工作流结果与 EdgeOne 部署 ID；平台显示成功后，再对公网主入口执行现行 live 验收，确认精简视图和实际转发行为。失败不能计作发布成功，也不能用旧成功部署的响应冒充本次 Git 部署验收。当前命名阻塞为 `dpvondepzdi5` 的克隆阶段失败，替代分支路线尚未解除这一实测缺口。
 
-若 Git 关联无法完成，备选是[官方 EdgeOne CLI](https://pages.edgeone.ai/document/edgeone-cli)部署到同一现有项目。官方 API Token 是账号级凭据，不能描述为仅限单个项目；令牌只存密码中心，由正式程序供给入口送入部署进程，不写入仓库、普通配置、日志或文档。目前尚未交付该供给脚本或完成 CLI 实测，因此不能把这条备选当作现成的一条命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
+生产自动部署复选框由平台默认开启且不可操作，不能写成可自行关闭的停用开关。控制台可以选择 Git 分支发起新部署，但当前 main 克隆失败仍未解决；解除 Git 关联后能否恢复上传或 CLI 路线未验证，状态为 `Unknown`，历史 ZIP 成功记录仅是恢复依据。现有项目已实际完成 Git 关联，因此[官方直接上传说明](https://pages.edgeone.ai/document/direct-upload)中“不能切换 Git”的旧说法不再代表这个项目的当前设置；也不能据此保证所有旧项目均支持迁移。[官方 CLI 文档](https://pages.edgeone.ai/document/edgeone-cli)将本地部署到现有项目限定为直接上传类型，不能把它写作当前 Git 项目的现成恢复命令。函数目录及路由约定见[官方 Edge Functions 文档](https://pages.edgeone.ai/document/edge-functions)。
 
 ## 扫描做什么
 
