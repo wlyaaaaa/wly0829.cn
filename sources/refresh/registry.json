@@ -17183,6 +17183,3030 @@
       ],
       "measurement_scope": "同屏明确被截至日期注明的数字；全取得才按最早观察日期更新；Unknown 保留旧日期。",
       "scope_status": "verified"
+    },
+    {
+      "id": "b7-agents-context-evidence-category-count",
+      "page": "agents-context-evidence",
+      "screen": "agents-context-evidence-06",
+      "label": "消息分类器声明类别数",
+      "current_value": "9",
+      "as_of": "2026-10-11",
+      "field": "screens[5].text",
+      "page_pattern": "现在分 (\\d+) 类",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-agents-module-source-metrics",
+        "pointer": [
+          "category_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "E:/.agents/tools/daily_owner_corrections.py顶层CATEGORIES元组长度；仅统计类别定义，不数私人消息、不运行分类。",
+      "source_location": "E:/.agents/tools/daily_owner_corrections.py顶层CATEGORIES元组长度；仅统计类别定义，不数私人消息、不运行分类。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-rules-contracts-release-id",
+      "page": "agents-rules-contracts",
+      "screen": "agents-rules-contracts-05",
+      "label": "实际活动规则版本",
+      "current_value": "E257",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "当前 (E\\d+)（",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "e-rules-inspect",
+        "pointer": [
+          "release_id"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "正式活动规则Inspect -Brief只读核验pass/e_rules_active_verified才返回release_id；不代表任何业务功能已经验收。",
+      "source_location": "正式活动规则Inspect -Brief只读核验pass/e_rules_active_verified才返回release_id；不代表任何业务功能已经验收。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-rules-contracts-release-file-count",
+      "page": "agents-rules-contracts",
+      "screen": "agents-rules-contracts-05",
+      "label": "完整核验发布集合文件数",
+      "current_value": "14",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "完整发布集合 (\\d+) 个文件",
+      "retrieve": {
+        "kind": "rules_inspect",
+        "pointer": [
+          "verified_current",
+          "files"
+        ],
+        "operation": "length"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "正式Inspect -Json通过后，verified_current.files数组长度；文件集完整性证据，不是功能测试。",
+      "source_location": "正式Inspect -Json通过后，verified_current.files数组长度；文件集完整性证据，不是功能测试。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-installed-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "按现行技能供应清单启用且路径匹配的技能数",
+      "current_value": "29",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "中 (\\d+) 个 install=true",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "agents-shared-skill-source",
+        "pointer": [
+          "installed_skills"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "复用agents-shared-skill-source：读取personal-skill-supply.json中install=true条目，逐个检查源/发现路径存在且resolve一致；不证明新会话发现或真实使用。",
+      "source_location": "复用agents-shared-skill-source：读取personal-skill-supply.json中install=true条目，逐个检查源/发现路径存在且resolve一致；不证明新会话发现或真实使用。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-personal-installed-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "personal类启用技能数",
+      "current_value": "27",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "（个人 (\\d+)、",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/.agents/config/personal-skill-supply.json",
+        "pattern": "\\{(?=[^{}]*\"kind\"\\s*:\\s*\"personal\")(?=[^{}]*\"install\"\\s*:\\s*true)[^{}]*\\}"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "personal-skill-supply.json每个独立扁平skill对象内同时kind=personal与install=true，跨换行且字段顺序无关的正则计数；不以维护根目录数量代替。",
+      "source_location": "personal-skill-supply.json每个独立扁平skill对象内同时kind=personal与install=true，跨换行且字段顺序无关的正则计数；不以维护根目录数量代替。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-plugin-installed-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "plugin类启用技能数",
+      "current_value": "2",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "插件 (\\d+)）",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/.agents/config/personal-skill-supply.json",
+        "pattern": "\\{(?=[^{}]*\"kind\"\\s*:\\s*\"plugin\")(?=[^{}]*\"install\"\\s*:\\s*true)[^{}]*\\}"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "personal-skill-supply.json每个独立扁平skill对象内同时kind=plugin与install=true，跨换行且字段顺序无关的正则计数；不以维护根目录数量代替。",
+      "source_location": "personal-skill-supply.json每个独立扁平skill对象内同时kind=plugin与install=true，跨换行且字段顺序无关的正则计数；不以维护根目录数量代替。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-resolved-link-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "逐个核验resolve来源一致的链接数",
+      "current_value": "29",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "检查 (\\d+)/29 链接",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "agents-shared-skill-source",
+        "pointer": [
+          "installed_skills"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "现有agents-shared-skill-source对每个install=true项断言源/发现路径存在且resolve一致，全部通过才返回链接数。",
+      "source_location": "现有agents-shared-skill-source对每个install=true项断言源/发现路径存在且resolve一致，全部通过才返回链接数。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-declared-link-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "清单应存在的启用链接数",
+      "current_value": "29",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "检查 29/(\\d+) 链接",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "agents-shared-skill-source",
+        "pointer": [
+          "installed_skills"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "personal-skill-supply.json install=true对象总数；分母是应检查项数量，不是实际成功数。",
+      "source_location": "personal-skill-supply.json install=true对象总数；分母是应检查项数量，不是实际成功数。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-skill-document-count",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "发现根内确实存在的SKILL.md数",
+      "current_value": "29",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "检查 (\\d+)/29 链接",
+      "retrieve": {
+        "kind": "file_count",
+        "path": "C:/Users/10979/.agents/skills",
+        "include": [
+          "*/SKILL.md"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "C:/Users/10979/.agents/skills一级能力目录下实际SKILL.md文件数，当前只读29，配合逐个resolve来源检查证明29个技能文档存在；不递归插件下层或以目录本身存在代替文档。",
+      "source_location": "C:/Users/10979/.agents/skills一级能力目录下实际SKILL.md文件数，当前只读29，配合逐个resolve来源检查证明29个技能文档存在；不递归插件下层或以目录本身存在代替文档。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-working-tree-hot-mirror-source-absence",
+      "page": "agents-working-tree-hot-mirror",
+      "screen": "agents-working-tree-hot-mirror-05",
+      "label": "热镜像脚本安装器测试源码缺失状态",
+      "current_value": "三者都不存在",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(三者都不存在)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-agents-module-source-metrics",
+        "pointer": [
+          "hot_mirror_absence"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "E:/.agents/tools/Sync-AgentsHotMirror.ps1、tools/Install-AgentsHotMirrorTask.ps1、tests/Test-AgentsHotMirror.ps1实际路径存在性；只核当前源码组件不存在，不能推出任务现场。",
+      "source_location": "E:/.agents/tools/Sync-AgentsHotMirror.ps1、tools/Install-AgentsHotMirrorTask.ps1、tests/Test-AgentsHotMirror.ps1实际路径存在性；只核当前源码组件不存在，不能推出任务现场。",
+      "source_project": "agents",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-claude-project-memory-task-state",
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "label": "专门备份任务现场状态",
+      "current_value": "Disabled",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(Disabled)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "tasks",
+          "Claude Memory Backup"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "Get-ScheduledTask -TaskName Claude Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_location": "Get-ScheduledTask -TaskName Claude Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-claude-project-memory-g-archive-directories",
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "label": "G旧快照目录数",
+      "current_value": "5",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个快照目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "Claude"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管G盘ControlPlane/AIMemory/Claude根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管G盘ControlPlane/AIMemory/Claude根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-claude-project-memory-h-archive-directories",
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "label": "H旧快照目录数",
+      "current_value": "5",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个快照目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "Claude"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管H盘ControlPlane/AIMemory/Claude根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管H盘ControlPlane/AIMemory/Claude根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-claude-project-memory-files",
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "label": "旧Claude current指针files",
+      "current_value": "21",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(\\d+) 个文件",
+      "retrieve": {
+        "kind": "json",
+        "path": "G:/80_Backup/ControlPlane/AIMemory/Claude/current.json",
+        "pointer": [
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G盘Claude/current.json现存元数据['file_count']；不重新逐文件校验。",
+      "source_location": "G盘Claude/current.json现存元数据['file_count']；不重新逐文件校验。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-claude-project-memory-bytes",
+      "page": "codex-memory-claude-project-memory",
+      "screen": "codex-memory-claude-project-memory-05",
+      "label": "旧Claude current指针bytes",
+      "current_value": "35,680",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "、([\\d,]+) 字节",
+      "retrieve": {
+        "kind": "json",
+        "path": "G:/80_Backup/ControlPlane/AIMemory/Claude/current.json",
+        "pointer": [
+          "total_size_bytes"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G盘Claude/current.json现存元数据['total_size_bytes']；不重新逐文件校验。",
+      "source_location": "G盘Claude/current.json现存元数据['total_size_bytes']；不重新逐文件校验。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-gemini-workspace-memory-task-state",
+      "page": "codex-memory-gemini-workspace-memory",
+      "screen": "codex-memory-gemini-workspace-memory-05",
+      "label": "专门备份任务现场状态",
+      "current_value": "Disabled",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(Disabled)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "tasks",
+          "Gemini Memory Backup"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "Get-ScheduledTask -TaskName Gemini Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_location": "Get-ScheduledTask -TaskName Gemini Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-gemini-workspace-memory-g-archive-directories",
+      "page": "codex-memory-gemini-workspace-memory",
+      "screen": "codex-memory-gemini-workspace-memory-05",
+      "label": "G旧快照目录数",
+      "current_value": "30",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个旧快照目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "Gemini"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管G盘ControlPlane/AIMemory/Gemini根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管G盘ControlPlane/AIMemory/Gemini根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-gemini-workspace-memory-h-archive-directories",
+      "page": "codex-memory-gemini-workspace-memory",
+      "screen": "codex-memory-gemini-workspace-memory-05",
+      "label": "H旧快照目录数",
+      "current_value": "30",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个旧快照目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "Gemini"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管H盘ControlPlane/AIMemory/Gemini根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管H盘ControlPlane/AIMemory/Gemini根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-openclaw-workspace-recovery-task-state",
+      "page": "codex-memory-openclaw-workspace-recovery",
+      "screen": "codex-memory-openclaw-workspace-recovery-05",
+      "label": "专门备份任务现场状态",
+      "current_value": "Disabled",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(Disabled)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "tasks",
+          "OpenClaw Memory Backup"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "Get-ScheduledTask -TaskName OpenClaw Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_location": "Get-ScheduledTask -TaskName OpenClaw Memory Backup只读State；Disabled是实际停用，不证明旧副本完整性。",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-openclaw-workspace-recovery-g-archive-directories",
+      "page": "codex-memory-openclaw-workspace-recovery",
+      "screen": "codex-memory-openclaw-workspace-recovery-05",
+      "label": "G旧快照目录数",
+      "current_value": "2",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个旧目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "OpenClaw"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管G盘ControlPlane/AIMemory/OpenClaw根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管G盘ControlPlane/AIMemory/OpenClaw根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-openclaw-workspace-recovery-h-archive-directories",
+      "page": "codex-memory-openclaw-workspace-recovery",
+      "screen": "codex-memory-openclaw-workspace-recovery-05",
+      "label": "H旧快照目录数",
+      "current_value": "2",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "各有 (\\d+) 个旧目录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "OpenClaw"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "受管H盘ControlPlane/AIMemory/OpenClaw根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_location": "受管H盘ControlPlane/AIMemory/OpenClaw根下一层目录数量；不读取个人原件内容，不以目录数声称旧保存点有效或恢复成功。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state",
+      "page": "codex-memory-config-memory-whitelist-sync",
+      "screen": "codex-memory-config-memory-whitelist-sync-05",
+      "label": "台式机白名单备份任务现场状态",
+      "current_value": "Disabled",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "(Disabled)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "tasks",
+          "Codex Memory Backup"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只读Get-ScheduledTask的Codex Memory Backup状态；与笔记本独立支路分开。",
+      "source_location": "只读Get-ScheduledTask的Codex Memory Backup状态；与笔记本独立支路分开。",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits",
+      "page": "codex-memory-config-memory-whitelist-sync",
+      "screen": "codex-memory-config-memory-whitelist-sync-05",
+      "label": "笔记本独立云分支全部提交数",
+      "current_value": "59",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "共 (\\d+) 次提交",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "codex-memory-laptop-snapshot-history",
+        "pointer": [
+          "all_commits"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "复用codex-memory-laptop-snapshot-history，只读远端commits GET，branch=backup/secondary-laptop，统计全部提交（含初始化），现有提交跨度为9/10–10/10共59；严格snapshot标题匹配仅58，不能代替网页全部提交59。超过单页100入口拒绝，须人工分页复核。新增提交使正文跨度变化时交Opus同时更新范围，本清单不机械改写起迄日期。",
+      "source_location": "复用codex-memory-laptop-snapshot-history，只读远端commits GET，branch=backup/secondary-laptop，统计全部提交（含初始化），现有提交跨度为9/10–10/10共59；严格snapshot标题匹配仅58，不能代替网页全部提交59。超过单页100入口拒绝，须人工分页复核。新增提交使正文跨度变化时交Opus同时更新范围，本清单不机械改写起迄日期。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits",
+      "page": "codex-memory-config-memory-whitelist-sync",
+      "screen": "codex-memory-config-memory-whitelist-sync-05",
+      "label": "本机缓存的笔记本分支提交数",
+      "current_value": "49",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "缓存仍是 (\\d+) 次",
+      "retrieve": {
+        "kind": "git_count",
+        "path": "E:/Projects/Backups/codex-memory",
+        "ref": "refs/remotes/origin/backup/secondary-laptop"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只读本机已有refs/remotes/origin/backup/secondary-laptop的rev-list --count，不fetch、不冒充远端新读59次；缓存与远端分别注明。",
+      "source_location": "只读本机已有refs/remotes/origin/backup/secondary-laptop的rev-list --count，不fetch、不冒充远端新读59次；缓存与远端分别注明。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-g-file-count",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "G当前生产回执文件数",
+      "current_value": "10,491",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "G当前生产回执总字节数",
+      "current_value": "39,234,419,908",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "个文件、([\\d,]+) 字节",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "total_size_bytes"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "Greuse-gb",
+      "current_value": "19.8",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "复用 ([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "reused_object_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-new-gb",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "Gnew-gb",
+      "current_value": "19.5",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "新写 ([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "new_object_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-file-count",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "H当前生产回执文件数",
+      "current_value": "9,815",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "H当前生产回执总量GB",
+      "current_value": "35.1",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "H 当前[^\\n]*?、([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "total_size_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "H生产回执覆盖率百分数",
+      "current_value": "100",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "覆盖 (\\d+)%",
+      "retrieve": {
+        "kind": "json",
+        "path": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json",
+        "pointer": [
+          "coverage_percent"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H receipts/cold-last.json coverage_percent，与现有入口强制complete/current/all_manifest_files/无警告条件共同使用；不重跑逐文件校验。",
+      "source_location": "H receipts/cold-last.json coverage_percent，与现有入口强制complete/current/all_manifest_files/无警告条件共同使用；不重跑逐文件校验。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-isolated-disaster-recovery-g-file-count",
+      "page": "codex-memory-isolated-disaster-recovery",
+      "screen": "codex-memory-isolated-disaster-recovery-05",
+      "label": "G当前生产回执文件数",
+      "current_value": "10,491",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-isolated-disaster-recovery-h-file-count",
+      "page": "codex-memory-isolated-disaster-recovery",
+      "screen": "codex-memory-isolated-disaster-recovery-05",
+      "label": "H当前生产回执文件数",
+      "current_value": "9,815",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "G当前生产回执文件数",
+      "current_value": "10,491",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "G 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "G当前生产回执总字节数",
+      "current_value": "39,234,419,908",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "个文件、([\\d,]+) 字节",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "total_size_bytes"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.jsontotal_size_bytes，单点文件清单字节汇总；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "Greuse-gb",
+      "current_value": "19.8",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "复用 ([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "reused_object_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['reused_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-new-gb",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "Gnew-gb",
+      "current_value": "19.5",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "新写 ([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "g",
+          "receipt",
+          "new_object_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_location": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json['new_object_bytes']除10^9、四舍五入一位；两项独立舍入，不以相加还原原总量；入口校验complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-h-file-count",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "H当前生产回执文件数",
+      "current_value": "9,815",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "H 当前[^\\n]*?([\\d,]+) 个文件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "file_count"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.json的file_count；入口强制complete/readback_verified/current point相同才返回；非原件数量，不重新哈希所有对象。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-h-gb",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "H当前生产回执总量GB",
+      "current_value": "35.1",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "H 当前[^\\n]*?、([\\d.]+) GB",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "h",
+          "receipt",
+          "total_size_bytes"
+        ],
+        "scale": 1e-09,
+        "digits": 1
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_location": "H:/80_自动备份区/ControlPlane/AIMemory/CodexConversations/receipts/cold-last.jsontotal_size_bytes除10^9、四舍五入一位；只读H本身生产回执并强制complete/readback/current。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "G生产回执文件警告数",
+      "current_value": "0",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "警告 (\\d+)",
+      "retrieve": {
+        "kind": "json",
+        "path": "G:/80_Backup/ControlPlane/AIMemory/CodexConversations/receipts/hot-last.json",
+        "pointer": [
+          "file_warnings"
+        ],
+        "operation": "length"
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "G receipts/hot-last.json file_warnings数组长度；只输出数量，与完整指针护栏共用，不输出相对文件名。",
+      "source_location": "G receipts/hot-last.json file_warnings数组长度；只输出数量，与完整指针护栏共用，不输出相对文件名。",
+      "source_project": "codex-memory",
+      "private": true,
+      "historical": false
+    },
+    {
+      "id": "b7-codex-memory-isolated-disaster-recovery-conversation-task-result",
+      "page": "codex-memory-isolated-disaster-recovery",
+      "screen": "codex-memory-isolated-disaster-recovery-05",
+      "label": "会话计划任务最后运行结果码",
+      "current_value": "0",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "page_pattern": "自然运行、结果 (\\d+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-ai-backup-task-archive-status",
+        "pointer": [
+          "tasks",
+          "LastTaskResult",
+          "CodexConversationBackup-Hot-Daily"
+        ]
+      },
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "Get-ScheduledTaskInfo -TaskName CodexConversationBackup-Hot-Daily的LastTaskResult；只读观察最近自然运行返回码，不是本轮重跑成功，不等同使用账本采集成功，也不代表新机恢复。",
+      "source_location": "Get-ScheduledTaskInfo -TaskName CodexConversationBackup-Hot-Daily的LastTaskResult；只读观察最近自然运行返回码，不是本轮重跑成功，不等同使用账本采集成功，也不代表新机恢复。",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false
+    },
+    {
+      "id": "b7-agents-skills-plugins-as_of-item-21",
+      "page": "agents-skills-plugins",
+      "screen": "agents-skills-plugins-05",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "start": 47,
+      "end": 63,
+      "qualifies": [
+        "b7-agents-skills-plugins-installed-count",
+        "b7-agents-skills-plugins-personal-installed-count",
+        "b7-agents-skills-plugins-plugin-installed-count",
+        "b7-agents-skills-plugins-resolved-link-count",
+        "b7-agents-skills-plugins-declared-link-count",
+        "b7-agents-skills-plugins-skill-document-count"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-agents-skills-plugins-installed-count,b7-agents-skills-plugins-personal-installed-count,b7-agents-skills-plugins-plugin-installed-count,b7-agents-skills-plugins-resolved-link-count,b7-agents-skills-plugins-declared-link-count,b7-agents-skills-plugins-skill-document-count",
+      "source_project": "agents",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-config-memory-whitelist-sync-as_of-item-95",
+      "page": "codex-memory-config-memory-whitelist-sync",
+      "screen": "codex-memory-config-memory-whitelist-sync-05",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "start": 47,
+      "end": 63,
+      "qualifies": [
+        "b7-codex-memory-config-memory-whitelist-sync-desktop-task-state",
+        "b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits",
+        "b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-config-memory-whitelist-sync-desktop-task-state,b7-codex-memory-config-memory-whitelist-sync-laptop-window-commits,b7-codex-memory-config-memory-whitelist-sync-laptop-cached-commits",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-as_of-item-98",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-01",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[0].text",
+      "start": 157,
+      "end": 173,
+      "qualifies": [
+        "b7-codex-memory-content-addressed-storage-cold-sync-g-file-count",
+        "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
+        "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-new-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-h-file-count",
+        "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-content-addressed-storage-cold-sync-g-file-count,b7-codex-memory-content-addressed-storage-cold-sync-g-bytes,b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb,b7-codex-memory-content-addressed-storage-cold-sync-new-gb,b7-codex-memory-content-addressed-storage-cold-sync-h-file-count,b7-codex-memory-content-addressed-storage-cold-sync-h-gb,b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-content-addressed-storage-cold-sync-as_of-item-99",
+      "page": "codex-memory-content-addressed-storage-cold-sync",
+      "screen": "codex-memory-content-addressed-storage-cold-sync-05",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "start": 47,
+      "end": 63,
+      "qualifies": [
+        "b7-codex-memory-content-addressed-storage-cold-sync-g-file-count",
+        "b7-codex-memory-content-addressed-storage-cold-sync-g-bytes",
+        "b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-new-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-h-file-count",
+        "b7-codex-memory-content-addressed-storage-cold-sync-h-gb",
+        "b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-content-addressed-storage-cold-sync-g-file-count,b7-codex-memory-content-addressed-storage-cold-sync-g-bytes,b7-codex-memory-content-addressed-storage-cold-sync-reuse-gb,b7-codex-memory-content-addressed-storage-cold-sync-new-gb,b7-codex-memory-content-addressed-storage-cold-sync-h-file-count,b7-codex-memory-content-addressed-storage-cold-sync-h-gb,b7-codex-memory-content-addressed-storage-cold-sync-cold-coverage-percent",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-isolated-disaster-recovery-as_of-item-105",
+      "page": "codex-memory-isolated-disaster-recovery",
+      "screen": "codex-memory-isolated-disaster-recovery-05",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "start": 47,
+      "end": 63,
+      "qualifies": [
+        "b7-codex-memory-isolated-disaster-recovery-g-file-count",
+        "b7-codex-memory-isolated-disaster-recovery-h-file-count",
+        "b7-codex-memory-isolated-disaster-recovery-conversation-task-result"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-isolated-disaster-recovery-g-file-count,b7-codex-memory-isolated-disaster-recovery-h-file-count,b7-codex-memory-isolated-disaster-recovery-conversation-task-result",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-110",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-01",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[0].text",
+      "start": 160,
+      "end": 176,
+      "qualifies": [
+        "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
+        "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
+        "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-new-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-h-file-count",
+        "b7-codex-memory-vss-conversation-hot-backup-h-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-vss-conversation-hot-backup-g-file-count,b7-codex-memory-vss-conversation-hot-backup-g-bytes,b7-codex-memory-vss-conversation-hot-backup-reuse-gb,b7-codex-memory-vss-conversation-hot-backup-new-gb,b7-codex-memory-vss-conversation-hot-backup-h-file-count,b7-codex-memory-vss-conversation-hot-backup-h-gb,b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-codex-memory-vss-conversation-hot-backup-as_of-item-111",
+      "page": "codex-memory-vss-conversation-hot-backup",
+      "screen": "codex-memory-vss-conversation-hot-backup-05",
+      "label": "数据截至日期关联它注明的真实计数",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "field": "screens[4].text",
+      "start": 47,
+      "end": 63,
+      "qualifies": [
+        "b7-codex-memory-vss-conversation-hot-backup-g-file-count",
+        "b7-codex-memory-vss-conversation-hot-backup-g-bytes",
+        "b7-codex-memory-vss-conversation-hot-backup-reuse-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-new-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-h-file-count",
+        "b7-codex-memory-vss-conversation-hot-backup-h-gb",
+        "b7-codex-memory-vss-conversation-hot-backup-hot-warning-count"
+      ],
+      "automatic": true,
+      "scope_status": "verified",
+      "measurement_scope": "只关联该取数句所注明的同页实际数量；日期+14:00捕获完整，新观察日没有clock时只能输出候选交事实组/Opus审核，不能拼回旧14:00当新验证时间。",
+      "source_location": "qualifies=b7-codex-memory-vss-conversation-hot-backup-g-file-count,b7-codex-memory-vss-conversation-hot-backup-g-bytes,b7-codex-memory-vss-conversation-hot-backup-reuse-gb,b7-codex-memory-vss-conversation-hot-backup-new-gb,b7-codex-memory-vss-conversation-hot-backup-h-file-count,b7-codex-memory-vss-conversation-hot-backup-h-gb,b7-codex-memory-vss-conversation-hot-backup-hot-warning-count",
+      "source_project": "codex-memory",
+      "private": false,
+      "historical": false,
+      "date_precision": "datetime",
+      "date_review_route": "程序只返回观察日期、不返回观察时刻时输出候选供GPT/Opus审核；保留完整旧date+time，不机械沿用14:00。"
+    },
+    {
+      "id": "b7-daily-preferences-current-corrections-statements-all",
+      "page": "daily-preferences-current-corrections",
+      "screen": "daily-preferences-current-corrections-05",
+      "field": "screens[4].text",
+      "label": "statements-all",
+      "current_value": 423,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_statements 全表行数；不是事实真伪或本日新增数",
+      "page_pattern": "本人原话共 ([\\d,]+) 条",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "statements",
+          "_all"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-current-corrections-statements-current",
+      "page": "daily-preferences-current-corrections",
+      "screen": "daily-preferences-current-corrections-05",
+      "field": "screens[4].text",
+      "label": "statements-current",
+      "current_value": 134,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_statements 按status=current只数行；不是事实真伪或本日新增数",
+      "page_pattern": "其中 ([\\d,]+) 条 current",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "statements",
+          "current"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-current-corrections-statements-historical",
+      "page": "daily-preferences-current-corrections",
+      "screen": "daily-preferences-current-corrections-05",
+      "field": "screens[4].text",
+      "label": "statements-historical",
+      "current_value": 289,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_statements 按status=historical只数行；不是事实真伪",
+      "page_pattern": "当前状态）、([\\d,]+) 条 historical",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "statements",
+          "historical"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-personal-understanding-cards-current",
+      "page": "daily-preferences-personal-understanding",
+      "screen": "daily-preferences-personal-understanding-05",
+      "field": "screens[4].text",
+      "label": "cards-current",
+      "current_value": 78,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_snapshots status=current 的行数",
+      "page_pattern": "现行认识卡 ([\\d,]+) 张",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "cards",
+          "current"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-personal-understanding-cards-noncurrent",
+      "page": "daily-preferences-personal-understanding",
+      "screen": "daily-preferences-personal-understanding-05",
+      "field": "screens[4].text",
+      "label": "cards-noncurrent",
+      "current_value": 1011,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_snapshots status非current 的历史/stale行数；不是当前卡",
+      "page_pattern": "另有 ([\\d,]+) 个非现行卡版本",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "cards",
+          "_noncurrent"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-personal-understanding-cards-historical",
+      "page": "daily-preferences-personal-understanding",
+      "screen": "daily-preferences-personal-understanding-05",
+      "field": "screens[4].text",
+      "label": "cards-historical",
+      "current_value": 710,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_snapshots status=historical 的行数",
+      "page_pattern": "historical ([\\d,]+)、stale",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "cards",
+          "historical"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-personal-understanding-cards-stale",
+      "page": "daily-preferences-personal-understanding",
+      "screen": "daily-preferences-personal-understanding-05",
+      "field": "screens[4].text",
+      "label": "cards-stale",
+      "current_value": 301,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "preference_snapshots status=stale 的行数",
+      "page_pattern": "、stale ([\\d,]+)）",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "cards",
+          "stale"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-fact-verification-credit-charges",
+      "page": "daily-preferences-fact-verification",
+      "screen": "daily-preferences-fact-verification-05",
+      "field": "screens[4].text",
+      "label": "credit-charges",
+      "current_value": 1250,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1、record_type=credit_card_charge 的本库分类行数；不是全账户完整性或金额",
+      "page_pattern": "：([\\d,]+) 条消费",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "record_types",
+          "credit_card_charge"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-fact-verification-credit-refunds",
+      "page": "daily-preferences-fact-verification",
+      "screen": "daily-preferences-fact-verification-05",
+      "field": "screens[4].text",
+      "label": "credit-refunds",
+      "current_value": 181,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1、record_type=credit_card_refund 的本库分类行数；不是全账户完整性或金额",
+      "page_pattern": "、([\\d,]+) 条退款",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "record_types",
+          "credit_card_refund"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-fact-verification-credit-transfers",
+      "page": "daily-preferences-fact-verification",
+      "screen": "daily-preferences-fact-verification-05",
+      "field": "screens[4].text",
+      "label": "credit-transfers",
+      "current_value": 69,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1、record_type=credit_card_transfer 的本库分类行数；不是全账户完整性或金额",
+      "page_pattern": "、([\\d,]+) 条转账",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "record_types",
+          "credit_card_transfer"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-fact-verification-credit-summaries",
+      "page": "daily-preferences-fact-verification",
+      "screen": "daily-preferences-fact-verification-05",
+      "field": "screens[4].text",
+      "label": "credit-summaries",
+      "current_value": 34,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1、record_type=credit_statement_summary 的本库分类行数；不是全账户完整性或金额",
+      "page_pattern": "、([\\d,]+) 份账单摘要",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "record_types",
+          "credit_statement_summary"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-source-coverage-source-instances",
+      "page": "daily-preferences-source-coverage",
+      "screen": "daily-preferences-source-coverage-23",
+      "field": "screens[22].text",
+      "label": "source-instances",
+      "current_value": 160,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "source_instances全表行数",
+      "page_pattern": "）：([\\d,]+) 个来源实例",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "instances"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-source-coverage-registered-categories",
+      "page": "daily-preferences-source-coverage",
+      "screen": "daily-preferences-source-coverage-23",
+      "field": "screens[22].text",
+      "label": "registered-categories",
+      "current_value": 34,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "source_instances.logical_source去重数",
+      "page_pattern": "、([\\d,]+) 类登记",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "registered_categories"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-source-coverage-current-categories",
+      "page": "daily-preferences-source-coverage",
+      "screen": "daily-preferences-source-coverage-23",
+      "field": "screens[22].text",
+      "label": "current-categories",
+      "current_value": 33,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1连接source_instances后logical_source去重数",
+      "page_pattern": "、([\\d,]+) 类有现行记录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "current_categories"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-evidence-query-registered-categories",
+      "page": "daily-preferences-evidence-query",
+      "screen": "daily-preferences-evidence-query-06",
+      "field": "screens[5].text",
+      "label": "registered-categories",
+      "current_value": 34,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "source_instances.logical_source去重数",
+      "page_pattern": "为 ([\\d,]+) 类，其中",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "registered_categories"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-evidence-query-current-categories",
+      "page": "daily-preferences-evidence-query",
+      "screen": "daily-preferences-evidence-query-06",
+      "field": "screens[5].text",
+      "label": "current-categories",
+      "current_value": 33,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1连接source_instances后logical_source去重数",
+      "page_pattern": "其中 ([\\d,]+) 类有现行记录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "current_categories"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-evidence-query-source-instances",
+      "page": "daily-preferences-evidence-query",
+      "screen": "daily-preferences-evidence-query-06",
+      "field": "screens[5].text",
+      "label": "source-instances",
+      "current_value": 160,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "source_instances全表行数",
+      "page_pattern": "，([\\d,]+) 个来源实例",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "summary",
+          "instances"
+        ]
+      }
+    },
+    {
+      "id": "b7-daily-preferences-recommendation-choice-steam-played-game",
+      "page": "daily-preferences-recommendation-choice",
+      "screen": "daily-preferences-recommendation-choice-13",
+      "field": "screens[12].text",
+      "label": "steam-played-game",
+      "current_value": 118,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/日常偏好/preferences.sqlite3；固定immutable技术计数入口",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "records.is_current=1且record_type=steam_game_played的分类行数；不自动等于唯一游戏数",
+      "page_pattern": "按类别为 ([\\d,]+) /",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "record_types",
+          "steam_game_played"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-explain-to-me-explain-principles",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-05",
+      "field": "screens[4].text",
+      "label": "explain-principles",
+      "current_value": 11,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "说明指南一节数字标题的讲解原则数；不证明讲解效果",
+      "page_pattern": "现有 ([\\d,]+) 条讲解原则",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "principles"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-explain-to-me-understanding-principles",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-05",
+      "field": "screens[4].text",
+      "label": "understanding-principles",
+      "current_value": 6,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "说明指南二节固定条目标题计数；不证明理解效果",
+      "page_pattern": "、([\\d,]+) 条读懂原话的规则",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "understanding"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-explain-to-me-explain-cases",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-05",
+      "field": "screens[4].text",
+      "label": "explain-cases",
+      "current_value": 55,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达/explain-to-me.md；只输出日期案例标题计数",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "说明指南全文件日期案例标题数；已核唯一日期标题属于案例区，实取55；不是认可或讲解成功次数",
+      "page_pattern": "、([\\d,]+) 个案例",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/PersonalData/个人表达/explain-to-me.md",
+        "pattern": "^- (?:\\*\\*)?(?:2026-)?\\d{2}-\\d{2}",
+        "flags": "m"
+      }
+    },
+    {
+      "id": "b7-personal-expression-reply-as-me-reply-samples",
+      "page": "personal-expression-reply-as-me",
+      "screen": "personal-expression-reply-as-me-05",
+      "field": "screens[4].text",
+      "label": "reply-samples",
+      "current_value": 45,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "reference 且author为self_message/user_revision的有效本人样本数；不输出样本",
+      "page_pattern": "本人样本 ([\\d,]+) 条",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "samples"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-reply-as-me-reply-contrasts",
+      "page": "personal-expression-reply-as-me",
+      "screen": "personal-expression-reply-as-me-05",
+      "field": "screens[4].text",
+      "label": "reply-contrasts",
+      "current_value": 5,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "reply-contrasts.jsonl 非空对象行数；不输出草稿、关系或反馈",
+      "page_pattern": "AI 稿对照 ([\\d,]+) 份",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "contrasts"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-feedback-consolidation-and-lessons-sync-reply-samples",
+      "page": "personal-expression-feedback-consolidation-and-lessons-sync",
+      "screen": "personal-expression-feedback-consolidation-and-lessons-sync-06",
+      "field": "screens[5].text",
+      "label": "reply-samples",
+      "current_value": 45,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "reference 且author为self_message/user_revision的有效本人样本数；不输出样本",
+      "page_pattern": "现役样本 ([\\d,]+) 条",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "samples"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-corpus-extension-and-private-recovery-reply-samples",
+      "page": "personal-expression-corpus-extension-and-private-recovery",
+      "screen": "personal-expression-corpus-extension-and-private-recovery-05",
+      "field": "screens[4].text",
+      "label": "reply-samples",
+      "current_value": 45,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/PersonalData/个人表达；已登记固定计数入口personal-expression-counts",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "reference 且author为self_message/user_revision的有效本人样本数；不输出样本",
+      "page_pattern": "现有 ([\\d,]+) 条样本",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "personal-expression-counts",
+        "pointer": [
+          "samples"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-explain-to-me-usage-all-time",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-08",
+      "field": "screens[7].text",
+      "label": "usage-all-time",
+      "current_value": 34,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；正式账本白名单format=jsonl,key_field=name,filter.kind=skill",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "沿正式 __usage_ledger__ 的 JSONL、name 键和 kind=skill 口径，每个匹配元数据行计一次；全历史累计，不能代替2026-10-04 14:00以来固定窗口或滚动7天。2026-10-11 对932119个非空JSON对象行逐行比对正则与JSON字段判断完全一致。只输出计数，不输出记录正文、cwd或其他元数据。",
+      "page_pattern": "explain\\-to\\-me 技能共 ([\\d,]+) 次调用记录",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+        "pattern": "^(?=.*\"kind\"\\s*:\\s*\"skill\")(?=.*\"name\"\\s*:\\s*\"explain\\-to\\-me\").*$",
+        "flags": "m"
+      }
+    },
+    {
+      "id": "b7-personal-expression-reply-as-me-usage-all-time",
+      "page": "personal-expression-reply-as-me",
+      "screen": "personal-expression-reply-as-me-10",
+      "field": "screens[9].text",
+      "label": "usage-all-time",
+      "current_value": 10,
+      "as_of": "2026-10-11",
+      "category": "只读技术计数",
+      "source_location": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl；正式账本白名单format=jsonl,key_field=name,filter.kind=skill",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "沿正式 __usage_ledger__ 的 JSONL、name 键和 kind=skill 口径，每个匹配元数据行计一次；全历史累计，不能代替2026-10-04 14:00以来固定窗口或滚动7天。2026-10-11 对932119个非空JSON对象行逐行比对正则与JSON字段判断完全一致。只输出计数，不输出记录正文、cwd或其他元数据。",
+      "page_pattern": "reply\\-as\\-me 技能共 ([\\d,]+) 次调用记录",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl",
+        "pattern": "^(?=.*\"kind\"\\s*:\\s*\"skill\")(?=.*\"name\"\\s*:\\s*\"reply\\-as\\-me\").*$",
+        "flags": "m"
+      }
+    },
+    {
+      "id": "b7-daily-preferences-evidence-query-collector-stored-through",
+      "page": "daily-preferences-evidence-query",
+      "screen": "daily-preferences-evidence-query-05",
+      "field": "screens[4].text",
+      "label": "collector-stored-through",
+      "current_value": "10 月 7 日",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "Collector 原件已入库时期，必须核对 activity 的逐日覆盖、trusted与安装清单快照；这是数据覆盖/事件日期，不是本轮读取时间。",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "现行Collector已存使用事件的最后原生事件日期（北京时间）；明确是已存原件时期，不是本轮观察日期，不证明持续或完整覆盖。",
+      "page_pattern": "这是读取截至 (10 月 7 日)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-daily-preferences-technical-counts",
+        "pointer": [
+          "collector_event_dates",
+          "last_stored_event_day"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-explain-to-me-usage-collected-through",
+      "page": "personal-expression-explain-to-me",
+      "screen": "personal-expression-explain-to-me-08",
+      "field": "screens[7].text",
+      "label": "usage-collected-through",
+      "current_value": "10 月 9 日",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "AI 使用账本 explain-to-me 全历史34、分宿主23/11、2026-10-04 14:00以来固定窗10及最后调用时间；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=explain-to-me聚合，并核 U补采/写入恢复回执。累计数和固定窗不可用滚动7天替换。",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
+      "page_pattern": "AI 使用记录（截至 (10 月 9 日)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-usage-ledger-complete-day",
+        "pointer": [
+          "complete_through_day"
+        ]
+      }
+    },
+    {
+      "id": "b7-personal-expression-reply-as-me-usage-collected-through",
+      "page": "personal-expression-reply-as-me",
+      "screen": "personal-expression-reply-as-me-10",
+      "field": "screens[9].text",
+      "label": "usage-collected-through",
+      "current_value": "10 月 9 日",
+      "as_of": "2026-10-11",
+      "category": "截至日期",
+      "source_location": "AI 使用账本 reply-as-me 全历史10、分宿主5/5、2026-10-04 14:00以来固定窗0及最后调用时间；沿 E:/Data/PCConfig/AiUsageLedger/usage-events.jsonl 固定kind=skill,name=reply-as-me聚合，并核 U补采/写入恢复回执。0不代表没用；累计数和固定窗不可用滚动7天替换。",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "scope_status": "verified",
+      "measurement_scope": "共同完成补采的包容北京日：两个last_completed的较早排他午夜端点减一个日历日；源Owner仅在账本fsync且invalid_lines=0后推进水位。当前两宿主都完成10/10整日扫描，不代表10/11当日完整，不宣称全历史无缺口。本句与总数/分宿主/固定窗口/未补采说明的叙述需Opus同页审核，不能只改裸日期。",
+      "page_pattern": "AI 使用记录（截至 (10 月 9 日)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-usage-ledger-complete-day",
+        "pointer": [
+          "complete_through_day"
+        ]
+      }
+    },
+    {
+      "id": "b7-localocr-jobs-cache-027",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "全部任务登记",
+      "current_value": 16151,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "正式 _server/jobs/*.json 全集按 status 计数，不排除样例；写盘登记不是实时服务忙碌状态。",
+      "scope_status": "verified",
+      "page_pattern": "正式任务目录有 ([\\d,]+) 份登记",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "total"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-jobs-cache-028",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "全部完成任务登记",
+      "current_value": 16107,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "正式 _server/jobs/*.json 全集按 status 计数，不排除样例；写盘登记不是实时服务忙碌状态。",
+      "scope_status": "verified",
+      "page_pattern": "份登记：完成 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "completed"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-jobs-cache-029",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "全部失败任务登记",
+      "current_value": 44,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "正式 _server/jobs/*.json 全集按 status 计数，不排除样例；写盘登记不是实时服务忙碌状态。",
+      "scope_status": "verified",
+      "page_pattern": "、失败 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "failed"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-jobs-cache-030",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "全部运行中任务登记",
+      "current_value": 0,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "正式 _server/jobs/*.json 全集按 status 计数，不排除样例；写盘登记不是实时服务忙碌状态。",
+      "scope_status": "verified",
+      "page_pattern": "、运行中 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "running"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-031",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-01",
+      "label": "说不准记录条数",
+      "current_value": 466,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "分别为 ([\\d,]+) 条和",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_indeterminate"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-032",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-01",
+      "label": "无字记录条数",
+      "current_value": 3,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_no_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "条和 ([\\d,]+) 条记录",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_no_text_detected"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-033",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-05",
+      "label": "带 display_summary 的完成记录",
+      "current_value": 15545,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[4].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 display_summary，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "有 ([\\d,]+) 条完成记录带这句摘要",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "display_summary"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-034",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-07",
+      "label": "说不准记录条数",
+      "current_value": 466,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[6].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "有 ([\\d,]+) 条完成记录落在这一类",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_indeterminate"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-035",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "有文字检测结论的完成登记",
+      "current_value": 15665,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcomes_recorded，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "有 ([\\d,]+) 条保存了文字检测结论",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcomes_recorded"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-036",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "有字完成登记",
+      "current_value": 15196,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "：有字 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_text_detected"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-037",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "说不准完成登记",
+      "current_value": 466,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "、说不准 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_indeterminate"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-038",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "无字完成登记",
+      "current_value": 3,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 outcome_no_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "、无字 ([\\d,]+)",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "outcome_no_text_detected"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-039",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "有字原件指纹数",
+      "current_value": 14261,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "三类分别涉及 ([\\d,]+)、",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "originals_text_detected"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-040",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "说不准原件指纹数",
+      "current_value": 446,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_indeterminate，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "三类分别涉及 [\\d,]+、([\\d,]+)、",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "originals_indeterminate"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-results-evidence-041",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "无字原件指纹数",
+      "current_value": 1,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "既有任务 JSON 元数据，只统计 completed；排除 source_path 中项目 samples/inputs、smoke、明确开发空白图及 output_dir 中 smoke；本项只取 originals_no_text_detected，不看 OCR 正文，不把记录条数当原件数、真实准确率或已验证缓存数。",
+      "scope_status": "verified",
+      "page_pattern": "三类分别涉及 [\\d,]+、[\\d,]+、([\\d,]+) 份原件",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "originals_no_text_detected"
+        ],
+        "timeout": 180
+      }
+    },
+    {
+      "id": "b7-localocr-jobs-cache-042",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "原筛选完成登记数与输出位置覆盖",
+      "current_value": 16074,
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "原页面排除集合与原截止时间必须复核，同口径未确认。",
+      "scope_status": "verified",
+      "page_pattern": "([\\d,]+) 条完成登记都存着输出位置",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "GPT 只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据，与原事实报告 E:/Cache/Claude/Temp/6428793e/deltas/facts-frozen-F2-localocr.md 的 E8 排除集合逐项复核（19 项目样例、13 冒烟、1 明确开发空白图），按业务 started_at/updated_at 与网页注明截止筛选；现有 source_path-only 入口得16075，加 output_dir smoke 排除得16073，均不能冒充原文16074。先找回原排除集合与口径，无法一致则交内容 Owner 具名 Unknown 保留日期，不用 offset 凑数。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-043",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "原筛选完成任务数",
+      "current_value": 16074,
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "原页面排除集合与原截止时间必须复核，同口径未确认。",
+      "scope_status": "verified",
+      "page_pattern": "([\\d,]+) 条完成任务里",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "GPT 只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据，与原事实报告 E:/Cache/Claude/Temp/6428793e/deltas/facts-frozen-F2-localocr.md 的 E8 排除集合逐项复核（19 项目样例、13 冒烟、1 明确开发空白图），按业务 started_at/updated_at 与网页注明截止筛选；现有 source_path-only 入口得16075，加 output_dir smoke 排除得16073，均不能冒充原文16074。先找回原排除集合与口径，无法一致则交内容 Owner 具名 Unknown 保留日期，不用 offset 凑数。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-044",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "原筛选完成记录缺字段数",
+      "current_value": 409,
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "E:/Projects/Tools/LocalOCR",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "原文409依赖16074原排除集合，不沿用不同集合的408或410。",
+      "scope_status": "verified",
+      "page_pattern": "另有 ([\\d,]+) 条早期记录没有这个字段",
+      "retrieve": {
+        "kind": "manual"
+      },
+      "manual_reason": "judgment",
+      "manual_route": "GPT 只读 E:/Projects/Tools/LocalOCR/_server/jobs 元数据，与原事实报告 E:/Cache/Claude/Temp/6428793e/deltas/facts-frozen-F2-localocr.md 的 E8 排除集合逐项复核（19 项目样例、13 冒烟、1 明确开发空白图），按业务 started_at/updated_at 与网页注明截止筛选；现有 source_path-only 入口得16075，加 output_dir smoke 排除得16073，均不能冒充原文16074。先找回原排除集合与口径，无法一致则交内容 Owner 具名 Unknown 保留日期，不用 offset 凑数。"
+    },
+    {
+      "id": "b7-chinese-asr-audit-evidence-045",
+      "page": "chinese-asr-audit-evidence",
+      "screen": "chinese-asr-audit-evidence-13",
+      "label": "当前测试定义数",
+      "current_value": 544,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ChineseASR",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[12].text",
+      "measurement_scope": "tests/**/*.py 中 def/async def test_ 定义计数，已实取544；不执行，不代表测试通过。",
+      "scope_status": "verified",
+      "page_pattern": "当前共 ([\\d,]+) 个测试定义",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/ChineseASR/tests",
+        "include": [
+          "**/*.py"
+        ],
+        "pattern": "^\\s*(?:async\\s+)?def test_\\w+\\s*\\(",
+        "flags": "m"
+      }
+    },
+    {
+      "id": "b7-chinese-asr-models-modes-046",
+      "page": "chinese-asr-models-modes",
+      "screen": "chinese-asr-models-modes-12",
+      "label": "模型配置登记数",
+      "current_value": 6,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ChineseASR",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[11].text",
+      "measurement_scope": "当前 models.yaml engines 中二级 engine 配置且带 adapter 的条目，实取6；不当直接执行闭集或推理验证。",
+      "scope_status": "verified",
+      "page_pattern": "仍登记 ([\\d,]+) 个 Profile",
+      "retrieve": {
+        "kind": "regex_count",
+        "path": "E:/Projects/Tools/ChineseASR/configs/models.yaml",
+        "pattern": "^  [\\w.-]+:\\r?\\n    adapter:",
+        "flags": "m"
+      }
+    },
+    {
+      "id": "b7-ai-cli-profile-manager-engines-providers-047",
+      "page": "ai-cli-profile-manager-engines-providers",
+      "screen": "ai-cli-profile-manager-engines-providers-01",
+      "label": "公开配置档数",
+      "current_value": 21,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ai-cli-profile-manager",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "data/providers/*.json 中 hidden!=true 的配置档，实读现有白名单；不等于实际云端调用。",
+      "scope_status": "verified",
+      "page_pattern": "现有 ([\\d,]+) 个公开配置档",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "ai-cli-profile-config-counts",
+        "pointer": [
+          "routes"
+        ]
+      }
+    },
+    {
+      "id": "b7-ai-cli-profile-manager-engines-providers-048",
+      "page": "ai-cli-profile-manager-engines-providers",
+      "screen": "ai-cli-profile-manager-engines-providers-01",
+      "label": "配置清单文件数",
+      "current_value": 23,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ai-cli-profile-manager",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "data/providers 直接一级 *.json 文件数，包含隐藏模板。",
+      "scope_status": "verified",
+      "page_pattern": "共 ([\\d,]+) 份配置清单",
+      "retrieve": {
+        "kind": "file_count",
+        "path": "E:/Projects/Tools/ai-cli-profile-manager/data/providers",
+        "include": [
+          "*.json"
+        ]
+      }
+    },
+    {
+      "id": "b7-ai-cli-profile-manager-engines-providers-049",
+      "page": "ai-cli-profile-manager-engines-providers",
+      "screen": "ai-cli-profile-manager-engines-providers-01",
+      "label": "公开配置档引擎数",
+      "current_value": 5,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ai-cli-profile-manager",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "公开配置档 engine 字段去重；不等于每种原版工具已经运行通过。",
+      "scope_status": "verified",
+      "page_pattern": "覆盖 ([\\d,]+) 种原版工具",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "ai-cli-profile-config-counts",
+        "pointer": [
+          "tools"
+        ]
+      }
+    },
+    {
+      "id": "b7-ai-cli-profile-manager-native-desktop-integration-050",
+      "page": "ai-cli-profile-manager-native-desktop-integration",
+      "screen": "ai-cli-profile-manager-native-desktop-integration-04",
+      "label": "已有桌面桥接发行目录数",
+      "current_value": 24,
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "E:/Projects/Tools/ai-cli-profile-manager",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[3].text",
+      "measurement_scope": "LOCALAPPDATA/AiCliProfileManager/desktop/releases 子目录数；不代表全部正在运行。",
+      "scope_status": "verified",
+      "page_pattern": "当前登记 ([\\d,]+) 个版本",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "ai-cli-profile-config-counts",
+        "pointer": [
+          "bridge_builds"
+        ]
+      }
+    },
+    {
+      "id": "b7-localocr-document-structure-069",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-01",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "现役版本的合成验收通过；截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-document-structure-structure-completed-zero"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-document-structure-071",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-08",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日",
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[7].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "启而图表关闭的实际状态；截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日)",
+      "qualifies": [
+        "b7-localocr-document-structure-default-config-count",
+        "b7-localocr-document-structure-config-use_table_recognition",
+        "b7-localocr-document-structure-config-use_formula_recognition",
+        "b7-localocr-document-structure-config-use_seal_recognition",
+        "b7-localocr-document-structure-config-use_region_detection",
+        "b7-localocr-document-structure-config-format_block_content",
+        "b7-localocr-document-structure-config-use_chart_recognition",
+        "b7-localocr-document-structure-config-profile-identity"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-document-structure-072",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-08",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[7].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "的漏标题和错字已经修好。截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-document-structure-structure-completed-zero"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-jobs-cache-079",
+      "page": "localocr-jobs-cache",
+      "screen": "localocr-jobs-cache-09",
+      "label": "截至日期：as_of",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[8].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "推导任意私人原件准确率。截至\\ (\\d{4}-\\d{2}-\\d{2}[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-jobs-cache-027",
+        "b7-localocr-jobs-cache-028",
+        "b7-localocr-jobs-cache-029",
+        "b7-localocr-jobs-cache-030",
+        "b7-localocr-jobs-cache-042"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-081",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-01",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[0].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "无字”两类结论都已出现，截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-results-evidence-031",
+        "b7-localocr-results-evidence-032"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-083",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-05",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "field": "screens[4].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "读正文、坐标与客观文件。截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-results-evidence-033"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-084",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-07",
+      "label": "截至日期：as_of",
+      "current_value": "10 月 11 日 14:00",
+      "as_of": "2026-10-11",
+      "category": "静态/计数",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[6].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "空结果都不能伪装成无字。截至\\ (\\d{1,2}\\s*月\\s*\\d{1,2}\\s*日[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-results-evidence-034"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-results-evidence-085",
+      "page": "localocr-results-evidence",
+      "screen": "localocr-results-evidence-10",
+      "label": "截至日期：as_of",
+      "current_value": "2026-10-11 14:00",
+      "as_of": "2026-10-11",
+      "category": "人工审阅",
+      "source_location": "同页已定位事实来源（qualifies）",
+      "automatic": false,
+      "private": false,
+      "historical": false,
+      "field": "screens[9].text",
+      "measurement_scope": "实际数据取数时间，只注明同页对应计数/配置字段；原句若带14:00则捕获完整日期时间。新观察日缺时分时只作候选交事实/Opus审阅，绝不拼接旧时分，不自动应用。",
+      "scope_status": "verified",
+      "page_pattern": "依据与来源（二）\\\n\\\n\\-\\ 截至\\ (\\d{4}-\\d{2}-\\d{2}[ T]\\d{1,2}:\\d{2})",
+      "qualifies": [
+        "b7-localocr-results-evidence-035",
+        "b7-localocr-results-evidence-036",
+        "b7-localocr-results-evidence-037",
+        "b7-localocr-results-evidence-038",
+        "b7-localocr-results-evidence-039",
+        "b7-localocr-results-evidence-040",
+        "b7-localocr-results-evidence-041",
+        "b7-localocr-results-evidence-043",
+        "b7-localocr-results-evidence-044"
+      ],
+      "manual_review_required": true,
+      "manual_review_note": "真实日期时间必须由实际 source_observed_at 和同口径范围核对；机械程序如只生成新日期或遇中文计数/布尔表述，交候选给事实/Opus审，不应用。"
+    },
+    {
+      "id": "b7-localocr-document-structure-structure-completed-zero",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-08",
+      "field": "screens[7].text",
+      "label": "日常完成任务走结构路线数量（中文零计数）",
+      "current_value": "没有一条",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/_server/jobs",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "b7-localocr-module-field-counts",
+        "pointer": [
+          "structure_text"
+        ],
+        "timeout": 180
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "page_pattern": "完成任务里(没有一条)走结构路线",
+      "measurement_scope": "没有一条是零计数；固定只读聚合按相同日常完成任务排除规则计算 engine/requested_engine=structure 的条数。数据取得0后中文表述由Opus核对，不用静态测试证明实际使用。 实际计数0映射为没有一条，正数映射为实际N条，仅消除中文零表述与阿拉伯0之间的表示差异。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-default-config-count",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-08",
+      "field": "screens[7].text",
+      "label": "默认模型配置数量（中文三计数）",
+      "current_value": "三",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "defaults"
+        ],
+        "operation": "length"
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "截至 \\d{1,2}\\s*月\\s*\\d{1,2}\\s*日，(三)个默认模型配置",
+      "measurement_scope": "defaults 对象的登记键数；三表示3，仅证明默认配置数量。中文表述需Opus核对，不直接把三替成数字。；current_value保留页面实际表述'三'，其源值语义为3；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-use_table_recognition",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构解析选项 use_table_recognition 当前启用",
+      "current_value": "已开启",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "use_table_recognition"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
+      "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-use_formula_recognition",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构解析选项 use_formula_recognition 当前启用",
+      "current_value": "已开启",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "use_formula_recognition"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
+      "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-use_seal_recognition",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构解析选项 use_seal_recognition 当前启用",
+      "current_value": "已开启",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "use_seal_recognition"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
+      "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-use_region_detection",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构解析选项 use_region_detection 当前启用",
+      "current_value": "已开启",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "use_region_detection"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
+      "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-format_block_content",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构解析选项 format_block_content 当前启用",
+      "current_value": "已开启",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "format_block_content"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_table_recognition、use_formula_recognition、use_seal_recognition、use_region_detection 与 format_block_content (已开启)",
+      "measurement_scope": "本页一句并列声明五个选项已开启，每个选项独立读取 pp-structure-v3 options 的对应布尔值；只是配置状态，不代表模型执行。；current_value保留页面实际表述'已开启'，其源值语义为True；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-use_chart_recognition",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "图表识别开关当前关闭",
+      "current_value": "false",
+      "as_of": "2026-10-11",
+      "category": "配置/计数",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "options",
+          "use_chart_recognition"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "use_chart_recognition=(false)",
+      "measurement_scope": "本页明确 use_chart_recognition=false；只读 pp-structure-v3 对应布尔值。；current_value保留页面实际表述'false'，其源值语义为False；中文数量和布尔表示差异只交候选审阅，不当作事实变化。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-localocr-document-structure-config-profile-identity",
+      "page": "localocr-document-structure",
+      "screen": "localocr-document-structure-04",
+      "field": "screens[3].text",
+      "label": "结构配置选项所属模型身份",
+      "current_value": "pp-structure-v3",
+      "as_of": "2026-10-11",
+      "category": "配置",
+      "source_location": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+      "retrieve": {
+        "kind": "json",
+        "path": "E:/Projects/Tools/LocalOCR/localocr/model_profiles.json",
+        "pointer": [
+          "profiles",
+          2,
+          "id"
+        ]
+      },
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "- (pp-structure-v3) profile 使用",
+      "measurement_scope": "同时读取 profiles[2].id 确认上述布尔选项属于本页 pp-structure-v3；模型顺序/身份变化时必须先核对来源身份和当前页面，不能把另一Profile选项当作结构配置。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-agents-context-evidence-owner-decision-sections",
+      "page": "agents-context-evidence",
+      "screen": "agents-context-evidence-01",
+      "field": "screens[0].text",
+      "label": "决定原话月卷合计二级小节数",
+      "current_value": 860,
+      "as_of": "2026-10-11",
+      "source_location": "E:/.agents/docs/owner-decisions/order.json和正式owner_decision_store已核验月卷集合；仅总小节数，不输出原话正文",
+      "retrieve": {
+        "kind": "entry",
+        "entry": "agents-decision-volumes-stats",
+        "pointer": [
+          "sections"
+        ]
+      },
+      "automatic": true,
+      "private": true,
+      "historical": false,
+      "page_pattern": "共 ([\\d,]+) 节",
+      "measurement_scope": "正式月卷order定义的完整集合，_verify.sections与合并字节二级标题计数相等且读取前后order字节一致；只输出聚合。当前895，不用分类器9类代替原话章节数。",
+      "scope_status": "verified"
+    },
+    {
+      "id": "b7-agents-context-evidence-owner-decision-data-date",
+      "page": "agents-context-evidence",
+      "screen": "agents-context-evidence-01",
+      "field": "screens[0].text",
+      "label": "决定原话规模观察时间",
+      "current_value": "10/11 13:59",
+      "as_of": "2026-10-11",
+      "source_location": "E:/.agents/docs/owner-decisions/order.json和正式owner_decision_store已核验月卷集合；仅总小节数，不输出原话正文",
+      "qualifies": [
+        "b7-agents-context-evidence-owner-decision-sections"
+      ],
+      "automatic": true,
+      "private": false,
+      "historical": false,
+      "page_pattern": "截至 (10/11 13:59) 共",
+      "measurement_scope": "紧邻860节的真实数据观察时间，只关联原话节数；不是整模块核对戳。捕获完整时刻，格式候选若不能机械表达交事实/稿件审核，原文不改。",
+      "scope_status": "verified"
     }
   ]
 }
