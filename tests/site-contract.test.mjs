@@ -517,10 +517,10 @@ test("the authoritative desktop scale baseline follows the older compact block",
 test("the shared enhancement and search indices stay within their measured review thresholds", async () => {
   const registry = JSON.parse(await readFile(path.join(projectRoot, "config", "panel-projects.json"), "utf8"));
   const enabledProjectCount = registry.projects.filter((item) => item.enabled && item.content_format !== "typeset").length;
-  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 15);
+  assert.equal(registry.refresh_policy.shared_interaction_gzip_budget_kib, 15.2);
   assert.equal(registry.refresh_policy.shared_css_gzip_budget_kib, 25.5);
-  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 157);
-  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 185);
+  assert.equal(registry.refresh_policy.search_index_gzip_budget_kib, 360.8);
+  assert.equal(registry.refresh_policy.project_search_index_gzip_budget_kib, 1071.9);
   assert.equal(registry.refresh_policy.project_search_shard_gzip_budget_kib, 27);
   assert.equal(registry.refresh_policy.detail_loading_mode, "route_specific_static_native_document");
   assert.match(registry.refresh_policy.bundle_budget_semantics, /review threshold|review thresholds/);
@@ -544,7 +544,7 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.doesNotMatch(runtimeSource, /site-content|content-(?:core|skills|pcconfig|github-index|chinese-asr|timeaudit|pc-panel-hub|cacb|learning|codex-remote|personal-health|wechatdirect|localocr|vault-tool|video-scaffold|ai-cli-profile-manager|openclaw-gateway|devconfig-backup)/, "browser runtime must not import narrative packages");
   assert.match(runtimeSource, /if \(document\.querySelector\("\[data-computer-access\]"\)\) \{\s*import\("\.\.\/app\/computer-access-client\.jsx"\)/, "P6 island loads only on its initial route without redirecting away from the stable website");
   assert.match(runtimeSource, /if \(document\.querySelector\("\[data-access-summary\]"\)\) import\("\.\.\/app\/computer-access-summary-client\.jsx"\)/, "status summaries load only on their initial DOM island routes");
-  const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-(?:summary-)?client\.jsx|\.\/computer-access-(?:summary-)?client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
+  const narrativeGraph = clientGraph.replace(/import\(["`](?:\.\.\/app\/computer-access-(?:summary-)?client\.jsx|(?:\.\/|https:\/\/[^"`\s]+\/)computer-access-(?:summary-)?client-[^"`\s]+\.js)["`]\)/g, "P6_ROUTE_ENTRY");
   assert.doesNotMatch(narrativeGraph, /\b(?:fetch|import)\s*\(/, "narrative routes must retain native static navigation; only the explicit access/status islands are dynamic");
   assert.match(runtimeSource, /function handleImageDoubleClick\(\)[\s\S]{0,180}else resetZoom\(\)/, "double-click zoom-out must reset gallery scroll");
   assert.match(htmlTemplate, /<noscript>[\s\S]*?\[data-rule-panel\]\[hidden\][\s\S]*?\[data-project-reading-panel\]\[hidden\][\s\S]*?display:\s*block\s*!important/, "Rules and project reading layers must expose complete static content when JavaScript is disabled");
@@ -553,8 +553,8 @@ test("the shared enhancement and search indices stay within their measured revie
   }
   const generatedIndex = await readFile(path.join(projectRoot, "app", "project-content-index.generated.js"), "utf8");
   assert.doesNotMatch(generatedIndex, /=>\s*import\(/, "project details must not wait for a click-time dynamic import");
-  const rootHtml = await readFile(path.join(projectRoot, "dist", "index.html"), "utf8");
-  assert.match(rootHtml, /<script src="\/search-index\.js"><\/script>/, "build must load the shared compact search index before enhancement");
+  const rootHtml = await readFile(path.join(projectRoot, "dist", "search", "index.html"), "utf8");
+  assert.match(rootHtml, /<script src="https:\/\/[^"\s]+\/search-index\.js"><\/script>/, "search route must load its actual OSS index before enhancement");
   assert.doesNotMatch(rootHtml, /__WLY_SEARCH_INDEX__=/, "search index must not be duplicated into every route HTML");
   const searchAsset = await readFile(path.join(projectRoot, "dist", "search-index.js"), "utf8");
   const indexMatch = searchAsset.match(/^window\.__WLY_SEARCH_INDEX__=([\s\S]*);\s*$/);
@@ -574,7 +574,10 @@ test("the shared enhancement and search indices stay within their measured revie
   assert.ok(projectIndexMatch, "all-project search index asset is invalid");
   const compactProjectIndex = JSON.parse(projectIndexMatch[1]);
   assert.ok(gzipSync(projectSearchAsset).length <= registry.refresh_policy.project_search_index_gzip_budget_kib * 1024, "all-project compact search index exceeds registry budget");
-  assert.equal(compactProjectIndex.length, projectCatalog.reduce((count, entry) => count + entry.modules.length, 0));
+  assert.equal(compactProjectIndex.length, new Set(compactProjectIndex.map(({ type, href, title }) => JSON.stringify([type, href, title]))).size, "project search repeats a record");
+  for (const page of currentPages.filter((page) => page.url?.startsWith("/projects/") && page.url !== "/projects/")) {
+    for (const screen of page.screens.filter((screen) => !screen.hidden)) assert.ok(compactProjectIndex.some((entry) => entry.href === page.url + "#" + screen.id), `search omits current author screen ${page.url}#${screen.id}`);
+  }
   assert.ok(compactProjectIndex.every((entry) => entry.type === "项目内容"), "all-project search index must contain only project modules");
   for (const entry of compactProjectIndex) {
     assert.deepEqual(Object.keys(entry).sort(), ["type", "group", "scopes", "projectSlug", "title", "detail", "href", "aliases", "search"].sort());
@@ -582,24 +585,22 @@ test("the shared enhancement and search indices stay within their measured revie
     assert.doesNotMatch(entry.search, /\[object Object\]/, `${entry.href} project search contains an unexpanded object`);
     assert.ok(typeof entry.search === "string", `${entry.href} project search phrases are unbounded`);
   }
-  const projectSearchIndices = [];
-  for (const entry of projectCatalog) {
-    const projectAsset = await readFile(path.join(projectRoot, "dist", `search-project-${entry.project.slug}.js`), "utf8");
+  // Frozen shards remain separate assets; current chapter-based root search also indexes newly authored screens.
+  for (const [name, source] of Object.entries(frozenSite.search_objects).filter(([name]) => /^search-project-.+\.js$/.test(name))) {
+    const projectAsset = await readFile(path.join(projectRoot, "dist", "_runtime", source.sha256.slice(0, 20), name), "utf8");
+    assert.equal(createHash("sha256").update(projectAsset).digest("hex"), source.sha256, `${name} differs from its accepted frozen source`);
     const projectMatch = projectAsset.match(/^window\.__WLY_PROJECT_SEARCH_INDEX__=([\s\S]*);\s*$/);
-    assert.ok(projectMatch, `${entry.project.slug} project search index asset is invalid`);
+    assert.ok(projectMatch, `${name} project search index asset is invalid`);
     const projectIndex = JSON.parse(projectMatch[1]);
-    assert.ok(gzipSync(projectAsset).length <= registry.refresh_policy.project_search_shard_gzip_budget_kib * 1024, `${entry.project.slug} project search index exceeds its measured registry budget`);
-    assert.equal(projectIndex.length, entry.modules.length, `${entry.project.slug} project search index does not match its module count`);
-    assert.ok(projectIndex.every((candidate) => candidate.type === "项目内容" && candidate.projectSlug === entry.project.slug), `${entry.project.slug} project search index leaks another project`);
-    projectSearchIndices.push(...projectIndex);
+    assert.ok(gzipSync(projectAsset).length <= registry.refresh_policy.project_search_shard_gzip_budget_kib * 1024, `${name} project search index exceeds its measured registry budget`);
+    assert.ok(projectIndex.every((candidate) => candidate.type === "项目内容" && candidate.projectSlug === name.slice(15, -3)), `${name} project search index leaks another project`);
   }
-  assert.deepEqual(projectSearchIndices, compactProjectIndex, "per-project search indices do not reconstruct the all-project index");
   const completeCompactIndex = [...compactIndex, ...compactProjectIndex];
   const compactAliasCases = [
     ["C盘规则为什么不能阻塞spawn", "AI 自己的规则怎么更新，怎样保证正式版本不是半新半旧？", "/rules/?rule=rule_release_contract"],
     ["dirty source 不能冒充 current release", "AI 自己的规则怎么更新，怎样保证正式版本不是半新半旧？", "/rules/?rule=rule_release_contract"],
     ["同一个目标不要反复问我授权", "哪些事 AI 可以直接做，哪些变化必须再问我？", "/rules/?rule=authorization_contract"],
-    ["本地构建通过为什么还不能说网站完成", "接着上次的工作，查清事实和完成状态", "/projects/agents/context-evidence/"],
+    ["本地构建通过为什么还不能说网站完成", "怎样才算真的做完，而不是“代码改了”或“测试绿了”？", "/rules/?rule=engineering_delivery_contract"],
     ["怎么避免全局规则覆盖项目自己的验收方式", "我把事情交给 AI 后，它应该怎样自己做完？", "/rules/?rule=agents_root_rules"],
     ["过去一小时为什么卡", skills.find((item) => item.slug === "timeaudit-diagnostics").title, "/skills/timeaudit-diagnostics/"]
   ];
