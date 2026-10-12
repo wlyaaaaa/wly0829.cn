@@ -397,7 +397,38 @@ def sync_cloud(args, start, end, now):
     return paths, records, sync, file_range
 
 
-def visitor_metrics(events, history, start, end, networks=None, city=None, org=None):
+def deep_visitors(events, since, locations, history):
+    people, qualified = defaultdict(list), {}
+    for row in sorted(events, key=lambda r: r["time"]):
+        if row["params"]["v"]:
+            people[row["params"]["v"]].append(row)
+    for visitor, rows in people.items():
+        sessions = [[]]
+        for row in rows:
+            if sessions[-1] and row["time"] - sessions[-1][-1]["time"] > timedelta(minutes=30):
+                sessions.append([])
+            sessions[-1].append(row)
+        for session in sessions:
+            if session[-1]["time"] <= since:
+                continue
+            instances, pages = defaultdict(float), defaultdict(float)
+            for row in session:
+                params = row["params"]
+                key = (params["id"] or row["identity"], params["p"].rstrip("/") or "/")
+                seconds = metric(params, "visible") if params["event"] == "leave" else None
+                instances[key] = max(instances[key], seconds or 0)
+            for (_, page), seconds in instances.items():
+                pages[page] += seconds
+            if not (any(seconds >= 120 and (page == "/" or page.startswith("/projects/")) for page, seconds in pages.items()) or len(pages) >= 3 and sum(pages.values()) >= 180):
+                continue
+            latest = session[-1]
+            qualified[visitor] = {"id": visitor, "first_at": history.get("first_seen", {}).get(visitor, session[0]["time"].isoformat()),
+                                  "city": locations[latest["ip"]]["city"], "organization": locations[latest["ip"]]["organization"], "app": app_name(latest["ua"]),
+                                  "pages": [{"path": page, "visible_seconds": round(seconds, 2)} for page, seconds in sorted(pages.items())]}
+    return {"checked_at": datetime.now(TZ).isoformat(), "visitors": list(qualified.values())}
+
+
+def visitor_metrics(events, history, start, end, networks=None, city=None, org=None, deep_since=None):
     locations = {ip: {"province": "未知", "city": "未知", "operator": "未知", "organization": "未知机构网络"} for ip in {r["ip"] for r in events}}
     if networks:
         try:
@@ -461,10 +492,12 @@ def visitor_metrics(events, history, start, end, networks=None, city=None, org=N
                                 "apps": sorted({app_name(r["ua"]) for r in rows}),
                                 "pages": {page: dwell_summary(items) for page, items in visitor_dwell[visitor].items()}})
         result["possible_sources"] = {"conclusion": "可能", "city": city, "org": org, "visitors": matches}
+    if deep_since is not None:
+        result["deep_read"] = deep_visitors(events, deep_since, locations, history)
     return result
 
 
-def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None):
+def analyze(paths, start, end, include_self=False, include_monitor=False, extra_records=(), file_range=None, networks=None, history=None, city=None, org=None, deep_since=None):
     records, seen, malformed, duplicates = list(extra_records), set(), 0, 0
     for path in paths:
         opener = gzip.open if path.suffix == ".gz" else open
@@ -565,7 +598,7 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
     output_daily = [{"date": day, "unique_visitors": len(row["visitors"]), "unique_ips": len(row["ips"]),
                      "pageviews": row["pv"], "log_lines": row["log_lines"],
                      "coverage": "observed_partial" if row["log_lines"] else "no_logs"} for day, row in daily.items()]
-    enhancements = visitor_metrics(events, history, start, end, networks, city, org)
+    enhancements = visitor_metrics(events, history, start, end, networks, city, org, deep_since)
     enhancements["ai_crawler_lower_bound"] = {"by_ua": {name: {"requests": len(values), "dates": dict(Counter(values))} for name, values in ai_requests.items()},
                                                "note": "只是下限，看不到只抓网页的爬虫；UA 声称身份不代表经过身份验证。"}
     return {**enhancements, "timezone": "Asia/Shanghai", "start": start.isoformat(), "end": end.isoformat(), "daily": output_daily,
@@ -588,6 +621,9 @@ def analyze(paths, start, end, include_self=False, include_monitor=False, extra_
 
 def main():
     parser = argparse.ArgumentParser(description="按北京时间查询网站访客（输出 JSON）")
+    parser.add_argument("--deep-read", action="store_true", help="查询新达标的深读访客；30 分钟空闲切访问，只用可见信标")
+    parser.add_argument("--since", type=datetime.fromisoformat, help="深读检查起点 ISO 时间（必须带时区）")
+    parser.add_argument("--json", action="store_true", help="显式选择 JSON（默认已经是 JSON）")
     parser.add_argument("--days", type=int)
     parser.add_argument("--month", help="自然月 YYYY-MM（北京时间）")
     parser.add_argument("--around", type=date.fromisoformat, help="以此日期为中心，默认共 14 天")
@@ -606,12 +642,16 @@ def main():
     parser.add_argument("--include-self", action="store_true")
     parser.add_argument("--include-monitor", action="store_true")
     args = parser.parse_args()
+    if bool(args.deep_read) != bool(args.since) or (args.deep_read and (args.since.tzinfo is None or args.start or args.end or args.month or args.around or args.days is not None or args.include_self or args.include_monitor)):
+        parser.error("--deep-read 与带时区的 --since 配对使用，不能指定日期窗口或包含本人/巡检")
     if bool(args.start) != bool(args.end) or (args.start and args.days is not None) or (args.days is not None and args.days < 1):
         parser.error("同时指定 --start 和 --end，或使用正数 --days")
     if (args.month and (args.start or args.around or args.days is not None)) or (args.around and args.start) or bool(args.around) != bool(args.city) or (args.org and not args.around):
         parser.error("--month 独立使用；--around 与 --city 配对，可加 --org 和正数 --days")
     end = args.end or datetime.now(TZ).date()
     start = args.start or end - timedelta(days=(args.days or 7) - 1)
+    if args.deep_read:
+        start = (args.since.astimezone(TZ) - timedelta(minutes=30)).date()
     if args.month:
         try:
             start = datetime.strptime(args.month, "%Y-%m").date().replace(day=1)
@@ -624,14 +664,14 @@ def main():
     if start > end:
         parser.error("起始日期不得晚于结束日期")
     try:
-        records, file_range = [], None
+        records, file_range, checked_at = [], None, datetime.now(TZ)
         if args.logs_dir:
             if not args.logs_dir.is_dir():
                 raise ValueError("日志目录不存在")
             paths = sorted(p for p in args.logs_dir.rglob("*") if p.is_file() and p.suffix in ("", ".log", ".gz"))
             sync = {"mode": "local_only", "sources": [{"source": "local_logs"}]}
         else:
-            paths, records, sync, file_range = sync_cloud(args, start, end, datetime.now(TZ))
+            paths, records, sync, file_range = sync_cloud(args, start, end, checked_at)
         history_path = args.cache_dir / "visitor-history.json"
         history = json.loads(history_path.read_text("utf-8")) if not args.logs_dir and history_path.exists() else {}
         cached = any((args.cache_dir / "networks" / name).is_file() for name in ("ip2region_v4.xdb", "ip2region_v6.xdb", "ip2asn-combined.tsv.gz"))
@@ -640,7 +680,7 @@ def main():
             networks = None if args.logs_dir and not cached else OfflineNetworks(args.cache_dir, download=not args.logs_dir)
         except NETWORK_ERRORS as error:
             networks, database_state = None, network_failure(error)
-        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org)
+        output = analyze(paths, start, end, args.include_self, args.include_monitor, records, file_range, networks, history, args.city, args.org, args.since)
         output["offline_network_databases"] = networks.metadata if networks else database_state
         if not args.logs_dir:
             args.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -649,7 +689,9 @@ def main():
             temporary.replace(history_path)
         output["log_coverage"]["sources"] = sync["sources"]
         output["sync"] = sync
-        print(json.dumps(output, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
+        if args.deep_read:
+            output["deep_read"]["checked_at"] = checked_at.isoformat()
+        print(json.dumps(output["deep_read"] if args.deep_read else output, ensure_ascii=False, indent=2, default=lambda value: value.isoformat()))
     except (OSError, ValueError, RuntimeError, struct.error, subprocess.TimeoutExpired) as error:
         print(json.dumps({"status": "error", "reason": str(error)}, ensure_ascii=False))
         return 1
