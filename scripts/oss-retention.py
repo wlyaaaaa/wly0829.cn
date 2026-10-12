@@ -3,11 +3,15 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import ssl
 import subprocess
 import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
+from http.client import IncompleteRead, RemoteDisconnected
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
@@ -45,19 +49,33 @@ def manifest(ref):
                               '-H', 'Accept: application/vnd.github.raw+json'))
 
 
+def public_read(name):
+    request = Request('https://wly0829.cn/'+name, headers={'Cache-Control': 'no-cache'})
+    for delay in (0.5, 1, 2, 2, 2, 2, 2, 2, None):
+        try:
+            with urlopen(request, timeout=30) as response:
+                if response.status != 200:
+                    raise ValueError('Current public '+name+' GET is not 200')
+                return response.read()
+        except HTTPError:
+            raise
+        except (URLError, ConnectionError, TimeoutError, ssl.SSLError, RemoteDisconnected, IncompleteRead) as error:
+            reason = error.reason if isinstance(error, URLError) else error
+            if delay is None or (isinstance(reason, OSError) and reason.errno == 2 and reason.filename is not None):
+                raise
+        except OSError as error:
+            if delay is None or error.errno != 2 or error.filename is not None:
+                raise
+        time.sleep(delay)
+
+
 def predecessor():
     deployments = json.loads(command('gh', 'api', 'repos/wlyaaaaa/wly0829.cn/deployments?environment=github-pages&per_page=10'))
     for deployment in deployments:
         statuses = json.loads(command('gh', 'api', 'repos/wlyaaaaa/wly0829.cn/deployments/' + str(deployment['id']) + '/statuses?per_page=1'))
         if statuses and statuses[0]['state'] == 'success':
-            with urlopen(Request('https://wly0829.cn/release-manifest.json', headers={'Cache-Control': 'no-cache'}), timeout=30) as response:
-                if response.status != 200:
-                    raise ValueError('Current public manifest GET is not 200')
-                payload = response.read()
-            with urlopen(Request('https://wly0829.cn/release-identity.json', headers={'Cache-Control': 'no-cache'}), timeout=30) as response:
-                if response.status != 200:
-                    raise ValueError('Current public identity GET is not 200')
-                identity = json.load(response)
+            payload = public_read('release-manifest.json')
+            identity = json.loads(public_read('release-identity.json'))
             current = json.loads(payload)
             if identity.get('release_id') != current.get('release_id') or identity.get('manifest_sha256') != hashlib.sha256(payload).hexdigest():
                 raise ValueError('Current public deployment identity is inconsistent')

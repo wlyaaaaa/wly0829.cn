@@ -5,8 +5,10 @@ import hashlib
 import importlib.util
 import json
 import shutil
+import ssl
 import subprocess
 import time
+from http.client import IncompleteRead, RemoteDisconnected
 from types import SimpleNamespace
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -50,10 +52,15 @@ def retrying(function, connection_error):
                 raise
             time.sleep(delay)
 
-def connection_level(error):
+def connection_level(error, url_read=False):
     if isinstance(error, HTTPError):
         return False
-    if isinstance(error, (URLError, ConnectionError, TimeoutError, subprocess.TimeoutExpired)):
+    if isinstance(error, URLError) and isinstance(error.reason, OSError) and error.reason.errno == 2:
+        error = error.reason
+    if isinstance(error, (URLError, ConnectionError, TimeoutError, ssl.SSLError,
+                          RemoteDisconnected, IncompleteRead, subprocess.TimeoutExpired)):
+        return True
+    if url_read and isinstance(error, OSError) and error.errno == 2 and error.filename is None:
         return True
     if isinstance(error, subprocess.CalledProcessError):
         text = ((error.stderr or '')+(error.output or '')).lower()
@@ -82,7 +89,7 @@ def head(item, root):
     def fetch():
         with urlopen(request, timeout=HEAD_TIMEOUT) as response:
             return response.status, dict(response.headers.items())
-    status, headers = retrying(fetch, connection_level)
+    status, headers = retrying(fetch, lambda error: connection_level(error, url_read=True))
     passed = status == 200 and int(headers.get('Content-Length', -1)) == row['bytes']
     passed &= (headers.get('ETag', '').strip('"').lower() == md5 or
                headers.get('Content-MD5') == base64.b64encode(bytes.fromhex(md5)).decode())
@@ -98,8 +105,10 @@ def get_page(item):
                       headers={'Accept-Encoding': 'identity', 'Cache-Control': 'no-cache'})
     def fetch():
         with urlopen(request, timeout=PAGE_TIMEOUT) as response:
+            if response.status != 200:
+                raise ValueError('Public HTML GET is not 200: '+rel)
             return response.status, hashlib.file_digest(response, 'sha256').hexdigest()
-    status, digest = retrying(fetch, connection_level)
+    status, digest = retrying(fetch, lambda error: connection_level(error, url_read=True))
     if status != 200 or digest != row['sha256']:
         raise ValueError('Public HTML GET differs: '+rel)
     return rel, {'status': 'pass', 'http': 200, 'sha256': digest}
@@ -113,15 +122,24 @@ def pages(commit, timeout):
     if not match:
         raise ValueError('Pages dispatch returned no run id; deployment is unconfirmed for '+commit)
     run_id = int(match[1])
+    last_error = ''
     while time.monotonic() < deadline:
-        run = json.loads(net('gh', 'run', 'view', str(run_id), '--repo', repository,
-                                 '--json', 'status,conclusion', timeout=max(1, min(GH_TIMEOUT, deadline-time.monotonic()))))
+        try:
+            run = json.loads(command('gh', 'run', 'view', str(run_id), '--repo', repository,
+                                     '--json', 'status,conclusion', timeout=min(GH_TIMEOUT, deadline-time.monotonic())))
+        except Exception as error:
+            if not connection_level(error):
+                raise
+            last_error = (error.stderr or error.output or str(error)) if isinstance(error, subprocess.CalledProcessError) else str(error)
+            time.sleep(min(2, max(0, deadline-time.monotonic())))
+            continue
         if run['status'] == 'completed':
             if run['conclusion'] != 'success':
                 raise ValueError('Pages run '+str(run_id)+' failed: '+str(run['conclusion']))
             return run_id
         time.sleep(min(2, max(0, deadline-time.monotonic())))
-    raise TimeoutError('Pages run '+str(run_id)+' success is unconfirmed for '+commit)
+    raise TimeoutError('Pages run '+str(run_id)+' success is unconfirmed for '+commit+
+                       ('; last connection error: '+last_error if last_error else ''))
 
 def artifact_commit(dist, plan, output, source_commit):
     destination = output/'site-dist'
@@ -186,7 +204,7 @@ def publish(args):
         if changed or (not args.dry_run and scan.get('failures') != []):
             raise ValueError('Dist differs from successful scan: '+(', '.join(changed) if changed else 'scan has failures'))
         previous = step('previous_manifest', lambda: oss.verify_manifest(oss.read(args.previous_manifest))
-                        if args.previous_manifest else retrying(retention.predecessor, connection_level))
+                        if args.previous_manifest else retention.predecessor())
         build = oss.read(args.dist/'.build-receipt.json') if (args.dist/'.build-receipt.json').is_file() else {}
         source_commit = args.source_commit or build.get('source_commit') or source.get('source_commit') or 'Unknown'
         if source_commit != 'Unknown' and not oss.re.fullmatch('[a-f0-9]{40}', source_commit):

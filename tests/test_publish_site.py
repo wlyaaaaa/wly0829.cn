@@ -1,4 +1,6 @@
 import importlib.util, tempfile, types, unittest.mock
+import io, ssl
+from http.client import IncompleteRead, RemoteDisconnected
 from pathlib import Path
 spec = importlib.util.spec_from_file_location('publisher', Path(__file__).resolve().parents[1]/'site-astro/tools/publish_site.py')
 publisher = importlib.util.module_from_spec(spec); spec.loader.exec_module(publisher)
@@ -71,6 +73,50 @@ class PublishTests(unittest.TestCase):
             with self.subTest(result=result), unittest.mock.patch.object(publisher, 'command', return_value=result) as commands:
                 with self.assertRaisesRegex(ValueError, 'no run id'): publisher.pages('a'*40, 60)
                 self.assertEqual(commands.call_count, 1)
+    def test_pages_connection_errors_preserve_deadline_and_dispatch_once(self):
+        eof = publisher.subprocess.CalledProcessError(1, 'gh', '', 'unexpected EOF')
+        for timeout, expected_calls, elapsed in ((30, 12, 20), (3, 3, 3)):
+            clock = [0]
+            with self.subTest(timeout=timeout), unittest.mock.patch.object(publisher.time, 'monotonic', side_effect=lambda: clock[0]), \
+                 unittest.mock.patch.object(publisher.time, 'sleep', side_effect=lambda delay: clock.__setitem__(0, clock[0]+delay)), \
+                 unittest.mock.patch.object(publisher, 'command', side_effect=['https://github.com/wlyaaaaa/wly0829.cn/actions/runs/42']+[eof]*10+['{"status":"completed","conclusion":"success"}']) as calls:
+                if timeout == 30: self.assertEqual(publisher.pages('a'*40, timeout), 42)
+                else:
+                    with self.assertRaisesRegex(TimeoutError, 'run 42.*EOF'): publisher.pages('a'*40, timeout)
+            self.assertEqual((calls.call_count, clock[0]), (expected_calls, elapsed))
+            self.assertEqual(sum(call.args[1:3] == ('workflow', 'run') for call in calls.call_args_list), 1)
+            self.assertEqual([call.kwargs['timeout'] for call in calls.call_args_list[1:]], list(range(timeout, timeout-elapsed-1, -2)) if timeout == 30 else [3, 1])
+    def test_public_fetch_retries_transport_errors_but_rejects_local_http_and_content_errors(self):
+        payload = b'x'; digest = publisher.hashlib.sha256(payload).hexdigest()
+        with tempfile.TemporaryDirectory() as temporary, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
+            root = Path(temporary); (root/'a.css').write_bytes(payload)
+            item = ('a.css', {'url': 'https://example.invalid/a.css', 'bytes': 1, 'sha256': digest})
+            for head in (False, True):
+                run = lambda: publisher.head(item, root) if head else publisher.get_page(item)
+                failures = (ssl.SSLEOFError('SSL EOF'), RemoteDisconnected('EOF'), IncompleteRead(b'x', 2), OSError(2, 'missing'))
+                for failure in (*failures, publisher.HTTPError('u', 404, 'nf', {}, None), OSError(2, 'missing', str(root/'missing')), publisher.URLError(FileNotFoundError(2, 'missing', 'missing.pem'))):
+                    response = io.BytesIO(payload); response.status = 200
+                    response.headers = {'Content-Length': '1', 'ETag': publisher.hashlib.md5(payload).hexdigest()}
+                    sleeps.reset_mock()
+                    with self.subTest(head=head, failure=repr(failure)), unittest.mock.patch.object(publisher, 'urlopen', side_effect=[failure, failure, response]) as calls:
+                        if failure in failures: self.assertEqual(run()[1]['status'], 'pass')
+                        else:
+                            with self.assertRaises(type(failure)): run()
+                    self.assertEqual(calls.call_count, 3 if failure in failures else 1)
+                    if failure not in failures: sleeps.assert_not_called()
+                    if isinstance(failure, publisher.HTTPError): failure.close()
+                for status, body in ((404, payload), (201, None), (200, b'wrong')):
+                    response = io.BufferedReader(io.BytesIO(body or b'')); response.status = status
+                    response.headers = {'Content-Length': str(len(body or b'')), 'ETag': publisher.hashlib.md5(body or b'').hexdigest()}
+                    if body is None: response.readinto = unittest.mock.Mock(side_effect=IncompleteRead(b'x', 2))
+                    with self.subTest(head=head, status=status, body=body), unittest.mock.patch.object(publisher, 'urlopen', return_value=response) as calls:
+                        with self.assertRaises(ValueError): run()
+                    self.assertEqual(calls.call_count, 1)
+                    if body is None: response.readinto.assert_not_called(); sleeps.assert_not_called()
+            sleeps.reset_mock()
+            with unittest.mock.patch.object(publisher, 'urlopen') as calls:
+                with self.assertRaises(FileNotFoundError): publisher.head(('missing', item[1]), root)
+            calls.assert_not_called(); sleeps.assert_not_called()
     def test_pages_reports_a_dispatch_command_timeout(self):
         with unittest.mock.patch.object(publisher, 'command', side_effect=publisher.subprocess.TimeoutExpired('gh', 1)) as commands, unittest.mock.patch.object(publisher.time, 'sleep') as sleeps:
             with self.assertRaises(publisher.subprocess.TimeoutExpired): publisher.pages('a'*40, 1)
@@ -89,6 +135,7 @@ class PublishTests(unittest.TestCase):
             missing = unittest.mock.Mock(side_effect=publisher.HTTPError('u', 404, 'nf', {}, None))
             with self.assertRaises(publisher.HTTPError): publisher.retrying(missing, publisher.connection_level)
             self.assertEqual(missing.call_count, 1)
+            missing.side_effect.close()
         with tempfile.TemporaryDirectory() as folder, unittest.mock.patch.object(publisher.time, 'sleep'):
             (Path(folder)/'a.css').write_bytes(b'x')
             response = unittest.mock.MagicMock(status=200); response.headers.items.return_value = [('Content-Length', '2'), ('ETag', '"00"')]

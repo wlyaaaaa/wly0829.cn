@@ -2,6 +2,9 @@
 import argparse
 import importlib.util
 import json, io
+import ssl
+from http.client import IncompleteRead, RemoteDisconnected
+from urllib.error import HTTPError, URLError
 import os
 from pathlib import Path
 import tempfile
@@ -172,6 +175,32 @@ class RetentionTests(unittest.TestCase):
              patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)):
             self.assertEqual(retention.predecessor(), {'release_id': 'actual-old-ref'})
 
+    def test_predecessor_retries_each_public_read_but_not_status_or_identity_validation(self):
+        self.public_patch.stop()
+        payload = b'{"release_id":"previous"}'
+        identity = json.dumps({'release_id': 'previous', 'manifest_sha256': retention.hashlib.sha256(payload).hexdigest()}).encode()
+        def response(body):
+            value = io.BytesIO(body); value.status = 200
+            return value
+        for failure in (ssl.SSLEOFError('SSL EOF'), RemoteDisconnected('EOF'), IncompleteRead(b'{', 10), OSError(2, 'missing')):
+            failures = [failure, failure]
+            if isinstance(failure, IncompleteRead):
+                broken = unittest.mock.MagicMock(status=200); broken.__enter__.return_value = broken
+                broken.read.side_effect = failure; failures = [broken, broken]
+            with self.subTest(failure=repr(failure)), patch.object(retention, 'command', side_effect=['[{"id":7}]', '[{"state":"success"}]']), \
+                 patch.object(retention, 'urlopen', side_effect=failures+[response(payload)]+failures+[response(identity)]) as calls, \
+                 patch.object(retention, 'oss_contract', return_value=SimpleNamespace(verify_manifest=lambda value: value)), patch('time.sleep'):
+                self.assertEqual(retention.predecessor(), {'release_id': 'previous'})
+            self.assertEqual([call.args[0].full_url for call in calls.call_args_list], ['https://wly0829.cn/release-manifest.json']*3+['https://wly0829.cn/release-identity.json']*3)
+        for bad_at in (0, 1, 2, 3, 4):
+            error = URLError(FileNotFoundError(2, 'missing', 'missing.pem')) if bad_at >= 3 else None if bad_at == 2 else HTTPError('u', 404, 'nf', {}, None)
+            effects = [error] if bad_at in (0, 3) else [response(payload), response(b'{}') if bad_at == 2 else error]
+            with self.subTest(bad_at=bad_at), patch.object(retention, 'command', side_effect=['[{"id":7}]', '[{"state":"success"}]']), \
+                 patch.object(retention, 'urlopen', side_effect=effects) as calls, patch('time.sleep') as sleeps:
+                with self.assertRaises(HTTPError if bad_at < 2 else ValueError if bad_at == 2 else URLError): retention.predecessor()
+            self.assertEqual(calls.call_count, 1 if bad_at in (0, 3) else 2); sleeps.assert_not_called()
+            for effect in effects:
+                if hasattr(effect, 'close'): effect.close()
     def test_finalized_hybrid_without_named_ref_uses_exact_frozen_predecessor_and_known_rollback(self):
         current = {'schema': 'wly.hybrid-release.v1', 'finalized_dist': True, 'release_id': 'current',
                    'files': {}, 'routes': {}, 'baseline_production_commit': 'a'*40,
