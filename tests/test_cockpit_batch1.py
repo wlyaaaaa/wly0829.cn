@@ -101,23 +101,64 @@ const assert = require('node:assert/strict');
   const river = riverSnapshot(v, now);
   assert.equal(river.automation.items.find((t) => t.id === 'gov').plain.status_note, '10月12日 12:58 开始，正在跑（还没收到跑完的回执）');
   assert.doesNotMatch(JSON.stringify(river), /这周已跑过/);
-  // 10 “你得知道”：字段不在不出；空数组一行；有条目最多 5 条，在修的网络问题让远程卡改口并能跳过去
+  // 10 “你得知道”（后端 must_know）：字段不在不出；empty 一行；unavailable 照实说读不到；有条目最多 5 条，收起的折叠；远程卡按 must_know_id 跳过去
   assert.doesNotMatch(R.REGIONS.overview(v, ctx), /cp-know/);
-  assert.match(R.REGIONS.overview(normalize({ ...base0, know: [] }), ctx), /没有要你知道的新事/);
-  const know = [{ id: 'net', kind: 'fixing', topic: 'network', text: '虚构两台电脑网络时不时断一下', impact: '你不用做什么', next_check_at: '2026-10-12T18:00:00+08:00' },
-    ...[1, 2, 3, 4, 5].map((i) => ({ id: 'd' + i, kind: 'done', text: '虚构刚办好 ' + i }))];
-  const vk = normalize({ ...base0, know });
+  assert.match(R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'empty', text: '没有要你知道的新事', items: [], archived_items: [] } }), ctx), /没有要你知道的新事/);
+  const mkUn = R.REGIONS.overview(normalize({ ...base0, must_know: { state: 'unavailable', text: '', items: [], archived_items: [] } }), ctx);
+  assert.match(mkUn, /你得知道：这会儿读不到.*不代表没有新事/);
+  assert.doesNotMatch(mkUn, /没有要你知道的新事/);
+  const items = [{ id: 'pending-net', kind: 'repairing', text: '虚构两台电脑网络偶尔断开。AI 在跟进，你不用操作。', at: '2026-10-12T14:00:00+08:00', exit_when: 'AI 核实解决后转为已恢复，3 天后收起' },
+    ...[1, 2, 3, 4, 5].map((i) => ({ id: 'r' + i, kind: 'recovered', text: '虚构已恢复 ' + i, at: '2026-10-12T13:00:00+08:00' }))];
+  const vk = normalize({ ...base0, must_know: { state: 'ok', text: '', items, archived_items: [{ id: 'old1', kind: 'report', text: '虚构旧汇报' }] },
+    sections: { ...base0.sections, remote: [{ id: 'remote', title: '远程连接', text: '此刻能连上；间歇断开还在查。', state: 'ok', color: 'ok', observed_at: at, must_know_id: 'pending-net' }] } });
   o = R.REGIONS.overview(vk, ctx);
-  assert.equal((o.match(/<li id="know-/g) || []).length, 5);
-  assert.match(o, /AI 在修.*虚构两台电脑网络时不时断一下.*下次核对 18:00/);
-  assert.match(o, /还有 1 条/);
+  assert.equal((o.match(/<li id="know-(pending|r)/g) || []).length, 5);
+  assert.match(o, /AI 在修.*虚构两台电脑网络偶尔断开.*AI 核实解决后转为已恢复/);
+  assert.match(o, /已恢复.*虚构已恢复 1/);
+  assert.match(o, /最近收起的 1 条/);
   const remote = R.computer(vk, ctx);
   assert.match(remote, /此刻能连上；间歇断开还在查/);
-  assert.match(remote, /href="#know-net"/);
-  // 11 网站上次发布：字段不在不出；成功一行；回读没通过变黄写原因
+  assert.match(remote, /href="#know-pending-net"/);
+  // 11 网站上次成功发布（后端 website_release）：字段不在不出；成功一行用后端的话；读不到灰着
   assert.doesNotMatch(today, /cp-release/);
-  assert.match(R.todayBlock(normalize({ ...base0, site_release: { at: '2026-10-12T08:18:00+08:00', ok: true, readback_ok: true, files: 315 } }), ctx), /cp-release"><span class="cp-dot is-green".*网站上次发布 08:18，成功，发布后回读通过（315 个文件）/);
-  assert.match(R.todayBlock(normalize({ ...base0, site_release: { at: '2026-10-12T08:18:00+08:00', ok: true, readback_ok: false, reason: '虚构文件对不上' } }), ctx), /cp-release is-bad"><span class="cp-dot is-yellow".*发布后回读没通过：虚构文件对不上；AI 在处理/);
+  assert.match(R.todayBlock(normalize({ ...base0, website_release: { state: 'success', published_at: '2026-10-12T08:18:37+08:00', version: 'c438b00a9f84', verified: true, text: '网站上次成功发布 10-12 08:18，回读通过，版本 c438b00a9f84' } }), ctx), /cp-release"><span class="cp-dot is-green".*网站上次成功发布 10-12 08:18，回读通过/);
+  assert.match(R.todayBlock(normalize({ ...base0, website_release: { state: 'unavailable', verified: false } }), ctx), /cp-release is-off"><span class="cp-dot is-gray".*读不到/);
+  // 11b 颜色读后端 color：卡片、首屏三格、分区灯、事项、自动任务的河
+  const colored = normalize({ ...base0,
+    overview: ov({ signals: [{ id: 'computer', level: 'act', color: 'neutral', ai_handling: 'AI 在管：虚构内存偏高在盯' }, { id: 'today_tasks', level: 'act', value: 1, recovered_today: 2, color: 'neutral' }, { id: 'backup', level: 'ok', value: 0, color: 'ok' }],
+      sections: { need_you: { level: 'watch', color: 'yellow' }, computer: { level: 'act', color: 'neutral' }, automation: { level: 'act', color: 'neutral' }, backup_cloud: { level: 'ok', color: 'ok' }, today: { level: 'act', color: 'neutral' }, projects: { level: 'act', color: 'neutral' } },
+      task_health: { current_repeated_7d: 0 } }),
+    need_you: [{ ...todo, color: 'yellow', report_title: '虚构汇报页标题', last_checked_at: '2026-10-12T14:45:00+08:00' }],
+    sections: { ...base0.sections, computer: [{ id: 'system_resources', title: '内存/系统资源', text: '虚构内核内存偏高', state: 'attention', color: 'neutral', ai_handling: 'AI 在管：虚构内存在盯', observed_at: at },
+      { id: 'proxy_traffic', title: '本机代理流量', text: '今天 30 GB。', state: 'attention', color: 'neutral', observed_at: at, trigger_items: [{ reason: 'program_hour_upload', name: '虚构程序', value_gb: 3, threshold_gb: 2 }] }],
+      today: [{ id: 'learning', title: '学习进度', text: '虚构课程 2/28', state: 'attention', color: 'unavailable', observed_at: at }] },
+    automation: { ...base0.automation, items: [...base0.automation.items, { id: 'sw', name: '虚构软件维护', state: 'failed', color: 'neutral', ai_handling: 'AI 在管：虚构软件正在使用，本次更新暂缓' }] } });
+  o = R.REGIONS.overview(colored, ctx);
+  assert.match(o, /cp-tri-cell is-neutral" data-signal="computer">.*AI 在管<\/span>.*虚构内存偏高在盯/);
+  assert.match(o, /今天 1 个出错还没恢复/);
+  assert.match(o, /今天出过错、已恢复 2 个/);
+  assert.doesNotMatch(o, /这周反复出错/);
+  assert.match(R.REGIONS['lamp-need-you'](colored, ctx), /is-yellow.*要你处理/);
+  assert.match(R.REGIONS['lamp-computer'](colored, ctx), /is-neutral.*AI 在管/);
+  const pcc = R.computer(colored, ctx);
+  assert.match(pcc, /cp-card is-neutral">.*内存\/系统资源.*AI 在管：虚构内存在盯/);
+  assert.match(pcc, /触发的是：虚构程序 1 小时上传 3\.0GB，超过 2GB/);
+  assert.match(R.todayBlock(colored, ctx), /cp-card is-gray">.*学习进度.*数据源停了/);
+  const ask = R.needYou(colored, ctx);
+  assert.match(ask, /cp-ask" id="todo-pending-trip">.*cp-dot is-yellow/);
+  assert.match(ask, /汇报页：虚构汇报页标题/);
+  assert.match(ask, /最后核对 14:45/);
+  const rv = riverSnapshot(colored, now).automation.items.find((t) => t.id === 'sw');
+  assert.equal(rv.color, 'neutral');
+  assert.match(rv.ai_handling, /暂缓/);
+  // 体检 phase：跑完写后端结果句；正在跑写几点开始
+  const gv = (g) => R.needYou(normalize({ ...base0, governance: { ...base0.governance, ...g } }), ctx);
+  assert.match(gv({ phase: 'completed', status_note: '跑完：修好8、关掉0、还在跟21、转暂缓6、要你2', last_run: { started_at: '2026-10-12T12:58:00+08:00', ended_at: '2026-10-12T14:53:00+08:00' } }), /每周 AI 体检：跑完：修好8、关掉0、还在跟21、转暂缓6、要你2（10月12日 14:53）/);
+  assert.match(gv({ phase: 'running', last_run: { started_at: '2026-10-12T12:58:00+08:00' } }), /每周 AI 体检：10月12日 12:58 开始，正在跑/);
+  // 首页小屏读 color
+  const sm = OV.html(ov({ signals: [{ id: 'computer', level: 'act', color: 'neutral' }, { id: 'today_tasks', level: 'act', value: 1, recovered_today: 1, color: 'neutral' }, { id: 'backup', level: 'ok', value: 0, color: 'ok' }] }), { size: 'small', now: now.getTime() });
+  assert.match(sm, /ov-sig is-neutral" data-signal="computer">.*?AI 在管/);
+  assert.match(sm, /data-signal="today_tasks">.*?1<small>个没恢复<\/small>.*?AI 在管/);
   // 12 安全和授权：手机那一行
   assert.match(R.security(v, ctx), /cp-sec-line.*资料已解锁到 10月13日 13:37 · 无限制授权关 · 未锁屏 · 能连上/);
   // 14 下一步和大标题说的是同一件事时不再当成第 N 步接在后面；不同的事照旧接上

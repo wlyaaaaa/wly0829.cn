@@ -371,6 +371,12 @@
 /* 网站上次发布一行（字段到了才出） */
 .cp-release { display: flex; align-items: baseline; gap: 0; margin: 0 0 12px; padding: 8px 14px; border: 1px solid var(--cp-line); border-radius: 12px; background: #fbfefc; font-size: 15px; overflow-wrap: anywhere; }
 .cp-release.is-bad { border-color: #ecdcae; background: #fffdf6; }
+.cp-release.is-off { color: var(--cp-soft); background: #f8f9f8; }
+.cp-know-old { margin-top: 6px; font-size: 13px; color: var(--cp-soft); }
+.cp-know-old summary { cursor: pointer; }
+.cp-know-old .cp-know-text { font-size: 13.5px; }
+/* 要你处理卡片：汇报页标题小字 */
+.cp-report-title { margin: 4px 0 0; font-size: 13px; color: var(--cp-soft); overflow-wrap: anywhere; }
 .cp-net { font-size: 14px; }
 .ov-sec.is-neutral { --ov-c: var(--cp-neutral); }
 

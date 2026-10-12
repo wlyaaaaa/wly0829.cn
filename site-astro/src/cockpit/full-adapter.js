@@ -19,7 +19,8 @@ const blockState = (b) => (!b || typeof b !== 'object' ? 'unavailable' : b.colle
 const grant = (v) => ({ state: text(obj(v).state) || 'unknown', expires_at: ['unlocked', 'active'].includes(obj(v).state) ? iso(obj(v).expires_at_unix) : null });
 const card = (r) => {
   const d = obj(r.display), n = obj(r.normal);
-  return { id: text(r.id), title: text(r.title), text: text(d.text), state: stateOf(d.state), observed_at: d.observed_at, unavailable_since: d.unavailable_since, criteria_text: n.configured === true ? text(n.value) : '', copy_ai_id: text(r.id) };
+  return { id: text(r.id), title: text(r.title), text: text(d.text), state: stateOf(d.state), observed_at: d.observed_at, unavailable_since: d.unavailable_since, criteria_text: n.configured === true ? text(n.value) : '', copy_ai_id: text(r.id),
+    ...Object.fromEntries(COLOR_KEYS.filter((k) => d[k] != null).map((k) => [k, d[k]])), ...(r.must_know_id || d.must_know_id ? { must_know_id: text(r.must_know_id || d.must_know_id) } : {}) };
 };
 const notice = (r) => {
   const a = obj(r.action);
@@ -29,7 +30,9 @@ const notice = (r) => {
     where: r.where || a.where || null, minutes: r.minutes ?? a.estimated_minutes ?? null, consequence: r.consequence || a.consequence || null,
     ...Object.fromEntries(PASS.filter((k) => r[k] != null).map((k) => [k, r[k]])) };
 };
-const PASS = ['ask_kind', 'why_you', 'steps', 'options', 'questions', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
+// 后端 10 月 12 日加的显示颜色和责任字段（color 只取 ok/neutral/unavailable/yellow/red），有就原样带上
+const COLOR_KEYS = ['color', 'owner_action', 'owner_action_needed', 'ai_handling', 'trigger_items', 'source_over_limit'];
+const PASS = ['report_title', 'color', 'owner_action', 'owner_action_needed', 'ai_handling', 'ask_kind', 'why_you', 'steps', 'options', 'questions', 'handler', 'asked_count', 'urgent', 'headline', 'stuck', 'stuck_reason', 'done_when_text', 'reason', 'deferred_reason'];
 const LABELS = { 'cpu-gpu': 'CPU 和显卡', 'memory-network': '内存和网络' };
 
 export function fromFull(full) {
@@ -41,7 +44,7 @@ export function fromFull(full) {
       mine: p.mine === true, last_run_at: r.last_run_at, next_run_at: r.next_run_at, runs_today: r.runs_today === true, schedule: text(r.schedule_zh || p.schedule_zh),
       note: text(p.status_note), what: text(p.what), stop: text(p.stop), impact: text(p.impact), heartbeat_at: o.heartbeat_at || r.heartbeat_at || null, failures_7d: Number.isFinite(r.failures_7d) ? r.failures_7d : null,
       panel: { is_panel: 'panel' in rel || o.kind === 'panel_heartbeat', execution_failed: o.execution_failed === true, related_state: rel.panel || o.state || null },
-      public_message: text(r.public_message), notice_kind: text(r.notice_kind) };
+      public_message: text(r.public_message), notice_kind: text(r.notice_kind), ...(r.color ? { color: text(r.color), ai_handling: text(r.ai_handling) } : {}) };
   });
   const sections = { computer: [], remote: [], backup_cloud: [], today: [] };
   for (const r of Array.isArray(cp.cards) ? cp.cards : []) if (r && typeof r === 'object') (sections[text(r.section) || 'other'] ||= []).push(card(r));
@@ -67,6 +70,7 @@ export function fromFull(full) {
     projects: { state: blockState(f.projects), observed_at: obj(f.projects).observed_at, items: rows(f.projects).map((r) => ({ id: text(r.id), name: text(r.project), mode: text(r.mode), phase: r.phase, run_health: r.run_health, overview: r.overview, waiting_user: r.waiting_user_count, waiting_ai: r.waiting_ai_count, on_hold: r.on_hold_count, health_reason: text(r.health_reason), last_commit_at: r.last_commit_at, commits_7d: r.commits_7d })) },
     source_gaps: (Array.isArray(cp.source_gaps) ? cp.source_gaps : []).map((r) => ({ source_id: text(r.source_id), title: text(r.title), since: r.since, observed_at: r.observed_at })),
     owner_corrections: obj(cp.owner_corrections),
+    ...(f.must_know ? { must_know: f.must_know } : {}), ...(f.website_release ? { website_release: f.website_release } : {}),
     ai_work: obj(f.ai_work), governance: obj(cp.governance),
     today_activity: obj(f.today_activity), power_today: obj(f.power_today),
     pc_health: (({ state, reason_code, metrics, changes_24h, observed_at_unix }) => ({ state, reason_code, metrics, changes_24h, observed_at: iso(observed_at_unix) }))(obj(obj(obj(f.hardware).health).pc_health)),

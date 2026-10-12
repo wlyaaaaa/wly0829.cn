@@ -8480,13 +8480,13 @@
     "source_path": "scripts/today-river-assets2/river.webp"
   },
   "cockpit/assets/today-river-d6e2d14e41fb5adb5c58.js": {
-    "bytes": 49016,
-    "sha256": "d6ef46750a8ef27b48497191cdd9f5a1ef4c76894699a1cd680cd83171652378",
+    "bytes": 49857,
+    "sha256": "1815b8b8466484d2ae0dec3211f97269f6ed77249a355615b1dd1f2068b2e3ac",
     "source_path": "scripts/today-river.js"
   },
   "cockpit/assets/today-river-f36ca903ec4e711209dc.css": {
-    "bytes": 19822,
-    "sha256": "f36ca903ec4e711209dce79c6beb18857056db262d343c635694b65c51e08bde",
+    "bytes": 20265,
+    "sha256": "64d46e8a41b9d7eeced1bfa8a660c798bb9f57a1c73543a55bdf4e83acdf2dd0",
     "source_path": "scripts/today-river.css"
   },
   "projects/agents/assets/hero-7ecc7c631fc6a60c-mask.png": {
