@@ -13,11 +13,16 @@ import motionRuntime from '../../public/_living/quality-runtime/manifest.json';
 import '../styles/typeset-page.css';
 import tocConsistency from '../../../scripts/toc-consistency.js?url&no-inline';
 import typesetMotion from '../scripts/typeset-motion.js?url&no-inline';
+import pageBird from '../scripts/page-bird.js?url&no-inline';
+import { readFileSync } from 'node:fs';
 import { currentImageLoading } from '../image-loading';
 const runtimes = import.meta.glob('../chrome/runtime/*.json', { eager: true, import: 'default' }) as Record<string, any>;
 interface Props { title: string; kind: string; url: string; page: string; motion?: any; blocks?: any; pageMeta?: any; moved?: string; noindex?: boolean; toc: { id: string; label: string; img?: string }[] }
 const { title, kind, url, toc, page, motion, blocks, pageMeta, moved, noindex } = Astro.props;
 const rt = runtimes[`../chrome/runtime/${page}.json`];
+const needsPageBird = blocks && kind !== '404' && !['/', '/cockpit/', '/computer-access/'].includes(url) && !blocks.screens.some((s: any) => ['h', 'v'].some(o => s[o]?.overlay?.includes('data-living-config=')));
+const birdFolder = needsPageBird ? readFileSync(`public/_living/_engine/${livingEngine.fixed}`, 'utf8').match(/\b[\w$]+="(bird\.[a-f0-9]+\/)"/)?.[1] : '';
+if (needsPageBird && !birdFolder) throw new Error('当前小鸟资源目录未登记');
 
 function albumMeta() {
   const old = rt.album;
@@ -132,6 +137,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'||(e.key===' '&&e.targ
     document.addEventListener('scroll',(e)=>{if(e.target instanceof Element&&e.target.matches('nav.toc .toc-inner'))edge();},{capture:true,passive:true});
     addEventListener('resize',edge);addEventListener('load',edge);edge();})();</script>
   <Fragment set:html={tail} />
+  {needsPageBird && <script is:inline defer src={pageBird} data-bird={safe({script: `/_living/_engine/${birdFolder}bird.js`, atlas: `/_living/_engine/${birdFolder}bird-atlas.webp`})}></script>}
   {blocks && <script is:inline defer src={typesetMotion}></script>}
   <script is:inline defer src={tocConsistency}></script>
   <script is:inline defer src="/_interactions/anchor-offset.js"></script>

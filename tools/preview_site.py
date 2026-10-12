@@ -20,7 +20,8 @@ class Preview(SimpleHTTPRequestHandler):
         if path.is_dir() and not self.path.split('?', 1)[0].endswith('/'): return super().send_head()
         if path.is_dir(): path /= 'index.html'
         if not path.is_file() or path.suffix not in TEXT: return super().send_head()
-        raw = PREFIX.sub('/', path.read_text('utf8')).encode('utf8')
+        # Keep absolute assets absolute so sprite engines do not prepend their base.
+        raw = PREFIX.sub('http://' + self.headers['Host'] + '/', path.read_text('utf8')).encode('utf8')
         self.send_response(200)
         self.send_header('Content-Type', self.guess_type(path.name) + '; charset=utf-8')
         self.send_header('Content-Length', str(len(raw)))
@@ -42,7 +43,7 @@ class Preview(SimpleHTTPRequestHandler):
 
     def send_error(self, code, message=None, explain=None):
         if code == 404 and (ROOT / '404.html').is_file():
-            body = PREFIX.sub('/', (ROOT / '404.html').read_text('utf8')).encode('utf8'); self.send_response(404)
+            body = PREFIX.sub('http://' + self.headers['Host'] + '/', (ROOT / '404.html').read_text('utf8')).encode('utf8'); self.send_response(404)
             self.send_header('Content-Type', 'text/html; charset=utf-8'); self.send_header('Content-Length', str(len(body)))
             self.end_headers()
             if self.command != 'HEAD': self.wfile.write(body)
