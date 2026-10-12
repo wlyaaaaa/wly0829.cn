@@ -98,13 +98,15 @@ function stateOf(t) {
 
 // ---------- 选中一条：那六样 ----------
 const v = x => x ? esc(x) : '<span class="none">还没写</span>';
+// 归属项目：后端给了才显示，没给就不出这一行（不写“未知”占位）
+const owner = r => r && r.project ? `<div class="owner" style="grid-column:1/-1"><b>归属项目</b>${esc(r.project)}</div>` : '';
 function six(M, t) {
   const [cls, word] = stateOf(t), r = t.raw;
   const err = t.off ? '已停用，不算出错' : t.panelUnknown ? '不知道，这次没读到副屏心跳' : r.state === 'overdue' ? '过期' + (t.note ? '：' + t.note : '') : t.flag === 'bad' ? '出错了' + (t.note ? '：' + t.note : '') : t.flag === 'warn' ? '要留意' + (t.note ? '：' + t.note : '') : t.flag === 'ai' ? 'AI 在管，不用你动手' + (t.note ? '：' + t.note : '') :
     r.state === 'unknown' ? '不知道，这次没读到它的运行结果' : r.state === 'paused' ? '按需运行，现在暂停着，不算出错' : r.state === 'never' ? '还没跑过，谈不上出错' : r.state === 'running' ? '没有，正在运行' : '没有，上次运行正常';
   const next = t.off ? '已停用，不会自动跑' : t.next > M.now ? whenText(M, t.next) + (r.schedule_zh ? `（${r.schedule_zh}）` : '') : r.schedule_zh || '';
   return `<h4>${esc(t.name)}<span class="state ${cls}">${word}</span><small>${esc(t.group)}</small></h4><div class="six">
-    <div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : r.state === 'paused' ? '还没启动过' : '没读到') + '</span>'}</div>
+    ${owner(r)}<div><b>在做什么</b>${v(r.plain?.what)}</div><div><b>${t.panel ? '最后读到副屏心跳' : '上次什么时候跑的'}</b>${(t.panel ? t.pulse : t.last) > 0 ? esc(whenText(M, t.panel ? t.pulse : t.last)) : '<span class="none">' + (r.state === 'never' ? '还没跑过' : r.state === 'paused' ? '还没启动过' : '没读到') + '</span>'}</div>
     <div><b>下次什么时候跑</b>${next ? esc(next) : '<span class="none">没读到</span>'}</div><div><b>有没有出错</b>${esc(err)}</div>
     <div><b>怎么停</b>${v(r.plain?.stop)}</div><div><b>停了影响什么</b>${v(r.plain?.impact)}</div></div>`;
 }
@@ -286,6 +288,7 @@ function pick(t, scroll, occurrence = 0) {
   if (['bad', 'warn', 'ai'].includes(t.flag) || t.raw.state === 'unknown') {
     p.textContent = t.raw.public_message || STATE[t.flag];
     document.dispatchEvent(new CustomEvent('today-river-selected-notice', {detail:{taskId:t.raw.id, task:t.raw, target:p}}));
+    if (t.raw.project) p.insertAdjacentHTML('afterbegin', owner(t.raw));   // 未知/出错走提醒这一支，也要看得到归属
   } else p.innerHTML = six(M, t);
   p.insertAdjacentHTML('beforeend', '<button type="button" data-close-pick>收起说明</button>');
   p.querySelector('[data-close-pick]').onclick = () => { picked = null; p.hidden = true; mark(null); };
