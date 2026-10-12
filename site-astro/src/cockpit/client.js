@@ -1,7 +1,7 @@
 // 驾驶舱浏览器端：页面一打开就是构建时那份快照画好的最终版式；这里只负责读新数据、原地换字。
 // 每分钟读一次（页面在后台时不读）；刷新按钮叫醒电脑重读，等三个采集器都完成再换。
 import { normalize, riverSnapshot, freshAfter } from './model.js';
-import { REGIONS } from './render.js';
+import { REGIONS, PICK_FIRST, COPY_HINT } from './render.js';
 import { asView } from './full-adapter.js';
 
 const boot = JSON.parse(document.getElementById('cockpit-boot')?.textContent || '{}');
@@ -65,7 +65,10 @@ function restoreAnswers(node, answers) {
 }
 function syncAnswer(card) {
   const b = card.querySelector('[data-copy-answer]');
-  if (b) b.disabled = !card.querySelector('.cp-opt[aria-pressed="true"]');
+  if (!b) return;
+  b.disabled = !card.querySelector('.cp-opt[aria-pressed="true"]');
+  const hint = card.querySelector('.cp-hint');
+  if (hint) hint.textContent = b.disabled ? PICK_FIRST : COPY_HINT;
 }
 function answerText(card, b) {
   const qs = [...card.querySelectorAll('.cp-q')];

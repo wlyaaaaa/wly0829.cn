@@ -125,7 +125,11 @@ class CockpitPageTests(unittest.TestCase):
                     # （原测试的页内授权办理面板已随整页重做删除，安全和授权改为链到授权页办理；同样的“刷新不丢正在填的东西”落在这里。）
                     quiz = page.locator('.cp-ask#todo-need-q')
                     quiz.scroll_into_view_if_needed()
+                    self.assertTrue(quiz.locator('[data-copy-answer]').is_disabled())
+                    self.assertEqual(quiz.locator('.cp-hint').inner_text(), '先在上面选一项，才能复制答复')
+                    self.assertEqual(quiz.locator('[data-copy-answer]').get_attribute('aria-describedby'), 'todo-need-q-hint')
                     quiz.get_by_role('button', name='乙方案', exact=True).click()
+                    self.assertEqual(quiz.locator('.cp-hint').inner_text(), '按钮只复制一句话，贴到任意 AI 对话发送即可')
                     quiz.locator('[data-note]').fill('虚构补充说明')
                     page.locator('#ai-rest > summary').click()
                     before = page.evaluate('scrollY')
