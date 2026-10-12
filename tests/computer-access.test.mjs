@@ -225,23 +225,30 @@ test("status reads do not overlap and a late old poll cannot overwrite operation
   assert.deepEqual(seen, ["new-state"]);
 });
 
-test("built route preserves the complete static shell and scoped connection policy", async () => {
+// 授权页自 2026-10-10（aaee4dbf，合并 72a20ee1）起由 site-astro/sources/retained-home-cockpit/computer-access.html 构建，
+// 旧 React 外壳（app/computer-access.jsx 经 server/render-route.jsx）不再产出该路由；以下断言对准现行页面的同等行为。
+test("built route preserves the complete static shell and only allows submitting from the formal origins", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
-  for (const text of ["授权与状态", "电脑现在", "截止时间读不到", "Windows 锁屏", "无限制授权", "锁定个人资料", "锁定Windows", "正在连接主机"]) assert.ok(html.includes(text), text);
+  // 不跑脚本也能看到三项状态、各自的锁定/结束按钮和“读不到不冒充锁着”的说明
+  for (const text of ["授权与状态", "个人资料", "无限制授权", "Windows 锁屏", "锁定 Windows", "当前状态未知", "空心灰圈：读不到", "读不到电脑，暂时不能办理"]) assert.ok(html.includes(text), text);
+  for (const id of ["personal-data", "unrestricted", "windows", "apply"]) assert.ok(html.includes(`id="${id}"`), id);
+  for (const action of ["lock-personal-data", "lock-unrestricted", "lock-windows"]) assert.ok(html.includes(`"action":"${action}"`), action);
+  assert.match(html, /"text":"结束"[^{}]*"action":"lock-unrestricted"/);
+  // 静态外壳不带验证码输入框，也没有旧版表单
   assert.ok(!html.includes('id="ca-totp"'));
-  assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
-  assert.match(html, /aria-label="授权与状态"/);
-  assert.ok(!html.includes("需要结束访问时"));
-  assert.match(html, /aria-label="结束无限制授权"/);
-  assert.ok(html.indexOf('class="ca-grants"') < html.indexOf('id="ca-computer-summary-title"'));
-  assert.ok(html.indexOf('id="ca-computer-summary-title"') < html.indexOf('id="access-form"'));
+  assert.ok(!/<form\b|<input\b/.test(html));
   assert.ok(!html.includes('class="flow-field"'));
-  assert.match(html, /href="\/computer-access\/"[^>]*aria-label="授权与状态"/);
-  assert.match(html, /connect-src 'self' https:\/\/mcp.wly0829.cn/);
-  assert.match(html, /name="referrer" content="no-referrer"/);
+  assert.match(html, /href="https:\/\/wly0829.cn\/computer-access\/"/);
+  assert.match(html, /<a class="nav-link" href="\/computer-access\/" aria-current="page">/);
+  assert.ok(!html.includes("需要结束访问时"));
+  // 状态在前、办理在后
+  assert.ok(html.indexOf('id="personal-data"') < html.indexOf('id="apply"'));
+  // 只有 wly0829.cn / mcp.wly0829.cn 顶层打开时才放行办理；本机预览和被嵌入时只能看
+  assert.ok(html.includes("const formal = ['https://wly0829.cn', 'https://mcp.wly0829.cn'].includes(location.origin) && window.top === window"));
+  // 跨站只送来源、不送完整地址（发布侧同一策略见 scripts/prepare-oss-release.py 的 OSS_REFERRER_POLICY）
+  assert.match(html, /name="referrer" content="strict-origin-when-cross-origin"/);
   assert.ok(html.includes('href="/cockpit/#pc"'));
   assert.ok(!html.includes('class="ca-card ca-network-card"'));
-  assert.match(html, /rel="preconnect" href="https:\/\/mcp.wly0829.cn"/);
 });
 
 test("website entry mounts in place without redirecting or discarding request locators", async () => {
@@ -317,11 +324,15 @@ test("initial page GET expires during slow hydration and retains service failure
 
 test("computer routes stay in the current tab while external links retain their target", async () => {
   const html = await readFile(new URL("../dist/computer-access/index.html", import.meta.url), "utf8");
-  for (const name of ["连接电脑", "授权与状态"]) {
-    const tag = html.match(new RegExp(`<a[^>]+aria-label="${name}"[^>]*>`))?.[0];
-    assert.ok(tag, name); assert.ok(!tag.includes('target="_blank"'), tag);
+  const anchors = html.match(/<a\b[^>]*>/g) || [];
+  for (const route of ["/mcp/", "/computer-access/", "/cockpit/"]) {
+    const tags = anchors.filter(tag => tag.includes(`href="${route}"`));
+    assert.ok(tags.length, route);
+    for (const tag of tags) assert.ok(!tag.includes('target="_blank"'), tag);
   }
-  assert.match(html, /data-grafana-entry="true"[^>]*href="\/cockpit\/#grafana"/);
+  for (const tag of anchors.filter(tag => /href="\//.test(tag))) assert.ok(!tag.includes('target="_blank"'), tag);
+  // 唯一另开标签页的是看大图的“完整尺寸”，保持另开并带 noopener
+  assert.match(html, /<a target="_blank" rel="noopener">完整尺寸<\/a>/);
 });
 
 test("hardware specifications preserve actual inventory and dynamic link evidence", () => {
@@ -374,10 +385,13 @@ test("HTTP service failure retains status for friendly connection diagnosis with
 });
 
 test("home and MCP summaries only provide links to the common authority page", async () => {
-  for (const route of ["index.html", "mcp/index.html"]) {
+  // 首页（2026-10-09 起由 retained-home-cockpit/home.html 构建）和 MCP 页只给去授权页的链接，自己不收验证码、不提交
+  const pages = { "index.html": /"text":"授权与状态 →","href":"\/computer-access\/"/, "mcp/index.html": /<a class="lk"[^>]*href="\/computer-access\/">授权与状态<\/a>/ };
+  for (const [route, entry] of Object.entries(pages)) {
     const html = await readFile(new URL(`../dist/${route}`, import.meta.url), "utf8");
-    assert.ok(html.includes("data-access-summary")); assert.ok(html.includes("进入授权与状态")); assert.ok(html.includes('id="grafana-status"'));
-    assert.ok(!html.includes('id="ca-totp"'));
+    assert.match(html, entry, route); assert.match(html, /<a class="nav-link" href="\/computer-access\/">/, route);
+    assert.ok(!html.includes('id="ca-totp"'), route); assert.ok(!/<form\b|<input\b/.test(html), route);
+    assert.ok(!/method:\s*["']POST/.test(html), route);
   }
   const summary = await readFile(new URL("../app/computer-access-summary.jsx", import.meta.url), "utf8");
   assert.ok(!summary.includes('method: "POST"'));
