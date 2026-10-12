@@ -218,30 +218,59 @@ def sls_address():
             addresses = [str(ipaddress.IPv4Address(row["data"])) for row in answers if row.get("type") == 1]
             if addresses:
                 return addresses[0]
-        except OSError:
+        except (OSError, ValueError):
             if attempt == 2:
-                raise
+                raise RuntimeError("无法解析 SLS 服务地址（DNS 查询失败）；未将连接失败当作零访客") from None
+            time.sleep(attempt + 1)
     raise RuntimeError("无法解析 SLS 服务地址；未将连接失败当作零访客")
+
+
+def cli_error(result):
+    error = (result.stderr + result.stdout).decode("utf-8", errors="replace").lower()
+    for category, markers in (
+        ("连接超时", ("timeout", "timed out", "deadline exceeded")),
+        ("DNS 解析失败", ("no such host", "name resolution")),
+        ("连接中断", ("eof", "connection reset", "connection refused", "tls handshake")),
+        ("代理拒绝", ("proxyconnect",)),
+        ("鉴权失败", ("forbidden", "unauthorized", "accessdenied", "invalidaccesskey", "signature", "credential")),
+        ("请求参数无效", ("invalidparameter", "badrequest", "invalid argument")),
+        ("CLI 初始化失败", ("init openapi client failed",)),
+    ):
+        if any(marker in error for marker in markers):
+            return category
+    return "CLI 调用失败"
 
 
 def cli_run(command):
     relay, env = None, None
-    if command[1] == "sls" and any(address[4][0].startswith(("198.18.", "198.19."))
+    is_sls = command[1] == "sls"
+    if is_sls and any(address[4][0].startswith(("198.18.", "198.19."))
                                   for address in socket.getaddrinfo("cn-shanghai.log.aliyuncs.com", 443)):
         address = sls_address()
         relay = ThreadingHTTPServer(("127.0.0.1", 0), SlsTunnel)
         relay.sls_address = address
         Thread(target=relay.serve_forever, daemon=True).start()
-        env = {**os.environ, "NO_PROXY": "", "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
+        # OAuth refresh must keep its normal path; this relay accepts SLS only.
+        env = {**os.environ, "NO_PROXY": "oauth.aliyun.com,oauth.alibabacloud.com,signin.aliyun.com,signin.alibabacloud.com",
+               "HTTPS_PROXY": f"http://127.0.0.1:{relay.server_port}"}
     try:
-        result = subprocess.run(command, capture_output=True, timeout=180, env=env)
+        for attempt in range(3 if is_sls else 1):
+            try:
+                result = subprocess.run(command, capture_output=True, timeout=60 if is_sls else 180, env=env)
+            except subprocess.TimeoutExpired:
+                category = "连接超时"
+            else:
+                if not result.returncode:
+                    return result.stdout.decode("utf-8-sig")
+                category = cli_error(result)
+            if is_sls and category in ("连接超时", "DNS 解析失败", "连接中断") and attempt < 2:
+                time.sleep(attempt + 1)
+                continue
+            raise RuntimeError(f"阿里云命令失败（{category}，尝试 {attempt + 1} 次）；未输出可能含凭据的原始错误")
     finally:
         if relay:
             relay.shutdown()
             relay.server_close()
-    if result.returncode:
-        raise RuntimeError(f"阿里云命令失败（退出码 {result.returncode}）；未输出可能含凭据的原始错误")
-    return result.stdout.decode("utf-8-sig")
 
 
 def list_objects(args, prefix):

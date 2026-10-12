@@ -191,6 +191,32 @@ class VisitorTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             query.parse_sls_row({**row, "request_id": "-"})
 
+    def test_sls_relay_preserves_oauth_and_retries_network_failures(self):
+        relay = Mock(server_port=12345)
+        failed = SimpleNamespace(returncode=2, stdout=b"", stderr=b"request failed: EOF")
+        good = SimpleNamespace(returncode=0, stdout=b'\xef\xbb\xbf{"data":[]}', stderr=b"")
+        with patch.object(query.socket, "getaddrinfo", return_value=[(0, 0, 0, "", ("198.18.0.1", 443))]), patch.object(query, "sls_address", return_value="203.0.113.1"), patch.object(query, "ThreadingHTTPServer", return_value=relay), patch.object(query, "Thread"), patch.object(query.subprocess, "run", side_effect=[failed, subprocess.TimeoutExpired("aliyun", 60), good]) as run, patch.object(query.time, "sleep") as sleep:
+            self.assertEqual(query.cli_run(["aliyun", "sls", "GetLogsV2"]), '{"data":[]}')
+        self.assertEqual(run.call_count, 3)
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 2])
+        env = run.call_args.kwargs["env"]
+        self.assertIn("oauth.aliyun.com", env["NO_PROXY"].split(","))
+        self.assertNotIn("aliyuncs.com", env["NO_PROXY"])
+        self.assertEqual(env["HTTPS_PROXY"], "http://127.0.0.1:12345")
+        self.assertEqual(run.call_args.kwargs["timeout"], 60)
+        relay.shutdown.assert_called_once()
+        relay.server_close.assert_called_once()
+
+    def test_cli_failures_are_classified_without_secrets_or_auth_retries(self):
+        for service, message, attempts, category in (("sls", b"AccessDenied secret-value", 1, "鉴权失败"), ("sls", b"request failed: EOF secret-value", 3, "连接中断"), ("oss", b"request failed: EOF secret-value", 1, "连接中断")):
+            failed = SimpleNamespace(returncode=2, stdout=b"", stderr=message)
+            with patch.object(query.socket, "getaddrinfo", return_value=[]), patch.object(query.subprocess, "run", return_value=failed) as run, patch.object(query.time, "sleep"):
+                with self.assertRaises(RuntimeError) as error:
+                    query.cli_run(["aliyun", service, "GetLogsV2"])
+            self.assertEqual(run.call_count, attempts)
+            self.assertIn(category, str(error.exception))
+            self.assertNotIn("secret-value", str(error.exception))
+
     def test_cloud_failure_is_error_and_not_zero_visitors(self):
         with patch.object(sys, "argv", [query.__file__, "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", side_effect=RuntimeError("SLS unavailable")), patch("builtins.print") as output:
             self.assertEqual(query.main(), 1)
