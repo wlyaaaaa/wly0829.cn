@@ -48,5 +48,6 @@ class AstroSearchTests(unittest.TestCase):
             for rel in ('search-projects.js', 'search-project-localocr.js'):
                 self.assertEqual(after[rel][0]['title'], 'Current · Renamed')
                 self.assertEqual(after[rel][0]['detail'], 'New <text>')
+                self.assertEqual(after[rel][0]['search'], '')
 
 if __name__ == '__main__': unittest.main()

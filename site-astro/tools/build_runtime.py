@@ -141,9 +141,14 @@ def sync_search(root, previous, converted, pin, changed_routes):
                 if match is not None: kept.append(added.pop(match))
         # Incremental builds also repair overview records inherited from old assets.
         for row in kept + added:
+            # Every matcher keeps at least 120 UTF-16 units of the visible detail.
+            if 'search' in row and len(row['detail'].encode('utf-16-le', 'surrogatepass')) <= 240 and row['search'] == row['detail'].lower():
+                row['search'] = ''
             target = urlsplit(row['href'])
             if target.path in skill_aliases and row['type'] in {'Skill', '页面'} and target.fragment in {'', 'top'}:
                 row['aliases'] = list(dict.fromkeys([*row.get('aliases', []), *skill_aliases.get(target.path, [])]))
+            for field in ('title', 'search', 'detail'):
+                if field in row: row[field] = row.pop(field)
         prefix = 'window.' + ('__WLY_SEARCH_INDEX__' if rel == 'search-index.js' else '__WLY_PROJECT_SEARCH_INDEX__') + '='
         old.write_bytes((prefix + json.dumps(kept + added, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c') + ';\n').encode())
         replacements[obj['url']] = '/' + rel
