@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Synthetic OSS logs only. Run: python -B -X utf8 tools/test-query-site-visitors.py"""
-from datetime import date
+from datetime import date, datetime, timedelta
 import importlib.util
 import json
 from pathlib import Path
@@ -10,7 +10,7 @@ import tempfile
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
-from urllib.parse import urlencode
+from urllib.parse import quote, urlencode
 
 SPEC = importlib.util.spec_from_file_location("visitors", Path(__file__).with_name("query-site-visitors.py"))
 query = importlib.util.module_from_spec(SPEC)
@@ -121,6 +121,82 @@ class VisitorTests(unittest.TestCase):
         result = subprocess.run([sys.executable, "-B", "-X", "utf8", str(Path(query.__file__)), "--logs-dir", str(self.root),
                                  "--start", "2026-10-12", "--end", "2026-10-12"], capture_output=True, check=True)
         self.assertEqual(json.loads(result.stdout)["total"]["unique_visitors"], 1)
+
+    def sls_row(self):
+        return {"__time__": str(datetime(2026, 10, 12, 10, tzinfo=query.TZ).timestamp()),
+                "client_ip": "203.0.113.1", "user_agent": UA, "http_status": "200",
+                "bucket": query.SOURCE, "operation": "GetObject", "request_id": "shared",
+                "request_uri": quote("/_v.gif?" + urlencode({"x-v": "visitor-A", "x-p": "/甲&/",
+                    "x-ref": "https://example.com/?a=1&b=2", "x-self": "0"}), safe="")}
+
+    def test_sls_encoded_uri_cross_source_dedup_and_exclusion(self):
+        row = query.parse_sls_row(self.sls_row())
+        self.assertEqual((row["path"], row["params"]["p"], row["params"]["ref"]), ("/_v.gif", "/甲&/", "example.com"))
+        archived = log(p="/甲&/", extra={"x-ref": "https://example.com/?a=1&b=2", "x-self": "0"}, request_id="shared")
+        marked = {**self.sls_row(), "request_id": "self", "request_uri": "/_v.gif?x-v=self&x-self=1"}
+        result = self.analyze([archived], extra_records=[row, query.parse_sls_row(marked)])
+        self.assertEqual(result["total"], {"unique_visitors": 1, "unique_ips": 1, "pageviews": 1})
+        self.assertEqual(result["log_coverage"]["duplicate_lines"], 1)
+        self.assertEqual(result["filtered_lines"]["self"], 1)
+        alternate = self.sls_row()
+        alternate["User-Agent"] = alternate.pop("user_agent")
+        self.assertEqual(query.parse_sls_row(alternate)["ua"], UA)
+        protocol_row = {**self.sls_row(), "request_uri": "/_v.gif?x-v=visitor-A&x-self=1&x-monitor=0 HTTP/1.1"}
+        self.assertEqual(query.parse_sls_row(protocol_row)["params"]["monitor"], "0")
+        self.assertEqual(query.parse_sls_row({**protocol_row, "request_uri": quote(protocol_row["request_uri"], safe="")})["params"]["monitor"], "0")
+
+    def test_cross_source_resource_exclusion_and_archive_cutoff(self):
+        self.root.joinpath("boundary.log").write_text(log("05/Oct/2026:11:59:50 +0800", path="/image.png") + log("05/Oct/2026:12:00:31 +0800", v="too-late"), "utf-8")
+        cutoff = datetime(2026, 10, 5, 12, tzinfo=query.TZ)
+        marked = {**self.sls_row(), "__time__": cutoff.timestamp(), "request_uri": "/_v.gif?x-v=self&x-self=1"}
+        result = query.analyze([self.root / "boundary.log"], cutoff.date(), cutoff.date(),
+            extra_records=[query.parse_sls_row(marked)], file_range=(cutoff - timedelta(minutes=1), cutoff + timedelta(seconds=30)))
+        self.assertEqual(result["total"], {"unique_visitors": 0, "unique_ips": 0, "pageviews": 0})
+        self.assertEqual(result["filtered_lines"]["marked_resource_window"], 1)
+
+    def test_rolling_retention_and_source_windows(self):
+        now = datetime(2026, 10, 12, 12, tzinfo=query.TZ)
+        windows = query.source_windows(date(2026, 10, 5), END, now)
+        self.assertEqual([window[0] for window in windows], ["oss_archive", "sls_realtime"])
+        self.assertEqual(windows[1][1], now - timedelta(days=7))
+        self.assertEqual(windows[0][2], windows[1][1] + timedelta(seconds=30))
+        self.assertEqual(windows[1][2], now + timedelta(seconds=1))
+        self.assertEqual(query.source_windows(END, END, now)[0][0], "sls_realtime")
+        self.assertEqual(query.source_windows(date(2026, 10, 1), date(2026, 10, 1), now)[0][0], "oss_archive")
+        with patch.object(query, "sync_logs", return_value=([], {"objects": 0})) as archive, patch.object(query, "sls_logs", return_value=[]) as realtime:
+            _, _, sync, _ = query.sync_cloud(SimpleNamespace(), date(2026, 10, 5), END, now)
+        self.assertEqual(archive.call_args.args[1:], (date(2026, 10, 4), date(2026, 10, 5)))
+        self.assertEqual(realtime.call_args.args[1:], windows[1][1:])
+        self.assertEqual([source["source"] for source in sync["sources"]], ["oss_archive", "sls_realtime"])
+
+    def test_sls_pagination_retries_and_schema(self):
+        args = SimpleNamespace(aliyun="aliyun", profile="website-images", sls_project="oss-log-test", sls_logstore="oss-log-store")
+        def page(data, progress="Complete"):
+            return {"meta": {"count": len(data), "progress": progress}, "data": data}
+        row = self.sls_row()
+        pages = [{"body": page([], "Incomplete")}, page([row] * 100), {"body": json.dumps(page([row]))}]
+        stamp = datetime(2026, 10, 12, tzinfo=query.TZ)
+        with patch.object(query, "cli_run", side_effect=[json.dumps(p) for p in pages]) as cloud, patch.object(query.time, "sleep"):
+            self.assertEqual(len(query.sls_logs(args, stamp, stamp + timedelta(days=1))), 101)
+        bodies = [json.loads(call.args[0][-1]) for call in cloud.call_args_list]
+        self.assertEqual([body["offset"] for body in bodies], [0, 0, 100])
+        self.assertIn(query.SOURCE, bodies[0]["query"])
+        with patch.object(query, "cli_run", return_value=json.dumps(page([row], "Incomplete"))) as cloud, patch.object(query.time, "sleep"):
+            with self.assertRaises(RuntimeError):
+                query.sls_logs(args, stamp, stamp + timedelta(days=1))
+            self.assertEqual(cloud.call_count, 3)
+        with patch.object(query, "cli_run", return_value=json.dumps({"meta": {"count": 1, "progress": "Complete"}, "data": []})):
+            with self.assertRaises(ValueError):
+                query.sls_logs(args, stamp, stamp + timedelta(days=1))
+        with self.assertRaises(ValueError):
+            query.parse_sls_row({**row, "request_id": "-"})
+
+    def test_cloud_failure_is_error_and_not_zero_visitors(self):
+        with patch.object(sys, "argv", [query.__file__, "--start", "2026-10-12", "--end", "2026-10-12"]), patch.object(query, "sync_cloud", side_effect=RuntimeError("SLS unavailable")), patch("builtins.print") as output:
+            self.assertEqual(query.main(), 1)
+        result = json.loads(output.call_args.args[0])
+        self.assertEqual(result["status"], "error")
+        self.assertNotIn("total", result)
 
 
 if __name__ == "__main__":
